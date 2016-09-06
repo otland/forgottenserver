@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-250" />
 		<attack name="earth" interval="2000" chance="15" length="7" spread="2" min="-60" max="-300">
 			<attribute key="areaEffect" value="smallplants" />
 		</attack>

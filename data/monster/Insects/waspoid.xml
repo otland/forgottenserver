@@ -16,7 +16,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="55" poison="400" />
+		<attack name="melee" interval="2000" min="0" max="-248" poison="400" />
 		<attack name="earth" interval="2000" chance="15" target="1" radius="3" min="-110" max="-180">
 			<attribute key="areaEffect" value="poison" />
 		</attack>

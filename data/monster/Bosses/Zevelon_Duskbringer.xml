@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="65" attack="75" />
+		<attack name="melee" interval="2000" min="0" max="-282" />
 		<attack name="death" interval="1000" chance="12" target="1" min="0" max="-200">
 			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="shootEffect" value="suddendeath" />

@@ -17,7 +17,7 @@
 		<flag runonhealth="250" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="57" attack="67" />
+		<attack name="melee" interval="2000" min="0" max="-225" />
 		<attack name="lifedrain" interval="2000" chance="10" target="0" length="8" spread="3" min="-175" max="-380">
 			<attribute key="areaEffect" value="poff" />
 		</attack>

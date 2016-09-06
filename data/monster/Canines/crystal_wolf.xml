@@ -17,7 +17,7 @@
 		<flag runonhealth="20" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" chance="15" length="3" spread="2" min="-60" max="-130">
 			<attribute key="areaEffect" value="stones" />
 		</attack>

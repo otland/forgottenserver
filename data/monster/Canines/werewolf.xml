@@ -17,7 +17,7 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-350" />
 		<attack name="outfit" interval="2000" chance="1" target="1" radius="1" monster="werewolf" duration="2000">
 			<attribute key="areaeffect" value="bluenote" />
 		</attack>

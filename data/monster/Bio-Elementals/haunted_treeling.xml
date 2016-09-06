@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="manadrain" interval="2000" chance="5" min="-30" max="-100" radius="4" target="0">
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>

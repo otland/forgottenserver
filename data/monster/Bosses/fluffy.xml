@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" skill="98" attack="120" />
+		<attack name="melee" interval="1000" min="0" max="-648" />
 		<attack name="energy" interval="1500" chance="300" length="8" spread="3" min="-100" max="-200">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>

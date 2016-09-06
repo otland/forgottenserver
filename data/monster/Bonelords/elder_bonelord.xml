@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="55" />
+		<attack name="melee" interval="2000" min="0" max="-55" />
 		<attack name="energy" interval="2000" chance="5" range="7" min="-45" max="-60">
 			<attribute key="shootEffect" value="energy" />
 		</attack>

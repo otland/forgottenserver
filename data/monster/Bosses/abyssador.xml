@@ -17,7 +17,7 @@
 		<flag runonhealth="100" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2500" skill="110" attack="160" />
+		<attack name="melee" interval="2500" min="0" max="-960" />
 		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-400" duration="2500">
 			<attribute key="shootEffect" value="earth" />
 		</attack>

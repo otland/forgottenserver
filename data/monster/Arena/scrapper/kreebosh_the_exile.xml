@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="fire" interval="6000" chance="80" radius="3" min="0" max="-120">
 			<attribute key="areaEffect" value="energy" />
 		</attack>

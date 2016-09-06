@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="110" />
+		<attack name="melee" interval="2000" min="0" max="-550" />
 		<attack name="earth" interval="2000" chance="40" radius="3" max="-980">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>

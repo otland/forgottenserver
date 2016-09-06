@@ -17,7 +17,7 @@
 		<flag runonhealth="10000" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1300" skill="80" attack="120" />
+		<attack name="melee" interval="1300" min="0" max="-540" />
 		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-400" duration="2500">
 			<attribute key="shootEffect" value="whirlwindaxe" />
 		</attack>

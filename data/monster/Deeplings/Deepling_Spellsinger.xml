@@ -17,7 +17,7 @@
 		<flag runonhealth="60" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="55" />
+		<attack name="melee" interval="2000" min="0" max="-152" />
 		<attack name="ice" interval="2000" chance="10" length="10" spread="3" min="-180" max="-350">
 			<attribute key="areaEffect" value="icetornado" />
 		</attack>

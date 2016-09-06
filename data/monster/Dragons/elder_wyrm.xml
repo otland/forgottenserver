@@ -18,7 +18,7 @@
 		<flag runonhealth="250" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-360" />
 		<attack name="energy" interval="2000" chance="15" radius="4" target="1" min="-90" max="-150">
 			<attribute key="areaEffect" value="teleport" />
 		</attack>

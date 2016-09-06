@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="120" />
+		<attack name="melee" interval="2000" min="0" max="-540" />
 		<attack name="speed" interval="1000" chance="17" range="7" radius="4" target="1" speedchange="-600" duration="1500">
 		</attack>
 		<attack name="ice" interval="2000" chance="21" range="6" radius="2" target="1" min="-130" max="-350">

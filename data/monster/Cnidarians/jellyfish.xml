@@ -23,7 +23,7 @@
 		<immunity drown="1" />
 	</immunities>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="10" />
+		<attack name="melee" interval="2000" min="0" max="-10" />
 	</attacks>
 	<defenses armor="10" defense="10">
 		<defense name="invisible" interval="2000" chance="15" duration="3000" />

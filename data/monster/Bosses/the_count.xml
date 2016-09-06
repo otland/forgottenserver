@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="130" attack="135" />
+		<attack name="melee" interval="2000" min="0" max="-945" />
 		<attack name="lifedrain" interval="1000" chance="9" target="0" radius="4" min="0" max="-300">
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>

@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" poison="160" />
+		<attack name="melee" interval="2000" min="0" max="-80" poison="160" />
 		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-60" max="-120">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="smallclouds" />

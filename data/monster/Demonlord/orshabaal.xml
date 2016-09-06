@@ -16,7 +16,7 @@
 		<flag runonhealth="2500" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="190" attack="199" />
+		<attack name="melee" interval="2000" min="0" max="-1990" />
 		<attack name="manadrain" interval="1000" chance="13" range="7" min="-300" max="-600" />
 		<attack name="manadrain" interval="1000" chance="6" radius="5" target="0" min="-150" max="-350">
 			<attribute key="areaEffect" value="poison" />

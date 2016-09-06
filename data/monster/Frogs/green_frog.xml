@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="25" />
+		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<voices interval="5000" chance="10">

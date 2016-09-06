@@ -16,7 +16,7 @@
 		<flag runonhealth="3000" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="200" attack="250" />
+		<attack name="melee" interval="2000" min="0" max="-2625" />
 		<attack name="manadrain" interval="1000" chance="7" range="7" min="-100" max="-1000">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="poff" />

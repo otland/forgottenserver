@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="80" poison="300" />
+		<attack name="melee" interval="2000" min="0" max="-220" poison="300" />
 		<attack name="drown" interval="2000" chance="15" target="1" range="7" radius="2" min="-330" max="-450">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>

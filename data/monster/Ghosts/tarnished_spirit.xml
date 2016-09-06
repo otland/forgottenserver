@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-45">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>

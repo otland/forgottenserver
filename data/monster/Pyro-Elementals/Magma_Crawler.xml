@@ -17,7 +17,7 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="58" />
+		<attack name="melee" interval="2000" min="0" max="-203" />
 		<attack name="death" interval="2000" chance="10" length="8" spread="0" min="-300" max="-1100">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>

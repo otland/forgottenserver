@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0" />
+		<attack name="melee" interval="2000" min="0" max="-0" />
 		<attack name="outfit" interval="2000" radius="3" chance="6" monster="bat" duration="6000">
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
