@@ -23,7 +23,7 @@
 		<attack name="ice" interval="1000" chance="10" length="9" spread="3" min="-365" max="-491">
 			<attribute key="areaEffect" value="icearea" />
 		</attack>
-		<attack name="drown" interval="1000" chance="11" radius="4" target="1" min ="-15" max="-20">
+		<attack name="drown" interval="1000" chance="11" radius="4" target="1" min="-15" max="-20">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
 	</attacks>

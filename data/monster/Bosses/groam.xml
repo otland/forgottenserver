@@ -17,7 +17,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-99" />
-		<attack name="drown" interval="1000" chance="11" range="5" target="1" min ="-15" max="-100">
+		<attack name="drown" interval="1000" chance="11" range="5" target="1" min="-15" max="-100">
 			<attribute key="shootEffect" value="spear" />
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
