@@ -942,6 +942,17 @@ void Monster::onThinkDefense(uint32_t interval)
 				continue;
 			}
 
+			uint32_t summonCount = 0;
+			for (Creature* summon : summons) {
+				if (summon->getName() == summonBlock.name) {
+					++summonCount;
+				}
+			}
+
+			if (summonCount >= summonBlock.max) {
+				continue;
+			}
+
 			if (summonBlock.chance < static_cast<uint32_t>(uniform_random(1, 100))) {
 				continue;
 			}
