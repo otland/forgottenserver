@@ -40,7 +40,7 @@
 		<item id="2667" chance="6667" countmax="1" /><!-- fish -->
 		<item id="2392" chance="8970" /><!-- fire sword -->
 		<item id="2463" chance="7333" /><!-- plate armor -->
-		<item id="2399" chance1="6666" countmax="18" /><!-- throwing star -->
+		<item id="2399" chance="6666" countmax="18" /><!-- throwing star -->
 		<item id="2428" chance="13000" /><!-- orcish axe -->
 		<item id="2478" chance="3333" /><!-- brass legs -->
 		<item id="2200" chance="9000" /><!-- protection amulet -->
