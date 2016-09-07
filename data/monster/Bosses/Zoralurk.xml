@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Zoralurk" nameDescription="Zoralurk" race="UNDEAD" experience="30000" speed="400" manacost="0">
+<monster name="Zoralurk" nameDescription="Zoralurk" race="undead" experience="30000" speed="400" manacost="0">
 	<health now="55000" max="55000" />
 	<look type="12" head="0" body="98" legs="86" feet="94" corpse="6068" />
 	<targetchange interval="10000" chance="20" />
