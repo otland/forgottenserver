@@ -49,7 +49,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="8">
-		<summon name="Slime2" interval="2000" chance="30000000" max="8" />
+		<summon name="Slime" interval="2000" chance="100" max="8" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="You will become a feast for my maggots." />
