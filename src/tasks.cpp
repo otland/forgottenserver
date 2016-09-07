@@ -91,7 +91,7 @@ void Dispatcher::shutdown()
 		taskSignal.notify_one();
 	});
 
-	std::lock_guard<std::mutex> lockGuard(taskLock);
+	std::lock_guard<std::mutex> lockClass(taskLock);
 	taskList.push_back(task);
 
 	taskSignal.notify_one();
