@@ -1127,6 +1127,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 		for (auto summonNode : node.children()) {
 			int32_t chance = 100;
 			int32_t speed = 1000;
+			int32_t max = mType->maxSummons;
 			bool force = false;
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
@@ -1136,7 +1137,11 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			if ((attr = summonNode.attribute("chance"))) {
 				chance = pugi::cast<int32_t>(attr.value());
 			}
-			
+
+			if ((attr = summonNode.attribute("max"))) {
+				max = pugi::cast<uint32_t>(attr.value());
+			}
+
 			if ((attr = summonNode.attribute("force"))) {
 				force = attr.as_bool();
 			}
@@ -1146,6 +1151,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 				sb.name = attr.as_string();
 				sb.speed = speed;
 				sb.chance = chance;
+				sb.max = max;
 				sb.force = force;
 				mType->summons.emplace_back(sb);
 			} else {
