@@ -29,7 +29,7 @@
 			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="poison" interval="2000" chance="10" range="7" min="-20" max="-40">
+		<attack name="earth" interval="2000" chance="10" range="7" min="-20" max="-40">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="5" range="7" min="-45" max="-85">

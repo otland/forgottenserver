@@ -24,7 +24,7 @@
 		<attack name="earth" interval="2000" chance="15" length="5" spread="0" min="-40" max="-60">
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
-		<attack name="poison" interval="2000" chance="10" range="7" target="1">
+		<attack name="earth" interval="2000" chance="10" range="7" target="1">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>

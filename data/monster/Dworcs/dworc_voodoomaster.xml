@@ -31,7 +31,7 @@
 		<attack name="outfit" interval="2000" chance="10" range="7" monster="chicken" duration="5000">
 			<attribute key="areaeffect" value="blueshimmer" />
 		</attack>
-		<attack name="poison" interval="2000" chance="10" radius="6" target="0" min="-6" max="-18">
+		<attack name="earth" interval="2000" chance="10" radius="6" target="0" min="-6" max="-18">
 			<attribute key="areaeffect" value="greenbubble" />
 		</attack>
 		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">

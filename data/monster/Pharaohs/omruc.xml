@@ -19,7 +19,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" poison="65" />
 		<attack name="lifedrain" interval="5000" chance="20" range="1" min="-100" max="-250" />
-		<attack name="poison" interval="2000" chance="20" min="-200" max="-500">
+		<attack name="earth" interval="2000" chance="20" min="-200" max="-500">
 			<attribute key="shootEffect" value="poisonarrow" />
 		</attack>
 		<attack name="fire" interval="1000" chance="20" range="3" min="-120" max="-450">

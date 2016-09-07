@@ -21,7 +21,7 @@
 		<attack name="lifedrain" interval="1000" chance="20" range="1" min="-80" max="-120">
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
-		<attack name="poison" interval="1000" chance="17" range="7" min="-50" max="-140">
+		<attack name="earth" interval="1000" chance="17" range="7" min="-50" max="-140">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -32,7 +32,7 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity outfit="1" />
 		<immunity drunk="1" />

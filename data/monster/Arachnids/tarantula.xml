@@ -18,7 +18,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" poison="40" />
-		<attack name="poison" interval="2000" chance="10" target="1" radius="1" range="1">
+		<attack name="earth" interval="2000" chance="10" target="1" radius="1" range="1">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="carniphila" />
 		</attack>

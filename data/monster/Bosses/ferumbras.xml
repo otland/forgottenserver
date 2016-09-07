@@ -21,7 +21,7 @@
 		<attack name="manadrain" interval="2000" chance="20" range="7" min="-300" max="-700">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="poison" interval="3000" chance="20" radius="6" target="0" min="-250" max="-550">
+		<attack name="earth" interval="3000" chance="20" radius="6" target="0" min="-250" max="-550">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="energy" interval="2000" chance="18" radius="6" target="0" min="-200" max="-400">

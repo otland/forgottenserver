@@ -28,7 +28,7 @@
 		<attack name="manadrain" interval="2000" chance="10" length="6" spread="0" min="-130" max="-200">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
-		<attack name="poison" interval="2000" chance="15" length="8" spread="3" min="-80" max="-120">
+		<attack name="earth" interval="2000" chance="15" length="8" spread="3" min="-80" max="-120">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</attack>
 	</attacks>

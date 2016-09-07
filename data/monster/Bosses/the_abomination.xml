@@ -38,7 +38,7 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity outfit="1" />
 		<immunity drunk="1" />
 		<immunity invisible="1" />

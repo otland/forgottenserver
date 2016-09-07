@@ -25,7 +25,7 @@
 	<defenses armor="25" defense="25" />
 	<immunities>
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity drunk="1" />
 	</immunities>

@@ -28,7 +28,7 @@
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
-		<attack name="poison" interval="1000" chance="15" range="7" min="-40" max="-120">
+		<attack name="earth" interval="1000" chance="15" range="7" min="-40" max="-120">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="lifedrain" interval="1000" chance="12" range="7" min="-110" max="-130">
@@ -37,7 +37,7 @@
 		<attack name="speed" interval="1000" chance="10" range="7" speedchange="-850" duration="20000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="poison" interval="1000" chance="8" length="8" spread="3" min="-35" max="-85">
+		<attack name="earth" interval="1000" chance="8" length="8" spread="3" min="-35" max="-85">
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
 		<attack name="lifedrain" interval="1000" chance="6" length="8" spread="3" min="-75" max="-85">

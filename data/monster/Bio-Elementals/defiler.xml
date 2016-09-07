@@ -18,13 +18,13 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-240" poison="150" />
-		<attack name="poison" interval="2000" chance="20" range="7" min="-160" max="-270">
+		<attack name="earth" interval="2000" chance="20" range="7" min="-160" max="-270">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="15" target="0" radius="7" range="7" min="-400" max="-640">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
-		<attack name="poison" interval="2000" chance="20" radius="3" target="0" min="-120" max="-170">
+		<attack name="earth" interval="2000" chance="20" radius="3" target="0" min="-120" max="-170">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="10" length="8" spread="3" min="-500" max="-1000">

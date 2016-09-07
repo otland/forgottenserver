@@ -24,7 +24,7 @@
 	<immunities>
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
