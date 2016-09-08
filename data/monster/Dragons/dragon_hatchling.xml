@@ -17,7 +17,7 @@
 		<flag staticattack="90" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-55" />
 		<attack name="fire" interval="2000" chance="10" length="5" spread="2" min="-60" max="-90">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>

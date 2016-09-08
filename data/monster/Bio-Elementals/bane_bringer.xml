@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="60" range="1" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 	</attacks>
 	<defenses armor="50" defense="55" />
 	<elements>
@@ -37,7 +37,7 @@
 		<voice sentence="This time we will prevail!" />
 	</voices>
 	<loot>
-		<item id="12969" chance="100000" /><!-- dry piece of wood -->
 		<item id="2250" countmax="96" chance="14285" /><!-- wooden trash -->
+		<item id="12969" chance="100000" /><!-- dry piece of wood -->
 	</loot>
 </monster>

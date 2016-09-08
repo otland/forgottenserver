@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>
 	<defenses armor="20" defense="25">
 		<defense name="speed" interval="1000" chance="7" speedchange="260" duration="3000">
@@ -42,10 +42,10 @@
 	</voices>
 	<loot>
 		<item id="2148" chance="50000" countmax="60" /><!-- gold coin -->
-		<item id="5883" chance="2500" /><!-- ape fur -->
-		<item id="2676" chance="7500" countmax="2" /><!-- banana -->
-		<item id="2200" chance="3000" /><!-- protection amulet -->
 		<item id="2166" chance="7500" /><!-- power ring -->
+		<item id="2200" chance="3000" /><!-- protection amulet -->
 		<item id="2463" chance="5000" /><!-- plate armor -->
+		<item id="2676" chance="7500" countmax="2" /><!-- banana -->
+		<item id="5883" chance="2500" /><!-- ape fur -->
 	</loot>
 </monster>

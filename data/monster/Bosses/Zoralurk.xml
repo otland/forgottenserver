@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="140" attack="135" />
+		<attack name="melee" interval="2000" min="0" max="-1013" />
 		<attack name="energy" interval="1000" chance="12" radius="7" target="0" min="-600" max="-900">
 			<attribute key="areaEffect" value="energy" />
 		</attack>
@@ -56,10 +56,9 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity physical="0" />
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity outfit="1" />
@@ -74,15 +73,15 @@
 		<voice sentence="BRING IT, COCKROACHES!" yell="1" />
 	</voices>
 	<loot>
+		<item id="2143" chance="10000" countmax="5" /><!-- White Pearl -->
 		<item id="2148" chance="100000" countmax="100" /><!-- Gold Coin -->
 		<item id="2148" chance="50000" countmax="90" /><!-- Gold Coin -->
-		<item id="2143" chance="10000" countmax="5" /><!-- White Pearl -->
-		<item id="2407" chance="20000" /><!-- Haunted Blade -->
-		<item id="6530" chance="16000" /><!-- Worn Soft Boots -->
-		<item id="2641" chance="7000" /><!-- Traper Boots -->
-		<item id="2407" chance="20000" /><!-- Bright -->
-		<item id="2393" chance="60000" /><!-- Giant Sword -->
 		<item id="2195" chance="16033" /><!-- Boots of Haste -->
+		<item id="2393" chance="60000" /><!-- Giant Sword -->
+		<item id="2407" chance="20000" /><!-- Haunted Blade -->
+		<item id="2407" chance="20000" /><!-- Bright -->
 		<item id="2408" chance="6000" /><!-- Warlord Sword -->
+		<item id="2641" chance="7000" /><!-- Traper Boots -->
+		<item id="6530" chance="16000" /><!-- Worn Soft Boots -->
 	</loot>
 </monster>

@@ -17,12 +17,12 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" poison="160" />
+		<attack name="melee" interval="2000" min="0" max="-80" poison="160" />
 		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-60" max="-120">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="poison" interval="2000" chance="20" range="7" min="-65" max="-120">
+		<attack name="earth" interval="2000" chance="20" range="7" min="-65" max="-120">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -55,15 +55,15 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="90" chance="30050" /><!-- gold coin -->
-		<item id="2545" countmax="5" chance="15000" /><!-- poison arrow -->
-		<item id="2796" chance="1470" /><!-- green mushroom -->
-		<item id="2423" chance="390" /><!-- clerical mace -->
-		<item id="7589" chance="300" /><!-- strong mana potion -->
-		<item id="2663" chance="500" /><!-- mystic turban -->
-		<item id="2436" chance="100" /><!-- skull staff -->
-		<item id="7456" chance="10" /><!-- noble axe -->
-		<item id="8901" chance="130" /><!-- spellbook of warding -->
 		<item id="2195" chance="210" /><!-- boots of haste -->
+		<item id="2423" chance="390" /><!-- clerical mace -->
+		<item id="2436" chance="100" /><!-- skull staff -->
+		<item id="2545" countmax="5" chance="15000" /><!-- poison arrow -->
+		<item id="2663" chance="500" /><!-- mystic turban -->
+		<item id="2796" chance="1470" /><!-- green mushroom -->
+		<item id="7456" chance="10" /><!-- noble axe -->
+		<item id="7589" chance="300" /><!-- strong mana potion -->
+		<item id="8901" chance="130" /><!-- spellbook of warding -->
 		<item id="11237" chance="10130" /><!-- Book of Necromantic Rituals -->
 		<item id="12431" chance="1001" /><!-- Necromantic Robe -->
 	</loot>

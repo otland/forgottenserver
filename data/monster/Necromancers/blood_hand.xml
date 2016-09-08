@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="45" poison="80" />
+		<attack name="melee" interval="2000" min="0" max="-158" poison="80" />
 		<attack name="lifedrain" interval="2000" chance="20" target="0" radius="4" min="-50" max="-100">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -29,7 +29,10 @@
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">
-		<defense name="physical" interval="2000" radius="1" chance="10">
+		<defense name="healing" interval="2000" chance="20" min="70" max="90">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="effect" interval="2000" chance="10" radius="1">
 			<attribute key="areaEffect" value="insects" />
 		</defense>
 	</defenses>
@@ -45,32 +48,27 @@
 		<immunity earth="1" />
 		<immunity drown="1" />
 	</immunities>
-	<defenses>
-		<defense name="healing" interval="2000" chance="20" min="70" max="90">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-	</defenses>
 	<voices interval="5000" chance="10">
 		<voice sentence="Blood for the dark god!" />
 		<voice sentence="Die, filth!" />
 	</voices>
 	<loot>
 		<item id="2148" countmax="130" chance="100000" /><!-- gold coin -->
-		<item id="21245" chance="15460" /><!-- Blood Tincture in a Vial -->
-		<item id="21242" chance="10680" /><!-- Lancet -->
-		<item id="21246" chance="8820" /><!-- Incantation Notes -->
-		<item id="11237" chance="9340" /><!-- Book of Necromantic Rituals -->
-		<item id="21243" chance="7950" /><!-- Horoscope -->
-		<item id="21247" chance="6120" /><!-- Pieces of Magic Chalk -->
-		<item id="7589" chance="5590" /><!-- Strong Mana Potion -->
 		<item id="2185" chance="3000" /><!-- Necrotic Rod -->
-		<item id="8900" chance="790" /><!-- Spellbook of Enlightenment -->
-		<item id="15565" chance="710" /><!-- Red Gem -->
-		<item id="5909" chance="840" /><!-- White Piece of Cloth -->
-		<item id="2663" chance="790" /><!-- Mystic Turban -->
 		<item id="2195" chance="210" /><!-- Boots of Haste -->
-		<item id="5911" chance="500" /><!-- Red Piece of Cloth -->
 		<item id="2436" chance="130" /><!-- Skull Staff -->
+		<item id="2663" chance="790" /><!-- Mystic Turban -->
+		<item id="5909" chance="840" /><!-- White Piece of Cloth -->
+		<item id="5911" chance="500" /><!-- Red Piece of Cloth -->
 		<item id="7456" chance="10" /><!-- Noble Axe -->
+		<item id="7589" chance="5590" /><!-- Strong Mana Potion -->
+		<item id="8900" chance="790" /><!-- Spellbook of Enlightenment -->
+		<item id="11237" chance="9340" /><!-- Book of Necromantic Rituals -->
+		<item id="15565" chance="710" /><!-- Red Gem -->
+		<item id="21242" chance="10680" /><!-- Lancet -->
+		<item id="21243" chance="7950" /><!-- Horoscope -->
+		<item id="21245" chance="15460" /><!-- Blood Tincture in a Vial -->
+		<item id="21246" chance="8820" /><!-- Incantation Notes -->
+		<item id="21247" chance="6120" /><!-- Pieces of Magic Chalk -->
 	</loot>
 </monster>

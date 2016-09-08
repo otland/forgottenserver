@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-70" />
 		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-20" max="-30">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -38,12 +38,12 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="8" chance="13000" /><!-- gold coin -->
-		<item id="2410" countmax="2" chance="11170" /><!-- throwing knife -->
-		<item id="2478" chance="3500" /><!-- brass legs -->
-		<item id="2478" chance="5510" /><!-- brass shield -->
 		<item id="2260" chance="8670" /><!-- blank rune -->
+		<item id="2410" countmax="2" chance="11170" /><!-- throwing knife -->
 		<item id="2412" chance="530" /><!-- katana -->
 		<item id="2425" chance="1210" /><!-- obsidian lance -->
+		<item id="2478" chance="3500" /><!-- brass legs -->
+		<item id="2478" chance="5510" /><!-- brass shield -->
 		<item id="12430" chance="1550" /><!-- miraculum -->
 	</loot>
 </monster>

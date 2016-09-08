@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="230" attack="210" />
+		<attack name="melee" interval="2000" min="0" max="-2520" />
 		<attack name="death" interval="1000" chance="8" radius="9" target="0" min="-800" max="-1900">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
@@ -53,10 +53,9 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity physical="0" />
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity outfit="1" />
@@ -69,63 +68,63 @@
 		<voice sentence="CHAOS!" yell="1" />
 		<voice sentence="DEATH TO ALL!" yell="1" />
 	</voices>
-	<loot capacity="5000">
-		<item id="2142" countmax="1" chance="3500" />
-		<item id="2231" countmax="1" chance="9000" />
-		<item id="2144" countmax="15" chance="15000" />
-		<item id="2158" countmax="1" chance="1500" />
-		<item id="2195" countmax="1" chance="4000" />
-		<item id="2192" countmax="1" chance="2500" />
-		<item id="2125" countmax="1" chance="1500" />
+	<loot>
+		<item id="1982" countmax="1" chance="2600" />
+		<item id="2033" countmax="1" chance="7500" />
+		<item id="2112" countmax="1" chance="14500" />
+		<item id="2123" countmax="1" chance="3500" />
 		<item id="2124" countmax="1" chance="5500" />
-		<item id="2520" countmax="1" chance="15500" />
-		<item id="2462" countmax="1" chance="11000" />
-		<item id="2387" countmax="1" chance="20000" />
-		<item id="2434" countmax="1" chance="4500" />
-		<item id="2167" countmax="1" chance="13500" />
-		<item id="2432" countmax="1" chance="17000" />
-		<item id="2393" countmax="1" chance="12500" />
+		<item id="2125" countmax="1" chance="1500" />
+		<item id="2142" countmax="1" chance="3500" />
+		<item id="2143" countmax="15" chance="12500" />
+		<item id="2144" countmax="15" chance="15000" />
+		<item id="2145" countmax="5" chance="9500" />
+		<item id="2146" countmax="10" chance="13500" />
 		<item id="2148" countmax="100" chance="99900" />
 		<item id="2148" countmax="100" chance="88800" />
 		<item id="2148" countmax="100" chance="77700" />
 		<item id="2148" countmax="100" chance="66600" />
-		<item id="2179" countmax="1" chance="8000" />
-		<item id="2470" countmax="1" chance="5000" />
-		<item id="2033" countmax="1" chance="7500" />
-		<item id="2418" countmax="1" chance="4500" />
+		<item id="2149" countmax="10" chance="15500" />
+		<item id="2150" countmax="20" chance="13500" />
+		<item id="2151" countmax="7" chance="14000" />
 		<item id="2155" countmax="1" chance="1500" />
-		<item id="2396" countmax="1" chance="7500" />
-		<item id="2177" countmax="1" chance="1000" />
+		<item id="2158" countmax="1" chance="1500" />
 		<item id="2162" countmax="1" chance="11500" />
+		<item id="2164" countmax="1" chance="5000" />
+		<item id="2165" countmax="1" chance="9500" />
+		<item id="2167" countmax="1" chance="13500" />
+		<item id="2170" countmax="1" chance="13000" />
+		<item id="2171" countmax="1" chance="4500" />
+		<item id="2174" countmax="1" chance="2500" />
+		<item id="2176" countmax="1" chance="12000" />
+		<item id="2177" countmax="1" chance="1000" />
+		<item id="2178" countmax="1" chance="4000" />
+		<item id="2179" countmax="1" chance="8000" />
+		<item id="2182" countmax="1" chance="3500" />
+		<item id="2185" countmax="1" chance="3500" />
+		<item id="2186" countmax="1" chance="3500" />
+		<item id="2188" countmax="1" chance="2500" />
+		<item id="2192" countmax="1" chance="2500" />
+		<item id="2195" countmax="1" chance="4000" />
+		<item id="2197" countmax="1" chance="4000" />
+		<item id="2200" countmax="1" chance="4500" />
+		<item id="2214" countmax="1" chance="13000" />
+		<item id="2231" countmax="1" chance="9000" />
+		<item id="2377" countmax="1" chance="20000" />
+		<item id="2387" countmax="1" chance="20000" />
+		<item id="2393" countmax="1" chance="12500" />
+		<item id="2396" countmax="1" chance="7500" />
+		<item id="2402" countmax="1" chance="15500" />
+		<item id="2418" countmax="1" chance="4500" />
+		<item id="2421" countmax="1" chance="13500" />
+		<item id="2432" countmax="1" chance="17000" />
+		<item id="2434" countmax="1" chance="4500" />
+		<item id="2436" countmax="1" chance="5000" />
+		<item id="2462" countmax="1" chance="11000" />
+		<item id="2470" countmax="1" chance="5000" />
 		<item id="2472" countmax="1" chance="3000" />
 		<item id="2514" countmax="1" chance="7500" />
-		<item id="2164" countmax="1" chance="5000" />
-		<item id="2178" countmax="1" chance="4000" />
-		<item id="2186" countmax="1" chance="3500" />
-		<item id="2176" countmax="1" chance="12000" />
-		<item id="2171" countmax="1" chance="4500" />
-		<item id="2200" countmax="1" chance="4500" />
-		<item id="1982" countmax="1" chance="2600" />
-		<item id="2214" countmax="1" chance="13000" />
-		<item id="2123" countmax="1" chance="3500" />
-		<item id="2170" countmax="1" chance="13000" />
-		<item id="2402" countmax="1" chance="15500" />
-		<item id="2436" countmax="1" chance="5000" />
-		<item id="2150" countmax="20" chance="13500" />
-		<item id="2145" countmax="5" chance="9500" />
-		<item id="2149" countmax="10" chance="15500" />
-		<item id="2146" countmax="10" chance="13500" />
-		<item id="2182" countmax="1" chance="3500" />
-		<item id="2165" countmax="1" chance="9500" />
-		<item id="2197" countmax="1" chance="4000" />
-		<item id="2174" countmax="1" chance="2500" />
-		<item id="2151" countmax="7" chance="14000" />
-		<item id="2112" countmax="1" chance="14500" />
-		<item id="2421" countmax="1" chance="13500" />
-		<item id="2377" countmax="1" chance="20000" />
-		<item id="2185" countmax="1" chance="3500" />
+		<item id="2520" countmax="1" chance="15500" />
 		<item id="3955" countmax="1" chance="100" />
-		<item id="2188" countmax="1" chance="2500" />
-		<item id="2143" countmax="15" chance="12500" />
 	</loot>
 </monster>

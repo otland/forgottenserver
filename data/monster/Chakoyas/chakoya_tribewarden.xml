@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -38,12 +38,12 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
-		<item id="2667" chance="20000" /><!-- fish -->
+		<item id="2406" chance="4680" /><!-- short sword -->
 		<item id="2541" chance="1000" /><!-- bone shield -->
-		<item id="7381" chance="300" /><!-- mammoth whopper -->
+		<item id="2667" chance="20000" /><!-- fish -->
+		<item id="2669" chance="90" /><!-- northern pike -->
 		<item id="7158" chance="130" /><!-- rainbow trout -->
 		<item id="7159" chance="190" /><!-- green perch -->
-		<item id="2669" chance="90" /><!-- northern pike -->
-		<item id="2406" chance="4680" /><!-- short sword -->
+		<item id="7381" chance="300" /><!-- mammoth whopper -->
 	</loot>
 </monster>

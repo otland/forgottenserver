@@ -26,7 +26,7 @@
 		<immunity physical="1" />
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity ice="1" />
 		<immunity holy="1" />
 		<immunity death="1" />

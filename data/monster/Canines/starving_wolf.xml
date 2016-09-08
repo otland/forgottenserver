@@ -17,10 +17,10 @@
 		<flag runonhealth="8" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="25" />
+		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>
 	<defenses armor="10" defense="10">
-		<defense name="physical" interval="2000" chance="10" radius="1">
+		<defense name="effect" interval="2000" chance="10" radius="1">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</defense>
 	</defenses>
@@ -36,8 +36,8 @@
 		<voice sentence="Yoooohhuuuu!" />
 	</voices>
 	<loot>
+		<item id="220" chance="64730" /><!-- dirty fur -->
 		<item id="2666" countmax="2" chance="5300" /><!-- meat -->
 		<item id="5897" chance="1430" /><!-- wolf paw -->
-		<item id="220" chance="64730" /><!-- dirty fur -->
 	</loot>
 </monster>

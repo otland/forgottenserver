@@ -17,7 +17,7 @@
 		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="56" />
+		<attack name="melee" interval="2000" min="0" max="-140" />
 		<attack name="earth" interval="2000" chance="10" target="0" length="5" spread="3" min="-50" max="-100">
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
@@ -44,17 +44,17 @@
 	<loot>
 		<item id="2148" countmax="120" chance="100000" /><!-- gold coin -->
 		<item id="2696" chance="20000" /><!-- cheese -->
-		<item id="20097" chance="16666" /><!-- cheese cutter -->
-		<item id="20101" chance="14285" /><!-- rat cheese -->
-		<item id="20100" chance="14285" /><!-- soft cheese -->
-		<item id="20099" chance="11111" /><!-- earflap -->
 		<item id="20089" chance="10000" /><!-- bola -->
-		<item id="20093" chance="5000" /><!-- life preserver -->
-		<item id="20092" chance="5000" /><!-- ratana -->
 		<item id="20090" chance="4761" /><!-- spike shield -->
+		<item id="20092" chance="5000" /><!-- ratana -->
+		<item id="20093" chance="5000" /><!-- life preserver -->
+		<item id="20097" chance="16666" /><!-- cheese cutter -->
 		<item id="20098" chance="3846" /><!-- cheesy figurine -->
-		<item id="20139" chance="3225" /><!-- spiky club -->
-		<item id="20126" chance="1612" /><!-- leather harness -->
+		<item id="20099" chance="11111" /><!-- earflap -->
+		<item id="20100" chance="14285" /><!-- soft cheese -->
+		<item id="20101" chance="14285" /><!-- rat cheese -->
 		<item id="20105" chance="14" /><!-- rat god doll -->
+		<item id="20126" chance="1612" /><!-- leather harness -->
+		<item id="20139" chance="3225" /><!-- spiky club -->
 	</loot>
 </monster>

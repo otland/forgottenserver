@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-40" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -30,8 +30,8 @@
 		<voice sentence="Groarrr!" />
 	</voices>
 	<loot>
-		<item id="2671" countmax="2" chance="18430" /><!-- ham -->
 		<item id="2666" countmax="4" chance="45000" /><!-- meat -->
+		<item id="2671" countmax="2" chance="18430" /><!-- ham -->
 		<item id="10608" chance="1400" /><!-- lion's mane -->
 	</loot>
 </monster>

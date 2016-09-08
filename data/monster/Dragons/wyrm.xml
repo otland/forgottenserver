@@ -18,7 +18,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="67" />
+		<attack name="melee" interval="2000" min="0" max="-235" />
 		<attack name="energy" interval="2000" chance="15" radius="3" min="-100" max="-220">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>
@@ -37,7 +37,7 @@
 		<defense name="healing" interval="2000" chance="15" min="100" max="150">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
-		<defense name="physical" interval="2000" chance="10" radius="1">
+		<defense name="effect" interval="2000" chance="10" radius="1">
 			<attribute key="areaEffect" value="yellownote" />
 		</defense>
 	</defenses>
@@ -58,23 +58,23 @@
 		<voice sentence="GROOOOAAAAAAAAR!" />
 	</voices>
 	<loot>
+		<item id="2145" countmax="3" chance="750" /><!-- small diamonds-->
 		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
 		<item id="2148" countmax="30" chance="30000" /><!-- gold coin -->
-		<item id="2672" countmax="3" chance="34800" /><!-- dragon ham -->
-		<item id="2546" countmax="10" chance="7650" /><!-- burst arrow -->
-		<item id="7588" chance="19970" /><!-- strong health potion -->
-		<item id="8921" chance="990" /><!-- wand of draconia -->
-		<item id="2145" countmax="3" chance="750" /><!-- small diamonds-->
-		<item id="7589" chance="15310" /><!-- strong mana potion -->
 		<item id="2455" chance="5920" /><!-- crossbow -->
-		<item id="7889" chance="720" /><!-- lightning pendant -->
-		<item id="8871" chance="1250" /><!-- focus cape -->
-		<item id="8920" chance="420" /><!-- wand of starstorm -->
-		<item id="8873" chance="250" /><!-- hubiscus dress -->
+		<item id="2546" countmax="10" chance="7650" /><!-- burst arrow -->
+		<item id="2672" countmax="3" chance="34800" /><!-- dragon ham -->
 		<item id="7430" chance="110" /><!-- dragonbone staff -->
+		<item id="7588" chance="19970" /><!-- strong health potion -->
+		<item id="7589" chance="15310" /><!-- strong mana potion -->
+		<item id="7889" chance="720" /><!-- lightning pendant -->
 		<item id="8855" chance="90" /><!-- composite hornbow -->
-		<item id="10582" chance="15360" /><!--wyrm scale -->
+		<item id="8871" chance="1250" /><!-- focus cape -->
+		<item id="8873" chance="250" /><!-- hubiscus dress -->
+		<item id="8920" chance="420" /><!-- wand of starstorm -->
+		<item id="8921" chance="990" /><!-- wand of draconia -->
 		<item id="10221" chance="110" /><!--shockwave amulet-->
+		<item id="10582" chance="15360" /><!--wyrm scale -->
 	</loot>
 </monster>

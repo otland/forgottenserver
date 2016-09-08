@@ -17,11 +17,11 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0" />
+		<attack name="melee" interval="2000" min="0" max="0" />
 	</attacks>
 	<defenses armor="1" defense="2" />
 	<loot>
-		<item id="2684" countmax="2" chance="9000" /><!-- carrot -->
 		<item id="2666" countmax="2" chance="20000" /><!-- meat -->
+		<item id="2684" countmax="2" chance="9000" /><!-- carrot -->
 	</loot>
 </monster>

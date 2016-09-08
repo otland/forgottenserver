@@ -16,7 +16,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="physical" interval="2000" chance="15" target="1" radius="1" range="7" min="0" max="-35">
 			<attribute key="shootEffect" value="smallstone" />
 			<attribute key="areaEffect" value="explosionarea" />
@@ -38,9 +38,9 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="10" chance="18000" /><!-- gold coin -->
-		<item id="2667" countmax="4" chance="8000" /><!-- fish -->
-		<item id="7159" chance="7000" /><!-- green perch -->
-		<item id="7158" chance="8000" /><!-- rainbow trout -->
 		<item id="2434" chance="200" /><!-- dragon hammer -->
+		<item id="2667" countmax="4" chance="8000" /><!-- fish -->
+		<item id="7158" chance="8000" /><!-- rainbow trout -->
+		<item id="7159" chance="7000" /><!-- green perch -->
 	</loot>
 </monster>

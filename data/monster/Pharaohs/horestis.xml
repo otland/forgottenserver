@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="150" attack="74" poison="165" />
+		<attack name="melee" interval="2000" min="0" max="-592" poison="165" />
 		<attack name="lifedrain" interval="1000" chance="8" range="1" min="-300" max="-500" />
 		<attack name="earth" interval="1000" chance="12" range="7" min="-300" max="-500">
 			<attribute key="shootEffect" value="poison" />
@@ -54,18 +54,18 @@
 		<voice sentence="Receive a lesson of the past!" />
 	</voices>
 	<loot>
-		<item id="13498" chance="100000" /><!-- scorpion sceptre -->
+		<item id="2134" chance="12500" /><!-- silver brooch -->
 		<item id="2148" countmax="243" chance="50000" /><!-- gold coin -->
 		<item id="2152" countmax="5" chance="33333" /><!-- platinum coin -->
-		<item id="13472" chance="16666" /><!-- pharaoh banner -->
 		<item id="2159" countmax="5" chance="14285" /><!-- scarab coin -->
-		<item id="13739" chance="12500" /><!-- hieroglyph banner -->
-		<item id="2134" chance="12500" /><!-- silver brooch -->
+		<item id="2446" chance="5000" /><!-- pharaoh sword -->
+		<item id="2447" chance="2500" /><!-- twin axe -->
 		<item id="7590" countmax="3" chance="10000" /><!-- great mana potion -->
 		<item id="7591" countmax="4" chance="5000" /><!-- great health potion -->
-		<item id="2446" chance="5000" /><!-- pharaoh sword -->
-		<item id="11207" chance="2500" /><!-- mini mummy -->
 		<item id="9811" chance="2500" /><!-- rusty legs -->
-		<item id="2447" chance="2500" /><!-- twin axe -->
+		<item id="11207" chance="2500" /><!-- mini mummy -->
+		<item id="13472" chance="16666" /><!-- pharaoh banner -->
+		<item id="13498" chance="100000" /><!-- scorpion sceptre -->
+		<item id="13739" chance="12500" /><!-- hieroglyph banner -->
 	</loot>
 </monster>

@@ -17,7 +17,7 @@
 		<flag runonhealth="900" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-210" />
 		<attack name="fire" interval="2000" chance="10" length="5" spread="2" target="0" min="-120" max="-250">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="fire" />
@@ -55,8 +55,8 @@
 		<item id="2148" countmax="100" chance="37500" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="37500" /><!-- gold coin -->
 		<item id="2148" countmax="27" chance="37500" /><!-- gold coin -->
-		<item id="7589" countmax="2" chance="16900" /><!-- smp-->
 		<item id="7588" countmax="2" chance="24480" /><!-- shp -->
+		<item id="7589" countmax="2" chance="16900" /><!-- smp-->
 		<item id="18425" chance="12410" /><!-- Blazing Bones -->
 	</loot>
 </monster>

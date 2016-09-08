@@ -17,7 +17,7 @@
 		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="energy" interval="2000" chance="15" radius="4" target="1" min="-60" max="-100">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="yellowenergy" />
@@ -50,16 +50,16 @@
 	<loot>
 		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="40" chance="45000" /><!-- gold coin -->
-		<item id="9690" chance="940" /><!-- gear wheel -->
-		<item id="13938" chance="40" /><!-- Golden Can of Oil -->
-		<item id="7618" chance="4930" /><!-- health potion -->
-		<item id="2466" chance="10" /><!-- Golden Armor -->
-		<item id="7620" chance="4950" /><!-- mana potion -->
-		<item id="2179" chance="10" /><!-- gold ring -->
-		<item id="13758" chance="340" /><!-- slime mould -->
-		<item id="8900" chance="520" /><!-- spellbook of enlightenment -->
 		<item id="2165" chance="450" /><!-- stealth ring -->
+		<item id="2179" chance="10" /><!-- gold ring -->
 		<item id="2381" chance="3003" /><!-- halberd -->
+		<item id="2466" chance="10" /><!-- Golden Armor -->
 		<item id="2796" chance="1450" /><!-- Green mushroom -->
+		<item id="7618" chance="4930" /><!-- health potion -->
+		<item id="7620" chance="4950" /><!-- mana potion -->
+		<item id="8900" chance="520" /><!-- spellbook of enlightenment -->
+		<item id="9690" chance="940" /><!-- gear wheel -->
+		<item id="13758" chance="340" /><!-- slime mould -->
+		<item id="13938" chance="40" /><!-- Golden Can of Oil -->
 	</loot>
 </monster>

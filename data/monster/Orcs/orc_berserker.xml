@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="6000">
@@ -34,14 +34,14 @@
 		<voice sentence="KRAK ORRRRRRK!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="54000" /><!-- gold coin -->
-		<item id="2671" chance="10400" /><!-- ham -->
-		<item id="11113" chance="3000" /><!-- orc tooth -->
-		<item id="2464" chance="890" /><!-- chain armor -->
 		<item id="2044" chance="830" /><!-- lamp -->
-		<item id="2381" chance="7280" /><!-- halberd -->
+		<item id="2148" countmax="12" chance="54000" /><!-- gold coin -->
 		<item id="2378" chance="6110" /><!-- battle axe -->
+		<item id="2381" chance="7280" /><!-- halberd -->
+		<item id="2464" chance="890" /><!-- chain armor -->
+		<item id="2671" chance="10400" /><!-- ham -->
 		<item id="3965" chance="5000" /><!-- hunting spear -->
+		<item id="11113" chance="3000" /><!-- orc tooth -->
 		<item id="12433" chance="9400" /><!-- orcish gear -->
 		<item id="12435" chance="4000" /><!-- orc leather -->
 	</loot>

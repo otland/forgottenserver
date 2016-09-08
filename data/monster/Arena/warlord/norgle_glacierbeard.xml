@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-225" />
 	</attacks>
 	<defenses armor="25" defense="27" />
 	<elements>

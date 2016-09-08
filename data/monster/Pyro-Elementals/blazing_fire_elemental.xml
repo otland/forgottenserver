@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="fire" interval="1000" chance="13" radius="5" target="0" min="-65" max="-205">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
@@ -30,12 +30,12 @@
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20" />
-	<immunities>
-		<immunity fire="1" />
-	</immunities>
 	<elements>
 		<element icePercent="-15" />
 	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
 	<loot>
 		<item id="2148" countmax="40" chance="10000" /><!-- gold coin -->
 		<item id="7840" countmax="4" chance="5000" /><!-- flaming arrow -->

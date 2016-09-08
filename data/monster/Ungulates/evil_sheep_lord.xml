@@ -30,13 +30,13 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<immunities>
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element firePercent="-5" />
 		<element physicalPercent="-20" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
 	<summons maxSummons="3">
 		<summon name="Evil Sheep" interval="2000" chance="30" />
 	</summons>

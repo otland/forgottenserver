@@ -32,9 +32,9 @@
 	<loot>
 		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="19" chance="50000" /><!-- gold coin -->
-		<item id="8859" chance="25000" /><!-- spider fangs -->
 		<item id="2159" countmax="4" chance="7142" /><!-- scarab coin -->
 		<item id="2463" chance="4761" /><!-- plate armor -->
+		<item id="8859" chance="25000" /><!-- spider fangs -->
 		<item id="9971" chance="95" /><!-- gold ingot -->
 	</loot>
 </monster>

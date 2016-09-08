@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="35" />
+		<attack name="melee" interval="2000" min="0" max="-70" />
 	</attacks>
 	<defenses armor="20" defense="20" />
 	<elements>
@@ -33,16 +33,16 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="60" chance="84000" /><!-- gold coin -->
-		<item id="2406" chance="9500" /><!-- short sword -->
-		<item id="2457" chance="2000" /><!-- steel helmet -->
+		<item id="2149" chance="250" /><!-- small emerald -->
 		<item id="2376" chance="4000" /><!-- sword -->
 		<item id="2394" chance="1990" /><!-- morning star -->
+		<item id="2406" chance="9500" /><!-- short sword -->
+		<item id="2457" chance="2000" /><!-- steel helmet -->
 		<item id="2463" chance="1000" /><!-- plate armor -->
-		<item id="5876" chance="880" /><!-- lizard leather -->
 		<item id="3963" chance="500" /><!-- templar scytheblade -->
-		<item id="2149" chance="250" /><!-- small emerald -->
-		<item id="7618" chance="890" /><!-- health potion -->
-		<item id="5881" chance="990" /><!-- lizard scale -->
 		<item id="3975" chance="110" /><!-- salamander shield -->
+		<item id="5876" chance="880" /><!-- lizard leather -->
+		<item id="5881" chance="990" /><!-- lizard scale -->
+		<item id="7618" chance="890" /><!-- health potion -->
 	</loot>
 </monster>

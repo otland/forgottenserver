@@ -17,14 +17,14 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0" />
+		<attack name="melee" interval="2000" min="0" max="0" />
 	</attacks>
 	<defenses armor="5" defense="11" />
 	<immunities>
 		<immunity physical="1" />
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity ice="1" />
 		<immunity holy="1" />
 		<immunity death="1" />
@@ -34,6 +34,4 @@
 		<immunity outfit="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<loot>
-	</loot>
 </monster>

@@ -18,20 +18,20 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-1" max="-15" />
+		<attack name="melee" interval="2000" min="0" max="-15" />
 	</attacks>
 	<defenses armor="2" defense="4" />
-	<voices interval="2000" chance="5">
-		<voice sentence="Meeeeep!" />
-	</voices>
 	<summons maxSummons="2">
 		<summon name="Rat" interval="2000" chance="20" max="2" />
 	</summons>
+	<voices interval="2000" chance="5">
+		<voice sentence="Meeeeep!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="16" chance="100000" /><!-- gold coin -->
-		<item id="2696" chance="50000" /><!-- cheese -->
-		<item id="2687" countmax="1" chance="5000" /><!-- cookie -->
-		<item id="2650" chance="50000" /><!-- jacket -->
 		<item id="2449" chance="5000" /><!-- bone club -->
+		<item id="2650" chance="50000" /><!-- jacket -->
+		<item id="2687" countmax="1" chance="5000" /><!-- cookie -->
+		<item id="2696" chance="50000" /><!-- cheese -->
 	</loot>
 </monster>

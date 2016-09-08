@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-45">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -36,14 +36,14 @@
 		<voice sentence="Buuuuuh" />
 	</voices>
 	<loot>
+		<item id="1962" chance="1310" /><!-- orange book -->
+		<item id="2165" chance="180" /><!-- stealth ring -->
 		<item id="2394" chance="10610" /><!-- morning star -->
 		<item id="2404" chance="7002" /><!-- combat knife -->
-		<item id="2804" chance="14400" /><!-- shadow herb -->
-		<item id="2654" chance="8800" /><!-- cape -->
-		<item id="1962" chance="1310" /><!-- orange book -->
-		<item id="5909" chance="1940" /><!-- white piece of cloth -->
 		<item id="2532" chance="860" /><!-- ancient shield -->
-		<item id="2165" chance="180" /><!-- stealth ring -->
+		<item id="2654" chance="8800" /><!-- cape -->
+		<item id="2804" chance="14400" /><!-- shadow herb -->
+		<item id="5909" chance="1940" /><!-- white piece of cloth -->
 		<item id="10607" chance="1870" /><!-- ghostly tissue -->
 	</loot>
 </monster>

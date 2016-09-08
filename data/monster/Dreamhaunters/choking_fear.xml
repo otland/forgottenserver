@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="95" attack="95" poison="600" />
+		<attack name="melee" interval="2000" min="0" max="-499" poison="600" />
 		<attack name="poisoncondition" interval="2000" chance="10" length="5" spread="3" target="0" min="-700" max="-900">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
@@ -65,22 +65,22 @@
 		<item id="2167" chance="3000" /><!-- energy ring -->
 		<item id="2168" chance="4200" /><!-- life ring -->
 		<item id="2214" chance="3000" /><!-- ring of healing -->
+		<item id="2515" chance="1540" /><!-- guardian shield -->
+		<item id="3962" chance="3290" /><!-- beastslayer axe -->
 		<item id="5913" chance="6000" /><!-- brown piece of cloth -->
 		<item id="5914" chance="3500" /><!-- yellow piece of cloth -->
 		<item id="7590" countmax="3" chance="20000" /><!-- great mana potion -->
 		<item id="7886" chance="720" /><!-- terra boots -->
-		<item id="8910" chance="720" /><!-- underworld rod -->
 		<item id="8472" countmax="3" chance="20000" /><!-- great spirit potion -->
 		<item id="8473" countmax="3" chance="19000" /><!-- ultimate health potion -->
 		<item id="8902" chance="720" /><!-- spellbook of mind control -->
+		<item id="8910" chance="720" /><!-- underworld rod -->
+		<item id="8912" chance="510" /><!-- springsprout rod -->
 		<item id="18415" chance="1540" /><!-- green crystal shard -->
 		<item id="18417" countmax="2" chance="52500" /><!-- brown crystal splinter -->
 		<item id="18418" countmax="3" chance="10000" /><!-- blue crystal splinter -->
 		<item id="22396" chance="620" /><!-- cluster of solace -->
 		<item id="22536" chance="14180" /><!-- dead weight -->
 		<item id="22540" chance="14180" /><!-- hemp rope -->
-		<item id="3962" chance="3290" /><!-- beastslayer axe -->
-		<item id="2515" chance="1540" /><!-- guardian shield -->
-		<item id="8912" chance="510" /><!-- springsprout rod -->
 	</loot>
 </monster>

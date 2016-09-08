@@ -16,7 +16,7 @@
 		<flag runonhealth="60" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="5" attack="5" />
+		<attack name="melee" interval="2000" min="0" max="-4" />
 		<attack name="earth" interval="2000" chance="15" range="1" min="0" max="-20">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
@@ -25,18 +25,18 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<immunities>
-		<immunity invisible="1" />
-	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Nee pah!" />
-	</voices>
 	<elements>
 		<element earthPercent="5" />
 		<element physicalPercent="-5" />
 		<element firePercent="-5" />
 		<element icePercent="-5" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Nee pah!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="40" chance="65000" /><!-- gold coin -->
 	</loot>

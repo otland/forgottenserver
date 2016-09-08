@@ -17,7 +17,7 @@
 		<flag runonhealth="600" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="100" poison="840" />
+		<attack name="melee" interval="2000" min="0" max="-450" poison="840" />
 		<attack name="lifedrain" interval="2000" chance="20" count="5" range="7" target="1" min="-21" max="-350">
 			<attribute key="shootEffect" value="earth" />
 			<attribute key="areaEffect" value="carniphila" />
@@ -56,18 +56,18 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="74810" /><!-- platinum coin -->
 		<item id="2149" countmax="4" chance="3770" /><!-- small emerald -->
+		<item id="2152" countmax="6" chance="74810" /><!-- platinum coin -->
+		<item id="2476" chance="1840" /><!-- knight armor -->
+		<item id="2536" chance="3040" /><!-- medusa shield -->
+		<item id="7413" chance="1160" /><!-- titan axe -->
+		<item id="7590" countmax="2" chance="10000" /><!-- great mana potion -->
+		<item id="7884" chance="870" /><!-- terra mantle -->
+		<item id="7885" chance="420" /><!-- terra legs -->
 		<item id="7887" chance="4060" /><!-- terra amulet -->
 		<item id="8473" countmax="2" chance="9290" /><!-- ultimate health potion -->
-		<item id="2536" chance="3040" /><!-- medusa shield -->
-		<item id="7590" countmax="2" chance="10000" /><!-- great mana potion -->
-		<item id="11226" chance="9900" /><!-- strand of medusa hair -->
-		<item id="7885" chance="420" /><!-- terra legs -->
-		<item id="7413" chance="1160" /><!-- titan axe -->
-		<item id="7884" chance="870" /><!-- terra mantle -->
-		<item id="10219" chance="850" /><!-- sacred tree amulet -->
-		<item id="2476" chance="1840" /><!-- knight armor -->
 		<item id="9810" chance="500" /><!-- rusty armor -->
+		<item id="10219" chance="850" /><!-- sacred tree amulet -->
+		<item id="11226" chance="9900" /><!-- strand of medusa hair -->
 	</loot>
 </monster>

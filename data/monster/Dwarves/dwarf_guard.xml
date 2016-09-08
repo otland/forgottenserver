@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-140" />
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<elements>
@@ -34,18 +34,18 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="30" chance="40000" /><!-- gold coin -->
-		<item id="7618" chance="380" /><!-- health potion -->
-		<item id="5880" chance="510" /><!-- iron ore -->
-		<item id="2643" chance="40000" /><!-- leather boots -->
 		<item id="2150" chance="140" /><!-- small amethyst -->
-		<item id="2457" chance="1600" /><!-- steel helmet -->
-		<item id="2513" chance="6000" /><!-- battle shield -->
-		<item id="2417" chance="4000" /><!-- battle hammer -->
-		<item id="2787" countmax="2" chance="55000" /><!-- white mushroom -->
-		<item id="2483" chance="9200" /><!-- scale armor -->
-		<item id="2387" chance="600" /><!-- double axe -->
-		<item id="2459" chance="250" /><!-- iron helmet -->
 		<item id="2208" chance="190" /><!-- axe ring -->
+		<item id="2387" chance="600" /><!-- double axe -->
+		<item id="2417" chance="4000" /><!-- battle hammer -->
+		<item id="2457" chance="1600" /><!-- steel helmet -->
+		<item id="2459" chance="250" /><!-- iron helmet -->
+		<item id="2483" chance="9200" /><!-- scale armor -->
+		<item id="2513" chance="6000" /><!-- battle shield -->
+		<item id="2643" chance="40000" /><!-- leather boots -->
+		<item id="2787" countmax="2" chance="55000" /><!-- white mushroom -->
+		<item id="5880" chance="510" /><!-- iron ore -->
+		<item id="7618" chance="380" /><!-- health potion -->
 		<item id="13757" chance="280" /><!-- coal -->
 	</loot>
 </monster>

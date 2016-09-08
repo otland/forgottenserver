@@ -16,7 +16,7 @@
 		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="37" poison="80" />
+		<attack name="melee" interval="2000" min="0" max="-102" poison="80" />
 		<attack name="lifedrain" interval="2000" chance="20" range="7" target="1" min="-50" max="-110">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -41,9 +41,9 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="75" chance="100000" /><!-- gold coin -->
-		<item id="15479" chance="15300" /><!-- swarmer antenna -->
-		<item id="15486" chance="12500" /><!-- compound eye -->
 		<item id="2149" chance="920" /><!-- small emerald -->
 		<item id="2438" chance="450" /><!-- epee -->
+		<item id="15479" chance="15300" /><!-- swarmer antenna -->
+		<item id="15486" chance="12500" /><!-- compound eye -->
 	</loot>
 </monster>

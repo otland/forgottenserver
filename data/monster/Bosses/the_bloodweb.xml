@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="100" poison="8" />
+		<attack name="melee" interval="2000" min="0" max="-250" poison="8" />
 		<attack name="speed" interval="2000" chance="20" range="7" radius="7" target="0" speedchange="-850" duration="8000">
 			<attribute key="areaEffect" value="poff" />
 		</attack>
@@ -48,19 +48,19 @@
 		<voice sentence="Screeech!" />
 	</voices>
 	<loot>
+		<item id="2169" chance="3703" /><!-- time ring -->
 		<item id="2463" chance="100000" /><!-- ice cube -->
-		<item id="7364" countmax="9" chance="100000" /><!-- platinum coin -->
-		<item id="7589" chance="100000" /><!-- strong mana potion -->
-		<item id="5879" chance="50000" /><!-- spider silk-->
-		<item id="7902" chance="33333" /><!-- glacier mask -->
-		<item id="7896" chance="33333" /><!-- glacier kilt -->
-		<item id="11306" chance="20000" /><!-- sais -->
-		<item id="7437" chance="20000" /><!-- sapphire hammer -->
-		<item id="5801" chance="7692" /><!-- jewelled backpack -->
 		<item id="2476" chance="7692" /><!-- knight armor -->
 		<item id="2477" chance="5555" /><!-- knight legs -->
-		<item id="7290" chance="3703" /><!-- shard -->
-		<item id="2169" chance="3703" /><!-- time ring -->
+		<item id="5801" chance="7692" /><!-- jewelled backpack -->
+		<item id="5879" chance="50000" /><!-- spider silk-->
 		<item id="6578" chance="1886" /><!-- party hat -->
+		<item id="7290" chance="3703" /><!-- shard -->
+		<item id="7364" countmax="9" chance="100000" /><!-- platinum coin -->
+		<item id="7437" chance="20000" /><!-- sapphire hammer -->
+		<item id="7589" chance="100000" /><!-- strong mana potion -->
+		<item id="7896" chance="33333" /><!-- glacier kilt -->
+		<item id="7902" chance="33333" /><!-- glacier mask -->
+		<item id="11306" chance="20000" /><!-- sais -->
 	</loot>
 </monster>

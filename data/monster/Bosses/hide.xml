@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="40" poison="80" />
+		<attack name="melee" interval="2000" min="0" max="-140" poison="80" />
 	</attacks>
 	<defenses armor="25" defense="40">
 		<defense name="speed" interval="2000" chance="10" speedchange="340" duration="5000">
@@ -38,10 +38,10 @@
 	</immunities>
 	<loot>
 		<item id="2152" countmax="5" chance="100000" /><!-- platinum coin -->
+		<item id="2169" chance="33333" /><!-- time ring -->
 		<item id="2457" chance="50000" /><!-- steel helmet -->
+		<item id="2477" chance="50000" /><!-- knight legs -->
 		<item id="5879" chance="50000" /><!-- spider silk -->
 		<item id="7903" chance="50000" /><!-- terra hood -->
-		<item id="2477" chance="50000" /><!-- knight legs -->
-		<item id="2169" chance="33333" /><!-- time ring -->
 	</loot>
 </monster>

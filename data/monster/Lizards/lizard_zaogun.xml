@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="82" />
+		<attack name="melee" interval="2000" min="0" max="-349" />
 		<attack name="earth" interval="2000" chance="15" range="7" radius="1" target="1" min="-220" max="-375">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
@@ -43,18 +43,18 @@
 		<item id="2148" countmax="100" chance="31500" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="31500" /><!-- gold coin -->
 		<item id="2148" countmax="68" chance="31000" /><!-- gold coin -->
-		<item id="7591" countmax="3" chance="7000" /><!-- great health potion -->
-		<item id="11330" chance="8280" /><!-- zaogun flag -->
-		<item id="5881" chance="12520" /><!-- lizard scale -->
-		<item id="11303" chance="1000" /><!-- zaoan shoes -->
-		<item id="11206" chance="2170" /><!-- red lantern -->
-		<item id="2152" countmax="2" chance="48900" /><!-- platinum coin -->
 		<item id="2149" countmax="5" chance="4830" /><!-- small emerald -->
-		<item id="5876" chance="14360" /><!-- lizard leather -->
-		<item id="7588" chance="1900" /><!-- strong health potion -->
+		<item id="2152" countmax="2" chance="48900" /><!-- platinum coin -->
 		<item id="2528" chance="1000" /><!-- tower shield -->
-		<item id="11304" chance="1001" /><!-- zaoan legs -->
+		<item id="5876" chance="14360" /><!-- lizard leather -->
+		<item id="5881" chance="12520" /><!-- lizard scale -->
+		<item id="7588" chance="1900" /><!-- strong health potion -->
+		<item id="7591" countmax="3" chance="7000" /><!-- great health potion -->
+		<item id="11206" chance="2170" /><!-- red lantern -->
 		<item id="11301" chance="530" /><!-- zaoan armor -->
+		<item id="11303" chance="1000" /><!-- zaoan shoes -->
+		<item id="11304" chance="1001" /><!-- zaoan legs -->
+		<item id="11330" chance="8280" /><!-- zaogun flag -->
 		<item id="11331" chance="14980" /><!-- zaogun shoulderplates -->
 	</loot>
 </monster>

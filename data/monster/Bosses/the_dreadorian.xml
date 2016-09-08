@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="64" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-370" />
 	</attacks>
 	<defenses armor="25" defense="35">
 		<defense name="healing" interval="2000" chance="50" min="100" max="150">

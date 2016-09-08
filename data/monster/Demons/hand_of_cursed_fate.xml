@@ -17,7 +17,7 @@
 		<flag runonhealth="3500" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="130" poison="380" />
+		<attack name="melee" interval="2000" min="0" max="-520" poison="380" />
 		<attack name="manadrain" interval="2000" chance="15" range="1" min="0" max="-920" />
 		<attack name="drunk" interval="2000" chance="10" target="0" radius="4" duration="3000">
 			<attribute key="areaEffect" value="smallclouds" />
@@ -50,35 +50,35 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
+		<item id="2127" chance="3500" /><!-- emerald bangle -->
+		<item id="2146" countmax="4" chance="11000" /><!-- small sapphire -->
 		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
 		<item id="2148" countmax="67" chance="50000" /><!-- gold coin -->
 		<item id="2152" countmax="7" chance="100000" /><!-- platinum coin -->
-		<item id="6558" countmax="4" chance="30000" /><!-- concentrated demonic blood -->
-		<item id="5944" chance="31111" /><!-- soul orb -->
-		<item id="6500" chance="12000" /><!-- demonic essence -->
-		<item id="2146" countmax="4" chance="11000" /><!-- small sapphire -->
-		<item id="8473" chance="18000" /><!-- ultimate health potion -->
-		<item id="7590" countmax="2" chance="19990" /><!-- great mana potion -->
-		<item id="2178" chance="9090" /><!-- mind stone -->
-		<item id="7365" countmax="3" chance="8333" /><!-- onyx arrow -->
-		<item id="7368" countmax="5" chance="7692" /><!-- assassin star -->
-		<item id="2127" chance="3500" /><!-- emerald bangle -->
-		<item id="2200" chance="8740" /><!-- protection amulet -->
-		<item id="2187" chance="5590" /><!-- wand of inferno -->
-		<item id="2476" chance="4550" /><!-- knight armor -->
-		<item id="6300" chance="1750" /><!-- death ring -->
-		<item id="2487" chance="1400" /><!-- crown armor -->
-		<item id="2167" chance="3150" /><!-- energy ring -->
-		<item id="2171" chance="1005" /><!-- platinum amulet-->
-		<item id="7414" chance="495" /><!-- abyss hammer -->
-		<item id="9971" chance="700" /><!-- gold ingot -->
-		<item id="2436" chance="700" /><!-- skull staff -->
 		<item id="2153" chance="700" /><!-- violet gem -->
 		<item id="2154" chance="5940" /><!-- yellow gem -->
+		<item id="2167" chance="3150" /><!-- energy ring -->
+		<item id="2171" chance="1005" /><!-- platinum amulet-->
+		<item id="2178" chance="9090" /><!-- mind stone -->
+		<item id="2187" chance="5590" /><!-- wand of inferno -->
 		<item id="2195" chance="540" /><!-- boots of haste -->
-		<item id="5799" chance="195" /><!-- golden figurine -->
-		<item id="5669" chance="247" /><!-- mysterious voodoo skull -->
+		<item id="2200" chance="8740" /><!-- protection amulet -->
 		<item id="2268" countmax="8" chance="4200" /><!-- sudden death rune -->
+		<item id="2436" chance="700" /><!-- skull staff -->
+		<item id="2476" chance="4550" /><!-- knight armor -->
+		<item id="2487" chance="1400" /><!-- crown armor -->
+		<item id="5669" chance="247" /><!-- mysterious voodoo skull -->
+		<item id="5799" chance="195" /><!-- golden figurine -->
+		<item id="5944" chance="31111" /><!-- soul orb -->
+		<item id="6300" chance="1750" /><!-- death ring -->
+		<item id="6500" chance="12000" /><!-- demonic essence -->
+		<item id="6558" countmax="4" chance="30000" /><!-- concentrated demonic blood -->
+		<item id="7365" countmax="3" chance="8333" /><!-- onyx arrow -->
+		<item id="7368" countmax="5" chance="7692" /><!-- assassin star -->
+		<item id="7414" chance="495" /><!-- abyss hammer -->
+		<item id="7590" countmax="2" chance="19990" /><!-- great mana potion -->
+		<item id="8473" chance="18000" /><!-- ultimate health potion -->
+		<item id="9971" chance="700" /><!-- gold ingot -->
 	</loot>
 </monster>

@@ -17,8 +17,11 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="32" attack="37" />
-		<attack name="thunderstorm" interval="2000" chance="40" range="7" target="1" min="-150" max="-230" />
+		<attack name="melee" interval="2000" min="0" max="-78" />
+		<attack name="energy" interval="2000" chance="40" range="7" target="1" radius="5" min="-150" max="-230">
+			<attribute key="shootEffect" value="energyball" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
 		<attack name="manadrain" interval="2000" chance="20" range="7" min="-100" max="-200" />
 		<attack name="energyfield" interval="2000" chance="20" range="7" radius="2" target="1">
 			<attribute key="shootEffect" value="energy" />
@@ -43,13 +46,13 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="1">
+		<summon name="golden servant" interval="2000" chance="50" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Behold the all permeating powers I draw from this gate!!" />
 		<voice sentence="ENERGY!!" />
 		<voice sentence="I FEEL, I FEEEEL... OMNIPOTENCE!!" />
 		<voice sentence="MWAAAHAHAAA!! NO ONE!! NO ONE CAN DEFEAT MEEE!!!" />
 	</voices>
-	<summons maxSummons="1">
-		<summon name="golden servant" interval="2000" chance="50" />
-	</summons>
 </monster>

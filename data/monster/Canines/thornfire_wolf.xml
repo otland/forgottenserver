@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="35" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-68" />
 		<attack name="physical" interval="2000" chance="15" range="1" target="1" min="-35" max="-70">
 			<attribute key="shootEffect" value="whirlwindsword" />
 		</attack>
@@ -43,8 +43,8 @@
 	<loot>
 		<item id="2148" countmax="53" chance="64000" /><!-- gold coin -->
 		<item id="2666" chance="34000" /><!-- meat -->
-		<item id="7840" countmax="8" chance="15000" /><!-- flaming arrow -->
 		<item id="5897" chance="7900" /><!-- wolf paw -->
+		<item id="7840" countmax="8" chance="15000" /><!-- flaming arrow -->
 		<item id="10553" chance="7900" /><!-- fiery heart -->
 	</loot>
 </monster>

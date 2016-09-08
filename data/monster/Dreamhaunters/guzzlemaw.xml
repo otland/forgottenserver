@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="95" attack="95" />
+		<attack name="melee" interval="2000" min="0" max="-499" />
 		<attack name="bleedcondition" interval="2000" chance="10" radius="3" target="0" min="-500" max="-1000">
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
@@ -66,6 +66,7 @@
 		<item id="2229" chance="10400" /><!-- skull -->
 		<item id="2230" chance="9200" /><!-- bone -->
 		<item id="2231" chance="4500" /><!-- big bone -->
+		<item id="2240" chance="10110" /><!-- remains of a fish -->
 		<item id="2377" chance="2700" /><!-- two handed sword -->
 		<item id="2667" countmax="3" chance="7000" /><!-- fish -->
 		<item id="2671" chance="10000" /><!-- ham -->
@@ -86,6 +87,5 @@
 		<item id="22396" chance="920" /><!-- cluster of solace -->
 		<item id="22532" chance="15000" /><!-- frazzle tongue -->
 		<item id="22533" chance="14000" /><!-- frazzle skin -->
-		<item id="2240" chance="10110" /><!-- remains of a fish -->
 	</loot>
 </monster>

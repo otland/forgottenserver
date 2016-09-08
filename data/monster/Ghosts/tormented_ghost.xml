@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="140" />
+		<attack name="melee" interval="2000" min="0" max="-280" />
 		<attack name="lifedrain" interval="3000" chance="15" range="1" min="-55" max="-105" />
 	</attacks>
 	<defenses armor="10" defense="10" />
@@ -32,6 +32,4 @@
 		<voice sentence="Haaahhh!" />
 		<voice sentence="Grrglll" />
 	</voices>
-	<loot>
-	</loot>
 </monster>
