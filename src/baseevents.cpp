@@ -26,11 +26,6 @@
 
 extern LuaEnvironment g_luaEnvironment;
 
-BaseEvents::BaseEvents()
-{
-	loaded = false;
-}
-
 bool BaseEvents::loadFromXml()
 {
 	if (loaded) {
@@ -147,13 +142,6 @@ bool Event::loadScript(const std::string& scriptFile)
 	scripted = true;
 	scriptId = id;
 	return true;
-}
-
-CallBack::CallBack()
-{
-	scriptId = 0;
-	scriptInterface = nullptr;
-	loaded = false;
 }
 
 bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& name)

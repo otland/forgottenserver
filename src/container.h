@@ -160,9 +160,9 @@ class Container : public Item, public Cylinder
 		std::ostringstream& getContentDescription(std::ostringstream& os) const;
 
 		uint32_t maxSize;
-		uint32_t totalWeight;
+		uint32_t totalWeight = 0;
 		ItemDeque itemlist;
-		uint32_t serializationCount;
+		uint32_t serializationCount = 0;
 
 		bool unlocked;
 		bool pagination;

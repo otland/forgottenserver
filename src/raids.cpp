@@ -32,14 +32,7 @@ extern Game g_game;
 extern ConfigManager g_config;
 
 Raids::Raids()
-	: scriptInterface("Raid Interface")
 {
-	loaded = false;
-	started = false;
-	running = nullptr;
-	lastRaidEnd = 0;
-	checkRaidsEvent = 0;
-
 	scriptInterface.initState();
 }
 

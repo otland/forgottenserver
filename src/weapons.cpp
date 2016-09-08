@@ -30,8 +30,7 @@ extern Vocations g_vocations;
 extern ConfigManager g_config;
 extern Weapons* g_weapons;
 
-Weapons::Weapons():
-	scriptInterface("Weapon Interface")
+Weapons::Weapons()
 {
 	scriptInterface.initState();
 }

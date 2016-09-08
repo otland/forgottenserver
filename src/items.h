@@ -58,54 +58,36 @@ enum ItemTypes_t {
 };
 
 struct Abilities {
-	Abilities() : stats(), statsPercent(), skills(), fieldAbsorbPercent(), absorbPercent() {
-		elementType = COMBAT_NONE;
-		elementDamage = 0;
+	uint32_t healthGain = 0;
+	uint32_t healthTicks = 0;
+	uint32_t manaGain = 0;
+	uint32_t manaTicks = 0;
 
-		speed = 0;
-		manaShield = false;
-		invisible = false;
-		regeneration = false;
-
-		healthGain = 0;
-		healthTicks = 0;
-		manaGain = 0;
-		manaTicks = 0;
-
-		conditionImmunities = 0;
-		conditionSuppressions = 0;
-	}
-
-	uint32_t healthGain;
-	uint32_t healthTicks;
-	uint32_t manaGain;
-	uint32_t manaTicks;
-
-	uint32_t conditionImmunities;
-	uint32_t conditionSuppressions;
+	uint32_t conditionImmunities = 0;
+	uint32_t conditionSuppressions = 0;
 
 	//stats modifiers
-	int32_t stats[STAT_LAST + 1];
-	int32_t statsPercent[STAT_LAST + 1];
+	int32_t stats[STAT_LAST + 1] = { 0 };
+	int32_t statsPercent[STAT_LAST + 1] = { 0 };
 
 	//extra skill modifiers
-	int32_t skills[SKILL_LAST + 1];
+	int32_t skills[SKILL_LAST + 1] = { 0 };
 
-	int32_t speed;
+	int32_t speed = 0;
 
 	// field damage abilities modifiers
-	int16_t fieldAbsorbPercent[COMBAT_COUNT];
+	int16_t fieldAbsorbPercent[COMBAT_COUNT] = { 0 };
 
 	//damage abilities modifiers
-	int16_t absorbPercent[COMBAT_COUNT];
+	int16_t absorbPercent[COMBAT_COUNT] = { 0 };
 
 	//elemental damage
-	uint16_t elementDamage;
-	CombatType_t elementType;
+	uint16_t elementDamage = 0;
+	CombatType_t elementType = COMBAT_NONE;
 
-	bool manaShield;
-	bool invisible;
-	bool regeneration;
+	bool manaShield = false;
+	bool invisible = false;
+	bool regeneration = false;
 };
 
 class ConditionDamage;
@@ -113,7 +95,7 @@ class ConditionDamage;
 class ItemType
 {
 	public:
-		ItemType();
+		ItemType() = default;
 
 		//non-copyable
 		ItemType(const ItemType& other) = delete;
@@ -189,12 +171,12 @@ class ItemType
 			return str;
 		}
 
-		itemgroup_t group;
-		ItemTypes_t type;
-		uint16_t id;
-		uint16_t clientId;
-		bool stackable;
-		bool isAnimation;
+		itemgroup_t group = ITEM_GROUP_NONE;
+		ItemTypes_t type = ITEM_TYPE_NONE;
+		uint16_t id = 0;
+		uint16_t clientId = 0;
+		bool stackable = false;
+		bool isAnimation = false;
 
 		std::string name;
 		std::string article;
@@ -206,78 +188,78 @@ class ItemType
 		std::unique_ptr<Abilities> abilities;
 		std::unique_ptr<ConditionDamage> conditionDamage;
 
-		uint32_t weight;
-		uint32_t levelDoor;
-		uint32_t decayTime;
-		uint32_t wieldInfo;
-		uint32_t minReqLevel;
-		uint32_t minReqMagicLevel;
-		uint32_t charges;
-		int32_t maxHitChance;
-		int32_t decayTo;
-		int32_t attack;
-		int32_t defense;
-		int32_t extraDefense;
-		int32_t armor;
-		int32_t rotateTo;
-		int32_t runeMagLevel;
-		int32_t runeLevel;
+		uint32_t weight = 0;
+		uint32_t levelDoor = 0;
+		uint32_t decayTime = 0;
+		uint32_t wieldInfo = 0;
+		uint32_t minReqLevel = 0;
+		uint32_t minReqMagicLevel = 0;
+		uint32_t charges = 0;
+		int32_t maxHitChance = -1;
+		int32_t decayTo = -1;
+		int32_t attack = 0;
+		int32_t defense = 0;
+		int32_t extraDefense = 0;
+		int32_t armor = 0;
+		int32_t rotateTo = 0;
+		int32_t runeMagLevel = 0;
+		int32_t runeLevel = 0;
 
-		CombatType_t combatType;
+		CombatType_t combatType = COMBAT_NONE;
 
-		uint16_t transformToOnUse[2];
-		uint16_t transformToFree;
-		uint16_t destroyTo;
-		uint16_t maxTextLen;
-		uint16_t writeOnceItemId;
-		uint16_t transformEquipTo;
-		uint16_t transformDeEquipTo;
-		uint16_t maxItems;
-		uint16_t slotPosition;
-		uint16_t speed;
-		uint16_t wareId;
+		uint16_t transformToOnUse[2] = { 0 };
+		uint16_t transformToFree = 0;
+		uint16_t destroyTo = 0;
+		uint16_t maxTextLen = 0;
+		uint16_t writeOnceItemId = 0;
+		uint16_t transformEquipTo = 0;
+		uint16_t transformDeEquipTo = 0;
+		uint16_t maxItems = 8;
+		uint16_t slotPosition = SLOTP_HAND;
+		uint16_t speed = 0;
+		uint16_t wareId = 0;
 
-		MagicEffectClasses magicEffect;
-		Direction bedPartnerDir;
-		WeaponType_t weaponType;
-		Ammo_t ammoType;
-		ShootType_t shootType;
-		RaceType_t corpseType;
-		FluidTypes_t fluidSource;
+		MagicEffectClasses magicEffect = CONST_ME_NONE;
+		Direction bedPartnerDir = DIRECTION_NONE;
+		WeaponType_t weaponType = WEAPON_NONE;
+		Ammo_t ammoType = AMMO_NONE;
+		ShootType_t shootType = CONST_ANI_NONE;
+		RaceType_t corpseType = RACE_NONE;
+		FluidTypes_t fluidSource = FLUID_NONE;
 
-		uint8_t floorChange;
-		uint8_t alwaysOnTopOrder;
-		uint8_t lightLevel;
-		uint8_t lightColor;
-		uint8_t shootRange;
-		int8_t hitChance;
+		uint8_t floorChange = 0;
+		uint8_t alwaysOnTopOrder = 0;
+		uint8_t lightLevel = 0;
+		uint8_t lightColor = 0;
+		uint8_t shootRange = 1;
+		int8_t hitChance = 0;
 
-		bool forceUse;
-		bool hasHeight;
-		bool walkStack;
-		bool blockSolid;
-		bool blockPickupable;
-		bool blockProjectile;
-		bool blockPathFind;
-		bool allowPickupable;
-		bool showDuration;
-		bool showCharges;
-		bool showAttributes;
-		bool replaceable;
-		bool pickupable;
-		bool rotatable;
-		bool useable;
-		bool moveable;
-		bool alwaysOnTop;
-		bool canReadText;
-		bool canWriteText;
-		bool isVertical;
-		bool isHorizontal;
-		bool isHangable;
-		bool allowDistRead;
-		bool lookThrough;
-		bool stopTime;
-		bool showCount;
+		bool forceUse = false;
+		bool hasHeight = false;
+		bool walkStack = true;
+		bool blockSolid = false;
+		bool blockPickupable = false;
+		bool blockProjectile = false;
+		bool blockPathFind = false;
+		bool allowPickupable = false;
+		bool showDuration = false;
+		bool showCharges = false;
+		bool showAttributes = false;
+		bool replaceable = true;
+		bool pickupable = false;
+		bool rotatable = false;
+		bool useable = false;
+		bool moveable = false;
+		bool alwaysOnTop = false;
+		bool canReadText = false;
+		bool canWriteText = false;
+		bool isVertical = false;
+		bool isHorizontal = false;
+		bool isHangable = false;
+		bool allowDistRead = false;
+		bool lookThrough = false;
+		bool stopTime = false;
+		bool showCount = true;
 };
 
 class Items

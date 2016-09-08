@@ -38,7 +38,7 @@ enum Direction : uint8_t {
 
 struct Position
 {
-	Position() : x(0), y(0), z(0) {}
+	Position() = default;
 	Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
 
 	template<int_fast32_t deltax, int_fast32_t deltay>
@@ -71,9 +71,9 @@ struct Position
 		return std::abs(Position::getOffsetZ(p1, p2));
 	}
 
-	uint16_t x;
-	uint16_t y;
-	uint8_t z;
+	uint16_t x = 0;
+	uint16_t y = 0;
+	uint8_t z = 0;
 
 	bool operator<(const Position& p) const {
 		if (z < p.z) {

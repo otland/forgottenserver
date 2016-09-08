@@ -33,8 +33,7 @@ extern Vocations g_vocations;
 extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
-Spells::Spells():
-	scriptInterface("Spell Interface")
+Spells::Spells()
 {
 	scriptInterface.initState();
 }

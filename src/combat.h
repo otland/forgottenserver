@@ -61,42 +61,26 @@ class TargetCallback final : public CallBack
 };
 
 struct CombatParams {
-	CombatParams() {
-		dispelType = CONDITION_NONE;
-		combatType = COMBAT_NONE;
-
-		blockedByArmor = false;
-		blockedByShield = false;
-		targetCasterOrTopMost = false;
-		aggressive = true;
-		itemId = 0;
-		impactEffect = CONST_ME_NONE;
-		distanceEffect = CONST_ANI_NONE;
-		useCharges = false;
-
-		origin = ORIGIN_SPELL;
-	}
-
 	std::forward_list<std::unique_ptr<const Condition>> conditionList;
 
 	std::unique_ptr<ValueCallback> valueCallback;
 	std::unique_ptr<TileCallback> tileCallback;
 	std::unique_ptr<TargetCallback> targetCallback;
 
-	uint16_t itemId;
+	uint16_t itemId = 0;
 
-	ConditionType_t dispelType;
-	CombatType_t combatType;
-	CombatOrigin origin;
+	ConditionType_t dispelType = CONDITION_NONE;
+	CombatType_t combatType = COMBAT_NONE;
+	CombatOrigin origin = ORIGIN_SPELL;
 
-	uint8_t impactEffect;
-	uint8_t distanceEffect;
+	uint8_t impactEffect = CONST_ANI_NONE;
+	uint8_t distanceEffect = CONST_ANI_NONE;
 
-	bool blockedByArmor;
-	bool blockedByShield;
-	bool targetCasterOrTopMost;
-	bool aggressive;
-	bool useCharges;
+	bool blockedByArmor = false;
+	bool blockedByShield = false;
+	bool targetCasterOrTopMost = false;
+	bool aggressive = true;
+	bool useCharges = false;
 };
 
 typedef void (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, CombatDamage*);
@@ -192,9 +176,8 @@ class MatrixArea
 class AreaCombat
 {
 	public:
-		AreaCombat() {
-			hasExtArea = false;
-		}
+		AreaCombat() = default;
+
 		AreaCombat(const AreaCombat& rhs);
 		~AreaCombat() {
 			clear();
@@ -259,13 +242,13 @@ class AreaCombat
 		}
 
 		std::map<Direction, MatrixArea*> areas;
-		bool hasExtArea;
+		bool hasExtArea = false;
 };
 
 class Combat
 {
 	public:
-		Combat();
+		Combat() = default;
 
 		// non-copyable
 		Combat(const Combat&) = delete;
@@ -340,11 +323,11 @@ class Combat
 		CombatParams params;
 
 		//formula variables
-		formulaType_t formulaType;
-		double mina;
-		double minb;
-		double maxa;
-		double maxb;
+		formulaType_t formulaType = COMBAT_FORMULA_UNDEFINED;
+		double mina = 0.0;
+		double minb = 0.0;
+		double maxa = 0.0;
+		double maxb = 0.0;
 
 		std::unique_ptr<AreaCombat> area;
 };

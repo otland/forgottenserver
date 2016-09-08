@@ -31,8 +31,6 @@ Container::Container(uint16_t type) :
 Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
 	Item(type),
 	maxSize(size),
-	totalWeight(0),
-	serializationCount(0),
 	unlocked(unlocked),
 	pagination(pagination)
 {}

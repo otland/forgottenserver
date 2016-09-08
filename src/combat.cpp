@@ -31,14 +31,6 @@ extern Weapons* g_weapons;
 extern ConfigManager g_config;
 extern Events* g_events;
 
-Combat::Combat() :
-	formulaType(COMBAT_FORMULA_UNDEFINED),
-	mina(0.0), minb(0.0), maxa(0.0), maxb(0.0),
-	area(nullptr)
-{
-	//
-}
-
 CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
 	CombatDamage damage;

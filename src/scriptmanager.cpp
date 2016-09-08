@@ -42,11 +42,6 @@ Weapons* g_weapons = nullptr;
 
 extern LuaEnvironment g_luaEnvironment;
 
-ScriptingManager::ScriptingManager()
-{
-	//
-}
-
 ScriptingManager::~ScriptingManager()
 {
 	delete g_events;
