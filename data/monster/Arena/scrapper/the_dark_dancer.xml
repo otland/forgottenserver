@@ -22,7 +22,7 @@
 			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="10000" speed="-400">
+		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="10000" speedchange="-400">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 		<attack name="manadrain" interval="4000" chance="30" radius="1" target="1" range="5" min="-2" max="-110">

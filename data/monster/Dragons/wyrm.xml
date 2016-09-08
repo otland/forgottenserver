@@ -37,7 +37,7 @@
 		<defense name="healing" interval="2000" chance="15" min="100" max="150">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
-		<defense name="physical" interval="2000" chance="10" radius="1">
+		<defense name="effect" interval="2000" chance="10" radius="1">
 			<attribute key="areaEffect" value="yellownote" />
 		</defense>
 	</defenses>

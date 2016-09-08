@@ -23,6 +23,10 @@
 		</attack>
 	</attacks>
 	<defenses armor="45" defense="45" />
+	<elements>
+		<element energyPercent="-10" />
+		<element physicalPercent="10" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity fire="1" />
@@ -30,10 +34,6 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element energyPercent="-10" />
-		<element physicalPercent="10" />
-	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Clank clank!" />
 		<voice sentence="Clap!" />

@@ -19,13 +19,13 @@
 		<attack name="melee" interval="2000" min="0" max="-349" />
 	</attacks>
 	<defenses armor="30" defense="30" />
+	<elements>
+		<element holyPercent="-10" />
+	</elements>
 	<immunities>
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element holyPercent="-10" />
-	</elements>
 	<loot>
 		<item id="2147" countmax="5" chance="23280" /><!-- small ruby -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->

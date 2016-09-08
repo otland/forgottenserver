@@ -23,6 +23,12 @@
 		</attack>
 	</attacks>
 	<defenses armor="12" defense="20" />
+	<elements>
+		<element earthPercent="-20" />
+		<element energyPercent="-20" />
+		<element physicalPercent="-20" />
+		<element deathPercent="-20" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity drown="1" />
@@ -34,12 +40,6 @@
 		<voice sentence="Djon't djare stjare injo the eyes of the djeep!" />
 		<voice sentence="Ljeave this sjacred pljace while you cjan" />
 	</voices>
-	<elements>
-		<element earthPercent="-20" />
-		<element energyPercent="-20" />
-		<element physicalPercent="-20" />
-		<element deathPercent="-20" />
-	</elements>
 	<loot>
 		<item id="2148" countmax="50" chance="100000" /><!-- gold coin -->
 		<item id="2168" chance="50000" /><!-- life ring -->

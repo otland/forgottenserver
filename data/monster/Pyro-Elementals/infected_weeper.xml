@@ -44,12 +44,12 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Moooaaan!" />
-	</voices>
 	<summons maxSummons="6">
 		<summon name="Parasite" interval="2000" chance="10" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Moooaaan!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="198" chance="100000" /><!-- gold coin -->
 		<item id="2152" countmax="7" chance="100000" /><!-- platinum coin -->

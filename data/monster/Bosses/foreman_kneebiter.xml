@@ -11,7 +11,7 @@
 		<flag staticattack="90" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-60" max="-200" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 	</attacks>
 	<defenses armor="15" defense="22" />
 	<elements>

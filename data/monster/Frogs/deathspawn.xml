@@ -26,10 +26,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="1" defense="5" />
-	<voices interval="5000" chance="10">
-		<voice sentence="Ribbit!" />
-		<voice sentence="Ribbit! Ribbit!" />
-	</voices>
 	<elements>
 		<element holyPercent="10" />
 		<element firePercent="-15" />
@@ -40,4 +36,8 @@
 		<immunity death="1" />
 		<immunity earth="1" />
 	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit!" />
+		<voice sentence="Ribbit! Ribbit!" />
+	</voices>
 </monster>

@@ -34,6 +34,4 @@
 		<immunity outfit="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<loot>
-	</loot>
 </monster>

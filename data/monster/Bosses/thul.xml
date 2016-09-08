@@ -41,12 +41,12 @@
 		<immunity ice="1" />
 		<immunity earth="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Gaaahhh!" />
-	</voices>
 	<summons maxSummons="2">
 		<summon name="Massive Water Elementals" interval="2000" chance="10" max="2" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gaaahhh!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="77" chance="50000" /><!-- gold coin -->
 		<item id="2670" chance="25000" /><!-- shrimp -->

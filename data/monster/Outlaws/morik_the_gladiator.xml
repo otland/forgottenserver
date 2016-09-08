@@ -32,15 +32,15 @@
 		<element physicalPercent="15" />
 		<element deathPercent="-10" />
 	</elements>
+	<summons maxSummons="2">
+		<summon name="gladiator" interval="2000" chance="10" max="2" />
+	</summons>
 	<voices interval="4000" chance="10">
 		<voice sentence="To be the one you'll have to beat the one!" />
 		<voice sentence="Where did I put my ultimate health potion again?" />
 		<voice sentence="I am the best!" />
 		<voice sentence="I'll take your ears as a trophy!" />
 	</voices>
-	<summons maxSummons="2">
-		<summon name="gladiator" interval="2000" chance="10" max="2" />
-	</summons>
 	<loot>
 		<item id="9735" chance="9999999" /><!-- morik helmet -->
 	</loot>

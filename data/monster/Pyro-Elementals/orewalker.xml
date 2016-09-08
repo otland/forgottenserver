@@ -24,7 +24,7 @@
 		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1500">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>
-		<attack name="poisoncondition" interval="2000" chance="10" target="1" radius="3" min="-800" max="-1080" >
+		<attack name="poisoncondition" interval="2000" chance="10" target="1" radius="3" min="-800" max="-1080">
 			<attribute key="shootEffect" value="smallearth" />
 			<attribute key="areaEffect" value="smallplants" />
 		</attack>

@@ -36,13 +36,13 @@
 		<element earthPercent="-20" />
 		<element deathPercent="10" />
 	</elements>
-		<immunities>
+	<immunities>
 		<immunity ice="1" />
 		<immunity drown="1" />
 		<immunity fire="1" />
 		<immunity invisible="1" />
 		<immunity paralyze="1" />
-		</immunities>
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="QJELL NETA NA!!" />
 	</voices>

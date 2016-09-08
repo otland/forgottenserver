@@ -26,6 +26,12 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element deathPercent="5" />
+		<element holyPercent="-5" />
+		<element firePercent="-10" />
+		<element icePercent="-5" />
+	</elements>
 	<immunities>
 		<immunity earth="1" />
 		<immunity invisible="1" />
@@ -33,12 +39,6 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="Sssschrchrsss!" />
 	</voices>
-	<elements>
-		<element deathPercent="5" />
-		<element holyPercent="-5" />
-		<element firePercent="-10" />
-		<element icePercent="-5" />
-	</elements>
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->

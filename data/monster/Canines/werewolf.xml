@@ -55,7 +55,6 @@
 	</immunities>
 	<summons maxSummons="2">
 		<summon name="war wolf" interval="2000" chance="40" />
-		<summon name="war wolf" interval="2000" chance="40" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="BLOOD!" yell="1" />

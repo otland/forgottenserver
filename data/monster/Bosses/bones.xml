@@ -35,9 +35,6 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<summons maxSummons="0">
-		<summon name="" interval="" chance="" />
-	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Your new name is breakfast." />
 		<voice sentence="Keep that dog away!" />

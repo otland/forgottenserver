@@ -25,18 +25,18 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<immunities>
-		<immunity invisible="1" />
-	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Nee pah!" />
-	</voices>
 	<elements>
 		<element earthPercent="5" />
 		<element physicalPercent="-5" />
 		<element firePercent="-5" />
 		<element icePercent="-5" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Nee pah!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="40" chance="65000" /><!-- gold coin -->
 	</loot>

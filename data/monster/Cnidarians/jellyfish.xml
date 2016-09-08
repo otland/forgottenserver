@@ -16,18 +16,18 @@
 		<flag runonhealth="0" />
 		<flag staticattack="80" />
 	</flags>
-	<immunities>
-		<immunity fire="1" />
-		<immunity earth="1" />
-		<immunity invisible="1" />
-		<immunity drown="1" />
-	</immunities>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-10" />
 	</attacks>
 	<defenses armor="10" defense="10">
 		<defense name="invisible" interval="2000" chance="15" duration="3000" />
 	</defenses>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Luuurrrp" />
 	</voices>

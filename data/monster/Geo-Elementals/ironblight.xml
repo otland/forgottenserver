@@ -39,10 +39,6 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<voices interval="5000" chance="10">
-		<voice sentence="Clonk!" />
-		<voice sentence="Yowl!" />
-	</voices>
 	<elements>
 		<element deathPercent="50" />
 		<element icePercent="20" />
@@ -54,6 +50,10 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Clonk!" />
+		<voice sentence="Yowl!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="199" chance="100000" /><!-- gold coin -->
 		<item id="2149" countmax="3" chance="10890" /><!-- small emerald -->

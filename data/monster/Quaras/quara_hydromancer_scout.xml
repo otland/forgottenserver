@@ -39,6 +39,9 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element energyPercent="-10" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity fire="1" />
@@ -46,9 +49,6 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element energyPercent="-10" />
-	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Qua hah tsh!" />
 		<voice sentence="Teech tsha tshul!" />

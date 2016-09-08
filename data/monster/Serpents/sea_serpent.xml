@@ -40,16 +40,16 @@
 		<immunity invisible="1" />
 		<immunity drown="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="CHHHRRRR" />
-		<voice sentence="HISSSS" />
-	</voices>
 	<elements>
 		<element firePercent="30" />
 		<element energyPercent="-5" />
 		<element physicalPercent="-15" />
 		<element deathPercent="10" />
 	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="CHHHRRRR" />
+		<voice sentence="HISSSS" />
+	</voices>
 	<loot>
 		<item id="2146" countmax="3" chance="5600" /><!-- small saphire -->
 		<item id="2148" countmax="100" chance="38000" /><!-- gold coin -->

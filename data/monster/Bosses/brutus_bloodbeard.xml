@@ -18,7 +18,8 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-450" max="-500" /><!--		<attack name="drunk explosion" interval="2000" />-->
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<!--<attack name="drunk explosion" interval="2000" />-->
 	</attacks>
 	<defenses armor="35" defense="50" />
 	<immunities>

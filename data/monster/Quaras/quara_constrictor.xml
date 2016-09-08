@@ -22,7 +22,7 @@
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
 		<attack name="quara constrictor freeze" interval="2000" chance="10" />
-		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0" >
+		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0">
 			<attribute key="areaEffect" value="iceattack" />
 		</attack>
 		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />

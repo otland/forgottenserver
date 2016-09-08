@@ -26,6 +26,11 @@
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="15" />
+	<elements>
+		<element icePercent="-1" />
+		<element physicalPercent="-1" />
+		<element energyPercent="1" />
+	</elements>
 	<immunities>
 		<immunity earth="1" />
 		<immunity fire="1" />
@@ -35,11 +40,6 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="Flap flap flap!" />
 	</voices>
-	<elements>
-		<element icePercent="-1" />
-		<element physicalPercent="-1" />
-		<element energyPercent="1" />
-	</elements>
 	<loot>
 		<item id="2148" countmax="38" chance="50000" /><!-- gold coin -->
 	</loot>

@@ -56,7 +56,6 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity physical="0" />
 		<immunity energy="1" />
 		<immunity fire="1" />
 		<immunity earth="1" />

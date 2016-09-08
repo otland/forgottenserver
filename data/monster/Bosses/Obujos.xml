@@ -41,6 +41,12 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element earthPercent="-20" />
+		<element energyPercent="-20" />
+		<element physicalPercent="-20" />
+		<element deathPercent="-20" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity paralyze="1" />
@@ -48,16 +54,10 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="3000" chance="100">
 		<voice sentence="JN OBU!!" />
 		<voice sentence="QJELL KEJH!!" />
 	</voices>
-	<elements>
-		<element earthPercent="-20" />
-		<element energyPercent="-20" />
-		<element physicalPercent="-20" />
-		<element deathPercent="-20" />
-	</elements>
 	<loot>
 		<item id="15404" chance="14285" /><!-- deepling axe -->
 		<item id="15411" chance="100000" /><!-- depth scutum -->

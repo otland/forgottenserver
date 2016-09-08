@@ -53,11 +53,9 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<summons maxSummons="3">
-		<summon name="Minion of Gaz'haragoth" interval="4000" chance="33" />
-	</summons>
-	<summons maxSummons="3">
-		<summon name="Nightmare of Gaz'haragoth" interval="4000" chance="33" />
+	<summons maxSummons="6">
+		<summon name="Minion of Gaz'haragoth" interval="4000" chance="33" max="3" />
+		<summon name="Nightmare of Gaz'haragoth" interval="4000" chance="33" max="3" />
 	</summons>
 	<voices interval="5000" chance="30">
 		<voice sentence="Gaz'haragoth begins to channel DEATH AND DOOM into the area! RUN!" yell="1" />

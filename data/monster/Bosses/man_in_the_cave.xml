@@ -33,15 +33,15 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="2">
+		<summon name="Monk" interval="2000" chance="20" max="1" />
+	</summons>
 	<voices interval="2000" chance="5">
 		<voice sentence="THE MONKS ARE MINE" yell="1" />
 		<voice sentence="I will rope you up! All of you!" />
 		<voice sentence="You have been roped up!" />
 		<voice sentence="A MIC to rule them all!" />
 	</voices>
-	<summons maxSummons="2">
-		<summon name="Monk" interval="2000" chance="20" max="1" />
-	</summons>
 	<loot>
 		<item id="2120" chance="20000" /><!-- rope -->
 		<item id="2120" chance="6666" /><!-- rope -->

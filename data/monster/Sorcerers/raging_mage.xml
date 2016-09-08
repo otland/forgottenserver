@@ -42,13 +42,13 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="1">
+		<summon name="golden servant" interval="2000" chance="50" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Behold the all permeating powers I draw from this gate!!" />
 		<voice sentence="ENERGY!!" />
 	</voices>
-	<summons maxSummons="1">
-		<summon name="golden servant" interval="2000" chance="50" />
-	</summons>
 	<loot>
 		<item id="2123" chance="1830" /><!-- ring of the sky -->
 		<item id="2146" countmax="5" chance="1830" /><!-- small sapphires -->

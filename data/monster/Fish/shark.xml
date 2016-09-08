@@ -20,10 +20,6 @@
 		<attack name="melee" interval="2000" min="0" max="-175" />
 	</attacks>
 	<defenses armor="15" defense="15" />
-	<immunities>
-		<immunity invisible="1" />
-		<immunity drown="1" />
-	</immunities>
 	<elements>
 		<element physicalPercent="1" />
 		<element firePercent="1" />
@@ -31,6 +27,10 @@
 		<element energyPercent="-5" />
 		<element earthPercent="20" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drown="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Rarr chomp chomp!" />
 	</voices>

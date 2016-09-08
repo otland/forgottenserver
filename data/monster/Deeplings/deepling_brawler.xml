@@ -39,7 +39,6 @@
 		<item id="5895" chance="740" /><!-- fish fin -->
 		<item id="13838" chance="2940" /><!-- heavy trident -->
 		<item id="13870" chance="6600" /><!-- eye of a deepling -->
-		<item id="13870" chance="6620" /><!-- eye of a deepling -->
 		<item id="15430" chance="14500" /><!-- deepling scales -->
 	</loot>
 </monster>

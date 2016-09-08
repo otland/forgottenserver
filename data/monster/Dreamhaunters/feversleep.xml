@@ -18,7 +18,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
-		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-800" max="-1000" >
+		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-800" max="-1000">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="10" radius="5" target="0" min="-70" max="-100">

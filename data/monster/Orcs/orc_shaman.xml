@@ -39,12 +39,12 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Huumans stinkk!" />
-	</voices>
 	<summons maxSummons="4">
 		<summon name="Snake" interval="2000" chance="20" max="4" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Huumans stinkk!" />
+	</voices>
 	<loot>
 		<item id="1958" chance="520" /><!-- book -->
 		<item id="2148" countmax="5" chance="90000" /><!-- gold coin -->

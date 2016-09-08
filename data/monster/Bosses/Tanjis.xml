@@ -56,15 +56,15 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
-		<voice sentence="JAUL QJELL, JAKNH JEH KENH!!" />
-	</voices>
 	<elements>
 		<element earthPercent="-20" />
 		<element energyPercent="-20" />
 		<element physicalPercent="-20" />
 		<element deathPercent="-20" />
 	</elements>
+	<voices interval="3000" chance="200">
+		<voice sentence="JAUL QJELL, JAKNH JEH KENH!!" />
+	</voices>
 	<loot>
 		<item id="15409" chance="50000" /><!-- depth ocrea -->
 		<item id="15413" chance="20000" /><!-- ornate shield -->

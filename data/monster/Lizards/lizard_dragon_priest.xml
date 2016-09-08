@@ -20,7 +20,7 @@
 		<attack name="melee" interval="2000" min="0" max="-50" />
 		<attack name="fire" interval="2000" chance="20" target="1" range="7" min="-125" max="-190">
 			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="fireattack"/>
+			<attribute key="areaEffect" value="fireattack" />
 		</attack>
 		<attack name="poisoncondition" interval="2000" chance="15" target="1" range="7" radius="1" min="-320" max="-400">
 			<attribute key="shootEffect" value="poison" />
@@ -42,12 +42,12 @@
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="I ssssmell warm blood!" />
-	</voices>
 	<summons maxSummons="2">
 		<summon name="Dragon Hatchling" interval="2000" chance="20" max="2" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I ssssmell warm blood!" />
+	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="5000" /><!-- gold coin -->
 		<item id="2148" countmax="88" chance="4400" /><!-- gold coin -->

@@ -49,6 +49,9 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element deathPercent="-1" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity paralyze="1" />
@@ -60,9 +63,6 @@
 		<voice sentence="QJELL AFAR GOU JEY!!" />
 		<voice sentence="DIE!! KENH!!" />
 	</voices>
-	<elements>
-		<element deathPercent="-1" />
-	</elements>
 	<loot>
 		<item id="15404" chance="25000" /><!-- deepling axe -->
 		<item id="15406" chance="25000" /><!-- ornate chestplate -->

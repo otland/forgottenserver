@@ -48,14 +48,14 @@
 		<voice sentence="Blubb" />
 	</voices>
 	<loot>
-		<item id="2144" countmax="3" chance1="5000" chancemax="0" /><!-- black pearl -->
-		<item id="2146" countmax="3" chance1="5000" chancemax="0" /><!-- small sapphire -->
-		<item id="2148" countmax="70" chance1="20000" chancemax="0" /><!-- gold coins -->
-		<item id="2148" countmax="60" chance1="20000" chancemax="0" /><!-- gold coins -->
-		<item id="2148" countmax="45" chance1="20000" chancemax="0" /><!-- gold coins -->
-		<item id="2152" countmax="13" chance1="25000" chancemax="0" /><!-- platinum coin -->
+		<item id="2144" countmax="3" chance="5000" /><!-- black pearl -->
+		<item id="2146" countmax="3" chance="5000" /><!-- small sapphire -->
+		<item id="2148" countmax="70" chance="20000" /><!-- gold coins -->
+		<item id="2148" countmax="60" chance="20000" /><!-- gold coins -->
+		<item id="2148" countmax="45" chance="20000" /><!-- gold coins -->
+		<item id="2152" countmax="13" chance="25000" /><!-- platinum coin -->
 		<item id="5944" chance="35000" /><!-- soul orb -->
-		<item id="6500" chance1="45000" chancemax="0" /><!-- demonic essence -->
+		<item id="6500" chance="45000" /><!-- demonic essence -->
 		<item id="6535" chance="100000" /><!-- the plasmother's remains -->
 	</loot>
 </monster>

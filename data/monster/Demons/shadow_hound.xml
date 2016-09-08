@@ -20,7 +20,7 @@
 		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
 		<attack name="fire" interval="2000" chance="24" min="-60" max="-160">
 			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="fireattack"/>
+			<attribute key="areaEffect" value="fireattack" />
 		</attack>
 		<attack name="soulfire" interval="2000" chance="14" />
 	</attacks>

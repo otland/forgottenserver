@@ -21,7 +21,9 @@
 		<attack name="speed" interval="3000" chance="10" range="7" target="1" duration="30000" speedchange="-600">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="divine missile" interval="2000" chance="24" min="-90" max="-170" />
+		<attack name="holy" interval="2000" chance="24" range="4" min="-90" max="-170">
+			<attribute key="shootEffect" value="smallholy" />
+		</attack>
 	</attacks>
 	<defenses armor="50" defense="55">
 		<defense name="speed" interval="1000" chance="15" speedchange="200" duration="20000">

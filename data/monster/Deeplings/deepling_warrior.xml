@@ -27,16 +27,16 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element earthPercent="-20" />
+		<element energyPercent="-10" />
+	</elements>
 	<immunities>
 		<immunity invisible="1" />
 		<immunity fire="1" />
 		<immunity ice="1" />
 		<immunity drown="1" />
 	</immunities>
-	<elements>
-		<element earthPercent="-20" />
-		<element energyPercent="-10" />
-	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Jou wjil all djie!" />
 	</voices>

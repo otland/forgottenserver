@@ -25,15 +25,15 @@
 	<defenses armor="20" defense="20">
 		<defense name="speed" interval="2000" chance="15" speedchange="3000" duration="2000" />
 	</defenses>
-	<immunities>
-		<immunity death="1" />
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element earthPercent="70" />
 		<element holyPercent="-10" />
 		<element firePercent="-10" />
 	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grawrrr!!" />
 		<voice sentence="Hoouu!" />

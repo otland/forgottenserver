@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-90" max="-170" poison="300" />
+		<attack name="melee" interval="2000" min="0" max="-170" poison="300" />
 		<attack name="lifedrain" interval="3000" chance="9" range="1" min="-60" max="-250">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
@@ -60,8 +60,8 @@
 		<voice sentence="What a disgusting smell of life!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance1="100000" chancemax="0" />
-		<item id="2148" countmax="12" chance1="80000" chancemax="0" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="12" chance="80000" />
 		<item id="2165" chance="888" />
 		<item id="2171" chance="1666" />
 		<item id="2175" chance="10000" />

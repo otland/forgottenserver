@@ -33,6 +33,11 @@
 		<attack name="deepling spellsinger skill reducer" range="5" interval="2000" chance="5" />
 	</attacks>
 	<defenses armor="25" defense="25" />
+	<elements>
+		<element earthPercent="-20" />
+		<element energyPercent="-20" />
+		<element deathPercent="50" />
+	</elements>
 	<immunities>
 		<immunity invisible="1" />
 		<immunity ice="1" />
@@ -43,11 +48,6 @@
 		<voice sentence="Jey Obu giotja!!" />
 		<voice sentence="Mmmmmoooaaaaaahaaa!!" />
 	</voices>
-	<elements>
-		<element earthPercent="-20" />
-		<element energyPercent="-20" />
-		<element deathPercent="50" />
-	</elements>
 	<loot>
 		<item id="2146" chance="2854" /><!-- small sapphire -->
 		<item id="2148" countmax="60" chance="70000" /><!-- gold coin -->

@@ -29,7 +29,10 @@
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">
-		<defense name="physical" interval="2000" radius="1" chance="10">
+		<defense name="healing" interval="2000" chance="20" min="70" max="90">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="effect" interval="2000" chance="10" radius="1">
 			<attribute key="areaEffect" value="insects" />
 		</defense>
 	</defenses>
@@ -45,11 +48,6 @@
 		<immunity earth="1" />
 		<immunity drown="1" />
 	</immunities>
-	<defenses>
-		<defense name="healing" interval="2000" chance="20" min="70" max="90">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-	</defenses>
 	<voices interval="5000" chance="10">
 		<voice sentence="Blood for the dark god!" />
 		<voice sentence="Die, filth!" />

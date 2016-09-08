@@ -16,7 +16,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<defenses>
-		<defense name="physical" interval="100" chance="100" radius="1" target="0">
+		<defense name="effect" interval="100" chance="100" radius="1" target="0">
 			<attribute key="areaeffect" value="greenshimmer" />
 		</defense>
 	</defenses>

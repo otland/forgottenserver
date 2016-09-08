@@ -34,15 +34,15 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element firePercent="-10" />
+	</elements>
 	<immunities>
 		<immunity death="1" />
 		<immunity earth="1" />
 		<immunity drown="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element firePercent="-10" />
-	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Shriiiiiek" />
 	</voices>

@@ -43,9 +43,6 @@
 		<element holyPercent="65" />
 		<element lifedrainPercent="80" />
 	</elements>
-	<immunities>
-		<immunity death="1" />
-	</immunities>
 	<summons maxSummons="3">
 		<summon name="Mercury Blob" interval="2000" chance="10" />
 	</summons>

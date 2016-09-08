@@ -25,10 +25,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25" />
-	<immunities>
-		<immunity earth="1" />
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element deathPercent="5" />
 		<element energyPercent="25" />
@@ -36,6 +32,10 @@
 		<element holyPercent="-5" />
 		<element firePercent="-10" />
 	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Peeex!" />
 	</voices>

@@ -20,10 +20,6 @@
 		<attack name="melee" interval="2000" min="0" max="-300" />
 	</attacks>
 	<defenses armor="32" defense="35" />
-	<immunities>
-		<immunity invisible="1" />
-		<immunity paralyze="1" />
-	</immunities>
 	<elements>
 		<element firePercent="80" />
 		<element energyPercent="30" />
@@ -31,6 +27,10 @@
 		<element earthPercent="-10" />
 		<element deathPercent="-10" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
 	<summons maxSummons="3">
 		<summon name="Orc Berserker" interval="2000" chance="30" max="3" />
 	</summons>
@@ -40,7 +40,7 @@
 		<item id="2200" chance="9000" /><!-- protection amulet -->
 		<item id="2377" chance="18180" /><!-- two-handed sword -->
 		<item id="2392" chance="8970" /><!-- fire sword -->
-		<item id="2399" chance1="6666" countmax="18" /><!-- throwing star -->
+		<item id="2399" chance="6666" countmax="18" /><!-- throwing star -->
 		<item id="2428" chance="13000" /><!-- orcish axe -->
 		<item id="2463" chance="7333" /><!-- plate armor -->
 		<item id="2478" chance="3333" /><!-- brass legs -->

@@ -41,12 +41,12 @@
 		<immunity death="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="I challenge you!" />
-	</voices>
 	<summons maxSummons="4">
 		<summon name="Vampire" interval="2000" chance="30" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I challenge you!" />
+	</voices>
 	<loot>
 		<item id="2148" chance="100000" countmax="93" />
 		<item id="2152" chance="50000" countmax="5" />
@@ -57,6 +57,6 @@
 		<item id="7427" chance="250" />
 		<item id="7588" chance="1500" />
 		<item id="9020" chance="100000" />
-		<item id="9020" chance1="100000" />
+		<item id="9020" chance="100000" />
 	</loot>
 </monster>

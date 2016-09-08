@@ -32,6 +32,12 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element firePercent="30" />
+		<element energyPercent="-10" />
+		<element physicalPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity paralyze="1" />
@@ -42,12 +48,6 @@
 		<voice sentence="CHHHRRRR" />
 		<voice sentence="HISSSS" />
 	</voices>
-	<elements>
-		<element firePercent="30" />
-		<element energyPercent="-10" />
-		<element physicalPercent="-10" />
-		<element deathPercent="-10" />
-	</elements>
 	<loot>
 		<item id="2146" countmax="3" chance="10000" /><!-- small saphire -->
 		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->

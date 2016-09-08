@@ -17,7 +17,7 @@
 		<attack name="fire" interval="6000" chance="80" radius="3" min="0" max="-120">
 			<attribute key="areaEffect" value="energy" />
 		</attack>
-		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="20000" speed="-450">
+		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="20000" speedchange="-450">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 		<attack name="physical" interval="6000" chance="40" radius="1" target="1" range="5" min="-20" max="-100">

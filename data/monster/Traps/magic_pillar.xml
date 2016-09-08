@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Magic Pillar" nameDescription="a magic pillar" race="undead" experience="0" speed="0" manacost="0">
 	<health now="9950" max="9950" />
-	<look type="0" corpse="1740" />
+	<look typeex="1551" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag summonable="0" />

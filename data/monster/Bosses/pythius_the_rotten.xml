@@ -55,6 +55,9 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="3">
+		<summon name="Undead Gladiator" interval="1000" chance="10" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="YOU'LL NEVER GET MY TREASURE!" yell="1" />
 		<voice sentence="MINIONS, MEET YOUR NEW BROTHER!" yell="1" />
@@ -62,7 +65,4 @@
 		<voice sentence="YOU MADE A HUGE WASTE!" yell="1" />
 		<voice sentence="I SENSE LIFE" yell="1" />
 	</voices>
-	<summons maxSummons="3">
-		<summon name="Undead Gladiator" interval="1000" chance="10" />
-	</summons>
 </monster>

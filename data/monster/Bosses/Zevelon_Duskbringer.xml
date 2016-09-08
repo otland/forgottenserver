@@ -43,14 +43,14 @@
 		<immunity death="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="3">
+		<summon name="Vampire" interval="3000" chance="40" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Human blood is not suitable for drinking" />
 		<voice sentence="Your short live is coming to an end" />
 		<voice sentence="Ashari Mortals. Come and stay forever!" />
 	</voices>
-	<summons maxSummons="3">
-		<summon name="Vampire" interval="3000" chance="40" />
-	</summons>
 	<loot>
 		<item id="2144" chance="8000" />
 		<item id="2148" chance="100000" countmax="75" />

@@ -19,12 +19,12 @@
 		<attack name="melee" interval="2000" min="0" max="-99" />
 	</attacks>
 	<defenses armor="12" defense="20" />
+	<elements>
+	</elements>
 	<immunities>
 	</immunities>
 	<voices interval="3000" chance="200">
 	</voices>
-	<elements>
-	</elements>
 	<loot>
 	</loot>
 </monster>

@@ -27,12 +27,12 @@
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="20" />
-	<immunities>
-		<immunity fire="1" />
-	</immunities>
 	<elements>
 		<element icePercent="-25" />
 	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
 	<loot>
 		<item id="2147" countmax="3" chance="3200" /><!-- small ruby -->
 		<item id="2148" countmax="65" chance="12500" /><!-- gold coin -->

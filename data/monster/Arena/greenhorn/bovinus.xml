@@ -15,6 +15,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
+	<defenses armor="9" defense="11" />
 	<elements>
 		<element firePercent="20" />
 	</elements>
@@ -23,5 +24,4 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<defenses armor="9" defense="11" />
 </monster>

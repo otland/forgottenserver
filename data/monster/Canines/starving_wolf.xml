@@ -20,7 +20,7 @@
 		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>
 	<defenses armor="10" defense="10">
-		<defense name="physical" interval="2000" chance="10" radius="1">
+		<defense name="effect" interval="2000" chance="10" radius="1">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</defense>
 	</defenses>

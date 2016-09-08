@@ -26,16 +26,16 @@
 		</attack>
 	</attacks>
 	<defenses armor="1" defense="2" />
+	<elements>
+		<element holyPercent="-5" />
+		<element physicalPercent="-20" />
+	</elements>
 	<immunities>
 		<immunity fire="1" />
 		<immunity drown="1" />
 		<immunity lifedrain="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element holyPercent="-5" />
-		<element physicalPercent="-20" />
-	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Wuff Wuff" />
 		<voice sentence="Grrr Wuff" />

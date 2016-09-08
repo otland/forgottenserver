@@ -56,16 +56,15 @@
 		<immunity lifedrain="1" />
 		<immunity physical="1" />
 	</immunities>
+	<summons maxSummons="4">
+		<summon name="Phantasm Summon" interval="2000" chance="20" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Oh my, you forgot to put your pants on!" />
 		<voice sentence="Weeheeheeheehee!" />
 		<voice sentence="Its nothing but a dream!" />
 		<voice sentence="Give in!" />
 	</voices>
-	<summons maxSummons="4">
-		<summon name="Phantasm Summon" interval="2000" chance="20" />
-		<summon name="Phantasm Summon" interval="2000" chance="20" />
-	</summons>
 	<loot>
 		<item id="2147" countmax="3" chance="12160" /><!-- small ruby -->
 		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
