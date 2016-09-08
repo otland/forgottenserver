@@ -182,25 +182,25 @@ class Monster final : public Creature
 		std::string strDescription;
 
 		MonsterType* mType;
-		Spawn* spawn;
+		Spawn* spawn = nullptr;
 
-		int64_t lastMeleeAttack;
+		int64_t lastMeleeAttack = 0;
 
-		uint32_t attackTicks;
-		uint32_t targetTicks;
-		uint32_t targetChangeTicks;
-		uint32_t defenseTicks;
-		uint32_t yellTicks;
-		int32_t minCombatValue;
-		int32_t maxCombatValue;
+		uint32_t attackTicks = 0;
+		uint32_t targetTicks = 0;
+		uint32_t targetChangeTicks = 0;
+		uint32_t defenseTicks = 0;
+		uint32_t yellTicks = 0;
+		int32_t minCombatValue = 0;
+		int32_t maxCombatValue = 0;
 		int32_t targetChangeCooldown;
-		int32_t stepDuration;
+		int32_t stepDuration = 0;
 
 		Position masterPos;
 
-		bool isIdle;
-		bool extraMeleeAttack;
-		bool isMasterInRange;
+		bool isIdle = true;
+		bool extraMeleeAttack = false;
+		bool isMasterInRange = false;
 
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);

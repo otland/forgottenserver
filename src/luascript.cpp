@@ -57,9 +57,7 @@ LuaEnvironment g_luaEnvironment;
 
 ScriptEnvironment::ScriptEnvironment()
 {
-	curNpc = nullptr;
 	resetEnv();
-	lastUID = std::numeric_limits<uint16_t>::max();
 }
 
 ScriptEnvironment::~ScriptEnvironment()

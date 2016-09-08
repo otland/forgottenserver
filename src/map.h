@@ -80,14 +80,14 @@ typedef std::map<Position, SpectatorVec> SpectatorCache;
 #define FLOOR_MASK (FLOOR_SIZE - 1)
 
 struct Floor {
-	Floor() : tiles() {}
+	Floor() = default;
 	~Floor();
 
 	// non-copyable
 	Floor(const Floor&) = delete;
 	Floor& operator=(const Floor&) = delete;
 
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE];
+	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = { nullptr };
 };
 
 class FrozenPathingConditionCall;
@@ -172,8 +172,6 @@ class QTreeLeafNode final : public QTreeNode
 class Map
 {
 	public:
-		Map() : width(0), height(0) {}
-
 		static const int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
 		static const int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
 		static const int32_t maxClientViewportX = 8;
@@ -273,7 +271,8 @@ class Map
 		std::string spawnfile;
 		std::string housefile;
 
-		uint32_t width, height;
+		uint32_t width = 0;
+		uint32_t height = 0;
 
 		// Actually scans the map for spectators
 		void getSpectatorsInternal(SpectatorVec& list, const Position& centerPos,

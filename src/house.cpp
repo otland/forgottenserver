@@ -30,17 +30,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-House::House(uint32_t houseId) :
-	transfer_container(ITEM_LOCKER1),
-	transferItem(nullptr),
-	paidUntil(0),
-	id(houseId),
-	owner(0),
-	rentWarnings(0),
-	rent(0),
-	townId(0),
-	posEntry(),
-	isLoaded(false)
+House::House(uint32_t houseId) : id(houseId)
 {}
 
 void House::addTile(HouseTile* tile)

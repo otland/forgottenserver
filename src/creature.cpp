@@ -33,49 +33,8 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
 
-Creature::Creature() :
-	localMapCache(), isInternalRemoved(false)
+Creature::Creature()
 {
-	referenceCounter = 0;
-
-	id = 0;
-	tile = nullptr;
-	direction = DIRECTION_SOUTH;
-	master = nullptr;
-	lootDrop = true;
-	skillLoss = true;
-
-	health = 1000;
-	healthMax = 1000;
-	mana = 0;
-
-	lastStep = 0;
-	lastStepCost = 1;
-	baseSpeed = 220;
-	varSpeed = 0;
-
-	followCreature = nullptr;
-	hasFollowPath = false;
-	eventWalk = 0;
-	cancelNextWalk = false;
-	forceUpdateFollowPath = false;
-	isMapLoaded = false;
-	isUpdatingPath = false;
-
-	attackedCreature = nullptr;
-
-	lastHitCreatureId = 0;
-	blockCount = 0;
-	blockTicks = 0;
-	walkUpdateTicks = 0;
-	creatureCheck = false;
-	inCheckCreaturesVector = false;
-	scriptEventsBitField = 0;
-
-	hiddenHealth = false;
-
-	skull = SKULL_NONE;
-
 	onIdleStatus();
 }
 

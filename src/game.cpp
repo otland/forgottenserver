@@ -50,29 +50,8 @@ extern Spells* g_spells;
 extern TalkActions* g_talkActions;
 extern Vocations g_vocations;
 
-Game::Game() :
-	wildcardTree(false),
-	offlineTrainingWindow(std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:")
+Game::Game()
 {
-	gameState = GAME_STATE_NORMAL;
-	worldType = WORLD_TYPE_PVP;
-
-	serviceManager = nullptr;
-	lastStageLevel = 0;
-	playersRecord = 0;
-	motdNum = 0;
-	useLastStageLevel = false;
-	stagesEnabled = false;
-
-	lastBucket = 0;
-
-	//(1440 minutes/day)/(3600 seconds/day)*10 seconds event interval
-	int32_t dayCycle = 3600;
-	lightHourDelta = 1440 * 10 / dayCycle;
-	lightHour = SUNRISE + (SUNSET - SUNRISE) / 2;
-	lightLevel = LIGHT_LEVEL_DAY;
-	lightState = LIGHT_STATE_DAY;
-
 	offlineTrainingWindow.choices.emplace_back("Sword Fighting and Shielding", SKILL_SWORD);
 	offlineTrainingWindow.choices.emplace_back("Axe Fighting and Shielding", SKILL_AXE);
 	offlineTrainingWindow.choices.emplace_back("Club Fighting and Shielding", SKILL_CLUB);

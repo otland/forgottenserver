@@ -493,47 +493,47 @@ class Creature : virtual public Thing
 
 		std::forward_list<Direction> listWalkDir;
 
-		Tile* tile;
-		Creature* attackedCreature;
-		Creature* master;
-		Creature* followCreature;
+		Tile* tile = nullptr;
+		Creature* attackedCreature = nullptr;
+		Creature* master = nullptr;
+		Creature* followCreature = nullptr;
 
-		uint64_t lastStep;
-		uint32_t referenceCounter;
-		uint32_t id;
-		uint32_t scriptEventsBitField;
-		uint32_t eventWalk;
-		uint32_t walkUpdateTicks;
-		uint32_t lastHitCreatureId;
-		uint32_t blockCount;
-		uint32_t blockTicks;
-		uint32_t lastStepCost;
-		uint32_t baseSpeed;
-		uint32_t mana;
-		int32_t varSpeed;
-		int32_t health;
-		int32_t healthMax;
+		uint64_t lastStep = 0;
+		uint32_t referenceCounter = 0;
+		uint32_t id = 0;
+		uint32_t scriptEventsBitField = 0;
+		uint32_t eventWalk = 0;
+		uint32_t walkUpdateTicks = 0;
+		uint32_t lastHitCreatureId = 0;
+		uint32_t blockCount = 0;
+		uint32_t blockTicks = 0;
+		uint32_t lastStepCost = 1;
+		uint32_t baseSpeed = 220;
+		uint32_t mana = 0;
+		int32_t varSpeed = 0;
+		int32_t health = 1000;
+		int32_t healthMax = 1000;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
 
 		LightInfo internalLight;
 
-		Direction direction;
-		Skulls_t skull;
+		Direction direction = DIRECTION_SOUTH;
+		Skulls_t skull = SKULL_NONE;
 
-		bool localMapCache[mapWalkHeight][mapWalkWidth];
-		bool isInternalRemoved;
-		bool isMapLoaded;
-		bool isUpdatingPath;
-		bool creatureCheck;
-		bool inCheckCreaturesVector;
-		bool skillLoss;
-		bool lootDrop;
-		bool cancelNextWalk;
-		bool hasFollowPath;
-		bool forceUpdateFollowPath;
-		bool hiddenHealth;
+		bool localMapCache[mapWalkHeight][mapWalkWidth] = { false };
+		bool isInternalRemoved = false;
+		bool isMapLoaded = false;
+		bool isUpdatingPath = false;
+		bool creatureCheck = false;
+		bool inCheckCreaturesVector = false;
+		bool skillLoss = true;
+		bool lootDrop = true;
+		bool cancelNextWalk = false;
+		bool hasFollowPath = false;
+		bool forceUpdateFollowPath = false;
+		bool hiddenHealth = false;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

@@ -532,7 +532,7 @@ class Game
 
 		size_t lastBucket;
 
-		WildcardTreeNode wildcardTree;
+		WildcardTreeNode wildcardTree { false };
 
 		std::map<uint32_t, Npc*> npcs;
 		std::map<uint32_t, Monster*> monsters;
@@ -542,7 +542,7 @@ class Game
 
 		std::map<uint32_t, BedItem*> bedSleepersMap;
 
-		ModalWindow offlineTrainingWindow;
+		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 		Commands commands;
 
 		static const int32_t LIGHT_LEVEL_DAY = 250;
@@ -550,8 +550,8 @@ class Game
 		static const int32_t SUNSET = 1305;
 		static const int32_t SUNRISE = 430;
 
-		GameState_t gameState;
-		WorldType_t worldType;
+		GameState_t gameState = GAME_STATE_NORMAL;
+		WorldType_t worldType = WORLD_TYPE_PVP;
 
 		LightState_t lightState;
 		uint8_t lightLevel;

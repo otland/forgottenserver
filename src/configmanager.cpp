@@ -29,12 +29,6 @@
 
 extern Game g_game;
 
-ConfigManager::ConfigManager()
-	: integer(), boolean()
-{
-	loaded = false;
-}
-
 bool ConfigManager::load()
 {
 	lua_State* L = luaL_newstate();

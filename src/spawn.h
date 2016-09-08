@@ -82,8 +82,6 @@ class Spawn
 class Spawns
 {
 	public:
-		Spawns();
-
 		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
 		bool loadFromXml(const std::string& filename);
@@ -98,7 +96,8 @@ class Spawns
 		std::forward_list<Npc*> npcList;
 		std::forward_list<Spawn> spawnList;
 		std::string filename;
-		bool loaded, started;
+		bool loaded = false;
+		bool started = false;
 };
 
 #endif
