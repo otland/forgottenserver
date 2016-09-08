@@ -112,7 +112,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		return false;
 	}
 
-	if (root_header.majorVersionItems > Items::dwMajorVersion) {
+	if (root_header.majorVersionItems > Item::items.majorVersion) {
 		setLastErrorString("The map was saved with a different items.otb version, an upgraded items.otb is required.");
 		return false;
 	}
@@ -122,7 +122,7 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 		return false;
 	}
 
-	if (root_header.minorVersionItems > Items::dwMinorVersion) {
+	if (root_header.minorVersionItems > Item::items.minorVersion) {
 		std::cout << "[Warning - IOMap::loadMap] This map needs an updated items.otb." << std::endl;
 	}
 
