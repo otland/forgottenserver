@@ -13330,7 +13330,6 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="7638" article="a" name="dead cat">
-		<attribute key="containerSize" value="10" />
 		<attribute key="containerSize" value="5" />
 		<attribute key="decayTo" value="7639" />
 		<attribute key="duration" value="900" />
@@ -13706,7 +13705,6 @@
 		<attribute key="charges" value="1000" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="decayTo" value="7392" />
-		<attribute key="showcharges" value="1" />
 	</item>
 	<item id="7758" article="a" name="fiery war hammer">
 		<attribute key="weight" value="8500" />
@@ -13796,7 +13794,6 @@
 		<attribute key="charges" value="1000" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="decayTo" value="2429" />
-		<attribute key="showcharges" value="1" />
 	</item>
 	<item id="7769" article="an" name="icy knight axe">
 		<attribute key="weight" value="5900" />
