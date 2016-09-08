@@ -26,10 +26,6 @@
 
 #include "pugicast.h"
 
-uint32_t Items::dwMajorVersion = 0;
-uint32_t Items::dwMinorVersion = 0;
-uint32_t Items::dwBuildNumber = 0;
-
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 
@@ -125,18 +121,18 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				return ERROR_INVALID_FORMAT;
 			}
 
-			Items::dwMajorVersion = vi.dwMajorVersion; //items otb format file version
-			Items::dwMinorVersion = vi.dwMinorVersion; //client version
-			Items::dwBuildNumber = vi.dwBuildNumber; //revision
+			majorVersion = vi.dwMajorVersion; //items otb format file version
+			minorVersion = vi.dwMinorVersion; //client version
+			buildNumber = vi.dwBuildNumber; //revision
 		}
 	}
 
-	if (Items::dwMajorVersion == 0xFFFFFFFF) {
+	if (majorVersion == 0xFFFFFFFF) {
 		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
-	} else if (Items::dwMajorVersion != 3) {
+	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
-	} else if (Items::dwMinorVersion < CLIENT_VERSION_1076) {
+	} else if (minorVersion < CLIENT_VERSION_1076) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}

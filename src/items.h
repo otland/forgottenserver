@@ -304,9 +304,9 @@ class Items
 
 		uint16_t getItemIdByName(const std::string& name);
 
-		static uint32_t dwMajorVersion;
-		static uint32_t dwMinorVersion;
-		static uint32_t dwBuildNumber;
+		uint32_t majorVersion = 0;
+		uint32_t minorVersion = 0;
+		uint32_t buildNumber = 0;
 
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
