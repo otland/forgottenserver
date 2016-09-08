@@ -31,11 +31,11 @@
 		<immunity drown="1" />
 	</immunities>
 	<loot>
+		<item id="2143" chance="480" /><!-- white pearl -->
 		<item id="2148" countmax="20" chance="90000" /><!-- gold coin -->
-		<item id="2667" chance="13000" /><!-- fish -->
-		<item id="10550" chance="6260" /><!-- bloody pincers -->
 		<item id="2464" chance="5555" /><!-- chain armor -->
 		<item id="2478" chance="2170" /><!-- brass legs -->
-		<item id="2143" chance="480" /><!-- white pearl -->
+		<item id="2667" chance="13000" /><!-- fish -->
+		<item id="10550" chance="6260" /><!-- bloody pincers -->
 	</loot>
 </monster>

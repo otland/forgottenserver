@@ -51,13 +51,13 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="37" chance="50000" /><!-- gold coin -->
-		<item id="11328" chance="20950" /><!-- widow's mandibles -->
-		<item id="7618" chance="4761" /><!-- health potion -->
-		<item id="2510" chance="2854" /><!-- plate shield -->
-		<item id="7620" chance="4785" /><!-- mana potion -->
-		<item id="2796" chance="3208" /><!-- green mushroom -->
-		<item id="11329" chance="900" /><!-- wailing widow's necklace -->
-		<item id="11323" chance="2210" /><!-- zaoan halberd -->
 		<item id="2381" chance="4460" /><!-- halberd -->
+		<item id="2510" chance="2854" /><!-- plate shield -->
+		<item id="2796" chance="3208" /><!-- green mushroom -->
+		<item id="7618" chance="4761" /><!-- health potion -->
+		<item id="7620" chance="4785" /><!-- mana potion -->
+		<item id="11323" chance="2210" /><!-- zaoan halberd -->
+		<item id="11328" chance="20950" /><!-- widow's mandibles -->
+		<item id="11329" chance="900" /><!-- wailing widow's necklace -->
 	</loot>
 </monster>

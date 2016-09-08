@@ -52,8 +52,8 @@
 		<item id="2148" countmax="90" chance="33750" /><!-- gold coin -->
 		<item id="2148" countmax="75" chance="33750" /><!-- gold coin -->
 		<item id="2672" chance="80000" /><!-- dragon ham -->
-		<item id="7620" chance="300" /><!-- mana potion -->
 		<item id="2796" chance="560" /><!-- green mushroom -->
+		<item id="7620" chance="300" /><!-- mana potion -->
 		<item id="7891" chance="100" /><!-- magma boots -->
 	</loot>
 </monster>

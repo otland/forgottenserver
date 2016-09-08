@@ -40,17 +40,17 @@
 		<voice sentence="Peeex!" />
 	</voices>
 	<loot>
+		<item id="2127" chance="2040" /><!-- emerald bangle -->
+		<item id="2144" chance="4230" /><!-- black pearl -->
 		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="35" chance="50000" /><!-- gold coin -->
 		<item id="2152" chance="40430" /><!-- platinum coin -->
-		<item id="15484" chance="13890" /><!-- waspoid wing -->
-		<item id="15483" chance="9096" /><!-- waspoid claw -->
-		<item id="15486" chance="6060" /><!-- compound eye -->
-		<item id="2144" chance="4230" /><!-- black pearl -->
-		<item id="2127" chance="2040" /><!-- emerald bangle -->
 		<item id="2154" chance="1040" /><!-- yellow gem -->
+		<item id="15483" chance="9096" /><!-- waspoid claw -->
+		<item id="15484" chance="13890" /><!-- waspoid wing -->
+		<item id="15486" chance="6060" /><!-- compound eye -->
 		<item id="15490" chance="230" /><!-- grasshopper legs -->
-		<item id="15492" chance="330" /><!-- hive scythe -->
 		<item id="15491" chance="120" /><!-- carapace shield -->
+		<item id="15492" chance="330" /><!-- hive scythe -->
 	</loot>
 </monster>

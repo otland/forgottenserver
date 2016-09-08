@@ -54,12 +54,12 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="45" chance="7500" /><!-- gold coin -->
-		<item id="2260" countmax="3" chance="8125" /><!-- blank rune -->
-		<item id="7620" chance="2980" /><!-- mana potion -->
-		<item id="6079" chance="12100" /><!-- dead frog -->
-		<item id="2191" chance="1980" /><!-- wand of dragonbreath -->
-		<item id="7618" chance="2900" /><!-- health potion -->
 		<item id="2188" chance="110" /><!-- wand of decay -->
+		<item id="2191" chance="1980" /><!-- wand of dragonbreath -->
+		<item id="2260" countmax="3" chance="8125" /><!-- blank rune -->
+		<item id="6079" chance="12100" /><!-- dead frog -->
+		<item id="7618" chance="2900" /><!-- health potion -->
+		<item id="7620" chance="2980" /><!-- mana potion -->
 		<item id="13295" chance="10" /><!-- reins -->
 	</loot>
 </monster>

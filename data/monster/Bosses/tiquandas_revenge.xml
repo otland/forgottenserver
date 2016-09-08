@@ -38,13 +38,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
+		<item id="2145" countmax="3" chance="33333" /><!-- small diamond -->
 		<item id="2148" countmax="10" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2666" countmax="50" chance="33333" /><!-- meat -->
 		<item id="2671" countmax="8" chance="20000" /><!-- ham -->
-		<item id="2145" countmax="3" chance="33333" /><!-- small diamond -->
-		<item id="7732" chance="4000" /><!-- seeds -->
-		<item id="5015" chance="100000" /><!-- mandrake -->
 		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
+		<item id="5015" chance="100000" /><!-- mandrake -->
+		<item id="7732" chance="4000" /><!-- seeds -->
 	</loot>
 </monster>

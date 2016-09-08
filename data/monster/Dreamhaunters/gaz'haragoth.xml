@@ -74,18 +74,18 @@
 		<voice sentence="ZATHROTH! LOOK AT THE DESTRUCTION I AM CAUSING IN YOUR NAME!" yell="1" />
 	</voices>
 	<loot>
+		<item id="2143" countmax="5" chance="10000" /><!-- white pearl -->
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2143" countmax="5" chance="10000" /><!-- white pearl -->
-		<item id="2396" chance="19429" /><!-- ice rapier -->
-		<item id="2462" chance="20000" /><!-- devil helmet -->
+		<item id="2192" chance="24000" /><!-- crystal ball -->
+		<item id="2195" chance="16033" /><!-- boots of haste -->
 		<item id="2214" chance="16000" /><!-- ring of healing -->
-		<item id="2495" chance="6000" /><!-- demon legs -->
 		<item id="2387" chance="20000" /><!-- double axe -->
 		<item id="2393" chance="60000" /><!-- giant sword -->
-		<item id="2195" chance="16033" /><!-- boots of haste -->
+		<item id="2396" chance="19429" /><!-- ice rapier -->
 		<item id="2421" chance="7000" /><!-- thunder hammer -->
+		<item id="2462" chance="20000" /><!-- devil helmet -->
+		<item id="2495" chance="6000" /><!-- demon legs -->
 		<item id="2522" chance="5600" /><!-- great shield -->
-		<item id="2192" chance="24000" /><!-- crystal ball -->
 	</loot>
 </monster>

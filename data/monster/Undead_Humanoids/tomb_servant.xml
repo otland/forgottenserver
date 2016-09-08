@@ -34,12 +34,12 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="108" chance="82350" /><!-- gold coin -->
-		<item id="2230" chance="49000" /><!-- bone -->
-		<item id="3976" countmax="12" chance="25325" /><!-- worm -->
 		<item id="2159" chance="8210" /><!-- scarab coin -->
+		<item id="2227" chance="2000" /><!-- rotten meat -->
+		<item id="2230" chance="49000" /><!-- bone -->
 		<item id="2397" chance="6560" /><!-- longsword -->
 		<item id="2541" chance="5300" /><!-- bone shield -->
-		<item id="2227" chance="2000" /><!-- rotten meat -->
+		<item id="3976" countmax="12" chance="25325" /><!-- worm -->
 		<item id="11200" chance="1000" /><!-- half-digested piece of meat -->
 		<item id="13535" chance="230" /><!-- fist on a stick -->
 	</loot>

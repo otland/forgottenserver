@@ -25,8 +25,8 @@
 		<voice sentence="Grrrrrr!" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="3" chance="39075" /><!-- meat -->
 		<item id="2148" countmax="30" chance="48000" /><!-- gold coin -->
+		<item id="2666" countmax="3" chance="39075" /><!-- meat -->
 		<item id="3976" countmax="3" chance="33300" /><!-- worm -->
 		<item id="11324" chance="25550" /><!-- shaggy tail -->
 	</loot>

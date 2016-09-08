@@ -47,11 +47,11 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="87500" /><!-- gold coin -->
-		<item id="12443" chance="14520" /><!-- quara tentacle -->
-		<item id="2397" chance="7761" /><!-- longsword -->
-		<item id="2670" countmax="5" chance="5000" /><!-- shrimp -->
-		<item id="2465" chance="5000" /><!-- brass armor -->
-		<item id="5895" chance="430" /><!-- fish fin -->
 		<item id="2150" chance="2860" /><!-- small amethyst -->
+		<item id="2397" chance="7761" /><!-- longsword -->
+		<item id="2465" chance="5000" /><!-- brass armor -->
+		<item id="2670" countmax="5" chance="5000" /><!-- shrimp -->
+		<item id="5895" chance="430" /><!-- fish fin -->
+		<item id="12443" chance="14520" /><!-- quara tentacle -->
 	</loot>
 </monster>

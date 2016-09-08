@@ -41,9 +41,9 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="75" chance="100000" /><!-- gold coin -->
-		<item id="15479" chance="15300" /><!-- swarmer antenna -->
-		<item id="15486" chance="12500" /><!-- compound eye -->
 		<item id="2149" chance="920" /><!-- small emerald -->
 		<item id="2438" chance="450" /><!-- epee -->
+		<item id="15479" chance="15300" /><!-- swarmer antenna -->
+		<item id="15486" chance="12500" /><!-- compound eye -->
 	</loot>
 </monster>

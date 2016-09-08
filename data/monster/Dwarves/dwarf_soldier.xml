@@ -33,16 +33,16 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="12" chance="28000" /><!-- gold coin -->
-		<item id="2543" countmax="7" chance="40000" /><!-- bolt -->
-		<item id="2787" countmax="3" chance="40000" /><!-- white mushroom -->
-		<item id="2554" chance="10000" /><!-- shovel -->
-		<item id="2481" chance="12000" /><!-- soldier helmet -->
-		<item id="2464" chance="8000" /><!-- chain armor -->
-		<item id="7363" countmax="3" chance="4000" /><!-- piercing bolt -->
+		<item id="2208" chance="120" /><!-- axe ring -->
 		<item id="2378" chance="2500" /><!-- battle axe -->
 		<item id="2455" chance="3000" /><!-- crossbow -->
+		<item id="2464" chance="8000" /><!-- chain armor -->
+		<item id="2481" chance="12000" /><!-- soldier helmet -->
 		<item id="2525" chance="3000" /><!-- dwarven shield -->
-		<item id="2208" chance="120" /><!-- axe ring -->
+		<item id="2543" countmax="7" chance="40000" /><!-- bolt -->
+		<item id="2554" chance="10000" /><!-- shovel -->
+		<item id="2787" countmax="3" chance="40000" /><!-- white mushroom -->
 		<item id="5880" chance="300" /><!-- iron ore -->
+		<item id="7363" countmax="3" chance="4000" /><!-- piercing bolt -->
 	</loot>
 </monster>

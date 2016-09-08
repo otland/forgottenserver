@@ -71,51 +71,51 @@
 		<voice sentence="THE TRIANGLE OF TERROR WILL RISE!" yell="1" />
 	</voices>
 	<loot>
-		<item id="6500" chance="50000" /><!-- demonic essence -->
-		<item id="2152" countmax="74" chance="50000" /><!-- platinum coin -->
-		<item id="7590" chance="50000" /><!-- great mana potion -->
-		<item id="2155" chance="33333" /><!-- green gem -->
-		<item id="2150" countmax="18" chance="33333" /><!-- small amethyst -->
-		<item id="8852" chance="33333" /><!-- devileye -->
-		<item id="2214" chance="25000" /><!-- ring of healing -->
-		<item id="2146" countmax="8" chance="25000" /><!-- small sapphire -->
-		<item id="8853" chance="25000" /><!-- ironworker -->
-		<item id="8850" chance="20000" /><!-- chain bolter -->
-		<item id="8865" chance="20000" /><!-- dark lord's cape -->
-		<item id="5954" countmax="2" chance="20000" /><!-- demon horn -->
-		<item id="2472" chance="20000" /><!-- magic plate armor -->
-		<item id="2164" chance="20000" /><!-- might ring -->
 		<item id="1986" chance="20000" /><!-- red tome -->
-		<item id="2149" countmax="6" chance="20000" /><!-- small emerald -->
-		<item id="8473" chance="20000" /><!-- ultimate health potion -->
-		<item id="7368" countmax="28" chance="16666" /><!-- assassin star -->
-		<item id="2144" countmax="15" chance="16666" /><!-- black pearl -->
-		<item id="6300" chance="16666" /><!-- death ring -->
-		<item id="7431" chance="16666" /><!-- demonbone -->
-		<item id="2387" chance="16666" /><!-- double axe -->
-		<item id="8881" chance="16666" /><!-- fireborn giant armor -->
 		<item id="2033" chance="16666" /><!-- golden mug -->
-		<item id="2178" chance="16666" /><!-- mind stone -->
-		<item id="5943" chance="16666" /><!-- Morgaroth's heart -->
-		<item id="8928" chance="16666" /><!-- obsidian truncheon -->
+		<item id="2112" chance="11111" /><!-- teddy bear -->
+		<item id="2124" chance="5882" /><!-- crystal ring -->
+		<item id="2143" countmax="13" chance="11111" /><!-- white pearl -->
+		<item id="2144" countmax="15" chance="16666" /><!-- black pearl -->
+		<item id="2146" countmax="8" chance="25000" /><!-- small sapphire -->
+		<item id="2149" countmax="6" chance="20000" /><!-- small emerald -->
+		<item id="2150" countmax="18" chance="33333" /><!-- small amethyst -->
 		<item id="2151" countmax="7" chance="16666" /><!-- talon -->
+		<item id="2152" countmax="74" chance="50000" /><!-- platinum coin -->
+		<item id="2155" chance="33333" /><!-- green gem -->
 		<item id="2158" chance="11111" /><!-- blue gem -->
+		<item id="2164" chance="20000" /><!-- might ring -->
+		<item id="2165" chance="11111" /><!-- stealth ring -->
+		<item id="2167" chance="5882" /><!-- energy ring -->
+		<item id="2174" chance="11111" /><!-- strange symbol -->
+		<item id="2177" chance="11111" /><!-- life crystal -->
+		<item id="2177" chance="11111" /><!-- life crystal -->
+		<item id="2178" chance="16666" /><!-- mind stone -->
+		<item id="2179" chance="5882" /><!-- gold ring -->
+		<item id="2214" chance="25000" /><!-- ring of healing -->
+		<item id="2387" chance="16666" /><!-- double axe -->
 		<item id="2393" chance="11111" /><!-- giant sword -->
 		<item id="2470" chance="11111" /><!-- golden legs -->
-		<item id="2177" chance="11111" /><!-- life crystal -->
-		<item id="2177" chance="11111" /><!-- life crystal -->
-		<item id="7493" chance="11111" /><!-- orb -->
-		<item id="8851" chance="11111" /><!-- royal crossbow -->
-		<item id="2165" chance="11111" /><!-- stealth ring -->
+		<item id="2472" chance="20000" /><!-- magic plate armor -->
 		<item id="2645" chance="11111" /><!-- steel boots -->
-		<item id="2174" chance="11111" /><!-- strange symbol -->
-		<item id="2112" chance="11111" /><!-- teddy bear -->
-		<item id="2143" countmax="13" chance="11111" /><!-- white pearl -->
-		<item id="2124" chance="5882" /><!-- crystal ring -->
-		<item id="8867" chance="5882" /><!-- dragon robe -->
-		<item id="2167" chance="5882" /><!-- energy ring -->
-		<item id="2179" chance="5882" /><!-- gold ring -->
+		<item id="5943" chance="16666" /><!-- Morgaroth's heart -->
+		<item id="5954" countmax="2" chance="20000" /><!-- demon horn -->
+		<item id="6300" chance="16666" /><!-- death ring -->
+		<item id="6500" chance="50000" /><!-- demonic essence -->
+		<item id="7368" countmax="28" chance="16666" /><!-- assassin star -->
+		<item id="7431" chance="16666" /><!-- demonbone -->
+		<item id="7493" chance="11111" /><!-- orb -->
+		<item id="7590" chance="50000" /><!-- great mana potion -->
 		<item id="7591" chance="5882" /><!-- great health potion -->
 		<item id="8472" chance="5882" /><!-- great spirit potion -->
+		<item id="8473" chance="20000" /><!-- ultimate health potion -->
+		<item id="8850" chance="20000" /><!-- chain bolter -->
+		<item id="8851" chance="11111" /><!-- royal crossbow -->
+		<item id="8852" chance="33333" /><!-- devileye -->
+		<item id="8853" chance="25000" /><!-- ironworker -->
+		<item id="8865" chance="20000" /><!-- dark lord's cape -->
+		<item id="8867" chance="5882" /><!-- dragon robe -->
+		<item id="8881" chance="16666" /><!-- fireborn giant armor -->
+		<item id="8928" chance="16666" /><!-- obsidian truncheon -->
 	</loot>
 </monster>

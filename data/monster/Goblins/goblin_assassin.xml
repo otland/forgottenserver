@@ -47,16 +47,16 @@
 		<voice sentence="Gooobliiiins!" />
 	</voices>
 	<loot>
+		<item id="1294" countmax="3" chance="9900" /><!-- small stone -->
 		<item id="2148" countmax="9" chance="50000" /><!-- gold coin -->
-		<item id="2667" chance="12400" /><!-- fish -->
-		<item id="2449" chance="4770" /><!-- bone club -->
-		<item id="2406" chance="8820" /><!-- short sword -->
 		<item id="2230" chance="13000" /><!-- bone -->
+		<item id="2235" chance="6610" /><!-- mouldy cheese -->
 		<item id="2379" chance="17000" /><!-- dagger -->
+		<item id="2406" chance="8820" /><!-- short sword -->
+		<item id="2449" chance="4770" /><!-- bone club -->
+		<item id="2461" chance="13000" /><!-- leather helmet -->
 		<item id="2467" chance="7240" /><!-- leather armor -->
 		<item id="2559" chance="9800" /><!-- small axe -->
-		<item id="1294" countmax="3" chance="9900" /><!-- small stone -->
-		<item id="2235" chance="6610" /><!-- mouldy cheese -->
-		<item id="2461" chance="13000" /><!-- leather helmet -->
+		<item id="2667" chance="12400" /><!-- fish -->
 	</loot>
 </monster>

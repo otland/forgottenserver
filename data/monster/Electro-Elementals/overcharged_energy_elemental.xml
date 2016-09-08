@@ -49,9 +49,9 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="56" chance="50000" /><!-- gold coin -->
-		<item id="8303" chance="14285" /><!-- energy soil -->
-		<item id="7591" chance="10000" /><!-- great health potion -->
 		<item id="2150" countmax="2" chance="10000" /><!-- small amethyst -->
 		<item id="7439" chance="2173" /><!-- berserk potion -->
+		<item id="7591" chance="10000" /><!-- great health potion -->
+		<item id="8303" chance="14285" /><!-- energy soil -->
 	</loot>
 </monster>

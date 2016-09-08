@@ -74,14 +74,14 @@
 		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
 		<item id="2150" countmax="3" chance="7000" /><!-- small amethyst -->
-		<item id="2214" chance="7000" /><!-- ring of healing -->
-		<item id="7590" chance="7000" /><!-- great mana potion -->
-		<item id="2662" chance="300" /><!-- magician hat -->
-		<item id="2176" chance="500" /><!-- orb -->
-		<item id="2185" chance="500" /><!-- necrotic rod -->
 		<item id="2153" chance="500" /><!-- violet gem -->
+		<item id="2176" chance="500" /><!-- orb -->
 		<item id="2184" chance="500" /><!-- crystal wand -->
-		<item id="2447" chance="200" /><!-- twin axe -->
+		<item id="2185" chance="500" /><!-- necrotic rod -->
+		<item id="2214" chance="7000" /><!-- ring of healing -->
 		<item id="2348" chance="100000" /><!-- ancient rune -->
+		<item id="2447" chance="200" /><!-- twin axe -->
+		<item id="2662" chance="300" /><!-- magician hat -->
+		<item id="7590" chance="7000" /><!-- great mana potion -->
 	</loot>
 </monster>

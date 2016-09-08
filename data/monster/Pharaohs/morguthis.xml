@@ -64,16 +64,16 @@
 		<voice sentence="Anotherone to bite the dust!" />
 	</voices>
 	<loot>
+		<item id="2136" chance="500" /><!-- demonbone amulet -->
+		<item id="2144" chance="7000" /><!-- black pearl -->
 		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="73" chance="50000" /><!-- gold coin -->
 		<item id="2197" chance="7000" /><!-- stone skin amulet -->
-		<item id="2430" chance="7000" /><!-- knight axe -->
-		<item id="2144" chance="7000" /><!-- black pearl -->
-		<item id="7591" chance="1500" /><!-- great health potion -->
-		<item id="2136" chance="500" /><!-- demonbone amulet -->
-		<item id="2443" chance="300" /><!-- ravager's axe -->
-		<item id="7368" countmax="3" chance="500" /><!-- assassin star -->
-		<item id="2645" chance="500" /><!-- steel boots -->
 		<item id="2350" chance="100000" /><!-- sword hilt -->
+		<item id="2430" chance="7000" /><!-- knight axe -->
+		<item id="2443" chance="300" /><!-- ravager's axe -->
+		<item id="2645" chance="500" /><!-- steel boots -->
+		<item id="7368" countmax="3" chance="500" /><!-- assassin star -->
+		<item id="7591" chance="1500" /><!-- great health potion -->
 	</loot>
 </monster>

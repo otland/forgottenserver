@@ -56,30 +56,30 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="199" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
-		<item id="2150" countmax="3" chance="15020" /><!-- small amethist -->
 		<item id="2149" countmax="3" chance="10890" /><!-- small emerald -->
-		<item id="7590" chance="17640" /><!-- GMP -->
-		<item id="10571" chance="21230" /><!-- war crystal -->
-		<item id="8473" chance="18330" /><!-- UHP -->
-		<item id="11227" chance="15230" /><!-- shiny stone -->
+		<item id="2150" countmax="3" chance="15020" /><!-- small amethist -->
+		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
 		<item id="2156" chance="3510" /><!-- red gem -->
 		<item id="2158" chance="480" /><!-- blue gem -->
-		<item id="18420" chance="10540" /><!-- red crystal fragment -->
-		<item id="18421" chance="10540" /><!-- green crystal fragment -->
-		<item id="18415" chance="5720" /><!-- green crystal shard -->
-		<item id="18417" countmax="2" chance="12610" /><!-- brown crystal splinter -->
-		<item id="18432" chance="18400" /><!-- crystalline spikes -->
-		<item id="9942" chance="4480" /><!-- crystal of balance -->
-		<item id="9980" chance="2480" /><!-- crystal of power -->
-		<item id="5904" chance="830" /><!-- magic sulphur -->
 		<item id="2245" chance="620" /><!-- crystal mace -->
 		<item id="2438" chance="480" /><!-- epee -->
+		<item id="5904" chance="830" /><!-- magic sulphur -->
 		<item id="7437" chance="480" /><!-- sapphire hammer -->
-		<item id="8855" chance="210" /><!-- composite hornbow -->
-		<item id="18412" chance="960" /><!-- glacial rod -->
-		<item id="8912" chance="1720" /><!-- springsprout rod -->
-		<item id="11368" chance="210" /><!-- jade hat -->
+		<item id="7590" chance="17640" /><!-- GMP -->
 		<item id="7885" chance="1110" /><!-- terra legs -->
+		<item id="8473" chance="18330" /><!-- UHP -->
+		<item id="8855" chance="210" /><!-- composite hornbow -->
+		<item id="8912" chance="1720" /><!-- springsprout rod -->
+		<item id="9942" chance="4480" /><!-- crystal of balance -->
+		<item id="9980" chance="2480" /><!-- crystal of power -->
+		<item id="10571" chance="21230" /><!-- war crystal -->
+		<item id="11227" chance="15230" /><!-- shiny stone -->
+		<item id="11368" chance="210" /><!-- jade hat -->
+		<item id="18412" chance="960" /><!-- glacial rod -->
+		<item id="18415" chance="5720" /><!-- green crystal shard -->
+		<item id="18417" countmax="2" chance="12610" /><!-- brown crystal splinter -->
+		<item id="18420" chance="10540" /><!-- red crystal fragment -->
+		<item id="18421" chance="10540" /><!-- green crystal fragment -->
+		<item id="18432" chance="18400" /><!-- crystalline spikes -->
 	</loot>
 </monster>

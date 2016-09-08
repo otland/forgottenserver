@@ -60,17 +60,17 @@
 		<voice sentence="Blup." />
 	</voices>
 	<loot>
+		<item id="2143" chance="5250" /><!-- white pearl -->
+		<item id="2144" chance="3150" /><!-- black pearl -->
 		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
-		<item id="12444" chance="15930" /><!-- quara eye -->
-		<item id="2670" countmax="5" chance="4545" /><!-- shrimp -->
-		<item id="2144" chance="3150" /><!-- black pearl -->
-		<item id="2143" chance="5250" /><!-- white pearl -->
 		<item id="2149" countmax="2" chance="5111" /><!-- small emerald -->
 		<item id="2189" chance="900" /><!-- wand of cosmic energy -->
-		<item id="7590" chance="3100" /><!-- great mana potion -->
-		<item id="5895" chance="1280" /><!-- fish fin -->
 		<item id="2214" chance="1008" /><!-- ring of healing -->
 		<item id="2476" chance="200" /><!-- knight armor -->
+		<item id="2670" countmax="5" chance="4545" /><!-- shrimp -->
+		<item id="5895" chance="1280" /><!-- fish fin -->
+		<item id="7590" chance="3100" /><!-- great mana potion -->
+		<item id="12444" chance="15930" /><!-- quara eye -->
 	</loot>
 </monster>

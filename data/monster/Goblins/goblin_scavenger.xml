@@ -48,16 +48,16 @@
 		<voice sentence="Uhh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="9" chance="50810" /><!-- gold coin -->
 		<item id="1294" countmax="2" chance="25560" /><!-- small stone -->
-		<item id="2379" chance="18280" /><!-- dagger -->
+		<item id="2148" countmax="9" chance="50810" /><!-- gold coin -->
 		<item id="2230" chance="12450" /><!-- bone -->
+		<item id="2235" chance="7000" /><!-- moldy cheese -->
+		<item id="2379" chance="18280" /><!-- dagger -->
+		<item id="2406" chance="8900" /><!-- short sword -->
+		<item id="2449" chance="5000" /><!-- bone club -->
+		<item id="2461" chance="10180" /><!-- leather helmet -->
+		<item id="2467" chance="7700" /><!-- leather armor -->
 		<item id="2559" chance="9790" /><!-- small axe -->
 		<item id="2667" chance="13640" /><!-- fish -->
-		<item id="2461" chance="10180" /><!-- leather helmet -->
-		<item id="2235" chance="7000" /><!-- moldy cheese -->
-		<item id="2406" chance="8900" /><!-- short sword -->
-		<item id="2467" chance="7700" /><!-- leather armor -->
-		<item id="2449" chance="5000" /><!-- bone club -->
 	</loot>
 </monster>

@@ -35,13 +35,13 @@
 		<voice sentence="Rarr chomp chomp!" />
 	</voices>
 	<loot>
+		<item id="2146" chance="1222" /><!-- small sapphire -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="38" chance="40000" /><!-- gold coin -->
 		<item id="2667" countmax="4" chance="25000" /><!-- fish -->
-		<item id="15430" chance="9090" /><!-- deepling scales -->
-		<item id="13870" chance="1270" /><!-- eye of a deepling -->
-		<item id="2146" chance="1222" /><!-- small sapphire -->
-		<item id="7632" chance="550" /><!-- giant shimmering pearl -->
 		<item id="5895" chance="161" /><!-- fish fin -->
+		<item id="7632" chance="550" /><!-- giant shimmering pearl -->
+		<item id="13870" chance="1270" /><!-- eye of a deepling -->
+		<item id="15430" chance="9090" /><!-- deepling scales -->
 	</loot>
 </monster>

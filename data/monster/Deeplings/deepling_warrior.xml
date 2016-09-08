@@ -43,19 +43,19 @@
 	<loot>
 		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
 		<item id="2148" countmax="80" chance="60000" /><!-- gold coin -->
-		<item id="15426" chance="14285" /><!-- deeptags -->
-		<item id="15488" chance="14285" /><!-- deepling filet -->
-		<item id="15452" chance="11111" /><!-- deepling ridge -->
-		<item id="7591" chance="11111" /><!-- great health potion -->
-		<item id="15425" chance="10000" /><!-- deepling warts -->
-		<item id="7590" chance="9090" /><!-- great mana potion -->
-		<item id="15649" countmax="5" chance="3571" /><!-- vortex bolt -->
-		<item id="2168" chance="2941" /><!-- life ring -->
 		<item id="2149" chance="2854" /><!-- small emerald -->
-		<item id="13838" chance="1030" /><!-- heavy trident -->
+		<item id="2168" chance="2941" /><!-- life ring -->
 		<item id="5895" chance="961" /><!-- fish fin -->
-		<item id="15453" chance="684" /><!-- warrior's shield -->
+		<item id="7590" chance="9090" /><!-- great mana potion -->
+		<item id="7591" chance="11111" /><!-- great health potion -->
+		<item id="13838" chance="1030" /><!-- heavy trident -->
 		<item id="13870" chance="574" /><!-- eye of a deepling -->
+		<item id="15425" chance="10000" /><!-- deepling warts -->
+		<item id="15426" chance="14285" /><!-- deeptags -->
 		<item id="15451" chance="534" /><!-- warrior's axe -->
+		<item id="15452" chance="11111" /><!-- deepling ridge -->
+		<item id="15453" chance="684" /><!-- warrior's shield -->
+		<item id="15488" chance="14285" /><!-- deepling filet -->
+		<item id="15649" countmax="5" chance="3571" /><!-- vortex bolt -->
 	</loot>
 </monster>

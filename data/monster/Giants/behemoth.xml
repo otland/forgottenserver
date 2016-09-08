@@ -46,30 +46,30 @@
 		<voice sentence="Crush the intruders!" />
 	</voices>
 	<loot>
+		<item id="2023" chance="100" /><!-- amphora -->
+		<item id="2125" chance="2530" /><!-- crystal necklace -->
 		<item id="2148" countmax="100" chance="595300" /><!-- gold coin -->
 		<item id="2148" countmax="99" chance="40000" /><!-- gold coin -->
+		<item id="2150" countmax="5" chance="6380" /><!-- small amethyst -->
 		<item id="2152" countmax="5" chance="59800" /><!-- platinum coin-->
-		<item id="2023" chance="100" /><!-- amphora -->
-		<item id="7368" countmax="5" chance="9750" /><!-- assassin star -->
+		<item id="2174" chance="750" /><!-- strange symbol -->
 		<item id="2231" chance="670" /><!-- big bone -->
-		<item id="2416" chance="100" /><!-- crowbar -->
-		<item id="2489" chance="4370" /><!-- dark armor -->
+		<item id="2377" chance="5980" /><!-- two handed sword -->
 		<item id="2387" chance="10510" /><!-- double axe -->
+		<item id="2393" chance="1006" /><!-- giant sword -->
+		<item id="2416" chance="100" /><!-- crowbar -->
+		<item id="2454" chance="50" /><!-- war axe -->
+		<item id="2463" chance="3930" /><!-- plate armor -->
+		<item id="2489" chance="4370" /><!-- dark armor -->
+		<item id="2553" chance="650" /><!-- pick -->
+		<item id="2645" chance="380" /><!-- steel boots -->
 		<item id="2666" countmax="6" chance="30000" /><!-- meat -->
 		<item id="5893" chance="1090" /><!-- perfect behemoth fang -->
-		<item id="2553" chance="650" /><!-- pick -->
-		<item id="2463" chance="3930" /><!-- plate armor -->
-		<item id="2150" countmax="5" chance="6380" /><!-- small amethyst -->
-		<item id="2645" chance="380" /><!-- steel boots -->
-		<item id="2377" chance="5980" /><!-- two handed sword -->
-		<item id="2393" chance="1006" /><!-- giant sword -->
-		<item id="7591" chance="5120" /><!-- great health potion -->
-		<item id="2174" chance="750" /><!-- strange symbol -->
 		<item id="5930" chance="430" /><!-- behemoth claw -->
-		<item id="2454" chance="50" /><!-- war axe -->
+		<item id="7368" countmax="5" chance="9750" /><!-- assassin star -->
 		<item id="7396" chance="170" /><!-- behemoth trophy -->
-		<item id="2125" chance="2530" /><!-- crystal necklace -->
 		<item id="7413" chance="90" /><!-- titan axe-->
+		<item id="7591" chance="5120" /><!-- great health potion -->
 		<item id="12403" chance="14000" /><!-- battle stone-->
 	</loot>
 </monster>

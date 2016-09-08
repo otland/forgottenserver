@@ -60,20 +60,20 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="88" chance="10000" /><!-- gold coin -->
-		<item id="5912" chance="5000" /><!-- ice cube -->
-		<item id="7449" chance="4000" /><!-- green mushroom -->
-		<item id="7440" chance="1500" /><!-- glacier shoes -->
-		<item id="7439" chance="1500" /><!-- diamond sceptre -->
-		<item id="7443" chance="1500" /><!-- crystal sword -->
-		<item id="7459" chance="1000" /><!-- shard -->
-		<item id="2201" chance="3250" /><!-- clerical mace -->
-		<item id="7896" chance="2650" /><!-- strong mana potion -->
 		<item id="2195" chance="2000" /><!-- mystic turban -->
-		<item id="7897" chance="3000" /><!-- glacier kilt -->
-		<item id="7410" chance="1500" /><!-- ear muffs -->
+		<item id="2201" chance="3250" /><!-- clerical mace -->
 		<item id="2436" chance="4500" /><!-- ear muffs -->
-		<item id="9971" chance="5000" /><!-- ear muffs -->
 		<item id="2445" chance="4000" /><!-- ear muffs -->
+		<item id="5912" chance="5000" /><!-- ice cube -->
 		<item id="7290" chance="1000000" /><!-- ear muffs -->
+		<item id="7410" chance="1500" /><!-- ear muffs -->
+		<item id="7439" chance="1500" /><!-- diamond sceptre -->
+		<item id="7440" chance="1500" /><!-- glacier shoes -->
+		<item id="7443" chance="1500" /><!-- crystal sword -->
+		<item id="7449" chance="4000" /><!-- green mushroom -->
+		<item id="7459" chance="1000" /><!-- shard -->
+		<item id="7896" chance="2650" /><!-- strong mana potion -->
+		<item id="7897" chance="3000" /><!-- glacier kilt -->
+		<item id="9971" chance="5000" /><!-- ear muffs -->
 	</loot>
 </monster>

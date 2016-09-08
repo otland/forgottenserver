@@ -66,6 +66,7 @@
 		<item id="2229" chance="12680" /><!-- skull -->
 		<item id="2230" chance="10000" /><!-- bone -->
 		<item id="2231" chance="5500" /><!-- big bone -->
+		<item id="2240" chance="9420" /><!-- remains of a fish -->
 		<item id="2377" chance="3200" /><!-- two handed sword -->
 		<item id="2667" countmax="3" chance="6750" /><!-- fish -->
 		<item id="2671" countmax="2" chance="6000" /><!-- ham -->
@@ -87,6 +88,5 @@
 		<item id="22396" chance="450" /><!-- cluster of solace -->
 		<item id="22532" chance="18760" /><!-- frazzle tongue -->
 		<item id="22533" chance="16000" /><!-- frazzle skin -->
-		<item id="2240" chance="9420" /><!-- remains of a fish -->
 	</loot>
 </monster>

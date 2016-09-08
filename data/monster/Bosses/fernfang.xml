@@ -60,14 +60,14 @@
 		<voice sentence="Yoooohhuuuu!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
 		<item id="1949" chance="10000" /><!-- scroll -->
+		<item id="2044" chance="6666" /><!-- lamp -->
+		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
+		<item id="2166" chance="1428" /><!-- power ring -->
+		<item id="2401" chance="3333" /><!-- staff -->
 		<item id="2467" chance="10000" /><!-- leather armor -->
 		<item id="2642" chance="6666" /><!-- sandals -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
-		<item id="2044" chance="6666" /><!-- lamp -->
 		<item id="2689" countmax="3" chance="20000" /><!-- bread -->
-		<item id="2401" chance="3333" /><!-- staff -->
-		<item id="2166" chance="1428" /><!-- power ring -->
+		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 	</loot>
 </monster>

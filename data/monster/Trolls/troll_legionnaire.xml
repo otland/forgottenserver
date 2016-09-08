@@ -39,8 +39,8 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="155" chance="92000" /><!-- gold coin -->
+		<item id="2165" chance="560" /><!-- stealth ring -->
 		<item id="2399" countmax="10" chance="28000" /><!-- throwing star -->
 		<item id="10565" chance="5120" /><!-- frosty ear of a troll -->
-		<item id="2165" chance="560" /><!-- stealth ring -->
 	</loot>
 </monster>

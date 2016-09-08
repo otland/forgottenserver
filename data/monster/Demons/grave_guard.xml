@@ -33,11 +33,11 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="30" chance="50000" /><!-- gold coin -->
-		<item id="2747" chance="70000" /><!-- grave flower -->
-		<item id="7620" chance="20000" /><!-- mana potion -->
-		<item id="7618" chance="20000" /><!-- health potion -->
 		<item id="2159" chance="4166" /><!-- scarab coin -->
-		<item id="6300" chance="1754" /><!-- death ring -->
 		<item id="2440" chance="1170" /><!-- daramanian waraxe -->
+		<item id="2747" chance="70000" /><!-- grave flower -->
+		<item id="6300" chance="1754" /><!-- death ring -->
+		<item id="7618" chance="20000" /><!-- health potion -->
+		<item id="7620" chance="20000" /><!-- mana potion -->
 	</loot>
 </monster>

@@ -51,8 +51,8 @@
 	<loot>
 		<item id="2148" countmax="55" chance="86750" /><!-- gold coin -->
 		<item id="2672" chance="79600" /><!-- dragon ham -->
-		<item id="8900" chance="400" /><!-- spellbook of enlightenment -->
 		<item id="7618" chance="560" /><!-- health potion -->
+		<item id="8900" chance="400" /><!-- spellbook of enlightenment -->
 		<item id="10578" chance="5000" /><!-- frosty heart -->
 	</loot>
 </monster>

@@ -35,12 +35,12 @@
 		<voice sentence="Shhhhhhhh" />
 	</voices>
 	<loot>
+		<item id="2147" countmax="5" chance="8970" /><!-- small ruby -->
 		<item id="2148" countmax="50" chance="77230" /><!-- gold coin -->
 		<item id="2152" countmax="19" chance="13400" /><!-- platinum coin -->
-		<item id="7590" chance="4480" /><!-- great mana potion -->
-		<item id="2147" countmax="5" chance="8970" /><!-- small ruby -->
-		<item id="7589" chance="6280" /><!-- smp -->
-		<item id="5881" chance="450" /><!-- lizard scale -->
 		<item id="5876" chance="220" /><!-- lizard leather -->
+		<item id="5881" chance="450" /><!-- lizard scale -->
+		<item id="7589" chance="6280" /><!-- smp -->
+		<item id="7590" chance="4480" /><!-- great mana potion -->
 	</loot>
 </monster>

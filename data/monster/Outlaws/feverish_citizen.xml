@@ -45,15 +45,15 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="35" chance="30300" /><!-- gold coin -->
-		<item id="3976" countmax="3" chance="25730" /><!-- worms -->
 		<item id="2230" chance="4920" /><!-- bone -->
-		<item id="13545" chance="2290" /><!-- luminous piece of cloth -->
-		<item id="13543" chance="2006" /><!-- obvious piece of cloth -->
+		<item id="3976" countmax="3" chance="25730" /><!-- worms -->
+		<item id="13540" chance="1660" /><!-- ominous piece of cloth -->
 		<item id="13541" chance="1720" /><!-- dubious piece of cloth -->
 		<item id="13542" chance="2290" /><!-- voluminous piece of cloth -->
-		<item id="13540" chance="1660" /><!-- ominous piece of cloth -->
+		<item id="13543" chance="2006" /><!-- obvious piece of cloth -->
 		<item id="13544" chance="2060" /><!-- ludicrous piece of cloth -->
-		<item id="13926" chance="100" /><!-- plague bell -->
+		<item id="13545" chance="2290" /><!-- luminous piece of cloth -->
 		<item id="13925" chance="100" /><!-- plague mask -->
+		<item id="13926" chance="100" /><!-- plague bell -->
 	</loot>
 </monster>

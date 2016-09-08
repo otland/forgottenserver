@@ -49,9 +49,9 @@
 		<element deathPercent="-10" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="40000" /><!-- platinum coin -->
 		<item id="2146" countmax="3" chance="10000" /><!-- small saphire -->
 		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
+		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
+		<item id="2152" countmax="6" chance="40000" /><!-- platinum coin -->
 	</loot>
 </monster>

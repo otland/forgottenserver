@@ -49,23 +49,23 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="99" chance="40000" /><!-- gold coin -->
-		<item id="2671" countmax="2" chance="60000" /><!-- ham -->
 		<item id="2152" countmax="8" chance="55000" /><!-- platinum coin -->
-		<item id="6558" countmax="3" chance="33333" /><!-- concentrated demonic blood -->
-		<item id="5944" chance="23000" /><!-- soul orb -->
-		<item id="7591" countmax="2" chance="10000" /><!-- great health potion -->
-		<item id="7590" countmax="2" chance="14830" /><!-- great mana potion -->
-		<item id="2645" chance="5050" /><!-- steel boots -->
-		<item id="9971" chance="3140" /><!-- gold ingot -->
-		<item id="6500" chance="8520" /><!-- demonic essence -->
-		<item id="2558" chance="5250" /><!-- saw -->
-		<item id="6300" chance="2008" /><!-- death ring -->
-		<item id="7368" countmax="5" chance="2222" /><!-- assassin star -->
-		<item id="5480" chance="2222" /><!-- cat's paw -->
-		<item id="5022" countmax="2" chance="2760" /><!-- orichalcum pearl -->
-		<item id="7412" chance="850" /><!-- butcher axe -->
-		<item id="5801" chance="1192" /><!-- jewelled backpack -->
-		<item id="7388" chance="480" /><!-- vile axe -->
 		<item id="2470" chance="30" /><!-- golden legs -->
+		<item id="2558" chance="5250" /><!-- saw -->
+		<item id="2645" chance="5050" /><!-- steel boots -->
+		<item id="2671" countmax="2" chance="60000" /><!-- ham -->
+		<item id="5022" countmax="2" chance="2760" /><!-- orichalcum pearl -->
+		<item id="5480" chance="2222" /><!-- cat's paw -->
+		<item id="5801" chance="1192" /><!-- jewelled backpack -->
+		<item id="5944" chance="23000" /><!-- soul orb -->
+		<item id="6300" chance="2008" /><!-- death ring -->
+		<item id="6500" chance="8520" /><!-- demonic essence -->
+		<item id="6558" countmax="3" chance="33333" /><!-- concentrated demonic blood -->
+		<item id="7368" countmax="5" chance="2222" /><!-- assassin star -->
+		<item id="7388" chance="480" /><!-- vile axe -->
+		<item id="7412" chance="850" /><!-- butcher axe -->
+		<item id="7590" countmax="2" chance="14830" /><!-- great mana potion -->
+		<item id="7591" countmax="2" chance="10000" /><!-- great health potion -->
+		<item id="9971" chance="3140" /><!-- gold ingot -->
 	</loot>
 </monster>

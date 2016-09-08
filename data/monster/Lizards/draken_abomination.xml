@@ -61,21 +61,21 @@
 		<item id="2148" countmax="98" chance="47000" /><!-- gold coin -->
 		<item id="2152" countmax="8" chance="50590" /><!-- platinum coin -->
 		<item id="2666" countmax="4" chance="50450" /><!-- meat -->
-		<item id="8473" countmax="3" chance="9400" /><!-- ultimate health potion -->
 		<item id="7590" countmax="3" chance="9950" /><!-- great mana potion -->
-		<item id="12627" chance="12110" /><!-- eye of corruption -->
-		<item id="12628" chance="6240" /><!-- tail of corruption -->
-		<item id="9970" countmax="4" chance="2900" /><!-- small topaz -->
-		<item id="8472" countmax="3" chance="4905" /><!-- great spirit potion -->
 		<item id="7903" chance="8730" /><!-- terra hood -->
-		<item id="12629" chance="10940" /><!-- scale of corruption -->
+		<item id="8472" countmax="3" chance="4905" /><!-- great spirit potion -->
+		<item id="8473" countmax="3" chance="9400" /><!-- ultimate health potion -->
 		<item id="8922" chance="1020" /><!-- wand of voodoo -->
-		<item id="12646" chance="540" /><!-- draken boots -->
-		<item id="12644" chance="10" /><!-- shield of corruption -->
-		<item id="12647" chance="10" /><!-- snake god's wristguard -->
-		<item id="13538" chance="360" /><!-- bamboo leaves -->
-		<item id="11304" chance="780" /><!-- zaoan legs -->
+		<item id="9970" countmax="4" chance="2900" /><!-- small topaz -->
 		<item id="11301" chance="470" /><!-- zaoan armor -->
 		<item id="11302" chance="560" /><!-- zaoan helmet -->
+		<item id="11304" chance="780" /><!-- zaoan legs -->
+		<item id="12627" chance="12110" /><!-- eye of corruption -->
+		<item id="12628" chance="6240" /><!-- tail of corruption -->
+		<item id="12629" chance="10940" /><!-- scale of corruption -->
+		<item id="12644" chance="10" /><!-- shield of corruption -->
+		<item id="12646" chance="540" /><!-- draken boots -->
+		<item id="12647" chance="10" /><!-- snake god's wristguard -->
+		<item id="13538" chance="360" /><!-- bamboo leaves -->
 	</loot>
 </monster>

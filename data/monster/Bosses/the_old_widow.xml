@@ -52,18 +52,18 @@
 	<loot>
 		<item id="2148" countmax="99" chance="100000" /><!-- gold coin -->
 		<item id="2152" countmax="10" chance="100000" /><!-- platinum coin -->
-		<item id="5879" chance="100000" /><!-- spider silk -->
-		<item id="2457" chance="100000" /><!-- steel helmet -->
-		<item id="7591" countmax="4" chance="100000" /><!-- great health potion -->
-		<item id="2476" chance="50000" /><!-- knight armor -->
 		<item id="2165" chance="33333" /><!-- stealth ring -->
 		<item id="2167" chance="33333" /><!-- energy ring -->
 		<item id="2169" chance="33333" /><!-- time ring -->
-		<item id="13307" chance="33333" /><!-- sweet smelling bait -->
-		<item id="2477" chance="25000" /><!-- knight legs -->
 		<item id="2171" chance="25000" /><!-- platinum amulet -->
+		<item id="2457" chance="100000" /><!-- steel helmet -->
+		<item id="2476" chance="50000" /><!-- knight armor -->
+		<item id="2477" chance="25000" /><!-- knight legs -->
+		<item id="5879" chance="100000" /><!-- spider silk -->
 		<item id="5886" chance="25000" /><!-- spool of yarn -->
 		<item id="7416" chance="3225" /><!-- bloody edge -->
 		<item id="7419" chance="1639" /><!-- dreaded cleaver -->
+		<item id="7591" countmax="4" chance="100000" /><!-- great health potion -->
+		<item id="13307" chance="33333" /><!-- sweet smelling bait -->
 	</loot>
 </monster>

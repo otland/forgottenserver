@@ -35,15 +35,15 @@
 		<voice sentence="I might reward you for killing my brother ~ with a swift dead!" yell="1" />
 	</voices>
 	<loot>
+		<item id="2144" countmax="28" chance="7777" /><!-- black pearl -->
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="50" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="80000" /><!-- platinum coin -->
-		<item id="2144" countmax="28" chance="7777" /><!-- black pearl -->
-		<item id="7440" chance="17000" /><!-- mastermind potion -->
-		<item id="2514" chance="4500" /><!-- mastermind shield -->
-		<item id="2171" chance="12222" /><!-- platinum amulet -->
 		<item id="2151" countmax="13" chance="6500" /><!-- talon -->
-		<item id="2470" chance="6555" /><!-- golden legs -->
+		<item id="2152" countmax="6" chance="80000" /><!-- platinum coin -->
+		<item id="2171" chance="12222" /><!-- platinum amulet -->
 		<item id="2432" chance="8200" /><!-- fire axe -->
+		<item id="2470" chance="6555" /><!-- golden legs -->
+		<item id="2514" chance="4500" /><!-- mastermind shield -->
+		<item id="7440" chance="17000" /><!-- mastermind potion -->
 	</loot>
 </monster>

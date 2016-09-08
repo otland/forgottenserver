@@ -50,25 +50,25 @@
 		<voice sentence="Moooaaan!" />
 	</voices>
 	<loot>
+		<item id="2147" countmax="3" chance="15690" /><!-- small ruby -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="99" chance="50000" /><!-- gold coin -->
 		<item id="2172" countmax="7" chance="100000" /><!-- platinum coin -->
-		<item id="18425" chance="14890" /><!-- blazing bones -->
-		<item id="18426" chance="15870" /><!-- eye of a weeper -->
-		<item id="10553" chance="13570" /><!-- fiery hearts -->
-		<item id="18424" chance="13240" /><!-- magma clumps -->
-		<item id="18435" countmax="5" chance="10900" /><!-- prismatic bolt -->
-		<item id="7590" countmax="2" chance="14800" /><!-- GMP -->
-		<item id="8473" countmax="2" chance="15440" /><!-- UHP -->
-		<item id="18417" countmax="2" chance="12100" /><!-- brown crystal plinter -->
-		<item id="2147" countmax="3" chance="15690" /><!-- small ruby -->
-		<item id="18409" chance="1480" /><!-- wand of everblazing -->
-		<item id="18420" chance="8880" /><!-- red crystal fragment -->
-		<item id="18414" chance="5430" /><!-- violet crystal shard -->
 		<item id="2392" chance="3280" /><!-- fire sword -->
 		<item id="2432" chance="2150" /><!-- fire axe -->
+		<item id="7590" countmax="2" chance="14800" /><!-- GMP -->
 		<item id="7894" chance="790" /><!-- magma legs -->
 		<item id="7899" chance="790" /><!-- magma coat -->
+		<item id="8473" countmax="2" chance="15440" /><!-- UHP -->
+		<item id="10553" chance="13570" /><!-- fiery hearts -->
 		<item id="13757" chance="1320" /><!-- coal -->
+		<item id="18409" chance="1480" /><!-- wand of everblazing -->
+		<item id="18414" chance="5430" /><!-- violet crystal shard -->
+		<item id="18417" countmax="2" chance="12100" /><!-- brown crystal plinter -->
+		<item id="18420" chance="8880" /><!-- red crystal fragment -->
+		<item id="18424" chance="13240" /><!-- magma clumps -->
+		<item id="18425" chance="14890" /><!-- blazing bones -->
+		<item id="18426" chance="15870" /><!-- eye of a weeper -->
+		<item id="18435" countmax="5" chance="10900" /><!-- prismatic bolt -->
 	</loot>
 </monster>

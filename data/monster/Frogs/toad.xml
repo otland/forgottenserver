@@ -39,9 +39,9 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="20" chance="80000" /><!-- gold coin -->
+		<item id="2391" chance="148" /><!-- war hammer -->
+		<item id="2398" chance="2854" /><!-- mace -->
 		<item id="2667" chance="20000" /><!-- fish -->
 		<item id="10557" chance="4761" /><!-- poisonous slime -->
-		<item id="2398" chance="2854" /><!-- mace -->
-		<item id="2391" chance="148" /><!-- war hammer -->
 	</loot>
 </monster>

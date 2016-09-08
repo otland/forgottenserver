@@ -32,10 +32,10 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="30" chance="50110" /><!-- gold coin -->
-		<item id="2389" chance="8700" /><!-- mace -->
-		<item id="2649" chance="15330" /><!-- leather legs -->
-		<item id="2468" chance="5220" /><!-- studded legs -->
-		<item id="2689" chance="4760" /><!-- bread -->
 		<item id="2209" chance="740" /><!-- club ring -->
+		<item id="2389" chance="8700" /><!-- mace -->
+		<item id="2468" chance="5220" /><!-- studded legs -->
+		<item id="2649" chance="15330" /><!-- leather legs -->
+		<item id="2689" chance="4760" /><!-- bread -->
 	</loot>
 </monster>

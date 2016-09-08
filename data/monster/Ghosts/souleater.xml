@@ -59,14 +59,14 @@
 		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
 		<item id="2152" countmax="6" chance="49610" /><!-- platinum coin -->
+		<item id="2185" chance="980" /><!-- necrotic rod -->
 		<item id="2189" chance="910" /><!-- wand of cosmic energy -->
-		<item id="12637" chance="2000" /><!-- ectoplasmic sushi -->
+		<item id="5884" chance="140" /><!-- spirit container -->
+		<item id="6300" chance="300" /><!-- death ring -->
 		<item id="7590" chance="8000" /><!-- great mana potion -->
 		<item id="8473" chance="9400" /><!-- ultimate health potion -->
-		<item id="12636" chance="15250" /><!-- lizard essence -->
-		<item id="2185" chance="980" /><!-- necrotic rod -->
 		<item id="12635" chance="20" /><!-- souleater trophy -->
-		<item id="6300" chance="300" /><!-- death ring -->
-		<item id="5884" chance="140" /><!-- spirit container -->
+		<item id="12636" chance="15250" /><!-- lizard essence -->
+		<item id="12637" chance="2000" /><!-- ectoplasmic sushi -->
 	</loot>
 </monster>

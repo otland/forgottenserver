@@ -55,34 +55,34 @@
 		<voice sentence="Cough Cough" />
 	</voices>
 	<loot>
+		<item id="2127" chance="341" /><!-- emerald bangle -->
+		<item id="2134" chance="2000" /><!-- silver brooch -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="65" chance="50000" /><!-- gold coin -->
-		<item id="2237" chance="60000" /><!-- dirty cape -->
-		<item id="2235" chance="50000" /><!-- moldy cheese -->
-		<item id="2394" chance="29000" /><!-- morning star-->
-		<item id="2377" chance="20000" /><!-- two handed sword -->
-		<item id="2509" chance="20000" /><!-- steel shield -->
+		<item id="2150" countmax="3" chance="5000" /><!-- small amethyst -->
+		<item id="2152" countmax="2" chance="7142" /><!-- platinum coin -->
+		<item id="2208" chance="4347" /><!-- axe ring -->
+		<item id="2209" chance="4761" /><!-- club ring -->
 		<item id="2225" chance="20000" /><!-- piece of iron -->
+		<item id="2235" chance="50000" /><!-- moldy cheese -->
+		<item id="2237" chance="60000" /><!-- dirty cape -->
+		<item id="2377" chance="20000" /><!-- two handed sword -->
+		<item id="2391" chance="2127" /><!-- war hammer -->
+		<item id="2394" chance="29000" /><!-- morning star-->
 		<item id="2417" chance="20000" /><!-- battle hammer -->
+		<item id="2444" chance="952" /><!-- hammer of wrath -->
+		<item id="2477" chance="6250" /><!-- knight legs -->
+		<item id="2509" chance="20000" /><!-- steel shield -->
+		<item id="2645" chance="1123" /><!-- steel boots -->
+		<item id="3957" chance="100" /><!-- war horn -->
+		<item id="5887" chance="1234" /><!-- piece of royal steel -->
+		<item id="5888" chance="1010" /><!-- piece of hell steel -->
+		<item id="5889" chance="1030" /><!-- piece of dragonian steel -->
 		<item id="5944" chance="11111" /><!-- soul orb -->
-		<item id="7591" chance="10000" /><!-- great health potion -->
 		<item id="6500" chance="9033" /><!-- demonic essence -->
 		<item id="7365" countmax="4" chance="7692" /><!-- onyx arrow -->
+		<item id="7591" chance="10000" /><!-- great health potion -->
 		<item id="9810" chance="540" /><!-- rusty armor-->
-		<item id="2152" countmax="2" chance="7142" /><!-- platinum coin -->
-		<item id="2477" chance="6250" /><!-- knight legs -->
-		<item id="2150" countmax="3" chance="5000" /><!-- small amethyst -->
-		<item id="2209" chance="4761" /><!-- club ring -->
-		<item id="2208" chance="4347" /><!-- axe ring -->
-		<item id="2391" chance="2127" /><!-- war hammer -->
-		<item id="2134" chance="2000" /><!-- silver brooch -->
-		<item id="5887" chance="1234" /><!-- piece of royal steel -->
-		<item id="2645" chance="1123" /><!-- steel boots -->
-		<item id="5889" chance="1030" /><!-- piece of dragonian steel -->
-		<item id="5888" chance="1010" /><!-- piece of hell steel -->
-		<item id="2444" chance="952" /><!-- hammer of wrath -->
-		<item id="2127" chance="341" /><!-- emerald bangle -->
-		<item id="3957" chance="100" /><!-- war horn -->
 	</loot>
 </monster>

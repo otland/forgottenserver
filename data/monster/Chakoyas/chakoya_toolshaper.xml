@@ -41,14 +41,14 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="20" chance="60000" /><!-- gold coin -->
-		<item id="2667" countmax="2" chance="25000" /><!-- fish -->
 		<item id="2398" chance="4000" /><!-- mace-->
-		<item id="2553" chance="940" /><!-- pick -->
 		<item id="2541" chance="870" /><!-- bone shield -->
-		<item id="7381" chance="150" /><!-- mammoth whopper -->
-		<item id="7441" chance="470" /><!-- ice cube -->
-		<item id="7159" chance="100" /><!-- green perch -->
+		<item id="2553" chance="940" /><!-- pick -->
+		<item id="2667" countmax="2" chance="25000" /><!-- fish -->
 		<item id="2669" chance="120" /><!-- northern pike -->
 		<item id="7158" chance="170" /><!-- rainbow trout -->
+		<item id="7159" chance="100" /><!-- green perch -->
+		<item id="7381" chance="150" /><!-- mammoth whopper -->
+		<item id="7441" chance="470" /><!-- ice cube -->
 	</loot>
 </monster>

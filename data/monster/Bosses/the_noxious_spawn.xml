@@ -57,13 +57,13 @@
 	</voices>
 	<loot>
 		<item id="2152" countmax="5" chance="51850" /><!-- platinum coin -->
-		<item id="7456" chance="37000" /><!-- noble axe -->
 		<item id="2152" countmax="95" chance="10750" /><!-- assassin star -->
-		<item id="7365" chance="525" /><!-- onyx arrow -->
-		<item id="10309" chance="31500" /><!-- claw of the noxious spawn-->
 		<item id="2168" chance="35000" /><!-- life ring -->
 		<item id="2547" countmax="29" chance="36250" /><!-- power bolt -->
-		<item id="7386" chance="27750" /><!-- mercenary sword -->
 		<item id="2796" chance="11111" /><!-- green mushroom -->
+		<item id="7365" chance="525" /><!-- onyx arrow -->
+		<item id="7386" chance="27750" /><!-- mercenary sword -->
+		<item id="7456" chance="37000" /><!-- noble axe -->
+		<item id="10309" chance="31500" /><!-- claw of the noxious spawn-->
 	</loot>
 </monster>

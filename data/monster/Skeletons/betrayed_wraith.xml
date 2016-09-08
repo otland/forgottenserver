@@ -55,25 +55,25 @@
 		<voice sentence="Tcharrr!" />
 	</voices>
 	<loot>
+		<item id="2145" countmax="4" chance="11800" /><!-- small diamond -->
 		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
 		<item id="2148" countmax="20" chance="20000" /><!-- gold coin -->
 		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
-		<item id="6558" chance="65250" /><!-- concentrated demonic blood -->
-		<item id="2547" countmax="5" chance="50000" /><!-- power bolt-->
-		<item id="7368" countmax="5" chance="10780" /><!-- assassin star-->
-		<item id="5944" chance="10000" /><!-- soul orb-->
-		<item id="7386" chance="1890" /><!-- mercenary sword -->
-		<item id="7590" countmax="3" chance="15000" /><!-- great mana potion-->
-		<item id="6300" chance="390" /><!-- death ring -->
-		<item id="7416" chance="80" /><!-- bloody edge -->
-		<item id="5799" chance="160" /><!-- golden figurine -->
-		<item id="5741" chance="390" /><!-- skull helmet -->
-		<item id="6500" chance="19430" /><!-- demonic essence -->
-		<item id="2145" countmax="4" chance="11800" /><!-- small diamond -->
-		<item id="5022" countmax="2" chance="8000" /><!-- orichalcum pearl -->
-		<item id="11233" chance="18410" /><!--unholy bone -->
-		<item id="8473" chance="15410" /><!--ultimate health potion -->
 		<item id="2173" chance="130" /><!-- amulet of loss -->
+		<item id="2547" countmax="5" chance="50000" /><!-- power bolt-->
+		<item id="5022" countmax="2" chance="8000" /><!-- orichalcum pearl -->
+		<item id="5741" chance="390" /><!-- skull helmet -->
+		<item id="5799" chance="160" /><!-- golden figurine -->
+		<item id="5944" chance="10000" /><!-- soul orb-->
+		<item id="6300" chance="390" /><!-- death ring -->
+		<item id="6500" chance="19430" /><!-- demonic essence -->
+		<item id="6558" chance="65250" /><!-- concentrated demonic blood -->
+		<item id="7368" countmax="5" chance="10780" /><!-- assassin star-->
+		<item id="7386" chance="1890" /><!-- mercenary sword -->
+		<item id="7416" chance="80" /><!-- bloody edge -->
+		<item id="7590" countmax="3" chance="15000" /><!-- great mana potion-->
+		<item id="8473" chance="15410" /><!--ultimate health potion -->
+		<item id="11233" chance="18410" /><!--unholy bone -->
 	</loot>
 </monster>

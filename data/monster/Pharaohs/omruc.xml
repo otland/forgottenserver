@@ -55,20 +55,20 @@
 		<voice sentence="Psssst, I am over chhhere." />
 	</voices>
 	<loot>
+		<item id="2145" countmax="3" chance="7000" /><!-- small diamond -->
 		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="70" chance="50000" /><!-- gold coin -->
+		<item id="2154" chance="5000" /><!-- yellow gem -->
+		<item id="2165" chance="5000" /><!-- stealth ring -->
+		<item id="2195" chance="1500" /><!-- boots of haste -->
+		<item id="2352" chance="100000" /><!-- crystal arrow -->
 		<item id="2443" countmax="2" chance="10000" /><!-- apple -->
+		<item id="2444" chance="300" /><!-- hammer of wrath -->
 		<item id="2544" countmax="21" chance="10000" /><!-- arrow-->
 		<item id="2545" countmax="20" chance="10000" /><!-- poison arrow -->
 		<item id="2546" countmax="15" chance="10000" /><!-- burst arrow -->
-		<item id="7365" countmax="2" chance="10000" /><!-- onyx arrow -->
 		<item id="2547" countmax="3" chance="10000" /><!-- power bolt -->
-		<item id="2145" countmax="3" chance="7000" /><!-- small diamond -->
+		<item id="7365" countmax="2" chance="10000" /><!-- onyx arrow -->
 		<item id="7591" chance="7000" /><!-- great health potion-->
-		<item id="2165" chance="5000" /><!-- stealth ring -->
-		<item id="2154" chance="5000" /><!-- yellow gem -->
-		<item id="2195" chance="1500" /><!-- boots of haste -->
-		<item id="2444" chance="300" /><!-- hammer of wrath -->
-		<item id="2352" chance="100000" /><!-- crystal arrow -->
 	</loot>
 </monster>

@@ -58,18 +58,18 @@
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="50" chance="100000" /><!-- gold coin -->
-		<item id="6300" chance="7777" /><!-- death ring -->
+		<item id="2149" countmax="3" chance="1428" /><!-- small emerald -->
+		<item id="2151" countmax="11" chance="6000" /><!-- talon -->
+		<item id="2158" chance="4444" /><!-- blue gem -->
+		<item id="2171" chance="2333" /><!-- platinum amulet -->
 		<item id="2195" chance="4444" /><!-- boots of haste -->
 		<item id="2393" chance="3000" /><!-- giant sword -->
-		<item id="2432" chance="5555" /><!-- fire axe -->
 		<item id="2402" chance="10000" /><!-- silver dagger -->
-		<item id="2477" chance="6666" /><!-- knight legs -->
-		<item id="2151" countmax="11" chance="6000" /><!-- talon -->
+		<item id="2432" chance="5555" /><!-- fire axe -->
 		<item id="2462" chance="9700" /><!-- devil helmet -->
-		<item id="2149" countmax="3" chance="1428" /><!-- small emerald -->
-		<item id="2171" chance="2333" /><!-- platinum amulet -->
-		<item id="2158" chance="4444" /><!-- blue gem -->
 		<item id="2470" chance="6500" /><!-- golden legs -->
+		<item id="2477" chance="6666" /><!-- knight legs -->
 		<item id="2520" chance="9999" /><!-- demon shield -->
+		<item id="6300" chance="7777" /><!-- death ring -->
 	</loot>
 </monster>

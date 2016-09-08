@@ -39,19 +39,19 @@
 		<voice sentence="&lt;crackle&gt;" />
 	</voices>
 	<loot>
+		<item id="1294" countmax="10" chance="30230" /><!-- small stone -->
 		<item id="2148" countmax="100" chance="99930" /><!-- gold coin -->
 		<item id="2152" countmax="4" chance="99540" /><!-- platinum coin -->
-		<item id="1294" countmax="10" chance="30230" /><!-- small stone -->
-		<item id="11227" chance="800" /><!-- shiny stone -->
-		<item id="10549" chance="20020" /><!-- ancient stone -->
-		<item id="11325" chance="9960" /><!-- spicked iron ball -->
-		<item id="11323" chance="1860" /><!-- zaoan halberd -->
-		<item id="13757" chance="400" /><!-- coal -->
+		<item id="2427" chance="560" /><!-- guardian halberd -->
+		<item id="2528" chance="820" /><!-- tower shield -->
 		<item id="5880" chance="1700" /><!-- iron ore -->
+		<item id="10549" chance="20020" /><!-- ancient stone -->
+		<item id="11227" chance="800" /><!-- shiny stone -->
+		<item id="11307" chance="100" /><!-- zaoan sword -->
+		<item id="11323" chance="1860" /><!-- zaoan halberd -->
+		<item id="11325" chance="9960" /><!-- spicked iron ball -->
 		<item id="11339" chance="720" /><!-- clay lump -->
 		<item id="11343" chance="430" /><!-- piece of marble rock -->
-		<item id="2528" chance="820" /><!-- tower shield -->
-		<item id="2427" chance="560" /><!-- guardian halberd -->
-		<item id="11307" chance="100" /><!-- zaoan sword -->
+		<item id="13757" chance="400" /><!-- coal -->
 	</loot>
 </monster>

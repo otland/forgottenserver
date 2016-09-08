@@ -43,8 +43,8 @@
 	<loot>
 		<item id="2148" countmax="53" chance="64000" /><!-- gold coin -->
 		<item id="2666" chance="34000" /><!-- meat -->
-		<item id="7840" countmax="8" chance="15000" /><!-- flaming arrow -->
 		<item id="5897" chance="7900" /><!-- wolf paw -->
+		<item id="7840" countmax="8" chance="15000" /><!-- flaming arrow -->
 		<item id="10553" chance="7900" /><!-- fiery heart -->
 	</loot>
 </monster>

@@ -53,19 +53,19 @@
 		<voice sentence="DEATH TO THE ASKARAK!" />
 	</voices>
 	<loot>
+		<item id="2114" chance="1030" /><!-- piggy bank -->
+		<item id="2147" countmax="5" chance="4761" /><!-- small rubies -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
-		<item id="7378" countmax="6" chance="10000" /><!-- royal spear -->
-		<item id="7589" chance="5000" /><!-- strong mana potion -->
-		<item id="7588" chance="4761" /><!-- strong health potion -->
-		<item id="2147" countmax="5" chance="4761" /><!-- small rubies -->
-		<item id="2789" chance="3846" /><!-- brown mushroom -->
 		<item id="2167" chance="1052" /><!-- energy ring -->
-		<item id="2114" chance="1030" /><!-- piggy bank -->
-		<item id="7443" chance="628" /><!-- bullseye potion -->
 		<item id="2187" chance="564" /><!-- wand of inferno -->
-		<item id="7894" chance="155" /><!-- magma legs -->
+		<item id="2789" chance="3846" /><!-- brown mushroom -->
 		<item id="5904" chance="81" /><!-- magic sulphur -->
+		<item id="7378" countmax="6" chance="10000" /><!-- royal spear -->
+		<item id="7443" chance="628" /><!-- bullseye potion -->
+		<item id="7588" chance="4761" /><!-- strong health potion -->
+		<item id="7589" chance="5000" /><!-- strong mana potion -->
+		<item id="7894" chance="155" /><!-- magma legs -->
 	</loot>
 </monster>

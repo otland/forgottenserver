@@ -46,14 +46,14 @@
 		<voice sentence="Shriiiek" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="2672" countmax="3" chance="60500" /><!-- dragon ham -->
-		<item id="2547" countmax="2" chance="3400" /><!-- power bolt -->
-		<item id="2146" chance="5000" /><!-- small sapphire -->
-		<item id="7588" chance="2500" /><!-- strong health potion -->
-		<item id="2187" chance="810" /><!-- wand of inferno -->
-		<item id="7408" chance="410" /><!-- wydern fang -->
 		<item id="2127" chance="540" /><!-- emerald bangle -->
+		<item id="2146" chance="5000" /><!-- small sapphire -->
+		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
+		<item id="2187" chance="810" /><!-- wand of inferno -->
+		<item id="2547" countmax="2" chance="3400" /><!-- power bolt -->
+		<item id="2672" countmax="3" chance="60500" /><!-- dragon ham -->
+		<item id="7408" chance="410" /><!-- wydern fang -->
+		<item id="7588" chance="2500" /><!-- strong health potion -->
 		<item id="10561" chance="12300" /><!-- wyvern talisman -->
 	</loot>
 </monster>

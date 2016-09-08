@@ -49,10 +49,10 @@
 	<loot>
 		<item id="2148" countmax="61" chance="60000" /><!-- gold coin -->
 		<item id="2148" countmax="79" chance="60000" /><!-- gold coin -->
-		<item id="11372" chance="16666" /><!-- lancer beetle shell -->
+		<item id="2150" chance="247" /><!-- small amethyst -->
 		<item id="10557" chance="8333" /><!-- poisonous slime -->
 		<item id="10609" chance="4166" /><!-- lump of dirt -->
+		<item id="11372" chance="16666" /><!-- lancer beetle shell -->
 		<item id="11374" chance="1123" /><!-- beetle necklace -->
-		<item id="2150" chance="247" /><!-- small amethyst -->
 	</loot>
 </monster>

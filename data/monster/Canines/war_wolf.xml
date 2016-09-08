@@ -35,8 +35,8 @@
 	</voices>
 	<loot>
 		<item id="2671" countmax="2" chance="35000" /><!-- ham -->
-		<item id="5897" chance="710" /><!-- wolf paw -->
 		<item id="3976" chance="40" /><!-- wolf trophy -->
+		<item id="5897" chance="710" /><!-- wolf paw -->
 		<item id="11235" chance="5230" /><!-- warwolf fur -->
 	</loot>
 </monster>

@@ -48,18 +48,18 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="18304" countmax="5" chance="15540" /><!-- crystalline arrow -->
-		<item id="18436" countmax="5" chance="15260" /><!-- drill bolt -->
 		<item id="2152" chance="14790" /><!-- platinum coin -->
-		<item id="2787" countmax="5" chance="7142" /><!-- white mushroom -->
-		<item id="7589" chance="5250" /><!-- strong mana potion -->
-		<item id="7588" chance="4930" /><!-- strong health potion -->
-		<item id="18416" chance="3600" /><!-- green crystal splinter -->
-		<item id="5912" chance="2080" /><!-- blue piece of cloth -->
-		<item id="5914" chance="2160" /><!-- yellow piece of cloth -->
-		<item id="18421" chance="2070" /><!-- green crystal fragment -->
+		<item id="2181" chance="850" /><!-- terra rod -->
 		<item id="2409" chance="1360" /><!-- serpent sword -->
 		<item id="2529" chance="1320" /><!-- black shield -->
-		<item id="2181" chance="850" /><!-- terra rod -->
+		<item id="2787" countmax="5" chance="7142" /><!-- white mushroom -->
+		<item id="5912" chance="2080" /><!-- blue piece of cloth -->
+		<item id="5914" chance="2160" /><!-- yellow piece of cloth -->
+		<item id="7588" chance="4930" /><!-- strong health potion -->
+		<item id="7589" chance="5250" /><!-- strong mana potion -->
+		<item id="18304" countmax="5" chance="15540" /><!-- crystalline arrow -->
+		<item id="18416" chance="3600" /><!-- green crystal splinter -->
+		<item id="18421" chance="2070" /><!-- green crystal fragment -->
+		<item id="18436" countmax="5" chance="15260" /><!-- drill bolt -->
 	</loot>
 </monster>

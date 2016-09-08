@@ -55,14 +55,14 @@
 		<voice sentence="HISSSS" />
 	</voices>
 	<loot>
-		<item id="7589" countmax="2" chance="100000" /><!-- strong mana potion -->
 		<item id="2146" countmax="5" chance="56325" /><!-- small sapphire -->
-		<item id="9971" countmax="3" chance="47725" /><!-- gold ingot -->
 		<item id="2197" chance="100000" /><!-- stone skin amulet -->
-		<item id="10523" chance="100000" /><!-- egg of the many -->
-		<item id="10219" chance="75500" /><!-- sacred tree amulet -->
-		<item id="2536" chance="75500" /><!-- medusa shield -->
-		<item id="2498" chance="25500" /><!-- royal helmet -->
 		<item id="2475" chance="75500" /><!-- warrior helmet -->
+		<item id="2498" chance="25500" /><!-- royal helmet -->
+		<item id="2536" chance="75500" /><!-- medusa shield -->
+		<item id="7589" countmax="2" chance="100000" /><!-- strong mana potion -->
+		<item id="9971" countmax="3" chance="47725" /><!-- gold ingot -->
+		<item id="10219" chance="75500" /><!-- sacred tree amulet -->
+		<item id="10523" chance="100000" /><!-- egg of the many -->
 	</loot>
 </monster>

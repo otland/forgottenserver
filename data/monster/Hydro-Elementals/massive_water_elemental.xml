@@ -49,16 +49,16 @@
 		<immunity lifedrain="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="20000" /><!-- platinum coin -->
-		<item id="2667" countmax="2" chance="40000" /><!-- fish -->
 		<item id="2145" countmax="2" chance="1900" /><!-- small diamond -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2149" countmax="2" chance="1000" /><!-- small emerald -->
-		<item id="7591" chance="10000" /><!-- ghp -->
-		<item id="7590" chance="10400" /><!-- gmp -->
+		<item id="2152" countmax="2" chance="20000" /><!-- platinum coin -->
 		<item id="2167" chance="910" /><!-- energy ring -->
 		<item id="2168" chance="1000" /><!-- life ring -->
+		<item id="2667" countmax="2" chance="40000" /><!-- fish -->
 		<item id="7158" chance="1340" /><!-- rainbow trout -->
 		<item id="7159" chance="1590" /><!-- green perch -->
+		<item id="7590" chance="10400" /><!-- gmp -->
+		<item id="7591" chance="10000" /><!-- ghp -->
 	</loot>
 </monster>

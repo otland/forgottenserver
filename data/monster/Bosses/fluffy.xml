@@ -18,10 +18,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="1000" min="0" max="-648" />
-		<attack name="energy" interval="1500" chance="100" length="8" spread="3" min="-100" max="-200">
+		<attack name="energy" interval="1500" chance="300" length="8" spread="3" min="-100" max="-200">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="earth" interval="1000" chance="100" length="8" spread="3" min="-120" max="-300">
+		<attack name="earth" interval="1000" chance="150" length="8" spread="3" min="-120" max="-300">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="physical" interval="1000" chance="25" range="7" min="-105" max="-235">
@@ -42,14 +42,14 @@
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
+		<item id="2230" chance="25000" /><!-- bone -->
+		<item id="2383" chance="2500" /><!-- spike sword -->
+		<item id="2430" chance="2857" /><!-- knight axe -->
+		<item id="2671" countmax="8" chance="50000" /><!-- ham -->
 		<item id="5944" chance="5555" /><!-- soul orb -->
+		<item id="6500" chance="7200" /><!-- demonic essence -->
+		<item id="6558" chance="8888" /><!-- concentrated demonic blood -->
 		<item id="6570" chance="5538" countmax="4" /><!-- blue surprise bag -->
 		<item id="6571" chance="1538" /><!-- red surprise bag -->
-		<item id="2671" countmax="8" chance="50000" /><!-- ham -->
-		<item id="2230" chance="25000" /><!-- bone -->
-		<item id="6500" chance="7200" /><!-- demonic essence -->
-		<item id="2430" chance="2857" /><!-- knight axe -->
-		<item id="2383" chance="2500" /><!-- spike sword -->
-		<item id="6558" chance="8888" /><!-- concentrated demonic blood -->
 	</loot>
 </monster>

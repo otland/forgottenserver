@@ -54,11 +54,11 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="10" chance="12500" /><!-- gold coin -->
-		<item id="2526" chance="1200" /><!-- studded shield -->
+		<item id="2385" chance="10250" /><!-- sabre -->
+		<item id="2386" chance="12250" /><!-- axe -->
 		<item id="2482" chance="9500" /><!-- studded helmet -->
 		<item id="2484" chance="7000" /><!-- studded armor -->
-		<item id="2386" chance="12250" /><!-- axe -->
-		<item id="2385" chance="10250" /><!-- sabre -->
+		<item id="2526" chance="1200" /><!-- studded shield -->
 		<item id="6570" chance="500" /><!-- blue surprise bag -->
 		<item id="6571" chance="500" /><!-- red surprise bag -->
 	</loot>

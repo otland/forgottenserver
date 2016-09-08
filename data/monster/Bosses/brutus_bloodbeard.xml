@@ -25,10 +25,10 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="6099" chance="100000" /><!-- brutus bloodbeard's hat -->
 		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
-		<item id="2476" chance="1200" /><!-- knight armor -->
-		<item id="2463" chance="4000" /><!-- plate armor -->
 		<item id="2320" chance="100000" /><!-- skull -->
+		<item id="2463" chance="4000" /><!-- plate armor -->
+		<item id="2476" chance="1200" /><!-- knight armor -->
+		<item id="6099" chance="100000" /><!-- brutus bloodbeard's hat -->
 	</loot>
 </monster>

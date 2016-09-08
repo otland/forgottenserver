@@ -35,11 +35,11 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="25" chance="70000" /><!-- gold coin -->
-		<item id="15430" chance="6950" /><!-- deepling scales -->
-		<item id="13838" chance="510" /><!-- heavy trident -->
-		<item id="5895" chance="350" /><!-- fish fin -->
-		<item id="13870" chance="283" /><!-- eye of a deepling -->
-		<item id="2667" countmax="3" chance="12020" /><!-- fish -->
 		<item id="2149" countmax="3" chance="110" /><!-- small emerald -->
+		<item id="2667" countmax="3" chance="12020" /><!-- fish -->
+		<item id="5895" chance="350" /><!-- fish fin -->
+		<item id="13838" chance="510" /><!-- heavy trident -->
+		<item id="13870" chance="283" /><!-- eye of a deepling -->
+		<item id="15430" chance="6950" /><!-- deepling scales -->
 	</loot>
 </monster>

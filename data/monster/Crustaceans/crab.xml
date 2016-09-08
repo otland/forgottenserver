@@ -31,7 +31,7 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="10" chance="80000" /><!-- gold coin -->
-		<item id="11189" chance="20000" /><!-- crab pincers -->
 		<item id="2667" chance="20000" /><!-- fish -->
+		<item id="11189" chance="20000" /><!-- crab pincers -->
 	</loot>
 </monster>

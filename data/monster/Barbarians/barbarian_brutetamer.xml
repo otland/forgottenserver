@@ -51,17 +51,17 @@
 		<voice sentence="My instincts tell me about your cowardice." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="58000" /><!-- gold coin -->
-		<item id="3965" chance="5250" /><!-- hunting spear -->
-		<item id="2686" countmax="2" chance="11000" /><!-- corncob -->
-		<item id="2464" chance="8900" /><!-- chain armor -->
-		<item id="2401" chance="6500" /><!-- staff -->
-		<item id="7343" chance="7540" /><!-- fur bag -->
 		<item id="1958" chance="5000" /><!-- grey small book -->
-		<item id="7620" chance="630" /><!-- mana potion -->
+		<item id="2148" countmax="15" chance="58000" /><!-- gold coin -->
+		<item id="2401" chance="6500" /><!-- staff -->
+		<item id="2464" chance="8900" /><!-- chain armor -->
+		<item id="2686" countmax="2" chance="11000" /><!-- corncob -->
+		<item id="3965" chance="5250" /><!-- hunting spear -->
+		<item id="7343" chance="7540" /><!-- fur bag -->
 		<item id="7379" chance="380" /><!-- brutetamer's staff -->
 		<item id="7457" chance="160" /><!-- fur boots -->
-		<item id="7464" chance="90" /><!-- mammoth fur shorts -->
 		<item id="7463" chance="160" /><!-- mammoth fur cape -->
+		<item id="7464" chance="90" /><!-- mammoth fur shorts -->
+		<item id="7620" chance="630" /><!-- mana potion -->
 	</loot>
 </monster>

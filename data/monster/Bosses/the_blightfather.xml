@@ -42,12 +42,12 @@
 		<voice sentence="Crump!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="61" chance="2000" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="2000" /><!-- gold coin -->
-		<item id="10609" chance="17500" /><!-- lump of dirt -->
+		<item id="2148" countmax="61" chance1="2000" chancemax="6400" /><!-- gold coin -->
+		<item id="2148" countmax="60" chance1="2000" chancemax="6400" /><!-- gold coin -->
+		<item id="2150" chance="800" /><!-- small amethyst -->
 		<item id="10557" chance="12500" /><!-- poisonous slime -->
+		<item id="10609" chance="17500" /><!-- lump of dirt -->
 		<item id="11372" chance="7000" /><!-- lancer beetle shell -->
 		<item id="11374" chance="400" /><!-- beetle necklace -->
-		<item id="2150" chance="800" /><!-- small amethyst -->
 	</loot>
 </monster>

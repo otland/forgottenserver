@@ -32,12 +32,12 @@
 		<summon name="Pirate Cutthroat" interval="2000" chance="50" />
 	</summons>
 	<loot>
-		<item id="6100" chance="100000" /><!-- lethal lissy's shirt -->
+		<item id="2145" chance="100000" /><!-- small diamond -->
 		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
-		<item id="2476" chance="1200" /><!-- knight armor -->
+		<item id="2320" countmax="1" chance="100000" /><!-- skull -->
 		<item id="2387" chance="1500" /><!-- double axe -->
 		<item id="2463" chance="4000" /><!-- plate armor -->
-		<item id="2145" chance="100000" /><!-- small diamond -->
-		<item id="2320" countmax="1" chance="100000" /><!-- skull -->
+		<item id="2476" chance="1200" /><!-- knight armor -->
+		<item id="6100" chance="100000" /><!-- lethal lissy's shirt -->
 	</loot>
 </monster>

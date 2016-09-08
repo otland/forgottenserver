@@ -60,26 +60,26 @@
 	<loot>
 		<item id="2148" countmax="90" chance="37500" /><!-- gold coin -->
 		<item id="2148" countmax="80" chance="375000" /><!-- gold coin -->
-		<item id="8309" countmax="5" chance="5260" /><!-- nails -->
-		<item id="2377" chance="5500" /><!-- two handed sword -->
-		<item id="2510" chance="9000" /><!-- plate shield -->
-		<item id="2394" chance="7000" /><!-- morning star -->
-		<item id="2513" chance="6500" /><!-- battle shield -->
-		<item id="8473" chance="10080" /><!-- ultimate health potion -->
-		<item id="7590" chance="8860" /><!-- great mana potion -->
-		<item id="5880" chance="1920" /><!-- iron ore -->
-		<item id="7439" chance="900" /><!-- berserk potion -->
-		<item id="2438" chance="6400" /><!-- epee -->
-		<item id="9809" chance="260" /><!-- rusty armor-->
+		<item id="2177" chance="1000" /><!-- life crystal -->
 		<item id="2209" chance="810" /><!-- club ring -->
 		<item id="2213" chance="1210" /><!-- dwarven ring -->
-		<item id="9980" chance="130" /><!-- crystal of power -->
-		<item id="9978" chance="1080" /><!-- crystal pedestal -->
-		<item id="7893" chance="90" /><!-- lightning boots -->
+		<item id="2377" chance="5500" /><!-- two handed sword -->
+		<item id="2394" chance="7000" /><!-- morning star -->
+		<item id="2438" chance="6400" /><!-- epee -->
+		<item id="2510" chance="9000" /><!-- plate shield -->
+		<item id="2513" chance="6500" /><!-- battle shield -->
 		<item id="2645" chance="620" /><!-- steel boots -->
+		<item id="5880" chance="1920" /><!-- iron ore -->
 		<item id="7403" chance="50" /><!-- berserker -->
 		<item id="7422" chance="120" /><!-- jade hammer -->
 		<item id="7428" chance="770" /><!-- bonebreaker -->
-		<item id="2177" chance="1000" /><!-- life crystal -->
+		<item id="7439" chance="900" /><!-- berserk potion -->
+		<item id="7590" chance="8860" /><!-- great mana potion -->
+		<item id="7893" chance="90" /><!-- lightning boots -->
+		<item id="8309" countmax="5" chance="5260" /><!-- nails -->
+		<item id="8473" chance="10080" /><!-- ultimate health potion -->
+		<item id="9809" chance="260" /><!-- rusty armor-->
+		<item id="9978" chance="1080" /><!-- crystal pedestal -->
+		<item id="9980" chance="130" /><!-- crystal of power -->
 	</loot>
 </monster>

@@ -47,19 +47,19 @@
 		<voice sentence="Shriiiiiek" />
 	</voices>
 	<loot>
+		<item id="2144" countmax="3" chance="720" /><!-- black pearl -->
 		<item id="2148" countmax="50" chance="53000" /><!-- gold coin -->
 		<item id="2148" countmax="70" chance="40000" /><!-- gold coin -->
-		<item id="5894" countmax="2" chance="4900" /><!-- bat wing -->
-		<item id="2513" chance="7760" /><!-- battle shield -->
-		<item id="2144" countmax="3" chance="720" /><!-- black pearl -->
-		<item id="2529" chance="70" /><!-- black shield -->
-		<item id="2167" chance="990" /><!-- energy ring -->
-		<item id="2800" chance="7260" /><!-- obsidian lance -->
-		<item id="9809" countmax="2" chance="12530" /><!-- rusty armor -->
-		<item id="9808" chance="12530" /><!-- rusty armor -->
 		<item id="2150" countmax="2" chance="500" /><!-- small amethyst -->
+		<item id="2167" chance="990" /><!-- energy ring -->
+		<item id="2513" chance="7760" /><!-- battle shield -->
+		<item id="2529" chance="70" /><!-- black shield -->
+		<item id="2800" chance="7260" /><!-- obsidian lance -->
 		<item id="2800" chance="5060" /><!-- star herb -->
+		<item id="5894" countmax="2" chance="4900" /><!-- bat wing -->
 		<item id="7386" chance="110" /><!-- mercenary sword -->
+		<item id="9808" chance="12530" /><!-- rusty armor -->
+		<item id="9809" countmax="2" chance="12530" /><!-- rusty armor -->
 		<item id="10016" chance="80" /><!-- batwing hat -->
 		<item id="10579" chance="4900" /><!-- Mutated Bat Ear -->
 	</loot>

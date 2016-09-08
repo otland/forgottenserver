@@ -46,16 +46,16 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
 		<item id="2050" chance="10000" /><!-- torch -->
+		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
+		<item id="2311" chance="2857" /><!-- heavy magic missile rune -->
+		<item id="2362" countmax="5" chance="20000" /><!-- carrot of doom -->
+		<item id="2404" chance="10000" /><!-- combat knife -->
 		<item id="2461" chance="8000" /><!-- leather helmet -->
 		<item id="2649" chance="8000" /><!-- leather legs -->
-		<item id="5878" chance="100000" /><!-- minotaur leather -->
-		<item id="2404" chance="10000" /><!-- combat knife -->
-		<item id="2362" countmax="5" chance="20000" /><!-- carrot of doom -->
 		<item id="2817" chance="10000" /><!-- dead snake -->
-		<item id="2311" chance="2857" /><!-- heavy magic missile rune -->
+		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
+		<item id="5878" chance="100000" /><!-- minotaur leather -->
 		<item id="7425" chance="1000" /><!-- taurus mace -->
 	</loot>
 </monster>

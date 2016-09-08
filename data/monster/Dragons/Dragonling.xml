@@ -55,8 +55,8 @@
 		<item id="2148" countmax="100" chance="37500" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="37500" /><!-- gold coin -->
 		<item id="2148" countmax="27" chance="37500" /><!-- gold coin -->
-		<item id="7589" countmax="2" chance="16900" /><!-- smp-->
 		<item id="7588" countmax="2" chance="24480" /><!-- shp -->
+		<item id="7589" countmax="2" chance="16900" /><!-- smp-->
 		<item id="18425" chance="12410" /><!-- Blazing Bones -->
 	</loot>
 </monster>

@@ -24,8 +24,8 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="5880" countmax="2" chance="2500" /><!-- iron ore -->
 		<item id="2148" countmax="100" chance="90000" /><!-- gold coin -->
 		<item id="2513" chance="6666" /><!-- battle shield -->
+		<item id="5880" countmax="2" chance="2500" /><!-- iron ore -->
 	</loot>
 </monster>

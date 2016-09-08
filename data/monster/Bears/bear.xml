@@ -30,9 +30,9 @@
 		<voice sentence="Groar" />
 	</voices>
 	<loot>
-		<item id="5896" chance="2000" /><!-- bear paw -->
-		<item id="2671" countmax="3" chance="20000" /><!-- ham -->
 		<item id="2666" countmax="4" chance="39750" /><!-- meat -->
+		<item id="2671" countmax="3" chance="20000" /><!-- ham -->
+		<item id="5896" chance="2000" /><!-- bear paw -->
 		<item id="5902" chance="460" /><!-- honeycomb -->
 	</loot>
 </monster>

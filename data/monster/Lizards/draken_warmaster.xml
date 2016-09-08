@@ -44,21 +44,21 @@
 		<voice sentence="Hizzzzz!" />
 	</voices>
 	<loot>
+		<item id="2123" chance="180" /><!-- ring of the sky -->
+		<item id="2147" countmax="5" chance="1525" /><!-- small ruby -->
 		<item id="2148" countmax="100" chance="47000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2152" countmax="5" chance="50625" /><!-- platinum coin -->
-		<item id="7591" countmax="3" chance="4850" /><!-- great health potion -->
 		<item id="2528" chance="2035" /><!-- tower shield -->
-		<item id="11323" chance="7925" /><!-- zaoan halberd -->
-		<item id="8473" chance="4020" /><!-- ultimate health potion -->
 		<item id="2666" chance="30300" /><!-- meat -->
-		<item id="11303" chance="1900" /><!-- zaoan shoes -->
-		<item id="2123" chance="180" /><!-- ring of the sky -->
-		<item id="2147" countmax="5" chance="1525" /><!-- small ruby -->
-		<item id="11305" chance="860" /><!-- drakinata -->
-		<item id="11304" chance="960" /><!-- zaoan legs -->
+		<item id="7591" countmax="3" chance="4850" /><!-- great health potion -->
+		<item id="8473" chance="4020" /><!-- ultimate health potion -->
 		<item id="11301" chance="790" /><!-- zaoan armor -->
+		<item id="11303" chance="1900" /><!-- zaoan shoes -->
+		<item id="11304" chance="960" /><!-- zaoan legs -->
+		<item id="11305" chance="860" /><!-- drakinata -->
 		<item id="11321" chance="12010" /><!-- bone shoulderplate -->
 		<item id="11322" chance="7000" /><!-- warmaster's wristguards -->
+		<item id="11323" chance="7925" /><!-- zaoan halberd -->
 	</loot>
 </monster>

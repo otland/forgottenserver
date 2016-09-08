@@ -45,8 +45,8 @@
 	<loot>
 		<item id="2148" countmax="35" chance="79000" /><!-- gold coin -->
 		<item id="2397" chance="6000" /><!-- longsword -->
-		<item id="2681" chance="20000" /><!-- grape -->
 		<item id="2456" chance="4000" /><!-- bow -->
+		<item id="2681" chance="20000" /><!-- grape -->
 		<item id="5921" chance="930" /><!-- heaven blossom -->
 		<item id="7438" chance="100" /><!-- elvish bow -->
 		<item id="7840" countmax="12" chance="30000" /><!-- flaming arrow -->

@@ -51,20 +51,20 @@
 	<loot>
 		<item id="2148" countmax="100" chance="5000" /><!-- gold coin -->
 		<item id="2148" countmax="88" chance="4400" /><!-- gold coin -->
-		<item id="11245" chance="960" /><!-- bunch of ripe rice -->
+		<item id="2150" countmax="3" chance="4900" /><!-- small amethyst -->
 		<item id="2152" countmax="2" chance="4090" /><!-- platinum coin -->
 		<item id="2154" chance="1000" /><!-- yellow gem -->
-		<item id="2150" countmax="3" chance="4900" /><!-- small amethyst -->
-		<item id="11361" chance="9910" /><!-- dragon priest's wandtip -->
-		<item id="8871" chance="660" /><!-- focus cape -->
-		<item id="7589" chance="12110" /><!-- strong mana potion -->
-		<item id="5876" chance="980" /><!-- lizard leather -->
-		<item id="2181" chance="1001" /><!-- terra rod -->
-		<item id="7590" chance="7940" /><!-- great mana potion -->
-		<item id="11356" chance="300" /><!-- zaoan robe -->
-		<item id="2187" chance="1480" /><!-- wand of inferno -->
-		<item id="5881" chance="1130" /><!-- lizard scale -->
-		<item id="11303" chance="450" /><!-- zaoan shoes -->
 		<item id="2168" chance="770" /><!-- life ring -->
+		<item id="2181" chance="1001" /><!-- terra rod -->
+		<item id="2187" chance="1480" /><!-- wand of inferno -->
+		<item id="5876" chance="980" /><!-- lizard leather -->
+		<item id="5881" chance="1130" /><!-- lizard scale -->
+		<item id="7589" chance="12110" /><!-- strong mana potion -->
+		<item id="7590" chance="7940" /><!-- great mana potion -->
+		<item id="8871" chance="660" /><!-- focus cape -->
+		<item id="11245" chance="960" /><!-- bunch of ripe rice -->
+		<item id="11303" chance="450" /><!-- zaoan shoes -->
+		<item id="11356" chance="300" /><!-- zaoan robe -->
+		<item id="11361" chance="9910" /><!-- dragon priest's wandtip -->
 	</loot>
 </monster>

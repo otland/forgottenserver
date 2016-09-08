@@ -44,7 +44,7 @@
 	</summons>
 	<loot>
 		<item id="2148" countmax="98" chance="40000" /><!-- gold coin -->
-		<item id="8752" chance="100000" /><!-- the ring of the count -->
 		<item id="2391" chance="2300" /><!-- war hammer -->
+		<item id="8752" chance="100000" /><!-- the ring of the count -->
 	</loot>
 </monster>

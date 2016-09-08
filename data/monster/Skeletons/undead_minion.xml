@@ -34,8 +34,8 @@
 		<item id="2260" chance="10000" /><!-- blank rune -->
 		<item id="2417" chance="5000" /><!-- battle hammer -->
 		<item id="2513" chance="1000" /><!-- battle shield -->
+		<item id="2515" chance="5000" /><!-- guardian shield -->
 		<item id="6570" chance="5538" /><!-- blue surprise bag -->
 		<item id="6571" chance="1538" /><!-- red surprise bag -->
-		<item id="2515" chance="5000" /><!-- guardian shield -->
 	</loot>
 </monster>

@@ -48,12 +48,12 @@
 		<summon name="golden servant" interval="1000" chance="10" />
 	</summons>
 	<loot>
-		<item id="7368" chance="2400" countmax="4" /><!-- assassin star -->
-		<item id="5911" chance="800" /><!-- red poc -->
-		<item id="7589" countmax="2" chance="1200" /><!-- strong mana potion -->
-		<item id="7588" countmax="5" chance="1300" /><!-- strong health potion -->
 		<item id="2148" countmax="66" chance="100000" /><!-- gold coins -->
-		<item id="2792" countmax="5" chance="5000" /><!-- dark mushroom -->
 		<item id="2148" chance="100000" countmax="20" /><!-- gold coin -->
+		<item id="2792" countmax="5" chance="5000" /><!-- dark mushroom -->
+		<item id="5911" chance="800" /><!-- red poc -->
+		<item id="7368" chance="2400" countmax="4" /><!-- assassin star -->
+		<item id="7588" countmax="5" chance="1300" /><!-- strong health potion -->
+		<item id="7589" countmax="2" chance="1200" /><!-- strong mana potion -->
 	</loot>
 </monster>

@@ -44,8 +44,8 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="8300" chance="100000" /><!-- flawless ice crystal -->
 		<item id="2148" countmax="38" chance="50000" /><!-- gold coin -->
 		<item id="2152" countmax="3" chance="50000" /><!-- platinum coin -->
+		<item id="8300" chance="100000" /><!-- flawless ice crystal -->
 	</loot>
 </monster>

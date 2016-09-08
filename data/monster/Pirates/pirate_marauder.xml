@@ -39,20 +39,20 @@
 		<voice sentence="Hiyaa!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="77670" /><!-- gold coin -->
 		<item id="2050" chance="9880" /><!-- torch -->
+		<item id="2148" countmax="40" chance="77670" /><!-- gold coin -->
 		<item id="2389" countmax="2" chance="5140" /><!-- spear -->
-		<item id="2510" chance="5000" /><!-- plate shield -->
 		<item id="2464" chance="3000" /><!-- chain armor -->
+		<item id="2510" chance="5000" /><!-- plate shield -->
 		<item id="5091" chance="910" /><!-- treasure map -->
+		<item id="5553" chance="110" /><!-- rum flask -->
+		<item id="5792" chance="90" /><!-- dice -->
 		<item id="5917" chance="880" /><!-- bandana-->
-		<item id="6126" chance="520" /><!-- peg leg -->
+		<item id="5927" chance="430" /><!-- pirate bag -->
+		<item id="5928" chance="80" /><!-- empty goldfish bowl -->
 		<item id="6097" chance="520" /><!-- hook -->
 		<item id="6098" chance="530" /><!-- eye patch -->
-		<item id="5553" chance="110" /><!-- rum flask -->
-		<item id="5928" chance="80" /><!-- empty goldfish bowl -->
-		<item id="5792" chance="90" /><!-- dice -->
-		<item id="5927" chance="430" /><!-- pirate bag -->
+		<item id="6126" chance="520" /><!-- peg leg -->
 		<item id="11219" chance="9720" /><!-- compass -->
 	</loot>
 </monster>

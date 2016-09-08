@@ -46,15 +46,15 @@
 		<summon name="Snake" interval="2000" chance="20" max="4" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="5" chance="90000" /><!-- gold coin -->
-		<item id="2686" countmax="2" chance="10600" /><!-- corncob -->
-		<item id="2464" chance="8750" /><!-- chain armor -->
-		<item id="2389" chance="4850" /><!-- spear -->
-		<item id="2188" chance="1000" /><!-- wand of decay -->
-		<item id="12435" chance="4300" /><!-- orc leather -->
-		<item id="11113" chance="2100" /><!-- orc tooth -->
-		<item id="12434" chance="6860" /><!-- shamantic hood -->
-		<item id="12408" chance="10300" /><!-- broken shamantic staff -->
 		<item id="1958" chance="520" /><!-- book -->
+		<item id="2148" countmax="5" chance="90000" /><!-- gold coin -->
+		<item id="2188" chance="1000" /><!-- wand of decay -->
+		<item id="2389" chance="4850" /><!-- spear -->
+		<item id="2464" chance="8750" /><!-- chain armor -->
+		<item id="2686" countmax="2" chance="10600" /><!-- corncob -->
+		<item id="11113" chance="2100" /><!-- orc tooth -->
+		<item id="12408" chance="10300" /><!-- broken shamantic staff -->
+		<item id="12434" chance="6860" /><!-- shamantic hood -->
+		<item id="12435" chance="4300" /><!-- orc leather -->
 	</loot>
 </monster>

@@ -49,7 +49,7 @@
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2152" countmax="3" chance="10000" /><!-- platinum coin -->
-		<item id="6500" countmax="1" chance="2857" /><!-- demonic essence -->
 		<item id="5944" chance="2500" /><!-- soul orb -->
+		<item id="6500" countmax="1" chance="2857" /><!-- demonic essence -->
 	</loot>
 </monster>

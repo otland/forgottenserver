@@ -48,26 +48,26 @@
 		<voice sentence="Praise to my master Urgith!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
 		<item id="2032" chance="10000" /><!-- bowl -->
-		<item id="3969" chance="150" /><!-- horseman helmet -->
+		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
+		<item id="2186" chance="500" /><!-- moonlight rod -->
+		<item id="2195" chance="666" /><!-- boots of haste -->
+		<item id="2229" countmax="3" chance="20000" /><!-- skull -->
+		<item id="2230" countmax="1" chance="30000" /><!-- bone -->
+		<item id="2231" countmax="1" chance="6000" /><!-- big bone -->
 		<item id="2392" chance="220" /><!-- fire sword -->
+		<item id="2412" chance="10000" /><!-- katana -->
+		<item id="2423" chance="5000" /><!-- clerical mace -->
+		<item id="2436" chance="833" /><!-- skull staff -->
+		<item id="2449" countmax="1" chance="19900" /><!-- bone club -->
+		<item id="2483" countmax="1" chance="8500" /><!-- scale armor -->
+		<item id="2541" chance="7500" /><!-- bone shield -->
+		<item id="2663" chance="909" /><!-- mystic turban -->
+		<item id="2747" chance="20000" /><!-- grave flower -->
+		<item id="2796" countmax="1" chance="22500" /><!-- green mushroom -->
 		<item id="2804" countmax="2" chance="20000" /><!-- shadow herb -->
+		<item id="3969" chance="150" /><!-- horseman helmet -->
 		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 		<item id="5809" chance="100000" /><!-- soul stone -->
-		<item id="2186" chance="500" /><!-- moonlight rod -->
-		<item id="2483" countmax="1" chance="8500" /><!-- scale armor -->
-		<item id="2796" countmax="1" chance="22500" /><!-- green mushroom -->
-		<item id="2231" countmax="1" chance="6000" /><!-- big bone -->
-		<item id="2230" countmax="1" chance="30000" /><!-- bone -->
-		<item id="2449" countmax="1" chance="19900" /><!-- bone club -->
-		<item id="2541" chance="7500" /><!-- bone shield -->
-		<item id="2412" chance="10000" /><!-- katana -->
-		<item id="2229" countmax="3" chance="20000" /><!-- skull -->
-		<item id="2747" chance="20000" /><!-- grave flower -->
-		<item id="2436" chance="833" /><!-- skull staff -->
-		<item id="2663" chance="909" /><!-- mystic turban -->
-		<item id="2195" chance="666" /><!-- boots of haste -->
-		<item id="2423" chance="5000" /><!-- clerical mace -->
 	</loot>
 </monster>

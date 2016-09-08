@@ -53,23 +53,23 @@
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="98" chance="100000" /><!-- gold coin -->
 		<item id="2152" countmax="7" chance="95000" /><!-- platinum coin -->
-		<item id="7620" countmax="3" chance="14285" /><!-- mana potion -->
-		<item id="7591" countmax="2" chance="15000" /><!-- great health potion -->
-		<item id="7588" countmax="2" chance="14285" /><!-- strong health potion -->
-		<item id="18432" chance="14540" /><!-- crystalline spikes -->
-		<item id="7590" countmax="2" chance="15920" /><!-- great mana potion -->
-		<item id="7589" countmax="2" chance="15000" /><!-- strong mana potion -->
-		<item id="12403" chance="12460" /><!-- battle stone -->
-		<item id="18437" countmax="10" chance="10230" /><!-- envenomed arrow -->
-		<item id="18436" countmax="5" chance="7692" /><!-- drill bolt -->
-		<item id="13757" chance="6000" /><!-- coal -->
-		<item id="18421" countmax="2" chance="5690" /><!-- green crystal fragment -->
-		<item id="18416" countmax="2" chance="3920" /><!-- green crystal splinter -->
-		<item id="7886" chance="2850" /><!-- terra boots -->
-		<item id="7413" chance="1540" /><!-- titan axe -->
-		<item id="7428" chance="1150" /><!-- bonebreaker -->
 		<item id="2169" chance="1000" /><!-- time ring -->
 		<item id="2528" chance="620" /><!-- tower shield -->
+		<item id="7413" chance="1540" /><!-- titan axe -->
+		<item id="7428" chance="1150" /><!-- bonebreaker -->
+		<item id="7588" countmax="2" chance="14285" /><!-- strong health potion -->
+		<item id="7589" countmax="2" chance="15000" /><!-- strong mana potion -->
+		<item id="7590" countmax="2" chance="15920" /><!-- great mana potion -->
+		<item id="7591" countmax="2" chance="15000" /><!-- great health potion -->
+		<item id="7620" countmax="3" chance="14285" /><!-- mana potion -->
+		<item id="7886" chance="2850" /><!-- terra boots -->
 		<item id="8878" chance="230" /><!-- crystalline armor -->
+		<item id="12403" chance="12460" /><!-- battle stone -->
+		<item id="13757" chance="6000" /><!-- coal -->
+		<item id="18416" countmax="2" chance="3920" /><!-- green crystal splinter -->
+		<item id="18421" countmax="2" chance="5690" /><!-- green crystal fragment -->
+		<item id="18432" chance="14540" /><!-- crystalline spikes -->
+		<item id="18436" countmax="5" chance="7692" /><!-- drill bolt -->
+		<item id="18437" countmax="10" chance="10230" /><!-- envenomed arrow -->
 	</loot>
 </monster>

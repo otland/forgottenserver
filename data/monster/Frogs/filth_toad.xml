@@ -39,9 +39,9 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="21" chance="75000" /><!-- gold coin -->
+		<item id="2377" chance="500" /><!-- two handed sword -->
+		<item id="2398" chance="2000" /><!-- mace -->
 		<item id="2667" chance="22000" /><!-- fish -->
 		<item id="10557" chance="3000" /><!-- poisonous slime -->
-		<item id="2398" chance="2000" /><!-- mace -->
-		<item id="2377" chance="500" /><!-- two handed sword -->
 	</loot>
 </monster>

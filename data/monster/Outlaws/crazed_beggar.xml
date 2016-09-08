@@ -36,20 +36,20 @@
 		<voice sentence="Make it stop!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="9" chance="99000" /><!-- gold coin -->
-		<item id="2237" chance="55000" /><!-- dirty cape -->
-		<item id="2690" chance="22500" /><!-- roll -->
-		<item id="2666" chance="9500" /><!-- meat -->
-		<item id="2567" chance="9750" /><!-- wooden spoon -->
-		<item id="2556" chance="6500" /><!-- wooden hammer -->
-		<item id="2570" chance="5650" /><!-- rolling pin -->
-		<item id="2744" chance="4700" /><!-- red rose -->
 		<item id="1681" chance="420" /><!-- blue pillow -->
-		<item id="5553" chance="420" /><!-- rum flak -->
-		<item id="2802" chance="420" /><!-- sling herb -->
-		<item id="9808" chance="80" /><!-- rusty armor -->
-		<item id="2213" chance="120" /><!-- dwarven ring -->
 		<item id="2072" chance="360" /><!-- lute -->
+		<item id="2148" countmax="9" chance="99000" /><!-- gold coin -->
+		<item id="2213" chance="120" /><!-- dwarven ring -->
+		<item id="2237" chance="55000" /><!-- dirty cape -->
+		<item id="2556" chance="6500" /><!-- wooden hammer -->
+		<item id="2567" chance="9750" /><!-- wooden spoon -->
+		<item id="2570" chance="5650" /><!-- rolling pin -->
+		<item id="2666" chance="9500" /><!-- meat -->
+		<item id="2690" chance="22500" /><!-- roll -->
+		<item id="2744" chance="4700" /><!-- red rose -->
+		<item id="2802" chance="420" /><!-- sling herb -->
+		<item id="5553" chance="420" /><!-- rum flak -->
 		<item id="6092" chance="300" /><!-- very noble-looking watch -->
+		<item id="9808" chance="80" /><!-- rusty armor -->
 	</loot>
 </monster>

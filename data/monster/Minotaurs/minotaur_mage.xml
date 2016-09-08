@@ -46,14 +46,14 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="85780" /><!-- gold coin -->
-		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
 		<item id="2050" chance="4950" /><!-- torch -->
-		<item id="2649" chance="5190" /><!-- leather legs -->
+		<item id="2148" countmax="35" chance="85780" /><!-- gold coin -->
+		<item id="2189" chance="600" /><!-- wand of cosmic energy -->
 		<item id="2461" chance="3000" /><!-- leather helmet -->
+		<item id="2649" chance="5190" /><!-- leather legs -->
+		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
 		<item id="5878" chance="2290" /><!-- minotaur leather -->
 		<item id="7425" chance="1000" /><!-- taurus mace -->
-		<item id="2189" chance="600" /><!-- wand of cosmic energy -->
 		<item id="7620" chance="490" /><!-- mana potion -->
 		<item id="12428" countmax="2" chance="3020" /><!-- Minotaur Horn -->
 		<item id="12429" countmax="2" chance="6430" /><!-- purple robe -->

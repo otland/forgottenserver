@@ -40,12 +40,12 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2804" chance="10650" /><!-- shadow herb -->
-		<item id="12432" chance="10000" /><!-- nettle spit -->
 		<item id="2148" countmax="5" chance="10600" /><!-- gold coin -->
 		<item id="2802" countmax="2" chance="5263" /><!-- sling herb -->
 		<item id="2802" chance="1010" /><!-- grave flower -->
-		<item id="11231" chance="833" /><!-- nettle blossom -->
 		<item id="2802" chance="362" /><!-- seeds-->
+		<item id="2804" chance="10650" /><!-- shadow herb -->
+		<item id="11231" chance="833" /><!-- nettle blossom -->
+		<item id="12432" chance="10000" /><!-- nettle spit -->
 	</loot>
 </monster>

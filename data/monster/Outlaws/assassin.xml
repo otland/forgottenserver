@@ -44,18 +44,18 @@
 		<voice sentence="You are on my deathlist!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="83210" /><!-- gold coin -->
 		<item id="2050" countmax="2" chance="29980" /><!-- torch -->
+		<item id="2145" chance="220" /><!-- small diamond -->
+		<item id="2148" countmax="50" chance="83210" /><!-- gold coin -->
 		<item id="2148" countmax="14" chance="7250" /><!-- throwing star -->
-		<item id="7366" countmax="7" chance="4200" /><!-- viper star -->
 		<item id="2403" chance="9500" /><!-- knife -->
 		<item id="2404" chance="4000" /><!-- combat knife -->
 		<item id="2457" chance="3230" /><!-- steel helmet -->
 		<item id="2509" chance="970" /><!-- steel shield -->
 		<item id="2510" chance="1900" /><!-- plate shield -->
-		<item id="3968" chance="480" /><!-- leopard armor -->
 		<item id="2513" chance="1600" /><!-- battle shield -->
-		<item id="2145" chance="220" /><!-- small diamond -->
+		<item id="3968" chance="480" /><!-- leopard armor -->
 		<item id="3969" chance="230" /><!-- horseman helmet -->
+		<item id="7366" countmax="7" chance="4200" /><!-- viper star -->
 	</loot>
 </monster>

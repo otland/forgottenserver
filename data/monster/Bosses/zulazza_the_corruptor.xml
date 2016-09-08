@@ -52,28 +52,28 @@
 		<voice sentence="Oh, HE will take revenge on zzizz azzault when you zztep in front of HIZZ fazze!" />
 	</voices>
 	<loot>
-		<item id="7591" chance="30500" /><!-- great health potion -->
-		<item id="2152" countmax="30" chance="41325" /><!-- platinum coin -->
+		<item id="2127" chance="10500" /><!-- emerald bangle -->
 		<item id="2148" countmax="100" chance="49650" /><!-- gold coin -->
+		<item id="2152" countmax="30" chance="41325" /><!-- platinum coin -->
+		<item id="2153" chance="25500" /><!-- violet gem -->
+		<item id="2154" chance="15500" /><!-- yellow gem -->
+		<item id="2155" chance="20500" /><!-- green gem -->
+		<item id="2156" chance="10500" /><!-- red gem -->
+		<item id="2158" chance="30500" /><!-- blue gem -->
+		<item id="2514" chance="5500" /><!-- mastermind shield -->
+		<item id="2515" chance="5500" /><!-- guardian shield -->
+		<item id="2528" chance="15500" /><!-- tower shield -->
+		<item id="5944" countmax="4" chance="19250" /><!-- soul orb -->
+		<item id="7366" countmax="67" chance="8100" /><!-- viper star -->
+		<item id="7440" chance="10500" /><!-- mastermind potion -->
+		<item id="7590" chance="20500" /><!-- great mana potion -->
+		<item id="7591" chance="30500" /><!-- great health potion -->
+		<item id="7632" countmax="2" chance="28000" /><!-- giant shimmering pearl -->
+		<item id="8473" chance="10500" /><!-- dragon scale boots -->
+		<item id="8882" chance="5500" /><!-- earthborn titan armor -->
+		<item id="8891" chance="5500" /><!-- paladin armor -->
 		<item id="9808" chance="50500" /><!-- rusty armor -->
 		<item id="9971" countmax="4" chance="33000" /><!-- gold ingot -->
-		<item id="2158" chance="30500" /><!-- blue gem -->
-		<item id="2155" chance="20500" /><!-- green gem -->
-		<item id="8473" chance="10500" /><!-- dragon scale boots -->
 		<item id="11118" chance="5500" /><!-- ultimate health potion -->
-		<item id="5944" countmax="4" chance="19250" /><!-- soul orb -->
-		<item id="2528" chance="15500" /><!-- tower shield -->
-		<item id="7366" countmax="67" chance="8100" /><!-- viper star -->
-		<item id="7632" countmax="2" chance="28000" /><!-- giant shimmering pearl -->
-		<item id="2154" chance="15500" /><!-- yellow gem -->
-		<item id="2156" chance="10500" /><!-- red gem -->
-		<item id="7440" chance="10500" /><!-- mastermind potion -->
-		<item id="2153" chance="25500" /><!-- violet gem -->
-		<item id="7590" chance="20500" /><!-- great mana potion -->
-		<item id="8882" chance="5500" /><!-- earthborn titan armor -->
-		<item id="2514" chance="5500" /><!-- mastermind shield -->
-		<item id="2127" chance="10500" /><!-- emerald bangle -->
-		<item id="8891" chance="5500" /><!-- paladin armor -->
-		<item id="2515" chance="5500" /><!-- guardian shield -->
 	</loot>
 </monster>

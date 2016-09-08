@@ -41,16 +41,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="11217" chance="100000" /><!-- carniphila seeds -->
-		<item id="2152" countmax="5" chance="100000" /><!-- platinum coins -->
-		<item id="2804" chance="100000" /><!-- shadow herb -->
 		<item id="2149" countmax="4" chance="100000" /><!-- small emerald -->
+		<item id="2152" countmax="5" chance="100000" /><!-- platinum coins -->
 		<item id="2792" chance="50000" /><!-- dark mushroom -->
-		<item id="7732" chance="50000" /><!-- seeds -->
-		<item id="7887" chance="50000" /><!--terra amulet-->
-		<item id="7886" chance="50000" /><!-- terra boots -->
-		<item id="8912" chance="50000" /><!--springsprout rod-->
+		<item id="2804" chance="100000" /><!-- shadow herb -->
 		<item id="5015" chance="5555" /><!--mandrake-->
+		<item id="7732" chance="50000" /><!-- seeds -->
+		<item id="7886" chance="50000" /><!-- terra boots -->
+		<item id="7887" chance="50000" /><!--terra amulet-->
+		<item id="8912" chance="50000" /><!--springsprout rod-->
+		<item id="11217" chance="100000" /><!-- carniphila seeds -->
 		<item id="13307" chance="2854" /><!--mandrake-->
 	</loot>
 </monster>

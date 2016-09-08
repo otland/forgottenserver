@@ -42,13 +42,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
+		<item id="1294" countmax="10" chance="10000" /><!-- small stone -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="63" chance="50000" /><!-- gold coin -->
-		<item id="11222" chance="25000" /><!-- lump of earth -->
 		<item id="2260" chance="25000" /><!-- blank rune -->
-		<item id="1294" countmax="10" chance="10000" /><!-- small stone -->
 		<item id="7850" countmax="8" chance="5555" /><!-- earth arrow -->
-		<item id="11339" chance="1100" /><!-- clay lump -->
 		<item id="9970" chance="320" /><!-- small topaz -->
+		<item id="11222" chance="25000" /><!-- lump of earth -->
+		<item id="11339" chance="1100" /><!-- clay lump -->
 	</loot>
 </monster>

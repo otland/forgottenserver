@@ -47,23 +47,23 @@
 	<loot>
 		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
 		<item id="2148" countmax="48" chance="50500" /><!-- gold coin -->
-		<item id="8872" chance="5000" /><!-- belted cape -->
-		<item id="2465" chance="4700" /><!-- brass armor -->
-		<item id="2478" chance="5500" /><!-- brass legs -->
-		<item id="3965" chance="4200" /><!-- hunting spear -->
-		<item id="2666" countmax="2" chance="15000" /><!-- meat -->
-		<item id="2419" chance="11280" /><!-- scimitar -->
-		<item id="2399" countmax="18" chance="15700" /><!-- throwing star -->
-		<item id="2647" chance="2444" /><!-- plate legs -->
-		<item id="2463" chance="1700" /><!-- plate armor -->
+		<item id="2165" chance="30" /><!-- stealth ring -->
 		<item id="2200" chance="2200" /><!-- protection amulet -->
 		<item id="2377" chance="1900" /><!-- two handed sword -->
-		<item id="2165" chance="30" /><!-- stealth ring -->
+		<item id="2399" countmax="18" chance="15700" /><!-- throwing star -->
+		<item id="2419" chance="11280" /><!-- scimitar -->
+		<item id="2430" chance="280" /><!-- knight axe -->
+		<item id="2463" chance="1700" /><!-- plate armor -->
+		<item id="2465" chance="4700" /><!-- brass armor -->
+		<item id="2478" chance="5500" /><!-- brass legs -->
 		<item id="2490" chance="1460" /><!-- dark helmet -->
 		<item id="2497" chance="100" /><!-- crusader helmet -->
-		<item id="7618" chance="350" /><!-- health potion -->
-		<item id="2430" chance="280" /><!-- knight axe -->
+		<item id="2647" chance="2444" /><!-- plate legs -->
+		<item id="2666" countmax="2" chance="15000" /><!-- meat -->
+		<item id="3965" chance="4200" /><!-- hunting spear -->
 		<item id="5885" chance="210" /><!-- warrior's sweat -->
+		<item id="7618" chance="350" /><!-- health potion -->
+		<item id="8872" chance="5000" /><!-- belted cape -->
 		<item id="10573" chance="5200" /><!-- broken gladiator shield -->
 	</loot>
 </monster>

@@ -36,13 +36,13 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="53" chance="87250" /><!-- gold coin -->
+		<item id="2455" chance="2750" /><!-- crossbow -->
 		<item id="2543" countmax="15" chance="48270" /><!-- bolts -->
 		<item id="2666" chance="24930" /><!-- meat -->
 		<item id="7363" countmax="5" chance="14900" /><!-- piercing bolts -->
-		<item id="21312" chance="13210" /><!-- venison -->
-		<item id="21311" chance="7030" /><!-- elven hoof -->
-		<item id="2455" chance="2750" /><!-- crossbow -->
-		<item id="9970" chance="470" /><!-- small topaz -->
 		<item id="7438" chance="90" /><!-- elvish bow -->
+		<item id="9970" chance="470" /><!-- small topaz -->
+		<item id="21311" chance="7030" /><!-- elven hoof -->
+		<item id="21312" chance="13210" /><!-- venison -->
 	</loot>
 </monster>

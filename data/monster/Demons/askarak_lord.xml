@@ -54,17 +54,17 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="35333" /><!-- platinum coin -->
-		<item id="7589" chance="7692" /><!-- strong mana potion -->
-		<item id="7588" chance="6250" /><!-- strong health potion -->
 		<item id="2149" countmax="5" chance="5882" /><!-- small emerald -->
-		<item id="2789" countmax="5" chance="5263" /><!-- brown mushroom -->
-		<item id="8912" chance="1010" /><!-- springsprout rod -->
+		<item id="2152" countmax="2" chance="35333" /><!-- platinum coin -->
 		<item id="2167" chance="606" /><!-- energy ring -->
-		<item id="7440" chance="750" /><!-- mastermind potion -->
+		<item id="2789" countmax="5" chance="5263" /><!-- brown mushroom -->
 		<item id="5904" chance="620" /><!-- magic sulphur -->
 		<item id="7368" countmax="5" chance="70" /><!-- assassin star -->
-		<item id="7884" chance="70" /><!-- terra mantle -->
 		<item id="7419" chance="30" /><!-- dread cleaver -->
+		<item id="7440" chance="750" /><!-- mastermind potion -->
+		<item id="7588" chance="6250" /><!-- strong health potion -->
+		<item id="7589" chance="7692" /><!-- strong mana potion -->
+		<item id="7884" chance="70" /><!-- terra mantle -->
+		<item id="8912" chance="1010" /><!-- springsprout rod -->
 	</loot>
 </monster>

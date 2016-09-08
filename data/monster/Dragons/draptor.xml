@@ -48,9 +48,9 @@
 	<loot>
 		<item id="2148" countmax="90" chance="33750" /><!-- gold coin -->
 		<item id="2148" countmax="60" chance="33750" /><!-- gold coin -->
-		<item id="8867" chance="950" /><!-- dragon robe -->
-		<item id="13296" chance="6650" /><!-- draptor scales -->
 		<item id="7588" chance="3150" /><!-- strong health potion -->
 		<item id="7589" chance="4150" /><!-- strong mana potion -->
+		<item id="8867" chance="950" /><!-- dragon robe -->
+		<item id="13296" chance="6650" /><!-- draptor scales -->
 	</loot>
 </monster>

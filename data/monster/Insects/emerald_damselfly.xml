@@ -31,12 +31,12 @@
 		<voice sentence="Bzzzzz!" />
 	</voices>
 	<loot>
+		<item id="2120" chance="4300" /><!-- rope -->
 		<item id="2148" countmax="18" chance="90000" /><!-- gold coin -->
 		<item id="2544" countmax="5" chance="7570" /><!-- Arrows -->
 		<item id="7618" chance="1780" /><!-- HP -->
 		<item id="7620" chance="2520" /><!-- MP -->
 		<item id="19737" chance="10830" /><!-- Damselfly Wing -->
 		<item id="19742" chance="8610" /><!-- Damselfly Eye -->
-		<item id="2120" chance="4300" /><!-- rope -->
 	</loot>
 </monster>

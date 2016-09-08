@@ -43,20 +43,20 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
+		<item id="2150" countmax="2" chance="8000" /><!-- small amethyst -->
 		<item id="2152" chance="75250" /><!-- platinum coin -->
+		<item id="2155" chance="210" /><!-- green gem -->
+		<item id="2169" chance="2400" /><!-- time ring -->
+		<item id="2171" chance="260" /><!-- platinum amulet -->
+		<item id="2497" chance="230" /><!-- crusader helmet -->
+		<item id="2789" countmax="3" chance="7500" /><!-- brown mushroom -->
+		<item id="7440" chance="310" /><!-- mastermind potion -->
+		<item id="7449" chance="2000" /><!-- crystal sword -->
+		<item id="7590" chance="8000" /><!-- great mana potion -->
+		<item id="7591" chance="5000" /><!-- great health potion -->
 		<item id="15481" chance="18000" /><!-- spitter nose -->
 		<item id="15486" chance="15000" /><!-- compound eye -->
-		<item id="7590" chance="8000" /><!-- great mana potion -->
-		<item id="2150" countmax="2" chance="8000" /><!-- small amethyst -->
-		<item id="2789" countmax="3" chance="7500" /><!-- brown mushroom -->
-		<item id="7591" chance="5000" /><!-- great health potion -->
-		<item id="2169" chance="2400" /><!-- time ring -->
-		<item id="7449" chance="2000" /><!-- crystal sword -->
 		<item id="15489" chance="240" /><!-- calopteryx cape -->
-		<item id="2155" chance="210" /><!-- green gem -->
-		<item id="7440" chance="310" /><!-- mastermind potion -->
-		<item id="2497" chance="230" /><!-- crusader helmet -->
-		<item id="2171" chance="260" /><!-- platinum amulet -->
 		<item id="15490" chance="130" /><!-- grasshopper legs -->
 	</loot>
 </monster>

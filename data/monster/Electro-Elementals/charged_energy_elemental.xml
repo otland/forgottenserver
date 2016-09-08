@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
-		<attack name="energy" interval="2000" chance="20" range="6" radius="4" target="1" min="-100" max="-168">
+		<attack name="energy" interval="2000" chance="20" range="6" radius="4" target="1" min="-168" max="-100">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>

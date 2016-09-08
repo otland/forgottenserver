@@ -52,10 +52,10 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="88" chance="68810" /><!-- gold coin -->
-		<item id="8309" chance="1460" /><!-- nails -->
+		<item id="2207" chance="570" /><!-- sword ring -->
 		<item id="5880" chance="400" /><!-- iron ore -->
+		<item id="8309" chance="1460" /><!-- nails -->
 		<item id="9808" chance="790" /><!-- rusty armor -->
 		<item id="10572" chance="200" /><!-- gear crystal -->
-		<item id="2207" chance="570" /><!-- sword ring -->
 	</loot>
 </monster>

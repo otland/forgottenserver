@@ -64,11 +64,11 @@
 		<voice sentence="I am the darkness around you..." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
-		<item id="2149" chance="14000" /><!-- small emerald -->
 		<item id="2147" countmax="3" chance="9600" /><!-- small ruby -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2149" chance="14000" /><!-- small emerald -->
 		<item id="2150" countmax="3" chance="17000" /><!-- small amethyst -->
+		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
 		<item id="2393" chance="560" /><!-- giant sword -->
 		<item id="2475" chance="2820" /><!-- warrior helmet -->
 		<item id="2476" chance="4000" /><!-- knight armor -->
@@ -80,8 +80,8 @@
 		<item id="18413" chance="6000" /><!-- blue crystal shard -->
 		<item id="18418" chance="13000" /><!-- blue crystal splinter -->
 		<item id="18419" chance="17000" /><!-- cyan crystal fragment -->
+		<item id="22363" chance="1130" /><!-- broken dream -->
 		<item id="22537" chance="13000" /><!-- trapped bad dream monster -->
 		<item id="22538" chance="18000" /><!-- bowl of terror sweat -->
-		<item id="22363" chance="1130" /><!-- broken dream -->
 	</loot>
 </monster>

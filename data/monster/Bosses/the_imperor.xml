@@ -64,24 +64,24 @@
 		<voice sentence="He he he!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="79" chance="100000" /><!-- gold coin -->
 		<item id="2050" chance="15000" /><!-- torch -->
-		<item id="6558" chance="2222" /><!-- concentrated demonic blood -->
-		<item id="2260" chance="18000" /><!-- blank rune -->
-		<item id="6534" chance="100000" /><!-- the imperor's trident -->
-		<item id="6300" chance="999" /><!-- death ring -->
-		<item id="2465" chance="6577" /><!-- brass armor -->
-		<item id="2548" chance="20000" /><!-- pitchfork -->
-		<item id="6529" countmax="5" chance="5000" /><!-- infernal bolts -->
-		<item id="2465" chance="6577" /><!-- brass armor -->
-		<item id="2185" chance="833" /><!-- volcanic rod -->
-		<item id="2464" chance="7887" /><!-- chain armor -->
-		<item id="5944" chance="5666" /><!-- soul orb -->
-		<item id="7899" chance="2000" /><!-- magma coat -->
-		<item id="7900" chance="2000" /><!-- magma monocle -->
-		<item id="7891" chance="2000" /><!-- magma boots -->
-		<item id="6500" countmax="1" chance="7777" /><!-- demonic essence -->
+		<item id="2148" countmax="79" chance="100000" /><!-- gold coin -->
 		<item id="2150" countmax="1" chance="8888" /><!-- small amethyst -->
 		<item id="2165" chance="4555" /><!-- stealth ring -->
+		<item id="2185" chance="833" /><!-- volcanic rod -->
+		<item id="2260" chance="18000" /><!-- blank rune -->
+		<item id="2464" chance="7887" /><!-- chain armor -->
+		<item id="2465" chance="6577" /><!-- brass armor -->
+		<item id="2465" chance="6577" /><!-- brass armor -->
+		<item id="2548" chance="20000" /><!-- pitchfork -->
+		<item id="5944" chance="5666" /><!-- soul orb -->
+		<item id="6300" chance="999" /><!-- death ring -->
+		<item id="6500" countmax="1" chance="7777" /><!-- demonic essence -->
+		<item id="6529" countmax="5" chance="5000" /><!-- infernal bolts -->
+		<item id="6534" chance="100000" /><!-- the imperor's trident -->
+		<item id="6558" chance="2222" /><!-- concentrated demonic blood -->
+		<item id="7891" chance="2000" /><!-- magma boots -->
+		<item id="7899" chance="2000" /><!-- magma coat -->
+		<item id="7900" chance="2000" /><!-- magma monocle -->
 	</loot>
 </monster>

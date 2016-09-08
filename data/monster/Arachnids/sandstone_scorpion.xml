@@ -41,8 +41,8 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="128" chance="90000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="11111" /><!-- platinum coin -->
 		<item id="2149" countmax="2" chance="9900" /><!-- small emerald -->
+		<item id="2152" countmax="2" chance="11111" /><!-- platinum coin -->
 		<item id="2439" chance="6250" /><!-- daraminian mace -->
 		<item id="2457" chance="5000" /><!-- steel helmet -->
 		<item id="2529" chance="1724" /><!-- black shield -->

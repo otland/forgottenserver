@@ -53,28 +53,28 @@
 		<voice sentence="You will die zhouzandz deazhz!" />
 	</voices>
 	<loot>
+		<item id="2145" countmax="4" chance="2440" /><!-- small diamond -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="47000" /><!-- gold coin -->
 		<item id="2152" countmax="8" chance="50360" /><!-- platinum coin -->
-		<item id="12617" chance="24670" /><!-- broken slicer -->
 		<item id="2666" chance="30175" /><!-- meat -->
-		<item id="7590" countmax="3" chance="9340" /><!-- great mana potion -->
-		<item id="2145" countmax="4" chance="2440" /><!-- small diamond -->
-		<item id="12615" chance="14030" /><!-- draken wristbands -->
-		<item id="12616" chance="16930" /><!-- broken draken mail -->
-		<item id="8473" countmax="3" chance="9250" /><!-- ultimate health potion -->
-		<item id="12614" chance="7600" /><!-- draken sulphur -->
-		<item id="12613" chance="910" /><!-- twiceslicer -->
 		<item id="5904" chance="2100" /><!-- magic sulphur -->
 		<item id="7404" chance="980" /><!-- assassin dagger -->
-		<item id="11307" chance="490" /><!-- zaoan sword -->
-		<item id="12646" chance="600" /><!-- draken boots -->
-		<item id="12649" chance="20" /><!-- blade of corruption -->
-		<item id="12630" chance="10" /><!-- cobra crown -->
+		<item id="7590" countmax="3" chance="9340" /><!-- great mana potion -->
+		<item id="8473" countmax="3" chance="9250" /><!-- ultimate health potion -->
+		<item id="11301" chance="490" /><!-- zaoan armor -->
 		<item id="11302" chance="150" /><!-- zaoan helmet -->
 		<item id="11304" chance="770" /><!-- zaoan legs -->
-		<item id="11301" chance="490" /><!-- zaoan armor -->
-		<item id="12647" chance="80" /><!-- snake god's wristguard -->
+		<item id="11307" chance="490" /><!-- zaoan sword -->
 		<item id="12607" chance="110" /><!-- elite draken mail -->
+		<item id="12613" chance="910" /><!-- twiceslicer -->
+		<item id="12614" chance="7600" /><!-- draken sulphur -->
+		<item id="12615" chance="14030" /><!-- draken wristbands -->
+		<item id="12616" chance="16930" /><!-- broken draken mail -->
+		<item id="12617" chance="24670" /><!-- broken slicer -->
+		<item id="12630" chance="10" /><!-- cobra crown -->
+		<item id="12646" chance="600" /><!-- draken boots -->
+		<item id="12647" chance="80" /><!-- snake god's wristguard -->
+		<item id="12649" chance="20" /><!-- blade of corruption -->
 	</loot>
 </monster>

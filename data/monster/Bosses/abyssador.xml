@@ -69,13 +69,13 @@
 		<voice sentence="*** DEATH ***" />
 	</voices>
 	<loot>
-		<item id="18496" chance="100000" /><!-- Abyssador's Lash -->
+		<item id="18449" chance="10000" /><!-- Decorative Ribbon -->
+		<item id="18450" chance="5500" /><!-- Crystalline Sword -->
+		<item id="18451" chance="5500" /><!-- Crystalline Axe -->
+		<item id="18452" chance="4500" /><!-- Mace -->
+		<item id="18453" chance="4500" /><!-- Crystal Crossbow -->
 		<item id="18454" chance="10000" /><!-- Mycological Bow -->
 		<item id="18465" chance="8000" /><!-- Shiny Sword -->
-		<item id="18449" chance="10000" /><!-- Decorative Ribbon -->
-		<item id="18453" chance="4500" /><!-- Crystal Crossbow -->
-		<item id="18451" chance="5500" /><!-- Crystalline Axe -->
-		<item id="18450" chance="5500" /><!-- Crystalline Sword -->
-		<item id="18452" chance="4500" /><!-- Mace -->
+		<item id="18496" chance="100000" /><!-- Abyssador's Lash -->
 	</loot>
 </monster>

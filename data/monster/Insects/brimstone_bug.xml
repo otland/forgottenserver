@@ -52,16 +52,16 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2149" countmax="4" chance="2702" /><!-- small emerald -->
+		<item id="2165" chance="892" /><!-- stealth ring -->
+		<item id="2171" chance="110" /><!-- platinum amulet -->
+		<item id="5904" chance="1639" /><!-- magic sulphur -->
+		<item id="7588" chance="9003" /><!-- strong health potion -->
+		<item id="7589" chance="9025" /><!-- strong mana potion -->
 		<item id="10557" chance="50000" /><!-- poisonous slime -->
 		<item id="11222" chance="20000" /><!-- lump of earth -->
 		<item id="11232" chance="14970" /><!-- sulphurous stone -->
-		<item id="12659" chance="10000" /><!-- brimstone shell -->
-		<item id="7589" chance="9025" /><!-- strong mana potion -->
-		<item id="7588" chance="9003" /><!-- strong health potion -->
 		<item id="12658" chance="5710" /><!-- brimstone fangs -->
-		<item id="2149" countmax="4" chance="2702" /><!-- small emerald -->
-		<item id="5904" chance="1639" /><!-- magic sulphur -->
-		<item id="2165" chance="892" /><!-- stealth ring -->
-		<item id="2171" chance="110" /><!-- platinum amulet -->
+		<item id="12659" chance="10000" /><!-- brimstone shell -->
 	</loot>
 </monster>

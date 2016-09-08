@@ -58,21 +58,21 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="97" chance="40000" /><!-- gold coin -->
-		<item id="2548" chance="50000" /><!-- pitchfork -->
-		<item id="6558" countmax="2" chance="25000" /><!-- concentrated demonic blood -->
-		<item id="2260" countmax="2" chance="16666" /><!-- blank rune -->
-		<item id="6500" chance="8000" /><!-- demonic essence -->
-		<item id="2515" chance="8130" /><!-- guardian shield -->
-		<item id="2568" chance="8830" /><!-- cleaver -->
-		<item id="2419" chance="5660" /><!-- scimitar -->
-		<item id="5944" chance="7230" /><!-- soul orb -->
 		<item id="2148" countmax="7" chance="3390" /><!-- platinum coin -->
 		<item id="2150" countmax="3" chance="2250" /><!-- small amethyst -->
 		<item id="2165" chance="2702" /><!-- stealth ring -->
+		<item id="2185" chance="830" /><!-- necrotic rod -->
+		<item id="2260" countmax="2" chance="16666" /><!-- blank rune -->
 		<item id="2387" chance="1994" /><!-- double axe -->
+		<item id="2419" chance="5660" /><!-- scimitar -->
+		<item id="2515" chance="8130" /><!-- guardian shield -->
+		<item id="2548" chance="50000" /><!-- pitchfork -->
+		<item id="2568" chance="8830" /><!-- cleaver -->
+		<item id="5944" chance="7230" /><!-- soul orb -->
 		<item id="6300" chance="120" /><!-- death ring -->
+		<item id="6500" chance="8000" /><!-- demonic essence -->
+		<item id="6558" countmax="2" chance="25000" /><!-- concentrated demonic blood -->
 		<item id="7899" chance="250" /><!-- magma coat-->
 		<item id="7900" chance="430" /><!-- magma monocle -->
-		<item id="2185" chance="830" /><!-- necrotic rod -->
 	</loot>
 </monster>

@@ -34,14 +34,14 @@
 		<voice sentence="Huh!" />
 	</voices>
 	<loot>
+		<item id="1962" chance="1310" /><!-- orange book -->
+		<item id="2165" chance="180" /><!-- stealth ring -->
 		<item id="2394" chance="10610" /><!-- morning star -->
 		<item id="2404" chance="7002" /><!-- combat knife -->
-		<item id="2804" chance="14400" /><!-- shadow herb -->
-		<item id="2654" chance="8800" /><!-- cape -->
-		<item id="1962" chance="1310" /><!-- orange book -->
-		<item id="5909" chance="1940" /><!-- white piece of cloth -->
 		<item id="2532" chance="860" /><!-- ancient shield -->
-		<item id="2165" chance="180" /><!-- stealth ring -->
+		<item id="2654" chance="8800" /><!-- cape -->
+		<item id="2804" chance="14400" /><!-- shadow herb -->
+		<item id="5909" chance="1940" /><!-- white piece of cloth -->
 		<item id="10607" chance="1870" /><!-- ghostly tissue -->
 	</loot>
 </monster>

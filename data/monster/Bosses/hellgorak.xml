@@ -59,14 +59,14 @@
 		<voice sentence="Delicious!" />
 	</voices>
 	<loot>
+		<item id="2143" countmax="7" chance="3000" /><!-- white pearl -->
 		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="70000" /><!-- gold coin -->
+		<item id="2148" countmax="83" chance="60000" /><!-- gold coin -->
 		<item id="2160" countmax="3" chance="100000" /><!-- crystal coin -->
-		<item id="2143" countmax="7" chance="3000" /><!-- white pearl -->
 		<item id="2514" chance="1650" /><!-- mastermind shield -->
+		<item id="7368" countmax="25" chance="100000" /><!-- assassin star -->
 		<item id="7590" chance="7000" /><!-- great mana potion -->
 		<item id="7591" chance="7000" /><!-- great health potion -->
-		<item id="2148" countmax="83" chance="60000" /><!-- gold coin -->
-		<item id="7368" countmax="25" chance="100000" /><!-- assassin star -->
 	</loot>
 </monster>

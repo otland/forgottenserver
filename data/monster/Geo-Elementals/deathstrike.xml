@@ -53,12 +53,12 @@
 		<voice sentence="Taaake ... this!" />
 	</voices>
 	<loot>
-		<item id="18465" chance="11430" /><!-- shiny blade -->
-		<item id="18452" chance="8570" /><!-- mycological mace -->
-		<item id="18450" chance="10480" /><!-- crystalline sword -->
 		<item id="18430" chance="100000" /><!-- Deathstrike's snippets -->
-		<item id="18453" chance="12380" /><!-- crystalline crossbow -->
+		<item id="18450" chance="10480" /><!-- crystalline sword -->
 		<item id="18451" chance="11430" /><!-- crystalline axe -->
+		<item id="18452" chance="8570" /><!-- mycological mace -->
+		<item id="18453" chance="12380" /><!-- crystalline crossbow -->
 		<item id="18454" chance="11430" /><!-- mycological bow -->
+		<item id="18465" chance="11430" /><!-- shiny blade -->
 	</loot>
 </monster>

@@ -36,8 +36,8 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="80" chance="80000" /><!-- gold coin -->
+		<item id="2209" chance="100" /><!-- club ring -->
 		<item id="3964" chance="850" /><!-- ripper lance -->
 		<item id="7618" chance="280" /><!-- hp -->
-		<item id="2209" chance="100" /><!-- club ring -->
 	</loot>
 </monster>

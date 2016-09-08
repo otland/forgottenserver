@@ -68,12 +68,12 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="45" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="90" chance="80000" /><!-- gold coin -->
+		<item id="2391" chance="1333" /><!-- war hammer -->
+		<item id="2423" chance="5000" /><!-- clerical mace -->
 		<item id="2445" chance="1000" /><!-- crystal mace -->
 		<item id="2451" chance="800" /><!-- djinn blade -->
 		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 		<item id="5898" countmax="1" chance="5000" /><!-- beholder eye -->
-		<item id="2148" countmax="90" chance="80000" /><!-- gold coin -->
-		<item id="2423" chance="5000" /><!-- clerical mace -->
-		<item id="2391" chance="1333" /><!-- war hammer -->
 	</loot>
 </monster>

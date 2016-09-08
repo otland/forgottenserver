@@ -37,7 +37,7 @@
 		<voice sentence="This time we will prevail!" />
 	</voices>
 	<loot>
-		<item id="12969" chance="100000" /><!-- dry piece of wood -->
 		<item id="2250" countmax="96" chance="14285" /><!-- wooden trash -->
+		<item id="12969" chance="100000" /><!-- dry piece of wood -->
 	</loot>
 </monster>

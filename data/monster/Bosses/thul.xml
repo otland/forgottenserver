@@ -48,9 +48,9 @@
 		<summon name="Massive Water Elementals" interval="2000" chance="10" max="2" />
 	</summons>
 	<loot>
-		<item id="5895" chance="100000" /><!-- fish fin -->
 		<item id="2148" countmax="77" chance="50000" /><!-- gold coin -->
-		<item id="7383" chance="50000" /><!-- relic sword -->
 		<item id="2670" chance="25000" /><!-- shrimp -->
+		<item id="5895" chance="100000" /><!-- fish fin -->
+		<item id="7383" chance="50000" /><!-- relic sword -->
 	</loot>
 </monster>

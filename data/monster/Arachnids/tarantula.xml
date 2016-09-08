@@ -40,11 +40,11 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="40" chance="79000" /><!-- gold coin -->
-		<item id="11198" chance="10000" /><!-- tarantula egg -->
+		<item id="2169" chance="120" /><!-- time ring -->
+		<item id="2457" chance="990" /><!-- steel helmet -->
 		<item id="2478" chance="3050" /><!-- brass legs -->
 		<item id="2510" chance="2000" /><!-- plate shield -->
-		<item id="2457" chance="990" /><!-- steel helmet -->
-		<item id="2169" chance="120" /><!-- time ring -->
 		<item id="8859" chance="4820" /><!-- spider fangs -->
+		<item id="11198" chance="10000" /><!-- tarantula egg -->
 	</loot>
 </monster>
