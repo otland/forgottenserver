@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-45">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
@@ -32,13 +32,13 @@
 	<loot>
 		<item id="2148" countmax="10" chance="40000" /><!-- gold coin -->
 		<item id="2230" chance="11500" /><!-- bone -->
-		<item id="2461" chance="16670" /><!-- leather helmet -->
-		<item id="2467" chance="5000" /><!-- leather armor -->
-		<item id="2379" chance="10300" /><!-- dagger -->
-		<item id="2667" chance="15000" /><!-- fish -->
 		<item id="2235" chance="9000" /><!-- mouldy cheese -->
-		<item id="2559" chance="12800" /><!-- small axe -->
+		<item id="2379" chance="10300" /><!-- dagger -->
 		<item id="2406" chance="15400" /><!-- short sword -->
 		<item id="2449" chance="1300" /><!-- bone club -->
+		<item id="2461" chance="16670" /><!-- leather helmet -->
+		<item id="2467" chance="5000" /><!-- leather armor -->
+		<item id="2559" chance="12800" /><!-- small axe -->
+		<item id="2667" chance="15000" /><!-- fish -->
 	</loot>
 </monster>

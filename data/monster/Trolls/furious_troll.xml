@@ -33,7 +33,7 @@
 	<loot>
 		<item id="2148" countmax="146" chance="93000" /><!-- gold coin -->
 		<item id="2152" chance="6000" /><!-- platinum coin -->
-		<item id="10606" chance="4400" /><!-- bunch of troll hair -->
 		<item id="2391" chance="750" /><!-- war hammer -->
+		<item id="10606" chance="4400" /><!-- bunch of troll hair -->
 	</loot>
 </monster>

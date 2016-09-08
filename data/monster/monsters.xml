@@ -364,7 +364,6 @@
 	<monster name="Demon Outcast" file="Dreamhaunters/demon_outcast.xml" />
 	<monster name="Feversleep" file="Dreamhaunters/feversleep.xml" />
 	<monster name="Frazzlemaw" file="Dreamhaunters/frazzlemaw.xml" />
-	<monster name="Gaz'haragoth" file="Dreamhaunters/gaz'haragoth.xml" />
 	<monster name="Guzzlemaw" file="Dreamhaunters/guzzlemaw.xml" />
 	<monster name="Mawhawk" file="Dreamhaunters/mawhawk.xml" />
 	<monster name="Minion of Gaz'haragoth" file="Dreamhaunters/minion_of_gaz'haragoth.xml" />

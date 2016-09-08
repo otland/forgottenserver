@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="physical" interval="2000" chance="50" range="7" min="0" max="-100">
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
@@ -34,22 +34,22 @@
 		<voice sentence="You'll make a nice trophy!" />
 	</voices>
 	<loot>
-		<item id="2545" countmax="4" chance="4500" /><!-- poison arrow -->
-		<item id="2544" countmax="22" chance="82000" /><!-- arrow -->
-		<item id="2675" countmax="2" chance="20300" /><!-- orange -->
-		<item id="2690" countmax="2" chance="11370" /><!-- roll -->
 		<item id="2050" chance="3300" /><!-- torch -->
-		<item id="2465" chance="5070" /><!-- brass armor -->
+		<item id="2147" chance="150" /><!-- small ruby -->
+		<item id="2201" chance="3000" /><!-- dragon necklace -->
 		<item id="2456" chance="5770" /><!-- bow -->
 		<item id="2460" chance="5050" /><!-- brass helmet -->
-		<item id="2201" chance="3000" /><!-- dragon necklace -->
+		<item id="2465" chance="5070" /><!-- brass armor -->
+		<item id="2544" countmax="22" chance="82000" /><!-- arrow -->
+		<item id="2545" countmax="4" chance="4500" /><!-- poison arrow -->
 		<item id="2546" countmax="3" chance="5360" /><!-- burst arrow -->
-		<item id="7394" chance="190" /><!-- wolf trophy -->
-		<item id="7400" chance="70" /><!-- lion trophy -->
-		<item id="7397" chance="520" /><!-- deer trophy -->
+		<item id="2675" countmax="2" chance="20300" /><!-- orange -->
+		<item id="2690" countmax="2" chance="11370" /><!-- roll -->
 		<item id="5875" chance="610" /><!-- sniper gloves -->
-		<item id="2147" chance="150" /><!-- small ruby -->
 		<item id="5907" chance="120" /><!-- slingshot -->
+		<item id="7394" chance="190" /><!-- wolf trophy -->
+		<item id="7397" chance="520" /><!-- deer trophy -->
+		<item id="7400" chance="70" /><!-- lion trophy -->
 		<item id="12425" chance="10240" /><!-- hunter's quiver -->
 	</loot>
 </monster>

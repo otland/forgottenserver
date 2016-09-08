@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-275" />
 		<attack name="ice" interval="2000" chance="15" range="7" target="1" min="0" max="-90">
 			<attribute key="shootEffect" value="ice" />
 			<attribute key="areaEffect" value="iceattack" />
@@ -47,9 +47,9 @@
 	<loot>
 		<item id="2148" countmax="87" chance="99700" /><!-- gold coin -->
 		<item id="7290" chance="40000" /><!-- shard -->
-		<item id="7588" chance="100000" /><!-- strong health potion -->
-		<item id="10578" chance="40000" /><!-- frosty heart -->
 		<item id="7441" chance="80000" /><!-- ice cube -->
 		<item id="7449" chance="30000" /><!-- crystal sword -->
+		<item id="7588" chance="100000" /><!-- strong health potion -->
+		<item id="10578" chance="40000" /><!-- frosty heart -->
 	</loot>
 </monster>

@@ -17,7 +17,7 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-160" max="-600" />
+		<attack name="melee" interval="2000" min="0" max="-600" />
 		<attack name="fire" interval="3000" chance="20" range="7" radius="4" target="1" min="-250" max="-350">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="firearea" />
@@ -48,24 +48,24 @@
 		<voice sentence="I WILL PROTECT MY BROOD!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2672" countmax="2" chance="20000" /><!-- dragon ham -->
-		<item id="2033" chance="1818" /><!-- golden mug -->
 		<item id="1976" chance="3333" /><!-- gemmed book -->
-		<item id="2413" chance="5000" /><!-- broadsword -->
-		<item id="2498" chance="588" /><!-- royal helmet -->
-		<item id="2492" chance="333" /><!-- dragon scale mail -->
-		<item id="2547" countmax="10" chance="2222" /><!-- power bolt -->
-		<item id="2546" countmax="5" chance="2222" /><!-- burst arrow -->
-		<item id="2796" countmax="1" chance="6666" /><!-- green mushroom -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
+		<item id="2033" chance="1818" /><!-- golden mug -->
+		<item id="2146" countmax="2" chance="2222" /><!-- small sapphire -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2149" countmax="2" chance="833" /><!-- small emerald -->
 		<item id="2392" chance="1428" /><!-- fire sword -->
-		<item id="2146" countmax="2" chance="2222" /><!-- small sapphire -->
+		<item id="2413" chance="5000" /><!-- broadsword -->
+		<item id="2492" chance="333" /><!-- dragon scale mail -->
+		<item id="2498" chance="588" /><!-- royal helmet -->
 		<item id="2528" chance="1333" /><!-- tower shield -->
-		<item id="5948" countmax="1" chance="5000" /><!-- red dragon leather -->
+		<item id="2546" countmax="5" chance="2222" /><!-- burst arrow -->
+		<item id="2547" countmax="10" chance="2222" /><!-- power bolt -->
+		<item id="2672" countmax="2" chance="20000" /><!-- dragon ham -->
+		<item id="2796" countmax="1" chance="6666" /><!-- green mushroom -->
+		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 		<item id="5882" countmax="1" chance="5000" /><!-- red dragon scale -->
 		<item id="5919" chance="100000" /><!-- dragon claw -->
+		<item id="5948" countmax="1" chance="5000" /><!-- red dragon leather -->
 	</loot>
 </monster>

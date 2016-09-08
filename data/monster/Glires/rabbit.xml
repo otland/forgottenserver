@@ -18,7 +18,7 @@
 	</flags>
 	<defenses armor="5" defense="5" />
 	<loot>
-		<item id="2684" countmax="2" chance="10000" /><!-- carrot -->
 		<item id="2666" countmax="2" chance="85620" /><!-- meat -->
+		<item id="2684" countmax="2" chance="10000" /><!-- carrot -->
 	</loot>
 </monster>

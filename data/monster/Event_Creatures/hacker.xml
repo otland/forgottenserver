@@ -17,7 +17,7 @@
 		<flag runonhealth="429" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" skill="20" attack="55" />
+		<attack name="melee" interval="1000" min="0" max="-83" />
 	</attacks>
 	<defenses armor="15" defense="12">
 		<defense name="speed" interval="1000" chance="15" speedchange="290" duration="6000">
@@ -30,7 +30,7 @@
 	<immunities>
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity drunk="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
@@ -46,14 +46,14 @@
 		<voice sentence="Me other char is highlevel!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="100000" /><!-- gold coin -->
-		<item id="2671" chance="50000" /><!-- ham -->
-		<item id="6570" chance="5538" /><!-- blue surprise bag -->
-		<item id="6571" chance="1538" /><!-- red surprise bag -->
 		<item id="2044" chance="6666" /><!-- lamp -->
+		<item id="2148" countmax="12" chance="100000" /><!-- gold coin -->
+		<item id="2378" chance="5000" /><!-- battle axe -->
 		<item id="2381" chance="10000" /><!-- halberd -->
 		<item id="2386" chance="10000" /><!-- axe -->
 		<item id="2391" chance="5000" /><!-- war hammer -->
-		<item id="2378" chance="5000" /><!-- battle axe -->
+		<item id="2671" chance="50000" /><!-- ham -->
+		<item id="6570" chance="5538" /><!-- blue surprise bag -->
+		<item id="6571" chance="1538" /><!-- red surprise bag -->
 	</loot>
 </monster>

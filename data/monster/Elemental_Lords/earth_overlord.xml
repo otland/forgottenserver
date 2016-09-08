@@ -18,7 +18,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="earth" interval="1000" chance="10" length="7" spread="0" min="0" max="-800">
 			<attribute key="areaEffect" value="stones" />
 		</attack>
@@ -41,11 +41,11 @@
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="68" chance="100000" /><!-- gold coin -->
+		<item id="2152" countmax="3" chance="33333" /><!-- platinum coin -->
+		<item id="7884" chance="1923" /><!-- terra mantle -->
 		<item id="8305" chance="100000" /><!-- mother soil -->
 		<item id="11222" chance="33333" /><!-- lump of earth -->
-		<item id="2152" countmax="3" chance="33333" /><!-- platinum coin -->
 		<item id="11227" chance="8333" /><!-- shiny stone -->
-		<item id="7884" chance="1923" /><!-- terra mantle -->
 		<item id="13757" chance="552" /><!-- coal -->
 	</loot>
 </monster>

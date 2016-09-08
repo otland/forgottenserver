@@ -17,7 +17,7 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="lifedrain" interval="2000" chance="10" range="1" min="0" max="-40">
 			<attribute key="areaeffect" value="redshimmer" />
 		</attack>
@@ -31,7 +31,7 @@
 		<attack name="outfit" interval="2000" chance="10" range="7" monster="chicken" duration="5000">
 			<attribute key="areaeffect" value="blueshimmer" />
 		</attack>
-		<attack name="poison" interval="2000" chance="10" radius="6" target="0" min="-6" max="-18">
+		<attack name="earth" interval="2000" chance="10" radius="6" target="0" min="-6" max="-18">
 			<attribute key="areaeffect" value="greenbubble" />
 		</attack>
 		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">
@@ -64,16 +64,16 @@
 		<voice sentence="Prek tars, dekklep zurk." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="17" chance="75000" /><!-- gold coin -->
-		<item id="2229" countmax="3" chance="1950" /><!-- skull -->
 		<item id="2050" chance="6000" /><!-- torch -->
-		<item id="2230" chance="5800" /><!-- bone -->
-		<item id="2467" chance="10000" /><!-- leather armor -->
-		<item id="2411" chance="1000" /><!-- poison dagger -->
-		<item id="3967" chance="500" /><!-- tribal mask -->
+		<item id="2148" countmax="17" chance="75000" /><!-- gold coin -->
 		<item id="2174" chance="500" /><!-- strange symbol-->
-		<item id="7618" chance="600" /><!-- health potion -->
-		<item id="3955" chance="130" /><!-- voodoo doll-->
+		<item id="2229" countmax="3" chance="1950" /><!-- skull -->
+		<item id="2230" chance="5800" /><!-- bone -->
 		<item id="2231" chance="3000" /><!-- big bone-->
+		<item id="2411" chance="1000" /><!-- poison dagger -->
+		<item id="2467" chance="10000" /><!-- leather armor -->
+		<item id="3955" chance="130" /><!-- voodoo doll-->
+		<item id="3967" chance="500" /><!-- tribal mask -->
+		<item id="7618" chance="600" /><!-- health potion -->
 	</loot>
 </monster>

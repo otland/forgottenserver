@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-40" />
 	</attacks>
 	<defenses armor="6" defense="13" />
 	<elements>
@@ -31,8 +31,8 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="25" chance="100000" /><!-- gold coin -->
-		<item id="10608" countmax="2" chance="100000" /><!-- lion's mane -->
 		<item id="2152" chance="25000" /><!-- platinum coin -->
 		<item id="2168" chance="12500" /><!-- life ring -->
+		<item id="10608" countmax="2" chance="100000" /><!-- lion's mane -->
 	</loot>
 </monster>

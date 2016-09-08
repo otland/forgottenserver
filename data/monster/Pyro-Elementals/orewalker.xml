@@ -17,14 +17,14 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="75" />
+		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="manadrain" interval="2000" chance="15" length="4" spread="3" min="-296" max="-700">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1500">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>
-		<attack name="poisoncondition" interval="2000" chance="10" target="1" radius="3" min="-800" max="-1080" >
+		<attack name="poisoncondition" interval="2000" chance="10" target="1" radius="3" min="-800" max="-1080">
 			<attribute key="shootEffect" value="smallearth" />
 			<attribute key="areaEffect" value="smallplants" />
 		</attack>
@@ -56,31 +56,31 @@
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="98" chance="50000" /><!-- gold coin -->
 		<item id="2152" countmax="10" chance="100000" /><!-- platinum coin -->
-		<item id="9970" countmax="3" chance="16500" /><!-- small topaz -->
-		<item id="18435" countmax="5" chance="15500" /><!-- prismatic bolt -->
-		<item id="18418" countmax="2" chance="16000" /><!-- blue crystal splinter -->
-		<item id="7589" countmax="2" chance="14000" /><!-- smp -->
-		<item id="7590" countmax="2" chance="14000" /><!-- gmp -->
-		<item id="7620" countmax="4" chance="14000" /><!-- mp -->
-		<item id="7588" countmax="2" chance="15600" /><!-- shp -->
-		<item id="8473" countmax="2" chance="9500" /><!-- uhp -->
-		<item id="18419" chance="13000" /><!-- cyan crystal fragment -->
-		<item id="11232" chance="20700" /><!-- sulphurous stone -->
-		<item id="18427" chance="20500" /><!-- pulverized ore -->
-		<item id="5880" chance="15000" /><!-- iron ore -->
-		<item id="18429" chance="15000" /><!-- vein of ore -->
-		<item id="11227" chance="13700" /><!-- shiny stone -->
-		<item id="18415" chance="8000" /><!-- green crystal shard -->
+		<item id="2154" chance="1030" /><!-- yellow gem -->
 		<item id="2213" chance="4660" /><!-- dwarven ring -->
+		<item id="2477" chance="1910" /><!-- knight legs -->
+		<item id="2487" chance="370" /><!-- crown armor -->
+		<item id="2491" chance="890" /><!-- crown helmet -->
+		<item id="5880" chance="15000" /><!-- iron ore -->
 		<item id="5904" chance="3000" /><!-- magic sulphur -->
 		<item id="7413" chance="2600" /><!-- titan axe -->
 		<item id="7454" chance="1870" /><!-- glorious axe -->
-		<item id="2477" chance="1910" /><!-- knight legs -->
-		<item id="2154" chance="1030" /><!-- yellow gem -->
-		<item id="18390" chance="1300" /><!-- wand of defiance -->
-		<item id="2491" chance="890" /><!-- crown helmet -->
+		<item id="7588" countmax="2" chance="15600" /><!-- shp -->
+		<item id="7589" countmax="2" chance="14000" /><!-- smp -->
+		<item id="7590" countmax="2" chance="14000" /><!-- gmp -->
+		<item id="7620" countmax="4" chance="14000" /><!-- mp -->
+		<item id="8473" countmax="2" chance="9500" /><!-- uhp -->
 		<item id="8878" chance="560" /><!-- crystalline armor -->
-		<item id="2487" chance="370" /><!-- crown armor -->
+		<item id="9970" countmax="3" chance="16500" /><!-- small topaz -->
+		<item id="11227" chance="13700" /><!-- shiny stone -->
+		<item id="11232" chance="20700" /><!-- sulphurous stone -->
+		<item id="18390" chance="1300" /><!-- wand of defiance -->
+		<item id="18415" chance="8000" /><!-- green crystal shard -->
+		<item id="18418" countmax="2" chance="16000" /><!-- blue crystal splinter -->
+		<item id="18419" chance="13000" /><!-- cyan crystal fragment -->
+		<item id="18427" chance="20500" /><!-- pulverized ore -->
+		<item id="18429" chance="15000" /><!-- vein of ore -->
+		<item id="18435" countmax="5" chance="15500" /><!-- prismatic bolt -->
 		<item id="18453" chance="300" /><!-- crystal crossbow -->
 	</loot>
 </monster>

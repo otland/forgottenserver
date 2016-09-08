@@ -35,12 +35,12 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="2">
+		<summon name="pirate marauder" interval="4000" chance="30" max="2" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="You are no match for the scourge of the seas!" />
 		<voice sentence="You move like a seasick whale!" />
 		<voice sentence="Yarr, death to all landlubbers!" />
 	</voices>
-	<summons maxSummons="2">
-		<summon name="pirate marauder" interval="4000" chance="30" max="2" />
-	</summons>
 </monster>

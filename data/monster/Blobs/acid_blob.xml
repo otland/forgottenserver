@@ -17,14 +17,14 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" target="0" chance="30" radius="4" min="-10" max="-20">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
 		<attack name="earth" interval="2000" chance="15" length="5" spread="0" min="-40" max="-60">
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
-		<attack name="poison" interval="2000" chance="10" range="7" target="1">
+		<attack name="earth" interval="2000" chance="10" range="7" target="1">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>

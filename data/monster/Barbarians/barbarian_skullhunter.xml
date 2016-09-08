@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-60" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -38,18 +38,18 @@
 		<voice sentence="Show that you are a worthy opponent." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
 		<item id="2050" chance="60500" /><!-- torch -->
-		<item id="2460" chance="19000" /><!-- brass helmet -->
+		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
+		<item id="2168" chance="250" /><!-- life ring -->
+		<item id="2229" chance="3000" /><!-- skull -->
 		<item id="2403" chance="15250" /><!-- knife -->
+		<item id="2460" chance="19000" /><!-- brass helmet -->
 		<item id="2473" chance="8000" /><!-- viking helmet -->
 		<item id="2483" chance="3850" /><!-- scale armor -->
-		<item id="2229" chance="3000" /><!-- skull -->
-		<item id="7449" chance="90" /><!-- crystal sword -->
-		<item id="7618" chance="930" /><!-- HP -->
 		<item id="5913" chance="500" /><!-- brown piece of cloth -->
-		<item id="2168" chance="250" /><!-- life ring -->
-		<item id="7462" chance="100" /><!-- ragnir helmet -->
+		<item id="7449" chance="90" /><!-- crystal sword -->
 		<item id="7457" chance="120" /><!-- fur boots -->
+		<item id="7462" chance="100" /><!-- ragnir helmet -->
+		<item id="7618" chance="930" /><!-- HP -->
 	</loot>
 </monster>

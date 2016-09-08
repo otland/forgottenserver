@@ -17,7 +17,7 @@
 		<flag runonhealth="80" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-160" />
 		<attack name="ice" interval="2000" chance="10" length="5" spread="2" min="-60" max="-110">
 			<attribute key="areaEffect" value="iceattack" />
 		</attack>
@@ -51,8 +51,8 @@
 	<loot>
 		<item id="2148" countmax="55" chance="86750" /><!-- gold coin -->
 		<item id="2672" chance="79600" /><!-- dragon ham -->
-		<item id="8900" chance="400" /><!-- spellbook of enlightenment -->
 		<item id="7618" chance="560" /><!-- health potion -->
+		<item id="8900" chance="400" /><!-- spellbook of enlightenment -->
 		<item id="10578" chance="5000" /><!-- frosty heart -->
 	</loot>
 </monster>

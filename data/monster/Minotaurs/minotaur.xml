@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-45" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -33,16 +33,16 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="25" chance="67500" /><!-- gold coin -->
-		<item id="2510" chance="20020" /><!-- plate shield -->
-		<item id="2398" chance="12840" /><!-- mace -->
-		<item id="2376" chance="5000" /><!-- sword -->
-		<item id="2464" chance="10000" /><!-- chain armor -->
-		<item id="2666" chance="5000" /><!-- meat -->
-		<item id="2460" chance="7700" /><!-- brass helmet -->
-		<item id="2386" chance="4000" /><!-- axe -->
-		<item id="2554" chance="310" /><!-- shovel -->
-		<item id="5878" chance="990" /><!-- minotaur leather -->
 		<item id="2172" chance="110" /><!-- bronze amulet -->
+		<item id="2376" chance="5000" /><!-- sword -->
+		<item id="2386" chance="4000" /><!-- axe -->
+		<item id="2398" chance="12840" /><!-- mace -->
+		<item id="2460" chance="7700" /><!-- brass helmet -->
+		<item id="2464" chance="10000" /><!-- chain armor -->
+		<item id="2510" chance="20020" /><!-- plate shield -->
+		<item id="2554" chance="310" /><!-- shovel -->
+		<item id="2666" chance="5000" /><!-- meat -->
+		<item id="5878" chance="990" /><!-- minotaur leather -->
 		<item id="12428" countmax="2" chance="2090" /><!-- Minotaur Horn -->
 	</loot>
 </monster>

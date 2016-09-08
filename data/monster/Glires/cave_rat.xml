@@ -17,7 +17,7 @@
 		<flag runonhealth="3" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="10" />
+		<attack name="melee" interval="2000" min="0" max="-10" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<elements>
@@ -29,8 +29,8 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="2" chance="85000" /><!-- gold coin -->
-		<item id="3976" countmax="2" chance="9700" /><!-- worm -->
-		<item id="2696" chance="30000" /><!-- cheese -->
 		<item id="2687" chance="750" /><!-- cookie -->
+		<item id="2696" chance="30000" /><!-- cheese -->
+		<item id="3976" countmax="2" chance="9700" /><!-- worm -->
 	</loot>
 </monster>

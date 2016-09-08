@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="55" />
+		<attack name="melee" interval="2000" min="0" max="-220" />
 		<attack name="physical" interval="1000" chance="12" range="7" min="-50" max="-120">
 			<attribute key="shootEffect" value="bolt" />
 		</attack>
@@ -44,21 +44,21 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="30" chance="100000" /><!-- gold coin -->
-		<item id="2410" countmax="2" chance="50000" /><!-- throwing knife -->
-		<item id="2419" chance="10000" /><!-- scimitar -->
-		<item id="2510" chance="5000" /><!-- plate shield -->
-		<item id="2667" countmax="1" chance="20000" /><!-- fish -->
-		<item id="2647" chance="1818" /><!-- plate legs -->
-		<item id="2413" chance="2857" /><!-- broadsword -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 		<item id="2148" countmax="1" chance="2857" /><!-- gold coin -->
 		<item id="2207" chance="2000" /><!-- sword ring -->
-		<item id="2666" countmax="2" chance="33333" /><!-- meat -->
 		<item id="2379" chance="6666" /><!-- dagger -->
-		<item id="2475" chance="1000" /><!-- warrior helmet -->
 		<item id="2397" chance="10000" /><!-- longsword -->
-		<item id="2652" chance="2500" /><!-- green tunic -->
-		<item id="2478" chance="2857" /><!-- brass legs -->
+		<item id="2410" countmax="2" chance="50000" /><!-- throwing knife -->
+		<item id="2413" chance="2857" /><!-- broadsword -->
+		<item id="2419" chance="10000" /><!-- scimitar -->
 		<item id="2463" chance="1818" /><!-- plate armor -->
+		<item id="2475" chance="1000" /><!-- warrior helmet -->
+		<item id="2478" chance="2857" /><!-- brass legs -->
+		<item id="2510" chance="5000" /><!-- plate shield -->
+		<item id="2647" chance="1818" /><!-- plate legs -->
+		<item id="2652" chance="2500" /><!-- green tunic -->
+		<item id="2666" countmax="2" chance="33333" /><!-- meat -->
+		<item id="2667" countmax="1" chance="20000" /><!-- fish -->
+		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 	</loot>
 </monster>

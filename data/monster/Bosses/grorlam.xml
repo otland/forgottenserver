@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-255" />
 		<attack name="physical" interval="1000" chance="15" range="7" min="-150" max="-200">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -43,13 +43,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
-		<item id="2483" chance="10000" /><!-- scale armor -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
-		<item id="1295" chance="10000" /><!-- stone -->
 		<item id="1294" countmax="5" chance="20000" /><!-- small stone -->
-		<item id="2395" chance="2500" /><!-- carlin sword -->
+		<item id="1295" chance="10000" /><!-- stone -->
 		<item id="2050" chance="20000" /><!-- torch -->
+		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
+		<item id="2395" chance="2500" /><!-- carlin sword -->
+		<item id="2483" chance="10000" /><!-- scale armor -->
 		<item id="2580" chance="5000" /><!-- fishing rod -->
+		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
 	</loot>
 </monster>

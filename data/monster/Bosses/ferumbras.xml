@@ -17,11 +17,11 @@
 		<flag runonhealth="2500" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-100" max="-350" />
+		<attack name="melee" interval="2000" min="0" max="-350" />
 		<attack name="manadrain" interval="2000" chance="20" range="7" min="-300" max="-700">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="poison" interval="3000" chance="20" radius="6" target="0" min="-250" max="-550">
+		<attack name="earth" interval="3000" chance="20" radius="6" target="0" min="-250" max="-550">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="energy" interval="2000" chance="18" radius="6" target="0" min="-200" max="-400">
@@ -75,15 +75,15 @@
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="25" chance="100000" /><!-- gold coin -->
-		<item id="2393" chance="16060" /><!-- giant sword -->
-		<item id="2514" chance="12050" /><!-- mastermind shield -->
-		<item id="2472" chance="7000" /><!-- magic plate armor -->
-		<item id="2678" countmax="3" chance="20000" /><!-- coconut -->
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2151" countmax="4" chance="12000" /><!-- talon -->
-		<item id="5903" chance="100000" /><!-- ferumbras' hat -->
 		<item id="2149" countmax="3" chance="15000" /><!-- small emerald -->
+		<item id="2151" countmax="4" chance="12000" /><!-- talon -->
 		<item id="2171" chance="30000" /><!-- platinum amulet -->
+		<item id="2393" chance="16060" /><!-- giant sword -->
 		<item id="2415" chance="6000" /><!-- great axe -->
+		<item id="2472" chance="7000" /><!-- magic plate armor -->
+		<item id="2514" chance="12050" /><!-- mastermind shield -->
+		<item id="2678" countmax="3" chance="20000" /><!-- coconut -->
+		<item id="5903" chance="100000" /><!-- ferumbras' hat -->
 	</loot>
 </monster>

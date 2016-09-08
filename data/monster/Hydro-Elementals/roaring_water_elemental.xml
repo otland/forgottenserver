@@ -18,7 +18,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="90" />
+		<attack name="melee" interval="2000" min="0" max="-225" />
 		<attack name="ice" interval="1000" chance="15" radius="2" target="1" min="-240" max="-320">
 			<attribute key="areaEffect" value="bluebubble" />
 			<attribute key="shootEffect" value="ice" />
@@ -41,11 +41,11 @@
 		<immunity drown="1" />
 	</immunities>
 	<loot>
+		<item id="2146" countmax="2" chance="4125" /><!-- small sapphire -->
 		<item id="2148" countmax="90" chance="27000" /><!-- gold coin -->
 		<item id="2148" countmax="87" chance="27000" /><!-- gold coin -->
-		<item id="8302" chance="9000" /><!-- iced soil -->
-		<item id="2146" countmax="2" chance="4125" /><!-- small sapphire -->
 		<item id="7839" countmax="2" chance="1000" /><!-- giant shimmering pearl -->
+		<item id="8302" chance="9000" /><!-- iced soil -->
 		<item id="8911" chance="750" /><!-- northwind rod -->
 	</loot>
 </monster>

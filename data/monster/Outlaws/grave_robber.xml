@@ -17,7 +17,7 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="35" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="poisoncondition" interval="2000" chance="15" range="7" radius="1" target="1" min="-100" max="-160">
 			<attribute key="shooteffect" value="poison" />
 		</attack>
@@ -40,12 +40,12 @@
 		<item id="2148" countmax="38" chance="54260" /><!-- gold coin -->
 		<item id="2386" chance="2500" /><!-- axe -->
 		<item id="2398" chance="1700" /><!-- mace -->
+		<item id="2459" chance="500" /><!-- iron helmet -->
 		<item id="2465" chance="1700" /><!-- brass armor -->
 		<item id="2509" chance="500" /><!-- steel shield -->
-		<item id="2459" chance="500" /><!-- iron helmet -->
-		<item id="12448" chance="7510" /><!-- rope belt -->
-		<item id="8838" countmax="3" chance="5680" /><!-- potatoes -->
 		<item id="8267" chance="170" /><!-- nomad parchment -->
+		<item id="8838" countmax="3" chance="5680" /><!-- potatoes -->
 		<item id="12412" chance="1700" /><!-- dirty turban -->
+		<item id="12448" chance="7510" /><!-- rope belt -->
 	</loot>
 </monster>

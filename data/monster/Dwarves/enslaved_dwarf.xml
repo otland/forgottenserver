@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="91" />
+		<attack name="melee" interval="2000" min="0" max="-501" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-340">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -54,29 +54,29 @@
 	<loot>
 		<item id="2148" countmax="99" chance="50000" /><!-- Gold Coins -->
 		<item id="2148" countmax="50" chance="50000" /><!-- Gold Coins -->
+		<item id="2149" countmax="2" chance="10290" /><!-- small emerald -->
+		<item id="2150" countmax="2" chance="10680" /><!-- small amethist -->
 		<item id="2152" countmax="6" chance="100000" /><!-- platinum Coins -->
-		<item id="7590" countmax="2" chance="6660" /><!-- GMP -->
-		<item id="2789" countmax="2" chance="15150" /><!-- Brown Mushroom -->
-		<item id="7591" chance="7960" /><!-- GHP -->
-		<item id="7454" chance="1940" /><!-- Glorious Axe -->
-		<item id="18416" chance="3110" /><!-- Green Crystal Splinter -->
-		<item id="2532" chance="3690" /><!-- Ancient Shield -->
-		<item id="7452" chance="80" /><!-- Spiked Squelcher -->
-		<item id="7437" chance="80" /><!-- Sapphire Hammer -->
-		<item id="5880" chance="11070" /><!-- Iron Ore -->
-		<item id="18417" countmax="2" chance="5630" /><!-- Brown crystal splinter -->
-		<item id="18436" countmax="5" chance="3690" /><!-- drill bolts -->
+		<item id="2208" chance="1550" /><!-- axe ring -->
+		<item id="2391" chance="5050" /><!-- war hammer -->
+		<item id="2475" chance="580" /><!-- warrior helmet -->
 		<item id="2515" chance="2300" /><!-- guardian shield -->
 		<item id="2528" chance="190" /><!-- tower shield -->
-		<item id="2150" countmax="2" chance="10680" /><!-- small amethist -->
-		<item id="2149" countmax="2" chance="10290" /><!-- small emerald -->
-		<item id="2208" chance="1550" /><!-- axe ring -->
-		<item id="18420" chance="3690" /><!-- red crystal fragment -->
-		<item id="18415" chance="1750" /><!-- green crystal shard -->
-		<item id="2391" chance="5050" /><!-- war hammer -->
+		<item id="2532" chance="3690" /><!-- Ancient Shield -->
+		<item id="2789" countmax="2" chance="15150" /><!-- Brown Mushroom -->
+		<item id="5880" chance="11070" /><!-- Iron Ore -->
 		<item id="7413" chance="1170" /><!-- titan axe -->
-		<item id="2475" chance="580" /><!-- warrior helmet -->
+		<item id="7437" chance="80" /><!-- Sapphire Hammer -->
+		<item id="7452" chance="80" /><!-- Spiked Squelcher -->
+		<item id="7454" chance="1940" /><!-- Glorious Axe -->
+		<item id="7590" countmax="2" chance="6660" /><!-- GMP -->
+		<item id="7591" chance="7960" /><!-- GHP -->
 		<item id="11227" chance="4660" /><!-- shiny stone -->
 		<item id="13757" chance="780" /><!-- Coal -->
+		<item id="18415" chance="1750" /><!-- green crystal shard -->
+		<item id="18416" chance="3110" /><!-- Green Crystal Splinter -->
+		<item id="18417" countmax="2" chance="5630" /><!-- Brown crystal splinter -->
+		<item id="18420" chance="3690" /><!-- red crystal fragment -->
+		<item id="18436" countmax="5" chance="3690" /><!-- drill bolts -->
 	</loot>
 </monster>

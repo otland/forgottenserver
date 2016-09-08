@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="120" />
+		<attack name="melee" interval="2000" min="0" max="-600" />
 		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-800" duration="10000">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -38,7 +38,7 @@
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity outfit="1" />
 		<immunity drunk="1" />
 		<immunity invisible="1" />
@@ -49,7 +49,7 @@
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2152" countmax="3" chance="10000" /><!-- platinum coin -->
-		<item id="6500" countmax="1" chance="2857" /><!-- demonic essence -->
 		<item id="5944" chance="2500" /><!-- soul orb -->
+		<item id="6500" countmax="1" chance="2857" /><!-- demonic essence -->
 	</loot>
 </monster>

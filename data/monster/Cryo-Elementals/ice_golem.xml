@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-220" />
 		<attack name="speed" interval="1000" chance="13" length="8" spread="0" speedchange="-800" duration="20000">
 			<attribute key="areaEffect" value="energy" />
 		</attack>
@@ -48,18 +48,18 @@
 		<voice sentence="Gnarr." />
 	</voices>
 	<loot>
+		<item id="2144" chance="1612" /><!-- black pearl -->
+		<item id="2145" chance="66" /><!-- small diamond -->
+		<item id="2146" chance="578" /><!-- small sapphire -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="3" chance="50000" /><!-- gold coin -->
-		<item id="10578" chance="11111" /><!-- frosty heart -->
-		<item id="7441" chance="5000" /><!-- ice cube -->
-		<item id="2144" chance="1612" /><!-- black pearl -->
-		<item id="2146" chance="578" /><!-- small sapphire -->
-		<item id="2479" chance="444" /><!-- strange helmet -->
-		<item id="7588" chance="444" /><!-- strong health potion -->
 		<item id="2396" chance="400" /><!-- ice rapier -->
+		<item id="2479" chance="444" /><!-- strange helmet -->
 		<item id="7290" chance="266" /><!-- shard -->
+		<item id="7441" chance="5000" /><!-- ice cube -->
 		<item id="7449" chance="177" /><!-- crystal sword -->
+		<item id="7588" chance="444" /><!-- strong health potion -->
 		<item id="7902" chance="111" /><!-- glacier mask -->
-		<item id="2145" chance="66" /><!-- small diamond -->
+		<item id="10578" chance="11111" /><!-- frosty heart -->
 	</loot>
 </monster>

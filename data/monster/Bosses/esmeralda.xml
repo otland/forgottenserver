@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="50" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-175" poison="100" />
 		<attack name="earth" interval="2000" chance="30" range="7" min="0" max="-110">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
@@ -48,16 +48,16 @@
 		<voice sentence="Fcccccchhhhhh" />
 	</voices>
 	<loot>
-		<item id="2152" countmax="4" chance="68125" /><!-- platinum coin -->
-		<item id="2214" chance="100000" /><!-- ring of healing -->
-		<item id="2528" chance="41400" /><!-- tower shield -->
-		<item id="2381" chance="30050" /><!-- halberd -->
 		<item id="2148" countmax="100" chance="58775" /><!-- gold coin -->
 		<item id="2148" countmax="19" chance="58775" /><!-- gold coin -->
-		<item id="10585" chance="100000" /><!-- mutated rat tail -->
+		<item id="2152" countmax="4" chance="68125" /><!-- platinum coin -->
+		<item id="2214" chance="100000" /><!-- ring of healing -->
+		<item id="2381" chance="30050" /><!-- halberd -->
 		<item id="2438" chance="14150" /><!-- epee -->
 		<item id="2476" chance="45950" /><!-- knight armor -->
+		<item id="2528" chance="41400" /><!-- tower shield -->
 		<item id="2799" chance="9600" /><!-- stone herb -->
 		<item id="7884" chance="2775" /><!-- terra mantle -->
+		<item id="10585" chance="100000" /><!-- mutated rat tail -->
 	</loot>
 </monster>

@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-10" max="-40" />
+		<attack name="melee" interval="2000" min="0" max="-40" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-5" max="-13">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -37,10 +37,10 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="15" chance="50000" /><!-- gold coin -->
+		<item id="2159" countmax="1" chance="2600" /><!-- scarab coin -->
 		<item id="2398" chance="3760" /><!-- mace -->
 		<item id="2419" chance="1640" /><!-- scimitar -->
 		<item id="2789" countmax="2" chance="6120" /><!-- brown mushroom -->
-		<item id="2159" countmax="1" chance="2600" /><!-- scarab coin -->
 		<item id="12437" chance="8700" /><!-- pelvis bone -->
 	</loot>
 </monster>

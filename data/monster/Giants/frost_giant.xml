@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-90">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -41,16 +41,16 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="40" chance="82000" /><!-- gold coin -->
-		<item id="2666" countmax="2" chance="4970" /><!-- meat -->
-		<item id="2406" chance="8140" /><!-- short sword -->
-		<item id="7441" chance="2180" /><!-- ice cube -->
-		<item id="2513" chance="1350" /><!-- battle shield -->
-		<item id="2381" chance="560" /><!-- halberd -->
-		<item id="7460" chance="250" /><!-- norse shield -->
-		<item id="2490" chance="180" /><!-- dark helmet -->
-		<item id="7618" chance="819" /><!-- health potion -->
-		<item id="7290" chance="60" /><!-- shard -->
 		<item id="2209" chance="130" /><!-- club ring -->
+		<item id="2381" chance="560" /><!-- halberd -->
+		<item id="2406" chance="8140" /><!-- short sword -->
+		<item id="2490" chance="180" /><!-- dark helmet -->
+		<item id="2513" chance="1350" /><!-- battle shield -->
+		<item id="2666" countmax="2" chance="4970" /><!-- meat -->
+		<item id="7290" chance="60" /><!-- shard -->
+		<item id="7441" chance="2180" /><!-- ice cube -->
+		<item id="7460" chance="250" /><!-- norse shield -->
+		<item id="7618" chance="819" /><!-- health potion -->
 		<item id="10575" chance="5000" /><!-- Frost Giant Pelt -->
 	</loot>
 </monster>

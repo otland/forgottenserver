@@ -17,7 +17,7 @@
 		<flag staticattack="90" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="3" />
+		<attack name="melee" interval="2000" min="0" max="-3" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<elements>
@@ -26,7 +26,7 @@
 	</elements>
 	<loot>
 		<item id="2667" countmax="2" chance="7500" /><!-- fish -->
-		<item id="7159" chance="140" /><!-- green perch -->
 		<item id="7158" chance="60" /><!-- rainbow trout -->
+		<item id="7159" chance="140" /><!-- green perch -->
 	</loot>
 </monster>

@@ -17,7 +17,7 @@
 		<flag runonhealth="20" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="45" />
+		<attack name="melee" interval="2000" min="0" max="-135" />
 		<attack name="lifedrain" interval="2000" chance="15" radius="3" target="0" max="-80">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
@@ -41,11 +41,11 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="49" chance="98800" /><!-- gold coin -->
-		<item id="12443" chance="15600" /><!-- quara tentacle -->
+		<item id="2150" chance="4350" /><!-- small amethyst -->
 		<item id="2397" chance="8310" /><!-- longsword -->
 		<item id="2465" chance="4660" /><!-- brass armor -->
-		<item id="2150" chance="4350" /><!-- small amethyst -->
-		<item id="5895" chance="290" /><!-- fish fin -->
 		<item id="2670" countmax="3" chance="9680" /><!-- shrimp -->
+		<item id="5895" chance="290" /><!-- fish fin -->
+		<item id="12443" chance="15600" /><!-- quara tentacle -->
 	</loot>
 </monster>

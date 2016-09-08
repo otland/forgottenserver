@@ -16,7 +16,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="59" attack="53" poison="80" />
+		<attack name="melee" interval="2000" min="0" max="-183" poison="80" />
 		<attack name="lifedrain" interval="2000" chance="10" min="-90" max="-140" range="7" target="1">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -55,13 +55,13 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50750" /><!-- gold coin -->
 		<item id="2148" countmax="5" chance="50750" /><!-- gold coin -->
-		<item id="10584" chance="9870" /><!-- boggy dreads -->
-		<item id="7591" chance="2000" /><!-- great health potion -->
-		<item id="8912" chance="1030" /><!-- springsprout rod -->
-		<item id="8472" chance="2008" /><!-- great spirit potion -->
 		<item id="2647" chance="2040" /><!-- plate legs -->
+		<item id="7591" chance="2000" /><!-- great health potion -->
+		<item id="8472" chance="2008" /><!-- great spirit potion -->
 		<item id="8473" chance="740" /><!-- ultimate health potion -->
 		<item id="8872" chance="590" /><!-- belted cape -->
 		<item id="8891" chance="110" /><!--paladin armor-->
+		<item id="8912" chance="1030" /><!-- springsprout rod -->
+		<item id="10584" chance="9870" /><!-- boggy dreads -->
 	</loot>
 </monster>

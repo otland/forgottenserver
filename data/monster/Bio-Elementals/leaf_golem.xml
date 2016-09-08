@@ -15,7 +15,7 @@
 		<flag staticattack="90" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="35" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="physical" interval="2000" chance="15" range="7" target="1" min="0" max="-15">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
@@ -35,10 +35,10 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="27" chance="86830" /><!-- gold coin -->
-		<item id="21427" chance="15230" /><!-- dowser -->
-		<item id="21428" chance="14350" /><!-- fir cone -->
+		<item id="2149" chance="1230" /><!-- small emerald -->
 		<item id="2787" countmax="3" chance="4940" /><!-- white mushrooms -->
 		<item id="20104" chance="4940" /><!-- swampling club -->
-		<item id="2149" chance="1230" /><!-- small emerald -->
+		<item id="21427" chance="15230" /><!-- dowser -->
+		<item id="21428" chance="14350" /><!-- fir cone -->
 	</loot>
 </monster>

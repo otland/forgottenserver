@@ -17,8 +17,8 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="105" poison="100" />
-		<attack name="poison" interval="1000" chance="12" range="7" min="-15" max="-135">
+		<attack name="melee" interval="2000" min="0" max="-210" poison="100" />
+		<attack name="earth" interval="1000" chance="12" range="7" min="-15" max="-135">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -50,19 +50,19 @@
 		<summon name="Larva" interval="1000" chance="15" max="3" />
 	</summons>
 	<loot>
+		<item id="2135" chance="2063" /><!-- scarab amulet -->
+		<item id="2142" chance="2564" /><!-- ancient amulet -->
 		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="2162" chance="11111" /><!-- magic lightwand -->
-		<item id="2463" chance="10000" /><!-- plate armor -->
-		<item id="2159" countmax="2" chance="7692" /><!-- scarab coin -->
 		<item id="2149" countmax="3" chance="4347" /><!-- small emerald -->
 		<item id="2150" countmax="4" chance="4166" /><!-- small amethyst -->
-		<item id="10548" chance="3571" /><!-- scarab pincers -->
-		<item id="2142" chance="2564" /><!-- ancient amulet -->
-		<item id="2135" chance="2063" /><!-- scarab amulet -->
-		<item id="7903" chance="1298" /><!-- terra hood -->
-		<item id="7588" chance="1041" /><!-- strong health potion -->
+		<item id="2159" countmax="2" chance="7692" /><!-- scarab coin -->
+		<item id="2162" chance="11111" /><!-- magic lightwand -->
 		<item id="2440" chance="781" /><!-- daramanian waraxe -->
+		<item id="2463" chance="10000" /><!-- plate armor -->
 		<item id="2540" chance="518" /><!-- scarab shield -->
+		<item id="7588" chance="1041" /><!-- strong health potion -->
+		<item id="7903" chance="1298" /><!-- terra hood -->
+		<item id="10548" chance="3571" /><!-- scarab pincers -->
 	</loot>
 </monster>

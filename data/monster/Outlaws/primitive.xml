@@ -17,7 +17,7 @@
 		<flag runonhealth="5" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="16" />
+		<attack name="melee" interval="2000" min="0" max="-32" />
 		<attack name="drunk" interval="1000" chance="20" range="7">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
@@ -54,11 +54,11 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="10" chance="12500" /><!-- gold coin -->
-		<item id="2526" chance="1200" /><!-- studded shield -->
+		<item id="2385" chance="10250" /><!-- sabre -->
+		<item id="2386" chance="12250" /><!-- axe -->
 		<item id="2482" chance="9500" /><!-- studded helmet -->
 		<item id="2484" chance="7000" /><!-- studded armor -->
-		<item id="2386" chance="12250" /><!-- axe -->
-		<item id="2385" chance="10250" /><!-- sabre -->
+		<item id="2526" chance="1200" /><!-- studded shield -->
 		<item id="6570" chance="500" /><!-- blue surprise bag -->
 		<item id="6571" chance="500" /><!-- red surprise bag -->
 	</loot>

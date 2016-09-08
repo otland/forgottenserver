@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="15" attack="16" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-7" max="-13" />
 	</attacks>
 	<defenses armor="10" defense="10" />
@@ -30,15 +30,15 @@
 		<immunity lifedrain="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="10" chance="43900" /><!-- gold coin -->
 		<item id="2050" chance="10000" /><!-- torch -->
+		<item id="2050" chance="9880" /><!-- torch -->
+		<item id="2148" countmax="10" chance="43900" /><!-- gold coin -->
 		<item id="2230" chance="49100" /><!-- bone -->
+		<item id="2376" chance="1940" /><!-- sword -->
 		<item id="2388" chance="4850" /><!-- hatchet -->
 		<item id="2398" chance="4850" /><!-- mace -->
-		<item id="2511" chance="2090" /><!-- brass shield -->
-		<item id="2050" chance="9880" /><!-- torch -->
 		<item id="2473" chance="7520" /><!-- viking helmet -->
-		<item id="2376" chance="1940" /><!-- sword -->
+		<item id="2511" chance="2090" /><!-- brass shield -->
 		<item id="12437" chance="9940" /><!-- pelvis bone -->
 	</loot>
 </monster>

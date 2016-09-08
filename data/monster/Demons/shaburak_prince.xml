@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="75" />
+		<attack name="melee" interval="2000" min="0" max="-319" />
 		<attack name="fire" interval="2000" chance="20" range="7" radius="6" target="0" min="-40" max="-90">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="fireattack" />
@@ -53,20 +53,20 @@
 		<voice sentence="ONLY WE ARE TRUE DEMONS!" />
 	</voices>
 	<loot>
+		<item id="2147" countmax="5" chance="12500" /><!-- Small Rubies -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="78" chance="50000" /><!-- gold coin -->
 		<item id="2152" countmax="4" chance="33333" /><!-- platinum coin -->
-		<item id="7589" chance="14285" /><!-- Strong Mana Potion -->
-		<item id="7588" chance="14285" /><!-- Strong Health Potion -->
-		<item id="2147" countmax="5" chance="12500" /><!-- Small Rubies -->
 		<item id="2165" chance="5000" /><!-- Stealth Ring -->
-		<item id="2789" chance="4545" /><!-- Brown Mushroom -->
 		<item id="2187" chance="892" /><!-- Wand of Inferno -->
-		<item id="7443" chance="714" /><!-- Bullseye Potion -->
-		<item id="7899" chance="714" /><!-- Magma Coat -->
+		<item id="2645" chance="89" /><!-- Steel Boots -->
+		<item id="2789" chance="4545" /><!-- Brown Mushroom -->
 		<item id="5904" chance="534" /><!-- magic sulphur -->
 		<item id="7412" chance="357" /><!-- Butcher's Axe -->
+		<item id="7443" chance="714" /><!-- Bullseye Potion -->
+		<item id="7588" chance="14285" /><!-- Strong Health Potion -->
+		<item id="7589" chance="14285" /><!-- Strong Mana Potion -->
+		<item id="7899" chance="714" /><!-- Magma Coat -->
 		<item id="13530" chance="178" /><!-- Demonic Finger -->
-		<item id="2645" chance="89" /><!-- Steel Boots -->
 	</loot>
 </monster>

@@ -16,11 +16,8 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<script>
-		<event name="Versperoth" />
-	</script>
 	<attacks>
-		<attack name="melee" interval="1200" skill="120" attack="100" />
+		<attack name="melee" interval="1200" min="0" max="-650" />
 		<attack name="firefield" interval="1200" chance="30" range="7" radius="4" target="0">
 			<attribute key="shootEffect" value="fire" />
 		</attack>

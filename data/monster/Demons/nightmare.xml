@@ -17,7 +17,7 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="death" interval="2000" chance="10" range="7" radius="1" target="1" min="-120" max="-170">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="mortarea" />
@@ -59,20 +59,20 @@
 	<loot>
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="55" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="3" chance="2564" /><!-- platinum coin -->
+		<item id="2195" chance="337" /><!-- boots of haste -->
+		<item id="2454" chance="95" /><!-- war axe -->
+		<item id="2477" chance="961" /><!-- knight legs -->
+		<item id="2532" chance="990" /><!-- ancient shield -->
+		<item id="2547" countmax="4" chance="9090" /><!-- power bolt -->
 		<item id="2671" countmax="2" chance="29000" /><!-- ham -->
+		<item id="5669" chance="123" /><!-- mysterious voodoo skull -->
 		<item id="5944" chance="20000" /><!-- soul orb -->
+		<item id="6300" chance="1298" /><!-- death ring -->
+		<item id="6500" chance="10000" /><!-- demonic essence -->
+		<item id="6526" chance="337" /><!-- skeleton decoration -->
 		<item id="6558" countmax="2" chance="19666" /><!-- concentrated demonic blood -->
 		<item id="11223" chance="15240" /><!-- essence of a bad dream -->
-		<item id="6500" chance="10000" /><!-- demonic essence -->
-		<item id="2547" countmax="4" chance="9090" /><!-- power bolt -->
 		<item id="11229" chance="9090" /><!-- scythe leg -->
-		<item id="2152" countmax="3" chance="2564" /><!-- platinum coin -->
-		<item id="6300" chance="1298" /><!-- death ring -->
-		<item id="2532" chance="990" /><!-- ancient shield -->
-		<item id="2477" chance="961" /><!-- knight legs -->
-		<item id="2195" chance="337" /><!-- boots of haste -->
-		<item id="6526" chance="337" /><!-- skeleton decoration -->
-		<item id="5669" chance="123" /><!-- mysterious voodoo skull -->
-		<item id="2454" chance="95" /><!-- war axe -->
 	</loot>
 </monster>

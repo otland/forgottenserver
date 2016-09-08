@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="145" />
+		<attack name="melee" interval="2000" min="0" max="-798" />
 		<attack name="death" interval="2000" chance="15" length="5" spread="2" target="1" min="-200" max="-300">
 			<attribute key="areaEffect" value="blacksmoke" />
 		</attack>
@@ -53,9 +53,9 @@
 		<voice sentence="Thun... Thun... THUNDER!" />
 	</voices>
 	<loot>
+		<item id="2146" chance="5000" /><!-- small sapphire -->
 		<item id="2148" countmax="100" chance="43000" /><!-- gold coin -->
 		<item id="2148" countmax="87" chance="50000" /><!-- gold coin -->
-		<item id="2146" chance="5000" /><!-- small sapphire -->
 		<item id="2498" chance="270" /><!-- royal helmet -->
 		<item id="22539" chance="10000" /><!-- goosebump leather -->
 	</loot>

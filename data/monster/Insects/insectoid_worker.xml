@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="55" attack="50" poison="160" />
+		<attack name="melee" interval="2000" min="0" max="-163" poison="160" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -32,10 +32,10 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="15622" chance="14990" /><!-- dung ball -->
-		<item id="15486" chance="15380" /><!-- compound eye -->
-		<item id="7618" chance="5090" /><!-- health potion -->
 		<item id="2149" chance="2880" /><!-- small emerald -->
 		<item id="2438" chance="560" /><!-- epee -->
+		<item id="7618" chance="5090" /><!-- health potion -->
+		<item id="15486" chance="15380" /><!-- compound eye -->
+		<item id="15622" chance="14990" /><!-- dung ball -->
 	</loot>
 </monster>

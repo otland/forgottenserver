@@ -17,7 +17,7 @@
 		<flag runonhealth="220" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="67" />
+		<attack name="melee" interval="2000" min="0" max="-235" />
 		<attack name="fire" interval="2000" chance="10" length="8" spread="0" min="-195" max="-340">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
@@ -46,19 +46,19 @@
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="7" chance="50000" /><!-- gold coin -->
 		<item id="2152" chance="14780" /><!-- platinum coin -->
-		<item id="2676" countmax="10" chance="10420" /><!-- banana -->
 		<item id="2187" chance="1000" /><!-- woi -->
 		<item id="2207" chance="2920" /><!-- sword ring -->
 		<item id="2392" chance="260" /><!-- fire sword -->
-		<item id="7899" chance="140" /><!-- magma coat -->
-		<item id="7890" chance="970" /><!-- magma amulet -->
-		<item id="10553" chance="9380" /><!-- fiery heart -->
-		<item id="18424" chance="12440" /><!-- Magma Clump -->
-		<item id="18425" chance="8030" /><!-- Blazing Bone -->
+		<item id="2676" countmax="10" chance="10420" /><!-- banana -->
 		<item id="7588" chance="7100" /><!-- shp -->
 		<item id="7589" chance="7100" /><!-- smp -->
-		<item id="18420" chance="2280" /><!-- Red Crystal Fragment -->
+		<item id="7890" chance="970" /><!-- magma amulet -->
+		<item id="7899" chance="140" /><!-- magma coat -->
+		<item id="10553" chance="9380" /><!-- fiery heart -->
 		<item id="13757" chance="940" /><!-- coal -->
 		<item id="18417" chance="4850" /><!-- Brown Crystal Splinter -->
+		<item id="18420" chance="2280" /><!-- Red Crystal Fragment -->
+		<item id="18424" chance="12440" /><!-- Magma Clump -->
+		<item id="18425" chance="8030" /><!-- Blazing Bone -->
 	</loot>
 </monster>

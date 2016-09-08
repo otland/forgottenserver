@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -31,7 +31,7 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="10" chance="80000" /><!-- gold coin -->
-		<item id="11189" chance="20000" /><!-- crab pincers -->
 		<item id="2667" chance="20000" /><!-- fish -->
+		<item id="11189" chance="20000" /><!-- crab pincers -->
 	</loot>
 </monster>
