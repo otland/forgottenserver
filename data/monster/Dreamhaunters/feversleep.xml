@@ -17,8 +17,8 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="90" />
-		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-800" max="-1000" >
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-800" max="-1000">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="10" radius="5" target="0" min="-70" max="-100">
@@ -57,15 +57,15 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="9" chance="100000" /><!-- platinum coin -->
 		<item id="2149" countmax="2" chance="11000" /><!-- small emerald -->
 		<item id="2150" countmax="3" chance="12000" /><!-- small amethyst -->
+		<item id="2152" countmax="9" chance="100000" /><!-- platinum coin -->
 		<item id="2656" chance="1500" /><!-- blue robe -->
 		<item id="7590" countmax="2" chance="40000" /><!-- great mana potion -->
 		<item id="8473" chance="18000" /><!-- ultimate health potion -->
 		<item id="9970" countmax="2" chance="16000" /><!-- small topaz -->
-		<item id="18418" chance="13000" /><!-- blue crystal splinter -->
 		<item id="18413" chance="11000" /><!-- blue crystal shard -->
+		<item id="18418" chance="13000" /><!-- blue crystal splinter -->
 		<item id="18419" chance="18000" /><!-- cyan crystal fragment -->
 		<item id="22537" chance="17000" /><!-- trapped bad dream monster -->
 		<item id="22538" chance="14000" /><!-- bowl of terror sweat -->

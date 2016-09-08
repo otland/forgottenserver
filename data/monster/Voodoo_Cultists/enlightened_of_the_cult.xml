@@ -60,24 +60,24 @@
 		<voice sentence="You will die in the name of the triangle!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="64550" /><!-- gold coin -->
-		<item id="10555" chance="10250" /><!-- cultish mask -->
 		<item id="1962" chance="910" /><!-- orange book -->
-		<item id="12411" chance="890" /><!-- cultish symbol -->
-		<item id="2200" chance="790" /><!-- protection amulet -->
-		<item id="7589" chance="740" /><!-- strong mana potion -->
+		<item id="2114" chance="130" /><!-- piggy bank -->
 		<item id="2146" chance="550" /><!-- small sapphire -->
-		<item id="6090" chance="490" /><!-- music sheet 4th verse -->
+		<item id="2148" countmax="70" chance="64550" /><!-- gold coin -->
 		<item id="2167" chance="450" /><!-- energy ring -->
-		<item id="5810" chance="430" /><!-- pirate voodoo doll -->
-		<item id="2436" chance="350" /><!-- skull staff -->
 		<item id="2171" chance="200" /><!-- platinum amulet -->
 		<item id="2187" chance="180" /><!-- wand of inferno -->
-		<item id="5670" chance="130" /><!-- mysterious voodoo skull -->
-		<item id="2114" chance="130" /><!-- piggy bank -->
-		<item id="7426" chance="100" /><!-- amber staff -->
-		<item id="12608" chance="100" /><!-- broken key ring -->
-		<item id="5801" chance="100" /><!-- jewelled backpack -->
+		<item id="2200" chance="790" /><!-- protection amulet -->
+		<item id="2436" chance="350" /><!-- skull staff -->
 		<item id="2656" chance="40" /><!-- blue robe -->
+		<item id="5670" chance="130" /><!-- mysterious voodoo skull -->
+		<item id="5801" chance="100" /><!-- jewelled backpack -->
+		<item id="5810" chance="430" /><!-- pirate voodoo doll -->
+		<item id="6090" chance="490" /><!-- music sheet 4th verse -->
+		<item id="7426" chance="100" /><!-- amber staff -->
+		<item id="7589" chance="740" /><!-- strong mana potion -->
+		<item id="10555" chance="10250" /><!-- cultish mask -->
+		<item id="12411" chance="890" /><!-- cultish symbol -->
+		<item id="12608" chance="100" /><!-- broken key ring -->
 	</loot>
 </monster>

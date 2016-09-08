@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="40" />
+		<attack name="melee" interval="2000" min="0" max="-100" poison="40" />
 		<attack name="lifedrain" interval="2000" chance="15" radius="1" target="0" min="-40" max="-80">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -48,11 +48,11 @@
 		<voice sentence="You will not get my treasure!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="67" chance="48000" /><!-- gold coin -->
-		<item id="10601" chance="4300" /><!-- Tattered Piece of Robe -->
-		<item id="2165" chance="650" /><!-- stealth ring -->
 		<item id="1951" chance="910" /><!-- parchment -->
+		<item id="2148" countmax="67" chance="48000" /><!-- gold coin -->
+		<item id="2165" chance="650" /><!-- stealth ring -->
 		<item id="2383" chance="130" /><!-- spike sword -->
 		<item id="2655" chance="130" /><!-- red robe -->
+		<item id="10601" chance="4300" /><!-- Tattered Piece of Robe -->
 	</loot>
 </monster>

@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="57" />
+		<attack name="melee" interval="2000" min="0" max="-143" />
 		<attack name="earth" interval="2000" chance="20" range="7" radius="6" target="0" min="-20" max="-60">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="greenbubble" />
@@ -51,19 +51,19 @@
 		<voice sentence="RED IS MAD" />
 	</voices>
 	<loot>
+		<item id="2114" chance="1052" /><!-- piggy bank -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="35" chance="40000" /><!-- gold coin -->
 		<item id="2149" countmax="4" chance="6250" /><!-- small emerald -->
-		<item id="7589" chance="5263" /><!-- strong mana potion -->
-		<item id="7588" chance="5263" /><!-- strong health potion -->
-		<item id="7368" countmax="5" chance="4761" /><!-- assassin star -->
-		<item id="2789" countmax="5" chance="3846" /><!-- brown mushroom -->
-		<item id="2114" chance="1052" /><!-- piggy bank -->
 		<item id="2167" chance="961" /><!-- energy ring -->
-		<item id="8912" chance="512" /><!-- springsprout rod -->
-		<item id="7440" chance="431" /><!-- mastermind potion -->
-		<item id="7885" chance="123" /><!-- terra legs -->
+		<item id="2789" countmax="5" chance="3846" /><!-- brown mushroom -->
 		<item id="5904" chance="102" /><!-- magic sulphur -->
+		<item id="7368" countmax="5" chance="4761" /><!-- assassin star -->
+		<item id="7440" chance="431" /><!-- mastermind potion -->
+		<item id="7588" chance="5263" /><!-- strong health potion -->
+		<item id="7589" chance="5263" /><!-- strong mana potion -->
+		<item id="7885" chance="123" /><!-- terra legs -->
+		<item id="8912" chance="512" /><!-- springsprout rod -->
 	</loot>
 </monster>

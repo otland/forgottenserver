@@ -17,7 +17,7 @@
 		<flag runonhealth="5" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="25" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-35" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-35">
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
@@ -29,13 +29,13 @@
 		<voice sentence="Look what has stepped into my trap!" />
 	</voices>
 	<loot>
-		<item id="2649" chance="26740" /><!-- leather legs -->
-		<item id="2461" chance="30600" /><!-- leather helmet -->
-		<item id="2690" countmax="2" chance="11110" /><!-- roll -->
+		<item id="2050" chance="4180" /><!-- torch -->
 		<item id="2456" chance="14930" /><!-- bow -->
+		<item id="2461" chance="30600" /><!-- leather helmet -->
 		<item id="2544" countmax="17" chance="49500" /><!-- arrow -->
 		<item id="2545" countmax="3" chance="2930" /><!-- poison arrow -->
-		<item id="2050" chance="4180" /><!-- torch -->
 		<item id="2578" chance="710" /><!-- closed trap -->
+		<item id="2649" chance="26740" /><!-- leather legs -->
+		<item id="2690" countmax="2" chance="11110" /><!-- roll -->
 	</loot>
 </monster>

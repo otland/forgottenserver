@@ -18,10 +18,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="1200" min="0" max="-200" />
+		<attack name="physical" interval="2000" chance="30" range="1" min="0" max="-100" />
 		<attack name="drown" interval="2000" chance="15" target="0" min="-41" max="-70">
 			<attribute key="areaEffect" value="explosionarea" />
 		</attack>
-		<attack name="Blood Rage" interval="2000" chance="30" target="1" />
 	</attacks>
 	<defenses armor="30" defense="35">
 		<defense name="speed" interval="1000" chance="40" speedchange="400" duration="8000">

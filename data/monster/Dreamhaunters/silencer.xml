@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="70" poison="600" />
+		<attack name="melee" interval="2000" min="0" max="-315" poison="600" />
 		<attack name="silencer skill reducer" range="3" interval="2000" chance="10" />
 		<attack name="manadrain" interval="2000" chance="15" radius="4" target="1" min="-40" max="-150">
 			<attribute key="shootEffect" value="onyxarrow" />

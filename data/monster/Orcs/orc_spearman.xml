@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="15" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-25" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-30">
 			<attribute key="shootEffect" value="spear" />
 		</attack>
@@ -34,12 +34,12 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="11" chance="25050" /><!-- gold coin -->
-		<item id="2420" chance="3000" /><!-- machete -->
-		<item id="2666" chance="30200" /><!-- meat -->
 		<item id="2389" chance="17440" /><!-- spear -->
-		<item id="2482" chance="9000" /><!-- studded helmet -->
+		<item id="2420" chance="3000" /><!-- machete -->
 		<item id="2468" chance="10000" /><!-- studded legs -->
-		<item id="12435" chance="2300" /><!-- orc leather -->
+		<item id="2482" chance="9000" /><!-- studded helmet -->
+		<item id="2666" chance="30200" /><!-- meat -->
 		<item id="11113" chance="150" /><!-- orc tooth -->
+		<item id="12435" chance="2300" /><!-- orc leather -->
 	</loot>
 </monster>

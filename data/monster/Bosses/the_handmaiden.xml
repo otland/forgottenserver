@@ -41,7 +41,7 @@
 		<immunity energy="1" />
 		<immunity fire="1" />
 		<immunity ice="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity outfit="1" />

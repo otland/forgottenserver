@@ -16,14 +16,14 @@
 		<flag runonhealth="600" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-298" />
 		<attack name="earth" interval="1000" chance="8" length="9" spread="3" min="-130" max="-460">
 			<attribute key="areaEffect" value="bigplants" />
 		</attack>
 		<attack name="ice" interval="1000" chance="10" length="9" spread="3" min="-365" max="-491">
 			<attribute key="areaEffect" value="icearea" />
 		</attack>
-		<attack name="drown" interval="1000" chance="11" radius="4" target="1" min ="-15" max="-20">
+		<attack name="drown" interval="1000" chance="11" radius="4" target="1" min="-15" max="-20">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
 	</attacks>
@@ -32,6 +32,12 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element firePercent="30" />
+		<element energyPercent="-10" />
+		<element physicalPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
 	<immunities>
 		<immunity ice="1" />
 		<immunity paralyze="1" />
@@ -42,16 +48,10 @@
 		<voice sentence="CHHHRRRR" />
 		<voice sentence="HISSSS" />
 	</voices>
-	<elements>
-		<element firePercent="30" />
-		<element energyPercent="-10" />
-		<element physicalPercent="-10" />
-		<element deathPercent="-10" />
-	</elements>
 	<loot>
-		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="40000" /><!-- platinum coin -->
 		<item id="2146" countmax="3" chance="10000" /><!-- small saphire -->
 		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
+		<item id="2148" countmax="80" chance="40000" /><!-- gold coin -->
+		<item id="2152" countmax="6" chance="40000" /><!-- platinum coin -->
 	</loot>
 </monster>

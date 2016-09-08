@@ -52,18 +52,18 @@
 		<voice sentence="Feel the power of the cult!" />
 	</voices>
 	<loot>
+		<item id="1962" chance="730" /><!-- orange book -->
 		<item id="2148" countmax="40" chance="66940" /><!-- gold coin -->
-		<item id="12448" chance="10420" /><!-- rope belt -->
-		<item id="10556" chance="8070" /><!-- cultish robe -->
+		<item id="2149" chance="550" /><!-- small emerald -->
+		<item id="2168" chance="560" /><!-- life ring -->
+		<item id="2181" chance="250" /><!-- terra rod -->
+		<item id="2201" chance="1050" /><!-- dragon necklace -->
 		<item id="2394" chance="4990" /><!-- morning star -->
 		<item id="5810" chance="1060" /><!-- pirate voodoo doll -->
-		<item id="2201" chance="1050" /><!-- dragon necklace -->
-		<item id="1962" chance="730" /><!-- orange book -->
-		<item id="2168" chance="560" /><!-- life ring -->
-		<item id="2149" chance="550" /><!-- small emerald -->
 		<item id="6088" chance="480" /><!-- music sheet 2nd verse -->
-		<item id="2181" chance="250" /><!-- terra rod -->
-		<item id="12608" chance="60" /><!-- broken key ring -->
+		<item id="10556" chance="8070" /><!-- cultish robe -->
 		<item id="12411" chance="40" /><!-- cultish symbol -->
+		<item id="12448" chance="10420" /><!-- rope belt -->
+		<item id="12608" chance="60" /><!-- broken key ring -->
 	</loot>
 </monster>

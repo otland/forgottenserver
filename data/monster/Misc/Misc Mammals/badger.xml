@@ -17,12 +17,12 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="12" />
+		<attack name="melee" interval="2000" min="0" max="-12" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<loot>
-		<item id="8845" chance="40710" /><!-- beetroot -->
 		<item id="7965" chance="10230" /><!-- badger fur -->
+		<item id="8845" chance="40710" /><!-- beetroot -->
 		<item id="11213" chance="5130" /><!-- acorn -->
 	</loot>
 </monster>

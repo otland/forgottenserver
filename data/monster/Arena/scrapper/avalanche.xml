@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-180" />
 		<attack name="drown" interval="1000" chance="100" length="5" spread="6" min="-10" max="-50">
 			<attribute key="areaEffect" value="energyarea" />
 		</attack>

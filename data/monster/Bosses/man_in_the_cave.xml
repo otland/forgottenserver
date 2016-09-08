@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-105" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="-10" max="-95">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
@@ -33,26 +33,26 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="2">
+		<summon name="Monk" interval="2000" chance="20" max="1" />
+	</summons>
 	<voices interval="2000" chance="5">
 		<voice sentence="THE MONKS ARE MINE" yell="1" />
 		<voice sentence="I will rope you up! All of you!" />
 		<voice sentence="You have been roped up!" />
 		<voice sentence="A MIC to rule them all!" />
 	</voices>
-	<summons maxSummons="2">
-		<summon name="Monk" interval="2000" chance="20" max="1" />
-	</summons>
 	<loot>
-		<item id="2148" countmax="27" chance="100000" /><!-- gold coin -->
 		<item id="2120" chance="20000" /><!-- rope -->
 		<item id="2120" chance="6666" /><!-- rope -->
 		<item id="2120" chance="3333" /><!-- rope -->
+		<item id="2148" countmax="27" chance="100000" /><!-- gold coin -->
+		<item id="2173" chance="500" /><!-- amulet of loss -->
 		<item id="2691" chance="4000" /><!-- brown bread -->
 		<item id="5913" chance="2000" /><!-- brown piece of cloth -->
 		<item id="7290" chance="4000" /><!-- shard -->
-		<item id="7463" chance="6666" /><!-- mammoth fur cape -->
 		<item id="7386" chance="6666" /><!-- mercenary sword -->
 		<item id="7458" chance="1000" /><!-- fur cap -->
-		<item id="2173" chance="500" /><!-- amulet of loss -->
+		<item id="7463" chance="6666" /><!-- mammoth fur cape -->
 	</loot>
 </monster>

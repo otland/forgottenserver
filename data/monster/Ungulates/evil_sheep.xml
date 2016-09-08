@@ -23,15 +23,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="35" />
-	<immunities>
-		<immunity lifedrain="1" />
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element firePercent="-10" />
 		<element icePercent="20" />
 		<element physicalPercent="20" />
 	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grrrr" />
 	</voices>

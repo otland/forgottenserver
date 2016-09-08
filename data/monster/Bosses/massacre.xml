@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="150" attack="150" />
+		<attack name="melee" interval="2000" min="0" max="-1200" />
 		<attack name="physical" interval="2000" chance="24" range="7" min="-280" max="-500">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -30,7 +30,7 @@
 	<immunities>
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity outfit="1" />

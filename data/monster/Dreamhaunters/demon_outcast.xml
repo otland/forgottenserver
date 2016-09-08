@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="energy" interval="2000" chance="10" length="6" spread="0" target="1" min="-250" max="-450">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
@@ -60,12 +60,12 @@
 		<voice sentence="No one will imprison me again!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="100000" /><!-- platinum coin -->
 		<item id="2145" countmax="5" chance="10000" /><!-- small diamond -->
 		<item id="2146" countmax="5" chance="10000" /><!-- small sapphire -->
 		<item id="2147" countmax="5" chance="12000" /><!-- small ruby -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2149" countmax="5" chance="10000" /><!-- small emerald -->
+		<item id="2152" countmax="6" chance="100000" /><!-- platinum coin -->
 		<item id="2164" chance="910" /><!-- might ring -->
 		<item id="2165" chance="1300" /><!-- stealth ring -->
 		<item id="2171" chance="1000" /><!-- platinum amulet -->
@@ -76,10 +76,10 @@
 		<item id="2497" chance="740" /><!-- crusader helmet -->
 		<item id="2519" chance="740" /><!-- crown shield -->
 		<item id="2520" chance="170" /><!-- demon shield -->
-		<item id="7382" chance="350" /><!-- demonrage sword -->
-		<item id="6550" chance="1000" /><!-- demon dust -->
 		<item id="2795" countmax="6" chance="20600" /><!-- fire mushroom -->
+		<item id="6550" chance="1000" /><!-- demon dust -->
 		<item id="7368" countmax="10" chance="8340" /><!-- assassin star -->
+		<item id="7382" chance="350" /><!-- demonrage sword -->
 		<item id="7590" countmax="2" chance="18000" /><!-- great mana potion -->
 		<item id="8473" countmax="3" chance="20500" /><!-- ultimate health potion -->
 		<item id="9970" countmax="5" chance="9300" /><!-- small topaz -->

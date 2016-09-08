@@ -24,14 +24,7 @@
 	</attacks>
 	<defenses armor="18" defense="19" />
 	<immunities>
-		<immunity physical="0" />
-		<immunity energy="0" />
 		<immunity fire="1" />
-		<immunity poison="0" />
-		<immunity lifedrain="0" />
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
-		<immunity drunk="0" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="10">

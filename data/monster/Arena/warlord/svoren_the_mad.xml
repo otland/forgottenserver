@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="150" />
+		<attack name="melee" interval="2000" min="0" max="-525" />
 		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="1" duration="40" speedchange="-250">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>

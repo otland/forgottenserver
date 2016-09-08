@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-90">
 			<attribute key="shootEffect" value="whirlwindclub" />
 		</attack>
@@ -40,16 +40,16 @@
 	<loot>
 		<item id="2148" countmax="45" chance="50000" /><!-- gold coin -->
 		<item id="2696" chance="20000" /><!-- cheese -->
-		<item id="20101" chance="16666" /><!-- rat cheese -->
-		<item id="20100" chance="14285" /><!-- soft cheese -->
-		<item id="20099" chance="9090" /><!-- earflap -->
-		<item id="20097" chance="8333" /><!-- cheese cutter -->
 		<item id="20089" chance="7692" /><!-- bola -->
-		<item id="20093" chance="2941" /><!-- life preserver -->
-		<item id="20092" chance="2702" /><!-- ratana -->
-		<item id="20098" chance="854" /><!-- cheesy figurine -->
 		<item id="20090" chance="645" /><!-- spike shield -->
-		<item id="20126" chance="561" /><!-- leather harness -->
+		<item id="20092" chance="2702" /><!-- ratana -->
+		<item id="20093" chance="2941" /><!-- life preserver -->
+		<item id="20097" chance="8333" /><!-- cheese cutter -->
+		<item id="20098" chance="854" /><!-- cheesy figurine -->
+		<item id="20099" chance="9090" /><!-- earflap -->
+		<item id="20100" chance="14285" /><!-- soft cheese -->
+		<item id="20101" chance="16666" /><!-- rat cheese -->
 		<item id="20105" chance="12" /><!-- rat god doll -->
+		<item id="20126" chance="561" /><!-- leather harness -->
 	</loot>
 </monster>

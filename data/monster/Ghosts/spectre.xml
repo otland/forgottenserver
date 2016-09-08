@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="65" attack="82" poison="300" />
+		<attack name="melee" interval="2000" min="0" max="-308" poison="300" />
 		<attack name="drunk" interval="2000" chance="15" radius="4" target="0" duration="6000">
 			<attribute key="areaEffect" value="purplenote" />
 		</attack>
@@ -58,23 +58,23 @@
 		<voice sentence="Life...force! Feed me your... lifeforce!" />
 	</voices>
 	<loot>
+		<item id="2071" chance="9620" /><!-- lyre -->
+		<item id="2134" chance="850" /><!-- silver brooch -->
+		<item id="2134" chance="110" /><!-- shadow sceptre -->
+		<item id="2136" chance="110" /><!--demonbone amulet -->
 		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
 		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
 		<item id="2148" countmax="97" chance="33000" /><!-- gold coin -->
-		<item id="2260" countmax="2" chance="30310" /><!-- blank rune -->
 		<item id="2152" countmax="7" chance="3850" /><!-- platinum coin -->
-		<item id="5944" chance="6005" /><!-- soul orb -->
 		<item id="2165" chance="190" /><!-- stealth ring -->
 		<item id="2189" chance="9800" /><!-- wand of cosmic energy -->
-		<item id="6500" chance="6270" /><!-- demonic essence -->
-		<item id="2071" chance="9620" /><!-- lyre -->
-		<item id="7383" chance="700" /><!-- relic sword -->
-		<item id="2134" chance="850" /><!-- silver brooch -->
+		<item id="2260" countmax="2" chance="30310" /><!-- blank rune -->
 		<item id="5909" chance="3800" /><!-- white piece of cloth -->
+		<item id="5944" chance="6005" /><!-- soul orb -->
 		<item id="6300" chance="280" /><!-- death ring -->
+		<item id="6500" chance="6270" /><!-- demonic essence -->
+		<item id="7383" chance="700" /><!-- relic sword -->
 		<item id="7590" chance="920" /><!-- great mana potion -->
-		<item id="2134" chance="110" /><!-- shadow sceptre -->
-		<item id="2136" chance="110" /><!--demonbone amulet -->
 		<item id="11227" chance="1000" /><!-- shiny stone -->
 	</loot>
 </monster>

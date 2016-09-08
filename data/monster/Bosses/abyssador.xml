@@ -17,7 +17,7 @@
 		<flag runonhealth="100" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2500" skill="110" attack="160" />
+		<attack name="melee" interval="2500" min="0" max="-960" />
 		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-400" duration="2500">
 			<attribute key="shootEffect" value="earth" />
 		</attack>
@@ -30,7 +30,7 @@
 		<attack name="lifedrain" interval="700" chance="10" range="3" radius="4" target="1" min="-600" max="-1230">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
-		<attack name="poison" interval="700" chance="12" radius="3" target="0" min="-40" max="-130">
+		<attack name="earth" interval="700" chance="12" radius="3" target="0" min="-40" max="-130">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>
@@ -69,13 +69,13 @@
 		<voice sentence="*** DEATH ***" />
 	</voices>
 	<loot>
-		<item id="18496" chance="100000" /><!-- Abyssador's Lash -->
+		<item id="18449" chance="10000" /><!-- Decorative Ribbon -->
+		<item id="18450" chance="5500" /><!-- Crystalline Sword -->
+		<item id="18451" chance="5500" /><!-- Crystalline Axe -->
+		<item id="18452" chance="4500" /><!-- Mace -->
+		<item id="18453" chance="4500" /><!-- Crystal Crossbow -->
 		<item id="18454" chance="10000" /><!-- Mycological Bow -->
 		<item id="18465" chance="8000" /><!-- Shiny Sword -->
-		<item id="18449" chance="10000" /><!-- Decorative Ribbon -->
-		<item id="18453" chance="4500" /><!-- Crystal Crossbow -->
-		<item id="18451" chance="5500" /><!-- Crystalline Axe -->
-		<item id="18450" chance="5500" /><!-- Crystalline Sword -->
-		<item id="18452" chance="4500" /><!-- Mace -->
+		<item id="18496" chance="100000" /><!-- Abyssador's Lash -->
 	</loot>
 </monster>

@@ -38,12 +38,12 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="40" chance="69000" /><!-- gold coin -->
-		<item id="2676" countmax="12" chance="30000" /><!-- banana -->
-		<item id="2463" chance="950" /><!-- plate armor -->
-		<item id="2200" chance="990" /><!-- protection amulet -->
-		<item id="5883" chance="980" /><!-- ape fur -->
 		<item id="2166" chance="300" /><!-- power ring -->
+		<item id="2200" chance="990" /><!-- protection amulet -->
 		<item id="2209" chance="230" /><!-- club ring -->
+		<item id="2463" chance="950" /><!-- plate armor -->
+		<item id="2676" countmax="12" chance="30000" /><!-- banana -->
+		<item id="5883" chance="980" /><!-- ape fur -->
 		<item id="7618" chance="570" /><!-- health potion -->
 		<item id="12427" chance="4900" /><!-- kongra shoulderpad -->
 	</loot>

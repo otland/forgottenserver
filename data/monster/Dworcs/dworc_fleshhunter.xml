@@ -17,7 +17,7 @@
 		<flag runonhealth="8" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="15" attack="20" poison="20" />
+		<attack name="melee" interval="2000" min="0" max="-25" poison="20" />
 		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-15">
 			<attribute key="shootEffect" value="throwingknife" />
 		</attack>
@@ -37,15 +37,15 @@
 		<voice sentence="Prek tars, dekklep zurk." />
 	</voices>
 	<loot>
+		<item id="2050" chance="4750" /><!-- torch -->
 		<item id="2148" countmax="13" chance="69000" /><!-- gold coin -->
 		<item id="2229" countmax="3" chance="3300" /><!-- skull -->
-		<item id="2568" chance="9750" /><!-- cleaver -->
-		<item id="2050" chance="4750" /><!-- torch -->
-		<item id="2567" chance="10000" /><!-- leather armor-->
-		<item id="3967" chance="500" /><!-- tribal mask -->
-		<item id="3965" chance="2000" /><!-- hunting spear -->
 		<item id="2411" chance="2250" /><!-- poison dagger -->
 		<item id="2541" chance="1000" /><!-- bone shield -->
+		<item id="2567" chance="10000" /><!-- leather armor-->
+		<item id="2568" chance="9750" /><!-- cleaver -->
 		<item id="3964" chance="90" /><!-- ripper lance -->
+		<item id="3965" chance="2000" /><!-- hunting spear -->
+		<item id="3967" chance="500" /><!-- tribal mask -->
 	</loot>
 </monster>

@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="150" poison="18" />
+		<attack name="melee" interval="2000" min="0" max="-525" poison="18" />
 		<attack name="fire" interval="6000" chance="30" min="-80" max="-300" length="8" spread="3">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
@@ -27,7 +27,7 @@
 		<attack name="poisoncondition" interval="4500" chance="40" min="-10" max="-200" range="10">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
-		<attack name="poison" interval="5000" chance="30" length="8" spread="3" min="-60" max="-300">
+		<attack name="earth" interval="5000" chance="30" length="8" spread="3" min="-60" max="-300">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>

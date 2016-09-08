@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-90" />
 	</attacks>
 	<defenses armor="25" defense="25">
 		<defense name="speed" interval="2000" chance="15" speedchange="215" duration="5000">
@@ -37,14 +37,14 @@
 	</voices>
 	<loot>
 		<item id="2148" countmax="30" chance="49500" /><!-- gold coin -->
-		<item id="2666" chance="19000" /><!-- meat -->
-		<item id="2510" chance="9950" /><!-- plate shield -->
 		<item id="2376" chance="12620" /><!-- sword -->
 		<item id="2398" chance="11160" /><!-- mace -->
-		<item id="2465" chance="2750" /><!-- brass armor -->
 		<item id="2458" chance="5200" /><!-- chain helmet -->
-		<item id="2509" chance="840" /><!-- steel shield -->
-		<item id="8872" chance="340" /><!-- belted cape -->
 		<item id="2459" chance="590" /><!-- iron helmet -->
+		<item id="2465" chance="2750" /><!-- brass armor -->
+		<item id="2509" chance="840" /><!-- steel shield -->
+		<item id="2510" chance="9950" /><!-- plate shield -->
+		<item id="2666" chance="19000" /><!-- meat -->
+		<item id="8872" chance="340" /><!-- belted cape -->
 	</loot>
 </monster>

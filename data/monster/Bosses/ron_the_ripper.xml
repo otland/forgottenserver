@@ -18,16 +18,16 @@
 		<flag runonhealth="250" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-200" max="-250" />
+		<attack name="melee" interval="2000" min="0" max="-250" />
 	</attacks>
 	<defenses armor="35" defense="50" />
 	<loot>
-		<item id="6101" chance="100000" /><!-- ron the ripper's sabre -->
 		<item id="2148" countmax="50" chance="100000" /><!-- gold coin -->
-		<item id="2476" chance="1200" /><!-- knight armor -->
+		<item id="2320" countmax="2" chance="100000" /><!-- skull -->
+		<item id="2379" chance="8500" /><!-- dagger -->
 		<item id="2387" chance="1500" /><!-- double axe -->
 		<item id="2463" chance="4000" /><!-- plate armor -->
-		<item id="2379" chance="8500" /><!-- dagger -->
-		<item id="2320" countmax="2" chance="100000" /><!-- skull -->
+		<item id="2476" chance="1200" /><!-- knight armor -->
+		<item id="6101" chance="100000" /><!-- ron the ripper's sabre -->
 	</loot>
 </monster>

@@ -37,17 +37,17 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="160" chance="87000" /><!-- gold coin -->
-		<item id="3976" countmax="3" chance="20000" /><!-- worm -->
-		<item id="12422" chance="12600" /><!-- flask of embalming fluid -->
-		<item id="10566" chance="10000" /><!-- gauze bandage -->
-		<item id="2159" countmax="3" chance="10000" /><!-- scarab coin -->
-		<item id="2162" chance="6000" /><!-- magic lightwand -->
-		<item id="2161" chance="4500" /><!-- strange talisman -->
-		<item id="2134" chance="4000" /><!-- silver brooch -->
-		<item id="13472" chance="2400" /><!-- pharaoh banner -->
 		<item id="2124" chance="1650" /><!-- crystal ring -->
+		<item id="2134" chance="4000" /><!-- silver brooch -->
 		<item id="2144" chance="1340" /><!-- black pearl -->
+		<item id="2148" countmax="160" chance="87000" /><!-- gold coin -->
+		<item id="2159" countmax="3" chance="10000" /><!-- scarab coin -->
+		<item id="2161" chance="4500" /><!-- strange talisman -->
+		<item id="2162" chance="6000" /><!-- magic lightwand -->
 		<item id="2411" chance="380" /><!-- poison dagger -->
+		<item id="3976" countmax="3" chance="20000" /><!-- worm -->
+		<item id="10566" chance="10000" /><!-- gauze bandage -->
+		<item id="12422" chance="12600" /><!-- flask of embalming fluid -->
+		<item id="13472" chance="2400" /><!-- pharaoh banner -->
 	</loot>
 </monster>

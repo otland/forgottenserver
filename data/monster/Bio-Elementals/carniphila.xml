@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-100" poison="100" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-60" max="-95">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="greenbubble" />
@@ -42,12 +42,12 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="40" chance="60000" /><!-- gold coin -->
-		<item id="2792" chance="7692" /><!-- dark mushroom -->
-		<item id="11217" chance="4166" /><!-- carniphila seeds -->
-		<item id="2804" chance="880" /><!-- shadow herb -->
 		<item id="2686" chance="890" /><!-- corncob -->
-		<item id="7732" chance="490" /><!-- seeds -->
+		<item id="2792" chance="7692" /><!-- dark mushroom -->
 		<item id="2802" countmax="2" chance="446" /><!-- sling herb -->
+		<item id="2804" chance="880" /><!-- shadow herb -->
+		<item id="7732" chance="490" /><!-- seeds -->
+		<item id="11217" chance="4166" /><!-- carniphila seeds -->
 		<item id="13298" chance="170" /><!-- carrot on a stick -->
 	</loot>
 </monster>

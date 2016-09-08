@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="110" attack="115" />
+		<attack name="melee" interval="2000" min="0" max="-690" />
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="1000" chance="25" min="100" max="195">
@@ -60,12 +60,12 @@
 		<voice sentence="I'LL FREEZE YOU THEN I CRUSH YOU!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2152" countmax="9" chance="50000" /><!-- platinum coin -->
-		<item id="9971" chance="25000" /><!-- gold ingot -->
+		<item id="2146" countmax="4" chance="7142" /><!-- small sapphire -->
+		<item id="2147" countmax="4" chance="11111" /><!-- small ruby -->
 		<item id="2149" countmax="4" chance="11111" /><!-- small emerald -->
 		<item id="2150" countmax="3" chance="11111" /><!-- small amethyst -->
-		<item id="2147" countmax="4" chance="11111" /><!-- small ruby -->
-		<item id="2146" countmax="4" chance="7142" /><!-- small sapphire -->
+		<item id="2152" countmax="9" chance="50000" /><!-- platinum coin -->
 		<item id="8882" chance="2063" /><!-- earthborn titan armor -->
+		<item id="9971" chance="25000" /><!-- gold ingot -->
 	</loot>
 </monster>

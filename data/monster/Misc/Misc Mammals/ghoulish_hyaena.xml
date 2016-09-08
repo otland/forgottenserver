@@ -17,7 +17,7 @@
 		<flag runonhealth="30" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="56" poison="10" />
+		<attack name="melee" interval="2000" min="0" max="-112" poison="10" />
 		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-60">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -25,24 +25,24 @@
 	<defenses armor="20" defense="20">
 		<defense name="speed" interval="2000" chance="15" speedchange="3000" duration="2000" />
 	</defenses>
-	<immunities>
-		<immunity death="1" />
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element earthPercent="70" />
 		<element holyPercent="-10" />
 		<element firePercent="-10" />
 	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Grawrrr!!" />
 		<voice sentence="Hoouu!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="89000" /><!-- gold coin -->
 		<item id="2147" countmax="2" chance="2700" /><!-- small ruby -->
-		<item id="3976" countmax="7" chance="65000" /><!-- worm -->
+		<item id="2148" countmax="40" chance="89000" /><!-- gold coin -->
 		<item id="2666" countmax="3" chance="51060" /><!-- meat -->
+		<item id="3976" countmax="7" chance="65000" /><!-- worm -->
 		<item id="7618" chance="19840" /><!-- hp -->
 	</loot>
 </monster>

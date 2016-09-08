@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="55" />
+		<attack name="melee" interval="2000" min="0" max="-193" />
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<elements>
@@ -36,15 +36,15 @@
 		<voice sentence="Rraaar!" />
 	</voices>
 	<loot>
+		<item id="2145" countmax="2" chance="5520" /><!-- small diamond -->
 		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
 		<item id="2148" countmax="69" chance="48000" /><!-- gold coin -->
-		<item id="12447" chance="10150" /><!-- quara bone -->
+		<item id="2377" chance="2320" /><!-- two handed sword -->
 		<item id="2387" chance="5800" /><!-- double axe -->
 		<item id="2483" chance="8000" /><!-- scale armor -->
-		<item id="2145" countmax="2" chance="5520" /><!-- small diamond -->
-		<item id="5895" chance="980" /><!-- fish fin -->
-		<item id="2377" chance="2320" /><!-- two handed sword -->
-		<item id="8911" chance="800" /><!-- northwind rod -->
 		<item id="2670" countmax="5" chance="4700" /><!-- shrimp -->
+		<item id="5895" chance="980" /><!-- fish fin -->
+		<item id="8911" chance="800" /><!-- northwind rod -->
+		<item id="12447" chance="10150" /><!-- quara bone -->
 	</loot>
 </monster>

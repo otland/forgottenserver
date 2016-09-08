@@ -18,13 +18,13 @@
 		<flag runonhealth="2000" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-660" max="-1280" />
+		<attack name="melee" interval="2000" min="0" max="-1280" />
 	</attacks>
 	<defenses armor="64" defense="72" />
 	<immunities>
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<loot>

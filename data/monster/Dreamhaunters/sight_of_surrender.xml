@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="200" />
+		<attack name="melee" interval="2000" min="0" max="-1100" />
 		<attack name="energy" interval="2000" chance="15" length="8" spread="0" target="1" min="-500" max="-800">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>
@@ -59,8 +59,8 @@
 		<item id="2444" chance="1380" /><!-- hammer of wrath -->
 		<item id="2445" chance="5500" /><!-- crystal mace -->
 		<item id="2472" chance="1380" /><!-- magic plate armor -->
-		<item id="2497" chance="920" /><!-- crusader helmet -->
 		<item id="2488" chance="920" /><!-- crown legs -->
+		<item id="2497" chance="920" /><!-- crusader helmet -->
 		<item id="2528" chance="1380" /><!-- tower shield -->
 		<item id="2645" chance="920" /><!-- steel boots -->
 		<item id="7421" chance="920" /><!-- onyx flail -->

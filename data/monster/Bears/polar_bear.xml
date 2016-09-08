@@ -17,7 +17,7 @@
 		<flag runonhealth="5" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -30,8 +30,8 @@
 		<voice sentence="GROARRR!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2671" countmax="2" chance="50000" /><!-- ham -->
 		<item id="2666" countmax="4" chance="5000" /><!-- meat -->
+		<item id="2671" countmax="2" chance="50000" /><!-- ham -->
 		<item id="10567" chance="920" /><!-- polar bear paw -->
 	</loot>
 </monster>

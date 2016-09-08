@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-15" max="-400" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 	</attacks>
 	<defenses armor="23" defense="27" />
 	<elements>
@@ -31,8 +31,8 @@
 	</immunities>
 	<loot>
 		<item id="2148" countmax="80" chance="9750" /><!-- gold coin -->
-		<item id="13303" chance="3150" /><!-- cavebear skull -->
-		<item id="13302" chance="2350" /><!-- maxilla -->
 		<item id="13291" chance="900" /><!-- maxilla maximus -->
+		<item id="13302" chance="2350" /><!-- maxilla -->
+		<item id="13303" chance="3150" /><!-- cavebear skull -->
 	</loot>
 </monster>
