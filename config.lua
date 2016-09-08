@@ -70,6 +70,8 @@ kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
 emoteSpells = false
 classicEquipmentSlots = false
+coinPacketSize = 25
+coinImagesURL = "http://some.url/images/store"
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml

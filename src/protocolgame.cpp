@@ -1442,15 +1442,25 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	uint32_t containerSize = container->size();
 	msg.add<uint16_t>(containerSize);
 	msg.add<uint16_t>(firstIndex);
-	if (firstIndex < containerSize) {
-		uint8_t itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
 
-		msg.addByte(itemsToSend);
-		for (ItemDeque::const_iterator it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
+	uint32_t maxItemsToSend;
+
+	if (container->hasPagination() && firstIndex > 0) {
+		maxItemsToSend = std::min<uint32_t>(container->capacity(), containerSize - firstIndex);
+	} else {
+		maxItemsToSend = container->capacity();
+	}
+
+	if (firstIndex >= containerSize) {
+		msg.addByte(0x00);
+	} else {
+		msg.addByte(std::min<uint32_t>(maxItemsToSend, containerSize));
+
+		uint32_t i = 0;
+		const ItemDeque& itemList = container->getItemList();
+		for (ItemDeque::const_iterator it = itemList.begin() + firstIndex, end = itemList.end(); i < maxItemsToSend && it != end; ++it, ++i) {
 			msg.addItem(*it);
 		}
-	} else {
-		msg.addByte(0x00);
 	}
 	writeToOutputBuffer(msg);
 }
@@ -2351,22 +2361,25 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	if (creature != player) {
-		if (stackpos != -1) {
-			NetworkMessage msg;
-			msg.addByte(0x6A);
-			msg.addPosition(pos);
-			msg.addByte(stackpos);
-
-			bool known;
-			uint32_t removedKnown;
-			checkCreatureAsKnown(creature->getID(), known, removedKnown);
-			AddCreature(msg, creature, known, removedKnown);
-			writeToOutputBuffer(msg);
+		if (stackpos >= 10) {
+			return;
 		}
+
+		NetworkMessage msg;
+		msg.addByte(0x6A);
+		msg.addPosition(pos);
+		msg.addByte(stackpos);
+
+		bool known;
+		uint32_t removedKnown;
+		checkCreatureAsKnown(creature->getID(), known, removedKnown);
+		AddCreature(msg, creature, known, removedKnown);
+		writeToOutputBuffer(msg);
 
 		if (isLogin) {
 			sendMagicEffect(pos, CONST_ME_TELEPORT);
 		}
+
 		return;
 	}
 
@@ -2389,6 +2402,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
+
+	msg.addString(g_config.getString(ConfigManager::COIN_IMAGES_URL));
+	msg.addByte(g_config.getNumber(ConfigManager::COIN_PACKET_SIZE));
 
 	writeToOutputBuffer(msg);
 
