@@ -265,6 +265,8 @@ class ItemType
 class Items
 {
 	public:
+		using nameMap = std::unordered_multimap<std::string, uint16_t>;
+
 		Items();
 
 		// non-copyable
@@ -296,9 +298,10 @@ class Items
 			return items.size();
 		}
 
+		nameMap nameToItems;
+
 	protected:
 		std::map<uint16_t, uint16_t> reverseItemMap;
-		std::unordered_multimap<std::string, uint16_t> nameMap;
 		std::vector<ItemType> items;
 };
 #endif

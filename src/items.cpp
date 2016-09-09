@@ -32,14 +32,14 @@ extern Weapons* g_weapons;
 Items::Items()
 {
 	items.reserve(30000);
-	nameMap.reserve(30000);
+	nameToItems.reserve(30000);
 }
 
 void Items::clear()
 {
 	items.clear();
 	reverseItemMap.clear();
-	nameMap.clear();
+	nameToItems.clear();
 }
 
 bool Items::reload()
@@ -353,7 +353,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 	it.name = itemNode.attribute("name").as_string();
 
-	nameMap.insert({ asLowerCaseString(it.name), id });
+	nameToItems.insert({ asLowerCaseString(it.name), id });
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
@@ -911,9 +911,9 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
-	auto result = nameMap.find(asLowerCaseString(name));
+	auto result = nameToItems.find(asLowerCaseString(name));
 
-	if (result == nameMap.end())
+	if (result == nameToItems.end())
 		return 0;
 
 	return result->second;
