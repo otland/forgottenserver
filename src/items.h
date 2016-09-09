@@ -266,7 +266,6 @@ class Items
 {
 	public:
 		Items();
-		~Items();
 
 		// non-copyable
 		Items(const Items&) = delete;
@@ -299,6 +298,7 @@ class Items
 
 	protected:
 		std::map<uint16_t, uint16_t> reverseItemMap;
+		std::unordered_multimap<std::string, uint16_t> nameMap;
 		std::vector<ItemType> items;
 };
 #endif
