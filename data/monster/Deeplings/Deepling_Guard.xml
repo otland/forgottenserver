@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Deepling Guard" nameDescription="a deepling guard" race="blood" experience="2100" speed="220" manacost="390">
 	<health now="1900" max="1900" />
 	<look type="442" corpse="15187" />
@@ -47,21 +47,21 @@
 		<voice sentence="QJELL NETA NA!!" />
 	</voices>
 	<loot>
-		<item id="2146" countmax="3" chance="2890" /><!-- small sapphire -->
-		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="70000" /><!-- platinum coin -->
-		<item id="7590" countmax="3" chance="14285" /><!-- great mana potion -->
-		<item id="7591" countmax="3" chance="14285" /><!-- great health potion -->
-		<item id="13838" chance="1694" /><!-- heavy trident -->
-		<item id="13870" chance="10000" /><!-- eye of a deepling -->
-		<item id="15423" chance="12500" /><!-- deepling guard belt buckle -->
-		<item id="15424" chance="16666" /><!-- deepling breaktime snack -->
-		<item id="15454" chance="925" /><!-- guardian axe -->
-		<item id="15455" chance="9090" /><!-- deepling claw -->
-		<item id="15545" chance="10" /><!-- foxtail -->
-		<item id="15644" chance="362" /><!-- ornate crossbow -->
-		<item id="15645" chance="333" /><!-- deepling backpack -->
-		<item id="15647" chance="751" /><!-- deepling squelcher -->
+		<item name="small sapphire" countmax="3" chance="2890" />
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="platinum coin" countmax="2" chance="70000" />
+		<item name="great mana potion" countmax="3" chance="14285" />
+		<item name="great health potion" countmax="3" chance="14285" />
+		<item name="heavy trident" chance="1694" />
+		<item name="eye of a deepling" chance="10000" />
+		<item name="deepling guard belt buckle" chance="12500" />
+		<item name="deepling breaktime snack" chance="16666" />
+		<item name="guardian axe" chance="925" />
+		<item name="deepling claw" chance="9090" />
+		<item name="foxtail" chance="10" />
+		<item name="ornate crossbow" chance="362" />
+		<item name="deepling backpack" chance="333" />
+		<item name="deepling squelcher" chance="751" />
 	</loot>
 </monster>

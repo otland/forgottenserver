@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Stonecracker" nameDescription="stonecracker" race="blood" experience="3500" speed="280" manacost="0">
 	<health now="6500" max="6500" />
 	<look type="55" corpse="5999" />
@@ -46,16 +46,16 @@
 		<voice sentence="HUAHAHA!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="76225" /><!-- gold coin -->
-		<item id="2150" countmax="2" chance="7650" /><!-- small amethyst -->
-		<item id="2387" chance="7650" /><!-- double axe -->
-		<item id="2416" chance="14800" /><!-- crowbar -->
-		<item id="2463" chance="7650" /><!-- plate armor -->
-		<item id="2489" chance="7650" /><!-- dark armor -->
-		<item id="2553" chance="14800" /><!-- pick -->
-		<item id="2666" chance="36200" /><!-- meat -->
-		<item id="5893" chance="64800" /><!-- perfect behemoth fang -->
-		<item id="5930" chance="50500" /><!-- behemoth claw -->
-		<item id="7368" countmax="2" chance="11225" /><!-- assassin star -->
+		<item name="gold coin" countmax="100" chance="76225" />
+		<item name="small amethyst" countmax="2" chance="7650" />
+		<item name="double axe" chance="7650" />
+		<item name="crowbar" chance="14800" />
+		<item name="plate armor" chance="7650" />
+		<item name="dark armor" chance="7650" />
+		<item name="pick" chance="14800" />
+		<item name="meat" chance="36200" />
+		<item name="perfect behemoth fang" chance="64800" />
+		<item name="behemoth claw" chance="50500" />
+		<item name="assassin star" countmax="2" chance="11225" />
 	</loot>
 </monster>

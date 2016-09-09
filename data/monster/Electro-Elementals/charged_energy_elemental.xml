@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Charged Energy Elemental" nameDescription="a charged energy Elemental" race="undead" experience="450" speed="270" manacost="0">
 	<health now="500" max="500" />
 	<look type="293" corpse="8966" />
@@ -41,9 +41,9 @@
 		<immunity ice="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="22" chance="50000" /><!-- gold coin -->
-		<item id="7838" countmax="3" chance="6250" /><!-- flash arrow -->
-		<item id="8303" chance="2063" /><!-- energy soil -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="22" chance="50000" />
+		<item name="flash arrow" countmax="3" chance="6250" />
+		<item name="energy soil" chance="2063" />
 	</loot>
 </monster>

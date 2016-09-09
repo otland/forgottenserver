@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Fire Overlord" nameDescription="a fire overlord" race="fire" experience="2800" speed="300" manacost="0">
 	<health now="4000" max="4000" />
 	<look type="243" corpse="8964" />
@@ -40,10 +40,10 @@
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="75" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="50000" /><!-- platinum coin -->
-		<item id="7899" chance="819" /><!-- magma coat -->
-		<item id="8304" chance="100000" /><!-- eternal flames -->
-		<item id="10553" chance="100000" /><!-- fiery heart -->
+		<item name="gold coin" countmax="75" chance="50000" />
+		<item name="platinum coin" countmax="3" chance="50000" />
+		<item name="magma coat" chance="819" />
+		<item name="eternal flames" chance="100000" />
+		<item name="fiery heart" chance="100000" />
 	</loot>
 </monster>

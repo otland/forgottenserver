@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Mutated Human" nameDescription="a mutated human" race="blood" experience="150" speed="200" manacost="0">
 	<health now="240" max="240" />
 	<look type="323" corpse="9107" />
@@ -56,18 +56,18 @@
 		<voice sentence="Oh by the gods! What is this... aaaaaargh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="44000" /><!-- gold coin -->
-		<item id="2148" countmax="50" chance="44000" /><!-- gold coin -->
-		<item id="2161" chance="4980" /><!-- strange talisman -->
-		<item id="2170" chance="70" /><!-- silver amulet -->
-		<item id="2226" chance="10050" /><!-- fishbone -->
+		<item name="gold coin" countmax="80" chance="44000" />
+		<item name="gold coin" countmax="50" chance="44000" />
+		<item name="strange talisman" chance="4980" />
+		<item name="silver amulet" chance="70" />
+		<item name="fishbone" chance="10050" />
 		<item id="2376" chance="5030" /><!-- sword -->
-		<item id="2483" chance="8080" /><!-- scale armor -->
+		<item name="scale armor" chance="8080" />
 		<item id="2696" chance="8000" /><!-- cheese -->
-		<item id="2801" chance="420" /><!-- fern -->
-		<item id="3976" countmax="2" chance="7110" /><!-- worm -->
-		<item id="7910" chance="580" /><!-- peanut -->
+		<item name="fern" chance="420" />
+		<item name="worm" countmax="2" chance="7110" />
+		<item name="peanut" chance="580" />
 		<item id="9808" chance="190" /><!-- rusty armor -->
-		<item id="11225" chance="19940" /><!-- Mutated Flesh -->
+		<item name="mutated flesh" chance="19940" />
 	</loot>
 </monster>

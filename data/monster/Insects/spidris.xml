@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Spidris" nameDescription="a spidris" race="venom" experience="2600" speed="260" manacost="0">
 	<health now="3700" max="3700" />
 	<look type="457" corpse="15296" />
@@ -43,20 +43,20 @@
 		<voice sentence="Iiiiieeeeeh!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="5" chance="11900" /><!-- small ruby -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="4" chance="45000" /><!-- platinum coin -->
-		<item id="2153" chance="770" /><!-- violet gem -->
+		<item name="small ruby" countmax="5" chance="11900" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="platinum coin" countmax="4" chance="45000" />
+		<item name="violet gem" chance="770" />
 		<item id="6300" chance="2700" /><!-- death ring -->
-		<item id="7413" chance="920" /><!-- titan axe -->
-		<item id="7590" countmax="2" chance="11500" /><!-- great mana potion -->
+		<item name="titan axe" chance="920" />
+		<item name="great mana potion" countmax="2" chance="11500" />
 		<item id="7632" chance="1700" /><!-- giant shimmering pearl -->
-		<item id="8473" countmax="2" chance="6250" /><!-- ultimate health potion -->
-		<item id="15485" chance="14960" /><!-- spidris sandible -->
-		<item id="15486" chance="12500" /><!-- compound eye -->
-		<item id="15489" chance="370" /><!-- calopteryx cape -->
-		<item id="15491" chance="720" /><!-- carapace shield -->
-		<item id="15492" chance="690" /><!-- hive scythe -->
+		<item name="ultimate health potion" countmax="2" chance="6250" />
+		<item name="spidris mandible" chance="14960" />
+		<item name="compound eye" chance="12500" />
+		<item name="calopteryx cape" chance="370" />
+		<item name="carapace shield" chance="720" />
+		<item name="hive scythe" chance="690" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ghoulish Hyaena" nameDescription="a ghoulish hyaena" race="blood" experience="195" speed="200" manacost="275">
 	<health now="400" max="400" />
 	<look type="94" head="20" body="30" legs="40" feet="50" corpse="6026" />
@@ -39,10 +39,10 @@
 		<voice sentence="Hoouu!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="2" chance="2700" /><!-- small ruby -->
-		<item id="2148" countmax="40" chance="89000" /><!-- gold coin -->
-		<item id="2666" countmax="3" chance="51060" /><!-- meat -->
-		<item id="3976" countmax="7" chance="65000" /><!-- worm -->
-		<item id="7618" chance="19840" /><!-- hp -->
+		<item name="small ruby" countmax="2" chance="2700" />
+		<item name="gold coin" countmax="40" chance="89000" />
+		<item name="meat" countmax="3" chance="51060" />
+		<item name="worm" countmax="7" chance="65000" />
+		<item name="health potion" chance="19840" />
 	</loot>
 </monster>

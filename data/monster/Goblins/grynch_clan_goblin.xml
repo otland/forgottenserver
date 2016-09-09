@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Grynch Clan Goblin" nameDescription="a Grynch Clan Goblin" race="blood" experience="4" speed="870" manacost="0">
 	<health now="80" max="80" />
 	<look type="61" corpse="6002" />
@@ -55,46 +55,46 @@
 		<voice sentence="Catch me if you can!" />
 	</voices>
 	<loot>
-		<item id="1686" chance="750" /><!-- blue round pillow -->
-		<item id="1687" chance="750" /><!-- red round pillow -->
-		<item id="1688" chance="750" /><!-- green round pillow -->
+		<item name="blue pillow" chance="750" />
+		<item name="red pillow" chance="750" />
+		<item name="green pillow" chance="750" />
 		<item id="1689" chance="750" /><!-- yellow round pillow -->
 		<item id="1852" chance="4000" /><!-- landscape picture -->
 		<item id="1949" chance="4000" /><!-- scroll -->
 		<item id="2072" chance="5000" /><!-- lute -->
 		<item id="2102" chance="500" /><!-- flower bowl -->
-		<item id="2111" countmax="5" chance="7000" /><!-- snowball -->
-		<item id="2114" chance="1000" /><!-- piggy bank -->
-		<item id="2148" countmax="22" chance="22500" /><!-- gold coin -->
-		<item id="2159" countmax="2" chance="500" /><!-- scarab coin -->
-		<item id="2160" chance="250" /><!-- crystal coin -->
+		<item name="snowball" countmax="5" chance="7000" />
+		<item name="piggy bank" chance="1000" />
+		<item name="gold coin" countmax="22" chance="22500" />
+		<item name="scarab coin" countmax="2" chance="500" />
+		<item name="crystal coin" chance="250" />
 		<item id="2163" chance="4000" /><!-- magic light wand -->
-		<item id="2172" chance="4000" /><!-- bronze amulet -->
-		<item id="2260" chance="5000" /><!-- blank rune -->
-		<item id="2534" chance="250" /><!-- vampire shield -->
+		<item name="bronze amulet" chance="4000" />
+		<item name="blank rune" chance="5000" />
+		<item name="vampire shield" chance="250" />
 		<item id="2551" chance="1500" /><!-- broom -->
 		<item id="2560" chance="1000" /><!-- mirror -->
-		<item id="2661" chance="4000" /><!-- scarf -->
-		<item id="2674" countmax="3" chance="700" /><!-- apple -->
-		<item id="2675" countmax="3" chance="7000" /><!-- orange -->
-		<item id="2679" countmax="4" chance="7000" /><!-- cherry -->
-		<item id="2687" countmax="5" chance="7000" /><!-- cookie -->
-		<item id="2688" countmax="3" chance="5000" /><!-- candy cane -->
+		<item name="scarf" chance="4000" />
+		<item name="red apple" countmax="3" chance="700" />
+		<item name="orange" countmax="3" chance="7000" />
+		<item name="cherry" countmax="4" chance="7000" />
+		<item name="cookie" countmax="5" chance="7000" />
+		<item name="candy cane" countmax="3" chance="5000" />
 		<item id="2695" countmax="2" chance="5000" /><!-- egg -->
-		<item id="4839" chance="500" /><!-- bottle -->
-		<item id="4873" chance="4000" /><!-- explorer brooch -->
-		<item id="5022" countmax="2" chance="500" /><!-- orichalcum pearl -->
+		<item name="flask of cough syrup" chance="500" />
+		<item name="explorer brooch" chance="4000" />
+		<item name="orichalcum pearl" countmax="2" chance="500" />
 		<item id="5792" chance="1000" /><!-- dice -->
-		<item id="5890" countmax="5" chance="4000" /><!-- chicken feather -->
-		<item id="5894" countmax="3" chance="4000" /><!-- bat wing -->
-		<item id="5902" chance="4000" /><!-- honeycomb -->
+		<item name="chicken feather" countmax="5" chance="4000" />
+		<item name="bat wing" countmax="3" chance="4000" />
+		<item name="honeycomb" chance="4000" />
 		<item id="6091" chance="1500" /><!-- watch -->
-		<item id="6277" countmax="3" chance="7000" /><!-- lump of cake dough -->
-		<item id="6393" chance="1500" /><!-- valentine cake -->
-		<item id="6497" chance="7000" /><!-- present bag -->
-		<item id="6501" countmax="2" chance="4000" /><!-- gingerbread man -->
-		<item id="7731" chance="250" /><!-- elvenhair rope -->
-		<item id="7909" countmax="5" chance="3500" /><!-- walnut -->
-		<item id="7910" countmax="100" chance="3500" /><!-- peanut -->
+		<item name="lump of cake dough" countmax="3" chance="7000" />
+		<item name="valentine's cake" chance="1500" />
+		<item name="christmas present bag" chance="7000" />
+		<item name="gingerbreadman" countmax="2" chance="4000" />
+		<item name="elvenhair rope" chance="250" />
+		<item name="walnut" countmax="5" chance="3500" />
+		<item name="peanut" countmax="100" chance="3500" />
 	</loot>
 </monster>

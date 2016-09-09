@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crazed Beggar" nameDescription="a crazed beggar" race="blood" experience="35" speed="200" manacost="300">
 	<health now="100" max="100" />
 	<look type="153" body="38" feet="97" head="59" legs="38" addons="3" corpse="20351" />
@@ -36,19 +36,19 @@
 		<voice sentence="Make it stop!" />
 	</voices>
 	<loot>
-		<item id="1681" chance="420" /><!-- blue pillow -->
+		<item name="small blue pillow" chance="420" />
 		<item id="2072" chance="360" /><!-- lute -->
-		<item id="2148" countmax="9" chance="99000" /><!-- gold coin -->
-		<item id="2213" chance="120" /><!-- dwarven ring -->
-		<item id="2237" chance="55000" /><!-- dirty cape -->
-		<item id="2556" chance="6500" /><!-- wooden hammer -->
-		<item id="2567" chance="9750" /><!-- wooden spoon -->
-		<item id="2570" chance="5650" /><!-- rolling pin -->
-		<item id="2666" chance="9500" /><!-- meat -->
-		<item id="2690" chance="22500" /><!-- roll -->
-		<item id="2744" chance="4700" /><!-- red rose -->
-		<item id="2802" chance="420" /><!-- sling herb -->
-		<item id="5553" chance="420" /><!-- rum flak -->
+		<item name="gold coin" countmax="9" chance="99000" />
+		<item name="dwarven ring" chance="120" />
+		<item name="dirty cape" chance="55000" />
+		<item name="wooden hammer" chance="6500" />
+		<item name="wooden spoon" chance="9750" />
+		<item name="rolling pin" chance="5650" />
+		<item name="meat" chance="9500" />
+		<item name="roll" chance="22500" />
+		<item name="red rose" chance="4700" />
+		<item name="sling herb" chance="420" />
+		<item name="rum flask" chance="420" />
 		<item id="6092" chance="300" /><!-- very noble-looking watch -->
 		<item id="9808" chance="80" /><!-- rusty armor -->
 	</loot>

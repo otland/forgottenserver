@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Deepling Brawler" nameDescription="a deepling brawler" race="blood" experience="260" speed="190" manacost="0">
 	<health now="380" max="380" />
 	<look type="470" corpse="13840" />
@@ -34,11 +34,11 @@
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="44" chance="61000" /><!-- gold coin -->
+		<item name="gold coin" countmax="44" chance="61000" />
 		<item id="2667" countmax="3" chance="19120" /><!-- fish-->
-		<item id="5895" chance="740" /><!-- fish fin -->
-		<item id="13838" chance="2940" /><!-- heavy trident -->
-		<item id="13870" chance="6600" /><!-- eye of a deepling -->
-		<item id="15430" chance="14500" /><!-- deepling scales -->
+		<item name="fish fin" chance="740" />
+		<item name="heavy trident" chance="2940" />
+		<item name="eye of a deepling" chance="6600" />
+		<item name="deepling scales" chance="14500" />
 	</loot>
 </monster>

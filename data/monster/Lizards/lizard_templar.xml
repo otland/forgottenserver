@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="155" speed="200" manacost="0">
 	<health now="410" max="410" />
 	<look type="113" corpse="4251" />
@@ -32,17 +32,17 @@
 		<voice sentence="Hissss!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="84000" /><!-- gold coin -->
-		<item id="2149" chance="250" /><!-- small emerald -->
+		<item name="gold coin" countmax="60" chance="84000" />
+		<item name="small emerald" chance="250" />
 		<item id="2376" chance="4000" /><!-- sword -->
-		<item id="2394" chance="1990" /><!-- morning star -->
-		<item id="2406" chance="9500" /><!-- short sword -->
-		<item id="2457" chance="2000" /><!-- steel helmet -->
-		<item id="2463" chance="1000" /><!-- plate armor -->
-		<item id="3963" chance="500" /><!-- templar scytheblade -->
-		<item id="3975" chance="110" /><!-- salamander shield -->
-		<item id="5876" chance="880" /><!-- lizard leather -->
-		<item id="5881" chance="990" /><!-- lizard scale -->
-		<item id="7618" chance="890" /><!-- health potion -->
+		<item name="morning star" chance="1990" />
+		<item name="short sword" chance="9500" />
+		<item name="steel helmet" chance="2000" />
+		<item name="plate armor" chance="1000" />
+		<item name="templar scytheblade" chance="500" />
+		<item name="salamander shield" chance="110" />
+		<item name="lizard leather" chance="880" />
+		<item name="lizard scale" chance="990" />
+		<item name="health potion" chance="890" />
 	</loot>
 </monster>

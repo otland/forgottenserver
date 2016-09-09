@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Terrified Elephant" nameDescription="a terrified elephant" race="blood" experience="160" speed="220" manacost="500">
 	<health now="320" max="320" />
 	<look type="211" corpse="6052" />
@@ -33,9 +33,9 @@
 		<voice sentence="Trooooot!" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="40000" /><!-- meat -->
-		<item id="2671" countmax="9" chance="27000" /><!-- ham -->
-		<item id="3956" countmax="2" chance="8510" /><!-- tusk -->
-		<item id="3973" chance="80" /><!-- tusk shield -->
+		<item name="meat" countmax="4" chance="40000" />
+		<item name="ham" countmax="9" chance="27000" />
+		<item name="tusk" countmax="2" chance="8510" />
+		<item name="tusk shield" chance="80" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Countess Sorrow" nameDescription="a countess sorrow" race="undead" experience="5150" speed="250" manacost="0">
 	<health now="7200" max="7200" />
 	<look type="241" head="20" corpse="6344" />
@@ -45,6 +45,6 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="6536" chance="100000" /><!-- countess sorrow's frozen tear -->
+		<item name="Countess Sorrow's frozen tear" chance="100000" />
 	</loot>
 </monster>

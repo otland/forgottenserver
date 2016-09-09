@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Troll Legionnaire" nameDescription="a troll legionnaire" race="blood" experience="140" speed="190" manacost="0">
 	<health now="210" max="210" />
 	<look type="53" corpse="5998" />
@@ -38,9 +38,9 @@
 		<voice sentence="Graaaaar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="155" chance="92000" /><!-- gold coin -->
-		<item id="2165" chance="560" /><!-- stealth ring -->
-		<item id="2399" countmax="10" chance="28000" /><!-- throwing star -->
-		<item id="10565" chance="5120" /><!-- frosty ear of a troll -->
+		<item name="gold coin" countmax="155" chance="92000" />
+		<item name="stealth ring" chance="560" />
+		<item name="throwing star" countmax="10" chance="28000" />
+		<item name="frosty ear of a troll" chance="5120" />
 	</loot>
 </monster>

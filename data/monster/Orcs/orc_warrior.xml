@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Orc Warrior" nameDescription="a orc warrior" race="blood" experience="50" speed="190" manacost="360">
 	<health now="125" max="125" />
 	<look type="7" corpse="5979" />
@@ -32,14 +32,14 @@
 		<voice sentence="Alk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="65000" /><!-- gold coin -->
-		<item id="2411" chance="120" /><!-- poison dagger -->
-		<item id="2464" chance="7360" /><!-- chain armor -->
-		<item id="2530" chance="560" /><!-- copper shield -->
-		<item id="2666" chance="15000" /><!-- meat -->
-		<item id="11113" chance="700" /><!-- orc tooth -->
-		<item id="12409" chance="10800" /><!-- broken helmet -->
-		<item id="12435" chance="4000" /><!-- orc leather -->
-		<item id="12436" chance="980" /><!-- skull belt -->
+		<item name="gold coin" countmax="15" chance="65000" />
+		<item name="poison dagger" chance="120" />
+		<item name="chain armor" chance="7360" />
+		<item name="copper shield" chance="560" />
+		<item name="meat" chance="15000" />
+		<item name="orc tooth" chance="700" />
+		<item name="broken helmet" chance="10800" />
+		<item name="orc leather" chance="4000" />
+		<item name="skull belt" chance="980" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Groam" nameDescription="a groam" race="blood" experience="180" speed="560" manacost="0">
 	<health now="400" max="400" />
 	<look type="413" corpse="13839" />
@@ -41,9 +41,9 @@
 		<voice sentence="Ljeave this sjacred pljace while you cjan" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="100000" /><!-- gold coin -->
-		<item id="2168" chance="50000" /><!-- life ring -->
-		<item id="3965" countmax="4" chance="25000" /><!-- hunting spear -->
+		<item name="gold coin" countmax="50" chance="100000" />
+		<item name="life ring" chance="50000" />
+		<item name="hunting spear" countmax="4" chance="25000" />
 		<item id="9808" chance="14285" /><!-- rusty armor -->
 	</loot>
 </monster>

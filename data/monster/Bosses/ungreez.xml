@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ungreez" nameDescription="ungreez" race="blood" experience="5000" speed="330" manacost="10000">
 	<health now="8200" max="8200" />
 	<look type="35" corpse="5995" />
@@ -56,9 +56,9 @@
 		<voice sentence="You wil die Begging like the others did" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="21000" /><!-- gold coin -->
-		<item id="2795" countmax="6" chance="10000" /><!-- fire mushroom -->
-		<item id="7590" chance="20000" /><!-- great mana potion -->
-		<item id="7591" chance="20000" /><!-- great health potion -->
+		<item name="gold coin" countmax="90" chance="21000" />
+		<item name="fire mushroom" countmax="6" chance="10000" />
+		<item name="great mana potion" chance="20000" />
+		<item name="great health potion" chance="20000" />
 	</loot>
 </monster>

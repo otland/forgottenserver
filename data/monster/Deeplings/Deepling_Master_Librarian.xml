@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Deepling Master Librarian" nameDescription="a deepling master librarian" race="blood" experience="1900" speed="190" manacost="0">
 	<health now="1700" max="1700" />
 	<look type="443" corpse="15211" />
@@ -46,18 +46,18 @@
 		<voice sentence="Mmmmmoooaaaaaahaaa!!!" />
 	</voices>
 	<loot>
-		<item id="2146" countmax="3" chance="8440" /><!-- small sapphire -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="90000" /><!-- platinum coin -->
-		<item id="2168" chance="3200" /><!-- life ring -->
+		<item name="small sapphire" countmax="3" chance="8440" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" countmax="3" chance="90000" />
+		<item name="life ring" chance="3200" />
 		<item id="2667" countmax="2" chance="9090" /><!-- fish -->
-		<item id="5895" chance="1950" /><!-- fish fin -->
-		<item id="13870" chance="9380" /><!-- eye of a deepling -->
-		<item id="15400" chance="3130" /><!-- deepling staff -->
-		<item id="15403" chance="1330" /><!-- necklace of the deep -->
-		<item id="15421" chance="25000" /><!-- spellsinger's seal -->
-		<item id="15422" chance="20000" /><!-- key to the drowned library -->
-		<item id="15488" chance="20000" /><!-- deepling filet -->
-		<item id="15644" chance="39" /><!-- ornate crossbow -->
+		<item name="fish fin" chance="1950" />
+		<item name="eye of a deepling" chance="9380" />
+		<item name="deepling staff" chance="3130" />
+		<item name="necklace of the deep" chance="1330" />
+		<item name="spellsinger's seal" chance="25000" />
+		<item name="key to the Drowned Library" chance="20000" />
+		<item name="deepling filet" chance="20000" />
+		<item name="ornate crossbow" chance="39" />
 	</loot>
 </monster>

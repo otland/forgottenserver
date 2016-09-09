@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Elf Arcanist" nameDescription="a elf arcanist" race="blood" experience="175" speed="170" manacost="0">
 	<health now="220" max="220" />
 	<look type="63" corpse="6011" />
@@ -54,25 +54,25 @@
 	</voices>
 	<loot>
 		<item id="1949" chance="31000" /><!-- scroll -->
-		<item id="2047" chance="2100" /><!-- candlestick-->
-		<item id="2148" countmax="47" chance="37000" /><!-- gold coin -->
-		<item id="2154" chance="50" /><!-- yellow gem -->
-		<item id="2177" chance="970" /><!-- life crystal -->
-		<item id="2189" chance="1160" /><!-- wand of cosmic energy -->
-		<item id="2198" chance="1999" /><!-- elven amulet -->
-		<item id="2260" chance="18000" /><!-- blank rune -->
-		<item id="2544" countmax="3" chance="6000" /><!-- arrow -->
-		<item id="2600" chance="1000" /><!-- inkwell -->
-		<item id="2642" chance="950" /><!-- sandals -->
-		<item id="2652" chance="7000" /><!-- green tunic -->
-		<item id="2682" chance="22000" /><!-- melon -->
-		<item id="2689" chance="14000" /><!-- bread -->
-		<item id="2747" chance="880" /><!-- grave flower -->
-		<item id="2802" chance="5000" /><!-- sling herb -->
-		<item id="5922" chance="2100" /><!-- holy orchid -->
-		<item id="7589" chance="3000" /><!-- strong mana potion -->
-		<item id="7618" chance="4000" /><!-- health potion -->
-		<item id="10552" chance="10000" /><!-- elvish talisman -->
-		<item id="12421" chance="7710" /><!-- Elven Astral Observer -->
+		<item name="candlestick" chance="2100" />
+		<item name="gold coin" countmax="47" chance="37000" />
+		<item name="yellow gem" chance="50" />
+		<item name="life crystal" chance="970" />
+		<item name="wand of cosmic energy" chance="1160" />
+		<item name="elven amulet" chance="1999" />
+		<item name="blank rune" chance="18000" />
+		<item name="arrow" countmax="3" chance="6000" />
+		<item name="inkwell" chance="1000" />
+		<item name="sandals" chance="950" />
+		<item name="green tunic" chance="7000" />
+		<item name="melon" chance="22000" />
+		<item name="bread" chance="14000" />
+		<item name="grave flower" chance="880" />
+		<item name="sling herb" chance="5000" />
+		<item name="holy orchid" chance="2100" />
+		<item name="strong mana potion" chance="3000" />
+		<item name="health potion" chance="4000" />
+		<item name="elvish talisman" chance="10000" />
+		<item name="elven astral observer" chance="7710" />
 	</loot>
 </monster>

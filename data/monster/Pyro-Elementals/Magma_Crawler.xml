@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Magma Crawler" nameDescription="a magma crawler" race="fire" experience="2700" speed="220" manacost="0">
 	<health now="4800" max="4800" />
 	<look type="492" corpse="17336" />
@@ -54,33 +54,33 @@
 		<voice sentence="Crrroak!" />
 	</voices>
 	<loot>
-		<item id="2145" countmax="3" chance="8800" /><!-- small diamonds -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="99" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="5" chance="100000" /><!-- platinum coin -->
-		<item id="2154" chance="1030" /><!-- yellow gem -->
-		<item id="2167" chance="1650" /><!-- energy ring -->
-		<item id="2392" chance="1680" /><!-- fire sword -->
-		<item id="2529" chance="1550" /><!-- black shield -->
-		<item id="5880" chance="4280" /><!-- iron ore -->
-		<item id="5909" chance="2310" /><!-- white piece of cloth -->
-		<item id="5911" chance="930" /><!-- red piece of cloth -->
-		<item id="5914" chance="2980" /><!-- yellow piece of cloth -->
-		<item id="7590" chance="6500" /><!-- gmp -->
-		<item id="7591" chance="7270" /><!-- great health potion -->
-		<item id="7890" chance="3120" /><!-- magma amulet -->
-		<item id="7891" chance="1820" /><!-- magma boots -->
-		<item id="8921" chance="4280" /><!-- wand of draconia -->
-		<item id="10553" chance="7810" /><!-- fiery hearts -->
+		<item name="small diamond" countmax="3" chance="8800" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="50000" />
+		<item name="platinum coin" countmax="5" chance="100000" />
+		<item name="yellow gem" chance="1030" />
+		<item name="energy ring" chance="1650" />
+		<item name="fire sword" chance="1680" />
+		<item name="black shield" chance="1550" />
+		<item name="iron ore" chance="4280" />
+		<item name="white piece of cloth" chance="2310" />
+		<item name="red piece of cloth" chance="930" />
+		<item name="yellow piece of cloth" chance="2980" />
+		<item name="great mana potion" chance="6500" />
+		<item name="great health potion" chance="7270" />
+		<item name="magma amulet" chance="3120" />
+		<item name="magma boots" chance="1820" />
+		<item name="wand of draconia" chance="4280" />
+		<item name="fiery heart" chance="7810" />
 		<item id="13757" chance="1675" /><!-- coal -->
-		<item id="18304" countmax="10" chance="5950" /><!-- crystalline arrows -->
-		<item id="18409" chance="690" /><!-- wand of everblazing -->
-		<item id="18413" countmax="2" chance="3930" /><!-- blue crystal shard -->
-		<item id="18417" countmax="2" chance="8500" /><!-- brown crystal splinter -->
-		<item id="18418" countmax="2" chance="8500" /><!-- blue crystal splinter -->
-		<item id="18421" chance="7000" /><!-- green crystal fragment -->
-		<item id="18424" chance="11600" /><!-- magma clumps -->
-		<item id="18425" countmax="1" chance="11500" /><!-- violet -->
-		<item id="18425" chance="12220" /><!-- blazing bones -->
+		<item name="crystalline arrow" countmax="10" chance="5950" />
+		<item name="wand of everblazing" chance="690" />
+		<item name="blue crystal shard" countmax="2" chance="3930" />
+		<item name="brown crystal splinter" countmax="2" chance="8500" />
+		<item name="blue crystal splinter" countmax="2" chance="8500" />
+		<item name="green crystal fragment" chance="7000" />
+		<item name="magma clump" chance="11600" />
+		<item name="blazing bone" countmax="1" chance="11500" />
+		<item name="blazing bone" chance="12220" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Undead Gladiator" nameDescription="a undead gladiator" race="undead" experience="800" speed="180" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="306" corpse="9823" />
@@ -45,25 +45,25 @@
 		<voice sentence="Another foolish adventurer who tries to beat me." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
-		<item id="2148" countmax="48" chance="50500" /><!-- gold coin -->
-		<item id="2165" chance="30" /><!-- stealth ring -->
-		<item id="2200" chance="2200" /><!-- protection amulet -->
-		<item id="2377" chance="1900" /><!-- two handed sword -->
-		<item id="2399" countmax="18" chance="15700" /><!-- throwing star -->
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="48" chance="50500" />
+		<item name="stealth ring" chance="30" />
+		<item name="protection amulet" chance="2200" />
+		<item name="two handed sword" chance="1900" />
+		<item name="throwing star" countmax="18" chance="15700" />
 		<item id="2419" chance="11280" /><!-- scimitar -->
-		<item id="2430" chance="280" /><!-- knight axe -->
-		<item id="2463" chance="1700" /><!-- plate armor -->
-		<item id="2465" chance="4700" /><!-- brass armor -->
-		<item id="2478" chance="5500" /><!-- brass legs -->
-		<item id="2490" chance="1460" /><!-- dark helmet -->
-		<item id="2497" chance="100" /><!-- crusader helmet -->
-		<item id="2647" chance="2444" /><!-- plate legs -->
-		<item id="2666" countmax="2" chance="15000" /><!-- meat -->
-		<item id="3965" chance="4200" /><!-- hunting spear -->
-		<item id="5885" chance="210" /><!-- warrior's sweat -->
-		<item id="7618" chance="350" /><!-- health potion -->
-		<item id="8872" chance="5000" /><!-- belted cape -->
-		<item id="10573" chance="5200" /><!-- broken gladiator shield -->
+		<item name="knight axe" chance="280" />
+		<item name="plate armor" chance="1700" />
+		<item name="brass armor" chance="4700" />
+		<item name="brass legs" chance="5500" />
+		<item name="dark helmet" chance="1460" />
+		<item name="crusader helmet" chance="100" />
+		<item name="plate legs" chance="2444" />
+		<item name="meat" countmax="2" chance="15000" />
+		<item name="hunting spear" chance="4200" />
+		<item name="flask of warrior's sweat" chance="210" />
+		<item name="health potion" chance="350" />
+		<item name="belted cape" chance="5000" />
+		<item name="broken gladiator shield" chance="5200" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Handmaiden" nameDescription="the handmaiden" race="blood" experience="3850" speed="450" manacost="0">
 	<health now="14500" max="14500" />
 	<look type="230" corpse="6312" />
@@ -50,6 +50,6 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="6539" chance="35000" /><!-- handmaiden's protector -->
+		<item name="the Handmaiden's protector" chance="35000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Donkey" nameDescription="a donkey" race="blood" experience="0" speed="150">
 	<health now="45" max="45" />
 	<look type="387" corpse="13509" />
@@ -24,6 +24,6 @@
 		<voice sentence="Grunt!" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="20000" />
+		<item name="meat" countmax="2" chance="20000" />
 	</loot>
 </monster>

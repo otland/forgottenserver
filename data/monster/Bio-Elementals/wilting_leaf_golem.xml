@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wilting Leaf Golem" nameDescription="a wilting leaf golem" race="blood" experience="145" speed="145" manacost="390">
 	<health now="380" max="380" />
 	<look type="573" corpse="21434" />
@@ -38,11 +38,11 @@
 		<voice sentence="*swwwwishhhh*" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="45" chance="97230" /><!-- gold coin -->
-		<item id="2149" chance="830" /><!-- small emerald -->
-		<item id="2787" countmax="3" chance="4860" /><!-- white mushrooms -->
-		<item id="20104" chance="4200" /><!-- swampling club -->
-		<item id="21427" chance="10690" /><!-- dowser -->
-		<item id="21428" chance="15630" /><!-- fir cone -->
+		<item name="gold coin" countmax="45" chance="97230" />
+		<item name="small emerald" chance="830" />
+		<item name="white mushroom" countmax="3" chance="4860" />
+		<item name="swampling club" chance="4200" />
+		<item name="dowser" chance="10690" />
+		<item name="fir cone" chance="15630" />
 	</loot>
 </monster>

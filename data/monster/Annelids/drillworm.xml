@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Drillworm" nameDescription="drillworm" race="venom" experience="1100" speed="240" manacost="0">
 	<health now="1500" max="1500" />
 	<look type="527" corpse="19705" />
@@ -45,22 +45,22 @@
 		<voice sentence="Knarrrk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- Gold Coin -->
-		<item id="2148" countmax="50" chance="50000" /><!-- Gold Coin -->
-		<item id="2515" chance="2240" /><!-- Dwarven Ring -->
-		<item id="2553" chance="5280" /><!-- Pick -->
-		<item id="3976" countmax="5" chance="4580" /><!-- Worms -->
-		<item id="5880" chance="1750" /><!-- Iron Ore -->
-		<item id="7452" chance="540" /><!-- Spiked Squelcher -->
-		<item id="7887" chance="2360" /><!-- Terra Amulet -->
-		<item id="11222" chance="15000" /><!-- Lump of Earth -->
-		<item id="11339" chance="700" /><!-- Clay Lump -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="50" chance="50000" />
+		<item name="guardian shield" chance="2240" />
+		<item name="pick" chance="5280" />
+		<item name="worm" countmax="5" chance="4580" />
+		<item name="iron ore" chance="1750" />
+		<item name="spiked squelcher" chance="540" />
+		<item name="terra amulet" chance="2360" />
+		<item name="lump of earth" chance="15000" />
+		<item name="clay lump" chance="700" />
 		<item id="13757" chance="12130" /><!-- Coal -->
-		<item id="18416" chance="9780" /><!-- green crystal splinter -->
-		<item id="18417" chance="9260" /><!-- brown crystal splinter -->
-		<item id="18418" chance="9610" /><!-- blue crystal splinter -->
-		<item id="18427" chance="5400" /><!-- pulverized ore -->
-		<item id="18429" chance="7280" /><!-- vein of ore -->
-		<item id="18436" countmax="2" chance="4870" /><!-- Drill Bolts -->
+		<item name="green crystal splinter" chance="9780" />
+		<item name="brown crystal splinter" chance="9260" />
+		<item name="blue crystal splinter" chance="9610" />
+		<item name="pulverized ore" chance="5400" />
+		<item name="vein of ore" chance="7280" />
+		<item name="drill bolt" countmax="2" chance="4870" />
 	</loot>
 </monster>

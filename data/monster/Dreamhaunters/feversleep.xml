@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Feversleep" nameDescription="Feversleep" race="blood" experience="4400" speed="270" manacost="0">
 	<health now="5900" max="5900" />
 	<look type="593" corpse="22497" />
@@ -56,18 +56,18 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2149" countmax="2" chance="11000" /><!-- small emerald -->
-		<item id="2150" countmax="3" chance="12000" /><!-- small amethyst -->
-		<item id="2152" countmax="9" chance="100000" /><!-- platinum coin -->
-		<item id="2656" chance="1500" /><!-- blue robe -->
-		<item id="7590" countmax="2" chance="40000" /><!-- great mana potion -->
-		<item id="8473" chance="18000" /><!-- ultimate health potion -->
-		<item id="9970" countmax="2" chance="16000" /><!-- small topaz -->
-		<item id="18413" chance="11000" /><!-- blue crystal shard -->
-		<item id="18418" chance="13000" /><!-- blue crystal splinter -->
-		<item id="18419" chance="18000" /><!-- cyan crystal fragment -->
-		<item id="22537" chance="17000" /><!-- trapped bad dream monster -->
-		<item id="22538" chance="14000" /><!-- bowl of terror sweat -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="small emerald" countmax="2" chance="11000" />
+		<item name="small amethyst" countmax="3" chance="12000" />
+		<item name="platinum coin" countmax="9" chance="100000" />
+		<item name="blue robe" chance="1500" />
+		<item name="great mana potion" countmax="2" chance="40000" />
+		<item name="ultimate health potion" chance="18000" />
+		<item name="small topaz" countmax="2" chance="16000" />
+		<item name="blue crystal shard" chance="11000" />
+		<item name="blue crystal splinter" chance="13000" />
+		<item name="cyan crystal fragment" chance="18000" />
+		<item name="trapped bad dream monster" chance="17000" />
+		<item name="bowl of terror sweat" chance="14000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ice Overlord" nameDescription="an ice overlord" race="undead" experience="1950" speed="390" manacost="0">
 	<health now="4000" max="2800" />
 	<look type="11" corpse="8965" />
@@ -44,8 +44,8 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="38" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="50000" /><!-- platinum coin -->
-		<item id="8300" chance="100000" /><!-- flawless ice crystal -->
+		<item name="gold coin" countmax="38" chance="50000" />
+		<item name="platinum coin" countmax="3" chance="50000" />
+		<item name="flawless ice crystal" chance="100000" />
 	</loot>
 </monster>

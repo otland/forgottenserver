@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Bat" namedescription="a bat" race="blood" experience="10" speed="230" manacost="250">
 	<health now="30" max="30" />
 	<look type="122" corpse="6053" />
@@ -27,6 +27,6 @@
 		<voice sentence="Flap!Flap!" />
 	</voices>
 	<loot>
-		<item id="5894" chance="1220" /><!-- bat wing -->
+		<item name="bat wing" chance="1220" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Kraknaknork Demon" nameDescription="a Kraknaknork Demon" race="fire" experience="0" speed="400" manacost="0">
 	<health now="120" max="120" />
 	<look type="12" head="117" body="58" legs="117" feet="0" corpse="6068" />
@@ -39,8 +39,8 @@
 		<voice sentence="ROOKIE FOR BREAKFAST" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="48025" /><!-- gold coin -->
-		<item id="2148" countmax="86" chance="48025" /><!-- gold coin -->
-		<item id="2148" chance="24400" /><!-- gold ingot -->
+		<item name="gold coin" countmax="100" chance="48025" />
+		<item name="gold coin" countmax="86" chance="48025" />
+		<item name="gold coin" chance="24400" />
 	</loot>
 </monster>

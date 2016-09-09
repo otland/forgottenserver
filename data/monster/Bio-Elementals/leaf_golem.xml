@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Leaf Golem" nameDescription="a leaf golem" race="undead" experience="45" speed="140" manacost="390">
 	<health now="90" max="90" />
 	<look type="567" corpse="21358" />
@@ -34,11 +34,11 @@
 		<voice sentence="*swwwwishhhh*" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="27" chance="86830" /><!-- gold coin -->
-		<item id="2149" chance="1230" /><!-- small emerald -->
-		<item id="2787" countmax="3" chance="4940" /><!-- white mushrooms -->
-		<item id="20104" chance="4940" /><!-- swampling club -->
-		<item id="21427" chance="15230" /><!-- dowser -->
-		<item id="21428" chance="14350" /><!-- fir cone -->
+		<item name="gold coin" countmax="27" chance="86830" />
+		<item name="small emerald" chance="1230" />
+		<item name="white mushroom" countmax="3" chance="4940" />
+		<item name="swampling club" chance="4940" />
+		<item name="dowser" chance="15230" />
+		<item name="fir cone" chance="14350" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185" manacost="0">
 	<health now="125" max="125" />
 	<look type="425" corpse="20395" />
@@ -44,16 +44,16 @@
 		<voice sentence="This is Venore!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="30300" /><!-- gold coin -->
+		<item name="gold coin" countmax="35" chance="30300" />
 		<item id="2230" chance="4920" /><!-- bone -->
-		<item id="3976" countmax="3" chance="25730" /><!-- worms -->
-		<item id="13540" chance="1660" /><!-- ominous piece of cloth -->
-		<item id="13541" chance="1720" /><!-- dubious piece of cloth -->
-		<item id="13542" chance="2290" /><!-- voluminous piece of cloth -->
-		<item id="13543" chance="2006" /><!-- obvious piece of cloth -->
-		<item id="13544" chance="2060" /><!-- ludicrous piece of cloth -->
-		<item id="13545" chance="2290" /><!-- luminous piece of cloth -->
-		<item id="13925" chance="100" /><!-- plague mask -->
-		<item id="13926" chance="100" /><!-- plague bell -->
+		<item name="worm" countmax="3" chance="25730" />
+		<item name="ominous piece of cloth" chance="1660" />
+		<item name="dubious piece of cloth" chance="1720" />
+		<item name="voluminous piece of cloth" chance="2290" />
+		<item name="obvious piece of cloth" chance="2006" />
+		<item name="ludicrous piece of cloth" chance="2060" />
+		<item name="luminous piece of cloth" chance="2290" />
+		<item name="plague mask" chance="100" />
+		<item name="plague bell" chance="100" />
 	</loot>
 </monster>

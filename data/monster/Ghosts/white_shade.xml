@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="White Shade" nameDescription="a white shade" race="undead" experience="120" speed="190" manacost="0">
 	<health now="260" max="260" />
 	<look type="560" corpse="21376" />
@@ -49,6 +49,6 @@
 		<voice sentence="No... don't go further stranger... danger lies in every step..." />
 	</voices>
 	<loot>
-		<item id="5909" chance="3370" /><!-- white piece of cloth -->
+		<item name="white piece of cloth" chance="3370" />
 	</loot>
 </monster>

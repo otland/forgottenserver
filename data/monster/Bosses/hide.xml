@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Hide" nameDescription="hide" race="venom" experience="240" speed="280">
 	<health now="500" max="500" />
 	<look type="219" corpse="6060" />
@@ -37,11 +37,11 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="2152" countmax="5" chance="100000" /><!-- platinum coin -->
+		<item name="platinum coin" countmax="5" chance="100000" />
 		<item id="2169" chance="33333" /><!-- time ring -->
-		<item id="2457" chance="50000" /><!-- steel helmet -->
-		<item id="2477" chance="50000" /><!-- knight legs -->
-		<item id="5879" chance="50000" /><!-- spider silk -->
-		<item id="7903" chance="50000" /><!-- terra hood -->
+		<item name="steel helmet" chance="50000" />
+		<item name="knight legs" chance="50000" />
+		<item name="spider silk" chance="50000" />
+		<item name="terra hood" chance="50000" />
 	</loot>
 </monster>

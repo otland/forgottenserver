@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Minishabaal" nameDescription="minishabaal" race="blood" experience="4000" speed="700" manacost="0">
 	<health now="3500" max="3500" />
 	<look type="237" corpse="6364" />
@@ -59,18 +59,18 @@
 	</voices>
 	<loot>
 		<item id="2136" chance="909" /><!-- demonbone amulet -->
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
-		<item id="2150" countmax="2" chance="1428" /><!-- small amethyst -->
-		<item id="2432" chance="666" /><!-- fire axe -->
-		<item id="2470" chance="180" /><!-- golden legs -->
-		<item id="2488" chance="800" /><!-- crown legs -->
-		<item id="2515" chance="1333" /><!-- guardian shield -->
-		<item id="2520" chance="200" /><!-- demon shield -->
-		<item id="2542" chance="500" /><!-- tempest shield -->
-		<item id="2548" chance="2857" /><!-- pitch fork -->
-		<item id="5944" chance="909" /><!-- soul orb -->
-		<item id="5944" chance="909" /><!-- soul orb -->
-		<item id="6500" countmax="2" chance="1000" /><!-- demonic essence -->
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item name="small amethyst" countmax="2" chance="1428" />
+		<item name="fire axe" chance="666" />
+		<item name="golden legs" chance="180" />
+		<item name="crown legs" chance="800" />
+		<item name="guardian shield" chance="1333" />
+		<item name="demon shield" chance="200" />
+		<item name="tempest shield" chance="500" />
+		<item name="pitchfork" chance="2857" />
+		<item name="soul orb" chance="909" />
+		<item name="soul orb" chance="909" />
+		<item name="demonic essence" countmax="2" chance="1000" />
 	</loot>
 </monster>

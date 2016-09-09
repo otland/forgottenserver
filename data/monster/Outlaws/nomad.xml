@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="205" manacost="420">
 	<health now="160" max="160" />
 	<look type="146" head="114" body="20" legs="22" feet="2" addons="2" corpse="20466" />
@@ -36,15 +36,15 @@
 		<voice sentence="We are swift as the wind of the desert!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="56250" /><!-- gold coin -->
-		<item id="2386" chance="2730" /><!-- axe -->
-		<item id="2398" chance="2120" /><!-- mace -->
-		<item id="2459" chance="650" /><!-- iron helmet -->
-		<item id="2465" chance="2350" /><!-- brass armor -->
-		<item id="2509" chance="920" /><!-- steel shield -->
-		<item id="8267" chance="200" /><!-- nomad parchment -->
-		<item id="8838" countmax="3" chance="4840" /><!-- potatoes -->
-		<item id="12412" chance="2160" /><!-- dirty turban -->
-		<item id="12448" chance="6420" /><!-- rope belt -->
+		<item name="gold coin" countmax="40" chance="56250" />
+		<item name="axe" chance="2730" />
+		<item name="mace" chance="2120" />
+		<item name="iron helmet" chance="650" />
+		<item name="brass armor" chance="2350" />
+		<item name="steel shield" chance="920" />
+		<item name="nomad parchment" chance="200" />
+		<item name="potato" countmax="3" chance="4840" />
+		<item name="dirty turban" chance="2160" />
+		<item name="rope belt" chance="6420" />
 	</loot>
 </monster>

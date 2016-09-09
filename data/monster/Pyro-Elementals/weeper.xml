@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Weeper" nameDescription="Weeper" race="fire" experience="4800" speed="260" manacost="0">
 	<health now="6800" max="6800" />
 	<look type="489" corpse="17252" />
@@ -50,25 +50,25 @@
 		<voice sentence="Moooaaan!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="3" chance="15690" /><!-- small ruby -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="99" chance="50000" /><!-- gold coin -->
-		<item id="2172" countmax="7" chance="100000" /><!-- platinum coin -->
-		<item id="2392" chance="3280" /><!-- fire sword -->
-		<item id="2432" chance="2150" /><!-- fire axe -->
-		<item id="7590" countmax="2" chance="14800" /><!-- GMP -->
-		<item id="7894" chance="790" /><!-- magma legs -->
-		<item id="7899" chance="790" /><!-- magma coat -->
-		<item id="8473" countmax="2" chance="15440" /><!-- UHP -->
-		<item id="10553" chance="13570" /><!-- fiery hearts -->
+		<item name="small ruby" countmax="3" chance="15690" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="50000" />
+		<item name="bronze amulet" countmax="7" chance="100000" />
+		<item name="fire sword" chance="3280" />
+		<item name="fire axe" chance="2150" />
+		<item name="great mana potion" countmax="2" chance="14800" />
+		<item name="magma legs" chance="790" />
+		<item name="magma coat" chance="790" />
+		<item name="ultimate health potion" countmax="2" chance="15440" />
+		<item name="fiery heart" chance="13570" />
 		<item id="13757" chance="1320" /><!-- coal -->
-		<item id="18409" chance="1480" /><!-- wand of everblazing -->
-		<item id="18414" chance="5430" /><!-- violet crystal shard -->
-		<item id="18417" countmax="2" chance="12100" /><!-- brown crystal plinter -->
-		<item id="18420" chance="8880" /><!-- red crystal fragment -->
-		<item id="18424" chance="13240" /><!-- magma clumps -->
-		<item id="18425" chance="14890" /><!-- blazing bones -->
-		<item id="18426" chance="15870" /><!-- eye of a weeper -->
-		<item id="18435" countmax="5" chance="10900" /><!-- prismatic bolt -->
+		<item name="wand of everblazing" chance="1480" />
+		<item name="violet crystal shard" chance="5430" />
+		<item name="brown crystal splinter" countmax="2" chance="12100" />
+		<item name="red crystal fragment" chance="8880" />
+		<item name="magma clump" chance="13240" />
+		<item name="blazing bone" chance="14890" />
+		<item name="eye of a weeper" chance="15870" />
+		<item name="prismatic bolt" countmax="5" chance="10900" />
 	</loot>
 </monster>

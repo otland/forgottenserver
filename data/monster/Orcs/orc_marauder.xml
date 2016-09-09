@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Orc Marauder" nameDescription="a orc marauder" race="blood" experience="205" speed="210" manacost="0">
 	<health now="235" max="235" />
 	<look type="342" corpse="11251" />
@@ -38,16 +38,16 @@
 		<voice sentence="Grrrrrr" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="55000" /><!-- gold coin -->
-		<item id="2425" chance="1110" /><!-- obsidian lance -->
-		<item id="2428" chance="1320" /><!-- orcish axe -->
-		<item id="2455" chance="440" /><!-- crossbow -->
-		<item id="2456" chance="5210" /><!-- bow -->
-		<item id="2666" chance="24600" /><!-- meat -->
-		<item id="8857" chance="70" /><!-- silkweaver bow -->
-		<item id="11113" chance="3890" /><!-- orc tooth -->
-		<item id="11324" chance="10090" /><!-- shaggy tail -->
-		<item id="12407" chance="4830" /><!-- broken crossbow -->
-		<item id="12435" chance="3800" /><!-- orc leather -->
+		<item name="gold coin" countmax="90" chance="55000" />
+		<item name="obsidian lance" chance="1110" />
+		<item name="orcish axe" chance="1320" />
+		<item name="crossbow" chance="440" />
+		<item name="bow" chance="5210" />
+		<item name="meat" chance="24600" />
+		<item name="silkweaver bow" chance="70" />
+		<item name="orc tooth" chance="3890" />
+		<item name="shaggy tail" chance="10090" />
+		<item name="broken crossbow" chance="4830" />
+		<item name="orc leather" chance="3800" />
 	</loot>
 </monster>

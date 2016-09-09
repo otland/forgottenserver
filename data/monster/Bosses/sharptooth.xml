@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Sharptooth" nameDescription="a sharptooth" race="blood" experience="1600" speed="290" manacost="0">
 	<health now="2500" max="2500" />
 	<look type="20" corpse="6067" />
@@ -44,6 +44,6 @@
 		<voice sentence="Rraaar!" />
 	</voices>
 	<loot>
-		<item id="2226" chance="50000" /><!-- fishbone -->
+		<item name="fishbone" chance="50000" />
 	</loot>
 </monster>

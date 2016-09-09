@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Hellgorak" nameDescription="a hellgorak" race="blood" experience="10000" speed="360" manacost="0">
 	<health now="40000" max="40000" />
 	<look type="12" head="19" body="96" legs="21" feet="81" corpse="6068" />
@@ -59,14 +59,14 @@
 		<voice sentence="Delicious!" />
 	</voices>
 	<loot>
-		<item id="2143" countmax="7" chance="3000" /><!-- white pearl -->
-		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="70000" /><!-- gold coin -->
-		<item id="2148" countmax="83" chance="60000" /><!-- gold coin -->
-		<item id="2160" countmax="3" chance="100000" /><!-- crystal coin -->
-		<item id="2514" chance="1650" /><!-- mastermind shield -->
-		<item id="7368" countmax="25" chance="100000" /><!-- assassin star -->
-		<item id="7590" chance="7000" /><!-- great mana potion -->
-		<item id="7591" chance="7000" /><!-- great health potion -->
+		<item name="white pearl" countmax="7" chance="3000" />
+		<item name="gold coin" countmax="100" chance="80000" />
+		<item name="gold coin" countmax="100" chance="70000" />
+		<item name="gold coin" countmax="83" chance="60000" />
+		<item name="crystal coin" countmax="3" chance="100000" />
+		<item name="mastermind shield" chance="1650" />
+		<item name="assassin star" countmax="25" chance="100000" />
+		<item name="great mana potion" chance="7000" />
+		<item name="great health potion" chance="7000" />
 	</loot>
 </monster>

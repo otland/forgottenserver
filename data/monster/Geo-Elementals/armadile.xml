@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Armadile" nameDescription="a armadile" race="undead" experience="2900" speed="210" manacost="0">
 	<health now="3800" max="3800" />
 	<look type="487" corpse="18378" />
@@ -50,26 +50,26 @@
 		<voice sentence="Creak!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="98" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="95000" /><!-- platinum coin -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="98" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="95000" />
 		<item id="2169" chance="1000" /><!-- time ring -->
-		<item id="2528" chance="620" /><!-- tower shield -->
-		<item id="7413" chance="1540" /><!-- titan axe -->
-		<item id="7428" chance="1150" /><!-- bonebreaker -->
-		<item id="7588" countmax="2" chance="14285" /><!-- strong health potion -->
-		<item id="7589" countmax="2" chance="15000" /><!-- strong mana potion -->
-		<item id="7590" countmax="2" chance="15920" /><!-- great mana potion -->
-		<item id="7591" countmax="2" chance="15000" /><!-- great health potion -->
-		<item id="7620" countmax="3" chance="14285" /><!-- mana potion -->
-		<item id="7886" chance="2850" /><!-- terra boots -->
-		<item id="8878" chance="230" /><!-- crystalline armor -->
-		<item id="12403" chance="12460" /><!-- battle stone -->
+		<item name="tower shield" chance="620" />
+		<item name="titan axe" chance="1540" />
+		<item name="bonebreaker" chance="1150" />
+		<item name="strong health potion" countmax="2" chance="14285" />
+		<item name="strong mana potion" countmax="2" chance="15000" />
+		<item name="great mana potion" countmax="2" chance="15920" />
+		<item name="great health potion" countmax="2" chance="15000" />
+		<item name="mana potion" countmax="3" chance="14285" />
+		<item name="terra boots" chance="2850" />
+		<item name="crystalline armor" chance="230" />
+		<item name="battle stone" chance="12460" />
 		<item id="13757" chance="6000" /><!-- coal -->
-		<item id="18416" countmax="2" chance="3920" /><!-- green crystal splinter -->
-		<item id="18421" countmax="2" chance="5690" /><!-- green crystal fragment -->
-		<item id="18432" chance="14540" /><!-- crystalline spikes -->
-		<item id="18436" countmax="5" chance="7692" /><!-- drill bolt -->
-		<item id="18437" countmax="10" chance="10230" /><!-- envenomed arrow -->
+		<item name="green crystal splinter" countmax="2" chance="3920" />
+		<item name="green crystal fragment" countmax="2" chance="5690" />
+		<item name="crystalline spikes" chance="14540" />
+		<item name="drill bolt" countmax="5" chance="7692" />
+		<item name="envenomed arrow" countmax="10" chance="10230" />
 	</loot>
 </monster>

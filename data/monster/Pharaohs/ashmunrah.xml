@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ashmunrah" nameDescription="an ashmunrah" race="undead" experience="3100" speed="320" manacost="0">
 	<health now="5000" max="5000" />
 	<look type="87" corpse="6031" />
@@ -64,12 +64,12 @@
 		<voice sentence="Ahhhh all those long years." />
 	</voices>
 	<loot>
-		<item id="2134" chance="7000" /><!-- silver brooch -->
-		<item id="2140" chance="400" /><!-- holy scarab -->
-		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
-		<item id="2164" chance="1000" /><!-- might ring -->
-		<item id="2487" chance="80000" /><!-- crown armor-->
-		<item id="7590" chance="1500" /><!-- great mana potion -->
+		<item name="silver brooch" chance="7000" />
+		<item name="holy scarab" chance="400" />
+		<item name="gold coin" countmax="80" chance="50000" />
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="might ring" chance="1000" />
+		<item name="crown armor" chance="80000" />
+		<item name="great mana potion" chance="1500" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lady Bug" nameDescription="a lady bug" race="venom" experience="70" speed="200" manacost="0">
 	<health now="255" max="255" />
 	<look type="448" corpse="15272" />
@@ -38,6 +38,6 @@
 		<voice sentence="Nee pah!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="65000" /><!-- gold coin -->
+		<item name="gold coin" countmax="40" chance="65000" />
 	</loot>
 </monster>

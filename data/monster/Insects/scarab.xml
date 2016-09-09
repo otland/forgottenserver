@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Scarab" nameDescription="a scarab" race="venom" experience="120" speed="170" manacost="395">
 	<health now="320" max="320" />
 	<look type="83" corpse="6024" />
@@ -39,12 +39,12 @@
 		<immunity paralyze="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="52" chance="86800" /><!-- gold coin -->
-		<item id="2149" chance="413" /><!-- small emerald -->
-		<item id="2150" chance="540" /><!-- small amethyst -->
-		<item id="2159" chance="1098" /><!-- scarab coin -->
-		<item id="2439" chance="245" /><!-- daramanian mace -->
-		<item id="2666" countmax="2" chance="40000" /><!-- meat -->
-		<item id="10558" chance="4950" /><!-- piece of scarab shell -->
+		<item name="gold coin" countmax="52" chance="86800" />
+		<item name="small emerald" chance="413" />
+		<item name="small amethyst" chance="540" />
+		<item name="scarab coin" chance="1098" />
+		<item name="daramian mace" chance="245" />
+		<item name="meat" countmax="2" chance="40000" />
+		<item name="piece of scarab shell" chance="4950" />
 	</loot>
 </monster>

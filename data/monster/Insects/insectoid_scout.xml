@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190" manacost="0">
 	<health now="230" max="230" />
 	<look type="403" corpse="13514" />
@@ -35,9 +35,9 @@
 		<voice sentence="Klk! Klk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="80000" /><!-- gold coin -->
-		<item id="2209" chance="100" /><!-- club ring -->
-		<item id="3964" chance="850" /><!-- ripper lance -->
-		<item id="7618" chance="280" /><!-- hp -->
+		<item name="gold coin" countmax="80" chance="80000" />
+		<item name="club ring" chance="100" />
+		<item name="ripper lance" chance="850" />
+		<item name="health potion" chance="280" />
 	</loot>
 </monster>

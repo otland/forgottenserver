@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Mummy" nameDescription="a mummy" race="undead" experience="150" speed="150" manacost="0">
 	<health now="240" max="240" />
 	<look type="65" corpse="6004" />
@@ -48,18 +48,18 @@
 	</voices>
 	<loot>
 		<item id="2124" chance="1500" /><!-- crystal ring -->
-		<item id="2134" chance="4000" /><!-- silver brooch -->
-		<item id="2144" chance="1000" /><!-- black pearl -->
-		<item id="2148" countmax="80" chance="38000" /><!-- gold coin -->
-		<item id="2161" chance="5000" /><!-- strange talisman -->
+		<item name="silver brooch" chance="4000" />
+		<item name="black pearl" chance="1000" />
+		<item name="gold coin" countmax="80" chance="38000" />
+		<item name="strange talisman" chance="5000" />
 		<item id="2162" chance="5800" /><!-- magic lightwand -->
-		<item id="2170" chance="100" /><!-- silver amulet -->
-		<item id="2411" chance="450" /><!-- poison dagger -->
-		<item id="2529" chance="170" /><!-- black shield -->
-		<item id="3976" countmax="3" chance="19000" /><!-- worm -->
-		<item id="5914" chance="900" /><!-- yellow piece of cloth -->
-		<item id="10566" chance="10000" /><!-- gauze bandage -->
-		<item id="11207" chance="10" /><!-- mini mummy -->
-		<item id="12422" chance="11690" /><!-- flask of embalming fluid -->
+		<item name="silver amulet" chance="100" />
+		<item name="poison dagger" chance="450" />
+		<item name="black shield" chance="170" />
+		<item name="worm" countmax="3" chance="19000" />
+		<item name="yellow piece of cloth" chance="900" />
+		<item name="gauze bandage" chance="10000" />
+		<item name="mini mummy" chance="10" />
+		<item name="flask of embalming fluid" chance="11690" />
 	</loot>
 </monster>

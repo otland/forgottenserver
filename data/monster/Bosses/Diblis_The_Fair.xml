@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Diblis the fair" nameDescription="a vampire lord" race="undead" experience="1800" speed="280" manacost="0">
 	<health now="1600" max="1600" />
 	<look type="287" corpse="8937" />
@@ -49,15 +49,15 @@
 		<voice sentence="I will drain your ugly corpses of the last drop of blood." />
 	</voices>
 	<loot>
-		<item id="2144" chance="8900" countmax="2" />
-		<item id="2148" chance="100000" countmax="99" />
-		<item id="2152" chance="50000" countmax="5" />
-		<item id="2216" chance="14111" />
+		<item name="black pearl" chance="8900" countmax="2" />
+		<item name="gold coin" chance="100000" countmax="99" />
+		<item name="platinum coin" chance="50000" countmax="5" />
+		<item name="ring of healing (faster regeneration)" chance="14111" />
 		<item id="2229" chance="15000" />
-		<item id="2534" chance="2100" />
-		<item id="7588" chance="1500" />
-		<item id="8903" chance="300" />
-		<item id="9020" chance="100000" />
-		<item id="13224" chance="500" />
+		<item name="vampire shield" chance="2100" />
+		<item name="strong health potion" chance="1500" />
+		<item name="spellbook of lost souls" chance="300" />
+		<item name="vampire lord token" chance="100000" />
+		<item name="scum bag" chance="500" />
 	</loot>
 </monster>

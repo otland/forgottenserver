@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Orchid Frog" nameDescription="a orchid frog" race="blood" experience="20" speed="200" manacost="305">
 	<health now="60" max="60" />
 	<look type="226" head="109" body="14" legs="109" feet="114" corpse="6079" />
@@ -29,7 +29,7 @@
 		<voice sentence="Ribbit! Ribbit!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="10" chance="73230" /><!-- gold coin -->
-		<item id="3976" chance="8000" /><!-- worm -->
+		<item name="gold coin" countmax="10" chance="73230" />
+		<item name="worm" chance="8000" />
 	</loot>
 </monster>

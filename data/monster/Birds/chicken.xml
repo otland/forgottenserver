@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="160" manacost="220">
 	<health now="15" max="15" />
 	<look type="111" corpse="6042" />
@@ -22,9 +22,9 @@
 		<voice sentence="Cluck Cluck" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="2120" /><!-- meat -->
+		<item name="meat" countmax="2" chance="2120" />
 		<item id="2695" chance="950" /><!-- egg -->
-		<item id="3976" countmax="3" chance="10000" /><!-- worm -->
-		<item id="5890" countmax="1" chance="20000" /><!-- chicken feather -->
+		<item name="worm" countmax="3" chance="10000" />
+		<item name="chicken feather" countmax="1" chance="20000" />
 	</loot>
 </monster>

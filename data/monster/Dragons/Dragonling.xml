@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dragonling" nameDescription="a dragonling" race="blood" experience="2200" speed="330" manacost="0">
 	<health now="2600" max="2600" />
 	<look type="505" corpse="18438" />
@@ -52,11 +52,11 @@
 		<voice sentence="FI?" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="37500" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="37500" /><!-- gold coin -->
-		<item id="2148" countmax="27" chance="37500" /><!-- gold coin -->
-		<item id="7588" countmax="2" chance="24480" /><!-- shp -->
-		<item id="7589" countmax="2" chance="16900" /><!-- smp-->
-		<item id="18425" chance="12410" /><!-- Blazing Bones -->
+		<item name="gold coin" countmax="100" chance="37500" />
+		<item name="gold coin" countmax="100" chance="37500" />
+		<item name="gold coin" countmax="27" chance="37500" />
+		<item name="strong health potion" countmax="2" chance="24480" />
+		<item name="strong mana potion" countmax="2" chance="16900" />
+		<item name="blazing bone" chance="12410" />
 	</loot>
 </monster>

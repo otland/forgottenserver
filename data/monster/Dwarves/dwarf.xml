@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="180" manacost="320">
 	<health now="90" max="90" />
 	<look type="69" corpse="6007" />
@@ -29,16 +29,16 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="8" chance="35000" /><!-- gold coin -->
-		<item id="2213" chance="100" /><!-- dwarven ring -->
-		<item id="2386" chance="15000" /><!-- axe -->
-		<item id="2388" chance="25000" /><!-- hatchet -->
-		<item id="2484" chance="8000" /><!-- studded armor -->
-		<item id="2530" chance="10000" /><!-- copper shield -->
-		<item id="2553" chance="10000" /><!-- pick -->
-		<item id="2597" chance="8000" /><!-- letter -->
-		<item id="2649" chance="10000" /><!-- leather legs -->
-		<item id="2787" chance="50000" /><!-- white mushroom -->
-		<item id="5880" chance="700" /><!-- iron ore -->
+		<item name="gold coin" countmax="8" chance="35000" />
+		<item name="dwarven ring" chance="100" />
+		<item name="axe" chance="15000" />
+		<item name="hatchet" chance="25000" />
+		<item name="studded armor" chance="8000" />
+		<item name="copper shield" chance="10000" />
+		<item name="pick" chance="10000" />
+		<item name="letter" chance="8000" />
+		<item name="leather legs" chance="10000" />
+		<item name="white mushroom" chance="50000" />
+		<item name="iron ore" chance="700" />
 	</loot>
 </monster>

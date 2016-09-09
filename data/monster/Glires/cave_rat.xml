@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Cave Rat" nameDescription="a cave rat" race="blood" experience="10" speed="150" manacost="250">
 	<health now="30" max="30" />
 	<look type="56" corpse="5964" />
@@ -28,9 +28,9 @@
 		<voice sentence="Meep!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="2" chance="85000" /><!-- gold coin -->
-		<item id="2687" chance="750" /><!-- cookie -->
+		<item name="gold coin" countmax="2" chance="85000" />
+		<item name="cookie" chance="750" />
 		<item id="2696" chance="30000" /><!-- cheese -->
-		<item id="3976" countmax="2" chance="9700" /><!-- worm -->
+		<item name="worm" countmax="2" chance="9700" />
 	</loot>
 </monster>

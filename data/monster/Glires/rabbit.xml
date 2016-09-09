@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Rabbit" nameDescription="a rabbit" race="blood" experience="0" speed="180" manacost="220">
 	<health now="15" max="15" />
 	<look type="74" corpse="6017" />
@@ -18,7 +18,7 @@
 	</flags>
 	<defenses armor="5" defense="5" />
 	<loot>
-		<item id="2666" countmax="2" chance="85620" /><!-- meat -->
+		<item name="meat" countmax="2" chance="85620" />
 		<item id="2684" countmax="2" chance="10000" /><!-- carrot -->
 	</loot>
 </monster>

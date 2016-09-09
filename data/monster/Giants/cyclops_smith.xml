@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Cyclops Smith" nameDescription="a cyclops smith" race="blood" experience="255" speed="210" manacost="695">
 	<health now="435" max="435" />
 	<look type="277" corpse="7740" />
@@ -39,19 +39,19 @@
 		<voice sentence="Ai humy phary ty kaynon" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="82920" /><!-- gold coin -->
-		<item id="2209" chance="90" /><!-- club ring -->
-		<item id="2378" chance="5450" /><!-- battle axe -->
-		<item id="2387" chance="880" /><!-- double axe -->
-		<item id="2417" chance="5200" /><!-- battle hammer -->
-		<item id="2442" chance="2000" /><!-- heavy machete -->
-		<item id="2490" chance="200" /><!-- dark helmet -->
-		<item id="2510" chance="2000" /><!-- plate shield -->
-		<item id="2513" chance="6190" /><!-- battle shield -->
-		<item id="2666" chance="49950" /><!-- meat -->
+		<item name="gold coin" countmax="70" chance="82920" />
+		<item name="club ring" chance="90" />
+		<item name="battle axe" chance="5450" />
+		<item name="double axe" chance="880" />
+		<item name="battle hammer" chance="5200" />
+		<item name="heavy machete" chance="2000" />
+		<item name="dark helmet" chance="200" />
+		<item name="plate shield" chance="2000" />
+		<item name="battle shield" chance="6190" />
+		<item name="meat" chance="49950" />
 		<item id="7398" chance="140" /><!-- cyclops trophy -->
-		<item id="7452" chance="150" /><!-- spiked squelcher -->
-		<item id="7588" chance="390" /><!-- strong health potion -->
-		<item id="10574" chance="10280" /><!-- cyclops toe -->
+		<item name="spiked squelcher" chance="150" />
+		<item name="strong health potion" chance="390" />
+		<item name="cyclops toe" chance="10280" />
 	</loot>
 </monster>

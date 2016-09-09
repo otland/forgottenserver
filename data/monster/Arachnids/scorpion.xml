@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Scorpion" nameDescription="a scorpion" race="venom" experience="45" speed="155" manacost="310">
 	<health now="45" max="45" />
 	<look type="43" corpse="5988" />
@@ -29,6 +29,6 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="10568" chance="4930" /><!-- scorpion tail -->
+		<item name="scorpion tail" chance="4930" />
 	</loot>
 </monster>

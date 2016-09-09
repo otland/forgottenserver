@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Hydra" nameDescription="a hydra" race="blood" experience="2100" speed="250" manacost="0">
 	<health now="2350" max="2350" />
 	<look type="121" corpse="6048" />
@@ -54,23 +54,23 @@
 		<voice sentence="HISSSS" />
 	</voices>
 	<loot>
-		<item id="2146" chance="5000" /><!-- small sapphire -->
-		<item id="2148" countmax="100" chance="34000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="34000" /><!-- gold coin -->
-		<item id="2148" countmax="46" chance="20000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="48000" /><!-- platinum coins-->
-		<item id="2177" chance="570" /><!-- life crystal -->
-		<item id="2195" chance="130" /><!-- boots of haste -->
-		<item id="2197" chance="900" /><!-- stone skin amulet -->
-		<item id="2214" chance="1190" /><!-- ring of healing -->
-		<item id="2475" chance="890" /><!-- warrior helmet -->
-		<item id="2476" chance="1000" /><!-- knight armor -->
-		<item id="2498" chance="210" /><!-- royal helmet -->
-		<item id="2536" chance="270" /><!-- medusa shield -->
-		<item id="2671" countmax="4" chance="60000" /><!-- ham -->
-		<item id="4850" chance="930" /><!-- hydra egg -->
-		<item id="7589" chance="380" /><!-- strong mana potion -->
-		<item id="8842" chance="4780" /><!-- cucumber -->
-		<item id="11199" chance="10120" /><!-- hydra head -->
+		<item name="small sapphire" chance="5000" />
+		<item name="gold coin" countmax="100" chance="34000" />
+		<item name="gold coin" countmax="100" chance="34000" />
+		<item name="gold coin" countmax="46" chance="20000" />
+		<item name="platinum coin" countmax="3" chance="48000" />
+		<item name="life crystal" chance="570" />
+		<item name="boots of haste" chance="130" />
+		<item name="stone skin amulet" chance="900" />
+		<item name="ring of healing" chance="1190" />
+		<item name="warrior helmet" chance="890" />
+		<item name="knight armor" chance="1000" />
+		<item name="royal helmet" chance="210" />
+		<item name="medusa shield" chance="270" />
+		<item name="ham" countmax="4" chance="60000" />
+		<item name="hydra egg" chance="930" />
+		<item name="strong mana potion" chance="380" />
+		<item name="cucumber" chance="4780" />
+		<item name="hydra head" chance="10120" />
 	</loot>
 </monster>

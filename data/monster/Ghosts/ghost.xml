@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ghost" nameDescription="a ghost" race="undead" experience="120" speed="160" manacost="100">
 	<health now="150" max="150" />
 	<look type="48" corpse="5993" />
@@ -37,13 +37,13 @@
 	</voices>
 	<loot>
 		<item id="1962" chance="1310" /><!-- orange book -->
-		<item id="2165" chance="180" /><!-- stealth ring -->
-		<item id="2394" chance="10610" /><!-- morning star -->
-		<item id="2404" chance="7002" /><!-- combat knife -->
-		<item id="2532" chance="860" /><!-- ancient shield -->
-		<item id="2654" chance="8800" /><!-- cape -->
-		<item id="2804" chance="14400" /><!-- shadow herb -->
-		<item id="5909" chance="1940" /><!-- white piece of cloth -->
-		<item id="10607" chance="1870" /><!-- ghostly tissue -->
+		<item name="stealth ring" chance="180" />
+		<item name="morning star" chance="10610" />
+		<item name="combat knife" chance="7002" />
+		<item name="ancient shield" chance="860" />
+		<item name="cape" chance="8800" />
+		<item name="shadow herb" chance="14400" />
+		<item name="white piece of cloth" chance="1940" />
+		<item name="ghostly tissue" chance="1870" />
 	</loot>
 </monster>

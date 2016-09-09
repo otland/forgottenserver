@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wolf" nameDescription="a wolf" race="blood" experience="18" speed="160" manacost="255">
 	<health now="25" max="25" />
 	<look type="27" corpse="5968" />
@@ -31,7 +31,7 @@
 		<voice sentence="Grrrrrr" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="55000" /><!-- meat -->
-		<item id="5897" chance="980" /><!-- wolf paw -->
+		<item name="meat" countmax="2" chance="55000" />
+		<item name="wolf paw" chance="980" />
 	</loot>
 </monster>

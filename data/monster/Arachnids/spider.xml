@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Spider" nameDescription="a spider" race="venom" experience="12" speed="165" manacost="210">
 	<health now="20" max="20" />
 	<look type="30" corpse="5961" />
@@ -24,7 +24,7 @@
 		<element firePercent="-1" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="5" chance="63333" /><!-- gold coin -->
-		<item id="8859" chance="810" /><!-- spider fangs -->
+		<item name="gold coin" countmax="5" chance="63333" />
+		<item name="spider fangs" chance="810" />
 	</loot>
 </monster>

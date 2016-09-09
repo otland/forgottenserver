@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200" manacost="0">
 	<health now="1100" max="1100" />
 	<look type="355" corpse="12631" />
@@ -56,17 +56,17 @@
 		<voice sentence="I will feed on you." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="33400" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="49610" /><!-- platinum coin -->
-		<item id="2185" chance="980" /><!-- necrotic rod -->
-		<item id="2189" chance="910" /><!-- wand of cosmic energy -->
-		<item id="5884" chance="140" /><!-- spirit container -->
+		<item name="gold coin" countmax="100" chance="33400" />
+		<item name="gold coin" countmax="100" chance="33400" />
+		<item name="platinum coin" countmax="6" chance="49610" />
+		<item name="necrotic rod" chance="980" />
+		<item name="wand of cosmic energy" chance="910" />
+		<item name="spirit container" chance="140" />
 		<item id="6300" chance="300" /><!-- death ring -->
-		<item id="7590" chance="8000" /><!-- great mana potion -->
-		<item id="8473" chance="9400" /><!-- ultimate health potion -->
-		<item id="12635" chance="20" /><!-- souleater trophy -->
-		<item id="12636" chance="15250" /><!-- lizard essence -->
-		<item id="12637" chance="2000" /><!-- ectoplasmic sushi -->
+		<item name="great mana potion" chance="8000" />
+		<item name="ultimate health potion" chance="9400" />
+		<item name="souleater trophy" chance="20" />
+		<item name="lizard essence" chance="15250" />
+		<item name="ectoplasmic sushi" chance="2000" />
 	</loot>
 </monster>

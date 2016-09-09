@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crawler" nameDescription="a crawler" race="venom" experience="1000" speed="200" manacost="0">
 	<health now="1450" max="1450" />
 	<look type="456" corpse="15292" />
@@ -40,17 +40,17 @@
 		<voice sentence="Sssschrchrsss!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2154" chance="530" /><!-- yellow gem -->
-		<item id="2168" chance="50000" /><!-- platinum coin -->
-		<item id="2391" chance="2070" /><!-- war hammer -->
-		<item id="7590" chance="9300" /><!-- great mana potion -->
-		<item id="7591" chance="6200" /><!-- great health potion -->
-		<item id="8912" chance="710" /><!-- springsprout rod -->
-		<item id="9970" countmax="2" chance="10040" /><!-- small topaz -->
-		<item id="15482" chance="18430" /><!-- crawler head plating -->
-		<item id="15486" chance="14640" /><!-- compound eye -->
-		<item id="15490" chance="100" /><!-- grasshopper legs -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="90" chance="50000" />
+		<item name="yellow gem" chance="530" />
+		<item name="life ring" chance="50000" />
+		<item name="war hammer" chance="2070" />
+		<item name="great mana potion" chance="9300" />
+		<item name="great health potion" chance="6200" />
+		<item name="springsprout rod" chance="710" />
+		<item name="small topaz" countmax="2" chance="10040" />
+		<item name="crawler head plating" chance="18430" />
+		<item name="compound eye" chance="14640" />
+		<item name="grasshopper legs" chance="100" />
 	</loot>
 </monster>

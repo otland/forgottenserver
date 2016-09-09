@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Cyclops Drone" nameDescription="a cyclops drone" race="blood" experience="200" speed="205" manacost="525">
 	<health now="325" max="325" />
 	<look type="280" corpse="7847" />
@@ -36,16 +36,16 @@
 		<voice sentence="Humy tasy! Hum hum!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="82000" /><!-- gold coin -->
-		<item id="2209" chance="90" /><!-- club ring -->
-		<item id="2381" chance="680" /><!-- halberd -->
-		<item id="2406" chance="8000" /><!-- short sword -->
-		<item id="2490" chance="190" /><!-- dark helmet -->
-		<item id="2510" chance="2000" /><!-- plate shield -->
-		<item id="2513" chance="1600" /><!-- battle shield -->
-		<item id="2666" countmax="2" chance="50430" /><!-- meat -->
+		<item name="gold coin" countmax="30" chance="82000" />
+		<item name="club ring" chance="90" />
+		<item name="halberd" chance="680" />
+		<item name="short sword" chance="8000" />
+		<item name="dark helmet" chance="190" />
+		<item name="plate shield" chance="2000" />
+		<item name="battle shield" chance="1600" />
+		<item name="meat" countmax="2" chance="50430" />
 		<item id="7398" chance="120" /><!-- cyclops trophy -->
-		<item id="7588" chance="520" /><!-- strong health potion -->
-		<item id="10574" chance="6750" /><!-- cyclops toe -->
+		<item name="strong health potion" chance="520" />
+		<item name="cyclops toe" chance="6750" />
 	</loot>
 </monster>

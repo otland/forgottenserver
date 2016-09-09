@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wasp" nameDescription="a wasp" race="venom" experience="24" speed="260" manacost="280">
 	<health now="35" max="35" />
 	<look type="44" corpse="5989" />
@@ -30,6 +30,6 @@
 		<voice sentence="Bssssss" />
 	</voices>
 	<loot>
-		<item id="5902" chance="3000" /><!-- honeycomb -->
+		<item name="honeycomb" chance="3000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="230" manacost="590">
 	<health now="305" max="305" />
 	<look type="255" head="114" body="132" legs="132" feet="132" corpse="20335" />
@@ -41,16 +41,16 @@
 	</voices>
 	<loot>
 		<item id="2044" chance="8280" /><!-- lamp -->
-		<item id="2148" countmax="12" chance="50000" /><!-- gold coin -->
-		<item id="2378" chance="6000" /><!-- battle axe -->
-		<item id="2381" chance="6730" /><!-- halberd -->
-		<item id="2458" chance="10440" /><!-- chain helmet -->
-		<item id="2464" chance="10290" /><!-- chain armor -->
-		<item id="2671" chance="4970" /><!-- ham -->
-		<item id="3962" chance="390" /><!-- beastslayer axe -->
-		<item id="5911" chance="530" /><!-- red piece of cloth -->
-		<item id="7290" chance="290" /><!-- shard -->
-		<item id="7457" chance="100" /><!-- fur boots -->
-		<item id="7618" chance="950" /><!-- health potion -->
+		<item name="gold coin" countmax="12" chance="50000" />
+		<item name="battle axe" chance="6000" />
+		<item name="halberd" chance="6730" />
+		<item name="chain helmet" chance="10440" />
+		<item name="chain armor" chance="10290" />
+		<item name="ham" chance="4970" />
+		<item name="beastslayer axe" chance="390" />
+		<item name="red piece of cloth" chance="530" />
+		<item name="shard" chance="290" />
+		<item name="fur boots" chance="100" />
+		<item name="health potion" chance="950" />
 	</loot>
 </monster>

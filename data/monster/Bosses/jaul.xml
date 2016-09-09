@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Jaul" nameDescription="a jaul" race="blood" experience="30000" speed="560" manacost="0">
 	<health now="100000" max="100000" />
 	<look type="444" corpse="15220" />
@@ -64,13 +64,13 @@
 		<voice sentence="DIE!! KENH!!" />
 	</voices>
 	<loot>
-		<item id="15404" chance="25000" /><!-- deepling axe -->
-		<item id="15406" chance="25000" /><!-- ornate chestplate -->
-		<item id="15407" chance="20000" /><!-- depth lorica -->
+		<item name="deepling axe" chance="25000" />
+		<item name="ornate chestplate" chance="25000" />
+		<item name="depth lorica" chance="20000" />
 		<item id="15408" chance="33333" /><!-- depth galea -->
-		<item id="15410" chance="14285" /><!-- depth calcei -->
-		<item id="15412" chance="7142" /><!-- ornate legs -->
-		<item id="15413" chance="50000" /><!-- ornate shield -->
-		<item id="15414" chance="14285" /><!-- ornate mace -->
+		<item name="depth calcei" chance="14285" />
+		<item name="ornate legs" chance="7142" />
+		<item name="ornate shield" chance="50000" />
+		<item name="ornate mace" chance="14285" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Minotaur Archer" nameDescription="a minotaur archer" race="blood" experience="65" speed="170" manacost="390">
 	<health now="100" max="100" />
 	<look type="24" corpse="5982" />
@@ -34,16 +34,16 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="75410" /><!-- gold coin -->
-		<item id="2455" chance="830" /><!-- crossbow -->
-		<item id="2465" chance="530" /><!-- brass armor-->
-		<item id="2483" chance="530" /><!-- scale armor -->
-		<item id="2543" countmax="20" chance="90450" /><!-- bolt -->
-		<item id="2666" chance="5000" /><!-- meat -->
-		<item id="5878" chance="1900" /><!-- minotaur leather -->
-		<item id="7363" countmax="4" chance="12340" /><!-- piercing bolt -->
-		<item id="12407" chance="15400" /><!-- Broken Crossbow -->
-		<item id="12428" countmax="2" chance="1990" /><!-- Minotaur Horn -->
-		<item id="12439" chance="8260" /><!-- Piece of Archer Armor -->
+		<item name="gold coin" countmax="30" chance="75410" />
+		<item name="crossbow" chance="830" />
+		<item name="brass armor" chance="530" />
+		<item name="scale armor" chance="530" />
+		<item name="bolt" countmax="20" chance="90450" />
+		<item name="meat" chance="5000" />
+		<item name="minotaur leather" chance="1900" />
+		<item name="piercing bolt" countmax="4" chance="12340" />
+		<item name="broken crossbow" chance="15400" />
+		<item name="minotaur horn" countmax="2" chance="1990" />
+		<item name="piece of archer armor" chance="8260" />
 	</loot>
 </monster>

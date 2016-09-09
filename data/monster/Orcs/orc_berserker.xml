@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Orc Berserker" nameDescription="a orc berserker" race="blood" experience="195" speed="195" manacost="590">
 	<health now="210" max="210" />
 	<look type="8" corpse="5980" />
@@ -35,14 +35,14 @@
 	</voices>
 	<loot>
 		<item id="2044" chance="830" /><!-- lamp -->
-		<item id="2148" countmax="12" chance="54000" /><!-- gold coin -->
-		<item id="2378" chance="6110" /><!-- battle axe -->
-		<item id="2381" chance="7280" /><!-- halberd -->
-		<item id="2464" chance="890" /><!-- chain armor -->
-		<item id="2671" chance="10400" /><!-- ham -->
-		<item id="3965" chance="5000" /><!-- hunting spear -->
-		<item id="11113" chance="3000" /><!-- orc tooth -->
-		<item id="12433" chance="9400" /><!-- orcish gear -->
-		<item id="12435" chance="4000" /><!-- orc leather -->
+		<item name="gold coin" countmax="12" chance="54000" />
+		<item name="battle axe" chance="6110" />
+		<item name="halberd" chance="7280" />
+		<item name="chain armor" chance="890" />
+		<item name="ham" chance="10400" />
+		<item name="hunting spear" chance="5000" />
+		<item name="orc tooth" chance="3000" />
+		<item name="orcish gear" chance="9400" />
+		<item name="orc leather" chance="4000" />
 	</loot>
 </monster>

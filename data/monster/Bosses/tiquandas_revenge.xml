@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Tiquandas Revenge" nameDescription="a tiquandas revenge" race="venom" experience="1755" speed="440" manacost="0">
 	<health now="2000" max="2000" />
 	<look type="120" corpse="6047" />
@@ -40,13 +40,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2145" countmax="3" chance="33333" /><!-- small diamond -->
-		<item id="2148" countmax="10" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2666" countmax="50" chance="33333" /><!-- meat -->
-		<item id="2671" countmax="8" chance="20000" /><!-- ham -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
-		<item id="5015" chance="100000" /><!-- mandrake -->
-		<item id="7732" chance="4000" /><!-- seeds -->
+		<item name="small diamond" countmax="3" chance="33333" />
+		<item name="gold coin" countmax="10" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="meat" countmax="50" chance="33333" />
+		<item name="ham" countmax="8" chance="20000" />
+		<item name="worm" countmax="10" chance="50000" />
+		<item name="mandrake" chance="100000" />
+		<item name="seeds" chance="4000" />
 	</loot>
 </monster>

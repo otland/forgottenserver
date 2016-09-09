@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Morguthis" nameDescription="a morguthis" race="undead" experience="3000" speed="320" manacost="0">
 	<health now="4800" max="4800" />
 	<look type="90" corpse="6025" />
@@ -65,15 +65,15 @@
 	</voices>
 	<loot>
 		<item id="2136" chance="500" /><!-- demonbone amulet -->
-		<item id="2144" chance="7000" /><!-- black pearl -->
-		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="73" chance="50000" /><!-- gold coin -->
-		<item id="2197" chance="7000" /><!-- stone skin amulet -->
-		<item id="2350" chance="100000" /><!-- sword hilt -->
-		<item id="2430" chance="7000" /><!-- knight axe -->
-		<item id="2443" chance="300" /><!-- ravager's axe -->
-		<item id="2645" chance="500" /><!-- steel boots -->
-		<item id="7368" countmax="3" chance="500" /><!-- assassin star -->
-		<item id="7591" chance="1500" /><!-- great health potion -->
+		<item name="black pearl" chance="7000" />
+		<item name="gold coin" countmax="80" chance="50000" />
+		<item name="gold coin" countmax="73" chance="50000" />
+		<item name="stone skin amulet" chance="7000" />
+		<item name="sword hilt" chance="100000" />
+		<item name="knight axe" chance="7000" />
+		<item name="ravager's axe" chance="300" />
+		<item name="steel boots" chance="500" />
+		<item name="assassin star" countmax="3" chance="500" />
+		<item name="great health potion" chance="1500" />
 	</loot>
 </monster>

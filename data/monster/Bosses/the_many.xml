@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Many" nameDescription="the many" race="blood" experience="4000" speed="260" manacost="0">
 	<health now="4600" max="4600" />
 	<look type="121" corpse="6048" />
@@ -55,14 +55,14 @@
 		<voice sentence="HISSSS" />
 	</voices>
 	<loot>
-		<item id="2146" countmax="5" chance="56325" /><!-- small sapphire -->
-		<item id="2197" chance="100000" /><!-- stone skin amulet -->
-		<item id="2475" chance="75500" /><!-- warrior helmet -->
-		<item id="2498" chance="25500" /><!-- royal helmet -->
-		<item id="2536" chance="75500" /><!-- medusa shield -->
-		<item id="7589" countmax="2" chance="100000" /><!-- strong mana potion -->
-		<item id="9971" countmax="3" chance="47725" /><!-- gold ingot -->
-		<item id="10219" chance="75500" /><!-- sacred tree amulet -->
-		<item id="10523" chance="100000" /><!-- egg of the many -->
+		<item name="small sapphire" countmax="5" chance="56325" />
+		<item name="stone skin amulet" chance="100000" />
+		<item name="warrior helmet" chance="75500" />
+		<item name="royal helmet" chance="25500" />
+		<item name="medusa shield" chance="75500" />
+		<item name="strong mana potion" countmax="2" chance="100000" />
+		<item name="gold ingot" countmax="3" chance="47725" />
+		<item name="sacred tree amulet" chance="75500" />
+		<item name="egg of The Many" chance="100000" />
 	</loot>
 </monster>

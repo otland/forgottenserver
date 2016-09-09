@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Waspoid" nameDescription="a waspoid" race="venom" experience="830" speed="210" manacost="0">
 	<health now="1100" max="1100" />
 	<look type="462" corpse="15396" />
@@ -40,17 +40,17 @@
 		<voice sentence="Peeex!" />
 	</voices>
 	<loot>
-		<item id="2127" chance="2040" /><!-- emerald bangle -->
-		<item id="2144" chance="4230" /><!-- black pearl -->
-		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
-		<item id="2148" countmax="35" chance="50000" /><!-- gold coin -->
-		<item id="2152" chance="40430" /><!-- platinum coin -->
-		<item id="2154" chance="1040" /><!-- yellow gem -->
-		<item id="15483" chance="9096" /><!-- waspoid claw -->
-		<item id="15484" chance="13890" /><!-- waspoid wing -->
-		<item id="15486" chance="6060" /><!-- compound eye -->
-		<item id="15490" chance="230" /><!-- grasshopper legs -->
-		<item id="15491" chance="120" /><!-- carapace shield -->
-		<item id="15492" chance="330" /><!-- hive scythe -->
+		<item name="emerald bangle" chance="2040" />
+		<item name="black pearl" chance="4230" />
+		<item name="gold coin" countmax="100" chance="40000" />
+		<item name="gold coin" countmax="35" chance="50000" />
+		<item name="platinum coin" chance="40430" />
+		<item name="yellow gem" chance="1040" />
+		<item name="waspoid claw" chance="9096" />
+		<item name="waspoid wing" chance="13890" />
+		<item name="compound eye" chance="6060" />
+		<item name="grasshopper legs" chance="230" />
+		<item name="carapace shield" chance="120" />
+		<item name="hive scythe" chance="330" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Munster" nameDescription="a munster" race="blood" experience="23" speed="200" manacost="250">
 	<health now="58" max="58" />
 	<look type="56" corpse="2813" />
@@ -28,10 +28,10 @@
 		<voice sentence="Meeeeep!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="16" chance="100000" /><!-- gold coin -->
-		<item id="2449" chance="5000" /><!-- bone club -->
-		<item id="2650" chance="50000" /><!-- jacket -->
-		<item id="2687" countmax="1" chance="5000" /><!-- cookie -->
+		<item name="gold coin" countmax="16" chance="100000" />
+		<item name="bone club" chance="5000" />
+		<item name="jacket" chance="50000" />
+		<item name="cookie" countmax="1" chance="5000" />
 		<item id="2696" chance="50000" /><!-- cheese -->
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Shaburak Demon" nameDescription="a shaburak demon" race="fire" experience="900" speed="220" manacost="0">
 	<health now="1500" max="1500" />
 	<look type="417" corpse="13814" />
@@ -53,19 +53,19 @@
 		<voice sentence="DEATH TO THE ASKARAK!" />
 	</voices>
 	<loot>
-		<item id="2114" chance="1030" /><!-- piggy bank -->
-		<item id="2147" countmax="5" chance="4761" /><!-- small rubies -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
-		<item id="2167" chance="1052" /><!-- energy ring -->
-		<item id="2187" chance="564" /><!-- wand of inferno -->
-		<item id="2789" chance="3846" /><!-- brown mushroom -->
-		<item id="5904" chance="81" /><!-- magic sulphur -->
-		<item id="7378" countmax="6" chance="10000" /><!-- royal spear -->
-		<item id="7443" chance="628" /><!-- bullseye potion -->
-		<item id="7588" chance="4761" /><!-- strong health potion -->
-		<item id="7589" chance="5000" /><!-- strong mana potion -->
-		<item id="7894" chance="155" /><!-- magma legs -->
+		<item name="piggy bank" chance="1030" />
+		<item name="small ruby" countmax="5" chance="4761" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="50" chance="50000" />
+		<item name="energy ring" chance="1052" />
+		<item name="wand of inferno" chance="564" />
+		<item name="brown mushroom" chance="3846" />
+		<item name="magic sulphur" chance="81" />
+		<item name="royal spear" countmax="6" chance="10000" />
+		<item name="bullseye potion" chance="628" />
+		<item name="strong health potion" chance="4761" />
+		<item name="strong mana potion" chance="5000" />
+		<item name="magma legs" chance="155" />
 	</loot>
 </monster>

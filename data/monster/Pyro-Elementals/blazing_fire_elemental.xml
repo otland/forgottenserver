@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blazing Fire Elemental" nameDescription="a blazing fire elemental" race="fire" experience="580" speed="220" manacost="0">
 	<health now="580" max="580" />
 	<look type="49" corpse="8964" />
@@ -37,9 +37,9 @@
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="40" chance="10000" /><!-- gold coin -->
-		<item id="7840" countmax="4" chance="5000" /><!-- flaming arrow -->
-		<item id="8299" chance="2500" /><!-- glimmering soil -->
-		<item id="10553" chance="5475" /><!-- fiery heart -->
+		<item name="gold coin" countmax="40" chance="10000" />
+		<item name="flaming arrow" countmax="4" chance="5000" />
+		<item name="glimmering soil" chance="2500" />
+		<item name="fiery heart" chance="5475" />
 	</loot>
 </monster>

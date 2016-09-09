@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wisp" nameDescription="a wisp" race="undead" experience="0" speed="180" manacost="0">
 	<health now="115" max="115" />
 	<look type="294" corpse="6324" />
@@ -48,6 +48,6 @@
 		<voice sentence="Tsshh" />
 	</voices>
 	<loot>
-		<item id="10521" chance="220" /><!-- moon backpack -->
+		<item name="moon backpack" chance="220" />
 	</loot>
 </monster>
