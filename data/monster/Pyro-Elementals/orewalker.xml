@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Orewalker" nameDescription="orewalker" race="undead" experience="4800" speed="250" manacost="0">
 	<health now="7200" max="7200" />
 	<look type="490" corpse="17256" />
@@ -53,34 +53,34 @@
 		<voice sentence="CLONK!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="98" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="10" chance="100000" /><!-- platinum coin -->
-		<item id="2154" chance="1030" /><!-- yellow gem -->
-		<item id="2213" chance="4660" /><!-- dwarven ring -->
-		<item id="2477" chance="1910" /><!-- knight legs -->
-		<item id="2487" chance="370" /><!-- crown armor -->
-		<item id="2491" chance="890" /><!-- crown helmet -->
-		<item id="5880" chance="15000" /><!-- iron ore -->
-		<item id="5904" chance="3000" /><!-- magic sulphur -->
-		<item id="7413" chance="2600" /><!-- titan axe -->
-		<item id="7454" chance="1870" /><!-- glorious axe -->
-		<item id="7588" countmax="2" chance="15600" /><!-- shp -->
-		<item id="7589" countmax="2" chance="14000" /><!-- smp -->
-		<item id="7590" countmax="2" chance="14000" /><!-- gmp -->
-		<item id="7620" countmax="4" chance="14000" /><!-- mp -->
-		<item id="8473" countmax="2" chance="9500" /><!-- uhp -->
-		<item id="8878" chance="560" /><!-- crystalline armor -->
-		<item id="9970" countmax="3" chance="16500" /><!-- small topaz -->
-		<item id="11227" chance="13700" /><!-- shiny stone -->
-		<item id="11232" chance="20700" /><!-- sulphurous stone -->
-		<item id="18390" chance="1300" /><!-- wand of defiance -->
-		<item id="18415" chance="8000" /><!-- green crystal shard -->
-		<item id="18418" countmax="2" chance="16000" /><!-- blue crystal splinter -->
-		<item id="18419" chance="13000" /><!-- cyan crystal fragment -->
-		<item id="18427" chance="20500" /><!-- pulverized ore -->
-		<item id="18429" chance="15000" /><!-- vein of ore -->
-		<item id="18435" countmax="5" chance="15500" /><!-- prismatic bolt -->
-		<item id="18453" chance="300" /><!-- crystal crossbow -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="98" chance="50000" />
+		<item name="platinum coin" countmax="10" chance="100000" />
+		<item name="yellow gem" chance="1030" />
+		<item name="dwarven ring" chance="4660" />
+		<item name="knight legs" chance="1910" />
+		<item name="crown armor" chance="370" />
+		<item name="crown helmet" chance="890" />
+		<item name="iron ore" chance="15000" />
+		<item name="magic sulphur" chance="3000" />
+		<item name="titan axe" chance="2600" />
+		<item name="glorious axe" chance="1870" />
+		<item name="strong health potion" countmax="2" chance="15600" />
+		<item name="strong mana potion" countmax="2" chance="14000" />
+		<item name="great mana potion" countmax="2" chance="14000" />
+		<item name="mana potion" countmax="4" chance="14000" />
+		<item name="ultimate health potion" countmax="2" chance="9500" />
+		<item name="crystalline armor" chance="560" />
+		<item name="small topaz" countmax="3" chance="16500" />
+		<item name="shiny stone" chance="13700" />
+		<item name="sulphurous stone" chance="20700" />
+		<item name="wand of defiance" chance="1300" />
+		<item name="green crystal shard" chance="8000" />
+		<item name="blue crystal splinter" countmax="2" chance="16000" />
+		<item name="cyan crystal fragment" chance="13000" />
+		<item name="pulverized ore" chance="20500" />
+		<item name="vein of ore" chance="15000" />
+		<item name="prismatic bolt" countmax="5" chance="15500" />
+		<item name="crystal crossbow" chance="300" />
 	</loot>
 </monster>

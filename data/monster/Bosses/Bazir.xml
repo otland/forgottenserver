@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Bazir" nameDescription="Bazir" race="fire" experience="30000" speed="530" manacost="0">
 	<health now="110000" max="110000" />
 	<look type="35" head="0" body="0" legs="0" feet="0" corpse="2916" />
@@ -95,62 +95,62 @@
 		<voice sentence="DON'T BE AFRAID! I AM COMING IN PEACE!" yell="1" />
 	</voices>
 	<loot>
-		<item id="1982" countmax="1" chance="2600" />
-		<item id="2033" countmax="1" chance="7500" />
-		<item id="2112" countmax="1" chance="14500" />
-		<item id="2123" countmax="1" chance="3500" />
+		<item name="purple tome" countmax="1" chance="2600" />
+		<item name="golden mug" countmax="1" chance="7500" />
+		<item name="teddy bear" countmax="1" chance="14500" />
+		<item name="ring of the sky" countmax="1" chance="3500" />
 		<item id="2124" countmax="1" chance="5500" />
-		<item id="2125" countmax="1" chance="1500" />
-		<item id="2142" countmax="1" chance="3500" />
-		<item id="2143" countmax="15" chance="12500" />
-		<item id="2144" countmax="15" chance="15000" />
-		<item id="2145" countmax="5" chance="9500" />
-		<item id="2146" countmax="10" chance="13500" />
-		<item id="2148" countmax="100" chance="99900" />
-		<item id="2148" countmax="100" chance="88800" />
-		<item id="2148" countmax="100" chance="77700" />
-		<item id="2148" countmax="100" chance="66600" />
-		<item id="2149" countmax="10" chance="15500" />
-		<item id="2150" countmax="20" chance="13500" />
-		<item id="2151" countmax="7" chance="14000" />
-		<item id="2155" countmax="1" chance="1500" />
-		<item id="2158" countmax="1" chance="1500" />
+		<item name="crystal necklace" countmax="1" chance="1500" />
+		<item name="ancient amulet" countmax="1" chance="3500" />
+		<item name="white pearl" countmax="15" chance="12500" />
+		<item name="black pearl" countmax="15" chance="15000" />
+		<item name="small diamond" countmax="5" chance="9500" />
+		<item name="small sapphire" countmax="10" chance="13500" />
+		<item name="gold coin" countmax="100" chance="99900" />
+		<item name="gold coin" countmax="100" chance="88800" />
+		<item name="gold coin" countmax="100" chance="77700" />
+		<item name="gold coin" countmax="100" chance="66600" />
+		<item name="small emerald" countmax="10" chance="15500" />
+		<item name="small amethyst" countmax="20" chance="13500" />
+		<item name="talon" countmax="7" chance="14000" />
+		<item name="green gem" countmax="1" chance="1500" />
+		<item name="blue gem" countmax="1" chance="1500" />
 		<item id="2162" countmax="1" chance="11500" />
-		<item id="2164" countmax="1" chance="5000" />
-		<item id="2165" countmax="1" chance="9500" />
-		<item id="2167" countmax="1" chance="13500" />
-		<item id="2170" countmax="1" chance="13000" />
-		<item id="2171" countmax="1" chance="4500" />
-		<item id="2174" countmax="1" chance="2500" />
-		<item id="2176" countmax="1" chance="12000" />
-		<item id="2177" countmax="1" chance="1000" />
-		<item id="2178" countmax="1" chance="4000" />
-		<item id="2179" countmax="1" chance="8000" />
-		<item id="2182" countmax="1" chance="3500" />
-		<item id="2185" countmax="1" chance="3500" />
-		<item id="2186" countmax="1" chance="3500" />
-		<item id="2188" countmax="1" chance="2500" />
+		<item name="might ring" countmax="1" chance="5000" />
+		<item name="stealth ring" countmax="1" chance="9500" />
+		<item name="energy ring" countmax="1" chance="13500" />
+		<item name="silver amulet" countmax="1" chance="13000" />
+		<item name="platinum amulet" countmax="1" chance="4500" />
+		<item name="strange symbol" countmax="1" chance="2500" />
+		<item name="orb" countmax="1" chance="12000" />
+		<item name="life crystal" countmax="1" chance="1000" />
+		<item name="mind stone" countmax="1" chance="4000" />
+		<item name="gold ring" countmax="1" chance="8000" />
+		<item name="snakebite rod" countmax="1" chance="3500" />
+		<item name="necrotic rod" countmax="1" chance="3500" />
+		<item name="moonlight rod" countmax="1" chance="3500" />
+		<item name="wand of decay" countmax="1" chance="2500" />
 		<item id="2192" countmax="1" chance="2500" />
-		<item id="2195" countmax="1" chance="4000" />
-		<item id="2197" countmax="1" chance="4000" />
-		<item id="2200" countmax="1" chance="4500" />
-		<item id="2214" countmax="1" chance="13000" />
+		<item name="boots of haste" countmax="1" chance="4000" />
+		<item name="stone skin amulet" countmax="1" chance="4000" />
+		<item name="protection amulet" countmax="1" chance="4500" />
+		<item name="ring of healing" countmax="1" chance="13000" />
 		<item id="2231" countmax="1" chance="9000" />
-		<item id="2377" countmax="1" chance="20000" />
-		<item id="2387" countmax="1" chance="20000" />
-		<item id="2393" countmax="1" chance="12500" />
-		<item id="2396" countmax="1" chance="7500" />
-		<item id="2402" countmax="1" chance="15500" />
-		<item id="2418" countmax="1" chance="4500" />
-		<item id="2421" countmax="1" chance="13500" />
-		<item id="2432" countmax="1" chance="17000" />
-		<item id="2434" countmax="1" chance="4500" />
-		<item id="2436" countmax="1" chance="5000" />
-		<item id="2462" countmax="1" chance="11000" />
-		<item id="2470" countmax="1" chance="5000" />
-		<item id="2472" countmax="1" chance="3000" />
-		<item id="2514" countmax="1" chance="7500" />
-		<item id="2520" countmax="1" chance="15500" />
+		<item name="two handed sword" countmax="1" chance="20000" />
+		<item name="double axe" countmax="1" chance="20000" />
+		<item name="giant sword" countmax="1" chance="12500" />
+		<item name="ice rapier" countmax="1" chance="7500" />
+		<item name="silver dagger" countmax="1" chance="15500" />
+		<item name="golden sickle" countmax="1" chance="4500" />
+		<item name="thunder hammer" countmax="1" chance="13500" />
+		<item name="fire axe" countmax="1" chance="17000" />
+		<item name="dragon hammer" countmax="1" chance="4500" />
+		<item name="skull staff" countmax="1" chance="5000" />
+		<item name="devil helmet" countmax="1" chance="11000" />
+		<item name="golden legs" countmax="1" chance="5000" />
+		<item name="magic plate armor" countmax="1" chance="3000" />
+		<item name="mastermind shield" countmax="1" chance="7500" />
+		<item name="demon shield" countmax="1" chance="15500" />
 		<item id="3955" countmax="1" chance="100" />
 	</loot>
 </monster>

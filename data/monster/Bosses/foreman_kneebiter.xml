@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Foreman Kneebiter" nameDescription="foreman kneebiter" race="blood" experience="570" speed="200">
 	<health now="445" max="445" />
 	<look type="70" corpse="6013" />
@@ -24,8 +24,8 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="90000" /><!-- gold coin -->
-		<item id="2513" chance="6666" /><!-- battle shield -->
-		<item id="5880" countmax="2" chance="2500" /><!-- iron ore -->
+		<item name="gold coin" countmax="100" chance="90000" />
+		<item name="battle shield" chance="6666" />
+		<item name="iron ore" countmax="2" chance="2500" />
 	</loot>
 </monster>

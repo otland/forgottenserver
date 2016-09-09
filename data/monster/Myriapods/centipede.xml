@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Centipede" namedescription="a centipede" race="venom" experience="34" speed="165" manacost="335">
 	<health now="70" max="70" />
 	<look type="124" corpse="6050" />
@@ -29,7 +29,7 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="15" chance="80000" /><!-- gold coin -->
-		<item id="11218" chance="10300" /><!-- centipede leg -->
+		<item name="gold coin" countmax="15" chance="80000" />
+		<item name="centipede leg" chance="10300" />
 	</loot>
 </monster>

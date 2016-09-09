@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Killer Rabbit" nameDescription="a killer rabbit" race="blood" experience="160" speed="300" manacost="220">
 	<health now="205" max="205" />
 	<look type="74" corpse="6017" />
@@ -35,6 +35,6 @@
 		<voice sentence="Who is lunch NOW?" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="50000" /><!-- gold coins -->
+		<item name="gold coin" countmax="90" chance="50000" />
 	</loot>
 </monster>

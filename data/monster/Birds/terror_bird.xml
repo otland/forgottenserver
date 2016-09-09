@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Terror Bird" nameDescription="a terror bird" race="blood" experience="150" speed="220" manacost="490">
 	<health now="300" max="300" />
 	<look type="218" corpse="6057" />
@@ -33,13 +33,13 @@
 		<voice sentence="Carrah Carrah!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="81500" /><!-- gold coin -->
-		<item id="2148" countmax="3" chance="48000" /><!-- meat -->
-		<item id="3970" chance="630" /><!-- health potion -->
-		<item id="3970" chance="150" /><!-- feather headdress -->
-		<item id="3970" chance="260" /><!-- seeds -->
-		<item id="3976" countmax="3" chance="10000" /><!-- worm -->
-		<item id="11190" chance="11000" /><!-- terrorbird beak -->
-		<item id="12470" chance="3000" /><!-- colourful feather -->
+		<item name="gold coin" countmax="30" chance="81500" />
+		<item name="gold coin" countmax="3" chance="48000" />
+		<item name="feather headdress" chance="630" />
+		<item name="feather headdress" chance="150" />
+		<item name="feather headdress" chance="260" />
+		<item name="worm" countmax="3" chance="10000" />
+		<item name="terrorbird beak" chance="11000" />
+		<item name="colourful feather" chance="3000" />
 	</loot>
 </monster>

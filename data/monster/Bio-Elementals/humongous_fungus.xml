@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Humongous Fungus" nameDescription="a humongous fungus" race="blood" experience="2600" speed="270" manacost="0">
 	<health now="3400" max="3400" />
 	<look type="488" corpse="18382" />
@@ -57,28 +57,28 @@
 		<voice sentence="Munch munch munch!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="100000" /><!-- platinum coin -->
-		<item id="5909" chance="10000" /><!-- white piece of cloth -->
-		<item id="5911" chance="2941" /><!-- red piece of cloth -->
-		<item id="5912" chance="4545" /><!-- blue piece of cloth -->
-		<item id="5913" chance="15285" /><!-- brown piece of cloth -->
-		<item id="7436" chance="1265" /><!-- angelic axe -->
-		<item id="7588" countmax="2" chance="5000" /><!-- strong health potion -->
-		<item id="7589" countmax="2" chance="5000" /><!-- strong mana potion -->
-		<item id="7590" countmax="2" chance="5000" /><!-- great mana potion -->
-		<item id="7591" countmax="2" chance="5000" /><!-- great health potion -->
-		<item id="7620" countmax="3" chance="5000" /><!-- mana potion -->
-		<item id="7884" chance="869" /><!-- terra mantle -->
-		<item id="7885" chance="1123" /><!-- terra legs -->
-		<item id="7886" chance="1851" /><!-- terra boots -->
-		<item id="7887" chance="2127" /><!-- terra amulet -->
-		<item id="18393" chance="20" /><!-- mushroom backpack -->
-		<item id="18397" countmax="3" chance="16666" /><!-- mushroom pie -->
-		<item id="18411" chance="680" /><!-- muck rod -->
-		<item id="18433" chance="10000" /><!-- humongous chunk -->
-		<item id="18436" countmax="15" chance="14285" /><!-- drill bolt -->
-		<item id="18454" chance="150" /><!-- mycological bow -->
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="platinum coin" countmax="6" chance="100000" />
+		<item name="white piece of cloth" chance="10000" />
+		<item name="red piece of cloth" chance="2941" />
+		<item name="blue piece of cloth" chance="4545" />
+		<item name="brown piece of cloth" chance="15285" />
+		<item name="angelic axe" chance="1265" />
+		<item name="strong health potion" countmax="2" chance="5000" />
+		<item name="strong mana potion" countmax="2" chance="5000" />
+		<item name="great mana potion" countmax="2" chance="5000" />
+		<item name="great health potion" countmax="2" chance="5000" />
+		<item name="mana potion" countmax="3" chance="5000" />
+		<item name="terra mantle" chance="869" />
+		<item name="terra legs" chance="1123" />
+		<item name="terra boots" chance="1851" />
+		<item name="terra amulet" chance="2127" />
+		<item name="mushroom backpack" chance="20" />
+		<item name="mushroom pie" countmax="3" chance="16666" />
+		<item name="muck rod" chance="680" />
+		<item name="humongous chunk" chance="10000" />
+		<item name="drill bolt" countmax="15" chance="14285" />
+		<item name="mycological bow" chance="150" />
 	</loot>
 </monster>

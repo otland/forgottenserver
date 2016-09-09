@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blistering Fire Elemental" nameDescription="a blistering fire elemental" race="fire" experience="1300" speed="230" manacost="0">
 	<health now="1500" max="1500" />
 	<look type="242" corpse="8964" />
@@ -34,10 +34,10 @@
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item id="2147" countmax="3" chance="3200" /><!-- small ruby -->
-		<item id="2148" countmax="65" chance="12500" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="12500" /><!-- gold coin -->
-		<item id="8299" chance="2500" /><!-- glimmering soil -->
-		<item id="8921" chance="1250" /><!-- wand of draconia -->
+		<item name="small ruby" countmax="3" chance="3200" />
+		<item name="gold coin" countmax="65" chance="12500" />
+		<item name="gold coin" countmax="60" chance="12500" />
+		<item name="glimmering soil" chance="2500" />
+		<item name="wand of draconia" chance="1250" />
 	</loot>
 </monster>

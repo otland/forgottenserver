@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Shaburak Prince" nameDescription="a shaburak Prince" race="fire" experience="1700" speed="240" manacost="0">
 	<health now="2600" max="2600" />
 	<look type="418" corpse="13969" />
@@ -53,20 +53,20 @@
 		<voice sentence="ONLY WE ARE TRUE DEMONS!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="5" chance="12500" /><!-- Small Rubies -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="78" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="4" chance="33333" /><!-- platinum coin -->
-		<item id="2165" chance="5000" /><!-- Stealth Ring -->
-		<item id="2187" chance="892" /><!-- Wand of Inferno -->
-		<item id="2645" chance="89" /><!-- Steel Boots -->
-		<item id="2789" chance="4545" /><!-- Brown Mushroom -->
-		<item id="5904" chance="534" /><!-- magic sulphur -->
-		<item id="7412" chance="357" /><!-- Butcher's Axe -->
-		<item id="7443" chance="714" /><!-- Bullseye Potion -->
-		<item id="7588" chance="14285" /><!-- Strong Health Potion -->
-		<item id="7589" chance="14285" /><!-- Strong Mana Potion -->
-		<item id="7899" chance="714" /><!-- Magma Coat -->
-		<item id="13530" chance="178" /><!-- Demonic Finger -->
+		<item name="small ruby" countmax="5" chance="12500" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="78" chance="50000" />
+		<item name="platinum coin" countmax="4" chance="33333" />
+		<item name="stealth ring" chance="5000" />
+		<item name="wand of inferno" chance="892" />
+		<item name="steel boots" chance="89" />
+		<item name="brown mushroom" chance="4545" />
+		<item name="magic sulphur" chance="534" />
+		<item name="butcher's axe" chance="357" />
+		<item name="bullseye potion" chance="714" />
+		<item name="strong health potion" chance="14285" />
+		<item name="strong mana potion" chance="14285" />
+		<item name="magma coat" chance="714" />
+		<item name="demonic finger" chance="178" />
 	</loot>
 </monster>

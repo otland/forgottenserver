@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Spidris Elite" nameDescription="a spidris elite" race="venom" experience="4000" speed="260" manacost="0">
 	<health now="3700" max="3700" />
 	<look type="457" corpse="15296" />
@@ -27,20 +27,20 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2147" countmax="5" chance="23280" /><!-- small ruby -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="45000" /><!-- platinum coin -->
-		<item id="2153" chance="1120" /><!-- violet gem -->
+		<item name="small ruby" countmax="5" chance="23280" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="platinum coin" countmax="6" chance="45000" />
+		<item name="violet gem" chance="1120" />
 		<item id="6300" chance="4480" /><!-- death ring -->
-		<item id="7413" chance="1440" /><!-- titan axe -->
-		<item id="7590" countmax="2" chance="20400" /><!-- great mana potion -->
+		<item name="titan axe" chance="1440" />
+		<item name="great mana potion" countmax="2" chance="20400" />
 		<item id="7632" chance="3040" /><!-- giant shimmering pearl -->
-		<item id="8473" countmax="2" chance="9250" /><!-- ultimate health potion -->
-		<item id="15485" chance="27440" /><!-- spidris sandible -->
-		<item id="15486" chance="13210" /><!-- compound eye -->
-		<item id="15489" chance="1280" /><!-- calopteryx cape -->
-		<item id="15491" chance="1170" /><!-- carapace shield -->
-		<item id="15492" chance="1390" /><!-- hive scythe -->
+		<item name="ultimate health potion" countmax="2" chance="9250" />
+		<item name="spidris mandible" chance="27440" />
+		<item name="compound eye" chance="13210" />
+		<item name="calopteryx cape" chance="1280" />
+		<item name="carapace shield" chance="1170" />
+		<item name="hive scythe" chance="1390" />
 	</loot>
 </monster>

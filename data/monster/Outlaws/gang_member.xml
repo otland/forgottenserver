@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Gang Member" nameDescription="a gang member" race="blood" experience="70" speed="200" manacost="420">
 	<health now="295" max="295" />
 	<look type="151" head="114" body="19" legs="42" feet="20" corpse="20403" />
@@ -31,11 +31,11 @@
 		<voice sentence="Don't mess with us!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="50110" /><!-- gold coin -->
-		<item id="2209" chance="740" /><!-- club ring -->
-		<item id="2389" chance="8700" /><!-- mace -->
-		<item id="2468" chance="5220" /><!-- studded legs -->
-		<item id="2649" chance="15330" /><!-- leather legs -->
-		<item id="2689" chance="4760" /><!-- bread -->
+		<item name="gold coin" countmax="30" chance="50110" />
+		<item name="club ring" chance="740" />
+		<item name="spear" chance="8700" />
+		<item name="studded legs" chance="5220" />
+		<item name="leather legs" chance="15330" />
+		<item name="bread" chance="4760" />
 	</loot>
 </monster>

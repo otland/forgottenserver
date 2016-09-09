@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Armenius" nameDescription="a armenius" race="venom" experience="720" speed="330" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="79" corpse="6021" />
@@ -50,19 +50,19 @@
 		<summon name="Larva" interval="1000" chance="15" max="3" />
 	</summons>
 	<loot>
-		<item id="2135" chance="2063" /><!-- scarab amulet -->
-		<item id="2142" chance="2564" /><!-- ancient amulet -->
-		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
-		<item id="2149" countmax="3" chance="4347" /><!-- small emerald -->
-		<item id="2150" countmax="4" chance="4166" /><!-- small amethyst -->
-		<item id="2159" countmax="2" chance="7692" /><!-- scarab coin -->
+		<item name="scarab amulet" chance="2063" />
+		<item name="ancient amulet" chance="2564" />
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="small emerald" countmax="3" chance="4347" />
+		<item name="small amethyst" countmax="4" chance="4166" />
+		<item name="scarab coin" countmax="2" chance="7692" />
 		<item id="2162" chance="11111" /><!-- magic lightwand -->
-		<item id="2440" chance="781" /><!-- daramanian waraxe -->
-		<item id="2463" chance="10000" /><!-- plate armor -->
-		<item id="2540" chance="518" /><!-- scarab shield -->
-		<item id="7588" chance="1041" /><!-- strong health potion -->
-		<item id="7903" chance="1298" /><!-- terra hood -->
-		<item id="10548" chance="3571" /><!-- scarab pincers -->
+		<item name="daramian waraxe" chance="781" />
+		<item name="plate armor" chance="10000" />
+		<item name="scarab shield" chance="518" />
+		<item name="strong health potion" chance="1041" />
+		<item name="terra hood" chance="1298" />
+		<item name="scarab pincers" chance="3571" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Fire Devil" nameDescription="a fire devil" race="blood" experience="145" speed="190" manacost="530">
 	<health now="200" max="200" />
 	<look type="40" corpse="5985" />
@@ -46,13 +46,13 @@
 	<loot>
 		<item id="2050" chance="10000" /><!-- torch -->
 		<item id="2050" countmax="2" chance="1420" /><!-- torch -->
-		<item id="2150" chance="300" /><!-- small amethyst -->
-		<item id="2185" chance="460" /><!-- necrotic rod -->
-		<item id="2260" chance="10950" /><!-- blank rune -->
-		<item id="2387" chance="1500" /><!-- double axe -->
+		<item name="small amethyst" chance="300" />
+		<item name="necrotic rod" chance="460" />
+		<item name="blank rune" chance="10950" />
+		<item name="double axe" chance="1500" />
 		<item id="2419" chance="3000" /><!-- scimitar -->
-		<item id="2515" chance="210" /><!-- guardian shield -->
-		<item id="2568" chance="1100" /><!-- cleaver -->
-		<item id="12469" chance="19770" /><!-- small pitchfork -->
+		<item name="guardian shield" chance="210" />
+		<item name="cleaver" chance="1100" />
+		<item name="small pitchfork" chance="19770" />
 	</loot>
 </monster>

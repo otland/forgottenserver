@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wild Warrior" nameDescription="a wild warrior" race="blood" experience="55" speed="190" manacost="420">
 	<health now="135" max="135" />
 	<look type="131" head="57" body="57" legs="57" feet="57" corpse="20531" />
@@ -35,16 +35,16 @@
 	</voices>
 	<loot>
 		<item id="2110" chance="520" /><!-- doll -->
-		<item id="2148" countmax="30" chance="49070" /><!-- gold coin -->
-		<item id="2386" chance="30710" /><!-- axe -->
-		<item id="2391" chance="100" /><!-- war hammer -->
-		<item id="2398" chance="9800" /><!-- mace -->
-		<item id="2458" chance="5250" /><!-- chain helmet -->
-		<item id="2459" chance="580" /><!-- iron elhmet -->
-		<item id="2465" chance="2540" /><!-- brass armor -->
-		<item id="2509" chance="910" /><!-- steel shield -->
-		<item id="2511" chance="17000" /><!-- brass shield -->
-		<item id="2649" chance="27500" /><!-- leather legs -->
+		<item name="gold coin" countmax="30" chance="49070" />
+		<item name="axe" chance="30710" />
+		<item name="war hammer" chance="100" />
+		<item name="mace" chance="9800" />
+		<item name="chain helmet" chance="5250" />
+		<item name="iron helmet" chance="580" />
+		<item name="brass armor" chance="2540" />
+		<item name="steel shield" chance="910" />
+		<item name="brass shield" chance="17000" />
+		<item name="leather legs" chance="27500" />
 		<item id="2695" countmax="2" chance="9730" /><!-- eggs -->
 	</loot>
 </monster>

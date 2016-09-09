@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Enraged Crystal Golem" nameDescription="enraged crystal golem" race="energy" experience="550" speed="200" manacost="0">
 	<health now="700" max="700" />
 	<look type="508" corpse="18466" />
@@ -33,14 +33,14 @@
 		<voice sentence="Crrrrk! Chhhhr!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="7449" chance="4710" /><!-- crystal sword -->
-		<item id="7454" chance="360" /><!-- glorious axe -->
-		<item id="7588" chance="7140" /><!-- SHP -->
-		<item id="7589" chance="8270" /><!-- SMP -->
-		<item id="18418" chance="4120" /><!-- blue crystal splinter -->
-		<item id="18419" chance="1050" /><!-- cyan crystal fragment -->
-		<item id="18432" chance="7980" /><!-- crystaline spikes -->
-		<item id="18451" countmax="5" chance="5008" /><!-- crystalline arrows -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="crystal sword" chance="4710" />
+		<item name="glorious axe" chance="360" />
+		<item name="strong health potion" chance="7140" />
+		<item name="strong mana potion" chance="8270" />
+		<item name="blue crystal splinter" chance="4120" />
+		<item name="cyan crystal fragment" chance="1050" />
+		<item name="crystalline spikes" chance="7980" />
+		<item name="crystalline axe" countmax="5" chance="5008" />
 	</loot>
 </monster>

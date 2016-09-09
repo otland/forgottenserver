@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Energy Elemental" nameDescription="an energy elemental" race="energy" experience="550" speed="200" manacost="0">
 	<health now="500" max="500" />
 	<look type="293" corpse="8966" />
@@ -50,18 +50,18 @@
 	</immunities>
 	<loot>
 		<item id="2124" chance="2000" /><!-- crystal ring -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="70" chance="50000" /><!-- gold coin -->
-		<item id="2150" countmax="2" chance="5000" /><!-- small amethyst -->
-		<item id="2167" chance="892" /><!-- energy ring -->
-		<item id="2170" chance="1020" /><!-- silver amulet -->
-		<item id="2189" chance="636" /><!-- wand of cosmic energy -->
-		<item id="2399" countmax="5" chance="9900" /><!-- throwing star -->
-		<item id="2425" chance="3571" /><!-- obsidian lance -->
-		<item id="2515" chance="243" /><!-- guardian shield -->
-		<item id="7449" chance="5882" /><!-- crystal sword -->
-		<item id="7589" chance="7692" /><!-- strong mana potion -->
-		<item id="7620" chance="11711" /><!-- mana potion -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="70" chance="50000" />
+		<item name="small amethyst" countmax="2" chance="5000" />
+		<item name="energy ring" chance="892" />
+		<item name="silver amulet" chance="1020" />
+		<item name="wand of cosmic energy" chance="636" />
+		<item name="throwing star" countmax="5" chance="9900" />
+		<item name="obsidian lance" chance="3571" />
+		<item name="guardian shield" chance="243" />
+		<item name="crystal sword" chance="5882" />
+		<item name="strong mana potion" chance="7692" />
+		<item name="mana potion" chance="11711" />
 		<item id="7638" countmax="10" chance="10000" /><!-- flash arrow -->
 	</loot>
 </monster>

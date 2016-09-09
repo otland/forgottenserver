@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Fluffy" nameDescription="fluffy" race="blood" experience="3550" speed="310" manacost="0">
 	<health now="4500" max="4500" />
 	<look type="240" corpse="6332" />
@@ -40,15 +40,15 @@
 		<voice sentence="Wooof!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="20" chance="100000" />
 		<item id="2230" chance="25000" /><!-- bone -->
-		<item id="2383" chance="2500" /><!-- spike sword -->
-		<item id="2430" chance="2857" /><!-- knight axe -->
-		<item id="2671" countmax="8" chance="50000" /><!-- ham -->
-		<item id="5944" chance="5555" /><!-- soul orb -->
-		<item id="6500" chance="7200" /><!-- demonic essence -->
-		<item id="6558" chance="8888" /><!-- concentrated demonic blood -->
+		<item name="spike sword" chance="2500" />
+		<item name="knight axe" chance="2857" />
+		<item name="ham" countmax="8" chance="50000" />
+		<item name="soul orb" chance="5555" />
+		<item name="demonic essence" chance="7200" />
+		<item name="concentrated demonic blood" chance="8888" />
 		<item id="6570" chance="5538" countmax="4" /><!-- blue surprise bag -->
 		<item id="6571" chance="1538" /><!-- red surprise bag -->
 	</loot>

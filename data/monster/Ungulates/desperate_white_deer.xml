@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Desperate White Deer" nameDescription="a desperate white deer" race="blood" experience="35" speed="225" manacost="0">
 	<health now="55" max="255" />
 	<look type="400" corpse="13513" />
@@ -28,8 +28,8 @@
 		<voice sentence="*wheeze*" />
 	</voices>
 	<loot>
-		<item id="2671" countmax="3" chance="20000" /><!-- ham -->
-		<item id="13533" chance="20000" /><!-- white deer antlers -->
-		<item id="13534" chance="20000" /><!-- white deer skin -->
+		<item name="ham" countmax="3" chance="20000" />
+		<item name="white deer antlers" chance="20000" />
+		<item name="white deer skin" chance="20000" />
 	</loot>
 </monster>

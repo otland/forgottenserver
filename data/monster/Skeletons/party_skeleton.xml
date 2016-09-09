@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Skeleton" nameDescription="a skeleton" race="undead" experience="35" speed="154" manacost="300">
 	<health now="50" max="50" />
 	<look type="33" corpse="5972" />
@@ -30,12 +30,12 @@
 	<loot>
 		<item id="2050" chance="25000" /><!-- torch -->
 		<item id="2050" chance="25000" /><!-- torch -->
-		<item id="2148" countmax="10" chance="24500" /><!-- gold coin -->
+		<item name="gold coin" countmax="10" chance="24500" />
 		<item id="2230" chance="49750" /><!-- bone -->
 		<item id="2376" chance="1500" /><!-- sword -->
-		<item id="2388" chance="23750" /><!-- hatchet -->
-		<item id="2398" chance="19500" /><!-- mace -->
-		<item id="2473" chance="8250" /><!-- viking helmet -->
-		<item id="2511" chance="13250" /><!-- brass shield -->
+		<item name="hatchet" chance="23750" />
+		<item name="mace" chance="19500" />
+		<item name="viking helmet" chance="8250" />
+		<item name="brass shield" chance="13250" />
 	</loot>
 </monster>

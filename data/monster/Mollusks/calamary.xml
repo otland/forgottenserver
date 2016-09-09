@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Calamary" nameDescription="a Calamary" race="undead" experience="0" speed="160" manacost="0">
 	<health now="75" max="75" />
 	<look type="451" corpse="15280" />
@@ -30,6 +30,6 @@
 		<voice sentence="Bobble!" />
 	</voices>
 	<loot>
-		<item id="2670" countmax="2" chance="12270" /><!-- shrimp -->
+		<item name="shrimp" countmax="2" chance="12270" />
 	</loot>
 </monster>

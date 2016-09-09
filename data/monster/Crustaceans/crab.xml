@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crab" namedescription="a crab" race="undead" experience="30" speed="140" manacost="305">
 	<health now="55" max="55" />
 	<look type="112" corpse="6039" />
@@ -30,8 +30,8 @@
 		<immunity drown="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="10" chance="80000" /><!-- gold coin -->
+		<item name="gold coin" countmax="10" chance="80000" />
 		<item id="2667" chance="20000" /><!-- fish -->
-		<item id="11189" chance="20000" /><!-- crab pincers -->
+		<item name="crab pincers" chance="20000" />
 	</loot>
 </monster>

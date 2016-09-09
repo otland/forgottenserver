@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Yielothax" nameDescription="Yielothax" race="venom" experience="1250" speed="240" manacost="0">
 	<health now="1500" max="1500" />
 	<look type="408" corpse="13752" />
@@ -52,23 +52,23 @@
 		<voice sentence="Bsssssssm Bssssssm Bsssssssssssm!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2145" countmax="5" chance="4761" /><!-- small diamond -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="27" chance="50000" /><!-- gold coin -->
-		<item id="2151" chance="917" /><!-- talon -->
-		<item id="2164" chance="3846" /><!-- might ring -->
-		<item id="2189" chance="523" /><!-- wand of cosmic energy -->
-		<item id="2438" chance="564" /><!-- epee -->
-		<item id="2789" countmax="3" chance="9090" /><!-- brown mushroom -->
-		<item id="7440" chance="490" /><!-- mastermind potion -->
-		<item id="7588" chance="20000" /><!-- strong health potion -->
-		<item id="7589" chance="20000" /><!-- strong mana potion -->
-		<item id="7889" chance="862" /><!-- lightning pendant -->
-		<item id="7895" chance="480" /><!-- lightning legs -->
-		<item id="10221" chance="571" /><!-- shockwave amulet -->
-		<item id="13877" chance="261" /><!-- broken ring of ending -->
-		<item id="13881" chance="300" /><!-- yielowax -->
-		<item id="13942" chance="320" /><!-- yielocks -->
+		<item name="small diamond" countmax="5" chance="4761" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="27" chance="50000" />
+		<item name="talon" chance="917" />
+		<item name="might ring" chance="3846" />
+		<item name="wand of cosmic energy" chance="523" />
+		<item name="epee" chance="564" />
+		<item name="brown mushroom" countmax="3" chance="9090" />
+		<item name="mastermind potion" chance="490" />
+		<item name="strong health potion" chance="20000" />
+		<item name="strong mana potion" chance="20000" />
+		<item name="lightning pendant" chance="862" />
+		<item name="lightning legs" chance="480" />
+		<item name="shockwave amulet" chance="571" />
+		<item name="broken ring of ending" chance="261" />
+		<item name="yielowax" chance="300" />
+		<item name="yielocks" chance="320" />
 	</loot>
 </monster>

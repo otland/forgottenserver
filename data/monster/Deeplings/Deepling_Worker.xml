@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Deepling Worker" nameDescription="a deepling worker" race="blood" experience="130" speed="210" manacost="0">
 	<health now="190" max="190" />
 	<look type="470" corpse="15497" />
@@ -34,12 +34,12 @@
 		<voice sentence="Qjell afar gou jey!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="25" chance="70000" /><!-- gold coin -->
-		<item id="2149" countmax="3" chance="110" /><!-- small emerald -->
+		<item name="gold coin" countmax="25" chance="70000" />
+		<item name="small emerald" countmax="3" chance="110" />
 		<item id="2667" countmax="3" chance="12020" /><!-- fish -->
-		<item id="5895" chance="350" /><!-- fish fin -->
-		<item id="13838" chance="510" /><!-- heavy trident -->
-		<item id="13870" chance="283" /><!-- eye of a deepling -->
-		<item id="15430" chance="6950" /><!-- deepling scales -->
+		<item name="fish fin" chance="350" />
+		<item name="heavy trident" chance="510" />
+		<item name="eye of a deepling" chance="283" />
+		<item name="deepling scales" chance="6950" />
 	</loot>
 </monster>

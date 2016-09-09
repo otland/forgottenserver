@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Skeleton Warrior" nameDescription="a skeleton warrior" race="undead" experience="65" speed="150" manacost="350">
 	<health now="45" max="45" />
 	<look type="298" corpse="5972" />
@@ -30,12 +30,12 @@
 		<immunity death="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="10" chance="43500" /><!-- gold coin -->
+		<item name="gold coin" countmax="10" chance="43500" />
 		<item id="2230" chance="50000" /><!-- bone -->
 		<item id="2376" chance="1500" /><!-- sword -->
-		<item id="2398" chance="2000" /><!-- mace -->
-		<item id="2787" countmax="3" chance="24000" /><!-- white mushroom -->
-		<item id="2789" chance="1700" /><!-- brown mushroom -->
-		<item id="12437" chance="10630" /><!-- pelvis bone -->
+		<item name="mace" chance="2000" />
+		<item name="white mushroom" countmax="3" chance="24000" />
+		<item name="brown mushroom" chance="1700" />
+		<item name="pelvis bone" chance="10630" />
 	</loot>
 </monster>

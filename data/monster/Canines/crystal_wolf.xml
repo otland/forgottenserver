@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crystal Wolf" nameDescription="a crystal wolf" race="undead" experience="275" speed="200" manacost="0">
 	<health now="750" max="750" />
 	<look type="391" corpse="13584" />
@@ -42,11 +42,11 @@
 		<voice sentence="Aaaauuuuuooooooo!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="52" chance="56000" /><!-- gold coin -->
-		<item id="2183" chance="7400" /><!-- hailstorm rod -->
-		<item id="2666" countmax="4" chance="52000" /><!-- meat -->
-		<item id="5897" chance="3700" /><!-- wolf paw -->
-		<item id="7839" countmax="10" chance="11000" /><!-- shiver arrow -->
-		<item id="8878" chance="3700" /><!-- crystalline armor -->
+		<item name="gold coin" countmax="52" chance="56000" />
+		<item name="hailstorm rod" chance="7400" />
+		<item name="meat" countmax="4" chance="52000" />
+		<item name="wolf paw" chance="3700" />
+		<item name="shiver arrow" countmax="10" chance="11000" />
+		<item name="crystalline armor" chance="3700" />
 	</loot>
 </monster>

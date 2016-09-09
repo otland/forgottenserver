@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Corym Skirmisher" nameDescription="a corym skirmisher" race="blood" experience="260" speed="200" manacost="0">
 	<health now="450" max="450" />
 	<look type="533" legs="101" corpse="19726" />
@@ -38,18 +38,18 @@
 		<voice sentence="&lt;sniff&gt;&lt;sniff&gt;&lt;sniff&gt;" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="45" chance="50000" /><!-- gold coin -->
+		<item name="gold coin" countmax="45" chance="50000" />
 		<item id="2696" chance="20000" /><!-- cheese -->
-		<item id="20089" chance="7692" /><!-- bola -->
-		<item id="20090" chance="645" /><!-- spike shield -->
-		<item id="20092" chance="2702" /><!-- ratana -->
-		<item id="20093" chance="2941" /><!-- life preserver -->
-		<item id="20097" chance="8333" /><!-- cheese cutter -->
-		<item id="20098" chance="854" /><!-- cheesy figurine -->
-		<item id="20099" chance="9090" /><!-- earflap -->
-		<item id="20100" chance="14285" /><!-- soft cheese -->
-		<item id="20101" chance="16666" /><!-- rat cheese -->
-		<item id="20105" chance="12" /><!-- rat god doll -->
-		<item id="20126" chance="561" /><!-- leather harness -->
+		<item name="bola" chance="7692" />
+		<item name="spike shield" chance="645" />
+		<item name="ratana" chance="2702" />
+		<item name="life preserver" chance="2941" />
+		<item name="cheese cutter" chance="8333" />
+		<item name="cheesy figurine" chance="854" />
+		<item name="earflap" chance="9090" />
+		<item name="soft cheese" chance="14285" />
+		<item name="rat cheese" chance="16666" />
+		<item name="rat god doll" chance="12" />
+		<item name="leather harness" chance="561" />
 	</loot>
 </monster>

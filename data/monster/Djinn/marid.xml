@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Marid" nameDescription="a marid" race="blood" experience="410" speed="180" manacost="0">
 	<health now="550" max="550" />
 	<look type="104" corpse="6033" />
@@ -66,22 +66,22 @@
 	</voices>
 	<loot>
 		<item id="1872" chance="2560" /><!-- blue tapestry -->
-		<item id="2063" chance="110" /><!-- small oil lamp -->
-		<item id="2146" chance="6200" /><!-- small sapphire -->
-		<item id="2148" countmax="70" chance="60000" /><!-- gold coin -->
-		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
-		<item id="2158" chance="110" /><!-- blue gem -->
-		<item id="2183" chance="770" /><!-- hailstorm rod -->
+		<item name="small oil lamp" chance="110" />
+		<item name="small sapphire" chance="6200" />
+		<item name="gold coin" countmax="70" chance="60000" />
+		<item name="gold coin" countmax="30" chance="60000" />
+		<item name="blue gem" chance="110" />
+		<item name="hailstorm rod" chance="770" />
 		<item id="2374" chance="5000" /><!-- wooden flute -->
-		<item id="2442" chance="4530" /><!-- heavy machete -->
-		<item id="2663" chance="290" /><!-- mystic turban -->
-		<item id="2677" countmax="29" chance="65000" /><!-- blueberry -->
-		<item id="5912" chance="3750" /><!-- blue piece of cloth -->
-		<item id="7378" countmax="3" chance="15500" /><!-- royal spear -->
-		<item id="7589" chance="9800" /><!-- strong mana potion -->
-		<item id="7732" chance="2400" /><!-- seeds -->
-		<item id="7900" chance="320" /><!-- magma monocle -->
-		<item id="12426" chance="7880" /><!-- Jewelled Belt -->
-		<item id="12442" chance="530" /><!-- Noble turban -->
+		<item name="heavy machete" chance="4530" />
+		<item name="mystic turban" chance="290" />
+		<item name="blueberry" countmax="29" chance="65000" />
+		<item name="blue piece of cloth" chance="3750" />
+		<item name="royal spear" countmax="3" chance="15500" />
+		<item name="strong mana potion" chance="9800" />
+		<item name="seeds" chance="2400" />
+		<item name="magma monocle" chance="320" />
+		<item name="jewelled belt" chance="7880" />
+		<item name="noble turban" chance="530" />
 	</loot>
 </monster>

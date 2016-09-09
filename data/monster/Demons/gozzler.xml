@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Gozzler" nameDescription="a gozzler" race="undead" experience="180" speed="190" manacost="800">
 	<health now="240" max="240" />
 	<look type="313" corpse="9938" />
@@ -45,15 +45,15 @@
 		<voice sentence="I'll bite you! Nyehehehehe!" />
 	</voices>
 	<loot>
-		<item id="2015" chance="8750" /><!-- brown flask -->
-		<item id="2146" chance="360" /><!-- small sapphire -->
-		<item id="2148" countmax="70" chance="52500" /><!-- gold coin -->
-		<item id="2213" chance="190" /><!-- dwarven ring -->
-		<item id="2378" chance="3100" /><!-- battle axe -->
-		<item id="2385" chance="8250" /><!-- sabre -->
-		<item id="2394" chance="5000" /><!-- morning star -->
-		<item id="2409" chance="250" /><!-- serpent sword -->
-		<item id="2423" chance="900" /><!-- clerical mace -->
-		<item id="2510" chance="10000" /><!-- plate shield -->
+		<item name="brown flask" chance="8750" />
+		<item name="small sapphire" chance="360" />
+		<item name="gold coin" countmax="70" chance="52500" />
+		<item name="dwarven ring" chance="190" />
+		<item name="battle axe" chance="3100" />
+		<item name="sabre" chance="8250" />
+		<item name="morning star" chance="5000" />
+		<item name="serpent sword" chance="250" />
+		<item name="clerical mace" chance="900" />
+		<item name="plate shield" chance="10000" />
 	</loot>
 </monster>

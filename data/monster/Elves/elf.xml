@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Elf" nameDescription="a elf" race="blood" experience="42" speed="170" manacost="320">
 	<health now="100" max="100" />
 	<look type="62" corpse="6003" />
@@ -38,15 +38,15 @@
 		<voice sentence="Death to the defilers!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="44000" /><!-- gold coin -->
-		<item id="2397" chance="10800" /><!-- longsword -->
-		<item id="2482" chance="13500" /><!-- studded helmet -->
-		<item id="2484" chance="8960" /><!-- studded armor -->
-		<item id="2510" chance="9300" /><!-- plate shield -->
-		<item id="2544" countmax="3" chance="7060" /><!-- arrow -->
-		<item id="2643" chance="11410" /><!-- leather boots -->
+		<item name="gold coin" countmax="30" chance="44000" />
+		<item name="longsword" chance="10800" />
+		<item name="studded helmet" chance="13500" />
+		<item name="studded armor" chance="8960" />
+		<item name="plate shield" chance="9300" />
+		<item name="arrow" countmax="3" chance="7060" />
+		<item name="leather boots" chance="11410" />
 		<item id="5921" chance="940" /><!-- heaven blossom -->
-		<item id="8839" countmax="2" chance="20000" /><!-- plum -->
-		<item id="10552" chance="2100" /><!-- elvish talisman -->
+		<item name="plum" countmax="2" chance="20000" />
+		<item name="elvish talisman" chance="2100" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Black Knight" nameDescription="a black knight" race="blood" experience="1600" speed="250" manacost="0">
 	<health now="1800" max="1800" />
 	<look type="131" head="95" body="95" legs="95" feet="95" addons="3" corpse="20355" />
@@ -44,27 +44,27 @@
 		<voice sentence="You're no match for me!" />
 	</voices>
 	<loot>
-		<item id="2114" chance="210" /><!-- piggy bank -->
+		<item name="piggy bank" chance="210" />
 		<item id="2120" chance="16020" /><!-- rope -->
-		<item id="2133" chance="740" /><!-- ruby necklace -->
-		<item id="2148" countmax="80" chance="23000" /><!-- gold coin -->
-		<item id="2148" countmax="56" chance="23000" /><!-- gold coin -->
-		<item id="2195" chance="320" /><!-- boots of haste -->
-		<item id="2377" chance="8470" /><!-- two handed sword -->
-		<item id="2381" chance="11850" /><!-- halberd -->
-		<item id="2389" countmax="3" chance="30800" /><!-- spear -->
-		<item id="2414" chance="110" /><!-- dragon lance -->
-		<item id="2417" chance="6980" /><!-- battle hammer -->
-		<item id="2430" chance="3280" /><!-- knight axe -->
-		<item id="2457" chance="11220" /><!-- steel helmet -->
-		<item id="2463" chance="10370" /><!-- plate armor -->
-		<item id="2475" chance="5610" /><!-- warrior helmet -->
-		<item id="2476" chance="320" /><!-- knight armor -->
-		<item id="2477" chance="1050" /><!-- knight legs -->
-		<item id="2478" chance="12200" /><!-- brass legs -->
-		<item id="2489" chance="1900" /><!-- dark armor -->
-		<item id="2490" chance="2330" /><!-- dark helmet -->
-		<item id="2691" countmax="2" chance="21600" /><!-- brown bread -->
-		<item id="7895" chance="950" /><!-- lightning legs -->
+		<item name="ruby necklace" chance="740" />
+		<item name="gold coin" countmax="80" chance="23000" />
+		<item name="gold coin" countmax="56" chance="23000" />
+		<item name="boots of haste" chance="320" />
+		<item name="two handed sword" chance="8470" />
+		<item name="halberd" chance="11850" />
+		<item name="spear" countmax="3" chance="30800" />
+		<item name="dragon lance" chance="110" />
+		<item name="battle hammer" chance="6980" />
+		<item name="knight axe" chance="3280" />
+		<item name="steel helmet" chance="11220" />
+		<item name="plate armor" chance="10370" />
+		<item name="warrior helmet" chance="5610" />
+		<item name="knight armor" chance="320" />
+		<item name="knight legs" chance="1050" />
+		<item name="brass legs" chance="12200" />
+		<item name="dark armor" chance="1900" />
+		<item name="dark helmet" chance="2330" />
+		<item name="brown bread" countmax="2" chance="21600" />
+		<item name="lightning legs" chance="950" />
 	</loot>
 </monster>

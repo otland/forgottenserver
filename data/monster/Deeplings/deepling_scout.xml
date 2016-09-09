@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Deepling Scout" nameDescription="a deepling scout" race="blood" experience="160" speed="200" manacost="0">
 	<health now="240" max="240" />
 	<look type="413" corpse="13839" />
@@ -41,14 +41,14 @@
 		<voice sentence="Ljeave this sjacred pljace while you cjan" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="60000" /><!-- gold coin -->
-		<item id="2149" chance="121" /><!-- small emerald -->
-		<item id="2168" chance="2127" /><!-- life ring -->
-		<item id="3965" countmax="3" chance="14285" /><!-- hunting spear -->
-		<item id="5895" chance="310" /><!-- fish fin -->
+		<item name="gold coin" countmax="50" chance="60000" />
+		<item name="small emerald" chance="121" />
+		<item name="life ring" chance="2127" />
+		<item name="hunting spear" countmax="3" chance="14285" />
+		<item name="fish fin" chance="310" />
 		<item id="9809" chance="925" /><!-- rusty armor -->
-		<item id="9930" chance="111" /><!-- flask of rust remover -->
-		<item id="13838" chance="505" /><!-- heavy trident -->
-		<item id="13870" chance="310" /><!-- eye of a deepling -->
+		<item name="flask of rust remover" chance="111" />
+		<item name="heavy trident" chance="505" />
+		<item name="eye of a deepling" chance="310" />
 	</loot>
 </monster>

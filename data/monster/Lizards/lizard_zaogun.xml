@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Zaogun" nameDescription="a lizard zaogun" race="blood" experience="1700" speed="250" manacost="0">
 	<health now="2955" max="2955" />
 	<look type="343" corpse="11284" />
@@ -40,21 +40,21 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="31500" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="31500" /><!-- gold coin -->
-		<item id="2148" countmax="68" chance="31000" /><!-- gold coin -->
-		<item id="2149" countmax="5" chance="4830" /><!-- small emerald -->
-		<item id="2152" countmax="2" chance="48900" /><!-- platinum coin -->
-		<item id="2528" chance="1000" /><!-- tower shield -->
-		<item id="5876" chance="14360" /><!-- lizard leather -->
-		<item id="5881" chance="12520" /><!-- lizard scale -->
-		<item id="7588" chance="1900" /><!-- strong health potion -->
-		<item id="7591" countmax="3" chance="7000" /><!-- great health potion -->
-		<item id="11206" chance="2170" /><!-- red lantern -->
-		<item id="11301" chance="530" /><!-- zaoan armor -->
-		<item id="11303" chance="1000" /><!-- zaoan shoes -->
-		<item id="11304" chance="1001" /><!-- zaoan legs -->
-		<item id="11330" chance="8280" /><!-- zaogun flag -->
-		<item id="11331" chance="14980" /><!-- zaogun shoulderplates -->
+		<item name="gold coin" countmax="100" chance="31500" />
+		<item name="gold coin" countmax="100" chance="31500" />
+		<item name="gold coin" countmax="68" chance="31000" />
+		<item name="small emerald" countmax="5" chance="4830" />
+		<item name="platinum coin" countmax="2" chance="48900" />
+		<item name="tower shield" chance="1000" />
+		<item name="lizard leather" chance="14360" />
+		<item name="lizard scale" chance="12520" />
+		<item name="strong health potion" chance="1900" />
+		<item name="great health potion" countmax="3" chance="7000" />
+		<item name="red lantern" chance="2170" />
+		<item name="Zaoan armor" chance="530" />
+		<item name="Zaoan shoes" chance="1000" />
+		<item name="Zaoan legs" chance="1001" />
+		<item name="zaogun flag" chance="8280" />
+		<item name="zaogun shoulderplates" chance="14980" />
 	</loot>
 </monster>

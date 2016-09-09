@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Terrorsleep" nameDescription="Terrorsleep" race="blood" experience="5900" speed="270" manacost="0">
 	<health now="7200" max="7200" />
 	<look type="593" corpse="22497" />
@@ -64,24 +64,24 @@
 		<voice sentence="I am the darkness around you..." />
 	</voices>
 	<loot>
-		<item id="2147" countmax="3" chance="9600" /><!-- small ruby -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2149" chance="14000" /><!-- small emerald -->
-		<item id="2150" countmax="3" chance="17000" /><!-- small amethyst -->
-		<item id="2152" countmax="8" chance="100000" /><!-- platinum coin -->
-		<item id="2393" chance="560" /><!-- giant sword -->
-		<item id="2475" chance="2820" /><!-- warrior helmet -->
-		<item id="2476" chance="4000" /><!-- knight armor -->
-		<item id="5909" chance="4520" /><!-- white piece of cloth -->
-		<item id="5911" chance="1130" /><!-- red piece of cloth -->
-		<item id="7590" countmax="2" chance="36000" /><!-- great mana potion -->
-		<item id="8473" chance="26000" /><!-- ultimate health potion -->
-		<item id="9970" countmax="2" chance="17000" /><!-- small topaz -->
-		<item id="18413" chance="6000" /><!-- blue crystal shard -->
-		<item id="18418" chance="13000" /><!-- blue crystal splinter -->
-		<item id="18419" chance="17000" /><!-- cyan crystal fragment -->
+		<item name="small ruby" countmax="3" chance="9600" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="small emerald" chance="14000" />
+		<item name="small amethyst" countmax="3" chance="17000" />
+		<item name="platinum coin" countmax="8" chance="100000" />
+		<item name="giant sword" chance="560" />
+		<item name="warrior helmet" chance="2820" />
+		<item name="knight armor" chance="4000" />
+		<item name="white piece of cloth" chance="4520" />
+		<item name="red piece of cloth" chance="1130" />
+		<item name="great mana potion" countmax="2" chance="36000" />
+		<item name="ultimate health potion" chance="26000" />
+		<item name="small topaz" countmax="2" chance="17000" />
+		<item name="blue crystal shard" chance="6000" />
+		<item name="blue crystal splinter" chance="13000" />
+		<item name="cyan crystal fragment" chance="17000" />
 		<item id="22363" chance="1130" /><!-- broken dream -->
-		<item id="22537" chance="13000" /><!-- trapped bad dream monster -->
-		<item id="22538" chance="18000" /><!-- bowl of terror sweat -->
+		<item name="trapped bad dream monster" chance="13000" />
+		<item name="bowl of terror sweat" chance="18000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Evil Sheep Lord" nameDescription="an evil sheep lord" race="blood" experience="340" speed="300" manacost="0">
 	<health now="400" max="400" />
 	<look type="13" corpse="5994" />
@@ -46,6 +46,6 @@
 		<voice sentence="I feel you're getting sleepy! Maeh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="75000" /><!-- gold coins -->
+		<item name="gold coin" countmax="60" chance="75000" />
 	</loot>
 </monster>

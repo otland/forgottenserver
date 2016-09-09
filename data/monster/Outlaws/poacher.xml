@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="185" manacost="530">
 	<health now="90" max="90" />
 	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="20487" />
@@ -30,12 +30,12 @@
 	</voices>
 	<loot>
 		<item id="2050" chance="4180" /><!-- torch -->
-		<item id="2456" chance="14930" /><!-- bow -->
-		<item id="2461" chance="30600" /><!-- leather helmet -->
-		<item id="2544" countmax="17" chance="49500" /><!-- arrow -->
-		<item id="2545" countmax="3" chance="2930" /><!-- poison arrow -->
-		<item id="2578" chance="710" /><!-- closed trap -->
-		<item id="2649" chance="26740" /><!-- leather legs -->
-		<item id="2690" countmax="2" chance="11110" /><!-- roll -->
+		<item name="bow" chance="14930" />
+		<item name="leather helmet" chance="30600" />
+		<item name="arrow" countmax="17" chance="49500" />
+		<item name="poison arrow" countmax="3" chance="2930" />
+		<item name="closed trap" chance="710" />
+		<item name="leather legs" chance="26740" />
+		<item name="roll" countmax="2" chance="11110" />
 	</loot>
 </monster>

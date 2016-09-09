@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Plasmother" nameDescription="the plasmother" race="venom" experience="8900" speed="310" manacost="0">
 	<health now="16050" max="16050" />
 	<look type="238" corpse="6532" />
@@ -48,14 +48,14 @@
 		<voice sentence="Blubb" />
 	</voices>
 	<loot>
-		<item id="2144" countmax="3" chance="5000" /><!-- black pearl -->
-		<item id="2146" countmax="3" chance="5000" /><!-- small sapphire -->
-		<item id="2148" countmax="70" chance="20000" /><!-- gold coins -->
-		<item id="2148" countmax="60" chance="20000" /><!-- gold coins -->
-		<item id="2148" countmax="45" chance="20000" /><!-- gold coins -->
-		<item id="2152" countmax="13" chance="25000" /><!-- platinum coin -->
-		<item id="5944" chance="35000" /><!-- soul orb -->
-		<item id="6500" chance="45000" /><!-- demonic essence -->
-		<item id="6535" chance="100000" /><!-- the plasmother's remains -->
+		<item name="black pearl" countmax="3" chance="5000" />
+		<item name="small sapphire" countmax="3" chance="5000" />
+		<item name="gold coin" countmax="70" chance="20000" />
+		<item name="gold coin" countmax="60" chance="20000" />
+		<item name="gold coin" countmax="45" chance="20000" />
+		<item name="platinum coin" countmax="13" chance="25000" />
+		<item name="soul orb" chance="35000" />
+		<item name="demonic essence" chance="45000" />
+		<item name="the Plasmother's remains" chance="100000" />
 	</loot>
 </monster>

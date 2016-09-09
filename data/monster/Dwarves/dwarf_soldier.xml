@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dwarf Soldier" nameDescription="a dwarf soldier" race="blood" experience="70" speed="170" manacost="360">
 	<health now="135" max="135" />
 	<look type="71" corpse="6014" />
@@ -32,17 +32,17 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="28000" /><!-- gold coin -->
-		<item id="2208" chance="120" /><!-- axe ring -->
-		<item id="2378" chance="2500" /><!-- battle axe -->
-		<item id="2455" chance="3000" /><!-- crossbow -->
-		<item id="2464" chance="8000" /><!-- chain armor -->
-		<item id="2481" chance="12000" /><!-- soldier helmet -->
-		<item id="2525" chance="3000" /><!-- dwarven shield -->
-		<item id="2543" countmax="7" chance="40000" /><!-- bolt -->
+		<item name="gold coin" countmax="12" chance="28000" />
+		<item name="axe ring" chance="120" />
+		<item name="battle axe" chance="2500" />
+		<item name="crossbow" chance="3000" />
+		<item name="chain armor" chance="8000" />
+		<item name="soldier helmet" chance="12000" />
+		<item name="dwarven shield" chance="3000" />
+		<item name="bolt" countmax="7" chance="40000" />
 		<item id="2554" chance="10000" /><!-- shovel -->
-		<item id="2787" countmax="3" chance="40000" /><!-- white mushroom -->
-		<item id="5880" chance="300" /><!-- iron ore -->
-		<item id="7363" countmax="3" chance="4000" /><!-- piercing bolt -->
+		<item name="white mushroom" countmax="3" chance="40000" />
+		<item name="iron ore" chance="300" />
+		<item name="piercing bolt" countmax="3" chance="4000" />
 	</loot>
 </monster>

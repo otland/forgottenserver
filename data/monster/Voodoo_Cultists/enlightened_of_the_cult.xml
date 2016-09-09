@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Enlightened of the Cult" nameDescription="an enlightened of the cult" race="blood" experience="500" speed="210" manacost="0">
 	<health now="700" max="700" />
 	<look type="193" corpse="20391" />
@@ -61,23 +61,23 @@
 	</voices>
 	<loot>
 		<item id="1962" chance="910" /><!-- orange book -->
-		<item id="2114" chance="130" /><!-- piggy bank -->
-		<item id="2146" chance="550" /><!-- small sapphire -->
-		<item id="2148" countmax="70" chance="64550" /><!-- gold coin -->
-		<item id="2167" chance="450" /><!-- energy ring -->
-		<item id="2171" chance="200" /><!-- platinum amulet -->
-		<item id="2187" chance="180" /><!-- wand of inferno -->
-		<item id="2200" chance="790" /><!-- protection amulet -->
-		<item id="2436" chance="350" /><!-- skull staff -->
-		<item id="2656" chance="40" /><!-- blue robe -->
-		<item id="5670" chance="130" /><!-- mysterious voodoo skull -->
-		<item id="5801" chance="100" /><!-- jewelled backpack -->
-		<item id="5810" chance="430" /><!-- pirate voodoo doll -->
+		<item name="piggy bank" chance="130" />
+		<item name="small sapphire" chance="550" />
+		<item name="gold coin" countmax="70" chance="64550" />
+		<item name="energy ring" chance="450" />
+		<item name="platinum amulet" chance="200" />
+		<item name="wand of inferno" chance="180" />
+		<item name="protection amulet" chance="790" />
+		<item name="skull staff" chance="350" />
+		<item name="blue robe" chance="40" />
+		<item name="enigmatic voodoo skull" chance="130" />
+		<item name="jewelled backpack" chance="100" />
+		<item name="pirate voodoo doll" chance="430" />
 		<item id="6090" chance="490" /><!-- music sheet 4th verse -->
-		<item id="7426" chance="100" /><!-- amber staff -->
-		<item id="7589" chance="740" /><!-- strong mana potion -->
-		<item id="10555" chance="10250" /><!-- cultish mask -->
-		<item id="12411" chance="890" /><!-- cultish symbol -->
-		<item id="12608" chance="100" /><!-- broken key ring -->
+		<item name="amber staff" chance="100" />
+		<item name="strong mana potion" chance="740" />
+		<item name="cultish mask" chance="10250" />
+		<item name="cultish symbol" chance="890" />
+		<item name="broken key ring" chance="100" />
 	</loot>
 </monster>

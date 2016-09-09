@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blood Priest" nameDescription="a blood priest" race="blood" experience="900" speed="210" manacost="0">
 	<health now="820" max="820" />
 	<look type="553" corpse="21262" />
@@ -54,24 +54,24 @@
 		<voice sentence="Blood for the dark god!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="2" chance="3510" /><!-- Small Rubies -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="71" chance="50000" /><!-- gold coin -->
-		<item id="2195" chance="120" /><!-- Boots of Haste -->
-		<item id="2436" chance="180" /><!-- Skull Staff -->
-		<item id="2663" chance="2170" /><!-- Mystic Turban -->
-		<item id="5909" chance="3040" /><!-- White Piece of Cloth -->
-		<item id="5911" chance="640" /><!-- Red Piece of Cloth -->
-		<item id="7589" chance="6000" /><!-- Strong Mana Potion -->
-		<item id="8901" chance="290" /><!-- Spellbook of Warding -->
-		<item id="8902" chance="180" /><!-- Spellbook of Mind Control -->
-		<item id="8910" chance="470" /><!-- Underworld Rod -->
-		<item id="11237" chance="13550" /><!-- Book of Necromantic Rituals -->
-		<item id="15565" chance="880" /><!-- Red Gem -->
-		<item id="21242" chance="14410" /><!-- Lancet -->
-		<item id="21243" chance="9270" /><!-- Horoscope -->
-		<item id="21245" chance="14460" /><!-- Blood Tincture in a Vial -->
-		<item id="21246" chance="14660" /><!-- Incantation Notes -->
-		<item id="21247" chance="7770" /><!-- Pieces of Magic Chalk -->
+		<item name="small ruby" countmax="2" chance="3510" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="71" chance="50000" />
+		<item name="boots of haste" chance="120" />
+		<item name="skull staff" chance="180" />
+		<item name="mystic turban" chance="2170" />
+		<item name="white piece of cloth" chance="3040" />
+		<item name="red piece of cloth" chance="640" />
+		<item name="strong mana potion" chance="6000" />
+		<item name="spellbook of warding" chance="290" />
+		<item name="spellbook of mind control" chance="180" />
+		<item name="underworld rod" chance="470" />
+		<item name="book of necromantic rituals" chance="13550" />
+		<item name="rough red gem" chance="880" />
+		<item name="lancet" chance="14410" />
+		<item name="horoscope" chance="9270" />
+		<item name="blood tincture in a vial" chance="14460" />
+		<item name="incantation notes" chance="14660" />
+		<item name="pieces of magic chalk" chance="7770" />
 	</loot>
 </monster>

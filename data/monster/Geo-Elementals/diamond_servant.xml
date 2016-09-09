@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Diamond Servant" nameDescription="a diamond servant" race="energy" experience="700" speed="210" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="397" corpse="13485" />
@@ -47,23 +47,23 @@
 		<voice sentence="Remain. Obedient." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
-		<item id="2148" countmax="79" chance="50000" /><!-- gold coin -->
-		<item id="2154" chance="550" /><!-- yellow gem -->
-		<item id="2164" chance="940" /><!-- might ring -->
-		<item id="2177" chance="9150" /><!-- life crystal -->
-		<item id="2189" chance="530" /><!-- wand of cosmic energy -->
-		<item id="5944" chance="45000" /><!-- soul orb -->
-		<item id="7428" chance="10" /><!-- bonebreaker -->
-		<item id="7440" chance="400" /><!-- mastermind potion -->
-		<item id="7588" chance="5790" /><!-- strong health potion -->
-		<item id="7589" chance="5980" /><!-- strong mana potion -->
-		<item id="7889" chance="710" /><!-- lightning pendant -->
-		<item id="8878" chance="20" /><!-- crystalline armor -->
-		<item id="9690" chance="5000" /><!-- gear wheel -->
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="79" chance="50000" />
+		<item name="yellow gem" chance="550" />
+		<item name="might ring" chance="940" />
+		<item name="life crystal" chance="9150" />
+		<item name="wand of cosmic energy" chance="530" />
+		<item name="soul orb" chance="45000" />
+		<item name="bonebreaker" chance="10" />
+		<item name="mastermind potion" chance="400" />
+		<item name="strong health potion" chance="5790" />
+		<item name="strong mana potion" chance="5980" />
+		<item name="lightning pendant" chance="710" />
+		<item name="crystalline armor" chance="20" />
+		<item name="gear wheel" chance="5000" />
 		<item id="9976" chance="5320" /><!-- crystal pedestal -->
-		<item id="10221" chance="110" /><!-- shockwave amulet -->
-		<item id="10572" chance="5000" /><!-- gear crystal -->
-		<item id="13758" chance="480" /><!-- slime mould -->
+		<item name="shockwave amulet" chance="110" />
+		<item name="gear crystal" chance="5000" />
+		<item name="slime mould" chance="480" />
 	</loot>
 </monster>

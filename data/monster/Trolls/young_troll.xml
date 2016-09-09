@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Young Troll" nameDescription="a young troll" race="blood" experience="12" speed="380" manacost="0">
 	<health now="30" max="30" />
 	<look type="15" corpse="5960" />
@@ -22,8 +22,8 @@
 	<defenses armor="1" defense="2" />
 	<loot>
 		<item id="2120" chance="10000" /><!-- rope -->
-		<item id="2148" countmax="12" chance="58000" /><!-- gold coin -->
-		<item id="2448" chance="3000" /><!-- studded club -->
-		<item id="2666" chance="14000" /><!-- meat -->
+		<item name="gold coin" countmax="12" chance="58000" />
+		<item name="studded club" chance="3000" />
+		<item name="meat" chance="14000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Evil Eye" nameDescription="the Evil Eye" race="blood" experience="500" speed="240" manacost="0">
 	<health now="1200" max="1200" />
 	<look type="210" corpse="6037" />
@@ -67,13 +67,13 @@
 		<voice sentence="Inferior creatures, bow before my power!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="45" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="90" chance="80000" /><!-- gold coin -->
-		<item id="2391" chance="1333" /><!-- war hammer -->
-		<item id="2423" chance="5000" /><!-- clerical mace -->
-		<item id="2445" chance="1000" /><!-- crystal mace -->
-		<item id="2451" chance="800" /><!-- djinn blade -->
-		<item id="3976" countmax="10" chance="50000" /><!-- worm -->
-		<item id="5898" countmax="1" chance="5000" /><!-- beholder eye -->
+		<item name="gold coin" countmax="45" chance="100000" />
+		<item name="gold coin" countmax="90" chance="80000" />
+		<item name="war hammer" chance="1333" />
+		<item name="clerical mace" chance="5000" />
+		<item name="crystal mace" chance="1000" />
+		<item name="djinn blade" chance="800" />
+		<item name="worm" countmax="10" chance="50000" />
+		<item name="bonelord eye" countmax="1" chance="5000" />
 	</loot>
 </monster>

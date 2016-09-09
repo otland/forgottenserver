@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Grave Guard" nameDescription="a grave guard" race="undead" experience="485" speed="200" manacost="0">
 	<health now="720" max="720" />
 	<look type="234" corpse="13975" />
@@ -31,13 +31,13 @@
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="30" chance="50000" /><!-- gold coin -->
-		<item id="2159" chance="4166" /><!-- scarab coin -->
-		<item id="2440" chance="1170" /><!-- daramanian waraxe -->
-		<item id="2747" chance="70000" /><!-- grave flower -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="30" chance="50000" />
+		<item name="scarab coin" chance="4166" />
+		<item name="daramian waraxe" chance="1170" />
+		<item name="grave flower" chance="70000" />
 		<item id="6300" chance="1754" /><!-- death ring -->
-		<item id="7618" chance="20000" /><!-- health potion -->
-		<item id="7620" chance="20000" /><!-- mana potion -->
+		<item name="health potion" chance="20000" />
+		<item name="mana potion" chance="20000" />
 	</loot>
 </monster>

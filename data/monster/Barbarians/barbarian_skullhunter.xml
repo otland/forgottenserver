@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Barbarian Skullhunter" nameDescription="a barbarian skullhunter" race="blood" experience="85" speed="220" manacost="450">
 	<health now="135" max="135" />
 	<look type="254" head="0" body="77" legs="77" feet="114" corpse="20347" />
@@ -39,17 +39,17 @@
 	</voices>
 	<loot>
 		<item id="2050" chance="60500" /><!-- torch -->
-		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
-		<item id="2168" chance="250" /><!-- life ring -->
+		<item name="gold coin" countmax="30" chance="60000" />
+		<item name="life ring" chance="250" />
 		<item id="2229" chance="3000" /><!-- skull -->
-		<item id="2403" chance="15250" /><!-- knife -->
-		<item id="2460" chance="19000" /><!-- brass helmet -->
-		<item id="2473" chance="8000" /><!-- viking helmet -->
-		<item id="2483" chance="3850" /><!-- scale armor -->
-		<item id="5913" chance="500" /><!-- brown piece of cloth -->
-		<item id="7449" chance="90" /><!-- crystal sword -->
-		<item id="7457" chance="120" /><!-- fur boots -->
-		<item id="7462" chance="100" /><!-- ragnir helmet -->
-		<item id="7618" chance="930" /><!-- HP -->
+		<item name="knife" chance="15250" />
+		<item name="brass helmet" chance="19000" />
+		<item name="viking helmet" chance="8000" />
+		<item name="scale armor" chance="3850" />
+		<item name="brown piece of cloth" chance="500" />
+		<item name="crystal sword" chance="90" />
+		<item name="fur boots" chance="120" />
+		<item name="ragnir helmet" chance="100" />
+		<item name="health potion" chance="930" />
 	</loot>
 </monster>

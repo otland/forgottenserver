@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Demon Parrot" nameDescription="a demon parrot" race="blood" experience="225" speed="300" manacost="250">
 	<health now="360" max="360" />
 	<look type="217" corpse="6056" />
@@ -41,6 +41,6 @@
 		<voice sentence="Your shhoooul will be mineee!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="99" chance="50000" /><!-- gold coins -->
+		<item name="gold coin" countmax="99" chance="50000" />
 	</loot>
 </monster>

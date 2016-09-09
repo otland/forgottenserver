@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Mutated Tiger" nameDescription="a mutated tiger" race="blood" experience="750" speed="240" manacost="0">
 	<health now="1100" max="1100" />
 	<look type="318" corpse="9913" />
@@ -46,16 +46,16 @@
 		<voice sentence="CHHHHHHHHHHH" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="5" chance="50000" /><!-- gold coin -->
-		<item id="2168" chance="5580" /><!-- life ring -->
-		<item id="2515" chance="380" /><!-- guardian shield -->
-		<item id="2666" countmax="2" chance="29500" /><!-- meat -->
-		<item id="7436" chance="440" /><!-- angelic axe -->
-		<item id="7454" chance="870" /><!-- glorius axe -->
-		<item id="7588" chance="6000" /><!-- strong health potion -->
-		<item id="9959" chance="730" /><!-- Silky Tapestry -->
-		<item id="11210" chance="20130" /><!-- striped fur -->
-		<item id="11228" chance="10600" /><!-- sabretooth -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="5" chance="50000" />
+		<item name="life ring" chance="5580" />
+		<item name="guardian shield" chance="380" />
+		<item name="meat" countmax="2" chance="29500" />
+		<item name="angelic axe" chance="440" />
+		<item name="glorious axe" chance="870" />
+		<item name="strong health potion" chance="6000" />
+		<item name="silky tapestry" chance="730" />
+		<item name="striped fur" chance="20130" />
+		<item name="sabretooth" chance="10600" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lethal Lissy" nameDescription="lethal lissy" race="blood" experience="500" speed="240" manacost="0">
 	<health now="1450" max="1450" />
 	<look type="155" head="77" body="0" legs="76" feet="132" addons="3" corpse="20438" />
@@ -32,12 +32,12 @@
 		<summon name="Pirate Cutthroat" interval="2000" chance="50" />
 	</summons>
 	<loot>
-		<item id="2145" chance="100000" /><!-- small diamond -->
-		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
-		<item id="2320" countmax="1" chance="100000" /><!-- skull -->
-		<item id="2387" chance="1500" /><!-- double axe -->
-		<item id="2463" chance="4000" /><!-- plate armor -->
-		<item id="2476" chance="1200" /><!-- knight armor -->
+		<item name="small diamond" chance="100000" />
+		<item name="gold coin" countmax="40" chance="100000" />
+		<item name="skull of Ratha" countmax="1" chance="100000" />
+		<item name="double axe" chance="1500" />
+		<item name="plate armor" chance="4000" />
+		<item name="knight armor" chance="1200" />
 		<item id="6100" chance="100000" /><!-- lethal lissy's shirt -->
 	</loot>
 </monster>

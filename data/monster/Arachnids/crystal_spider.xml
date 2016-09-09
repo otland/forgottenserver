@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crystal Spider" nameDescription="a crystal spider" race="undead" experience="900" speed="220" manacost="0">
 	<health now="1250" max="1250" />
 	<look type="263" corpse="7344" />
@@ -52,23 +52,23 @@
 	</voices>
 	<loot>
 		<item id="2124" chance="1560" /><!-- crystal ring -->
-		<item id="2125" chance="1730" /><!-- crystal necklace -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="92" chance="50000" /><!-- gold coin -->
+		<item name="crystal necklace" chance="1730" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="92" chance="50000" />
 		<item id="2169" chance="1587" /><!-- time ring -->
-		<item id="2171" chance="120" /><!-- platinum amulet -->
-		<item id="2457" chance="4545" /><!-- steel helmet -->
-		<item id="2463" chance="10000" /><!-- plate armor -->
-		<item id="2463" chance="5263" /><!-- ice cube -->
-		<item id="2476" chance="540" /><!-- knight armor -->
-		<item id="2477" chance="690" /><!-- knight legs -->
-		<item id="5801" chance="70" /><!-- jeweled backpack -->
-		<item id="5879" chance="1950" /><!-- spider silk-->
-		<item id="7290" chance="750" /><!-- shard -->
-		<item id="7364" countmax="6" chance="6250" /><!-- sniper arrow -->
-		<item id="7437" chance="130" /><!-- sapphire hammer -->
-		<item id="7449" chance="2564" /><!-- crystal sword -->
-		<item id="7589" chance="14810" /><!-- strong mana potion -->
-		<item id="7902" chance="650" /><!-- glacier mask -->
+		<item name="platinum amulet" chance="120" />
+		<item name="steel helmet" chance="4545" />
+		<item name="plate armor" chance="10000" />
+		<item name="plate armor" chance="5263" />
+		<item name="knight armor" chance="540" />
+		<item name="knight legs" chance="690" />
+		<item name="jewelled backpack" chance="70" />
+		<item name="spider silk" chance="1950" />
+		<item name="shard" chance="750" />
+		<item name="sniper arrow" countmax="6" chance="6250" />
+		<item name="sapphire hammer" chance="130" />
+		<item name="crystal sword" chance="2564" />
+		<item name="strong mana potion" chance="14810" />
+		<item name="glacier mask" chance="650" />
 	</loot>
 </monster>

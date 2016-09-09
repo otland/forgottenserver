@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Spectre" nameDescription="a spectre" race="undead" experience="2100" speed="230" manacost="0">
 	<health now="1350" max="1350" />
 	<look type="235" head="20" corpse="6348" />
@@ -59,22 +59,22 @@
 	</voices>
 	<loot>
 		<item id="2071" chance="9620" /><!-- lyre -->
-		<item id="2134" chance="850" /><!-- silver brooch -->
-		<item id="2134" chance="110" /><!-- shadow sceptre -->
+		<item name="silver brooch" chance="850" />
+		<item name="silver brooch" chance="110" />
 		<item id="2136" chance="110" /><!--demonbone amulet -->
-		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
-		<item id="2148" countmax="97" chance="33000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="3850" /><!-- platinum coin -->
-		<item id="2165" chance="190" /><!-- stealth ring -->
-		<item id="2189" chance="9800" /><!-- wand of cosmic energy -->
-		<item id="2260" countmax="2" chance="30310" /><!-- blank rune -->
-		<item id="5909" chance="3800" /><!-- white piece of cloth -->
-		<item id="5944" chance="6005" /><!-- soul orb -->
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="97" chance="33000" />
+		<item name="platinum coin" countmax="7" chance="3850" />
+		<item name="stealth ring" chance="190" />
+		<item name="wand of cosmic energy" chance="9800" />
+		<item name="blank rune" countmax="2" chance="30310" />
+		<item name="white piece of cloth" chance="3800" />
+		<item name="soul orb" chance="6005" />
 		<item id="6300" chance="280" /><!-- death ring -->
-		<item id="6500" chance="6270" /><!-- demonic essence -->
-		<item id="7383" chance="700" /><!-- relic sword -->
-		<item id="7590" chance="920" /><!-- great mana potion -->
-		<item id="11227" chance="1000" /><!-- shiny stone -->
+		<item name="demonic essence" chance="6270" />
+		<item name="relic sword" chance="700" />
+		<item name="great mana potion" chance="920" />
+		<item name="shiny stone" chance="1000" />
 	</loot>
 </monster>

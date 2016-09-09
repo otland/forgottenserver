@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Stone Devourer" nameDescription="a stone devourer" race="undead" experience="2900" speed="250" manacost="0">
 	<health now="4200" max="4200" />
 	<look type="486" corpse="18375" />
@@ -48,27 +48,27 @@
 		<voice sentence="Rumble!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="92000" /><!-- platinum coins -->
-		<item id="2197" chance="2270" /><!-- stone skin amulet -->
-		<item id="2213" chance="2840" /><!-- dwarven ring-->
-		<item id="2393" chance="570" /><!-- giant sword -->
-		<item id="2445" chance="850" /><!-- crystal mace -->
-		<item id="2454" chance="920" /><!-- war axe -->
-		<item id="7437" chance="1490" /><!-- sapphire hammer-->
-		<item id="7452" chance="1490" /><!-- spiked squelcher -->
-		<item id="7454" chance="3340" /><!-- glorious axe -->
-		<item id="7588" countmax="2" chance="13840" /><!-- SHP -->
-		<item id="7589" countmax="2" chance="14900" /><!-- SMP -->
-		<item id="7590" countmax="2" chance="15610" /><!-- GMP -->
-		<item id="7620" countmax="2" chance="15050" /><!-- MP -->
-		<item id="8473" chance="14410" /><!-- UHP -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="92000" />
+		<item name="stone skin amulet" chance="2270" />
+		<item name="dwarven ring" chance="2840" />
+		<item name="giant sword" chance="570" />
+		<item name="crystal mace" chance="850" />
+		<item name="war axe" chance="920" />
+		<item name="sapphire hammer" chance="1490" />
+		<item name="spiked squelcher" chance="1490" />
+		<item name="glorious axe" chance="3340" />
+		<item name="strong health potion" countmax="2" chance="13840" />
+		<item name="strong mana potion" countmax="2" chance="14900" />
+		<item name="great mana potion" countmax="2" chance="15610" />
+		<item name="mana potion" countmax="2" chance="15050" />
+		<item name="ultimate health potion" chance="14410" />
 		<item id="8748" chance="11360" /><!-- coal -->
-		<item id="10549" chance="12850" /><!-- ancient stone -->
-		<item id="18304" countmax="10" chance="9940" /><!-- crystalline arrows -->
-		<item id="18416" chance="6960" /><!-- green crystal splinter -->
-		<item id="18419" chance="6810" /><!-- cyan crystal fragment -->
-		<item id="18431" chance="18679" /><!-- stone nose -->
-		<item id="18432" chance="16320" /><!-- crystalline spikes -->
+		<item name="ancient stone" chance="12850" />
+		<item name="crystalline arrow" countmax="10" chance="9940" />
+		<item name="green crystal splinter" chance="6960" />
+		<item name="cyan crystal fragment" chance="6810" />
+		<item name="stone nose" chance="18679" />
+		<item name="crystalline spikes" chance="16320" />
 	</loot>
 </monster>

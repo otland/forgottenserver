@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Water Buffalo" nameDescription="water buffalo" race="blood" experience="20" speed="210" manacost="0">
 	<health now="390" max="390" />
 	<look type="523" corpse="19701" />
@@ -34,8 +34,8 @@
 		<voice sentence="Mrrr!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
-		<item id="2666" countmax="4" chance="33600" /><!-- Meat -->
-		<item id="2671" countmax="3" chance="39200" /><!-- Ham -->
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item name="meat" countmax="4" chance="33600" />
+		<item name="ham" countmax="3" chance="39200" />
 	</loot>
 </monster>

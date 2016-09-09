@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dark Magician" nameDescription="a dark magician" race="blood" experience="185" speed="210" manacost="0">
 	<health now="325" max="325" />
 	<look type="133" head="116" body="95" legs="50" feet="132" addons="2" corpse="20367" />
@@ -51,14 +51,14 @@
 		<voice sentence="Stand Still!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="55" chance="75100" /><!-- gold coin -->
-		<item id="2188" chance="280" /><!-- necrotic rod -->
-		<item id="2260" chance="10000" /><!-- blank rune -->
-		<item id="7588" chance="3000" /><!-- strong health potion -->
-		<item id="7589" chance="2860" /><!-- strong mana potion -->
-		<item id="7618" chance="12000" /><!-- health potion -->
-		<item id="7620" chance="11900" /><!-- mana potion -->
-		<item id="7761" chance="510" /><!-- small enchanted amethyst -->
-		<item id="13295" chance="20" /><!-- reins -->
+		<item name="gold coin" countmax="55" chance="75100" />
+		<item name="wand of decay" chance="280" />
+		<item name="blank rune" chance="10000" />
+		<item name="strong health potion" chance="3000" />
+		<item name="strong mana potion" chance="2860" />
+		<item name="health potion" chance="12000" />
+		<item name="mana potion" chance="11900" />
+		<item name="small enchanted emerald" chance="510" />
+		<item name="reins" chance="20" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Acid Blob" nameDescription="an acid blob" race="venom" experience="250" speed="180" manacost="0">
 	<health now="250" max="250" />
 	<look type="314" corpse="9962" />
@@ -40,6 +40,6 @@
 		<voice sentence="Kzzchhh!" />
 	</voices>
 	<loot>
-		<item id="9967" chance="14285" /><!-- glob of acid -->
+		<item name="glob of acid slime" chance="14285" />
 	</loot>
 </monster>

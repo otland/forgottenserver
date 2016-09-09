@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Tortoise" nameDescription="a tortoise" race="blood" experience="90" speed="200" manacost="445">
 	<health now="185" max="185" />
 	<look type="197" corpse="6072" />
@@ -27,12 +27,12 @@
 		<element firePercent="-10" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="30" chance="59000" /><!-- gold coin -->
-		<item id="2417" chance="730" /><!-- battle hammer -->
-		<item id="2510" chance="2850" /><!-- plate shield -->
+		<item name="gold coin" countmax="30" chance="59000" />
+		<item name="battle hammer" chance="730" />
+		<item name="plate shield" chance="2850" />
 		<item id="2667" chance="4600" /><!-- fish -->
-		<item id="5678" countmax="2" chance="770" /><!-- tortoise egg -->
-		<item id="5899" chance="1300" /><!-- turtle shell -->
-		<item id="6131" chance="200" /><!-- tortoise shield -->
+		<item name="tortoise egg" countmax="2" chance="770" />
+		<item name="turtle shell" chance="1300" />
+		<item name="tortoise shield" chance="200" />
 	</loot>
 </monster>

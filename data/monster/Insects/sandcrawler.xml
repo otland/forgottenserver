@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Sandcrawler" nameDescription="a sandcrawler" race="venom" experience="20" speed="170" manacost="250">
 	<health now="30" max="30" />
 	<look type="350" corpse="11357" />
@@ -27,7 +27,7 @@
 		<voice sentence="Chrk chrk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="6" chance="33333" /><!-- gold coin -->
-		<item id="11373" chance="2173" /><!-- sandcrawler shell -->
+		<item name="gold coin" countmax="6" chance="33333" />
+		<item name="sandcrawler shell" chance="2173" />
 	</loot>
 </monster>

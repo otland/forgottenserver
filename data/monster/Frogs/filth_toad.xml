@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Filth Toad" nameDescription="a filth toad" race="blood" experience="90" speed="210" manacost="0">
 	<health now="185" max="185" />
 	<look type="222" corpse="6077" />
@@ -38,10 +38,10 @@
 		<voice sentence="Ribbit!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="21" chance="75000" /><!-- gold coin -->
-		<item id="2377" chance="500" /><!-- two handed sword -->
-		<item id="2398" chance="2000" /><!-- mace -->
+		<item name="gold coin" countmax="21" chance="75000" />
+		<item name="two handed sword" chance="500" />
+		<item name="mace" chance="2000" />
 		<item id="2667" chance="22000" /><!-- fish -->
-		<item id="10557" chance="3000" /><!-- poisonous slime -->
+		<item name="poisonous slime" chance="3000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Obujos" nameDescription="a obujos" race="blood" experience="25000" speed="560" manacost="0">
 	<health now="90000" max="90000" />
 	<look type="445" corpse="15224" />
@@ -59,8 +59,8 @@
 		<voice sentence="QJELL KEJH!!" />
 	</voices>
 	<loot>
-		<item id="15404" chance="14285" /><!-- deepling axe -->
-		<item id="15411" chance="100000" /><!-- depth scutum -->
-		<item id="15412" chance="14285" /><!-- ornate legs -->
+		<item name="deepling axe" chance="14285" />
+		<item name="depth scutum" chance="100000" />
+		<item name="ornate legs" chance="14285" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Earth Elemental" nameDescription="an earth elemental" race="undead" experience="450" speed="220" manacost="0">
 	<health now="650" max="650" />
 	<look type="301" corpse="8933" />
@@ -57,16 +57,16 @@
 		<immunity energy="1" />
 	</immunities>
 	<loot>
-		<item id="1294" countmax="10" chance="10000" /><!-- small stone -->
-		<item id="2148" countmax="100" chance="43000" /><!-- gold coin -->
-		<item id="2148" countmax="30" chance="50000" /><!-- gold coin -->
-		<item id="2260" chance="10000" /><!-- blank rune -->
-		<item id="7589" chance="1910" /><!-- strong mana potion -->
-		<item id="7850" countmax="30" chance="20160" /><!-- earth arrow -->
+		<item name="small stone" countmax="10" chance="10000" />
+		<item name="gold coin" countmax="100" chance="43000" />
+		<item name="gold coin" countmax="30" chance="50000" />
+		<item name="blank rune" chance="10000" />
+		<item name="strong mana potion" chance="1910" />
+		<item name="earth arrow" countmax="30" chance="20160" />
 		<item id="9808" chance="350" /><!-- rusty armor -->
-		<item id="9970" chance="620" /><!-- small topaz -->
-		<item id="11222" chance="20460" /><!-- lump of earth -->
-		<item id="11339" chance="570" /><!-- clay lump -->
+		<item name="small topaz" chance="620" />
+		<item name="lump of earth" chance="20460" />
+		<item name="clay lump" chance="570" />
 		<item id="13757" chance="470" /><!-- coal -->
 	</loot>
 </monster>

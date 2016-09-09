@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dromedary" nameDescription="a dromedary" race="blood" experience="0" speed="170">
 	<health now="45" max="45" />
 	<look type="404" corpse="13528" />
@@ -29,7 +29,7 @@
 		<voice sentence="Grunt!" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="36000" /><!-- meat -->
-		<item id="13939" chance="1000" /><!-- sugar oat -->
+		<item name="meat" countmax="2" chance="36000" />
+		<item name="sugar oat" chance="1000" />
 	</loot>
 </monster>

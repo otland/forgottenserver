@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="180" manacost="0">
 	<health now="550" max="550" />
 	<look type="103" corpse="6032" />
@@ -65,21 +65,21 @@
 	</voices>
 	<loot>
 		<item id="1860" chance="2200" /><!-- green tapestry -->
-		<item id="2063" chance="160" /><!-- small oil lamp -->
-		<item id="2148" countmax="75" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="50" chance="60000" /><!-- gold coin -->
-		<item id="2149" chance="7000" /><!-- small emerald -->
-		<item id="2155" chance="200" /><!-- green gem -->
-		<item id="2187" chance="390" /><!-- wand of inferno -->
-		<item id="2442" chance="5000" /><!-- heavy machete -->
-		<item id="2663" chance="160" /><!-- mystic turban -->
-		<item id="2673" countmax="5" chance="9390" /><!-- pear -->
-		<item id="5910" chance="3000" /><!-- green piece of cloth -->
-		<item id="7378" countmax="3" chance="15570" /><!-- royal spear -->
-		<item id="7589" chance="3500" /><!-- strong mana potion -->
-		<item id="7732" countmax="2" chance="2000" /><!-- seeds -->
-		<item id="7900" chance="360" /><!-- magma monocle -->
-		<item id="12426" chance="8540" /><!-- Jewelled belt -->
-		<item id="12442" chance="1130" /><!-- noble turban -->
+		<item name="small oil lamp" chance="160" />
+		<item name="gold coin" countmax="75" chance="50000" />
+		<item name="gold coin" countmax="50" chance="60000" />
+		<item name="small emerald" chance="7000" />
+		<item name="green gem" chance="200" />
+		<item name="wand of inferno" chance="390" />
+		<item name="heavy machete" chance="5000" />
+		<item name="mystic turban" chance="160" />
+		<item name="pear" countmax="5" chance="9390" />
+		<item name="green piece of cloth" chance="3000" />
+		<item name="royal spear" countmax="3" chance="15570" />
+		<item name="strong mana potion" chance="3500" />
+		<item name="seeds" countmax="2" chance="2000" />
+		<item name="magma monocle" chance="360" />
+		<item name="jewelled belt" chance="8540" />
+		<item name="noble turban" chance="1130" />
 	</loot>
 </monster>

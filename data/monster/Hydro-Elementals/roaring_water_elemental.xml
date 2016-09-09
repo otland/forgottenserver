@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Roaring Water Elemental" nameDescription="a roaring water elemental" race="undead" experience="1300" speed="390" manacost="0">
 	<health now="1750" max="1750" />
 	<look type="11" corpse="8965" />
@@ -41,11 +41,11 @@
 		<immunity drown="1" />
 	</immunities>
 	<loot>
-		<item id="2146" countmax="2" chance="4125" /><!-- small sapphire -->
-		<item id="2148" countmax="90" chance="27000" /><!-- gold coin -->
-		<item id="2148" countmax="87" chance="27000" /><!-- gold coin -->
-		<item id="7839" countmax="2" chance="1000" /><!-- giant shimmering pearl -->
-		<item id="8302" chance="9000" /><!-- iced soil -->
-		<item id="8911" chance="750" /><!-- northwind rod -->
+		<item name="small sapphire" countmax="2" chance="4125" />
+		<item name="gold coin" countmax="90" chance="27000" />
+		<item name="gold coin" countmax="87" chance="27000" />
+		<item name="shiver arrow" countmax="2" chance="1000" />
+		<item name="iced soil" chance="9000" />
+		<item name="northwind rod" chance="750" />
 	</loot>
 </monster>

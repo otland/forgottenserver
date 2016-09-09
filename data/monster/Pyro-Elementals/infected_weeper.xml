@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Infected Weeper" nameDescription="infected weeper" race="fire" experience="4800" speed="250" manacost="0">
 	<health now="6800" max="6800" />
 	<look type="489" corpse="17251" />
@@ -51,8 +51,8 @@
 		<voice sentence="Moooaaan!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="198" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="100000" /><!-- platinum coin -->
+		<item name="gold coin" countmax="198" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="100000" />
 		<item id="8748" chance="1460" /><!-- coal -->
 	</loot>
 </monster>

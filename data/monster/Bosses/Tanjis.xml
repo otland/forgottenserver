@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Tanjis" nameDescription="a tanjis" race="blood" experience="14500" speed="560" manacost="0">
 	<health now="17350" max="17350" />
 	<look type="446" corpse="15228" />
@@ -66,8 +66,8 @@
 		<voice sentence="JAUL QJELL, JAKNH JEH KENH!!" />
 	</voices>
 	<loot>
-		<item id="15409" chance="50000" /><!-- depth ocrea -->
-		<item id="15413" chance="20000" /><!-- ornate shield -->
-		<item id="15414" chance="25000" /><!-- ornate mace -->
+		<item name="depth ocrea" chance="50000" />
+		<item name="ornate shield" chance="20000" />
+		<item name="ornate mace" chance="25000" />
 	</loot>
 </monster>

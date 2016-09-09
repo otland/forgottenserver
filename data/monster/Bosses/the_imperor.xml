@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Imperor" nameDescription="the imperor" race="fire" experience="8000" speed="330" manacost="0">
 	<health now="15000" max="15000" />
 	<look type="237" corpse="8635" />
@@ -65,23 +65,23 @@
 	</voices>
 	<loot>
 		<item id="2050" chance="15000" /><!-- torch -->
-		<item id="2148" countmax="79" chance="100000" /><!-- gold coin -->
-		<item id="2150" countmax="1" chance="8888" /><!-- small amethyst -->
-		<item id="2165" chance="4555" /><!-- stealth ring -->
-		<item id="2185" chance="833" /><!-- volcanic rod -->
-		<item id="2260" chance="18000" /><!-- blank rune -->
-		<item id="2464" chance="7887" /><!-- chain armor -->
-		<item id="2465" chance="6577" /><!-- brass armor -->
-		<item id="2465" chance="6577" /><!-- brass armor -->
-		<item id="2548" chance="20000" /><!-- pitchfork -->
-		<item id="5944" chance="5666" /><!-- soul orb -->
+		<item name="gold coin" countmax="79" chance="100000" />
+		<item name="small amethyst" countmax="1" chance="8888" />
+		<item name="stealth ring" chance="4555" />
+		<item name="necrotic rod" chance="833" />
+		<item name="blank rune" chance="18000" />
+		<item name="chain armor" chance="7887" />
+		<item name="brass armor" chance="6577" />
+		<item name="brass armor" chance="6577" />
+		<item name="pitchfork" chance="20000" />
+		<item name="soul orb" chance="5666" />
 		<item id="6300" chance="999" /><!-- death ring -->
-		<item id="6500" countmax="1" chance="7777" /><!-- demonic essence -->
-		<item id="6529" countmax="5" chance="5000" /><!-- infernal bolts -->
-		<item id="6534" chance="100000" /><!-- the imperor's trident -->
-		<item id="6558" chance="2222" /><!-- concentrated demonic blood -->
-		<item id="7891" chance="2000" /><!-- magma boots -->
-		<item id="7899" chance="2000" /><!-- magma coat -->
-		<item id="7900" chance="2000" /><!-- magma monocle -->
+		<item name="demonic essence" countmax="1" chance="7777" />
+		<item name="infernal bolt" countmax="5" chance="5000" />
+		<item name="the Imperor's trident" chance="100000" />
+		<item name="concentrated demonic blood" chance="2222" />
+		<item name="magma boots" chance="2000" />
+		<item name="magma coat" chance="2000" />
+		<item name="magma monocle" chance="2000" />
 	</loot>
 </monster>

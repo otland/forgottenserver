@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Amazon" nameDescription="a amazon" race="blood" experience="60" speed="180" manacost="390">
 	<health now="110" max="110" />
 	<look type="137" head="113" body="120" legs="114" feet="132" corpse="20323" />
@@ -34,14 +34,14 @@
 	</voices>
 	<loot>
 		<item id="2050" chance="1005" /><!-- torch -->
-		<item id="2125" chance="287" /><!-- crystal necklace -->
-		<item id="2147" chance="161" /><!-- small ruby -->
-		<item id="2148" countmax="20" chance="40000" /><!-- gold coin -->
+		<item name="crystal necklace" chance="287" />
+		<item name="small ruby" chance="161" />
+		<item name="gold coin" countmax="20" chance="40000" />
 		<item id="2229" countmax="2" chance="80000" /><!-- skull -->
-		<item id="2379" chance="80000" /><!-- dagger -->
-		<item id="2385" chance="23000" /><!-- sabre -->
-		<item id="2691" chance="30333" /><!-- brown bread -->
-		<item id="12399" chance="10000" /><!-- Girlish Hair Decoration -->
-		<item id="12400" chance="5000" /><!-- Protective Charm -->
+		<item name="dagger" chance="80000" />
+		<item name="sabre" chance="23000" />
+		<item name="brown bread" chance="30333" />
+		<item name="girlish hair decoration" chance="10000" />
+		<item name="protective charm" chance="5000" />
 	</loot>
 </monster>

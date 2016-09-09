@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Noble" nameDescription="a lizard noble" race="blood" experience="2000" speed="200" manacost="0">
 	<health now="7000" max="7000" />
 	<look type="115" corpse="6041" />
@@ -42,12 +42,12 @@
 		<voice sentence="Where are zhe guardz when you need zhem!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="5" chance="7100" /><!-- small ruby -->
-		<item id="2148" countmax="100" chance="91300" /><!-- gold coin -->
-		<item id="2152" countmax="20" chance="10000" /><!-- platinum coin -->
-		<item id="5876" chance="220" /><!-- lizard leather -->
-		<item id="5881" chance="650" /><!-- lizard scale -->
-		<item id="7588" chance="2550" /><!-- strong health potion -->
-		<item id="7591" chance="2900" /><!-- GHP -->
+		<item name="small ruby" countmax="5" chance="7100" />
+		<item name="gold coin" countmax="100" chance="91300" />
+		<item name="platinum coin" countmax="20" chance="10000" />
+		<item name="lizard leather" chance="220" />
+		<item name="lizard scale" chance="650" />
+		<item name="strong health potion" chance="2550" />
+		<item name="great health potion" chance="2900" />
 	</loot>
 </monster>

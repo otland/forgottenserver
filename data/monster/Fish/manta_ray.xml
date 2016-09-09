@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Manta Ray" nameDescription="a manta ray" race="blood" experience="125" speed="200" manacost="0">
 	<health now="680" max="680" />
 	<look type="449" corpse="15276" />
@@ -41,6 +41,6 @@
 		<voice sentence="Flap flap flap!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="38" chance="50000" /><!-- gold coin -->
+		<item name="gold coin" countmax="38" chance="50000" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Rotworm Queen" nameDescription="a rotworm queen" race="blood" experience="300" speed="126" manacost="0">
 	<health now="85" max="85" />
 	<look type="295" corpse="8947" />
@@ -20,8 +20,8 @@
 	</attacks>
 	<defenses armor="10" defense="15" />
 	<loot>
-		<item id="2148" countmax="47" chance="100000" /><!-- gold coin -->
-		<item id="3976" countmax="45" chance="20000" /><!-- worm -->
-		<item id="8971" chance="3333" /><!-- gland -->
+		<item name="gold coin" countmax="47" chance="100000" />
+		<item name="worm" countmax="45" chance="20000" />
+		<item name="gland" chance="3333" />
 	</loot>
 </monster>

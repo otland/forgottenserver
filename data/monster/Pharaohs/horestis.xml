@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Horestis" nameDescription="a horestis" race="undead" experience="3500" speed="276" manacost="0">
 	<health now="6000" max="6000" />
 	<look type="88" head="20" body="30" legs="40" feet="50" corpse="6031" />
@@ -54,18 +54,18 @@
 		<voice sentence="Receive a lesson of the past!" />
 	</voices>
 	<loot>
-		<item id="2134" chance="12500" /><!-- silver brooch -->
-		<item id="2148" countmax="243" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="5" chance="33333" /><!-- platinum coin -->
-		<item id="2159" countmax="5" chance="14285" /><!-- scarab coin -->
-		<item id="2446" chance="5000" /><!-- pharaoh sword -->
-		<item id="2447" chance="2500" /><!-- twin axe -->
-		<item id="7590" countmax="3" chance="10000" /><!-- great mana potion -->
-		<item id="7591" countmax="4" chance="5000" /><!-- great health potion -->
+		<item name="silver brooch" chance="12500" />
+		<item name="gold coin" countmax="243" chance="50000" />
+		<item name="platinum coin" countmax="5" chance="33333" />
+		<item name="scarab coin" countmax="5" chance="14285" />
+		<item name="pharaoh sword" chance="5000" />
+		<item name="twin axe" chance="2500" />
+		<item name="great mana potion" countmax="3" chance="10000" />
+		<item name="great health potion" countmax="4" chance="5000" />
 		<item id="9811" chance="2500" /><!-- rusty legs -->
-		<item id="11207" chance="2500" /><!-- mini mummy -->
+		<item name="mini mummy" chance="2500" />
 		<item id="13472" chance="16666" /><!-- pharaoh banner -->
-		<item id="13498" chance="100000" /><!-- scorpion sceptre -->
+		<item name="scorpion sceptre" chance="100000" />
 		<item id="13739" chance="12500" /><!-- hieroglyph banner -->
 	</loot>
 </monster>

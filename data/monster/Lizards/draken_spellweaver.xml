@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Draken Spellweaver" nameDescription="a draken spellweaver" race="blood" experience="3100" speed="210" manacost="0">
 	<health now="5000" max="5000" />
 	<look type="340" corpse="11316" />
@@ -63,24 +63,24 @@
 		<voice sentence="Zzzzzooom!!" />
 	</voices>
 	<loot>
-		<item id="2123" chance="370" /><!-- ring of the sky -->
-		<item id="2147" countmax="5" chance="6910" /><!-- small ruby -->
-		<item id="2148" countmax="100" chance="41000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="58000" /><!-- gold coin -->
-		<item id="2152" countmax="5" chance="25510" /><!-- platinum coin -->
-		<item id="2155" chance="970" /><!-- green gem -->
-		<item id="2187" chance="1660" /><!-- wand of inferno -->
-		<item id="2666" chance="30400" /><!-- meat -->
-		<item id="7590" chance="4970" /><!-- great mana potion -->
-		<item id="8871" chance="1450" /><!-- focus cape -->
-		<item id="11303" chance="1980" /><!-- zaoan shoes -->
-		<item id="11314" chance="19790" /><!-- weaver's wandtip -->
-		<item id="11315" chance="10" /><!-- draken trophy -->
-		<item id="11355" chance="620" /><!-- spellweaver's robe -->
-		<item id="11356" chance="770" /><!-- zaoan robe-->
-		<item id="12410" chance="1980" /><!-- luminous orb -->
-		<item id="12614" chance="3930" /><!-- draken sulphur-->
-		<item id="13294" chance="30" /><!-- harness -->
-		<item id="13538" chance="180" /><!-- bamboo leaves -->
+		<item name="ring of the sky" chance="370" />
+		<item name="small ruby" countmax="5" chance="6910" />
+		<item name="gold coin" countmax="100" chance="41000" />
+		<item name="gold coin" countmax="100" chance="58000" />
+		<item name="platinum coin" countmax="5" chance="25510" />
+		<item name="green gem" chance="970" />
+		<item name="wand of inferno" chance="1660" />
+		<item name="meat" chance="30400" />
+		<item name="great mana potion" chance="4970" />
+		<item name="focus cape" chance="1450" />
+		<item name="Zaoan shoes" chance="1980" />
+		<item name="weaver's wandtip" chance="19790" />
+		<item name="draken trophy" chance="10" />
+		<item name="spellweaver's robe" chance="620" />
+		<item name="Zaoan robe" chance="770" />
+		<item name="luminous orb" chance="1980" />
+		<item name="draken sulphur" chance="3930" />
+		<item name="harness" chance="30" />
+		<item name="bamboo leaves" chance="180" />
 	</loot>
 </monster>

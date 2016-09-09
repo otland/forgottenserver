@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190" manacost="0">
 	<health now="245" max="245" />
 	<look type="15" corpse="5960" />
@@ -31,9 +31,9 @@
 		<voice sentence="DIE!!!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="146" chance="93000" /><!-- gold coin -->
-		<item id="2152" chance="6000" /><!-- platinum coin -->
-		<item id="2391" chance="750" /><!-- war hammer -->
-		<item id="10606" chance="4400" /><!-- bunch of troll hair -->
+		<item name="gold coin" countmax="146" chance="93000" />
+		<item name="platinum coin" chance="6000" />
+		<item name="war hammer" chance="750" />
+		<item name="bunch of troll hair" chance="4400" />
 	</loot>
 </monster>

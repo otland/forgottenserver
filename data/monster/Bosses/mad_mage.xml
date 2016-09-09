@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="mad mage" nameDescription="a mad mage" race="blood" experience="1800" speed="240" manacost="0">
 	<health now="2200" max="2200" />
 	<look type="394" corpse="13603" />
@@ -51,13 +51,13 @@
 		<summon name="stone golem" interval="1000" chance="10" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="66" chance="100000" /><!-- gold coins -->
-		<item id="2148" chance="100000" countmax="20" /><!-- gold coin -->
-		<item id="2792" countmax="5" chance="5000" /><!-- dark mushroom -->
-		<item id="5911" chance="800" /><!-- red poc -->
-		<item id="7368" chance="2400" countmax="4" /><!-- assassin star :: Atk 65 -->
-		<item id="7588" countmax="5" chance="1300" /><!-- strong health potion -->
-		<item id="7589" countmax="2" chance="1200" /><!-- strong mana potion -->
-		<item id="7895" chance="800" /><!-- lightning legs :: Arm 8 -->
+		<item name="gold coin" countmax="66" chance="100000" />
+		<item name="gold coin" chance="100000" countmax="20" />
+		<item name="dark mushroom" countmax="5" chance="5000" />
+		<item name="red piece of cloth" chance="800" />
+		<item name="assassin star" chance="2400" countmax="4" />
+		<item name="strong health potion" countmax="5" chance="1300" />
+		<item name="strong mana potion" countmax="2" chance="1200" />
+		<item name="lightning legs" chance="800" />
 	</loot>
 </monster>

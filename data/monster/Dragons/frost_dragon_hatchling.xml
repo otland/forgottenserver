@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Frost Dragon Hatchling" nameDescription="a frost dragon hatchling" race="undead" experience="745" speed="200" manacost="0">
 	<health now="800" max="800" />
 	<look type="283" corpse="7969" />
@@ -49,10 +49,10 @@
 		<voice sentence="Fchu?" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="55" chance="86750" /><!-- gold coin -->
-		<item id="2672" chance="79600" /><!-- dragon ham -->
-		<item id="7618" chance="560" /><!-- health potion -->
-		<item id="8900" chance="400" /><!-- spellbook of enlightenment -->
-		<item id="10578" chance="5000" /><!-- frosty heart -->
+		<item name="gold coin" countmax="55" chance="86750" />
+		<item name="dragon ham" chance="79600" />
+		<item name="health potion" chance="560" />
+		<item name="spellbook of enlightenment" chance="400" />
+		<item name="frosty heart" chance="5000" />
 	</loot>
 </monster>

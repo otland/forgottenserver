@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Slick Water Elemental" nameDescription="a slick water elemental" race="undead" experience="450" speed="280" manacost="0">
 	<health now="550" max="550" />
 	<look type="286" corpse="8965" />
@@ -46,9 +46,9 @@
 		<voice sentence="Splipsh Splash" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="22500" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="22500" /><!-- gold coin -->
-		<item id="7839" chance="2575" countmax="3" /><!-- shiver arrow -->
-		<item id="8302" chance="6000" /><!-- iced soil -->
+		<item name="gold coin" countmax="70" chance="22500" />
+		<item name="gold coin" countmax="60" chance="22500" />
+		<item name="shiver arrow" chance="2575" countmax="3" />
+		<item name="iced soil" chance="6000" />
 	</loot>
 </monster>

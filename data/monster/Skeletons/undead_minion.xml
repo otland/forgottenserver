@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Undead Minion" nameDescription="an undead minion" race="undead" experience="550" speed="230" manacost="620">
 	<health now="850" max="850" />
 	<look type="37" corpse="5963" />
@@ -30,11 +30,11 @@
 		<immunity drunk="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
-		<item id="2260" chance="10000" /><!-- blank rune -->
-		<item id="2417" chance="5000" /><!-- battle hammer -->
-		<item id="2513" chance="1000" /><!-- battle shield -->
-		<item id="2515" chance="5000" /><!-- guardian shield -->
+		<item name="gold coin" countmax="40" chance="100000" />
+		<item name="blank rune" chance="10000" />
+		<item name="battle hammer" chance="5000" />
+		<item name="battle shield" chance="1000" />
+		<item name="guardian shield" chance="5000" />
 		<item id="6570" chance="5538" /><!-- blue surprise bag -->
 		<item id="6571" chance="1538" /><!-- red surprise bag -->
 	</loot>

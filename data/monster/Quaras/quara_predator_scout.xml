@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Quara Predator Scout" nameDescription="a quara predator scout" race="blood" experience="400" speed="250" manacost="0">
 	<health now="890" max="890" />
 	<look type="20" corpse="6067" />
@@ -36,15 +36,15 @@
 		<voice sentence="Rraaar!" />
 	</voices>
 	<loot>
-		<item id="2145" countmax="2" chance="5520" /><!-- small diamond -->
-		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="69" chance="48000" /><!-- gold coin -->
-		<item id="2377" chance="2320" /><!-- two handed sword -->
-		<item id="2387" chance="5800" /><!-- double axe -->
-		<item id="2483" chance="8000" /><!-- scale armor -->
-		<item id="2670" countmax="5" chance="4700" /><!-- shrimp -->
-		<item id="5895" chance="980" /><!-- fish fin -->
-		<item id="8911" chance="800" /><!-- northwind rod -->
-		<item id="12447" chance="10150" /><!-- quara bone -->
+		<item name="small diamond" countmax="2" chance="5520" />
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="gold coin" countmax="69" chance="48000" />
+		<item name="two handed sword" chance="2320" />
+		<item name="double axe" chance="5800" />
+		<item name="scale armor" chance="8000" />
+		<item name="shrimp" countmax="5" chance="4700" />
+		<item name="fish fin" chance="980" />
+		<item name="northwind rod" chance="800" />
+		<item name="quara bone" chance="10150" />
 	</loot>
 </monster>

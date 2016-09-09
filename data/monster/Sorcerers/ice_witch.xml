@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ice Witch" nameDescription="an ice witch" race="blood" experience="580" speed="200" manacost="0">
 	<health now="650" max="650" />
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20423" />
@@ -58,16 +58,16 @@
 		<voice sentence="Freeze!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="29630" /><!-- gold coin -->
-		<item id="2423" chance="920" /><!-- clerical mace -->
-		<item id="2663" chance="430" /><!-- mystic turban -->
-		<item id="2796" chance="1310" /><!-- green mushroom -->
-		<item id="7290" chance="530" /><!-- shard -->
-		<item id="7387" chance="330" /><!-- diamond sceptre -->
+		<item name="gold coin" countmax="90" chance="29630" />
+		<item name="clerical mace" chance="920" />
+		<item name="mystic turban" chance="430" />
+		<item name="green mushroom" chance="1310" />
+		<item name="shard" chance="530" />
+		<item name="diamond sceptre" chance="330" />
 		<item id="7441" chance="10000" /><!-- ice cube -->
-		<item id="7449" chance="400" /><!-- crystal sword -->
-		<item id="7459" chance="90" /><!-- ear muffs -->
-		<item id="7589" chance="820" /><!-- strong mana potion -->
-		<item id="7892" chance="280" /><!-- glacier shoes -->
+		<item name="crystal sword" chance="400" />
+		<item name="pair of earmuffs" chance="90" />
+		<item name="strong mana potion" chance="820" />
+		<item name="glacier shoes" chance="280" />
 	</loot>
 </monster>

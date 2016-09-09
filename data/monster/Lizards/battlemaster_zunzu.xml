@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Battlemaster Zunzu" nameDescription="a battlemaster zunzu" race="blood" experience="6500" speed="420" manacost="0">
 	<health now="5000" max="5000" />
 	<look type="343" corpse="11281" />
@@ -39,16 +39,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2152" countmax="3" chance="26800" /><!-- gold coin -->
-		<item id="5876" chance="1825" /><!-- lizard leather -->
-		<item id="5881" chance="800" /><!-- lizard scale -->
-		<item id="7588" countmax="2" chance="2875" /><!-- strong health potion -->
-		<item id="7591" countmax="2" chance="2775" /><!-- great health potion -->
-		<item id="11206" chance="100000" /><!-- red lantern -->
-		<item id="11301" chance="1050" /><!-- zaoan armor -->
-		<item id="11303" chance="3150" /><!-- zaoan shoes -->
-		<item id="11304" chance="2625" /><!-- zaoan legs -->
-		<item id="11330" chance="11250" /><!-- zaogun flag -->
-		<item id="11331" chance="100000" /><!-- zaogun shoulderplates -->
+		<item name="platinum coin" countmax="3" chance="26800" />
+		<item name="lizard leather" chance="1825" />
+		<item name="lizard scale" chance="800" />
+		<item name="strong health potion" countmax="2" chance="2875" />
+		<item name="great health potion" countmax="2" chance="2775" />
+		<item name="red lantern" chance="100000" />
+		<item name="Zaoan armor" chance="1050" />
+		<item name="Zaoan shoes" chance="3150" />
+		<item name="Zaoan legs" chance="2625" />
+		<item name="zaogun flag" chance="11250" />
+		<item name="zaogun shoulderplates" chance="100000" />
 	</loot>
 </monster>

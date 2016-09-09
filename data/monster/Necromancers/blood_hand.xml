@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blood Hand" nameDescription="a blood hand" race="blood" experience="750" speed="220" manacost="0">
 	<health now="700" max="700" />
 	<look type="552" corpse="21257" />
@@ -53,22 +53,22 @@
 		<voice sentence="Die, filth!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="130" chance="100000" /><!-- gold coin -->
-		<item id="2185" chance="3000" /><!-- Necrotic Rod -->
-		<item id="2195" chance="210" /><!-- Boots of Haste -->
-		<item id="2436" chance="130" /><!-- Skull Staff -->
-		<item id="2663" chance="790" /><!-- Mystic Turban -->
-		<item id="5909" chance="840" /><!-- White Piece of Cloth -->
-		<item id="5911" chance="500" /><!-- Red Piece of Cloth -->
-		<item id="7456" chance="10" /><!-- Noble Axe -->
-		<item id="7589" chance="5590" /><!-- Strong Mana Potion -->
-		<item id="8900" chance="790" /><!-- Spellbook of Enlightenment -->
-		<item id="11237" chance="9340" /><!-- Book of Necromantic Rituals -->
-		<item id="15565" chance="710" /><!-- Red Gem -->
-		<item id="21242" chance="10680" /><!-- Lancet -->
-		<item id="21243" chance="7950" /><!-- Horoscope -->
-		<item id="21245" chance="15460" /><!-- Blood Tincture in a Vial -->
-		<item id="21246" chance="8820" /><!-- Incantation Notes -->
-		<item id="21247" chance="6120" /><!-- Pieces of Magic Chalk -->
+		<item name="gold coin" countmax="130" chance="100000" />
+		<item name="necrotic rod" chance="3000" />
+		<item name="boots of haste" chance="210" />
+		<item name="skull staff" chance="130" />
+		<item name="mystic turban" chance="790" />
+		<item name="white piece of cloth" chance="840" />
+		<item name="red piece of cloth" chance="500" />
+		<item name="noble axe" chance="10" />
+		<item name="strong mana potion" chance="5590" />
+		<item name="spellbook of enlightenment" chance="790" />
+		<item name="book of necromantic rituals" chance="9340" />
+		<item name="rough red gem" chance="710" />
+		<item name="lancet" chance="10680" />
+		<item name="horoscope" chance="7950" />
+		<item name="blood tincture in a vial" chance="15460" />
+		<item name="incantation notes" chance="8820" />
+		<item name="pieces of magic chalk" chance="6120" />
 	</loot>
 </monster>

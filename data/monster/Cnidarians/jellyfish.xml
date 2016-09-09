@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Jellyfish" nameDescription="a Jellyfish" race="undead" experience="0" speed="170" manacost="0">
 	<health now="55" max="55" />
 	<look type="452" corpse="15284" />
@@ -32,6 +32,6 @@
 		<voice sentence="Luuurrrp" />
 	</voices>
 	<loot>
-		<item id="2670" chance="8333" /><!-- shrimp -->
+		<item name="shrimp" chance="8333" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Penguin" nameDescription="penguin" race="blood" experience="1" speed="180" manacost="300">
 	<health now="33" max="33" />
 	<look type="250" corpse="7334" />
@@ -26,7 +26,7 @@
 	</elements>
 	<loot>
 		<item id="2667" countmax="2" chance="7500" /><!-- fish -->
-		<item id="7158" chance="60" /><!-- rainbow trout -->
-		<item id="7159" chance="140" /><!-- green perch -->
+		<item name="rainbow trout" chance="60" />
+		<item name="green perch" chance="140" />
 	</loot>
 </monster>

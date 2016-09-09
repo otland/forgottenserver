@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Vashresamun" nameDescription="a vashresamun" race="undead" experience="2950" speed="340" manacost="0">
 	<health now="4000" max="4000" />
 	<look type="90" corpse="6025" />
@@ -51,14 +51,14 @@
 		<item id="2072" chance="7000" /><!-- lute -->
 		<item id="2074" chance="1500" /><!-- panpipes -->
 		<item id="2124" chance="1500" /><!-- crystal ring -->
-		<item id="2139" chance="300" /><!-- ancient tiara -->
-		<item id="2143" chance="7000" /><!-- white pearl -->
-		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="65" chance="50000" /><!-- gold coin -->
-		<item id="2349" chance="100000" /><!-- blue note -->
-		<item id="2445" chance="500" /><!-- crystal mace -->
-		<item id="2656" chance="2500" /><!-- blue robe -->
+		<item name="ancient tiara" chance="300" />
+		<item name="white pearl" chance="7000" />
+		<item name="gold coin" countmax="90" chance="50000" />
+		<item name="gold coin" countmax="80" chance="50000" />
+		<item name="gold coin" countmax="65" chance="50000" />
+		<item name="blue note" chance="100000" />
+		<item name="crystal mace" chance="500" />
+		<item name="blue robe" chance="2500" />
 		<item id="7691" chance="7000" /><!-- great mana potion -->
 	</loot>
 </monster>

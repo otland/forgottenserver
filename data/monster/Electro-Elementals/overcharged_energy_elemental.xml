@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Overcharged Energy Elemental" nameDescription="an orvercharged energy elemental" race="undead" experience="1300" speed="300" manacost="0">
 	<health now="1700" max="1700" />
 	<look type="290" corpse="8966" />
@@ -47,11 +47,11 @@
 		<voice sentence="BZZZZZZZZZZ" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="56" chance="50000" /><!-- gold coin -->
-		<item id="2150" countmax="2" chance="10000" /><!-- small amethyst -->
-		<item id="7439" chance="2173" /><!-- berserk potion -->
-		<item id="7591" chance="10000" /><!-- great health potion -->
-		<item id="8303" chance="14285" /><!-- energy soil -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="56" chance="50000" />
+		<item name="small amethyst" countmax="2" chance="10000" />
+		<item name="berserk potion" chance="2173" />
+		<item name="great health potion" chance="10000" />
+		<item name="energy soil" chance="14285" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Zugurosh" nameDescription="zugurosh" race="fire" experience="10000" speed="340" manacost="0">
 	<health now="95000" max="95000" />
 	<look type="12" head="2" body="35" legs="57" feet="91" corpse="6068" />
@@ -56,20 +56,20 @@
 		<voice sentence="I sense your strength fading!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="50" chance="100000" /><!-- gold coin -->
-		<item id="2149" countmax="3" chance="1428" /><!-- small emerald -->
-		<item id="2151" countmax="11" chance="6000" /><!-- talon -->
-		<item id="2158" chance="4444" /><!-- blue gem -->
-		<item id="2171" chance="2333" /><!-- platinum amulet -->
-		<item id="2195" chance="4444" /><!-- boots of haste -->
-		<item id="2393" chance="3000" /><!-- giant sword -->
-		<item id="2402" chance="10000" /><!-- silver dagger -->
-		<item id="2432" chance="5555" /><!-- fire axe -->
-		<item id="2462" chance="9700" /><!-- devil helmet -->
-		<item id="2470" chance="6500" /><!-- golden legs -->
-		<item id="2477" chance="6666" /><!-- knight legs -->
-		<item id="2520" chance="9999" /><!-- demon shield -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="50" chance="100000" />
+		<item name="small emerald" countmax="3" chance="1428" />
+		<item name="talon" countmax="11" chance="6000" />
+		<item name="blue gem" chance="4444" />
+		<item name="platinum amulet" chance="2333" />
+		<item name="boots of haste" chance="4444" />
+		<item name="giant sword" chance="3000" />
+		<item name="silver dagger" chance="10000" />
+		<item name="fire axe" chance="5555" />
+		<item name="devil helmet" chance="9700" />
+		<item name="golden legs" chance="6500" />
+		<item name="knight legs" chance="6666" />
+		<item name="demon shield" chance="9999" />
 		<item id="6300" chance="7777" /><!-- death ring -->
 	</loot>
 </monster>

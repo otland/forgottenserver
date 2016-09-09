@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Hot Dog" nameDescription="a hot dog" race="blood" experience="190" speed="300" manacost="220">
 	<health now="505" max="505" />
 	<look type="32" corpse="5971" />
@@ -42,6 +42,6 @@
 		<voice sentence="Show me how good you are without some rolled newspaper!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="75" chance="50000" /><!-- gold coins -->
+		<item name="gold coin" countmax="75" chance="50000" />
 	</loot>
 </monster>

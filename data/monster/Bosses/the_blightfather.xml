@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Blightfather" nameDescription="the blightfather" race="venom" experience="600" speed="290" manacost="0">
 	<health now="400" max="400" />
 	<look type="348" corpse="11375" />
@@ -42,12 +42,12 @@
 		<voice sentence="Crump!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="61" chance="2000" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="2000" /><!-- gold coin -->
-		<item id="2150" chance="800" /><!-- small amethyst -->
-		<item id="10557" chance="12500" /><!-- poisonous slime -->
-		<item id="10609" chance="17500" /><!-- lump of dirt -->
-		<item id="11372" chance="7000" /><!-- lancer beetle shell -->
-		<item id="11374" chance="400" /><!-- beetle necklace -->
+		<item name="gold coin" countmax="61" chance="2000" />
+		<item name="gold coin" countmax="60" chance="2000" />
+		<item name="small amethyst" chance="800" />
+		<item name="poisonous slime" chance="12500" />
+		<item name="lump of dirt" chance="17500" />
+		<item name="lancer beetle shell" chance="7000" />
+		<item name="beetle necklace" chance="400" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Sandstone Scorpion" nameDescription="a sandstone scorpion" race="undead" experience="680" speed="230" manacost="0">
 	<health now="900" max="900" />
 	<look type="398" corpse="13501" />
@@ -40,12 +40,12 @@
 		<voice sentence="*tak tak tak*" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="128" chance="90000" /><!-- gold coin -->
-		<item id="2149" countmax="2" chance="9900" /><!-- small emerald -->
-		<item id="2152" countmax="2" chance="11111" /><!-- platinum coin -->
-		<item id="2439" chance="6250" /><!-- daraminian mace -->
-		<item id="2457" chance="5000" /><!-- steel helmet -->
-		<item id="2529" chance="1724" /><!-- black shield -->
-		<item id="13535" chance="280" /><!-- fist on a stick -->
+		<item name="gold coin" countmax="128" chance="90000" />
+		<item name="small emerald" countmax="2" chance="9900" />
+		<item name="platinum coin" countmax="2" chance="11111" />
+		<item name="daramian mace" chance="6250" />
+		<item name="steel helmet" chance="5000" />
+		<item name="black shield" chance="1724" />
+		<item name="fist on a stick" chance="280" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Damaged Worker Golem" nameDescription="a damaged worker golem" race="energy" experience="95" speed="200" manacost="0">
 	<health now="260" max="260" />
 	<look type="304" corpse="9801" />
@@ -51,11 +51,11 @@
 		<voice sentence="Aw... chhhrrr orders." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="88" chance="68810" /><!-- gold coin -->
-		<item id="2207" chance="570" /><!-- sword ring -->
-		<item id="5880" chance="400" /><!-- iron ore -->
-		<item id="8309" chance="1460" /><!-- nails -->
+		<item name="gold coin" countmax="88" chance="68810" />
+		<item name="sword ring" chance="570" />
+		<item name="iron ore" chance="400" />
+		<item name="nail" chance="1460" />
 		<item id="9808" chance="790" /><!-- rusty armor -->
-		<item id="10572" chance="200" /><!-- gear crystal -->
+		<item name="gear crystal" chance="200" />
 	</loot>
 </monster>
