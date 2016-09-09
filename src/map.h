@@ -87,7 +87,7 @@ struct Floor {
 	Floor(const Floor&) = delete;
 	Floor& operator=(const Floor&) = delete;
 
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = { nullptr };
+	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {{ nullptr }};
 };
 
 class FrozenPathingConditionCall;
