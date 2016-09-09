@@ -32,16 +32,14 @@ extern Weapons* g_weapons;
 Items::Items()
 {
 	items.reserve(30000);
-}
-
-Items::~Items()
-{
-	clear();
+	nameMap.reserve(30000);
 }
 
 void Items::clear()
 {
 	items.clear();
+	reverseItemMap.clear();
+	nameMap.clear();
 }
 
 bool Items::reload()
@@ -354,6 +352,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 	}
 
 	it.name = itemNode.attribute("name").as_string();
+
+	nameMap.insert({ asLowerCaseString(it.name), id });
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
@@ -911,15 +911,10 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
-	if (name.empty()) {
-		return 0;
-	}
+	auto result = nameMap.find(asLowerCaseString(name));
 
-	const char* itemName = name.c_str();
-	for (size_t i = 100, size = items.size(); i < size; ++i) {
-		if (strcasecmp(itemName, items[i].name.c_str()) == 0) {
-			return i;
-		}
-	}
-	return 0;
+	if (result == nameMap.end())
+		return 0;
+
+	return result->second;
 }
