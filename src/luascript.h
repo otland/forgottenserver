@@ -159,14 +159,14 @@ class ScriptEnvironment
 		LuaScriptInterface* interface;
 
 		//for npc scripts
-		Npc* curNpc;
+		Npc* curNpc = nullptr;
 
 		//temporary item list
 		static std::multimap<ScriptEnvironment*, Item*> tempItems;
 
 		//local item map
 		std::unordered_map<uint32_t, Item*> localMap;
-		uint32_t lastUID;
+		uint32_t lastUID = std::numeric_limits<uint16_t>::max();
 
 		//script file id
 		int32_t scriptId;
