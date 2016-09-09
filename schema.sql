@@ -321,6 +321,16 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `live_casts` (
+  `player_id` int(11) NOT NULL,
+  `cast_name` varchar(255) NOT NULL,
+  `password` boolean NOT NULL DEFAULT false,
+  `description` varchar(255),
+  `spectators` smallint(5) DEFAULT 0,
+  UNIQUE KEY `player_id_2` (`player_id`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '18'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (

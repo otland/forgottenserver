@@ -28,7 +28,7 @@
 extern ConfigManager g_config;
 Ban g_bans;
 
-ServiceManager::ServiceManager(): 
+ServiceManager::ServiceManager():
 	death_timer(io_service),
 	running(false)
 {
