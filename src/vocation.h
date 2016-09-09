@@ -86,10 +86,10 @@ class Vocation
 			return fromVocation;
 		}
 
-		float meleeDamageMultiplier = 1.0;
-		float distDamageMultiplier = 1.0;
-		float defenseMultiplier = 1.0;
-		float armorMultiplier = 1.0;
+		float meleeDamageMultiplier = 1.0f;
+		float distDamageMultiplier = 1.0f;
+		float defenseMultiplier = 1.0f;
+		float armorMultiplier = 1.0f;
 
 	protected:
 		friend class Vocations;
@@ -97,11 +97,11 @@ class Vocation
 		std::map<uint32_t, uint64_t> cacheMana;
 		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
 
-		std::string name { "none" };
+		std::string name {"none"};
 		std::string description;
 
-		float skillMultipliers[SKILL_LAST + 1] = { 1.5, 2.0, 2.0, 2.0, 2.0, 1.5, 1.1 };
-		float manaMultiplier = 4.0;
+		float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};
+		float manaMultiplier = 4.0f;
 
 		uint32_t gainHealthTicks = 6;
 		uint32_t gainHealthAmount = 1;
