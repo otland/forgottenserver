@@ -1131,7 +1131,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 			bool force = false;
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
-				speed = pugi::cast<int32_t>(attr.value());
+				speed = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
 			}
 
 			if ((attr = summonNode.attribute("chance"))) {
