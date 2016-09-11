@@ -181,7 +181,7 @@
 	<monster name="Inky" file="Bosses/inky.xml" />
 	<monster name="Jaul" file="Bosses/jaul.xml" />
 	<monster name="Koshei The Deathless" file="Bosses/koshei_the_deathless.xml" />
-	<monster name="Kraknaknork Demon" file="Bosses/Kraknaknork_Demon.xml" />
+	<monster name="Kraknaknork's Demon" file="Bosses/kraknaknork's_demon.xml" />
 	<monster name="Kraknaknork" file="Bosses/kraknaknork.xml" />
 	<monster name="Latrivan" file="Bosses/latrivan.xml" />
 	<monster name="Lethal Lissy" file="Bosses/lethal_lissy.xml" />
@@ -406,7 +406,7 @@
 	<monster name="Charged Energy Elemental" file="Electro-Elementals/charged_energy_elemental.xml" />
 	<monster name="Energy Elemental" file="Electro-Elementals/energy_elemental.xml" />
 	<monster name="Massive Energy Elemental" file="Electro-Elementals/massive_energy_elemental.xml" />
-	<monster name="Overcharged Energy Elemental" file="Electro-Elementals/overcharged_energy_elemental.xml" />
+	<monster name="Overcharged Energy Element" file="Electro-Elementals/overcharged_energy_element.xml" />
 
 	<!-- Elemental_Lords -->
 	<monster name="Earth Overlord" file="Elemental_Lords/earth_overlord.xml" />
@@ -441,7 +441,7 @@
 
 	<!-- Glires -->
 	<monster name="Cave Rat" file="Glires/cave_rat.xml" />
-	<monster name="The Halloween Hare" file="Glires/halloweenhare.xml" />
+	<monster name="The Halloween Hare" file="Glires/the_halloween_hare.xml" />
 	<monster name="Rabbit" file="Glires/rabbit.xml" />
 	<monster name="Rat" file="Glires/rat.xml" />
 	<monster name="Silver Rabbit" file="Glires/silver_rabbit.xml" />
@@ -522,7 +522,7 @@
 	<monster name="Insectoid Scout" file="Insects/insectoid_scout.xml" />
 	<monster name="Insectoid Worker" file="Insects/insectoid_worker.xml" />
 	<monster name="Kollos" file="Insects/kollos.xml" />
-	<monster name="Lady Bug" file="Insects/lady_bug.xml" />
+	<monster name="Ladybug" file="Insects/ladybug.xml" />
 	<monster name="Lancer Beetle" file="Insects/lancer_beetle.xml" />
 	<monster name="Larva" file="Insects/larva.xml" />
 	<monster name="Lesser Swarmer" file="Insects/lesser_swarmer.xml" />

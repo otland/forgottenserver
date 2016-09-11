@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="" nameDescription="" race="undead" experience="" speed="" manacost="">
+<monster name="Kraknaknork's Demon" nameDescription="Kraknaknork's Demon" race="undead" experience="" speed="" manacost="">
 	<health now="" max="" />
 	<look type="" corpse="" />
 	<targetchange interval="3000" chance="5" />
