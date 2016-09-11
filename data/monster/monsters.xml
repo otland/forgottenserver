@@ -78,7 +78,6 @@
 	<monster name="Undead Cavebear" file="Bears/undead_cavebear.xml" />
 
 	<!-- Bio-Elementals -->
-	<monster name="Bane Bringer" file="Bio-Elementals/bane_bringer.xml" />
 	<monster name="Bog Raider" file="Bio-Elementals/bog_raider.xml" />
 	<monster name="Carniphila" file="Bio-Elementals/carniphila.xml" />
 	<monster name="Defiler" file="Bio-Elementals/defiler.xml" />
@@ -111,10 +110,8 @@
 	<!-- Blobs -->
 	<monster name="Acid Blob" file="Blobs/acid_blob.xml" />
 	<monster name="Death Blob" file="Blobs/death_blob.xml" />
-	<monster name="Essence of Darkness" file="Blobs/essence_of_darkness.xml" />
 	<monster name="Floor Blob" file="Blobs/floor_blob.xml" />
 	<monster name="Mercury Blob" file="Blobs/mercury_blob.xml" />
-	<monster name="Midnight Spawn" file="Blobs/midnight_spawn.xml" />
 
 	<!-- Bonelords -->
 	<monster name="Bonelord" file="Bonelords/bonelord.xml" />
@@ -334,7 +331,6 @@
 	<monster name="Hand of Cursed Fate" file="Demons/hand_of_cursed_fate.xml" />
 	<monster name="Hellhound" file="Demons/hellhound.xml" />
 	<monster name="Hellspawn" file="Demons/hellspawn.xml" />
-	<monster name="Herald of Gloom" file="Demons/herald_of_gloom.xml" />
 	<monster name="Juggernaut" file="Demons/juggernaut.xml" />
 	<monster name="Nightmare Scion" file="Demons/nightmare_scion.xml" />
 	<monster name="Nightmare" file="Demons/nightmare.xml" />
@@ -345,7 +341,6 @@
 	<monster name="Shaburak Demon" file="Demons/shaburak_demon.xml" />
 	<monster name="Shaburak Lord" file="Demons/shaburak_lord.xml" />
 	<monster name="Shaburak Prince" file="Demons/shaburak_prince.xml" />
-	<monster name="Shadow Hound" file="Demons/shadow_hound.xml" />
 	<monster name="Yielothax" file="Demons/yielothax.xml" />
 
 	<!-- Djinn -->
@@ -402,8 +397,17 @@
 	<monster name="Dworc Voodoomaster" file="Dworcs/dworc_voodoomaster.xml" />
 
 	<!-- Event_Creatures -->
+	<monster name="Bane Bringer" file="Event_Creatures/bane_bringer.xml" />
+	<monster name="Essence of Darkness" file="Event_Creatures/essence_of_darkness.xml" />
+	<monster name="Grynch Clan Goblin" file="Event_Creatures/grynch_clan_goblin.xml" />
 	<monster name="Hacker" file="Event_Creatures/hacker.xml" />
+	<monster name="Herald of Gloom" file="Event_Creatures/herald_of_gloom.xml" />
+	<monster name="Midnight Spawn" file="Event_Creatures/midnight_spawn.xml" />
+	<monster name="Primitive" file="Event_Creatures/primitive.xml" />
+	<monster name="Shadow Hound" file="Event_Creatures/shadow_hound.xml" />
 	<monster name="Spectral Scum" file="Event_Creatures/spectral_scum.xml" />
+	<monster name="The Halloween Hare" file="Event_Creatures/the_halloween_hare.xml" />
+	<monster name="Undead Minion" file="Event_Creatures/undead_minion.xml" />
 
 	<!-- Elves -->
 	<monster name="Elf" file="Elves/elf.xml" />
@@ -449,7 +453,6 @@
 
 	<!-- Glires -->
 	<monster name="Cave Rat" file="Glires/cave_rat.xml" />
-	<monster name="The Halloween Hare" file="Glires/the_halloween_hare.xml" />
 	<monster name="Rabbit" file="Glires/rabbit.xml" />
 	<monster name="Rat" file="Glires/rat.xml" />
 	<monster name="Silver Rabbit" file="Glires/silver_rabbit.xml" />
@@ -506,7 +509,6 @@
 	<monster name="Goblin Assassin" file="Goblins/goblin_assassin.xml" />
 	<monster name="Goblin Leader" file="Goblins/goblin_leader.xml" />
 	<monster name="Goblin Scavenger" file="Goblins/goblin_scavenger.xml" />
-	<monster name="Grynch Clan Goblin" file="Goblins/grynch_clan_goblin.xml" />
 	<monster name="Demon (Goblin)" file="Goblins/demon_(goblin).xml" />
 
 	<!-- Hydro-Elementals -->
@@ -646,7 +648,6 @@
 	<monster name="Hunter" file="Outlaws/hunter.xml" />
 	<monster name="Nomad" file="Outlaws/nomad.xml" />
 	<monster name="Poacher" file="Outlaws/poacher.xml" />
-	<monster name="Primitive" file="Outlaws/primitive.xml" />
 	<monster name="Smuggler" file="Outlaws/smuggler.xml" />
 	<monster name="Stalker" file="Outlaws/stalker.xml" />
 	<monster name="Wild Warrior" file="Outlaws/wild_warrior.xml" />
@@ -720,7 +721,6 @@
 	<monster name="Skeleton" file="Skeletons/skeleton.xml" />
 	<monster name="Skeleton Warrior" file="Skeletons/skeleton_warrior.xml" />
 	<monster name="Undead Gladiator" file="Skeletons/undead_gladiator.xml" />
-	<monster name="Undead Minion" file="Skeletons/undead_minion.xml" />
 	<monster name="Undead Mine Worker" file="Skeletons/undead_mine_worker.xml" />
 
 	<!-- Sorcerers -->
