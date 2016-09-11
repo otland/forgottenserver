@@ -171,7 +171,6 @@
 	<monster name="Groam" file="Bosses/groam.xml" />
 	<monster name="Grorlam" file="Bosses/grorlam.xml" />
 	<monster name="Hairman the Huge" file="Bosses/hairman_the_huge.xml" />
-	<monster name="Handmaiden" file="Bosses/handmaiden.xml" />
 	<monster name="Haunter" file="Bosses/haunter.xml" />
 	<monster name="Hellgorak" file="Bosses/hellgorak.xml" />
 	<monster name="Heoni" file="Bosses/heoni.xml" />
@@ -324,7 +323,6 @@
 	<monster name="Hellspawn" file="Demons/hellspawn.xml" />
 	<monster name="Herald of Gloom" file="Demons/herald_of_gloom.xml" />
 	<monster name="Juggernaut" file="Demons/juggernaut.xml" />
-	<monster name="Kraknaknork's Demon" file="Demons/kraknaknork's_demon.xml" />
 	<monster name="Nightmare Scion" file="Demons/nightmare_scion.xml" />
 	<monster name="Nightmare" file="Demons/nightmare.xml" />
 	<monster name="Nightstalker" file="Demons/nightstalker.xml" />
@@ -365,7 +363,6 @@
 	<monster name="Feversleep" file="Dreamhaunters/feversleep.xml" />
 	<monster name="Frazzlemaw" file="Dreamhaunters/frazzlemaw.xml" />
 	<monster name="Guzzlemaw" file="Dreamhaunters/guzzlemaw.xml" />
-	<monster name="Mawhawk" file="Dreamhaunters/mawhawk.xml" />
 	<monster name="Minion of Gaz'haragoth" file="Dreamhaunters/minion_of_gaz'haragoth.xml" />
 	<monster name="Nightmare of Gaz'haragoth" file="Dreamhaunters/nightmare_of_gaz'haragoth.xml" />
 	<monster name="Retching Horror" file="Dreamhaunters/retching_horror.xml" />
@@ -578,7 +575,6 @@
 
 	<!-- Misc Mounts -->
 	<monster name="Donkey" file="Misc/Misc Mounts/donkey.xml" />
-	<monster name="Incredibly Old Witch" file="Misc/Misc Mounts/Incredibly_Old_Witch.xml" />
 	<monster name="Modified Gnarlhound" file="Misc/Misc Mounts/modified_gnarlhound.xml" />
 
 	<!-- Misc Reptiles -->
@@ -735,7 +731,6 @@
 	<monster name="Ice Witch" file="Sorcerers/ice_witch.xml" />
 	<monster name="Incredibly Old Witch" file="Sorcerers/incredibly_old_witch.xml" />
 	<monster name="Infernalist" file="Sorcerers/infernalist.xml" />
-	<monster name="Mad Mage" file="Sorcerers/mad_mage.xml" />
 	<monster name="Mad Scientist" file="Sorcerers/mad_scientist.xml" />
 	<monster name="Raging Mage" file="Sorcerers/raging_mage.xml" />
 	<monster name="Warlock" file="Sorcerers/warlock.xml" />
