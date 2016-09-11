@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Collector" nameDescription="an the collector" race="undead" experience="100" speed="195" manacost="0">
+<monster name="The Collector" nameDescription="a the collector" race="undead" experience="100" speed="195" manacost="0">
 	<health now="340" max="340" />
 	<look type="261" corpse="7282" />
 	<targetchange interval="2000" chance="5" />

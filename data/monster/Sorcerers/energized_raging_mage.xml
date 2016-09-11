@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="energized raging mage" nameDescription="a energized raging mage" race="blood" experience="0" speed="230" manacost="0">
+<monster name="energized raging mage" nameDescription="an energized raging mage" race="blood" experience="0" speed="230" manacost="0">
 	<health now="3500" max="3500" />
 	<look type="423" corpse="0" />
 	<targetchange interval="4000" chance="10" />

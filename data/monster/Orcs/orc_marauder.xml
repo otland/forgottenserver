@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Orc Marauder" nameDescription="a orc marauder" race="blood" experience="205" speed="210" manacost="0">
+<monster name="Orc Marauder" nameDescription="an orc marauder" race="blood" experience="205" speed="210" manacost="0">
 	<health now="235" max="235" />
 	<look type="342" corpse="11251" />
 	<targetchange interval="4000" chance="10" />

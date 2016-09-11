@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Yakchal" nameDescription="an yakchal" race="blood" experience="4400" speed="200" manacost="0">
+<monster name="Yakchal" nameDescription="a yakchal" race="blood" experience="4400" speed="200" manacost="0">
 	<health now="5000" max="5000" />
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20546" />
 	<targetchange interval="2000" chance="5" />

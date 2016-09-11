@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Orc Berserker" nameDescription="a orc berserker" race="blood" experience="195" speed="195" manacost="590">
+<monster name="Orc Berserker" nameDescription="an orc berserker" race="blood" experience="195" speed="195" manacost="590">
 	<health now="210" max="210" />
 	<look type="8" corpse="5980" />
 	<targetchange interval="4000" chance="10" />
