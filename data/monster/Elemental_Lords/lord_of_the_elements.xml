@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lord of the Elements" nameDescription="lord of the elements" race="undead" experience="8000" speed="370" manacost="0">
+<monster name="Lord of the Elements" nameDescription="Lord of the Elements" race="undead" experience="8000" speed="370" manacost="0">
 	<health now="8000" max="8000" />
 	<look type="290" corpse="9009" />
 	<targetchange interval="5000" chance="10" />

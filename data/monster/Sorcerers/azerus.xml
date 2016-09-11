@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Azerus" nameDescription="azerus" race="blood" experience="6000" speed="320" manacost="0">
+<monster name="Azerus" nameDescription="Azerus" race="blood" experience="6000" speed="320" manacost="0">
 	<health now="7500" max="7500" />
 	<look type="309" head="19" body="96" legs="21" feet="81" corpse="9738" />
 	<targetchange interval="5000" chance="8" />

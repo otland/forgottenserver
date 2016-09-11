@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Charged Energy Elemental" nameDescription="a charged energy Elemental" race="undead" experience="450" speed="270" manacost="0">
+<monster name="Charged Energy Elemental" nameDescription="a charged energy elemental" race="undead" experience="450" speed="270" manacost="0">
 	<health now="500" max="500" />
 	<look type="293" corpse="8966" />
 	<targetchange interval="20000" chance="15" />

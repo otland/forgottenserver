@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Kreebosh the Exile" nameDescription="kreebosh the exile" race="blood" experience="350" speed="270" manacost="0">
+<monster name="Kreebosh the Exile" nameDescription="Kreebosh the Exile" race="blood" experience="350" speed="270" manacost="0">
 	<health now="880" max="880" />
 	<look type="103" corpse="7349" />
 	<flags>

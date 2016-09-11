@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Evil Eye" nameDescription="the Evil Eye" race="blood" experience="500" speed="240" manacost="0">
+<monster name="The Evil Eye" nameDescription="The Evil Eye" race="blood" experience="500" speed="240" manacost="0">
 	<health now="1200" max="1200" />
 	<look type="210" corpse="6037" />
 	<targetchange interval="5000" chance="8" />

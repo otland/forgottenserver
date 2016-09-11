@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Bloodtusk" nameDescription="the bloodtuskh" race="blood" experience="300" speed="190" manacost="0">
+<monster name="The Bloodtusk" nameDescription="The Bloodtusk" race="blood" experience="300" speed="190" manacost="0">
 	<health now="600" max="600" />
 	<look type="199" corpse="6074" />
 	<targetchange interval="5000" chance="8" />

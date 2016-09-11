@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Primitive" nameDescription="a Primitive" race="blood" experience="45" speed="300" manacost="0">
+<monster name="Primitive" nameDescription="Primitive" race="blood" experience="45" speed="300" manacost="0">
 	<health now="200" max="200" />
 	<look type="143" head="1" body="1" legs="1" feet="1" corpse="6080" />
 	<targetchange interval="5000" chance="8" />

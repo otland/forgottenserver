@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Water Buffalo" nameDescription="water buffalo" race="blood" experience="20" speed="210" manacost="0">
+<monster name="Water Buffalo" nameDescription="a water buffalo" race="blood" experience="20" speed="210" manacost="0">
 	<health now="390" max="390" />
 	<look type="523" corpse="19701" />
 	<targetchange interval="4000" chance="10" />

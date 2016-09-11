@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Tanjis" nameDescription="a tanjis" race="blood" experience="14500" speed="560" manacost="0">
+<monster name="Tanjis" nameDescription="Tanjis" race="blood" experience="14500" speed="560" manacost="0">
 	<health now="17350" max="17350" />
 	<look type="446" corpse="15228" />
 	<targetchange interval="2000" chance="50" />

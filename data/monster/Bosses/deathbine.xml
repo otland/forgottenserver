@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deathbine" nameDescription="a deathbine" race="venom" experience="340" speed="240" manacost="0">
+<monster name="Deathbine" nameDescription="Deathbine" race="venom" experience="340" speed="240" manacost="0">
 	<health now="525" max="525" />
 	<look type="120" corpse="6047" />
 	<targetchange interval="5000" chance="8" />

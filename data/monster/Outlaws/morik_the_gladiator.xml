@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Morik the Gladiator" nameDescription="a gladiator" race="blood" experience="160" speed="200">
+<monster name="Morik the Gladiator" nameDescription="Morik the Gladiator" race="blood" experience="160" speed="200">
 	<health now="1235" max="1235" />
 	<look type="131" head="57" body="57" legs="57" feet="57" addons="1" corpse="20531" />
 	<targetchange interval="2000" chance="0" />

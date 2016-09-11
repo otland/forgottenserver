@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Colerian The Barbarian" nameDescription="colerian the barbarian" race="blood" experience="90" speed="190" manacost="0">
+<monster name="Colerian The Barbarian" nameDescription="Colerian the Barbarian" race="blood" experience="90" speed="190" manacost="0">
 	<health now="265" max="265" />
 	<look type="253" head="76" body="115" legs="115" feet="43" corpse="7349" />
 	<flags>

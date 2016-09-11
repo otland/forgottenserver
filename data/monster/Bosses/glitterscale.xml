@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Glitterscale" nameDescription="glitterscale" race="blood" experience="700" speed="180" manacost="0">
+<monster name="Glitterscale" nameDescription="Glitterscale" race="blood" experience="700" speed="180" manacost="0">
 	<health now="1000" max="1000" />
 	<look type="34" corpse="5973" />
 	<targetchange interval="2000" chance="10" />

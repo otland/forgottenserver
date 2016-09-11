@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Xenia" nameDescription="xenia" race="blood" experience="255" speed="176" manacost="450">
+<monster name="Xenia" nameDescription="Xenia" race="blood" experience="255" speed="176" manacost="450">
 	<health now="290" max="290" />
 	<look type="137" head="95" body="115" legs="115" feet="95" corpse="20542" />
 	<targetchange interval="5000" chance="8" />

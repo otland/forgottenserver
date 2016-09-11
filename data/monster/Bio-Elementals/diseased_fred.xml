@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Diseased Fred" nameDescription="a diseased fred" race="venom" experience="800" speed="150" manacost="0">
+<monster name="Diseased Fred" nameDescription="a diseased Fred" race="venom" experience="800" speed="150" manacost="0">
 	<health now="1300" max="1300" />
 	<look type="299" corpse="8951" />
 	<targetchange interval="60000" chance="0" />

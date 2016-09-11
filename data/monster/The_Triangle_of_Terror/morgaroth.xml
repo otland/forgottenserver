@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Morgaroth" nameDescription="a morgaroth" race="undead" experience="15000" speed="400" manacost="0">
+<monster name="Morgaroth" nameDescription="Morgaroth" race="undead" experience="15000" speed="400" manacost="0">
 	<health now="55000" max="55000" />
 	<look type="12" head="0" body="94" legs="79" feet="79" corpse="6068" />
 	<targetchange interval="10000" chance="20" />

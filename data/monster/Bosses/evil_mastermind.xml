@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Evil Mastermind" nameDescription="an evil mastermind" race="undead" experience="675" speed="350" manacost="0">
+<monster name="Evil Mastermind" nameDescription="Evil Mastermind" race="undead" experience="675" speed="350" manacost="0">
 	<health now="1095" max="1095" />
 	<look type="256" corpse="10321" />
 	<targetchange interval="5000" chance="8" />

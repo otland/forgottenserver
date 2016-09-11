@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Arachir the ancient one" nameDescription="a vampire lord" race="undead" experience="1800" speed="300" manacost="0">
+<monster name="Arachir The Ancient One" nameDescription="Arachir The Ancient One" race="undead" experience="1800" speed="300" manacost="0">
 	<health now="1600" max="1600" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />

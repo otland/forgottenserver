@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Pit Lord" nameDescription="the pit lord" race="blood" experience="2500" speed="270" manacost="0">
+<monster name="The Pit Lord" nameDescription="The Pit Lord" race="blood" experience="2500" speed="270" manacost="0">
 	<health now="4500" max="4500" />
 	<look type="55" corpse="7349" />
 	<flags>

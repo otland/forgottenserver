@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Earth Overlord" nameDescription="an earth overlord" race="undead" experience="2800" speed="330" manacost="0">
+<monster name="Earth Overlord" nameDescription="an Earth Overlord" race="undead" experience="2800" speed="330" manacost="0">
 	<health now="4000" max="4000" />
 	<look type="285" corpse="8933" />
 	<targetchange interval="20000" chance="30" />
