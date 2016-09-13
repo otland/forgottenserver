@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Amazon" nameDescription="a amazon" race="blood" experience="60" speed="180" manacost="390">
+<monster name="Amazon" nameDescription="an amazon" race="blood" experience="60" speed="180" manacost="390">
 	<health now="110" max="110" />
 	<look type="137" head="113" body="120" legs="114" feet="132" corpse="20323" />
 	<targetchange interval="4000" chance="10" />

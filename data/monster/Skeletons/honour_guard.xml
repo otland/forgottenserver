@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Honour Guard" nameDescription="a honour guard" race="undead" experience="55" speed="180" manacost="0">
+<monster name="Honour Guard" nameDescription="an honour guard" race="undead" experience="55" speed="180" manacost="0">
 	<health now="85" max="85" />
 	<look type="298" corpse="2843" />
 	<targetchange interval="4000" chance="0" />

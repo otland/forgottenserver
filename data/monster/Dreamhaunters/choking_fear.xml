@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Choking Fear" nameDescription="Choking Fear" race="undead" experience="4700" speed="260" manacost="0">
+<monster name="Choking Fear" nameDescription="a choking fear" race="undead" experience="4700" speed="260" manacost="0">
 	<health now="5800" max="5800" />
 	<look type="586" corpse="22493" />
 	<targetchange interval="4000" chance="5" />

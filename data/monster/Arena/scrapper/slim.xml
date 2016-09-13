@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Slim" nameDescription="slim" race="undead" experience="580" speed="200" manacost="0">
+<monster name="Slim" nameDescription="Slim" race="undead" experience="580" speed="200" manacost="0">
 	<health now="1025" max="1025" />
 	<look type="101" corpse="7349" />
 	<flags>

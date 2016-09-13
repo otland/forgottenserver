@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Skeleton" nameDescription="a skeleton" race="undead" experience="35" speed="154" manacost="300">
+<monster name="Party Skeleton" nameDescription="a party skeleton" race="undead" experience="35" speed="154" manacost="300">
 	<health now="50" max="50" />
 	<look type="33" corpse="5972" />
 	<targetchange interval="2000" chance="0" />

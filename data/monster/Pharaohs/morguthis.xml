@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Morguthis" nameDescription="a morguthis" race="undead" experience="3000" speed="320" manacost="0">
+<monster name="Morguthis" nameDescription="Morguthis" race="undead" experience="3000" speed="320" manacost="0">
 	<health now="4800" max="4800" />
 	<look type="90" corpse="6025" />
 	<targetchange interval="5000" chance="8" />

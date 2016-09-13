@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="energized raging mage" nameDescription="an energized raging mage" race="blood" experience="0" speed="230" manacost="0">
+	<health now="3500" max="3500" />
+	<look type="423" corpse="0" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="300" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-78" />
+		<attack name="energy" interval="2000" chance="40" range="7" target="1" radius="5" min="-150" max="-230">
+			<attribute key="shootEffect" value="energyball" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" range="7" min="-100" max="-200" />
+		<attack name="energyfield" interval="2000" chance="20" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="25" length="8" spread="0" min="-200" max="-300">
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="20" min="155" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-50" />
+		<element holyPercent="10" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity outfit="1" />
+		<immunity fire="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="golden servant" interval="2000" chance="50" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Behold the all permeating powers I draw from this gate!!" />
+		<voice sentence="ENERGY!!" />
+		<voice sentence="I FEEL, I FEEEEL... OMNIPOTENCE!!" />
+		<voice sentence="MWAAAHAHAAA!! NO ONE!! NO ONE CAN DEFEAT MEEE!!!" />
+	</voices>
+</monster>

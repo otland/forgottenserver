@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bloodpaw" nameDescription="bloodpaw" race="blood" experience="50" speed="156" manacost="0">
+<monster name="Bloodpaw" nameDescription="Bloodpaw" race="blood" experience="50" speed="156" manacost="0">
 	<health now="100" max="100" />
 	<look type="42" corpse="7349" />
 	<flags>

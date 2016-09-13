@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grimgor Guteater" nameDescription="grimgor guteater" race="blood" experience="670" speed="240" manacost="0">
+<monster name="Grimgor Guteater" nameDescription="Grimgor Guteater" race="blood" experience="670" speed="240" manacost="0">
 	<health now="1115" max="1115" />
 	<look type="2" corpse="7349" />
 	<flags>
