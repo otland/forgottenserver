@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Groam" nameDescription="a groam" race="blood" experience="180" speed="560" manacost="0">
+<monster name="Groam" nameDescription="Groam" race="blood" experience="180" speed="560" manacost="0">
 	<health now="400" max="400" />
 	<look type="413" corpse="13839" />
 	<targetchange interval="2000" chance="50" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Inky" nameDescription="a inky" race="blood" experience="250" speed="520" manacost="670">
+<monster name="Inky" nameDescription="Inky" race="blood" experience="250" speed="520" manacost="670">
 	<health now="600" max="600" />
 	<look type="46" corpse="6065" />
 	<targetchange interval="5000" chance="8" />

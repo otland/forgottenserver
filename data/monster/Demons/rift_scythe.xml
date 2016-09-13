@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rift Scythe" nameDescription="a rift scythe" race="undead" experience="2000" speed="370" manacost="0">
+<monster name="Rift Scythe" nameDescription="Rift Scythe" race="undead" experience="2000" speed="370" manacost="0">
 	<health now="3600" max="3600" />
 	<look type="300" corpse="0" />
 	<targetchange interval="5000" chance="10" />

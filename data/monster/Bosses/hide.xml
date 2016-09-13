@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Hide" nameDescription="hide" race="venom" experience="240" speed="280">
+<monster name="Hide" nameDescription="Hide" race="venom" experience="240" speed="280">
 	<health now="500" max="500" />
 	<look type="219" corpse="6060" />
 	<targetchange interval="5000" chance="8" />

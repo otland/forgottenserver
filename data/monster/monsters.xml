@@ -78,13 +78,9 @@
 	<monster name="Undead Cavebear" file="Bears/undead_cavebear.xml" />
 
 	<!-- Bio-Elementals -->
-	<monster name="Bane Bringer" file="Bio-Elementals/bane_bringer.xml" />
 	<monster name="Bog Raider" file="Bio-Elementals/bog_raider.xml" />
 	<monster name="Carniphila" file="Bio-Elementals/carniphila.xml" />
 	<monster name="Defiler" file="Bio-Elementals/defiler.xml" />
-	<monster name="Diseased Bill" file="Bio-Elementals/diseased_bill.xml" />
-	<monster name="Diseased Dan" file="Bio-Elementals/diseased_dan.xml" />
-	<monster name="Diseased Fred" file="Bio-Elementals/diseased_fred.xml" />
 	<monster name="Haunted Treeling" file="Bio-Elementals/haunted_treeling.xml" />
 	<monster name="Hideous Fungus" file="Bio-Elementals/hideous_fungus.xml" />
 	<monster name="Humongous Fungus" file="Bio-Elementals/humongous_fungus.xml" />
@@ -114,10 +110,8 @@
 	<!-- Blobs -->
 	<monster name="Acid Blob" file="Blobs/acid_blob.xml" />
 	<monster name="Death Blob" file="Blobs/death_blob.xml" />
-	<monster name="Essence of Darkness" file="Blobs/essence_of_darkness.xml" />
 	<monster name="Floor Blob" file="Blobs/floor_blob.xml" />
 	<monster name="Mercury Blob" file="Blobs/mercury_blob.xml" />
-	<monster name="Midnight Spawn" file="Blobs/midnight_spawn.xml" />
 
 	<!-- Bonelords -->
 	<monster name="Bonelord" file="Bonelords/bonelord.xml" />
@@ -134,8 +128,11 @@
 	<monster name="Apocalypse" file="Bosses/Apocalypse.xml" />
 	<monster name="Apprentice Sheng" file="Bosses/apprentice_sheng.xml" />
 	<monster name="Arachir the Ancient One" file="Bosses/Arachir_the_ancient_one.xml" />
+	<monster name="Armenius" file="Bosses/armenius.xml" />
+	<monster name="Azerus" file="Bosses/azerus.xml" />
 	<monster name="Barbaria" file="Bosses/barbaria.xml" />
 	<monster name="Baron Brute" file="Bosses/baron_brute.xml" />
+	<monster name="Battlemaster Zunzu" file="Bosses/battlemaster_zunzu.xml" />
 	<monster name="Bazir" file="Bosses/Bazir.xml" />
 	<monster name="Big Boss Trolliver" file="Bosses/big_boss_trolliver.xml" />
 	<monster name="Bones" file="Bosses/bones.xml" />
@@ -146,24 +143,31 @@
 	<monster name="Countess Sorrow" file="Bosses/countess_sorrow.xml" />
 	<monster name="Deadeye Devious" file="Bosses/deadeye_devious.xml" />
 	<monster name="Deathbine" file="Bosses/deathbine.xml" />
+	<monster name="Deathstrike" file="Bosses/deathstrike.xml" />
 	<monster name="Demodras" file="Bosses/demodras.xml" />
 	<monster name="Dharalion" file="Bosses/dharalion.xml" />
 	<monster name="Diblis the Fair" file="Bosses/Diblis_The_Fair.xml" />
 	<monster name="Dirtbeard" file="Bosses/dirtbeard.xml" />
+	<monster name="Diseased Bill" file="Bosses/diseased_bill.xml" />
+	<monster name="Diseased Dan" file="Bosses/diseased_dan.xml" />
+	<monster name="Diseased Fred" file="Bosses/diseased_fred.xml" />
 	<monster name="Doomhowl" file="Bosses/Doomhowl.xml" />
 	<monster name="Dracola" file="Bosses/dracola.xml" />
 	<monster name="Dreadwing" file="Bosses/dreadwing.xml" />
+	<monster name="Energized Raging Mage" file="Bosses/energized_raging_mage.xml" />
 	<monster name="Esmeralda" file="Bosses/esmeralda.xml" />
 	<monster name="Evil Mastermind" file="Bosses/evil_mastermind.xml" />
 	<monster name="Fatality" file="Bosses/fatality.xml" />
 	<monster name="Fernfang" file="Bosses/fernfang.xml" />
 	<monster name="Ferumbras" file="Bosses/ferumbras.xml" />
+	<monster name="Fleshslicer" file="Bosses/fleshslicer.xml" />
 	<monster name="Fluffy" file="Bosses/fluffy.xml" />
 	<monster name="Foreman Kneebiter" file="Bosses/foreman_kneebiter.xml" />
 	<monster name="Freegoiz" file="Bosses/Freegoiz.xml" />
 	<monster name="Fury of the Emperor" file="Bosses/fury_of_the_emperor.xml" />
 	<monster name="Gaz'haragoth" file="Bosses/gaz'haragoth.xml" />
 	<monster name="General Murius" file="Bosses/general_murius.xml" />
+	<monster name="Ghazbaran" file="Bosses/ghazbaran.xml" />
 	<monster name="Glitterscale" file="Bosses/glitterscale.xml" />
 	<monster name="Gnomevil" file="Bosses/gnomevil.xml" />
 	<monster name="Golgordan" file="Bosses/golgordan.xml" />
@@ -171,21 +175,23 @@
 	<monster name="Groam" file="Bosses/groam.xml" />
 	<monster name="Grorlam" file="Bosses/grorlam.xml" />
 	<monster name="Hairman the Huge" file="Bosses/hairman_the_huge.xml" />
-	<monster name="Handmaiden" file="Bosses/handmaiden.xml" />
 	<monster name="Haunter" file="Bosses/haunter.xml" />
 	<monster name="Hellgorak" file="Bosses/hellgorak.xml" />
 	<monster name="Heoni" file="Bosses/heoni.xml" />
 	<monster name="Hide" file="Bosses/hide.xml" />
+	<monster name="Horestis" file="Bosses/horestis.xml" />
 	<monster name="Incineron" file="Bosses/incineron.xml" />
 	<monster name="Infernatil" file="Bosses/Infernatil.xml" />
 	<monster name="Inky" file="Bosses/inky.xml" />
 	<monster name="Jaul" file="Bosses/jaul.xml" />
 	<monster name="Koshei The Deathless" file="Bosses/koshei_the_deathless.xml" />
-	<monster name="Kraknaknork Demon" file="Bosses/Kraknaknork_Demon.xml" />
+	<monster name="Kraknaknork's Demon" file="Bosses/kraknaknork's_demon.xml" />
 	<monster name="Kraknaknork" file="Bosses/kraknaknork.xml" />
 	<monster name="Latrivan" file="Bosses/latrivan.xml" />
 	<monster name="Lethal Lissy" file="Bosses/lethal_lissy.xml" />
 	<monster name="Leviathan" file="Bosses/leviathan.xml" />
+	<monster name="Lizard Abomination" file="Bosses/lizard_abomination.xml" />
+	<monster name="Lord of the Elements" file="Bosses/lord_of_the_elements.xml" />
 	<monster name="Mad Mage" file="Bosses/mad_mage.xml" />
 	<monster name="Mad Technomancer" file="Bosses/mad_technomancer.xml" />
 	<monster name="Madareth" file="Bosses/madareth.xml" />
@@ -196,11 +202,15 @@
 	<monster name="Mephiles" file="Bosses/mephiles.xml" />
 	<monster name="Minishabaal" file="Bosses/minishabaal.xml" />
 	<monster name="Monstor" file="Bosses/monstor.xml" />
+	<monster name="Morgaroth" file="Bosses/morgaroth.xml" />
+	<monster name="Morik the Gladiator" file="Bosses/morik_the_gladiator.xml" />
 	<monster name="Mr. Punish" file="Bosses/mr._punish.xml" />
 	<monster name="Munster" file="Bosses/munster.xml" />
 	<monster name="Necropharus" file="Bosses/necropharus.xml" />
 	<monster name="Obujos" file="Bosses/Obujos.xml" />
+	<monster name="Orshabaal" file="Bosses/orshabaal.xml" />
 	<monster name="Pythius The Rotten" file="Bosses/pythius_the_rotten.xml" />
+	<monster name="Raging Mage" file="Bosses/raging_mage.xml" />
 	<monster name="Rocko" file="Bosses/rocko.xml" />
 	<monster name="Ron the Ripper" file="Bosses/ron_the_ripper.xml" />
 	<monster name="Rottie the Rotworm" file="Bosses/Rottie_the_Rotworm.xml" />
@@ -222,6 +232,7 @@
 	<monster name="The Blightfather" file="Bosses/the_blightfather.xml" />
 	<monster name="The Bloodtusk" file="Bosses/the_bloodtusk.xml" />
 	<monster name="The Bloodweb" file="Bosses/the_bloodweb.xml" />
+	<monster name="The Collector" file="Bosses/the_collector.xml" />
 	<monster name="The Count" file="Bosses/the_count.xml" />
 	<monster name="The Dreadorian" file="Bosses/the_dreadorian.xml" />
 	<monster name="The Evil Eye" file="Bosses/the_evil_eye.xml" />
@@ -232,6 +243,7 @@
 	<monster name="The Many" file="Bosses/the_many.xml" />
 	<monster name="The Noxious Spawn" file="Bosses/the_noxious_spawn.xml" />
 	<monster name="The Old Widow" file="Bosses/the_old_widow.xml" />
+	<monster name="The Pale Count" file="Bosses/the_pale_count.xml" />
 	<monster name="The Plasmother" file="Bosses/the_plasmother.xml" />
 	<monster name="The Snapper" file="Bosses/the_snapper.xml" />
 	<monster name="Thul" file="Bosses/thul.xml" />
@@ -247,6 +259,7 @@
 	<monster name="Xenia" file="Bosses/xenia.xml" />
 	<monster name="Yaga The Crone" file="Bosses/Yaga_The_Crone.xml" />
 	<monster name="Yakchal" file="Bosses/yakchal.xml" />
+	<monster name="Zavarash" file="Bosses/zavarash.xml" />
 	<monster name="Zevelon Duskbringer" file="Bosses/Zevelon_Duskbringer.xml" />
 	<monster name="Zomba" file="Bosses/zomba.xml" />
 	<monster name="Zoralurk" file="Bosses/Zoralurk.xml" />
@@ -291,7 +304,6 @@
 
 	<!-- Cryo-Elementals -->
 	<monster name="Ice Golem" file="Cryo-Elementals/ice_golem.xml" />
-	<monster name="The Collector" file="Cryo-Elementals/the_collector.xml" />
 
 	<!-- Deeplings -->
 	<monster name="Deepling Brawler" file="Deeplings/deepling_brawler.xml" />
@@ -303,9 +315,6 @@
 	<monster name="Deepling Tyrant" file="Deeplings/Deepling_Tyrant.xml" />
 	<monster name="Deepling Warrior" file="Deeplings/deepling_warrior.xml" />
 	<monster name="Deepling worker" file="Deeplings/Deepling_Worker.xml" />
-
-	<!-- Demonlord -->
-	<monster name="Orshabaal" file="Demonlord/orshabaal.xml" />
 
 	<!-- Demons -->
 	<monster name="Askarak Demon" file="Demons/askarak_demon.xml" />
@@ -322,9 +331,7 @@
 	<monster name="Hand of Cursed Fate" file="Demons/hand_of_cursed_fate.xml" />
 	<monster name="Hellhound" file="Demons/hellhound.xml" />
 	<monster name="Hellspawn" file="Demons/hellspawn.xml" />
-	<monster name="Herald of Gloom" file="Demons/herald_of_gloom.xml" />
 	<monster name="Juggernaut" file="Demons/juggernaut.xml" />
-	<monster name="Kraknaknork's Demon" file="Demons/kraknaknork's_demon.xml" />
 	<monster name="Nightmare Scion" file="Demons/nightmare_scion.xml" />
 	<monster name="Nightmare" file="Demons/nightmare.xml" />
 	<monster name="Nightstalker" file="Demons/nightstalker.xml" />
@@ -334,9 +341,7 @@
 	<monster name="Shaburak Demon" file="Demons/shaburak_demon.xml" />
 	<monster name="Shaburak Lord" file="Demons/shaburak_lord.xml" />
 	<monster name="Shaburak Prince" file="Demons/shaburak_prince.xml" />
-	<monster name="Shadow Hound" file="Demons/shadow_hound.xml" />
 	<monster name="Yielothax" file="Demons/yielothax.xml" />
-	<monster name="Zavarash" file="Demons/zavarash.xml" />
 
 	<!-- Djinn -->
 	<monster name="Blue Djinn" file="Djinn/blue_djinn.xml" />
@@ -365,7 +370,6 @@
 	<monster name="Feversleep" file="Dreamhaunters/feversleep.xml" />
 	<monster name="Frazzlemaw" file="Dreamhaunters/frazzlemaw.xml" />
 	<monster name="Guzzlemaw" file="Dreamhaunters/guzzlemaw.xml" />
-	<monster name="Mawhawk" file="Dreamhaunters/mawhawk.xml" />
 	<monster name="Minion of Gaz'haragoth" file="Dreamhaunters/minion_of_gaz'haragoth.xml" />
 	<monster name="Nightmare of Gaz'haragoth" file="Dreamhaunters/nightmare_of_gaz'haragoth.xml" />
 	<monster name="Retching Horror" file="Dreamhaunters/retching_horror.xml" />
@@ -393,8 +397,17 @@
 	<monster name="Dworc Voodoomaster" file="Dworcs/dworc_voodoomaster.xml" />
 
 	<!-- Event_Creatures -->
+	<monster name="Bane Bringer" file="Event_Creatures/bane_bringer.xml" />
+	<monster name="Essence of Darkness" file="Event_Creatures/essence_of_darkness.xml" />
+	<monster name="Grynch Clan Goblin" file="Event_Creatures/grynch_clan_goblin.xml" />
 	<monster name="Hacker" file="Event_Creatures/hacker.xml" />
+	<monster name="Herald of Gloom" file="Event_Creatures/herald_of_gloom.xml" />
+	<monster name="Midnight Spawn" file="Event_Creatures/midnight_spawn.xml" />
+	<monster name="Primitive" file="Event_Creatures/primitive.xml" />
+	<monster name="Shadow Hound" file="Event_Creatures/shadow_hound.xml" />
 	<monster name="Spectral Scum" file="Event_Creatures/spectral_scum.xml" />
+	<monster name="The Halloween Hare" file="Event_Creatures/the_halloween_hare.xml" />
+	<monster name="Undead Minion" file="Event_Creatures/undead_minion.xml" />
 
 	<!-- Elves -->
 	<monster name="Elf" file="Elves/elf.xml" />
@@ -406,14 +419,13 @@
 	<monster name="Charged Energy Elemental" file="Electro-Elementals/charged_energy_elemental.xml" />
 	<monster name="Energy Elemental" file="Electro-Elementals/energy_elemental.xml" />
 	<monster name="Massive Energy Elemental" file="Electro-Elementals/massive_energy_elemental.xml" />
-	<monster name="Overcharged Energy Elemental" file="Electro-Elementals/overcharged_energy_elemental.xml" />
+	<monster name="Overcharged Energy Element" file="Electro-Elementals/overcharged_energy_element.xml" />
 
 	<!-- Elemental_Lords -->
 	<monster name="Earth Overlord" file="Elemental_Lords/earth_overlord.xml" />
 	<monster name="Energy Overlord" file="Elemental_Lords/energy_overlord.xml" />
 	<monster name="Fire Overlord" file="Elemental_Lords/fire_overlord.xml" />
 	<monster name="Ice Overlord" file="Elemental_Lords/ice_overlord.xml" />
-	<monster name="Lord of the Elements" file="Elemental_Lords/lord_of_the_elements.xml" />
 
 	<!-- Felines -->
 	<monster name="Cat" file="Felines/cat.xml" />
@@ -441,7 +453,6 @@
 
 	<!-- Glires -->
 	<monster name="Cave Rat" file="Glires/cave_rat.xml" />
-	<monster name="The Halloween Hare" file="Glires/halloweenhare.xml" />
 	<monster name="Rabbit" file="Glires/rabbit.xml" />
 	<monster name="Rat" file="Glires/rat.xml" />
 	<monster name="Silver Rabbit" file="Glires/silver_rabbit.xml" />
@@ -455,7 +466,6 @@
 	<monster name="Crystalcrusher" file="Geo-Elementals/crystalcrusher.xml" />
 	<monster name="Damaged Crystal Golem" file="Geo-Elementals/damaged_crystal_golem.xml" />
 	<monster name="Damaged Worker Golem" file="Geo-Elementals/damaged_worker_golem.xml" />
-	<monster name="Deathstrike" file="Geo-Elementals/deathstrike.xml" />
 	<monster name="Diamond Servant" file="Geo-Elementals/diamond_servant.xml" />
 	<monster name="Earth Elemental" file="Geo-Elementals/earth_elemental.xml" />
 	<monster name="Enraged Crystal Golem" file="Geo-Elementals/enraged_crystal_golem.xml" />
@@ -499,7 +509,6 @@
 	<monster name="Goblin Assassin" file="Goblins/goblin_assassin.xml" />
 	<monster name="Goblin Leader" file="Goblins/goblin_leader.xml" />
 	<monster name="Goblin Scavenger" file="Goblins/goblin_scavenger.xml" />
-	<monster name="Grynch Clan Goblin" file="Goblins/grynch_clan_goblin.xml" />
 	<monster name="Demon (Goblin)" file="Goblins/demon_(goblin).xml" />
 
 	<!-- Hydro-Elementals -->
@@ -516,13 +525,12 @@
 	<monster name="Butterfly" file="Insects/butterfly.xml" />
 	<monster name="Cockroach" file="Insects/cockroach.xml" />
 	<monster name="Emerald Damselfly" file="Insects/emerald_damselfly.xml" />
-	<monster name="Fleshslicer" file="Insects/fleshslicer.xml" />
 	<monster name="Hive Overseer" file="Insects/hive_overseer.xml" />
 	<monster name="Insect Swarm" file="Insects/insect_swarm.xml" />
 	<monster name="Insectoid Scout" file="Insects/insectoid_scout.xml" />
 	<monster name="Insectoid Worker" file="Insects/insectoid_worker.xml" />
 	<monster name="Kollos" file="Insects/kollos.xml" />
-	<monster name="Lady Bug" file="Insects/lady_bug.xml" />
+	<monster name="Ladybug" file="Insects/ladybug.xml" />
 	<monster name="Lancer Beetle" file="Insects/lancer_beetle.xml" />
 	<monster name="Larva" file="Insects/larva.xml" />
 	<monster name="Lesser Swarmer" file="Insects/lesser_swarmer.xml" />
@@ -543,12 +551,10 @@
 	<monster name="Yellow Butterfly" file="Insects/yellow_butterfly.xml" />
 
 	<!-- Lizards -->
-	<monster name="Battlemaster Zunzu" file="Lizards/battlemaster_zunzu.xml" />
 	<monster name="Draken Abomination" file="Lizards/draken_abomination.xml" />
 	<monster name="Draken Elite" file="Lizards/draken_elite.xml" />
 	<monster name="Draken Spellweaver" file="Lizards/draken_spellweaver.xml" />
 	<monster name="Draken Warmaster" file="Lizards/draken_warmaster.xml" />
-	<monster name="Lizard Abomination" file="Lizards/lizard_abomination.xml" />
 	<monster name="Lizard Chosen" file="Lizards/lizard_chosen.xml" />
 	<monster name="Lizard Dragon Priest" file="Lizards/lizard_dragon_priest.xml" />
 	<monster name="Lizard High Guard" file="Lizards/lizard_high_guard.xml" />
@@ -578,7 +584,6 @@
 
 	<!-- Misc Mounts -->
 	<monster name="Donkey" file="Misc/Misc Mounts/donkey.xml" />
-	<monster name="Incredibly Old Witch" file="Misc/Misc Mounts/Incredibly_Old_Witch.xml" />
 	<monster name="Modified Gnarlhound" file="Misc/Misc Mounts/modified_gnarlhound.xml" />
 
 	<!-- Misc Reptiles -->
@@ -641,10 +646,8 @@
 	<monster name="Grave Robber" file="Outlaws/grave_robber.xml" />
 	<monster name="Hero" file="Outlaws/hero.xml" />
 	<monster name="Hunter" file="Outlaws/hunter.xml" />
-	<monster name="Morik the Gladiator" file="Outlaws/morik_the_gladiator.xml" />
 	<monster name="Nomad" file="Outlaws/nomad.xml" />
 	<monster name="Poacher" file="Outlaws/poacher.xml" />
-	<monster name="Primitive" file="Outlaws/primitive.xml" />
 	<monster name="Smuggler" file="Outlaws/smuggler.xml" />
 	<monster name="Stalker" file="Outlaws/stalker.xml" />
 	<monster name="Wild Warrior" file="Outlaws/wild_warrior.xml" />
@@ -654,7 +657,6 @@
 	<!-- Pharaohs -->
 	<monster name="Ashmunrah" file="Pharaohs/ashmunrah.xml" />
 	<monster name="Dipthrah" file="Pharaohs/dipthrah.xml" />
-	<monster name="Horestis" file="Pharaohs/horestis.xml" />
 	<monster name="Mahrdis" file="Pharaohs/mahrdis.xml" />
 	<monster name="Morguthis" file="Pharaohs/morguthis.xml" />
 	<monster name="Omruc" file="Pharaohs/omruc.xml" />
@@ -719,25 +721,16 @@
 	<monster name="Skeleton" file="Skeletons/skeleton.xml" />
 	<monster name="Skeleton Warrior" file="Skeletons/skeleton_warrior.xml" />
 	<monster name="Undead Gladiator" file="Skeletons/undead_gladiator.xml" />
-	<monster name="Undead Minion" file="Skeletons/undead_minion.xml" />
 	<monster name="Undead Mine Worker" file="Skeletons/undead_mine_worker.xml" />
 
-	<!-- The_Triangle_of_Terror -->
-	<monster name="Ghazbaran" file="The_Triangle_of_Terror/ghazbaran.xml" />
-	<monster name="Morgaroth" file="The_Triangle_of_Terror/morgaroth.xml" />
-
 	<!-- Sorcerers -->
-	<monster name="Azerus" file="Sorcerers/azerus.xml" />
 	<monster name="Dark Apprentice" file="Sorcerers/dark_apprentice.xml" />
 	<monster name="Dark Magician" file="Sorcerers/dark_magician.xml" />
-	<monster name="Energized Raging Mage" file="Sorcerers/energized_raging_mage.xml" />
 	<monster name="Fury" file="Sorcerers/fury.xml" />
 	<monster name="Ice Witch" file="Sorcerers/ice_witch.xml" />
 	<monster name="Incredibly Old Witch" file="Sorcerers/incredibly_old_witch.xml" />
 	<monster name="Infernalist" file="Sorcerers/infernalist.xml" />
-	<monster name="Mad Mage" file="Sorcerers/mad_mage.xml" />
 	<monster name="Mad Scientist" file="Sorcerers/mad_scientist.xml" />
-	<monster name="Raging Mage" file="Sorcerers/raging_mage.xml" />
 	<monster name="Warlock" file="Sorcerers/warlock.xml" />
 	<monster name="Witch" file="Sorcerers/witch.xml" />
 	<monster name="Yalahari" file="Sorcerers/yalahari.xml" />
@@ -764,7 +757,6 @@
 	<monster name="Young Troll" file="Trolls/young_troll.xml" />
 
 	<!-- Undead_Humanoids -->
-	<monster name="Armenius" file="Undead_Humanoids/armenius.xml" />
 	<monster name="Banshee" file="Undead_Humanoids/banshee.xml" />
 	<monster name="Blightwalker" file="Undead_Humanoids/blightwalker.xml" />
 	<monster name="Crypt Shambler" file="Undead_Humanoids/crypt_shambler.xml" />
@@ -782,7 +774,6 @@
 	<monster name="Undead Prospector" file="Undead_Humanoids/undead_prospector.xml" />
 	<monster name="Nightfiend" file="Undead_Humanoids/nightfiend.xml" />
 	<monster name="Tomb Servant" file="Undead_Humanoids/tomb_servant.xml" />
-	<monster name="The Pale Count" file="Undead_Humanoids/the_pale_count.xml" />
 
 	<!-- Ungulates -->
 	<monster name="Black Sheep" file="Ungulates/black_sheep.xml" />

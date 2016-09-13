@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lord of the Elements" nameDescription="Lord of the Elements" race="undead" experience="8000" speed="370" manacost="0">
+	<health now="8000" max="8000" />
+	<look type="290" corpse="9009" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-690" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="1000" chance="25" min="100" max="195">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="40" monster="Energy Overlord" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="40" monster="Fire Overlord" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="40" monster="Earth Overlord" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="40" monster="Ice Overlord" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="1" />
+		<element firePercent="30" />
+		<element energyPercent="30" />
+		<element icePercent="30" />
+		<element earthPercent="45" />
+	</elements>
+	<immunities>
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Blistering Fire Elemental" interval="4000" chance="50" />
+		<summon name="Jagged Earth Elemental" interval="4000" chance="50" />
+		<summon name="Roaring Water Elemental" interval="4000" chance="50" />
+		<summon name="Overcharged Energy Elemental" interval="4000" chance="50" />
+	</summons>
+	<voices interval="5000" chance="30">
+		<voice sentence="WHO DARES CALLING ME?" yell="1" />
+		<voice sentence="I'LL FREEZE YOU THEN I CRUSH YOU!" yell="1" />
+	</voices>
+	<loot>
+		<item name="small sapphire" countmax="4" chance="7142" />
+		<item name="small ruby" countmax="4" chance="11111" />
+		<item name="small emerald" countmax="4" chance="11111" />
+		<item name="small amethyst" countmax="3" chance="11111" />
+		<item name="platinum coin" countmax="9" chance="50000" />
+		<item name="earthborn titan armor" chance="2063" />
+		<item name="gold ingot" chance="25000" />
+	</loot>
+</monster>

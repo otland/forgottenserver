@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Handmaiden" nameDescription="the handmaiden" race="blood" experience="3850" speed="450" manacost="0">
+<monster name="The Handmaiden" nameDescription="The Handmaiden" race="blood" experience="3850" speed="450" manacost="0">
 	<health now="14500" max="14500" />
 	<look type="230" corpse="6312" />
 	<targetchange interval="5000" chance="8" />

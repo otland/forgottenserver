@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rift Worm" nameDescription="a rift worm" race="blood" experience="1195" speed="200" manacost="0">
+<monster name="Rift Worm" nameDescription="Rift Worm" race="blood" experience="1195" speed="200" manacost="0">
 	<health now="2800" max="2800" />
 	<look type="295" corpse="0" />
 	<targetchange interval="60000" chance="0" />

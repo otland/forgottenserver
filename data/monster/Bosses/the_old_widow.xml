@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Old Widow" nameDescription="the Old Widow" race="blood" experience="4200" speed="240" manacost="0">
+<monster name="The Old Widow" nameDescription="The Old Widow" race="blood" experience="4200" speed="240" manacost="0">
 	<health now="3200" max="3200" />
 	<look type="208" corpse="5977" />
 	<targetchange interval="5000" chance="8" />

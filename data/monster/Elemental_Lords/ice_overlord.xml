@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ice Overlord" nameDescription="an ice overlord" race="undead" experience="1950" speed="390" manacost="0">
+<monster name="Ice Overlord" nameDescription="an Ice Overlord" race="undead" experience="1950" speed="390" manacost="0">
 	<health now="4000" max="2800" />
 	<look type="11" corpse="8965" />
 	<targetchange interval="20000" chance="15" />
