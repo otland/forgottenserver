@@ -28,10 +28,36 @@ class Tile;
 
 class Events
 {
+	struct EventsInfo {
+		// Creature
+		int32_t creatureOnChangeOutfit = -1;
+		int32_t creatureOnAreaCombat = -1;
+		int32_t creatureOnTargetCombat = -1;
+
+		// Party
+		int32_t partyOnJoin = -1;
+		int32_t partyOnLeave = -1;
+		int32_t partyOnDisband = -1;
+
+		// Player
+		int32_t playerOnBrowseField = -1;
+		int32_t playerOnLook = -1;
+		int32_t playerOnLookInBattleList = -1;
+		int32_t playerOnLookInTrade = -1;
+		int32_t playerOnLookInShop = -1;
+		int32_t playerOnMoveItem = -1;
+		int32_t playerOnMoveCreature = -1;
+		int32_t playerOnTurn = -1;
+		int32_t playerOnTradeRequest = -1;
+		int32_t playerOnTradeAccept = -1;
+		int32_t playerOnGainExperience = -1;
+		int32_t playerOnLoseExperience = -1;
+		int32_t playerOnGainSkillTries = -1;
+	};
+
 	public:
 		Events();
 
-		void clear();
 		bool load();
 
 		// Creature
@@ -61,31 +87,7 @@ class Events
 
 	private:
 		LuaScriptInterface scriptInterface;
-
-		// Creature
-		int32_t creatureOnChangeOutfit;
-		int32_t creatureOnAreaCombat;
-		int32_t creatureOnTargetCombat;
-
-		// Party
-		int32_t partyOnJoin;
-		int32_t partyOnLeave;
-		int32_t partyOnDisband;
-
-		// Player
-		int32_t playerOnBrowseField;
-		int32_t playerOnLook;
-		int32_t playerOnLookInBattleList;
-		int32_t playerOnLookInTrade;
-		int32_t playerOnLookInShop;
-		int32_t playerOnMoveItem;
-		int32_t playerOnMoveCreature;
-		int32_t playerOnTurn;
-		int32_t playerOnTradeRequest;
-		int32_t playerOnTradeAccept;
-		int32_t playerOnGainExperience;
-		int32_t playerOnLoseExperience;
-		int32_t playerOnGainSkillTries;
+		EventsInfo info;
 };
 
 #endif

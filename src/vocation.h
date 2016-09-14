@@ -26,7 +26,7 @@
 class Vocation
 {
 	public:
-		explicit Vocation(uint16_t id);
+		explicit Vocation(uint16_t id) : id(id) {}
 
 		const std::string& getVocName() const {
 			return name;
@@ -97,7 +97,7 @@ class Vocation
 		std::map<uint32_t, uint64_t> cacheMana;
 		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
 
-		std::string name {"none"};
+		std::string name = "none";
 		std::string description;
 
 		float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};

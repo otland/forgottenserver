@@ -89,36 +89,36 @@ class Monster final : public Creature
 		}
 
 		RaceType_t getRace() const final {
-			return mType->race;
+			return mType->info.race;
 		}
 		int32_t getArmor() const final {
-			return mType->armor;
+			return mType->info.armor;
 		}
 		int32_t getDefense() const final {
-			return mType->defense;
+			return mType->info.defense;
 		}
 		bool isPushable() const final {
-			return mType->pushable && baseSpeed != 0;
+			return mType->info.pushable && baseSpeed != 0;
 		}
 		bool isAttackable() const final {
-			return mType->isAttackable;
+			return mType->info.isAttackable;
 		}
 
 		bool canPushItems() const {
-			return mType->canPushItems;
+			return mType->info.canPushItems;
 		}
 		bool canPushCreatures() const {
-			return mType->canPushCreatures;
+			return mType->info.canPushCreatures;
 		}
 		bool isHostile() const {
-			return mType->isHostile;
+			return mType->info.isHostile;
 		}
 		bool canSee(const Position& pos) const final;
 		bool canSeeInvisibility() const final {
 			return isImmune(CONDITION_INVISIBLE);
 		}
 		uint32_t getManaCost() const {
-			return mType->manaCost;
+			return mType->info.manaCost;
 		}
 		void setSpawn(Spawn* spawn) {
 			this->spawn = spawn;
@@ -162,7 +162,7 @@ class Monster final : public Creature
 
 		bool isTarget(const Creature* creature) const;
 		bool isFleeing() const {
-			return !isSummon() && getHealth() <= mType->runAwayHealth;
+			return !isSummon() && getHealth() <= mType->info.runAwayHealth;
 		}
 
 		bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
@@ -252,17 +252,17 @@ class Monster final : public Creature
 		bool isOpponent(const Creature* creature) const;
 
 		uint64_t getLostExperience() const final {
-			return skillLoss ? mType->experience : 0;
+			return skillLoss ? mType->info.experience : 0;
 		}
 		uint16_t getLookCorpse() const final {
-			return mType->lookcorpse;
+			return mType->info.lookcorpse;
 		}
 		void dropLoot(Container* corpse, Creature* lastHitCreature) final;
 		uint32_t getDamageImmunities() const final {
-			return mType->damageImmunities;
+			return mType->info.damageImmunities;
 		}
 		uint32_t getConditionImmunities() const final {
-			return mType->conditionImmunities;
+			return mType->info.conditionImmunities;
 		}
 		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const final;
 		bool useCacheMap() const final {

@@ -107,9 +107,6 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	return TALKACTION_CONTINUE;
 }
 
-TalkAction::TalkAction(LuaScriptInterface* interface) :
-	Event(interface), separator('"') {}
-
 bool TalkAction::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute wordsAttribute = node.attribute("words");

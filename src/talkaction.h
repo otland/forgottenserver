@@ -60,11 +60,11 @@ class TalkActions : public BaseEvents
 class TalkAction : public Event
 {
 	public:
-		explicit TalkAction(LuaScriptInterface* interface);
+		explicit TalkAction(LuaScriptInterface* interface) : Event(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
 
-		std::string getWords() const {
+		const std::string& getWords() const {
 			return words;
 		}
 		char getSeparator() const {
@@ -79,7 +79,7 @@ class TalkAction : public Event
 		std::string getScriptEventName() const override;
 
 		std::string words;
-		char separator;
+		char separator = '"';
 };
 
 #endif

@@ -49,23 +49,13 @@ enum slots_t : uint8_t {
 };
 
 struct FindPathParams {
-	bool fullPathSearch;
-	bool clearSight;
-	bool allowDiagonal;
-	bool keepDistance;
-	int32_t maxSearchDist;
-	int32_t minTargetDist;
-	int32_t maxTargetDist;
-
-	FindPathParams() {
-		fullPathSearch = true;
-		clearSight = true;
-		allowDiagonal = true;
-		keepDistance = false;
-		maxSearchDist = 0;
-		minTargetDist = -1;
-		maxTargetDist = -1;
-	}
+	bool fullPathSearch = true;
+	bool clearSight = true;
+	bool allowDiagonal = true;
+	bool keepDistance = false;
+	int32_t maxSearchDist = 0;
+	int32_t minTargetDist = -1;
+	int32_t maxTargetDist = -1;
 };
 
 class Map;
@@ -84,7 +74,7 @@ class Tile;
 class FrozenPathingConditionCall
 {
 	public:
-		explicit FrozenPathingConditionCall(Position targetPos) : targetPos(targetPos) {}
+		explicit constexpr FrozenPathingConditionCall(Position targetPos) : targetPos(std::move(targetPos)) {}
 
 		bool operator()(const Position& startPos, const Position& testPos,
 		                const FindPathParams& fpp, int32_t& bestMatchDist) const;

@@ -54,7 +54,6 @@ class Door final : public Item
 {
 	public:
 		explicit Door(uint16_t type);
-		~Door();
 
 		// non-copyable
 		Door(const Door&) = delete;
@@ -93,8 +92,8 @@ class Door final : public Item
 		void setHouse(House* house);
 
 	private:
-		House* house;
-		AccessList* accessList;
+		House* house = nullptr;
+		std::unique_ptr<AccessList> accessList;
 		friend class House;
 };
 
@@ -232,7 +231,7 @@ class House
 		AccessList guestList;
 		AccessList subOwnerList;
 
-		Container transfer_container { ITEM_LOCKER1 };
+		Container transfer_container{ITEM_LOCKER1};
 
 		HouseTileList houseTiles;
 		std::list<Door*> doorList;
@@ -251,7 +250,7 @@ class House
 		uint32_t rent = 0;
 		uint32_t townId = 0;
 
-		Position posEntry {};
+		Position posEntry = {};
 
 		bool isLoaded = false;
 };

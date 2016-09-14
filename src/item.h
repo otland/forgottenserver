@@ -108,7 +108,7 @@ enum Attr_ReadValue {
 class ItemAttributes
 {
 	public:
-		ItemAttributes() : attributeBits(0) {}
+		ItemAttributes() = default;
 
 		void setSpecialDescription(const std::string& desc) {
 			setStrAttr(ITEM_ATTRIBUTE_DESCRIPTION, desc);
@@ -270,7 +270,7 @@ class ItemAttributes
 		};
 
 		std::forward_list<Attribute> attributes;
-		uint32_t attributeBits;
+		uint32_t attributeBits = 0;
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
@@ -311,7 +311,7 @@ class Item : virtual public Thing
 		Item(const Item& i);
 		virtual Item* clone() const;
 
-		virtual ~Item();
+		virtual ~Item() = default;
 
 		// non-assignable
 		Item& operator=(const Item&) = delete;
@@ -709,9 +709,9 @@ class Item : virtual public Thing
 
 		bool hasMarketAttributes() const;
 
-		ItemAttributes* getAttributes() {
+		std::unique_ptr<ItemAttributes>& getAttributes() {
 			if (!attributes) {
-				attributes = new ItemAttributes();
+				attributes.reset(new ItemAttributes());
 			}
 			return attributes;
 		}
@@ -742,15 +742,15 @@ class Item : virtual public Thing
 	protected:
 		std::string getWeightDescription(uint32_t weight) const;
 
-		Cylinder* parent;
-		ItemAttributes* attributes;
+		Cylinder* parent = nullptr;
+		std::unique_ptr<ItemAttributes> attributes;
 
-		uint32_t referenceCounter;
+		uint32_t referenceCounter = 0;
 
 		uint16_t id;  // the same id as in ItemType
-		uint8_t count; // number of stacked items
+		uint8_t count = 1; // number of stacked items
 
-		bool loadedFromMap;
+		bool loadedFromMap = false;
 
 		//Don't add variables here, use the ItemAttribute class.
 };

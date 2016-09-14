@@ -92,7 +92,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		OutputMessage_ptr outputBuffer;
 	private:
 		const ConnectionWeak_ptr connection;
-		uint32_t key[4] = { 0 };
+		uint32_t key[4] = {};
 		bool encryptionEnabled = false;
 		bool checksumEnabled = true;
 		bool rawMessages = false;

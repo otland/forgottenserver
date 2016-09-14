@@ -384,37 +384,21 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 	return ret;
 }
 
-MoveEvent::MoveEvent(LuaScriptInterface* interface) :
-	Event(interface),
-	eventType(MOVE_EVENT_NONE),
-	stepFunction(nullptr),
-	moveFunction(nullptr),
-	equipFunction(nullptr),
-	slot(SLOTP_WHEREEVER),
-	reqLevel(0),
-	reqMagLevel(0),
-	premium(false),
-	wieldInfo(0)
-{}
+MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface) {}
 
 MoveEvent::MoveEvent(const MoveEvent* copy) :
-	Event(copy)
-{
-	eventType = copy->eventType;
-	stepFunction = copy->stepFunction;
-	moveFunction = copy->moveFunction;
-	equipFunction = copy->equipFunction;
-	slot = copy->slot;
-
-	if (copy->eventType == MOVE_EVENT_EQUIP) {
-		wieldInfo = copy->wieldInfo;
-		reqLevel = copy->reqLevel;
-		reqMagLevel = copy->reqMagLevel;
-		vocationString = copy->vocationString;
-		premium = copy->premium;
-		vocEquipMap = copy->vocEquipMap;
-	}
-}
+	Event(copy),
+	eventType(copy->eventType),
+	stepFunction(copy->stepFunction),
+	moveFunction(copy->moveFunction),
+	equipFunction(copy->equipFunction),
+	slot(copy->slot),
+	reqLevel(copy->reqLevel),
+	reqMagLevel(copy->reqMagLevel),
+	premium(copy->premium),
+	vocationString(copy->vocationString),
+	wieldInfo(copy->wieldInfo),
+	vocEquipMap(copy->vocEquipMap) {}
 
 std::string MoveEvent::getScriptEventName() const
 {

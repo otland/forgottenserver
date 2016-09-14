@@ -43,14 +43,10 @@ class NetworkMessage
 		enum { MAX_BODY_LENGTH = NETWORKMESSAGE_MAXSIZE - HEADER_LENGTH - CHECKSUM_LENGTH - XTEA_MULTIPLE };
 		enum { MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10 };
 
-		NetworkMessage() {
-			reset();
-		}
+		NetworkMessage() = default;
 
 		void reset() {
-			overrun = false;
-			length = 0;
-			position = INITIAL_BUFFER_POSITION;
+			info = {};
 		}
 
 		// simply read functions for incoming message
@@ -59,11 +55,11 @@ class NetworkMessage
 				return 0;
 			}
 
-			return buffer[position++];
+			return buffer[info.position++];
 		}
 
 		uint8_t getPreviousByte() {
-			return buffer[--position];
+			return buffer[--info.position];
 		}
 
 		template<typename T>
@@ -73,8 +69,8 @@ class NetworkMessage
 			}
 
 			T v;
-			memcpy(&v, buffer + position, sizeof(T));
-			position += sizeof(T);
+			memcpy(&v, buffer + info.position, sizeof(T));
+			info.position += sizeof(T);
 			return v;
 		}
 
@@ -83,7 +79,7 @@ class NetworkMessage
 
 		// skips count unknown/unused bytes in an incoming message
 		void skipBytes(int16_t count) {
-			position += count;
+			info.position += count;
 		}
 
 		// simply write functions for outgoing message
@@ -92,8 +88,8 @@ class NetworkMessage
 				return;
 			}
 
-			buffer[position++] = value;
-			length++;
+			buffer[info.position++] = value;
+			info.length++;
 		}
 
 		template<typename T>
@@ -102,9 +98,9 @@ class NetworkMessage
 				return;
 			}
 
-			memcpy(buffer + position, &value, sizeof(T));
-			position += sizeof(T);
-			length += sizeof(T);
+			memcpy(buffer + info.position, &value, sizeof(T));
+			info.position += sizeof(T);
+			info.length += sizeof(T);
 		}
 
 		void addBytes(const char* bytes, size_t size);
@@ -121,15 +117,15 @@ class NetworkMessage
 		void addItemId(uint16_t itemId);
 
 		MsgSize_t getLength() const {
-			return length;
+			return info.length;
 		}
 
 		void setLength(MsgSize_t newLength) {
-			length = newLength;
+			info.length = newLength;
 		}
 
 		MsgSize_t getBufferPosition() const {
-			return position;
+			return info.position;
 		}
 
 		uint16_t getLengthHeader() const {
@@ -137,7 +133,7 @@ class NetworkMessage
 		}
 
 		bool isOverrun() const {
-			return overrun;
+			return info.overrun;
 		}
 
 		uint8_t* getBuffer() {
@@ -149,27 +145,30 @@ class NetworkMessage
 		}
 
 		uint8_t* getBodyBuffer() {
-			position = 2;
+			info.position = 2;
 			return buffer + HEADER_LENGTH;
 		}
 
 	protected:
 		inline bool canAdd(size_t size) const {
-			return (size + position) < MAX_BODY_LENGTH;
+			return (size + info.position) < MAX_BODY_LENGTH;
 		}
 
 		inline bool canRead(int32_t size) {
-			if ((position + size) > (length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
-				overrun = true;
+			if ((info.position + size) > (info.length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - info.position)) {
+				info.overrun = true;
 				return false;
 			}
 			return true;
 		}
 
-		MsgSize_t length;
-		MsgSize_t position;
-		bool overrun;
+		struct NetworkMessageInfo {
+			MsgSize_t length = 0;
+			MsgSize_t position = INITIAL_BUFFER_POSITION;
+			bool overrun = false;
+		};
 
+		NetworkMessageInfo info;
 		uint8_t buffer[NETWORKMESSAGE_MAXSIZE];
 };
 

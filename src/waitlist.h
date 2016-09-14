@@ -23,7 +23,7 @@
 #include "player.h"
 
 struct Wait {
-	Wait(int64_t timeout, uint32_t playerGUID) :
+	constexpr Wait(int64_t timeout, uint32_t playerGUID) :
 		timeout(timeout), playerGUID(playerGUID) {}
 
 	int64_t timeout;

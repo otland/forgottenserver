@@ -62,7 +62,7 @@ class Weapons final : public BaseEvents
 class Weapon : public Event
 {
 	public:
-		explicit Weapon(LuaScriptInterface* interface);
+		explicit Weapon(LuaScriptInterface* interface) : Event(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute&) final {
@@ -114,17 +114,17 @@ class Weapon : public Event
 
 		CombatParams params;
 
-		uint32_t level;
-		uint32_t magLevel;
-		uint32_t mana;
-		uint32_t manaPercent;
-		uint32_t soul;
-		uint16_t id;
-		WeaponAction_t action;
-		uint8_t breakChance;
-		bool enabled;
-		bool premium;
-		bool wieldUnproperly;
+		uint32_t level = 0;
+		uint32_t magLevel = 0;
+		uint32_t mana = 0;
+		uint32_t manaPercent = 0;
+		uint32_t soul = 0;
+		uint16_t id = 0;
+		WeaponAction_t action = WEAPONACTION_NONE;
+		uint8_t breakChance = 0;
+		bool enabled = true;
+		bool premium = false;
+		bool wieldUnproperly = false;
 
 	private:
 		static void decrementItemCount(Item* item);
@@ -149,8 +149,8 @@ class WeaponMelee final : public Weapon
 	protected:
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
-		CombatType_t elementType;
-		uint16_t elementDamage;
+		CombatType_t elementType = COMBAT_NONE;
+		uint16_t elementDamage = 0;
 };
 
 class WeaponDistance final : public Weapon
@@ -172,14 +172,14 @@ class WeaponDistance final : public Weapon
 	protected:
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
-		CombatType_t elementType;
-		uint16_t elementDamage;
+		CombatType_t elementType = COMBAT_NONE;
+		uint16_t elementDamage = 0;
 };
 
 class WeaponWand final : public Weapon
 {
 	public:
-		explicit WeaponWand(LuaScriptInterface* interface);
+		explicit WeaponWand(LuaScriptInterface* interface) : Weapon(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		void configureWeapon(const ItemType& it) final;
@@ -193,8 +193,8 @@ class WeaponWand final : public Weapon
 			return false;
 		}
 
-		int32_t minChange;
-		int32_t maxChange;
+		int32_t minChange = 0;
+		int32_t maxChange = 0;
 };
 
 #endif
