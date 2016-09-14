@@ -41,19 +41,6 @@ extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
-ProtocolGame::ProtocolGame(Connection_ptr connection) :
-	Protocol(connection),
-	player(nullptr),
-	eventConnect(0),
-	challengeTimestamp(0),
-	version(CLIENT_VERSION_MIN),
-	challengeRandom(0),
-	debugAssertSent(false),
-	acceptPackets(false)
-{
-	//
-}
-
 void ProtocolGame::release()
 {
 	//dispatcher thread
@@ -2639,11 +2626,7 @@ void ProtocolGame::sendOutfitWindow()
 	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
 		static const std::string gamemasterOutfitName = "Gamemaster";
-		protocolOutfits.emplace_back(
-			&gamemasterOutfitName,
-			75,
-			0
-		);
+		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
 	}
 
 	const auto& outfits = Outfits::getInstance()->getOutfits(player->getSex());
@@ -2654,11 +2637,7 @@ void ProtocolGame::sendOutfitWindow()
 			continue;
 		}
 
-		protocolOutfits.emplace_back(
-			&outfit.name,
-			outfit.lookType,
-			addons
-		);
+		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
 		if (protocolOutfits.size() == 50) { // Game client doesn't allow more than 50 outfits
 			break;
 		}
@@ -2667,7 +2646,7 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(protocolOutfits.size());
 	for (const ProtocolOutfit& outfit : protocolOutfits) {
 		msg.add<uint16_t>(outfit.lookType);
-		msg.addString(*outfit.name);
+		msg.addString(outfit.name);
 		msg.addByte(outfit.addons);
 	}
 

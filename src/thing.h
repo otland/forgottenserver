@@ -31,7 +31,7 @@ class Container;
 class Thing
 {
 	protected:
-		Thing() = default;
+		constexpr Thing() = default;
 		~Thing() = default;
 
 	public:

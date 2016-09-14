@@ -207,7 +207,7 @@ class ItemType
 
 		CombatType_t combatType = COMBAT_NONE;
 
-		uint16_t transformToOnUse[2] = { 0 };
+		uint16_t transformToOnUse[2] = {0, 0};
 		uint16_t transformToFree = 0;
 		uint16_t destroyTo = 0;
 		uint16_t maxTextLen = 0;

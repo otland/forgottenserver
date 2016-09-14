@@ -67,10 +67,6 @@ void ServiceManager::stop()
 	death_timer.async_wait(std::bind(&ServiceManager::die, this));
 }
 
-ServicePort::ServicePort(boost::asio::io_service& io_service) :
-	io_service(io_service)
-{}
-
 ServicePort::~ServicePort()
 {
 	close();

@@ -425,36 +425,21 @@ enum MapMark_t
 };
 
 struct Outfit_t {
-	Outfit_t() {
-		reset();
-	}
-
-	void reset() {
-		lookType = 0;
-		lookTypeEx = 0;
-		lookMount = 0;
-		lookHead = 0;
-		lookBody = 0;
-		lookLegs = 0;
-		lookFeet = 0;
-		lookAddons = 0;
-	}
-
-	uint16_t lookType;
-	uint16_t lookTypeEx;
-	uint16_t lookMount;
-	uint8_t lookHead;
-	uint8_t lookBody;
-	uint8_t lookLegs;
-	uint8_t lookFeet;
-	uint8_t lookAddons;
+	uint16_t lookType = 0;
+	uint16_t lookTypeEx = 0;
+	uint16_t lookMount = 0;
+	uint8_t lookHead = 0;
+	uint8_t lookBody = 0;
+	uint8_t lookLegs = 0;
+	uint8_t lookFeet = 0;
+	uint8_t lookAddons = 0;
 };
 
 struct LightInfo {
 	uint8_t level = 0;
 	uint8_t color = 0;
-	LightInfo() = default;
-	LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
+	constexpr LightInfo() = default;
+	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
 struct ShopInfo {

@@ -91,14 +91,14 @@ class NpcEventsHandler
 		Npc* npc;
 		NpcScriptInterface* scriptInterface;
 
-		int32_t creatureAppearEvent;
-		int32_t creatureDisappearEvent;
-		int32_t creatureMoveEvent;
-		int32_t creatureSayEvent;
-		int32_t playerCloseChannelEvent;
-		int32_t playerEndTradeEvent;
-		int32_t thinkEvent;
-		bool loaded;
+		int32_t creatureAppearEvent = -1;
+		int32_t creatureDisappearEvent = -1;
+		int32_t creatureMoveEvent = -1;
+		int32_t creatureSayEvent = -1;
+		int32_t playerCloseChannelEvent = -1;
+		int32_t playerEndTradeEvent = -1;
+		int32_t thinkEvent = -1;
+		bool loaded = false;
 };
 
 class Npc final : public Creature

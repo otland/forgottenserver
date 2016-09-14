@@ -204,9 +204,7 @@ class DBInsert
 class DBTransaction
 {
 	public:
-		DBTransaction() {
-			state = STATE_NO_START;
-		}
+		constexpr DBTransaction() = default;
 
 		~DBTransaction() {
 			if (state == STATE_START) {
@@ -239,7 +237,7 @@ class DBTransaction
 			STEATE_COMMIT,
 		};
 
-		TransactionStates_t state;
+		TransactionStates_t state = STATE_NO_START;
 };
 
 #endif

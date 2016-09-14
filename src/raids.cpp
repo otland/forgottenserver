@@ -546,8 +546,6 @@ bool AreaSpawnEvent::executeEvent()
 	return true;
 }
 
-ScriptEvent::ScriptEvent(LuaScriptInterface* interface) : Event(interface) {}
-
 bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 {
 	if (!RaidEvent::configureRaidEvent(eventNode)) {

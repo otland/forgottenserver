@@ -31,8 +31,6 @@ GlobalEvents::GlobalEvents() :
 	scriptInterface("GlobalEvent Interface")
 {
 	scriptInterface.initState();
-	thinkEventId = 0;
-	timerEventId = 0;
 }
 
 GlobalEvents::~GlobalEvents()
@@ -209,8 +207,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 	}
 }
 
-GlobalEvent::GlobalEvent(LuaScriptInterface* interface):
-	Event(interface), eventType(GLOBALEVENT_NONE), nextExecution(0), interval(0) {}
+GlobalEvent::GlobalEvent(LuaScriptInterface* interface) : Event(interface) {}
 
 bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 {

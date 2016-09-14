@@ -73,7 +73,7 @@ struct CombatParams {
 	CombatType_t combatType = COMBAT_NONE;
 	CombatOrigin origin = ORIGIN_SPELL;
 
-	uint8_t impactEffect = CONST_ANI_NONE;
+	uint8_t impactEffect = CONST_ME_NONE;
 	uint8_t distanceEffect = CONST_ANI_NONE;
 
 	bool blockedByArmor = false;
@@ -88,13 +88,7 @@ typedef void (*COMBATFUNC)(Creature*, Creature*, const CombatParams&, CombatDama
 class MatrixArea
 {
 	public:
-		MatrixArea(uint32_t rows, uint32_t cols) {
-			centerX = 0;
-			centerY = 0;
-
-			this->rows = rows;
-			this->cols = cols;
-
+		MatrixArea(uint32_t rows, uint32_t cols): centerX(0), centerY(0), rows(rows), cols(cols) {
 			data_ = new bool*[rows];
 
 			for (uint32_t row = 0; row < rows; ++row) {
@@ -335,9 +329,7 @@ class Combat
 class MagicField final : public Item
 {
 	public:
-		explicit MagicField(uint16_t type) : Item(type) {
-			createTime = OTSYS_TIME();
-		}
+		explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME()) {}
 
 		MagicField* getMagicField() final {
 			return this;
