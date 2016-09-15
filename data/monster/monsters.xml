@@ -636,7 +636,6 @@
 	<!-- Outlaws -->
 	<monster name="Adventurer" file="Outlaws/adventurer.xml" />
 	<monster name="Angry Adventurer" file="Outlaws/angry_adventurer.xml" />
-	<monster name="Asassin" file="Outlaws/assassin.xml" />
 	<monster name="Assassin" file="Outlaws/assassin.xml" />
 	<monster name="Bandit" file="Outlaws/bandit.xml" />
 	<monster name="Black Knight" file="Outlaws/black_knight.xml" />
