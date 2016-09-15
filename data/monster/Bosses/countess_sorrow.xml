@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Countess Sorrow" nameDescription="Countess Sorrow" race="undead" experience="5150" speed="250" manacost="0">
-	<health now="7200" max="7200" />
+<monster name="Countess Sorrow" nameDescription="Countess Sorrow" race="undead" experience="13000" speed="250" manacost="0">
+	<health now="6500" max="6500" />
 	<look type="241" head="20" corpse="6344" />
 	<targetchange interval="60000" chance="0" />
 	<flags>

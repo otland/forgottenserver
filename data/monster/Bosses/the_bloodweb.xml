@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Bloodweb" nameDescription="The Bloodweb" race="undead" experience="900" speed="340" manacost="0">
-	<health now="1250" max="1250" />
+<monster name="The Bloodweb" nameDescription="The Bloodweb" race="undead" experience="1450" speed="340" manacost="0">
+	<health now="1750" max="1750" />
 	<look type="263" corpse="7344" />
 	<targetchange speed="20000" chance="8" />
 	<flags>

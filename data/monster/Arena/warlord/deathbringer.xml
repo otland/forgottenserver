@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deathbringer" nameDescription="Deathbringer" race="undead" experience="5100" speed="300" manacost="0">
-	<health now="10000" max="10000" />
+	<health now="8440" max="8440" />
 	<look type="231" corpse="7349" />
 	<flags>
 		<flag summonable="0" />

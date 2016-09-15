@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Spidris Elite" nameDescription="Spidris Elite" race="venom" experience="4000" speed="260" manacost="0">
-	<health now="3700" max="3700" />
+	<health now="5000" max="5000" />
 	<look type="457" corpse="15296" />
 	<targetchange interval="4000" chance="0" />
 	<flags>

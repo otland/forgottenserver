@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Necropharus" nameDescription="Necropharus" race="blood" experience="700" speed="240" manacost="0">
+<monster name="Necropharus" nameDescription="Necropharus" race="blood" experience="1050" speed="240" manacost="0">
 	<health now="750" max="750" />
 	<look type="209" corpse="20574" />
 	<targetchange interval="5000" chance="8" />

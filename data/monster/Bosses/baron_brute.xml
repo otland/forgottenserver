@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Baron Brute" nameDescription="Baron Brute" race="blood" experience="3000" speed="290" manacost="0">
-	<health now="5000" max="5000" />
+	<health now="5025" max="5025" />
 	<look type="2" corpse="6008" />
 	<targetchange interval="2000" chance="10" />
 	<flags>

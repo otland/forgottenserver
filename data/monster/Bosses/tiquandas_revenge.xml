@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Tiquandas Revenge" nameDescription="Tiquandas Revenge" race="venom" experience="1755" speed="440" manacost="0">
-	<health now="2000" max="2000" />
+<monster name="Tiquandas Revenge" nameDescription="Tiquandas Revenge" race="venom" experience="2635" speed="440" manacost="0">
+	<health now="1800" max="1800" />
 	<look type="120" corpse="6047" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

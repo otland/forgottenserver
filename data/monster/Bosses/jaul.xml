@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Jaul" nameDescription="Jaul" race="blood" experience="30000" speed="560" manacost="0">
-	<health now="100000" max="100000" />
+	<health now="90000" max="90000" />
 	<look type="444" corpse="15220" />
 	<targetchange interval="2000" chance="50" />
 	<flags>

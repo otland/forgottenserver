@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Barbaria" nameDescription="Barbaria" race="blood" experience="355" speed="280" manacost="0">
-	<health now="555" max="555" />
+	<health now="345" max="345" />
 	<look type="264" head="78" body="116" legs="95" feet="121" corpse="20339" />
 	<targetchange interval="60000" chance="0" />
 	<flags>
