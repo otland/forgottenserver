@@ -14,16 +14,6 @@ speed:setParameter(CONDITION_PARAM_TICKS, 10000)
 speed:setFormula(-0.7, 56, -0.7, 56)
 combat:setCondition(speed)
 
-local cooldownHealingGroup = Condition(CONDITION_SPELLGROUPCOOLDOWN)
-cooldownHealingGroup:setParameter(CONDITION_PARAM_TICKS, 10000)
-cooldownHealingGroup:setParameter(CONDITION_PARAM_SUBID, 2)
-combat:setCondition(cooldownHealingGroup)
-
-local cooldownSupportGroup = Condition(CONDITION_SPELLGROUPCOOLDOWN)
-cooldownSupportGroup:setParameter(CONDITION_PARAM_TICKS, 10000)
-cooldownSupportGroup:setParameter(CONDITION_PARAM_SUBID, 3)
-combat:setCondition(cooldownSupportGroup)
-
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)
 end
