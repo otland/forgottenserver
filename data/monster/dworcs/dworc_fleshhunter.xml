@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dworc Fleshhunter" nameDescription="a dworc fleshhunter" race="blood" experience="40" speed="180" manacost="0">
+	<health now="85" max="85" />
+	<look type="215" corpse="6058" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="8" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-25" poison="20" />
+		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-15">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element deathPercent="-15" />
+		<element firePercent="-10" />
+		<element icePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grak brrretz!" />
+		<voice sentence="Grow truk grrrrr." />
+		<voice sentence="Prek tars, dekklep zurk." />
+	</voices>
+	<loot>
+		<item id="2050" chance="4750" /><!-- torch -->
+		<item name="gold coin" countmax="13" chance="69000" />
+		<item id="2229" countmax="3" chance="3300" /><!-- skull -->
+		<item name="poison dagger" chance="2250" />
+		<item name="bone shield" chance="1000" />
+		<item name="wooden spoon" chance="10000" />
+		<item name="cleaver" chance="9750" />
+		<item name="ripper lance" chance="90" />
+		<item name="hunting spear" chance="2000" />
+		<item name="tribal mask" chance="500" />
+	</loot>
+</monster>

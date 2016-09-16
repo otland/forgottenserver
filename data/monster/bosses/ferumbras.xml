@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Ferumbras" nameDescription="Ferumbras" race="venom" experience="12000" speed="320" manacost="0">
+	<health now="50000" max="50000" />
+	<look type="229" corpse="6078" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="2" />
+		<flag staticattack="90" />
+		<flag runonhealth="2500" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="manadrain" interval="2000" chance="20" range="7" min="-300" max="-700">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="earth" interval="3000" chance="20" radius="6" target="0" min="-250" max="-550">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="energy" interval="2000" chance="18" radius="6" target="0" min="-200" max="-400">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="16" radius="6" target="0" min="-225" max="-375">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="21" radius="6" target="0" min="-200" max="-450">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="effect" interval="3000" chance="20" radius="5" target="0" min="-200" max="-600">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="firecondition" interval="3000" chance="20" range="7" radius="7" target="1" min="-200" max="-800">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="25" length="8" spread="0" min="-50" max="-250">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+	</attacks>
+	<defenses armor="100" defense="120">
+		<defense name="healing" interval="2000" chance="10" min="900" max="1500">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="speed" interval="3000" chance="30" speedchange="360" duration="7000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="4000" chance="20" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="90" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Demon" interval="3000" chance="12" max="3" />
+	</summons>
+	<voices interval="5000" chance="20">
+		<voice sentence="NOONE WILL STOP ME THIS TIME!" yell="1" />
+		<voice sentence="THE POWER IS MINE!" yell="1" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="25" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="small emerald" countmax="3" chance="15000" />
+		<item name="talon" countmax="4" chance="12000" />
+		<item name="platinum amulet" chance="30000" />
+		<item name="giant sword" chance="16060" />
+		<item name="great axe" chance="6000" />
+		<item name="magic plate armor" chance="7000" />
+		<item name="mastermind shield" chance="12050" />
+		<item name="coconut" countmax="3" chance="20000" />
+		<item name="Ferumbras' hat" chance="100000" />
+	</loot>
+</monster>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Fernfang" nameDescription="Fernfang" race="blood" experience="600" speed="240" manacost="0">
+	<health now="400" max="400" />
+	<look type="206" corpse="20566" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-120" />
+		<attack name="manadrain" interval="1000" chance="25" range="7" min="-25" max="-45">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="energy" interval="1000" chance="13" range="7" min="-70" max="-90">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-140" max="-180">
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="10">
+		<defense name="healing" interval="1000" chance="15" min="90" max="120">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="7" speedchange="310" duration="10000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="effect" interval="1000" chance="5">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="outfit" interval="1000" chance="5" monster="war wolf" duration="14000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="70" />
+		<element earthPercent="40" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="War Wolf" interval="1000" chance="13" max="3" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="You desecrated this place!" />
+		<voice sentence="I will cleanse this isle!" />
+		<voice sentence="Grrrrrrr" />
+		<voice sentence="Yoooohhuuuu!" yell="1" />
+	</voices>
+	<loot>
+		<item id="1949" chance="10000" /><!-- scroll -->
+		<item id="2044" chance="6666" /><!-- lamp -->
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item name="power ring" chance="1428" />
+		<item id="2401" chance="3333" /><!-- staff -->
+		<item name="leather armor" chance="10000" />
+		<item name="sandals" chance="6666" />
+		<item name="bread" countmax="3" chance="20000" />
+		<item name="worm" countmax="10" chance="50000" />
+	</loot>
+</monster>

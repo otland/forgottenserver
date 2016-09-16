@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Thornfire Wolf" nameDescription="a thornfire wolf" race="energy" experience="200" speed="250" manacost="0">
+	<health now="600" max="600" />
+	<look type="414" corpse="13859" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-68" />
+		<attack name="physical" interval="2000" chance="15" range="1" target="1" min="-35" max="-70">
+			<attribute key="shootEffect" value="whirlwindsword" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="2" target="1" min="-30" max="-70">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="2" target="1" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="1000" chance="20" min="100" max="220">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="1" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="53" chance="64000" />
+		<item name="meat" chance="34000" />
+		<item name="wolf paw" chance="7900" />
+		<item name="flaming arrow" countmax="8" chance="15000" />
+		<item name="fiery heart" chance="7900" />
+	</loot>
+</monster>

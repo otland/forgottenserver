@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Valkyrie" nameDescription="a valkyrie" race="blood" experience="85" speed="190" manacost="450">
+	<health now="190" max="190" />
+	<look type="139" head="113" body="57" legs="95" feet="113" corpse="20523" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="20" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-70" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-50">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element icePercent="10" />
+		<element firePercent="10" />
+		<element holyPercent="5" />
+		<element deathPercent="-5" />
+		<element physicalPercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Another head for me!" />
+		<voice sentence="Head off!" />
+		<voice sentence="Your head will be mine!" />
+		<voice sentence="Stand still!" />
+		<voice sentence="One more head for me!" />
+	</voices>
+	<loot>
+		<item name="small diamond" chance="200" />
+		<item name="gold coin" countmax="12" chance="30000" />
+		<item name="protection amulet" chance="1086" />
+		<item id="2229" chance="760" /><!-- skull -->
+		<item name="double axe" chance="492" />
+		<item name="spear" countmax="3" chance="55000" />
+		<item name="plate armor" chance="719" />
+		<item name="chain armor" chance="10000" />
+		<item name="meat" chance="30100" />
+		<item name="red apple" countmax="2" chance="6800" />
+		<item name="hunting spear" chance="5155" />
+		<item name="health potion" chance="591" />
+		<item name="girlish hair decoration" chance="5800" />
+		<item name="protective charm" chance="3400" />
+	</loot>
+</monster>

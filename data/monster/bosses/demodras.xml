@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Demodras" nameDescription="Demodras" race="blood" experience="6000" speed="230" manacost="0">
+	<health now="4500" max="4500" />
+	<look type="204" corpse="5984" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="300" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-600" />
+		<attack name="fire" interval="3000" chance="20" range="7" radius="4" target="1" min="-250" max="-350">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="10" range="7" radius="6" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="4000" chance="20" length="8" spread="3" min="-250" max="-550">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="25">
+		<defense name="healing" interval="1000" chance="25" min="400" max="700">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Dragon" interval="1000" chance="17" max="2" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I WILL SET THE WORLD IN FIRE!" yell="1" />
+		<voice sentence="I WILL PROTECT MY BROOD!" yell="1" />
+	</voices>
+	<loot>
+		<item name="gemmed book" chance="3333" />
+		<item name="golden mug" chance="1818" />
+		<item name="small sapphire" countmax="2" chance="2222" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="small emerald" countmax="2" chance="833" />
+		<item name="fire sword" chance="1428" />
+		<item name="broadsword" chance="5000" />
+		<item name="dragon scale mail" chance="333" />
+		<item name="royal helmet" chance="588" />
+		<item name="tower shield" chance="1333" />
+		<item name="burst arrow" countmax="5" chance="2222" />
+		<item name="power bolt" countmax="10" chance="2222" />
+		<item name="dragon ham" countmax="2" chance="20000" />
+		<item name="green mushroom" countmax="1" chance="6666" />
+		<item name="worm" countmax="10" chance="50000" />
+		<item name="red dragon scale" countmax="1" chance="5000" />
+		<item id="5919" chance="100000" /><!-- dragon claw -->
+		<item name="red dragon leather" countmax="1" chance="5000" />
+	</loot>
+</monster>

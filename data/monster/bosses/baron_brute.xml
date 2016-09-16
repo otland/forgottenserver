@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Baron Brute" nameDescription="Baron Brute" race="blood" experience="3000" speed="290" manacost="0">
+	<health now="5025" max="5025" />
+	<look type="2" corpse="6008" />
+	<targetchange interval="2000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-475" />
+	</attacks>
+	<defenses armor="22" defense="35">
+	</defenses>
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-10" />
+		<element deathPercent="-5" />
+		<element holyPercent="10" />
+		<element firePercent="80" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="10">
+		<voice sentence="Mash'n!" />
+	</voices>
+</monster>

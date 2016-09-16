@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Terror Bird" nameDescription="a terror bird" race="blood" experience="150" speed="220" manacost="490">
+	<health now="300" max="300" />
+	<look type="218" corpse="6057" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element energyPercent="20" />
+		<element icePercent="20" />
+		<element firePercent="-10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="CRAAAHHH!" />
+		<voice sentence="Gruuuh Gruuuh." />
+		<voice sentence="Carrah Carrah!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="30" chance="81500" />
+		<item name="gold coin" countmax="3" chance="48000" />
+		<item name="feather headdress" chance="630" />
+		<item name="feather headdress" chance="150" />
+		<item name="feather headdress" chance="260" />
+		<item name="worm" countmax="3" chance="10000" />
+		<item name="terrorbird beak" chance="11000" />
+		<item name="colourful feather" chance="3000" />
+	</loot>
+</monster>

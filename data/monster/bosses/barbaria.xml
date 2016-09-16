@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Barbaria" nameDescription="Barbaria" race="blood" experience="355" speed="280" manacost="0">
+	<health now="345" max="345" />
+	<look type="264" head="78" body="116" legs="95" feet="121" corpse="20339" />
+	<targetchange interval="60000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="90" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-70" />
+		<attack name="physical" interval="2000" chance="34" range="7" radius="1" target="1" min="-30" max="-80">
+			<attribute key="shootEffect" value="snowball" />
+		</attack>
+		<attack name="energy" interval="3000" chance="20" range="7" min="-35" max="-70">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10">
+		<defense name="healing" interval="1000" chance="25" min="50" max="80">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-20" />
+		<element icePercent="50" />
+		<element holyPercent="10" />
+		<element energyPercent="20" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="War Wolf" interval="2000" chance="40" />
+	</summons>
+	<voices interval="2000" chance="5">
+		<voice sentence="To me, creatures of the wild!" />
+		<voice sentence="My instincts tell me about your cowardice." />
+	</voices>
+	<loot>
+		<item id="1958" chance="15000" /><!-- grey book -->
+		<item id="2050" chance="25000" /><!-- torch -->
+		<item name="gold coin" countmax="35" chance="48000" />
+		<item name="chain armor" chance="11000" />
+		<item name="hunting spear" chance="12500" />
+		<item name="fur bag" chance="1000" />
+	</loot>
+</monster>

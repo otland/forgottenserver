@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dreadbeast" species="undead" nameDescription="a dreadbeast" race="undead" experience="250" speed="200" manacost="800">
+	<health now="800" max="800" />
+	<look type="101" head="20" body="30" legs="40" feet="50" corpse="3031" />
+	<targetchange interval="60000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="lifedrain" interval="2000" chance="20" radius="1" target="1" min="-150" max="-250">
+			<attribute key="areaEffect" value="yellowenergy" />
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="20" radius="1" target="1" min="-150" max="-250">
+			<attribute key="areaEffect" value="purpleenergy" />
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+	</attacks>
+	<defenses armor="34" defense="36" />
+	<elements>
+		<element firePercent="70" />
+		<element physicalPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+	</immunities>
+</monster>

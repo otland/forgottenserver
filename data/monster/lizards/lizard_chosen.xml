@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lizard Chosen" nameDescription="a lizard chosen" race="blood" experience="2200" speed="260" manacost="0">
+	<health now="3050" max="3050" />
+	<look type="344" corpse="11288" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="50" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-360" />
+		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-240" max="-320">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" target="0" radius="3" min="-190" max="-340">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="0" min="-90" max="-180">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="10" min="75" max="125">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="10" />
+		<element energyPercent="20" />
+		<element icePercent="10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grzzzzzzz!" />
+		<voice sentence="Garrrblarrrrzzzz!" />
+		<voice sentence="Kzzzzzz!" />
+	</voices>
+	<loot>
+		<item name="small diamond" countmax="5" chance="2550" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="36" chance="32000" />
+		<item name="platinum coin" countmax="5" chance="2920" />
+		<item name="tower shield" chance="1100" />
+		<item name="lizard leather" chance="2000" />
+		<item name="lizard scale" countmax="3" chance="980" />
+		<item name="great health potion" countmax="3" chance="5350" />
+		<item name="Zaoan armor" chance="980" />
+		<item name="Zaoan helmet" chance="140" />
+		<item name="Zaoan shoes" chance="810" />
+		<item name="Zaoan legs" chance="940" />
+		<item name="spiked iron ball" chance="9890" />
+		<item name="corrupted flag" chance="3350" />
+		<item name="cursed shoulder spikes" chance="5800" />
+		<item name="scale of corruption" chance="2870" />
+	</loot>
+</monster>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Annihilon" nameDescription="Annihilon" race="fire" experience="15000" speed="380" manacost="0">
+	<health now="46500" max="46500" />
+	<look type="12" head="19" body="104" legs="96" feet="96" corpse="6068" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1707" />
+		<attack name="death" interval="1000" chance="11" length="8" spread="0" min="0" max="-600">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" target="0" radius="4" min="-200" max="-700">
+			<attribute key="areaEffect" value="icearea" />
+		</attack>
+		<attack name="physical" interval="3000" chance="18" radius="5" target="1" min="-50" max="-255">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" radius="6" target="1" min="-50" max="-600">
+			<attribute key="areaEffect" value="firearea" />
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="55">
+		<defense name="healing" interval="1000" chance="14" min="400" max="900">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="4" speedchange="500" duration="7000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="96" />
+		<element deathPercent="95" />
+		<element icePercent="20" />
+		<element earthPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Flee as long as you can!" />
+		<voice sentence="Annihilon's might will crush you all!" />
+		<voice sentence="I am coming for you!" />
+	</voices>
+	<loot>
+		<item name="emerald bangle" chance="20000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" countmax="30" chance="16666" />
+		<item name="violet gem" chance="16666" />
+		<item name="yellow gem" chance="20000" />
+		<item name="green gem" chance="12500" />
+		<item name="red gem" chance="20000" />
+		<item name="blue gem" chance="20000" />
+		<item name="halberd" chance="20000" />
+		<item name="guardian halberd" chance="20000" />
+		<item name="heavy mace" chance="25000" />
+		<item name="mastermind shield" chance="4166" />
+		<item name="guardian shield" chance="7692" />
+		<item name="crown shield" chance="11111" />
+		<item name="demon shield" chance="4166" />
+		<item name="tower shield" chance="9090" />
+		<item name="power bolt" countmax="94" chance="16666" />
+		<item name="soul orb" countmax="5" chance="20000" />
+		<item name="demon horn" countmax="2" chance="12500" />
+		<item name="infernal bolt" countmax="46" chance="20000" />
+		<item name="viper star" countmax="70" chance="16666" />
+		<item name="assassin star" countmax="50" chance="16666" />
+		<item name="diamond sceptre" chance="7142" />
+		<item name="onyx flail" chance="14285" />
+		<item name="demonbone" chance="1234" />
+		<item name="berserk potion" chance="16666" />
+		<item name="mastermind potion" chance="14285" />
+		<item name="great mana potion" chance="11111" />
+		<item name="great health potion" chance="14285" />
+		<item id="7632" countmax="2" chance="33333" /><!-- giant shimmering pearl -->
+		<item name="flaming arrow" countmax="46" chance="20000" />
+		<item name="great spirit potion" chance="14285" />
+		<item name="ultimate health potion" chance="14285" />
+		<item name="lavos armor" chance="1851" />
+		<item name="paladin armor" chance="10000" />
+		<item name="obsidian truncheon" chance="1234" />
+		<item id="9808" chance="1234" /><!-- rusty armor -->
+		<item id="9810" chance="50000" /><!-- rusty armor -->
+		<item name="gold ingot" chance="20000" />
+	</loot>
+</monster>

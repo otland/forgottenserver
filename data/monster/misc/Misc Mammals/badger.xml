@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Badger" namedescription="a badger" race="blood" experience="5" speed="180" manacost="200">
+	<health now="23" max="23" />
+	<look type="105" corpse="6034" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-12" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<loot>
+		<item id="7965" chance="10230" /><!-- badger fur -->
+		<item name="beetroot" chance="40710" />
+		<item name="acorn" chance="5130" />
+	</loot>
+</monster>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Pig" nameDescription="a pig" race="blood" experience="0" speed="130" manacost="255">
+	<health now="25" max="25" />
+	<look type="60" corpse="6000" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="25" />
+	</flags>
+	<voices interval="5000" chance="10">
+		<voice sentence="Oink oink" />
+		<voice sentence="Oink" />
+	</voices>
+	<loot>
+		<item name="meat" countmax="4" chance="64000" />
+		<item name="pig foot" chance="950" />
+	</loot>
+</monster>

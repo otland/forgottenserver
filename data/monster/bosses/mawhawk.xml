@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Mawhawk" nameDescription="Mawhawk" race="blood" experience="14000" speed="270" manacost="0">
+	<health now="45000" max="45000" />
+	<look type="595" corpse="22629" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="earth" interval="1800" chance="10" length="7" spread="0" min="-300" max="-685">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="earth" interval="2000" chance="9" radius="6" min="-250" max="-590">
+			<attribute key="areaEffect" value="bigplants" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55" />
+	<elements>
+		<element icePercent="-10" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity energy="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Knorrrr!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="10000" />
+		<item name="platinum coin" countmax="25" chance="10000" />
+		<item name="fire sword" chance="10000" />
+		<item name="iron ore" chance="10000" />
+		<item name="fish fin" chance="10000" />
+		<item name="red piece of cloth" chance="10000" />
+		<item name="hardened bone" chance="10000" />
+		<item name="assassin dagger" chance="10000" />
+		<item name="haunted blade" chance="10000" />
+		<item name="nightmare blade" chance="10000" />
+		<item name="violet crystal shard" countmax="3" chance="10000" />
+		<item name="green crystal shard" countmax="3" chance="10000" />
+		<item name="green crystal splinter" countmax="5" chance="10000" />
+		<item name="blue crystal splinter" countmax="5" chance="10000" />
+		<item name="cluster of solace" countmax="2" chance="30000" />
+		<item name="frazzle tongue" chance="30000" />
+		<item name="unrealized dream" countmax="2" chance="30000" />
+	</loot>
+</monster>

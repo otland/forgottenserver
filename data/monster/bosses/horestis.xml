@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Horestis" nameDescription="Horestis" race="undead" experience="3500" speed="276" manacost="0">
+	<health now="6000" max="6000" />
+	<look type="88" head="20" body="30" legs="40" feet="50" corpse="6031" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-592" poison="165" />
+		<attack name="lifedrain" interval="1000" chance="8" range="1" min="-300" max="-500" />
+		<attack name="earth" interval="1000" chance="12" range="7" min="-300" max="-500">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="1000" chance="25" range="7" speedchange="-850" duration="50000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="30">
+		<defense name="healing" interval="1000" chance="20" min="200" max="400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="1000" chance="7" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1000" chance="3" monster="ancient scarab" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="20" />
+		<element energyPercent="5" />
+		<element physicalPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Feel my eternal wrath!" />
+		<voice sentence="I might be dead but I'm not gone!" />
+		<voice sentence="Receive a lesson of the past!" />
+	</voices>
+	<loot>
+		<item name="silver brooch" chance="12500" />
+		<item name="gold coin" countmax="243" chance="50000" />
+		<item name="platinum coin" countmax="5" chance="33333" />
+		<item name="scarab coin" countmax="5" chance="14285" />
+		<item name="pharaoh sword" chance="5000" />
+		<item name="twin axe" chance="2500" />
+		<item name="great mana potion" countmax="3" chance="10000" />
+		<item name="great health potion" countmax="4" chance="5000" />
+		<item id="9811" chance="2500" /><!-- rusty legs -->
+		<item name="mini mummy" chance="2500" />
+		<item id="13472" chance="16666" /><!-- pharaoh banner -->
+		<item name="scorpion sceptre" chance="100000" />
+		<item id="13739" chance="12500" /><!-- hieroglyph banner -->
+	</loot>
+</monster>

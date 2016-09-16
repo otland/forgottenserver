@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Fire Devil" nameDescription="a fire devil" race="blood" experience="145" speed="190" manacost="530">
+	<health now="200" max="200" />
+	<look type="40" corpse="5985" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="4" target="1" min="-60" max="-90">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="2" target="1" min="-20" max="-50">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element energyPercent="30" />
+		<element earthPercent="20" />
+		<element deathPercent="5" />
+		<element physicalPercent="-5" />
+		<element icePercent="-20" />
+		<element holyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hot, eh?" />
+		<voice sentence="Hell, oh hell!" />
+	</voices>
+	<loot>
+		<item id="2050" chance="10000" /><!-- torch -->
+		<item id="2050" countmax="2" chance="1420" /><!-- torch -->
+		<item name="small amethyst" chance="300" />
+		<item name="necrotic rod" chance="460" />
+		<item name="blank rune" chance="10950" />
+		<item name="double axe" chance="1500" />
+		<item id="2419" chance="3000" /><!-- scimitar -->
+		<item name="guardian shield" chance="210" />
+		<item name="cleaver" chance="1100" />
+		<item name="small pitchfork" chance="19770" />
+	</loot>
+</monster>

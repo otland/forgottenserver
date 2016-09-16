@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Hellgorak" nameDescription="Hellgorak" race="blood" experience="10000" speed="360" manacost="0">
+	<health now="25850" max="25850" />
+	<look type="12" head="19" body="96" legs="21" feet="81" corpse="6068" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-910" />
+		<attack name="energy" interval="1000" chance="11" length="8" spread="0" min="-250" max="-819">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="14" radius="5" target="0" min="-90" max="-500">
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+		<attack name="fire" interval="1000" chance="11" radius="5" target="1" min="-50" max="-520">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="5" radius="7" target="0" min="0" max="-150">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="70" defense="65">
+		<defense name="healing" interval="1000" chance="11" min="400" max="900">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="99" />
+		<element energyPercent="99" />
+		<element earthPercent="99" />
+		<element holyPercent="99" />
+		<element deathPercent="99" />
+		<element firePercent="99" />
+		<element drownPercent="-50" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="0">
+		<voice sentence="I'll sacrifice yours souls to seven!" />
+		<voice sentence="I'm bad news for you mortals!" />
+		<voice sentence="No man can defeat me!" />
+		<voice sentence="Your puny skills are no match for me." />
+		<voice sentence="I smell your fear." />
+		<voice sentence="Delicious!" />
+	</voices>
+	<loot>
+		<item name="white pearl" countmax="7" chance="3000" />
+		<item name="gold coin" countmax="100" chance="80000" />
+		<item name="gold coin" countmax="100" chance="70000" />
+		<item name="gold coin" countmax="83" chance="60000" />
+		<item name="crystal coin" countmax="3" chance="100000" />
+		<item name="mastermind shield" chance="1650" />
+		<item name="assassin star" countmax="25" chance="100000" />
+		<item name="great mana potion" chance="7000" />
+		<item name="great health potion" chance="7000" />
+	</loot>
+</monster>

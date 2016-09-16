@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Ice Overlord" nameDescription="an Ice Overlord" race="undead" experience="2800" speed="390" manacost="0">
+	<health now="4000" max="4000" />
+	<look type="11" corpse="8965" />
+	<targetchange interval="20000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="85" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="speed" interval="2000" chance="18" radius="6" target="0" speedchange="-800" duration="5000">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+		<attack name="ice" interval="1000" chance="9" range="7" target="1" min="-50" max="-400">
+			<attribute key="shootEffect" value="smallice" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="38" chance="50000" />
+		<item name="platinum coin" countmax="3" chance="50000" />
+		<item name="flawless ice crystal" chance="100000" />
+	</loot>
+</monster>

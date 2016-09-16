@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Zevelon Duskbringer" nameDescription="Zevelon Duskbringer" race="undead" experience="1800" speed="310" manacost="0">
+	<health now="1400" max="1400" />
+	<look type="287" corpse="8937" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-282" />
+		<attack name="death" interval="1000" chance="12" target="1" min="0" max="-200">
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-700" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="1000" chance="12" min="100" max="235">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="3000" chance="25" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		<defense name="outfit" interval="4500" chance="30" monster="bat" duration="4000" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="20" />
+		<element holyPercent="-15" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity death="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Vampire" interval="3000" chance="40" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Human blood is not suitable for drinking" />
+		<voice sentence="Your short live is coming to an end" />
+		<voice sentence="Ashari Mortals. Come and stay forever!" />
+	</voices>
+	<loot>
+		<item name="black pearl" chance="8000" />
+		<item name="gold coin" chance="100000" countmax="75" />
+		<item name="platinum coin" chance="50000" countmax="5" />
+		<item name="ring of healing (faster regeneration)" chance="11111" />
+		<item name="vampire shield" chance="4500" />
+		<item name="strong health potion" chance="4000" />
+		<item name="vampire lord token" chance="100000" />
+	</loot>
+</monster>

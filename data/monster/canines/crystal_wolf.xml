@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Crystal Wolf" nameDescription="a crystal wolf" race="undead" experience="275" speed="200" manacost="0">
+	<health now="750" max="750" />
+	<look type="391" corpse="13584" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="20" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-80" />
+		<attack name="earth" interval="2000" chance="15" length="3" spread="2" min="-60" max="-130">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" range="6" radius="3" target="1" min="-80" max="-150">
+			<attribute key="shootEffect" value="smallice" />
+			<attribute key="areaEffect" value="giantice" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-25" max="-80" />
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="5" min="15" max="55">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Raaarrr!" />
+		<voice sentence="Aaaauuuuuooooooo!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="52" chance="56000" />
+		<item name="hailstorm rod" chance="7400" />
+		<item name="meat" countmax="4" chance="52000" />
+		<item name="wolf paw" chance="3700" />
+		<item name="shiver arrow" countmax="10" chance="11000" />
+		<item name="crystalline armor" chance="3700" />
+	</loot>
+</monster>

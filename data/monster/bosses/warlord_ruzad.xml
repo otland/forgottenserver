@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Warlord Ruzad" nameDescription="Warlord Ruzad" race="blood" experience="1700" speed="270" manacost="0">
+	<health now="2500" max="2500" />
+	<look type="2" head="20" body="30" legs="40" feet="50" corpse="6008" />
+	<targetchange interval="2000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+	</attacks>
+	<defenses armor="32" defense="35" />
+	<elements>
+		<element firePercent="80" />
+		<element energyPercent="30" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Orc Berserker" interval="2000" chance="30" max="3" />
+	</summons>
+	<loot>
+		<item name="gold coin" chance="50000" countmax="59" />
+		<item name="gold ring" chance="5506" />
+		<item name="protection amulet" chance="9000" />
+		<item name="two handed sword" chance="18180" />
+		<item name="fire sword" chance="8970" />
+		<item name="throwing star" chance="6666" countmax="18" />
+		<item name="orcish axe" chance="13000" />
+		<item name="plate armor" chance="7333" />
+		<item name="brass legs" chance="3333" />
+		<item name="crusader helmet" chance="6670" />
+		<item name="meat" chance="20000" countmax="3" />
+		<item id="2667" chance="6667" countmax="1" /><!-- fish -->
+	</loot>
+</monster>

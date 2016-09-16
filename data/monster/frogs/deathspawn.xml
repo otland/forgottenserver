@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Deathspawn" namedescription="a deathspawn" race="blood" experience="20" speed="230" manacost="305">
+	<health now="225" max="225" />
+	<look type="226" head="114" body="98" legs="97" feet="114" corpse="2220" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="fire" interval="1000" chance="10" length="7" spread="0" min="-400" max="-700">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="energy" interval="1000" chance="11" length="7" spread="0" min="-250" max="-450">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="1" defense="5" />
+	<elements>
+		<element holyPercent="10" />
+		<element firePercent="-15" />
+		<element energyPercent="-15" />
+		<element icePercent="-15" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit!" />
+		<voice sentence="Ribbit! Ribbit!" />
+	</voices>
+</monster>
