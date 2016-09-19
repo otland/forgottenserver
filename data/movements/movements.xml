@@ -65,7 +65,7 @@
 	<movevent event="StepOut" itemid="3550" script="closingdoor.lua" />
 	<movevent event="StepIn" itemid="3550" script="level_door.lua" />
 	<movevent event="StepOut" itemid="3552" script="closingdoor.lua" />
-	<movevent event="StepIn" itemid="3552" script="quest_door.lua" /> 
+	<movevent event="StepIn" itemid="3552" script="quest_door.lua" />
 	<movevent event="StepOut" itemid="5104" script="closingdoor.lua" />
 	<movevent event="StepIn" itemid="5104" script="level_door.lua" />
 	<movevent event="StepOut" itemid="5106" script="closingdoor.lua" />
@@ -994,6 +994,46 @@
 	<movevent event="DeEquip" itemid="18451" slot="hand" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="18465" slot="hand" level="120" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="18465" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22400" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22400" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22403" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22403" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22406" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22406" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22409" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22409" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22412" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22412" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22415" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22415" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22418" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22418" slot="hand" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="22421" level="250" slot="hand" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="22421" slot="hand" function="onDeEquipItem" />
 
 	<!-- Shields -->
 	<movevent event="Equip" itemid="2175" slot="shield" function="onEquipItem">
