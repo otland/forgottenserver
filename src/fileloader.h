@@ -91,7 +91,7 @@ class PropStream;
 class FileLoader
 {
 	public:
-		constexpr FileLoader() = default;
+		FileLoader() = default;
 		~FileLoader();
 
 		// non-copyable
