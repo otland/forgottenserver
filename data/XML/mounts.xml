@@ -74,4 +74,7 @@
 	<mount id="72" clientid="685" name="Shadow Hart" speed="20" premium="yes" />
 	<mount id="73" clientid="686" name="Black Stag" speed="20" premium="yes" />
 	<mount id="74" clientid="687" name="Emperor Deer" speed="20" premium="yes" />
+	<mount id="75" clientid="726" name="Flitterkatzen" speed="20" premium="yes" />
+	<mount id="76" clientid="727" name="Venompaw" speed="20" premium="yes" />
+	<mount id="77" clientid="728" name="Batcat" speed="20" premium="yes" />
 </mounts>
