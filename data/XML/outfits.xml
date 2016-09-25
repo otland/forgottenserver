@@ -20,9 +20,9 @@
 	<outfit type="0" looktype="269" name="Nightmare" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="270" name="Jester" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="279" name="Brotherhood" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="288" name="Demonhunter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="288" name="Demon Hunter" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="324" name="Yalaharian" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="329" name="Wife" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="329" name="Newly Wed" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="336" name="Warmaster" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="366" name="Wayfarer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="431" name="Afflicted" premium="yes" unlocked="no" enabled="yes" />
@@ -32,9 +32,10 @@
 	<outfit type="0" looktype="471" name="Entrepreneur" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="513" name="Crystal Warlord" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="514" name="Soil Guardian" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="542" name="Demon" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="542" name="Demon Outfit" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="575" name="Cave Explorer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="578" name="Dream Warden" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="618" name="Glooth Engineer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="620" name="Jersey" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="632" name="Champion" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="635" name="Conjurer" premium="yes" unlocked="no" enabled="yes" />
@@ -45,6 +46,7 @@
 	<outfit type="0" looktype="694" name="Ceremonial Garb" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="696" name="Puppeteer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="698" name="Spirit Caller" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="724" name="Evoker" premium="yes" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -66,9 +68,9 @@
 	<outfit type="1" looktype="268" name="Nightmare" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="273" name="Jester" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="278" name="Brotherhood" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="289" name="Demonhunter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="289" name="Demon Hunter" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="325" name="Yalaharian" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="328" name="Husband" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="328" name="Newly Wed" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="335" name="Warmaster" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="367" name="Wayfarer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="430" name="Afflicted" premium="yes" unlocked="no" enabled="yes" />
@@ -78,9 +80,10 @@
 	<outfit type="1" looktype="472" name="Entrepreneur" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="512" name="Crystal Warlord" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="516" name="Soil Guardian" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="541" name="Demon" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="541" name="Demon Outfit" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="574" name="Cave Explorer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="577" name="Dream Warden" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="610" name="Glooth Engineer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="619" name="Jersey" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="633" name="Champion" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="634" name="Conjurer" premium="yes" unlocked="no" enabled="yes" />
@@ -91,4 +94,5 @@
 	<outfit type="1" looktype="695" name="Ceremonial Garb" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="697" name="Puppeteer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="699" name="Spirit Caller" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="725" name="Evoker" premium="yes" unlocked="no" enabled="yes" />
 </outfits>
