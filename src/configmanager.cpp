@@ -48,6 +48,7 @@ bool ConfigManager::load()
 	if (!loaded) { //info that must be loaded one time (unless we reset the modules involved)
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
+		boolean[ENABLE_REDIS] = getGlobalBoolean(L, "enableRedis", true);
 
 		string[IP] = getGlobalString(L, "ip", "127.0.0.1");
 		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
@@ -58,11 +59,13 @@ bool ConfigManager::load()
 		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
 		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[REDIS_HOST] = getGlobalString(L, "redisHost", "127.0.0.1");
 
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
 		integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
+		integer[REDIS_PORT] = getGlobalNumber(L, "redisPort", 6379);
 
 		integer[MARKET_OFFER_DURATION] = getGlobalNumber(L, "marketOfferDuration", 30 * 24 * 60 * 60);
 	}

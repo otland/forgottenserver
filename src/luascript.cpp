@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "redis.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -42,6 +43,7 @@ extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
+extern Redis* g_redis;
 
 ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
 uint32_t ScriptEnvironment::lastResultId = 0;
@@ -2543,6 +2545,14 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "isSharedExperienceEnabled", LuaScriptInterface::luaPartyIsSharedExperienceEnabled);
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
+
+	// Redis
+	registerTable("Redis");
+
+	registerMethod("Redis", "get", LuaScriptInterface::luaRedisGet);
+	registerMethod("Redis", "set", LuaScriptInterface::luaRedisSet);
+	registerMethod("Redis", "emit", LuaScriptInterface::luaRedisPublish);
+	registerMethod("Redis", "subscribe", LuaScriptInterface::luaRedisSubscribe);
 }
 
 #undef registerEnum
@@ -12113,6 +12123,62 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+// Redis
+int LuaScriptInterface::luaRedisGet(lua_State* L)
+{
+	const std::string& key = getString(L, 1);
+
+	std::string str = g_redis->get(key);
+
+
+	if (str == "0-$NULL") {
+		lua_pushnil(L);
+	}
+	else {
+		lua_pushstring(L, str.c_str());
+	}
+
+	return 1;
+}
+
+
+int LuaScriptInterface::luaRedisSet(lua_State* L)
+{
+	const std::string& key = getString(L, 1);
+	const std::string& value = getString(L, 2);
+
+	bool success = g_redis->set(key, value);
+
+	if (!success)
+		return -1;
+
+	return 1;
+}
+
+int LuaScriptInterface::luaRedisPublish(lua_State* L)
+{
+	const std::string& channel = getString(L, 1);
+	const std::string& msg = getString(L, 2);
+
+	g_redis->publish(channel, msg);
+
+	return 1;
+}
+
+int LuaScriptInterface::luaRedisSubscribe(lua_State* L)
+{
+	const std::string& channel = getString(L, 1);
+
+	lua_getglobal(L, "Redis");
+	lua_getfield(L, -1, "__eventCatcher");
+	lua_pushinteger(L, 5);
+	lua_pcall(L, 1, 0, 0);
+
+	g_redis->subscribe(channel);
+
 	return 1;
 }
 

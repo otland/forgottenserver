@@ -1239,6 +1239,12 @@ class LuaScriptInterface
 		static int luaPartyShareExperience(lua_State* L);
 		static int luaPartySetSharedExperience(lua_State* L);
 
+		// Redis
+		static int luaRedisGet(lua_State* L);
+		static int luaRedisSet(lua_State* L);
+		static int luaRedisPublish(lua_State* L);
+		static int luaRedisSubscribe(lua_State * L);
+
 		//
 		lua_State* luaState = nullptr;
 		std::string lastLuaError;
@@ -1258,46 +1264,46 @@ class LuaScriptInterface
 
 class LuaEnvironment : public LuaScriptInterface
 {
-	public:
-		LuaEnvironment();
-		~LuaEnvironment();
+public:
+	LuaEnvironment();
+	~LuaEnvironment();
 
-		// non-copyable
-		LuaEnvironment(const LuaEnvironment&) = delete;
-		LuaEnvironment& operator=(const LuaEnvironment&) = delete;
+	// non-copyable
+	LuaEnvironment(const LuaEnvironment&) = delete;
+	LuaEnvironment& operator=(const LuaEnvironment&) = delete;
 
-		bool initState();
-		bool reInitState();
-		bool closeState();
+	bool initState();
+	bool reInitState();
+	bool closeState();
 
-		LuaScriptInterface* getTestInterface();
+	LuaScriptInterface* getTestInterface();
 
-		Combat* getCombatObject(uint32_t id) const;
-		Combat* createCombatObject(LuaScriptInterface* interface);
-		void clearCombatObjects(LuaScriptInterface* interface);
+	Combat* getCombatObject(uint32_t id) const;
+	Combat* createCombatObject(LuaScriptInterface* interface);
+	void clearCombatObjects(LuaScriptInterface* interface);
 
-		AreaCombat* getAreaObject(uint32_t id) const;
-		uint32_t createAreaObject(LuaScriptInterface* interface);
-		void clearAreaObjects(LuaScriptInterface* interface);
+	AreaCombat* getAreaObject(uint32_t id) const;
+	uint32_t createAreaObject(LuaScriptInterface* interface);
+	void clearAreaObjects(LuaScriptInterface* interface);
 
-	private:
-		void executeTimerEvent(uint32_t eventIndex);
+private:
+	void executeTimerEvent(uint32_t eventIndex);
 
-		std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
-		std::unordered_map<uint32_t, Combat*> combatMap;
-		std::unordered_map<uint32_t, AreaCombat*> areaMap;
+	std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
+	std::unordered_map<uint32_t, Combat*> combatMap;
+	std::unordered_map<uint32_t, AreaCombat*> areaMap;
 
-		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> combatIdMap;
-		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> areaIdMap;
+	std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> combatIdMap;
+	std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> areaIdMap;
 
-		LuaScriptInterface* testInterface = nullptr;
+	LuaScriptInterface* testInterface = nullptr;
 
-		uint32_t lastEventTimerId = 1;
-		uint32_t lastCombatId = 0;
-		uint32_t lastAreaId = 0;
+	uint32_t lastEventTimerId = 1;
+	uint32_t lastCombatId = 0;
+	uint32_t lastAreaId = 0;
 
-		friend class LuaScriptInterface;
-		friend class CombatSpell;
+	friend class LuaScriptInterface;
+	friend class CombatSpell;
 };
 
 #endif
