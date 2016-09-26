@@ -206,7 +206,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		int redisPort = g_config.getNumber(ConfigManager::REDIS_PORT);
 		std::string redisHost = g_config.getString(ConfigManager::REDIS_HOST);
 
-		boost::asio::io_service &ioService = services->getIoService();//  serviceManager.getIoService();
+		boost::asio::io_service &ioService = services->getIoService();
 		g_redis = new Redis(redisHost, redisPort, ioService);
 
 		bool status = g_redis->isSuccessfullyInitalized();
