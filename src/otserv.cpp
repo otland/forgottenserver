@@ -90,19 +90,6 @@ int main(int argc, char* argv[])
 	g_dispatcher.start();
 	g_scheduler.start();
 
-	//if (g_config.getBoolean(ConfigManager::ENABLE_REDIS)) {
-	//	std::cout << "ENABLED" << std::endl;
-	//} else {
-	//	std::cout << "DISABLED" << std::endl;
-	//}
-
-	//std::cout << g_config.getNumber(ConfigManager::REDIS_PORT) << std::endl;
-	//std::cout << g_config.getString(ConfigManager::REDIS_HOST) << std::endl;
-
-	/*std::cout << ">> Establishing redis connection..." << std::endl;
-	boost::asio::io_service &ioService = serviceManager.getIoService();
-	g_redis = new Redis(ioService);*/
-
 	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);

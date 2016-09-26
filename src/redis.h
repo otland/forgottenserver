@@ -20,17 +20,8 @@
 #ifndef FS_GAME_H_415c7e06e9eafb77540b29f60a9ab327
 #define FS_GAME_H_415c7e06e9eafb77540b29f60a9ab327
 
-#include <string>
-#include <iostream>
-#include <functional>
-
 #include <redisclient/redissyncclient.h>
 #include <redisclient/redisasyncclient.h>
-
-#include <boost/format.hpp>
-
-#include <boost/asio/io_service.hpp>
-#include <boost/asio/ip/address.hpp>
 
 #include "luascript.h"
 
