@@ -132,8 +132,7 @@ void Redis::onMessage(std::string channel, const std::vector<char> &buf)
 		std::string msg(buf.begin(), buf.end());
 		lua_State* L = scriptInterface.getLuaState();
 
-		lua_getglobal(L, "Redis");
-		lua_getfield(L, -1, "__eventCatcher");
+		lua_getglobal(L, "redisEventCatcher");
 		lua_pushstring(L, channel.c_str());
 		lua_pushstring(L, msg.c_str());
 		lua_pcall(L, 2, 0, 0);

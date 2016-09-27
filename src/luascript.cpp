@@ -2546,13 +2546,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
 
-	// Redis
-	registerTable("Redis");
-
-	registerMethod("Redis", "get", LuaScriptInterface::luaRedisGet);
-	registerMethod("Redis", "set", LuaScriptInterface::luaRedisSet);
-	registerMethod("Redis", "emit", LuaScriptInterface::luaRedisPublish);
-	registerMethod("Redis", "subscribe", LuaScriptInterface::luaRedisSubscribe);
+	registerGlobalMethod("redisGet", LuaScriptInterface::luaRedisGet);
+	registerGlobalMethod("redisSet", LuaScriptInterface::luaRedisSet);
+	registerGlobalMethod("redisEmit", LuaScriptInterface::luaRedisPublish);
+	registerGlobalMethod("redisSubscribe", LuaScriptInterface::luaRedisSubscribe);
 }
 
 #undef registerEnum
@@ -12171,12 +12168,6 @@ int LuaScriptInterface::luaRedisPublish(lua_State* L)
 int LuaScriptInterface::luaRedisSubscribe(lua_State* L)
 {
 	const std::string& channel = getString(L, 1);
-
-	lua_getglobal(L, "Redis");
-	lua_getfield(L, -1, "__eventCatcher");
-	lua_pushinteger(L, 5);
-	lua_pcall(L, 1, 0, 0);
-
 	g_redis->subscribe(channel);
 
 	return 1;
