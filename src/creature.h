@@ -74,7 +74,7 @@ class Tile;
 class FrozenPathingConditionCall
 {
 	public:
-		explicit constexpr FrozenPathingConditionCall(Position targetPos) : targetPos(std::move(targetPos)) {}
+		explicit FrozenPathingConditionCall(Position targetPos) : targetPos(std::move(targetPos)) {}
 
 		bool operator()(const Position& startPos, const Position& testPos,
 		                const FindPathParams& fpp, int32_t& bestMatchDist) const;
