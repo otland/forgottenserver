@@ -40,10 +40,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if instrument.monster and chance then
 			local position = player:getPosition()
 			local monster = Game.createMonster(instrument.monster, Position(
-												position.x - math.random(-1, 1),
-												position.y - math.random(-1, 1),
-												position.z
-												), false, true)
+				position.x - math.random(-1, 1),
+				position.y - math.random(-1, 1),
+				position.z
+			), false, true)
+			
 			if monster then
 				monster:setMaster(player)
 			end
