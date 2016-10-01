@@ -138,7 +138,6 @@
 	<action itemid="6576" script="other/fireworksrocket.lua" />
 	<action itemid="2036" script="other/watch.lua" />
 	<action fromid="1728" toid="1731" script="other/watch.lua" />
-	<action itemid="6572" script="other/partytrumpet.lua" />
 	<action itemid="2785" script="other/blueberrybush.lua" />
 	<action itemid="2579" script="other/trap.lua" />
 	<action itemid="2148" script="other/changegold.lua" />
@@ -165,12 +164,16 @@
 	<action itemid="20257" script="other/constructionkits.lua" />
 	<action fromid="7904" toid="7907" script="other/bed_modification_kits.lua" />
 	<action itemid="20252" script="other/bed_modification_kits.lua" />
-	<action fromid="2070" toid="2078" script="other/music.lua" />
-	<action fromid="2080" toid="2085" script="other/music.lua" />
+	<action fromid="2070" toid="2085" script="other/music.lua" />
 	<action itemid="2332" script="other/music.lua" />
 	<action itemid="2364" script="other/music.lua" />
-	<action fromid="2367" toid="2368" script="other/music.lua" />
+	<action fromid="2367" toid="2369" script="other/music.lua" />
 	<action fromid="2370" toid="2373" script="other/music.lua" />
+	<action fromid="3951" toid="3953" script="other/music.lua" />
+	<action itemid="3957" script="other/music.lua" />
+	<action itemid="5786" script="other/music.lua" />
+	<action fromid="6572" toid="6573" script="other/music.lua" />
+	<action itemid="13759" script="other/music.lua" />
 	<action fromid="2041" toid="2042" script="other/decayto.lua" />
 	<action fromid="2044" toid="2045" script="other/decayto.lua" />
 	<action fromid="2047" toid="2048" script="other/decayto.lua" />
