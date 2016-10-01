@@ -1379,7 +1379,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 
 		//calling movement scripts
 		if (creature) {
-			g_moveEvents->onCreatureMove(creature, this, oldParent ? oldParent->getPosition() : getPosition(), MOVE_EVENT_STEP_IN);
+			g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_IN);
 		} else if (item) {
 			g_moveEvents->onItemMove(item, this, true);
 		}
@@ -1409,7 +1409,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	//calling movement scripts
 	Creature* creature = thing->getCreature();
 	if (creature) {
-		g_moveEvents->onCreatureMove(creature, this, getPosition(), MOVE_EVENT_STEP_OUT);
+		g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_OUT);
 	} else {
 		Item* item = thing->getItem();
 		if (item) {

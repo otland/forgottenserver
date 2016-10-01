@@ -752,6 +752,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
+	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
 	Position destPos = getNextPosition(direction, currentPos);
 
