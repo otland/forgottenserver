@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Water Buffalo" nameDescription="a water buffalo" race="blood" experience="20" speed="210" manacost="0">
+	<health now="390" max="390" />
+	<look type="523" corpse="19701" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" />
+	</attacks>
+	<elements>
+		<element physicalPercent="5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gnorrr!" />
+		<voice sentence="Gnarrr!" />
+		<voice sentence="&lt;snort&gt;" />
+		<voice sentence="Mrrr!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item name="meat" countmax="4" chance="33600" />
+		<item name="ham" countmax="3" chance="39200" />
+	</loot>
+</monster>

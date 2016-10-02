@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Blistering Fire Elemental" nameDescription="a blistering fire elemental" race="fire" experience="1300" speed="230" manacost="0">
+	<health now="1500" max="1500" />
+	<look type="242" corpse="8964" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="fire" interval="1000" chance="11" length="7" spread="3" min="-65" max="-510" />
+		<attack name="firecondition" interval="1000" chance="12" radius="6" target="0" min="-50" max="-200">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="15" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element icePercent="-25" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
+	<loot>
+		<item name="small ruby" countmax="3" chance="3200" />
+		<item name="gold coin" countmax="65" chance="12500" />
+		<item name="gold coin" countmax="60" chance="12500" />
+		<item name="glimmering soil" chance="2500" />
+		<item name="wand of draconia" chance="1250" />
+	</loot>
+</monster>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Azure Frog" nameDescription="an azure frog" race="blood" experience="20" speed="200" manacost="305">
+	<health now="60" max="60" />
+	<look type="226" head="69" body="66" legs="69" feet="66" corpse="6079" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-24" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<elements>
+		<element icePercent="10" />
+		<element firePercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit! Ribbit!" />
+		<voice sentence="Ribbit!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="10" chance="71230" />
+		<item name="worm" chance="8880" />
+	</loot>
+</monster>

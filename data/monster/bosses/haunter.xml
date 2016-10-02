@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Haunter" nameDescription="Haunter" race="blood" experience="4000" speed="270" manacost="0">
+	<health now="8500" max="8500" />
+	<look type="320" corpse="9915" />
+	<targetchange interval="2000" chance="9" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="energy" interval="2000" chance="16" radius="3" target="0" min="0" max="-130">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="16" range="7" target="1" start="13">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="20">
+		<defense name="healing" interval="2000" chance="16" min="100" max="155">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="16" speedchange="360" duration="80000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="9">
+		<voice sentence="Surrender and I'll end it quick!" />
+	</voices>
+</monster>

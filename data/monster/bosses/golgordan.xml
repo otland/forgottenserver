@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Golgordan" nameDescription="Golgordan" race="fire" experience="10000" speed="350" manacost="0">
+	<health now="40000" max="40000" />
+	<look type="12" head="108" body="100" legs="105" feet="114" corpse="6068" />
+	<targetchange interval="7000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-575" />
+		<attack name="death" interval="3000" chance="15" length="8" spread="0" min="-250" max="-850">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="poisoncondition" interval="1000" chance="11" length="5" spread="2" min="-300" max="-350">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="1000" chance="8" radius="6" target="0" min="-50" max="-955">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" radius="7" target="1" min="-50" max="-200">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="48" defense="54" />
+	<elements>
+		<element icePercent="-10" />
+		<element holyPercent="15" />
+		<element physicalPercent="20" />
+		<element firePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Latrivan your fool" yell="1" />
+	</voices>
+</monster>

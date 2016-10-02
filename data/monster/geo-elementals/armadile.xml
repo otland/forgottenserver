@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Armadile" nameDescription="an armadile" race="undead" experience="2900" speed="210" manacost="0">
+	<health now="3800" max="3800" />
+	<look type="487" corpse="18378" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="300" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="drunk" interval="2000" chance="15" radius="4" target="1" duration="5000">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="15" range="7" min="-430" max="-550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" radius="4" target="0" min="-200" max="-400">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="invisible" interval="2000" chance="15" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="1" />
+		<element holyPercent="15" />
+		<element deathPercent="1" />
+		<element firePercent="20" />
+		<element energyPercent="15" />
+		<element icePercent="15" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Creak!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="98" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="95000" />
+		<item id="2169" chance="1000" /><!-- time ring -->
+		<item name="tower shield" chance="620" />
+		<item name="titan axe" chance="1540" />
+		<item name="bonebreaker" chance="1150" />
+		<item name="strong health potion" countmax="2" chance="14285" />
+		<item name="strong mana potion" countmax="2" chance="15000" />
+		<item name="great mana potion" countmax="2" chance="15920" />
+		<item name="great health potion" countmax="2" chance="15000" />
+		<item name="mana potion" countmax="3" chance="14285" />
+		<item name="terra boots" chance="2850" />
+		<item name="crystalline armor" chance="230" />
+		<item name="battle stone" chance="12460" />
+		<item id="13757" chance="6000" /><!-- coal -->
+		<item name="green crystal splinter" countmax="2" chance="3920" />
+		<item name="green crystal fragment" countmax="2" chance="5690" />
+		<item name="crystalline spikes" chance="14540" />
+		<item name="drill bolt" countmax="5" chance="7692" />
+		<item name="envenomed arrow" countmax="10" chance="10230" />
+	</loot>
+</monster>

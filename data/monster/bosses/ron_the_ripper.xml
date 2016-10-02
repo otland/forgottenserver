@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Ron the Ripper" nameDescription="Ron the Ripper" race="blood" experience="500" speed="240" manacost="0">
+	<health now="1500" max="1500" />
+	<look type="151" head="95" body="94" legs="117" feet="97" addons="1" corpse="20502" />
+	<targetchange interval="60000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="50" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="250" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+	</attacks>
+	<defenses armor="35" defense="50" />
+	<loot>
+		<item name="gold coin" countmax="50" chance="100000" />
+		<item name="skull of Ratha" countmax="2" chance="100000" />
+		<item name="dagger" chance="8500" />
+		<item name="double axe" chance="1500" />
+		<item name="plate armor" chance="4000" />
+		<item name="knight armor" chance="1200" />
+		<item name="Ron the Ripper's sabre" chance="100000" />
+	</loot>
+</monster>

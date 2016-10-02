@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Evil Sheep" nameDescription="an evil sheep" race="blood" experience="240" speed="250" manacost="0">
+	<health now="350" max="350" />
+	<look type="14" corpse="5991" />
+	<targetchange interval="2000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="20" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" />
+		<attack name="physical" interval="4000" chance="30" target="1" range="7" min="0" max="-50">
+			<attribute key="shootEffect" value="snowball" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="35" />
+	<elements>
+		<element firePercent="-10" />
+		<element icePercent="20" />
+		<element physicalPercent="20" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrr" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="50" chance="50000" />
+	</loot>
+</monster>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Defiler" nameDescription="a defiler" race="venom" experience="3700" speed="230" manacost="0">
+	<health now="3650" max="3650" />
+	<look type="238" corpse="6532" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="85" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-240" poison="150" />
+		<attack name="earth" interval="2000" chance="20" range="7" min="-160" max="-270">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" target="0" radius="7" range="7" min="-400" max="-640">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" radius="3" target="0" min="-120" max="-170">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" length="8" spread="3" min="-500" max="-1000">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" length="8" spread="3" speedchange="-700" duration="15000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="10" min="280" max="350">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10" />
+		<element icePercent="20" />
+		<element firePercent="-25" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Blubb" />
+		<voice sentence="Blubb Blubb" />
+	</voices>
+	<loot>
+		<item name="small diamond" countmax="2" chance="2439" />
+		<item name="small ruby" countmax="2" chance="3000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="72" chance="100000" />
+		<item name="small emerald" countmax="3" chance="5366" />
+		<item name="talon" chance="5710" />
+		<item name="platinum coin" countmax="6" chance="95000" />
+		<item name="yellow gem" chance="1219" />
+		<item name="green gem" chance="613" />
+		<item name="red gem" chance="1538" />
+		<item name="blue gem" chance="300" />
+		<item name="soul orb" chance="20000" />
+		<item id="6300" chance="3030" /><!-- death ring-->
+		<item name="demonic essence" chance="20320" />
+		<item name="glob of acid slime" chance="14210" />
+		<item name="glob of tar" chance="12000" />
+	</loot>
+</monster>

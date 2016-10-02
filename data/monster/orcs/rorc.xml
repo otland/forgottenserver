@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Rorc" nameDescription="a rorc" race="blood" experience="105" speed="200" manacost="0">
+	<health now="260" max="260" />
+	<look type="550" corpse="21223" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="10" min="40" max="55" />
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element earthPercent="-20" />
+		<element deathPercent="-5" />
+		<element holyPercent="10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Kroaaah!!" />
+	</voices>
+	<loot>
+		<item name="wolf tooth chain" chance="7410" />
+		<item name="gold coin" countmax="25" chance="73640" />
+		<item name="obsidian lance" chance="930" />
+		<item name="orcish axe" chance="2040" />
+		<item name="plate shield" chance="6700" />
+		<item name="rorc feather" chance="12520" />
+		<item name="rorc egg" chance="790" />
+		<item name="hatched rorc egg" chance="12670" />
+	</loot>
+</monster>

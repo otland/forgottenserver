@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Shadow Hound" nameDescription="a shadow hound" experience="600" speed="360" race="blood" manacost="0">
+	<health now="555" max="555" />
+	<targetchange speed="0" chance="8" />
+	<look type="322" corpse="9923" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+		<attack name="fire" interval="2000" chance="24" min="-60" max="-160">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="soulfire" interval="2000" chance="14" />
+	</attacks>
+	<defenses armor="50" defense="55">
+		<defense name="healing" interval="1000" chance="15" min="60" max="230">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="30" />
+		<element energyPercent="10" />
+		<element firePercent="-10" />
+		<element icePercent="-10" />
+		<element physicalPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrr!" yell="1" />
+	</voices>
+	<loot>
+		<item name="midnight shard" chance="8333" />
+	</loot>
+</monster>

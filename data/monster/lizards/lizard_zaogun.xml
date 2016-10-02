@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lizard Zaogun" nameDescription="a lizard zaogun" race="blood" experience="1700" speed="250" manacost="0">
+	<health now="2955" max="2955" />
+	<look type="343" corpse="11284" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-349" />
+		<attack name="earth" interval="2000" chance="15" range="7" radius="1" target="1" min="-220" max="-375">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="10" min="175" max="275">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5" />
+		<element deathPercent="10" />
+		<element firePercent="45" />
+		<element energyPercent="20" />
+		<element icePercent="15" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="31500" />
+		<item name="gold coin" countmax="100" chance="31500" />
+		<item name="gold coin" countmax="68" chance="31000" />
+		<item name="small emerald" countmax="5" chance="4830" />
+		<item name="platinum coin" countmax="2" chance="48900" />
+		<item name="tower shield" chance="1000" />
+		<item name="lizard leather" chance="14360" />
+		<item name="lizard scale" chance="12520" />
+		<item name="strong health potion" chance="1900" />
+		<item name="great health potion" countmax="3" chance="7000" />
+		<item name="red lantern" chance="2170" />
+		<item name="Zaoan armor" chance="530" />
+		<item name="Zaoan shoes" chance="1000" />
+		<item name="Zaoan legs" chance="1001" />
+		<item name="zaogun flag" chance="8280" />
+		<item name="zaogun shoulderplates" chance="14980" />
+	</loot>
+</monster>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Nightstalker" nameDescription="a nightstalker" experience="500" speed="260" race="undead">
+	<health now="700" max="700" />
+	<targetchange speed="0" chance="8" />
+	<look type="320" corpse="9915" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" poison="80" />
+		<attack name="lifedrain" interval="2000" range="7" target="1" chance="20" min="-60" max="-170">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="sleep" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="240" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="10" duration="4000">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</defense>
+		<defense name="outfit" interval="5000" chance="10" monster="nightstalker" duration="4000" />
+		<defense name="outfit" interval="5000" chance="10" monster="werewolf" duration="4000" />
+		<defense name="outfit" interval="5000" chance="10" monster="the count" duration="4000" />
+		<defense name="outfit" interval="5000" chance="10" monster="grim reaper" duration="4000" />
+		<defense name="outfit" interval="5000" chance="10" monster="tarantula" duration="4000" />
+		<defense name="outfit" interval="5000" chance="1" monster="ferumbras" duration="4000" />
+	</defenses>
+	<elements>
+		<element physicalPercent="-5" />
+		<element energyPercent="-5" />
+		<element deathPercent="-5" />
+		<element icePercent="20" />
+		<element holyPercent="20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="The sunlight is so depressing." />
+		<voice sentence="Come with me, my child." />
+		<voice sentence="I've been in the shadow under your bed last night." />
+		<voice sentence="You never know what hides in the night." />
+		<voice sentence="I remember your face - and I know where you sleep." />
+		<voice sentence="Only the sweetest and cruelest dreams for you, my love." />
+	</voices>
+	<loot>
+		<item id="2124" chance="1030" /><!-- crystal ring -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="10" chance="50000" />
+		<item name="platinum amulet" chance="121" />
+		<item name="boots of haste" chance="121" />
+		<item name="protection amulet" chance="847" />
+		<item name="shadow herb" chance="4761" />
+		<item name="haunted blade" chance="318" />
+		<item name="chaos mace" chance="121" />
+		<item name="strong mana potion" chance="1612" />
+		<item name="spirit cloak" chance="520" />
+		<item name="crystal of balance" chance="127" />
+	</loot>
+</monster>

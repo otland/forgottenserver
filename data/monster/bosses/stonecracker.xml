@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Stonecracker" nameDescription="Stonecracker" race="blood" experience="3500" speed="280" manacost="0">
+	<health now="6500" max="6500" />
+	<look type="55" corpse="5999" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="-200" max="-280">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="speed" interval="2000" chance="10" speedchange="360" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="10" min="500" max="600">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="85" />
+		<element holyPercent="35" />
+		<element firePercent="40" />
+		<element energyPercent="15" />
+		<element physicalPercent="15" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="HUAHAHA!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="76225" />
+		<item name="small amethyst" countmax="2" chance="7650" />
+		<item name="double axe" chance="7650" />
+		<item name="crowbar" chance="14800" />
+		<item name="plate armor" chance="7650" />
+		<item name="dark armor" chance="7650" />
+		<item name="pick" chance="14800" />
+		<item name="meat" chance="36200" />
+		<item name="perfect behemoth fang" chance="64800" />
+		<item name="behemoth claw" chance="50500" />
+		<item name="assassin star" countmax="2" chance="11225" />
+	</loot>
+</monster>

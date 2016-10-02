@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Hellhound" nameDescription="a hellhound" race="blood" experience="6800" speed="280" manacost="0">
+	<health now="7500" max="7500" />
+	<look type="240" corpse="6332" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-520" poison="800" />
+		<attack name="earth" interval="2000" chance="5" length="8" spread="3" min="-300" max="-700">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="-395" max="-498">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-350" max="-660">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="3" min="-350" max="-976">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" radius="1" target="1" min="-200" max="-403">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="earth" interval="2000" chance="5" range="7" min="-300" max="-549">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="220" max="425">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="20" />
+		<element energyPercent="10" />
+		<element icePercent="-5" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="GROOOWL!" />
+		<voice sentence="GRRRRR!" />
+	</voices>
+	<loot>
+		<item name="black pearl" countmax="4" chance="9400" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="100000" />
+		<item name="wand of inferno" chance="9000" />
+		<item id="2231" chance="1000" /><!-- big bone -->
+		<item name="spike sword" chance="16310" />
+		<item name="fire sword" chance="6900" />
+		<item name="giant sword" chance="950" />
+		<item name="knight axe" chance="10810" />
+		<item name="ham" countmax="14" chance="30930" />
+		<item name="explorer brooch" chance="130" />
+		<item name="soul orb" chance="53000" />
+		<item name="demonic essence" chance="17000" />
+		<item name="ruthless axe" chance="400" />
+		<item name="concentrated demonic blood" countmax="2" chance="31000" />
+		<item name="assassin star" countmax="10" chance="38000" />
+		<item name="great mana potion" countmax="3" chance="15150" />
+		<item name="great health potion" countmax="2" chance="15150" />
+		<item name="magma legs" chance="1270" />
+		<item id="9810" chance="4500" /><!-- rusty armor -->
+		<item name="gold ingot" chance="1500" />
+		<item name="hellhound slobber" chance="18000" />
+	</loot>
+</monster>

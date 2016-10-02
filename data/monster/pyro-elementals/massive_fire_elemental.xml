@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="1400" speed="210" manacost="0">
+	<health now="1200" max="1200" />
+	<look type="242" corpse="6324" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="firefield" interval="2000" chance="10" range="7" target="0" radius="3">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" target="1" range="7" radius="3">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" length="7" spread="0" min="-200" max="-700" />
+		<attack name="fire" interval="2000" chance="15" radius="3" target="0" min="-60" max="-250">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="massive fire elemental soulfire" interval="2000" chance="15" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element icePercent="-15" />
+		<element physicalPercent="40" />
+		<element deathPercent="20" />
+		<element energyPercent="30" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="small ruby" countmax="2" chance="6100" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="25000" />
+		<item name="gold coin" countmax="12" chance="25000" />
+		<item name="bronze amulet" countmax="1" chance="15000" />
+		<item name="wand of inferno" chance="2240" />
+		<item name="fire sword" chance="530" />
+		<item name="magma amulet" chance="1300" />
+		<item name="magma boots" chance="560" />
+		<item name="magma legs" chance="210" />
+		<item id="9809" chance="1330" /><!-- rusty armor -->
+	</loot>
+</monster>

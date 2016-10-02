@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Stampor" nameDescription="a stampor" race="blood" experience="780" speed="240">
+	<health now="1200" max="1200" />
+	<look type="381" corpse="13312" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-150" max="-280">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" target="1" min="-75" max="-100">
+			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+		<attack name="stampor skill reducer" range="5" interval="2000" chance="10" />
+	</attacks>
+	<defenses>
+		<defense name="healing" interval="2000" chance="15" min="90" max="120">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="50" />
+		<element deathPercent="10" />
+		<element firePercent="20" />
+		<element energyPercent="20" />
+		<element icePercent="10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="KRRRRRNG" yell="1" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="242" chance="30000" />
+		<item name="platinum coin" countmax="2" chance="9920" />
+		<item name="war hammer" chance="1010" />
+		<item name="knight armor" chance="870" />
+		<item name="spiked squelcher" chance="160" />
+		<item name="strong health potion" countmax="2" chance="5000" />
+		<item name="strong mana potion" countmax="2" chance="5000" />
+		<item name="small topaz" countmax="2" chance="7940" />
+		<item name="stampor horn" chance="4920" />
+		<item name="stampor talons" countmax="2" chance="9950" />
+		<item name="hollow stampor hoof" chance="3020" />
+	</loot>
+</monster>
