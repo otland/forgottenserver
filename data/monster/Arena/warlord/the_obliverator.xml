@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Obliverator" nameDescription="The Obliverator" race="fire" experience="6000" speed="280" manacost="0">
-	<health now="9020" max="9020" />
+	<health now="9500" max="9500" />
 	<look type="35" corpse="7349" />
 	<flags>
 		<flag summonable="0" />

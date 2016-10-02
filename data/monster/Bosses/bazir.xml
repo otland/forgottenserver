@@ -25,7 +25,7 @@
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energyarea" />
 		</attack>
-		<attack name="effect" interval="1000" chance="9" range="7">
+		<attack name="strength" interval="1000" chance="9" range="7">
 			<attribute key="shootEffect" value="largerock" />
 			<attribute key="areaEffect" value="energyarea" />
 		</attack>
@@ -38,7 +38,7 @@
 		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-1900" duration="60000">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
-		<attack name="effect" interval="1000" chance="8" radius="5" target="0">
+		<attack name="strength" interval="1000" chance="8" radius="5" target="0">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
 		<attack name="outfit" interval="1000" chance="2" radius="8" target="0" monster="demon" duration="5000">

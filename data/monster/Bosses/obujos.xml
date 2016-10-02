@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Obujos" nameDescription="Obujos" race="blood" experience="20000" speed="560" manacost="0">
-	<health now="35000" max="35000" />
+<monster name="Obujos" nameDescription="Obujos" race="blood" experience="25000" speed="560" manacost="0">
+	<health now="90000" max="90000" />
 	<look type="445" corpse="15224" />
 	<targetchange interval="2000" chance="50" />
 	<flags>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Count" nameDescription="The Count" race="undead" experience="450" speed="370" manacost="0">
-	<health now="1250" max="1250" />
+<monster name="The Count" nameDescription="The Count" race="undead" experience="1750" speed="370" manacost="0">
+	<health now="4600" max="4600" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />
 	<flags>

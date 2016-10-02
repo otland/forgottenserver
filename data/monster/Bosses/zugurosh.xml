@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Zugurosh" nameDescription="Zugurosh" race="fire" experience="10000" speed="340" manacost="0">
-	<health now="90500" max="90500" />
+	<health now="95000" max="95000" />
 	<look type="12" head="2" body="35" legs="57" feet="91" corpse="6068" />
 	<targetchange interval="5000" chance="15" />
 	<flags>

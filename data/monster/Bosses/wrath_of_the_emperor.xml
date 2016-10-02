@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wrath of the Emperor" nameDescription="Wrath of the Emperor" race="undead" experience="600" speed="410" manacost="0">
-	<health now="55000" max="55000" />
+<monster name="Wrath of the Emperor" nameDescription="Wrath of the Emperor" race="undead" experience="4600" speed="410" manacost="0">
+	<health now="7800" max="7800" />
 	<look type="351" corpse="0" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

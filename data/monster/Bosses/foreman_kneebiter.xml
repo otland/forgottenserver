@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Foreman Kneebiter" nameDescription="Foreman Kneebiter" race="blood" experience="445" speed="200">
-	<health now="570" max="570" />
+<monster name="Foreman Kneebiter" nameDescription="Foreman Kneebiter" race="blood" experience="570" speed="200">
+	<health now="445" max="445" />
 	<look type="70" corpse="6013" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Warlord Ruzad" nameDescription="Warlord Ruzad" race="blood" experience="1700" speed="270" manacost="0">
-	<health now="2500" max="2500" />
+	<health now="1950" max="1950" />
 	<look type="2" head="20" body="30" legs="40" feet="50" corpse="6008" />
 	<targetchange interval="2000" chance="10" />
 	<flags>

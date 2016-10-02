@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ungreez" nameDescription="Ungreez" race="blood" experience="500" speed="330" manacost="10000">
+<monster name="Ungreez" nameDescription="Ungreez" race="blood" experience="5000" speed="330" manacost="10000">
 	<health now="8200" max="8200" />
 	<look type="35" corpse="5995" />
 	<targetchange interval="5000" chance="8" />

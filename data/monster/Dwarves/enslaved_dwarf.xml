@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Enslaved Dwarf" nameDescription="an enslaved dwarf" race="blood" experience="2700" speed="280" manacost="0">
-	<health now="3800" max="3800" />
+<monster name="Enslaved Dwarf" nameDescription="an enslaved dwarf" race="blood" experience="2900" speed="280" manacost="0">
+	<health now="4200" max="4200" />
 	<look type="494" corpse="17408" />
 	<targetchange interval="4000" chance="10" />
 	<flags>

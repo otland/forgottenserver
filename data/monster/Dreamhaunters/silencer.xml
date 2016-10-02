@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Silencer" nameDescription="a silencer" race="blood" experience="5100" speed="230" manacost="0">
-	<health now="5400" max="5400" />
+<monster name="Silencer" nameDescription="a silencer" race="blood" experience="3800" speed="230" manacost="0">
+	<health now="4900" max="4900" />
 	<look type="585" corpse="22489" />
 	<targetchange interval="4000" chance="5" />
 	<flags>

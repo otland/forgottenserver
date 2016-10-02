@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Diabolic Imp" nameDescription="a diabolic imp" race="fire" experience="2900" speed="220" manacost="0">
-	<health now="1950" max="1950" />
+<monster name="Diabolic Imp" nameDescription="a diabolic imp" race="fire" experience="1950" speed="220" manacost="0">
+	<health now="2900" max="2900" />
 	<look type="237" corpse="6364" />
 	<targetchange interval="4000" chance="10" />
 	<flags>

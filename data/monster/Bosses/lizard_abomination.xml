@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lizard Abomination" nameDescription="a lizard abomination" race="blood" experience="1350" speed="220" manacost="0">
+<monster name="Lizard Abomination" nameDescription="lizard abomination" race="blood" experience="1350" speed="220" manacost="0">
 	<health now="20000" max="20000" />
 	<look type="364" corpse="12385" />
 	<targetchange interval="2000" chance="10" />

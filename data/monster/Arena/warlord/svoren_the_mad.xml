@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Svoren the Mad" nameDescription="Svoren the Mad" race="blood" experience="3000" speed="180" manacost="0">
-	<health now="6310" max="6310" />
+	<health now="6300" max="6300" />
 	<look type="254" head="80" body="99" legs="118" feet="38" corpse="7349" />
 	<flags>
 		<flag summonable="0" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Dark Dancer" nameDescription="The Dark Dancer" race="blood" experience="435" speed="170" manacost="0">
-	<health now="805" max="805" />
+	<health now="855" max="855" />
 	<look type="58" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
