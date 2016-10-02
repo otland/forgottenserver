@@ -167,8 +167,7 @@
 	<action fromid="2070" toid="2085" script="other/music.lua" />
 	<action itemid="2332" script="other/music.lua" />
 	<action itemid="2364" script="other/music.lua" />
-	<action fromid="2367" toid="2369" script="other/music.lua" />
-	<action fromid="2370" toid="2373" script="other/music.lua" />
+	<action fromid="2367" toid="2373" script="other/music.lua" />
 	<action fromid="3951" toid="3953" script="other/music.lua" />
 	<action itemid="3957" script="other/music.lua" />
 	<action itemid="5786" script="other/music.lua" />
