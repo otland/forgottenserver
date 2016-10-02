@@ -397,17 +397,17 @@
 	<monster name="Dworc Voodoomaster" file="dworcs/dworc_voodoomaster.xml" />
 
 	<!-- Event_Creatures -->
-	<monster name="Bane Bringer" file="event_Creatures/bane_bringer.xml" />
-	<monster name="Essence of Darkness" file="event_Creatures/essence_of_darkness.xml" />
-	<monster name="Grynch Clan Goblin" file="event_Creatures/grynch_clan_goblin.xml" />
-	<monster name="Hacker" file="event_Creatures/hacker.xml" />
-	<monster name="Herald of Gloom" file="event_Creatures/herald_of_gloom.xml" />
-	<monster name="Midnight Spawn" file="event_Creatures/midnight_spawn.xml" />
-	<monster name="Primitive" file="event_Creatures/primitive.xml" />
-	<monster name="Shadow Hound" file="event_Creatures/shadow_hound.xml" />
-	<monster name="Spectral Scum" file="event_Creatures/spectral_scum.xml" />
-	<monster name="The Halloween Hare" file="event_Creatures/the_halloween_hare.xml" />
-	<monster name="Undead Minion" file="event_Creatures/undead_minion.xml" />
+	<monster name="Bane Bringer" file="Event_Creatures/bane_bringer.xml" />
+	<monster name="Essence of Darkness" file="Event_Creatures/essence_of_darkness.xml" />
+	<monster name="Grynch Clan Goblin" file="Event_Creatures/grynch_clan_goblin.xml" />
+	<monster name="Hacker" file="Event_Creatures/hacker.xml" />
+	<monster name="Herald of Gloom" file="Event_Creatures/herald_of_gloom.xml" />
+	<monster name="Midnight Spawn" file="Event_Creatures/midnight_spawn.xml" />
+	<monster name="Primitive" file="Event_Creatures/primitive.xml" />
+	<monster name="Shadow Hound" file="Event_Creatures/shadow_hound.xml" />
+	<monster name="Spectral Scum" file="Event_Creatures/spectral_scum.xml" />
+	<monster name="The Halloween Hare" file="Event_Creatures/the_halloween_hare.xml" />
+	<monster name="Undead Minion" file="Event_Creatures/undead_minion.xml" />
 
 	<!-- Elves -->
 	<monster name="Elf" file="elves/elf.xml" />
