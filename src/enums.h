@@ -138,7 +138,7 @@ enum RaceType_t : uint8_t {
 	RACE_ENERGY,
 };
 
-enum CombatType_t {
+enum CombatType_t : uint16_t {
 	COMBAT_NONE = 0,
 
 	COMBAT_PHYSICALDAMAGE = 1 << 0,
