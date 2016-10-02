@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Kraknaknork" nameDescription="Kraknaknork" race="blood" experience="300" speed="380" manacost="220">
-	<health now="80" max="80" />
+<monster name="Kraknaknork" nameDescription="Kraknaknork" race="blood" experience="0" speed="380" manacost="220">
+	<health now="15" max="15" />
 	<look type="74" corpse="6017" />
 	<targetchange interval="5000" chance="20" />
 	<flags>

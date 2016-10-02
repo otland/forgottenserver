@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Masked Marauder" nameDescription="The Masked Marauder" race="blood" experience="3500" speed="250" manacost="0">
-	<health now="7320" max="7320" />
+	<health now="6800" max="6800" />
 	<look type="234" corpse="7349" />
 	<flags>
 		<flag summonable="0" />

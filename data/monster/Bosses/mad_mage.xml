@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="mad mage" nameDescription="a mad mage" race="blood" experience="1800" speed="240" manacost="0">
-	<health now="2500" max="2500" />
+	<health now="2200" max="2200" />
 	<look type="394" corpse="13603" />
 	<targetchange interval="5000" chance="30" />
 	<flags>

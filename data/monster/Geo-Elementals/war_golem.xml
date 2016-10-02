@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="War Golem" nameDescription="a war golem" race="energy" experience="2750" speed="240" manacost="0">
+<monster name="War Golem" nameDescription="a war golem" race="energy" experience="2550" speed="240" manacost="0">
 	<health now="4300" max="4300" />
 	<look type="326" corpse="10005" />
 	<targetchange interval="4000" chance="10" />

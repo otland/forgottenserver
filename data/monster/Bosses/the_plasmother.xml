@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Plasmother" nameDescription="The Plasmother" race="venom" experience="12000" speed="310" manacost="0">
-	<health now="7500" max="7500" />
+<monster name="The Plasmother" nameDescription="The Plasmother" race="venom" experience="8900" speed="310" manacost="0">
+	<health now="16050" max="16050" />
 	<look type="238" corpse="6532" />
 	<targetchange interval="5500" chance="10" />
 	<flags>

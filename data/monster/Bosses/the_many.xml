@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="The Many" nameDescription="The Many" race="blood" experience="4000" speed="260" manacost="0">
-	<health now="5000" max="5000" />
+	<health now="4600" max="4600" />
 	<look type="121" corpse="6048" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

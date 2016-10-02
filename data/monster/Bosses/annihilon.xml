@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Annihilon" nameDescription="Annihilon" race="fire" experience="15000" speed="380" manacost="0">
-	<health now="46500" max="46500" />
+<monster name="Annihilon" nameDescription="Annihilon" race="fire" experience="10000" speed="380" manacost="0">
+	<health now="60000" max="60000" />
 	<look type="12" head="19" body="104" legs="96" feet="96" corpse="6068" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

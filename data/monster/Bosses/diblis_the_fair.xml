@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Diblis The Fair" nameDescription="Diblis The Fair" race="undead" experience="1800" speed="280" manacost="0">
-	<health now="1500" max="1500" />
+	<health now="1600" max="1600" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />
 	<flags>
