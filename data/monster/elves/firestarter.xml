@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180" manacost="0">
+	<health now="180" max="180" />
+	<look type="159" head="94" body="77" legs="78" feet="79" corpse="20599" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-15" />
+		<attack name="fire" interval="2000" chance="15" radius="1" target="1" min="0" max="-21">
+			<attribute key="shootEffect" value="burstarrow" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" radius="1" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<elements>
+		<element deathPercent="-20" />
+		<element icePercent="-20" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="FIRE!" yell="1" />
+		<voice sentence="BURN!" yell="1" />
+		<voice sentence="DEATH to the FALSE GOD!!" yell="1" />
+		<voice sentence="You shall burn in the thornfires!!" />
+		<voice sentence="DOWN with the followers of the bog!!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="35" chance="79000" />
+		<item name="longsword" chance="6000" />
+		<item name="bow" chance="4000" />
+		<item name="grapes" chance="20000" />
+		<item id="5921" chance="930" /><!-- heaven blossom -->
+		<item name="elvish bow" chance="100" />
+		<item name="flaming arrow" countmax="12" chance="30000" />
+		<item name="elvish talisman" chance="5000" />
+		<item id="13757" chance="15280" /><!-- coal -->
+		<item name="flintstone" chance="340" />
+	</loot>
+</monster>

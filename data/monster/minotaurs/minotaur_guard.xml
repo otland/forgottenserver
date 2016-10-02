@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Minotaur Guard" nameDescription="a minotaur guard" race="blood" experience="160" speed="250" manacost="550">
+	<health now="185" max="185" />
+	<look type="29" corpse="5983" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element firePercent="20" />
+		<element holyPercent="10" />
+		<element icePercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Kirll Karrrl!" />
+		<voice sentence="Kaplar!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="20" chance="59640" />
+		<item name="double axe" chance="400" />
+		<item name="chain armor" chance="2980" />
+		<item name="brass armor" chance="4390" />
+		<item name="battle shield" chance="2150" />
+		<item name="fishing rod" chance="480" />
+		<item name="minotaur leather" chance="1000" />
+		<item id="7401" chance="80" /><!-- minotaur trophy -->
+		<item name="health potion" chance="400" />
+		<item name="minotaur horn" countmax="2" chance="8330" />
+		<item name="piece of warrior armor" chance="5040" />
+	</loot>
+</monster>

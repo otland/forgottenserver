@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="starving wolf" nameDescription="a starving wolf" race="blood" experience="65" speed="170" manacost="0">
+	<health now="85" max="85" />
+	<look type="27" head="20" body="30" legs="40" feet="50" corpse="5968" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="8" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-25" />
+	</attacks>
+	<defenses armor="10" defense="10">
+		<defense name="effect" interval="2000" chance="10" radius="1">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-30" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gaarrrrrr" />
+		<voice sentence="Gnoorrr" />
+		<voice sentence="Yoooohhuuuu!" />
+	</voices>
+	<loot>
+		<item id="220" chance="64730" /><!-- dirty fur -->
+		<item name="meat" countmax="2" chance="5300" />
+		<item name="wolf paw" chance="1430" />
+	</loot>
+</monster>

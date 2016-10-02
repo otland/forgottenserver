@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Quara Predator Scout" nameDescription="a quara predator scout" race="blood" experience="400" speed="250" manacost="0">
+	<health now="890" max="890" />
+	<look type="20" corpse="6067" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-193" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+		<immunity fire="1" />
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gnarrr!" />
+		<voice sentence="Tcharrr!" />
+		<voice sentence="Rrrah!" />
+		<voice sentence="Rraaar!" />
+	</voices>
+	<loot>
+		<item name="small diamond" countmax="2" chance="5520" />
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="gold coin" countmax="69" chance="48000" />
+		<item name="two handed sword" chance="2320" />
+		<item name="double axe" chance="5800" />
+		<item name="scale armor" chance="8000" />
+		<item name="shrimp" countmax="5" chance="4700" />
+		<item name="fish fin" chance="980" />
+		<item name="northwind rod" chance="800" />
+		<item name="quara bone" chance="10150" />
+	</loot>
+</monster>

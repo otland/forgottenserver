@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Filth Toad" nameDescription="a filth toad" race="blood" experience="90" speed="210" manacost="0">
+	<health now="185" max="185" />
+	<look type="222" corpse="6077" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="10" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" poison="20" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="-8" max="-17">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="20" />
+		<element icePercent="20" />
+		<element firePercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit, ribbit!" />
+		<voice sentence="Ribbit!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="21" chance="75000" />
+		<item name="two handed sword" chance="500" />
+		<item name="mace" chance="2000" />
+		<item id="2667" chance="22000" /><!-- fish -->
+		<item name="poisonous slime" chance="3000" />
+	</loot>
+</monster>

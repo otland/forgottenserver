@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Diamond Servant" nameDescription="a diamond servant" race="energy" experience="700" speed="210" manacost="0">
+	<health now="1000" max="1000" />
+	<look type="397" corpse="13485" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="100" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="energy" interval="2000" chance="20" radius="3" target="0" min="-80" max="-120">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" target="0" length="5" spread="2" min="-125" max="-170">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="3000">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element earthPercent="80" />
+		<element firePercent="10" />
+		<element icePercent="-5" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Error. LOAD 'PROGRAM',8,1" />
+		<voice sentence="Remain. Obedient." />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="79" chance="50000" />
+		<item name="yellow gem" chance="550" />
+		<item name="might ring" chance="940" />
+		<item name="life crystal" chance="9150" />
+		<item name="wand of cosmic energy" chance="530" />
+		<item name="soul orb" chance="45000" />
+		<item name="bonebreaker" chance="10" />
+		<item name="mastermind potion" chance="400" />
+		<item name="strong health potion" chance="5790" />
+		<item name="strong mana potion" chance="5980" />
+		<item name="lightning pendant" chance="710" />
+		<item name="crystalline armor" chance="20" />
+		<item name="gear wheel" chance="5000" />
+		<item id="9976" chance="5320" /><!-- crystal pedestal -->
+		<item name="shockwave amulet" chance="110" />
+		<item name="gear crystal" chance="5000" />
+		<item name="slime mould" chance="480" />
+	</loot>
+</monster>

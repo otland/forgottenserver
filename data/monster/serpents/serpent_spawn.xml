@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Serpent Spawn" nameDescription="a serpent spawn" race="venom" experience="3050" speed="250" manacost="0">
+	<health now="3000" max="3000" />
+	<look type="220" corpse="6061" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="275" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-252" />
+		<attack name="earth" interval="2000" chance="20" range="7" min="-80" max="-300">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="1" range="7" item="3976" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="speed" interval="2000" chance="25" range="7" target="1" radius="4" speedchange="-850" duration="12000">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-200" max="-500">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-200" max="-500">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="15" min="250" max="500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="340" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="20" />
+		<element firePercent="-10" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Sssssouls for the one" />
+		<voice sentence="HISSSS" yell="1" />
+		<voice sentence="Tsssse one will risssse again" />
+		<voice sentence="I bring your deathhh, mortalssss" />
+	</voices>
+	<loot>
+		<item name="golden mug" chance="2870" />
+		<item name="small sapphire" chance="12000" />
+		<item name="gold coin" countmax="100" chance="32300" />
+		<item name="gold coin" countmax="100" chance="32300" />
+		<item name="gold coin" countmax="39" chance="32300" />
+		<item name="energy ring" chance="590" />
+		<item name="life ring" chance="6250" />
+		<item name="life crystal" chance="800" />
+		<item name="snakebite rod" chance="930" />
+		<item name="warrior helmet" chance="560" />
+		<item name="strange helmet" chance="670" />
+		<item name="crown armor" chance="510" />
+		<item name="royal helmet" chance="140" />
+		<item name="tower shield" chance="920" />
+		<item name="power bolt" chance="6200" />
+		<item name="green mushroom" chance="18200" />
+		<item name="charmer's tiara" chance="180" />
+		<item id="4842" chance="600" /><!-- Old Parchment -->
+		<item name="mercenary sword" chance="2070" />
+		<item name="noble axe" chance="750" />
+		<item name="great mana potion" chance="2000" />
+		<item name="swamplair armor" chance="90" />
+		<item name="spellbook of mind control" chance="90" />
+		<item name="snake skin" chance="14800" />
+		<item name="winged tail" chance="960" />
+	</loot>
+</monster>

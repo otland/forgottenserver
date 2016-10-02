@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mephiles" nameDescription="Mephiles" race="blood" experience="415" speed="300" manacost="0">
+	<health now="415" max="415" />
+	<look type="237" corpse="10323" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="3" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1200" min="0" max="-35" />
+		<attack name="fire" interval="1500" chance="70" range="7" radius="2" target="1" min="-15" max="-45">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="35">
+		<defense name="speed" interval="1000" chance="40" speedchange="400" duration="40000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="4000" chance="50" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="50" />
+		<element icePercent="-10" />
+		<element holyPercent="-5" />
+		<element physicalPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="I have a contract here which you should sign!" />
+		<voice sentence="I sence so much potential in you. It's almost a shame I have to kill you." />
+		<voice sentence="Yes, slay me for the loot I might have. Give in to your greed." />
+		<voice sentence="Wealth, Power, it is all at your fingertips. All you have to do is a bit blackmailing and bullying." />
+		<voice sentence="Come on. being a bit evil won't hurt you." />
+	</voices>
+</monster>

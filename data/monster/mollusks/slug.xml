@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Slug" nameDescription="a slug" race="venom" experience="70" speed="150" manacost="0">
+	<health now="255" max="255" />
+	<look type="407" corpse="13515" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-44" />
+		<attack name="earth" interval="1000" chance="15" range="7" target="1" min="-5" max="-40">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element energyPercent="20" />
+		<element deathPercent="7" />
+	</elements>
+	<loot>
+		<item name="gold coin" countmax="40" chance="62000" />
+		<item name="worm" countmax="3" chance="5000" />
+	</loot>
+</monster>
