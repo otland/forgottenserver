@@ -723,9 +723,9 @@ SkullNames skullNames[] = {
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
-	for (size_t i = 0; i < sizeof(magicEffectNames) / sizeof(MagicEffectNames); ++i) {
-		if (strcasecmp(strValue.c_str(), magicEffectNames[i].name) == 0) {
-			return magicEffectNames[i].effect;
+	for (auto& magicEffectName : magicEffectNames) {
+		if (strcasecmp(strValue.c_str(), magicEffectName.name) == 0) {
+			return magicEffectName.effect;
 		}
 	}
 	return CONST_ME_NONE;
@@ -854,9 +854,9 @@ uint32_t adlerChecksum(const uint8_t* data, size_t length)
 
 std::string ucfirst(std::string str)
 {
-	for (size_t i = 0; i < str.length(); ++i) {
-		if (str[i] != ' ') {
-			str[i] = toupper(str[i]);
+	for (char& i : str) {
+		if (i != ' ') {
+			i = toupper(i);
 			break;
 		}
 	}

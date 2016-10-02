@@ -66,8 +66,8 @@ s_defcommands Commands::defined_commands[] = {
 Commands::Commands()
 {
 	// set up command map
-	for (uint32_t i = 0; i < sizeof(defined_commands) / sizeof(defined_commands[0]); i++) {
-		commandMap[defined_commands[i].name] = new Command(defined_commands[i].f, 1, ACCOUNT_TYPE_GOD, true);
+	for (auto& command : defined_commands) {
+		commandMap[command.name] = new Command(command.f, 1, ACCOUNT_TYPE_GOD, true);
 	}
 }
 

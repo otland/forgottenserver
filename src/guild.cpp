@@ -49,9 +49,9 @@ void Guild::removeMember(Player* player)
 
 GuildRank* Guild::getRankById(uint32_t rankId)
 {
-	for (size_t i = 0; i < ranks.size(); ++i) {
-		if (ranks[i].id == rankId) {
-			return &ranks[i];
+	for (auto& rank : ranks) {
+		if (rank.id == rankId) {
+			return &rank;
 		}
 	}
 	return nullptr;
@@ -59,9 +59,9 @@ GuildRank* Guild::getRankById(uint32_t rankId)
 
 const GuildRank* Guild::getRankByLevel(uint8_t level) const
 {
-	for (size_t i = 0; i < ranks.size(); ++i) {
-		if (ranks[i].level == level) {
-			return &ranks[i];
+	for (const auto& rank : ranks) {
+		if (rank.level == level) {
+			return &rank;
 		}
 	}
 	return nullptr;
