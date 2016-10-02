@@ -1231,7 +1231,7 @@ class Player final : public Creature, public Cylinder
 		Group* group = nullptr;
 		Inbox* inbox;
 		Item* tradeItem = nullptr;
- 		Item* inventory[CONST_SLOT_LAST + 1] = { nullptr };
+ 		Item* inventory[CONST_SLOT_LAST + 1] = {};
 		Item* writeItem = nullptr;
 		House* editHouse = nullptr;
 		Npc* shopOwner = nullptr;
@@ -1259,8 +1259,8 @@ class Player final : public Creature, public Cylinder
 		uint32_t windowTextId = 0;
 		uint32_t editListId = 0;
 		uint32_t manaMax = 0;
-		int32_t varSkills[SKILL_LAST + 1] = { 0 };
-		int32_t varStats[STAT_LAST + 1] = { 0 };
+		int32_t varSkills[SKILL_LAST + 1] = {};
+		int32_t varStats[STAT_LAST + 1] = {};
 		int32_t purchaseCallback = -1;
 		int32_t saleCallback = -1;
 		int32_t MessageBufferCount = 0;
@@ -1296,7 +1296,7 @@ class Player final : public Creature, public Cylinder
 		bool pzLocked = false;
 		bool isConnecting = false;
 		bool addAttackSkillPoint = false;
-		bool inventoryAbilities[CONST_SLOT_LAST + 1] = { false };
+		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 
 		static uint32_t playerAutoID;
 

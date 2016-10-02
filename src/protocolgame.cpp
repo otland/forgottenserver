@@ -606,7 +606,7 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 
 	if (knownCreatureSet.size() > 1300) {
 		// Look for a creature to remove
-		for (std::unordered_set<uint32_t>::iterator it = knownCreatureSet.begin(), end = knownCreatureSet.end(); it != end; ++it) {
+		for (auto it = knownCreatureSet.begin(), end = knownCreatureSet.end(); it != end; ++it) {
 			Creature* creature = g_game.getCreatureByID(*it);
 			if (!canSee(creature)) {
 				removedKnown = *it;
@@ -616,7 +616,7 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 		}
 
 		// Bad situation. Let's just remove anyone.
-		std::unordered_set<uint32_t>::iterator it = knownCreatureSet.begin();
+		auto it = knownCreatureSet.begin();
 		if (*it == id) {
 			++it;
 		}
@@ -1433,7 +1433,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 		uint8_t itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
 
 		msg.addByte(itemsToSend);
-		for (ItemDeque::const_iterator it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
+		for (auto it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
 			msg.addItem(*it);
 		}
 	} else {
@@ -1452,7 +1452,7 @@ void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 	msg.add<uint16_t>(itemsToSend);
 
 	uint16_t i = 0;
-	for (ShopInfoList::const_iterator it = itemList.begin(); i < itemsToSend; ++it, ++i) {
+	for (auto it = itemList.begin(); i < itemsToSend; ++it, ++i) {
 		AddShopItem(msg, *it);
 	}
 
@@ -1735,7 +1735,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	msg.add<uint16_t>(MARKETREQUEST_OWN_HISTORY);
 
 	msg.add<uint32_t>(buyOffersToSend);
-	for (HistoryMarketOfferList::const_iterator it = buyOffers.begin(); i < buyOffersToSend; ++it, ++i) {
+	for (auto it = buyOffers.begin(); i < buyOffersToSend; ++it, ++i) {
 		msg.add<uint32_t>(it->timestamp);
 		msg.add<uint16_t>(counterMap[it->timestamp]++);
 		msg.addItemId(it->itemId);
@@ -1748,7 +1748,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	i = 0;
 
 	msg.add<uint32_t>(sellOffersToSend);
-	for (HistoryMarketOfferList::const_iterator it = sellOffers.begin(); i < sellOffersToSend; ++it, ++i) {
+	for (auto it = sellOffers.begin(); i < sellOffersToSend; ++it, ++i) {
 		msg.add<uint32_t>(it->timestamp);
 		msg.add<uint16_t>(counterMap[it->timestamp]++);
 		msg.addItemId(it->itemId);
