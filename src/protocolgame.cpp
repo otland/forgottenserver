@@ -2377,6 +2377,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
 
+	msg.add<uint16_t>(0x00); // URL (string) to ingame store images
+	msg.add<uint16_t>(25); // premium coin package size
+
 	writeToOutputBuffer(msg);
 
 	sendPendingStateEntered();
@@ -2822,7 +2825,12 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getPlayerInfo(PLAYERINFO_LEVELPERCENT));
-	msg.addDouble(0, 3); // experience bonus
+
+	msg.add<uint16_t>(100); // base xp gain rate
+	msg.add<uint16_t>(0); // xp voucher
+	msg.add<uint16_t>(0); // low level bonus
+	msg.add<uint16_t>(0); // xp boost
+	msg.add<uint16_t>(100); // stamina multiplier (100 = x1.0)
 
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getPlayerInfo(PLAYERINFO_MAXMANA), std::numeric_limits<uint16_t>::max()));
@@ -2841,6 +2849,9 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(condition ? condition->getTicks() / 1000 : 0x00);
 
 	msg.add<uint16_t>(player->getOfflineTrainingTime() / 60 / 1000);
+
+	msg.add<uint16_t>(0); // xp boost time (seconds)
+	msg.addByte(0); // ?
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
@@ -2852,6 +2863,30 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 		msg.add<uint16_t>(player->getBaseSkill(i));
 		msg.addByte(player->getSkillPercent(i));
 	}
+
+	// critical chance
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
+
+	// critical damage
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
+
+	// life leech chance
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
+
+	// life leech
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
+
+	// mana leech chance
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
+
+	// mana leech
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
 }
 
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
