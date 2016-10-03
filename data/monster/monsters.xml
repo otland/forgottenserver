@@ -269,7 +269,6 @@
 	<!-- Canines -->
 	<monster name="Crystal Wolf" file="Canines/crystal_wolf.xml" />
 	<monster name="Dog" file="Canines/dog.xml" />
-	<monster name="Hellhound" file="Canines/hellhound.xml" />
 	<monster name="Hot Dog" file="Canines/hot_dog.xml" />
 	<monster name="Husky" file="Canines/husky.xml" />
 	<monster name="Poodle" file="Canines/poodle.xml" />
@@ -636,7 +635,6 @@
 	<!-- Outlaws -->
 	<monster name="Adventurer" file="Outlaws/adventurer.xml" />
 	<monster name="Angry Adventurer" file="Outlaws/angry_adventurer.xml" />
-	<monster name="Asassin" file="Outlaws/assassin.xml" />
 	<monster name="Assassin" file="Outlaws/assassin.xml" />
 	<monster name="Bandit" file="Outlaws/bandit.xml" />
 	<monster name="Black Knight" file="Outlaws/black_knight.xml" />
