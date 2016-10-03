@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Shock Head" nameDescription="a shock head" race="blood" experience="4700" speed="250" manacost="0">
-	<health now="5800" max="5800" />
+<monster name="Shock Head" nameDescription="a shock head" race="blood" experience="2300" speed="250" manacost="0">
+	<health now="4200" max="4200" />
 	<look type="579" corpse="22392" />
 	<targetchange interval="4000" chance="10" />
 	<flags>

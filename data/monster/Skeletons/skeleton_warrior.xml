@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Skeleton Warrior" nameDescription="a skeleton warrior" race="undead" experience="65" speed="150" manacost="350">
-	<health now="45" max="45" />
+<monster name="Skeleton Warrior" nameDescription="a skeleton warrior" race="undead" experience="45" speed="150" manacost="350">
+	<health now="65" max="65" />
 	<look type="298" corpse="5972" />
 	<targetchange interval="4000" chance="0" />
 	<flags>

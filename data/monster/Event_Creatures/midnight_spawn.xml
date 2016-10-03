@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Midnight Spawn" nameDescription="a midnight spawn" race="undead" experience="900" speed="230" manacost="0">
-	<health now="957" max="957" />
+	<health now="1000" max="1000" />
 	<look type="315" corpse="9960" />
 	<targetchange interval="5000" chance="0" />
 	<flags>

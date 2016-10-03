@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Rocky" nameDescription="Rocky" race="undead" experience="190" speed="170" manacost="0">
-	<health now="250" max="250" />
+	<health now="390" max="390" />
 	<look type="95" corpse="7349" />
 	<flags>
 		<flag summonable="0" />

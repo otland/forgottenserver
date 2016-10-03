@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Darakan the Executioner" nameDescription="Darakan the Executioner" race="blood" experience="1600" speed="205" manacost="0">
-	<health now="3500" max="3500" />
+	<health now="3480" max="3480" />
 	<look type="255" head="78" body="114" legs="114" feet="114" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
