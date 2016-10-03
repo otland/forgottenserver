@@ -3372,7 +3372,7 @@ void Player::onAttackedCreature(Creature* target)
 {
 	Creature::onAttackedCreature(target);
 
-	if (target && target->getZone() == ZONE_PVP) {
+	if (target->getZone() == ZONE_PVP) {
 		return;
 	}
 
