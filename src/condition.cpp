@@ -1202,7 +1202,7 @@ void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::lis
 	int32_t sum = 0;
 	double x1, x2;
 
-	for (int32_t i = start; i > 0; --i) {
+	for (int32_t i = start; i > 0; i = i - (i > 21 ? (i / 20) + boolean_random() : 1)) {
 		int32_t n = start + 1 - i;
 		int32_t med = (n * amount) / start;
 
