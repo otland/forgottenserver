@@ -47,6 +47,15 @@
 	<outfit type="0" looktype="696" name="Puppeteer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="698" name="Spirit Caller" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="724" name="Evoker" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="732" name="Seaweaver" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="745" name="Recruiter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="749" name="Sea Dog" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="759" name="Royal Pumpkin" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="845" name="Rift Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="852" name="Winter Warden" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="874" name="Philosopher" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="885" name="Arena Champion" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="900" name="Lupine Warden" premium="yes" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -95,4 +104,13 @@
 	<outfit type="1" looktype="697" name="Puppeteer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="699" name="Spirit Caller" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="725" name="Evoker" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="733" name="Seaweaver" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="746" name="Recruiter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="750" name="Sea Dog" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="760" name="Royal Pumpkin" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="846" name="Rift Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="853" name="Winter Warden" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="873" name="Philosopher" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="884" name="Arena Champion" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="899" name="Lupine Warden" premium="yes" unlocked="no" enabled="yes" />
 </outfits>

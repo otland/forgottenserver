@@ -77,4 +77,29 @@
 	<mount id="75" clientid="726" name="Flitterkatzen" speed="20" premium="yes" />
 	<mount id="76" clientid="727" name="Venompaw" speed="20" premium="yes" />
 	<mount id="77" clientid="728" name="Batcat" speed="20" premium="yes" />
+	<mount id="78" clientid="734" name="Sea Devil" speed="20" premium="yes" />
+	<mount id="79" clientid="735" name="Coralripper" speed="20" premium="yes" />
+	<mount id="80" clientid="736" name="Plumfish" speed="20" premium="yes" />
+	<mount id="81" clientid="738" name="Gorongra" speed="20" premium="yes" />
+	<mount id="82" clientid="739" name="Noctungra" speed="20" premium="yes" />
+	<mount id="83" clientid="740" name="Silverneck" speed="20" premium="yes" />
+	<mount id="84" clientid="761" name="Slagsnare" speed="20" premium="yes" />
+	<mount id="85" clientid="762" name="Nightstinger" speed="20" premium="yes" />
+	<mount id="86" clientid="763" name="Razorcreep" speed="20" premium="yes" />
+	<mount id="87" clientid="848" name="Rift Runner" speed="20" premium="yes" />
+	<mount id="88" clientid="849" name="Nightdweller" speed="20" premium="yes" />
+	<mount id="89" clientid="850" name="Frostflare" speed="20" premium="yes" />
+	<mount id="90" clientid="851" name="Cinderhoof" speed="20" premium="yes" />
+	<mount id="91" clientid="868" name="Mouldpincer" speed="20" premium="yes" />
+	<mount id="92" clientid="869" name="Bloodcurl" speed="20" premium="yes" />
+	<mount id="93" clientid="870" name="Leafscuttler" speed="20" premium="yes" />
+	<mount id="94" clientid="883" name="Sparkion" speed="20" premium="yes" />
+	<mount id="95" clientid="886" name="Swamp Snapper" speed="20" premium="yes" />
+	<mount id="96" clientid="887" name="Mould Shell" speed="20" premium="yes" />
+	<mount id="97" clientid="888" name="Reed Lurker" speed="20" premium="yes" />
+	<mount id="98" clientid="889" name="Neon Sparkid" speed="20" premium="yes" />
+	<mount id="99" clientid="890" name="Vortexion" speed="20" premium="yes" />
+	<mount id="100" clientid="901" name="Ivory Fang" speed="20" premium="yes" />
+	<mount id="101" clientid="902" name="Shadow Claw" speed="20" premium="yes" />
+	<mount id="102" clientid="903" name="Snow Pelt" speed="20" premium="yes" />
 </mounts>
