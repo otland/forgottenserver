@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Azerus" nameDescription="Azerus" race="blood" experience="6000" speed="320" manacost="0">
-	<health now="7500" max="7500" />
+	<health now="26000" max="26000" />
 	<look type="309" head="19" body="96" legs="21" feet="81" corpse="9738" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

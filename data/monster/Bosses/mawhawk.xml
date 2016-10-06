@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Mawhawk" nameDescription="Mawhawk" race="blood" experience="15000" speed="270" manacost="0">
-	<health now="55000" max="55000" />
+<monster name="Mawhawk" nameDescription="Mawhawk" race="blood" experience="14000" speed="270" manacost="0">
+	<health now="45000" max="45000" />
 	<look type="595" corpse="22629" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

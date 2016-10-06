@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Nightmare of Gaz'haragoth" nameDescription="nightmare of Gaz'haragoth" race="blood" experience="5700" speed="270" manacost="0">
-	<health now="9400" max="9400" />
+<monster name="Nightmare of Gaz'haragoth" nameDescription="a nightmare of Gaz'haragoth" race="blood" experience="0" speed="270" manacost="0">
+	<health now="5500" max="5500" />
 	<look type="587" corpse="22497" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

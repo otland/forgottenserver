@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Armenius" nameDescription="Armenius" race="venom" experience="720" speed="330" manacost="0">
-	<health now="1000" max="1000" />
+<monster name="Armenius" nameDescription="Armenius" race="venom" experience="500" speed="330" manacost="0">
+	<health now="550" max="550" />
 	<look type="79" corpse="6021" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

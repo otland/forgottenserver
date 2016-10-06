@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ironblight" nameDescription="ironblight" race="undead" experience="4400" speed="220" manacost="0">
+<monster name="Ironblight" nameDescription="Ironblight" race="undead" experience="4400" speed="220" manacost="0">
 	<health now="6600" max="6600" />
 	<look type="498" corpse="17424" />
 	<targetchange interval="4000" chance="10" />

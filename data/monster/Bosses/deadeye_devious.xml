@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deadeye Devious" nameDescription="Deadeye Devious" race="blood" experience="500" speed="300" manacost="0">
-	<health now="2000" max="2000" />
+<monster name="Deadeye Devious" nameDescription="Deadeye Devious" race="blood" experience="750" speed="300" manacost="0">
+	<health now="1450" max="1450" />
 	<look type="151" head="115" body="76" legs="35" feet="117" addons="2" corpse="20378" />
 	<targetchange interval="60000" chance="0" />
 	<flags>

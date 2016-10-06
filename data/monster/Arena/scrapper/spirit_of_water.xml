@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Spirit of Water" nameDescription="a spirit of water" race="undead" experience="850" speed="200" manacost="0">
-	<health now="1517" max="1517" />
+	<health now="1400" max="1400" />
 	<look type="11" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
