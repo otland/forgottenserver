@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Massacre" nameDescription="Massacre" race="blood" experience="9800" speed="390" manacost="0">
-	<health now="30000" max="30000" />
+<monster name="Massacre" nameDescription="Massacre" race="blood" experience="20000" speed="390" manacost="0">
+	<health now="32000" max="32000" />
 	<look type="244" corpse="6336" />
 	<targetchange interval="60000" chance="0" />
 	<flags>

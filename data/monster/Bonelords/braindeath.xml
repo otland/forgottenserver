@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Braindeath" nameDescription="a braindeath" race="undead" experience="895" speed="230" manacost="0">
+<monster name="Braindeath" nameDescription="a braindeath" race="undead" experience="985" speed="230" manacost="0">
 	<health now="1225" max="1225" />
 	<look type="256" corpse="7256" />
 	<targetchange interval="4000" chance="10" />

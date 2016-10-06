@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Madareth" nameDescription="Madareth" race="fire" experience="10000" speed="380" manacost="0">
-	<health now="55000" max="55000" />
+	<health now="75000" max="75000" />
 	<look type="12" head="77" body="116" legs="82" feet="79" corpse="6068" />
 	<targetchange interval="5000" chance="8" />
 	<flags>

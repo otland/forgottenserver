@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Apprentice Sheng" nameDescription="Apprentice Sheng" race="blood" experience="100" speed="170" manacost="0">
+<monster name="Apprentice Sheng" nameDescription="Apprentice Sheng" race="blood" experience="150" speed="170" manacost="0">
 	<health now="95" max="95" />
 	<look type="23" corpse="5981" />
 	<targetchange interval="5000" chance="8" />
@@ -29,7 +29,7 @@
 		<attack name="energyfield" interval="1000" chance="8" range="7" radius="1" target="1">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
-		<attack name="physical" interval="10500" chance="100" radius="3" target="0" min="0" max="0">
+		<attack name="effect" interval="10500" chance="100" radius="3" target="0">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>

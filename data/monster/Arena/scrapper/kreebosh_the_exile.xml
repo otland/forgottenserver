@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Kreebosh the Exile" nameDescription="Kreebosh the Exile" race="blood" experience="350" speed="270" manacost="0">
-	<health now="880" max="880" />
+	<health now="705" max="705" />
 	<look type="103" corpse="7349" />
 	<flags>
 		<flag summonable="0" />

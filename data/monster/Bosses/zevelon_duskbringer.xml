@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Zevelon Duskbringer" nameDescription="Zevelon Duskbringer" race="undead" experience="1800" speed="310" manacost="0">
-	<health now="1600" max="1600" />
+	<health now="1400" max="1400" />
 	<look type="287" corpse="8937" />
 	<targetchange interval="5000" chance="10" />
 	<flags>

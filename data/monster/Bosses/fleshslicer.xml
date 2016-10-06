@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fleshslicer" nameDescription="Fleshslicer" race="blood" experience="0" speed="560" manacost="0">
-	<health now="95" max="95" />
+<monster name="Fleshslicer" nameDescription="Fleshslicer" race="blood" experience="5500" speed="560" manacost="0">
+	<health now="5700" max="5700" />
 	<look type="457" corpse="15296" />
 	<targetchange interval="2000" chance="50" />
 	<flags>
