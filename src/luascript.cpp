@@ -12291,62 +12291,62 @@ int LuaScriptInterface::luaPropStreamRead(lua_State* L)
 		PropType_t type = getNumber<PropType_t>(L, 2);
 
 		if (type == PROPUINT8) {
-			uint8_t value;
+			uint8_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPUINT16) {
-			uint16_t value;
+			uint16_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPUINT32) {
-			uint32_t value;
+			uint32_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPUINT64) {
-			uint64_t value;
+			uint64_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPINT8) {
-			int8_t value;
+			int8_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPINT16) {
-			int16_t value;
+			int16_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPINT32) {
-			int32_t value;
+			int32_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPINT64) {
-			int64_t value;
+			int64_t value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPFLOAT) {
-			float value;
+			float value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPDOUBLE) {
-			double value;
+			double value = 0;
 			propStream->read(value);
 			lua_pushnumber(L, value);
 
 		} else if (type == PROPCHAR) {
-			char value;
+			char value = 0;
 			propStream->read(value);
 			pushString(L, std::string(1, value));
 
 		} else if (type == PROPBOOL) {
-			bool value;
+			bool value = false;
 			propStream->read(value);
 			lua_pushboolean(L, value);
 
@@ -12363,7 +12363,7 @@ int LuaScriptInterface::luaPropStreamReadString(lua_State* L)
 	// propStream:readString()
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
-		std::string ret;
+		std::string ret = std::string();
 		propStream->readString(ret);
 		pushString(L, ret);
 	} else {
