@@ -1006,3 +1006,13 @@ end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
+
+function doTileAddItemEx(pos, uid, flags)
+	flags = flags or 0
+	local tile = Tile(pos)
+	local item = Item(uid)
+	if tile and item then
+		tile:addItemEx(item, flags)
+	end
+	return false
+end

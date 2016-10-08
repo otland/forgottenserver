@@ -910,9 +910,6 @@ void LuaScriptInterface::registerFunctions()
 	//doCreateItemEx(itemid, <optional> count/subtype)
 	lua_register(luaState, "doCreateItemEx", LuaScriptInterface::luaDoCreateItemEx);
 
-	//doTileAddItemEx(pos, uid)
-	lua_register(luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
-
 	//doMoveCreature(cid, direction)
 	lua_register(luaState, "doMoveCreature", LuaScriptInterface::luaDoMoveCreature);
 
@@ -1889,6 +1886,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Tile", "hasFlag", LuaScriptInterface::luaTileHasFlag);
 
 	registerMethod("Tile", "queryAdd", LuaScriptInterface::luaTileQueryAdd);
+	registerMethod("Tile", "addItem", LuaScriptInterface::luaTileAddItem);
+	registerMethod("Tile", "addItemEx", LuaScriptInterface::luaTileAddItemEx);
 
 	registerMethod("Tile", "getHouse", LuaScriptInterface::luaTileGetHouse);
 
@@ -2809,38 +2808,6 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	}
 
 	pushBoolean(L, false);
-	return 1;
-}
-
-int LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
-{
-	//doTileAddItemEx(pos, uid)
-	const Position& pos = getPosition(L, 1);
-
-	Tile* tile = g_game.map.getTile(pos);
-	if (!tile) {
-		std::ostringstream ss;
-		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint32_t uid = getNumber<uint32_t>(L, 2);
-	Item* item = getScriptEnv()->getItemByUID(uid);
-	if (!item) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (item->getParent() != VirtualCylinder::virtualCylinder) {
-		reportErrorFunc("Item already has a parent");
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_pushnumber(L, g_game.internalAddItem(tile, item));
 	return 1;
 }
 
@@ -5205,6 +5172,79 @@ int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTileAddItem(lua_State* L)
+{
+	// tile:addItem(itemId[, count/subType = 1[, flags = 0]])
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint16_t itemId;
+	if (isNumber(L, 2)) {
+		itemId = getNumber<uint16_t>(L, 2);
+	}
+	else {
+		itemId = Item::items.getItemIdByName(getString(L, 2));
+		if (itemId == 0) {
+			lua_pushnil(L);
+			return 1;
+		}
+	}
+
+	uint32_t subType = getNumber<uint32_t>(L, 3, 1);
+
+	Item* item = Item::CreateItem(itemId, std::min<uint32_t>(subType, 100));
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t flags = getNumber<uint32_t>(L, 4, 0);
+
+	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
+	if (ret == RETURNVALUE_NOERROR) {
+		pushUserdata<Item>(L, item);
+		setItemMetatable(L, -1, item);
+	}
+	else {
+		delete item;
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTileAddItemEx(lua_State* L)
+{
+	// tile:addItemEx(item[, flags = 0])
+	Item* item = getUserdata<Item>(L, 2);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (item->getParent() != VirtualCylinder::virtualCylinder) {
+		reportErrorFunc("Item already has a parent");
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t flags = getNumber<uint32_t>(L, 3, 0);
+	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
+	if (ret == RETURNVALUE_NOERROR) {
+		ScriptEnvironment::removeTempItem(item);
+	}
+	lua_pushnumber(L, ret);
 	return 1;
 }
 
