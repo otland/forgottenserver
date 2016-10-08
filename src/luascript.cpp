@@ -5187,8 +5187,7 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 	uint16_t itemId;
 	if (isNumber(L, 2)) {
 		itemId = getNumber<uint16_t>(L, 2);
-	}
-	else {
+	} else {
 		itemId = Item::items.getItemIdByName(getString(L, 2));
 		if (itemId == 0) {
 			lua_pushnil(L);
