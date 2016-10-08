@@ -550,4 +550,19 @@ typedef std::list<MarketOffer> MarketOfferList;
 typedef std::list<HistoryMarketOffer> HistoryMarketOfferList;
 typedef std::list<ShopInfo> ShopInfoList;
 
+enum PropType_t {
+	PROPUINT8,
+	PROPUINT16,
+	PROPUINT32,
+	PROPUINT64,
+	PROPINT8,
+	PROPINT16,
+	PROPINT32,
+	PROPINT64,
+	PROPFLOAT,
+	PROPDOUBLE,
+	PROPCHAR,
+	PROPBOOL,
+};
+
 #endif

@@ -5469,6 +5469,73 @@ void Game::internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, boo
 	}
 }
 
+void Game::serializeItem(PropWriteStream* stream, const Item* item)
+{ 
+	const Container* container = item->getContainer();
+
+	// Write ID & props
+	stream->write<uint16_t>(item->getID());
+	item->serializeAttr(*stream);
+
+	if (container) {
+		// Hack our way into the attributes
+		stream->write<uint8_t>(ATTR_CONTAINER_ITEMS);
+		stream->write<uint32_t>(container->size());
+		for (auto it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
+			serializeItem(stream, *it);
+		}
+	}
+
+	stream->write<uint8_t>(0x00); // attr end
+}
+
+bool Game::loadContainer(PropStream* propStream, Container* container)
+{
+	while (container->serializationCount > 0) {
+		if (unserializeItem(propStream, container) == nullptr) {
+			std::cout << "[Warning - Game::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
+			return false;
+		}
+		container->serializationCount--;
+	}
+
+	uint8_t endAttr;
+	if (!propStream->read<uint8_t>(endAttr) || endAttr != 0) {
+		std::cout << "[Warning - Game::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
+		return false;
+	}
+	return true;
+}
+
+Item* Game::unserializeItem(PropStream* propStream, Cylinder* parent)
+{
+	uint16_t id;
+	if (!propStream->read<uint16_t>(id)) {
+		return nullptr;
+	}
+
+	Item* item = Item::CreateItem(id);
+	if (item) {
+		if (item->unserializeAttr(*propStream)) {
+			Container* container = item->getContainer();
+			if (container && !loadContainer(propStream, container)) {
+				delete item;
+				item = nullptr;
+			}
+
+			if (parent) {
+				parent->internalAddThing(item);
+			}
+		} else {
+			std::cout << "WARNING: Unserialization error in Game::unserializeItem() " << id << std::endl;
+			delete item;
+			item = nullptr;
+		}
+	}
+
+	return item;
+}
+
 BedItem* Game::getBedBySleeper(uint32_t guid) const
 {
 	auto it = bedSleepersMap.find(guid);
