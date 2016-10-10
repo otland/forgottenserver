@@ -36,7 +36,7 @@ class Game;
 class Tile;
 class Map;
 
-#define MAP_MAX_LAYERS 16
+static constexpr int32_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
 struct AStarNode {
@@ -45,10 +45,10 @@ struct AStarNode {
 	uint16_t x, y;
 };
 
-#define MAX_NODES 512
+static constexpr int32_t MAX_NODES = 512;
 
-#define MAP_NORMALWALKCOST 10
-#define MAP_DIAGONALWALKCOST 25
+static constexpr int32_t MAP_NORMALWALKCOST = 10;
+static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
 
 class AStarNodes
 {
@@ -75,9 +75,9 @@ class AStarNodes
 
 typedef std::map<Position, SpectatorVec> SpectatorCache;
 
-#define FLOOR_BITS 3
-#define FLOOR_SIZE (1 << FLOOR_BITS)
-#define FLOOR_MASK (FLOOR_SIZE - 1)
+static constexpr int32_t FLOOR_BITS = 3;
+static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
+static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 
 struct Floor {
 	constexpr Floor() = default;
@@ -172,10 +172,10 @@ class QTreeLeafNode final : public QTreeNode
 class Map
 {
 	public:
-		static const int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
-		static const int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
-		static const int32_t maxClientViewportX = 8;
-		static const int32_t maxClientViewportY = 6;
+		static constexpr int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
+		static constexpr int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
+		static constexpr int32_t maxClientViewportX = 8;
+		static constexpr int32_t maxClientViewportY = 6;
 
 		uint32_t clean() const;
 

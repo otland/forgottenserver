@@ -24,11 +24,9 @@
 #include <unordered_set>
 #include <queue>
 
-
 #include "thread_holder_base.h"
 
-
-#define SCHEDULER_MINTICKS 50
+static constexpr int32_t SCHEDULER_MINTICKS = 50;
 
 class SchedulerTask : public Task
 {

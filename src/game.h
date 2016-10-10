@@ -71,9 +71,9 @@ enum LightState_t {
 	LIGHT_STATE_SUNRISE,
 };
 
-#define EVENT_LIGHTINTERVAL 10000
-#define EVENT_DECAYINTERVAL 250
-#define EVENT_DECAY_BUCKETS 4
+static constexpr int32_t EVENT_LIGHTINTERVAL = 10000;
+static constexpr int32_t EVENT_DECAYINTERVAL = 250;
+static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
 
 /**
   * Main Game class.
@@ -545,10 +545,10 @@ class Game
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 		Commands commands;
 
-		static const int32_t LIGHT_LEVEL_DAY = 250;
-		static const int32_t LIGHT_LEVEL_NIGHT = 40;
-		static const int32_t SUNSET = 1305;
-		static const int32_t SUNRISE = 430;
+		static constexpr int32_t LIGHT_LEVEL_DAY = 250;
+		static constexpr int32_t LIGHT_LEVEL_NIGHT = 40;
+		static constexpr int32_t SUNSET = 1305;
+		static constexpr int32_t SUNRISE = 430;
 
 		GameState_t gameState = GAME_STATE_NORMAL;
 		WorldType_t worldType = WORLD_TYPE_PVP;
