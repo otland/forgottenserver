@@ -8,11 +8,14 @@ function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
 		return true
 	end
+
 	local lookType = tonumber(param)
+
 	if not lookType then
 		player:sendCancelMessage("Param incorrect.")
 		return false 
 	end
+
 	if lookType >= 0 				and
 		not isInArray(blockLookType, lookType)	and
 		(lookType <= 160 or lookType >= 192)	and
@@ -27,5 +30,6 @@ function onSay(player, words, param)
 	else
 		player:sendCancelMessage("A look type with that id does not exist.")
 	end
+
 	return false
 end
