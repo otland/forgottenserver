@@ -6421,8 +6421,7 @@ int LuaScriptInterface::luaItemSerializeAttr(lua_State* L)
 	if (item && propWriteStream) {
 		item->serializeAttr(*propWriteStream);
 		pushBoolean(L, true);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -6436,8 +6435,7 @@ int LuaScriptInterface::luaItemUnserializeAttr(lua_State* L)
 	if (item && propStream) {
 		item->unserializeAttr(*propStream);
 		pushBoolean(L, true);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
