@@ -4474,9 +4474,8 @@ int LuaScriptInterface::luaGameSerializeItem(lua_State* L)
 	Item* item = getUserdata<Item>(L, 2);
 	if (propWriteStream && item) {
 		g_game.serializeItem(propWriteStream, item);
-		lua_pushboolean(L, true);
-	}
-	else {
+		pushBoolean(L, true);
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -4494,10 +4493,9 @@ int LuaScriptInterface::luaGameUnserializeItem(lua_State* L)
 			pushUserdata<Item>(L, item);
 			setItemMetatable(L, -1, item);
 		} else {
-			lua_pushboolean(L, false);
+			pushBoolean(L, false);
 		}
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -6422,7 +6420,7 @@ int LuaScriptInterface::luaItemSerializeAttr(lua_State* L)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 2);
 	if (item && propWriteStream) {
 		item->serializeAttr(*propWriteStream);
-		lua_pushboolean(L, true);
+		pushBoolean(L, true);
 	}
 	else {
 		lua_pushnil(L);
@@ -6437,7 +6435,7 @@ int LuaScriptInterface::luaItemUnserializeAttr(lua_State* L)
 	PropStream* propStream = getUserdata<PropStream>(L, 2);
 	if (item && propStream) {
 		item->unserializeAttr(*propStream);
-		lua_pushboolean(L, true);
+		pushBoolean(L, true);
 	}
 	else {
 		lua_pushnil(L);
@@ -12264,7 +12262,7 @@ int LuaScriptInterface::luaPropStreamInit(lua_State* L)
 		if (stream) {
 			size_t size = getNumber<size_t>(L, 3);
 			propStream->init(stream, size);
-			lua_pushboolean(L, true);
+			pushBoolean(L, true);
 		}
 	} else {
 		lua_pushnil(L);
@@ -12352,7 +12350,7 @@ int LuaScriptInterface::luaPropStreamRead(lua_State* L)
 		} else if (type == PROPBOOL) {
 			bool value = false;
 			propStream->read(value);
-			lua_pushboolean(L, value);
+			pushBoolean(L, value);
 
 		}
 	} else {
@@ -12384,7 +12382,7 @@ int LuaScriptInterface::luaPropStreamSkip(lua_State* L)
 	if (propStream) {
 		size_t n = getNumber<size_t>(L, 2);
 		propStream->skip(n);
-		lua_pushboolean(L, true);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12433,7 +12431,7 @@ int LuaScriptInterface::luaPropWriteStreamClear(lua_State* L)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->clear();
-		lua_pushboolean(L, true);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12494,7 +12492,7 @@ int LuaScriptInterface::luaPropWriteStreamWrite(lua_State* L)
 			propWriteStream->write<bool>(value);
 
 		}
-		lua_pushboolean(L, true);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12508,7 +12506,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteString(lua_State* L)
 	if (propWriteStream) {
 		std::string str = getString(L, 2);
 		propWriteStream->writeString(str);
-		lua_pushboolean(L, true);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
