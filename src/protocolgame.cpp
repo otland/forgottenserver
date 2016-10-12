@@ -516,20 +516,53 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 		}
 	}
 
-	const CreatureVector* creatures = tile->getCreatures();
-	if (creatures) {
-		for (const Creature* creature : boost::adaptors::reverse(*creatures)) {
-			if (!player->canSeeCreature(creature)) {
-				continue;
+	if (tileLogin && tile->getPosition() == player->getPosition()) {
+		bool playerSpawned = false;
+		const CreatureVector *creatures = tile->getCreatures();
+		if (creatures) {
+			for (const Creature *creature : boost::adaptors::reverse(*creatures)) {
+				if (!player->canSeeCreature(creature)) {
+					continue;
+				}
+
+				if (creature == player) {
+					playerSpawned = true;
+				}
+
+				bool known;
+				uint32_t removedKnown;
+				checkCreatureAsKnown(creature->getID(), known, removedKnown);
+				AddCreature(msg, creature, known, removedKnown);
+
+				if (count == 8 && playerSpawned == false) {
+					bool known;
+					uint32_t removedKnown;
+					checkCreatureAsKnown(player->getID(), known, removedKnown);
+					AddCreature(msg, player, known, removedKnown);
+					++count;
+				}
+
+				if (++count == 10) {
+					return;
+				}
 			}
+		}
+	} else {
+		const CreatureVector *creatures = tile->getCreatures();
+		if (creatures) {
+			for (const Creature *creature : boost::adaptors::reverse(*creatures)) {
+				if (!player->canSeeCreature(creature)) {
+					continue;
+				}
 
-			bool known;
-			uint32_t removedKnown;
-			checkCreatureAsKnown(creature->getID(), known, removedKnown);
-			AddCreature(msg, creature, known, removedKnown);
+				bool known;
+				uint32_t removedKnown;
+				checkCreatureAsKnown(creature->getID(), known, removedKnown);
+				AddCreature(msg, creature, known, removedKnown);
 
-			if (++count == 10) {
-				return;
+				if (++count == 10) {
+					return;
+				}
 			}
 		}
 	}
@@ -2389,7 +2422,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 	sendPendingStateEntered();
 	sendEnterWorld();
+	tileLogin = true;
 	sendMapDescription(pos);
+	tileLogin = false;
 
 	if (isLogin) {
 		sendMagicEffect(pos, CONST_ME_TELEPORT);
