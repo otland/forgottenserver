@@ -26,7 +26,7 @@
 class Item;
 class Creature;
 
-#define INDEX_WHEREEVER -1
+static constexpr int32_t INDEX_WHEREEVER = -1;
 
 enum cylinderflags_t {
 	FLAG_NOLIMIT = 1 << 0, //Bypass limits like capacity/container limits, blocking items/creatures etc.
