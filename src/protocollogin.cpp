@@ -138,7 +138,9 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	if (version <= 760) {
-		disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!", version);
+		std::ostringstream ss;
+		ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
+		disconnectClient(ss.str(), version);
 		return;
 	}
 
@@ -156,7 +158,9 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	setXTEAKey(key);
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!", version);
+		std::ostringstream ss;
+		ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
+		disconnectClient(ss.str(), version);
 		return;
 	}
 
