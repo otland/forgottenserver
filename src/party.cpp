@@ -412,7 +412,7 @@ bool Party::setSharedExperience(Player* player, bool sharedExpActive)
 
 void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 {
-	uint64_t shareExperience = static_cast<uint64_t>(std::ceil((static_cast<double>(experience) * extraExpRate) / (memberList.size() + 1)));
+	uint64_t shareExperience = static_cast<uint64_t>(std::ceil((static_cast<double>(experience) * (extraExpRate + 1)) / (memberList.size() + 1)));
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
