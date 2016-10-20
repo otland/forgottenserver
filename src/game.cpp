@@ -2363,7 +2363,7 @@ void Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 	}
 
 	player->setContainerIndex(containerId, index);
-	player->sendContainer(containerId, container, false, index);
+	player->sendContainer(containerId, container, container->hasParent(), index);
 }
 
 void Game::playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text)
