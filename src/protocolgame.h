@@ -320,7 +320,7 @@ class ProtocolGame final : public Protocol
 
 		bool debugAssertSent = false;
 		bool acceptPackets = false;
-		bool tileLogin = true;
+		bool loggedIn = false;
 };
 
 #endif
