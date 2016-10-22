@@ -497,37 +497,14 @@ Direction getDirectionTo(const Position& from, const Position& to)
 	return dir;
 }
 
-struct MagicEffectNames {
-	const char* name;
-	MagicEffectClasses effect;
-};
+using MagicEffectNames = std::unordered_map<std::string, MagicEffectClasses>;
+using ShootTypeNames = std::unordered_map<std::string, ShootType_t>;
+using CombatTypeNames = std::unordered_map<CombatType_t, std::string, std::hash<int32_t>>;
+using AmmoTypeNames = std::unordered_map<std::string, Ammo_t>;
+using WeaponActionNames = std::unordered_map<std::string, WeaponAction_t>;
+using SkullNames = std::unordered_map<std::string, Skulls_t>;
 
-struct ShootTypeNames {
-	const char* name;
-	ShootType_t shoot;
-};
-
-struct CombatTypeNames {
-	const char* name;
-	CombatType_t combat;
-};
-
-struct AmmoTypeNames {
-	const char* name;
-	Ammo_t ammoType;
-};
-
-struct WeaponActionNames {
-	const char* name;
-	WeaponAction_t weaponAction;
-};
-
-struct SkullNames {
-	const char* name;
-	Skulls_t skull;
-};
-
-MagicEffectNames magicEffectNames[] = {
+MagicEffectNames magicEffectNames = {
 	{"redspark",		CONST_ME_DRAWBLOOD},
 	{"bluebubble",		CONST_ME_LOSEENERGY},
 	{"poff",		CONST_ME_POFF},
@@ -611,7 +588,7 @@ MagicEffectNames magicEffectNames[] = {
 	{"purplesmoke",		CONST_ME_PURPLESMOKE},
 };
 
-ShootTypeNames shootTypeNames[] = {
+ShootTypeNames shootTypeNames = {
 	{"spear",		CONST_ANI_SPEAR},
 	{"bolt",		CONST_ANI_BOLT},
 	{"arrow",		CONST_ANI_ARROW},
@@ -664,22 +641,22 @@ ShootTypeNames shootTypeNames[] = {
 	{"simplearrow",		CONST_ANI_SIMPLEARROW},
 };
 
-CombatTypeNames combatTypeNames[] = {
-	{"physical",		COMBAT_PHYSICALDAMAGE},
-	{"energy",		COMBAT_ENERGYDAMAGE},
-	{"earth",		COMBAT_EARTHDAMAGE},
-	{"fire",		COMBAT_FIREDAMAGE},
-	{"undefined",		COMBAT_UNDEFINEDDAMAGE},
-	{"lifedrain",		COMBAT_LIFEDRAIN},
-	{"manadrain",		COMBAT_MANADRAIN},
-	{"healing",		COMBAT_HEALING},
-	{"drown",		COMBAT_DROWNDAMAGE},
-	{"ice",			COMBAT_ICEDAMAGE},
-	{"holy",		COMBAT_HOLYDAMAGE},
-	{"death",		COMBAT_DEATHDAMAGE},
+CombatTypeNames combatTypeNames = {
+	{COMBAT_PHYSICALDAMAGE, 	"physical"},
+	{COMBAT_ENERGYDAMAGE, 		"energy"},
+	{COMBAT_EARTHDAMAGE, 		"earth"},
+	{COMBAT_FIREDAMAGE, 		"fire"},
+	{COMBAT_UNDEFINEDDAMAGE, 	"undefined"},
+	{COMBAT_LIFEDRAIN, 		"lifedrain"},
+	{COMBAT_MANADRAIN, 		"manadrain"},
+	{COMBAT_HEALING, 		"healing"},
+	{COMBAT_DROWNDAMAGE, 		"drown"},
+	{COMBAT_ICEDAMAGE, 		"ice"},
+	{COMBAT_HOLYDAMAGE, 		"holy"},
+	{COMBAT_DEATHDAMAGE, 		"death"},
 };
 
-AmmoTypeNames ammoTypeNames[] = {
+AmmoTypeNames ammoTypeNames = {
 	{"spear",		AMMO_SPEAR},
 	{"bolt",		AMMO_BOLT},
 	{"arrow",		AMMO_ARROW},
@@ -705,13 +682,13 @@ AmmoTypeNames ammoTypeNames[] = {
 	{"eartharrow",		AMMO_ARROW},
 };
 
-WeaponActionNames weaponActionNames[] = {
+WeaponActionNames weaponActionNames = {
 	{"move",		WEAPONACTION_MOVE},
 	{"removecharge",	WEAPONACTION_REMOVECHARGE},
 	{"removecount",		WEAPONACTION_REMOVECOUNT},
 };
 
-SkullNames skullNames[] = {
+SkullNames skullNames = {
 	{"none",	SKULL_NONE},
 	{"yellow",	SKULL_YELLOW},
 	{"green",	SKULL_GREEN},
@@ -723,70 +700,54 @@ SkullNames skullNames[] = {
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
-	for (auto& magicEffectName : magicEffectNames) {
-		if (strcasecmp(strValue.c_str(), magicEffectName.name) == 0) {
-			return magicEffectName.effect;
-		}
+	auto magicEffect = magicEffectNames.find(strValue);
+	if (magicEffect != magicEffectNames.end()) {
+		return magicEffect->second;
 	}
 	return CONST_ME_NONE;
 }
 
 ShootType_t getShootType(const std::string& strValue)
 {
-	for (size_t i = 0, size = sizeof(shootTypeNames) / sizeof(ShootTypeNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), shootTypeNames[i].name) == 0) {
-			return shootTypeNames[i].shoot;
-		}
+	auto shootType = shootTypeNames.find(strValue);
+	if (shootType != shootTypeNames.end()) {
+		return shootType->second;
 	}
 	return CONST_ANI_NONE;
 }
 
-CombatType_t getCombatType(const std::string& strValue)
-{
-	for (size_t i = 0, size = sizeof(combatTypeNames) / sizeof(CombatTypeNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), combatTypeNames[i].name) == 0) {
-			return combatTypeNames[i].combat;
-		}
-	}
-	return COMBAT_NONE;
-}
-
 std::string getCombatName(CombatType_t combatType)
 {
-	for (size_t i = 0, size = sizeof(combatTypeNames) / sizeof(CombatTypeNames); i < size; ++i) {
-		if (combatTypeNames[i].combat == combatType) {
-			return combatTypeNames[i].name;
-		}
+	auto combatName = combatTypeNames.find(combatType);
+	if (combatName != combatTypeNames.end()) {
+		return combatName->second;
 	}
 	return "unknown";
 }
 
 Ammo_t getAmmoType(const std::string& strValue)
 {
-	for (size_t i = 0, size = sizeof(ammoTypeNames) / sizeof(AmmoTypeNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), ammoTypeNames[i].name) == 0) {
-			return ammoTypeNames[i].ammoType;
-		}
+	auto ammoType = ammoTypeNames.find(strValue);
+	if (ammoType != ammoTypeNames.end()) {
+		return ammoType->second;
 	}
 	return AMMO_NONE;
 }
 
 WeaponAction_t getWeaponAction(const std::string& strValue)
 {
-	for (size_t i = 0, size = sizeof(weaponActionNames) / sizeof(WeaponActionNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), weaponActionNames[i].name) == 0) {
-			return weaponActionNames[i].weaponAction;
-		}
+	auto weaponAction = weaponActionNames.find(strValue);
+	if (weaponAction != weaponActionNames.end()) {
+		return weaponAction->second;
 	}
 	return WEAPONACTION_NONE;
 }
 
 Skulls_t getSkullType(const std::string& strValue)
 {
-	for (size_t i = 0, size = sizeof(skullNames) / sizeof(SkullNames); i < size; ++i) {
-		if (strcasecmp(strValue.c_str(), skullNames[i].name) == 0) {
-			return skullNames[i].skull;
-		}
+	auto skullType = skullNames.find(strValue);
+	if (skullType != skullNames.end()) {
+		return skullType->second;
 	}
 	return SKULL_NONE;
 }

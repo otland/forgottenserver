@@ -596,7 +596,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				const char* value = attr.value();
 				if (strcasecmp(value, "shooteffect") == 0) {
 					if ((attr = attributeNode.attribute("value"))) {
-						ShootType_t shoot = getShootType(attr.as_string());
+						ShootType_t shoot = getShootType(asLowerCaseString(attr.as_string()));
 						if (shoot != CONST_ANI_NONE) {
 							combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, shoot);
 						} else {
@@ -605,7 +605,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					}
 				} else if (strcasecmp(value, "areaeffect") == 0) {
 					if ((attr = attributeNode.attribute("value"))) {
-						MagicEffectClasses effect = getMagicEffect(attr.as_string());
+						MagicEffectClasses effect = getMagicEffect(asLowerCaseString(attr.as_string()));
 						if (effect != CONST_ME_NONE) {
 							combat->setParam(COMBAT_PARAM_EFFECT, effect);
 						} else {
@@ -701,7 +701,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	}
 
 	if ((attr = monsterNode.attribute("skull"))) {
-		mType->info.skull = getSkullType(attr.as_string());
+		mType->info.skull = getSkullType(asLowerCaseString(attr.as_string()));
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {
