@@ -182,7 +182,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("action"))) {
-		action = getWeaponAction(attr.as_string());
+		action = getWeaponAction(asLowerCaseString(attr.as_string()));
 		if (action == WEAPONACTION_NONE) {
 			std::cout << "[Warning - Weapon::configureEvent] Unknown action " << attr.as_string() << std::endl;
 		}
