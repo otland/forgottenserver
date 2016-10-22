@@ -2858,7 +2858,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getOfflineTrainingTime() / 60 / 1000);
 
 	msg.add<uint16_t>(0); // xp boost time (seconds)
-	msg.addByte(0); // ?
+	msg.addByte(0); // enables exp boost in the store
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
