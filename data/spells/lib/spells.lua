@@ -248,3 +248,45 @@ CORPSES = {
 
 -- This array contains all destroyable field items
 FIELDS = {1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1500,1501,1502,1503,1504}
+
+-- The numbered-keys represents the damage values, and their table
+-- contains the minimum and maximum number of rounds of those damage values.
+RANGE = {
+[1]  = {19, 20}, [2]  = {10, 10}, [3]  = {6, 7}, [4]  = {4, 5}, [5]  = {3, 4},
+[6]  = {3, 4},   [7]  = {2, 3},   [8]  = {2, 3}, [9]  = {2, 3}, [10] = {1, 2},
+[11] = {1, 2},   [12] = {1, 2},   [13] = {1, 2}, [14] = {1, 2}, [15] = {1, 2},
+[16] = {1, 2},   [17] = {1, 2},   [18] = {1, 2}, [19] = {1, 2}
+}
+
+function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
+	local condition = Condition(conditionType)
+	condition:setParameter(CONDITION_PARAM_OWNER, self:getId())
+	condition:setParameter(CONDITION_PARAM_DELAYED, true)
+
+	if listType == 0 then
+		local exponent, value = -10, 0
+		while value < damage do
+			value = math.floor(10 * 1.2 ^ exponent + 0.5)
+			condition:addDamage(1, time or 4000, -value)
+
+			if value >= damage then
+				local permille = math.random(10, 1200) / 1000
+				condition:addDamage(1, time or 4000, -math.max(1, math.floor(value * permille + 0.5)))
+			else
+				exponent = exponent + 1
+			end
+		end
+	elseif listType == 1 then
+		while damage > 0 do
+			condition:addDamage(RANGE[damage] and math.random(RANGE[damage][1], RANGE[damage][2]) or 1, time or 4000, -damage)
+			damage = damage - (damage > 21 and math.floor(damage / 20) + math.random(0, 1) or 1)
+		end
+	elseif listType == 2 then
+		for _ = 1, rounds do
+			condition:addDamage(1, math.random(time[1], time[2]) * 1000, -damage)
+		end
+	end
+
+	target:addCondition(condition)
+	return true
+end
