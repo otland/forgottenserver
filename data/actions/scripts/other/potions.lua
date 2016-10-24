@@ -65,7 +65,7 @@ local potions = {
 			description = "Only paladins of level 130 or above may drink this fluid."},
 
 	[26031] = {health = {875, 1125}, vocations = {4, 8}, level = 200, flask = 7635,
-			description = "Only knights of level 200 or above may drink this fluid."},
+			description = "Only knights of level 200 or above may drink this fluid."}
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -103,7 +103,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if potion.transform then
-		item:transform(math.random(potion.transform.id[1], potion.transform.id[2]))
+		item:transform(potion.transform.id[math.random(#potion.transform.id)])
 		item:getPosition():sendMagicEffect(potion.effect)
 		return true
 	end
