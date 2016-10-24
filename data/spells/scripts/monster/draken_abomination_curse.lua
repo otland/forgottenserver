@@ -1,24 +1,14 @@
-local combat = {}
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 
-for i = 15, 30 do
-	combat[i] = Combat()
-	combat[i]:setParameter(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE)
-	combat[i]:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
-	combat[i]:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
-
-	local condition = Condition(CONDITION_CURSED)
-	condition:setParameter(CONDITION_PARAM_DELAYED, true)
-
-	local damage = i
-	condition:addDamage(1, 4000, -damage)
-	for j = 1, 8 do
-		damage = damage * 1.2
-		condition:addDamage(1, 4000, -damage)
-	end
-
-	combat[i]:setCondition(condition)
+function onTargetCreature(creature, target)
+	creature:addDamageCondition(target, CONDITION_CURSED, 0, math.random(62, 128))
 end
 
+combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
+
 function onCastSpell(creature, variant)
-	return combat[math.random(15, 30)]:execute(creature, variant)
+	return combat:execute(creature, variant)
 end
