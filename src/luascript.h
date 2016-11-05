@@ -1079,6 +1079,7 @@ class LuaScriptInterface
 		static int luaHouseGetDoorCount(lua_State* L);
 
 		static int luaHouseGetTiles(lua_State* L);
+		static int luaHouseGetItems(lua_State* L);
 		static int luaHouseGetTileCount(lua_State* L);
 
 		static int luaHouseGetAccessList(lua_State* L);

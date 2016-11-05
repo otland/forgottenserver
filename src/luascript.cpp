@@ -2375,6 +2375,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("House", "getDoorCount", LuaScriptInterface::luaHouseGetDoorCount);
 
 	registerMethod("House", "getTiles", LuaScriptInterface::luaHouseGetTiles);
+	registerMethod("House", "getItems", LuaScriptInterface::luaHouseGetItems);
 	registerMethod("House", "getTileCount", LuaScriptInterface::luaHouseGetTileCount);
 
 	registerMethod("House", "getAccessList", LuaScriptInterface::luaHouseGetAccessList);
@@ -10412,6 +10413,31 @@ int LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 		pushUserdata<Tile>(L, tile);
 		setMetatable(L, -1, "Tile");
 		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetItems(lua_State* L)
+{
+	// house:getItems()
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+	const auto& tiles = house->getTiles();
+	lua_newtable(L);
+
+	int index = 0;
+	for (Tile* tile : tiles) {
+		TileItemVector* itemVector = tile->getItemList();
+		if(itemVector) {
+			for(Item* item : *itemVector) {
+				pushUserdata<Item>(L, item);
+				setItemMetatable(L, -1, item);
+				lua_rawseti(L, -2, ++index);
+			}
+		}
 	}
 	return 1;
 }

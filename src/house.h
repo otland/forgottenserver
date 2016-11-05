@@ -289,7 +289,7 @@ class Houses
 			houseMap[id] = house;
 			return house;
 		}
-
+		
 		House* getHouse(uint32_t houseId) {
 			auto it = houseMap.find(houseId);
 			if (it == houseMap.end()) {
