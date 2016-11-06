@@ -1290,7 +1290,10 @@ void ProtocolGame::sendBasicData()
 		msg.add<uint32_t>(0);
 	}
 	msg.addByte(player->getVocation()->getClientId());
-	msg.add<uint16_t>(0x00);
+	msg.add<uint16_t>(0xFF); // number of known spells
+	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
+		msg.addByte(spellId);
+	}
 	writeToOutputBuffer(msg);
 }
 
