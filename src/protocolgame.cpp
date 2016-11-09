@@ -270,19 +270,17 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(1); // gamemaster flag
 
 	std::string sessionKey = msg.getString();
-	size_t pos = sessionKey.find('\n');
-	if (pos == std::string::npos) {
-		disconnectClient("You must enter your account name.");
-		return;
-	}
 
-	std::string accountName = sessionKey.substr(0, pos);
+	auto sessionArgs = explodeString(sessionKey, "\n", 4);
+	std::string& accountName = sessionArgs[0];
+	std::string& password = sessionArgs[1];
+	std::string& token = sessionArgs[2];
+	std::string& tokenTime = sessionArgs[3];
+
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
 		return;
 	}
-
-	std::string password = sessionKey.substr(pos + 1);
 
 	std::string characterName = msg.getString();
 
@@ -322,7 +320,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName);
+	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, std::stoul(tokenTime));
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
