@@ -16,6 +16,7 @@ function onSay(player, words, param)
 	local targetPlayer = Player(param)
 	if targetPlayer then
 		targetIp = targetPlayer:getIp()
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, targetPlayer:getName() .. " has been banned in IP.")
 		targetPlayer:remove()
 	end
 
