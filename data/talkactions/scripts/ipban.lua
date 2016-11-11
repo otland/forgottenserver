@@ -16,7 +16,7 @@ function onSay(player, words, param)
 	local targetPlayer = Player(param)
 	if targetPlayer then
 		targetIp = targetPlayer:getIp()
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, targetPlayer:getName() .. " IP has been banned.")
+		targetName = targetPlayer:getName()
 		targetPlayer:remove()
 	end
 
@@ -33,5 +33,6 @@ function onSay(player, words, param)
 	local timeNow = os.time()
 	db.query("INSERT INTO `ip_bans` (`ip`, `reason`, `banned_at`, `expires_at`, `banned_by`) VALUES (" ..
 			targetIp .. ", '', " .. timeNow .. ", " .. timeNow + (ipBanDays * 86400) .. ", " .. player:getGuid() .. ")")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, targetName .. " IP has been banned.")
 	return false
 end
