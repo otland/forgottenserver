@@ -66,7 +66,7 @@ Tile* IOMap::createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8
 	return tile;
 }
 
-bool IOMap::loadMap(Map* map, const std::string& identifier)
+bool IOMap::loadMap(Map* map, const std::string& identifier, int place_x, int place_y)
 {
 	int64_t start = OTSYS_TIME();
 
@@ -198,9 +198,18 @@ bool IOMap::loadMap(Map* map, const std::string& identifier)
 				setLastErrorString("Invalid map node.");
 				return false;
 			}
-
-			uint16_t base_x = area_coord.x;
-			uint16_t base_y = area_coord.y;
+			
+			uint16_t base_x = 0;
+			uint16_t base_y = 0;
+			
+			if (place_x != 0 && place_y != 0) {
+				base_x = place_x;
+				base_y = place_y;
+			}
+			else {
+				base_x = area_coord.x;
+				base_y = area_coord.y;
+			}
 			uint16_t z = area_coord.z;
 
 			NODE nodeTile = f.getChildNode(nodeMapData, type);
