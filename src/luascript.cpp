@@ -5209,8 +5209,7 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 	if (ret == RETURNVALUE_NOERROR) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
-	}
-	else {
+	} else {
 		delete item;
 		lua_pushnil(L);
 	}
