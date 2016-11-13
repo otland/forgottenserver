@@ -638,7 +638,7 @@ bool Item::unserializeAttr(PropStream& propStream)
 	return true;
 }
 
-bool Item::unserializeItemNode(FileLoader&, NODE, PropStream& propStream)
+bool Item::unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream)
 {
 	return unserializeAttr(propStream);
 }

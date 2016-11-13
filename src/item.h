@@ -528,7 +528,7 @@ class Item : virtual public Thing
 		//serialization
 		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
 		bool unserializeAttr(PropStream& propStream);
-		virtual bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);
+		virtual bool unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream);
 
 		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
