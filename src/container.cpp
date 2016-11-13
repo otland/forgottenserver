@@ -107,24 +107,22 @@ Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-bool Container::unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream)
+bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream)
 {
-	bool ret = Item::unserializeItemNode(f, node, propStream);
+	bool ret = Item::unserializeItemNode(loader, node, propStream);
 	if (!ret) {
 		return false;
 	}
 
-	uint32_t type;
-	NODE nodeItem = f.getChildNode(node, type);
-	while (nodeItem) {
+	for (auto& itemNode : node.children) {
 		//load container items
-		if (type != OTBM_ITEM) {
+		if (itemNode.type != OTBM_ITEM) {
 			// unknown type
 			return false;
 		}
 
 		PropStream itemPropStream;
-		if (!f.getProps(nodeItem, itemPropStream)) {
+		if (!loader.getProps(itemNode, itemPropStream)) {
 			return false;
 		}
 
@@ -133,14 +131,12 @@ bool Container::unserializeItemNode(FileLoader& f, NODE node, PropStream& propSt
 			return false;
 		}
 
-		if (!item->unserializeItemNode(f, nodeItem, itemPropStream)) {
+		if (!item->unserializeItemNode(loader, itemNode, itemPropStream)) {
 			return false;
 		}
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
-
-		nodeItem = f.getNextNode(nodeItem, type);
 	}
 	return true;
 }
