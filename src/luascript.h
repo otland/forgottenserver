@@ -93,7 +93,6 @@ struct LuaTimerEventDesc {
 class LuaScriptInterface;
 class Cylinder;
 class Game;
-class Npc;
 
 class ScriptEnvironment
 {
