@@ -10467,16 +10467,20 @@ int LuaScriptInterface::luaHouseSetAccessList(lua_State* L)
 int LuaScriptInterface::luaItemTypeCreate(lua_State* L)
 {
 	// ItemType(id or name)
-	uint32_t id;
+	uint32_t id = 0;
 	if (isNumber(L, 2)) {
 		id = getNumber<uint32_t>(L, 2);
-	} else {
+	} else if (isString(L, 2)) {
 		id = Item::items.getItemIdByName(getString(L, 2));
 	}
 
 	const ItemType& itemType = Item::items[id];
-	pushUserdata<const ItemType>(L, &itemType);
-	setMetatable(L, -1, "ItemType");
+	if (itemType.id != 0) {
+		pushUserdata<const ItemType>(L, &itemType);
+		setMetatable(L, -1, "ItemType");
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
