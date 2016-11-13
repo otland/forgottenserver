@@ -1167,6 +1167,30 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
+		case RETURNVALUE_NOSUCHRAID:
+			return "No such raid exists.";
+
+		case RETURNVALUE_ANOTHERRAIDEXECUTING:
+			return "Another raid is already being executed.";
+
+		case RETURNVALUE_RAIDCONTAINSNODATA:
+			return "The raid does not contain any data.";
+
+		case RETURNVALUE_TRADEPLAYERFARAWAY:
+			return "Trade player is too far away.";
+		
+		case RETURNVALUE_YOUDONTOWNTHISHOUSE:
+			return "You don't own this house.";
+
+		case  RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE:
+			return "Trade player already owns a house.";
+
+		case RETURNVALUE_TRADEPLAYERHIGHESTBIDDER:
+			return "Trade player is currently the highest bidder of an auctioned house.";
+
+		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE:
+			return "You can not trade this house.";
+
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}

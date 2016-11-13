@@ -35,6 +35,11 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "actions.h"
+#include "movement.h"
+#include "weapons.h"
+#include "globalevent.h"
+#include "events.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -42,6 +47,14 @@ extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
+extern Actions* g_actions;
+extern TalkActions* g_talkActions;
+extern MoveEvents* g_moveEvents;
+extern Weapons* g_weapons;
+extern CreatureEvents* g_creatureEvents;
+extern GlobalEvents* g_globalEvents;
+extern Events* g_events;
+extern Chat* g_chat;
 
 ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
 uint32_t ScriptEnvironment::lastResultId = 0;
@@ -1717,6 +1730,15 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_CANONLYUSEONESHIELD)
 	registerEnum(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 	registerEnum(RETURNVALUE_YOUARENOTTHEOWNER)
+	registerEnum(RETURNVALUE_NOSUCHRAID)
+	registerEnum(RETURNVALUE_ANOTHERRAIDEXECUTING)
+	registerEnum(RETURNVALUE_RAIDCONTAINSNODATA)
+	registerEnum(RETURNVALUE_TRADEPLAYERNOTFOUND)
+	registerEnum(RETURNVALUE_TRADEPLAYERFARAWAY)
+	registerEnum(RETURNVALUE_YOUDONTOWNTHISHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
+	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
@@ -1831,6 +1853,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+
+	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -2379,6 +2403,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getAccessList", LuaScriptInterface::luaHouseGetAccessList);
 	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
+
+	registerMethod("House", "startTrade", LuaScriptInterface::luaHouseStartTrade);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -4413,12 +4439,76 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	const std::string& raidName = getString(L, 1);
 
 	Raid* raid = g_game.raids.getRaidByName(raidName);
-	if (raid) {
-		raid->startRaid();
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
+	if(!raid || !raid->isLoaded()) {
+		lua_pushnumber(L, RETURNVALUE_NOSUCHRAID);
+		return 1;
+	} else if (g_game.raids.getRunning()) {
+		lua_pushnumber(L, RETURNVALUE_ANOTHERRAIDEXECUTING);
+		return 1;
 	}
+
+	RaidEvent* raidEvent = raid->getNextRaidEvent();
+	if (!raidEvent) {
+		lua_pushnumber(L, RETURNVALUE_RAIDCONTAINSNODATA);
+		return 1;
+	}
+
+	g_game.raids.setRunning(raid);
+	raid->startRaid();
+	lua_pushnumber(L, RETURNVALUE_NOERROR);
+	return 1;
+}
+
+int LuaScriptInterface::luaGameReload(lua_State* L)
+{
+	// Game.reload(interfaceName)
+	const std::string& interfaceName = asLowerCaseString(getString(L, 1));
+	
+	if (interfaceName == "action" || interfaceName == "actions") {
+		g_actions->reload();
+	} else if (interfaceName == "config" || interfaceName == "configuration") {
+		g_config.reload();
+	} else if (interfaceName == "creaturescript" || interfaceName == "creaturescripts") {
+		g_creatureEvents->reload();
+	} else if (interfaceName == "monster" || interfaceName == "monsters") {
+		g_monsters.reload();
+	} else if (interfaceName == "move" || interfaceName == "movement" || interfaceName == "movements"
+		|| interfaceName == "moveevents" || interfaceName == "moveevent") {
+		g_moveEvents->reload();
+	} else if (interfaceName == "npc" || interfaceName == "npcs") {
+		Npcs::reload();
+	} else if (interfaceName == "raid" || interfaceName == "raids") {
+		g_game.raids.reload();
+		g_game.raids.startup();
+	} else if (interfaceName == "spell" || interfaceName == "spells") {
+		g_spells->reload();
+		g_monsters.reload();
+	} else if (interfaceName == "talk" || interfaceName == "talkaction" || interfaceName == "talkactions") {
+		g_talkActions->reload();
+	} else if (interfaceName == "items") {
+		Item::items.reload();
+	} else if (interfaceName == "weapon" || interfaceName == "weapons") {
+		g_weapons->reload();
+		g_weapons->loadDefaults();
+	} else if (interfaceName == "quest" || interfaceName == "quests") {
+		g_game.quests.reload();
+	} else if (interfaceName == "mount" || interfaceName == "mounts") {
+		g_game.mounts.reload();
+	} else if (interfaceName == "globalevents" || interfaceName == "globalevent") {
+		g_globalEvents->reload();
+	} else if (interfaceName == "events") {
+		g_events->load();
+	} else if (interfaceName == "chat" || interfaceName == "channel" || interfaceName == "chatchannels") {
+		g_chat->load();
+	} else if (interfaceName == "global") {
+		g_luaEnvironment.loadFile("data/global.lua");
+	} else {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
+	pushBoolean(L, true);
 	return 1;
 }
 
@@ -10460,6 +10550,52 @@ int LuaScriptInterface::luaHouseSetAccessList(lua_State* L)
 	const std::string& list = getString(L, 3);
 	house->setAccessList(listId, list);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
+{
+	// house:startTrade(player, tradePartner)
+	House* house = getUserdata<House>(L, 1);
+	Player* player = getUserdata<Player>(L, 2);
+	Player* tradePartner = getUserdata<Player>(L, 3);
+
+	if (!player || !tradePartner || !house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERFARAWAY);
+		return 1;
+	}
+
+	if (house->getOwner() != player->getGUID()) {
+		lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
+		return 1;
+	}
+
+	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+		return 1;
+	}
+
+	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
+		return 1;
+	}
+
+	Item* transferItem = house->getTransferItem();
+	if (!transferItem) {
+		lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
+		return 1;
+	}
+
+	transferItem->getParent()->setParent(player);
+	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+		house->resetTransferItem();
+	}
+	lua_pushnumber(L, RETURNVALUE_NOERROR);
 	return 1;
 }
 

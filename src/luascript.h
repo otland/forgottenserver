@@ -551,6 +551,8 @@ class LuaScriptInterface
 
 		static int luaGameStartRaid(lua_State* L);
 
+		static int luaGameReload(lua_State* L);
+
 		// Variant
 		static int luaVariantCreate(lua_State* L);
 
@@ -1082,6 +1084,8 @@ class LuaScriptInterface
 
 		static int luaHouseGetAccessList(lua_State* L);
 		static int luaHouseSetAccessList(lua_State* L);
+
+		static int luaHouseStartTrade(lua_State* L);
 
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);
