@@ -53,11 +53,6 @@ enum skillsid_t {
 	SKILLVALUE_PERCENT = 2,
 };
 
-enum chaseMode_t : uint8_t {
-	CHASEMODE_STANDSTILL = 0,
-	CHASEMODE_FOLLOW = 1,
-};
-
 enum fightMode_t : uint8_t {
 	FIGHTMODE_ATTACK = 1,
 	FIGHTMODE_BALANCED = 2,
@@ -574,7 +569,7 @@ class Player final : public Creature, public Cylinder
 		bool updateSaleShopList(const Item* item);
 		bool hasShopItemForSale(uint32_t itemId, uint8_t subType) const;
 
-		void setChaseMode(chaseMode_t mode);
+		void setChaseMode(bool mode);
 		void setFightMode(fightMode_t mode) {
 			fightMode = mode;
 		}
@@ -1280,10 +1275,10 @@ class Player final : public Creature, public Cylinder
 		OperatingSystem_t operatingSystem = CLIENTOS_NONE;
 		BlockType_t lastAttackBlockType = BLOCK_NONE;
 		tradestate_t tradeState = TRADE_NONE;
-		chaseMode_t chaseMode = CHASEMODE_STANDSTILL;
 		fightMode_t fightMode = FIGHTMODE_ATTACK;
 		AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
+		bool chaseMode = false;
 		bool secureMode = false;
 		bool inMarket = false;
 		bool wasMounted = false;
