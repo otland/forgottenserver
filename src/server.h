@@ -21,6 +21,7 @@
 #define FS_SERVER_H_984DA68ABF744127850F90CC710F281B
 
 #include "connection.h"
+#include "signals.h"
 #include <memory>
 
 class Protocol;
@@ -117,6 +118,7 @@ class ServiceManager
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;
 
 		boost::asio::io_service io_service;
+		Signals signals{io_service};
 		boost::asio::deadline_timer death_timer { io_service };
 		bool running = false;
 };
