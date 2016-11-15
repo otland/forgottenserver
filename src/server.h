@@ -111,6 +111,10 @@ class ServiceManager
 			return acceptors.empty() == false;
 		}
 
+		boost::asio::io_service &getIoService() {
+			return io_service;
+		};
+
 	protected:
 		void die();
 

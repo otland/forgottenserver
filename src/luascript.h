@@ -1238,6 +1238,12 @@ class LuaScriptInterface
 		static int luaPartyShareExperience(lua_State* L);
 		static int luaPartySetSharedExperience(lua_State* L);
 
+		// Redis
+		static int luaRedisGet(lua_State* L);
+		static int luaRedisSet(lua_State* L);
+		static int luaRedisPublish(lua_State* L);
+		static int luaRedisSubscribe(lua_State * L);
+
 		//
 		lua_State* luaState = nullptr;
 		std::string lastLuaError;

@@ -42,6 +42,7 @@ class ConfigManager
 			WARN_UNSAFE_SCRIPTS,
 			CONVERT_UNSAFE_SCRIPTS,
 			CLASSIC_EQUIPMENT_SLOTS,
+			ENABLE_REDIS,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -65,6 +66,7 @@ class ConfigManager
 			MYSQL_SOCK,
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
+			REDIS_HOST,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
@@ -101,6 +103,7 @@ class ConfigManager
 			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER,
 			EXP_FROM_PLAYERS_LEVEL_RANGE,
 			MAX_PACKETS_PER_SECOND,
+			REDIS_PORT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
