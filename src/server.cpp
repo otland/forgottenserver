@@ -12,6 +12,12 @@
 extern ConfigManager g_config;
 Ban g_bans;
 
+ServiceManager::ServiceManager(boost::asio::io_service& service):
+	io_service(service)
+{
+
+}
+
 ServiceManager::~ServiceManager()
 {
 	stop();
