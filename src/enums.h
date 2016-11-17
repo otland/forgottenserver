@@ -61,6 +61,14 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
 };
 
+enum customAttrTypes : uint8_t {
+	ATTR_NO_TYPE = 0,
+	ATTR_STRING_TYPE = 1,
+	ATTR_INTEGER_TYPE = 2,
+	ATTR_DOUBLE_TYPE = 3,
+	ATTR_BOOLEAN_TYPE = 4
+};
+
 enum VipStatus_t : uint8_t {
 	VIPSTATUS_OFFLINE = 0,
 	VIPSTATUS_ONLINE = 1,

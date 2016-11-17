@@ -97,6 +97,7 @@ enum AttrTypes_t {
 	ATTR_ARMOR = 31,
 	ATTR_HITCHANCE = 32,
 	ATTR_SHOOTRANGE = 33,
+	ATTR_CUSTOM_ATTRIBUTES = 34
 };
 
 enum Attr_ReadValue {
@@ -206,6 +207,220 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
+		struct CustomAttributeKey
+		{
+			union {
+				std::string* string;
+				int64_t integer;
+			} value;
+
+			customAttrTypes type = ATTR_NO_TYPE;
+
+			explicit CustomAttributeKey(customAttrTypes type) : type(type) {
+				memset(&value, 0, sizeof(value));
+			}
+
+			CustomAttributeKey(const std::string& v) {
+				type = ATTR_STRING_TYPE;
+				value.string = new std::string(v);
+			}
+
+			CustomAttributeKey(const char* v) {
+				type = ATTR_STRING_TYPE;
+				value.string = new std::string(v);
+			}
+
+			CustomAttributeKey(int64_t v) {
+				type = ATTR_INTEGER_TYPE;
+				value.integer = v;
+			}
+
+			CustomAttributeKey(const CustomAttributeKey& i) {
+				type = i.type;
+				switch (type) {
+					case ATTR_STRING_TYPE: {
+						value.string = new std::string(*i.value.string);
+					}
+
+					case ATTR_INTEGER_TYPE: {
+						value.integer = i.value.integer;
+					}
+
+					default: {
+						memset(&value, 0, sizeof(value));
+					}
+				}
+			}
+
+			CustomAttributeKey(CustomAttributeKey&& attribute) : value(attribute.value), type(attribute.type) {
+				memset(&attribute.value, 0, sizeof(value));
+				attribute.type = ATTR_NO_TYPE;
+			}
+
+			~CustomAttributeKey() {
+				if (type == ATTR_STRING_TYPE) {
+					delete value.string;
+				}
+			}
+
+			CustomAttributeKey& operator=(CustomAttributeKey other) {
+				CustomAttributeKey::swap(*this, other);
+				return *this;
+			}
+
+			CustomAttributeKey& operator=(CustomAttributeKey&& other) {
+				if (this != &other) {
+					if (type == ATTR_STRING_TYPE) {
+						delete value.string;
+					}
+
+					value = other.value;
+					type = other.type;
+					memset(&other.value, 0, sizeof(value));
+					other.type = ATTR_NO_TYPE;
+				}
+				return *this;
+			}
+
+			bool operator==(const CustomAttributeKey& other) const {
+				if (type != other.type) {
+					return false;
+				}
+				else {
+					switch (type) {
+						case ATTR_INTEGER_TYPE: {
+							return value.integer == other.value.integer;
+						}
+
+						case ATTR_STRING_TYPE: {
+							return !value.string->compare(*other.value.string);
+						}
+					}
+				}
+				return false;
+			}
+
+			static void swap(CustomAttributeKey& first, CustomAttributeKey& second) {
+				std::swap(first.value, second.value);
+				std::swap(first.type, second.type);
+			}
+
+			struct hash {
+				std::size_t operator()(const CustomAttributeKey& key) const {
+					switch (key.type) {
+						case ATTR_INTEGER_TYPE: {
+							return std::hash<int64_t>()(key.value.integer);
+						}
+
+						case ATTR_STRING_TYPE: {
+							return std::hash<std::string>()(*key.value.string);
+						}
+					}
+					return 0;
+				}
+			};
+		};
+
+		struct CustomAttribute
+		{
+			union {
+				std::string* string;
+				int64_t integer;
+				double doublen;
+				bool boolean;
+			} value;
+			customAttrTypes type = ATTR_NO_TYPE;
+
+			explicit CustomAttribute(customAttrTypes type) : type(type) {
+				memset(&value, 0, sizeof(value));
+			}
+
+			CustomAttribute(const std::string& v) {
+				type = ATTR_STRING_TYPE;
+				value.string = new std::string(v);
+			}
+
+			CustomAttribute(const char* v) {
+				type = ATTR_STRING_TYPE;
+				value.string = new std::string(v);
+			}
+
+			CustomAttribute(int64_t v) {
+				type = ATTR_INTEGER_TYPE;
+				value.integer = v;
+			}
+
+			CustomAttribute(double v) {
+				type = ATTR_DOUBLE_TYPE;
+				value.doublen = v;
+			}
+
+			CustomAttribute(bool v) {
+				type = ATTR_BOOLEAN_TYPE;
+				value.boolean = v;
+			}
+
+			CustomAttribute(const CustomAttribute& i) {
+				type = i.type;
+				switch (type) {
+					case ATTR_STRING_TYPE: {
+						value.string = new std::string(*i.value.string);
+					}
+
+					case ATTR_INTEGER_TYPE: {
+						value.integer = i.value.integer;
+					}
+
+					case ATTR_DOUBLE_TYPE: {
+						value.doublen = i.value.doublen;
+					}
+
+					case ATTR_BOOLEAN_TYPE: {
+						value.boolean = i.value.boolean;
+					}
+
+					default: {
+						memset(&value, 0, sizeof(value));
+					}
+				}
+			}
+
+			CustomAttribute(CustomAttribute&& attribute) : value(attribute.value), type(attribute.type) {
+				memset(&attribute.value, 0, sizeof(value));
+				attribute.type = ATTR_NO_TYPE;
+			}
+
+			~CustomAttribute() {
+				if (type == ATTR_STRING_TYPE) {
+					delete value.string;
+				}
+			}
+
+			CustomAttribute& operator=(CustomAttribute other) {
+				CustomAttribute::swap(*this, other);
+				return *this;
+			}
+
+			CustomAttribute& operator=(CustomAttribute&& other) {
+				if (this != &other) {
+					if (type == ATTR_STRING_TYPE) {
+						delete value.string;
+					}
+
+					value = other.value;
+					type = other.type;
+					memset(&other.value, 0, sizeof(value));
+					other.type = ATTR_NO_TYPE;
+				}
+				return *this;
+			}
+
+			static void swap(CustomAttribute& first, CustomAttribute& second) {
+				std::swap(first.value, second.value);
+				std::swap(first.type, second.type);
+			}
+		};
+
 	protected:
 		inline bool hasAttribute(itemAttrTypes type) const {
 			return (type & attributeBits) != 0;
@@ -281,6 +496,60 @@ class ItemAttributes
 
 		const Attribute* getExistingAttr(itemAttrTypes type) const;
 		Attribute& getAttr(itemAttrTypes type);
+
+		typedef std::unordered_map<CustomAttributeKey, CustomAttribute, CustomAttributeKey::hash> CustomAttributeMap;
+		CustomAttributeMap customAttributes;
+		bool hasCustomAttributes = false;
+
+		template<typename T, typename R>
+		void setCustomAttribute(T key, R value) {
+			if (hasCustomAttributes) {
+				removeCustomAttribute(key);
+			}
+			customAttributes.emplace(key, value);
+			hasCustomAttributes = true;
+		}
+
+		void setCustomAttribute(CustomAttributeKey& key, CustomAttribute& value) {
+			if (hasCustomAttributes) {
+				removeCustomAttribute(key);
+			}
+			customAttributes.insert(std::make_pair(std::move(key), std::move(value)));
+			hasCustomAttributes = true;
+		}
+
+		template<typename T>
+		const CustomAttribute* getCustomAttribute(T key) {
+			CustomAttributeKey tmp(key);
+			return getCustomAttribute(tmp);
+		}
+
+		const CustomAttribute* getCustomAttribute(const CustomAttributeKey& key) {
+			auto it = customAttributes.find(key);
+			if (it != customAttributes.end()) {
+				return &(it->second);
+			}
+			return nullptr;
+		}
+
+		template<typename T>
+		bool removeCustomAttribute(T key) {
+			CustomAttributeKey tmp(key);
+			return removeCustomAttribute(tmp);
+		}
+
+		bool removeCustomAttribute(const CustomAttributeKey& key) {
+			auto it = customAttributes.find(key);
+			if (it != customAttributes.end()) {
+				customAttributes.erase(it);
+				return true;
+			}
+			return false;
+		}
+
+		const CustomAttributeMap& getCustomAttributeMap() const {
+			return customAttributes;
+		}
 
 	public:
 		inline static bool isIntAttrType(itemAttrTypes type) {
@@ -394,6 +663,39 @@ class Item : virtual public Thing
 				return false;
 			}
 			return attributes->hasAttribute(type);
+		}
+
+		bool hasCustomAttributes() const {
+			if (!attributes) {
+				return false;
+			}
+			return attributes->hasCustomAttributes;
+		}
+		template<typename T, typename R>
+		void setCustomAttribute(T key, R value) {
+			getAttributes()->setCustomAttribute(key, value);
+		}
+
+		void setCustomAttribute(ItemAttributes::CustomAttributeKey& key, ItemAttributes::CustomAttribute& value) {
+			getAttributes()->setCustomAttribute(key, value);
+		}
+		
+		template<typename T>
+		const ItemAttributes::CustomAttribute* getCustomAttribute(T key) {
+			return getAttributes()->getCustomAttribute(key);
+		}
+
+		const ItemAttributes::CustomAttribute* getCustomAttribute(const ItemAttributes::CustomAttributeKey& key) {
+			return getAttributes()->getCustomAttribute(key);
+		}
+
+		template<typename T>
+		bool removeCustomAttribute(T key) {
+			return getAttributes()->removeCustomAttribute(key);
+		}
+
+		bool removeCustomAttribute(const ItemAttributes::CustomAttributeKey& key) {
+			return getAttributes()->removeCustomAttribute(key);
 		}
 
 		void setSpecialDescription(const std::string& desc) {

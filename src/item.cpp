@@ -617,6 +617,96 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			return ATTR_READ_ERROR;
 		}
 
+		case ATTR_CUSTOM_ATTRIBUTES: {
+			size_t size;
+			if (!propStream.read<size_t>(size)) {
+				return ATTR_READ_ERROR;
+			}
+			for (size_t i = 0; i < size; i++) {
+				// Unserialize key type and value
+				customAttrTypes keyType;
+				if (!propStream.read<customAttrTypes>(keyType)) {
+					return ATTR_READ_ERROR;
+				}
+				
+				ItemAttributes::CustomAttributeKey key(keyType);
+				switch (keyType) {
+					case ATTR_STRING_TYPE: {
+						std::string value;
+						if (!propStream.readString(value)) {
+							return ATTR_READ_ERROR;
+						}
+						key.value.string = new std::string(value);
+						break;
+					}
+
+					case ATTR_INTEGER_TYPE: {
+						int64_t value;
+						if (!propStream.read<int64_t>(value)) {
+							return ATTR_READ_ERROR;
+						}
+						key.value.integer = value;
+						break;
+					}
+
+					default: {
+						return ATTR_READ_ERROR;
+					}
+				}
+				
+				// Unserialize value type and value
+				customAttrTypes valueType;
+				if (!propStream.read<customAttrTypes>(valueType)) {
+					return ATTR_READ_ERROR;
+				}
+
+				ItemAttributes::CustomAttribute val(valueType);
+				switch (valueType) {
+					case ATTR_STRING_TYPE: {
+						std::string value;
+						if (!propStream.readString(value)) {
+							return ATTR_READ_ERROR;
+						}
+						val.value.string = new std::string(value);
+						break;
+					}
+
+					case ATTR_INTEGER_TYPE: {
+						int64_t value;
+						if (!propStream.read<int64_t>(value)) {
+							return ATTR_READ_ERROR;
+						}
+						val.value.integer = value;
+						break;
+					}
+
+					case ATTR_DOUBLE_TYPE: {
+						double value;
+						if (!propStream.read<double>(value)) {
+							return ATTR_READ_ERROR;
+						}
+						val.value.doublen = value;
+						break;
+					}
+
+					case ATTR_BOOLEAN_TYPE: {
+						bool value;
+						if (!propStream.read<bool>(value)) {
+							return ATTR_READ_ERROR;
+						}
+						val.value.boolean = value;
+						break;
+					}
+
+					default: {
+						return ATTR_READ_ERROR;
+					}
+				}
+				setCustomAttribute(key, val);
+			}
+			break;
+		}
+
 		default:
 			return ATTR_READ_ERROR;
 	}
@@ -748,6 +838,52 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)) {
 		propWriteStream.write<uint8_t>(ATTR_SHOOTRANGE);
 		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE));
+	}
+
+	if (hasCustomAttributes()) {
+		propWriteStream.write<uint8_t>(ATTR_CUSTOM_ATTRIBUTES);
+		propWriteStream.write<size_t>(attributes->getCustomAttributeMap().size());
+		for (const auto &entry : attributes->getCustomAttributeMap()) {
+			// Serializing key type and value
+			customAttrTypes keyType = entry.first.type;
+			propWriteStream.write<customAttrTypes>(keyType);
+			switch (keyType) {
+				case ATTR_STRING_TYPE: {
+					propWriteStream.writeString(*entry.first.value.string);
+					break;
+				}
+
+				case ATTR_INTEGER_TYPE: {
+					propWriteStream.write<int64_t>(entry.first.value.integer);
+					break;
+				}
+			}
+
+			// Serializing value type and value
+			customAttrTypes valueType = entry.second.type;
+			propWriteStream.write<customAttrTypes>(valueType);
+			switch (valueType) {
+				case ATTR_STRING_TYPE: {
+					propWriteStream.writeString(*entry.second.value.string);
+					break;
+				}
+
+				case ATTR_INTEGER_TYPE: {
+					propWriteStream.write<int64_t>(entry.second.value.integer);
+					break;
+				}
+
+				case ATTR_DOUBLE_TYPE: {
+					propWriteStream.write<double>(entry.second.value.doublen);
+					break;
+				}
+
+				case ATTR_BOOLEAN_TYPE: {
+					propWriteStream.write<bool>(entry.second.value.boolean);
+					break;
+				}
+			}
+		}
 	}
 }
 
