@@ -583,7 +583,9 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.stopTime = valueAttribute.as_bool();
 		} else if (tmpStrValue == "decayto") {
 			it.decayTo = pugi::cast<int32_t>(valueAttribute.value());
-		} else if (tmpStrValue == "transformequipto") {
+		} else if (tmpStrValue == "attackspeed") {
+			it.attackspeed = pugi::cast<uint32_t>(valueAttribute.value());
+		}else if (tmpStrValue == "transformequipto") {
 			it.transformEquipTo = pugi::cast<uint16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "transformdeequipto") {
 			it.transformDeEquipTo = pugi::cast<uint16_t>(valueAttribute.value());
