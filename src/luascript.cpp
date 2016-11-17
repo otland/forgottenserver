@@ -10773,6 +10773,19 @@ int LuaScriptInterface::luaItemTypeGetAttack(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemTypeGetAttackSpeed(lua_State* L)
+{
+	// itemType:getAttackSpeed()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->attackspeed);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaItemTypeGetDefense(lua_State* L)
 {
 	// itemType:getDefense()
