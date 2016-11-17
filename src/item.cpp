@@ -857,6 +857,10 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 					propWriteStream.write<int64_t>(entry.first.value.integer);
 					break;
 				}
+
+				default: {
+					break;
+				}
 			}
 
 			// Serializing value type and value
@@ -880,6 +884,10 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 
 				case ATTR_BOOLEAN_TYPE: {
 					propWriteStream.write<bool>(entry.second.value.boolean);
+					break;
+				}
+
+				default: {
 					break;
 				}
 			}
