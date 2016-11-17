@@ -295,9 +295,12 @@ class ItemAttributes
 						case ATTR_STRING_TYPE: {
 							return !value.string->compare(*other.value.string);
 						}
+
+						default: {
+							return false;
+						}
 					}
 				}
-				return false;
 			}
 
 			static void swap(CustomAttributeKey& first, CustomAttributeKey& second) {
@@ -315,8 +318,11 @@ class ItemAttributes
 						case ATTR_STRING_TYPE: {
 							return std::hash<std::string>()(*key.value.string);
 						}
+
+						default: {
+							return 0;
+						}
 					}
-					return 0;
 				}
 			};
 		};
