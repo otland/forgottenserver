@@ -1788,6 +1788,10 @@ bool Item::hasMarketAttributes() const
 		return true;
 	}
 
+	if (hasCustomAttributes()) {
+		return false;
+	}
+
 	for (const auto& attr : attributes->getList()) {
 		if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
 			uint16_t charges = static_cast<uint16_t>(attr.value.integer);
