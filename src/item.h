@@ -603,6 +603,13 @@ class Item : virtual public Thing
 			}
 			return items[id].hitChance;
 		}
+		
+		uint32_t getAttackSpeed() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_ATTACKSPEED)) {
+				return getIntAttr(ITEM_ATTRIBUTE_ATTACKSPEED);
+			}
+			return items[id].attackspeed;
+		}
 
 		uint32_t getWorth() const;
 		void getLight(LightInfo& lightInfo) const;
