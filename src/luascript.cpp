@@ -6313,8 +6313,7 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L) {
 		return 1;
 	}
 
-	item->removeCustomAttribute(key);
-	pushBoolean(L, true);
+	pushBoolean(L, item->removeCustomAttribute(key));
 	return 1;
 }
 
