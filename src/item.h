@@ -217,6 +217,22 @@ class ItemAttributes
 			customAttrTypes type = ATTR_NO_TYPE;
 
 			explicit CustomAttributeKey(customAttrTypes type) : type(type) {
+				switch (type) {
+					case ATTR_STRING_TYPE: {
+						value = std::string();
+						break;
+					}
+
+					case ATTR_INTEGER_TYPE: {
+						value = (int64_t)0;
+						break;
+					}
+
+					default: {
+						value = boost::blank();
+						break;
+					}
+				}
 			}
 
 			CustomAttributeKey(const std::string& v) {
@@ -348,6 +364,7 @@ class ItemAttributes
 					}
 
 					default: {
+						value = boost::blank();
 						break;
 					}
 				}
@@ -383,22 +400,27 @@ class ItemAttributes
 				switch (type) {
 					case ATTR_STRING_TYPE: {
 						value = std::string(boost::get<std::string>(i.value));
+						break;
 					}
 
 					case ATTR_INTEGER_TYPE: {
 						value = boost::get<int64_t>(i.value);
+						break;
 					}
 
 					case ATTR_DOUBLE_TYPE: {
 						value = boost::get<double>(i.value);
+						break;
 					}
 
 					case ATTR_BOOLEAN_TYPE: {
 						value = boost::get<bool>(i.value);
+						break;
 					}
 
 					default: {
 						value = boost::blank();
+						break;
 					}
 				}
 			}
