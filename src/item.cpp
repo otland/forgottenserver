@@ -636,7 +636,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 						if (!propStream.readString(value)) {
 							return ATTR_READ_ERROR;
 						}
-						key.value.string = new std::string(value);
+						key.value = value;
 						break;
 					}
 
@@ -645,7 +645,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 						if (!propStream.read<int64_t>(value)) {
 							return ATTR_READ_ERROR;
 						}
-						key.value.integer = value;
+						key.value = value;
 						break;
 					}
 
@@ -667,7 +667,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 						if (!propStream.readString(value)) {
 							return ATTR_READ_ERROR;
 						}
-						val.value.string = new std::string(value);
+						val.value = value;
 						break;
 					}
 
@@ -676,7 +676,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 						if (!propStream.read<int64_t>(value)) {
 							return ATTR_READ_ERROR;
 						}
-						val.value.integer = value;
+						val.value = value;
 						break;
 					}
 
@@ -685,7 +685,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 						if (!propStream.read<double>(value)) {
 							return ATTR_READ_ERROR;
 						}
-						val.value.doublen = value;
+						val.value = value;
 						break;
 					}
 
@@ -694,7 +694,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 						if (!propStream.read<bool>(value)) {
 							return ATTR_READ_ERROR;
 						}
-						val.value.boolean = value;
+						val.value = value;
 						break;
 					}
 
@@ -849,12 +849,12 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 			propWriteStream.write<customAttrTypes>(keyType);
 			switch (keyType) {
 				case ATTR_STRING_TYPE: {
-					propWriteStream.writeString(*entry.first.value.string);
+					propWriteStream.writeString(boost::get<std::string>(entry.first.value));
 					break;
 				}
 
 				case ATTR_INTEGER_TYPE: {
-					propWriteStream.write<int64_t>(entry.first.value.integer);
+					propWriteStream.write<int64_t>(boost::get<int64_t>(entry.first.value));
 					break;
 				}
 
@@ -868,22 +868,22 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 			propWriteStream.write<customAttrTypes>(valueType);
 			switch (valueType) {
 				case ATTR_STRING_TYPE: {
-					propWriteStream.writeString(*entry.second.value.string);
+					propWriteStream.writeString(boost::get<std::string>(entry.second.value));
 					break;
 				}
 
 				case ATTR_INTEGER_TYPE: {
-					propWriteStream.write<int64_t>(entry.second.value.integer);
+					propWriteStream.write<int64_t>(boost::get<int64_t>(entry.second.value));
 					break;
 				}
 
 				case ATTR_DOUBLE_TYPE: {
-					propWriteStream.write<double>(entry.second.value.doublen);
+					propWriteStream.write<double>(boost::get<double>(entry.second.value));
 					break;
 				}
 
 				case ATTR_BOOLEAN_TYPE: {
-					propWriteStream.write<bool>(entry.second.value.boolean);
+					propWriteStream.write<bool>(boost::get<bool>(entry.second.value));
 					break;
 				}
 

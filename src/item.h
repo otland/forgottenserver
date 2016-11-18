@@ -24,6 +24,7 @@
 #include "thing.h"
 #include "items.h"
 
+#include <boost/variant.hpp>
 #include <deque>
 
 class Creature;
@@ -207,60 +208,55 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
+		typedef boost::variant<boost::blank, std::string, int64_t> VariantKey;
+
 		struct CustomAttributeKey
 		{
-			union {
-				std::string* string;
-				int64_t integer;
-			} value;
+			VariantKey value;
 
 			customAttrTypes type = ATTR_NO_TYPE;
 
 			explicit CustomAttributeKey(customAttrTypes type) : type(type) {
-				memset(&value, 0, sizeof(value));
 			}
 
 			CustomAttributeKey(const std::string& v) {
 				type = ATTR_STRING_TYPE;
-				value.string = new std::string(v);
+				value = std::string(v);
 			}
 
 			CustomAttributeKey(const char* v) {
 				type = ATTR_STRING_TYPE;
-				value.string = new std::string(v);
+				value = std::string(v);
 			}
 
 			CustomAttributeKey(int64_t v) {
 				type = ATTR_INTEGER_TYPE;
-				value.integer = v;
+				value = v;
 			}
 
 			CustomAttributeKey(const CustomAttributeKey& i) {
 				type = i.type;
 				switch (type) {
 					case ATTR_STRING_TYPE: {
-						value.string = new std::string(*i.value.string);
+						value = std::string(boost::get<std::string>(i.value));
+						break;
 					}
 
 					case ATTR_INTEGER_TYPE: {
-						value.integer = i.value.integer;
+						value = boost::get<int64_t>(i.value);
+						break;
 					}
 
 					default: {
-						memset(&value, 0, sizeof(value));
+						value = boost::blank();
+						break;
 					}
 				}
 			}
 
 			CustomAttributeKey(CustomAttributeKey&& attribute) : value(attribute.value), type(attribute.type) {
-				memset(&attribute.value, 0, sizeof(value));
+				attribute.value = boost::blank();
 				attribute.type = ATTR_NO_TYPE;
-			}
-
-			~CustomAttributeKey() {
-				if (type == ATTR_STRING_TYPE) {
-					delete value.string;
-				}
 			}
 
 			CustomAttributeKey& operator=(CustomAttributeKey other) {
@@ -270,13 +266,9 @@ class ItemAttributes
 
 			CustomAttributeKey& operator=(CustomAttributeKey&& other) {
 				if (this != &other) {
-					if (type == ATTR_STRING_TYPE) {
-						delete value.string;
-					}
-
 					value = other.value;
 					type = other.type;
-					memset(&other.value, 0, sizeof(value));
+					other.value = boost::blank();
 					other.type = ATTR_NO_TYPE;
 				}
 				return *this;
@@ -285,15 +277,14 @@ class ItemAttributes
 			bool operator==(const CustomAttributeKey& other) const {
 				if (type != other.type) {
 					return false;
-				}
-				else {
+				} else {
 					switch (type) {
 						case ATTR_INTEGER_TYPE: {
-							return value.integer == other.value.integer;
+							return boost::get<int64_t>(value) == boost::get<int64_t>(other.value);
 						}
 
 						case ATTR_STRING_TYPE: {
-							return !value.string->compare(*other.value.string);
+							return !boost::get<std::string>(value).compare(boost::get<std::string>(other.value));
 						}
 
 						default: {
@@ -312,11 +303,11 @@ class ItemAttributes
 				std::size_t operator()(const CustomAttributeKey& key) const {
 					switch (key.type) {
 						case ATTR_INTEGER_TYPE: {
-							return std::hash<int64_t>()(key.value.integer);
+							return std::hash<int64_t>()(boost::get<int64_t>(key.value));
 						}
 
 						case ATTR_STRING_TYPE: {
-							return std::hash<std::string>()(*key.value.string);
+							return std::hash<std::string>()(boost::get<std::string>(key.value));
 						}
 
 						default: {
@@ -327,79 +318,94 @@ class ItemAttributes
 			};
 		};
 
+		typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
+
 		struct CustomAttribute
 		{
-			union {
-				std::string* string;
-				int64_t integer;
-				double doublen;
-				bool boolean;
-			} value;
+			VariantAttribute value;
 			customAttrTypes type = ATTR_NO_TYPE;
 
 			explicit CustomAttribute(customAttrTypes type) : type(type) {
-				memset(&value, 0, sizeof(value));
+				switch (type) {
+					case ATTR_STRING_TYPE: {
+						value = std::string();
+						break;
+					}
+
+					case ATTR_INTEGER_TYPE: {
+						value = (int64_t)0;
+						break;
+					}
+
+					case ATTR_DOUBLE_TYPE: {
+						value = (double)0;
+						break;
+					}
+
+					case ATTR_BOOLEAN_TYPE: {
+						value = false;
+						break;
+					}
+
+					default: {
+						break;
+					}
+				}
 			}
 
 			CustomAttribute(const std::string& v) {
 				type = ATTR_STRING_TYPE;
-				value.string = new std::string(v);
+				value = std::string(v);
 			}
 
 			CustomAttribute(const char* v) {
 				type = ATTR_STRING_TYPE;
-				value.string = new std::string(v);
+				value = std::string(v);
 			}
 
 			CustomAttribute(int64_t v) {
 				type = ATTR_INTEGER_TYPE;
-				value.integer = v;
+				value = v;
 			}
 
 			CustomAttribute(double v) {
 				type = ATTR_DOUBLE_TYPE;
-				value.doublen = v;
+				value = v;
 			}
 
 			CustomAttribute(bool v) {
 				type = ATTR_BOOLEAN_TYPE;
-				value.boolean = v;
+				value = v;
 			}
 
 			CustomAttribute(const CustomAttribute& i) {
 				type = i.type;
 				switch (type) {
 					case ATTR_STRING_TYPE: {
-						value.string = new std::string(*i.value.string);
+						value = std::string(boost::get<std::string>(i.value));
 					}
 
 					case ATTR_INTEGER_TYPE: {
-						value.integer = i.value.integer;
+						value = boost::get<int64_t>(i.value);
 					}
 
 					case ATTR_DOUBLE_TYPE: {
-						value.doublen = i.value.doublen;
+						value = boost::get<double>(i.value);
 					}
 
 					case ATTR_BOOLEAN_TYPE: {
-						value.boolean = i.value.boolean;
+						value = boost::get<bool>(i.value);
 					}
 
 					default: {
-						memset(&value, 0, sizeof(value));
+						value = boost::blank();
 					}
 				}
 			}
 
 			CustomAttribute(CustomAttribute&& attribute) : value(attribute.value), type(attribute.type) {
-				memset(&attribute.value, 0, sizeof(value));
+				attribute.value = boost::blank();
 				attribute.type = ATTR_NO_TYPE;
-			}
-
-			~CustomAttribute() {
-				if (type == ATTR_STRING_TYPE) {
-					delete value.string;
-				}
 			}
 
 			CustomAttribute& operator=(CustomAttribute other) {
@@ -409,13 +415,9 @@ class ItemAttributes
 
 			CustomAttribute& operator=(CustomAttribute&& other) {
 				if (this != &other) {
-					if (type == ATTR_STRING_TYPE) {
-						delete value.string;
-					}
-
 					value = other.value;
 					type = other.type;
-					memset(&other.value, 0, sizeof(value));
+					other.value = boost::blank();
 					other.type = ATTR_NO_TYPE;
 				}
 				return *this;

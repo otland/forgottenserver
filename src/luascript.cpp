@@ -6197,11 +6197,11 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 	if (isNumber(L, 2)) {
 		int64_t tmp = getNumber<int64_t>(L, 2);
 		key.type = ATTR_INTEGER_TYPE;
-		key.value.integer = tmp;
+		key.value = tmp;
 	} else if (isString(L, 2)) {
 		const std::string& tmp = getString(L, 2);
 		key.type = ATTR_STRING_TYPE;
-		key.value.string = new std::string(tmp);
+		key.value = std::string(tmp);
 	} else {
 		lua_pushnil(L);
 		return 1;
@@ -6212,19 +6212,19 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 		double tmp = getNumber<double>(L, 3);
 		if (std::floor(tmp) < tmp) {
 			val.type = ATTR_DOUBLE_TYPE;
-			val.value.doublen = tmp;
+			val.value = tmp;
 		} else {
 			val.type = ATTR_INTEGER_TYPE;
-			val.value.integer = (int64_t)tmp;
+			val.value = (int64_t)tmp;
 		}
 	} else if (isString(L, 3)) {
 		const std::string& tmp = getString(L, 3);
 		val.type = ATTR_STRING_TYPE;
-		val.value.string = new std::string(tmp);
+		val.value = std::string(tmp);
 	} else if (isBoolean(L, 3)) {
 		bool tmp = getBoolean(L, 3);
 		val.type = ATTR_BOOLEAN_TYPE;
-		val.value.boolean = tmp;
+		val.value = tmp;
 	} else {
 		lua_pushnil(L);
 		return 1;
@@ -6247,14 +6247,12 @@ int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
 	if (isNumber(L, 2)) {
 		int64_t tmp = getNumber<int64_t>(L, 2);
 		key.type = ATTR_INTEGER_TYPE;
-		key.value.integer = tmp;
-	}
-	else if (isString(L, 2)) {
-		std::string tmp = getString(L, 2);
+		key.value = tmp;
+	} else if (isString(L, 2)) {
+		const std::string& tmp = getString(L, 2);
 		key.type = ATTR_STRING_TYPE;
-		key.value.string = new std::string(tmp);
-	}
-	else {
+		key.value = std::string(tmp);
+	} else {
 		lua_pushnil(L);
 		return 1;
 	}
@@ -6263,22 +6261,22 @@ int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
 	if (attr) {
 		switch (attr->type) {
 			case ATTR_STRING_TYPE: {
-				pushString(L, *attr->value.string);
+				pushString(L, boost::get<std::string>(attr->value));
 				break;
 			}
 
 			case ATTR_INTEGER_TYPE: {
-				lua_pushnumber(L, attr->value.integer);
+				lua_pushnumber(L, boost::get<int64_t>(attr->value));
 				break;
 			}
 
 			case ATTR_DOUBLE_TYPE: {
-				lua_pushnumber(L, attr->value.doublen);
+				lua_pushnumber(L, boost::get<double>(attr->value));
 				break;
 			}
 
 			case ATTR_BOOLEAN_TYPE: {
-				pushBoolean(L, attr->value.boolean);
+				pushBoolean(L, boost::get<bool>(attr->value));
 				break;
 			}
 			
@@ -6305,14 +6303,12 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L) {
 	if (isNumber(L, 2)) {
 		int64_t tmp = getNumber<int64_t>(L, 2);
 		key.type = ATTR_INTEGER_TYPE;
-		key.value.integer = tmp;
-	}
-	else if (isString(L, 2)) {
-		std::string tmp = getString(L, 2);
+		key.value = tmp;
+	} else if (isString(L, 2)) {
+		const std::string& tmp = getString(L, 2);
 		key.type = ATTR_STRING_TYPE;
-		key.value.string = new std::string(tmp);
-	}
-	else {
+		key.value = std::string(tmp);
+	} else {
 		lua_pushnil(L);
 		return 1;
 	}
