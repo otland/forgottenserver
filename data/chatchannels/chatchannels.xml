@@ -7,4 +7,5 @@
 	<channel id="6" name="Advertising-Rookgaard" public="1" script="advertising-rook.lua" />
 	<channel id="7" name="Help" public="1" script="help.lua" />
 	<channel id="8" name="Gamemaster" script="gamemaster.lua" />
+	<channel id="9" name="Live Cast" />
 </channels>

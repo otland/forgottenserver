@@ -179,6 +179,7 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_PRIVATE_TO = 5,
 	TALKTYPE_CHANNEL_Y = 7,
 	TALKTYPE_CHANNEL_O = 8,
+	TALKTYPE_SPELL = 9,
 	TALKTYPE_PRIVATE_NP = 10,
 	TALKTYPE_PRIVATE_PN = 12,
 	TALKTYPE_BROADCAST = 13,
@@ -519,6 +520,7 @@ enum PlayerFlags : uint64_t {
 
 static constexpr int32_t CHANNEL_GUILD = 0x00;
 static constexpr int32_t CHANNEL_PARTY = 0x01;
+static constexpr int32_t CHANNEL_CAST = 0x09;
 static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
 
 //Reserved player storage key ranges;

@@ -30,6 +30,7 @@
 #include "rsa.h"
 #include "protocolold.h"
 #include "protocollogin.h"
+#include "protocolspectator.h"
 #include "protocolstatus.h"
 #include "databasemanager.h"
 #include "scheduler.h"
@@ -168,6 +169,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
 	}
+	
+	// clear live casts
+	if (g_config.getBoolean(ConfigManager::LIVE_CAST_ENABLED)) {
+		std::cout << ">> Clearing live casts" << std::endl;
+		std::ostringstream query;
+		query << "DELETE FROM `live_casts`;";
+		Database::getInstance()->executeQuery(query.str());
+	}
 
 	//load vocations
 	std::cout << ">> Loading vocations" << std::endl;
@@ -237,13 +246,16 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// Game client protocols
 	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
 	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
-
+	
 	// OT protocols
 	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
 
 	// Legacy login protocol
 	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
+	// Spectator protocol
+	services->add<ProtocolSpectator>(g_config.getNumber(ConfigManager::LIVE_CAST_PORT));
+	
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 

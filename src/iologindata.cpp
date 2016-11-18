@@ -160,6 +160,35 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	return accountId;
 }
 
+std::list<std::string> IOLoginData::liveCastAuthentication(const std::string& password)
+{
+	std::list<std::string> casts;
+
+	Database* db = Database::getInstance();
+
+	std::ostringstream query;
+	query << "SELECT `player_id`, `name`, `password`, `spectators` FROM `live_casts` WHERE `password` = '" << password << "'";
+	DBResult_ptr result = db->storeQuery(query.str());
+	if (!result) {
+		return casts;
+	}
+
+	query.str(std::string());
+	query << "SELECT `name` FROM `live_casts` WHERE `password` = '" << password << "' ORDER BY `name` ASC";
+	result = db->storeQuery(query.str());
+	if (result) {
+		do {
+			std::string name = result->getString("name");
+			if(Player* castPlayer = g_game.getPlayerByName(name)){
+				if(castPlayer->castPassword == password) {
+					casts.push_back(name);
+				}
+			}
+		} while (result->next());
+	}
+	return casts;
+}
+
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
 	std::ostringstream query;
@@ -638,6 +667,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 bool IOLoginData::savePlayer(Player* player)
 {
+	if(player->isSpectator) {
+		return false;
+	}
+
 	if (player->getHealth() <= 0) {
 		player->changeHealth(1);
 	}
