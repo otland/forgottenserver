@@ -333,7 +333,7 @@ CREATE TABLE IF NOT EXISTS `tile_store` (
 CREATE TABLE IF NOT EXISTS `live_casts` (
   `player_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
-  `password` varchar(30) NOT NULL DEFAULT '0',
+  `password` varchar(30) NOT NULL DEFAULT '',
   `spectators` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`player_id`),
   UNIQUE KEY `name` (`name`)
