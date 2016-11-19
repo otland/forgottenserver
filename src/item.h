@@ -23,6 +23,8 @@
 #include "cylinder.h"
 #include "thing.h"
 #include "items.h"
+#include "luascript.h"
+#include <typeinfo>
 
 #include <boost/variant.hpp>
 #include <deque>
@@ -208,246 +210,253 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-		typedef boost::variant<boost::blank, std::string, int64_t> VariantKey;
-
 		struct CustomAttributeKey
 		{
+			typedef boost::variant<boost::blank, std::string, int64_t> VariantKey;
 			VariantKey value;
 
-			customAttrTypes type = ATTR_NO_TYPE;
 
-			explicit CustomAttributeKey(customAttrTypes type) : type(type) {
-				switch (type) {
-					case ATTR_STRING_TYPE: {
-						value = std::string();
-						break;
-					}
+			CustomAttributeKey() : value(boost::blank()) {}
 
-					case ATTR_INTEGER_TYPE: {
-						value = (int64_t)0;
-						break;
-					}
+			template<typename T>
+			explicit CustomAttributeKey(const T& v) : value(v) {}
 
-					default: {
-						value = boost::blank();
-						break;
-					}
-				}
-			}
-
-			CustomAttributeKey(const std::string& v) {
-				type = ATTR_STRING_TYPE;
-				value = std::string(v);
-			}
-
-			CustomAttributeKey(const char* v) {
-				type = ATTR_STRING_TYPE;
-				value = std::string(v);
-			}
-
-			CustomAttributeKey(int64_t v) {
-				type = ATTR_INTEGER_TYPE;
+			template<typename T>
+			void set(const T& v) {
 				value = v;
 			}
 
-			CustomAttributeKey(const CustomAttributeKey& i) {
-				type = i.type;
-				switch (type) {
-					case ATTR_STRING_TYPE: {
-						value = std::string(boost::get<std::string>(i.value));
+			template<typename T>
+			T get() {
+				if (value.type() == typeid(T)) {
+					return boost::get<T>(value);
+				}
+				return T();
+			}
+
+			struct serializeVisitor : public boost::static_visitor<> {
+				PropWriteStream& propWriteStream;
+
+				serializeVisitor(PropWriteStream& propWriteStream) : propWriteStream(propWriteStream), boost::static_visitor<>() {}
+
+				void operator()(const boost::blank& v) const {
+				}
+
+				void operator()(const std::string& v) const {
+					propWriteStream.writeString(v);
+				}
+
+				void operator()(const int64_t& v) const {
+					propWriteStream.write<int64_t>(v);
+				}
+			};
+
+			void serialize(PropWriteStream& propWriteStream) const {
+				propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
+				boost::apply_visitor(serializeVisitor(propWriteStream), value);
+			}
+
+			bool unserialize(PropStream& propStream) {
+				// This is hard coded so it's not general, depends on the position of the variants.
+				uint8_t pos;
+				if (!propStream.read<uint8_t>(pos)) {
+					return false;
+				}
+
+				switch (pos) {
+					case 1:  { // std::string
+						std::string tmp;
+						if (!propStream.readString(tmp)) {
+							return false;
+						}
+						value = tmp;
 						break;
 					}
 
-					case ATTR_INTEGER_TYPE: {
-						value = boost::get<int64_t>(i.value);
+					case 2: { // int64_t
+						int64_t tmp;
+						if (!propStream.read<int64_t>(tmp)) {
+							return false;
+						}
+						value = tmp;
 						break;
 					}
 
 					default: {
 						value = boost::blank();
-						break;
+						return false;
 					}
 				}
+				return true;
 			}
 
-			CustomAttributeKey(CustomAttributeKey&& attribute) : value(attribute.value), type(attribute.type) {
-				attribute.value = boost::blank();
-				attribute.type = ATTR_NO_TYPE;
-			}
-
-			CustomAttributeKey& operator=(CustomAttributeKey other) {
-				CustomAttributeKey::swap(*this, other);
-				return *this;
-			}
-
-			CustomAttributeKey& operator=(CustomAttributeKey&& other) {
-				if (this != &other) {
-					value = other.value;
-					type = other.type;
-					other.value = boost::blank();
-					other.type = ATTR_NO_TYPE;
+			struct equalityVisitor : public boost::static_visitor<bool> {
+				bool operator()(const std::string& v1, const std::string& v2) const {
+					return !v1.compare(v2);
 				}
-				return *this;
-			}
+
+				bool operator()(const int64_t& v1, const int64_t& v2) const {
+					return v1 == v2;
+				}
+
+				template<class T1, class T2>
+				bool operator()(const T1& v1, const T2& v2) const {
+					return false;
+				}
+			};
 
 			bool operator==(const CustomAttributeKey& other) const {
-				if (type != other.type) {
+				if (value.which() != other.value.which()) {
 					return false;
-				} else {
-					switch (type) {
-						case ATTR_INTEGER_TYPE: {
-							return boost::get<int64_t>(value) == boost::get<int64_t>(other.value);
-						}
-
-						case ATTR_STRING_TYPE: {
-							return !boost::get<std::string>(value).compare(boost::get<std::string>(other.value));
-						}
-
-						default: {
-							return false;
-						}
-					}
 				}
+
+				return boost::apply_visitor(equalityVisitor(), value, other.value);
 			}
 
-			static void swap(CustomAttributeKey& first, CustomAttributeKey& second) {
-				std::swap(first.value, second.value);
-				std::swap(first.type, second.type);
-			}
+			struct hashVisitor : public boost::static_visitor<size_t> {
+				size_t operator()(const boost::blank& value) const {
+					return 0;
+				}
+
+				template<typename T>
+				size_t operator()(const T& value) const {
+					return std::hash<T>()(value);
+				}
+			};
 
 			struct hash {
 				std::size_t operator()(const CustomAttributeKey& key) const {
-					switch (key.type) {
-						case ATTR_INTEGER_TYPE: {
-							return std::hash<int64_t>()(boost::get<int64_t>(key.value));
-						}
-
-						case ATTR_STRING_TYPE: {
-							return std::hash<std::string>()(boost::get<std::string>(key.value));
-						}
-
-						default: {
-							return 0;
-						}
-					}
+					return boost::apply_visitor(hashVisitor(), key.value);
 				}
 			};
 		};
 
-		typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
-
 		struct CustomAttribute
 		{
+			typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
 			VariantAttribute value;
-			customAttrTypes type = ATTR_NO_TYPE;
 
-			explicit CustomAttribute(customAttrTypes type) : type(type) {
-				switch (type) {
-					case ATTR_STRING_TYPE: {
-						value = std::string();
+			CustomAttribute() : value(boost::blank()) {}
+
+			template<typename T>
+			explicit CustomAttribute(const T& v) : value(v) {}
+
+			template<typename T>
+			void set(const T& v) {
+				value = v;
+			}
+
+			template<typename T>
+			T get() {
+				if (value.type() == typeid(T)) {
+					return boost::get<T>(value);
+				}
+				return T();
+			}
+
+			struct pushLuaVisitor : public boost::static_visitor<> {
+				lua_State* L;
+
+				pushLuaVisitor(lua_State* L) : L(L), boost::static_visitor<>() {}
+
+				void operator()(const boost::blank& v) const {
+					lua_pushnil(L);
+				}
+
+				void operator()(const std::string& v) const {
+					LuaScriptInterface::pushString(L, v);
+				}
+
+				void operator()(const bool& v) const {
+					LuaScriptInterface::pushBoolean(L, v);
+				}
+
+				void operator()(const int64_t& v) const {
+					lua_pushnumber(L, v);
+				}
+
+				void operator()(const double& v) const {
+					lua_pushnumber(L, v);
+				}
+			};
+
+			void pushToLua(lua_State* L) const {
+				boost::apply_visitor(pushLuaVisitor(L), value);
+			}
+
+			struct serializeVisitor : public boost::static_visitor<> {
+				PropWriteStream& propWriteStream;
+
+				serializeVisitor(PropWriteStream& propWriteStream) : propWriteStream(propWriteStream), boost::static_visitor<>() {}
+
+				void operator()(const boost::blank& v) const {
+				}
+
+				void operator()(const std::string& v) const {
+					propWriteStream.writeString(v);
+				}
+
+				template<typename T>
+				void operator()(const T& v) const {
+					propWriteStream.write<T>(v);
+				}
+			};
+
+			void serialize(PropWriteStream& propWriteStream) const {
+				propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
+				boost::apply_visitor(serializeVisitor(propWriteStream), value);
+			}
+
+			bool unserialize(PropStream& propStream) {
+				// This is hard coded so it's not general, depends on the position of the variants.
+				uint8_t pos;
+				if (!propStream.read<uint8_t>(pos)) {
+					return false;
+				}
+
+				switch (pos) {
+					case 1:  { // std::string
+						std::string tmp;
+						if (!propStream.readString(tmp)) {
+							return false;
+						}
+						value = tmp;
 						break;
 					}
 
-					case ATTR_INTEGER_TYPE: {
-						value = (int64_t)0;
+					case 2: { // int64_t
+						int64_t tmp;
+						if (!propStream.read<int64_t>(tmp)) {
+							return false;
+						}
+						value = tmp;
 						break;
 					}
 
-					case ATTR_DOUBLE_TYPE: {
-						value = (double)0;
+					case 3: { // double
+						double tmp;
+						if (!propStream.read<double>(tmp)) {
+							return false;
+						}
+						value = tmp;
 						break;
 					}
 
-					case ATTR_BOOLEAN_TYPE: {
-						value = false;
+					case 4: { // bool
+						bool tmp;
+						if (!propStream.read<bool>(tmp)) {
+							return false;
+						}
+						value = tmp;
 						break;
 					}
 
 					default: {
 						value = boost::blank();
-						break;
+						return false;
 					}
 				}
-			}
-
-			CustomAttribute(const std::string& v) {
-				type = ATTR_STRING_TYPE;
-				value = std::string(v);
-			}
-
-			CustomAttribute(const char* v) {
-				type = ATTR_STRING_TYPE;
-				value = std::string(v);
-			}
-
-			CustomAttribute(int64_t v) {
-				type = ATTR_INTEGER_TYPE;
-				value = v;
-			}
-
-			CustomAttribute(double v) {
-				type = ATTR_DOUBLE_TYPE;
-				value = v;
-			}
-
-			CustomAttribute(bool v) {
-				type = ATTR_BOOLEAN_TYPE;
-				value = v;
-			}
-
-			CustomAttribute(const CustomAttribute& i) {
-				type = i.type;
-				switch (type) {
-					case ATTR_STRING_TYPE: {
-						value = std::string(boost::get<std::string>(i.value));
-						break;
-					}
-
-					case ATTR_INTEGER_TYPE: {
-						value = boost::get<int64_t>(i.value);
-						break;
-					}
-
-					case ATTR_DOUBLE_TYPE: {
-						value = boost::get<double>(i.value);
-						break;
-					}
-
-					case ATTR_BOOLEAN_TYPE: {
-						value = boost::get<bool>(i.value);
-						break;
-					}
-
-					default: {
-						value = boost::blank();
-						break;
-					}
-				}
-			}
-
-			CustomAttribute(CustomAttribute&& attribute) : value(attribute.value), type(attribute.type) {
-				attribute.value = boost::blank();
-				attribute.type = ATTR_NO_TYPE;
-			}
-
-			CustomAttribute& operator=(CustomAttribute other) {
-				CustomAttribute::swap(*this, other);
-				return *this;
-			}
-
-			CustomAttribute& operator=(CustomAttribute&& other) {
-				if (this != &other) {
-					value = other.value;
-					type = other.type;
-					other.value = boost::blank();
-					other.type = ATTR_NO_TYPE;
-				}
-				return *this;
-			}
-
-			static void swap(CustomAttribute& first, CustomAttribute& second) {
-				std::swap(first.value, second.value);
-				std::swap(first.type, second.type);
+				return true;
 			}
 		};
 
@@ -458,12 +467,14 @@ class ItemAttributes
 		void removeAttribute(itemAttrTypes type);
 
 		static std::string emptyString;
+		typedef std::unordered_map<CustomAttributeKey, CustomAttribute, CustomAttributeKey::hash> CustomAttributeMap;
 
 		struct Attribute
 		{
 			union {
 				int64_t integer;
 				std::string* string;
+				CustomAttributeMap* custom;
 			} value;
 			itemAttrTypes type;
 
@@ -476,6 +487,8 @@ class ItemAttributes
 					value.integer = i.value.integer;
 				} else if (ItemAttributes::isStrAttrType(type)) {
 					value.string = new std::string(*i.value.string);
+				} else if (ItemAttributes::isCustomAttrType(type)) {
+					value.custom = new CustomAttributeMap(*i.value.custom);
 				} else {
 					memset(&value, 0, sizeof(value));
 				}
@@ -487,6 +500,8 @@ class ItemAttributes
 			~Attribute() {
 				if (ItemAttributes::isStrAttrType(type)) {
 					delete value.string;
+				} else if (ItemAttributes::isCustomAttrType(type)) {
+					delete value.custom;
 				}
 			}
 			Attribute& operator=(Attribute other) {
@@ -497,6 +512,8 @@ class ItemAttributes
 				if (this != &other) {
 					if (ItemAttributes::isStrAttrType(type)) {
 						delete value.string;
+					} else if (ItemAttributes::isCustomAttrType(type)) {
+						delete value.custom;
 					}
 
 					value = other.value;
@@ -527,25 +544,31 @@ class ItemAttributes
 		const Attribute* getExistingAttr(itemAttrTypes type) const;
 		Attribute& getAttr(itemAttrTypes type);
 
-		typedef std::unordered_map<CustomAttributeKey, CustomAttribute, CustomAttributeKey::hash> CustomAttributeMap;
-		CustomAttributeMap customAttributes;
-		bool hasCustomAttributes = false;
+		CustomAttributeMap* getCustomAttributeMap() {
+			if (!hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
+				return nullptr;
+			}
+
+			return getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom;
+		}
 
 		template<typename T, typename R>
 		void setCustomAttribute(T key, R value) {
-			if (hasCustomAttributes) {
+			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
+			} else {
+				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 			}
-			customAttributes.emplace(key, value);
-			hasCustomAttributes = true;
+			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(key, value);
 		}
 
 		void setCustomAttribute(CustomAttributeKey& key, CustomAttribute& value) {
-			if (hasCustomAttributes) {
+			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
+			} else {
+				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 			}
-			customAttributes.insert(std::make_pair(std::move(key), std::move(value)));
-			hasCustomAttributes = true;
+			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->insert(std::make_pair(std::move(key), std::move(value)));
 		}
 
 		template<typename T>
@@ -555,9 +578,11 @@ class ItemAttributes
 		}
 
 		const CustomAttribute* getCustomAttribute(const CustomAttributeKey& key) {
-			auto it = customAttributes.find(key);
-			if (it != customAttributes.end()) {
-				return &(it->second);
+			if (const CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
+				auto it = customAttrMap->find(key);
+				if (it != customAttrMap->end()) {
+					return &(it->second);
+				}
 			}
 			return nullptr;
 		}
@@ -569,16 +594,14 @@ class ItemAttributes
 		}
 
 		bool removeCustomAttribute(const CustomAttributeKey& key) {
-			auto it = customAttributes.find(key);
-			if (it != customAttributes.end()) {
-				customAttributes.erase(it);
-				return true;
+			if (CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
+				auto it = customAttrMap->find(key);
+				if (it != customAttrMap->end()) {
+					customAttrMap->erase(it);
+					return true;
+				}
 			}
 			return false;
-		}
-
-		const CustomAttributeMap& getCustomAttributeMap() const {
-			return customAttributes;
 		}
 
 	public:
@@ -587,6 +610,9 @@ class ItemAttributes
 		}
 		inline static bool isStrAttrType(itemAttrTypes type) {
 			return (type & 0x1EC) != 0;
+		}
+		inline static bool isCustomAttrType(itemAttrTypes type) {
+			return (type & 0x40000000) != 0;
 		}
 
 		const std::forward_list<Attribute>& getList() const {
@@ -695,12 +721,6 @@ class Item : virtual public Thing
 			return attributes->hasAttribute(type);
 		}
 
-		bool hasCustomAttributes() const {
-			if (!attributes) {
-				return false;
-			}
-			return attributes->hasCustomAttributes;
-		}
 		template<typename T, typename R>
 		void setCustomAttribute(T key, R value) {
 			getAttributes()->setCustomAttribute(key, value);
