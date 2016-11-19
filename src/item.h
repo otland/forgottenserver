@@ -227,17 +227,12 @@ class ItemAttributes
 			}
 
 			template<typename T>
-			const T get() {
-				if (value.type() == typeid(T)) {
-					return boost::get<T>(value);
-				}
-				return T();
-			}
+			const T& get();
 
-			struct serializeVisitor : public boost::static_visitor<> {
+			struct SerializeVisitor : public boost::static_visitor<> {
 				PropWriteStream& propWriteStream;
 
-				serializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
+				SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
 
 				void operator()(const boost::blank& v) const {
 				}
@@ -253,7 +248,7 @@ class ItemAttributes
 
 			void serialize(PropWriteStream& propWriteStream) const {
 				propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
-				boost::apply_visitor(serializeVisitor(propWriteStream), value);
+				boost::apply_visitor(SerializeVisitor(propWriteStream), value);
 			}
 
 			bool unserialize(PropStream& propStream) {
@@ -290,7 +285,7 @@ class ItemAttributes
 				return true;
 			}
 
-			struct equalityVisitor : public boost::static_visitor<bool> {
+			struct EqualityVisitor : public boost::static_visitor<bool> {
 				bool operator()(const std::string& v1, const std::string& v2) const {
 					return !v1.compare(v2);
 				}
@@ -310,10 +305,10 @@ class ItemAttributes
 					return false;
 				}
 
-				return boost::apply_visitor(equalityVisitor(), value, other.value);
+				return boost::apply_visitor(EqualityVisitor(), value, other.value);
 			}
 
-			struct hashVisitor : public boost::static_visitor<size_t> {
+			struct HashVisitor : public boost::static_visitor<size_t> {
 				size_t operator()(const boost::blank& value) const {
 					return 0;
 				}
@@ -324,9 +319,9 @@ class ItemAttributes
 				}
 			};
 
-			struct hash {
+			struct Hash {
 				std::size_t operator()(const CustomAttributeKey& key) const {
-					return boost::apply_visitor(hashVisitor(), key.value);
+					return boost::apply_visitor(HashVisitor(), key.value);
 				}
 			};
 		};
@@ -347,17 +342,12 @@ class ItemAttributes
 			}
 
 			template<typename T>
-			const T get() {
-				if (value.type() == typeid(T)) {
-					return boost::get<T>(value);
-				}
-				return T();
-			}
+			const T& get();
 
-			struct pushLuaVisitor : public boost::static_visitor<> {
+			struct PushLuaVisitor : public boost::static_visitor<> {
 				lua_State* L;
 
-				pushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
+				PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
 
 				void operator()(const boost::blank& v) const {
 					lua_pushnil(L);
@@ -381,13 +371,13 @@ class ItemAttributes
 			};
 
 			void pushToLua(lua_State* L) const {
-				boost::apply_visitor(pushLuaVisitor(L), value);
+				boost::apply_visitor(PushLuaVisitor(L), value);
 			}
 
-			struct serializeVisitor : public boost::static_visitor<> {
+			struct SerializeVisitor : public boost::static_visitor<> {
 				PropWriteStream& propWriteStream;
 
-				serializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
+				SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
 
 				void operator()(const boost::blank& v) const {
 				}
@@ -404,7 +394,7 @@ class ItemAttributes
 
 			void serialize(PropWriteStream& propWriteStream) const {
 				propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
-				boost::apply_visitor(serializeVisitor(propWriteStream), value);
+				boost::apply_visitor(SerializeVisitor(propWriteStream), value);
 			}
 
 			bool unserialize(PropStream& propStream) {
@@ -467,7 +457,11 @@ class ItemAttributes
 		void removeAttribute(itemAttrTypes type);
 
 		static std::string emptyString;
-		typedef std::unordered_map<CustomAttributeKey, CustomAttribute, CustomAttributeKey::hash> CustomAttributeMap;
+		static int64_t emptyInt;
+		static double emptyDouble;
+		static bool emptyBool;
+
+		typedef std::unordered_map<CustomAttributeKey, CustomAttribute, CustomAttributeKey::Hash> CustomAttributeMap;
 
 		struct Attribute
 		{

@@ -618,11 +618,11 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_CUSTOM_ATTRIBUTES: {
-			size_t size;
-			if (!propStream.read<size_t>(size)) {
+			uint64_t size;
+			if (!propStream.read<uint64_t>(size)) {
 				return ATTR_READ_ERROR;
 			}
-			for (size_t i = 0; i < size; i++) {
+			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value
 				ItemAttributes::CustomAttributeKey key;
 				if (!key.unserialize(propStream)) {
@@ -776,7 +776,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 		const ItemAttributes::CustomAttributeMap* customAttrMap = attributes->getCustomAttributeMap();
 		propWriteStream.write<uint8_t>(ATTR_CUSTOM_ATTRIBUTES);
-		propWriteStream.write<size_t>(customAttrMap->size());
+		propWriteStream.write<uint64_t>(static_cast<uint64_t>(customAttrMap->size()));
 		for (const auto &entry : *customAttrMap) {
 			// Serializing key type and value
 			entry.first.serialize(propWriteStream);
@@ -1560,6 +1560,9 @@ void Item::getLight(LightInfo& lightInfo) const
 }
 
 std::string ItemAttributes::emptyString;
+int64_t ItemAttributes::emptyInt;
+double ItemAttributes::emptyDouble;
+bool ItemAttributes::emptyBool;
 
 const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 {
@@ -1696,4 +1699,58 @@ bool Item::hasMarketAttributes() const
 		}
 	}
 	return true;
+}
+
+template<>
+const std::string& ItemAttributes::CustomAttributeKey::get<std::string>() {
+	if (value.type() == typeid(std::string)) {
+		return boost::get<std::string>(value);
+	}
+
+	return emptyString;
+}
+
+template<>
+const int64_t& ItemAttributes::CustomAttributeKey::get<int64_t>() {
+	if (value.type() == typeid(int64_t)) {
+		return boost::get<int64_t>(value);
+	}
+
+	return emptyInt;
+}
+
+template<>
+const std::string& ItemAttributes::CustomAttribute::get<std::string>() {
+	if (value.type() == typeid(std::string)) {
+		return boost::get<std::string>(value);
+	}
+
+	return emptyString;
+}
+
+template<>
+const int64_t& ItemAttributes::CustomAttribute::get<int64_t>() {
+	if (value.type() == typeid(int64_t)) {
+		return boost::get<int64_t>(value);
+	}
+
+	return emptyInt;
+}
+
+template<>
+const double& ItemAttributes::CustomAttribute::get<double>() {
+	if (value.type() == typeid(double)) {
+		return boost::get<double>(value);
+	}
+
+	return emptyDouble;
+}
+
+template<>
+const bool& ItemAttributes::CustomAttribute::get<bool>() {
+	if (value.type() == typeid(bool)) {
+		return boost::get<bool>(value);
+	}
+
+	return emptyBool;
 }
