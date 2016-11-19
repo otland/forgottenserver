@@ -119,7 +119,7 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 		if (size == 0) {
 			return RETURNVALUE_NOERROR;
 		} else if (size > 1 || cur->breakpoint) {
-			return RETURNVALUE_NAMEISTOOAMBIGIOUS;
+			return RETURNVALUE_NAMEISTOOAMBIGUOUS;
 		}
 
 		auto it = cur->children.begin();
