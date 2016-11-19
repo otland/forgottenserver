@@ -227,6 +227,7 @@ class ItemAttributes
 			}
 
 			template<typename T>
+			T get() {
 				if (value.type() == typeid(T)) {
 					return boost::get<T>(value);
 				}
@@ -236,7 +237,7 @@ class ItemAttributes
 			struct serializeVisitor : public boost::static_visitor<> {
 				PropWriteStream& propWriteStream;
 
-				serializeVisitor(PropWriteStream& propWriteStream) : propWriteStream(propWriteStream), boost::static_visitor<>() {}
+				serializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
 
 				void operator()(const boost::blank& v) const {
 				}
@@ -346,6 +347,7 @@ class ItemAttributes
 			}
 
 			template<typename T>
+			const T get() {
 				if (value.type() == typeid(T)) {
 					return boost::get<T>(value);
 				}
@@ -355,7 +357,7 @@ class ItemAttributes
 			struct pushLuaVisitor : public boost::static_visitor<> {
 				lua_State* L;
 
-				pushLuaVisitor(lua_State* L) : L(L), boost::static_visitor<>() {}
+				pushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
 
 				void operator()(const boost::blank& v) const {
 					lua_pushnil(L);
@@ -385,7 +387,7 @@ class ItemAttributes
 			struct serializeVisitor : public boost::static_visitor<> {
 				PropWriteStream& propWriteStream;
 
-				serializeVisitor(PropWriteStream& propWriteStream) : propWriteStream(propWriteStream), boost::static_visitor<>() {}
+				serializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
 
 				void operator()(const boost::blank& v) const {
 				}
