@@ -227,7 +227,6 @@ class ItemAttributes
 			}
 
 			template<typename T>
-			T get() {
 				if (value.type() == typeid(T)) {
 					return boost::get<T>(value);
 				}
@@ -347,7 +346,6 @@ class ItemAttributes
 			}
 
 			template<typename T>
-			T get() {
 				if (value.type() == typeid(T)) {
 					return boost::get<T>(value);
 				}
