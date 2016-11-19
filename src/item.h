@@ -606,7 +606,7 @@ class ItemAttributes
 			return (type & 0x1EC) != 0;
 		}
 		inline static bool isCustomAttrType(itemAttrTypes type) {
-			return (type & 0x40000000) != 0;
+			return (type & 0x80000000) != 0;
 		}
 
 		const std::forward_list<Attribute>& getList() const {
