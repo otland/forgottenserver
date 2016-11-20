@@ -277,8 +277,14 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 			end
 		end
 	elseif listType == 1 then
+		rounds = rounds or RANGE
+		if rounds[damage] then
+			condition:addDamage(math.random(1, rounds[damage][2]), time or 4000, -damage)
+			damage = damage - 1
+		end
+
 		while damage > 0 do
-			condition:addDamage(RANGE[damage] and math.random(RANGE[damage][1], RANGE[damage][2]) or 1, time or 4000, -damage)
+			condition:addDamage(rounds[damage] and math.random(rounds[damage][1], rounds[damage][2]) or 1, time or 4000, -damage)
 			damage = damage - (damage > 21 and math.floor(damage / 20) + math.random(0, 1) or 1)
 		end
 	elseif listType == 2 then

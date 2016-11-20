@@ -223,7 +223,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="141" name="Inflict Wound" words="utori kor" lvl="40" mana="30" prem="1" range="1" aggressive="1" needtarget="1" needweapon="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/inflict_wound.lua">
+	<instant group="attack" spellid="141" name="Inflict Wound" words="utori kor" lvl="40" mana="30" prem="1" range="1" aggressive="1" needtarget="1" cooldown="30000" groupcooldown="2000" needlearn="0" script="attack/inflict_wound.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
@@ -792,4 +792,5 @@
 	<instant name="djinn cancel invisibility" words="###47" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/djinn_cancel_invisibility.lua" />
 	<instant name="betrayed wraith skill reducer" words="###48" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/betrayed_wraith_skill_reducer.lua" />
 	<instant name="pirate corsair skill reducer" words="###49" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/pirate_corsair_skill_reducer.lua" />
+	<instant name="monster soulfire" words="###50" aggressive="1" blockwalls="1" range="7" needtarget="1" needlearn="1" script="monster/monster_soulfire.lua" />
 </spells>
