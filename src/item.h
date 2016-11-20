@@ -434,11 +434,13 @@ class ItemAttributes
 
 		template<typename R>
 		void setCustomAttribute(int64_t key, R value) {
-			setCustomAttribute(boost::lexical_cast<std::string>(key), value);
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			setCustomAttribute(tmp, value);
 		}
 
 		void setCustomAttribute(int64_t key, CustomAttribute& value) {
-			setCustomAttribute(boost::lexical_cast<std::string>(key), value);
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			setCustomAttribute(tmp, value);
 		}
 
 		template<typename R>
@@ -463,7 +465,8 @@ class ItemAttributes
 		}
 
 		const CustomAttribute* getCustomAttribute(int64_t key) {
-			return getCustomAttribute(boost::lexical_cast<std::string>(key));
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			return getCustomAttribute(tmp);
 		}
 
 		const CustomAttribute* getCustomAttribute(const std::string& key) {
@@ -477,7 +480,8 @@ class ItemAttributes
 		}
 
 		bool removeCustomAttribute(int64_t key) {
-			return removeCustomAttribute(boost::lexical_cast<std::string>(key));
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			return removeCustomAttribute(tmp);
 		}
 
 		bool removeCustomAttribute(const std::string& key) {
@@ -618,7 +622,7 @@ class Item : virtual public Thing
 		}
 		
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
-			return getAttributes()->getCustomAttribute(boost::lexical_cast<std::string>(key));
+			return getAttributes()->getCustomAttribute(key);
 		}
 
 		const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key) {
