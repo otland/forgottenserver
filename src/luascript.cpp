@@ -6193,11 +6193,11 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 		return 1;
 	}
 
-	ItemAttributes::CustomAttributeKey key;
+	std::string key;
 	if (isNumber(L, 2)) {
-		key.set<int64_t>(getNumber<int64_t>(L, 2));
+		key = boost::lexical_cast<std::string>(getNumber<int64_t>(L, 2));
 	} else if (isString(L, 2)) {
-		key.set<std::string>(getString(L, 2));
+		key = getString(L, 2);
 	} else {
 		lua_pushnil(L);
 		return 1;
@@ -6233,17 +6233,16 @@ int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
 		return 1;
 	}
 
-	ItemAttributes::CustomAttributeKey key;
+	const ItemAttributes::CustomAttribute* attr;
 	if (isNumber(L, 2)) {
-		key.set<int64_t>(getNumber<int64_t>(L, 2));
+		attr = item->getCustomAttribute(getNumber<int64_t>(L, 2));
 	} else if (isString(L, 2)) {
-		key.set<std::string>(getString(L, 2));
+		attr = item->getCustomAttribute(getString(L, 2));
 	} else {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	const ItemAttributes::CustomAttribute* attr = item->getCustomAttribute(key);
 	if (attr) {
 		attr->pushToLua(L);
 	} else {
@@ -6260,17 +6259,14 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L) {
 		return 1;
 	}
 
-	ItemAttributes::CustomAttributeKey key;
 	if (isNumber(L, 2)) {
-		key.set<int64_t>(getNumber<int64_t>(L, 2));
+		pushBoolean(L, item->removeCustomAttribute(getNumber<int64_t>(L, 2)));
 	} else if (isString(L, 2)) {
-		key.set<std::string>(getString(L, 2));
+		pushBoolean(L, item->removeCustomAttribute(getString(L, 2)));
 	} else {
 		lua_pushnil(L);
-		return 1;
 	}
 
-	pushBoolean(L, item->removeCustomAttribute(key));
 	return 1;
 }
 

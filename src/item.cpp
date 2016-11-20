@@ -624,8 +624,8 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			}
 			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value
-				ItemAttributes::CustomAttributeKey key;
-				if (!key.unserialize(propStream)) {
+				std::string key;
+				if (!propStream.readString(key)) {
 					return ATTR_READ_ERROR;
 				};
 				
@@ -779,7 +779,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.write<uint64_t>(static_cast<uint64_t>(customAttrMap->size()));
 		for (const auto &entry : *customAttrMap) {
 			// Serializing key type and value
-			entry.first.serialize(propWriteStream);
+			propWriteStream.writeString(entry.first);
 
 			// Serializing value type and value
 			entry.second.serialize(propWriteStream);
@@ -1699,24 +1699,6 @@ bool Item::hasMarketAttributes() const
 		}
 	}
 	return true;
-}
-
-template<>
-const std::string& ItemAttributes::CustomAttributeKey::get<std::string>() {
-	if (value.type() == typeid(std::string)) {
-		return boost::get<std::string>(value);
-	}
-
-	return emptyString;
-}
-
-template<>
-const int64_t& ItemAttributes::CustomAttributeKey::get<int64_t>() {
-	if (value.type() == typeid(int64_t)) {
-		return boost::get<int64_t>(value);
-	}
-
-	return emptyInt;
 }
 
 template<>

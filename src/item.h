@@ -24,9 +24,11 @@
 #include "thing.h"
 #include "items.h"
 #include "luascript.h"
+#include "tools.h"
 #include <typeinfo>
 
 #include <boost/variant.hpp>
+#include <boost/lexical_cast.hpp>
 #include <deque>
 
 class Creature;
@@ -210,122 +212,6 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-		struct CustomAttributeKey
-		{
-			typedef boost::variant<boost::blank, std::string, int64_t> VariantKey;
-			VariantKey value;
-
-
-			CustomAttributeKey() : value(boost::blank()) {}
-
-			template<typename T>
-			explicit CustomAttributeKey(const T& v) : value(v) {}
-
-			template<typename T>
-			void set(const T& v) {
-				value = v;
-			}
-
-			template<typename T>
-			const T& get();
-
-			struct SerializeVisitor : public boost::static_visitor<> {
-				PropWriteStream& propWriteStream;
-
-				SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
-
-				void operator()(const boost::blank& v) const {
-				}
-
-				void operator()(const std::string& v) const {
-					propWriteStream.writeString(v);
-				}
-
-				void operator()(const int64_t& v) const {
-					propWriteStream.write<int64_t>(v);
-				}
-			};
-
-			void serialize(PropWriteStream& propWriteStream) const {
-				propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
-				boost::apply_visitor(SerializeVisitor(propWriteStream), value);
-			}
-
-			bool unserialize(PropStream& propStream) {
-				// This is hard coded so it's not general, depends on the position of the variants.
-				uint8_t pos;
-				if (!propStream.read<uint8_t>(pos)) {
-					return false;
-				}
-
-				switch (pos) {
-					case 1:  { // std::string
-						std::string tmp;
-						if (!propStream.readString(tmp)) {
-							return false;
-						}
-						value = tmp;
-						break;
-					}
-
-					case 2: { // int64_t
-						int64_t tmp;
-						if (!propStream.read<int64_t>(tmp)) {
-							return false;
-						}
-						value = tmp;
-						break;
-					}
-
-					default: {
-						value = boost::blank();
-						return false;
-					}
-				}
-				return true;
-			}
-
-			struct EqualityVisitor : public boost::static_visitor<bool> {
-				bool operator()(const std::string& v1, const std::string& v2) const {
-					return !v1.compare(v2);
-				}
-
-				bool operator()(const int64_t& v1, const int64_t& v2) const {
-					return v1 == v2;
-				}
-
-				template<class T1, class T2>
-				bool operator()(const T1& v1, const T2& v2) const {
-					return false;
-				}
-			};
-
-			bool operator==(const CustomAttributeKey& other) const {
-				if (value.which() != other.value.which()) {
-					return false;
-				}
-
-				return boost::apply_visitor(EqualityVisitor(), value, other.value);
-			}
-
-			struct HashVisitor : public boost::static_visitor<size_t> {
-				size_t operator()(const boost::blank& value) const {
-					return 0;
-				}
-
-				template<typename T>
-				size_t operator()(const T& value) const {
-					return std::hash<T>()(value);
-				}
-			};
-
-			struct Hash {
-				std::size_t operator()(const CustomAttributeKey& key) const {
-					return boost::apply_visitor(HashVisitor(), key.value);
-				}
-			};
-		};
-
 		struct CustomAttribute
 		{
 			typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
@@ -461,7 +347,7 @@ class ItemAttributes
 		static double emptyDouble;
 		static bool emptyBool;
 
-		typedef std::unordered_map<CustomAttributeKey, CustomAttribute, CustomAttributeKey::Hash> CustomAttributeMap;
+		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
 		struct Attribute
 		{
@@ -546,8 +432,18 @@ class ItemAttributes
 			return getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom;
 		}
 
-		template<typename T, typename R>
-		void setCustomAttribute(T key, R value) {
+		template<typename R>
+		void setCustomAttribute(int64_t key, R value) {
+			setCustomAttribute(boost::lexical_cast<std::string>(key), value);
+		}
+
+		void setCustomAttribute(int64_t key, CustomAttribute& value) {
+			setCustomAttribute(boost::lexical_cast<std::string>(key), value);
+		}
+
+		template<typename R>
+		void setCustomAttribute(std::string& key, R value) {
+			toLowerCaseString(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
 			} else {
@@ -556,7 +452,8 @@ class ItemAttributes
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(key, value);
 		}
 
-		void setCustomAttribute(CustomAttributeKey& key, CustomAttribute& value) {
+		void setCustomAttribute(std::string& key, CustomAttribute& value) {
+			toLowerCaseString(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
 			} else {
@@ -565,15 +462,13 @@ class ItemAttributes
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->insert(std::make_pair(std::move(key), std::move(value)));
 		}
 
-		template<typename T>
-		const CustomAttribute* getCustomAttribute(T key) {
-			CustomAttributeKey tmp(key);
-			return getCustomAttribute(tmp);
+		const CustomAttribute* getCustomAttribute(int64_t key) {
+			return getCustomAttribute(boost::lexical_cast<std::string>(key));
 		}
 
-		const CustomAttribute* getCustomAttribute(const CustomAttributeKey& key) {
+		const CustomAttribute* getCustomAttribute(const std::string& key) {
 			if (const CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
-				auto it = customAttrMap->find(key);
+				auto it = customAttrMap->find(asLowerCaseString(key));
 				if (it != customAttrMap->end()) {
 					return &(it->second);
 				}
@@ -581,15 +476,13 @@ class ItemAttributes
 			return nullptr;
 		}
 
-		template<typename T>
-		bool removeCustomAttribute(T key) {
-			CustomAttributeKey tmp(key);
-			return removeCustomAttribute(tmp);
+		bool removeCustomAttribute(int64_t key) {
+			return removeCustomAttribute(boost::lexical_cast<std::string>(key));
 		}
 
-		bool removeCustomAttribute(const CustomAttributeKey& key) {
+		bool removeCustomAttribute(const std::string& key) {
 			if (CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
-				auto it = customAttrMap->find(key);
+				auto it = customAttrMap->find(asLowerCaseString(key));
 				if (it != customAttrMap->end()) {
 					customAttrMap->erase(it);
 					return true;
@@ -715,30 +608,28 @@ class Item : virtual public Thing
 			return attributes->hasAttribute(type);
 		}
 
-		template<typename T, typename R>
-		void setCustomAttribute(T key, R value) {
+		template<typename R>
+		void setCustomAttribute(std::string& key, R value) {
 			getAttributes()->setCustomAttribute(key, value);
 		}
 
-		void setCustomAttribute(ItemAttributes::CustomAttributeKey& key, ItemAttributes::CustomAttribute& value) {
+		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
 			getAttributes()->setCustomAttribute(key, value);
 		}
 		
-		template<typename T>
-		const ItemAttributes::CustomAttribute* getCustomAttribute(T key) {
+		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
+			return getAttributes()->getCustomAttribute(boost::lexical_cast<std::string>(key));
+		}
+
+		const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key) {
 			return getAttributes()->getCustomAttribute(key);
 		}
 
-		const ItemAttributes::CustomAttribute* getCustomAttribute(const ItemAttributes::CustomAttributeKey& key) {
-			return getAttributes()->getCustomAttribute(key);
-		}
-
-		template<typename T>
-		bool removeCustomAttribute(T key) {
+		bool removeCustomAttribute(int64_t key) {
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
-		bool removeCustomAttribute(const ItemAttributes::CustomAttributeKey& key) {
+		bool removeCustomAttribute(const std::string& key) {
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
