@@ -6,7 +6,8 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGY)
 function onTargetCreature(creature, target)
 	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.15) + 1
 	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.25) + 1
-	creature:addDamageCondition(target, CONDITION_ENERGY, 2, target:isPlayer() and 13 or 25, {10, 12}, math.random(min, max))
+	local rounds = math.random(math.floor(min), math.floor(max))
+	creature:addDamageCondition(target, CONDITION_ENERGY, 2, target:isPlayer() and 13 or 25, {10, 12}, rounds)
 	return true
 end
 

@@ -10,7 +10,8 @@ function onTargetCreature(creature, target)
 
 	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.3) + 2
 	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.5) + 3
-	condition:addDamage(math.random(min, max), math.random(10, 12) * 1000, -(target:isPlayer() and 10 or 20))
+	local rounds = math.random(math.floor(min), math.floor(max))
+	condition:addDamage(rounds, math.random(10, 12) * 1000, -(target:isPlayer() and 10 or 20))
 	target:addCondition(condition)
 	return true
 end
