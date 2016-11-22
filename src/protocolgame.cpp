@@ -280,7 +280,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
 	std::string& token = sessionArgs[2];
-	std::string& tokenTime = sessionArgs[3];
+	uint32_t tokenTime = strtoul(sessionArgs[3].c_str(), NULL, 10);
 
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
@@ -325,7 +325,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, std::stoul(tokenTime));
+	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
