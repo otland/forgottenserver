@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#define FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
-
-// Definitions should be global.
-#include "definitions.h"
-
-#include <algorithm>
-#include <chrono>
-#include <cstdint>
-#include <forward_list>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <vector>
+#ifndef FS_API_SERVER_COMMON_H
+#define FS_API_SERVER_COMMON_H
 
 #include <boost/asio.hpp>
-#include <beast/http.hpp>
-#include <pugixml.hpp>
+#include <beast/http/message.hpp>
+#include <beast/http/string_body.hpp>
+namespace http
+{
+
+namespace asio = boost::asio;
+using IoService = asio::io_service;
+using Strand = IoService::strand;
+using ErrorCode = boost::system::error_code;
+
+using Request = beast::http::request<beast::http::string_body>;
+using Response = beast::http::response<beast::http::string_body>;
+using RequestID = uint;
+} //namespace http
+
+#endif // FS_API_SERVER_COMMON_H

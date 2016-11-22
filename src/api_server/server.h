@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,43 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#define FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
+#ifndef FS_API_SERVER_SERVER_H
+#define FS_API_SERVER_SERVER_H
 
-// Definitions should be global.
-#include "definitions.h"
+#include "common.h"
 
-#include <algorithm>
-#include <chrono>
-#include <cstdint>
-#include <forward_list>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
 #include <memory>
-#include <mutex>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <vector>
-
+#include <unordered_set>
 #include <boost/asio.hpp>
-#include <beast/http.hpp>
-#include <pugixml.hpp>
+#include "../tools.h"
+
+namespace http
+{
+
+class Peer;
+using PeerSharedPtr = std::shared_ptr<Peer>;
+
+class ApiServer : NonCopyable, NonMovable
+{
+	using Acceptor = asio::ip::tcp::acceptor;
+	using Peers = std::unordered_set<PeerSharedPtr>;
+	using EndPoint = asio::ip::tcp::endpoint;
+
+	Acceptor acceptor;
+	Peers peers;
+	Strand strand;
+	void accept();
+public:
+    explicit ApiServer(IoService& service);
+	void start(EndPoint endPoint);
+	void stop();
+
+	IoService& getIoService() {
+		return acceptor.get_io_service();
+	}
+
+    void onPeerClose(Peer& peer);
+};
+
+} //namespace http
+#endif // FS_API_SERVER_SERVER_H

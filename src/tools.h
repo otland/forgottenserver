@@ -93,4 +93,18 @@ const char* getReturnMessage(ReturnValue value);
 
 int64_t OTSYS_TIME();
 
+struct NonMovable
+{
+	constexpr NonMovable() noexcept = default;
+	NonMovable(NonMovable&&) = delete;
+	NonMovable& operator=(NonMovable&&) = delete;
+};
+
+struct NonCopyable
+{
+	constexpr NonCopyable() noexcept = default;
+	NonCopyable(NonCopyable&&) = delete;
+	NonCopyable& operator=(NonCopyable&&) = delete;
+};
+
 #endif
