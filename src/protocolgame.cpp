@@ -272,6 +272,11 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	std::string sessionKey = msg.getString();
 
 	auto sessionArgs = explodeString(sessionKey, "\n", 4);
+	if (sessionArgs.size() != 4) {
+		disconnect();
+		return;
+	}
+
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
 	std::string& token = sessionArgs[2];
