@@ -160,6 +160,18 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	return accountId;
 }
 
+std::vector<std::string> IOLoginData::liveCastAuthentication(const std::string& password)
+{
+	std::vector<std::string> casts;
+
+	for(Player* caster : g_game.getLiveCasters(password)) {
+		casts.push_back(caster->getName());
+	}
+
+	std::sort(casts.begin(), casts.end());
+	return casts;
+}
+
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
 	std::ostringstream query;
@@ -186,7 +198,7 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 
 	std::ostringstream query;
 	if (login) {
-		query << "INSERT INTO `players_online` VALUES (" << guid << ')';
+		query << "INSERT INTO `players_online` (`player_id`) VALUES (" << guid << ')';
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
 	}
@@ -638,6 +650,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 bool IOLoginData::savePlayer(Player* player)
 {
+	if(player->isSpectator) {
+		return false;
+	}
+
 	if (player->getHealth() <= 0) {
 		player->changeHealth(1);
 	}

@@ -83,6 +83,19 @@ GameState_t Game::getGameState() const
 	return gameState;
 }
 
+std::vector<Player*> Game::getLiveCasters(const std::string& password)
+{
+	std::vector<Player*> casters;
+
+	for(Player* caster : liveCasters) {
+		if(caster->isLiveCasting() && caster->castPassword == password) {
+			casters.push_back(caster);
+		}
+	}
+
+	return casters;
+}
+
 void Game::setWorldType(WorldType_t type)
 {
 	worldType = type;
@@ -1809,6 +1822,11 @@ void Game::playerCloseChannel(uint32_t playerId, uint16_t channelId)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
+		return;
+	}
+
+	if(channelId == CHANNEL_CAST && (player->isLiveCasting() || player->isSpectating())) {
+		player->sendChannel(CHANNEL_CAST, "Live Cast", nullptr, nullptr);
 		return;
 	}
 
