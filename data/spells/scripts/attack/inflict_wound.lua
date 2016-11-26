@@ -3,18 +3,18 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_DRAWBLOOD)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_WEAPONTYPE)
 
-function Creature:getHighestSkillLevel()
+local function getHighestSkillLevel(creature)
 	local skillLevel = -1
 	for skillType = SKILL_CLUB, SKILL_AXE do
-		if skillLevel < self:getEffectiveSkillLevel(skillType) then
-			skillLevel = self:getEffectiveSkillLevel(skillType)
+		if skillLevel < creature:getEffectiveSkillLevel(skillType) then
+			skillLevel = creature:getEffectiveSkillLevel(skillType)
 		end
 	end
 	return skillLevel
 end
 
 function onTargetCreature(creature, target)
-	local skill = creature:getHighestSkillLevel()
+	local skill = getHighestSkillLevel(creature)
 	local min = (creature:getLevel() / 80) + (skill * 0.2) + 2
 	local max = (creature:getLevel() / 80) + (skill * 0.4) + 2
 	local damage = math.random(math.floor(min), math.floor(max))
