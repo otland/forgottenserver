@@ -21,8 +21,9 @@
 
 #include "peer.h"
 #include "server.h"
-
-#include "response_writer.h"
+#include "router.h"
+#include "responder.h"
+#include "../tasks.h"
 
 namespace http
 {
@@ -30,14 +31,21 @@ namespace http
 using Seconds = std::chrono::seconds;
 using PeerWeakPtr = std::weak_ptr<Peer>;
 
-Peer::Peer(ApiServer& server) :
+Peer::Peer(ApiServer& server, Router& router) :
 	server(server),
+	router(router),
 	socket(server.getIoService()),
 	timer(server.getIoService()),
 	strand(server.getIoService())
 {
 	//
 }
+
+Peer::~Peer()
+{
+	cancelTimer();
+}
+
 
 void Peer::onAccept()
 {
@@ -58,9 +66,10 @@ void Peer::read()
 
 		cancelTimer(); // cancel read timer
 		state = beast::http::is_keep_alive(request) ? KeepAlive : Close;
+
 		startTimer(TimerType::ResponseGeneration);
-		std::cout << "Method: " << request.method << "\nURI: " << request.url  << std::endl;
-		ResponseWriter writer{sharedThis, std::move(request), requestCounter};
+		auto functor = std::bind(&Router::handleRequest, &router, Responder{sharedThis, std::move(request), requestCounter});
+		g_dispatcher.addTask(createTask(std::move(functor)));
 	}));
 }
 
@@ -68,7 +77,7 @@ void Peer::write()
 {
 	cancelTimer(); // cancel response generation timer
 	if (state != KeepAlive) {
-		response.headers.replace("Connection", "close");
+		response.fields.replace("Connection", "close");
 	}
 	beast::http::prepare(response);
 	auto sharedThis = shared_from_this();
@@ -155,42 +164,18 @@ void Peer::sendInternalServerError()
 void Peer::send(Response response, RequestID requestID, ConnectionState state)
 {
 	auto sharedThis = shared_from_this();
-
-	struct Functor // Workaround for borked move constructor in beast::http::message
-	{
-		PeerSharedPtr peer;
-		Response response;
-		RequestID requestID;
-		ConnectionState state;
-		void operator()()
-		{
-			if (peer->requestCounter != requestID) {
-				std::cerr << "HTTP API Peer send error: invalid request ID" << std::endl;
-				return;
-			}
-			peer->response = std::move(response);
-			if (state == ConnectionState::Close) {
-				peer->response.headers.insert("Connection", "close");
-				peer->state = Close;
-			}
-			peer->response = std::move(response);
-			peer->write();
+	strand.dispatch([sharedThis, this, requestID, response, state]() {
+		if (requestCounter != requestID) {
+			std::cerr << "HTTP API Peer send error: invalid request ID" << std::endl;
+			return;
 		}
-	} functor{std::move(sharedThis), std::move(response), requestID, state};
-	strand.dispatch(std::move(functor));
-// 	strand.dispatch([sharedThis, response, requestID, state]() {
-// 		auto & peer = sharedThis;
-// 		if (peer->requestCounter != requestID) {
-// 				std::cerr << "HTTP API Peer send error: invalid request ID" << std::endl;
-// 				return;
-// 			}
-// 			peer->response = std::move(response);
-// 			if (state == ConnectionState::Close) {
-// 				peer->response.headers.insert("Connection", "close");
-// 				peer->keepAlive = false;
-// 			}
-// 			peer->response = std::move(response);
-// 	});
+		this->response = std::move(response);
+		if (state == Close) {
+			this->response.fields.replace("Connection", "close");
+			this->state = Close;
+		}
+		write();
+	});
 }
 
 } //namespace http

@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "api_server/responder.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -2585,6 +2586,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
 
+
 	// Spells
 	registerClass("Spell", "", LuaScriptInterface::luaSpellCreate);
 	registerMetaMethod("Spell", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2594,6 +2596,18 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Spell", "isPremium", LuaScriptInterface::luaSpellIsPremium);
 	registerMethod("Spell", "isLearnable", LuaScriptInterface::luaSpellIsLearnable);
+
+	using http::Responder;
+	registerClass("Responder", "", nullptr);
+	registerMetaMethod("Responder", "__gc", Responder::luaDelete);
+	registerMethod("Responder", "delete", Responder::luaDelete);
+	registerMethod("Responder", "send", Responder::luaSend);
+	registerMethod("Responder", "getRequestBody", Responder::luaGetRequestBody);
+	registerMethod("Responder", "setResponseBody", Responder::luaSetResponseBody);
+	registerMethod("Responder", "getRequestField", Responder::luaGetRequestField);
+	registerMethod("Responder", "setResponseField", Responder::luaSetResponseField);
+	registerMethod("Responder", "getRequestMethod", Responder::luaGetRequestMethod);
+	registerMethod("Responder", "setResponseStatus", Responder::luaSetResponseStatus);
 }
 
 #undef registerEnum

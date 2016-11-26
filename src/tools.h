@@ -103,8 +103,8 @@ struct NonMovable
 struct NonCopyable
 {
 	constexpr NonCopyable() noexcept = default;
-	NonCopyable(NonCopyable&&) = delete;
-	NonCopyable& operator=(NonCopyable&&) = delete;
+	NonCopyable(const NonCopyable&) = delete;
+	NonCopyable& operator=(const NonCopyable&) = delete;
 };
 
 #endif

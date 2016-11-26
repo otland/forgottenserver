@@ -24,10 +24,16 @@
 #include "scheduler.h"
 #include "configmanager.h"
 #include "ban.h"
-
+#include "api_server/server.h"
 
 extern ConfigManager g_config;
 Ban g_bans;
+
+ServiceManager::ServiceManager(boost::asio::io_service& service):
+	io_service(service)
+{
+
+}
 
 ServiceManager::~ServiceManager()
 {
@@ -43,10 +49,7 @@ void ServiceManager::run()
 {
 	assert(!running);
 	running = true;
-	boost::asio::ip::tcp::endpoint ep{boost::asio::ip::address_v4(INADDR_ANY), 8003};
-	apiServer.start(ep);
 	io_service.run();
-
 }
 
 void ServiceManager::stop()
@@ -69,7 +72,6 @@ void ServiceManager::stop()
 
 	death_timer.expires_from_now(boost::posix_time::seconds(3));
 	death_timer.async_wait(std::bind(&ServiceManager::die, this));
-	apiServer.stop();
 }
 
 ServicePort::~ServicePort()

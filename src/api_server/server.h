@@ -21,7 +21,7 @@
 #define FS_API_SERVER_SERVER_H
 
 #include "common.h"
-
+#include "router.h"
 #include <memory>
 #include <unordered_set>
 #include <boost/asio.hpp>
@@ -42,6 +42,7 @@ class ApiServer : NonCopyable, NonMovable
 	Acceptor acceptor;
 	Peers peers;
 	Strand strand;
+	std::unique_ptr<Router> router;
 	void accept();
 public:
     explicit ApiServer(IoService& service);
@@ -52,7 +53,8 @@ public:
 		return acceptor.get_io_service();
 	}
 
-    void onPeerClose(Peer& peer);
+	void onPeerClose(Peer& peer);
+	void loadRoutes();
 };
 
 } //namespace http

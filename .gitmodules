@@ -1,4 +1,4 @@
 [submodule "ext/Beast"]
 	path = ext/Beast
 	url = https://github.com/vinniefalco/Beast.git
-	branch = master
+	branch = b21

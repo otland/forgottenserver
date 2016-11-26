@@ -22,7 +22,6 @@
 
 #include "connection.h"
 #include "signals.h"
-#include "api_server/server.h"
 #include <memory>
 
 class Protocol;
@@ -96,7 +95,7 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 class ServiceManager
 {
 	public:
-		ServiceManager() = default;
+		ServiceManager(boost::asio::io_service& service);
 		~ServiceManager();
 
 		// non-copyable
@@ -118,8 +117,7 @@ class ServiceManager
 
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;
 
-		boost::asio::io_service io_service;
-		http::ApiServer apiServer{io_service};
+		boost::asio::io_service& io_service;
 		Signals signals{io_service};
 		boost::asio::deadline_timer death_timer { io_service };
 		bool running = false;

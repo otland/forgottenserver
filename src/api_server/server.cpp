@@ -21,11 +21,12 @@
 
 #include "server.h"
 #include "peer.h"
+#include "router.h"
 
 namespace http
 {
 
-ApiServer::ApiServer(asio::io_service& service) :
+ApiServer::ApiServer(IoService& service) :
 	acceptor(service),
 	strand(service)
 {
@@ -34,7 +35,7 @@ ApiServer::ApiServer(asio::io_service& service) :
 
 void ApiServer::accept()
 {
-	auto peer = std::make_shared<Peer>(*this);
+	auto peer = std::make_shared<Peer>(*this, *router);
 	acceptor.async_accept(peer->socket, strand.wrap([this, peer](ErrorCode err) {
 		if (err == asio::error::operation_aborted || err == asio::error::bad_descriptor) {
 			std::cout << "HTTP API acceptor closing..." << std::endl;
@@ -59,6 +60,8 @@ void ApiServer::start(EndPoint endPoint)
 			std::cerr << "HTTP API acceptor open() error: " << err.message() << std::endl;
 			return;
 		}
+		asio::socket_base::reuse_address option(true);
+		acceptor.set_option(option);
 		acceptor.bind(endPoint, err);
 		if (err) {
 			std::cerr << "HTTP API acceptor bind() error: " << err.message() << std::endl;
@@ -94,6 +97,15 @@ void ApiServer::onPeerClose(Peer& peer)
 	strand.dispatch([this, peerShared]() {
 		peers.erase(peerShared);
 	});
+}
+
+void ApiServer::loadRoutes()
+{
+	//Dispatcher thread
+	router.reset(new Router);
+	router->loadFromXml();
+	asio::ip::tcp::endpoint ep{asio::ip::address_v4(INADDR_ANY), 8080};
+	start(ep);
 }
 
 } //namespace http

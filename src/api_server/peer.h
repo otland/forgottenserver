@@ -28,9 +28,17 @@ namespace http
 {
 
 class ApiServer;
+class Router;
 
 class Peer : public std::enable_shared_from_this<Peer>, NonCopyable, NonMovable
 {
+public:
+	enum ConnectionState : int
+	{
+		Close,
+		KeepAlive,
+	};
+private:
 	friend class ApiServer;
 	using Socket = asio::ip::tcp::socket;
 	using Streambuf = asio::streambuf;
@@ -42,15 +50,18 @@ class Peer : public std::enable_shared_from_this<Peer>, NonCopyable, NonMovable
 		Write,
 		ResponseGeneration
 	};
-	enum ConnectionState : int;
 
 	ApiServer& server;
+	Router& router;
 	Socket socket;
 	Timer timer;
 	Strand strand;
 	Streambuf buffer;
 	Request request;
 	Response response;
+	/**The @ref requestCounter variable is used to ensure that the lua environment does not store the responder and
+	 * accidentally respond to another request after the current one times out
+	 */
 	RequestID requestCounter{};
 	ConnectionState state;
 
@@ -62,13 +73,8 @@ class Peer : public std::enable_shared_from_this<Peer>, NonCopyable, NonMovable
 	void cancelTimer();
     void sendInternalServerError();
 public:
-	enum ConnectionState : int
-	{
-		Close,
-		KeepAlive,
-	};
-	explicit Peer(ApiServer& server);
-
+	explicit Peer(ApiServer& server, Router& router);
+	~Peer();
 	void send(Response response, RequestID requestID, ConnectionState = KeepAlive);
 	void close();
 };
