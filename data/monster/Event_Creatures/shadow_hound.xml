@@ -22,7 +22,7 @@
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>
-		<attack name="soulfire" interval="2000" chance="14" />
+		<attack name="monster soulfire" interval="2000" chance="14" />
 	</attacks>
 	<defenses armor="50" defense="55">
 		<defense name="healing" interval="1000" chance="15" min="60" max="230">
