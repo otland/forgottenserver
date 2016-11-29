@@ -28,7 +28,8 @@
 namespace http
 {
 
-using Seconds = std::chrono::seconds;
+using Seconds = boost::posix_time::seconds;
+using Minutes = boost::posix_time::minutes;
 using PeerWeakPtr = std::weak_ptr<Peer>;
 
 Peer::Peer(ApiServer& server, Router& router) :
@@ -41,12 +42,6 @@ Peer::Peer(ApiServer& server, Router& router) :
 	//
 }
 
-Peer::~Peer()
-{
-	cancelTimer();
-}
-
-
 void Peer::onAccept()
 {
 	read();
@@ -56,7 +51,7 @@ void Peer::read()
 {
 	auto sharedThis = shared_from_this();
 	state = KeepAlive;
-	startTimer(TimerType::Read);
+	startTimer();
 	beast::http::async_read(socket, buffer, request, strand.wrap([sharedThis, this](ErrorCode err) {
 		if (err) {
 			std::cerr << "HTTP API peer read() error: " << err.message() << std::endl;
@@ -67,7 +62,7 @@ void Peer::read()
 		cancelTimer(); // cancel read timer
 		state = beast::http::is_keep_alive(request) ? KeepAlive : Close;
 
-		startTimer(TimerType::ResponseGeneration);
+		startTimer(); // start response generation timer
 		auto functor = std::bind(&Router::handleRequest, &router, Responder{sharedThis, std::move(request), requestCounter});
 		g_dispatcher.addTask(createTask(std::move(functor)));
 	}));
@@ -81,7 +76,7 @@ void Peer::write()
 	}
 	beast::http::prepare(response);
 	auto sharedThis = shared_from_this();
-	startTimer(TimerType::Write);
+	startTimer(); // start write timer
 	++requestCounter;
 	beast::http::async_write(socket, response, strand.wrap([sharedThis, this](ErrorCode err) {
 		if (err) {
@@ -91,7 +86,7 @@ void Peer::write()
 		}
 
 		if (state == KeepAlive) {
-			cancelTimer(); //cancel write timer
+			cancelTimer(); // cancel write timer
 			read();
 		} else {
 			internalClose();
@@ -116,11 +111,11 @@ void Peer::close()
 	});
 }
 
-void Peer::startTimer(TimerType type)
+void Peer::startTimer()
 {
-	timer.expires_from_now(Seconds{5});
+	timer.expires_from_now(Minutes{30});
 	PeerWeakPtr weakThis = shared_from_this();
-	timer.async_wait(strand.wrap([weakThis, type](ErrorCode err) {
+	timer.async_wait(strand.wrap([weakThis](ErrorCode err) {
 		if (err == asio::error::operation_aborted) {
 			return;
 		}
@@ -130,35 +125,17 @@ void Peer::startTimer(TimerType type)
 			return;
 		}
 
-		switch(type) {
-			case TimerType::Write:
-				//[[fallthrough]]
-			case TimerType::Read:
-				sharedThis->internalClose();
-				break;
-			case TimerType::ResponseGeneration:
-				sharedThis->sendInternalServerError();
-				break;
-		}
+		sharedThis->internalClose();
 	}));
 }
 
 void Peer::cancelTimer()
 {
-	ErrorCode err;
+	ErrorCode err{};
 	timer.cancel(err);
 	if (err) {
 		std::cerr << "HTTP API Peer timer cancel error: " << err.message() << std::endl;
 	}
-}
-
-void Peer::sendInternalServerError()
-{
-	response = {};
-	response.status = 500;
-	response.reason = "Internal Server Error";
-	response.version = 11;
-	write();
 }
 
 void Peer::send(Response response, RequestID requestID, ConnectionState state)

@@ -8,31 +8,15 @@
 namespace http
 {
 
-class Route final : public Event
+class Router final
 {
-	std::string getScriptEventName() const final;
-	bool configureEvent (const pugi::xml_node& node) final;
-public:
-	std::string uri;
-	explicit Route (LuaScriptInterface*);
-	using Pointer = std::unique_ptr<Route>;
-	void handleRequest(Responder responder) const;
-};
-
-class Router final : public BaseEvents
-{
-	using Routes = std::unordered_map<std::string, Route::Pointer>;
-
-	Routes routes;
 	LuaScriptInterface interface{"HTTP API Router interface"};
+	int32_t luaHandlerId{-1};
+	void sendInternalServerError(Responder& responder) const;
 
-	std::string getScriptBaseName() const final;
-	LuaScriptInterface& getScriptInterface() final;
-	Event* getEvent(const std::string& nodeName) final;
-	bool registerEvent(Event* event, const pugi::xml_node& node) final;
-	void clear() final;
 public:
 	Router();
+	bool loadRoutingFunction();
 	void handleRequest(Responder responder);
 };
 

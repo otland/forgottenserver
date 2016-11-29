@@ -2608,6 +2608,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Responder", "setResponseField", Responder::luaSetResponseField);
 	registerMethod("Responder", "getRequestMethod", Responder::luaGetRequestMethod);
 	registerMethod("Responder", "setResponseStatus", Responder::luaSetResponseStatus);
+	registerMethod("Responder", "getRequestURL", Responder::luaGetRequestURL);
 }
 
 #undef registerEnum

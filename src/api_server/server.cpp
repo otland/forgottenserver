@@ -103,7 +103,9 @@ void ApiServer::loadRoutes()
 {
 	//Dispatcher thread
 	router.reset(new Router);
-	router->loadFromXml();
+	if (!router->loadRoutingFunction()) {
+		return;
+	}
 	asio::ip::tcp::endpoint ep{asio::ip::address_v4(INADDR_ANY), 8080};
 	start(ep);
 }

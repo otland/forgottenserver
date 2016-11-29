@@ -134,4 +134,17 @@ int Responder::luaSetResponseStatus(lua_State* L)
 	return 1;
 }
 
+int Responder::luaGetRequestURL(lua_State* L)
+{
+	//responder:getRequestURL()
+	Responder* responder = LuaScriptInterface::getUserdata<Responder>(L, 1);
+	if (responder == nullptr) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	LuaScriptInterface::pushString(L, responder->request.url);
+	return 1;
+}
+
 } //namespace http

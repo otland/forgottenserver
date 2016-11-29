@@ -42,14 +42,7 @@ private:
 	friend class ApiServer;
 	using Socket = asio::ip::tcp::socket;
 	using Streambuf = asio::streambuf;
-	using Timer = asio::steady_timer;
-
-	enum class TimerType
-	{
-		Read,
-		Write,
-		ResponseGeneration
-	};
+	using Timer = asio::deadline_timer;
 
 	ApiServer& server;
 	Router& router;
@@ -69,12 +62,11 @@ private:
 	void read();
 	void write();
 	void internalClose();
-	void startTimer(TimerType type);
+	void startTimer();
 	void cancelTimer();
     void sendInternalServerError();
 public:
 	explicit Peer(ApiServer& server, Router& router);
-	~Peer();
 	void send(Response response, RequestID requestID, ConnectionState = KeepAlive);
 	void close();
 };
