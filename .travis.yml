@@ -11,14 +11,13 @@ cache: apt
 addons:
   apt:
     packages:
-      - libboost-dev
-      - libboost-system-dev
-      - libboost-iostreams-dev
       - liblua5.2-dev
       - libluajit-5.1-dev
       - libmysqlclient-dev
       - libpugixml-dev
 before_script:
+  - sudo add-apt-repository ppa:kzemek/boost -y && sudo apt-get update
+  - sudo apt-get install libboost1.58-dev libboost-system1.58-dev libboost-iostreams1.58-dev -y
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
 script: make -j2

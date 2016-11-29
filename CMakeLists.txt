@@ -35,7 +35,7 @@ else()
     find_package(Lua)
 endif()
 
-find_package(Boost 1.53.0 COMPONENTS system iostreams REQUIRED)
+find_package(Boost 1.58.0 COMPONENTS system iostreams REQUIRED)
 
 add_subdirectory(src)
 add_executable(tfs ${tfs_SRC})
