@@ -28,9 +28,9 @@
 namespace http
 {
 
-using Seconds = boost::posix_time::seconds;
 using Minutes = boost::posix_time::minutes;
-using PeerWeakPtr = std::weak_ptr<Peer>;
+
+const static Minutes TIMER_TIMEOUT{30};
 
 Peer::Peer(ApiServer& server, Router& router) :
 	server(server),
@@ -50,7 +50,6 @@ void Peer::onAccept()
 void Peer::read()
 {
 	auto sharedThis = shared_from_this();
-	state = KeepAlive;
 	startTimer();
 	beast::http::async_read(socket, buffer, request, strand.wrap([sharedThis, this](ErrorCode err) {
 		if (err) {
@@ -60,7 +59,7 @@ void Peer::read()
 		}
 
 		cancelTimer(); // cancel read timer
-		state = beast::http::is_keep_alive(request) ? KeepAlive : Close;
+		requestKeepAlive = beast::http::is_keep_alive(request);
 
 		startTimer(); // start response generation timer
 		auto functor = std::bind(&Router::handleRequest, &router, Responder{sharedThis, std::move(request), requestCounter});
@@ -71,9 +70,6 @@ void Peer::read()
 void Peer::write()
 {
 	cancelTimer(); // cancel response generation timer
-	if (state != KeepAlive) {
-		response.fields.replace("Connection", "close");
-	}
 	beast::http::prepare(response);
 	auto sharedThis = shared_from_this();
 	startTimer(); // start write timer
@@ -85,7 +81,7 @@ void Peer::write()
 			return;
 		}
 
-		if (state == KeepAlive) {
+		if (requestKeepAlive && beast::http::is_keep_alive(response)) {
 			cancelTimer(); // cancel write timer
 			read();
 		} else {
@@ -113,7 +109,7 @@ void Peer::close()
 
 void Peer::startTimer()
 {
-	timer.expires_from_now(Minutes{30});
+	timer.expires_from_now(TIMER_TIMEOUT);
 	PeerWeakPtr weakThis = shared_from_this();
 	timer.async_wait(strand.wrap([weakThis](ErrorCode err) {
 		if (err == asio::error::operation_aborted) {
@@ -138,19 +134,15 @@ void Peer::cancelTimer()
 	}
 }
 
-void Peer::send(Response response, RequestID requestID, ConnectionState state)
+void Peer::send(Response response, RequestID requestID)
 {
 	auto sharedThis = shared_from_this();
-	strand.dispatch([sharedThis, this, requestID, response, state]() {
+	strand.dispatch([sharedThis, this, requestID, response]() {
 		if (requestCounter != requestID) {
 			std::cerr << "HTTP API Peer send error: invalid request ID" << std::endl;
 			return;
 		}
 		this->response = std::move(response);
-		if (state == Close) {
-			this->response.fields.replace("Connection", "close");
-			this->state = Close;
-		}
 		write();
 	});
 }

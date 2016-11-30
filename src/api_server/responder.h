@@ -9,16 +9,16 @@ namespace http
 {
 
 class Peer;
-using PeerSharedPtr = std::shared_ptr<Peer>;
+using PeerWeakPtr = std::weak_ptr<Peer>;
 
 class Responder// : NonCopyable
 {
-	const PeerSharedPtr peer;
+	const PeerWeakPtr peerWeak;
 	const RequestID requestID;
 public:
 	const Request request;
 	Response response;
-	Responder(PeerSharedPtr peer, Request request, RequestID requestID);
+	Responder(PeerWeakPtr peer, Request request, RequestID requestID);
 
 	static int luaDelete(lua_State* L);
 	static int luaSend(lua_State* L);

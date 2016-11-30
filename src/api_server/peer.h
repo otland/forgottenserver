@@ -22,7 +22,7 @@
 
 #include "common.h"
 #include "../tools.h"
-#include <boost/asio/steady_timer.hpp>
+
 #include <beast/http.hpp>
 namespace http
 {
@@ -33,11 +33,6 @@ class Router;
 class Peer : public std::enable_shared_from_this<Peer>, NonCopyable, NonMovable
 {
 public:
-	enum ConnectionState : int
-	{
-		Close,
-		KeepAlive,
-	};
 private:
 	friend class ApiServer;
 	using Socket = asio::ip::tcp::socket;
@@ -56,7 +51,7 @@ private:
 	 * accidentally respond to another request after the current one times out
 	 */
 	RequestID requestCounter{};
-	ConnectionState state;
+	bool requestKeepAlive{true};
 
 	void onAccept();
 	void read();
@@ -64,12 +59,13 @@ private:
 	void internalClose();
 	void startTimer();
 	void cancelTimer();
-    void sendInternalServerError();
 public:
-	explicit Peer(ApiServer& server, Router& router);
-	void send(Response response, RequestID requestID, ConnectionState = KeepAlive);
+	Peer(ApiServer& server, Router& router);
+	void send(Response response, RequestID requestID);
 	void close();
 };
+
+using PeerWeakPtr = std::weak_ptr<Peer>;
 
 } //namespace http
 

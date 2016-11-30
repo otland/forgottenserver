@@ -7,8 +7,8 @@
 namespace http
 {
 
-Responder::Responder(PeerSharedPtr peer, Request request, RequestID requestID):
-	peer(std::move(peer)),
+Responder::Responder(PeerWeakPtr peer, Request request, RequestID requestID):
+	peerWeak(std::move(peer)),
 	requestID(requestID),
 	request(std::move(request))
 {
@@ -18,6 +18,11 @@ Responder::Responder(PeerSharedPtr peer, Request request, RequestID requestID):
 
 void Responder::send()
 {
+	auto peer = peerWeak.lock();
+	if (peer == nullptr) {
+		std::cerr << "HTTP API send error: Peer no longer connected" << std::endl;
+		return;
+	}
 	peer->send(std::move(response), requestID);
 }
 
