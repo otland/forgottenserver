@@ -11,13 +11,17 @@ namespace http
 class Router final
 {
 	LuaScriptInterface interface{"HTTP API Router interface"};
-	int32_t luaHandlerId{-1};
+	int32_t luaRequestHandlerId{-1};
+	int32_t luaSessionOpenId{-1};
+	int32_t luaSessionCloseId{-1};
 	void sendInternalServerError(Responder& responder) const;
 
 public:
 	Router();
-	bool loadRoutingFunction();
-	void handleRequest(Responder responder);
+	bool loadRoutingFunctions();
+	void handleRequest(Responder responder, PeerID peerID);
+	void handleSessionOpen(PeerID peerID);
+	void handleSessionClose(PeerID peerID);
 };
 
 } //namespace http

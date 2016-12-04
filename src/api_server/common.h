@@ -34,6 +34,7 @@ using ErrorCode = boost::system::error_code;
 using Request = beast::http::request<beast::http::string_body>;
 using Response = beast::http::response<beast::http::string_body>;
 using RequestID = uint;
+using PeerID = uint;
 } //namespace http
 
 #endif // FS_API_SERVER_COMMON_H

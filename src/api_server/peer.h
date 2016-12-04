@@ -47,11 +47,13 @@ private:
 	Streambuf buffer;
 	Request request;
 	Response response;
+	const PeerID peerID;
 	/**The @ref requestCounter variable is used to ensure that the lua environment does not store the responder and
 	 * accidentally respond to another request after the current one times out
 	 */
 	RequestID requestCounter{};
 	bool requestKeepAlive{true};
+
 
 	void onAccept();
 	void read();
@@ -60,7 +62,7 @@ private:
 	void startTimer();
 	void cancelTimer();
 public:
-	Peer(ApiServer& server, Router& router);
+	Peer(ApiServer& server, Router& router, PeerID peerID);
 	void send(Response response, RequestID requestID);
 	void close();
 };

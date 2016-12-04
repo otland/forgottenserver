@@ -35,7 +35,7 @@ ApiServer::ApiServer(IoService& service) :
 
 void ApiServer::accept()
 {
-	auto peer = std::make_shared<Peer>(*this, *router);
+	auto peer = std::make_shared<Peer>(*this, *router, peerCounter++);
 	acceptor.async_accept(peer->socket, strand.wrap([this, peer](ErrorCode err) {
 		if (err == asio::error::operation_aborted || err == asio::error::bad_descriptor) {
 			std::cout << "HTTP API acceptor closing..." << std::endl;
@@ -103,7 +103,7 @@ void ApiServer::loadRoutes()
 {
 	//Dispatcher thread
 	router.reset(new Router);
-	if (!router->loadRoutingFunction()) {
+	if (!router->loadRoutingFunctions()) {
 		return;
 	}
 	asio::ip::tcp::endpoint ep{asio::ip::address_v4(INADDR_ANY), 8080};

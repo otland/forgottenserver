@@ -1,25 +1,24 @@
-routes = {}
-dofile("data/routes/scripts/api/players/online.lua")
+local Authenticator = {}
 
-local function dispatchRequest(responder)
-    responder:setResponseField('Server', 'TFS/1.3')
-    local route = routes[responder:getRequestURL()]
-    if not route then
-        responder:setResponseStatus(404, 'Not Found')
-        return false
-    end
+function Authenticator:hasPermissions(session, permissions)
+	for _, permission in pairs(permissions) do
+		if (session.permissions[permission] == nil) then
+			return false
+		end
+	end
 
-    if not route.methods[responder:getRequestMethod()]  then
-        responder:setResponseStatus(405, 'Method Not Allowed')
-        return false
-    end
-
-    return route.handler(responder)
+	return true
 end
 
-function handleRequest(responder)
-    if not dispatchRequest(responder) then
-        responder:send()
-    end
-    return true
+function Authenticator:onSessionClose(session)
 end
+
+Router.authenticator = Authenticator;
+
+local function registerRoutes()
+	local json = require 'json'
+	local stdApi = require('data.routes.scripts.standard_ot_api')
+	stdApi.register{router = Router, json = json}
+end
+
+registerRoutes()

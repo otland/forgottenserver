@@ -42,6 +42,7 @@ class ApiServer : NonCopyable, NonMovable
 	Acceptor acceptor;
 	Peers peers;
 	Strand strand;
+	PeerID peerCounter{};
 	std::unique_ptr<Router> router;
 	void accept();
 public:

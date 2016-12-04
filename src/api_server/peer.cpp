@@ -32,18 +32,23 @@ using Minutes = boost::posix_time::minutes;
 
 const static Minutes TIMER_TIMEOUT{30};
 
-Peer::Peer(ApiServer& server, Router& router) :
+Peer::Peer(ApiServer& server, Router& router, PeerID peerID) :
 	server(server),
 	router(router),
 	socket(server.getIoService()),
 	timer(server.getIoService()),
-	strand(server.getIoService())
+	strand(server.getIoService()),
+	peerID(peerID)
 {
 	//
 }
 
 void Peer::onAccept()
 {
+	auto sharedThis = shared_from_this();
+	g_dispatcher.addTask(createTask([sharedThis, this]() {
+		router.handleSessionOpen(peerID);
+	}));
 	read();
 }
 
@@ -62,8 +67,9 @@ void Peer::read()
 		requestKeepAlive = beast::http::is_keep_alive(request);
 
 		startTimer(); // start response generation timer
-		auto functor = std::bind(&Router::handleRequest, &router, Responder{sharedThis, std::move(request), requestCounter});
-		g_dispatcher.addTask(createTask(std::move(functor)));
+		g_dispatcher.addTask(createTask([sharedThis, this]() {
+			router.handleRequest(Responder{sharedThis, std::move(request), requestCounter}, peerID);
+		}));
 	}));
 }
 
@@ -96,6 +102,10 @@ void Peer::internalClose()
 	socket.shutdown(asio::socket_base::shutdown_both, err);
 	socket.close(err);
 	cancelTimer();
+	auto sharedThis = shared_from_this();
+	g_dispatcher.addTask(createTask([sharedThis, this]() {
+		router.handleSessionClose(peerID);
+	}));
 	server.onPeerClose(*this);
 }
 
