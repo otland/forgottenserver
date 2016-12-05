@@ -39,7 +39,6 @@ void Router::handleRequest(Responder responder, PeerID peerID)
 		std::cerr << "HTTP API handleRequest lua function error: " << interface.getLastLuaError()  << std::endl;
 		sendInternalServerError(*responderPtr);
 	}
-	std::cout << std::endl;
 }
 
 void Router::handleSessionOpen(PeerID peerID)
@@ -66,7 +65,6 @@ void Router::handleSessionOpen(PeerID peerID)
 	if (interface.callFunction(2) == false) {
 		std::cerr << "HTTP API handleSessionOpen lua function error: " << interface.getLastLuaError()  << std::endl;
 	}
-	std::cout << std::endl;
 }
 
 void Router::handleSessionClose(PeerID peerID)
@@ -93,7 +91,6 @@ void Router::handleSessionClose(PeerID peerID)
 	if (interface.callFunction(2) == false) {
 		std::cerr << "HTTP API handleSessionClose lua function error: " << interface.getLastLuaError()  << std::endl;
 	}
-	std::cout << std::endl;
 }
 
 void Router::sendInternalServerError(http::Responder& responder) const

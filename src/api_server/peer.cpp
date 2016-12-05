@@ -30,6 +30,8 @@ namespace http
 
 using Minutes = boost::posix_time::minutes;
 
+/** \brief Determines the time after which a connection is closed due to inactivity
+ */
 const static Minutes TIMER_TIMEOUT{30};
 
 Peer::Peer(ApiServer& server, Router& router, PeerID peerID) :
@@ -72,6 +74,7 @@ void Peer::read()
 		}));
 	}));
 }
+
 
 void Peer::write()
 {

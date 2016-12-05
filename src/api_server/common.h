@@ -28,6 +28,7 @@ namespace http
 
 namespace asio = boost::asio;
 using IoService = asio::io_service;
+/// Synchronization primitive provided by asio
 using Strand = IoService::strand;
 using ErrorCode = boost::system::error_code;
 
