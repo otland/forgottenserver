@@ -920,7 +920,7 @@ void ProtocolGame::parseFollow(NetworkMessage& msg)
 void ProtocolGame::parseEquipObject(NetworkMessage& msg)
 {
 	uint16_t spriteId = msg.get<uint16_t>();
-	msg.get<uint8_t>();
+	// msg.get<uint8_t>();
 
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerEquipItem, player->getID(), spriteId);
 }
@@ -2542,13 +2542,13 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendItems() {
+void ProtocolGame::sendItems()
+{
 	NetworkMessage msg;
 	msg.addByte(0xF5);
 
 	const std::vector<uint16_t>& inventory = Item::items.getInventory();
 	msg.add<uint16_t>(inventory.size() + 11);
-	//for whatever reason, and I don't know why, real Tibia always sends 11 1-count objects at the beginning.
 	for (uint16_t i = 1; i <= 11; i++) {
 		msg.add<uint16_t>(i);
 		msg.addByte(0); //always 0
