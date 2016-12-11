@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
+	<!-- Enchanting -->
+	<action fromid="2146" toid="2147" script="other/enchanting.lua" />
+	<action fromid="2149" toid="2150" script="other/enchanting.lua" />
+	<action itemid="2342" script="other/enchanting.lua" />
+	<action fromid="7759" toid="7762" script="other/enchanting.lua" />
+	<action itemid="24739" script="other/enchanting.lua" />
+
 	<!-- Quests -->
 	<action itemid="1740" script="quests/quests.lua" />
 	<action fromid="1747" toid="1749" script="quests/quests.lua" />
