@@ -31,14 +31,6 @@ extern Weapons* g_weapons;
 extern ConfigManager g_config;
 extern Events* g_events;
 
-Combat::Combat() :
-	formulaType(COMBAT_FORMULA_UNDEFINED),
-	mina(0.0), minb(0.0), maxa(0.0), maxb(0.0),
-	area(nullptr)
-{
-	//
-}
-
 CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
 	CombatDamage damage;
@@ -1306,11 +1298,11 @@ void AreaCombat::setupArea(int32_t radius)
 
 	std::list<uint32_t> list;
 
-	for (int32_t y = 0; y < 13; ++y) {
-		for (int32_t x = 0; x < 13; ++x) {
-			if (area[y][x] == 1) {
+	for (auto& row : area) {
+		for (int cell : row) {
+			if (cell == 1) {
 				list.push_back(3);
-			} else if (area[y][x] > 0 && area[y][x] <= radius) {
+			} else if (cell > 0 && cell <= radius) {
 				list.push_back(1);
 			} else {
 				list.push_back(0);

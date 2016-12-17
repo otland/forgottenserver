@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wrath of the Emperor" nameDescription="a wrath of the emperor" race="undead" experience="4600" speed="410" manacost="0">
-	<health now="7800" max="7800" />
+<monster name="Wrath of the Emperor" nameDescription="Wrath of the Emperor" race="undead" experience="600" speed="410" manacost="0">
+	<health now="55000" max="55000" />
 	<look type="351" corpse="0" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
@@ -17,7 +17,7 @@
 		<flag runonhealth="366" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="55" attack="115" />
+		<attack name="melee" interval="2000" min="0" max="-374" />
 		<attack name="physical" interval="3000" chance="17" length="8" spread="3" min="-150" max="-250">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>

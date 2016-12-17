@@ -13330,7 +13330,6 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="7638" article="a" name="dead cat">
-		<attribute key="containerSize" value="10" />
 		<attribute key="containerSize" value="5" />
 		<attribute key="decayTo" value="7639" />
 		<attribute key="duration" value="900" />
@@ -13706,7 +13705,6 @@
 		<attribute key="charges" value="1000" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="decayTo" value="7392" />
-		<attribute key="showcharges" value="1" />
 	</item>
 	<item id="7758" article="a" name="fiery war hammer">
 		<attribute key="weight" value="8500" />
@@ -13796,7 +13794,6 @@
 		<attribute key="charges" value="1000" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="decayTo" value="2429" />
-		<attribute key="showcharges" value="1" />
 	</item>
 	<item id="7769" article="an" name="icy knight axe">
 		<attribute key="weight" value="5900" />
@@ -29584,6 +29581,7 @@
 		<attribute key="weaponType" value="sword" />
 		<attribute key="skillSword" value="3" />
 		<attribute key="slotType" value="two-handed" />
+		<attribute key="skillSword" value="3" />
 	</item>
 	<item id="22404" article="a" name="crude umbral axe">
 		<attribute key="weight" value="9000" />
@@ -29697,6 +29695,7 @@
 		<attribute key="range" value="7" />
 		<attribute key="attack" value="6" />
 		<attribute key="hitChance" value="5" />
+		<attribute key="skillDist" value="3" />
 	</item>
 	<item id="22419" article="a" name="crude umbral crossbow">
 		<attribute key="weight" value="13000" />
@@ -29724,6 +29723,7 @@
 		<attribute key="range" value="5" />
 		<attribute key="hitChance" value="4" />
 		<attribute key="attack" value="9" />
+		<attribute key="skillDist" value="3" />
 	</item>
 	<item id="22422" article="a" name="crude umbral spellbook">
 		<attribute key="weight" value="4000" />

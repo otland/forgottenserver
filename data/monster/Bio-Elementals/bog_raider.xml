@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="240" manacost="0">
 	<health now="1300" max="1300" />
 	<look type="299" corpse="8951" />
@@ -16,7 +16,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="59" attack="53" poison="80" />
+		<attack name="melee" interval="2000" min="0" max="-183" poison="80" />
 		<attack name="lifedrain" interval="2000" chance="10" min="-90" max="-140" range="7" target="1">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -53,15 +53,15 @@
 		<voice sentence="Slurp!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50750" /><!-- gold coin -->
-		<item id="2148" countmax="5" chance="50750" /><!-- gold coin -->
-		<item id="10584" chance="9870" /><!-- boggy dreads -->
-		<item id="7591" chance="2000" /><!-- great health potion -->
-		<item id="8912" chance="1030" /><!-- springsprout rod -->
-		<item id="8472" chance="2008" /><!-- great spirit potion -->
-		<item id="2647" chance="2040" /><!-- plate legs -->
-		<item id="8473" chance="740" /><!-- ultimate health potion -->
-		<item id="8872" chance="590" /><!-- belted cape -->
-		<item id="8891" chance="110" /><!--paladin armor-->
+		<item name="gold coin" countmax="100" chance="50750" />
+		<item name="gold coin" countmax="5" chance="50750" />
+		<item name="plate legs" chance="2040" />
+		<item name="great health potion" chance="2000" />
+		<item name="great spirit potion" chance="2008" />
+		<item name="ultimate health potion" chance="740" />
+		<item name="belted cape" chance="590" />
+		<item name="paladin armor" chance="110" />
+		<item name="springsprout rod" chance="1030" />
+		<item name="boggy dreads" chance="9870" />
 	</loot>
 </monster>

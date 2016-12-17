@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Minotaur Mage" nameDescription="a minotaur mage" race="blood" experience="150" speed="170" manacost="0">
 	<health now="155" max="155" />
 	<look type="23" corpse="5981" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-20" max="-59">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energy" />
@@ -46,16 +46,16 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="85780" /><!-- gold coin -->
-		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
 		<item id="2050" chance="4950" /><!-- torch -->
-		<item id="2649" chance="5190" /><!-- leather legs -->
-		<item id="2461" chance="3000" /><!-- leather helmet -->
-		<item id="5878" chance="2290" /><!-- minotaur leather -->
-		<item id="7425" chance="1000" /><!-- taurus mace -->
-		<item id="2189" chance="600" /><!-- wand of cosmic energy -->
-		<item id="7620" chance="490" /><!-- mana potion -->
-		<item id="12428" countmax="2" chance="3020" /><!-- Minotaur Horn -->
-		<item id="12429" countmax="2" chance="6430" /><!-- purple robe -->
+		<item name="gold coin" countmax="35" chance="85780" />
+		<item name="wand of cosmic energy" chance="600" />
+		<item name="leather helmet" chance="3000" />
+		<item name="leather legs" chance="5190" />
+		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
+		<item name="minotaur leather" chance="2290" />
+		<item name="taurus mace" chance="1000" />
+		<item name="mana potion" chance="490" />
+		<item name="minotaur horn" countmax="2" chance="3020" />
+		<item name="purple robe" countmax="2" chance="6430" />
 	</loot>
 </monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spirit of Fire" nameDescription="the spirit of fire" race="blood" experience="950" speed="220" manacost="0">
+<monster name="Spirit of Fire" nameDescription="a spirit of fire" race="blood" experience="950" speed="220" manacost="0">
 	<health now="2210" max="2210" />
 	<look type="242" corpse="7349" />
 	<flags>
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="firefield" interval="1000" chance="15" range="7" radius="4" target="1">
 			<attribute key="shootEffect" value="fire" />
 		</attack>

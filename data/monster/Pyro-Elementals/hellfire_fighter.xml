@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Hellfire Fighter" nameDescription="a hellfire fighter" race="fire" experience="3900" speed="220" manacost="0">
 	<health now="3800" max="3800" />
 	<look type="243" corpse="6324" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="120" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-520" />
 		<attack name="firefield" interval="2000" chance="10" range="7" radius="3" target="0">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
@@ -42,24 +42,24 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
-		<item id="2148" countmax="46" chance="10000" /><!-- gold coin -->
-		<item id="2260" countmax="2" chance="30000" /><!-- blank rune -->
-		<item id="2172" chance="1000" /><!-- platinum coin -->
-		<item id="2239" chance="50000" /><!-- burnt scroll -->
-		<item id="6500" chance="14500" /><!-- demonic essence -->
-		<item id="2127" chance="2200" /><!-- emerald bangle -->
-		<item id="2392" chance="4140" /><!-- fire sword -->
-		<item id="7894" chance="730" /><!-- magma legs -->
-		<item id="7899" chance="470" /><!-- magma coat -->
-		<item id="2145" chance="1400" /><!-- small diamond -->
-		<item id="5944" chance="12150" /><!-- soul orb -->
-		<item id="2187" chance="9450" /><!-- wand of inferno -->
-		<item id="2432" chance="440" /><!-- fire axe -->
+		<item name="emerald bangle" chance="2200" />
 		<item id="2136" chance="190" /><!-- demonbone amulet -->
+		<item name="small diamond" chance="1400" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="40000" />
+		<item name="gold coin" countmax="46" chance="10000" />
+		<item name="bronze amulet" chance="1000" />
+		<item name="wand of inferno" chance="9450" />
+		<item name="burnt scroll" chance="50000" />
+		<item name="blank rune" countmax="2" chance="30000" />
+		<item name="fire sword" chance="4140" />
+		<item name="fire axe" chance="440" />
+		<item name="soul orb" chance="12150" />
+		<item name="demonic essence" chance="14500" />
+		<item name="magma legs" chance="730" />
+		<item name="magma coat" chance="470" />
+		<item name="fiery heart" chance="9570" />
+		<item name="piece of hellfire armor" chance="5060" />
 		<item id="13757" chance="670" /><!-- coal -->
-		<item id="10553" chance="9570" /><!-- fiery hearts -->
-		<item id="10581" chance="5060" /><!-- piece of hellfire armor -->
 	</loot>
 </monster>

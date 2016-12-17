@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Humorless Fungus" nameDescription="a humorless fungus" race="venom" experience="0" speed="230" manacost="0">
-	<health now="8000" max="8000" />
+	<health now="2500" max="2500" />
 	<look type="517" corpse="17428" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="95" />
+		<attack name="melee" interval="2000" min="0" max="-475" />
 		<attack name="earth" interval="2000" chance="10" range="7" target="1" min="-40" max="-197">
 			<attribute key="shootEffect" value="smallearth" />
 			<attribute key="areaEffect" value="smallplants" />
@@ -29,7 +29,7 @@
 		<attack name="poisoncondition" interval="2000" chance="10" target="0" radius="3" range="7" min="-400" max="-640">
 			<attribute key="areaEffect" value="greenspark" />
 		</attack>
-		<attack name="drunk" interval="2000" chance="10" range="7" target="1" radius="4" duration="4000" >
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" radius="4" duration="4000">
 			<attribute key="areaEffect" value="stun" />
 		</attack>
 	</attacks>

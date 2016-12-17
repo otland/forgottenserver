@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Sentinel" nameDescription="a lizard sentinel" race="blood" experience="110" speed="180" manacost="0">
 	<health now="265" max="265" />
 	<look type="114" corpse="6040" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-45" />
 		<attack name="physical" interval="2000" chance="30" range="7" min="0" max="-70">
 			<attribute key="shootEffect" value="spear" />
 		</attack>
@@ -36,17 +36,17 @@
 		<voice sentence="Tssss!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="89000" /><!-- gold coin -->
-		<item id="2389" countmax="3" chance="8750" /><!-- spear -->
-		<item id="2464" chance="8560" /><!-- chain armor -->
-		<item id="2483" chance="7730" /><!-- scale armor -->
-		<item id="3965" chance="4700" /><!-- hunting spear -->
-		<item id="5881" chance="960" /><!-- lizard scale -->
-		<item id="2425" chance="1120" /><!-- obsidian lance -->
-		<item id="3974" chance="320" /><!-- sentinel shield -->
-		<item id="5876" chance="990" /><!-- lizard leather -->
-		<item id="7618" chance="590" /><!-- health potion -->
-		<item id="2381" chance="510" /><!-- halberd -->
-		<item id="2145" chance="190" /><!-- small diamond -->
+		<item name="small diamond" chance="190" />
+		<item name="gold coin" countmax="80" chance="89000" />
+		<item name="halberd" chance="510" />
+		<item name="spear" countmax="3" chance="8750" />
+		<item name="obsidian lance" chance="1120" />
+		<item name="chain armor" chance="8560" />
+		<item name="scale armor" chance="7730" />
+		<item name="hunting spear" chance="4700" />
+		<item name="sentinel shield" chance="320" />
+		<item name="lizard leather" chance="990" />
+		<item name="lizard scale" chance="960" />
+		<item name="health potion" chance="590" />
 	</loot>
 </monster>

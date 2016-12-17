@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Koshei The Deathless" nameDescription="Koshei The Deathless" race="undead" experience="0" speed="390" manacost="0">
-	<health now="2000" max="2000" />
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Koshei The Deathless" nameDescription="Koshei the Deathless" race="undead" experience="0" speed="390" manacost="0">
+	<health now="3000" max="3000" />
 	<look type="99" head="95" body="116" legs="119" feet="115" corpse="6028" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-90" max="-170" poison="300" />
+		<attack name="melee" interval="2000" min="0" max="-170" poison="300" />
 		<attack name="lifedrain" interval="3000" chance="9" range="1" min="-60" max="-250">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
@@ -60,17 +60,17 @@
 		<voice sentence="What a disgusting smell of life!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance1="100000" chancemax="0" />
-		<item id="2401" chance="10000" />
-		<item id="2171" chance="1666" />
-		<item id="2656" chance="709" />
-		<item id="7893" chance="688" />
-		<item id="2535" chance="588" />
-		<item id="2165" chance="888" />
-		<item id="2237" chance="10000" />
-		<item id="2148" countmax="12" chance1="80000" chancemax="0" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="12" chance="80000" />
+		<item name="stealth ring" chance="888" />
+		<item name="platinum amulet" chance="1666" />
 		<item id="2175" chance="10000" />
-		<item id="2179" chance="900" />
-		<item id="3961" chance="1000" />
+		<item name="gold ring" chance="900" />
+		<item name="dirty cape" chance="10000" />
+		<item id="2401" chance="10000" />
+		<item name="castle shield" chance="588" />
+		<item name="blue robe" chance="709" />
+		<item name="lich staff" chance="1000" />
+		<item name="lightning boots" chance="688" />
 	</loot>
 </monster>

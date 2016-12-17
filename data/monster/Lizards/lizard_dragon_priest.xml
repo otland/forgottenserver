@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Dragon Priest" nameDescription="a lizard dragon priest" race="blood" experience="1320" speed="220" manacost="0">
 	<health now="1450" max="1450" />
 	<look type="339" corpse="11280" />
@@ -17,8 +17,11 @@
 		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="25" />
-		<attack name="fireball" interval="2000" chance="20" target="1" range="7" min="-125" max="-190" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
+		<attack name="fire" interval="2000" chance="20" target="1" range="7" min="-125" max="-190">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
 		<attack name="poisoncondition" interval="2000" chance="15" target="1" range="7" radius="1" min="-320" max="-400">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
@@ -39,29 +42,29 @@
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="I ssssmell warm blood!" />
-	</voices>
 	<summons maxSummons="2">
 		<summon name="Dragon Hatchling" interval="2000" chance="20" max="2" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I ssssmell warm blood!" />
+	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="5000" /><!-- gold coin -->
-		<item id="2148" countmax="88" chance="4400" /><!-- gold coin -->
-		<item id="11245" chance="960" /><!-- bunch of ripe rice -->
-		<item id="2152" countmax="2" chance="4090" /><!-- platinum coin -->
-		<item id="2154" chance="1000" /><!-- yellow gem -->
-		<item id="2150" countmax="3" chance="4900" /><!-- small amethyst -->
-		<item id="11361" chance="9910" /><!-- dragon priest's wandtip -->
-		<item id="8871" chance="660" /><!-- focus cape -->
-		<item id="7589" chance="12110" /><!-- strong mana potion -->
-		<item id="5876" chance="980" /><!-- lizard leather -->
-		<item id="2181" chance="1001" /><!-- terra rod -->
-		<item id="7590" chance="7940" /><!-- great mana potion -->
-		<item id="11356" chance="300" /><!-- zaoan robe -->
-		<item id="2187" chance="1480" /><!-- wand of inferno -->
-		<item id="5881" chance="1130" /><!-- lizard scale -->
-		<item id="11303" chance="450" /><!-- zaoan shoes -->
-		<item id="2168" chance="770" /><!-- life ring -->
+		<item name="gold coin" countmax="100" chance="5000" />
+		<item name="gold coin" countmax="88" chance="4400" />
+		<item name="small amethyst" countmax="3" chance="4900" />
+		<item name="platinum coin" countmax="2" chance="4090" />
+		<item name="yellow gem" chance="1000" />
+		<item name="life ring" chance="770" />
+		<item name="terra rod" chance="1001" />
+		<item name="wand of inferno" chance="1480" />
+		<item name="lizard leather" chance="980" />
+		<item name="lizard scale" chance="1130" />
+		<item name="strong mana potion" chance="12110" />
+		<item name="great mana potion" chance="7940" />
+		<item name="focus cape" chance="660" />
+		<item name="bunch of ripe rice" chance="960" />
+		<item name="Zaoan shoes" chance="450" />
+		<item name="Zaoan robe" chance="300" />
+		<item name="dragon priest's wandtip" chance="9910" />
 	</loot>
 </monster>

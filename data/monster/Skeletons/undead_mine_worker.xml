@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Mine Worker" nameDescription="a undead mine worker" race="undead" experience="45" speed="150" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Undead Mine Worker" nameDescription="an undead mine worker" race="undead" experience="45" speed="150" manacost="0">
 	<health now="65" max="65" />
 	<look type="33" corpse="5972" />
 	<targetchange interval="4000" chance="0" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-30" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-7" max="-13">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -30,11 +30,11 @@
 		<immunity death="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="10" chance="73000" /><!-- gold coin -->
+		<item name="gold coin" countmax="10" chance="73000" />
 		<item id="2230" chance="42000" /><!-- bone -->
 		<item id="2376" chance="3850" /><!-- sword -->
-		<item id="2398" chance="26900" /><!-- mace -->
-		<item id="2787" countmax="3" chance="15400" /><!-- white mushroom -->
-		<item id="2789" chance="3850" /><!-- brown mushroom -->
+		<item name="mace" chance="26900" />
+		<item name="white mushroom" countmax="3" chance="15400" />
+		<item name="brown mushroom" chance="3850" />
 	</loot>
 </monster>

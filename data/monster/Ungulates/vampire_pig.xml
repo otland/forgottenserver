@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300" manacost="0">
 	<health now="305" max="305" />
 	<look type="60" corpse="6000" />
@@ -21,7 +21,7 @@
 		<attack name="lifedrain" interval="2000" chance="30" target="1" radius="4" min="-15" max="-25">
 			<attribute key="areaEffect" value="bats" />
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="10" target ="1" range="3" min="-35" max="-55" />
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="3" min="-35" max="-55" />
 	</attacks>
 	<defenses armor="30" defense="35">
 		<defense name="outfit" interval="2000" chance="20" monster="mutated bat" duration="1500">
@@ -41,6 +41,6 @@
 		<voice sentence="Oink oink" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="90000" />	<!-- gold coins -->
+		<item name="gold coin" countmax="40" chance="90000" />
 	</loot>
 </monster>

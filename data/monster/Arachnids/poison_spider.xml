@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Poison Spider" nameDescription="a poison spider" race="venom" experience="22" speed="160" manacost="270">
 	<health now="26" max="26" />
 	<look type="36" corpse="5974" />
@@ -27,7 +27,7 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="4" chance="75000" /><!-- gold coin -->
-		<item id="12441" chance="1140" /><!-- poison spider shell -->
+		<item name="gold coin" countmax="4" chance="75000" />
+		<item name="poison spider shell" chance="1140" />
 	</loot>
 </monster>

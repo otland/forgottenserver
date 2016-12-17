@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="190" manacost="0">
 	<health now="325" max="325" />
 	<look type="133" head="97" body="0" legs="38" feet="97" addons="1" corpse="20439" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="25" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-35" />
 		<attack name="drown" interval="2000" chance="15" range="7" radius="3" target="1" min="-20" max="-56">
 			<attribute key="shootEffect" value="smallearth" />
 			<attribute key="areaEffect" value="poff" />
@@ -55,17 +55,17 @@
 		<voice sentence="I will study your corpse!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="65" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="50" chance="30000" /><!-- gold coin -->
-		<item id="7620" chance="19000" /><!-- mana potion -->
-		<item id="7618" chance="19000" /><!-- health potion -->
-		<item id="2787" countmax="3" chance="8000" /><!-- white mushroom -->
-		<item id="2308" chance="6000" /><!-- powder herb -->
-		<item id="2177" chance="2000" /><!-- life crystal -->
+		<item name="gold coin" countmax="65" chance="30000" />
+		<item name="gold coin" countmax="50" chance="30000" />
 		<item id="2162" chance="2000" /><!-- magic lightwand -->
-		<item id="7762" chance="470" /><!-- small enchanted amethyst -->
+		<item name="life crystal" chance="2000" />
+		<item name="soulfire rune" chance="6000" />
+		<item name="cookie" countmax="5" chance="1200" />
+		<item name="white mushroom" countmax="3" chance="8000" />
 		<item id="6324" chance="820" /><!-- cream cake -->
-		<item id="2687" countmax="5" chance="1200" /><!-- cookie -->
-		<item id="7440" chance="130" /><!-- mastermind potion -->
+		<item name="mastermind potion" chance="130" />
+		<item name="health potion" chance="19000" />
+		<item name="mana potion" chance="19000" />
+		<item name="small enchanted amethyst" chance="470" />
 	</loot>
 </monster>

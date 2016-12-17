@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Masked Marauder" nameDescription="the masked marauder" race="blood" experience="3500" speed="250" manacost="0">
-	<health now="6800" max="6800" />
+<monster name="The Masked Marauder" nameDescription="The Masked Marauder" race="blood" experience="3500" speed="250" manacost="0">
+	<health now="7320" max="7320" />
 	<look type="234" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="160" />
+		<attack name="melee" interval="2000" min="0" max="-640" />
 		<attack name="physical" interval="2000" chance="40" min="-38" max="-150">
 			<attribute key="shootEffect" value="throwingknife" />
 		</attack>

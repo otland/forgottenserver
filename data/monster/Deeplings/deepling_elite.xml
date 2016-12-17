@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Deepling Elite" nameDescription="a deepling elite" race="blood" experience="3000" speed="210" manacost="0">
 	<health now="3200" max="3200" />
 	<look type="441" corpse="15176" />
@@ -17,8 +17,8 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="80" />
-		<attack name="physical" interval="2000" chance="20" range="7" target="1" min ="-0" max="-225">
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="0" max="-225">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
 	</attacks>
@@ -33,21 +33,21 @@
 		<immunity paralyze="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /> <!-- gold coin -->
-		<item id="2148" countmax="86" chance="100000" /> <!-- gold coin -->
-		<item id="15425" chance="25000" /> <!-- deepling warts -->
-		<item id="7591" chance="25000" /> <!-- great health potion -->
-		<item id="13870" chance="25000" /><!-- eye of a deepling -->
-		<item id="7590" chance="24000" /><!-- great mana potion -->
-		<item id="15488" chance="25000" /><!-- deepling filet -->
-		<item id="15452" chance="19000" /><!-- deepling ridge -->
-		<item id="15426" chance="21700" /><!-- deeptags -->
-		<item id="15649" countmax="5" chance="24000" /> <!-- vortex bolt -->
-		<item id="2168" chance="5360" /> <!-- life ring -->
-		<item id="2149" countmax="2" chance="6290" /> <!-- small emerald -->
-		<item id="13838" chance="3380" /> <!-- heavy trident -->
-		<item id="5895" chance="2000" /><!-- fish fin -->
-		<item id="15453" chance="1234" /><!-- warrior's shield -->
-		<item id="15451" chance="640" /><!-- warrior's axe -->
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="86" chance="100000" />
+		<item name="small emerald" countmax="2" chance="6290" />
+		<item name="life ring" chance="5360" />
+		<item name="fish fin" chance="2000" />
+		<item name="great mana potion" chance="24000" />
+		<item name="great health potion" chance="25000" />
+		<item name="heavy trident" chance="3380" />
+		<item name="eye of a deepling" chance="25000" />
+		<item name="deepling warts" chance="25000" />
+		<item name="deeptags" chance="21700" />
+		<item name="warrior's axe" chance="640" />
+		<item name="deepling ridge" chance="19000" />
+		<item name="warrior's shield" chance="1234" />
+		<item name="deepling filet" chance="25000" />
+		<item name="vortex bolt" countmax="5" chance="24000" />
 	</loot>
 </monster>

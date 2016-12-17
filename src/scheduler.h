@@ -24,11 +24,9 @@
 #include <unordered_set>
 #include <queue>
 
-
 #include "thread_holder_base.h"
 
-
-#define SCHEDULER_MINTICKS 50
+static constexpr int32_t SCHEDULER_MINTICKS = 50;
 
 class SchedulerTask : public Task
 {
@@ -45,11 +43,9 @@ class SchedulerTask : public Task
 		}
 
 	protected:
-		SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {
-			eventId = 0;
-		}
+		SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {}
 
-		uint32_t eventId;
+		uint32_t eventId = 0;
 
 		friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
 };

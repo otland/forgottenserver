@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Chosen" nameDescription="a lizard chosen" race="blood" experience="2200" speed="260" manacost="0">
 	<health now="3050" max="3050" />
 	<look type="344" corpse="11288" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="50" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="80" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-360" />
 		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-240" max="-320">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -48,22 +48,22 @@
 		<voice sentence="Kzzzzzz!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="32000" /><!-- gold coin -->
-		<item id="2148" countmax="36" chance="32000" /><!-- gold coin -->
-		<item id="5876" chance="2000" /><!-- lizard leather -->
-		<item id="11325" chance="9890" /><!-- spiked iron ball -->
-		<item id="12629" chance="2870" /><!-- scale of corruption -->
-		<item id="2152" countmax="5" chance="2920" /><!-- platinum coin -->
-		<item id="11327" chance="5800" /><!-- cursed shoulder spikes -->
-		<item id="7591" countmax="3" chance="5350" /><!-- great health potion -->
-		<item id="11303" chance="810" /><!-- zaoan shoes -->
-		<item id="2145" countmax="5" chance="2550" /><!-- small diamond -->
-		<item id="11326" chance="3350" /><!-- corrupted flag -->
-		<item id="5881" countmax="3" chance="980" /><!-- lizard scale -->
-		<item id="2528" chance="1100" /><!-- tower shield -->
-		<item id="11304" chance="940" /><!-- zaoan legs -->
-		<item id="11302" chance="140" /><!-- zaoan helmet -->
-		<item id="11301" chance="980" /><!-- zaoan armor -->
+		<item name="small diamond" countmax="5" chance="2550" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="36" chance="32000" />
+		<item name="platinum coin" countmax="5" chance="2920" />
+		<item name="tower shield" chance="1100" />
+		<item name="lizard leather" chance="2000" />
+		<item name="lizard scale" countmax="3" chance="980" />
+		<item name="great health potion" countmax="3" chance="5350" />
+		<item name="Zaoan armor" chance="980" />
+		<item name="Zaoan helmet" chance="140" />
+		<item name="Zaoan shoes" chance="810" />
+		<item name="Zaoan legs" chance="940" />
+		<item name="spiked iron ball" chance="9890" />
+		<item name="corrupted flag" chance="3350" />
+		<item name="cursed shoulder spikes" chance="5800" />
+		<item name="scale of corruption" chance="2870" />
 	</loot>
 </monster>

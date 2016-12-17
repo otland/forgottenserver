@@ -34,13 +34,8 @@ class ChatChannel
 	public:
 		ChatChannel() = default;
 		ChatChannel(uint16_t channelId, std::string channelName):
-			name(channelName),
-			canJoinEvent(-1),
-			onJoinEvent(-1),
-			onLeaveEvent(-1),
-			onSpeakEvent(-1),
-			id(channelId),
-			publicChannel(false) {}
+			name(std::move(channelName)),
+			id(channelId) {}
 
 		virtual ~ChatChannel() = default;
 
@@ -79,13 +74,13 @@ class ChatChannel
 
 		std::string name;
 
-		int32_t canJoinEvent;
-		int32_t onJoinEvent;
-		int32_t onLeaveEvent;
-		int32_t onSpeakEvent;
+		int32_t canJoinEvent = -1;
+		int32_t onJoinEvent = -1;
+		int32_t onLeaveEvent = -1;
+		int32_t onSpeakEvent = -1;
 
 		uint16_t id;
-		bool publicChannel;
+		bool publicChannel = false;
 
 	friend class Chat;
 };
@@ -93,7 +88,7 @@ class ChatChannel
 class PrivateChatChannel final : public ChatChannel
 {
 	public:
-		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName), owner(0) {}
+		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName) {}
 
 		uint32_t getOwner() const final {
 			return owner;
@@ -117,7 +112,7 @@ class PrivateChatChannel final : public ChatChannel
 
 	protected:
 		InvitedMap invites;
-		uint32_t owner;
+		uint32_t owner = 0;
 };
 
 typedef std::list<ChatChannel*> ChannelList;

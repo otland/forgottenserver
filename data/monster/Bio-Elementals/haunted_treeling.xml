@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Haunted Treeling" nameDescription="a haunted treeling" experience="310" speed="220" race="undead" manacost="0">
 	<health now="450" max="450" />
 	<look type="310" corpse="9867" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="manadrain" interval="2000" chance="5" min="-30" max="-100" radius="4" target="0">
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
@@ -52,16 +52,16 @@
 		<voice sentence="Knorrrrrr" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="95" chance="60000" /><!-- gold coin -->
+		<item name="small sapphire" chance="585" />
+		<item name="gold coin" countmax="95" chance="60000" />
+		<item name="dwarven ring" chance="621" />
+		<item name="white mushroom" countmax="2" chance="5263" />
+		<item name="red mushroom" chance="7142" />
+		<item name="orange mushroom" chance="1851" />
 		<item id="4860" chance="25000" /><!-- wooden trash -->
-		<item id="2788" chance="7142" /><!-- red mushroom -->
-		<item id="2787" countmax="2" chance="5263" /><!-- white mushroom -->
-		<item id="10600" chance="5000" /><!-- haunted piece of wood -->
-		<item id="7618" chance="5000" /><!-- health potion -->
-		<item id="2790" chance="1851" /><!-- orange mushroom -->
-		<item id="7588" chance="900" /><!-- strong health potion -->
-		<item id="2213" chance="621" /><!-- dwarven ring -->
-		<item id="2146" chance="585" /><!-- small emerald -->
-		<item id="7443" chance="80" /><!-- bullseye potion -->
+		<item name="bullseye potion" chance="80" />
+		<item name="strong health potion" chance="900" />
+		<item name="health potion" chance="5000" />
+		<item name="haunted piece of wood" chance="5000" />
 	</loot>
 </monster>

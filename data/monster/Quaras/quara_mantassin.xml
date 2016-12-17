@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Quara Mantassin" nameDescription="a quara mantassin" race="blood" experience="400" speed="260" manacost="480">
 	<health now="800" max="800" />
 	<look type="72" corpse="6064" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="40" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-138" />
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="invisible" interval="2000" chance="20" duration="3000">
@@ -42,17 +42,17 @@
 		<voice sentence="Shrrrr" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="29" chance="50000" /><!-- gold coin -->
-		<item id="12445" chance="11600" /><!-- mantassin tail -->
-		<item id="2670" countmax="5" chance="5000" /><!-- shrimp -->
-		<item id="2381" chance="5000" /><!-- halberd -->
-		<item id="2377" chance="1010" /><!-- two handed sword -->
-		<item id="2654" chance="1050" /><!-- cape -->
-		<item id="2165" chance="960" /><!-- stealth ring -->
-		<item id="2146" chance="1000" /><!-- small sapphire -->
-		<item id="5895" chance="630" /><!-- fish fin -->
-		<item id="2479" chance="100" /><!-- strange helmet -->
-		<item id="2656" chance="50" /><!-- blue robe -->
+		<item name="small sapphire" chance="1000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="29" chance="50000" />
+		<item name="stealth ring" chance="960" />
+		<item name="two handed sword" chance="1010" />
+		<item name="halberd" chance="5000" />
+		<item name="strange helmet" chance="100" />
+		<item name="cape" chance="1050" />
+		<item name="blue robe" chance="50" />
+		<item name="shrimp" countmax="5" chance="5000" />
+		<item name="fish fin" chance="630" />
+		<item name="mantassin tail" chance="11600" />
 	</loot>
 </monster>

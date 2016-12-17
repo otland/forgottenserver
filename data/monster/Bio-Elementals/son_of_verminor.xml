@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Son of Verminor" nameDescription="a son of verminor" race="venom" experience="5900" speed="240" manacost="0">
+<monster name="Son of Verminor" nameDescription="Son of Verminor" race="venom" experience="5900" speed="240" manacost="0">
 	<health now="8500" max="8500" />
 	<look type="19" corpse="1490" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="95" attack="90" poison="450" />
+		<attack name="melee" interval="2000" min="0" max="-473" poison="450" />
 		<attack name="earth" interval="2000" chance="20" range="7" target="1" min="-150" max="-200">
 			<attribute key="shootEffect" value="poison" />
 		</attack>

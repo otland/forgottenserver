@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Quara Constrictor Scout" nameDescription="a quara constrictor scout" race="blood" experience="200" speed="200" manacost="670">
 	<health now="450" max="450" />
 	<look type="46" corpse="6065" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="20" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="45" />
+		<attack name="melee" interval="2000" min="0" max="-135" />
 		<attack name="lifedrain" interval="2000" chance="15" radius="3" target="0" max="-80">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
@@ -40,12 +40,12 @@
 		<voice sentence="Boohaa!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="49" chance="98800" /><!-- gold coin -->
-		<item id="12443" chance="15600" /><!-- quara tentacle -->
-		<item id="2397" chance="8310" /><!-- longsword -->
-		<item id="2465" chance="4660" /><!-- brass armor -->
-		<item id="2150" chance="4350" /><!-- small amethyst -->
-		<item id="5895" chance="290" /><!-- fish fin -->
-		<item id="2670" countmax="3" chance="9680" /><!-- shrimp -->
+		<item name="gold coin" countmax="49" chance="98800" />
+		<item name="small amethyst" chance="4350" />
+		<item name="longsword" chance="8310" />
+		<item name="brass armor" chance="4660" />
+		<item name="shrimp" countmax="3" chance="9680" />
+		<item name="fish fin" chance="290" />
+		<item name="quara tentacle" chance="15600" />
 	</loot>
 </monster>

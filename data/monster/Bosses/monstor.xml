@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Monstor" nameDescription="a monstor" race="blood" experience="575" speed="350" manacost="0">
+<monster name="Monstor" nameDescription="Monstor" race="blood" experience="575" speed="350" manacost="0">
 	<health now="960" max="960" />
 	<look type="244" corpse="10322" />
 	<targetchange interval="5000" chance="8" />
@@ -39,12 +39,12 @@
 		<immunity lifedrain="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="3">
+		<summon name="Acid Blob" interval="4000" chance="40" max="3" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="NO ARMY ME STOPPING! GRARR!" />
 		<voice sentence="ME DESTROY CITY! GROAR!" />
 		<voice sentence="WHARR! MUST ... KIDNAP WOMEN!" />
 	</voices>
-	<summons maxSummons="3">
-		<summon name="Acid Blob" interval="4000" chance="40" max="3" />
-	</summons>
 </monster>

@@ -1,10 +1,6 @@
 local groundIds = {354, 355}
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if toPosition.x == CONTAINER_POSITION then
-		return false
-	end
-
 	local tile = Tile(toPosition)
 	if not tile then
 		return false

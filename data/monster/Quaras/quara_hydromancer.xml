@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Quara Hydromancer" nameDescription="a quara hydromancer" race="blood" experience="800" speed="250" manacost="0">
 	<health now="1100" max="1100" />
 	<look type="47" corpse="6066" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-80" poison="100" />
 		<attack name="ice" interval="2000" chance="10" length="8" spread="0" min="-100" max="-180">
 			<attribute key="areaEffect" value="bubbles" />
 		</attack>
@@ -60,17 +60,17 @@
 		<voice sentence="Blup." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
-		<item id="12444" chance="15930" /><!-- quara eye -->
-		<item id="2670" countmax="5" chance="4545" /><!-- shrimp -->
-		<item id="2144" chance="3150" /><!-- black pearl -->
-		<item id="2143" chance="5250" /><!-- white pearl -->
-		<item id="2149" countmax="2" chance="5111" /><!-- small emerald -->
-		<item id="2189" chance="900" /><!-- wand of cosmic energy -->
-		<item id="7590" chance="3100" /><!-- great mana potion -->
-		<item id="5895" chance="1280" /><!-- fish fin -->
-		<item id="2214" chance="1008" /><!-- ring of healing -->
-		<item id="2476" chance="200" /><!-- knight armor -->
+		<item name="white pearl" chance="5250" />
+		<item name="black pearl" chance="3150" />
+		<item name="gold coin" countmax="50" chance="50000" />
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="small emerald" countmax="2" chance="5111" />
+		<item name="wand of cosmic energy" chance="900" />
+		<item name="ring of healing" chance="1008" />
+		<item name="knight armor" chance="200" />
+		<item name="shrimp" countmax="5" chance="4545" />
+		<item name="fish fin" chance="1280" />
+		<item name="great mana potion" chance="3100" />
+		<item name="quara eye" chance="15930" />
 	</loot>
 </monster>

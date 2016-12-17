@@ -28,7 +28,7 @@ template <typename Derived>
 class ThreadHolder
 {
 	public:
-		ThreadHolder(): threadState(THREAD_STATE_TERMINATED) {}
+		ThreadHolder() {}
 		void start() {
 			setState(THREAD_STATE_RUNNING);
 			thread = std::thread(&Derived::threadMain, static_cast<Derived*>(this));
@@ -52,7 +52,7 @@ class ThreadHolder
 			return threadState.load(std::memory_order_relaxed);
 		}
 	private:
-		std::atomic<ThreadState> threadState;
+		std::atomic<ThreadState> threadState{THREAD_STATE_TERMINATED};
 		std::thread thread;
 };
 

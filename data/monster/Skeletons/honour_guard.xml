@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Honour Guard" nameDescription="a honour guard" race="undead" experience="55" speed="180" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Honour Guard" nameDescription="an honour guard" race="undead" experience="55" speed="180" manacost="0">
 	<health now="85" max="85" />
 	<look type="298" corpse="2843" />
 	<targetchange interval="4000" chance="0" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-10" max="-40" />
+		<attack name="melee" interval="2000" min="0" max="-40" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-5" max="-13">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -36,11 +36,11 @@
 		<voice sentence="For the pharao!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="50000" /><!-- gold coin -->
-		<item id="2398" chance="3760" /><!-- mace -->
+		<item name="gold coin" countmax="15" chance="50000" />
+		<item name="scarab coin" countmax="1" chance="2600" />
+		<item name="mace" chance="3760" />
 		<item id="2419" chance="1640" /><!-- scimitar -->
-		<item id="2789" countmax="2" chance="6120" /><!-- brown mushroom -->
-		<item id="2159" countmax="1" chance="2600" /><!-- scarab coin -->
-		<item id="12437" chance="8700" /><!-- pelvis bone -->
+		<item name="brown mushroom" countmax="2" chance="6120" />
+		<item name="pelvis bone" chance="8700" />
 	</loot>
 </monster>

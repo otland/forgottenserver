@@ -19,7 +19,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="36" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-115" />
 		<attack name="earth" interval="2000" chance="16" radius="7" target="0" min="0" max="-255">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Lizard Legionnaire" nameDescription="a lizard legionnaire" race="blood" experience="1100" speed="230" manacost="0">
 	<health now="1400" max="1400" />
 	<look type="338" corpse="11276" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-180" />
 		<attack name="physical" interval="2000" chance="40" range="7" target="1" min="0" max="-200">
 			<attribute key="shootEffect" value="spear" />
 		</attack>
@@ -35,20 +35,20 @@
 		<voice sentence="Tssss!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
-		<item id="2148" countmax="65" chance="54000" /><!-- gold coin -->
-		<item id="11334" chance="1940" /><!-- legionnaire flags -->
-		<item id="5881" countmax="3" chance="980" /><!-- lizard scale -->
-		<item id="11323" chance="960" /><!-- zaoan halberd -->
-		<item id="7588" chance="3880" /><!-- strong health potion -->
-		<item id="11335" chance="14940" /><!-- broken halberd -->
-		<item id="5876" chance="970" /><!-- lizard leather -->
-		<item id="11305" chance="710" /><!-- drakinata -->
-		<item id="11206" chance="530" /><!-- red lantern -->
-		<item id="11245" chance="1950" /><!-- bunch of ripe rice -->
-		<item id="2145" countmax="2" chance="1001" /><!-- small diamond -->
-		<item id="11303" chance="460" /><!-- zaoan shoes -->
-		<item id="11336" chance="20" /><!-- lizard trophy -->
-		<item id="11301" chance="70" /><!-- zaoan armor -->
+		<item name="small diamond" countmax="2" chance="1001" />
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="65" chance="54000" />
+		<item name="lizard leather" chance="970" />
+		<item name="lizard scale" countmax="3" chance="980" />
+		<item name="strong health potion" chance="3880" />
+		<item name="red lantern" chance="530" />
+		<item name="bunch of ripe rice" chance="1950" />
+		<item name="Zaoan armor" chance="70" />
+		<item name="Zaoan shoes" chance="460" />
+		<item name="drakinata" chance="710" />
+		<item name="Zaoan halberd" chance="960" />
+		<item name="legionnaire flags" chance="1940" />
+		<item name="broken halberd" chance="14940" />
+		<item name="lizard trophy" chance="20" />
 	</loot>
 </monster>

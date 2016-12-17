@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Frog Prince" nameDescription="the frog prince" race="venom" experience="1" speed="230" manacost="250">
+<monster name="The Frog Prince" nameDescription="The Frog Prince" race="venom" experience="1" speed="230" manacost="250">
 	<health now="55" max="55" />
 	<look type="224" head="69" body="66" legs="69" feet="66" corpse="6079" />
 	<targetchange interval="5000" chance="20" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="1" />
+		<attack name="melee" interval="2000" min="0" max="-1" />
 	</attacks>
 	<defenses armor="3" defense="2" />
 	<elements>

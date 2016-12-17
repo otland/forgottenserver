@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Tiger" nameDescription="a tiger" race="blood" experience="40" speed="210" manacost="420">
 	<health now="75" max="75" />
 	<look type="125" corpse="6051" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-40" />
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="5000">
@@ -29,7 +29,7 @@
 		<element icePercent="-1" />
 	</elements>
 	<loot>
-		<item id="2666" countmax="4" chance="35190" /><!-- meat -->
-		<item id="11210" chance="10830" /><!-- striped fur -->
+		<item name="meat" countmax="4" chance="35190" />
+		<item name="striped fur" chance="10830" />
 	</loot>
 </monster>

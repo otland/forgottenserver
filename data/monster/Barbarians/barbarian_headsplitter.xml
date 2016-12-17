@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="200" manacost="450">
 	<health now="100" max="100" />
 	<look type="253" head="115" body="105" legs="119" feet="132" corpse="20343" />
@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="0" max="-60">
 			<attribute key="shootEffect" value="whirlwindaxe" />
 		</attack>
@@ -42,17 +42,17 @@
 		<voice sentence="Die! Die! Die!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="60000" /><!-- gold coin -->
 		<item id="2050" chance="61500" /><!-- torch -->
-		<item id="2403" chance="15500" /><!-- knife -->
-		<item id="2460" chance="20360" /><!-- brass helmet -->
-		<item id="2483" chance="4090" /><!-- scale armor -->
-		<item id="2473" chance="5080" /><!-- viking helmet -->
-		<item id="2320" chance="3270" /><!-- skull -->
-		<item id="5913" chance="950" /><!-- brown piece of cloth -->
-		<item id="7618" chance="560" /><!-- health potion -->
-		<item id="2168" chance="230" /><!-- life ring-->
-		<item id="7461" chance="110" /><!-- krimhorn helmet -->
-		<item id="7457" chance="100" /><!-- fur boots -->
+		<item name="gold coin" countmax="30" chance="60000" />
+		<item name="life ring" chance="230" />
+		<item name="skull of Ratha" chance="3270" />
+		<item name="knife" chance="15500" />
+		<item name="brass helmet" chance="20360" />
+		<item name="viking helmet" chance="5080" />
+		<item name="scale armor" chance="4090" />
+		<item name="brown piece of cloth" chance="950" />
+		<item name="fur boots" chance="100" />
+		<item name="krimhorn helmet" chance="110" />
+		<item name="health potion" chance="560" />
 	</loot>
 </monster>

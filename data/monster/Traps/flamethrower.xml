@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Flamethrower" nameDescription="a flamethrower" race="undead" experience="0" speed="0" manacost="0">
-	<health now="9950" max="9950" />
+	<health now="1" max="1" />
 	<look typeex="1551" />
 	<targetchange interval="5000" chance="5" />
 	<flags>
@@ -26,7 +26,7 @@
 		<immunity physical="1" />
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity ice="1" />
 		<immunity holy="1" />
 		<immunity death="1" />

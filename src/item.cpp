@@ -144,17 +144,10 @@ Item* Item::CreateItem(PropStream& propStream)
 	return Item::CreateItem(id, 0);
 }
 
-Item::Item(const uint16_t type, uint16_t count /*= 0*/)
+Item::Item(const uint16_t type, uint16_t count /*= 0*/) :
+	id(type)
 {
-	parent = nullptr;
-	referenceCounter = 0;
-
-	id = type;
-	attributes = nullptr;
-
 	const ItemType& it = items[id];
-
-	setItemCount(1);
 
 	if (it.isFluidContainer() || it.isSplash()) {
 		setFluidType(count);
@@ -172,24 +165,14 @@ Item::Item(const uint16_t type, uint16_t count /*= 0*/)
 		}
 	}
 
-	loadedFromMap = false;
 	setDefaultDuration();
 }
 
 Item::Item(const Item& i) :
-	Thing()
+	Thing(), id(i.id), count(i.count), loadedFromMap(i.loadedFromMap)
 {
-	parent = nullptr;
-	referenceCounter = 0;
-
-	id = i.id;
-	count = i.count;
-	loadedFromMap = i.loadedFromMap;
-
 	if (i.attributes) {
-		attributes = new ItemAttributes(*i.attributes);
-	} else {
-		attributes = nullptr;
+		attributes.reset(new ItemAttributes(*i.attributes));
 	}
 }
 
@@ -197,14 +180,9 @@ Item* Item::clone() const
 {
 	Item* item = Item::CreateItem(id, count);
 	if (attributes) {
-		item->attributes = new ItemAttributes(*attributes);
+		item->attributes.reset(new ItemAttributes(*attributes));
 	}
 	return item;
-}
-
-Item::~Item()
-{
-	delete attributes;
 }
 
 bool Item::equals(const Item* otherItem) const
@@ -217,7 +195,7 @@ bool Item::equals(const Item* otherItem) const
 		return !otherItem->attributes;
 	}
 
-	const ItemAttributes* otherAttributes = otherItem->attributes;
+	const auto& otherAttributes = otherItem->attributes;
 	if (!otherAttributes || attributes->attributeBits != otherAttributes->attributeBits) {
 		return false;
 	}
@@ -660,7 +638,7 @@ bool Item::unserializeAttr(PropStream& propStream)
 	return true;
 }
 
-bool Item::unserializeItemNode(FileLoader&, NODE, PropStream& propStream)
+bool Item::unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream)
 {
 	return unserializeAttr(propStream);
 }

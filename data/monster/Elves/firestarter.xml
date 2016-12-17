@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180" manacost="0">
 	<health now="180" max="180" />
 	<look type="159" head="94" body="77" legs="78" feet="79" corpse="20599" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="10" />
+		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="fire" interval="2000" chance="15" radius="1" target="1" min="0" max="-21">
 			<attribute key="shootEffect" value="burstarrow" />
 			<attribute key="areaEffect" value="explosion" />
@@ -43,15 +43,15 @@
 		<voice sentence="DOWN with the followers of the bog!!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="79000" /><!-- gold coin -->
-		<item id="2397" chance="6000" /><!-- longsword -->
-		<item id="2681" chance="20000" /><!-- grape -->
-		<item id="2456" chance="4000" /><!-- bow -->
+		<item name="gold coin" countmax="35" chance="79000" />
+		<item name="longsword" chance="6000" />
+		<item name="bow" chance="4000" />
+		<item name="grapes" chance="20000" />
 		<item id="5921" chance="930" /><!-- heaven blossom -->
-		<item id="7438" chance="100" /><!-- elvish bow -->
-		<item id="7840" countmax="12" chance="30000" /><!-- flaming arrow -->
-		<item id="10552" chance="5000" /><!-- elvish talisman -->
+		<item name="elvish bow" chance="100" />
+		<item name="flaming arrow" countmax="12" chance="30000" />
+		<item name="elvish talisman" chance="5000" />
 		<item id="13757" chance="15280" /><!-- coal -->
-		<item id="13943" chance="340" /><!-- flintstone -->
+		<item name="flintstone" chance="340" />
 	</loot>
 </monster>

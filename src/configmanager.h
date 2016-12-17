@@ -25,8 +25,6 @@
 class ConfigManager
 {
 	public:
-		ConfigManager();
-
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT,
 			ONE_PLAYER_ON_ACCOUNT,
@@ -119,11 +117,11 @@ class ConfigManager
 		static int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defaultValue = 0);
 		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue);
 
-		std::string string[LAST_STRING_CONFIG];
-		int32_t integer[LAST_INTEGER_CONFIG];
-		bool boolean[LAST_BOOLEAN_CONFIG];
+		std::string string[LAST_STRING_CONFIG] = {};
+		int32_t integer[LAST_INTEGER_CONFIG] = {};
+		bool boolean[LAST_BOOLEAN_CONFIG] = {};
 
-		bool loaded;
+		bool loaded = false;
 };
 
 #endif

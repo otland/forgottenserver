@@ -30,18 +30,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-House::House(uint32_t houseId) :
-	transfer_container(ITEM_LOCKER1),
-	transferItem(nullptr),
-	paidUntil(0),
-	id(houseId),
-	owner(0),
-	rentWarnings(0),
-	rent(0),
-	townId(0),
-	posEntry(),
-	isLoaded(false)
-{}
+House::House(uint32_t houseId) : id(houseId) {}
 
 void House::addTile(HouseTile* tile)
 {
@@ -520,13 +509,7 @@ void AccessList::getList(std::string& list) const
 	list = this->list;
 }
 
-Door::Door(uint16_t type) :
-	Item(type), house(nullptr), accessList(nullptr) {}
-
-Door::~Door()
-{
-	delete accessList;
-}
+Door::Door(uint16_t type) :	Item(type) {}
 
 Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
@@ -551,7 +534,7 @@ void Door::setHouse(House* house)
 	this->house = house;
 
 	if (!accessList) {
-		accessList = new AccessList();
+		accessList.reset(new AccessList());
 	}
 }
 
@@ -571,7 +554,7 @@ bool Door::canUse(const Player* player)
 void Door::setAccessList(const std::string& textlist)
 {
 	if (!accessList) {
-		accessList = new AccessList();
+		accessList.reset(new AccessList());
 	}
 
 	accessList->parseList(textlist);

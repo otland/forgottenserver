@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dwarf Miner" nameDescription="a dwarf miner" race="blood" experience="60" speed="210" manacost="420">
 	<health now="120" max="120" />
 	<look type="160" head="77" body="101" legs="97" feet="115" corpse="6007" />
@@ -16,7 +16,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="24" attack="15" />
+		<attack name="melee" interval="2000" min="0" max="-26" />
 	</attacks>
 	<defenses armor="7" defense="10" />
 	<voices interval="5000" chance="10">
@@ -25,13 +25,13 @@
 		<voice sentence="Mine, all mine!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="10" chance="33333" /><!-- gold coin -->
-		<item id="2386" chance="14285" /><!-- axe -->
-		<item id="2553" chance="11111" /><!-- pick -->
-		<item id="2649" chance="9090" /><!-- leather legs -->
-		<item id="2484" chance="6666" /><!-- studded armor -->
-		<item id="2666" chance="3846" /><!-- meat -->
-		<item id="2213" chance="793" /><!-- dwarven ring -->
-		<item id="5880" chance="793" /><!-- iron ore -->
+		<item name="gold coin" countmax="10" chance="33333" />
+		<item name="dwarven ring" chance="793" />
+		<item name="axe" chance="14285" />
+		<item name="studded armor" chance="6666" />
+		<item name="pick" chance="11111" />
+		<item name="leather legs" chance="9090" />
+		<item name="meat" chance="3846" />
+		<item name="iron ore" chance="793" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blood Crab" nameDescription="a blood crab" race="undead" experience="160" speed="220" manacost="505">
 	<health now="290" max="290" />
 	<look type="200" corpse="6075" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="45" />
+		<attack name="melee" interval="2000" min="0" max="-113" />
 	</attacks>
 	<defenses armor="20" defense="20" />
 	<elements>
@@ -31,11 +31,11 @@
 		<immunity drown="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="20" chance="90000" /><!-- gold coin -->
+		<item name="white pearl" chance="480" />
+		<item name="gold coin" countmax="20" chance="90000" />
+		<item name="chain armor" chance="5555" />
+		<item name="brass legs" chance="2170" />
 		<item id="2667" chance="13000" /><!-- fish -->
-		<item id="10550" chance="6260" /><!-- bloody pincers -->
-		<item id="2464" chance="5555" /><!-- chain armor -->
-		<item id="2478" chance="2170" /><!-- brass legs -->
-		<item id="2143" chance="480" /><!-- white pearl -->
+		<item name="bloody pincers" chance="6260" />
 	</loot>
 </monster>

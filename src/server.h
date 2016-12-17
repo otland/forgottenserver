@@ -21,6 +21,7 @@
 #define FS_SERVER_H_984DA68ABF744127850F90CC710F281B
 
 #include "connection.h"
+#include "signals.h"
 #include <memory>
 
 class Protocol;
@@ -61,7 +62,7 @@ class Service final : public ServiceBase
 class ServicePort : public std::enable_shared_from_this<ServicePort>
 {
 	public:
-		explicit ServicePort(boost::asio::io_service& io_service);
+		explicit ServicePort(boost::asio::io_service& io_service) : io_service(io_service) {}
 		~ServicePort();
 
 		// non-copyable
@@ -87,14 +88,14 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
 		std::vector<Service_ptr> services;
 
-		uint16_t serverPort;
-		bool pendingStart;
+		uint16_t serverPort = 0;
+		bool pendingStart = false;
 };
 
 class ServiceManager
 {
 	public:
-		ServiceManager();
+		ServiceManager() = default;
 		~ServiceManager();
 
 		// non-copyable
@@ -103,8 +104,6 @@ class ServiceManager
 
 		void run();
 		void stop();
-
-		bool okay();
 
 		template <typename ProtocolType>
 		bool add(uint16_t port);
@@ -119,8 +118,9 @@ class ServiceManager
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;
 
 		boost::asio::io_service io_service;
-		boost::asio::deadline_timer death_timer;
-		bool running;
+		Signals signals{io_service};
+		boost::asio::deadline_timer death_timer { io_service };
+		bool running = false;
 };
 
 template <typename ProtocolType>

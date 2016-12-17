@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Emerald Damselfly" nameDescription="emerald damselfly" race="venom" experience="35" speed="220" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Emerald Damselfly" nameDescription="an emerald damselfly" race="venom" experience="35" speed="220" manacost="0">
 	<health now="90" max="90" />
 	<look type="528" corpse="19706" />
 	<targetchange interval="5000" chance="0" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="5" attack="5" poison="10" />
+		<attack name="melee" interval="2000" min="0" max="-4" poison="10" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="0" max="-12">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
@@ -31,12 +31,12 @@
 		<voice sentence="Bzzzzz!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="18" chance="90000" /><!-- gold coin -->
-		<item id="2544" countmax="5" chance="7570" /><!-- Arrows -->
-		<item id="7618" chance="1780" /><!-- HP -->
-		<item id="7620" chance="2520" /><!-- MP -->
-		<item id="19737" chance="10830" /><!-- Damselfly Wing -->
-		<item id="19742" chance="8610" /><!-- Damselfly Eye -->
 		<item id="2120" chance="4300" /><!-- rope -->
+		<item name="gold coin" countmax="18" chance="90000" />
+		<item name="arrow" countmax="5" chance="7570" />
+		<item name="health potion" chance="1780" />
+		<item name="mana potion" chance="2520" />
+		<item name="insectoid eggs" chance="10830" />
+		<item name="marsh stalker feather" chance="8610" />
 	</loot>
 </monster>

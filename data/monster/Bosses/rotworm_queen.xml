@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rotworm Queen" nameDescription="a rotworm queen" race="blood" experience="300" speed="126" manacost="0">
-	<health now="85" max="85" />
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Rotworm Queen" nameDescription="a rotworm queen" race="blood" experience="75" speed="126" manacost="0">
+	<health now="105" max="105" />
 	<look type="295" corpse="8947" />
 	<targetchange interval="60000" chance="0" />
 	<flags>
@@ -16,12 +16,12 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-5" max="-80" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 	</attacks>
 	<defenses armor="10" defense="15" />
 	<loot>
-		<item id="2148" countmax="47" chance="100000" /><!-- gold coin -->
-		<item id="8971" chance="3333" /><!-- gland -->
-		<item id="3976" countmax="45" chance="20000" /><!-- worm -->
+		<item name="gold coin" countmax="47" chance="100000" />
+		<item name="worm" countmax="45" chance="20000" />
+		<item name="gland" chance="3333" />
 	</loot>
 </monster>

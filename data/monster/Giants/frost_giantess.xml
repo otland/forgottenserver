@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="210" manacost="490">
 	<health now="275" max="275" />
 	<look type="265" corpse="7330" />
@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-60" />
 		<attack name="physical" interval="2000" chance="30" range="7" min="0" max="-90">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -45,17 +45,17 @@
 		<voice sentence="Come kiss the cook!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="40" chance="80000" /><!-- gold coin -->
-		<item id="2671" countmax="2" chance="20990" /><!-- ham -->
-		<item id="2406" chance="7960" /><!-- short sword -->
-		<item id="10575" chance="4800" /><!-- Frost Giant Pelt -->
+		<item name="small stone" countmax="3" chance="10360" />
+		<item name="gold coin" countmax="40" chance="80000" />
+		<item name="club ring" chance="70" />
+		<item name="short sword" chance="7960" />
+		<item name="dark helmet" chance="170" />
+		<item name="battle shield" chance="1490" />
+		<item name="ham" countmax="2" chance="20990" />
+		<item name="shard" chance="100" />
 		<item id="7441" chance="2008" /><!-- ice cube -->
-		<item id="2513" chance="1490" /><!-- battle shield -->
-		<item id="7460" chance="320" /><!-- norse shield -->
-		<item id="1294" countmax="3" chance="10360" /><!-- small stone -->
-		<item id="2209" chance="70" /><!-- club ring -->
-		<item id="2490" chance="170" /><!-- dark helmet -->
-		<item id="7290" chance="100" /><!-- shard -->
-		<item id="7620" chance="950" /><!-- mana potion -->
+		<item name="norse shield" chance="320" />
+		<item name="mana potion" chance="950" />
+		<item name="frost giant pelt" chance="4800" />
 	</loot>
 </monster>

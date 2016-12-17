@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Yakchal" nameDescription="an yakchal" race="blood" experience="4400" speed="200" manacost="0">
-	<health now="5000" max="5000" />
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Yakchal" nameDescription="Yakchal" race="blood" experience="4400" speed="200" manacost="0">
+	<health now="5750" max="5750" />
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20546" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -59,21 +59,21 @@
 		<voice sentence="Freeze!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="88" chance="10000" /><!-- gold coin -->
-		<item id="5912" chance="5000" /><!-- ice cube -->
-		<item id="7449" chance="4000" /><!-- green mushroom -->
-		<item id="7440" chance="1500" /><!-- glacier shoes -->
-		<item id="7439" chance="1500" /><!-- diamond sceptre -->
-		<item id="7443" chance="1500" /><!-- crystal sword -->
-		<item id="7459" chance="1000" /><!-- shard -->
-		<item id="2201" chance="3250" /><!-- clerical mace -->
-		<item id="7896" chance="2650" /><!-- strong mana potion -->
-		<item id="2195" chance="2000" /><!-- mystic turban -->
-		<item id="7897" chance="3000" /><!-- glacier kilt -->
-		<item id="7410" chance="1500" /><!-- ear muffs -->
-		<item id="2436" chance="4500" /><!-- ear muffs -->
-		<item id="9971" chance="5000" /><!-- ear muffs -->
-		<item id="2445" chance="4000" /><!-- ear muffs -->
-		<item id="7290" chance="1000000" /><!-- ear muffs -->
+		<item name="gold coin" countmax="88" chance="10000" />
+		<item name="boots of haste" chance="2000" />
+		<item name="dragon necklace" chance="3250" />
+		<item name="skull staff" chance="4500" />
+		<item name="crystal mace" chance="4000" />
+		<item name="blue piece of cloth" chance="5000" />
+		<item name="shard" chance="1000000" />
+		<item name="queen's sceptre" chance="1500" />
+		<item name="berserk potion" chance="1500" />
+		<item name="mastermind potion" chance="1500" />
+		<item name="bullseye potion" chance="1500" />
+		<item name="crystal sword" chance="4000" />
+		<item name="pair of earmuffs" chance="1000" />
+		<item name="glacier kilt" chance="2650" />
+		<item name="glacier robe" chance="3000" />
+		<item name="gold ingot" chance="5000" />
 	</loot>
 </monster>

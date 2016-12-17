@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Midnight Panther" nameDescription="a midnight panther" race="blood" experience="900" speed="250" manacost="0">
 	<health now="1200" max="1200" />
 	<look type="385" corpse="13327" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1500" skill="40" attack="36" />
+		<attack name="melee" interval="1500" min="0" max="-90" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-75" max="-215">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energyarea" />
@@ -40,14 +40,14 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity invisibility="1" />
+		<immunity invisible="1" />
 		<immunity energy="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="57" chance1="100000" /><!-- gp -->
-		<item id="2666" countmax="4" chance="25000" /><!-- meat -->
-		<item id="13026" chance="12500" /><!-- panther head -->
-		<item id="2168" chance="12500" /><!-- Life Ring -->
-		<item id="13027" chance="100000" /><!-- panther paw -->
+		<item name="gold coin" countmax="57" chance="100000" />
+		<item name="life ring" chance="12500" />
+		<item name="meat" countmax="4" chance="25000" />
+		<item name="panther head" chance="12500" />
+		<item name="panther paw" chance="100000" />
 	</loot>
 </monster>

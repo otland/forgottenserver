@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Vicious Manbat" nameDescription="a vicious manbat" race="blood" experience="1200" speed="220" manacost="0">
 	<health now="1700" max="1700" />
 	<look type="554" corpse="21266" />
@@ -43,6 +43,6 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />	<!-- gold coin -->
+		<item name="gold coin" countmax="100" chance="50000" />
 	</loot>
 </monster>

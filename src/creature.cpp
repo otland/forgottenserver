@@ -33,49 +33,8 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
 
-Creature::Creature() :
-	localMapCache(), isInternalRemoved(false)
+Creature::Creature()
 {
-	referenceCounter = 0;
-
-	id = 0;
-	tile = nullptr;
-	direction = DIRECTION_SOUTH;
-	master = nullptr;
-	lootDrop = true;
-	skillLoss = true;
-
-	health = 1000;
-	healthMax = 1000;
-	mana = 0;
-
-	lastStep = 0;
-	lastStepCost = 1;
-	baseSpeed = 220;
-	varSpeed = 0;
-
-	followCreature = nullptr;
-	hasFollowPath = false;
-	eventWalk = 0;
-	cancelNextWalk = false;
-	forceUpdateFollowPath = false;
-	isMapLoaded = false;
-	isUpdatingPath = false;
-
-	attackedCreature = nullptr;
-
-	lastHitCreatureId = 0;
-	blockCount = 0;
-	blockTicks = 0;
-	walkUpdateTicks = 0;
-	creatureCheck = false;
-	inCheckCreaturesVector = false;
-	scriptEventsBitField = 0;
-
-	hiddenHealth = false;
-
-	skull = SKULL_NONE;
-
 	onIdleStatus();
 }
 
@@ -431,12 +390,16 @@ void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const Ite
 	}
 }
 
-void Creature::onCreatureAppear(Creature* creature, bool)
+void Creature::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	if (creature == this) {
 		if (useCacheMap()) {
 			isMapLoaded = true;
 			updateMapCache();
+		}
+
+		if (isLogin) {
+			setLastPosition(getPosition());
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
@@ -529,9 +492,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 			if (teleport || oldPos.z != newPos.z) {
 				updateMapCache();
 			} else {
-				Tile* tile;
 				const Position& myPos = getPosition();
-				Position pos;
 
 				if (oldPos.y > newPos.y) { //north
 					//shift y south
@@ -541,8 +502,8 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update 0
 					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
-						tile = g_game.map.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
-						updateTileCache(tile, x, -maxWalkCacheHeight);
+						Tile* cacheTile = g_game.map.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
+						updateTileCache(cacheTile, x, -maxWalkCacheHeight);
 					}
 				} else if (oldPos.y < newPos.y) { // south
 					//shift y north
@@ -552,8 +513,8 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update mapWalkHeight - 1
 					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
-						tile = g_game.map.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
-						updateTileCache(tile, x, maxWalkCacheHeight);
+						Tile* cacheTile = g_game.map.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
+						updateTileCache(cacheTile, x, maxWalkCacheHeight);
 					}
 				}
 
@@ -577,8 +538,8 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update mapWalkWidth - 1
 					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-						tile = g_game.map.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
-						updateTileCache(tile, maxWalkCacheWidth, y);
+						Tile* cacheTile = g_game.map.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
+						updateTileCache(cacheTile, maxWalkCacheWidth, y);
 					}
 				} else if (oldPos.x > newPos.x) { // west
 					//shift y east
@@ -600,8 +561,8 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 
 					//update 0
 					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-						tile = g_game.map.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
-						updateTileCache(tile, -maxWalkCacheWidth, y);
+						Tile* cacheTile = g_game.map.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
+						updateTileCache(cacheTile, -maxWalkCacheWidth, y);
 					}
 				}
 

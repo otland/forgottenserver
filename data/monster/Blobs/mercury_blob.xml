@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Mercury Blob" nameDescription="a mercury blob" race="undead" experience="180" speed="180" manacost="0">
 	<health now="150" max="150" />
 	<look type="316" corpse="9961" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-75" />
 		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="3000">
 			<attribute key="areaEffect" value="stun" />
 			<attribute key="shootEffect" value="holy" />
@@ -43,9 +43,6 @@
 		<element holyPercent="65" />
 		<element lifedrainPercent="80" />
 	</elements>
-	<immunities>
-		<immunity death="1" />
-	</immunities>
 	<summons maxSummons="3">
 		<summon name="Mercury Blob" interval="2000" chance="10" />
 	</summons>
@@ -53,6 +50,6 @@
 		<voice sentence="Crackle" />
 	</voices>
 	<loot>
-		<item id="9966" chance="17966" /><!-- glob of mercury -->
+		<item name="glob of mercury" chance="17966" />
 	</loot>
 </monster>

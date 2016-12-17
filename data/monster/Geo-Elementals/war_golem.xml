@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="War Golem" nameDescription="a war golem" race="energy" experience="2550" speed="240" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="War Golem" nameDescription="a war golem" race="energy" experience="2750" speed="240" manacost="0">
 	<health now="4300" max="4300" />
 	<look type="326" corpse="10005" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="110" />
+		<attack name="melee" interval="2000" min="0" max="-550" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-165" max="-220">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
@@ -58,28 +58,28 @@
 		<voice sentence="Rrrtttarrrttarrrtta" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="37500" /><!-- gold coin -->
-		<item id="2148" countmax="80" chance="375000" /><!-- gold coin -->
-		<item id="8309" countmax="5" chance="5260" /><!-- nails -->
-		<item id="2377" chance="5500" /><!-- two handed sword -->
-		<item id="2510" chance="9000" /><!-- plate shield -->
-		<item id="2394" chance="7000" /><!-- morning star -->
-		<item id="2513" chance="6500" /><!-- battle shield -->
-		<item id="8473" chance="10080" /><!-- ultimate health potion -->
-		<item id="7590" chance="8860" /><!-- great mana potion -->
-		<item id="5880" chance="1920" /><!-- iron ore -->
-		<item id="7439" chance="900" /><!-- berserk potion -->
-		<item id="2438" chance="6400" /><!-- epee -->
+		<item name="gold coin" countmax="90" chance="37500" />
+		<item name="gold coin" countmax="80" chance="375000" />
+		<item name="life crystal" chance="1000" />
+		<item name="club ring" chance="810" />
+		<item name="dwarven ring" chance="1210" />
+		<item name="two handed sword" chance="5500" />
+		<item name="morning star" chance="7000" />
+		<item name="epee" chance="6400" />
+		<item name="plate shield" chance="9000" />
+		<item name="battle shield" chance="6500" />
+		<item name="steel boots" chance="620" />
+		<item name="iron ore" chance="1920" />
+		<item name="berserker" chance="50" />
+		<item name="jade hammer" chance="120" />
+		<item name="bonebreaker" chance="770" />
+		<item name="berserk potion" chance="900" />
+		<item name="great mana potion" chance="8860" />
+		<item name="lightning boots" chance="90" />
+		<item name="nail" countmax="5" chance="5260" />
+		<item name="ultimate health potion" chance="10080" />
 		<item id="9809" chance="260" /><!-- rusty armor-->
-		<item id="2209" chance="810" /><!-- club ring -->
-		<item id="2213" chance="1210" /><!-- dwarven ring -->
-		<item id="9980" chance="130" /><!-- crystal of power -->
 		<item id="9978" chance="1080" /><!-- crystal pedestal -->
-		<item id="7893" chance="90" /><!-- lightning boots -->
-		<item id="2645" chance="620" /><!-- steel boots -->
-		<item id="7403" chance="50" /><!-- berserker -->
-		<item id="7422" chance="120" /><!-- jade hammer -->
-		<item id="7428" chance="770" /><!-- bonebreaker -->
-		<item id="2177" chance="1000" /><!-- life crystal -->
+		<item name="crystal of power" chance="130" />
 	</loot>
 </monster>

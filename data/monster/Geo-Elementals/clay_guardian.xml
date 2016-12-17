@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Clay Guardian" nameDescription="a clay guardian" race="undead" experience="400" speed="210" manacost="0">
 	<health now="625" max="625" />
 	<look type="333" corpse="13972" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-125" />
 		<attack name="earth" interval="2000" chance="20" range="7" min="-30" max="-150">
 			<attribute key="shootEffect" value="smallearth" />
 			<attribute key="areaEffect" value="greenbubble" />
@@ -42,13 +42,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="63" chance="50000" /><!-- gold coin -->
-		<item id="11222" chance="25000" /><!-- lump of earth -->
-		<item id="2260" chance="25000" /><!-- blank rune -->
-		<item id="1294" countmax="10" chance="10000" /><!-- small stone -->
-		<item id="7850" countmax="8" chance="5555" /><!-- earth arrow -->
-		<item id="11339" chance="1100" /><!-- clay lump -->
-		<item id="9970" chance="320" /><!-- small topaz -->
+		<item name="small stone" countmax="10" chance="10000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="63" chance="50000" />
+		<item name="blank rune" chance="25000" />
+		<item name="earth arrow" countmax="8" chance="5555" />
+		<item name="small topaz" chance="320" />
+		<item name="lump of earth" chance="25000" />
+		<item name="clay lump" chance="1100" />
 	</loot>
 </monster>

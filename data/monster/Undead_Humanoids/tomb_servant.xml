@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Tomb Servant" nameDescription="a tomb servant" race="undead" experience="215" speed="190" manacost="0">
 	<health now="475" max="475" />
 	<look type="100" corpse="6029" />
@@ -33,14 +33,14 @@
 		<voice sentence="Ngl..Nglll...Gll" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="108" chance="82350" />	<!-- gold coin -->
-		<item id="2230" chance="49000" />				<!-- bone -->
-		<item id="3976" countmax="12" chance="25325" />	<!-- worm -->
-		<item id="2159" chance="8210" />					<!-- scarab coin -->
-		<item id="2397" chance="6560" />					<!-- longsword -->
-		<item id="2541" chance="5300" />					<!-- bone shield -->
-		<item id="2227" chance="2000" />					<!-- rotten meat -->
-		<item id="11200" chance="1000" />				<!-- half-digested piece of meat -->
-		<item id="13535" chance="230" />					<!-- fist on a stick -->
+		<item name="gold coin" countmax="108" chance="82350" />
+		<item name="scarab coin" chance="8210" />
+		<item name="rotten meat" chance="2000" />
+		<item id="2230" chance="49000" /><!-- bone -->
+		<item name="longsword" chance="6560" />
+		<item name="bone shield" chance="5300" />
+		<item name="worm" countmax="12" chance="25325" />
+		<item name="half-digested piece of meat" chance="1000" />
+		<item name="fist on a stick" chance="230" />
 	</loot>
 </monster>

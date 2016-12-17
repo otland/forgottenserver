@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Quara Constrictor" nameDescription="a quara constrictor" race="blood" experience="250" speed="230" manacost="670">
 	<health now="450" max="450" />
 	<look type="46" corpse="6065" />
@@ -17,12 +17,12 @@
 		<flag runonhealth="30" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50" poison="20" />
+		<attack name="melee" interval="2000" min="0" max="-150" poison="20" />
 		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-50" max="-90">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
 		<attack name="quara constrictor freeze" interval="2000" chance="10" />
-		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0" >
+		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0">
 			<attribute key="areaEffect" value="iceattack" />
 		</attack>
 		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />
@@ -46,12 +46,12 @@
 		<voice sentence="Boohaa!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="87500" /><!-- gold coin -->
-		<item id="12443" chance="14520" /><!-- quara tentacle -->
-		<item id="2397" chance="7761" /><!-- longsword -->
-		<item id="2670" countmax="5" chance="5000" /><!-- shrimp -->
-		<item id="2465" chance="5000" /><!-- brass armor -->
-		<item id="5895" chance="430" /><!-- fish fin -->
-		<item id="2150" chance="2860" /><!-- small amethyst -->
+		<item name="gold coin" countmax="100" chance="87500" />
+		<item name="small amethyst" chance="2860" />
+		<item name="longsword" chance="7761" />
+		<item name="brass armor" chance="5000" />
+		<item name="shrimp" countmax="5" chance="5000" />
+		<item name="fish fin" chance="430" />
+		<item name="quara tentacle" chance="14520" />
 	</loot>
 </monster>

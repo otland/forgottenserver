@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spite of the Emperor" nameDescription="a spite of the emperor" race="undead" experience="5600" speed="410" manacost="0">
+<monster name="Spite of the Emperor" nameDescription="Spite of the Emperor" race="undead" experience="5600" speed="410" manacost="0">
 	<health now="8000" max="8000" />
 	<look type="351" corpse="0" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="366" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="55" attack="115" />
+		<attack name="melee" interval="2000" min="0" max="-374" />
 		<attack name="physical" interval="3000" chance="17" length="8" spread="3" min="-150" max="-250">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>

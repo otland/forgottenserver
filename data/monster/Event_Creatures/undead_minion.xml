@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Undead Minion" nameDescription="Undead Minion" race="undead" experience="550" speed="230" manacost="620">
+	<health now="850" max="850" />
+	<look type="37" corpse="5963" />
+	<targetchange interval="5000" chance="1" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-248" />
+		<attack name="lifedrain" interval="1000" chance="13" radius="4" target="0" min="-100" max="-160">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="40" chance="100000" />
+		<item name="blank rune" chance="10000" />
+		<item name="battle hammer" chance="5000" />
+		<item name="battle shield" chance="1000" />
+		<item name="guardian shield" chance="5000" />
+		<item id="6570" chance="5538" /><!-- blue surprise bag -->
+		<item id="6571" chance="1538" /><!-- red surprise bag -->
+	</loot>
+</monster>

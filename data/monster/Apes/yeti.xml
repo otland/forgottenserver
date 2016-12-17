@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Yeti" nameDescription="a yeti" race="blood" experience="460" speed="270" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Yeti" nameDescription="Yeti" race="blood" experience="460" speed="270" manacost="0">
 	<health now="950" max="950" />
 	<look type="110" corpse="6038" />
 	<targetchange interval="5000" chance="8" />
@@ -38,11 +38,11 @@
 		<voice sentence="Yooodelaaaheeeheee!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="60" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="40" chance="100000" /><!-- gold coin -->
-		<item id="2666" countmax="4" chance="33333" /><!-- meat -->
-		<item id="2671" countmax="5" chance="10000" /><!-- ham -->
-		<item id="2111" countmax="22" chance="10000" /><!-- snowball -->
-		<item id="2644" chance="1333" /><!-- bunny slippers -->
+		<item name="snowball" countmax="22" chance="10000" />
+		<item name="gold coin" countmax="60" chance="100000" />
+		<item name="gold coin" countmax="40" chance="100000" />
+		<item name="bunnyslippers" chance="1333" />
+		<item name="meat" countmax="4" chance="33333" />
+		<item name="ham" countmax="5" chance="10000" />
 	</loot>
 </monster>

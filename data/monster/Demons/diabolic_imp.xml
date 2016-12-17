@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Diabolic Imp" nameDescription="a diabolic imp" race="fire" experience="1950" speed="220" manacost="0">
-	<health now="2900" max="2900" />
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Diabolic Imp" nameDescription="a diabolic imp" race="fire" experience="2900" speed="220" manacost="0">
+	<health now="1950" max="1950" />
 	<look type="237" corpse="6364" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
@@ -17,7 +17,7 @@
 		<flag runonhealth="400" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="60" poison="160" />
+		<attack name="melee" interval="2000" min="0" max="-240" poison="160" />
 		<attack name="fire" interval="2000" chance="20" range="7" radius="4" target="1" min="-100" max="-240">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="firearea" />
@@ -56,23 +56,23 @@
 		<voice sentence="He he he." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="97" chance="40000" /><!-- gold coin -->
-		<item id="2548" chance="50000" /><!-- pitchfork -->
-		<item id="6558" countmax="2" chance="25000" /><!-- concentrated demonic blood -->
-		<item id="2260" countmax="2" chance="16666" /><!-- blank rune -->
-		<item id="6500" chance="8000" /><!-- demonic essence -->
-		<item id="2515" chance="8130" /><!-- guardian shield -->
-		<item id="2568" chance="8830" /><!-- cleaver -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="97" chance="40000" />
+		<item name="gold coin" countmax="7" chance="3390" />
+		<item name="small amethyst" countmax="3" chance="2250" />
+		<item name="stealth ring" chance="2702" />
+		<item name="necrotic rod" chance="830" />
+		<item name="blank rune" countmax="2" chance="16666" />
+		<item name="double axe" chance="1994" />
 		<item id="2419" chance="5660" /><!-- scimitar -->
-		<item id="5944" chance="7230" /><!-- soul orb -->
-		<item id="2148" countmax="7" chance="3390" /><!-- platinum coin -->
-		<item id="2150" countmax="3" chance="2250" /><!-- small amethyst -->
-		<item id="2165" chance="2702" /><!-- stealth ring -->
-		<item id="2387" chance="1994" /><!-- double axe -->
+		<item name="guardian shield" chance="8130" />
+		<item name="pitchfork" chance="50000" />
+		<item name="cleaver" chance="8830" />
+		<item name="soul orb" chance="7230" />
 		<item id="6300" chance="120" /><!-- death ring -->
-		<item id="7899" chance="250" /><!-- magma coat-->
-		<item id="7900" chance="430" /><!-- magma monocle -->
-		<item id="2185" chance="830" /><!-- necrotic rod -->
+		<item name="demonic essence" chance="8000" />
+		<item name="concentrated demonic blood" countmax="2" chance="25000" />
+		<item name="magma coat" chance="250" />
+		<item name="magma monocle" chance="430" />
 	</loot>
 </monster>

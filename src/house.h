@@ -54,7 +54,6 @@ class Door final : public Item
 {
 	public:
 		explicit Door(uint16_t type);
-		~Door();
 
 		// non-copyable
 		Door(const Door&) = delete;
@@ -93,8 +92,8 @@ class Door final : public Item
 		void setHouse(House* house);
 
 	private:
-		House* house;
-		AccessList* accessList;
+		House* house = nullptr;
+		std::unique_ptr<AccessList> accessList;
 		friend class House;
 };
 
@@ -232,7 +231,7 @@ class House
 		AccessList guestList;
 		AccessList subOwnerList;
 
-		Container transfer_container;
+		Container transfer_container{ITEM_LOCKER1};
 
 		HouseTileList houseTiles;
 		std::list<Door*> doorList;
@@ -241,19 +240,19 @@ class House
 		std::string houseName;
 		std::string ownerName;
 
-		HouseTransferItem* transferItem;
+		HouseTransferItem* transferItem = nullptr;
 
-		time_t paidUntil;
+		time_t paidUntil = 0;
 
 		uint32_t id;
-		uint32_t owner;
-		uint32_t rentWarnings;
-		uint32_t rent;
-		uint32_t townId;
+		uint32_t owner = 0;
+		uint32_t rentWarnings = 0;
+		uint32_t rent = 0;
+		uint32_t townId = 0;
 
-		Position posEntry;
+		Position posEntry = {};
 
-		bool isLoaded;
+		bool isLoaded = false;
 };
 
 typedef std::map<uint32_t, House*> HouseMap;

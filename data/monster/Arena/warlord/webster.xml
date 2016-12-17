@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Webster" nameDescription="a webster" race="undead" experience="1200" speed="290" manacost="0">
-	<health now="1750" max="1750" />
+<monster name="Webster" nameDescription="Webster" race="undead" experience="1200" speed="290" manacost="0">
+	<health now="2950" max="2950" />
 	<look type="263" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-250" />
 		<attack name="speed" interval="3500" chance="65" radius="1" target="1" range="1" duration="40" speedchange="-500">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>

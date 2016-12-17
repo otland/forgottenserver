@@ -26,11 +26,6 @@
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
 
-enum {
-	EVENT_ID_LOADING = 1,
-	EVENT_ID_USER = 1000,
-};
-
 uint32_t Npc::npcAutoID = 0x80000000;
 NpcScriptInterface* Npc::scriptInterface = nullptr;
 
@@ -175,7 +170,7 @@ bool Npc::loadFromXml()
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
-		setSkull(getSkullType(attr.as_string()));
+		setSkull(getSkullType(asLowerCaseString(attr.as_string())));
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
@@ -1046,21 +1041,13 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	return 1;
 }
 
-NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc)
+NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
+	npc(npc), scriptInterface(npc->getScriptInterface())
 {
-	this->npc = npc;
-	scriptInterface = npc->getScriptInterface();
 	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << scriptInterface->getLastLuaError() << std::endl;
-		creatureSayEvent = -1;
-		creatureDisappearEvent = -1;
-		creatureAppearEvent = -1;
-		creatureMoveEvent = -1;
-		playerCloseChannelEvent = -1;
-		playerEndTradeEvent = -1;
-		thinkEvent = -1;
 	} else {
 		creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
 		creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");

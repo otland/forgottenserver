@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Quara Mantassin Scout" nameDescription="a quara mantassin scout" race="blood" experience="100" speed="220" manacost="480">
 	<health now="220" max="220" />
 	<look type="72" corpse="6064" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -34,13 +34,13 @@
 		<voice sentence="Shrrrr" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="94000" /><!-- gold coin -->
-		<item id="2464" chance="4761" /><!-- chain armor -->
-		<item id="12445" chance="7780" /><!-- mantassin tail -->
+		<item name="small sapphire" chance="920" />
+		<item name="gold coin" countmax="30" chance="94000" />
+		<item name="stealth ring" chance="520" />
 		<item id="2229" chance="920" /><!-- skull -->
-		<item id="2377" chance="580" /><!-- two handed sword -->
-		<item id="5895" chance="520" /><!-- fish fin -->
-		<item id="2165" chance="520" /><!-- stealth ring -->
-		<item id="2146" chance="920" /><!-- small sapphire -->
+		<item name="two handed sword" chance="580" />
+		<item name="chain armor" chance="4761" />
+		<item name="fish fin" chance="520" />
+		<item name="mantassin tail" chance="7780" />
 	</loot>
 </monster>

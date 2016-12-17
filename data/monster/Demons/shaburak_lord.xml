@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Shaburak Lord" nameDescription="a shaburak lord" race="fire" experience="1200" speed="230" manacost="0">
 	<health now="2100" max="2100" />
 	<look type="409" corpse="13958" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="67" attack="65" />
+		<attack name="melee" interval="2000" min="0" max="-251" />
 		<attack name="fire" interval="2000" chance="20" range="7" radius="6" target="0" min="-30" max="-75">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="fireattack" />
@@ -54,18 +54,18 @@
 		<voice sentence="ONLY WE ARE TRUE DEMONS!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="78" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="33333" /><!-- platinum coin -->
-		<item id="7589" chance="7000" /><!-- strong mana potion -->
-		<item id="7588" chance="7000" /><!-- strong health potion -->
-		<item id="2147" countmax="5" chance="6120" /><!-- small rubies -->
-		<item id="2789" chance="5346" /><!-- brown mushroom -->
-		<item id="2167" chance="1652" /><!-- energy ring -->
-		<item id="7443" chance="400" /><!-- bullseye potion -->
-		<item id="2187" chance="800" /><!-- wand of inferno -->
-		<item id="5904" chance="620" /><!-- magic sulphur -->
-		<item id="7899" chance="100" /><!-- magma coat -->
-		<item id="2645" chance="160" /><!-- steel boots -->
+		<item name="small ruby" countmax="5" chance="6120" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="78" chance="50000" />
+		<item name="platinum coin" countmax="2" chance="33333" />
+		<item name="energy ring" chance="1652" />
+		<item name="wand of inferno" chance="800" />
+		<item name="steel boots" chance="160" />
+		<item name="brown mushroom" chance="5346" />
+		<item name="magic sulphur" chance="620" />
+		<item name="bullseye potion" chance="400" />
+		<item name="strong health potion" chance="7000" />
+		<item name="strong mana potion" chance="7000" />
+		<item name="magma coat" chance="100" />
 	</loot>
 </monster>

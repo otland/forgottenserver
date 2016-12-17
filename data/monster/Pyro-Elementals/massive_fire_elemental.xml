@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="1400" speed="210" manacost="0">
 	<health now="1200" max="1200" />
 	<look type="242" corpse="6324" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="75" />
+		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="firefield" interval="2000" chance="10" range="7" target="0" radius="3">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
@@ -43,16 +43,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="25000" /><!-- gold coin -->
-		<item id="2148" countmax="12" chance="25000" /><!-- gold coin -->
-		<item id="2172" countmax="1" chance="15000" /><!-- platinum coin -->
-		<item id="2147" countmax="2" chance="6100" /><!-- small ruby -->
+		<item name="small ruby" countmax="2" chance="6100" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="25000" />
+		<item name="gold coin" countmax="12" chance="25000" />
+		<item name="bronze amulet" countmax="1" chance="15000" />
+		<item name="wand of inferno" chance="2240" />
+		<item name="fire sword" chance="530" />
+		<item name="magma amulet" chance="1300" />
+		<item name="magma boots" chance="560" />
+		<item name="magma legs" chance="210" />
 		<item id="9809" chance="1330" /><!-- rusty armor -->
-		<item id="2187" chance="2240" /><!-- wand of inferno -->
-		<item id="7890" chance="1300" /><!-- magma amulet -->
-		<item id="7891" chance="560" /><!-- magma boots -->
-		<item id="2392" chance="530" /><!-- fire sword -->
-		<item id="7894" chance="210" /><!-- magma legs -->
 	</loot>
 </monster>

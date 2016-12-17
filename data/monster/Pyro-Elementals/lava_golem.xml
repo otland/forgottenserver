@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lava Golem" nameDescription="lava golem" race="fire" experience="6200" speed="290" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lava Golem" nameDescription="a lava golem" race="fire" experience="6200" speed="290" manacost="0">
 	<health now="9000" max="9000" />
 	<look type="491" corpse="17333" />
 	<targetchange interval="5000" chance="0" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-350" max="-700">
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>
@@ -52,34 +52,34 @@
 		<voice sentence="Grrrrunt" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="199" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="11" chance="100000" /><!-- platinum coin -->
-		<item id="7588" countmax="2" chance="18830" /><!-- shp -->
-		<item id="7589" countmax="2" chance="18150" /><!-- smp -->
-		<item id="7590" countmax="2" chance="16030" /><!-- gmp -->
-		<item id="7620" countmax="2" chance="20720" /><!-- mp -->
-		<item id="8473" chance="15390" /><!-- uhp -->
-		<item id="18435" countmax="5" chance="12580" /><!-- prismatic bolt -->
-		<item id="10553" chance="13510" /><!-- fiery heart -->
-		<item id="5880" chance="11570" /><!-- iron ore -->
-		<item id="5914" chance="7230" /><!-- yellow piece of cloth -->
-		<item id="2154" chance="6480" /><!-- yellow gem -->
-		<item id="5909" chance="4810" /><!-- white piece of cloth -->
-		<item id="2187" chance="2950" /><!-- wand of inferno -->
-		<item id="2392" chance="1710" /><!-- fire sword -->
-		<item id="7890" chance="2900" /><!-- magma amulet -->
-		<item id="7891" chance="2650" /><!-- magma boots -->
-		<item id="5911" chance="3530" /><!-- red piece of cloth -->
-		<item id="18409" chance="1390" /><!-- wand of everblazing -->
-		<item id="18416" countmax="2" chance="13990" /><!-- Green Crystal Splinters -->
-		<item id="18420" chance="10990" /><!-- Red Crystal Fragment -->
-		<item id="18414" chance="6200" /><!-- Violet Crystal Shard -->
-		<item id="18424" countmax="2" chance="15370" /><!-- Magma Clumps -->
-		<item id="18425" chance="15200" /><!-- Blazing Bone -->
-		<item id="2156" chance="1180" /><!-- red gem -->
-		<item id="2519" chance="1180" /><!-- crown shield -->
-		<item id="2432" chance="1560" /><!-- fire axe -->
-		<item id="7899" chance="430" /><!-- magma coat -->
-		<item id="8902" chance="450" /><!-- spellbook of mind control -->
+		<item name="gold coin" countmax="199" chance="100000" />
+		<item name="platinum coin" countmax="11" chance="100000" />
+		<item name="yellow gem" chance="6480" />
+		<item name="red gem" chance="1180" />
+		<item name="wand of inferno" chance="2950" />
+		<item name="fire sword" chance="1710" />
+		<item name="fire axe" chance="1560" />
+		<item name="crown shield" chance="1180" />
+		<item name="iron ore" chance="11570" />
+		<item name="white piece of cloth" chance="4810" />
+		<item name="red piece of cloth" chance="3530" />
+		<item name="yellow piece of cloth" chance="7230" />
+		<item name="strong health potion" countmax="2" chance="18830" />
+		<item name="strong mana potion" countmax="2" chance="18150" />
+		<item name="great mana potion" countmax="2" chance="16030" />
+		<item name="mana potion" countmax="2" chance="20720" />
+		<item name="magma amulet" chance="2900" />
+		<item name="magma boots" chance="2650" />
+		<item name="magma coat" chance="430" />
+		<item name="ultimate health potion" chance="15390" />
+		<item name="spellbook of mind control" chance="450" />
+		<item name="fiery heart" chance="13510" />
+		<item name="wand of everblazing" chance="1390" />
+		<item name="violet crystal shard" chance="6200" />
+		<item name="green crystal splinter" countmax="2" chance="13990" />
+		<item name="red crystal fragment" chance="10990" />
+		<item name="magma clump" countmax="2" chance="15370" />
+		<item name="blazing bone" chance="15200" />
+		<item name="prismatic bolt" countmax="5" chance="12580" />
 	</loot>
 </monster>

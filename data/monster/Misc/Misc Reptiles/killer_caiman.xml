@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Killer Caiman" nameDescription="a killer caiman" race="blood" experience="900" speed="230" manacost="0">
 	<health now="1500" max="1500" />
 	<look type="358" corpse="11430" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-180" />
 	</attacks>
 	<defenses armor="35" defense="35">
 		<defense name="speed" interval="2000" chance="15" speedchange="700" duration="5000">
@@ -34,14 +34,14 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="11196" chance="25430" /><!-- piece of crocodile leather -->
-		<item id="2671" chance="40100" /><!-- ham -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="80" chance="50000" />
+		<item name="small emerald" countmax="5" chance="10150" />
+		<item name="obsidian lance" chance="4975" />
+		<item name="ham" chance="40100" />
+		<item name="crocodile boots" chance="510" />
 		<item id="7632" chance="1130" /><!-- giant shimmering pearl -->
-		<item id="11245" countmax="2" chance="4800" /><!-- bunch of ripe rice -->
-		<item id="2149" countmax="5" chance="10150" /><!-- small emerald -->
-		<item id="3982" chance="510" /><!-- crocodile boots -->
-		<item id="2425" chance="4975" /><!-- obsidian lance -->
+		<item name="piece of crocodile leather" chance="25430" />
+		<item name="bunch of ripe rice" countmax="2" chance="4800" />
 	</loot>
 </monster>

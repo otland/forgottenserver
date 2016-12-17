@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rift Brood" nameDescription="a rift brood" race="energy" experience="1600" speed="300" manacost="0">
+<monster name="Rift Brood" nameDescription="Rift Brood" race="energy" experience="1600" speed="300" manacost="0">
 	<health now="3000" max="3000" />
 	<look type="290" corpse="1495" />
 	<targetchange interval="20000" chance="15" />
@@ -18,7 +18,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="75" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-255" />
 		<attack name="energy" interval="1000" chance="90" range="3" target="1" radius="2" min="-200" max="-400">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>

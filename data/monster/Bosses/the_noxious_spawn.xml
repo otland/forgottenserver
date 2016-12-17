@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Noxious Spawn" nameDescription="the noxious spawn" race="venom" experience="6000" speed="360" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="The Noxious Spawn" nameDescription="The Noxious Spawn" race="venom" experience="6000" speed="360" manacost="0">
 	<health now="9500" max="9500" />
 	<look type="220" corpse="4323" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="275" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-250" />
 		<attack name="speed" interval="2000" chance="6" range="7" speedchange="-660" duration="5000">
 		</attack>
 		<attack name="earth" interval="2000" chance="7" length="8" spread="3" min="0" max="-550">
@@ -26,7 +26,7 @@
 		<attack name="lifedrain" interval="2000" chance="9" length="8" spread="0" min="0" max="-550">
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
-		<attack name="poison" interval="2000" chance="12" range="1" min="0" max="-300">
+		<attack name="earth" interval="2000" chance="12" range="1" min="0" max="-300">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -56,14 +56,14 @@
 		<voice sentence="I bring your deathhh, mortalssss" />
 	</voices>
 	<loot>
-		<item id="2152" countmax="5" chance="51850" /><!-- platinum coin -->
-		<item id="7456" chance="37000" /><!-- noble axe -->
-		<item id="2152" countmax="95" chance="10750" /><!-- assassin star -->
-		<item id="7365" chance="525" /><!-- onyx arrow -->
+		<item name="platinum coin" countmax="5" chance="51850" />
+		<item name="platinum coin" countmax="95" chance="10750" />
+		<item name="life ring" chance="35000" />
+		<item name="power bolt" countmax="29" chance="36250" />
+		<item name="green mushroom" chance="11111" />
+		<item name="onyx arrow" chance="525" />
+		<item name="mercenary sword" chance="27750" />
+		<item name="noble axe" chance="37000" />
 		<item id="10309" chance="31500" /><!-- claw of the noxious spawn-->
-		<item id="2168" chance="35000" /><!-- life ring -->
-		<item id="2547" countmax="29" chance="36250" /><!-- power bolt -->
-		<item id="7386" chance="27750" /><!-- mercenary sword -->
-		<item id="2796" chance="11111" /><!-- green mushroom -->
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Swampling" nameDescription="a swampling" race="venom" experience="45" speed="190" manacost="0">
 	<health now="80" max="80" />
 	<look type="535" corpse="19902" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-2" max="-15">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
@@ -35,11 +35,11 @@
 		<voice sentence="Crrrck!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="60000" /><!-- gold coin -->
-		<item id="2787" countmax="5" chance="8980" /><!-- White Mushroom -->
-		<item id="20102" chance="12610" /><!-- Piece of Swampling Wood -->
-		<item id="20103" chance="8270" /><!-- Swampling Club -->
-		<item id="20101" chance="18670" /><!-- Swampling Moss -->
 		<item id="2120" chance="4540" /><!-- rope -->
+		<item name="gold coin" countmax="12" chance="60000" />
+		<item name="white mushroom" countmax="5" chance="8980" />
+		<item name="rat cheese" chance="18670" />
+		<item name="swampling moss" chance="12610" />
+		<item name="piece of swampling wood" chance="8270" />
 	</loot>
 </monster>

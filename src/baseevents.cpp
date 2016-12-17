@@ -26,11 +26,6 @@
 
 extern LuaEnvironment g_luaEnvironment;
 
-BaseEvents::BaseEvents()
-{
-	loaded = false;
-}
-
 bool BaseEvents::loadFromXml()
 {
 	if (loaded) {
@@ -91,8 +86,7 @@ bool BaseEvents::reload()
 	return loadFromXml();
 }
 
-Event::Event(LuaScriptInterface* interface) :
-	scripted(false), scriptId(0), scriptInterface(interface) {}
+Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
 Event::Event(const Event* copy) :
 	scripted(copy->scripted), scriptId(copy->scriptId), scriptInterface(copy->scriptInterface) {}
@@ -147,13 +141,6 @@ bool Event::loadScript(const std::string& scriptFile)
 	scripted = true;
 	scriptId = id;
 	return true;
-}
-
-CallBack::CallBack()
-{
-	scriptId = 0;
-	scriptInterface = nullptr;
-	loaded = false;
 }
 
 bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& name)

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Death Blob" nameDescription="a death blob" race="undead" experience="300" speed="180" manacost="0">
 	<health now="320" max="320" />
 	<look type="315" corpse="9960" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="physical" interval="2000" chance="25" range="3" radius="4" target="0" min="-35" max="-60">
 			<attribute key="areaEffect" value="poff" />
 		</attack>
@@ -43,6 +43,6 @@
 		<summon name="Death Blob" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item id="9968" chance="14285" /><!-- glob of tar -->
+		<item name="glob of tar" chance="14285" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="200" manacost="0">
 	<health now="140" max="140" />
 	<look type="3" corpse="6009" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -34,9 +34,9 @@
 		<voice sentence="Yoooohhuuuu!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2671" countmax="2" chance="35000" /><!-- ham -->
-		<item id="5897" chance="710" /><!-- wolf paw -->
-		<item id="3976" chance="40" /><!-- wolf trophy -->
-		<item id="11235" chance="5230" /><!-- warwolf fur -->
+		<item name="ham" countmax="2" chance="35000" />
+		<item name="worm" chance="40" />
+		<item name="wolf paw" chance="710" />
+		<item name="warwolf fur" chance="5230" />
 	</loot>
 </monster>

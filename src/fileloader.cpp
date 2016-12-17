@@ -19,401 +19,106 @@
 
 #include "otpch.h"
 
+#include <stack>
 #include "fileloader.h"
 
-FileLoader::FileLoader() : cached_data()
-{
-	file = nullptr;
-	root = nullptr;
-	buffer = new uint8_t[1024];
-	buffer_size = 1024;
-	lastError = ERROR_NONE;
 
-	//cache
-	cache_size = 0;
-	cache_index = NO_VALID_CACHE;
-	cache_offset = NO_VALID_CACHE;
-}
+namespace OTB {
 
-FileLoader::~FileLoader()
+constexpr Identifier wildcard = {{'\0', '\0', '\0', '\0'}};
+
+Loader::Loader(const std::string& fileName, const Identifier& acceptedIdentifier):
+	fileContents(fileName)
 {
-	if (file) {
-		fclose(file);
-		file = nullptr;
+	constexpr auto minimalSize = sizeof(Identifier) + sizeof(Node::START) + sizeof(Node::type) + sizeof(Node::END);
+	if (fileContents.size() <= minimalSize) {
+		throw InvalidOTBFormat{};
 	}
 
-	NodeStruct::clearNet(root);
-	delete[] buffer;
-
-	for (int32_t i = 0; i < CACHE_BLOCKS; i++) {
-		delete[] cached_data[i].data;
+	Identifier fileIdentifier;
+	std::copy(fileContents.begin(), fileContents.begin() + fileIdentifier.size(), fileIdentifier.begin());
+	if (fileIdentifier != acceptedIdentifier && fileIdentifier != wildcard) {
+		throw InvalidOTBFormat{};
 	}
 }
 
-bool FileLoader::openFile(const char* filename, const char* accept_identifier)
-{
-	file = fopen(filename, "rb");
-	if (!file) {
-		lastError = ERROR_CAN_NOT_OPEN;
-		return false;
+using NodeStack = std::stack<Node*, std::vector<Node*>>;
+static Node& getCurrentNode(const NodeStack& nodeStack) {
+	if (nodeStack.empty()) {
+		throw InvalidOTBFormat{};
 	}
-
-	char identifier[4];
-	if (fread(identifier, 1, 4, file) < 4) {
-		fclose(file);
-		file = nullptr;
-		lastError = ERROR_EOF;
-		return false;
-	}
-
-	// The first four bytes must either match the accept identifier or be 0x00000000 (wildcard)
-	if (memcmp(identifier, accept_identifier, 4) != 0 && memcmp(identifier, "\0\0\0\0", 4) != 0) {
-		fclose(file);
-		file = nullptr;
-		lastError = ERROR_INVALID_FILE_VERSION;
-		return false;
-	}
-
-	fseek(file, 0, SEEK_END);
-	int32_t file_size = ftell(file);
-	cache_size = std::min<uint32_t>(32768, std::max<uint32_t>(file_size / 20, 8192)) & ~0x1FFF;
-
-	if (!safeSeek(4)) {
-		lastError = ERROR_INVALID_FORMAT;
-		return false;
-	}
-
-	delete root;
-	root = new NodeStruct();
-	root->start = 4;
-
-	int32_t byte;
-	if (safeSeek(4) && readByte(byte) && byte == NODE_START) {
-		return parseNode(root);
-	}
-
-	return false;
+	return *nodeStack.top();
 }
 
-bool FileLoader::parseNode(NODE node)
+const Node& Loader::parseTree()
 {
-	int32_t byte, pos;
-	NODE currentNode = node;
+	auto it = fileContents.begin() + sizeof(Identifier);
+	if (static_cast<uint8_t>(*it) != Node::START) {
+		throw InvalidOTBFormat{};
+	}
+	root.type = *(++it);
+	root.propsBegin = ++it;
+	NodeStack parseStack;
+	parseStack.push(&root);
 
-	while (readByte(byte)) {
-		currentNode->type = byte;
-		bool setPropsSize = false;
-
-		while (true) {
-			if (!readByte(byte)) {
-				return false;
+	for (; it != fileContents.end(); ++it) {
+		switch(static_cast<uint8_t>(*it)) {
+			case Node::START: {
+				auto& currentNode = getCurrentNode(parseStack);
+				if (currentNode.children.empty()) {
+					currentNode.propsEnd = it;
+				}
+				currentNode.children.emplace_back();
+				auto& child = currentNode.children.back();
+				if (++it == fileContents.end()) {
+					throw InvalidOTBFormat{};
+				}
+				child.type = *it;
+				child.propsBegin = it + sizeof(Node::type);
+				parseStack.push(&child);
+				break;
 			}
-
-			bool skipNode = false;
-
-			switch (byte) {
-				case NODE_START: {
-					//child node start
-					if (!safeTell(pos)) {
-						return false;
-					}
-
-					NODE childNode = new NodeStruct();
-					childNode->start = pos;
-					currentNode->propsSize = pos - currentNode->start - 2;
-					currentNode->child = childNode;
-
-					setPropsSize = true;
-
-					if (!parseNode(childNode)) {
-						return false;
-					}
-
-					break;
+			case Node::END: {
+				auto& currentNode = getCurrentNode(parseStack);
+				if (currentNode.children.empty()) {
+					currentNode.propsEnd = it;
 				}
-
-				case NODE_END: {
-					//current node end
-					if (!setPropsSize) {
-						if (!safeTell(pos)) {
-							return false;
-						}
-
-						currentNode->propsSize = pos - currentNode->start - 2;
-					}
-
-					if (!readByte(byte)) {
-						return true;
-					}
-
-					switch (byte) {
-						case NODE_START: {
-							//starts next node
-							if (!safeTell(pos)) {
-								return false;
-							}
-
-							skipNode = true;
-							NODE nextNode = new NodeStruct();
-							nextNode->start = pos;
-							currentNode->next = nextNode;
-							currentNode = nextNode;
-							break;
-						}
-
-						case NODE_END:
-							return safeTell(pos) && safeSeek(pos);
-
-						default:
-							lastError = ERROR_INVALID_FORMAT;
-							return false;
-					}
-
-					break;
-				}
-
-				case ESCAPE_CHAR: {
-					if (!readByte(byte)) {
-						return false;
-					}
-
-					break;
-				}
-
-				default:
-					break;
+				parseStack.pop();
+				break;
 			}
-
-			if (skipNode) {
+			case Node::ESCAPE: {
+				if (++it == fileContents.end()) {
+					throw InvalidOTBFormat{};
+				}
+				break;
+			}
+			default: {
 				break;
 			}
 		}
 	}
-	return false;
-}
-
-const uint8_t* FileLoader::getProps(const NODE node, size_t& size)
-{
-	if (!node) {
-		return nullptr;
+	if (!parseStack.empty()) {
+		throw InvalidOTBFormat{};
 	}
 
-	if (node->propsSize >= buffer_size) {
-		delete[] buffer;
-
-		while (node->propsSize >= buffer_size) {
-			buffer_size *= 2;
-		}
-
-		buffer = new uint8_t[buffer_size];
-	}
-
-	//get buffer
-	if (!readBytes(node->propsSize, node->start + 2)) {
-		return nullptr;
-	}
-
-	//unscape buffer
-	size_t j = 0;
-	bool escaped = false;
-	for (uint32_t i = 0; i < node->propsSize; ++i, ++j) {
-		if (buffer[i] == ESCAPE_CHAR) {
-			//escape char found, skip it and write next
-			buffer[j] = buffer[++i];
-			//is neede a displacement for next bytes
-			escaped = true;
-		} else if (escaped) {
-			//perform that displacement
-			buffer[j] = buffer[i];
-		}
-	}
-
-	size = j;
-	return buffer;
-}
-
-bool FileLoader::getProps(const NODE node, PropStream& props)
-{
-	size_t size;
-	if (const uint8_t* a = getProps(node, size)) {
-		props.init(reinterpret_cast<const char*>(a), size); // does not break strict aliasing
-		return true;
-	}
-
-	props.init(nullptr, 0);
-	return false;
-}
-
-NODE FileLoader::getChildNode(const NODE parent, uint32_t& type)
-{
-	if (parent) {
-		NODE child = parent->child;
-		if (child) {
-			type = child->type;
-		}
-
-		return child;
-	}
-
-	type = root->type;
 	return root;
 }
 
-NODE FileLoader::getNextNode(const NODE prev, uint32_t& type)
+bool Loader::getProps(const Node& node, PropStream& props)
 {
-	if (!prev) {
-		return NO_NODE;
-	}
-
-	NODE next = prev->next;
-	if (next) {
-		type = next->type;
-	}
-	return next;
-}
-
-inline bool FileLoader::readByte(int32_t& value)
-{
-	if (cache_index == NO_VALID_CACHE) {
-		lastError = ERROR_CACHE_ERROR;
+	auto size = std::distance(node.propsBegin, node.propsEnd);
+	if (size == 0) {
 		return false;
 	}
+	propBuffer.resize(size);
+	bool lastEscaped = false;
 
-	if (cache_offset >= cached_data[cache_index].size) {
-		int32_t pos = cache_offset + cached_data[cache_index].base;
-		int32_t tmp = getCacheBlock(pos);
-		if (tmp < 0) {
-			return false;
-		}
-
-		cache_index = tmp;
-		cache_offset = pos - cached_data[cache_index].base;
-		if (cache_offset >= cached_data[cache_index].size) {
-			return false;
-		}
-	}
-
-	value = cached_data[cache_index].data[cache_offset++];
+	auto escapedPropEnd = std::copy_if(node.propsBegin, node.propsEnd, propBuffer.begin(), [&lastEscaped](const char& byte) {
+		lastEscaped = byte == static_cast<char>(Node::ESCAPE) && !lastEscaped;
+		return !lastEscaped;
+	});
+	props.init(&propBuffer[0], std::distance(propBuffer.begin(), escapedPropEnd));
 	return true;
 }
 
-inline bool FileLoader::readBytes(uint32_t size, int32_t pos)
-{
-	//seek at pos
-	uint32_t remain = size;
-	uint8_t* buf = this->buffer;
-	do {
-		//prepare cache
-		uint32_t i = getCacheBlock(pos);
-		if (i == NO_VALID_CACHE) {
-			return false;
-		}
-
-		cache_index = i;
-		cache_offset = pos - cached_data[i].base;
-
-		//get maximum read block size and calculate remaining bytes
-		uint32_t reading = std::min<int32_t>(remain, cached_data[i].size - cache_offset);
-		remain -= reading;
-
-		//read it
-		memcpy(buf, cached_data[cache_index].data + cache_offset, reading);
-
-		//update variables
-		cache_offset += reading;
-		buf += reading;
-		pos += reading;
-	} while (remain > 0);
-	return true;
-}
-
-inline bool FileLoader::safeSeek(uint32_t pos)
-{
-	uint32_t i = getCacheBlock(pos);
-	if (i == NO_VALID_CACHE) {
-		return false;
-	}
-
-	cache_index = i;
-	cache_offset = pos - cached_data[i].base;
-	return true;
-}
-
-inline bool FileLoader::safeTell(int32_t& pos)
-{
-	if (cache_index == NO_VALID_CACHE) {
-		lastError = ERROR_CACHE_ERROR;
-		return false;
-	}
-
-	pos = cached_data[cache_index].base + cache_offset - 1;
-	return true;
-}
-
-inline uint32_t FileLoader::getCacheBlock(uint32_t pos)
-{
-	bool found = false;
-	uint32_t i, base_pos = pos & ~(cache_size - 1);
-
-	for (i = 0; i < CACHE_BLOCKS; i++) {
-		if (cached_data[i].loaded) {
-			if (cached_data[i].base == base_pos) {
-				found = true;
-				break;
-			}
-		}
-	}
-
-	if (!found) {
-		i = loadCacheBlock(pos);
-	}
-
-	return i;
-}
-
-int32_t FileLoader::loadCacheBlock(uint32_t pos)
-{
-	int32_t i, loading_cache = -1, base_pos = pos & ~(cache_size - 1);
-
-	for (i = 0; i < CACHE_BLOCKS; i++) {
-		if (!cached_data[i].loaded) {
-			loading_cache = i;
-			break;
-		}
-	}
-
-	if (loading_cache == -1) {
-		for (i = 0; i < CACHE_BLOCKS; i++) {
-			if (std::abs(static_cast<long>(cached_data[i].base) - base_pos) > static_cast<long>(2 * cache_size)) {
-				loading_cache = i;
-				break;
-			}
-		}
-
-		if (loading_cache == -1) {
-			loading_cache = 0;
-		}
-	}
-
-	if (cached_data[loading_cache].data == nullptr) {
-		cached_data[loading_cache].data = new uint8_t[cache_size];
-	}
-
-	cached_data[loading_cache].base = base_pos;
-
-	if (fseek(file, cached_data[loading_cache].base, SEEK_SET) != 0) {
-		lastError = ERROR_SEEK_ERROR;
-		return -1;
-	}
-
-	uint32_t size = fread(cached_data[loading_cache].data, 1, cache_size, file);
-	cached_data[loading_cache].size = size;
-
-	if (size < (pos - cached_data[loading_cache].base)) {
-		lastError = ERROR_SEEK_ERROR;
-		return -1;
-	}
-
-	cached_data[loading_cache].loaded = 1;
-	return loading_cache;
-}
+} //namespace OTB

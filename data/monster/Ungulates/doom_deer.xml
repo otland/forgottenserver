@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Doom Deer" nameDescription="a doom deer" race="blood" experience="200" speed="300" manacost="0">
 	<health now="405" max="405" />
 	<look type="31" corpse="5970" />
@@ -37,6 +37,6 @@
 		<voice sentence="I bet it was you who killed my mom!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />	<!-- gold coins -->
+		<item name="gold coin" countmax="100" chance="50000" />
 	</loot>
 </monster>

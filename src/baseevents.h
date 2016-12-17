@@ -44,15 +44,15 @@ class Event
 	protected:
 		virtual std::string getScriptEventName() const = 0;
 
-		bool scripted;
-		int32_t scriptId;
-		LuaScriptInterface* scriptInterface;
+		bool scripted = false;
+		int32_t scriptId = 0;
+		LuaScriptInterface* scriptInterface = nullptr;
 };
 
 class BaseEvents
 {
 	public:
-		BaseEvents();
+ 		constexpr BaseEvents() = default;
 		virtual ~BaseEvents() = default;
 
 		bool loadFromXml();
@@ -68,21 +68,21 @@ class BaseEvents
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
 		virtual void clear() = 0;
 
-		bool loaded;
+		bool loaded = false;
 };
 
 class CallBack
 {
 	public:
-		CallBack();
+		CallBack() = default;
 
 		bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
 
 	protected:
-		int32_t scriptId;
-		LuaScriptInterface* scriptInterface;
+		int32_t scriptId = 0;
+		LuaScriptInterface* scriptInterface = nullptr;
 
-		bool loaded;
+		bool loaded = false;
 
 		std::string callbackName;
 };

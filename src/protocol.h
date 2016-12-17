@@ -25,7 +25,7 @@
 class Protocol : public std::enable_shared_from_this<Protocol>
 {
 	public:
-		explicit Protocol(Connection_ptr connection) : connection(connection), key(), encryptionEnabled(false), checksumEnabled(true), rawMessages(false) {}
+		explicit Protocol(Connection_ptr connection) : connection(connection) {}
 		virtual ~Protocol() = default;
 
 		// non-copyable
@@ -92,10 +92,10 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		OutputMessage_ptr outputBuffer;
 	private:
 		const ConnectionWeak_ptr connection;
-		uint32_t key[4];
-		bool encryptionEnabled;
-		bool checksumEnabled;
-		bool rawMessages;
+		uint32_t key[4] = {};
+		bool encryptionEnabled = false;
+		bool checksumEnabled = true;
+		bool rawMessages = false;
 };
 
 #endif

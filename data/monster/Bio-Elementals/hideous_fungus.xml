@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Hideous Fungus" nameDescription="a hideous fungus" race="venom" experience="2900" speed="260" manacost="0">
 	<health now="4600" max="4600" />
 	<look type="499" corpse="17428" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="275" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="90" />
+		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-250" max="-430">
 			<attribute key="shootEffect" value="smallearth" />
 			<attribute key="areaEffect" value="smallplants" />
@@ -28,7 +28,7 @@
 		<attack name="speed" interval="2000" chance="10" radius="1" target="1" speedchange="-600" duration="60000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="drunk" interval="2000" chance="10" range="7" target="1" radius="5" duration="4000" >
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" radius="5" duration="4000">
 			<attribute key="shootEffect" value="smallstone" />
 			<attribute key="areaEffect" value="stun" />
 		</attack>
@@ -63,26 +63,26 @@
 		<voice sentence="Munch munch munch!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="70000" /><!-- gold coin -->
-		<item id="2148" countmax="97" chance="70000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="100000" /><!-- platinum coin -->
-		<item id="18434" chance="14285" /><!-- hideous chunk -->
-		<item id="18437" countmax="15" chance="14500" /><!-- envenomed arrow -->
-		<item id="18397" countmax="3" chance="14500" /><!-- mushroom pie -->
-		<item id="7620" chance="9090" /><!-- mana potion -->
-		<item id="7590" chance="7692" /><!-- great mana potion -->
-		<item id="7591" chance="7220" /><!-- great health potion -->
-		<item id="5909" chance="6430" /><!-- white piece of cloth -->
-		<item id="2391" chance="4010" /><!-- war hammer -->
-		<item id="5912" chance="3700" /><!-- blue piece of cloth -->
-		<item id="5910" chance="3003" /><!-- green piece of cloth -->
-		<item id="7886" chance="2000" /><!-- terra boots -->
-		<item id="7887" chance="2000" /><!-- terra amulet -->
-		<item id="5911" chance="1820" /><!-- red piece of cloth -->
-		<item id="7885" chance="920" /><!-- terra legs -->
-		<item id="7884" chance="800" /><!-- terra mantle -->
-		<item id="18411" chance="590" /><!-- muck rod -->
-		<item id="18454" chance="60" /><!-- mycological bow -->
-		<item id="18393" chance="20" /><!-- mushroom backpack -->
+		<item name="gold coin" countmax="100" chance="70000" />
+		<item name="gold coin" countmax="97" chance="70000" />
+		<item name="platinum coin" countmax="7" chance="100000" />
+		<item name="war hammer" chance="4010" />
+		<item name="white piece of cloth" chance="6430" />
+		<item name="green piece of cloth" chance="3003" />
+		<item name="red piece of cloth" chance="1820" />
+		<item name="blue piece of cloth" chance="3700" />
+		<item name="great mana potion" chance="7692" />
+		<item name="great health potion" chance="7220" />
+		<item name="mana potion" chance="9090" />
+		<item name="terra mantle" chance="800" />
+		<item name="terra legs" chance="920" />
+		<item name="terra boots" chance="2000" />
+		<item name="terra amulet" chance="2000" />
+		<item name="mushroom backpack" chance="20" />
+		<item name="mushroom pie" countmax="3" chance="14500" />
+		<item name="muck rod" chance="590" />
+		<item name="hideous chunk" chance="14285" />
+		<item name="envenomed arrow" countmax="15" chance="14500" />
+		<item name="mycological bow" chance="60" />
 	</loot>
 </monster>

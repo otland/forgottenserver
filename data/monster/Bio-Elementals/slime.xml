@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>
 	<defenses armor="15" defense="15" />
 	<elements>
@@ -28,10 +28,10 @@
 	<immunities>
 		<immunity earth="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Blubb" />
-	</voices>
 	<summons maxSummons="3">
 		<summon name="Slime" interval="2000" chance="10" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Blubb" />
+	</voices>
 </monster>

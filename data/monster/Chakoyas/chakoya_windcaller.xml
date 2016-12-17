@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Chakoya Windcaller" nameDescription="a chakoya windcaller" race="blood" experience="48" speed="200" manacost="305">
 	<health now="84" max="84" />
 	<look type="260" corpse="7320" />
@@ -18,7 +18,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="12" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-22" />
 		<attack name="ice" interval="2000" chance="15" range="7" min="-16" max="-32">
 			<attribute key="shootEffect" value="ice" />
 		</attack>
@@ -50,12 +50,12 @@
 		<voice sentence="Quatu nguraka!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="26" chance="50000" /><!-- gold coin -->
+		<item name="gold coin" countmax="26" chance="50000" />
+		<item name="brass helmet" chance="3250" />
+		<item name="bone shield" chance="950" />
 		<item id="2667" countmax="3" chance="29000" /><!-- fish -->
-		<item id="2541" chance="950" /><!-- bone shield -->
-		<item id="7159" chance="60" /><!-- green perch -->
-		<item id="7158" chance="60" /><!-- rainbow trout -->
-		<item id="2669" chance="60" /><!-- northern pike -->
-		<item id="2460" chance="3250" /><!-- brass helmet -->
+		<item name="northern pike" chance="60" />
+		<item name="rainbow trout" chance="60" />
+		<item name="green perch" chance="60" />
 	</loot>
 </monster>

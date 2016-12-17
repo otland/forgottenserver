@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spectral Scum" nameDescription="a spectral scum" race="UNDEAD" experience="5" speed="230" manacost="0">
-	<health now="190" max="190" />
+<monster name="Spectral Scum" nameDescription="Spectral Scum" race="undead" experience="0" speed="230" manacost="0">
+	<health now="1" max="1" />
 	<look type="195" head="0" body="0" legs="0" feet="0" corpse="6070" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
@@ -24,14 +24,7 @@
 	</attacks>
 	<defenses armor="18" defense="19" />
 	<immunities>
-		<immunity physical="0" />
-		<immunity energy="0" />
 		<immunity fire="1" />
-		<immunity poison="0" />
-		<immunity lifedrain="0" />
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
-		<immunity drunk="0" />
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="2000" chance="10">

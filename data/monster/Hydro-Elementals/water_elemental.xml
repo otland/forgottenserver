@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Water Elemental" nameDescription="a water elemental" race="undead" experience="650" speed="220" manacost="0">
 	<health now="550" max="550" />
 	<look type="286" corpse="10499" />
@@ -17,11 +17,13 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="80" poison="60" />
+		<attack name="melee" interval="2000" min="0" max="-160" poison="60" />
 		<attack name="drown" interval="2000" chance="10" target="1" range="7" radius="2" min="-125" max="-235">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="icicle" interval="2000" chance="20" range="7" min="-88" max="-150" />
+		<attack name="ice" interval="2000" chance="20" range="7" min="-88" max="-150">
+			<attribute key="shootEffect" value="smallice" />
+		</attack>
 		<attack name="poisoncondition" interval="2000" chance="15" target="0" radius="5" min="-225" max="-260">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -50,20 +52,20 @@
 		<immunity lifedrain="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2152" chance="10000" /><!-- platinum coin -->
+		<item name="small diamond" chance="1000" />
+		<item name="small sapphire" chance="1000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="small emerald" countmax="2" chance="1000" />
+		<item name="platinum coin" chance="10000" />
+		<item name="energy ring" chance="950" />
+		<item name="life ring" chance="930" />
 		<item id="2667" chance="20000" /><!-- fish -->
-		<item id="2149" countmax="2" chance="1000" /><!-- small emerald -->
-		<item id="2145" chance="1000" /><!-- small diamond -->
-		<item id="2146" chance="1000" /><!-- small sapphire -->
+		<item name="rainbow trout" chance="940" />
+		<item name="green perch" chance="1050" />
+		<item name="strong health potion" chance="10000" />
+		<item name="strong mana potion" chance="10000" />
 		<item id="7632" chance="800" /><!-- giant shimmering pearl -->
 		<item id="7633" chance="800" /><!-- giant shimmering pearl -->
-		<item id="7588" chance="10000" /><!-- shp -->
-		<item id="7589" chance="10000" /><!-- smp -->
-		<item id="2167" chance="950" /><!-- energy ring -->
-		<item id="2168" chance="930" /><!-- life ring -->
-		<item id="7158" chance="940" /><!-- rainbow trout -->
-		<item id="7159" chance="1050" /><!-- green perch -->
-		<item id="10220" chance="260" /><!-- leviathan's amulet -->
+		<item name="leviathan's amulet" chance="260" />
 	</loot>
 </monster>

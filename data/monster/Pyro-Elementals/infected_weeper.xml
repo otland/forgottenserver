@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Infected Weeper" nameDescription="infected weeper" race="fire" experience="4800" speed="250" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Infected Weeper" nameDescription="an infected weeper" race="fire" experience="4800" speed="250" manacost="0">
 	<health now="6800" max="6800" />
 	<look type="489" corpse="17251" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-280" />
 		<attack name="lifedrain" interval="2000" chance="15" length="5" spread="3" min="-250" max="-700">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -44,15 +44,15 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Moooaaan!" />
-	</voices>
 	<summons maxSummons="6">
 		<summon name="Parasite" interval="2000" chance="10" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Moooaaan!" />
+	</voices>
 	<loot>
-		<item id="2148" countmax="198" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="7" chance="100000" /><!-- platinum coin -->
+		<item name="gold coin" countmax="198" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="100000" />
 		<item id="8748" chance="1460" /><!-- coal -->
 	</loot>
 </monster>

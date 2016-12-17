@@ -68,7 +68,7 @@ class Spells final : public BaseEvents
 		std::map<std::string, InstantSpell*> instants;
 
 		friend class CombatSpell;
-		LuaScriptInterface scriptInterface;
+		LuaScriptInterface scriptInterface { "Spell Interface" };
 };
 
 typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);
@@ -77,7 +77,7 @@ typedef bool (RuneSpellFunction)(const RuneSpell* spell, Player* player, const P
 class BaseSpell
 {
 	public:
-		BaseSpell() = default;
+		constexpr BaseSpell() = default;
 		virtual ~BaseSpell() = default;
 
 		virtual bool castSpell(Creature* creature) = 0;
@@ -122,7 +122,7 @@ class CombatSpell final : public Event, public BaseSpell
 class Spell : public BaseSpell
 {
 	public:
-		Spell();
+		Spell() = default;
 
 		bool configureSpell(const pugi::xml_node& node);
 		const std::string& getName() const {
@@ -167,29 +167,29 @@ class Spell : public BaseSpell
 		bool playerInstantSpellCheck(Player* player, const Position& toPos);
 		bool playerRuneSpellCheck(Player* player, const Position& toPos);
 
-		uint8_t spellId;
-		SpellGroup_t group;
-		uint32_t groupCooldown;
-		SpellGroup_t secondaryGroup;
-		uint32_t secondaryGroupCooldown;
+		uint8_t spellId = 0;
+		SpellGroup_t group = SPELLGROUP_NONE;
+		uint32_t groupCooldown = 1000;
+		SpellGroup_t secondaryGroup = SPELLGROUP_NONE;
+		uint32_t secondaryGroupCooldown = 0;
 
-		uint32_t mana;
-		uint32_t manaPercent;
-		uint32_t soul;
-		uint32_t cooldown;
-		uint32_t level;
-		uint32_t magLevel;
-		int32_t range;
+		uint32_t mana = 0;
+		uint32_t manaPercent = 0;
+		uint32_t soul = 0;
+		uint32_t cooldown = 1000;
+		uint32_t level = 0;
+		uint32_t magLevel = 0;
+		int32_t range = -1;
 
-		bool needTarget;
-		bool needWeapon;
-		bool selfTarget;
-		bool blockingSolid;
-		bool blockingCreature;
-		bool aggressive;
-		bool learnable;
-		bool enabled;
-		bool premium;
+		bool needTarget = false;
+		bool needWeapon = false;
+		bool selfTarget = false;
+		bool blockingSolid = false;
+		bool blockingCreature = false;
+		bool aggressive = true;
+		bool learnable = false;
+		bool enabled = true;
+		bool premium = false;
 
 		VocSpellMap vocSpellMap;
 
@@ -200,7 +200,7 @@ class Spell : public BaseSpell
 class InstantSpell : public TalkAction, public Spell
 {
 	public:
-		explicit InstantSpell(LuaScriptInterface* interface);
+		explicit InstantSpell(LuaScriptInterface* interface) : TalkAction(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute& attr) override;
@@ -241,19 +241,19 @@ class InstantSpell : public TalkAction, public Spell
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
-		InstantSpellFunction* function;
+		InstantSpellFunction* function = nullptr;
 
-		bool needDirection;
-		bool hasParam;
-		bool hasPlayerNameParam;
-		bool checkLineOfSight;
-		bool casterTargetOrDirection;
+		bool needDirection = false;
+		bool hasParam = false;
+		bool hasPlayerNameParam = false;
+		bool checkLineOfSight = true;
+		bool casterTargetOrDirection = false;
 };
 
 class ConjureSpell final : public InstantSpell
 {
 	public:
-		explicit ConjureSpell(LuaScriptInterface* interface);
+		explicit ConjureSpell(LuaScriptInterface* interface) : InstantSpell(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool loadFunction(const pugi::xml_attribute& attr) final;
@@ -271,18 +271,16 @@ class ConjureSpell final : public InstantSpell
 		std::string getScriptEventName() const final;
 
 		bool conjureItem(Creature* creature) const;
-		bool internalCastSpell(Creature* creature, const LuaVariant& var);
-		Position getCasterPosition(Creature* creature);
 
-		uint32_t conjureId;
-		uint32_t conjureCount;
-		uint32_t reagentId;
+		uint32_t conjureId = 0;
+		uint32_t conjureCount = 1;
+		uint32_t reagentId = 0;
 };
 
 class RuneSpell final : public Action, public Spell
 {
 	public:
-		explicit RuneSpell(LuaScriptInterface* interface);
+		explicit RuneSpell(LuaScriptInterface* interface) : Action(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		bool loadFunction(const pugi::xml_attribute& attr) final;
@@ -318,9 +316,9 @@ class RuneSpell final : public Action, public Spell
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
-		RuneSpellFunction* runeFunction;
-		uint16_t runeId;
-		bool hasCharges;
+		RuneSpellFunction* runeFunction = nullptr;
+		uint16_t runeId = 0;
+		bool hasCharges = true;
 };
 
 #endif

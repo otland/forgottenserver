@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Infernal Frog" nameDescription="a infernal frog" race="blood" experience="190" speed="220" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Infernal Frog" nameDescription="an infernal frog" race="blood" experience="190" speed="220" manacost="0">
 	<health now="655" max="655" />
 	<look type="224" head="69" body="66" legs="69" feet="66" corpse="6079" />
 	<targetchange interval="4000" chance="10" />
@@ -37,6 +37,6 @@
 		<voice sentence="No Kisses for you!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="65" chance="77000" /><!-- gold coins -->
+		<item name="gold coin" countmax="65" chance="77000" />
 	</loot>
 </monster>

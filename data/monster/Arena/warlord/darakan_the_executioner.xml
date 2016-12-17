@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Darakan the Executioner" nameDescription="darakan the executioner" race="blood" experience="1600" speed="205" manacost="0">
-	<health now="3500" max="3500" />
+<monster name="Darakan the Executioner" nameDescription="Darakan the Executioner" race="blood" experience="1600" speed="205" manacost="0">
+	<health now="3480" max="3480" />
 	<look type="255" head="78" body="114" legs="114" feet="114" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-210" />
 		<attack name="physical" interval="1000" chance="100" min="-72" max="-130">
 			<attribute key="shootEffect" value="spear" />
 		</attack>

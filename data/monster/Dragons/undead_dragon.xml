@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Dragon" nameDescription="a undead dragon" race="undead" experience="7200" speed="250" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Undead Dragon" nameDescription="an undead dragon" race="undead" experience="7200" speed="250" manacost="0">
 	<health now="8350" max="8350" />
 	<look type="231" corpse="6306" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="96" />
+		<attack name="melee" interval="2000" min="0" max="-480" />
 		<attack name="physical" interval="2000" chance="5" range="7" radius="4" target="1" min="-300" max="-400">
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
@@ -68,30 +68,30 @@
 		<voice sentence="I SENSE LIFE" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="35500" /><!-- gold coin -->
-		<item id="2148" countmax="98" chance="55500" /><!-- gold coin -->
-		<item id="6500" chance="12460" /><!-- demonic essence -->
-		<item id="2152" countmax="5" chance="52000" /><!-- platinum coin -->
+		<item name="golden mug" chance="6002" />
+		<item name="black pearl" countmax="2" chance="22780" />
+		<item name="small sapphire" countmax="2" chance="28370" />
+		<item name="gold coin" countmax="100" chance="35500" />
+		<item name="gold coin" countmax="98" chance="55500" />
+		<item name="platinum coin" countmax="5" chance="52000" />
+		<item name="life crystal" chance="2500" />
+		<item name="war axe" chance="1290" />
+		<item name="golden armor" chance="860" />
+		<item name="knight armor" chance="5500" />
+		<item name="royal helmet" chance="1720" />
+		<item name="power bolt" countmax="15" chance="15190" />
+		<item name="hardened bone" chance="14180" />
 		<item id="6300" chance="1150" /><!-- death ring -->
-		<item id="7591" chance="21200" /><!-- great health potion -->
-		<item id="2033" chance="6002" /><!-- golden mug -->
-		<item id="2547" countmax="15" chance="15190" /><!-- power bolt -->
-		<item id="7430" chance="4000" /><!-- dragonbone staff -->
-		<item id="2476" chance="5500" /><!-- knight armor -->
-		<item id="2177" chance="2500" /><!-- life crystal -->
-		<item id="5925" chance="14180" /><!-- hardened bone -->
-		<item id="9971" chance="570" /><!-- gold ingot -->
-		<item id="2498" chance="1720" /><!-- royal helmet -->
-		<item id="2454" chance="1290" /><!-- war axe -->
-		<item id="8885" chance="430" /><!-- divine plate -->
-		<item id="11233" chance="33380" /><!-- unholy bone -->
-		<item id="2146" countmax="2" chance="28370" /><!-- small sapphires -->
-		<item id="7368" countmax="5" chance="26650" /><!-- assassin stars -->
-		<item id="7402" chance="860" /><!-- dragon slayer -->
-		<item id="2144" countmax="2" chance="22780" /><!-- black pearls -->
-		<item id="7590" chance="21490" /><!-- great mana potion -->
-		<item id="11355" chance="860" /><!-- spellweaver's robe -->
-		<item id="2466" chance="860" /><!-- golden armor -->
-		<item id="8889" chance="290" /><!-- skullcracker armor -->
+		<item name="demonic essence" chance="12460" />
+		<item name="assassin star" countmax="5" chance="26650" />
+		<item name="dragon slayer" chance="860" />
+		<item name="dragonbone staff" chance="4000" />
+		<item name="great mana potion" chance="21490" />
+		<item name="great health potion" chance="21200" />
+		<item name="divine plate" chance="430" />
+		<item name="skullcracker armor" chance="290" />
+		<item name="gold ingot" chance="570" />
+		<item name="unholy bone" chance="33380" />
+		<item name="spellweaver's robe" chance="860" />
 	</loot>
 </monster>

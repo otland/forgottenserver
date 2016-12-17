@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rahemos" nameDescription="a rahemos" race="undead" experience="3100" speed="320" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Rahemos" nameDescription="Rahemos" race="undead" experience="3100" speed="320" manacost="0">
 	<health now="3700" max="3700" />
 	<look type="87" corpse="6031" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="150" poison="65" />
+		<attack name="melee" interval="2000" min="0" max="-750" poison="65" />
 		<attack name="lifedrain" interval="3000" chance="7" range="1" min="-75" max="-750" />
 		<attack name="energy" interval="2000" chance="20" range="7" min="-60" max="-600">
 			<attribute key="shootEffect" value="energy" />
@@ -70,18 +70,18 @@
 		<voice sentence="I will make you believe in magic." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="80" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
-		<item id="2150" countmax="3" chance="7000" /><!-- small amethyst -->
-		<item id="2214" chance="7000" /><!-- ring of healing -->
-		<item id="7590" chance="7000" /><!-- great mana potion -->
-		<item id="2662" chance="300" /><!-- magician hat -->
-		<item id="2176" chance="500" /><!-- orb -->
-		<item id="2185" chance="500" /><!-- necrotic rod -->
-		<item id="2153" chance="500" /><!-- violet gem -->
-		<item id="2184" chance="500" /><!-- crystal wand -->
-		<item id="2447" chance="200" /><!-- twin axe -->
-		<item id="2348" chance="100000" /><!-- ancient rune -->
+		<item name="gold coin" countmax="90" chance="50000" />
+		<item name="gold coin" countmax="80" chance="50000" />
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="small amethyst" countmax="3" chance="7000" />
+		<item name="violet gem" chance="500" />
+		<item name="orb" chance="500" />
+		<item name="crystal wand" chance="500" />
+		<item name="necrotic rod" chance="500" />
+		<item name="ring of healing" chance="7000" />
+		<item name="ancient rune" chance="100000" />
+		<item name="twin axe" chance="200" />
+		<item name="magician hat" chance="300" />
+		<item name="great mana potion" chance="7000" />
 	</loot>
 </monster>

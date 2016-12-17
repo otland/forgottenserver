@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Elder Bonelord" nameDescription="an elder bonelord" race="blood" experience="280" speed="180" manacost="0">
 	<health now="500" max="500" />
 	<look type="108" corpse="6037" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="55" />
+		<attack name="melee" interval="2000" min="0" max="-55" />
 		<attack name="energy" interval="2000" chance="5" range="7" min="-45" max="-60">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
@@ -29,7 +29,7 @@
 			<attribute key="areaEffect" value="mortarea" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="poison" interval="2000" chance="10" range="7" min="-20" max="-40">
+		<attack name="earth" interval="2000" chance="10" range="7" min="-20" max="-40">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="5" range="7" min="-45" max="-85">
@@ -61,16 +61,16 @@
 		<voice sentence="Inferior creatures, bow before my power!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="86" chance="30000" /><!-- gold coin -->
+		<item name="gold coin" countmax="86" chance="30000" />
 		<item id="2175" chance="7500" /><!-- spellbook -->
-		<item id="2509" chance="6000" /><!-- steel shield -->
-		<item id="2377" chance="6000" /><!-- two handed sword -->
-		<item id="7364" countmax="5" chance="10000" /><!-- sniper arrow -->
-		<item id="7589" chance="1000" /><!-- strong mana potion -->
-		<item id="2518" chance="150" /><!-- beholder shield -->
-		<item id="3972" chance="150" /><!-- beholder helmet -->
-		<item id="12468" chance="10025" /><!-- small flask of eyedrops -->
-		<item id="11193" chance="21725" /><!-- elder bonelord tentacle -->
-		<item id="11197" chance="850" /><!-- giant eye -->
+		<item name="two handed sword" chance="6000" />
+		<item name="steel shield" chance="6000" />
+		<item name="bonelord shield" chance="150" />
+		<item name="bonelord helmet" chance="150" />
+		<item name="sniper arrow" countmax="5" chance="10000" />
+		<item name="strong mana potion" chance="1000" />
+		<item name="elder bonelord tentacle" chance="21725" />
+		<item name="giant eye" chance="850" />
+		<item name="small flask of eyedrops" chance="10025" />
 	</loot>
 </monster>

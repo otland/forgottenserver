@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fury of the Emperor" nameDescription="a fury of the emperor" race="undead" experience="26600" speed="450" manacost="0">
+<monster name="Fury of the Emperor" nameDescription="Fury of the Emperor" race="undead" experience="26600" speed="450" manacost="0">
 	<health now="28800" max="28800" />
 	<look type="351" corpse="0" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="366" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="85" attack="145" />
+		<attack name="melee" interval="2000" min="0" max="-689" />
 		<attack name="physical" interval="3000" chance="17" length="8" spread="3" min="-250" max="-450">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>

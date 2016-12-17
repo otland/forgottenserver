@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rift Scythe" nameDescription="a rift scythe" race="undead" experience="2000" speed="370" manacost="0">
+<monster name="Rift Scythe" nameDescription="Rift Scythe" race="undead" experience="2000" speed="370" manacost="0">
 	<health now="3600" max="3600" />
 	<look type="300" corpse="0" />
 	<targetchange interval="5000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="135" attack="135" />
+		<attack name="melee" interval="2000" min="0" max="-979" />
 		<attack name="death" interval="2000" chance="60" range="7" target="1" min="0" max="-200">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />

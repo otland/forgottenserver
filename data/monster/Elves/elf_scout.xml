@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Elf Scout" nameDescription="a elf scout" race="blood" experience="75" speed="170" manacost="360">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Elf Scout" nameDescription="an elf scout" race="blood" experience="75" speed="170" manacost="360">
 	<health now="160" max="160" />
 	<look type="64" corpse="6012" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-30" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-80">
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
@@ -38,16 +38,16 @@
 		<voice sentence="Your existence will end here!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="25" chance="75000" /><!-- gold coin -->
-		<item id="2544" countmax="12" chance="30710" /><!-- arrow -->
-		<item id="2545" countmax="4" chance="15400" /><!-- poison arrow -->
-		<item id="2681" chance="17750" /><!-- grape -->
-		<item id="2031" chance="1350" /><!-- waterskin -->
-		<item id="12420" chance="9750" /><!-- Elven Scouting Glass -->
-		<item id="2642" chance="1180" /><!-- sandals -->
-		<item id="10552" chance="5200" /><!-- elvish talisman -->
-		<item id="2456" chance="4000" /><!-- bow -->
+		<item name="waterskin" chance="1350" />
+		<item name="gold coin" countmax="25" chance="75000" />
+		<item name="bow" chance="4000" />
+		<item name="arrow" countmax="12" chance="30710" />
+		<item name="poison arrow" countmax="4" chance="15400" />
+		<item name="sandals" chance="1180" />
+		<item name="grapes" chance="17750" />
 		<item id="5921" chance="1130" /><!-- heaven blossom -->
-		<item id="7438" chance="140" /><!-- elvish bow -->
+		<item name="elvish bow" chance="140" />
+		<item name="elvish talisman" chance="5200" />
+		<item name="elven scouting glass" chance="9750" />
 	</loot>
 </monster>

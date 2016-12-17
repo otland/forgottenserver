@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Gravedigger" nameDescription="a gravedigger" race="blood" experience="950" speed="230" manacost="0">
 	<health now="1500" max="1500" />
 	<look type="558" corpse="21279" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="200" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="80" poison="180" />
+		<attack name="melee" interval="2000" min="0" max="-320" poison="180" />
 		<attack name="manadrain" interval="2000" chance="10" range="1" min="-40" max="-250">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
@@ -57,20 +57,20 @@
 		<voice sentence="Put it there!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="137" chance="100000" /><!-- gold coin -->
-		<item id="2152" chance="24470" /><!-- platinum coin -->
-		<item id="11233" chance="9570" /><!-- unholy bone -->
-		<item id="2268" countmaxe="9" chance="7300" /><!-- sudden death rune -->
-		<item id="12449" chance="6000" /><!-- safety pin -->
-		<item id="2187" chance="5590" /><!-- wand of inferno -->
-		<item id="12440" chance="6650" /><!-- pile of grave earth -->
-		<item id="7588" countmax="2" chance="2260" /><!-- strong health potion -->
-		<item id="7589" countmax="2" chance="3600" /><!-- strong mana potion -->
-		<item id="2154" chance="800" /><!-- yellow gem -->
+		<item name="gold coin" countmax="137" chance="100000" />
+		<item name="platinum coin" chance="24470" />
+		<item name="yellow gem" chance="800" />
+		<item name="wand of inferno" chance="5590" />
+		<item name="sudden death rune" countmaxe="9" chance="7300" />
+		<item name="skull staff" chance="130" />
+		<item name="mysterious voodoo skull" chance="100" />
+		<item name="hardened bone" chance="50" />
 		<item id="6300" chance="800" /><!-- death ring -->
-		<item id="2436" chance="130" /><!-- skull staff -->
-		<item id="10609" chance="100" /><!-- lump of dirt -->
-		<item id="5669" chance="100" /><!-- mysterious voodoo skull -->
-		<item id="5925" chance="50" /><!-- hardened bone -->
+		<item name="strong health potion" countmax="2" chance="2260" />
+		<item name="strong mana potion" countmax="2" chance="3600" />
+		<item name="lump of dirt" chance="100" />
+		<item name="unholy bone" chance="9570" />
+		<item name="pile of grave earth" chance="6650" />
+		<item name="safety pin" chance="6000" />
 	</loot>
 </monster>

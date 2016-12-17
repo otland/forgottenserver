@@ -26,12 +26,6 @@
 
 extern ConfigManager g_config;
 
-Database::Database()
-{
-	handle = nullptr;
-	maxPacketSize = 1048576;
-}
-
 Database::~Database()
 {
 	if (handle != nullptr) {
@@ -251,7 +245,7 @@ bool DBResult::next()
 	return row != nullptr;
 }
 
-DBInsert::DBInsert(std::string query) : query(query)
+DBInsert::DBInsert(std::string query) : query(std::move(query))
 {
 	this->length = this->query.length();
 }

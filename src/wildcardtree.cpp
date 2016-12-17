@@ -105,8 +105,8 @@ void WildcardTreeNode::remove(const std::string& str)
 ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& result) const
 {
 	const WildcardTreeNode* cur = this;
-	for (size_t pos = 0; pos < query.length(); ++pos) {
-		cur = cur->getChild(query[pos]);
+	for (char pos : query) {
+		cur = cur->getChild(pos);
 		if (!cur) {
 			return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
 		}
@@ -119,7 +119,7 @@ ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& res
 		if (size == 0) {
 			return RETURNVALUE_NOERROR;
 		} else if (size > 1 || cur->breakpoint) {
-			return RETURNVALUE_NAMEISTOOAMBIGIOUS;
+			return RETURNVALUE_NAMEISTOOAMBIGUOUS;
 		}
 
 		auto it = cur->children.begin();

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Energy Overlord" nameDescription="an energy overlord" race="undead" experience="2800" speed="290" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Energy Overlord" nameDescription="an Energy Overlord" race="undead" experience="2800" speed="290" manacost="0">
 	<health now="4000" max="4000" />
 	<look type="290" corpse="8966" />
 	<targetchange interval="20000" chance="15" />
@@ -18,7 +18,7 @@
 		<flag runonhealth="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="energy" interval="2000" chance="25" length="7" spread="0" min="0" max="-800">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
@@ -43,8 +43,8 @@
 		<immunity energy="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="64" chance="100000" /><!-- gold coin -->
-		<item id="8306" chance="100000" /><!-- pure energy -->
-		<item id="2152" countmax="2" chance="25000" /><!-- platinum coin -->
+		<item name="gold coin" countmax="64" chance="100000" />
+		<item name="platinum coin" countmax="2" chance="25000" />
+		<item name="pure energy" chance="100000" />
 	</loot>
 </monster>

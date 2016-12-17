@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thul" nameDescription="a thul" race="blood" experience="2700" speed="520" manacost="670">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Thul" nameDescription="Thul" race="blood" experience="2700" speed="520" manacost="670">
 	<health now="2950" max="2950" />
 	<look type="46" corpse="6065" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="85" attack="285" />
+		<attack name="melee" interval="2000" min="0" max="-1354" />
 		<attack name="physical" interval="2000" chance="25" radius="3" min="0" max="-170">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
@@ -41,16 +41,16 @@
 		<immunity ice="1" />
 		<immunity earth="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Gaaahhh!" />
-	</voices>
 	<summons maxSummons="2">
 		<summon name="Massive Water Elementals" interval="2000" chance="10" max="2" />
 	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gaaahhh!" />
+	</voices>
 	<loot>
-		<item id="5895" chance="100000" /><!-- fish fin -->
-		<item id="2148" countmax="77" chance="50000" /><!-- gold coin -->
-		<item id="7383" chance="50000" /><!-- relic sword -->
-		<item id="2670" chance="25000" /><!-- shrimp -->
+		<item name="gold coin" countmax="77" chance="50000" />
+		<item name="shrimp" chance="25000" />
+		<item name="fish fin" chance="100000" />
+		<item name="relic sword" chance="50000" />
 	</loot>
 </monster>

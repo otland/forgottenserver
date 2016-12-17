@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Barbarian Brutetamer" nameDescription="a barbarian brutetamer" race="blood" experience="90" speed="190" manacost="0">
 	<health now="145" max="145" />
 	<look type="264" head="78" body="116" legs="95" feet="121" corpse="20339" />
@@ -18,7 +18,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="physical" interval="2000" chance="20" range="7" radius="1" target="1" min="0" max="-34">
 			<attribute key="shootEffect" value="snowball" />
 		</attack>
@@ -51,17 +51,17 @@
 		<voice sentence="My instincts tell me about your cowardice." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="58000" /><!-- gold coin -->
-		<item id="3965" chance="5250" /><!-- hunting spear -->
-		<item id="2686" countmax="2" chance="11000" /><!-- corncob -->
-		<item id="2464" chance="8900" /><!-- chain armor -->
-		<item id="2401" chance="6500" /><!-- staff -->
-		<item id="7343" chance="7540" /><!-- fur bag -->
 		<item id="1958" chance="5000" /><!-- grey small book -->
-		<item id="7620" chance="630" /><!-- mana potion -->
-		<item id="7379" chance="380" /><!-- brutetamer's staff -->
-		<item id="7457" chance="160" /><!-- fur boots -->
-		<item id="7464" chance="90" /><!-- mammoth fur shorts -->
-		<item id="7463" chance="160" /><!-- mammoth fur cape -->
+		<item name="gold coin" countmax="15" chance="58000" />
+		<item id="2401" chance="6500" /><!-- staff -->
+		<item name="chain armor" chance="8900" />
+		<item name="corncob" countmax="2" chance="11000" />
+		<item name="hunting spear" chance="5250" />
+		<item name="fur bag" chance="7540" />
+		<item name="brutetamer's staff" chance="380" />
+		<item name="fur boots" chance="160" />
+		<item name="mammoth fur cape" chance="160" />
+		<item name="mammoth fur shorts" chance="90" />
+		<item name="mana potion" chance="630" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ghoul" nameDescription="a ghoul" race="blood" experience="85" speed="170" manacost="450">
 	<health now="100" max="100" />
 	<look type="18" corpse="5976" />
@@ -42,16 +42,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="30" chance="68000" />	<!-- gold coin -->
-		<item id="11208" chance="14470" />				<!-- rotten piece of cloth -->
-		<item id="3976" countmax="2" chance="9600" />	<!-- worm -->
-		<item id="12423" chance="5130" />				<!-- ghoul snack -->
-		<item id="2050" chance="5000" />					<!-- torch -->
-		<item id="2483" chance="1000" />					<!-- scale armor -->
-		<item id="5913" chance="1000" />					<!-- brown piece of cloth -->
-		<item id="2473" chance="990" />					<!-- viking helmet -->
-		<item id="12440" chance="950" />					<!-- pile of grave earth -->
-		<item id="2229" chance="240" />					<!-- skull -->
-		<item id="2168" chance="180" />					<!-- life ring -->
+		<item id="2050" chance="5000" /><!-- torch -->
+		<item name="gold coin" countmax="30" chance="68000" />
+		<item name="life ring" chance="180" />
+		<item id="2229" chance="240" /><!-- skull -->
+		<item name="viking helmet" chance="990" />
+		<item name="scale armor" chance="1000" />
+		<item name="worm" countmax="2" chance="9600" />
+		<item name="brown piece of cloth" chance="1000" />
+		<item name="rotten piece of cloth" chance="14470" />
+		<item name="ghoul snack" chance="5130" />
+		<item name="pile of grave earth" chance="950" />
 	</loot>
 </monster>

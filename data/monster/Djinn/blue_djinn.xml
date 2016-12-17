@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blue Djinn" nameDescription="a blue djinn" race="blood" experience="215" speed="180" manacost="0">
 	<health now="330" max="330" />
 	<look type="80" corpse="6020" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 		<attack name="fire" interval="2000" chance="15" range="7" min="-45" max="-80">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
@@ -54,17 +54,17 @@
 		<voice sentence="Wishes can come true." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="70" chance="60000" /><!-- gold coin -->
-		<item id="2148" countmax="45" chance="70000" /><!-- gold coin -->
-		<item id="2684" chance="23480" /><!-- carrot -->
-		<item id="7378" countmax="2" chance="4500" /><!-- royal spear -->
-		<item id="2146" countmax="4" chance="2560" /><!-- small sapphire -->
-		<item id="2063" chance="690" /><!-- small oil lamp -->
 		<item id="1963" chance="2350" /><!-- blue book -->
-		<item id="5912" chance="1920" /><!-- blue piece of cloth -->
-		<item id="7620" chance="860" /><!-- mana potion -->
-		<item id="2745" chance="440" /><!-- blue rose -->
-		<item id="2663" chance="70" /><!-- mystic turban -->
-		<item id="12412" chance="1890" /><!-- dirty turban -->
+		<item name="small oil lamp" chance="690" />
+		<item name="small sapphire" countmax="4" chance="2560" />
+		<item name="gold coin" countmax="70" chance="60000" />
+		<item name="gold coin" countmax="45" chance="70000" />
+		<item name="mystic turban" chance="70" />
+		<item id="2684" chance="23480" /><!-- carrot -->
+		<item name="blue rose" chance="440" />
+		<item name="blue piece of cloth" chance="1920" />
+		<item name="royal spear" countmax="2" chance="4500" />
+		<item name="mana potion" chance="860" />
+		<item name="dirty turban" chance="1890" />
 	</loot>
 </monster>

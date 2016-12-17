@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Cavebear" nameDescription="an undead cavebear" race="blood" experience="600" speed="250" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Undead Cavebear" nameDescription="Undead Cavebear" race="blood" experience="600" speed="250" manacost="0">
 	<health now="450" max="450" />
 	<look type="384" corpse="13323" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-15" max="-400" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 	</attacks>
 	<defenses armor="23" defense="27" />
 	<elements>
@@ -30,9 +30,9 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="80" chance="9750" /><!-- gold coin -->
-		<item id="13303" chance="3150" /><!-- cavebear skull -->
-		<item id="13302" chance="2350" /><!-- maxilla -->
-		<item id="13291" chance="900" /><!-- maxilla maximus -->
+		<item name="gold coin" countmax="80" chance="9750" />
+		<item name="maxilla maximus" chance="900" />
+		<item name="maxilla" chance="2350" />
+		<item name="cavebear skull" chance="3150" />
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Vampire Bride" nameDescription="a vampire bride" race="blood" experience="1050" speed="230" manacost="0">
 	<health now="1200" max="1200" />
 	<look type="312" corpse="9658" />
@@ -59,22 +59,22 @@
 		<voice sentence="You won't regret you came to me, sweetheart." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="149" chance="90000" />	<!-- gold coin -->
-		<item id="7589" chance="10210" />				<!-- strong mana potion -->
-		<item id="10602" chance="10000" />				<!-- vampire teeth -->
-		<item id="2152" chance="9910" />					<!-- platinum coin -->
-		<item id="2186" chance="5500" />					<!-- moonlight rod -->
-		<item id="7588" chance="5000" />					<!-- strong health potion -->
-		<item id="12405" chance="4950" />				<!-- blood preservation -->
-		<item id="2127" chance="1100" />					<!-- emerald bangle -->
-		<item id="8873" chance="1030" />					<!-- hibiscus dress -->
-		<item id="2145" countmax="2" chance="1020" />	<!-- small diamond -->
-		<item id="9809" chance="1010" />					<!-- rusty armor (semi-rare) -->
-		<item id="9837" chance="970" />					<!-- velvet tapestry -->
-		<item id="2195" chance="220" />					<!-- boots of haste -->
-		<item id="7733" chance="200" />					<!-- flower bouquet -->
-		<item id="5670" chance="170" />					<!-- mysterious voodo skull -->
-		<item id="9447" chance="60" />					<!-- blood goblet -->
-		<item id="13293" chance="20" />					<!-- leather whip -->
+		<item name="emerald bangle" chance="1100" />
+		<item name="small diamond" countmax="2" chance="1020" />
+		<item name="gold coin" countmax="149" chance="90000" />
+		<item name="platinum coin" chance="9910" />
+		<item name="moonlight rod" chance="5500" />
+		<item name="boots of haste" chance="220" />
+		<item name="enigmatic voodoo skull" chance="170" />
+		<item name="strong health potion" chance="5000" />
+		<item name="strong mana potion" chance="10210" />
+		<item id="7733" chance="200" /><!-- flower bouquet -->
+		<item name="hibiscus dress" chance="1030" />
+		<item name="blood goblet" chance="60" />
+		<item id="9809" chance="1010" /><!-- rusty armor (semi-rare) -->
+		<item id="9837" chance="970" /><!-- velvet tapestry -->
+		<item name="vampire teeth" chance="10000" />
+		<item name="blood preservation" chance="4950" />
+		<item name="leather whip" chance="20" />
 	</loot>
 </monster>

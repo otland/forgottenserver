@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Frost Troll" nameDescription="a frost troll" race="blood" experience="23" speed="190" manacost="300">
 	<health now="55" max="55" />
 	<look type="53" corpse="5998" />
@@ -32,13 +32,13 @@
 		<voice sentence="Broar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="50840" />	<!-- gold coin -->
-		<item id="2389" chance="21500" />				<!-- spear -->
-		<item id="2667" chance="18000" />				<!-- fish -->
-		<item id="2512" chance="15850" />				<!-- wooden shield -->
-		<item id="2384" chance="15500" />				<!-- rapier -->
-		<item id="2245" chance="8300" />					<!-- twigs -->
-		<item id="10565" chance="2000" />				<!-- frosty ear of a troll -->
-		<item id="2651" chance="1200" />					<!-- coat -->
+		<item name="gold coin" countmax="12" chance="50840" />
+		<item name="twigs" chance="8300" />
+		<item name="rapier" chance="15500" />
+		<item name="spear" chance="21500" />
+		<item id="2512" chance="15850" /><!-- wooden shield -->
+		<item name="coat" chance="1200" />
+		<item id="2667" chance="18000" /><!-- fish -->
+		<item name="frosty ear of a troll" chance="2000" />
 	</loot>
 </monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Snake Thing" nameDescription="snake thing" race="venom" experience="4600" speed="240" manacost="0">
+<monster name="Snake Thing" nameDescription="Snake Thing" race="venom" experience="4600" speed="240" manacost="0">
 	<health now="20000" max="20000" />
 	<look type="220" corpse="12385" />
 	<targetchange interval="2000" chance="10" />
@@ -17,14 +17,14 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="160" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="earth" interval="2000" chance="35" length="8" spread="3" max="-500">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="manadrain" interval="2000" chance="40" length="8" spread="0" max="-2398">
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
-		<attack name="poison" interval="2000" chance="30" radius="6" target="0" min="-30" max="-600">
+		<attack name="earth" interval="2000" chance="30" radius="6" target="0" min="-30" max="-600">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dark Apprentice" nameDescription="a dark apprentice" race="blood" experience="100" speed="190" manacost="0">
 	<health now="225" max="225" />
 	<look type="133" head="78" body="57" legs="95" feet="115" addons="1" corpse="20363" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-60" />
 		<attack name="fire" interval="2000" chance="10" range="7" min="-2" max="-26">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
@@ -53,13 +53,13 @@
 		<voice sentence="I must dispose of my masters enemies!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="45" chance="7500" /><!-- gold coin -->
-		<item id="2260" countmax="3" chance="8125" /><!-- blank rune -->
-		<item id="7620" chance="2980" /><!-- mana potion -->
+		<item name="gold coin" countmax="45" chance="7500" />
+		<item name="wand of decay" chance="110" />
+		<item name="wand of dragonbreath" chance="1980" />
+		<item name="blank rune" countmax="3" chance="8125" />
 		<item id="6079" chance="12100" /><!-- dead frog -->
-		<item id="2191" chance="1980" /><!-- wand of dragonbreath -->
-		<item id="7618" chance="2900" /><!-- health potion -->
-		<item id="2188" chance="110" /><!-- wand of decay -->
-		<item id="13295" chance="10" /><!-- reins -->
+		<item name="health potion" chance="2900" />
+		<item name="mana potion" chance="2980" />
+		<item name="reins" chance="10" />
 	</loot>
 </monster>

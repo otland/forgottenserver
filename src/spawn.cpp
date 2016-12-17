@@ -31,13 +31,7 @@ extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;
 
-#define MINSPAWN_INTERVAL 1000
-
-Spawns::Spawns()
-{
-	loaded = false;
-	started = false;
-}
+static constexpr int32_t MINSPAWN_INTERVAL = 1000;
 
 bool Spawns::loadFromXml(const std::string& filename)
 {

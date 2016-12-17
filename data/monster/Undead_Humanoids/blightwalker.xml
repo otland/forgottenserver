@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Blightwalker" nameDescription="a blightwalker" race="undead" experience="5850" speed="250" manacost="0">
 	<health now="8900" max="8900" />
 	<look type="246" corpse="6354" />
@@ -52,29 +52,29 @@
 		<voice sentence="Your lifeforce is waning!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="197" chance="100000" />	<!-- gold coin -->
-		<item id="2152" countmax="5" chance="100000" />		<!-- platinum coin -->
-		<item id="2694" chance="50000" />					<!-- bunch of wheat -->
-		<item id="7590" countmax="3" chance="31360" />		<!-- great mana potion -->
-		<item id="6500" chance="28000" />					<!-- demonic essence -->
-		<item id="2260" countmax="2" chance="26250" />		<!-- blank rune -->
-		<item id="5944" chance="23720" />					<!-- soul orb -->
-		<item id="10605" chance="15000" />					<!-- bundle of cursed straw -->
-		<item id="8473" countmax="2" chance="14720" />		<!-- ultimate health potion -->
-		<item id="2183" chance="10000" />					<!-- hailstorm rod -->
-		<item id="7368" countmax="10" chance="5900" />		<!-- assassin star -->
-		<item id="9971" chance="5270" />						<!-- gold ingot -->
-		<item id="7632" chance="4450" />						<!-- giant shimmering pearl -->
-		<item id="7633" chance="4450" />						<!-- giant shimmering pearl -->
-		<item id="7732" chance="4300" />						<!-- seeds -->
-		<item id="2550" chance="3000" />						<!-- scythe -->
-		<item id="7885" chance="2500" />						<!-- terra legs -->
-		<item id="2199" chance="2050" />						<!-- garlic necklace -->
-		<item id="2179" chance="1870" />						<!-- gold ring -->
-		<item id="2436" chance="1520" />						<!-- skull staff -->
-		<item id="6300" chance="1410" />						<!-- death ring -->
-		<item id="7884" chance="1050" />						<!-- terra mantle -->
-		<item id="2418" chance="350" />						<!-- golden sickle -->
-		<item id="2173" chance="120" />						<!-- amulet of loss -->
+		<item name="gold coin" countmax="197" chance="100000" />
+		<item name="platinum coin" countmax="5" chance="100000" />
+		<item name="amulet of loss" chance="120" />
+		<item name="gold ring" chance="1870" />
+		<item name="hailstorm rod" chance="10000" />
+		<item name="garlic necklace" chance="2050" />
+		<item name="blank rune" countmax="2" chance="26250" />
+		<item name="golden sickle" chance="350" />
+		<item name="skull staff" chance="1520" />
+		<item name="scythe" chance="3000" />
+		<item name="bunch of wheat" chance="50000" />
+		<item name="soul orb" chance="23720" />
+		<item id="6300" chance="1410" /><!-- death ring -->
+		<item name="demonic essence" chance="28000" />
+		<item name="assassin star" countmax="10" chance="5900" />
+		<item name="great mana potion" countmax="3" chance="31360" />
+		<item id="7632" chance="4450" /><!-- giant shimmering pearl -->
+		<item id="7633" chance="4450" /><!-- giant shimmering pearl -->
+		<item name="seeds" chance="4300" />
+		<item name="terra mantle" chance="1050" />
+		<item name="terra legs" chance="2500" />
+		<item name="ultimate health potion" countmax="2" chance="14720" />
+		<item name="gold ingot" chance="5270" />
+		<item name="bundle of cursed straw" chance="15000" />
 	</loot>
 </monster>

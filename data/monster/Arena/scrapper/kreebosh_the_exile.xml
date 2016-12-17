@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Kreebosh the Exile" nameDescription="kreebosh the exile" race="blood" experience="350" speed="270" manacost="0">
-	<health now="880" max="880" />
+<monster name="Kreebosh the Exile" nameDescription="Kreebosh the Exile" race="blood" experience="350" speed="270" manacost="0">
+	<health now="705" max="705" />
 	<look type="103" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -13,11 +13,11 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="fire" interval="6000" chance="80" radius="3" min="0" max="-120">
 			<attribute key="areaEffect" value="energy" />
 		</attack>
-		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="20000" speed="-450">
+		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="5" duration="20000" speedchange="-450">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 		<attack name="physical" interval="6000" chance="40" radius="1" target="1" range="5" min="-20" max="-100">

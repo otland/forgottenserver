@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Troll Champion" nameDescription="a troll champion" race="blood" experience="40" speed="190" manacost="340">
 	<health now="75" max="75" />
 	<look type="281" corpse="7926" />
@@ -33,15 +33,15 @@
 		<voice sentence="Groar" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="64000" />	<!-- gold coin -->
-		<item id="2389" chance="25000" />				<!-- spear -->
-		<item id="2666" chance="9650" />					<!-- meat -->
-		<item id="2643" chance="9000" />					<!-- leather boots -->
-		<item id="2512" chance="6000" />					<!-- wooden shield -->
-		<item id="2544" countmax="5" chance="5450" />	<!-- arrow -->
-		<item id="2448" chance="5450" />					<!-- studded club -->
-		<item id="10606" chance="3000" />				<!-- bunch of troll hair -->
-		<item id="12471" chance="750" />					<!-- trollroot -->
-		<item id="2170" chance="230" />					<!-- silver amulet -->
+		<item name="gold coin" countmax="12" chance="64000" />
+		<item name="silver amulet" chance="230" />
+		<item name="spear" chance="25000" />
+		<item name="studded club" chance="5450" />
+		<item id="2512" chance="6000" /><!-- wooden shield -->
+		<item name="arrow" countmax="5" chance="5450" />
+		<item name="leather boots" chance="9000" />
+		<item name="meat" chance="9650" />
+		<item name="bunch of troll hair" chance="3000" />
+		<item name="trollroot" chance="750" />
 	</loot>
 </monster>

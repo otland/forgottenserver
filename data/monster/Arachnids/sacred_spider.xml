@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485">
 	<health now="550" max="550" />
 	<look type="219" corpse="6060" />
@@ -30,11 +30,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
-		<item id="2148" countmax="19" chance="50000" /><!-- gold coin -->
-		<item id="8859" chance="25000" /><!-- spider fangs -->
-		<item id="2159" countmax="4" chance="7142" /><!-- scarab coin -->
-		<item id="2463" chance="4761" /><!-- plate armor -->
-		<item id="9971" chance="95" /><!-- gold ingot -->
+		<item name="gold coin" countmax="100" chance="40000" />
+		<item name="gold coin" countmax="19" chance="50000" />
+		<item name="scarab coin" countmax="4" chance="7142" />
+		<item name="plate armor" chance="4761" />
+		<item name="spider fangs" chance="25000" />
+		<item name="gold ingot" chance="95" />
 	</loot>
 </monster>

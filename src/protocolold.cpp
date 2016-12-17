@@ -48,7 +48,9 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(12);
 
 	if (version <= 760) {
-		disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+		std::ostringstream ss;
+		ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
+		disconnectClient(ss.str());
 		return;
 	}
 
@@ -69,5 +71,7 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 		disableChecksum();
 	}
 
-	disconnectClient("Only clients with protocol " CLIENT_VERSION_STR " allowed!");
+	std::ostringstream ss;
+	ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
+	disconnectClient(ss.str());
 }
