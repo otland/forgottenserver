@@ -5863,6 +5863,8 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
+	
+	splitItem->setSubType(count);
 
 	ScriptEnvironment* env = getScriptEnv();
 	uint32_t uid = env->addThing(item);
@@ -6229,7 +6231,7 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	}
 
 	if (item->getParent() == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, g_game.internalAddItem(toCylinder, item) == RETURNVALUE_NOERROR);
+		pushBoolean(L, g_game.internalAddItem(toCylinder, item, INDEX_WHEREEVER, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE) == RETURNVALUE_NOERROR);
 	} else {
 		Item* moveItem = nullptr;
 		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toCylinder, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
