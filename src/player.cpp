@@ -4055,7 +4055,7 @@ bool Player::toggleMount(bool mount)
 		}
 
 		const Outfit* playerOutfit = Outfits::getInstance()->getOutfitByLookType(getSex(), defaultOutfit.lookType);
-		if (!playerOutfit) {
+		if (!playerOutfit || playerOutfit->lookType == 75) {
 			return false;
 		}
 
