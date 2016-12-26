@@ -18,6 +18,7 @@
 	<event class="Player" method="onLookInShop" enabled="0" />
 	<event class="Player" method="onMoveItem" enabled="0" />
 	<event class="Player" method="onMoveCreature" enabled="0" />
+	<event class="Player" method="onWrapItem" enabled="1" />
 	<event class="Player" method="onTurn" enabled="0" />
 	<event class="Player" method="onTradeRequest" enabled="0" />
 	<event class="Player" method="onTradeAccept" enabled="0" />

@@ -17590,6 +17590,7 @@
 	</item>
 	<item id="9975" article="a" name="crystal table">
 		<attribute key="weight" value="2500" />
+		<attribute key="wrapTo" value="9974" />
 	</item>
 	<item id="9976" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />

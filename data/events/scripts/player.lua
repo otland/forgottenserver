@@ -93,6 +93,18 @@ function Player:onMoveCreature(creature, fromPosition, toPosition)
 	return true
 end
 
+function Player:onWrapItem(item)
+	local pos = item:getPosition()
+	local house = Tile(pos):getHouse()
+	
+	if house then
+		return true
+	end
+	
+	self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap this item inside a house.")
+	return false
+end
+
 function Player:onTurn(direction)
 	return true
 end

@@ -639,6 +639,9 @@ class Item : virtual public Thing
 			const ItemType& it = items[id];
 			return it.rotatable && it.rotateTo;
 		}
+		bool isWrappable() const {
+			return items[id].wrapTo != 0;
+		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
 		}
