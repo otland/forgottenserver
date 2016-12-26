@@ -2265,15 +2265,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& pos, uint8_t stackP
 		return;
 	}
 
-	if (!g_events->eventPlayerOnWrapItem(player, item)) {
-		return;
-	}
-
-	uint16_t newId = Item::items[item->getID()].wrapTo;
-
-	if (newId != 0) {
-		transformItem(item, newId);
-	}
+	g_events->eventPlayerOnWrapItem(player, item)
 }
 
 void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text)

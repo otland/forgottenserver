@@ -99,10 +99,13 @@ function Player:onWrapItem(item)
 	
 	if not house then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap this item inside a house.")
-		return false
+		return
 	end
 	
-	return true
+	local wrapId = item:getType():getWrapId()
+	if wrapId ~= 0 then
+		item:transform(wrapId)
+	end
 end
 
 function Player:onTurn(direction)
