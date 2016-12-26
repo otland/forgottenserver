@@ -2270,7 +2270,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& pos, uint8_t stackP
 	}
 
 	uint16_t newId = Item::items[item->getID()].wrapTo;
-	//player event here
+
 	if (newId != 0) {
 		transformItem(item, newId);
 	}
