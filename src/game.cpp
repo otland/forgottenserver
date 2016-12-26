@@ -2265,7 +2265,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& pos, uint8_t stackP
 		return;
 	}
 
-	g_events->eventPlayerOnWrapItem(player, item)
+	g_events->eventPlayerOnWrapItem(player, item);
 }
 
 void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text)
