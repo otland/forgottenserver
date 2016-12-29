@@ -31,6 +31,8 @@
 
 extern Game g_game;
 
+namespace {
+
 std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue)
 {
 	lua_getglobal(L, identifier);
@@ -73,6 +75,8 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	int val = lua_toboolean(L, -1);
 	lua_pop(L, 1);
 	return val != 0;
+}
+
 }
 
 bool ConfigManager::load()
