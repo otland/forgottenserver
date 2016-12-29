@@ -138,6 +138,7 @@ function getCreaturePosition(cid) local c = Creature(cid) return c ~= nil and c:
 function getCreatureOutfit(cid) local c = Creature(cid) return c ~= nil and c:getOutfit() or false end
 function getCreatureSpeed(cid) local c = Creature(cid) return c ~= nil and c:getSpeed() or false end
 function getCreatureBaseSpeed(cid) local c = Creature(cid) return c ~= nil and c:getBaseSpeed() or false end
+function getCreatureCondition(cid, ...) local c = Creature(cid) return c ~= nil and c:hasCondition(...) or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
