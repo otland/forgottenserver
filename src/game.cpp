@@ -1812,6 +1812,11 @@ void Game::playerCloseChannel(uint32_t playerId, uint16_t channelId)
 		return;
 	}
 
+	if(channelId == CHANNEL_CAST && (player->isLiveCasting() || player->isSpectating())) {
+		player->sendChannel(CHANNEL_CAST, "Live Cast", nullptr, nullptr);
+		return;
+	}
+
 	g_chat->removeUserFromChannel(*player, channelId);
 }
 
@@ -3302,7 +3307,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	result = g_spells->playerSaySpell(player, words);
 	if (result == TALKACTION_BREAK) {
 		if (!g_config.getBoolean(ConfigManager::EMOTE_SPELLS)) {
-			return internalCreatureSay(player, TALKTYPE_SAY, words, false);
+			return internalCreatureSay(player, TALKTYPE_SPELL, words, false);
 		} else {
 			return internalCreatureSay(player, TALKTYPE_MONSTER_SAY, words, false);
 		}

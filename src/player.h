@@ -26,7 +26,7 @@
 #include "outfit.h"
 #include "enums.h"
 #include "vocation.h"
-#include "protocolgame.h"
+#include "protocolspectator.h"
 #include "ioguild.h"
 #include "party.h"
 #include "inbox.h"
@@ -713,9 +713,9 @@ class Player final : public Creature, public Cylinder
 			}
 		}
 
-		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel) {
+		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel, bool broadcast = true) {
 			if (client) {
-				client->sendChannelMessage(author, text, type, channel);
+				client->sendChannelMessage(author, text, type, channel, broadcast);
 			}
 		}
 		void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent) {
@@ -1126,6 +1126,63 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
+		void addSpectator(ProtocolSpectator* spectator) {
+			spectators.push_back(spectator);
+			spectatorCount++;
+			std::ostringstream query;
+			query << "UPDATE `live_casts` SET `spectators` = '" << spectatorCount << "' WHERE `player_id` = '" << getGUID() << "';";
+			Database::getInstance()->executeQuery(query.str());
+		}
+
+		void removeSpectator(ProtocolSpectator* spectator) {
+			spectators.erase(std::remove(spectators.begin(), spectators.end(), spectator), spectators.end());
+			spectatorCount--;
+			std::ostringstream query;
+			query << "UPDATE `live_casts` SET `spectators` = '" << spectatorCount << "' WHERE `player_id` = '" << getGUID() << "';";
+			Database::getInstance()->executeQuery(query.str());
+		}
+
+		std::vector<ProtocolSpectator*> getSpectators() {
+			return spectators;
+		}
+
+		uint32_t getSpectatorCount() {
+			return spectatorCount;
+		}
+
+		bool isLiveCasting() {
+			return liveCasting;
+		}
+
+		bool stopLiveCasting() {
+			liveCasting = false;
+			castPassword = "";
+			for(ProtocolSpectator* spectator : spectators) {
+				spectator->disconnect();
+				removeSpectator(spectator);
+			}
+			std::ostringstream query;
+			query << "DELETE FROM `live_casts` WHERE `player_id` = '" << getGUID() << "';";
+			Database::getInstance()->executeQuery(query.str());
+			return liveCasting == false;
+		}
+
+		bool startLiveCasting(std::string password) {
+			liveCasting = true;
+			if(!password.empty()) {
+				castPassword = password;
+			}
+			sendChannel(CHANNEL_CAST, "Live Cast", nullptr, nullptr);
+			std::ostringstream query;
+			query << "INSERT INTO `live_casts` (`player_id`, `name`, `password`, `spectators`) VALUES ('" << getGUID() <<"', '" << getName() << "', '" << password << "', '0');";
+			Database::getInstance()->executeQuery(query.str());
+			return liveCasting;
+		}
+
+		bool isSpectating() {
+			return isSpectator;
+		}
+
 	protected:
 		std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1182,6 +1239,9 @@ class Player final : public Creature, public Cylinder
 		std::map<uint32_t, int32_t> storageMap;
 
 		std::vector<OutfitEntry> outfits;
+		std::vector<ProtocolSpectator*> spectators;
+		std::vector<Player*> spectatorMutes;
+		std::unordered_map<std::string, uint32_t> spectatorBans;
 		GuildWarList guildWarList;
 
 		std::list<ShopInfo> shopItemList;
@@ -1193,6 +1253,7 @@ class Player final : public Creature, public Cylinder
 
 		std::string name;
 		std::string guildNick;
+		std::string castPassword;
 
 		Skill skills[SKILL_LAST + 1];
 		LightInfo itemsLight;
@@ -1260,6 +1321,7 @@ class Player final : public Creature, public Cylinder
 		int32_t offlineTrainingSkill = -1;
 		int32_t offlineTrainingTime = 0;
 		int32_t idleTime = 0;
+		uint32_t spectatorCount = 0;
 
 		uint16_t lastStatsTrainingTime = 0;
 		uint16_t staminaMinutes = 2520;
@@ -1287,6 +1349,9 @@ class Player final : public Creature, public Cylinder
 		bool isConnecting = false;
 		bool addAttackSkillPoint = false;
 		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+		bool isSpectator = false;
+		bool liveCasting = false;
+		bool liveChatDisabled = false;
 
 		static uint32_t playerAutoID;
 
@@ -1332,6 +1397,7 @@ class Player final : public Creature, public Cylinder
 		friend class Actions;
 		friend class IOLoginData;
 		friend class ProtocolGame;
+		friend class ProtocolSpectator;
 };
 
 #endif

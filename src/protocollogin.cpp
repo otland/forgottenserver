@@ -107,9 +107,73 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(1);
 		output->add<uint32_t>(0);
 	} else {
-		output->addByte(0);
+		output->addByte(1);
 		output->add<uint32_t>(time(nullptr) + (account.premiumDays * 86400));
 	}
+
+	send(output);
+
+	disconnect();
+}
+
+void ProtocolLogin::getCasterList(const std::string& accountName, const std::string& password, uint16_t version)
+{
+	std::list<std::string> casts = IOLoginData::liveCastAuthentication(password);
+	if (casts.empty()) {
+		if(password != "") {
+			disconnectClient("There are currently no live casts available.\nPlease check your password and try again.", version);
+		} else {
+			disconnectClient("There are currently no live casts available.", version);
+		}
+		return;
+	}
+
+	uint32_t ticks = time(nullptr) / AUTHENTICATOR_PERIOD;
+
+	auto output = OutputMessagePool::getOutputMessage();
+	output->addByte(0x0C);
+	output->addByte(0);
+
+	const std::string& motd = g_config.getString(ConfigManager::MOTD);
+	if (!motd.empty()) {
+		//Add MOTD
+		output->addByte(0x14);
+
+		std::ostringstream ss;
+		ss << g_game.getMotdNum() << "\n" << motd;
+		output->addString(ss.str());
+	}
+
+	//Add session key
+	output->addByte(0x28);
+	output->addString(accountName + "\n" + password + "\n" + "" + "\n" + std::to_string(ticks));
+
+	//Add char list
+	output->addByte(0x64);
+
+	output->addByte(1); // number of worlds
+
+	output->addByte(0); // world id
+	output->addString("Live Cast");
+	output->addString(g_config.getString(ConfigManager::IP));
+	output->add<uint16_t>(g_config.getNumber(ConfigManager::LIVE_CAST_PORT));
+	output->addByte(0);
+
+	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), casts.size());
+	output->addByte(size);
+	/*for (uint8_t i = 0; i < size; i++) {
+		output->addByte(0);
+		output->addString(casts[i]);
+	}*/
+	for(std::string name : casts) {
+		output->addByte(0);
+		output->addString(name);
+	}
+
+	//Add premium days
+	output->addByte(0);
+	output->addByte(1);
+	output->add<uint32_t>(0);
 
 	send(output);
 
@@ -193,12 +257,18 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	std::string accountName = msg.getString();
+	std::string password = msg.getString();
+
+	auto thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this());
 	if (accountName.empty()) {
-		disconnectClient("Invalid account name.", version);
+		if(g_config.getBoolean(ConfigManager::LIVE_CAST_ENABLED) == false) {
+			disconnectClient("Invalid account name.", version);
+		} else {
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCasterList, thisPtr, accountName, password, version)));
+		}
 		return;
 	}
 
-	std::string password = msg.getString();
 	if (password.empty()) {
 		disconnectClient("Invalid password.", version);
 		return;
@@ -213,6 +283,5 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string authToken = msg.getString();
 
-	auto thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this());
 	g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCharacterList, thisPtr, accountName, password, authToken, version)));
 }
