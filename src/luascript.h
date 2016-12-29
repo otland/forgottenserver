@@ -429,7 +429,6 @@ class LuaScriptInterface
 		static int luaGetPlayerFlagValue(lua_State* L);
 		static int luaGetCreatureCondition(lua_State* L);
 
-		static int luaGetPlayerInstantSpellInfo(lua_State* L);
 		static int luaGetPlayerInstantSpellCount(lua_State* L);
 
 		static int luaGetWorldTime(lua_State* L);
@@ -940,6 +939,7 @@ class LuaScriptInterface
 		static int luaPlayerLearnSpell(lua_State* L);
 		static int luaPlayerForgetSpell(lua_State* L);
 		static int luaPlayerHasLearnedSpell(lua_State* L);
+		static int luaPlayerGetInstantSpellInfo(lua_State* L);
 
 		static int luaPlayerSendTutorial(lua_State* L);
 		static int luaPlayerAddMapMark(lua_State* L);
