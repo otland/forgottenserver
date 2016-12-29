@@ -919,9 +919,6 @@ void LuaScriptInterface::registerFunctions()
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
-	//getCreatureCondition(cid, condition[, subId])
-	lua_register(luaState, "getCreatureCondition", LuaScriptInterface::luaGetCreatureCondition);
-
 	//isValidUID(uid)
 	lua_register(luaState, "isValidUID", LuaScriptInterface::luaIsValidUID);
 
@@ -2081,6 +2078,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getCondition", LuaScriptInterface::luaCreatureGetCondition);
 	registerMethod("Creature", "addCondition", LuaScriptInterface::luaCreatureAddCondition);
 	registerMethod("Creature", "removeCondition", LuaScriptInterface::luaCreatureRemoveCondition);
+	registerMethod("Creature", "hasCondition", LuaScriptInterface::luaCreatureHasCondition);
 
 	registerMethod("Creature", "remove", LuaScriptInterface::luaCreatureRemove);
 	registerMethod("Creature", "teleportTo", LuaScriptInterface::luaCreatureTeleportTo);
@@ -3672,18 +3670,18 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGetCreatureCondition(lua_State* L)
+int LuaScriptInterface::luaCreatureHasCondition(lua_State* L)
 {
-	Creature* creature = getCreature(L, 1);
+	//creature:hasCondition(conditionType, subId)
+	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
+		lua_pushnil(L);
 		return 1;
 	}
 
-	ConditionType_t condition = getNumber<ConditionType_t>(L, 2);
+	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
 	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
-	pushBoolean(L, creature->hasCondition(condition, subId));
+	pushBoolean(L, creature->hasCondition(conditionType, subId));
 	return 1;
 }
 

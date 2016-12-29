@@ -1006,3 +1006,5 @@ end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
+
+function getCreatureCondition(cid, type, subId) local c = Creature(cid) return c ~= nil and c:hasCondition(type, subId) or false end
