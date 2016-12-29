@@ -103,7 +103,7 @@ struct Skill {
 	uint8_t percent = 0;
 };
 
-typedef std::map<uint32_t, uint32_t> MuteCountMap;
+using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;

@@ -44,7 +44,7 @@ struct MoveEventList {
 	std::list<MoveEvent*> moveEvent[MOVE_EVENT_LAST];
 };
 
-typedef std::map<uint16_t, bool> VocEquipMap;
+using VocEquipMap = std::map<uint16_t, bool>;
 
 class MoveEvents final : public BaseEvents
 {
@@ -64,10 +64,10 @@ class MoveEvents final : public BaseEvents
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
 
 	protected:
-		typedef std::map<int32_t, MoveEventList> MoveListMap;
+		using MoveListMap = std::map<int32_t, MoveEventList>;
 		void clearMap(MoveListMap& map);
 
-		typedef std::map<Position, MoveEventList> MovePosListMap;
+		using MovePosListMap = std::map<Position, MoveEventList>;
 		void clear() final;
 		LuaScriptInterface& getScriptInterface() final;
 		std::string getScriptBaseName() const final;
@@ -89,9 +89,9 @@ class MoveEvents final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos);
-typedef uint32_t (MoveFunction)(Item* item, Item* tileItem, const Position& pos);
-typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+using StepFunction = std::function<uint32_t(Creature* creature, Item* item, const Position& pos)>;
+using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Position& pos)>;
+using EquipFunction = std::function<uint32_t(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
 
 class MoveEvent final : public Event
 {
@@ -142,18 +142,10 @@ class MoveEvent final : public Event
 	protected:
 		std::string getScriptEventName() const final;
 
-		static StepFunction StepInField;
-		static StepFunction StepOutField;
-
-		static MoveFunction AddItemField;
-		static MoveFunction RemoveItemField;
-		static EquipFunction EquipItem;
-		static EquipFunction DeEquipItem;
-
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
-		StepFunction* stepFunction = nullptr;
-		MoveFunction* moveFunction = nullptr;
-		EquipFunction* equipFunction = nullptr;
+		StepFunction stepFunction;
+		MoveFunction moveFunction;
+		EquipFunction equipFunction;
 		uint32_t slot = SLOTP_WHEREEVER;
 
 		//onEquip information

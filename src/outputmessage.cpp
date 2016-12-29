@@ -32,9 +32,9 @@ const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY {10};
 class OutputMessageAllocator
 {
 	public:
-		typedef OutputMessage value_type;
+		using value_type = OutputMessage;
 		template<typename U>
-		struct rebind {typedef LockfreePoolingAllocator<U, OUTPUTMESSAGE_FREE_LIST_CAPACITY> other;};
+		struct rebind {using other = LockfreePoolingAllocator<U, OUTPUTMESSAGE_FREE_LIST_CAPACITY>;};
 };
 
 void OutputMessagePool::scheduleSendAll()

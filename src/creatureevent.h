@@ -67,7 +67,7 @@ class CreatureEvents final : public BaseEvents
 		void clear() final;
 
 		//creature events
-		typedef std::map<std::string, CreatureEvent*> CreatureEventList;
+		using CreatureEventList = std::map<std::string, CreatureEvent*>;
 		CreatureEventList creatureEvents;
 
 		LuaScriptInterface scriptInterface;

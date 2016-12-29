@@ -34,9 +34,9 @@ class MagicField;
 class QTreeLeafNode;
 class BedItem;
 
-typedef std::vector<Creature*> CreatureVector;
-typedef std::vector<Item*> ItemVector;
-typedef std::unordered_set<Creature*> SpectatorVec;
+using CreatureVector = std::vector<Creature*>;
+using ItemVector = std::vector<Item*>;
+using SpectatorVec = std::unordered_set<Creature*>;
 
 enum tileflags_t : uint32_t {
 	TILESTATE_NONE = 0,

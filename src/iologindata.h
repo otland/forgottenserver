@@ -24,7 +24,7 @@
 #include "player.h"
 #include "database.h"
 
-typedef std::list<std::pair<int32_t, Item*>> ItemBlockList;
+using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
 class IOLoginData
 {
@@ -60,7 +60,7 @@ class IOLoginData
 		static void removePremiumDays(uint32_t accountId, int32_t removeDays);
 
 	protected:
-		typedef std::map<uint32_t, std::pair<Item*, uint32_t>> ItemMap;
+		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
 		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
 		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& stream);

@@ -26,7 +26,7 @@
 class Player;
 class Party;
 
-typedef std::vector<Player*> PlayerVector;
+using PlayerVector = std::vector<Player*>;
 
 class Party
 {
