@@ -1006,3 +1006,5 @@ end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
+
+function getPlayerFlagValue(cid, flag) local p = Player(cid) return p ~= nil and p:hasFlag(flag) or false end
