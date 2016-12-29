@@ -892,9 +892,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFlagValue(cid, flag)
 	lua_register(luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
 
-	//getPlayerInstantSpellCount(cid)
-	lua_register(luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
-
 	//getPlayerInstantSpellInfo(cid, index)
 	lua_register(luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
 
@@ -2230,6 +2227,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "learnSpell", LuaScriptInterface::luaPlayerLearnSpell);
 	registerMethod("Player", "forgetSpell", LuaScriptInterface::luaPlayerForgetSpell);
 	registerMethod("Player", "hasLearnedSpell", LuaScriptInterface::luaPlayerHasLearnedSpell);
+	registerMethod("Player", "getInstantSpellCount", LuaScriptInterface::luaPlayerGetInstantSpellCount);
 
 	registerMethod("Player", "sendTutorial", LuaScriptInterface::luaPlayerSendTutorial);
 	registerMethod("Player", "addMapMark", LuaScriptInterface::luaPlayerAddMapMark);
@@ -2696,15 +2694,14 @@ int LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
+int LuaScriptInterface::luaPlayerGetInstantSpellCount(lua_State* L)
 {
-	//getPlayerInstantSpellCount(cid)
-	Player* player = getPlayer(L, 1);
+	//player:getInstantSpellCount()
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
 	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 	return 1;
 }
