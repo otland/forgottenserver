@@ -20,8 +20,6 @@
 #ifndef FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
 #define FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
 
-#include <lua.hpp>
-
 class ConfigManager
 {
 	public:
@@ -47,7 +45,6 @@ class ConfigManager
 		};
 
 		enum string_config_t {
-			DUMMY_STR,
 			MAP_NAME,
 			HOUSE_RENT_PERIOD,
 			SERVER_NAME,
@@ -113,10 +110,6 @@ class ConfigManager
 		bool getBoolean(boolean_config_t what) const;
 
 	private:
-		static std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue);
-		static int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defaultValue = 0);
-		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue);
-
 		std::string string[LAST_STRING_CONFIG] = {};
 		int32_t integer[LAST_INTEGER_CONFIG] = {};
 		bool boolean[LAST_BOOLEAN_CONFIG] = {};
