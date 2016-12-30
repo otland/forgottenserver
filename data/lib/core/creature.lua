@@ -58,9 +58,7 @@ function Creature:setMonsterOutfit(monster, time)
 	end
 
 	if self:getPlayer() and not (getPlayerFlagValue(self, PlayerFlag_CanIllusionAll) or monsterType:isIllusionable()) then
-		if not monsterType:isIllusionable() then
-			return false
-		end
+		return false
 	end
 
 	local condition = Condition(CONDITION_OUTFIT)
