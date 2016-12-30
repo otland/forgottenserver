@@ -20,13 +20,13 @@
 #ifndef FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 #define FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 
-using GuildWarList = std::vector<uint32_t>;
+using GuildWarVector = std::vector<uint32_t>;
 
 class IOGuild
 {
 	public:
 		static uint32_t getGuildIdByName(const std::string& name);
-		static void getWarList(uint32_t guildId, GuildWarList& guildWarList);
+		static void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
 };
 
 #endif

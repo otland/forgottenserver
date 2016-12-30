@@ -251,8 +251,8 @@ class Player final : public Creature, public Cylinder
 
 		uint16_t getClientIcons() const;
 
-		const GuildWarList& getGuildWarList() const {
-			return guildWarList;
+		const GuildWarVector& getGuildWarVector() const {
+			return guildWarVector;
 		}
 
 		Vocation* getVocation() const {
@@ -1182,7 +1182,7 @@ class Player final : public Creature, public Cylinder
 		std::map<uint32_t, int32_t> storageMap;
 
 		std::vector<OutfitEntry> outfits;
-		GuildWarList guildWarList;
+		GuildWarVector guildWarVector;
 
 		std::list<ShopInfo> shopItemList;
 

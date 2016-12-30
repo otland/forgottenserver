@@ -444,7 +444,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			player->guildRank = rank;
 
-			IOGuild::getWarList(guildId, player->guildWarList);
+			IOGuild::getWarList(guildId, player->guildWarVector);
 
 			query.str(std::string());
 			query << "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = " << guildId;
@@ -580,8 +580,8 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 {
 	std::ostringstream ss;
 
-	using containerBlock = std::pair<Container*, int32_t>;
-	std::list<containerBlock> queue;
+	using ContainerBlock = std::pair<Container*, int32_t>;
+	std::list<ContainerBlock> queue;
 
 	int32_t runningId = 100;
 
@@ -608,7 +608,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	}
 
 	while (!queue.empty()) {
-		const containerBlock& cb = queue.front();
+		const ContainerBlock& cb = queue.front();
 		Container* container = cb.first;
 		int32_t parentId = cb.second;
 		queue.pop_front();
