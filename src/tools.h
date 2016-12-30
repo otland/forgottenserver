@@ -38,11 +38,11 @@ void toLowerCaseString(std::string& source);
 std::string asLowerCaseString(std::string source);
 std::string asUpperCaseString(std::string source);
 
-typedef std::vector<std::string> StringVec;
-typedef std::vector<int32_t> IntegerVec;
+using StringVector = std::vector<std::string>;
+using IntegerVector = std::vector<int32_t>;
 
-StringVec explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
-IntegerVec vectorAtoi(const StringVec& stringVector);
+StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
+IntegerVector vectorAtoi(const StringVector& stringVector);
 inline bool hasBitSet(uint32_t flag, uint32_t flags) {
 	return (flags & flag) != 0;
 }

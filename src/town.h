@@ -50,7 +50,7 @@ class Town
 		Position templePosition;
 };
 
-typedef std::map<uint32_t, Town*> TownMap;
+using TownMap = std::map<uint32_t, Town*>;
 
 class Towns
 {

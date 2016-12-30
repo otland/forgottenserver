@@ -35,7 +35,7 @@ struct ConnectBlock {
 	uint32_t count;
 };
 
-typedef std::map<uint32_t, ConnectBlock> IpConnectMap;
+using IpConnectMap = std::map<uint32_t, ConnectBlock>;
 
 class Ban
 {

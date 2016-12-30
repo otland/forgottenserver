@@ -25,17 +25,17 @@
 #include "networkmessage.h"
 
 class Protocol;
-typedef std::shared_ptr<Protocol> Protocol_ptr;
+using Protocol_ptr = std::shared_ptr<Protocol>;
 class OutputMessage;
-typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
+using OutputMessage_ptr = std::shared_ptr<OutputMessage>;
 class Connection;
-typedef std::shared_ptr<Connection> Connection_ptr;
-typedef std::weak_ptr<Connection> ConnectionWeak_ptr;
+using Connection_ptr = std::shared_ptr<Connection> ;
+using ConnectionWeak_ptr = std::weak_ptr<Connection>;
 class ServiceBase;
-typedef std::shared_ptr<ServiceBase> Service_ptr;
+using Service_ptr = std::shared_ptr<ServiceBase>;
 class ServicePort;
-typedef std::shared_ptr<ServicePort> ServicePort_ptr;
-typedef std::shared_ptr<const ServicePort> ConstServicePort_ptr;
+using ServicePort_ptr = std::shared_ptr<ServicePort>;
+using ConstServicePort_ptr = std::shared_ptr<const ServicePort>;
 
 class ConnectionManager
 {

@@ -33,7 +33,7 @@ enum GlobalEvent_t {
 };
 
 class GlobalEvent;
-typedef std::map<std::string, GlobalEvent*> GlobalEventMap;
+using GlobalEventMap = std::map<std::string, GlobalEvent*>;
 
 class GlobalEvents final : public BaseEvents
 {
