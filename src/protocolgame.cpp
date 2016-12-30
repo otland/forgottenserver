@@ -21,7 +21,7 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
-#include "protocolgame.h"
+#include "protocolspectator.h"
 
 #include "outputmessage.h"
 
@@ -35,16 +35,21 @@
 #include "waitlist.h"
 #include "ban.h"
 #include "scheduler.h"
+#include "spells.h"
 
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern Spells* g_spells;
 
 void ProtocolGame::release()
 {
 	//dispatcher thread
 	if (player && player->client == shared_from_this()) {
+		if(player->isLiveCasting()) {
+			player->stopLiveCasting();
+		}
 		player->client.reset();
 		player->decrementReferenceCounter();
 		player = nullptr;
@@ -371,8 +376,13 @@ void ProtocolGame::disconnectClient(const std::string& message) const
 	disconnect();
 }
 
-void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
+void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg, bool broadcast/* = true*/)
 {
+	if(broadcast && player->isLiveCasting()) {
+		for(auto& spectator : player->spectators) {
+				spectator->writeToOutputBuffer(msg);
+		}
+	}
 	auto out = getOutputBuffer(msg.getLength());
 	out->append(msg);
 }
@@ -837,6 +847,134 @@ void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerLookInBattleList, player->getID(), creatureId);
 }
 
+void ProtocolGame::parseExecuteCommand(const std::string& text) {
+	size_t pos = text.find(' ');
+	std::string command = text.substr(1, pos - 1);
+	if (command.empty()) {
+		return;
+	}
+
+	if(command == "commands") {
+		player->sendChannelMessage("", "Available commands:", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/kick PLAYERNAME - kick a player from your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/(un)mute PLAYERNAME - (un)mute a player in your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/mutelist - view current mutes in your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/(un)ban PLAYERNAME - (un)ban a player from your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/banlist - view current bans in your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/togglechat on/off - toggle the chat on or off in your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/spectators - view current spectators in your live cast.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		player->sendChannelMessage("", "/commands - view available live cast commands.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+	} else if(command == "spectators") {
+		std::stringstream ss;
+		ss << "Currently spectating your live cast (" << player->getSpectatorCount() << "):";
+		sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		for(ProtocolSpectator* Spectator : player->getSpectators()) {
+			sendChannelMessage("", Spectator->spectator->getName(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		}
+	} else if(command == "kick") {
+		std::string name = text.substr(pos + 1);
+		for(ProtocolSpectator* Spectator : player->getSpectators()) {
+			Player* spectator = Spectator->spectator;
+			if(spectator->getName() == name) {
+				std::stringstream ss;
+				ss << spectator->getName() << " have been kicked from this live cast.";
+				sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+				Spectator->logout();
+				return;
+			}
+		}
+		sendChannelMessage("", "Could not find a spectator with that name.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+	} else if(command == "ban") {
+		std::string name = text.substr(pos + 1);
+		for(ProtocolSpectator* Spectator : player->getSpectators()) {
+			Player* spectator = Spectator->spectator;
+			if(spectator->getName() == name) {
+				std::stringstream ss;
+				ss << spectator->getName() << " have been banned from this live cast.";
+				sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+				player->spectatorBans.insert(std::make_pair(name, spectator->getIP()));
+				Spectator->logout();
+				return;
+			}
+		}
+		sendChannelMessage("", "Could not find a spectator with that name.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+	} else if(command == "unban") {
+		std::string name = text.substr(pos + 1);
+		
+		for(auto it : player->spectatorBans) {
+			if(it.first == name) {
+				std::stringstream ss;
+				ss << name << " have been unbanned from this live cast.";
+				sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+				player->spectatorBans.erase(it.first);
+				return;
+			}
+		}
+		sendChannelMessage("", "Could not find a ban with that name.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+	} else if(command == "banlist") {
+		std::stringstream ss;
+		ss << "Currently banned from your live cast (" << player->spectatorBans.size() << "):";
+		sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		
+		for(auto it : player->spectatorBans) {
+			sendChannelMessage("", it.first, TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		}
+	} else if(command == "mute") {
+		std::string name = text.substr(pos + 1);
+		for(ProtocolSpectator* Spectator : player->getSpectators()) {
+			Player* spectator = Spectator->spectator;
+			if(spectator->getName() == name) {
+				std::stringstream ss;
+				ss << spectator->getName() << " have been muted.";
+				sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+				player->spectatorMutes.push_back(spectator);
+				return;
+			}
+		}
+		sendChannelMessage("", "Could not find a spectator with that name.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+	} else if(command == "unmute") {
+		std::string name = text.substr(pos + 1);
+		for(ProtocolSpectator* Spectator : player->getSpectators()) {
+			Player* spectator = Spectator->spectator;
+			if(spectator->getName() == name) {
+				std::stringstream ss;
+				ss << spectator->getName() << " have been unmuted.";
+				sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+				player->spectatorMutes.erase(std::remove(player->spectatorMutes.begin(), player->spectatorMutes.end(), spectator), player->spectatorMutes.end());
+				return;
+			}
+		}
+		sendChannelMessage("", "Could not find a mute with that name.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+	} else if(command == "mutelist") {
+		std::stringstream ss;
+		ss << "Currently muted in your live cast (" << player->spectatorMutes.size() << "):";
+		sendChannelMessage("", ss.str(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		
+		for(auto it : player->spectatorMutes) {
+			sendChannelMessage("", it->getName(), TALKTYPE_CHANNEL_O, CHANNEL_CAST, false);
+		}
+	} else if(command == "togglechat") {
+		std::string option = text.substr(pos + 1);
+		if(option == "on") {
+			if(player->liveChatDisabled) {
+				player->liveChatDisabled = false;
+				sendChannelMessage("", "Chat has been enabled.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+			} else {
+				sendChannelMessage("", "Invalid option, chat is already enabled.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+			}
+		} else if(option == "off") {
+			if(player->liveChatDisabled == false) {
+				player->liveChatDisabled = true;
+				sendChannelMessage("", "Chat has been disabled.", TALKTYPE_CHANNEL_O, CHANNEL_CAST, true);
+			} else {
+				sendChannelMessage("", "Invalid option, chat is already disabled.", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+			}
+		} else {
+			sendChannelMessage("", "Invalid option, usage: /togglechat on/off", TALKTYPE_CHANNEL_R1, CHANNEL_CAST, false);
+		}
+	}
+}
+
 void ProtocolGame::parseSay(NetworkMessage& msg)
 {
 	std::string receiver;
@@ -862,6 +1000,20 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 
 	const std::string text = msg.getString();
 	if (text.length() > 255) {
+		return;
+	}
+
+	if(channelId == CHANNEL_CAST && player->isLiveCasting()) {
+		InstantSpell* instantSpell = g_spells->getInstantSpell(text);
+		if (instantSpell) {
+			addGameTask(&Game::playerSay, player->getID(), 0, TALKTYPE_SAY, "", text);
+		} else {
+			if (!text.empty() && text.front() == '/') {
+				parseExecuteCommand(text);
+			} else {
+				player->sendChannelMessage(player->getName(), text, TALKTYPE_CHANNEL_O, CHANNEL_CAST);
+			}
+		}
 		return;
 	}
 
@@ -1245,7 +1397,7 @@ void ProtocolGame::sendTutorial(uint8_t tutorialId)
 	NetworkMessage msg;
 	msg.addByte(0xDC);
 	msg.addByte(tutorialId);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
@@ -1255,7 +1407,7 @@ void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const st
 	msg.addPosition(pos);
 	msg.addByte(markType);
 	msg.addString(desc);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendReLoginWindow(uint8_t unfairFightReduction)
@@ -1389,7 +1541,7 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel)
+void ProtocolGame::sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel, bool broadcast/* = true*/)
 {
 	NetworkMessage msg;
 	msg.addByte(0xAA);
@@ -1399,7 +1551,7 @@ void ProtocolGame::sendChannelMessage(const std::string& author, const std::stri
 	msg.addByte(type);
 	msg.add<uint16_t>(channel);
 	msg.addString(text);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, broadcast);
 }
 
 void ProtocolGame::sendIcons(uint16_t icons)
@@ -1564,7 +1716,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
 	if (!depotChest) {
 		msg.add<uint16_t>(0x00);
-		writeToOutputBuffer(msg);
+		writeToOutputBuffer(msg, false);
 		return;
 	}
 
@@ -1610,14 +1762,14 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		msg.add<uint16_t>(std::min<uint32_t>(0xFFFF, it->second));
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketLeave()
 {
 	NetworkMessage msg;
 	msg.addByte(0xF7);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers)
@@ -1645,7 +1797,7 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 		msg.addString(offer.playerName);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketAcceptOffer(const MarketOfferEx& offer)
@@ -1672,7 +1824,7 @@ void ProtocolGame::sendMarketAcceptOffer(const MarketOfferEx& offer)
 		msg.addString(offer.playerName);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers)
@@ -1699,7 +1851,7 @@ void ProtocolGame::sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, c
 		msg.add<uint32_t>(offer.price);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketCancelOffer(const MarketOfferEx& offer)
@@ -1726,7 +1878,7 @@ void ProtocolGame::sendMarketCancelOffer(const MarketOfferEx& offer)
 		msg.add<uint32_t>(offer.price);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers)
@@ -1763,7 +1915,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 		msg.addByte(it->state);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendMarketDetail(uint16_t itemId)
@@ -1968,7 +2120,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		msg.addByte(0x00);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendQuestLog()
@@ -1985,7 +2137,7 @@ void ProtocolGame::sendQuestLog()
 		}
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendQuestLine(const Quest* quest)
@@ -2002,7 +2154,7 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 		}
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack)
@@ -2238,7 +2390,7 @@ void ProtocolGame::sendFYIBox(const std::string& message)
 	NetworkMessage msg;
 	msg.addByte(0x15);
 	msg.addString(message);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 //tile
@@ -2593,7 +2745,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 		msg.add<uint16_t>(0x00);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text)
@@ -2606,7 +2758,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, uint32_t itemId, const 
 	msg.addString(text);
 	msg.add<uint16_t>(0x00);
 	msg.add<uint16_t>(0x00);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& text)
@@ -2616,7 +2768,7 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& tex
 	msg.addByte(0x00);
 	msg.add<uint32_t>(windowTextId);
 	msg.addString(text);
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendOutfitWindow()
@@ -2672,7 +2824,7 @@ void ProtocolGame::sendOutfitWindow()
 		msg.addString(mount->name);
 	}
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus)
@@ -2740,7 +2892,7 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 	msg.addByte(modalWindow.defaultEnterButton);
 	msg.addByte(modalWindow.priority ? 0x01 : 0x00);
 
-	writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg, false);
 }
 
 ////////////// Add common messages

@@ -179,7 +179,7 @@ class Game
 		  * Returns a player based on a string name identifier, with support for the "~" wildcard.
 		  * \param s is the name identifier, with or without wildcard
 		  * \param player will point to the found player (if any)
-		  * \return "RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE" or "RETURNVALUE_NAMEISTOOAMBIGIOUS"
+		  * \return "RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE" or "RETURNVALUE_NAMEISTOOAMBIGUOUS"
 		  */
 		ReturnValue getPlayerByNameWildcard(const std::string& s, Player*& player);
 
@@ -501,6 +501,16 @@ class Game
 			commands.reload();
 		}
 
+		std::vector<Player*> getLiveCasters(const std::string& password);
+
+		void addLiveCaster(Player* player) {
+			liveCasters.push_back(player);
+		}
+
+		void removeLiveCaster(Player* player) {
+			liveCasters.erase(std::remove(liveCasters.begin(), liveCasters.end(), player), liveCasters.end());
+		}
+
 		Groups groups;
 		Map map;
 		Mounts mounts;
@@ -532,6 +542,7 @@ class Game
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
 		std::vector<char> commandTags;
+		std::vector<Player*> liveCasters;
 
 		size_t lastBucket = 0;
 

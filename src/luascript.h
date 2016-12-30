@@ -809,6 +809,10 @@ class LuaScriptInterface
 
 		static int luaPlayerIsPlayer(lua_State* L);
 
+		static int luaPlayerIsLiveCasting(lua_State* L);
+		static int luaPlayerStartLiveCasting(lua_State* L);
+		static int luaPlayerStopLiveCasting(lua_State* L);
+
 		static int luaPlayerGetGuid(lua_State* L);
 		static int luaPlayerGetIp(lua_State* L);
 		static int luaPlayerGetAccountId(lua_State* L);
