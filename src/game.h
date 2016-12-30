@@ -32,7 +32,6 @@
 #include "raids.h"
 #include "npc.h"
 #include "wildcardtree.h"
-#include "quests.h"
 
 class ServiceManager;
 class Creature;
@@ -505,7 +504,6 @@ class Game
 		Map map;
 		Mounts mounts;
 		Raids raids;
-		Quests quests;
 
 	protected:
 		bool playerSayCommand(Player* player, const std::string& text);

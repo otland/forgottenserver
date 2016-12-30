@@ -234,9 +234,6 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 		g_weapons->reload();
 		g_weapons->loadDefaults();
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded weapons.");
-	} else if (tmpParam == "quest" || tmpParam == "quests") {
-		g_game.quests.reload();
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded quests.");
 	} else if (tmpParam == "mount" || tmpParam == "mounts") {
 		g_game.mounts.reload();
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reloaded mounts.");

@@ -180,3 +180,15 @@ function Player:onGainSkillTries(skill, tries)
 	end
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
 end
+
+function Player:onRequestQuestLog()
+	self:sendQuestLog()
+end
+
+function Player:onRequestQuestLine(questId)
+	self:sendQuestLine(questId)
+end
+
+function Player:onStorageUpdate(key, value, oldValue, currentFrameTime)
+	self:updateStorage(key, value, oldValue, currentFrameTime)
+end

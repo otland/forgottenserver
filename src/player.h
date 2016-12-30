@@ -1071,16 +1071,6 @@ class Player final : public Creature, public Cylinder
 				client->sendAddMarker(pos, markType, desc);
 			}
 		}
-		void sendQuestLog() {
-			if (client) {
-				client->sendQuestLog();
-			}
-		}
-		void sendQuestLine(const Quest* quest) {
-			if (client) {
-				client->sendQuestLine(quest);
-			}
-		}
 		void sendEnterWorld() {
 			if (client) {
 				client->sendEnterWorld();
