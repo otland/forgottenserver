@@ -1128,8 +1128,6 @@ bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 		function = HouseDoorList;
 	} else if (strcasecmp(functionName, "housekick") == 0) {
 		function = HouseKick;
-	} else if (strcasecmp(functionName, "searchplayer") == 0) {
-		function = SearchPlayer;
 	} else if (strcasecmp(functionName, "levitate") == 0) {
 		function = Levitate;
 	} else if (strcasecmp(functionName, "illusion") == 0) {
