@@ -46,12 +46,7 @@ function onCastSpell(creature, variant)
 	end
 
 	local playerPosition = creature:getPosition()
-	local targetPosition = targetPlayer:getPosition()
-	local offset = {
-		x = playerPosition.x - targetPosition.x,
-		y = playerPosition.y - targetPosition.y,
-		z = playerPosition.z - targetPosition.z
-	}
+	local offset = playerPosition - targetPlayer:getPosition()
 
 	local level = LEVEL_SAME
 	if offset.z > 0 then
@@ -60,6 +55,7 @@ function onCastSpell(creature, variant)
 		level = LEVEL_LOWER
 	end
 
+	local direction
 	local distanceOutput = DISTANCE_VERYFAR
 	if math.abs(offset.x) < 4 and math.abs(offset.y) < 4 then
 		distanceOutput = DISTANCE_BESIDE
@@ -70,34 +66,31 @@ function onCastSpell(creature, variant)
 		elseif distanceFormula < math.pow(274, 2) then
 			distanceOutput = DISTANCE_FAR
 		end
-	end
-
-	local direction
-	local distanceValue = offset.x ~= 0 and (offset.y / offset.x) or 10
-	local absValue = math.abs(distanceValue)
-	if absValue < 0.4142 then
-		direction = offset.x > 0 and DIRECTION_WEST or DIRECTION_EAST
-	elseif absValue < 2.4142 then
-		if distanceValue > 0 then
-			direction = offset.y > 0 and DIRECTION_NORTHWEST or DIRECTION_SOUTHEAST
-		elseif offset.x > 0 then
-			direction = DIRECTION_SOUTHWEST
+		
+		local distanceValue = offset.x ~= 0 and (offset.y / offset.x) or 10
+		local absValue = math.abs(distanceValue)
+		if absValue < 0.4142 then
+			direction = offset.x > 0 and DIRECTION_WEST or DIRECTION_EAST
+		elseif absValue < 2.4142 then
+			if distanceValue > 0 then
+				direction = offset.y > 0 and DIRECTION_NORTHWEST or DIRECTION_SOUTHEAST
+			elseif offset.x > 0 then
+				direction = DIRECTION_SOUTHWEST
+			else
+				direction = DIRECTION_NORTHEAST
+			end
 		else
-			direction = DIRECTION_NORTHEAST
+			direction = offset.y > 0 and DIRECTION_NORTH or DIRECTION_SOUTH
 		end
-	else
-		direction = offset.y > 0 and DIRECTION_NORTH or DIRECTION_SOUTH
 	end
 
 	local returnMessage = targetPlayer:getName()
 	if distanceOutput == DISTANCE_BESIDE then
-		returnMessage = returnMessage .. messages[distanceOutput][level] .. "."
+		returnMessage = returnMessage .. messages[distanceOutput][level]
 	elseif distanceOutput == DISTANCE_CLOSE then
 		returnMessage = returnMessage .. messages[distanceOutput][level] .. directions[direction] .. "."
-	elseif distanceOutput == DISTANCE_FAR then
-		returnMessage = returnMessage .. " is far to the " .. directions[direction] .. "."
-	elseif distanceOutput == DISTANCE_VERYFAR then
-		returnMessage = returnMessage .. " is very far to the " .. directions[direction] .. "."
+	else
+		returnMessage = returnMessage .. messages[distanceOutput] .. directions[direction] .. "."
 	end
 
 	creature:sendTextMessage(MESSAGE_INFO_DESCR, returnMessage)
