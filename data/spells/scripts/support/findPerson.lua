@@ -31,10 +31,6 @@ local isCloseStrings = {
 }
 
 function onCastSpell(creature, variant)
-	if not creature:getPlayer() then
-		return false
-	end
-
 	local targetPlayer = Player(variant:getString())
 	if not targetPlayer then
 		return false
