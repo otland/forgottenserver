@@ -7,7 +7,7 @@ local DISTANCE_CLOSE = 2
 local DISTANCE_FAR = 3
 local DISTANCE_VERYFAR = 4
 
-local directionNames = {
+local directions = {
 	[DIRECTION_NORTH] = "north",
 	[DIRECTION_SOUTH] = "south",
 	[DIRECTION_EAST] = "east",
@@ -18,16 +18,19 @@ local directionNames = {
 	[DIRECTION_SOUTHWEST] = "south-west"
 }
 
-local inShortRangeStrings = {
-	[LEVEL_LOWER] = " is on a lower level to the ",
-	[LEVEL_SAME] = " is to the ",
-	[LEVEL_HIGHER] = " is on a higher level to the "
-}
-
-local isCloseStrings = {
-	[LEVEL_LOWER] = " is below you",
-	[LEVEL_SAME] = " is standing next to you",
-	[LEVEL_HIGHER] = " is above you"
+local messages = {
+    [DISTANCE_BESIDE] = {
+        [LEVEL_LOWER] = " is below you.",
+        [LEVEL_SAME] = " is standing next to you.",
+        [LEVEL_HIGHER] = " is above you."
+    },
+    [DISTANCE_CLOSE] = {
+        [LEVEL_LOWER] = " is on a lower level to the ",
+        [LEVEL_SAME] = " is to the ",
+        [LEVEL_HIGHER] = " is on a higher level to the "
+    },
+    [DISTANCE_FAR] = " is far to the ",
+    [DISTANCE_VERYFAR] =  " is very far to the "
 }
 
 function onCastSpell(creature, variant)
@@ -61,10 +64,10 @@ function onCastSpell(creature, variant)
 	if math.abs(offset.x) < 4 and math.abs(offset.y) < 4 then
 		distanceOutput = DISTANCE_BESIDE
 	else
-		local distanceFormula = ((offset.x * offset.x) + (offset.y * offset.y))
+		local distanceFormula = math.pow(offset.x, 2) + math.pow(offset.y, 2)
 		if distanceFormula < 1000 then
 			distanceOutput = DISTANCE_CLOSE
-		elseif distanceFormula < 274 * 274 then
+		elseif distanceFormula < math.pow(274, 2) then
 			distanceOutput = DISTANCE_FAR
 		end
 	end
@@ -88,13 +91,13 @@ function onCastSpell(creature, variant)
 
 	local returnMessage = targetPlayer:getName()
 	if distanceOutput == DISTANCE_BESIDE then
-		returnMessage = returnMessage .. isCloseStrings[level] .. "."
+		returnMessage = returnMessage .. messages[distanceOutput][level] .. "."
 	elseif distanceOutput == DISTANCE_CLOSE then
-		returnMessage = returnMessage .. inShortRangeStrings[level] .. directionNames[direction] .. "."
+		returnMessage = returnMessage .. messages[distanceOutput][level] .. directions[direction] .. "."
 	elseif distanceOutput == DISTANCE_FAR then
-		returnMessage = returnMessage .. " is far to the " .. directionNames[direction] .. "."
+		returnMessage = returnMessage .. " is far to the " .. directions[direction] .. "."
 	elseif distanceOutput == DISTANCE_VERYFAR then
-		returnMessage = returnMessage .. " is very far to the " .. directionNames[direction] .. "."
+		returnMessage = returnMessage .. " is very far to the " .. directions[direction] .. "."
 	end
 
 	creature:sendTextMessage(MESSAGE_INFO_DESCR, returnMessage)
