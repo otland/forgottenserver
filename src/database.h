@@ -25,7 +25,7 @@
 #include <mysql.h>
 
 class DBResult;
-typedef std::shared_ptr<DBResult> DBResult_ptr;
+using DBResult_ptr = std::shared_ptr<DBResult>;
 
 class Database
 {

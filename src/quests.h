@@ -26,8 +26,8 @@
 class Mission;
 class Quest;
 
-typedef std::list<Mission> MissionsList;
-typedef std::list<Quest> QuestsList;
+using MissionsList = std::list<Mission>;
+using QuestsList = std::list<Quest>;
 
 class Mission
 {

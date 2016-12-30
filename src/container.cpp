@@ -215,48 +215,48 @@ bool Container::isHoldingItem(const Item* item) const
 
 void Container::onAddContainerItem(Item* item)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendAddContainerItem(this, item);
 	}
 
 	//event methods
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onAddContainerItem(item);
 	}
 }
 
 void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
 void Container::onRemoveContainerItem(uint32_t index, Item* item)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send change to client
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onRemoveContainerItem(this, item);
 	}
 }

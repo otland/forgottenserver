@@ -271,9 +271,9 @@ std::string asUpperCaseString(std::string source)
 	return source;
 }
 
-StringVec explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
+StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
 {
-	StringVec returnVector;
+	StringVector returnVector;
 	std::string::size_type start = 0, end = 0;
 
 	while (--limit != -1 && (end = inString.find(separator, start)) != std::string::npos) {
@@ -285,9 +285,9 @@ StringVec explodeString(const std::string& inString, const std::string& separato
 	return returnVector;
 }
 
-IntegerVec vectorAtoi(const StringVec& stringVector)
+IntegerVector vectorAtoi(const StringVector& stringVector)
 {
-	IntegerVec returnVector;
+	IntegerVector returnVector;
 	for (const auto& string : stringVector) {
 		returnVector.push_back(std::stoi(string));
 	}
