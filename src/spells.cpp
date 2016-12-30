@@ -1115,6 +1115,8 @@ bool Illusion(const InstantSpell*, Creature* creature, const std::string& param)
 	return true;
 }
 
+}
+
 bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
