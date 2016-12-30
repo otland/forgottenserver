@@ -137,7 +137,7 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
-	<instant group="support" spellid="20" name="Find Person" words="exiva" lvl="8" mana="20" aggressive="0" playernameparam="1" params="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="searchPlayer">
+	<instant group="support" spellid="20" name="Find Person" words="exiva" lvl="8" mana="20" aggressive="0" playernameparam="1" params="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/find_person.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
