@@ -46,7 +46,11 @@ function onCastSpell(creature, variant)
 	end
 
 	local playerPosition = creature:getPosition()
-	local offset = playerPosition - targetPlayer:getPosition()
+	local offset = {
+		x = playerPosition.x - targetPosition.x,
+		y = playerPosition.y - targetPosition.y,
+		z = playerPosition.z - targetPosition.z
+	}
 
 	local level = LEVEL_SAME
 	if offset.z > 0 then
@@ -66,7 +70,7 @@ function onCastSpell(creature, variant)
 		elseif distanceFormula < math.pow(274, 2) then
 			distanceOutput = DISTANCE_FAR
 		end
-		
+
 		local distanceValue = offset.x ~= 0 and (offset.y / offset.x) or 10
 		local absValue = math.abs(distanceValue)
 		if absValue < 0.4142 then
