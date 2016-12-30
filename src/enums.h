@@ -546,8 +546,8 @@ struct CombatDamage
 	}
 };
 
-typedef std::list<MarketOffer> MarketOfferList;
-typedef std::list<HistoryMarketOffer> HistoryMarketOfferList;
-typedef std::list<ShopInfo> ShopInfoList;
+using MarketOfferList = std::list<MarketOffer>;
+using HistoryMarketOfferList = std::list<HistoryMarketOffer>;
+using ShopInfoList = std::list<ShopInfo>;
 
 #endif

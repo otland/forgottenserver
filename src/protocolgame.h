@@ -34,7 +34,7 @@ class Tile;
 class Connection;
 class Quest;
 class ProtocolGame;
-typedef std::shared_ptr<ProtocolGame> ProtocolGame_ptr;
+using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
 extern Game g_game;
 

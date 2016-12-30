@@ -31,7 +31,7 @@ class ConjureSpell;
 class RuneSpell;
 class Spell;
 
-typedef std::map<uint16_t, bool> VocSpellMap;
+using VocSpellMap = std::map<uint16_t, bool>;
 
 class Spells final : public BaseEvents
 {
@@ -71,8 +71,8 @@ class Spells final : public BaseEvents
 		LuaScriptInterface scriptInterface { "Spell Interface" };
 };
 
-typedef bool (InstantSpellFunction)(const InstantSpell* spell, Creature* creature, const std::string& param);
-typedef bool (RuneSpellFunction)(const RuneSpell* spell, Player* player, const Position& posTo);
+using InstantSpellFunction = std::function<bool(const InstantSpell* spell, Creature* creature, const std::string& param)>;
+using RuneSpellFunction = std::function<bool(const RuneSpell* spell, Player* player, const Position& posTo)>;
 
 class BaseSpell
 {
@@ -228,19 +228,9 @@ class InstantSpell : public TalkAction, public Spell
 	protected:
 		std::string getScriptEventName() const override;
 
-		static InstantSpellFunction HouseGuestList;
-		static InstantSpellFunction HouseSubOwnerList;
-		static InstantSpellFunction HouseDoorList;
-		static InstantSpellFunction HouseKick;
-		static InstantSpellFunction SummonMonster;
-		static InstantSpellFunction Levitate;
-		static InstantSpellFunction Illusion;
-
-		static House* getHouseFromPos(Creature* creature);
-
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
-		InstantSpellFunction* function = nullptr;
+		InstantSpellFunction function;
 
 		bool needDirection = false;
 		bool hasParam = false;
@@ -310,12 +300,9 @@ class RuneSpell final : public Action, public Spell
 	protected:
 		std::string getScriptEventName() const final;
 
-		static RuneSpellFunction Illusion;
-		static RuneSpellFunction Convince;
-
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
-		RuneSpellFunction* runeFunction = nullptr;
+		RuneSpellFunction runeFunction;
 		uint16_t runeId = 0;
 		bool hasCharges = true;
 };

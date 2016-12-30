@@ -440,6 +440,32 @@ bool Action::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
+namespace {
+
+bool increaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
+{
+	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
+	return true;
+}
+
+bool decreaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
+{
+	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
+	return true;
+}
+
+bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
+{
+	if (player->getLastDepotId() == -1) {
+		return false;
+	}
+
+	player->sendMarketEnter(player->getLastDepotId());
+	return true;
+}
+
+}
+
 bool Action::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
@@ -455,28 +481,6 @@ bool Action::loadFunction(const pugi::xml_attribute& attr)
 	}
 
 	scripted = false;
-	return true;
-}
-
-bool Action::increaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
-	return true;
-}
-
-bool Action::decreaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
-	return true;
-}
-
-bool Action::enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
-{
-	if (player->getLastDepotId() == -1) {
-		return false;
-	}
-
-	player->sendMarketEnter(player->getLastDepotId());
 	return true;
 }
 

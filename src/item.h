@@ -755,8 +755,8 @@ class Item : virtual public Thing
 		//Don't add variables here, use the ItemAttribute class.
 };
 
-typedef std::list<Item*> ItemList;
-typedef std::deque<Item*> ItemDeque;
+using ItemList = std::list<Item*>;
+using ItemDeque = std::deque<Item*>;
 
 inline uint32_t Item::countByType(const Item* i, int32_t subType)
 {

@@ -61,8 +61,8 @@ class Spawn
 
 	private:
 		//map of the spawned creatures
-		typedef std::multimap<uint32_t, Monster*> SpawnedMap;
-		typedef SpawnedMap::value_type spawned_pair;
+		using SpawnedMap = std::multimap<uint32_t, Monster*>;
+		using spawned_pair = SpawnedMap::value_type;
 		SpawnedMap spawnedMap;
 
 		//map of creatures in the spawn

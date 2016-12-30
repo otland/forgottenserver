@@ -180,9 +180,9 @@ Spawn::~Spawn()
 
 bool Spawn::findPlayer(const Position& pos)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, pos, false, true);
-	for (Creature* spectator : list) {
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, pos, false, true);
+	for (Creature* spectator : spectators) {
 		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;
 		}
