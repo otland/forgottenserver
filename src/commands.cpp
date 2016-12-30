@@ -26,7 +26,6 @@
 #include "npc.h"
 #include "game.h"
 #include "actions.h"
-#include "iologindata.h"
 #include "configmanager.h"
 #include "spells.h"
 #include "movement.h"
@@ -57,10 +56,7 @@ s_defcommands Commands::defined_commands[] = {
 
 	//admin commands
 	{"/reload", &Commands::reloadInfo},
-	{"/raid", &Commands::forceRaid},
-
-	// player commands
-	{"!sellhouse", &Commands::sellHouse}
+	{"/raid", &Commands::forceRaid}
 };
 
 Commands::Commands()
@@ -256,59 +252,6 @@ void Commands::reloadInfo(Player& player, const std::string& param)
 		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.");
 	}
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
-}
-
-void Commands::sellHouse(Player& player, const std::string& param)
-{
-	Player* tradePartner = g_game.getPlayerByName(param);
-	if (!tradePartner || tradePartner == &player) {
-		player.sendCancelMessage("Trade player not found.");
-		return;
-	}
-
-	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player.getPosition())) {
-		player.sendCancelMessage("Trade player is too far away.");
-		return;
-	}
-
-	if (!tradePartner->isPremium()) {
-		player.sendCancelMessage("Trade player does not have a premium account.");
-		return;
-	}
-
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(player.getTile());
-	if (!houseTile) {
-		player.sendCancelMessage("You must stand in your house to initiate the trade.");
-		return;
-	}
-
-	House* house = houseTile->getHouse();
-	if (!house || house->getOwner() != player.getGUID()) {
-		player.sendCancelMessage("You don't own this house.");
-		return;
-	}
-
-	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
-		player.sendCancelMessage("Trade player already owns a house.");
-		return;
-	}
-
-	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
-		player.sendCancelMessage("Trade player is currently the highest bidder of an auctioned house.");
-		return;
-	}
-
-	Item* transferItem = house->getTransferItem();
-	if (!transferItem) {
-		player.sendCancelMessage("You can not trade this house.");
-		return;
-	}
-
-	transferItem->getParent()->setParent(&player);
-
-	if (!g_game.internalStartTrade(&player, tradePartner, transferItem)) {
-		house->resetTransferItem();
-	}
 }
 
 void Commands::forceRaid(Player& player, const std::string& param)

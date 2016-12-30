@@ -34,6 +34,7 @@
 	<talkaction words="/hide" script="hide.lua" />
 
 	<!-- player talkactions -->
+	<talkaction words="!sellhouse" separator=" " script="sellHouse.lua" />
 	<talkaction words="!buypremium" script="buyprem.lua" />
 	<talkaction words="!buyhouse" script="buyhouse.lua" />
 	<talkaction words="!leavehouse" script="leavehouse.lua" />

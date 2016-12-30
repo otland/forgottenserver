@@ -958,6 +958,8 @@ class LuaScriptInterface
 		static int luaPlayerGetContainerById(lua_State* L);
 		static int luaPlayerGetContainerIndex(lua_State* L);
 
+		static int luaPlayerStartTrade(lua_State* L);
+
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
 
@@ -1082,6 +1084,10 @@ class LuaScriptInterface
 
 		static int luaHouseGetAccessList(lua_State* L);
 		static int luaHouseSetAccessList(lua_State* L);
+
+		static int luaHouseGetTransferItem(lua_State* L);
+		static int luaHouseResetTransferItem(lua_State* L);
+		static int luaHouseMoveTransferItemTo(lua_State* L);
 
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);

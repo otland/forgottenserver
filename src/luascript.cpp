@@ -2248,6 +2248,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod("Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
+	registerMethod("Player", "startTrade", LuaScriptInterface::luaPlayerStartTrade);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2379,6 +2381,10 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getAccessList", LuaScriptInterface::luaHouseGetAccessList);
 	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
+
+	registerMethod("House", "getTransferItem", LuaScriptInterface::luaHouseGetTransferItem);
+	registerMethod("House", "resetTransferItem", LuaScriptInterface::luaHouseResetTransferItem);
+	registerMethod("House", "moveTransferItemTo", LuaScriptInterface::luaHouseMoveTransferItemTo);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -9288,6 +9294,20 @@ int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerStartTrade(lua_State* L)
+{
+	// player:startTrade(tradePartner, transferItem)
+	Player* player = getUserdata<Player>(L, 1);
+	Player* tradePartner = getUserdata<Player>(L, 2);
+	Item* transferItem = getUserdata<Item>(L, 3);
+	if (player && tradePartner && transferItem) {
+		pushBoolean(L, g_game.internalStartTrade(player, tradePartner, transferItem));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Monster
 int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
@@ -10460,6 +10480,46 @@ int LuaScriptInterface::luaHouseSetAccessList(lua_State* L)
 	const std::string& list = getString(L, 3);
 	house->setAccessList(listId, list);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetTransferItem(lua_State* L)
+{
+	// house:getTransferItem()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		pushUserdata<Item>(L, house->getTransferItem());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseResetTransferItem(lua_State* L)
+{
+	// house:resetTransferItem()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		house->resetTransferItem();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseMoveTransferItemTo(lua_State* L)
+{
+	// house:moveTransferItemTo(transferItem, player)
+	House* house = getUserdata<House>(L, 1);
+	Item* item = getUserdata<Item>(L, 2);
+	Player* player = getUserdata<Player>(L, 3);
+	if (house && item && player) {
+		item->getParent()->setParent(player);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
