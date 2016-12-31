@@ -46,6 +46,7 @@ function onCastSpell(creature, variant)
 	end
 
 	local playerPosition = creature:getPosition()
+	locla targetPosition = targetPlayer:getPosition()
 	local offset = {
 		x = playerPosition.x - targetPosition.x,
 		y = playerPosition.y - targetPosition.y,
