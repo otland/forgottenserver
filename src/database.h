@@ -42,10 +42,10 @@ class Database
 		 *
 		 * @return database connection handler singleton
 		 */
-		static Database* getInstance()
+		static Database& getInstance()
 		{
 			static Database instance;
-			return &instance;
+			return instance;
 		}
 
 		/**
@@ -208,7 +208,7 @@ class DBTransaction
 
 		~DBTransaction() {
 			if (state == STATE_START) {
-				Database::getInstance()->rollback();
+				Database::getInstance().rollback();
 			}
 		}
 
@@ -218,7 +218,7 @@ class DBTransaction
 
 		bool begin() {
 			state = STATE_START;
-			return Database::getInstance()->beginTransaction();
+			return Database::getInstance().beginTransaction();
 		}
 
 		bool commit() {
@@ -227,7 +227,7 @@ class DBTransaction
 			}
 
 			state = STEATE_COMMIT;
-			return Database::getInstance()->commit();
+			return Database::getInstance().commit();
 		}
 
 	private:

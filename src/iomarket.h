@@ -26,9 +26,9 @@
 class IOMarket
 {
 	public:
-		static IOMarket* getInstance() {
+		static IOMarket& getInstance() {
 			static IOMarket instance;
-			return &instance;
+			return instance;
 		}
 
 		static MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId);
