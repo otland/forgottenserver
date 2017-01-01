@@ -30,9 +30,9 @@ class ScriptingManager
 		ScriptingManager(const ScriptingManager&) = delete;
 		ScriptingManager& operator=(const ScriptingManager&) = delete;
 
-		static ScriptingManager* getInstance() {
+		static ScriptingManager& getInstance() {
 			static ScriptingManager instance;
-			return &instance;
+			return instance;
 		}
 
 		bool loadScriptSystems();

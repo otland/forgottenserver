@@ -36,9 +36,9 @@ using WaitListIterator = WaitList::iterator;
 class WaitingList
 {
 	public:
-		static WaitingList* getInstance() {
+		static WaitingList& getInstance() {
 			static WaitingList waitingList;
-			return &waitingList;
+			return waitingList;
 		}
 
 		bool clientLogin(const Player* player);

@@ -44,9 +44,9 @@ struct ProtocolOutfit {
 class Outfits
 {
 	public:
-		static Outfits* getInstance() {
+		static Outfits& getInstance() {
 			static Outfits instance;
-			return &instance;
+			return instance;
 		}
 
 		bool loadFromXml();
