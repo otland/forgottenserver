@@ -4454,7 +4454,6 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	ScriptingManager::ReloadInterface_t interfaceId = ScriptingManager::NONE;
 
 	if (interfaceName == "action" || interfaceName == "actions") {
-		//g_actions->reload();
 		interfaceId = ScriptingManager::ACTIONS;
 	} else if (interfaceName == "config" || interfaceName == "configuration") {
 		interfaceId = ScriptingManager::CONFIG;
