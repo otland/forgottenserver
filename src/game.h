@@ -493,9 +493,6 @@ class Game
 		Item* getUniqueItem(uint16_t uniqueId);
 		bool addUniqueItem(uint16_t uniqueId, Item* item);
 		void removeUniqueItem(uint16_t uniqueId);
-		void reloadCommands() {
-			commands.reload();
-		}
 
 		Groups groups;
 		Map map;

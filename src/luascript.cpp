@@ -35,11 +35,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "databasetasks.h"
-#include "actions.h"
-#include "movement.h"
-#include "weapons.h"
-#include "globalevent.h"
-#include "events.h"
+#include "scriptmanager.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -47,14 +43,6 @@ extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
 extern Spells* g_spells;
-extern Actions* g_actions;
-extern TalkActions* g_talkActions;
-extern MoveEvents* g_moveEvents;
-extern Weapons* g_weapons;
-extern CreatureEvents* g_creatureEvents;
-extern GlobalEvents* g_globalEvents;
-extern Events* g_events;
-extern Chat* g_chat;
 
 ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
 uint32_t ScriptEnvironment::lastResultId = 0;
@@ -4462,52 +4450,54 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 {
 	// Game.reload(interfaceName)
 	const std::string& interfaceName = asLowerCaseString(getString(L, 1));
-	
+
+	ScriptingManager::ReloadInterface_t interfaceId = ScriptingManager::NONE;
+
 	if (interfaceName == "action" || interfaceName == "actions") {
-		g_actions->reload();
+		//g_actions->reload();
+		interfaceId = ScriptingManager::ACTIONS;
 	} else if (interfaceName == "config" || interfaceName == "configuration") {
-		g_config.reload();
+		interfaceId = ScriptingManager::CONFIG;
 	} else if (interfaceName == "creaturescript" || interfaceName == "creaturescripts") {
-		g_creatureEvents->reload();
+		interfaceId = ScriptingManager::CREATUREEVENTS;
 	} else if (interfaceName == "monster" || interfaceName == "monsters") {
-		g_monsters.reload();
+		interfaceId = ScriptingManager::MONSTERS;
 	} else if (interfaceName == "move" || interfaceName == "movement" || interfaceName == "movements"
 		|| interfaceName == "moveevents" || interfaceName == "moveevent") {
-		g_moveEvents->reload();
+		interfaceId = ScriptingManager::MOVEEVENTS;
 	} else if (interfaceName == "npc" || interfaceName == "npcs") {
-		Npcs::reload();
+		interfaceId = ScriptingManager::NPCS;
 	} else if (interfaceName == "raid" || interfaceName == "raids") {
-		g_game.raids.reload();
-		g_game.raids.startup();
+		interfaceId = ScriptingManager::RAIDS;
 	} else if (interfaceName == "spell" || interfaceName == "spells") {
-		g_spells->reload();
-		g_monsters.reload();
+		interfaceId = ScriptingManager::SPELLS;
 	} else if (interfaceName == "talk" || interfaceName == "talkaction" || interfaceName == "talkactions") {
-		g_talkActions->reload();
+		interfaceId = ScriptingManager::TALKACTIONS;
 	} else if (interfaceName == "items") {
-		Item::items.reload();
+		interfaceId = ScriptingManager::ITEMS;
 	} else if (interfaceName == "weapon" || interfaceName == "weapons") {
-		g_weapons->reload();
-		g_weapons->loadDefaults();
+		interfaceId = ScriptingManager::WEAPONS;
 	} else if (interfaceName == "quest" || interfaceName == "quests") {
-		g_game.quests.reload();
+		interfaceId = ScriptingManager::QUESTS;
 	} else if (interfaceName == "mount" || interfaceName == "mounts") {
-		g_game.mounts.reload();
+		interfaceId = ScriptingManager::MOUNTS;
 	} else if (interfaceName == "globalevents" || interfaceName == "globalevent") {
-		g_globalEvents->reload();
+		interfaceId = ScriptingManager::GLOBALEVENTS;
 	} else if (interfaceName == "events") {
-		g_events->load();
+		interfaceId = ScriptingManager::EVENTS;
 	} else if (interfaceName == "chat" || interfaceName == "channel" || interfaceName == "chatchannels") {
-		g_chat->load();
+		interfaceId = ScriptingManager::CHAT;
 	} else if (interfaceName == "global") {
-		g_luaEnvironment.loadFile("data/global.lua");
+		interfaceId = ScriptingManager::GLOBAL;
+	}
+	
+	if (interfaceId != ScriptingManager::NONE) {
+		ScriptingManager::getInstance().reloadInterface(interfaceId);
+		lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
+		pushBoolean(L, true);
 	} else {
 		pushBoolean(L, false);
-		return 1;
 	}
-
-	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
-	pushBoolean(L, true);
 	return 1;
 }
 
