@@ -64,7 +64,7 @@ std::string Mission::getDescription(Player* player) const
 		LuaScriptInterface*	scriptInterface = info.scriptInterface;
 		if (!scriptInterface->reserveScriptEnv()) {
 			std::cout << "[Error - Mission::missionSetDescription] Call stack overflow" << std::endl;
-			return false;
+			return std::string();
 		}
 
 		ScriptEnvironment* env = scriptInterface->getScriptEnv();
