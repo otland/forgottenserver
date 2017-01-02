@@ -180,7 +180,7 @@ std::string Mission::getName(Player* player) const
 		LuaScriptInterface*	scriptInterface = info.scriptInterface;
 		if (!scriptInterface->reserveScriptEnv()) {
 			std::cout << "[Error - Mission::setName] Call stack overflow" << std::endl;
-			return false;
+			return std::string();
 		}
 
 		ScriptEnvironment* env = scriptInterface->getScriptEnv();
@@ -214,7 +214,7 @@ std::string Quest::getName(Player* player) const
 		LuaScriptInterface*	scriptInterface = info.scriptInterface;
 		if (!scriptInterface->reserveScriptEnv()) {
 			std::cout << "[Error - Quest::setName] Call stack overflow" << std::endl;
-			return false;
+			return std::string();
 		}
 
 		ScriptEnvironment* env = scriptInterface->getScriptEnv();
