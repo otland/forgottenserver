@@ -7,7 +7,7 @@ function onSay(player, words, param)
 
 	for k, targetPlayer in ipairs(players) do
 		if hasAccess or not targetPlayer:isInGhostMode() then
-			table.insert(onlineList, string.format("%s [%d]", targetPlayer:getName(), targetPlayer:getLevel()))
+			table.insert(onlineList, ("%s [%d]"):format(targetPlayer:getName(), targetPlayer:getLevel()))
 		end
 	end
 
