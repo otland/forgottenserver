@@ -5,8 +5,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	local tile = Tile(player:getPosition())
-	local house = tile:getHouse()
+	local house = Tile(player:getPosition()):getHouse()
 	if not house then
 		player:sendCancelMessage("You must stand in your house to initiate the trade.")
 		return false
