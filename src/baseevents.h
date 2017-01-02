@@ -83,8 +83,6 @@ class CallBack
 		LuaScriptInterface* scriptInterface = nullptr;
 
 		bool loaded = false;
-
-		std::string callbackName;
 };
 
 #endif

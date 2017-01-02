@@ -158,7 +158,6 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 		return false;
 	}
 
-	callbackName = name;
 	scriptId = id;
 	loaded = true;
 	return true;
