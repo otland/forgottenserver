@@ -23,7 +23,7 @@
 
 #include "pugicast.h"
 
-std::string Mission::getDescription(Player* player) const
+std::string Mission::getXmlDescription(Player* player) const
 {
 	int32_t value;
 	player->getStorageValue(storageID, value);
@@ -44,7 +44,8 @@ std::string Mission::getDescription(Player* player) const
 				}
 			}
 		}
-	} else {
+	}
+	else {
 		for (int32_t current = endValue; current >= startValue; current--) {
 			if (value == current) {
 				auto sit = descriptions.find(current);
@@ -57,10 +58,62 @@ std::string Mission::getDescription(Player* player) const
 	return "An error has occurred, please contact a gamemaster.";
 }
 
+std::string Mission::getDescription(Player* player) const
+{
+	if (player && info.missionSetDescription != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Mission::missionSetDescription] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.missionSetDescription, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.missionSetDescription);
+
+		LuaScriptInterface::pushUserdata<const Mission>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Mission");
+
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		if (scriptInterface->protectedCall(L, 2, 1) != 0) {
+			LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+		} else {
+			return LuaScriptInterface::popString(L);
+		}
+	}
+	return getXmlDescription(player);
+}
+
 bool Mission::isStarted(Player* player) const
 {
 	if (!player) {
 		return false;
+	}
+
+	if (info.missionIsStarted != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Mission::missionIsStarted] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.missionIsStarted, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.missionIsStarted);
+
+		LuaScriptInterface::pushUserdata<const Mission>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Mission");
+
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		return scriptInterface->callFunction(2);
 	}
 
 	int32_t value;
@@ -85,6 +138,28 @@ bool Mission::isCompleted(Player* player) const
 		return false;
 	}
 
+	if (info.missionIsCompleted != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Mission::isCompleted] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.missionIsCompleted, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.missionIsCompleted);
+
+		LuaScriptInterface::pushUserdata<const Mission>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Mission");
+
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		return scriptInterface->callFunction(2);
+	}
+
 	int32_t value;
 	if (!player->getStorageValue(storageID, value)) {
 		return false;
@@ -99,9 +174,68 @@ bool Mission::isCompleted(Player* player) const
 
 std::string Mission::getName(Player* player) const
 {
-	if (isCompleted(player)) {
-		return name + " (completed)";
+	std::string missionName = name;
+
+	if (player && info.missionSetName != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Mission::setName] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.missionSetName, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.missionSetName);
+
+		LuaScriptInterface::pushUserdata<const Mission>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Mission");
+
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		if (scriptInterface->protectedCall(L, 2, 1) != 0) {
+			LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+		} else {
+			missionName = LuaScriptInterface::popString(L);
+		}
 	}
+
+	if (isCompleted(player)) {
+		missionName += " (completed)";
+	}
+	return missionName;
+}
+
+std::string Quest::getName(Player* player) const
+{
+	if (player && info.questSetName != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Quest::setName] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.questSetName, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.questSetName);
+
+		LuaScriptInterface::pushUserdata<const Quest>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Quest");
+
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		if (scriptInterface->protectedCall(L, 2, 1) != 0) {
+			LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+		} else {
+			return LuaScriptInterface::popString(L);
+		}
+	}
+
 	return name;
 }
 
@@ -118,6 +252,32 @@ uint16_t Quest::getMissionsCount(Player* player) const
 
 bool Quest::isCompleted(Player* player) const
 {
+	if (!player) {
+		return false;
+	}
+
+	if (info.questIsCompleted != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Quest::isCompleted] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.questIsCompleted, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.questIsCompleted);
+			
+		LuaScriptInterface::pushUserdata<const Quest>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Quest");
+		
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		return scriptInterface->callFunction(2);
+	}
+
 	for (const Mission& mission : missions) {
 		if (!mission.isCompleted(player)) {
 			return false;
@@ -130,6 +290,28 @@ bool Quest::isStarted(Player* player) const
 {
 	if (!player) {
 		return false;
+	}
+
+	if (info.questIsStarted != -1 && info.scriptInterface) {
+		LuaScriptInterface*	scriptInterface = info.scriptInterface;
+		if (!scriptInterface->reserveScriptEnv()) {
+			std::cout << "[Error - Quest::isStarted] Call stack overflow" << std::endl;
+			return false;
+		}
+
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(info.questIsStarted, scriptInterface);
+
+		lua_State* L = scriptInterface->getLuaState();
+		scriptInterface->pushFunction(info.questIsStarted);
+
+		LuaScriptInterface::pushUserdata<const Quest>(L, this);
+		LuaScriptInterface::setMetatable(L, -1, "Quest");
+
+		LuaScriptInterface::pushUserdata<Player>(L, player);
+		LuaScriptInterface::setMetatable(L, -1, "Player");
+
+		return scriptInterface->callFunction(2);
 	}
 
 	int32_t value;
@@ -149,12 +331,13 @@ bool Quests::reload()
 bool Quests::loadFromXml()
 {
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/quests.xml");
+	pugi::xml_parse_result result = doc.load_file("data/quests/quests.xml");
 	if (!result) {
-		printXMLError("Error - Quests::loadFromXml", "data/XML/quests.xml", result);
+		printXMLError("Error - Quests::loadFromXml", "data/quests/quests.xml", result);
 		return false;
 	}
 
+	pugi::xml_attribute attr;
 	uint16_t id = 0;
 	for (auto questNode : doc.child("quests").children()) {
 		quests.emplace_back(
@@ -164,6 +347,24 @@ bool Quests::loadFromXml()
 			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
 		);
 		Quest& quest = quests.back();
+		
+		if ((attr = questNode.attribute("script"))) {
+			if (!scriptInterface) {
+				scriptInterface.reset(new LuaScriptInterface("Quest Interface"));
+				scriptInterface->initState();
+			}
+
+			std::string scriptFile = attr.as_string();
+			if (scriptInterface->loadFile("data/quests/scripts/" + scriptFile) != 0) {
+				std::cout << "[Warning - Quests::loadFromXml] Can not load script: " << scriptFile << std::endl;
+				std::cout << scriptInterface->getLastLuaError() << std::endl;
+			} else {
+				quest.info.scriptInterface = scriptInterface.get();
+				quest.info.questIsStarted = scriptInterface->getMetaEvent("Quest", "isStarted");
+				quest.info.questIsCompleted = scriptInterface->getMetaEvent("Quest", "isCompleted");
+				quest.info.questSetName = scriptInterface->getMetaEvent("Quest", "setName");
+			}
+		}
 
 		for (auto missionNode : questNode.children()) {
 			std::string mainDescription = missionNode.attribute("description").as_string();
@@ -176,6 +377,25 @@ bool Quests::loadFromXml()
 				missionNode.attribute("ignoreendvalue").as_bool()
 			);
 			Mission& mission = quest.missions.back();
+
+			if ((attr = missionNode.attribute("script"))) {
+				if (!scriptInterface) {
+					scriptInterface.reset(new LuaScriptInterface("Quest Interface"));
+					scriptInterface->initState();
+				}
+
+				std::string scriptFile = attr.as_string();
+				if (scriptInterface->loadFile("data/quests/scripts/" + scriptFile) != 0) {
+					std::cout << "[Warning - Quests::loadFromXml] Can not load script: " << scriptFile << std::endl;
+					std::cout << scriptInterface->getLastLuaError() << std::endl;
+				} else {
+					mission.info.scriptInterface = scriptInterface.get();
+					mission.info.missionIsStarted = scriptInterface->getMetaEvent("Mission", "isStarted");
+					mission.info.missionIsCompleted = scriptInterface->getMetaEvent("Mission", "isCompleted");
+					mission.info.missionSetName = scriptInterface->getMetaEvent("Mission", "setName");
+					mission.info.missionSetDescription = scriptInterface->getMetaEvent("Mission", "setDescription");
+				}
+			}
 
 			if (mainDescription.empty()) {
 				for (auto missionStateNode : missionNode.children()) {

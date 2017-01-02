@@ -31,6 +31,15 @@ using QuestsList = std::list<Quest>;
 
 class Mission
 {
+	struct MissionInfo {
+		LuaScriptInterface* scriptInterface;
+
+		int32_t missionIsStarted = -1;
+		int32_t missionIsCompleted = -1;
+		int32_t missionSetName = -1;
+		int32_t missionSetDescription = -1;
+	};
+
 	public:
 		Mission(std::string name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue) :
 			name(std::move(name)), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
@@ -38,7 +47,11 @@ class Mission
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
 		std::string getName(Player* player) const;
+		std::string getName() const {
+			return name;
+		}
 		std::string getDescription(Player* player) const;
+		std::string getXmlDescription(Player* player) const;
 
 		uint32_t getStorageId() const {
 			return storageID;
@@ -58,10 +71,21 @@ class Mission
 		uint32_t storageID;
 		int32_t startValue, endValue;
 		bool ignoreEndValue;
+		MissionInfo info;
+
+	friend class Quests;
 };
 
 class Quest
 {
+	struct QuestInfo {
+		LuaScriptInterface* scriptInterface;
+
+		int32_t questIsStarted = -1;
+		int32_t questIsCompleted = -1;
+		int32_t questSetName = -1;
+	};
+
 	public:
 		Quest(std::string name, uint16_t id, int32_t startStorageID, int32_t startStorageValue) :
 			name(std::move(name)), startStorageID(startStorageID), startStorageValue(startStorageValue), id(id) {}
@@ -73,6 +97,10 @@ class Quest
 		}
 		std::string getName() const {
 			return name;
+		}
+		std::string getName(Player* player) const;
+		uint16_t getMissionsCount() const {
+			return missions.size();
 		}
 		uint16_t getMissionsCount(Player* player) const;
 
@@ -95,6 +123,7 @@ class Quest
 		uint16_t id;
 
 		MissionsList missions;
+		QuestInfo info;
 
 	friend class Quests;
 };
@@ -113,6 +142,7 @@ class Quests
 		bool reload();
 
 	private:
+		std::unique_ptr<LuaScriptInterface> scriptInterface;
 		QuestsList quests;
 };
 

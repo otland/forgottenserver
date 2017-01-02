@@ -551,6 +551,8 @@ class LuaScriptInterface
 
 		static int luaGameStartRaid(lua_State* L);
 
+		static int luaGameGetQuests(lua_State* L);
+
 		// Variant
 		static int luaVariantCreate(lua_State* L);
 
@@ -1237,6 +1239,27 @@ class LuaScriptInterface
 		static int luaPartyIsSharedExperienceEnabled(lua_State* L);
 		static int luaPartyShareExperience(lua_State* L);
 		static int luaPartySetSharedExperience(lua_State* L);
+
+		// Quest
+		static int luaQuestGetId(lua_State* L);
+		static int luaQuestGetName(lua_State* L);
+		static int luaQuestGetMissions(lua_State* L);
+		static int luaQuestGetMissionsCount(lua_State* L);
+		static int luaQuestHasStarted(lua_State* L);
+		static int luaQuestHasCompleted(lua_State* L);
+		static int luaQuestGetStartStorageId(lua_State* L);
+		static int luaQuestGetStartStorageValue(lua_State* L);
+
+		// Mission
+		static int luaMissionGetName(lua_State* L);
+		static int luaMissionGetDescription(lua_State* L);
+		static int luaMissionHasStarted(lua_State* L);
+		static int luaMissionHasCompleted(lua_State* L);
+		static int luaMissionGetStorageId(lua_State* L);
+		static int luaMissionGetStartStorageValue(lua_State* L);
+		static int luaMissionGetEndStorageValue(lua_State* L);
+
+
 
 		//
 		lua_State* luaState = nullptr;
