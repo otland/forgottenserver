@@ -7,18 +7,16 @@ function onSay(player, words, param)
 
 	for k, targetPlayer in ipairs(players) do
 		if hasAccess or not targetPlayer:isInGhostMode() then
-			table.insert(onlineList, targetPlayer:getName() .. " [" .. targetPlayer:getLevel() .. "]")
+			table.insert(onlineList, string.format("%s [%d]", targetPlayer:getName(), targetPlayer:getLevel()))
 		end
 	end
 
 	local playersOnline = #onlineList
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, playersOnline .. " players online.")
 	
-	local i = 1
-	while i <= playersOnline do
+	for i = 1, playersOnline, maxPlayersPerMessage do
 		local msg = table.concat(onlineList, ", ", i, math.min(i + maxPlayersPerMessage - 1, playersOnline))
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, msg .. ".")
-		i = i + maxPlayersPerMessage
 	end
 	return false
 end
