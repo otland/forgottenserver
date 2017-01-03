@@ -425,6 +425,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x70: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_EAST); break;
 		case 0x71: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_SOUTH); break;
 		case 0x72: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_WEST); break;
+		case 0x77: parseEquipObject(msg); break;
 		case 0x78: parseThrow(msg); break;
 		case 0x79: parseLookInShop(msg); break;
 		case 0x7A: parsePlayerPurchase(msg); break;
@@ -900,6 +901,14 @@ void ProtocolGame::parseFollow(NetworkMessage& msg)
 	uint32_t creatureId = msg.get<uint32_t>();
 	// msg.get<uint32_t>(); creatureId (same as above)
 	addGameTask(&Game::playerFollowCreature, player->getID(), creatureId);
+}
+
+void ProtocolGame::parseEquipObject(NetworkMessage& msg)
+{
+	uint16_t spriteId = msg.get<uint16_t>();
+	// msg.get<uint8_t>();
+
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerEquipItem, player->getID(), spriteId);
 }
 
 void ProtocolGame::parseTextWindow(NetworkMessage& msg)
@@ -2527,6 +2536,28 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 		msg.addByte(0x79);
 		msg.addByte(slot);
 	}
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendItems()
+{
+	NetworkMessage msg;
+	msg.addByte(0xF5);
+
+	const std::vector<uint16_t>& inventory = Item::items.getInventory();
+	msg.add<uint16_t>(inventory.size() + 11);
+	for (uint16_t i = 1; i <= 11; i++) {
+		msg.add<uint16_t>(i);
+		msg.addByte(0); //always 0
+		msg.add<uint16_t>(1); // always 1
+	}
+
+	for (int clientId : inventory) {
+		msg.add<uint16_t>(clientId);
+		msg.addByte(0); //always 0
+		msg.add<uint16_t>(1);
+	}
+
 	writeToOutputBuffer(msg);
 }
 

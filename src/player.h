@@ -841,6 +841,11 @@ class Player final : public Creature, public Cylinder
 				client->sendInventoryItem(slot, item);
 			}
 		}
+		void sendItems() {
+			if (client) {
+				client->sendItems();
+			}
+		}
 
 		//event methods
 		void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
@@ -1285,8 +1290,8 @@ class Player final : public Creature, public Cylinder
 		bool ghostMode = false;
 		bool pzLocked = false;
 		bool isConnecting = false;
-		bool addAttackSkillPoint = false;
 		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+		bool addAttackSkillPoint = false;
 
 		static uint32_t playerAutoID;
 

@@ -102,6 +102,7 @@ class ProtocolGame final : public Protocol
 		void parseFightModes(NetworkMessage& msg);
 		void parseAttack(NetworkMessage& msg);
 		void parseFollow(NetworkMessage& msg);
+		void parseEquipObject(NetworkMessage& msg);
 
 		void parseBugReport(NetworkMessage& msg);
 		void parseDebugAssert(NetworkMessage& msg);
@@ -260,6 +261,7 @@ class ProtocolGame final : public Protocol
 
 		//inventory
 		void sendInventoryItem(slots_t slot, const Item* item);
+		void sendItems();
 
 		//messages
 		void sendModalWindow(const ModalWindow& modalWindow);

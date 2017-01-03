@@ -1681,6 +1681,84 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 }
 
 //Implementation of player invoked events
+void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	Item* item = nullptr;
+	if (!(item = player->getInventoryItem(CONST_SLOT_BACKPACK))) {
+		return;
+	}
+
+	Container* backpack = nullptr;
+	if (!(backpack = item->getContainer())) {
+		return;
+	}
+
+	Container* toContainer = backpack->getLastIndex() != backpack->capacity() ? backpack : nullptr;
+	for (ContainerIterator it = backpack->iterator(); it.hasNext() && !toContainer; it.advance()) {
+		if (Container* container = (*it)->getContainer()) {
+			if (container->getLastIndex() != container->capacity()) {
+				toContainer = container;
+			}
+		}
+	}
+
+	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
+		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+			if ((*it)->getID() == itemid) {
+				return *it;
+			}
+		}
+		return nullptr;
+	};
+
+	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+	slots_t slot = CONST_SLOT_RIGHT;
+	if (it.weaponType != WeaponType_t::WEAPON_SHIELD) {
+		int32_t slotPosition = it.slotPosition;
+
+		if (slotPosition & SLOTP_HEAD) {
+			slot = CONST_SLOT_HEAD;
+		} else if (slotPosition & SLOTP_NECKLACE) {
+			slot = CONST_SLOT_NECKLACE;
+		} else if (slotPosition & SLOTP_ARMOR) {
+			slot = CONST_SLOT_ARMOR;
+		} else if(slotPosition & SLOTP_LEGS) {
+			slot = CONST_SLOT_LEGS;
+		} else if (slotPosition & SLOTP_FEET) {
+			slot = CONST_SLOT_FEET ;
+		} else if (slotPosition & SLOTP_RING) {
+			slot = CONST_SLOT_RING;
+		} else if (slotPosition & SLOTP_AMMO) {
+			slot = CONST_SLOT_AMMO;
+		} else if (slotPosition & SLOTP_TWO_HAND || slotPosition & SLOTP_LEFT) {
+			slot = CONST_SLOT_LEFT;
+		} else {
+			return;
+		}
+	}
+
+	if (!(item = player->getInventoryItem(slot)) || (item->getID() == it.id && it.stackable && item->getItemCount() != 100)) {
+		if (Item* equipItem = searchForItem(backpack, it.id)) {
+			internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
+			return;
+		}
+	}
+
+	if (item && toContainer) {
+		if (item->getID() == it.id) {
+			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
+		} else if (Item* equipItem = searchForItem(backpack, it.id)) {
+			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
+			internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
+		}
+	}
+}
+
 void Game::playerMove(uint32_t playerId, Direction direction)
 {
 	Player* player = getPlayerByID(playerId);
