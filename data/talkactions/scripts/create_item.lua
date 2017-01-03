@@ -19,8 +19,6 @@ function onSay(player, words, param)
 			itemType = ItemType(tonumber(split[1]))
 		end
 
-		-- Yes, it is quite unnecessary to perform the check although we know for sure it will fail if above condition passes.
-		-- Although, I felt it was better than creating variables to check for success (or repaeting the cancel message).
 		if itemType:getId() == 0 then
 			player:sendCancelMessage("There is no item with that id or name.")
 			return false
