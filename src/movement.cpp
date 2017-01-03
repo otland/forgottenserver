@@ -295,7 +295,7 @@ MoveEvent* MoveEvents::getEvent(const Tile* tile, MoveEvent_t eventType)
 	return nullptr;
 }
 
-uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEvent_t eventType)
+uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, const Position& fromPos, MoveEvent_t eventType)
 {
 	const Position& pos = tile->getPosition();
 
@@ -303,7 +303,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 
 	MoveEvent* moveEvent = getEvent(tile, eventType);
 	if (moveEvent) {
-		ret &= moveEvent->fireStepEvent(creature, nullptr, pos);
+		ret &= moveEvent->fireStepEvent(creature, nullptr, pos, fromPos);
 	}
 
 	for (size_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
@@ -319,7 +319,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 
 		moveEvent = getEvent(tileItem, eventType);
 		if (moveEvent) {
-			ret &= moveEvent->fireStepEvent(creature, tileItem, pos);
+			ret &= moveEvent->fireStepEvent(creature, tileItem, pos, fromPos);
 		}
 	}
 	return ret;
@@ -524,7 +524,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 namespace {
 
-uint32_t StepInField(Creature* creature, Item* item, const Position&)
+uint32_t StepInField(Creature* creature, Item* item, const Position&, const Position&)
 {
 	MagicField* field = item->getMagicField();
 	if (field) {
@@ -535,7 +535,7 @@ uint32_t StepInField(Creature* creature, Item* item, const Position&)
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t StepOutField(Creature*, Item*, const Position&)
+uint32_t StepOutField(Creature*, Item*, const Position&, const Position&)
 {
 	return 1;
 }
@@ -784,16 +784,16 @@ void MoveEvent::setEventType(MoveEvent_t type)
 	eventType = type;
 }
 
-uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position& pos)
+uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position& pos, const Position& fromPos)
 {
 	if (scripted) {
-		return executeStep(creature, item, pos);
+		return executeStep(creature, item, pos, fromPos);
 	} else {
-		return stepFunction(creature, item, pos);
+		return stepFunction(creature, item, pos, fromPos);
 	}
 }
 
-bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
+bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos, const Position& fromPos)
 {
 	//onStepIn(creature, item, pos, fromPosition)
 	//onStepOut(creature, item, pos, fromPosition)
@@ -812,7 +812,7 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushThing(L, item);
 	LuaScriptInterface::pushPosition(L, pos);
-	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
+	LuaScriptInterface::pushPosition(L, fromPos);
 
 	return scriptInterface->callFunction(4);
 }
