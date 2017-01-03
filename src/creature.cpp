@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1103,9 +1103,9 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	gainExp /= 2;
 	master->onGainExperience(gainExp, target);
 
-	SpectatorVec list;
-	g_game.map.getSpectators(list, position, false, true);
-	if (list.empty()) {
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, position, false, true);
+	if (spectators.empty()) {
 		return;
 	}
 
@@ -1114,7 +1114,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.color = TEXTCOLOR_WHITE_EXP;
 	message.primary.value = gainExp;
 
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendTextMessage(message);
 	}
 }

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include "enums.h"
 #include "luascript.h"
 
-typedef bool (ActionFunction)(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey);
+using ActionFunction = std::function<bool(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey)>;
 
 class Action : public Event
 {
@@ -67,14 +67,10 @@ class Action : public Event
 		}
 		virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const;
 
-		ActionFunction* function;
+		ActionFunction function;
 
 	protected:
 		std::string getScriptEventName() const override;
-
-		static ActionFunction increaseItemId;
-		static ActionFunction decreaseItemId;
-		static ActionFunction enterMarket;
 
 		bool allowFarUse;
 		bool checkFloor;
@@ -108,7 +104,7 @@ class Actions final : public BaseEvents
 		Event* getEvent(const std::string& nodeName) final;
 		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
-		typedef std::map<uint16_t, Action*> ActionUseMap;
+		using ActionUseMap = std::map<uint16_t, Action*>;
 		ActionUseMap useItemMap;
 		ActionUseMap uniqueItemMap;
 		ActionUseMap actionItemMap;
