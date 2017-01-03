@@ -479,6 +479,10 @@ void Tile::onUpdateTile(const SpectatorHashSet& spectators)
 ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	if (const Creature* creature = thing.getCreature()) {
+		if (!g_moveEvents->onCreatureMove(const_cast<Creature*>(creature), this, creature->getPosition(), MOVE_EVENT_STEP_IN)) {
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
+
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOERROR;
 		}
@@ -1378,9 +1382,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 		}
 
 		//calling movement scripts
-		if (creature) {
-			g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_IN);
-		} else if (item) {
+		if (item) {
 			g_moveEvents->onItemMove(item, this, true);
 		}
 	}
@@ -1407,14 +1409,8 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	}
 
 	//calling movement scripts
-	Creature* creature = thing->getCreature();
-	if (creature) {
-		g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_OUT);
-	} else {
-		Item* item = thing->getItem();
-		if (item) {
-			g_moveEvents->onItemMove(item, this, false);
-		}
+	if (Item* item = thing->getItem()) {
+		g_moveEvents->onItemMove(item, this, false);
 	}
 }
 
