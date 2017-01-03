@@ -8,10 +8,19 @@ function onSay(player, words, param)
 	end
 
 	local split = param:split(",")
+	if not split[1] then
+		player:sendCancelMessage("You need to specify an item name or id.")
+		return false
+	end
 
 	local itemType = ItemType(split[1])
 	if itemType:getId() == 0 then
-		itemType = ItemType(tonumber(split[1]))
+		if tonumber(split[1]) then
+			itemType = ItemType(tonumber(split[1]))
+		end
+
+		-- Yes, it is quite unnecessary to perform the check although we know for sure it will fail if above condition passes.
+		-- Although, I felt it was better than creating variables to check for success (or repaeting the cancel message).
 		if itemType:getId() == 0 then
 			player:sendCancelMessage("There is no item with that id or name.")
 			return false
@@ -28,11 +37,7 @@ function onSay(player, words, param)
 			count = math.max(0, count)
 		end
 	else
-		if not itemType:isFluidContainer() then
-			count = 1
-		else
-			count = 0
-		end
+		count = itemType:isFluidContainer() and 0 or 1
 	end
 
 	local result = player:addItem(itemType:getId(), count)
