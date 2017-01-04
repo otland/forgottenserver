@@ -9187,7 +9187,7 @@ int LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
 
 int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 {
-	// player:setGhostMode(enabled)
+	// player:setGhostMode(enabled[, showEffect=true])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -9200,20 +9200,22 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		return 1;
 	}
 
+	bool showEffect = getBoolean(L, 3, true);
+
 	player->switchGhostMode();
 
 	Tile* tile = player->getTile();
 	const Position& position = player->getPosition();
 
-	SpectatorHashSet spectators;
-	g_game.map.getSpectators(spectators, position, true, true);
-	for (Creature* spectator : spectators) {
+	SpectatorVec list;
+	g_game.map.getSpectators(list, position, true, true);
+	for (Creature* spectator : list) {
 		Player* tmpPlayer = spectator->getPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
 			if (enabled) {
 				tmpPlayer->sendRemoveTileThing(position, tile->getStackposOfCreature(tmpPlayer, player));
 			} else {
-				tmpPlayer->sendCreatureAppear(player, position, true);
+				tmpPlayer->sendCreatureAppear(player, position, showEffect);
 			}
 		} else {
 			tmpPlayer->sendCreatureChangeVisible(player, !enabled);
