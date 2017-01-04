@@ -167,10 +167,6 @@ class RaidEvent
 			return delay;
 		}
 
-		static bool compareEvents(const RaidEvent* lhs, const RaidEvent* rhs) {
-			return lhs->getDelay() < rhs->getDelay();
-		}
-
 	private:
 		uint32_t delay;
 };
