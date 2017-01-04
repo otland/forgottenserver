@@ -9240,6 +9240,9 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	pushBoolean(L, true);
 	return 1;
 }
+	pushBoolean(L, true);
+	return 1;
+}
 
 int LuaScriptInterface::luaPlayerGetContainerId(lua_State* L)
 {
