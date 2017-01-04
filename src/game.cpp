@@ -1698,15 +1698,6 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	Container* toContainer = backpack->getLastIndex() != backpack->capacity() ? backpack : nullptr;
-	for (ContainerIterator it = backpack->iterator(); it.hasNext() && !toContainer; it.advance()) {
-		if (Container* container = (*it)->getContainer()) {
-			if (container->getLastIndex() != container->capacity()) {
-				toContainer = container;
-			}
-		}
-	}
-
 	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
 		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 			if ((*it)->getID() == itemid) {
@@ -1742,20 +1733,12 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		}
 	}
 
-	if (!(item = player->getInventoryItem(slot)) || (item->getID() == it.id && it.stackable && item->getItemCount() != 100)) {
-		if (Item* equipItem = searchForItem(backpack, it.id)) {
-			internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
-			return;
-		}
-	}
-
-	if (item && toContainer) {
-		if (item->getID() == it.id) {
-			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-		} else if (Item* equipItem = searchForItem(backpack, it.id)) {
-			internalMoveItem(player, toContainer, toContainer->getLastIndex(), item, item->getItemCount(), nullptr);
-			internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
-		}
+	Item* slotItem = player->getInventoryItem(slot);
+	Item* equipItem = searchForItem(backpack, it.id);
+	if (slotItem && slotItem->getID() == it.id && (!it.stackable || slotItem->getItemCount() == 100 || !equipItem)) {
+		internalMoveItem(slotItem->getParent(), player, CONST_SLOT_WHEREEVER, slotItem, slotItem->getItemCount(), nullptr);
+	} else if (equipItem) {
+		internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
 	}
 }
 
