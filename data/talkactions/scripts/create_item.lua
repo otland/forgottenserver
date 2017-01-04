@@ -8,7 +8,7 @@ function onSay(player, words, param)
 	end
 
 	local split = param:split(",")
-	if not split[1] then
+	if #split < 1 then
 		player:sendCancelMessage("You need to specify an item name or id.")
 		return false
 	end
