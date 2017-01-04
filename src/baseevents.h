@@ -26,7 +26,6 @@ class Event
 {
 	public:
 		explicit Event(LuaScriptInterface* interface);
-		explicit Event(const Event* copy);
 		virtual ~Event() = default;
 
 		virtual bool configureEvent(const pugi::xml_node& node) = 0;

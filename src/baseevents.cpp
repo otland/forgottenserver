@@ -88,9 +88,6 @@ bool BaseEvents::reload()
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
-Event::Event(const Event* copy) :
-	scripted(copy->scripted), scriptId(copy->scriptId), scriptInterface(copy->scriptInterface) {}
-
 bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
