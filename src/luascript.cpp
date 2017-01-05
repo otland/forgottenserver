@@ -7175,7 +7175,7 @@ int LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 	}
 
 	const Position oldPosition = creature->getPosition();
-	if (g_game.internalTeleport(creature, position, pushMovement) != RETURNVALUE_NOERROR) {
+	if (g_game.internalTeleport(creature, position, pushMovement, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
 		pushBoolean(L, false);
 		return 1;
 	}
