@@ -28,8 +28,8 @@ local instruments = {
 	[3953] = {effect = CONST_ME_SOUND_RED}, -- war drum
 	[3957] = {effect = CONST_ME_SOUND_YELLOW, item = {id = 2681, count = 10}, chance = 80, remove = true}, -- cornucopia
 	[5786] = {effects = {failure = CONST_ME_SOUND_RED, success = CONST_ME_SOUND_YELLOW}, monster = "war wolf", chance = 60, remove = true}, -- wooden whistle
-	[6572] = {effect = CONST_ME_SOUND_GREEN, text = "TOOOOOOT", transform = {id = 13578}}, -- party trumpet
-	[6573] = {effect = CONST_ME_SOUND_GREEN, text = "TOOOOOOT", transform = {id = 13578}}, -- party trumpet
+	[6572] = {effect = CONST_ME_SOUND_GREEN, text = "TOOOOOOT", transformId = 13578}, -- party trumpet
+	[6573] = {effect = CONST_ME_SOUND_GREEN, text = "TOOOOOOT", transformId = 13578}, -- party trumpet
 	[13759] = {effect = CONST_ME_SOUND_BLUE} -- small whistle (actual effect is unknown)
 }
 
@@ -62,9 +62,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 	end
 
-	if instrument.transform then
+	if instrument.transformId then
 		player:say(instrument.text, TALKTYPE_MONSTER_SAY, false, nil, item:getPosition())
-		item:transform(instrument.transform.id)
+		item:transform(instrument.transformId)
 		item:decay()
 	end
 

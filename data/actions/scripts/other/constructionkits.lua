@@ -1,4 +1,4 @@
-local kits = {
+local constructionKits = {
 	[3901] = 1666, [3902] = 1670, [3903] = 1652, [3904] = 1674, [3905] = 1658,
 	[3906] = 3813, [3907] = 3817, [3908] = 1619, [3909] = 12799, [3910] = 2105,
 	[3911] = 1614, [3912] = 3806, [3913] = 3807, [3914] = 3809, [3915] = 1716,
@@ -24,7 +24,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	item:transform(kits[item:getId()])
+	item:transform(constructionKits[item:getId()])
 	fromPosition:sendMagicEffect(CONST_ME_POFF)
 	return true
 end
