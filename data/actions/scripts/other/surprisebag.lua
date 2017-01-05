@@ -1,4 +1,4 @@
-local presents = {
+local bags = {
 	[6570] = { -- blue present
 		{2687, 10}, {6394, 3}, 6280, 6574, 6578, 6575, 6577, 6569, 6576, 6572, 2114
 	},
@@ -8,20 +8,11 @@ local presents = {
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local count = 1
-	local targetItem = presents[item.itemid]
-	if not targetItem then
-		return true
-	end
+	local bag = bags[item:getId()]
+	local surprise = bag[math.random(#bag)]
 
-	local gift = targetItem[math.random(#targetItem)]
-	if type(gift) == "table" then
-		gift = gift[1]
-		count = gift[2]
-	end
-
-	player:addItem(gift, count)
-	item:remove(1)
+	player:addItem(type(surprise) == "table" and surprise[1] or surprise, type(surprise) == "table" and surprise[2] or 1)
 	fromPosition:sendMagicEffect(CONST_ME_GIFT_WRAPS)
+	item:remove(1)
 	return true
 end
