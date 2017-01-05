@@ -22,9 +22,8 @@ function onStepIn(creature, item, position, fromPosition)
 	end
 
 	if Tile(position):hasFlag(TILESTATE_PROTECTIONZONE) then
-		local lookPosition = position
-		lookPosition:getNextPosition(player:getDirection())
-		local depotItem = Tile(lookPosition):getItemByType(ITEM_TYPE_DEPOT)
+		position:getNextPosition(player:getDirection())
+		local depotItem = Tile(position):getItemByType(ITEM_TYPE_DEPOT)
 		if depotItem ~= nil then
 			local depotItems = creature:getDepotChest(getDepotId(depotItem:getUniqueId()), true):getItemHoldingCount()
 			creature:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Your depot contains " .. depotItems .. " item" .. (depotItems > 1 and "s." or "."))
