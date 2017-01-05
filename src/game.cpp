@@ -1680,34 +1680,19 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-//Implementation of player invoked events
-void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
+Item* searchForItem(Container* container, uint16_t itemid)
 {
-	Player* player = getPlayerByID(playerId);
-	if (!player) {
-		return;
-	}
-
-	Item* item = nullptr;
-	if (!(item = player->getInventoryItem(CONST_SLOT_BACKPACK))) {
-		return;
-	}
-
-	Container* backpack = nullptr;
-	if (!(backpack = item->getContainer())) {
-		return;
-	}
-
-	static const std::function<Item*(Container*, uint16_t)> searchForItem = [](Container* container, uint16_t itemid) -> Item* {
-		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			if ((*it)->getID() == itemid) {
-				return *it;
-			}
+	for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+		if ((*it)->getID() == itemid) {
+			return *it;
 		}
-		return nullptr;
-	};
+	}
 
-	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+	return nullptr;
+}
+
+slots_t getSlotType(const ItemType& it)
+{
 	slots_t slot = CONST_SLOT_RIGHT;
 	if (it.weaponType != WeaponType_t::WEAPON_SHIELD) {
 		int32_t slotPosition = it.slotPosition;
@@ -1728,10 +1713,32 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 			slot = CONST_SLOT_AMMO;
 		} else if (slotPosition & SLOTP_TWO_HAND || slotPosition & SLOTP_LEFT) {
 			slot = CONST_SLOT_LEFT;
-		} else {
-			return;
 		}
 	}
+
+	return slot;
+}
+
+//Implementation of player invoked events
+void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	Item* item = player->getInventoryItem(CONST_SLOT_BACKPACK);
+	if (!item) {
+		return;
+	}
+
+	Container* backpack = item->getContainer();
+	if (!backpack) {
+		return;
+	}
+
+	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+	slots_t slot = getSlotType(it);
 
 	Item* slotItem = player->getInventoryItem(slot);
 	Item* equipItem = searchForItem(backpack, it.id);

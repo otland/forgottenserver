@@ -2552,7 +2552,7 @@ void ProtocolGame::sendItems()
 		msg.add<uint16_t>(1); // always 1
 	}
 
-	for (int clientId : inventory) {
+	for (auto clientId : inventory) {
 		msg.add<uint16_t>(clientId);
 		msg.addByte(0); //always 0
 		msg.add<uint16_t>(1);

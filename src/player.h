@@ -1290,8 +1290,8 @@ class Player final : public Creature, public Cylinder
 		bool ghostMode = false;
 		bool pzLocked = false;
 		bool isConnecting = false;
-		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 		bool addAttackSkillPoint = false;
+		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 
 		static uint32_t playerAutoID;
 

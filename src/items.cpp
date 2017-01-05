@@ -333,18 +333,18 @@ bool Items::loadFromXml()
 
 void Items::buildInventoryList()
 {
-	inventory.reserve(30000);
-	for(const auto &type: items) {
+	inventory.reserve(items.size());
+	for(const auto& type: items) {
 		if(type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
 			type.attack != 0 || type.defense != 0 ||
 			type.extraDefense != 0 || type.armor != 0 ||
-			(type.slotPosition & SLOTP_NECKLACE) == SLOTP_NECKLACE ||
-			(type.slotPosition & SLOTP_RING) == SLOTP_RING ||
-			(type.slotPosition & SLOTP_AMMO) == SLOTP_AMMO ||
-			(type.slotPosition & SLOTP_FEET) == SLOTP_FEET ||
-			(type.slotPosition & SLOTP_HEAD) == SLOTP_HEAD ||
-			(type.slotPosition & SLOTP_ARMOR) == SLOTP_ARMOR ||
-			(type.slotPosition & SLOTP_LEGS) == SLOTP_LEGS)
+			type.slotPosition & SLOTP_NECKLACE ||
+			type.slotPosition & SLOTP_RING ||
+			type.slotPosition & SLOTP_AMMO ||
+			type.slotPosition & SLOTP_FEET ||
+			type.slotPosition & SLOTP_HEAD ||
+			type.slotPosition & SLOTP_ARMOR ||
+			type.slotPosition & SLOTP_LEGS)
 		{
 			inventory.push_back(type.clientId);
 		}
