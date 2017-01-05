@@ -1684,7 +1684,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 			return ret;
 		}
 
-		if (!g_moveEvents->onCreatureMove(creature, creature->getTile(), creature->getPosition(), MOVE_EVENT_STEP_OUT)) {
+		if (!g_moveEvents->onCreatureMove(creature, creature->getTile(), creature->getPosition(), MOVE_EVENT_STEP_OUT) && !hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
