@@ -6,7 +6,6 @@ function onStepIn(creature, item, position, fromPosition)
 
 	if player:getStorageValue(item.actionid) == -1 then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "The door seems to be sealed against unwanted intruders.")
-		player:teleportTo(fromPosition, true)
 		return false
 	end
 	return true
