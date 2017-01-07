@@ -15,17 +15,16 @@ function onStepIn(creature, item, position, fromPosition)
 
 	if item.actionid >= 1000 then
 		if player:getLevel() < item.actionid - 1000 then
-			player:teleportTo(fromPosition, false)
 			position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
+			return false
 		end
 		return true
 	end
 
 	if Tile(position):hasFlag(TILESTATE_PROTECTIONZONE) then
-		local lookPosition = player:getPosition()
-		lookPosition:getNextPosition(player:getDirection())
-		local depotItem = Tile(lookPosition):getItemByType(ITEM_TYPE_DEPOT)
+		position:getNextPosition(player:getDirection())
+		local depotItem = Tile(position):getItemByType(ITEM_TYPE_DEPOT)
 		if depotItem ~= nil then
 			local depotItems = player:getDepotChest(getDepotId(depotItem:getUniqueId()), true):getItemHoldingCount()
 			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Your depot contains " .. depotItems .. " item" .. (depotItems > 1 and "s." or "."))
@@ -34,10 +33,9 @@ function onStepIn(creature, item, position, fromPosition)
 	end
 
 	if item.actionid ~= 0 and player:getStorageValue(item.actionid) <= 0 then
-		player:teleportTo(fromPosition, false)
 		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
-		return true
+		return false
 	end
 	return true
 end
