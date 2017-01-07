@@ -817,12 +817,12 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	return scriptInterface->callFunction(4);
 }
 
-uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool boolean)
+uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		return executeEquip(player, item, slot, boolean);
+		return executeEquip(player, item, slot, isCheck);
 	} else {
-		return equipFunction(this, player, item, slot, boolean);
+		return equipFunction(this, player, item, slot, isCheck);
 	}
 }
 
