@@ -241,7 +241,7 @@ class LuaScriptInterface
 		bool pushFunction(int32_t functionId);
 
 		static int luaErrorHandler(lua_State* L);
-		bool callFunction(int params);
+		bool callFunction(int params, bool defaultReturn = false);
 		void callVoidFunction(int params);
 
 		//push/pop common structures
@@ -316,7 +316,7 @@ class LuaScriptInterface
 			if (parameters == 0 || arg > parameters) {
 				return defaultValue;
 			}
-			return lua_toboolean(L, arg) != 0;
+			return lua_isboolean(L, arg) ? lua_toboolean(L, arg) != 0 : defaultValue;
 		}
 
 		static std::string getString(lua_State* L, int32_t arg);
