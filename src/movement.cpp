@@ -828,7 +828,7 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos,
 	LuaScriptInterface::pushPosition(L, pos);
 	LuaScriptInterface::pushPosition(L, fromPos);
 
-	return scriptInterface->callFunction(4);
+	return scriptInterface->callFunction(4, true);
 }
 
 uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool boolean)
