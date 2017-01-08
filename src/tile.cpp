@@ -479,6 +479,10 @@ void Tile::onUpdateTile(const SpectatorHashSet& spectators)
 ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	if (const Creature* creature = thing.getCreature()) {
+		if (!g_moveEvents->onCreatureMove(const_cast<Creature*>(creature), this, creature->getPosition(), MOVE_EVENT_STEP_IN)) {
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
+
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOERROR;
 		}
