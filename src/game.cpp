@@ -38,7 +38,6 @@
 #include "scheduler.h"
 #include "events.h"
 #include "databasetasks.h"
-#include "movement.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -48,7 +47,6 @@ extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
-extern MoveEvents* g_moveEvents;
 
 Game::Game()
 {
@@ -561,7 +559,6 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	}
 
 	Tile* tile = creature->getTile();
-	g_moveEvents->onCreatureMove(creature, tile, creature->getPosition(), MOVE_EVENT_STEP_OUT);
 
 	std::vector<int32_t> oldStackPosVector;
 
@@ -755,6 +752,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
 {
+	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
 	Position destPos = getNextPosition(direction, currentPos);
 
@@ -799,10 +797,6 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	ReturnValue ret = toTile.queryAdd(0, creature, 1, flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
-	}
-
-	if (!g_moveEvents->onCreatureMove(&creature, creature.getTile(), creature.getPosition(), MOVE_EVENT_STEP_OUT)) {
-		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	map.moveCreature(creature, toTile);
@@ -1676,10 +1670,6 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 		ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
-		}
-
-		if (!g_moveEvents->onCreatureMove(creature, creature->getTile(), creature->getPosition(), MOVE_EVENT_STEP_OUT) && !hasBitSet(FLAG_NOLIMIT, flags)) {
-			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
 		map.moveCreature(*creature, *toTile, !pushMove);
