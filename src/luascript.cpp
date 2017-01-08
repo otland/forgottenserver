@@ -895,9 +895,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerInstantSpellCount(cid)
 	lua_register(luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
 
-	//getPlayerInstantSpellInfo(cid, index)
-	lua_register(luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
-
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
 	//Returns uid of the created item
@@ -2230,6 +2227,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "learnSpell", LuaScriptInterface::luaPlayerLearnSpell);
 	registerMethod("Player", "forgetSpell", LuaScriptInterface::luaPlayerForgetSpell);
 	registerMethod("Player", "hasLearnedSpell", LuaScriptInterface::luaPlayerHasLearnedSpell);
+	registerMethod("Player", "getInstantSpellInfo", LuaScriptInterface::luaPlayerGetInstantSpellInfo);
 
 	registerMethod("Player", "sendTutorial", LuaScriptInterface::luaPlayerSendTutorial);
 	registerMethod("Player", "addMapMark", LuaScriptInterface::luaPlayerAddMapMark);
@@ -2709,21 +2707,19 @@ int LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
+int LuaScriptInterface::luaPlayerGetInstantSpellInfo(lua_State* L)
 {
-	//getPlayerInstantSpellInfo(cid, index)
+	//player:getInstantSpellInfo(index)
 	Player* player = getPlayer(L, 1);
 	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
+		lua_pushnil(L);
 		return 1;
 	}
 
 	uint32_t index = getNumber<uint32_t>(L, 2);
 	InstantSpell* spell = g_spells->getInstantSpellByIndex(player, index);
 	if (!spell) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_SPELL_NOT_FOUND));
-		pushBoolean(L, false);
+		lua_pushnil(L);
 		return 1;
 	}
 
