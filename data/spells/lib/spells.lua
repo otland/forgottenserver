@@ -296,3 +296,57 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 	target:addCondition(condition)
 	return true
 end
+
+function Creature:addPartyCondition(combat, variant, condition, baseMana)
+	local position = self:getPosition()
+	local party = self:getParty()
+	if not party then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "No party members in range.")
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local members = party:getMembers()
+	members[#members + 1] = party:getLeader()
+
+	if #members == 1 then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "No party members in range.")
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local affectedMembers = {}
+	for _, member in ipairs(members) do
+		if member:getPosition():getDistance(position) <= 36 then
+			affectedMembers[#affectedMembers + 1] = member
+		end
+	end
+
+	if #affectedMembers <= 1 then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "No party members in range.")
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local mana = math.ceil((math.pow(0.9, #affectedMembers - 1) * baseMana) * #affectedMembers)
+	if self:getMana() < mana then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_NOTENOUGHMANA))
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	if not combat:execute(self, variant) then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_NOTPOSSIBLE))
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	self:addMana(baseMana - mana, false)
+	self:addManaSpent(mana - baseMana)
+
+	for _, member in ipairs(affectedMembers) do
+		member:addCondition(condition)
+	end
+	return true
+end
+
