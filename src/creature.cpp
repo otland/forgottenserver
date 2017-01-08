@@ -1292,13 +1292,16 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	auto it = conditions.begin(), end = conditions.end();
+	ConditionList conditionsCopy;
+	std::copy(conditions.begin(), conditions.end(), std::back_inserter(conditionsCopy));
+	auto it = conditionsCopy.begin(), end = conditionsCopy.end();
 	while (it != end) {
 		Condition* condition = *it;
 		if (!condition->executeCondition(this, interval)) {
 			ConditionType_t type = condition->getType();
 
-			it = conditions.erase(it);
+			it = conditionsCopy.erase(it);
+			conditions.remove(condition);
 
 			condition->endCondition(this);
 			delete condition;
