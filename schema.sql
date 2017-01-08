@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `manamax` int(11) NOT NULL DEFAULT '0',
   `manaspent` int(11) unsigned NOT NULL DEFAULT '0',
   `soul` int(10) unsigned NOT NULL DEFAULT '0',
-  `town_id` int(11) NOT NULL DEFAULT '0',
+  `town_id` int(11) NOT NULL DEFAULT '1',
   `posx` int(11) NOT NULL DEFAULT '0',
   `posy` int(11) NOT NULL DEFAULT '0',
   `posz` int(11) NOT NULL DEFAULT '0',
