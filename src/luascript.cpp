@@ -889,9 +889,6 @@ void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 
 void LuaScriptInterface::registerFunctions()
 {
-	//getPlayerFlagValue(cid, flag)
-	lua_register(luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
-
 	//getPlayerInstantSpellCount(cid)
 	lua_register(luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
 
@@ -2239,6 +2236,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "isPzLocked", LuaScriptInterface::luaPlayerIsPzLocked);
 
+	registerMethod("Player", "hasFlag", LuaScriptInterface::luaPlayerHasFlag);
+
 	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
 	registerMethod("Player", "getHouse", LuaScriptInterface::luaPlayerGetHouse);
 
@@ -2682,16 +2681,15 @@ void LuaScriptInterface::registerGlobalBoolean(const std::string& name, bool val
 	lua_setglobal(luaState, name.c_str());
 }
 
-int LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
+int LuaScriptInterface::luaPlayerHasFlag(lua_State* L)
 {
-	//getPlayerFlagValue(cid, flag)
-	Player* player = getPlayer(L, 1);
+	//player:hasFlag(flag)
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		PlayerFlags flag = getNumber<PlayerFlags>(L, 2);
 		pushBoolean(L, player->hasFlag(flag));
 	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 	return 1;
 }
