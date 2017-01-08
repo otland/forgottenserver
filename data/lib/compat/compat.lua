@@ -1006,3 +1006,42 @@ end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
+
+function doSetMonsterOutfit(cid, name, time) local c = Creature(cid) return c ~= nil and c:setMonsterOutfit(name, time) or false end
+function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c ~= nil and c:setItemOutfit(item, time) or false end
+function doSetCreatureOutfit(cid, outfit, time) local c = Creature(cid) return c ~= nil and c:setCreatureOutfit(outfit, time) or false end
+function getCreatureCondition(cid, type, subId) local c = Creature(cid) return c ~= nil and c:hasCondition(type, subId) or false end
+function doSetCreatureLight(cid, lightLevel, lightColor, time) local c = Creature(cid) return c ~= nil and c:setCreatureLight(lightLevel, lightColor, time) or false end
+function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) or false end
+function doChallengeCreature(cid, target)
+	local creature = Creature(cid)
+	if creature == nil then
+		return false
+	end
+
+	local targetCreature = Creature(target)
+	if targetCreature == nil then
+		return false
+	end
+
+	creature:challenge(targetCreature)
+	return true
+end
+
+function getPlayerFlagValue(cid, flag) local p = Player(cid) return p ~= nil and p:hasFlag(flag) or false end
+function getPlayerInstantSpellCount(cid) local p = Player(cid) return p ~= nil and p:getInstantSpellCount() or false end
+function getPlayerInstantSpellInfo(cid, index) local p = Player(cid) return p ~= nil and p:getInstantSpellInfo(index) or false end
+function isInWar(cid, target)
+	local player = Player(cid)
+	if player == nil then
+		return false
+	end
+
+	local targetPlayer = Player(target)
+	if targetPlayer == nil then
+		return false
+	end
+
+	player:isInWar(target)
+	return true
+end
