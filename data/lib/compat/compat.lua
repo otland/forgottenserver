@@ -1006,3 +1006,6 @@ end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
+
+function getPlayerInstantSpellCount(cid) local p = Player(cid) return p ~= nil and p:getInstantSpellCount() or false end
+function getPlayerInstantSpellInfo(cid, index) local p = Player(cid) return p ~= nil and p:getInstantSpellInfo(index) or false end
