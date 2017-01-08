@@ -5052,7 +5052,7 @@ int LuaScriptInterface::luaTileHasFlag(lua_State* L)
 
 int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 {
-	// tile:queryAdd(thing[, flags])
+	// tile:queryAdd(thing[, flags = FLAG_PATHFINDING])
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
@@ -5061,7 +5061,7 @@ int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 
 	Thing* thing = getThing(L, 2);
 	if (thing) {
-		uint32_t flags = getNumber<uint32_t>(L, 3, 0);
+		uint32_t flags = getNumber<uint32_t>(L, 3, FLAG_PATHFINDING);
 		lua_pushnumber(L, tile->queryAdd(0, *thing, 1, flags));
 	} else {
 		lua_pushnil(L);
