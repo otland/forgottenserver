@@ -488,7 +488,7 @@ std::string Action::getScriptEventName() const
 
 ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos)
 {
-	if (allowFarUse) {
+	if (!allowFarUse) {
 		return g_actions->canUse(player, toPos);
 	} else {
 		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
