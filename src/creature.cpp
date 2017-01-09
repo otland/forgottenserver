@@ -624,6 +624,7 @@ void Creature::onDeath()
 
 	Creature* mostDamageCreature = nullptr;
 
+	const Player* targetPlayer = getPlayer();
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
 	int32_t mostDamage = 0;
@@ -638,8 +639,12 @@ void Creature::onDeath()
 
 			if (attacker != this) {
 				uint64_t gainExp = getGainedExperience(attacker);
-				if (Player* player = attacker->getPlayer()) {
-					Party* party = player->getParty();
+				if (Player* attackerPlayer = attacker->getPlayer()) {
+					if (targetPlayer && attackerPlayer->hasAttacked(targetPlayer)) {
+						attackerPlayer->removeAttacked(targetPlayer);
+					}
+
+					Party* party = attackerPlayer->getParty();
 					if (party && party->getLeader() && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
 						attacker = party->getLeader();
 					}

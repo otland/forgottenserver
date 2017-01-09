@@ -3751,6 +3751,20 @@ void Player::addAttacked(const Player* attacked)
 	attackedSet.insert(attacked->guid);
 }
 
+void Player::removeAttacked(const Player* attacked)
+{
+	if (!attacked || attacked == this) {
+		return;
+	}
+
+	auto it = std::find(attackedSet.begin(), attackedSet.end(), attacked->guid);
+	if (it == attackedSet.end()) {
+		return;
+	}
+
+	attackedSet.erase(it);
+}
+
 void Player::clearAttacked()
 {
 	attackedSet.clear();
