@@ -504,14 +504,14 @@ int LuaScriptInterface::luaErrorHandler(lua_State* L)
 	return 1;
 }
 
-bool LuaScriptInterface::callFunction(int params, bool defaultReturn /* = false */)
+bool LuaScriptInterface::callFunction(int params)
 {
 	bool result = false;
 	int size = lua_gettop(luaState);
 	if (protectedCall(luaState, params, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(luaState, -1));
 	} else {
-		result = LuaScriptInterface::getBoolean(luaState, -1, defaultReturn);
+		result = LuaScriptInterface::getBoolean(luaState, -1);
 	}
 
 	lua_pop(luaState, 1);
@@ -7293,7 +7293,7 @@ int LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 	}
 
 	const Position oldPosition = creature->getPosition();
-	if (g_game.internalTeleport(creature, position, pushMovement, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+	if (g_game.internalTeleport(creature, position, pushMovement) != RETURNVALUE_NOERROR) {
 		pushBoolean(L, false);
 		return 1;
 	}
