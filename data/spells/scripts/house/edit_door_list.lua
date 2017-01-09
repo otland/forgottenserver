@@ -10,7 +10,7 @@ function onCastSpell(player, variant)
 		player:setEditHouse(house, doorId)
 		player:sendHouseWindow(house, doorId)
 	else
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Sorry, not possible.")
+		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 	end
 	return true

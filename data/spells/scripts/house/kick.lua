@@ -6,7 +6,7 @@ function onCastSpell(player, variant)
 
 	local house = targetPlayer:getTile():getHouse()
 	if not house or not house:kickPlayer(player, targetPlayer) then
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Sorry, not possible.")
+		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
