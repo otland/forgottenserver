@@ -57,7 +57,7 @@ function Creature:setMonsterOutfit(monster, time)
 		return false
 	end
 
-	if self:getPlayer() and not (getPlayerFlagValue(self, PlayerFlag_CanIllusionAll) or monsterType:isIllusionable()) then
+	if self:isPlayer() and not (getPlayerFlagValue(self, PlayerFlag_CanIllusionAll) or monsterType:isIllusionable()) then
 		return false
 	end
 
@@ -75,11 +75,10 @@ function Creature:setItemOutfit(item, time)
 		return false
 	end
 
-	local outfit = {}
-	outfit.lookTypeEx = itemType:getId()
-
 	local condition = Condition(CONDITION_OUTFIT)
-	condition:setOutfit(outfit)
+	condition:setOutfit({
+		lookTypeEx = itemType:getId()
+	})
 	condition:setTicks(time)
 	self:addCondition(condition)
 
