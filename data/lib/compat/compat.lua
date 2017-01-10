@@ -1016,7 +1016,9 @@ function doSetCreatureOutfit(cid, outfit, time)
 	end
 
 	local condition = Condition(CONDITION_OUTFIT)
-	condition:setOutfit(outfit)
+	condition:setOutfit({
+		lookTypeEx = itemType:getId()
+	})
 	condition:setTicks(time)
 	creature:addCondition(condition)
 
