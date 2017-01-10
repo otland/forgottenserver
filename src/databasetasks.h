@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,34 +21,30 @@
 #define FS_DATABASETASKS_H_9CBA08E9F5FEBA7275CCEE6560059576
 
 #include <condition_variable>
-#include <list>
-#include <thread>
-
+#include "thread_holder_base.h"
 #include "database.h"
 #include "enums.h"
 
 struct DatabaseTask {
-	DatabaseTask(std::string query, const std::function<void(DBResult_ptr, bool)>& callback, bool store) :
-		query(query), callback(callback), store(store) {}
+	DatabaseTask(std::string query, std::function<void(DBResult_ptr, bool)> callback, bool store) :
+		query(std::move(query)), callback(std::move(callback)), store(store) {}
 
 	std::string query;
 	std::function<void(DBResult_ptr, bool)> callback;
 	bool store;
 };
 
-class DatabaseTasks {
+class DatabaseTasks : public ThreadHolder<DatabaseTasks>
+{
 	public:
-		DatabaseTasks();
-
+		DatabaseTasks() = default;
 		void start();
-		void run();
 		void flush();
-		void stop();
 		void shutdown();
-		void join();
 
 		void addTask(const std::string& query, const std::function<void(DBResult_ptr, bool)>& callback = nullptr, bool store = false);
 
+		void threadMain();
 	private:
 		void runTask(const DatabaseTask& task);
 
@@ -57,7 +53,6 @@ class DatabaseTasks {
 		std::list<DatabaseTask> tasks;
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
-		ThreadState threadState;
 };
 
 extern DatabaseTasks g_databaseTasks;

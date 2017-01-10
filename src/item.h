@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,7 @@ enum Attr_ReadValue {
 class ItemAttributes
 {
 	public:
-		ItemAttributes() : attributeBits(0) {}
+		ItemAttributes() = default;
 
 		void setSpecialDescription(const std::string& desc) {
 			setStrAttr(ITEM_ATTRIBUTE_DESCRIPTION, desc);
@@ -137,8 +137,8 @@ class ItemAttributes
 			return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE));
 		}
 
-		void setWriter(const std::string& _writer) {
-			setStrAttr(ITEM_ATTRIBUTE_WRITER, _writer);
+		void setWriter(const std::string& writer) {
+			setStrAttr(ITEM_ATTRIBUTE_WRITER, writer);
 		}
 		void resetWriter() {
 			removeAttribute(ITEM_ATTRIBUTE_WRITER);
@@ -175,15 +175,15 @@ class ItemAttributes
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
-		void setOwner(uint32_t _owner) {
-			setIntAttr(ITEM_ATTRIBUTE_OWNER, _owner);
+		void setOwner(uint32_t owner) {
+			setIntAttr(ITEM_ATTRIBUTE_OWNER, owner);
 		}
 		uint32_t getOwner() const {
 			return getIntAttr(ITEM_ATTRIBUTE_OWNER);
 		}
 
-		void setCorpseOwner(uint32_t _corpseOwner) {
-			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, _corpseOwner);
+		void setCorpseOwner(uint32_t corpseOwner) {
+			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, corpseOwner);
 		}
 		uint32_t getCorpseOwner() const {
 			return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER);
@@ -270,7 +270,7 @@ class ItemAttributes
 		};
 
 		std::forward_list<Attribute> attributes;
-		uint32_t attributeBits;
+		uint32_t attributeBits = 0;
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
@@ -279,7 +279,6 @@ class ItemAttributes
 		void setIntAttr(itemAttrTypes type, int64_t value);
 		void increaseIntAttr(itemAttrTypes type, int64_t value);
 
-		void addAttr(Attribute* attr);
 		const Attribute* getExistingAttr(itemAttrTypes type) const;
 		Attribute& getAttr(itemAttrTypes type);
 
@@ -302,17 +301,17 @@ class Item : virtual public Thing
 {
 	public:
 		//Factory member to create item of right type based on type
-		static Item* CreateItem(const uint16_t _type, uint16_t _count = 0);
-		static Container* CreateItemAsContainer(const uint16_t _type, uint16_t size);
+		static Item* CreateItem(const uint16_t type, uint16_t count = 0);
+		static Container* CreateItemAsContainer(const uint16_t type, uint16_t size);
 		static Item* CreateItem(PropStream& propStream);
 		static Items items;
 
 		// Constructor for items
-		Item(const uint16_t _type, uint16_t _count = 0);
+		Item(const uint16_t type, uint16_t count = 0);
 		Item(const Item& i);
 		virtual Item* clone() const;
 
-		virtual ~Item();
+		virtual ~Item() = default;
 
 		// non-assignable
 		Item& operator=(const Item&) = delete;
@@ -424,8 +423,8 @@ class Item : virtual public Thing
 			return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE));
 		}
 
-		void setWriter(const std::string& _writer) {
-			setStrAttr(ITEM_ATTRIBUTE_WRITER, _writer);
+		void setWriter(const std::string& writer) {
+			setStrAttr(ITEM_ATTRIBUTE_WRITER, writer);
 		}
 		void resetWriter() {
 			removeAttribute(ITEM_ATTRIBUTE_WRITER);
@@ -475,8 +474,8 @@ class Item : virtual public Thing
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
-		void setOwner(uint32_t _owner) {
-			setIntAttr(ITEM_ATTRIBUTE_OWNER, _owner);
+		void setOwner(uint32_t owner) {
+			setIntAttr(ITEM_ATTRIBUTE_OWNER, owner);
 		}
 		uint32_t getOwner() const {
 			if (!attributes) {
@@ -485,8 +484,8 @@ class Item : virtual public Thing
 			return getIntAttr(ITEM_ATTRIBUTE_OWNER);
 		}
 
-		void setCorpseOwner(uint32_t _corpseOwner) {
-			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, _corpseOwner);
+		void setCorpseOwner(uint32_t corpseOwner) {
+			setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, corpseOwner);
 		}
 		uint32_t getCorpseOwner() const {
 			if (!attributes) {
@@ -529,7 +528,7 @@ class Item : virtual public Thing
 		//serialization
 		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
 		bool unserializeAttr(PropStream& propStream);
-		virtual bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream);
+		virtual bool unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream);
 
 		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
@@ -545,9 +544,6 @@ class Item : virtual public Thing
 		}
 		uint16_t getClientID() const {
 			return items[id].clientId;
-		}
-		uint16_t getDestroyId() const {
-			return items[id].destroyTo;
 		}
 		void setID(uint16_t newid);
 
@@ -608,7 +604,7 @@ class Item : virtual public Thing
 			return items[id].hitChance;
 		}
 
-		int32_t getWorth() const;
+		uint32_t getWorth() const;
 		void getLight(LightInfo& lightInfo) const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;
@@ -704,9 +700,6 @@ class Item : virtual public Thing
 
 		virtual void startDecaying();
 
-		bool isLoadedFromMap() const {
-			return loadedFromMap;
-		}
 		void setLoadedFromMap(bool value) {
 			loadedFromMap = value;
 		}
@@ -716,9 +709,9 @@ class Item : virtual public Thing
 
 		bool hasMarketAttributes() const;
 
-		ItemAttributes* getAttributes() {
+		std::unique_ptr<ItemAttributes>& getAttributes() {
 			if (!attributes) {
-				attributes = new ItemAttributes();
+				attributes.reset(new ItemAttributes());
 			}
 			return attributes;
 		}
@@ -749,21 +742,21 @@ class Item : virtual public Thing
 	protected:
 		std::string getWeightDescription(uint32_t weight) const;
 
-		Cylinder* parent;
-		ItemAttributes* attributes;
+		Cylinder* parent = nullptr;
+		std::unique_ptr<ItemAttributes> attributes;
 
-		uint32_t referenceCounter;
+		uint32_t referenceCounter = 0;
 
 		uint16_t id;  // the same id as in ItemType
-		uint8_t count; // number of stacked items
+		uint8_t count = 1; // number of stacked items
 
-		bool loadedFromMap;
+		bool loadedFromMap = false;
 
 		//Don't add variables here, use the ItemAttribute class.
 };
 
-typedef std::list<Item*> ItemList;
-typedef std::deque<Item*> ItemDeque;
+using ItemList = std::list<Item*>;
+using ItemDeque = std::deque<Item*>;
 
 inline uint32_t Item::countByType(const Item* i, int32_t subType)
 {

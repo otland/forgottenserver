@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,7 @@
 
 extern Game g_game;
 
-void Dispatcher::start()
-{
-	setState(THREAD_STATE_RUNNING);
-	thread = std::thread(&Dispatcher::dispatcherThread, this);
-}
-
-void Dispatcher::dispatcherThread()
+void Dispatcher::threadMain()
 {
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
@@ -90,11 +84,6 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 	}
 }
 
-void Dispatcher::stop()
-{
-	setState(THREAD_STATE_CLOSING);
-}
-
 void Dispatcher::shutdown()
 {
 	Task* task = createTask([this]() {
@@ -102,15 +91,8 @@ void Dispatcher::shutdown()
 		taskSignal.notify_one();
 	});
 
-	std::lock_guard<std::mutex> lockGuard(taskLock);
+	std::lock_guard<std::mutex> lockClass(taskLock);
 	taskList.push_back(task);
 
 	taskSignal.notify_one();
-}
-
-void Dispatcher::join()
-{
-	if (thread.joinable()) {
-		thread.join();
-	}
 }

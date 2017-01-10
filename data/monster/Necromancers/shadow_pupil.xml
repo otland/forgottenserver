@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Shadow Pupil" nameDescription="a shadow pupil" race="blood" experience="410" speed="210" manacost="0">
+	<health now="450" max="450" />
+	<look type="551" corpse="21254" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-70" poison="90" />
+		<attack name="death" interval="2000" chance="20" range="7" target="1" min="-60" max="-80">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" target="0" radius="3" min="-30" max="-60">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element energyPercent="5" />
+		<element icePercent="5" />
+		<element deathPercent="5" />
+		<element physicalPercent="-5" />
+		<element firePercent="-5" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Skeleton" interval="2000" chance="10" />
+		<summon name="Ghost" interval="2000" chance="5" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="When I'm finished with you, you'll be a shadow of your former self." />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="64" chance="100000" />
+		<item name="boots of haste" chance="60" />
+		<item name="clerical mace" chance="290" />
+		<item name="mystic turban" chance="580" />
+		<item name="brown mushroom" chance="5170" />
+		<item name="strong mana potion" chance="470" />
+		<item name="spellbook of enlightenment" chance="290" />
+		<item name="book of necromantic rituals" chance="6920" />
+		<item name="horoscope" chance="15000" />
+		<item name="incantation notes" chance="9130" />
+		<item name="pieces of magic chalk" chance="4300" />
+	</loot>
+</monster>

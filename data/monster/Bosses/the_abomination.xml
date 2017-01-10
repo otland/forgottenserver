@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="The Abomination" nameDescription="The Abomination" race="venom" experience="25000" speed="340" manacost="0">
+	<health now="38050" max="38050" />
+	<look type="238" corpse="6532" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-600" />
+		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-800" duration="10000">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="1000" chance="9" target="0" radius="4" min="-200" max="-650">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="11" target="1" radius="4" min="-400" max="-900">
+			<attribute key="areaEffect" value="greennote" />
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="2000" chance="19" length="7" min="-350" max="-850">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="1000" chance="75" min="505" max="605">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity earth="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Blubb" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" countmax="3" chance="10000" />
+		<item name="soul orb" chance="2500" />
+		<item name="demonic essence" countmax="1" chance="2857" />
+	</loot>
+</monster>

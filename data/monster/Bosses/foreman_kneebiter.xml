@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Foreman Kneebiter" nameDescription="Foreman Kneebiter" race="blood" experience="445" speed="200">
+	<health now="570" max="570" />
+	<look type="70" corpse="6013" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+	</attacks>
+	<defenses armor="15" defense="22" />
+	<elements>
+		<element earthPercent="90" />
+		<element physicalPercent="20" />
+		<element firePercent="-5" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="90000" />
+		<item name="battle shield" chance="6666" />
+		<item name="iron ore" countmax="2" chance="2500" />
+	</loot>
+</monster>

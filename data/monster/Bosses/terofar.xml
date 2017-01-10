@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Terofar" nameDescription="a Terofar" race="blood" experience="0" speed="380" manacost="220">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Terofar" nameDescription="Terofar" race="blood" experience="0" speed="380" manacost="220">
 	<health now="15" max="15" />
 	<look type="74" corpse="6017" />
 	<targetchange interval="5000" chance="20" />
@@ -17,11 +17,11 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="0" attack="0" />
+		<attack name="melee" interval="2000" min="0" max="0" />
 	</attacks>
 	<defenses armor="1" defense="2" />
 	<loot>
+		<item name="meat" countmax="2" chance="20000" />
 		<item id="2684" countmax="2" chance="9000" /><!-- carrot -->
-		<item id="2666" countmax="2" chance="20000" /><!-- meat -->
 	</loot>
 </monster>

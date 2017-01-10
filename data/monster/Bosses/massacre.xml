@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Massacre" nameDescription="the massacre" race="blood" experience="9800" speed="390" manacost="0">
-	<health now="30000" max="30000" />
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Massacre" nameDescription="Massacre" race="blood" experience="20000" speed="390" manacost="0">
+	<health now="32000" max="32000" />
 	<look type="244" corpse="6336" />
 	<targetchange interval="60000" chance="0" />
 	<flags>
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="150" attack="150" />
+		<attack name="melee" interval="2000" min="0" max="-1200" />
 		<attack name="physical" interval="2000" chance="24" range="7" min="-280" max="-500">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -30,7 +30,7 @@
 	<immunities>
 		<immunity energy="1" />
 		<immunity fire="1" />
-		<immunity poison="1" />
+		<immunity earth="1" />
 		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
 		<immunity outfit="1" />
@@ -38,6 +38,6 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="6540" chance="100000" /><!-- massacre's shell piece -->
+		<item name="piece of Massacre's shell" chance="100000" />
 	</loot>
 </monster>

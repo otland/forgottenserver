@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,25 +48,24 @@ bool Mounts::loadFromXml()
 			mountNode.attribute("premium").as_bool()
 		);
 	}
+	mounts.shrink_to_fit();
 	return true;
 }
 
 Mount* Mounts::getMountByID(uint8_t id)
 {
-	for (Mount& mount : mounts) {
-		if (mount.id == id) {
-			return &mount;
-		}
-	}
-	return nullptr;
+	auto it = std::find_if(mounts.begin(), mounts.end(), [id](const Mount& mount) {
+		return mount.id == id;
+	});
+
+	return it != mounts.end() ? &*it : nullptr;
 }
 
 Mount* Mounts::getMountByClientID(uint16_t clientId)
 {
-	for (Mount& mount : mounts) {
-		if (mount.clientId == clientId) {
-			return &mount;
-		}
-	}
-	return nullptr;
+	auto it = std::find_if(mounts.begin(), mounts.end(), [clientId](const Mount& mount) {
+		return mount.clientId == clientId;
+	});
+
+	return it != mounts.end() ? &*it : nullptr;
 }

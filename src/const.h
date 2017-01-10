@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #ifndef FS_CONST_H_0A49B5996F074465BF44B90F4F780E8B
 #define FS_CONST_H_0A49B5996F074465BF44B90F4F780E8B
 
-#define NETWORKMESSAGE_MAXSIZE 24590
+static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
 
 enum MagicEffectClasses : uint8_t {
 	CONST_ME_NONE,
@@ -325,7 +325,7 @@ enum TextColor_t : uint8_t {
 	TEXTCOLOR_DARKRED = 108,
 	TEXTCOLOR_LIGHTGREY = 129,
 	TEXTCOLOR_SKYBLUE = 143,
-	TEXTCOLOR_PURPLE = 154,
+	TEXTCOLOR_PURPLE = 155,
 	TEXTCOLOR_RED = 180,
 	TEXTCOLOR_ORANGE = 198,
 	TEXTCOLOR_YELLOW = 210,
@@ -517,21 +517,21 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
 };
 
-#define CHANNEL_GUILD 0x00
-#define CHANNEL_PARTY 0x01
-#define CHANNEL_PRIVATE 0xFFFF
+static constexpr int32_t CHANNEL_GUILD = 0x00;
+static constexpr int32_t CHANNEL_PARTY = 0x01;
+static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
 
-//Reserved player storage key ranges
-//[10000000 - 20000000]
-#define PSTRG_RESERVED_RANGE_START 10000000
-#define PSTRG_RESERVED_RANGE_SIZE 10000000
-//[1000 - 1500]
-#define PSTRG_OUTFITS_RANGE_START (PSTRG_RESERVED_RANGE_START + 1000)
-#define PSTRG_OUTFITS_RANGE_SIZE 500
-//[2001 - 2011]
-#define PSTRG_MOUNTS_RANGE_START (PSTRG_RESERVED_RANGE_START + 2001)
-#define PSTRG_MOUNTS_RANGE_SIZE 10
-#define PSTRG_MOUNTS_CURRENTMOUNT (PSTRG_MOUNTS_RANGE_START + 10)
+//Reserved player storage key ranges;
+//[10000000 - 20000000];
+static constexpr int32_t PSTRG_RESERVED_RANGE_START = 10000000;
+static constexpr int32_t PSTRG_RESERVED_RANGE_SIZE = 10000000;
+//[1000 - 1500];
+static constexpr int32_t PSTRG_OUTFITS_RANGE_START = (PSTRG_RESERVED_RANGE_START + 1000);
+static constexpr int32_t PSTRG_OUTFITS_RANGE_SIZE = 500;
+//[2001 - 2011];
+static constexpr int32_t PSTRG_MOUNTS_RANGE_START = (PSTRG_RESERVED_RANGE_START + 2001);
+static constexpr int32_t PSTRG_MOUNTS_RANGE_SIZE = 10;
+static constexpr int32_t PSTRG_MOUNTS_CURRENTMOUNT = (PSTRG_MOUNTS_RANGE_START + 10);
 
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
 

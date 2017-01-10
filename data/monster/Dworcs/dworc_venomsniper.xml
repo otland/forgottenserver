@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="180" manacost="0">
+	<health now="80" max="80" />
+	<look type="216" corpse="6059" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-15" />
+		<attack name="poisoncondition" interval="2000" chance="15" range="5" min="-20" max="-40">
+			<attribute key="shooteffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element holyPercent="20" />
+		<element firePercent="-15" />
+		<element deathPercent="-10" />
+		<element icePercent="-13" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Brak brrretz!" />
+		<voice sentence="Grow truk grrrrr." />
+		<voice sentence="Prek tars, dekklep zurk." />
+	</voices>
+	<loot>
+		<item id="2050" chance="6000" /><!-- torch -->
+		<item name="gold coin" countmax="13" chance="75000" />
+		<item name="bronze amulet" chance="110" />
+		<item id="2229" countmax="2" chance="1000" /><!-- skull -->
+		<item name="throwing star" countmax="2" chance="8000" />
+		<item name="poison dagger" chance="1500" />
+		<item name="leather armor" chance="10000" />
+		<item name="poison arrow" countmax="3" chance="5000" />
+		<item name="tribal mask" chance="510" />
+		<item name="bast skirt" chance="100" />
+		<item name="seeds" chance="200" />
+	</loot>
+</monster>

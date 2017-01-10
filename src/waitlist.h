@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,22 +23,22 @@
 #include "player.h"
 
 struct Wait {
-	Wait(int64_t timeout, uint32_t playerGUID) :
+	constexpr Wait(int64_t timeout, uint32_t playerGUID) :
 		timeout(timeout), playerGUID(playerGUID) {}
 
 	int64_t timeout;
 	uint32_t playerGUID;
 };
 
-typedef std::list<Wait> WaitList;
-typedef WaitList::iterator WaitListIterator;
+using WaitList = std::list<Wait>;
+using WaitListIterator = WaitList::iterator;
 
 class WaitingList
 {
 	public:
-		static WaitingList* getInstance() {
+		static WaitingList& getInstance() {
 			static WaitingList waitingList;
-			return &waitingList;
+			return waitingList;
 		}
 
 		bool clientLogin(const Player* player);

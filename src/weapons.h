@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,13 +56,13 @@ class Weapons final : public BaseEvents
 
 		std::map<uint32_t, Weapon*> weapons;
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface { "Weapon Interface" };
 };
 
 class Weapon : public Event
 {
 	public:
-		explicit Weapon(LuaScriptInterface* _interface);
+		explicit Weapon(LuaScriptInterface* interface) : Event(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute&) final {
@@ -114,20 +114,20 @@ class Weapon : public Event
 
 		CombatParams params;
 
-		uint32_t level;
-		uint32_t magLevel;
-		uint32_t mana;
-		uint32_t manaPercent;
-		uint32_t soul;
-		uint16_t id;
-		WeaponAction_t action;
-		uint8_t breakChance;
-		bool enabled;
-		bool premium;
-		bool wieldUnproperly;
+		uint32_t level = 0;
+		uint32_t magLevel = 0;
+		uint32_t mana = 0;
+		uint32_t manaPercent = 0;
+		uint32_t soul = 0;
+		uint16_t id = 0;
+		WeaponAction_t action = WEAPONACTION_NONE;
+		uint8_t breakChance = 0;
+		bool enabled = true;
+		bool premium = false;
+		bool wieldUnproperly = false;
 
 	private:
-		void decrementItemCount(Item* item) const;
+		static void decrementItemCount(Item* item);
 
 		std::map<uint16_t, bool> vocWeaponMap;
 		friend class Combat;
@@ -136,7 +136,7 @@ class Weapon : public Event
 class WeaponMelee final : public Weapon
 {
 	public:
-		explicit WeaponMelee(LuaScriptInterface* _interface);
+		explicit WeaponMelee(LuaScriptInterface* interface);
 
 		void configureWeapon(const ItemType& it) final;
 
@@ -149,14 +149,14 @@ class WeaponMelee final : public Weapon
 	protected:
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
-		CombatType_t elementType;
-		uint16_t elementDamage;
+		CombatType_t elementType = COMBAT_NONE;
+		uint16_t elementDamage = 0;
 };
 
 class WeaponDistance final : public Weapon
 {
 	public:
-		explicit WeaponDistance(LuaScriptInterface* _interface);
+		explicit WeaponDistance(LuaScriptInterface* interface);
 
 		void configureWeapon(const ItemType& it) final;
 		bool interruptSwing() const final {
@@ -172,14 +172,14 @@ class WeaponDistance final : public Weapon
 	protected:
 		bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const final;
 
-		CombatType_t elementType;
-		uint16_t elementDamage;
+		CombatType_t elementType = COMBAT_NONE;
+		uint16_t elementDamage = 0;
 };
 
 class WeaponWand final : public Weapon
 {
 	public:
-		explicit WeaponWand(LuaScriptInterface* _interface);
+		explicit WeaponWand(LuaScriptInterface* interface) : Weapon(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) final;
 		void configureWeapon(const ItemType& it) final;
@@ -193,8 +193,8 @@ class WeaponWand final : public Weapon
 			return false;
 		}
 
-		int32_t minChange;
-		int32_t maxChange;
+		int32_t minChange = 0;
+		int32_t maxChange = 0;
 };
 
 #endif

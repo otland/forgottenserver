@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,44 +34,39 @@ class MagicField;
 class QTreeLeafNode;
 class BedItem;
 
-typedef std::vector<Creature*> CreatureVector;
-typedef std::vector<Item*> ItemVector;
-typedef std::unordered_set<Creature*> SpectatorVec;
+using CreatureVector = std::vector<Creature*>;
+using ItemVector = std::vector<Item*>;
+using SpectatorHashSet = std::unordered_set<Creature*>;
 
 enum tileflags_t : uint32_t {
-	TILESTATE_NONE,
+	TILESTATE_NONE = 0,
 
-	TILESTATE_PROTECTIONZONE = 1 << 0,
-	TILESTATE_DEPRECATED_HOUSE = 1 << 1,
-	TILESTATE_NOPVPZONE = 1 << 2,
-	TILESTATE_NOLOGOUT = 1 << 3,
-	TILESTATE_PVPZONE = 1 << 4,
-	TILESTATE_REFRESH = 1 << 5, // unused
+	TILESTATE_FLOORCHANGE_DOWN = 1 << 0,
+	TILESTATE_FLOORCHANGE_NORTH = 1 << 1,
+	TILESTATE_FLOORCHANGE_SOUTH = 1 << 2,
+	TILESTATE_FLOORCHANGE_EAST = 1 << 3,
+	TILESTATE_FLOORCHANGE_WEST = 1 << 4,
+	TILESTATE_FLOORCHANGE_SOUTH_ALT = 1 << 5,
+	TILESTATE_FLOORCHANGE_EAST_ALT = 1 << 6,
+	TILESTATE_PROTECTIONZONE = 1 << 7,
+	TILESTATE_NOPVPZONE = 1 << 8,
+	TILESTATE_NOLOGOUT = 1 << 9,
+	TILESTATE_PVPZONE = 1 << 10,
+	TILESTATE_TELEPORT = 1 << 11,
+	TILESTATE_MAGICFIELD = 1 << 12,
+	TILESTATE_MAILBOX = 1 << 13,
+	TILESTATE_TRASHHOLDER = 1 << 14,
+	TILESTATE_BED = 1 << 15,
+	TILESTATE_DEPOT = 1 << 16,
+	TILESTATE_BLOCKSOLID = 1 << 17,
+	TILESTATE_BLOCKPATH = 1 << 18,
+	TILESTATE_IMMOVABLEBLOCKSOLID = 1 << 19,
+	TILESTATE_IMMOVABLEBLOCKPATH = 1 << 20,
+	TILESTATE_IMMOVABLENOFIELDBLOCKPATH = 1 << 21,
+	TILESTATE_NOFIELDBLOCKPATH = 1 << 22,
+	TILESTATE_SUPPORTS_HANGABLE = 1 << 23,
 
-	//internal usage
-	TILESTATE_HOUSE = 1 << 6,
-	TILESTATE_FLOORCHANGE = 1 << 7,
-	TILESTATE_FLOORCHANGE_DOWN = 1 << 8,
-	TILESTATE_FLOORCHANGE_NORTH = 1 << 9,
-	TILESTATE_FLOORCHANGE_SOUTH = 1 << 10,
-	TILESTATE_FLOORCHANGE_EAST = 1 << 11,
-	TILESTATE_FLOORCHANGE_WEST = 1 << 12,
-	TILESTATE_TELEPORT = 1 << 13,
-	TILESTATE_MAGICFIELD = 1 << 14,
-	TILESTATE_MAILBOX = 1 << 15,
-	TILESTATE_TRASHHOLDER = 1 << 16,
-	TILESTATE_BED = 1 << 17,
-	TILESTATE_DEPOT = 1 << 18,
-	TILESTATE_BLOCKSOLID = 1 << 19,
-	TILESTATE_BLOCKPATH = 1 << 20,
-	TILESTATE_IMMOVABLEBLOCKSOLID = 1 << 21,
-	TILESTATE_IMMOVABLEBLOCKPATH = 1 << 22,
-	TILESTATE_IMMOVABLENOFIELDBLOCKPATH = 1 << 23,
-	TILESTATE_NOFIELDBLOCKPATH = 1 << 24,
-	TILESTATE_DYNAMIC_TILE = 1 << 25,
-	TILESTATE_FLOORCHANGE_SOUTH_ALT = 1 << 26,
-	TILESTATE_FLOORCHANGE_EAST_ALT = 1 << 27,
-	TILESTATE_SUPPORTS_HANGABLE = 1 << 28,
+	TILESTATE_FLOORCHANGE = TILESTATE_FLOORCHANGE_DOWN | TILESTATE_FLOORCHANGE_NORTH | TILESTATE_FLOORCHANGE_SOUTH | TILESTATE_FLOORCHANGE_EAST | TILESTATE_FLOORCHANGE_WEST | TILESTATE_FLOORCHANGE_SOUTH_ALT | TILESTATE_FLOORCHANGE_EAST_ALT,
 };
 
 enum ZoneType_t {
@@ -82,71 +77,47 @@ enum ZoneType_t {
 	ZONE_NORMAL,
 };
 
-class TileItemVector
+class TileItemVector : private ItemVector
 {
 	public:
-		TileItemVector() : downItemCount(0) {}
+		using ItemVector::begin;
+		using ItemVector::end;
+		using ItemVector::rbegin;
+		using ItemVector::rend;
+		using ItemVector::size;
+		using ItemVector::clear;
+		using ItemVector::at;
+		using ItemVector::insert;
+		using ItemVector::erase;
+		using ItemVector::push_back;
+		using ItemVector::value_type;
+		using ItemVector::iterator;
+		using ItemVector::const_iterator;
+		using ItemVector::reverse_iterator;
+		using ItemVector::const_reverse_iterator;
 
-		ItemVector::const_iterator begin() const {
-			return items.begin();
-		}
-		ItemVector::const_reverse_iterator rbegin() const {
-			return items.rbegin();
-		}
-
-		ItemVector::const_iterator end() const {
-			return items.end();
-		}
-		ItemVector::const_reverse_iterator rend() const {
-			return items.rend();
-		}
-
-		void clear() {
-			items.clear();
-		}
-
-		size_t size() const {
-			return items.size();
-		}
-
-		ItemVector::iterator insert(ItemVector::iterator _where, Item* item) {
-			return items.insert(_where, item);
-		}
-		ItemVector::iterator erase(ItemVector::iterator _pos) {
-			return items.erase(_pos);
-		}
-		Item* at(size_t _pos) const {
-			return items.at(_pos);
-		}
-		Item* back() const {
-			return items.back();
-		}
-		void push_back(Item* item) {
-			return items.push_back(item);
-		}
-
-		ItemVector::iterator getBeginDownItem() {
-			return items.begin();
-		}
-		ItemVector::const_iterator getBeginDownItem() const {
+		iterator getBeginDownItem() {
 			return begin();
 		}
-		ItemVector::iterator getEndDownItem() {
-			return items.begin() + downItemCount;
+		const_iterator getBeginDownItem() const {
+			return begin();
 		}
-		ItemVector::const_iterator getEndDownItem() const {
-			return items.begin() + downItemCount;
+		iterator getEndDownItem() {
+			return begin() + downItemCount;
 		}
-		ItemVector::iterator getBeginTopItem() {
+		const_iterator getEndDownItem() const {
+			return begin() + downItemCount;
+		}
+		iterator getBeginTopItem() {
 			return getEndDownItem();
 		}
-		ItemVector::const_iterator getBeginTopItem() const {
+		const_iterator getBeginTopItem() const {
 			return getEndDownItem();
 		}
-		ItemVector::iterator getEndTopItem() {
-			return items.end();
+		iterator getEndTopItem() {
+			return end();
 		}
-		ItemVector::const_iterator getEndTopItem() const {
+		const_iterator getEndTopItem() const {
 			return end();
 		}
 
@@ -168,32 +139,32 @@ class TileItemVector
 			}
 			return *getBeginDownItem();
 		}
+		void addDownItemCount(int32_t increment) {
+			downItemCount += increment;
+		}
 
 	private:
-		ItemVector items;
-		uint16_t downItemCount;
-
-		friend class Tile;
+		uint16_t downItemCount = 0;
 };
 
 class Tile : public Cylinder
 {
 	public:
 		static Tile& nullptr_tile;
-		Tile(uint16_t x, uint16_t y, uint8_t z);
+		Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z) {}
 		virtual ~Tile();
 
 		// non-copyable
 		Tile(const Tile&) = delete;
 		Tile& operator=(const Tile&) = delete;
 
-		TileItemVector* getItemList();
-		const TileItemVector* getItemList() const;
-		TileItemVector* makeItemList();
+		virtual TileItemVector* getItemList() = 0;
+		virtual const TileItemVector* getItemList() const = 0;
+		virtual TileItemVector* makeItemList() = 0;
 
-		CreatureVector* getCreatures();
-		const CreatureVector* getCreatures() const;
-		CreatureVector* makeCreatures();
+		virtual CreatureVector* getCreatures() = 0;
+		virtual const CreatureVector* getCreatures() const = 0;
+		virtual CreatureVector* makeCreatures() = 0;
 
 		int32_t getThrowRange() const final {
 			return 0;
@@ -234,48 +205,14 @@ class Tile : public Cylinder
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool hasProperty(const Item* exclude, ITEMPROPERTY prop) const;
 
-		bool hasFlag(tileflags_t flag) const {
-			return hasBitSet(flag, m_flags);
+		inline bool hasFlag(uint32_t flag) const {
+			return hasBitSet(flag, this->flags);
 		}
-		void setFlag(tileflags_t flag) {
-			m_flags |= static_cast<uint32_t>(flag);
+		inline void setFlag(uint32_t flag) {
+			this->flags |= flag;
 		}
-		void resetFlag(tileflags_t flag) {
-			m_flags &= ~static_cast<uint32_t>(flag);
-		}
-
-		bool positionChange() const {
-			return hasFlag(TILESTATE_TELEPORT);
-		}
-		bool floorChange() const {
-			return hasFlag(TILESTATE_FLOORCHANGE);
-		}
-		bool floorChangeDown() const {
-			return hasFlag(TILESTATE_FLOORCHANGE_DOWN);
-		}
-		bool floorChange(Direction direction) const {
-			switch (direction) {
-				case DIRECTION_NORTH:
-						return hasFlag(TILESTATE_FLOORCHANGE_NORTH);
-
-				case DIRECTION_SOUTH:
-					return hasFlag(TILESTATE_FLOORCHANGE_SOUTH);
-
-				case DIRECTION_EAST:
-					return hasFlag(TILESTATE_FLOORCHANGE_EAST);
-
-				case DIRECTION_WEST:
-					return hasFlag(TILESTATE_FLOORCHANGE_WEST);
-
-				case DIRECTION_SOUTH_ALT:
-					return hasFlag(TILESTATE_FLOORCHANGE_SOUTH_ALT);
-
-				case DIRECTION_EAST_ALT:
-					return hasFlag(TILESTATE_FLOORCHANGE_EAST_ALT);
-
-				default:
-					return false;
-			}
+		inline void resetFlag(uint32_t flag) {
+			this->flags &= ~flag;
 		}
 
 		ZoneType_t getZone() const {
@@ -328,7 +265,7 @@ class Tile : public Cylinder
 		void internalAddThing(Thing* thing) final;
 		void internalAddThing(uint32_t index, Thing* thing) override;
 
-		const Position& getPosition() const {
+		const Position& getPosition() const final {
 			return tilePos;
 		}
 
@@ -348,21 +285,16 @@ class Tile : public Cylinder
 	private:
 		void onAddTileItem(Item* item);
 		void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
-		void onRemoveTileItem(const SpectatorVec& list, const std::vector<int32_t>& oldStackPosVector, Item* item);
-		void onUpdateTile(const SpectatorVec& list);
+		void onRemoveTileItem(const SpectatorHashSet& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
+		void onUpdateTile(const SpectatorHashSet& spectators);
 
 		void setTileFlags(const Item* item);
 		void resetTileFlags(const Item* item);
 
 	protected:
-		// Put this first for cache-coherency
-		bool isDynamic() const {
-			return (m_flags & TILESTATE_DYNAMIC_TILE) != 0;
-		}
-
-		Item* ground;
+		Item* ground = nullptr;
 		Position tilePos;
-		uint32_t m_flags;
+		uint32_t flags = 0;
 };
 
 // Used for walkable tiles, where there is high likeliness of
@@ -374,30 +306,30 @@ class DynamicTile : public Tile
 		CreatureVector creatures;
 
 	public:
-		DynamicTile(uint16_t x, uint16_t y, uint8_t z);
+		DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
 		~DynamicTile();
 
 		// non-copyable
 		DynamicTile(const DynamicTile&) = delete;
 		DynamicTile& operator=(const DynamicTile&) = delete;
 
-		TileItemVector* getItemList() {
+		TileItemVector* getItemList() final {
 			return &items;
 		}
-		const TileItemVector* getItemList() const {
+		const TileItemVector* getItemList() const final {
 			return &items;
 		}
-		TileItemVector* makeItemList() {
+		TileItemVector* makeItemList() final {
 			return &items;
 		}
 
-		CreatureVector* getCreatures() {
+		CreatureVector* getCreatures() final {
 			return &creatures;
 		}
-		const CreatureVector* getCreatures() const {
+		const CreatureVector* getCreatures() const final {
 			return &creatures;
 		}
-		CreatureVector* makeCreatures() {
+		CreatureVector* makeCreatures() final {
 			return &creatures;
 		}
 };
@@ -406,109 +338,47 @@ class DynamicTile : public Tile
 class StaticTile final : public Tile
 {
 	// We very rarely even need the vectors, so don't keep them in memory
-	TileItemVector* items;
-	CreatureVector* creatures;
+	std::unique_ptr<TileItemVector> items;
+	std::unique_ptr<CreatureVector> creatures;
 
 	public:
-		StaticTile(uint16_t x, uint16_t y, uint8_t z);
+		StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
 		~StaticTile();
 
 		// non-copyable
 		StaticTile(const StaticTile&) = delete;
 		StaticTile& operator=(const StaticTile&) = delete;
 
-		TileItemVector* getItemList() {
-			return items;
+		TileItemVector* getItemList() final {
+			return items.get();
 		}
-		const TileItemVector* getItemList() const {
-			return items;
+		const TileItemVector* getItemList() const final {
+			return items.get();
 		}
-		TileItemVector* makeItemList() {
+		TileItemVector* makeItemList() final {
 			if (!items) {
-				items = new TileItemVector;
+				items.reset(new TileItemVector);
 			}
-			return items;
+			return items.get();
 		}
 
-		CreatureVector* getCreatures() {
-			return creatures;
+		CreatureVector* getCreatures() final {
+			return creatures.get();
 		}
-		const CreatureVector* getCreatures() const {
-			return creatures;
+		const CreatureVector* getCreatures() const final {
+			return creatures.get();
 		}
-		CreatureVector* makeCreatures() {
+		CreatureVector* makeCreatures() final {
 			if (!creatures) {
-				creatures = new CreatureVector;
+				creatures.reset(new CreatureVector);
 			}
-			return creatures;
+			return creatures.get();
 		}
 };
-
-inline Tile::Tile(uint16_t x, uint16_t y, uint8_t z) :
-	ground(nullptr),
-	tilePos(x, y, z),
-	m_flags(0)
-{
-}
 
 inline Tile::~Tile()
 {
 	delete ground;
-}
-
-inline CreatureVector* Tile::getCreatures()
-{
-	if (isDynamic()) {
-		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::getCreatures();
-	}
-	return reinterpret_cast<StaticTile*>(this)->StaticTile::getCreatures();
-}
-
-inline const CreatureVector* Tile::getCreatures() const
-{
-	if (isDynamic()) {
-		return reinterpret_cast<const DynamicTile*>(this)->DynamicTile::getCreatures();
-	}
-	return reinterpret_cast<const StaticTile*>(this)->StaticTile::getCreatures();
-}
-
-inline TileItemVector* Tile::getItemList()
-{
-	if (isDynamic()) {
-		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::getItemList();
-	}
-	return reinterpret_cast<StaticTile*>(this)->StaticTile::getItemList();
-}
-
-inline const TileItemVector* Tile::getItemList() const
-{
-	if (isDynamic()) {
-		return reinterpret_cast<const DynamicTile*>(this)->DynamicTile::getItemList();
-	}
-	return reinterpret_cast<const StaticTile*>(this)->StaticTile::getItemList();
-}
-
-inline CreatureVector* Tile::makeCreatures()
-{
-	if (isDynamic()) {
-		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::makeCreatures();
-	}
-	return reinterpret_cast<StaticTile*>(this)->StaticTile::makeCreatures();
-}
-
-inline TileItemVector* Tile::makeItemList()
-{
-	if (isDynamic()) {
-		return reinterpret_cast<DynamicTile*>(this)->DynamicTile::makeItemList();
-	}
-	return reinterpret_cast<StaticTile*>(this)->StaticTile::makeItemList();
-}
-
-inline StaticTile::StaticTile(uint16_t x, uint16_t y, uint8_t z) :
-	Tile(x, y, z),
-	items(nullptr),
-	creatures(nullptr)
-{
 }
 
 inline StaticTile::~StaticTile()
@@ -517,16 +387,7 @@ inline StaticTile::~StaticTile()
 		for (Item* item : *items) {
 			item->decrementReferenceCounter();
 		}
-		delete items;
 	}
-
-	delete creatures;
-}
-
-inline DynamicTile::DynamicTile(uint16_t x, uint16_t y, uint8_t z) :
-	Tile(x, y, z)
-{
-	m_flags |= TILESTATE_DYNAMIC_TILE;
 }
 
 inline DynamicTile::~DynamicTile()

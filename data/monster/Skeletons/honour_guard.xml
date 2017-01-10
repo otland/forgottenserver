@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Honour Guard" nameDescription="an honour guard" race="undead" experience="55" speed="180" manacost="0">
+	<health now="85" max="85" />
+	<look type="298" corpse="2843" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-5" max="-13">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element holyPercent="5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Horestis curse upon you!" />
+		<voice sentence="Vengeance!" />
+		<voice sentence="Thy punishment is at hand!" />
+		<voice sentence="For the pharao!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="15" chance="50000" />
+		<item name="scarab coin" countmax="1" chance="2600" />
+		<item name="mace" chance="3760" />
+		<item id="2419" chance="1640" /><!-- scimitar -->
+		<item name="brown mushroom" countmax="2" chance="6120" />
+		<item name="pelvis bone" chance="8700" />
+	</loot>
+</monster>

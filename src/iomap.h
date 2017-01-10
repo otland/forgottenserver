@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,13 @@ enum OTBM_NodeTypes_t {
 	OTBM_WAYPOINT = 16,
 };
 
+enum OTBM_TileFlag_t : uint32_t {
+	OTBM_TILEFLAG_PROTECTIONZONE = 1 << 0,
+	OTBM_TILEFLAG_NOPVPZONE = 1 << 2,
+	OTBM_TILEFLAG_NOLOGOUT = 1 << 3,
+	OTBM_TILEFLAG_PVPZONE = 1 << 4
+};
+
 #pragma pack(1)
 
 struct OTBM_root_header {
@@ -93,17 +100,12 @@ struct OTBM_Tile_coords {
 	uint8_t y;
 };
 
-struct OTBM_HouseTile_coords {
-	uint8_t x;
-	uint8_t y;
-	uint32_t houseId;
-};
-
 #pragma pack()
 
 class IOMap
 {
-		static Tile* createTile(Item*& ground, Item* item, int px, int py, int pz);
+	static Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z);
+
 	public:
 		bool loadMap(Map* map, const std::string& identifier);
 
@@ -146,6 +148,10 @@ class IOMap
 		}
 
 	protected:
+		bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName);
+		bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
+		bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
+		bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);
 		std::string errorString;
 };
 

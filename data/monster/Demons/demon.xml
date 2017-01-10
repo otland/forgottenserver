@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Demon" nameDescription="a demon" race="fire" experience="6000" speed="280" manacost="0">
 	<health now="8200" max="8200" />
 	<look type="35" corpse="5995" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="130" />
+		<attack name="melee" interval="2000" min="0" max="-520" />
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-120" />
 		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="1" min="-150" max="-250">
 			<attribute key="shootEffect" value="fire" />
@@ -29,7 +29,8 @@
 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
-		<attack name="energy strike" interval="2000" chance="10" range="1" min="-210" max="-300">
+		<attack name="energy" interval="2000" chance="10" range="1" min="-210" max="-300">
+			<attribute key="shootEffect" value="energy" />
 		</attack>
 		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-700" duration="30000">
 			<attribute key="areaEffect" value="redshimmer" />
@@ -69,34 +70,34 @@
 		<voice sentence="Your resistance is futile!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
-		<item id="2148" countmax="99" chance="60000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="100000" /><!-- platinum coin -->
-		<item id="2795" countmax="6" chance="20740" /><!-- fire mushroom -->
-		<item id="8473" countmax="3" chance="20000" /><!-- ultimate health potion -->
-		<item id="7590" countmax="3" chance="14285" /><!-- great mana potion -->
-		<item id="2387" chance="14285" /><!-- double axe -->
-		<item id="2149" chance="10000" /><!-- small emerald -->
-		<item id="7368" countmax="5" chance="5263" /><!-- assassin star -->
-		<item id="2432" chance="3703" /><!-- fire axe -->
-		<item id="2151" chance="3571" /><!-- talon -->
-		<item id="2176" chance="2854" /><!-- orb -->
-		<item id="2393" chance="2000" /><!-- giant sword -->
-		<item id="2418" chance="1428" /><!-- golden sickle -->
-		<item id="2165" chance="1333" /><!-- stealth ring -->
-		<item id="2462" chance="1204" /><!-- devil helmet -->
-		<item id="1982" chance="1190" /><!-- purple tome -->
-		<item id="2179" chance="1010" /><!-- gold ring -->
-		<item id="2171" chance="813" /><!-- platinum amulet -->
-		<item id="2396" chance="666" /><!-- ice rapier -->
-		<item id="2520" chance="649" /><!-- demon shield -->
-		<item id="2214" chance="473" /><!-- ring of healing -->
-		<item id="5954" chance="467" /><!-- demon horn -->
-		<item id="2470" chance="413" /><!-- golden legs -->
-		<item id="2514" chance="389" /><!-- mastermind shield -->
-		<item id="2164" chance="170" /><!-- might ring -->
-		<item id="2472" chance="70" /><!-- magic plate armor -->
+		<item name="purple tome" chance="1190" />
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="gold coin" countmax="99" chance="60000" />
+		<item name="small emerald" chance="10000" />
+		<item name="talon" chance="3571" />
+		<item name="platinum coin" countmax="6" chance="100000" />
+		<item name="might ring" chance="170" />
+		<item name="stealth ring" chance="1333" />
+		<item name="platinum amulet" chance="813" />
+		<item name="orb" chance="2854" />
+		<item name="gold ring" chance="1010" />
+		<item name="ring of healing" chance="473" />
+		<item name="double axe" chance="14285" />
+		<item name="giant sword" chance="2000" />
+		<item name="ice rapier" chance="666" />
+		<item name="golden sickle" chance="1428" />
+		<item name="fire axe" chance="3703" />
+		<item name="devil helmet" chance="1204" />
+		<item name="golden legs" chance="413" />
+		<item name="magic plate armor" chance="70" />
+		<item name="mastermind shield" chance="389" />
+		<item name="demon shield" chance="649" />
+		<item name="fire mushroom" countmax="6" chance="20740" />
+		<item name="demon horn" chance="467" />
+		<item name="assassin star" countmax="5" chance="5263" />
+		<item name="demonrage sword" chance="80" />
 		<item id="7393" chance="100" /><!-- demon trophy -->
-		<item id="7382" chance="80" /><!-- demonrage sword -->
+		<item name="great mana potion" countmax="3" chance="14285" />
+		<item name="ultimate health potion" countmax="3" chance="20000" />
 	</loot>
 </monster>

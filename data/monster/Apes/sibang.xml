@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="200" manacost="0">
 	<health now="225" max="225" />
 	<look type="118" corpse="6045" />
@@ -44,13 +44,13 @@
 		<voice sentence="Ahhuuaaa!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="56000" /><!-- gold coin -->
-		<item id="2676" countmax="12" chance="30000" /><!-- banana -->
-		<item id="2678" countmax="3" chance="1960" /><!-- coconut -->
-		<item id="2675" countmax="5" chance="19840" /><!-- orange -->
-		<item id="1294" countmax="3" chance="30060" /><!-- small stone -->
-		<item id="2682" chance="1000" /><!-- melon -->
-		<item id="12467" chance="5000" /><!-- banana sash -->
-		<item id="5883" chance="1000" /><!-- ape fur -->
+		<item name="small stone" countmax="3" chance="30060" />
+		<item name="gold coin" countmax="35" chance="56000" />
+		<item name="orange" countmax="5" chance="19840" />
+		<item name="banana" countmax="12" chance="30000" />
+		<item name="coconut" countmax="3" chance="1960" />
+		<item name="melon" chance="1000" />
+		<item name="ape fur" chance="1000" />
+		<item name="banana sash" chance="5000" />
 	</loot>
 </monster>

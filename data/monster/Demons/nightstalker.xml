@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Nightstalker" nameDescription="a nightstalker" experience="500" speed="260" race="undead">
 	<health now="700" max="700" />
 	<targetchange speed="0" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="30" poison="80" />
+		<attack name="melee" interval="2000" min="0" max="-90" poison="80" />
 		<attack name="lifedrain" interval="2000" range="7" target="1" chance="20" min="-60" max="-170">
 			<attribute key="areaEffect" value="holyarea" />
 		</attack>
@@ -59,17 +59,17 @@
 		<voice sentence="Only the sweetest and cruelest dreams for you, my love." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="10" chance="50000" /><!-- gold coin -->
-		<item id="2804" chance="4761" /><!-- shadow herb -->
-		<item id="7589" chance="1612" /><!-- strong mana potion -->
 		<item id="2124" chance="1030" /><!-- crystal ring -->
-		<item id="2200" chance="847" /><!-- protection amulet -->
-		<item id="7407" chance="318" /><!-- haunted blade -->
-		<item id="9942" chance="127" /><!-- crystal of balance -->
-		<item id="2195" chance="121" /><!-- boots of haste -->
-		<item id="7427" chance="121" /><!-- chaos mace -->
-		<item id="2171" chance="121" /><!-- platinum amulet -->
-		<item id="8870" chance="520" /><!-- spirit cloak -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="10" chance="50000" />
+		<item name="platinum amulet" chance="121" />
+		<item name="boots of haste" chance="121" />
+		<item name="protection amulet" chance="847" />
+		<item name="shadow herb" chance="4761" />
+		<item name="haunted blade" chance="318" />
+		<item name="chaos mace" chance="121" />
+		<item name="strong mana potion" chance="1612" />
+		<item name="spirit cloak" chance="520" />
+		<item name="crystal of balance" chance="127" />
 	</loot>
 </monster>

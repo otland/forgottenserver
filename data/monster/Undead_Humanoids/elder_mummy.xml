@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Elder Mummy" nameDescription="an elder mummy" race="undead" experience="560" speed="180" manacost="0">
+	<health now="850" max="850" />
+	<look type="65" head="20" body="30" legs="40" feet="50" corpse="6004" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-120" poison="3" />
+		<attack name="death" interval="2000" chance="20" target="1" range="1" min="0" max="-130">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-300" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element icePercent="20" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2124" chance="1650" /><!-- crystal ring -->
+		<item name="silver brooch" chance="4000" />
+		<item name="black pearl" chance="1340" />
+		<item name="gold coin" countmax="160" chance="87000" />
+		<item name="scarab coin" countmax="3" chance="10000" />
+		<item name="strange talisman" chance="4500" />
+		<item id="2162" chance="6000" /><!-- magic lightwand -->
+		<item name="poison dagger" chance="380" />
+		<item name="worm" countmax="3" chance="20000" />
+		<item name="gauze bandage" chance="10000" />
+		<item name="flask of embalming fluid" chance="12600" />
+		<item id="13472" chance="2400" /><!-- pharaoh banner -->
+	</loot>
+</monster>

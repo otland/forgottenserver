@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Monk" nameDescription="a monk" race="blood" experience="200" speed="200" manacost="600">
 	<health now="240" max="240" />
 	<look type="57" corpse="20559" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="65" />
+		<attack name="melee" interval="2000" min="0" max="-130" />
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="15" min="30" max="50">
@@ -41,18 +41,18 @@
 		<voice sentence="I will punish the sinners!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="18" chance="15000" /><!-- gold coin -->
-		<item id="2689" chance="20000" /><!-- bread -->
 		<item id="1949" chance="2000" /><!-- scroll -->
+		<item name="brown flask" chance="820" />
 		<item id="2044" chance="880" /><!-- lamp -->
-		<item id="10563" chance="4930" /><!-- Book of Prayers -->
-		<item id="2015" chance="820" /><!-- brown flask -->
-		<item id="12448" chance="2950" /><!-- rope belt -->
-		<item id="12449" chance="1001" /><!-- safety pins -->
-		<item id="2642" chance="710" /><!-- sandals -->
+		<item name="gold coin" countmax="18" chance="15000" />
+		<item name="power ring" chance="100" />
+		<item name="life crystal" chance="1002" />
+		<item name="ankh" chance="2240" />
 		<item id="2401" chance="440" /><!-- staff -->
-		<item id="2177" chance="1002" /><!-- life crystal -->
-		<item id="2193" chance="2240" /><!-- ankh -->
-		<item id="2166" chance="100" /><!-- power ring -->
+		<item name="sandals" chance="710" />
+		<item name="bread" chance="20000" />
+		<item name="book of prayers" chance="4930" />
+		<item name="rope belt" chance="2950" />
+		<item name="safety pin" chance="1001" />
 	</loot>
 </monster>

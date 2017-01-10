@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Juggernaut" nameDescription="a juggernaut" race="blood" experience="14000" speed="290" manacost="0">
 	<health now="20000" max="20000" />
 	<look type="244" corpse="6336" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="200" attack="140" />
+		<attack name="melee" interval="2000" min="0" max="-1470" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-780">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
@@ -48,38 +48,38 @@
 		<voice sentence="WAHHHH!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="15" chance="100000" /><!-- platinum coin -->
-		<item id="2671" countmax="8" chance="60000" /><!-- ham -->
-		<item id="6500" chance="45333" /><!-- demonic essence -->
-		<item id="5944" chance="33333" /><!-- soul orb -->
-		<item id="6558" countmax="4" chance="25000" /><!-- concentrated demonic blood -->
-		<item id="7591" chance="32000" /><!-- great health potion -->
-		<item id="2147" countmax="4" chance="20000" /><!-- small ruby -->
-		<item id="7368" countmax="10" chance="25000" /><!-- assassin star -->
-		<item id="7590" chance="35000" /><!-- great mana potion -->
-		<item id="2149" countmax="5" chance="20000" /><!-- small emerald -->
-		<item id="9810" chance="3000" /><!-- rusty armor -->
-		<item id="7365" countmax="15" chance="11111" /><!-- onyx arrow -->
-		<item id="2156" chance="13850" /><!-- red gem -->
-		<item id="9971" countmax="2" chance="7692" /><!-- gold ingot -->
-		<item id="7452" chance="7761" /><!-- spiked squelcher -->
-		<item id="2153" chance="830" /><!-- violet gem -->
 		<item id="2136" chance="550" /><!-- demonbone amulet -->
-		<item id="2466" chance="550" /><!-- golden armor -->
-		<item id="2155" chance="869" /><!-- green gem -->
-		<item id="2578" chance="280" /><!-- closed trap -->
-		<item id="2476" chance="4990" /><!-- knight armor -->
-		<item id="2514" chance="800" /><!-- mastermind shield -->
-		<item id="2434" chance="9000" /><!-- dragon hammer -->
-		<item id="7413" chance="4430" /><!-- titan axe -->
-		<item id="2470" chance="500" /><!-- golden legs -->
+		<item name="small ruby" countmax="4" chance="20000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="small emerald" countmax="5" chance="20000" />
+		<item name="platinum coin" countmax="15" chance="100000" />
+		<item name="violet gem" chance="830" />
+		<item name="green gem" chance="869" />
+		<item name="red gem" chance="13850" />
 		<item id="2228" chance="600" /><!-- broken pottery -->
-		<item id="8889" chance="400" /><!-- skullcracker armor-->
-		<item id="2452" chance="400" /><!-- heavy mace -->
-		<item id="2454" chance="400" /><!-- war axe -->
+		<item name="dragon hammer" chance="9000" />
+		<item name="heavy mace" chance="400" />
+		<item name="war axe" chance="400" />
+		<item name="golden armor" chance="550" />
+		<item name="golden legs" chance="500" />
+		<item name="knight armor" chance="4990" />
+		<item name="mastermind shield" chance="800" />
+		<item name="closed trap" chance="280" />
+		<item name="ham" countmax="8" chance="60000" />
+		<item name="soul orb" chance="33333" />
+		<item name="demonic essence" chance="45333" />
+		<item name="concentrated demonic blood" countmax="4" chance="25000" />
+		<item name="onyx arrow" countmax="15" chance="11111" />
+		<item name="assassin star" countmax="10" chance="25000" />
+		<item name="titan axe" chance="4430" />
+		<item name="spiked squelcher" chance="7761" />
+		<item name="great mana potion" chance="35000" />
+		<item name="great health potion" chance="32000" />
+		<item name="skullcracker armor" chance="400" />
+		<item id="9810" chance="3000" /><!-- rusty armor -->
+		<item name="gold ingot" countmax="2" chance="7692" />
 	</loot>
 </monster>

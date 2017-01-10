@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ class Creature;
 class Game;
 class Spawn;
 
-typedef std::unordered_set<Creature*> CreatureHashSet;
-typedef std::list<Creature*> CreatureList;
+using CreatureHashSet = std::unordered_set<Creature*>;
+using CreatureList = std::list<Creature*>;
 
 enum TargetSearchType_t {
 	TARGETSEARCH_DEFAULT,
@@ -89,39 +89,39 @@ class Monster final : public Creature
 		}
 
 		RaceType_t getRace() const final {
-			return mType->race;
+			return mType->info.race;
 		}
 		int32_t getArmor() const final {
-			return mType->armor;
+			return mType->info.armor;
 		}
 		int32_t getDefense() const final {
-			return mType->defense;
+			return mType->info.defense;
 		}
 		bool isPushable() const final {
-			return mType->pushable && baseSpeed != 0;
+			return mType->info.pushable && baseSpeed != 0;
 		}
 		bool isAttackable() const final {
-			return mType->isAttackable;
+			return mType->info.isAttackable;
 		}
 
 		bool canPushItems() const {
-			return mType->canPushItems;
+			return mType->info.canPushItems;
 		}
 		bool canPushCreatures() const {
-			return mType->canPushCreatures;
+			return mType->info.canPushCreatures;
 		}
 		bool isHostile() const {
-			return mType->isHostile;
+			return mType->info.isHostile;
 		}
 		bool canSee(const Position& pos) const final;
 		bool canSeeInvisibility() const final {
 			return isImmune(CONDITION_INVISIBLE);
 		}
 		uint32_t getManaCost() const {
-			return mType->manaCost;
+			return mType->info.manaCost;
 		}
-		void setSpawn(Spawn* _spawn) {
-			spawn = _spawn;
+		void setSpawn(Spawn* spawn) {
+			this->spawn = spawn;
 		}
 
 		void onAttackedCreatureDisappear(bool isLogout) final;
@@ -134,7 +134,7 @@ class Monster final : public Creature
 		void drainHealth(Creature* attacker, int32_t damage) final;
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) final;
 		void onWalk() final;
-		bool getNextStep(Direction& dir, uint32_t& flags) final;
+		bool getNextStep(Direction& direction, uint32_t& flags) final;
 		void onFollowCreatureComplete(const Creature* creature) final;
 
 		void onThink(uint32_t interval) final;
@@ -162,10 +162,10 @@ class Monster final : public Creature
 
 		bool isTarget(const Creature* creature) const;
 		bool isFleeing() const {
-			return getHealth() <= mType->runAwayHealth;
+			return !isSummon() && getHealth() <= mType->info.runAwayHealth;
 		}
 
-		bool getDistanceStep(const Position& targetPos, Direction& dir, bool flee = false);
+		bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
 		bool isTargetNearby() const {
 			return stepDuration >= 1;
 		}
@@ -182,25 +182,25 @@ class Monster final : public Creature
 		std::string strDescription;
 
 		MonsterType* mType;
-		Spawn* spawn;
+		Spawn* spawn = nullptr;
 
-		int64_t lastMeleeAttack;
+		int64_t lastMeleeAttack = 0;
 
-		uint32_t attackTicks;
-		uint32_t targetTicks;
-		uint32_t targetChangeTicks;
-		uint32_t defenseTicks;
-		uint32_t yellTicks;
-		int32_t minCombatValue;
-		int32_t maxCombatValue;
-		int32_t targetChangeCooldown;
-		int32_t stepDuration;
+		uint32_t attackTicks = 0;
+		uint32_t targetTicks = 0;
+		uint32_t targetChangeTicks = 0;
+		uint32_t defenseTicks = 0;
+		uint32_t yellTicks = 0;
+		int32_t minCombatValue = 0;
+		int32_t maxCombatValue = 0;
+		int32_t targetChangeCooldown = 0;
+		int32_t stepDuration = 0;
 
 		Position masterPos;
 
-		bool isIdle;
-		bool extraMeleeAttack;
-		bool isMasterInRange;
+		bool isIdle = true;
+		bool extraMeleeAttack = false;
+		bool isMasterInRange = false;
 
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);
@@ -217,10 +217,10 @@ class Monster final : public Creature
 		void clearTargetList();
 		void clearFriendList();
 
-		void death(Creature* _lastHitCreature) final;
-		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature) final;
+		void death(Creature* lastHitCreature) final;
+		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) final;
 
-		void setIdle(bool _idle);
+		void setIdle(bool idle);
 		void updateIdleStatus();
 		bool getIdleStatus() const {
 			return isIdle;
@@ -233,11 +233,11 @@ class Monster final : public Creature
 		bool canUseAttack(const Position& pos, const Creature* target) const;
 		bool canUseSpell(const Position& pos, const Position& targetPos,
 		                 const spellBlock_t& sb, uint32_t interval, bool& inRange, bool& resetTicks);
-		bool getRandomStep(const Position& creaturePos, Direction& dir) const;
-		bool getDanceStep(const Position& creaturePos, Direction& dir,
+		bool getRandomStep(const Position& creaturePos, Direction& direction) const;
+		bool getDanceStep(const Position& creaturePos, Direction& direction,
 		                  bool keepAttack = true, bool keepDistance = true);
 		bool isInSpawnRange(const Position& pos) const;
-		bool canWalkTo(Position pos, Direction dir) const;
+		bool canWalkTo(Position pos, Direction direction) const;
 
 		static bool pushItem(Item* item);
 		static void pushItems(Tile* tile);
@@ -252,17 +252,17 @@ class Monster final : public Creature
 		bool isOpponent(const Creature* creature) const;
 
 		uint64_t getLostExperience() const final {
-			return skillLoss ? mType->experience : 0;
+			return skillLoss ? mType->info.experience : 0;
 		}
 		uint16_t getLookCorpse() const final {
-			return mType->lookcorpse;
+			return mType->info.lookcorpse;
 		}
-		void dropLoot(Container* corpse, Creature* _lastHitCreature) final;
+		void dropLoot(Container* corpse, Creature* lastHitCreature) final;
 		uint32_t getDamageImmunities() const final {
-			return mType->damageImmunities;
+			return mType->info.damageImmunities;
 		}
 		uint32_t getConditionImmunities() const final {
-			return mType->conditionImmunities;
+			return mType->info.conditionImmunities;
 		}
 		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const final;
 		bool useCacheMap() const final {

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@
 class Event
 {
 	public:
-		explicit Event(LuaScriptInterface* _interface);
-		explicit Event(const Event* copy);
+		explicit Event(LuaScriptInterface* interface);
 		virtual ~Event() = default;
 
 		virtual bool configureEvent(const pugi::xml_node& node) = 0;
@@ -38,27 +37,27 @@ class Event
 		}
 
 		bool isScripted() const {
-			return m_scripted;
+			return scripted;
 		}
 
 	protected:
 		virtual std::string getScriptEventName() const = 0;
 
-		bool m_scripted;
-		int32_t m_scriptId;
-		LuaScriptInterface* m_scriptInterface;
+		bool scripted = false;
+		int32_t scriptId = 0;
+		LuaScriptInterface* scriptInterface = nullptr;
 };
 
 class BaseEvents
 {
 	public:
-		BaseEvents();
+ 		constexpr BaseEvents() = default;
 		virtual ~BaseEvents() = default;
 
 		bool loadFromXml();
 		bool reload();
 		bool isLoaded() const {
-			return m_loaded;
+			return loaded;
 		}
 
 	protected:
@@ -68,23 +67,21 @@ class BaseEvents
 		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
 		virtual void clear() = 0;
 
-		bool m_loaded;
+		bool loaded = false;
 };
 
 class CallBack
 {
 	public:
-		CallBack();
+		CallBack() = default;
 
-		bool loadCallBack(LuaScriptInterface* _interface, const std::string& name);
+		bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
 
 	protected:
-		int32_t m_scriptId;
-		LuaScriptInterface* m_scriptInterface;
+		int32_t scriptId = 0;
+		LuaScriptInterface* scriptInterface = nullptr;
 
-		bool m_loaded;
-
-		std::string m_callbackName;
+		bool loaded = false;
 };
 
 #endif

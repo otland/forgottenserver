@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Silver Rabbit" nameDescription="a silver rabbit" race="blood" experience="0" speed="195" manacost="220">
+	<health now="15" max="15" />
+	<look type="262" head="69" body="66" legs="69" feet="66" corpse="7338" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag staticattack="70" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="0" />
+		<flag runonhealth="15" />
+	</flags>
+	<defenses armor="5" defense="5" />
+	<loot>
+		<item name="meat" countmax="2" chance="86170" />
+		<item id="2684" chance="11150" /><!-- carrot -->
+		<item name="silky fur" chance="28670" />
+	</loot>
+</monster>

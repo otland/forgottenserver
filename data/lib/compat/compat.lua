@@ -757,7 +757,7 @@ function getTileInfo(position)
 	ret.nopz = ret.protection
 	ret.nologout = t:hasFlag(TILESTATE_NOLOGOUT)
 	ret.refresh = t:hasFlag(TILESTATE_REFRESH)
-	ret.house = t:hasFlag(TILESTATE_HOUSE)
+	ret.house = t:getHouse() ~= nil
 	ret.bed = t:hasFlag(TILESTATE_BED)
 	ret.depot = t:hasFlag(TILESTATE_DEPOT)
 
@@ -875,6 +875,7 @@ function getThingfromPos(pos)
 	end
 
 	local thing
+	local stackpos = pos.stackpos or 0
 	if stackpos == STACKPOS_TOP_MOVEABLE_ITEM_OR_CREATURE then
 		thing = tile:getTopCreature()
 		if thing == nil then
@@ -888,7 +889,7 @@ function getThingfromPos(pos)
 	elseif stackpos == STACKPOS_TOP_CREATURE then
 		thing = tile:getTopCreature()
 	else
-		thing = tile:getThing(pos.stackpos)
+		thing = tile:getThing(stackpos)
 	end
 	return pushThing(thing)
 end

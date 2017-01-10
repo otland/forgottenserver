@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +28,8 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Events* g_events;
 
-Party::Party(Player* leader)
+Party::Party(Player* leader) : leader(leader)
 {
-	extraExpRate = 0.20f;
-
-	sharedExpActive = false;
-	sharedExpEnabled = false;
-
-	this->leader = leader;
 	leader->setParty(this);
 }
 
@@ -388,22 +382,22 @@ void Party::updateVocationsList()
 	}
 }
 
-bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
+bool Party::setSharedExperience(Player* player, bool sharedExpActive)
 {
 	if (!player || leader != player) {
 		return false;
 	}
 
-	if (sharedExpActive == _sharedExpActive) {
+	if (this->sharedExpActive == sharedExpActive) {
 		return true;
 	}
 
-	sharedExpActive = _sharedExpActive;
+	this->sharedExpActive = sharedExpActive;
 
 	if (sharedExpActive) {
-		sharedExpEnabled = canEnableSharedExperience();
+		this->sharedExpEnabled = canEnableSharedExperience();
 
-		if (sharedExpEnabled) {
+		if (this->sharedExpEnabled) {
 			leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience is now active.");
 		} else {
 			leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience has been activated, but some members of your party are inactive.");
@@ -418,7 +412,7 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 
 void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 {
-	uint32_t shareExperience = static_cast<uint64_t>(std::ceil(((static_cast<double>(experience) / (memberList.size() + 1)) + (static_cast<double>(experience) * extraExpRate))));
+	uint64_t shareExperience = static_cast<uint64_t>(std::ceil((static_cast<double>(experience) * (extraExpRate + 1)) / (memberList.size() + 1)));
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
