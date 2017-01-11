@@ -1007,8 +1007,8 @@ function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
 
-function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c ~= nil and creature:setItemOutfit(item, time) end
-function doSetMonsterOutfit(cid) local c = Creature(cid) return c ~= nil and creature:setMonsterOutfit(name, time) end
+function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c ~= nil and c:setItemOutfit(item, time) end
+function doSetMonsterOutfit(cid) local c = Creature(cid) return c ~= nil and c:setMonsterOutfit(name, time) end
 function doSetCreatureOutfit(cid, outfit, time)
 	local creature = Creature(cid)
 	if not creature then
