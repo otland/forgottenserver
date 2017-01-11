@@ -234,17 +234,11 @@ uint32_t Spells::getInstantSpellCount(const Player* player) const
 	return count;
 }
 
-InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t index)
+InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
-	uint32_t count = 0;
-	for (const auto& it : instants) {
-		InstantSpell* instantSpell = it.second;
-		if (instantSpell->canCast(player)) {
-			if (count == index) {
-				return instantSpell;
-			}
-			++count;
-		}
+	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
+	if (it != instants.end()) {
+		return it->second;
 	}
 	return nullptr;
 }
