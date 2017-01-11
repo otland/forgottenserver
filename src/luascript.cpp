@@ -976,15 +976,6 @@ void LuaScriptInterface::registerFunctions()
 	//doChallengeCreature(cid, target)
 	lua_register(luaState, "doChallengeCreature", LuaScriptInterface::luaDoChallengeCreature);
 
-	//doSetMonsterOutfit(cid, name, time)
-	lua_register(luaState, "doSetMonsterOutfit", LuaScriptInterface::luaSetMonsterOutfit);
-
-	//doSetItemOutfit(cid, item, time)
-	lua_register(luaState, "doSetItemOutfit", LuaScriptInterface::luaSetItemOutfit);
-
-	//doSetCreatureOutfit(cid, outfit, time)
-	lua_register(luaState, "doSetCreatureOutfit", LuaScriptInterface::luaSetCreatureOutfit);
-
 	//isInArray(array, value)
 	lua_register(luaState, "isInArray", LuaScriptInterface::luaIsInArray);
 
@@ -3300,54 +3291,6 @@ int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 
 	target->challengeCreature(creature);
 	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaSetCreatureOutfit(lua_State* L)
-{
-	//doSetCreatureOutfit(cid, outfit, time)
-	Creature* creature = getCreature(L, 1);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Outfit_t outfit = getOutfit(L, 2);
-	int32_t time = getNumber<int32_t>(L, 3);
-	pushBoolean(L, Spell::CreateIllusion(creature, outfit, time) == RETURNVALUE_NOERROR);
-	return 1;
-}
-
-int LuaScriptInterface::luaSetMonsterOutfit(lua_State* L)
-{
-	//doSetMonsterOutfit(cid, name, time)
-	Creature* creature = getCreature(L, 1);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	std::string name = getString(L, 2);
-	int32_t time = getNumber<int32_t>(L, 3);
-	pushBoolean(L, Spell::CreateIllusion(creature, name, time) == RETURNVALUE_NOERROR);
-	return 1;
-}
-
-int LuaScriptInterface::luaSetItemOutfit(lua_State* L)
-{
-	//doSetItemOutfit(cid, item, time)
-	Creature* creature = getCreature(L, 1);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint32_t item = getNumber<uint32_t>(L, 2);
-	int32_t time = getNumber<int32_t>(L, 3);
-	pushBoolean(L, Spell::CreateIllusion(creature, item, time) == RETURNVALUE_NOERROR);
 	return 1;
 }
 

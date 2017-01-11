@@ -462,10 +462,6 @@ class LuaScriptInterface
 
 		static int luaDoChallengeCreature(lua_State* L);
 
-		static int luaSetCreatureOutfit(lua_State* L);
-		static int luaSetMonsterOutfit(lua_State* L);
-		static int luaSetItemOutfit(lua_State* L);
-
 		static int luaDebugPrint(lua_State* L);
 		static int luaIsInArray(lua_State* L);
 		static int luaAddEvent(lua_State* L);
