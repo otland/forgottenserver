@@ -236,8 +236,7 @@ uint32_t Spells::getInstantSpellCount(const Player* player) const
 
 InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
-	auto& it = instants.begin();
-	std::advance(it, spellId);
+	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
 	if (it != instants.end()) {
 		return it->second;
 	}
