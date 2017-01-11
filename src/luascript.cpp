@@ -12175,17 +12175,15 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 int LuaScriptInterface::luaSpellCreate(lua_State* L)
 {
 	// Spell(words, name or id)
-	InstantSpell* spell;
-	if (isString(L, 2)) {
+	InstantSpell* spell = nullptr;
+	if (isNumber(L, 2)) {
+		spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
+	} else if (isString(L, 2)) {
 		const std::string& stringArgument = getString(L, 2);
 		spell = g_spells->getInstantSpellByName(stringArgument);
-		if (spell == nullptr) {
-			spell = g_spells->getInstantSpell(stringArgument);
-		} else if (isNumber(L, 2)) {
-			spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
+		if (!spell) {
+			spell = g_spells->getInstantSpell(stringArgument); 
 		}
-	} else {
-		spell = nullptr;
 	}
 
 	if (spell) {
