@@ -3757,12 +3757,10 @@ void Player::removeAttacked(const Player* attacked)
 		return;
 	}
 
-	auto it = std::find(attackedSet.begin(), attackedSet.end(), attacked->guid);
-	if (it == attackedSet.end()) {
-		return;
+	auto it = attackedSet.find(attacked->guid);
+	if (it != attackedSet.end()) {
+		attackedSet.erase(it);
 	}
-
-	attackedSet.erase(it);
 }
 
 void Player::clearAttacked()
