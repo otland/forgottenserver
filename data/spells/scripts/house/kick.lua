@@ -1,9 +1,5 @@
 function onCastSpell(player, variant)
-	local targetPlayer = Player(variant:getString())
-	if not targetPlayer then
-		targetPlayer = player
-	end
-
+	local targetPlayer = Player(variant:getString()) or player
 	local house = targetPlayer:getTile():getHouse()
 	if not house or not house:kickPlayer(player, targetPlayer) then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
