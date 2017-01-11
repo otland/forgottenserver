@@ -1015,7 +1015,7 @@ function getPlayerInstantSpellInfo(cid, spellId)
 	end
 
 	local spell = Spell(spellId)
-	if spell == nil or not player:canCast(spell) then
+	if not spell or not player:canCast(spell) then
 		return false
 	end
 
