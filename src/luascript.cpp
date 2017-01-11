@@ -2232,7 +2232,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "isPzLocked", LuaScriptInterface::luaPlayerIsPzLocked);
 
 	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
+
 	registerMethod("Player", "getHouse", LuaScriptInterface::luaPlayerGetHouse);
+	registerMethod("Player", "sendHouseWindow", LuaScriptInterface::luaPlayerSendHouseWindow);
+	registerMethod("Player", "setEditHouse", LuaScriptInterface::luaPlayerSetEditHouse);
 
 	registerMethod("Player", "setGhostMode", LuaScriptInterface::luaPlayerSetGhostMode);
 
@@ -2365,12 +2368,16 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getDoors", LuaScriptInterface::luaHouseGetDoors);
 	registerMethod("House", "getDoorCount", LuaScriptInterface::luaHouseGetDoorCount);
+	registerMethod("House", "getDoorIdByPosition", LuaScriptInterface::luaHouseGetDoorIdByPosition);
 
 	registerMethod("House", "getTiles", LuaScriptInterface::luaHouseGetTiles);
 	registerMethod("House", "getTileCount", LuaScriptInterface::luaHouseGetTileCount);
 
+	registerMethod("House", "canEditAccessList", LuaScriptInterface::luaHouseCanEditAccessList);
 	registerMethod("House", "getAccessList", LuaScriptInterface::luaHouseGetAccessList);
 	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
+
+	registerMethod("House", "kickPlayer", LuaScriptInterface::luaHouseKickPlayer);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -9148,6 +9155,48 @@ int LuaScriptInterface::luaPlayerGetHouse(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerSendHouseWindow(lua_State* L)
+{
+	// player:sendHouseWindow(house, listId)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	House* house = getUserdata<House>(L, 2);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t listId = getNumber<uint32_t>(L, 3);
+	player->sendHouseWindow(house, listId);
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetEditHouse(lua_State* L)
+{
+	// player:setEditHouse(house, listId)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	House* house = getUserdata<House>(L, 2);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t listId = getNumber<uint32_t>(L, 3);
+	player->setEditHouse(house, listId);
+	pushBoolean(L, true);
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 {
 	// player:setGhostMode(enabled)
@@ -10358,6 +10407,24 @@ int LuaScriptInterface::luaHouseGetDoorCount(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaHouseGetDoorIdByPosition(lua_State* L)
+{
+	// house:getDoorIdByPosition(position)
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Door* door = house->getDoorByPosition(getPosition(L, 2));
+	if (door) {
+		lua_pushnumber(L, door->getDoorId());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 {
 	// house:getTiles()
@@ -10388,6 +10455,22 @@ int LuaScriptInterface::luaHouseGetTileCount(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseCanEditAccessList(lua_State* L)
+{
+	// house:canEditAccessList(listId, player)
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t listId = getNumber<uint32_t>(L, 2);
+	Player* player = getPlayer(L, 3);
+
+	pushBoolean(L, house->canEditAccessList(listId, player));
 	return 1;
 }
 
@@ -10423,6 +10506,19 @@ int LuaScriptInterface::luaHouseSetAccessList(lua_State* L)
 	const std::string& list = getString(L, 3);
 	house->setAccessList(listId, list);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseKickPlayer(lua_State* L)
+{
+	// house:kickPlayer(player, targetPlayer)
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushBoolean(L, house->kickPlayer(getPlayer(L, 2), getPlayer(L, 3)));
 	return 1;
 }
 

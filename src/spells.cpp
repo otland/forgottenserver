@@ -892,110 +892,6 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 
 namespace {
 
-House* getHouseFromPos(Creature* creature)
-{
-	if (!creature) {
-		return nullptr;
-	}
-
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return nullptr;
-	}
-
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
-	if (!houseTile) {
-		return nullptr;
-	}
-
-	House* house = houseTile->getHouse();
-	if (!house) {
-		return nullptr;
-	}
-
-	return house;
-}
-
-bool HouseGuestList(const InstantSpell*, Creature* creature, const std::string&)
-{
-	House* house = getHouseFromPos(creature);
-	if (!house) {
-		return false;
-	}
-
-	Player* player = creature->getPlayer();
-	if (house->canEditAccessList(GUEST_LIST, player)) {
-		player->setEditHouse(house, GUEST_LIST);
-		player->sendHouseWindow(house, GUEST_LIST);
-	} else {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-	return true;
-}
-
-bool HouseSubOwnerList(const InstantSpell*, Creature* creature, const std::string&)
-{
-	House* house = getHouseFromPos(creature);
-	if (!house) {
-		return false;
-	}
-
-	Player* player = creature->getPlayer();
-	if (house->canEditAccessList(SUBOWNER_LIST, player)) {
-		player->setEditHouse(house, SUBOWNER_LIST);
-		player->sendHouseWindow(house, SUBOWNER_LIST);
-	} else {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-	return true;
-}
-
-bool HouseDoorList(const InstantSpell*, Creature* creature, const std::string&)
-{
-	House* house = getHouseFromPos(creature);
-	if (!house) {
-		return false;
-	}
-
-	Player* player = creature->getPlayer();
-	Position pos = Spells::getCasterPosition(player, player->getDirection());
-	Door* door = house->getDoorByPosition(pos);
-	if (door && house->canEditAccessList(door->getDoorId(), player)) {
-		player->setEditHouse(house, door->getDoorId());
-		player->sendHouseWindow(house, door->getDoorId());
-	} else {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-	return true;
-}
-
-bool HouseKick(const InstantSpell*, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-
-	Player* targetPlayer = g_game.getPlayerByName(param);
-	if (!targetPlayer) {
-		targetPlayer = player;
-	}
-
-	House* house = getHouseFromPos(targetPlayer);
-	if (!house) {
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return false;
-	}
-
-	if (!house->kickPlayer(player, targetPlayer)) {
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return false;
-	}
-	return true;
-}
-
 bool SummonMonster(const InstantSpell* spell, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -1120,15 +1016,7 @@ bool Illusion(const InstantSpell*, Creature* creature, const std::string& param)
 bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "edithouseguest") == 0) {
-		function = HouseGuestList;
-	} else if (strcasecmp(functionName, "edithousesubowner") == 0) {
-		function = HouseSubOwnerList;
-	} else if (strcasecmp(functionName, "edithousedoor") == 0) {
-		function = HouseDoorList;
-	} else if (strcasecmp(functionName, "housekick") == 0) {
-		function = HouseKick;
-	} else if (strcasecmp(functionName, "levitate") == 0) {
+	if (strcasecmp(functionName, "levitate") == 0) {
 		function = Levitate;
 	} else if (strcasecmp(functionName, "illusion") == 0) {
 		function = Illusion;
