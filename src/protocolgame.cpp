@@ -1981,7 +1981,7 @@ void ProtocolGame::sendQuestLog()
 	for (const Quest& quest : g_game.quests.getQuests()) {
 		if (quest.isStarted(player)) {
 			msg.add<uint16_t>(quest.getID());
-			msg.addString(quest.getName());
+			msg.addString(quest.getName(player));
 			msg.addByte(quest.isCompleted(player));
 		}
 	}
