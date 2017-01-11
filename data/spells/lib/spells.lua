@@ -322,7 +322,7 @@ function Creature:addPartyCondition(combat, variant, condition, baseMana)
 		return false
 	end
 
-	local mana = math.ceil((math.pow(0.9, #affectedMembers - 1) * baseMana) * #affectedMembers)
+	local mana = math.ceil(math.pow(0.9, #affectedMembers - 1) * baseMana * #affectedMembers)
 	if self:getMana() < mana then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_NOTENOUGHMANA))
 		position:sendMagicEffect(CONST_ME_POFF)
