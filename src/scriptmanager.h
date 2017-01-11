@@ -35,7 +35,29 @@ class ScriptingManager
 			return instance;
 		}
 
+		enum ReloadInterface_t {
+			NONE,
+			ACTIONS,
+			CONFIG,
+			CREATUREEVENTS,
+			MONSTERS,
+			MOVEEVENTS,
+			NPCS,
+			RAIDS,
+			SPELLS,
+			TALKACTIONS,
+			ITEMS,
+			WEAPONS,
+			QUESTS,
+			MOUNTS,
+			GLOBALEVENTS,
+			EVENTS,
+			CHAT,
+			GLOBAL,
+		};
+
 		bool loadScriptSystems();
+		void reloadInterface(ReloadInterface_t interfaceId);
 };
 
 #endif

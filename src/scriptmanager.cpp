@@ -29,6 +29,8 @@
 #include "weapons.h"
 #include "globalevent.h"
 #include "events.h"
+#include "configmanager.h"
+#include "game.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
@@ -41,6 +43,9 @@ MoveEvents* g_moveEvents = nullptr;
 Weapons* g_weapons = nullptr;
 
 extern LuaEnvironment g_luaEnvironment;
+extern ConfigManager g_config;
+extern Game g_game;
+extern Monsters g_monsters;
 
 ScriptingManager::~ScriptingManager()
 {
@@ -114,4 +119,80 @@ bool ScriptingManager::loadScriptSystems()
 	}
 
 	return true;
+}
+
+void ScriptingManager::reloadInterface(ReloadInterface_t interfaceId) {
+	switch (interfaceId) {
+		case ACTIONS:
+			g_actions->reload();
+			break;
+
+		case CONFIG:
+			g_config.reload();
+			break;
+
+		case CREATUREEVENTS:
+			g_creatureEvents->reload();
+			break;
+
+		case MOVEEVENTS:
+			g_moveEvents->reload();
+			break;
+
+		case NPCS:
+			Npcs::reload();
+			break;
+
+		case RAIDS:
+			g_game.raids.reload();
+			g_game.raids.startup();
+			break;
+
+		case SPELLS:
+			g_spells->reload();
+
+		case MONSTERS:
+			g_monsters.reload();
+			break;
+
+		case TALKACTIONS:
+			g_talkActions->reload();
+			break;
+
+		case ITEMS:
+			Item::items.reload();
+			break;
+
+		case WEAPONS:
+			g_weapons->reload();
+			g_weapons->loadDefaults();
+			break;
+
+		case QUESTS:
+			g_game.quests.reload();
+			break;
+
+		case MOUNTS:
+			g_game.mounts.reload();
+			break;
+
+		case GLOBALEVENTS:
+			g_globalEvents->reload();
+			break;
+
+		case EVENTS:
+			g_events->load();
+			break;
+
+		case CHAT:
+			g_chat->load();
+			break;
+
+		case GLOBAL:
+			g_luaEnvironment.loadFile("data/global.lua");
+			break;
+
+		default:
+			break;
+	}
 }

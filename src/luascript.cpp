@@ -35,6 +35,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "scriptmanager.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -1708,6 +1709,14 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_CANONLYUSEONESHIELD)
 	registerEnum(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 	registerEnum(RETURNVALUE_YOUARENOTTHEOWNER)
+	registerEnum(RETURNVALUE_NOSUCHRAID)
+	registerEnum(RETURNVALUE_ANOTHERRAIDEXECUTING)
+	registerEnum(RETURNVALUE_RAIDCONTAINSNODATA)
+	registerEnum(RETURNVALUE_TRADEPLAYERFARAWAY)
+	registerEnum(RETURNVALUE_YOUDONTOWNTHISHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
+	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
@@ -1822,6 +1831,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+
+	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -2371,6 +2382,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getAccessList", LuaScriptInterface::luaHouseGetAccessList);
 	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
+
+	registerMethod("House", "startTrade", LuaScriptInterface::luaHouseStartTrade);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -4357,11 +4370,76 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	const std::string& raidName = getString(L, 1);
 
 	Raid* raid = g_game.raids.getRaidByName(raidName);
-	if (raid) {
-		raid->startRaid();
+	if(!raid || !raid->isLoaded()) {
+		lua_pushnumber(L, RETURNVALUE_NOSUCHRAID);
+		return 1;
+	} else if (g_game.raids.getRunning()) {
+		lua_pushnumber(L, RETURNVALUE_ANOTHERRAIDEXECUTING);
+		return 1;
+	}
+
+	RaidEvent* raidEvent = raid->getNextRaidEvent();
+	if (!raidEvent) {
+		lua_pushnumber(L, RETURNVALUE_RAIDCONTAINSNODATA);
+		return 1;
+	}
+
+	g_game.raids.setRunning(raid);
+	raid->startRaid();
+	lua_pushnumber(L, RETURNVALUE_NOERROR);
+	return 1;
+}
+
+int LuaScriptInterface::luaGameReload(lua_State* L)
+{
+	// Game.reload(interfaceName)
+	const std::string& interfaceName = asLowerCaseString(getString(L, 1));
+
+	ScriptingManager::ReloadInterface_t interfaceId = ScriptingManager::NONE;
+
+	if (interfaceName == "action" || interfaceName == "actions") {
+		interfaceId = ScriptingManager::ACTIONS;
+	} else if (interfaceName == "config" || interfaceName == "configuration") {
+		interfaceId = ScriptingManager::CONFIG;
+	} else if (interfaceName == "creaturescript" || interfaceName == "creaturescripts") {
+		interfaceId = ScriptingManager::CREATUREEVENTS;
+	} else if (interfaceName == "monster" || interfaceName == "monsters") {
+		interfaceId = ScriptingManager::MONSTERS;
+	} else if (interfaceName == "move" || interfaceName == "movement" || interfaceName == "movements"
+		|| interfaceName == "moveevents" || interfaceName == "moveevent") {
+		interfaceId = ScriptingManager::MOVEEVENTS;
+	} else if (interfaceName == "npc" || interfaceName == "npcs") {
+		interfaceId = ScriptingManager::NPCS;
+	} else if (interfaceName == "raid" || interfaceName == "raids") {
+		interfaceId = ScriptingManager::RAIDS;
+	} else if (interfaceName == "spell" || interfaceName == "spells") {
+		interfaceId = ScriptingManager::SPELLS;
+	} else if (interfaceName == "talk" || interfaceName == "talkaction" || interfaceName == "talkactions") {
+		interfaceId = ScriptingManager::TALKACTIONS;
+	} else if (interfaceName == "items") {
+		interfaceId = ScriptingManager::ITEMS;
+	} else if (interfaceName == "weapon" || interfaceName == "weapons") {
+		interfaceId = ScriptingManager::WEAPONS;
+	} else if (interfaceName == "quest" || interfaceName == "quests") {
+		interfaceId = ScriptingManager::QUESTS;
+	} else if (interfaceName == "mount" || interfaceName == "mounts") {
+		interfaceId = ScriptingManager::MOUNTS;
+	} else if (interfaceName == "globalevents" || interfaceName == "globalevent") {
+		interfaceId = ScriptingManager::GLOBALEVENTS;
+	} else if (interfaceName == "events") {
+		interfaceId = ScriptingManager::EVENTS;
+	} else if (interfaceName == "chat" || interfaceName == "channel" || interfaceName == "chatchannels") {
+		interfaceId = ScriptingManager::CHAT;
+	} else if (interfaceName == "global") {
+		interfaceId = ScriptingManager::GLOBAL;
+	}
+	
+	if (interfaceId != ScriptingManager::NONE) {
+		ScriptingManager::getInstance().reloadInterface(interfaceId);
+		lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 		pushBoolean(L, true);
 	} else {
-		lua_pushnil(L);
+		pushBoolean(L, false);
 	}
 	return 1;
 }
@@ -10423,6 +10501,52 @@ int LuaScriptInterface::luaHouseSetAccessList(lua_State* L)
 	const std::string& list = getString(L, 3);
 	house->setAccessList(listId, list);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
+{
+	// house:startTrade(player, tradePartner)
+	House* house = getUserdata<House>(L, 1);
+	Player* player = getUserdata<Player>(L, 2);
+	Player* tradePartner = getUserdata<Player>(L, 3);
+
+	if (!player || !tradePartner || !house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERFARAWAY);
+		return 1;
+	}
+
+	if (house->getOwner() != player->getGUID()) {
+		lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
+		return 1;
+	}
+
+	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+		return 1;
+	}
+
+	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
+		return 1;
+	}
+
+	Item* transferItem = house->getTransferItem();
+	if (!transferItem) {
+		lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
+		return 1;
+	}
+
+	transferItem->getParent()->setParent(player);
+	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+		house->resetTransferItem();
+	}
+	lua_pushnumber(L, RETURNVALUE_NOERROR);
 	return 1;
 }
 

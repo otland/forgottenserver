@@ -32,6 +32,8 @@
 	<talkaction words="/ghost" script="ghost.lua" />
 	<talkaction words="/clean" script="clean.lua" />
 	<talkaction words="/hide" script="hide.lua" />
+	<talkaction words="/raid" separator=" " script="raid.lua" />
+	<talkaction words="/reload" separator=" " script="reload.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua" />
@@ -43,6 +45,7 @@
 	<talkaction words="!kills" script="kills.lua" />
 	<talkaction words="!online" script="online.lua" />
 	<talkaction words="!serverinfo" script="serverinfo.lua" />
+	<talkaction words="!sellhouse" separator=" " script="sellhouse.lua" />
 
 	<!-- test talkactions -->
 	<talkaction words="!z" separator=" " script="magiceffect.lua" />

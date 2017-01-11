@@ -22,7 +22,6 @@
 #include "pugicast.h"
 
 #include "items.h"
-#include "commands.h"
 #include "creature.h"
 #include "monster.h"
 #include "game.h"
@@ -101,8 +100,6 @@ void Game::setGameState(GameState_t newState)
 	gameState = newState;
 	switch (newState) {
 		case GAME_STATE_INIT: {
-			commands.loadFromXml();
-
 			loadExperienceStages();
 
 			groups.load();
@@ -3225,10 +3222,6 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
-	if (playerSayCommand(player, text)) {
-		return;
-	}
-
 	if (playerSaySpell(player, type, text)) {
 		return;
 	}
@@ -3276,23 +3269,6 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		default:
 			break;
 	}
-}
-
-bool Game::playerSayCommand(Player* player, const std::string& text)
-{
-	if (text.empty()) {
-		return false;
-	}
-
-	char firstCharacter = text.front();
-	for (char commandTag : commandTags) {
-		if (commandTag == firstCharacter) {
-			if (commands.exeCommand(*player, text)) {
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& text)
@@ -4352,21 +4328,6 @@ void Game::getWorldLightInfo(LightInfo& lightInfo) const
 {
 	lightInfo.level = lightLevel;
 	lightInfo.color = 0xD7;
-}
-
-void Game::addCommandTag(char tag)
-{
-	for (char commandTag : commandTags) {
-		if (commandTag == tag) {
-			return;
-		}
-	}
-	commandTags.push_back(tag);
-}
-
-void Game::resetCommandTag()
-{
-	commandTags.clear();
 }
 
 void Game::shutdown()
