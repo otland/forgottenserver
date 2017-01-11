@@ -2222,7 +2222,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod("Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
-	registerMethod("Player", "getSpellCount", LuaScriptInterface::luaPlayerGetSpellCount);
+	registerMethod("Player", "getInstantSpellCount", LuaScriptInterface::luaPlayerGetInstantSpellCount);
 	registerMethod("Player", "canCast", LuaScriptInterface::luaPlayerCanCast);
 
 	// Monster
@@ -9218,9 +9218,9 @@ int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetSpellCount(lua_State* L)
+int LuaScriptInterface::luaPlayerGetInstantSpellCount(lua_State* L)
 {
-	// player:getSpellCount()
+	// player:getInstantSpellCount()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
@@ -12069,13 +12069,13 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 {
 	// Spell(words, name or id)
 	InstantSpell* spell;
-	if (isNumber(L, 2)) {
-		spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
-	} else if (isString(L, 2)) {
+	if (isString(L, 2)) {
 		const std::string& stringArgument = getString(L, 2);
 		spell = g_spells->getInstantSpellByName(stringArgument);
 		if (spell == nullptr) {
 			spell = g_spells->getInstantSpell(stringArgument);
+		} else if (isNumber(L, 2)) {
+			spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
 		}
 	} else {
 		spell = nullptr;
@@ -12093,8 +12093,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 int LuaScriptInterface::luaSpellGetName(lua_State* L)
 {
 	// spell:getName()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		pushString(L, spell->getName());
 	} else {
 		lua_pushnil(L);
@@ -12105,8 +12104,7 @@ int LuaScriptInterface::luaSpellGetName(lua_State* L)
 int LuaScriptInterface::luaSpellGetWords(lua_State* L)
 {
 	// spell:getWords()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		pushString(L, spell->getWords());
 	} else {
 		lua_pushnil(L);
@@ -12117,8 +12115,7 @@ int LuaScriptInterface::luaSpellGetWords(lua_State* L)
 int LuaScriptInterface::luaSpellGetLevel(lua_State* L)
 {
 	// spell:getLevel()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		lua_pushnumber(L, spell->getLevel());
 	} else {
 		lua_pushnil(L);
@@ -12129,8 +12126,7 @@ int LuaScriptInterface::luaSpellGetLevel(lua_State* L)
 int LuaScriptInterface::luaSpellGetMagicLevel(lua_State* L)
 {
 	// spell:getMagicLevel()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		lua_pushnumber(L, spell->getMagicLevel());
 	} else {
 		lua_pushnil(L);
@@ -12154,8 +12150,7 @@ int LuaScriptInterface::luaSpellGetManaCost(lua_State* L)
 int LuaScriptInterface::luaSpellGetManaPercent(lua_State* L)
 {
 	// spell:getManaPercent()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		lua_pushnumber(L, spell->getManaPercent());
 	} else {
 		lua_pushnil(L);
@@ -12166,8 +12161,7 @@ int LuaScriptInterface::luaSpellGetManaPercent(lua_State* L)
 int LuaScriptInterface::luaSpellGetSoulCost(lua_State* L)
 {
 	// spell:getSoulCost()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		lua_pushnumber(L, spell->getSoulCost());
 	} else {
 		lua_pushnil(L);
@@ -12178,8 +12172,7 @@ int LuaScriptInterface::luaSpellGetSoulCost(lua_State* L)
 int LuaScriptInterface::luaSpellIsPremium(lua_State* L)
 {
 	// spell:isPremium()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		pushBoolean(L, spell->isPremium());
 	} else {
 		lua_pushnil(L);
@@ -12190,8 +12183,7 @@ int LuaScriptInterface::luaSpellIsPremium(lua_State* L)
 int LuaScriptInterface::luaSpellIsLearnable(lua_State* L)
 {
 	// spell:isLearnable()
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
-	if (spell) {
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
 		pushBoolean(L, spell->isLearnable());
 	} else {
 		lua_pushnil(L);

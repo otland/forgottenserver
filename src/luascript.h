@@ -968,7 +968,7 @@ class LuaScriptInterface
 		static int luaPlayerGetContainerById(lua_State* L);
 		static int luaPlayerGetContainerIndex(lua_State* L);
 
-		static int luaPlayerGetSpellCount(lua_State* L);
+		static int luaPlayerGetInstantSpellCount(lua_State* L);
 		static int luaPlayerCanCast(lua_State* L);
 
 		// Monster
