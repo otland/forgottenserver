@@ -5,8 +5,8 @@ branches:
     - master
 
 platform:
-  - x86
-  - Any CPU
+  - Win32
+  - x64
 
 configuration:
   - Debug
