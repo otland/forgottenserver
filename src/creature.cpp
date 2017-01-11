@@ -639,10 +639,7 @@ void Creature::onDeath()
 			if (attacker != this) {
 				uint64_t gainExp = getGainedExperience(attacker);
 				if (Player* attackerPlayer = attacker->getPlayer()) {
-					Player* targetPlayer = getPlayer();
-					if (targetPlayer && attackerPlayer->hasAttacked(targetPlayer)) {
-						attackerPlayer->removeAttacked(targetPlayer);
-					}
+					attackerPlayer->removeAttacked(getPlayer());
 
 					Party* party = attackerPlayer->getParty();
 					if (party && party->getLeader() && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
