@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Frog Prince" nameDescription="The Frog Prince" race="venom" experience="1" speed="230" manacost="250">
+	<health now="55" max="55" />
+	<look type="224" head="69" body="66" legs="69" feet="66" corpse="6079" />
+	<targetchange interval="5000" chance="20" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1" />
+	</attacks>
+	<defenses armor="3" defense="2" />
+	<elements>
+		<element energyPercent="85" />
+		<element icePercent="90" />
+		<element firePercent="10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit!" />
+		<voice sentence="Ribbit! Ribbit!" />
+	</voices>
+</monster>

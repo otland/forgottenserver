@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Grave Guard" nameDescription="a grave guard" race="undead" experience="485" speed="200" manacost="0">
+	<health now="720" max="720" />
+	<look type="234" corpse="13975" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-147" />
+		<attack name="physical" interval="2000" chance="5" target="0" radius="1">
+			<attribute key="areaEffect" value="bluenote" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element energyPercent="20" />
+		<element icePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="30" chance="50000" />
+		<item name="scarab coin" chance="4166" />
+		<item name="daramian waraxe" chance="1170" />
+		<item name="grave flower" chance="70000" />
+		<item id="6300" chance="1754" /><!-- death ring -->
+		<item name="health potion" chance="20000" />
+		<item name="mana potion" chance="20000" />
+	</loot>
+</monster>

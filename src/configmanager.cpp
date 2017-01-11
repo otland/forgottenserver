@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,18 +19,64 @@
 
 #include "otpch.h"
 
+#include <lua.hpp>
+
 #include "configmanager.h"
 #include "game.h"
 
 #if LUA_VERSION_NUM >= 502
+#undef lua_strlen
 #define lua_strlen lua_rawlen
 #endif
 
 extern Game g_game;
 
-ConfigManager::ConfigManager()
+namespace {
+
+std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue)
 {
-	loaded = false;
+	lua_getglobal(L, identifier);
+	if (!lua_isstring(L, -1)) {
+		return defaultValue;
+	}
+
+	size_t len = lua_strlen(L, -1);
+	std::string ret(lua_tostring(L, -1), len);
+	lua_pop(L, 1);
+	return ret;
+}
+
+int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defaultValue = 0)
+{
+	lua_getglobal(L, identifier);
+	if (!lua_isnumber(L, -1)) {
+		return defaultValue;
+	}
+
+	int32_t val = lua_tonumber(L, -1);
+	lua_pop(L, 1);
+	return val;
+}
+
+bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue)
+{
+	lua_getglobal(L, identifier);
+	if (!lua_isboolean(L, -1)) {
+		if (!lua_isstring(L, -1)) {
+			return defaultValue;
+		}
+
+		size_t len = lua_strlen(L, -1);
+		std::string ret(lua_tostring(L, -1), len);
+		lua_pop(L, 1);
+		return booleanString(ret);
+	}
+
+	int val = lua_toboolean(L, -1);
+	lua_pop(L, 1);
+	return val != 0;
+}
+
 }
 
 bool ConfigManager::load()
@@ -136,73 +182,31 @@ bool ConfigManager::reload()
 	return result;
 }
 
-const std::string& ConfigManager::getString(string_config_t _what) const
+static std::string dummy;
+
+const std::string& ConfigManager::getString(string_config_t what) const
 {
-	if (_what >= LAST_STRING_CONFIG) {
-		std::cout << "[Warning - ConfigManager::getString] Accessing invalid index: " << _what << std::endl;
-		return string[DUMMY_STR];
+	if (what >= LAST_STRING_CONFIG) {
+		std::cout << "[Warning - ConfigManager::getString] Accessing invalid index: " << what << std::endl;
+		return dummy;
 	}
-	return string[_what];
+	return string[what];
 }
 
-int32_t ConfigManager::getNumber(integer_config_t _what) const
+int32_t ConfigManager::getNumber(integer_config_t what) const
 {
-	if (_what >= LAST_INTEGER_CONFIG) {
-		std::cout << "[Warning - ConfigManager::getNumber] Accessing invalid index: " << _what << std::endl;
+	if (what >= LAST_INTEGER_CONFIG) {
+		std::cout << "[Warning - ConfigManager::getNumber] Accessing invalid index: " << what << std::endl;
 		return 0;
 	}
-	return integer[_what];
+	return integer[what];
 }
 
-bool ConfigManager::getBoolean(boolean_config_t _what) const
+bool ConfigManager::getBoolean(boolean_config_t what) const
 {
-	if (_what >= LAST_BOOLEAN_CONFIG) {
-		std::cout << "[Warning - ConfigManager::getBoolean] Accessing invalid index: " << _what << std::endl;
+	if (what >= LAST_BOOLEAN_CONFIG) {
+		std::cout << "[Warning - ConfigManager::getBoolean] Accessing invalid index: " << what << std::endl;
 		return false;
 	}
-	return boolean[_what];
-}
-
-std::string ConfigManager::getGlobalString(lua_State* L, const char* identifier, const char* _default)
-{
-	lua_getglobal(L, identifier);
-	if (!lua_isstring(L, -1)) {
-		return _default;
-	}
-
-	size_t len = lua_strlen(L, -1);
-	std::string ret(lua_tostring(L, -1), len);
-	lua_pop(L, 1);
-	return ret;
-}
-
-int32_t ConfigManager::getGlobalNumber(lua_State* L, const char* identifier, const int32_t _default)
-{
-	lua_getglobal(L, identifier);
-	if (!lua_isnumber(L, -1)) {
-		return _default;
-	}
-
-	int32_t val = lua_tonumber(L, -1);
-	lua_pop(L, 1);
-	return val;
-}
-
-bool ConfigManager::getGlobalBoolean(lua_State* L, const char* identifier, const bool _default)
-{
-	lua_getglobal(L, identifier);
-	if (!lua_isboolean(L, -1)) {
-		if (!lua_isstring(L, -1)) {
-			return _default;
-		}
-
-		size_t len = lua_strlen(L, -1);
-		std::string ret(lua_tostring(L, -1), len);
-		lua_pop(L, 1);
-		return booleanString(ret);
-	}
-
-	int val = lua_toboolean(L, -1);
-	lua_pop(L, 1);
-	return val != 0;
+	return boolean[what];
 }

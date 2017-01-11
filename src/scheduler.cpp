@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,18 +21,7 @@
 
 #include "scheduler.h"
 
-Scheduler::Scheduler()
-{
-	lastEventId = 0;
-}
-
-void Scheduler::start()
-{
-	setState(THREAD_STATE_RUNNING);
-	thread = std::thread(&Scheduler::schedulerThread, this);
-}
-
-void Scheduler::schedulerThread()
+void Scheduler::threadMain()
 {
 	std::unique_lock<std::mutex> eventLockUnique(eventLock, std::defer_lock);
 	while (getState() != THREAD_STATE_TERMINATED) {
@@ -71,7 +60,7 @@ void Scheduler::schedulerThread()
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
-	bool do_signal = false;
+	bool do_signal;
 	eventLock.lock();
 
 	if (getState() == THREAD_STATE_RUNNING) {
@@ -115,7 +104,7 @@ bool Scheduler::stopEvent(uint32_t eventid)
 		return false;
 	}
 
-	std::lock_guard<std::mutex> lockGuard(eventLock);
+	std::lock_guard<std::mutex> lockClass(eventLock);
 
 	// search the event id..
 	auto it = eventIds.find(eventid);
@@ -125,11 +114,6 @@ bool Scheduler::stopEvent(uint32_t eventid)
 
 	eventIds.erase(it);
 	return true;
-}
-
-void Scheduler::stop()
-{
-	setState(THREAD_STATE_CLOSING);
 }
 
 void Scheduler::shutdown()
@@ -148,9 +132,3 @@ void Scheduler::shutdown()
 	eventSignal.notify_one();
 }
 
-void Scheduler::join()
-{
-	if (thread.joinable()) {
-		thread.join();
-	}
-}

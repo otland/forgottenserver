@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ enum GlobalEvent_t {
 };
 
 class GlobalEvent;
-typedef std::map<std::string, GlobalEvent*> GlobalEventMap;
+using GlobalEventMap = std::map<std::string, GlobalEvent*>;
 
 class GlobalEvents final : public BaseEvents
 {
@@ -64,18 +64,18 @@ class GlobalEvents final : public BaseEvents
 		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
 		LuaScriptInterface& getScriptInterface() final {
-			return m_scriptInterface;
+			return scriptInterface;
 		}
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 
 		GlobalEventMap thinkMap, serverMap, timerMap;
-		int32_t thinkEventId, timerEventId;
+		int32_t thinkEventId = 0, timerEventId = 0;
 };
 
 class GlobalEvent final : public Event
 {
 	public:
-		explicit GlobalEvent(LuaScriptInterface* _interface);
+		explicit GlobalEvent(LuaScriptInterface* interface);
 
 		bool configureEvent(const pugi::xml_node& node) final;
 
@@ -83,31 +83,32 @@ class GlobalEvent final : public Event
 		bool executeEvent();
 
 		GlobalEvent_t getEventType() const {
-			return m_eventType;
+			return eventType;
 		}
-		std::string getName() const {
-			return m_name;
+
+		const std::string& getName() const {
+			return name;
 		}
 
 		uint32_t getInterval() const {
-			return m_interval;
+			return interval;
 		}
 
 		int64_t getNextExecution() const {
-			return m_nextExecution;
+			return nextExecution;
 		}
 		void setNextExecution(int64_t time) {
-			m_nextExecution = time;
+			nextExecution = time;
 		}
 
 	protected:
-		GlobalEvent_t m_eventType;
+		GlobalEvent_t eventType = GLOBALEVENT_NONE;
 
 		std::string getScriptEventName() const final;
 
-		std::string m_name;
-		int64_t m_nextExecution;
-		uint32_t m_interval;
+		std::string name;
+		int64_t nextExecution = 0;
+		uint32_t interval = 0;
 };
 
 #endif

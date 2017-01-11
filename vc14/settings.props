@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <LUA_DIR>$(TFSSDKDir)\LuaJIT\</LUA_DIR>
+    <GMP_DIR>$(TFSSDKDir)\mpir\</GMP_DIR>
+    <MYSQLC_DIR>$(TFSSDKDir)\mysql-connector-c\</MYSQLC_DIR>
+	<PUGIXML_DIR>$(TFSSDKDir)\pugixml\</PUGIXML_DIR>
+    <PREPROCESSOR_DEFS>_CRT_SECURE_NO_WARNINGS;</PREPROCESSOR_DEFS>
+    <TFS_INCLUDES>$(BOOST_ROOT);$(LUA_DIR)\include;$(GMP_DIR)\include;$(MYSQLC_DIR)\include;$(PUGIXML_DIR)\include;</TFS_INCLUDES>
+    <TFS_LIBS>$(BOOST_ROOT)\lib32-msvc-14.0;$(LUA_DIR)\lib;$(GMP_DIR)\lib;$(MYSQLC_DIR)\lib</TFS_LIBS>
+    <TFS_LIBS64>$(BOOST_ROOT)\lib64-msvc-14.0;$(LUA_DIR)\lib64;$(GMP_DIR)\lib64;$(MYSQLC_DIR)\lib64</TFS_LIBS64>
+    <TFS_LIBDEPS>lua51.lib;mpir.lib;libmysql.lib</TFS_LIBDEPS>
+    <TFS_LIBDEPS_D>lua51.lib;mpir.lib;libmysql.lib</TFS_LIBDEPS_D>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(TFS_INCLUDES)</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>otpch.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(TFS_LIBDEPS)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <ResourceCompile>
+      <PreprocessorDefinitions>$(PREPROCESSOR_DEFS)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="LUA_DIR">
+      <Value>$(LUA_DIR)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="GMP_DIR">
+      <Value>$(GMP_DIR)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="MYSQLC_DIR">
+      <Value>$(MYSQLC_DIR)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="PREPROCESSOR_DEFS">
+      <Value>$(PREPROCESSOR_DEFS)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="TFS_INCLUDES">
+      <Value>$(TFS_INCLUDES)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="TFS_LIBS">
+      <Value>$(TFS_LIBS)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="TFS_LIBS64">
+      <Value>$(TFS_LIBS64)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="TFS_LIBDEPS">
+      <Value>$(TFS_LIBDEPS)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="TFS_LIBDEPS_D">
+      <Value>$(TFS_LIBDEPS_D)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

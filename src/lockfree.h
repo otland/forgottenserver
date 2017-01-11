@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 #ifndef FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 #define FS_LOCKFREE_H_8C707AEB7C7235A2FBC5D4EDDF03B008
 
+#if _MSC_FULL_VER >= 190023918 // Workaround for VS2015 Update 2. Boost.Lockfree is a header-only library, so this should be safe to do.
+#define _ENABLE_ATOMIC_ALIGNMENT_FIX
+#endif
+
 #include <boost/lockfree/stack.hpp>
 
 template <typename T, size_t CAPACITY>
@@ -27,8 +31,8 @@ class LockfreePoolingAllocator : public std::allocator<T>
 {
 	public:
 		template <typename U>
-		LockfreePoolingAllocator(const U&) {}
-		typedef T value_type;
+		explicit constexpr LockfreePoolingAllocator(const U&) {}
+		using value_type = T;
 
 		T* allocate(size_t) const {
 			T* p; // NOTE: p doesn't have to be initialized
@@ -48,7 +52,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 		}
 
 	private:
-		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>> FreeList;
+		using FreeList = boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>>;
 		static FreeList& getFreeList() {
 			static FreeList freeList;
 			return freeList;

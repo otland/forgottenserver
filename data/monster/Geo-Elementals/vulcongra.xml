@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vulcongra" nameDescription="vulcongra" race="fire" experience="1100" speed="230" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Vulcongra" nameDescription="Vulcongra" race="fire" experience="1100" speed="230" manacost="0">
 	<health now="1600" max="1600" />
 	<look type="509" corpse="18476" />
 	<targetchange interval="4000" chance="10" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="220" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="67" />
+		<attack name="melee" interval="2000" min="0" max="-235" />
 		<attack name="fire" interval="2000" chance="10" length="8" spread="0" min="-195" max="-340">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
@@ -43,22 +43,22 @@
 		<voice sentence="Yag! Yag! Yag!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="7" chance="50000" /><!-- gold coin -->
-		<item id="2152" chance="14780" /><!-- platinum coin -->
-		<item id="2676" countmax="10" chance="10420" /><!-- banana -->
-		<item id="2187" chance="1000" /><!-- woi -->
-		<item id="2207" chance="2920" /><!-- sword ring -->
-		<item id="2392" chance="260" /><!-- fire sword -->
-		<item id="7899" chance="140" /><!-- magma coat -->
-		<item id="7890" chance="970" /><!-- magma amulet -->
-		<item id="10553" chance="9380" /><!-- fiery heart -->
-		<item id="18424" chance="12440" /><!-- Magma Clump -->
-		<item id="18425" chance="8030" /><!-- Blazing Bone -->
-		<item id="7588" chance="7100" /><!-- shp -->
-		<item id="7589" chance="7100" /><!-- smp -->
-		<item id="18420" chance="2280" /><!-- Red Crystal Fragment -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="7" chance="50000" />
+		<item name="platinum coin" chance="14780" />
+		<item name="wand of inferno" chance="1000" />
+		<item name="sword ring" chance="2920" />
+		<item name="fire sword" chance="260" />
+		<item name="banana" countmax="10" chance="10420" />
+		<item name="strong health potion" chance="7100" />
+		<item name="strong mana potion" chance="7100" />
+		<item name="magma amulet" chance="970" />
+		<item name="magma coat" chance="140" />
+		<item name="fiery heart" chance="9380" />
 		<item id="13757" chance="940" /><!-- coal -->
-		<item id="18417" chance="4850" /><!-- Brown Crystal Splinter -->
+		<item name="brown crystal splinter" chance="4850" />
+		<item name="red crystal fragment" chance="2280" />
+		<item name="magma clump" chance="12440" />
+		<item name="blazing bone" chance="8030" />
 	</loot>
 </monster>

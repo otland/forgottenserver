@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Splasher" nameDescription="a splasher" race="blood" experience="500" speed="520" manacost="480">
+<monster name="Splasher" nameDescription="Splasher" race="blood" experience="500" speed="520" manacost="480">
 	<health now="1000" max="1000" />
 	<look type="72" head="0" body="0" legs="0" feet="0" corpse="6064" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="40" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" skill="60" attack="109" />
+		<attack name="melee" interval="1000" min="0" max="-382" />
 		<attack name="lifedrain" interval="2000" chance="8" range="7" target="1" min="-162" max="-228">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>

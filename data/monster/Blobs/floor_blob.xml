@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Floor Blob" nameDescription="a floor blob" race="venom" experience="0" speed="0" manacost="0">
+	<health now="1" max="1" />
+	<look type="459" corpse="0" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="0" />
+	</attacks>
+	<defenses armor="5" defense="11" />
+	<immunities>
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+		<immunity outfit="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
+	<!-- Enchanting -->
+	<action fromid="2146" toid="2147" script="other/enchanting.lua" />
+	<action fromid="2149" toid="2150" script="other/enchanting.lua" />
+	<action itemid="2342" script="other/enchanting.lua" />
+	<action fromid="7759" toid="7762" script="other/enchanting.lua" />
+	<action itemid="24739" script="other/enchanting.lua" />
+
 	<!-- Quests -->
 	<action itemid="1740" script="quests/quests.lua" />
 	<action fromid="1747" toid="1749" script="quests/quests.lua" />
@@ -20,8 +27,6 @@
 	<action itemid="1876" function="decreaseItemId" />
 	<action itemid="2162" function="increaseItemId" />
 	<action itemid="2163" function="decreaseItemId" />
-	<action itemid="3743" function="increaseItemId" />
-	<action itemid="3744" function="decreaseItemId" />
 	<action itemid="3947" function="increaseItemId" />
 	<action itemid="3948" function="decreaseItemId" />
 	<action itemid="1479" function="increaseItemId" />
@@ -140,7 +145,6 @@
 	<action itemid="6576" script="other/fireworksrocket.lua" />
 	<action itemid="2036" script="other/watch.lua" />
 	<action fromid="1728" toid="1731" script="other/watch.lua" />
-	<action itemid="6572" script="other/partytrumpet.lua" />
 	<action itemid="2785" script="other/blueberrybush.lua" />
 	<action itemid="2579" script="other/trap.lua" />
 	<action itemid="2148" script="other/changegold.lua" />
@@ -167,12 +171,15 @@
 	<action itemid="20257" script="other/constructionkits.lua" />
 	<action fromid="7904" toid="7907" script="other/bed_modification_kits.lua" />
 	<action itemid="20252" script="other/bed_modification_kits.lua" />
-	<action fromid="2070" toid="2078" script="other/music.lua" />
-	<action fromid="2080" toid="2085" script="other/music.lua" />
+	<action fromid="2070" toid="2085" script="other/music.lua" />
 	<action itemid="2332" script="other/music.lua" />
 	<action itemid="2364" script="other/music.lua" />
-	<action fromid="2367" toid="2368" script="other/music.lua" />
-	<action fromid="2370" toid="2373" script="other/music.lua" />
+	<action fromid="2367" toid="2373" script="other/music.lua" />
+	<action fromid="3951" toid="3953" script="other/music.lua" />
+	<action itemid="3957" script="other/music.lua" />
+	<action itemid="5786" script="other/music.lua" />
+	<action fromid="6572" toid="6573" script="other/music.lua" />
+	<action itemid="13759" script="other/music.lua" />
 	<action fromid="2041" toid="2042" script="other/decayto.lua" />
 	<action fromid="2044" toid="2045" script="other/decayto.lua" />
 	<action fromid="2047" toid="2048" script="other/decayto.lua" />
@@ -191,17 +198,16 @@
 	<action itemid="1775" script="other/fluids.lua" />
 	<action fromid="2031" toid="2034" script="other/fluids.lua" />
 	<action fromid="2574" toid="2577" script="other/fluids.lua" />
-	<action fromid="5792" toid="5797" script="other/dice.lua" />
-	<action itemid="7588" script="other/potions.lua" />
-	<action itemid="7589" script="other/potions.lua" />
-	<action itemid="7590" script="other/potions.lua" />
-	<action itemid="7591" script="other/potions.lua" />
+	<action fromid="5792" toid="5797" script="other/die.lua" />
+	<action itemid="6558" script="other/potions.lua" />
+	<action fromid="7439" toid="7440" script="other/potions.lua"/>
+	<action itemid="7443" script="other/potions.lua"/>
+	<action fromid="7588" toid="7591" script="other/potions.lua" />
 	<action itemid="7618" script="other/potions.lua" />
 	<action itemid="7620" script="other/potions.lua" />
-	<action itemid="8472" script="other/potions.lua" />
-	<action itemid="8473" script="other/potions.lua" />
-	<action itemid="8474" script="other/potions.lua" />
+	<action fromid="8472" toid="8474" script="other/potions.lua" />
 	<action itemid="8704" script="other/potions.lua" />
+	<action fromid="26029" toid="26031" script="other/potions.lua" />
 	<action itemid="2692" script="other/createbread.lua" />
 	<action itemid="2694" script="other/createbread.lua" />
 	<action fromid="6436" toid="6447" script="other/windows.lua" />
@@ -256,4 +262,6 @@
 	<action fromid="13020" toid="13023" script="other/doors.lua" />
 	<action itemid="14405" function="market" />
 	<action fromid="18488" toid="18492" script="other/skilltrainer.lua" />
+	<action itemid="3743" script="other/transforms.lua" />
+	<action itemid="4404" script="other/transforms.lua" />
 </actions>

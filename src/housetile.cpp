@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,8 @@
 
 extern Game g_game;
 
-HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* _house) :
-	DynamicTile(x, y, z)
-{
-	house = _house;
-	setFlag(TILESTATE_HOUSE);
-}
+HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* house) :
+	DynamicTile(x, y, z), house(house) {}
 
 void HouseTile::addThing(int32_t index, Thing* thing)
 {

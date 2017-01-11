@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Bear" namedescription="a bear" race="blood" experience="23" speed="145" manacost="300">
 	<health now="80" max="80" />
 	<look type="16" corpse="5975" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="40" attack="10" />
+		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -30,9 +30,9 @@
 		<voice sentence="Groar" />
 	</voices>
 	<loot>
-		<item id="5896" chance="2000" /><!-- bear paw -->
-		<item id="2671" countmax="3" chance="20000" /><!-- ham -->
-		<item id="2666" countmax="4" chance="39750" /><!-- meat -->
-		<item id="5902" chance="460" /><!-- honeycomb -->
+		<item name="meat" countmax="4" chance="39750" />
+		<item name="ham" countmax="3" chance="20000" />
+		<item name="bear paw" chance="2000" />
+		<item name="honeycomb" chance="460" />
 	</loot>
 </monster>

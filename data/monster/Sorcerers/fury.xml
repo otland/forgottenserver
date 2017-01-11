@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Fury" nameDescription="a fury" race="blood" experience="4500" speed="250" manacost="0">
 	<health now="4100" max="4100" />
 	<look type="149" head="94" body="77" legs="96" feet="0" addons="3" corpse="20399" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="170" />
+		<attack name="melee" interval="2000" min="0" max="-510" />
 		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-200" max="-300">
 			<attribute key="areaEffect" value="explosionarea" />
 		</attack>
@@ -67,27 +67,27 @@
 		<voice sentence="Dieee!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="69" chance="38000" /><!-- gold coin -->
-		<item id="2152" countmax="4" chance="2800" /><!-- platinum coin -->
-		<item id="6558" countmax="3" chance="35000" /><!-- concentrated demonic blood -->
-		<item id="6500" chance="22500" /><!-- demonic essence -->
-		<item id="2470" chance="130" /><!-- golden legs -->
-		<item id="7591" chance="10500" /><!-- great health potion-->
-		<item id="2666" chance="25000" /><!-- meat -->
-		<item id="7456" chance="2000" /><!-- noble axe -->
-		<item id="5022" countmax="4" chance="1500" /><!-- orichalcum pearl -->
-		<item id="5911" chance="4000" /><!-- red piece of cloth -->
-		<item id="9813" chance="1920" /><!-- rusty legs -->
 		<item id="2120" countmax="3" chance="8000" /><!-- small amethyst -->
-		<item id="5944" chance="21500" /><!-- soul orb -->
-		<item id="2645" chance="790" /><!-- steel boots -->
-		<item id="2181" chance="20000" /><!-- terra rod -->
-		<item id="7404" chance="660" /><!-- assassin dagger -->
-		<item id="5944" chance="50" /><!-- assassin star -->
 		<item id="2124" chance="410" /><!-- crystal ring-->
-		<item id="8844" countmax="4" chance="29280" /><!-- jalapeno peppers-->
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="69" chance="38000" />
+		<item name="platinum coin" countmax="4" chance="2800" />
+		<item name="terra rod" chance="20000" />
+		<item name="golden legs" chance="130" />
+		<item name="steel boots" chance="790" />
+		<item name="meat" chance="25000" />
+		<item name="orichalcum pearl" countmax="4" chance="1500" />
+		<item name="red piece of cloth" chance="4000" />
+		<item name="soul orb" chance="21500" />
+		<item name="soul orb" chance="50" />
 		<item id="6301" chance="60" /><!-- death ring-->
+		<item name="demonic essence" chance="22500" />
+		<item name="concentrated demonic blood" countmax="3" chance="35000" />
+		<item name="assassin dagger" chance="660" />
+		<item name="noble axe" chance="2000" />
+		<item name="great health potion" chance="10500" />
+		<item name="jalapeño pepper" countmax="4" chance="29280" />
+		<item id="9813" chance="1920" /><!-- rusty legs -->
 	</loot>
 </monster>

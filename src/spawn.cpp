@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,28 +31,22 @@ extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;
 
-#define MINSPAWN_INTERVAL 1000
+static constexpr int32_t MINSPAWN_INTERVAL = 1000;
 
-Spawns::Spawns()
-{
-	loaded = false;
-	started = false;
-}
-
-bool Spawns::loadFromXml(const std::string& _filename)
+bool Spawns::loadFromXml(const std::string& filename)
 {
 	if (loaded) {
 		return true;
 	}
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file(_filename.c_str());
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		printXMLError("Error - Spawns::loadFromXml", _filename, result);
+		printXMLError("Error - Spawns::loadFromXml", filename, result);
 		return false;
 	}
 
-	filename = _filename;
+	this->filename = filename;
 	loaded = true;
 
 	for (auto spawnNode : doc.child("spawns").children()) {
@@ -186,9 +180,9 @@ Spawn::~Spawn()
 
 bool Spawn::findPlayer(const Position& pos)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, pos, false, true);
-	for (Creature* spectator : list) {
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, pos, false, true);
+	for (Creature* spectator : spectators) {
 		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;
 		}
@@ -290,23 +284,21 @@ void Spawn::cleanup()
 	}
 }
 
-bool Spawn::addMonster(const std::string& _name, const Position& _pos, Direction _dir, uint32_t _interval)
+bool Spawn::addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval)
 {
-	MonsterType* mType = g_monsters.getMonsterType(_name);
+	MonsterType* mType = g_monsters.getMonsterType(name);
 	if (!mType) {
-		std::cout << "[Spawn::addMonster] Can not find " << _name << std::endl;
+		std::cout << "[Spawn::addMonster] Can not find " << name << std::endl;
 		return false;
 	}
 
-	if (_interval < interval) {
-		interval = _interval;
-	}
+	this->interval = std::min(this->interval, interval);
 
 	spawnBlock_t sb;
 	sb.mType = mType;
-	sb.pos = _pos;
-	sb.direction = _dir;
-	sb.interval = _interval;
+	sb.pos = pos;
+	sb.direction = dir;
+	sb.interval = interval;
 	sb.lastSpawn = 0;
 
 	uint32_t spawnId = spawnMap.size() + 1;

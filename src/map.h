@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class Game;
 class Tile;
 class Map;
 
-#define MAP_MAX_LAYERS 16
+static constexpr int32_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
 struct AStarNode {
@@ -45,10 +45,10 @@ struct AStarNode {
 	uint16_t x, y;
 };
 
-#define MAX_NODES 512
+static constexpr int32_t MAX_NODES = 512;
 
-#define MAP_NORMALWALKCOST 10
-#define MAP_DIAGONALWALKCOST 25
+static constexpr int32_t MAP_NORMALWALKCOST = 10;
+static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
 
 class AStarNodes
 {
@@ -73,21 +73,21 @@ class AStarNodes
 		int_fast32_t closedNodes;
 };
 
-typedef std::map<Position, SpectatorVec> SpectatorCache;
+using SpectatorCache = std::map<Position, SpectatorHashSet>;
 
-#define FLOOR_BITS 3
-#define FLOOR_SIZE (1 << FLOOR_BITS)
-#define FLOOR_MASK (FLOOR_SIZE - 1)
+static constexpr int32_t FLOOR_BITS = 3;
+static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
+static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 
 struct Floor {
-	Floor() : tiles() {}
+	constexpr Floor() = default;
 	~Floor();
 
 	// non-copyable
 	Floor(const Floor&) = delete;
 	Floor& operator=(const Floor&) = delete;
 
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE];
+	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
 };
 
 class FrozenPathingConditionCall;
@@ -96,7 +96,7 @@ class QTreeLeafNode;
 class QTreeNode
 {
 	public:
-		QTreeNode();
+		constexpr QTreeNode() = default;
 		virtual ~QTreeNode();
 
 		// non-copyable
@@ -104,7 +104,7 @@ class QTreeNode
 		QTreeNode& operator=(const QTreeNode&) = delete;
 
 		bool isLeaf() const {
-			return m_isLeaf;
+			return leaf;
 		}
 
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
@@ -113,23 +113,23 @@ class QTreeNode
 		inline static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
 		{
 			do {
-				node = node->m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+				node = node->child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
 				if (!node) {
 					return nullptr;
 				}
 
 				x <<= 1;
 				y <<= 1;
-			} while (!node->m_isLeaf);
-			return reinterpret_cast<Leaf>(node);
+			} while (!node->leaf);
+			return static_cast<Leaf>(node);
 		}
 
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
-		QTreeNode* m_child[4];
+		QTreeNode* child[4] = {};
 
-		bool m_isLeaf;
+		bool leaf = false;
 
 		friend class Map;
 };
@@ -137,7 +137,7 @@ class QTreeNode
 class QTreeLeafNode final : public QTreeNode
 {
 	public:
-		QTreeLeafNode();
+		QTreeLeafNode() { leaf = true; newLeaf = true; }
 		~QTreeLeafNode();
 
 		// non-copyable
@@ -146,7 +146,7 @@ class QTreeLeafNode final : public QTreeNode
 
 		Floor* createFloor(uint32_t z);
 		Floor* getFloor(uint8_t z) const {
-			return m_array[z];
+			return array[z];
 		}
 
 		void addCreature(Creature* c);
@@ -154,9 +154,9 @@ class QTreeLeafNode final : public QTreeNode
 
 	protected:
 		static bool newLeaf;
-		QTreeLeafNode* m_leafS;
-		QTreeLeafNode* m_leafE;
-		Floor* m_array[MAP_MAX_LAYERS];
+		QTreeLeafNode* leafS = nullptr;
+		QTreeLeafNode* leafE = nullptr;
+		Floor* array[MAP_MAX_LAYERS] = {};
 		CreatureVector creature_list;
 		CreatureVector player_list;
 
@@ -172,12 +172,10 @@ class QTreeLeafNode final : public QTreeNode
 class Map
 {
 	public:
-		Map() : width(0), height(0) {}
-
-		static const int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
-		static const int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
-		static const int32_t maxClientViewportX = 8;
-		static const int32_t maxClientViewportY = 6;
+		static constexpr int32_t maxViewportX = 11; //min value: maxClientViewportX + 1
+		static constexpr int32_t maxViewportY = 11; //min value: maxClientViewportY + 1
+		static constexpr int32_t maxClientViewportX = 8;
+		static constexpr int32_t maxClientViewportY = 6;
 
 		uint32_t clean() const;
 
@@ -221,13 +219,7 @@ class Map
 
 		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
-		/**
-		  * Remove a creature from the map.
-		  * \param c Creature pointer to the creature to remove
-		  */
-		bool removeCreature(Creature* c);
-
-		void getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
+		void getSpectators(SpectatorHashSet& spectators, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
 		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
 
@@ -279,10 +271,11 @@ class Map
 		std::string spawnfile;
 		std::string housefile;
 
-		uint32_t width, height;
+		uint32_t width = 0;
+		uint32_t height = 0;
 
 		// Actually scans the map for spectators
-		void getSpectatorsInternal(SpectatorVec& list, const Position& centerPos,
+		void getSpectatorsInternal(SpectatorHashSet& spectators, const Position& centerPos,
 		                           int32_t minRangeX, int32_t maxRangeX,
 		                           int32_t minRangeY, int32_t maxRangeY,
 		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const;

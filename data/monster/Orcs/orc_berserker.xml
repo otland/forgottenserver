@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Orc Berserker" nameDescription="an orc berserker" race="blood" experience="195" speed="195" manacost="590">
+	<health now="210" max="210" />
+	<look type="8" corpse="5980" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="15" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="KRAK ORRRRRRK!" yell="1" />
+	</voices>
+	<loot>
+		<item id="2044" chance="830" /><!-- lamp -->
+		<item name="gold coin" countmax="12" chance="54000" />
+		<item name="battle axe" chance="6110" />
+		<item name="halberd" chance="7280" />
+		<item name="chain armor" chance="890" />
+		<item name="ham" chance="10400" />
+		<item name="hunting spear" chance="5000" />
+		<item name="orc tooth" chance="3000" />
+		<item name="orcish gear" chance="9400" />
+		<item name="orc leather" chance="4000" />
+	</loot>
+</monster>

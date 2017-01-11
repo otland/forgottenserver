@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,14 +38,14 @@ struct spawnBlock_t {
 class Spawn
 {
 	public:
-		Spawn(const Position& pos, int32_t radius) : centerPos(pos), radius(radius), interval(60000), checkSpawnEvent() {}
+		Spawn(Position pos, int32_t radius) : centerPos(std::move(pos)), radius(radius) {}
 		~Spawn();
 
 		// non-copyable
 		Spawn(const Spawn&) = delete;
 		Spawn& operator=(const Spawn&) = delete;
 
-		bool addMonster(const std::string& _name, const Position& _pos, Direction _dir, uint32_t _interval);
+		bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
 		void removeMonster(Monster* monster);
 
 		uint32_t getInterval() const {
@@ -61,8 +61,8 @@ class Spawn
 
 	private:
 		//map of the spawned creatures
-		typedef std::multimap<uint32_t, Monster*> SpawnedMap;
-		typedef SpawnedMap::value_type spawned_pair;
+		using SpawnedMap = std::multimap<uint32_t, Monster*>;
+		using spawned_pair = SpawnedMap::value_type;
 		SpawnedMap spawnedMap;
 
 		//map of creatures in the spawn
@@ -71,8 +71,8 @@ class Spawn
 		Position centerPos;
 		int32_t radius;
 
-		uint32_t interval;
-		uint32_t checkSpawnEvent;
+		uint32_t interval = 60000;
+		uint32_t checkSpawnEvent = 0;
 
 		static bool findPlayer(const Position& pos);
 		bool spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup = false);
@@ -82,11 +82,9 @@ class Spawn
 class Spawns
 {
 	public:
-		Spawns();
-
 		static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
-		bool loadFromXml(const std::string& _filename);
+		bool loadFromXml(const std::string& filename);
 		void startup();
 		void clear();
 
@@ -98,7 +96,8 @@ class Spawns
 		std::forward_list<Npc*> npcList;
 		std::forward_list<Spawn> spawnList;
 		std::string filename;
-		bool loaded, started;
+		bool loaded = false;
+		bool started = false;
 };
 
 #endif

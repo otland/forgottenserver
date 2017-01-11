@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Draptor" nameDescription="a draptor" race="blood" experience="2400" speed="282" manacost="0">
 	<health now="3000" max="3000" />
 	<look type="382" corpse="13316" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="350" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-1" max="-150" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="energy" interval="3000" chance="30" radius="3" min="-130" max="-310">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>
@@ -46,11 +46,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="90" chance="33750" /><!-- gold coin -->
-		<item id="2148" countmax="60" chance="33750" /><!-- gold coin -->
-		<item id="8867" chance="950" /><!-- dragon robe -->
-		<item id="13296" chance="6650" /><!-- draptor scales -->
-		<item id="7588" chance="3150" /><!-- strong health potion -->
-		<item id="7589" chance="4150" /><!-- strong mana potion -->
+		<item name="gold coin" countmax="90" chance="33750" />
+		<item name="gold coin" countmax="60" chance="33750" />
+		<item name="strong health potion" chance="3150" />
+		<item name="strong mana potion" chance="4150" />
+		<item name="dragon robe" chance="950" />
+		<item name="draptor scales" chance="6650" />
 	</loot>
 </monster>

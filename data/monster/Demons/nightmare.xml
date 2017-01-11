@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Nightmare" nameDescription="a nightmare" race="blood" experience="2150" speed="240" manacost="0">
 	<health now="2700" max="2700" />
 	<look type="245" corpse="6340" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="death" interval="2000" chance="10" range="7" radius="1" target="1" min="-120" max="-170">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="mortarea" />
@@ -57,22 +57,22 @@
 		<voice sentence="Weeeheeheeeheee!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="55" chance="50000" /><!-- gold coin -->
-		<item id="2671" countmax="2" chance="29000" /><!-- ham -->
-		<item id="5944" chance="20000" /><!-- soul orb -->
-		<item id="6558" countmax="2" chance="19666" /><!-- concentrated demonic blood -->
-		<item id="11223" chance="15240" /><!-- essence of a bad dream -->
-		<item id="6500" chance="10000" /><!-- demonic essence -->
-		<item id="2547" countmax="4" chance="9090" /><!-- power bolt -->
-		<item id="11229" chance="9090" /><!-- scythe leg -->
-		<item id="2152" countmax="3" chance="2564" /><!-- platinum coin -->
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="55" chance="50000" />
+		<item name="platinum coin" countmax="3" chance="2564" />
+		<item name="boots of haste" chance="337" />
+		<item name="war axe" chance="95" />
+		<item name="knight legs" chance="961" />
+		<item name="ancient shield" chance="990" />
+		<item name="power bolt" countmax="4" chance="9090" />
+		<item name="ham" countmax="2" chance="29000" />
+		<item name="mysterious voodoo skull" chance="123" />
+		<item name="soul orb" chance="20000" />
 		<item id="6300" chance="1298" /><!-- death ring -->
-		<item id="2532" chance="990" /><!-- ancient shield -->
-		<item id="2477" chance="961" /><!-- knight legs -->
-		<item id="2195" chance="337" /><!-- boots of haste -->
-		<item id="6526" chance="337" /><!-- skeleton decoration -->
-		<item id="5669" chance="123" /><!-- mysterious voodoo skull -->
-		<item id="2454" chance="95" /><!-- war axe -->
+		<item name="demonic essence" chance="10000" />
+		<item name="skeleton decoration" chance="337" />
+		<item name="concentrated demonic blood" countmax="2" chance="19666" />
+		<item name="essence of a bad dream" chance="15240" />
+		<item name="scythe leg" chance="9090" />
 	</loot>
 </monster>

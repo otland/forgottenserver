@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lizard Legionnaire" nameDescription="a lizard legionnaire" race="blood" experience="1100" speed="230" manacost="0">
+	<health now="1400" max="1400" />
+	<look type="338" corpse="11276" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-180" />
+		<attack name="physical" interval="2000" chance="40" range="7" target="1" min="0" max="-200">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element firePercent="45" />
+		<element icePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Tssss!" />
+	</voices>
+	<loot>
+		<item name="small diamond" countmax="2" chance="1001" />
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="65" chance="54000" />
+		<item name="lizard leather" chance="970" />
+		<item name="lizard scale" countmax="3" chance="980" />
+		<item name="strong health potion" chance="3880" />
+		<item name="red lantern" chance="530" />
+		<item name="bunch of ripe rice" chance="1950" />
+		<item name="Zaoan armor" chance="70" />
+		<item name="Zaoan shoes" chance="460" />
+		<item name="drakinata" chance="710" />
+		<item name="Zaoan halberd" chance="960" />
+		<item name="legionnaire flags" chance="1940" />
+		<item name="broken halberd" chance="14940" />
+		<item name="lizard trophy" chance="20" />
+	</loot>
+</monster>

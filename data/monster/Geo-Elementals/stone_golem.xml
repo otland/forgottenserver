@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Stone Golem" nameDescription="a stone golem" race="undead" experience="160" speed="180" manacost="590">
+	<health now="270" max="270" />
+	<look type="67" corpse="6005" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element physicalPercent="20" />
+		<element firePercent="20" />
+		<element energyPercent="15" />
+		<element deathPercent="20" />
+		<element icePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity earth="1" />
+	</immunities>
+	<loot>
+		<item name="small stone" countmax="4" chance="13890" />
+		<item id="2124" chance="120" /><!-- crystal ring -->
+		<item name="gold coin" countmax="40" chance="90000" />
+		<item name="red gem" chance="30" />
+		<item name="club ring" chance="5070" />
+		<item name="carlin sword" chance="2500" />
+		<item name="iron ore" chance="1980" />
+		<item name="ancient stone" chance="1020" />
+		<item name="shiny stone" chance="760" />
+		<item name="sulphurous stone" chance="10370" />
+		<item name="piece of marble rock" chance="380" />
+		<item id="13757" chance="550" /><!-- coal -->
+	</loot>
+</monster>

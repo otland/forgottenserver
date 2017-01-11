@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Salamander" nameDescription="a salamander" race="blood" experience="25" speed="220" manacost="0">
 	<health now="70" max="70" />
 	<look type="529" corpse="19707" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="30" poison="10" />
+		<attack name="melee" interval="2000" min="0" max="-60" poison="10" />
 	</attacks>
 	<defenses armor="5" defense="5">
 		<defense name="healing" interval="6000" chance="20" min="0" max="4">
@@ -29,14 +29,14 @@
 		<voice sentence="Chhh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="60000" /><!-- Gold Coin -->
-		<item id="2544" countmax="3" chance="7890" /><!-- Arrows -->
-		<item id="7618" chance="840" /><!-- HP -->
 		<item id="2120" chance="4700" /><!-- Rope -->
-		<item id="2456" chance="1090" /><!-- Bow -->
-		<item id="2398" chance="3780" /><!-- Mace -->
-		<item id="2460" chance="2180" /><!-- Brass Helmet -->
+		<item name="gold coin" countmax="15" chance="60000" />
+		<item name="mace" chance="3780" />
 		<item id="2419" chance="420" /><!-- Scimitar -->
+		<item name="bow" chance="1090" />
+		<item name="brass helmet" chance="2180" />
+		<item name="arrow" countmax="3" chance="7890" />
+		<item name="health potion" chance="840" />
 		<item id="19736" countmax="5" chance="32830" /><!-- Insectoid Eggs -->
 	</loot>
 </monster>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nightfiend" nameDescription="a nightfiend" race="blood" experience="2100" speed="210" manacost="0">
+	<health now="2700" max="2700" />
+	<look type="568" corpse="2669" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" />
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="11" defense="11" />
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="5" />
+		<element icePercent="5" />
+		<element firePercent="-5" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Phantasm" nameDescription="a phantasm" race="undead" experience="4400" speed="240" manacost="0">
 	<health now="3950" max="3950" />
 	<look type="241" head="20" corpse="6344" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="350" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="95" />
+		<attack name="melee" interval="2000" min="0" max="-475" />
 		<attack name="death" interval="2000" chance="10" range="7" min="-250" max="-610">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
@@ -56,34 +56,33 @@
 		<immunity lifedrain="1" />
 		<immunity physical="1" />
 	</immunities>
+	<summons maxSummons="4">
+		<summon name="Phantasm Summon" interval="2000" chance="20" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Oh my, you forgot to put your pants on!" />
 		<voice sentence="Weeheeheeheehee!" />
 		<voice sentence="Its nothing but a dream!" />
 		<voice sentence="Give in!" />
 	</voices>
-	<summons maxSummons="4">
-		<summon name="Phantasm Summon" interval="2000" chance="20" />
-		<summon name="Phantasm Summon" interval="2000" chance="20" />
-	</summons>
 	<loot>
-		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
-		<item id="2148" countmax="33" chance="28000" /><!-- gold coin -->
-		<item id="2152" countmax="4" chance="87730" /><!-- platinum coin -->
-		<item id="2260" countmax="2" chance="22500" /><!-- blank rune -->
-		<item id="6500" chance="16320" /><!-- demonic essence -->
-		<item id="7590" countmax="2" chance="32750" /><!-- great mana potion -->
-		<item id="8473" chance="14680" /><!-- ultimate health potion -->
-		<item id="2804" countmax="2" chance="26930" /><!-- shadow herb -->
-		<item id="2149" countmax="3" chance="10190" /><!-- small emerald -->
-		<item id="7414" chance="110" /><!-- abyss hammer -->
-		<item id="2487" chance="660" /><!-- crown armor -->
-		<item id="2165" chance="550" /><!-- stealth ring -->
+		<item name="small ruby" countmax="3" chance="12160" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="33" chance="28000" />
+		<item name="small emerald" countmax="3" chance="10190" />
+		<item name="small amethyst" countmax="3" chance="14570" />
+		<item name="platinum coin" countmax="4" chance="87730" />
+		<item name="stealth ring" chance="550" />
+		<item name="blank rune" countmax="2" chance="22500" />
+		<item name="crown armor" chance="660" />
+		<item name="shadow herb" countmax="2" chance="26930" />
 		<item id="6300" chance="330" /><!-- death ring -->
-		<item id="7451" chance="550" /><!-- Shadow Sceptre -->
-		<item id="2147" countmax="3" chance="12160" /><!-- small ruby -->
-		<item id="9970" countmax="3" chance="12810" /><!-- small topaz -->
-		<item id="2150" countmax="3" chance="14570" /><!-- small amethyst -->
+		<item name="demonic essence" chance="16320" />
+		<item name="abyss hammer" chance="110" />
+		<item name="shadow sceptre" chance="550" />
+		<item name="great mana potion" countmax="2" chance="32750" />
+		<item name="ultimate health potion" chance="14680" />
+		<item name="small topaz" countmax="3" chance="12810" />
 	</loot>
 </monster>

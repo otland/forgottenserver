@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Blue Djinn" nameDescription="a blue djinn" race="blood" experience="215" speed="180" manacost="0">
+	<health now="330" max="330" />
+	<look type="80" corpse="6020" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+		<attack name="fire" interval="2000" chance="15" range="7" min="-45" max="-80">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" radius="1" target="1" range="7" min="-60" max="-105">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7" duration="5000">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="1" range="7" monster="rabbit" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="djinn electrify" interval="2000" range="5" chance="15" />
+		<attack name="djinn cancel invisibility" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element firePercent="80" />
+		<element energyPercent="50" />
+		<element holyPercent="1" />
+		<element icePercent="-10" />
+		<element deathPercent="-12" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Simsalabim" />
+		<voice sentence="Feel the power of my magic, tiny mortal!" />
+		<voice sentence="Be careful what you wish for." />
+		<voice sentence="Wishes can come true." />
+	</voices>
+	<loot>
+		<item id="1963" chance="2350" /><!-- blue book -->
+		<item name="small oil lamp" chance="690" />
+		<item name="small sapphire" countmax="4" chance="2560" />
+		<item name="gold coin" countmax="70" chance="60000" />
+		<item name="gold coin" countmax="45" chance="70000" />
+		<item name="mystic turban" chance="70" />
+		<item id="2684" chance="23480" /><!-- carrot -->
+		<item name="blue rose" chance="440" />
+		<item name="blue piece of cloth" chance="1920" />
+		<item name="royal spear" countmax="2" chance="4500" />
+		<item name="mana potion" chance="860" />
+		<item name="dirty turban" chance="1890" />
+	</loot>
+</monster>

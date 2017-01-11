@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ class ContainerIterator
 class Container : public Item, public Cylinder
 {
 	public:
-		explicit Container(uint16_t _type);
-		Container(uint16_t _type, uint16_t _size);
-		explicit Container(Tile* tile);
+		explicit Container(uint16_t type);
+		Container(uint16_t type, uint16_t size, bool unlocked = true, bool pagination = false);
+		explicit Container(Tile* type);
 		~Container();
 
 		// non-copyable
@@ -75,7 +75,7 @@ class Container : public Item, public Cylinder
 		}
 
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
-		bool unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream) override;
+		bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
 		std::string getContentDescription() const;
 
 		size_t size() const {
@@ -138,8 +138,8 @@ class Container : public Item, public Cylinder
 		size_t getFirstIndex() const final;
 		size_t getLastIndex() const final;
 		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
-		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const final;
-		Thing*getThing(size_t index) const final;
+		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const final;
+		Thing* getThing(size_t index) const final;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
@@ -160,9 +160,9 @@ class Container : public Item, public Cylinder
 		std::ostringstream& getContentDescription(std::ostringstream& os) const;
 
 		uint32_t maxSize;
-		uint32_t totalWeight;
+		uint32_t totalWeight = 0;
 		ItemDeque itemlist;
-		uint32_t serializationCount;
+		uint32_t serializationCount = 0;
 
 		bool unlocked;
 		bool pagination;

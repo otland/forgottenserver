@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="The Horned Fox" nameDescription="The Horned Fox" race="blood" experience="300" speed="210" manacost="0">
+	<health now="265" max="265" />
+	<look type="202" corpse="5983" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-122" />
+		<attack name="physical" interval="1000" chance="25" range="7" min="-50" max="-120">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+		<attack name="poisoncondition" interval="1000" chance="17" range="7" min="-50" max="-120">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+	</attacks>
+	<defenses armor="17" defense="16">
+		<defense name="healing" interval="1000" chance="15" min="25" max="75">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="1000" chance="10" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="6">
+		<summon name="minotaur archer" interval="1000" chance="13" max="2" />
+		<summon name="minotaur guard" interval="1000" chance="13" max="2" />
+		<summon name="minotaur mage" interval="1000" chance="13" max="2" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="You will never get me!" />
+		<voice sentence="I'll be back!" />
+		<voice sentence="Catch me, if you can!" />
+		<voice sentence="Help me, boys!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="30" chance="100000" />
+		<item name="wand of cosmic energy" chance="1333" />
+		<item name="sword ring" chance="2000" />
+		<item name="dagger" chance="6666" />
+		<item name="longsword" chance="10000" />
+		<item name="throwing knife" countmax="2" chance="50000" />
+		<item name="broadsword" chance="2857" />
+		<item id="2419" chance="10000" /><!-- scimitar -->
+		<item name="plate armor" chance="1818" />
+		<item name="warrior helmet" chance="1000" />
+		<item name="brass legs" chance="2857" />
+		<item name="plate shield" chance="5000" />
+		<item name="plate legs" chance="1818" />
+		<item name="green tunic" chance="2500" />
+		<item name="meat" countmax="2" chance="33333" />
+		<item id="2667" countmax="1" chance="20000" /><!-- fish -->
+		<item name="worm" countmax="10" chance="50000" />
+		<item name="nose ring" chance="100000" />
+	</loot>
+</monster>

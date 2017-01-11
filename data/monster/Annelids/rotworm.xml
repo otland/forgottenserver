@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="150" manacost="305">
 	<health now="65" max="65" />
 	<look type="26" corpse="5967" />
@@ -21,12 +21,12 @@
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<loot>
-		<item id="2148" countmax="17" chance="71760" /><!-- gold coin -->
-		<item id="3976" countmax="3" chance="3000" /><!-- worm -->
-		<item id="2666" chance="20000" /><!-- meat -->
-		<item id="2671" chance="20120" /><!-- ham -->
+		<item name="gold coin" countmax="17" chance="71760" />
 		<item id="2376" chance="3000" /><!-- sword -->
-		<item id="2398" chance="4500" /><!-- mace -->
-		<item id="10609" chance="10000" /><!-- lump of dirt -->
+		<item name="mace" chance="4500" />
+		<item name="meat" chance="20000" />
+		<item name="ham" chance="20120" />
+		<item name="worm" countmax="3" chance="3000" />
+		<item name="lump of dirt" chance="10000" />
 	</loot>
 </monster>

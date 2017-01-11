@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Hand of Cursed Fate" nameDescription="a hand of cursed fate" race="blood" experience="5000" speed="260" manacost="0">
+	<health now="7500" max="7500" />
+	<look type="230" corpse="6312" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="20" />
+		<flag runonhealth="3500" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-520" poison="380" />
+		<attack name="manadrain" interval="2000" chance="15" range="1" min="0" max="-920" />
+		<attack name="drunk" interval="2000" chance="10" target="0" radius="4" duration="3000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-220" max="-880">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="2000" chance="15" speedchange="1000" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="10" duration="8000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="100" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="-10" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="emerald bangle" chance="3500" />
+		<item name="small sapphire" countmax="4" chance="11000" />
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="gold coin" countmax="67" chance="50000" />
+		<item name="platinum coin" countmax="7" chance="100000" />
+		<item name="violet gem" chance="700" />
+		<item name="yellow gem" chance="5940" />
+		<item name="energy ring" chance="3150" />
+		<item name="platinum amulet" chance="1005" />
+		<item name="mind stone" chance="9090" />
+		<item name="wand of inferno" chance="5590" />
+		<item name="boots of haste" chance="540" />
+		<item name="protection amulet" chance="8740" />
+		<item name="sudden death rune" countmax="8" chance="4200" />
+		<item name="skull staff" chance="700" />
+		<item name="knight armor" chance="4550" />
+		<item name="crown armor" chance="1400" />
+		<item name="mysterious voodoo skull" chance="247" />
+		<item name="golden figurine" chance="195" />
+		<item name="soul orb" chance="31111" />
+		<item id="6300" chance="1750" /><!-- death ring -->
+		<item name="demonic essence" chance="12000" />
+		<item name="concentrated demonic blood" countmax="4" chance="30000" />
+		<item name="onyx arrow" countmax="3" chance="8333" />
+		<item name="assassin star" countmax="5" chance="7692" />
+		<item name="abyss hammer" chance="495" />
+		<item name="great mana potion" countmax="2" chance="19990" />
+		<item name="ultimate health potion" chance="18000" />
+		<item name="gold ingot" chance="700" />
+	</loot>
+</monster>

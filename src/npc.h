@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ class NpcScriptInterface final : public LuaScriptInterface
 		bool initState() final;
 		bool closeState() final;
 
-		bool m_libLoaded;
+		bool libLoaded;
 };
 
 class NpcEventsHandler
@@ -88,17 +88,17 @@ class NpcEventsHandler
 		bool isLoaded() const;
 
 	protected:
-		Npc* m_npc;
-		NpcScriptInterface* m_scriptInterface;
+		Npc* npc;
+		NpcScriptInterface* scriptInterface;
 
-		int32_t m_onCreatureAppear;
-		int32_t m_onCreatureDisappear;
-		int32_t m_onCreatureMove;
-		int32_t m_onCreatureSay;
-		int32_t m_onPlayerCloseChannel;
-		int32_t m_onPlayerEndTrade;
-		int32_t m_onThink;
-		bool m_loaded;
+		int32_t creatureAppearEvent = -1;
+		int32_t creatureDisappearEvent = -1;
+		int32_t creatureMoveEvent = -1;
+		int32_t creatureSayEvent = -1;
+		int32_t playerCloseChannelEvent = -1;
+		int32_t playerEndTradeEvent = -1;
+		int32_t thinkEvent = -1;
+		bool loaded = false;
 };
 
 class Npc final : public Creature
@@ -186,7 +186,7 @@ class Npc final : public Creature
 		static uint32_t npcAutoID;
 
 	protected:
-		explicit Npc(const std::string& _name);
+		explicit Npc(const std::string& name);
 
 		void onCreatureAppear(Creature* creature, bool isLogin) final;
 		void onRemoveCreature(Creature* creature, bool isLogout) final;
@@ -212,20 +212,20 @@ class Npc final : public Creature
 		bool getRandomStep(Direction& dir) const;
 
 		void reset();
-		bool loadFromXml(const std::string& name);
+		bool loadFromXml();
 
 		void addShopPlayer(Player* player);
 		void removeShopPlayer(Player* player);
 		void closeAllShopWindows();
 
-		std::map<std::string, std::string> m_parameters;
+		std::map<std::string, std::string> parameters;
 
 		std::set<Player*> shopPlayerSet;
 
 		std::string name;
-		std::string m_filename;
+		std::string filename;
 
-		NpcEventsHandler* m_npcEventHandler;
+		NpcEventsHandler* npcEventHandler;
 
 		Position masterPos;
 
@@ -240,7 +240,7 @@ class Npc final : public Creature
 		bool ignoreHeight;
 		bool loaded;
 
-		static NpcScriptInterface* m_scriptInterface;
+		static NpcScriptInterface* scriptInterface;
 
 		friend class Npcs;
 		friend class NpcScriptInterface;

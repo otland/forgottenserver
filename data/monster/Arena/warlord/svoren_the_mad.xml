@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Svoren the Mad" nameDescription="Svoren the Mad" race="blood" experience="3000" speed="180" manacost="0">
+	<health now="6310" max="6310" />
+	<look type="254" head="80" body="99" legs="118" feet="38" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-525" />
+		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="1" duration="40" speedchange="-250">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="27" />
+	<immunities>
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity energy="1" />
+		<immunity earth="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="NO mommy NO. Leave me alone!" />
+		<voice sentence="Not that tower again!" />
+		<voice sentence="The cat has grown some horns!!" />
+		<voice sentence="What was I doing here again?" />
+		<voice sentence="Are we there soon mommy?" />
+	</voices>
+</monster>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Fury of the Emperor" nameDescription="Fury of the Emperor" race="undead" experience="26600" speed="450" manacost="0">
+	<health now="28800" max="28800" />
+	<look type="351" corpse="0" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="366" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-689" />
+		<attack name="physical" interval="3000" chance="17" length="8" spread="3" min="-250" max="-450">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="physical" interval="3000" chance="10" range="7" min="-100" max="-700">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="speed" interval="1000" chance="10" range="7" speedchange="-600" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="21" radius="6" target="0" min="-400" max="-650">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="65" defense="55" />
+	<elements>
+		<element icePercent="50" />
+		<element firePercent="10" />
+		<element physicalPercent="-10" />
+		<element energyPercent="-10" />
+		<element holyPercent="-15" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Draken Warmaster" interval="2000" chance="10" max="2" />
+	</summons>
+</monster>

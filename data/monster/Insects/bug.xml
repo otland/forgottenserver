@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Bug" namedescription="a bug" race="venom" experience="18" speed="160" manacost="250">
 	<health now="29" max="29" />
 	<look type="45" corpse="5990" />
@@ -17,14 +17,14 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="20" attack="15" />
+		<attack name="melee" interval="2000" min="0" max="-23" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<elements>
 		<element firePercent="-10" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="6" chance="51170" /><!-- gold coin -->
-		<item id="2679" countmax="3" chance="2590" /><!-- cherry -->
+		<item name="gold coin" countmax="6" chance="51170" />
+		<item name="cherry" countmax="3" chance="2590" />
 	</loot>
 </monster>

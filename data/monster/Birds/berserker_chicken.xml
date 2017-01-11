@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Berserker Chicken" namedescription="a berserker chicken" race="blood" experience="220" speed="300" manacost="220">
+	<health now="465" max="465" />
+	<look type="111" corpse="6042" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1200" min="0" max="-200" />
+		<attack name="physical" interval="2000" chance="30" range="1" min="0" max="-100" />
+		<attack name="drown" interval="2000" chance="15" target="0" min="-41" max="-70">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="35">
+		<defense name="speed" interval="1000" chance="40" speedchange="400" duration="8000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="10" />
+		<element deathPercent="10" />
+		<element firePercent="10" />
+		<element energyPercent="10" />
+		<element icePercent="10" />
+		<element earthPercent="10" />
+		<element physicalPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gokgoooook" />
+		<voice sentence="Cluck Cluck" />
+		<voice sentence="I will fill MY cushion with YOUR hair! CLUCK!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+	</loot>
+</monster>

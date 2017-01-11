@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,22 +24,17 @@
 
 extern Dispatcher g_dispatcher;
 
-DatabaseTasks::DatabaseTasks()
-{
-	threadState = THREAD_STATE_TERMINATED;
-}
 
 void DatabaseTasks::start()
 {
 	db.connect();
-	threadState = THREAD_STATE_RUNNING;
-	thread = std::thread(&DatabaseTasks::run, this);
+	ThreadHolder::start();
 }
 
-void DatabaseTasks::run()
+void DatabaseTasks::threadMain()
 {
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
-	while (threadState != THREAD_STATE_TERMINATED) {
+	while (getState() != THREAD_STATE_TERMINATED) {
 		taskLockUnique.lock();
 		if (tasks.empty()) {
 			taskSignal.wait(taskLockUnique);
@@ -60,7 +55,7 @@ void DatabaseTasks::addTask(const std::string& query, const std::function<void(D
 {
 	bool signal = false;
 	taskLock.lock();
-	if (threadState == THREAD_STATE_RUNNING) {
+	if (getState() == THREAD_STATE_RUNNING) {
 		signal = tasks.empty();
 		tasks.emplace_back(query, callback, store);
 	}
@@ -96,25 +91,11 @@ void DatabaseTasks::flush()
 	}
 }
 
-void DatabaseTasks::stop()
-{
-	taskLock.lock();
-	threadState = THREAD_STATE_CLOSING;
-	taskLock.unlock();
-}
-
 void DatabaseTasks::shutdown()
 {
 	taskLock.lock();
-	threadState = THREAD_STATE_TERMINATED;
+	setState(THREAD_STATE_TERMINATED);
 	flush();
 	taskLock.unlock();
 	taskSignal.notify_one();
-}
-
-void DatabaseTasks::join()
-{
-	if (thread.joinable()) {
-		thread.join();
-	}
 }

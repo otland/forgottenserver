@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lizard High Guard" nameDescription="a lizard high guard" race="blood" experience="1450" speed="240" manacost="0">
+	<health now="1800" max="1800" />
+	<look type="337" corpse="11272" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-306" />
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="10" min="25" max="75">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="-10" />
+		<element physicalPercent="5" />
+		<element firePercent="45" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hizzzzzzz!" />
+		<voice sentence="To armzzzz!" />
+		<voice sentence="Engage zze aggrezzor!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="27" chance="32000" />
+		<item name="small emerald" countmax="4" chance="2520" />
+		<item name="platinum coin" countmax="2" chance="4900" />
+		<item name="tower shield" chance="1040" />
+		<item name="lizard leather" chance="1000" />
+		<item name="lizard scale" chance="970" />
+		<item name="strong health potion" chance="11925" />
+		<item name="great health potion" chance="7070" />
+		<item name="red lantern" chance="1220" />
+		<item name="bunch of ripe rice" chance="4950" />
+		<item name="Zaoan armor" chance="80" />
+		<item name="Zaoan shoes" chance="700" />
+		<item name="Zaoan legs" chance="720" />
+		<item name="spiked iron ball" chance="7000" />
+		<item name="high guard flag" chance="2990" />
+		<item name="high guard shoulderplates" chance="8150" />
+	</loot>
+</monster>

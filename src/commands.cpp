@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,187 +31,42 @@
 
 extern Game g_game;
 
-s_defcommands Commands::defined_commands[] = {
-	// TODO: move all commands to talkactions
+namespace {
 
-	//admin commands
-	{"/raid", &Commands::forceRaid},
-
-	// player commands
-	{"!sellhouse", &Commands::sellHouse}
-};
-
-Commands::Commands()
+void forceRaid(Player& player, const std::string& param)
 {
-	loaded = false;
-
-	//setup command map
-	for (uint32_t i = 0; i < sizeof(defined_commands) / sizeof(defined_commands[0]); i++) {
-		Command* cmd = new Command;
-		cmd->loadedGroupId = false;
-		cmd->loadedAccountType = false;
-		cmd->loadedLogging = false;
-		cmd->logged = true;
-		cmd->groupId = 1;
-		cmd->f = defined_commands[i].f;
-		std::string key = defined_commands[i].name;
-		commandMap[key] = cmd;
-	}
-}
-
-Commands::~Commands()
-{
-	for (const auto& it : commandMap) {
-		delete it.second;
-	}
-}
-
-bool Commands::loadFromXml()
-{
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/commands.xml");
-	if (!result) {
-		printXMLError("Error - Commands::loadFromXml", "data/XML/commands.xml", result);
-		return false;
+	Raid* raid = g_game.raids.getRaidByName(param);
+	if (!raid || !raid->isLoaded()) {
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "No such raid exists.");
+		return;
 	}
 
-	loaded = true;
-
-	for (auto commandNode : doc.child("commands").children()) {
-		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
-		if (!cmdAttribute) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing cmd" << std::endl;
-			continue;
-		}
-
-		auto it = commandMap.find(cmdAttribute.as_string());
-		if (it == commandMap.end()) {
-			std::cout << "[Warning - Commands::loadFromXml] Unknown command " << cmdAttribute.as_string() << std::endl;
-			continue;
-		}
-
-		Command* command = it->second;
-
-		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
-		if (groupAttribute) {
-			if (!command->loadedGroupId) {
-				command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
-				command->loadedGroupId = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
-			}
-		}
-
-		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
-		if (acctypeAttribute) {
-			if (!command->loadedAccountType) {
-				command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
-				command->loadedAccountType = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate command: " << it->first << std::endl;
-			}
-		}
-
-		pugi::xml_attribute logAttribute = commandNode.attribute("log");
-		if (logAttribute) {
-			if (!command->loadedLogging) {
-				command->logged = booleanString(logAttribute.as_string());
-				command->loadedLogging = true;
-			} else {
-				std::cout << "[Notice - Commands::loadFromXml] Duplicate log tag for: " << it->first << std::endl;
-			}
-		}
+	if (g_game.raids.getRunning()) {
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
+		return;
 	}
 
-	for (const auto& it : commandMap) {
-		Command* command = it.second;
-		if (!command->loadedGroupId) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing group id for command " << it.first << std::endl;
-		}
+	g_game.raids.setRunning(raid);
 
-		if (!command->loadedAccountType) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing acctype level for command " << it.first << std::endl;
-		}
-
-		if (!command->loadedLogging) {
-			std::cout << "[Warning - Commands::loadFromXml] Missing log command " << it.first << std::endl;
-		}
-
-		g_game.addCommandTag(it.first.front());
-	}
-	return loaded;
-}
-
-bool Commands::reload()
-{
-	loaded = false;
-
-	for (const auto& it : commandMap) {
-		Command* command = it.second;
-		command->groupId = 1;
-		command->accountType = ACCOUNT_TYPE_GOD;
-		command->loadedGroupId = false;
-		command->loadedAccountType = false;
-		command->logged = true;
-		command->loadedLogging = false;
+	RaidEvent* event = raid->getNextRaidEvent();
+	if (!event) {
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
+		return;
 	}
 
-	g_game.resetCommandTag();
-	return loadFromXml();
-}
+	raid->setState(RAIDSTATE_EXECUTING);
 
-bool Commands::exeCommand(Player& player, const std::string& cmd)
-{
-	std::string str_command;
-	std::string str_param;
-
-	std::string::size_type loc = cmd.find(' ', 0);
-	if (loc != std::string::npos) {
-		str_command = std::string(cmd, 0, loc);
-		str_param = std::string(cmd, (loc + 1), cmd.size() - loc - 1);
+	uint32_t ticks = event->getDelay();
+	if (ticks > 0) {
+		g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
 	} else {
-		str_command = cmd;
+		g_dispatcher.addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
-	//find command
-	auto it = commandMap.find(str_command);
-	if (it == commandMap.end()) {
-		return false;
-	}
-
-	Command* command = it->second;
-	if (command->groupId > player.getGroup()->id || command->accountType > player.getAccountType()) {
-		if (player.getGroup()->access) {
-			player.sendTextMessage(MESSAGE_STATUS_SMALL, "You can not execute this command.");
-		}
-
-		return false;
-	}
-
-	//execute command
-	CommandFunc cfunc = command->f;
-	(this->*cfunc)(player, str_param);
-
-	if (command->logged) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_RED, cmd);
-
-		std::ostringstream logFile;
-		logFile << "data/logs/" << player.getName() << " commands.log";
-		std::ofstream out(logFile.str(), std::ios::app);
-		if (out.is_open()) {
-			time_t ticks = time(nullptr);
-			const tm* now = localtime(&ticks);
-			char buf[32];
-			strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M", now);
-
-			out << '[' << buf << "] " << cmd << std::endl;
-			out.close();
-		}
-	}
-	return true;
+	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.");
 }
 
-void Commands::sellHouse(Player& player, const std::string& param)
+void sellHouse(Player& player, const std::string& param)
 {
 	Player* tradePartner = g_game.getPlayerByName(param);
 	if (!tradePartner || tradePartner == &player) {
@@ -264,35 +119,142 @@ void Commands::sellHouse(Player& player, const std::string& param)
 	}
 }
 
-void Commands::forceRaid(Player& player, const std::string& param)
+std::map<std::string, CommandFunction> defined_commands = {
+	// TODO: move all commands to talkactions
+
+	//admin commands
+	{"/raid", forceRaid},
+
+	// player commands
+	{"!sellhouse", sellHouse}
+};
+
+}
+
+Commands::Commands()
 {
-	Raid* raid = g_game.raids.getRaidByName(param);
-	if (!raid || !raid->isLoaded()) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "No such raid exists.");
-		return;
+	// set up command map
+	for (auto& command : defined_commands) {
+		commandMap[command.first] = new Command(command.second, 1, ACCOUNT_TYPE_GOD, true);
+	}
+}
+
+Commands::~Commands()
+{
+	for (const auto& it : commandMap) {
+		delete it.second;
+	}
+}
+
+bool Commands::loadFromXml()
+{
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/commands.xml");
+	if (!result) {
+		printXMLError("Error - Commands::loadFromXml", "data/XML/commands.xml", result);
+		return false;
 	}
 
-	if (g_game.raids.getRunning()) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
-		return;
+	for (auto commandNode : doc.child("commands").children()) {
+		pugi::xml_attribute cmdAttribute = commandNode.attribute("cmd");
+		if (!cmdAttribute) {
+			std::cout << "[Warning - Commands::loadFromXml] Missing cmd" << std::endl;
+			continue;
+		}
+
+		auto it = commandMap.find(cmdAttribute.as_string());
+		if (it == commandMap.end()) {
+			std::cout << "[Warning - Commands::loadFromXml] Unknown command " << cmdAttribute.as_string() << std::endl;
+			continue;
+		}
+
+		Command* command = it->second;
+
+		pugi::xml_attribute groupAttribute = commandNode.attribute("group");
+		if (groupAttribute) {
+			command->groupId = pugi::cast<uint32_t>(groupAttribute.value());
+		} else {
+			std::cout << "[Warning - Commands::loadFromXml] Missing group for command " << it->first << std::endl;
+		}
+
+		pugi::xml_attribute acctypeAttribute = commandNode.attribute("acctype");
+		if (acctypeAttribute) {
+			command->accountType = static_cast<AccountType_t>(pugi::cast<uint32_t>(acctypeAttribute.value()));
+		} else {
+			std::cout << "[Warning - Commands::loadFromXml] Missing acctype for command " << it->first << std::endl;
+		}
+
+		pugi::xml_attribute logAttribute = commandNode.attribute("log");
+		if (logAttribute) {
+			command->log = booleanString(logAttribute.as_string());
+		} else {
+			std::cout << "[Warning - Commands::loadFromXml] Missing log for command " << it->first << std::endl;
+		}
+		g_game.addCommandTag(it->first.front());
+	}
+	return true;
+}
+
+bool Commands::reload()
+{
+	for (const auto& it : commandMap) {
+		Command* command = it.second;
+		command->groupId = 1;
+		command->accountType = ACCOUNT_TYPE_GOD;
+		command->log = true;
 	}
 
-	g_game.raids.setRunning(raid);
+	g_game.resetCommandTag();
+	return loadFromXml();
+}
 
-	RaidEvent* event = raid->getNextRaidEvent();
-	if (!event) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
-		return;
-	}
+bool Commands::exeCommand(Player& player, const std::string& cmd)
+{
+	std::string str_command;
+	std::string str_param;
 
-	raid->setState(RAIDSTATE_EXECUTING);
-
-	uint32_t ticks = event->getDelay();
-	if (ticks > 0) {
-		g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
+	std::string::size_type loc = cmd.find(' ', 0);
+	if (loc != std::string::npos) {
+		str_command = std::string(cmd, 0, loc);
+		str_param = std::string(cmd, (loc + 1), cmd.size() - loc - 1);
 	} else {
-		g_dispatcher.addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
+		str_command = cmd;
 	}
 
-	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.");
+	//find command
+	auto it = commandMap.find(str_command);
+	if (it == commandMap.end()) {
+		return false;
+	}
+
+	Command* command = it->second;
+	if (command->groupId > player.getGroup()->id || command->accountType > player.getAccountType()) {
+		if (player.getGroup()->access) {
+			player.sendTextMessage(MESSAGE_STATUS_SMALL, "You can not execute this command.");
+		}
+
+		return false;
+	}
+
+	//execute command
+	CommandFunction cfunc = command->f;
+	cfunc(player, str_param);
+
+	if (command->log) {
+		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_RED, cmd);
+
+		std::ostringstream logFile;
+		logFile << "data/logs/" << player.getName() << " commands.log";
+		std::ofstream out(logFile.str(), std::ios::app);
+		if (out.is_open()) {
+			time_t ticks = time(nullptr);
+			const tm* now = localtime(&ticks);
+			char buf[32];
+			strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M", now);
+
+			out << '[' << buf << "] " << cmd << std::endl;
+			out.close();
+		}
+	}
+	return true;
 }

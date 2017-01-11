@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Eternal Guardian" nameDescription="an eternal guardian" race="undead" experience="1800" speed="180" manacost="0">
+	<health now="2500" max="2500" />
+	<look type="345" corpse="11300" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+	</attacks>
+	<defenses armor="40" defense="40" />
+	<elements>
+		<element deathPercent="20" />
+		<element firePercent="70" />
+		<element holyPercent="20" />
+		<element energyPercent="10" />
+		<element icePercent="10" />
+		<element physicalPercent="25" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zzrkrrch!" />
+		<voice sentence="&lt;crackle&gt;" />
+	</voices>
+	<loot>
+		<item name="small stone" countmax="10" chance="30230" />
+		<item name="gold coin" countmax="100" chance="99930" />
+		<item name="platinum coin" countmax="4" chance="99540" />
+		<item name="guardian halberd" chance="560" />
+		<item name="tower shield" chance="820" />
+		<item name="iron ore" chance="1700" />
+		<item name="ancient stone" chance="20020" />
+		<item name="shiny stone" chance="800" />
+		<item name="Zaoan sword" chance="100" />
+		<item name="Zaoan halberd" chance="1860" />
+		<item name="spiked iron ball" chance="9960" />
+		<item name="clay lump" chance="720" />
+		<item name="piece of marble rock" chance="430" />
+		<item id="13757" chance="400" /><!-- coal -->
+	</loot>
+</monster>

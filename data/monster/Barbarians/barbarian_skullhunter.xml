@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Barbarian Skullhunter" nameDescription="a barbarian skullhunter" race="blood" experience="85" speed="220" manacost="450">
+	<health now="135" max="135" />
+	<look type="254" head="0" body="77" legs="77" feet="114" corpse="20347" />
+	<targetchange interval="60000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="70" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-60" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element icePercent="50" />
+		<element holyPercent="10" />
+		<element energyPercent="20" />
+		<element physicalPercent="5" />
+		<element earthPercent="-10" />
+		<element deathPercent="-1" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="You will become my trophy." />
+		<voice sentence="Fight harder, coward." />
+		<voice sentence="Show that you are a worthy opponent." />
+	</voices>
+	<loot>
+		<item id="2050" chance="60500" /><!-- torch -->
+		<item name="gold coin" countmax="30" chance="60000" />
+		<item name="life ring" chance="250" />
+		<item id="2229" chance="3000" /><!-- skull -->
+		<item name="knife" chance="15250" />
+		<item name="brass helmet" chance="19000" />
+		<item name="viking helmet" chance="8000" />
+		<item name="scale armor" chance="3850" />
+		<item name="brown piece of cloth" chance="500" />
+		<item name="crystal sword" chance="90" />
+		<item name="fur boots" chance="120" />
+		<item name="ragnir helmet" chance="100" />
+		<item name="health potion" chance="930" />
+	</loot>
+</monster>

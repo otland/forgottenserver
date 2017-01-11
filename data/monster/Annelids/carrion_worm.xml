@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Carrion Worm" nameDescription="a carrion worm" race="blood" experience="70" speed="160" manacost="380">
+	<health now="145" max="145" />
+	<look type="192" corpse="6069" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element earthPercent="20" />
+		<element energyPercent="5" />
+		<element firePercent="-5" />
+		<element icePercent="-5" />
+	</elements>
+	<loot>
+		<item name="gold coin" countmax="45" chance="50000" />
+		<item name="meat" countmax="2" chance="9460" />
+		<item name="worm" countmax="2" chance="2100" />
+		<item name="carrion worm fang" chance="10000" />
+		<item id="13757" chance="210" /><!-- Coal -->
+	</loot>
+</monster>

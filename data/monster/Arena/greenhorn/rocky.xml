@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rocky" nameDescription="rocky" race="undead" experience="190" speed="170" manacost="0">
-	<health now="250" max="250" />
+<monster name="Rocky" nameDescription="Rocky" race="undead" experience="190" speed="170" manacost="0">
+	<health now="390" max="390" />
 	<look type="95" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="40" />
+		<attack name="melee" interval="2000" min="0" max="-80" />
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="50" min="15" max="35">
