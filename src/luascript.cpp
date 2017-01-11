@@ -892,12 +892,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerFlagValue(cid, flag)
 	lua_register(luaState, "getPlayerFlagValue", LuaScriptInterface::luaGetPlayerFlagValue);
 
-	//getPlayerInstantSpellCount(cid)
-	lua_register(luaState, "getPlayerInstantSpellCount", LuaScriptInterface::luaGetPlayerInstantSpellCount);
-
-	//getPlayerInstantSpellInfo(cid, index)
-	lua_register(luaState, "getPlayerInstantSpellInfo", LuaScriptInterface::luaGetPlayerInstantSpellInfo);
-
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
 	//Returns uid of the created item
@@ -2248,6 +2242,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod("Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
+	registerMethod("Player", "getInstantSpellCount", LuaScriptInterface::luaPlayerGetInstantSpellCount);
+	registerMethod("Player", "canCast", LuaScriptInterface::luaPlayerCanCast);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2543,6 +2540,21 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "isSharedExperienceEnabled", LuaScriptInterface::luaPartyIsSharedExperienceEnabled);
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
+
+	// Spells
+	registerClass("Spell", "", LuaScriptInterface::luaSpellCreate);
+	registerMetaMethod("Spell", "__eq", LuaScriptInterface::luaUserdataCompare);
+
+	registerMethod("Spell", "getName", LuaScriptInterface::luaSpellGetName);
+	registerMethod("Spell", "getWords", LuaScriptInterface::luaSpellGetWords);
+	registerMethod("Spell", "getLevel", LuaScriptInterface::luaSpellGetLevel);
+	registerMethod("Spell", "getMagicLevel", LuaScriptInterface::luaSpellGetMagicLevel);
+	registerMethod("Spell", "getManaCost", LuaScriptInterface::luaSpellGetManaCost);
+	registerMethod("Spell", "getManaPercent", LuaScriptInterface::luaSpellGetManaPercent);
+	registerMethod("Spell", "getSoulCost", LuaScriptInterface::luaSpellGetSoulCost);
+
+	registerMethod("Spell", "isPremium", LuaScriptInterface::luaSpellIsPremium);
+	registerMethod("Spell", "isLearnable", LuaScriptInterface::luaSpellIsLearnable);
 }
 
 #undef registerEnum
@@ -2693,47 +2705,6 @@ int LuaScriptInterface::luaGetPlayerFlagValue(lua_State* L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 	}
-	return 1;
-}
-
-int LuaScriptInterface::luaGetPlayerInstantSpellCount(lua_State* L)
-{
-	//getPlayerInstantSpellCount(cid)
-	Player* player = getPlayer(L, 1);
-	if (player) {
-		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
-	} else {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State* L)
-{
-	//getPlayerInstantSpellInfo(cid, index)
-	Player* player = getPlayer(L, 1);
-	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	uint32_t index = getNumber<uint32_t>(L, 2);
-	InstantSpell* spell = g_spells->getInstantSpellByIndex(player, index);
-	if (!spell) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_SPELL_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	lua_createtable(L, 0, 6);
-	setField(L, "name", spell->getName());
-	setField(L, "words", spell->getWords());
-	setField(L, "level", spell->getLevel());
-	setField(L, "mlevel", spell->getMagicLevel());
-	setField(L, "mana", spell->getManaCost(player));
-	setField(L, "manapercent", spell->getManaPercent());
 	return 1;
 }
 
@@ -9288,6 +9259,31 @@ int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerGetInstantSpellCount(lua_State* L)
+{
+	// player:getInstantSpellCount()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCanCast(lua_State* L)
+{
+	// player:canCast(spell)
+	Player* player = getUserdata<Player>(L, 1);
+	InstantSpell* spell = getUserdata<InstantSpell>(L, 2);
+	if (player && spell) {
+		pushBoolean(L, spell->canCast(player));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Monster
 int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
@@ -12110,6 +12106,133 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
 		pushBoolean(L, party->setSharedExperience(party->getLeader(), active));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// Spells
+int LuaScriptInterface::luaSpellCreate(lua_State* L)
+{
+	// Spell(words, name or id)
+	InstantSpell* spell;
+	if (isString(L, 2)) {
+		const std::string& stringArgument = getString(L, 2);
+		spell = g_spells->getInstantSpellByName(stringArgument);
+		if (spell == nullptr) {
+			spell = g_spells->getInstantSpell(stringArgument);
+		} else if (isNumber(L, 2)) {
+			spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
+		}
+	} else {
+		spell = nullptr;
+	}
+
+	if (spell) {
+		pushUserdata<InstantSpell>(L, spell);
+		setMetatable(L, -1, "Spell");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetName(lua_State* L)
+{
+	// spell:getName()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		pushString(L, spell->getName());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetWords(lua_State* L)
+{
+	// spell:getWords()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		pushString(L, spell->getWords());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetLevel(lua_State* L)
+{
+	// spell:getLevel()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		lua_pushnumber(L, spell->getLevel());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetMagicLevel(lua_State* L)
+{
+	// spell:getMagicLevel()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		lua_pushnumber(L, spell->getMagicLevel());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetManaCost(lua_State* L)
+{
+	// spell:getManaCost(player)
+	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	Player* player = getUserdata<Player>(L, 2);
+	if (spell && player) {
+		lua_pushnumber(L, spell->getManaCost(player));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetManaPercent(lua_State* L)
+{
+	// spell:getManaPercent()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		lua_pushnumber(L, spell->getManaPercent());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellGetSoulCost(lua_State* L)
+{
+	// spell:getSoulCost()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		lua_pushnumber(L, spell->getSoulCost());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellIsPremium(lua_State* L)
+{
+	// spell:isPremium()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		pushBoolean(L, spell->isPremium());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellIsLearnable(lua_State* L)
+{
+	// spell:isLearnable()
+	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+		pushBoolean(L, spell->isLearnable());
 	} else {
 		lua_pushnil(L);
 	}

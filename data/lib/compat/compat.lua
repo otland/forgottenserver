@@ -1006,3 +1006,25 @@ end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
+
+function getPlayerInstantSpellCount(cid) local p = Player(cid) return p ~= nil and p:getInstantSpellCount() end
+function getPlayerInstantSpellInfo(cid, spellId)
+	local player = Player(cid)
+	if not player then
+		return false
+	end
+
+	local spell = Spell(spellId)
+	if spell == nil or not player:canCast(spell) then
+		return false
+	end
+
+	return {
+		["name"] = spell:getName(),
+		["words"] = spell:getWords(),
+		["level"] = spell:getLevel(),
+		["mlevel"] = spell:getMagicLevel(),
+		["mana"] = spell:getManaCost(player),
+		["manapercent"] = spell:getManaPercent()
+	}
+end
