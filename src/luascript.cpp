@@ -12178,11 +12178,11 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 	InstantSpell* spell = nullptr;
 	if (isNumber(L, 2)) {
 		spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
-	} else if (isString(L, 2)) {
-		const std::string& stringArgument = getString(L, 2);
+	} else {
+		std::string stringArgument = getString(L, 2);
 		spell = g_spells->getInstantSpellByName(stringArgument);
 		if (!spell) {
-			spell = g_spells->getInstantSpell(stringArgument); 
+			spell = g_spells->getInstantSpell(stringArgument);
 		}
 	}
 
