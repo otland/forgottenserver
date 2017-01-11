@@ -7265,13 +7265,10 @@ int LuaScriptInterface::luaCreatureIsImmune(lua_State* L)
 
 	if (isNumber(L, 2)) {
 		pushBoolean(L, creature->isImmune(getNumber<ConditionType_t>(L, 2)));
+	} else if (Condition* condition = getUserdata<Condition>(L, 2)) {
+		pushBoolean(L, creature->isImmune(condition->getType()));
 	} else {
-		Condition* condition = getUserdata<Condition>(L, 2);
-		if (condition) {
-			pushBoolean(L, creature->isImmune(condition->getType()));
-		} else {
-			lua_pushnil(L);
-		}
+		lua_pushnil(L);
 	}
 	return 1;
 }
