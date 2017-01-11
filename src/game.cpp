@@ -5553,51 +5553,118 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 
 bool Game::reload(ReloadTypes_t reloadType)
 {
-	if (reloadType == RELOAD_TYPE_ACTIONS) {
-		return g_actions->reload();
-	} else if (reloadType == RELOAD_TYPE_CONFIG) {
-		return g_config.reload();
-	} else if (reloadType == RELOAD_TYPE_CREATURESCRIPTS) {
-		return g_creatureEvents->reload();
-	} else if (reloadType == RELOAD_TYPE_MONSTERS) {
-		return g_monsters.reload();
-	} else if (reloadType == RELOAD_TYPE_MOVEMENTS) {
-		return g_moveEvents->reload();
-	} else if (reloadType == RELOAD_TYPE_NPCS) {
-		Npcs::reload();
-		return true;
-	} else if (reloadType == RELOAD_TYPE_RAIDS) {
-		return raids.reload() && raids.startup();
-	} else if (reloadType == RELOAD_TYPE_SPELLS) {
-		if (!g_spells->reload()) {
-			std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
-			std::terminate();
-		} else if (!g_monsters.reload()) {
-			std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
-			std::terminate();
+	switch (reloadType) {
+		case RELOAD_TYPE_ALL: {
+			if (!g_spells->reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+				std::terminate();
+				return false;
+			} else if (!g_monsters.reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+				std::terminate();
+				return false;
+			}
+
+			g_actions->reload();
+			g_config.reload();
+			g_creatureEvents->reload();
+			g_monsters.reload();
+			g_moveEvents->reload();
+			Npcs::reload();
+			raids.reload() && raids.startup();
+			g_talkActions->reload();
+			Item::items.reload();
+			g_weapons->reload();
+			g_weapons->loadDefaults();
+			quests.reload();
+			mounts.reload();
+			g_globalEvents->reload();
+			g_events->load();
+			g_chat->load();
+			commands.reload();
+			return true;
 		}
-		return true;
-	} else if (reloadType == RELOAD_TYPE_TALKCTIONS) {
-		return g_talkActions->reload();
-	} else if (reloadType == RELOAD_TYPE_ITEMS) {
-		return Item::items.reload();
-	} else if (reloadType == RELOAD_TYPE_WEAPONS) {
-		bool results = g_weapons->reload();
-		g_weapons->loadDefaults();
-		return results;
-	} else if (reloadType == RELOAD_TYPE_QUESTS) {
-		return quests.reload();
-	} else if (reloadType == RELOAD_TYPE_MOUNTS) {
-		return mounts.reload();
-	} else if (reloadType == RELOAD_TYPE_GLOBALEVENTS) {
-		return g_globalEvents->reload();
-	} else if (reloadType == RELOAD_TYPE_EVENTS) {
-		return g_events->load();
-	} else if (reloadType == RELOAD_TYPE_CHAT) {
-		return g_chat->load();
-	} else if (reloadType == RELOAD_TYPE_COMMANDS) {
-		return commands.reload();
-	} else {
-		return false;
+
+		case RELOAD_TYPE_ACTIONS: {
+			return g_actions->reload();
+		}
+
+		case RELOAD_TYPE_CHAT: {
+			return g_chat->load();
+		}
+
+		case RELOAD_TYPE_COMMANDS: {
+			return commands.reload();
+		}
+
+		case RELOAD_TYPE_CONFIG: {
+			return g_config.reload();
+		}
+
+		case RELOAD_TYPE_CREATURESCRIPTS: {
+			return g_creatureEvents->reload();
+		}
+
+		case RELOAD_TYPE_EVENTS: {
+			return g_events->load();
+		}
+
+		case RELOAD_TYPE_GLOBALEVENTS: {
+			return g_globalEvents->reload();
+		}
+
+		case RELOAD_TYPE_ITEMS: {
+			return Item::items.reload();
+		}
+
+		case RELOAD_TYPE_MONSTERS: {
+			return g_monsters.reload();
+		}
+
+		case RELOAD_TYPE_MOUNTS: {
+			return mounts.reload();
+		}
+
+		case RELOAD_TYPE_MOVEMENTS: {
+			return g_moveEvents->reload();
+		}
+
+		case RELOAD_TYPE_NPCS: {
+			Npcs::reload();
+			return true;
+		}
+
+		case RELOAD_TYPE_QUESTS: {
+			return quests.reload();
+		}
+
+		case RELOAD_TYPE_RAIDS: {
+			return raids.reload() && raids.startup();
+		}
+
+		case RELOAD_TYPE_SPELLS: {
+			if (!g_spells->reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+				std::terminate();
+			} else if (!g_monsters.reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+				std::terminate();
+			}
+			return true;
+		}
+
+		case RELOAD_TYPE_TALKCTIONS: {
+			return g_talkActions->reload();
+		}
+
+		case RELOAD_TYPE_WEAPONS: {
+			bool results = g_weapons->reload();
+			g_weapons->loadDefaults();
+			return results;
+		}
+
+		default: {
+			return false;
+		}
 	}
 }

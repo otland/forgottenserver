@@ -1,57 +1,59 @@
 local reloadTypes = {
-	["action"] = { targetType = RELOAD_TYPE_ACTIONS, name = "actions"},
-	["actions"] = { targetType = RELOAD_TYPE_ACTIONS, name = "actions"},
+	["all"] = { targetType = RELOAD_TYPE_ALL, name = "all" },
 
-	["config"] = { targetType = RELOAD_TYPE_CONFIG, name = "config"},
-	["configuration"] = { targetType = RELOAD_TYPE_CONFIG, name = "config"},
+	["action"] = { targetType = RELOAD_TYPE_ACTIONS, name = "actions" },
+	["actions"] = { targetType = RELOAD_TYPE_ACTIONS, name = "actions" },
 
-	["creaturescript"] = { targetType = RELOAD_TYPE_CREATURESCRIPTS, name = "creature scripts"},
-	["creaturescripts"] = { targetType = RELOAD_TYPE_CREATURESCRIPTS, name = "creature scripts"},
+	["chat"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
+	["channel"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
+	["chatchannels"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
 
-	["monster"] = { targetType = RELOAD_TYPE_MONSTERS, name = "monsters"},
-	["monsters"] = { targetType = RELOAD_TYPE_MONSTERS, name = "monsters"},
+	["command"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands" },
+	["commands"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands" },
 
-	["move"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements"},
-	["movement"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements"},
-	["movements"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements"},
+	["config"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
+	["configuration"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
 
-	["npc"] = { targetType = RELOAD_TYPE_NPCS, name = "npcs"},
-	["npcs"] = { targetType = RELOAD_TYPE_NPCS, name = "npcs"},
+	["creaturescript"] = { targetType = RELOAD_TYPE_CREATURESCRIPTS, name = "creature scripts" },
+	["creaturescripts"] = { targetType = RELOAD_TYPE_CREATURESCRIPTS, name = "creature scripts" },
 
-	["raid"] = { targetType = RELOAD_TYPE_RAIDS, name = "raids"},
-	["raids"] = { targetType = RELOAD_TYPE_RAIDS, name = "raids"},
+	["events"] = { targetType = RELOAD_TYPE_EVENTS, name = "events" },
 
-	["spell"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells"},
-	["spells"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells"},
+	["global"] = { targetType = RELOAD_TYPE_GLOBAL, name = "global.lua" },
 
-	["talk"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions"},
-	["talkaction"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions"},
-	["talkactions"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions"},
+	["globalevent"] = { targetType = RELOAD_TYPE_GLOBALEVENTS, name = "globalevents" },
+	["globalevents"] = { targetType = RELOAD_TYPE_GLOBALEVENTS, name = "globalevents" },
 
-	["items"] = { targetType = RELOAD_TYPE_ITEMS, name = "items"},
+	["items"] = { targetType = RELOAD_TYPE_ITEMS, name = "items" },
 
-	["weapon"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons"},
-	["weapons"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons"},
+	["monster"] = { targetType = RELOAD_TYPE_MONSTERS, name = "monsters" },
+	["monsters"] = { targetType = RELOAD_TYPE_MONSTERS, name = "monsters" },
 
-	["quest"] = { targetType = RELOAD_TYPE_QUESTS, name = "quests"},
-	["quests"] = { targetType = RELOAD_TYPE_QUESTS, name = "quests"},
+	["mount"] = { targetType = RELOAD_TYPE_MOUNTS, name = "mounts" },
+	["mounts"] = { targetType = RELOAD_TYPE_MOUNTS, name = "mounts" },
 
-	["mount"] = { targetType = RELOAD_TYPE_MOUNTS, name = "mounts"},
-	["mounts"] = { targetType = RELOAD_TYPE_MOUNTS, name = "mounts"},
+	["move"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements" },
+	["movement"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements" },
+	["movements"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements" },
 
-	["globalevent"] = { targetType = RELOAD_TYPE_GLOBALEVENTS, name = "globalevents"},
-	["globalevents"] = { targetType = RELOAD_TYPE_GLOBALEVENTS, name = "globalevents"},
+	["npc"] = { targetType = RELOAD_TYPE_NPCS, name = "npcs" },
+	["npcs"] = { targetType = RELOAD_TYPE_NPCS, name = "npcs" },
 
-	["events"] = { targetType = RELOAD_TYPE_EVENTS, name = "events"},
+	["quest"] = { targetType = RELOAD_TYPE_QUESTS, name = "quests" },
+	["quests"] = { targetType = RELOAD_TYPE_QUESTS, name = "quests" },
 
-	["chat"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels"},
-	["channel"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels"},
-	["chatchannels"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels"},
+	["raid"] = { targetType = RELOAD_TYPE_RAIDS, name = "raids" },
+	["raids"] = { targetType = RELOAD_TYPE_RAIDS, name = "raids" },
 
-	["global"] = { targetType = RELOAD_TYPE_GLOBAL, name = "global.lua"},
+	["spell"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells" },
+	["spells"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells" },
 
-	["command"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands"},
-	["commands"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands"}
+	["talk"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions" },
+	["talkaction"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions" },
+	["talkactions"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions" },
+
+	["weapon"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" },
+	["weapons"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" }
 }
 
 function onSay(player, words, param)
