@@ -48,3 +48,15 @@ end
 if nextUseStaminaTime == nil then
 	nextUseStaminaTime = {}
 end
+
+uint8_t = PROPUINT8
+uint16_t = PROPUINT16
+uint32_t = PROPUINT32
+uint64_t = PROPUINT64
+int8_t = PROPINT8
+int16_t = PROPINT16
+int32_t = PROPINT32
+int64_t = PROPINT64
+double = PROPDOUBLE
+char = PROPCHAR
+bool = PROPBOOL

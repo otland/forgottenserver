@@ -547,6 +547,9 @@ class LuaScriptInterface
 
 		static int luaGameStartRaid(lua_State* L);
 
+		static int luaGameSerializeItem(lua_State* L);
+		static int luaGameUnserializeItem(lua_State* L);
+
 		// Variant
 		static int luaVariantCreate(lua_State* L);
 
@@ -703,6 +706,9 @@ class LuaScriptInterface
 		static int luaItemGetDescription(lua_State* L);
 
 		static int luaItemHasProperty(lua_State* L);
+
+		static int luaItemSerializeAttr(lua_State* L);
+		static int luaItemUnserializeAttr(lua_State* L);
 
 		// Container
 		static int luaContainerCreate(lua_State* L);
@@ -1234,6 +1240,24 @@ class LuaScriptInterface
 		static int luaPartyIsSharedExperienceEnabled(lua_State* L);
 		static int luaPartyShareExperience(lua_State* L);
 		static int luaPartySetSharedExperience(lua_State* L);
+
+		// PropStream
+		static int luaPropStreamCreate(lua_State* L);
+		static int luaPropStreamDelete(lua_State* L);
+		static int luaPropStreamInit(lua_State* L);
+		static int luaPropStreamSize(lua_State* L);
+		static int luaPropStreamRead(lua_State* L);
+		static int luaPropStreamReadString(lua_State* L);
+		static int luaPropStreamSkip(lua_State* L);
+
+		// PropWriteStream
+		static int luaPropWriteStreamCreate(lua_State* L);
+		static int luaPropWriteStreamDelete(lua_State* L);
+		static int luaPropWriteStreamGetStream(lua_State* L);
+		static int luaPropWriteStreamClear(lua_State* L);
+		static int luaPropWriteStreamWrite(lua_State* L);
+		static int luaPropWriteStreamWriteString(lua_State* L);
+
 
 		//
 		lua_State* luaState = nullptr;

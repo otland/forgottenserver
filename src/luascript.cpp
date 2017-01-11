@@ -21,6 +21,8 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
+#include "iomap.h"
+#include "iomapserialize.h"
 #include "luascript.h"
 #include "chat.h"
 #include "player.h"
@@ -1709,6 +1711,19 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 	registerEnum(RETURNVALUE_YOUARENOTTHEOWNER)
 
+	registerEnum(PROPUINT8)
+	registerEnum(PROPUINT16)
+	registerEnum(PROPUINT32)
+	registerEnum(PROPUINT64)
+	registerEnum(PROPINT8)
+	registerEnum(PROPINT16)
+	registerEnum(PROPINT32)
+	registerEnum(PROPINT64)
+	registerEnum(PROPFLOAT)
+	registerEnum(PROPDOUBLE)
+	registerEnum(PROPCHAR)
+	registerEnum(PROPBOOL)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -1822,6 +1837,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+
+	registerMethod("Game", "serializeItem", LuaScriptInterface::luaGameSerializeItem);
+	registerMethod("Game", "unserializeItem", LuaScriptInterface::luaGameUnserializeItem);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -1985,6 +2003,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getDescription", LuaScriptInterface::luaItemGetDescription);
 
 	registerMethod("Item", "hasProperty", LuaScriptInterface::luaItemHasProperty);
+
+	registerMethod("Item", "serializeAttr", LuaScriptInterface::luaItemSerializeAttr);
+	registerMethod("Item", "unserializeAttr", LuaScriptInterface::luaItemUnserializeAttr);
 
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
@@ -2535,6 +2556,30 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "isSharedExperienceEnabled", LuaScriptInterface::luaPartyIsSharedExperienceEnabled);
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
+	
+	// PropStream
+	registerClass("PropStream", "", LuaScriptInterface::luaPropStreamCreate);
+	registerMetaMethod("PropStream", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("PropStream", "__gc", LuaScriptInterface::luaPropStreamDelete);
+	registerMethod("PropStream", "delete", LuaScriptInterface::luaPropStreamDelete);
+	registerMethod("PropStream", "init", LuaScriptInterface::luaPropStreamInit);
+	registerMethod("PropStream", "size", LuaScriptInterface::luaPropStreamSize);
+	registerMethod("PropStream", "read", LuaScriptInterface::luaPropStreamRead);
+	registerMethod("PropStream", "readString", LuaScriptInterface::luaPropStreamReadString);
+	registerMethod("PropStream", "skip", LuaScriptInterface::luaPropStreamSkip);
+
+	// PropWriteStream
+	registerClass("PropWriteStream", "", LuaScriptInterface::luaPropWriteStreamCreate);
+	registerMetaMethod("PropWriteStream", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("PropWriteStream", "__gc", LuaScriptInterface::luaPropWriteStreamDelete);
+	registerMethod("PropWriteStream", "delete", LuaScriptInterface::luaPropWriteStreamDelete);
+	registerMethod("PropWriteStream", "getStream", LuaScriptInterface::luaPropWriteStreamGetStream);
+	registerMethod("PropWriteStream", "clear", LuaScriptInterface::luaPropWriteStreamClear);
+	registerMethod("PropWriteStream", "write", LuaScriptInterface::luaPropWriteStreamWrite);
+	registerMethod("PropWriteStream", "writeString", LuaScriptInterface::luaPropWriteStreamWriteString);
+
+
+
 }
 
 #undef registerEnum
@@ -4360,6 +4405,40 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	if (raid) {
 		raid->startRaid();
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameSerializeItem(lua_State* L)
+{
+	// Game.serializeItem(propWriteStream, item)
+	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
+	Item* item = getUserdata<Item>(L, 2);
+	if (propWriteStream && item) {
+		g_game.serializeItem(propWriteStream, item);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameUnserializeItem(lua_State* L)
+{
+	// Game.unserializeItem(propStream)
+	PropStream* propStream = getUserdata<PropStream>(L, 1);
+	if (propStream) {
+		Item* item = g_game.unserializeItem(propStream, nullptr);
+		if (item) {
+			getScriptEnv()->addTempItem(item);
+			item->setParent(VirtualCylinder::virtualCylinder);
+			pushUserdata<Item>(L, item);
+			setItemMetatable(L, -1, item);
+		} else {
+			pushBoolean(L, false);
+		}
 	} else {
 		lua_pushnil(L);
 	}
@@ -6272,6 +6351,34 @@ int LuaScriptInterface::luaItemHasProperty(lua_State* L)
 	if (item) {
 		ITEMPROPERTY property = getNumber<ITEMPROPERTY>(L, 2);
 		pushBoolean(L, item->hasProperty(property));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemSerializeAttr(lua_State* L)
+{
+	// item:serializeAttr(propWriteStream)
+	Item* item = getUserdata<Item>(L, 1);
+	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 2);
+	if (item && propWriteStream) {
+		item->serializeAttr(*propWriteStream);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemUnserializeAttr(lua_State* L)
+{
+	// item:unserializeAttr(propStream)
+	Item* item = getUserdata<Item>(L, 1);
+	PropStream* propStream = getUserdata<PropStream>(L, 2);
+	if (item && propStream) {
+		item->unserializeAttr(*propStream);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12073,6 +12180,294 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
 		pushBoolean(L, party->setSharedExperience(party->getLeader(), active));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// PropStream
+int LuaScriptInterface::luaPropStreamCreate(lua_State* L)
+{
+	// PropStream([stream, size])
+	PropStream* propStream = new PropStream();
+	if(lua_gettop(L) >= 3) {
+		const char* stream = lua_tolstring(L, 2, nullptr);
+		if (stream) {
+			size_t size = getNumber<size_t>(L, 3);
+			propStream->init(stream, size);
+		}
+	}
+	pushUserdata<PropStream>(L, propStream);
+	setMetatable(L, -1, "PropStream");
+	return 1;
+}
+
+int LuaScriptInterface::luaPropStreamDelete(lua_State* L)
+{
+	// propStream:delete() or __gc call
+	PropStream** propStreamPtr = getRawUserdata<PropStream>(L, 1);
+	if (propStreamPtr && *propStreamPtr) {
+		delete *propStreamPtr;
+		*propStreamPtr = nullptr;
+	}
+	return 0;
+}
+
+int LuaScriptInterface::luaPropStreamInit(lua_State* L)
+{
+	// propStream:init(stream, size)
+	PropStream* propStream = getUserdata<PropStream>(L, 1);
+	if (propStream) {
+		const char* stream = lua_tolstring(L, 2, nullptr);
+		if (stream) {
+			size_t size = getNumber<size_t>(L, 3);
+			propStream->init(stream, size);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPropStreamSize(lua_State* L)
+{
+	// propStream:size()
+	PropStream* propStream = getUserdata<PropStream>(L, 1);
+	if (propStream) {
+		size_t size = propStream->size();
+		lua_pushnumber(L, size);
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPropStreamRead(lua_State* L)
+{
+	// propStream:read(type)
+	PropStream* propStream = getUserdata<PropStream>(L, 1);
+	if (propStream) {
+		PropType_t type = getNumber<PropType_t>(L, 2);
+
+		if (type == PROPUINT8) {
+			uint8_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPUINT16) {
+			uint16_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPUINT32) {
+			uint32_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPUINT64) {
+			uint64_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPINT8) {
+			int8_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPINT16) {
+			int16_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPINT32) {
+			int32_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPINT64) {
+			int64_t value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPFLOAT) {
+			float value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPDOUBLE) {
+			double value = 0;
+			propStream->read(value);
+			lua_pushnumber(L, value);
+
+		} else if (type == PROPCHAR) {
+			char value = 0;
+			propStream->read(value);
+			pushString(L, std::string(1, value));
+
+		} else if (type == PROPBOOL) {
+			bool value = false;
+			propStream->read(value);
+			pushBoolean(L, value);
+
+		}
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPropStreamReadString(lua_State* L)
+{
+	// propStream:readString()
+	PropStream* propStream = getUserdata<PropStream>(L, 1);
+	if (propStream) {
+		std::string ret = std::string();
+		propStream->readString(ret);
+		pushString(L, ret);
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPropStreamSkip(lua_State* L)
+{
+	// propStream:skip(n)
+	PropStream* propStream = getUserdata<PropStream>(L, 1);
+	if (propStream) {
+		size_t n = getNumber<size_t>(L, 2);
+		propStream->skip(n);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+// PropWriteStream
+int LuaScriptInterface::luaPropWriteStreamCreate(lua_State* L)
+{
+	// PropWriteStream()
+	pushUserdata<PropWriteStream>(L, new PropWriteStream);
+	setMetatable(L, -1, "PropWriteStream");
+	return 1;
+}
+
+int LuaScriptInterface::luaPropWriteStreamDelete(lua_State* L)
+{
+	// propWriteStream:delete() or __gc call
+	PropWriteStream** propWriteStreamPtr = getRawUserdata<PropWriteStream>(L, 1);
+	if (propWriteStreamPtr && *propWriteStreamPtr) {
+		delete *propWriteStreamPtr;
+		*propWriteStreamPtr = nullptr;
+	}
+	return 0;
+}
+
+int LuaScriptInterface::luaPropWriteStreamGetStream(lua_State* L)
+{
+	// propWriteStream:getStream()
+	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
+	if (propWriteStream) {
+		size_t size;
+		const char * stream = propWriteStream->getStream(size);
+		lua_pushlstring(L, stream, size);
+		lua_pushnumber(L, static_cast<int>(size));
+	} else {
+		lua_pushnil(L);
+	}
+	return 2;
+}
+
+int LuaScriptInterface::luaPropWriteStreamClear(lua_State* L)
+{
+	// propWriteStream:clear()
+	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
+	if (propWriteStream) {
+		propWriteStream->clear();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPropWriteStreamWrite(lua_State* L)
+{
+	// propWriteStream:write(type, value)
+	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
+	if (propWriteStream) {
+		PropType_t type = getNumber<PropType_t>(L, 2);
+		if (type == PROPUINT8) {
+			uint8_t value = getNumber<uint8_t>(L, 3);
+			propWriteStream->write<uint8_t>(value);
+
+		} else if (type == PROPUINT16) {
+			uint16_t value = getNumber<uint16_t>(L, 3);
+			propWriteStream->write<uint16_t>(value);
+
+		} else if (type == PROPUINT32) {
+			uint32_t value = getNumber<uint32_t>(L, 3);
+			propWriteStream->write<uint32_t>(value);
+		} else if (type == PROPUINT64) {
+			uint64_t value = getNumber<uint64_t>(L, 3);
+			propWriteStream->write<uint64_t>(value);
+
+		} else if (type == PROPINT8) {
+			int8_t value = getNumber<int8_t>(L, 3);
+			propWriteStream->write<int8_t>(value);
+
+		} else if (type == PROPINT16) {
+			int16_t value = getNumber<int16_t>(L, 3);
+			propWriteStream->write<int16_t>(value);
+
+		} else if (type == PROPINT32) {
+			int32_t value = getNumber<int32_t>(L, 3);
+			propWriteStream->write<int32_t>(value);
+
+		} else if (type == PROPINT64) {
+			int64_t value = getNumber<int64_t>(L, 3);
+			propWriteStream->write<int64_t>(value);
+
+		} else if (type == PROPFLOAT) {
+			float value = getNumber<float>(L, 3);
+			propWriteStream->write<float>(value);
+
+		} else if (type == PROPDOUBLE) {
+			double value = getNumber<double>(L, 3);
+			propWriteStream->write<double>(value);
+
+		} else if (type == PROPCHAR) {
+			char value = getNumber<char>(L, 3);
+			propWriteStream->write<char>(value);
+
+		} else if (type == PROPBOOL) {
+			bool value = getBoolean(L, 3);
+			propWriteStream->write<bool>(value);
+
+		}
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPropWriteStreamWriteString(lua_State* L)
+{
+	// propWriteStream:writeString(string)
+	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
+	if (propWriteStream) {
+		std::string str = getString(L, 2);
+		propWriteStream->writeString(str);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}

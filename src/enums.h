@@ -550,4 +550,19 @@ using MarketOfferList = std::list<MarketOffer>;
 using HistoryMarketOfferList = std::list<HistoryMarketOffer>;
 using ShopInfoList = std::list<ShopInfo>;
 
+enum PropType_t : uint8_t {
+	PROPUINT8,
+	PROPUINT16,
+	PROPUINT32,
+	PROPUINT64,
+	PROPINT8,
+	PROPINT16,
+	PROPINT32,
+	PROPINT64,
+	PROPFLOAT,
+	PROPDOUBLE,
+	PROPCHAR,
+	PROPBOOL,
+};
+
 #endif

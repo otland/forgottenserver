@@ -490,6 +490,11 @@ class Game
 
 		void internalRemoveItems(std::vector<Item*> itemList, uint32_t amount, bool stackable);
 
+		// Serialization
+		void serializeItem(PropWriteStream* stream, const Item* item);
+		bool loadContainer(PropStream* propStream, Container* container);
+		Item* unserializeItem(PropStream* propStream, Cylinder* parent);
+
 		BedItem* getBedBySleeper(uint32_t guid) const;
 		void setBedSleeper(BedItem* bed, uint32_t guid);
 		void removeBedSleeper(uint32_t guid);
