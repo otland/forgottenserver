@@ -1028,3 +1028,21 @@ function getPlayerInstantSpellInfo(cid, spellId)
 		["manapercent"] = spell:getManaPercent()
 	}
 end
+
+function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c ~= nil and c:setItemOutfit(item, time) end
+function doSetMonsterOutfit(cid, name, time) local c = Creature(cid) return c ~= nil and c:setMonsterOutfit(name, time) end
+function doSetCreatureOutfit(cid, outfit, time)
+	local creature = Creature(cid)
+	if not creature then
+		return false
+	end
+
+	local condition = Condition(CONDITION_OUTFIT)
+	condition:setOutfit({
+		lookTypeEx = itemType:getId()
+	})
+	condition:setTicks(time)
+	creature:addCondition(condition)
+
+	return true
+end

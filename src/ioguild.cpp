@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 
 uint32_t IOGuild::getGuildIdByName(const std::string& name)
 {
-	Database* db = Database::getInstance();
+	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db->escapeString(name);
+	query << "SELECT `id` FROM `guilds` WHERE `name` = " << db.escapeString(name);
 
-	DBResult_ptr result = db->storeQuery(query.str());
+	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
 		return 0;
 	}
@@ -41,7 +41,7 @@ void IOGuild::getWarList(uint32_t guildId, GuildWarVector& guildWarVector)
 	std::ostringstream query;
 	query << "SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = " << guildId << " OR `guild2` = " << guildId << ") AND `ended` = 0 AND `status` = 1";
 
-	DBResult_ptr result = Database::getInstance()->storeQuery(query.str());
+	DBResult_ptr result = Database::getInstance().storeQuery(query.str());
 	if (!result) {
 		return;
 	}
