@@ -309,12 +309,6 @@ function Creature:addPartyCondition(combat, variant, condition, baseMana)
 	local members = party:getMembers()
 	members[#members + 1] = party:getLeader()
 
-	if #members == 1 then
-		self:sendTextMessage(MESSAGE_STATUS_SMALL, "No party members in range.")
-		position:sendMagicEffect(CONST_ME_POFF)
-		return false
-	end
-
 	local affectedMembers = {}
 	for _, member in ipairs(members) do
 		if member:getPosition():getDistance(position) <= 36 then
