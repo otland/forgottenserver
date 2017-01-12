@@ -34,27 +34,32 @@ local instruments = {
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local instrument, effect, chance = instruments[item:getId()]
+	local instrument, chance = instruments[item:getId()]
 	if instrument.chance then
-		chance = instrument.chance > math.random(0, 100)
-		if instrument.monster and chance then
+		chance = instrument.chance >= math.random(1, 100)
+
+		if instrument.monster then
 			local position = player:getPosition()
-			local monster = Game.createMonster(instrument.monster, Position(
-				position.x - math.random(-1, 1),
-				position.y - math.random(-1, 1),
-				position.z
-			), false, true)
-			
-			if monster then
-				monster:setMaster(player)
+			if Tile(position):hasFlag(TILESTATE_PROTECTIONZONE) then
+				return false
+			end
+
+			if chance then
+				local monster = Game.createMonster(instrument.monster, Position(
+					position.x - math.random(-1, 1),
+					position.y - math.random(-1, 1),
+					position.z
+				))
+
+				if monster then
+					monster:setMaster(player)
+				end
 			end
 		end
 
 		if instrument.item and chance then
 			player:addItem(instrument.item.id, instrument.item.count)
 		end
-
-		effect = instrument.effect or (chance and instrument.effects.success or instrument.effects.failure)
 	end
 
 	if instrument.transformId then
@@ -63,7 +68,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:decay()
 	end
 
-	item:getPosition():sendMagicEffect(instrument.effect or effect)
+	item:getPosition():sendMagicEffect(instrument.effects and (chance and instrument.effects.success or instrument.effects.failure) or instrument.effect)
 
 	if not chance and instrument.remove then
 		item:remove(1)

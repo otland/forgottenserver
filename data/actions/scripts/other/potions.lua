@@ -26,44 +26,59 @@ antidote:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 antidote:setParameter(COMBAT_PARAM_TARGETCASTERORTOPMOST, true)
 
 local potions = {
-	[6558] = {transform = {id = {7588, 7589}}, effect = CONST_ME_DRAWBLOOD},
+	[6558] = {transform = {id = {7588, 7589}}, effect = CONST_ME_DRAWBLOOD}, -- concentrated demonic blood
+
+	-- berserk potion
 	[7439] = {condition = berserk, vocations = {4, 8}, effect = CONST_ME_MAGIC_RED,
 			description = "Only knights may drink this potion.", text = "You feel stronger."},
 
+	-- mastermind potion
 	[7440] = {condition = mastermind, vocations = {1, 2, 5, 6}, effect = CONST_ME_MAGIC_BLUE,
 			description = "Only sorcerers and druids may drink this potion.", text = "You feel smarter."},
 
+	-- bullseye potion
 	[7443] = {condition = bullseye, vocations = {3, 7}, effect = CONST_ME_MAGIC_GREEN,
 			description = "Only paladins may drink this potion.", text = "You feel more accurate."},
 
+	-- strong health potion
 	[7588] = {health = {250, 350}, vocations = {3, 4, 7, 8}, level = 50, flask = 7634,
 			description = "Only knights and paladins of level 50 or above may drink this fluid."},
 
+	-- strong mana potion
 	[7589] = {mana = {115, 185}, vocations = {1, 2, 3, 5, 6, 7}, level = 50, flask = 7634,
 			description = "Only sorcerers, druids and paladins of level 50 or above may drink this fluid."},
 
+	-- great mana potion
 	[7590] = {mana = {150, 250}, vocations = {1, 2, 5, 6}, level = 80, flask = 7635,
 			description = "Only druids and sorcerers of level 80 or above may drink this fluid."},
 
+	-- great health potion
 	[7591] = {health = {425, 575}, vocations = {4, 8}, level = 80, flask = 7635,
 			description = "Only knights of level 80 or above may drink this fluid."},
 
-	[7618] = {health = {125, 175}, flask = 7636},
-	[7620] = {mana = {75, 125}, flask = 7636},
+	[7618] = {health = {125, 175}, flask = 7636}, -- health potion
+	[7620] = {mana = {75, 125}, flask = 7636}, -- mana potion
+
+	-- great spirit potion
 	[8472] = {health = {250, 350}, mana = {100, 200}, vocations = {3, 7}, level = 80, flask = 7635,
 			description = "Only paladins of level 80 or above may drink this fluid."},
 
+	-- ultimate health potion
 	[8473] = {health = {650, 850}, vocations = {4, 8}, level = 130, flask = 7635,
 			description = "Only knights of level 130 or above may drink this fluid."},
 
-	[8474] = {combat = antidote, flask = 7636},
-	[8704] = {health = {60, 90}, flask = 7636},
+	[8474] = {combat = antidote, flask = 7636}, -- antidote potion
+	[8704] = {health = {60, 90}, flask = 7636}, -- small health potion
+
+	-- ultimate mana potion
 	[26029] = {mana = {425, 575}, vocations = {1, 2, 5, 6}, level = 130, flask = 7635,
 			description = "Only druids and sorcerers of level 130 or above may drink this fluid."},
 
+	-- ultimate spirit potion
 	[26030] = {health = {420, 580}, mana = {250, 350}, vocations = {3, 7}, level = 130, flask = 7635,
 			description = "Only paladins of level 130 or above may drink this fluid."},
 
+	-- supreme health potion
 	[26031] = {health = {875, 1125}, vocations = {4, 8}, level = 200, flask = 7635,
 			description = "Only knights of level 200 or above may drink this fluid."}
 }
