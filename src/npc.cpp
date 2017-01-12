@@ -97,7 +97,6 @@ bool Npc::load()
 
 void Npc::reset()
 {
-	isIdle = true;
 	loaded = false;
 	walkTicks = 1500;
 	floorChange = false;
@@ -111,7 +110,6 @@ void Npc::reset()
 
 	parameters.clear();
 	shopPlayerSet.clear();
-	spectators.clear();
 }
 
 void Npc::reload()
