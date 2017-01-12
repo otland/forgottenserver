@@ -24,7 +24,6 @@
 #include "luascript.h"
 
 #include <set>
-#include <unordered_set>
 
 class Npc;
 class Player;
@@ -225,7 +224,7 @@ class Npc final : public Creature
 		std::map<std::string, std::string> parameters;
 
 		std::set<Player*> shopPlayerSet;
-		std::unordered_set<Player*> spectators;
+		std::set<Player*> spectators;
 
 		std::string name;
 		std::string filename;
