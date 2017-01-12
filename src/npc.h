@@ -211,9 +211,6 @@ class Npc final : public Creature
 
 		void setIdle(bool idle);
 		void updateIdleStatus();
-		bool getIdleStatus() const {
-			return isIdle;
-		}
 
 		bool canWalkTo(const Position& fromPos, Direction dir) const;
 		bool getRandomStep(Direction& dir) const;
