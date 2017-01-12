@@ -412,11 +412,8 @@ void Npc::setIdle(bool idle)
 
 	isIdle = idle;
 
-	if (!isIdle) {
-		g_game.addCreatureCheck(this);
-	} else {
+	if (isIdle) {
 		onIdleStatus();
-		Game::removeCreatureCheck(this);
 	}
 }
 
