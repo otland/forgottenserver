@@ -259,6 +259,10 @@ RANGE = {
 }
 
 function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
+	if self:isImmune(conditionType) then
+		return false
+	end
+
 	local condition = Condition(conditionType)
 	condition:setParameter(CONDITION_PARAM_OWNER, self:getId())
 	condition:setParameter(CONDITION_PARAM_DELAYED, true)
