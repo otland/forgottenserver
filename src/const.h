@@ -108,6 +108,8 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_YELLOWSMOKE = 168,
 	CONST_ME_GREENSMOKE = 169,
 	CONST_ME_PURPLESMOKE = 170,
+
+	CONST_ME_LAST = CONST_ME_PURPLESMOKE,
 };
 
 enum ShootType_t : uint8_t {
@@ -169,6 +171,8 @@ enum ShootType_t : uint8_t {
 
 	// for internal use, don't send to client
 	CONST_ANI_WEAPONTYPE = 0xFE, // 254
+
+	CONST_ANI_LAST = CONST_ANI_SIMPLEARROW,
 };
 
 enum SpeakClasses : uint8_t {

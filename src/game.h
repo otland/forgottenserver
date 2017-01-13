@@ -501,6 +501,9 @@ class Game
 			commands.reload();
 		}
 
+		bool hasEffect(uint8_t effectId);
+		bool hasDistanceEffect(uint8_t effectId);
+
 		Groups groups;
 		Map map;
 		Mounts mounts;

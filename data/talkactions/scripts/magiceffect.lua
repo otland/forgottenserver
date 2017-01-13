@@ -3,6 +3,12 @@ function onSay(player, words, param)
 		return true
 	end
 
-	player:getPosition():sendMagicEffect(tonumber(param))
+	local effect = tonumber(param)
+	if not Game.hasEffect(effect) then
+		player:sendCancelMessage("Invalid effect id.")
+		return false
+	end
+
+	player:getPosition():sendMagicEffect(effect)
 	return false
 end
