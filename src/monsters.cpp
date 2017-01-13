@@ -366,7 +366,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				minDamage = pugi::cast<int32_t>(attr.value());
 				maxDamage = minDamage;
-				tickInterval = 5000;
+				tickInterval = 4000;
 			} else if ((attr = node.attribute("energy"))) {
 				conditionType = CONDITION_ENERGY;
 
@@ -399,7 +399,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				tickInterval = 4000;
 			} else if ((attr = node.attribute("bleed")) || (attr = node.attribute("physical"))) {
 				conditionType = CONDITION_BLEEDING;
-				tickInterval = 5000;
+				tickInterval = 4000;
 			}
 
 			if ((attr = node.attribute("tick"))) {
@@ -537,7 +537,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				tickInterval = 10000;
 			} else if (tmpName == "poisoncondition" || tmpName == "earthcondition") {
 				conditionType = CONDITION_POISON;
-				tickInterval = 5000;
+				tickInterval = 4000;
 			} else if (tmpName == "energycondition") {
 				conditionType = CONDITION_ENERGY;
 				tickInterval = 10000;
@@ -555,7 +555,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				tickInterval = 10000;
 			} else if (tmpName == "physicalcondition" || tmpName == "bleedcondition") {
 				conditionType = CONDITION_BLEEDING;
-				tickInterval = 5000;
+				tickInterval = 4000;
 			}
 
 			if ((attr = node.attribute("tick"))) {
