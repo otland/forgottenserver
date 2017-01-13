@@ -357,9 +357,6 @@ int32_t Player::getDefense() const
 
 			case FIGHTMODE_DEFENSE:
 				return 2;
-
-			default:
-				return 0;
 		}
 	}
 
