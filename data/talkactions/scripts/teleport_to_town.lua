@@ -4,11 +4,11 @@ function onSay(player, words, param)
 	end
 
 	local town = Town(param)
-	if town == nil then
+	if not town then
 		town = Town(tonumber(param))
 	end
 
-	if town == nil then
+	if not town then
 		player:sendCancelMessage("Town not found.")
 		return false
 	end

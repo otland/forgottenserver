@@ -11,7 +11,7 @@ end
 
 function onStepOut(creature, item, position, fromPosition)
 	local player = creature:getPlayer()
-	if player == nil then
+	if not player then
 		return false
 	end
 

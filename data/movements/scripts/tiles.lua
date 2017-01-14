@@ -7,7 +7,7 @@ function onStepIn(creature, item, position, fromPosition)
 	end
 
 	local player = creature:getPlayer()
-	if player == nil or player:isInGhostMode() then
+	if not player player or player:isInGhostMode() then
 		return true
 	end
 
