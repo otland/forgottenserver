@@ -10,11 +10,10 @@ function onStepIn(creature, item, position, fromPosition)
 end
 
 function onStepOut(creature, item, position, fromPosition)
-	local player = creature:getPlayer()
-	if not player then
+	if not creature:getPlayer() then
 		return false
 	end
 
-	player:removeCondition(CONDITION_OUTFIT)
+	creature:removeCondition(CONDITION_OUTFIT)
 	return true
 end

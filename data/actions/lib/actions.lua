@@ -1,5 +1,5 @@
 function destroyItem(player, target, toPosition)
-	if not target or not target:isItem() then
+	if type(target) ~= "userdata" or not target:isItem() then
 		return false
 	end
 
@@ -8,7 +8,7 @@ function destroyItem(player, target, toPosition)
 	end
 
 	if toPosition.x == CONTAINER_POSITION then
-		player:sendCancelMessage(Game.getReturnMessage(RETURNVALUE_NOTPOSSIBLE))
+		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
 

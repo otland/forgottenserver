@@ -1,12 +1,11 @@
 function onStepIn(creature, item, position, fromPosition)
-	local player = creature:getPlayer()
-	if not player then
+	if not creature:getPlayer() then
 		return false
 	end
 
-	if player:getLevel() < item.actionid - 1000 then
-		player:sendTextMessage(MESSAGE_INFO_DESCR, "Only the worthy may pass.")
-		player:teleportTo(fromPosition, true)
+	if creature:getLevel() < item.actionid - 1000 then
+		creature:sendTextMessage(MESSAGE_INFO_DESCR, "Only the worthy may pass.")
+		creature:teleportTo(fromPosition, true)
 		return false
 	end
 	return true
