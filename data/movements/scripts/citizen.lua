@@ -1,6 +1,6 @@
 function onStepIn(creature, item, position, fromPosition)
 	if item.actionid > 30020 and item.actionid < 30050 then
-		if not creature:getPlayer() then
+		if not creature:isPlayer() then
 			return false
 		end
 

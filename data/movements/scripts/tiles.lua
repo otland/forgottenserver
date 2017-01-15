@@ -6,7 +6,7 @@ function onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 
-	if not creature:getPlayer() or creature:isInGhostMode() then
+	if not creature:isPlayer() or creature:isInGhostMode() then
 		return true
 	end
 

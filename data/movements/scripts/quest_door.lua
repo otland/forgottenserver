@@ -1,5 +1,5 @@
 function onStepIn(creature, item, position, fromPosition)
-	if not creature:getPlayer() then
+	if not creature:isPlayer() then
 		return false
 	end
 
