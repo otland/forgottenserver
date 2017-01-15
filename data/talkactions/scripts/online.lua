@@ -13,7 +13,7 @@ function onSay(player, words, param)
 
 	local playersOnline = #onlineList
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, ("%d players online."):format(playersOnline))
-	
+
 	for i = 1, playersOnline, maxPlayersPerMessage do
 		local j = math.min(i + maxPlayersPerMessage - 1, playersOnline)
 		local msg = table.concat(onlineList, ", ", i, j) .. "."
