@@ -11,12 +11,8 @@ function onCastSpell(creature, variant)
 	local monsterType = MonsterType(variant:getString())
 	if not monsterType then
 		returnValue = RETURNVALUE_CREATUREDOESNOTEXIST
-	end
-
-	if returnValue == RETURNVALUE_NOERROR then
-		if not getPlayerFlagValue(creature, PlayerFlag_CanIllusionAll) or not monsterType:isIllusionable() then
-			returnValue = RETURNVALUE_NOTPOSSIBLE
-		end
+	elseif not getPlayerFlagValue(creature, PlayerFlag_CanIllusionAll) or not monsterType:isIllusionable() then
+		returnValue = RETURNVALUE_NOTPOSSIBLE
 	end
 
 	if returnValue ~= RETURNVALUE_NOERROR then
