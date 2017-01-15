@@ -3,11 +3,7 @@ function onSay(player, words, param)
 		return true
 	end
 
-	local town = Town(param)
-	if not town then
-		town = Town(tonumber(param))
-	end
-
+	local town = Town(param) or Town(tonumber(param))
 	if not town then
 		player:sendCancelMessage("Town not found.")
 		return false
