@@ -27,7 +27,6 @@
 #include "baseevents.h"
 
 class InstantSpell;
-class ConjureSpell;
 class RuneSpell;
 class Spell;
 
@@ -240,33 +239,6 @@ class InstantSpell : public TalkAction, public Spell
 		bool hasPlayerNameParam = false;
 		bool checkLineOfSight = true;
 		bool casterTargetOrDirection = false;
-};
-
-class ConjureSpell final : public InstantSpell
-{
-	public:
-		explicit ConjureSpell(LuaScriptInterface* interface) : InstantSpell(interface) {}
-
-		bool configureEvent(const pugi::xml_node& node) final;
-		bool loadFunction(const pugi::xml_attribute& attr) final;
-
-		bool playerCastInstant(Player* player, std::string& param) final;
-
-		bool castSpell(Creature*) final {
-			return false;
-		}
-		bool castSpell(Creature*, Creature*) final {
-			return false;
-		}
-
-	protected:
-		std::string getScriptEventName() const final;
-
-		bool conjureItem(Creature* creature) const;
-
-		uint32_t conjureId = 0;
-		uint32_t conjureCount = 1;
-		uint32_t reagentId = 0;
 };
 
 class RuneSpell final : public Action, public Spell
