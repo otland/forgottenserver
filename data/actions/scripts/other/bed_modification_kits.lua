@@ -18,7 +18,7 @@ end
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local newBed = beds[item:getId()]
-	if not newBed or not target or not target:isItem() then
+	if not newBed or type(target) ~= "userdata" or not target:isItem() then
 		return false
 	end
 
