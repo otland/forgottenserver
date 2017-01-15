@@ -55,13 +55,15 @@ premiumToCreateMarketOffer = true
 checkExpiredMarketOffersEachMinutes = 60
 maxMarketOffersAtATimePerPlayer = 100
 
--- MySQL
-mysqlHost = "127.0.0.1"
-mysqlUser = "forgottenserver"
-mysqlPass = ""
-mysqlDatabase = "forgottenserver"
-mysqlPort = 3306
-mysqlSock = ""
+-- Database
+sqlHost = "127.0.0.1"
+sqlUser = "forgottenserver"
+sqlPass = ""
+sqlDatabase = "forgottenserver"
+sqlPort = 3306
+sqlSock = ""
+-- options: mysql, sqlite, odbc or pgsql
+databaseType = "mysql"
 
 -- Misc.
 allowChangeOutfit = true

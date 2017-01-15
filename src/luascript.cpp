@@ -1755,11 +1755,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::IP)
 	registerEnumIn("configKeys", ConfigManager::MOTD)
 	registerEnumIn("configKeys", ConfigManager::WORLD_TYPE)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_HOST)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_USER)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_PASS)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_DB)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_SOCK)
+	registerEnumIn("configKeys", ConfigManager::SQL_HOST)
+	registerEnumIn("configKeys", ConfigManager::SQL_USER)
+	registerEnumIn("configKeys", ConfigManager::SQL_PASS)
+	registerEnumIn("configKeys", ConfigManager::SQL_DB)
+	registerEnumIn("configKeys", ConfigManager::SQL_SOCK)
+	registerEnumIn("configKeys", ConfigManager::SQL_TYPE)
 	registerEnumIn("configKeys", ConfigManager::DEFAULT_PRIORITY)
 	registerEnumIn("configKeys", ConfigManager::MAP_AUTHOR)
 
@@ -3868,7 +3869,7 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 
 int LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 {
-	pushBoolean(L, Database::getInstance().executeQuery(getString(L, -1)));
+	pushBoolean(L, Database::getInstance()->executeQuery(getString(L, -1)));
 	return 1;
 }
 
@@ -3904,7 +3905,7 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
-	if (DBResult_ptr res = Database::getInstance().storeQuery(getString(L, -1))) {
+	if (DBResult_ptr res = Database::getInstance()->storeQuery(getString(L, -1))) {
 		lua_pushnumber(L, ScriptEnvironment::addResult(res));
 	} else {
 		pushBoolean(L, false);
@@ -3948,20 +3949,20 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 {
-	pushString(L, Database::getInstance().escapeString(getString(L, -1)));
+	pushString(L, Database::getInstance()->escapeString(getString(L, -1)));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 {
 	uint32_t length = getNumber<uint32_t>(L, 2);
-	pushString(L, Database::getInstance().escapeBlob(getString(L, 1).c_str(), length));
+	pushString(L, Database::getInstance()->escapeBlob(getString(L, 1).c_str(), length));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
-	lua_pushnumber(L, Database::getInstance().getLastInsertId());
+	lua_pushnumber(L, Database::getInstance()->getLastInsertId());
 	return 1;
 }
 
@@ -4014,7 +4015,7 @@ int LuaScriptInterface::luaResultGetStream(lua_State* L)
 		return 1;
 	}
 
-	unsigned long length;
+	uint64_t length;
 	const char* stream = res->getStream(getString(L, 2), length);
 	lua_pushlstring(L, stream, length);
 	lua_pushnumber(L, length);

@@ -146,12 +146,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	std::cout << ">> Establishing database connection..." << std::flush;
 
-	if (!Database::getInstance().connect()) {
+	if (!Database::getInstance()->connect()) {
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
 
-	std::cout << " MySQL " << Database::getClientVersion() << std::endl;
+	std::cout << "DB - " << Database::getInstance()->getClientVersion() << std::endl;
 
 	// run database manager
 	std::cout << ">> Running database manager" << std::endl;
