@@ -48,9 +48,9 @@ local reloadTypes = {
 	["spell"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells" },
 	["spells"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells" },
 
-	["talk"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions" },
-	["talkaction"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions" },
-	["talkactions"] = { targetType = RELOAD_TYPE_TALKCTIONS, name = "talk actions" },
+	["talk"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
+	["talkaction"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
+	["talkactions"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
 
 	["weapon"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" },
 	["weapons"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" }
