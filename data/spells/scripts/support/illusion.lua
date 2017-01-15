@@ -2,10 +2,6 @@ local condition = Condition(CONDITION_OUTFIT)
 condition:setTicks(180000)
 
 function onCastSpell(creature, variant)
-	if not creature:isPlayer() then
-		return false
-	end
-
 	local returnValue = RETURNVALUE_NOERROR
 	local monsterType = MonsterType(variant:getString())
 	if not monsterType then
