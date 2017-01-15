@@ -1,4 +1,4 @@
-local food = {
+local foods = {
 	2666, -- meat
 	2671, -- ham
 	2681, -- grape
@@ -8,12 +8,12 @@ local food = {
 	2696  -- cheese
 }
 
-function onCastSpell(creature, var)
-	if not creature:isPlayer() then
-		return false
+function onCastSpell(creature, variant)
+	if math.random(0, 1) == 1 then
+		creature:addItem(foods[math.random(#foods)])
 	end
 
-	creature:addItem(food[math.random(#food)])
+	creature:addItem(foods[math.random(#foods)])
 	creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 	return true
 end

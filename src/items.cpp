@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,104 +26,20 @@
 
 #include "pugicast.h"
 
-uint32_t Items::dwMajorVersion = 0;
-uint32_t Items::dwMinorVersion = 0;
-uint32_t Items::dwBuildNumber = 0;
-
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
-
-ItemType::ItemType()
-{
-	type = ITEM_TYPE_NONE;
-	alwaysOnTopOrder = 0;
-	rotateTo = 0;
-	walkStack = true;
-
-	floorChangeDown = false;
-	floorChangeNorth = false;
-	floorChangeSouth = false;
-	floorChangeSouthAlt = false;
-	floorChangeEast = false;
-	floorChangeEastAlt = false;
-	floorChangeWest = false;
-
-	allowPickupable = false;
-
-	wieldInfo = 0;
-	minReqLevel = 0;
-	minReqMagicLevel = 0;
-
-	runeMagLevel = 0;
-	runeLevel = 0;
-
-	speed = 0;
-	id = 0;
-	clientId = 0;
-	maxItems = 8;  // maximum size if this is a container
-	weight = 0;  // weight of the item, e.g. throwing distance depends on it
-	showCount = true;
-	weaponType = WEAPON_NONE;
-	slotPosition = SLOTP_HAND;
-	ammoType = AMMO_NONE;
-	shootType = CONST_ANI_NONE;
-	magicEffect = CONST_ME_NONE;
-	attack = 0;
-	defense = 0;
-	extraDefense = 0;
-	armor = 0;
-	decayTo = -1;
-	decayTime = 0;
-	stopTime = false;
-	corpseType = RACE_NONE;
-	fluidSource = FLUID_NONE;
-
-	lightLevel = 0;
-	lightColor = 0;
-
-	maxTextLen = 0;
-	canWriteText = false;
-	writeOnceItemId = 0;
-
-	transformEquipTo = 0;
-	transformDeEquipTo = 0;
-	showDuration = false;
-	showCharges = false;
-	showAttributes = false;
-	charges	= 0;
-	hitChance = 0;
-	maxHitChance = -1;
-	shootRange = 1;
-
-	combatType = COMBAT_NONE;
-
-	replaceable = true;
-
-	bedPartnerDir = DIRECTION_NORTH;
-	transformToOnUse[PLAYERSEX_MALE] = 0;
-	transformToOnUse[PLAYERSEX_FEMALE] = 0;
-	transformToFree = 0;
-
-	destroyTo = 0;
-
-	levelDoor = 0;
-
-	wareId = 0;
-}
 
 Items::Items()
 {
 	items.reserve(30000);
-}
-
-Items::~Items()
-{
-	clear();
+	nameToItems.reserve(30000);
 }
 
 void Items::clear()
 {
 	items.clear();
+	reverseItemMap.clear();
+	nameToItems.clear();
 }
 
 bool Items::reload()
@@ -141,18 +57,16 @@ bool Items::reload()
 	return true;
 }
 
+constexpr auto OTBI = OTB::Identifier{{'O','T', 'B', 'I'}};
+
 FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 {
-	FileLoader f;
-	if (!f.openFile(file.c_str(), "OTBI")) {
-		return f.getError();
-	}
+	OTB::Loader loader{file, OTBI};
 
-	uint32_t type;
-	NODE node = f.getChildNode(NO_NODE, type);
+	auto& root = loader.parseTree();
 
 	PropStream props;
-	if (f.getProps(node, props)) {
+	if (loader.getProps(root, props)) {
 		//4 byte flags
 		//attributes
 		//0x01 = version data
@@ -176,32 +90,31 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				return ERROR_INVALID_FORMAT;
 			}
 
-			const VERSIONINFO* vi;
-			if (!props.readStruct(vi)) {
+			VERSIONINFO vi;
+			if (!props.read(vi)) {
 				return ERROR_INVALID_FORMAT;
 			}
 
-			Items::dwMajorVersion = vi->dwMajorVersion; //items otb format file version
-			Items::dwMinorVersion = vi->dwMinorVersion; //client version
-			Items::dwBuildNumber = vi->dwBuildNumber; //revision
+			majorVersion = vi.dwMajorVersion; //items otb format file version
+			minorVersion = vi.dwMinorVersion; //client version
+			buildNumber = vi.dwBuildNumber; //revision
 		}
 	}
 
-	if (Items::dwMajorVersion == 0xFFFFFFFF) {
+	if (majorVersion == 0xFFFFFFFF) {
 		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
-	} else if (Items::dwMajorVersion != 3) {
+	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
-	} else if (Items::dwMinorVersion < CLIENT_VERSION_1076) {
+	} else if (minorVersion < CLIENT_VERSION_1098) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return ERROR_INVALID_FORMAT;
 	}
 
-	node = f.getChildNode(node, type);
-	while (node != NO_NODE) {
+	for(auto & itemNode : root.children) {
 		PropStream stream;
-		if (!f.getProps(node, stream)) {
-			return f.getError();
+		if (!loader.getProps(itemNode, stream)) {
+			return ERROR_INVALID_FORMAT;
 		}
 
 		uint32_t flags;
@@ -267,13 +180,13 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 						return ERROR_INVALID_FORMAT;
 					}
 
-					const lightBlock2* lb2;
-					if (!stream.readStruct(lb2)) {
+					lightBlock2 lb2;
+					if (!stream.read(lb2)) {
 						return ERROR_INVALID_FORMAT;
 					}
 
-					lightLevel = static_cast<uint8_t>(lb2->lightLevel);
-					lightColor = static_cast<uint8_t>(lb2->lightColor);
+					lightLevel = static_cast<uint8_t>(lb2.lightLevel);
+					lightColor = static_cast<uint8_t>(lb2.lightColor);
 					break;
 				}
 
@@ -317,8 +230,8 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		}
 		ItemType& iType = items[serverId];
 
-		iType.group = static_cast<itemgroup_t>(type);
-		switch (type) {
+		iType.group = static_cast<itemgroup_t>(itemNode.type);
+		switch (itemNode.type) {
 			case ITEM_GROUP_CONTAINER:
 				iType.type = ITEM_TYPE_CONTAINER;
 				break;
@@ -359,7 +272,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		iType.isHorizontal = hasBitSet(FLAG_HORIZONTAL, flags);
 		iType.isHangable = hasBitSet(FLAG_HANGABLE, flags);
 		iType.allowDistRead = hasBitSet(FLAG_ALLOWDISTREAD, flags);
-		iType.rotatable = hasBitSet(FLAG_ROTABLE, flags);
+		iType.rotatable = hasBitSet(FLAG_ROTATABLE, flags);
 		iType.canReadText = hasBitSet(FLAG_READABLE, flags);
 		iType.lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
 		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
@@ -373,8 +286,6 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		iType.lightColor = lightColor;
 		iType.wareId = wareId;
 		iType.alwaysOnTopOrder = alwaysOnTopOrder;
-
-		node = f.getNextNode(node, type);
 	}
 
 	items.shrink_to_fit();
@@ -436,6 +347,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 	}
 
 	it.name = itemNode.attribute("name").as_string();
+
+	nameToItems.insert({ asLowerCaseString(it.name), id });
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
@@ -512,19 +425,19 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		} else if (tmpStrValue == "floorchange") {
 			tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 			if (tmpStrValue == "down") {
-				it.floorChangeDown = true;
+				it.floorChange = TILESTATE_FLOORCHANGE_DOWN;
 			} else if (tmpStrValue == "north") {
-				it.floorChangeNorth = true;
+				it.floorChange = TILESTATE_FLOORCHANGE_NORTH;
 			} else if (tmpStrValue == "south") {
-				it.floorChangeSouth = true;
-			} else if (tmpStrValue == "southalt" || tmpStrValue == "southex") {
-				it.floorChangeSouthAlt = true;
+				it.floorChange = TILESTATE_FLOORCHANGE_SOUTH;
+			} else if (tmpStrValue == "southalt") {
+				it.floorChange = TILESTATE_FLOORCHANGE_SOUTH_ALT;
 			} else if (tmpStrValue == "west") {
-				it.floorChangeWest = true;
+				it.floorChange = TILESTATE_FLOORCHANGE_WEST;
 			} else if (tmpStrValue == "east") {
-				it.floorChangeEast = true;
-			} else if (tmpStrValue == "eastalt" || tmpStrValue == "eastex") {
-				it.floorChangeEastAlt = true;
+				it.floorChange = TILESTATE_FLOORCHANGE_EAST;
+			} else if (tmpStrValue == "eastalt") {
+				it.floorChange = TILESTATE_FLOORCHANGE_EAST_ALT;
 			} else {
 				std::cout << "[Warning - Items::parseItemNode] Unknown floorChange: " << valueAttribute.as_string() << std::endl;
 			}
@@ -646,19 +559,19 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				std::cout << "[Warning - Items::parseItemNode] Unknown slotType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if (tmpStrValue == "ammotype") {
-			it.ammoType = getAmmoType(valueAttribute.as_string());
+			it.ammoType = getAmmoType(asLowerCaseString(valueAttribute.as_string()));
 			if (it.ammoType == AMMO_NONE) {
 				std::cout << "[Warning - Items::parseItemNode] Unknown ammoType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if (tmpStrValue == "shoottype") {
-			ShootType_t shoot = getShootType(valueAttribute.as_string());
+			ShootType_t shoot = getShootType(asLowerCaseString(valueAttribute.as_string()));
 			if (shoot != CONST_ANI_NONE) {
 				it.shootType = shoot;
 			} else {
 				std::cout << "[Warning - Items::parseItemNode] Unknown shootType: " << valueAttribute.as_string() << std::endl;
 			}
 		} else if (tmpStrValue == "effect") {
-			MagicEffectClasses effect = getMagicEffect(valueAttribute.as_string());
+			MagicEffectClasses effect = getMagicEffect(asLowerCaseString(valueAttribute.as_string()));
 			if (effect != CONST_ME_NONE) {
 				it.magicEffect = effect;
 			} else {
@@ -745,8 +658,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		} else if (tmpStrValue == "absorbpercentall" || tmpStrValue == "absorbpercentallelements") {
 			int16_t value = pugi::cast<int16_t>(valueAttribute.value());
 			Abilities& abilities = it.getAbilities();
-			for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-				abilities.absorbPercent[i] += value;
+			for (auto& i : abilities.absorbPercent) {
+				i += value;
 			}
 		} else if (tmpStrValue == "absorbpercentelements") {
 			int16_t value = pugi::cast<int16_t>(valueAttribute.value());
@@ -853,7 +766,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 			if (combatType != COMBAT_NONE) {
 				it.combatType = combatType;
-				it.conditionDamage.set(conditionDamage);
+				it.conditionDamage.reset(conditionDamage);
 				uint32_t ticks = 0;
 				int32_t damage = 0;
 				int32_t start = 0;
@@ -993,15 +906,10 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
-	if (name.empty()) {
-		return 0;
-	}
+	auto result = nameToItems.find(asLowerCaseString(name));
 
-	const char* itemName = name.c_str();
-	for (size_t i = 100, size = items.size(); i < size; ++i) {
-		if (strcasecmp(itemName, items[i].name.c_str()) == 0) {
-			return i;
-		}
-	}
-	return 0;
+	if (result == nameToItems.end())
+		return 0;
+
+	return result->second;
 }

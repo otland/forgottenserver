@@ -26,7 +26,7 @@ function destroyItem(player, target, toPosition)
 		-- Move items outside the container
 		if target:isContainer() then
 			for i = target:getSize() - 1, 0, -1 do
-   				local containerItem = target:getItem(i)
+				local containerItem = target:getItem(i)
 				if containerItem then
 					containerItem:moveTo(toPosition)
 				end

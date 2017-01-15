@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Skunk" nameDescription="a skunk" race="blood" experience="3" speed="120" manacost="200">
 	<health now="20" max="20" />
 	<look type="106" corpse="6035" />
@@ -17,12 +17,12 @@
 		<flag runonhealth="8" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="5" />
-		<attack name="poison" interval="2000" chance="10" range="1" target="1" min="-1" max="-3" />
+		<attack name="melee" interval="2000" min="0" max="-5" />
+		<attack name="earth" interval="2000" chance="10" range="1" target="1" min="-1" max="-3" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<loot>
-		<item id="9114" chance="4910" /><!-- bulb of garlic -->
-		<item id="11191" chance="920" /><!-- skunk tail -->
+		<item name="bulb of garlic" chance="4910" />
+		<item name="skunk tail" chance="920" />
 	</loot>
 </monster>

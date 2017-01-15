@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dirtbeard" nameDescription="a dirtbeard" race="blood" experience="375" speed="300" manacost="775">
+<monster name="Dirtbeard" nameDescription="Dirtbeard" race="blood" experience="375" speed="300" manacost="775">
 	<health now="630" max="630" />
 	<look type="98" corpse="10320" />
 	<targetchange interval="5000" chance="8" />
@@ -35,12 +35,12 @@
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="2">
+		<summon name="pirate marauder" interval="4000" chance="30" max="2" />
+	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="You are no match for the scourge of the seas!" />
 		<voice sentence="You move like a seasick whale!" />
 		<voice sentence="Yarr, death to all landlubbers!" />
 	</voices>
-	<summons maxSummons="2">
-		<summon name="pirate marauder" interval="4000" chance="30" max="2" />
-	</summons>
 </monster>

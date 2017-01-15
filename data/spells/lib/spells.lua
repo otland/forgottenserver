@@ -1,7 +1,7 @@
 --Pre-made areas
 
 --Waves
-AREA_SHORTWAVE3 = {
+AREA_WAVE3 = {
 {1, 1, 1},
 {1, 1, 1},
 {0, 3, 0}
@@ -26,6 +26,35 @@ AREA_SQUAREWAVE5 = {
 {1, 1, 1},
 {0, 1, 0},
 {0, 3, 0}
+}
+
+AREA_SQUAREWAVE6 = {
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0}
+}
+
+AREA_SQUAREWAVE7 = {
+{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+{0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0}
 }
 
 --Diagonal waves
@@ -66,6 +95,17 @@ AREA_BEAM5 = {
 }
 
 AREA_BEAM7 = {
+{1},
+{1},
+{1},
+{1},
+{1},
+{1},
+{3}
+}
+
+AREA_BEAM8 = {
+{1},
 {1},
 {1},
 {1},
@@ -120,33 +160,33 @@ AREA_CROSS1X1 = {
 {0, 1, 0}
 }
 
-AREA_CROSS5X5 = {
+AREA_CIRCLE5X5 = {
 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
 {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
 {0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 {1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1},
 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 {0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
 {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
-{0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}
 }
 
-AREA_CROSS6X6 = {
+AREA_CIRCLE6X6 = {
 {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0},
-{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0},
 {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
 {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 {1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1},
 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 {0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
 {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
 {0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0},
-{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}
 }
 
@@ -208,3 +248,103 @@ CORPSES = {
 
 -- This array contains all destroyable field items
 FIELDS = {1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1500,1501,1502,1503,1504}
+
+-- The numbered-keys represents the damage values, and their table
+-- contains the minimum and maximum number of rounds of those damage values.
+RANGE = {
+[1]  = {19, 20}, [2]  = {10, 10}, [3]  = {6, 7}, [4]  = {4, 5}, [5]  = {3, 4},
+[6]  = {3, 4},   [7]  = {2, 3},   [8]  = {2, 3}, [9]  = {2, 3}, [10] = {1, 2},
+[11] = {1, 2},   [12] = {1, 2},   [13] = {1, 2}, [14] = {1, 2}, [15] = {1, 2},
+[16] = {1, 2},   [17] = {1, 2},   [18] = {1, 2}, [19] = {1, 2}
+}
+
+function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
+	if target:isImmune(conditionType) then
+		return false
+	end
+
+	local condition = Condition(conditionType)
+	condition:setParameter(CONDITION_PARAM_OWNER, self:getId())
+	condition:setParameter(CONDITION_PARAM_DELAYED, true)
+
+	if listType == 0 then
+		local exponent, value = -10, 0
+		while value < damage do
+			value = math.floor(10 * math.pow(1.2, exponent) + 0.5)
+			condition:addDamage(1, time or 4000, -value)
+
+			if value >= damage then
+				local permille = math.random(10, 1200) / 1000
+				condition:addDamage(1, time or 4000, -math.max(1, math.floor(value * permille + 0.5)))
+			else
+				exponent = exponent + 1
+			end
+		end
+	elseif listType == 1 then
+		rounds = rounds or RANGE
+		if rounds[damage] then
+			condition:addDamage(math.random(1, rounds[damage][2]), time or 4000, -damage)
+			damage = damage - 1
+		end
+
+		while damage > 0 do
+			condition:addDamage(rounds[damage] and math.random(rounds[damage][1], rounds[damage][2]) or 1, time or 4000, -damage)
+			damage = damage - (damage > 21 and math.floor(damage / 20) + math.random(0, 1) or 1)
+		end
+	elseif listType == 2 then
+		for _ = 1, rounds do
+			condition:addDamage(1, math.random(time[1], time[2]) * 1000, -damage)
+		end
+	end
+
+	target:addCondition(condition)
+	return true
+end
+
+function Creature:addPartyCondition(combat, variant, condition, baseMana)
+	local party = self:getParty()
+	if not party then
+		self:sendCancelMessage("No party members in range.")
+		self:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local members = party:getMembers()
+	members[#members + 1] = party:getLeader()
+
+	local position = self:getPosition()
+	local affectedMembers = {}
+	for _, member in ipairs(members) do
+		if member:getPosition():getDistance(position) <= 36 then
+			affectedMembers[#affectedMembers + 1] = member
+		end
+	end
+
+	if #affectedMembers <= 1 then
+		self:sendCancelMessage("No party members in range.")
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local mana = math.ceil(math.pow(0.9, #affectedMembers - 1) * baseMana * #affectedMembers)
+	if self:getMana() < mana then
+		self:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	if not combat:execute(self, variant) then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	self:addMana(baseMana - mana, false)
+	self:addManaSpent(mana - baseMana)
+
+	for _, member in ipairs(affectedMembers) do
+		member:addCondition(condition)
+	end
+	return true
+end
+

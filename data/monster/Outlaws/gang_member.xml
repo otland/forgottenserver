@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Gang Member" nameDescription="a gang member" race="blood" experience="70" speed="200" manacost="420">
+	<health now="295" max="295" />
+	<look type="151" head="114" body="19" legs="42" feet="20" corpse="20403" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="35" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-70" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element deathPercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="This is our territory!" />
+		<voice sentence="Help me guys!" />
+		<voice sentence="I don't like the way you look!" />
+		<voice sentence="You're wearing the wrong colours!" />
+		<voice sentence="Don't mess with us!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="30" chance="50110" />
+		<item name="club ring" chance="740" />
+		<item name="spear" chance="8700" />
+		<item name="studded legs" chance="5220" />
+		<item name="leather legs" chance="15330" />
+		<item name="bread" chance="4760" />
+	</loot>
+</monster>

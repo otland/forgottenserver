@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,28 +34,22 @@ class Tile;
 class Connection;
 class Quest;
 class ProtocolGame;
-typedef std::shared_ptr<ProtocolGame> ProtocolGame_ptr;
+using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
 extern Game g_game;
 
 struct TextMessage
 {
-	MessageClasses type;
+	MessageClasses type = MESSAGE_STATUS_DEFAULT;
 	std::string text;
 	Position position;
 	struct {
-		int32_t value;
+		int32_t value = 0;
 		TextColor_t color;
 	} primary, secondary;
 
-	TextMessage() {
-		primary.value = 0;
-		secondary.value = 0;
-	}
-	TextMessage(MessageClasses type, std::string text) : type(type), text(text) {
-		primary.value = 0;
-		secondary.value = 0;
-	}
+	TextMessage() = default;
+	TextMessage(MessageClasses type, std::string text) : type(type), text(std::move(text)) {}
 };
 
 class ProtocolGame final : public Protocol
@@ -69,7 +63,7 @@ class ProtocolGame final : public Protocol
 			return "gameworld protocol";
 		}
 
-		explicit ProtocolGame(Connection_ptr connection);
+		explicit ProtocolGame(Connection_ptr connection) : Protocol(connection) {}
 
 		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
@@ -80,7 +74,7 @@ class ProtocolGame final : public Protocol
 
 	private:
 		ProtocolGame_ptr getThis() {
-			return std::dynamic_pointer_cast<ProtocolGame>(shared_from_this());
+			return std::static_pointer_cast<ProtocolGame>(shared_from_this());
 		}
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
 		void disconnectClient(const std::string& message) const;
@@ -194,7 +188,6 @@ class ProtocolGame final : public Protocol
 		void sendCancelWalk();
 		void sendChangeSpeed(const Creature* creature, uint32_t speed);
 		void sendCancelTarget();
-		void sendCreatureVisible(const Creature* creature, bool visible);
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
 		void sendBasicData();
@@ -297,14 +290,6 @@ class ProtocolGame final : public Protocol
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 
-		//container
-		void AddContainerItem(NetworkMessage& msg, uint8_t cid, const Item* item);
-		void UpdateContainerItem(NetworkMessage& msg, uint8_t cid, uint16_t slot, const Item* item);
-		void RemoveContainerItem(NetworkMessage& msg, uint8_t cid, uint16_t slot);
-
-		//inventory
-		void SetInventoryItem(NetworkMessage& msg, slots_t slot, const Item* item);
-
 		//shop
 		void AddShopItem(NetworkMessage& msg, const ShopInfo& item);
 
@@ -318,24 +303,23 @@ class ProtocolGame final : public Protocol
 		void addGameTask(Callable function, Args&&... args) {
 			g_dispatcher.addTask(createTask(std::bind(function, &g_game, std::forward<Args>(args)...)));
 		}
-		
+
 		template <typename Callable, typename... Args>
 		void addGameTaskTimed(uint32_t delay, Callable function, Args&&... args) {
 			g_dispatcher.addTask(createTask(delay, std::bind(function, &g_game, std::forward<Args>(args)...)));
 		}
 
-		
 		std::unordered_set<uint32_t> knownCreatureSet;
-		Player* player;
+		Player* player = nullptr;
 
-		uint32_t eventConnect;
-		uint32_t m_challengeTimestamp;
-		uint16_t version;
+		uint32_t eventConnect = 0;
+		uint32_t challengeTimestamp = 0;
+		uint16_t version = CLIENT_VERSION_MIN;
 
-		uint8_t m_challengeRandom;
+		uint8_t challengeRandom = 0;
 
-		bool m_debugAssertSent;
-		bool m_acceptPackets;
+		bool debugAssertSent = false;
+		bool acceptPackets = false;
 };
 
 #endif

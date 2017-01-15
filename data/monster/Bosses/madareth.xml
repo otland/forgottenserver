@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Madareth" nameDescription="madareth" race="fire" experience="10000" speed="380" manacost="0">
-	<health now="55000" max="55000" />
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Madareth" nameDescription="Madareth" race="fire" experience="10000" speed="380" manacost="0">
+	<health now="75000" max="75000" />
 	<look type="12" head="77" body="116" legs="82" feet="79" corpse="6068" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
@@ -30,10 +30,10 @@
 		<voice sentence="I am going to play with yourself!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2514" chance="12650" /><!-- mastermind shield -->
-		<item id="2214" chance="8000" /><!-- ring of healing -->
-		<item id="2520" chance="7650" /><!-- demon shield -->
-		<item id="2145" chance="5800" /><!-- small amethyst -->
+		<item name="small diamond" chance="5800" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="ring of healing" chance="8000" />
+		<item name="mastermind shield" chance="12650" />
+		<item name="demon shield" chance="7650" />
 	</loot>
 </monster>

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,8 @@ enum RaidState_t {
 };
 
 struct MonsterSpawn {
-	MonsterSpawn(const char* name, uint32_t minAmount, uint32_t maxAmount) : name(name), minAmount(minAmount), maxAmount(maxAmount) {}
+	MonsterSpawn(std::string name, uint32_t minAmount, uint32_t maxAmount) :
+		name(std::move(name)), minAmount(minAmount), maxAmount(maxAmount) {}
 
 	std::string name;
 	uint32_t minAmount;
@@ -38,9 +39,9 @@ struct MonsterSpawn {
 };
 
 //How many times it will try to find a tile to add the monster to before giving up
-#define MAXIMUM_TRIES_PER_MONSTER 10
-#define CHECK_RAIDS_INTERVAL 60
-#define RAID_MINTICKS 1000
+static constexpr int32_t MAXIMUM_TRIES_PER_MONSTER = 10;
+static constexpr int32_t CHECK_RAIDS_INTERVAL = 60;
+static constexpr int32_t RAID_MINTICKS = 1000;
 
 class Raid;
 class RaidEvent;
@@ -91,27 +92,28 @@ class Raids
 		}
 
 	private:
-		LuaScriptInterface scriptInterface;
+		LuaScriptInterface scriptInterface{"Raid Interface"};
 
 		std::list<Raid*> raidList;
-		Raid* running;
-		uint64_t lastRaidEnd;
-		uint32_t checkRaidsEvent;
-		bool loaded, started;
+		Raid* running = nullptr;
+		uint64_t lastRaidEnd = 0;
+		uint32_t checkRaidsEvent = 0;
+		bool loaded = false;
+		bool started = false;
 };
 
 class Raid
 {
 	public:
-		Raid(std::string name, uint32_t interval, uint32_t marginTime, bool repeat)
-			: name(name), interval(interval), nextEvent(0), margin(marginTime), state(RAIDSTATE_IDLE), nextEventEvent(0), loaded(false), repeat(repeat) {}
+		Raid(std::string name, uint32_t interval, uint32_t marginTime, bool repeat) :
+			name(std::move(name)), interval(interval), margin(marginTime), repeat(repeat) {}
 		~Raid();
 
 		// non-copyable
 		Raid(const Raid&) = delete;
 		Raid& operator=(const Raid&) = delete;
 
-		bool loadFromXml(const std::string& _filename);
+		bool loadFromXml(const std::string& filename);
 
 		void startRaid();
 
@@ -122,7 +124,7 @@ class Raid
 		void setState(RaidState_t newState) {
 			state = newState;
 		}
-		std::string getName() const {
+		const std::string& getName() const {
 			return name;
 		}
 
@@ -145,11 +147,11 @@ class Raid
 		std::vector<RaidEvent*> raidEvents;
 		std::string name;
 		uint32_t interval;
-		uint32_t nextEvent;
+		uint32_t nextEvent = 0;
 		uint64_t margin;
-		RaidState_t state;
-		uint32_t nextEventEvent;
-		bool loaded;
+		RaidState_t state = RAIDSTATE_IDLE;
+		uint32_t nextEventEvent = 0;
+		bool loaded = false;
 		bool repeat;
 };
 
@@ -164,13 +166,6 @@ class RaidEvent
 		uint32_t getDelay() const {
 			return delay;
 		}
-		void setDelay(uint32_t newDelay) {
-			delay = newDelay;
-		}
-
-		static bool compareEvents(const RaidEvent* lhs, const RaidEvent* rhs) {
-			return lhs->getDelay() < rhs->getDelay();
-		}
 
 	private:
 		uint32_t delay;
@@ -179,7 +174,7 @@ class RaidEvent
 class AnnounceEvent final : public RaidEvent
 {
 	public:
-		AnnounceEvent() : messageType(MESSAGE_EVENT_ADVANCE) {}
+		AnnounceEvent() = default;
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
@@ -187,7 +182,7 @@ class AnnounceEvent final : public RaidEvent
 
 	private:
 		std::string message;
-		MessageClasses messageType;
+		MessageClasses messageType = MESSAGE_EVENT_ADVANCE;
 };
 
 class SingleSpawnEvent final : public RaidEvent
@@ -207,8 +202,6 @@ class AreaSpawnEvent final : public RaidEvent
 	public:
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 
-		void addMonster(const std::string& monsterName, uint32_t minAmount, uint32_t maxAmount);
-
 		bool executeEvent() final;
 
 	private:
@@ -219,8 +212,7 @@ class AreaSpawnEvent final : public RaidEvent
 class ScriptEvent final : public RaidEvent, public Event
 {
 	public:
-		explicit ScriptEvent(LuaScriptInterface* _interface);
-		explicit ScriptEvent(const ScriptEvent* copy);
+		explicit ScriptEvent(LuaScriptInterface* interface) : Event(interface) {}
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
 		bool configureEvent(const pugi::xml_node&) final {

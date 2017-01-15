@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,8 @@
 #include "enums.h"
 
 struct Outfit {
-	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) : name(name), lookType(lookType), premium(premium), unlocked(unlocked) {}
+	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) :
+		name(std::move(name)), lookType(lookType), premium(premium), unlocked(unlocked) {}
 
 	std::string name;
 	uint16_t lookType;
@@ -32,9 +33,10 @@ struct Outfit {
 };
 
 struct ProtocolOutfit {
-	ProtocolOutfit(const std::string* name, uint16_t lookType, uint8_t addons) : name(name), lookType(lookType), addons(addons) {}
+	ProtocolOutfit(const std::string& name, uint16_t lookType, uint8_t addons) :
+		name(name), lookType(lookType), addons(addons) {}
 
-	const std::string* name;
+	const std::string& name;
 	uint16_t lookType;
 	uint8_t addons;
 };
@@ -42,9 +44,9 @@ struct ProtocolOutfit {
 class Outfits
 {
 	public:
-		static Outfits* getInstance() {
+		static Outfits& getInstance() {
 			static Outfits instance;
-			return &instance;
+			return instance;
 		}
 
 		bool loadFromXml();

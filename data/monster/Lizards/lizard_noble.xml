@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lizard Noble" nameDescription="a lizard noble" race="blood" experience="2000" speed="200" manacost="0">
+	<health now="7000" max="7000" />
+	<look type="115" corpse="6041" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" />
+		<attack name="earth" interval="2000" chance="25" range="7" min="-120" max="-250">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="50" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="90" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Where are zhe guardz when you need zhem!" />
+	</voices>
+	<loot>
+		<item name="small ruby" countmax="5" chance="7100" />
+		<item name="gold coin" countmax="100" chance="91300" />
+		<item name="platinum coin" countmax="20" chance="10000" />
+		<item name="lizard leather" chance="220" />
+		<item name="lizard scale" chance="650" />
+		<item name="strong health potion" chance="2550" />
+		<item name="great health potion" chance="2900" />
+	</loot>
+</monster>

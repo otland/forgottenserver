@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,21 +53,6 @@ enum skillsid_t {
 	SKILLVALUE_PERCENT = 2,
 };
 
-enum playerinfo_t {
-	PLAYERINFO_LEVELPERCENT,
-	PLAYERINFO_HEALTH,
-	PLAYERINFO_MAXHEALTH,
-	PLAYERINFO_MANA,
-	PLAYERINFO_MAXMANA,
-	PLAYERINFO_MAGICLEVEL,
-	PLAYERINFO_MAGICLEVELPERCENT,
-};
-
-enum chaseMode_t : uint8_t {
-	CHASEMODE_STANDSTILL = 0,
-	CHASEMODE_FOLLOW = 1,
-};
-
 enum fightMode_t : uint8_t {
 	FIGHTMODE_ATTACK = 1,
 	FIGHTMODE_BALANCED = 2,
@@ -90,8 +75,8 @@ enum tradestate_t : uint8_t {
 };
 
 struct VIPEntry {
-	VIPEntry(uint32_t guid, std::string name, const std::string& description, uint32_t icon, bool notify)
-		: guid(guid), name(name), description(description), icon(icon), notify(notify) {}
+	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
+		guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify) {}
 
 	uint32_t guid;
 	std::string name;
@@ -106,23 +91,22 @@ struct OpenContainer {
 };
 
 struct OutfitEntry {
-	OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
+	constexpr OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
 
 	uint16_t lookType;
 	uint8_t addons;
 };
 
 struct Skill {
-	Skill() : tries(0), level(10), percent(0) {}
-	uint64_t tries;
-	uint16_t level;
-	uint8_t percent;
+	uint64_t tries = 0;
+	uint16_t level = 10;
+	uint8_t percent = 0;
 };
 
-typedef std::map<uint32_t, uint32_t> MuteCountMap;
+using MuteCountMap = std::map<uint32_t, uint32_t>;
 
-#define PLAYER_MAX_SPEED 1500
-#define PLAYER_MIN_SPEED 10
+static constexpr int32_t PLAYER_MAX_SPEED = 1500;
+static constexpr int32_t PLAYER_MIN_SPEED = 10;
 
 class Player final : public Creature, public Cylinder
 {
@@ -153,7 +137,7 @@ class Player final : public Creature, public Cylinder
 			return name;
 		}
 		void setName(std::string name) {
-			this->name = name;
+			this->name = std::move(name);
 		}
 		const std::string& getNameDescription() const final {
 			return name;
@@ -181,8 +165,8 @@ class Player final : public Creature, public Cylinder
 			}
 		}
 
-		void setGUID(uint32_t _guid) {
-			guid = _guid;
+		void setGUID(uint32_t guid) {
+			this->guid = guid;
 		}
 		uint32_t getGUID() const {
 			return guid;
@@ -235,11 +219,11 @@ class Player final : public Creature, public Cylinder
 		}
 		void setGuild(Guild* guild);
 
-		uint8_t getGuildLevel() const {
-			return guildLevel;
+		const GuildRank* getGuildRank() const {
+			return guildRank;
 		}
-		void setGuildLevel(uint8_t newGuildLevel) {
-			guildLevel = newGuildLevel;
+		void setGuildRank(const GuildRank* newGuildRank) {
+			guildRank = newGuildRank;
 		}
 
 		bool isGuildMate(const Player* player) const;
@@ -267,11 +251,8 @@ class Player final : public Creature, public Cylinder
 
 		uint16_t getClientIcons() const;
 
-		const GuildWarList& getGuildWarList() const {
-			return guildWarList;
-		}
-		void setGuildWarList(GuildWarList guildWarList) {
-			this->guildWarList = guildWarList;
+		const GuildWarVector& getGuildWarVector() const {
+			return guildWarVector;
 		}
 
 		Vocation* getVocation() const {
@@ -297,8 +278,8 @@ class Player final : public Creature, public Cylinder
 			return secureMode;
 		}
 
-		void setParty(Party* _party) {
-			party = _party;
+		void setParty(Party* party) {
+			this->party = party;
 		}
 		Party* getParty() const {
 			return party;
@@ -403,11 +384,17 @@ class Player final : public Creature, public Cylinder
 		uint32_t getLevel() const {
 			return level;
 		}
+		uint8_t getLevelPercent() const {
+			return levelPercent;
+		}
 		uint32_t getMagicLevel() const {
-			return getPlayerInfo(PLAYERINFO_MAGICLEVEL);
+			return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]);
 		}
 		uint32_t getBaseMagicLevel() const {
 			return magLevel;
+		}
+		uint8_t getMagicLevelPercent() const {
+			return magLevelPercent;
 		}
 		uint8_t getSoul() const {
 			return soul;
@@ -429,7 +416,6 @@ class Player final : public Creature, public Cylinder
 			return sex;
 		}
 		void setSex(PlayerSex_t);
-		int32_t getPlayerInfo(playerinfo_t playerinfo) const;
 		uint64_t getExperience() const {
 			return experience;
 		}
@@ -451,8 +437,8 @@ class Player final : public Creature, public Cylinder
 		Town* getTown() const {
 			return town;
 		}
-		void setTown(Town* _town) {
-			town = _town;
+		void setTown(Town* town) {
+			this->town = town;
 		}
 
 		void clearModalWindows();
@@ -486,10 +472,10 @@ class Player final : public Creature, public Cylinder
 		}
 
 		int32_t getMaxHealth() const final {
-			return getPlayerInfo(PLAYERINFO_MAXHEALTH);
+			return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]);
 		}
 		uint32_t getMaxMana() const {
-			return getPlayerInfo(PLAYERINFO_MAXMANA);
+			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]);
 		}
 
 		Item* getInventoryItem(slots_t slot) const;
@@ -513,7 +499,7 @@ class Player final : public Creature, public Cylinder
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
 		DepotLocker* getDepotLocker(uint32_t depotId);
-		void onReceiveMail();
+		void onReceiveMail() const;
 		bool isNearDepotBox() const;
 
 		bool canSee(const Position& pos) const final;
@@ -583,7 +569,7 @@ class Player final : public Creature, public Cylinder
 		bool updateSaleShopList(const Item* item);
 		bool hasShopItemForSale(uint32_t itemId, uint8_t subType) const;
 
-		void setChaseMode(chaseMode_t mode);
+		void setChaseMode(bool mode);
 		void setFightMode(fightMode_t mode) {
 			fightMode = mode;
 		}
@@ -597,6 +583,7 @@ class Player final : public Creature, public Cylinder
 		bool isImmune(ConditionType_t type) const final;
 		bool hasShield() const;
 		bool isAttackable() const final;
+		static bool lastHitIsPlayer(Creature* lastHitCreature);
 
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) final;
 		void changeMana(int32_t manaChange) final;
@@ -677,6 +664,7 @@ class Player final : public Creature, public Cylinder
 
 		bool hasAttacked(const Player* attacked) const;
 		void addAttacked(const Player* attacked);
+		void removeAttacked(const Player* attacked);
 		void clearAttacked();
 		void addUnjustifiedDead(const Player* attacked);
 		void sendCreatureSkull(const Creature* creature) const {
@@ -1129,10 +1117,10 @@ class Player final : public Creature, public Cylinder
 		}
 		uint32_t getNextActionTime() const;
 
-		Item* getWriteItem(uint32_t& _windowTextId, uint16_t& _maxWriteLen);
-		void setWriteItem(Item* item, uint16_t _maxWriteLen = 0);
+		Item* getWriteItem(uint32_t& windowTextId, uint16_t& maxWriteLen);
+		void setWriteItem(Item* item, uint16_t maxWriteLen = 0);
 
-		House* getEditHouse(uint32_t& _windowTextId, uint32_t& _listId);
+		House* getEditHouse(uint32_t& windowTextId, uint32_t& listId);
 		void setEditHouse(House* house, uint32_t listId = 0);
 
 		void learnInstantSpell(const std::string& spellName);
@@ -1155,9 +1143,9 @@ class Player final : public Creature, public Cylinder
 		void setNextWalkTask(SchedulerTask* task);
 		void setNextActionTask(SchedulerTask* task);
 
-		void death(Creature* _lastHitCreature) final;
-		bool dropCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified) final;
-		Item* getCorpse(Creature* _lastHitCreature, Creature* mostDamageCreature) final;
+		void death(Creature* lastHitCreature) final;
+		bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified) final;
+		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) final;
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
@@ -1180,8 +1168,8 @@ class Player final : public Creature, public Cylinder
 		size_t getFirstIndex() const final;
 		size_t getLastIndex() const final;
 		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
-		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const final;
-		Thing*getThing(size_t index) const final;
+		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const final;
+		Thing* getThing(size_t index) const final;
 
 		void internalAddThing(Thing* thing) final;
 		void internalAddThing(uint32_t index, Thing* thing) final;
@@ -1195,7 +1183,7 @@ class Player final : public Creature, public Cylinder
 		std::map<uint32_t, int32_t> storageMap;
 
 		std::vector<OutfitEntry> outfits;
-		GuildWarList guildWarList;
+		GuildWarVector guildWarVector;
 
 		std::list<ShopInfo> shopItemList;
 
@@ -1212,94 +1200,94 @@ class Player final : public Creature, public Cylinder
 		Position loginPosition;
 		Position lastWalkthroughPosition;
 
-		time_t lastLoginSaved;
-		time_t lastLogout;
+		time_t lastLoginSaved = 0;
+		time_t lastLogout = 0;
 
-		uint64_t experience;
-		uint64_t manaSpent;
-		uint64_t lastAttack;
-		uint64_t bankBalance;
-		uint64_t lastQuestlogUpdate;
-		int64_t lastFailedFollow;
-		int64_t skullTicks;
-		int64_t lastWalkthroughAttempt;
-		int64_t lastToggleMount;
+		uint64_t experience = 0;
+		uint64_t manaSpent = 0;
+		uint64_t lastAttack = 0;
+		uint64_t bankBalance = 0;
+		uint64_t lastQuestlogUpdate = 0;
+		int64_t lastFailedFollow = 0;
+		int64_t skullTicks = 0;
+		int64_t lastWalkthroughAttempt = 0;
+		int64_t lastToggleMount = 0;
 		int64_t lastPing;
 		int64_t lastPong;
-		int64_t nextAction;
+		int64_t nextAction = 0;
 
-		BedItem* bedItem;
-		Guild* guild;
-		Group* group;
+		BedItem* bedItem = nullptr;
+		Guild* guild = nullptr;
+		const GuildRank* guildRank = nullptr;
+		Group* group = nullptr;
 		Inbox* inbox;
-		Item* tradeItem;
-		Item* inventory[CONST_SLOT_LAST + 1];
-		Item* writeItem;
-		House* editHouse;
-		Npc* shopOwner;
-		Party* party;
-		Player* tradePartner;
+		Item* tradeItem = nullptr;
+ 		Item* inventory[CONST_SLOT_LAST + 1] = {};
+		Item* writeItem = nullptr;
+		House* editHouse = nullptr;
+		Npc* shopOwner = nullptr;
+		Party* party = nullptr;
+		Player* tradePartner = nullptr;
 		ProtocolGame_ptr client;
-		SchedulerTask* walkTask;
-		Town* town;
-		Vocation* vocation;
+		SchedulerTask* walkTask = nullptr;
+		Town* town = nullptr;
+		Vocation* vocation = nullptr;
 
-		uint32_t inventoryWeight;
-		uint32_t capacity;
-		uint32_t damageImmunities;
-		uint32_t conditionImmunities;
-		uint32_t conditionSuppressions;
-		uint32_t level;
-		uint32_t magLevel;
-		uint32_t actionTaskEvent;
-		uint32_t nextStepEvent;
-		uint32_t walkTaskEvent;
-		uint32_t MessageBufferTicks;
-		uint32_t lastIP;
-		uint32_t accountNumber;
-		uint32_t guid;
-		uint32_t windowTextId;
-		uint32_t editListId;
-		uint32_t manaMax;
-		int32_t varSkills[SKILL_LAST + 1];
-		int32_t varStats[STAT_LAST + 1];
-		int32_t purchaseCallback;
-		int32_t saleCallback;
-		int32_t MessageBufferCount;
-		int32_t premiumDays;
-		int32_t bloodHitCount;
-		int32_t shieldBlockCount;
-		int32_t offlineTrainingSkill;
-		int32_t offlineTrainingTime;
-		int32_t idleTime;
+		uint32_t inventoryWeight = 0;
+		uint32_t capacity = 40000;
+		uint32_t damageImmunities = 0;
+		uint32_t conditionImmunities = 0;
+		uint32_t conditionSuppressions = 0;
+		uint32_t level = 1;
+		uint32_t magLevel = 0;
+		uint32_t actionTaskEvent = 0;
+		uint32_t nextStepEvent = 0;
+		uint32_t walkTaskEvent = 0;
+		uint32_t MessageBufferTicks = 0;
+		uint32_t lastIP = 0;
+		uint32_t accountNumber = 0;
+		uint32_t guid = 0;
+		uint32_t windowTextId = 0;
+		uint32_t editListId = 0;
+		uint32_t manaMax = 0;
+		int32_t varSkills[SKILL_LAST + 1] = {};
+		int32_t varStats[STAT_LAST + 1] = {};
+		int32_t purchaseCallback = -1;
+		int32_t saleCallback = -1;
+		int32_t MessageBufferCount = 0;
+		int32_t premiumDays = 0;
+		int32_t bloodHitCount = 0;
+		int32_t shieldBlockCount = 0;
+		int32_t offlineTrainingSkill = -1;
+		int32_t offlineTrainingTime = 0;
+		int32_t idleTime = 0;
 
-		uint16_t lastStatsTrainingTime;
-		uint16_t staminaMinutes;
-		uint16_t maxWriteLen;
-		int16_t lastDepotId;
+		uint16_t lastStatsTrainingTime = 0;
+		uint16_t staminaMinutes = 2520;
+		uint16_t maxWriteLen = 0;
+		int16_t lastDepotId = -1;
 
-		uint8_t soul;
-		uint8_t blessings;
-		uint8_t guildLevel;
-		uint8_t levelPercent;
-		uint8_t magLevelPercent;
+		uint8_t soul = 0;
+		uint8_t blessings = 0;
+		uint8_t levelPercent = 0;
+		uint8_t magLevelPercent = 0;
 
-		PlayerSex_t sex;
-		OperatingSystem_t operatingSystem;
-		BlockType_t lastAttackBlockType;
-		tradestate_t tradeState;
-		chaseMode_t chaseMode;
-		fightMode_t fightMode;
-		AccountType_t accountType;
+		PlayerSex_t sex = PLAYERSEX_FEMALE;
+		OperatingSystem_t operatingSystem = CLIENTOS_NONE;
+		BlockType_t lastAttackBlockType = BLOCK_NONE;
+		tradestate_t tradeState = TRADE_NONE;
+		fightMode_t fightMode = FIGHTMODE_ATTACK;
+		AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
-		bool secureMode;
-		bool inMarket;
-		bool wasMounted;
-		bool ghostMode;
-		bool pzLocked;
-		bool isConnecting;
-		bool addAttackSkillPoint;
-		bool inventoryAbilities[CONST_SLOT_LAST + 1];
+		bool chaseMode = false;
+		bool secureMode = false;
+		bool inMarket = false;
+		bool wasMounted = false;
+		bool ghostMode = false;
+		bool pzLocked = false;
+		bool isConnecting = false;
+		bool addAttackSkillPoint = false;
+		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 
 		static uint32_t playerAutoID;
 

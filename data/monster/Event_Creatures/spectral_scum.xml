@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spectral Scum" nameDescription="Spectral Scum" race="undead" experience="0" speed="230" manacost="0">
+	<health now="1" max="1" />
+	<look type="195" head="0" body="0" legs="0" feet="0" corpse="6070" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="0" />
+		<attack name="drunk" interval="5000" chance="10" range="2">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="18" defense="19" />
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="10">
+		<voice sentence="BBooze! More booze!, Harrr Harrr!" />
+		<voice sentence="Burp, Fart." />
+		<voice sentence="Nothing better than plundering and getting palstered!" />
+		<voice sentence="Yarrr!, A pirate's unlife for me!" />
+	</voices>
+</monster>

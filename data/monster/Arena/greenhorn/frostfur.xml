@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Frostfur" nameDescription="frostfur" race="blood" experience="35" speed="170" manacost="0">
+<monster name="Frostfur" nameDescription="Frostfur" race="blood" experience="35" speed="170" manacost="0">
 	<health now="65" max="65" />
 	<look type="52" corpse="7349" />
 	<flags>
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="30" />
+		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>
 	<defenses armor="2" defense="3" />
 	<elements>

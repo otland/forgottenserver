@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,36 +23,17 @@
 #include "player.h"
 #include "networkmessage.h"
 
-class MissionState;
 class Mission;
 class Quest;
 
-typedef std::list<Mission> MissionsList;
-typedef std::list<Quest> QuestsList;
-
-class MissionState
-{
-	public:
-		MissionState() = default;
-		MissionState(std::string description, int32_t missionID) : description(description), missionID(missionID) {}
-
-		int32_t getMissionID() const {
-			return missionID;
-		}
-		std::string getMissionDescription() const {
-			return description;
-		}
-
-	private:
-		std::string description;
-		int32_t missionID;
-};
+using MissionsList = std::list<Mission>;
+using QuestsList = std::list<Quest>;
 
 class Mission
 {
 	public:
-		Mission(std::string name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue)
-			: mainState(nullptr), name(name), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
+		Mission(std::string name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue) :
+			name(std::move(name)), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
 
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;
@@ -69,8 +50,8 @@ class Mission
 			return endValue;
 		}
 
-		std::map<int32_t, MissionState> state;
-		MissionState* mainState;
+		std::map<int32_t, std::string> descriptions;
+		std::string mainDescription;
 
 	private:
 		std::string name;
@@ -82,8 +63,8 @@ class Mission
 class Quest
 {
 	public:
-		Quest(std::string name, uint16_t id, int32_t startStorageID, int32_t startStorageValue)
-			: name(name), startStorageID(startStorageID), startStorageValue(startStorageValue), id(id) {}
+		Quest(std::string name, uint16_t id, int32_t startStorageID, int32_t startStorageValue) :
+			name(std::move(name)), startStorageID(startStorageID), startStorageValue(startStorageValue), id(id) {}
 
 		bool isCompleted(Player* player) const;
 		bool isStarted(Player* player) const;

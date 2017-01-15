@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Mutated Rat" nameDescription="a mutated rat" race="blood" experience="450" speed="220" manacost="0">
+	<health now="550" max="550" />
+	<look type="305" corpse="9871" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-158" poison="100" />
+		<attack name="earth" interval="2000" chance="15" range="7" min="-45" max="-85">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" length="5" spread="0" min="-80" max="-100">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" target="1" speedchange="-600" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" range="7" radius="3" target="0" min="-30" max="-70">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" range="7" radius="3" target="0" min="-80">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="5" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-10" />
+		<element holyPercent="10" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrrrrrrrrrrrr!" />
+		<voice sentence="Fcccccchhhhhh" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="65" chance="38000" />
+		<item name="gold coin" countmax="65" chance="40000" />
+		<item name="stealth ring" chance="540" />
+		<item name="mouldy cheese" chance="930" />
+		<item name="skull of Ratha" chance="20180" />
+		<item name="halberd" chance="3000" />
+		<item name="plate shield" chance="3750" />
+		<item name="tower shield" chance="60" />
+		<item name="green mushroom" chance="1390" />
+		<item name="stone herb" chance="4920" />
+		<item name="health potion" chance="560" />
+		<item name="spellbook of enlightenment" chance="290" />
+		<item name="mutated rat tail" chance="3770" />
+	</loot>
+</monster>

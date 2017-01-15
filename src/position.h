@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,15 +33,13 @@ enum Direction : uint8_t {
 	DIRECTION_NORTHEAST = DIRECTION_DIAGONAL_MASK | 3,
 
 	DIRECTION_LAST = DIRECTION_NORTHEAST,
-	DIRECTION_SOUTH_ALT = 8,
-	DIRECTION_EAST_ALT = 9,
-	DIRECTION_NONE = 10,
+	DIRECTION_NONE = 8,
 };
 
 struct Position
 {
-	Position() : x(0), y(0), z(0) {}
-	Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
+	constexpr Position() = default;
+	constexpr Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
 
 	template<int_fast32_t deltax, int_fast32_t deltay>
 	inline static bool areInRange(const Position& p1, const Position& p2) {
@@ -73,9 +71,9 @@ struct Position
 		return std::abs(Position::getOffsetZ(p1, p2));
 	}
 
-	uint16_t x;
-	uint16_t y;
-	uint8_t z;
+	uint16_t x = 0;
+	uint16_t y = 0;
+	uint8_t z = 0;
 
 	bool operator<(const Position& p) const {
 		if (z < p.z) {

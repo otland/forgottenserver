@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Panda" nameDescription="a panda" race="blood" experience="23" speed="150" manacost="300">
 	<health now="80" max="80" />
 	<look type="123" corpse="6049" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -31,8 +31,8 @@
 		<voice sentence="Groar" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="70500" /><!-- meat -->
-		<item id="2671" countmax="2" chance="39000" /><!-- ham -->
-		<item id="12401" chance="10000" /><!-- bamboo stick -->
+		<item name="meat" countmax="4" chance="70500" />
+		<item name="ham" countmax="2" chance="39000" />
+		<item name="bamboo stick" chance="10000" />
 	</loot>
 </monster>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Drasilla" nameDescription="drasilla" race="blood" experience="700" speed="170" manacost="0">
-	<health now="1320" max="1320" />
+<monster name="Drasilla" nameDescription="Drasilla" race="blood" experience="700" speed="170" manacost="0">
+	<health now="1260" max="1260" />
 	<look type="34" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -14,7 +14,7 @@
 		<flag runonhealth="100" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="60" />
+		<attack name="melee" interval="2000" min="0" max="-120" />
 		<attack name="fire" interval="6000" chance="60" min="-100" max="-180" length="8" spread="3">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>

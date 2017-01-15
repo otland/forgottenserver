@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,6 +102,7 @@ enum clientVersion_t {
 	CLIENT_VERSION_1031 = 54,
 	CLIENT_VERSION_1035 = 55,
 	CLIENT_VERSION_1076 = 56,
+	CLIENT_VERSION_1098 = 57,
 };
 
 enum rootattrib_ {
@@ -156,24 +157,24 @@ enum itemflags_t {
 	FLAG_PICKUPABLE = 1 << 5,
 	FLAG_MOVEABLE = 1 << 6,
 	FLAG_STACKABLE = 1 << 7,
-	FLAG_FLOORCHANGEDOWN = 1 << 8,
-	FLAG_FLOORCHANGENORTH = 1 << 9,
-	FLAG_FLOORCHANGEEAST = 1 << 10,
-	FLAG_FLOORCHANGESOUTH = 1 << 11,
-	FLAG_FLOORCHANGEWEST = 1 << 12,
+	FLAG_FLOORCHANGEDOWN = 1 << 8, // unused
+	FLAG_FLOORCHANGENORTH = 1 << 9, // unused
+	FLAG_FLOORCHANGEEAST = 1 << 10, // unused
+	FLAG_FLOORCHANGESOUTH = 1 << 11, // unused
+	FLAG_FLOORCHANGEWEST = 1 << 12, // unused
 	FLAG_ALWAYSONTOP = 1 << 13,
 	FLAG_READABLE = 1 << 14,
-	FLAG_ROTABLE = 1 << 15,
+	FLAG_ROTATABLE = 1 << 15,
 	FLAG_HANGABLE = 1 << 16,
 	FLAG_VERTICAL = 1 << 17,
 	FLAG_HORIZONTAL = 1 << 18,
-	FLAG_CANNOTDECAY = 1 << 19,
+	FLAG_CANNOTDECAY = 1 << 19, // unused
 	FLAG_ALLOWDISTREAD = 1 << 20,
-	FLAG_UNUSED = 1 << 21,
+	FLAG_UNUSED = 1 << 21, // unused
 	FLAG_CLIENTCHARGES = 1 << 22, /* deprecated */
 	FLAG_LOOKTHROUGH = 1 << 23,
 	FLAG_ANIMATION = 1 << 24,
-	FLAG_FULLTILE = 1 << 25,
+	FLAG_FULLTILE = 1 << 25, // unused
 	FLAG_FORCEUSE = 1 << 26,
 };
 

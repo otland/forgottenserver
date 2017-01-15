@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 class Protocol : public std::enable_shared_from_this<Protocol>
 {
 	public:
-		explicit Protocol(Connection_ptr connection) : m_connection(connection), m_key(), m_encryptionEnabled(false), m_checksumEnabled(true), m_rawMessages(false) {}
+		explicit Protocol(Connection_ptr connection) : connection(connection) {}
 		virtual ~Protocol() = default;
 
 		// non-copyable
@@ -40,22 +40,22 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		virtual void onConnect() {}
 
 		bool isConnectionExpired() const {
-			return m_connection.expired();
+			return connection.expired();
 		}
 
 		Connection_ptr getConnection() const {
-			return m_connection.lock();
+			return connection.lock();
 		}
 
 		uint32_t getIP() const;
 
 		//Use this function for autosend messages only
 		OutputMessage_ptr getOutputBuffer(int32_t size);
-		
+
 		OutputMessage_ptr& getCurrentBuffer() {
-			return m_outputBuffer;
+			return outputBuffer;
 		}
-		
+
 		void send(OutputMessage_ptr msg) const {
 			if (auto connection = getConnection()) {
 				connection->send(msg);
@@ -69,19 +69,13 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 			}
 		}
 		void enableXTEAEncryption() {
-			m_encryptionEnabled = true;
-		}
-		void disableXTEAEncryption() {
-			m_encryptionEnabled = false;
+			encryptionEnabled = true;
 		}
 		void setXTEAKey(const uint32_t* key) {
-			memcpy(m_key, key, sizeof(*key) * 4);
-		}
-		void enableChecksum() {
-			m_checksumEnabled = true;
+			memcpy(this->key, key, sizeof(*key) * 4);
 		}
 		void disableChecksum() {
-			m_checksumEnabled = false;
+			checksumEnabled = false;
 		}
 
 		void XTEA_encrypt(OutputMessage& msg) const;
@@ -89,19 +83,19 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		static bool RSA_decrypt(NetworkMessage& msg);
 
 		void setRawMessages(bool value) {
-			m_rawMessages = value;
+			rawMessages = value;
 		}
 
 		virtual void release() {}
 		friend class Connection;
 
-		OutputMessage_ptr m_outputBuffer;
+		OutputMessage_ptr outputBuffer;
 	private:
-		const ConnectionWeak_ptr m_connection;
-		uint32_t m_key[4];
-		bool m_encryptionEnabled;
-		bool m_checksumEnabled;
-		bool m_rawMessages;
+		const ConnectionWeak_ptr connection;
+		uint32_t key[4] = {};
+		bool encryptionEnabled = false;
+		bool checksumEnabled = true;
+		bool rawMessages = false;
 };
 
 #endif

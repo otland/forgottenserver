@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,26 +31,22 @@ class RSA;
 class NetworkMessage
 {
 	public:
-		typedef uint16_t MsgSize_t;
+		using MsgSize_t = uint16_t;
 		// Headers:
 		// 2 bytes for unencrypted message size
 		// 4 bytes for checksum
 		// 2 bytes for encrypted message size
-		static const MsgSize_t INITIAL_BUFFER_POSITION = 8;
+		static constexpr MsgSize_t INITIAL_BUFFER_POSITION = 8;
 		enum { HEADER_LENGTH = 2 };
 		enum { CHECKSUM_LENGTH = 4 };
 		enum { XTEA_MULTIPLE = 8 };
 		enum { MAX_BODY_LENGTH = NETWORKMESSAGE_MAXSIZE - HEADER_LENGTH - CHECKSUM_LENGTH - XTEA_MULTIPLE };
 		enum { MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10 };
 
-		NetworkMessage() {
-			reset();
-		}
+		NetworkMessage() = default;
 
 		void reset() {
-			overrun = false;
-			length = 0;
-			position = INITIAL_BUFFER_POSITION;
+			info = {};
 		}
 
 		// simply read functions for incoming message
@@ -59,11 +55,11 @@ class NetworkMessage
 				return 0;
 			}
 
-			return buffer[position++];
+			return buffer[info.position++];
 		}
 
 		uint8_t getPreviousByte() {
-			return buffer[--position];
+			return buffer[--info.position];
 		}
 
 		template<typename T>
@@ -72,8 +68,9 @@ class NetworkMessage
 				return 0;
 			}
 
-			T v = *reinterpret_cast<T*>(buffer + position);
-			position += sizeof(T);
+			T v;
+			memcpy(&v, buffer + info.position, sizeof(T));
+			info.position += sizeof(T);
 			return v;
 		}
 
@@ -82,7 +79,7 @@ class NetworkMessage
 
 		// skips count unknown/unused bytes in an incoming message
 		void skipBytes(int16_t count) {
-			position += count;
+			info.position += count;
 		}
 
 		// simply write functions for outgoing message
@@ -91,8 +88,8 @@ class NetworkMessage
 				return;
 			}
 
-			buffer[position++] = value;
-			length++;
+			buffer[info.position++] = value;
+			info.length++;
 		}
 
 		template<typename T>
@@ -101,9 +98,9 @@ class NetworkMessage
 				return;
 			}
 
-			*reinterpret_cast<T*>(buffer + position) = value;
-			position += sizeof(T);
-			length += sizeof(T);
+			memcpy(buffer + info.position, &value, sizeof(T));
+			info.position += sizeof(T);
+			info.length += sizeof(T);
 		}
 
 		void addBytes(const char* bytes, size_t size);
@@ -120,25 +117,23 @@ class NetworkMessage
 		void addItemId(uint16_t itemId);
 
 		MsgSize_t getLength() const {
-			return length;
+			return info.length;
 		}
 
 		void setLength(MsgSize_t newLength) {
-			length = newLength;
+			info.length = newLength;
 		}
 
 		MsgSize_t getBufferPosition() const {
-			return position;
+			return info.position;
 		}
 
-		void setBufferPosition(MsgSize_t pos) {
-			position = pos;
+		uint16_t getLengthHeader() const {
+			return static_cast<uint16_t>(buffer[0] | buffer[1] << 8);
 		}
-
-		int32_t decodeHeader();
 
 		bool isOverrun() const {
-			return overrun;
+			return info.overrun;
 		}
 
 		uint8_t* getBuffer() {
@@ -150,27 +145,30 @@ class NetworkMessage
 		}
 
 		uint8_t* getBodyBuffer() {
-			position = 2;
+			info.position = 2;
 			return buffer + HEADER_LENGTH;
 		}
 
 	protected:
 		inline bool canAdd(size_t size) const {
-			return (size + position) < MAX_BODY_LENGTH;
+			return (size + info.position) < MAX_BODY_LENGTH;
 		}
 
 		inline bool canRead(int32_t size) {
-			if ((position + size) > (length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - position)) {
-				overrun = true;
+			if ((info.position + size) > (info.length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - info.position)) {
+				info.overrun = true;
 				return false;
 			}
 			return true;
 		}
 
-		MsgSize_t length;
-		MsgSize_t position;
-		bool overrun;
+		struct NetworkMessageInfo {
+			MsgSize_t length = 0;
+			MsgSize_t position = INITIAL_BUFFER_POSITION;
+			bool overrun = false;
+		};
 
+		NetworkMessageInfo info;
 		uint8_t buffer[NETWORKMESSAGE_MAXSIZE];
 };
 

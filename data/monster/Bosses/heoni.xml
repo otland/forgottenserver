@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Heoni" nameDescription="heoni" race="blood" experience="515" speed="300" manacost="0">
-	<health now="795" max="795" />
+<monster name="Heoni" nameDescription="Heoni" race="blood" experience="515" speed="300" manacost="0">
+	<health now="900" max="900" />
 	<look type="239" corpse="6302" />
 	<targetchange interval="2000" chance="10" />
 	<flags>
@@ -17,7 +17,7 @@
 		<flag runonhealth="300" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="40" poison="480" />
+		<attack name="melee" interval="2000" min="0" max="-120" poison="480" />
 		<attack name="poisoncondition" interval="2000" chance="15" length="8" spread="3" min="-20" max="-240">
 			<attribute key="areaEffect" value="poison" />
 		</attack>

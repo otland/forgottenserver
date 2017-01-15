@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Poison Spider" nameDescription="a poison spider" race="venom" experience="22" speed="160" manacost="270">
+	<health now="26" max="26" />
+	<look type="36" corpse="5974" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="6" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-20" poison="30" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="4" chance="75000" />
+		<item name="poison spider shell" chance="1140" />
+	</loot>
+</monster>

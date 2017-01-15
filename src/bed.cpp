@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,8 @@
 
 extern Game g_game;
 
-BedItem::BedItem(uint16_t _id) : Item(_id)
+BedItem::BedItem(uint16_t id) : Item(id)
 {
-	house = nullptr;
 	internalRemoveSleeper();
 }
 
@@ -185,10 +184,10 @@ void BedItem::wakeUp(Player* player)
 
 	if (sleeperGUID != 0) {
 		if (!player) {
-			Player _player(nullptr);
-			if (IOLoginData::loadPlayerById(&_player, sleeperGUID)) {
-				regeneratePlayer(&_player);
-				IOLoginData::savePlayer(&_player);
+			Player regenPlayer(nullptr);
+			if (IOLoginData::loadPlayerById(&regenPlayer, sleeperGUID)) {
+				regeneratePlayer(&regenPlayer);
+				IOLoginData::savePlayer(&regenPlayer);
 			}
 		} else {
 			regeneratePlayer(player);

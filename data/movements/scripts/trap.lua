@@ -7,14 +7,16 @@ local traps = {
 
 function onStepIn(creature, item, position, fromPosition)
 	local trap = traps[item.itemid]
-	if trap ~= nil then
-		if creature:isMonster() then
-			doTargetCombatHealth(0, creature, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
-		end
+	if trap == nil then
+		return true
+	end
 
-		if trap.transformTo ~= nil then
-			item:transform(trap.transformTo)
-		end
+	if creature:isMonster() then
+		doTargetCombatHealth(0, creature, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
+	end
+
+	if trap.transformTo ~= nil then
+		item:transform(trap.transformTo)
 	end
 	return true
 end
@@ -25,10 +27,10 @@ function onStepOut(creature, item, position, fromPosition)
 end
 
 function onRemoveItem(item, tile, position)
-	local thingPos = item:getPosition()
-	if getDistanceBetween(thingPos, position) > 0 then
+	local itemPosition = item:getPosition()
+	if itemPosition:getDistance(position) > 0 then
 		item:transform(item.itemid - 1)
-		thingPos:sendMagicEffect(CONST_ME_POFF)
+		itemPosition:sendMagicEffect(CONST_ME_POFF)
 	end
 	return true
 end

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,16 +26,13 @@
 #include "scheduler.h"
 #include "server.h"
 
-bool Connection::logError = true;
-
 extern ConfigManager g_config;
 
-Connection_ptr ConnectionManager::createConnection(boost::asio::ip::tcp::socket* socket,
-        boost::asio::io_service& io_service, ServicePort_ptr servicer)
+Connection_ptr ConnectionManager::createConnection(boost::asio::io_service& io_service, ConstServicePort_ptr servicePort)
 {
 	std::lock_guard<std::mutex> lockClass(connectionManagerLock);
 
-	auto connection = std::make_shared<Connection>(socket, io_service, servicer);
+	auto connection = std::make_shared<Connection>(io_service, servicePort);
 	connections.insert(connection);
 	return connection;
 }
@@ -54,8 +51,8 @@ void ConnectionManager::closeAll()
 	for (const auto& connection : connections) {
 		try {
 			boost::system::error_code error;
-			connection->socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			connection->socket->close(error);
+			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
+			connection->socket.close(error);
 		} catch (boost::system::system_error&) {
 		}
 	}
@@ -74,12 +71,12 @@ void Connection::close(bool force)
 		return;
 	}
 	connectionState = CONNECTION_STATE_CLOSED;
-	
+
 	if (protocol) {
 		g_dispatcher.addTask(
 			createTask(std::bind(&Protocol::release, protocol)));
 	}
-	
+
 	if (messageQueue.empty() || force) {
 		closeSocket();
 	} else {
@@ -89,18 +86,15 @@ void Connection::close(bool force)
 
 void Connection::closeSocket()
 {
-	if (socket->is_open()) {
+	if (socket.is_open()) {
 		try {
 			readTimer.cancel();
 			writeTimer.cancel();
 			boost::system::error_code error;
-			socket->shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			socket->close(error);
+			socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
+			socket.close(error);
 		} catch (boost::system::system_error& e) {
-			if (logError) {
-				std::cout << "[Network error - Connection::closeSocket] " << e.what() << std::endl;
-				logError = false;
-			}
+			std::cout << "[Network error - Connection::closeSocket] " << e.what() << std::endl;
 		}
 	}
 }
@@ -126,15 +120,11 @@ void Connection::accept()
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
 		// Read size of the first packet
-		boost::asio::async_read(*socket,
+		boost::asio::async_read(socket,
 		                        boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
-		if (logError) {
-			std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
-			logError = false;
-		}
-
+		std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
 	}
 }
@@ -144,12 +134,10 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
 	readTimer.cancel();
 
-	int32_t size = msg.decodeHeader();
-	if (error || size <= 0 || size >= NETWORKMESSAGE_MAXSIZE - 16) {
+	if (error) {
 		close(FORCE_CLOSE);
-	}
-
-	if (connectionState != CONNECTION_STATE_OPEN) {
+		return;
+	} else if (connectionState != CONNECTION_STATE_OPEN) {
 		return;
 	}
 
@@ -165,6 +153,12 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		packetsSent = 0;
 	}
 
+	uint16_t size = msg.getLengthHeader();
+	if (size == 0 || size >= NETWORKMESSAGE_MAXSIZE - 16) {
+		close(FORCE_CLOSE);
+		return;
+	}
+
 	try {
 		readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
@@ -172,14 +166,10 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 		// Read packet content
 		msg.setLength(size + NetworkMessage::HEADER_LENGTH);
-		boost::asio::async_read(*socket, boost::asio::buffer(msg.getBodyBuffer(), size),
+		boost::asio::async_read(socket, boost::asio::buffer(msg.getBodyBuffer(), size),
 		                        std::bind(&Connection::parsePacket, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
-		if (logError) {
-			std::cout << "[Network error - Connection::parseHeader] " << e.what() << std::endl;
-			logError = false;
-		}
-
+		std::cout << "[Network error - Connection::parseHeader] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
 	}
 }
@@ -191,9 +181,8 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 	if (error) {
 		close(FORCE_CLOSE);
-	}
-
-	if (connectionState != CONNECTION_STATE_OPEN) {
+		return;
+	} else if (connectionState != CONNECTION_STATE_OPEN) {
 		return;
 	}
 
@@ -238,15 +227,11 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		                                    std::placeholders::_1));
 
 		// Wait to the next packet
-		boost::asio::async_read(*socket,
+		boost::asio::async_read(socket,
 		                        boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
-		if (logError) {
-			std::cout << "[Network error - Connection::parsePacket] " << e.what() << std::endl;
-			logError = false;
-		}
-
+		std::cout << "[Network error - Connection::parsePacket] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
 	}
 }
@@ -273,14 +258,12 @@ void Connection::internalSend(const OutputMessage_ptr& msg)
 		writeTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                     std::placeholders::_1));
 
-		boost::asio::async_write(*socket,
+		boost::asio::async_write(socket,
 		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
 		                         std::bind(&Connection::onWriteOperation, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
-		if (logError) {
-			std::cout << "[Network error - Connection::internalSend] " << e.what() << std::endl;
-			logError = false;
-		}
+		std::cout << "[Network error - Connection::internalSend] " << e.what() << std::endl;
+		close(FORCE_CLOSE);
 	}
 }
 
@@ -290,7 +273,7 @@ uint32_t Connection::getIP()
 
 	// IP-address is expressed in network byte order
 	boost::system::error_code error;
-	const boost::asio::ip::tcp::endpoint endpoint = socket->remote_endpoint(error);
+	const boost::asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error);
 	if (error) {
 		return 0;
 	}

@@ -1,30 +1,18 @@
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE)
-combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MORTAREA)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 
-local condition = Condition(CONDITION_CURSED)
-condition:setParameter(CONDITION_PARAM_DELAYED, 1)
+function onTargetCreature(creature, target)
+	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.5) + 7
+	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.9) + 8
+	local damage = math.random(math.floor(min), math.floor(max))
+	creature:addDamageCondition(target, CONDITION_CURSED, 0, damage)
+	return true
+end
 
-condition:addDamage(1, 3000, -45)
-condition:addDamage(1, 3000, -40)
-condition:addDamage(1, 3000, -35)
-condition:addDamage(1, 3000, -34)
-condition:addDamage(2, 3000, -33)
-condition:addDamage(2, 3000, -32)
-condition:addDamage(2, 3000, -31)
-condition:addDamage(2, 3000, -30)
-condition:addDamage(3, 3000, -29)
-condition:addDamage(3, 3000, -25)
-condition:addDamage(3, 3000, -24)
-condition:addDamage(4, 3000, -23)
-condition:addDamage(4, 3000, -20)
-condition:addDamage(5, 3000, -19)
-condition:addDamage(5, 3000, -15)
-condition:addDamage(6, 3000, -10)
-condition:addDamage(10, 3000, -5)
-combat:setCondition(condition)
+combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

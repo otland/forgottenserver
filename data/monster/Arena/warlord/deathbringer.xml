@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Deathbringer" nameDescription="deathbringer" race="undead" experience="5100" speed="300" manacost="0">
-	<health now="10000" max="10000" />
+<monster name="Deathbringer" nameDescription="Deathbringer" race="undead" experience="5100" speed="300" manacost="0">
+	<health now="8440" max="8440" />
 	<look type="231" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
@@ -13,7 +13,7 @@
 		<flag targetdistance="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="155" />
+		<attack name="melee" interval="2000" min="0" max="-465" />
 		<attack name="fire" interval="1000" chance="10" range="7" radius="4" target="1" min="-80" max="-120">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="redspark" />
@@ -21,7 +21,7 @@
 		<attack name="fire" interval="3000" chance="17" length="8" spread="3" min="-300" max="-450">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
-		<attack name="poison" interval="2000" chance="12" length="8" spread="3" min="-300" max="-450">
+		<attack name="earth" interval="2000" chance="12" length="8" spread="3" min="-300" max="-450">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="10" radius="6" target="0" min="-80" max="-100">

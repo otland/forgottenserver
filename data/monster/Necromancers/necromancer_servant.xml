@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Necromancer Servant" nameDescription="a necromancer servant" race="blood" experience="590" speed="210" manacost="390">
+	<health now="600" max="600" />
+	<look type="9" corpse="20455" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" />
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="11" defense="11" />
+	<elements>
+		<element physicalPercent="-8" />
+		<element deathPercent="-7" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Blib!" />
+		<voice sentence="Blub!" />
+	</voices>
+</monster>

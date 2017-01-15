@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,17 +26,17 @@
 class Item;
 class Creature;
 
-#define INDEX_WHEREEVER -1
+static constexpr int32_t INDEX_WHEREEVER = -1;
 
 enum cylinderflags_t {
-	FLAG_NOLIMIT = 1 << 0,		//Bypass limits like capacity/container limits, blocking items/creatures etc.
-	FLAG_IGNOREBLOCKITEM = 1 << 1,	//Bypass movable blocking item checks
-	FLAG_IGNOREBLOCKCREATURE = 1 << 2,	//Bypass creature checks
-	FLAG_CHILDISOWNER = 1 << 3,		//Used by containers to query capacity of the carrier (player)
-	FLAG_PATHFINDING = 1 << 4,		//An additional check is done for floor changing/teleport items
-	FLAG_IGNOREFIELDDAMAGE = 1 << 5,	//Bypass field damage checks
-	FLAG_IGNORENOTMOVEABLE = 1 << 6,	//Bypass check for mobility
-	FLAG_IGNOREAUTOSTACK = 1 << 7,    //queryDestination will not try to stack items together
+	FLAG_NOLIMIT = 1 << 0, //Bypass limits like capacity/container limits, blocking items/creatures etc.
+	FLAG_IGNOREBLOCKITEM = 1 << 1, //Bypass movable blocking item checks
+	FLAG_IGNOREBLOCKCREATURE = 1 << 2, //Bypass creature checks
+	FLAG_CHILDISOWNER = 1 << 3, //Used by containers to query capacity of the carrier (player)
+	FLAG_PATHFINDING = 1 << 4, //An additional check is done for floor changing/teleport items
+	FLAG_IGNOREFIELDDAMAGE = 1 << 5, //Bypass field damage checks
+	FLAG_IGNORENOTMOVEABLE = 1 << 6, //Bypass check for mobility
+	FLAG_IGNOREAUTOSTACK = 1 << 7, //queryDestination will not try to stack items together
 };
 
 enum cylinderlink_t {
@@ -187,7 +187,7 @@ class Cylinder : virtual public Thing
 		  * \param countMap a map to put the itemID:count mapping in
 		  * \returns a map mapping item id to count (same as first argument)
 		  */
-		virtual std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const;
+		virtual std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
 
 		/**
 		  * Adds an object to the cylinder without sending to the client(s)
@@ -210,27 +210,27 @@ class VirtualCylinder final : public Cylinder
 	public:
 		static VirtualCylinder* virtualCylinder;
 
-		virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const {
+		virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-		virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const {
+		virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const override {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-		virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t) const {
+		virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t) const override {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-		virtual Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) {
+		virtual Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override {
 			return nullptr;
 		}
 
-		virtual void addThing(Thing*) {}
-		virtual void addThing(int32_t, Thing*) {}
-		virtual void updateThing(Thing*, uint16_t, uint32_t) {}
-		virtual void replaceThing(uint32_t, Thing*) {}
-		virtual void removeThing(Thing*, uint32_t) {}
+		virtual void addThing(Thing*) override {}
+		virtual void addThing(int32_t, Thing*) override {}
+		virtual void updateThing(Thing*, uint16_t, uint32_t) override {}
+		virtual void replaceThing(uint32_t, Thing*) override {}
+		virtual void removeThing(Thing*, uint32_t) override {}
 
-		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) {}
-		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) {}
+		virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) override {}
+		virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) override {}
 
 		bool isPushable() const override {
 			return false;
@@ -239,7 +239,7 @@ class VirtualCylinder final : public Cylinder
 			return 1;
 		}
 		std::string getDescription(int32_t) const override {
-			return std::string();
+			return {};
 		}
 		bool isRemoved() const override {
 			return false;

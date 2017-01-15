@@ -6,20 +6,21 @@ local vocation = {}
 local town = {}
 local destination = {}
 
-function onCreatureAppear(cid) npcHandler:onCreatureAppear(cid) end
-function onCreatureDisappear(cid) npcHandler:onCreatureDisappear(cid) end
-function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
-function onThink() npcHandler:onThink() end
+function onCreatureAppear(cid)              npcHandler:onCreatureAppear(cid)            end
+function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid)         end
+function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
+function onThink()                          npcHandler:onThink()                        end
 
 local function greetCallback(cid)
-	local level = getPlayerLevel(cid)
+	local player = Player(cid)
+	local level = player:getLevel()
 	if level < 8 then
 		npcHandler:say("CHILD! COME BACK WHEN YOU HAVE GROWN UP!", cid)
 		return false
 	elseif level > 9 then
-		npcHandler:say(getCreatureName(cid) .. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
+		npcHandler:say(player:getName() .. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
 		return false
-	elseif getPlayerVocation(cid) > 0 then
+	elseif player:getVocation():getId() > 0 then
 		npcHandler:say("YOU ALREADY HAVE A VOCATION!", cid)
 		return false
 	end
@@ -29,13 +30,15 @@ end
 local function creatureSayCallback(cid, type, msg)
 	if not npcHandler:isFocused(cid) then
 		return false
-	elseif msgcontains(msg, "yes") and npcHandler.topic[cid] == 0 then
+	end
+
+	if msgcontains(msg, "yes") and npcHandler.topic[cid] == 0 then
 		npcHandler:say("IN WHICH TOWN DO YOU WANT TO LIVE: {RHYVES}?", cid)
 		npcHandler.topic[cid] = 1
 	elseif npcHandler.topic[cid] == 1 then
 		if msgcontains(msg, "rhyves") then
 			town[cid] = 2
-			destination[cid] = {x = 159, y = 387, z = 6}
+			destination[cid] = Position(159, 387, 6)
 			npcHandler:say("IN RHYVES! AND WHAT PROFESSION HAVE YOU CHOSEN: {KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?", cid)
 			npcHandler.topic[cid] = 2
 		else
@@ -63,14 +66,16 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 3 then
 		if msgcontains(msg, "yes") then
+			local player = Player(cid)
 			npcHandler:say("SO BE IT!", cid)
-			doPlayerSetVocation(cid, vocation[cid])
-			doPlayerSetTown(cid, town[cid])
+			player:setVocation(Vocation(vocation[cid]))
+			player:setTown(Town(town[cid]))
+
 			local destination = destination[cid]
 			npcHandler:releaseFocus(cid)
-			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_TELEPORT)
-			doTeleportThing(cid, destination)
-			doSendMagicEffect(destination, CONST_ME_TELEPORT)
+			player:teleportTo(destination)
+			player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
+			destination:sendMagicEffect(CONST_ME_TELEPORT)
 		else
 			npcHandler:say("THEN WHAT? {KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?", cid)
 			npcHandler.topic[cid] = 2

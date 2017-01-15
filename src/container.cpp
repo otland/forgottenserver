@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,25 +25,17 @@
 
 extern Game g_game;
 
-Container::Container(uint16_t _type) : Item(_type)
-{
-	maxSize = items[_type].maxItems;
-	totalWeight = 0;
-	serializationCount = 0;
-	unlocked = true;
-	pagination = false;
-}
+Container::Container(uint16_t type) :
+	Container(type, items[type].maxItems) {}
 
-Container::Container(uint16_t _type, uint16_t _size) : Item(_type)
-{
-	maxSize = _size;
-	totalWeight = 0;
-	serializationCount = 0;
-	unlocked = true;
-	pagination = false;
-}
+Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
+	Item(type),
+	maxSize(size),
+	unlocked(unlocked),
+	pagination(pagination)
+{}
 
-Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
+Container::Container(Tile* tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
 {
 	TileItemVector* itemVector = tile->getItemList();
 	if (itemVector) {
@@ -55,11 +47,6 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 		}
 	}
 
-	maxSize = 30;
-	totalWeight = 0;
-	serializationCount = 0;
-	unlocked = false;
-	pagination = true;
 	setParent(tile);
 }
 
@@ -81,7 +68,7 @@ Container::~Container()
 
 Item* Container::clone() const
 {
-	Container* clone = reinterpret_cast<Container*>(Item::clone());
+	Container* clone = static_cast<Container*>(Item::clone());
 	for (Item* item : itemlist) {
 		clone->addItem(item->clone());
 	}
@@ -120,24 +107,22 @@ Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-bool Container::unserializeItemNode(FileLoader& f, NODE node, PropStream& propStream)
+bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream)
 {
-	bool ret = Item::unserializeItemNode(f, node, propStream);
+	bool ret = Item::unserializeItemNode(loader, node, propStream);
 	if (!ret) {
 		return false;
 	}
 
-	uint32_t type;
-	NODE nodeItem = f.getChildNode(node, type);
-	while (nodeItem) {
+	for (auto& itemNode : node.children) {
 		//load container items
-		if (type != OTBM_ITEM) {
+		if (itemNode.type != OTBM_ITEM) {
 			// unknown type
 			return false;
 		}
 
 		PropStream itemPropStream;
-		if (!f.getProps(nodeItem, itemPropStream)) {
+		if (!loader.getProps(itemNode, itemPropStream)) {
 			return false;
 		}
 
@@ -146,14 +131,12 @@ bool Container::unserializeItemNode(FileLoader& f, NODE node, PropStream& propSt
 			return false;
 		}
 
-		if (!item->unserializeItemNode(f, nodeItem, itemPropStream)) {
+		if (!item->unserializeItemNode(loader, itemNode, itemPropStream)) {
 			return false;
 		}
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
-
-		nodeItem = f.getNextNode(nodeItem, type);
 	}
 	return true;
 }
@@ -232,48 +215,48 @@ bool Container::isHoldingItem(const Item* item) const
 
 void Container::onAddContainerItem(Item* item)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendAddContainerItem(this, item);
 	}
 
 	//event methods
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onAddContainerItem(item);
 	}
 }
 
 void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
 void Container::onRemoveContainerItem(uint32_t index, Item* item)
 {
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send change to client
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onRemoveContainerItem(this, item);
 	}
 }
@@ -636,7 +619,7 @@ uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType/* = -1*/) 
 	return count;
 }
 
-std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const
+std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {
 	for (Item* item : itemlist) {
 		countMap[item->getID()] += item->getItemCount();

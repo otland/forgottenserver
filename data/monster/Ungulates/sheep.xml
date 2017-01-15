@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Sheep" nameDescription="a sheep" race="blood" experience="0" speed="110" manacost="250">
 	<health now="20" max="20" />
 	<look type="14" corpse="5991" />
@@ -26,7 +26,7 @@
 		<voice sentence="Maeh" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="4" chance="70000" />	<!-- meat -->
-		<item id="11236" chance="1000" />				<!-- wool -->
+		<item name="meat" countmax="4" chance="70000" />
+		<item name="wool" chance="1000" />
 	</loot>
 </monster>

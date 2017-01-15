@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Diblis The Fair" nameDescription="Diblis The Fair" race="undead" experience="1800" speed="280" manacost="0">
+	<health now="1500" max="1500" />
+	<look type="287" corpse="8937" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-380" />
+		<attack name="death" interval="1000" chance="12" target="1" min="0" max="-155">
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="1000" chance="12" min="100" max="235">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="3000" chance="25" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-10" />
+		<element holyPercent="-15" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity death="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Banshee" interval="4500" chance="50" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I envy you to be slain by someone as beautiful as me." />
+		<voice sentence="I will drain your ugly corpses of the last drop of blood." />
+	</voices>
+	<loot>
+		<item name="black pearl" chance="8900" countmax="2" />
+		<item name="gold coin" chance="100000" countmax="99" />
+		<item name="platinum coin" chance="50000" countmax="5" />
+		<item name="ring of healing (faster regeneration)" chance="14111" />
+		<item id="2229" chance="15000" />
+		<item name="vampire shield" chance="2100" />
+		<item name="strong health potion" chance="1500" />
+		<item name="spellbook of lost souls" chance="300" />
+		<item name="vampire lord token" chance="100000" />
+		<item name="scum bag" chance="500" />
+	</loot>
+</monster>

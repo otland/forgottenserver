@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dark Torturer" nameDescription="a dark torturer" race="undead" experience="4650" speed="240" manacost="0">
+	<health now="7350" max="7350" />
+	<look type="234" corpse="6328" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-781">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+		<attack name="dark torturer skill reducer" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="10" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="90" />
+		<element energyPercent="30" />
+		<element deathPercent="10" />
+		<element icePercent="-10" />
+		<element holyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="You like it, don't you?" />
+		<voice sentence="IahaEhheAie!" />
+		<voice sentence="It's party time!" />
+		<voice sentence="Harrr, Harrr!" />
+		<voice sentence="The torturer is in!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="40000" />
+		<item name="platinum coin" countmax="8" chance="55000" />
+		<item name="golden legs" chance="30" />
+		<item id="2558" chance="5250" /><!-- saw -->
+		<item name="steel boots" chance="5050" />
+		<item name="ham" countmax="2" chance="60000" />
+		<item name="orichalcum pearl" countmax="2" chance="2760" />
+		<item name="cat's paw" chance="2222" />
+		<item name="jewelled backpack" chance="1192" />
+		<item name="soul orb" chance="23000" />
+		<item id="6300" chance="2008" /><!-- death ring -->
+		<item name="demonic essence" chance="8520" />
+		<item name="concentrated demonic blood" countmax="3" chance="33333" />
+		<item name="assassin star" countmax="5" chance="2222" />
+		<item name="vile axe" chance="480" />
+		<item name="butcher's axe" chance="850" />
+		<item name="great mana potion" countmax="2" chance="14830" />
+		<item name="great health potion" countmax="2" chance="10000" />
+		<item name="gold ingot" chance="3140" />
+	</loot>
+</monster>

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc" nameDescription="a orc" race="blood" experience="25" speed="150" manacost="300">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Orc" nameDescription="an orc" race="blood" experience="25" speed="150" manacost="300">
 	<health now="70" max="70" />
 	<look type="5" corpse="5966" />
 	<targetchange interval="4000" chance="0" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="15" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="25" attack="20" />
+		<attack name="melee" interval="2000" min="0" max="-35" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>
@@ -32,14 +32,14 @@
 		<voice sentence="Prek tars, dekklep zurk." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="14" chance="84810" /><!-- gold coin -->
-		<item id="2666" chance="10160" /><!-- meat -->
-		<item id="2484" chance="7860" /><!-- studded armor -->
-		<item id="2482" chance="2950" /><!-- studded helmet -->
-		<item id="2526" chance="7300" /><!-- studded shield -->
-		<item id="2385" chance="5850" /><!-- sabre -->
-		<item id="2386" chance="4960" /><!-- axe -->
-		<item id="11113" chance="210" /><!-- orc tooth -->
-		<item id="12435" chance="590" /><!-- orc leather -->
+		<item name="gold coin" countmax="14" chance="84810" />
+		<item name="sabre" chance="5850" />
+		<item name="axe" chance="4960" />
+		<item name="studded helmet" chance="2950" />
+		<item name="studded armor" chance="7860" />
+		<item name="studded shield" chance="7300" />
+		<item name="meat" chance="10160" />
+		<item name="orc tooth" chance="210" />
+		<item name="orc leather" chance="590" />
 	</loot>
 </monster>

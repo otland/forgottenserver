@@ -10,49 +10,49 @@ if NpcHandler == nil then
 	NPCHANDLER_TALKDELAY = TALKDELAY_ONTHINK
 
 	-- Constant indexes for defining default messages.
-	MESSAGE_GREET 			= 1 -- When the player greets the npc.
-	MESSAGE_FAREWELL 		= 2 -- When the player unGreets the npc.
-	MESSAGE_BUY 			= 3 -- When the npc asks the player if he wants to buy something.
-	MESSAGE_ONBUY 			= 4 -- When the player successfully buys something via talk.
-	MESSAGE_BOUGHT			= 5 -- When the player bought something through the shop window.
-	MESSAGE_SELL 			= 6 -- When the npc asks the player if he wants to sell something.
-	MESSAGE_ONSELL 			= 7 -- When the player successfully sells something via talk.
-	MESSAGE_SOLD			= 8 -- When the player sold something through the shop window.
-	MESSAGE_MISSINGMONEY		= 9 -- When the player does not have enough money.
-	MESSAGE_NEEDMONEY		= 10 -- Same as above, used for shop window.
-	MESSAGE_MISSINGITEM		= 11 -- When the player is trying to sell an item he does not have.
-	MESSAGE_NEEDITEM		= 12 -- Same as above, used for shop window.
-	MESSAGE_NEEDSPACE 		= 13 -- When the player don't have any space to buy an item
-	MESSAGE_NEEDMORESPACE		= 14 -- When the player has some space to buy an item, but not enough space
-	MESSAGE_IDLETIMEOUT		= 15 -- When the player has been idle for longer then idleTime allows.
-	MESSAGE_WALKAWAY		= 16 -- When the player walks out of the talkRadius of the npc.
-	MESSAGE_DECLINE			= 17 -- When the player says no to something.
-	MESSAGE_SENDTRADE		= 18 -- When the npc sends the trade window to the player
-	MESSAGE_NOSHOP			= 19 -- When the npc's shop is requested but he doesn't have any
-	MESSAGE_ONCLOSESHOP		= 20 -- When the player closes the npc's shop window
-	MESSAGE_ALREADYFOCUSED		= 21 -- When the player already has the focus of this npc.
-	MESSAGE_WALKAWAY_MALE		= 22 -- When a male player walks out of the talkRadius of the npc.
-	MESSAGE_WALKAWAY_FEMALE		= 23 -- When a female player walks out of the talkRadius of the npc.
+	MESSAGE_GREET = 1 -- When the player greets the npc.
+	MESSAGE_FAREWELL = 2 -- When the player unGreets the npc.
+	MESSAGE_BUY = 3 -- When the npc asks the player if he wants to buy something.
+	MESSAGE_ONBUY = 4 -- When the player successfully buys something via talk.
+	MESSAGE_BOUGHT = 5 -- When the player bought something through the shop window.
+	MESSAGE_SELL = 6 -- When the npc asks the player if he wants to sell something.
+	MESSAGE_ONSELL = 7 -- When the player successfully sells something via talk.
+	MESSAGE_SOLD = 8 -- When the player sold something through the shop window.
+	MESSAGE_MISSINGMONEY = 9 -- When the player does not have enough money.
+	MESSAGE_NEEDMONEY = 10 -- Same as above, used for shop window.
+	MESSAGE_MISSINGITEM = 11 -- When the player is trying to sell an item he does not have.
+	MESSAGE_NEEDITEM = 12 -- Same as above, used for shop window.
+	MESSAGE_NEEDSPACE = 13 -- When the player don't have any space to buy an item
+	MESSAGE_NEEDMORESPACE = 14 -- When the player has some space to buy an item, but not enough space
+	MESSAGE_IDLETIMEOUT = 15 -- When the player has been idle for longer then idleTime allows.
+	MESSAGE_WALKAWAY = 16 -- When the player walks out of the talkRadius of the npc.
+	MESSAGE_DECLINE = 17 -- When the player says no to something.
+	MESSAGE_SENDTRADE = 18 -- When the npc sends the trade window to the player
+	MESSAGE_NOSHOP = 19 -- When the npc's shop is requested but he doesn't have any
+	MESSAGE_ONCLOSESHOP = 20 -- When the player closes the npc's shop window
+	MESSAGE_ALREADYFOCUSED = 21 -- When the player already has the focus of this npc.
+	MESSAGE_WALKAWAY_MALE = 22 -- When a male player walks out of the talkRadius of the npc.
+	MESSAGE_WALKAWAY_FEMALE = 23 -- When a female player walks out of the talkRadius of the npc.
 
 	-- Constant indexes for callback functions. These are also used for module callback ids.
-	CALLBACK_CREATURE_APPEAR 	= 1
+	CALLBACK_CREATURE_APPEAR = 1
 	CALLBACK_CREATURE_DISAPPEAR	= 2
-	CALLBACK_CREATURE_SAY 		= 3
-	CALLBACK_ONTHINK 		= 4
-	CALLBACK_GREET 			= 5
-	CALLBACK_FAREWELL 		= 6
-	CALLBACK_MESSAGE_DEFAULT 	= 7
-	CALLBACK_PLAYER_ENDTRADE 	= 8
-	CALLBACK_PLAYER_CLOSECHANNEL	= 9
-	CALLBACK_ONBUY			= 10
-	CALLBACK_ONSELL			= 11
-	CALLBACK_ONADDFOCUS		= 18
-	CALLBACK_ONRELEASEFOCUS		= 19
-	CALLBACK_ONTRADEREQUEST		= 20
+	CALLBACK_CREATURE_SAY = 3
+	CALLBACK_ONTHINK = 4
+	CALLBACK_GREET = 5
+	CALLBACK_FAREWELL = 6
+	CALLBACK_MESSAGE_DEFAULT = 7
+	CALLBACK_PLAYER_ENDTRADE = 8
+	CALLBACK_PLAYER_CLOSECHANNEL = 9
+	CALLBACK_ONBUY = 10
+	CALLBACK_ONSELL = 11
+	CALLBACK_ONADDFOCUS = 18
+	CALLBACK_ONRELEASEFOCUS = 19
+	CALLBACK_ONTRADEREQUEST = 20
 
 	-- Addidional module callback ids
-	CALLBACK_MODULE_INIT		= 12
-	CALLBACK_MODULE_RESET		= 13
+	CALLBACK_MODULE_INIT = 12
+	CALLBACK_MODULE_RESET = 13
 
 	-- Constant strings defining the keywords to replace in the default messages.
 	TAG_PLAYERNAME = "|PLAYERNAME|"
@@ -76,29 +76,29 @@ if NpcHandler == nil then
 		topic = nil,
 		messages = {
 			-- These are the default replies of all npcs. They can/should be changed individually for each npc.
-			[MESSAGE_GREET]		= "Greetings, |PLAYERNAME|.",
-			[MESSAGE_FAREWELL] 	= "Good bye, |PLAYERNAME|.",
-			[MESSAGE_BUY] 		= "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
-			[MESSAGE_ONBUY]		= "Here you are.",
-			[MESSAGE_BOUGHT] 	= "Bought |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
-			[MESSAGE_SELL] 		= "Do you want to sell |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
-			[MESSAGE_ONSELL] 	= "Here you are, |TOTALCOST| gold.",
-			[MESSAGE_SOLD]	 	= "Sold |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
-			[MESSAGE_MISSINGMONEY]	= "You don't have enough money.",
-			[MESSAGE_NEEDMONEY] 	= "You don't have enough money.",
-			[MESSAGE_MISSINGITEM] 	= "You don't have so many.",
-			[MESSAGE_NEEDITEM]	= "You do not have this object.",
-			[MESSAGE_NEEDSPACE]	= "You do not have enough capacity.",
-			[MESSAGE_NEEDMORESPACE]	= "You do not have enough capacity for all items.",
-			[MESSAGE_IDLETIMEOUT] 	= "Good bye.",
-			[MESSAGE_WALKAWAY] 	= "Good bye.",
-			[MESSAGE_DECLINE]	= "Then not.",
-			[MESSAGE_SENDTRADE]	= "Of course, just browse through my wares.",
-			[MESSAGE_NOSHOP]	= "Sorry, I'm not offering anything.",
-			[MESSAGE_ONCLOSESHOP]	= "Thank you, come back whenever you're in need of something else.",
-			[MESSAGE_ALREADYFOCUSED]= "|PLAYERNAME|, I am already talking to you.",
-			[MESSAGE_WALKAWAY_MALE]	= "Good bye.",
-			[MESSAGE_WALKAWAY_FEMALE] 	= "Good bye."
+			[MESSAGE_GREET] = "Greetings, |PLAYERNAME|.",
+			[MESSAGE_FAREWELL] = "Good bye, |PLAYERNAME|.",
+			[MESSAGE_BUY] = "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
+			[MESSAGE_ONBUY] = "Here you are.",
+			[MESSAGE_BOUGHT] = "Bought |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
+			[MESSAGE_SELL] = "Do you want to sell |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
+			[MESSAGE_ONSELL] = "Here you are, |TOTALCOST| gold.",
+			[MESSAGE_SOLD] = "Sold |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
+			[MESSAGE_MISSINGMONEY] = "You don't have enough money.",
+			[MESSAGE_NEEDMONEY] = "You don't have enough money.",
+			[MESSAGE_MISSINGITEM] = "You don't have so many.",
+			[MESSAGE_NEEDITEM] = "You do not have this object.",
+			[MESSAGE_NEEDSPACE] = "You do not have enough capacity.",
+			[MESSAGE_NEEDMORESPACE] = "You do not have enough capacity for all items.",
+			[MESSAGE_IDLETIMEOUT] = "Good bye.",
+			[MESSAGE_WALKAWAY] = "Good bye.",
+			[MESSAGE_DECLINE] = "Then not.",
+			[MESSAGE_SENDTRADE] = "Of course, just browse through my wares.",
+			[MESSAGE_NOSHOP] = "Sorry, I'm not offering anything.",
+			[MESSAGE_ONCLOSESHOP] = "Thank you, come back whenever you're in need of something else.",
+			[MESSAGE_ALREADYFOCUSED] = "|PLAYERNAME|, I am already talking to you.",
+			[MESSAGE_WALKAWAY_MALE] = "Good bye.",
+			[MESSAGE_WALKAWAY_FEMALE] = "Good bye."
 		}
 	}
 
@@ -175,16 +175,16 @@ if NpcHandler == nil then
 	-- Used when the npc should un-focus the player.
 	function NpcHandler:releaseFocus(focus)
 		if shop_cost[focus] ~= nil then
-			table.remove(shop_amount, focus)
-			table.remove(shop_cost, focus)
-			table.remove(shop_rlname, focus)
-			table.remove(shop_itemid, focus)
-			table.remove(shop_container, focus)
-			table.remove(shop_npcuid, focus)
-			table.remove(shop_eventtype, focus)
-			table.remove(shop_subtype, focus)
-			table.remove(shop_destination, focus)
-			table.remove(shop_premium, focus)
+			shop_amount[focus] = nil
+			shop_cost[focus] = nil
+			shop_rlname[focus] = nil
+			shop_itemid[focus] = nil
+			shop_container[focus] = nil
+			shop_npcuid[focus] = nil
+			shop_eventtype[focus] = nil
+			shop_subtype[focus] = nil
+			shop_destination[focus] = nil
+			shop_premium[focus] = nil
 		end
 
 		if self.eventDelayedSay[focus] then
@@ -201,7 +201,7 @@ if NpcHandler == nil then
 				pos = k
 			end
 		end
-		table.remove(self.focuses, pos)
+		self.focuses[pos] = nil
 
 		self.eventSay[focus] = nil
 		self.eventDelayedSay[focus] = nil
@@ -238,7 +238,7 @@ if NpcHandler == nil then
 	-- Adds a module to this npchandler and inits it.
 	function NpcHandler:addModule(module)
 		if self.modules ~= nil then
-			self.modules[#self.modules +1] = module
+			self.modules[#self.modules + 1] = module
 			module:init(self)
 		end
 	end
@@ -335,7 +335,7 @@ if NpcHandler == nil then
 
 	-- Greets a new player.
 	function NpcHandler:greet(cid)
-		if cid ~= 0  then
+		if cid ~= 0 then
 			local callback = self:getCallback(CALLBACK_GREET)
 			if callback == nil or callback(cid) then
 				if self:processModuleCallback(CALLBACK_GREET, cid) then
@@ -406,7 +406,7 @@ if NpcHandler == nil then
 				if self.keywordHandler ~= nil then
 					if self:isFocused(cid) and msgtype == TALKTYPE_PRIVATE_PN or not self:isFocused(cid) then
 						local ret = self.keywordHandler:processMessage(cid, msg)
-						if(not ret) then
+						if not ret then
 							local callback = self:getCallback(CALLBACK_MESSAGE_DEFAULT)
 							if callback ~= nil and callback(cid, msgtype, msg) then
 								self.talkStart[cid] = os.time()
@@ -597,7 +597,7 @@ if NpcHandler == nil then
 		for aux = 1, #msgs do
 			self.eventDelayedSay[pcid][aux] = {}
 			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
-			ret[#ret +1] = self.eventDelayedSay[pcid][aux]
+			ret[#ret + 1] = self.eventDelayedSay[pcid][aux]
 		end
 		return(ret)
 	end
