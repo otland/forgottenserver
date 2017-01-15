@@ -126,17 +126,17 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	if targetType.shrine then
 		if not isInArray(targetType.shrine, targetId) then
-			player:sendTextMessage(RETURNVALUE_NOTPOSSIBLE)
+			player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 			return true
 		end
 
 		if player:getMana() < items.valuables.mana then
-			player:sendTextMessage(RETURNVALUE_NOTENOUGHMANA)
+			player:sendCancelTextMessage(RETURNVALUE_NOTENOUGHMANA)
 			return true
 		end
 
 		if player:getSoul() < items.valuables.soul then
-			player:sendTextMessage(RETURNVALUE_NOTENOUGHSOUL)
+			player:sendCancelTextMessage(RETURNVALUE_NOTENOUGHSOUL)
 			return true
 		end
 		player:addSoul(-items.valuables.soul)
