@@ -7,7 +7,6 @@ function onCastSpell(creature, variant)
 	end
 
 	local returnValue = RETURNVALUE_NOERROR
-
 	local monsterType = MonsterType(variant:getString())
 	if not monsterType then
 		returnValue = RETURNVALUE_CREATUREDOESNOTEXIST
@@ -23,7 +22,6 @@ function onCastSpell(creature, variant)
 
 	condition:setOutfit(monsterType:getOutfit())
 	creature:addCondition(condition)
-
 	creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
 	return true
 end
