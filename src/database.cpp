@@ -22,22 +22,22 @@
 #include "databasepgsql.h"
 #include "database.h"
 
-Database* Database::instance;
-
-Database* Database::getInstance() 		
+Database& Database::getInstance() 		
 {
-	if (!instance) {
-		if (g_config.getString(ConfigManager::SQL_TYPE) == "mysql"){
-			instance = new DatabaseMYsql();
-		}else if (g_config.getString(ConfigManager::SQL_TYPE) == "odbc"){
-				//instance = new DatabaseODBC();
-		}else if (g_config.getString(ConfigManager::SQL_TYPE) == "sqlite"){
-				//instance = new DatabaseSQLite();
-		}else if (g_config.getString(ConfigManager::SQL_TYPE) == "pgsql"){
-			instance = new DatabasePGsql();
-		}
+	if (g_config.getString(ConfigManager::SQL_TYPE) == "mysql") {
+		static DatabaseMYsql instanceMY;
+		return instanceMY;
 	}
-	return instance;
+	else if (g_config.getString(ConfigManager::SQL_TYPE) == "odbc") {
+	}
+	else if (g_config.getString(ConfigManager::SQL_TYPE) == "sqlite") {		
+	}
+	else if (g_config.getString(ConfigManager::SQL_TYPE) == "pgsql") {
+		static DatabasePGsql instancePG;
+		return instancePG;
+	}
+	static Database instanceDB; // NULL
+	return instanceDB;
 }
 
 bool Database::executeQuery(const std::string& query)
@@ -122,7 +122,7 @@ bool DBInsert::addRow(const std::string& row)
 	// adds new row to buffer
 	const size_t rowLength = row.length();
 	length += rowLength;	
-	if (length > Database::getInstance()->getMaxPacketSize() && !execute()) {
+	if (length > Database::getInstance().getMaxPacketSize() && !execute()) {
 		return false;
 	}
 
@@ -156,7 +156,7 @@ bool DBInsert::execute()
 	}
 
 	// executes buffer
-	bool res = Database::getInstance()->executeQuery(query + values);
+	bool res = Database::getInstance().executeQuery(query + values);
 	values.clear();
 	length = query.length();
 	return res;
