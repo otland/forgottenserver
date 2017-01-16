@@ -4,7 +4,7 @@ function onSay(player, words, param)
 	end
 
 	local target = Player(param)
-	if target == nil then
+	if not target then
 		player:sendCancelMessage("A player with that name is not online.")
 		return false
 	end
