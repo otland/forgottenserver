@@ -131,12 +131,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 
 		if player:getMana() < items.valuables.mana then
-			player:sendCancelTextMessage(RETURNVALUE_NOTENOUGHMANA)
+			player:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
 			return true
 		end
 
 		if player:getSoul() < items.valuables.soul then
-			player:sendCancelTextMessage(RETURNVALUE_NOTENOUGHSOUL)
+			player:sendCancelMessage(RETURNVALUE_NOTENOUGHSOUL)
 			return true
 		end
 		player:addSoul(-items.valuables.soul)
