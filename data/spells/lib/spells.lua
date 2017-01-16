@@ -348,7 +348,7 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 	return true
 end
 
-function Creature:conjureItem(reagentId, conjureId, conjureCount, effect)
+function Player:conjureItem(reagentId, conjureId, conjureCount, effect)
 	if not conjureCount and conjureId ~= 0 then
 		local itemType = ItemType(conjureId)
 		if itemType:getId() == 0 then
