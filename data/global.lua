@@ -33,6 +33,19 @@ function getFormattedWorldTime()
 	return hours .. ':' .. minutes
 end
 
+function isInArray(array, value)
+	if type(array) ~= "table" then
+		return false
+	end
+
+	for _, targetColumn in pairs(array) do
+		if targetColumn == value then
+			return true
+		end
+	end
+	return false
+end
+
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do
