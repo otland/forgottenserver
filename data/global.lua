@@ -33,7 +33,7 @@ function getFormattedWorldTime()
 	return hours .. ':' .. minutes
 end
 
-function isInArray(array, value)
+function table.contains(array, value)
 	if type(array) ~= "table" then
 		return false
 	end

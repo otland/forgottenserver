@@ -1046,3 +1046,5 @@ function doSetCreatureOutfit(cid, outfit, time)
 
 	return true
 end
+
+function isInArray(array, value) return table.contains(array, value) end
