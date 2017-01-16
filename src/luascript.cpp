@@ -4376,6 +4376,7 @@ int LuaScriptInterface::luaGameGetVersion(lua_State* L)
 	setField(L, "min", CLIENT_VERSION_MIN);
 	setField(L, "max", CLIENT_VERSION_MAX);
 	setField(L, "string", CLIENT_VERSION_STR);
+	return 1;
 }
 
 int LuaScriptInterface::luaGameReload(lua_State* L)
