@@ -4,7 +4,7 @@ function onSay(player, words, param)
 	end
 
 	local target = Player(param)
-	if target == nil then
+	if not target then
 		player:sendCancelMessage("Player not found.")
 		return false
 	end
