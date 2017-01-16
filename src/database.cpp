@@ -94,12 +94,12 @@ const char * DBResult::getStream(const std::string & s, uint64_t & size) const
 	return nullptr;
 }
 
-bool DBResult::hasNext() const
+bool DBResult::hasNext()
 {
 	return false;
 }
 
-bool DBResult::next()
+bool DBResult::next() 
 {
 	return false;
 }

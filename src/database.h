@@ -165,7 +165,7 @@ class DBResult
 		virtual std::string getString(const std::string& s) const;
 		virtual const char* getStream(const std::string& s, uint64_t& size) const;
 
-		virtual bool hasNext() const;
+		virtual bool hasNext();
 		virtual bool next();
 
 	private:
