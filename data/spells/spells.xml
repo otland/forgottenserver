@@ -512,43 +512,43 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</conjure>
-	<instant group="support" spellid="51" name="Conjure Arrow" words="exevo con" lvl="13" mana="100" soul="1" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/conjure_arrow.lua">
+	<instant group="support" spellid="51" name="Conjure Arrow" words="exevo con" lvl="13" mana="100" soul="1" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="176" name="Arrow Call" words="exevo infir con" lvl="1" mana="10" soul="1" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/arrow_call.lua">
+	<instant group="support" spellid="176" name="Arrow Call" words="exevo infir con" lvl="1" mana="10" soul="1" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/arrow_call.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="48" name="Conjure Poisoned Arrow" words="exevo con pox" lvl="16" mana="130" soul="2" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/conjure_poisoned_arrow.lua">
+	<instant group="support" spellid="48" name="Conjure Poisoned Arrow" words="exevo con pox" lvl="16" mana="130" soul="2" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_poisoned_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="79" name="Conjure Bolt" words="exevo con mort" lvl="17" mana="140" soul="2" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/conjure_bolt.lua">
+	<instant group="support" spellid="79" name="Conjure Bolt" words="exevo con mort" lvl="17" mana="140" soul="2" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_bolt.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="108" name="Conjure Sniper Arrow" words="exevo con hur" lvl="24" mana="160" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/conjure_sniper_arrow.lua">
+	<instant group="support" spellid="108" name="Conjure Sniper Arrow" words="exevo con hur" lvl="24" mana="160" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_sniper_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="49" name="Conjure Explosive Arrow" words="exevo con flam" lvl="25" mana="290" soul="3" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/conjure_explosive_arrow.lua">
+	<instant group="support" spellid="49" name="Conjure Explosive Arrow" words="exevo con flam" lvl="25" mana="290" soul="3" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_explosive_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="109" name="Conjure Piercing Bolt" words="exevo con grav" lvl="33" mana="180" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/conjure_piercing_bolt.lua">
+	<instant group="support" spellid="109" name="Conjure Piercing Bolt" words="exevo con grav" lvl="33" mana="180" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_piercing_bolt.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="92" name="Enchant Staff" words="exeta vis" lvl="41" mana="80" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/enchant_staff.lua">
+	<instant group="support" spellid="92" name="Enchant Staff" words="exeta vis" lvl="41" mana="80" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_staff.lua">
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="support" spellid="110" name="Enchant Spear" words="exeta con" lvl="45" mana="350" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/enchant_staff.lua">
+	<instant group="support" spellid="110" name="Enchant Spear" words="exeta con" lvl="45" mana="350" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_staff.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
 
-	<instant group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/power_bolt.lua">
+	<instant group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/power_bolt.lua">
 		<vocation name="Royal Paladin" />
 	</instant>
 
