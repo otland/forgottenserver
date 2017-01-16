@@ -543,15 +543,13 @@
 	<instant group="support" spellid="92" name="Enchant Staff" words="exeta vis" lvl="41" mana="80" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_staff.lua">
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="support" spellid="110" name="Enchant Spear" words="exeta con" lvl="45" mana="350" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_staff.lua">
+	<instant group="support" spellid="110" name="Enchant Spear" words="exeta con" lvl="45" mana="350" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_spear.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-
 	<instant group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/power_bolt.lua">
 		<vocation name="Royal Paladin" />
 	</instant>
-
 	<conjure name="Poison Field" words="adevo grav pox" lvl="14" mana="200" soul="1" reagentId="2260" conjureId="2285" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
