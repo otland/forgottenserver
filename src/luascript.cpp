@@ -4350,7 +4350,7 @@ int LuaScriptInterface::luaGameGetVersion(lua_State* L)
 {
 	// Game.getVersion()
 
-	lua_createtable(L, 0, 2);
+	lua_createtable(L, 0, 3);
 	setField(L, "min", CLIENT_VERSION_MIN);
 	setField(L, "max", CLIENT_VERSION_MAX);
 	setField(L, "string", CLIENT_VERSION_STR);
