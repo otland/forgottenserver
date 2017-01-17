@@ -4,11 +4,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local spells = {}
 	for i = 0, count - 1 do
 		local spell = getPlayerInstantSpellInfo(player, i)
-		if spell.level ~= 0 then
-			if spell.manapercent > 0 then
-				spell.mana = spell.manapercent .. "%"
+		if spell then
+			if spell.level ~= 0 then
+				if spell.manapercent > 0 then
+					spell.mana = spell.manapercent .. "%"
+				end
+				spells[#spells + 1] = spell
 			end
-			spells[#spells + 1] = spell
 		end
 	end
 
