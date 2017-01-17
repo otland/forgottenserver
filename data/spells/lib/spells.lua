@@ -301,10 +301,10 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 	return true
 end
 
-function Creature:addPartyCondition(combat, variant, condition, baseMana)
+function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local party = self:getParty()
 	if not party then
-		self:sendCancelMessage("No party members in range.")
+		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 		self:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
@@ -321,7 +321,7 @@ function Creature:addPartyCondition(combat, variant, condition, baseMana)
 	end
 
 	if #affectedMembers <= 1 then
-		self:sendCancelMessage("No party members in range.")
+		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 		position:sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
@@ -347,4 +347,3 @@ function Creature:addPartyCondition(combat, variant, condition, baseMana)
 	end
 	return true
 end
-
