@@ -1837,7 +1837,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
 
-	registerMethod("Game", "getVersion", LuaScriptInterface::luaGameGetVersion);
+	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
 
@@ -4368,9 +4368,9 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameGetVersion(lua_State* L)
+int LuaScriptInterface::luaGameGetClientVersion(lua_State* L)
 {
-	// Game.getVersion()
+	// Game.getClientVersion()
 
 	lua_createtable(L, 0, 3);
 	setField(L, "min", CLIENT_VERSION_MIN);
