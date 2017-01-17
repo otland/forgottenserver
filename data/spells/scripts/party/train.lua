@@ -1,7 +1,7 @@
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
-combat:setArea(createCombatArea(AREA_CIRCLE5X5))
+combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 
 local condition = Condition(CONDITION_ATTRIBUTES)
 condition:setParameter(CONDITION_PARAM_SUBID, 1)
