@@ -3670,21 +3670,6 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureHasCondition(lua_State* L)
-{
-	//creature:hasCondition(conditionType, subId)
-	Creature* creature = getUserdata<Creature>(L, 1);
-	if (!creature) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
-	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
-	pushBoolean(L, creature->hasCondition(conditionType, subId));
-	return 1;
-}
-
 int LuaScriptInterface::luaSaveServer(lua_State* L)
 {
 	g_game.saveGameState();
@@ -7248,6 +7233,21 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureHasCondition(lua_State* L)
+{
+	//creature:hasCondition(conditionType, subId)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	ConditionType_t condition = getNumber<ConditionType_t>(L, 2);
+	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
+	pushBoolean(L, creature->hasCondition(condition, subId));
 	return 1;
 }
 
