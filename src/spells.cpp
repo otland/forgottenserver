@@ -930,24 +930,6 @@ bool Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 	return true;
 }
 
-bool Illusion(const InstantSpell*, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	ReturnValue ret = Spell::CreateIllusion(creature, param, 180000);
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
-	return true;
-}
-
 }
 
 bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
@@ -955,8 +937,6 @@ bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 	const char* functionName = attr.as_string();
 	if (strcasecmp(functionName, "levitate") == 0) {
 		function = Levitate;
-	} else if (strcasecmp(functionName, "illusion") == 0) {
-		function = Illusion;
 	} else {
 		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
