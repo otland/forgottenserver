@@ -4371,7 +4371,6 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 int LuaScriptInterface::luaGameGetClientVersion(lua_State* L)
 {
 	// Game.getClientVersion()
-
 	lua_createtable(L, 0, 3);
 	setField(L, "min", CLIENT_VERSION_MIN);
 	setField(L, "max", CLIENT_VERSION_MAX);
