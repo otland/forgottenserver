@@ -46,6 +46,7 @@ class Combat;
 class Condition;
 class Npc;
 class Monster;
+class InstantSpell;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -367,6 +368,7 @@ class LuaScriptInterface
 
 		// Push
 		static void pushBoolean(lua_State* L, bool value);
+		static void pushInstantSpell(lua_State* L, const InstantSpell& spell);
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
@@ -957,7 +959,7 @@ class LuaScriptInterface
 		static int luaPlayerGetContainerById(lua_State* L);
 		static int luaPlayerGetContainerIndex(lua_State* L);
 
-		static int luaPlayerGetInstantSpellCount(lua_State* L);
+		static int luaPlayerGetInstantSpells(lua_State* L);
 		static int luaPlayerCanCast(lua_State* L);
 
 		// Monster
@@ -1247,12 +1249,7 @@ class LuaScriptInterface
 		// Spells
 		static int luaSpellCreate(lua_State* L);
 
-		static int luaSpellGetName(lua_State* L);
-		static int luaSpellGetWords(lua_State* L);
-		static int luaSpellGetLevel(lua_State* L);
-		static int luaSpellGetMagicLevel(lua_State* L);
 		static int luaSpellGetManaCost(lua_State* L);
-		static int luaSpellGetManaPercent(lua_State* L);
 		static int luaSpellGetSoulCost(lua_State* L);
 
 		static int luaSpellIsPremium(lua_State* L);

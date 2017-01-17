@@ -1019,14 +1019,7 @@ function getPlayerInstantSpellInfo(cid, spellId)
 		return false
 	end
 
-	return {
-		["name"] = spell:getName(),
-		["words"] = spell:getWords(),
-		["level"] = spell:getLevel(),
-		["mlevel"] = spell:getMagicLevel(),
-		["mana"] = spell:getManaCost(player),
-		["manapercent"] = spell:getManaPercent()
-	}
+	return spell
 end
 
 function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c ~= nil and c:setItemOutfit(item, time) end

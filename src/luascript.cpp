@@ -859,6 +859,20 @@ void LuaScriptInterface::pushBoolean(lua_State* L, bool value)
 	lua_pushboolean(L, value ? 1 : 0);
 }
 
+void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spell)
+{
+	lua_createtable(L, 0, 6);
+
+	setField(L, "name", spell.getName());
+	setField(L, "words", spell.getWords());
+	setField(L, "level", spell.getLevel());
+	setField(L, "mlevel", spell.getMagicLevel());
+	setField(L, "mana", spell.getMana());
+	setField(L, "manapercent", spell.getManaPercent());
+
+	setMetatable(L, -1, "Spell");
+}
+
 void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, int32_t stackpos/* = 0*/)
 {
 	lua_createtable(L, 0, 4);
@@ -2259,7 +2273,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod("Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
-	registerMethod("Player", "getInstantSpellCount", LuaScriptInterface::luaPlayerGetInstantSpellCount);
+	registerMethod("Player", "getInstantSpells", LuaScriptInterface::luaPlayerGetInstantSpells);
 	registerMethod("Player", "canCast", LuaScriptInterface::luaPlayerCanCast);
 
 	// Monster
@@ -2566,12 +2580,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Spell", "", LuaScriptInterface::luaSpellCreate);
 	registerMetaMethod("Spell", "__eq", LuaScriptInterface::luaUserdataCompare);
 
-	registerMethod("Spell", "getName", LuaScriptInterface::luaSpellGetName);
-	registerMethod("Spell", "getWords", LuaScriptInterface::luaSpellGetWords);
-	registerMethod("Spell", "getLevel", LuaScriptInterface::luaSpellGetLevel);
-	registerMethod("Spell", "getMagicLevel", LuaScriptInterface::luaSpellGetMagicLevel);
 	registerMethod("Spell", "getManaCost", LuaScriptInterface::luaSpellGetManaCost);
-	registerMethod("Spell", "getManaPercent", LuaScriptInterface::luaSpellGetManaPercent);
 	registerMethod("Spell", "getSoulCost", LuaScriptInterface::luaSpellGetSoulCost);
 
 	registerMethod("Spell", "isPremium", LuaScriptInterface::luaSpellIsPremium);
@@ -9311,14 +9320,28 @@ int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetInstantSpellCount(lua_State* L)
+int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 {
-	// player:getInstantSpellCount()
+	// player:getInstantSpells()
 	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, g_spells->getInstantSpellCount(player));
-	} else {
+	if (!player) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	std::vector<InstantSpell*> spells;
+	for (auto spell : g_spells->getInstantSpells()) {
+		if (spell.second->canCast(player)) {
+			spells.push_back(spell.second);
+		}
+	}
+
+	lua_createtable(L, spells.size(), 0);
+
+	int index = 0;
+	for (auto spell : spells) {
+		pushInstantSpell(L, *spell);
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
@@ -12227,52 +12250,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 	}
 
 	if (spell) {
-		pushUserdata<InstantSpell>(L, spell);
-		setMetatable(L, -1, "Spell");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaSpellGetName(lua_State* L)
-{
-	// spell:getName()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
-		pushString(L, spell->getName());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaSpellGetWords(lua_State* L)
-{
-	// spell:getWords()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
-		pushString(L, spell->getWords());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaSpellGetLevel(lua_State* L)
-{
-	// spell:getLevel()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
-		lua_pushnumber(L, spell->getLevel());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaSpellGetMagicLevel(lua_State* L)
-{
-	// spell:getMagicLevel()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
-		lua_pushnumber(L, spell->getMagicLevel());
+		pushInstantSpell(L, *spell);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12286,17 +12264,6 @@ int LuaScriptInterface::luaSpellGetManaCost(lua_State* L)
 	Player* player = getUserdata<Player>(L, 2);
 	if (spell && player) {
 		lua_pushnumber(L, spell->getManaCost(player));
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaSpellGetManaPercent(lua_State* L)
-{
-	// spell:getManaPercent()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
-		lua_pushnumber(L, spell->getManaPercent());
 	} else {
 		lua_pushnil(L);
 	}
