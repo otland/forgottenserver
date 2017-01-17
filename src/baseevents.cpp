@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,9 +88,6 @@ bool BaseEvents::reload()
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
-Event::Event(const Event* copy) :
-	scripted(copy->scripted), scriptId(copy->scriptId), scriptInterface(copy->scriptInterface) {}
-
 bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
@@ -158,7 +155,6 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 		return false;
 	}
 
-	callbackName = name;
 	scriptId = id;
 	loaded = true;
 	return true;

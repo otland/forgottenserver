@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 	public:
 		template <typename U>
 		explicit constexpr LockfreePoolingAllocator(const U&) {}
-		typedef T value_type;
+		using value_type = T;
 
 		T* allocate(size_t) const {
 			T* p; // NOTE: p doesn't have to be initialized
@@ -52,7 +52,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 		}
 
 	private:
-		typedef boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>> FreeList;
+		using FreeList = boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>>;
 		static FreeList& getFreeList() {
 			static FreeList freeList;
 			return freeList;

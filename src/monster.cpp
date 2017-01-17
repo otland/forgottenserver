@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -349,10 +349,10 @@ void Monster::updateTargetList()
 		}
 	}
 
-	SpectatorVec list;
-	g_game.map.getSpectators(list, position, true);
-	list.erase(this);
-	for (Creature* spectator : list) {
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, position, true);
+	spectators.erase(this);
+	for (Creature* spectator : spectators) {
 		if (canSee(spectator->getPosition())) {
 			onCreatureFound(spectator);
 		}
@@ -1952,10 +1952,10 @@ bool Monster::convinceCreature(Creature* creature)
 	updateIdleStatus();
 
 	//Notify surrounding about the change
-	SpectatorVec list;
-	g_game.map.getSpectators(list, getPosition(), true);
-	g_game.map.getSpectators(list, creature->getPosition(), true);
-	for (Creature* spectator : list) {
+	SpectatorHashSet spectators;
+	g_game.map.getSpectators(spectators, getPosition(), true);
+	g_game.map.getSpectators(spectators, creature->getPosition(), true);
+	for (Creature* spectator : spectators) {
 		spectator->onCreatureConvinced(creature, this);
 	}
 

@@ -137,7 +137,7 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
-	<instant group="support" spellid="20" name="Find Person" words="exiva" lvl="8" mana="20" aggressive="0" playernameparam="1" params="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="searchPlayer">
+	<instant group="support" spellid="20" name="Find Person" words="exiva" lvl="8" mana="20" aggressive="0" playernameparam="1" params="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/find_person.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
@@ -737,10 +737,10 @@
 	</conjure>
 
 	<!-- House Spells -->
-	<instant spellid="71" name="House Guest List" words="aleta sio" selftarget="1" aggressive="0" function="editHouseGuest" />
-	<instant spellid="72" name="House Subowner List" words="aleta som" selftarget="1" aggressive="0" function="editHouseSubOwner" />
-	<instant spellid="73" name="House Door List" words="aleta grav" selftarget="1" aggressive="0" function="editHouseDoor" />
-	<instant spellid="74" name="House Kick" words="alana sio" params="1" aggressive="0" function="houseKick" />
+	<instant name="House Guest List" words="aleta sio" aggressive="0" script="house/edit_guest_list.lua" />
+	<instant name="House Subowner List" words="aleta som" aggressive="0" script="house/edit_subowner_list.lua" />
+	<instant name="House Door List" words="aleta grav" casterTargetOrDirection="1" aggressive="0" script="house/edit_door_list.lua" />
+	<instant name="House Kick" words="alana sio" aggressive="0" playernameparam="1" params="1" script="house/kick.lua" />
 
 	<!-- Monster Spells -->
 	<instant name="ghastly dragon curse" words="###1" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/ghastly_dragon_curse.lua" />
