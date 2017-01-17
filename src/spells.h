@@ -58,6 +58,10 @@ class Spells final : public BaseEvents
 		static Position getCasterPosition(Creature* creature, Direction dir);
 		std::string getScriptBaseName() const final;
 
+		const std::map<std::string, InstantSpell*>& getInstantSpells() const {
+			return instants;
+		};
+
 	protected:
 		void clear() final;
 		LuaScriptInterface& getScriptInterface() final;
@@ -141,6 +145,9 @@ class Spell : public BaseSpell
 		}
 		uint32_t getMagicLevel() const {
 			return magLevel;
+		}
+		uint32_t getMana() const {
+			return mana;
 		}
 		uint32_t getManaPercent() const {
 			return manaPercent;
