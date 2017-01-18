@@ -1396,6 +1396,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CLIENTOS_OTCLIENT_WINDOWS)
 	registerEnum(CLIENTOS_OTCLIENT_MAC)
 
+	registerEnum(FIGHTMODE_ATTACK)
+	registerEnum(FIGHTMODE_BALANCED)
+	registerEnum(FIGHTMODE_DEFENSE)
+
 	registerEnum(ITEM_ATTRIBUTE_NONE)
 	registerEnum(ITEM_ATTRIBUTE_ACTIONID)
 	registerEnum(ITEM_ATTRIBUTE_UNIQUEID)
@@ -2282,6 +2286,10 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getInstantSpells", LuaScriptInterface::luaPlayerGetInstantSpells);
 	registerMethod("Player", "canCast", LuaScriptInterface::luaPlayerCanCast);
+
+	registerMethod("Player", "hasChaseMode", LuaScriptInterface::luaPlayerHasChaseMode);
+	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
+	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -9370,6 +9378,42 @@ int LuaScriptInterface::luaPlayerCanCast(lua_State* L)
 	InstantSpell* spell = getUserdata<InstantSpell>(L, 2);
 	if (player && spell) {
 		pushBoolean(L, spell->canCast(player));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerHasChaseMode(lua_State* L)
+{
+	// player:hasChaseMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->chaseMode);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerHasSecureMode(lua_State* L)
+{
+	// player:hasSecureMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->secureMode);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
+{
+	// player:getFightMode()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->fightMode);
 	} else {
 		lua_pushnil(L);
 	}
