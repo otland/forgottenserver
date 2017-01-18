@@ -1047,6 +1047,11 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ACCOUNT_TYPE_GAMEMASTER)
 	registerEnum(ACCOUNT_TYPE_GOD)
 
+	registerEnum(BUG_CATEGORY_MAP)
+	registerEnum(BUG_CATEGORY_TYPO)
+	registerEnum(BUG_CATEGORY_TECHNICAL)
+	registerEnum(BUG_CATEGORY_OTHER)
+
 	registerEnum(CALLBACK_PARAM_LEVELMAGICVALUE)
 	registerEnum(CALLBACK_PARAM_SKILLVALUE)
 	registerEnum(CALLBACK_PARAM_TARGETTILE)
