@@ -2,7 +2,7 @@ function onSay(player, words, param)
 	local position = player:getPosition()
 	local tile = Tile(position)
 	local house = tile and tile:getHouse()
-	if house == nil then
+	if not house then
 		player:sendCancelMessage("You are not inside a house.")
 		position:sendMagicEffect(CONST_ME_POFF)
 		return false

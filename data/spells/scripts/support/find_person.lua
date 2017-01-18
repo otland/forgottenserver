@@ -19,18 +19,18 @@ local directions = {
 }
 
 local messages = {
-    [DISTANCE_BESIDE] = {
-        [LEVEL_LOWER] = " is below you.",
-        [LEVEL_SAME] = " is standing next to you.",
-        [LEVEL_HIGHER] = " is above you."
-    },
-    [DISTANCE_CLOSE] = {
-        [LEVEL_LOWER] = " is on a lower level to the ",
-        [LEVEL_SAME] = " is to the ",
-        [LEVEL_HIGHER] = " is on a higher level to the "
-    },
-    [DISTANCE_FAR] = " is far to the ",
-    [DISTANCE_VERYFAR] =  " is very far to the "
+	[DISTANCE_BESIDE] = {
+		[LEVEL_LOWER] = " is below you.",
+		[LEVEL_SAME] = " is standing next to you.",
+		[LEVEL_HIGHER] = " is above you."
+	},
+	[DISTANCE_CLOSE] = {
+		[LEVEL_LOWER] = " is on a lower level to the ",
+		[LEVEL_SAME] = " is to the ",
+		[LEVEL_HIGHER] = " is on a higher level to the "
+	},
+	[DISTANCE_FAR] = " is far to the ",
+	[DISTANCE_VERYFAR] =  " is very far to the "
 }
 
 function onCastSpell(creature, variant)
@@ -79,10 +79,8 @@ function onCastSpell(creature, variant)
 		elseif absValue < 2.4142 then
 			if distanceValue > 0 then
 				direction = offset.y > 0 and DIRECTION_NORTHWEST or DIRECTION_SOUTHEAST
-			elseif offset.x > 0 then
-				direction = DIRECTION_SOUTHWEST
 			else
-				direction = DIRECTION_NORTHEAST
+				direction = offset.x > 0 and DIRECTION_SOUTHWEST or DIRECTION_NORTHEAST
 			end
 		else
 			direction = offset.y > 0 and DIRECTION_NORTH or DIRECTION_SOUTH

@@ -234,17 +234,11 @@ uint32_t Spells::getInstantSpellCount(const Player* player) const
 	return count;
 }
 
-InstantSpell* Spells::getInstantSpellByIndex(const Player* player, uint32_t index)
+InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
-	uint32_t count = 0;
-	for (const auto& it : instants) {
-		InstantSpell* instantSpell = it.second;
-		if (instantSpell->canCast(player)) {
-			if (count == index) {
-				return instantSpell;
-			}
-			++count;
-		}
+	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
+	if (it != instants.end()) {
+		return it->second;
 	}
 	return nullptr;
 }
@@ -892,167 +886,6 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 
 namespace {
 
-House* getHouseFromPos(Creature* creature)
-{
-	if (!creature) {
-		return nullptr;
-	}
-
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return nullptr;
-	}
-
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(player->getTile());
-	if (!houseTile) {
-		return nullptr;
-	}
-
-	House* house = houseTile->getHouse();
-	if (!house) {
-		return nullptr;
-	}
-
-	return house;
-}
-
-bool HouseGuestList(const InstantSpell*, Creature* creature, const std::string&)
-{
-	House* house = getHouseFromPos(creature);
-	if (!house) {
-		return false;
-	}
-
-	Player* player = creature->getPlayer();
-	if (house->canEditAccessList(GUEST_LIST, player)) {
-		player->setEditHouse(house, GUEST_LIST);
-		player->sendHouseWindow(house, GUEST_LIST);
-	} else {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-	return true;
-}
-
-bool HouseSubOwnerList(const InstantSpell*, Creature* creature, const std::string&)
-{
-	House* house = getHouseFromPos(creature);
-	if (!house) {
-		return false;
-	}
-
-	Player* player = creature->getPlayer();
-	if (house->canEditAccessList(SUBOWNER_LIST, player)) {
-		player->setEditHouse(house, SUBOWNER_LIST);
-		player->sendHouseWindow(house, SUBOWNER_LIST);
-	} else {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-	return true;
-}
-
-bool HouseDoorList(const InstantSpell*, Creature* creature, const std::string&)
-{
-	House* house = getHouseFromPos(creature);
-	if (!house) {
-		return false;
-	}
-
-	Player* player = creature->getPlayer();
-	Position pos = Spells::getCasterPosition(player, player->getDirection());
-	Door* door = house->getDoorByPosition(pos);
-	if (door && house->canEditAccessList(door->getDoorId(), player)) {
-		player->setEditHouse(house, door->getDoorId());
-		player->sendHouseWindow(house, door->getDoorId());
-	} else {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-	}
-	return true;
-}
-
-bool HouseKick(const InstantSpell*, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-
-	Player* targetPlayer = g_game.getPlayerByName(param);
-	if (!targetPlayer) {
-		targetPlayer = player;
-	}
-
-	House* house = getHouseFromPos(targetPlayer);
-	if (!house) {
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return false;
-	}
-
-	if (!house->kickPlayer(player, targetPlayer)) {
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return false;
-	}
-	return true;
-}
-
-bool SummonMonster(const InstantSpell* spell, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	MonsterType* mType = g_monsters.getMonsterType(param);
-	if (!mType) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	if (!player->hasFlag(PlayerFlag_CanSummonAll)) {
-		if (!mType->info.isSummonable) {
-			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getMana() < mType->info.manaCost) {
-			player->sendCancelMessage(RETURNVALUE_NOTENOUGHMANA);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-
-		if (player->getSummonCount() >= 2) {
-			player->sendCancelMessage("You cannot summon more creatures.");
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-	}
-
-	Monster* monster = Monster::createMonster(param);
-	if (!monster) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	// Place the monster
-	creature->addSummon(monster);
-
-	if (!g_game.placeCreature(monster, creature->getPosition(), true)) {
-		creature->removeSummon(monster);
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Spell::postCastSpell(player, mType->info.manaCost, spell->getSoulCost());
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_BLUE);
-	g_game.addMagicEffect(monster->getPosition(), CONST_ME_TELEPORT);
-	return true;
-}
-
 bool Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 {
 	Player* player = creature->getPlayer();
@@ -1097,43 +930,13 @@ bool Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 	return true;
 }
 
-bool Illusion(const InstantSpell*, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	ReturnValue ret = Spell::CreateIllusion(creature, param, 180000);
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
-	return true;
-}
-
 }
 
 bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "edithouseguest") == 0) {
-		function = HouseGuestList;
-	} else if (strcasecmp(functionName, "edithousesubowner") == 0) {
-		function = HouseSubOwnerList;
-	} else if (strcasecmp(functionName, "edithousedoor") == 0) {
-		function = HouseDoorList;
-	} else if (strcasecmp(functionName, "housekick") == 0) {
-		function = HouseKick;
-	} else if (strcasecmp(functionName, "levitate") == 0) {
+	if (strcasecmp(functionName, "levitate") == 0) {
 		function = Levitate;
-	} else if (strcasecmp(functionName, "illusion") == 0) {
-		function = Illusion;
-	} else if (strcasecmp(functionName, "summonmonster") == 0) {
-		function = SummonMonster;
 	} else {
 		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 		return false;
