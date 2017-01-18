@@ -30,7 +30,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	if isInArray(horizontalOpenDoors, itemId) or isInArray(verticalOpenDoors, itemId) then
 		local doorCreature = Tile(toPosition):getTopCreature()
-		if doorCreature ~= nil then
+		if doorCreature then
 			toPosition.x = toPosition.x + 1
 			local query = Tile(toPosition):queryAdd(doorCreature, bit.bor(FLAG_IGNOREBLOCKCREATURE, FLAG_PATHFINDING))
 			if query ~= RETURNVALUE_NOERROR then

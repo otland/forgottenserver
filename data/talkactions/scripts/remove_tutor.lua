@@ -15,7 +15,7 @@ function onSay(player, words, param)
 	end
 
 	local target = Player(param)
-	if target ~= nil then
+	if target then
 		target:setAccountType(ACCOUNT_TYPE_NORMAL)
 	else
 		db.query("UPDATE `accounts` SET `type` = " .. ACCOUNT_TYPE_NORMAL .. " WHERE `id` = " .. result.getDataInt(resultId, "account_id"))

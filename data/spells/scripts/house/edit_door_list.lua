@@ -5,7 +5,7 @@ function onCastSpell(player, variant)
 	end
 
 	local doorId = house:getDoorIdByPosition(variant:getPosition())
-	if doorId ~= nil and house:canEditAccessList(doorId, player) then
+	if doorId and house:canEditAccessList(doorId, player) then
 		player:setEditHouse(house, doorId)
 		player:sendHouseWindow(house, doorId)
 	else

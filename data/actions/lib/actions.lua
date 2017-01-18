@@ -19,7 +19,7 @@ function destroyItem(player, target, toPosition)
 
 	if math.random(7) == 1 then
 		local item = Game.createItem(destroyId, 1, toPosition)
-		if item ~= nil then
+		if item then
 			item:decay()
 		end
 
