@@ -487,7 +487,7 @@
 	<rune group="healing" spellid="5" name="Ultimate Healing Rune" id="2273" allowfaruse="1" charges="1" lvl="24" maglv="4" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/ultimate_healing_rune.lua" />
 
 	<!-- Summon Runes -->
-	<rune group="support" spellid="12" name="Convince Creature" id="2290" allowfaruse="1" charges="1" lvl="16" maglv="5" cooldown="2000" groupcooldown="2000" needtarget="1" blocktype="solid" function="convince" />
+	<rune group="support" spellid="12" name="Convince Creature" id="2290" allowfaruse="1" charges="1" lvl="16" maglv="5" cooldown="2000" groupcooldown="2000" needtarget="1" blocktype="solid" script="support/convince_creature.lua" />
 	<rune group="support" spellid="83" name="Animate Dead" id="2316" allowfaruse="1" charges="1" lvl="27" maglv="4" cooldown="2000" groupcooldown="2000" blocktype="solid" script="support/animate_dead_rune.lua" />
 
 	<!-- Support Runes -->
