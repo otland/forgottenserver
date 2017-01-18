@@ -25,7 +25,6 @@
 class Player;
 
 struct Command;
-struct s_defcommands;
 
 class Commands
 {

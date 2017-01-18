@@ -21,23 +21,26 @@
 
 #include "pugicast.h"
 
-#include "items.h"
-#include "commands.h"
-#include "creature.h"
-#include "monster.h"
-#include "game.h"
 #include "actions.h"
+#include "bed.h"
+#include "commands.h"
+#include "configmanager.h"
+#include "creature.h"
+#include "creatureevent.h"
+#include "databasetasks.h"
+#include "events.h"
+#include "game.h"
+#include "globalevent.h"
 #include "iologindata.h"
 #include "iomarket.h"
-#include "talkaction.h"
-#include "spells.h"
-#include "configmanager.h"
-#include "server.h"
-#include "globalevent.h"
-#include "bed.h"
+#include "items.h"
+#include "monster.h"
+#include "movement.h"
 #include "scheduler.h"
-#include "events.h"
-#include "databasetasks.h"
+#include "server.h"
+#include "spells.h"
+#include "talkaction.h"
+#include "weapons.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -46,7 +49,12 @@ extern TalkActions* g_talkActions;
 extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
+extern CreatureEvents* g_creatureEvents;
 extern Events* g_events;
+extern CreatureEvents* g_creatureEvents;
+extern Monsters g_monsters;
+extern MoveEvents* g_moveEvents;
+extern Weapons* g_weapons;
 
 Game::Game()
 {
@@ -4834,26 +4842,7 @@ void Game::playerReportBug(uint32_t playerId, const std::string& message, const 
 		return;
 	}
 
-	if (player->getAccountType() == ACCOUNT_TYPE_NORMAL) {
-		return;
-	}
-
-	std::string fileName = "data/reports/" + player->getName() + " report.txt";
-	FILE* file = fopen(fileName.c_str(), "a");
-	if (!file) {
-		player->sendTextMessage(MESSAGE_EVENT_DEFAULT, "There was an error when processing your report, please contact a gamemaster.");
-		return;
-	}
-
-	const Position& playerPosition = player->getPosition();
-	if (category == BUG_CATEGORY_MAP) {
-		fprintf(file, "------------------------------\nName: %s [Map Position: %u, %u, %u] [Player Position: %u, %u, %u]\nComment: %s\n", player->getName().c_str(), position.x, position.y, position.z, playerPosition.x, playerPosition.y, playerPosition.z, message.c_str());
-	} else {
-		fprintf(file, "------------------------------\nName: %s [Player Position: %u, %u, %u]\nComment: %s\n", player->getName().c_str(), playerPosition.x, playerPosition.y, playerPosition.z, message.c_str());
-	}
-	fclose(file);
-
-	player->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your report has been sent to " + g_config.getString(ConfigManager::SERVER_NAME) + ".");
+	g_events->eventPlayerOnReport(player, message, position, category);
 }
 
 void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment)
@@ -5528,5 +5517,79 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 	auto it = uniqueItems.find(uniqueId);
 	if (it != uniqueItems.end()) {
 		uniqueItems.erase(it);
+	}
+}
+
+bool Game::reload(ReloadTypes_t reloadType)
+{
+	switch (reloadType) {
+		case RELOAD_TYPE_ACTIONS: return g_actions->reload();
+		case RELOAD_TYPE_CHAT: return g_chat->load();
+		case RELOAD_TYPE_COMMANDS: return commands.reload();
+		case RELOAD_TYPE_CONFIG: return g_config.reload();
+		case RELOAD_TYPE_CREATURESCRIPTS: return g_creatureEvents->reload();
+		case RELOAD_TYPE_EVENTS: return g_events->load();
+		case RELOAD_TYPE_GLOBALEVENTS: return g_globalEvents->reload();
+		case RELOAD_TYPE_ITEMS: return Item::items.reload();
+		case RELOAD_TYPE_MONSTERS: return g_monsters.reload();
+		case RELOAD_TYPE_MOUNTS: return mounts.reload();
+		case RELOAD_TYPE_MOVEMENTS: return g_moveEvents->reload();
+		case RELOAD_TYPE_NPCS: {
+			Npcs::reload();
+			return true;
+		}
+
+		case RELOAD_TYPE_QUESTS: return quests.reload();
+		case RELOAD_TYPE_RAIDS: return raids.reload() && raids.startup();
+
+		case RELOAD_TYPE_SPELLS: {
+			if (!g_spells->reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+				std::terminate();
+			} else if (!g_monsters.reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+				std::terminate();
+			}
+			return true;
+		}
+
+		case RELOAD_TYPE_TALKACTIONS: return g_talkActions->reload();
+
+		case RELOAD_TYPE_WEAPONS: {
+			bool results = g_weapons->reload();
+			g_weapons->loadDefaults();
+			return results;
+		}
+
+		default: {
+			if (!g_spells->reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+				std::terminate();
+				return false;
+			} else if (!g_monsters.reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+				std::terminate();
+				return false;
+			}
+
+			g_actions->reload();
+			g_config.reload();
+			g_creatureEvents->reload();
+			g_monsters.reload();
+			g_moveEvents->reload();
+			Npcs::reload();
+			raids.reload() && raids.startup();
+			g_talkActions->reload();
+			Item::items.reload();
+			g_weapons->reload();
+			g_weapons->loadDefaults();
+			quests.reload();
+			mounts.reload();
+			g_globalEvents->reload();
+			g_events->load();
+			g_chat->load();
+			commands.reload();
+			return true;
+		}
 	}
 }

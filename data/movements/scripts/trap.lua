@@ -7,7 +7,7 @@ local traps = {
 
 function onStepIn(creature, item, position, fromPosition)
 	local trap = traps[item.itemid]
-	if trap == nil then
+	if not trap then
 		return true
 	end
 

@@ -259,6 +259,10 @@ RANGE = {
 }
 
 function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
+	if target:isImmune(conditionType) then
+		return false
+	end
+
 	local condition = Condition(conditionType)
 	condition:setParameter(CONDITION_PARAM_OWNER, self:getId())
 	condition:setParameter(CONDITION_PARAM_DELAYED, true)
@@ -266,7 +270,7 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 	if listType == 0 then
 		local exponent, value = -10, 0
 		while value < damage do
-			value = math.floor(10 * 1.2 ^ exponent + 0.5)
+			value = math.floor(10 * math.pow(1.2, exponent) + 0.5)
 			condition:addDamage(1, time or 4000, -value)
 
 			if value >= damage then
@@ -294,5 +298,52 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 	end
 
 	target:addCondition(condition)
+	return true
+end
+
+function Player:addPartyCondition(combat, variant, condition, baseMana)
+	local party = self:getParty()
+	if not party then
+		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
+		self:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local members = party:getMembers()
+	members[#members + 1] = party:getLeader()
+
+	local position = self:getPosition()
+	local affectedMembers = {}
+	for _, member in ipairs(members) do
+		if member:getPosition():getDistance(position) <= 36 then
+			affectedMembers[#affectedMembers + 1] = member
+		end
+	end
+
+	if #affectedMembers <= 1 then
+		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local mana = math.ceil(math.pow(0.9, #affectedMembers - 1) * baseMana * #affectedMembers)
+	if self:getMana() < mana then
+		self:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	if not combat:execute(self, variant) then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		position:sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	self:addMana(baseMana - mana, false)
+	self:addManaSpent(mana - baseMana)
+
+	for _, member in ipairs(affectedMembers) do
+		member:addCondition(condition)
+	end
 	return true
 end

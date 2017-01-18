@@ -46,6 +46,7 @@ class Combat;
 class Condition;
 class Npc;
 class Monster;
+class InstantSpell;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -367,6 +368,7 @@ class LuaScriptInterface
 
 		// Push
 		static void pushBoolean(lua_State* L, bool value);
+		static void pushInstantSpell(lua_State* L, const InstantSpell& spell);
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
@@ -429,9 +431,6 @@ class LuaScriptInterface
 		static int luaGetPlayerFlagValue(lua_State* L);
 		static int luaGetCreatureCondition(lua_State* L);
 
-		static int luaGetPlayerInstantSpellInfo(lua_State* L);
-		static int luaGetPlayerInstantSpellCount(lua_State* L);
-
 		static int luaGetWorldTime(lua_State* L);
 		static int luaGetWorldLight(lua_State* L);
 		static int luaGetWorldUpTime(lua_State* L);
@@ -461,10 +460,6 @@ class LuaScriptInterface
 		static int luaDoTargetCombatDispel(lua_State* L);
 
 		static int luaDoChallengeCreature(lua_State* L);
-
-		static int luaSetCreatureOutfit(lua_State* L);
-		static int luaSetMonsterOutfit(lua_State* L);
-		static int luaSetItemOutfit(lua_State* L);
 
 		static int luaDebugPrint(lua_State* L);
 		static int luaIsInArray(lua_State* L);
@@ -550,6 +545,10 @@ class LuaScriptInterface
 		static int luaGameCreateTile(lua_State* L);
 
 		static int luaGameStartRaid(lua_State* L);
+
+		static int luaGameGetClientVersion(lua_State* L);
+
+		static int luaGameReload(lua_State* L);
 
 		// Variant
 		static int luaVariantCreate(lua_State* L);
@@ -740,6 +739,7 @@ class LuaScriptInterface
 		static int luaCreatureIsCreature(lua_State* L);
 		static int luaCreatureIsInGhostMode(lua_State* L);
 		static int luaCreatureIsHealthHidden(lua_State* L);
+		static int luaCreatureIsImmune(lua_State* L);
 
 		static int luaCreatureCanSee(lua_State* L);
 		static int luaCreatureCanSeeCreature(lua_State* L);
@@ -950,13 +950,23 @@ class LuaScriptInterface
 		static int luaPlayerIsPzLocked(lua_State* L);
 
 		static int luaPlayerGetClient(lua_State* L);
+
 		static int luaPlayerGetHouse(lua_State* L);
+		static int luaPlayerSendHouseWindow(lua_State* L);
+		static int luaPlayerSetEditHouse(lua_State* L);
 
 		static int luaPlayerSetGhostMode(lua_State* L);
 
 		static int luaPlayerGetContainerId(lua_State* L);
 		static int luaPlayerGetContainerById(lua_State* L);
 		static int luaPlayerGetContainerIndex(lua_State* L);
+
+		static int luaPlayerGetInstantSpells(lua_State* L);
+		static int luaPlayerCanCast(lua_State* L);
+
+		static int luaPlayerHasChaseMode(lua_State* L);
+		static int luaPlayerHasSecureMode(lua_State* L);
+		static int luaPlayerGetFightMode(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
@@ -1076,12 +1086,16 @@ class LuaScriptInterface
 
 		static int luaHouseGetDoors(lua_State* L);
 		static int luaHouseGetDoorCount(lua_State* L);
+		static int luaHouseGetDoorIdByPosition(lua_State* L);
 
 		static int luaHouseGetTiles(lua_State* L);
 		static int luaHouseGetTileCount(lua_State* L);
 
+		static int luaHouseCanEditAccessList(lua_State* L);
 		static int luaHouseGetAccessList(lua_State* L);
 		static int luaHouseSetAccessList(lua_State* L);
+
+		static int luaHouseKickPlayer(lua_State* L);
 
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);
@@ -1237,6 +1251,15 @@ class LuaScriptInterface
 		static int luaPartyIsSharedExperienceEnabled(lua_State* L);
 		static int luaPartyShareExperience(lua_State* L);
 		static int luaPartySetSharedExperience(lua_State* L);
+
+		// Spells
+		static int luaSpellCreate(lua_State* L);
+
+		static int luaSpellGetManaCost(lua_State* L);
+		static int luaSpellGetSoulCost(lua_State* L);
+
+		static int luaSpellIsPremium(lua_State* L);
+		static int luaSpellIsLearnable(lua_State* L);
 
 		//
 		lua_State* luaState = nullptr;
