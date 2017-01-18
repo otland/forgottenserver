@@ -1,5 +1,5 @@
 function onCastSpell(creature, variant, isHotkey)
-	local target = Tile(variant:getPosition()):getTopVisibleThing(creature)
+	local target = Creature(variant:getNumber())
 	if not target or not target:isMonster() then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
