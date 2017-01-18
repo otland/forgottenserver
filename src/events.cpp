@@ -100,6 +100,8 @@ bool Events::load()
 				info.playerOnMoveItem = event;
 			} else if (methodName == "onMoveCreature") {
 				info.playerOnMoveCreature = event;
+			} else if (methodName == "onReport") {
+				info.playerOnReport = event;
 			} else if (methodName == "onTurn") {
 				info.playerOnTurn = event;
 			} else if (methodName == "onGainExperience") {
@@ -522,6 +524,34 @@ bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const
 
 	LuaScriptInterface::pushPosition(L, fromPosition);
 	LuaScriptInterface::pushPosition(L, toPosition);
+
+	return scriptInterface.callFunction(4);
+}
+
+bool Events::eventPlayerOnReport(Player* player, const std::string& message, const Position& position, uint8_t category)
+{
+	// Player:onReport(message, position, category)
+	if (info.playerOnReport == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnReport] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnReport, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnReport);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushString(L, message);
+	LuaScriptInterface::pushPosition(L, position);
+	lua_pushnumber(L, category);
 
 	return scriptInterface.callFunction(4);
 }
