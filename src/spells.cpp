@@ -1164,13 +1164,6 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool RuneSpell::loadFunction(const pugi::xml_attribute& attr)
-{
-	const char* functionName = attr.as_string();
-	std::cout << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-	return false;
-}
-
 ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& toPos)
 {
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
@@ -1199,35 +1192,32 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 		return false;
 	}
 
-	bool result = false;
-	if (scripted) {
-		LuaVariant var;
-
-		if (needTarget) {
-			var.type = VARIANT_NUMBER;
-
-			if (target == nullptr) {
-				Tile* toTile = g_game.map.getTile(toPosition);
-				if (toTile) {
-					const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
-					if (visibleCreature) {
-						var.number = visibleCreature->getID();
-					}
-				}
-			} else {
-				var.number = target->getCreature()->getID();
-			}
-		} else {
-			var.type = VARIANT_POSITION;
-			var.pos = toPosition;
-		}
-
-		result = internalCastSpell(player, var, isHotkey);
-	} else if (runeFunction) {
-		result = runeFunction(this, player, toPosition);
+	if (!scripted) {
+		return false;
 	}
 
-	if (!result) {
+	LuaVariant var;
+
+	if (needTarget) {
+		var.type = VARIANT_NUMBER;
+
+		if (target == nullptr) {
+			Tile* toTile = g_game.map.getTile(toPosition);
+			if (toTile) {
+				const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
+				if (visibleCreature) {
+					var.number = visibleCreature->getID();
+				}
+			}
+		} else {
+			var.number = target->getCreature()->getID();
+		}
+	} else {
+		var.type = VARIANT_POSITION;
+		var.pos = toPosition;
+	}
+
+	if (!internalCastSpell(player, var, isHotkey)) {
 		return false;
 	}
 
