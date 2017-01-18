@@ -98,7 +98,7 @@ function Player:onReport(message, position, category)
 		return false
 	end
 
-	local name, playerPos = self:getName(), self:getPosition()
+	local name = self:getName()
 	local file = io.open("data/reports/" .. name .. " report.txt", "a")
 
 	if not file then
@@ -112,7 +112,8 @@ function Player:onReport(message, position, category)
 	if category == BUG_CATEGORY_MAP then
 		io.write(" [Map position: " .. position.x .. ", " .. position.y .. ", " .. position.z .. "]")
 	end
-	io.write(" [Player position: " .. playerPos.x .. ", " .. playerPos.y .. ", " .. playerPos.z .. "]\n")
+	local playerPosition = self:getPosition()
+	io.write(" [Player Position: " .. playerPosition.x .. ", " .. playerPosition.y .. ", " .. playerPosition.z .. "]\n")
 	io.write("Comment: " .. message .. "\n")
 	io.close(file)
 
