@@ -964,6 +964,10 @@ class LuaScriptInterface
 		static int luaPlayerGetInstantSpells(lua_State* L);
 		static int luaPlayerCanCast(lua_State* L);
 
+		static int luaPlayerHasChaseMode(lua_State* L);
+		static int luaPlayerHasSecureMode(lua_State* L);
+		static int luaPlayerGetFightMode(lua_State* L);
+
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
 
