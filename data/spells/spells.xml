@@ -493,7 +493,7 @@
 	<!-- Support Runes -->
 	<rune group="support" spellid="78" name="Disintegrate" id="2310" allowfaruse="0" charges="3" lvl="21" maglv="4" cooldown="2000" groupcooldown="2000" range="1" script="support/disintegrate_rune.lua" />
 	<rune group="support" spellid="30" name="Destroy Field" id="2261" allowfaruse="1" charges="3" lvl="17" maglv="3" cooldown="2000" groupcooldown="2000" aggressive="0" range="5" script="support/destroy_field_rune.lua" />
-	<rune group="support" spellid="14" name="Chameleon" id="2291" allowfaruse="1" charges="1" lvl="27" maglv="4" cooldown="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" function="chameleon" />
+	<rune group="support" spellid="14" name="Chameleon" id="2291" allowfaruse="1" charges="1" lvl="27" maglv="4" cooldown="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" script="support/chameleon.lua" />
 	<rune group="support" spellid="94" name="Wild Growth" id="2269" allowfaruse="1" charges="2" lvl="27" maglv="8" cooldown="2000" groupcooldown="2000" blocktype="all" script="support/wild_growth_rune.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" showInDescription="0" />

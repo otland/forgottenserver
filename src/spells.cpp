@@ -1166,33 +1166,6 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 
 namespace {
 
-bool RuneIllusion(const RuneSpell*, Player* player, const Position& posTo)
-{
-	Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_MOVE);
-	if (!thing) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Item* illusionItem = thing->getItem();
-	if (!illusionItem || !illusionItem->isMoveable()) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	ReturnValue ret = Spell::CreateIllusion(player, illusionItem->getID(), 200000);
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
-	return true;
-}
-
 bool Convince(const RuneSpell* spell, Player* player, const Position& posTo)
 {
 	if (!player->hasFlag(PlayerFlag_CanConvinceAll)) {
@@ -1245,9 +1218,7 @@ bool Convince(const RuneSpell* spell, Player* player, const Position& posTo)
 bool RuneSpell::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "chameleon") == 0) {
-		runeFunction = RuneIllusion;
-	} else if (strcasecmp(functionName, "convince") == 0) {
+	if (strcasecmp(functionName, "convince") == 0) {
 		runeFunction = Convince;
 	} else {
 		std::cout << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
