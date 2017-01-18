@@ -87,11 +87,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>      
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Program Files\PostgreSQL\9.6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>      
+      <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Program Files\PostgreSQL\9.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\Program Files\PostgreSQL\9.6\lib\libpq.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -114,12 +117,15 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WarningLevel>Level4</WarningLevel>
+      <AdditionalIncludeDirectories>C:\Program Files\PostgreSQL\9.6\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Program Files\PostgreSQL\9.6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\Program Files\PostgreSQL\9.6\lib\libpq.lib;$(TFS_LIBDEPS)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
