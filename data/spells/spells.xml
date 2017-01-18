@@ -385,7 +385,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="support" spellid="9" name="Summon Creature" words="utevo res" lvl="25" params="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="summonMonster">
+	<instant group="support" spellid="9" name="Summon Creature" words="utevo res" lvl="25" params="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/summon_monster.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
