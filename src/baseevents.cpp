@@ -74,6 +74,7 @@ bool BaseEvents::loadFromXml()
 
 		if (!success || !registerEvent(event, node)) {
 			delete event;
+			return false;
 		}
 	}
 	return true;
