@@ -30555,7 +30555,7 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="23417" article="a" name="slime slide" />
-	<item id="23419" article="a" name="slime sli" />
+	<item id="23419" article="a" name="slime slide" />
 	<item id="23460" article="a" name="blue pollen">
 		<attribute key="weight" value="50" />
 	</item>
