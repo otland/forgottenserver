@@ -272,7 +272,7 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 			end
 		end
 	elseif listType == 1 then
-		local value, n = math.floor(damage), 1
+		local value, n = math.floor(damage + 0.35), 1
 		while value >= 1 do
 			condition:addDamage(1, time or 4000, -value)
 			value, n = math.floor(damage * math.pow(2.75, -0.05 * n) + 0.35), n + 1
