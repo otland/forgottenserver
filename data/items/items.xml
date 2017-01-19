@@ -29357,11 +29357,11 @@
 		<attribute key="weight" value="180" />
 		<attribute key="description" value="It holds a liquid concentrate developed by the gnomes to fertilise mushrooms." />
 	</item>
-	<item id="21565" article="a" name="gardener mushroom"/>
+	<item id="21565" article="a" name="gardener mushroom" />
 	<item id="21566" article="a" name="partially charged lodestone">
 		<attribute key="weight" value="300" />
 	</item>
-	<item id="21567" article="a" name="magnetic monolith"/>
+	<item id="21567" article="a" name="magnetic monolith" />
 	<item id="21568" article="a" name="highly charged lodestone">
 		<attribute key="weight" value="300" />
 	</item>
@@ -30554,8 +30554,8 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="23417" article="a" name="slime slide"/>
-	<item id="23419" article="a" name="slime slide"/>
+	<item id="23417" article="a" name="slime slide" />
+	<item id="23419" article="a" name="slime sli" />
 	<item id="23460" article="a" name="blue pollen">
 		<attribute key="weight" value="50" />
 	</item>
