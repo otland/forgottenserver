@@ -4023,17 +4023,11 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
-			std::string damageString = std::to_string(realDamage) + (realDamage != 1 ? " hitpoints" : " hitpoint");
-			std::string spectatorMessage = ucfirst(target->getNameDescription()) + " loses " + damageString;
-			if (attacker) {
-				spectatorMessage += " due to ";
-				if (attacker == target) {
-					spectatorMessage += (targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her own attack" : "his own attack") : "its own attack");
-				} else {
-					spectatorMessage += "an attack by " + attacker->getNameDescription();
-				}
-			}
-			spectatorMessage += '.';
+			std::stringstream ss;
+
+			ss << realDamage << (realDamage != 1 ? " hitpoints" : " hitpoint");
+			std::string damageString = ss.str();
+			std::string spectatorMessage;
 
 			for (Creature* spectator : spectators) {
 				Player* tmpPlayer = spectator->getPlayer();
@@ -4042,20 +4036,44 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				}
 
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+					ss.str({});
+					ss << ucfirst(target->getNameDescription()) << " loses " << damageString << " due to your attack.";
 					message.type = MESSAGE_DAMAGE_DEALT;
-					message.text = ucfirst(target->getNameDescription()) + " loses " + damageString + " due to your attack.";
+					message.text = ss.str();
 				} else if (tmpPlayer == targetPlayer) {
-					message.type = MESSAGE_DAMAGE_RECEIVED;
+					ss.str({});
+					ss << "You lose " << damageString;
 					if (!attacker) {
-						message.text = "You lose " + damageString + '.';
+						ss << '.';
 					} else if (targetPlayer == attackerPlayer) {
-						message.text = "You lose " + damageString + " due to your own attack.";
+						ss << " due to your own attack.";
 					} else {
-						message.text = "You lose " + damageString + " due to an attack by " + attacker->getNameDescription() + '.';
+						ss << " due to an attack by " << attacker->getNameDescription() << '.';
 					}
+					message.type = MESSAGE_DAMAGE_RECEIVED;
+					message.text = ss.str();
 				} else {
 					message.type = MESSAGE_DAMAGE_OTHERS;
-					// TODO: Avoid copying spectatorMessage everytime we send to a spectator
+
+					if (spectatorMessage.empty()) {
+						ss.str({});
+						ss << ucfirst(target->getNameDescription()) << " loses " << damageString;
+						if (attacker) {
+							ss << " due to ";
+							if (attacker == target) {
+								if (targetPlayer) {
+									ss << (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her own attack" : "his own attack");
+								} else {
+									ss << "its own attack";
+								}
+							} else {
+								ss << "an attack by " << attacker->getNameDescription();
+							}
+						}
+						ss << '.';
+						spectatorMessage = ss.str();
+					}
+
 					message.text = spectatorMessage;
 				}
 				tmpPlayer->sendTextMessage(message);
