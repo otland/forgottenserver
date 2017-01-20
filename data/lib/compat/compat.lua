@@ -1008,11 +1008,15 @@ function Guild.removeMember(self, player)
 end
 
 function doTileAddItemEx(pos, uid, flags)
-	flags = flags or 0
 	local tile = Tile(pos)
+	if not tile then
+		return false
+	end
+
+
 	local item = Item(uid)
-	if tile and item then
-		tile:addItemEx(item, flags)
+	if item then
+		return tile:addItemEx(item, flags)
 	end
 	return false
 end
