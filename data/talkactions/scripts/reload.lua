@@ -65,6 +65,8 @@ function onSay(player, words, param)
 		return false
 	end
 
+	logCommand(player, words, param)
+
 	local reloadType = reloadTypes[param and param:lower()]
 	if not reloadType then
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.")
