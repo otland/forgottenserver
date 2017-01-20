@@ -4381,12 +4381,19 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	const std::string& raidName = getString(L, 1);
 
 	Raid* raid = g_game.raids.getRaidByName(raidName);
-	if (raid) {
-		raid->startRaid();
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
+	if (!raid || !raid->isLoaded()) {
+		lua_pushnumber(L, RETURNVALUE_NOSUCHRAIDEXISTS);
+		return 1;
 	}
+
+	if (g_game.raids.getRunning()) {
+		lua_pushnumber(L, RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING);
+		return 1;
+	}
+
+	g_game.raids.setRunning(raid);
+	raid->startRaid();
+	lua_pushnumber(L, RETURNVALUE_NOERROR);
 	return 1;
 }
 
