@@ -33,39 +33,6 @@ extern Game g_game;
 
 namespace {
 
-void forceRaid(Player& player, const std::string& param)
-{
-	Raid* raid = g_game.raids.getRaidByName(param);
-	if (!raid || !raid->isLoaded()) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "No such raid exists.");
-		return;
-	}
-
-	if (g_game.raids.getRunning()) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Another raid is already being executed.");
-		return;
-	}
-
-	g_game.raids.setRunning(raid);
-
-	RaidEvent* event = raid->getNextRaidEvent();
-	if (!event) {
-		player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "The raid does not contain any data.");
-		return;
-	}
-
-	raid->setState(RAIDSTATE_EXECUTING);
-
-	uint32_t ticks = event->getDelay();
-	if (ticks > 0) {
-		g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, raid, event)));
-	} else {
-		g_dispatcher.addTask(createTask(std::bind(&Raid::executeRaidEvent, raid, event)));
-	}
-
-	player.sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.");
-}
-
 void sellHouse(Player& player, const std::string& param)
 {
 	Player* tradePartner = g_game.getPlayerByName(param);
@@ -121,9 +88,6 @@ void sellHouse(Player& player, const std::string& param)
 
 std::map<std::string, CommandFunction> defined_commands = {
 	// TODO: move all commands to talkactions
-
-	//admin commands
-	{"/raid", forceRaid},
 
 	// player commands
 	{"!sellhouse", sellHouse}
