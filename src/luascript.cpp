@@ -911,13 +911,6 @@ void LuaScriptInterface::registerFunctions()
 	//Returns uid of the created item
 	lua_register(luaState, "doPlayerAddItem", LuaScriptInterface::luaDoPlayerAddItem);
 
-	//doCreateItem(itemid, type/count, pos)
-	//Returns uid of the created item, only works on tiles.
-	lua_register(luaState, "doCreateItem", LuaScriptInterface::luaDoCreateItem);
-
-	//doCreateItemEx(itemid, <optional> count/subtype)
-	lua_register(luaState, "doCreateItemEx", LuaScriptInterface::luaDoCreateItemEx);
-
 	//doTileAddItemEx(pos, uid)
 	lua_register(luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
@@ -2857,106 +2850,6 @@ int LuaScriptInterface::luaDoTileAddItemEx(lua_State* L)
 	}
 
 	lua_pushnumber(L, g_game.internalAddItem(tile, item));
-	return 1;
-}
-
-int LuaScriptInterface::luaDoCreateItem(lua_State* L)
-{
-	//doCreateItem(itemid, <optional> type/count, pos)
-	//Returns uid of the created item, only works on tiles.
-	const Position& pos = getPosition(L, 3);
-	Tile* tile = g_game.map.getTile(pos);
-	if (!tile) {
-		std::ostringstream ss;
-		ss << pos << ' ' << getErrorDesc(LUA_ERROR_TILE_NOT_FOUND);
-		reportErrorFunc(ss.str());
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	ScriptEnvironment* env = getScriptEnv();
-
-	int32_t itemCount = 1;
-	int32_t subType = 1;
-
-	uint16_t itemId = getNumber<uint16_t>(L, 1);
-	uint32_t count = getNumber<uint32_t>(L, 2, 1);
-
-	const ItemType& it = Item::items[itemId];
-	if (it.hasSubType()) {
-		if (it.stackable) {
-			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / 100));
-		}
-
-		subType = count;
-	} else {
-		itemCount = std::max<int32_t>(1, count);
-	}
-
-	while (itemCount > 0) {
-		int32_t stackCount = std::min<int32_t>(100, subType);
-		Item* newItem = Item::CreateItem(itemId, stackCount);
-		if (!newItem) {
-			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (it.stackable) {
-			subType -= stackCount;
-		}
-
-		ReturnValue ret = g_game.internalAddItem(tile, newItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		if (ret != RETURNVALUE_NOERROR) {
-			delete newItem;
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		if (--itemCount == 0) {
-			if (newItem->getParent()) {
-				uint32_t uid = env->addThing(newItem);
-				lua_pushnumber(L, uid);
-				return 1;
-			} else {
-				//stackable item stacked with existing object, newItem will be released
-				pushBoolean(L, false);
-				return 1;
-			}
-		}
-	}
-
-	pushBoolean(L, false);
-	return 1;
-}
-
-int LuaScriptInterface::luaDoCreateItemEx(lua_State* L)
-{
-	//doCreateItemEx(itemid, <optional> count/subtype)
-	//Returns uid of the created item
-	uint16_t itemId = getNumber<uint16_t>(L, 1);
-	uint32_t count = getNumber<uint32_t>(L, 2, 1);
-
-	const ItemType& it = Item::items[itemId];
-	if (it.stackable && count > 100) {
-		reportErrorFunc("Stack count cannot be higher than 100.");
-		count = 100;
-	}
-
-	Item* newItem = Item::CreateItem(itemId, count);
-	if (!newItem) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	newItem->setParent(VirtualCylinder::virtualCylinder);
-
-	ScriptEnvironment* env = getScriptEnv();
-	env->addTempItem(newItem);
-
-	uint32_t uid = env->addThing(newItem);
-	lua_pushnumber(L, uid);
 	return 1;
 }
 

@@ -416,8 +416,6 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int luaDoCreateItem(lua_State* L);
-		static int luaDoCreateItemEx(lua_State* L);
 		static int luaDoMoveCreature(lua_State* L);
 
 		static int luaDoPlayerAddItem(lua_State* L);
