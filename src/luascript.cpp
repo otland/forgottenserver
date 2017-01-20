@@ -921,9 +921,6 @@ void LuaScriptInterface::registerFunctions()
 	//doTileAddItemEx(pos, uid)
 	lua_register(luaState, "doTileAddItemEx", LuaScriptInterface::luaDoTileAddItemEx);
 
-	//doMoveCreature(cid, direction)
-	lua_register(luaState, "doMoveCreature", LuaScriptInterface::luaDoMoveCreature);
-
 	//doSetCreatureLight(cid, lightLevel, lightColor, time)
 	lua_register(luaState, "doSetCreatureLight", LuaScriptInterface::luaDoSetCreatureLight);
 
@@ -2126,6 +2123,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getDescription", LuaScriptInterface::luaCreatureGetDescription);
 
 	registerMethod("Creature", "getPathTo", LuaScriptInterface::luaCreatureGetPathTo);
+	registerMethod("Creature", "move", LuaScriptInterface::luaCreatureMove);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
@@ -3316,28 +3314,6 @@ int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 
 	target->challengeCreature(creature);
 	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaDoMoveCreature(lua_State* L)
-{
-	//doMoveCreature(cid, direction)
-	Creature* creature = getCreature(L, 1);
-	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Direction direction = getNumber<Direction>(L, 2);
-	if (direction > DIRECTION_LAST) {
-		reportErrorFunc("No valid direction");
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	ReturnValue ret = g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT);
-	lua_pushnumber(L, ret);
 	return 1;
 }
 
@@ -7462,6 +7438,26 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 	} else {
 		pushBoolean(L, false);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureMove(lua_State* L)
+{
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	Direction direction = getNumber<Direction>(L, 2);
+	if (direction > DIRECTION_LAST) {
+		reportErrorFunc("No valid direction");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	lua_pushnumber(L, g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT));
 	return 1;
 }
 
