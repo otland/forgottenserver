@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -228,7 +228,9 @@ bool Raid::loadFromXml(const std::string& filename)
 	}
 
 	//sort by delay time
-	std::sort(raidEvents.begin(), raidEvents.end(), RaidEvent::compareEvents);
+	std::sort(raidEvents.begin(), raidEvents.end(), [](const RaidEvent* lhs, const RaidEvent* rhs) {
+		return lhs->getDelay() < rhs->getDelay();
+	});
 
 	loaded = true;
 	return true;

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,8 @@
 class Mission;
 class Quest;
 
-typedef std::list<Mission> MissionsList;
-typedef std::list<Quest> QuestsList;
+using MissionsList = std::list<Mission>;
+using QuestsList = std::list<Quest>;
 
 class Mission
 {

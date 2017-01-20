@@ -5,7 +5,7 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 project(tfs)
 
-list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cotire)
 
@@ -35,7 +35,7 @@ else()
     find_package(Lua)
 endif()
 
-find_package(Boost 1.53.0 COMPONENTS system REQUIRED)
+find_package(Boost 1.53.0 COMPONENTS system iostreams REQUIRED)
 
 include(src/CMakeLists.txt)
 add_executable(tfs ${tfs_SRC})

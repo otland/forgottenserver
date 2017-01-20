@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -271,9 +271,9 @@ std::string asUpperCaseString(std::string source)
 	return source;
 }
 
-StringVec explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
+StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
 {
-	StringVec returnVector;
+	StringVector returnVector;
 	std::string::size_type start = 0, end = 0;
 
 	while (--limit != -1 && (end = inString.find(separator, start)) != std::string::npos) {
@@ -285,9 +285,9 @@ StringVec explodeString(const std::string& inString, const std::string& separato
 	return returnVector;
 }
 
-IntegerVec vectorAtoi(const StringVec& stringVector)
+IntegerVector vectorAtoi(const StringVector& stringVector)
 {
-	IntegerVec returnVector;
+	IntegerVector returnVector;
 	for (const auto& string : stringVector) {
 		returnVector.push_back(std::stoi(string));
 	}
@@ -1155,8 +1155,8 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS:
 			return "You need to split your spears first.";
 
-		case RETURNVALUE_NAMEISTOOAMBIGIOUS:
-			return "Name is too ambigious.";
+		case RETURNVALUE_NAMEISTOOAMBIGUOUS:
+			return "Player name is ambiguous.";
 
 		case RETURNVALUE_CANONLYUSEONESHIELD:
 			return "You may use only one shield.";
@@ -1166,6 +1166,12 @@ const char* getReturnMessage(ReturnValue value)
 
 		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
+
+		case RETURNVALUE_NOSUCHRAIDEXISTS:
+			return "No such raid exists.";
+
+		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING:
+			return "Another raid is already executing.";
 
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";

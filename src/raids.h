@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,10 +165,6 @@ class RaidEvent
 		virtual bool executeEvent() = 0;
 		uint32_t getDelay() const {
 			return delay;
-		}
-
-		static bool compareEvents(const RaidEvent* lhs, const RaidEvent* rhs) {
-			return lhs->getDelay() < rhs->getDelay();
 		}
 
 	private:

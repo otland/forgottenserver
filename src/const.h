@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -517,6 +517,28 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
 };
 
+enum ReloadTypes_t : uint8_t  {
+	RELOAD_TYPE_ALL,
+	RELOAD_TYPE_ACTIONS,
+	RELOAD_TYPE_CHAT,
+	RELOAD_TYPE_COMMANDS,
+	RELOAD_TYPE_CONFIG,
+	RELOAD_TYPE_CREATURESCRIPTS,
+	RELOAD_TYPE_EVENTS,
+	RELOAD_TYPE_GLOBAL,
+	RELOAD_TYPE_GLOBALEVENTS,
+	RELOAD_TYPE_ITEMS,
+	RELOAD_TYPE_MONSTERS,
+	RELOAD_TYPE_MOUNTS,
+	RELOAD_TYPE_MOVEMENTS,
+	RELOAD_TYPE_NPCS,
+	RELOAD_TYPE_QUESTS,
+	RELOAD_TYPE_RAIDS,
+	RELOAD_TYPE_SPELLS,
+	RELOAD_TYPE_TALKACTIONS,
+	RELOAD_TYPE_WEAPONS,
+};
+
 static constexpr int32_t CHANNEL_GUILD = 0x00;
 static constexpr int32_t CHANNEL_PARTY = 0x01;
 static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
@@ -532,6 +554,7 @@ static constexpr int32_t PSTRG_OUTFITS_RANGE_SIZE = 500;
 static constexpr int32_t PSTRG_MOUNTS_RANGE_START = (PSTRG_RESERVED_RANGE_START + 2001);
 static constexpr int32_t PSTRG_MOUNTS_RANGE_SIZE = 10;
 static constexpr int32_t PSTRG_MOUNTS_CURRENTMOUNT = (PSTRG_MOUNTS_RANGE_START + 10);
+
 
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
 

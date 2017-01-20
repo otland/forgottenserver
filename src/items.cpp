@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,18 +57,16 @@ bool Items::reload()
 	return true;
 }
 
+constexpr auto OTBI = OTB::Identifier{{'O','T', 'B', 'I'}};
+
 FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 {
-	FileLoader f;
-	if (!f.openFile(file.c_str(), "OTBI")) {
-		return f.getError();
-	}
+	OTB::Loader loader{file, OTBI};
 
-	uint32_t type;
-	NODE node = f.getChildNode(NO_NODE, type);
+	auto& root = loader.parseTree();
 
 	PropStream props;
-	if (f.getProps(node, props)) {
+	if (loader.getProps(root, props)) {
 		//4 byte flags
 		//attributes
 		//0x01 = version data
@@ -113,11 +111,10 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		return ERROR_INVALID_FORMAT;
 	}
 
-	node = f.getChildNode(node, type);
-	while (node != NO_NODE) {
+	for(auto & itemNode : root.children) {
 		PropStream stream;
-		if (!f.getProps(node, stream)) {
-			return f.getError();
+		if (!loader.getProps(itemNode, stream)) {
+			return ERROR_INVALID_FORMAT;
 		}
 
 		uint32_t flags;
@@ -233,8 +230,8 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		}
 		ItemType& iType = items[serverId];
 
-		iType.group = static_cast<itemgroup_t>(type);
-		switch (type) {
+		iType.group = static_cast<itemgroup_t>(itemNode.type);
+		switch (itemNode.type) {
 			case ITEM_GROUP_CONTAINER:
 				iType.type = ITEM_TYPE_CONTAINER;
 				break;
@@ -289,8 +286,6 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		iType.lightColor = lightColor;
 		iType.wareId = wareId;
 		iType.alwaysOnTopOrder = alwaysOnTopOrder;
-
-		node = f.getNextNode(node, type);
 	}
 
 	items.shrink_to_fit();

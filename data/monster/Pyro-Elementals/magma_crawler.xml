@@ -25,7 +25,7 @@
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>
 		<attack name="magma crawler soulfire" interval="2000" chance="20" />
-		<attack name="soulfire" interval="2000" chance="10" range="7" target="1" />
+		<attack name="monster soulfire" interval="2000" chance="10" />
 		<attack name="fire" interval="2000" chance="15" target="0" radius="3" min="-140" max="-180">
 			<attribute key="areaEffect" value="fire" />
 		</attack>
