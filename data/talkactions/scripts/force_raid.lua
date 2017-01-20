@@ -7,6 +7,8 @@ function onSay(player, words, param)
 		return false
 	end
 
+	logCommand(player, words, param)
+
 	local returnValue = Game.startRaid(param)
 	if returnValue ~= RETURNVALUE_NOERROR then
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, Game.getReturnMessage(returnValue))
@@ -14,13 +16,5 @@ function onSay(player, words, param)
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.")
 	end
 
-	local file = io.open("data/logs/" .. player:getName() .. " commands.log", "a")
-	if not file then
-		return false
-	end
-
-	io.output(file)
-	io.write(string.format("[%s] %s %s", os.date("%d/%m/%Y %H:%M"), words, param):trim() .. "\n")
-	io.close(file)
 	return false
 end
