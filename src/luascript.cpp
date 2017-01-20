@@ -7338,15 +7338,13 @@ int LuaScriptInterface::luaCreatureMove(lua_State* L)
 {
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-		pushBoolean(L, false);
+		lua_pushnil(L);
 		return 1;
 	}
 
 	Direction direction = getNumber<Direction>(L, 2);
 	if (direction > DIRECTION_LAST) {
-		reportErrorFunc("No valid direction");
-		pushBoolean(L, false);
+		lua_pushnil(L);
 		return 1;
 	}
 
