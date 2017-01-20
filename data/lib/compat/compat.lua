@@ -1061,3 +1061,4 @@ function doCreateItemEx(itemid, count)
 	return false
 end
 
+function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) end
