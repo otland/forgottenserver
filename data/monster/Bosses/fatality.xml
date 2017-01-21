@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fatality" nameDescription="Fatality" race="blood" experience="3250" speed="220" manacost="0">
+<monster name="Fatality" nameDescription="Fatality" race="blood" experience="3250" speed="220">
 	<health now="6000" max="6000" />
 	<look type="113" corpse="4251" />
 	<targetchange interval="2000" chance="10" />

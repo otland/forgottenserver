@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Sharptooth" nameDescription="Sharptooth" race="blood" experience="1600" speed="290" manacost="0">
+<monster name="Sharptooth" nameDescription="Sharptooth" race="blood" experience="1600" speed="290">
 	<health now="2500" max="2500" />
 	<look type="20" corpse="6067" />
 	<targetchange interval="5000" chance="8" />

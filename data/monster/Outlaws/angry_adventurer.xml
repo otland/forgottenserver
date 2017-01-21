@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Angry Adventurer" nameDescription="an angry adventurer" race="blood" experience="50" speed="195" manacost="0">
+<monster name="Angry Adventurer" nameDescription="an angry adventurer" race="blood" experience="50" speed="195">
 	<health now="65" max="65" />
 	<look type="129" head="92" body="15" legs="92" feet="82" corpse="20315" />
 	<targetchange interval="4000" chance="10" />

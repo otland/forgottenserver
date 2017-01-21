@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dwarf Geomancer" nameDescription="a dwarf geomancer" race="blood" experience="265" speed="190" manacost="0">
+<monster name="Dwarf Geomancer" nameDescription="a dwarf geomancer" race="blood" experience="265" speed="190">
 	<health now="380" max="380" />
 	<look type="66" corpse="6015" />
 	<targetchange interval="4000" chance="10" />

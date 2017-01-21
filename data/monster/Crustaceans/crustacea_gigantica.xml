@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Crustacea Gigantica" nameDescription="a crustacea gigantica" race="blood" experience="1800" speed="290" manacost="0">
+<monster name="Crustacea Gigantica" nameDescription="a crustacea gigantica" race="blood" experience="1800" speed="290">
 	<health now="1600" max="1600" />
 	<look type="383" corpse="13331" />
 	<targetchange interval="5000" chance="8" />
