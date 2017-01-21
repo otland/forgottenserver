@@ -6733,11 +6733,13 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 		return 1;
 	}
 
-	Creature* master = getCreature(L, 2);
-	bool force = getBoolean(L, 3, false);
-	if (master) {
-		if (force) {
+	if (Creature* master = getCreature(L, 2)) {
+		if (getBoolean(L, 3, false)) {
 			if (Monster* summon = creature->getMonster()) {
+				if (Creature* oldMaster = summon->getMaster()) {
+					oldMaster->removeSummon(summon);
+				}
+
 				master->addSummon(summon);
 				summon->setFollowCreature(nullptr);
 				summon->setAttackedCreature(nullptr);
