@@ -46,6 +46,7 @@ class Combat;
 class Condition;
 class Npc;
 class Monster;
+class InstantSpell;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -367,6 +368,7 @@ class LuaScriptInterface
 
 		// Push
 		static void pushBoolean(lua_State* L, bool value);
+		static void pushInstantSpell(lua_State* L, const InstantSpell& spell);
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 
@@ -414,10 +416,6 @@ class LuaScriptInterface
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
-		static int luaDoCreateItem(lua_State* L);
-		static int luaDoCreateItemEx(lua_State* L);
-		static int luaDoMoveCreature(lua_State* L);
-
 		static int luaDoPlayerAddItem(lua_State* L);
 		static int luaDoTileAddItemEx(lua_State* L);
 		static int luaDoSetCreatureLight(lua_State* L);
@@ -542,6 +540,8 @@ class LuaScriptInterface
 		static int luaGameCreateTile(lua_State* L);
 
 		static int luaGameStartRaid(lua_State* L);
+
+		static int luaGameGetClientVersion(lua_State* L);
 
 		static int luaGameReload(lua_State* L);
 
@@ -798,6 +798,7 @@ class LuaScriptInterface
 		static int luaCreatureGetDescription(lua_State* L);
 
 		static int luaCreatureGetPathTo(lua_State* L);
+		static int luaCreatureMove(lua_State* L);
 
 		// Player
 		static int luaPlayerCreate(lua_State* L);
@@ -956,8 +957,12 @@ class LuaScriptInterface
 		static int luaPlayerGetContainerById(lua_State* L);
 		static int luaPlayerGetContainerIndex(lua_State* L);
 
-		static int luaPlayerGetInstantSpellCount(lua_State* L);
+		static int luaPlayerGetInstantSpells(lua_State* L);
 		static int luaPlayerCanCast(lua_State* L);
+
+		static int luaPlayerHasChaseMode(lua_State* L);
+		static int luaPlayerHasSecureMode(lua_State* L);
+		static int luaPlayerGetFightMode(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
@@ -1246,12 +1251,7 @@ class LuaScriptInterface
 		// Spells
 		static int luaSpellCreate(lua_State* L);
 
-		static int luaSpellGetName(lua_State* L);
-		static int luaSpellGetWords(lua_State* L);
-		static int luaSpellGetLevel(lua_State* L);
-		static int luaSpellGetMagicLevel(lua_State* L);
 		static int luaSpellGetManaCost(lua_State* L);
-		static int luaSpellGetManaPercent(lua_State* L);
 		static int luaSpellGetSoulCost(lua_State* L);
 
 		static int luaSpellIsPremium(lua_State* L);

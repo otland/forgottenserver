@@ -58,6 +58,6 @@ string.trim = function(str)
 	return str:match'^()%s*$' and '' or str:match'^%s*(.*%S)'
 end
 
-if nextUseStaminaTime == nil then
+if not nextUseStaminaTime then
 	nextUseStaminaTime = {}
 end

@@ -49,6 +49,7 @@ extern TalkActions* g_talkActions;
 extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
+extern CreatureEvents* g_creatureEvents;
 extern Events* g_events;
 extern CreatureEvents* g_creatureEvents;
 extern Monsters g_monsters;
@@ -4841,26 +4842,7 @@ void Game::playerReportBug(uint32_t playerId, const std::string& message, const 
 		return;
 	}
 
-	if (player->getAccountType() == ACCOUNT_TYPE_NORMAL) {
-		return;
-	}
-
-	std::string fileName = "data/reports/" + player->getName() + " report.txt";
-	FILE* file = fopen(fileName.c_str(), "a");
-	if (!file) {
-		player->sendTextMessage(MESSAGE_EVENT_DEFAULT, "There was an error when processing your report, please contact a gamemaster.");
-		return;
-	}
-
-	const Position& playerPosition = player->getPosition();
-	if (category == BUG_CATEGORY_MAP) {
-		fprintf(file, "------------------------------\nName: %s [Map Position: %u, %u, %u] [Player Position: %u, %u, %u]\nComment: %s\n", player->getName().c_str(), position.x, position.y, position.z, playerPosition.x, playerPosition.y, playerPosition.z, message.c_str());
-	} else {
-		fprintf(file, "------------------------------\nName: %s [Player Position: %u, %u, %u]\nComment: %s\n", player->getName().c_str(), playerPosition.x, playerPosition.y, playerPosition.z, message.c_str());
-	}
-	fclose(file);
-
-	player->sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your report has been sent to " + g_config.getString(ConfigManager::SERVER_NAME) + ".");
+	g_events->eventPlayerOnReport(player, message, position, category);
 }
 
 void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment)
