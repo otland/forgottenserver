@@ -28,15 +28,15 @@ function Position:moveUpstairs()
 	self.z = self.z - 1
 
 	local defaultPosition = self + Position.directionOffset[DIRECTION_SOUTH]
-	local tileDefaultPosition = Tile(defaultPosition)
-	if not tileDefaultPosition or not tileDefaultPosition:isWalkable() then
+	local toTile = Tile(defaultPosition)
+	if not toTile or not toTile:isWalkable() then
 		for direction = DIRECTION_NORTH, DIRECTION_NORTHEAST do
 			if direction == DIRECTION_SOUTH then
 				direction = DIRECTION_WEST
 			end
 
 			local position = self + Position.directionOffset[direction]
-			local tilePosition = Tile(position)
+			toTile = Tile(position)
 			if tilePosition and tilePosition:isWalkable() then
 				swap(self, position)
 				return self
