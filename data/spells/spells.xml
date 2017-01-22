@@ -547,7 +547,7 @@
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 	</instant>
-	<instant group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/power_bolt.lua">
+	<instant group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_power_bolt.lua">
 		<vocation name="Royal Paladin" />
 	</instant>
 	<instant group="support" name="Poison Field" words="adevo grav pox" lvl="14" mana="200" soul="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/poison_field_rune.lua">
