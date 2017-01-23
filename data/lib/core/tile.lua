@@ -33,19 +33,43 @@ function Tile.relocateTo(self, toPosition)
 	return true
 end
 
-function Tile.isWalkable(self)
-	local ground = self:getGround()
-	if not ground or ground:hasProperty(CONST_PROP_BLOCKSOLID) then
-		return false
-	end
+function Tile.isWalkable(self, check)
+  local ground = self:getGround()
+  if not ground or ground:hasProperty(CONST_PROP_BLOCKSOLID) then
+    return false
+  end
 
-	local items = self:getItems()
-	for i = 1, self:getItemCount() do
-		local item = items[i]
-		local itemType = item:getType()
-		if itemType:getType() ~= ITEM_TYPE_MAGICFIELD and not itemType:isMovable() and item:hasProperty(CONST_PROP_BLOCKSOLID) then
-			return false
-		end
-	end
-	return true
+  if check then
+    if check.protection and self:hasFlag(TILESTATE_PROTECTIONZONE) or
+      check.floorChange and self:hasFlag(TILESTATE_FLOORCHANGE) or
+      check.house and self:getHouse() ~= nil then
+      return false
+    elseif check.creatures or check.players or check.monsters or check.npcs then
+      local creatures = self:getCreatures()
+      for i = 1, self:getCreatureCount() do
+        local creature = creatures[i]
+        if check.creatures and creature:isCreature() or
+					check.players and creature:isPlayer() or
+					check.monsters and creature:isMonster() or
+					check.npcs and creature:isNpc() then
+					return false
+        end
+      end
+    end
+  end
+
+  local items = self:getItems()
+  for i = 1, self:getItemCount() do
+    local item = items[i]
+    local itemType = item:getType()
+    if check then
+      if check.teleport and itemType:getType() == ITEM_TYPE_TELEPORT or
+        check.magicField and itemType:getType() == ITEM_TYPE_MAGICFIELD then
+        return false
+      end
+    elseif item:hasProperty(CONST_PROP_BLOCKSOLID) then
+      return false
+    end
+  end
+  return true
 end
