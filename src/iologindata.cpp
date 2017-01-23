@@ -466,18 +466,18 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	ItemMap itemMap;
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	query << "SELECT `parent_id`, `slot_id`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `slot_id` DESC";
 	if ((result = db.storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
-			int32_t pid = pair.second;
-			if (pid >= 1 && pid <= 10) {
-				player->internalAddThing(pid, item);
+			int32_t parentId = pair.second;
+			if (parentId >= 1 && parentId <= 10) {
+				player->internalAddThing(parentId, item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				ItemMap::const_iterator it2 = itemMap.find(parentId);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
@@ -494,7 +494,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	itemMap.clear();
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	query << "SELECT `parent_id`, `slot_id`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `slot_id` DESC";
 	if ((result = db.storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -502,14 +502,14 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
 
-			int32_t pid = pair.second;
-			if (pid >= 0 && pid < 100) {
-				DepotChest* depotChest = player->getDepotChest(pid, true);
+			int32_t parentId = pair.second;
+			if (parentId >= 0 && parentId < 100) {
+				DepotChest* depotChest = player->getDepotChest(parentId, true);
 				if (depotChest) {
 					depotChest->internalAddThing(item);
 				}
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				ItemMap::const_iterator it2 = itemMap.find(parentId);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
@@ -526,19 +526,19 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	itemMap.clear();
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	query << "SELECT `parent_id`, `slot_id`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `slot_id` DESC";
 	if ((result = db.storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
-			int32_t pid = pair.second;
+			int32_t parentId = pair.second;
 
-			if (pid >= 0 && pid < 100) {
+			if (parentId >= 0 && parentId < 100) {
 				player->getInbox()->internalAddThing(item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				ItemMap::const_iterator it2 = itemMap.find(parentId);
 
 				if (it2 == itemMap.end()) {
 					continue;
@@ -587,7 +587,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 	Database& db = Database::getInstance();
 	for (const auto& it : itemList) {
-		int32_t pid = it.first;
+		int32_t parentId = it.first;
 		Item* item = it.second;
 		++runningId;
 
@@ -597,7 +597,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		size_t attributesSize;
 		const char* attributes = propWriteStream.getStream(attributesSize);
 
-		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+		ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
 		if (!query_insert.addRow(ss)) {
 			return false;
 		}
@@ -790,7 +790,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `parent_id`, `slot_id`, `itemtype`, `count`, `attributes`) VALUES ");
 
 	ItemBlockList itemList;
 	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
@@ -813,7 +813,7 @@ bool IOLoginData::savePlayer(Player* player)
 			return false;
 		}
 
-		DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+		DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `parent_id`, `slot_id`, `itemtype`, `count`, `attributes`) VALUES ");
 		itemList.clear();
 
 		for (const auto& it : player->depotChests) {
@@ -835,7 +835,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `parent_id`, `slot_id`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
 	for (Item* item : player->getInbox()->getItemList()) {
@@ -941,8 +941,8 @@ bool IOLoginData::formatPlayerName(std::string& name)
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 {
 	do {
-		uint32_t sid = result->getNumber<uint32_t>("sid");
-		uint32_t pid = result->getNumber<uint32_t>("pid");
+		uint32_t slotId = result->getNumber<uint32_t>("slot_id");
+		uint32_t parentId = result->getNumber<uint32_t>("parent_id");
 		uint16_t type = result->getNumber<uint16_t>("itemtype");
 		uint16_t count = result->getNumber<uint16_t>("count");
 
@@ -958,8 +958,8 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			}
 
-			std::pair<Item*, uint32_t> pair(item, pid);
-			itemMap[sid] = pair;
+			std::pair<Item*, uint32_t> pair(item, parentId);
+			itemMap[slotId] = pair;
 		}
 	} while (result->next());
 }
