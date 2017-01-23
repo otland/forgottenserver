@@ -378,6 +378,6 @@ function Player:conjureItem(reagentId, conjureId, conjureCount, effect)
 		item:decay()
 	end
 
-	self:getPosition():sendMagicEffect(effect)
+	self:getPosition():sendMagicEffect(item:getType():isRune() and CONST_ME_MAGIC_RED or effect)
 	return true
 end
