@@ -40,10 +40,10 @@ Monster* Monster::createMonster(const std::string& name)
 	return new Monster(mType);
 }
 
-Monster::Monster(MonsterType* mtype) :
+Monster::Monster(MonsterType* mType) :
 	Creature(),
-	strDescription(asLowerCaseString(mtype->nameDescription)),
-	mType(mtype)
+	strDescription(asLowerCaseString(mType->nameDescription)),
+	mType(mType)
 {
 	defaultOutfit = mType->info.outfit;
 	currentOutfit = mType->info.outfit;

@@ -166,6 +166,7 @@ bool MonsterType::createLootContainer(Container* parent, const LootBlock& lootbl
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
+	unloadedMonsters = {};
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
 	if (!result) {
@@ -175,30 +176,13 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 	loaded = true;
 
-	std::list<std::pair<MonsterType*, std::string>> monsterScriptList;
 	for (auto monsterNode : doc.child("monsters").children()) {
-		loadMonster("data/monster/" + std::string(monsterNode.attribute("file").as_string()), monsterNode.attribute("name").as_string(), monsterScriptList, reloading);
-	}
-
-	if (!monsterScriptList.empty()) {
-		if (!scriptInterface) {
-			scriptInterface.reset(new LuaScriptInterface("Monster Interface"));
-			scriptInterface->initState();
-		}
-
-		for (const auto& scriptEntry : monsterScriptList) {
-			MonsterType* mType = scriptEntry.first;
-			if (scriptInterface->loadFile("data/monster/scripts/" + scriptEntry.second) == 0) {
-				mType->info.scriptInterface = scriptInterface.get();
-				mType->info.creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
-				mType->info.creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
-				mType->info.creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
-				mType->info.creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
-				mType->info.thinkEvent = scriptInterface->getEvent("onThink");
-			} else {
-				std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << scriptEntry.second << std::endl;
-				std::cout << scriptInterface->getLastLuaError() << std::endl;
-			}
+		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
+		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
+		if (reloading && monsters.find(name) != monsters.end()) {
+			loadMonster(file, name, true);
+		} else {
+			unloadedMonsters.emplace(name, file);
 		}
 	}
 	return true;
@@ -626,39 +610,38 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	return true;
 }
 
-bool Monsters::loadMonster(const std::string& file, const std::string& monsterName, std::list<std::pair<MonsterType*, std::string>>& monsterScriptList, bool reloading /*= false*/)
+MonsterType* Monsters::loadMonster(const std::string& file, const std::string& monsterName, bool reloading /*= false*/)
 {
 	MonsterType* mType = nullptr;
-	bool new_mType = true;
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(file.c_str());
 	if (!result) {
 		printXMLError("Error - Monsters::loadMonster", file, result);
-		return false;
+		return nullptr;
 	}
 
 	pugi::xml_node monsterNode = doc.child("monster");
 	if (!monsterNode) {
 		std::cout << "[Error - Monsters::loadMonster] Missing monster node in: " << file << std::endl;
-		return false;
+		return nullptr;
 	}
 
 	pugi::xml_attribute attr;
 	if (!(attr = monsterNode.attribute("name"))) {
 		std::cout << "[Error - Monsters::loadMonster] Missing name in: " << file << std::endl;
-		return false;
+		return nullptr;
 	}
 
 	if (reloading) {
-		mType = getMonsterType(monsterName);
-		if (mType != nullptr) {
-			new_mType = false;
+		auto it = monsters.find(asLowerCaseString(monsterName));
+		if (it == monsters.end()) {
+			mType = &it->second;
 			mType->info = {};
 		}
 	}
 
-	if (new_mType) {
+	if (!mType) {
 		mType = &monsters[asLowerCaseString(monsterName)];
 	}
 
@@ -705,7 +688,23 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {
-		monsterScriptList.emplace_back(mType, attr.as_string());
+		if (!scriptInterface) {
+			scriptInterface.reset(new LuaScriptInterface("Monster Interface"));
+			scriptInterface->initState();
+		}
+
+		std::string script = attr.as_string();
+		if (scriptInterface->loadFile("data/monster/scripts/" + script) == 0) {
+			mType->info.scriptInterface = scriptInterface.get();
+			mType->info.creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
+			mType->info.creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
+			mType->info.creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
+			mType->info.creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
+			mType->info.thinkEvent = scriptInterface->getEvent("onThink");
+		} else {
+			std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << script << std::endl;
+			std::cout << scriptInterface->getLastLuaError() << std::endl;
+		}
 	}
 
 	pugi::xml_node node;
@@ -1103,7 +1102,7 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monsterNa
 	mType->info.defenseSpells.shrink_to_fit();
 	mType->info.voiceVector.shrink_to_fit();
 	mType->info.scripts.shrink_to_fit();
-	return true;
+	return mType;
 }
 
 bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
@@ -1182,10 +1181,16 @@ void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 
 MonsterType* Monsters::getMonsterType(const std::string& name)
 {
-	auto it = monsters.find(asLowerCaseString(name));
+	std::string lowerCaseName = asLowerCaseString(name);
 
+	auto it = monsters.find(lowerCaseName);
 	if (it == monsters.end()) {
-		return nullptr;
+		auto it = unloadedMonsters.find(lowerCaseName);
+		if (it == unloadedMonsters.end()) {
+			return nullptr;
+		}
+
+		return loadMonster(it->second, name);
 	}
 	return &it->second;
 }
