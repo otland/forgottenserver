@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Northern Pike" nameDescription="a northern pike" race="undead" experience="0" speed="180" manacost="0">
+<monster name="Northern Pike" nameDescription="a northern pike" race="undead" experience="0" speed="180">
 	<health now="95" max="95" />
 	<look type="454" corpse="2669" />
 	<targetchange interval="4000" chance="0" />

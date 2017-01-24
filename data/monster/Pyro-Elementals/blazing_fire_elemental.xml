@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Blazing Fire Elemental" nameDescription="a blazing fire elemental" race="fire" experience="450" speed="220" manacost="0">
+<monster name="Blazing Fire Elemental" nameDescription="a blazing fire elemental" race="fire" experience="450" speed="220">
 	<health now="650" max="650" />
 	<look type="49" corpse="8964" />
 	<targetchange interval="5000" chance="8" />

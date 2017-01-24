@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Pirate Skeleton" nameDescription="a pirate skeleton" race="undead" experience="85" speed="180" manacost="0">
+<monster name="Pirate Skeleton" nameDescription="a pirate skeleton" race="undead" experience="85" speed="180">
 	<health now="190" max="190" />
 	<look type="195" corpse="6070" />
 	<targetchange interval="5000" chance="0" />

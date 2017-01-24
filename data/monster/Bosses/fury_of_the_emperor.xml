@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fury of the Emperor" nameDescription="Fury of the Emperor" race="undead" experience="26600" speed="450" manacost="0">
+<monster name="Fury of the Emperor" nameDescription="Fury of the Emperor" race="undead" experience="26600" speed="450">
 	<health now="28800" max="28800" />
 	<look type="351" corpse="0" />
 	<targetchange interval="5000" chance="8" />

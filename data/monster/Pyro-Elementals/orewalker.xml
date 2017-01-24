@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Orewalker" nameDescription="an orewalker" race="undead" experience="4800" speed="250" manacost="0">
+<monster name="Orewalker" nameDescription="an orewalker" race="undead" experience="4800" speed="250">
 	<health now="7200" max="7200" />
 	<look type="490" corpse="17256" />
 	<targetchange interval="4000" chance="10" />

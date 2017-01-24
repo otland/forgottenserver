@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Imperor" nameDescription="The Imperor" race="fire" experience="8000" speed="330" manacost="0">
+<monster name="The Imperor" nameDescription="The Imperor" race="fire" experience="8000" speed="330">
 	<health now="15000" max="15000" />
 	<look type="237" corpse="8635" />
 	<targetchange interval="5000" chance="5" />

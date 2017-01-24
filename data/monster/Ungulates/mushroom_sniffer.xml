@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mushroom Sniffer" nameDescription="a mushroom sniffer" race="blood" experience="0" speed="120" manacost="0">
+<monster name="Mushroom Sniffer" nameDescription="a mushroom sniffer" race="blood" experience="0" speed="120">
 	<health now="250" max="250" />
 	<look type="60" corpse="2935" />
 	<targetchange interval="5000" chance="0" />

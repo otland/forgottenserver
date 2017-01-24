@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="210" manacost="0">
+<monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="210">
 	<health now="340" max="340" />
 	<look type="116" corpse="6043" />
 	<targetchange interval="4000" chance="0" />
