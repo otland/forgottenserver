@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Werewolf" nameDescription="a werewolf" experience="1900" speed="200" race="blood" manacost="0">
+<monster name="Werewolf" nameDescription="a werewolf" experience="1900" speed="200" race="blood">
 	<health now="1955" max="1955" />
 	<targetchange interval="4000" chance="10" />
 	<look type="308" corpse="20380" />

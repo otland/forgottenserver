@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Brimstone Bug" namedescription="a brimstone bug" race="venom" experience="900" speed="200" manacost="0">
+<monster name="Brimstone Bug" namedescription="a brimstone bug" race="venom" experience="900" speed="200">
 	<health now="1300" max="1300" />
 	<look type="352" corpse="12527" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="White Shade" nameDescription="a white shade" race="undead" experience="120" speed="190" manacost="0">
+<monster name="White Shade" nameDescription="a white shade" race="undead" experience="120" speed="190">
 	<health now="260" max="260" />
 	<look type="560" corpse="21376" />
 	<targetchange interval="4000" chance="10" />

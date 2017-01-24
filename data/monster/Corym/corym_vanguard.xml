@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Corym Vanguard" nameDescription="a corym vanguard" race="blood" experience="490" speed="210" manacost="0">
+<monster name="Corym Vanguard" nameDescription="a corym vanguard" race="blood" experience="490" speed="210">
 	<health now="700" max="700" />
 	<look type="534" head="101" legs="101" corpse="19734" />
 	<targetchange interval="4000" chance="10" />

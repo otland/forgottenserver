@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Banshee" nameDescription="a banshee" race="undead" experience="900" speed="200" manacost="0">
+<monster name="Banshee" nameDescription="a banshee" race="undead" experience="900" speed="200">
 	<health now="1000" max="1000" />
 	<look type="78" corpse="6019" />
 	<targetchange interval="4000" chance="10" />

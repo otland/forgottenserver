@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Clay Guardian" nameDescription="a clay guardian" race="undead" experience="400" speed="210" manacost="0">
+<monster name="Clay Guardian" nameDescription="a clay guardian" race="undead" experience="400" speed="210">
 	<health now="625" max="625" />
 	<look type="333" corpse="13972" />
 	<targetchange interval="4000" chance="10" />
