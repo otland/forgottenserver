@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Esmeralda" nameDescription="Esmeralda" race="blood" experience="600" speed="245" manacost="0">
+<monster name="Esmeralda" nameDescription="Esmeralda" race="blood" experience="600" speed="245">
 	<health now="800" max="800" />
 	<look type="305" corpse="9871" />
 	<targetchange interval="5000" chance="8" />

@@ -200,8 +200,8 @@
 	<action fromid="2574" toid="2577" script="other/fluids.lua" />
 	<action fromid="5792" toid="5797" script="other/die.lua" />
 	<action itemid="6558" script="other/potions.lua" />
-	<action fromid="7439" toid="7440" script="other/potions.lua"/>
-	<action itemid="7443" script="other/potions.lua"/>
+	<action fromid="7439" toid="7440" script="other/potions.lua" />
+	<action itemid="7443" script="other/potions.lua" />
 	<action fromid="7588" toid="7591" script="other/potions.lua" />
 	<action itemid="7618" script="other/potions.lua" />
 	<action itemid="7620" script="other/potions.lua" />

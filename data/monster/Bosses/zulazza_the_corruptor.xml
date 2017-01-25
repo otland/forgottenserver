@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Zulazza the Corruptor" nameDescription="Zulazza The Corruptor" race="blood" experience="9800" speed="290" manacost="0">
+<monster name="Zulazza the Corruptor" nameDescription="Zulazza The Corruptor" race="blood" experience="9800" speed="290">
 	<health now="28000" max="28000" />
 	<look type="334" corpse="11107" />
 	<targetchange interval="2000" chance="10" />

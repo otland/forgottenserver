@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Massive Earth Elemental" nameDescription="a massive earth elemental" race="undead" experience="950" speed="240" manacost="0">
+<monster name="Massive Earth Elemental" nameDescription="a massive earth elemental" race="undead" experience="950" speed="240">
 	<health now="1330" max="1330" />
 	<look type="285" corpse="8933" />
 	<targetchange interval="4000" chance="10" />

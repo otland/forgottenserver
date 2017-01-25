@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Rotworm Queen" nameDescription="a rotworm queen" race="blood" experience="75" speed="126" manacost="0">
+<monster name="Rotworm Queen" nameDescription="a rotworm queen" race="blood" experience="75" speed="126">
 	<health now="105" max="105" />
 	<look type="295" corpse="8947" />
 	<targetchange interval="60000" chance="0" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Adept of the Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="215" manacost="0">
+<monster name="Adept of the Cult" nameDescription="an adept of the cult" race="blood" experience="400" speed="215">
 	<health now="430" max="430" />
 	<look type="194" head="114" body="94" legs="94" feet="57" corpse="20311" />
 	<targetchange interval="4000" chance="10" />

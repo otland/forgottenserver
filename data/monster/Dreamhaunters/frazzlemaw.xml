@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Frazzlemaw" nameDescription="a frazzlemaw" race="blood" experience="3400" speed="250" manacost="0">
+<monster name="Frazzlemaw" nameDescription="a frazzlemaw" race="blood" experience="3400" speed="250">
 	<health now="4100" max="4100" />
 	<look type="594" corpse="22567" />
 	<targetchange interval="4000" chance="10" />

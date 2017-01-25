@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Undead Gladiator" nameDescription="an undead gladiator" race="undead" experience="800" speed="180" manacost="0">
+<monster name="Undead Gladiator" nameDescription="an undead gladiator" race="undead" experience="800" speed="180">
 	<health now="1000" max="1000" />
 	<look type="306" corpse="9823" />
 	<targetchange interval="4000" chance="10" />

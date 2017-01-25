@@ -1167,6 +1167,12 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
+		case RETURNVALUE_NOSUCHRAIDEXISTS:
+			return "No such raid exists.";
+
+		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING:
+			return "Another raid is already executing.";
+
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}

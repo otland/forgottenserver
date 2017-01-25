@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Drasilla" nameDescription="Drasilla" race="blood" experience="700" speed="170" manacost="0">
+<monster name="Drasilla" nameDescription="Drasilla" race="blood" experience="700" speed="170">
 	<health now="1260" max="1260" />
 	<look type="34" corpse="7349" />
 	<flags>
