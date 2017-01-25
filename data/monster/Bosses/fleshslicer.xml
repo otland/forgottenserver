@@ -25,6 +25,4 @@
 	</immunities>
 	<voices interval="3000" chance="200">
 	</voices>
-	<loot>
-	</loot>
 </monster>

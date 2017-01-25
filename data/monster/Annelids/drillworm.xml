@@ -45,22 +45,21 @@
 		<voice sentence="Knarrrk!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="50" chance="50000" />
-		<item name="guardian shield" chance="2240" />
-		<item name="pick" chance="5280" />
-		<item name="worm" countmax="5" chance="4580" />
-		<item name="iron ore" chance="1750" />
-		<item name="spiked squelcher" chance="540" />
-		<item name="terra amulet" chance="2360" />
-		<item name="lump of earth" chance="15000" />
-		<item name="clay lump" chance="700" />
-		<item id="13757" chance="12130" /><!-- Coal -->
-		<item name="green crystal splinter" chance="9780" />
-		<item name="brown crystal splinter" chance="9260" />
-		<item name="blue crystal splinter" chance="9610" />
-		<item name="pulverized ore" chance="5400" />
-		<item name="vein of ore" chance="7280" />
-		<item name="drill bolt" countmax="2" chance="4870" />
+		<item name="gold coin" countmax="150" chance="100000" />
+		<item name="lump of earth" chance="14960" />
+		<item id="13757" chance="12120" /><!-- coal -->
+		<item name="brown crystal splinter" chance="10200" />
+		<item name="green crystal splinter" chance="10080" />
+		<item name="blue crystal splinter" chance="9930" />
+		<item name="vein of ore" chance="7380" />
+		<item name="pulverized ore" chance="5110" />
+		<item name="pick" chance="5100" />
+		<item name="worm" countmax="5" chance="4990" />
+		<item name="drill bolt" countmax="2" chance="4980" />
+		<item name="terra amulet" chance="2610" />
+		<item name="dwarven ring" chance="2370" />
+		<item name="iron ore" chance="1530" />
+		<item name="clay lump" chance="730" />
+		<item name="spiked squelcher" chance="510" />
 	</loot>
 </monster>

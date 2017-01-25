@@ -56,44 +56,44 @@
 		<voice sentence="I am coming for you!" />
 	</voices>
 	<loot>
-		<item name="emerald bangle" chance="20000" />
 		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="platinum coin" countmax="30" chance="16666" />
-		<item name="violet gem" chance="16666" />
-		<item name="yellow gem" chance="20000" />
-		<item name="green gem" chance="12500" />
-		<item name="red gem" chance="20000" />
-		<item name="blue gem" chance="20000" />
-		<item name="halberd" chance="20000" />
-		<item name="guardian halberd" chance="20000" />
-		<item name="heavy mace" chance="25000" />
-		<item name="mastermind shield" chance="4166" />
-		<item name="guardian shield" chance="7692" />
-		<item name="crown shield" chance="11111" />
-		<item name="demon shield" chance="4166" />
-		<item name="tower shield" chance="9090" />
-		<item name="power bolt" countmax="94" chance="16666" />
-		<item name="soul orb" countmax="5" chance="20000" />
-		<item name="demon horn" countmax="2" chance="12500" />
-		<item name="infernal bolt" countmax="46" chance="20000" />
-		<item name="viper star" countmax="70" chance="16666" />
-		<item name="assassin star" countmax="50" chance="16666" />
-		<item name="diamond sceptre" chance="7142" />
-		<item name="onyx flail" chance="14285" />
-		<item name="demonbone" chance="1234" />
-		<item name="berserk potion" chance="16666" />
-		<item name="mastermind potion" chance="14285" />
-		<item name="great mana potion" chance="11111" />
-		<item name="great health potion" chance="14285" />
-		<item id="7632" countmax="2" chance="33333" /><!-- giant shimmering pearl -->
-		<item name="flaming arrow" countmax="46" chance="20000" />
-		<item name="great spirit potion" chance="14285" />
-		<item name="ultimate health potion" chance="14285" />
-		<item name="lavos armor" chance="1851" />
-		<item name="paladin armor" chance="10000" />
-		<item name="obsidian truncheon" chance="1234" />
-		<item id="9808" chance="1234" /><!-- rusty armor -->
-		<item id="9810" chance="50000" /><!-- rusty armor -->
-		<item name="gold ingot" chance="20000" />
+		<item id="9810" chance="62290" /><!-- rusty armor (rare) -->
+		<item id="7632" countmax="2" chance="38140" /><!-- giant shimmering pearl -->
+		<item name="heavy mace" chance="28390" />
+		<item name="assassin star" countmax="50" chance="23730" />
+		<item name="blue gem" chance="22880" />
+		<item name="emerald bangle" chance="22460" />
+		<item name="yellow gem" chance="22030" />
+		<item name="infernal bolt" countmax="46" chance="21610" />
+		<item name="guardian halberd" chance="21190" />
+		<item name="red gem" chance="21190" />
+		<item name="berserk potion" chance="20340" />
+		<item name="halberd" chance="20340" />
+		<item name="gold ingot" chance="19920" />
+		<item name="platinum coin" countmax="30" chance="19920" />
+		<item name="flaming arrow" countmax="96" chance="19490" />
+		<item name="soul orb" countmax="5" chance="19490" />
+		<item name="power bolt" countmax="99" chance="19070" />
+		<item name="violet gem" chance="17370" />
+		<item name="green gem" chance="16530" />
+		<item name="viper star" countmax="70" chance="16100" />
+		<item name="mastermind potion" chance="15680" />
+		<item name="onyx flail" chance="14410" />
+		<item name="great health potion" chance="13560" />
+		<item name="ultimate health potion" chance="13560" />
+		<item name="crown shield" chance="13140" />
+		<item name="great spirit potion" chance="12710" />
+		<item name="demon horn" countmax="2" chance="12290" />
+		<item name="great mana potion" chance="12290" />
+		<item name="paladin armor" chance="10590" />
+		<item name="tower shield" chance="10170" />
+		<item name="guardian shield" chance="7630" />
+		<item name="diamond sceptre" chance="7200" />
+		<item name="demon shield" chance="4240" />
+		<item name="mastermind shield" chance="3810" />
+		<item name="demonbone" chance="1690" />
+		<item name="lavos armor" chance="1270" />
+		<item name="obsidian truncheon" chance="1270" />
+		<item name="the stomper" chance="420" />
 	</loot>
 </monster>

@@ -38,11 +38,9 @@
 		<voice sentence="Yooodelaaaheeeheee!" />
 	</voices>
 	<loot>
-		<item name="snowball" countmax="22" chance="10000" />
-		<item name="gold coin" countmax="60" chance="100000" />
-		<item name="gold coin" countmax="40" chance="100000" />
-		<item name="bunnyslippers" chance="1333" />
-		<item name="meat" countmax="4" chance="33333" />
-		<item name="ham" countmax="5" chance="10000" />
+		<item name="gold coin" countmax="10" chance="75000" />
+		<item name="meat" chance="66670" />
+		<item name="ham" chance="50000" />
+		<item name="snowball" countmax="20" chance="50000" />
 	</loot>
 </monster>

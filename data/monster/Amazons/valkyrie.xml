@@ -38,19 +38,19 @@
 		<voice sentence="One more head for me!" />
 	</voices>
 	<loot>
-		<item name="small diamond" chance="200" />
-		<item name="gold coin" countmax="12" chance="30000" />
-		<item name="protection amulet" chance="1086" />
-		<item id="2229" chance="760" /><!-- skull -->
-		<item name="double axe" chance="492" />
-		<item name="spear" countmax="3" chance="55000" />
-		<item name="plate armor" chance="719" />
-		<item name="chain armor" chance="10000" />
-		<item name="meat" chance="30100" />
-		<item name="red apple" countmax="2" chance="6800" />
-		<item name="hunting spear" chance="5155" />
-		<item name="health potion" chance="591" />
-		<item name="girlish hair decoration" chance="5800" />
-		<item name="protective charm" chance="3400" />
+		<item name="spear" countmax="3" chance="55210" />
+		<item name="gold coin" countmax="12" chance="32580" />
+		<item name="meat" chance="30040" />
+		<item name="chain armor" chance="10150" />
+		<item name="red apple" countmax="2" chance="7440" />
+		<item name="girlish hair decoration" chance="5950" />
+		<item name="hunting spear" chance="5100" />
+		<item name="protective charm" chance="3230" />
+		<item name="protection amulet" chance="1180" />
+		<item name="plate armor" chance="860" />
+		<item id="2229" chance="770" /><!-- skull -->
+		<item name="health potion" chance="530" />
+		<item name="double axe" chance="460" />
+		<item name="small diamond" chance="140" />
 	</loot>
 </monster>
