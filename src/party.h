@@ -28,6 +28,13 @@ class Party;
 
 using PlayerVector = std::vector<Player*>;
 
+enum SharedExperienceState_t {
+	SHAREDEXPERIENCE_STATE_DEACTIVATED = 0,
+	SHAREDEXPERIENCE_STATE_ACTIVE = 1,
+	SHAREDEXPERIENCE_STATE_ACTIVATED_LEVELSPREADTOOWIDE = 2,
+	SHAREDEXPERIENCE_STATE_ACTIVATED_MEMBERSINACTIVE = 3,
+};
+
 class Party
 {
 	public:
@@ -75,7 +82,7 @@ class Party
 		bool isSharedExperienceEnabled() const {
 			return sharedExpEnabled;
 		}
-		bool canUseSharedExperience(const Player* player) const;
+		SharedExperienceState_t canUseSharedExperience(const Player* player) const;
 		void updateSharedExperience();
 
 		void updateVocationsList();
@@ -85,6 +92,9 @@ class Party
 
 	protected:
 		bool canEnableSharedExperience();
+		void setSharedExperienceState(const SharedExperienceState_t& state) {
+			sharedExpState = state;
+		}
 
 		std::map<uint32_t, int64_t> ticksMap;
 
@@ -97,6 +107,7 @@ class Party
 
 		bool sharedExpActive = false;
 		bool sharedExpEnabled = false;
+		SharedExperienceState_t sharedExpState = SHAREDEXPERIENCE_STATE_DEACTIVATED;
 };
 
 #endif
