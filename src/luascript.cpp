@@ -6733,18 +6733,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 		return 1;
 	}
 
-	Creature* master = getCreature(L, 2);
-	if (master) {
-		pushBoolean(L, creature->convinceCreature(master));
-	} else {
-		master = creature->getMaster();
-		if (master) {
-			master->removeSummon(creature);
-			creature->incrementReferenceCounter();
-			creature->setDropLoot(true);
-		}
-		pushBoolean(L, true);
-	}
+	creature->setMaster(getCreature(L, 2));
 	g_game.updateCreatureType(creature);
 	return 1;
 }

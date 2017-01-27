@@ -413,7 +413,7 @@ void Creature::onRemoveCreature(Creature* creature, bool)
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
 		if (master && !master->isRemoved()) {
-			master->removeSummon(this);
+			this->setMaster(nullptr);
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
@@ -674,7 +674,7 @@ void Creature::onDeath()
 	death(lastHitCreature);
 
 	if (master) {
-		master->removeSummon(this);
+		this->setMaster(nullptr);
 	}
 
 	if (droppedCorpse) {
@@ -1121,24 +1121,17 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	}
 }
 
-void Creature::addSummon(Creature* creature)
-{
-	creature->setDropLoot(false);
-	creature->setLossSkill(false);
-	creature->setMaster(this);
-	creature->incrementReferenceCounter();
-	summons.push_back(creature);
-}
-
-void Creature::removeSummon(Creature* creature)
-{
-	auto cit = std::find(summons.begin(), summons.end(), creature);
-	if (cit != summons.end()) {
-		creature->setDropLoot(false);
-		creature->setLossSkill(true);
-		creature->setMaster(nullptr);
-		creature->decrementReferenceCounter();
-		summons.erase(cit);
+void Creature::setMaster(Creature* creature) {
+	master = creature;
+	if (creature) {
+		this->incrementReferenceCounter();
+		creature->summons.push_back(this);
+	} else {
+		auto cit = std::find(summons.begin(), summons.end(), this);
+		if (cit != summons.end()) {
+			this->decrementReferenceCounter();
+			summons.erase(cit);
+		}
 	}
 }
 
