@@ -294,6 +294,9 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
+		void buildInventoryList();
+		const std::vector<uint16_t>& getInventory() const { return inventory; }
+
 		inline size_t size() const {
 			return items.size();
 		}
@@ -303,5 +306,6 @@ class Items
 	protected:
 		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
+		std::vector<uint16_t> inventory;
 };
 #endif
