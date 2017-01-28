@@ -1753,7 +1753,6 @@ void Monster::death(Creature*)
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
 		summon->setMaster(nullptr);
-		summon->decrementReferenceCounter();
 	}
 	summons.clear();
 
@@ -1943,7 +1942,6 @@ bool Monster::convinceCreature(Creature* creature)
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
 		summon->setMaster(nullptr);
-		summon->decrementReferenceCounter();
 	}
 	summons.clear();
 

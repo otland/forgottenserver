@@ -43,7 +43,6 @@ Creature::~Creature()
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(nullptr);
 		summon->setMaster(nullptr);
-		summon->decrementReferenceCounter();
 	}
 
 	for (Condition* condition : conditions) {
@@ -1121,16 +1120,16 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	}
 }
 
-void Creature::setMaster(Creature* creature) {
-	master = creature;
-	if (creature) {
-		this->incrementReferenceCounter();
-		creature->summons.push_back(this);
+void Creature::setMaster(Creature* master) {
+	this->master = master;
+	if (master) {
+		incrementReferenceCounter();
+		master->summons.push_back(this);
 	} else {
-		auto cit = std::find(summons.begin(), summons.end(), this);
-		if (cit != summons.end()) {
-			this->decrementReferenceCounter();
-			summons.erase(cit);
+		auto summon = std::find(master->summons.begin(), master->summons.end(), this);
+		if (summon != master->summons.end()) {
+			decrementReferenceCounter();
+			summons.erase(summon);
 		}
 	}
 }
