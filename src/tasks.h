@@ -59,15 +59,8 @@ class Task
 		std::function<void (void)> func;
 };
 
-inline Task* createTask(const std::function<void (void)>& f)
-{
-	return new Task(f);
-}
-
-inline Task* createTask(uint32_t expiration, const std::function<void (void)>& f)
-{
-	return new Task(expiration, f);
-}
+Task* createTask(const std::function<void (void)>& f);
+Task* createTask(uint32_t expiration, const std::function<void (void)>& f);
 
 class Dispatcher : public ThreadHolder<Dispatcher> {
 	public:

@@ -428,7 +428,7 @@ class Creature : virtual public Thing
 			position = tile->getPosition();
 		}
 
-		inline const Position& getPosition() const final {
+		const Position& getPosition() const final {
 			return position;
 		}
 

@@ -50,10 +50,7 @@ class SchedulerTask : public Task
 		friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
 };
 
-inline SchedulerTask* createSchedulerTask(uint32_t delay, const std::function<void (void)>& f)
-{
-	return new SchedulerTask(delay, f);
-}
+SchedulerTask* createSchedulerTask(uint32_t delay, const std::function<void (void)>& f);
 
 struct TaskComparator {
 	bool operator()(const SchedulerTask* lhs, const SchedulerTask* rhs) const {

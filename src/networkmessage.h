@@ -150,11 +150,11 @@ class NetworkMessage
 		}
 
 	protected:
-		inline bool canAdd(size_t size) const {
+		bool canAdd(size_t size) const {
 			return (size + info.position) < MAX_BODY_LENGTH;
 		}
 
-		inline bool canRead(int32_t size) {
+		bool canRead(int32_t size) {
 			if ((info.position + size) > (info.length + 8) || size >= (NETWORKMESSAGE_MAXSIZE - info.position)) {
 				info.overrun = true;
 				return false;

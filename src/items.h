@@ -294,7 +294,7 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
-		inline size_t size() const {
+		size_t size() const {
 			return items.size();
 		}
 

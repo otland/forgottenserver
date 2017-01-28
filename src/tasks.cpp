@@ -24,6 +24,16 @@
 
 extern Game g_game;
 
+Task* createTask(const std::function<void (void)>& f)
+{
+	return new Task(f);
+}
+
+Task* createTask(uint32_t expiration, const std::function<void (void)>& f)
+{
+	return new Task(expiration, f);
+}
+
 void Dispatcher::threadMain()
 {
 	// NOTE: second argument defer_lock is to prevent from immediate locking
