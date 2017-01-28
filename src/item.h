@@ -37,6 +37,11 @@ class Door;
 class MagicField;
 class BedItem;
 
+namespace tfs {
+class Item;
+class Item_Attribute;
+}
+
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
 	CONST_PROP_HASHEIGHT,
@@ -527,10 +532,11 @@ class Item : virtual public Thing
 
 		//serialization
 		virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-		bool unserializeAttr(PropStream& propStream);
+		virtual Attr_ReadValue readAttr(AttrTypes_t attr, const tfs::Item_Attribute& value);
+		virtual bool unserializeAttr(const tfs::Item&);
 		virtual bool unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream);
 
-		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
+		virtual void serializeAttr(tfs::Item*) const;
 
 		bool isPushable() const final {
 			return isMoveable();

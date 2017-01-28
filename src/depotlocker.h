@@ -39,6 +39,8 @@ class DepotLocker final : public Container
 
 		//serialization
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
+		bool unserializeAttr(const tfs::Item&) final;
+		void serializeAttr(tfs::Item*) const final;
 
 		uint16_t getDepotId() const {
 			return depotId;

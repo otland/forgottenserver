@@ -72,7 +72,8 @@ class Door final : public Item
 
 		//serialization
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		void serializeAttr(PropWriteStream&) const final {}
+		bool unserializeAttr(const tfs::Item&) final;
+		void serializeAttr(tfs::Item*) const final;
 
 		void setDoorId(uint32_t doorId) {
 			setIntAttr(ITEM_ATTRIBUTE_DOORID, doorId);

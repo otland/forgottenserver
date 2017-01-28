@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "iologindata.h"
 #include "configmanager.h"
 #include "game.h"
@@ -591,13 +593,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		Item* item = it.second;
 		++runningId;
 
-		propWriteStream.clear();
-		item->serializeAttr(propWriteStream);
+		tfs::Item pbItem;
+		item->serializeAttr(&pbItem);
 
-		size_t attributesSize;
-		const char* attributes = propWriteStream.getStream(attributesSize);
-
-		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeString(pbItem.SerializeAsString());
 		if (!query_insert.addRow(ss)) {
 			return false;
 		}
@@ -621,13 +620,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 				queue.emplace_back(subContainer, runningId);
 			}
 
-			propWriteStream.clear();
-			item->serializeAttr(propWriteStream);
+			tfs::Item pbItem;
+			item->serializeAttr(&pbItem);
 
-			size_t attributesSize;
-			const char* attributes = propWriteStream.getStream(attributesSize);
-
-			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeString(pbItem.SerializeAsString());
 			if (!query_insert.addRow(ss)) {
 				return false;
 			}
@@ -946,20 +942,15 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		uint16_t type = result->getNumber<uint16_t>("itemtype");
 		uint16_t count = result->getNumber<uint16_t>("count");
 
-		unsigned long attrSize;
-		const char* attr = result->getStream("attributes", attrSize);
-
-		PropStream propStream;
-		propStream.init(attr, attrSize);
+		tfs::Item pbItem;
+		pbItem.ParseFromString(result->getString("attributes"));
 
 		Item* item = Item::CreateItem(type, count);
 		if (item) {
-			if (!item->unserializeAttr(propStream)) {
+			if (!item->unserializeAttr(pbItem)) {
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			}
-
-			std::pair<Item*, uint32_t> pair(item, pid);
-			itemMap[sid] = pair;
+			itemMap[sid] = std::make_pair(item, pid);
 		}
 	} while (result->next());
 }

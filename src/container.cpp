@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "container.h"
 #include "iomap.h"
 #include "game.h"
@@ -107,6 +109,28 @@ Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
+bool Container::unserializeAttr(const tfs::Item& pbItem)
+{
+	if (pbItem.has_container()) {
+		const tfs::Item_Container& container = pbItem.container();
+
+		for (const tfs::Item& child : container.item()) {
+			Item* item = Item::CreateItem(child.id());
+			if (!item) {
+				return false;
+			}
+
+			if (!item->unserializeAttr(child)) {
+				return false;
+			}
+
+			addItem(item);
+			updateItemWeight(item->getWeight());
+		}
+	}
+	return Item::unserializeAttr(pbItem);
+}
+
 bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream)
 {
 	bool ret = Item::unserializeItemNode(loader, node, propStream);
@@ -139,6 +163,16 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 		updateItemWeight(item->getWeight());
 	}
 	return true;
+}
+
+void Container::serializeAttr(tfs::Item* item) const
+{
+	Item::serializeAttr(item);
+
+	tfs::Item_Container* container = item->mutable_container();
+	for (const Item* child : itemlist) {
+		child->serializeAttr(container->add_item());
+	}
 }
 
 void Container::updateItemWeight(int32_t diff)

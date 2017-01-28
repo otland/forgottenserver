@@ -1,0 +1,55 @@
+syntax = "proto2";
+package tfs;
+
+message Position {
+	required uint32 x = 1;
+	required uint32 y = 2;
+	required uint32 z = 3;
+}
+
+message Item {
+	required uint32 id = 1;
+
+	message Attribute {
+		oneof value {
+			int64 integer = 1;
+			string string = 2;
+		}
+	}
+
+	map<int32, Attribute> attributes = 2;
+
+	message Bed {
+		required uint32 sleeperGUID = 1;
+		required uint64 sleepStart = 2;
+	}
+
+	message Container {
+		repeated Item item = 1;
+	}
+
+	message DepotLocker {
+		required uint32 depotId = 1;
+	}
+
+	message Door {
+		required uint32 doorId = 1;
+	}
+
+	message Teleport {
+		required Position destination = 1;
+	}
+
+	oneof extraType {
+		Bed bed = 16;
+		Container container = 17;
+		DepotLocker depotLocker = 18;
+		Door door = 19;
+		Teleport teleport = 20;
+	}
+}
+
+message Tile {
+	required Position position = 1;
+	repeated Item item = 2;
+}

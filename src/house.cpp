@@ -19,6 +19,7 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
 #include "pugicast.h"
 
 #include "house.h"
@@ -523,6 +524,24 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 		return ATTR_READ_CONTINUE;
 	}
 	return Item::readAttr(attr, propStream);
+}
+
+bool Door::unserializeAttr(const tfs::Item& pbItem)
+{
+	if (pbItem.has_door()) {
+		const tfs::Item_Door& door = pbItem.door();
+
+		setDoorId(door.doorid());
+	}
+	return Item::unserializeAttr(pbItem);
+}
+
+void Door::serializeAttr(tfs::Item* item) const
+{
+	Item::serializeAttr(item);
+
+	tfs::Item_Door* door = item->mutable_door();
+	door->set_doorid(getDoorId());
 }
 
 void Door::setHouse(House* house)

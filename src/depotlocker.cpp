@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "depotlocker.h"
 
 DepotLocker::DepotLocker(uint16_t type) :
@@ -33,6 +35,24 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 		return ATTR_READ_CONTINUE;
 	}
 	return Item::readAttr(attr, propStream);
+}
+
+bool DepotLocker::unserializeAttr(const tfs::Item& pbItem)
+{
+	if (pbItem.has_depotlocker()) {
+		const tfs::Item_DepotLocker& depotLocker = pbItem.depotlocker();
+
+		depotId = depotLocker.depotid();
+	}
+	return Item::unserializeAttr(pbItem);
+}
+
+void DepotLocker::serializeAttr(tfs::Item* item) const
+{
+	Item::serializeAttr(item);
+
+	tfs::Item_DepotLocker* depotLocker = item->mutable_depotlocker();
+	depotLocker->set_depotid(depotId);
 }
 
 ReturnValue DepotLocker::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature*) const

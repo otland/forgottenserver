@@ -10,6 +10,9 @@ env:
 cache: apt
 addons:
   apt:
+    sources:
+      - sourceline: "deb https://packagecloud.io/capotej/protobuf3/ubuntu/ trusty main"
+        key_url: "https://packagecloud.io/capotej/protobuf3/gpgkey"
     packages:
       - libboost-dev
       - libboost-system-dev
@@ -17,7 +20,9 @@ addons:
       - liblua5.2-dev
       - libluajit-5.1-dev
       - libmysqlclient-dev
+      - libprotobuf-dev
       - libpugixml-dev
+      - protobuf-compiler
 before_script:
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..

@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "item.h"
 #include "container.h"
 #include "teleport.h"
@@ -624,7 +626,132 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return ATTR_READ_CONTINUE;
 }
 
-bool Item::unserializeAttr(PropStream& propStream)
+Attr_ReadValue Item::readAttr(AttrTypes_t attr, const tfs::Item_Attribute& value)
+{
+	switch (attr) {
+		case ATTR_COUNT:
+		case ATTR_RUNE_CHARGES: {
+			setSubType(static_cast<uint8_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_ACTION_ID: {
+			setActionId(static_cast<uint16_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_UNIQUE_ID: {
+			setUniqueId(static_cast<uint16_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_TEXT: {
+			setText(value.string());
+			break;
+		}
+
+		case ATTR_WRITTENDATE: {
+			setDate(static_cast<uint32_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_WRITTENBY: {
+			setWriter(value.string());
+			break;
+		}
+
+		case ATTR_DESC: {
+			setSpecialDescription(value.string());
+			break;
+		}
+
+		case ATTR_CHARGES: {
+			setSubType(static_cast<uint16_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_DURATION: {
+			setDuration(std::max<int32_t>(0, value.integer()));
+			break;
+		}
+
+		case ATTR_DECAYING_STATE: {
+			uint8_t state = static_cast<uint8_t>(value.integer());
+			if (state != DECAYING_FALSE) {
+				setDecaying(DECAYING_PENDING);
+			}
+			break;
+		}
+
+		case ATTR_NAME: {
+			setStrAttr(ITEM_ATTRIBUTE_NAME, value.string());
+			break;
+		}
+
+		case ATTR_ARTICLE: {
+			setStrAttr(ITEM_ATTRIBUTE_ARTICLE, value.string());
+			break;
+		}
+
+		case ATTR_PLURALNAME: {
+			setStrAttr(ITEM_ATTRIBUTE_PLURALNAME, value.string());
+			break;
+		}
+
+		case ATTR_WEIGHT: {
+			setIntAttr(ITEM_ATTRIBUTE_WEIGHT, static_cast<uint32_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_ATTACK: {
+			setIntAttr(ITEM_ATTRIBUTE_ATTACK, static_cast<int32_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_DEFENSE: {
+			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, static_cast<int32_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_EXTRADEFENSE: {
+			setIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE, static_cast<int32_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_ARMOR: {
+			setIntAttr(ITEM_ATTRIBUTE_ARMOR, static_cast<int32_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_HITCHANCE: {
+			setIntAttr(ITEM_ATTRIBUTE_HITCHANCE, static_cast<int8_t>(value.integer()));
+			break;
+		}
+
+		case ATTR_SHOOTRANGE: {
+			setIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE, static_cast<int8_t>(value.integer()));
+			break;
+		}
+
+		default:
+			return ATTR_READ_ERROR;
+	}
+
+	return ATTR_READ_CONTINUE;
+}
+
+bool Item::unserializeAttr(const tfs::Item& pbItem)
+{
+	for (const auto& attr : pbItem.attributes()) {
+		Attr_ReadValue ret = readAttr(static_cast<AttrTypes_t>(attr.first), attr.second);
+		if (ret == ATTR_READ_ERROR) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Item::unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream)
 {
 	uint8_t attr_type;
 	while (propStream.read<uint8_t>(attr_type) && attr_type != 0) {
@@ -638,116 +765,94 @@ bool Item::unserializeAttr(PropStream& propStream)
 	return true;
 }
 
-bool Item::unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream)
+void Item::serializeAttr(tfs::Item* pbItem) const
 {
-	return unserializeAttr(propStream);
-}
+	pbItem->set_id(id);
 
-void Item::serializeAttr(PropWriteStream& propWriteStream) const
-{
 	const ItemType& it = items[id];
+	auto& attrs = *pbItem->mutable_attributes();
+
 	if (it.stackable || it.isFluidContainer() || it.isSplash()) {
-		propWriteStream.write<uint8_t>(ATTR_COUNT);
-		propWriteStream.write<uint8_t>(getSubType());
+		attrs[ATTR_COUNT].set_integer(getSubType());
 	}
 
 	uint16_t charges = getCharges();
 	if (charges != 0) {
-		propWriteStream.write<uint8_t>(ATTR_CHARGES);
-		propWriteStream.write<uint16_t>(charges);
+		attrs[ATTR_CHARGES].set_integer(charges);
 	}
 
 	if (it.moveable) {
 		uint16_t actionId = getActionId();
 		if (actionId != 0) {
-			propWriteStream.write<uint8_t>(ATTR_ACTION_ID);
-			propWriteStream.write<uint16_t>(actionId);
+			attrs[ATTR_ACTION_ID].set_integer(actionId);
 		}
 	}
 
 	const std::string& text = getText();
 	if (!text.empty()) {
-		propWriteStream.write<uint8_t>(ATTR_TEXT);
-		propWriteStream.writeString(text);
+		attrs[ATTR_TEXT].set_string(text);
 	}
 
-	const time_t writtenDate = getDate();
+	time_t writtenDate = getDate();
 	if (writtenDate != 0) {
-		propWriteStream.write<uint8_t>(ATTR_WRITTENDATE);
-		propWriteStream.write<uint32_t>(writtenDate);
+		attrs[ATTR_WRITTENDATE].set_integer(writtenDate);
 	}
 
 	const std::string& writer = getWriter();
 	if (!writer.empty()) {
-		propWriteStream.write<uint8_t>(ATTR_WRITTENBY);
-		propWriteStream.writeString(writer);
+		attrs[ATTR_WRITTENBY].set_string(writer);
 	}
 
 	const std::string& specialDesc = getSpecialDescription();
 	if (!specialDesc.empty()) {
-		propWriteStream.write<uint8_t>(ATTR_DESC);
-		propWriteStream.writeString(specialDesc);
-	}
-
-	if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
-		propWriteStream.write<uint8_t>(ATTR_DURATION);
-		propWriteStream.write<uint32_t>(getIntAttr(ITEM_ATTRIBUTE_DURATION));
+		attrs[ATTR_DESC].set_string(specialDesc);
 	}
 
 	ItemDecayState_t decayState = getDecaying();
 	if (decayState == DECAYING_TRUE || decayState == DECAYING_PENDING) {
-		propWriteStream.write<uint8_t>(ATTR_DECAYING_STATE);
-		propWriteStream.write<uint8_t>(decayState);
+		attrs[ATTR_DECAYING_STATE].set_integer(decayState);
+	}
+
+	if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
+		attrs[ATTR_DURATION].set_integer(getIntAttr(ITEM_ATTRIBUTE_DURATION));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
-		propWriteStream.write<uint8_t>(ATTR_NAME);
-		propWriteStream.writeString(getStrAttr(ITEM_ATTRIBUTE_NAME));
+		attrs[ATTR_NAME].set_string(getStrAttr(ITEM_ATTRIBUTE_NAME));
 	}
-
 	if (hasAttribute(ITEM_ATTRIBUTE_ARTICLE)) {
-		propWriteStream.write<uint8_t>(ATTR_ARTICLE);
-		propWriteStream.writeString(getStrAttr(ITEM_ATTRIBUTE_ARTICLE));
+		attrs[ATTR_ARTICLE].set_string(getStrAttr(ITEM_ATTRIBUTE_ARTICLE));
 	}
-
 	if (hasAttribute(ITEM_ATTRIBUTE_PLURALNAME)) {
-		propWriteStream.write<uint8_t>(ATTR_PLURALNAME);
-		propWriteStream.writeString(getStrAttr(ITEM_ATTRIBUTE_PLURALNAME));
+		attrs[ATTR_PLURALNAME].set_string(getStrAttr(ITEM_ATTRIBUTE_PLURALNAME));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_WEIGHT)) {
-		propWriteStream.write<uint8_t>(ATTR_WEIGHT);
-		propWriteStream.write<uint32_t>(getIntAttr(ITEM_ATTRIBUTE_WEIGHT));
+		attrs[ATTR_WEIGHT].set_integer(getIntAttr(ITEM_ATTRIBUTE_WEIGHT));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_ATTACK)) {
-		propWriteStream.write<uint8_t>(ATTR_ATTACK);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_ATTACK));
+		attrs[ATTR_ATTACK].set_integer(getIntAttr(ITEM_ATTRIBUTE_ATTACK));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
-		propWriteStream.write<uint8_t>(ATTR_DEFENSE);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_DEFENSE));
+		attrs[ATTR_DEFENSE].set_integer(getIntAttr(ITEM_ATTRIBUTE_DEFENSE));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {
-		propWriteStream.write<uint8_t>(ATTR_EXTRADEFENSE);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE));
+		attrs[ATTR_EXTRADEFENSE].set_integer(getIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
-		propWriteStream.write<uint8_t>(ATTR_ARMOR);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_ARMOR));
+		attrs[ATTR_ARMOR].set_integer(getIntAttr(ITEM_ATTRIBUTE_ARMOR));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
-		propWriteStream.write<uint8_t>(ATTR_HITCHANCE);
-		propWriteStream.write<int8_t>(getIntAttr(ITEM_ATTRIBUTE_HITCHANCE));
+		attrs[ATTR_HITCHANCE].set_integer(getIntAttr(ITEM_ATTRIBUTE_HITCHANCE));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)) {
-		propWriteStream.write<uint8_t>(ATTR_SHOOTRANGE);
-		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE));
+		attrs[ATTR_SHOOTRANGE].set_integer(getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE));
 	}
 }
 
