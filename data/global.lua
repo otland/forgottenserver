@@ -33,11 +33,7 @@ function getFormattedWorldTime()
 	return hours .. ':' .. minutes
 end
 
-function table.contains(array, value)
-	if type(array) ~= "table" then
-		return false
-	end
-
+table.contains = function(array, value)
 	for _, targetColumn in pairs(array) do
 		if targetColumn == value then
 			return true
