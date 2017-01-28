@@ -276,7 +276,7 @@ class Creature : virtual public Thing
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
 		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
 
-		bool setMaster(Creature* master);
+		bool setMaster(Creature* newMaster);
 
 		bool isSummon() const {
 			return master != nullptr;
