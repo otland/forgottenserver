@@ -458,7 +458,6 @@ class LuaScriptInterface
 		static int luaDoChallengeCreature(lua_State* L);
 
 		static int luaDebugPrint(lua_State* L);
-		static int luaIsInArray(lua_State* L);
 		static int luaAddEvent(lua_State* L);
 		static int luaStopEvent(lua_State* L);
 

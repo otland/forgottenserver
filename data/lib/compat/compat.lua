@@ -1040,6 +1040,8 @@ function doSetCreatureOutfit(cid, outfit, time)
 	return true
 end
 
+function isInArray(array, value) return table.contains(array, value) end
+
 function doCreateItem(itemid, count, pos)
 	local tile = Tile(pos)
 	if not tile then
