@@ -1120,18 +1120,26 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	}
 }
 
-void Creature::setMaster(Creature* master) {
-	this->master = master;
-	if (master) {
+bool Creature::setMaster(Creature* newMaster) {
+	if (!newMaster && !master) {
+		return false;
+	}
+
+	if (newMaster) {
 		incrementReferenceCounter();
-		master->summons.push_back(this);
-	} else {
+		newMaster->summons.push_back(this);
+	}
+
+	if (master) {
 		auto summon = std::find(master->summons.begin(), master->summons.end(), this);
 		if (summon != master->summons.end()) {
 			decrementReferenceCounter();
-			summons.erase(summon);
+			master->summons.erase(summon);
 		}
 	}
+
+	master = newMaster;
+	return true;
 }
 
 bool Creature::addCondition(Condition* condition, bool force/* = false*/)
