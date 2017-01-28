@@ -22,7 +22,7 @@ function onSay(player, words, param)
 		end
 	end
 
-	if isInArray(invalidIds, itemType:getId()) then
+	if table.contains(invalidIds, itemType:getId()) then
 		return false
 	end
 

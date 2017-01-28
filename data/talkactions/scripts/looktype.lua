@@ -14,7 +14,7 @@ function onSay(player, words, param)
 	end
 
 	local lookType = tonumber(param)
-	if lookType >= 0 and lookType < 700 and not isInArray(invalidTypes, lookType) then
+	if lookType >= 0 and lookType < 700 and not table.contains(invalidTypes, lookType) then
 		local playerOutfit = player:getOutfit()
 		playerOutfit.lookType = lookType
 		player:setOutfit(playerOutfit)
