@@ -7189,7 +7189,7 @@ int LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 		return 1;
 	}
 
-	if (!pushMovement) {
+	if (pushMovement) {
 		if (oldPosition.x == position.x) {
 			if (oldPosition.y < position.y) {
 				g_game.internalCreatureTurn(creature, DIRECTION_SOUTH);
