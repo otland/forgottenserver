@@ -3845,19 +3845,20 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				} else if (tmpPlayer == targetPlayer) {
 					ss.str({});
 					if (!attacker) {
-						ss << "You were healed for " << damageString;
+						ss << "You were healed";
 					} else if (targetPlayer == attackerPlayer) {
-						ss << "You heal yourself for " << damageString;
+						ss << "You heal yourself";
 					} else {
-						ss << "You were healed by " << attacker->getNameDescription() << " for " << damageString;
+						ss << "You were healed by " << attacker->getNameDescription();
 					}
+					ss << " for " << damageString;
 					message.type = MESSAGE_HEALED;
 					message.text = ss.str();
 				} else {
 					if (spectatorMessage.empty()) {
 						ss.str({});
 						if (!attacker) {
-							ss << ucfirst(target->getNameDescription()) << " was healed for " << damageString;
+							ss << ucfirst(target->getNameDescription()) << " was healed";
 						} else {
 							ss << ucfirst(attacker->getNameDescription()) << " healed ";
 							if (attacker == target) {
@@ -3865,8 +3866,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 							} else {
 								ss << target->getNameDescription();
 							}
-							ss << " for " << damageString;
 						}
+						ss << " for " << damageString;
 						spectatorMessage = ss.str();
 					}
 					message.type = MESSAGE_HEALED_OTHERS;
@@ -3949,12 +3950,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						message.text = ss.str();
 					} else if (tmpPlayer == targetPlayer) {
 						ss.str({});
+						ss << "You lose " << damageString << " mana";
 						if (!attacker) {
-							ss << "You lose " << damageString << " mana.";
+							ss << '.';
 						} else if (targetPlayer == attackerPlayer) {
-							ss << "You lose " << damageString << " mana due to your own attack.";
+							ss << " due to your own attack.";
 						} else {
-							ss << "You lose " << damageString + " mana due to an attack by " << attacker->getNameDescription() << '.';
+							ss << " due to an attack by " << attacker->getNameDescription() << '.';
 						}
 						message.type = MESSAGE_DAMAGE_RECEIVED;
 						message.text = ss.str();
@@ -4196,12 +4198,13 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 				message.text = ss.str();
 			} else if (tmpPlayer == targetPlayer) {
 				ss.str({});
+				ss << "You lose " << damageString << " mana";
 				if (!attacker) {
-					ss << "You lose " << damageString << " mana.";
+					ss << '.';
 				} else if (targetPlayer == attackerPlayer) {
-					ss << "You lose " << damageString << " mana due to your own attack.";
+					ss << " due to your own attack.";
 				} else {
-					ss << "You lose " << damageString << " mana due to an attack by " << attacker->getNameDescription() << '.';
+					ss << " mana due to an attack by " << attacker->getNameDescription() << '.';
 				}
 				message.type = MESSAGE_DAMAGE_RECEIVED;
 				message.text = ss.str();
