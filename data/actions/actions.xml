@@ -20,80 +20,29 @@
 	<action itemid="2120" script="tools/rope.lua" />
 	<action itemid="2553" script="tools/pick.lua" />
 
-	<!-- Increase/Decrease ItemId -->
-	<action itemid="1873" function="increaseItemId" />
-	<action itemid="1874" function="decreaseItemId" />
-	<action itemid="1875" function="increaseItemId" />
-	<action itemid="1876" function="decreaseItemId" />
-	<action itemid="2162" function="increaseItemId" />
-	<action itemid="2163" function="decreaseItemId" />
-	<action itemid="3947" function="increaseItemId" />
-	<action itemid="3948" function="decreaseItemId" />
-	<action itemid="1479" function="increaseItemId" />
-	<action itemid="1480" function="decreaseItemId" />
-	<action itemid="1945" function="increaseItemId" />
-	<action itemid="1946" function="decreaseItemId" />
-	<action itemid="2037" function="increaseItemId" />
-	<action itemid="2038" function="decreaseItemId" />
-	<action itemid="2039" function="increaseItemId" />
-	<action itemid="2040" function="decreaseItemId" />
-	<action itemid="2058" function="increaseItemId" />
-	<action itemid="2059" function="decreaseItemId" />
-	<action itemid="2060" function="increaseItemId" />
-	<action itemid="2061" function="decreaseItemId" />
-	<action itemid="2066" function="increaseItemId" />
-	<action itemid="2067" function="decreaseItemId" />
-	<action itemid="2068" function="increaseItemId" />
-	<action itemid="2069" function="decreaseItemId" />
-	<action itemid="2064" function="increaseItemId" />
-	<action itemid="2065" function="decreaseItemId" />
-	<action itemid="2578" function="increaseItemId" />
-	<action itemid="2096" function="increaseItemId" />
-	<action itemid="2097" function="decreaseItemId" />
-	<action itemid="1786" function="increaseItemId" />
-	<action itemid="1787" function="decreaseItemId" />
-	<action itemid="1788" function="increaseItemId" />
-	<action itemid="1789" function="decreaseItemId" />
-	<action itemid="1790" function="increaseItemId" />
-	<action itemid="1791" function="decreaseItemId" />
-	<action itemid="1792" function="increaseItemId" />
-	<action itemid="1793" function="decreaseItemId" />
-	<action itemid="1634" function="increaseItemId" />
-	<action itemid="1635" function="decreaseItemId" />
-	<action itemid="1636" function="increaseItemId" />
-	<action itemid="1637" function="decreaseItemId" />
-	<action itemid="1638" function="increaseItemId" />
-	<action itemid="1639" function="decreaseItemId" />
-	<action itemid="1640" function="increaseItemId" />
-	<action itemid="1641" function="decreaseItemId" />
-	<action itemid="5812" function="increaseItemId" />
-	<action itemid="5813" function="decreaseItemId" />
-	<action itemid="6489" function="increaseItemId" />
-	<action itemid="6490" function="decreaseItemId" />
-	<action itemid="7058" function="increaseItemId" />
-	<action itemid="7059" function="decreaseItemId" />
-	<action itemid="8684" function="increaseItemId" />
-	<action itemid="8685" function="decreaseItemId" />
-	<action itemid="8686" function="increaseItemId" />
-	<action itemid="8687" function="decreaseItemId" />
-	<action itemid="8688" function="increaseItemId" />
-	<action itemid="8689" function="decreaseItemId" />
-	<action itemid="8690" function="increaseItemId" />
-	<action itemid="8691" function="decreaseItemId" />
-	<action itemid="9575" function="increaseItemId" />
-	<action itemid="9576" function="decreaseItemId" />
-	<action itemid="9577" function="increaseItemId" />
-	<action itemid="9578" function="decreaseItemId" />
-	<action itemid="9579" function="increaseItemId" />
-	<action itemid="9580" function="decreaseItemId" />
-	<action itemid="9581" function="increaseItemId" />
-	<action itemid="9582" function="decreaseItemId" />
-	<action itemid="9747" function="increaseItemId" />
-	<action itemid="9748" function="decreaseItemId" />
-	<action itemid="9749" function="increaseItemId" />
-	<action itemid="9750" function="decreaseItemId" />
-	<action itemid="19691" function="increaseItemId" />
-	<action itemid="19692" function="decreaseItemId" />
+	<!-- Transform and decay -->
+	<action fromid="1479" toid="1480" script="other/decayto.lua" />
+	<action fromid="1634" toid="1641" script="other/decayto.lua" />
+	<action fromid="1786" toid="1793" script="other/decayto.lua" />
+	<action fromid="1873" toid="1876" script="other/decayto.lua" />
+	<action fromid="1945" toid="1946" script="other/decayto.lua" />
+	<action fromid="2037" toid="2042" script="other/decayto.lua" />
+	<action fromid="2044" toid="2045" script="other/decayto.lua" />
+	<action fromid="2047" toid="2048" script="other/decayto.lua" />
+	<action fromid="2050" toid="2055" script="other/decayto.lua" />
+	<action fromid="2058" toid="2061" script="other/decayto.lua" />
+	<action fromid="2064" toid="2069" script="other/decayto.lua" />
+	<action fromid="2096" toid="2097" script="other/decayto.lua" />
+	<action fromid="2162" toid="2163" script="other/decayto.lua" />
+	<action itemid="2578" script="other/decayto.lua" />
+	<action fromid="3947" toid="3948" script="other/decayto.lua" />
+	<action fromid="5812" toid="5813" script="other/decayto.lua" />
+	<action fromid="6489" toid="6490" script="other/decayto.lua" />
+	<action fromid="7058" toid="7059" script="other/decayto.lua" />
+	<action fromid="8684" toid="8691" script="other/decayto.lua" />
+	<action fromid="9575" toid="9582" script="other/decayto.lua" />
+	<action fromid="9747" toid="9750" script="other/decayto.lua" />
+	<action fromid="19691" toid="19692" script="other/decayto.lua" />
 
 	<!-- Food -->
 	<action itemid="2362" script="other/food.lua" />
@@ -180,10 +129,6 @@
 	<action itemid="5786" script="other/music.lua" />
 	<action fromid="6572" toid="6573" script="other/music.lua" />
 	<action itemid="13759" script="other/music.lua" />
-	<action fromid="2041" toid="2042" script="other/decayto.lua" />
-	<action fromid="2044" toid="2045" script="other/decayto.lua" />
-	<action fromid="2047" toid="2048" script="other/decayto.lua" />
-	<action fromid="2050" toid="2055" script="other/decayto.lua" />
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="1369" script="other/teleport.lua" />
 	<action itemid="1386" script="other/teleport.lua" />
