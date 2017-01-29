@@ -360,8 +360,7 @@ int32_t Player::getDefense() const
 		}
 	}
 
-	defenseValue = static_cast<int32_t>(((((defenseSkill / 4.) + 2.23) * defenseValue) * 0.15) * getDefenseFactor());
-	return static_cast<int32_t>(static_cast<float>(defenseValue * vocation->defenseMultiplier));
+	return (defenseSkill / 4. + 2.23) * defenseValue * 0.15 * getDefenseFactor() * vocation->defenseMultiplier;
 }
 
 float Player::getAttackFactor() const
