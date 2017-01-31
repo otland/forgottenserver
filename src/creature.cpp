@@ -412,7 +412,7 @@ void Creature::onRemoveCreature(Creature* creature, bool)
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
 		if (master && !master->isRemoved()) {
-			this->setMaster(nullptr);
+			setMaster(nullptr);
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
@@ -673,7 +673,7 @@ void Creature::onDeath()
 	death(lastHitCreature);
 
 	if (master) {
-		this->setMaster(nullptr);
+		setMaster(nullptr);
 	}
 
 	if (droppedCorpse) {
