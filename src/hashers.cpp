@@ -17,11 +17,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include "otpch.h"
+
 #include "hashers.h"
 
 namespace hashers {
 
 namespace {
+
+std::vector<Hasher> hashers = {
+		SHA1Hasher{}
+};
 
 constexpr uint32_t circularShift(int bits, uint32_t value)
 {
@@ -92,6 +98,44 @@ void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 	H[4] += E;
 }
 
+}
+
+std::string Hasher::algorithm() const
+{
+	throw std::runtime_error("[Error - Hasher::algorithm()] - Subclasses of Hasher must provide an algorithm() method.");
+}
+
+std::string Hasher::encode(const std::string&, const std::string&) const
+{
+	throw std::runtime_error("[Error - Hasher::encode()] - Subclasses of Hasher must provide an encode() method.");
+}
+
+bool Hasher::verify(const std::string&, const std::string&) const
+{
+	throw std::runtime_error("[Error - Hasher::verify()] - Subclasses of Hasher must provide a verify() method.");
+}
+
+const Hasher& getHasher(const std::string& algorithm)
+{
+	for (const Hasher& hasher : hashers) {
+		if (hasher.algorithm() == algorithm) {
+			return hasher;
+		}
+	}
+
+	throw std::invalid_argument("[Error - getHasher] Unknown hasher specified: " + algorithm);
+}
+
+const Hasher& identifyHasher(const std::string& encoded)
+{
+	auto it = encoded.find('$');
+
+	// ancient versions of TFS used plain SHA1 passwords
+	if (encoded.size() == 40 && it == std::string::npos) {
+		return getHasher("sha1");
+	}
+
+	return getHasher(encoded.substr(0, it));
 }
 
 std::string SHA1Hasher::encode(const std::string& input, const std::string&) const
