@@ -51,8 +51,7 @@ class TalkActions : public BaseEvents
 		bool registerEvent(Event* event, const pugi::xml_node& node) final;
 		void clear() final;
 
-		// TODO: Store TalkAction objects directly in the list instead of using pointers
-		std::forward_list<TalkAction*> talkActions;
+		std::forward_list<TalkAction> talkActions;
 
 		LuaScriptInterface scriptInterface;
 };
