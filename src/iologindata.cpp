@@ -19,12 +19,15 @@
 
 #include "otpch.h"
 
-#include "iologindata.h"
 #include "configmanager.h"
 #include "game.h"
+#include "hashers.h"
+#include "iologindata.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
+
+static hashers::SHA1Hasher passwordHasher;
 
 Account IOLoginData::loadAccount(uint32_t accno)
 {
@@ -92,7 +95,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 		return false;
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	if (!passwordHasher.verify(password, result->getString("password"))) {
 		return false;
 	}
 
@@ -140,7 +143,7 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		}
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	if (!passwordHasher.verify(password, result->getString("password"))) {
 		return 0;
 	}
 
