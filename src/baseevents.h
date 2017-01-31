@@ -54,7 +54,7 @@ class BaseEvents
  		constexpr BaseEvents() = default;
 		virtual ~BaseEvents() = default;
 
-		bool loadFromXml();
+		virtual bool loadFromXml();
 		bool reload();
 		bool isLoaded() const {
 			return loaded;

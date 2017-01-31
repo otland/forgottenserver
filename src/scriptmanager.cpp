@@ -29,6 +29,7 @@
 #include "weapons.h"
 #include "globalevent.h"
 #include "events.h"
+#include "store.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
@@ -39,6 +40,7 @@ Spells* g_spells = nullptr;
 TalkActions* g_talkActions = nullptr;
 MoveEvents* g_moveEvents = nullptr;
 Weapons* g_weapons = nullptr;
+Store* g_store = nullptr;
 
 extern LuaEnvironment g_luaEnvironment;
 
@@ -53,6 +55,7 @@ ScriptingManager::~ScriptingManager()
 	delete g_chat;
 	delete g_creatureEvents;
 	delete g_globalEvents;
+	delete g_store;
 }
 
 bool ScriptingManager::loadScriptSystems()
@@ -110,6 +113,12 @@ bool ScriptingManager::loadScriptSystems()
 	g_events = new Events();
 	if (!g_events->load()) {
 		std::cout << "> ERROR: Unable to load events!" << std::endl;
+		return false;
+	}
+
+	g_store = new Store();
+	if (!g_store->loadFromXml()) {
+		std::cout << "> ERROR: Unable to load store!" << std::endl;
 		return false;
 	}
 

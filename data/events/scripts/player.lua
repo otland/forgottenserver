@@ -86,6 +86,25 @@ function Player:onLookInShop(itemType, count)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	-- Store Inbox
+	local containerIdFrom = fromPosition.y - 64
+	local containerFrom = self:getContainerById(containerIdFrom)
+	if containerFrom then
+		if containerFrom:getId() == ITEM_STORE_INBOX and toPosition.y >= 1 and toPosition.y <= 11 and toPosition.y ~= 3 then
+			self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
+			return false
+		end
+	end
+
+	local containerTo = self:getContainerById(toPosition.y - 64)
+	if containerTo then
+		if (containerTo:getId() == ITEM_STORE_INBOX) then
+			self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
+			return false
+		end
+	end
+	-- End Store Inbox
+
 	return true
 end
 
