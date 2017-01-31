@@ -56,6 +56,8 @@ extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 
+static std::hash<std::string> hashMotd;
+
 Game::Game()
 {
 	offlineTrainingWindow.choices.emplace_back("Sword Fighting and Shielding", SKILL_SWORD);
@@ -4626,8 +4628,8 @@ void Game::loadMotdNum()
 
 	result = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'motd_hash'");
 	if (result) {
-		motdHash = result->getString("value");
-		if (motdHash != transformToSHA1(g_config.getString(ConfigManager::MOTD))) {
+		motdHash = result->getNumber<std::size_t>("value");
+		if (hashMotd(g_config.getString(ConfigManager::MOTD)) != motdHash) {
 			++motdNum;
 		}
 	} else {
@@ -4644,8 +4646,16 @@ void Game::saveMotdNum() const
 	db.executeQuery(query.str());
 
 	query.str(std::string());
-	query << "UPDATE `server_config` SET `value` = '" << transformToSHA1(g_config.getString(ConfigManager::MOTD)) << "' WHERE `config` = 'motd_hash'";
+	query << "UPDATE `server_config` SET `value` = '" << hashMotd(g_config.getString(ConfigManager::MOTD)) << "' WHERE `config` = 'motd_hash'";
 	db.executeQuery(query.str());
+}
+
+void Game::updateMotdHash(const std::string& motd)
+{
+	std::size_t hash = hashMotd(motd);
+	if (hash != motdHash) {
+		++motdNum;
+	}
 }
 
 void Game::checkPlayersRecord()

@@ -463,9 +463,9 @@ class Game
 
 		void loadMotdNum();
 		void saveMotdNum() const;
-		const std::string& getMotdHash() const { return motdHash; }
+		void updateMotdHash(const std::string& motd);
+		std::size_t getMotdHash() const { return motdHash; }
 		uint32_t getMotdNum() const { return motdNum; }
-		void incrementMotdNum() { motdNum++; }
 
 		void sendOfflineTrainingDialog(Player* player);
 
@@ -569,7 +569,7 @@ class Game
 		void updatePlayersRecord() const;
 		uint32_t playersRecord = 0;
 
-		std::string motdHash;
+		std::size_t motdHash;
 		uint32_t motdNum = 0;
 
 		uint32_t lastStageLevel = 0;
