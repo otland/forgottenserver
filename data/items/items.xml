@@ -31181,6 +31181,13 @@
 		<attribute key="weight" value="2504" />
 		<attribute key="description" value="Only the real killers can touch me!" />
 	</item>
+	<item id="24770" article="a" name="Tibia coin">
+		<attribute key="weight" value="0" />
+		<attribute key="description" value="Tibia Coins are needed to shop exclusive products in the Store, including fabulous mounts, classy outfits, a Name Change or even Premium Time." />
+	</item>
+	<item id="26052" name="your store inbox">
+		<attribute key="containerSize" value="20" />
+	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
 	<item id="30003" name="beer" />
