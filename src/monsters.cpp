@@ -1185,12 +1185,12 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 
 	auto it = monsters.find(lowerCaseName);
 	if (it == monsters.end()) {
-		auto it = unloadedMonsters.find(lowerCaseName);
-		if (it == unloadedMonsters.end()) {
+		auto it2 = unloadedMonsters.find(lowerCaseName);
+		if (it2 == unloadedMonsters.end()) {
 			return nullptr;
 		}
 
-		return loadMonster(it->second, name);
+		return loadMonster(it2->second, name);
 	}
 	return &it->second;
 }
