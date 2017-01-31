@@ -75,5 +75,5 @@ function onSay(player, words, param)
 
 	Game.reload(reloadType.targetType)
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", reloadType.name))
-	return true
+	return false
 end
