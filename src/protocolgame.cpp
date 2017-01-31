@@ -35,11 +35,13 @@
 #include "waitlist.h"
 #include "ban.h"
 #include "scheduler.h"
+#include "store.h"
 
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern Store* g_store;
 
 void ProtocolGame::release()
 {
@@ -477,6 +479,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xE6: parseBugReport(msg); break;
 		case 0xE7: /* thank you */ break;
 		case 0xE8: parseDebugAssert(msg); break;
+		case 0xEF: parseTransferCoins(msg); break;
 		case 0xF0: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerShowQuestLog, player->getID()); break;
 		case 0xF1: parseQuestLine(msg); break;
 		case 0xF2: /* rule violation report */ break;
@@ -487,6 +490,11 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xF7: parseMarketCancelOffer(msg); break;
 		case 0xF8: parseMarketAcceptOffer(msg); break;
 		case 0xF9: parseModalWindowAnswer(msg); break;
+		case 0xFA: parseStoreOpen(); break;
+		case 0xFB: parseStoreSelectCategory(msg); break;
+		case 0xFC: parseStoreBuyOffer(msg); break;
+		case 0xFD: parseStoreOpenHistory(msg); break;
+		case 0xFE: parseStoreRequestHistory(msg); break;
 
 		default:
 			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
@@ -1095,6 +1103,62 @@ void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
 	addGameTask(&Game::playerAcceptMarketOffer, player->getID(), timestamp, counter, amount);
 }
 
+void ProtocolGame::parseStoreOpen() {
+	return sendStore();
+}
+
+void ProtocolGame::parseStoreSelectCategory(NetworkMessage& msg) {
+	std::string categoryName = msg.getString();
+
+	for (auto& category : g_store->getCategories()) {
+		if (category.getName() == categoryName) {
+			return g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::sendStoreOffers, getThis(), category)));
+		}
+	}
+}
+
+void ProtocolGame::parseStoreBuyOffer(NetworkMessage& msg) {
+	uint32_t offerId = msg.get<uint32_t>();
+	StoreOfferType_t offerType = static_cast<StoreOfferType_t>(msg.getByte());
+	std::string param;
+
+	if (offerType == STORE_OFFERTYPE_NAMECHANGE) {
+		param = msg.getString();
+	}
+
+	auto offer = g_store->getOfferById(offerId);
+	if (!offer) {
+		sendStoreError(STORE_ERROR_PURCHASE, "Offer not found. Please reopen the store and try again.");
+		return;
+	}
+
+	if ((strcasecmp(offer->getName().c_str(), "name change") == 0) && offerType != STORE_OFFERTYPE_NAMECHANGE) {
+		requestPurchaseData(offerId, STORE_OFFERTYPE_NAMECHANGE);
+		return;
+	}
+
+	addGameTask(&Game::playerPurchaseStoreOffer, player->getID(), offerId, param);
+}
+
+void ProtocolGame::parseStoreOpenHistory(NetworkMessage& msg) {
+	storeHistoryEntriesPerPage = msg.getByte();
+
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::sendStoreHistory, getThis(), currentPage, storeHistoryEntriesPerPage)));
+}
+
+void ProtocolGame::parseStoreRequestHistory(NetworkMessage& msg) {
+	currentPage = msg.get<uint32_t>();
+
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::sendStoreHistory, getThis(), currentPage, storeHistoryEntriesPerPage)));
+}
+
+void ProtocolGame::parseTransferCoins(NetworkMessage& msg) {
+	std::string recipient = msg.getString();
+	uint16_t amount = msg.get<uint16_t>();
+
+	addGameTask(&Game::playerTransferCoins, player->getID(), recipient, amount);
+}
+
 void ProtocolGame::parseModalWindowAnswer(NetworkMessage& msg)
 {
 	uint32_t id = msg.get<uint32_t>();
@@ -1617,6 +1681,8 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	}
 
 	writeToOutputBuffer(msg);
+
+	updateCoinBalance();
 }
 
 void ProtocolGame::sendMarketLeave()
@@ -1973,6 +2039,161 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	} else {
 		msg.addByte(0x00);
 	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendStoreError(StoreError_t errorType, const std::string& message) {
+	NetworkMessage msg;
+	msg.addByte(0xE0);
+	msg.addByte(errorType);
+	msg.addString(message);
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::requestPurchaseData(uint32_t offerId, StoreOfferType_t offerType) {
+	NetworkMessage msg;
+	msg.addByte(0xE1);
+	msg.add<uint32_t>(offerId);
+	msg.addByte(offerType);
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendCoinBalance() {
+	NetworkMessage msg;
+	msg.addByte(0xF2);
+	msg.addByte(0x01);
+	msg.addByte(0xDF);
+	msg.addByte(0x01);
+
+	msg.add<uint32_t>(player->coinBalance); //total coins
+	msg.add<uint32_t>(player->coinBalance); //transferable coins
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::updateCoinBalance() {
+	NetworkMessage msg;
+	msg.addByte(0xF2);
+	msg.addByte(0x00);
+
+	writeToOutputBuffer(msg);
+
+	g_dispatcher.addTask(
+		createTask(std::bind([](ProtocolGame_ptr client) {
+		auto coinBalance = IOAccount::getCoinBalance(client->player->getAccount());
+		client->player->coinBalance = coinBalance;
+
+		client->sendCoinBalance();
+	}, getThis()))
+	);
+}
+
+void ProtocolGame::sendStore() {
+	NetworkMessage msg;
+	msg.addByte(0xFB);
+	msg.addByte(0x00);
+	msg.add<uint16_t>(g_store->getCategories().size());
+
+	for (auto& category : g_store->getCategories()) {
+		msg.addString(category.getName());
+		msg.addString(category.getDescription());
+		msg.addByte(category.getState());
+		msg.addByte(category.getIcons().size());
+
+		for (const auto& icon : category.getIcons()) {
+			msg.addString(icon);
+		}
+
+		msg.addString(category.getParent());
+	}
+
+	writeToOutputBuffer(msg);
+
+	updateCoinBalance();
+}
+
+void ProtocolGame::sendStoreOffers(StoreCategory& category) {
+	NetworkMessage msg;
+	msg.addByte(0xFC);
+	msg.addString(category.getName());
+	msg.add<uint16_t>(category.getOffers().size());
+
+	for (auto& offer : category.getOffers()) {
+		msg.add<uint32_t>(offer.getId());
+		msg.addString(offer.getName());
+		msg.addString(offer.getDescription());
+		msg.add<uint32_t>(offer.getPrice());
+		msg.addByte(offer.getState());
+
+		bool disabled = g_store->executeOnRender(player, &offer);
+		msg.addByte(!disabled);
+		if (!disabled) {
+			std::string reason = "";
+			msg.addString(reason);
+		}
+
+		msg.addByte(offer.getIcons().size());
+		for (const auto& icon : offer.getIcons()) {
+			msg.addString(icon);
+		}
+
+		msg.add<uint16_t>(offer.getSubOffers().size());
+		for (auto& subOffer : offer.getSubOffers()) {
+			msg.addString(subOffer.getName());
+			msg.addString(subOffer.getDescription());
+
+			msg.addByte(subOffer.getIcons().size());
+			for (const auto& icon : subOffer.getIcons()) {
+				msg.addString(icon);
+			}
+
+			msg.addString(subOffer.getParent()); //serviceType
+		}
+	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendStoreHistory(uint32_t page, uint32_t entriesPerPage) {
+	// dispatcher thread
+	std::vector<StoreTransaction> storeHistory;
+	g_store->getTransactionHistory(player->getAccount(), page, entriesPerPage, storeHistory);
+
+	if (storeHistory.size() == 0) {
+		return sendStoreError(STORE_ERROR_HISTORY, "No entries yet.");
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0xFD);
+	msg.add<uint32_t>(page);
+	msg.add<uint32_t>((storeHistory.size() > entriesPerPage) ? 0x01 : 0x00);
+	msg.addByte((storeHistory.size() > entriesPerPage) ? entriesPerPage : storeHistory.size());
+
+	size_t count = 0;
+	for (const auto& entry : storeHistory) {
+		if (count++ >= entriesPerPage) {
+			break;
+		}
+
+		msg.add<uint32_t>(entry.timestamp);
+		msg.addByte(entry.type); // offer type
+		msg.add<int32_t>(entry.coins);
+		msg.addString(entry.description);
+	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendStorePurchaseCompleted(const std::string& message) {
+	NetworkMessage msg;
+	msg.addByte(0xFE);
+	msg.addByte(0x00);
+	msg.addString(message);
+	msg.add<uint32_t>(player->coinBalance);
+	msg.add<uint32_t>(player->coinBalance);
 
 	writeToOutputBuffer(msg);
 }
@@ -2389,8 +2610,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
 
-	msg.add<uint16_t>(0x00); // URL (string) to ingame store images
-	msg.add<uint16_t>(25); // premium coin package size
+	msg.addString(g_config.getString(ConfigManager::STORE_IMAGES_URL)); // URL (string) to ingame store images
+	msg.add<uint16_t>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STORE_COINS_PACKET_SIZE))); // premium coin package size
 
 	writeToOutputBuffer(msg);
 
@@ -2412,6 +2633,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendInventoryItem(CONST_SLOT_FEET, player->getInventoryItem(CONST_SLOT_FEET));
 	sendInventoryItem(CONST_SLOT_RING, player->getInventoryItem(CONST_SLOT_RING));
 	sendInventoryItem(CONST_SLOT_AMMO, player->getInventoryItem(CONST_SLOT_AMMO));
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getInventoryItem(CONST_SLOT_STORE_INBOX));
 
 	sendStats();
 	sendSkills();

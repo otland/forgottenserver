@@ -1327,6 +1327,19 @@ void Player::onSendContainer(const Container* container)
 	}
 }
 
+//store
+void Player::sendStoreError(StoreError_t errorType, const std::string& message) {
+	if (client) {
+		client->sendStoreError(errorType, message);
+	}
+}
+
+void Player::sendStorePurchaseCompleted(const std::string& message) {
+	if (client) {
+		client->sendStorePurchaseCompleted(message);
+	}
+}
+
 //inventory
 void Player::onUpdateInventoryItem(Item* oldItem, Item* newItem)
 {
@@ -2554,7 +2567,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 
 		std::vector<Container*> containers;
 
-		for (uint32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_LAST; ++slotIndex) {
+		for (uint32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_AMMO; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
 			if (inventoryItem) {
 				if (inventoryItem == tradeItem) {
@@ -3056,7 +3069,7 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 	}
 
 	//index == 0 means we should equip this item at the most appropiate slot (no action required here)
-	if (index > 0 && index < 11) {
+	if (index > 0 && index <= 11) {
 		if (inventory[index]) {
 			return;
 		}

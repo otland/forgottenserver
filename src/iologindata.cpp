@@ -31,7 +31,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	Account account;
 
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << accno;
+	query << "SELECT `id`, `name`, `password`, `type`, `premdays`, `lastday`, `coins` FROM `accounts` WHERE `id` = " << accno;
 	DBResult_ptr result = Database::getInstance().storeQuery(query.str());
 	if (!result) {
 		return account;
@@ -42,6 +42,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
 	account.premiumDays = result->getNumber<uint16_t>("premdays");
 	account.lastDay = result->getNumber<time_t>("lastday");
+	account.coinBalance = result->getNumber<uint32_t>("coins");
 	return account;
 }
 
@@ -198,7 +199,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
+	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`, (SELECT `coins` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `coinbalance`";
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		query << ", (SELECT `premdays` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_days`";
 	}
@@ -221,6 +222,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	player->setGroup(group);
 	player->accountNumber = result->getNumber<uint32_t>("account_id");
 	player->accountType = static_cast<AccountType_t>(result->getNumber<uint16_t>("account_type"));
+	player->coinBalance = result->getNumber<uint32_t>("coinbalance");
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		player->premiumDays = result->getNumber<uint16_t>("premium_days");
 	} else {
@@ -260,6 +262,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->accountNumber = accno;
 
 	player->accountType = acc.accountType;
+
+	player->coinBalance = acc.coinBalance;
 
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		player->premiumDays = std::numeric_limits<uint16_t>::max();
@@ -474,7 +478,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
 			int32_t pid = pair.second;
-			if (pid >= 1 && pid <= 10) {
+			if (pid >= 1 && pid <= 11) {
 				player->internalAddThing(pid, item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
@@ -488,6 +492,11 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 				}
 			}
 		}
+	}
+
+	//store inbox
+	if (!player->inventory[CONST_SLOT_STORE_INBOX]) {
+		player->internalAddThing(CONST_SLOT_STORE_INBOX, Item::CreateItem(ITEM_STORE_INBOX));
 	}
 
 	//load depot items
@@ -793,7 +802,7 @@ bool IOLoginData::savePlayer(Player* player)
 	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 
 	ItemBlockList itemList;
-	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
+	for (int32_t slotId = 1; slotId <= 11; ++slotId) {
 		Item* item = player->inventory[slotId];
 		if (item) {
 			itemList.emplace_back(slotId, item);
