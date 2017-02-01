@@ -30,7 +30,7 @@ replaceKickOnLogin = true
 maxPacketsPerSecond = 25
 
 -- Store configuration
-storeImagesUrl = "http://otserv.info/store/"
+storeImagesUrl = "http://static.tibia.com/images/store/"
 storeCoinsPacketSize = 25
 
 -- Deaths
