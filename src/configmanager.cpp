@@ -140,7 +140,7 @@ bool ConfigManager::load()
 	string[LOCATION] = getGlobalString(L, "location", "");
 	string[MOTD] = getGlobalString(L, "motd", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
-	string[STORE_IMAGES_URL] = getGlobalString(L, "storeImagesUrl", "http://static.tibia.solutions/images/store/");
+	string[STORE_IMAGES_URL] = getGlobalString(L, "storeImagesUrl", "http://otserv.info/images/store/");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	integer[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
