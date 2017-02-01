@@ -8,15 +8,15 @@ for line in io.lines('data/XML/outfits.xml') do
     local enabled = line:match('enabled.-=[\'"](.-)[\'"]') == 'yes'
     local unlocked = line:match('unlocked.-=[\'"](.-)[\'"]') == 'yes'
 
-    if enabled then
-        local outfit = outfits[name:lower()]
-        if not outfit then
-            outfit = {}
-            outfits[name:lower()] = outfit
-        end
-        table.insert(outfit, lookType)
-        outfit.unlocked = unlocked
-    end
+	if enabled then
+		local outfit = outfits[name:lower()]
+		if not outfit then
+			outfit = {}
+			outfits[name:lower()] = outfit
+		end
+		table.insert(outfit, lookType)
+		outfit.unlocked = unlocked
+	end
 end
 
 local function getAffectedOutfit(offerName)

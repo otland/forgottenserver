@@ -75,22 +75,22 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 		description.clear();
 		icons.clear();
 
-		if ((attr = categoryNode.attribute("name"))) {
+		if (attr = categoryNode.attribute("name")) {
 			name = attr.as_string();
 		} else {
 			std::cout << "[Error - Store::loadFromXml] Missing category name." << std::endl;
 			continue;
 		}
 
-		if ((attr = categoryNode.attribute("state"))) {
+		if (attr = categoryNode.attribute("state")) {
 			state = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
 		}
 
-		if ((attr = categoryNode.attribute("description"))) {
+		if (attr = categoryNode.attribute("description")) {
 			description = attr.as_string();
 		}
 
-		if ((attr = categoryNode.attribute("icons"))) {
+		if (attr = categoryNode.attribute("icons")) {
 			icons = explodeString(attr.as_string(), ";");
 		}
 
@@ -100,7 +100,7 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 		for (auto offerNode : categoryNode.children()) {
 			StoreOffer& offer = category.createOffer(runningId++);
 
-			if ((attr = offerNode.attribute("name"))) {
+			if (attr = offerNode.attribute("name")) {
 				offer.name = attr.as_string();
 			} else {
 				std::cout << "[Error - Store::loadFromXml] Missing offer name in category: " << category.name << std::endl;
@@ -108,23 +108,23 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 				continue;
 			}
 
-			if ((attr = offerNode.attribute("type"))) {
+			if (attr = offerNode.attribute("type")) {
 				offer.type = static_cast<StoreOfferType_t>(pugi::cast<uint8_t>(attr.value()));
 			}
 
-			if ((attr = offerNode.attribute("description"))) {
+			if (attr = offerNode.attribute("description")) {
 				offer.description = attr.as_string();
 			}
 
-			if ((attr = offerNode.attribute("message"))) {
+			if (attr = offerNode.attribute("message")) {
 				offer.message = attr.as_string();
 			}
 
-			if ((attr = offerNode.attribute("icons"))) {
+			if (attr = offerNode.attribute("icons")) {
 				offer.icons = explodeString(attr.as_string(), ";");
 			}
 
-			if ((attr = offerNode.attribute("price"))) {
+			if (attr = offerNode.attribute("price")) {
 				offer.price = attr.as_uint();
 			}
 
@@ -134,26 +134,26 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 				description.clear();
 				icons.clear();
 
-				if ((attr = subOfferNode.attribute("name"))) {
+				if (attr = subOfferNode.attribute("name")) {
 					name = attr.as_string();
 				}
 
-				if ((attr = subOfferNode.attribute("state"))) {
+				if (attr = subOfferNode.attribute("state")) {
 					state = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
 				}
 
-				if ((attr = subOfferNode.attribute("description"))) {
+				if (attr = subOfferNode.attribute("description")) {
 					description = attr.as_string();
 				}
 
-				if ((attr = subOfferNode.attribute("icons"))) {
+				if (attr = subOfferNode.attribute("icons")) {
 					icons = explodeString(attr.as_string(), ";");
 				}
 
 				offer.subOffers.push_back(SubOffer(name, state, description, icons));
 			}
 
-			if ((attr = offerNode.attribute("script"))) {
+			if (attr = offerNode.attribute("script")) {
 				if (!scriptInterface) {
 					scriptInterface.reset(new LuaScriptInterface("Store Interface"));
 					scriptInterface->initState();
@@ -167,6 +167,7 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 				} else {
 					std::cout << "[Warning - Store::loadFromXml] Can not load script: " << script << std::endl;
 					std::cout << scriptInterface->getLastLuaError() << std::endl;
+					return false;
 				}
 			}
 		}

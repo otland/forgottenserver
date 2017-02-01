@@ -2063,9 +2063,10 @@ void ProtocolGame::requestPurchaseData(uint32_t offerId, StoreOfferType_t offerT
 
 void ProtocolGame::sendCoinBalance() {
 	NetworkMessage msg;
-	msg.addByte(0xF2);
+	msg.addByte(0xF2); // updating balance
 	msg.addByte(0x01);
-	msg.addByte(0xDF);
+
+	msg.addByte(0xDF); // coins balance
 	msg.addByte(0x01);
 
 	msg.add<uint32_t>(player->coinBalance); //total coins
