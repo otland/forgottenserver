@@ -61,7 +61,9 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
 {
-	talkActions.push_front(*static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
+	TalkAction* talkAction = static_cast<TalkAction*>(event) // event is guaranteed to be a TalkAction
+	talkActions.push_front(*talkAction);
+	delete talkAction;
 	return true;
 }
 
