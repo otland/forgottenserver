@@ -4900,7 +4900,7 @@ void Game::playerPurchaseStoreOffer(uint32_t playerId, uint32_t offerId, const s
 			IOAccount::addCoins(player->getAccount(), -static_cast<int32_t>(offer->getPrice()));
 			player->coinBalance -= offer->getPrice();
 			player->sendStorePurchaseCompleted(offer->getMessage());
-			player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "A transaction was successful. For more details, please check your Tibia Coins history.");
+			player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "A transaction was successful. For more details, please check your Store Coins history.");
 
 			std::string transactionDescription;
 			if (offer->getSubOffers().size() == 0) {
@@ -4965,7 +4965,7 @@ void Game::playerTransferCoins(uint32_t playerId, const std::string& recipient, 
 		delete tmpPlayer;
 	}
 
-	return player->sendStorePurchaseCompleted("You have successfully gifted Tibia Coins.");
+	return player->sendStorePurchaseCompleted("You have successfully gifted Store Coins.");
 }
 
 void Game::playerLeaveMarket(uint32_t playerId)
@@ -5100,7 +5100,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			return;
 		}
 
-		if (it.id == ITEM_TIBIACOINS) {
+		if (it.id == ITEM_STORECOINS) {
 			if (amount > player->coinBalance) {
 				return;
 			}
@@ -5174,7 +5174,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			return;
 		}
 
-		if (it.id == ITEM_TIBIACOINS) {
+		if (it.id == ITEM_STORECOINS) {
 			IOAccount::addCoins(player->getAccount(), offer.amount);
 		} else if (it.stackable) {
 			uint16_t tmpAmount = offer.amount;
@@ -5258,7 +5258,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			}
 		}
 
-		if (it.id == ITEM_TIBIACOINS) {
+		if (it.id == ITEM_STORECOINS) {
 			if (amount > IOAccount::getCoinBalance(player->getAccount())) {
 				return;
 			}
@@ -5291,7 +5291,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		player->bankBalance += totalPrice;
 
-		if (it.id == ITEM_TIBIACOINS) {
+		if (it.id == ITEM_STORECOINS) {
 			IOAccount::addCoins(buyerPlayer->getAccount(), amount);
 			g_store->onTransactionCompleted(buyerPlayer->getAccount(), STORE_OFFERTYPE_OTHER, amount, "Purchased on Market");
 		} else if (it.stackable) {
@@ -5336,7 +5336,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		player->bankBalance -= totalPrice;
 
-		if (it.id == ITEM_TIBIACOINS) {
+		if (it.id == ITEM_STORECOINS) {
 			IOAccount::addCoins(player->getAccount(), amount);
 			g_store->onTransactionCompleted(player->getAccount(), STORE_OFFERTYPE_OTHER, amount, "Purchased on Market");
 		} else if (it.stackable) {
@@ -5372,13 +5372,13 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		if (sellerPlayer) {
 			sellerPlayer->bankBalance += totalPrice;
 
-			if (it.id == ITEM_TIBIACOINS) {
+			if (it.id == ITEM_STORECOINS) {
 				g_store->onTransactionCompleted(sellerPlayer->getAccount(), STORE_OFFERTYPE_OTHER, -static_cast<int32_t>(amount), "Sold on Market");
 			}
 		} else {
 			IOLoginData::increaseBankBalance(offer.playerId, totalPrice);
 
-			if (it.id == ITEM_TIBIACOINS) {
+			if (it.id == ITEM_STORECOINS) {
 				sellerPlayer = new Player(nullptr);
 
 				if (IOLoginData::loadPlayerById(sellerPlayer, offer.playerId)) {
@@ -5389,7 +5389,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			}
 		}
 
-		if (it.id != ITEM_TIBIACOINS) {
+		if (it.id != ITEM_STORECOINS) {
 			player->onReceiveMail();
 		}
 	}

@@ -482,7 +482,7 @@ enum item_t : uint16_t {
 
 	ITEM_AMULETOFLOSS = 2173,
 
-	ITEM_TIBIACOINS = 24774,
+	ITEM_STORECOINS = 24774,
 
 	ITEM_DOCUMENT_RO = 1968, //read-only
 };

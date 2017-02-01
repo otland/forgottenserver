@@ -3,7 +3,7 @@ local blessings = {
 	['the spark of the phoenix'] = 2,
 	['the fire of the suns'] = 3,
 	['the spiritual shielding'] = 4,
-	['the embrace of tibia'] = 5,
+	['the embrace of server'] = 5,
 	['twist of fate'] = 6
 }
 
