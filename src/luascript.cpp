@@ -8740,12 +8740,21 @@ int LuaScriptInterface::luaPlayerSendOutfitWindow(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerAddMount(lua_State* L)
-{
-	// player:addMount(mountId)
+int LuaScriptInterface::luaPlayerAddMount(lua_State* L) {
+	// player:addMount(mountId or mountName)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		uint8_t mountId = getNumber<uint8_t>(L, 2);
+		uint8_t mountId;
+		if (isString(L, 2)) {
+			Mount* mount = g_game.mounts.getMountByName(getString(L, 2));
+			if (!mount) {
+				lua_pushnil(L);
+				return 1;
+			}
+			mountId = mount->id;
+		} else {
+			mountId = getNumber<uint8_t>(L, 2);
+		}
 		pushBoolean(L, player->tameMount(mountId));
 	} else {
 		lua_pushnil(L);
@@ -8753,12 +8762,21 @@ int LuaScriptInterface::luaPlayerAddMount(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L)
-{
-	// player:removeMount(mountId)
+int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L) {
+	// player:removeMount(mountId or mountName)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		uint8_t mountId = getNumber<uint8_t>(L, 2);
+		uint8_t mountId;
+		if (isString(L, 2)) {
+			Mount* mount = g_game.mounts.getMountByName(getString(L, 2));
+			if (!mount) {
+				lua_pushnil(L);
+				return 1;
+			}
+			mountId = mount->id;
+		} else {
+			mountId = getNumber<uint8_t>(L, 2);
+		}
 		pushBoolean(L, player->untameMount(mountId));
 	} else {
 		lua_pushnil(L);
@@ -8766,17 +8784,21 @@ int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerHasMount(lua_State* L)
-{
-	// player:hasMount(mountId)
+int LuaScriptInterface::luaPlayerHasMount(lua_State* L) {
+	// player:hasMount(mountId or mountName)
 	const Player* player = getUserdata<const Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint8_t mountId = getNumber<uint8_t>(L, 2);
-	Mount* mount = g_game.mounts.getMountByID(mountId);
+	Mount* mount = nullptr;
+	if (isString(L, 2)) {
+		mount = g_game.mounts.getMountByName(getString(L, 2));
+	} else {
+		mount = g_game.mounts.getMountByID(getNumber<uint8_t>(L, 2));
+	}
+
 	if (mount) {
 		pushBoolean(L, player->hasMount(mount));
 	} else {
