@@ -76,7 +76,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 
 std::string generateToken(const std::string& key, uint32_t ticks)
 {
-	static hashers::SHA1Hasher hasher;
+	constexpr static hashers::SHA1Hasher hasher;
 
 	// generate message from ticks
 	std::string message(8, 0);

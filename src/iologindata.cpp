@@ -27,8 +27,6 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-static hashers::SHA1Hasher passwordHasher;
-
 Account IOLoginData::loadAccount(uint32_t accno)
 {
 	Account account;
@@ -95,7 +93,8 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 		return false;
 	}
 
-	if (!passwordHasher.verify(password, result->getString("password"))) {
+	std::string encoded = result->getString("password");
+	if (!hashers::identifyHasher(encoded).verify(password, encoded)) {
 		return false;
 	}
 
@@ -142,8 +141,8 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 			return 0;
 		}
 	}
-
-	if (!passwordHasher.verify(password, result->getString("password"))) {
+	std::string encoded = result->getString("password");
+	if (!hashers::identifyHasher(encoded).verify(password, encoded)) {
 		return 0;
 	}
 
