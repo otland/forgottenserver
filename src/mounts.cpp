@@ -21,8 +21,6 @@
 
 #include "mounts.h"
 
-#include <boost/algorithm/string/predicate.hpp>
-
 #include "pugicast.h"
 #include "tools.h"
 
@@ -65,7 +63,7 @@ Mount* Mounts::getMountByID(uint8_t id)
 
 Mount* Mounts::getMountByName(const std::string& name) {
 	auto it = std::find_if(mounts.begin(), mounts.end(), [&name](const Mount& mount) {
-		return boost::iequals(name, mount.name);
+		return strcasecmp(name.c_str(), mount.name.c_str());
 	});
 
 	return it != mounts.end() ? &*it : nullptr;
