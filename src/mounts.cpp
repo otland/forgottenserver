@@ -67,7 +67,6 @@ Mount* Mounts::getMountByName(const std::string& name) {
 	});
 
 	return it != mounts.end() ? &*it : nullptr;
-
 }
 
 Mount* Mounts::getMountByClientID(uint16_t clientId)
