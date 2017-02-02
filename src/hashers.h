@@ -25,9 +25,9 @@
 namespace hashers {
 
 struct Hasher {
-	virtual std::string algorithm() const;
-	virtual std::string encode(const std::string& input, const std::string& salt) const;
-	virtual bool verify(const std::string& input, const std::string& encoded) const;
+	virtual std::string algorithm() const = 0;
+	virtual std::string encode(const std::string& input, const std::string& salt) const = 0;
+	virtual bool verify(const std::string& input, const std::string& encoded) const = 0;
 };
 
 const Hasher& getHasher(const std::string& algorithm);

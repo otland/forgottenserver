@@ -25,8 +25,8 @@ namespace hashers {
 
 namespace {
 
-std::vector<Hasher> hashers = {
-		SHA1Hasher{}
+std::unique_ptr<Hasher> hashers[] = {
+		std::unique_ptr<Hasher>(new SHA1Hasher)
 };
 
 constexpr uint32_t circularShift(int bits, uint32_t value)
@@ -98,28 +98,11 @@ void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 	H[4] += E;
 }
 
-}
-
-std::string Hasher::algorithm() const
-{
-	throw std::runtime_error("[Error - Hasher::algorithm()] - Subclasses of Hasher must provide an algorithm() method.");
-}
-
-std::string Hasher::encode(const std::string&, const std::string&) const
-{
-	throw std::runtime_error("[Error - Hasher::encode()] - Subclasses of Hasher must provide an encode() method.");
-}
-
-bool Hasher::verify(const std::string&, const std::string&) const
-{
-	throw std::runtime_error("[Error - Hasher::verify()] - Subclasses of Hasher must provide a verify() method.");
-}
-
 const Hasher& getHasher(const std::string& algorithm)
 {
-	for (const Hasher& hasher : hashers) {
-		if (hasher.algorithm() == algorithm) {
-			return hasher;
+	for (const auto& hasher : hashers) {
+		if (hasher->algorithm() == algorithm) {
+			return *hasher;
 		}
 	}
 
