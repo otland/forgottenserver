@@ -250,7 +250,7 @@ CORPSES = {
 FIELDS = {1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1500,1501,1502,1503,1504}
 
 function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
-	if target:isImmune(conditionType) then
+	if damage <= 0 or target:isImmune(conditionType) then
 		return false
 	end
 
@@ -272,10 +272,14 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 			end
 		end
 	elseif listType == 1 then
-		local value, n = math.floor(damage + 0.35), 1
+		local n, value = 0, damage
 		while value > 0 do
-			condition:addDamage(1, time or 4000, -value)
-			value, n = math.floor(damage * math.pow(2.75, -0.05 * n) + 0.35), n + 1
+			value = math.floor(damage * math.pow(2.75, -0.05 * n) + 0.35)
+
+			if value > 0 then
+				condition:addDamage(1, time or 4000, -value)
+				n = n + 1
+			end
 		end
 	elseif listType == 2 then
 		for _ = 1, rounds do
