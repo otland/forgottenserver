@@ -61,7 +61,7 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
 {
-	auto talkAction = std::unique_ptr<TalkAction>(event); // event is guaranteed to be a TalkAction
+	auto talkAction = std::unique_ptr<TalkAction>(static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
 	talkActions.push_front(std::move(*talkAction.get()));
 	return true;
 }
