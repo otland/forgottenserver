@@ -68,7 +68,7 @@ const Hasher& identifyHasher(const std::string& encoded)
 
 std::string SHA1Hasher::encode(const std::string& input, const std::string&) const
 {
-	CryptoPP::SHA1 hasher;
+	static CryptoPP::SHA1 hasher;
 	byte digest[CryptoPP::SHA1::DIGESTSIZE];
 	hasher.CalculateDigest(digest, reinterpret_cast<const byte*>(input.c_str()), input.size());
 	return hexencode(digest, sizeof(digest));
