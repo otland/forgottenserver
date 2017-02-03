@@ -774,13 +774,13 @@ void Combat::doCombatHealth(Creature* caster, Creature* target, CombatDamage& da
 	}
 
 	if (canCombat) {
+		if (caster && params.distanceEffect != CONST_ANI_NONE) {
+			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
+		}
+		
 		CombatHealthFunc(caster, target, params, &damage);
 		if (params.targetCallback) {
 			params.targetCallback->onTargetCombat(caster, target);
-		}
-
-		if (caster && params.distanceEffect != CONST_ANI_NONE) {
-			addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 		}
 	}
 }
