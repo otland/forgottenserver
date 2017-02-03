@@ -60,17 +60,17 @@ void GlobalEvents::clear()
 	scriptInterface.reInitState();
 }
 
-Event* GlobalEvents::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> GlobalEvents::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "globalevent") != 0) {
 		return nullptr;
 	}
-	return new GlobalEvent(&scriptInterface);
+	return std::unique_ptr<Event>(new GlobalEvent(&scriptInterface));
 }
 
-bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
+bool GlobalEvents::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node&)
 {
-	GlobalEvent* globalEvent = static_cast<GlobalEvent*>(event); //event is guaranteed to be a GlobalEvent
+	GlobalEvent* globalEvent = static_cast<GlobalEvent*>(event.release()); //event is guaranteed to be a GlobalEvent
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
 		auto result = timerMap.emplace(globalEvent->getName(), globalEvent);
 		if (result.second) {

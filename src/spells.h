@@ -65,8 +65,8 @@ class Spells final : public BaseEvents
 	protected:
 		void clear() final;
 		LuaScriptInterface& getScriptInterface() final;
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		std::unique_ptr<Event> getEvent(const std::string& nodeName) final;
+		bool registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node) final;
 
 		std::map<uint16_t, RuneSpell*> runes;
 		std::map<std::string, InstantSpell*> instants;

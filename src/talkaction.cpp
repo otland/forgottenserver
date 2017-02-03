@@ -51,17 +51,17 @@ std::string TalkActions::getScriptBaseName() const
 	return "talkactions";
 }
 
-Event* TalkActions::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> TalkActions::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
 		return nullptr;
 	}
-	return new TalkAction(&scriptInterface);
+	return std::unique_ptr<Event>(new TalkAction(&scriptInterface));
 }
 
-bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
+bool TalkActions::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node&)
 {
-	auto talkAction = std::unique_ptr<TalkAction>(static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
+	auto talkAction = std::unique_ptr<TalkAction>(static_cast<TalkAction*>(event.release())); // event is guaranteed to be a TalkAction
 	talkActions.push_front(std::move(*talkAction));
 	return true;
 }

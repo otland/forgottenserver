@@ -76,17 +76,17 @@ std::string Actions::getScriptBaseName() const
 	return "actions";
 }
 
-Event* Actions::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> Actions::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "action") != 0) {
 		return nullptr;
 	}
-	return new Action(&scriptInterface);
+	return std::unique_ptr<Event>(new Action(&scriptInterface));
 }
 
-bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
+bool Actions::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node)
 {
-	Action* action = static_cast<Action*>(event); //event is guaranteed to be an Action
+	Action* action = static_cast<Action*>(event.release()); //event is guaranteed to be an Action
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {

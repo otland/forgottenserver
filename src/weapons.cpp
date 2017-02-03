@@ -109,21 +109,21 @@ void Weapons::loadDefaults()
 	}
 }
 
-Event* Weapons::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> Weapons::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
-		return new WeaponMelee(&scriptInterface);
+		return std::unique_ptr<Event>(new WeaponMelee(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
-		return new WeaponDistance(&scriptInterface);
+		return std::unique_ptr<Event>(new WeaponDistance(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
-		return new WeaponWand(&scriptInterface);
+		return std::unique_ptr<Event>(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
 }
 
-bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
+bool Weapons::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event); //event is guaranteed to be a Weapon
+	Weapon* weapon = static_cast<Weapon*>(event.release()); //event is guaranteed to be a Weapon
 
 	auto result = weapons.emplace(weapon->getID(), weapon);
 	if (!result.second) {

@@ -60,8 +60,8 @@ class GlobalEvents final : public BaseEvents
 		}
 		void clear() final;
 
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		std::unique_ptr<Event> getEvent(const std::string& nodeName) final;
+		bool registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node) final;
 
 		LuaScriptInterface& getScriptInterface() final {
 			return scriptInterface;

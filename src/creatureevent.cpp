@@ -57,17 +57,17 @@ std::string CreatureEvents::getScriptBaseName() const
 	return "creaturescripts";
 }
 
-Event* CreatureEvents::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> CreatureEvents::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "event") != 0) {
 		return nullptr;
 	}
-	return new CreatureEvent(&scriptInterface);
+	return std::unique_ptr<Event>(new CreatureEvent(&scriptInterface));
 }
 
-bool CreatureEvents::registerEvent(Event* event, const pugi::xml_node&)
+bool CreatureEvents::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node&)
 {
-	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(event); //event is guaranteed to be a CreatureEvent
+	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(event.release()); //event is guaranteed to be a CreatureEvent
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerEvent] Trying to register event without type!" << std::endl;
 		return false;

@@ -86,17 +86,17 @@ std::string MoveEvents::getScriptBaseName() const
 	return "movements";
 }
 
-Event* MoveEvents::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> MoveEvents::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "movevent") != 0) {
 		return nullptr;
 	}
-	return new MoveEvent(&scriptInterface);
+	return std::unique_ptr<Event>(new MoveEvent(&scriptInterface));
 }
 
-bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
+bool MoveEvents::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node)
 {
-	MoveEvent* moveEvent = static_cast<MoveEvent*>(event); //event is guaranteed to be a MoveEvent
+	MoveEvent* moveEvent = static_cast<MoveEvent*>(event.release()); //event is guaranteed to be a MoveEvent
 
 	const MoveEvent_t eventType = moveEvent->getEventType();
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {

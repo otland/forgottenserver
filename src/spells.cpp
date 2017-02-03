@@ -122,22 +122,23 @@ std::string Spells::getScriptBaseName() const
 	return "spells";
 }
 
-Event* Spells::getEvent(const std::string& nodeName)
+std::unique_ptr<Event> Spells::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "rune") == 0) {
-		return new RuneSpell(&scriptInterface);
+		return std::unique_ptr<Event>(new RuneSpell(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
-		return new InstantSpell(&scriptInterface);
+		return std::unique_ptr<Event>(new InstantSpell(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "conjure") == 0) {
-		return new ConjureSpell(&scriptInterface);
+		return std::unique_ptr<Event>(new ConjureSpell(&scriptInterface));
 	}
 	return nullptr;
 }
 
-bool Spells::registerEvent(Event* event, const pugi::xml_node&)
+bool Spells::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node&)
 {
-	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
+	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
 	if (instant) {
+		event.release();
 		auto result = instants.emplace(instant->getWords(), instant);
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
@@ -145,8 +146,9 @@ bool Spells::registerEvent(Event* event, const pugi::xml_node&)
 		return result.second;
 	}
 
-	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
+	RuneSpell* rune = dynamic_cast<RuneSpell*>(event.get());
 	if (rune) {
+		event.release();
 		auto result = runes.emplace(rune->getRuneItemId(), rune);
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
