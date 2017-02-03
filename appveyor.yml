@@ -19,6 +19,7 @@ environment:
 
 install:
   - ps: if (-not (Test-Path tfs-sdk-3.2)) { Start-FileDownload https://static.otland.net/dl/tfs-sdk-3.2.zip; 7z x tfs-sdk-3.2.zip }
+  - ps: Install-Package cryptopp
   - set TFSSDKDir=%CD%\tfs-sdk-3.2
 
 cache:
