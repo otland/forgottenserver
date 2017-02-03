@@ -41,6 +41,17 @@ class SHA1Hasher : public Hasher {
 		bool verify(const std::string& input, const std::string& encoded) const override;
 };
 
+class PBKDF2Hasher : public Hasher {
+	public:
+		std::string algorithm() const override { return "pbkdf2_sha256"; }
+		std::string encode(const std::string& input, const std::string& salt) const override;
+		std::string encode(const std::string& input, const std::string& salt, std::size_t iterations) const;
+		bool verify(const std::string& input, const std::string& encoded) const override;
+
+private:
+		static constexpr std::size_t default_iterations = 30000u;
+};
+
 }
 
 #endif //TFS_HASHERS_H

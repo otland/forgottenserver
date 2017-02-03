@@ -19,14 +19,18 @@
 
 #include "otpch.h"
 
+#include <cryptopp/base64.h>
 #include <cryptopp/hex.h>
+#include <cryptopp/pwdbased.h>
 #include <cryptopp/sha.h>
 
 #include "hashers.h"
+#include "tools.h"
 
 namespace hashers {
 
 static std::unique_ptr<Hasher> hashers[] = {
+	std::unique_ptr<Hasher>(new PBKDF2Hasher),
 	std::unique_ptr<Hasher>(new SHA1Hasher),
 };
 
@@ -69,6 +73,40 @@ std::string SHA1Hasher::encode(const std::string& input, const std::string&) con
 bool SHA1Hasher::verify(const std::string& input, const std::string& encoded) const
 {
 	return encode(input) == encoded;
+}
+
+std::string PBKDF2Hasher::encode(const std::string& input, const std::string& salt) const
+{
+	return encode(input, salt, default_iterations);
+}
+
+std::string PBKDF2Hasher::encode(const std::string& input, const std::string& salt, std::size_t iterations) const
+{
+	static CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA256> hasher;
+	byte digest[CryptoPP::SHA256::DIGESTSIZE];
+	hasher.DeriveKey(digest, sizeof(digest), 0, reinterpret_cast<const byte*>(input.c_str()), input.size(), reinterpret_cast<const byte*>(salt.c_str()), salt.size(), iterations);
+
+	std::string output;
+	CryptoPP::Base64Encoder encoder{new CryptoPP::StringSink{output}, false};
+	encoder.Put(digest, sizeof(digest));
+	encoder.MessageEnd();
+	return output;
+}
+
+bool PBKDF2Hasher::verify(const std::string& input, const std::string& encoded) const
+{
+	StringVector split = explodeString(encoded, "$", 3);
+
+	const std::string& algorithm = split[0];
+	if (algorithm != this->algorithm()) {
+		return false;
+	}
+
+	std::size_t iterations = std::strtoull(split[1].c_str(), nullptr, 10);
+	const std::string& salt = split[2];
+	const std::string& hash = split[3];
+
+	return encode(input, salt, iterations) == hash;
 }
 
 }
