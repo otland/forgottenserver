@@ -24,32 +24,28 @@
 
 namespace hashers {
 
-class Hasher {
-	public:
-		virtual std::string algorithm() const = 0;
-		virtual std::string encode(const std::string& input, const std::string& salt) const = 0;
-		virtual bool verify(const std::string& input, const std::string& encoded) const = 0;
+struct Hasher {
+	virtual std::string algorithm() const = 0;
+	virtual std::string encode(const std::string& input, const std::string& salt) const = 0;
+	virtual bool verify(const std::string& input, const std::string& encoded) const = 0;
 };
 
 const Hasher& getHasher(const std::string& algorithm);
 const Hasher& identifyHasher(const std::string& encoded);
 
-class SHA1Hasher : public Hasher {
-	public:
-		std::string algorithm() const override { return "deprecated_sha1"; }
-		std::string encode(const std::string& input, const std::string& salt = "") const override;
-		bool verify(const std::string& input, const std::string& encoded) const override;
+struct SHA1Hasher : public Hasher {
+	std::string algorithm() const override { return "deprecated_sha1"; }
+	std::string encode(const std::string& input, const std::string& salt = "") const override;
+	bool verify(const std::string& input, const std::string& encoded) const override;
 };
 
-class PBKDF2Hasher : public Hasher {
-	public:
-		std::string algorithm() const override { return "pbkdf2_sha256"; }
-		std::string encode(const std::string& input, const std::string& salt) const override;
-		std::string encode(const std::string& input, const std::string& salt, std::size_t iterations) const;
-		bool verify(const std::string& input, const std::string& encoded) const override;
+struct PBKDF2Hasher : public Hasher {
+	std::string algorithm() const override { return "pbkdf2_sha256"; }
+	std::string encode(const std::string& input, const std::string& salt) const override;
+	std::string encode(const std::string& input, const std::string& salt, std::size_t iterations) const;
+	bool verify(const std::string& input, const std::string& encoded) const override;
 
-private:
-		static constexpr std::size_t default_iterations = 30000u;
+	static constexpr std::size_t default_iterations = 30000u;
 };
 
 }
