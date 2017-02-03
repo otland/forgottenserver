@@ -26,22 +26,9 @@
 
 namespace hashers {
 
-namespace {
-
-std::unique_ptr<Hasher> hashers[] = {
-		std::unique_ptr<Hasher>(new SHA1Hasher)
+static std::unique_ptr<Hasher> hashers[] = {
+	std::unique_ptr<Hasher>(new SHA1Hasher),
 };
-
-std::string hexencode(const byte* raw, std::size_t length)
-{
-	std::string output;
-	CryptoPP::HexEncoder encoder{new CryptoPP::StringSink{output}, false};
-	encoder.Put(raw, length);
-	encoder.MessageEnd();
-	return output;
-}
-
-}
 
 const Hasher& getHasher(const std::string& algorithm)
 {
@@ -71,7 +58,12 @@ std::string SHA1Hasher::encode(const std::string& input, const std::string&) con
 	static CryptoPP::SHA1 hasher;
 	byte digest[CryptoPP::SHA1::DIGESTSIZE];
 	hasher.CalculateDigest(digest, reinterpret_cast<const byte*>(input.c_str()), input.size());
-	return hexencode(digest, sizeof(digest));
+
+	std::string output;
+	CryptoPP::HexEncoder encoder{new CryptoPP::StringSink{output}, false};
+	encoder.Put(digest, sizeof(digest));
+	encoder.MessageEnd();
+	return output;
 }
 
 bool SHA1Hasher::verify(const std::string& input, const std::string& encoded) const
