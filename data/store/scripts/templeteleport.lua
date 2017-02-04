@@ -1,25 +1,23 @@
-function onRender(player, offer)
-	return not player:isPzLocked() and not Tile(player:getPosition()):hasFlag(TILESTATE_NOLOGOUT)
-end
-
 local MIN_DISTANCE = 0
-function onBuy(player, offer)
+
+function onRender(player, offer)
 	if player:isPzLocked() then
-		player:sendStoreError(STORE_ERROR_PURCHASE, "You can not purchase a transportation service while PZ Locked.")
-		return false
+		return false, "You can not purchase a transportation service while PZ Locked."
 	end
 
 	if Tile(player:getPosition()):hasFlag(TILESTATE_NOLOGOUT) then
-		player:sendStoreError(STORE_ERROR_PURCHASE, "You can not purchase a transportation service while in a no-logout zone.")
-		return false
+		return false, "You can not purchase a transportation service while in a no-logout zone."
 	end
 
 	local templePosition = player:getTown():getTemplePosition()
 	if player:getPosition():getDistance(templePosition) < MIN_DISTANCE then
-		player:sendStoreError(STORE_ERROR_PURCHASE, "You can not purchase this transportation service this close to your temple.")
-		return false
+		return false, "You can not purchase this transportation service this close to your temple."
 	end
 
+	return true
+end
+
+function onBuy(player, offer)
 	player:teleportTo(templePosition)
 	return true
 end

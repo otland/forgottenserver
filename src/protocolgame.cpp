@@ -1108,6 +1108,7 @@ void ProtocolGame::parseStoreOpen() {
 }
 
 void ProtocolGame::parseStoreSelectCategory(NetworkMessage& msg) {
+	msg.getByte(); // ??
 	std::string categoryName = msg.getString();
 
 	for (auto& category : g_store->getCategories()) {
@@ -2096,14 +2097,15 @@ void ProtocolGame::sendStore() {
 	NetworkMessage msg;
 	msg.addByte(0xFB);
 	msg.addByte(0x00);
-	msg.add<uint16_t>(g_store->getCategories().size());
 
+	msg.add<uint16_t>(g_store->getCategories().size());
 	for (auto& category : g_store->getCategories()) {
 		msg.addString(category.getName());
 		msg.addString(category.getDescription());
-		msg.addByte(category.getState());
-		msg.addByte(category.getIcons().size());
 
+		msg.addByte(category.getState());
+
+		msg.addByte(category.getIcons().size());
 		for (const auto& icon : category.getIcons()) {
 			msg.addString(icon);
 		}
@@ -2120,20 +2122,21 @@ void ProtocolGame::sendStoreOffers(StoreCategory& category) {
 	NetworkMessage msg;
 	msg.addByte(0xFC);
 	msg.addString(category.getName());
-	msg.add<uint16_t>(category.getOffers().size());
 
+	msg.add<uint16_t>(category.getOffers().size());
 	for (auto& offer : category.getOffers()) {
 		msg.add<uint32_t>(offer.getId());
 		msg.addString(offer.getName());
 		msg.addString(offer.getDescription());
+
 		msg.add<uint32_t>(offer.getPrice());
+
 		msg.addByte(offer.getState());
 
-		bool disabled = g_store->executeOnRender(player, &offer);
-		msg.addByte(!disabled);
-		if (!disabled) {
-			std::string reason = "";
-			msg.addString(reason);
+		StoreResult result = g_store->executeOnRender(player, &offer);
+		msg.addByte(!result.enable);
+		if (!result.enable) {
+			msg.addString(result.reason);
 		}
 
 		msg.addByte(offer.getIcons().size());
@@ -2150,7 +2153,6 @@ void ProtocolGame::sendStoreOffers(StoreCategory& category) {
 			for (const auto& icon : subOffer.getIcons()) {
 				msg.addString(icon);
 			}
-
 			msg.addString(subOffer.getParent()); //serviceType
 		}
 	}
@@ -2170,7 +2172,10 @@ void ProtocolGame::sendStoreHistory(uint32_t page, uint32_t entriesPerPage) {
 	NetworkMessage msg;
 	msg.addByte(0xFD);
 	msg.add<uint32_t>(page);
-	msg.add<uint32_t>((storeHistory.size() > entriesPerPage) ? 0x01 : 0x00);
+
+	int pages = storeHistory.size() / entriesPerPage + ((storeHistory.size() % entriesPerPage) > 0 ? 1 : 0);
+	msg.add<uint32_t>(pages);
+
 	msg.addByte((storeHistory.size() > entriesPerPage) ? entriesPerPage : storeHistory.size());
 
 	size_t count = 0;
@@ -2180,7 +2185,7 @@ void ProtocolGame::sendStoreHistory(uint32_t page, uint32_t entriesPerPage) {
 		}
 
 		msg.add<uint32_t>(entry.timestamp);
-		msg.addByte(entry.type); // offer type
+		msg.addByte(STORE_OFFERTYPE_OTHER); // offer type
 		msg.add<int32_t>(entry.coins);
 		msg.addString(entry.description);
 	}

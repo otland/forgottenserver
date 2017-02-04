@@ -38,16 +38,16 @@ void Store::getTransactionHistory(uint32_t accountId, uint16_t page, uint32_t en
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (result) {
 		do {
-			out.emplace_back(result->getNumber<uint32_t>("id"), result->getNumber<uint8_t>("type"), result->getNumber<int32_t>("coins"), result->getString("description"), result->getNumber<time_t>("timestamp"));
+			out.emplace_back(result->getNumber<uint32_t>("id"), result->getNumber<int32_t>("coins"), result->getString("description"), result->getNumber<time_t>("timestamp"));
 		} while (result->next());
 	}
 }
 
-void Store::onTransactionCompleted(uint32_t accountId, uint8_t type, int32_t coins, const std::string& description) const {
+void Store::onTransactionCompleted(uint32_t accountId, int32_t coins, const std::string& description) const {
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "INSERT INTO `store_history` (`account_id`, `type`, `coins`, `description`, `timestamp`) VALUES (" << accountId << "," << type << "," << coins << "," << db.escapeString(description) << "," << time(nullptr) << ")";
+	query << "INSERT INTO `store_history` (`account_id`, `coins`, `description`, `timestamp`) VALUES (" << accountId << "," << coins << "," << db.escapeString(description) << "," << time(nullptr) << ")";
 
 	db.executeQuery(query.str());
 }
@@ -82,10 +82,6 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 			continue;
 		}
 
-		if ((attr = categoryNode.attribute("state"))) {
-			state = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
-		}
-
 		if ((attr = categoryNode.attribute("description"))) {
 			description = attr.as_string();
 		}
@@ -108,8 +104,11 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 				continue;
 			}
 
-			if ((attr = offerNode.attribute("type"))) {
-				offer.type = static_cast<StoreOfferType_t>(pugi::cast<uint8_t>(attr.value()));
+			if ((attr = offerNode.attribute("state"))) {
+				StoreOfferState_t offerState = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
+				if (offerState > category.state) {
+					category.state = offerState;
+				}
 			}
 
 			if ((attr = offerNode.attribute("description"))) {
@@ -136,10 +135,6 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 
 				if ((attr = subOfferNode.attribute("name"))) {
 					name = attr.as_string();
-				}
-
-				if ((attr = subOfferNode.attribute("state"))) {
-					state = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
 				}
 
 				if ((attr = subOfferNode.attribute("description"))) {
@@ -198,13 +193,14 @@ boost::optional<StoreOffer&> Store::getOfferById(uint32_t id) {
 	return boost::optional<StoreOffer&>();
 }
 
-bool Store::executeOnRender(Player* player, StoreOffer* offer) {
+StoreResult Store::executeOnRender(Player* player, StoreOffer* offer) {
+	StoreResult result;
 	if (offer->renderEvent != -1) {
 		// onRender(player, offer)
 		LuaScriptInterface* scriptInterface = offer->scriptInterface;
 		if (!scriptInterface->reserveScriptEnv()) {
 			std::cout << "[Error - Store::executeOnRender] Call stack overflow" << std::endl;
-			return false;
+			return result;
 		}
 
 		ScriptEnvironment* env = scriptInterface->getScriptEnv();
@@ -219,10 +215,19 @@ bool Store::executeOnRender(Player* player, StoreOffer* offer) {
 		LuaScriptInterface::pushUserdata<StoreOffer>(L, offer);
 		LuaScriptInterface::setMetatable(L, -1, "StoreOffer");
 
-		return scriptInterface->callFunction(2);
+		if (scriptInterface->protectedCall(L, 2, 2) != 0) {
+			LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+		} else {
+			result.enable = LuaScriptInterface::getBoolean(L, -2);
+			result.reason = LuaScriptInterface::getString(L, -1);
+
+			lua_pop(L, 2);
+		}
+
+		scriptInterface->resetScriptEnv();
 	}
 
-	return false;
+	return result;
 }
 
 bool Store::executeOnBuy(Player* player, StoreOffer* offer, const std::string& param) {

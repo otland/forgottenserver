@@ -33,18 +33,21 @@ class StoreOffer;
 
 struct StoreTransaction {
 	uint32_t id;
-	uint8_t type;
 	int32_t coins;
 	std::string description;
 	time_t timestamp;
 
-	StoreTransaction(uint32_t _id, uint8_t _type, int32_t _coins, const std::string& _description, time_t _timestamp) {
+	StoreTransaction(uint32_t _id, int32_t _coins, const std::string& _description, time_t _timestamp) {
 		id = _id;
-		type = _type;
 		coins = _coins;
 		description = _description;
 		timestamp = _timestamp;
 	}
+};
+
+struct StoreResult {
+	bool enable = false;
+	std::string reason = "";
 };
 
 class Store {
@@ -57,13 +60,13 @@ class Store {
 		}
 
 		void getTransactionHistory(uint32_t accountId, uint16_t page, uint32_t entriesPerPage, std::vector<StoreTransaction>& out) const;
-		void onTransactionCompleted(uint32_t accountId, uint8_t type, int32_t coins, const std::string& description) const;
+		void onTransactionCompleted(uint32_t accountId, int32_t coins, const std::string& description) const;
 
 		boost::optional<StoreOffer&> getOfferById(uint32_t id);
 
 		//scripting
 		bool executeOnBuy(Player* player, StoreOffer* offer, const std::string& param);
-		bool executeOnRender(Player* player, StoreOffer* offer);
+		StoreResult executeOnRender(Player* player, StoreOffer* offer);
 
 	protected:
 		std::unique_ptr<LuaScriptInterface> scriptInterface;
@@ -144,7 +147,6 @@ class StoreOffer : public StoreEntry {
 	public:
 		StoreOffer(uint32_t _id) {
 			id = _id;
-			type = STORE_OFFERTYPE_OTHER;
 			price = 0;
 			scriptInterface = nullptr;
 			renderEvent = -1;
@@ -159,10 +161,6 @@ class StoreOffer : public StoreEntry {
 			return price;
 		}
 
-		StoreOfferType_t getType() const {
-			return type;
-		}
-
 		std::vector<SubOffer>& getSubOffers() {
 			return subOffers;
 		}
@@ -175,7 +173,6 @@ class StoreOffer : public StoreEntry {
 		uint32_t id;
 		uint32_t price;
 		std::string message; //on purchase message
-		StoreOfferType_t type;
 
 		std::vector<SubOffer> subOffers; //bundled offers
 

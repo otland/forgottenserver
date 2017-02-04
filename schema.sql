@@ -328,7 +328,6 @@ INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '19'), ('m
 CREATE TABLE IF NOT EXISTS `store_history` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
-  `type` smallint(5) NOT NULL DEFAULT '0',
   `coins` int(10) NOT NULL DEFAULT '0',
   `description` varchar(256) NOT NULL DEFAULT '',
   `timestamp` bigint(20) unsigned NOT NULL,

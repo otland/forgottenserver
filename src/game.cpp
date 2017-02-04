@@ -4919,7 +4919,7 @@ void Game::playerPurchaseStoreOffer(uint32_t playerId, uint32_t offerId, const s
 				transactionDescription = tmpDesc.str();
 			}
 
-			g_store->onTransactionCompleted(player->getAccount(), offer->getType(), -static_cast<int32_t>(offer->getPrice()), transactionDescription);
+			g_store->onTransactionCompleted(player->getAccount(), -static_cast<int32_t>(offer->getPrice()), transactionDescription);
 		}
 	} else {
 		player->sendStoreError(STORE_ERROR_PURCHASE, "You do not have enough coins to complete this purchase.");
@@ -4956,10 +4956,10 @@ void Game::playerTransferCoins(uint32_t playerId, const std::string& recipient, 
 	std::string description(player->getName() + " transferred to " + recipient);
 
 	IOAccount::addCoins(player->getAccount(), -static_cast<int32_t>(amount));
-	g_store->onTransactionCompleted(player->getAccount(), STORE_OFFERTYPE_OTHER, -static_cast<int32_t>(amount), description);
+	g_store->onTransactionCompleted(player->getAccount(), -static_cast<int32_t>(amount), description);
 
 	IOAccount::addCoins(tmpPlayer->getAccount(), amount);
-	g_store->onTransactionCompleted(tmpPlayer->getAccount(), STORE_OFFERTYPE_OTHER, amount, description);
+	g_store->onTransactionCompleted(tmpPlayer->getAccount(), amount, description);
 
 	if (tmpPlayer->isOffline()) {
 		delete tmpPlayer;
@@ -5264,7 +5264,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			}
 
 			IOAccount::addCoins(player->getAccount(), -static_cast<int32_t>(amount));
-			g_store->onTransactionCompleted(player->getAccount(), STORE_OFFERTYPE_OTHER, -static_cast<int32_t>(amount), "Sold on Market");
+			g_store->onTransactionCompleted(player->getAccount(), -static_cast<int32_t>(amount), "Sold on Market");
 		} else {
 			std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
 			if (itemList.empty()) {
@@ -5293,7 +5293,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.id == ITEM_STORECOINS) {
 			IOAccount::addCoins(buyerPlayer->getAccount(), amount);
-			g_store->onTransactionCompleted(buyerPlayer->getAccount(), STORE_OFFERTYPE_OTHER, amount, "Purchased on Market");
+			g_store->onTransactionCompleted(buyerPlayer->getAccount(), amount, "Purchased on Market");
 		} else if (it.stackable) {
 			uint16_t tmpAmount = amount;
 			while (tmpAmount > 0) {
@@ -5338,7 +5338,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.id == ITEM_STORECOINS) {
 			IOAccount::addCoins(player->getAccount(), amount);
-			g_store->onTransactionCompleted(player->getAccount(), STORE_OFFERTYPE_OTHER, amount, "Purchased on Market");
+			g_store->onTransactionCompleted(player->getAccount(), amount, "Purchased on Market");
 		} else if (it.stackable) {
 			uint16_t tmpAmount = amount;
 			while (tmpAmount > 0) {
@@ -5373,7 +5373,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			sellerPlayer->bankBalance += totalPrice;
 
 			if (it.id == ITEM_STORECOINS) {
-				g_store->onTransactionCompleted(sellerPlayer->getAccount(), STORE_OFFERTYPE_OTHER, -static_cast<int32_t>(amount), "Sold on Market");
+				g_store->onTransactionCompleted(sellerPlayer->getAccount(), -static_cast<int32_t>(amount), "Sold on Market");
 			}
 		} else {
 			IOLoginData::increaseBankBalance(offer.playerId, totalPrice);
@@ -5382,7 +5382,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				sellerPlayer = new Player(nullptr);
 
 				if (IOLoginData::loadPlayerById(sellerPlayer, offer.playerId)) {
-					g_store->onTransactionCompleted(sellerPlayer->getAccount(), STORE_OFFERTYPE_OTHER, -static_cast<int32_t>(amount), "Sold on Market");
+					g_store->onTransactionCompleted(sellerPlayer->getAccount(), -static_cast<int32_t>(amount), "Sold on Market");
 				}
 
 				delete sellerPlayer;

@@ -37,20 +37,22 @@ function onRender(player, offer)
     local lookTypes, addons = getAffectedOutfit(offer:getName():lower())
 
     if not lookTypes then
-        return false
+        return false, 'Outfit "' .. offer:getName() .. '" was not found. Please contact the administrator.'
     end
 
     for _, lookType in ipairs(lookTypes) do
         if #addons == 0 then
             if player:hasOutfit(lookType, 0) or lookTypes.unlocked then
-                return false
+                return false, "You already have " .. offer:getName() .. " Outfit."
             end
         elseif #addons == 1 then
-            return (player:hasOutfit(lookType, 0) or lookTypes.unlocked) and not player:hasOutfit(lookType, addons[1])
+			local enabled = (player:hasOutfit(lookType, 0) or lookTypes.unlocked) and not player:hasOutfit(lookType, addons[1])
+			local reason = enabled and "" or "You already have this addon."
+            return enabled, reason
         else
             for _, addon in ipairs(addons) do
                 if player:hasOutfit(lookType, addon) then
-                    return false
+                    return false, "You already have one these addons."
                 end
             end
         end
@@ -61,11 +63,6 @@ end
 
 function onBuy(player, offer)
     local lookTypes, addons = getAffectedOutfit(offer:getName():lower())
-
-    if not lookTypes then
-        player:sendStoreError('Outfit "' .. offer:getName() .. '" was not found. Please contact the administrator.')
-        return false
-    end
 
     for _, lookType in ipairs(lookTypes) do
         player:addOutfit(lookType)
