@@ -193,14 +193,13 @@ boost::optional<StoreOffer&> Store::getOfferById(uint32_t id) {
 	return boost::optional<StoreOffer&>();
 }
 
-StoreResult Store::executeOnRender(Player* player, StoreOffer* offer) {
-	StoreResult result;
+bool Store::executeOnRender(Player* player, StoreOffer* offer, std::string& reason) {
 	if (offer->renderEvent != -1) {
 		// onRender(player, offer)
 		LuaScriptInterface* scriptInterface = offer->scriptInterface;
 		if (!scriptInterface->reserveScriptEnv()) {
 			std::cout << "[Error - Store::executeOnRender] Call stack overflow" << std::endl;
-			return result;
+			return false;
 		}
 
 		ScriptEnvironment* env = scriptInterface->getScriptEnv();
@@ -215,19 +214,21 @@ StoreResult Store::executeOnRender(Player* player, StoreOffer* offer) {
 		LuaScriptInterface::pushUserdata<StoreOffer>(L, offer);
 		LuaScriptInterface::setMetatable(L, -1, "StoreOffer");
 
+		bool result = false;
 		if (scriptInterface->protectedCall(L, 2, 2) != 0) {
 			LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 		} else {
-			result.enable = LuaScriptInterface::getBoolean(L, -2);
-			result.reason = LuaScriptInterface::getString(L, -1);
+			result = LuaScriptInterface::getBoolean(L, -2);
+			reason = LuaScriptInterface::getString(L, -1);
 
 			lua_pop(L, 2);
 		}
 
 		scriptInterface->resetScriptEnv();
+		return result;
 	}
 
-	return result;
+	return false;
 }
 
 bool Store::executeOnBuy(Player* player, StoreOffer* offer, const std::string& param) {

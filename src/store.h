@@ -45,11 +45,6 @@ struct StoreTransaction {
 	}
 };
 
-struct StoreResult {
-	bool enable = false;
-	std::string reason = "";
-};
-
 class Store {
 	public:
 		bool loadFromXml(bool reloading = false);
@@ -66,7 +61,7 @@ class Store {
 
 		//scripting
 		bool executeOnBuy(Player* player, StoreOffer* offer, const std::string& param);
-		StoreResult executeOnRender(Player* player, StoreOffer* offer);
+		bool executeOnRender(Player* player, StoreOffer* offer, std::string& reason);
 
 	protected:
 		std::unique_ptr<LuaScriptInterface> scriptInterface;

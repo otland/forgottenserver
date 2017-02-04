@@ -2133,10 +2133,11 @@ void ProtocolGame::sendStoreOffers(StoreCategory& category) {
 
 		msg.addByte(offer.getState());
 
-		StoreResult result = g_store->executeOnRender(player, &offer);
-		msg.addByte(!result.enable);
-		if (!result.enable) {
-			msg.addString(result.reason);
+		std::string reason = "";
+		bool disabled = g_store->executeOnRender(player, &offer, reason);
+		msg.addByte(!disabled);
+		if (!disabled) {
+			msg.addString(reason);
 		}
 
 		msg.addByte(offer.getIcons().size());
