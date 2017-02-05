@@ -41,6 +41,7 @@ class ChatChannel
 
 		bool addUser(Player& player);
 		bool removeUser(const Player& player);
+		bool hasUser(const Player& player);
 
 		bool talk(const Player& fromPlayer, SpeakClasses type, const std::string& text);
 		void sendToAll(const std::string& message, SpeakClasses type) const;
