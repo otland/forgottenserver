@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir -p /shrd/build
+cd /shrd/build && cmake .. && make
+cp tfs ../

@@ -1,0 +1,84 @@
+#!/bin/bash
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+NC='\033[0m' # No Color
+
+########################
+###Parse settings. ini file from /home
+########################
+sudo touch  /home/tfs-settings.ini
+source /home/tfs-settings.ini
+
+#####################
+###Check for runnig containers
+#####################
+
+ENGINE_CONTAINER=$(docker ps -a | grep tfs-engine)
+DB_CONTAINER=$(docker ps -a | grep tfs-mysql )
+
+##################################################################
+##Lookup for database password on host. If there is none, assume we are on local and set default password
+##################################################################
+
+if  [ "$sql_user" == '' ];
+then
+  sql_user='root';
+  echo -e  "${YELLOW}[WARNING]: Using root as mysql user! ${NC}";
+fi
+if  [ "$sql_database" == '' ];
+then
+  sql_database='tfs_local';
+  echo -e  "${YELLOW}[WARNING]: Using tfs_local mysql databse! ${NC}";
+fi
+
+if  [ "$sql_password" != '' ];
+then
+  echo -e  "${GREEN}[NOTICE]: Using custom mysql container password! ${NC}";
+else
+  echo -e  "${YELLOW}[WARNING]: Using default mysql container password! ${NC}";
+  sql_password='docker';
+fi
+
+##################################################################
+
+sudo service mysql stop
+
+if [ "$DB_CONTAINER" == '' ];
+then
+    echo -e  "${GREEN}[NOTICE]: Creating new database container.${NC}"
+    docker run -p 3306:3306 \
+	--name tfs-mysql\
+	-e MYSQL_ROOT_PASSWORD=$sql_password\
+	--restart always\
+    -d mysql:latest;
+else
+    echo  -e "${GREEN}[NOTICE]: Starting database container. ${NC}"
+    docker start tfs-mysql;
+fi
+
+if [ "$ENGINE_CONTAINER" == "" ];
+then
+    echo -e  "${GREEN}[NOTICE]: Creating new server container.${NC}"
+    docker run -ti --name tfs-engine -v $(pwd):/shrd \
+        --link tfs-mysql:tfs-mysql \
+	    --restart always\
+	    -e DB_PASSWORD=$sql_password\
+	    -e DB_USERNAME=$sql_user\
+	    -e DB_DATABASE=$sql_database\
+	    -e ENVIRONMENT=$ENVIRONMENT\
+	    -e run_debug_mode=$run_debug_mode\
+        -p 7171:7171 \
+        -p 7172:7172 \
+        -p 8787:8787 \
+        -p 8788:8788 \
+        --security-opt seccomp:unconfined \
+        tfs
+
+else
+
+    echo -e  "${GREEN}[NOTICE]: Starting server container.${NC}"
+    docker start tfs-engine
+    echo -e  "${GREEN}[NOTICE]: Attached to a machine ${YELLOW} [press enter] ${NC}"
+
+fi
