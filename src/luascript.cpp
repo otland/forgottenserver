@@ -1367,6 +1367,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MESSAGE_HEALED_OTHERS)
 	registerEnum(MESSAGE_EXPERIENCE_OTHERS)
 	registerEnum(MESSAGE_EVENT_DEFAULT)
+	registerEnum(MESSAGE_GUILD)
+	registerEnum(MESSAGE_PARTY_MANAGEMENT)
+	registerEnum(MESSAGE_PARTY)
 	registerEnum(MESSAGE_EVENT_ORANGE)
 	registerEnum(MESSAGE_STATUS_CONSOLE_ORANGE)
 
@@ -8522,10 +8525,14 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 
 int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
-	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[, secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]])
+	// player:sendTextMessage(type, text, channelId)
 	int parameters = lua_gettop(L);
 
 	TextMessage message(getNumber<MessageClasses>(L, 2), getString(L, 3));
+	if (parameters == 4) {
+		message.channelId = getNumber<uint16_t>(L, 4);
+	}
+	
 	if (parameters >= 6) {
 		message.position = getPosition(L, 4);
 		message.primary.value = getNumber<int32_t>(L, 5);
