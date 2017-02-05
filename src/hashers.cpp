@@ -29,7 +29,7 @@
 
 namespace hashers {
 
-static std::unique_ptr<Hasher> hashers[] = {
+static std::array<std::unique_ptr<Hasher>, 2> hashers = {
 	std::unique_ptr<Hasher>(new PBKDF2Hasher),
 	std::unique_ptr<Hasher>(new SHA1Hasher),
 };
