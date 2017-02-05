@@ -428,7 +428,7 @@ void Player::updateInventoryWeight()
 	}
 
 	inventoryWeight = 0;
-	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_AMMO; ++i) {
 		const Item* item = inventory[i];
 		if (item) {
 			inventoryWeight += item->getWeight();
@@ -1826,7 +1826,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	}
 
 	if (damage > 0) {
-		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_AMMO; ++slot) {
 			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 				continue;
 			}
@@ -3241,7 +3241,7 @@ void Player::updateItemsLight(bool internal /*=false*/)
 	LightInfo maxLight;
 	LightInfo curLight;
 
-	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_AMMO; ++i) {
 		Item* item = inventory[i];
 		if (item) {
 			item->getLight(curLight);
