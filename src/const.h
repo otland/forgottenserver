@@ -212,6 +212,9 @@ enum MessageClasses : uint8_t {
 	MESSAGE_EVENT_DEFAULT = 30, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_LOOT = 31,
 
+	MESSAGE_GUILD = 33, /* White message in channel (+ channelId) */
+	MESSAGE_PARTY_MANAGEMENT = 34, /* White message in channel (+ channelId) */
+	MESSAGE_PARTY = 35, /* White message in channel (+ channelId) */
 	MESSAGE_EVENT_ORANGE = 36, /*Orange message in the console*/
 	MESSAGE_STATUS_CONSOLE_ORANGE = 37,  /*Orange message in the console*/
 };
