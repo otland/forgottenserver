@@ -4962,6 +4962,7 @@ void Game::playerTransferCoins(uint32_t playerId, const std::string& recipient, 
 	g_store->onTransactionCompleted(tmpPlayer->getAccount(), amount, description);
 
 	if (tmpPlayer->isOffline()) {
+		IOLoginData::savePlayer(tmpPlayer);
 		delete tmpPlayer;
 	}
 
