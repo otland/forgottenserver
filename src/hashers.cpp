@@ -59,7 +59,7 @@ const Hasher& identifyHasher(const std::string& encoded)
 
 std::string SHA1Hasher::encode(const std::string& input, const std::string&) const
 {
-	static CryptoPP::SHA1 hasher;
+	CryptoPP::SHA1 hasher;
 	byte digest[CryptoPP::SHA1::DIGESTSIZE];
 	hasher.CalculateDigest(digest, reinterpret_cast<const byte*>(input.c_str()), input.size());
 
@@ -82,7 +82,7 @@ std::string PBKDF2Hasher::encode(const std::string& input, const std::string& sa
 
 std::string PBKDF2Hasher::encode(const std::string& input, const std::string& salt, std::size_t iterations) const
 {
-	static CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA256> hasher;
+	CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA256> hasher;
 	byte digest[CryptoPP::SHA256::DIGESTSIZE];
 	hasher.DeriveKey(digest, sizeof(digest), 0, reinterpret_cast<const byte*>(input.c_str()), input.size(), reinterpret_cast<const byte*>(salt.c_str()), salt.size(), iterations);
 
