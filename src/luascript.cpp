@@ -8544,7 +8544,6 @@ int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 			pushBoolean(L, false);
 			return 1;
 		}
-
 		message.channelId = channelId;
 	} else {
 		if (parameters >= 6) {
