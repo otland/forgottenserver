@@ -8546,17 +8546,17 @@ int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 		}
 
 		message.channelId = channelId;
-	}
+	} else {
+		if (parameters >= 6) {
+			message.position = getPosition(L, 4);
+			message.primary.value = getNumber<int32_t>(L, 5);
+			message.primary.color = getNumber<TextColor_t>(L, 6);
+		}
 
-	if (parameters >= 6) {
-		message.position = getPosition(L, 4);
-		message.primary.value = getNumber<int32_t>(L, 5);
-		message.primary.color = getNumber<TextColor_t>(L, 6);
-	}
-
-	if (parameters >= 8) {
-		message.secondary.value = getNumber<int32_t>(L, 7);
-		message.secondary.color = getNumber<TextColor_t>(L, 8);
+		if (parameters >= 8) {
+			message.secondary.value = getNumber<int32_t>(L, 7);
+			message.secondary.color = getNumber<TextColor_t>(L, 8);
+		}
 	}
 
 	player->sendTextMessage(message);
