@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <store>
-	<category name="Items" icons="Item_SolarAxe.png" description="Buy items">
+	<category name="Items" state="1" icons="Item_SolarAxe.png" description="Buy items">
 		<offer name="Solar Axe" state="1" price="100" icons="Item_SolarAxe.png" description="It's fucking orange. What else could you ask for?" message="Thank you for buying this overpriced item." script="items.lua" />
 
 		<offer name="Thunder Hammer" price="100" description="Just pretend you're Thor." message="Thank you for buying this overpriced item." script="items.lua" />

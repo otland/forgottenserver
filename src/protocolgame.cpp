@@ -2103,7 +2103,7 @@ void ProtocolGame::sendStore() {
 		msg.addString(category.getName());
 		msg.addString(category.getDescription());
 
-		msg.addByte(category.getState());
+		msg.addByte(category.getCategoryState());
 
 		msg.addByte(category.getIcons().size());
 		for (const auto& icon : category.getIcons()) {
@@ -2131,13 +2131,13 @@ void ProtocolGame::sendStoreOffers(StoreCategory& category) {
 
 		msg.add<uint32_t>(offer.getPrice());
 
-		msg.addByte(offer.getState());
+		msg.addByte(offer.getOfferState());
 
 		std::string reason = "";
 		bool enabled = g_store->executeOnRender(player, &offer, reason);
 		msg.addByte(!enabled);
 		if (!enabled) {
-			msg.addString(reason);
+			msg.addString(reason + "\n");
 		}
 
 		msg.addByte(offer.getIcons().size());
@@ -2154,7 +2154,7 @@ void ProtocolGame::sendStoreOffers(StoreCategory& category) {
 			for (const auto& icon : subOffer.getIcons()) {
 				msg.addString(icon);
 			}
-			msg.addString(subOffer.getParent()); //serviceType
+			msg.addString(subOffer.getParent());
 		}
 	}
 

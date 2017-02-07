@@ -37,7 +37,8 @@ struct StoreTransaction {
 	std::string description;
 	time_t timestamp;
 
-	StoreTransaction(uint32_t _id, int32_t _coins, const std::string& _description, time_t _timestamp) {
+	StoreTransaction(uint32_t _id, int32_t _coins, const std::string& _description, time_t _timestamp)
+	{
 		id = _id;
 		coins = _coins;
 		description = _description;
@@ -76,19 +77,15 @@ class StoreEntry {
 	public:
 		StoreEntry() = default;
 
-		StoreEntry(const std::string& _name, const StoreOfferState_t& _state, const std::string& _description, const StringVector& _icons) {
+		StoreEntry(const std::string& _name, const StoreOfferState_t& _categoryState, const std::string& _description, const StringVector& _icons) {
 			name = _name;
-			state = _state;
+			categoryState = _categoryState;
 			description = _description;
 			icons = _icons;
 		}
 
 		const std::string& getName() const {
 			return name;
-		}
-
-		const StoreOfferState_t& getState() const {
-			return state;
 		}
 
 		const std::string& getDescription() const {
@@ -105,7 +102,7 @@ class StoreEntry {
 
 	protected:
 		std::string name;
-		StoreOfferState_t state;
+		StoreOfferState_t categoryState;
 		std::string description;
 		StringVector icons;
 
@@ -118,9 +115,11 @@ class StoreEntry {
 
 class StoreCategory : public StoreEntry {
 	public:
-		StoreCategory(const std::string& _name, const StoreOfferState_t& _state, const std::string& _description, const StringVector& _icons) :
-			StoreEntry(_name, _state, _description, _icons) {
+		StoreCategory(const std::string& _name, const StoreOfferState_t& _categoryState, const std::string& _description, const StringVector& _icons) :
+			StoreEntry(_name, _categoryState, _description, _icons) { }
 
+		StoreOfferState_t getCategoryState() {
+			return categoryState;
 		}
 
 		std::vector<StoreOffer>& getOffers() {
@@ -129,7 +128,6 @@ class StoreCategory : public StoreEntry {
 
 	protected:
 		std::string parent;
-
 		std::vector<StoreOffer> offers;
 		StoreOffer& createOffer(uint32_t offerId);
 
@@ -142,6 +140,7 @@ class StoreOffer : public StoreEntry {
 	public:
 		StoreOffer(uint32_t _id) {
 			id = _id;
+			offerState = STORE_OFFERSTATE_NONE;
 			price = 0;
 			scriptInterface = nullptr;
 			renderEvent = -1;
@@ -150,6 +149,10 @@ class StoreOffer : public StoreEntry {
 
 		uint32_t getId() const {
 			return id;
+		}
+
+		StoreOfferState_t getOfferState() const {
+			return offerState;
 		}
 
 		uint32_t getPrice() const {
@@ -166,6 +169,7 @@ class StoreOffer : public StoreEntry {
 
 	protected:
 		uint32_t id;
+		StoreOfferState_t offerState;
 		uint32_t price;
 		std::string message; //on purchase message
 

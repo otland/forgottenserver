@@ -428,7 +428,7 @@ void Player::updateInventoryWeight()
 	}
 
 	inventoryWeight = 0;
-	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_AMMO; ++i) {
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		const Item* item = inventory[i];
 		if (item) {
 			inventoryWeight += item->getWeight();

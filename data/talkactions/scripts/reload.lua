@@ -50,7 +50,9 @@ local reloadTypes = {
 	["talkactions"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
 
 	["weapon"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" },
-	["weapons"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" }
+	["weapons"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" },
+
+	["store"] = { targetType = RELOAD_TYPE_STORE, name = "store" }
 }
 
 function onSay(player, words, param)

@@ -71,7 +71,7 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 		pugi::xml_attribute attr;
 
 		name.clear();
-		state = StoreOfferState_t::STORE_OFFERSTATE_NONE;
+		state = STORE_OFFERSTATE_NONE;
 		description.clear();
 		icons.clear();
 
@@ -80,6 +80,10 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 		} else {
 			std::cout << "[Error - Store::loadFromXml] Missing category name." << std::endl;
 			continue;
+		}
+
+		if ((attr = categoryNode.attribute("state"))) {
+			state = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
 		}
 
 		if ((attr = categoryNode.attribute("description"))) {
@@ -105,10 +109,7 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 			}
 
 			if ((attr = offerNode.attribute("state"))) {
-				StoreOfferState_t offerState = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
-				if (offerState > category.state) {
-					category.state = offerState;
-				}
+				offer.offerState = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
 			}
 
 			if ((attr = offerNode.attribute("description"))) {
@@ -135,6 +136,10 @@ bool Store::loadFromXml(bool /*reloading = false*/) {
 
 				if ((attr = subOfferNode.attribute("name"))) {
 					name = attr.as_string();
+				}
+
+				if ((attr = offerNode.attribute("state"))) {
+					state = static_cast<StoreOfferState_t>(pugi::cast<uint32_t>(attr.value()));
 				}
 
 				if ((attr = subOfferNode.attribute("description"))) {
