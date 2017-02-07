@@ -1,4 +1,4 @@
-local MIN_DISTANCE = 0
+local MIN_DISTANCE = 50 -- Distance in SQM's
 
 function onRender(player, offer)
 	if player:isPzLocked() then
@@ -9,8 +9,7 @@ function onRender(player, offer)
 		return false, "You can not purchase a transportation service while in a no-logout zone."
 	end
 
-	local templePosition = player:getTown():getTemplePosition()
-	if player:getPosition():getDistance(templePosition) < MIN_DISTANCE then
+	if player:getPosition():getDistance(player:getTown():getTemplePosition()) < MIN_DISTANCE then
 		return false, "You can not purchase this transportation service this close to your temple."
 	end
 
@@ -18,6 +17,6 @@ function onRender(player, offer)
 end
 
 function onBuy(player, offer)
-	player:teleportTo(templePosition)
+	player:teleportTo(player:getTown():getTemplePosition())
 	return true
 end
