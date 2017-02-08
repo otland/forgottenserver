@@ -1,24 +1,19 @@
 sudo: required
 dist: trusty
-language: cpp
-compiler:
-  - clang
-  - gcc
+language: generic
 env:
-  - LUAJIT=OFF
-  - LUAJIT=ON
-cache: apt
-addons:
-  apt:
-    packages:
-      - libboost-dev
-      - libboost-system-dev
-      - libboost-iostreams-dev
-      - liblua5.2-dev
-      - libluajit-5.1-dev
-      - libmysqlclient-dev
-      - libpugixml-dev
-before_script:
-  - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
-script: make -j2
+  global:
+    - CONTAINER=forgottenserver
+  matrix:
+    - LUAJIT=OFF CXX=g++
+    - LUAJIT=ON  CXX=g++
+    - LUAJIT=OFF CXX=clang++
+    - LUAJIT=ON  CXX=clang++
+services:
+  - docker
+install: docker build -t ${CONTAINER} .
+before_script: mkdir ${TRAVIS_BUILD_DIR}/build
+script:
+  - DOCKER_PARAMS="-e CXX=${CXX} -v ${TRAVIS_BUILD_DIR}:/opt -w /opt/build ${CONTAINER}"
+  - docker run ${DOCKER_PARAMS} cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
+  - docker run ${DOCKER_PARAMS} make -j2
