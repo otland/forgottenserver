@@ -12,7 +12,8 @@ function Creature.getClosestFreePosition(self, position, maxRadius)
 				if math.abs(x) == radius or math.abs(y) == radius then
 					local checkPosition = Position(position.x + x, position.y + y, position.z)
 					local tile = Tile(checkPosition)
-					if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) then
+					if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) and
+						(not mustBeReachable or self:getPathTo(checkPosition)) then
 						return checkPosition
 					end
 				end
