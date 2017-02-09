@@ -6834,8 +6834,7 @@ int LuaScriptInterface::luaCreatureSetSkillLoss(lua_State* L)
 	if (creature) {
 		creature->setSkillLoss(getBoolean(L, 2));
 		pushBoolean(L, true);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
