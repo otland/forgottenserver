@@ -46,6 +46,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			), false, true)
 
 			if monster then
+				player:addSummon(monster)
 				monster:setMaster(player)
 			end
 		end

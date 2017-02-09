@@ -84,3 +84,29 @@ function Creature:setItemOutfit(item, time)
 
 	return true
 end
+
+function Creature:addSummon(monster)
+	local summon = Monster(monster)
+	if not summon then
+		return false
+	end
+
+	summon.setMaster(self)
+	summon.setDropLoot(false)
+	summon.setSkillLoss(false)
+
+	return true
+end
+
+function Creature:removeSummon(monster)
+	local summon = Monster(monster)
+	if not summon or summon:getMaster() ~= self then
+		return false
+	end
+
+	summon.setMaster(nil)
+	summon.setDropLoot(true)
+	summon.setSkillLoss(true)
+
+	return true
+end
