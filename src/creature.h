@@ -409,7 +409,7 @@ class Creature : virtual public Thing
 		void setDropLoot(bool lootDrop) {
 			this->lootDrop = lootDrop;
 		}
-		void setLossSkill(bool skillLoss) {
+		void setSkillLoss(bool skillLoss) {
 			this->skillLoss = skillLoss;
 		}
 

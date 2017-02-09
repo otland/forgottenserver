@@ -934,7 +934,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			if (summon) {
 				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force)) {
 					summon->setDropLoot(false);
-					summon->setLossSkill(false);
+					summon->setSkillLoss(false);
 					summon->setMaster(this);
 					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
 					g_game.addMagicEffect(summon->getPosition(), CONST_ME_TELEPORT);
@@ -1931,7 +1931,7 @@ bool Monster::convinceCreature(Creature* creature)
 	}
 	setMaster(creature);
 	setDropLoot(false);
-	setLossSkill(false);
+	setSkillLoss(false);
 	setFollowCreature(nullptr);
 	setAttackedCreature(nullptr);
 

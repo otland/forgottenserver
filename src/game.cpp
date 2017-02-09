@@ -604,7 +604,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	removeCreatureCheck(creature);
 
 	for (Creature* summon : creature->summons) {
-		summon->setLossSkill(false);
+		summon->setSkillLoss(false);
 		removeCreature(summon);
 	}
 	return true;
