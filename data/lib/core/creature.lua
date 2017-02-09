@@ -91,9 +91,9 @@ function Creature:addSummon(monster)
 		return false
 	end
 
-	summon.setMaster(self)
-	summon.setDropLoot(false)
-	summon.setSkillLoss(false)
+	summon:setMaster(self)
+	summon:setDropLoot(false)
+	summon:setSkillLoss(false)
 
 	return true
 end
@@ -104,9 +104,9 @@ function Creature:removeSummon(monster)
 		return false
 	end
 
-	summon.setMaster(nil)
-	summon.setDropLoot(true)
-	summon.setSkillLoss(true)
+	summon:setMaster(nil)
+	summon:setDropLoot(true)
+	summon:setSkillLoss(true)
 
 	return true
 end
