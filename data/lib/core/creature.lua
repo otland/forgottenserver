@@ -1,4 +1,4 @@
-function Creature.getClosestFreePosition(self, position, maxRadius)
+function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReachable)
 	maxRadius = maxRadius or 1
 
 	-- backward compatability (extended)
