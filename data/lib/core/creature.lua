@@ -6,7 +6,7 @@ function Creature.getClosestFreePosition(self, position, maxRadius)
 		maxRadius = 2
 	end
 
-	for _ = 0, maxRadius do
+	for radius = 0, maxRadius do
 		for x = -radius, radius do
 			for y = -radius, radius do
 				if math.abs(x) == radius or math.abs(y) == radius then
