@@ -1,27 +1,22 @@
-function Creature.getClosestFreePosition(self, position, extended)
-	local usePosition = Position(position)
-	local tiles = { Tile(usePosition) }
-	local length = extended and 2 or 1
+function Creature.getClosestFreePosition(self, position, maxRadius)
+	maxRadius = maxRadius or 1
 
-	local tile
-	for y = -length, length do
-		for x = -length, length do
-			if x ~= 0 or y ~= 0 then
-				usePosition.x = position.x + x
-				usePosition.y = position.y + y
-
-				tile = Tile(usePosition)
-				if tile then
-					tiles[#tiles + 1] = tile
-				end
-			end
-		end
+	-- backward compatability (extended)
+	if maxRadius == true then
+		maxRadius = 2
 	end
 
-	for i = 1, #tiles do
-		tile = tiles[i]
-		if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) then
-			return tile:getPosition()
+	for _ = 0, maxRadius do
+		for x = -radius, radius do
+			for y = -radius, radius do
+				if math.abs(x) == radius or math.abs(y) == radius then
+					local checkPosition = Position(position.x + x, position.y + y, position.z)
+					local tile = Tile(checkPosition)
+					if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) then
+						return checkPosition
+					end
+				end
+			end
 		end
 	end
 	return Position()
