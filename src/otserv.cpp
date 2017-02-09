@@ -79,11 +79,16 @@ int main(int argc, char* argv[])
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
-	if (serviceManager.is_running()) {
+	bool dryRun = argc >= 2 && strcmp(argv[1], "--dry-run") == 0;
+	if (serviceManager.is_running() && !dryRun) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 		serviceManager.run();
 	} else {
-		std::cout << ">> No services running. The server is NOT online." << std::endl;
+		if (dryRun) {
+			std::cout << ">> Dry run complete. Server shutting down." << std::endl;
+		} else {
+			std::cout << ">> No services running. The server is NOT online." << std::endl;
+		}
 		g_scheduler.shutdown();
 		g_databaseTasks.shutdown();
 		g_dispatcher.shutdown();
