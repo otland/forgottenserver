@@ -23,7 +23,7 @@
 #include <boost/asio.hpp>
 #include <beast/http/message.hpp>
 #include <beast/http/string_body.hpp>
-namespace http
+namespace http_api
 {
 
 namespace asio = boost::asio;
@@ -36,6 +36,6 @@ using Request = beast::http::request<beast::http::string_body>;
 using Response = beast::http::response<beast::http::string_body>;
 using RequestID = uint;
 using PeerID = uint;
-} //namespace http
+} //namespace http_api
 
 #endif // FS_API_SERVER_COMMON_H

@@ -5,7 +5,7 @@
 #include "../baseevents.h"
 #include <unordered_map>
 #include <functional>
-namespace http
+namespace http_api
 {
 
 class Router final
@@ -24,6 +24,6 @@ public:
 	void handleSessionClose(PeerID peerID);
 };
 
-} //namespace http
+} //namespace http_api
 
 #endif //FS_API_SERVER_ROUTER_H

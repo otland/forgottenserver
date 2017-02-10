@@ -25,7 +25,7 @@
 #include "responder.h"
 #include "../tasks.h"
 
-namespace http
+namespace http_api
 {
 
 using Minutes = boost::posix_time::minutes;
@@ -160,4 +160,4 @@ void Peer::send(Response response, RequestID requestID)
 	});
 }
 
-} //namespace http
+} //namespace http_api

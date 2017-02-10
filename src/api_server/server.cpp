@@ -23,7 +23,7 @@
 #include "peer.h"
 #include "router.h"
 
-namespace http
+namespace http_api
 {
 
 ApiServer::ApiServer(IoService& service) :
@@ -32,6 +32,8 @@ ApiServer::ApiServer(IoService& service) :
 {
 	//
 }
+
+ApiServer::~ApiServer() = default;
 
 void ApiServer::accept()
 {
@@ -106,8 +108,9 @@ void ApiServer::loadRoutes()
 	if (!router->loadRoutingFunctions()) {
 		return;
 	}
+	//TODO: load address and port from config
 	asio::ip::tcp::endpoint ep{asio::ip::address_v4(INADDR_ANY), 8080};
 	start(ep);
 }
 
-} //namespace http
+} //namespace http_api

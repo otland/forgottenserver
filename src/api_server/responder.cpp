@@ -4,7 +4,7 @@
 #include "peer.h"
 #include "../luascript.h"
 
-namespace http
+namespace http_api
 {
 
 Responder::Responder(PeerWeakPtr peer, Request request, RequestID requestID):
@@ -152,4 +152,4 @@ int Responder::luaGetRequestURL(lua_State* L)
 	return 1;
 }
 
-} //namespace http
+} //namespace http_api

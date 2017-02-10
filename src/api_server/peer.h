@@ -24,7 +24,7 @@
 #include "../tools.h"
 
 #include <beast/http.hpp>
-namespace http
+namespace http_api
 {
 
 class ApiServer;
@@ -149,8 +149,8 @@ public:
 	void close();
 };
 
-using PeerWeakPtr = std::weak_ptr<Peer>;
+using PeerWeakPtr = std::weak_ptr<Peer>; ///Weak pointer to peer, used to prevent lua from keeping Peers alive for too long
 
-} //namespace http
+} //namespace http_api
 
 #endif // FS_API_SERVER_PEER_H

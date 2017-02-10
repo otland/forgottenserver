@@ -21,17 +21,16 @@
 #define FS_API_SERVER_SERVER_H
 
 #include "common.h"
-#include "router.h"
+#include "../tools.h"
 #include <memory>
 #include <unordered_set>
-#include <boost/asio.hpp>
-#include "../tools.h"
 
-namespace http
+namespace http_api
 {
 
 class Peer;
-using PeerSharedPtr = std::shared_ptr<Peer>;
+class Router;
+using PeerSharedPtr = std::shared_ptr<Peer>; ///Shared pointer to Peer object
 
 class ApiServer : NonCopyable, NonMovable
 {
@@ -39,18 +38,27 @@ class ApiServer : NonCopyable, NonMovable
 	using Peers = std::unordered_set<PeerSharedPtr>;
 	using EndPoint = asio::ip::tcp::endpoint;
 
-	Acceptor acceptor;
-	Peers peers;
-	Strand strand;
-	PeerID peerCounter{};
-	std::unique_ptr<Router> router;
+	Acceptor acceptor; ///The acceptor used to listen for incomming TCP/IP connections
+	Peers peers; ///Set of connections, tracked so that we can perform a clean shutdown
+	Strand strand; ///Internal strand for the server to synchronize access to the server
+	PeerID peerCounter{}; ///Counter used to generate PeerIDs
+	std::unique_ptr<Router> router; ///Router which dispatches handlers
+
 	void accept();
+	void start(EndPoint endPoint);
 public:
     explicit ApiServer(IoService& service);
-	void start(EndPoint endPoint);
+	~ApiServer();
+	/** \brief Stops the API server
+	 *
+	 * Stops the API server by closing the acceptor and terminating connections to
+	 * all connected \ref Peer objects.
+	 * \remark Thread-safe - access to this boject is synchronized with a local \ref ApiServer::strand
+	 */
 	void stop();
 
-	IoService& getIoService() {
+	IoService& getIoService()
+	{
 		return acceptor.get_io_service();
 	}
 
@@ -58,5 +66,5 @@ public:
 	void loadRoutes();
 };
 
-} //namespace http
+} //namespace http_api
 #endif // FS_API_SERVER_SERVER_H

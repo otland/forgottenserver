@@ -57,7 +57,7 @@ void startupErrorMessage(const std::string& errorStr)
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* servicer, http::ApiServer* apiServer);
+void mainLoader(int, char*[], ServiceManager* services, http_api::ApiServer* apiServer);
 
 void badAllocationHandler()
 {
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 
 	boost::asio::io_service service;
 	ServiceManager serviceManager{service};
-	http::ApiServer apiServer{service};
+	http_api::ApiServer apiServer{service};
 	g_dispatcher.start();
 	g_scheduler.start();
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void mainLoader(int, char*[], ServiceManager* services, http::ApiServer* apiServer)
+void mainLoader(int, char*[], ServiceManager* services, http_api::ApiServer* apiServer)
 {
 	//dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);

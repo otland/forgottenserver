@@ -5,7 +5,7 @@
 #include "common.h"
 #include <lua.hpp>
 
-namespace http
+namespace http_api
 {
 
 class Peer;
@@ -36,6 +36,6 @@ public:
 	void send();
 };
 
-} //namespace http
+} //namespace http_api
 
 #endif // FS_API_SERVER_RESPONDER_H

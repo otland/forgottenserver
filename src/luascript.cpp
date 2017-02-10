@@ -2586,7 +2586,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
 
-
 	// Spells
 	registerClass("Spell", "", LuaScriptInterface::luaSpellCreate);
 	registerMetaMethod("Spell", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2597,7 +2596,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Spell", "isPremium", LuaScriptInterface::luaSpellIsPremium);
 	registerMethod("Spell", "isLearnable", LuaScriptInterface::luaSpellIsLearnable);
 
-	using http::Responder;
+	using http_api::Responder;
 	registerClass("Responder", "", nullptr);
 	registerMetaMethod("Responder", "__gc", Responder::luaDelete);
 	registerMethod("Responder", "delete", Responder::luaDelete);
