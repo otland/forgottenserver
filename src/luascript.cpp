@@ -6708,16 +6708,32 @@ int LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 
 int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 {
-	// creature:setMaster(master)
+	// creature:setMaster(master[, force = false])
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Creature* master = getCreature(L, 2);
-	if (master) {
-		pushBoolean(L, creature->convinceCreature(master));
+	if (Creature* master = getCreature(L, 2)) {
+		if (getBoolean(L, 3, false)) {
+			if (Monster* summon = creature->getMonster()) {
+				if (Creature* oldMaster = summon->getMaster()) {
+					oldMaster->removeSummon(summon);
+				}
+
+				master->addSummon(summon);
+				summon->setFollowCreature(nullptr);
+				summon->setAttackedCreature(nullptr);
+				summon->updateTargetList();
+				summon->updateIdleStatus();
+				pushBoolean(L, true);
+			} else {
+				pushBoolean(L, false);
+			}
+		} else {
+			pushBoolean(L, creature->convinceCreature(master));
+		}
 	} else {
 		master = creature->getMaster();
 		if (master) {
