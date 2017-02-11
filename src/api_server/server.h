@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,11 @@ class Peer;
 class Router;
 using PeerSharedPtr = std::shared_ptr<Peer>; ///Shared pointer to Peer object
 
+/** \brief represents the HTTP API subsystem
+ *
+ * This class handles preparation of the API subsystem and handling of incoming connections.
+ * \remark Thread-safe - access to this object is synchronized with a local \ref ApiServer::strand
+ */
 class ApiServer : NonCopyable, NonMovable
 {
 	using Acceptor = asio::ip::tcp::acceptor;
@@ -47,13 +52,15 @@ class ApiServer : NonCopyable, NonMovable
 	void accept();
 	void start(EndPoint endPoint);
 public:
+
     explicit ApiServer(IoService& service);
 	~ApiServer();
+
 	/** \brief Stops the API server
 	 *
 	 * Stops the API server by closing the acceptor and terminating connections to
 	 * all connected \ref Peer objects.
-	 * \remark Thread-safe - access to this boject is synchronized with a local \ref ApiServer::strand
+	 * \remark Thread-safe - access to this object is synchronized with a local \ref ApiServer::strand
 	 */
 	void stop();
 
@@ -62,7 +69,19 @@ public:
 		return acceptor.get_io_service();
 	}
 
+	/** \brief Handles closing of a remote connection
+	 *
+	 * Handles removing memory related to the \ref Peer that has just disconnected.
+	 * \remark Thread-safe - access to this object is synchronized with a local \ref ApiServer::strand
+	 */
 	void onPeerClose(Peer& peer);
+
+	/** \brief loads routing lua subsystem
+	 *
+	 * Loads the routing lua subsystem. If failure occurs the server will continue to run but the API
+	 * will be disabled.
+	 * \remark NOT Thread-safe - access to this object is NOT synchronized
+	 */
 	void loadRoutes();
 };
 

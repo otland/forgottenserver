@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
 #ifndef FS_API_SERVER_PEER_H
 #define FS_API_SERVER_PEER_H
 
-#include "common.h"
 #include "../tools.h"
-
+#include "common.h"
 #include <beast/http.hpp>
+
 namespace http_api
 {
 
@@ -80,72 +80,73 @@ private:
 
 
 	/** \brief Accept event handler
-	*
-	* This function is called when a remote peer estabilishes a connection.
-	* Enqueues the first read operation and dispatches an event to the router.
-	* \remark Thread-safe - access to this object is synchronized with a local \ref Peer::strand.
-	*/
+	 *
+	 * This function is called when a remote peer estabilishes a connection.
+	 * Enqueues the first read operation and dispatches an event to the router.
+	 * \remark Thread-safe - access to this object is synchronized with a local \ref Peer::strand.
+	 */
 	void onAccept();
 
 	/** \brief Asynchronous read operation enqueuing method
-	*
-	*  Enqueues an asynchronous read operation of an HTTP request. On completion of the read operation
-	*  a handler is dispatched which constructs a Responder and passes it over to the \ref router.
-	*  \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
-	*  \remark Only one read operation can be enqueued for a particular socket at any time.
-	**/
+	 *
+	 *  Enqueues an asynchronous read operation of an HTTP request. On completion of the read operation
+	 *  a handler is dispatched which constructs a Responder and passes it over to the \ref router.
+	 *  \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
+	 *  \remark Only one read operation can be enqueued for a particular socket at any time.
+	 **/
 	void read();
 
 	/** \brief Asynchronous write operation enqueuing method
-	*
-	* Enqueues an asynchronous write operation of an HTTP response stored in \ref response.
-	* On completion of the write operation a handler is dispatched which closes the connection if
-	* Connection: close HTTP header field is present. Otherwise, a next read operation is enqueued
-	* using \ref read.
-	* \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
-	* \remark Only one read operation can be enqueued for a particular socket at any time.
-	*/
+	 *
+	 * Enqueues an asynchronous write operation of an HTTP response stored in \ref response.
+	 * On completion of the write operation a handler is dispatched which closes the connection if
+	 * Connection: close HTTP header field is present. Otherwise, a next read operation is enqueued
+	 * using \ref read.
+	 * \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
+	 * \remark Only one read operation can be enqueued for a particular socket at any time.
+	 */
 	void write();
 
 	void internalClose();
 
 	/** \brief Starts the internal timeout timer
-	*
-	* The timer allows detection of a dropped connection in an easy way. The timeout is controlled
-	* by \ref TIMER_TIMEOUT.
-	* \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
-	*/
+	 *
+	 * The timer allows detection of a dropped connection in an easy way. The timeout is controlled
+	 * by \ref TIMER_TIMEOUT.
+	 * \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
+	 */
 	void startTimer();
 
 	/** \brief Stops the internal timeout timer
-	*
-	* Stops the internal timer. Calling this function if the timer is not running is safe.
-	* \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
-	*/
+	 *
+	 * Stops the internal timer. Calling this function if the timer is not running is safe.
+	 * \remark Thread-unsafe - this function should only be called within the local \ref Peer::strand.
+	 */
 	void cancelTimer();
 public:
 	Peer(ApiServer& server, Router& router, PeerID peerID);
 
 	/** \brief Sends an HTTP response for a request
-	*
-	* Sends an HTTP response to this Peer for a request with the provided requestID.
-	* If the request ID is invalid the message is not sent and an error message is printed.
-	* Otherwise the reponse is moved into the Peer object and an asynchronous write operation
-	* is enqueued with \ref Peer::write.
-	* \param[in] response - the HTTP response message
-	* \param[in] requestID - the ID of the request linked to the response
-	* \remark Thread-safe - access to this object is synchronized with a local \ref Peer::strand.
-	*/
+	 *
+	 * Sends an HTTP response to this Peer for a request with the provided requestID.
+	 * If the request ID is invalid the message is not sent and an error message is printed.
+	 * Otherwise the reponse is moved into the Peer object and an asynchronous write operation
+	 * is enqueued with \ref Peer::write.
+	 * \param[in] response - the HTTP response message
+	 * \param[in] requestID - the ID of the request linked to the response
+	 * \remark Thread-safe - access to this object is synchronized with a local \ref Peer::strand.
+	 */
 	void send(Response response, RequestID requestID);
 
 	/** \brief Closes the connection
-	*  This function closes the connection related to this Peer, cancels all
-	*  enqueued asynchronous operations and removes this Peer from the Peer list
-	*  stored in its parent \ref Peer::server.
-	*  \remark Thread-safe - access to this object is synchronized with a local \ref Peer::strand.
-	*  \remark It is safe to call this method multiple times - subsequent calls will have no effect
-	*  (apart from printing a few warnings).
-	*/
+	 *
+	 *  This function closes the connection related to this Peer, cancels all
+	 *  enqueued asynchronous operations and removes this Peer from the Peer list
+	 *  stored in its parent \ref Peer::server.
+	 *  \remark Thread-safe - access to this object is synchronized with a local \ref Peer::strand.
+	 *  \remark It is safe to call this method multiple times - subsequent calls will have no effect
+	 *  (apart from printing a few warnings).
+	 */
 	void close();
 };
 
