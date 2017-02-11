@@ -20,9 +20,13 @@ environment:
 install:
   - ps: if (-not (Test-Path tfs-sdk-3.2)) { Start-FileDownload https://static.otland.net/dl/tfs-sdk-3.2.zip; 7z x tfs-sdk-3.2.zip }
   - set TFSSDKDir=%CD%\tfs-sdk-3.2
+  - git submodule update --init --recursive
 
 cache:
   - tfs-sdk-3.2 -> appveyor.yml
 
 artifacts:
   - path: vc14\**\theforgottenserver.exe
+
+build:
+  project: vc14\theforgottenserver.sln
