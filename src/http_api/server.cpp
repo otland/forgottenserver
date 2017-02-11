@@ -26,16 +26,16 @@
 namespace http_api
 {
 
-ApiServer::ApiServer(IoService& service) :
+Server::Server(IoService& service) :
 	acceptor(service),
 	strand(service)
 {
 	//
 }
 
-ApiServer::~ApiServer() = default;
+Server::~Server() = default;
 
-void ApiServer::accept()
+void Server::accept()
 {
 	auto peer = std::make_shared<Peer>(*this, *router, peerCounter++);
 	acceptor.async_accept(peer->socket, strand.wrap([this, peer](ErrorCode err) {
@@ -53,7 +53,7 @@ void ApiServer::accept()
 	}));
 }
 
-void ApiServer::start(EndPoint endPoint)
+void Server::start(EndPoint endPoint)
 {
 	strand.dispatch([this, endPoint]() {
 		ErrorCode err{};
@@ -78,7 +78,7 @@ void ApiServer::start(EndPoint endPoint)
 	});
 }
 
-void ApiServer::stop()
+void Server::stop()
 {
 	strand.dispatch([this]() {
 		ErrorCode err{};
@@ -93,7 +93,7 @@ void ApiServer::stop()
 	});
 }
 
-void ApiServer::onPeerClose(Peer& peer)
+void Server::onPeerClose(Peer& peer)
 {
 	auto peerShared = peer.shared_from_this();
 	strand.dispatch([this, peerShared]() {
@@ -101,7 +101,7 @@ void ApiServer::onPeerClose(Peer& peer)
 	});
 }
 
-void ApiServer::loadRoutes()
+void Server::loadRoutes()
 {
 	//Dispatcher thread
 	router.reset(new Router);

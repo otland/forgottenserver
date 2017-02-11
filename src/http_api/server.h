@@ -35,9 +35,9 @@ using PeerSharedPtr = std::shared_ptr<Peer>; ///Shared pointer to Peer object
 /** \brief represents the HTTP API subsystem
  *
  * This class handles preparation of the API subsystem and handling of incoming connections.
- * \remark Thread-safe - access to this object is synchronized with a local \ref ApiServer::strand
+ * \remark Thread-safe - access to this object is synchronized with a local \ref Server::strand
  */
-class ApiServer : NonCopyable, NonMovable
+class Server : NonCopyable, NonMovable
 {
 	using Acceptor = asio::ip::tcp::acceptor;
 	using Peers = std::unordered_set<PeerSharedPtr>;
@@ -53,14 +53,14 @@ class ApiServer : NonCopyable, NonMovable
 	void start(EndPoint endPoint);
 public:
 
-    explicit ApiServer(IoService& service);
-	~ApiServer();
+    explicit Server(IoService& service);
+	~Server();
 
 	/** \brief Stops the API server
 	 *
 	 * Stops the API server by closing the acceptor and terminating connections to
 	 * all connected \ref Peer objects.
-	 * \remark Thread-safe - access to this object is synchronized with a local \ref ApiServer::strand
+	 * \remark Thread-safe - access to this object is synchronized with a local \ref Server::strand
 	 */
 	void stop();
 
@@ -72,7 +72,7 @@ public:
 	/** \brief Handles closing of a remote connection
 	 *
 	 * Handles removing memory related to the \ref Peer that has just disconnected.
-	 * \remark Thread-safe - access to this object is synchronized with a local \ref ApiServer::strand
+	 * \remark Thread-safe - access to this object is synchronized with a local \ref Server::strand
 	 */
 	void onPeerClose(Peer& peer);
 

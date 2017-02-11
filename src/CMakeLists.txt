@@ -1,10 +1,10 @@
 set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/otpch.cpp
 	${CMAKE_CURRENT_LIST_DIR}/actions.cpp
-	${CMAKE_CURRENT_LIST_DIR}/api_server/peer.cpp
-	${CMAKE_CURRENT_LIST_DIR}/api_server/responder.cpp
-	${CMAKE_CURRENT_LIST_DIR}/api_server/router.cpp
-	${CMAKE_CURRENT_LIST_DIR}/api_server/server.cpp
+	${CMAKE_CURRENT_LIST_DIR}/http_api/peer.cpp
+	${CMAKE_CURRENT_LIST_DIR}/http_api/responder.cpp
+	${CMAKE_CURRENT_LIST_DIR}/http_api/router.cpp
+	${CMAKE_CURRENT_LIST_DIR}/http_api/server.cpp
 	${CMAKE_CURRENT_LIST_DIR}/ban.cpp
 	${CMAKE_CURRENT_LIST_DIR}/baseevents.cpp
 	${CMAKE_CURRENT_LIST_DIR}/bed.cpp

@@ -27,7 +27,7 @@
 namespace http_api
 {
 
-class ApiServer;
+class Server;
 class Router;
 
 /** \brief Represents a connection to a remote Peer
@@ -40,13 +40,13 @@ class Peer : public std::enable_shared_from_this<Peer>, NonCopyable, NonMovable
 {
 public:
 private:
-	friend class ApiServer;
+	friend class Server;
 	using Socket = asio::ip::tcp::socket;
 	using Streambuf = asio::streambuf;
 	using Timer = asio::deadline_timer;
 
 	/// Reference to the server object. \remark The \ref Peer does not manage its lifetime.
-	ApiServer& server;
+	Server& server;
 
 	/** Reference to the router object which dispatches request handlers.
 	  * \remark The \ref Peer does not manage its lifetime.
@@ -124,7 +124,7 @@ private:
 	 */
 	void cancelTimer();
 public:
-	Peer(ApiServer& server, Router& router, PeerID peerID);
+	Peer(Server& server, Router& router, PeerID peerID);
 
 	/** \brief Sends an HTTP response for a request
 	 *

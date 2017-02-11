@@ -35,7 +35,7 @@
 #include "monster.h"
 #include "scheduler.h"
 #include "databasetasks.h"
-#include "api_server/responder.h"
+#include "http_api/responder.h"
 
 extern Chat* g_chat;
 extern Game g_game;

@@ -24,7 +24,6 @@
 #include "scheduler.h"
 #include "configmanager.h"
 #include "ban.h"
-#include "api_server/server.h"
 
 extern ConfigManager g_config;
 Ban g_bans;

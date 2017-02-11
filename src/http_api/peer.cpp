@@ -34,7 +34,7 @@ using Minutes = boost::posix_time::minutes;
  */
 const static Minutes TIMER_TIMEOUT{30};
 
-Peer::Peer(ApiServer& server, Router& router, PeerID peerID) :
+Peer::Peer(Server& server, Router& router, PeerID peerID) :
 	server(server),
 	router(router),
 	socket(server.getIoService()),
