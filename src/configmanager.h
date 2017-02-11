@@ -62,7 +62,7 @@ class ConfigManager
 			MYSQL_SOCK,
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
-
+			HTTP_API_IP,
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 
@@ -98,7 +98,7 @@ class ConfigManager
 			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER,
 			EXP_FROM_PLAYERS_LEVEL_RANGE,
 			MAX_PACKETS_PER_SECOND,
-
+			HTTP_API_PORT,
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 

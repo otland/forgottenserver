@@ -101,3 +101,10 @@ ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
 location = "Sweden"
+
+-- HTTP API configuration
+-- NOTE: The API communication uses raw, insecure HTTP
+-- DO NOT SEND private data over it, unless you use
+-- an external HTTPS server as a reverse proxy
+httpApiPort = 8080
+httpApiIp = "127.0.0.1"

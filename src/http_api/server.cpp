@@ -22,6 +22,9 @@
 #include "server.h"
 #include "peer.h"
 #include "router.h"
+#include "../configmanager.h"
+
+extern ConfigManager g_config;
 
 namespace http_api
 {
@@ -108,8 +111,10 @@ void Server::loadRoutes()
 	if (!router->loadRoutingFunctions()) {
 		return;
 	}
-	//TODO: load address and port from config
-	asio::ip::tcp::endpoint ep{asio::ip::address_v4(INADDR_ANY), 8080};
+	;
+	auto address = asio::ip::address::from_string(g_config.getString(ConfigManager::HTTP_API_IP));
+	auto port = static_cast<uint16_t>(g_config.getNumber(ConfigManager::HTTP_API_PORT));
+	asio::ip::tcp::endpoint ep{address, port};
 	start(ep);
 }
 
