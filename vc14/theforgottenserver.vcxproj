@@ -157,7 +157,7 @@
     <ClCompile Include="..\src\http_api\responder.cpp" />
     <ClCompile Include="..\src\http_api\router.cpp" />
     <ClCompile Include="..\src\http_api\server.cpp">
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)\obj_d\api_server</ObjectFileName>
+      <ObjectFileName>$(IntDir)\obj_d\api_server</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\src\inbox.cpp" />
     <ClCompile Include="..\src\ioguild.cpp" />
