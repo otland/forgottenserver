@@ -17,11 +17,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "../otpch.h"
+#include "otpch.h"
 
 #include "responder.h"
 #include "peer.h"
-#include "../luascript.h"
+#include "luascript.h"
 
 namespace http_api
 {

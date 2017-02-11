@@ -20,7 +20,7 @@
 #ifndef FS_HTTP_API_RESPONDER_H_8F52C86127F133F8E606D96A33069264
 #define FS_HTTP_API_RESPONDER_H_8F52C86127F133F8E606D96A33069264
 
-#include "../tools.h"
+#include "tools.h"
 #include "common.h"
 #include <lua.hpp>
 
@@ -76,4 +76,4 @@ public:
 
 } //namespace http_api
 
-#endif // FS_HTTP_API_RESPONDER_H
+#endif // FS_HTTP_API_RESPONDER_H_8F52C86127F133F8E606D96A33069264

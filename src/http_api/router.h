@@ -21,7 +21,7 @@
 #define FS_HTTP_API_ROUTER_H_BF19E77EB9613BA48A6343C06DD0B197
 
 #include "responder.h"
-#include "../baseevents.h"
+#include "baseevents.h"
 
 namespace http_api
 {
@@ -90,4 +90,4 @@ public:
 
 } //namespace http_api
 
-#endif //FS_HTTP_API_ROUTER_H
+#endif //FS_HTTP_API_ROUTER_H_BF19E77EB9613BA48A6343C06DD0B197

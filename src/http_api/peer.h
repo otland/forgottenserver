@@ -20,7 +20,7 @@
 #ifndef FS_HTTP_API_PEER_H_FF52E73D0D1DFC8DCCA08929BACB0739
 #define FS_HTTP_API_PEER_H_FF52E73D0D1DFC8DCCA08929BACB0739
 
-#include "../tools.h"
+#include "tools.h"
 #include "common.h"
 #include <beast/http.hpp>
 
@@ -154,4 +154,4 @@ using PeerWeakPtr = std::weak_ptr<Peer>; ///Weak pointer to peer, used to preven
 
 } //namespace http_api
 
-#endif // FS_HTTP_API_PEER_H
+#endif // FS_HTTP_API_PEER_H_FF52E73D0D1DFC8DCCA08929BACB0739
