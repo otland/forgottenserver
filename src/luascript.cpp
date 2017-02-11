@@ -2081,7 +2081,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "setDropLoot", LuaScriptInterface::luaCreatureSetDropLoot);
 	registerMethod("Creature", "setSkillLoss", LuaScriptInterface::luaCreatureSetSkillLoss);
 
-
 	registerMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
 	registerMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
 	registerMethod("Creature", "getDirection", LuaScriptInterface::luaCreatureGetDirection);
