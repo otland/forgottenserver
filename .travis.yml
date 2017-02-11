@@ -17,9 +17,9 @@ addons:
       - libluajit-5.1-dev
       - libmysqlclient-dev
       - libpugixml-dev
-      - libboost-dev
-      - libboost-system-dev
-      - libboost-iostreams-dev
+      - libboost1.58-dev
+      - libboost-system1.58-dev
+      - libboost-iostreams1.58-dev
 before_script:
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
