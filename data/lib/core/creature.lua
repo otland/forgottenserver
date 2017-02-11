@@ -84,3 +84,33 @@ function Creature:setItemOutfit(item, time)
 
 	return true
 end
+
+function Creature:addSummon(monster)
+	local summon = Monster(monster)
+	if not summon then
+		return false
+	end
+
+	summon:setTarget(nil)
+	summon:setFollowCreature(nil)
+	summon:setDropLoot(false)
+	summon:setSkillLoss(false)
+	summon:setMaster(self)
+
+	return true
+end
+
+function Creature:removeSummon(monster)
+	local summon = Monster(monster)
+	if not summon or summon:getMaster() ~= self then
+		return false
+	end
+
+	summon:setTarget(nil)
+	summon:setFollowCreature(nil)
+	summon:setDropLoot(true)
+	summon:setSkillLoss(true)
+	summon:setMaster(nil)
+
+	return true
+end

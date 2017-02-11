@@ -761,6 +761,7 @@ class LuaScriptInterface
 		static int luaCreatureChangeSpeed(lua_State* L);
 
 		static int luaCreatureSetDropLoot(lua_State* L);
+		static int luaCreatureSetSkillLoss(lua_State* L);
 
 		static int luaCreatureGetPosition(lua_State* L);
 		static int luaCreatureGetTile(lua_State* L);

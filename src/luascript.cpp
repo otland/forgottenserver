@@ -2081,6 +2081,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "changeSpeed", LuaScriptInterface::luaCreatureChangeSpeed);
 
 	registerMethod("Creature", "setDropLoot", LuaScriptInterface::luaCreatureSetDropLoot);
+	registerMethod("Creature", "setSkillLoss", LuaScriptInterface::luaCreatureSetSkillLoss);
 
 	registerMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
 	registerMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
@@ -6715,18 +6716,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 		return 1;
 	}
 
-	Creature* master = getCreature(L, 2);
-	if (master) {
-		pushBoolean(L, creature->convinceCreature(master));
-	} else {
-		master = creature->getMaster();
-		if (master) {
-			master->removeSummon(creature);
-			creature->incrementReferenceCounter();
-			creature->setDropLoot(true);
-		}
-		pushBoolean(L, true);
-	}
+	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
 	g_game.updateCreatureType(creature);
 	return 1;
 }
@@ -6811,6 +6801,19 @@ int LuaScriptInterface::luaCreatureSetDropLoot(lua_State* L)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		creature->setDropLoot(getBoolean(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureSetSkillLoss(lua_State* L)
+{
+	// creature:setSkillLoss(skillLoss)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->setSkillLoss(getBoolean(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
