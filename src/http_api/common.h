@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_API_SERVER_COMMON_H
-#define FS_API_SERVER_COMMON_H
+#ifndef FS_HTTP_API_COMMON_H_140089624C7E205078FEBA74EC391A0E
+#define FS_HTTP_API_COMMON_H_140089624C7E205078FEBA74EC391A0E
 
 #include <boost/asio.hpp>
 #include <beast/http/message.hpp>
@@ -39,4 +39,4 @@ using RequestID = uint;
 using PeerID = uint;
 } //namespace http_api
 
-#endif // FS_API_SERVER_COMMON_H
+#endif // FS_HTTP_API_COMMON_H

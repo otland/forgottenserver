@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_API_SERVER_PEER_H
-#define FS_API_SERVER_PEER_H
+#ifndef FS_HTTP_API_PEER_H_FF52E73D0D1DFC8DCCA08929BACB0739
+#define FS_HTTP_API_PEER_H_FF52E73D0D1DFC8DCCA08929BACB0739
 
 #include "../tools.h"
 #include "common.h"
@@ -154,4 +154,4 @@ using PeerWeakPtr = std::weak_ptr<Peer>; ///Weak pointer to peer, used to preven
 
 } //namespace http_api
 
-#endif // FS_API_SERVER_PEER_H
+#endif // FS_HTTP_API_PEER_H

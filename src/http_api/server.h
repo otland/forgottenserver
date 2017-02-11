@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_API_SERVER_SERVER_H
-#define FS_API_SERVER_SERVER_H
+#ifndef FS_HTTP_API_SERVER_H_EFFE32E9805E557424770A73C1FD86BB
+#define FS_HTTP_API_SERVER_H_EFFE32E9805E557424770A73C1FD86BB
 
 #include "common.h"
 #include "../tools.h"
@@ -86,4 +86,4 @@ public:
 };
 
 } //namespace http_api
-#endif // FS_API_SERVER_SERVER_H
+#endif // FS_HTTP_API_SERVER_H
