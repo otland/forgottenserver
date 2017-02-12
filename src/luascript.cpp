@@ -1371,6 +1371,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MESSAGE_HEALED_OTHERS)
 	registerEnum(MESSAGE_EXPERIENCE_OTHERS)
 	registerEnum(MESSAGE_EVENT_DEFAULT)
+	registerEnum(MESSAGE_GUILD)
+	registerEnum(MESSAGE_PARTY_MANAGEMENT)
+	registerEnum(MESSAGE_PARTY)
 	registerEnum(MESSAGE_EVENT_ORANGE)
 	registerEnum(MESSAGE_STATUS_CONSOLE_ORANGE)
 
@@ -8536,27 +8539,41 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
 	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[, secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]])
+	// player:sendTextMessage(type, text, channelId)
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	int parameters = lua_gettop(L);
 
 	TextMessage message(getNumber<MessageClasses>(L, 2), getString(L, 3));
-	if (parameters >= 6) {
-		message.position = getPosition(L, 4);
-		message.primary.value = getNumber<int32_t>(L, 5);
-		message.primary.color = getNumber<TextColor_t>(L, 6);
-	}
-
-	if (parameters >= 8) {
-		message.secondary.value = getNumber<int32_t>(L, 7);
-		message.secondary.color = getNumber<TextColor_t>(L, 8);
-	}
-
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		player->sendTextMessage(message);
-		pushBoolean(L, true);
+	if (parameters == 4) {
+		uint16_t channelId = getNumber<uint16_t>(L, 4);
+		ChatChannel* channel = g_chat->getChannel(*player, channelId);
+		if (!channel || !channel->hasUser(*player)) {
+			pushBoolean(L, false);
+			return 1;
+		}
+		message.channelId = channelId;
 	} else {
-		lua_pushnil(L);
+		if (parameters >= 6) {
+			message.position = getPosition(L, 4);
+			message.primary.value = getNumber<int32_t>(L, 5);
+			message.primary.color = getNumber<TextColor_t>(L, 6);
+		}
+
+		if (parameters >= 8) {
+			message.secondary.value = getNumber<int32_t>(L, 7);
+			message.secondary.color = getNumber<TextColor_t>(L, 8);
+		}
 	}
+
+	player->sendTextMessage(message);
+	pushBoolean(L, true);
+
 	return 1;
 }
 

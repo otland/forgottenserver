@@ -133,6 +133,10 @@ bool ChatChannel::removeUser(const Player& player)
 	return true;
 }
 
+bool ChatChannel::hasUser(const Player& player) {
+	return users.find(player.getID()) != users.end();
+}
+
 void ChatChannel::sendToAll(const std::string& message, SpeakClasses type) const
 {
 	for (const auto& it : users) {
