@@ -737,8 +737,9 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (result->getNumber<uint16_t>("save") == 0) {
-		return db.executeQuery(fmt::format("UPDATE `players` SET `lastlogin` = {:d}, `lastip` = {:d} WHERE `id` = {:d}",
-		                                   player->lastLoginSaved, player->lastIP, player->getGUID()));
+		return db.executeQuery(
+		    fmt::format("UPDATE `players` SET `lastlogin` = {:d}, `lastip` = INET6_ATON('{:s}') WHERE `id` = {:d}",
+		                player->lastLoginSaved, player->lastIP.to_string(), player->getGUID()));
 	}
 
 	// serialize conditions
@@ -793,8 +794,8 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastlogin` = " << player->lastLoginSaved << ',';
 	}
 
-	if (player->lastIP != 0) {
-		query << "`lastip` = " << player->lastIP << ',';
+	if (!player->lastIP.is_unspecified()) {
+		query << "`lastip` = INET6_ATON('" << player->lastIP.to_string() << "'),";
 	}
 
 	query << "`conditions` = " << db.escapeBlob(conditions, conditionsSize) << ',';

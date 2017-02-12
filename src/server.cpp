@@ -12,6 +12,25 @@
 extern ConfigManager g_config;
 Ban g_bans;
 
+namespace {
+
+boost::asio::ip::address getListenAddress()
+{
+	if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
+		return boost::asio::ip::address::from_string(g_config.getString(ConfigManager::IP));
+	}
+	return boost::asio::ip::address_v6::any();
+}
+
+void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
+{
+	if (auto service = weak_service.lock()) {
+		service->open(port);
+	}
+}
+
+} // namespace
+
 ServiceManager::~ServiceManager() { stop(); }
 
 void ServiceManager::die() { io_service.stop(); }
@@ -84,8 +103,8 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 			return;
 		}
 
-		auto remote_ip = connection->getIP();
-		if (remote_ip != 0 && g_bans.acceptConnection(remote_ip)) {
+		const auto& remote_ip = connection->getIP();
+		if (g_bans.acceptConnection(remote_ip)) {
 			Service_ptr service = services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));
@@ -101,9 +120,9 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		if (!pendingStart) {
 			close();
 			pendingStart = true;
-			g_scheduler.addEvent(
-			    createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() {
-				    ServicePort::openAcceptor(thisPtr, serverPort);
+			g_scheduler.addEvent(createSchedulerTask(
+			    15000, [serverPort = this->serverPort, service = std::weak_ptr<ServicePort>(shared_from_this())]() {
+				    openAcceptor(service, serverPort);
 			    }));
 		}
 	}
@@ -123,44 +142,41 @@ Protocol_ptr ServicePort::make_protocol(NetworkMessage& msg, const Connection_pt
 
 void ServicePort::onStopServer() { close(); }
 
-void ServicePort::openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
-{
-	if (auto service = weak_service.lock()) {
-		service->open(port);
-	}
-}
-
 void ServicePort::open(uint16_t port)
 {
+	namespace ip = boost::asio::ip;
+
 	close();
 
 	serverPort = port;
 	pendingStart = false;
 
 	try {
-		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(
-			    io_service,
-			    boost::asio::ip::tcp::endpoint(boost::asio::ip::address(boost::asio::ip::address_v4::from_string(
-			                                       g_config.getString(ConfigManager::IP))),
-			                                   serverPort)));
-		} else {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(
-			    io_service, boost::asio::ip::tcp::endpoint(
-			                    boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), serverPort)));
-		}
+		auto address = getListenAddress();
 
-		acceptor->set_option(boost::asio::ip::tcp::no_delay(true));
+		acceptor = std::make_unique<ip::tcp::acceptor>(io_service, ip::tcp::endpoint{address, serverPort});
+		if (address.is_v6()) {
+			ip::v6_only option;
+			acceptor->get_option(option);
+			if (option) {
+				boost::system::error_code err;
+				acceptor->set_option(ip::v6_only{false}, err);
+				if (err) {
+					std::cout << "[Warning - ServicePort::open] Enabling IPv4 support failed: " << err.message()
+					          << std::endl;
+				}
+			}
+		}
+		acceptor->set_option(ip::tcp::no_delay{true});
 
 		accept();
 	} catch (boost::system::system_error& e) {
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		pendingStart = true;
-		g_scheduler.addEvent(
-		    createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() {
-			    ServicePort::openAcceptor(thisPtr, serverPort);
-		    }));
+		g_scheduler.addEvent(createSchedulerTask(
+		    15000,
+		    [port, service = std::weak_ptr<ServicePort>(shared_from_this())]() { openAcceptor(service, port); }));
 	}
 }
 
