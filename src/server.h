@@ -23,6 +23,7 @@
 #include "connection.h"
 #include "signals.h"
 #include <memory>
+#include <boost/asio.hpp>
 
 class Protocol;
 
@@ -83,9 +84,13 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 
 	protected:
 		void accept();
+		using TCPAcceptor = boost::asio::ip::tcp::acceptor;
+		using TCPEndpoint = boost::asio::ip::tcp::endpoint;
+		using IPAddress  = boost::asio::ip::address;
+		using IPv6Address = boost::asio::ip::address_v6;
 
 		boost::asio::io_service& io_service;
-		std::unique_ptr<boost::asio::ip::tcp::acceptor> acceptor;
+		std::unique_ptr<TCPAcceptor> acceptor;
 		std::vector<Service_ptr> services;
 
 		uint16_t serverPort = 0;

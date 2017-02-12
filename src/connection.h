@@ -21,6 +21,7 @@
 #define FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
 
 #include <unordered_set>
+#include <boost/asio.hpp>
 
 #include "networkmessage.h"
 
@@ -59,6 +60,7 @@ class ConnectionManager
 class Connection : public std::enable_shared_from_this<Connection>
 {
 	public:
+		using Address = boost::asio::ip::address;
 		// non-copyable
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
@@ -95,7 +97,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		void send(const OutputMessage_ptr& msg);
 
-		uint32_t getIP();
+		Address getIP();
 
 	private:
 		void parseHeader(const boost::system::error_code& error);

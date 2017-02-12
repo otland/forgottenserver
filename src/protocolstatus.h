@@ -44,7 +44,7 @@ class ProtocolStatus final : public Protocol
 		static const uint64_t start;
 
 	protected:
-		static std::map<uint32_t, int64_t> ipConnectMap;
+		static std::map<Connection::Address, int64_t> ipConnectMap;
 };
 
 #endif

@@ -144,11 +144,11 @@ bool Protocol::RSA_decrypt(NetworkMessage& msg)
 	return msg.getByte() == 0;
 }
 
-uint32_t Protocol::getIP() const
+Connection::Address Protocol::getIP() const
 {
 	if (auto connection = getConnection()) {
 		return connection->getIP();
 	}
 
-	return 0;
+	return {};
 }

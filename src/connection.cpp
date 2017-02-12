@@ -143,7 +143,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - timeConnected) + 1);
 	if ((++packetsSent / timePassed) > static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
-		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
+		std::cout << getIP() << " disconnected for exceeding packet per second limit." << std::endl;
 		close();
 		return;
 	}
@@ -267,7 +267,7 @@ void Connection::internalSend(const OutputMessage_ptr& msg)
 	}
 }
 
-uint32_t Connection::getIP()
+Connection::Address Connection::getIP()
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
 
@@ -275,10 +275,10 @@ uint32_t Connection::getIP()
 	boost::system::error_code error;
 	const boost::asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error);
 	if (error) {
-		return 0;
+		return {};
 	}
 
-	return htonl(endpoint.address().to_v4().to_ulong());
+	return endpoint.address();
 }
 
 void Connection::onWriteOperation(const boost::system::error_code& error)

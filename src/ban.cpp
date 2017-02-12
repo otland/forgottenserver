@@ -23,8 +23,9 @@
 #include "database.h"
 #include "databasetasks.h"
 #include "tools.h"
+#include "connection.h"
 
-bool Ban::acceptConnection(uint32_t clientip)
+bool Ban::acceptConnection(Connection::Address clientip)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(lock);
 
@@ -89,16 +90,16 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	return true;
 }
 
-bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
+bool IOBan::isIpBanned(Connection::Address clientip, BanInfo& banInfo)
 {
-	if (clientip == 0) {
+	if (clientip.is_unspecified()) {
 		return false;
 	}
 
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = " << clientip;
+	query << "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = " << db.escapeString(clientip.to_string());
 
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
@@ -108,7 +109,7 @@ bool IOBan::isIpBanned(uint32_t clientip, BanInfo& banInfo)
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		query.str(std::string());
-		query << "DELETE FROM `ip_bans` WHERE `ip` = " << clientip;
+		query << "DELETE FROM `ip_bans` WHERE `ip` = " << db.escapeString(clientip.to_string());
 		g_databaseTasks.addTask(query.str());
 		return false;
 	}

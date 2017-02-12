@@ -110,7 +110,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		}
 
 		auto remote_ip = connection->getIP();
-		if (remote_ip != 0 && g_bans.acceptConnection(remote_ip)) {
+		if (!remote_ip.is_unspecified() && g_bans.acceptConnection(remote_ip)) {
 			Service_ptr service = services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));
@@ -167,14 +167,26 @@ void ServicePort::open(uint16_t port)
 	pendingStart = false;
 
 	try {
+		IPAddress address;
 		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), serverPort)));
+			address = IPAddress::from_string(g_config.getString(ConfigManager::IP));
 		} else {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), serverPort)));
+			address = IPv6Address::any();
 		}
 
+		acceptor.reset(new TCPAcceptor(io_service, TCPEndpoint(address, serverPort)));
+		if (address.is_v6()) {
+			boost::asio::ip::v6_only option;
+			acceptor->get_option(option);
+			if (option) {
+				option = {false};
+				boost::system::error_code err;
+				acceptor->set_option(option, err);
+				if (err) {
+					std::cout << "[ServicePort::open] Warning: enabling IPv4 support failed: " << err.message() << std::endl;
+				}
+			}
+		}
 		acceptor->set_option(boost::asio::ip::tcp::no_delay(true));
 
 		accept();

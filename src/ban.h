@@ -20,6 +20,8 @@
 #ifndef FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 #define FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 
+#include "connection.h"
+
 struct BanInfo {
 	std::string bannedBy;
 	std::string reason;
@@ -35,12 +37,12 @@ struct ConnectBlock {
 	uint32_t count;
 };
 
-using IpConnectMap = std::map<uint32_t, ConnectBlock>;
+using IpConnectMap = std::map<Connection::Address, ConnectBlock>;
 
 class Ban
 {
 	public:
-		bool acceptConnection(uint32_t clientip);
+		bool acceptConnection(Connection::Address clientip);
 
 	protected:
 		IpConnectMap ipConnectMap;
@@ -51,7 +53,7 @@ class IOBan
 {
 	public:
 		static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
-		static bool isIpBanned(uint32_t ip, BanInfo& banInfo);
+		static bool isIpBanned(Connection::Address ip, BanInfo& banInfo);
 		static bool isPlayerNamelocked(uint32_t playerId);
 };
 

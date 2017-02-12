@@ -27,7 +27,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
+std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
 
 enum RequestedInfo_t : uint16_t {
@@ -43,11 +43,10 @@ enum RequestedInfo_t : uint16_t {
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
-	uint32_t ip = getIP();
-	if (ip != 0x0100007F) {
-		std::string ipStr = convertIPToString(ip);
-		if (ipStr != g_config.getString(ConfigManager::IP)) {
-			std::map<uint32_t, int64_t>::const_iterator it = ipConnectMap.find(ip);
+	Connection::Address ip = getIP();
+	if (!ip.is_loopback()) {
+		if (ip != Connection::Address::from_string(g_config.getString(ConfigManager::IP))) {
+			auto it = ipConnectMap.find(ip);
 			if (it != ipConnectMap.end() && (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
 				disconnect();
 				return;
