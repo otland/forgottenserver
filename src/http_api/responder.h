@@ -39,7 +39,7 @@ using PeerWeakPtr = std::weak_ptr<Peer>;
  *
  * \remark Thread-unsafe - objects of this class should only be accessed by one thread at a time.
  */
-class Responder// : NonCopyable
+class Responder : NonCopyable
 {
 	/// Weak handle to the associated \ref Peer
 	const PeerWeakPtr peerWeak;
