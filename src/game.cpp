@@ -5735,7 +5735,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
-			commands.reload();
 			g_store->reload();
 			return true;
 		}
