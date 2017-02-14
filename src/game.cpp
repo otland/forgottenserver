@@ -4396,21 +4396,6 @@ void Game::getWorldLightInfo(LightInfo& lightInfo) const
 	lightInfo.color = 0xD7;
 }
 
-void Game::addCommandTag(char tag)
-{
-	for (char commandTag : commandTags) {
-		if (commandTag == tag) {
-			return;
-		}
-	}
-	commandTags.push_back(tag);
-}
-
-void Game::resetCommandTag()
-{
-	commandTags.clear();
-}
-
 void Game::shutdown()
 {
 	std::cout << "Shutting down..." << std::flush;
