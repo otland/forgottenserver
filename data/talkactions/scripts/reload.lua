@@ -8,9 +8,6 @@ local reloadTypes = {
 	["channel"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
 	["chatchannels"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
 
-	["command"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands" },
-	["commands"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands" },
-
 	["config"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
 	["configuration"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
 

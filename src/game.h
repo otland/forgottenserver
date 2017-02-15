@@ -449,9 +449,6 @@ class Game
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 		static void addDistanceEffect(const SpectatorHashSet& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
 
-		void addCommandTag(char tag);
-		void resetCommandTag();
-
 		void startDecay(Item* item);
 		int32_t getLightHour() const {
 			return lightHour;
@@ -528,7 +525,6 @@ class Game
 
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
-		std::vector<char> commandTags;
 
 		size_t lastBucket = 0;
 
