@@ -106,25 +106,25 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 		//update north
 		QTreeLeafNode* northLeaf = root.getLeaf(x, y - FLOOR_SIZE);
 		if (northLeaf) {
-			northLeaf->m_leafS = leaf;
+			northLeaf->leafS = leaf;
 		}
 
 		//update west leaf
 		QTreeLeafNode* westLeaf = root.getLeaf(x - FLOOR_SIZE, y);
 		if (westLeaf) {
-			westLeaf->m_leafE = leaf;
+			westLeaf->leafE = leaf;
 		}
 
 		//update south
 		QTreeLeafNode* southLeaf = root.getLeaf(x, y + FLOOR_SIZE);
 		if (southLeaf) {
-			leaf->m_leafS = southLeaf;
+			leaf->leafS = southLeaf;
 		}
 
 		//update east
 		QTreeLeafNode* eastLeaf = root.getLeaf(x + FLOOR_SIZE, y);
 		if (eastLeaf) {
-			leaf->m_leafE = eastLeaf;
+			leaf->leafE = eastLeaf;
 		}
 	}
 
@@ -351,14 +351,14 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 						list.insert(creature);
 					} while (++node_iter != node_end);
 				}
-				leafE = leafE->m_leafE;
+				leafE = leafE->leafE;
 			} else {
 				leafE = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, nx + FLOOR_SIZE, ny);
 			}
 		}
 
 		if (leafS) {
-			leafS = leafS->m_leafS;
+			leafS = leafS->leafS;
 		} else {
 			leafS = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, startx1, ny + FLOOR_SIZE);
 		}
@@ -873,28 +873,28 @@ Floor::~Floor()
 // QTreeNode
 QTreeNode::QTreeNode()
 {
-	m_isLeaf = false;
-	m_child[0] = nullptr;
-	m_child[1] = nullptr;
-	m_child[2] = nullptr;
-	m_child[3] = nullptr;
+	leaf = false;
+	child[0] = nullptr;
+	child[1] = nullptr;
+	child[2] = nullptr;
+	child[3] = nullptr;
 }
 
 QTreeNode::~QTreeNode()
 {
-	delete m_child[0];
-	delete m_child[1];
-	delete m_child[2];
-	delete m_child[3];
+	delete child[0];
+	delete child[1];
+	delete child[2];
+	delete child[3];
 }
 
 QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 {
-	if (m_isLeaf) {
+	if (leaf) {
 		return static_cast<QTreeLeafNode*>(this);
 	}
 
-	QTreeNode* node = m_child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+	QTreeNode* node = child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
 	if (!node) {
 		return nullptr;
 	}
@@ -905,15 +905,15 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 {
 	if (!isLeaf()) {
 		uint32_t index = ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14);
-		if (!m_child[index]) {
+		if (!child[index]) {
 			if (level != FLOOR_BITS) {
-				m_child[index] = new QTreeNode();
+				child[index] = new QTreeNode();
 			} else {
-				m_child[index] = new QTreeLeafNode();
+				child[index] = new QTreeLeafNode();
 				QTreeLeafNode::newLeaf = true;
 			}
 		}
-		return m_child[index]->createLeaf(x * 2, y * 2, level - 1);
+		return child[index]->createLeaf(x * 2, y * 2, level - 1);
 	}
 	return static_cast<QTreeLeafNode*>(this);
 }
@@ -923,27 +923,27 @@ bool QTreeLeafNode::newLeaf = false;
 QTreeLeafNode::QTreeLeafNode()
 {
 	for (uint32_t i = 0; i < MAP_MAX_LAYERS; ++i) {
-		m_array[i] = nullptr;
+		array[i] = nullptr;
 	}
 
-	m_isLeaf = true;
-	m_leafS = nullptr;
-	m_leafE = nullptr;
+	leaf = true;
+	leafS = nullptr;
+	leafE = nullptr;
 }
 
 QTreeLeafNode::~QTreeLeafNode()
 {
 	for (uint32_t i = 0; i < MAP_MAX_LAYERS; ++i) {
-		delete m_array[i];
+		delete array[i];
 	}
 }
 
 Floor* QTreeLeafNode::createFloor(uint32_t z)
 {
-	if (!m_array[z]) {
-		m_array[z] = new Floor();
+	if (!array[z]) {
+		array[z] = new Floor();
 	}
-	return m_array[z];
+	return array[z];
 }
 
 void QTreeLeafNode::addCreature(Creature* c)
@@ -1023,7 +1023,7 @@ uint32_t Map::clean() const
 			}
 		} else {
 			for (size_t i = 0; i < 4; ++i) {
-				QTreeNode* childNode = node->m_child[i];
+				QTreeNode* childNode = node->child[i];
 				if (childNode) {
 					nodes.push_back(childNode);
 				}

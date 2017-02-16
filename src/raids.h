@@ -111,7 +111,7 @@ class Raid
 		Raid(const Raid&) = delete;
 		Raid& operator=(const Raid&) = delete;
 
-		bool loadFromXml(const std::string& _filename);
+		bool loadFromXml(const std::string& filename);
 
 		void startRaid();
 
@@ -163,9 +163,6 @@ class RaidEvent
 		virtual bool executeEvent() = 0;
 		uint32_t getDelay() const {
 			return delay;
-		}
-		void setDelay(uint32_t newDelay) {
-			delay = newDelay;
 		}
 
 		static bool compareEvents(const RaidEvent* lhs, const RaidEvent* rhs) {
@@ -219,7 +216,7 @@ class AreaSpawnEvent final : public RaidEvent
 class ScriptEvent final : public RaidEvent, public Event
 {
 	public:
-		explicit ScriptEvent(LuaScriptInterface* _interface);
+		explicit ScriptEvent(LuaScriptInterface* interface);
 		explicit ScriptEvent(const ScriptEvent* copy);
 
 		bool configureRaidEvent(const pugi::xml_node& eventNode) final;

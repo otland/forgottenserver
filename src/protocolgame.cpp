@@ -45,11 +45,11 @@ ProtocolGame::ProtocolGame(Connection_ptr connection) :
 	Protocol(connection),
 	player(nullptr),
 	eventConnect(0),
-	m_challengeTimestamp(0),
+	challengeTimestamp(0),
 	version(CLIENT_VERSION_MIN),
-	m_challengeRandom(0),
-	m_debugAssertSent(false),
-	m_acceptPackets(false)
+	challengeRandom(0),
+	debugAssertSent(false),
+	acceptPackets(false)
 {
 	//
 }
@@ -70,8 +70,8 @@ void ProtocolGame::release()
 void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
-	Player* _player = g_game.getPlayerByName(name);
-	if (!_player || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	Player* foundPlayer = g_game.getPlayerByName(name);
+	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
 		player->setName(name);
 
@@ -158,7 +158,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 
 		player->lastIP = player->getIP();
 		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
-		m_acceptPackets = true;
+		acceptPackets = true;
 	} else {
 		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
 			//Already trying to connect
@@ -166,13 +166,13 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return;
 		}
 
-		if (_player->client) {
-			_player->disconnect();
-			_player->isConnecting = true;
+		if (foundPlayer->client) {
+			foundPlayer->disconnect();
+			foundPlayer->isConnecting = true;
 
-			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, getThis(), _player->getID(), operatingSystem)));
+			eventConnect = g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&ProtocolGame::connect, getThis(), foundPlayer->getID(), operatingSystem)));
 		} else {
-			connect(_player->getID(), operatingSystem);
+			connect(foundPlayer->getID(), operatingSystem);
 		}
 	}
 	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
@@ -182,8 +182,8 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 {
 	eventConnect = 0;
 
-	Player* _player = g_game.getPlayerByID(playerId);
-	if (!_player || _player->client) {
+	Player* foundPlayer = g_game.getPlayerByID(playerId);
+	if (!foundPlayer || foundPlayer->client) {
 		disconnectClient("You are already logged in.");
 		return;
 	}
@@ -194,7 +194,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 		return;
 	}
 
-	player = _player;
+	player = foundPlayer;
 	player->incrementReferenceCounter();
 
 	g_chat->removeUserFromAllChannels(*player);
@@ -206,7 +206,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	sendAddCreature(player, player->getPosition(), 0, false);
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
-	m_acceptPackets = true;
+	acceptPackets = true;
 }
 
 void ProtocolGame::logout(bool displayEffect, bool forced)
@@ -301,7 +301,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
-	if (m_challengeTimestamp != timeStamp || m_challengeRandom != randNumber) {
+	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
 		disconnect();
 		return;
 	}
@@ -357,11 +357,11 @@ void ProtocolGame::onConnect()
 	output->addByte(0x1F);
 
 	// Add timestamp & random number
-	m_challengeTimestamp = static_cast<uint32_t>(time(nullptr));
-	output->add<uint32_t>(m_challengeTimestamp);
+	challengeTimestamp = static_cast<uint32_t>(time(nullptr));
+	output->add<uint32_t>(challengeTimestamp);
 
-	m_challengeRandom = randNumber(generator);
-	output->addByte(m_challengeRandom);
+	challengeRandom = randNumber(generator);
+	output->addByte(challengeRandom);
 
 	// Go back and write checksum
 	output->skipBytes(-12);
@@ -387,7 +387,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!m_acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() <= 0) {
+	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() <= 0) {
 		return;
 	}
 
@@ -1017,11 +1017,11 @@ void ProtocolGame::parseBugReport(NetworkMessage& msg)
 
 void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 {
-	if (m_debugAssertSent) {
+	if (debugAssertSent) {
 		return;
 	}
 
-	m_debugAssertSent = true;
+	debugAssertSent = true;
 
 	std::string assertLine = msg.getString();
 	std::string date = msg.getString();

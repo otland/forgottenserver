@@ -24,9 +24,7 @@
 
 extern Game g_game;
 
-Teleport::Teleport(uint16_t _type) : Item(_type)
-{
-}
+Teleport::Teleport(uint16_t type) : Item(type) {}
 
 Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 {

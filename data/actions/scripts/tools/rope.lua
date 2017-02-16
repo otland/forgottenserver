@@ -7,6 +7,10 @@ local holeId = {
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local tile = Tile(toPosition)
+	if not tile then
+		return false
+	end
+
 	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
 		player:teleportTo(toPosition:moveUpstairs(), false)
 		return true

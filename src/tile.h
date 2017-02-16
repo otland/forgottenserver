@@ -142,6 +142,7 @@ class TileItemVector : private ItemVector
 		void addDownItemCount(int32_t increment) {
 			downItemCount += increment;
 		}
+
 	private:
 		uint16_t downItemCount {0};
 };
@@ -386,7 +387,6 @@ inline Tile::~Tile()
 {
 	delete ground;
 }
-
 
 inline StaticTile::StaticTile(uint16_t x, uint16_t y, uint8_t z) :
 	Tile(x, y, z),

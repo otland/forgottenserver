@@ -25,25 +25,19 @@
 
 extern Game g_game;
 
-Container::Container(uint16_t _type) : Item(_type)
-{
-	maxSize = items[_type].maxItems;
-	totalWeight = 0;
-	serializationCount = 0;
-	unlocked = true;
-	pagination = false;
-}
+Container::Container(uint16_t type) :
+	Container(type, items[type].maxItems) {}
 
-Container::Container(uint16_t _type, uint16_t _size) : Item(_type)
-{
-	maxSize = _size;
-	totalWeight = 0;
-	serializationCount = 0;
-	unlocked = true;
-	pagination = false;
-}
+Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
+	Item(type),
+	maxSize(size),
+	totalWeight(0),
+	serializationCount(0),
+	unlocked(unlocked),
+	pagination(pagination)
+{}
 
-Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
+Container::Container(Tile* tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
 {
 	TileItemVector* itemVector = tile->getItemList();
 	if (itemVector) {
@@ -55,11 +49,6 @@ Container::Container(Tile* tile) : Item(ITEM_BROWSEFIELD)
 		}
 	}
 
-	maxSize = 30;
-	totalWeight = 0;
-	serializationCount = 0;
-	unlocked = false;
-	pagination = true;
 	setParent(tile);
 }
 

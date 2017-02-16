@@ -110,14 +110,14 @@ class ConfigManager
 		bool load();
 		bool reload();
 
-		const std::string& getString(string_config_t _what) const;
-		int32_t getNumber(integer_config_t _what) const;
-		bool getBoolean(boolean_config_t _what) const;
+		const std::string& getString(string_config_t what) const;
+		int32_t getNumber(integer_config_t what) const;
+		bool getBoolean(boolean_config_t what) const;
 
 	private:
-		static std::string getGlobalString(lua_State* L, const char* identifier, const char* _default);
-		static int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t _default = 0);
-		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool _default);
+		static std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue);
+		static int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defaultValue = 0);
+		static bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue);
 
 		std::string string[LAST_STRING_CONFIG];
 		int32_t integer[LAST_INTEGER_CONFIG];

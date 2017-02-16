@@ -20,8 +20,6 @@
 	<action itemid="1876" function="decreaseItemId" />
 	<action itemid="2162" function="increaseItemId" />
 	<action itemid="2163" function="decreaseItemId" />
-	<action itemid="3743" function="increaseItemId" />
-	<action itemid="3744" function="decreaseItemId" />
 	<action itemid="3947" function="increaseItemId" />
 	<action itemid="3948" function="decreaseItemId" />
 	<action itemid="1479" function="increaseItemId" />
@@ -191,7 +189,7 @@
 	<action itemid="1775" script="other/fluids.lua" />
 	<action fromid="2031" toid="2034" script="other/fluids.lua" />
 	<action fromid="2574" toid="2577" script="other/fluids.lua" />
-	<action fromid="5792" toid="5797" script="other/dice.lua" />
+	<action fromid="5792" toid="5797" script="other/die.lua" />
 	<action itemid="7588" script="other/potions.lua" />
 	<action itemid="7589" script="other/potions.lua" />
 	<action itemid="7590" script="other/potions.lua" />
@@ -256,4 +254,6 @@
 	<action fromid="13020" toid="13023" script="other/doors.lua" />
 	<action itemid="14405" function="market" />
 	<action fromid="18488" toid="18492" script="other/skilltrainer.lua" />
+	<action itemid="3743" script="other/transforms.lua" />
+	<action itemid="4404" script="other/transforms.lua" />
 </actions>
