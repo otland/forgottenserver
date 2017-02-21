@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  compile:
+    build:
+      context: ${PWD}/docker
+      dockerfile: Dockerfile.compile
+    environment:
+      - CXX
+    volumes:
+      - build:/build
+      - ${TRAVIS_BUILD_DIR}:/source
+    working_dir: /build
+  db:
+    environment:
+      - MYSQL_DATABASE=forgottenserver
+      - MYSQL_USER=forgottenserver
+      - MYSQL_PASSWORD=forgottenserver
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    image: mariadb
+    restart: always
+    volumes:
+      - ${TRAVIS_BUILD_DIR}/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  server:
+    build:
+      context: ${PWD}/docker
+      dockerfile: Dockerfile.server
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PASS=forgottenserver
+    volumes:
+      - build:/build
+      - ${TRAVIS_BUILD_DIR}/config.lua:/build/config.lua
+      - ${TRAVIS_BUILD_DIR}/data:/build/data
+    working_dir: /build
+
+volumes:
+  build:
+
+# vim: set et sw=2 ts=2:

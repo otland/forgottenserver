@@ -1,0 +1,14 @@
+FROM ubuntu:xenial
+
+RUN apt-get update && apt-get install -y \
+  cmake make \
+  clang g++ \
+  libboost-iostreams-dev libboost-system-dev \
+  libgmp-dev \
+  liblua5.2-dev libluajit-5.1-dev \
+  libmysqlclient-dev \
+  libpugixml-dev
+
+WORKDIR /build
+
+# vim: set et sw=2 ts=2 syntax=dockerfile:

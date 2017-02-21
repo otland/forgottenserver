@@ -1,0 +1,13 @@
+FROM ubuntu:xenial
+
+RUN apt-get update -q && apt-get install -yq \
+	libboost-iostreams1.58.0 libboost-system1.58.0 \
+	libgmp10 \
+	liblua5.2 libluajit-5.1 \
+	libmysqlclient20 \
+	libpugixml1v5
+
+ENTRYPOINT ["/build/tfs"]
+EXPOSE 7171 7172
+
+# vim: set et sw=2 ts=2 syntax=dockerfile:

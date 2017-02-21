@@ -2,8 +2,6 @@ sudo: required
 dist: trusty
 language: generic
 env:
-  global:
-    - CONTAINER=forgottenserver
   matrix:
     - LUAJIT=OFF CXX=g++
     - LUAJIT=ON  CXX=g++
@@ -11,9 +9,11 @@ env:
     - LUAJIT=ON  CXX=clang++
 services:
   - docker
-install: docker build -t ${CONTAINER} .
-before_script: mkdir ${TRAVIS_BUILD_DIR}/build
+before_script:
+  - export MYSQL_PASS="$(openssl rand -base64 32)"
+  - docker-compose up -d
 script:
-  - DOCKER_PARAMS="-e CXX=${CXX} -v ${TRAVIS_BUILD_DIR}:/opt -w /opt/build ${CONTAINER}"
-  - docker run ${DOCKER_PARAMS} cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
-  - docker run ${DOCKER_PARAMS} make -j2
+  - docker-compose run compile cmake -DUSE_LUAJIT=${LUAJIT} /source
+  - docker-compose run compile make -j2
+  - docker-compose run server --dry-run
+after_script: docker-compose down
