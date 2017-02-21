@@ -46,6 +46,15 @@ std::string getGlobalString(lua_State* L, const char* identifier, const char* de
 	return ret;
 }
 
+std::string getGlobalString(lua_State* L, const char* identifier, const char* envVar, const char* defaultValue)
+{
+	if (char* value = getenv(envVar)) {
+		return value;
+	}
+
+	return getGlobalString(L, identifier, defaultValue);
+}
+
 int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defaultValue = 0)
 {
 	lua_getglobal(L, identifier);
@@ -56,6 +65,15 @@ int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defa
 	int32_t val = lua_tonumber(L, -1);
 	lua_pop(L, 1);
 	return val;
+}
+
+int32_t getGlobalNumber(lua_State* L, const char* identifier, const char* envVar, const int32_t defaultValue = 0)
+{
+	if (char* value = getenv(envVar)) {
+		return atoi(value);
+	}
+
+	return getGlobalNumber(L, identifier, defaultValue);
 }
 
 bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultValue)
@@ -103,13 +121,13 @@ bool ConfigManager::load()
 		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		string[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
 		string[HOUSE_RENT_PERIOD] = getGlobalString(L, "houseRentPeriod", "never");
-		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", "127.0.0.1");
-		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", "forgottenserver");
-		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
-		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
-		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", "MYSQL_HOST", "127.0.0.1");
+		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", "MYSQL_USER", "forgottenserver");
+		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "MYSQL_PASS", "");
+		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "MYSQL_DB", "forgottenserver");
+		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "MYSQL_SOCK", "");
 
-		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
+		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", "SQL_PORT", 3306);
 		integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
 		integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
