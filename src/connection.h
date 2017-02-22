@@ -128,7 +128,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 		Protocol_ptr protocol;
 
 		boost::asio::ip::tcp::socket socket;
-
+		Address remoteAddress;
 		time_t timeConnected;
 		uint32_t packetsSent;
 

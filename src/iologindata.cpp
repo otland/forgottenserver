@@ -653,7 +653,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 	if (result->getNumber<uint16_t>("save") == 0) {
 		query.str(std::string());
-		query << "UPDATE `players` SET `lastlogin` = " << player->lastLoginSaved << ", `lastip` = " << db.escapeString(player->lastIP.to_string()) << " WHERE `id` = " << player->getGUID();
+		query << "UPDATE `players` SET `lastlogin` = " << player->lastLoginSaved << ", `lastip` = INET6_ATON(" << db.escapeString(player->lastIP.to_string()) << ")" << " WHERE `id` = " << player->getGUID();
 		return db.executeQuery(query.str());
 	}
 

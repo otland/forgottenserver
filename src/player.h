@@ -1244,7 +1244,7 @@ class Player final : public Creature, public Cylinder
 		uint32_t nextStepEvent = 0;
 		uint32_t walkTaskEvent = 0;
 		uint32_t MessageBufferTicks = 0;
-		Connection::Address lastIP{};
+		Connection::Address lastIP = {};
 		uint32_t accountNumber = 0;
 		uint32_t guid = 0;
 		uint32_t windowTextId = 0;

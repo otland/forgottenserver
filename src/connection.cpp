@@ -115,6 +115,11 @@ void Connection::accept(Protocol_ptr protocol)
 void Connection::accept()
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	boost::system::error_code error;
+	auto endpoint = socket.remote_endpoint(error);
+	if (!error) {
+		remoteAddress = endpoint.address();
+	}
 	try {
 		readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
@@ -271,14 +276,7 @@ Connection::Address Connection::getIP()
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
 
-	// IP-address is expressed in network byte order
-	boost::system::error_code error;
-	const boost::asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error);
-	if (error) {
-		return {};
-	}
-
-	return endpoint.address();
+	return remoteAddress;
 }
 
 void Connection::onWriteOperation(const boost::system::error_code& error)

@@ -167,11 +167,9 @@ void ServicePort::open(uint16_t port)
 	pendingStart = false;
 
 	try {
-		IPAddress address;
+		IPAddress address = IPv6Address::any();
 		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
 			address = IPAddress::from_string(g_config.getString(ConfigManager::IP));
-		} else {
-			address = IPv6Address::any();
 		}
 
 		acceptor.reset(new TCPAcceptor(io_service, TCPEndpoint(address, serverPort)));
@@ -183,7 +181,7 @@ void ServicePort::open(uint16_t port)
 				boost::system::error_code err;
 				acceptor->set_option(option, err);
 				if (err) {
-					std::cout << "[ServicePort::open] Warning: enabling IPv4 support failed: " << err.message() << std::endl;
+					std::cout << "[Warning - ServicePort::open] Enabling enabling IPv4 support failed: " << err.message() << std::endl;
 				}
 			}
 		}

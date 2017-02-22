@@ -99,7 +99,7 @@ bool IOBan::isIpBanned(Connection::Address clientip, BanInfo& banInfo)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = " << db.escapeString(clientip.to_string());
+	query << "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = INET6_ATON(" << db.escapeString(clientip.to_string()) << ")";
 
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {

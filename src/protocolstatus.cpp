@@ -44,8 +44,9 @@ enum RequestedInfo_t : uint16_t {
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
 	Connection::Address ip = getIP();
+	const static auto acceptorAddress = Connection::Address::from_string(g_config.getString(ConfigManager::IP));
 	if (!ip.is_loopback()) {
-		if (ip != Connection::Address::from_string(g_config.getString(ConfigManager::IP))) {
+		if (ip != acceptorAddress) {
 			auto it = ipConnectMap.find(ip);
 			if (it != ipConnectMap.end() && (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
 				disconnect();

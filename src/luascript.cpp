@@ -7391,7 +7391,7 @@ int LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 	// player:getIp()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushstring(L, player->getIP().to_string().c_str());
+		pushString(L, player->getIP().to_string());
 	} else {
 		lua_pushnil(L);
 	}
