@@ -11,7 +11,7 @@ services:
   - docker
 before_script:
   - export MYSQL_PASS="$(openssl rand -base64 32)"
-  - docker-compose up -d
+  - docker-compose up -d db
 script:
   - docker-compose run compile cmake -DUSE_LUAJIT=${LUAJIT} /source
   - docker-compose run compile make -j2
