@@ -2,6 +2,7 @@ local json = nil
 
 local function getPlayersOnline(session)
 	session.responder:setResponseStatus(200, 'OK')
+	session.responder:setResponseField("Content-type", "application/json")
 	session.responder:setResponseBody(json.encode(Game.getPlayers()))
 end
 
@@ -47,8 +48,9 @@ local function getServerStatus(session)
 		motd = configManager.getString(configKeys.MOTD)
 	}
 
-	session.responder:setResponseBody(json.encode(data))
 	session.responder:setResponseStatus(200, 'OK')
+	session.responder:setResponseField("Content-type", "application/json")
+	session.responder:setResponseBody(json.encode(data))
 end
 
 return {
