@@ -106,5 +106,5 @@ location = "Sweden"
 -- NOTE: The API communication uses raw, insecure HTTP
 -- DO NOT SEND private data over it, unless you use
 -- an external HTTPS server as a reverse proxy
-httpApiPort = 8080
+httpApiPort = 7174
 httpApiIp = "127.0.0.1"

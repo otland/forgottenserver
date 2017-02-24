@@ -116,7 +116,7 @@ bool ConfigManager::load()
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 
 		integer[MARKET_OFFER_DURATION] = getGlobalNumber(L, "marketOfferDuration", 30 * 24 * 60 * 60);
-		integer[HTTP_API_PORT] = getGlobalNumber(L, "httpApiPort", 8080);
+		integer[HTTP_API_PORT] = getGlobalNumber(L, "httpApiPort", 7174);
 	}
 
 	boolean[ALLOW_CHANGEOUTFIT] = getGlobalBoolean(L, "allowChangeOutfit", true);
