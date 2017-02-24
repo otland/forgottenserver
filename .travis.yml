@@ -14,11 +14,13 @@ addons:
       - libboost-dev
       - libboost-system-dev
       - libboost-iostreams-dev
-      - libcrypto++-dev
       - liblua5.2-dev
       - libluajit-5.1-dev
       - libmysqlclient-dev
       - libpugixml-dev
+      - libsodium-dev
+    sources:
+      - sourceline: 'ppa:elt/libsodium'
 before_script:
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..

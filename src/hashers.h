@@ -24,6 +24,8 @@
 
 namespace hashers {
 
+bool init();
+
 struct Hasher {
 	virtual std::string algorithm() const = 0;
 	virtual std::string encode(const std::string& input, const std::string& salt) const = 0;
@@ -39,13 +41,24 @@ struct SHA1Hasher : public Hasher {
 	bool verify(const std::string& input, const std::string& encoded) const override;
 };
 
-struct PBKDF2Hasher : public Hasher {
-	std::string algorithm() const override { return "pbkdf2_sha256"; }
+struct Argon2Hasher : public Hasher {
+	std::string algorithm() const override { return "argon2"; }
 	std::string encode(const std::string& input, const std::string& salt) const override;
-	std::string encode(const std::string& input, const std::string& salt, std::size_t iterations) const;
+	std::string encode(const std::string& input, const std::string& salt, std::size_t timeCost, std::size_t memoryCost) const;
 	bool verify(const std::string& input, const std::string& encoded) const override;
 
-	static constexpr std::size_t default_iterations = 30000u;
+	static const std::size_t default_time_cost;
+	static const std::size_t default_memory_cost;
+};
+
+struct ScryptSHA256Hasher : public Hasher {
+	std::string algorithm() const override { return "scrypt_sha256"; }
+	std::string encode(const std::string& input, const std::string& salt) const override;
+	std::string encode(const std::string& input, const std::string& salt, std::size_t timeCost, std::size_t memoryCost) const;
+	bool verify(const std::string& input, const std::string& encoded) const override;
+
+	static const std::size_t default_time_cost;
+	static const std::size_t default_memory_cost;
 };
 
 }
