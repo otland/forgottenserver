@@ -9,14 +9,14 @@ end
 local function getServerStatus(session)
 	local data = {
 		uptime = getWorldUpTime(),
-		ip = configManager.getString(configKeys.SERVER_IP),
+		ip = configManager.getString(configKeys.IP),
 		serverName = configManager.getString(configKeys.SERVER_NAME),
 		port = configManager.getNumber(configKeys.LOGIN_PORT),
 		location = configManager.getString(configKeys.LOCATION),
 		url = configManager.getString(configKeys.URL),
 		server = 'The Forgotten Server',
 		version = '1.3',
-		client = '1098',
+		client = Game.getClientVersion().string,
 		owner = {
 			name = configManager.getString(configKeys.OWNER_NAME),
 			email = configManager.getString(configKeys.OWNER_EMAIL)
@@ -33,11 +33,11 @@ local function getServerStatus(session)
 			total = Game.getNpcCount()
 		},
 		rates = {
-			experience = configManager.getNumber(RATE_EXPERIENCE),
-			skill = configManager.getNumber(RATE_SKILL),
-			loot = configManager.getNumber(RATE_LOOT),
-			magic = configManager.getNumber(RATE_MAGIC),
-			spawn = configManager.getNumber(RATE_SPAWN),
+			experience = configManager.getNumber(configKeys.RATE_EXPERIENCE),
+			skill = configManager.getNumber(configKeys.RATE_SKILL),
+			loot = configManager.getNumber(configKeys.RATE_LOOT),
+			magic = configManager.getNumber(configKeys.RATE_MAGIC),
+			spawn = configManager.getNumber(configKeys.RATE_SPAWN),
 		},
 		map = {
 			name = configManager.getString(configKeys.MAP_NAME),
