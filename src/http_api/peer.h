@@ -39,12 +39,11 @@ class Router;
 class Peer : public std::enable_shared_from_this<Peer>, NonCopyable, NonMovable
 {
 public:
-private:
-	friend class Server;
-	using Socket = asio::ip::tcp::socket;
+	using Socket = asio::generic::stream_protocol::socket;
 	using Streambuf = asio::streambuf;
 	using Timer = asio::deadline_timer;
-
+private:
+	friend class Server;
 	/// Reference to the server object. \remark The \ref Peer does not manage its lifetime.
 	Server& server;
 

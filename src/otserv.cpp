@@ -93,6 +93,8 @@ int main(int argc, char* argv[])
 	}
 
 	apiServer.stop();
+	service.reset();
+	service.poll(); // We need to poll to execute the api stop
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();

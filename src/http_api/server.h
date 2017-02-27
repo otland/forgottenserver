@@ -32,6 +32,8 @@ class Peer;
 class Router;
 using PeerSharedPtr = std::shared_ptr<Peer>; ///Shared pointer to Peer object
 
+class GenericStreamAcceptor;
+
 /** \brief represents the HTTP API subsystem
  *
  * This class handles preparation of the API subsystem and handling of incoming connections.
@@ -39,18 +41,17 @@ using PeerSharedPtr = std::shared_ptr<Peer>; ///Shared pointer to Peer object
  */
 class Server : NonCopyable, NonMovable
 {
-	using Acceptor = asio::ip::tcp::acceptor;
+	using Acceptor = GenericStreamAcceptor;
 	using Peers = std::unordered_set<PeerSharedPtr>;
-	using EndPoint = asio::ip::tcp::endpoint;
 
-	Acceptor acceptor; ///The acceptor used to listen for incomming TCP/IP connections
+	std::unique_ptr<Acceptor> acceptor; ///The acceptor used to listen for incomming TCP/IP connections
 	Peers peers; ///Set of connections, tracked so that we can perform a clean shutdown
 	Strand strand; ///Internal strand for the server to synchronize access to the server
 	PeerID peerCounter{}; ///Counter used to generate PeerIDs
 	std::unique_ptr<Router> router; ///Router which dispatches handlers
 
 	void accept();
-	void start(EndPoint endPoint);
+	void start(const std::string& address, uint16_t port);
 public:
 
     explicit Server(IoService& service);
@@ -64,10 +65,7 @@ public:
 	 */
 	void stop();
 
-	IoService& getIoService()
-	{
-		return acceptor.get_io_service();
-	}
+	IoService& getIoService();
 
 	/** \brief Handles closing of a remote connection
 	 *
