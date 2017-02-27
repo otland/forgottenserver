@@ -42,6 +42,7 @@ public:
 	using Socket = asio::generic::stream_protocol::socket;
 	using Streambuf = asio::streambuf;
 	using Timer = asio::deadline_timer;
+
 private:
 	friend class Server;
 	/// Reference to the server object. \remark The \ref Peer does not manage its lifetime.
@@ -70,10 +71,12 @@ private:
 
 	/// A number which uniquely identifies a \ref Peer (these numbers are not persistent across process restarts)
 	const PeerID peerID;
+
 	/**The \ref requestCounter variable is used to ensure that the lua environment does not store the responder and
 	 * accidentally respond to another request after the current one times out
 	 */
 	RequestID requestCounter{};
+
 	/// Determines whether the next response sent is followed by a connection close
 	bool requestKeepAlive{true};
 

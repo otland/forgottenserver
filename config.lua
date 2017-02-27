@@ -104,7 +104,11 @@ location = "Sweden"
 
 -- HTTP API configuration
 -- NOTE: The API communication uses raw, insecure HTTP
--- DO NOT SEND private data over it, unless you use
--- an external HTTPS server as a reverse proxy
-httpApiPort = 7174
+-- DO NOT SEND private data over it, unless you use an external HTTPS server as a reverse proxy
+-- WARNING: If you change this to an external IP you do it at your own responsibility
 httpApiIp = "127.0.0.1"
+httpApiPort = 7174
+
+-- UNIX socket example (socket path: /tmp/tfs.sock) - not supported on Windows
+-- This is recommended on systems which support local stream sockets (Linux/BSD)
+-- httpApiIp = "unix:///tmp/tfs.sock"

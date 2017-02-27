@@ -19,6 +19,7 @@
 
 #include "otpch.h"
 
+#include "generic_stream_acceptor.h"
 #include "server.h"
 #include "peer.h"
 #include "router.h"
@@ -28,153 +29,6 @@ extern ConfigManager g_config;
 
 namespace http_api
 {
-
-using IpEndpoint = asio::ip::tcp::endpoint;
-using IpAcceptor = asio::ip::tcp::acceptor;
-using LocalEndpoint = asio::local::stream_protocol::endpoint;
-using LocalAcceptor = asio::local::stream_protocol::acceptor;
-
-namespace detail
-{
-
-template<typename Acceptor, typename Endpoint>
-void open(Acceptor& acceptor, Endpoint endpoint, ErrorCode& error)
-{
-	acceptor.open(endpoint.protocol(), error);
-	if (error) {
-		return;
-	}
-
-	asio::socket_base::reuse_address option(true);
-	acceptor.set_option(option, error);
-	if (error) {
-		return;
-	}
-
-	acceptor.bind(endpoint, error);
-	if (error) {
-		return;
-	}
-
-	acceptor.listen(asio::socket_base::max_connections, error);
-	if (error) {
-		return;
-	}
-}
-
-} //namespace detail
-
-const static std::string LOCAL_SOCKET_PREFIX {"unix://"};
-
-class GenericStreamAcceptor
-{
-public:
-	using Pointer = std::unique_ptr<GenericStreamAcceptor>;
-	using AcceptHandler = std::function<void(ErrorCode)>;
-
-	static Pointer make(IoService& service, const std::string& address, uint16_t port);
-
-	virtual ~GenericStreamAcceptor() = default;
-
-	virtual void open(const std::string& address, uint16_t port, ErrorCode& error) = 0;
-	virtual void close(ErrorCode& error) = 0;
-	virtual void asyncAccept(Peer::Socket& socket, AcceptHandler handler) = 0;
-};
-
-class LocalAcceptorWrapper : public GenericStreamAcceptor
-{
-	LocalAcceptor acceptor;
-
-	void open(const std::string& address, uint16_t port, ErrorCode& error) override;
-	void close(ErrorCode& error) override;
-	void asyncAccept(Peer::Socket& socket, AcceptHandler handler) override;
-
-public:
-	LocalAcceptorWrapper(IoService& service);
-};
-
-LocalAcceptorWrapper::LocalAcceptorWrapper(IoService& service):
-	acceptor{service}
-{
-}
-
-void LocalAcceptorWrapper::asyncAccept(Peer::Socket& socket, AcceptHandler handler)
-{
-	acceptor.async_accept(socket, std::move(handler));
-}
-
-void LocalAcceptorWrapper::open(const std::string& address, uint16_t /*port*/, ErrorCode& error)
-{
-	auto pos = address.find(LOCAL_SOCKET_PREFIX);
-	//GenericStreamAcceptor::make() already checked if address is longer than the prefix
-	auto realAddress = address.substr(pos + LOCAL_SOCKET_PREFIX.size());
-	LocalEndpoint endpoint{realAddress};
-	::unlink(endpoint.path().c_str());
-	detail::open(acceptor, endpoint, error);
-}
-
-void LocalAcceptorWrapper::close(ErrorCode& error)
-{
-	if (!acceptor.is_open()) {
-		return;
-	}
-	auto endpoint = acceptor.local_endpoint();
-	acceptor.close(error);
-	::unlink(endpoint.path().c_str());
-}
-
-class IpAcceptorWrapper : public GenericStreamAcceptor
-{
-	IpAcceptor acceptor;
-
-	void open(const std::string& address, uint16_t port, ErrorCode& error) override;
-	void close(ErrorCode& error) override;
-	void asyncAccept(Peer::Socket& socket, AcceptHandler handler) override;
-
-public:
-	IpAcceptorWrapper(IoService& service);
-};
-
-IpAcceptorWrapper::IpAcceptorWrapper(IoService& service):
-	acceptor{service}
-{
-}
-
-void IpAcceptorWrapper::asyncAccept(Peer::Socket& socket, AcceptHandler handler)
-{
-	acceptor.async_accept(socket, std::move(handler));
-}
-
-void IpAcceptorWrapper::open(const std::string& address, uint16_t port, ErrorCode& error)
-{
-	IpEndpoint endpoint {asio::ip::address::from_string(address), port};
-	detail::open(acceptor, endpoint, error);
-}
-
-void IpAcceptorWrapper::close(ErrorCode& error)
-{
-	if (!acceptor.is_open()) {
-		return;
-	}
-	acceptor.close(error);
-}
-
-GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(IoService& service, const std::string& address, uint16_t port)
-{
-	auto pos = address.find(LOCAL_SOCKET_PREFIX);
-	GenericStreamAcceptor::Pointer acceptor;
-	if (pos == std::string::npos) {
-		acceptor.reset(new IpAcceptorWrapper{service});
-	} else if (address.size() > LOCAL_SOCKET_PREFIX.size()) {
-
-		acceptor.reset(new LocalAcceptorWrapper{service});
-	} else {
-		std::cout << "HTTP API makeAcceptor error: Invalid acceptor type." << std::endl;
-	}
-
-	return acceptor;
-}
-
 
 Server::Server(IoService& service) :
 	strand(service)
@@ -208,6 +62,10 @@ void Server::start(const std::string& address, uint16_t port)
 	strand.dispatch([this, address, port]() {
 		ErrorCode err{};
 		acceptor = GenericStreamAcceptor::make(getIoService(), address, port);
+		if (acceptor == nullptr) {
+			return;
+		}
+
 		acceptor->open(address, port, err);
 		if (err) {
 			std::cerr << "HTTP API acceptor open() error: " << err.message() << std::endl;
