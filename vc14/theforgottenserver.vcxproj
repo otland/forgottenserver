@@ -156,6 +156,7 @@
     <ClCompile Include="..\src\http_api\peer.cpp" />
     <ClCompile Include="..\src\http_api\responder.cpp" />
     <ClCompile Include="..\src\http_api\router.cpp" />
+    <ClCompile Include="..\src\http_api\generic_stream_acceptor.cpp" />
     <ClCompile Include="..\src\http_api\server.cpp">
       <ObjectFileName>$(IntDir)\obj_d\api_server</ObjectFileName>
     </ClCompile>
@@ -250,6 +251,7 @@
     <ClInclude Include="..\src\http_api\peer.h" />
     <ClInclude Include="..\src\http_api\responder.h" />
     <ClInclude Include="..\src\http_api\router.h" />
+	<ClInclude Include="..\src\http_api\generic_stream_acceptor.h" />
     <ClInclude Include="..\src\http_api\server.h" />
     <ClInclude Include="..\src\inbox.h" />
     <ClInclude Include="..\src\ioguild.h" />
