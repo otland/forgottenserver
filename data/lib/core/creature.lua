@@ -12,9 +12,9 @@ function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReacha
 		checkPosition.y = checkPosition.y + math.min(1, radius)
 		
 		local total = math.max(1, radius * 8)
-		for y = 1, total do
+		for i = 1, total do
 			if radius > 0 then
-				local direction = math.floor((y - 1) / (radius * 2))
+				local direction = math.floor((i - 1) / (radius * 2))
 				checkPosition:getNextPosition(direction)
 			end
 
