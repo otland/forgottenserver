@@ -1,3 +1,6 @@
 [submodule "ext/Beast"]
 	path = ext/Beast
 	url = https://github.com/vinniefalco/Beast.git
+[submodule "ext/luajson"]
+	path = ext/luajson
+	url = https://github.com/harningt/luajson
