@@ -143,10 +143,10 @@ GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(IoService& service, c
 #if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
 		acceptor.reset(new LocalAcceptorWrapper{service});
 #else
-		std::cout << "HTTP API makeAcceptor error: Local stream sockets not supported" << std::endl;
+		std::cerr << "HTTP API makeAcceptor error: Local stream sockets not supported" << std::endl;
 #endif //defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
 	} else {
-		std::cout << "HTTP API makeAcceptor error: Invalid acceptor type" << std::endl;
+		std::cerr << "HTTP API makeAcceptor error: Invalid acceptor type" << std::endl;
 	}
 
 	return acceptor;
