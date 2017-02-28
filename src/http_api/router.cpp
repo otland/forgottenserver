@@ -21,7 +21,7 @@
 
 #include "router.h"
 
-namespace http_api
+namespace HttpApi
 {
 
 Router::Router()
@@ -114,7 +114,7 @@ void Router::handleSessionClose(PeerID peerID)
 	}
 }
 
-void Router::sendInternalServerError(http_api::Responder& responder) const
+void Router::sendInternalServerError(HttpApi::Responder& responder) const
 {
 	responder.response.status = 500;
 	responder.response.reason = "Internal Server Error";
@@ -154,4 +154,4 @@ bool Router::loadRoutingFunctions()
 	return true;
 }
 
-} //namespace http_api
+} //namespace HttpApi

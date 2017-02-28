@@ -27,7 +27,7 @@
 #include <memory>
 #include <functional>
 
-namespace http_api
+namespace HttpApi
 {
 
 class GenericStreamAcceptor
@@ -45,6 +45,6 @@ public:
 	virtual void asyncAccept(Peer::Socket& socket, AcceptHandler handler) = 0;
 };
 
-} //namespace http_api
+} //namespace HttpApi
 
 #endif //FS_HTTP_API_COMMON_H_28A59A93B06ABF50122CED74389422A2

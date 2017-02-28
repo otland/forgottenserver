@@ -23,7 +23,7 @@
 #include "responder.h"
 #include "baseevents.h"
 
-namespace http_api
+namespace HttpApi
 {
 
 /** \brief Represents the lua HTTP API subsystem
@@ -88,6 +88,6 @@ public:
 	void handleSessionClose(PeerID peerID);
 };
 
-} //namespace http_api
+} //namespace HttpApi
 
 #endif //FS_HTTP_API_ROUTER_H_BF19E77EB9613BA48A6343C06DD0B197

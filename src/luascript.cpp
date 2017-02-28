@@ -2596,7 +2596,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Spell", "isPremium", LuaScriptInterface::luaSpellIsPremium);
 	registerMethod("Spell", "isLearnable", LuaScriptInterface::luaSpellIsLearnable);
 
-	using http_api::Responder;
+	using HttpApi::Responder;
 	registerClass("Responder", "", nullptr);
 	registerMetaMethod("Responder", "__gc", Responder::luaDelete);
 	registerMethod("Responder", "delete", Responder::luaDelete);

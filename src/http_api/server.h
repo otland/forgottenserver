@@ -25,7 +25,7 @@
 #include <memory>
 #include <unordered_set>
 
-namespace http_api
+namespace HttpApi
 {
 
 class Peer;
@@ -83,6 +83,6 @@ public:
 	void loadRoutes();
 };
 
-} //namespace http_api
+} //namespace HttpApi
 
 #endif // FS_HTTP_API_SERVER_H_EFFE32E9805E557424770A73C1FD86BB

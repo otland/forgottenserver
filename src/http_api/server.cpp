@@ -27,7 +27,7 @@
 
 extern ConfigManager g_config;
 
-namespace http_api
+namespace HttpApi
 {
 
 Server::Server(IoService& service) :
@@ -84,9 +84,6 @@ void Server::stop()
 		if (err) {
 			std::cerr << "HTTP API acceptor close() error: " << err.message() << std::endl;
 		}
-		for (const auto& peer : peers) {
-			peer->close();
-		}
 		peers.clear();
 	});
 }
@@ -119,4 +116,4 @@ IoService& Server::getIoService()
 }
 
 
-} //namespace http_api
+} //namespace HttpApi

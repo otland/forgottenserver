@@ -24,7 +24,7 @@
 #include "common.h"
 #include <beast/http.hpp>
 
-namespace http_api
+namespace HttpApi
 {
 
 class Server;
@@ -154,6 +154,6 @@ public:
 
 using PeerWeakPtr = std::weak_ptr<Peer>; ///Weak pointer to peer, used to prevent lua from keeping Peers alive for too long
 
-} //namespace http_api
+} //namespace HttpApi
 
 #endif // FS_HTTP_API_PEER_H_FF52E73D0D1DFC8DCCA08929BACB0739

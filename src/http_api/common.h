@@ -24,7 +24,7 @@
 #include <beast/http/message.hpp>
 #include <beast/http/string_body.hpp>
 
-namespace http_api
+namespace HttpApi
 {
 
 namespace asio = boost::asio;
@@ -38,6 +38,6 @@ using Response = beast::http::response<beast::http::string_body>;
 using RequestID = uint32_t;
 using PeerID = uint32_t;
 
-} //namespace http_api
+} //namespace HttpApi
 
 #endif // FS_HTTP_API_COMMON_H_140089624C7E205078FEBA74EC391A0E

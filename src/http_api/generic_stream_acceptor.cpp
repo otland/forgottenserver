@@ -21,7 +21,7 @@
 
 #include "generic_stream_acceptor.h"
 
-namespace http_api
+namespace HttpApi
 {
 
 namespace detail
@@ -152,4 +152,4 @@ GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(IoService& service, c
 	return acceptor;
 }
 
-} //namespace http_api
+} //namespace HttpApi
