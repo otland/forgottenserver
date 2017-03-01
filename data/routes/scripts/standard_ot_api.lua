@@ -56,7 +56,7 @@ end
 return {
 	register = function(dependencies)
 		json = dependencies.json
-		dependencies.router:register('/ot_api/status/players', getPlayersOnline, {GET = {}})
-		dependencies.router:register('/ot_api/status/info', getServerStatus, {GET = {}})
+		dependencies.router:register('/ot-api/status/players', getPlayersOnline, {GET = {}})
+		dependencies.router:register('/ot-api/status/info', getServerStatus, {GET = {}})
 	end
 }
