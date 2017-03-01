@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Hellspawn" nameDescription="a hellspawn" experience="2550" speed="260" race="fire" manacost="0">
+<monster name="Hellspawn" nameDescription="a hellspawn" experience="2550" speed="260" race="fire">
 	<health now="3500" max="3500" />
 	<targetchange interval="4000" chance="15" />
 	<look type="322" corpse="9923" />

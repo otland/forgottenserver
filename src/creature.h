@@ -276,9 +276,8 @@ class Creature : virtual public Thing
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
 		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
 
-		void setMaster(Creature* creature) {
-			master = creature;
-		}
+		bool setMaster(Creature* newMaster);
+
 		bool isSummon() const {
 			return master != nullptr;
 		}
@@ -286,8 +285,6 @@ class Creature : virtual public Thing
 			return master;
 		}
 
-		void addSummon(Creature* creature);
-		void removeSummon(Creature* creature);
 		const std::list<Creature*>& getSummons() const {
 			return summons;
 		}
@@ -412,7 +409,7 @@ class Creature : virtual public Thing
 		void setDropLoot(bool lootDrop) {
 			this->lootDrop = lootDrop;
 		}
-		void setLossSkill(bool skillLoss) {
+		void setSkillLoss(bool skillLoss) {
 			this->skillLoss = skillLoss;
 		}
 
@@ -428,7 +425,7 @@ class Creature : virtual public Thing
 			position = tile->getPosition();
 		}
 
-		inline const Position& getPosition() const final {
+		const Position& getPosition() const final {
 			return position;
 		}
 

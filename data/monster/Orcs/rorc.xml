@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Rorc" nameDescription="a rorc" race="blood" experience="105" speed="200" manacost="0">
+<monster name="Rorc" nameDescription="a rorc" race="blood" experience="105" speed="200">
 	<health now="260" max="260" />
 	<look type="550" corpse="21223" />
 	<targetchange interval="5000" chance="0" />

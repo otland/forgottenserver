@@ -1328,6 +1328,11 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.addByte(message.primary.color);
 			break;
 		}
+		case MESSAGE_GUILD:
+		case MESSAGE_PARTY_MANAGEMENT:
+		case MESSAGE_PARTY:
+			msg.add<uint16_t>(message.channelId);
+			break;
 		default: {
 			break;
 		}

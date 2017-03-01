@@ -22,7 +22,6 @@
 
 #include "account.h"
 #include "combat.h"
-#include "commands.h"
 #include "groups.h"
 #include "map.h"
 #include "position.h"
@@ -451,9 +450,6 @@ class Game
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 		static void addDistanceEffect(const SpectatorHashSet& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
 
-		void addCommandTag(char tag);
-		void resetCommandTag();
-
 		void startDecay(Item* item);
 		int32_t getLightHour() const {
 			return lightHour;
@@ -498,9 +494,8 @@ class Game
 		Item* getUniqueItem(uint16_t uniqueId);
 		bool addUniqueItem(uint16_t uniqueId, Item* item);
 		void removeUniqueItem(uint16_t uniqueId);
-		void reloadCommands() {
-			commands.reload();
-		}
+
+		bool reload(ReloadTypes_t reloadType);
 
 		Groups groups;
 		Map map;
@@ -509,7 +504,6 @@ class Game
 		Quests quests;
 
 	protected:
-		bool playerSayCommand(Player* player, const std::string& text);
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);
@@ -532,7 +526,6 @@ class Game
 
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
-		std::vector<char> commandTags;
 
 		size_t lastBucket = 0;
 
@@ -547,7 +540,6 @@ class Game
 		std::map<uint32_t, BedItem*> bedSleepersMap;
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
-		Commands commands;
 
 		static constexpr int32_t LIGHT_LEVEL_DAY = 250;
 		static constexpr int32_t LIGHT_LEVEL_NIGHT = 40;

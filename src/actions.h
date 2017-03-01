@@ -29,7 +29,6 @@ using ActionFunction = std::function<bool(Player* player, Item* item, const Posi
 class Action : public Event
 {
 	public:
-		explicit Action(const Action* copy);
 		explicit Action(LuaScriptInterface* interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
@@ -38,28 +37,6 @@ class Action : public Event
 		//scripting
 		virtual bool executeUse(Player* player, Item* item, const Position& fromPosition,
 			Thing* target, const Position& toPosition, bool isHotkey);
-		//
-
-		bool getAllowFarUse() const {
-			return allowFarUse;
-		}
-		void setAllowFarUse(bool v) {
-			allowFarUse = v;
-		}
-
-		bool getCheckLineOfSight() const {
-			return checkLineOfSight;
-		}
-		void setCheckLineOfSight(bool v) {
-			checkLineOfSight = v;
-		}
-
-		bool getCheckFloor() const {
-			return checkFloor;
-		}
-		void setCheckFloor(bool v) {
-			checkFloor = v;
-		}
 
 		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
 		virtual bool hasOwnErrorHandler() {

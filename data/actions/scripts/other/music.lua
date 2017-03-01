@@ -44,9 +44,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				position.y - math.random(-1, 1),
 				position.z
 			), false, true)
-			
+
 			if monster then
-				monster:setMaster(player)
+				player:addSummon(monster)
 			end
 		end
 

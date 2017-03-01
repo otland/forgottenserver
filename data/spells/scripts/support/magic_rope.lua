@@ -3,7 +3,7 @@ function onCastSpell(creature, variant)
 	position:sendMagicEffect(CONST_ME_POFF)
 
 	local tile = Tile(position)
-	if isInArray(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
+	if table.contains(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
 		tile = Tile(position:moveUpstairs())
 		if tile then
 			creature:teleportTo(position, false)

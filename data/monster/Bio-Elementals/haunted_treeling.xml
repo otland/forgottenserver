@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Haunted Treeling" nameDescription="a haunted treeling" experience="310" speed="220" race="undead" manacost="0">
+<monster name="Haunted Treeling" nameDescription="a haunted treeling" experience="310" speed="220" race="undead">
 	<health now="450" max="450" />
 	<look type="310" corpse="9867" />
 	<targetchange interval="4000" chance="10" />

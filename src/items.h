@@ -298,7 +298,7 @@ class Items
 		void buildInventoryList();
 		const InventoryVector& getInventory() const { return inventory; }
 
-		inline size_t size() const {
+		size_t size() const {
 			return items.size();
 		}
 

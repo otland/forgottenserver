@@ -60,7 +60,7 @@ void Scheduler::threadMain()
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
-	bool do_signal = false;
+	bool do_signal;
 	eventLock.lock();
 
 	if (getState() == THREAD_STATE_RUNNING) {
@@ -132,3 +132,7 @@ void Scheduler::shutdown()
 	eventSignal.notify_one();
 }
 
+SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f)
+{
+	return new SchedulerTask(delay, std::move(f));
+}

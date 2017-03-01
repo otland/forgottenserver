@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lost Basher" nameDescription="a lost basher" race="blood" experience="1800" speed="250" manacost="0">
+<monster name="Lost Basher" nameDescription="a lost basher" race="blood" experience="1800" speed="250">
 	<health now="2600" max="2600" />
 	<look type="538" corpse="19963" />
 	<targetchange interval="4000" chance="10" />

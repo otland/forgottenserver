@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Spit Nettle" nameDescription="a spit nettle" race="venom" experience="20" speed="0" manacost="0">
+<monster name="Spit Nettle" nameDescription="a spit nettle" race="venom" experience="20" speed="0">
 	<health now="150" max="150" />
 	<look type="221" corpse="6062" />
 	<targetchange interval="4000" chance="20" />

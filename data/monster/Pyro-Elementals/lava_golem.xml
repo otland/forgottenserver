@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lava Golem" nameDescription="a lava golem" race="fire" experience="6200" speed="290" manacost="0">
+<monster name="Lava Golem" nameDescription="a lava golem" race="fire" experience="6200" speed="290">
 	<health now="9000" max="9000" />
 	<look type="491" corpse="17333" />
 	<targetchange interval="5000" chance="0" />
