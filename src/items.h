@@ -266,6 +266,7 @@ class Items
 {
 	public:
 		using NameMap = std::unordered_multimap<std::string, uint16_t>;
+		using InventoryVector = std::vector<uint16_t>;
 
 		Items();
 
@@ -295,7 +296,7 @@ class Items
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
 		void buildInventoryList();
-		const std::vector<uint16_t>& getInventory() const { return inventory; }
+		const InventoryVector& getInventory() const { return inventory; }
 
 		inline size_t size() const {
 			return items.size();
@@ -306,6 +307,6 @@ class Items
 	protected:
 		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
-		std::vector<uint16_t> inventory;
+		InventoryVector inventory;
 };
 #endif
