@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Earth Elemental" nameDescription="an earth elemental" race="undead" experience="450" speed="220" manacost="0">
+<monster name="Earth Elemental" nameDescription="an earth elemental" race="undead" experience="450" speed="220">
 	<health now="650" max="650" />
 	<look type="301" corpse="8933" />
 	<targetchange interval="4000" chance="10" />

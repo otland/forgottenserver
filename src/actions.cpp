@@ -43,7 +43,7 @@ Actions::~Actions()
 	clear();
 }
 
-inline void Actions::clearMap(ActionUseMap& map)
+void Actions::clearMap(ActionUseMap& map)
 {
 	// Filter out duplicates to avoid double-free
 	std::unordered_set<Action*> set;
@@ -417,42 +417,27 @@ void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t co
 Action::Action(LuaScriptInterface* interface) :
 	Event(interface), function(nullptr), allowFarUse(false), checkFloor(true), checkLineOfSight(true) {}
 
-Action::Action(const Action* copy) :
-	Event(copy), function(copy->function), allowFarUse(copy->allowFarUse), checkFloor(copy->checkFloor), checkLineOfSight(copy->checkLineOfSight) {}
-
 bool Action::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute allowFarUseAttr = node.attribute("allowfaruse");
 	if (allowFarUseAttr) {
-		setAllowFarUse(allowFarUseAttr.as_bool());
+		allowFarUse = allowFarUseAttr.as_bool();
 	}
 
 	pugi::xml_attribute blockWallsAttr = node.attribute("blockwalls");
 	if (blockWallsAttr) {
-		setCheckLineOfSight(blockWallsAttr.as_bool());
+		checkLineOfSight = blockWallsAttr.as_bool();
 	}
 
 	pugi::xml_attribute checkFloorAttr = node.attribute("checkfloor");
 	if (checkFloorAttr) {
-		setCheckFloor(checkFloorAttr.as_bool());
+		checkFloor = checkFloorAttr.as_bool();
 	}
 
 	return true;
 }
 
 namespace {
-
-bool increaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
-	return true;
-}
-
-bool decreaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
-	return true;
-}
 
 bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
 {
@@ -469,11 +454,7 @@ bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&
 bool Action::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "increaseitemid") == 0) {
-		function = increaseItemId;
-	} else if (strcasecmp(functionName, "decreaseitemid") == 0) {
-		function = decreaseItemId;
-	} else if (strcasecmp(functionName, "market") == 0) {
+	if (strcasecmp(functionName, "market") == 0) {
 		function = enterMarket;
 	} else {
 		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
@@ -491,10 +472,10 @@ std::string Action::getScriptEventName() const
 
 ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos)
 {
-	if (!getAllowFarUse()) {
+	if (!allowFarUse) {
 		return g_actions->canUse(player, toPos);
 	} else {
-		return g_actions->canUseFar(player, toPos, getCheckLineOfSight(), getCheckFloor());
+		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
 	}
 }
 

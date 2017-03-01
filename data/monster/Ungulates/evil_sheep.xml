@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Evil Sheep" nameDescription="an evil sheep" race="blood" experience="240" speed="250" manacost="0">
+<monster name="Evil Sheep" nameDescription="an evil sheep" race="blood" experience="240" speed="250">
 	<health now="350" max="350" />
 	<look type="14" corpse="5991" />
 	<targetchange interval="2000" chance="20" />

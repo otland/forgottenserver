@@ -386,20 +386,6 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 
 MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface) {}
 
-MoveEvent::MoveEvent(const MoveEvent* copy) :
-	Event(copy),
-	eventType(copy->eventType),
-	stepFunction(copy->stepFunction),
-	moveFunction(copy->moveFunction),
-	equipFunction(copy->equipFunction),
-	slot(copy->slot),
-	reqLevel(copy->reqLevel),
-	reqMagLevel(copy->reqMagLevel),
-	premium(copy->premium),
-	vocationString(copy->vocationString),
-	wieldInfo(copy->wieldInfo),
-	vocEquipMap(copy->vocEquipMap) {}
-
 std::string MoveEvent::getScriptEventName() const
 {
 	switch (eventType) {

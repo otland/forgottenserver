@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="1400" speed="210" manacost="0">
+<monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="1400" speed="210">
 	<health now="1200" max="1200" />
 	<look type="242" corpse="6324" />
 	<targetchange interval="4000" chance="10" />

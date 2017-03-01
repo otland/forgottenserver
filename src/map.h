@@ -110,7 +110,7 @@ class QTreeNode
 		QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
 
 		template<typename Leaf, typename Node>
-		inline static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
+		static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
 		{
 			do {
 				node = node->child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
@@ -196,7 +196,7 @@ class Map
 		  * \returns A pointer to that tile.
 		  */
 		Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const;
-		inline Tile* getTile(const Position& pos) const {
+		Tile* getTile(const Position& pos) const {
 			return getTile(pos.x, pos.y, pos.z);
 		}
 

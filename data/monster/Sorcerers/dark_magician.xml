@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dark Magician" nameDescription="a dark magician" race="blood" experience="185" speed="210" manacost="0">
+<monster name="Dark Magician" nameDescription="a dark magician" race="blood" experience="185" speed="210">
 	<health now="325" max="325" />
 	<look type="133" head="116" body="95" legs="50" feet="132" addons="2" corpse="20367" />
 	<targetchange interval="4000" chance="10" />

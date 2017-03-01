@@ -297,7 +297,7 @@ class Items
 		void buildInventoryList();
 		const std::vector<uint16_t>& getInventory() const { return inventory; }
 
-		inline size_t size() const {
+		size_t size() const {
 			return items.size();
 		}
 

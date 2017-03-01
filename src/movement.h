@@ -97,7 +97,6 @@ class MoveEvent final : public Event
 {
 	public:
 		explicit MoveEvent(LuaScriptInterface* interface);
-		explicit MoveEvent(const MoveEvent* copy);
 
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);

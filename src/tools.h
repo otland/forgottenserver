@@ -43,7 +43,7 @@ using IntegerVector = std::vector<int32_t>;
 
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
 IntegerVector vectorAtoi(const StringVector& stringVector);
-inline bool hasBitSet(uint32_t flag, uint32_t flags) {
+constexpr bool hasBitSet(uint32_t flag, uint32_t flags) {
 	return (flags & flag) != 0;
 }
 
@@ -91,9 +91,6 @@ itemAttrTypes stringToItemAttribute(const std::string& str);
 
 const char* getReturnMessage(ReturnValue value);
 
-inline int64_t OTSYS_TIME()
-{
-	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-}
+int64_t OTSYS_TIME();
 
 #endif

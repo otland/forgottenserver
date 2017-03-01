@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deepling Tyrant" nameDescription="a deepling tyrant" race="blood" experience="4200" speed="260" manacost="0">
+<monster name="Deepling Tyrant" nameDescription="a deepling tyrant" race="blood" experience="4200" speed="260">
 	<health now="4900" max="4900" />
 	<look type="442" corpse="15188" />
 	<targetchange interval="4000" chance="10" />

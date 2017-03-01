@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Thalas" nameDescription="Thalas" race="undead" experience="2950" speed="320" manacost="0">
+<monster name="Thalas" nameDescription="Thalas" race="undead" experience="2950" speed="320">
 	<health now="4100" max="4100" />
 	<look type="90" corpse="6025" />
 	<targetchange interval="5000" chance="8" />

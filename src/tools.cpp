@@ -73,7 +73,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	std::cout << '^' << std::endl;
 }
 
-inline static uint32_t circularShift(int bits, uint32_t value)
+static uint32_t circularShift(int bits, uint32_t value)
 {
 	return (value << bits) | (value >> (32 - bits));
 }
@@ -1167,7 +1167,33 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
+		case RETURNVALUE_NOSUCHRAIDEXISTS:
+			return "No such raid exists.";
+
+		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING:
+			return "Another raid is already executing.";
+
+		case RETURNVALUE_TRADEPLAYERFARAWAY:
+			return "Trade player is too far away.";
+
+		case RETURNVALUE_YOUDONTOWNTHISHOUSE:
+			return "You don't own this house.";
+
+		case RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE:
+			return "Trade player already owns a house.";
+
+		case RETURNVALUE_TRADEPLAYERHIGHESTBIDDER:
+			return "Trade player is currently the highest bidder of an auctioned house.";
+
+		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE:
+			return "You can not trade this house.";
+
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
+}
+
+int64_t OTSYS_TIME()
+{
+	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
