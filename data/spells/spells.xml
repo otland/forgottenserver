@@ -251,7 +251,7 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="support" spellid="81" name="Levitate" words="exani hur" lvl="12" mana="50" prem="1" aggressive="0" cooldown="2000" groupcooldown="2000" params="1" needlearn="0" function="Levitate">
+	<instant group="support" spellid="81" name="Levitate" words="exani hur" lvl="12" mana="50" prem="1" aggressive="0" cooldown="2000" groupcooldown="2000" params="1" needlearn="0" script="support/levitate.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
