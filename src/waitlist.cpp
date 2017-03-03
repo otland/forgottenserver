@@ -26,26 +26,69 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
-{
-	slot = 1;
-	for (auto it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it) {
-		if (it->playerGUID == player->getGUID()) {
-			return it;
-		}
-		++slot;
-	}
 
-	for (auto it = waitList.begin(), end = waitList.end(); it != end; ++it) {
-		if (it->playerGUID == player->getGUID()) {
-			return it;
+namespace {
+
+struct Wait {
+	constexpr Wait(std::size_t timeout, uint32_t playerGUID) :
+			timeout(timeout), playerGUID(playerGUID) {}
+
+	std::size_t timeout;
+	uint32_t playerGUID;
+};
+
+using WaitList = std::list<Wait>;
+
+void cleanupList(WaitList& list)
+{
+	int64_t time = OTSYS_TIME();
+
+	auto it = list.begin(), end = list.end();
+	while (it != end) {
+		if ((it->timeout - time) <= 0) {
+			it = list.erase(it);
+		} else {
+			++it;
 		}
-		++slot;
 	}
-	return waitList.end();
 }
 
-uint32_t WaitingList::getTime(uint32_t slot)
+std::size_t getTimeout(std::size_t slot)
+{
+	//timeout is set to 15 seconds longer than expected retry attempt
+	return WaitingList::getTime(slot) + 15;
+}
+
+}
+
+struct WaitListInfo {
+	WaitList priorityWaitList;
+	WaitList waitList;
+
+	std::pair<WaitList::iterator, WaitList::size_type> findClient(const Player *player) {
+		std::size_t slot = 1;
+		for (auto it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it, ++slot) {
+			if (it->playerGUID == player->getGUID()) {
+				return {it, slot};
+			}
+		}
+
+		for (auto it = waitList.begin(), end = waitList.end(); it != end; ++it, ++slot) {
+			if (it->playerGUID == player->getGUID()) {
+				return {it, slot};
+			}
+		}
+		return {waitList.end(), slot};
+	}
+};
+
+
+WaitingList& WaitingList::getInstance() {
+	static WaitingList waitingList;
+	return waitingList;
+}
+
+std::size_t WaitingList::getTime(std::size_t slot)
 {
 	if (slot < 5) {
 		return 5;
@@ -60,12 +103,6 @@ uint32_t WaitingList::getTime(uint32_t slot)
 	}
 }
 
-uint32_t WaitingList::getTimeout(uint32_t slot)
-{
-	//timeout is set to 15 seconds longer than expected retry attempt
-	return getTime(slot) + 15;
-}
-
 bool WaitingList::clientLogin(const Player* player)
 {
 	if (player->hasFlag(PlayerFlag_CanAlwaysLogin) || player->getAccountType() >= ACCOUNT_TYPE_GAMEMASTER) {
@@ -73,20 +110,20 @@ bool WaitingList::clientLogin(const Player* player)
 	}
 
 	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-	if (maxPlayers == 0 || (priorityWaitList.empty() && waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
+	if (maxPlayers == 0 || (info->priorityWaitList.empty() && info->waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return true;
 	}
 
-	WaitingList::cleanupList(priorityWaitList);
-	WaitingList::cleanupList(waitList);
+	cleanupList(info->priorityWaitList);
+	cleanupList(info->waitList);
 
-	uint32_t slot;
-
-	auto it = findClient(player, slot);
-	if (it != waitList.end()) {
+	WaitList::iterator it;
+	WaitList::size_type slot;
+	std::tie(it, slot) = info->findClient(player);
+	if (it != info->waitList.end()) {
 		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
 			//should be able to login now
-			waitList.erase(it);
+			info->waitList.erase(it);
 			return true;
 		}
 
@@ -95,36 +132,25 @@ bool WaitingList::clientLogin(const Player* player)
 		return false;
 	}
 
-	slot = priorityWaitList.size();
+	slot = info->priorityWaitList.size();
 	if (player->isPremium()) {
-		priorityWaitList.emplace_back(OTSYS_TIME() + (getTimeout(slot + 1) * 1000), player->getGUID());
+		info->priorityWaitList.emplace_back(OTSYS_TIME() + (getTimeout(slot + 1) * 1000), player->getGUID());
 	} else {
-		slot += waitList.size();
-		waitList.emplace_back(OTSYS_TIME() + (getTimeout(slot + 1) * 1000), player->getGUID());
+		slot += info->waitList.size();
+		info->waitList.emplace_back(OTSYS_TIME() + (getTimeout(slot + 1) * 1000), player->getGUID());
 	}
 	return false;
 }
 
-uint32_t WaitingList::getClientSlot(const Player* player)
+std::size_t WaitingList::getClientSlot(const Player* player)
 {
-	uint32_t slot;
-	auto it = findClient(player, slot);
-	if (it == waitList.end()) {
+	WaitList::iterator it;
+	WaitList::size_type slot;
+	std::tie(it, slot) = info->findClient(player);
+	if (it == info->waitList.end()) {
 		return 0;
 	}
 	return slot;
 }
 
-void WaitingList::cleanupList(WaitList& list)
-{
-	int64_t time = OTSYS_TIME();
-
-	auto it = list.begin(), end = list.end();
-	while (it != end) {
-		if ((it->timeout - time) <= 0) {
-			it = list.erase(it);
-		} else {
-			++it;
-		}
-	}
-}
+WaitingList::WaitingList() : info(new WaitListInfo) {}
