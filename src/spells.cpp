@@ -935,15 +935,8 @@ bool Levitate(const InstantSpell*, Creature* creature, const std::string& param)
 bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "levitate") == 0) {
-		function = Levitate;
-	} else {
-		std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
-	}
-
-	scripted = false;
-	return true;
+	std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+	return false;
 }
 
 bool InstantSpell::playerCastInstant(Player* player, std::string& param)
@@ -1140,8 +1133,6 @@ bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 {
 	if (scripted) {
 		return executeCastSpell(creature, var);
-	} else if (function) {
-		return function(this, creature, var.text);
 	}
 
 	return false;
