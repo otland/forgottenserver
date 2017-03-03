@@ -1,30 +1,26 @@
-function onCastSpell(creature, variant)
-	local currentPosition = creature:getPosition()
-	local destinationPosition = creature:getPosition()
-	destinationPosition:getNextPosition(creature:getDirection())
+local function levitate(creature, parameter)
+	local fromPosition = creature:getPosition()
 
-	local returnValue = RETURNVALUE_NOTPOSSIBLE
-	local parameter = variant:getString():lower()
-	if parameter == "up" and currentPosition.z ~= 8 then
-		local tile = Tile(currentPosition.x, currentPosition.y, currentPosition.z - 1)
-		if not tile or not tile:getGround() and not tile:hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) then
-			tile = Tile(destinationPosition.x, destinationPosition.y, destinationPosition.z - 1)
+	if parameter == "up" and fromPosition.z ~= 8 or parameter == "down" and fromPosition.z ~= 7 then
+		local toPosition = creature:getPosition()
+		toPosition:getNextPosition(creature:getDirection())
 
-			if tile and tile:getGround() and not tile:hasFlag(bit.bor(TILESTATE_IMMOVABLEBLOCKSOLID, TILESTATE_FLOORCHANGE)) then
-				returnValue = creature:move(nil, tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
-			end
-		end
-	elseif parameter == "down" and currentPosition.z ~= 7 then
-		local tile = Tile(destinationPosition)
-		if not tile or not tile:getGround() and not tile:hasFlag(TILESTATE_BLOCKSOLID) then
-			tile = Tile(destinationPosition.x, destinationPosition.y, destinationPosition.z + 1)
+		local flag = parameter == "up" and TILESTATE_IMMOVABLEBLOCKSOLID or TILESTATE_BLOCKSOLID
+		local floorChange = parameter == "up" and -1 or 1
+		local tile = Tile(parameter == "up" and Position(fromPosition.x, fromPosition.y, fromPosition.z + floorChange) or toPosition)
+		if not tile or not tile:getGround() and not tile:hasFlag(flag) then
+			tile = Tile(toPosition.x, toPosition.y, toPosition.z + floorChange)
 
 			if tile and tile:getGround() and not tile:hasFlag(bit.bor(TILESTATE_IMMOVABLEBLOCKSOLID, TILESTATE_FLOORCHANGE)) then
-				returnValue = creature:move(nil, tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
+				return creature:move(tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
 			end
 		end
 	end
+	return RETURNVALUE_NOTPOSSIBLE
+end
 
+function onCastSpell(creature, variant)
+	local returnValue = levitate(creature, variant:getString())
 	if returnValue ~= RETURNVALUE_NOERROR then
 		creature:sendCancelMessage(returnValue)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
