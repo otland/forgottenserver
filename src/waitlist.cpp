@@ -29,7 +29,8 @@ extern Game g_game;
 
 namespace {
 
-struct Wait {
+struct Wait
+{
 	constexpr Wait(std::size_t timeout, uint32_t playerGUID) :
 			timeout(timeout), playerGUID(playerGUID) {}
 
@@ -59,9 +60,10 @@ std::size_t getTimeout(std::size_t slot)
 	return WaitingList::getTime(slot) + 15;
 }
 
-}
+} // namespace
 
-struct WaitListInfo {
+struct WaitListInfo
+{
 	WaitList priorityWaitList;
 	WaitList waitList;
 
@@ -82,8 +84,8 @@ struct WaitListInfo {
 	}
 };
 
-
-WaitingList& WaitingList::getInstance() {
+WaitingList& WaitingList::getInstance()
+{
 	static WaitingList waitingList;
 	return waitingList;
 }
