@@ -60,7 +60,7 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_FLUIDTYPE = 1 << 21,
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
 
-	ITEM_ATTRIBUTE_CUSTOM = static_cast<uint32_t>(1) << 31
+	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
 
 enum VipStatus_t : uint8_t {
