@@ -5,11 +5,9 @@ local function levitate(creature, parameter)
 		local toPosition = creature:getPosition()
 		toPosition:getNextPosition(creature:getDirection())
 
-		local flag = parameter == "up" and TILESTATE_IMMOVABLEBLOCKSOLID or TILESTATE_BLOCKSOLID
-		local floorChange = parameter == "up" and -1 or 1
-		local tile = Tile(parameter == "up" and Position(fromPosition.x, fromPosition.y, fromPosition.z + floorChange) or toPosition)
-		if not tile or not tile:getGround() and not tile:hasFlag(flag) then
-			tile = Tile(toPosition.x, toPosition.y, toPosition.z + floorChange)
+		local tile = Tile(parameter == "up" and Position(fromPosition.x, fromPosition.y, fromPosition.z - 1) or toPosition)
+		if not tile or not tile:getGround() and not tile:hasFlag(parameter == "up" and TILESTATE_IMMOVABLEBLOCKSOLID or TILESTATE_BLOCKSOLID) then
+			tile = Tile(toPosition.x, toPosition.y, toPosition.z + (parameter == "up" and -1 or 1))
 
 			if tile and tile:getGround() and not tile:hasFlag(bit.bor(TILESTATE_IMMOVABLEBLOCKSOLID, TILESTATE_FLOORCHANGE)) then
 				return creature:move(tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
