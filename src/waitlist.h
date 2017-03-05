@@ -22,7 +22,7 @@
 
 #include "player.h"
 
-class WaitListInfo;
+struct WaitListInfo;
 
 class WaitingList
 {
