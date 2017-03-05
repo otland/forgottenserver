@@ -235,7 +235,7 @@ class ItemAttributes
 
 				PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
 
-				void operator()(const boost::blank& v) const {
+				void operator()(const boost::blank&) const {
 					lua_pushnil(L);
 				}
 
@@ -243,7 +243,7 @@ class ItemAttributes
 					LuaScriptInterface::pushString(L, v);
 				}
 
-				void operator()(const bool& v) const {
+				void operator()(bool v) const {
 					LuaScriptInterface::pushBoolean(L, v);
 				}
 
@@ -265,7 +265,7 @@ class ItemAttributes
 
 				SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
 
-				void operator()(const boost::blank& v) const {
+				void operator()(const boost::blank&) const {
 				}
 
 				void operator()(const std::string& v) const {
