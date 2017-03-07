@@ -42,7 +42,8 @@ Creature::~Creature()
 {
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(nullptr);
-		summon->setMaster(nullptr);
+		summon->master = nullptr;
+		summon->decrementReferenceCounter();
 	}
 
 	for (Condition* condition : conditions) {
