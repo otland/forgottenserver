@@ -1749,7 +1749,7 @@ void Monster::death(Creature*)
 
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
-		summon->setMaster(nullptr);
+		summon->removeMaster();
 	}
 	summons.clear();
 
@@ -1938,7 +1938,7 @@ bool Monster::convinceCreature(Creature* creature)
 	//destroy summons
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
-		summon->setMaster(nullptr);
+		summon->removeMaster();
 	}
 	summons.clear();
 

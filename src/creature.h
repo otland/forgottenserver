@@ -278,6 +278,13 @@ class Creature : virtual public Thing
 
 		bool setMaster(Creature* newMaster);
 
+		void removeMaster() {
+			if (master) {
+				decrementReferenceCounter();
+				master = nullptr;
+			}
+		}
+
 		bool isSummon() const {
 			return master != nullptr;
 		}
