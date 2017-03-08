@@ -1131,15 +1131,16 @@ bool Creature::setMaster(Creature* newMaster) {
 		newMaster->summons.push_back(this);
 	}
 
-	if (master) {
-		auto summon = std::find(master->summons.begin(), master->summons.end(), this);
-		if (summon != master->summons.end()) {
+	Creature* oldMaster = master;
+	master = newMaster;
+
+	if (oldMaster) {
+		auto summon = std::find(oldMaster->summons.begin(), oldMaster->summons.end(), this);
+		if (summon != oldMaster->summons.end()) {
+			oldMaster->summons.erase(summon);
 			decrementReferenceCounter();
-			master->summons.erase(summon);
 		}
 	}
-
-	master = newMaster;
 	return true;
 }
 
