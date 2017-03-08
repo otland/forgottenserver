@@ -884,54 +884,6 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-namespace {
-
-bool Levitate(const InstantSpell*, Creature* creature, const std::string& param)
-{
-	Player* player = creature->getPlayer();
-	if (!player) {
-		return false;
-	}
-
-	const Position& currentPos = creature->getPosition();
-	const Position& destPos = Spells::getCasterPosition(creature, creature->getDirection());
-
-	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
-
-	if (strcasecmp(param.c_str(), "up") == 0) {
-		if (currentPos.z != 8) {
-			Tile* tmpTile = g_game.map.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
-			if (tmpTile == nullptr || (tmpTile->getGround() == nullptr && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID))) {
-				tmpTile = g_game.map.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
-				if (tmpTile && tmpTile->getGround() && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID | TILESTATE_FLOORCHANGE)) {
-					ret = g_game.internalMoveCreature(*player, *tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
-				}
-			}
-		}
-	} else if (strcasecmp(param.c_str(), "down") == 0) {
-		if (currentPos.z != 7) {
-			Tile* tmpTile = g_game.map.getTile(destPos);
-			if (tmpTile == nullptr || (tmpTile->getGround() == nullptr && !tmpTile->hasFlag(TILESTATE_BLOCKSOLID))) {
-				tmpTile = g_game.map.getTile(destPos.x, destPos.y, destPos.z + 1);
-				if (tmpTile && tmpTile->getGround() && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID | TILESTATE_FLOORCHANGE)) {
-					ret = g_game.internalMoveCreature(*player, *tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
-				}
-			}
-		}
-	}
-
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_TELEPORT);
-	return true;
-}
-
-}
-
 bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
