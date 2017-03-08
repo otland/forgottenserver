@@ -280,8 +280,8 @@ class Creature : virtual public Thing
 
 		void removeMaster() {
 			if (master) {
-				decrementReferenceCounter();
 				master = nullptr;
+				decrementReferenceCounter();
 			}
 		}
 
