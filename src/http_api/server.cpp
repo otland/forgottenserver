@@ -80,6 +80,10 @@ void Server::stop()
 {
 	strand.dispatch([this]() {
 		ErrorCode err{};
+		if (!acceptor) {
+			return;
+		}
+
 		acceptor->close(err);
 		if (err) {
 			std::cerr << "HTTP API acceptor close() error: " << err.message() << std::endl;
