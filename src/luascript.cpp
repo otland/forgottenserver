@@ -7327,19 +7327,29 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 
 int LuaScriptInterface::luaCreatureMove(lua_State* L)
 {
+	// creature:move(direction)
+	// creature:move(tile[, flags = 0])
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Direction direction = getNumber<Direction>(L, 2);
-	if (direction > DIRECTION_LAST) {
-		lua_pushnil(L);
-		return 1;
+	if (isNumber(L, 2)) {
+		Direction direction = getNumber<Direction>(L, 2);
+		if (direction > DIRECTION_LAST) {
+			lua_pushnil(L);
+			return 1;
+		}
+		lua_pushnumber(L, g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT));
+	} else {
+		Tile* tile = getUserdata<Tile>(L, 2);
+		if (!tile) {
+			lua_pushnil(L);
+			return 1;
+		}
+		lua_pushnumber(L, g_game.internalMoveCreature(*creature, *tile, getNumber<uint32_t>(L, 3)));
 	}
-
-	lua_pushnumber(L, g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT));
 	return 1;
 }
 
