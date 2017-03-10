@@ -24,6 +24,9 @@
 namespace HttpApi
 {
 
+namespace
+{
+
 namespace detail
 {
 
@@ -132,6 +135,8 @@ private:
 	}
 
 };
+
+}
 
 GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(IoService& service, const std::string& address, uint16_t port)
 {
