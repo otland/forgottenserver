@@ -23,6 +23,7 @@ function Session:handleRequest(responder)
 		return
 	end
 
+	responder:setResponseStatus(200, 'OK')
 	return route.handler(self, session)
 end
 
