@@ -36,7 +36,7 @@ using ErrorCode = boost::system::error_code;
 using Request = beast::http::request<beast::http::string_body>;
 using Response = beast::http::response<beast::http::string_body>;
 using RequestID = uint32_t;
-using PeerID = uint32_t;
+using PeerId = uint32_t;
 
 } //namespace HttpApi
 

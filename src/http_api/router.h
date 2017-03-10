@@ -62,30 +62,30 @@ public:
 	 * be called then a HTTP 500 Internal Server Error is sent as a response.
 	 * \param[in] responder - the object that contains the request data and a handle
 	 * to send a response
-	 * \param[in] peerID - unique ID of a remote \ref Peer, used by lua to identify which
+	 * \param[in] peerId - unique ID of a remote \ref Peer, used by lua to identify which
 	 * connection this request belongs to
 	 */
-	void handleRequest(Responder responder, PeerID peerID);
+	void handleRequest(Responder responder, PeerId peerId);
 
 	/** \brief Handles the opening of an HTTP connection and session
 	 *
 	 * Attempts to dispatch the lua session open handler which allows the API side
 	 * to track open sessions. In the event of failure(e.g. when the handler is not present)
 	 * no action is taken.
-	 * \param[in] peerID - unique ID of a remote \ref Peer, used by lua to identify which
+	 * \param[in] peerId - unique ID of a remote \ref Peer, used by lua to identify which
 	 * connection this event belongs to
 	 */
-	void handleSessionOpen(PeerID peerID);
+	void handleSessionOpen(PeerId peerId);
 
 	/** \brief Handles the closing of an HTTP connection and session
 	 *
 	 * Attempts to dispatch the lua session close handler which allows the API side
 	 * to track session close events and release any resources that are no longer
 	 * needed.
-	 * \param[in] peerID - unique ID of a remote \ref Peer, used by lua to identify which
+	 * \param[in] peerId - unique ID of a remote \ref Peer, used by lua to identify which
 	 * connection this event belongs to
 	 */
-	void handleSessionClose(PeerID peerID);
+	void handleSessionClose(PeerId peerId);
 };
 
 } //namespace HttpApi

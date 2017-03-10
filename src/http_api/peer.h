@@ -70,7 +70,7 @@ private:
 	Response response;
 
 	/// A number which uniquely identifies a \ref Peer (these numbers are not persistent across process restarts)
-	const PeerID peerID;
+	const PeerId peerId;
 
 	/**The \ref requestCounter variable is used to ensure that the lua environment does not store the responder and
 	 * accidentally respond to another request after the current one times out
@@ -126,7 +126,7 @@ private:
 	 */
 	void cancelTimer();
 public:
-	Peer(Server& server, Router& router, PeerID peerID);
+	Peer(Server& server, Router& router, PeerId peerId);
 
 	/** \brief Sends an HTTP response for a request
 	 *

@@ -47,7 +47,7 @@ class Server : NonCopyable, NonMovable
 	std::unique_ptr<Acceptor> acceptor; ///The acceptor used to listen for incomming TCP/IP connections
 	Peers peers; ///Set of connections, tracked so that we can perform a clean shutdown
 	Strand strand; ///Internal strand for the server to synchronize access to the server
-	PeerID peerCounter{}; ///Counter used to generate PeerIDs
+	PeerId peerCounter{}; ///Counter used to generate PeerIds
 	std::unique_ptr<Router> router; ///Router which dispatches handlers
 
 	void accept();

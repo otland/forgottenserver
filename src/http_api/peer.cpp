@@ -34,13 +34,13 @@ using Minutes = boost::posix_time::minutes;
  */
 const static Minutes TIMER_TIMEOUT{30};
 
-Peer::Peer(Server& server, Router& router, PeerID peerID) :
+Peer::Peer(Server& server, Router& router, PeerId peerId) :
 	server(server),
 	router(router),
 	socket(server.getIoService()),
 	timer(server.getIoService()),
 	strand(server.getIoService()),
-	peerID(peerID)
+	peerId(peerId)
 {
 	//
 }
@@ -49,7 +49,7 @@ void Peer::onAccept()
 {
 	auto sharedThis = shared_from_this();
 	g_dispatcher.addTask(createTask([sharedThis, this]() {
-		router.handleSessionOpen(peerID);
+		router.handleSessionOpen(peerId);
 	}));
 	read();
 }
@@ -70,7 +70,7 @@ void Peer::read()
 
 		startTimer(); // start response generation timer
 		g_dispatcher.addTask(createTask([sharedThis, this]() {
-			router.handleRequest(Responder{sharedThis, std::move(request), requestCounter}, peerID);
+			router.handleRequest(Responder{sharedThis, std::move(request), requestCounter}, peerId);
 		}));
 	}));
 }
@@ -107,7 +107,7 @@ void Peer::internalClose()
 	cancelTimer();
 	auto sharedThis = shared_from_this();
 	g_dispatcher.addTask(createTask([sharedThis, this]() {
-		router.handleSessionClose(peerID);
+		router.handleSessionClose(peerId);
 	}));
 	server.onPeerClose(*this);
 }
