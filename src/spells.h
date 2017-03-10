@@ -75,7 +75,6 @@ class Spells final : public BaseEvents
 		LuaScriptInterface scriptInterface { "Spell Interface" };
 };
 
-using InstantSpellFunction = std::function<bool(const InstantSpell* spell, Creature* creature, const std::string& param)>;
 using RuneSpellFunction = std::function<bool(const RuneSpell* spell, Player* player, const Position& posTo)>;
 
 class BaseSpell
@@ -210,7 +209,6 @@ class InstantSpell : public TalkAction, public Spell
 		explicit InstantSpell(LuaScriptInterface* interface) : TalkAction(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		virtual bool playerCastInstant(Player* player, std::string& param);
 
@@ -236,8 +234,6 @@ class InstantSpell : public TalkAction, public Spell
 		std::string getScriptEventName() const override;
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var);
-
-		InstantSpellFunction function;
 
 		bool needDirection = false;
 		bool hasParam = false;

@@ -884,13 +884,6 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool InstantSpell::loadFunction(const pugi::xml_attribute& attr)
-{
-	const char* functionName = attr.as_string();
-	std::cout << "[Warning - InstantSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-	return false;
-}
-
 bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 {
 	if (!playerSpellCheck(player)) {
@@ -1083,13 +1076,7 @@ bool InstantSpell::castSpell(Creature* creature, Creature* target)
 
 bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 {
-	if (scripted) {
-		return executeCastSpell(creature, var);
-	} else if (function) {
-		return function(this, creature, var.text);
-	}
-
-	return false;
+	return executeCastSpell(creature, var);
 }
 
 bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
