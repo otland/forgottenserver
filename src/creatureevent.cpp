@@ -523,9 +523,8 @@ void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, 
 	scriptInterface->resetScriptEnv();
 }
 
-void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin)
-{
-	//onManaChange(creature, attacker, manaChange, origin)
+void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage) {
+	//onManaChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeManaChange] Call stack overflow" << std::endl;
 		return;
@@ -546,15 +545,22 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, in
 		lua_pushnil(L);
 	}
 
-	lua_pushnumber(L, manaChange);
-	lua_pushnumber(L, origin);
+	lua_pushnumber(L, damage.primary.value);
+	lua_pushnumber(L, damage.primary.type);
+	lua_pushnumber(L, damage.secondary.value);
+	lua_pushnumber(L, damage.secondary.type);
+	lua_pushnumber(L, damage.origin);
 
-	if (scriptInterface->protectedCall(L, 4, 1) != 0) {
-		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(L, -1));
+	if (scriptInterface->protectedCall(L, 7, 4) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		manaChange = LuaScriptInterface::getNumber<int32_t>(L, -1);
+		damage.primary.value = LuaScriptInterface::getNumber<int32_t>(L, -4);
+		damage.primary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -3);
+		damage.secondary.value = LuaScriptInterface::getNumber<int32_t>(L, -2);
+		damage.secondary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -1);
+
+		lua_pop(L, 4);
 	}
-	lua_pop(L, 1);
 
 	scriptInterface->resetScriptEnv();
 }

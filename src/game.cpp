@@ -3891,8 +3891,9 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 					if (!events.empty()) {
 						for (CreatureEvent* creatureEvent : events) {
-							creatureEvent->executeManaChange(target, attacker, healthChange, damage.origin);
+							creatureEvent->executeManaChange(target, attacker, damage);
 						}
+						healthChange = damage.primary.value + damage.secondary.value;
 						if (healthChange == 0) {
 							return true;
 						}
@@ -4087,8 +4088,9 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 	return true;
 }
 
-bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaChange, CombatOrigin origin)
+bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& damage)
 {
+	int32_t manaChange = damage.primary.value + damage.secondary.value;
 	if (manaChange > 0) {
 		if (attacker) {
 			const Player* attackerPlayer = attacker->getPlayer();
@@ -4097,13 +4099,14 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			}
 		}
 
-		if (origin != ORIGIN_NONE) {
+		if (damage.origin != ORIGIN_NONE) {
 			const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 			if (!events.empty()) {
 				for (CreatureEvent* creatureEvent : events) {
-					creatureEvent->executeManaChange(target, attacker, manaChange, origin);
+					creatureEvent->executeManaChange(target, attacker, damage);
 				}
-				return combatChangeMana(attacker, target, manaChange, ORIGIN_NONE);
+				damage.origin = ORIGIN_NONE;
+				return combatChangeMana(attacker, target, damage);
 			}
 		}
 
@@ -4140,13 +4143,14 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			return true;
 		}
 
-		if (origin != ORIGIN_NONE) {
+		if (damage.origin != ORIGIN_NONE) {
 			const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 			if (!events.empty()) {
 				for (CreatureEvent* creatureEvent : events) {
-					creatureEvent->executeManaChange(target, attacker, manaChange, origin);
+					creatureEvent->executeManaChange(target, attacker, damage);
 				}
-				return combatChangeMana(attacker, target, manaChange, ORIGIN_NONE);
+				damage.origin = ORIGIN_NONE;
+				return combatChangeMana(attacker, target, damage);
 			}
 		}
 
