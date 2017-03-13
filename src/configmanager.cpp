@@ -97,7 +97,6 @@ bool ConfigManager::load()
 	integer[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
 	integer[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
 	integer[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
-	integer[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
 	integer[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
 	integer[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
 	integer[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
@@ -117,6 +116,8 @@ bool ConfigManager::load()
 	integer[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);
 	integer[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
 	integer[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
+
+	floating[RATE_LOOT] = getGlobalFloat(L, "rateLoot", 2.0);
 
 	loaded = true;
 	lua_close(L);
@@ -150,6 +151,14 @@ int32_t ConfigManager::getNumber(integer_config_t what) const
 	return integer[what];
 }
 
+float ConfigManager::getFloat(floating_config_t what) const
+{
+	if (what >= LAST_FLOATING_CONFIG) {
+		std::cout << "[Warning - ConfigManager::getFloat] Access invalid index: " << what << std::endl;
+		return 0.0;
+	}
+}
+
 bool ConfigManager::getBoolean(boolean_config_t what) const
 {
 	if (what >= LAST_BOOLEAN_CONFIG) {
@@ -180,6 +189,18 @@ int32_t ConfigManager::getGlobalNumber(lua_State* L, const char* identifier, con
 	}
 
 	int32_t val = lua_tonumber(L, -1);
+	lua_pop(L, 1);
+	return val;
+}
+
+float ConfigManager::getGlobalFloat(lua_State* L, const char* identifier, const float defaultValue)
+{
+	lua_getglobal(L, identifier);
+	if (!lua_isnumber(L, -1)) {
+		return defaultValue;
+	}
+
+	float val = lua_tonumber(L, -1);
 	lua_pop(L, 1);
 	return val;
 }
