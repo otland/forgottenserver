@@ -21,6 +21,7 @@
 #define FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
 
 #include <regex>
+#include <set>
 
 #include "container.h"
 #include "housetile.h"
@@ -212,8 +213,8 @@ class House
 			return houseTiles;
 		}
 
-		const std::list<Door*>& getDoors() const {
-			return doorList;
+		const std::set<Door*>& getDoors() const {
+			return doorSet;
 		}
 
 		void addBed(BedItem* bed);
@@ -234,7 +235,7 @@ class House
 		Container transfer_container{ITEM_LOCKER1};
 
 		HouseTileList houseTiles;
-		std::list<Door*> doorList;
+		std::set<Door*> doorSet;
 		HouseBedItemList bedsList;
 
 		std::string houseName;
