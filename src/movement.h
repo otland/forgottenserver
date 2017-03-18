@@ -39,9 +39,10 @@ enum MoveEvent_t {
 };
 
 class MoveEvent;
+using MoveEvent_ptr = std::unique_ptr<MoveEvent>;
 
 struct MoveEventList {
-	std::list<MoveEvent*> moveEvent[MOVE_EVENT_LAST];
+	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 
 using VocEquipMap = std::map<uint16_t, bool>;
@@ -74,9 +75,9 @@ class MoveEvents final : public BaseEvents
 		Event_ptr getEvent(const std::string& nodeName) final;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
 
-		void addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map);
+		void addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map);
 
-		void addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map);
+		void addEvent(MoveEvent moveEvent, const Position& pos, MovePosListMap& map);
 		MoveEvent* getEvent(const Tile* tile, MoveEvent_t eventType);
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType, slots_t slot);
