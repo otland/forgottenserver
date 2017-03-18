@@ -24,6 +24,8 @@
 #include "enums.h"
 #include "luascript.h"
 
+class Action;
+using Action_ptr = std::unique_ptr<Action>;
 using ActionFunction = std::function<bool(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey)>;
 
 class Action : public Event
@@ -81,7 +83,7 @@ class Actions final : public BaseEvents
 		Event_ptr getEvent(const std::string& nodeName) final;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
 
-		using ActionUseMap = std::map<uint16_t, Action*>;
+		using ActionUseMap = std::map<uint16_t, Action>;
 		ActionUseMap useItemMap;
 		ActionUseMap uniqueItemMap;
 		ActionUseMap actionItemMap;
