@@ -71,7 +71,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
-			oldEvent->copyEvent(creatureEvent.release());
+			oldEvent->copyEvent(creatureEvent.get());
 		}
 
 		return false;
