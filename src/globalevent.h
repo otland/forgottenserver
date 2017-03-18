@@ -33,7 +33,8 @@ enum GlobalEvent_t {
 };
 
 class GlobalEvent;
-using GlobalEventMap = std::map<std::string, GlobalEvent*>;
+using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
+using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
 class GlobalEvents final : public BaseEvents
 {
@@ -80,7 +81,7 @@ class GlobalEvent final : public Event
 		bool configureEvent(const pugi::xml_node& node) final;
 
 		bool executeRecord(uint32_t current, uint32_t old);
-		bool executeEvent();
+		bool executeEvent() const;
 
 		GlobalEvent_t getEventType() const {
 			return eventType;
