@@ -24,6 +24,9 @@
 #include "baseevents.h"
 #include "const.h"
 
+class TalkAction;
+using TalkAction_ptr = std::unique_ptr<TalkAction>;
+
 enum TalkActionResult_t {
 	TALKACTION_CONTINUE,
 	TALKACTION_BREAK,
