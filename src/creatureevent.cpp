@@ -81,7 +81,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		if (it != creatureEvents.end()) {
 			it->second = *creatureEvent;
 		} else {
-			creatureEvents.emplace(creatureEvent->getName(), *creatureEvent);
+			creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
 		}
 
 		return true;

@@ -83,7 +83,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	if ((attr = node.attribute("itemid"))) {
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
 
-		auto result = useItemMap.emplace(id, *action);
+		auto result = useItemMap.emplace(id, std::move(*action));
 		if (!result.second) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
 		}
@@ -117,7 +117,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	} else if ((attr = node.attribute("uniqueid"))) {
 		uint16_t uid = pugi::cast<uint16_t>(attr.value());
 
-		auto result = uniqueItemMap.emplace(uid, *action);
+		auto result = uniqueItemMap.emplace(uid, std::move(*action));
 		if (!result.second) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
 		}
@@ -151,7 +151,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	} else if ((attr = node.attribute("actionid"))) {
 		uint16_t aid = pugi::cast<uint16_t>(attr.value());
 
-		auto result = actionItemMap.emplace(aid, *action);
+		auto result = actionItemMap.emplace(aid, std::move(*action));
 		if (!result.second) {
 			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
 		}

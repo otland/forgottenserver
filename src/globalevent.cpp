@@ -69,7 +69,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	GlobalEvent_ptr globalEvent{static_cast<GlobalEvent*>(event.release())}; //event is guaranteed to be a GlobalEvent
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
-		auto result = timerMap.emplace(globalEvent->getName(), *globalEvent);
+		auto result = timerMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
@@ -77,12 +77,12 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 			return true;
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
-		auto result = serverMap.emplace(globalEvent->getName(), *globalEvent);
+		auto result = serverMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			return true;
 		}
 	} else { // think event
-		auto result = thinkMap.emplace(globalEvent->getName(), *globalEvent);
+		auto result = thinkMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
@@ -186,6 +186,7 @@ void GlobalEvents::execute(GlobalEvent_t type) const
 
 GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 {
+	// TODO: This should be better implemented. Maybe have a map for every type.
 	switch (type) {
 		case GLOBALEVENT_NONE: return thinkMap;
 		case GLOBALEVENT_TIMER: return timerMap;

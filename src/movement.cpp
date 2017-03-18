@@ -97,7 +97,6 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
 		int32_t id = pugi::cast<int32_t>(attr.value());
-		addEvent(*moveEvent, id, itemIdMap);
 		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
 			ItemType& it = Item::items.getItemType(id);
 			it.wieldInfo = moveEvent->getWieldInfo();
@@ -105,6 +104,7 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			it.minReqMagicLevel = moveEvent->getReqMagLv();
 			it.vocationString = moveEvent->getVocationString();
 		}
+		addEvent(std::move(*moveEvent), id, itemIdMap);
 	} else if ((attr = node.attribute("fromid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toid").value());
@@ -133,7 +133,7 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			}
 		}
 	} else if ((attr = node.attribute("uniqueid"))) {
-		addEvent(*moveEvent, pugi::cast<int32_t>(attr.value()), uniqueIdMap);
+		addEvent(std::move(*moveEvent), pugi::cast<int32_t>(attr.value()), uniqueIdMap);
 	} else if ((attr = node.attribute("fromuid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("touid").value());
@@ -142,7 +142,7 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			addEvent(*moveEvent, id, uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("actionid"))) {
-		addEvent(*moveEvent, pugi::cast<int32_t>(attr.value()), actionIdMap);
+		addEvent(std::move(*moveEvent), pugi::cast<int32_t>(attr.value()), actionIdMap);
 	} else if ((attr = node.attribute("fromaid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toaid").value());
@@ -157,7 +157,7 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 
 		Position pos(posList[0], posList[1], posList[2]);
-		addEvent(*moveEvent, pos, positionMap);
+		addEvent(std::move(*moveEvent), pos, positionMap);
 	} else {
 		return false;
 	}
