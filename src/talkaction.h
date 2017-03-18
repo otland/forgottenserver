@@ -30,7 +30,30 @@ enum TalkActionResult_t {
 	TALKACTION_FAILED,
 };
 
-class TalkAction;
+class TalkAction : public Event
+{
+	public:
+		explicit TalkAction(LuaScriptInterface* interface) : Event(interface) {}
+
+		bool configureEvent(const pugi::xml_node& node) override;
+
+		const std::string& getWords() const {
+			return words;
+		}
+		char getSeparator() const {
+			return separator;
+		}
+
+		//scripting
+		bool executeSay(Player* player, const std::string& param, SpeakClasses type) const;
+		//
+
+	protected:
+		std::string getScriptEventName() const override;
+
+		std::string words;
+		char separator = '"';
+};
 
 class TalkActions : public BaseEvents
 {
@@ -54,31 +77,6 @@ class TalkActions : public BaseEvents
 		std::forward_list<TalkAction> talkActions;
 
 		LuaScriptInterface scriptInterface;
-};
-
-class TalkAction : public Event
-{
-	public:
-		TalkAction(LuaScriptInterface* interface) : Event(interface) {}
-
-		bool configureEvent(const pugi::xml_node& node) override;
-
-		const std::string& getWords() const {
-			return words;
-		}
-		char getSeparator() const {
-			return separator;
-		}
-
-		//scripting
-		bool executeSay(Player* player, const std::string& param, SpeakClasses type) const;
-		//
-
-	protected:
-		std::string getScriptEventName() const override;
-
-		std::string words;
-		char separator = '"';
 };
 
 #endif

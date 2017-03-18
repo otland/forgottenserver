@@ -108,6 +108,11 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_YELLOWSMOKE = 168,
 	CONST_ME_GREENSMOKE = 169,
 	CONST_ME_PURPLESMOKE = 170,
+	CONST_ME_EARLY_THUNDER = 171,
+	CONST_ME_RAGIAZ_BONECAPSULE = 172,
+	CONST_ME_CRITICAL_DAMAGE = 173,
+	// 174 is empty
+	CONST_ME_PLUNGING_FISH = 175,
 };
 
 enum ShootType_t : uint8_t {
@@ -212,6 +217,9 @@ enum MessageClasses : uint8_t {
 	MESSAGE_EVENT_DEFAULT = 30, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_LOOT = 31,
 
+	MESSAGE_GUILD = 33, /*White message in channel (+ channelId)*/
+	MESSAGE_PARTY_MANAGEMENT = 34, /*White message in channel (+ channelId)*/
+	MESSAGE_PARTY = 35, /*White message in channel (+ channelId)*/
 	MESSAGE_EVENT_ORANGE = 36, /*Orange message in the console*/
 	MESSAGE_STATUS_CONSOLE_ORANGE = 37,  /*Orange message in the console*/
 };
@@ -521,7 +529,6 @@ enum ReloadTypes_t : uint8_t  {
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_ACTIONS,
 	RELOAD_TYPE_CHAT,
-	RELOAD_TYPE_COMMANDS,
 	RELOAD_TYPE_CONFIG,
 	RELOAD_TYPE_CREATURESCRIPTS,
 	RELOAD_TYPE_EVENTS,

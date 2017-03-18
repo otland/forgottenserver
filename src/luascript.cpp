@@ -1252,6 +1252,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_YELLOWSMOKE)
 	registerEnum(CONST_ME_GREENSMOKE)
 	registerEnum(CONST_ME_PURPLESMOKE)
+	registerEnum(CONST_ME_EARLY_THUNDER)
+	registerEnum(CONST_ME_RAGIAZ_BONECAPSULE)
+	registerEnum(CONST_ME_CRITICAL_DAMAGE)
+	registerEnum(CONST_ME_PLUNGING_FISH)
 
 	registerEnum(CONST_ANI_NONE)
 	registerEnum(CONST_ANI_SPEAR)
@@ -1367,6 +1371,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MESSAGE_HEALED_OTHERS)
 	registerEnum(MESSAGE_EXPERIENCE_OTHERS)
 	registerEnum(MESSAGE_EVENT_DEFAULT)
+	registerEnum(MESSAGE_GUILD)
+	registerEnum(MESSAGE_PARTY_MANAGEMENT)
+	registerEnum(MESSAGE_PARTY)
 	registerEnum(MESSAGE_EVENT_ORANGE)
 	registerEnum(MESSAGE_STATUS_CONSOLE_ORANGE)
 
@@ -1712,11 +1719,15 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_CANONLYUSEONESHIELD)
 	registerEnum(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 	registerEnum(RETURNVALUE_YOUARENOTTHEOWNER)
+	registerEnum(RETURNVALUE_TRADEPLAYERFARAWAY)
+	registerEnum(RETURNVALUE_YOUDONTOWNTHISHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
+	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 
 	registerEnum(RELOAD_TYPE_ALL)
 	registerEnum(RELOAD_TYPE_ACTIONS)
 	registerEnum(RELOAD_TYPE_CHAT)
-	registerEnum(RELOAD_TYPE_COMMANDS)
 	registerEnum(RELOAD_TYPE_CONFIG)
 	registerEnum(RELOAD_TYPE_CREATURESCRIPTS)
 	registerEnum(RELOAD_TYPE_EVENTS)
@@ -2076,6 +2087,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "changeSpeed", LuaScriptInterface::luaCreatureChangeSpeed);
 
 	registerMethod("Creature", "setDropLoot", LuaScriptInterface::luaCreatureSetDropLoot);
+	registerMethod("Creature", "setSkillLoss", LuaScriptInterface::luaCreatureSetSkillLoss);
 
 	registerMethod("Creature", "getPosition", LuaScriptInterface::luaCreatureGetPosition);
 	registerMethod("Creature", "getTile", LuaScriptInterface::luaCreatureGetTile);
@@ -2398,6 +2410,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
 	registerMethod("House", "setOwnerGuid", LuaScriptInterface::luaHouseSetOwnerGuid);
+	registerMethod("House", "startTrade", LuaScriptInterface::luaHouseStartTrade);
 
 	registerMethod("House", "getBeds", LuaScriptInterface::luaHouseGetBeds);
 	registerMethod("House", "getBedCount", LuaScriptInterface::luaHouseGetBedCount);
@@ -6709,18 +6722,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 		return 1;
 	}
 
-	Creature* master = getCreature(L, 2);
-	if (master) {
-		pushBoolean(L, creature->convinceCreature(master));
-	} else {
-		master = creature->getMaster();
-		if (master) {
-			master->removeSummon(creature);
-			creature->incrementReferenceCounter();
-			creature->setDropLoot(true);
-		}
-		pushBoolean(L, true);
-	}
+	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
 	g_game.updateCreatureType(creature);
 	return 1;
 }
@@ -6805,6 +6807,19 @@ int LuaScriptInterface::luaCreatureSetDropLoot(lua_State* L)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		creature->setDropLoot(getBoolean(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureSetSkillLoss(lua_State* L)
+{
+	// creature:setSkillLoss(skillLoss)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->setSkillLoss(getBoolean(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -7312,19 +7327,29 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 
 int LuaScriptInterface::luaCreatureMove(lua_State* L)
 {
+	// creature:move(direction)
+	// creature:move(tile[, flags = 0])
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Direction direction = getNumber<Direction>(L, 2);
-	if (direction > DIRECTION_LAST) {
-		lua_pushnil(L);
-		return 1;
+	if (isNumber(L, 2)) {
+		Direction direction = getNumber<Direction>(L, 2);
+		if (direction > DIRECTION_LAST) {
+			lua_pushnil(L);
+			return 1;
+		}
+		lua_pushnumber(L, g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT));
+	} else {
+		Tile* tile = getUserdata<Tile>(L, 2);
+		if (!tile) {
+			lua_pushnil(L);
+			return 1;
+		}
+		lua_pushnumber(L, g_game.internalMoveCreature(*creature, *tile, getNumber<uint32_t>(L, 3)));
 	}
-
-	lua_pushnumber(L, g_game.internalMoveCreature(creature, direction, FLAG_NOLIMIT));
 	return 1;
 }
 
@@ -8523,27 +8548,41 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 {
 	// player:sendTextMessage(type, text[, position, primaryValue = 0, primaryColor = TEXTCOLOR_NONE[, secondaryValue = 0, secondaryColor = TEXTCOLOR_NONE]])
+	// player:sendTextMessage(type, text, channelId)
+
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	int parameters = lua_gettop(L);
 
 	TextMessage message(getNumber<MessageClasses>(L, 2), getString(L, 3));
-	if (parameters >= 6) {
-		message.position = getPosition(L, 4);
-		message.primary.value = getNumber<int32_t>(L, 5);
-		message.primary.color = getNumber<TextColor_t>(L, 6);
-	}
-
-	if (parameters >= 8) {
-		message.secondary.value = getNumber<int32_t>(L, 7);
-		message.secondary.color = getNumber<TextColor_t>(L, 8);
-	}
-
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		player->sendTextMessage(message);
-		pushBoolean(L, true);
+	if (parameters == 4) {
+		uint16_t channelId = getNumber<uint16_t>(L, 4);
+		ChatChannel* channel = g_chat->getChannel(*player, channelId);
+		if (!channel || !channel->hasUser(*player)) {
+			pushBoolean(L, false);
+			return 1;
+		}
+		message.channelId = channelId;
 	} else {
-		lua_pushnil(L);
+		if (parameters >= 6) {
+			message.position = getPosition(L, 4);
+			message.primary.value = getNumber<int32_t>(L, 5);
+			message.primary.color = getNumber<TextColor_t>(L, 6);
+		}
+
+		if (parameters >= 8) {
+			message.secondary.value = getNumber<int32_t>(L, 7);
+			message.secondary.color = getNumber<TextColor_t>(L, 8);
+		}
 	}
+
+	player->sendTextMessage(message);
+	pushBoolean(L, true);
+
 	return 1;
 }
 
@@ -10352,6 +10391,53 @@ int LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
+{
+	// house:startTrade(player, tradePartner)
+	House* house = getUserdata<House>(L, 1);
+	Player* player = getUserdata<Player>(L, 2);
+	Player* tradePartner = getUserdata<Player>(L, 3);
+
+	if (!player || !tradePartner || !house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERFARAWAY);
+		return 1;
+	}
+
+	if (house->getOwner() != player->getGUID()) {
+		lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
+		return 1;
+	}
+
+	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+		return 1;
+	}
+
+	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
+		return 1;
+	}
+
+	Item* transferItem = house->getTransferItem();
+	if (!transferItem) {
+		lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
+		return 1;
+	}
+
+	transferItem->getParent()->setParent(player);
+	if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+		house->resetTransferItem();
+	}
+
+	lua_pushnumber(L, RETURNVALUE_NOERROR);
 	return 1;
 }
 

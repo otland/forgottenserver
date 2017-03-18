@@ -106,7 +106,7 @@ class MoveEvent final : public Event
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
-		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool boolean);
+		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 
 		uint32_t getSlot() const {
 			return slot;
@@ -114,7 +114,7 @@ class MoveEvent final : public Event
 
 		//scripting
 		bool executeStep(Creature* creature, Item* item, const Position& pos);
-		bool executeEquip(Player* player, Item* item, slots_t slot);
+		bool executeEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 		bool executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		//
 

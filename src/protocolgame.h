@@ -43,6 +43,7 @@ struct TextMessage
 	MessageClasses type = MESSAGE_STATUS_DEFAULT;
 	std::string text;
 	Position position;
+	uint16_t channelId;
 	struct {
 		int32_t value = 0;
 		TextColor_t color;
@@ -224,6 +225,7 @@ class ProtocolGame final : public Protocol
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
+		void sendVIPEntries();
 
 		void sendPendingStateEntered();
 		void sendEnterWorld();
