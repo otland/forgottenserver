@@ -24,6 +24,9 @@
 #include "baseevents.h"
 #include "enums.h"
 
+class CreatureEvent;
+using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;
+
 enum CreatureEventType_t {
 	CREATURE_EVENT_NONE,
 	CREATURE_EVENT_LOGIN,
@@ -38,39 +41,6 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_HEALTHCHANGE,
 	CREATURE_EVENT_MANACHANGE,
 	CREATURE_EVENT_EXTENDED_OPCODE, // otclient additional network opcodes
-};
-
-class CreatureEvent;
-
-class CreatureEvents final : public BaseEvents
-{
-	public:
-		CreatureEvents();
-		~CreatureEvents();
-
-		// non-copyable
-		CreatureEvents(const CreatureEvents&) = delete;
-		CreatureEvents& operator=(const CreatureEvents&) = delete;
-
-		// global events
-		bool playerLogin(Player* player) const;
-		bool playerLogout(Player* player) const;
-		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
-
-		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
-
-	protected:
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event_ptr getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
-		void clear() final;
-
-		//creature events
-		using CreatureEventMap = std::map<std::string, CreatureEvent*>;
-		CreatureEventMap creatureEvents;
-
-		LuaScriptInterface scriptInterface;
 };
 
 class CreatureEvent final : public Event
@@ -94,8 +64,8 @@ class CreatureEvent final : public Event
 		void copyEvent(CreatureEvent* creatureEvent);
 
 		//scripting
-		bool executeOnLogin(Player* player);
-		bool executeOnLogout(Player* player);
+		bool executeOnLogin(Player* player) const;
+		bool executeOnLogout(Player* player) const;
 		bool executeOnThink(Creature* creature, uint32_t interval);
 		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
@@ -114,6 +84,36 @@ class CreatureEvent final : public Event
 		std::string eventName;
 		CreatureEventType_t type;
 		bool loaded;
+};
+
+class CreatureEvents final : public BaseEvents
+{
+	public:
+		CreatureEvents();
+
+		// non-copyable
+		CreatureEvents(const CreatureEvents&) = delete;
+		CreatureEvents& operator=(const CreatureEvents&) = delete;
+
+		// global events
+		bool playerLogin(Player* player) const;
+		bool playerLogout(Player* player) const;
+		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
+
+		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
+
+	protected:
+		LuaScriptInterface& getScriptInterface() final;
+		std::string getScriptBaseName() const final;
+		Event_ptr getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
+		void clear() final;
+
+		//creature events
+		using CreatureEventMap = std::map<std::string, CreatureEvent>;
+		CreatureEventMap creatureEvents;
+
+		LuaScriptInterface scriptInterface;
 };
 
 #endif
