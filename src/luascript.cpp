@@ -9289,8 +9289,8 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 
 	std::vector<InstantSpell*> spells;
 	for (auto spell : g_spells->getInstantSpells()) {
-		if (spell.second->canCast(player)) {
-			spells.push_back(spell.second);
+		if (spell.second.canCast(player)) {
+			spells.push_back(&spell.second);
 		}
 	}
 

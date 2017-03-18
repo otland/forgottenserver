@@ -58,7 +58,7 @@ class Spells final : public BaseEvents
 		static Position getCasterPosition(Creature* creature, Direction dir);
 		std::string getScriptBaseName() const final;
 
-		const std::map<std::string, InstantSpell*>& getInstantSpells() const {
+		const std::map<std::string, InstantSpell>& getInstantSpells() const {
 			return instants;
 		};
 
@@ -68,8 +68,9 @@ class Spells final : public BaseEvents
 		Event_ptr getEvent(const std::string& nodeName) final;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
 
-		std::map<uint16_t, RuneSpell*> runes;
-		std::map<std::string, InstantSpell*> instants;
+		std::map<uint16_t, RuneSpell> runes;
+		std::map<std::string, InstantSpell> instants;
+		std::map<std::string, ConjureSpell> instantsConjure; // This is temporary just to avoid slicing, ConjureSpell is being moved to Lua.
 
 		friend class CombatSpell;
 		LuaScriptInterface scriptInterface { "Spell Interface" };
