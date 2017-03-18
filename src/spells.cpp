@@ -122,19 +122,19 @@ std::string Spells::getScriptBaseName() const
 	return "spells";
 }
 
-std::unique_ptr<Event> Spells::getEvent(const std::string& nodeName)
+Event_ptr Spells::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "rune") == 0) {
-		return std::unique_ptr<Event>(new RuneSpell(&scriptInterface));
+		return Event_ptr(new RuneSpell(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
-		return std::unique_ptr<Event>(new InstantSpell(&scriptInterface));
+		return Event_ptr(new InstantSpell(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "conjure") == 0) {
-		return std::unique_ptr<Event>(new ConjureSpell(&scriptInterface));
+		return Event_ptr(new ConjureSpell(&scriptInterface));
 	}
 	return nullptr;
 }
 
-bool Spells::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node&)
+bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
 	if (instant) {

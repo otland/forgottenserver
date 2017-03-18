@@ -76,15 +76,15 @@ std::string Actions::getScriptBaseName() const
 	return "actions";
 }
 
-std::unique_ptr<Event> Actions::getEvent(const std::string& nodeName)
+Event_ptr Actions::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "action") != 0) {
 		return nullptr;
 	}
-	return std::unique_ptr<Event>(new Action(&scriptInterface));
+	return Event_ptr(new Action(&scriptInterface));
 }
 
-bool Actions::registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node)
+bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 {
 	Action* action = static_cast<Action*>(event.release()); //event is guaranteed to be an Action
 

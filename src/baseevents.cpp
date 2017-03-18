@@ -51,7 +51,7 @@ bool BaseEvents::loadFromXml()
 	loaded = true;
 
 	for (auto node : doc.child(scriptsName.c_str()).children()) {
-		std::unique_ptr<Event> event = getEvent(node.name());
+		Event_ptr event = getEvent(node.name());
 		if (!event) {
 			continue;
 		}

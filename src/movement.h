@@ -71,8 +71,8 @@ class MoveEvents final : public BaseEvents
 		void clear() final;
 		LuaScriptInterface& getScriptInterface() final;
 		std::string getScriptBaseName() const final;
-		std::unique_ptr<Event> getEvent(const std::string& nodeName) final;
-		bool registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node) final;
+		Event_ptr getEvent(const std::string& nodeName) final;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
 
 		void addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map);
 

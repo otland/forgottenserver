@@ -22,6 +22,9 @@
 
 #include "luascript.h"
 
+class Event;
+using Event_ptr = std::unique_ptr<Event>;
+
 class Event
 {
 	public:
@@ -63,8 +66,8 @@ class BaseEvents
 	protected:
 		virtual LuaScriptInterface& getScriptInterface() = 0;
 		virtual std::string getScriptBaseName() const = 0;
-		virtual std::unique_ptr<Event> getEvent(const std::string& nodeName) = 0;
-		virtual bool registerEvent(std::unique_ptr<Event>&& event, const pugi::xml_node& node) = 0;
+		virtual Event_ptr getEvent(const std::string& nodeName) = 0;
+		virtual bool registerEvent(Event_ptr event, const pugi::xml_node& node) = 0;
 		virtual void clear() = 0;
 
 		bool loaded = false;
