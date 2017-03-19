@@ -75,4 +75,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/weapons.cpp
 	${CMAKE_CURRENT_LIST_DIR}/wildcardtree.cpp
 	PARENT_SCOPE)
+file(GLOB_RECURSE tfs_HDR *.h)
 
+set(tfs_HDR ${tfs_HDR} PARENT_SCOPE)

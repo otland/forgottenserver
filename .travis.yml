@@ -11,6 +11,7 @@ cache: apt
 addons:
   apt:
     packages:
+      - clang-format-3.8
       - libboost-dev
       - libboost-system-dev
       - libboost-iostreams-dev
@@ -19,6 +20,7 @@ addons:
       - libmysqlclient-dev
       - libpugixml-dev
 before_script:
+  - ./verify-format.sh
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
 script: make -j2
