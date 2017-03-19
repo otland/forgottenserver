@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="180" manacost="0">
+<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="180">
 	<health now="120" max="120" />
 	<look type="109" corpse="6036" />
 	<targetchange interval="4000" chance="10" />

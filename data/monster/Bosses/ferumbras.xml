@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ferumbras" nameDescription="Ferumbras" race="venom" experience="12000" speed="320" manacost="0">
+<monster name="Ferumbras" nameDescription="Ferumbras" race="venom" experience="12000" speed="320">
 	<health now="50000" max="50000" />
 	<look type="229" corpse="6078" />
 	<targetchange interval="5000" chance="8" />

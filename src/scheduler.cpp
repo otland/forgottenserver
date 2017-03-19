@@ -132,3 +132,7 @@ void Scheduler::shutdown()
 	eventSignal.notify_one();
 }
 
+SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f)
+{
+	return new SchedulerTask(delay, std::move(f));
+}

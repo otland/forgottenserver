@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Battlemaster Zunzu" nameDescription="Battlemaster Zunzu" race="blood" experience="2500" speed="420" manacost="0">
+<monster name="Battlemaster Zunzu" nameDescription="Battlemaster Zunzu" race="blood" experience="2500" speed="420">
 	<health now="4000" max="4000" />
 	<look type="343" corpse="11281" />
 	<targetchange interval="5000" chance="8" />

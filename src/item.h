@@ -207,7 +207,7 @@ class ItemAttributes
 		}
 
 	protected:
-		inline bool hasAttribute(itemAttrTypes type) const {
+		bool hasAttribute(itemAttrTypes type) const {
 			return (type & attributeBits) != 0;
 		}
 		void removeAttribute(itemAttrTypes type);
@@ -283,10 +283,10 @@ class ItemAttributes
 		Attribute& getAttr(itemAttrTypes type);
 
 	public:
-		inline static bool isIntAttrType(itemAttrTypes type) {
+		static bool isIntAttrType(itemAttrTypes type) {
 			return (type & 0x7FFE13) != 0;
 		}
-		inline static bool isStrAttrType(itemAttrTypes type) {
+		static bool isStrAttrType(itemAttrTypes type) {
 			return (type & 0x1EC) != 0;
 		}
 
@@ -670,7 +670,13 @@ class Item : virtual public Thing
 			count = n;
 		}
 
-		static uint32_t countByType(const Item* i, int32_t subType);
+		static uint32_t countByType(const Item* i, int32_t subType) {
+			if (subType == -1 || subType == i->getSubType()) {
+				return i->getItemCount();
+			}
+
+			return 0;
+		}
 
 		void setDefaultSubtype();
 		uint16_t getSubType() const;
@@ -757,14 +763,5 @@ class Item : virtual public Thing
 
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
-
-inline uint32_t Item::countByType(const Item* i, int32_t subType)
-{
-	if (subType == -1 || subType == i->getSubType()) {
-		return i->getItemCount();
-	}
-
-	return 0;
-}
 
 #endif

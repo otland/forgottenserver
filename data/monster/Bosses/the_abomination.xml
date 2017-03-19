@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="The Abomination" nameDescription="The Abomination" race="venom" experience="25000" speed="340" manacost="0">
+<monster name="The Abomination" nameDescription="The Abomination" race="venom" experience="25000" speed="340">
 	<health now="38050" max="38050" />
 	<look type="238" corpse="6532" />
 	<targetchange interval="5000" chance="8" />

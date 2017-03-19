@@ -42,32 +42,32 @@ struct Position
 	constexpr Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
 
 	template<int_fast32_t deltax, int_fast32_t deltay>
-	inline static bool areInRange(const Position& p1, const Position& p2) {
+	static bool areInRange(const Position& p1, const Position& p2) {
 		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay;
 	}
 
 	template<int_fast32_t deltax, int_fast32_t deltay, int_fast16_t deltaz>
-	inline static bool areInRange(const Position& p1, const Position& p2) {
+	static bool areInRange(const Position& p1, const Position& p2) {
 		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay && Position::getDistanceZ(p1, p2) <= deltaz;
 	}
 
-	inline static int_fast32_t getOffsetX(const Position& p1, const Position& p2) {
+	static int_fast32_t getOffsetX(const Position& p1, const Position& p2) {
 		return p1.getX() - p2.getX();
 	}
-	inline static int_fast32_t getOffsetY(const Position& p1, const Position& p2) {
+	static int_fast32_t getOffsetY(const Position& p1, const Position& p2) {
 		return p1.getY() - p2.getY();
 	}
-	inline static int_fast16_t getOffsetZ(const Position& p1, const Position& p2) {
+	static int_fast16_t getOffsetZ(const Position& p1, const Position& p2) {
 		return p1.getZ() - p2.getZ();
 	}
 
-	inline static int32_t getDistanceX(const Position& p1, const Position& p2) {
+	static int32_t getDistanceX(const Position& p1, const Position& p2) {
 		return std::abs(Position::getOffsetX(p1, p2));
 	}
-	inline static int32_t getDistanceY(const Position& p1, const Position& p2) {
+	static int32_t getDistanceY(const Position& p1, const Position& p2) {
 		return std::abs(Position::getOffsetY(p1, p2));
 	}
-	inline static int16_t getDistanceZ(const Position& p1, const Position& p2) {
+	static int16_t getDistanceZ(const Position& p1, const Position& p2) {
 		return std::abs(Position::getOffsetZ(p1, p2));
 	}
 
@@ -123,9 +123,9 @@ struct Position
 		return Position(x - p1.x, y - p1.y, z - p1.z);
 	}
 
-	inline int_fast32_t getX() const { return x; }
-	inline int_fast32_t getY() const { return y; }
-	inline int_fast16_t getZ() const { return z; }
+	int_fast32_t getX() const { return x; }
+	int_fast32_t getY() const { return y; }
+	int_fast16_t getZ() const { return z; }
 };
 
 std::ostream& operator<<(std::ostream&, const Position&);

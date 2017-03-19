@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Bazir" nameDescription="Bazir" race="fire" experience="30000" speed="530" manacost="0">
+<monster name="Bazir" nameDescription="Bazir" race="fire" experience="30000" speed="530">
 	<health now="110000" max="110000" />
 	<look type="35" head="0" body="0" legs="0" feet="0" corpse="2916" />
 	<targetchange interval="2000" chance="10" />

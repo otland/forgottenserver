@@ -152,7 +152,9 @@ class Tile : public Cylinder
 	public:
 		static Tile& nullptr_tile;
 		Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z) {}
-		virtual ~Tile();
+		virtual ~Tile() {
+			delete ground;
+		};
 
 		// non-copyable
 		Tile(const Tile&) = delete;
@@ -205,13 +207,13 @@ class Tile : public Cylinder
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool hasProperty(const Item* exclude, ITEMPROPERTY prop) const;
 
-		inline bool hasFlag(uint32_t flag) const {
+		bool hasFlag(uint32_t flag) const {
 			return hasBitSet(flag, this->flags);
 		}
-		inline void setFlag(uint32_t flag) {
+		void setFlag(uint32_t flag) {
 			this->flags |= flag;
 		}
-		inline void resetFlag(uint32_t flag) {
+		void resetFlag(uint32_t flag) {
 			this->flags &= ~flag;
 		}
 
@@ -307,7 +309,11 @@ class DynamicTile : public Tile
 
 	public:
 		DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
-		~DynamicTile();
+		~DynamicTile() {
+			for (Item* item : items) {
+				item->decrementReferenceCounter();
+			}
+		}
 
 		// non-copyable
 		DynamicTile(const DynamicTile&) = delete;
@@ -343,7 +349,13 @@ class StaticTile final : public Tile
 
 	public:
 		StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
-		~StaticTile();
+		~StaticTile() {
+			if (items) {
+				for (Item* item : *items) {
+					item->decrementReferenceCounter();
+				}
+			}
+		}
 
 		// non-copyable
 		StaticTile(const StaticTile&) = delete;
@@ -375,26 +387,5 @@ class StaticTile final : public Tile
 			return creatures.get();
 		}
 };
-
-inline Tile::~Tile()
-{
-	delete ground;
-}
-
-inline StaticTile::~StaticTile()
-{
-	if (items) {
-		for (Item* item : *items) {
-			item->decrementReferenceCounter();
-		}
-	}
-}
-
-inline DynamicTile::~DynamicTile()
-{
-	for (Item* item : items) {
-		item->decrementReferenceCounter();
-	}
-}
 
 #endif

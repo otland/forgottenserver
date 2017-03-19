@@ -31,8 +31,8 @@ class Task
 {
 	public:
 		// DO NOT allocate this class on the stack
-		explicit Task(std::function<void (void)> f) : func(std::move(f)) {}
-		Task(uint32_t ms, std::function<void (void)> f) :
+		explicit Task(std::function<void (void)>&& f) : func(std::move(f)) {}
+		Task(uint32_t ms, std::function<void (void)>&& f) :
 			expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f)) {}
 
 		virtual ~Task() = default;
@@ -59,15 +59,8 @@ class Task
 		std::function<void (void)> func;
 };
 
-inline Task* createTask(const std::function<void (void)>& f)
-{
-	return new Task(f);
-}
-
-inline Task* createTask(uint32_t expiration, const std::function<void (void)>& f)
-{
-	return new Task(expiration, f);
-}
+Task* createTask(std::function<void (void)> f);
+Task* createTask(uint32_t expiration, std::function<void (void)> f);
 
 class Dispatcher : public ThreadHolder<Dispatcher> {
 	public:

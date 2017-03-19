@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Diamond Servant" nameDescription="a diamond servant" race="energy" experience="700" speed="210" manacost="0">
+<monster name="Diamond Servant" nameDescription="a diamond servant" race="energy" experience="700" speed="210">
 	<health now="1000" max="1000" />
 	<look type="397" corpse="13485" />
 	<targetchange interval="4000" chance="10" />

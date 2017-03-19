@@ -18,7 +18,7 @@ end
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local newBed = beds[item:getId()]
-	if not newBed or target == nil or not target:isItem() then
+	if not newBed or type(target) ~= "userdata" or not target:isItem() then
 		return false
 	end
 
@@ -34,12 +34,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	for _, bed in pairs(beds) do
-		if bed[1][1] == targetItemId or isInArray({1758, 5502, 18027}, targetItemId) then
+		if bed[1][1] == targetItemId or table.contains({1758, 5502, 18027}, targetItemId) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.y = toPosition.y + 1
 			internalBedTransform(item, target, toPosition, newBed[1])
 			break
-		elseif bed[2][1] == targetItemId or isInArray({1756, 5500, 18029}, targetItemId) then
+		elseif bed[2][1] == targetItemId or table.contains({1756, 5500, 18029}, targetItemId) then
 			toPosition:sendMagicEffect(CONST_ME_POFF)
 			toPosition.x = toPosition.x + 1
 			internalBedTransform(item, target, toPosition, newBed[2])

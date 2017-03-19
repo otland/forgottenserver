@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Death Priest" nameDescription="a death priest" race="undead" experience="750" speed="220" manacost="0">
+<monster name="Death Priest" nameDescription="a death priest" race="undead" experience="750" speed="220">
 	<health now="800" max="800" />
 	<look type="99" head="95" body="116" legs="119" feet="115" corpse="13975" />
 	<targetchange interval="4000" chance="10" />

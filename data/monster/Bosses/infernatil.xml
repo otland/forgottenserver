@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Infernatil" nameDescription="Infernatil" race="fire" experience="85000" speed="605" manacost="0">
+<monster name="Infernatil" nameDescription="Infernatil" race="fire" experience="85000" speed="605">
 	<health now="270000" max="270000" />
 	<look type="35" head="0" body="0" legs="0" feet="0" corpse="2916" />
 	<targetchange interval="2000" chance="15" />

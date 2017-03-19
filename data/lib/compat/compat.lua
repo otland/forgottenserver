@@ -546,7 +546,7 @@ function doConvinceCreature(cid, target)
 		return false
 	end
 
-	targetCreature:setMaster(creature)
+	creature:addSummon(targetCreature)
 	return true
 end
 
@@ -1019,14 +1019,7 @@ function getPlayerInstantSpellInfo(cid, spellId)
 		return false
 	end
 
-	return {
-		["name"] = spell:getName(),
-		["words"] = spell:getWords(),
-		["level"] = spell:getLevel(),
-		["mlevel"] = spell:getMagicLevel(),
-		["mana"] = spell:getManaCost(player),
-		["manapercent"] = spell:getManaPercent()
-	}
+	return spell
 end
 
 function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c ~= nil and c:setItemOutfit(item, time) end
@@ -1046,3 +1039,28 @@ function doSetCreatureOutfit(cid, outfit, time)
 
 	return true
 end
+
+function isInArray(array, value) return table.contains(array, value) end
+
+function doCreateItem(itemid, count, pos)
+	local tile = Tile(pos)
+	if not tile then
+		return false
+	end
+
+	local item = Game.createItem(itemid, count, pos)
+	if item then
+		return item:getUniqueId()
+	end
+	return false
+end
+
+function doCreateItemEx(itemid, count)
+	local item = Game.createItem(itemid, count)
+	if item then
+		return item:getUniqueId()
+	end
+	return false
+end
+
+function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) end
