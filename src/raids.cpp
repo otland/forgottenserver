@@ -227,10 +227,8 @@ bool Raid::loadFromXml(const std::string& filename)
 		}
 	}
 
-	//sort by delay time
-	std::sort(raidEvents.begin(), raidEvents.end(), [](const RaidEvent* lhs, const RaidEvent* rhs) {
-		return lhs->getDelay() < rhs->getDelay();
-	});
+	// sort by delay time
+	std::sort(raidEvents.begin(), raidEvents.end(), [](const RaidEvent* lhs, const RaidEvent* rhs) { return lhs->getDelay() < rhs->getDelay(); });
 
 	loaded = true;
 	return true;
@@ -534,7 +532,8 @@ bool AreaSpawnEvent::executeEvent()
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr &&
+				    g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;
 				}
@@ -574,7 +573,7 @@ std::string ScriptEvent::getScriptEventName() const
 
 bool ScriptEvent::executeEvent()
 {
-	//onRaid()
+	// onRaid()
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - ScriptEvent::onRaid] Call stack overflow" << std::endl;
 		return false;

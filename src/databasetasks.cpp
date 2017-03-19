@@ -24,7 +24,6 @@
 
 extern Dispatcher g_dispatcher;
 
-
 void DatabaseTasks::start()
 {
 	db.connect();
@@ -51,7 +50,7 @@ void DatabaseTasks::threadMain()
 	}
 }
 
-void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback/* = nullptr*/, bool store/* = false*/)
+void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/, bool store /* = false*/)
 {
 	bool signal = false;
 	taskLock.lock();

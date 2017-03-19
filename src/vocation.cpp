@@ -42,8 +42,7 @@ bool Vocations::loadFromXml()
 
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
 
-		auto res = vocationsMap.emplace(std::piecewise_construct,
-				std::forward_as_tuple(id), std::forward_as_tuple(id));
+		auto res = vocationsMap.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id));
 		Vocation& voc = res.first->second;
 
 		if ((attr = vocationNode.attribute("name"))) {

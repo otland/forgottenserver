@@ -25,15 +25,14 @@
 
 extern Game g_game;
 
-Container::Container(uint16_t type) :
-	Container(type, items[type].maxItems) {}
+Container::Container(uint16_t type) : Container(type, items[type].maxItems)
+{
+}
 
-Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
-	Item(type),
-	maxSize(size),
-	unlocked(unlocked),
-	pagination(pagination)
-{}
+Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/)
+    : Item(type), maxSize(size), unlocked(unlocked), pagination(pagination)
+{
+}
 
 Container::Container(Tile* tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
 {
@@ -115,7 +114,7 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 	}
 
 	for (auto& itemNode : node.children) {
-		//load container items
+		// load container items
 		if (itemNode.type != OTBM_ITEM) {
 			// unknown type
 			return false;
@@ -218,12 +217,12 @@ void Container::onAddContainerItem(Item* item)
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
-	//send to client
+	// send to client
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendAddContainerItem(this, item);
 	}
 
-	//event methods
+	// event methods
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onAddContainerItem(item);
 	}
@@ -234,12 +233,12 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
-	//send to client
+	// send to client
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
 	}
 
-	//event methods
+	// event methods
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
 	}
@@ -250,24 +249,23 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
-	//send change to client
+	// send change to client
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendRemoveContainerItem(this, index);
 	}
 
-	//event methods
+	// event methods
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->onRemoveContainerItem(this, item);
 	}
 }
 
-ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t count,
-		uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /* = nullptr*/) const
 {
 	bool childIsOwner = hasBitSet(FLAG_CHILDISOWNER, flags);
 	if (childIsOwner) {
-		//a child container is querying, since we are the top container (not carried by a player)
-		//just return with no error.
+		// a child container is querying, since we are the top container (not carried by a player)
+		// just return with no error.
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -323,8 +321,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 }
 
-ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
-		uint32_t& maxQueryCount, uint32_t flags) const
+ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing.getItem();
 	if (item == nullptr) {
@@ -343,7 +340,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 		uint32_t n = 0;
 
 		if (index == INDEX_WHEREEVER) {
-			//Iterate through every item and check how much free stackable slots there is.
+			// Iterate through every item and check how much free stackable slots there is.
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
@@ -398,8 +395,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Container::queryDestination(int32_t& index, const Thing &thing, Item** destItem,
-		uint32_t& flags)
+Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
 	if (!unlocked) {
 		*destItem = nullptr;
@@ -439,7 +435,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing &thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
-		//try find a suitable item to stack with
+		// try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
 			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < 100) {
@@ -487,7 +483,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	itemlist.push_front(item);
 	updateItemWeight(item->getWeight());
 
-	//send change to client
+	// send change to client
 	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
@@ -498,7 +494,7 @@ void Container::addItemBack(Item* item)
 	addItem(item);
 	updateItemWeight(item->getWeight());
 
-	//send change to client
+	// send change to client
 	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
@@ -521,7 +517,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	item->setSubType(count);
 	updateItemWeight(-oldWeight + item->getWeight());
 
-	//send change to client
+	// send change to client
 	if (getParent()) {
 		onUpdateContainerItem(index, item, item);
 	}
@@ -543,7 +539,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 	item->setParent(this);
 	updateItemWeight(-static_cast<int32_t>(replacedItem->getWeight()) + item->getWeight());
 
-	//send change to client
+	// send change to client
 	if (getParent()) {
 		onUpdateContainerItem(index, replacedItem, item);
 	}
@@ -569,14 +565,14 @@ void Container::removeThing(Thing* thing, uint32_t count)
 		item->setItemCount(newCount);
 		updateItemWeight(-oldWeight + item->getWeight());
 
-		//send change to client
+		// send change to client
 		if (getParent()) {
 			onUpdateContainerItem(index, item, item);
 		}
 	} else {
 		updateItemWeight(-static_cast<int32_t>(item->getWeight()));
 
-		//send change to client
+		// send change to client
 		if (getParent()) {
 			onRemoveContainerItem(index, item);
 		}
@@ -608,7 +604,7 @@ size_t Container::getLastIndex() const
 	return size();
 }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType/* = -1*/) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {
@@ -638,7 +634,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 	if (topParent->getCreature()) {
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
-		//let the tile class notify surrounding players
+		// let the tile class notify surrounding players
 		if (topParent->getParent()) {
 			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
@@ -653,7 +649,7 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 	if (topParent->getCreature()) {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
-		//let the tile class notify surrounding players
+		// let the tile class notify surrounding players
 		if (topParent->getParent()) {
 			topParent->getParent()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 		}

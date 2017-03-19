@@ -25,26 +25,33 @@
 
 class ProtocolStatus final : public Protocol
 {
-	public:
-		// static protocol information
-		enum {server_sends_first = false};
-		enum {protocol_identifier = 0xFF};
-		enum {use_checksum = false};
-		static const char* protocol_name() {
-			return "status protocol";
-		}
+public:
+	// static protocol information
+	enum
+	{
+		server_sends_first = false
+	};
+	enum
+	{
+		protocol_identifier = 0xFF
+	};
+	enum
+	{
+		use_checksum = false
+	};
+	static const char* protocol_name() { return "status protocol"; }
 
-		explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
+	explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
 
-		void onRecvFirstMessage(NetworkMessage& msg) final;
+	void onRecvFirstMessage(NetworkMessage& msg) final;
 
-		void sendStatusString();
-		void sendInfo(uint16_t requestedInfo, const std::string& characterName);
+	void sendStatusString();
+	void sendInfo(uint16_t requestedInfo, const std::string& characterName);
 
-		static const uint64_t start;
+	static const uint64_t start;
 
-	protected:
-		static std::map<uint32_t, int64_t> ipConnectMap;
+protected:
+	static std::map<uint32_t, int64_t> ipConnectMap;
 };
 
 #endif

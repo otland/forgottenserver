@@ -30,7 +30,9 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-House::House(uint32_t houseId) : id(houseId) {}
+House::House(uint32_t houseId) : id(houseId)
+{
+}
 
 void House::addTile(HouseTile* tile)
 {
@@ -38,7 +40,7 @@ void House::addTile(HouseTile* tile)
 	houseTiles.push_back(tile);
 }
 
-void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* player/* = nullptr*/)
+void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* player /* = nullptr*/)
 {
 	if (updateDatabase && owner != guid) {
 		Database& db = Database::getInstance();
@@ -55,7 +57,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 	isLoaded = true;
 
 	if (owner != 0) {
-		//send items to depot
+		// send items to depot
 		if (player) {
 			transferToDepot(player);
 		} else {
@@ -77,7 +79,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 			}
 		}
 
-		//clean access lists
+		// clean access lists
 		owner = 0;
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
@@ -86,7 +88,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 			door->setAccessList("");
 		}
 
-		//reset paid date
+		// reset paid date
 		paidUntil = 0;
 		rentWarnings = 0;
 	}
@@ -185,7 +187,7 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 		return;
 	}
 
-	//kick uninvited players
+	// kick uninvited players
 	for (HouseTile* tile : houseTiles) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
@@ -481,7 +483,8 @@ void AccessList::addExpression(const std::string& expression)
 				regExList.emplace_back(std::regex(outExp), true);
 			}
 		}
-	} catch (...) {}
+	} catch (...) {
+	}
 }
 
 bool AccessList::isInList(const Player* player)
@@ -509,7 +512,9 @@ void AccessList::getList(std::string& list) const
 	list = this->list;
 }
 
-Door::Door(uint16_t type) :	Item(type) {}
+Door::Door(uint16_t type) : Item(type)
+{
+}
 
 Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
@@ -614,15 +619,11 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 		house->setName(houseNode.attribute("name").as_string());
 
-		Position entryPos(
-			pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
-			pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
-			pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
-		);
+		Position entryPos(pugi::cast<uint16_t>(houseNode.attribute("entryx").value()), pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
+		                  pugi::cast<uint16_t>(houseNode.attribute("entryz").value()));
 		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
 			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
-					    << " - Name: " << house->getName()
-					    << " - House id: " << houseId << std::endl;
+			          << " - Name: " << house->getName() << " - House id: " << houseId << std::endl;
 		}
 		house->setEntryPos(entryPos);
 
@@ -716,7 +717,8 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				}
 
 				std::ostringstream ss;
-				ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName() << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";
+				ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName()
+				   << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";
 				letter->setText(ss.str());
 				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);

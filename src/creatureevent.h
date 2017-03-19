@@ -24,7 +24,8 @@
 #include "baseevents.h"
 #include "enums.h"
 
-enum CreatureEventType_t {
+enum CreatureEventType_t
+{
 	CREATURE_EVENT_NONE,
 	CREATURE_EVENT_LOGIN,
 	CREATURE_EVENT_LOGOUT,
@@ -44,76 +45,70 @@ class CreatureEvent;
 
 class CreatureEvents final : public BaseEvents
 {
-	public:
-		CreatureEvents();
-		~CreatureEvents();
+public:
+	CreatureEvents();
+	~CreatureEvents();
 
-		// non-copyable
-		CreatureEvents(const CreatureEvents&) = delete;
-		CreatureEvents& operator=(const CreatureEvents&) = delete;
+	// non-copyable
+	CreatureEvents(const CreatureEvents&) = delete;
+	CreatureEvents& operator=(const CreatureEvents&) = delete;
 
-		// global events
-		bool playerLogin(Player* player) const;
-		bool playerLogout(Player* player) const;
-		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
+	// global events
+	bool playerLogin(Player* player) const;
+	bool playerLogout(Player* player) const;
+	bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
 
-		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
+	CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
-	protected:
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
-		void clear() final;
+protected:
+	LuaScriptInterface& getScriptInterface() final;
+	std::string getScriptBaseName() const final;
+	Event* getEvent(const std::string& nodeName) final;
+	bool registerEvent(Event* event, const pugi::xml_node& node) final;
+	void clear() final;
 
-		//creature events
-		using CreatureEventMap = std::map<std::string, CreatureEvent*>;
-		CreatureEventMap creatureEvents;
+	// creature events
+	using CreatureEventMap = std::map<std::string, CreatureEvent*>;
+	CreatureEventMap creatureEvents;
 
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface scriptInterface;
 };
 
 class CreatureEvent final : public Event
 {
-	public:
-		explicit CreatureEvent(LuaScriptInterface* interface);
+public:
+	explicit CreatureEvent(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) final;
+	bool configureEvent(const pugi::xml_node& node) final;
 
-		CreatureEventType_t getEventType() const {
-			return type;
-		}
-		const std::string& getName() const {
-			return eventName;
-		}
-		bool isLoaded() const {
-			return loaded;
-		}
+	CreatureEventType_t getEventType() const { return type; }
+	const std::string& getName() const { return eventName; }
+	bool isLoaded() const { return loaded; }
 
-		void clearEvent();
-		void copyEvent(CreatureEvent* creatureEvent);
+	void clearEvent();
+	void copyEvent(CreatureEvent* creatureEvent);
 
-		//scripting
-		bool executeOnLogin(Player* player);
-		bool executeOnLogout(Player* player);
-		bool executeOnThink(Creature* creature, uint32_t interval);
-		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
-		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
-		void executeOnKill(Creature* creature, Creature* target);
-		bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
-		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
-		bool executeTextEdit(Player* player, Item* item, const std::string& text);
-		void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
-		void executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
-		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
-		//
+	// scripting
+	bool executeOnLogin(Player* player);
+	bool executeOnLogout(Player* player);
+	bool executeOnThink(Creature* creature, uint32_t interval);
+	bool executeOnPrepareDeath(Creature* creature, Creature* killer);
+	bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
+	void executeOnKill(Creature* creature, Creature* target);
+	bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
+	void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
+	bool executeTextEdit(Player* player, Item* item, const std::string& text);
+	void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
+	void executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
+	void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
+	//
 
-	protected:
-		std::string getScriptEventName() const final;
+protected:
+	std::string getScriptEventName() const final;
 
-		std::string eventName;
-		CreatureEventType_t type;
-		bool loaded;
+	std::string eventName;
+	CreatureEventType_t type;
+	bool loaded;
 };
 
 #endif

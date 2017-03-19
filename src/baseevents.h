@@ -24,64 +24,58 @@
 
 class Event
 {
-	public:
-		explicit Event(LuaScriptInterface* interface);
-		virtual ~Event() = default;
+public:
+	explicit Event(LuaScriptInterface* interface);
+	virtual ~Event() = default;
 
-		virtual bool configureEvent(const pugi::xml_node& node) = 0;
+	virtual bool configureEvent(const pugi::xml_node& node) = 0;
 
-		bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const;
-		bool loadScript(const std::string& scriptFile);
-		virtual bool loadFunction(const pugi::xml_attribute&) {
-			return false;
-		}
+	bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const;
+	bool loadScript(const std::string& scriptFile);
+	virtual bool loadFunction(const pugi::xml_attribute&) { return false; }
 
-		bool isScripted() const {
-			return scripted;
-		}
+	bool isScripted() const { return scripted; }
 
-	protected:
-		virtual std::string getScriptEventName() const = 0;
+protected:
+	virtual std::string getScriptEventName() const = 0;
 
-		bool scripted = false;
-		int32_t scriptId = 0;
-		LuaScriptInterface* scriptInterface = nullptr;
+	bool scripted = false;
+	int32_t scriptId = 0;
+	LuaScriptInterface* scriptInterface = nullptr;
 };
 
 class BaseEvents
 {
-	public:
- 		constexpr BaseEvents() = default;
-		virtual ~BaseEvents() = default;
+public:
+	constexpr BaseEvents() = default;
+	virtual ~BaseEvents() = default;
 
-		bool loadFromXml();
-		bool reload();
-		bool isLoaded() const {
-			return loaded;
-		}
+	bool loadFromXml();
+	bool reload();
+	bool isLoaded() const { return loaded; }
 
-	protected:
-		virtual LuaScriptInterface& getScriptInterface() = 0;
-		virtual std::string getScriptBaseName() const = 0;
-		virtual Event* getEvent(const std::string& nodeName) = 0;
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
-		virtual void clear() = 0;
+protected:
+	virtual LuaScriptInterface& getScriptInterface() = 0;
+	virtual std::string getScriptBaseName() const = 0;
+	virtual Event* getEvent(const std::string& nodeName) = 0;
+	virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
+	virtual void clear() = 0;
 
-		bool loaded = false;
+	bool loaded = false;
 };
 
 class CallBack
 {
-	public:
-		CallBack() = default;
+public:
+	CallBack() = default;
 
-		bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
+	bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
 
-	protected:
-		int32_t scriptId = 0;
-		LuaScriptInterface* scriptInterface = nullptr;
+protected:
+	int32_t scriptId = 0;
+	LuaScriptInterface* scriptInterface = nullptr;
 
-		bool loaded = false;
+	bool loaded = false;
 };
 
 #endif

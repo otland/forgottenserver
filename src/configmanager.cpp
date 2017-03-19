@@ -76,7 +76,6 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	lua_pop(L, 1);
 	return val != 0;
 }
-
 }
 
 bool ConfigManager::load()
@@ -94,8 +93,8 @@ bool ConfigManager::load()
 		return false;
 	}
 
-	//parse config
-	if (!loaded) { //info that must be loaded one time (unless we reset the modules involved)
+	// parse config
+	if (!loaded) { // info that must be loaded one time (unless we reset the modules involved)
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
 

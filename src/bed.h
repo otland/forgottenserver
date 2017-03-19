@@ -27,48 +27,38 @@ class Player;
 
 class BedItem final : public Item
 {
-	public:
-		explicit BedItem(uint16_t id);
+public:
+	explicit BedItem(uint16_t id);
 
-		BedItem* getBed() final {
-			return this;
-		}
-		const BedItem* getBed() const final {
-			return this;
-		}
+	BedItem* getBed() final { return this; }
+	const BedItem* getBed() const final { return this; }
 
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		void serializeAttr(PropWriteStream& propWriteStream) const final;
+	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
+	void serializeAttr(PropWriteStream& propWriteStream) const final;
 
-		bool canRemove() const final {
-			return house == nullptr;
-		}
+	bool canRemove() const final { return house == nullptr; }
 
-		uint32_t getSleeper() const {
-			return sleeperGUID;
-		}
+	uint32_t getSleeper() const { return sleeperGUID; }
 
-		void setHouse(House* h) {
-			house = h;
-		}
+	void setHouse(House* h) { house = h; }
 
-		bool canUse(Player* player);
+	bool canUse(Player* player);
 
-		bool trySleep(Player* player);
-		bool sleep(Player* player);
-		void wakeUp(Player* player);
+	bool trySleep(Player* player);
+	bool sleep(Player* player);
+	void wakeUp(Player* player);
 
-		BedItem* getNextBedItem() const;
+	BedItem* getNextBedItem() const;
 
-	protected:
-		void updateAppearance(const Player* player);
-		void regeneratePlayer(Player* player) const;
-		void internalSetSleeper(const Player* player);
-		void internalRemoveSleeper();
+protected:
+	void updateAppearance(const Player* player);
+	void regeneratePlayer(Player* player) const;
+	void internalSetSleeper(const Player* player);
+	void internalRemoveSleeper();
 
-		House* house = nullptr;
-		uint64_t sleepStart;
-		uint32_t sleeperGUID;
+	House* house = nullptr;
+	uint64_t sleepStart;
+	uint32_t sleeperGUID;
 };
 
 #endif

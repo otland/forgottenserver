@@ -22,11 +22,11 @@
 #include "depotchest.h"
 #include "tools.h"
 
-DepotChest::DepotChest(uint16_t type) :
-	Container(type), maxDepotItems(1500) {}
+DepotChest::DepotChest(uint16_t type) : Container(type), maxDepotItems(1500)
+{
+}
 
-ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
-		uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /* = nullptr*/) const
 {
 	const Item* item = thing.getItem();
 	if (item == nullptr) {

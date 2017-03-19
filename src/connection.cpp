@@ -63,7 +63,7 @@ void ConnectionManager::closeAll()
 
 void Connection::close(bool force)
 {
-	//any thread
+	// any thread
 	ConnectionManager::getInstance().releaseConnection(shared_from_this());
 
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
@@ -73,14 +73,13 @@ void Connection::close(bool force)
 	connectionState = CONNECTION_STATE_CLOSED;
 
 	if (protocol) {
-		g_dispatcher.addTask(
-			createTask(std::bind(&Protocol::release, protocol)));
+		g_dispatcher.addTask(createTask(std::bind(&Protocol::release, protocol)));
 	}
 
 	if (messageQueue.empty() || force) {
 		closeSocket();
 	} else {
-		//will be closed by the destructor or onWriteOperation
+		// will be closed by the destructor or onWriteOperation
 	}
 }
 
@@ -120,8 +119,7 @@ void Connection::accept()
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
 		// Read size of the first packet
-		boost::asio::async_read(socket,
-		                        boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
+		boost::asio::async_read(socket, boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
@@ -161,8 +159,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 
 	try {
 		readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
-		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
-		                                    std::placeholders::_1));
+		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
 		// Read packet content
 		msg.setLength(size + NetworkMessage::HEADER_LENGTH);
@@ -186,7 +183,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		return;
 	}
 
-	//Check packet checksum
+	// Check packet checksum
 	uint32_t checksum;
 	int32_t len = msg.getLength() - msg.getBufferPosition() - NetworkMessage::CHECKSUM_LENGTH;
 	if (len > 0) {
@@ -213,22 +210,20 @@ void Connection::parsePacket(const boost::system::error_code& error)
 				return;
 			}
 		} else {
-			msg.skipBytes(1);    // Skip protocol ID
+			msg.skipBytes(1); // Skip protocol ID
 		}
 
 		protocol->onRecvFirstMessage(msg);
 	} else {
-		protocol->onRecvMessage(msg);    // Send the packet to the current protocol
+		protocol->onRecvMessage(msg); // Send the packet to the current protocol
 	}
 
 	try {
 		readTimer.expires_from_now(boost::posix_time::seconds(Connection::read_timeout));
-		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
-		                                    std::placeholders::_1));
+		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
 		// Wait to the next packet
-		boost::asio::async_read(socket,
-		                        boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
+		boost::asio::async_read(socket, boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
 		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::parsePacket] " << e.what() << std::endl;
@@ -255,11 +250,9 @@ void Connection::internalSend(const OutputMessage_ptr& msg)
 	protocol->onSendMessage(msg);
 	try {
 		writeTimer.expires_from_now(boost::posix_time::seconds(Connection::write_timeout));
-		writeTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
-		                                     std::placeholders::_1));
+		writeTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
-		boost::asio::async_write(socket,
-		                         boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
+		boost::asio::async_write(socket, boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
 		                         std::bind(&Connection::onWriteOperation, shared_from_this(), std::placeholders::_1));
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::internalSend] " << e.what() << std::endl;
@@ -303,7 +296,7 @@ void Connection::onWriteOperation(const boost::system::error_code& error)
 void Connection::handleTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error)
 {
 	if (error == boost::asio::error::operation_aborted) {
-		//The timer has been manually cancelled
+		// The timer has been manually cancelled
 		return;
 	}
 

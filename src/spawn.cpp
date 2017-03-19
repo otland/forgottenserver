@@ -50,11 +50,8 @@ bool Spawns::loadFromXml(const std::string& filename)
 	loaded = true;
 
 	for (auto spawnNode : doc.child("spawns").children()) {
-		Position centerPos(
-			pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
-			pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
-			pugi::cast<uint16_t>(spawnNode.attribute("centerz").value())
-		);
+		Position centerPos(pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()), pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
+		                   pugi::cast<uint16_t>(spawnNode.attribute("centerz").value()));
 
 		int32_t radius;
 		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
@@ -83,16 +80,14 @@ bool Spawns::loadFromXml(const std::string& filename)
 					dir = DIRECTION_NORTH;
 				}
 
-				Position pos(
-					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
-					centerPos.z
-				);
+				Position pos(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z);
 				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
 				if (interval > MINSPAWN_INTERVAL) {
 					spawn.addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {
-					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than "
+					          << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 				}
 			} else if (strcasecmp(childNode.name(), "npc") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
@@ -110,11 +105,9 @@ bool Spawns::loadFromXml(const std::string& filename)
 					npc->setDirection(static_cast<Direction>(pugi::cast<uint16_t>(directionAttribute.value())));
 				}
 
-				npc->setMasterPos(Position(
-					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
-					centerPos.z
-				), radius);
+				npc->setMasterPos(Position(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+				                           centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z),
+				                  radius);
 				npcList.push_front(npc);
 			}
 		}
@@ -158,8 +151,8 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 		return true;
 	}
 
-	return ((pos.getX() >= centerPos.getX() - radius) && (pos.getX() <= centerPos.getX() + radius) &&
-	        (pos.getY() >= centerPos.getY() - radius) && (pos.getY() <= centerPos.getY() + radius));
+	return ((pos.getX() >= centerPos.getX() - radius) && (pos.getX() <= centerPos.getX() + radius) && (pos.getY() >= centerPos.getY() - radius) &&
+	        (pos.getY() <= centerPos.getY() + radius));
 }
 
 void Spawn::startSpawnCheck()
@@ -199,7 +192,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
 	if (startup) {
-		//No need to send out events to the surrounding since there is no one out there to listen!
+		// No need to send out events to the surrounding since there is no one out there to listen!
 		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
 			return false;
 		}

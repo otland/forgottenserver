@@ -47,7 +47,9 @@ bool Database::connect()
 	mysql_options(handle, MYSQL_OPT_RECONNECT, &reconnect);
 
 	// connects to database
-	if (!mysql_real_connect(handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(), g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(), g_config.getNumber(ConfigManager::SQL_PORT), g_config.getString(ConfigManager::MYSQL_SOCK).c_str(), 0)) {
+	if (!mysql_real_connect(handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(), g_config.getString(ConfigManager::MYSQL_USER).c_str(),
+	                        g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(),
+	                        g_config.getNumber(ConfigManager::SQL_PORT), g_config.getString(ConfigManager::MYSQL_SOCK).c_str(), 0)) {
 		std::cout << std::endl << "MySQL Error Message: " << mysql_error(handle) << std::endl;
 		return false;
 	}
@@ -103,7 +105,8 @@ bool Database::executeQuery(const std::string& query)
 	while (mysql_real_query(handle, query.c_str(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query.substr(0, 256) << std::endl << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
-		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053/*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
+		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053 /*ER_SERVER_SHUTDOWN*/ &&
+		    error != CR_CONNECTION_ERROR) {
 			success = false;
 			break;
 		}
@@ -124,11 +127,12 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 {
 	databaseLock.lock();
 
-	retry:
+retry:
 	while (mysql_real_query(handle, query.c_str(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query << std::endl << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
-		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053/*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
+		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053 /*ER_SERVER_SHUTDOWN*/ &&
+		    error != CR_CONNECTION_ERROR) {
 			break;
 		}
 		std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -140,7 +144,8 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	if (res == nullptr) {
 		std::cout << "[Error - mysql_store_result] Query: " << query << std::endl << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
-		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053/*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
+		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053 /*ER_SERVER_SHUTDOWN*/ &&
+		    error != CR_CONNECTION_ERROR) {
 			databaseLock.unlock();
 			return nullptr;
 		}

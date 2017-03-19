@@ -24,12 +24,12 @@
 
 extern Game g_game;
 
-Task* createTask(std::function<void (void)> f)
+Task* createTask(std::function<void(void)> f)
 {
 	return new Task(std::move(f));
 }
 
-Task* createTask(uint32_t expiration, std::function<void (void)> f)
+Task* createTask(uint32_t expiration, std::function<void(void)> f)
 {
 	return new Task(expiration, std::move(f));
 }
@@ -44,7 +44,7 @@ void Dispatcher::threadMain()
 		taskLockUnique.lock();
 
 		if (taskList.empty()) {
-			//if the list is empty wait for signal
+			// if the list is empty wait for signal
 			taskSignal.wait(taskLockUnique);
 		}
 

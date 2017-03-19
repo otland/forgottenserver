@@ -36,7 +36,6 @@
 #include "monster.h"
 #include "events.h"
 
-
 extern Dispatcher g_dispatcher;
 
 extern ConfigManager g_config;
@@ -55,8 +54,7 @@ extern LuaEnvironment g_luaEnvironment;
 
 using ErrorCode = boost::system::error_code;
 
-Signals::Signals(boost::asio::io_service& service) :
-	set(service)
+Signals::Signals(boost::asio::io_service& service) : set(service)
 {
 	set.add(SIGINT);
 	set.add(SIGTERM);
@@ -70,9 +68,9 @@ Signals::Signals(boost::asio::io_service& service) :
 
 void Signals::asyncWait()
 {
-	set.async_wait([this] (ErrorCode err, int signal) {
+	set.async_wait([this](ErrorCode err, int signal) {
 		if (err) {
-			std::cerr << "Signal handling error: "  << err.message() << std::endl;
+			std::cerr << "Signal handling error: " << err.message() << std::endl;
 			return;
 		}
 		dispatchSignalHandler(signal);
@@ -82,18 +80,18 @@ void Signals::asyncWait()
 
 void Signals::dispatchSignalHandler(int signal)
 {
-	switch(signal) {
-		case SIGINT: //Shuts the server down
+	switch (signal) {
+		case SIGINT: // Shuts the server down
 			g_dispatcher.addTask(createTask(sigintHandler));
 			break;
-		case SIGTERM: //Shuts the server down
+		case SIGTERM: // Shuts the server down
 			g_dispatcher.addTask(createTask(sigtermHandler));
 			break;
 #ifndef _WIN32
-		case SIGHUP: //Reload config/data
+		case SIGHUP: // Reload config/data
 			g_dispatcher.addTask(createTask(sighupHandler));
 			break;
-		case SIGUSR1: //Saves game state
+		case SIGUSR1: // Saves game state
 			g_dispatcher.addTask(createTask(sigusr1Handler));
 			break;
 #endif
@@ -104,21 +102,21 @@ void Signals::dispatchSignalHandler(int signal)
 
 void Signals::sigtermHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
 void Signals::sigusr1Handler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGUSR1 received, saving the game state..." << std::endl;
 	g_game.saveGameState();
 }
 
 void Signals::sighupHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGHUP received, reloading config files..." << std::endl;
 
 	g_actions->reload();
@@ -179,7 +177,7 @@ void Signals::sighupHandler()
 
 void Signals::sigintHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGINT received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }

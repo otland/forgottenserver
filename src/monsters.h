@@ -22,22 +22,23 @@
 
 #include "creature.h"
 
-
 const uint32_t MAX_LOOTCHANCE = 100000;
 const uint32_t MAX_STATICWALK = 100;
 
-struct LootBlock {
+struct LootBlock
+{
 	uint16_t id;
 	uint32_t countmax;
 	uint32_t chance;
 
-	//optional
+	// optional
 	int32_t subType;
 	int32_t actionId;
 	std::string text;
 
 	std::vector<LootBlock> childLoot;
-	LootBlock() {
+	LootBlock()
+	{
 		id = 0;
 		countmax = 0;
 		chance = 0;
@@ -47,7 +48,8 @@ struct LootBlock {
 	}
 };
 
-struct summonBlock_t {
+struct summonBlock_t
+{
 	std::string name;
 	uint32_t chance;
 	uint32_t speed;
@@ -56,20 +58,22 @@ struct summonBlock_t {
 };
 
 class BaseSpell;
-struct spellBlock_t {
+struct spellBlock_t
+{
 	constexpr spellBlock_t() = default;
 	~spellBlock_t();
 	spellBlock_t(const spellBlock_t& other) = delete;
 	spellBlock_t& operator=(const spellBlock_t& other) = delete;
-	spellBlock_t(spellBlock_t&& other) :
-		spell(other.spell),
-		chance(other.chance),
-		speed(other.speed),
-		range(other.range),
-		minCombatValue(other.minCombatValue),
-		maxCombatValue(other.maxCombatValue),
-		combatSpell(other.combatSpell),
-		isMelee(other.isMelee) {
+	spellBlock_t(spellBlock_t&& other)
+	    : spell(other.spell),
+	      chance(other.chance),
+	      speed(other.speed),
+	      range(other.range),
+	      minCombatValue(other.minCombatValue),
+	      maxCombatValue(other.maxCombatValue),
+	      combatSpell(other.combatSpell),
+	      isMelee(other.isMelee)
+	{
 		other.spell = nullptr;
 	}
 
@@ -83,14 +87,16 @@ struct spellBlock_t {
 	bool isMelee = false;
 };
 
-struct voiceBlock_t {
+struct voiceBlock_t
+{
 	std::string text;
 	bool yellText;
 };
 
 class MonsterType
 {
-	struct MonsterInfo {
+	struct MonsterInfo
+	{
 		LuaScriptInterface* scriptInterface;
 
 		std::map<CombatType_t, int32_t> elementMap;
@@ -131,7 +137,7 @@ class MonsterType
 		int32_t runAwayHealth = 0;
 		int32_t health = 100;
 		int32_t healthMax = 100;
-		int32_t changeTargetChance =0;
+		int32_t changeTargetChance = 0;
 		int32_t defense = 0;
 		int32_t armor = 0;
 
@@ -146,56 +152,53 @@ class MonsterType
 		bool hiddenHealth = false;
 	};
 
-	public:
-		MonsterType() = default;
+public:
+	MonsterType() = default;
 
-		// non-copyable
-		MonsterType(const MonsterType&) = delete;
-		MonsterType& operator=(const MonsterType&) = delete;
+	// non-copyable
+	MonsterType(const MonsterType&) = delete;
+	MonsterType& operator=(const MonsterType&) = delete;
 
-		std::string name;
-		std::string nameDescription;
+	std::string name;
+	std::string nameDescription;
 
-		MonsterInfo info;
+	MonsterInfo info;
 
-		void createLoot(Container* corpse);
-		bool createLootContainer(Container* parent, const LootBlock& lootblock);
-		std::vector<Item*> createLootItem(const LootBlock& lootBlock);
+	void createLoot(Container* corpse);
+	bool createLootContainer(Container* parent, const LootBlock& lootblock);
+	std::vector<Item*> createLootItem(const LootBlock& lootBlock);
 };
 
 class Monsters
 {
-	public:
-		Monsters() = default;
-		// non-copyable
-		Monsters(const Monsters&) = delete;
-		Monsters& operator=(const Monsters&) = delete;
+public:
+	Monsters() = default;
+	// non-copyable
+	Monsters(const Monsters&) = delete;
+	Monsters& operator=(const Monsters&) = delete;
 
-		bool loadFromXml(bool reloading = false);
-		bool isLoaded() const {
-			return loaded;
-		}
-		bool reload();
+	bool loadFromXml(bool reloading = false);
+	bool isLoaded() const { return loaded; }
+	bool reload();
 
-		MonsterType* getMonsterType(const std::string& name);
+	MonsterType* getMonsterType(const std::string& name);
 
-		static uint32_t getLootRandom();
+	static uint32_t getLootRandom();
 
-	private:
-		ConditionDamage* getDamageCondition(ConditionType_t conditionType,
-		                                    int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval);
-		bool deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description = "");
+private:
+	ConditionDamage* getDamageCondition(ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval);
+	bool deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description = "");
 
-		MonsterType* loadMonster(const std::string& file, const std::string& monsterName, bool reloading = false);
+	MonsterType* loadMonster(const std::string& file, const std::string& monsterName, bool reloading = false);
 
-		void loadLootContainer(const pugi::xml_node& node, LootBlock&);
-		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
+	void loadLootContainer(const pugi::xml_node& node, LootBlock&);
+	bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
-		std::map<std::string, MonsterType> monsters;
-		std::map<std::string, std::string> unloadedMonsters;
-		std::unique_ptr<LuaScriptInterface> scriptInterface;
+	std::map<std::string, MonsterType> monsters;
+	std::map<std::string, std::string> unloadedMonsters;
+	std::unique_ptr<LuaScriptInterface> scriptInterface;
 
-		bool loaded = false;
+	bool loaded = false;
 };
 
 #endif

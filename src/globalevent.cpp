@@ -27,8 +27,7 @@
 
 extern ConfigManager g_config;
 
-GlobalEvents::GlobalEvents() :
-	scriptInterface("GlobalEvent Interface")
+GlobalEvents::GlobalEvents() : scriptInterface("GlobalEvent Interface")
 {
 	scriptInterface.initState();
 }
@@ -70,7 +69,7 @@ Event* GlobalEvents::getEvent(const std::string& nodeName)
 
 bool GlobalEvents::registerEvent(Event* event, const pugi::xml_node&)
 {
-	GlobalEvent* globalEvent = static_cast<GlobalEvent*>(event); //event is guaranteed to be a GlobalEvent
+	GlobalEvent* globalEvent = static_cast<GlobalEvent*>(event); // event is guaranteed to be a GlobalEvent
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
 		auto result = timerMap.emplace(globalEvent->getName(), globalEvent);
 		if (result.second) {
@@ -139,8 +138,7 @@ void GlobalEvents::timer()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
-							                std::bind(&GlobalEvents::timer, this)));
+		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000), std::bind(&GlobalEvents::timer, this)));
 	}
 }
 
@@ -190,8 +188,10 @@ void GlobalEvents::execute(GlobalEvent_t type) const
 GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 {
 	switch (type) {
-		case GLOBALEVENT_NONE: return thinkMap;
-		case GLOBALEVENT_TIMER: return timerMap;
+		case GLOBALEVENT_NONE:
+			return thinkMap;
+		case GLOBALEVENT_TIMER:
+			return timerMap;
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
 		case GLOBALEVENT_RECORD: {
@@ -203,11 +203,14 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			}
 			return retMap;
 		}
-		default: return GlobalEventMap();
+		default:
+			return GlobalEventMap();
 	}
 }
 
-GlobalEvent::GlobalEvent(LuaScriptInterface* interface) : Event(interface) {}
+GlobalEvent::GlobalEvent(LuaScriptInterface* interface) : Event(interface)
+{
+}
 
 bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 {
@@ -237,14 +240,16 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		if (params.size() > 1) {
 			min = params[1];
 			if (min < 0 || min > 59) {
-				std::cout << "[Error - GlobalEvent::configureEvent] Invalid minute \"" << attr.as_string() << "\" for globalevent with name: " << name << std::endl;
+				std::cout << "[Error - GlobalEvent::configureEvent] Invalid minute \"" << attr.as_string() << "\" for globalevent with name: " << name
+				          << std::endl;
 				return false;
 			}
 
 			if (params.size() > 2) {
 				sec = params[2];
 				if (sec < 0 || sec > 59) {
-					std::cout << "[Error - GlobalEvent::configureEvent] Invalid second \"" << attr.as_string() << "\" for globalevent with name: " << name << std::endl;
+					std::cout << "[Error - GlobalEvent::configureEvent] Invalid second \"" << attr.as_string() << "\" for globalevent with name: " << name
+					          << std::endl;
 					return false;
 				}
 			}
@@ -288,17 +293,22 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 std::string GlobalEvent::getScriptEventName() const
 {
 	switch (eventType) {
-		case GLOBALEVENT_STARTUP: return "onStartup";
-		case GLOBALEVENT_SHUTDOWN: return "onShutdown";
-		case GLOBALEVENT_RECORD: return "onRecord";
-		case GLOBALEVENT_TIMER: return "onTime";
-		default: return "onThink";
+		case GLOBALEVENT_STARTUP:
+			return "onStartup";
+		case GLOBALEVENT_SHUTDOWN:
+			return "onShutdown";
+		case GLOBALEVENT_RECORD:
+			return "onRecord";
+		case GLOBALEVENT_TIMER:
+			return "onTime";
+		default:
+			return "onThink";
 	}
 }
 
 bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 {
-	//onRecord(current, old)
+	// onRecord(current, old)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
 		return false;

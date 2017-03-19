@@ -24,9 +24,9 @@ using GuildWarVector = std::vector<uint32_t>;
 
 class IOGuild
 {
-	public:
-		static uint32_t getGuildIdByName(const std::string& name);
-		static void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
+public:
+	static uint32_t getGuildIdByName(const std::string& name);
+	static void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
 };
 
 #endif

@@ -24,34 +24,26 @@
 
 class DepotChest final : public Container
 {
-	public:
-		explicit DepotChest(uint16_t type);
+public:
+	explicit DepotChest(uint16_t type);
 
-		//serialization
-		void setMaxDepotItems(uint32_t maxitems) {
-			maxDepotItems = maxitems;
-		}
+	// serialization
+	void setMaxDepotItems(uint32_t maxitems) { maxDepotItems = maxitems; }
 
-		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const;
+	// cylinder implementations
+	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER);
+	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
+	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER);
 
-		//overrides
-		bool canRemove() const {
-			return false;
-		}
+	// overrides
+	bool canRemove() const { return false; }
 
-		Cylinder* getParent() const;
-		Cylinder* getRealParent() const {
-			return parent;
-		}
+	Cylinder* getParent() const;
+	Cylinder* getRealParent() const { return parent; }
 
-	private:
-		uint32_t maxDepotItems;
+private:
+	uint32_t maxDepotItems;
 };
 
 #endif
-

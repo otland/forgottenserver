@@ -28,68 +28,65 @@ using ActionFunction = std::function<bool(Player* player, Item* item, const Posi
 
 class Action : public Event
 {
-	public:
-		explicit Action(LuaScriptInterface* interface);
+public:
+	explicit Action(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const pugi::xml_attribute& attr) override;
+	bool configureEvent(const pugi::xml_node& node) override;
+	bool loadFunction(const pugi::xml_attribute& attr) override;
 
-		//scripting
-		virtual bool executeUse(Player* player, Item* item, const Position& fromPosition,
-			Thing* target, const Position& toPosition, bool isHotkey);
+	// scripting
+	virtual bool executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey);
 
-		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
-		virtual bool hasOwnErrorHandler() {
-			return false;
-		}
-		virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const;
+	virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
+	virtual bool hasOwnErrorHandler() { return false; }
+	virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const;
 
-		ActionFunction function;
+	ActionFunction function;
 
-	protected:
-		std::string getScriptEventName() const override;
+protected:
+	std::string getScriptEventName() const override;
 
-		bool allowFarUse;
-		bool checkFloor;
-		bool checkLineOfSight;
+	bool allowFarUse;
+	bool checkFloor;
+	bool checkLineOfSight;
 };
 
 class Actions final : public BaseEvents
 {
-	public:
-		Actions();
-		~Actions();
+public:
+	Actions();
+	~Actions();
 
-		// non-copyable
-		Actions(const Actions&) = delete;
-		Actions& operator=(const Actions&) = delete;
+	// non-copyable
+	Actions(const Actions&) = delete;
+	Actions& operator=(const Actions&) = delete;
 
-		bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, Creature* creature = nullptr);
+	bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
+	bool useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey, Creature* creature = nullptr);
 
-		ReturnValue canUse(const Player* player, const Position& pos);
-		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
-		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
+	ReturnValue canUse(const Player* player, const Position& pos);
+	ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
+	ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-	protected:
-		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
+protected:
+	ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
+	static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
-		void clear() final;
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+	void clear() final;
+	LuaScriptInterface& getScriptInterface() final;
+	std::string getScriptBaseName() const final;
+	Event* getEvent(const std::string& nodeName) final;
+	bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
-		using ActionUseMap = std::map<uint16_t, Action*>;
-		ActionUseMap useItemMap;
-		ActionUseMap uniqueItemMap;
-		ActionUseMap actionItemMap;
+	using ActionUseMap = std::map<uint16_t, Action*>;
+	ActionUseMap useItemMap;
+	ActionUseMap uniqueItemMap;
+	ActionUseMap actionItemMap;
 
-		Action* getAction(const Item* item);
-		void clearMap(ActionUseMap& map);
+	Action* getAction(const Item* item);
+	void clearMap(ActionUseMap& map);
 
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface scriptInterface;
 };
 
 #endif

@@ -55,7 +55,8 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	auto output = OutputMessagePool::getOutputMessage();
 	if (!account.key.empty()) {
-		if (token.empty() || !(token == generateToken(account.key, ticks) || token == generateToken(account.key, ticks - 1) || token == generateToken(account.key, ticks + 1))) {
+		if (token.empty() ||
+		    !(token == generateToken(account.key, ticks) || token == generateToken(account.key, ticks - 1) || token == generateToken(account.key, ticks + 1))) {
 			output->addByte(0x0D);
 			output->addByte(0);
 			send(output);
@@ -66,12 +67,12 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0);
 	}
 
-	//Update premium days
+	// Update premium days
 	Game::updatePremium(account);
 
 	const std::string& motd = g_config.getString(ConfigManager::MOTD);
 	if (!motd.empty()) {
-		//Add MOTD
+		// Add MOTD
 		output->addByte(0x14);
 
 		std::ostringstream ss;
@@ -79,11 +80,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addString(ss.str());
 	}
 
-	//Add session key
+	// Add session key
 	output->addByte(0x28);
 	output->addString(accountName + "\n" + password + "\n" + token + "\n" + std::to_string(ticks));
 
-	//Add char list
+	// Add char list
 	output->addByte(0x64);
 
 	output->addByte(1); // number of worlds
@@ -101,7 +102,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addString(account.characters[i]);
 	}
 
-	//Add premium days
+	// Add premium days
 	output->addByte(0);
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		output->addByte(1);
@@ -187,7 +188,8 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		}
 
 		std::ostringstream ss;
-		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
+		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n"
+		   << banInfo.reason;
 		disconnectClient(ss.str(), version);
 		return;
 	}

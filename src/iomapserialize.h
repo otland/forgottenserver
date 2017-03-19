@@ -25,18 +25,18 @@
 
 class IOMapSerialize
 {
-	public:
-		static void loadHouseItems(Map* map);
-		static bool saveHouseItems();
-		static bool loadHouseInfo();
-		static bool saveHouseInfo();
+public:
+	static void loadHouseItems(Map* map);
+	static bool saveHouseItems();
+	static bool loadHouseInfo();
+	static bool saveHouseInfo();
 
-	protected:
-		static void saveItem(PropWriteStream& stream, const Item* item);
-		static void saveTile(PropWriteStream& stream, const Tile* tile);
+protected:
+	static void saveItem(PropWriteStream& stream, const Item* item);
+	static void saveTile(PropWriteStream& stream, const Tile* tile);
 
-		static bool loadContainer(PropStream& propStream, Container* container);
-		static bool loadItem(PropStream& propStream, Cylinder* parent);
+	static bool loadContainer(PropStream& propStream, Container* container);
+	static bool loadItem(PropStream& propStream, Cylinder* parent);
 };
 
 #endif

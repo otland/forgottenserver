@@ -103,7 +103,7 @@ bool Party::leaveParty(Player* player)
 		}
 	}
 
-	//since we already passed the leadership, we remove the player from the list
+	// since we already passed the leadership, we remove the player from the list
 	auto it = std::find(memberList.begin(), memberList.end(), player);
 	if (it != memberList.end()) {
 		memberList.erase(it);
@@ -148,7 +148,7 @@ bool Party::passPartyLeadership(Player* player)
 		return false;
 	}
 
-	//Remove it before to broadcast the message correctly
+	// Remove it before to broadcast the message correctly
 	auto it = std::find(memberList.begin(), memberList.end(), player);
 	if (it != memberList.end()) {
 		memberList.erase(it);
@@ -222,13 +222,13 @@ bool Party::joinParty(Player& player)
 
 	const std::string& leaderName = leader->getName();
 	ss.str(std::string());
-	ss << "You have joined " << leaderName << "'" << (leaderName.back() == 's' ? "" : "s") <<
-	   " party. Open the party channel to communicate with your companions.";
+	ss << "You have joined " << leaderName << "'" << (leaderName.back() == 's' ? "" : "s")
+	   << " party. Open the party channel to communicate with your companions.";
 	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 	return true;
 }
 
-bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
+bool Party::removeInvite(Player& player, bool removeFromPlayer /* = true*/)
 {
 	auto it = std::find(inviteList.begin(), inviteList.end(), &player);
 	if (it == inviteList.end()) {
@@ -410,7 +410,7 @@ bool Party::setSharedExperience(Player* player, bool sharedExpActive)
 	return true;
 }
 
-void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
+void Party::shareExperience(uint64_t experience, Creature* source /* = nullptr*/)
 {
 	uint64_t shareExperience = static_cast<uint64_t>(std::ceil((static_cast<double>(experience) * (extraExpRate + 1)) / (memberList.size() + 1)));
 	for (Player* member : memberList) {
@@ -442,7 +442,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 	}
 
 	if (!player->hasFlag(PlayerFlag_NotGainInFight)) {
-		//check if the player has healed/attacked anything recently
+		// check if the player has healed/attacked anything recently
 		auto it = ticksMap.find(player->getID());
 		if (it == ticksMap.end()) {
 			return false;

@@ -22,7 +22,8 @@
 
 static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
 
-enum MagicEffectClasses : uint8_t {
+enum MagicEffectClasses : uint8_t
+{
 	CONST_ME_NONE,
 
 	CONST_ME_DRAWBLOOD = 1,
@@ -115,7 +116,8 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_PLUNGING_FISH = 175,
 };
 
-enum ShootType_t : uint8_t {
+enum ShootType_t : uint8_t
+{
 	CONST_ANI_NONE,
 
 	CONST_ANI_SPEAR = 1,
@@ -176,7 +178,8 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_WEAPONTYPE = 0xFE, // 254
 };
 
-enum SpeakClasses : uint8_t {
+enum SpeakClasses : uint8_t
+{
 	TALKTYPE_SAY = 1,
 	TALKTYPE_WHISPER = 2,
 	TALKTYPE_YELL = 3,
@@ -187,26 +190,27 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_PRIVATE_NP = 10,
 	TALKTYPE_PRIVATE_PN = 12,
 	TALKTYPE_BROADCAST = 13,
-	TALKTYPE_CHANNEL_R1 = 14, //red - #c text
+	TALKTYPE_CHANNEL_R1 = 14,       // red - #c text
 	TALKTYPE_PRIVATE_RED_FROM = 15, //@name@text
-	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
+	TALKTYPE_PRIVATE_RED_TO = 16,   //@name@text
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
 
 	TALKTYPE_CHANNEL_R2 = 0xFF, //#d
 };
 
-enum MessageClasses : uint8_t {
+enum MessageClasses : uint8_t
+{
 	MESSAGE_STATUS_CONSOLE_BLUE = 4, /*FIXME Blue message in the console*/
 
 	MESSAGE_STATUS_CONSOLE_RED = 13, /*Red message in the console*/
 
 	MESSAGE_STATUS_DEFAULT = 17, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_STATUS_WARNING = 18, /*Red message in game window and in the console*/
-	MESSAGE_EVENT_ADVANCE = 19, /*White message in game window and in the console*/
+	MESSAGE_EVENT_ADVANCE = 19,  /*White message in game window and in the console*/
 
 	MESSAGE_STATUS_SMALL = 21, /*White message at the bottom of the game window"*/
-	MESSAGE_INFO_DESCR = 22, /*Green message in game window and in the console*/
+	MESSAGE_INFO_DESCR = 22,   /*Green message in game window and in the console*/
 	MESSAGE_DAMAGE_DEALT = 23,
 	MESSAGE_DAMAGE_RECEIVED = 24,
 	MESSAGE_HEALED = 25,
@@ -217,14 +221,15 @@ enum MessageClasses : uint8_t {
 	MESSAGE_EVENT_DEFAULT = 30, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_LOOT = 31,
 
-	MESSAGE_GUILD = 33, /*White message in channel (+ channelId)*/
-	MESSAGE_PARTY_MANAGEMENT = 34, /*White message in channel (+ channelId)*/
-	MESSAGE_PARTY = 35, /*White message in channel (+ channelId)*/
-	MESSAGE_EVENT_ORANGE = 36, /*Orange message in the console*/
-	MESSAGE_STATUS_CONSOLE_ORANGE = 37,  /*Orange message in the console*/
+	MESSAGE_GUILD = 33,                 /*White message in channel (+ channelId)*/
+	MESSAGE_PARTY_MANAGEMENT = 34,      /*White message in channel (+ channelId)*/
+	MESSAGE_PARTY = 35,                 /*White message in channel (+ channelId)*/
+	MESSAGE_EVENT_ORANGE = 36,          /*Orange message in the console*/
+	MESSAGE_STATUS_CONSOLE_ORANGE = 37, /*Orange message in the console*/
 };
 
-enum FluidColors_t : uint8_t {
+enum FluidColors_t : uint8_t
+{
 	FLUID_EMPTY,
 	FLUID_BLUE,
 	FLUID_RED,
@@ -235,7 +240,8 @@ enum FluidColors_t : uint8_t {
 	FLUID_PURPLE,
 };
 
-enum FluidTypes_t : uint8_t {
+enum FluidTypes_t : uint8_t
+{
 	FLUID_NONE = FLUID_EMPTY,
 	FLUID_WATER = FLUID_BLUE,
 	FLUID_BLOOD = FLUID_RED,
@@ -264,40 +270,16 @@ enum FluidTypes_t : uint8_t {
 };
 
 const uint8_t reverseFluidMap[] = {
-	FLUID_EMPTY,
-	FLUID_WATER,
-	FLUID_MANA,
-	FLUID_BEER,
-	FLUID_EMPTY,
-	FLUID_BLOOD,
-	FLUID_SLIME,
-	FLUID_EMPTY,
-	FLUID_LEMONADE,
-	FLUID_MILK,
+    FLUID_EMPTY, FLUID_WATER, FLUID_MANA, FLUID_BEER, FLUID_EMPTY, FLUID_BLOOD, FLUID_SLIME, FLUID_EMPTY, FLUID_LEMONADE, FLUID_MILK,
 };
 
 const uint8_t clientToServerFluidMap[] = {
-	FLUID_EMPTY,
-	FLUID_WATER,
-	FLUID_MANA,
-	FLUID_BEER,
-	FLUID_MUD,
-	FLUID_BLOOD,
-	FLUID_SLIME,
-	FLUID_RUM,
-	FLUID_LEMONADE,
-	FLUID_MILK,
-	FLUID_WINE,
-	FLUID_LIFE,
-	FLUID_URINE,
-	FLUID_OIL,
-	FLUID_FRUITJUICE,
-	FLUID_COCONUTMILK,
-	FLUID_TEA,
-	FLUID_MEAD,
+    FLUID_EMPTY, FLUID_WATER, FLUID_MANA, FLUID_BEER,  FLUID_MUD, FLUID_BLOOD,      FLUID_SLIME,       FLUID_RUM, FLUID_LEMONADE,
+    FLUID_MILK,  FLUID_WINE,  FLUID_LIFE, FLUID_URINE, FLUID_OIL, FLUID_FRUITJUICE, FLUID_COCONUTMILK, FLUID_TEA, FLUID_MEAD,
 };
 
-enum ClientFluidTypes_t : uint8_t {
+enum ClientFluidTypes_t : uint8_t
+{
 	CLIENTFLUID_EMPTY = 0,
 	CLIENTFLUID_BLUE = 1,
 	CLIENTFLUID_PURPLE = 2,
@@ -311,21 +293,16 @@ enum ClientFluidTypes_t : uint8_t {
 };
 
 const uint8_t fluidMap[] = {
-	CLIENTFLUID_EMPTY,
-	CLIENTFLUID_BLUE,
-	CLIENTFLUID_RED,
-	CLIENTFLUID_BROWN_1,
-	CLIENTFLUID_GREEN,
-	CLIENTFLUID_YELLOW,
-	CLIENTFLUID_WHITE,
-	CLIENTFLUID_PURPLE,
+    CLIENTFLUID_EMPTY, CLIENTFLUID_BLUE, CLIENTFLUID_RED, CLIENTFLUID_BROWN_1, CLIENTFLUID_GREEN, CLIENTFLUID_YELLOW, CLIENTFLUID_WHITE, CLIENTFLUID_PURPLE,
 };
 
-enum SquareColor_t : uint8_t {
+enum SquareColor_t : uint8_t
+{
 	SQ_COLOR_BLACK = 0,
 };
 
-enum TextColor_t : uint8_t {
+enum TextColor_t : uint8_t
+{
 	TEXTCOLOR_BLUE = 5,
 	TEXTCOLOR_LIGHTGREEN = 30,
 	TEXTCOLOR_LIGHTBLUE = 35,
@@ -341,10 +318,11 @@ enum TextColor_t : uint8_t {
 	TEXTCOLOR_NONE = 255,
 };
 
-enum Icons_t {
+enum Icons_t
+{
 	ICON_POISON = 1 << 0,
 	ICON_BURN = 1 << 1,
-	ICON_ENERGY =  1 << 2,
+	ICON_ENERGY = 1 << 2,
 	ICON_DRUNK = 1 << 3,
 	ICON_MANASHIELD = 1 << 4,
 	ICON_PARALYZE = 1 << 5,
@@ -360,7 +338,8 @@ enum Icons_t {
 	ICON_BLEEDING = 1 << 15,
 };
 
-enum WeaponType_t : uint8_t {
+enum WeaponType_t : uint8_t
+{
 	WEAPON_NONE,
 	WEAPON_SWORD,
 	WEAPON_CLUB,
@@ -371,7 +350,8 @@ enum WeaponType_t : uint8_t {
 	WEAPON_AMMO,
 };
 
-enum Ammo_t : uint8_t {
+enum Ammo_t : uint8_t
+{
 	AMMO_NONE,
 	AMMO_BOLT,
 	AMMO_ARROW,
@@ -382,21 +362,24 @@ enum Ammo_t : uint8_t {
 	AMMO_SNOWBALL,
 };
 
-enum WeaponAction_t : uint8_t {
+enum WeaponAction_t : uint8_t
+{
 	WEAPONACTION_NONE,
 	WEAPONACTION_REMOVECOUNT,
 	WEAPONACTION_REMOVECHARGE,
 	WEAPONACTION_MOVE,
 };
 
-enum WieldInfo_t {
+enum WieldInfo_t
+{
 	WIELDINFO_LEVEL = 1 << 0,
 	WIELDINFO_MAGLV = 1 << 1,
 	WIELDINFO_VOCREQ = 1 << 2,
 	WIELDINFO_PREMIUM = 1 << 3,
 };
 
-enum Skulls_t : uint8_t {
+enum Skulls_t : uint8_t
+{
 	SKULL_NONE = 0,
 	SKULL_YELLOW = 1,
 	SKULL_GREEN = 2,
@@ -406,7 +389,8 @@ enum Skulls_t : uint8_t {
 	SKULL_ORANGE = 6,
 };
 
-enum PartyShields_t : uint8_t {
+enum PartyShields_t : uint8_t
+{
 	SHIELD_NONE = 0,
 	SHIELD_WHITEYELLOW = 1,
 	SHIELD_WHITEBLUE = 2,
@@ -421,7 +405,8 @@ enum PartyShields_t : uint8_t {
 	SHIELD_GRAY = 11,
 };
 
-enum GuildEmblems_t : uint8_t {
+enum GuildEmblems_t : uint8_t
+{
 	GUILDEMBLEM_NONE = 0,
 	GUILDEMBLEM_ALLY = 1,
 	GUILDEMBLEM_ENEMY = 2,
@@ -430,7 +415,8 @@ enum GuildEmblems_t : uint8_t {
 	GUILDEMBLEM_OTHER = 5,
 };
 
-enum item_t : uint16_t {
+enum item_t : uint16_t
+{
 	ITEM_BROWSEFIELD = 460, // for internal use
 
 	ITEM_FIREFIELD_PVP_FULL = 1487,
@@ -481,10 +467,11 @@ enum item_t : uint16_t {
 
 	ITEM_AMULETOFLOSS = 2173,
 
-	ITEM_DOCUMENT_RO = 1968, //read-only
+	ITEM_DOCUMENT_RO = 1968, // read-only
 };
 
-enum PlayerFlags : uint64_t {
+enum PlayerFlags : uint64_t
+{
 	PlayerFlag_CannotUseCombat = 1 << 0,
 	PlayerFlag_CannotAttackPlayer = 1 << 1,
 	PlayerFlag_CannotAttackMonster = 1 << 2,
@@ -525,7 +512,8 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
 };
 
-enum ReloadTypes_t : uint8_t  {
+enum ReloadTypes_t : uint8_t
+{
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_ACTIONS,
 	RELOAD_TYPE_CHAT,
@@ -550,7 +538,7 @@ static constexpr int32_t CHANNEL_GUILD = 0x00;
 static constexpr int32_t CHANNEL_PARTY = 0x01;
 static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
 
-//Reserved player storage key ranges;
+// Reserved player storage key ranges;
 //[10000000 - 20000000];
 static constexpr int32_t PSTRG_RESERVED_RANGE_START = 10000000;
 static constexpr int32_t PSTRG_RESERVED_RANGE_SIZE = 10000000;
@@ -561,7 +549,6 @@ static constexpr int32_t PSTRG_OUTFITS_RANGE_SIZE = 500;
 static constexpr int32_t PSTRG_MOUNTS_RANGE_START = (PSTRG_RESERVED_RANGE_START + 2001);
 static constexpr int32_t PSTRG_MOUNTS_RANGE_SIZE = 10;
 static constexpr int32_t PSTRG_MOUNTS_CURRENTMOUNT = (PSTRG_MOUNTS_RANGE_START + 10);
-
 
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
 

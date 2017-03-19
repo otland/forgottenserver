@@ -133,7 +133,8 @@ bool ChatChannel::removeUser(const Player& player)
 	return true;
 }
 
-bool ChatChannel::hasUser(const Player& player) {
+bool ChatChannel::hasUser(const Player& player)
+{
 	return users.find(player.getID()) != users.end();
 }
 
@@ -162,7 +163,7 @@ bool ChatChannel::executeCanJoinEvent(const Player& player)
 		return true;
 	}
 
-	//canJoin(player)
+	// canJoin(player)
 	LuaScriptInterface* scriptInterface = g_chat->getScriptInterface();
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CanJoinChannelEvent::execute] Call stack overflow" << std::endl;
@@ -187,7 +188,7 @@ bool ChatChannel::executeOnJoinEvent(const Player& player)
 		return true;
 	}
 
-	//onJoin(player)
+	// onJoin(player)
 	LuaScriptInterface* scriptInterface = g_chat->getScriptInterface();
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - OnJoinChannelEvent::execute] Call stack overflow" << std::endl;
@@ -212,7 +213,7 @@ bool ChatChannel::executeOnLeaveEvent(const Player& player)
 		return true;
 	}
 
-	//onLeave(player)
+	// onLeave(player)
 	LuaScriptInterface* scriptInterface = g_chat->getScriptInterface();
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - OnLeaveChannelEvent::execute] Call stack overflow" << std::endl;
@@ -237,7 +238,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 		return true;
 	}
 
-	//onSpeak(player, type, message)
+	// onSpeak(player, type, message)
 	LuaScriptInterface* scriptInterface = g_chat->getScriptInterface();
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - OnSpeakChannelEvent::execute] Call stack overflow" << std::endl;
@@ -278,9 +279,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	return result;
 }
 
-Chat::Chat():
-	scriptInterface("Chat Interface"),
-	dummyPrivate(CHANNEL_PRIVATE, "Private Chat Channel")
+Chat::Chat() : scriptInterface("Chat Interface"), dummyPrivate(CHANNEL_PRIVATE, "Private Chat Channel")
 {
 	scriptInterface.initState();
 }
@@ -356,15 +355,15 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 		}
 
 		case CHANNEL_PRIVATE: {
-			//only 1 private channel for each premium player
+			// only 1 private channel for each premium player
 			if (!player.isPremium() || getPrivateChannel(player)) {
 				return nullptr;
 			}
 
-			//find a free private channel slot
+			// find a free private channel slot
 			for (uint16_t i = 100; i < 10000; ++i) {
 				auto ret = privateChannels.emplace(std::make_pair(i, PrivateChatChannel(i, player.getName() + "'s Channel")));
-				if (ret.second) { //second is a bool that indicates that a new channel has been placed in the map
+				if (ret.second) { // second is a bool that indicates that a new channel has been placed in the map
 					auto& newChannel = (*ret.first).second;
 					newChannel.setOwner(player.getGUID());
 					return &newChannel;

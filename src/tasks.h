@@ -29,58 +29,53 @@ const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono:
 
 class Task
 {
-	public:
-		// DO NOT allocate this class on the stack
-		explicit Task(std::function<void (void)>&& f) : func(std::move(f)) {}
-		Task(uint32_t ms, std::function<void (void)>&& f) :
-			expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f)) {}
+public:
+	// DO NOT allocate this class on the stack
+	explicit Task(std::function<void(void)>&& f) : func(std::move(f)) {}
+	Task(uint32_t ms, std::function<void(void)>&& f) : expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f)) {}
 
-		virtual ~Task() = default;
-		void operator()() {
-			func();
+	virtual ~Task() = default;
+	void operator()() { func(); }
+
+	void setDontExpire() { expiration = SYSTEM_TIME_ZERO; }
+
+	bool hasExpired() const
+	{
+		if (expiration == SYSTEM_TIME_ZERO) {
+			return false;
 		}
+		return expiration < std::chrono::system_clock::now();
+	}
 
-		void setDontExpire() {
-			expiration = SYSTEM_TIME_ZERO;
-		}
-
-		bool hasExpired() const {
-			if (expiration == SYSTEM_TIME_ZERO) {
-				return false;
-			}
-			return expiration < std::chrono::system_clock::now();
-		}
-
-	protected:
-		// Expiration has another meaning for scheduler tasks,
-		// then it is the time the task should be added to the
-		// dispatcher
-		std::chrono::system_clock::time_point expiration = SYSTEM_TIME_ZERO;
-		std::function<void (void)> func;
+protected:
+	// Expiration has another meaning for scheduler tasks,
+	// then it is the time the task should be added to the
+	// dispatcher
+	std::chrono::system_clock::time_point expiration = SYSTEM_TIME_ZERO;
+	std::function<void(void)> func;
 };
 
-Task* createTask(std::function<void (void)> f);
-Task* createTask(uint32_t expiration, std::function<void (void)> f);
+Task* createTask(std::function<void(void)> f);
+Task* createTask(uint32_t expiration, std::function<void(void)> f);
 
-class Dispatcher : public ThreadHolder<Dispatcher> {
-	public:
-		void addTask(Task* task, bool push_front = false);
+class Dispatcher : public ThreadHolder<Dispatcher>
+{
+public:
+	void addTask(Task* task, bool push_front = false);
 
-		void shutdown();
+	void shutdown();
 
-		uint64_t getDispatcherCycle() const {
-			return dispatcherCycle;
-		}
+	uint64_t getDispatcherCycle() const { return dispatcherCycle; }
 
-		void threadMain();
+	void threadMain();
 
-	protected:
-		std::thread thread;
-		std::mutex taskLock;
-		std::condition_variable taskSignal;
+protected:
+	std::thread thread;
+	std::mutex taskLock;
+	std::condition_variable taskSignal;
 
-		std::list<Task*> taskList;
-		uint64_t dispatcherCycle = 0;
+	std::list<Task*> taskList;
+	uint64_t dispatcherCycle = 0;
 };
 
 extern Dispatcher g_dispatcher;

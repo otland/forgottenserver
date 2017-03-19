@@ -40,10 +40,7 @@ Monster* Monster::createMonster(const std::string& name)
 	return new Monster(mType);
 }
 
-Monster::Monster(MonsterType* mType) :
-	Creature(),
-	strDescription(asLowerCaseString(mType->nameDescription)),
-	mType(mType)
+Monster::Monster(MonsterType* mType) : Creature(), strDescription(asLowerCaseString(mType->nameDescription)), mType(mType)
 {
 	defaultOutfit = mType->info.outfit;
 	currentOutfit = mType->info.outfit;
@@ -119,7 +116,7 @@ void Monster::onCreatureAppear(Creature* creature, bool isLogin)
 	}
 
 	if (creature == this) {
-		//We just spawned lets look around to see who is there.
+		// We just spawned lets look around to see who is there.
 		if (isSummon()) {
 			isMasterInRange = canSee(getMaster()->getPosition());
 		}
@@ -171,8 +168,7 @@ void Monster::onRemoveCreature(Creature* creature, bool isLogout)
 	}
 }
 
-void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
-                             const Tile* oldTile, const Position& oldPos, bool teleport)
+void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
@@ -222,7 +218,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
-			isMasterInRange = true;    //Follow master again
+			isMasterInRange = true; // Follow master again
 		}
 
 		updateIdleStatus();
@@ -247,7 +243,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 					}
 				}
 			} else if (isOpponent(creature)) {
-				//we have no target lets try pick this one
+				// we have no target lets try pick this one
 				selectTarget(creature);
 			}
 		}
@@ -303,7 +299,7 @@ void Monster::removeFriend(Creature* creature)
 	}
 }
 
-void Monster::addTarget(Creature* creature, bool pushFront/* = false*/)
+void Monster::addTarget(Creature* creature, bool pushFront /* = false*/)
 {
 	assert(creature != this);
 	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
@@ -375,7 +371,7 @@ void Monster::clearFriendList()
 	friendList.clear();
 }
 
-void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
+void Monster::onCreatureFound(Creature* creature, bool pushFront /* = false*/)
 {
 	if (isFriend(creature)) {
 		addFriend(creature);
@@ -393,7 +389,7 @@ void Monster::onCreatureEnter(Creature* creature)
 	// std::cout << "onCreatureEnter - " << creature->getName() << std::endl;
 
 	if (getMaster() == creature) {
-		//Follow master again
+		// Follow master again
 		isMasterInRange = true;
 	}
 
@@ -434,7 +430,7 @@ bool Monster::isOpponent(const Creature* creature) const
 		}
 	} else {
 		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		        (creature->getMaster() && creature->getMaster()->getPlayer())) {
+		    (creature->getMaster() && creature->getMaster()->getPlayer())) {
 			return true;
 		}
 	}
@@ -447,16 +443,16 @@ void Monster::onCreatureLeave(Creature* creature)
 	// std::cout << "onCreatureLeave - " << creature->getName() << std::endl;
 
 	if (getMaster() == creature) {
-		//Take random steps and only use defense abilities (e.g. heal) until its master comes back
+		// Take random steps and only use defense abilities (e.g. heal) until its master comes back
 		isMasterInRange = false;
 	}
 
-	//update friendList
+	// update friendList
 	if (isFriend(creature)) {
 		removeFriend(creature);
 	}
 
-	//update targetList
+	// update targetList
 	if (isOpponent(creature)) {
 		removeTarget(creature);
 		if (targetList.empty()) {
@@ -538,7 +534,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 		}
 	}
 
-	//lets just pick the first target in the list
+	// lets just pick the first target in the list
 	for (Creature* target : targetList) {
 		if (followCreature != target && selectTarget(target)) {
 			return true;
@@ -566,8 +562,8 @@ void Monster::onFollowCreatureComplete(const Creature* creature)
 	}
 }
 
-BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                              bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool /* field = false */)
+BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense /* = false*/, bool checkArmor /* = false*/,
+                              bool /* field = false */)
 {
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor);
 
@@ -590,11 +586,9 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 	return blockType;
 }
 
-
 bool Monster::isTarget(const Creature* creature) const
 {
-	if (creature->isRemoved() || !creature->isAttackable() ||
-	        creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
+	if (creature->isRemoved() || !creature->isAttackable() || creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
 		return false;
 	}
 
@@ -612,7 +606,7 @@ bool Monster::selectTarget(Creature* creature)
 
 	auto it = std::find(targetList.begin(), targetList.end(), creature);
 	if (it == targetList.end()) {
-		//Target not found in our target list.
+		// Target not found in our target list.
 		return false;
 	}
 
@@ -713,16 +707,16 @@ void Monster::onThink(uint32_t interval)
 			if (isSummon()) {
 				if (!attackedCreature) {
 					if (getMaster() && getMaster()->getAttackedCreature()) {
-						//This happens if the monster is summoned during combat
+						// This happens if the monster is summoned during combat
 						selectTarget(getMaster()->getAttackedCreature());
 					} else if (getMaster() != followCreature) {
-						//Our master has not ordered us to attack anything, lets follow him around instead.
+						// Our master has not ordered us to attack anything, lets follow him around instead.
 						setFollowCreature(getMaster());
 					}
 				} else if (attackedCreature == this) {
 					setFollowCreature(nullptr);
 				} else if (followCreature != attackedCreature) {
-					//This happens just after a master orders an attack, so lets follow it aswell.
+					// This happens just after a master orders an attack, so lets follow it aswell.
 					setFollowCreature(attackedCreature);
 				}
 			} else if (!targetList.empty()) {
@@ -776,7 +770,7 @@ void Monster::doAttacking(uint32_t interval)
 		}
 
 		if (!inRange && spellBlock.isMelee) {
-			//melee swing out of reach
+			// melee swing out of reach
 			extraMeleeAttack = true;
 		}
 	}
@@ -805,8 +799,7 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 	return true;
 }
 
-bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
-                          const spellBlock_t& sb, uint32_t interval, bool& inRange, bool& resetTicks)
+bool Monster::canUseSpell(const Position& pos, const Position& targetPos, const spellBlock_t& sb, uint32_t interval, bool& inRange, bool& resetTicks)
 {
 	inRange = true;
 
@@ -827,7 +820,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		}
 
 		if (attackTicks % sb.speed >= interval) {
-			//already used this spell for this round
+			// already used this spell for this round
 			return false;
 		}
 	}
@@ -888,7 +881,7 @@ void Monster::onThinkDefense(uint32_t interval)
 		}
 
 		if (defenseTicks % spellBlock.speed >= interval) {
-			//already used this spell for this round
+			// already used this spell for this round
 			continue;
 		}
 
@@ -911,7 +904,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			}
 
 			if (defenseTicks % summonBlock.speed >= interval) {
-				//already used this spell for this round
+				// already used this spell for this round
 				continue;
 			}
 
@@ -982,11 +975,7 @@ bool Monster::pushItem(Item* item)
 {
 	const Position& centerPos = item->getPosition();
 
-	static std::vector<std::pair<int32_t, int32_t>> relList {
-		{-1, -1}, {0, -1}, {1, -1},
-		{-1,  0},          {1,  0},
-		{-1,  1}, {0,  1}, {1,  1}
-	};
+	static std::vector<std::pair<int32_t, int32_t>> relList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
 	std::shuffle(relList.begin(), relList.end(), getRandomGenerator());
 
@@ -1004,9 +993,9 @@ bool Monster::pushItem(Item* item)
 
 void Monster::pushItems(Tile* tile)
 {
-	//We can not use iterators here since we can push the item to another tile
-	//which will invalidate the iterator.
-	//start from the end to minimize the amount of traffic
+	// We can not use iterators here since we can push the item to another tile
+	// which will invalidate the iterator.
+	// start from the end to minimize the amount of traffic
 	if (TileItemVector* items = tile->getItemList()) {
 		uint32_t moveCount = 0;
 		uint32_t removeCount = 0;
@@ -1014,8 +1003,7 @@ void Monster::pushItems(Tile* tile)
 		int32_t downItemSize = tile->getDownItemCount();
 		for (int32_t i = downItemSize; --i >= 0;) {
 			Item* item = items->at(i);
-			if (item && item->hasProperty(CONST_PROP_MOVEABLE) && (item->hasProperty(CONST_PROP_BLOCKPATH)
-			        || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
+			if (item && item->hasProperty(CONST_PROP_MOVEABLE) && (item->hasProperty(CONST_PROP_BLOCKPATH) || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
 				if (moveCount < 20 && Monster::pushItem(item)) {
 					++moveCount;
 				} else if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
@@ -1032,11 +1020,7 @@ void Monster::pushItems(Tile* tile)
 
 bool Monster::pushCreature(Creature* creature)
 {
-	static std::vector<Direction> dirList {
-			DIRECTION_NORTH,
-		DIRECTION_WEST, DIRECTION_EAST,
-			DIRECTION_SOUTH
-	};
+	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
 	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 
 	for (Direction dir : dirList) {
@@ -1053,8 +1037,8 @@ bool Monster::pushCreature(Creature* creature)
 
 void Monster::pushCreatures(Tile* tile)
 {
-	//We can not use iterators here since we can push a creature to another tile
-	//which will invalidate the iterator.
+	// We can not use iterators here since we can push a creature to another tile
+	// which will invalidate the iterator.
 	if (CreatureVector* creatures = tile->getCreatures()) {
 		uint32_t removeCount = 0;
 		Monster* lastPushedMonster = nullptr;
@@ -1084,7 +1068,7 @@ void Monster::pushCreatures(Tile* tile)
 bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 {
 	if (isIdle || getHealth() <= 0) {
-		//we dont have anyone watching might aswell stop walking
+		// we dont have anyone watching might aswell stop walking
 		eventWalk = 0;
 		return false;
 	}
@@ -1092,7 +1076,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 	bool result = false;
 	if ((!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
 		if (followCreature || getTimeSinceLastMove() > 1000) {
-			//choose a random direction
+			// choose a random direction
 			result = getRandomStep(getPosition(), direction);
 		}
 	} else if ((isSummon() && isMasterInRange) || followCreature) {
@@ -1100,7 +1084,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 		if (result) {
 			flags |= FLAG_PATHFINDING;
 		} else {
-			//target dancing
+			// target dancing
 			if (attackedCreature && attackedCreature == followCreature) {
 				if (isFleeing()) {
 					result = getDanceStep(getPosition(), direction, false, false);
@@ -1130,11 +1114,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 
 bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) const
 {
-	static std::vector<Direction> dirList{
-			DIRECTION_NORTH,
-		DIRECTION_WEST, DIRECTION_EAST,
-			DIRECTION_SOUTH
-	};
+	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
 	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 
 	for (Direction dir : dirList) {
@@ -1146,8 +1126,7 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) c
 	return false;
 }
 
-bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
-                           bool keepAttack /*= true*/, bool keepDistance /*= true*/)
+bool Monster::getDanceStep(const Position& creaturePos, Direction& direction, bool keepAttack /*= true*/, bool keepDistance /*= true*/)
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
 
@@ -1251,7 +1230,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 	int_fast32_t offsety = Position::getOffsetY(creaturePos, targetPos);
 
 	if (dx <= 1 && dy <= 1) {
-		//seems like a target is near, it this case we need to slow down our movements (as a monster)
+		// seems like a target is near, it this case we need to slow down our movements (as a monster)
 		if (stepDuration < 2) {
 			stepDuration++;
 		}
@@ -1264,10 +1243,10 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 	}
 
 	if (dx == dy) {
-		//player is diagonal to the monster
+		// player is diagonal to the monster
 		if (offsetx >= 1 && offsety >= 1) {
 			// player is NW
-			//escape to SE, S or E [and some extra]
+			// escape to SE, S or E [and some extra]
 			bool s = canWalkTo(creaturePos, DIRECTION_SOUTH);
 			bool e = canWalkTo(creaturePos, DIRECTION_EAST);
 
@@ -1312,8 +1291,8 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 
 			return true;
 		} else if (offsetx <= -1 && offsety <= -1) {
-			//player is SE
-			//escape to NW , W or N [and some extra]
+			// player is SE
+			// escape to NW , W or N [and some extra]
 			bool w = canWalkTo(creaturePos, DIRECTION_WEST);
 			bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 
@@ -1360,8 +1339,8 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 
 			return true;
 		} else if (offsetx >= 1 && offsety <= -1) {
-			//player is SW
-			//escape to NE, N, E [and some extra]
+			// player is SW
+			// escape to NE, N, E [and some extra]
 			bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 			bool e = canWalkTo(creaturePos, DIRECTION_EAST);
 			if (n && e) {
@@ -1408,7 +1387,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			return true;
 		} else if (offsetx <= -1 && offsety >= 1) {
 			// player is NE
-			//escape to SW, S, W [and some extra]
+			// escape to SW, S, W [and some extra]
 			bool w = canWalkTo(creaturePos, DIRECTION_WEST);
 			bool s = canWalkTo(creaturePos, DIRECTION_SOUTH);
 			if (w && s) {
@@ -1454,12 +1433,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 		}
 	}
 
-	//Now let's decide where the player is located to the monster (what direction) so we can decide where to escape.
+	// Now let's decide where the player is located to the monster (what direction) so we can decide where to escape.
 	if (dy > dx) {
 		Direction playerDir = offsety < 0 ? DIRECTION_SOUTH : DIRECTION_NORTH;
 		switch (playerDir) {
 			case DIRECTION_NORTH: {
-				// Player is to the NORTH, so obviously we need to check if we can go SOUTH, if not then let's choose WEST or EAST and again if we can't we need to decide about some diagonal movements.
+				// Player is to the NORTH, so obviously we need to check if we can go SOUTH, if not then let's choose WEST or EAST and again if we can't we need
+				// to decide about some diagonal movements.
 				if (canWalkTo(creaturePos, DIRECTION_SOUTH)) {
 					direction = DIRECTION_SOUTH;
 					return true;
@@ -1825,14 +1805,14 @@ void Monster::updateLookDirection()
 		int32_t dx = std::abs(offsetx);
 		int32_t dy = std::abs(offsety);
 		if (dx > dy) {
-			//look EAST/WEST
+			// look EAST/WEST
 			if (offsetx < 0) {
 				newDir = DIRECTION_WEST;
 			} else {
 				newDir = DIRECTION_EAST;
 			}
 		} else if (dx < dy) {
-			//look NORTH/SOUTH
+			// look NORTH/SOUTH
 			if (offsety < 0) {
 				newDir = DIRECTION_NORTH;
 			} else {
@@ -1891,9 +1871,9 @@ void Monster::drainHealth(Creature* attacker, int32_t damage)
 	}
 }
 
-void Monster::changeHealth(int32_t healthChange, bool sendHealthChange/* = true*/)
+void Monster::changeHealth(int32_t healthChange, bool sendHealthChange /* = true*/)
 {
-	//In case a player with ignore flag set attacks the monster
+	// In case a player with ignore flag set attacks the monster
 	setIdle(false);
 	Creature::changeHealth(healthChange, sendHealthChange);
 }
@@ -1927,7 +1907,6 @@ bool Monster::convinceCreature(Creature* creature)
 		} else if (getMaster() == creature) {
 			return false;
 		}
-
 	}
 	setMaster(creature);
 	setDropLoot(false);
@@ -1935,7 +1914,7 @@ bool Monster::convinceCreature(Creature* creature)
 	setFollowCreature(nullptr);
 	setAttackedCreature(nullptr);
 
-	//destroy summons
+	// destroy summons
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
 		summon->removeMaster();
@@ -1946,7 +1925,7 @@ bool Monster::convinceCreature(Creature* creature)
 	updateTargetList();
 	updateIdleStatus();
 
-	//Notify surrounding about the change
+	// Notify surrounding about the change
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true);
 	g_game.map.getSpectators(spectators, creature->getPosition(), true);
@@ -1986,7 +1965,7 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 			fpp.fullPathSearch = !canUseAttack(getPosition(), creature);
 		}
 	} else if (isFleeing()) {
-		//Distance should be higher than the client view range (Map::maxClientViewportX/Map::maxClientViewportY)
+		// Distance should be higher than the client view range (Map::maxClientViewportX/Map::maxClientViewportY)
 		fpp.maxTargetDist = Map::maxViewportX;
 		fpp.clearSight = false;
 		fpp.keepDistance = true;

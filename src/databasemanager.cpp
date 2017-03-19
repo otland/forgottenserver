@@ -30,7 +30,8 @@ bool DatabaseManager::optimizeTables()
 	Database& db = Database::getInstance();
 	std::ostringstream query;
 
-	query << "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `DATA_FREE` > 0";
+	query << "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))
+	      << " AND `DATA_FREE` > 0";
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -57,7 +58,8 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TABLE_NAME` = " << db.escapeString(tableName) << " LIMIT 1";
+	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))
+	      << " AND `TABLE_NAME` = " << db.escapeString(tableName) << " LIMIT 1";
 	return db.storeQuery(query.str()).get() != nullptr;
 }
 
@@ -73,7 +75,8 @@ int32_t DatabaseManager::getDatabaseVersion()
 {
 	if (!tableExists("server_config")) {
 		Database& db = Database::getInstance();
-		db.executeQuery("CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB");
+		db.executeQuery(
+		    "CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB");
 		db.executeQuery("INSERT INTO `server_config` VALUES ('db_version', 0)");
 		return 0;
 	}
@@ -95,15 +98,15 @@ void DatabaseManager::updateDatabase()
 	luaL_openlibs(L);
 
 #ifndef LUAJIT_VERSION
-	//bit operations for Lua, based on bitlib project release 24
-	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
+	// bit operations for Lua, based on bitlib project release 24
+	// bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
 	luaL_register(L, "bit", LuaScriptInterface::luaBitReg);
 #endif
 
-	//db table
+	// db table
 	luaL_register(L, "db", LuaScriptInterface::luaDatabaseTable);
 
-	//result table
+	// result table
 	luaL_register(L, "result", LuaScriptInterface::luaResultTable);
 
 	int32_t version = getDatabaseVersion();

@@ -23,8 +23,7 @@
 #include "talkaction.h"
 #include "pugicast.h"
 
-TalkActions::TalkActions()
-	: scriptInterface("TalkAction Interface")
+TalkActions::TalkActions() : scriptInterface("TalkAction Interface")
 {
 	scriptInterface.initState();
 }
@@ -129,7 +128,7 @@ std::string TalkAction::getScriptEventName() const
 
 bool TalkAction::executeSay(Player* player, const std::string& param, SpeakClasses type) const
 {
-	//onSay(player, words, param, type)
+	// onSay(player, words, param, type)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
 		return false;

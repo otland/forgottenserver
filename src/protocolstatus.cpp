@@ -30,7 +30,8 @@ extern Game g_game;
 std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
 
-enum RequestedInfo_t : uint16_t {
+enum RequestedInfo_t : uint16_t
+{
 	REQUEST_BASIC_SERVER_INFO = 1 << 0,
 	REQUEST_OWNER_SERVER_INFO = 1 << 1,
 	REQUEST_MISC_SERVER_INFO = 1 << 2,
@@ -58,25 +59,24 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 	ipConnectMap[ip] = OTSYS_TIME();
 
 	switch (msg.getByte()) {
-		//XML info protocol
+		// XML info protocol
 		case 0xFF: {
 			if (msg.getString(4) == "info") {
-				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString,
-									  std::static_pointer_cast<ProtocolStatus>(shared_from_this()))));
+				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString, std::static_pointer_cast<ProtocolStatus>(shared_from_this()))));
 				return;
 			}
 			break;
 		}
 
-		//Another ServerInfo protocol
+		// Another ServerInfo protocol
 		case 0x01: {
 			uint16_t requestedInfo = msg.get<uint16_t>(); // only a Byte is necessary, though we could add new info here
 			std::string characterName;
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.getString();
 			}
-			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, std::static_pointer_cast<ProtocolStatus>(shared_from_this()),
-								  requestedInfo, characterName)));
+			g_dispatcher.addTask(
+			    createTask(std::bind(&ProtocolStatus::sendInfo, std::static_pointer_cast<ProtocolStatus>(shared_from_this()), requestedInfo, characterName)));
 			return;
 		}
 

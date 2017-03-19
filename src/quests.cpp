@@ -157,24 +157,16 @@ bool Quests::loadFromXml()
 
 	uint16_t id = 0;
 	for (auto questNode : doc.child("quests").children()) {
-		quests.emplace_back(
-			questNode.attribute("name").as_string(),
-			++id,
-			pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
-			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
-		);
+		quests.emplace_back(questNode.attribute("name").as_string(), ++id, pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
+		                    pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value()));
 		Quest& quest = quests.back();
 
 		for (auto missionNode : questNode.children()) {
 			std::string mainDescription = missionNode.attribute("description").as_string();
 
-			quest.missions.emplace_back(
-				missionNode.attribute("name").as_string(),
-				pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
-				pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
-				pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
-				missionNode.attribute("ignoreendvalue").as_bool()
-			);
+			quest.missions.emplace_back(missionNode.attribute("name").as_string(), pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
+			                            pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
+			                            pugi::cast<int32_t>(missionNode.attribute("endvalue").value()), missionNode.attribute("ignoreendvalue").as_bool());
 			Mission& mission = quest.missions.back();
 
 			if (mainDescription.empty()) {

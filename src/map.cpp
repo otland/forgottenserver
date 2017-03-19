@@ -103,25 +103,25 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	QTreeLeafNode* leaf = root.createLeaf(x, y, 15);
 
 	if (QTreeLeafNode::newLeaf) {
-		//update north
+		// update north
 		QTreeLeafNode* northLeaf = root.getLeaf(x, y - FLOOR_SIZE);
 		if (northLeaf) {
 			northLeaf->leafS = leaf;
 		}
 
-		//update west leaf
+		// update west leaf
 		QTreeLeafNode* westLeaf = root.getLeaf(x - FLOOR_SIZE, y);
 		if (westLeaf) {
 			westLeaf->leafE = leaf;
 		}
 
-		//update south
+		// update south
 		QTreeLeafNode* southLeaf = root.getLeaf(x, y + FLOOR_SIZE);
 		if (southLeaf) {
 			leaf->leafS = southLeaf;
 		}
 
-		//update east
+		// update east
 		QTreeLeafNode* eastLeaf = root.getLeaf(x + FLOOR_SIZE, y);
 		if (eastLeaf) {
 			leaf->leafE = eastLeaf;
@@ -153,7 +153,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	}
 }
 
-bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/)
+bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos /* = false*/, bool forceLogin /* = false*/)
 {
 	bool foundTile;
 	bool placeInPZ;
@@ -169,19 +169,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	}
 
 	if (!foundTile) {
-		static std::vector<std::pair<int32_t, int32_t>> extendedRelList {
-			                   {0, -2},
-			         {-1, -1}, {0, -1}, {1, -1},
-			{-2, 0}, {-1,  0},          {1,  0}, {2, 0},
-			         {-1,  1}, {0,  1}, {1,  1},
-			                   {0,  2}
-		};
+		static std::vector<std::pair<int32_t, int32_t>> extendedRelList{{0, -2}, {-1, -1}, {0, -1}, {1, -1}, {-2, 0}, {-1, 0},
+		                                                                {1, 0},  {2, 0},   {-1, 1}, {0, 1},  {1, 1},  {0, 2}};
 
-		static std::vector<std::pair<int32_t, int32_t>> normalRelList {
-			{-1, -1}, {0, -1}, {1, -1},
-			{-1,  0},          {1,  0},
-			{-1,  1}, {0,  1}, {1,  1}
-		};
+		static std::vector<std::pair<int32_t, int32_t>> normalRelList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
 		std::vector<std::pair<int32_t, int32_t>>& relList = (extendedPos ? extendedRelList : normalRelList);
 
@@ -225,7 +216,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	return true;
 }
 
-void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* = false*/)
+void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* = false*/)
 {
 	Tile& oldTile = *creature.getTile();
 
@@ -249,7 +240,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 		}
 	}
 
-	//remove the creature
+	// remove the creature
 	oldTile.removeThing(&creature, 0);
 
 	QTreeLeafNode* leaf = getQTNode(oldPos.x, oldPos.y);
@@ -261,7 +252,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 		new_leaf->addCreature(&creature);
 	}
 
-	//add the creature
+	// add the creature
 	newTile.addThing(&creature);
 
 	if (!teleport) {
@@ -278,11 +269,11 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 		}
 	}
 
-	//send to client
+	// send to client
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			//Use the correct stackpos
+			// Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
 				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getStackposOfCreature(tmpPlayer, &creature), oldPos, stackpos, teleport);
@@ -290,7 +281,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 		}
 	}
 
-	//event method
+	// event method
 	for (Creature* spectator : spectators) {
 		spectator->onCreatureMove(&creature, &newTile, newPos, &oldTile, oldPos, teleport);
 	}
@@ -299,7 +290,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	newTile.postAddNotification(&creature, &oldTile, 0);
 }
 
-void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
+void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY,
+                                int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
 {
 	int_fast16_t min_y = centerPos.y + minRangeY;
 	int_fast16_t min_x = centerPos.x + minRangeX;
@@ -355,7 +347,8 @@ void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& ce
 	}
 }
 
-void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/,
+                        int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -416,9 +409,9 @@ void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos,
 
 		if (multifloor) {
 			if (centerPos.z > 7) {
-				//underground
+				// underground
 
-				//8->15
+				// 8->15
 				minRangeZ = std::max<int32_t>(centerPos.getZ() - 2, 0);
 				maxRangeZ = std::min<int32_t>(centerPos.getZ() + 2, MAP_MAX_LAYERS - 1);
 			} else if (centerPos.z == 6) {
@@ -454,12 +447,12 @@ void Map::clearSpectatorCache()
 	playersSpectatorCache.clear();
 }
 
-bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                           int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
+bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, int32_t rangex /*= Map::maxClientViewportX*/,
+                           int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	//z checks
-	//underground 8->15
-	//ground level and above 7->0
+	// z checks
+	// underground 8->15
+	// ground level and above 7->0
 	if ((fromPos.z >= 8 && toPos.z < 8) || (toPos.z >= 8 && fromPos.z < 8)) {
 		return false;
 	}
@@ -473,7 +466,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 		return false;
 	}
 
-	//distance checks
+	// distance checks
 	if ((Position::getDistanceY(fromPos, toPos) - deltaz) > rangey) {
 		return false;
 	}
@@ -551,7 +544,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 		return getTile(pos.x, pos.y, pos.z);
 	}
 
-	//used for non-cached tiles
+	// used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
 		if (!tile || tile->queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
@@ -561,7 +554,8 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
+                          const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -570,19 +564,11 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 
 	int32_t bestMatch = 0;
 
-	static int_fast32_t dirNeighbors[8][5][2] = {
-		{{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},
-		{{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-		{{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}},
-		{{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-		{{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},
-		{{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-		{{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},
-		{{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}
-	};
-	static int_fast32_t allNeighbors[8][2] = {
-		{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}
-	};
+	static int_fast32_t dirNeighbors[8][5][2] = {{{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
+	                                             {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
+	                                             {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
+	                                             {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
+	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
 	const Position startPos = pos;
 
@@ -647,7 +633,8 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 			pos.x = x + *neighbors++;
 			pos.y = y + *neighbors++;
 
-			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist || Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+			if (fpp.maxSearchDist != 0 &&
+			    (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist || Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 
@@ -666,14 +653,14 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 				}
 			}
 
-			//The cost (g) for this neighbor
+			// The cost (g) for this neighbor
 			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t newf = f + cost + extraCost;
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
-					//The node on the closed/open list is cheaper than this one
+					// The node on the closed/open list is cheaper than this one
 					continue;
 				}
 
@@ -681,7 +668,7 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
 			} else {
-				//Does not exist in the open/closed list, create a new node
+				// Does not exist in the open/closed list, create a new node
 				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
 				if (!neighborNode) {
 					if (found) {
@@ -738,8 +725,7 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 
 // AStarNodes
 
-AStarNodes::AStarNodes(uint32_t x, uint32_t y)
-	: nodes(), openNodes()
+AStarNodes::AStarNodes(uint32_t x, uint32_t y) : nodes(), openNodes()
 {
 	curNode = 1;
 	closedNodes = 0;
@@ -827,7 +813,7 @@ AStarNode* AStarNodes::getNodeByPosition(uint32_t x, uint32_t y)
 int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {
 	if (std::abs(node->x - neighborPos.x) == std::abs(node->y - neighborPos.y)) {
-		//diagonal movement extra cost
+		// diagonal movement extra cost
 		return MAP_DIAGONALWALKCOST;
 	}
 	return MAP_NORMALWALKCOST;
@@ -837,7 +823,7 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 {
 	int_fast32_t cost = 0;
 	if (tile->getTopVisibleCreature(&creature) != nullptr) {
-		//destroy creature cost
+		// destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
 	}
 
@@ -949,9 +935,7 @@ uint32_t Map::clean() const
 		g_game.setGameState(GAME_STATE_MAINTAIN);
 	}
 
-	std::vector<const QTreeNode*> nodes {
-		&root
-	};
+	std::vector<const QTreeNode*> nodes{&root};
 	std::vector<Item*> toRemove;
 	do {
 		const QTreeNode* node = nodes.back();
@@ -1003,8 +987,7 @@ uint32_t Map::clean() const
 		g_game.setGameState(GAME_STATE_NORMAL);
 	}
 
-	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "")
-	          << " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
+	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "") << " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
 	          << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 	return count;
 }

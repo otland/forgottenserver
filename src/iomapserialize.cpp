@@ -70,13 +70,13 @@ bool IOMapSerialize::saveHouseItems()
 	Database& db = Database::getInstance();
 	std::ostringstream query;
 
-	//Start the transaction
+	// Start the transaction
 	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
 
-	//clear old tile data
+	// clear old tile data
 	if (!db.executeQuery("DELETE FROM `tile_store`")) {
 		return false;
 	}
@@ -85,7 +85,7 @@ bool IOMapSerialize::saveHouseItems()
 
 	PropWriteStream stream;
 	for (const auto& it : g_game.map.houses.getHouses()) {
-		//save house items
+		// save house items
 		House* house = it.second;
 		for (HouseTile* tile : house->getTiles()) {
 			saveTile(stream, tile);
@@ -106,10 +106,9 @@ bool IOMapSerialize::saveHouseItems()
 		return false;
 	}
 
-	//End the transaction
+	// End the transaction
 	bool success = transaction.commit();
-	std::cout << "> Saved house items in: " <<
-	          (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
+	std::cout << "> Saved house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 	return success;
 }
 
@@ -145,7 +144,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || !tile) {
-		//create a new item
+		// create a new item
 		Item* item = Item::CreateItem(id);
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
@@ -193,7 +192,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
 			}
 		} else {
-			//The map changed since the last save, just read the attributes
+			// The map changed since the last save, just read the attributes
 			std::unique_ptr<Item> dummy(Item::CreateItem(id));
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
@@ -318,10 +317,15 @@ bool IOMapSerialize::saveHouseInfo()
 		DBResult_ptr result = db.storeQuery(query.str());
 		if (result) {
 			query.str(std::string());
-			query << "UPDATE `houses` SET `owner` = " << house->getOwner() << ", `paid` = " << house->getPaidUntil() << ", `warnings` = " << house->getPayRentWarnings() << ", `name` = " << db.escapeString(house->getName()) << ", `town_id` = " << house->getTownId() << ", `rent` = " << house->getRent() << ", `size` = " << house->getTiles().size() << ", `beds` = " << house->getBedCount() << " WHERE `id` = " << house->getId();
+			query << "UPDATE `houses` SET `owner` = " << house->getOwner() << ", `paid` = " << house->getPaidUntil()
+			      << ", `warnings` = " << house->getPayRentWarnings() << ", `name` = " << db.escapeString(house->getName())
+			      << ", `town_id` = " << house->getTownId() << ", `rent` = " << house->getRent() << ", `size` = " << house->getTiles().size()
+			      << ", `beds` = " << house->getBedCount() << " WHERE `id` = " << house->getId();
 		} else {
 			query.str(std::string());
-			query << "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES (" << house->getId() << ',' << house->getOwner() << ',' << house->getPaidUntil() << ',' << house->getPayRentWarnings() << ',' << db.escapeString(house->getName()) << ',' << house->getTownId() << ',' << house->getRent() << ',' << house->getTiles().size() << ',' << house->getBedCount() << ')';
+			query << "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES (" << house->getId() << ','
+			      << house->getOwner() << ',' << house->getPaidUntil() << ',' << house->getPayRentWarnings() << ',' << db.escapeString(house->getName()) << ','
+			      << house->getTownId() << ',' << house->getRent() << ',' << house->getTiles().size() << ',' << house->getBedCount() << ')';
 		}
 
 		db.executeQuery(query.str());

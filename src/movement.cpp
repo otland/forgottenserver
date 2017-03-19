@@ -28,8 +28,7 @@
 extern Game g_game;
 extern Vocations g_vocations;
 
-MoveEvents::MoveEvents() :
-	scriptInterface("MoveEvents Interface")
+MoveEvents::MoveEvents() : scriptInterface("MoveEvents Interface")
 {
 	scriptInterface.initState();
 }
@@ -96,7 +95,7 @@ Event* MoveEvents::getEvent(const std::string& nodeName)
 
 bool MoveEvents::registerEvent(Event* event, const pugi::xml_node& node)
 {
-	MoveEvent* moveEvent = static_cast<MoveEvent*>(event); //event is guaranteed to be a MoveEvent
+	MoveEvent* moveEvent = static_cast<MoveEvent*>(event); // event is guaranteed to be a MoveEvent
 
 	const MoveEvent_t eventType = moveEvent->getEventType();
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
@@ -207,17 +206,39 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 {
 	uint32_t slotp;
 	switch (slot) {
-		case CONST_SLOT_HEAD: slotp = SLOTP_HEAD; break;
-		case CONST_SLOT_NECKLACE: slotp = SLOTP_NECKLACE; break;
-		case CONST_SLOT_BACKPACK: slotp = SLOTP_BACKPACK; break;
-		case CONST_SLOT_ARMOR: slotp = SLOTP_ARMOR; break;
-		case CONST_SLOT_RIGHT: slotp = SLOTP_RIGHT; break;
-		case CONST_SLOT_LEFT: slotp = SLOTP_LEFT; break;
-		case CONST_SLOT_LEGS: slotp = SLOTP_LEGS; break;
-		case CONST_SLOT_FEET: slotp = SLOTP_FEET; break;
-		case CONST_SLOT_AMMO: slotp = SLOTP_AMMO; break;
-		case CONST_SLOT_RING: slotp = SLOTP_RING; break;
-		default: slotp = 0; break;
+		case CONST_SLOT_HEAD:
+			slotp = SLOTP_HEAD;
+			break;
+		case CONST_SLOT_NECKLACE:
+			slotp = SLOTP_NECKLACE;
+			break;
+		case CONST_SLOT_BACKPACK:
+			slotp = SLOTP_BACKPACK;
+			break;
+		case CONST_SLOT_ARMOR:
+			slotp = SLOTP_ARMOR;
+			break;
+		case CONST_SLOT_RIGHT:
+			slotp = SLOTP_RIGHT;
+			break;
+		case CONST_SLOT_LEFT:
+			slotp = SLOTP_LEFT;
+			break;
+		case CONST_SLOT_LEGS:
+			slotp = SLOTP_LEGS;
+			break;
+		case CONST_SLOT_FEET:
+			slotp = SLOTP_FEET;
+			break;
+		case CONST_SLOT_AMMO:
+			slotp = SLOTP_AMMO;
+			break;
+		case CONST_SLOT_RING:
+			slotp = SLOTP_RING;
+			break;
+		default:
+			slotp = 0;
+			break;
 	}
 
 	auto it = itemIdMap.find(item->getID());
@@ -384,17 +405,25 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 	return ret;
 }
 
-MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface) {}
+MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface)
+{
+}
 
 std::string MoveEvent::getScriptEventName() const
 {
 	switch (eventType) {
-		case MOVE_EVENT_STEP_IN: return "onStepIn";
-		case MOVE_EVENT_STEP_OUT: return "onStepOut";
-		case MOVE_EVENT_EQUIP: return "onEquip";
-		case MOVE_EVENT_DEEQUIP: return "onDeEquip";
-		case MOVE_EVENT_ADD_ITEM: return "onAddItem";
-		case MOVE_EVENT_REMOVE_ITEM: return "onRemoveItem";
+		case MOVE_EVENT_STEP_IN:
+			return "onStepIn";
+		case MOVE_EVENT_STEP_OUT:
+			return "onStepOut";
+		case MOVE_EVENT_EQUIP:
+			return "onEquip";
+		case MOVE_EVENT_DEEQUIP:
+			return "onDeEquip";
+		case MOVE_EVENT_ADD_ITEM:
+			return "onAddItem";
+		case MOVE_EVENT_REMOVE_ITEM:
+			return "onRemoveItem";
 		default:
 			std::cout << "[Error - MoveEvent::getScriptEventName] Invalid event type" << std::endl;
 			return std::string();
@@ -484,7 +513,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			}
 		}
 
-		//Gather vocation information
+		// Gather vocation information
 		std::list<std::string> vocStringList;
 		for (auto vocationNode : node.children()) {
 			pugi::xml_attribute vocationNameAttribute = vocationNode.attribute("name");
@@ -637,7 +666,7 @@ uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slo
 		player->addCondition(condition);
 	}
 
-	//skill modifiers
+	// skill modifiers
 	bool needUpdateSkills = false;
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
@@ -651,7 +680,7 @@ uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slo
 		player->sendSkills();
 	}
 
-	//stat modifiers
+	// stat modifiers
 	bool needUpdateStats = false;
 
 	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
@@ -662,7 +691,8 @@ uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slo
 
 		if (it.abilities->statsPercent[s]) {
 			needUpdateStats = true;
-			player->setVarStats(static_cast<stats_t>(s), static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)));
+			player->setVarStats(static_cast<stats_t>(s),
+			                    static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)));
 		}
 	}
 
@@ -712,7 +742,7 @@ uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 		player->removeCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
 	}
 
-	//skill modifiers
+	// skill modifiers
 	bool needUpdateSkills = false;
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
@@ -726,7 +756,7 @@ uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 		player->sendSkills();
 	}
 
-	//stat modifiers
+	// stat modifiers
 	bool needUpdateStats = false;
 
 	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
@@ -737,7 +767,8 @@ uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 
 		if (it.abilities->statsPercent[s]) {
 			needUpdateStats = true;
-			player->setVarStats(static_cast<stats_t>(s), -static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)));
+			player->setVarStats(static_cast<stats_t>(s),
+			                    -static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)));
 		}
 	}
 
@@ -747,7 +778,6 @@ uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 
 	return 1;
 }
-
 }
 
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr)
@@ -795,8 +825,8 @@ uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position
 
 bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 {
-	//onStepIn(creature, item, pos, fromPosition)
-	//onStepOut(creature, item, pos, fromPosition)
+	// onStepIn(creature, item, pos, fromPosition)
+	// onStepOut(creature, item, pos, fromPosition)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeStep] Call stack overflow" << std::endl;
 		return false;
@@ -828,8 +858,8 @@ uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isC
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	//onEquip(player, item, slot, isCheck)
-	//onDeEquip(player, item, slot, isCheck)
+	// onEquip(player, item, slot, isCheck)
+	// onDeEquip(player, item, slot, isCheck)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeEquip] Call stack overflow" << std::endl;
 		return false;
@@ -861,8 +891,8 @@ uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& p
 
 bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& pos)
 {
-	//onaddItem(moveitem, tileitem, pos)
-	//onRemoveItem(moveitem, tileitem, pos)
+	// onaddItem(moveitem, tileitem, pos)
+	// onRemoveItem(moveitem, tileitem, pos)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeAddRemItem] Call stack overflow" << std::endl;
 		return false;

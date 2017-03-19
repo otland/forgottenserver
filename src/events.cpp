@@ -26,8 +26,7 @@
 
 #include <set>
 
-Events::Events() :
-	scriptInterface("Event Interface")
+Events::Events() : scriptInterface("Event Interface")
 {
 	scriptInterface.initState();
 }
@@ -464,7 +463,8 @@ bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, u
 	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder,
+                                   Cylinder* toCylinder)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if (info.playerOnMoveItem == -1) {

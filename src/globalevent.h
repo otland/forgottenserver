@@ -23,7 +23,8 @@
 
 #include "const.h"
 
-enum GlobalEvent_t {
+enum GlobalEvent_t
+{
 	GLOBALEVENT_NONE,
 	GLOBALEVENT_TIMER,
 
@@ -37,78 +38,64 @@ using GlobalEventMap = std::map<std::string, GlobalEvent*>;
 
 class GlobalEvents final : public BaseEvents
 {
-	public:
-		GlobalEvents();
-		~GlobalEvents();
+public:
+	GlobalEvents();
+	~GlobalEvents();
 
-		// non-copyable
-		GlobalEvents(const GlobalEvents&) = delete;
-		GlobalEvents& operator=(const GlobalEvents&) = delete;
+	// non-copyable
+	GlobalEvents(const GlobalEvents&) = delete;
+	GlobalEvents& operator=(const GlobalEvents&) = delete;
 
-		void startup() const;
+	void startup() const;
 
-		void timer();
-		void think();
-		void execute(GlobalEvent_t type) const;
+	void timer();
+	void think();
+	void execute(GlobalEvent_t type) const;
 
-		GlobalEventMap getEventMap(GlobalEvent_t type);
-		static void clearMap(GlobalEventMap& map);
+	GlobalEventMap getEventMap(GlobalEvent_t type);
+	static void clearMap(GlobalEventMap& map);
 
-	protected:
-		std::string getScriptBaseName() const final {
-			return "globalevents";
-		}
-		void clear() final;
+protected:
+	std::string getScriptBaseName() const final { return "globalevents"; }
+	void clear() final;
 
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+	Event* getEvent(const std::string& nodeName) final;
+	bool registerEvent(Event* event, const pugi::xml_node& node) final;
 
-		LuaScriptInterface& getScriptInterface() final {
-			return scriptInterface;
-		}
-		LuaScriptInterface scriptInterface;
+	LuaScriptInterface& getScriptInterface() final { return scriptInterface; }
+	LuaScriptInterface scriptInterface;
 
-		GlobalEventMap thinkMap, serverMap, timerMap;
-		int32_t thinkEventId = 0, timerEventId = 0;
+	GlobalEventMap thinkMap, serverMap, timerMap;
+	int32_t thinkEventId = 0, timerEventId = 0;
 };
 
 class GlobalEvent final : public Event
 {
-	public:
-		explicit GlobalEvent(LuaScriptInterface* interface);
+public:
+	explicit GlobalEvent(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) final;
+	bool configureEvent(const pugi::xml_node& node) final;
 
-		bool executeRecord(uint32_t current, uint32_t old);
-		bool executeEvent();
+	bool executeRecord(uint32_t current, uint32_t old);
+	bool executeEvent();
 
-		GlobalEvent_t getEventType() const {
-			return eventType;
-		}
+	GlobalEvent_t getEventType() const { return eventType; }
 
-		const std::string& getName() const {
-			return name;
-		}
+	const std::string& getName() const { return name; }
 
-		uint32_t getInterval() const {
-			return interval;
-		}
+	uint32_t getInterval() const { return interval; }
 
-		int64_t getNextExecution() const {
-			return nextExecution;
-		}
-		void setNextExecution(int64_t time) {
-			nextExecution = time;
-		}
+	int64_t getNextExecution() const { return nextExecution; }
+	void setNextExecution(int64_t time) { nextExecution = time; }
 
-	protected:
-		GlobalEvent_t eventType = GLOBALEVENT_NONE;
+protected:
+	GlobalEvent_t eventType = GLOBALEVENT_NONE;
 
-		std::string getScriptEventName() const final;
+	std::string getScriptEventName() const final;
 
-		std::string name;
-		int64_t nextExecution = 0;
-		uint32_t interval = 0;
+	std::string name;
+	int64_t nextExecution = 0;
+	uint32_t interval = 0;
 };
 
 #endif

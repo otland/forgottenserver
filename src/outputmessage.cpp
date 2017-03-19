@@ -27,14 +27,16 @@
 extern Scheduler g_scheduler;
 
 const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 2048;
-const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY {10};
+const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY{10};
 
 class OutputMessageAllocator
 {
-	public:
-		using value_type = OutputMessage;
-		template<typename U>
-		struct rebind {using other = LockfreePoolingAllocator<U, OUTPUTMESSAGE_FREE_LIST_CAPACITY>;};
+public:
+	using value_type = OutputMessage;
+	template <typename U> struct rebind
+	{
+		using other = LockfreePoolingAllocator<U, OUTPUTMESSAGE_FREE_LIST_CAPACITY>;
+	};
 };
 
 void OutputMessagePool::scheduleSendAll()
@@ -45,7 +47,7 @@ void OutputMessagePool::scheduleSendAll()
 
 void OutputMessagePool::sendAll()
 {
-	//dispatcher thread
+	// dispatcher thread
 	for (auto& protocol : bufferedProtocols) {
 		auto& msg = protocol->getCurrentBuffer();
 		if (msg) {
@@ -60,7 +62,7 @@ void OutputMessagePool::sendAll()
 
 void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 {
-	//dispatcher thread
+	// dispatcher thread
 	if (bufferedProtocols.empty()) {
 		scheduleSendAll();
 	}
@@ -69,7 +71,7 @@ void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 
 void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
 {
-	//dispatcher thread
+	// dispatcher thread
 	auto it = std::find(bufferedProtocols.begin(), bufferedProtocols.end(), protocol);
 	if (it != bufferedProtocols.end()) {
 		std::swap(*it, bufferedProtocols.back());

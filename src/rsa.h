@@ -24,20 +24,20 @@
 
 class RSA
 {
-	public:
-		RSA();
-		~RSA();
+public:
+	RSA();
+	~RSA();
 
-		// non-copyable
-		RSA(const RSA&) = delete;
-		RSA& operator=(const RSA&) = delete;
+	// non-copyable
+	RSA(const RSA&) = delete;
+	RSA& operator=(const RSA&) = delete;
 
-		void setKey(const char* pString, const char* qString);
-		void decrypt(char* msg) const;
+	void setKey(const char* pString, const char* qString);
+	void decrypt(char* msg) const;
 
-	private:
-		//use only GMP
-		mpz_t n, d;
+private:
+	// use only GMP
+	mpz_t n, d;
 };
 
 #endif

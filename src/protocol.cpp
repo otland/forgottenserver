@@ -48,7 +48,7 @@ void Protocol::onRecvMessage(NetworkMessage& msg)
 
 OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
-	//dispatcher thread
+	// dispatcher thread
 	if (!outputBuffer) {
 		outputBuffer = OutputMessagePool::getOutputMessage();
 	} else if ((outputBuffer->getLength() + size) > NetworkMessage::MAX_PROTOCOL_BODY_LENGTH) {
@@ -140,7 +140,7 @@ bool Protocol::RSA_decrypt(NetworkMessage& msg)
 		return false;
 	}
 
-	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getBufferPosition()); //does not break strict aliasing
+	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getBufferPosition()); // does not break strict aliasing
 	return msg.getByte() == 0;
 }
 

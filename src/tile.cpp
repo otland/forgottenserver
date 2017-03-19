@@ -328,13 +328,14 @@ Item* Tile::getTopTopItem() const
 
 Item* Tile::getItemByTopOrder(int32_t topOrder)
 {
-	//topOrder:
-	//1: borders
-	//2: ladders, signs, splashes
-	//3: doors etc
-	//4: creatures
+	// topOrder:
+	// 1: borders
+	// 2: ladders, signs, splashes
+	// 3: doors etc
+	// 4: creatures
 	if (TileItemVector* items = getItemList()) {
-		for (auto it = ItemVector::const_reverse_iterator(items->getEndTopItem()), end = ItemVector::const_reverse_iterator(items->getBeginTopItem()); it != end; ++it) {
+		for (auto it = ItemVector::const_reverse_iterator(items->getEndTopItem()), end = ItemVector::const_reverse_iterator(items->getBeginTopItem());
+		     it != end; ++it) {
 			if (Item::items[(*it)->getID()].alwaysOnTopOrder == topOrder) {
 				return (*it);
 			}
@@ -359,7 +360,8 @@ Thing* Tile::getTopVisibleThing(const Creature* creature)
 			}
 		}
 
-		for (auto it = ItemVector::const_reverse_iterator(items->getEndTopItem()), end = ItemVector::const_reverse_iterator(items->getBeginTopItem()); it != end; ++it) {
+		for (auto it = ItemVector::const_reverse_iterator(items->getEndTopItem()), end = ItemVector::const_reverse_iterator(items->getBeginTopItem());
+		     it != end; ++it) {
 			const ItemType& iit = Item::items[(*it)->getID()];
 			if (!iit.lookThrough) {
 				return (*it);
@@ -387,14 +389,14 @@ void Tile::onAddTileItem(Item* item)
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, cylinderMapPos, true);
 
-	//send to client
+	// send to client
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			tmpPlayer->sendAddTileItem(this, cylinderMapPos, item);
 		}
 	}
 
-	//event methods
+	// event methods
 	for (Creature* spectator : spectators) {
 		spectator->onAddTileItem(this, cylinderMapPos);
 	}
@@ -425,14 +427,14 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 	SpectatorHashSet spectators;
 	g_game.map.getSpectators(spectators, cylinderMapPos, true);
 
-	//send to client
+	// send to client
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			tmpPlayer->sendUpdateTileItem(this, cylinderMapPos, newItem);
 		}
 	}
 
-	//event methods
+	// event methods
 	for (Creature* spectator : spectators) {
 		spectator->onUpdateTileItem(this, cylinderMapPos, oldItem, oldType, newItem, newType);
 	}
@@ -452,7 +454,7 @@ void Tile::onRemoveTileItem(const SpectatorHashSet& spectators, const std::vecto
 	const Position& cylinderMapPos = getPosition();
 	const ItemType& iType = Item::items[item->getID()];
 
-	//send to client
+	// send to client
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -460,7 +462,7 @@ void Tile::onRemoveTileItem(const SpectatorHashSet& spectators, const std::vecto
 		}
 	}
 
-	//event methods
+	// event methods
 	for (Creature* spectator : spectators) {
 		spectator->onRemoveTileItem(this, cylinderMapPos, iType, item);
 	}
@@ -470,7 +472,7 @@ void Tile::onUpdateTile(const SpectatorHashSet& spectators)
 {
 	const Position& cylinderMapPos = getPosition();
 
-	//send to clients
+	// send to clients
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateTile(this, cylinderMapPos);
 	}
@@ -505,8 +507,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 						}
 
 						const Monster* creatureMonster = tileCreature->getMonster();
-						if (!creatureMonster || !tileCreature->isPushable() ||
-						        (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
+						if (!creatureMonster || !tileCreature->isPushable() || (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
 							return RETURNVALUE_NOTPOSSIBLE;
 						}
 					}
@@ -537,11 +538,11 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			if (field && !field->isBlocking()) {
 				CombatType_t combatType = field->getCombatType();
 
-				//There is 3 options for a monster to enter a magic field
-				//1) Monster is immune
+				// There is 3 options for a monster to enter a magic field
+				// 1) Monster is immune
 				if (!monster->isImmune(combatType)) {
-					//1) Monster is "strong" enough to handle the damage
-					//2) Monster is already afflicated by this type of condition
+					// 1) Monster is "strong" enough to handle the damage
+					// 2) Monster is already afflicated by this type of condition
 					if (hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
 						if (!(monster->canPushItems() || monster->hasCondition(Combat::DamageToConditionType(combatType)))) {
 							return RETURNVALUE_NOTPOSSIBLE;
@@ -566,14 +567,14 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			}
 
 			if (player->getParent() == nullptr && hasFlag(TILESTATE_NOLOGOUT)) {
-				//player is trying to login to a "no logout" tile
+				// player is trying to login to a "no logout" tile
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
 			const Tile* playerTile = player->getTile();
 			if (playerTile && player->isPzLocked()) {
 				if (!playerTile->hasFlag(TILESTATE_PVPZONE)) {
-					//player is trying to enter a pvp zone while being pz-locked
+					// player is trying to enter a pvp zone while being pz-locked
 					if (hasFlag(TILESTATE_PVPZONE)) {
 						return RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE;
 					}
@@ -583,7 +584,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 
 				if ((!playerTile->hasFlag(TILESTATE_NOPVPZONE) && hasFlag(TILESTATE_NOPVPZONE)) ||
-					(!playerTile->hasFlag(TILESTATE_PROTECTIONZONE) && hasFlag(TILESTATE_PROTECTIONZONE))) {
+				    (!playerTile->hasFlag(TILESTATE_PROTECTIONZONE) && hasFlag(TILESTATE_PROTECTIONZONE))) {
 					// player is trying to enter a non-pvp/protection zone while being pz-locked
 					return RETURNVALUE_PLAYERISPZLOCKED;
 				}
@@ -597,12 +598,12 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 		}
 
 		if (!hasBitSet(FLAG_IGNOREBLOCKITEM, flags)) {
-			//If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
+			// If the FLAG_IGNOREBLOCKITEM bit isn't set we dont have to iterate every single item
 			if (hasFlag(TILESTATE_BLOCKSOLID)) {
 				return RETURNVALUE_NOTENOUGHROOM;
 			}
 		} else {
-			//FLAG_IGNOREBLOCKITEM is set
+			// FLAG_IGNOREBLOCKITEM is set
 			if (ground) {
 				const ItemType& iiType = Item::items[ground->getID()];
 				if (iiType.blockSolid && (!iiType.moveable || ground->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
@@ -806,7 +807,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 	if (destTile == nullptr) {
 		destTile = this;
 	} else {
-		flags |= FLAG_NOLIMIT;    //Will ignore that there is blocking items/creatures
+		flags |= FLAG_NOLIMIT; // Will ignore that there is blocking items/creatures
 	}
 
 	if (destTile) {
@@ -863,7 +864,7 @@ void Tile::addThing(int32_t, Thing* thing)
 			}
 		} else if (itemType.alwaysOnTop) {
 			if (itemType.isSplash() && items) {
-				//remove old splash if exists
+				// remove old splash if exists
 				for (ItemVector::const_iterator it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 					Item* oldSplash = *it;
 					if (!Item::items[oldSplash->getID()].isSplash()) {
@@ -882,7 +883,7 @@ void Tile::addThing(int32_t, Thing* thing)
 
 			if (items) {
 				for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
-					//Note: this is different from internalAddThing
+					// Note: this is different from internalAddThing
 					if (itemType.alwaysOnTopOrder <= Item::items[(*it)->getID()].alwaysOnTopOrder) {
 						items->insert(it, item);
 						isInserted = true;
@@ -900,7 +901,7 @@ void Tile::addThing(int32_t, Thing* thing)
 			onAddTileItem(item);
 		} else {
 			if (itemType.isMagicField()) {
-				//remove old field item if exists
+				// remove old field item if exists
 				if (items) {
 					for (ItemVector::const_iterator it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
 						MagicField* oldField = (*it)->getMagicField();
@@ -913,7 +914,7 @@ void Tile::addThing(int32_t, Thing* thing)
 								postRemoveNotification(oldField, nullptr, 0);
 								break;
 							} else {
-								//This magic field cannot be replaced.
+								// This magic field cannot be replaced.
 								item->setParent(nullptr);
 								g_game.ReleaseItem(item);
 								return;
@@ -1346,7 +1347,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
 
-	//add a reference to this item, it may be deleted after being added (mailbox for example)
+	// add a reference to this item, it may be deleted after being added (mailbox for example)
 	Creature* creature = thing->getCreature();
 	Item* item;
 	if (creature) {
@@ -1377,7 +1378,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 			}
 		}
 
-		//calling movement scripts
+		// calling movement scripts
 		if (creature) {
 			g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_IN);
 		} else if (item) {
@@ -1385,7 +1386,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 		}
 	}
 
-	//release the reference to this item onces we are finished
+	// release the reference to this item onces we are finished
 	if (creature) {
 		g_game.ReleaseCreature(creature);
 	} else if (item) {
@@ -1406,7 +1407,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 		spectator->getPlayer()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
-	//calling movement scripts
+	// calling movement scripts
 	Creature* creature = thing->getCreature();
 	if (creature) {
 		g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_OUT);

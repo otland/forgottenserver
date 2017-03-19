@@ -57,7 +57,7 @@ bool Items::reload()
 	return true;
 }
 
-constexpr auto OTBI = OTB::Identifier{{'O','T', 'B', 'I'}};
+constexpr auto OTBI = OTB::Identifier{{'O', 'T', 'B', 'I'}};
 
 FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 {
@@ -67,9 +67,9 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 
 	PropStream props;
 	if (loader.getProps(root, props)) {
-		//4 byte flags
-		//attributes
-		//0x01 = version data
+		// 4 byte flags
+		// attributes
+		// 0x01 = version data
 		uint32_t flags;
 		if (!props.read<uint32_t>(flags)) {
 			return ERROR_INVALID_FORMAT;
@@ -95,9 +95,9 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				return ERROR_INVALID_FORMAT;
 			}
 
-			majorVersion = vi.dwMajorVersion; //items otb format file version
-			minorVersion = vi.dwMinorVersion; //client version
-			buildNumber = vi.dwBuildNumber; //revision
+			majorVersion = vi.dwMajorVersion; // items otb format file version
+			minorVersion = vi.dwMinorVersion; // client version
+			buildNumber = vi.dwBuildNumber;   // revision
 		}
 	}
 
@@ -111,7 +111,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		return ERROR_INVALID_FORMAT;
 	}
 
-	for(auto & itemNode : root.children) {
+	for (auto& itemNode : root.children) {
 		PropStream stream;
 		if (!loader.getProps(itemNode, stream)) {
 			return ERROR_INVALID_FORMAT;
@@ -213,7 +213,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				}
 
 				default: {
-					//skip unknown attributes
+					// skip unknown attributes
 					if (!stream.skip(datalen)) {
 						return ERROR_INVALID_FORMAT;
 					}
@@ -236,15 +236,15 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				iType.type = ITEM_TYPE_CONTAINER;
 				break;
 			case ITEM_GROUP_DOOR:
-				//not used
+				// not used
 				iType.type = ITEM_TYPE_DOOR;
 				break;
 			case ITEM_GROUP_MAGICFIELD:
-				//not used
+				// not used
 				iType.type = ITEM_TYPE_MAGICFIELD;
 				break;
 			case ITEM_GROUP_TELEPORT:
-				//not used
+				// not used
 				iType.type = ITEM_TYPE_TELEPORT;
 				break;
 			case ITEM_GROUP_NONE:
@@ -348,7 +348,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 	it.name = itemNode.attribute("name").as_string();
 
-	nameToItems.insert({ asLowerCaseString(it.name), id });
+	nameToItems.insert({asLowerCaseString(it.name), id});
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
@@ -681,7 +681,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.getAbilities().absorbPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "absorbpercentfire") {
 			it.getAbilities().absorbPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
-		} else if (tmpStrValue == "absorbpercentpoison" ||	tmpStrValue == "absorbpercentearth") {
+		} else if (tmpStrValue == "absorbpercentpoison" || tmpStrValue == "absorbpercentearth") {
 			it.getAbilities().absorbPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "absorbpercentice") {
 			it.getAbilities().absorbPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
@@ -873,7 +873,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		}
 	}
 
-	//check bed items
+	// check bed items
 	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
 		std::cout << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
 	}

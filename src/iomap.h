@@ -28,7 +28,8 @@
 
 extern ConfigManager g_config;
 
-enum OTBM_AttrTypes_t {
+enum OTBM_AttrTypes_t
+{
 	OTBM_ATTR_DESCRIPTION = 1,
 	OTBM_ATTR_EXT_FILE = 2,
 	OTBM_ATTR_TILE_FLAGS = 3,
@@ -53,7 +54,8 @@ enum OTBM_AttrTypes_t {
 	OTBM_ATTR_CHARGES = 22,
 };
 
-enum OTBM_NodeTypes_t {
+enum OTBM_NodeTypes_t
+{
 	OTBM_ROOTV1 = 1,
 	OTBM_MAP_DATA = 2,
 	OTBM_ITEM_DEF = 3,
@@ -72,7 +74,8 @@ enum OTBM_NodeTypes_t {
 	OTBM_WAYPOINT = 16,
 };
 
-enum OTBM_TileFlag_t : uint32_t {
+enum OTBM_TileFlag_t : uint32_t
+{
 	OTBM_TILEFLAG_PROTECTIONZONE = 1 << 0,
 	OTBM_TILEFLAG_NOPVPZONE = 1 << 2,
 	OTBM_TILEFLAG_NOLOGOUT = 1 << 3,
@@ -81,7 +84,8 @@ enum OTBM_TileFlag_t : uint32_t {
 
 #pragma pack(1)
 
-struct OTBM_root_header {
+struct OTBM_root_header
+{
 	uint32_t version;
 	uint16_t width;
 	uint16_t height;
@@ -89,13 +93,15 @@ struct OTBM_root_header {
 	uint32_t minorVersionItems;
 };
 
-struct OTBM_Destination_coords {
+struct OTBM_Destination_coords
+{
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_Tile_coords {
+struct OTBM_Tile_coords
+{
 	uint8_t x;
 	uint8_t y;
 };
@@ -106,53 +112,51 @@ class IOMap
 {
 	static Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z);
 
-	public:
-		bool loadMap(Map* map, const std::string& identifier);
+public:
+	bool loadMap(Map* map, const std::string& identifier);
 
-		/* Load the spawns
-		 * \param map pointer to the Map class
-		 * \returns Returns true if the spawns were loaded successfully
-		 */
-		static bool loadSpawns(Map* map) {
-			if (map->spawnfile.empty()) {
-				//OTBM file doesn't tell us about the spawnfile,
-				//lets guess it is mapname-spawn.xml.
-				map->spawnfile = g_config.getString(ConfigManager::MAP_NAME);
-				map->spawnfile += "-spawn.xml";
-			}
-
-			return map->spawns.loadFromXml(map->spawnfile);
+	/* Load the spawns
+	 * \param map pointer to the Map class
+	 * \returns Returns true if the spawns were loaded successfully
+	 */
+	static bool loadSpawns(Map* map)
+	{
+		if (map->spawnfile.empty()) {
+			// OTBM file doesn't tell us about the spawnfile,
+			// lets guess it is mapname-spawn.xml.
+			map->spawnfile = g_config.getString(ConfigManager::MAP_NAME);
+			map->spawnfile += "-spawn.xml";
 		}
 
-		/* Load the houses (not house tile-data)
-		 * \param map pointer to the Map class
-		 * \returns Returns true if the houses were loaded successfully
-		 */
-		static bool loadHouses(Map* map) {
-			if (map->housefile.empty()) {
-				//OTBM file doesn't tell us about the housefile,
-				//lets guess it is mapname-house.xml.
-				map->housefile = g_config.getString(ConfigManager::MAP_NAME);
-				map->housefile += "-house.xml";
-			}
+		return map->spawns.loadFromXml(map->spawnfile);
+	}
 
-			return map->houses.loadHousesXML(map->housefile);
+	/* Load the houses (not house tile-data)
+	 * \param map pointer to the Map class
+	 * \returns Returns true if the houses were loaded successfully
+	 */
+	static bool loadHouses(Map* map)
+	{
+		if (map->housefile.empty()) {
+			// OTBM file doesn't tell us about the housefile,
+			// lets guess it is mapname-house.xml.
+			map->housefile = g_config.getString(ConfigManager::MAP_NAME);
+			map->housefile += "-house.xml";
 		}
 
-		const std::string& getLastErrorString() const {
-			return errorString;
-		}
+		return map->houses.loadHousesXML(map->housefile);
+	}
 
-		void setLastErrorString(std::string error) {
-			errorString = error;
-		}
+	const std::string& getLastErrorString() const { return errorString; }
 
-	protected:
-		bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName);
-		bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
-		bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
-		bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);
-		std::string errorString;
+	void setLastErrorString(std::string error) { errorString = error; }
+
+protected:
+	bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName);
+	bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
+	bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
+	bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);
+	std::string errorString;
 };
 
 #endif

@@ -20,7 +20,8 @@
 #ifndef FS_GROUPS_H_EE39438337D148E1983FB79D936DD8F3
 #define FS_GROUPS_H_EE39438337D148E1983FB79D936DD8F3
 
-struct Group {
+struct Group
+{
 	std::string name;
 	uint64_t flags;
 	uint32_t maxDepotItems;
@@ -29,13 +30,14 @@ struct Group {
 	bool access;
 };
 
-class Groups {
-	public:
-		bool load();
-		Group* getGroup(uint16_t id);
+class Groups
+{
+public:
+	bool load();
+	Group* getGroup(uint16_t id);
 
-	private:
-		std::vector<Group> groups;
+private:
+	std::vector<Group> groups;
 };
 
 #endif

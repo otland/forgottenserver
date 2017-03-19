@@ -95,9 +95,9 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void mainLoader(int, char*[], ServiceManager* services)
+void mainLoader(int, char* [], ServiceManager* services)
 {
-	//dispatcher thread
+	// dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);
 
 	srand(static_cast<unsigned int>(OTSYS_TIME()));
@@ -139,9 +139,11 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 #endif
 
-	//set RSA key
-	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
-	const char* q("7630979195970404721891201847792002125535401292779123937207447574596692788513647179235335529307251350570728407373705564708871762033017096809910315212884101");
+	// set RSA key
+	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065"
+	              "728686565928113");
+	const char* q("76309791959704047218912018477920021255354012927791239372074475745966927885136471792353355293072513505707284073737055647088717620330170968099"
+	              "10315212884101");
 	g_RSA.setKey(p, q);
 
 	std::cout << ">> Establishing database connection..." << std::flush;
@@ -168,7 +170,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
-	//load vocations
+	// load vocations
 	std::cout << ">> Loading vocations" << std::endl;
 	if (!g_vocations.loadFromXml()) {
 		startupErrorMessage("Unable to load vocations!");

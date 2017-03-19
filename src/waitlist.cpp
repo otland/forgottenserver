@@ -26,13 +26,11 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-
 namespace {
 
 struct Wait
 {
-	constexpr Wait(std::size_t timeout, uint32_t playerGUID) :
-			timeout(timeout), playerGUID(playerGUID) {}
+	constexpr Wait(std::size_t timeout, uint32_t playerGUID) : timeout(timeout), playerGUID(playerGUID) {}
 
 	std::size_t timeout;
 	uint32_t playerGUID;
@@ -56,7 +54,7 @@ void cleanupList(WaitList& list)
 
 std::size_t getTimeout(std::size_t slot)
 {
-	//timeout is set to 15 seconds longer than expected retry attempt
+	// timeout is set to 15 seconds longer than expected retry attempt
 	return WaitingList::getTime(slot) + 15;
 }
 
@@ -67,7 +65,8 @@ struct WaitListInfo
 	WaitList priorityWaitList;
 	WaitList waitList;
 
-	std::pair<WaitList::iterator, WaitList::size_type> findClient(const Player *player) {
+	std::pair<WaitList::iterator, WaitList::size_type> findClient(const Player* player)
+	{
 		std::size_t slot = 1;
 		for (auto it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it, ++slot) {
 			if (it->playerGUID == player->getGUID()) {
@@ -124,12 +123,12 @@ bool WaitingList::clientLogin(const Player* player)
 	std::tie(it, slot) = info->findClient(player);
 	if (it != info->waitList.end()) {
 		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
-			//should be able to login now
+			// should be able to login now
 			info->waitList.erase(it);
 			return true;
 		}
 
-		//let them wait a bit longer
+		// let them wait a bit longer
 		it->timeout = OTSYS_TIME() + (getTimeout(slot) * 1000);
 		return false;
 	}
@@ -155,4 +154,6 @@ std::size_t WaitingList::getClientSlot(const Player* player)
 	return slot;
 }
 
-WaitingList::WaitingList() : info(new WaitListInfo) {}
+WaitingList::WaitingList() : info(new WaitListInfo)
+{
+}

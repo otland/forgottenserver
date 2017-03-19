@@ -20,20 +20,23 @@
 #ifndef FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
 #define FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
 
-enum BugReportType_t : uint8_t {
+enum BugReportType_t : uint8_t
+{
 	BUG_CATEGORY_MAP = 0,
 	BUG_CATEGORY_TYPO = 1,
 	BUG_CATEGORY_TECHNICAL = 2,
 	BUG_CATEGORY_OTHER = 3
 };
 
-enum ThreadState {
+enum ThreadState
+{
 	THREAD_STATE_RUNNING,
 	THREAD_STATE_CLOSING,
 	THREAD_STATE_TERMINATED,
 };
 
-enum itemAttrTypes : uint32_t {
+enum itemAttrTypes : uint32_t
+{
 	ITEM_ATTRIBUTE_NONE,
 
 	ITEM_ATTRIBUTE_ACTIONID = 1 << 0,
@@ -61,23 +64,27 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
 };
 
-enum VipStatus_t : uint8_t {
+enum VipStatus_t : uint8_t
+{
 	VIPSTATUS_OFFLINE = 0,
 	VIPSTATUS_ONLINE = 1,
 	VIPSTATUS_PENDING = 2
 };
 
-enum MarketAction_t {
+enum MarketAction_t
+{
 	MARKETACTION_BUY = 0,
 	MARKETACTION_SELL = 1,
 };
 
-enum MarketRequest_t {
+enum MarketRequest_t
+{
 	MARKETREQUEST_OWN_OFFERS = 0xFFFE,
 	MARKETREQUEST_OWN_HISTORY = 0xFFFF,
 };
 
-enum MarketOfferState_t {
+enum MarketOfferState_t
+{
 	OFFERSTATE_ACTIVE = 0,
 	OFFERSTATE_CANCELLED = 1,
 	OFFERSTATE_EXPIRED = 2,
@@ -86,14 +93,16 @@ enum MarketOfferState_t {
 	OFFERSTATE_ACCEPTEDEX = 255,
 };
 
-enum ChannelEvent_t : uint8_t {
+enum ChannelEvent_t : uint8_t
+{
 	CHANNELEVENT_JOIN = 0,
 	CHANNELEVENT_LEAVE = 1,
 	CHANNELEVENT_INVITE = 2,
 	CHANNELEVENT_EXCLUDE = 3,
 };
 
-enum CreatureType_t : uint8_t {
+enum CreatureType_t : uint8_t
+{
 	CREATURETYPE_PLAYER = 0,
 	CREATURETYPE_MONSTER = 1,
 	CREATURETYPE_NPC = 2,
@@ -101,7 +110,8 @@ enum CreatureType_t : uint8_t {
 	CREATURETYPE_SUMMON_OTHERS = 4,
 };
 
-enum OperatingSystem_t : uint8_t {
+enum OperatingSystem_t : uint8_t
+{
 	CLIENTOS_NONE = 0,
 
 	CLIENTOS_LINUX = 1,
@@ -113,7 +123,8 @@ enum OperatingSystem_t : uint8_t {
 	CLIENTOS_OTCLIENT_MAC = 12,
 };
 
-enum SpellGroup_t : uint8_t {
+enum SpellGroup_t : uint8_t
+{
 	SPELLGROUP_NONE = 0,
 	SPELLGROUP_ATTACK = 1,
 	SPELLGROUP_HEALING = 2,
@@ -121,7 +132,8 @@ enum SpellGroup_t : uint8_t {
 	SPELLGROUP_SPECIAL = 4,
 };
 
-enum AccountType_t : uint8_t {
+enum AccountType_t : uint8_t
+{
 	ACCOUNT_TYPE_NORMAL = 1,
 	ACCOUNT_TYPE_TUTOR = 2,
 	ACCOUNT_TYPE_SENIORTUTOR = 3,
@@ -129,7 +141,8 @@ enum AccountType_t : uint8_t {
 	ACCOUNT_TYPE_GOD = 5
 };
 
-enum RaceType_t : uint8_t {
+enum RaceType_t : uint8_t
+{
 	RACE_NONE,
 	RACE_VENOM,
 	RACE_BLOOD,
@@ -138,7 +151,8 @@ enum RaceType_t : uint8_t {
 	RACE_ENERGY,
 };
 
-enum CombatType_t : uint16_t {
+enum CombatType_t : uint16_t
+{
 	COMBAT_NONE = 0,
 
 	COMBAT_PHYSICALDAMAGE = 1 << 0,
@@ -157,7 +171,8 @@ enum CombatType_t : uint16_t {
 	COMBAT_COUNT = 12
 };
 
-enum CombatParam_t {
+enum CombatParam_t
+{
 	COMBAT_PARAM_TYPE,
 	COMBAT_PARAM_EFFECT,
 	COMBAT_PARAM_DISTANCEEFFECT,
@@ -170,17 +185,19 @@ enum CombatParam_t {
 	COMBAT_PARAM_USECHARGES,
 };
 
-enum CallBackParam_t {
+enum CallBackParam_t
+{
 	CALLBACK_PARAM_LEVELMAGICVALUE,
 	CALLBACK_PARAM_SKILLVALUE,
 	CALLBACK_PARAM_TARGETTILE,
 	CALLBACK_PARAM_TARGETCREATURE,
 };
 
-enum ConditionParam_t {
+enum ConditionParam_t
+{
 	CONDITION_PARAM_OWNER = 1,
 	CONDITION_PARAM_TICKS = 2,
-	//CONDITION_PARAM_OUTFIT = 3,
+	// CONDITION_PARAM_OUTFIT = 3,
 	CONDITION_PARAM_HEALTHGAIN = 4,
 	CONDITION_PARAM_HEALTHTICKS = 5,
 	CONDITION_PARAM_MANAGAIN = 6,
@@ -226,14 +243,16 @@ enum ConditionParam_t {
 	CONDITION_PARAM_FIELD = 46,
 };
 
-enum BlockType_t : uint8_t {
+enum BlockType_t : uint8_t
+{
 	BLOCK_NONE,
 	BLOCK_DEFENSE,
 	BLOCK_ARMOR,
 	BLOCK_IMMUNITY
 };
 
-enum skills_t : uint8_t {
+enum skills_t : uint8_t
+{
 	SKILL_FIST = 0,
 	SKILL_CLUB = 1,
 	SKILL_SWORD = 2,
@@ -249,7 +268,8 @@ enum skills_t : uint8_t {
 	SKILL_LAST = SKILL_FISHING
 };
 
-enum stats_t {
+enum stats_t
+{
 	STAT_MAXHITPOINTS,
 	STAT_MAXMANAPOINTS,
 	STAT_SOULPOINTS, // unused
@@ -259,14 +279,16 @@ enum stats_t {
 	STAT_LAST = STAT_MAGICPOINTS
 };
 
-enum formulaType_t {
+enum formulaType_t
+{
 	COMBAT_FORMULA_UNDEFINED,
 	COMBAT_FORMULA_LEVELMAGIC,
 	COMBAT_FORMULA_SKILL,
 	COMBAT_FORMULA_DAMAGE,
 };
 
-enum ConditionType_t {
+enum ConditionType_t
+{
 	CONDITION_NONE,
 
 	CONDITION_POISON = 1 << 0,
@@ -293,13 +315,14 @@ enum ConditionType_t {
 	CONDITION_DAZZLED = 1 << 21,
 	CONDITION_CURSED = 1 << 22,
 	CONDITION_EXHAUST_COMBAT = 1 << 23, // unused
-	CONDITION_EXHAUST_HEAL = 1 << 24, // unused
+	CONDITION_EXHAUST_HEAL = 1 << 24,   // unused
 	CONDITION_PACIFIED = 1 << 25,
 	CONDITION_SPELLCOOLDOWN = 1 << 26,
 	CONDITION_SPELLGROUPCOOLDOWN = 1 << 27,
 };
 
-enum ConditionId_t : int8_t {
+enum ConditionId_t : int8_t
+{
 	CONDITIONID_DEFAULT = -1,
 	CONDITIONID_COMBAT,
 	CONDITIONID_HEAD,
@@ -314,18 +337,21 @@ enum ConditionId_t : int8_t {
 	CONDITIONID_AMMO,
 };
 
-enum PlayerSex_t : uint8_t {
+enum PlayerSex_t : uint8_t
+{
 	PLAYERSEX_FEMALE = 0,
 	PLAYERSEX_MALE = 1,
 
 	PLAYERSEX_LAST = PLAYERSEX_MALE
 };
 
-enum Vocation_t : uint16_t {
+enum Vocation_t : uint16_t
+{
 	VOCATION_NONE = 0
 };
 
-enum ReturnValue {
+enum ReturnValue
+{
 	RETURNVALUE_NOERROR,
 	RETURNVALUE_NOTPOSSIBLE,
 	RETURNVALUE_NOTENOUGHROOM,
@@ -431,7 +457,8 @@ enum MapMark_t
 	MAPMARK_GREENSOUTH = 19,
 };
 
-struct Outfit_t {
+struct Outfit_t
+{
 	uint16_t lookType = 0;
 	uint16_t lookTypeEx = 0;
 	uint16_t lookMount = 0;
@@ -442,21 +469,24 @@ struct Outfit_t {
 	uint8_t lookAddons = 0;
 };
 
-struct LightInfo {
+struct LightInfo
+{
 	uint8_t level = 0;
 	uint8_t color = 0;
 	constexpr LightInfo() = default;
 	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
-struct ShopInfo {
+struct ShopInfo
+{
 	uint16_t itemId;
 	int32_t subType;
 	uint32_t buyPrice;
 	uint32_t sellPrice;
 	std::string realName;
 
-	ShopInfo() {
+	ShopInfo()
+	{
 		itemId = 0;
 		subType = 1;
 		buyPrice = 0;
@@ -464,10 +494,13 @@ struct ShopInfo {
 	}
 
 	ShopInfo(uint16_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
-		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName)) {}
+	    : itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName))
+	{
+	}
 };
 
-struct MarketOffer {
+struct MarketOffer
+{
 	uint32_t price;
 	uint32_t timestamp;
 	uint16_t amount;
@@ -476,12 +509,21 @@ struct MarketOffer {
 	std::string playerName;
 };
 
-struct MarketOfferEx {
+struct MarketOfferEx
+{
 	MarketOfferEx() = default;
-	MarketOfferEx(MarketOfferEx&& other) :
-		id(other.id), playerId(other.playerId), timestamp(other.timestamp), price(other.price),
-		amount(other.amount), counter(other.counter), itemId(other.itemId), type(other.type),
-		playerName(std::move(other.playerName)) {}
+	MarketOfferEx(MarketOfferEx&& other)
+	    : id(other.id),
+	      playerId(other.playerId),
+	      timestamp(other.timestamp),
+	      price(other.price),
+	      amount(other.amount),
+	      counter(other.counter),
+	      itemId(other.itemId),
+	      type(other.type),
+	      playerName(std::move(other.playerName))
+	{
+	}
 
 	uint32_t id;
 	uint32_t playerId;
@@ -494,7 +536,8 @@ struct MarketOfferEx {
 	std::string playerName;
 };
 
-struct HistoryMarketOffer {
+struct HistoryMarketOffer
+{
 	uint32_t timestamp;
 	uint32_t price;
 	uint16_t itemId;
@@ -502,8 +545,10 @@ struct HistoryMarketOffer {
 	MarketOfferState_t state;
 };
 
-struct MarketStatistics {
-	MarketStatistics() {
+struct MarketStatistics
+{
+	MarketStatistics()
+	{
 		numTransactions = 0;
 		highestPrice = 0;
 		totalPrice = 0;
@@ -525,7 +570,9 @@ struct ModalWindow
 	bool priority;
 
 	ModalWindow(uint32_t id, std::string title, std::string message)
-		: title(std::move(title)), message(std::move(message)), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
+	    : title(std::move(title)), message(std::move(message)), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false)
+	{
+	}
 };
 
 enum CombatOrigin
@@ -539,7 +586,8 @@ enum CombatOrigin
 
 struct CombatDamage
 {
-	struct {
+	struct
+	{
 		CombatType_t type;
 		int32_t value;
 	} primary, secondary;

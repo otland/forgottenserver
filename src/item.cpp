@@ -92,7 +92,8 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 Container* Item::CreateItemAsContainer(const uint16_t type, uint16_t size)
 {
 	const ItemType& it = Item::items[type];
-	if (it.id == 0 || it.group == ITEM_GROUP_DEPRECATED || it.stackable || it.useable || it.moveable || it.pickupable || it.isDepot() || it.isSplash() || it.isDoor()) {
+	if (it.id == 0 || it.group == ITEM_GROUP_DEPRECATED || it.stackable || it.useable || it.moveable || it.pickupable || it.isDepot() || it.isSplash() ||
+	    it.isDoor()) {
 		return nullptr;
 	}
 
@@ -144,8 +145,7 @@ Item* Item::CreateItem(PropStream& propStream)
 	return Item::CreateItem(id, 0);
 }
 
-Item::Item(const uint16_t type, uint16_t count /*= 0*/) :
-	id(type)
+Item::Item(const uint16_t type, uint16_t count /*= 0*/) : id(type)
 {
 	const ItemType& it = items[id];
 
@@ -168,8 +168,7 @@ Item::Item(const uint16_t type, uint16_t count /*= 0*/) :
 	setDefaultDuration();
 }
 
-Item::Item(const Item& i) :
-	Thing(), id(i.id), count(i.count), loadedFromMap(i.loadedFromMap)
+Item::Item(const Item& i) : Thing(), id(i.id), count(i.count), loadedFromMap(i.loadedFromMap)
 {
 	if (i.attributes) {
 		attributes.reset(new ItemAttributes(*i.attributes));
@@ -306,7 +305,7 @@ const Cylinder* Item::getTopParent() const
 Tile* Item::getTile()
 {
 	Cylinder* cylinder = getTopParent();
-	//get root cylinder
+	// get root cylinder
 	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
@@ -316,7 +315,7 @@ Tile* Item::getTile()
 const Tile* Item::getTile() const
 {
 	const Cylinder* cylinder = getTopParent();
-	//get root cylinder
+	// get root cylinder
 	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
@@ -569,11 +568,11 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		//these should be handled through derived classes
-		//If these are called then something has changed in the items.xml since the map was saved
-		//just read the values
+		// these should be handled through derived classes
+		// If these are called then something has changed in the items.xml since the map was saved
+		// just read the values
 
-		//Depot class
+		// Depot class
 		case ATTR_DEPOT_ID: {
 			if (!propStream.skip(2)) {
 				return ATTR_READ_ERROR;
@@ -581,7 +580,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		//Door class
+		// Door class
 		case ATTR_HOUSEDOORID: {
 			if (!propStream.skip(1)) {
 				return ATTR_READ_ERROR;
@@ -589,7 +588,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		//Bed class
+		// Bed class
 		case ATTR_SLEEPERGUID: {
 			if (!propStream.skip(4)) {
 				return ATTR_READ_ERROR;
@@ -604,7 +603,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		//Teleport class
+		// Teleport class
 		case ATTR_TELE_DEST: {
 			if (!propStream.skip(5)) {
 				return ATTR_READ_ERROR;
@@ -612,7 +611,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		//Container class
+		// Container class
 		case ATTR_CONTAINER_ITEMS: {
 			return ATTR_READ_ERROR;
 		}
@@ -755,19 +754,32 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 {
 	const ItemType& it = items[id];
 	switch (prop) {
-		case CONST_PROP_BLOCKSOLID: return it.blockSolid;
-		case CONST_PROP_MOVEABLE: return it.moveable && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID);
-		case CONST_PROP_HASHEIGHT: return it.hasHeight;
-		case CONST_PROP_BLOCKPROJECTILE: return it.blockProjectile;
-		case CONST_PROP_BLOCKPATH: return it.blockPathFind;
-		case CONST_PROP_ISVERTICAL: return it.isVertical;
-		case CONST_PROP_ISHORIZONTAL: return it.isHorizontal;
-		case CONST_PROP_IMMOVABLEBLOCKSOLID: return it.blockSolid && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
-		case CONST_PROP_IMMOVABLEBLOCKPATH: return it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
-		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
-		case CONST_PROP_NOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind;
-		case CONST_PROP_SUPPORTHANGABLE: return it.isHorizontal || it.isVertical;
-		default: return false;
+		case CONST_PROP_BLOCKSOLID:
+			return it.blockSolid;
+		case CONST_PROP_MOVEABLE:
+			return it.moveable && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID);
+		case CONST_PROP_HASHEIGHT:
+			return it.hasHeight;
+		case CONST_PROP_BLOCKPROJECTILE:
+			return it.blockProjectile;
+		case CONST_PROP_BLOCKPATH:
+			return it.blockPathFind;
+		case CONST_PROP_ISVERTICAL:
+			return it.isVertical;
+		case CONST_PROP_ISHORIZONTAL:
+			return it.isHorizontal;
+		case CONST_PROP_IMMOVABLEBLOCKSOLID:
+			return it.blockSolid && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		case CONST_PROP_IMMOVABLEBLOCKPATH:
+			return it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH:
+			return !it.isMagicField() && it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		case CONST_PROP_NOFIELDBLOCKPATH:
+			return !it.isMagicField() && it.blockPathFind;
+		case CONST_PROP_SUPPORTHANGABLE:
+			return it.isHorizontal || it.isVertical;
+		default:
+			return false;
 	}
 }
 
@@ -780,8 +792,7 @@ uint32_t Item::getWeight() const
 	return weight;
 }
 
-std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
-                                 const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
+std::string Item::getDescription(const ItemType& it, int32_t lookDistance, const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	const std::string* text = nullptr;
 

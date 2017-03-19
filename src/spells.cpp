@@ -47,7 +47,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 {
 	std::string str_words = words;
 
-	//strip trailing spaces
+	// strip trailing spaces
 	trimString(str_words);
 
 	InstantSpell* instantSpell = getInstantSpell(str_words);
@@ -258,12 +258,10 @@ Position Spells::getCasterPosition(Creature* creature, Direction dir)
 	return getNextPosition(dir, creature->getPosition());
 }
 
-CombatSpell::CombatSpell(Combat* combat, bool needTarget, bool needDirection) :
-	Event(&g_spells->getScriptInterface()),
-	combat(combat),
-	needDirection(needDirection),
-	needTarget(needTarget)
-{}
+CombatSpell::CombatSpell(Combat* combat, bool needTarget, bool needDirection)
+    : Event(&g_spells->getScriptInterface()), combat(combat), needDirection(needDirection), needTarget(needTarget)
+{
+}
 
 CombatSpell::~CombatSpell()
 {
@@ -340,7 +338,7 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 
 bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
-	//onCastSpell(creature, var)
+	// onCastSpell(creature, var)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CombatSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
@@ -371,34 +369,13 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 
 	name = nameAttribute.as_string();
 
-	static const char* reservedList[] = {
-		"melee",
-		"physical",
-		"poison",
-		"fire",
-		"energy",
-		"drown",
-		"lifedrain",
-		"manadrain",
-		"healing",
-		"speed",
-		"outfit",
-		"invisible",
-		"drunk",
-		"firefield",
-		"poisonfield",
-		"energyfield",
-		"firecondition",
-		"poisoncondition",
-		"energycondition",
-		"drowncondition",
-		"freezecondition",
-		"cursecondition",
-		"dazzlecondition"
-	};
+	static const char* reservedList[] = {"melee",           "physical",       "poison",          "fire",           "energy",         "drown",
+	                                     "lifedrain",       "manadrain",      "healing",         "speed",          "outfit",         "invisible",
+	                                     "drunk",           "firefield",      "poisonfield",     "energyfield",    "firecondition",  "poisoncondition",
+	                                     "energycondition", "drowncondition", "freezecondition", "cursecondition", "dazzlecondition"};
 
-	//static size_t size = sizeof(reservedList) / sizeof(const char*);
-	//for (size_t i = 0; i < size; ++i) {
+	// static size_t size = sizeof(reservedList) / sizeof(const char*);
+	// for (size_t i = 0; i < size; ++i) {
 	for (const char* reserved : reservedList) {
 		if (strcasecmp(reserved, name.c_str()) == 0) {
 			std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
@@ -567,7 +544,8 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group) || player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId) || (secondaryGroup != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, secondaryGroup))) {
+	if (player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group) || player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId) ||
+	    (secondaryGroup != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, secondaryGroup))) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 
 		if (isInstant()) {
@@ -766,7 +744,8 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 			}
 
 			if (secondaryGroupCooldown > 0) {
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
+				Condition* condition =
+				    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
 				player->addCondition(condition);
 			}
 		}
@@ -921,7 +900,8 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 					}
 
 					if (secondaryGroupCooldown > 0) {
-						Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
+						Condition* condition =
+						    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
 						player->addCondition(condition);
 					}
 
@@ -985,7 +965,8 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 				}
 
 				if (secondaryGroupCooldown > 0) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
+					Condition* condition =
+					    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
 					player->addCondition(condition);
 				}
 
@@ -1026,9 +1007,8 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 {
 	const Position& fromPos = creature->getPosition();
 	const Position& toPos = target->getPosition();
-	if (fromPos.z != toPos.z ||
-	        (range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight)) ||
-	        (range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
+	if (fromPos.z != toPos.z || (range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight)) ||
+	    (range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
 		return false;
 	}
 	return true;
@@ -1081,7 +1061,7 @@ bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 
 bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
-	//onCastSpell(creature, var)
+	// onCastSpell(creature, var)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - InstantSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
@@ -1243,7 +1223,7 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 
 	hasCharges = (charges > 0);
 	if (magLevel != 0 || level != 0) {
-		//Change information in the ItemType to get accurate description
+		// Change information in the ItemType to get accurate description
 		ItemType& iType = Item::items.getItemType(runeId);
 		iType.runeMagLevel = magLevel;
 		iType.runeLevel = level;
@@ -1328,7 +1308,6 @@ bool Convince(const RuneSpell* spell, Player* player, const Position& posTo)
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
 	return true;
 }
-
 }
 
 bool RuneSpell::loadFunction(const pugi::xml_attribute& attr)
@@ -1444,7 +1423,7 @@ bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var, boo
 
 bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey)
 {
-	//onCastSpell(creature, var, isHotkey)
+	// onCastSpell(creature, var, isHotkey)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - RuneSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;

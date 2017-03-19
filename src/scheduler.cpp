@@ -121,7 +121,7 @@ void Scheduler::shutdown()
 	setState(THREAD_STATE_TERMINATED);
 	eventLock.lock();
 
-	//this list should already be empty
+	// this list should already be empty
 	while (!eventList.empty()) {
 		delete eventList.top();
 		eventList.pop();
@@ -132,7 +132,7 @@ void Scheduler::shutdown()
 	eventSignal.notify_one();
 }
 
-SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f)
+SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void(void)> f)
 {
 	return new SchedulerTask(delay, std::move(f));
 }

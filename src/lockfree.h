@@ -26,37 +26,38 @@
 
 #include <boost/lockfree/stack.hpp>
 
-template <typename T, size_t CAPACITY>
-class LockfreePoolingAllocator : public std::allocator<T>
+template <typename T, size_t CAPACITY> class LockfreePoolingAllocator : public std::allocator<T>
 {
-	public:
-		template <typename U>
-		explicit constexpr LockfreePoolingAllocator(const U&) {}
-		using value_type = T;
+public:
+	template <typename U> explicit constexpr LockfreePoolingAllocator(const U&) {}
+	using value_type = T;
 
-		T* allocate(size_t) const {
-			T* p; // NOTE: p doesn't have to be initialized
-			if (!getFreeList().pop(p)) {
-				//Acquire memory without calling the constructor of T
-				p = static_cast<T*>(operator new (sizeof(T)));
-			}
-			return p;
+	T* allocate(size_t) const
+	{
+		T* p; // NOTE: p doesn't have to be initialized
+		if (!getFreeList().pop(p)) {
+			// Acquire memory without calling the constructor of T
+			p = static_cast<T*>(operator new(sizeof(T)));
 		}
+		return p;
+	}
 
-		void deallocate(T* p, size_t) const {
-			if (!getFreeList().bounded_push(p)) {
-				//Release memory without calling the destructor of T
-				//(it has already been called at this point)
-				operator delete(p);
-			}
+	void deallocate(T* p, size_t) const
+	{
+		if (!getFreeList().bounded_push(p)) {
+			// Release memory without calling the destructor of T
+			//(it has already been called at this point)
+			operator delete(p);
 		}
+	}
 
-	private:
-		using FreeList = boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>>;
-		static FreeList& getFreeList() {
-			static FreeList freeList;
-			return freeList;
-		}
+private:
+	using FreeList = boost::lockfree::stack<T*, boost::lockfree::capacity<CAPACITY>>;
+	static FreeList& getFreeList()
+	{
+		static FreeList freeList;
+		return freeList;
+	}
 };
 
 #endif

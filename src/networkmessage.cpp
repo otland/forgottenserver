@@ -24,7 +24,7 @@
 #include "container.h"
 #include "creature.h"
 
-std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
+std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
 	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
@@ -34,7 +34,7 @@ std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 		return std::string();
 	}
 
-	char* v = reinterpret_cast<char*>(buffer) + info.position; //does not break strict aliasing
+	char* v = reinterpret_cast<char*>(buffer) + info.position; // does not break strict aliasing
 	info.position += stringLen;
 	return std::string(v, stringLen);
 }
@@ -61,7 +61,7 @@ void NetworkMessage::addString(const std::string& value)
 	info.length += stringLen;
 }
 
-void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
+void NetworkMessage::addDouble(double value, uint8_t precision /* = 2*/)
 {
 	addByte(precision);
 	add<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + std::numeric_limits<int32_t>::max());

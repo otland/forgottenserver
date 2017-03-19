@@ -138,12 +138,13 @@ bool Condition::executeCondition(Creature*, int32_t interval)
 		return true;
 	}
 
-	//Not using set ticks here since it would reset endTime
+	// Not using set ticks here since it would reset endTime
 	ticks = std::max<int32_t>(0, ticks - interval);
 	return getEndTime() >= OTSYS_TIME();
 }
 
-Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param/* = 0*/, bool buff/* = false*/, uint32_t subId/* = 0*/)
+Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param /* = 0*/, bool buff /* = false*/,
+                                      uint32_t subId /* = 0*/)
 {
 	switch (type) {
 		case CONDITION_POISON:
@@ -347,10 +348,10 @@ void ConditionAttributes::addCondition(Creature* creature, const Condition* addC
 		setTicks(addCondition->getTicks());
 
 		const ConditionAttributes& conditionAttrs = static_cast<const ConditionAttributes&>(*addCondition);
-		//Remove the old condition
+		// Remove the old condition
 		endCondition(creature);
 
-		//Apply the new one
+		// Apply the new one
 		memcpy(skills, conditionAttrs.skills, sizeof(skills));
 		memcpy(skillsPercent, conditionAttrs.skillsPercent, sizeof(skillsPercent));
 		memcpy(stats, conditionAttrs.stats, sizeof(stats));
@@ -930,7 +931,7 @@ bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
 {
 	time = std::max<int32_t>(time, EVENT_CREATURE_THINK_INTERVAL);
 	if (rounds == -1) {
-		//periodic damage
+		// periodic damage
 		periodDamage = value;
 		setParam(CONDITION_PARAM_TICKINTERVAL, time);
 		setParam(CONDITION_PARAM_TICKS, -1);
@@ -941,7 +942,7 @@ bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
 		return false;
 	}
 
-	//rounds, time, damage
+	// rounds, time, damage
 	for (int32_t i = 0; i < rounds; ++i) {
 		IntervalInfo damageInfo;
 		damageInfo.interval = time;
@@ -1116,7 +1117,7 @@ void ConditionDamage::addCondition(Creature* creature, const Condition* addCondi
 	int32_t nextTimeLeft = tickInterval;
 
 	if (!damageList.empty()) {
-		//save previous timeLeft
+		// save previous timeLeft
 		IntervalInfo& damageInfo = damageList.front();
 		nextTimeLeft = damageInfo.timeLeft;
 		damageList.clear();
@@ -1126,7 +1127,7 @@ void ConditionDamage::addCondition(Creature* creature, const Condition* addCondi
 
 	if (init()) {
 		if (!damageList.empty()) {
-			//restore last timeLeft
+			// restore last timeLeft
 			IntervalInfo& damageInfo = damageList.front();
 			damageInfo.timeLeft = nextTimeLeft;
 		}
