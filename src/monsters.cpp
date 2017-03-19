@@ -198,11 +198,11 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Can not load script: " << scriptEntry.second << std::endl;
 				std::cout << scriptInterface->getLastLuaError() << std::endl;
-				return false;
+				loaded = false;
 			}
 		}
 	}
-	return true;
+	return loaded;
 }
 
 bool Monsters::reload()

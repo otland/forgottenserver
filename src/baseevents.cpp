@@ -74,10 +74,10 @@ bool BaseEvents::loadFromXml()
 
 		if (!success || !registerEvent(event, node)) {
 			delete event;
-			return false;
+			loaded = false;
 		}
 	}
-	return true;
+	return loaded;
 }
 
 bool BaseEvents::reload()
