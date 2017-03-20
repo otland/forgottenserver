@@ -15,6 +15,9 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="100" />
 		<flag hidehealth="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<summons maxSummons="2">
 		<summon name="Demon" interval="2000" chance="7" max="3" />
