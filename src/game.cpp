@@ -3999,6 +3999,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			return true;
 		}
 
+		target->drainHealth(attacker, realDamage);
+
 		if (spectators.empty()) {
 			map.getSpectators(spectators, targetPos, true, true);
 		}
