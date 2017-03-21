@@ -541,12 +541,13 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			CombatType_t combatType = field->getCombatType();
 
 			//There is 3 options for a monster to enter a magic field
-			//1) Monster is immune
+			//1) Monster is able to walk over field type
 			if (!monster->isImmune(combatType)) {
-				//1) Monster is "strong" enough to handle the damage
+				//1) Monster is able to walk over field type
 				//2) Monster is already afflicated by this type of condition
+				//3) Being attacked while random stepping will make it ignore field damages
 				if (hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
-					if (!(monster->canPushItems() || monster->hasCondition(Combat::DamageToConditionType(combatType)))) {
+					if (!(monster->canWalkOnFieldType(combatType) || monster->getIgnoreFieldDamage() || monster->hasCondition(Combat::DamageToConditionType(combatType)))) {
 						return RETURNVALUE_NOTPOSSIBLE;
 					}
 				} else {
