@@ -499,7 +499,7 @@ void Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 	}
 
 	if (g_game.combatChangeHealth(caster, target, damage)) {
-		CombatConditionFunc(caster, target, params, nullptr);
+		CombatConditionFunc(caster, target, params, &damage);
 		CombatDispelFunc(caster, target, params, nullptr);
 	}
 }
@@ -520,8 +520,12 @@ void Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 	}
 }
 
-void Combat::CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage*)
+void Combat::CombatConditionFunc(Creature* caster, Creature* target, const CombatParams& params, CombatDamage* data)
 {
+	if (params.origin == ORIGIN_MELEE && data && data->primary.value == 0 && data->secondary.value == 0) {
+		return;
+	}
+
 	for (const auto& condition : params.conditionList) {
 		if (caster == target || !target->isImmune(condition->getType())) {
 			Condition* conditionCopy = condition->clone();
