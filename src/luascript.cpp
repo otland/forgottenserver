@@ -2094,7 +2094,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("NetworkMessage", "reset", LuaScriptInterface::luaNetworkMessageReset);
 	registerMethod("NetworkMessage", "seek", LuaScriptInterface::luaNetworkMessageSeek);
 	registerMethod("NetworkMessage", "tell", LuaScriptInterface::luaNetworkMessageTell);
-	registerMethod("NetworkMessage", "length", LuaScriptInterface::luaNetworkMessageLength);
+	registerMethod("NetworkMessage", "len", LuaScriptInterface::luaNetworkMessageLength);
 	registerMethod("NetworkMessage", "skipBytes", LuaScriptInterface::luaNetworkMessageSkipBytes);
 	registerMethod("NetworkMessage", "sendToPlayer", LuaScriptInterface::luaNetworkMessageSendToPlayer);
 
