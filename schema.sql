@@ -132,11 +132,24 @@ CREATE TABLE IF NOT EXISTS `guilds` (
   `name` varchar(255) NOT NULL,
   `ownerid` int(11) NOT NULL,
   `creationdata` int(11) NOT NULL,
+  `balance` bigint(20) unsigned NOT NULL DEFAULT '0',
   `motd` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`),
   UNIQUE KEY (`ownerid`),
   FOREIGN KEY (`ownerid`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `guild_transactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guild_id` int(11) NOT NULL,
+  `to_guild_id` int(11) DEFAULT NULL,
+  `player_id` int(11) DEFAULT NULL,
+  `type` TINYINT(3) NOT NULL,
+  `balance` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `time` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`guild_id`) REFERENCES `guilds`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `guild_invites` (
@@ -207,6 +220,7 @@ CREATE TABLE IF NOT EXISTS `houses` (
   `highest_bidder` int(11) NOT NULL DEFAULT '0',
   `size` int(11) NOT NULL DEFAULT '0',
   `beds` int(11) NOT NULL DEFAULT '0',
+  `type` TINYINT(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`),
   KEY `town_id` (`town_id`)
@@ -322,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '19'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '20'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
