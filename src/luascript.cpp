@@ -6322,9 +6322,13 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 		}
 	}
 
-	uint32_t subType = getNumber<uint32_t>(L, 3, 1);
+	uint32_t count = getNumber<uint32_t>(L, 3, 1);
+	const ItemType& it = Item::items[itemId];
+	if (it.stackable) {
+		count = std::min<uint16_t>(count, 100);
+	}
 
-	Item* item = Item::CreateItem(itemId, std::min<uint32_t>(subType, 100));
+	Item* item = Item::CreateItem(itemId, count);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
