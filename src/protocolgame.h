@@ -174,10 +174,9 @@ class ProtocolGame final : public ProtocolGameBase
 			bool enabled = false;
 			bool paused = false;
 
-			std::vector<ProtocolSpectator_ptr> spectators = {};
-			std::unordered_map<std::string, uint32_t> muteList = {};
-			std::unordered_map<std::string, uint32_t> banList = {};
-			std::unordered_map<uint32_t, std::string> spectatorsNames = {}; // names based on ip
+			std::vector<ProtocolSpectator_ptr> spectators;
+			std::unordered_map<std::string, uint32_t> muteList;
+			std::unordered_map<std::string, uint32_t> banList;
 
 			std::string password;
 			std::string pauseReason;
