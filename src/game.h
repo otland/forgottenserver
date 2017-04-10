@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -503,7 +503,7 @@ class Game
 		Quests quests;
 
 	protected:
-		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
+		bool playerSaySpell(Player* player, SpeakClasses type, uint16_t channelId, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);
 		bool playerSpeakTo(Player* player, SpeakClasses type, const std::string& receiver, const std::string& text);

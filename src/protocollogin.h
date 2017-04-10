@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -43,6 +43,7 @@ class ProtocolLogin : public Protocol
 	protected:
 		void disconnectClient(const std::string& message, uint16_t version);
 
+		void getCastList(const std::string& password, uint16_t version);
 		void getCharacterList(const std::string& accountName, const std::string& password, const std::string& token, uint16_t version);
 };
 

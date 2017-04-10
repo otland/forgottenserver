@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -30,6 +30,7 @@
 #include "rsa.h"
 #include "protocolold.h"
 #include "protocollogin.h"
+#include "protocolspectator.h"
 #include "protocolstatus.h"
 #include "databasemanager.h"
 #include "scheduler.h"
@@ -234,6 +235,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// Game client protocols
 	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
+	services->add<ProtocolSpectator>(g_config.getNumber(ConfigManager::CAST_PORT));
 	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
 
 	// OT protocols

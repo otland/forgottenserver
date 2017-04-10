@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -40,6 +40,7 @@ class ConfigManager
 			WARN_UNSAFE_SCRIPTS,
 			CONVERT_UNSAFE_SCRIPTS,
 			CLASSIC_EQUIPMENT_SLOTS,
+			LIVE_CAST_ENABLED,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -90,6 +91,7 @@ class ConfigManager
 			FRAG_TIME,
 			WHITE_SKULL_TIME,
 			GAME_PORT,
+			CAST_PORT,
 			LOGIN_PORT,
 			STATUS_PORT,
 			STAIRHOP_DELAY,

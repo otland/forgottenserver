@@ -47,6 +47,16 @@
 	<talkaction words="!online" script="online.lua" />
 	<talkaction words="!serverinfo" script="serverinfo.lua" />
 
+	<!-- cast talkactions -->
+	<talkaction words="!cast" separator=" " script="livecast.lua" />
+	<talkaction words="!pause" channel="cast" separator=" " script="livecastcommands.lua" />
+	<talkaction words="!start" channel="cast" separator=" " script="livecastcommands.lua" />
+	<talkaction words="!kick" channel="cast" separator=" " script="livecastcommands.lua" />
+	<talkaction words="!ban" channel="cast" separator=" " script="livecastcommands.lua" />
+	<talkaction words="!unban" channel="cast" separator=" " script="livecastcommands.lua" />
+	<talkaction words="!mute" channel="cast" separator=" " script="livecastcommands.lua" />
+	<talkaction words="!unmute" channel="cast" separator=" " script="livecastcommands.lua" />
+	
 	<!-- test talkactions -->
 	<talkaction words="!z" separator=" " script="magiceffect.lua" />
 	<talkaction words="!x" separator=" " script="animationeffect.lua" />

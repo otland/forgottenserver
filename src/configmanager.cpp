@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -111,6 +111,7 @@ bool ConfigManager::load()
 
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
+		integer[CAST_PORT] = getGlobalNumber(L, "loveCastProtocolPort", 7173);
 		integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 
@@ -131,6 +132,7 @@ bool ConfigManager::load()
 	boolean[WARN_UNSAFE_SCRIPTS] = getGlobalBoolean(L, "warnUnsafeScripts", true);
 	boolean[CONVERT_UNSAFE_SCRIPTS] = getGlobalBoolean(L, "convertUnsafeScripts", true);
 	boolean[CLASSIC_EQUIPMENT_SLOTS] = getGlobalBoolean(L, "classicEquipmentSlots", false);
+	boolean[LIVE_CAST_ENABLED] = getGlobalBoolean(L, "liveCastEnabled", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");

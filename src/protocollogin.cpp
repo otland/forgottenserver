@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -116,6 +116,68 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	disconnect();
 }
 
+void ProtocolLogin::getCastList(const std::string& password, uint16_t version)
+{
+	// dispatcher thread
+	std::vector<std::string> worldList; // dummy world list to spectators amount; 
+	std::vector<std::string> castList;
+
+	uint8_t size = 0;
+
+	for (auto it : ProtocolGame::liveCasts) {
+		auto player = it.first;
+		auto protocol = it.second;
+
+		if (player && protocol && (password.empty() || protocol->canJoinCast(password))) {
+			castList.push_back(player->getName());
+			worldList.push_back(std::to_string(protocol->getSpectatorsCount()) + " spectators");
+		}
+
+		if (++size == std::numeric_limits<uint8_t>::max()) {
+			break;
+		}
+	}
+
+	// this is a result of incorrect password
+	if (castList.empty()) {
+		disconnectClient("There is not live cast with this password.", version);
+		return;
+	}
+
+	auto output = OutputMessagePool::getOutputMessage();
+
+	//Add session key
+	output->addByte(0x28);
+	output->addString(password);
+
+	//Add char list
+	output->addByte(0x64);
+
+	output->addByte(size);
+	for (int i = 0; i < size; i++) {
+		output->addByte(i); // world id
+		output->addString(worldList[i]);
+		output->addString(g_config.getString(ConfigManager::IP));
+		output->add<uint16_t>(g_config.getNumber(ConfigManager::CAST_PORT));
+		output->addByte(0);
+	}
+
+	output->addByte(size);
+	for (uint8_t i = 0; i < size; i++) {
+		output->addByte(0);
+		output->addString(castList[i]);
+	}
+
+	// premium;
+	output->addByte(0);
+	output->addByte(1);
+	output->add<uint32_t>(0);
+
+	send(output);
+
+	disconnect();
+}
+
 void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
@@ -193,12 +255,22 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	std::string accountName = msg.getString();
+	std::string password = msg.getString();
+
 	if (accountName.empty()) {
-		disconnectClient("Invalid account name.", version);
+		if (g_config.getBoolean(ConfigManager::LIVE_CAST_ENABLED)) {
+			if (ProtocolGame::liveCasts.empty()) {
+				disconnectClient("There are no live casts right now.", version);
+			} else {
+				auto thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this());
+				g_dispatcher.addTask(createTask(std::bind(&ProtocolLogin::getCastList, thisPtr, password, version)));
+			}
+		} else {
+			disconnectClient("Invalid account name.", version);
+		}
 		return;
 	}
 
-	std::string password = msg.getString();
 	if (password.empty()) {
 		disconnectClient("Invalid password.", version);
 		return;
