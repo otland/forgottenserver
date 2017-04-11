@@ -290,8 +290,7 @@ void ProtocolSpectator::parseCloseChannel(NetworkMessage& msg)
 {
 	uint16_t channelId = msg.get<uint16_t>();
 	if (channelId == CHANNEL_CAST) {
-		sendCastChannel();
-		sendChannelMessage("[Cast System]", "You can't close this channel!", TALKTYPE_CHANNEL_R1, CHANNEL_CAST);
+		g_dispatcher.addTask(createTask(std::bind(&ProtocolSpectator::reOpenCastChannel, getThis())));
 	}
 }
 
@@ -377,4 +376,13 @@ void ProtocolSpectator::sendCastChannel()
 
 	msg.add<uint16_t>(0x00);
 	writeToOutputBuffer(msg);
+}
+
+void ProtocolSpectator::reOpenCastChannel()
+{
+	// dispatcher thread
+	if (player && casterProtocol && player->client == casterProtocol->shared_from_this()) {
+		sendCastChannel();
+		sendChannelMessage("[Cast System]", "You can't close this channel!", TALKTYPE_CHANNEL_R1, CHANNEL_CAST);
+	}
 }

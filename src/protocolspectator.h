@@ -66,6 +66,8 @@ class ProtocolSpectator final : public ProtocolGameBase
 		bool isBanned();
 		bool isMuted();
 
+		void reOpenCastChannel();
+
 		friend class ProtocolGame;
 
 		uint32_t lastSpeak = 0;
