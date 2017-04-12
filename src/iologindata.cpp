@@ -183,7 +183,7 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		return;
 	}
-	
+
 	std::ostringstream query;
 	if (login) {
 		query << "INSERT INTO `players_online` (`player_id`, `cast_on`, `cast_password`, `cast_spectators`) VALUES (" << guid << ", 0, '', 0)";
