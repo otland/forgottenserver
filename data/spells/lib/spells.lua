@@ -301,7 +301,11 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 	return true
 end
 
-function Player:addPartyCondition(combat, variant, condition, baseMana)
+function Player:addPartyCondition(combat, variant, positions, condition, baseMana)
+	if not combat:execute(self, variant) then
+		return false
+	end
+
 	local party = self:getParty()
 	if not party then
 		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
@@ -312,38 +316,38 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local members = party:getMembers()
 	members[#members + 1] = party:getLeader()
 
-	local position = self:getPosition()
 	local affectedMembers = {}
 	for _, member in ipairs(members) do
-		if member:getPosition():getDistance(position) <= 36 then
-			affectedMembers[#affectedMembers + 1] = member
+		local memberPosition = member:getPosition()
+		for _, position in ipairs(positions) do
+			if memberPosition == position then
+				affectedMembers[#affectedMembers + 1] = member
+			end
 		end
 	end
 
-	if #affectedMembers <= 1 then
+	if #affectedMembers == 1 then
 		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
-		position:sendMagicEffect(CONST_ME_POFF)
+		self:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
 
-	local mana = math.ceil(math.pow(0.9, #affectedMembers - 1) * baseMana * #affectedMembers)
+	local mana = math.ceil(#affectedMembers * math.pow(0.9, #affectedMembers - 1) * baseMana)
 	if self:getMana() < mana then
 		self:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
-		position:sendMagicEffect(CONST_ME_POFF)
+		self:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
-
-	if not combat:execute(self, variant) then
-		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
-		position:sendMagicEffect(CONST_ME_POFF)
-		return false
-	end
-
-	self:addMana(baseMana - mana, false)
-	self:addManaSpent(mana - baseMana)
 
 	for _, member in ipairs(affectedMembers) do
 		member:addCondition(condition)
 	end
+
+	for _, position in ipairs(positions) do
+		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
+	end
+
+	self:addMana(-mana)
+	self:addManaSpent(mana)
 	return true
 end

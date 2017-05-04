@@ -1,15 +1,22 @@
 local combat = Combat()
-combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
-combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 
 local condition = Condition(CONDITION_REGENERATION)
-condition:setParameter(CONDITION_PARAM_SUBID, 4)
 condition:setParameter(CONDITION_PARAM_TICKS, 2 * 60 * 1000)
 condition:setParameter(CONDITION_PARAM_HEALTHGAIN, 20)
-condition:setParameter(CONDITION_PARAM_HEALTHTICKS, 2000)
+condition:setParameter(CONDITION_PARAM_HEALTHTICKS, 2 * 1000)
 condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
-function onCastSpell(creature, variant)
-	return creature:addPartyCondition(combat, variant, condition, 120)
+local positions
+
+function onTargetTile(creature, position)
+	positions[#positions + 1] = position
 end
+
+combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
+
+function onCastSpell(creature, variant)
+	positions = {}
+	return creature:addPartyCondition(combat, variant, positions, condition, 120)
+end
+
