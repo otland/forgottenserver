@@ -98,6 +98,7 @@ function creatureSayCallback(cid, type, msg)
 	end
 
 	local player = Player(cid)
+	local vocationId = player:getVocation():getId()
 	local items = {
 		[1] = 2190,
 		[2] = 2182,
@@ -106,7 +107,6 @@ function creatureSayCallback(cid, type, msg)
 	}
 
 	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
-		local vocationId = player:getVocation():getId()
 		if table.contains({1, 2, 5, 6}, vocationId) then
 			if player:getStorageValue(30002) == -1 then
 				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your advanture?', cid)
