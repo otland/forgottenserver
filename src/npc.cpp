@@ -145,6 +145,7 @@ bool Npc::loadFromXml()
 	name = npcNode.attribute("name").as_string();
 	attackable = npcNode.attribute("attackable").as_bool();
 	floorChange = npcNode.attribute("floorchange").as_bool();
+    pushable = npcNode.attribute("pushable").as_bool();
 
 	pugi::xml_attribute attr;
 	if ((attr = npcNode.attribute("speed"))) {
