@@ -99,6 +99,7 @@ void Npc::reset()
 {
 	loaded = false;
 	walkTicks = 1500;
+    pushable = true;
 	floorChange = false;
 	attackable = false;
 	ignoreHeight = true;
