@@ -738,7 +738,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 			}
 
 			Npc* movingNpc = movingCreature->getNpc();
-            if (movingNpc && (!movingNpc->isPushable() || !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos))) {
+			if (movingNpc && (!movingNpc->isPushable() || !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos))) {
 				player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 				return;
 			}
