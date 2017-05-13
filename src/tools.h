@@ -62,6 +62,8 @@ std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 std::string convertIPToString(uint32_t ip);
 
+bool hasSameSign(int32_t x, int32_t y, bool neutralZero = true);
+
 void trimString(std::string& str);
 
 MagicEffectClasses getMagicEffect(const std::string& strValue);
