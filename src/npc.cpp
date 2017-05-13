@@ -154,11 +154,9 @@ bool Npc::loadFromXml()
 		baseSpeed = 100;
 	}
 
-        if((attr = npcNode.attribute("pushable"))) {
-            pushable = attr.as_bool();
-        } else {
-            pushable = true;
-        }
+	if ((attr = npcNode.attribute("pushable"))) {
+		pushable = attr.as_bool();
+	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
 		walkTicks = pugi::cast<uint32_t>(attr.value());
