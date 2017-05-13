@@ -431,7 +431,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_HEALING);
 			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 		} else if (tmpName == "speed") {
-			int32_t speedChange = 0;
+			int32_t speedChangeMin = 0;
+			int32_t speedChangeMax = 0;
 			int32_t duration = 10000;
 
 			if ((attr = node.attribute("duration"))) {
@@ -439,15 +440,49 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			if ((attr = node.attribute("speedchange"))) {
-				speedChange = pugi::cast<int32_t>(attr.value());
-				if (speedChange < -1000) {
-					//cant be slower than 100%
-					speedChange = -1000;
+				speedChangeMin = pugi::cast<int32_t>(attr.value());
+
+				if(speedChangeMin < -1000) {
+					speedChangeMin = -1000;
+				}
+
+				speedChangeMax = speedChangeMin;
+			} else {
+				attr = node.attribute("speedchangemin");
+
+				if(attr) {
+					speedChangeMin = pugi::cast<int32_t>(attr.value());
+
+					if(speedChangeMin < -1000) {
+						speedChangeMin = -1000;
+					}
+
+					speedChangeMax = speedChangeMin;
+				}
+
+				attr = node.attribute("speedchangemax");
+
+				if(attr) {
+					speedChangeMax = pugi::cast<int32_t>(attr.value());
+
+					if(speedChangeMax < -1000) {
+						speedChangeMax = -1000;
+					}
+				}
+
+				if(!hasSameSign(speedChangeMin, speedChangeMax)) {
+					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - invalid speed change range: " << name << std::endl;
+					delete combat;
+					return false;
+				}
+
+				if(speedChangeMin > speedChangeMax) {
+					std::swap(speedChangeMin, speedChangeMax);
 				}
 			}
 
 			ConditionType_t conditionType;
-			if (speedChange > 0) {
+			if (speedChangeMin >= 0) {
 				conditionType = CONDITION_HASTE;
 				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 			} else {
@@ -455,7 +490,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			ConditionSpeed* condition = static_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
-			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
+			condition->setFormulaVars(speedChangeMin / 1000.0, 0, speedChangeMax / 1000.0, 0);
 			combat->setCondition(condition);
 		} else if (tmpName == "outfit") {
 			int32_t duration = 10000;

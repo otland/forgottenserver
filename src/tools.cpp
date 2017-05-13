@@ -346,6 +346,15 @@ void trimString(std::string& str)
 	str.erase(0, str.find_first_not_of(' '));
 }
 
+bool hasSameSign(int32_t x, int32_t y, bool neutralZero /* = true */)
+{
+	if(neutralZero) {
+		return (x >= 0 && y >= 0) || (x <= 0 && y <= 0);
+	}
+
+	return (x <= 0) == (y <= 0);
+}
+
 std::string convertIPToString(uint32_t ip)
 {
 	char buffer[17];
