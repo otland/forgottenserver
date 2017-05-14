@@ -442,7 +442,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			if ((attr = node.attribute("speedchange"))) {
 				speedChangeMin = pugi::cast<int32_t>(attr.value());
 
-				if(speedChangeMin < -1000) {
+				if (speedChangeMin < -1000) {
 					speedChangeMin = -1000;
 				}
 
@@ -450,10 +450,10 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			} else {
 				attr = node.attribute("speedchangemin");
 
-				if(attr) {
+				if (attr) {
 					speedChangeMin = pugi::cast<int32_t>(attr.value());
 
-					if(speedChangeMin < -1000) {
+					if (speedChangeMin < -1000) {
 						speedChangeMin = -1000;
 					}
 
@@ -462,21 +462,21 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				attr = node.attribute("speedchangemax");
 
-				if(attr) {
+				if (attr) {
 					speedChangeMax = pugi::cast<int32_t>(attr.value());
 
-					if(speedChangeMax < -1000) {
+					if (speedChangeMax < -1000) {
 						speedChangeMax = -1000;
 					}
 				}
 
-				if(!hasSameSign(speedChangeMin, speedChangeMax)) {
+				if (!hasSameSign(speedChangeMin, speedChangeMax)) {
 					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - invalid speed change range: " << name << std::endl;
 					delete combat;
 					return false;
 				}
 
-				if(speedChangeMin > speedChangeMax) {
+				if (speedChangeMin > speedChangeMax) {
 					std::swap(speedChangeMin, speedChangeMax);
 				}
 			}
