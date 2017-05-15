@@ -118,7 +118,7 @@ class Npc final : public Creature
 		}
 
 		bool isPushable() const final {
-			return walkTicks > 0 && pushable;
+			return pushable && walkTicks != 0;
 		}
 
 		void setID() final {
