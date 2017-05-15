@@ -348,7 +348,7 @@ void trimString(std::string& str)
 
 bool hasSameSign(int32_t x, int32_t y, bool neutralZero /* = true */)
 {
-	if(neutralZero) {
+	if (neutralZero) {
 		return (x >= 0 && y >= 0) || (x <= 0 && y <= 0);
 	}
 
