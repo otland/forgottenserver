@@ -635,7 +635,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 	if (reloading) {
 		auto it = monsters.find(asLowerCaseString(monsterName));
-		if (it == monsters.end()) {
+		if (it != monsters.end()) {
 			mType = &it->second;
 			mType->info = {};
 		}
