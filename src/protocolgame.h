@@ -34,6 +34,7 @@ class Tile;
 class Connection;
 class Quest;
 class ProtocolGame;
+class StoreCategory;
 using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
 extern Game g_game;
@@ -147,6 +148,14 @@ class ProtocolGame final : public Protocol
 		void parseMarketCancelOffer(NetworkMessage& msg);
 		void parseMarketAcceptOffer(NetworkMessage& msg);
 
+		//store methods
+		void parseStoreOpen();
+		void parseStoreSelectCategory(NetworkMessage& msg);
+		void parseStoreBuyOffer(NetworkMessage& msg);
+		void parseStoreOpenHistory(NetworkMessage& msg);
+		void parseStoreRequestHistory(NetworkMessage& msg);
+		void parseTransferCoins(NetworkMessage& msg);
+
 		//VIP methods
 		void parseAddVip(NetworkMessage& msg);
 		void parseRemoveVip(NetworkMessage& msg);
@@ -217,6 +226,15 @@ class ProtocolGame final : public Protocol
 		void sendMarketDetail(uint16_t itemId);
 		void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack);
 		void sendCloseTrade();
+
+		void sendStore();
+		void requestPurchaseData(uint32_t offerId, StoreOfferType_t offerType);
+		void sendStoreOffers(StoreCategory& category);
+		void sendStoreError(StoreError_t errorType, const std::string& message);
+		void updateCoinBalance();
+		void sendCoinBalance();
+		void sendStorePurchaseCompleted(const std::string& message);
+		void sendStoreHistory(uint32_t page, uint32_t entriesPerPage);
 
 		void sendTextWindow(uint32_t windowTextId, Item* item, uint16_t maxlen, bool canWrite);
 		void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
@@ -319,6 +337,9 @@ class ProtocolGame final : public Protocol
 		uint16_t version = CLIENT_VERSION_MIN;
 
 		uint8_t challengeRandom = 0;
+
+		uint8_t storeHistoryEntriesPerPage = 16;
+		uint32_t currentPage = 0;
 
 		bool debugAssertSent = false;
 		bool acceptPackets = false;

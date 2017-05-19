@@ -121,6 +121,26 @@ enum SpellGroup_t : uint8_t {
 	SPELLGROUP_SPECIAL = 4,
 };
 
+enum StoreOfferState_t : uint8_t {
+	STORE_OFFERSTATE_NONE = 0,
+	STORE_OFFERSTATE_NEW = 1,
+	STORE_OFFERSTATE_SALE = 2,
+	STORE_OFFERSTATE_TIMED = 3,
+};
+
+enum StoreOfferType_t : uint8_t {
+	STORE_OFFERTYPE_OTHER = 0,
+	STORE_OFFERTYPE_NAMECHANGE = 1,
+};
+
+enum StoreError_t : uint8_t {
+	STORE_ERROR_PURCHASE = 0,
+	STORE_ERROR_NETWORK = 1,
+	STORE_ERROR_HISTORY = 2,
+	STORE_ERROR_TRANSFER = 3,
+	STORE_ERROR_INFORMATION = 4,
+};
+
 enum AccountType_t : uint8_t {
 	ACCOUNT_TYPE_NORMAL = 1,
 	ACCOUNT_TYPE_TUTOR = 2,
