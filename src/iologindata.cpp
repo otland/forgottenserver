@@ -205,7 +205,7 @@ void IOLoginData::updateCast(uint32_t guid, uint32_t spectators)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "UPDATE `players_online` set `cast_spectators = " << spectators << " WHERE `player_id` = " << guid;
+	query << "UPDATE `players_online` set `cast_spectators` = " << spectators << " WHERE `player_id` = " << guid;
 	db.executeQuery(query.str());
 }
 
