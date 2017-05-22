@@ -111,7 +111,7 @@ bool ConfigManager::load()
 
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 		integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
-		integer[CAST_PORT] = getGlobalNumber(L, "loveCastProtocolPort", 7173);
+		integer[CAST_PORT] = getGlobalNumber(L, "liveCastProtocolPort", 7173);
 		integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 
