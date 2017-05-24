@@ -24,6 +24,7 @@ maxPlayers = 0
 motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
+allowWalkthrough = true
 serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
