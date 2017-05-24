@@ -587,7 +587,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 WeaponDistance::WeaponDistance(LuaScriptInterface* interface) :
 	Weapon(interface)
 {
-	params.blockedByArmor = true;
+	params.blockedByShield = true;
 	params.combatType = COMBAT_PHYSICALDAMAGE;
 }
 
