@@ -250,7 +250,7 @@ class ConditionDamage final : public Condition
 		ConditionDamage(ConditionId_t id, ConditionType_t type, bool buff = false, uint32_t subId = 0) :
 			Condition(id, type, 0, buff, subId) {}
 
-		static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);
+		static void generateDamageList(ConditionType_t type, int32_t amount, int32_t start, std::list<int32_t>& list);
 
 		bool startCondition(Creature* creature) final;
 		bool executeCondition(Creature* creature, int32_t interval) final;

@@ -976,7 +976,7 @@ bool ConditionDamage::init()
 			}
 
 			std::list<int32_t> list;
-			ConditionDamage::generateDamageList(amount, startDamage, list);
+			ConditionDamage::generateDamageList(conditionType, amount, startDamage, list);
 			for (int32_t value : list) {
 				addDamage(1, tickInterval, -value);
 			}
@@ -1196,23 +1196,32 @@ uint32_t ConditionDamage::getIcons() const
 	return icons;
 }
 
-void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list)
+void ConditionDamage::generateDamageList(ConditionType_t type, int32_t amount, int32_t start, std::list<int32_t>& list)
 {
-	amount = std::abs(amount);
-	int32_t sum = 0;
-	double x1, x2;
-
-	for (int32_t i = start; i > 0; --i) {
-		int32_t n = start + 1 - i;
-		int32_t med = (n * amount) / start;
-
+	if (type == CONDITION_CURSED) {
+		int8_t exponent = -10;
 		do {
-			sum += i;
-			list.push_back(i);
+			list.push_back(static_cast<int32_t>(std::round(10 * std::pow(1.2f, exponent++))));
+		} while (list.back() < start);
 
-			x1 = std::fabs(1.0 - ((static_cast<float>(sum)) + i) / med);
-			x2 = std::fabs(1.0 - (static_cast<float>(sum) / med));
-		} while (x1 < x2);
+		list.push_back(std::max<int32_t>(1, static_cast<int32_t>(std::round(list.back() * uniform_random(10, 1200) / 1000.0f))));
+	} else {
+		amount = std::abs(amount);
+		int32_t sum = 0;
+		double x1, x2;
+
+		for (int32_t i = start; i > 0; i = i - (i > 21 ? (i / 20) + boolean_random() : 1)) {
+			int32_t n = start + 1 - i;
+			int32_t med = (n * amount) / start;
+
+			do {
+				sum += i;
+				list.push_back(i);
+
+				x1 = std::fabs(1.0 - ((static_cast<float>(sum)) + i) / med);
+				x2 = std::fabs(1.0 - (static_cast<float>(sum) / med));
+			} while (x1 < x2);
+		}
 	}
 }
 
