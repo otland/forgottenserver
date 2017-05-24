@@ -25,6 +25,15 @@
 #include "protocol.h"
 #include "scheduler.h"
 #include "server.h"
+#if defined(__unix__) //all this for setsockopt
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#include <string.h>
+#include <errno.h>
+#elif defined(_WIN32)
+#include <Winsock2.h>
+#endif
 
 extern ConfigManager g_config;
 
@@ -33,6 +42,23 @@ Connection_ptr ConnectionManager::createConnection(boost::asio::io_service& io_s
 	std::lock_guard<std::mutex> lockClass(connectionManagerLock);
 
 	auto connection = std::make_shared<Connection>(io_service, servicePort);
+	#if defined(__unix__)
+	{
+		int flag = 1;
+		int result = setsockopt(connection->getSocket(),IPPROTO_TCP,TCP_NODELAY,&flag,sizeof(flag));
+		if (result != 0) {
+			std::cerr << "warning: failed to enable TCP_NODELAY. errno: " << errno << " strerror: " << strerror(errno) << "\n";
+		}
+    	}
+	#elif defined(_WIN32)
+	{
+		BOOL flag = TRUE;
+		int result = setsockopt(connection->getSocket(), IPPROTO_TCP, TCP_NODELAY, &flag, sizeof(flag));
+		if (result == SOCKET_ERROR) {
+			std::cerr << "Warning: failed to enable TCP_NODELAY. WSAGetLastError:" << WSAGetLastError() << "\n";//someone have fun doing the FormatMessage stuff here
+		}
+	}
+	#endif
 	connections.insert(connection);
 	return connection;
 }
