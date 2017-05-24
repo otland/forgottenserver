@@ -108,7 +108,8 @@ class IOMap
 
 	public:
 		bool loadMap(Map* map, const std::string& identifier);
-
+		bool loadMapU(Map* map, const std::string& identifier, int place_x, int place_y);
+		
 		/* Load the spawns
 		 * \param map pointer to the Map class
 		 * \returns Returns true if the spawns were loaded successfully
