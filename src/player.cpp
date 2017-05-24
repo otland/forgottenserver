@@ -1267,6 +1267,11 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 			}
 		}
 	}
+
+	// unset editing house
+	if (editHouse && !newTile->hasFlag(TILESTATE_HOUSE)) {
+		editHouse = nullptr;
+	}
 }
 
 //container
