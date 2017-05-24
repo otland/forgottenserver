@@ -414,6 +414,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.extraDefense = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "attack") {
 			it.attack = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "attackspeed") {
+			it.attackspeed = pugi::cast<uint32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "rotateto") {
 			it.rotateTo = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "moveable" || tmpStrValue == "movable") {
