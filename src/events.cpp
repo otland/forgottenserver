@@ -34,6 +34,10 @@ Events::Events() :
 
 bool Events::load()
 {
+	if (scriptInterface.loadFile("data/events/lib/events.lua") == -1) {
+		std::cout << "[Warning - Events::load] Can not load events lib/events.lua" << std::endl;
+	}
+	
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/events/events.xml");
 	if (!result) {
