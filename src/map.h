@@ -184,7 +184,7 @@ class Map
 		  * \returns true if the map was loaded successfully
 		  */
 		bool loadMap(const std::string& identifier, bool loadHouses);
-
+		bool loadMapU(const std::string& identifier, bool loadHouses, int place_x, int place_y);
 		/**
 		  * Save a map.
 		  * \returns true if the map was saved successfully
