@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <movements>
+	<!-- Ankrahmun pyramid ramps -->
+	<movevent event="StepIn" itemid="1553" script="pyramidramps.lua"/>
+	<movevent event="StepIn" itemid="1555" script="pyramidramps.lua"/>
+	<movevent event="StepIn" itemid="1557" script="pyramidramps.lua"/>
+	<movevent event="StepIn" itemid="1559" script="pyramidramps.lua"/>
+
 	<!-- Decaying tiles -->
 	<movevent event="StepIn" itemid="293" script="decay.lua" />
 	<movevent event="StepIn" itemid="461" script="decay.lua" />
