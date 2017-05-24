@@ -554,7 +554,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	//used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
-		if (!tile || tile->queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
+		if (!tile || tile->queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR || tile->hasFlag(TILESTATE_BLOCKPATH)) {
 			return nullptr;
 		}
 	}
