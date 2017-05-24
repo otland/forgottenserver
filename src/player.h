@@ -1306,6 +1306,20 @@ class Player final : public Creature, public Cylinder
 		bool isPromoted() const;
 
 		uint32_t getAttackSpeed() const {
+			if (auto left = getInventoryItem(CONST_SLOT_LEFT)) {
+				if (left->getWeaponType()) {
+					if (auto wleft = left->getAttackSpeed()) {
+						return wleft;
+					}
+				}
+			}
+			else if (auto right = getInventoryItem(CONST_SLOT_RIGHT)) {
+				if (right->getWeaponType()) {
+					if (auto wright = right->getAttackSpeed()) {
+						return wright;
+					}
+				}
+			}
 			return vocation->getAttackSpeed();
 		}
 

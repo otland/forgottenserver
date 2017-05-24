@@ -1125,6 +1125,7 @@ class LuaScriptInterface
 		static int luaItemTypeGetHitChance(lua_State* L);
 		static int luaItemTypeGetShootRange(lua_State* L);
 		static int luaItemTypeGetAttack(lua_State* L);
+		static int luaItemTypeGetAttackSpeed(lua_State* L);
 		static int luaItemTypeGetDefense(lua_State* L);
 		static int luaItemTypeGetExtraDefense(lua_State* L);
 		static int luaItemTypeGetArmor(lua_State* L);
