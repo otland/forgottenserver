@@ -117,6 +117,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 #else
 	std::cout << "unknown" << std::endl;
 #endif
+	std::cout << "Compiled with: " << BOOST_COMPILER << std::endl;
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
