@@ -238,13 +238,6 @@ class Player final : public Creature, public Cylinder
 		bool isInWar(const Player* player) const;
 		bool isInWarList(uint32_t guild_id) const;
 
-		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
-			lastWalkthroughAttempt = walkthroughAttempt;
-		}
-		void setLastWalkthroughPosition(Position walkthroughPosition) {
-			lastWalkthroughPosition = walkthroughPosition;
-		}
-
 		Inbox* getInbox() const {
 			return inbox;
 		}
@@ -1198,7 +1191,6 @@ class Player final : public Creature, public Cylinder
 		Skill skills[SKILL_LAST + 1];
 		LightInfo itemsLight;
 		Position loginPosition;
-		Position lastWalkthroughPosition;
 
 		time_t lastLoginSaved = 0;
 		time_t lastLogout = 0;
@@ -1210,7 +1202,6 @@ class Player final : public Creature, public Cylinder
 		uint64_t lastQuestlogUpdate = 0;
 		int64_t lastFailedFollow = 0;
 		int64_t skullTicks = 0;
-		int64_t lastWalkthroughAttempt = 0;
 		int64_t lastToggleMount = 0;
 		int64_t lastPing;
 		int64_t lastPong;
