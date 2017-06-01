@@ -534,21 +534,23 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			}
 
 			MagicField* field = getFieldItem();
-			if (field && !field->isBlocking()) {
-				CombatType_t combatType = field->getCombatType();
+			if (!field || field->isBlocking()) {
+				return RETURNVALUE_NOERROR;
+			}
 
-				//There is 3 options for a monster to enter a magic field
-				//1) Monster is immune
-				if (!monster->isImmune(combatType)) {
-					//1) Monster is "strong" enough to handle the damage
-					//2) Monster is already afflicated by this type of condition
-					if (hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
-						if (!(monster->canPushItems() || monster->hasCondition(Combat::DamageToConditionType(combatType)))) {
-							return RETURNVALUE_NOTPOSSIBLE;
-						}
-					} else {
+			CombatType_t combatType = field->getCombatType();
+
+			//There is 3 options for a monster to enter a magic field
+			//1) Monster is immune
+			if (!monster->isImmune(combatType)) {
+				//1) Monster is "strong" enough to handle the damage
+				//2) Monster is already afflicated by this type of condition
+				if (hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
+					if (!(monster->canPushItems() || monster->hasCondition(Combat::DamageToConditionType(combatType)))) {
 						return RETURNVALUE_NOTPOSSIBLE;
 					}
+				} else {
+					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
 

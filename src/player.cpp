@@ -159,26 +159,28 @@ std::string Player::getDescription(int32_t lookDistance) const
 		}
 	}
 
-	if (guild && guildRank) {
-		if (lookDistance == -1) {
-			s << " You are ";
-		} else if (sex == PLAYERSEX_FEMALE) {
-			s << " She is ";
-		} else {
-			s << " He is ";
-		}
+	if (!guild || !guildRank) {
+		return s.str();
+	}
 
-		s << guildRank->name << " of the " << guild->getName();
-		if (!guildNick.empty()) {
-			s << " (" << guildNick << ')';
-		}
+	if (lookDistance == -1) {
+		s << " You are ";
+	} else if (sex == PLAYERSEX_FEMALE) {
+		s << " She is ";
+	} else {
+		s << " He is ";
+	}
 
-		size_t memberCount = guild->getMemberCount();
-		if (memberCount == 1) {
-			s << ", which has 1 member, " << guild->getMembersOnline().size() << " of them online.";
-		} else {
-			s << ", which has " << memberCount << " members, " << guild->getMembersOnline().size() << " of them online.";
-		}
+	s << guildRank->name << " of the " << guild->getName();
+	if (!guildNick.empty()) {
+		s << " (" << guildNick << ')';
+	}
+
+	size_t memberCount = guild->getMemberCount();
+	if (memberCount == 1) {
+		s << ", which has 1 member, " << guild->getMembersOnline().size() << " of them online.";
+	} else {
+		s << ", which has " << memberCount << " members, " << guild->getMembersOnline().size() << " of them online.";
 	}
 	return s.str();
 }
@@ -1812,47 +1814,56 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		return blockType;
 	}
 
-	if (damage > 0) {
-		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
-				continue;
+	if (damage <= 0) {
+		damage = 0;
+		return BLOCK_ARMOR;
+	}
+
+	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+		if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+			continue;
+		}
+
+		Item* item = inventory[slot];
+		if (!item) {
+			continue;
+		}
+
+		const ItemType& it = Item::items[item->getID()];
+		if (!it.abilities) {
+			if (damage <= 0) {
+				damage = 0;
+				blockType = BLOCK_ARMOR;
 			}
+			return blockType;
+		}
 
-			Item* item = inventory[slot];
-			if (!item) {
-				continue;
-			}
+		const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
+		if (absorbPercent != 0) {
+			damage -= std::round(damage * (absorbPercent / 100.));
 
-			const ItemType& it = Item::items[item->getID()];
-			if (it.abilities) {
-				const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
-				if (absorbPercent != 0) {
-					damage -= std::round(damage * (absorbPercent / 100.));
-
-					uint16_t charges = item->getCharges();
-					if (charges != 0) {
-						g_game.transformItem(item, item->getID(), charges - 1);
-					}
-				}
-
-				if (field) {
-					const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
-					if (fieldAbsorbPercent != 0) {
-						damage -= std::round(damage * (fieldAbsorbPercent / 100.));
-
-						uint16_t charges = item->getCharges();
-						if (charges != 0) {
-							g_game.transformItem(item, item->getID(), charges - 1);
-						}
-					}
-				}
+			uint16_t charges = item->getCharges();
+			if (charges != 0) {
+				g_game.transformItem(item, item->getID(), charges - 1);
 			}
 		}
 
-		if (damage <= 0) {
-			damage = 0;
-			blockType = BLOCK_ARMOR;
+		if (field) {
+			const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
+			if (fieldAbsorbPercent != 0) {
+				damage -= std::round(damage * (fieldAbsorbPercent / 100.));
+
+				uint16_t charges = item->getCharges();
+				if (charges != 0) {
+					g_game.transformItem(item, item->getID(), charges - 1);
+				}
+			}
 		}
+	}
+
+	if (damage <= 0) {
+		damage = 0;
+		blockType = BLOCK_ARMOR;
 	}
 	return blockType;
 }
@@ -2420,21 +2431,24 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 			break;
 	}
 
-	if (ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_NOTENOUGHROOM) {
-		//need an exchange with source?
-		const Item* inventoryItem = getInventoryItem(static_cast<slots_t>(index));
-		if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
-			return RETURNVALUE_NEEDEXCHANGE;
-		}
 
-		//check if enough capacity
-		if (!hasCapacity(item, count)) {
-			return RETURNVALUE_NOTENOUGHCAPACITY;
-		}
+	if (ret != RETURNVALUE_NOERROR && ret != RETURNVALUE_NOTENOUGHROOM) {
+		return ret;
+	}
 
-		if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true)) {
-			return RETURNVALUE_CANNOTBEDRESSED;
-		}
+	//need an exchange with source?
+	const Item* inventoryItem = getInventoryItem(static_cast<slots_t>(index));
+	if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
+		return RETURNVALUE_NEEDEXCHANGE;
+	}
+
+	//check if enough capacity
+	if (!hasCapacity(item, count)) {
+		return RETURNVALUE_NOTENOUGHCAPACITY;
+	}
+
+	if (!g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true)) {
+		return RETURNVALUE_CANNOTBEDRESSED;
 	}
 	return ret;
 }
@@ -3463,22 +3477,25 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 
 	Creature::onKilledCreature(target, lastHit);
 
-	if (Player* targetPlayer = target->getPlayer()) {
-		if (targetPlayer && targetPlayer->getZone() == ZONE_PVP) {
-			targetPlayer->setDropLoot(false);
-			targetPlayer->setSkillLoss(false);
-		} else if (!hasFlag(PlayerFlag_NotGainInFight) && !isPartner(targetPlayer)) {
-			if (!Combat::isInPvpZone(this, targetPlayer) && hasAttacked(targetPlayer) && !targetPlayer->hasAttacked(this) && !isGuildMate(targetPlayer) && targetPlayer != this) {
-				if (targetPlayer->getSkull() == SKULL_NONE && !isInWar(targetPlayer)) {
-					unjustified = true;
-					addUnjustifiedDead(targetPlayer);
-				}
+	Player* targetPlayer = target->getPlayer();
+	if (!targetPlayer) {
+		return false;
+	}
 
-				if (lastHit && hasCondition(CONDITION_INFIGHT)) {
-					pzLocked = true;
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME), 0);
-					addCondition(condition);
-				}
+	if (targetPlayer->getZone() == ZONE_PVP) {
+		targetPlayer->setDropLoot(false);
+		targetPlayer->setSkillLoss(false);
+	} else if (!hasFlag(PlayerFlag_NotGainInFight) && !isPartner(targetPlayer)) {
+		if (!Combat::isInPvpZone(this, targetPlayer) && hasAttacked(targetPlayer) && !targetPlayer->hasAttacked(this) && !isGuildMate(targetPlayer) && targetPlayer != this) {
+			if (targetPlayer->getSkull() == SKULL_NONE && !isInWar(targetPlayer)) {
+				unjustified = true;
+				addUnjustifiedDead(targetPlayer);
+			}
+
+			if (lastHit && hasCondition(CONDITION_INFIGHT)) {
+				pzLocked = true;
+				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME), 0);
+				addCondition(condition);
 			}
 		}
 	}
@@ -3713,22 +3730,24 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 	}
 
 	const Player* player = creature->getPlayer();
-	if (player && player->getSkull() == SKULL_NONE) {
-		if (isInWar(player)) {
-			return SKULL_GREEN;
-		}
+	if (!player || player->getSkull() != SKULL_NONE) {
+		return Creature::getSkullClient(creature);
+	}
 
-		if (!player->getGuildWarVector().empty() && guild == player->getGuild()) {
-			return SKULL_GREEN;
-		}
+	if (isInWar(player)) {
+		return SKULL_GREEN;
+	}
 
-		if (player->hasAttacked(this)) {
-			return SKULL_YELLOW;
-		}
+	if (!player->getGuildWarVector().empty() && guild == player->getGuild()) {
+		return SKULL_GREEN;
+	}
 
-		if (isPartner(player)) {
-			return SKULL_GREEN;
-		}
+	if (player->hasAttacked(this)) {
+		return SKULL_YELLOW;
+	}
+
+	if (isPartner(player)) {
+		return SKULL_GREEN;
 	}
 	return Creature::getSkullClient(creature);
 }
