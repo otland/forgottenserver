@@ -69,13 +69,13 @@
 		<voice sentence="*** DEATH ***" />
 	</voices>
 	<loot>
-		<item name="decorative ribbon" chance="10000" />
-		<item name="crystalline sword" chance="5500" />
-		<item name="crystalline axe" chance="5500" />
-		<item name="mycological mace" chance="4500" />
-		<item name="crystal crossbow" chance="4500" />
-		<item name="mycological bow" chance="10000" />
-		<item name="shiny blade" chance="8000" />
-		<item name="Abyssador's lash" chance="100000" />
+		<item name="abyssador's lash" chance="100000" />
+		<item name="crystal crossbow" chance="10960" />
+		<item name="crystalline sword" chance="10960" />
+		<item name="crystalline axe" chance="9590" />
+		<item name="shiny blade" chance="9590" />
+		<item name="mycological bow" chance="4110" />
+		<item name="decorative ribbon" chance="1370" />
+		<item name="mycological mace" chance="1370" />
 	</loot>
 </monster>

@@ -37,14 +37,14 @@
 		<voice sentence="Huaauaauaauaa!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="40" chance="69000" />
-		<item name="power ring" chance="300" />
-		<item name="protection amulet" chance="990" />
-		<item name="club ring" chance="230" />
-		<item name="plate armor" chance="950" />
-		<item name="banana" countmax="12" chance="30000" />
-		<item name="ape fur" chance="980" />
-		<item name="health potion" chance="570" />
-		<item name="kongra's shoulderpad" chance="4900" />
+		<item name="gold coin" countmax="40" chance="87980" />
+		<item name="banana" countmax="12" chance="30810" />
+		<item name="kongra's shoulderpad" chance="9350" />
+		<item name="protection amulet" chance="1020" />
+		<item name="plate armor" chance="1010" />
+		<item name="ape fur" chance="970" />
+		<item name="health potion" chance="500" />
+		<item name="power ring" chance="310" />
+		<item name="club ring" chance="200" />
 	</loot>
 </monster>

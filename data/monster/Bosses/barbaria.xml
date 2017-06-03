@@ -53,10 +53,11 @@
 		<voice sentence="My instincts tell me about your cowardice." />
 	</voices>
 	<loot>
-		<item id="1958" chance="15000" /><!-- grey book -->
+		<item id="1958" chance="15000" /><!-- book (grey) -->
 		<item id="2050" chance="25000" /><!-- torch -->
-		<item name="gold coin" countmax="35" chance="48000" />
-		<item name="chain armor" chance="11000" />
+		<item name="gold coin" countmax="35" chance="100000" />
+		<item name="chain armor" chance="33330" />
+		<item name="ham" chance="33330" />
 		<item name="hunting spear" chance="12500" />
 		<item name="fur bag" chance="1000" />
 	</loot>

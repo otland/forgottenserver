@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="mad mage" nameDescription="a mad mage" race="blood" experience="1800" speed="240">
+<monster name="Mad Mage" nameDescription="a mad mage" race="blood" experience="1800" speed="240">
 	<health now="2500" max="2500" />
 	<look type="394" corpse="13603" />
 	<targetchange interval="5000" chance="30" />
