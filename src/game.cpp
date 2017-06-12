@@ -3611,7 +3611,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 			addMagicEffect(targetPos, CONST_ME_POFF);
 		} else if (blockType == BLOCK_ARMOR) {
 			addMagicEffect(targetPos, CONST_ME_BLOCKHIT);
-		} else if (blockType == BLOCK_IMMUNITY) {
+		} else if (blockType == BLOCK_IMMUNITY && target->getPlayer()) {
 			uint8_t hitEffect = 0;
 			switch (combatType) {
 				case COMBAT_UNDEFINEDDAMAGE: {
