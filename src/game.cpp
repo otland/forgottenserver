@@ -3648,7 +3648,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense, checkArmor, field);
 
 		damage.primary.value = -damage.primary.value;
-		sendBlockEffect(primaryBlockType, damage.primary.type, target->getPosition(), target->getPlayer());
+		sendBlockEffect(primaryBlockType, damage.primary.type, target->getPosition(), target->getCreature());
 	} else {
 		primaryBlockType = BLOCK_NONE;
 	}
@@ -3658,7 +3658,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field);
 
 		damage.secondary.value = -damage.secondary.value;
-		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition(), target->getPlayer());
+		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition(), target->getCreature());
 	} else {
 		secondaryBlockType = BLOCK_NONE;
 	}
