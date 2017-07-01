@@ -18,20 +18,20 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	if ItemType(itemid):isStackable() then
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			item = doAddContainerItem(stuff, itemid, math.min(100, amount)) -- Container(stuff):addItemEx(Item(itemid))
+			item = doAddContainerItem(stuff, itemid, math.min(100, amount)) -- ???
 		else
 			stuff = Game.createItem(itemid, math.min(100, amount))
 		end
-		return player:addItemEx(Item(stuff), ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
+		return player:addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
 	end
 
 	local a = 0
 	if inBackpacks then
 		local container, b = Game.createItem(backpack, 1), 1
 		for i = 1, amount do
-			local item = doAddContainerItem(container, itemid, subType) -- Container(container):addItemEx(Item(itemid))
+			local item = doAddContainerItem(container, itemid, subType) -- ???
 			if table.contains({(ItemType(backpack):getCapacity() * b), amount}, i) then
-				if player:addItemEx(Item(container), ignoreCap) ~= RETURNVALUE_NOERROR then
+				if player:addItemEx(container, ignoreCap) ~= RETURNVALUE_NOERROR then
 					b = b - 1
 					break
 				end
@@ -48,7 +48,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 
 	for i = 1, amount do -- normal method for non-stackable items
 		local item = Game.createItem(itemid, subType)
-		if player:addItemEx(Item(item), ignoreCap) ~= RETURNVALUE_NOERROR then
+		if player:addItemEx(item, ignoreCap) ~= RETURNVALUE_NOERROR then
 			break
 		end
 		a = i
@@ -121,10 +121,10 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	for i = 1, count do
 		local container = Game.createItem(containerid, 1)
 		for x = 1, ItemType(containerid):getCapacity() do
-			doAddContainerItem(container, itemid, charges) --  -- Container(container):addItemEx(Item(itemid))
+			doAddContainerItem(container, itemid, charges) -- ???
 		end
 
-		if player:addItemEx(Item(container), true) ~= RETURNVALUE_NOERROR then
+		if player:addItemEx(container, true) ~= RETURNVALUE_NOERROR then
 			return false
 		end
 	end
