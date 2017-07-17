@@ -846,62 +846,68 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 		}
 	} else if (it.weaponType != WEAPON_NONE) {
-		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
-			s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
-
-			int32_t attack;
-			int8_t hitChance;
-			if (item) {
-				attack = item->getAttack();
-				hitChance = item->getHitChance();
-			} else {
-				attack = it.attack;
-				hitChance = it.hitChance;
-			}
-
-			if (attack != 0) {
-				s << ", Atk" << std::showpos << attack << std::noshowpos;
-			}
-
-			if (hitChance != 0) {
-				s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
-			}
-
-			s << ')';
-		} else if (it.weaponType != WEAPON_AMMO) {
+		if (it.weaponType != WEAPON_AMMO) {
 			bool begin = true;
 
-			int32_t attack, defense, extraDefense;
-			if (item) {
-				attack = item->getAttack();
-				defense = item->getDefense();
-				extraDefense = item->getExtraDefense();
+			if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
+				s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
+
+				int32_t attack;
+				int8_t hitChance;
+				if (item) {
+					attack = item->getAttack();
+					hitChance = item->getHitChance();
+				}
+				else {
+					attack = it.attack;
+					hitChance = it.hitChance;
+				}
+
+				if (attack != 0) {
+					s << ", Atk" << std::showpos << attack << std::noshowpos;
+				}
+
+				if (hitChance != 0) {
+					s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
+				}
+
+				s << ')';
 			} else {
-				attack = it.attack;
-				defense = it.defense;
-				extraDefense = it.extraDefense;
-			}
 
-			if (attack != 0) {
-				begin = false;
-				s << " (Atk:" << attack;
-
-				if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
-					s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
+				int32_t attack, defense, extraDefense;
+				if (item) {
+					attack = item->getAttack();
+					defense = item->getDefense();
+					extraDefense = item->getExtraDefense();
 				}
-			}
+				else {
+					attack = it.attack;
+					defense = it.defense;
+					extraDefense = it.extraDefense;
+				}
 
-			if (defense != 0 || extraDefense != 0) {
-				if (begin) {
+				if (attack != 0) {
 					begin = false;
-					s << " (";
-				} else {
-					s << ", ";
+					s << " (Atk:" << attack;
+
+					if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
+						s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
+					}
 				}
 
-				s << "Def:" << defense;
-				if (extraDefense != 0) {
-					s << ' ' << std::showpos << extraDefense << std::noshowpos;
+				if (defense != 0 || extraDefense != 0) {
+					if (begin) {
+						begin = false;
+						s << " (";
+					}
+					else {
+						s << ", ";
+					}
+
+					s << "Def:" << defense;
+					if (extraDefense != 0) {
+						s << ' ' << std::showpos << extraDefense << std::noshowpos;
+					}
 				}
 			}
 
