@@ -99,6 +99,7 @@ void Npc::reset()
 {
 	loaded = false;
 	walkTicks = 1500;
+	pushable = true;
 	floorChange = false;
 	attackable = false;
 	ignoreHeight = true;
@@ -151,6 +152,10 @@ bool Npc::loadFromXml()
 		baseSpeed = pugi::cast<uint32_t>(attr.value());
 	} else {
 		baseSpeed = 100;
+	}
+
+	if ((attr = npcNode.attribute("pushable"))) {
+		pushable = attr.as_bool();
 	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
