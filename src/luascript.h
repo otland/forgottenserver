@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -964,6 +964,16 @@ class LuaScriptInterface
 		static int luaPlayerHasChaseMode(lua_State* L);
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
+
+		static int luaPlayerIsLiveCasting(lua_State* L);
+		static int luaPlayerStartLiveCasting(lua_State* L);
+		static int luaPlayerPauseLiveCasting(lua_State* L);
+		static int luaPlayerStopLiveCasting(lua_State* L);
+		static int luaPlayerKickCastSpectator(lua_State* L);
+		static int luaPlayerBanCastSpectator(lua_State* L);
+		static int luaPlayerUnBanCastSpectator(lua_State* L);
+		static int luaPlayerMuteCastSpectator(lua_State* L);
+		static int luaPlayerUnMuteCastSpectator(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);

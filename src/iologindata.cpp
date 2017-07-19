@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -186,10 +186,33 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 
 	std::ostringstream query;
 	if (login) {
-		query << "INSERT INTO `players_online` VALUES (" << guid << ')';
+		query << "INSERT INTO `players_online` (`player_id`, `cast_on`, `cast_password`, `cast_spectators`) VALUES (" << guid << ", 0, '', 0)";
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
 	}
+	Database::getInstance().executeQuery(query.str());
+}
+
+void IOLoginData::startCast(uint32_t guid, std::string password)
+{
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "UPDATE `players_online` set `cast_on` = 1, `cast_password` = " << db.escapeString(password) << ", `cast_spectators` = 0 WHERE `player_id` = " << guid;
+	db.executeQuery(query.str());
+}
+
+void IOLoginData::updateCast(uint32_t guid, uint32_t spectators)
+{
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "UPDATE `players_online` set `cast_spectators` = " << spectators << " WHERE `player_id` = " << guid;
+	db.executeQuery(query.str());
+}
+
+void IOLoginData::stopCast(uint32_t guid)
+{
+	std::ostringstream query;
+	query << "UPDATE `players_online` set `cast_on` = 0, `cast_password` = '', `cast_spectators` = 0 WHERE `player_id` = " << guid;
 	Database::getInstance().executeQuery(query.str());
 }
 
