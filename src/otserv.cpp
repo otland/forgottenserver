@@ -34,6 +34,7 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "hashers.h"
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -166,6 +167,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
+	}
+
+	std::cout << ">> Initializing hash library..." << std::flush;
+	if (!hashers::init()) {
+		startupErrorMessage("Unable to initialize hash library!");
+		return;
 	}
 
 	//load vocations
