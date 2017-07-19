@@ -347,3 +347,37 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 	end
 	return true
 end
+
+function Player:conjureItem(reagentId, conjureId, conjureCount, effect)
+	if not conjureCount and conjureId ~= 0 then
+		local itemType = ItemType(conjureId)
+		if itemType:getId() == 0 then
+			return false
+		end
+
+		local charges = itemType:getCharges()
+		if charges ~= 0 then
+			conjureCount = charges
+		end
+	end
+
+	if reagentId ~= 0 and not self:removeItem(reagentId, 1, -1) then
+		self:sendCancelMessage(RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL)
+		self:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	local item = self:addItem(conjureId, conjureCount)
+	if not item then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		self:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	if item:hasAttribute(ITEM_ATTRIBUTE_DURATION) then
+		item:decay()
+	end
+
+	self:getPosition():sendMagicEffect(item:getType():isRune() and CONST_ME_MAGIC_RED or effect)
+	return true
+end
