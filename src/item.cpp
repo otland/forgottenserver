@@ -871,7 +871,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
 				}
 
-				s << ')';
+				begin = false;
 			} else {
 
 				int32_t attack, defense, extraDefense;
