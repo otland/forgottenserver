@@ -873,14 +873,12 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 				begin = false;
 			} else {
-
 				int32_t attack, defense, extraDefense;
 				if (item) {
 					attack = item->getAttack();
 					defense = item->getDefense();
 					extraDefense = item->getExtraDefense();
-				}
-				else {
+				} else {
 					attack = it.attack;
 					defense = it.defense;
 					extraDefense = it.extraDefense;
