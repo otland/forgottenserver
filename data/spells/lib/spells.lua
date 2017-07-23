@@ -302,14 +302,14 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 end
 
 function Player:addPartyCondition(combat, variant, positions, condition, baseMana)
-	if not combat:execute(self, variant) then
-		return false
-	end
-
 	local party = self:getParty()
 	if not party then
 		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 		self:getPosition():sendMagicEffect(CONST_ME_POFF)
+		return false
+	end
+
+	if not combat:execute(self, variant) then
 		return false
 	end
 
