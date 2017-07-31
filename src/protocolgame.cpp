@@ -1176,7 +1176,7 @@ void ProtocolGame::sendCreatureLight(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendWorldLight(const LightInfo& lightInfo)
+void ProtocolGame::sendWorldLight(LightInfo lightInfo)
 {
 	NetworkMessage msg;
 	AddWorldLight(msg, lightInfo);
@@ -2434,9 +2434,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendSkills();
 
 	//gameworld light-settings
-	LightInfo lightInfo;
-	g_game.getWorldLightInfo(lightInfo);
-	sendWorldLight(lightInfo);
+	sendWorldLight(g_game.getWorldLightInfo());
 
 	//player light level
 	sendCreatureLight(creature);
@@ -2788,8 +2786,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		AddOutfit(msg, outfit);
 	}
 
-	LightInfo lightInfo;
-	creature->getCreatureLight(lightInfo);
+	LightInfo lightInfo = creature->getCreatureLight();
 	msg.addByte(player->isAccessPlayer() ? 0xFF : lightInfo.level);
 	msg.addByte(lightInfo.color);
 
@@ -2924,7 +2921,7 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 	msg.add<uint16_t>(outfit.lookMount);
 }
 
-void ProtocolGame::AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo)
+void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
 {
 	msg.addByte(0x82);
 	msg.addByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
@@ -2933,8 +2930,7 @@ void ProtocolGame::AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo
 
 void ProtocolGame::AddCreatureLight(NetworkMessage& msg, const Creature* creature)
 {
-	LightInfo lightInfo;
-	creature->getCreatureLight(lightInfo);
+	LightInfo lightInfo = creature->getCreatureLight();
 
 	msg.addByte(0x8D);
 	msg.add<uint32_t>(creature->getID());

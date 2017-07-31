@@ -4384,8 +4384,7 @@ void Game::checkLight()
 	}
 
 	if (lightChange) {
-		LightInfo lightInfo;
-		getWorldLightInfo(lightInfo);
+		LightInfo lightInfo = getWorldLightInfo();
 
 		for (const auto& it : players) {
 			it.second->sendWorldLight(lightInfo);
@@ -4393,10 +4392,9 @@ void Game::checkLight()
 	}
 }
 
-void Game::getWorldLightInfo(LightInfo& lightInfo) const
+LightInfo Game::getWorldLightInfo() const
 {
-	lightInfo.level = lightLevel;
-	lightInfo.color = 0xD7;
+	return {lightLevel, 0xD7};
 }
 
 void Game::shutdown()
