@@ -1235,7 +1235,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << "unknown";
 				}
 			} else if (it.allowDistRead && (it.id < 7369 || it.id > 7371)) {
-				s << '.' << std::endl;
+				s << ".\n";
 
 				if (lookDistance <= 4) {
 					if (item) {
@@ -1325,7 +1325,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (it.wieldInfo != 0) {
-		s << std::endl << "It can only be wielded properly by ";
+		s << "\nIt can only be wielded properly by ";
 
 		if (it.wieldInfo & WIELDINFO_PREMIUM) {
 			s << "premium ";
@@ -1358,22 +1358,22 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		if (item) {
 			const uint32_t weight = item->getWeight();
 			if (weight != 0 && it.pickupable) {
-				s << std::endl << getWeightDescription(it, weight, item->getItemCount());
+				s << '\n' << getWeightDescription(it, weight, item->getItemCount());
 			}
 		} else if (it.weight != 0 && it.pickupable) {
-			s << std::endl << getWeightDescription(it, it.weight);
+			s << '\n' << getWeightDescription(it, it.weight);
 		}
 	}
 
 	if (item) {
 		const std::string& specialDescription = item->getSpecialDescription();
 		if (!specialDescription.empty()) {
-			s << std::endl << specialDescription;
+			s << '\n' << specialDescription;
 		} else if (lookDistance <= 1 && !it.description.empty()) {
-			s << std::endl << it.description;
+			s << '\n' << it.description;
 		}
 	} else if (lookDistance <= 1 && !it.description.empty()) {
-		s << std::endl << it.description;
+		s << '\n' << it.description;
 	}
 
 	if (it.allowDistRead && it.id >= 7369 && it.id <= 7371) {
@@ -1382,7 +1382,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 
 		if (text && !text->empty()) {
-			s << std::endl << *text;
+			s << '\n' << *text;
 		}
 	}
 	return s.str();
