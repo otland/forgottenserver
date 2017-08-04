@@ -47,6 +47,7 @@ class DatabaseTasks : public ThreadHolder<DatabaseTasks>
 		void threadMain();
 	private:
 		void runTask(const DatabaseTask& task);
+		void flushInternal();
 
 		Database db;
 		std::thread thread;

@@ -85,6 +85,13 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 
 void DatabaseTasks::flush()
 {
+	taskLock.lock();
+	flushInternal();
+	taskLock.unlock();
+}
+
+void DatabaseTasks::flushInternal()
+{
 	while (!tasks.empty()) {
 		runTask(tasks.front());
 		tasks.pop_front();
@@ -95,7 +102,7 @@ void DatabaseTasks::shutdown()
 {
 	taskLock.lock();
 	setState(THREAD_STATE_TERMINATED);
-	flush();
+	flushInternal();
 	taskLock.unlock();
 	taskSignal.notify_one();
 }
