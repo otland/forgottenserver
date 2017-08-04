@@ -92,9 +92,13 @@ void DatabaseTasks::flush()
 
 void DatabaseTasks::flushInternal()
 {
+	std::unique_lock<std::mutex> guard{ taskLock };
 	while (!tasks.empty()) {
-		runTask(tasks.front());
+		auto task = std::move(tasks.front());
 		tasks.pop_front();
+		guard.unlock();
+		runTask(task);
+		guard.lock();
 	}
 }
 
