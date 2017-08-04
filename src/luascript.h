@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -1098,15 +1098,22 @@ class LuaScriptInterface
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);
 
+		static int luaItemTypeIsBlocking(lua_State* L);
 		static int luaItemTypeIsCorpse(lua_State* L);
 		static int luaItemTypeIsDoor(lua_State* L);
 		static int luaItemTypeIsContainer(lua_State* L);
 		static int luaItemTypeIsFluidContainer(lua_State* L);
+		static int luaItemTypeIsGroundTile(lua_State* L);
+		static int luaItemTypeIsMagicField(lua_State* L);
 		static int luaItemTypeIsMovable(lua_State* L);
 		static int luaItemTypeIsRune(lua_State* L);
+		static int luaItemTypeIsUseable(lua_State* L);
 		static int luaItemTypeIsStackable(lua_State* L);
 		static int luaItemTypeIsReadable(lua_State* L);
 		static int luaItemTypeIsWritable(lua_State* L);
+		static int luaItemTypeIsHangable(lua_State* L);
+		static int luaItemTypeIsRotateable(lua_State* L);
+		static int luaItemTypeIsPickupable(lua_State* L);
 
 		static int luaItemTypeGetType(lua_State* L);
 		static int luaItemTypeGetId(lua_State* L);
@@ -1138,8 +1145,10 @@ class LuaScriptInterface
 		static int luaItemTypeGetDestroyId(lua_State* L);
 		static int luaItemTypeGetDecayId(lua_State* L);
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
+		static int luaItemTypeGetAmmoType(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
+		static int luaItemTypeHasWalkStack(lua_State* L);
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);
