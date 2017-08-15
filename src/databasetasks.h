@@ -48,7 +48,6 @@ class DatabaseTasks : public ThreadHolder<DatabaseTasks>
 	private:
 		void runTask(const DatabaseTask& task);
 
-		Database db;
 		std::thread thread;
 		std::list<DatabaseTask> tasks;
 		std::mutex taskLock;
