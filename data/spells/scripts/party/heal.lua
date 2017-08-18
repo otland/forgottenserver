@@ -7,16 +7,7 @@ condition:setParameter(CONDITION_PARAM_HEALTHGAIN, 20)
 condition:setParameter(CONDITION_PARAM_HEALTHTICKS, 2 * 1000)
 condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
-local positions
-
-function onTargetTile(creature, position)
-	positions[#positions + 1] = position
-end
-
-combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
-
 function onCastSpell(creature, variant)
-	positions = {}
-	return creature:addPartyCondition(combat, variant, positions, condition, 120)
+	return creature:addPartyCondition(combat, variant, condition, 120)
 end
 

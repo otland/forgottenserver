@@ -301,13 +301,20 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 	return true
 end
 
-function Player:addPartyCondition(combat, variant, positions, condition, baseMana)
+function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local party = self:getParty()
 	if not party then
 		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 		self:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
+
+	local positions = {}
+	function onTargetTile(creature, position)
+		positions[#positions + 1] = position
+	end
+
+	combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
 
 	if not combat:execute(self, variant) then
 		return false
@@ -351,3 +358,4 @@ function Player:addPartyCondition(combat, variant, positions, condition, baseMan
 	self:addManaSpent(mana)
 	return true
 end
+
