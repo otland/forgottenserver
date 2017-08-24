@@ -55,7 +55,11 @@ class Guild
 			memberCount = count;
 		}
 
+		const std::vector<GuildRank>& getRanks() const {
+			return ranks;
+		}
 		GuildRank* getRankById(uint32_t id);
+		const GuildRank* getRankByName(const std::string& name) const;
 		const GuildRank* getRankByLevel(uint8_t level) const;
 		void addRank(uint32_t id, const std::string& name, uint8_t level);
 
