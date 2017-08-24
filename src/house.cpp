@@ -394,7 +394,7 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 void AccessList::parseList(const std::string& list)
 {
 	playerList.clear();
-	guildList.clear();
+	guildRankList.clear();
 	expressionList.clear();
 	regExList.clear();
 	this->list = list;
@@ -419,7 +419,11 @@ void AccessList::parseList(const std::string& list)
 
 		std::string::size_type at_pos = line.find("@");
 		if (at_pos != std::string::npos) {
-			addGuild(line.substr(at_pos + 1));
+			if (at_pos == 0) {
+				addGuild(line.substr(1));
+			} else {
+				addGuildRank(line.substr(0, at_pos - 1), line.substr(at_pos + 1));
+			}
 		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos || line.find("?") != std::string::npos) {
 			addExpression(line);
 		} else {
@@ -441,11 +445,43 @@ void AccessList::addPlayer(const std::string& name)
 	}
 }
 
-void AccessList::addGuild(const std::string& name)
+namespace {
+
+const Guild* getGuildByName(const std::string& name)
 {
 	uint32_t guildId = IOGuild::getGuildIdByName(name);
-	if (guildId != 0) {
-		guildList.insert(guildId);
+	if (guildId == 0) {
+		return nullptr;
+	}
+
+	const Guild* guild = g_game.getGuild(guildId);
+	if (guild) {
+		return guild;
+	}
+
+	return IOGuild::loadGuild(guildId);
+}
+
+}
+
+void AccessList::addGuild(const std::string& name)
+{
+	const Guild* guild = getGuildByName(name);
+	if (guild) {
+		for (const auto& rank : guild->getRanks()) {
+			guildRankList.insert(rank.id);
+		}
+	}
+}
+
+void AccessList::addGuildRank(const std::string& name, const std::string& guildName)
+{
+	const Guild* guild = getGuildByName(name);
+	if (guild) {
+		const GuildRank* rank = guild->getRankByName(name);
+		if (rank) {
+			guildRankList.insert(rank->id);
+		}
 	}
 }
 
@@ -500,8 +536,8 @@ bool AccessList::isInList(const Player* player)
 		return true;
 	}
 
-	const Guild* guild = player->getGuild();
-	return guild && guildList.find(guild->getId()) != guildList.end();
+	const GuildRank* rank = player->getGuildRank();
+	return rank && guildRankList.find(rank->id) != guildRankList.end();
 }
 
 void AccessList::getList(std::string& list) const
