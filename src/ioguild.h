@@ -20,7 +20,7 @@
 #ifndef FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 #define FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 
-struct Guild;
+class Guild;
 using GuildWarVector = std::vector<uint32_t>;
 
 class IOGuild
