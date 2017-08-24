@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -142,7 +142,13 @@ class ItemType
 			return (type == ITEM_TYPE_BED);
 		}
 		bool isRune() const {
-			return type == ITEM_TYPE_RUNE;
+			return (type == ITEM_TYPE_RUNE);
+		}
+		bool isPickupable() const {
+			return (allowPickupable || pickupable);
+		}
+		bool isUseable() const {
+			return (useable);
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);

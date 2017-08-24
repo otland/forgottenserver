@@ -452,7 +452,7 @@
 
 	<!-- Attack Runes -->
 	<rune group="attack" spellid="26" name="Poison Field" id="2285" allowfaruse="1" charges="3" lvl="14" maglv="0" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_field.lua" />
-	<rune group="attack" spellid="91" name="Poison Bomb" id="2286" allowfaruse="1" charges="2" lvl="25" maglv="4" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_bomb.lua" />
+	<rune group="attack" spellid="91" name="Poisonbomb" id="2286" allowfaruse="1" charges="2" lvl="25" maglv="4" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_bomb.lua" />
 	<rune group="attack" spellid="32" name="Poison Wall" id="2289" allowfaruse="1" charges="4" lvl="29" maglv="5" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_wall.lua" />
 	<rune group="attack" spellid="25" name="Fire Field" id="2301" allowfaruse="1" charges="3" lvl="15" maglv="1" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/fire_field.lua" />
 	<rune group="attack" spellid="17" name="Firebomb" id="2305" allowfaruse="1" charges="2" lvl="27" maglv="5" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/fire_bomb.lua" />
@@ -482,7 +482,7 @@
 	<rune group="attack" spellid="86" name="Magic Wall" id="2293" allowfaruse="1" charges="3" lvl="32" maglv="9" cooldown="2000" groupcooldown="2000" blocktype="all" script="support/magic_wall_rune.lua" />
 
 	<!-- Healing Runes -->
-	<rune group="healing" spellid="31" name="Antidote Rune" id="2266" allowfaruse="1" charges="1" lvl="15" maglv="0" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/cure_poison_rune.lua" />
+	<rune group="healing" spellid="31" name="Cure Poison Rune" id="2266" allowfaruse="1" charges="1" lvl="15" maglv="0" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/cure_poison_rune.lua" />
 	<rune group="healing" spellid="4" name="Intense Healing Rune" id="2265" allowfaruse="1" charges="1" lvl="15" maglv="1" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/intense_healing_rune.lua" />
 	<rune group="healing" spellid="5" name="Ultimate Healing Rune" id="2273" allowfaruse="1" charges="1" lvl="24" maglv="4" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/ultimate_healing_rune.lua" />
 
@@ -503,238 +503,238 @@
 		<vocation name="Elder Druid" showInDescription="0" />
 	</rune>
 
-	<!-- Conjure Spells -->
-	<conjure group="support" name="Blank Rune" words="adori blank" lvl="20" mana="50" soul="1" conjureId="2260" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	<!-- Conjuring Spells -->
+	<instant group="support" name="Blank Rune" words="adori blank" lvl="20" mana="50" soul="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/blank_rune.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure group="support" spellid="51" name="Conjure Arrow" words="exevo con" lvl="13" mana="100" soul="1" conjureId="2544" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="51" name="Conjure Arrow" words="exevo con" lvl="13" mana="100" soul="1" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="176" name="Arrow Call" words="exevo infir con" lvl="1" mana="10" soul="1" conjureId="23839" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="176" name="Arrow Call" words="exevo infir con" lvl="1" mana="10" soul="1" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/arrow_call.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="48" name="Conjure Poisoned Arrow" words="exevo con pox" lvl="16" mana="130" soul="2" conjureId="2545" conjureCount="7" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="48" name="Conjure Poisoned Arrow" words="exevo con pox" lvl="16" mana="130" soul="2" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_poisoned_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="79" name="Conjure Bolt" words="exevo con mort" lvl="17" mana="140" soul="2" prem="1" conjureId="2543" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="79" name="Conjure Bolt" words="exevo con mort" lvl="17" mana="140" soul="2" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_bolt.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="108" name="Conjure Sniper Arrow" words="exevo con hur" lvl="24" mana="160" soul="3" prem="1" conjureId="7364" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="108" name="Conjure Sniper Arrow" words="exevo con hur" lvl="24" mana="160" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_sniper_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="49" name="Conjure Explosive Arrow" words="exevo con flam" lvl="25" mana="290" soul="3" conjureId="2546" conjureCount="8" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="49" name="Conjure Explosive Arrow" words="exevo con flam" lvl="25" mana="290" soul="3" prem="0" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_explosive_arrow.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="109" name="Conjure Piercing Bolt" words="exevo con grav" lvl="33" mana="180" soul="3" prem="1" conjureId="7363" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="109" name="Conjure Piercing Bolt" words="exevo con grav" lvl="33" mana="180" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_piercing_bolt.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="92" name="Enchant Staff" words="exeta vis" lvl="41" mana="80" prem="1" conjureId="2433" reagentId="2401" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="92" name="Enchant Staff" words="exeta vis" lvl="41" mana="80" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_staff.lua">
 		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure group="support" spellid="110" name="Enchant Spear" words="exeta con" lvl="45" mana="350" soul="3" prem="1" conjureId="7367" reagentId="2389" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="110" name="Enchant Spear" words="exeta con" lvl="45" mana="350" soul="3" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/enchant_spear.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" conjureId="2547" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureItem">
+	</instant>
+	<instant group="support" spellid="95" name="Conjure Power Bolt" words="exevo con vis" lvl="59" mana="700" soul="4" prem="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/conjure_power_bolt.lua">
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure name="Poison Field" words="adevo grav pox" lvl="14" mana="200" soul="1" reagentId="2260" conjureId="2285" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Poison Field" words="adevo grav pox" lvl="14" mana="200" soul="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/poison_field_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Light Magic Missile" words="adori min vis" lvl="15" mana="120" soul="1" reagentId="2260" conjureId="2287" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Light Magic Missile" words="adori min vis" lvl="15" mana="120" soul="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/light_magic_missile_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Lightest Magic Missile" words="adori dis min vis" lvl="1" mana="5" soul="0" reagentId="2260" conjureId="2287" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Lightest Magic Missile" words="adori dis min vis" lvl="1" mana="5" soul="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/lightest_magic_missile_rune.lua">
 		<vocation name="None" />
-	</conjure>
-	<conjure name="Lightest Missile" words="adori infir vis" lvl="1" mana="6" soul="0" reagentId="2260" conjureId="23723" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Lightest Missile" words="adori infir vis" lvl="1" mana="6" soul="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/lightest_missile_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure name="Fire Field" words="adevo grav flam" lvl="15" mana="240" soul="1" reagentId="2260" conjureId="2301" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Fire Field" words="adevo grav flam" lvl="15" mana="240" soul="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/fire_field_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Fireball" words="adori flam" lvl="27" mana="460" soul="3" prem="1" reagentId="2260" conjureId="2302" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Fireball" words="adori flam" lvl="27" mana="460" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/fireball_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure name="Energy Field" words="adevo grav vis" lvl="18" mana="320" soul="2" reagentId="2260" conjureId="2277" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Sorcerer" />
-		<vocation name="Druid" />
-		<vocation name="Master Sorcerer" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Stalagmite" words="adori tera" lvl="24" mana="350" soul="2" prem="2" reagentId="2260" conjureId="2292" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" />
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Great Fireball" words="adori mas flam" lvl="30" mana="530" soul="3" reagentId="2260" conjureId="2304" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure name="Heavy Magic Missile" words="adori vis" lvl="25" mana="350" soul="2" reagentId="2260" conjureId="2311" conjureCount="10" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" />
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Poison Bomb" words="adevo mas pox" lvl="25" mana="520" soul="2" prem="1" reagentId="2260" conjureId="2286" conjureCount="2" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Firebomb" words="adevo mas flam" lvl="27" mana="600" soul="4" reagentId="2260" conjureId="2305" conjureCount="2" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Energy Field" words="adevo grav vis" lvl="18" mana="320" soul="2" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/energy_field_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Soulfire" words="adevo res flam" lvl="27" mana="420" soul="3" prem="1" reagentId="2260" conjureId="2308" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Stalagmite" words="adori tera" lvl="24" mana="350" soul="2" prem="2" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/stalagmite_rune.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Great Fireball" words="adori mas flam" lvl="30" mana="530" soul="3" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/great_fireball_rune.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
+	</instant>
+	<instant group="support" name="Heavy Magic Missile" words="adori vis" lvl="25" mana="350" soul="2" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/heavy_magic_missile_rune.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Poisonbomb" words="adevo mas pox" lvl="25" mana="520" soul="2" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/poison_bomb_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Firebomb" words="adevo mas flam" lvl="27" mana="600" soul="4" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/fire_bomb_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Poison Wall" words="adevo mas grav pox" lvl="29" mana="640" soul="3" reagentId="2260" conjureId="2289" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Soulfire" words="adevo res flam" lvl="27" mana="420" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/soulfire_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Explosion" words="adevo mas hur" lvl="31" mana="570" soul="4" reagentId="2260" conjureId="2313" conjureCount="6" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Poison Wall" words="adevo mas grav pox" lvl="29" mana="640" soul="3" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/poison_wall_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Fire Wall" words="adevo mas grav flam" lvl="33" mana="780" soul="4" reagentId="2260" conjureId="2303" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Explosion" words="adevo mas hur" lvl="31" mana="570" soul="4" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/explosion_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Energybomb" words="adevo mas vis" lvl="37" mana="880" soul="5" prem="1" reagentId="2260" conjureId="2262" conjureCount="2" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure name="Energy Wall" words="adevo mas grav vis" lvl="41" mana="1000" soul="5" reagentId="2260" conjureId="2279" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Fire Wall" words="adevo mas grav flam" lvl="33" mana="780" soul="4" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/fire_wall_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Sudden Death" words="adori gran mort" lvl="45" mana="985" soul="5" reagentId="2260" conjureId="2268" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Energybomb" words="adevo mas vis" lvl="37" mana="880" soul="5" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/energy_bomb_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure name="Antidote Rune" words="adana pox" lvl="15" mana="200" soul="1" reagentId="2260" conjureId="2266" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Intense Healing Rune" words="adura gran" lvl="15" mana="120" soul="2" reagentId="2260" conjureId="2265" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Ultimate Healing Rune" words="adura vita" lvl="24" mana="400" soul="3" reagentId="2260" conjureId="2273" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Convince Creature" words="adeta sio" lvl="16" mana="200" soul="3" reagentId="2260" conjureId="2290" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Animate Dead" words="adana mort" lvl="27" mana="600" soul="5" prem="1" reagentId="2260" conjureId="2316" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Energy Wall" words="adevo mas grav vis" lvl="41" mana="1000" soul="5" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/energy_wall_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Chameleon" words="adevo ina" lvl="27" mana="600" soul="2" reagentId="2260" conjureId="2291" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Sudden Death" words="adori gran mort" lvl="45" mana="985" soul="5" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/sudden_death_rune.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
+	</instant>
+	<instant group="support" name="Cure Poison Rune" words="adana pox" lvl="15" mana="200" soul="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/cure_poison_rune.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Destroy Field" words="adito grav" lvl="17" mana="120" soul="2" reagentId="2260" conjureId="2261" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Intense Healing Rune" words="adura gran" lvl="15" mana="120" soul="2" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/intense_healing_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Ultimate Healing Rune" words="adura vita" lvl="24" mana="400" soul="3" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/ultimate_healing_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Convince Creature" words="adeta sio" lvl="16" mana="200" soul="3" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/convince_creature_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Animate Dead" words="adana mort" lvl="27" mana="600" soul="5" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/animate_dead_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
-		<vocation name="Paladin" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
-		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure name="Desintegrate" words="adito tera" lvl="21" mana="200" soul="3" prem="1" reagentId="2260" conjureId="2310" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Chameleon" words="adevo ina" lvl="27" mana="600" soul="2" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/chameleon_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Destroy Field" words="adito grav" lvl="17" mana="120" soul="2" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/destroy_field_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure name="Magic Wall" words="adevo grav tera" lvl="32" mana="750" soul="5" prem="1" reagentId="2260" conjureId="2293" conjureCount="3" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure name="Wild Growth" words="adevo grav vita" lvl="27" mana="600" soul="5" prem="1" reagentId="2260" conjureId="2269" conjureCount="2" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Paralyze" words="adana ani" lvl="54" mana="1400" soul="3" prem="1" reagentId="2260" conjureId="2278" conjureCount="1" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Icicle" words="adori frigo" lvl="28" mana="460" soul="3" prem="1" reagentId="2260" conjureId="2271" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Avalanche" words="adori mas frigo" lvl="30" mana="530" soul="3" reagentId="2260" conjureId="2274" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Stone Shower" words="adori mas tera" lvl="28" mana="430" soul="3" prem="1" reagentId="2260" conjureId="2288" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-	</conjure>
-	<conjure name="Light Stone Shower" words="adori infir mas tera" lvl="1" mana="6" soul="3" prem="1" reagentId="2260" conjureId="23722" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Disintegrate" words="adito tera" lvl="21" mana="200" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/disintegrate_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Paladin" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 		<vocation name="Royal Paladin" />
-	</conjure>
-	<conjure name="Thunderstorm" words="adori mas vis" lvl="28" mana="430" soul="3" prem="1" reagentId="2260" conjureId="2315" conjureCount="4" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Magic Wall" words="adevo grav tera" lvl="32" mana="750" soul="5" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/magic_wall_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
-	</conjure>
-	<conjure name="Holy Missile" words="adori san" lvl="27" mana="300" soul="3" prem="1" reagentId="2260" conjureId="2295" conjureCount="5" cooldown="2000" groupcooldown="2000" needlearn="0" function="conjureRune">
+	</instant>
+	<instant group="support" name="Wild Growth" words="adevo grav vita" lvl="27" mana="600" soul="5" prem="1" needlearn="0" script="conjuring/wild_growth_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Paralyze" words="adana ani" lvl="54" mana="1400" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/paralyze_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Icicle" words="adori frigo" lvl="28" mana="460" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/icicle_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Avalanche" words="adori mas frigo" lvl="30" mana="530" soul="3" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/avalanche_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Stone Shower" words="adori mas tera" lvl="28" mana="430" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/stone_shower_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" />
+	</instant>
+	<instant group="support" name="Light Stone Shower" words="adori infir mas tera" lvl="1" mana="6" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/light_stone_shower_rune.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Paladin" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Elder Druid" />
+		<vocation name="Royal Paladin" />
+	</instant>
+	<instant group="support" name="Thunderstorm" words="adori mas vis" lvl="28" mana="430" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/thunderstorm_rune.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" />
+	</instant>
+	<instant group="support" name="Holy Missile" words="adori san" lvl="27" mana="300" soul="3" prem="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/holy_missile_rune.lua">
 		<vocation name="Paladin" />
 		<vocation name="Royal Paladin" />
-	</conjure>
+	</instant>
 
 	<!-- House Spells -->
 	<instant name="House Guest List" words="aleta sio" aggressive="0" script="house/edit_guest_list.lua" />
