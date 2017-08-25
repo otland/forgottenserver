@@ -18,7 +18,9 @@ addons:
       - libluajit-5.1-dev
       - libmysqlclient-dev
       - libpugixml-dev
+      - clang-format-3.9
 before_script:
   - mkdir build && cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
+  - make clangformat && source ../verify-format.sh
 script: make -j2
