@@ -11,6 +11,10 @@ function onSay(player, words, param)
 		return false
 	end
 
+	if not param:find(",") then
+		return false
+	end
+
 	local split = param:split(",")
 
 	local itemType = ItemType(split[1])
