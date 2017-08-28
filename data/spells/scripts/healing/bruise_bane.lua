@@ -4,11 +4,11 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
-function onGetFormulaValues(player, level, maglevel)
+function onGetFormulaValues(player, level, magicLevel)
 	level = math.min(level, 20)
-	maglevel = math.min(maglevel, 20)
-	local min = (level / 5) + (maglevel * 1.4) + 8
-	local max = (level / 5) + (maglevel * 1.8) + 11
+	magicLevel = math.min(magicLevel, 20)
+	local min = (level / 5) + (magicLevel * 1.4) + 8
+	local max = (level / 5) + (magicLevel * 1.8) + 11
 	return min, max
 end
 
