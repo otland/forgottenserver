@@ -3696,7 +3696,7 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 					effect = CONST_ME_DRAWBLOOD;
 					break;
 				case RACE_ENERGY:
-					color = TEXTCOLOR_PURPLE;
+					color = TEXTCOLOR_ELECTRICPURPLE;
 					effect = CONST_ME_ENERGYHIT;
 					break;
 				default:
@@ -3714,7 +3714,7 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 		}
 
 		case COMBAT_ENERGYDAMAGE: {
-			color = TEXTCOLOR_PURPLE;
+			color = TEXTCOLOR_ELECTRICPURPLE;
 			effect = CONST_ME_ENERGYHIT;
 			break;
 		}
@@ -3809,7 +3809,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			TextMessage message;
 			message.position = targetPos;
 			message.primary.value = realHealthChange;
-			message.primary.color = TEXTCOLOR_MAYABLUE;
+			message.primary.color = TEXTCOLOR_PASTELRED;
 
 			SpectatorHashSet spectators;
 			map.getSpectators(spectators, targetPos, false, true);
