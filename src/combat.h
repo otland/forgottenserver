@@ -75,6 +75,7 @@ struct CombatParams {
 	bool targetCasterOrTopMost = false;
 	bool aggressive = true;
 	bool useCharges = false;
+	bool targetPlayersOrSummons = false;
 };
 
 using CombatFunction = std::function<void(Creature*, Creature*, const CombatParams&, CombatDamage*)>;

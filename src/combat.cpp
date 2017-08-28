@@ -435,6 +435,11 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 			params.useCharges = (value != 0);
 			return true;
 		}
+
+		case COMBAT_PARAM_TARGETPLAYERSORSUMMONS: {
+			params.targetPlayersOrSummons = (value != 0);
+			return true;
+		}
 	}
 	return false;
 }
@@ -719,6 +724,13 @@ void Combat::CombatFunc(Creature* caster, const Position& pos, const AreaCombat*
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			const Creature* topCreature = tile->getTopCreature();
 			for (Creature* creature : *creatures) {
+				if (params.targetPlayersOrSummons) {
+					const Creature* master = creature->getMaster();
+					if ((!master && !creature->getPlayer()) || (master && !master->getPlayer())) {
+						continue;
+					}
+				}
+
 				if (params.targetCasterOrTopMost) {
 					if (caster && caster->getTile() == tile) {
 						if (creature != caster) {
