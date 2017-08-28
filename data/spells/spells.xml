@@ -589,7 +589,7 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="support" name="Stalagmite Rune" words="adori tera" lvl="24" mana="350" soul="2" prem="2" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/stalagmite_rune.lua">
+	<instant group="support" name="Stalagmite Rune" words="adori tera" lvl="24" mana="350" soul="2" prem="0" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/stalagmite_rune.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 		<vocation name="Druid" />
