@@ -3825,7 +3825,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					if (!attacker) {
 						ss << "You were healed";
 					} else if (targetPlayer == attackerPlayer) {
-						ss << "You heal yourself";
+						ss << "You healed yourself";
 					} else {
 						ss << "You were healed by " << attacker->getNameDescription();
 					}
