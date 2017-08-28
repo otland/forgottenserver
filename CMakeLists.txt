@@ -55,7 +55,7 @@ set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
 find_package(ClangFormat)
 if(CLANG_FORMAT_BIN)
 	if(CLANG_FORMAT_VERSION VERSION_GREATER "3.8")
-		file(GLOB_RECURSE tfs_ALL_FILES *.c *.cpp *.h *.hpp *.inl)
+		file(GLOB_RECURSE tfs_ALL_FILES *.cpp *.h)
 		add_custom_target(
 			clangformat
 			COMMAND ${CLANG_FORMAT_BIN} -i -style=file ${tfs_ALL_FILES}
