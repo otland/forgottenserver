@@ -25743,6 +25743,12 @@
 	<item fromid="19332" toid="19342" article="a" name="brown stone wall" />
 	<item fromid="19354" toid="19375" article="an" name="ornate wall" />
 	<item fromid="19376" toid="19388" article="a" name="stone wall" />
+	<item id="19392" article="a" name="lightest magic missile rune">
+		<attribute key="type" value="rune" />
+		<attribute key="runeSpellName" value="adori dis min vis" />
+		<attribute key="weight" value="210" />
+		<attribute key="charges" value="10" />
+	</item>
 	<item fromid="19395" toid="19420" article="a" name="stone wall" />
 	<item id="19431" name="freshly cut venorean spice">
 		<attribute key="description" value="It has just been cut." />
