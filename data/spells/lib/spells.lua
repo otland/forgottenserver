@@ -284,6 +284,8 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, ti
 		for _ = 1, rounds do
 			condition:addDamage(1, math.random(time[1], time[2]) * 1000, -damage)
 		end
+	elseif listType == 3 then
+		condition:addDamage(rounds, time * 1000, -damage)
 	end
 
 	target:addCondition(condition)
