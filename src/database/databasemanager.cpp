@@ -20,7 +20,7 @@
 #include "otpch.h"
 
 #include "configmanager.h"
-#include "databasemanager.h"
+#include "database/databasemanager.h"
 #include "luascript.h"
 
 extern ConfigManager g_config;

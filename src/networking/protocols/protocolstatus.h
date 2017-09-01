@@ -17,33 +17,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_PROTOCOLLOGIN_H_1238F4B473074DF2ABC595C29E81C46D
-#define FS_PROTOCOLLOGIN_H_1238F4B473074DF2ABC595C29E81C46D
+#ifndef FS_STATUS_H_8B28B354D65B4C0483E37AD1CA316EB4
+#define FS_STATUS_H_8B28B354D65B4C0483E37AD1CA316EB4
 
-#include "protocol.h"
+#include "networking/networkmessage.h"
+#include "networking/protocols/protocol.h"
 
-class NetworkMessage;
-class OutputMessage;
-
-class ProtocolLogin : public Protocol
+class ProtocolStatus final : public Protocol
 {
 	public:
 		// static protocol information
 		enum {server_sends_first = false};
-		enum {protocol_identifier = 0x01};
-		enum {use_checksum = true};
+		enum {protocol_identifier = 0xFF};
+		enum {use_checksum = false};
 		static const char* protocol_name() {
-			return "login protocol";
+			return "status protocol";
 		}
 
-		explicit ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
+		explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
 
-		void onRecvFirstMessage(NetworkMessage& msg);
+		void onRecvFirstMessage(NetworkMessage& msg) final;
+
+		void sendStatusString();
+		void sendInfo(uint16_t requestedInfo, const std::string& characterName);
+
+		static const uint64_t start;
 
 	protected:
-		void disconnectClient(const std::string& message, uint16_t version);
-
-		void getCharacterList(const std::string& accountName, const std::string& password, const std::string& token, uint16_t version);
+		static std::map<uint32_t, int64_t> ipConnectMap;
 };
 
 #endif

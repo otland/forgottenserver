@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "server.h"
+#include "networking/server.h"
 
 #include "game.h"
 
@@ -27,13 +27,13 @@
 
 #include "configmanager.h"
 #include "scriptmanager.h"
-#include "rsa.h"
-#include "protocolold.h"
-#include "protocollogin.h"
-#include "protocolstatus.h"
-#include "databasemanager.h"
+#include "encryption/rsa.h"
+#include "networking/protocols/protocolold.h"
+#include "networking/protocols/protocollogin.h"
+#include "networking/protocols/protocolstatus.h"
+#include "database/databasemanager.h"
 #include "scheduler.h"
-#include "databasetasks.h"
+#include "database/databasetasks.h"
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;

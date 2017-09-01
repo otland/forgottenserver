@@ -19,10 +19,9 @@
 
 #include "otpch.h"
 
-#include "networkmessage.h"
+#include "networking/networkmessage.h"
 
-#include "container.h"
-#include "creature.h"
+#include "item.h"
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {

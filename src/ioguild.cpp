@@ -20,7 +20,7 @@
 #include "otpch.h"
 
 #include "ioguild.h"
-#include "database.h"
+#include "database/database.h"
 
 uint32_t IOGuild::getGuildIdByName(const std::string& name)
 {

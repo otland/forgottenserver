@@ -20,8 +20,8 @@
 #include "otpch.h"
 
 #include "ban.h"
-#include "database.h"
-#include "databasetasks.h"
+#include "database/database.h"
+#include "database/databasetasks.h"
 #include "tools.h"
 
 bool Ban::acceptConnection(uint32_t clientip)

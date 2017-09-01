@@ -20,11 +20,11 @@
 #include "otpch.h"
 
 #include "configmanager.h"
-#include "connection.h"
-#include "outputmessage.h"
-#include "protocol.h"
+#include "networking/connection.h"
+#include "networking/outputmessage.h"
+#include "networking/protocols/protocol.h"
 #include "scheduler.h"
-#include "server.h"
+#include "networking/server.h"
 
 extern ConfigManager g_config;
 

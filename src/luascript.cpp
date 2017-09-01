@@ -25,16 +25,16 @@
 #include "chat.h"
 #include "player.h"
 #include "game.h"
-#include "protocolstatus.h"
+#include "networking/protocols/protocolstatus.h"
 #include "spells.h"
 #include "iologindata.h"
 #include "configmanager.h"
 #include "teleport.h"
-#include "databasemanager.h"
+#include "database/databasemanager.h"
 #include "bed.h"
 #include "monster.h"
 #include "scheduler.h"
-#include "databasetasks.h"
+#include "database/databasetasks.h"
 
 extern Chat* g_chat;
 extern Game g_game;

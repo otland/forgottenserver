@@ -19,9 +19,9 @@
 
 #include "otpch.h"
 
-#include "protocol.h"
-#include "outputmessage.h"
-#include "rsa.h"
+#include "networking/protocols/protocol.h"
+#include "networking/outputmessage.h"
+#include "encryption/rsa.h"
 
 extern RSA g_RSA;
 

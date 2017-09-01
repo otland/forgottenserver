@@ -19,10 +19,10 @@
 
 #include "otpch.h"
 
-#include "protocolstatus.h"
+#include "networking/protocols/protocolstatus.h"
 #include "configmanager.h"
 #include "game.h"
-#include "outputmessage.h"
+#include "networking/outputmessage.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

@@ -22,7 +22,7 @@
 
 #include "account.h"
 #include "player.h"
-#include "database.h"
+#include "database/database.h"
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 

@@ -19,9 +19,9 @@
 
 #include "otpch.h"
 
-#include "protocollogin.h"
+#include "networking/protocols/protocollogin.h"
 
-#include "outputmessage.h"
+#include "networking/outputmessage.h"
 #include "tasks.h"
 
 #include "configmanager.h"

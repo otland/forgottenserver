@@ -22,7 +22,7 @@
 
 #include <unordered_set>
 
-#include "networkmessage.h"
+#include "networking/networkmessage.h"
 
 class Protocol;
 using Protocol_ptr = std::shared_ptr<Protocol>;

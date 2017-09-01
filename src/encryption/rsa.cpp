@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "rsa.h"
+#include "encryption/rsa.h"
 
 RSA::RSA()
 {

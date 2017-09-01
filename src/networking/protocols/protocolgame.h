@@ -20,7 +20,7 @@
 #ifndef FS_PROTOCOLGAME_H_FACA2A2D1A9348B78E8FD7E8003EBB87
 #define FS_PROTOCOLGAME_H_FACA2A2D1A9348B78E8FD7E8003EBB87
 
-#include "protocol.h"
+#include "networking/protocols/protocol.h"
 #include "chat.h"
 #include "creature.h"
 #include "tasks.h"

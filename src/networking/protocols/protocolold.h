@@ -20,7 +20,7 @@
 #ifndef FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
 #define FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
 
-#include "protocol.h"
+#include "networking/protocols/protocol.h"
 
 class NetworkMessage;
 
