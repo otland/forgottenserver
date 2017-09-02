@@ -8,15 +8,18 @@ set(tfs_encryption_SRC
 	${CMAKE_CURRENT_LIST_DIR}/encryption/rsa.cpp
 )
 
+set(tfs_protocols_SRC
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocol.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocolgame.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocollogin.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocolold.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocolstatus.cpp
+)
+
 set(tfs_networking_SRC
 	${CMAKE_CURRENT_LIST_DIR}/networking/connection.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networking/networkmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networking/outputmessage.cpp
-	${CMAKE_CURRENT_LIST_DIR}/networking/protocols/protocol.cpp
-	${CMAKE_CURRENT_LIST_DIR}/networking/protocols/protocolgame.cpp
-	${CMAKE_CURRENT_LIST_DIR}/networking/protocols/protocollogin.cpp
-	${CMAKE_CURRENT_LIST_DIR}/networking/protocols/protocolold.cpp
-	${CMAKE_CURRENT_LIST_DIR}/networking/protocols/protocolstatus.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networking/server.cpp
 )
 
@@ -85,6 +88,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/wildcardtree.cpp
 	${tfs_database_SRC}
 	${tfs_encryption_SRC}
+	${tfs_protocols_SRC}
 	${tfs_networking_SRC}
 	PARENT_SCOPE)
 

@@ -21,7 +21,7 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
-#include "networking/protocols/protocolgame.h"
+#include "protocols/protocolgame.h"
 
 #include "networking/outputmessage.h"
 

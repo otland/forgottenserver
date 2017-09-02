@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "networking/protocols/protocol.h"
+#include "protocols/protocol.h"
 #include "networking/outputmessage.h"
 #include "encryption/rsa.h"
 

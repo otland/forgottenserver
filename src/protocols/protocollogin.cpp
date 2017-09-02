@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "networking/protocols/protocollogin.h"
+#include "protocols/protocollogin.h"
 
 #include "networking/outputmessage.h"
 #include "tasks.h"

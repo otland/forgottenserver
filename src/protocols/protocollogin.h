@@ -20,7 +20,7 @@
 #ifndef FS_PROTOCOLLOGIN_H_1238F4B473074DF2ABC595C29E81C46D
 #define FS_PROTOCOLLOGIN_H_1238F4B473074DF2ABC595C29E81C46D
 
-#include "networking/protocols/protocol.h"
+#include "protocols/protocol.h"
 
 class NetworkMessage;
 class OutputMessage;

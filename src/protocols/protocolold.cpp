@@ -19,7 +19,7 @@
 
 #include "otpch.h"
 
-#include "networking/protocols/protocolold.h"
+#include "protocols/protocolold.h"
 #include "networking/outputmessage.h"
 
 #include "game.h"

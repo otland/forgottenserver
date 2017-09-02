@@ -22,7 +22,7 @@
 #include "configmanager.h"
 #include "networking/connection.h"
 #include "networking/outputmessage.h"
-#include "networking/protocols/protocol.h"
+#include "protocols/protocol.h"
 #include "scheduler.h"
 #include "networking/server.h"
 

@@ -20,7 +20,7 @@
 #include "otpch.h"
 
 #include "networking/outputmessage.h"
-#include "networking/protocols/protocol.h"
+#include "protocols/protocol.h"
 #include "lockfree.h"
 #include "scheduler.h"
 
