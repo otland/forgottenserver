@@ -250,7 +250,7 @@ CORPSES = {
 FIELDS = {1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1500,1501,1502,1503,1504}
 
 function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
-	if target:isImmune(conditionType) then
+	if damage <= 0 or target:isImmune(conditionType) then
 		return false
 	end
 
