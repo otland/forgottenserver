@@ -310,10 +310,10 @@ class Player final : public Creature, public Cylinder
 		}
 
 		void addBlessing(uint8_t blessing) {
-			blessings |= blessing;
+			blessings |= (static_cast<uint8_t>(1) << blessing);
 		}
 		void removeBlessing(uint8_t blessing) {
-			blessings &= ~blessing;
+			blessings &= ~(static_cast<uint8_t>(1) << blessing);
 		}
 		bool hasBlessing(uint8_t value) const {
 			return (blessings & (static_cast<uint8_t>(1) << value)) != 0;
