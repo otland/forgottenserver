@@ -2136,6 +2136,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getCondition", LuaScriptInterface::luaCreatureGetCondition);
 	registerMethod("Creature", "addCondition", LuaScriptInterface::luaCreatureAddCondition);
 	registerMethod("Creature", "removeCondition", LuaScriptInterface::luaCreatureRemoveCondition);
+	registerMethod("Creature", "hasCondition", LuaScriptInterface::luaCreatureHasCondition);
 
 	registerMethod("Creature", "remove", LuaScriptInterface::luaCreatureRemove);
 	registerMethod("Creature", "teleportTo", LuaScriptInterface::luaCreatureTeleportTo);
@@ -7130,6 +7131,21 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureHasCondition(lua_State* L)
+{
+	// creature:hasCondition(conditionType[, subId = 0])
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
+	uint32_t subId = getNumber<uint32_t>(L, 3, 0);
+	pushBoolean(L, creature->hasCondition(conditionType, subId));
 	return 1;
 }
 

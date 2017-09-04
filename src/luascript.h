@@ -786,6 +786,7 @@ class LuaScriptInterface
 		static int luaCreatureGetCondition(lua_State* L);
 		static int luaCreatureAddCondition(lua_State* L);
 		static int luaCreatureRemoveCondition(lua_State* L);
+		static int luaCreatureHasCondition(lua_State* L);
 
 		static int luaCreatureRemove(lua_State* L);
 		static int luaCreatureTeleportTo(lua_State* L);
