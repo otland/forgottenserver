@@ -446,7 +446,7 @@ SharedExperienceState_t Party::canUseSharedExperience(const Player* player) cons
 		}
 	}
 
-	uint32_t minLevel = static_cast<int32_t>(std::ceil((static_cast<float>(highestLevel) * 2) / 3));
+	uint32_t minLevel = static_cast<uint32_t>(highestLevel * 2 / 3.f);
 	if (player->getLevel() < minLevel) {
 		return SHAREDEXPERIENCE_STATE_ACTIVATED_LEVELSPREADTOOWIDE;
 	}
