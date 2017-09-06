@@ -181,6 +181,7 @@ function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c ~= 
 function doChangeSpeed(cid, delta) local c = Creature(cid) return c ~= nil and c:changeSpeed(delta) or false end
 function doAddCondition(cid, conditionId) local c = Creature(cid) return c ~= nil and c:addCondition(conditionId) or false end
 function doRemoveCondition(cid, conditionType, subId) local c = Creature(cid) return c ~= nil and (c:removeCondition(conditionType, CONDITIONID_COMBAT, subId) or c:removeCondition(conditionType, CONDITIONID_DEFAULT, subId) or true) end
+function getCreatureCondition(cid, type, subId) local c = Creature(cid) return c ~= nil and c:hasCondition(type, subId) or false end
 
 doSetCreatureDirection = doCreatureSetLookDir
 

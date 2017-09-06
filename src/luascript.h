@@ -425,7 +425,6 @@ class LuaScriptInterface
 
 		//get creature info functions
 		static int luaGetPlayerFlagValue(lua_State* L);
-		static int luaGetCreatureCondition(lua_State* L);
 
 		static int luaGetWorldTime(lua_State* L);
 		static int luaGetWorldLight(lua_State* L);
@@ -787,6 +786,7 @@ class LuaScriptInterface
 		static int luaCreatureGetCondition(lua_State* L);
 		static int luaCreatureAddCondition(lua_State* L);
 		static int luaCreatureRemoveCondition(lua_State* L);
+		static int luaCreatureHasCondition(lua_State* L);
 
 		static int luaCreatureRemove(lua_State* L);
 		static int luaCreatureTeleportTo(lua_State* L);
