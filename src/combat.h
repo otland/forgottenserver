@@ -287,7 +287,7 @@ class Combat
 		bool hasArea() const {
 			return area != nullptr;
 		}
-		void setCondition(const Condition* condition) {
+		void addCondition(const Condition* condition) {
 			params.conditionList.emplace_front(condition);
 		}
 		void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);

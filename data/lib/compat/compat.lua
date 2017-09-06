@@ -111,9 +111,11 @@ end
 createCombatObject = Combat
 setCombatArea = Combat.setArea
 setCombatCallback = Combat.setCallback
-setCombatCondition = Combat.setCondition
+setCombatCondition = Combat.addCondition
 setCombatFormula = Combat.setFormula
 setCombatParam = Combat.setParameter
+
+Combat.setCondition = Combat.addCondition
 
 createConditionObject = Condition
 setConditionParam = Condition.setParameter
