@@ -1915,6 +1915,10 @@ bool Monster::challengeCreature(Creature* creature)
 bool Monster::convinceCreature(Creature* creature)
 {
 	Player* player = creature->getPlayer();
+	if (player->getSkull() == SKULL_BLACK) {
+		return false;
+	}
+	
 	if (player && !player->hasFlag(PlayerFlag_CanConvinceAll)) {
 		if (!mType->info.isConvinceable) {
 			return false;

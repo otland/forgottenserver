@@ -13,5 +13,9 @@ combat:setFormula(COMBAT_FORMULA_SKILL, 0, 0, 1, 0)
 combat:setArea(area)
 
 function onUseWeapon(player, variant)
+	if player:getSkull() == SKULL_BLACK then
+		return false
+	end
+	
 	return combat:execute(player, variant)
 end

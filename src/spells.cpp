@@ -560,6 +560,11 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
+	if (aggressive && (range < 1 || range > 0 && !player->getAttackedCreature()) && player->getSkull() == SKULL_BLACK) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return false;
+	}
+	
 	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;
