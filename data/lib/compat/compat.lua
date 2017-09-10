@@ -111,11 +111,19 @@ end
 createCombatObject = Combat
 setCombatArea = Combat.setArea
 setCombatCallback = Combat.setCallback
-setCombatCondition = Combat.addCondition
 setCombatFormula = Combat.setFormula
 setCombatParam = Combat.setParameter
+addCombatCondition = Combat.addCondition
 
-Combat.setCondition = Combat.addCondition
+Combat.setCondition = function(...)
+	print("[Warning] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
+	Combat.addCondition(...)
+end
+
+setCombatCondition = function(...)
+	print("[Warning] Function setCombatCondition was renamed to addCombatCondition and will be removed in the future")
+	Combat.addCondition(...)
+end
 
 createConditionObject = Condition
 setConditionParam = Condition.setParameter

@@ -9,7 +9,7 @@ condition:setParameter(CONDITION_PARAM_DELAYED, true)
 condition:addDamage(4, 4000, -3)
 condition:addDamage(9, 4000, -2)
 condition:addDamage(20, 4000, -1)
-combat:setCondition(condition)
+combat:addCondition(condition)
 
 function onUseWeapon(player, variant)
 	return combat:execute(player, variant)

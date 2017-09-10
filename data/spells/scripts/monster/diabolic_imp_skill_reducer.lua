@@ -8,7 +8,7 @@ for i = 70, 80 do
 	combat[i] = Combat()
 	combat[i]:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGY)
 	combat[i]:setArea(createCombatArea(AREA_BEAM1))
-	combat[i]:setCondition(condition)
+	combat[i]:addCondition(condition)
 end
 
 function onCastSpell(creature, variant)
