@@ -560,6 +560,12 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
+	if (aggressive && player->hasCondition(CONDITION_PACIFIED)) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+		return false;
+	}
+	
 	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;
