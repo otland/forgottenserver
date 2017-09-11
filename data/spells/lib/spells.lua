@@ -383,3 +383,14 @@ function Player:conjureItem(reagentId, conjureId, conjureCount, effect)
 	self:getPosition():sendMagicEffect(item:getType():isRune() and CONST_ME_MAGIC_RED or effect)
 	return true
 end
+
+function Creature:addAttributeCondition(parameters)
+	local condition = Condition(CONDITION_ATTRIBUTES)
+	for _, parameter in ipairs(parameters) do
+		if parameter.key and parameter.value then
+			condition:setParameter(parameter.key, parameter.value)
+		end
+	end
+
+	self:addCondition(condition)
+end
