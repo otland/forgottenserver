@@ -109,11 +109,11 @@ function pushThing(thing)
 end
 
 createCombatObject = Combat
+addCombatCondition = Combat.addCondition
 setCombatArea = Combat.setArea
 setCombatCallback = Combat.setCallback
 setCombatFormula = Combat.setFormula
 setCombatParam = Combat.setParameter
-addCombatCondition = Combat.addCondition
 
 Combat.setCondition = function(...)
 	print("[Warning] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
