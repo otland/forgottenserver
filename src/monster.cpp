@@ -1918,7 +1918,7 @@ bool Monster::convinceCreature(Creature* creature)
 	if (player->getSkull() == SKULL_BLACK) {
 		return false;
 	}
-	
+
 	if (player && !player->hasFlag(PlayerFlag_CanConvinceAll)) {
 		if (!mType->info.isConvinceable) {
 			return false;

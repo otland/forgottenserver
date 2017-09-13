@@ -564,7 +564,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return false;
 	}
-	
+
 	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;

@@ -3,7 +3,7 @@ function onCastSpell(creature, variant)
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return false
 	end
-	
+
 	local monsterName = variant:getString()
 	local monsterType = MonsterType(monsterName)
 
