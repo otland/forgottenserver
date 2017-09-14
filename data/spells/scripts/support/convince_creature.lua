@@ -8,8 +8,14 @@ function onCastSpell(creature, variant, isHotkey)
 
 	local monsterType = target:getType()
 	if not getPlayerFlagValue(creature, PlayerFlag_CanConvinceAll) then
-		if not monsterType:isConvinceable() or #creature:getSummons() >= 2 then
+		if not monsterType:isConvinceable() then
 			creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
+			return false
+		end
+
+		if #creature:getSummons() >= 2 then
+			creature:sendCancelMessage("You cannot control more creatures.")
 			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 			return false
 		end
