@@ -116,7 +116,7 @@ function Creature:removeSummon(monster)
 end
 
 function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
-	if damage <= 0 or target:isImmune(conditionType) then
+	if damage <= 0 or not target or target:isImmune(conditionType) then
 		return false
 	end
 
