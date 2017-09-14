@@ -114,3 +114,46 @@ function Creature:removeSummon(monster)
 
 	return true
 end
+
+function Creature:addDamageCondition(target, conditionType, listType, damage, time, rounds)
+	if damage <= 0 or target:isImmune(conditionType) then
+		return false
+	end
+
+	local condition = Condition(conditionType)
+	condition:setParameter(CONDITION_PARAM_OWNER, self:getId())
+	condition:setParameter(CONDITION_PARAM_DELAYED, true)
+
+	if listType == 0 then
+		local exponent, value = -10, 0
+		while value < damage do
+			value = math.floor(10 * math.pow(1.2, exponent) + 0.5)
+			condition:addDamage(1, time or 4000, -value)
+
+			if value >= damage then
+				local permille = math.random(10, 1200) / 1000
+				condition:addDamage(1, time or 4000, -math.max(1, math.floor(value * permille + 0.5)))
+			else
+				exponent = exponent + 1
+			end
+		end
+	elseif listType == 1 then
+		local n, value = 0, damage
+		while value > 0 do
+			value = math.floor(damage * math.pow(2.718281828459, -0.05 * n) + 0.5)
+			if value ~= 0 then
+				condition:addDamage(1, time or 4000, -value)
+				n = n + 1
+			end
+		end
+	elseif listType == 2 then
+		for _ = 1, rounds do
+			condition:addDamage(1, math.random(time[1], time[2]) * 1000, -damage)
+		end
+	elseif listType == 3 then
+		condition:addDamage(rounds, time * 1000, -damage)
+	end
+
+	target:addCondition(condition)
+	return true
+end
