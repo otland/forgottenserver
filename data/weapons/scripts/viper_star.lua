@@ -11,7 +11,7 @@ condition:addDamage(20, 4000, -1)
 
 local secondCombat = Combat()
 secondCombat:setParameter(COMBAT_PARAM_TYPE, COMBAT_EARTHDAMAGE)
-secondCombat:setCondition(condition)
+secondCombat:addCondition(condition)
 
 function onUseWeapon(player, variant)
 	local boolean = combat:execute(player, variant)
