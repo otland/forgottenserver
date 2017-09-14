@@ -12,7 +12,7 @@ function onCastSpell(creature, variant)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
-	
+
 	if not getPlayerFlagValue(creature, PlayerFlag_CanSummonAll) then
 		if not monsterType:isSummonable() then
 			creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
