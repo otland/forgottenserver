@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
@@ -425,7 +425,6 @@ class LuaScriptInterface
 
 		//get creature info functions
 		static int luaGetPlayerFlagValue(lua_State* L);
-		static int luaGetCreatureCondition(lua_State* L);
 
 		static int luaGetWorldTime(lua_State* L);
 		static int luaGetWorldLight(lua_State* L);
@@ -787,6 +786,7 @@ class LuaScriptInterface
 		static int luaCreatureGetCondition(lua_State* L);
 		static int luaCreatureAddCondition(lua_State* L);
 		static int luaCreatureRemoveCondition(lua_State* L);
+		static int luaCreatureHasCondition(lua_State* L);
 
 		static int luaCreatureRemove(lua_State* L);
 		static int luaCreatureTeleportTo(lua_State* L);
@@ -1107,6 +1107,11 @@ class LuaScriptInterface
 		static int luaItemTypeIsStackable(lua_State* L);
 		static int luaItemTypeIsReadable(lua_State* L);
 		static int luaItemTypeIsWritable(lua_State* L);
+		static int luaItemTypeIsBlocking(lua_State* L);
+		static int luaItemTypeIsGroundTile(lua_State* L);
+		static int luaItemTypeIsMagicField(lua_State* L);
+		static int luaItemTypeIsUseable(lua_State* L);
+		static int luaItemTypeIsPickupable(lua_State* L);
 
 		static int luaItemTypeGetType(lua_State* L);
 		static int luaItemTypeGetId(lua_State* L);
@@ -1138,6 +1143,8 @@ class LuaScriptInterface
 		static int luaItemTypeGetDestroyId(lua_State* L);
 		static int luaItemTypeGetDecayId(lua_State* L);
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
+		static int luaItemTypeGetAmmoType(lua_State* L);
+		static int luaItemTypeGetCorpseType(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
 

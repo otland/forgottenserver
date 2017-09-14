@@ -451,11 +451,11 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		secondaryGroupCooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("lvl"))) {
+	if ((attr = node.attribute("level")) || (attr = node.attribute("lvl"))) {
 		level = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("maglv"))) {
+	if ((attr = node.attribute("magiclevel")) || (attr = node.attribute("maglv"))) {
 		magLevel = pugi::cast<uint32_t>(attr.value());
 	}
 
@@ -475,11 +475,11 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		range = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("exhaustion")) || (attr = node.attribute("cooldown"))) {
+	if ((attr = node.attribute("cooldown")) || (attr = node.attribute("exhaustion"))) {
 		cooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("prem"))) {
+	if ((attr = node.attribute("premium")) || (attr = node.attribute("prem"))) {
 		premium = attr.as_bool();
 	}
 
@@ -560,6 +560,12 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
+	if (aggressive && player->hasCondition(CONDITION_PACIFIED)) {
+		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
+		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+		return false;
+	}
+	
 	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;

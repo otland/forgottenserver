@@ -846,6 +846,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 		}
 	} else if (it.weaponType != WEAPON_NONE) {
+		bool begin = true;
 		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
 			s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
 
@@ -867,9 +868,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
 			}
 
-			s << ')';
+			begin = false;
 		} else if (it.weaponType != WEAPON_AMMO) {
-			bool begin = true;
 
 			int32_t attack, defense, extraDefense;
 			if (item) {
@@ -904,141 +904,141 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ' ' << std::showpos << extraDefense << std::noshowpos;
 				}
 			}
+		}
 
-			if (it.abilities) {
-				for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-					if (!it.abilities->skills[i]) {
+		if (it.abilities) {
+			for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
+				if (!it.abilities->skills[i]) {
+					continue;
+				}
+
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
+			}
+
+			if (it.abilities->stats[STAT_MAGICPOINTS]) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+				
+				s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
+			}
+
+			int16_t show = it.abilities->absorbPercent[0];
+			if (show != 0) {
+				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] != show) {
+						show = 0;
+						break;
+					}
+				}
+			}
+
+			if (show == 0) {
+				bool tmp = true;
+				
+				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] == 0) {
 						continue;
 					}
 
-					if (begin) {
-						begin = false;
-						s << " (";
-					} else {
-						s << ", ";
-					}
+					if (tmp) {
+						tmp = false;
 
-					s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
-				}
-
-				if (it.abilities->stats[STAT_MAGICPOINTS]) {
-					if (begin) {
-						begin = false;
-						s << " (";
-					} else {
-						s << ", ";
-					}
-
-					s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
-				}
-
-				int16_t show = it.abilities->absorbPercent[0];
-				if (show != 0) {
-					for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-						if (it.abilities->absorbPercent[i] != show) {
-							show = 0;
-							break;
-						}
-					}
-				}
-
-				if (show == 0) {
-					bool tmp = true;
-
-					for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-						if (it.abilities->absorbPercent[i] == 0) {
-							continue;
-						}
-
-						if (tmp) {
-							tmp = false;
-
-							if (begin) {
-								begin = false;
-								s << " (";
-							} else {
-								s << ", ";
-							}
-
-							s << "protection ";
+						if (begin) {
+							begin = false;
+							s << " (";
 						} else {
 							s << ", ";
 						}
 
-						s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
-					}
-				} else {
-					if (begin) {
-						begin = false;
-						s << " (";
+						s << "protection ";
 					} else {
 						s << ", ";
 					}
 
-					s << "protection all " << std::showpos << show << std::noshowpos << '%';
+					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
+				}
+			} else {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
 				}
 
-				show = it.abilities->fieldAbsorbPercent[0];
-				if (show != 0) {
-					for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-						if (it.abilities->absorbPercent[i] != show) {
-							show = 0;
-							break;
-						}
+				s << "protection all " << std::showpos << show << std::noshowpos << '%';
+			}
+
+			show = it.abilities->fieldAbsorbPercent[0];
+			if (show != 0) {
+				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->absorbPercent[i] != show) {
+						show = 0;
+						break;
 					}
 				}
+			}
 
-				if (show == 0) {
-					bool tmp = true;
+			if (show == 0) {
+				bool tmp = true;
 
-					for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-						if (it.abilities->fieldAbsorbPercent[i] == 0) {
-							continue;
-						}
+				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+					if (it.abilities->fieldAbsorbPercent[i] == 0) {
+						continue;
+					}
 
-						if (tmp) {
-							tmp = false;
+					if (tmp) {
+						tmp = false;
 
-							if (begin) {
-								begin = false;
-								s << " (";
-							} else {
-								s << ", ";
-							}
-
-							s << "protection ";
+						if (begin) {
+							begin = false;
+							s << " (";
 						} else {
 							s << ", ";
 						}
 
-						s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
+						s << "protection ";
+					} else {
+						s << ", ";
 					}
+
+					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
+				}
+			} else {
+				if (begin) {
+					begin = false;
+					s << " (";
 				} else {
-					if (begin) {
-						begin = false;
-						s << " (";
-					} else {
-						s << ", ";
-					}
-
-					s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
+					s << ", ";
 				}
 
-				if (it.abilities->speed) {
-					if (begin) {
-						begin = false;
-						s << " (";
-					} else {
-						s << ", ";
-					}
+				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
+			}
 
-					s << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
+			if (it.abilities->speed) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
 				}
-			}
 
-			if (!begin) {
-				s << ')';
+				s << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
 			}
+		}
+
+		if (!begin) {
+			s << ')';
 		}
 	} else if (it.armor != 0 || (item && item->getArmor() != 0) || it.showAttributes) {
 		bool begin = true;
