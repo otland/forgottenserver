@@ -76,33 +76,29 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	if potion.health or potion.mana or potion.combat then
-		if potion.health then
-			doTargetCombatHealth(0, target, COMBAT_HEALING, potion.health[1], potion.health[2], CONST_ME_MAGIC_BLUE)
-		end
+	if potion.health then
+		doTargetCombatHealth(player:getId(), target, COMBAT_HEALING, potion.health[1], potion.health[2], CONST_ME_MAGIC_BLUE)
+	end
 
-		if potion.mana then
-			doTargetCombatMana(0, target, potion.mana[1], potion.mana[2], CONST_ME_MAGIC_BLUE)
-		end
+	if potion.mana then
+		doTargetCombatMana(player:getId(), target, potion.mana[1], potion.mana[2], CONST_ME_MAGIC_BLUE)
+	end
 
-		if potion.combat then
-			potion.combat:execute(target, Variant(target:getId()))
-		end
-
-		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
-		player:addItem(potion.flask, 1)
+	if potion.combat then
+		potion.combat:execute(target, Variant(target:getId()))
 	end
 
 	if potion.condition then
 		player:addCondition(potion.condition)
 		player:say(potion.text, TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(potion.effect)
-	end
-
-	if potion.transform then
+	elseif potion.transform then
 		item:transform(potion.transform.id[math.random(#potion.transform.id)])
 		item:getPosition():sendMagicEffect(potion.effect)
 		return true
+	else
+		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		player:addItem(potion.flask, 1)
 	end
 
 	item:remove(1)
