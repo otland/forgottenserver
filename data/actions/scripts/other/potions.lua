@@ -98,7 +98,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	else
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
-		player:addItem(potion.flask, 1)
+		player:addItem(potion.flask)
 	end
 
 	item:remove(1)
