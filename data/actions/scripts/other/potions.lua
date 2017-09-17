@@ -90,7 +90,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:getPosition():sendMagicEffect(potion.effect)
 		return true
 	else
-		player:addItem(potion.flask)
+		local parent = item:getParent()
+		if parent:isTile() then
+			Game.createItem(potion.flask, 1, parent:getPosition())
+		elseif parent:isContainer() then
+			parent:addItem(potion.flask)
+		end
+
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
