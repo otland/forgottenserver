@@ -97,8 +97,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			parent:addItem(potion.flask)
 		end
 
-		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
-		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
+		toPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
+
+		local spectators = Game.getSpectators(toPosition, false, true, 1, 1, 1, 1)
+		for _, spectator in ipairs(spectators) do
+			spectator:say("Aaaah...", TALKTYPE_MONSTER_SAY, false, spectator, toPosition)
+		end
 	end
 
 	item:remove(1)
