@@ -16,7 +16,7 @@ bullseye:setParameter(CONDITION_PARAM_SKILL_SHIELD, -10)
 bullseye:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local potions = {
-	[6558] = {transform = {id = {7588, 7589}}, effect = CONST_ME_DRAWBLOOD},
+	[6558] = {transform = {7588, 7589}, effect = CONST_ME_DRAWBLOOD},
 	[7439] = {condition = berserk, vocations = {4, 8}, effect = CONST_ME_MAGIC_RED,
 			description = "Only knights may drink this potion.", text = "You feel stronger."},
 
@@ -74,7 +74,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:say(potion.text, TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(potion.effect)
 	elseif potion.transform then
-		item:transform(potion.transform.id[math.random(#potion.transform.id)])
+		item:transform(potion.transform[math.random(#potion.transform)])
 		item:getPosition():sendMagicEffect(potion.effect)
 		return true
 	else
