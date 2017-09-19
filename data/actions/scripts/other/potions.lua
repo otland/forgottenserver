@@ -69,18 +69,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	if potion.health then
-		doTargetCombatHealth(0, target, COMBAT_HEALING, potion.health[1], potion.health[2])
-	end
-
-	if potion.mana then
-		doTargetCombatMana(0, target, potion.mana[1], potion.mana[2])
-	end
-
-	if potion.antidote then
-		target:removeCondition(CONDITION_POISON)
-	end
-
 	if potion.condition then
 		player:addCondition(potion.condition)
 		player:say(potion.text, TALKTYPE_MONSTER_SAY)
@@ -90,6 +78,18 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:getPosition():sendMagicEffect(potion.effect)
 		return true
 	else
+		if potion.health then
+			doTargetCombatHealth(0, target, COMBAT_HEALING, potion.health[1], potion.health[2])
+		end
+
+		if potion.mana then
+			doTargetCombatMana(0, target, potion.mana[1], potion.mana[2])
+		end
+
+		if potion.antidote then
+			target:removeCondition(CONDITION_POISON)
+		end
+
 		local parent = item:getParent()
 		if parent:isTile() then
 			Game.createItem(potion.flask, 1, parent:getPosition())
