@@ -569,7 +569,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-
 		case ATTR_UNMOVEABLEDITEM: {
 			uint8_t unmoveabledItem;
 			if (!propStream.read<uint8_t>(unmoveabledItem)) {
@@ -945,7 +944,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				} else {
 					s << ", ";
 				}
-				
+
 				s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
 			}
 
@@ -961,7 +960,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 			if (show == 0) {
 				bool tmp = true;
-				
+
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
 					if (it.abilities->absorbPercent[i] == 0) {
 						continue;
