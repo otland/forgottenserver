@@ -569,6 +569,17 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+
+		case ATTR_UNMOVEABLEDITEM: {
+			uint8_t unmoveabledItem;
+			if (!propStream.read<uint8_t>(unmoveabledItem)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setIntAttr(ITEM_ATTRIBUTE_UNMOVEABLEDITEM, unmoveabledItem);
+			break;
+		}
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values
@@ -748,6 +759,11 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)) {
 		propWriteStream.write<uint8_t>(ATTR_SHOOTRANGE);
 		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE));
+	}
+
+	if (hasAttribute(ITEM_ATTRIBUTE_UNMOVEABLEDITEM)) {
+		propWriteStream.write<uint8_t>(ATTR_UNMOVEABLEDITEM);
+		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_UNMOVEABLEDITEM));
 	}
 }
 
