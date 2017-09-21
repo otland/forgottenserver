@@ -115,16 +115,16 @@ function Creature:removeSummon(monster)
 	return true
 end
 
-function Creature:addDamageCondition(target, conditionType, listType, damage, period, rounds)
-	if damage <= 0 or not target or target:isImmune(conditionType) then
+function Creature:addDamageCondition(target, type, list, damage, period, rounds)
+	if damage <= 0 or not target or target:isImmune(type) then
 		return false
 	end
 
-	local condition = Condition(conditionType)
+	local condition = Condition(type)
 	condition:setParameter(CONDITION_PARAM_OWNER, self:getId())
 	condition:setParameter(CONDITION_PARAM_DELAYED, true)
 
-	if listType == LISTTYPE_EXPONENTIAL_DAMAGE then
+	if list == DAMAGELIST_EXPONENTIAL_DAMAGE then
 		local exponent, value = -10, 0
 		while value < damage do
 			value = math.floor(10 * math.pow(1.2, exponent) + 0.5)
@@ -137,7 +137,7 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, pe
 				exponent = exponent + 1
 			end
 		end
-	elseif listType == LISTTYPE_LOGARITHMIC_DAMAGE then
+	elseif list == DAMAGELIST_LOGARITHMIC_DAMAGE then
 		local n, value = 0, damage
 		while value > 0 do
 			value = math.floor(damage * math.pow(2.718281828459, -0.05 * n) + 0.5)
@@ -146,11 +146,11 @@ function Creature:addDamageCondition(target, conditionType, listType, damage, pe
 				n = n + 1
 			end
 		end
-	elseif listType == LISTTYPE_VARYING_PERIOD then
+	elseif list == DAMAGELIST_VARYING_PERIOD then
 		for _ = 1, rounds do
 			condition:addDamage(1, math.random(period[1], period[2]) * 1000, -damage)
 		end
-	elseif listType == LISTTYPE_CONSTANT_PERIOD then
+	elseif list == DAMAGELIST_CONSTANT_PERIOD then
 		condition:addDamage(rounds, period * 1000, -damage)
 	end
 
