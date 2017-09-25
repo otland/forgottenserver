@@ -9,6 +9,6 @@ function onUseWeapon(player, variant)
 		return false
 	end
 
-	player:addDamageCondition(Creature(variant:getNumber()), CONDITION_POISON, LISTTYPE_LOGARITHMIC_DAMAGE, 3)
+	player:addDamageCondition(Creature(variant:getNumber()), CONDITION_POISON, DAMAGELIST_LOGARITHMIC_DAMAGE, 3)
 	return true
 end
