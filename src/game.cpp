@@ -3768,7 +3768,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 	if (damage.primary.value == 0) {
 		return false;
 	}
-	
+
 	const Position& targetPos = target->getPosition();
 	if (damage.primary.value > 0) {
 		if (target->getHealth() <= 0) {
@@ -4101,7 +4101,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 	if (manaChange == 0) {
 		return false;
 	}
-	
+
 	if (manaChange > 0) {
 		if (attacker) {
 			const Player* attackerPlayer = attacker->getPlayer();
