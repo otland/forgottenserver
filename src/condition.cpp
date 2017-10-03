@@ -723,7 +723,9 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 
 	if (internalManaTicks >= manaTicks) {
 		internalManaTicks = 0;
-		creature->changeMana(manaGain);
+		if (Player* player = creature->getPlayer()) {
+			player->changeMana(manaGain);
+		}
 	}
 
 	return ConditionGeneric::executeCondition(creature, interval);

@@ -226,12 +226,6 @@ class Creature : virtual public Thing
 		virtual int32_t getMaxHealth() const {
 			return healthMax;
 		}
-		uint32_t getMana() const {
-			return mana;
-		}
-		virtual uint32_t getMaxMana() const {
-			return 0;
-		}
 
 		const Outfit_t getCurrentOutfit() const {
 			return currentOutfit;
@@ -340,11 +334,9 @@ class Creature : virtual public Thing
 		}
 
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
-		virtual void changeMana(int32_t manaChange);
 
 		void gainHealth(Creature* attacker, int32_t healthGain);
 		virtual void drainHealth(Creature* attacker, int32_t damage);
-		virtual void drainMana(Creature* attacker, int32_t manaLoss);
 
 		virtual bool challengeCreature(Creature*) {
 			return false;
@@ -508,7 +500,6 @@ class Creature : virtual public Thing
 		uint32_t blockTicks = 0;
 		uint32_t lastStepCost = 1;
 		uint32_t baseSpeed = 220;
-		uint32_t mana = 0;
 		int32_t varSpeed = 0;
 		int32_t health = 1000;
 		int32_t healthMax = 1000;

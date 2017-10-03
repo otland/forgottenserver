@@ -773,10 +773,6 @@ class LuaScriptInterface
 		static int luaCreatureSetMaxHealth(lua_State* L);
 		static int luaCreatureSetHiddenHealth(lua_State* L);
 
-		static int luaCreatureGetMana(lua_State* L);
-		static int luaCreatureAddMana(lua_State* L);
-		static int luaCreatureGetMaxMana(lua_State* L);
-
 		static int luaCreatureGetSkull(lua_State* L);
 		static int luaCreatureSetSkull(lua_State* L);
 
@@ -834,6 +830,9 @@ class LuaScriptInterface
 
 		static int luaPlayerGetMagicLevel(lua_State* L);
 		static int luaPlayerGetBaseMagicLevel(lua_State* L);
+		static int luaPlayerGetMana(lua_State* L);
+		static int luaPlayerAddMana(lua_State* L);
+		static int luaPlayerGetMaxMana(lua_State* L);
 		static int luaPlayerSetMaxMana(lua_State* L);
 		static int luaPlayerGetManaSpent(lua_State* L);
 		static int luaPlayerAddManaSpent(lua_State* L);

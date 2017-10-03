@@ -505,7 +505,7 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 
 		case STAT_MAXMANAPOINTS: {
 			if (getMana() > getMaxMana()) {
-				Creature::changeMana(getMaxMana() - getMana());
+				changeMana(getMaxMana() - getMana());
 			}
 			break;
 		}
@@ -1505,7 +1505,13 @@ void Player::drainHealth(Creature* attacker, int32_t damage)
 
 void Player::drainMana(Creature* attacker, int32_t manaLoss)
 {
-	Creature::drainMana(attacker, manaLoss);
+	onAttacked();
+	changeMana(-manaLoss);
+
+	if (attacker) {
+		addDamagePoints(attacker, manaLoss);
+	}
+
 	sendStats();
 }
 
@@ -3571,7 +3577,11 @@ void Player::changeHealth(int32_t healthChange, bool sendHealthChange/* = true*/
 void Player::changeMana(int32_t manaChange)
 {
 	if (!hasFlag(PlayerFlag_HasInfiniteMana)) {
-		Creature::changeMana(manaChange);
+		if (manaChange > 0) {
+			mana += std::min<int32_t>(manaChange, getMaxMana() - mana);
+		} else {
+			mana = std::max<int32_t>(0, mana + manaChange);
+		}
 	}
 
 	sendStats();

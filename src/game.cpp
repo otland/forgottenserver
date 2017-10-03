@@ -3886,8 +3886,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		message.position = targetPos;
 
 		SpectatorHashSet spectators;
-		if (target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
-			int32_t manaDamage = std::min<int32_t>(target->getMana(), healthChange);
+		if (targetPlayer && target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
+			int32_t manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 			if (manaDamage != 0) {
 				if (damage.origin != ORIGIN_NONE) {
 					const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
@@ -3898,11 +3898,11 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						if (healthChange == 0) {
 							return true;
 						}
-						manaDamage = std::min<int32_t>(target->getMana(), healthChange);
+						manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 					}
 				}
 
-				target->drainMana(attacker, manaDamage);
+				targetPlayer->drainMana(attacker, manaDamage);
 				map.getSpectators(spectators, targetPos, true, true);
 				addMagicEffect(spectators, targetPos, CONST_ME_LOSEENERGY);
 
@@ -4094,10 +4094,15 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaChange, CombatOrigin origin)
 {
+	Player* targetPlayer = target->getPlayer();
+	if (!targetPlayer) {
+		return true;
+	}
+
 	if (manaChange > 0) {
 		if (attacker) {
 			const Player* attackerPlayer = attacker->getPlayer();
-			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && target->getPlayer() && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
+			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
 				return false;
 			}
 		}
@@ -4112,7 +4117,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			}
 		}
 
-		target->changeMana(manaChange);
+		targetPlayer->changeMana(manaChange);
 	} else {
 		const Position& targetPos = target->getPosition();
 		if (!target->isAttackable()) {
@@ -4129,12 +4134,11 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			attackerPlayer = nullptr;
 		}
 
-		Player* targetPlayer = target->getPlayer();
-		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
+		if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
 
-		int32_t manaLoss = std::min<int32_t>(target->getMana(), -manaChange);
+		int32_t manaLoss = std::min<int32_t>(targetPlayer->getMana(), -manaChange);
 		BlockType_t blockType = target->blockHit(attacker, COMBAT_MANADRAIN, manaLoss);
 		if (blockType != BLOCK_NONE) {
 			addMagicEffect(targetPos, CONST_ME_POFF);
@@ -4155,7 +4159,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			}
 		}
 
-		target->drainMana(attacker, manaLoss);
+		targetPlayer->drainMana(attacker, manaLoss);
 
 		std::stringstream ss;
 
