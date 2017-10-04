@@ -75,6 +75,8 @@ target_link_libraries(tfs PRIVATE
         ${PUGIXML_LIBRARIES}
         )
 
+add_subdirectory(tools)
+
 ### INTERPROCEDURAL_OPTIMIZATION ###
 cmake_policy(SET CMP0069 NEW)
 include(CheckIPOSupported)
