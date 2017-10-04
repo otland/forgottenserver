@@ -49,7 +49,6 @@ class Spells final : public BaseEvents
 		InstantSpell* getInstantSpell(const std::string& words);
 		InstantSpell* getInstantSpellByName(const std::string& name);
 
-		uint32_t getInstantSpellCount(const Player* player) const;
 		InstantSpell* getInstantSpellById(uint32_t spellId);
 
 		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
