@@ -98,16 +98,16 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	return task->getEventId();
 }
 
-bool Scheduler::stopEvent(uint32_t eventid)
+bool Scheduler::stopEvent(uint32_t eventId)
 {
-	if (eventid == 0) {
+	if (eventId == 0) {
 		return false;
 	}
 
 	std::lock_guard<std::mutex> lockClass(eventLock);
 
 	// search the event id..
-	auto it = eventIds.find(eventid);
+	auto it = eventIds.find(eventId);
 	if (it == eventIds.end()) {
 		return false;
 	}

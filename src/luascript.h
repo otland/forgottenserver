@@ -403,7 +403,7 @@ class LuaScriptInterface
 
 		void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = nullptr);
 		void registerTable(const std::string& tableName);
-		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
+		void registerMethod(const std::string& globalName, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
 		void registerVariable(const std::string& tableName, const std::string& name, lua_Number value);

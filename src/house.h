@@ -207,7 +207,7 @@ class House
 
 		HouseTransferItem* getTransferItem();
 		void resetTransferItem();
-		bool executeTransfer(HouseTransferItem* item, Player* player);
+		bool executeTransfer(HouseTransferItem* item, Player* newOwner);
 
 		const HouseTileList& getTiles() const {
 			return houseTiles;

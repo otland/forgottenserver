@@ -1400,8 +1400,8 @@ LightInfo Creature::getCreatureLight() const
 	return internalLight;
 }
 
-void Creature::setCreatureLight(LightInfo light) {
-	internalLight = std::move(light);
+void Creature::setCreatureLight(LightInfo lightInfo) {
+	internalLight = std::move(lightInfo);
 }
 
 void Creature::setNormalCreatureLight()

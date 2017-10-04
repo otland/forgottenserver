@@ -131,7 +131,7 @@ class Spell : public BaseSpell
 			return name;
 		}
 
-		void postCastSpell(Player* player, bool finishedSpell = true, bool payCost = true) const;
+		void postCastSpell(Player* player, bool finishedCast = true, bool payCost = true) const;
 		static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
 
 		uint32_t getManaCost(const Player* player) const;

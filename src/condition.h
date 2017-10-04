@@ -181,7 +181,7 @@ class ConditionRegeneration final : public ConditionGeneric
 		ConditionRegeneration(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0):
 			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		void addCondition(Creature* creature, const Condition* addCondition) final;
+		void addCondition(Creature* creature, const Condition* condition) final;
 		bool executeCondition(Creature* creature, int32_t interval) final;
 
 		bool setParam(ConditionParam_t param, int32_t value) final;
@@ -210,7 +210,7 @@ class ConditionSoul final : public ConditionGeneric
 		ConditionSoul(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
 			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		void addCondition(Creature* creature, const Condition* addCondition) final;
+		void addCondition(Creature* creature, const Condition* condition) final;
 		bool executeCondition(Creature* creature, int32_t interval) final;
 
 		bool setParam(ConditionParam_t param, int32_t value) final;
@@ -367,7 +367,7 @@ class ConditionLight final : public Condition
 		bool startCondition(Creature* creature) final;
 		bool executeCondition(Creature* creature, int32_t interval) final;
 		void endCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* addCondition) final;
+		void addCondition(Creature* creature, const Condition* condition) final;
 
 		ConditionLight* clone() const final {
 			return new ConditionLight(*this);

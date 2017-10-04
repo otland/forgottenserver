@@ -55,7 +55,7 @@ void startupErrorMessage(const std::string& errorStr)
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* servicer);
+void mainLoader(int argc, char* argv[], ServiceManager* services);
 
 void badAllocationHandler()
 {

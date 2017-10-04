@@ -51,7 +51,7 @@ class IOBan
 {
 	public:
 		static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
-		static bool isIpBanned(uint32_t ip, BanInfo& banInfo);
+		static bool isIpBanned(uint32_t clientip, BanInfo& banInfo);
 		static bool isPlayerNamelocked(uint32_t playerId);
 };
 

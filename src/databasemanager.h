@@ -24,7 +24,7 @@
 class DatabaseManager
 {
 	public:
-		static bool tableExists(const std::string& table);
+		static bool tableExists(const std::string& tableName);
 
 		static int32_t getDatabaseVersion();
 		static bool isDatabaseSetup();

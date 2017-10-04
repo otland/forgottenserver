@@ -335,7 +335,7 @@ class Creature : virtual public Thing
 
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
 
-		void gainHealth(Creature* attacker, int32_t healthGain);
+		void gainHealth(Creature* healer, int32_t healthGain);
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 
 		virtual bool challengeCreature(Creature*) {
