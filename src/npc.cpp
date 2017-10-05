@@ -392,7 +392,7 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 		return true;
 	}
 
-	if (walkTicks <= 0) {
+	if (walkTicks == 0) {
 		return false;
 	}
 
