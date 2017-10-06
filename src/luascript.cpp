@@ -2047,6 +2047,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getDescription", LuaScriptInterface::luaItemGetDescription);
 
 	registerMethod("Item", "hasProperty", LuaScriptInterface::luaItemHasProperty);
+	registerMethod("Item", "isLoadedFromMap", LuaScriptInterface::luaItemIsLoadedFromMap);
 
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
@@ -6203,6 +6204,18 @@ int LuaScriptInterface::luaItemHasProperty(lua_State* L)
 	if (item) {
 		ITEMPROPERTY property = getNumber<ITEMPROPERTY>(L, 2);
 		pushBoolean(L, item->hasProperty(property));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemIsLoadedFromMap(lua_State* L)
+{
+	// item:isLoadedFromMap()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushBoolean(L, item->isLoadedFromMap());
 	} else {
 		lua_pushnil(L);
 	}

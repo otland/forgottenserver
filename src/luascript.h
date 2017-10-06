@@ -700,6 +700,7 @@ class LuaScriptInterface
 		static int luaItemGetDescription(lua_State* L);
 
 		static int luaItemHasProperty(lua_State* L);
+		static int luaItemIsLoadedFromMap(lua_State* L);
 
 		// Container
 		static int luaContainerCreate(lua_State* L);
