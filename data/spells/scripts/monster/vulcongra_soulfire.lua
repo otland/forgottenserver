@@ -4,7 +4,7 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITBYFIRE)
 combat:setArea(createCombatArea(AREA_SQUARE1X1))
 
 function onTargetCreature(creature, target)
-	creature:addDamageCondition(target, CONDITION_FIRE, 2, 10, {8, 10}, 20)
+	creature:addDamageCondition(target, CONDITION_FIRE, DAMAGELIST_VARYING_PERIOD, 10, {8, 10}, 20)
 end
 
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
