@@ -5,7 +5,7 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 combat:setArea(createCombatArea(AREA_SQUAREWAVE7))
 
 function onTargetCreature(creature, target)
-	creature:addDamageCondition(target, CONDITION_CURSED, 0, math.random(154, 266))
+	creature:addDamageCondition(target, CONDITION_CURSED, DAMAGELIST_EXPONENTIAL_DAMAGE, math.random(154, 266))
 end
 
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
