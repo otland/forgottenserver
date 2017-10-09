@@ -26,14 +26,58 @@
 
 extern ConfigManager g_config;
 
-Database::~Database()
+namespace Database {
+
+MYSQL* handle = nullptr;
+std::recursive_mutex databaseLock;
+uint64_t maxPacketSize = 1048576u;
+
+namespace {
+
+void disconnect()
 {
 	if (handle != nullptr) {
 		mysql_close(handle);
 	}
 }
 
-bool Database::connect()
+bool beginTransaction()
+{
+	if (!executeQuery("BEGIN")) {
+		return false;
+	}
+
+	databaseLock.lock();
+	return true;
+}
+
+bool rollback()
+{
+	if (mysql_rollback(handle) != 0) {
+		std::cout << "[Error - mysql_rollback] Message: " << mysql_error(handle) << std::endl;
+		databaseLock.unlock();
+		return false;
+	}
+
+	databaseLock.unlock();
+	return true;
+}
+
+bool commit()
+{
+	if (mysql_commit(handle) != 0) {
+		std::cout << "[Error - mysql_commit] Message: " << mysql_error(handle) << std::endl;
+		databaseLock.unlock();
+		return false;
+	}
+
+	databaseLock.unlock();
+	return true;
+}
+
+}
+
+bool connect()
 {
 	// connection handle initialization
 	handle = mysql_init(nullptr);
@@ -52,6 +96,8 @@ bool Database::connect()
 		return false;
 	}
 
+	std::atexit(disconnect);
+
 	DBResult_ptr result = storeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'");
 	if (result) {
 		maxPacketSize = result->getNumber<uint64_t>("Value");
@@ -59,41 +105,7 @@ bool Database::connect()
 	return true;
 }
 
-bool Database::beginTransaction()
-{
-	if (!executeQuery("BEGIN")) {
-		return false;
-	}
-
-	databaseLock.lock();
-	return true;
-}
-
-bool Database::rollback()
-{
-	if (mysql_rollback(handle) != 0) {
-		std::cout << "[Error - mysql_rollback] Message: " << mysql_error(handle) << std::endl;
-		databaseLock.unlock();
-		return false;
-	}
-
-	databaseLock.unlock();
-	return true;
-}
-
-bool Database::commit()
-{
-	if (mysql_commit(handle) != 0) {
-		std::cout << "[Error - mysql_commit] Message: " << mysql_error(handle) << std::endl;
-		databaseLock.unlock();
-		return false;
-	}
-
-	databaseLock.unlock();
-	return true;
-}
-
-bool Database::executeQuery(const std::string& query)
+bool executeQuery(const std::string& query)
 {
 	bool success = true;
 
@@ -120,7 +132,7 @@ bool Database::executeQuery(const std::string& query)
 	return success;
 }
 
-DBResult_ptr Database::storeQuery(const std::string& query)
+DBResult_ptr storeQuery(const std::string& query)
 {
 	databaseLock.lock();
 
@@ -156,12 +168,12 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	return result;
 }
 
-std::string Database::escapeString(const std::string& s) const
+std::string escapeString(const std::string& s)
 {
 	return escapeBlob(s.c_str(), s.length());
 }
 
-std::string Database::escapeBlob(const char* s, uint32_t length) const
+std::string escapeBlob(const char* s, uint32_t length)
 {
 	// the worst case is 2n + 1
 	size_t maxLength = (length * 2) + 1;
@@ -179,6 +191,16 @@ std::string Database::escapeBlob(const char* s, uint32_t length) const
 
 	escaped.push_back('\'');
 	return escaped;
+}
+
+uint64_t getLastInsertId() {
+	return static_cast<uint64_t>(mysql_insert_id(handle));
+}
+
+const char* getClientVersion() {
+	return mysql_get_client_info();
+}
+
 }
 
 DBResult::DBResult(MYSQL_RES* res)
@@ -255,7 +277,7 @@ bool DBInsert::addRow(const std::string& row)
 	// adds new row to buffer
 	const size_t rowLength = row.length();
 	length += rowLength;
-	if (length > Database::getInstance().getMaxPacketSize() && !execute()) {
+	if (length > Database::maxPacketSize && !execute()) {
 		return false;
 	}
 
@@ -288,8 +310,28 @@ bool DBInsert::execute()
 	}
 
 	// executes buffer
-	bool res = Database::getInstance().executeQuery(query + values);
+	bool res = Database::executeQuery(query + values);
 	values.clear();
 	length = query.length();
 	return res;
+}
+
+DBTransaction::~DBTransaction() {
+	if (state == STATE_START) {
+		Database::rollback();
+	}
+}
+
+bool DBTransaction::begin() {
+	state = STATE_START;
+	return Database::beginTransaction();
+}
+
+bool DBTransaction::commit() {
+	if (state != STATE_START) {
+		return false;
+	}
+
+	state = STATE_COMMIT;
+	return Database::commit();
 }

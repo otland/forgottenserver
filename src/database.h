@@ -27,115 +27,20 @@
 class DBResult;
 using DBResult_ptr = std::shared_ptr<DBResult>;
 
-class Database
-{
-	public:
-		Database() = default;
-		~Database();
+namespace Database {
 
-		// non-copyable
-		Database(const Database&) = delete;
-		Database& operator=(const Database&) = delete;
+bool connect();
 
-		/**
-		 * Singleton implementation.
-		 *
-		 * @return database connection handler singleton
-		 */
-		static Database& getInstance()
-		{
-			static Database instance;
-			return instance;
-		}
+bool executeQuery(const std::string& query);
+DBResult_ptr storeQuery(const std::string& query);
 
-		/**
-		 * Connects to the database
-		 *
-		 * @return true on successful connection, false on error
-		 */
-		bool connect();
+std::string escapeString(const std::string& s);
+std::string escapeBlob(const char* s, uint32_t length);
 
-		/**
-		 * Executes command.
-		 *
-		 * Executes query which doesn't generates results (eg. INSERT, UPDATE, DELETE...).
-		 *
-		 * @param query command
-		 * @return true on success, false on error
-		 */
-		bool executeQuery(const std::string& query);
+uint64_t getLastInsertId();
+const char* getClientVersion();
 
-		/**
-		 * Queries database.
-		 *
-		 * Executes query which generates results (mostly SELECT).
-		 *
-		 * @return results object (nullptr on error)
-		 */
-		DBResult_ptr storeQuery(const std::string& query);
-
-		/**
-		 * Escapes string for query.
-		 *
-		 * Prepares string to fit SQL queries including quoting it.
-		 *
-		 * @param s string to be escaped
-		 * @return quoted string
-		 */
-		std::string escapeString(const std::string& s) const;
-
-		/**
-		 * Escapes binary stream for query.
-		 *
-		 * Prepares binary stream to fit SQL queries.
-		 *
-		 * @param s binary stream
-		 * @param length stream length
-		 * @return quoted string
-		 */
-		std::string escapeBlob(const char* s, uint32_t length) const;
-
-		/**
-		 * Retrieve id of last inserted row
-		 *
-		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
-		 */
-		uint64_t getLastInsertId() const {
-			return static_cast<uint64_t>(mysql_insert_id(handle));
-		}
-
-		/**
-		 * Get database engine version
-		 *
-		 * @return the database engine version
-		 */
-		static const char* getClientVersion() {
-			return mysql_get_client_info();
-		}
-
-		uint64_t getMaxPacketSize() const {
-			return maxPacketSize;
-		}
-
-	protected:
-		/**
-		 * Transaction related methods.
-		 *
-		 * Methods for starting, commiting and rolling back transaction. Each of the returns boolean value.
-		 *
-		 * @return true on success, false on error
-		 */
-		bool beginTransaction();
-		bool rollback();
-		bool commit();
-
-	private:
-		MYSQL* handle = nullptr;
-		std::recursive_mutex databaseLock;
-		uint64_t maxPacketSize = 1048576;
-
-	friend class DBTransaction;
-};
+}
 
 class DBResult
 {
@@ -180,8 +85,6 @@ class DBResult
 		MYSQL_ROW row;
 
 		std::map<std::string, size_t> listNames;
-
-	friend class Database;
 };
 
 /**
@@ -206,35 +109,21 @@ class DBTransaction
 	public:
 		constexpr DBTransaction() = default;
 
-		~DBTransaction() {
-			if (state == STATE_START) {
-				Database::getInstance().rollback();
-			}
-		}
+		~DBTransaction();
 
 		// non-copyable
 		DBTransaction(const DBTransaction&) = delete;
 		DBTransaction& operator=(const DBTransaction&) = delete;
 
-		bool begin() {
-			state = STATE_START;
-			return Database::getInstance().beginTransaction();
-		}
+		bool begin();
 
-		bool commit() {
-			if (state != STATE_START) {
-				return false;
-			}
-
-			state = STEATE_COMMIT;
-			return Database::getInstance().commit();
-		}
+		bool commit();
 
 	private:
 		enum TransactionStates_t {
 			STATE_NO_START,
 			STATE_START,
-			STEATE_COMMIT,
+			STATE_COMMIT,
 		};
 
 		TransactionStates_t state = STATE_NO_START;
