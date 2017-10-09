@@ -281,7 +281,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
 	std::string& token = sessionArgs[2];
-	uint32_t tokenTime = strtoul(sessionArgs[3].c_str(), NULL, 10);
+	uint32_t tokenTime = std::stoul(sessionArgs[3]);
 
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
