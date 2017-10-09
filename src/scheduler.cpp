@@ -60,34 +60,34 @@ void Scheduler::threadMain()
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
-	bool do_signal;
 	eventLock.lock();
 
-	if (getState() == THREAD_STATE_RUNNING) {
-		// check if the event has a valid id
-		if (task->getEventId() == 0) {
-			// if not generate one
-			if (++lastEventId == 0) {
-				lastEventId = 1;
-			}
-
-			task->setEventId(lastEventId);
-		}
-
-		// insert the event id in the list of active events
-		eventIds.insert(task->getEventId());
-
-		// add the event to the queue
-		eventList.push(task);
-
-		// if the list was empty or this event is the top in the list
-		// we have to signal it
-		do_signal = (task == eventList.top());
-	} else {
+	if (getState() != THREAD_STATE_RUNNING) {
 		eventLock.unlock();
 		delete task;
 		return 0;
 	}
+
+	// check if the event has a valid id
+	if (task->getEventId() == 0) {
+		// if not generate one
+		if (++lastEventId == 0) {
+			lastEventId = 1;
+		}
+
+		task->setEventId(lastEventId);
+	}
+
+	// insert the event id in the list of active events
+	uint32_t eventId = task->getEventId();
+	eventIds.insert(eventId);
+
+	// add the event to the queue
+	eventList.push(task);
+
+	// if the list was empty or this event is the top in the list
+	// we have to signal it
+	bool do_signal = (task == eventList.top());
 
 	eventLock.unlock();
 
@@ -95,7 +95,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 		eventSignal.notify_one();
 	}
 
-	return task->getEventId();
+	return eventId;
 }
 
 bool Scheduler::stopEvent(uint32_t eventid)
