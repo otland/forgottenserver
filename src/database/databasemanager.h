@@ -17,33 +17,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_PROTOCOLLOGIN_H_1238F4B473074DF2ABC595C29E81C46D
-#define FS_PROTOCOLLOGIN_H_1238F4B473074DF2ABC595C29E81C46D
+#ifndef FS_DATABASEMANAGER_H_2B75821C555E4D1D83E32B20D683217C
+#define FS_DATABASEMANAGER_H_2B75821C555E4D1D83E32B20D683217C
+#include "database/database.h"
 
-#include "protocol.h"
-
-class NetworkMessage;
-class OutputMessage;
-
-class ProtocolLogin : public Protocol
+class DatabaseManager
 {
 	public:
-		// static protocol information
-		enum {server_sends_first = false};
-		enum {protocol_identifier = 0x01};
-		enum {use_checksum = true};
-		static const char* protocol_name() {
-			return "login protocol";
-		}
+		static bool tableExists(const std::string& table);
 
-		explicit ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
+		static int32_t getDatabaseVersion();
+		static bool isDatabaseSetup();
 
-		void onRecvFirstMessage(NetworkMessage& msg);
+		static bool optimizeTables();
+		static void updateDatabase();
 
-	protected:
-		void disconnectClient(const std::string& message, uint16_t version);
-
-		void getCharacterList(const std::string& accountName, const std::string& password, const std::string& token, uint16_t version);
+		static bool getDatabaseConfig(const std::string& config, int32_t& value);
+		static void registerDatabaseConfig(const std::string& config, int32_t value);
 };
-
 #endif

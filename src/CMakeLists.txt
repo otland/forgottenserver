@@ -1,3 +1,28 @@
+set(tfs_database_SRC
+	${CMAKE_CURRENT_LIST_DIR}/database/database.cpp
+	${CMAKE_CURRENT_LIST_DIR}/database/databasemanager.cpp
+	${CMAKE_CURRENT_LIST_DIR}/database/databasetasks.cpp
+)
+
+set(tfs_encryption_SRC
+	${CMAKE_CURRENT_LIST_DIR}/encryption/rsa.cpp
+)
+
+set(tfs_protocols_SRC
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocol.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocolgame.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocollogin.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocolold.cpp
+	${CMAKE_CURRENT_LIST_DIR}/protocols/protocolstatus.cpp
+)
+
+set(tfs_networking_SRC
+	${CMAKE_CURRENT_LIST_DIR}/networking/connection.cpp
+	${CMAKE_CURRENT_LIST_DIR}/networking/networkmessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/networking/outputmessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/networking/server.cpp
+)
+
 set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/otpch.cpp
 	${CMAKE_CURRENT_LIST_DIR}/actions.cpp
@@ -8,14 +33,10 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/combat.cpp
 	${CMAKE_CURRENT_LIST_DIR}/condition.cpp
 	${CMAKE_CURRENT_LIST_DIR}/configmanager.cpp
-	${CMAKE_CURRENT_LIST_DIR}/connection.cpp
 	${CMAKE_CURRENT_LIST_DIR}/container.cpp
 	${CMAKE_CURRENT_LIST_DIR}/creature.cpp
 	${CMAKE_CURRENT_LIST_DIR}/creatureevent.cpp
 	${CMAKE_CURRENT_LIST_DIR}/cylinder.cpp
-	${CMAKE_CURRENT_LIST_DIR}/database.cpp
-	${CMAKE_CURRENT_LIST_DIR}/databasemanager.cpp
-	${CMAKE_CURRENT_LIST_DIR}/databasetasks.cpp
 	${CMAKE_CURRENT_LIST_DIR}/depotchest.cpp
 	${CMAKE_CURRENT_LIST_DIR}/depotlocker.cpp
 	${CMAKE_CURRENT_LIST_DIR}/events.cpp
@@ -41,25 +62,16 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/monsters.cpp
 	${CMAKE_CURRENT_LIST_DIR}/mounts.cpp
 	${CMAKE_CURRENT_LIST_DIR}/movement.cpp
-	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
 	${CMAKE_CURRENT_LIST_DIR}/otserv.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outfit.cpp
-	${CMAKE_CURRENT_LIST_DIR}/outputmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/party.cpp
 	${CMAKE_CURRENT_LIST_DIR}/player.cpp
 	${CMAKE_CURRENT_LIST_DIR}/position.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocol.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocolgame.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocollogin.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocolold.cpp
-	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.cpp
 	${CMAKE_CURRENT_LIST_DIR}/quests.cpp
 	${CMAKE_CURRENT_LIST_DIR}/raids.cpp
-	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scriptmanager.cpp
-	${CMAKE_CURRENT_LIST_DIR}/server.cpp
 	${CMAKE_CURRENT_LIST_DIR}/signals.cpp
 	${CMAKE_CURRENT_LIST_DIR}/spawn.cpp
 	${CMAKE_CURRENT_LIST_DIR}/spells.cpp
@@ -74,5 +86,9 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/waitlist.cpp
 	${CMAKE_CURRENT_LIST_DIR}/weapons.cpp
 	${CMAKE_CURRENT_LIST_DIR}/wildcardtree.cpp
+	${tfs_database_SRC}
+	${tfs_encryption_SRC}
+	${tfs_protocols_SRC}
+	${tfs_networking_SRC}
 	PARENT_SCOPE)
 

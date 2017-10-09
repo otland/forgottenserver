@@ -20,7 +20,7 @@
 #include "otpch.h"
 
 #include "configmanager.h"
-#include "database.h"
+#include "database/database.h"
 
 #include <errmsg.h>
 

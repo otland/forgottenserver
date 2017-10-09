@@ -17,34 +17,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_STATUS_H_8B28B354D65B4C0483E37AD1CA316EB4
-#define FS_STATUS_H_8B28B354D65B4C0483E37AD1CA316EB4
+#ifndef FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
+#define FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
 
-#include "networkmessage.h"
-#include "protocol.h"
+#include "protocols/protocol.h"
 
-class ProtocolStatus final : public Protocol
+class NetworkMessage;
+
+class ProtocolOld final : public Protocol
 {
 	public:
 		// static protocol information
 		enum {server_sends_first = false};
-		enum {protocol_identifier = 0xFF};
+		enum {protocol_identifier = 0x01};
 		enum {use_checksum = false};
 		static const char* protocol_name() {
-			return "status protocol";
+			return "old login protocol";
 		}
 
-		explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
+		explicit ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
 
 		void onRecvFirstMessage(NetworkMessage& msg) final;
 
-		void sendStatusString();
-		void sendInfo(uint16_t requestedInfo, const std::string& characterName);
-
-		static const uint64_t start;
-
 	protected:
-		static std::map<uint32_t, int64_t> ipConnectMap;
+		void disconnectClient(const std::string& message);
 };
 
 #endif

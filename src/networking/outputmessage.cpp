@@ -19,8 +19,8 @@
 
 #include "otpch.h"
 
-#include "outputmessage.h"
-#include "protocol.h"
+#include "networking/outputmessage.h"
+#include "protocols/protocol.h"
 #include "lockfree.h"
 #include "scheduler.h"
 

@@ -20,8 +20,8 @@
 #ifndef FS_OUTPUTMESSAGE_H_C06AAED85C7A43939F22D229297C0CC1
 #define FS_OUTPUTMESSAGE_H_C06AAED85C7A43939F22D229297C0CC1
 
-#include "networkmessage.h"
-#include "connection.h"
+#include "networking/networkmessage.h"
+#include "networking/connection.h"
 #include "tools.h"
 
 class Protocol;

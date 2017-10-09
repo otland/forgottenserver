@@ -19,8 +19,8 @@
 
 #include "otpch.h"
 
-#include "outputmessage.h"
-#include "server.h"
+#include "networking/outputmessage.h"
+#include "networking/server.h"
 #include "scheduler.h"
 #include "configmanager.h"
 #include "ban.h"
