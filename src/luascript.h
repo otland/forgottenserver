@@ -1292,9 +1292,9 @@ class LuaEnvironment : public LuaScriptInterface
 		LuaEnvironment(const LuaEnvironment&) = delete;
 		LuaEnvironment& operator=(const LuaEnvironment&) = delete;
 
-		bool initState();
+		bool initState() override;
 		bool reInitState();
-		bool closeState();
+		bool closeState() override;
 
 		LuaScriptInterface* getTestInterface();
 

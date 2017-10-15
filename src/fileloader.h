@@ -54,11 +54,11 @@ struct Node
 };
 
 struct LoadError : std::exception {
-	const char* what() const noexcept = 0;
+	const char* what() const noexcept override = 0;
 };
 
-struct InvalidOTBFormat : LoadError {
-	const char* what() const noexcept final {
+struct InvalidOTBFormat final : LoadError {
+	const char* what() const noexcept override {
 		return "Invalid OTBM file format";
 	}
 };

@@ -91,7 +91,7 @@ class PrivateChatChannel final : public ChatChannel
 	public:
 		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName) {}
 
-		uint32_t getOwner() const final {
+		uint32_t getOwner() const override {
 			return owner;
 		}
 		void setOwner(uint32_t owner) {
@@ -107,11 +107,11 @@ class PrivateChatChannel final : public ChatChannel
 
 		void closeChannel() const;
 
-		const InvitedMap* getInvitedUsers() const final {
+		const InvitedMap* getInvitedUsers() const override {
 			return &invites;
 		}
 
-	protected:
+	private:
 		InvitedMap invites;
 		uint32_t owner = 0;
 };

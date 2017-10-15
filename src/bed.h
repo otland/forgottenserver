@@ -30,17 +30,17 @@ class BedItem final : public Item
 	public:
 		explicit BedItem(uint16_t id);
 
-		BedItem* getBed() final {
+		BedItem* getBed() override {
 			return this;
 		}
-		const BedItem* getBed() const final {
+		const BedItem* getBed() const override {
 			return this;
 		}
 
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		void serializeAttr(PropWriteStream& propWriteStream) const final;
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+		void serializeAttr(PropWriteStream& propWriteStream) const override;
 
-		bool canRemove() const final {
+		bool canRemove() const override {
 			return house == nullptr;
 		}
 
@@ -60,7 +60,7 @@ class BedItem final : public Item
 
 		BedItem* getNextBedItem() const;
 
-	protected:
+	private:
 		void updateAppearance(const Player* player);
 		void regeneratePlayer(Player* player) const;
 		void internalSetSleeper(const Player* player);
