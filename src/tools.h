@@ -60,7 +60,6 @@ std::string getFirstLine(const std::string& str);
 
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
-std::string convertIPToString(uint32_t ip);
 
 void trimString(std::string& str);
 
