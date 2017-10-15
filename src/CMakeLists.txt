@@ -15,6 +15,8 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/cylinder.cpp
 	${CMAKE_CURRENT_LIST_DIR}/database.cpp
 	${CMAKE_CURRENT_LIST_DIR}/databasemanager.cpp
+	${CMAKE_CURRENT_LIST_DIR}/databasemysql.cpp
+	${CMAKE_CURRENT_LIST_DIR}/databasepgsql.cpp
 	${CMAKE_CURRENT_LIST_DIR}/databasetasks.cpp
 	${CMAKE_CURRENT_LIST_DIR}/depotchest.cpp
 	${CMAKE_CURRENT_LIST_DIR}/depotlocker.cpp

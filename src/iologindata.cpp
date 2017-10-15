@@ -300,7 +300,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->capacity = result->getNumber<uint32_t>("cap") * 100;
 	player->blessings = result->getNumber<uint16_t>("blessings");
 
-	unsigned long conditionsSize;
+	uint64_t conditionsSize;
 	const char* conditions = result->getStream("conditions", conditionsSize);
 	PropStream propStream;
 	propStream.init(conditions, conditionsSize);
@@ -947,7 +947,7 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		uint16_t type = result->getNumber<uint16_t>("itemtype");
 		uint16_t count = result->getNumber<uint16_t>("count");
 
-		unsigned long attrSize;
+		uint64_t attrSize;
 		const char* attr = result->getStream("attributes", attrSize);
 
 		PropStream propStream;

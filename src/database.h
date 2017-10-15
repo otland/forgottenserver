@@ -20,9 +20,14 @@
 #ifndef FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 #define FS_DATABASE_H_A484B0CDFDE542838F506DCE3D40C693
 
-#include <boost/lexical_cast.hpp>
+#include <boost/lexical_cast.hpp> 
+#include <errmsg.h>
 
-#include <mysql.h>
+#include "definitions.h"
+#include "databasemanager.h"
+#include "iostream"
+#include "configmanager.h"
+extern ConfigManager g_config;
 
 class DBResult;
 using DBResult_ptr = std::shared_ptr<DBResult>;
@@ -30,30 +35,29 @@ using DBResult_ptr = std::shared_ptr<DBResult>;
 class Database
 {
 	public:
-		Database() = default;
-		~Database();
+		Database() {};
+		virtual ~Database() {};
 
 		// non-copyable
-		Database(const Database&) = delete;
-		Database& operator=(const Database&) = delete;
+		//Database(const Database&) = delete;
+		//Database& operator=(const Database&) = delete;
 
 		/**
 		 * Singleton implementation.
 		 *
 		 * @return database connection handler singleton
 		 */
-		static Database& getInstance()
-		{
-			static Database instance;
-			return instance;
-		}
+		static Database& getInstance();
 
 		/**
 		 * Connects to the database
 		 *
 		 * @return true on successful connection, false on error
 		 */
-		bool connect();
+		bool connect()
+		{
+			return m_connected;
+		}
 
 		/**
 		 * Executes command.
@@ -63,7 +67,7 @@ class Database
 		 * @param query command
 		 * @return true on success, false on error
 		 */
-		bool executeQuery(const std::string& query);
+		virtual bool executeQuery(const std::string& query);
 
 		/**
 		 * Queries database.
@@ -72,7 +76,7 @@ class Database
 		 *
 		 * @return results object (nullptr on error)
 		 */
-		DBResult_ptr storeQuery(const std::string& query);
+		virtual DBResult_ptr storeQuery(const std::string& query);
 
 		/**
 		 * Escapes string for query.
@@ -82,7 +86,7 @@ class Database
 		 * @param s string to be escaped
 		 * @return quoted string
 		 */
-		std::string escapeString(const std::string& s) const;
+		virtual std::string escapeString(const std::string& s) const;
 
 		/**
 		 * Escapes binary stream for query.
@@ -93,25 +97,21 @@ class Database
 		 * @param length stream length
 		 * @return quoted string
 		 */
-		std::string escapeBlob(const char* s, uint32_t length) const;
+		virtual std::string escapeBlob(const char* s, uint32_t length) const;
 
 		/**
 		 * Retrieve id of last inserted row
 		 *
 		 * @return id on success, 0 if last query did not result on any rows with auto_increment keys
 		 */
-		uint64_t getLastInsertId() const {
-			return static_cast<uint64_t>(mysql_insert_id(handle));
-		}
+		virtual uint64_t getLastInsertId();
 
 		/**
 		 * Get database engine version
 		 *
 		 * @return the database engine version
 		 */
-		static const char* getClientVersion() {
-			return mysql_get_client_info();
-		}
+		virtual std::string getClientVersion();
 
 		uint64_t getMaxPacketSize() const {
 			return maxPacketSize;
@@ -128,59 +128,46 @@ class Database
 		bool beginTransaction();
 		bool rollback();
 		bool commit();
-
-	private:
-		MYSQL* handle = nullptr;
+		
+		bool m_connected;
+		
 		std::recursive_mutex databaseLock;
+	private:
 		uint64_t maxPacketSize = 1048576;
-
 	friend class DBTransaction;
 };
 
 class DBResult
 {
 	public:
-		explicit DBResult(MYSQL_RES* res);
-		~DBResult();
+		DBResult() {};
+		template<class Y> DBResult(Y * p) {};
+		virtual ~DBResult() {};
 
 		// non-copyable
-		DBResult(const DBResult&) = delete;
-		DBResult& operator=(const DBResult&) = delete;
+		//DBResult(const DBResult&) = delete;
+		//DBResult& operator=(const DBResult&) = delete;
 
-		template<typename T>
-		T getNumber(const std::string& s) const
-		{
-			auto it = listNames.find(s);
-			if (it == listNames.end()) {
-				std::cout << "[Error - DBResult::getNumber] Column '" << s << "' doesn't exist in the result set" << std::endl;
-				return static_cast<T>(0);
+		template<typename A>
+		A getNumber(const std::string & s) const {
+			try{
+				A data = boost::lexical_cast<A>(getNumberAny(s));
+				return data;
 			}
-
-			if (row[it->second] == nullptr) {
-				return static_cast<T>(0);
+			catch (const std::exception& e) {
+				std::cerr << e.what() << std::endl;				
+				return 0;
 			}
+		}	
 
-			T data;
-			try {
-				data = boost::lexical_cast<T>(row[it->second]);
-			} catch (boost::bad_lexical_cast&) {
-				data = 0;
-			}
-			return data;
-		}
+		virtual std::string getString(const std::string& s) const;
+		virtual const char* getStream(const std::string& s, uint64_t& size) const;
 
-		std::string getString(const std::string& s) const;
-		const char* getStream(const std::string& s, unsigned long& size) const;
-
-		bool hasNext() const;
-		bool next();
+		virtual bool hasNext();
+		virtual bool next();
 
 	private:
-		MYSQL_RES* handle;
-		MYSQL_ROW row;
-
-		std::map<std::string, size_t> listNames;
-
+		virtual int64_t getNumberAny(std::string const& s) const;
 	friend class Database;
 };
 

@@ -1804,11 +1804,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::IP)
 	registerEnumIn("configKeys", ConfigManager::MOTD)
 	registerEnumIn("configKeys", ConfigManager::WORLD_TYPE)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_HOST)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_USER)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_PASS)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_DB)
-	registerEnumIn("configKeys", ConfigManager::MYSQL_SOCK)
+	registerEnumIn("configKeys", ConfigManager::SQL_HOST)
+	registerEnumIn("configKeys", ConfigManager::SQL_USER)
+	registerEnumIn("configKeys", ConfigManager::SQL_PASS)
+	registerEnumIn("configKeys", ConfigManager::SQL_DB)
+	registerEnumIn("configKeys", ConfigManager::SQL_SOCK)
+	registerEnumIn("configKeys", ConfigManager::SQL_TYPE)
 	registerEnumIn("configKeys", ConfigManager::DEFAULT_PRIORITY)
 	registerEnumIn("configKeys", ConfigManager::MAP_AUTHOR)
 
@@ -3854,7 +3855,7 @@ int LuaScriptInterface::luaResultGetStream(lua_State* L)
 		return 1;
 	}
 
-	unsigned long length;
+	uint64_t length;
 	const char* stream = res->getStream(getString(L, 2), length);
 	lua_pushlstring(L, stream, length);
 	lua_pushnumber(L, length);

@@ -87,7 +87,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>      
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -138,6 +138,8 @@
     <ClCompile Include="..\src\cylinder.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
+    <ClCompile Include="..\src\databasemysql.cpp" />
+    <ClCompile Include="..\src\databasepgsql.cpp" />
     <ClCompile Include="..\src\databasetasks.cpp" />
     <ClCompile Include="..\src\depotchest.cpp" />
     <ClCompile Include="..\src\depotlocker.cpp" />
@@ -223,6 +225,8 @@
     <ClInclude Include="..\src\cylinder.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
+    <ClInclude Include="..\src\databasemysql.h" />
+    <ClInclude Include="..\src\databasepgsql.h" />
     <ClInclude Include="..\src\databasetasks.h" />
     <ClInclude Include="..\src\definitions.h" />
     <ClInclude Include="..\src\depotchest.h" />
