@@ -36,7 +36,8 @@ class Teleport final : public Item, public Cylinder
 
 		//serialization
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		void serializeAttr(PropWriteStream& propWriteStream) const final;
+		bool unserializeAttr(const tfs::Item&) final;
+		void serializeAttr(tfs::Item*) const final;
 
 		const Position& getDestPos() const {
 			return destPos;

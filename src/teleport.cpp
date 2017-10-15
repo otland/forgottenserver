@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "teleport.h"
 #include "game.h"
 
@@ -35,14 +37,25 @@ Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-void Teleport::serializeAttr(PropWriteStream& propWriteStream) const
+bool Teleport::unserializeAttr(const tfs::Item& pbItem)
 {
-	Item::serializeAttr(propWriteStream);
+	if (pbItem.has_teleport()) {
+		const tfs::Position& position = pbItem.teleport().destination();
+		destPos = {static_cast<uint16_t>(position.x()),
+				   static_cast<uint16_t>(position.y()),
+				   static_cast<uint8_t>(position.z())};
+	}
+	return Item::unserializeAttr(pbItem);
+}
 
-	propWriteStream.write<uint8_t>(ATTR_TELE_DEST);
-	propWriteStream.write<uint16_t>(destPos.x);
-	propWriteStream.write<uint16_t>(destPos.y);
-	propWriteStream.write<uint8_t>(destPos.z);
+void Teleport::serializeAttr(tfs::Item* item) const
+{
+	Item::serializeAttr(item);
+
+	tfs::Position* position = item->mutable_teleport()->mutable_destination();
+	position->set_x(destPos.x);
+	position->set_y(destPos.x);
+	position->set_z(destPos.y);
 }
 
 ReturnValue Teleport::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature*) const

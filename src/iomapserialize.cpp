@@ -19,138 +19,44 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "iomapserialize.h"
 #include "game.h"
 #include "bed.h"
 
 extern Game g_game;
 
-void IOMapSerialize::loadHouseItems(Map* map)
+bool loadItem(const tfs::Item& pbItem, Cylinder* parent);
+
+bool loadContainer(const tfs::Item& pbItem, Container* container)
 {
-	int64_t start = OTSYS_TIME();
-
-	DBResult_ptr result = Database::getInstance().storeQuery("SELECT `data` FROM `tile_store`");
-	if (!result) {
-		return;
-	}
-
-	do {
-		unsigned long attrSize;
-		const char* attr = result->getStream("data", attrSize);
-
-		PropStream propStream;
-		propStream.init(attr, attrSize);
-
-		uint16_t x, y;
-		uint8_t z;
-		if (!propStream.read<uint16_t>(x) || !propStream.read<uint16_t>(y) || !propStream.read<uint8_t>(z)) {
-			continue;
-		}
-
-		Tile* tile = map->getTile(x, y, z);
-		if (!tile) {
-			continue;
-		}
-
-		uint32_t item_count;
-		if (!propStream.read<uint32_t>(item_count)) {
-			continue;
-		}
-
-		while (item_count--) {
-			loadItem(propStream, tile);
-		}
-	} while (result->next());
-	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
-}
-
-bool IOMapSerialize::saveHouseItems()
-{
-	int64_t start = OTSYS_TIME();
-	Database& db = Database::getInstance();
-	std::ostringstream query;
-
-	//Start the transaction
-	DBTransaction transaction;
-	if (!transaction.begin()) {
-		return false;
-	}
-
-	//clear old tile data
-	if (!db.executeQuery("DELETE FROM `tile_store`")) {
-		return false;
-	}
-
-	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
-
-	PropWriteStream stream;
-	for (const auto& it : g_game.map.houses.getHouses()) {
-		//save house items
-		House* house = it.second;
-		for (HouseTile* tile : house->getTiles()) {
-			saveTile(stream, tile);
-
-			size_t attributesSize;
-			const char* attributes = stream.getStream(attributesSize);
-			if (attributesSize > 0) {
-				query << house->getId() << ',' << db.escapeBlob(attributes, attributesSize);
-				if (!stmt.addRow(query)) {
-					return false;
-				}
-				stream.clear();
-			}
-		}
-	}
-
-	if (!stmt.execute()) {
-		return false;
-	}
-
-	//End the transaction
-	bool success = transaction.commit();
-	std::cout << "> Saved house items in: " <<
-	          (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
-	return success;
-}
-
-bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
-{
-	while (container->serializationCount > 0) {
-		if (!loadItem(propStream, container)) {
+	for (const tfs::Item& item : pbItem.container().item()) {
+		if (!loadItem(item, container)) {
 			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 			return false;
 		}
-		container->serializationCount--;
-	}
-
-	uint8_t endAttr;
-	if (!propStream.read<uint8_t>(endAttr) || endAttr != 0) {
-		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
-		return false;
 	}
 	return true;
 }
 
-bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
+bool loadItem(const tfs::Item& pbItem, Cylinder* parent)
 {
-	uint16_t id;
-	if (!propStream.read<uint16_t>(id)) {
-		return false;
-	}
-
 	Tile* tile = nullptr;
 	if (parent->getParent() == nullptr) {
 		tile = parent->getTile();
 	}
+
+	uint16_t id = pbItem.id();
 
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || !tile) {
 		//create a new item
 		Item* item = Item::CreateItem(id);
 		if (item) {
-			if (item->unserializeAttr(propStream)) {
+			if (item->unserializeAttr(pbItem)) {
 				Container* container = item->getContainer();
-				if (container && !loadContainer(propStream, container)) {
+				if (container && !loadContainer(pbItem, container)) {
 					delete item;
 					return false;
 				}
@@ -182,9 +88,9 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		}
 
 		if (item) {
-			if (item->unserializeAttr(propStream)) {
+			if (item->unserializeAttr(pbItem)) {
 				Container* container = item->getContainer();
-				if (container && !loadContainer(propStream, container)) {
+				if (container && !loadContainer(pbItem, container)) {
 					return false;
 				}
 
@@ -196,10 +102,10 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			//The map changed since the last save, just read the attributes
 			std::unique_ptr<Item> dummy(Item::CreateItem(id));
 			if (dummy) {
-				dummy->unserializeAttr(propStream);
+				dummy->unserializeAttr(pbItem);
 				Container* container = dummy->getContainer();
 				if (container) {
-					if (!loadContainer(propStream, container)) {
+					if (!loadContainer(pbItem, container)) {
 						return false;
 					}
 				} else if (BedItem* bedItem = dynamic_cast<BedItem*>(dummy.get())) {
@@ -214,35 +120,53 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 	return true;
 }
 
-void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
+void IOMapSerialize::loadHouseItems(Map* map)
 {
-	const Container* container = item->getContainer();
+	int64_t start = OTSYS_TIME();
 
-	// Write ID & props
-	stream.write<uint16_t>(item->getID());
-	item->serializeAttr(stream);
-
-	if (container) {
-		// Hack our way into the attributes
-		stream.write<uint8_t>(ATTR_CONTAINER_ITEMS);
-		stream.write<uint32_t>(container->size());
-		for (auto it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
-			saveItem(stream, *it);
-		}
-	}
-
-	stream.write<uint8_t>(0x00); // attr end
-}
-
-void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
-{
-	const TileItemVector* tileItems = tile->getItemList();
-	if (!tileItems) {
+	DBResult_ptr result = Database::getInstance().storeQuery("SELECT `data` FROM `tile_store`");
+	if (!result) {
 		return;
 	}
 
-	std::forward_list<Item*> items;
-	uint16_t count = 0;
+	do {
+		tfs::Tile pbTile;
+		pbTile.ParseFromString(result->getString("data"));
+
+		const tfs::Position& pos = pbTile.position();
+		Tile* tile = map->getTile(pos.x(), pos.y(), pos.z());
+		if (!tile) {
+			continue;
+		}
+
+		for (auto pbItem : pbTile.item()) {
+			loadItem(pbItem, tile);
+		}
+	} while (result->next());
+	std::cout << "> Loaded house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
+}
+
+void saveItem(tfs::Item* pbItem, const Item* item)
+{
+	// Write ID & props
+	pbItem->set_id(item->getID());
+	item->serializeAttr(pbItem);
+
+	if (const Container* container = item->getContainer()) {
+		tfs::Item_Container* pbContainer = pbItem->mutable_container();
+		for (auto it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
+			saveItem(pbContainer->add_item(), *it);
+		}
+	}
+}
+
+int saveTile(tfs::Tile* pbTile, const Tile* tile)
+{
+	const TileItemVector* tileItems = tile->getItemList();
+	if (!tileItems) {
+		return 0;
+	}
+
 	for (Item* item : *tileItems) {
 		const ItemType& it = Item::items[item->getID()];
 
@@ -251,21 +175,64 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 			continue;
 		}
 
-		items.push_front(item);
-		++count;
+		saveItem(pbTile->add_item(), item);
 	}
 
-	if (!items.empty()) {
+	if (pbTile->item_size() != 0) {
 		const Position& tilePosition = tile->getPosition();
-		stream.write<uint16_t>(tilePosition.x);
-		stream.write<uint16_t>(tilePosition.y);
-		stream.write<uint8_t>(tilePosition.z);
+		tfs::Position* pos = pbTile->mutable_position();
+		pos->set_x(tilePosition.x);
+		pos->set_y(tilePosition.y);
+		pos->set_z(tilePosition.z);
+	}
 
-		stream.write<uint32_t>(count);
-		for (const Item* item : items) {
-			saveItem(stream, item);
+	return pbTile->item_size();
+}
+
+bool IOMapSerialize::saveHouseItems()
+{
+	int64_t start = OTSYS_TIME();
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+
+	//Start the transaction
+	DBTransaction transaction;
+	if (!transaction.begin()) {
+		return false;
+	}
+
+	//clear old tile data
+	if (!db.executeQuery("DELETE FROM `tile_store`")) {
+		return false;
+	}
+
+	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
+
+	PropWriteStream stream;
+	for (const auto& it : g_game.map.houses.getHouses()) {
+		//save house items
+		House* house = it.second;
+
+		for (HouseTile* tile : house->getTiles()) {
+			tfs::Tile pbTile;
+			if (saveTile(&pbTile, tile) != 0) {
+				query << house->getId() << ',' << db.escapeString(pbTile.SerializeAsString());
+				if (!stmt.addRow(query)) {
+					return false;
+				}
+			}
 		}
 	}
+
+	if (!stmt.execute()) {
+		return false;
+	}
+
+	//End the transaction
+	bool success = transaction.commit();
+	std::cout << "> Saved house items in: " <<
+	          (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
+	return success;
 }
 
 bool IOMapSerialize::loadHouseInfo()

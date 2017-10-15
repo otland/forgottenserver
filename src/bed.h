@@ -38,7 +38,8 @@ class BedItem final : public Item
 		}
 
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		void serializeAttr(PropWriteStream& propWriteStream) const final;
+		bool unserializeAttr(const tfs::Item&) final;
+		void serializeAttr(tfs::Item*) const final;
 
 		bool canRemove() const final {
 			return house == nullptr;

@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include "item.pb.h"
+
 #include "bed.h"
 #include "game.h"
 #include "iologindata.h"
@@ -67,18 +69,33 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-void BedItem::serializeAttr(PropWriteStream& propWriteStream) const
+bool BedItem::unserializeAttr(const tfs::Item& pbItem)
 {
-	if (sleeperGUID != 0) {
-		propWriteStream.write<uint8_t>(ATTR_SLEEPERGUID);
-		propWriteStream.write<uint32_t>(sleeperGUID);
-	}
+	if (pbItem.has_bed()) {
+		const tfs::Item_Bed& bed = pbItem.bed();
 
-	if (sleepStart != 0) {
-		propWriteStream.write<uint8_t>(ATTR_SLEEPSTART);
-		// FIXME: should be stored as 64-bit, but we need to retain backwards compatibility
-		propWriteStream.write<uint32_t>(static_cast<uint32_t>(sleepStart));
+		uint32_t guid = bed.sleeperguid();
+		if (guid != 0) {
+			std::string name = IOLoginData::getNameByGuid(guid);
+			if (!name.empty()) {
+				setSpecialDescription(name + " is sleeping there.");
+				g_game.setBedSleeper(this, guid);
+				sleeperGUID = guid;
+			}
+		}
+
+		sleepStart = bed.sleepstart();
 	}
+	return Item::unserializeAttr(pbItem);
+}
+
+void BedItem::serializeAttr(tfs::Item* item) const
+{
+	Item::serializeAttr(item);
+
+	tfs::Item_Bed* bed = item->mutable_bed();
+	bed->set_sleeperguid(sleeperGUID);
+	bed->set_sleepstart(sleepStart);
 }
 
 BedItem* BedItem::getNextBedItem() const
