@@ -101,20 +101,23 @@ class Weapon : public Event
 	protected:
 		void internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
 		void internalUseWeapon(Player* player, Item* item, Tile* tile) const;
+
+		CombatParams params;
+
+		uint16_t id = 0;
+
+	private:
 		virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const {
 			return false;
 		}
 
 		uint32_t getManaCost(const Player* player) const;
 
-		CombatParams params;
-
 		uint32_t level = 0;
 		uint32_t magLevel = 0;
 		uint32_t mana = 0;
 		uint32_t manaPercent = 0;
 		uint32_t soul = 0;
-		uint16_t id = 0;
 		WeaponAction_t action = WEAPONACTION_NONE;
 		uint8_t breakChance = 0;
 		bool enabled = true;

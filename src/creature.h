@@ -82,7 +82,7 @@ class FrozenPathingConditionCall
 		bool isInRange(const Position& startPos, const Position& testPos,
 		               const FindPathParams& fpp) const;
 
-	protected:
+	private:
 		Position targetPos;
 };
 

@@ -72,7 +72,7 @@ class Condition
 		Condition() = default;
 		Condition(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
 			endTime(ticks == -1 ? std::numeric_limits<int64_t>::max() : 0),
-			subId(subId), ticks(ticks),	conditionType(type), id(id), isBuff(buff) {}
+			subId(subId), ticks(ticks), conditionType(type), isBuff(buff), id(id) {}
 		virtual ~Condition() = default;
 
 		virtual bool startCondition(Creature* creature);
@@ -113,14 +113,16 @@ class Condition
 		bool isPersistent() const;
 
 	protected:
+		virtual bool updateCondition(const Condition* addCondition);
+
 		int64_t endTime;
 		uint32_t subId;
 		int32_t ticks;
 		ConditionType_t conditionType;
-		ConditionId_t id;
 		bool isBuff;
 
-		virtual bool updateCondition(const Condition* addCondition);
+	private:
+		ConditionId_t id;
 };
 
 class ConditionGeneric : public Condition

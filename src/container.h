@@ -149,17 +149,18 @@ class Container : public Item, public Cylinder
 		void startDecaying() override final;
 
 	protected:
+		ItemDeque itemlist;
+
+	private:
 		std::ostringstream& getContentDescription(std::ostringstream& os) const;
 
 		uint32_t maxSize;
 		uint32_t totalWeight = 0;
-		ItemDeque itemlist;
 		uint32_t serializationCount = 0;
 
 		bool unlocked;
 		bool pagination;
 
-	private:
 		void onAddContainerItem(Item* item);
 		void onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem);
 		void onRemoveContainerItem(uint32_t index, Item* item);

@@ -206,7 +206,7 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-	protected:
+	private:
 		bool hasAttribute(itemAttrTypes type) const {
 			return (type & attributeBits) != 0;
 		}
@@ -746,14 +746,17 @@ class Item : virtual public Thing
 		}
 
 	protected:
+		Cylinder* parent = nullptr;
+
+		uint16_t id;  // the same id as in ItemType
+
+	private:
 		std::string getWeightDescription(uint32_t weight) const;
 
-		Cylinder* parent = nullptr;
 		std::unique_ptr<ItemAttributes> attributes;
 
 		uint32_t referenceCounter = 0;
 
-		uint16_t id;  // the same id as in ItemType
 		uint8_t count = 1; // number of stacked items
 
 		bool loadedFromMap = false;

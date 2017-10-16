@@ -81,7 +81,7 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		void onStopServer();
 		void onAccept(Connection_ptr connection, const boost::system::error_code& error);
 
-	protected:
+	private:
 		void accept();
 
 		boost::asio::io_service& io_service;
@@ -112,7 +112,7 @@ class ServiceManager
 			return acceptors.empty() == false;
 		}
 
-	protected:
+	private:
 		void die();
 
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;

@@ -171,23 +171,30 @@ class Spell : public BaseSpell
 		bool playerInstantSpellCheck(Player* player, const Position& toPos);
 		bool playerRuneSpellCheck(Player* player, const Position& toPos);
 
-		uint8_t spellId = 0;
-		SpellGroup_t group = SPELLGROUP_NONE;
-		uint32_t groupCooldown = 1000;
-		SpellGroup_t secondaryGroup = SPELLGROUP_NONE;
-		uint32_t secondaryGroupCooldown = 0;
+		VocSpellMap vocSpellMap;
 
-		uint32_t mana = 0;
-		uint32_t manaPercent = 0;
-		uint32_t soul = 0;
+		SpellGroup_t group = SPELLGROUP_NONE;
+		SpellGroup_t secondaryGroup = SPELLGROUP_NONE;
+
 		uint32_t cooldown = 1000;
+		uint32_t groupCooldown = 1000;
+		uint32_t secondaryGroupCooldown = 0;
 		uint32_t level = 0;
 		uint32_t magLevel = 0;
 		int32_t range = -1;
 
-		bool needTarget = false;
-		bool needWeapon = false;
+		uint8_t spellId = 0;
+
 		bool selfTarget = false;
+		bool needTarget = false;
+
+	private:
+
+		uint32_t mana = 0;
+		uint32_t manaPercent = 0;
+		uint32_t soul = 0;
+
+		bool needWeapon = false;
 		bool blockingSolid = false;
 		bool blockingCreature = false;
 		bool aggressive = true;
@@ -195,7 +202,6 @@ class Spell : public BaseSpell
 		bool enabled = true;
 		bool premium = false;
 
-		VocSpellMap vocSpellMap;
 
 	private:
 		std::string name;

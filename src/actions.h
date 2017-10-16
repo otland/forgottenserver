@@ -46,7 +46,7 @@ class Action : public Event
 
 		ActionFunction function;
 
-	protected:
+	private:
 		std::string getScriptEventName() const override;
 
 		bool allowFarUse;
@@ -71,7 +71,7 @@ class Actions final : public BaseEvents
 		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
 		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-	protected:
+	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 

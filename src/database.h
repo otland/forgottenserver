@@ -117,7 +117,7 @@ class Database
 			return maxPacketSize;
 		}
 
-	protected:
+	private:
 		/**
 		 * Transaction related methods.
 		 *
@@ -129,7 +129,6 @@ class Database
 		bool rollback();
 		bool commit();
 
-	private:
 		MYSQL* handle = nullptr;
 		std::recursive_mutex databaseLock;
 		uint64_t maxPacketSize = 1048576;
@@ -195,7 +194,7 @@ class DBInsert
 		bool addRow(std::ostringstream& row);
 		bool execute();
 
-	protected:
+	private:
 		std::string query;
 		std::string values;
 		size_t length;

@@ -138,7 +138,7 @@ class PropStream
 			return true;
 		}
 
-	protected:
+	private:
 		const char* p = nullptr;
 		const char* end = nullptr;
 };
@@ -178,7 +178,7 @@ class PropWriteStream
 			std::copy(str.begin(), str.end(), std::back_inserter(buffer));
 		}
 
-	protected:
+	private:
 		std::vector<char> buffer;
 };
 
