@@ -36,6 +36,7 @@ void Scheduler::threadMain()
 
 		// the mutex is locked again now...
 		if (ret == std::cv_status::timeout) {
+		if ((ret == std::cv_status::timeout) && !eventList.empty()) {
 			// ok we had a timeout, so there has to be an event we have to execute...
 			SchedulerTask* task = eventList.top();
 			eventList.pop();
