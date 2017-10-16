@@ -54,11 +54,11 @@ struct Node
 };
 
 struct LoadError : std::exception {
-	const char* what() const noexcept = 0;
+	const char* what() const noexcept override = 0;
 };
 
-struct InvalidOTBFormat : LoadError {
-	const char* what() const noexcept final {
+struct InvalidOTBFormat final : LoadError {
+	const char* what() const noexcept override {
 		return "Invalid OTBM file format";
 	}
 };
@@ -138,7 +138,7 @@ class PropStream
 			return true;
 		}
 
-	protected:
+	private:
 		const char* p = nullptr;
 		const char* end = nullptr;
 };
@@ -178,7 +178,7 @@ class PropWriteStream
 			std::copy(str.begin(), str.end(), std::back_inserter(buffer));
 		}
 
-	protected:
+	private:
 		std::vector<char> buffer;
 };
 

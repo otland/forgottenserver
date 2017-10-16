@@ -127,9 +127,10 @@ class QTreeNode
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
-		QTreeNode* child[4] = {};
-
 		bool leaf = false;
+
+	private:
+		QTreeNode* child[4] = {};
 
 		friend class Map;
 };
@@ -152,7 +153,7 @@ class QTreeLeafNode final : public QTreeNode
 		void addCreature(Creature* c);
 		void removeCreature(Creature* c);
 
-	protected:
+	private:
 		static bool newLeaf;
 		QTreeLeafNode* leafS = nullptr;
 		QTreeLeafNode* leafE = nullptr;
@@ -262,7 +263,8 @@ class Map
 		Spawns spawns;
 		Towns towns;
 		Houses houses;
-	protected:
+
+	private:
 		SpectatorCache spectatorCache;
 		SpectatorCache playersSpectatorCache;
 

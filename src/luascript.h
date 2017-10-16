@@ -401,9 +401,21 @@ class LuaScriptInterface
 
 		void registerFunctions();
 
+		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
+
+		static std::string getErrorDesc(ErrorCode_t code);
+
+		lua_State* luaState = nullptr;
+
+		int32_t eventTableRef = -1;
+		int32_t runningEventId = EVENT_ID_USER;
+
+		//script file cache
+		std::map<int32_t, std::string> cacheFiles;
+
+	private:
 		void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = nullptr);
 		void registerTable(const std::string& tableName);
-		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerMetaMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
 		void registerGlobalMethod(const std::string& functionName, lua_CFunction func);
 		void registerVariable(const std::string& tableName, const std::string& name, lua_Number value);
@@ -412,7 +424,6 @@ class LuaScriptInterface
 
 		std::string getStackTrace(const std::string& error_desc);
 
-		static std::string getErrorDesc(ErrorCode_t code);
 		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
 
 		//lua functions
@@ -1266,20 +1277,14 @@ class LuaScriptInterface
 		static int luaSpellIsLearnable(lua_State* L);
 
 		//
-		lua_State* luaState = nullptr;
 		std::string lastLuaError;
 
 		std::string interfaceName;
-		int32_t eventTableRef = -1;
 
 		static ScriptEnvironment scriptEnv[16];
 		static int32_t scriptEnvIndex;
 
-		int32_t runningEventId = EVENT_ID_USER;
 		std::string loadingFile;
-
-		//script file cache
-		std::map<int32_t, std::string> cacheFiles;
 };
 
 class LuaEnvironment : public LuaScriptInterface
@@ -1292,9 +1297,9 @@ class LuaEnvironment : public LuaScriptInterface
 		LuaEnvironment(const LuaEnvironment&) = delete;
 		LuaEnvironment& operator=(const LuaEnvironment&) = delete;
 
-		bool initState();
+		bool initState() override;
 		bool reInitState();
-		bool closeState();
+		bool closeState() override;
 
 		LuaScriptInterface* getTestInterface();
 

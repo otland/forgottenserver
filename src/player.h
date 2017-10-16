@@ -118,14 +118,14 @@ class Player final : public Creature, public Cylinder
 		Player(const Player&) = delete;
 		Player& operator=(const Player&) = delete;
 
-		Player* getPlayer() final {
+		Player* getPlayer() override {
 			return this;
 		}
-		const Player* getPlayer() const final {
+		const Player* getPlayer() const override {
 			return this;
 		}
 
-		void setID() final {
+		void setID() override {
 			if (id == 0) {
 				id = playerAutoID++;
 			}
@@ -133,18 +133,18 @@ class Player final : public Creature, public Cylinder
 
 		static MuteCountMap muteCountMap;
 
-		const std::string& getName() const final {
+		const std::string& getName() const override {
 			return name;
 		}
 		void setName(std::string name) {
 			this->name = std::move(name);
 		}
-		const std::string& getNameDescription() const final {
+		const std::string& getNameDescription() const override {
 			return name;
 		}
-		std::string getDescription(int32_t lookDistance) const final;
+		std::string getDescription(int32_t lookDistance) const override;
 
-		CreatureType_t getType() const final {
+		CreatureType_t getType() const override {
 			return CREATURETYPE_PLAYER;
 		}
 
@@ -171,12 +171,12 @@ class Player final : public Creature, public Cylinder
 		uint32_t getGUID() const {
 			return guid;
 		}
-		bool canSeeInvisibility() const final {
+		bool canSeeInvisibility() const override {
 			return hasFlag(PlayerFlag_CanSenseInvisibility) || group->access;
 		}
 
-		void removeList() final;
-		void addList() final;
+		void removeList() override;
+		void addList() override;
 		void kickPlayer(bool displayEffect);
 
 		static uint64_t getExpForLevel(int32_t lv) {
@@ -368,7 +368,7 @@ class Player final : public Creature, public Cylinder
 			idleTime = 0;
 		}
 
-		bool isInGhostMode() const {
+		bool isInGhostMode() const override {
 			return ghostMode;
 		}
 		void switchGhostMode() {
@@ -445,7 +445,7 @@ class Player final : public Creature, public Cylinder
 		bool hasModalWindowOpen(uint32_t modalWindowId) const;
 		void onModalWindowHandled(uint32_t modalWindowId);
 
-		bool isPushable() const final;
+		bool isPushable() const override;
 		uint32_t isMuted() const;
 		void addMessageBuffer();
 		void removeMessageBuffer();
@@ -471,7 +471,7 @@ class Player final : public Creature, public Cylinder
 			}
 		}
 
-		int32_t getMaxHealth() const final {
+		int32_t getMaxHealth() const override {
 			return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]);
 		}
 		uint32_t getMana() const {
@@ -505,13 +505,13 @@ class Player final : public Creature, public Cylinder
 		void onReceiveMail() const;
 		bool isNearDepotBox() const;
 
-		bool canSee(const Position& pos) const final;
-		bool canSeeCreature(const Creature* creature) const final;
+		bool canSee(const Position& pos) const override;
+		bool canSeeCreature(const Creature* creature) const override;
 
 		bool canWalkthrough(const Creature* creature) const;
 		bool canWalkthroughEx(const Creature* creature) const;
 
-		RaceType_t getRace() const final {
+		RaceType_t getRace() const override {
 			return RACE_BLOOD;
 		}
 
@@ -555,16 +555,16 @@ class Player final : public Creature, public Cylinder
 		bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
 
 		//follow functions
-		bool setFollowCreature(Creature* creature) final;
-		void goToFollowCreature() final;
+		bool setFollowCreature(Creature* creature) override;
+		void goToFollowCreature() override;
 
 		//follow events
-		void onFollowCreature(const Creature* creature) final;
+		void onFollowCreature(const Creature* creature) override;
 
 		//walk events
-		void onWalk(Direction& dir) final;
-		void onWalkAborted() final;
-		void onWalkComplete() final;
+		void onWalk(Direction& dir) override;
+		void onWalkAborted() override;
+		void onWalkComplete() override;
 
 		void stopWalk();
 		void openShopWindow(Npc* npc, const std::list<ShopInfo>& shop);
@@ -581,14 +581,14 @@ class Player final : public Creature, public Cylinder
 		}
 
 		//combat functions
-		bool setAttackedCreature(Creature* creature) final;
-		bool isImmune(CombatType_t type) const final;
-		bool isImmune(ConditionType_t type) const final;
+		bool setAttackedCreature(Creature* creature) override;
+		bool isImmune(CombatType_t type) const override;
+		bool isImmune(ConditionType_t type) const override;
 		bool hasShield() const;
-		bool isAttackable() const final;
+		bool isAttackable() const override;
 		static bool lastHitIsPlayer(Creature* lastHitCreature);
 
-		void changeHealth(int32_t healthChange, bool sendHealthChange = true) final;
+		void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
 		void changeMana(int32_t manaChange);
 		void changeSoul(int32_t soulChange);
 
@@ -596,9 +596,9 @@ class Player final : public Creature, public Cylinder
 			return pzLocked;
 		}
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false, bool field = false) final;
-		void doAttacking(uint32_t interval) final;
-		bool hasExtraSwing() final {
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		void doAttacking(uint32_t interval) override;
+		bool hasExtraSwing() override {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());
 		}
 
@@ -625,43 +625,43 @@ class Player final : public Creature, public Cylinder
 		int32_t getWeaponSkill(const Item* item) const;
 		void getShieldAndWeapon(const Item*& shield, const Item*& weapon) const;
 
-		void drainHealth(Creature* attacker, int32_t damage) final;
+		void drainHealth(Creature* attacker, int32_t damage) override;
 		void drainMana(Creature* attacker, int32_t manaLoss);
 		void addManaSpent(uint64_t amount);
 		void addSkillAdvance(skills_t skill, uint64_t count);
 
-		int32_t getArmor() const final;
-		int32_t getDefense() const final;
-		float getAttackFactor() const final;
-		float getDefenseFactor() const final;
+		int32_t getArmor() const override;
+		int32_t getDefense() const override;
+		float getAttackFactor() const override;
+		float getDefenseFactor() const override;
 
 		void addInFightTicks(bool pzlock = false);
 
-		uint64_t getGainedExperience(Creature* attacker) const final;
+		uint64_t getGainedExperience(Creature* attacker) const override;
 
 		//combat event functions
-		void onAddCondition(ConditionType_t type) final;
-		void onAddCombatCondition(ConditionType_t type) final;
-		void onEndCondition(ConditionType_t type) final;
-		void onCombatRemoveCondition(Condition* condition) final;
-		void onAttackedCreature(Creature* target) final;
-		void onAttacked() final;
-		void onAttackedCreatureDrainHealth(Creature* target, int32_t points) final;
-		void onTargetCreatureGainHealth(Creature* target, int32_t points) final;
-		bool onKilledCreature(Creature* target, bool lastHit = true) final;
-		void onGainExperience(uint64_t gainExp, Creature* target) final;
+		void onAddCondition(ConditionType_t type) override;
+		void onAddCombatCondition(ConditionType_t type) override;
+		void onEndCondition(ConditionType_t type) override;
+		void onCombatRemoveCondition(Condition* condition) override;
+		void onAttackedCreature(Creature* target) override;
+		void onAttacked() override;
+		void onAttackedCreatureDrainHealth(Creature* target, int32_t points) override;
+		void onTargetCreatureGainHealth(Creature* target, int32_t points) override;
+		bool onKilledCreature(Creature* target, bool lastHit = true) override;
+		void onGainExperience(uint64_t gainExp, Creature* target) override;
 		void onGainSharedExperience(uint64_t gainExp, Creature* source);
-		void onAttackedCreatureBlockHit(BlockType_t blockType) final;
-		void onBlockHit() final;
-		void onChangeZone(ZoneType_t zone) final;
-		void onAttackedCreatureChangeZone(ZoneType_t zone) final;
-		void onIdleStatus() final;
-		void onPlacedCreature() final;
+		void onAttackedCreatureBlockHit(BlockType_t blockType) override;
+		void onBlockHit() override;
+		void onChangeZone(ZoneType_t zone) override;
+		void onAttackedCreatureChangeZone(ZoneType_t zone) override;
+		void onIdleStatus() override;
+		void onPlacedCreature() override;
 
-		LightInfo getCreatureLight() const final;
+		LightInfo getCreatureLight() const override;
 
-		Skulls_t getSkull() const final;
-		Skulls_t getSkullClient(const Creature* creature) const final;
+		Skulls_t getSkull() const override;
+		Skulls_t getSkullClient(const Creature* creature) const override;
 		int64_t getSkullTicks() const { return skullTicks; }
 		void setSkullTicks(int64_t ticks) { skullTicks = ticks; }
 
@@ -848,17 +848,17 @@ class Player final : public Creature, public Cylinder
 
 		//event methods
 		void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
-		                              const ItemType& oldType, const Item* newItem, const ItemType& newType) final;
+		                              const ItemType& oldType, const Item* newItem, const ItemType& newType) override;
 		void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-		                              const Item* item) final;
+		                              const Item* item) override;
 
-		void onCreatureAppear(Creature* creature, bool isLogin) final;
-		void onRemoveCreature(Creature* creature, bool isLogout) final;
+		void onCreatureAppear(Creature* creature, bool isLogin) override;
+		void onRemoveCreature(Creature* creature, bool isLogout) override;
 		void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos,
-		                            const Tile* oldTile, const Position& oldPos, bool teleport) final;
+		                            const Tile* oldTile, const Position& oldPos, bool teleport) override;
 
-		void onAttackedCreatureDisappear(bool isLogout) final;
-		void onFollowCreatureDisappear(bool isLogout) final;
+		void onAttackedCreatureDisappear(bool isLogout) override;
+		void onFollowCreatureDisappear(bool isLogout) override;
 
 		//container
 		void onAddContainerItem(const Item* item);
@@ -1105,10 +1105,10 @@ class Player final : public Creature, public Cylinder
 			lastPong = OTSYS_TIME();
 		}
 
-		void onThink(uint32_t interval) final;
+		void onThink(uint32_t interval) override;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
 		void setNextAction(int64_t time) {
 			if (time > nextAction) {
@@ -1130,7 +1130,7 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
-	protected:
+	private:
 		std::forward_list<Condition*> getMuteConditions() const;
 
 		void checkTradeState(const Item* item);
@@ -1146,36 +1146,36 @@ class Player final : public Creature, public Cylinder
 		void setNextWalkTask(SchedulerTask* task);
 		void setNextActionTask(SchedulerTask* task);
 
-		void death(Creature* lastHitCreature) final;
-		bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified) final;
-		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) final;
+		void death(Creature* lastHitCreature) override;
+		bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified) override;
+		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) override;
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const final;
+				uint32_t flags, Creature* actor = nullptr) const override;
 		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-				uint32_t flags) const final;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const final;
+				uint32_t flags) const override;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const override;
 		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
-				uint32_t& flags) final;
+				uint32_t& flags) override;
 
-		void addThing(Thing*) final {}
-		void addThing(int32_t index, Thing* thing) final;
+		void addThing(Thing*) override {}
+		void addThing(int32_t index, Thing* thing) override;
 
-		void updateThing(Thing* thing, uint16_t itemId, uint32_t count) final;
-		void replaceThing(uint32_t index, Thing* thing) final;
+		void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
+		void replaceThing(uint32_t index, Thing* thing) override;
 
-		void removeThing(Thing* thing, uint32_t count) final;
+		void removeThing(Thing* thing, uint32_t count) override;
 
-		int32_t getThingIndex(const Thing* thing) const final;
-		size_t getFirstIndex() const final;
-		size_t getLastIndex() const final;
-		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const final;
-		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const final;
-		Thing* getThing(size_t index) const final;
+		int32_t getThingIndex(const Thing* thing) const override;
+		size_t getFirstIndex() const override;
+		size_t getLastIndex() const override;
+		uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
+		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
+		Thing* getThing(size_t index) const override;
 
-		void internalAddThing(Thing* thing) final;
-		void internalAddThing(uint32_t index, Thing* thing) final;
+		void internalAddThing(Thing* thing) override;
+		void internalAddThing(uint32_t index, Thing* thing) override;
 
 		std::unordered_set<uint32_t> attackedSet;
 		std::unordered_set<uint32_t> VIPList;
@@ -1296,7 +1296,7 @@ class Player final : public Creature, public Cylinder
 		static uint32_t playerAutoID;
 
 		void updateItemsLight(bool internal = false);
-		int32_t getStepSpeed() const final {
+		int32_t getStepSpeed() const override {
 			return std::max<int32_t>(PLAYER_MIN_SPEED, std::min<int32_t>(PLAYER_MAX_SPEED, getSpeed()));
 		}
 		void updateBaseSpeed() {
@@ -1315,20 +1315,20 @@ class Player final : public Creature, public Cylinder
 
 		static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
 		double getLostPercent() const;
-		uint64_t getLostExperience() const final {
+		uint64_t getLostExperience() const override {
 			return skillLoss ? static_cast<uint64_t>(experience * getLostPercent()) : 0;
 		}
-		uint32_t getDamageImmunities() const final {
+		uint32_t getDamageImmunities() const override {
 			return damageImmunities;
 		}
-		uint32_t getConditionImmunities() const final {
+		uint32_t getConditionImmunities() const override {
 			return conditionImmunities;
 		}
-		uint32_t getConditionSuppressions() const final {
+		uint32_t getConditionSuppressions() const override {
 			return conditionSuppressions;
 		}
-		uint16_t getLookCorpse() const final;
-		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const final;
+		uint16_t getLookCorpse() const override;
+		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
 
 		friend class Game;
 		friend class Npc;

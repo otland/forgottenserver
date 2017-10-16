@@ -31,13 +31,13 @@ class HouseTile final : public DynamicTile
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const final;
+				uint32_t flags, Creature* actor = nullptr) const override;
 
 		Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
-				uint32_t& flags) final;
+				uint32_t& flags) override;
 
-		void addThing(int32_t index, Thing* thing) final;
-		void internalAddThing(uint32_t index, Thing* thing) final;
+		void addThing(int32_t index, Thing* thing) override;
+		void internalAddThing(uint32_t index, Thing* thing) override;
 
 		House* getHouse() {
 			return house;

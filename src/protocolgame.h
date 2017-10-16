@@ -81,7 +81,7 @@ class ProtocolGame final : public Protocol
 		void disconnectClient(const std::string& message) const;
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
-		void release() final;
+		void release() override;
 
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 
@@ -90,9 +90,9 @@ class ProtocolGame final : public Protocol
 		bool canSee(const Position& pos) const;
 
 		// we have all the parse methods
-		void parsePacket(NetworkMessage& msg) final;
-		void onRecvFirstMessage(NetworkMessage& msg) final;
-		void onConnect() final;
+		void parsePacket(NetworkMessage& msg) override;
+		void onRecvFirstMessage(NetworkMessage& msg) override;
+		void onConnect() override;
 
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
