@@ -46,18 +46,12 @@ class TileCallback final : public CallBack
 {
 	public:
 		void onTileCombat(Creature* creature, Tile* tile) const;
-
-	private:
-		formulaType_t type;
 };
 
 class TargetCallback final : public CallBack
 {
 	public:
 		void onTargetCombat(Creature* creature, Creature* target) const;
-
-	private:
-		formulaType_t type;
 };
 
 struct CombatParams {
