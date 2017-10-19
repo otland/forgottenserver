@@ -182,11 +182,10 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 		if (reloading && monsters.find(name) != monsters.end()) {
 			loadMonster(file, name, true);
 		} else {
-			loaded = false;
 			unloadedMonsters.emplace(name, file);
 		}
 	}
-	return loaded;
+	return true;
 }
 
 bool Monsters::reload()
