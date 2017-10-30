@@ -93,7 +93,7 @@ class Party
 
 		Player* leader;
 
-		float extraExpRate = 0.20f;
+		float extraExpRate;
 
 		bool sharedExpActive = false;
 		bool sharedExpEnabled = false;
