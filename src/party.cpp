@@ -375,11 +375,7 @@ void Party::updateVocationsList()
 	}
 
 	size_t size = vocationIds.size();
-	if (size > 1) {
-		extraExpRate = static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f;
-	} else {
-		extraExpRate = 0.20f;
-	}
+	extraExpRate = size > 1 ? static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f : 0.20f;
 }
 
 bool Party::setSharedExperience(Player* player, bool sharedExpActive)
