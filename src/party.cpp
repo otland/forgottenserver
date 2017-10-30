@@ -279,7 +279,7 @@ bool Party::invitePlayer(Player& player)
 	std::ostringstream ss;
 	ss << player.getName() << " has been invited.";
 
-	if (memberList.empty() && inviteList.empty()) {
+	if (empty()) {
 		ss << " Open the party channel to communicate with your members.";
 		g_game.updatePlayerShield(leader);
 		leader->sendCreatureSkull(leader);
