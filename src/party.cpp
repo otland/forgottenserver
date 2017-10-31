@@ -375,7 +375,7 @@ void Party::updateSharedExperienceBonus()
 	}
 
 	size_t size = vocationIds.size();
-	sharedExpBonus = size > 1 ? static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f : 0.20f;
+	sharedExpBonus = std::max(0.20f, (size * (5 * (size - 1) + 10)) / 100.f);
 }
 
 bool Party::setSharedExperience(Player* player, bool sharedExpActive)
