@@ -93,7 +93,7 @@ class Party
 
 		Player* leader;
 
-		float sharedExpBonus;
+		double sharedExpBonus;
 
 		bool sharedExpActive = false;
 		bool sharedExpEnabled = false;
