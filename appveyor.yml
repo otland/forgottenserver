@@ -1,4 +1,4 @@
-os: Visual Studio 2015
+os: Visual Studio 2017
 
 platform:
   - x64
@@ -11,7 +11,7 @@ matrix:
   fast_finish: true
 
 environment:
-  BOOST_ROOT: C:\Libraries\boost_1_62_0
+  BOOST_ROOT: C:\Libraries\boost_1_64_0
 
 install:
   - ps: if (-not (Test-Path tfs-sdk-3.2)) { Start-FileDownload https://static.otland.net/dl/tfs-sdk-3.2.zip; 7z x tfs-sdk-3.2.zip }
