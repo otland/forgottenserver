@@ -11529,8 +11529,6 @@
 		<attribute key="weight" value="50" />
 	</item>
 	<item id="6573" article="a" name="party trumpet">
-		<attribute key="duration" value="4" />
-		<attribute key="decayTo" value="6572" />
 		<attribute key="weight" value="50" />
 	</item>
 	<item id="6574" article="a" name="bar of chocolate">
@@ -22225,6 +22223,10 @@
 	</item>
 	<item fromid="13572" toid="13575" article="a" name="mysterious machine" />
 	<item fromid="13576" toid="13577" article="a" name="wheel" />
+	<item id="13578" article="a" name="party trumpet">
+		<attribute key="duration" value="2" />
+		<attribute key="weight" value="50" />
+	</item>
 	<item id="13581" name="dread doll">
 		<attribute key="description" value="It is shining with positive energy and was awarded by the gods." />
 		<attribute key="weight" value="1100" />
