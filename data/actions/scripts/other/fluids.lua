@@ -10,29 +10,17 @@ poison:setParameter(CONDITION_PARAM_TICKINTERVAL, 4000)
 poison:setParameter(CONDITION_PARAM_FORCEUPDATE, true)
 
 local fluidMessage = {
-	[3] = 'Aah...',
-	[4] = 'Urgh!',
-	[5] = 'Mmmh.',
-	[7] = 'Aaaah...',
-	[10] = 'Aaaah...',
-	[11] = 'Urgh!',
-	[13] = 'Urgh!',
-	[15] = 'Aah...',
-	[19] = 'Urgh!',
-	[43] = 'Aaaah...'
+	[3] = "Aah...",
+	[4] = "Urgh!",
+	[5] = "Mmmh.",
+	[7] = "Aaaah...",
+	[10] = "Aaaah...",
+	[11] = "Urgh!",
+	[13] = "Urgh!",
+	[15] = "Aah...",
+	[19] = "Urgh!",
+	[43] = "Aaaah..."
 }
-
-local function graveStoneTeleport(cid, fromPosition, toPosition)
-	local player = Player(cid)
-	if not player then
-		return true
-	end
-
-	player:teleportTo(toPosition)
-	player:say('Muahahahaha..', TALKTYPE_MONSTER_SAY, false, player)
-	fromPosition:sendMagicEffect(CONST_ME_DRAWBLOOD)
-	toPosition:sendMagicEffect(CONST_ME_MORTAREA)
-end
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetType = ItemType(target.itemid)
@@ -50,7 +38,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	if target.itemid == 1 then
 		if item.type == 0 then
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, 'It is empty.')
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 
 		elseif target.uid == player.uid then
 			if table.contains({3, 15, 43}, item.type) then
@@ -68,7 +56,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			end
 
-			player:say(fluidMessage[item.type] or 'Gulp.', TALKTYPE_MONSTER_SAY)
+			player:say(fluidMessage[item.type] or "Gulp.", TALKTYPE_MONSTER_SAY)
 			item:transform(item:getId(), 0)
 		else
 			Game.createItem(2016, item.type, toPosition):decay()
@@ -81,34 +69,14 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			item:transform(item:getId(), fluidSource)
 
 		elseif item.type == 0 then
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, 'It is empty.')
-
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		else
-			if item.type == 2 and target.actionid == 2023 then
-				toPosition.y = toPosition.y + 1
-				local creatures, destination = Tile(toPosition):getCreatures(), Position(32791, 32332, 10)
-				if #creatures == 0 then
-					graveStoneTeleport(player.uid, fromPosition, destination)
-				else
-					local creature
-					for i = 1, #creatures do
-						creature = creatures[i]
-						if creature and creature:isPlayer() then
-							graveStoneTeleport(creature.uid, toPosition, destination)
-						end
-					end
-				end
-
-			else
-				if toPosition.x == CONTAINER_POSITION then
-					toPosition = player:getPosition()
-				end
-
+			if toPosition.x == CONTAINER_POSITION then
+				toPosition = player:getPosition()
+			end
 			Game.createItem(2016, item.type, toPosition):decay()
 			item:transform(item:getId(), 0)
-			end
 		end
 	end
-
 	return true
 end
