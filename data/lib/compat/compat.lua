@@ -765,6 +765,8 @@ function getTileInfo(position)
 
 	local ret = pushThing(t:getGround())
 	ret.protection = t:hasFlag(TILESTATE_PROTECTIONZONE)
+	ret.pvp = t:hasFlag(TILESTATE_PVPZONE)
+	ret.nopvp = t:hasFlag(TILESTATE_NOPVPZONE)
 	ret.nopz = ret.protection
 	ret.nologout = t:hasFlag(TILESTATE_NOLOGOUT)
 	ret.refresh = t:hasFlag(TILESTATE_REFRESH)
