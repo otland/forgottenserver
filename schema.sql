@@ -271,35 +271,35 @@ CREATE TABLE IF NOT EXISTS `player_deaths` (
 
 CREATE TABLE IF NOT EXISTS `player_depotitems` (
   `player_id` int(11) NOT NULL,
-  `sid` int(11) NOT NULL COMMENT 'any given range eg 0-100 will be reserved for depot lockers and all > 100 will be then normal items inside depots',
-  `pid` int(11) NOT NULL DEFAULT '0',
+  `slot_id` int(11) NOT NULL COMMENT 'any given range eg 0-100 will be reserved for depot lockers and all > 100 will be then normal items inside depots',
+  `parent_id` int(11) NOT NULL DEFAULT '0',
   `itemtype` smallint(6) NOT NULL,
   `count` smallint(5) NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
-  UNIQUE KEY `player_id_2` (`player_id`, `sid`),
+  UNIQUE KEY `player_id_2` (`player_id`, `slot_id`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `player_inboxitems` (
   `player_id` int(11) NOT NULL,
-  `sid` int(11) NOT NULL,
-  `pid` int(11) NOT NULL DEFAULT '0',
+  `slot_id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
   `itemtype` smallint(6) NOT NULL,
   `count` smallint(5) NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
-  UNIQUE KEY `player_id_2` (`player_id`, `sid`),
+  UNIQUE KEY `player_id_2` (`player_id`, `slot_id`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `player_items` (
   `player_id` int(11) NOT NULL DEFAULT '0',
-  `pid` int(11) NOT NULL DEFAULT '0',
-  `sid` int(11) NOT NULL DEFAULT '0',
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `slot_id` int(11) NOT NULL DEFAULT '0',
   `itemtype` smallint(6) NOT NULL DEFAULT '0',
   `count` smallint(5) NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE,
-  KEY `sid` (`sid`)
+  KEY `slot_id` (`slot_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `player_spells` (
