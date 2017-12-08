@@ -706,7 +706,9 @@ class Item : virtual public Thing
 
 		virtual void startDecaying();
 
-		bool isLoadedFromMap() const {return loadedFromMap;}
+		bool isLoadedFromMap() const {
+			return loadedFromMap;
+		}
 		void setLoadedFromMap(bool value) {
 			loadedFromMap = value;
 		}
