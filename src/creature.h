@@ -82,7 +82,7 @@ class FrozenPathingConditionCall
 		bool isInRange(const Position& startPos, const Position& testPos,
 		               const FindPathParams& fpp) const;
 
-	protected:
+	private:
 		Position targetPos;
 };
 
@@ -104,10 +104,10 @@ class Creature : virtual public Thing
 		Creature(const Creature&) = delete;
 		Creature& operator=(const Creature&) = delete;
 
-		Creature* getCreature() final {
+		Creature* getCreature() override final {
 			return this;
 		}
-		const Creature* getCreature() const final {
+		const Creature* getCreature() const override final {
 			return this;
 		}
 		virtual Player* getPlayer() {
@@ -172,13 +172,13 @@ class Creature : virtual public Thing
 			hiddenHealth = b;
 		}
 
-		int32_t getThrowRange() const final {
+		int32_t getThrowRange() const override final {
 			return 1;
 		}
 		bool isPushable() const override {
 			return getWalkDelay() <= 0;
 		}
-		bool isRemoved() const final {
+		bool isRemoved() const override final {
 			return isInternalRemoved;
 		}
 		virtual bool canSeeInvisibility() const {
@@ -226,12 +226,6 @@ class Creature : virtual public Thing
 		virtual int32_t getMaxHealth() const {
 			return healthMax;
 		}
-		uint32_t getMana() const {
-			return mana;
-		}
-		virtual uint32_t getMaxMana() const {
-			return 0;
-		}
 
 		const Outfit_t getCurrentOutfit() const {
 			return currentOutfit;
@@ -277,6 +271,13 @@ class Creature : virtual public Thing
 		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
 
 		bool setMaster(Creature* newMaster);
+
+		void removeMaster() {
+			if (master) {
+				master = nullptr;
+				decrementReferenceCounter();
+			}
+		}
 
 		bool isSummon() const {
 			return master != nullptr;
@@ -333,11 +334,9 @@ class Creature : virtual public Thing
 		}
 
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
-		virtual void changeMana(int32_t manaChange);
 
 		void gainHealth(Creature* attacker, int32_t healthGain);
 		virtual void drainHealth(Creature* attacker, int32_t damage);
-		virtual void drainMana(Creature* attacker, int32_t manaLoss);
 
 		virtual bool challengeCreature(Creature*) {
 			return false;
@@ -369,11 +368,9 @@ class Creature : virtual public Thing
 		virtual void onAttackedCreatureChangeZone(ZoneType_t zone);
 		virtual void onIdleStatus();
 
-		virtual void getCreatureLight(LightInfo& light) const;
+		virtual LightInfo getCreatureLight() const;
 		virtual void setNormalCreatureLight();
-		void setCreatureLight(LightInfo light) {
-			internalLight = light;
-		}
+		void setCreatureLight(LightInfo lightInfo);
 
 		virtual void onThink(uint32_t interval);
 		void onAttacking(uint32_t interval);
@@ -417,22 +414,22 @@ class Creature : virtual public Thing
 		bool registerCreatureEvent(const std::string& name);
 		bool unregisterCreatureEvent(const std::string& name);
 
-		Cylinder* getParent() const final {
+		Cylinder* getParent() const override final {
 			return tile;
 		}
-		void setParent(Cylinder* cylinder) final {
+		void setParent(Cylinder* cylinder) override final {
 			tile = static_cast<Tile*>(cylinder);
 			position = tile->getPosition();
 		}
 
-		const Position& getPosition() const final {
+		const Position& getPosition() const override final {
 			return position;
 		}
 
-		Tile* getTile() final {
+		Tile* getTile() override final {
 			return tile;
 		}
-		const Tile* getTile() const final {
+		const Tile* getTile() const override final {
 			return tile;
 		}
 
@@ -503,7 +500,6 @@ class Creature : virtual public Thing
 		uint32_t blockTicks = 0;
 		uint32_t lastStepCost = 1;
 		uint32_t baseSpeed = 220;
-		uint32_t mana = 0;
 		int32_t varSpeed = 0;
 		int32_t health = 1000;
 		int32_t healthMax = 1000;

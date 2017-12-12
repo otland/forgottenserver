@@ -5,7 +5,7 @@ The Forgotten Server is a free and open-source MMORPG server emulator written in
 
 ### Getting Started
 
-* [Compiling](https://github.com/otland/forgottenserver/wiki/Compiling), alternatively download [nightly builds for Windows](http://nightlies.otland.net/)
+* [Compiling](https://github.com/otland/forgottenserver/wiki/Compiling), alternatively download [AppVeyor builds for Windows](https://ci.appveyor.com/project/kornholi/forgottenserver)
 * [Scripting Reference](https://github.com/otland/forgottenserver/wiki/Script-Interface)
 
 ### Support

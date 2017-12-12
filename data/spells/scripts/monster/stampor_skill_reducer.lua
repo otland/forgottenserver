@@ -10,7 +10,7 @@ for i = 60, 85 do
 	combat[i]:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLPLANTS)
 	combat[i]:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_SMALLEARTH)
 	combat[i]:setArea(createCombatArea(AREA_BEAM1))
-	combat[i]:setCondition(condition)
+	combat[i]:addCondition(condition)
 end
 
 function onCastSpell(creature, variant)

@@ -81,7 +81,7 @@ class ProtocolGame final : public Protocol
 		void disconnectClient(const std::string& message) const;
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
-		void release() final;
+		void release() override;
 
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 
@@ -90,9 +90,9 @@ class ProtocolGame final : public Protocol
 		bool canSee(const Position& pos) const;
 
 		// we have all the parse methods
-		void parsePacket(NetworkMessage& msg) final;
-		void onRecvFirstMessage(NetworkMessage& msg) final;
-		void onConnect() final;
+		void parsePacket(NetworkMessage& msg) override;
+		void onRecvFirstMessage(NetworkMessage& msg) override;
+		void onConnect() override;
 
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
@@ -106,6 +106,7 @@ class ProtocolGame final : public Protocol
 
 		void parseBugReport(NetworkMessage& msg);
 		void parseDebugAssert(NetworkMessage& msg);
+		void parseRuleViolationReport(NetworkMessage& msg);
 
 		void parseThrow(NetworkMessage& msg);
 		void parseUseItemEx(NetworkMessage& msg);
@@ -225,6 +226,7 @@ class ProtocolGame final : public Protocol
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
+		void sendVIPEntries();
 
 		void sendPendingStateEntered();
 		void sendEnterWorld();
@@ -232,7 +234,7 @@ class ProtocolGame final : public Protocol
 		void sendFightModes();
 
 		void sendCreatureLight(const Creature* creature);
-		void sendWorldLight(const LightInfo& lightInfo);
+		void sendWorldLight(LightInfo lightInfo);
 
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 
@@ -282,7 +284,7 @@ class ProtocolGame final : public Protocol
 		void AddPlayerStats(NetworkMessage& msg);
 		void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 		void AddPlayerSkills(NetworkMessage& msg);
-		void AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo);
+		void AddWorldLight(NetworkMessage& msg, LightInfo lightInfo);
 		void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
 
 		//tiles

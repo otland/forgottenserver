@@ -29,18 +29,18 @@ class Inbox final : public Container
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const final;
+				uint32_t flags, Creature* actor = nullptr) const override;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
 		//overrides
-		bool canRemove() const final {
+		bool canRemove() const override {
 			return false;
 		}
 
-		Cylinder* getParent() const final;
-		Cylinder* getRealParent() const final {
+		Cylinder* getParent() const override;
+		Cylinder* getRealParent() const override {
 			return parent;
 		}
 };

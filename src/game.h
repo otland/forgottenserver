@@ -229,7 +229,7 @@ class Game
 			return playersRecord;
 		}
 
-		void getWorldLightInfo(LightInfo& lightInfo) const;
+		LightInfo getWorldLightInfo() const;
 
 		ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 		ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
@@ -317,6 +317,7 @@ class Game
 		void playerReportBug(uint32_t playerId, const std::string& message, const Position& position, uint8_t category);
 		void playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment);
 		void playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
+		void playerReportRuleViolation(uint32_t playerId, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation);
 
 		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
 		void internalCloseTrade(Player* player);
@@ -502,7 +503,7 @@ class Game
 		Raids raids;
 		Quests quests;
 
-	protected:
+	private:
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);

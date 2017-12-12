@@ -83,7 +83,7 @@ class Party
 		void updatePlayerTicks(Player* player, uint32_t points);
 		void clearPlayerPoints(Player* player);
 
-	protected:
+	private:
 		bool canEnableSharedExperience();
 
 		std::map<uint32_t, int64_t> ticksMap;

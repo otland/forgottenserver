@@ -40,10 +40,10 @@ Monster* Monster::createMonster(const std::string& name)
 	return new Monster(mType);
 }
 
-Monster::Monster(MonsterType* mtype) :
+Monster::Monster(MonsterType* mType) :
 	Creature(),
-	strDescription(asLowerCaseString(mtype->nameDescription)),
-	mType(mtype)
+	strDescription(mType->nameDescription),
+	mType(mType)
 {
 	defaultOutfit = mType->info.outfit;
 	currentOutfit = mType->info.outfit;
@@ -1749,7 +1749,7 @@ void Monster::death(Creature*)
 
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
-		summon->setMaster(nullptr);
+		summon->removeMaster();
 	}
 	summons.clear();
 
@@ -1938,7 +1938,7 @@ bool Monster::convinceCreature(Creature* creature)
 	//destroy summons
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
-		summon->setMaster(nullptr);
+		summon->removeMaster();
 	}
 	summons.clear();
 

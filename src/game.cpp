@@ -186,6 +186,8 @@ void Game::saveGameState()
 
 	Map::save();
 
+	g_databaseTasks.flush();
+
 	if (gameState == GAME_STATE_MAINTAIN) {
 		setGameState(GAME_STATE_NORMAL);
 	}
@@ -1471,7 +1473,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			money -= moneyEntry.first;
 		} else if (moneyEntry.first > money) {
 			const uint32_t worth = moneyEntry.first / item->getItemCount();
-			const uint32_t removeCount = (money / worth) + 1;
+			const uint32_t removeCount = std::ceil(money / static_cast<double>(worth));
 
 			addMoney(cylinder, (worth * removeCount) - money, flags);
 			internalRemoveItem(item, removeCount);
@@ -2653,7 +2655,7 @@ std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
 				ss << " this object.";
 			}
 
-			ss << std::endl << ' ' << item->getWeightDescription();
+			ss << "\n " << item->getWeightDescription();
 			return ss.str();
 		} else if (ret == RETURNVALUE_NOTENOUGHROOM || ret == RETURNVALUE_CONTAINERNOTENOUGHROOM) {
 			std::ostringstream ss;
@@ -3884,8 +3886,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		message.position = targetPos;
 
 		SpectatorHashSet spectators;
-		if (target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
-			int32_t manaDamage = std::min<int32_t>(target->getMana(), healthChange);
+		if (targetPlayer && target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
+			int32_t manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 			if (manaDamage != 0) {
 				if (damage.origin != ORIGIN_NONE) {
 					const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
@@ -3896,11 +3898,11 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						if (healthChange == 0) {
 							return true;
 						}
-						manaDamage = std::min<int32_t>(target->getMana(), healthChange);
+						manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 					}
 				}
 
-				target->drainMana(attacker, manaDamage);
+				targetPlayer->drainMana(attacker, manaDamage);
 				map.getSpectators(spectators, targetPos, true, true);
 				addMagicEffect(spectators, targetPos, CONST_ME_LOSEENERGY);
 
@@ -3992,19 +3994,11 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		realDamage = damage.primary.value + damage.secondary.value;
 		if (realDamage == 0) {
 			return true;
-		} else if (realDamage >= targetHealth) {
-			for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
-				if (!creatureEvent->executeOnPrepareDeath(target, attacker)) {
-					return false;
-				}
-			}
 		}
 
-		target->drainHealth(attacker, realDamage);
 		if (spectators.empty()) {
 			map.getSpectators(spectators, targetPos, true, true);
 		}
-		addCreatureHealth(spectators, target);
 
 		message.primary.value = damage.primary.value;
 		message.secondary.value = damage.secondary.value;
@@ -4082,6 +4076,17 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				tmpPlayer->sendTextMessage(message);
 			}
 		}
+
+		if (realDamage >= targetHealth) {
+			for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
+				if (!creatureEvent->executeOnPrepareDeath(target, attacker)) {
+					return false;
+				}
+			}
+		}
+
+		target->drainHealth(attacker, realDamage);
+		addCreatureHealth(spectators, target);
 	}
 
 	return true;
@@ -4089,10 +4094,15 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaChange, CombatOrigin origin)
 {
+	Player* targetPlayer = target->getPlayer();
+	if (!targetPlayer) {
+		return true;
+	}
+
 	if (manaChange > 0) {
 		if (attacker) {
 			const Player* attackerPlayer = attacker->getPlayer();
-			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && target->getPlayer() && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
+			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
 				return false;
 			}
 		}
@@ -4107,7 +4117,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			}
 		}
 
-		target->changeMana(manaChange);
+		targetPlayer->changeMana(manaChange);
 	} else {
 		const Position& targetPos = target->getPosition();
 		if (!target->isAttackable()) {
@@ -4124,12 +4134,11 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			attackerPlayer = nullptr;
 		}
 
-		Player* targetPlayer = target->getPlayer();
-		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
+		if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
 
-		int32_t manaLoss = std::min<int32_t>(target->getMana(), -manaChange);
+		int32_t manaLoss = std::min<int32_t>(targetPlayer->getMana(), -manaChange);
 		BlockType_t blockType = target->blockHit(attacker, COMBAT_MANADRAIN, manaLoss);
 		if (blockType != BLOCK_NONE) {
 			addMagicEffect(targetPos, CONST_ME_POFF);
@@ -4150,7 +4159,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 			}
 		}
 
-		target->drainMana(attacker, manaLoss);
+		targetPlayer->drainMana(attacker, manaLoss);
 
 		std::stringstream ss;
 
@@ -4381,8 +4390,7 @@ void Game::checkLight()
 	}
 
 	if (lightChange) {
-		LightInfo lightInfo;
-		getWorldLightInfo(lightInfo);
+		LightInfo lightInfo = getWorldLightInfo();
 
 		for (const auto& it : players) {
 			it.second->sendWorldLight(lightInfo);
@@ -4390,10 +4398,9 @@ void Game::checkLight()
 	}
 }
 
-void Game::getWorldLightInfo(LightInfo& lightInfo) const
+LightInfo Game::getWorldLightInfo() const
 {
-	lightInfo.level = lightLevel;
-	lightInfo.color = 0xD7;
+	return {lightLevel, 0xD7};
 }
 
 void Game::shutdown()
@@ -4854,6 +4861,16 @@ void Game::kickPlayer(uint32_t playerId, bool displayEffect)
 	player->kickPlayer(displayEffect);
 }
 
+void Game::playerReportRuleViolation(uint32_t playerId, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	g_events->eventPlayerOnReportRuleViolation(player, targetName, reportType, reportReason, comment, translation);
+}
+
 void Game::playerReportBug(uint32_t playerId, const std::string& message, const Position& position, uint8_t category)
 {
 	Player* player = getPlayerByID(playerId);
@@ -4861,7 +4878,7 @@ void Game::playerReportBug(uint32_t playerId, const std::string& message, const 
 		return;
 	}
 
-	g_events->eventPlayerOnReport(player, message, position, category);
+	g_events->eventPlayerOnReportBug(player, message, position, category);
 }
 
 void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description, const std::string& comment)
