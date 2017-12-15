@@ -55,7 +55,7 @@
 		<item name="small amethyst" countmax="3" chance="3270" />
 		<item name="strong mana potion" chance="17450" />
 		<item name="great mana potion" chance="5450" />
-		<item id="7638" countmax="15" chance="6550" /><!-- flash arrow -->
+		<item name="flash arrow" countmax="15" chance="6550" />
 		<item name="energy spike sword" chance="500" />
 		<item name="lightning pendant" chance="730" />
 		<item name="lightning legs" chance="150" />
