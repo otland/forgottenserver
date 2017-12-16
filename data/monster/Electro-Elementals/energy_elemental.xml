@@ -62,6 +62,6 @@
 		<item name="crystal sword" chance="5882" />
 		<item name="strong mana potion" chance="7692" />
 		<item name="mana potion" chance="11711" />
-		<item id="7638" countmax="10" chance="10000" /><!-- flash arrow -->
+		<item name="flash arrow" countmax="10" chance="10000" />
 	</loot>
 </monster>
