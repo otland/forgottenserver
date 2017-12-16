@@ -4072,31 +4072,35 @@ void Player::setCurrentMount(uint8_t mount)
 	addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mount);
 }
 
-bool Player::toggleMount(bool mount)
+bool Player::toggleMount(bool mount, bool force /*= false*/)
 {
-	if ((OTSYS_TIME() - lastToggleMount) < 3000 && !wasMounted) {
+	if (!force && (OTSYS_TIME() - lastToggleMount) < 3000 && !wasMounted) {
 		sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return false;
 	}
 
 	if (mount) {
-		if (isMounted()) {
-			return false;
-		}
+		if (!force) {
+			if (isMounted()) {
+				return false;
+			}
 
-		if (!group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
-			sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
-			return false;
-		}
+			if (!group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+				sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
+				return false;
+			}
 
-		const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(getSex(), defaultOutfit.lookType);
-		if (!playerOutfit) {
-			return false;
+			const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(getSex(), defaultOutfit.lookType);
+			if (!playerOutfit) {
+				return false;
+			}
 		}
 
 		uint8_t currentMountId = getCurrentMount();
 		if (currentMountId == 0) {
-			sendOutfitWindow();
+			if (!force) {
+				sendOutfitWindow();
+			}
 			return false;
 		}
 
@@ -4105,20 +4109,22 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (!hasMount(currentMount)) {
-			setCurrentMount(0);
-			sendOutfitWindow();
-			return false;
-		}
+		if (!force) {
+			if (!hasMount(currentMount)) {
+				setCurrentMount(0);
+				sendOutfitWindow();
+				return false;
+			}
 
-		if (currentMount->premium && !isPremium()) {
-			sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
-			return false;
-		}
+			if (currentMount->premium && !isPremium()) {
+				sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
+				return false;
+			}
 
-		if (hasCondition(CONDITION_OUTFIT)) {
-			sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-			return false;
+			if (hasCondition(CONDITION_OUTFIT)) {
+				sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+				return false;
+			}
 		}
 
 		defaultOutfit.lookMount = currentMount->clientId;
@@ -4127,7 +4133,7 @@ bool Player::toggleMount(bool mount)
 			g_game.changeSpeed(this, currentMount->speed);
 		}
 	} else {
-		if (!isMounted()) {
+		if (!force && !isMounted()) {
 			return false;
 		}
 
@@ -4135,7 +4141,10 @@ bool Player::toggleMount(bool mount)
 	}
 
 	g_game.internalCreatureChangeOutfit(this, defaultOutfit);
-	lastToggleMount = OTSYS_TIME();
+
+	if (!force) {
+		lastToggleMount = OTSYS_TIME();
+	}
 	return true;
 }
 
