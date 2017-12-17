@@ -724,13 +724,12 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	if (internalManaTicks >= manaTicks) {
 		internalManaTicks = 0;
 
-		int32_t realManaGain = creature->getMana();
-		creature->changeMana(manaGain);
-		realManaGain = creature->getMana() - realManaGain;
+		if (Player* player = creature->getPlayer()) {
+			int32_t realManaGain = player->getMana();
+			player->changeMana(manaGain);
+			realManaGain = player->getMana() - realManaGain;
 
-		if (isBuff && realManaGain > 0) {
-			Player* player = creature->getPlayer();
-			if (player) {
+			if (isBuff && realManaGain > 0) {
 				std::string manaGainString = std::to_string(realManaGain);
 
 				TextMessage message(MESSAGE_HEALED, "You gained " + manaGainString + " mana.");
