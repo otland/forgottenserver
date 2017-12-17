@@ -17,28 +17,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#define FS_OTPCH_H_F00C737DA6CA4C8D90F57430C614367F
-
-// Definitions should be global.
-#include "definitions.h"
-
-#include <algorithm>
-#include <chrono>
-#include <cstdint>
-#include <forward_list>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <list>
-#include <map>
-#include <memory>
-#include <mutex>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <vector>
+#ifndef FS_HTTP_API_COMMON_H_140089624C7E205078FEBA74EC391A0E
+#define FS_HTTP_API_COMMON_H_140089624C7E205078FEBA74EC391A0E
 
 #include <boost/asio.hpp>
-#include <beast/http.hpp>
-#include <pugixml.hpp>
+#include <beast/http/message.hpp>
+#include <beast/http/string_body.hpp>
+
+namespace HttpApi
+{
+
+namespace asio = boost::asio;
+using IoService = asio::io_service;
+/// Synchronization primitive provided by asio
+using Strand = IoService::strand;
+using ErrorCode = boost::system::error_code;
+
+using Request = beast::http::request<beast::http::string_body>;
+using Response = beast::http::response<beast::http::string_body>;
+using RequestID = uint32_t;
+using PeerId = uint32_t;
+
+} //namespace HttpApi
+
+#endif // FS_HTTP_API_COMMON_H_140089624C7E205078FEBA74EC391A0E
