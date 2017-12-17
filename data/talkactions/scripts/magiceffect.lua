@@ -3,10 +3,7 @@ function onSay(player, words, param)
 		return true
 	end
 
-	local effect = tonumber(param)
-	if(effect ~= nil and effect > 0) then
-		player:getPosition():sendMagicEffect(effect)
-	end
+	player:getPosition():sendMagicEffect(tonumber(param))
 
 	return false
 end
