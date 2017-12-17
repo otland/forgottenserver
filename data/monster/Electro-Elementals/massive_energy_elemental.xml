@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Massive Energy Elemental" nameDescription="a massive energy elemental" race="energy" experience="950" speed="210" manacost="0">
+<monster name="Massive Energy Elemental" nameDescription="a massive energy elemental" race="energy" experience="950" speed="210">
 	<health now="1100" max="1100" />
 	<look type="290" corpse="8966" />
 	<targetchange interval="4000" chance="15" />
@@ -55,7 +55,7 @@
 		<item name="small amethyst" countmax="3" chance="3270" />
 		<item name="strong mana potion" chance="17450" />
 		<item name="great mana potion" chance="5450" />
-		<item id="7638" countmax="15" chance="6550" /><!-- flash arrow -->
+		<item name="flash arrow" countmax="15" chance="6550" />
 		<item name="energy spike sword" chance="500" />
 		<item name="lightning pendant" chance="730" />
 		<item name="lightning legs" chance="150" />

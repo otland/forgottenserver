@@ -8,9 +8,6 @@ local reloadTypes = {
 	["channel"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
 	["chatchannels"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
 
-	["command"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands" },
-	["commands"] = { targetType = RELOAD_TYPE_COMMANDS, name = "commands" },
-
 	["config"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
 	["configuration"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
 
@@ -61,9 +58,11 @@ function onSay(player, words, param)
 		return true
 	end
 
-	if player:getAccountType() < ACCOUNT_TYPE_GAMEMASTER then
+	if player:getAccountType() < ACCOUNT_TYPE_GOD then
 		return false
 	end
+
+	logCommand(player, words, param)
 
 	local reloadType = reloadTypes[param and param:lower()]
 	if not reloadType then
@@ -73,5 +72,5 @@ function onSay(player, words, param)
 
 	Game.reload(reloadType.targetType)
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", reloadType.name))
-	return true
+	return false
 end

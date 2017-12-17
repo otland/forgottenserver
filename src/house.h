@@ -21,6 +21,7 @@
 #define FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
 
 #include <regex>
+#include <set>
 
 #include "container.h"
 #include "housetile.h"
@@ -59,10 +60,10 @@ class Door final : public Item
 		Door(const Door&) = delete;
 		Door& operator=(const Door&) = delete;
 
-		Door* getDoor() final {
+		Door* getDoor() override {
 			return this;
 		}
-		const Door* getDoor() const final {
+		const Door* getDoor() const override {
 			return this;
 		}
 
@@ -71,8 +72,8 @@ class Door final : public Item
 		}
 
 		//serialization
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
-		void serializeAttr(PropWriteStream&) const final {}
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+		void serializeAttr(PropWriteStream&) const override {}
 
 		void setDoorId(uint32_t doorId) {
 			setIntAttr(ITEM_ATTRIBUTE_DOORID, doorId);
@@ -86,12 +87,11 @@ class Door final : public Item
 		void setAccessList(const std::string& textlist);
 		bool getAccessList(std::string& list) const;
 
-		void onRemoved() final;
-
-	protected:
-		void setHouse(House* house);
+		void onRemoved() override;
 
 	private:
+		void setHouse(House* house);
+
 		House* house = nullptr;
 		std::unique_ptr<AccessList> accessList;
 		friend class House;
@@ -119,12 +119,12 @@ class HouseTransferItem final : public Item
 
 		explicit HouseTransferItem(House* house) : Item(0), house(house) {}
 
-		void onTradeEvent(TradeEvents_t event, Player* owner) final;
-		bool canTransform() const final {
+		void onTradeEvent(TradeEvents_t event, Player* owner) override;
+		bool canTransform() const override {
 			return false;
 		}
 
-	protected:
+	private:
 		House* house;
 };
 
@@ -212,8 +212,8 @@ class House
 			return houseTiles;
 		}
 
-		const std::list<Door*>& getDoors() const {
-			return doorList;
+		const std::set<Door*>& getDoors() const {
+			return doorSet;
 		}
 
 		void addBed(BedItem* bed);
@@ -234,7 +234,7 @@ class House
 		Container transfer_container{ITEM_LOCKER1};
 
 		HouseTileList houseTiles;
-		std::list<Door*> doorList;
+		std::set<Door*> doorSet;
 		HouseBedItemList bedsList;
 
 		std::string houseName;

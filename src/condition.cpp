@@ -266,7 +266,7 @@ bool Condition::isPersistent() const
 		return false;
 	}
 
-	if (!(id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT)) {
+	if (!(id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT || conditionType == CONDITION_MUTED)) {
 		return false;
 	}
 
@@ -423,7 +423,7 @@ void ConditionAttributes::updatePercentStats(Player* player)
 				break;
 
 			case STAT_MAGICPOINTS:
-				stats[i] = static_cast<int32_t>(player->getMagicLevel() * ((statsPercent[i] - 100) / 100.f));
+				stats[i] = static_cast<int32_t>(player->getBaseMagicLevel() * ((statsPercent[i] - 100) / 100.f));
 				break;
 		}
 	}
@@ -685,42 +685,46 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	internalHealthTicks += interval;
 	internalManaTicks += interval;
 
-	if (creature->getZone() != ZONE_PROTECTION) {
-		if (internalHealthTicks >= healthTicks) {
-			internalHealthTicks = 0;
+	if (creature->getZone() == ZONE_PROTECTION) {
+		return ConditionGeneric::executeCondition(creature, interval);
+	}
 
-			int32_t realHealthGain = creature->getHealth();
-			creature->changeHealth(healthGain);
-			realHealthGain = creature->getHealth() - realHealthGain;
+	if (internalHealthTicks >= healthTicks) {
+		internalHealthTicks = 0;
 
-			if (isBuff && realHealthGain > 0) {
-				Player* player = creature->getPlayer();
-				if (player) {
-					std::string healString = std::to_string(realHealthGain) + (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
+		int32_t realHealthGain = creature->getHealth();
+		creature->changeHealth(healthGain);
+		realHealthGain = creature->getHealth() - realHealthGain;
 
-					TextMessage message(MESSAGE_HEALED, "You were healed for " + healString);
-					message.position = player->getPosition();
-					message.primary.value = realHealthGain;
-					message.primary.color = TEXTCOLOR_MAYABLUE;
-					player->sendTextMessage(message);
+		if (isBuff && realHealthGain > 0) {
+			Player* player = creature->getPlayer();
+			if (player) {
+				std::string healString = std::to_string(realHealthGain) + (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
 
-					SpectatorHashSet spectators;
-					g_game.map.getSpectators(spectators, player->getPosition(), false, true);
-					spectators.erase(player);
-					if (!spectators.empty()) {
-						message.type = MESSAGE_HEALED_OTHERS;
-						message.text = player->getName() + " was healed for " + healString;
-						for (Creature* spectator : spectators) {
-							spectator->getPlayer()->sendTextMessage(message);
-						}
+				TextMessage message(MESSAGE_HEALED, "You were healed for " + healString);
+				message.position = player->getPosition();
+				message.primary.value = realHealthGain;
+				message.primary.color = TEXTCOLOR_MAYABLUE;
+				player->sendTextMessage(message);
+
+				SpectatorHashSet spectators;
+				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
+				spectators.erase(player);
+				if (!spectators.empty()) {
+					message.type = MESSAGE_HEALED_OTHERS;
+					message.text = player->getName() + " was healed for " + healString;
+					for (Creature* spectator : spectators) {
+						spectator->getPlayer()->sendTextMessage(message);
 					}
 				}
 			}
 		}
+	}
 
-		if (internalManaTicks >= manaTicks) {
-			internalManaTicks = 0;
-			creature->changeMana(manaGain);
+	if (internalManaTicks >= manaTicks) {
+		internalManaTicks = 0;
+		if (Player* player = creature->getPlayer()) {
+			player->changeMana(manaGain);
 		}
 	}
 
@@ -964,22 +968,24 @@ bool ConditionDamage::init()
 		return true;
 	}
 
-	if (damageList.empty()) {
-		setTicks(0);
+	if (!damageList.empty()) {
+		return true;
+	}
 
-		int32_t amount = uniform_random(minDamage, maxDamage);
-		if (amount != 0) {
-			if (startDamage > maxDamage) {
-				startDamage = maxDamage;
-			} else if (startDamage == 0) {
-				startDamage = std::max<int32_t>(1, std::ceil(amount / 20.0));
-			}
+	setTicks(0);
 
-			std::list<int32_t> list;
-			ConditionDamage::generateDamageList(amount, startDamage, list);
-			for (int32_t value : list) {
-				addDamage(1, tickInterval, -value);
-			}
+	int32_t amount = uniform_random(minDamage, maxDamage);
+	if (amount != 0) {
+		if (startDamage > maxDamage) {
+			startDamage = maxDamage;
+		} else if (startDamage == 0) {
+			startDamage = std::max<int32_t>(1, std::ceil(amount / 20.0));
+		}
+
+		std::list<int32_t> list;
+		ConditionDamage::generateDamageList(amount, startDamage, list);
+		for (int32_t value : list) {
+			addDamage(1, tickInterval, -value);
 		}
 	}
 	return !damageList.empty();
@@ -1449,12 +1455,11 @@ bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 
 	if (internalLightTicks >= lightChangeInterval) {
 		internalLightTicks = 0;
-		LightInfo creatureLight;
-		creature->getCreatureLight(creatureLight);
+		LightInfo lightInfo = creature->getCreatureLight();
 
-		if (creatureLight.level > 0) {
-			--creatureLight.level;
-			creature->setCreatureLight(creatureLight);
+		if (lightInfo.level > 0) {
+			--lightInfo.level;
+			creature->setCreatureLight(lightInfo);
 			g_game.changeLight(creature);
 		}
 	}

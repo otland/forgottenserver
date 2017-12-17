@@ -42,8 +42,7 @@ Creature::~Creature()
 {
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(nullptr);
-		summon->setMaster(nullptr);
-		summon->decrementReferenceCounter();
+		summon->removeMaster();
 	}
 
 	for (Condition* condition : conditions) {
@@ -413,7 +412,7 @@ void Creature::onRemoveCreature(Creature* creature, bool)
 	onCreatureDisappear(creature, true);
 	if (creature == this) {
 		if (master && !master->isRemoved()) {
-			master->removeSummon(this);
+			setMaster(nullptr);
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
@@ -674,7 +673,7 @@ void Creature::onDeath()
 	death(lastHitCreature);
 
 	if (master) {
-		master->removeSummon(this);
+		setMaster(nullptr);
 	}
 
 	if (droppedCorpse) {
@@ -765,15 +764,6 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 	}
 }
 
-void Creature::changeMana(int32_t manaChange)
-{
-	if (manaChange > 0) {
-		mana += std::min<int32_t>(manaChange, getMaxMana() - mana);
-	} else {
-		mana = std::max<int32_t>(0, mana + manaChange);
-	}
-}
-
 void Creature::gainHealth(Creature* healer, int32_t healthGain)
 {
 	changeHealth(healthGain);
@@ -788,16 +778,6 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 
 	if (attacker) {
 		attacker->onAttackedCreatureDrainHealth(this, damage);
-	}
-}
-
-void Creature::drainMana(Creature* attacker, int32_t manaLoss)
-{
-	onAttacked();
-	changeMana(-manaLoss);
-
-	if (attacker) {
-		addDamagePoints(attacker, manaLoss);
 	}
 }
 
@@ -1121,25 +1101,27 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	}
 }
 
-void Creature::addSummon(Creature* creature)
-{
-	creature->setDropLoot(false);
-	creature->setLossSkill(false);
-	creature->setMaster(this);
-	creature->incrementReferenceCounter();
-	summons.push_back(creature);
-}
-
-void Creature::removeSummon(Creature* creature)
-{
-	auto cit = std::find(summons.begin(), summons.end(), creature);
-	if (cit != summons.end()) {
-		creature->setDropLoot(false);
-		creature->setLossSkill(true);
-		creature->setMaster(nullptr);
-		creature->decrementReferenceCounter();
-		summons.erase(cit);
+bool Creature::setMaster(Creature* newMaster) {
+	if (!newMaster && !master) {
+		return false;
 	}
+
+	if (newMaster) {
+		incrementReferenceCounter();
+		newMaster->summons.push_back(this);
+	}
+
+	Creature* oldMaster = master;
+	master = newMaster;
+
+	if (oldMaster) {
+		auto summon = std::find(oldMaster->summons.begin(), oldMaster->summons.end(), this);
+		if (summon != oldMaster->summons.end()) {
+			oldMaster->summons.erase(summon);
+			decrementReferenceCounter();
+		}
+	}
+	return true;
 }
 
 bool Creature::addCondition(Condition* condition, bool force/* = false*/)
@@ -1371,7 +1353,7 @@ int64_t Creature::getStepDuration() const
 	int32_t stepSpeed = getStepSpeed();
 	if (stepSpeed > -Creature::speedB) {
 		calculatedStepSpeed = floor((Creature::speedA * log((stepSpeed / 2) + Creature::speedB) + Creature::speedC) + 0.5);
-		if (calculatedStepSpeed <= 0) {
+		if (calculatedStepSpeed == 0) {
 			calculatedStepSpeed = 1;
 		}
 	} else {
@@ -1413,15 +1395,18 @@ int64_t Creature::getEventStepTicks(bool onlyDelay) const
 	return ret;
 }
 
-void Creature::getCreatureLight(LightInfo& light) const
+LightInfo Creature::getCreatureLight() const
 {
-	light = internalLight;
+	return internalLight;
+}
+
+void Creature::setCreatureLight(LightInfo light) {
+	internalLight = std::move(light);
 }
 
 void Creature::setNormalCreatureLight()
 {
-	internalLight.level = 0;
-	internalLight.color = 0;
+	internalLight = {};
 }
 
 bool Creature::registerCreatureEvent(const std::string& name)

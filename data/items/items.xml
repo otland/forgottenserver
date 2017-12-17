@@ -25743,6 +25743,12 @@
 	<item fromid="19332" toid="19342" article="a" name="brown stone wall" />
 	<item fromid="19354" toid="19375" article="an" name="ornate wall" />
 	<item fromid="19376" toid="19388" article="a" name="stone wall" />
+	<item id="19392" article="a" name="lightest magic missile rune">
+		<attribute key="type" value="rune" />
+		<attribute key="runeSpellName" value="adori dis min vis" />
+		<attribute key="weight" value="210" />
+		<attribute key="charges" value="10" />
+	</item>
 	<item fromid="19395" toid="19420" article="a" name="stone wall" />
 	<item id="19431" name="freshly cut venorean spice">
 		<attribute key="description" value="It has just been cut." />
@@ -29357,11 +29363,11 @@
 		<attribute key="weight" value="180" />
 		<attribute key="description" value="It holds a liquid concentrate developed by the gnomes to fertilise mushrooms." />
 	</item>
-	<item id="21565" article="a" name="gardener mushroom"/>
+	<item id="21565" article="a" name="gardener mushroom" />
 	<item id="21566" article="a" name="partially charged lodestone">
 		<attribute key="weight" value="300" />
 	</item>
-	<item id="21567" article="a" name="magnetic monolith"/>
+	<item id="21567" article="a" name="magnetic monolith" />
 	<item id="21568" article="a" name="highly charged lodestone">
 		<attribute key="weight" value="300" />
 	</item>
@@ -30554,8 +30560,8 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="23417" article="a" name="slime slide"/>
-	<item id="23419" article="a" name="slime slide"/>
+	<item id="23417" article="a" name="slime slide" />
+	<item id="23419" article="a" name="slime slide" />
 	<item id="23460" article="a" name="blue pollen">
 		<attribute key="weight" value="50" />
 	</item>

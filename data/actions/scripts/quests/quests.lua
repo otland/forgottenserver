@@ -11,7 +11,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local itemWeight = itemType:getWeight()
 	local playerCap = player:getFreeCapacity()
-	if isInArray(annihilatorReward, item.uid) then
+	if table.contains(annihilatorReward, item.uid) then
 		if player:getStorageValue(30015) == -1 then
 			if playerCap >= itemWeight then
 				if item.uid == 1990 then

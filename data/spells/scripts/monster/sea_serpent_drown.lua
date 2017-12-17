@@ -6,7 +6,7 @@ local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_DROWNDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_WATERSPLASH)
 combat:setArea(createCombatArea(AREA_SQUARE1X1))
-combat:setCondition(condition)
+combat:addCondition(condition)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)

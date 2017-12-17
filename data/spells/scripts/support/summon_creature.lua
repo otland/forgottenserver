@@ -15,12 +15,6 @@ function onCastSpell(creature, variant)
 			return false
 		end
 
-		if creature:getMana() < monsterType:getManaCost() then
-			creature:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
-			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
-			return false
-		end
-
 		if #creature:getSummons() >= 2 then
 			creature:sendCancelMessage("You cannot summon more creatures.")
 			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
@@ -45,8 +39,7 @@ function onCastSpell(creature, variant)
 
 	creature:addMana(-manaCost)
 	creature:addManaSpent(manaCost)
-
-	summon:setMaster(creature)
+	creature:addSummon(summon)
 	position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	summon:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 	return true

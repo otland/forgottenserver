@@ -126,7 +126,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			return;
 		}
 
-		if (!IOLoginData::loadPlayerByName(player, name)) {
+		if (!IOLoginData::loadPlayerById(player, player->getGUID())) {
 			disconnectClient("Your character could not be loaded.");
 			return;
 		}
@@ -281,7 +281,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
 	std::string& token = sessionArgs[2];
-	uint32_t tokenTime = strtoul(sessionArgs[3].c_str(), NULL, 10);
+	uint32_t tokenTime = std::stoul(sessionArgs[3]);
 
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
@@ -479,7 +479,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xE8: parseDebugAssert(msg); break;
 		case 0xF0: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerShowQuestLog, player->getID()); break;
 		case 0xF1: parseQuestLine(msg); break;
-		case 0xF2: /* rule violation report */ break;
+		case 0xF2: parseRuleViolationReport(msg); break;
 		case 0xF3: /* get object info */ break;
 		case 0xF4: parseMarketLeave(); break;
 		case 0xF5: parseMarketBrowse(msg); break;
@@ -988,6 +988,23 @@ void ProtocolGame::parseRotateItem(NetworkMessage& msg)
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRotateItem, player->getID(), pos, stackpos, spriteId);
 }
 
+void ProtocolGame::parseRuleViolationReport(NetworkMessage& msg)
+{
+	uint8_t reportType = msg.getByte();
+	uint8_t reportReason = msg.getByte();
+	const std::string& targetName = msg.getString();
+	const std::string& comment = msg.getString();
+	std::string translation;
+	if (reportType == REPORT_TYPE_NAME) {
+		translation = msg.getString();
+	} else if (reportType == REPORT_TYPE_STATEMENT) {
+		translation = msg.getString();
+		msg.get<uint32_t>(); // statement id, used to get whatever player have said, we don't log that.
+	}
+
+	addGameTask(&Game::playerReportRuleViolation, player->getID(), targetName, reportType, reportReason, comment, translation);
+}
+
 void ProtocolGame::parseBugReport(NetworkMessage& msg)
 {
 	uint8_t category = msg.getByte();
@@ -1159,7 +1176,7 @@ void ProtocolGame::sendCreatureLight(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendWorldLight(const LightInfo& lightInfo)
+void ProtocolGame::sendWorldLight(LightInfo lightInfo)
 {
 	NetworkMessage msg;
 	AddWorldLight(msg, lightInfo);
@@ -1319,6 +1336,11 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.addByte(message.primary.color);
 			break;
 		}
+		case MESSAGE_GUILD:
+		case MESSAGE_PARTY_MANAGEMENT:
+		case MESSAGE_PARTY:
+			msg.add<uint16_t>(message.channelId);
+			break;
 		default: {
 			break;
 		}
@@ -2412,42 +2434,12 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendSkills();
 
 	//gameworld light-settings
-	LightInfo lightInfo;
-	g_game.getWorldLightInfo(lightInfo);
-	sendWorldLight(lightInfo);
+	sendWorldLight(g_game.getWorldLightInfo());
 
 	//player light level
 	sendCreatureLight(creature);
 
-	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
-
-	if (player->isAccessPlayer()) {
-		for (const VIPEntry& entry : vipEntries) {
-			VipStatus_t vipStatus;
-
-			Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
-			if (!vipPlayer) {
-				vipStatus = VIPSTATUS_OFFLINE;
-			} else {
-				vipStatus = VIPSTATUS_ONLINE;
-			}
-
-			sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
-		}
-	} else {
-		for (const VIPEntry& entry : vipEntries) {
-			VipStatus_t vipStatus;
-
-			Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
-			if (!vipPlayer || vipPlayer->isInGhostMode()) {
-				vipStatus = VIPSTATUS_OFFLINE;
-			} else {
-				vipStatus = VIPSTATUS_ONLINE;
-			}
-
-			sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
-		}
-	}
+	sendVIPEntries();
 
 	sendBasicData();
 	player->sendIcons();
@@ -2698,6 +2690,23 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendVIPEntries()
+{
+	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
+
+	for (const VIPEntry& entry : vipEntries) {
+		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
+
+		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
+
+		if (!vipPlayer || vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
+			vipStatus = VIPSTATUS_OFFLINE;
+		}
+
+		sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
+	}
+}
+
 void ProtocolGame::sendSpellCooldown(uint8_t spellId, uint32_t time)
 {
 	NetworkMessage msg;
@@ -2777,8 +2786,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		AddOutfit(msg, outfit);
 	}
 
-	LightInfo lightInfo;
-	creature->getCreatureLight(lightInfo);
+	LightInfo lightInfo = creature->getCreatureLight();
 	msg.addByte(player->isAccessPlayer() ? 0xFF : lightInfo.level);
 	msg.addByte(lightInfo.color);
 
@@ -2913,7 +2921,7 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 	msg.add<uint16_t>(outfit.lookMount);
 }
 
-void ProtocolGame::AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo)
+void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
 {
 	msg.addByte(0x82);
 	msg.addByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
@@ -2922,8 +2930,7 @@ void ProtocolGame::AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo
 
 void ProtocolGame::AddCreatureLight(NetworkMessage& msg, const Creature* creature)
 {
-	LightInfo lightInfo;
-	creature->getCreatureLight(lightInfo);
+	LightInfo lightInfo = creature->getCreatureLight();
 
 	msg.addByte(0x8D);
 	msg.add<uint32_t>(creature->getID());

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Nightmare" nameDescription="a nightmare" race="blood" experience="2150" speed="240" manacost="0">
+<monster name="Nightmare" nameDescription="a nightmare" race="blood" experience="2150" speed="240">
 	<health now="2700" max="2700" />
 	<look type="245" corpse="6340" />
 	<targetchange interval="4000" chance="10" />

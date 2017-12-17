@@ -62,13 +62,13 @@ function onCastSpell(creature, variant)
 
 	local direction
 	local distanceOutput = DISTANCE_VERYFAR
-	if math.abs(offset.x) < 4 and math.abs(offset.y) < 4 then
+	local distance = math.max(math.abs(offset.x), math.abs(offset.y))
+	if distance <= 4 then
 		distanceOutput = DISTANCE_BESIDE
 	else
-		local distanceFormula = math.pow(offset.x, 2) + math.pow(offset.y, 2)
-		if distanceFormula < 1000 then
+		if distance <= 100 then
 			distanceOutput = DISTANCE_CLOSE
-		elseif distanceFormula < math.pow(274, 2) then
+		elseif distance <= 274 then
 			distanceOutput = DISTANCE_FAR
 		end
 

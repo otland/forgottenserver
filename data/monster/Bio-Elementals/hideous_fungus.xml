@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Hideous Fungus" nameDescription="a hideous fungus" race="venom" experience="2900" speed="260" manacost="0">
+<monster name="Hideous Fungus" nameDescription="a hideous fungus" race="venom" experience="2900" speed="260">
 	<health now="4600" max="4600" />
 	<look type="499" corpse="17428" />
 	<targetchange interval="4000" chance="10" />

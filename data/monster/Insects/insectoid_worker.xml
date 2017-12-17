@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Insectoid Worker" nameDescription="an insectoid worker" race="venom" experience="650" speed="200" manacost="0">
+<monster name="Insectoid Worker" nameDescription="an insectoid worker" race="venom" experience="650" speed="200">
 	<health now="950" max="950" />
 	<look type="403" corpse="13514" />
 	<targetchange interval="4000" chance="10" />
