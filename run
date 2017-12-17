@@ -1,0 +1,22 @@
+#!/bin/bash
+
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+NC='\033[0m' # No Color
+
+build_engine
+
+source /home/tfs-settings.ini
+
+###########################
+##Check debug mode variable
+###########################
+cd /shrd
+if (($run_debug_mode==1)); then
+    echo -e "${YELLOW}[WARNING]: Starting server in debug mode, binding port 8787.${NC}"
+    gdbserver localhost:8787 ./tfs0
+else
+    echo -e "${GREEN}[NOTICE]: Starting server in normal mode. ${NC}"
+    ./tfs
+fi
