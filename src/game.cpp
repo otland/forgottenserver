@@ -4122,11 +4122,11 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, int32_t manaCh
 		realManaChange = targetPlayer->getMana() - realManaChange;
 
 		if (realManaChange > 0 && !targetPlayer->isInGhostMode()) {
-      TextMessage message(MESSAGE_HEALED, "You gained " + std::to_string(realManaChange) + " mana.");
-      message.position = target->getPosition();
-      message.primary.value = realManaChange;
-      message.primary.color = TEXTCOLOR_MAYABLUE;
-      targetPlayer->sendTextMessage(message);
+			TextMessage message(MESSAGE_HEALED, "You gained " + std::to_string(realManaChange) + " mana.");
+			message.position = target->getPosition();
+			message.primary.value = realManaChange;
+			message.primary.color = TEXTCOLOR_MAYABLUE;
+			targetPlayer->sendTextMessage(message);
 		}
 	} else {
 		const Position& targetPos = target->getPosition();
