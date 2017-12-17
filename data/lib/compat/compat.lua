@@ -109,11 +109,21 @@ function pushThing(thing)
 end
 
 createCombatObject = Combat
+addCombatCondition = Combat.addCondition
 setCombatArea = Combat.setArea
 setCombatCallback = Combat.setCallback
-setCombatCondition = Combat.setCondition
 setCombatFormula = Combat.setFormula
 setCombatParam = Combat.setParameter
+
+Combat.setCondition = function(...)
+	print("[Warning] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
+	Combat.addCondition(...)
+end
+
+setCombatCondition = function(...)
+	print("[Warning] Function setCombatCondition was renamed to addCombatCondition and will be removed in the future")
+	Combat.addCondition(...)
+end
 
 createConditionObject = Condition
 setConditionParam = Condition.setParameter
@@ -181,6 +191,7 @@ function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c ~= 
 function doChangeSpeed(cid, delta) local c = Creature(cid) return c ~= nil and c:changeSpeed(delta) or false end
 function doAddCondition(cid, conditionId) local c = Creature(cid) return c ~= nil and c:addCondition(conditionId) or false end
 function doRemoveCondition(cid, conditionType, subId) local c = Creature(cid) return c ~= nil and (c:removeCondition(conditionType, CONDITIONID_COMBAT, subId) or c:removeCondition(conditionType, CONDITIONID_DEFAULT, subId) or true) end
+function getCreatureCondition(cid, type, subId) local c = Creature(cid) return c ~= nil and c:hasCondition(type, subId) or false end
 
 doSetCreatureDirection = doCreatureSetLookDir
 
@@ -1007,7 +1018,7 @@ function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
 
-function getPlayerInstantSpellCount(cid) local p = Player(cid) return p ~= nil and p:getInstantSpellCount() end
+function getPlayerInstantSpellCount(cid) local p = Player(cid) return p ~= nil and #p:getInstantSpells() end
 function getPlayerInstantSpellInfo(cid, spellId)
 	local player = Player(cid)
 	if not player then
