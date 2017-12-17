@@ -4,13 +4,11 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_POISONARROW)
 combat:setParameter(COMBAT_PARAM_BLOCKARMOR, true)
 combat:setFormula(COMBAT_FORMULA_SKILL, 0, 0, 1, 0)
 
-local condition = Condition(CONDITION_POISON)
-condition:setParameter(CONDITION_PARAM_DELAYED, true)
-condition:addDamage(4, 4000, -3)
-condition:addDamage(9, 4000, -2)
-condition:addDamage(20, 4000, -1)
-combat:addCondition(condition)
-
 function onUseWeapon(player, variant)
-	return combat:execute(player, variant)
+	if not combat:execute(player, variant) then
+		return false
+	end
+
+	player:addDamageCondition(Creature(variant:getNumber()), CONDITION_POISON, DAMAGELIST_LOGARITHMIC_DAMAGE, 3)
+	return true
 end

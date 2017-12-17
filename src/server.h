@@ -41,20 +41,20 @@ template <typename ProtocolType>
 class Service final : public ServiceBase
 {
 	public:
-		bool is_single_socket() const final {
+		bool is_single_socket() const override {
 			return ProtocolType::server_sends_first;
 		}
-		bool is_checksummed() const final {
+		bool is_checksummed() const override {
 			return ProtocolType::use_checksum;
 		}
-		uint8_t get_protocol_identifier() const final {
+		uint8_t get_protocol_identifier() const override {
 			return ProtocolType::protocol_identifier;
 		}
-		const char* get_protocol_name() const final {
+		const char* get_protocol_name() const override {
 			return ProtocolType::protocol_name();
 		}
 
-		Protocol_ptr make_protocol(const Connection_ptr& c) const final {
+		Protocol_ptr make_protocol(const Connection_ptr& c) const override {
 			return std::make_shared<ProtocolType>(c);
 		}
 };
@@ -81,7 +81,7 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 		void onStopServer();
 		void onAccept(Connection_ptr connection, const boost::system::error_code& error);
 
-	protected:
+	private:
 		void accept();
 
 		boost::asio::io_service& io_service;
@@ -112,7 +112,7 @@ class ServiceManager
 			return acceptors.empty() == false;
 		}
 
-	protected:
+	private:
 		void die();
 
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;

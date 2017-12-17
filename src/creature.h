@@ -82,7 +82,7 @@ class FrozenPathingConditionCall
 		bool isInRange(const Position& startPos, const Position& testPos,
 		               const FindPathParams& fpp) const;
 
-	protected:
+	private:
 		Position targetPos;
 };
 
@@ -104,10 +104,10 @@ class Creature : virtual public Thing
 		Creature(const Creature&) = delete;
 		Creature& operator=(const Creature&) = delete;
 
-		Creature* getCreature() final {
+		Creature* getCreature() override final {
 			return this;
 		}
-		const Creature* getCreature() const final {
+		const Creature* getCreature() const override final {
 			return this;
 		}
 		virtual Player* getPlayer() {
@@ -172,13 +172,13 @@ class Creature : virtual public Thing
 			hiddenHealth = b;
 		}
 
-		int32_t getThrowRange() const final {
+		int32_t getThrowRange() const override final {
 			return 1;
 		}
 		bool isPushable() const override {
 			return getWalkDelay() <= 0;
 		}
-		bool isRemoved() const final {
+		bool isRemoved() const override final {
 			return isInternalRemoved;
 		}
 		virtual bool canSeeInvisibility() const {
@@ -414,22 +414,22 @@ class Creature : virtual public Thing
 		bool registerCreatureEvent(const std::string& name);
 		bool unregisterCreatureEvent(const std::string& name);
 
-		Cylinder* getParent() const final {
+		Cylinder* getParent() const override final {
 			return tile;
 		}
-		void setParent(Cylinder* cylinder) final {
+		void setParent(Cylinder* cylinder) override final {
 			tile = static_cast<Tile*>(cylinder);
 			position = tile->getPosition();
 		}
 
-		const Position& getPosition() const final {
+		const Position& getPosition() const override final {
 			return position;
 		}
 
-		Tile* getTile() final {
+		Tile* getTile() override final {
 			return tile;
 		}
-		const Tile* getTile() const final {
+		const Tile* getTile() const override final {
 			return tile;
 		}
 

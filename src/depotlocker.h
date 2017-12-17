@@ -28,17 +28,17 @@ class DepotLocker final : public Container
 	public:
 		explicit DepotLocker(uint16_t type);
 
-		DepotLocker* getDepotLocker() final {
+		DepotLocker* getDepotLocker() override {
 			return this;
 		}
-		const DepotLocker* getDepotLocker() const final {
+		const DepotLocker* getDepotLocker() const override {
 			return this;
 		}
 
 		void removeInbox(Inbox* inbox);
 
 		//serialization
-		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) final;
+		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
 		uint16_t getDepotId() const {
 			return depotId;
@@ -49,12 +49,12 @@ class DepotLocker final : public Container
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const final;
+				uint32_t flags, Creature* actor = nullptr) const override;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) final;
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
-		bool canRemove() const final {
+		bool canRemove() const override {
 			return false;
 		}
 

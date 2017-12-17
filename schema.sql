@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `posy` int(11) NOT NULL DEFAULT '0',
   `posz` int(11) NOT NULL DEFAULT '0',
   `conditions` blob NOT NULL,
-  `cap` int(11) NOT NULL DEFAULT '0',
+  `cap` int(11) NOT NULL DEFAULT '400',
   `sex` int(11) NOT NULL DEFAULT '0',
   `lastlogin` bigint(20) unsigned NOT NULL DEFAULT '0',
   `lastip` int(10) unsigned NOT NULL DEFAULT '0',

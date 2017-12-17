@@ -57,7 +57,7 @@ void startupErrorMessage(const std::string& errorStr)
 
 void mainLoader(int argc, char* argv[], ServiceManager* services);
 
-void badAllocationHandler()
+[[noreturn]] void badAllocationHandler()
 {
 	// Use functions that only use stack allocation
 	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");

@@ -3,16 +3,18 @@ function onCastSpell(creature, variant)
 	position:sendMagicEffect(CONST_ME_POFF)
 
 	local tile = Tile(position)
-	if table.contains(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
-		tile = Tile(position:moveUpstairs())
-		if tile then
-			creature:teleportTo(position, false)
-			position:sendMagicEffect(CONST_ME_TELEPORT)
-		else
-			creature:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
-		end
-	else
+	if not table.contains(ropeSpots, tile:getGround():getId()) and not tile:getItemById(14435) then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return false
 	end
+
+	tile = Tile(position:moveUpstairs())
+	if not tile then
+		creature:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
+		return false
+	end
+
+	creature:teleportTo(position, false)
+	position:sendMagicEffect(CONST_ME_TELEPORT)
 	return true
 end

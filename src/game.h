@@ -503,7 +503,7 @@ class Game
 		Raids raids;
 		Quests quests;
 
-	protected:
+	private:
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
 		bool playerYell(Player* player, const std::string& text);
