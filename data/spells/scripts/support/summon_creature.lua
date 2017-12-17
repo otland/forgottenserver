@@ -1,4 +1,9 @@
 function onCastSpell(creature, variant)
+	if creature:getSkull() == SKULL_BLACK then
+		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return false
+	end
+
 	local monsterName = variant:getString()
 	local monsterType = MonsterType(monsterName)
 

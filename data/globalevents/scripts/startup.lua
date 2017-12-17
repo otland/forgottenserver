@@ -23,7 +23,7 @@ function onStartup()
 	if resultId ~= false then
 		repeat
 			local house = House(result.getDataInt(resultId, "id"))
-			if house ~= nil then
+			if house then
 				local highestBidder = result.getDataInt(resultId, "highest_bidder")
 				local balance = result.getDataLong(resultId, "balance")
 				local lastBid = result.getDataInt(resultId, "last_bid")

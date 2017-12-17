@@ -9,7 +9,7 @@ function onSay(player, words, param)
 	local reason = ''
 
 	local separatorPos = param:find(',')
-	if separatorPos ~= nil then
+	if separatorPos then
 		name = param:sub(0, separatorPos - 1)
 		reason = string.trim(param:sub(separatorPos + 1))
 	end
@@ -30,7 +30,7 @@ function onSay(player, words, param)
 			accountId .. ", " .. db.escapeString(reason) .. ", " .. timeNow .. ", " .. timeNow + (banDays * 86400) .. ", " .. player:getGuid() .. ")")
 
 	local target = Player(name)
-	if target ~= nil then
+	if target then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, target:getName() .. " has been banned.")
 		target:remove()
 	else

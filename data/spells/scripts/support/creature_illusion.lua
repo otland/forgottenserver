@@ -18,6 +18,6 @@ function onCastSpell(creature, variant)
 
 	condition:setOutfit(monsterType:getOutfit())
 	creature:addCondition(condition)
-	creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
+	creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	return true
 end

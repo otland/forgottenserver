@@ -5,10 +5,9 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 
 function onTargetCreature(creature, target)
 	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.3) + 2
-	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.55) + 4
+	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.6) + 4
 	local rounds = math.random(math.floor(min), math.floor(max))
 	creature:addDamageCondition(target, CONDITION_FIRE, 2, target:isPlayer() and 5 or 10, {8, 10}, rounds)
-	return true
 end
 
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")

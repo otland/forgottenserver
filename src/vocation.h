@@ -91,7 +91,7 @@ class Vocation
 		float defenseMultiplier = 1.0f;
 		float armorMultiplier = 1.0f;
 
-	protected:
+	private:
 		friend class Vocations;
 
 		std::map<uint32_t, uint64_t> cacheMana;
