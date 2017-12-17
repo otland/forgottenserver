@@ -42,7 +42,7 @@ class Ban
 	public:
 		bool acceptConnection(uint32_t clientip);
 
-	protected:
+	private:
 		IpConnectMap ipConnectMap;
 		std::recursive_mutex lock;
 };

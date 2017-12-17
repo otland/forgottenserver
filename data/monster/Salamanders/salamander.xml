@@ -37,6 +37,6 @@
 		<item name="brass helmet" chance="2180" />
 		<item name="arrow" countmax="3" chance="7890" />
 		<item name="health potion" chance="840" />
-		<item id="19736" countmax="5" chance="32830" /><!-- Insectoid Eggs -->
+		<item name="insectoid eggs" countmax="5" chance="32830" />
 	</loot>
 </monster>

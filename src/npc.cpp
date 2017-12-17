@@ -99,6 +99,7 @@ void Npc::reset()
 {
 	loaded = false;
 	walkTicks = 1500;
+	pushable = true;
 	floorChange = false;
 	attackable = false;
 	ignoreHeight = true;
@@ -151,6 +152,10 @@ bool Npc::loadFromXml()
 		baseSpeed = pugi::cast<uint32_t>(attr.value());
 	} else {
 		baseSpeed = 100;
+	}
+
+	if ((attr = npcNode.attribute("pushable"))) {
+		pushable = attr.as_bool();
 	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
@@ -387,7 +392,7 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 		return true;
 	}
 
-	if (walkTicks <= 0) {
+	if (walkTicks == 0) {
 		return false;
 	}
 
@@ -1113,6 +1118,7 @@ void NpcEventsHandler::onCreatureAppear(Creature* creature)
 	//onCreatureAppear(creature)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureAppear] Call stack overflow" << std::endl;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();

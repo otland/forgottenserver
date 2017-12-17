@@ -65,7 +65,7 @@ class OutputMessage : public NetworkMessage
 			info.position += msgLen;
 		}
 
-	protected:
+	private:
 		template <typename T>
 		void add_header(T add) {
 			assert(outputBufferStart >= sizeof(T));

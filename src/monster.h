@@ -51,33 +51,33 @@ class Monster final : public Creature
 		Monster(const Monster&) = delete;
 		Monster& operator=(const Monster&) = delete;
 
-		Monster* getMonster() final {
+		Monster* getMonster() override {
 			return this;
 		}
-		const Monster* getMonster() const final {
+		const Monster* getMonster() const override {
 			return this;
 		}
 
-		void setID() final {
+		void setID() override {
 			if (id == 0) {
 				id = monsterAutoID++;
 			}
 		}
 
-		void removeList() final;
-		void addList() final;
+		void removeList() override;
+		void addList() override;
 
-		const std::string& getName() const final {
+		const std::string& getName() const override {
 			return mType->name;
 		}
-		const std::string& getNameDescription() const final {
+		const std::string& getNameDescription() const override {
 			return mType->nameDescription;
 		}
-		std::string getDescription(int32_t) const final {
+		std::string getDescription(int32_t) const override {
 			return strDescription + '.';
 		}
 
-		CreatureType_t getType() const final {
+		CreatureType_t getType() const override {
 			return CREATURETYPE_MONSTER;
 		}
 
@@ -88,19 +88,19 @@ class Monster final : public Creature
 			masterPos = pos;
 		}
 
-		RaceType_t getRace() const final {
+		RaceType_t getRace() const override {
 			return mType->info.race;
 		}
-		int32_t getArmor() const final {
+		int32_t getArmor() const override {
 			return mType->info.armor;
 		}
-		int32_t getDefense() const final {
+		int32_t getDefense() const override {
 			return mType->info.defense;
 		}
-		bool isPushable() const final {
+		bool isPushable() const override {
 			return mType->info.pushable && baseSpeed != 0;
 		}
-		bool isAttackable() const final {
+		bool isAttackable() const override {
 			return mType->info.isAttackable;
 		}
 
@@ -113,8 +113,8 @@ class Monster final : public Creature
 		bool isHostile() const {
 			return mType->info.isHostile;
 		}
-		bool canSee(const Position& pos) const final;
-		bool canSeeInvisibility() const final {
+		bool canSee(const Position& pos) const override;
+		bool canSeeInvisibility() const override {
 			return isImmune(CONDITION_INVISIBLE);
 		}
 		uint32_t getManaCost() const {
@@ -124,29 +124,29 @@ class Monster final : public Creature
 			this->spawn = spawn;
 		}
 
-		void onAttackedCreatureDisappear(bool isLogout) final;
+		void onAttackedCreatureDisappear(bool isLogout) override;
 
-		void onCreatureAppear(Creature* creature, bool isLogin) final;
-		void onRemoveCreature(Creature* creature, bool isLogout) final;
-		void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport) final;
-		void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text) final;
+		void onCreatureAppear(Creature* creature, bool isLogin) override;
+		void onRemoveCreature(Creature* creature, bool isLogout) override;
+		void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos, bool teleport) override;
+		void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text) override;
 
-		void drainHealth(Creature* attacker, int32_t damage) final;
-		void changeHealth(int32_t healthChange, bool sendHealthChange = true) final;
-		void onWalk() final;
-		bool getNextStep(Direction& direction, uint32_t& flags) final;
-		void onFollowCreatureComplete(const Creature* creature) final;
+		void drainHealth(Creature* attacker, int32_t damage) override;
+		void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
+		void onWalk() override;
+		bool getNextStep(Direction& direction, uint32_t& flags) override;
+		void onFollowCreatureComplete(const Creature* creature) override;
 
-		void onThink(uint32_t interval) final;
+		void onThink(uint32_t interval) override;
 
-		bool challengeCreature(Creature* creature) final;
-		bool convinceCreature(Creature* creature) final;
+		bool challengeCreature(Creature* creature) override;
+		bool convinceCreature(Creature* creature) override;
 
-		void setNormalCreatureLight() final;
-		bool getCombatValues(int32_t& min, int32_t& max) final;
+		void setNormalCreatureLight() override;
+		bool getCombatValues(int32_t& min, int32_t& max) override;
 
-		void doAttacking(uint32_t interval) final;
-		bool hasExtraSwing() final {
+		void doAttacking(uint32_t interval) override;
+		bool hasExtraSwing() override {
 			return extraMeleeAttack;
 		}
 
@@ -171,7 +171,7 @@ class Monster final : public Creature
 		}
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                     bool checkDefense = false, bool checkArmor = false, bool field = false);
+		                     bool checkDefense = false, bool checkArmor = false, bool field = false) override;
 
 		static uint32_t monsterAutoID;
 
@@ -217,8 +217,8 @@ class Monster final : public Creature
 		void clearTargetList();
 		void clearFriendList();
 
-		void death(Creature* lastHitCreature) final;
-		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) final;
+		void death(Creature* lastHitCreature) override;
+		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) override;
 
 		void setIdle(bool idle);
 		void updateIdleStatus();
@@ -226,9 +226,9 @@ class Monster final : public Creature
 			return isIdle;
 		}
 
-		void onAddCondition(ConditionType_t type) final;
-		void onEndCondition(ConditionType_t type) final;
-		void onCreatureConvinced(const Creature* convincer, const Creature* creature) final;
+		void onAddCondition(ConditionType_t type) override;
+		void onEndCondition(ConditionType_t type) override;
+		void onCreatureConvinced(const Creature* convincer, const Creature* creature) override;
 
 		bool canUseAttack(const Position& pos, const Creature* target) const;
 		bool canUseSpell(const Position& pos, const Position& targetPos,
@@ -251,21 +251,21 @@ class Monster final : public Creature
 		bool isFriend(const Creature* creature) const;
 		bool isOpponent(const Creature* creature) const;
 
-		uint64_t getLostExperience() const final {
+		uint64_t getLostExperience() const override {
 			return skillLoss ? mType->info.experience : 0;
 		}
-		uint16_t getLookCorpse() const final {
+		uint16_t getLookCorpse() const override {
 			return mType->info.lookcorpse;
 		}
-		void dropLoot(Container* corpse, Creature* lastHitCreature) final;
-		uint32_t getDamageImmunities() const final {
+		void dropLoot(Container* corpse, Creature* lastHitCreature) override;
+		uint32_t getDamageImmunities() const override {
 			return mType->info.damageImmunities;
 		}
-		uint32_t getConditionImmunities() const final {
+		uint32_t getConditionImmunities() const override {
 			return mType->info.conditionImmunities;
 		}
-		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const final;
-		bool useCacheMap() const final {
+		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
+		bool useCacheMap() const override {
 			return true;
 		}
 
