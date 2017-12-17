@@ -27,7 +27,7 @@ function onSay(player, words, param)
 	end
 
 	local count = tonumber(split[2])
-	if count ~= nil then
+	if count then
 		if itemType:isStackable() then
 			count = math.min(10000, math.max(1, count))
 		elseif not itemType:isFluidContainer() then
@@ -44,7 +44,7 @@ function onSay(player, words, param)
 	end
 
 	local result = player:addItem(itemType:getId(), count)
-	if result ~= nil then
+	if result then
 		if not itemType:isStackable() then
 			if type(result) == "table" then
 				for _, item in ipairs(result) do
