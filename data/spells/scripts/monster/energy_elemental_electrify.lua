@@ -6,7 +6,7 @@ local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_BLOCKHIT)
 combat:setArea(createCombatArea(AREA_CIRCLE3X3))
-combat:setCondition(condition)
+combat:addCondition(condition)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)

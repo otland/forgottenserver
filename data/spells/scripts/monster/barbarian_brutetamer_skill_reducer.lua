@@ -10,7 +10,7 @@ for i = CONDITION_PARAM_SKILL_FIST, CONDITION_PARAM_SKILL_SHIELD do
 		local condition = Condition(CONDITION_ATTRIBUTES)
 		condition:setParameter(CONDITION_PARAM_TICKS, 5000)
 		condition:setParameter(i, -j)
-		combat[index]:setCondition(condition)
+		combat[index]:addCondition(condition)
 	end
 end
 

@@ -398,7 +398,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Container::queryDestination(int32_t& index, const Thing &thing, Item** destItem,
+Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 		uint32_t& flags)
 {
 	if (!unlocked) {
