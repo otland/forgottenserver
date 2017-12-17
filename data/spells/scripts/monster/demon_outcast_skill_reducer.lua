@@ -5,7 +5,7 @@ condition:setParameter(CONDITION_PARAM_SKILL_DISTANCEPERCENT, 25)
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FLASHARROW)
 combat:setArea(createCombatArea(AREA_BEAM1))
-combat:setCondition(condition)
+combat:addCondition(condition)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Son of Verminor" nameDescription="Son of Verminor" race="venom" experience="5900" speed="240" manacost="0">
+<monster name="Son of Verminor" nameDescription="Son of Verminor" race="venom" experience="5900" speed="240">
 	<health now="8500" max="8500" />
 	<look type="19" corpse="1490" />
 	<targetchange interval="4000" chance="10" />

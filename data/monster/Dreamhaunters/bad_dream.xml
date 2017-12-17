@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bad Dream" nameDescription="a bad dream" race="blood" experience="0" speed="0" manacost="0">
+<monster name="Bad Dream" nameDescription="a bad dream" race="blood" experience="0" speed="0">
 	<health now="7200" max="7200" />
 	<look typeex="22444" corpse="22497" />
 	<targetchange interval="4000" chance="10" />

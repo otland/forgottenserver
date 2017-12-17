@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spirit of Fire" nameDescription="a spirit of fire" race="blood" experience="950" speed="220" manacost="0">
+<monster name="Spirit of Fire" nameDescription="a spirit of fire" race="blood" experience="950" speed="220">
 	<health now="2210" max="2210" />
 	<look type="242" corpse="7349" />
 	<flags>

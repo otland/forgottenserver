@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Killer Caiman" nameDescription="a killer caiman" race="blood" experience="900" speed="230" manacost="0">
+<monster name="Killer Caiman" nameDescription="a killer caiman" race="blood" experience="900" speed="230">
 	<health now="1500" max="1500" />
 	<look type="358" corpse="11430" />
 	<targetchange interval="4000" chance="10" />

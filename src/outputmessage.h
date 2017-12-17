@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,23 +51,23 @@ class OutputMessage : public NetworkMessage
 			writeMessageLength();
 		}
 
-		inline void append(const NetworkMessage& msg) {
+		void append(const NetworkMessage& msg) {
 			auto msgLen = msg.getLength();
 			memcpy(buffer + info.position, msg.getBuffer() + 8, msgLen);
 			info.length += msgLen;
 			info.position += msgLen;
 		}
 
-		inline void append(const OutputMessage_ptr& msg) {
+		void append(const OutputMessage_ptr& msg) {
 			auto msgLen = msg->getLength();
 			memcpy(buffer + info.position, msg->getBuffer() + 8, msgLen);
 			info.length += msgLen;
 			info.position += msgLen;
 		}
 
-	protected:
+	private:
 		template <typename T>
-		inline void add_header(T add) {
+		void add_header(T add) {
 			assert(outputBufferStart >= sizeof(T));
 			outputBufferStart -= sizeof(T);
 			memcpy(buffer + outputBufferStart, &add, sizeof(T));

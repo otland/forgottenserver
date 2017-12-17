@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Axeitus Headbanger" nameDescription="Axeitus Headbanger" race="blood" experience="140" speed="170" manacost="0">
+<monster name="Axeitus Headbanger" nameDescription="Axeitus Headbanger" race="blood" experience="140" speed="170">
 	<health now="365" max="365" />
 	<look type="71" corpse="7349" />
 	<flags>

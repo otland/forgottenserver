@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300" manacost="0">
+<monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300">
 	<health now="305" max="305" />
 	<look type="60" corpse="6000" />
 	<targetchange interval="2000" chance="0" />

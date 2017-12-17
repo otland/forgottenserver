@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Butterfly" nameDescription="a butterfly" race="venom" experience="0" speed="230" manacost="0">
+<monster name="Butterfly" nameDescription="a butterfly" race="venom" experience="0" speed="230">
 	<health now="2" max="2" />
 	<look type="213" corpse="4313" />
 	<targetchange interval="5000" chance="20" />

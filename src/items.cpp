@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		return ERROR_INVALID_FORMAT;
 	}
 
-	for(auto & itemNode : root.children) {
+	for (auto& itemNode : root.children) {
 		PropStream stream;
 		if (!loader.getProps(itemNode, stream)) {
 			return ERROR_INVALID_FORMAT;

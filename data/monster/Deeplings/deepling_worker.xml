@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deepling Worker" nameDescription="a deepling worker" race="blood" experience="130" speed="210" manacost="0">
+<monster name="Deepling Worker" nameDescription="a deepling worker" race="blood" experience="130" speed="210">
 	<health now="190" max="190" />
 	<look type="470" corpse="15497" />
 	<targetchange interval="4000" chance="10" />

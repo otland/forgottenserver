@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Blue Djinn" nameDescription="a blue djinn" race="blood" experience="215" speed="180" manacost="0">
+<monster name="Blue Djinn" nameDescription="a blue djinn" race="blood" experience="215" speed="180">
 	<health now="330" max="330" />
 	<look type="80" corpse="6020" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Crystal Wolf" nameDescription="a crystal wolf" race="undead" experience="275" speed="200" manacost="0">
+<monster name="Crystal Wolf" nameDescription="a crystal wolf" race="undead" experience="275" speed="200">
 	<health now="750" max="750" />
 	<look type="391" corpse="13584" />
 	<targetchange interval="4000" chance="10" />

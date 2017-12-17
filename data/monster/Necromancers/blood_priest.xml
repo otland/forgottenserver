@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Blood Priest" nameDescription="a blood priest" race="blood" experience="900" speed="210" manacost="0">
+<monster name="Blood Priest" nameDescription="a blood priest" race="blood" experience="900" speed="210">
 	<health now="820" max="820" />
 	<look type="553" corpse="21262" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lizard Sentinel" nameDescription="a lizard sentinel" race="blood" experience="110" speed="180" manacost="0">
+<monster name="Lizard Sentinel" nameDescription="a lizard sentinel" race="blood" experience="110" speed="180" manacost="560">
 	<health now="265" max="265" />
 	<look type="114" corpse="6040" />
 	<targetchange interval="4000" chance="10" />

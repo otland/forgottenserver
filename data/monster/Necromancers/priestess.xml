@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Priestess" nameDescription="a priestess" race="blood" experience="420" speed="200" manacost="0">
+<monster name="Priestess" nameDescription="a priestess" race="blood" experience="420" speed="200">
 	<health now="390" max="390" />
 	<look type="58" corpse="20491" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="155" speed="200" manacost="0">
+<monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="155" speed="200">
 	<health now="410" max="410" />
 	<look type="113" corpse="4251" />
 	<targetchange interval="5000" chance="0" />

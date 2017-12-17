@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deepling Spellsinger" nameDescription="a deepling spellsinger" race="blood" experience="1000" speed="190" manacost="0">
+<monster name="Deepling Spellsinger" nameDescription="a deepling spellsinger" race="blood" experience="1000" speed="190">
 	<health now="850" max="850" />
 	<look type="443" corpse="15208" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Armadile" nameDescription="an armadile" race="undead" experience="2900" speed="210" manacost="0">
+<monster name="Armadile" nameDescription="an armadile" race="undead" experience="2900" speed="210">
 	<health now="3800" max="3800" />
 	<look type="487" corpse="18378" />
 	<targetchange interval="4000" chance="10" />

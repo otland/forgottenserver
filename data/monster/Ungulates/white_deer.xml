@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="White Deer" nameDescription="a white deer" race="blood" experience="0" speed="190" manacost="0">
+<monster name="White Deer" nameDescription="a white deer" race="blood" experience="0" speed="190">
 	<health now="195" max="195" />
 	<look type="400" corpse="13513" />
 	<targetchange interval="4000" chance="0" />

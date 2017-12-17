@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Undead Dragon" nameDescription="an undead dragon" race="undead" experience="7200" speed="250" manacost="0">
+<monster name="Undead Dragon" nameDescription="an undead dragon" race="undead" experience="7200" speed="250">
 	<health now="8350" max="8350" />
 	<look type="231" corpse="6306" />
 	<targetchange interval="4000" chance="10" />

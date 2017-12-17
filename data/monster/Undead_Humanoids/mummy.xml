@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Mummy" nameDescription="a mummy" race="undead" experience="150" speed="150" manacost="0">
+<monster name="Mummy" nameDescription="a mummy" race="undead" experience="150" speed="150">
 	<health now="240" max="240" />
 	<look type="65" corpse="6004" />
 	<targetchange interval="4000" chance="10" />

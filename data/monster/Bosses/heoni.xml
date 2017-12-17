@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Heoni" nameDescription="Heoni" race="blood" experience="515" speed="300" manacost="0">
+<monster name="Heoni" nameDescription="Heoni" race="blood" experience="515" speed="300">
 	<health now="900" max="900" />
 	<look type="239" corpse="6302" />
 	<targetchange interval="2000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lancer Beetle" nameDescription="a lancer beetle" race="venom" experience="275" speed="200" manacost="0">
+<monster name="Lancer Beetle" nameDescription="a lancer beetle" race="venom" experience="275" speed="200">
 	<health now="400" max="400" />
 	<look type="348" corpse="11375" />
 	<targetchange interval="4000" chance="10" />

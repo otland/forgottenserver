@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ghazbaran" nameDescription="Ghazbaran" race="undead" experience="15000" speed="400" manacost="0">
+<monster name="Ghazbaran" nameDescription="Ghazbaran" race="undead" experience="15000" speed="400">
 	<health now="60000" max="60000" />
 	<look type="12" head="0" body="123" legs="97" feet="94" corpse="6068" />
 	<targetchange interval="10000" chance="20" />

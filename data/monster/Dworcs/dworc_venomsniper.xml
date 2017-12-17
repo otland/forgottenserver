@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="180" manacost="0">
+<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="180">
 	<health now="80" max="80" />
 	<look type="216" corpse="6059" />
 	<targetchange interval="4000" chance="0" />

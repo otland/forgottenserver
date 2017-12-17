@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Zombie" nameDescription="a zombie" race="undead" experience="280" speed="180" manacost="0">
+<monster name="Zombie" nameDescription="a zombie" race="undead" experience="280" speed="180">
 	<health now="500" max="500" />
 	<look type="311" corpse="9875" />
 	<targetchange interval="4000" chance="10" />

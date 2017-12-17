@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dipthrah" nameDescription="Dipthrah" race="undead" experience="2900" speed="320" manacost="0">
+<monster name="Dipthrah" nameDescription="Dipthrah" race="undead" experience="2900" speed="320">
 	<health now="4200" max="4200" />
 	<look type="87" corpse="6031" />
 	<targetchange interval="5000" chance="8" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Corym Skirmisher" nameDescription="a corym skirmisher" race="blood" experience="260" speed="200" manacost="0">
+<monster name="Corym Skirmisher" nameDescription="a corym skirmisher" race="blood" experience="260" speed="200">
 	<health now="450" max="450" />
 	<look type="533" legs="101" corpse="19726" />
 	<targetchange interval="4000" chance="10" />

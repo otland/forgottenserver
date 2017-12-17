@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2015  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017 Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,9 +126,6 @@ void Signals::sighupHandler()
 
 	g_config.reload();
 	std::cout << "Reloaded config." << std::endl;
-
-	g_game.reloadCommands();
-	std::cout << "Reloaded commands." << std::endl;
 
 	g_creatureEvents->reload();
 	std::cout << "Reloaded creature scripts." << std::endl;

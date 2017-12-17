@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lost Thrower" nameDescription="a lost thrower" race="blood" experience="1200" speed="220" manacost="0">
+<monster name="Lost Thrower" nameDescription="a lost thrower" race="blood" experience="1200" speed="220">
 	<health now="1700" max="1700" />
 	<look type="539" corpse="19998" />
 	<targetchange interval="4000" chance="10" />

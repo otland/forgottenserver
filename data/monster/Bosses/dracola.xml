@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dracola" nameDescription="Dracola" race="undead" experience="11000" speed="410" manacost="0">
+<monster name="Dracola" nameDescription="Dracola" race="undead" experience="11000" speed="410">
 	<health now="16200" max="16200" />
 	<look type="231" corpse="6307" />
 	<targetchange interval="2000" chance="5" />

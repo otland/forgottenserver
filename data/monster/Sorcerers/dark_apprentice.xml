@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dark Apprentice" nameDescription="a dark apprentice" race="blood" experience="100" speed="190" manacost="0">
+<monster name="Dark Apprentice" nameDescription="a dark apprentice" race="blood" experience="100" speed="190">
 	<health now="225" max="225" />
 	<look type="133" head="78" body="57" legs="95" feet="115" addons="1" corpse="20363" />
 	<targetchange interval="4000" chance="10" />

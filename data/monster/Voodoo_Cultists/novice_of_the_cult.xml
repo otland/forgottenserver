@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Novice of the Cult" nameDescription="a novice of the cult" race="blood" experience="100" speed="200" manacost="0">
+<monster name="Novice of the Cult" nameDescription="a novice of the cult" race="blood" experience="100" speed="200">
 	<health now="285" max="285" />
 	<look type="133" head="114" body="95" legs="114" feet="114" corpse="20467" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Cockroach" nameDescription="a cockroach" race="venom" experience="0" speed="180" manacost="0">
+<monster name="Cockroach" nameDescription="a cockroach" race="venom" experience="0" speed="180">
 	<health now="1" max="1" />
 	<look type="284" corpse="8593" />
 	<targetchange interval="60000" chance="0" />

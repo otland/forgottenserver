@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Stonecracker" nameDescription="Stonecracker" race="blood" experience="3500" speed="280" manacost="0">
+<monster name="Stonecracker" nameDescription="Stonecracker" race="blood" experience="3500" speed="280">
 	<health now="6500" max="6500" />
 	<look type="55" corpse="5999" />
 	<targetchange interval="5000" chance="8" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Quara Predator" nameDescription="a quara predator" race="blood" experience="1600" speed="280" manacost="0">
+<monster name="Quara Predator" nameDescription="a quara predator" race="blood" experience="1600" speed="280">
 	<health now="2200" max="2200" />
 	<look type="20" corpse="6067" />
 	<targetchange interval="4000" chance="10" />

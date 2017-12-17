@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="190" manacost="0">
+<monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="190">
 	<health now="325" max="325" />
 	<look type="133" head="97" body="0" legs="38" feet="97" addons="1" corpse="20439" />
 	<targetchange interval="4000" chance="10" />

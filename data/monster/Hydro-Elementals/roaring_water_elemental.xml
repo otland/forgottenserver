@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Roaring Water Elemental" nameDescription="a roaring water elemental" race="undead" experience="1300" speed="390" manacost="0">
+<monster name="Roaring Water Elemental" nameDescription="a roaring water elemental" race="undead" experience="1300" speed="390">
 	<health now="1750" max="1750" />
 	<look type="11" corpse="8965" />
 	<targetchange interval="20000" chance="15" />

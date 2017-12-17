@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Calamary" nameDescription="a calamary" race="undead" experience="0" speed="160" manacost="0">
+<monster name="Calamary" nameDescription="a calamary" race="undead" experience="0" speed="160">
 	<health now="75" max="75" />
 	<look type="451" corpse="15280" />
 	<targetchange interval="4000" chance="8" />

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -167,10 +167,6 @@ class RaidEvent
 			return delay;
 		}
 
-		static bool compareEvents(const RaidEvent* lhs, const RaidEvent* rhs) {
-			return lhs->getDelay() < rhs->getDelay();
-		}
-
 	private:
 		uint32_t delay;
 };
@@ -180,9 +176,9 @@ class AnnounceEvent final : public RaidEvent
 	public:
 		AnnounceEvent() = default;
 
-		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
+		bool configureRaidEvent(const pugi::xml_node& eventNode) override;
 
-		bool executeEvent() final;
+		bool executeEvent() override;
 
 	private:
 		std::string message;
@@ -192,9 +188,9 @@ class AnnounceEvent final : public RaidEvent
 class SingleSpawnEvent final : public RaidEvent
 {
 	public:
-		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
+		bool configureRaidEvent(const pugi::xml_node& eventNode) override;
 
-		bool executeEvent() final;
+		bool executeEvent() override;
 
 	private:
 		std::string monsterName;
@@ -204,9 +200,9 @@ class SingleSpawnEvent final : public RaidEvent
 class AreaSpawnEvent final : public RaidEvent
 {
 	public:
-		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
+		bool configureRaidEvent(const pugi::xml_node& eventNode) override;
 
-		bool executeEvent() final;
+		bool executeEvent() override;
 
 	private:
 		std::list<MonsterSpawn> spawnList;
@@ -218,15 +214,15 @@ class ScriptEvent final : public RaidEvent, public Event
 	public:
 		explicit ScriptEvent(LuaScriptInterface* interface) : Event(interface) {}
 
-		bool configureRaidEvent(const pugi::xml_node& eventNode) final;
-		bool configureEvent(const pugi::xml_node&) final {
+		bool configureRaidEvent(const pugi::xml_node& eventNode) override;
+		bool configureEvent(const pugi::xml_node&) override {
 			return false;
 		}
 
-		bool executeEvent() final;
+		bool executeEvent() override;
 
-	protected:
-		std::string getScriptEventName() const final;
+	private:
+		std::string getScriptEventName() const override;
 };
 
 #endif

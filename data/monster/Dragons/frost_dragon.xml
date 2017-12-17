@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Frost Dragon" nameDescription="a frost dragon" race="undead" experience="2100" speed="240" manacost="0">
+<monster name="Frost Dragon" nameDescription="a frost dragon" race="undead" experience="2100" speed="240">
 	<health now="1800" max="1800" />
 	<look type="248" corpse="7091" />
 	<targetchange interval="4000" chance="10" />

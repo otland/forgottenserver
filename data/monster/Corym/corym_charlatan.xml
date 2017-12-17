@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Corym Charlatan" nameDescription="a corym charlatan" race="blood" experience="150" speed="180" manacost="0">
+<monster name="Corym Charlatan" nameDescription="a corym charlatan" race="blood" experience="150" speed="180">
 	<health now="250" max="250" />
 	<look type="532" body="97" legs="116" corpse="19725" />
 	<targetchange interval="5000" chance="0" />

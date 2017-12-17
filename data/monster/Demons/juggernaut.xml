@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Juggernaut" nameDescription="a juggernaut" race="blood" experience="14000" speed="290" manacost="0">
+<monster name="Juggernaut" nameDescription="a juggernaut" race="blood" experience="14000" speed="290">
 	<health now="20000" max="20000" />
 	<look type="244" corpse="6336" />
 	<targetchange interval="4000" chance="10" />

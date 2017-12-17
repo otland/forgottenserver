@@ -8,7 +8,7 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_FIREDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_FIREAREA)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 combat:setFormula(COMBAT_FORMULA_LEVELMAGIC, -1.3, -30, -1.7, 0)
-combat:setCondition(condition)
+combat:addCondition(condition)
 
 function onCastSpell(creature, variant, isHotkey)
 	return combat:execute(creature, variant)

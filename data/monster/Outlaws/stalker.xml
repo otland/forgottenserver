@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="200" manacost="0">
+<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="200">
 	<health now="120" max="120" />
 	<look type="128" head="78" body="116" legs="95" feet="114" corpse="20511" />
 	<targetchange interval="4000" chance="10" />

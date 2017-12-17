@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Swarmer Hatchling" nameDescription="a swarmer hatchling" race="blood" experience="0" speed="560" manacost="0">
+<monster name="Swarmer Hatchling" nameDescription="a swarmer hatchling" race="blood" experience="0" speed="560">
 	<health now="5" max="5" />
 	<look type="460" corpse="15388" />
 	<targetchange interval="2000" chance="50" />

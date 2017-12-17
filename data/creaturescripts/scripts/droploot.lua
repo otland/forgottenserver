@@ -4,7 +4,7 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 	end
 
 	local amulet = player:getSlotItem(CONST_SLOT_NECKLACE)
-	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not isInArray({SKULL_RED, SKULL_BLACK}, player:getSkull()) then
+	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull()) then
 		local isPlayer = false
 		if killer then
 			if killer:isPlayer() then
@@ -24,7 +24,7 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 		for i = CONST_SLOT_HEAD, CONST_SLOT_AMMO do
 			local item = player:getSlotItem(i)
 			if item then
-				if isInArray({SKULL_RED, SKULL_BLACK}, player:getSkull()) or math.random(item:isContainer() and 100 or 1000) <= player:getLossPercent() then
+				if table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull()) or math.random(item:isContainer() and 100 or 1000) <= player:getLossPercent() then
 					if not item:moveTo(corpse) then
 						item:remove()
 					end

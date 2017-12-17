@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="180" manacost="0">
+<monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="180">
 	<health now="550" max="550" />
 	<look type="103" corpse="6032" />
 	<targetchange interval="4000" chance="10" />

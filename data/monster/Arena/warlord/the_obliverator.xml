@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Obliverator" nameDescription="The Obliverator" race="fire" experience="6000" speed="280" manacost="0">
+<monster name="The Obliverator" nameDescription="The Obliverator" race="fire" experience="6000" speed="280">
 	<health now="9020" max="9020" />
 	<look type="35" corpse="7349" />
 	<flags>

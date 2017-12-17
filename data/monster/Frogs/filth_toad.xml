@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Filth Toad" nameDescription="a filth toad" race="blood" experience="90" speed="210" manacost="0">
+<monster name="Filth Toad" nameDescription="a filth toad" race="blood" experience="90" speed="210">
 	<health now="185" max="185" />
 	<look type="222" corpse="6077" />
 	<targetchange interval="4000" chance="10" />

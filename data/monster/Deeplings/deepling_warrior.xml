@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deepling Warrior" nameDescription="a deepling warrior" race="blood" experience="1500" speed="210" manacost="0">
+<monster name="Deepling Warrior" nameDescription="a deepling warrior" race="blood" experience="1500" speed="210">
 	<health now="1600" max="1600" />
 	<look type="441" corpse="15175" />
 	<targetchange interval="4000" chance="10" />
