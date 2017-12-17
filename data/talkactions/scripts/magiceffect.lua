@@ -4,6 +4,5 @@ function onSay(player, words, param)
 	end
 
 	player:getPosition():sendMagicEffect(tonumber(param))
-
 	return false
 end
