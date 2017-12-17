@@ -31,23 +31,6 @@
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
 
-enum slots_t : uint8_t {
-	CONST_SLOT_WHEREEVER = 0,
-	CONST_SLOT_HEAD = 1,
-	CONST_SLOT_NECKLACE = 2,
-	CONST_SLOT_BACKPACK = 3,
-	CONST_SLOT_ARMOR = 4,
-	CONST_SLOT_RIGHT = 5,
-	CONST_SLOT_LEFT = 6,
-	CONST_SLOT_LEGS = 7,
-	CONST_SLOT_FEET = 8,
-	CONST_SLOT_RING = 9,
-	CONST_SLOT_AMMO = 10,
-
-	CONST_SLOT_FIRST = CONST_SLOT_HEAD,
-	CONST_SLOT_LAST = CONST_SLOT_AMMO,
-};
-
 struct FindPathParams {
 	bool fullPathSearch = true;
 	bool clearSight = true;
