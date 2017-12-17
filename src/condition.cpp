@@ -723,8 +723,32 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 
 	if (internalManaTicks >= manaTicks) {
 		internalManaTicks = 0;
+
 		if (Player* player = creature->getPlayer()) {
+			int32_t realManaGain = player->getMana();
 			player->changeMana(manaGain);
+			realManaGain = player->getMana() - realManaGain;
+
+			if (isBuff && realManaGain > 0) {
+				std::string manaGainString = std::to_string(realManaGain);
+
+				TextMessage message(MESSAGE_HEALED, "You gained " + manaGainString + " mana.");
+				message.position = player->getPosition();
+				message.primary.value = realManaGain;
+				message.primary.color = TEXTCOLOR_MAYABLUE;
+				player->sendTextMessage(message);
+
+				SpectatorHashSet spectators;
+				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
+				spectators.erase(player);
+				if (!spectators.empty()) {
+					message.type = MESSAGE_HEALED_OTHERS;
+					message.text = player->getName() + " gained " + manaGainString + " mana.";
+					for (Creature* spectator : spectators) {
+						spectator->getPlayer()->sendTextMessage(message);
+					}
+				}
+			}
 		}
 	}
 
