@@ -236,7 +236,7 @@ class Player final : public Creature, public Cylinder
 		}
 
 		bool isInWar(const Player* player) const;
-		bool isInWarList(uint32_t guild_id) const;
+		bool isInWarList(uint32_t guildId) const;
 
 		void setLastWalkthroughAttempt(int64_t walkthroughAttempt) {
 			lastWalkthroughAttempt = walkthroughAttempt;
@@ -548,7 +548,7 @@ class Player final : public Creature, public Cylinder
 		}
 
 		//V.I.P. functions
-		void notifyStatusChange(Player* player, VipStatus_t status);
+		void notifyStatusChange(Player* loginPlayer, VipStatus_t status);
 		bool removeVIP(uint32_t vipGuid);
 		bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
 		bool addVIPInternal(uint32_t vipGuid);
@@ -1136,7 +1136,7 @@ class Player final : public Creature, public Cylinder
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 
-		void gainExperience(uint64_t exp, Creature* source);
+		void gainExperience(uint64_t gainExp, Creature* source);
 		void addExperience(Creature* source, uint64_t exp, bool sendText = false);
 		void removeExperience(uint64_t exp, bool sendText = false);
 

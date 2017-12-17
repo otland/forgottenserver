@@ -204,7 +204,7 @@ class Game
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param force If true, placing the creature will not fail because of obstacles (creatures/items)
 		  */
-		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool force = false);
+		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false);
 
 		/**
 		  * Remove Creature from the map.
@@ -319,7 +319,7 @@ class Game
 		void playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
 		void playerReportRuleViolation(uint32_t playerId, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation);
 
-		bool internalStartTrade(Player* player, Player* partner, Item* tradeItem);
+		bool internalStartTrade(Player* player, Player* tradePartner, Item* tradeItem);
 		void internalCloseTrade(Player* player);
 		bool playerBroadcastMessage(Player* player, const std::string& text) const;
 		void broadcastMessage(const std::string& text, MessageClasses type) const;
@@ -328,7 +328,7 @@ class Game
 		void playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
 		                     const Position& toPos, uint8_t count);
 		void playerMoveCreatureByID(uint32_t playerId, uint32_t movingCreatureId, const Position& movingCreatureOrigPos, const Position& toPos);
-		void playerMoveCreature(Player* playerId, Creature* movingCreature, const Position& movingCreatureOrigPos, Tile* toTile);
+		void playerMoveCreature(Player* player, Creature* movingCreature, const Position& movingCreatureOrigPos, Tile* toTile);
 		void playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count);
 		void playerMoveItem(Player* player, const Position& fromPos,
 		                    uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count, Item* item, Cylinder* toCylinder);
@@ -412,13 +412,13 @@ class Game
 
 		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
 		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY) const;
-		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor) const;
+		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
 
 		void changeSpeed(Creature* creature, int32_t varSpeedDelta);
-		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& oufit);
+		void internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit);
 		void internalCreatureChangeVisible(Creature* creature, bool visible);
 		void changeLight(const Creature* creature);
-		void updateCreatureSkull(const Creature* player);
+		void updateCreatureSkull(const Creature* creature);
 		void updatePlayerShield(Player* player);
 		void updatePlayerHelpers(const Player& player);
 		void updateCreatureType(Creature* creature);
@@ -475,8 +475,8 @@ class Game
 		void addNpc(Npc* npc);
 		void removeNpc(Npc* npc);
 
-		void addMonster(Monster* npc);
-		void removeMonster(Monster* npc);
+		void addMonster(Monster* monster);
+		void removeMonster(Monster* monster);
 
 		Guild* getGuild(uint32_t id) const;
 		void addGuild(Guild* guild);

@@ -183,7 +183,7 @@ class ConditionRegeneration final : public ConditionGeneric
 		ConditionRegeneration(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0):
 			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		void addCondition(Creature* creature, const Condition* addCondition) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 		bool executeCondition(Creature* creature, int32_t interval) override;
 
 		bool setParam(ConditionParam_t param, int32_t value) override;
@@ -212,7 +212,7 @@ class ConditionSoul final : public ConditionGeneric
 		ConditionSoul(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
 			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		void addCondition(Creature* creature, const Condition* addCondition) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 		bool executeCondition(Creature* creature, int32_t interval) override;
 
 		bool setParam(ConditionParam_t param, int32_t value) override;
@@ -369,7 +369,7 @@ class ConditionLight final : public Condition
 		bool startCondition(Creature* creature) override;
 		bool executeCondition(Creature* creature, int32_t interval) override;
 		void endCondition(Creature* creature) override;
-		void addCondition(Creature* creature, const Condition* addCondition) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 
 		ConditionLight* clone() const override {
 			return new ConditionLight(*this);
