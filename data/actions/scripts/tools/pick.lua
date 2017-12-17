@@ -16,7 +16,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		target:remove(1)
 		return true
 	end
-	
+
 	local tile = Tile(toPosition)
 	if not tile then
 		return false
