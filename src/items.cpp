@@ -111,7 +111,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		return ERROR_INVALID_FORMAT;
 	}
 
-	for(auto & itemNode : root.children) {
+	for (auto& itemNode : root.children) {
 		PropStream stream;
 		if (!loader.getProps(itemNode, stream)) {
 			return ERROR_INVALID_FORMAT;

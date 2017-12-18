@@ -51,14 +51,14 @@ class TalkAction : public Event
 		bool executeSay(Player* player, const std::string& param, SpeakClasses type) const;
 		//
 
-	protected:
+	private:
 		std::string getScriptEventName() const override;
 
 		std::string words;
 		char separator = '"';
 };
 
-class TalkActions : public BaseEvents
+class TalkActions final : public BaseEvents
 {
 	public:
 		TalkActions();
@@ -70,12 +70,12 @@ class TalkActions : public BaseEvents
 
 		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
 
-	protected:
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event_ptr getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
-		void clear() final;
+	private:
+		LuaScriptInterface& getScriptInterface() override;
+		std::string getScriptBaseName() const override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+		void clear() override;
 
 		std::forward_list<TalkAction> talkActions;
 

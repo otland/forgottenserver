@@ -63,7 +63,7 @@ class BaseEvents
 			return loaded;
 		}
 
-	protected:
+	private:
 		virtual LuaScriptInterface& getScriptInterface() = 0;
 		virtual std::string getScriptBaseName() const = 0;
 		virtual Event_ptr getEvent(const std::string& nodeName) = 0;
@@ -84,6 +84,7 @@ class CallBack
 		int32_t scriptId = 0;
 		LuaScriptInterface* scriptInterface = nullptr;
 
+	private:
 		bool loaded = false;
 };
 

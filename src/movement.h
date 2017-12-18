@@ -64,16 +64,16 @@ class MoveEvents final : public BaseEvents
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
 
-	protected:
+	private:
 		using MoveListMap = std::map<int32_t, MoveEventList>;
 		void clearMap(MoveListMap& map);
 
 		using MovePosListMap = std::map<Position, MoveEventList>;
-		void clear() final;
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event_ptr getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event_ptr event, const pugi::xml_node& node) final;
+		void clear() override;
+		LuaScriptInterface& getScriptInterface() override;
+		std::string getScriptBaseName() const override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
 		void addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map);
 
@@ -102,8 +102,8 @@ class MoveEvent final : public Event
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);
 
-		bool configureEvent(const pugi::xml_node& node) final;
-		bool loadFunction(const pugi::xml_attribute& attr) final;
+		bool configureEvent(const pugi::xml_node& node) override;
+		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
@@ -139,8 +139,8 @@ class MoveEvent final : public Event
 			return vocEquipMap;
 		}
 
-	protected:
-		std::string getScriptEventName() const final;
+	private:
+		std::string getScriptEventName() const override;
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
 		StepFunction stepFunction;

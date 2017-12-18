@@ -48,7 +48,7 @@ class CreatureEvent final : public Event
 	public:
 		explicit CreatureEvent(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) final;
+		bool configureEvent(const pugi::xml_node& node) override;
 
 		CreatureEventType_t getEventType() const {
 			return type;
@@ -78,8 +78,8 @@ class CreatureEvent final : public Event
 		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 
-	protected:
-		std::string getScriptEventName() const final;
+	private:
+		std::string getScriptEventName() const override;
 
 		std::string eventName;
 		CreatureEventType_t type;

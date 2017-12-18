@@ -16,7 +16,7 @@ function onSay(player, words, param)
 	local itemType = ItemType(split[1])
 	if itemType:getId() == 0 then
 		itemType = ItemType(tonumber(split[1]))
-		if itemType:getId() == 0 then
+		if tonumber(split[1]) == nil or itemType:getId() == 0 then
 			player:sendCancelMessage("There is no item with that id or name.")
 			return false
 		end
@@ -27,7 +27,7 @@ function onSay(player, words, param)
 	end
 
 	local count = tonumber(split[2])
-	if count ~= nil then
+	if count then
 		if itemType:isStackable() then
 			count = math.min(10000, math.max(1, count))
 		elseif not itemType:isFluidContainer() then
@@ -44,7 +44,7 @@ function onSay(player, words, param)
 	end
 
 	local result = player:addItem(itemType:getId(), count)
-	if result ~= nil then
+	if result then
 		if not itemType:isStackable() then
 			if type(result) == "table" then
 				for _, item in ipairs(result) do
