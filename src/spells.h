@@ -60,7 +60,7 @@ class Spells final : public BaseEvents
 			return instants;
 		};
 
-	protected:
+	private:
 		void clear() override;
 		LuaScriptInterface& getScriptInterface() override;
 		Event_ptr getEvent(const std::string& nodeName) override;
