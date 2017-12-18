@@ -37,6 +37,7 @@ class AccessList
 		void parseList(const std::string& list);
 		void addPlayer(const std::string& name);
 		void addGuild(const std::string& name);
+		void addGuildRank(const std::string& name, const std::string& guildName);
 		void addExpression(const std::string& expression);
 
 		bool isInList(const Player* player);
@@ -46,7 +47,7 @@ class AccessList
 	private:
 		std::string list;
 		std::unordered_set<uint32_t> playerList;
-		std::unordered_set<uint32_t> guildList; // TODO: include ranks
+		std::unordered_set<uint32_t> guildRankList;
 		std::list<std::string> expressionList;
 		std::list<std::pair<std::regex, bool>> regExList;
 };

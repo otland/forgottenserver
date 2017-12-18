@@ -19,8 +19,30 @@
 
 #include "otpch.h"
 
-#include "ioguild.h"
 #include "database.h"
+#include "guild.h"
+#include "ioguild.h"
+
+Guild* IOGuild::loadGuild(uint32_t guildId)
+{
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT `name` FROM `guilds` WHERE `id` = " << guildId;
+	if (DBResult_ptr result = db.storeQuery(query.str())) {
+		Guild* guild = new Guild(guildId, result->getString("name"));
+
+		query.str(std::string());
+		query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId;
+
+		if ((result = db.storeQuery(query.str()))) {
+			do {
+				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"), result->getNumber<uint16_t>("level"));
+			} while (result->next());
+		}
+		return guild;
+	}
+	return nullptr;
+}
 
 uint32_t IOGuild::getGuildIdByName(const std::string& name)
 {

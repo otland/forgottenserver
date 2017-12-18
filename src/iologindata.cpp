@@ -409,21 +409,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		Guild* guild = g_game.getGuild(guildId);
 		if (!guild) {
-			query.str(std::string());
-			query << "SELECT `name` FROM `guilds` WHERE `id` = " << guildId;
-			if ((result = db.storeQuery(query.str()))) {
-				guild = new Guild(guildId, result->getString("name"));
-				g_game.addGuild(guild);
-
-				query.str(std::string());
-				query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId;
-
-				if ((result = db.storeQuery(query.str()))) {
-					do {
-						guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"), result->getNumber<uint16_t>("level"));
-					} while (result->next());
-				}
-			}
+			guild = IOGuild::loadGuild(guildId);
+			g_game.addGuild(guild);
 		}
 
 		if (guild) {
