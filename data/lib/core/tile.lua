@@ -37,11 +37,7 @@ function Tile.relocateTo(self, toPosition)
 	return true
 end
 
-function Tile.isWalkable(self, condition)
-	if condition and condition(self) then
-		return true
-	end
-
+function Tile.isWalkable(self)
 	local ground = self:getGround()
 	if not ground or ground:hasProperty(CONST_PROP_BLOCKSOLID) then
 		return false
