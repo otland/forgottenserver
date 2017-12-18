@@ -9199,7 +9199,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		pushBoolean(L, true);
 		return 1;
 	}
-	
+
 	bool showEffect = getBoolean(L, 3, true);
 
 	player->switchGhostMode();
