@@ -781,7 +781,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 				}
 			}
 		}
-		
+
 		//try go down
 		if (currentPos.z != 7 && currentPos.z == destPos.z) {
 			Tile* tmpTile = map.getTile(destPos.x, destPos.y, destPos.z);
