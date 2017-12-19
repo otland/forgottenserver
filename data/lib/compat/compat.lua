@@ -1491,3 +1491,11 @@ end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
 if unpack == nil then unpack = table.unpack end
+
+Game.startRaid = function(name)
+	if name == "Server Save" then
+		return RETURNVALUE_NOSUCHRAIDEXISTS
+	end
+
+	return Game.startEvent(name)
+end
