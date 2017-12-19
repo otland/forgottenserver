@@ -7,7 +7,7 @@ function onCastSpell(creature, variant, isHotkey)
 	end
 
 	local monsterType = target:getType()
-	if not getPlayerFlagValue(creature, PlayerFlag_CanConvinceAll) then
+	if not creature:hasFlag(PlayerFlag_CanConvinceAll) then
 		if not monsterType:isConvinceable() then
 			creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
@@ -22,7 +22,7 @@ function onCastSpell(creature, variant, isHotkey)
 	end
 
 	local manaCost = target:getType():getManaCost()
-	if creature:getMana() < manaCost and not getPlayerFlagValue(creature, PlayerFlag_HasInfiniteMana) then
+	if creature:getMana() < manaCost and not creature:hasFlag(PlayerFlag_HasInfiniteMana) then
 		creature:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false

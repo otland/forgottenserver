@@ -434,9 +434,7 @@ class LuaScriptInterface
 		//get item info
 		static int luaGetDepotId(lua_State* L);
 
-		//get creature info functions
-		static int luaGetPlayerFlagValue(lua_State* L);
-
+		//get world info
 		static int luaGetWorldTime(lua_State* L);
 		static int luaGetWorldLight(lua_State* L);
 		static int luaGetWorldUpTime(lua_State* L);
@@ -1039,6 +1037,7 @@ class LuaScriptInterface
 		static int luaGroupGetAccess(lua_State* L);
 		static int luaGroupGetMaxDepotItems(lua_State* L);
 		static int luaGroupGetMaxVipEntries(lua_State* L);
+		static int luaGroupHasFlag(lua_State* L);
 
 		// Vocation
 		static int luaVocationCreate(lua_State* L);
