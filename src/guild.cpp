@@ -57,6 +57,16 @@ GuildRank* Guild::getRankById(uint32_t rankId)
 	return nullptr;
 }
 
+const GuildRank* Guild::getRankByName(const std::string& name) const
+{
+	for (const auto& rank : ranks) {
+		if (rank.name == name) {
+			return &rank;
+		}
+	}
+	return nullptr;
+}
+
 const GuildRank* Guild::getRankByLevel(uint8_t level) const
 {
 	for (const auto& rank : ranks) {

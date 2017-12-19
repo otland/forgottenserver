@@ -9,7 +9,7 @@ function onUpdateDatabase()
 	db.query("ALTER TABLE `accounts` DROP `group_id`")
 
 	local groupsFile = io.open("data/XML/groups.xml", "w")
-	if groupsFile ~= nil then
+	if groupsFile then
 		groupsFile:write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n")
 		groupsFile:write("<groups>\r\n")
 

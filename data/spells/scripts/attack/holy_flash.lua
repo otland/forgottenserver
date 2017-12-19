@@ -8,7 +8,6 @@ function onTargetCreature(creature, target)
 	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.5) + 3
 	local rounds = math.random(math.floor(min), math.floor(max))
 	creature:addDamageCondition(target, CONDITION_DAZZLED, 3, target:isPlayer() and 10 or 20, math.random(10, 12), rounds)
-	return true
 end
 
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")

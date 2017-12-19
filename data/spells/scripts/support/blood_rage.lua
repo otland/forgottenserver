@@ -7,7 +7,7 @@ condition:setParameter(CONDITION_PARAM_TICKS, 10000)
 condition:setParameter(CONDITION_PARAM_SKILL_MELEEPERCENT, 135)
 condition:setParameter(CONDITION_PARAM_SKILL_SHIELDPERCENT, -100)
 condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
-combat:setCondition(condition)
+combat:addCondition(condition)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)
