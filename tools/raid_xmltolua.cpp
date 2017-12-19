@@ -158,9 +158,9 @@ std::vector<Spawn> parseSpawnList(const pugi::xml_node& monsterNode)
 {
 	std::vector<Spawn> spawnList;
 
-	for (auto&& monsterNode: monsterNode.children()) {
+	for (auto&& node: monsterNode.children()) {
 		try {
-			auto&& spawn = parseSpawnNode(monsterNode);
+			auto&& spawn = parseSpawnNode(node);
 			spawnList.emplace_back(std::move(spawn));
 		} catch (const std::runtime_error& err) {
 			std::cout << "[Error - parseSpawn] " << err.what() << std::endl;
@@ -458,10 +458,10 @@ int main(int argc, char** argv)
 
 	char real_path[PATH_MAX];
 
-	realpath(globalevents_path.c_str(), real_path);
+	std::ignore = realpath(globalevents_path.c_str(), real_path);
 	globalevents_path = real_path;
 
-	realpath(raids_path.c_str(), real_path);
+	std::ignore = realpath(raids_path.c_str(), real_path);
 	raids_path = real_path;
 
 	std::cout << "Output path: " << globalevents_path << '\n';
