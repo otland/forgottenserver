@@ -58,7 +58,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			item:transform(item:getId(), 0)
 		end
 	else
-		local fluidSource = targetType:getFluidSource()
+		local fluidSource = targetItemType and targetItemType:getFluidSource() or 0
 		if fluidSource ~= 0 then
 			item:transform(item:getId(), fluidSource)
 		elseif item.type == 0 then
