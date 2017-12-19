@@ -252,7 +252,6 @@ class RuneSpell final : public Action, public Spell
 		explicit RuneSpell(LuaScriptInterface* interface) : Action(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		ReturnValue canExecuteAction(const Player* player, const Position& toPos) override;
 		bool hasOwnErrorHandler() override {
