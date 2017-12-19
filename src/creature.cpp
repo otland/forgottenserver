@@ -1121,6 +1121,8 @@ bool Creature::setMaster(Creature* newMaster) {
 			decrementReferenceCounter();
 		}
 	}
+
+	onCreatureAppear(this);
 	return true;
 }
 

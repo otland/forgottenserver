@@ -495,7 +495,7 @@
 
 	<!-- Summon Runes -->
 	<rune group="support" spellid="83" name="Animate Dead Rune" id="2316" allowfaruse="1" charges="1" level="27" magiclevel="4" cooldown="2000" groupcooldown="2000" blocktype="solid" script="support/animate_dead_rune.lua" />
-	<rune group="support" spellid="12" name="Convince Creature Rune" id="2290" allowfaruse="1" charges="1" level="16" magiclevel="5" cooldown="2000" groupcooldown="2000" needtarget="1" blocktype="solid" function="convince" />
+	<rune group="support" spellid="12" name="Convince Creature Rune" id="2290" allowfaruse="1" charges="1" level="16" magiclevel="5" cooldown="2000" groupcooldown="2000" needtarget="1" blocktype="solid" script="support/convince_creature_rune.lua" />
 
 	<!-- Support Runes -->
 	<rune group="support" spellid="14" name="Chameleon Rune" id="2291" allowfaruse="1" charges="1" level="27" magiclevel="4" cooldown="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" function="chameleon" />

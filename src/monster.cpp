@@ -1912,67 +1912,6 @@ bool Monster::challengeCreature(Creature* creature)
 	return result;
 }
 
-bool Monster::convinceCreature(Creature* creature)
-{
-	Player* player = creature->getPlayer();
-	if (player->getSkull() == SKULL_BLACK) {
-		return false;
-	}
-
-	if (player && !player->hasFlag(PlayerFlag_CanConvinceAll)) {
-		if (!mType->info.isConvinceable) {
-			return false;
-		}
-	}
-
-	if (isSummon()) {
-		if (getMaster()->getPlayer()) {
-			return false;
-		} else if (getMaster() == creature) {
-			return false;
-		}
-
-	}
-	setMaster(creature);
-	setDropLoot(false);
-	setSkillLoss(false);
-	setFollowCreature(nullptr);
-	setAttackedCreature(nullptr);
-
-	//destroy summons
-	for (Creature* summon : summons) {
-		summon->changeHealth(-summon->getHealth());
-		summon->removeMaster();
-	}
-	summons.clear();
-
-	isMasterInRange = true;
-	updateTargetList();
-	updateIdleStatus();
-
-	//Notify surrounding about the change
-	SpectatorHashSet spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true);
-	g_game.map.getSpectators(spectators, creature->getPosition(), true);
-	for (Creature* spectator : spectators) {
-		spectator->onCreatureConvinced(creature, this);
-	}
-
-	if (spawn) {
-		spawn->removeMonster(this);
-		spawn = nullptr;
-	}
-	return true;
-}
-
-void Monster::onCreatureConvinced(const Creature* convincer, const Creature* creature)
-{
-	if (convincer != this && (isFriend(creature) || isOpponent(creature))) {
-		updateTargetList();
-		updateIdleStatus();
-	}
-}
-
 void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp) const
 {
 	Creature::getPathSearchParams(creature, fpp);
