@@ -693,6 +693,18 @@ void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const
 }
 
 // Get
+CombatDamage LuaScriptInterface::getCombatDamage(lua_State* L)
+{
+	CombatDamage damage;
+	damage.primary.value = getNumber<int32_t>(L, -4);
+	damage.primary.type = getNumber<CombatType_t>(L, -3);
+	damage.secondary.value = getNumber<int32_t>(L, -2);
+	damage.secondary.type = getNumber<CombatType_t>(L, -1);
+
+	lua_pop(L, 4);
+	return damage;
+}
+
 std::string LuaScriptInterface::getString(lua_State* L, int32_t arg)
 {
 	size_t len;
@@ -857,6 +869,15 @@ LuaDataType LuaScriptInterface::getUserdataType(lua_State* L, int32_t arg)
 void LuaScriptInterface::pushBoolean(lua_State* L, bool value)
 {
 	lua_pushboolean(L, value ? 1 : 0);
+}
+
+void LuaScriptInterface::pushCombatDamage(lua_State* L, const CombatDamage& damage)
+{
+	lua_pushnumber(L, damage.primary.value);
+	lua_pushnumber(L, damage.primary.type);
+	lua_pushnumber(L, damage.secondary.value);
+	lua_pushnumber(L, damage.secondary.type);
+	lua_pushnumber(L, damage.origin);
 }
 
 void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spell)

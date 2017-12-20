@@ -545,21 +545,12 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, Co
 		lua_pushnil(L);
 	}
 
-	lua_pushnumber(L, damage.primary.value);
-	lua_pushnumber(L, damage.primary.type);
-	lua_pushnumber(L, damage.secondary.value);
-	lua_pushnumber(L, damage.secondary.type);
-	lua_pushnumber(L, damage.origin);
+	LuaScriptInterface::pushCombatDamage(L, damage);
 
 	if (scriptInterface->protectedCall(L, 7, 4) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		damage.primary.value = LuaScriptInterface::getNumber<int32_t>(L, -4);
-		damage.primary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -3);
-		damage.secondary.value = LuaScriptInterface::getNumber<int32_t>(L, -2);
-		damage.secondary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -1);
-
-		lua_pop(L, 4);
+		damage = LuaScriptInterface::getCombatDamage(L);
 	}
 
 	scriptInterface->resetScriptEnv();
