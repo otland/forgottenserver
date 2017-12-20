@@ -5720,7 +5720,7 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
-	
+
 	splitItem->setItemCount(count);
 
 	ScriptEnvironment* env = getScriptEnv();
@@ -10001,7 +10001,7 @@ int LuaScriptInterface::luaGroupHasFlag(lua_State* L)
 	Group* group = getUserdata<Group>(L, 1);
 	if (group) {
 		PlayerFlags flag = getNumber<PlayerFlags>(L, 2);
-		pushBoolean(L, group->flags & flag);
+		pushBoolean(L, (group->flags & flag) != 0);
 	} else {
 		lua_pushnil(L);
 	}
