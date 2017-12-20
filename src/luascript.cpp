@@ -7689,7 +7689,10 @@ int LuaScriptInterface::luaPlayerAddMana(lua_State* L)
 	if (!animationOnLoss && manaChange < 0) {
 		player->changeMana(manaChange);
 	} else {
-		g_game.combatChangeMana(nullptr, player, manaChange, ORIGIN_NONE);
+		CombatDamage damage;
+		damage.primary.value = manaChange;
+		damage.origin = ORIGIN_NONE;
+		g_game.combatChangeMana(nullptr, creature, damage);
 	}
 	pushBoolean(L, true);
 	return 1;
