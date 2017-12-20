@@ -516,7 +516,7 @@ void Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 		}
 	}
 
-	if (g_game.combatChangeMana(caster, target, damage)) {
+	if (g_game.combatChangeMana(caster, target, damageCopy)) {
 		CombatConditionFunc(caster, target, params, nullptr);
 		CombatDispelFunc(caster, target, params, nullptr);
 	}
