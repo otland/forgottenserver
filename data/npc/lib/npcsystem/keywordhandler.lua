@@ -1,6 +1,6 @@
 -- Advanced NPC System by Jiddo
 
-if KeywordHandler == nil then
+if not KeywordHandler then
 	KeywordNode = {
 		keywords = nil,
 		callback = nil,
@@ -23,19 +23,19 @@ if KeywordHandler == nil then
 
 	-- Calls the underlying callback function if it is not nil.
 	function KeywordNode:processMessage(cid, message)
-		return (self.callback == nil or self.callback(cid, message, self.keywords, self.parameters, self))
+		return (not self.callback or self.callback(cid, message, self.keywords, self.parameters, self))
 	end
 
 	-- Returns true if message contains all patterns/strings found in keywords.
 	function KeywordNode:checkMessage(message)
-		if self.keywords.callback ~= nil then
+		if self.keywords.callback then
 			return self.keywords.callback(self.keywords, message)
 		end
 
 		for _, v in ipairs(self.keywords) do
 			if type(v) == 'string' then
 				local a, b = string.find(message, v)
-				if a == nil or b == nil then
+				if not a or not b then
 					return false
 				end
 			end
@@ -96,7 +96,7 @@ if KeywordHandler == nil then
 	-- Makes sure the correct childNode of lastNode gets a chance to process the message.
 	function KeywordHandler:processMessage(cid, message)
 		local node = self:getLastNode(cid)
-		if node == nil then
+		if not node then
 			error('No root node found.')
 			return false
 		end
@@ -159,12 +159,12 @@ if KeywordHandler == nil then
 
 	-- Moves the current position in the keyword hierarchy steps upwards. Steps defalut value = 1.
 	function KeywordHandler:moveUp(cid, steps)
-		if steps == nil or type(steps) ~= "number" then
+		if not steps or type(steps) ~= "number" then
 			steps = 1
 		end
 
 		for i = 1, steps do
-			if self.lastNode[cid] == nil then
+			if not self.lastNode[cid] then
 				return nil
 			end
 			self.lastNode[cid] = self.lastNode[cid]:getParent() or self:getRoot()

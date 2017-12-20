@@ -34,18 +34,18 @@ class DepotChest final : public Container
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const;
+				uint32_t flags, Creature* actor = nullptr) const override;
 
-		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER);
-		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER);
+		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
 		//overrides
-		bool canRemove() const {
+		bool canRemove() const override {
 			return false;
 		}
 
-		Cylinder* getParent() const;
-		Cylinder* getRealParent() const {
+		Cylinder* getParent() const override;
+		Cylinder* getRealParent() const override {
 			return parent;
 		}
 
