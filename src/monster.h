@@ -140,7 +140,6 @@ class Monster final : public Creature
 		void onThink(uint32_t interval) override;
 
 		bool challengeCreature(Creature* creature) override;
-		bool convinceCreature(Creature* creature) override;
 
 		void setNormalCreatureLight() override;
 		bool getCombatValues(int32_t& min, int32_t& max) override;
@@ -228,7 +227,6 @@ class Monster final : public Creature
 
 		void onAddCondition(ConditionType_t type) override;
 		void onEndCondition(ConditionType_t type) override;
-		void onCreatureConvinced(const Creature* convincer, const Creature* creature) override;
 
 		bool canUseAttack(const Position& pos, const Creature* target) const;
 		bool canUseSpell(const Position& pos, const Position& targetPos,
