@@ -499,11 +499,7 @@ void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, 
 		lua_pushnil(L);
 	}
 
-	lua_pushnumber(L, damage.primary.value);
-	lua_pushnumber(L, damage.primary.type);
-	lua_pushnumber(L, damage.secondary.value);
-	lua_pushnumber(L, damage.secondary.type);
-	lua_pushnumber(L, damage.origin);
+	LuaScriptInterface::pushCombatDamage(L, damage);
 
 	if (scriptInterface->protectedCall(L, 7, 4) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
