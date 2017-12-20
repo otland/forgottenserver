@@ -7692,7 +7692,7 @@ int LuaScriptInterface::luaPlayerAddMana(lua_State* L)
 		CombatDamage damage;
 		damage.primary.value = manaChange;
 		damage.origin = ORIGIN_NONE;
-		g_game.combatChangeMana(nullptr, creature, damage);
+		g_game.combatChangeMana(nullptr, player, damage);
 	}
 	pushBoolean(L, true);
 	return 1;
