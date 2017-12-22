@@ -64,6 +64,9 @@ mysqlPort = 3306
 mysqlSock = ""
 
 -- Misc.
+-- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
+-- intervals regardless of other actions such as item (potion) use. This setting
+-- may cause high CPU usage with many players and potentially affect performance!
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
