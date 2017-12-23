@@ -513,7 +513,7 @@ void ConditionAttributes::endCondition(Creature* creature)
 	}
 
 	if (disableDefense) {
-		creature->setUseDefense(disableDefense);
+		creature->setUseDefense(true);
 	}
 }
 
