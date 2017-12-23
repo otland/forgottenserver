@@ -170,13 +170,7 @@ class Monster final : public Creature
 		bool isTargetNearby() const {
 			return stepDuration >= 1;
 		}
-		bool isRandomSteping() const {
-			return randomSteping;
-		}
-		void setIgnoreFieldDamage(bool ignore) {
-			ignoreFieldDamage = ignore;
-		}
-		bool getIgnoreFieldDamage() const {
+		bool isIgnoringFieldDamage() const {
 			return ignoreFieldDamage;
 		}
 
@@ -211,7 +205,7 @@ class Monster final : public Creature
 		bool isIdle = true;
 		bool extraMeleeAttack = false;
 		bool isMasterInRange = false;
-		bool randomSteping = false;
+		bool randomStepping = false;
 		bool ignoreFieldDamage = false;
 
 		void onCreatureEnter(Creature* creature);
@@ -277,7 +271,7 @@ class Monster final : public Creature
 		}
 		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
 		bool useCacheMap() const override {
-			return !randomSteping;
+			return !randomStepping;
 		}
 
 		friend class LuaScriptInterface;

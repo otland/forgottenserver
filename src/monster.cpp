@@ -1107,12 +1107,12 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 	bool result = false;
 	if ((!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
 		if (getWalkDelay() <= 0) {
-			randomSteping = true;
+			randomStepping = true;
 			//choose a random direction
 			result = getRandomStep(getPosition(), direction);
 		}
 	} else if ((isSummon() && isMasterInRange) || followCreature) {
-		randomSteping = false;
+		randomStepping = false;
 		result = Creature::getNextStep(direction, flags);
 		if (result) {
 			flags |= FLAG_PATHFINDING;
@@ -1907,6 +1907,12 @@ void Monster::setNormalCreatureLight()
 void Monster::drainHealth(Creature* attacker, int32_t damage)
 {
 	Creature::drainHealth(attacker, damage);
+
+	if (damage > 0 && randomStepping) {
+		ignoreFieldDamage = true;
+		updateMapCache();
+	}
+
 	if (isInvisible()) {
 		removeCondition(CONDITION_INVISIBLE);
 	}
