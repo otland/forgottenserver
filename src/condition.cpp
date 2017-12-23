@@ -397,7 +397,7 @@ bool ConditionAttributes::startCondition(Creature* creature)
 		return false;
 	}
 
-	creature->setUseDefense(disableDefense);
+	creature->setUseDefense(!disableDefense);
 
 	if (Player* player = creature->getPlayer()) {
 		updatePercentSkills(player);
@@ -513,7 +513,7 @@ void ConditionAttributes::endCondition(Creature* creature)
 	}
 
 	if (disableDefense) {
-		creature->setUseDefense(!disableDefense);
+		creature->setUseDefense(disableDefense);
 	}
 }
 
