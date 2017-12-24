@@ -471,6 +471,7 @@ int main(int argc, char** argv)
 	std::ignore = realpath(raids_path.c_str(), real_path);
 	raids_path = real_path;
 
+	std::ios::sync_with_stdio(false);
 	std::cout << "Output path: " << globalevents_path << '\n';
 	std::cout << "XML path: " << raids_path << '\n';
 
