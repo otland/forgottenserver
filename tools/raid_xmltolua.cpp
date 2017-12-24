@@ -1,5 +1,4 @@
 #include <getopt.h>
-#include <limits.h>
 
 #include <fstream>
 #include <iostream>
@@ -8,8 +7,11 @@
 #include <unordered_map>
 #include <vector>
 
+#include <boost/filesystem.hpp>
 #include <pugixml.hpp>
 #include "../src/pugicast.h"
+
+namespace fs = boost::filesystem;
 
 void usage(const char* program)
 {
@@ -262,7 +264,8 @@ struct ScriptEvent : public RaidEvent
 
 struct RaidInfo
 {
-	std::string name, file;
+	std::string name;
+	fs::path path;
 	uint32_t interval, margin;
 	bool repeat;
 };
@@ -292,6 +295,8 @@ struct Raid
 		return prelude.str();
 	}
 
+	fs::path stem() const { return info.path.stem(); }
+
 	std::vector<std::unique_ptr<RaidEvent>> eventList;
 	RaidInfo info;
 };
@@ -320,9 +325,9 @@ std::unique_ptr<RaidEvent> parseEvent(const std::string& eventType, const pugi::
 	throw std::runtime_error("invalid event type " + eventType);
 }
 
-Raid loadRaid(RaidInfo info, const std::string& raids_path)
+Raid loadRaid(RaidInfo info, const fs::path& raids_path)
 {
-	std::string xml_path = raids_path + "/" + info.file;
+	fs::path xml_path = raids_path / info.path.filename();
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(xml_path.c_str());
@@ -336,7 +341,7 @@ Raid loadRaid(RaidInfo info, const std::string& raids_path)
 			auto&& event = parseEvent(eventNode.name(), eventNode);
 			eventList.emplace_back(std::move(event));
 		} catch (const std::runtime_error& err) {
-			std::cout << "[Error - loadRaid] " << info.file << ": " << err.what() << std::endl;
+			std::cout << "[Error - loadRaid] " << info.path << ": " << err.what() << std::endl;
 		}
 	}
 
@@ -350,9 +355,9 @@ Raid loadRaid(RaidInfo info, const std::string& raids_path)
 	return {std::move(eventList), std::move(info)};
 }
 
-std::vector<Raid> loadRaids(const std::string& raids_path)
+std::vector<Raid> loadRaids(const fs::path& raids_path)
 {
-	std::string xml_path = raids_path + "/raids.xml";
+	fs::path xml_path = raids_path / "raids.xml";
 	std::cout << xml_path << std::endl;
 
 	pugi::xml_document doc;
@@ -413,14 +418,14 @@ std::vector<Raid> loadRaids(const std::string& raids_path)
 	return raidList;
 }
 
-void storeRaids(const std::string& globalevents_path, const std::vector<Raid>& raidList)
+void storeRaids(const fs::path& globalevents_path, const std::vector<Raid>& raidList)
 {
 	for (auto&& raid: raidList) {
-		std::string script_path = globalevents_path + "/scripts/" + raid.info.file;
-		script_path.replace(script_path.size() - 4, 4, ".lua");
+		fs::path script_path = globalevents_path / "scripts" / raid.stem();
+		script_path += ".lua";
 
 		std::cout << script_path << std::endl;
-		std::ofstream output{script_path};
+		std::ofstream output{script_path.native()};
 		if (not output.is_open()) {
 			std::cout << "[Error - storeRaids] Couldn't open file: " << script_path << std::endl;
 			continue;
@@ -432,7 +437,7 @@ void storeRaids(const std::string& globalevents_path, const std::vector<Raid>& r
 
 int main(int argc, char** argv)
 {
-	std::string globalevents_path, raids_path;
+	fs::path globalevents_path, raids_path;
 
 	int opt;
 	while ((opt = getopt(argc, argv, "hg:r:")) != -1) {
@@ -458,18 +463,12 @@ int main(int argc, char** argv)
 	}
 
 	if (globalevents_path.empty()) {
-		globalevents_path = raids_path + "/../globalevents/";
+		raids_path = raids_path.remove_trailing_separator();
+		globalevents_path = raids_path.parent_path() / "globalevents";
 	} else if (raids_path.empty()) {
-		raids_path = globalevents_path + "/../raids/";
+		globalevents_path = globalevents_path.remove_trailing_separator();
+		raids_path = globalevents_path.parent_path() / "raids";
 	}
-
-	char real_path[PATH_MAX];
-
-	std::ignore = realpath(globalevents_path.c_str(), real_path);
-	globalevents_path = real_path;
-
-	std::ignore = realpath(raids_path.c_str(), real_path);
-	raids_path = real_path;
 
 	std::ios::sync_with_stdio(false);
 	std::cout << "Output path: " << globalevents_path << '\n';
