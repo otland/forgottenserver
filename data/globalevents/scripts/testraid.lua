@@ -1,6 +1,6 @@
 function onTime(interval)
 	-- Message broadcast
-	addEvent(Game.broadcastMessage, 1000, "Rats are attacking neart Trekolt Temple!", MESSAGE_STATUS_WARNING)
+	addEvent(Game.broadcastMessage, 1000, "Rats are attacking near Trekolt Temple!", MESSAGE_STATUS_WARNING)
 	addEvent(Game.broadcastMessage, 25000, "Rats attack continues!", MESSAGE_STATUS_WARNING)
 
 	-- Area spawns - you can use a center and radius style or using fromPos/toPos style
