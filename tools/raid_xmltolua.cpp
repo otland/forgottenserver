@@ -51,7 +51,7 @@ struct AnnounceEvent : public RaidEvent
 			throw std::runtime_error("message tag missing for announce event.");
 		}
 
-		std::string messageType = [&](const pugi::xml_attribute& type) {
+		std::string messageType = [](const pugi::xml_attribute& type) {
 			if (not type) {
 				std::cout << "[Notice] Raid: type tag missing for announce"
 				             "event. Using default: " << defaultMessageType <<
