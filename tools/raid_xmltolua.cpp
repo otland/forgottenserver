@@ -13,7 +13,7 @@
 void usage(const char* program)
 {
 	std::cout << "usage: " << program
-		<< " -x path/to/data/raids -o path/to/data/globalevents\n";
+		<< " [-r path/to/data/raids] [-g path/to/data/globalevents]\n";
 }
 
 constexpr const char* INDENT = "    ";
