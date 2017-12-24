@@ -1,6 +1,7 @@
 #include <getopt.h>
 #include <limits.h>
 
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -415,11 +416,17 @@ std::vector<Raid> loadRaids(const std::string& raids_path)
 void storeRaids(const std::string& globalevents_path, const std::vector<Raid>& raidList)
 {
 	for (auto&& raid: raidList) {
-		std::string script_path = raid.info.file;
+		std::string script_path = globalevents_path + "/scripts/" + raid.info.file;
 		script_path.replace(script_path.size() - 4, 4, ".lua");
+
 		std::cout << script_path << std::endl;
-		std::cout << raid.to_script() << std::endl;
-		std::cout << std::endl;
+		std::ofstream output{script_path};
+		if (not output.is_open()) {
+			std::cout << "[Error - storeRaids] Couldn't open file: " << script_path << std::endl;
+			continue;
+		}
+
+		output << raid.to_script() << std::endl;
 	}
 }
 
