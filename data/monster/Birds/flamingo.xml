@@ -14,6 +14,9 @@
 		<flag canpushcreatures="0" />
 		<flag staticattack="90" />
 		<flag runonhealth="25" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<defenses armor="5" defense="5" />
 	<loot>

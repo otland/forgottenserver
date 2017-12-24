@@ -16,6 +16,9 @@
 		<flag lightcolor="0" />
 		<flag targetdistance="0" />
 		<flag runonhealth="15" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<defenses armor="5" defense="5" />
 	<loot>
