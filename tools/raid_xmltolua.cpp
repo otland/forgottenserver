@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <unordered_map>
 #include <vector>
 
 #include <pugixml.hpp>
@@ -27,6 +28,17 @@ struct RaidEvent
 	uint32_t delay;
 };
 
+static const std::unordered_map<std::string, std::string> messageTypes{
+	{"warning", "MESSAGE_STATUS_WARNING"},
+	{"event", "MESSAGE_EVENT_ADVANCE"},
+	{"default", "MESSAGE_EVENT_DEFAULT"},
+	{"description", "MESSAGE_INFO_DESCR"},
+	{"smallstatus", "MESSAGE_STATUS_SMALL"},
+	{"blueconsole", "MESSAGE_STATUS_CONSOLE_BLUE"},
+	{"redconsole", "MESSAGE_STATUS_CONSOLE_RED"},
+};
+static const std::string defaultMessageType{"MESSAGE_EVENT_ADVANCE"};
+
 struct AnnounceEvent : public RaidEvent
 {
 	AnnounceEvent(uint32_t delay, std::string msg, std::string type) :
@@ -42,29 +54,18 @@ struct AnnounceEvent : public RaidEvent
 		std::string messageType = [&](const pugi::xml_attribute& type) {
 			if (not type) {
 				std::cout << "[Notice] Raid: type tag missing for announce"
-				             "event. Using default: MESSAGE_TYPE_ADVANCE\n";
-				return "MESSAGE_EVENT_ADVANCE";
+				             "event. Using default: " << defaultMessageType <<
+							 "\n";
+				return defaultMessageType;
 			}
 
-			std::string tmpStrValue = type.as_string();
-			if (tmpStrValue == "warning") {
-				return "MESSAGE_STATUS_WARNING";
-			} else if (tmpStrValue == "event") {
-				return "MESSAGE_EVENT_ADVANCE";
-			} else if (tmpStrValue == "default") {
-				return "MESSAGE_EVENT_DEFAULT";
-			} else if (tmpStrValue == "description") {
-				return "MESSAGE_INFO_DESCR";
-			} else if (tmpStrValue == "smallstatus") {
-				return "MESSAGE_STATUS_SMALL";
-			} else if (tmpStrValue == "blueconsole") {
-				return "MESSAGE_STATUS_CONSOLE_BLUE";
-			} else if (tmpStrValue == "redconsole") {
-				return "MESSAGE_STATUS_CONSOLE_RED";
+			try {
+				return messageTypes.at(type.as_string());
+			} catch (const std::out_of_range&) {
+				std::cout << "[Notice] Raid: Unknown type tag for announce"
+							 "event. Using default: MESSAGE_TYPE_ADVANCE\n";
+				return defaultMessageType;
 			}
-			std::cout << "[Notice] Raid: Unknown type tag for announce"
-				         "event. Using default: MESSAGE_TYPE_ADVANCE\n";
-			return "MESSAGE_EVENT_ADVANCE";
 		}(eventNode.attribute("type"));
 
 		return new AnnounceEvent{delay, message.as_string(), messageType};
