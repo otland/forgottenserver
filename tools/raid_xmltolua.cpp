@@ -121,7 +121,7 @@ struct SingleSpawnEvent : public RaidEvent
 	void to_script(std::ostringstream& ss) const override
 	{
 		ss << INDENT << "Game.createMonster(\"" << name << "\", Position("
-			<< pos.x << ", " << pos.y << ", " << pos.z << ")\n";
+			<< pos.x << ", " << pos.y << ", " << pos.z << "))\n";
 	}
 
 	std::string name;
