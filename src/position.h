@@ -39,7 +39,6 @@ enum Direction : uint8_t {
 struct Position
 {
 	constexpr Position() = default;
-	constexpr Position(Position&&) = default;
 	constexpr Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
 
 	template<int_fast32_t deltax, int_fast32_t deltay>
