@@ -256,8 +256,7 @@ struct AreaSpawnEvent : public RaidEvent
 
 struct ScriptEvent : public RaidEvent
 {
-	ScriptEvent(uint32_t delay) :
-			RaidEvent{delay} {}
+	ScriptEvent(uint32_t delay) : RaidEvent{delay} {}
 };
 
 struct RaidInfo
