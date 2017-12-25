@@ -10717,6 +10717,11 @@ int LuaScriptInterface::luaItemTypeCreate(lua_State* L)
 		id = Item::items.getItemIdByName(getString(L, 2));
 	}
 
+	if (id == 0) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	const ItemType& itemType = Item::items[id];
 	pushUserdata<const ItemType>(L, &itemType);
 	setMetatable(L, -1, "ItemType");

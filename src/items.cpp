@@ -907,9 +907,9 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 uint16_t Items::getItemIdByName(const std::string& name)
 {
 	auto result = nameToItems.find(asLowerCaseString(name));
-
-	if (result == nameToItems.end())
+	if (result == nameToItems.end() || result->first.empty()) {
 		return 0;
+	}
 
 	return result->second;
 }
