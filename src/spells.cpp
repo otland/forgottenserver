@@ -121,23 +121,12 @@ Event_ptr Spells::getEvent(const std::string& nodeName)
 		return Event_ptr(new RuneSpell(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
 		return Event_ptr(new InstantSpell(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "conjure") == 0) {
-		return Event_ptr(new ConjureSpell(&scriptInterface));
 	}
 	return nullptr;
 }
 
 bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	ConjureSpell* instantConjure = dynamic_cast<ConjureSpell*>(event.get());
-	if (instantConjure) {
-		auto result = instantsConjure.emplace(instantConjure->getWords(), std::move(*instantConjure));
-		if (!result.second) {
-			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instantConjure->getWords() << std::endl;
-		}
-		return result.second;
-	}
-
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
 	if (instant) {
 		auto result = instants.emplace(instant->getWords(), std::move(*instant));
@@ -204,19 +193,6 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 		}
 	}
 
-	for (auto& it : instantsConjure) {
-		const std::string& instantSpellWords = it.second.getWords();
-		size_t spellLen = instantSpellWords.length();
-		if (strncasecmp(instantSpellWords.c_str(), words.c_str(), spellLen) == 0) {
-			if (!result || spellLen > result->getWords().length()) {
-				result = &it.second;
-				if (words.length() == spellLen) {
-					break;
-				}
-			}
-		}
-	}
-
 	if (result) {
 		const std::string& resultWords = result->getWords();
 		if (words.length() > resultWords.length()) {
@@ -235,26 +211,10 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	return nullptr;
 }
 
-uint32_t Spells::getInstantSpellCount(const Player* player) const
-{
-	uint32_t count = 0;
-	for (const auto& it : instants) {
-		if (it.second.canCast(player)) {
-			++count;
-		}
-	}
-	return count;
-}
-
 InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
 	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
 	if (it != instants.end()) {
-		return &it->second;
-	}
-
-	auto it2 = std::next(instantsConjure.begin(), std::min<uint32_t>(spellId, instantsConjure.size()));
-	if (it2 != instantsConjure.end()) {
 		return &it->second;
 	}
 	return nullptr;
@@ -263,11 +223,6 @@ InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (auto& it : instants) {
-		if (strcasecmp(it.second.getName().c_str(), name.c_str()) == 0) {
-			return &it.second;
-		}
-	}
-	for (auto& it : instantsConjure) {
 		if (strcasecmp(it.second.getName().c_str(), name.c_str()) == 0) {
 			return &it.second;
 		}

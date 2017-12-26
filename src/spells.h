@@ -68,7 +68,6 @@ class Spells final : public BaseEvents
 
 		std::map<uint16_t, RuneSpell> runes;
 		std::map<std::string, InstantSpell> instants;
-		std::map<std::string, ConjureSpell> instantsConjure; // This is temporary just to avoid slicing, ConjureSpell is being moved to Lua.
 
 		friend class CombatSpell;
 		LuaScriptInterface scriptInterface { "Spell Interface" };
