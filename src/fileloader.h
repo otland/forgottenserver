@@ -33,12 +33,6 @@ using Identifier = std::array<char, 4>;
 
 struct Node
 {
-	Node() = default;
-	Node(Node&&) = default;
-	Node& operator=(Node&&) = default;
-	Node(const Node&) = delete;
-	Node& operator=(const Node&) = delete;
-
 	using ChildrenVector = std::vector<Node>;
 
 	ChildrenVector children;
