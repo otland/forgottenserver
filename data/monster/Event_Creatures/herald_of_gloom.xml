@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Herald of Gloom" nameDescription="a herald of gloom" experience="450" speed="260" race="undead">
+	<health now="350" max="350" />
+	<targetchange speed="0" chance="8" />
+	<look type="320" corpse="9915" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-90" />
+		<attack name="speed" interval="3000" chance="10" range="7" target="1" duration="30000" speedchange="-600">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="holy" interval="2000" chance="24" range="4" min="-90" max="-170">
+			<attribute key="shootEffect" value="smallholy" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="55">
+		<defense name="speed" interval="1000" chance="15" speedchange="200" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="5000" chance="20" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="20" monster="nightstalker" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="10" monster="werewolf" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="10" monster="the count" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="10" monster="grim reaper" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="10" monster="tarantula" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="10" monster="ferumbras" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-5" />
+		<element energyPercent="-5" />
+		<element deathPercent="-5" />
+		<element icePercent="20" />
+		<element holyPercent="20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="The powers of light are waning." yell="1" />
+		<voice sentence="You will join us in eternal night!" yell="1" />
+		<voice sentence="The shadows will engulf the world." yell="1" />
+	</voices>
+	<loot>
+		<item name="midnight shard" chance="1886" />
+	</loot>
+</monster>

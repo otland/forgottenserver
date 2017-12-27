@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Massive Water Elemental" nameDescription="a massive water elemental" race="undead" experience="1100" speed="280">
+	<health now="1250" max="1250" />
+	<look type="11" corpse="10499" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-220" poison="300" />
+		<attack name="drown" interval="2000" chance="15" target="1" range="7" radius="2" min="-330" max="-450">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="ice" interval="2000" chance="20" range="7" min="-170" max="-210">
+			<attribute key="shootEffect" value="smallice" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="20" target="0" radius="5" min="-355" max="-420">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="5" min="120" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element holyPercent="30" />
+		<element deathPercent="50" />
+		<element energyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+	</immunities>
+	<loot>
+		<item name="small diamond" countmax="2" chance="1900" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="small emerald" countmax="2" chance="1000" />
+		<item name="platinum coin" countmax="2" chance="20000" />
+		<item name="energy ring" chance="910" />
+		<item name="life ring" chance="1000" />
+		<item id="2667" countmax="2" chance="40000" /><!-- fish -->
+		<item name="rainbow trout" chance="1340" />
+		<item name="green perch" chance="1590" />
+		<item name="great mana potion" chance="10400" />
+		<item name="great health potion" chance="10000" />
+	</loot>
+</monster>

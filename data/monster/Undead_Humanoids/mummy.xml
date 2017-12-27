@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Mummy" nameDescription="a mummy" race="undead" experience="150" speed="150">
+	<health now="240" max="240" />
+	<look type="65" corpse="6004" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-85" poison="4" />
+		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-30" max="-40">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" target="1" speedchange="-226" duration="10000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element icePercent="20" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="I will ssswallow your sssoul!" />
+		<voice sentence="Mort ulhegh dakh visss." />
+		<voice sentence="Flesssh to dussst!" />
+		<voice sentence="I will tassste life again!" />
+		<voice sentence="Ahkahra exura belil mort!" />
+		<voice sentence="Yohag Sssetham!" />
+	</voices>
+	<loot>
+		<item id="2124" chance="1500" /><!-- crystal ring -->
+		<item name="silver brooch" chance="4000" />
+		<item name="black pearl" chance="1000" />
+		<item name="gold coin" countmax="80" chance="38000" />
+		<item name="strange talisman" chance="5000" />
+		<item id="2162" chance="5800" /><!-- magic lightwand -->
+		<item name="silver amulet" chance="100" />
+		<item name="poison dagger" chance="450" />
+		<item name="black shield" chance="170" />
+		<item name="worm" countmax="3" chance="19000" />
+		<item name="yellow piece of cloth" chance="900" />
+		<item name="gauze bandage" chance="10000" />
+		<item name="mini mummy" chance="10" />
+		<item name="flask of embalming fluid" chance="11690" />
+	</loot>
+</monster>

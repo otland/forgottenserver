@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Massive Energy Elemental" nameDescription="a massive energy elemental" race="energy" experience="950" speed="210">
+	<health now="1100" max="1100" />
+	<look type="290" corpse="8966" />
+	<targetchange interval="4000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="85" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-175" />
+		<attack name="energy" interval="2000" chance="10" range="7" radius="2" target="1" min="-270" max="-615">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" min="-175" max="-205">
+			<attribute key="shootEffect" value="energyball" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="massive energy elemental electrify" interval="2000" chance="20">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="5" min="190" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="70" />
+		<element holyPercent="25" />
+		<element deathPercent="1" />
+		<element earthPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="91" chance="50000" />
+		<item name="small amethyst" countmax="3" chance="3270" />
+		<item name="strong mana potion" chance="17450" />
+		<item name="great mana potion" chance="5450" />
+		<item name="flash arrow" countmax="15" chance="6550" />
+		<item name="energy spike sword" chance="500" />
+		<item name="lightning pendant" chance="730" />
+		<item name="lightning legs" chance="150" />
+		<item name="spellbook of warding" chance="360" />
+		<item name="wand of starstorm" chance="730" />
+		<item id="9809" chance="730" /><!-- rusty armor -->
+		<item name="shockwave amulet" chance="500" />
+	</loot>
+</monster>

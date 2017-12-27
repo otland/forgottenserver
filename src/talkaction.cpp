@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,9 @@
 #include "pugicast.h"
 
 TalkActions::TalkActions()
-	: m_scriptInterface("TalkAction Interface")
+	: scriptInterface("TalkAction Interface")
 {
-	m_scriptInterface.initState();
+	scriptInterface.initState();
 }
 
 TalkActions::~TalkActions()
@@ -36,17 +36,14 @@ TalkActions::~TalkActions()
 
 void TalkActions::clear()
 {
-	for (TalkAction* talkAction : talkActions) {
-		delete talkAction;
-	}
 	talkActions.clear();
 
-	m_scriptInterface.reInitState();
+	scriptInterface.reInitState();
 }
 
 LuaScriptInterface& TalkActions::getScriptInterface()
 {
-	return m_scriptInterface;
+	return scriptInterface;
 }
 
 std::string TalkActions::getScriptBaseName() const
@@ -59,20 +56,21 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
 		return nullptr;
 	}
-	return new TalkAction(&m_scriptInterface);
+	return new TalkAction(&scriptInterface);
 }
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
 {
-	talkActions.push_front(static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
+	auto talkAction = std::unique_ptr<TalkAction>(static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
+	talkActions.push_front(std::move(*talkAction));
 	return true;
 }
 
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
 	size_t wordsLength = words.length();
-	for (TalkAction* talkAction : talkActions) {
-		const std::string& talkactionWords = talkAction->getWords();
+	for (const TalkAction& talkAction : talkActions) {
+		const std::string& talkactionWords = talkAction.getWords();
 		size_t talkactionLength = talkactionWords.length();
 		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
 			continue;
@@ -86,7 +84,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 			trim_left(param, ' ');
 
-			char separator = talkAction->getSeparator();
+			char separator = talkAction.getSeparator();
 			if (separator != ' ') {
 				if (!param.empty()) {
 					if (param.front() != separator) {
@@ -98,19 +96,13 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (talkAction->executeSay(player, param, type)) {
+		if (talkAction.executeSay(player, param, type)) {
 			return TALKACTION_CONTINUE;
 		} else {
 			return TALKACTION_BREAK;
 		}
 	}
 	return TALKACTION_CONTINUE;
-}
-
-TalkAction::TalkAction(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-	separator = '"';
 }
 
 bool TalkAction::configureEvent(const pugi::xml_node& node)
@@ -138,17 +130,17 @@ std::string TalkAction::getScriptEventName() const
 bool TalkAction::executeSay(Player* player, const std::string& param, SpeakClasses type) const
 {
 	//onSay(player, words, param, type)
-	if (!m_scriptInterface->reserveScriptEnv()) {
+	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
 
-	lua_State* L = m_scriptInterface->getLuaState();
+	lua_State* L = scriptInterface->getLuaState();
 
-	m_scriptInterface->pushFunction(m_scriptId);
+	scriptInterface->pushFunction(scriptId);
 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
@@ -157,5 +149,5 @@ bool TalkAction::executeSay(Player* player, const std::string& param, SpeakClass
 	LuaScriptInterface::pushString(L, param);
 	lua_pushnumber(L, type);
 
-	return m_scriptInterface->callFunction(4);
+	return scriptInterface->callFunction(4);
 }

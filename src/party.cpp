@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,14 +28,8 @@ extern Game g_game;
 extern ConfigManager g_config;
 extern Events* g_events;
 
-Party::Party(Player* leader)
+Party::Party(Player* leader) : leader(leader)
 {
-	extraExpRate = 0.20f;
-
-	sharedExpActive = false;
-	sharedExpEnabled = false;
-
-	this->leader = leader;
 	leader->setParty(this);
 }
 
@@ -133,7 +127,7 @@ bool Party::leaveParty(Player* player)
 	player->sendTextMessage(MESSAGE_INFO_DESCR, "You have left the party.");
 
 	updateSharedExperience();
-	updateVocationsList();
+	updateSharedExperienceBonus();
 
 	clearPlayerPoints(player);
 
@@ -224,7 +218,7 @@ bool Party::joinParty(Player& player)
 
 	player.removePartyInvitation(this);
 	updateSharedExperience();
-	updateVocationsList();
+	updateSharedExperienceBonus();
 
 	const std::string& leaderName = leader->getName();
 	ss.str(std::string());
@@ -285,7 +279,7 @@ bool Party::invitePlayer(Player& player)
 	std::ostringstream ss;
 	ss << player.getName() << " has been invited.";
 
-	if (memberList.empty() && inviteList.empty()) {
+	if (empty()) {
 		ss << " Open the party channel to communicate with your members.";
 		g_game.updatePlayerShield(leader);
 		leader->sendCreatureSkull(leader);
@@ -364,7 +358,7 @@ void Party::updateSharedExperience()
 	}
 }
 
-void Party::updateVocationsList()
+void Party::updateSharedExperienceBonus()
 {
 	std::set<uint32_t> vocationIds;
 
@@ -381,29 +375,25 @@ void Party::updateVocationsList()
 	}
 
 	size_t size = vocationIds.size();
-	if (size > 1) {
-		extraExpRate = static_cast<float>(size * (10 + (size - 1) * 5)) / 100.f;
-	} else {
-		extraExpRate = 0.20f;
-	}
+	sharedExpBonus = std::max(0.2, (size * (5 * (size - 1) + 10)) / 100.);
 }
 
-bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
+bool Party::setSharedExperience(Player* player, bool sharedExpActive)
 {
 	if (!player || leader != player) {
 		return false;
 	}
 
-	if (sharedExpActive == _sharedExpActive) {
+	if (this->sharedExpActive == sharedExpActive) {
 		return true;
 	}
 
-	sharedExpActive = _sharedExpActive;
+	this->sharedExpActive = sharedExpActive;
 
 	if (sharedExpActive) {
-		sharedExpEnabled = canEnableSharedExperience();
+		this->sharedExpEnabled = canEnableSharedExperience();
 
-		if (sharedExpEnabled) {
+		if (this->sharedExpEnabled) {
 			leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience is now active.");
 		} else {
 			leader->sendTextMessage(MESSAGE_INFO_DESCR, "Shared Experience has been activated, but some members of your party are inactive.");
@@ -418,7 +408,7 @@ bool Party::setSharedExperience(Player* player, bool _sharedExpActive)
 
 void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 {
-	uint32_t shareExperience = static_cast<uint64_t>(std::ceil(((static_cast<double>(experience) / (memberList.size() + 1)) + (static_cast<double>(experience) * extraExpRate))));
+	uint64_t shareExperience = static_cast<uint64_t>(std::ceil((static_cast<double>(experience) * (sharedExpBonus + 1)) / (memberList.size() + 1)));
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
@@ -438,7 +428,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 		}
 	}
 
-	uint32_t minLevel = static_cast<int32_t>(std::ceil((static_cast<float>(highestLevel) * 2) / 3));
+	uint32_t minLevel = static_cast<uint32_t>(std::ceil((static_cast<float>(highestLevel) * 2) / 3));
 	if (player->getLevel() < minLevel) {
 		return false;
 	}

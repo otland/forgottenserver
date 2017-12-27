@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Obliverator" nameDescription="The Obliverator" race="fire" experience="6000" speed="280">
+	<health now="9020" max="9020" />
+	<look type="35" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-700" />
+		<attack name="fire" interval="1000" chance="20" range="5" radius="7" target="1" min="-100" max="-250">
+			<attribute key="areaEffect" value="firearea" />
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="energy" interval="3000" chance="30" length="8" spread="0" min="-200" max="-500">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="4000" chance="5" min="50" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="50" />
+		<element deathPercent="35" />
+		<element holyPercent="-15" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="fire elemental" interval="2000" chance="50" />
+	</summons>
+	<voices interval="1000" chance="10">
+		<voice sentence="NO ONE WILL BEAT ME!" />
+	</voices>
+</monster>

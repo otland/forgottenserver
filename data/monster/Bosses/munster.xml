@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Munster" nameDescription="a munster" race="blood" experience="23" speed="200" manacost="250">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Munster" nameDescription="Munster" race="blood" experience="35" speed="200" manacost="250">
 	<health now="58" max="58" />
 	<look type="56" corpse="2813" />
 	<targetchange interval="60000" chance="0" />
@@ -18,20 +18,20 @@
 		<flag runonhealth="10" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-1" max="-15" />
+		<attack name="melee" interval="2000" min="0" max="-15" />
 	</attacks>
 	<defenses armor="2" defense="4" />
-	<voices interval="2000" chance="5">
-		<voice sentence="Meeeeep!" />
-	</voices>
 	<summons maxSummons="2">
 		<summon name="Rat" interval="2000" chance="20" max="2" />
 	</summons>
+	<voices interval="2000" chance="5">
+		<voice sentence="Meeeeep!" />
+	</voices>
 	<loot>
-		<item id="2148" countmax="16" chance="100000" /><!-- gold coin -->
+		<item name="gold coin" countmax="16" chance="100000" />
+		<item name="bone club" chance="5000" />
+		<item name="jacket" chance="50000" />
+		<item name="cookie" countmax="1" chance="5000" />
 		<item id="2696" chance="50000" /><!-- cheese -->
-		<item id="2687" countmax="1" chance="5000" /><!-- cookie -->
-		<item id="2650" chance="50000" /><!-- jacket -->
-		<item id="2449" chance="5000" /><!-- bone club -->
 	</loot>
 </monster>

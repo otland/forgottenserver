@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="170" manacost="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="170">
 	<health now="255" max="255" />
 	<look type="120" corpse="6047" />
 	<targetchange interval="4000" chance="10" />
@@ -15,9 +15,11 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" poison="100" />
+		<attack name="melee" interval="2000" min="0" max="-100" poison="100" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-60" max="-95">
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="greenbubble" />
@@ -41,13 +43,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="40" chance="60000" /><!-- gold coin -->
-		<item id="2792" chance="7692" /><!-- dark mushroom -->
-		<item id="11217" chance="4166" /><!-- carniphila seeds -->
-		<item id="2804" chance="880" /><!-- shadow herb -->
-		<item id="2686" chance="890" /><!-- corncob -->
-		<item id="7732" chance="490" /><!-- seeds -->
-		<item id="2802" countmax="2" chance="446" /><!-- sling herb -->
-		<item id="13298" chance="170" /><!-- carrot on a stick -->
+		<item name="gold coin" countmax="40" chance="60000" />
+		<item name="corncob" chance="890" />
+		<item name="dark mushroom" chance="7692" />
+		<item name="sling herb" countmax="2" chance="446" />
+		<item name="shadow herb" chance="880" />
+		<item name="seeds" chance="490" />
+		<item name="carniphila seeds" chance="4166" />
+		<item name="carrot on a stick" chance="170" />
 	</loot>
 </monster>

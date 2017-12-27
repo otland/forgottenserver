@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dragonling" nameDescription="a dragonling" race="blood" experience="2200" speed="330">
+	<health now="2600" max="2600" />
+	<look type="505" corpse="18438" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="900" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-210" />
+		<attack name="fire" interval="2000" chance="10" length="5" spread="2" target="0" min="-120" max="-250">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="energy" interval="2000" chance="20" radius="3" target="0" min="-115" max="-180">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" radius="3" target="0" min="-95" max="-150">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="1" radius="1" speedchange="-700" duration="16000">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="100" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-5" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="FCHHHHHHHHHHHHHHHH" />
+		<voice sentence="FI?" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="37500" />
+		<item name="gold coin" countmax="100" chance="37500" />
+		<item name="gold coin" countmax="27" chance="37500" />
+		<item name="strong health potion" countmax="2" chance="24480" />
+		<item name="strong mana potion" countmax="2" chance="16900" />
+		<item name="blazing bone" chance="12410" />
+	</loot>
+</monster>

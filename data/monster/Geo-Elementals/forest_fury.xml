@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Forest Fury" nameDescription="a forest fury" race="blood" experience="235" speed="210">
+	<health now="480" max="480" />
+	<look type="569" corpse="21359" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-125" />
+		<attack name="physical" interval="1500" chance="40" radius="4" target="1" range="7" min="0" max="-100">
+			<attribute key="shootEffect" value="huntingspear" />
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="forest fury skill reducer" range="5" interval="2000" chance="20" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element holyPercent="10" />
+		<element firePercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="To arms, sisters!" />
+		<voice sentence="Feel the wrath of mother forest!" />
+		<voice sentence="By the power of Greenskull!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="53" chance="87250" />
+		<item name="crossbow" chance="2750" />
+		<item name="bolt" countmax="15" chance="48270" />
+		<item name="meat" chance="24930" />
+		<item name="piercing bolt" countmax="5" chance="14900" />
+		<item name="elvish bow" chance="90" />
+		<item name="small topaz" chance="470" />
+		<item name="elven hoof" chance="7030" />
+		<item name="venison" chance="13210" />
+	</loot>
+</monster>

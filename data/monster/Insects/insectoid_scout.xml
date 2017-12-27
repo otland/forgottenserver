@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190">
+	<health now="230" max="230" />
+	<look type="403" corpse="13514" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-74" poison="60" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element physicalPercent="5" />
+		<element firePercent="-5" />
+		<element earthPercent="50" />
+		<element icePercent="-5" />
+		<element energyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Chrrr! Chrr!" />
+		<voice sentence="Klk! Klk!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="80" chance="80000" />
+		<item name="club ring" chance="100" />
+		<item name="ripper lance" chance="850" />
+		<item name="health potion" chance="280" />
+	</loot>
+</monster>

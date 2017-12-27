@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spirit of Water" nameDescription="a spirit of water" race="undead" experience="850" speed="200">
+	<health now="1400" max="1400" />
+	<look type="11" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="poisonfield" interval="1000" chance="50">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="physical" spread="3" chance="40" interval="2000" min="-1" max="-120">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+	</attacks>
+	<defenses armor="0" defense="0" />
+	<elements>
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="5">
+		<voice sentence="Blubb" />
+	</voices>
+</monster>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Skeleton Warrior" nameDescription="a skeleton warrior" race="undead" experience="45" speed="150" manacost="350">
+	<health now="65" max="65" />
+	<look type="298" corpse="5972" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-7" max="-13">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="10" chance="43500" />
+		<item id="2230" chance="50000" /><!-- bone -->
+		<item id="2376" chance="1500" /><!-- sword -->
+		<item name="mace" chance="2000" />
+		<item name="white mushroom" countmax="3" chance="24000" />
+		<item name="brown mushroom" chance="1700" />
+		<item name="pelvis bone" chance="10630" />
+	</loot>
+</monster>

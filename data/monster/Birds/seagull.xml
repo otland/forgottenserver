@@ -15,9 +15,12 @@
 		<flag staticattack="90" />
 		<flag targetdistance="11" />
 		<flag runonhealth="25" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="10" attack="3" />
+		<attack name="melee" interval="2000" min="0" max="-3" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 </monster>

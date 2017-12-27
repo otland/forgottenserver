@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Sir Valorcrest" nameDescription="Sir Valorcrest" race="undead" experience="1800" speed="270">
+	<health now="1600" max="1600" />
+	<look type="287" corpse="8937" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-380" />
+		<attack name="death" interval="1000" chance="12" target="1" radius="4" min="0" max="-190">
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+	</attacks>
+	<defenses armor="38" defense="35">
+		<defense name="healing" interval="1000" chance="12" min="100" max="235">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="3000" chance="25" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="20" />
+		<element holyPercent="-15" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity death="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Vampire" interval="2000" chance="30" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I challenge you!" />
+	</voices>
+	<loot>
+		<item name="gold coin" chance="100000" countmax="93" />
+		<item name="platinum coin" chance="50000" countmax="5" />
+		<item name="sword ring" chance="1400" />
+		<item name="ring of healing (faster regeneration)" chance="17111" />
+		<item id="2229" chance="15000" />
+		<item name="vampire shield" chance="6300" />
+		<item name="chaos mace" chance="250" />
+		<item name="strong health potion" chance="1500" />
+		<item name="vampire lord token" chance="100000" />
+		<item name="vampire lord token" chance="100000" />
+	</loot>
+</monster>

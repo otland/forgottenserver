@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 
 struct Mount
 {
-	Mount(uint8_t id, uint16_t clientId, std::string name, int32_t speed, bool premium)
-		: name(name), speed(speed), clientId(clientId), id(id), premium(premium) {}
+	Mount(uint8_t id, uint16_t clientId, std::string name, int32_t speed, bool premium) :
+		name(std::move(name)), speed(speed), clientId(clientId), id(id), premium(premium) {}
 
 	std::string name;
 	int32_t speed;
@@ -38,6 +38,7 @@ class Mounts
 		bool reload();
 		bool loadFromXml();
 		Mount* getMountByID(uint8_t id);
+		Mount* getMountByName(const std::string& name);
 		Mount* getMountByClientID(uint16_t clientId);
 
 		const std::vector<Mount>& getMounts() const {

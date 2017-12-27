@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Ghoulish Hyaena" nameDescription="a ghoulish hyaena" race="blood" experience="195" speed="200" manacost="275">
+	<health now="400" max="400" />
+	<look type="94" head="20" body="30" legs="40" feet="50" corpse="6026" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-112" poison="10" />
+		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-60">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="speed" interval="2000" chance="15" speedchange="3000" duration="2000" />
+	</defenses>
+	<elements>
+		<element earthPercent="70" />
+		<element holyPercent="-10" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grawrrr!!" />
+		<voice sentence="Hoouu!" />
+	</voices>
+	<loot>
+		<item name="small ruby" countmax="2" chance="2700" />
+		<item name="gold coin" countmax="40" chance="89000" />
+		<item name="meat" countmax="3" chance="51060" />
+		<item name="worm" countmax="7" chance="65000" />
+		<item name="health potion" chance="19840" />
+	</loot>
+</monster>

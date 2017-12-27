@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Quara Hydromancer" nameDescription="a quara hydromancer" race="blood" experience="800" speed="250">
+	<health now="1100" max="1100" />
+	<look type="47" corpse="6066" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-80" poison="100" />
+		<attack name="ice" interval="2000" chance="10" length="8" spread="0" min="-100" max="-180">
+			<attribute key="areaEffect" value="bubbles" />
+		</attack>
+		<attack name="ice" interval="2000" chance="10" radius="3" target="0" min="-90" max="-150">
+			<attribute key="areaEffect" value="bubbles" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-170" max="-240">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="0" max="-170">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="100" max="120">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Qua hah tsh!" />
+		<voice sentence="Teech tsha tshul!" />
+		<voice sentence="Quara tsha Fach!" />
+		<voice sentence="Tssssha Quara!" />
+		<voice sentence="Blubber." />
+		<voice sentence="Blup." />
+	</voices>
+	<loot>
+		<item name="white pearl" chance="5250" />
+		<item name="black pearl" chance="3150" />
+		<item name="gold coin" countmax="50" chance="50000" />
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="small emerald" countmax="2" chance="5111" />
+		<item name="wand of cosmic energy" chance="900" />
+		<item name="ring of healing" chance="1008" />
+		<item name="knight armor" chance="200" />
+		<item name="shrimp" countmax="5" chance="4545" />
+		<item name="fish fin" chance="1280" />
+		<item name="great mana potion" chance="3100" />
+		<item name="quara eye" chance="15930" />
+	</loot>
+</monster>

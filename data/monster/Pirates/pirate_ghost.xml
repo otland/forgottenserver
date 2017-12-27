@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Pirate Ghost" nameDescription="a pirate ghost" race="undead" experience="250" speed="170">
+	<health now="275" max="275" />
+	<look type="196" corpse="5566" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" poison="40" />
+		<attack name="lifedrain" interval="2000" chance="15" radius="1" target="0" min="-40" max="-80">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" radius="3" target="1" min="-50" max="-65">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+	</attacks>
+	<defenses>
+		<defense name="healing" interval="2000" chance="5" min="40" max="70">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
+		<immunity physical="1" />
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Yooh Ho Hooh Ho!" />
+		<voice sentence="Hell is waiting for You!" />
+		<voice sentence="It's alive!" />
+		<voice sentence="The curse! Aww the curse!" />
+		<voice sentence="You will not get my treasure!" />
+	</voices>
+	<loot>
+		<item id="1951" chance="910" /><!-- parchment -->
+		<item name="gold coin" countmax="67" chance="48000" />
+		<item name="stealth ring" chance="650" />
+		<item name="spike sword" chance="130" />
+		<item name="red robe" chance="130" />
+		<item name="tattered piece of robe" chance="4300" />
+	</loot>
+</monster>

@@ -46,27 +46,24 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
+  <Import Project="settings.props" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="settings.props" />
     <Import Project="arch32.props" />
     <Import Project="debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="settings.props" />
     <Import Project="arch64.props" />
     <Import Project="debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="settings.props" />
     <Import Project="arch32.props" />
     <Import Project="release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="settings.props" />
     <Import Project="arch64.props" />
     <Import Project="release.props" />
   </ImportGroup>
@@ -132,7 +129,6 @@
     <ClCompile Include="..\src\bed.cpp" />
     <ClCompile Include="..\src\chat.cpp" />
     <ClCompile Include="..\src\combat.cpp" />
-    <ClCompile Include="..\src\commands.cpp" />
     <ClCompile Include="..\src\condition.cpp" />
     <ClCompile Include="..\src\configmanager.cpp" />
     <ClCompile Include="..\src\connection.cpp" />
@@ -193,6 +189,7 @@
     <ClCompile Include="..\src\scheduler.cpp" />
     <ClCompile Include="..\src\scriptmanager.cpp" />
     <ClCompile Include="..\src\server.cpp" />
+    <ClCompile Include="..\src\signals.cpp" />
     <ClCompile Include="..\src\spawn.cpp" />
     <ClCompile Include="..\src\spells.cpp" />
     <ClCompile Include="..\src\protocolstatus.cpp" />
@@ -216,7 +213,6 @@
     <ClInclude Include="..\src\bed.h" />
     <ClInclude Include="..\src\chat.h" />
     <ClInclude Include="..\src\combat.h" />
-    <ClInclude Include="..\src\commands.h" />
     <ClInclude Include="..\src\condition.h" />
     <ClInclude Include="..\src\configmanager.h" />
     <ClInclude Include="..\src\connection.h" />
@@ -276,6 +272,7 @@
     <ClInclude Include="..\src\scheduler.h" />
     <ClInclude Include="..\src\scriptmanager.h" />
     <ClInclude Include="..\src\server.h" />
+    <ClInclude Include="..\src\signals.h" />
     <ClInclude Include="..\src\spawn.h" />
     <ClInclude Include="..\src\spells.h" />
     <ClInclude Include="..\src\protocolstatus.h" />

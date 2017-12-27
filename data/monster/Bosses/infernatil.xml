@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Infernatil" nameDescription="Infernatil" race="fire" experience="85000" speed="605">
+	<health now="270000" max="270000" />
+	<look type="35" head="0" body="0" legs="0" feet="0" corpse="2916" />
+	<targetchange interval="2000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag runonhealth="3000" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-2860" />
+		<attack name="firecondition" interval="1000" chance="7" range="2" min="-800" max="-1200">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="physical" interval="1000" chance="7" radius="6" target="0" min="-250" max="-750">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="1000" chance="50" radius="5" target="0" min="-200" max="-500">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="4" radius="8" target="0">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="1000" chance="34" range="7" radius="7" target="1" min="-350" max="-850">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="1000" chance="13" length="8" spread="0" min="-500" max="-1000">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="1000" chance="10" length="8" spread="3" min="-300" max="-1500">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="165" defense="150">
+		<defense name="healing" interval="1000" chance="15" min="5000" max="10000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="1000" chance="25" min="2000" max="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="10" speedchange="1800" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="hellfire fighter" interval="1000" chance="8" max="4" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Worship Zathroth pathetic mortal!" />
+		<voice sentence="Your soul will be mine!" />
+		<voice sentence="ASHES TO ASHES!" yell="1" />
+		<voice sentence="YOU WILL ALL BURN!" yell="1" />
+		<voice sentence="THE DAY OF RECKONING IS AT HAND!" yell="1" />
+		<voice sentence="BOW TO THE POWER OF THE RUTHLESS SEVEN!" yell="1" />
+	</voices>
+	<loot>
+		<item name="purple tome" countmax="1" chance="2600" />
+		<item name="golden mug" countmax="1" chance="7500" />
+		<item name="teddy bear" countmax="1" chance="14500" />
+		<item name="ring of the sky" countmax="1" chance="3500" />
+		<item id="2124" countmax="1" chance="5500" />
+		<item name="crystal necklace" countmax="1" chance="1500" />
+		<item name="ancient amulet" countmax="1" chance="3500" />
+		<item name="white pearl" countmax="15" chance="12500" />
+		<item name="black pearl" countmax="15" chance="15000" />
+		<item name="small diamond" countmax="5" chance="9500" />
+		<item name="small sapphire" countmax="10" chance="13500" />
+		<item name="gold coin" countmax="100" chance="99900" />
+		<item name="gold coin" countmax="100" chance="88800" />
+		<item name="gold coin" countmax="100" chance="77700" />
+		<item name="gold coin" countmax="100" chance="66600" />
+		<item name="small emerald" countmax="10" chance="15500" />
+		<item name="small amethyst" countmax="20" chance="13500" />
+		<item name="talon" countmax="7" chance="14000" />
+		<item name="green gem" countmax="1" chance="1500" />
+		<item name="blue gem" countmax="1" chance="1500" />
+		<item id="2162" countmax="1" chance="11500" />
+		<item name="might ring" countmax="1" chance="5000" />
+		<item name="stealth ring" countmax="1" chance="9500" />
+		<item name="energy ring" countmax="1" chance="13500" />
+		<item name="silver amulet" countmax="1" chance="13000" />
+		<item name="platinum amulet" countmax="1" chance="4500" />
+		<item name="strange symbol" countmax="1" chance="2500" />
+		<item name="orb" countmax="1" chance="12000" />
+		<item name="life crystal" countmax="1" chance="1000" />
+		<item name="mind stone" countmax="1" chance="4000" />
+		<item name="gold ring" countmax="1" chance="8000" />
+		<item name="snakebite rod" countmax="1" chance="3500" />
+		<item name="necrotic rod" countmax="1" chance="3500" />
+		<item name="moonlight rod" countmax="1" chance="3500" />
+		<item name="wand of decay" countmax="1" chance="2500" />
+		<item id="2192" countmax="1" chance="2500" />
+		<item name="boots of haste" countmax="1" chance="4000" />
+		<item name="stone skin amulet" countmax="1" chance="4000" />
+		<item name="protection amulet" countmax="1" chance="4500" />
+		<item name="ring of healing" countmax="1" chance="13000" />
+		<item id="2231" countmax="1" chance="9000" />
+		<item name="two handed sword" countmax="1" chance="20000" />
+		<item name="double axe" countmax="1" chance="20000" />
+		<item name="giant sword" countmax="1" chance="12500" />
+		<item name="ice rapier" countmax="1" chance="7500" />
+		<item name="silver dagger" countmax="1" chance="15500" />
+		<item name="golden sickle" countmax="1" chance="4500" />
+		<item name="thunder hammer" countmax="1" chance="13500" />
+		<item name="fire axe" countmax="1" chance="17000" />
+		<item name="dragon hammer" countmax="1" chance="4500" />
+		<item name="skull staff" countmax="1" chance="5000" />
+		<item name="devil helmet" countmax="1" chance="11000" />
+		<item name="golden legs" countmax="1" chance="5000" />
+		<item name="magic plate armor" countmax="1" chance="3000" />
+		<item name="mastermind shield" countmax="1" chance="7500" />
+		<item name="demon shield" countmax="1" chance="15500" />
+		<item id="3955" countmax="1" chance="100" />
+	</loot>
+</monster>

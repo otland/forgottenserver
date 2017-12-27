@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dwarf Geomancer" nameDescription="a dwarf geomancer" race="blood" experience="265" speed="190">
+	<health now="380" max="380" />
+	<look type="66" corpse="6015" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="70" />
+		<flag runonhealth="110" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="earth" interval="2000" chance="20" range="7" min="-50" max="-110">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-50" max="-80" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="40" min="75" max="125">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="20" />
+		<element firePercent="60" />
+		<element energyPercent="10" />
+		<element holyPercent="10" />
+		<element icePercent="-5" />
+		<element deathPercent="-1" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hail Durin!" />
+		<voice sentence="Earth is the strongest element." />
+		<voice sentence="Dust to dust." />
+	</voices>
+	<loot>
+		<item name="small sapphire" chance="710" />
+		<item name="gold coin" countmax="35" chance="50000" />
+		<item id="2162" chance="14000" /><!-- magic lightwand -->
+		<item id="2175" chance="360" /><!-- Spellbook -->
+		<item name="dwarven ring" chance="530" />
+		<item name="blank rune" chance="33000" />
+		<item name="clerical mace" chance="1120" />
+		<item name="leather boots" chance="47500" />
+		<item name="pear" chance="25000" />
+		<item name="white mushroom" countmax="2" chance="60000" />
+		<item name="iron ore" chance="120" />
+		<item name="terra boots" chance="470" />
+		<item name="geomancer's robe" chance="8000" />
+		<item name="geomancer's staff" chance="7000" />
+	</loot>
+</monster>

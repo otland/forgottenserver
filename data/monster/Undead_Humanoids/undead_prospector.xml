@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Undead Prospector" nameDescription="an undead prospector" race="blood" experience="85" speed="170" manacost="440">
+	<health now="100" max="100" />
+	<look type="18" corpse="5976" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" />
+	</attacks>
+	<defenses>
+		<defense name="healing" interval="2000" chance="15" min="5" max="15">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element energyPercent="30" />
+		<element earthPercent="20" />
+		<element icePercent="10" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Our mine... leave us alone." />
+		<voice sentence="Turn back..." />
+		<voice sentence="These mine is ours... you shall not pass." />
+	</voices>
+	<loot>
+		<item id="2050" chance="46150" /><!-- torch -->
+		<item name="gold coin" countmax="30" chance="53850" />
+		<item name="life ring" chance="200" />
+		<item id="2229" chance="240" /><!-- skull -->
+		<item name="knife" chance="15380" />
+		<item name="brass helmet" chance="23000" />
+		<item name="viking helmet" chance="1000" />
+		<item name="scale armor" chance="1000" />
+		<item name="worm" countmax="6" chance="92310" />
+		<item name="brown piece of cloth" chance="1000" />
+	</loot>
+</monster>

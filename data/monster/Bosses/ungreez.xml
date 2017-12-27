@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ungreez" nameDescription="ungreez" race="blood" experience="5000" speed="330" manacost="10000">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Ungreez" nameDescription="Ungreez" race="blood" experience="500" speed="330" manacost="10000">
 	<health now="8200" max="8200" />
 	<look type="35" corpse="5995" />
 	<targetchange interval="5000" chance="8" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="70" attack="120" />
+		<attack name="melee" interval="2000" min="0" max="-480" />
 		<attack name="manadrain" interval="2000" chance="13" range="7" min="0" max="-110">
 			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
@@ -56,9 +56,9 @@
 		<voice sentence="You wil die Begging like the others did" yell="1" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="21000" /><!-- gold coin -->
-		<item id="2795" countmax="6" chance="10000" /><!-- fire mushroom -->
-		<item id="7590" chance="20000" /><!-- great mana potion -->
-		<item id="7591" chance="20000" /><!-- great health potion -->
+		<item name="gold coin" countmax="90" chance="21000" />
+		<item name="fire mushroom" countmax="6" chance="10000" />
+		<item name="great mana potion" chance="20000" />
+		<item name="great health potion" chance="20000" />
 	</loot>
 </monster>

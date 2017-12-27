@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Deepling Elite" nameDescription="a deepling elite" race="blood" experience="3000" speed="210">
+	<health now="3200" max="3200" />
+	<look type="441" corpse="15176" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="0" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="0" max="-225">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="150" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="86" chance="100000" />
+		<item name="small emerald" countmax="2" chance="6290" />
+		<item name="life ring" chance="5360" />
+		<item name="fish fin" chance="2000" />
+		<item name="great mana potion" chance="24000" />
+		<item name="great health potion" chance="25000" />
+		<item name="heavy trident" chance="3380" />
+		<item name="eye of a deepling" chance="25000" />
+		<item name="deepling warts" chance="25000" />
+		<item name="deeptags" chance="21700" />
+		<item name="warrior's axe" chance="640" />
+		<item name="deepling ridge" chance="19000" />
+		<item name="warrior's shield" chance="1234" />
+		<item name="deepling filet" chance="25000" />
+		<item name="vortex bolt" countmax="5" chance="24000" />
+	</loot>
+</monster>

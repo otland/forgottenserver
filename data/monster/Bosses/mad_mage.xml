@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="mad mage" nameDescription="a mad mage" race="blood" experience="1800" speed="240">
+	<health now="2500" max="2500" />
+	<look type="394" corpse="13603" />
+	<targetchange interval="5000" chance="30" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="1000" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-78" />
+		<attack name="fire" interval="1000" chance="12" range="7" target="1" min="-50" max="-185">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="manadrain" interval="1400" chance="24" range="6" min="-30" max="-90">
+			<attribute key="shootEffect" value="ice" />
+		</attack>
+		<attack name="firefield" interval="1600" chance="20" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="energy" interval="1900" chance="18" length="8" spread="0" min="-70" max="-150">
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="35" max="80">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-20" />
+		<element holyPercent="-10" />
+		<element earthPercent="50" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="stone golem" interval="1000" chance="10" />
+	</summons>
+	<loot>
+		<item name="gold coin" countmax="66" chance="100000" />
+		<item name="gold coin" chance="100000" countmax="20" />
+		<item name="dark mushroom" countmax="5" chance="5000" />
+		<item name="red piece of cloth" chance="800" />
+		<item name="assassin star" chance="2400" countmax="4" />
+		<item name="strong health potion" countmax="5" chance="1300" />
+		<item name="strong mana potion" countmax="2" chance="1200" />
+		<item name="lightning legs" chance="800" />
+	</loot>
+</monster>

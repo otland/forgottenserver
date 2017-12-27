@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Massive Earth Elemental" nameDescription="a massive earth elemental" race="undead" experience="950" speed="240">
+	<health now="1330" max="1330" />
+	<look type="285" corpse="8933" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag lightlevel="0" />
+		<flag lightcolor="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+		<attack name="earth" interval="2000" chance="10" range="7" target="1" min="-99" max="-145">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" range="7" radius="2" target="1" min="-95" max="-169">
+			<attribute key="shootEffect" value="largerock" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" length="6" spread="0" min="-300" max="-320">
+			<attribute key="areaEffect" value="bigplants" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" target="0" radius="5" min="-200" max="-220">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="5" target="1" speedchange="-330" duration="5000">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="5" min="150" max="180">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="45" />
+		<element energyPercent="90" />
+		<element physicalPercent="30" />
+		<element holyPercent="50" />
+		<element firePercent="-15" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity energy="1" />
+	</immunities>
+	<loot>
+		<item name="small stone" countmax="10" chance="25280" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="41" chance="32000" />
+		<item name="stone skin amulet" chance="980" />
+		<item name="protection amulet" chance="1580" />
+		<item name="dwarven ring" chance="2790" />
+		<item name="diamond sceptre" chance="150" />
+		<item name="terra amulet" chance="500" />
+		<item id="9809" chance="3300" /><!-- rusty armor -->
+		<item name="small topaz" countmax="2" chance="5280" />
+		<item name="lump of earth" chance="40680" />
+		<item name="clay lump" chance="480" />
+		<item id="13757" chance="430" /><!-- coal -->
+	</loot>
+</monster>

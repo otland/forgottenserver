@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Countess Sorrow" nameDescription="Countess Sorrow" race="undead" experience="13000" speed="250">
+	<health now="6500" max="6500" />
+	<look type="241" head="20" corpse="6344" />
+	<targetchange interval="60000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-360" poison="50" />
+		<attack name="earth" interval="1000" chance="10" range="7" radius="4" target="1" min="-150" max="-350">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisonfield" interval="1000" chance="17" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="manadrain" interval="1000" chance="25" range="7" min="-100" max="-400">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="20">
+		<defense name="healing" interval="1000" chance="50" min="409" max="812">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity physical="1" />
+		<immunity earth="1" />
+		<immunity ice="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="Countess Sorrow's frozen tear" chance="100000" />
+	</loot>
+</monster>

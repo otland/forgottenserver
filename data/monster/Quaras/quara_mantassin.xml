@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Quara Mantassin" nameDescription="a quara mantassin" race="blood" experience="400" speed="260" manacost="480">
+	<health now="800" max="800" />
+	<look type="72" corpse="6064" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="40" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-138" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="invisible" interval="2000" chance="20" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="400" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zuerk Pachak!" />
+		<voice sentence="Shrrrr" />
+	</voices>
+	<loot>
+		<item name="small sapphire" chance="1000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="29" chance="50000" />
+		<item name="stealth ring" chance="960" />
+		<item name="two handed sword" chance="1010" />
+		<item name="halberd" chance="5000" />
+		<item name="strange helmet" chance="100" />
+		<item name="cape" chance="1050" />
+		<item name="blue robe" chance="50" />
+		<item name="shrimp" countmax="5" chance="5000" />
+		<item name="fish fin" chance="630" />
+		<item name="mantassin tail" chance="11600" />
+	</loot>
+</monster>

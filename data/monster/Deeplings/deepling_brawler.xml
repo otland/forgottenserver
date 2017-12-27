@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Deepling Brawler" nameDescription="a deepling brawler" race="blood" experience="260" speed="190">
+	<health now="380" max="380" />
+	<look type="470" corpse="13840" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="0" />
+		<flag runonhealth="40" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="drown" interval="2000" chance="15" range="7" target="1" min="-60" max="-120">
+			<attribute key="shootEffect" value="spear" />
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element energyPercent="-10" />
+		<element earthPercent="-1" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="44" chance="61000" />
+		<item id="2667" countmax="3" chance="19120" /><!-- fish-->
+		<item name="fish fin" chance="740" />
+		<item name="heavy trident" chance="2940" />
+		<item name="eye of a deepling" chance="6600" />
+		<item name="deepling scales" chance="14500" />
+	</loot>
+</monster>

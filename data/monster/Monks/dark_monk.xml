@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dark Monk" nameDescription="a dark monk" race="blood" experience="145" speed="210" manacost="480">
+	<health now="190" max="190" />
+	<look type="225" corpse="20371" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-50">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="25" max="49">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="40" />
+		<element holyPercent="-10" />
+		<element physicalPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="You are no match to us!" />
+		<voice sentence="This is where your path will end!" />
+		<voice sentence="Your end has come!" />
+	</voices>
+	<loot>
+		<item id="1949" chance="1790" /><!-- scroll -->
+		<item name="brown flask" chance="380" />
+		<item id="2044" chance="550" /><!-- lamp -->
+		<item name="gold coin" countmax="18" chance="14600" />
+		<item name="power ring" chance="120" />
+		<item name="life crystal" chance="990" />
+		<item name="ankh" chance="900" />
+		<item name="sandals" chance="890" />
+		<item name="bread" chance="20550" />
+		<item name="mana potion" chance="790" />
+		<item name="book of prayers" chance="1900" />
+		<item name="dark rosary" chance="10500" />
+		<item name="rope belt" chance="6666" />
+		<item name="safety pin" chance="990" />
+	</loot>
+</monster>

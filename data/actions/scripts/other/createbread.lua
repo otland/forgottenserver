@@ -4,13 +4,13 @@ local millstones = {1381, 1382, 1383, 1384}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if itemId == 2692 then
-		if target.type == 1 and isInArray(liquidContainers, target.itemid) then
+		if target.type == 1 and table.contains(liquidContainers, target.itemid) then
 			item:remove(1)
 			player:addItem(2693, 1)
 			target:transform(target.itemid, 0)
 			return true
 		end
-	elseif isInArray(millstones, target.itemid) then
+	elseif table.contains(millstones, target.itemid) then
 		item:remove(1)
 		player:addItem(2692, 1)
 		return true

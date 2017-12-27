@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Big Boss Trolliver" nameDescription="Big Boss Trolliver" race="blood" experience="105" speed="140">
+	<health now="150" max="150" />
+	<look type="281" corpse="7926" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="20" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" />
+	</attacks>
+	<defenses armor="10" defense="12" />
+	<elements>
+		<element energyPercent="22" />
+		<element holyPercent="11" />
+		<element earthPercent="-3" />
+		<element deathPercent="-4" />
+	</elements>
+	<loot>
+		<item name="gold coin" countmax="57" chance="6000" />
+		<item name="spear" countmax="2" chance="2000" />
+		<item name="studded club" chance="5000" />
+		<item name="meat" countmax="3" chance="1500" />
+	</loot>
+</monster>

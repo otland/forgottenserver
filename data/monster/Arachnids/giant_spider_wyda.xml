@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Giant Spider" nameDescription="a giant spider" race="venom" experience="12" speed="152" manacost="210">
+	<health now="20" max="20" />
+	<look type="38" corpse="5977" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="6" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-20" />
+	</attacks>
+	<defenses armor="2" defense="2" />
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<loot>
+		<item name="gold coin" countmax="5" chance="100000" />
+	</loot>
+</monster>

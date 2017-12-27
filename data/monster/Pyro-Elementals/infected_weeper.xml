@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Infected Weeper" nameDescription="an infected weeper" race="fire" experience="4800" speed="250">
+	<health now="6800" max="6800" />
+	<look type="489" corpse="17251" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-280" />
+		<attack name="lifedrain" interval="2000" chance="15" length="5" spread="3" min="-250" max="-700">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="30" target="0" radius="3" min="-80" max="-250">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="invisible" interval="2000" chance="10" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-5" />
+		<element deathPercent="5" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="6">
+		<summon name="Parasite" interval="2000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Moooaaan!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="198" chance="100000" />
+		<item name="platinum coin" countmax="7" chance="100000" />
+		<item id="8748" chance="1460" /><!-- coal -->
+	</loot>
+</monster>

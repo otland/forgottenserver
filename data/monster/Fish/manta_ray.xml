@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Manta Ray" nameDescription="a manta ray" race="blood" experience="125" speed="200">
+	<health now="680" max="680" />
+	<look type="449" corpse="15276" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="0" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-99" poison="120" />
+		<attack name="energy" interval="2000" chance="10" range="7" min="-15" max="-75">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" length="4" spread="0" target="0">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element icePercent="-1" />
+		<element physicalPercent="-1" />
+		<element energyPercent="1" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Flap flap flap!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="38" chance="50000" />
+	</loot>
+</monster>

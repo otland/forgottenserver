@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ extern Actions* g_actions;
 extern ConfigManager g_config;
 
 Actions::Actions() :
-	m_scriptInterface("Action Interface")
+	scriptInterface("Action Interface")
 {
-	m_scriptInterface.initState();
+	scriptInterface.initState();
 }
 
 Actions::~Actions()
@@ -43,7 +43,7 @@ Actions::~Actions()
 	clear();
 }
 
-inline void Actions::clearMap(ActionUseMap& map)
+void Actions::clearMap(ActionUseMap& map)
 {
 	// Filter out duplicates to avoid double-free
 	std::unordered_set<Action*> set;
@@ -63,12 +63,12 @@ void Actions::clear()
 	clearMap(uniqueItemMap);
 	clearMap(actionItemMap);
 
-	m_scriptInterface.reInitState();
+	scriptInterface.reInitState();
 }
 
 LuaScriptInterface& Actions::getScriptInterface()
 {
-	return m_scriptInterface;
+	return scriptInterface;
 }
 
 std::string Actions::getScriptBaseName() const
@@ -81,7 +81,7 @@ Event* Actions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "action") != 0) {
 		return nullptr;
 	}
-	return new Action(&m_scriptInterface);
+	return new Action(&scriptInterface);
 }
 
 bool Actions::registerEvent(Event* event, const pugi::xml_node& node)
@@ -263,11 +263,7 @@ Action* Actions::getAction(const Item* item)
 	}
 
 	//rune items
-	Action* runeSpell = g_spells->getRuneSpell(item->getID());
-	if (runeSpell) {
-		return runeSpell;
-	}
-	return nullptr;
+	return g_spells->getRuneSpell(item->getID());
 }
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
@@ -283,6 +279,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		if (action->isScripted()) {
 			if (action->executeUse(player, item, pos, nullptr, pos, isHotkey)) {
 				return RETURNVALUE_NOERROR;
+			}
+
+			if (item->isRemoved()) {
+				return RETURNVALUE_CANNOTUSETHISOBJECT;
 			}
 		} else if (action->function) {
 			if (action->function(player, item, pos, nullptr, pos, isHotkey)) {
@@ -414,81 +414,54 @@ void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t co
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 
-Action::Action(LuaScriptInterface* _interface) :
-	Event(_interface)
-{
-	allowFarUse = false;
-	checkFloor = true;
-	checkLineOfSight = true;
-	function = nullptr;
-}
-
-Action::Action(const Action* copy) :
-	Event(copy)
-{
-	allowFarUse = copy->allowFarUse;
-	checkFloor = copy->checkFloor;
-	checkLineOfSight = copy->checkLineOfSight;
-	function = copy->function;
-}
+Action::Action(LuaScriptInterface* interface) :
+	Event(interface), function(nullptr), allowFarUse(false), checkFloor(true), checkLineOfSight(true) {}
 
 bool Action::configureEvent(const pugi::xml_node& node)
 {
 	pugi::xml_attribute allowFarUseAttr = node.attribute("allowfaruse");
 	if (allowFarUseAttr) {
-		setAllowFarUse(allowFarUseAttr.as_bool());
+		allowFarUse = allowFarUseAttr.as_bool();
 	}
 
 	pugi::xml_attribute blockWallsAttr = node.attribute("blockwalls");
 	if (blockWallsAttr) {
-		setCheckLineOfSight(blockWallsAttr.as_bool());
+		checkLineOfSight = blockWallsAttr.as_bool();
 	}
 
 	pugi::xml_attribute checkFloorAttr = node.attribute("checkfloor");
 	if (checkFloorAttr) {
-		setCheckFloor(checkFloorAttr.as_bool());
+		checkFloor = checkFloorAttr.as_bool();
 	}
 
 	return true;
 }
 
-bool Action::loadFunction(const pugi::xml_attribute& attr)
-{
-	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "increaseitemid") == 0) {
-		function = increaseItemId;
-	} else if (strcasecmp(functionName, "decreaseitemid") == 0) {
-		function = decreaseItemId;
-	} else if (strcasecmp(functionName, "market") == 0) {
-		function = enterMarket;
-	} else {
-		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
-	}
+namespace {
 
-	m_scripted = false;
-	return true;
-}
-
-bool Action::increaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
-	return true;
-}
-
-bool Action::decreaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
-	return true;
-}
-
-bool Action::enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
+bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
 {
 	if (player->getLastDepotId() == -1) {
 		return false;
 	}
 
 	player->sendMarketEnter(player->getLastDepotId());
+	return true;
+}
+
+}
+
+bool Action::loadFunction(const pugi::xml_attribute& attr)
+{
+	const char* functionName = attr.as_string();
+	if (strcasecmp(functionName, "market") == 0) {
+		function = enterMarket;
+	} else {
+		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		return false;
+	}
+
+	scripted = false;
 	return true;
 }
 
@@ -499,10 +472,10 @@ std::string Action::getScriptEventName() const
 
 ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos)
 {
-	if (!getAllowFarUse()) {
+	if (!allowFarUse) {
 		return g_actions->canUse(player, toPos);
 	} else {
-		return g_actions->canUseFar(player, toPos, getCheckLineOfSight(), getCheckFloor());
+		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
 	}
 }
 
@@ -514,30 +487,30 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 
-bool Action::executeUse(Player* player, Item* item, const Position& fromPos, Thing* target, const Position& toPos, bool isHotkey)
+bool Action::executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey)
 {
 	//onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if (!m_scriptInterface->reserveScriptEnv()) {
+	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - Action::executeUse] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = m_scriptInterface->getScriptEnv();
-	env->setScriptId(m_scriptId, m_scriptInterface);
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
 
-	lua_State* L = m_scriptInterface->getLuaState();
+	lua_State* L = scriptInterface->getLuaState();
 
-	m_scriptInterface->pushFunction(m_scriptId);
+	scriptInterface->pushFunction(scriptId);
 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushThing(L, item);
-	LuaScriptInterface::pushPosition(L, fromPos);
+	LuaScriptInterface::pushPosition(L, fromPosition);
 
 	LuaScriptInterface::pushThing(L, target);
-	LuaScriptInterface::pushPosition(L, toPos);
+	LuaScriptInterface::pushPosition(L, toPosition);
 
 	LuaScriptInterface::pushBoolean(L, isHotkey);
-	return m_scriptInterface->callFunction(6);
+	return scriptInterface->callFunction(6);
 }

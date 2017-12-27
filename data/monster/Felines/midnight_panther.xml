@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Midnight Panther" nameDescription="a midnight panther" race="blood" experience="900" speed="250">
+	<health now="1200" max="1200" />
+	<look type="385" corpse="13327" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1500" min="0" max="-90" />
+		<attack name="energy" interval="2000" chance="15" range="7" min="-75" max="-215">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="370" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="50" max="125">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="-1" />
+		<element firePercent="1" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity energy="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="57" chance="100000" />
+		<item name="life ring" chance="12500" />
+		<item name="meat" countmax="4" chance="25000" />
+		<item name="panther head" chance="12500" />
+		<item name="panther paw" chance="100000" />
+	</loot>
+</monster>

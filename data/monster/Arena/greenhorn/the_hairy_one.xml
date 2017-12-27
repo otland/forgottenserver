@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Hairy One" nameDescription="The Hairy One" race="blood" experience="115" speed="240">
+	<health now="325" max="325" />
+	<look type="116" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-70" />
+	</attacks>
+	<defenses armor="3" defense="5" />
+	<elements>
+		<element energyPercent="5" />
+		<element firePercent="-20" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Hugah!" />
+		<voice sentence="Ungh! Ungh!" />
+	</voices>
+</monster>

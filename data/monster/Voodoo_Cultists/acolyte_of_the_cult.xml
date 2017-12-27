@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Acolyte of the Cult" nameDescription="an acolyte of the cult" race="blood" experience="300" speed="200">
+	<health now="390" max="390" />
+	<look type="194" head="114" body="121" legs="121" feet="57" corpse="20319" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" poison="2" />
+		<attack name="lifedrain" interval="2000" chance="20" range="7" radius="1" target="1" min="-60" max="-120">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="5" range="7" radius="1" target="1" duration="3000">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holydamage" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="40" max="60">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="20" />
+		<element earthPercent="20" />
+		<element icePercent="20" />
+		<element physicalPercent="-10" />
+		<element energyPercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="Skeleton" interval="2000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Praise the voodoo!" />
+		<voice sentence="Power to the cult!" />
+		<voice sentence="Feel the power of the cult!" />
+	</voices>
+	<loot>
+		<item id="1962" chance="730" /><!-- orange book -->
+		<item name="gold coin" countmax="40" chance="66940" />
+		<item name="small emerald" chance="550" />
+		<item name="life ring" chance="560" />
+		<item name="terra rod" chance="250" />
+		<item name="dragon necklace" chance="1050" />
+		<item name="morning star" chance="4990" />
+		<item name="pirate voodoo doll" chance="1060" />
+		<item id="6088" chance="480" /><!-- music sheet 2nd verse -->
+		<item name="cultish robe" chance="8070" />
+		<item name="cultish symbol" chance="40" />
+		<item name="rope belt" chance="10420" />
+		<item name="broken key ring" chance="60" />
+	</loot>
+</monster>

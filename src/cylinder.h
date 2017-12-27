@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 class Item;
 class Creature;
 
-#define INDEX_WHEREEVER -1
+static constexpr int32_t INDEX_WHEREEVER = -1;
 
 enum cylinderflags_t {
 	FLAG_NOLIMIT = 1 << 0, //Bypass limits like capacity/container limits, blocking items/creatures etc.
@@ -187,7 +187,7 @@ class Cylinder : virtual public Thing
 		  * \param countMap a map to put the itemID:count mapping in
 		  * \returns a map mapping item id to count (same as first argument)
 		  */
-		virtual std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t> &countMap) const;
+		virtual std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
 
 		/**
 		  * Adds an object to the cylinder without sending to the client(s)
@@ -239,7 +239,7 @@ class VirtualCylinder final : public Cylinder
 			return 1;
 		}
 		std::string getDescription(int32_t) const override {
-			return std::string();
+			return {};
 		}
 		bool isRemoved() const override {
 			return false;

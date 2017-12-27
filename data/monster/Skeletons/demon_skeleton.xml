@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Demon Skeleton" nameDescription="a demon skeleton" race="undead" experience="240" speed="170" manacost="620">
+	<health now="400" max="400" />
+	<look type="37" corpse="5963" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-185" />
+		<attack name="death" interval="2000" chance="10" radius="1" target="1" range="1" min="-30" max="-50">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity death="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2050" chance="5270" /><!-- torch -->
+		<item name="black pearl" chance="2900" />
+		<item name="small ruby" chance="1400" />
+		<item name="gold coin" countmax="75" chance="97000" />
+		<item name="mind stone" chance="520" />
+		<item name="mysterious fetish" chance="690" />
+		<item name="throwing star" countmax="3" chance="10000" />
+		<item name="battle hammer" chance="4000" />
+		<item name="iron helmet" chance="3450" />
+		<item name="battle shield" chance="5000" />
+		<item name="guardian shield" chance="100" />
+		<item name="health potion" countmax="2" chance="10120" />
+		<item name="health potion" countmax="2" chance="10000" />
+		<item name="mana potion" chance="5300" />
+		<item name="demonic skeletal hand" chance="12600" />
+	</loot>
+</monster>

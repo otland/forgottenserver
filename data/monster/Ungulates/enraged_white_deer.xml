@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Enraged White Deer" nameDescription="an enraged white deer" race="blood" experience="165" speed="210">
+	<health now="255" max="255" />
+	<look type="400" corpse="13513" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="4000" chance="15" min="10" max="40">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="*wheeze*" />
+		<voice sentence="ROOOAAARR!!" />
+		<voice sentence="*sniff*" />
+		<voice sentence="*bell*" />
+	</voices>
+	<loot>
+		<item name="ham" countmax="3" chance="19850" />
+		<item name="white deer antlers" chance="19520" />
+		<item name="white deer skin" chance="20280" />
+	</loot>
+</monster>

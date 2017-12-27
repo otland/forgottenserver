@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orcus the Cruel" nameDescription="Orcus the cruel" race="blood" experience="280" speed="230">
+	<health now="480" max="480" />
+	<look type="59" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-180" />
+		<attack name="physical" interval="2000" chance="40" range="5" radius="1" target="1" min="0" max="-70">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="39" defense="40" />
+	<elements>
+		<element energyPercent="20" />
+		<element earthPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

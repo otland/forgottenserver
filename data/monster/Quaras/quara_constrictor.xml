@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Quara Constrictor" nameDescription="a quara constrictor" race="blood" experience="250" speed="230" manacost="670">
+	<health now="450" max="450" />
+	<look type="46" corpse="6065" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" poison="20" />
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-50" max="-90">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="quara constrictor freeze" interval="2000" chance="10" />
+		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0">
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gaaahhh!" />
+		<voice sentence="Gluh! Gluh!" />
+		<voice sentence="Tssss!" />
+		<voice sentence="Boohaa!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="87500" />
+		<item name="small amethyst" chance="2860" />
+		<item name="longsword" chance="7761" />
+		<item name="brass armor" chance="5000" />
+		<item name="shrimp" countmax="5" chance="5000" />
+		<item name="fish fin" chance="430" />
+		<item name="quara tentacle" chance="14520" />
+	</loot>
+</monster>

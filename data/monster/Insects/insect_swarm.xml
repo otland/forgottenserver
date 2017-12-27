@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Insect Swarm" nameDescription="an insect swarm" race="undead" experience="40" speed="150">
+	<health now="50" max="50" />
+	<look type="349" corpse="0" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="275" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-10" poison="16" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="0" max="-15">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+	</immunities>
+</monster>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Vampire Viscount" nameDescription="a vampire viscount" race="blood" experience="800" speed="250">
+	<health now="1200" max="1200" />
+	<look type="555" corpse="21275" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="death" interval="2000" chance="15" radius="3" range="6" target="1" min="-50" max="-100">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="bleedcondition" interval="2000" chance="10" radius="6" min="-320" max="-560">
+			<attribute key="areaEffect" value="bats" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="outfit" interval="2000" chance="10" monster="Vicious Manbat" duration="4000" />
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-5" />
+		<element firePercent="-5" />
+		<element physicalPercent="5" />
+		<element icePercent="5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Prepare to BLEED!" />
+		<voice sentence="Don't struggle. We don't want to waste a drop of blood now, do we?" />
+		<voice sentence="Ah, refreshments have arrived!" />
+	</voices>
+	<loot>
+		<item name="black pearl" chance="2500" />
+		<item name="small ruby" countmax="2" chance="3040" />
+		<item name="gold coin" countmax="50" chance="83000" />
+		<item name="red gem" chance="540" />
+		<item name="ice rapier" chance="810" />
+		<item name="vampire shield" chance="200" />
+		<item name="red piece of cloth" chance="70" />
+		<item name="strong health potion" chance="7100" />
+		<item name="strong mana potion" chance="8180" />
+		<item name="vampire teeth" chance="7200" />
+		<item name="blood preservation" chance="2910" />
+		<item name="tooth file" chance="6560" />
+		<item name="vampire's cape chain" chance="4460" />
+	</loot>
+</monster>

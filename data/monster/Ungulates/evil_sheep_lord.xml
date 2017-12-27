@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Evil Sheep Lord" nameDescription="an evil sheep lord" race="blood" experience="340" speed="300">
+	<health now="400" max="400" />
+	<look type="13" corpse="5994" />
+	<targetchange interval="2000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-118" />
+		<attack name="outfit" interval="3000" chance="20" target="1" range="7" monster="Sheep" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="35">
+		<defense name="healing" interval="2000" chance="20" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="outfit" interval="1500" chance="50" monster="Werewolf" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-5" />
+		<element physicalPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Evil Sheep" interval="2000" chance="30" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="You can COUNT on us!" />
+		<voice sentence="Maeh!" />
+		<voice sentence="I feel you're getting sleepy! Maeh!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="60" chance="75000" />
+	</loot>
+</monster>

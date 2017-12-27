@@ -1,13 +1,17 @@
 local annihilatorReward = {1990, 2400, 2431, 2494}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if item.uid <= 1000 or item.uid > 22700 then
+	if item.uid <= 1250 or item.uid >= 30000 then
 		return false
 	end
 
-	local itemType = ItemType(item.itemid)
+	local itemType = ItemType(item.uid)
+	if itemType:getId() == 0 then
+		return false
+	end
+
 	local itemWeight = itemType:getWeight()
 	local playerCap = player:getFreeCapacity()
-	if isInArray(annihilatorReward, item.uid) then
+	if table.contains(annihilatorReward, item.uid) then
 		if player:getStorageValue(30015) == -1 then
 			if playerCap >= itemWeight then
 				if item.uid == 1990 then

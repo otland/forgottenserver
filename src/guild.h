@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,14 @@ struct GuildRank {
 	std::string name;
 	uint8_t level;
 
-	GuildRank(uint32_t id, std::string name, uint8_t level) : id(id), name(name), level(level) {}
+	GuildRank(uint32_t id, std::string name, uint8_t level) :
+		id(id), name(std::move(name)), level(level) {}
 };
 
 class Guild
 {
 	public:
-		Guild(uint32_t id, std::string name) : name(name), id(id), memberCount(0) {}
+		Guild(uint32_t id, std::string name) : name(std::move(name)), id(id) {}
 
 		void addMember(Player* player);
 		void removeMember(Player* player);
@@ -54,9 +55,13 @@ class Guild
 			memberCount = count;
 		}
 
-		GuildRank* getRankById(uint32_t id);
+		const std::vector<GuildRank>& getRanks() const {
+			return ranks;
+		}
+		GuildRank* getRankById(uint32_t rankId);
+		const GuildRank* getRankByName(const std::string& name) const;
 		const GuildRank* getRankByLevel(uint8_t level) const;
-		void addRank(uint32_t id, const std::string& name, uint8_t level);
+		void addRank(uint32_t rankId, const std::string& rankName, uint8_t level);
 
 		const std::string& getMotd() const {
 			return motd;
@@ -71,7 +76,7 @@ class Guild
 		std::string name;
 		std::string motd;
 		uint32_t id;
-		uint32_t memberCount;
+		uint32_t memberCount = 0;
 };
 
 #endif

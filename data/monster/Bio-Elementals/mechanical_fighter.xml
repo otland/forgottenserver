@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mechanical Fighter" nameDescription="a mechanical fighter" race="undead" experience="255" speed="200">
+	<health now="420" max="420" />
+	<look type="102" corpse="2253" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+	</attacks>
+	<defenses armor="199" defense="199" />
+	<elements>
+		<element energyPercent="50" />
+	</elements>
+	<immunities>
+		<immunity holy="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

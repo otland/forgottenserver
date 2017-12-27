@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,12 @@
 #include "enums.h"
 #include "luascript.h"
 
-typedef bool (ActionFunction)(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey);
+using ActionFunction = std::function<bool(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey)>;
 
 class Action : public Event
 {
 	public:
-		explicit Action(const Action* copy);
-		explicit Action(LuaScriptInterface* _interface);
+		explicit Action(LuaScriptInterface* interface);
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute& attr) override;
@@ -38,28 +37,6 @@ class Action : public Event
 		//scripting
 		virtual bool executeUse(Player* player, Item* item, const Position& fromPosition,
 			Thing* target, const Position& toPosition, bool isHotkey);
-		//
-
-		bool getAllowFarUse() const {
-			return allowFarUse;
-		}
-		void setAllowFarUse(bool v) {
-			allowFarUse = v;
-		}
-
-		bool getCheckLineOfSight() const {
-			return checkLineOfSight;
-		}
-		void setCheckLineOfSight(bool v) {
-			checkLineOfSight = v;
-		}
-
-		bool getCheckFloor() const {
-			return checkFloor;
-		}
-		void setCheckFloor(bool v) {
-			checkFloor = v;
-		}
 
 		virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
 		virtual bool hasOwnErrorHandler() {
@@ -67,14 +44,10 @@ class Action : public Event
 		}
 		virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const;
 
-		ActionFunction* function;
+		ActionFunction function;
 
-	protected:
+	private:
 		std::string getScriptEventName() const override;
-
-		static ActionFunction increaseItemId;
-		static ActionFunction decreaseItemId;
-		static ActionFunction enterMarket;
 
 		bool allowFarUse;
 		bool checkFloor;
@@ -98,21 +71,17 @@ class Actions final : public BaseEvents
 		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
 		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-	protected:
+	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
-		void clear() final;
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		void clear() override;
+		LuaScriptInterface& getScriptInterface() override;
+		std::string getScriptBaseName() const override;
+		Event* getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event* event, const pugi::xml_node& node) override;
 
-		void registerItemID(int32_t itemId, Event* event);
-		void registerActionID(int32_t actionId, Event* event);
-		void registerUniqueID(int32_t uniqueId, Event* event);
-
-		typedef std::map<uint16_t, Action*> ActionUseMap;
+		using ActionUseMap = std::map<uint16_t, Action*>;
 		ActionUseMap useItemMap;
 		ActionUseMap uniqueItemMap;
 		ActionUseMap actionItemMap;
@@ -120,7 +89,7 @@ class Actions final : public BaseEvents
 		Action* getAction(const Item* item);
 		void clearMap(ActionUseMap& map);
 
-		LuaScriptInterface m_scriptInterface;
+		LuaScriptInterface scriptInterface;
 };
 
 #endif

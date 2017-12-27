@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="200" manacost="490">
+	<health now="210" max="210" />
+	<look type="93" corpse="20483" />
+	<targetchange interval="4000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="20" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-140" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-40">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element earthPercent="10" />
+		<element holyPercent="20" />
+		<element deathPercent="-5" />
+		<element firePercent="-10" />
+		<element energyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Plundeeeeer!" />
+		<voice sentence="Give up!" />
+		<voice sentence="Hiyaa!" />
+	</voices>
+	<loot>
+		<item id="2050" chance="9880" /><!-- torch -->
+		<item name="gold coin" countmax="40" chance="77670" />
+		<item name="spear" countmax="2" chance="5140" />
+		<item name="chain armor" chance="3000" />
+		<item name="plate shield" chance="5000" />
+		<item id="5091" chance="910" /><!-- treasure map -->
+		<item name="rum flask" chance="110" />
+		<item id="5792" chance="90" /><!-- dice -->
+		<item name="bandana" chance="880" />
+		<item name="pirate bag" chance="430" />
+		<item name="empty goldfish bowl" chance="80" />
+		<item name="hook" chance="520" />
+		<item name="eye patch" chance="530" />
+		<item name="peg leg" chance="520" />
+		<item name="compass" chance="9720" />
+	</loot>
+</monster>

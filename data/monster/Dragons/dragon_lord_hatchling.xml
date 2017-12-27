@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dragon Lord Hatchling" nameDescription="a dragon lord hatchling" race="blood" experience="645" speed="190">
+	<health now="750" max="750" />
+	<look type="272" corpse="7622" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" />
+		<attack name="fire" interval="2000" chance="10" length="5" spread="2" min="-90" max="-125">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-55" max="-105">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="15" min="26" max="48">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="10" />
+		<element icePercent="-10" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Fchu?" />
+		<voice sentence="Rooawwrr" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="90" chance="33750" />
+		<item name="gold coin" countmax="75" chance="33750" />
+		<item name="dragon ham" chance="80000" />
+		<item name="green mushroom" chance="560" />
+		<item name="mana potion" chance="300" />
+		<item name="magma boots" chance="100" />
+	</loot>
+</monster>

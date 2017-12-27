@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Zavarash" nameDescription="Zavarash" race="blood" experience="21000" speed="380" manacost="220">
+	<health now="35000" max="35000" />
+	<look type="74" corpse="6017" />
+	<targetchange interval="5000" chance="20" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="0" />
+	</attacks>
+	<defenses armor="1" defense="2" />
+	<loot>
+		<item name="meat" countmax="2" chance="20000" />
+		<item id="2684" countmax="2" chance="9000" /><!-- carrot -->
+	</loot>
+</monster>

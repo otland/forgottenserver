@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Spit Nettle" nameDescription="a spit nettle" race="venom" experience="20" speed="0">
+	<health now="150" max="150" />
+	<look type="221" corpse="6062" />
+	<targetchange interval="4000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="earth" interval="1000" chance="20" range="7" target="1" min="-15" max="-40">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" range="7" target="1" min="-40" max="-100">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="10" min="8" max="16">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="20" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="5" chance="10600" />
+		<item name="sling herb" countmax="2" chance="5263" />
+		<item name="sling herb" chance="1010" />
+		<item name="sling herb" chance="362" />
+		<item name="shadow herb" chance="10650" />
+		<item name="nettle blossom" chance="833" />
+		<item name="nettle spit" chance="10000" />
+	</loot>
+</monster>

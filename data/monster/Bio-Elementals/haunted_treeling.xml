@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Haunted Treeling" nameDescription="a haunted treeling" experience="310" speed="220" race="undead">
+	<health now="450" max="450" />
+	<look type="310" corpse="9867" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="0" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="manadrain" interval="2000" chance="5" min="-30" max="-100" radius="4" target="0">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" length="5" spread="0" duration="15000" speedchange="-700">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" range="7" target="1" radius="1" min="0" max="-100">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" min="-55" max="-100" radius="4" target="1">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" radius="1" target="0">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element firePercent="-5" />
+		<element deathPercent="1" />
+		<element icePercent="15" />
+		<element holyPercent="20" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Knarrrz" />
+		<voice sentence="Huuhuuhuuuhuuaarrr" />
+		<voice sentence="Knorrrrrr" />
+	</voices>
+	<loot>
+		<item name="small sapphire" chance="585" />
+		<item name="gold coin" countmax="95" chance="60000" />
+		<item name="dwarven ring" chance="621" />
+		<item name="white mushroom" countmax="2" chance="5263" />
+		<item name="red mushroom" chance="7142" />
+		<item name="orange mushroom" chance="1851" />
+		<item id="4860" chance="25000" /><!-- wooden trash -->
+		<item name="bullseye potion" chance="80" />
+		<item name="strong health potion" chance="900" />
+		<item name="health potion" chance="5000" />
+		<item name="haunted piece of wood" chance="5000" />
+	</loot>
+</monster>

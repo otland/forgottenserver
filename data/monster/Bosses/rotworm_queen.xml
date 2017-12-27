@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Rotworm Queen" nameDescription="a rotworm queen" race="blood" experience="75" speed="126">
+	<health now="105" max="105" />
+	<look type="295" corpse="8947" />
+	<targetchange interval="60000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag staticattack="50" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-80" />
+	</attacks>
+	<defenses armor="10" defense="15" />
+	<loot>
+		<item name="gold coin" countmax="47" chance="100000" />
+		<item name="worm" countmax="45" chance="20000" />
+		<item name="gland" chance="3333" />
+	</loot>
+</monster>

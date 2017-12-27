@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Black Sheep" namedescription="a black sheep" race="blood" experience="0" speed="130" manacost="250">
+	<health now="20" max="20" />
+	<look type="13" corpse="5994" />
+	<targetchange interval="4000" chance="20" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="20" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<defenses armor="5" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Maeh" />
+	</voices>
+	<loot>
+		<item name="meat" countmax="5" chance="70860" />
+		<item name="black wool" countmax="1" chance="1000" />
+	</loot>
+</monster>

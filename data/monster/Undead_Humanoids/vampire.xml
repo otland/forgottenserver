@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Vampire" nameDescription="a vampire" race="blood" experience="305" speed="220">
+	<health now="475" max="475" />
+	<look type="68" corpse="6006" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="lifedrain" interval="2000" chance="20" target="1" range="1" min="-50" max="-200">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="1" target="1" speedchange="-400" duration="60000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="outfit" interval="4000" chance="10" monster="bat" duration="5000">
+			<attribute key="areaEffect" value="groundshaker" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="15" max="25" />
+	</defenses>
+	<elements>
+		<element physicalPercent="35" />
+		<element firePercent="-10" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="BLOOD!" yell="1" />
+		<voice sentence="Let me kiss your neck" />
+		<voice sentence="I smell warm blood!" />
+		<voice sentence="I call you, my bats! Come!" />
+	</voices>
+	<loot>
+		<item name="emerald bangle" chance="230" />
+		<item name="black pearl" chance="1800" />
+		<item name="gold coin" countmax="60" chance="90230" />
+		<item name="bronze amulet" chance="220" />
+		<item id="2229" chance="1000" /><!-- skull -->
+		<item name="spike sword" chance="1000" />
+		<item name="ice rapier" chance="420" />
+		<item name="katana" chance="1560" />
+		<item name="strange helmet" chance="420" />
+		<item name="vampire shield" chance="230" />
+		<item name="grave flower" chance="1910" />
+		<item name="strong health potion" chance="1500" />
+		<item name="vampire teeth" chance="7600" />
+		<item name="blood preservation" chance="5100" />
+	</loot>
+</monster>

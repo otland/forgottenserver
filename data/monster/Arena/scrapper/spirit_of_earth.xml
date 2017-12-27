@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spirit of Earth" nameDescription="a spirit of earth" race="undead" experience="800" speed="180">
+	<health now="1200" max="1200" />
+	<look type="67" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-180" />
+	</attacks>
+	<defenses armor="30" defense="32" />
+	<elements>
+		<element energyPercent="50" />
+		<element firePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="5">
+		<voice sentence="Show your strengh ... or perish." />
+	</voices>
+</monster>

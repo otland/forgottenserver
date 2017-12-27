@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <weapons>
 	<!-- Rods -->
+	<wand id="23721" level="1" mana="1" min="3" max="7" type="ice"> <!-- The Chiller -->
+		<vocation name="Druid" />
+	</wand>
 	<wand id="2182" level="7" mana="2" min="8" max="18" type="earth"> <!-- Snakebit Rod -->
 		<vocation name="Druid" />
 	</wand>
@@ -36,6 +39,9 @@
 	</wand>
 
 	<!-- Wands -->
+	<wand id="23719" level="1" mana="1" min="3" max="7" type="fire"> <!-- The Scorcher -->
+		<vocation name="Sorcerer" />
+	</wand>
 	<wand id="2190" level="7" mana="2" min="8" max="18" type="energy"> <!-- Wand of Vortex -->
 		<vocation name="Sorcerer" />
 	</wand>
@@ -693,5 +699,6 @@
 	<distance id="18435" action="removecount" unproperly="1" level="90" /> <!-- Prismatic Bolt -->
 	<distance id="18436" action="removecount" unproperly="1" level="70" /> <!-- Drill Bolt -->
 	<distance id="18437" action="removecount" unproperly="1" level="70" /> <!-- Envenomed Arrow -->
+	<distance id="23529" breakchance="31" unproperly="1" level="60" /> <!-- Glooth Spear -->
 	<distance id="23839" action="removecount" unproperly="0" level="1" /> <!-- Simple Arrow -->
 </weapons>

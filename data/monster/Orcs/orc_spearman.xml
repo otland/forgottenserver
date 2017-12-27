@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Orc Spearman" nameDescription="an orc spearman" race="blood" experience="38" speed="176" manacost="310">
+	<health now="105" max="105" />
+	<look type="50" corpse="5996" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-25" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-30">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element energyPercent="20" />
+		<element holyPercent="20" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ugaar!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="11" chance="25050" />
+		<item name="spear" chance="17440" />
+		<item name="machete" chance="3000" />
+		<item name="studded legs" chance="10000" />
+		<item name="studded helmet" chance="9000" />
+		<item name="meat" chance="30200" />
+		<item name="orc tooth" chance="150" />
+		<item name="orc leather" chance="2300" />
+	</loot>
+</monster>

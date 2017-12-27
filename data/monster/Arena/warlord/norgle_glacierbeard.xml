@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Norgle Glacierbeard" nameDescription="Norgle Glacierbeard" race="blood" experience="2100" speed="195">
+	<health now="4280" max="4280" />
+	<look type="257" corpse="7349" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-225" />
+	</attacks>
+	<defenses armor="25" defense="27" />
+	<elements>
+		<element deathPercent="-15" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="I'll extinguish you warmbloods." />
+		<voice sentence="REVENGE!" />
+		<voice sentence="Far too hot." />
+		<voice sentence="DISGUSTING WARMBLOODS!" />
+		<voice sentence="Revenge is sweetest when served cold." />
+	</voices>
+</monster>

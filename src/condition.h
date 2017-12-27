@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,9 @@ class Condition
 {
 	public:
 		Condition() = default;
-		Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		Condition(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			endTime(ticks == -1 ? std::numeric_limits<int64_t>::max() : 0),
+			subId(subId), ticks(ticks), conditionType(type), isBuff(buff), id(id) {}
 		virtual ~Condition() = default;
 
 		virtual bool startCondition(Creature* creature);
@@ -98,7 +100,7 @@ class Condition
 		}
 		void setTicks(int32_t newTicks);
 
-		static Condition* createCondition(ConditionId_t _id, ConditionType_t _type, int32_t ticks, int32_t param = 0, bool _buff = false, uint32_t _subId = 0);
+		static Condition* createCondition(ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param = 0, bool buff = false, uint32_t subId = 0);
 		static Condition* createCondition(PropStream& propStream);
 
 		virtual bool setParam(ConditionParam_t param, int32_t value);
@@ -111,20 +113,23 @@ class Condition
 		bool isPersistent() const;
 
 	protected:
+		virtual bool updateCondition(const Condition* addCondition);
+
 		int64_t endTime;
 		uint32_t subId;
 		int32_t ticks;
 		ConditionType_t conditionType;
-		ConditionId_t id;
 		bool isBuff;
 
-		virtual bool updateCondition(const Condition* addCondition);
+	private:
+		ConditionId_t id;
 };
 
 class ConditionGeneric : public Condition
 {
 	public:
-		ConditionGeneric(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionGeneric(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0):
+			Condition(id, type, ticks, buff, subId) {}
 
 		bool startCondition(Creature* creature) override;
 		bool executeCondition(Creature* creature, int32_t interval) override;
@@ -140,30 +145,33 @@ class ConditionGeneric : public Condition
 class ConditionAttributes final : public ConditionGeneric
 {
 	public:
-		ConditionAttributes(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionAttributes(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		bool startCondition(Creature* creature) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
-		void endCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
+		bool startCondition(Creature* creature) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
+		void endCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 
-		bool setParam(ConditionParam_t param, int32_t value) final;
+		bool setParam(ConditionParam_t param, int32_t value) override;
 
-		ConditionAttributes* clone() const final {
+		ConditionAttributes* clone() const override {
 			return new ConditionAttributes(*this);
 		}
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
-		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
-		int32_t skills[SKILL_LAST + 1];
-		int32_t skillsPercent[SKILL_LAST + 1];
-		int32_t stats[STAT_LAST + 1];
-		int32_t statsPercent[STAT_LAST + 1];
-		int32_t currentSkill;
-		int32_t currentStat;
+	private:
+		int32_t skills[SKILL_LAST + 1] = {};
+		int32_t skillsPercent[SKILL_LAST + 1] = {};
+		int32_t stats[STAT_LAST + 1] = {};
+		int32_t statsPercent[STAT_LAST + 1] = {};
+		int32_t currentSkill = 0;
+		int32_t currentStat = 0;
+
+		bool disableDefense = false;
 
 		void updatePercentStats(Player* player);
 		void updateStats(Player* player);
@@ -174,64 +182,67 @@ class ConditionAttributes final : public ConditionGeneric
 class ConditionRegeneration final : public ConditionGeneric
 {
 	public:
-		ConditionRegeneration(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionRegeneration(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0):
+			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		void addCondition(Creature* creature, const Condition* addCondition) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
+		void addCondition(Creature* creature, const Condition* condition) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
 
-		bool setParam(ConditionParam_t param, int32_t value) final;
+		bool setParam(ConditionParam_t param, int32_t value) override;
 
-		ConditionRegeneration* clone() const final {
+		ConditionRegeneration* clone() const override {
 			return new ConditionRegeneration(*this);
 		}
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
- 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+ 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
-		uint32_t internalHealthTicks;
-		uint32_t internalManaTicks;
+	private:
+		uint32_t internalHealthTicks = 0;
+		uint32_t internalManaTicks = 0;
 
-		uint32_t healthTicks;
-		uint32_t manaTicks;
-		uint32_t healthGain;
-		uint32_t manaGain;
+		uint32_t healthTicks = 1000;
+		uint32_t manaTicks = 1000;
+		uint32_t healthGain = 0;
+		uint32_t manaGain = 0;
 };
 
 class ConditionSoul final : public ConditionGeneric
 {
 	public:
-		ConditionSoul(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionSoul(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		void addCondition(Creature* creature, const Condition* addCondition) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
+		void addCondition(Creature* creature, const Condition* condition) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
 
-		bool setParam(ConditionParam_t param, int32_t value) final;
+		bool setParam(ConditionParam_t param, int32_t value) override;
 
-		ConditionSoul* clone() const final {
+		ConditionSoul* clone() const override {
 			return new ConditionSoul(*this);
 		}
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
-		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
-		uint32_t internalSoulTicks;
-		uint32_t soulTicks;
-		uint32_t soulGain;
+	private:
+		uint32_t internalSoulTicks = 0;
+		uint32_t soulTicks = 0;
+		uint32_t soulGain = 0;
 };
 
 class ConditionInvisible final : public ConditionGeneric
 {
 	public:
-		ConditionInvisible(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionInvisible(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		bool startCondition(Creature* creature) final;
-		void endCondition(Creature* creature) final;
+		bool startCondition(Creature* creature) override;
+		void endCondition(Creature* creature) override;
 
-		ConditionInvisible* clone() const final {
+		ConditionInvisible* clone() const override {
 			return new ConditionInvisible(*this);
 		}
 };
@@ -240,21 +251,22 @@ class ConditionDamage final : public Condition
 {
 	public:
 		ConditionDamage() = default;
-		ConditionDamage(ConditionId_t _id, ConditionType_t _type, bool _buff = false, uint32_t _subId = 0);
+		ConditionDamage(ConditionId_t id, ConditionType_t type, bool buff = false, uint32_t subId = 0) :
+			Condition(id, type, 0, buff, subId) {}
 
 		static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);
 
-		bool startCondition(Creature* creature) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
-		void endCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
-		uint32_t getIcons() const final;
+		bool startCondition(Creature* creature) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
+		void endCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
+		uint32_t getIcons() const override;
 
-		ConditionDamage* clone() const final {
+		ConditionDamage* clone() const override {
 			return new ConditionDamage(*this);
 		}
 
-		bool setParam(ConditionParam_t param, int32_t value) final;
+		bool setParam(ConditionParam_t param, int32_t value) override;
 
 		bool addDamage(int32_t rounds, int32_t time, int32_t value);
 		bool doForceUpdate() const {
@@ -263,21 +275,21 @@ class ConditionDamage final : public Condition
 		int32_t getTotalDamage() const;
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
-		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
-		int32_t maxDamage;
-		int32_t minDamage;
-		int32_t startDamage;
-		int32_t periodDamage;
-		int32_t periodDamageTick;
-		int32_t tickInterval;
+	private:
+		int32_t maxDamage = 0;
+		int32_t minDamage = 0;
+		int32_t startDamage = 0;
+		int32_t periodDamage = 0;
+		int32_t periodDamageTick = 0;
+		int32_t tickInterval = 2000;
 
-		bool forceUpdate;
-		bool delayed;
-		bool field;
-		uint32_t owner;
+		bool forceUpdate = false;
+		bool delayed = false;
+		bool field = false;
+		uint32_t owner = 0;
 
 		bool init();
 
@@ -286,105 +298,107 @@ class ConditionDamage final : public Condition
 		bool getNextDamage(int32_t& damage);
 		bool doDamage(Creature* creature, int32_t healthChange);
 
-		bool updateCondition(const Condition* addCondition) final;
+		bool updateCondition(const Condition* addCondition) override;
 };
 
 class ConditionSpeed final : public Condition
 {
 	public:
-		ConditionSpeed(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, int32_t changeSpeed);
+		ConditionSpeed(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, int32_t changeSpeed) :
+			Condition(id, type, ticks, buff, subId), speedDelta(changeSpeed) {}
 
-		bool startCondition(Creature* creature) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
-		void endCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
-		uint32_t getIcons() const final;
+		bool startCondition(Creature* creature) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
+		void endCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
+		uint32_t getIcons() const override;
 
-		ConditionSpeed* clone() const final {
+		ConditionSpeed* clone() const override {
 			return new ConditionSpeed(*this);
 		}
 
-		bool setParam(ConditionParam_t param, int32_t value) final;
+		bool setParam(ConditionParam_t param, int32_t value) override;
 
-		void setFormulaVars(float _mina, float _minb, float _maxa, float _maxb);
+		void setFormulaVars(float mina, float minb, float maxa, float maxb);
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
-		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
+	private:
 		void getFormulaValues(int32_t var, int32_t& min, int32_t& max) const;
 
 		int32_t speedDelta;
 
 		//formula variables
-		float mina;
-		float minb;
-		float maxa;
-		float maxb;
+		float mina = 0.0f;
+		float minb = 0.0f;
+		float maxa = 0.0f;
+		float maxb = 0.0f;
 };
 
 class ConditionOutfit final : public Condition
 {
 	public:
-		ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionOutfit(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			Condition(id, type, ticks, buff, subId) {}
 
-		bool startCondition(Creature* creature) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
-		void endCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
+		bool startCondition(Creature* creature) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
+		void endCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 
-		ConditionOutfit* clone() const final {
+		ConditionOutfit* clone() const override {
 			return new ConditionOutfit(*this);
 		}
 
 		void setOutfit(const Outfit_t& outfit);
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
-		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
+	private:
 		Outfit_t outfit;
-
-		void changeOutfit(Creature* creature);
 };
 
 class ConditionLight final : public Condition
 {
 	public:
-		ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff, uint32_t _subId, uint8_t _lightlevel, uint8_t _lightcolor);
+		ConditionLight(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t lightlevel, uint8_t lightcolor) :
+			Condition(id, type, ticks, buff, subId), lightInfo(lightlevel, lightcolor) {}
 
-		bool startCondition(Creature* creature) final;
-		bool executeCondition(Creature* creature, int32_t interval) final;
-		void endCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* addCondition) final;
+		bool startCondition(Creature* creature) override;
+		bool executeCondition(Creature* creature, int32_t interval) override;
+		void endCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 
-		ConditionLight* clone() const final {
+		ConditionLight* clone() const override {
 			return new ConditionLight(*this);
 		}
 
-		bool setParam(ConditionParam_t param, int32_t value) final;
+		bool setParam(ConditionParam_t param, int32_t value) override;
 
 		//serialization
-		void serialize(PropWriteStream& propWriteStream) final;
-		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) final;
+		void serialize(PropWriteStream& propWriteStream) override;
+		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
-	protected:
+	private:
 		LightInfo lightInfo;
-		uint32_t internalLightTicks;
-		uint32_t lightChangeInterval;
+		uint32_t internalLightTicks = 0;
+		uint32_t lightChangeInterval = 0;
 };
 
 class ConditionSpellCooldown final : public ConditionGeneric
 {
 	public:
-		ConditionSpellCooldown(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionSpellCooldown(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		bool startCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
+		bool startCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 
-		ConditionSpellCooldown* clone() const final {
+		ConditionSpellCooldown* clone() const override {
 			return new ConditionSpellCooldown(*this);
 		}
 };
@@ -392,12 +406,13 @@ class ConditionSpellCooldown final : public ConditionGeneric
 class ConditionSpellGroupCooldown final : public ConditionGeneric
 {
 	public:
-		ConditionSpellGroupCooldown(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, bool _buff = false, uint32_t _subId = 0);
+		ConditionSpellGroupCooldown(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
+			ConditionGeneric(id, type, ticks, buff, subId) {}
 
-		bool startCondition(Creature* creature) final;
-		void addCondition(Creature* creature, const Condition* condition) final;
+		bool startCondition(Creature* creature) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
 
-		ConditionSpellGroupCooldown* clone() const final {
+		ConditionSpellGroupCooldown* clone() const override {
 			return new ConditionSpellGroupCooldown(*this);
 		}
 };

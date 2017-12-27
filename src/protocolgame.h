@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,29 +34,23 @@ class Tile;
 class Connection;
 class Quest;
 class ProtocolGame;
-typedef std::shared_ptr<ProtocolGame> ProtocolGame_ptr;
+using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
 extern Game g_game;
 
 struct TextMessage
 {
-	MessageClasses type;
+	MessageClasses type = MESSAGE_STATUS_DEFAULT;
 	std::string text;
 	Position position;
+	uint16_t channelId;
 	struct {
-		int32_t value;
+		int32_t value = 0;
 		TextColor_t color;
 	} primary, secondary;
 
-	TextMessage() {
-		type = MESSAGE_STATUS_DEFAULT;
-		primary.value = 0;
-		secondary.value = 0;
-	}
-	TextMessage(MessageClasses type, std::string text) : type(type), text(text) {
-		primary.value = 0;
-		secondary.value = 0;
-	}
+	TextMessage() = default;
+	TextMessage(MessageClasses type, std::string text) : type(type), text(std::move(text)) {}
 };
 
 class ProtocolGame final : public Protocol
@@ -70,9 +64,9 @@ class ProtocolGame final : public Protocol
 			return "gameworld protocol";
 		}
 
-		explicit ProtocolGame(Connection_ptr connection);
+		explicit ProtocolGame(Connection_ptr connection) : Protocol(connection) {}
 
-		void login(const std::string& name, uint32_t accnumber, OperatingSystem_t operatingSystem);
+		void login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
 
 		uint16_t getVersion() const {
@@ -81,13 +75,13 @@ class ProtocolGame final : public Protocol
 
 	private:
 		ProtocolGame_ptr getThis() {
-			return std::dynamic_pointer_cast<ProtocolGame>(shared_from_this());
+			return std::static_pointer_cast<ProtocolGame>(shared_from_this());
 		}
 		void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
 		void disconnectClient(const std::string& message) const;
 		void writeToOutputBuffer(const NetworkMessage& msg);
 
-		void release() final;
+		void release() override;
 
 		void checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& removedKnown);
 
@@ -96,9 +90,9 @@ class ProtocolGame final : public Protocol
 		bool canSee(const Position& pos) const;
 
 		// we have all the parse methods
-		void parsePacket(NetworkMessage& msg) final;
-		void onRecvFirstMessage(NetworkMessage& msg) final;
-		void onConnect() final;
+		void parsePacket(NetworkMessage& msg) override;
+		void onRecvFirstMessage(NetworkMessage& msg) override;
+		void onConnect() override;
 
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
@@ -112,6 +106,7 @@ class ProtocolGame final : public Protocol
 
 		void parseBugReport(NetworkMessage& msg);
 		void parseDebugAssert(NetworkMessage& msg);
+		void parseRuleViolationReport(NetworkMessage& msg);
 
 		void parseThrow(NetworkMessage& msg);
 		void parseUseItemEx(NetworkMessage& msg);
@@ -186,7 +181,7 @@ class ProtocolGame final : public Protocol
 		void sendSkills();
 		void sendPing();
 		void sendPingBack();
-		void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
+		void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
 		void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr);
 
 		void sendQuestLog();
@@ -195,7 +190,6 @@ class ProtocolGame final : public Protocol
 		void sendCancelWalk();
 		void sendChangeSpeed(const Creature* creature, uint32_t speed);
 		void sendCancelTarget();
-		void sendCreatureVisible(const Creature* creature, bool visible);
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
 		void sendBasicData();
@@ -232,6 +226,7 @@ class ProtocolGame final : public Protocol
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
+		void sendVIPEntries();
 
 		void sendPendingStateEntered();
 		void sendEnterWorld();
@@ -239,7 +234,7 @@ class ProtocolGame final : public Protocol
 		void sendFightModes();
 
 		void sendCreatureLight(const Creature* creature);
-		void sendWorldLight(const LightInfo& lightInfo);
+		void sendWorldLight(LightInfo lightInfo);
 
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 
@@ -289,7 +284,7 @@ class ProtocolGame final : public Protocol
 		void AddPlayerStats(NetworkMessage& msg);
 		void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 		void AddPlayerSkills(NetworkMessage& msg);
-		void AddWorldLight(NetworkMessage& msg, const LightInfo& lightInfo);
+		void AddWorldLight(NetworkMessage& msg, LightInfo lightInfo);
 		void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
 
 		//tiles
@@ -297,14 +292,6 @@ class ProtocolGame final : public Protocol
 
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
-
-		//container
-		void AddContainerItem(NetworkMessage& msg, uint8_t cid, const Item* item);
-		void UpdateContainerItem(NetworkMessage& msg, uint8_t cid, uint16_t slot, const Item* item);
-		void RemoveContainerItem(NetworkMessage& msg, uint8_t cid, uint16_t slot);
-
-		//inventory
-		void SetInventoryItem(NetworkMessage& msg, slots_t slot, const Item* item);
 
 		//shop
 		void AddShopItem(NetworkMessage& msg, const ShopInfo& item);
@@ -326,16 +313,16 @@ class ProtocolGame final : public Protocol
 		}
 
 		std::unordered_set<uint32_t> knownCreatureSet;
-		Player* player;
+		Player* player = nullptr;
 
-		uint32_t eventConnect;
-		uint32_t m_challengeTimestamp;
-		uint16_t version;
+		uint32_t eventConnect = 0;
+		uint32_t challengeTimestamp = 0;
+		uint16_t version = CLIENT_VERSION_MIN;
 
-		uint8_t m_challengeRandom;
+		uint8_t challengeRandom = 0;
 
-		bool m_debugAssertSent;
-		bool m_acceptPackets;
+		bool debugAssertSent = false;
+		bool acceptPackets = false;
 };
 
 #endif

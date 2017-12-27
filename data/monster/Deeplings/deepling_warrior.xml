@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Deepling Warrior" nameDescription="a deepling warrior" race="blood" experience="1500" speed="210">
+	<health now="1600" max="1600" />
+	<look type="441" corpse="15175" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="0" />
+		<flag staticattack="70" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="0" max="-290">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="50" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="-20" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Jou wjil all djie!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="gold coin" countmax="80" chance="60000" />
+		<item name="small emerald" chance="2854" />
+		<item name="life ring" chance="2941" />
+		<item name="fish fin" chance="961" />
+		<item name="great mana potion" chance="9090" />
+		<item name="great health potion" chance="11111" />
+		<item name="heavy trident" chance="1030" />
+		<item name="eye of a deepling" chance="574" />
+		<item name="deepling warts" chance="10000" />
+		<item name="deeptags" chance="14285" />
+		<item name="warrior's axe" chance="534" />
+		<item name="deepling ridge" chance="11111" />
+		<item name="warrior's shield" chance="684" />
+		<item name="deepling filet" chance="14285" />
+		<item name="vortex bolt" countmax="5" chance="3571" />
+	</loot>
+</monster>
