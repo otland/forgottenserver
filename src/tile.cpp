@@ -1601,7 +1601,7 @@ bool Tile::isMoveableBlocking() const
 	return !ground || hasFlag(TILESTATE_BLOCKSOLID);
 }
 
-Item* Tile::getUseItem(const int32_t& index) const
+Item* Tile::getUseItem(int32_t index) const
 {
 	const TileItemVector* items = getItemList();
 	if (!items || items->size() == 0) {
