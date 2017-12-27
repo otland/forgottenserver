@@ -1601,22 +1601,16 @@ bool Tile::isMoveableBlocking() const
 	return !ground || hasFlag(TILESTATE_BLOCKSOLID);
 }
 
-Item* Tile::getUseItem() const
+Item* Tile::getUseItem(int32_t index) const
 {
 	const TileItemVector* items = getItemList();
 	if (!items || items->size() == 0) {
 		return ground;
 	}
 
-	for (Item* item : boost::adaptors::reverse(*items)) {
-		if (Item::items[item->getID()].forceUse) {
-			return item;
-		}
+	if (Thing* thing = getThing(index)) {
+		return thing->getItem();
 	}
 
-	Item* item = items->getTopDownItem();
-	if (!item) {
-		item = items->getTopTopItem();
-	}
-	return item;
+	return nullptr;
 }
