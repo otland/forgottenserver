@@ -246,7 +246,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			}
 
 			case STACKPOS_USEITEM: {
-				thing = tile->getUseItem();
+				thing = tile->getUseItem(index);
 				break;
 			}
 
@@ -258,7 +258,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 			case STACKPOS_USETARGET: {
 				thing = tile->getTopVisibleCreature(player);
 				if (!thing) {
-					thing = tile->getUseItem();
+					thing = tile->getUseItem(index);
 				}
 				break;
 			}

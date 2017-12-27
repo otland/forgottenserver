@@ -275,7 +275,7 @@ class Tile : public Cylinder
 			return false;
 		}
 
-		Item* getUseItem() const;
+		Item* getUseItem(const int32_t& index) const;
 
 		Item* getGround() const {
 			return ground;
