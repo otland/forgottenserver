@@ -3884,6 +3884,28 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			return true;
 		}
 
+		if (attackerPlayer) {
+			uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHCHANCE);
+			if (chance != 0 && uniform_random(1, 100) <= chance) {
+				CombatDamage lifeLeech;
+				lifeLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHAMOUNT) / 100.));
+				g_game.combatChangeHealth(nullptr, attackerPlayer, lifeLeech);
+			}
+
+			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHCHANCE);
+			if (chance != 0 && uniform_random(1, 100) <= chance) {
+				CombatDamage manaLeech;
+				manaLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHAMOUNT) / 100.));
+				g_game.combatChangeMana(nullptr, attackerPlayer, manaLeech);
+			}
+
+			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
+			if (chance != 0 && uniform_random(1, 100) <= chance) {
+				healthChange += std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT) / 100.));
+				g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
+			}
+		}
+
 		TextMessage message;
 		message.position = targetPos;
 

@@ -2879,29 +2879,10 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 		msg.addByte(player->getSkillPercent(i));
 	}
 
-	// critical chance
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	// critical damage
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	// life leech chance
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	// life leech
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	// mana leech chance
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	// mana leech
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
+	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+		msg.add<uint16_t>(std::min<int32_t>(100, player->varSpecialSkills[i]));
+		msg.add<uint16_t>(0);
+	}
 }
 
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)

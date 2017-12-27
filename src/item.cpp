@@ -922,6 +922,21 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
 			}
 
+			for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; i++) {
+				if (!it.abilities->specialSkills[i]) {
+					continue;
+				}
+
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << getSpecialSkillName(i) << ' ' << std::showpos << it.abilities->specialSkills[i] << '%' << std::noshowpos;
+			}
+
 			if (it.abilities->stats[STAT_MAGICPOINTS]) {
 				if (begin) {
 					begin = false;
