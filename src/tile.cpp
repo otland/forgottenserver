@@ -1608,7 +1608,7 @@ Item* Tile::getUseItem() const
 		return ground;
 	}
 
-	for (Item* item : boost::adaptors::reverse(*items)) {
+	for (Item* item : *items) {
 		if (Item::items[item->getID()].forceUse) {
 			return item;
 		}
