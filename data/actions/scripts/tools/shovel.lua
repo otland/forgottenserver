@@ -1,4 +1,4 @@
-local holes = {468, 481, 483}
+local holes = {468, 481, 483, 9059}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local tile = Tile(toPosition)
 	if not tile then
@@ -12,7 +12,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local groundId = ground:getId()
 	if table.contains(holes, groundId) then
-		ground:transform(groundId + 1)
+		if groundId == 9059 then
+			ground:transform(489)
+		else
+			ground:transform(groundId + 1)
+		end
 		ground:decay()
 
 		toPosition.z = toPosition.z + 1
