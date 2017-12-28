@@ -8,16 +8,55 @@
 #include <vector>
 
 #include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 #include <pugixml.hpp>
 #include "../src/pugicast.h"
 
-namespace fs = boost::filesystem;
+namespace {
 
-void usage(const char* program)
+namespace fs = boost::filesystem;
+namespace po = boost::program_options;
+
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
 {
-	std::cout << "usage: " << program
-		<< " [-r path/to/data/raids] [-g path/to/data/globalevents]\n";
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
+
+enum LogLevel {
+	WARNING = 0,
+	INFO = 1,
+	DEBUG = 2,
+};
+
+struct ParseEventError: public std::runtime_error {
+	template<class ...Args>
+	ParseEventError(Args&& ...args): std::runtime_error{std::forward<Args>(args)...} {};
+};
+
+struct InvalidEventType: public ParseEventError
+{
+	InvalidEventType(const std::string& type): ParseEventError{build_message(type)} {}
+
+	static std::string build_message(const std::string& type)
+	{
+		std::ostringstream ss;
+		ss << "Invalid event type: " << type << ".";
+		return ss.str();
+	}
+};
+
+struct MissingTag: public ParseEventError
+{
+	MissingTag(const std::string& tag): ParseEventError{build_message(tag)} {}
+
+	static std::string build_message(const std::string& tag)
+	{
+		std::ostringstream ss;
+		ss << "Missing tag: " << tag << ".";
+		return ss.str();
+	}
+};
 
 constexpr const char* INDENT = "    ";
 
@@ -47,16 +86,16 @@ struct AnnounceEvent : public RaidEvent
 	AnnounceEvent(uint32_t delay, std::string msg, std::string type) :
 			RaidEvent{delay}, message{std::move(msg)}, type{std::move(type)} {}
 
-	static AnnounceEvent* from(uint32_t delay, const pugi::xml_node& eventNode)
+	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode)
 	{
 		pugi::xml_attribute message = eventNode.attribute("message");
 		if (not message) {
-			throw std::runtime_error("message tag missing for announce event.");
+			throw MissingTag{"message"};
 		}
 
 		std::string messageType = [](const pugi::xml_attribute& type) {
 			if (not type) {
-				std::cout << "[Notice] Raid: type tag missing for announce"
+				std::cout << "[Notice] Raid: type tag missing for announce "
 				             "event. Using default: " << defaultMessageType <<
 							 "\n";
 				return defaultMessageType;
@@ -65,13 +104,14 @@ struct AnnounceEvent : public RaidEvent
 			try {
 				return messageTypes.at(type.as_string());
 			} catch (const std::out_of_range&) {
-				std::cout << "[Notice] Raid: Unknown type tag for announce"
-							 "event. Using default: MESSAGE_TYPE_ADVANCE\n";
+				std::cout << "[Notice] Raid: Unknown type tag for announce "
+				             "event. Using default: " << defaultMessageType <<
+							 "\n";
 				return defaultMessageType;
 			}
 		}(eventNode.attribute("type"));
 
-		return new AnnounceEvent{delay, message.as_string(), messageType};
+		return make_unique<AnnounceEvent>(delay, message.as_string(), messageType);
 	}
 
 	void to_script(std::ostringstream& ss) const override
@@ -91,12 +131,12 @@ struct Position
 };
 
 template<class T>
-T require_attr(const pugi::xml_node& node, const std::string& tag)
+T require(const pugi::xml_node& node, const std::string& tag)
 {
 	if (pugi::xml_attribute attr = node.attribute(tag.c_str())) {
 		return pugi::cast<T>(attr.value());
 	}
-	throw std::runtime_error(tag + " tag missing.");
+	throw MissingTag{tag};
 }
 
 struct SingleSpawnEvent : public RaidEvent
@@ -104,20 +144,20 @@ struct SingleSpawnEvent : public RaidEvent
 	SingleSpawnEvent(uint32_t delay, std::string name, Position pos) :
 			RaidEvent{delay}, name{std::move(name)}, pos{std::move(pos)} {}
 
-	static SingleSpawnEvent* from(uint32_t delay, const pugi::xml_node& eventNode)
+	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode)
 	{
 		pugi::xml_attribute monsterName = eventNode.attribute("name");
 		if (not monsterName) {
-			throw std::runtime_error("name tag missing for singlespawn event.");
+			throw MissingTag{"name"};
 		}
 
 		Position pos{
-			require_attr<int32_t>(eventNode, "x"),
-			require_attr<int32_t>(eventNode, "y"),
-			require_attr<int16_t>(eventNode, "z"),
+			require<int32_t>(eventNode, "x"),
+			require<int32_t>(eventNode, "y"),
+			require<int16_t>(eventNode, "z"),
 		};
 
-		return new SingleSpawnEvent{delay, monsterName.as_string(), std::move(pos)};
+		return make_unique<SingleSpawnEvent>(delay, monsterName.as_string(), std::move(pos));
 	}
 
 	void to_script(std::ostringstream& ss) const override
@@ -140,7 +180,7 @@ Spawn parseSpawnNode(const pugi::xml_node& monsterNode)
 {
 	pugi::xml_attribute name = monsterNode.attribute("name");
 	if (not name) {
-		throw std::runtime_error("name tag missing for monster node.");
+		throw MissingTag{"name"};
 	}
 
 	uint32_t minAmount = 0, maxAmount = 0;
@@ -152,7 +192,7 @@ Spawn parseSpawnNode(const pugi::xml_node& monsterNode)
 	}
 
 	if (maxAmount == 0 and minAmount == 0) {
-		minAmount = maxAmount = require_attr<uint32_t>(monsterNode, "amount");
+		minAmount = maxAmount = require<uint32_t>(monsterNode, "amount");
 	}
 
 	return {name.as_string(), minAmount, maxAmount};
@@ -179,30 +219,30 @@ struct AreaSpawnEvent : public RaidEvent
 	AreaSpawnEvent(uint32_t delay, Position from, Position to, uint32_t radius, std::vector<Spawn> spawnList) :
 			RaidEvent{delay}, from_{std::move(from)}, to{std::move(to)}, radius{radius}, spawnList{std::move(spawnList)} {}
 
-	static AreaSpawnEvent* from(uint32_t delay, const pugi::xml_node& eventNode, uint16_t radius)
+	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode, uint16_t radius)
 	{
 		if (radius == 0) {
 			Position from{
-				require_attr<int32_t>(eventNode, "fromx"),
-				require_attr<int32_t>(eventNode, "fromy"),
-				require_attr<int16_t>(eventNode, "fromz"),
+				require<int32_t>(eventNode, "fromx"),
+				require<int32_t>(eventNode, "fromy"),
+				require<int16_t>(eventNode, "fromz"),
 			};
 
 			Position to{
-				require_attr<int32_t>(eventNode, "tox"),
-				require_attr<int32_t>(eventNode, "toy"),
-				require_attr<int16_t>(eventNode, "toz"),
+				require<int32_t>(eventNode, "tox"),
+				require<int32_t>(eventNode, "toy"),
+				require<int16_t>(eventNode, "toz"),
 			};
 
-			return new AreaSpawnEvent{delay, from, to, 0, parseSpawnList(eventNode)};
+			return make_unique<AreaSpawnEvent>(delay, from, to, 0, parseSpawnList(eventNode));
 		} else {
 			Position center{
-				require_attr<int32_t>(eventNode, "centerx"),
-				require_attr<int32_t>(eventNode, "centery"),
-				require_attr<int16_t>(eventNode, "centerz"),
+				require<int32_t>(eventNode, "centerx"),
+				require<int32_t>(eventNode, "centery"),
+				require<int16_t>(eventNode, "centerz"),
 			};
 
-			return new AreaSpawnEvent{delay, {}, center, radius, parseSpawnList(eventNode)};
+			return make_unique<AreaSpawnEvent>(delay, center, center, radius, parseSpawnList(eventNode));
 		}
 	}
 
@@ -305,24 +345,24 @@ std::unique_ptr<RaidEvent> parseEvent(const std::string& eventType, const pugi::
 {
 	pugi::xml_attribute delayAttr = eventNode.attribute("delay");
 	if (not delayAttr) {
-		throw std::runtime_error("delay tag missing.");
+		throw MissingTag{"delay"};
 	}
 
 	uint32_t delay = pugi::cast<uint32_t>(delayAttr.value());
 	if (eventType == "announce") {
-		return std::unique_ptr<RaidEvent>{AnnounceEvent::from(delay, eventNode)};
+		return AnnounceEvent::from(delay, eventNode);
 	} else if (eventType == "singlespawn") {
-		return std::unique_ptr<RaidEvent>{SingleSpawnEvent::from(delay, eventNode)};
+		return SingleSpawnEvent::from(delay, eventNode);
 	} else if (eventType == "areaspawn") {
 		uint16_t radius = 0;
 		if (auto radiusAttr = eventNode.attribute("radius")) {
 			radius = pugi::cast<uint16_t>(radiusAttr.value());
 		}
-		return std::unique_ptr<RaidEvent>{AreaSpawnEvent::from(delay, eventNode, radius)};
+		return AreaSpawnEvent::from(delay, eventNode, radius);
 	} else if (eventType == "script") {
-		return std::unique_ptr<RaidEvent>{new ScriptEvent{delay}};
+		return make_unique<ScriptEvent>(delay);
 	}
-	throw std::runtime_error("invalid event type " + eventType);
+	throw InvalidEventType{eventType};
 }
 
 Raid loadRaid(RaidInfo info, const fs::path& raids_path)
@@ -340,7 +380,7 @@ Raid loadRaid(RaidInfo info, const fs::path& raids_path)
 		try {
 			auto&& event = parseEvent(eventNode.name(), eventNode);
 			eventList.emplace_back(std::move(event));
-		} catch (const std::runtime_error& err) {
+		} catch (const ParseEventError& err) {
 			std::cout << "[Error - loadRaid] " << info.path << ": " << err.what() << std::endl;
 		}
 	}
@@ -355,10 +395,10 @@ Raid loadRaid(RaidInfo info, const fs::path& raids_path)
 	return {std::move(eventList), std::move(info)};
 }
 
-std::vector<Raid> loadRaids(const fs::path& raids_path)
+std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
 {
 	fs::path xml_path = raids_path / "raids.xml";
-	std::cout << xml_path << std::endl;
+	/* std::cout << xml_path << std::endl; */
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(xml_path.c_str());
@@ -418,13 +458,17 @@ std::vector<Raid> loadRaids(const fs::path& raids_path)
 	return raidList;
 }
 
-void storeRaids(const fs::path& globalevents_path, const std::vector<Raid>& raidList)
+void storeRaids(const fs::path& globalevents_path, const std::vector<Raid>& raidList, bool dryrun, bool)
 {
 	for (auto&& raid: raidList) {
 		fs::path script_path = globalevents_path / "scripts" / raid.stem();
 		script_path += ".lua";
 
-		std::cout << script_path << std::endl;
+		std::cout << raid.info.path << " -> " << script_path << std::endl;
+		if (dryrun) {
+			continue;
+		}
+
 		std::ofstream output{script_path.native()};
 		if (not output.is_open()) {
 			std::cout << "[Error - storeRaids] Couldn't open file: " << script_path << std::endl;
@@ -435,45 +479,52 @@ void storeRaids(const fs::path& globalevents_path, const std::vector<Raid>& raid
 	}
 }
 
+}
+
 int main(int argc, char** argv)
 {
-	fs::path globalevents_path, raids_path;
+	std::ios::sync_with_stdio(false);
+	fs::path globalevents, raids;
+	bool dryrun, verbose;
 
-	int opt;
-	while ((opt = getopt(argc, argv, "hg:r:")) != -1) {
-		switch (opt) {
-			case '?':
-			case 'h':
-				usage(argv[0]);
-				return 0;
+	po::options_description desc{"Usage"};
+	desc.add_options()
+		("help,h", "print help message")
+		("dry-run,d", po::bool_switch(&dryrun), "do not write files")
+		("globalevents,g", po::value(&globalevents)->required(), "path to globalevents folder (required)")
+		("raids,r", po::value(&raids)->required(), "path to raids folder (required)")
+		("verbose,v", po::bool_switch(&verbose), "print debug messages");
 
-			case 'g':
-				globalevents_path = optarg;
-				break;
+	po::variables_map vm;
+	try {
+		po::store(po::parse_command_line(argc, argv, desc), vm);
 
-			case 'r':
-				raids_path = optarg;
-				break;
+		if (vm.count("help")) {
+			std::cout << desc << std::endl;
+			return 0;
 		}
-	}
 
-	if (globalevents_path.empty() and raids_path.empty()) {
-		usage(argv[0]);
+		po::notify(vm);
+	} catch (const po::error& e) {
+		std::cerr << "[Error] " << e.what() << std::endl << desc << std::endl;
 		return 1;
 	}
 
-	if (globalevents_path.empty()) {
-		raids_path = raids_path.remove_trailing_separator();
-		globalevents_path = raids_path.parent_path() / "globalevents";
-	} else if (raids_path.empty()) {
-		globalevents_path = globalevents_path.remove_trailing_separator();
-		raids_path = globalevents_path.parent_path() / "raids";
+	if (globalevents.empty() and raids.empty()) {
+		std::cout << desc << std::endl;
+		return 1;
 	}
 
-	std::ios::sync_with_stdio(false);
-	std::cout << "Output path: " << globalevents_path << '\n';
-	std::cout << "XML path: " << raids_path << '\n';
+	if (globalevents.empty()) {
+		raids = raids.remove_trailing_separator();
+		globalevents = raids.parent_path() / "globalevents";
+	} else if (raids.empty()) {
+		globalevents = globalevents.remove_trailing_separator();
+		raids = globalevents.parent_path() / "raids";
+	}
 
-	auto raids = loadRaids(raids_path);
-	storeRaids(globalevents_path, raids);
+	std::cout << "Output path: " << globalevents << '\n';
+	std::cout << "XML path: " << raids << '\n';
+
+	storeRaids(globalevents, loadRaids(raids, dryrun, verbose), dryrun, verbose);
 }
