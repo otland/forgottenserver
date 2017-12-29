@@ -10,7 +10,7 @@ function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReacha
 	for radius = 0, maxRadius do
 		checkPosition.x = checkPosition.x - math.min(1, radius)
 		checkPosition.y = checkPosition.y + math.min(1, radius)
-		
+
 		local total = math.max(1, radius * 8)
 		for i = 1, total do
 			if radius > 0 then
