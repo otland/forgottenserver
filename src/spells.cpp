@@ -807,44 +807,6 @@ uint32_t Spell::getManaCost(const Player* player) const
 	return 0;
 }
 
-ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t& outfit, int32_t time)
-{
-	ConditionOutfit* outfitCondition = new ConditionOutfit(CONDITIONID_COMBAT, CONDITION_OUTFIT, time);
-	outfitCondition->setOutfit(outfit);
-	creature->addCondition(outfitCondition);
-	return RETURNVALUE_NOERROR;
-}
-
-ReturnValue Spell::CreateIllusion(Creature* creature, const std::string& name, int32_t time)
-{
-	const auto mType = g_monsters.getMonsterType(name);
-	if (mType == nullptr) {
-		return RETURNVALUE_CREATUREDOESNOTEXIST;
-	}
-
-	Player* player = creature->getPlayer();
-	if (player && !player->hasFlag(PlayerFlag_CanIllusionAll)) {
-		if (!mType->info.isIllusionable) {
-			return RETURNVALUE_NOTPOSSIBLE;
-		}
-	}
-
-	return CreateIllusion(creature, mType->info.outfit, time);
-}
-
-ReturnValue Spell::CreateIllusion(Creature* creature, uint32_t itemId, int32_t time)
-{
-	const ItemType& it = Item::items[itemId];
-	if (it.id == 0) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
-	Outfit_t outfit;
-	outfit.lookTypeEx = itemId;
-
-	return CreateIllusion(creature, outfit, time);
-}
-
 std::string InstantSpell::getScriptEventName() const
 {
 	return "onCastSpell";

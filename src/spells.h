@@ -158,10 +158,6 @@ class Spell : public BaseSpell
 			return learnable;
 		}
 
-		static ReturnValue CreateIllusion(Creature* creature, const Outfit_t& outfit, int32_t time);
-		static ReturnValue CreateIllusion(Creature* creature, const std::string& name, int32_t time);
-		static ReturnValue CreateIllusion(Creature* creature, uint32_t itemId, int32_t time);
-
 		const VocSpellMap& getVocMap() const {
 			return vocSpellMap;
 		}
