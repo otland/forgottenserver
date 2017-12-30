@@ -4,8 +4,8 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MORTAREA)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 
 function onTargetCreature(creature, target)
-	local min = (creature:getLevel() * 0.03) + (creature:getMagicLevel() * 0.45) + 4
-	local max = (creature:getLevel() * 0.03) + (creature:getMagicLevel() * 0.9) + 5
+	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.5) + 7
+	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.9) + 8
 	local damage = math.random(math.floor(min), math.floor(max))
 	creature:addDamageCondition(target, CONDITION_CURSED, 0, damage)
 	return true

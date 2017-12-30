@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -386,20 +386,6 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 
 MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface) {}
 
-MoveEvent::MoveEvent(const MoveEvent* copy) :
-	Event(copy),
-	eventType(copy->eventType),
-	stepFunction(copy->stepFunction),
-	moveFunction(copy->moveFunction),
-	equipFunction(copy->equipFunction),
-	slot(copy->slot),
-	reqLevel(copy->reqLevel),
-	reqMagLevel(copy->reqMagLevel),
-	premium(copy->premium),
-	vocationString(copy->vocationString),
-	wieldInfo(copy->wieldInfo),
-	vocEquipMap(copy->vocEquipMap) {}
-
 std::string MoveEvent::getScriptEventName() const
 {
 	switch (eventType) {
@@ -536,41 +522,9 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool MoveEvent::loadFunction(const pugi::xml_attribute& attr)
-{
-	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "onstepinfield") == 0) {
-		stepFunction = StepInField;
-	} else if (strcasecmp(functionName, "onstepoutfield") == 0) {
-		stepFunction = StepOutField;
-	} else if (strcasecmp(functionName, "onaddfield") == 0) {
-		moveFunction = AddItemField;
-	} else if (strcasecmp(functionName, "onremovefield") == 0) {
-		moveFunction = RemoveItemField;
-	} else if (strcasecmp(functionName, "onequipitem") == 0) {
-		equipFunction = EquipItem;
-	} else if (strcasecmp(functionName, "ondeequipitem") == 0) {
-		equipFunction = DeEquipItem;
-	} else {
-		std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
-	}
+namespace {
 
-	scripted = false;
-	return true;
-}
-
-MoveEvent_t MoveEvent::getEventType() const
-{
-	return eventType;
-}
-
-void MoveEvent::setEventType(MoveEvent_t type)
-{
-	eventType = type;
-}
-
-uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
+uint32_t StepInField(Creature* creature, Item* item, const Position&)
 {
 	MagicField* field = item->getMagicField();
 	if (field) {
@@ -581,12 +535,12 @@ uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t MoveEvent::StepOutField(Creature*, Item*, const Position&)
+uint32_t StepOutField(Creature*, Item*, const Position&)
 {
 	return 1;
 }
 
-uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
+uint32_t AddItemField(Item* item, Item*, const Position&)
 {
 	if (MagicField* field = item->getMagicField()) {
 		Tile* tile = item->getTile();
@@ -600,12 +554,12 @@ uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&)
+uint32_t RemoveItemField(Item*, Item*, const Position&)
 {
 	return 1;
 }
 
-uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
+uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (player->isItemAbilityEnabled(slot)) {
 		return 1;
@@ -719,7 +673,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	return 1;
 }
 
-uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
+uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
 		return 1;
@@ -792,6 +746,42 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	}
 
 	return 1;
+}
+
+}
+
+bool MoveEvent::loadFunction(const pugi::xml_attribute& attr)
+{
+	const char* functionName = attr.as_string();
+	if (strcasecmp(functionName, "onstepinfield") == 0) {
+		stepFunction = StepInField;
+	} else if (strcasecmp(functionName, "onstepoutfield") == 0) {
+		stepFunction = StepOutField;
+	} else if (strcasecmp(functionName, "onaddfield") == 0) {
+		moveFunction = AddItemField;
+	} else if (strcasecmp(functionName, "onremovefield") == 0) {
+		moveFunction = RemoveItemField;
+	} else if (strcasecmp(functionName, "onequipitem") == 0) {
+		equipFunction = EquipItem;
+	} else if (strcasecmp(functionName, "ondeequipitem") == 0) {
+		equipFunction = DeEquipItem;
+	} else {
+		std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+		return false;
+	}
+
+	scripted = false;
+	return true;
+}
+
+MoveEvent_t MoveEvent::getEventType() const
+{
+	return eventType;
+}
+
+void MoveEvent::setEventType(MoveEvent_t type)
+{
+	eventType = type;
 }
 
 uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position& pos)

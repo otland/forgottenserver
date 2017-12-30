@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,8 +67,8 @@ class CreatureEvents final : public BaseEvents
 		void clear() final;
 
 		//creature events
-		typedef std::map<std::string, CreatureEvent*> CreatureEventList;
-		CreatureEventList creatureEvents;
+		using CreatureEventMap = std::map<std::string, CreatureEvent*>;
+		CreatureEventMap creatureEvents;
 
 		LuaScriptInterface scriptInterface;
 };

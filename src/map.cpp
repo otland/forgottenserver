@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -234,12 +234,12 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
-	SpectatorVec list;
-	getSpectators(list, oldPos, true);
-	getSpectators(list, newPos, true);
+	SpectatorHashSet spectators;
+	getSpectators(spectators, oldPos, true);
+	getSpectators(spectators, newPos, true);
 
 	std::vector<int32_t> oldStackPosVector;
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (tmpPlayer->canSeeCreature(&creature)) {
 				oldStackPosVector.push_back(oldTile.getClientIndexOfCreature(tmpPlayer, &creature));
@@ -280,7 +280,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	//send to client
 	size_t i = 0;
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
@@ -291,7 +291,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	}
 
 	//event method
-	for (Creature* spectator : list) {
+	for (Creature* spectator : spectators) {
 		spectator->onCreatureMove(&creature, &newTile, newPos, &oldTile, oldPos, teleport);
 	}
 
@@ -299,7 +299,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	newTile.postAddNotification(&creature, &oldTile, 0);
 }
 
-void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
+void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
 {
 	int_fast16_t min_y = centerPos.y + minRangeY;
 	int_fast16_t min_x = centerPos.x + minRangeX;
@@ -339,7 +339,7 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 						continue;
 					}
 
-					list.insert(creature);
+					spectators.insert(creature);
 				}
 				leafE = leafE->leafE;
 			} else {
@@ -355,7 +355,7 @@ void Map::getSpectatorsInternal(SpectatorVec& list, const Position& centerPos, i
 	}
 }
 
-void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -373,11 +373,11 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 		if (onlyPlayers) {
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
-				if (!list.empty()) {
-					const SpectatorVec& cachedList = it->second;
-					list.insert(cachedList.begin(), cachedList.end());
+				if (!spectators.empty()) {
+					const SpectatorHashSet& cachedSpectators = it->second;
+					spectators.insert(cachedSpectators.begin(), cachedSpectators.end());
 				} else {
-					list = it->second;
+					spectators = it->second;
 				}
 
 				foundCache = true;
@@ -388,17 +388,17 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 			auto it = spectatorCache.find(centerPos);
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
-					if (!list.empty()) {
-						const SpectatorVec& cachedList = it->second;
-						list.insert(cachedList.begin(), cachedList.end());
+					if (!spectators.empty()) {
+						const SpectatorHashSet& cachedSpectators = it->second;
+						spectators.insert(cachedSpectators.begin(), cachedSpectators.end());
 					} else {
-						list = it->second;
+						spectators = it->second;
 					}
 				} else {
-					const SpectatorVec& cachedList = it->second;
-					for (Creature* spectator : cachedList) {
+					const SpectatorHashSet& cachedSpectators = it->second;
+					for (Creature* spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
-							list.insert(spectator);
+							spectators.insert(spectator);
 						}
 					}
 				}
@@ -436,13 +436,13 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos, bool mult
 			maxRangeZ = centerPos.z;
 		}
 
-		getSpectatorsInternal(list, centerPos, minRangeX, maxRangeX, minRangeY, maxRangeY, minRangeZ, maxRangeZ, onlyPlayers);
+		getSpectatorsInternal(spectators, centerPos, minRangeX, maxRangeX, minRangeY, maxRangeY, minRangeZ, maxRangeZ, onlyPlayers);
 
 		if (cacheResult) {
 			if (onlyPlayers) {
-				playersSpectatorCache[centerPos] = list;
+				playersSpectatorCache[centerPos] = spectators;
 			} else {
-				spectatorCache[centerPos] = list;
+				spectatorCache[centerPos] = spectators;
 			}
 		}
 	}

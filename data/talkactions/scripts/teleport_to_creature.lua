@@ -4,11 +4,10 @@ function onSay(player, words, param)
 	end
 
 	local target = Creature(param)
-	if target == nil then
+	if target then
+		player:teleportTo(target:getPosition())
+	else
 		player:sendCancelMessage("Creature not found.")
-		return false
 	end
-
-	player:teleportTo(target:getPosition())
 	return false
 end

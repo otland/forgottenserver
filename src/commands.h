@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 class Player;
 
 struct Command;
-struct s_defcommands;
 
 class Commands
 {
@@ -43,32 +42,19 @@ class Commands
 		bool exeCommand(Player& player, const std::string& cmd);
 
 	protected:
-		//commands
-		void reloadInfo(Player& player, const std::string& param);
-		void sellHouse(Player& player, const std::string& param);
-		void forceRaid(Player& player, const std::string& param);
-
-		//table of commands
-		static s_defcommands defined_commands[];
-
 		std::map<std::string, Command*> commandMap;
 };
 
-typedef void (Commands::*CommandFunc)(Player&, const std::string&);
+using CommandFunction = std::function<void(Player&, const std::string&)>;
 
 struct Command {
-	Command(CommandFunc f, uint32_t groupId, AccountType_t accountType, bool log)
+	Command(CommandFunction f, uint32_t groupId, AccountType_t accountType, bool log)
 		: f(f), groupId(groupId), accountType(accountType), log(log) {}
 
-	CommandFunc f;
+	CommandFunction f;
 	uint32_t groupId;
 	AccountType_t accountType;
 	bool log;
-};
-
-struct s_defcommands {
-	const char* name;
-	CommandFunc f;
 };
 
 #endif

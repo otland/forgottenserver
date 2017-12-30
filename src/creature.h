@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,8 +28,8 @@
 #include "enums.h"
 #include "creatureevent.h"
 
-typedef std::list<Condition*> ConditionList;
-typedef std::list<CreatureEvent*> CreatureEventList;
+using ConditionList = std::list<Condition*>;
+using CreatureEventList = std::list<CreatureEvent*>;
 
 enum slots_t : uint8_t {
 	CONST_SLOT_WHEREEVER = 0,
@@ -481,7 +481,7 @@ class Creature : virtual public Thing
 
 		Position position;
 
-		typedef std::map<uint32_t, CountBlock_t> CountMap;
+		using CountMap = std::map<uint32_t, CountBlock_t>;
 		CountMap damageMap;
 
 		std::list<Creature*> summons;
