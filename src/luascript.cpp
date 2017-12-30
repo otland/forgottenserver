@@ -2067,8 +2067,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "getAttribute", LuaScriptInterface::luaItemGetAttribute);
 	registerMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
 	registerMethod("Item", "removeAttribute", LuaScriptInterface::luaItemRemoveAttribute);
-	registerMethod("Item", "setCustomAttribute", LuaScriptInterface::luaItemSetCustomAttribute);
 	registerMethod("Item", "getCustomAttribute", LuaScriptInterface::luaItemGetCustomAttribute);
+	registerMethod("Item", "setCustomAttribute", LuaScriptInterface::luaItemSetCustomAttribute);
 	registerMethod("Item", "removeCustomAttribute", LuaScriptInterface::luaItemRemoveCustomAttribute);
 
 	registerMethod("Item", "moveTo", LuaScriptInterface::luaItemMoveTo);
@@ -6081,6 +6081,32 @@ int LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
+	// item:getCustomAttribute(key)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const ItemAttributes::CustomAttribute* attr;
+	if (isNumber(L, 2)) {
+		attr = item->getCustomAttribute(getNumber<int64_t>(L, 2));
+	} else if (isString(L, 2)) {
+		attr = item->getCustomAttribute(getString(L, 2));
+	} else {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (attr) {
+		attr->pushToLua(L);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 	// item:setCustomAttribute(key, value)
 	Item* item = getUserdata<Item>(L, 1);
@@ -6118,32 +6144,6 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 
 	item->setCustomAttribute(key, val);
 	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
-	// item:getCustomAttribute(key)
-	Item* item = getUserdata<Item>(L, 1);
-	if (!item) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	const ItemAttributes::CustomAttribute* attr;
-	if (isNumber(L, 2)) {
-		attr = item->getCustomAttribute(getNumber<int64_t>(L, 2));
-	} else if (isString(L, 2)) {
-		attr = item->getCustomAttribute(getString(L, 2));
-	} else {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	if (attr) {
-		attr->pushToLua(L);
-	} else {
-		lua_pushnil(L);
-	}
 	return 1;
 }
 
