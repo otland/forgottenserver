@@ -422,6 +422,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.blockProjectile = valueAttribute.as_bool();
 		} else if (tmpStrValue == "allowpickupable" || tmpStrValue == "pickupable") {
 			it.allowPickupable = valueAttribute.as_bool();
+		} else if (tmpStrValue == "forceserialize" || tmpStrValue == "forcesave") {
+			it.forceSerialize = valueAttribute.as_bool();
 		} else if (tmpStrValue == "floorchange") {
 			tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 			if (tmpStrValue == "down") {

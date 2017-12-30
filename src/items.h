@@ -242,6 +242,7 @@ class ItemType
 		int8_t hitChance = 0;
 
 		bool forceUse = false;
+		bool forceSerialize = false;
 		bool hasHeight = false;
 		bool walkStack = true;
 		bool blockSolid = false;
