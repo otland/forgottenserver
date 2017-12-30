@@ -622,13 +622,14 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			if (!propStream.read<uint64_t>(size)) {
 				return ATTR_READ_ERROR;
 			}
+
 			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value
 				std::string key;
 				if (!propStream.readString(key)) {
 					return ATTR_READ_ERROR;
 				};
-				
+
 				// Unserialize value type and value
 				ItemAttributes::CustomAttribute val;
 				if (!val.unserialize(propStream)) {

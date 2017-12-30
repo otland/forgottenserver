@@ -6115,7 +6115,7 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 		lua_pushnil(L);
 		return 1;
 	}
-	
+
 	item->setCustomAttribute(key, val);
 	pushBoolean(L, true);
 	return 1;
@@ -6162,7 +6162,6 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L) {
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 
