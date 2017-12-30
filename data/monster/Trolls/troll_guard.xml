@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Troll Guard" nameDescription="a troll guard" race="blood" experience="25" speed="180" manacost="0">
+<monster name="Troll Guard" nameDescription="a troll guard" race="blood" experience="25" speed="180">
 	<health now="60" max="60" />
 	<look type="281" corpse="7926" />
 	<targetchange interval="5000" chance="20" />

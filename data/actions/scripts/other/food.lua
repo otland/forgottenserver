@@ -100,7 +100,7 @@ local foods = {
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local food = foods[item.itemid]
-	if food == nil then
+	if not food then
 		return false
 	end
 

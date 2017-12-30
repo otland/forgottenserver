@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ void Npc::reset()
 {
 	loaded = false;
 	walkTicks = 1500;
+	pushable = true;
 	floorChange = false;
 	attackable = false;
 	ignoreHeight = true;
@@ -151,6 +152,10 @@ bool Npc::loadFromXml()
 		baseSpeed = pugi::cast<uint32_t>(attr.value());
 	} else {
 		baseSpeed = 100;
+	}
+
+	if ((attr = npcNode.attribute("pushable"))) {
+		pushable = attr.as_bool();
 	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
@@ -251,10 +256,13 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (creature->getPlayer()) {
+	} else if (Player* player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
+
+		spectators.insert(player);
+		updateIdleStatus();
 	}
 }
 
@@ -267,10 +275,13 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (creature->getPlayer()) {
+	} else if (Player* player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
+
+		spectators.erase(player);
+		updateIdleStatus();
 	}
 }
 
@@ -282,6 +293,19 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 	if (creature == this || creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureMove(creature, oldPos, newPos);
+		}
+
+		if (creature != this) {
+			Player* player = creature->getPlayer();
+
+			// if player is now in range, add to spectators list, otherwise erase
+			if (player->canSee(position)) {
+				spectators.insert(player);
+			} else {
+				spectators.erase(player);
+			}
+
+			updateIdleStatus();
 		}
 	}
 }
@@ -316,7 +340,7 @@ void Npc::onThink(uint32_t interval)
 		npcEventHandler->onThink();
 	}
 
-	if (getTimeSinceLastMove() >= walkTicks) {
+	if (!isIdle && getTimeSinceLastMove() >= walkTicks) {
 		addEventWalk();
 	}
 }
@@ -368,7 +392,7 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 		return true;
 	}
 
-	if (walkTicks <= 0) {
+	if (walkTicks == 0) {
 		return false;
 	}
 
@@ -381,6 +405,27 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	}
 
 	return getRandomStep(dir);
+}
+
+void Npc::setIdle(bool idle)
+{
+	if (isRemoved() || getHealth() <= 0) {
+		return;
+	}
+
+	isIdle = idle;
+
+	if (isIdle) {
+		onIdleStatus();
+	}
+}
+
+void Npc::updateIdleStatus()
+{
+	bool status = spectators.empty();
+	if (status != isIdle) {
+		setIdle(status);
+	}
 }
 
 bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
@@ -439,10 +484,10 @@ bool Npc::getRandomStep(Direction& dir) const
 	return true;
 }
 
-void Npc::doMoveTo(const Position& target)
+void Npc::doMoveTo(const Position& pos)
 {
 	std::forward_list<Direction> listDir;
-	if (getPathTo(target, listDir, 1, 1, true, true)) {
+	if (getPathTo(pos, listDir, 1, 1, true, true)) {
 		startAutoWalk(listDir);
 	}
 }
@@ -1073,6 +1118,7 @@ void NpcEventsHandler::onCreatureAppear(Creature* creature)
 	//onCreatureAppear(creature)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureAppear] Call stack overflow" << std::endl;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface->getScriptEnv();
@@ -1159,7 +1205,7 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	scriptInterface->callFunction(3);
 }
 
-void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemid,
+void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId,
                               uint8_t count, uint8_t amount, bool ignore, bool inBackpacks)
 {
 	if (callback == -1) {
@@ -1180,7 +1226,7 @@ void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t 
 	LuaScriptInterface::pushCallback(L, callback);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	lua_pushnumber(L, itemid);
+	lua_pushnumber(L, itemId);
 	lua_pushnumber(L, count);
 	lua_pushnumber(L, amount);
 	LuaScriptInterface::pushBoolean(L, ignore);

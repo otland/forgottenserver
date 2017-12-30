@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ struct Abilities {
 
 	//extra skill modifiers
 	int32_t skills[SKILL_LAST + 1] = { 0 };
+	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
 
 	int32_t speed = 0;
 
@@ -142,7 +143,13 @@ class ItemType
 			return (type == ITEM_TYPE_BED);
 		}
 		bool isRune() const {
-			return type == ITEM_TYPE_RUNE;
+			return (type == ITEM_TYPE_RUNE);
+		}
+		bool isPickupable() const {
+			return (allowPickupable || pickupable);
+		}
+		bool isUseable() const {
+			return (useable);
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
@@ -201,7 +208,7 @@ class ItemType
 		int32_t defense = 0;
 		int32_t extraDefense = 0;
 		int32_t armor = 0;
-		int32_t rotateTo = 0;
+		uint16_t rotateTo = 0;
 		int32_t runeMagLevel = 0;
 		int32_t runeLevel = 0;
 
@@ -265,7 +272,7 @@ class ItemType
 class Items
 {
 	public:
-		using nameMap = std::unordered_multimap<std::string, uint16_t>;
+		using NameMap = std::unordered_multimap<std::string, uint16_t>;
 
 		Items();
 
@@ -276,7 +283,7 @@ class Items
 		bool reload();
 		void clear();
 
-		FILELOADER_ERRORS loadFromOtb(const std::string& file);
+		bool loadFromOtb(const std::string& file);
 
 		const ItemType& operator[](size_t id) const {
 			return getItemType(id);
@@ -294,13 +301,13 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
-		inline size_t size() const {
+		size_t size() const {
 			return items.size();
 		}
 
-		nameMap nameToItems;
+		NameMap nameToItems;
 
-	protected:
+	private:
 		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
 };

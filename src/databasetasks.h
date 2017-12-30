@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include "enums.h"
 
 struct DatabaseTask {
-	DatabaseTask(std::string query, std::function<void(DBResult_ptr, bool)> callback, bool store) :
+	DatabaseTask(std::string&& query, std::function<void(DBResult_ptr, bool)>&& callback, bool store) :
 		query(std::move(query)), callback(std::move(callback)), store(store) {}
 
 	std::string query;
@@ -42,7 +42,7 @@ class DatabaseTasks : public ThreadHolder<DatabaseTasks>
 		void flush();
 		void shutdown();
 
-		void addTask(const std::string& query, const std::function<void(DBResult_ptr, bool)>& callback = nullptr, bool store = false);
+		void addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback = nullptr, bool store = false);
 
 		void threadMain();
 	private:

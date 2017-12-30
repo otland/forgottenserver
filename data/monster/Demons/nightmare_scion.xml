@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="230" manacost="0">
+<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="230">
 	<health now="1400" max="1400" />
 	<look type="321" corpse="9919" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,8 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="300" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-140" />

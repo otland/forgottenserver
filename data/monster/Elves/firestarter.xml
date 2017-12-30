@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180" manacost="0">
+<monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180">
 	<health now="180" max="180" />
 	<look type="159" head="94" body="77" legs="78" feet="79" corpse="20599" />
 	<targetchange interval="4000" chance="0" />

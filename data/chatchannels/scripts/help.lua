@@ -20,7 +20,7 @@ function onSpeak(player, type, message)
 		if string.sub(message, 1, 6) == "!mute " then
 			local targetName = string.sub(message, 7)
 			local target = Player(targetName)
-			if target ~= nil then
+			if target then
 				if playerAccountType > target:getAccountType() then
 					if not target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
 						target:addCondition(muted)
@@ -38,7 +38,7 @@ function onSpeak(player, type, message)
 		elseif string.sub(message, 1, 8) == "!unmute " then
 			local targetName = string.sub(message, 9)
 			local target = Player(targetName)
-			if target ~= nil then
+			if target then
 				if playerAccountType > target:getAccountType() then
 					if target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
 						target:removeCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
@@ -57,16 +57,16 @@ function onSpeak(player, type, message)
 	end
 
 	if type == TALKTYPE_CHANNEL_Y then
-		if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(player, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType >= ACCOUNT_TYPE_TUTOR or player:hasFlag(PlayerFlag_TalkOrangeHelpChannel) then
 			type = TALKTYPE_CHANNEL_O
 		end
 	elseif type == TALKTYPE_CHANNEL_O then
-		if playerAccountType < ACCOUNT_TYPE_TUTOR and not getPlayerFlagValue(player, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType < ACCOUNT_TYPE_TUTOR and not player:hasFlag(PlayerFlag_TalkOrangeHelpChannel) then
 			type = TALKTYPE_CHANNEL_Y
 		end
 	elseif type == TALKTYPE_CHANNEL_R1 then
-		if playerAccountType < ACCOUNT_TYPE_GAMEMASTER and not getPlayerFlagValue(player, PlayerFlag_CanTalkRedChannel) then
-			if playerAccountType >= ACCOUNT_TYPE_TUTOR or getPlayerFlagValue(player, PlayerFlag_TalkOrangeHelpChannel) then
+		if playerAccountType < ACCOUNT_TYPE_GAMEMASTER and not player:hasFlag(PlayerFlag_CanTalkRedChannel) then
+			if playerAccountType >= ACCOUNT_TYPE_TUTOR or player:hasFlag(PlayerFlag_TalkOrangeHelpChannel) then
 				type = TALKTYPE_CHANNEL_O
 			else
 				type = TALKTYPE_CHANNEL_Y

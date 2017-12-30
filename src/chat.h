@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,21 +26,21 @@
 class Party;
 class Player;
 
-typedef std::map<uint32_t, Player*> UsersMap;
-typedef std::map<uint32_t, const Player*> InvitedMap;
+using UsersMap = std::map<uint32_t, Player*>;
+using InvitedMap = std::map<uint32_t, const Player*>;
 
 class ChatChannel
 {
 	public:
 		ChatChannel() = default;
 		ChatChannel(uint16_t channelId, std::string channelName):
-			name(std::move(channelName)),
-			id(channelId) {}
+			id{channelId}, name{std::move(channelName)} {}
 
 		virtual ~ChatChannel() = default;
 
 		bool addUser(Player& player);
 		bool removeUser(const Player& player);
+		bool hasUser(const Player& player);
 
 		bool talk(const Player& fromPlayer, SpeakClasses type, const std::string& text);
 		void sendToAll(const std::string& message, SpeakClasses type) const;
@@ -72,6 +72,9 @@ class ChatChannel
 	protected:
 		UsersMap users;
 
+		uint16_t id;
+
+	private:
 		std::string name;
 
 		int32_t canJoinEvent = -1;
@@ -79,7 +82,6 @@ class ChatChannel
 		int32_t onLeaveEvent = -1;
 		int32_t onSpeakEvent = -1;
 
-		uint16_t id;
 		bool publicChannel = false;
 
 	friend class Chat;
@@ -90,7 +92,7 @@ class PrivateChatChannel final : public ChatChannel
 	public:
 		PrivateChatChannel(uint16_t channelId, std::string channelName) : ChatChannel(channelId, channelName) {}
 
-		uint32_t getOwner() const final {
+		uint32_t getOwner() const override {
 			return owner;
 		}
 		void setOwner(uint32_t owner) {
@@ -106,16 +108,16 @@ class PrivateChatChannel final : public ChatChannel
 
 		void closeChannel() const;
 
-		const InvitedMap* getInvitedUsers() const final {
+		const InvitedMap* getInvitedUsers() const override {
 			return &invites;
 		}
 
-	protected:
+	private:
 		InvitedMap invites;
 		uint32_t owner = 0;
 };
 
-typedef std::list<ChatChannel*> ChannelList;
+using ChannelList = std::list<ChatChannel*>;
 
 class Chat
 {

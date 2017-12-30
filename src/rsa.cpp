@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ void RSA::setKey(const char* pString, const char* qString)
 	mpz_clear(e);
 }
 
-void RSA::decrypt(char* msg) const 
+void RSA::decrypt(char* msg) const
 {
 	mpz_t c, m;
 	mpz_init2(c, 1024);

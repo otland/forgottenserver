@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2016  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ struct MoveEventList {
 	std::list<MoveEvent*> moveEvent[MOVE_EVENT_LAST];
 };
 
-typedef std::map<uint16_t, bool> VocEquipMap;
+using VocEquipMap = std::map<uint16_t, bool>;
 
 class MoveEvents final : public BaseEvents
 {
@@ -63,16 +63,16 @@ class MoveEvents final : public BaseEvents
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
 
-	protected:
-		typedef std::map<int32_t, MoveEventList> MoveListMap;
+	private:
+		using MoveListMap = std::map<int32_t, MoveEventList>;
 		void clearMap(MoveListMap& map);
 
-		typedef std::map<Position, MoveEventList> MovePosListMap;
-		void clear() final;
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
+		using MovePosListMap = std::map<Position, MoveEventList>;
+		void clear() override;
+		LuaScriptInterface& getScriptInterface() override;
+		std::string getScriptBaseName() const override;
+		Event* getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event* event, const pugi::xml_node& node) override;
 
 		void addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map);
 
@@ -89,25 +89,24 @@ class MoveEvents final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-typedef uint32_t (StepFunction)(Creature* creature, Item* item, const Position& pos);
-typedef uint32_t (MoveFunction)(Item* item, Item* tileItem, const Position& pos);
-typedef uint32_t (EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+using StepFunction = std::function<uint32_t(Creature* creature, Item* item, const Position& pos)>;
+using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Position& pos)>;
+using EquipFunction = std::function<uint32_t(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
 
 class MoveEvent final : public Event
 {
 	public:
 		explicit MoveEvent(LuaScriptInterface* interface);
-		explicit MoveEvent(const MoveEvent* copy);
 
 		MoveEvent_t getEventType() const;
 		void setEventType(MoveEvent_t type);
 
-		bool configureEvent(const pugi::xml_node& node) final;
-		bool loadFunction(const pugi::xml_attribute& attr) final;
+		bool configureEvent(const pugi::xml_node& node) override;
+		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
-		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool boolean);
+		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 
 		uint32_t getSlot() const {
 			return slot;
@@ -115,7 +114,7 @@ class MoveEvent final : public Event
 
 		//scripting
 		bool executeStep(Creature* creature, Item* item, const Position& pos);
-		bool executeEquip(Player* player, Item* item, slots_t slot);
+		bool executeEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 		bool executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
 		//
 
@@ -139,21 +138,13 @@ class MoveEvent final : public Event
 			return vocEquipMap;
 		}
 
-	protected:
-		std::string getScriptEventName() const final;
-
-		static StepFunction StepInField;
-		static StepFunction StepOutField;
-
-		static MoveFunction AddItemField;
-		static MoveFunction RemoveItemField;
-		static EquipFunction EquipItem;
-		static EquipFunction DeEquipItem;
+	private:
+		std::string getScriptEventName() const override;
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
-		StepFunction* stepFunction = nullptr;
-		MoveFunction* moveFunction = nullptr;
-		EquipFunction* equipFunction = nullptr;
+		StepFunction stepFunction;
+		MoveFunction moveFunction;
+		EquipFunction equipFunction;
 		uint32_t slot = SLOTP_WHEREEVER;
 
 		//onEquip information

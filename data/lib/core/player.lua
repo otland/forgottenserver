@@ -22,7 +22,7 @@ function Player.feed(self, food)
 end
 
 function Player.getClosestFreePosition(self, position, extended)
-	if self:getAccountType() >= ACCOUNT_TYPE_GOD then
+	if self:getGroup():getAccess() and self:getAccountType() >= ACCOUNT_TYPE_GOD then
 		return position
 	end
 	return Creature.getClosestFreePosition(self, position, extended)
@@ -30,6 +30,10 @@ end
 
 function Player.getDepotItems(self, depotId)
 	return self:getDepotChest(depotId, true):getItemHoldingCount()
+end
+
+function Player.hasFlag(self, flag)
+	return self:getGroup():hasFlag(flag)
 end
 
 function Player.getLossPercent(self)

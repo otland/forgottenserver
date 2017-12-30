@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Elder Wyrm" nameDescription="an elder wyrm" race="blood" experience="2500" speed="260" manacost="0">
+<monster name="Elder Wyrm" nameDescription="an elder wyrm" race="blood" experience="2500" speed="260">
 	<health now="2700" max="2700" />
 	<look type="561" corpse="21283" />
 	<targetchange interval="4000" chance="15" />

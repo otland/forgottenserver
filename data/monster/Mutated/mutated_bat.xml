@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Mutated Bat" nameDescription="a mutated bat" race="blood" experience="615" speed="210" manacost="0">
+<monster name="Mutated Bat" nameDescription="a mutated bat" race="blood" experience="615" speed="210">
 	<health now="900" max="900" />
 	<look type="307" corpse="9829" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,8 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="300" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-168" poison="120" />

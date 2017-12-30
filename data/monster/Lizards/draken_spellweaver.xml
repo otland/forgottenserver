@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Draken Spellweaver" nameDescription="a draken spellweaver" race="blood" experience="3100" speed="210" manacost="0">
+<monster name="Draken Spellweaver" nameDescription="a draken spellweaver" race="blood" experience="3100" speed="210">
 	<health now="5000" max="5000" />
 	<look type="340" corpse="11316" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,7 @@
 		<flag targetdistance="0" />
 		<flag staticattack="70" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-252" />
@@ -32,7 +33,7 @@
 		<attack name="earth" interval="2000" chance="10" target="1" radius="4" min="-200" max="-380">
 			<attribute key="areaEffect" value="poff" />
 		</attack>
-		<attack name="soulfire" interval="2000" chance="10" />
+		<attack name="monster soulfire" interval="2000" chance="10" />
 		<attack name="poisoncondition" interval="2000" chance="10" target="1" min="-280" max="-360">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
