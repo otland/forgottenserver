@@ -569,6 +569,16 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		case ATTR_UNMOVEABLEDITEM: {
+			uint8_t unmoveabledItem;
+			if (!propStream.read<uint8_t>(unmoveabledItem)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setIntAttr(ITEM_ATTRIBUTE_UNMOVEABLEDITEM, unmoveabledItem);
+			break;
+		}
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values
@@ -774,7 +784,12 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE));
 	}
 
-	if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
+	if (hasAttribute(ITEM_ATTRIBUTE_UNMOVEABLEDITEM)) {
+		propWriteStream.write<uint8_t>(ATTR_UNMOVEABLEDITEM);
+		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_UNMOVEABLEDITEM));
+  }
+
+  if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 		const ItemAttributes::CustomAttributeMap* customAttrMap = attributes->getCustomAttributeMap();
 		propWriteStream.write<uint8_t>(ATTR_CUSTOM_ATTRIBUTES);
 		propWriteStream.write<uint64_t>(static_cast<uint64_t>(customAttrMap->size()));

@@ -103,6 +103,7 @@ enum AttrTypes_t {
 	ATTR_HITCHANCE = 32,
 	ATTR_SHOOTRANGE = 33,
 	ATTR_CUSTOM_ATTRIBUTES = 34
+  ATTR_UNMOVEABLEDITEM = 35,
 };
 
 enum Attr_ReadValue {
