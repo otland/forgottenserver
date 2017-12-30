@@ -62,7 +62,7 @@ class Weapons final : public BaseEvents
 class Weapon : public Event
 {
 	public:
-		Weapon(LuaScriptInterface* interface) : Event(interface) {}
+		explicit Weapon(LuaScriptInterface* interface) : Event(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		bool loadFunction(const pugi::xml_attribute&) override final {
@@ -139,7 +139,7 @@ class Weapon : public Event
 class WeaponMelee final : public Weapon
 {
 	public:
-		WeaponMelee(LuaScriptInterface* interface);
+		explicit WeaponMelee(LuaScriptInterface* interface);
 
 		void configureWeapon(const ItemType& it) override;
 
@@ -159,7 +159,7 @@ class WeaponMelee final : public Weapon
 class WeaponDistance final : public Weapon
 {
 	public:
-		WeaponDistance(LuaScriptInterface* interface);
+		explicit WeaponDistance(LuaScriptInterface* interface);
 
 		void configureWeapon(const ItemType& it) override;
 		bool interruptSwing() const override {
@@ -182,7 +182,7 @@ class WeaponDistance final : public Weapon
 class WeaponWand final : public Weapon
 {
 	public:
-		WeaponWand(LuaScriptInterface* interface) : Weapon(interface) {}
+		explicit WeaponWand(LuaScriptInterface* interface) : Weapon(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
 		void configureWeapon(const ItemType& it) override;
