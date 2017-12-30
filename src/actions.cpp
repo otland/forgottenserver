@@ -43,7 +43,7 @@ Actions::~Actions()
 	clear();
 }
 
-inline void Actions::clearMap(ActionUseMap& map)
+void Actions::clearMap(ActionUseMap& map)
 {
 	// Filter out duplicates to avoid double-free
 	std::unordered_set<Action*> set;
@@ -439,18 +439,6 @@ bool Action::configureEvent(const pugi::xml_node& node)
 
 namespace {
 
-bool increaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() + 1));
-	return true;
-}
-
-bool decreaseItemId(Player*, Item* item, const Position&, Thing*, const Position&, bool)
-{
-	g_game.startDecay(g_game.transformItem(item, item->getID() - 1));
-	return true;
-}
-
 bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&, bool)
 {
 	if (player->getLastDepotId() == -1) {
@@ -466,11 +454,7 @@ bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&
 bool Action::loadFunction(const pugi::xml_attribute& attr)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "increaseitemid") == 0) {
-		function = increaseItemId;
-	} else if (strcasecmp(functionName, "decreaseitemid") == 0) {
-		function = decreaseItemId;
-	} else if (strcasecmp(functionName, "market") == 0) {
+	if (strcasecmp(functionName, "market") == 0) {
 		function = enterMarket;
 	} else {
 		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
@@ -503,7 +487,7 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 
-bool Action::executeUse(Player* player, Item* item, const Position& fromPos, Thing* target, const Position& toPos, bool isHotkey)
+bool Action::executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey)
 {
 	//onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if (!scriptInterface->reserveScriptEnv()) {
@@ -522,10 +506,10 @@ bool Action::executeUse(Player* player, Item* item, const Position& fromPos, Thi
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushThing(L, item);
-	LuaScriptInterface::pushPosition(L, fromPos);
+	LuaScriptInterface::pushPosition(L, fromPosition);
 
 	LuaScriptInterface::pushThing(L, target);
-	LuaScriptInterface::pushPosition(L, toPos);
+	LuaScriptInterface::pushPosition(L, toPosition);
 
 	LuaScriptInterface::pushBoolean(L, isHotkey);
 	return scriptInterface->callFunction(6);

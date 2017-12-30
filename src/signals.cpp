@@ -127,9 +127,6 @@ void Signals::sighupHandler()
 	g_config.reload();
 	std::cout << "Reloaded config." << std::endl;
 
-	g_game.reloadCommands();
-	std::cout << "Reloaded commands." << std::endl;
-
 	g_creatureEvents->reload();
 	std::cout << "Reloaded creature scripts." << std::endl;
 

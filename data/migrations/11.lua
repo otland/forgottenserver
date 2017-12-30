@@ -5,7 +5,7 @@ function onUpdateDatabase()
 	local motd = ""
 
 	local lastMotdFile = io.open("lastMotd.txt", "r")
-	if lastMotdFile ~= nil then
+	if lastMotdFile then
 		motdNum = lastMotdFile:read()
 		motd = lastMotdFile:read()
 		lastMotdFile:close()
@@ -14,7 +14,7 @@ function onUpdateDatabase()
 	local record = 0
 
 	local playersRecordFile = io.open("playersRecord.txt", "r")
-	if playersRecordFile ~= nil then
+	if playersRecordFile then
 		record = playersRecordFile:read("*n")
 		playersRecordFile:close()
 	end

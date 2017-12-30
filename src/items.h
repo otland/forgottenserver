@@ -116,6 +116,12 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_MAXMANAPOINTSPERCENT,
 	ITEM_PARSE_MAGICPOINTS,
 	ITEM_PARSE_MAGICPOINTSPERCENT,
+	ITEM_PARSE_CRITICALHITCHANCE,
+	ITEM_PARSE_CRITICALHITAMOUNT,
+	ITEM_PARSE_HITPOINTSLEECHCHANCE,
+	ITEM_PARSE_HITPOINTSLEECHAMOUNT,
+	ITEM_PARSE_MANAPOINTSLEECHCHANCE,
+	ITEM_PARSE_MANAPOINTSLEECHAMOUNT,
 	ITEM_PARSE_FIELDABSORBPERCENTENERGY,
 	ITEM_PARSE_FIELDABSORBPERCENTFIRE,
 	ITEM_PARSE_FIELDABSORBPERCENTPOISON,
@@ -161,114 +167,120 @@ enum ItemParseAttributes_t {
 };
 
 const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributesMap = {
-	{"type",				ITEM_PARSE_TYPE},
-	{"description",				ITEM_PARSE_DESCRIPTION},
-	{"runespellname",			ITEM_PARSE_RUNESPELLNAME},
-	{"weight",				ITEM_PARSE_WEIGHT},
-	{"showcount",				ITEM_PARSE_SHOWCOUNT},
-	{"armor",				ITEM_PARSE_ARMOR},
-	{"defense",				ITEM_PARSE_DEFENSE},
-	{"extradef",				ITEM_PARSE_EXTRADEF},
-	{"attack",				ITEM_PARSE_ATTACK},
-	{"rotateto",				ITEM_PARSE_ROTATETO},
-	{"moveable",				ITEM_PARSE_MOVEABLE},
-	{"movable",				ITEM_PARSE_MOVEABLE},
-	{"blockprojectile",			ITEM_PARSE_BLOCKPROJECTILE},
-	{"allowpickupable",			ITEM_PARSE_PICKUPABLE},
-	{"pickupable",				ITEM_PARSE_PICKUPABLE},
-	{"floorchange",				ITEM_PARSE_FLOORCHANGE},
-	{"corpsetype",				ITEM_PARSE_CORPSETYPE},
-	{"containersize",			ITEM_PARSE_CONTAINERSIZE},
-	{"fluidsource",				ITEM_PARSE_FLUIDSOURCE},
-	{"readable",				ITEM_PARSE_READABLE},
-	{"writeable",				ITEM_PARSE_WRITEABLE},
-	{"maxtextlen",				ITEM_PARSE_MAXTEXTLEN},
-	{"writeonceitemid",			ITEM_PARSE_WRITEONCEITEMID},
-	{"weapontype",				ITEM_PARSE_WEAPONTYPE},
-	{"slottype",				ITEM_PARSE_SLOTTYPE},
-	{"ammotype",				ITEM_PARSE_AMMOTYPE},
-	{"shoottype",				ITEM_PARSE_SHOOTTYPE},
-	{"effect",				ITEM_PARSE_EFFECT},
-	{"range",				ITEM_PARSE_RANGE},
-	{"stopduration",			ITEM_PARSE_STOPDURATION},
-	{"decayto",				ITEM_PARSE_DECAYTO},
-	{"transformequipto",			ITEM_PARSE_TRANSFORMEQUIPTO},
-	{"transformdeequipto",			ITEM_PARSE_TRANSFORMDEEQUIPTO},
-	{"duration",				ITEM_PARSE_DURATION},
-	{"showduration",			ITEM_PARSE_SHOWDURATION},
-	{"charges",				ITEM_PARSE_CHARGES},
-	{"showcharges",				ITEM_PARSE_SHOWCHARGES},
-	{"showattributes",			ITEM_PARSE_SHOWATTRIBUTES},
-	{"hitchance",				ITEM_PARSE_HITCHANCE},
-	{"maxhitchance",			ITEM_PARSE_MAXHITCHANCE},
-	{"invisible",				ITEM_PARSE_INVISIBLE},
-	{"speed",				ITEM_PARSE_SPEED},
-	{"healthgain",				ITEM_PARSE_HEALTHGAIN},
-	{"healthticks",				ITEM_PARSE_HEALTHTICKS},
-	{"managain",				ITEM_PARSE_MANAGAIN},
-	{"manaticks",				ITEM_PARSE_MANATICKS},
-	{"manashield",				ITEM_PARSE_MANASHIELD},
-	{"skillsword",				ITEM_PARSE_SKILLSWORD},
-	{"skillaxe",				ITEM_PARSE_SKILLAXE},
-	{"skillclub",				ITEM_PARSE_SKILLCLUB},
-	{"skilldist",				ITEM_PARSE_SKILLDIST},
-	{"skillfish",				ITEM_PARSE_SKILLFISH},
-	{"skillshield",				ITEM_PARSE_SKILLSHIELD},
-	{"skillfist",				ITEM_PARSE_SKILLFIST},
-	{"maxhitpoints",			ITEM_PARSE_MAXHITPOINTS},
-	{"maxhitpointspercent",			ITEM_PARSE_MAXHITPOINTSPERCENT},
-	{"maxmanapoints",			ITEM_PARSE_MAXMANAPOINTS},
-	{"maxmanapointspercent",		ITEM_PARSE_MAXMANAPOINTSPERCENT},
-	{"magicpoints",				ITEM_PARSE_MAGICPOINTS},
-	{"magiclevelpoints",			ITEM_PARSE_MAGICPOINTS},
-	{"magicpointspercent",			ITEM_PARSE_MAGICPOINTSPERCENT},
-	{"fieldabsorbpercentenergy",		ITEM_PARSE_FIELDABSORBPERCENTENERGY},
-	{"fieldabsorbpercentfire",		ITEM_PARSE_FIELDABSORBPERCENTFIRE},
-	{"fieldabsorbpercentpoison",		ITEM_PARSE_FIELDABSORBPERCENTPOISON},
-	{"fieldabsorbpercentearth",		ITEM_PARSE_FIELDABSORBPERCENTPOISON},
-	{"absorbpercentall",			ITEM_PARSE_ABSORBPERCENTALL},
-	{"absorbpercentallelements",		ITEM_PARSE_ABSORBPERCENTALL},
-	{"absorbpercentelements",		ITEM_PARSE_ABSORBPERCENTELEMENTS},
-	{"absorbpercentmagic",			ITEM_PARSE_ABSORBPERCENTMAGIC},
-	{"absorbpercentenergy",			ITEM_PARSE_ABSORBPERCENTENERGY},
-	{"absorbpercentfire",			ITEM_PARSE_ABSORBPERCENTFIRE},
-	{"absorbpercentpoison",			ITEM_PARSE_ABSORBPERCENTPOISON},
-	{"absorbpercentearth",			ITEM_PARSE_ABSORBPERCENTPOISON},
-	{"absorbpercentice",			ITEM_PARSE_ABSORBPERCENTICE},
-	{"absorbpercentholy",			ITEM_PARSE_ABSORBPERCENTHOLY},
-	{"absorbpercentdeath",			ITEM_PARSE_ABSORBPERCENTDEATH},
-	{"absorbpercentlifedrain",		ITEM_PARSE_ABSORBPERCENTLIFEDRAIN},
-	{"absorbpercentmanadrain",		ITEM_PARSE_ABSORBPERCENTMANADRAIN},
-	{"absorbpercentdrown",			ITEM_PARSE_ABSORBPERCENTDROWN},
-	{"absorbpercentphysical",		ITEM_PARSE_ABSORBPERCENTPHYSICAL},
-	{"absorbpercenthealing",		ITEM_PARSE_ABSORBPERCENTHEALING},
-	{"absorbpercentundefined",		ITEM_PARSE_ABSORBPERCENTUNDEFINED},
-	{"suppressdrunk",			ITEM_PARSE_SUPPRESSDRUNK},
-	{"suppressenergy",			ITEM_PARSE_SUPPRESSENERGY},
-	{"suppressfire",			ITEM_PARSE_SUPPRESSFIRE},
-	{"suppresspoison",			ITEM_PARSE_SUPPRESSPOISON},
-	{"suppressdrown",			ITEM_PARSE_SUPPRESSDROWN},
-	{"suppressphysical",			ITEM_PARSE_SUPPRESSPHYSICAL},
-	{"suppressfreeze",			ITEM_PARSE_SUPPRESSFREEZE},
-	{"suppressdazzle",			ITEM_PARSE_SUPPRESSDAZZLE},
-	{"suppresscurse",			ITEM_PARSE_SUPPRESSCURSE},
-	{"field",				ITEM_PARSE_FIELD},
-	{"replaceable",				ITEM_PARSE_REPLACEABLE},
-	{"partnerdirection",			ITEM_PARSE_PARTNERDIRECTION},
-	{"leveldoor",				ITEM_PARSE_LEVELDOOR},
-	{"maletransformto",			ITEM_PARSE_MALETRANSFORMTO},
-	{"malesleeper",				ITEM_PARSE_MALETRANSFORMTO},
-	{"femaletransformto",			ITEM_PARSE_FEMALETRANSFORMTO},
-	{"femalesleeper",			ITEM_PARSE_FEMALETRANSFORMTO},
-	{"transformto",				ITEM_PARSE_TRANSFORMTO},
-	{"destroyto",				ITEM_PARSE_DESTROYTO},
-	{"elementice",				ITEM_PARSE_ELEMENTICE},
-	{"elementearth",			ITEM_PARSE_ELEMENTEARTH},
-	{"elementfire",				ITEM_PARSE_ELEMENTFIRE},
-	{"elementenergy",			ITEM_PARSE_ELEMENTENERGY},
-	{"walkstack",				ITEM_PARSE_WALKSTACK},
-	{"blocking",				ITEM_PARSE_BLOCKING},
-	{"allowdistread",			ITEM_PARSE_ALLOWDISTREAD}
+	{"type", ITEM_PARSE_TYPE},
+	{"description", ITEM_PARSE_DESCRIPTION},
+	{"runespellname", ITEM_PARSE_RUNESPELLNAME},
+	{"weight", ITEM_PARSE_WEIGHT},
+	{"showcount", ITEM_PARSE_SHOWCOUNT},
+	{"armor", ITEM_PARSE_ARMOR},
+	{"defense", ITEM_PARSE_DEFENSE},
+	{"extradef", ITEM_PARSE_EXTRADEF},
+	{"attack", ITEM_PARSE_ATTACK},
+	{"rotateto", ITEM_PARSE_ROTATETO},
+	{"moveable", ITEM_PARSE_MOVEABLE},
+	{"movable", ITEM_PARSE_MOVEABLE},
+	{"blockprojectile", ITEM_PARSE_BLOCKPROJECTILE},
+	{"allowpickupable", ITEM_PARSE_PICKUPABLE},
+	{"pickupable", ITEM_PARSE_PICKUPABLE},
+	{"floorchange", ITEM_PARSE_FLOORCHANGE},
+	{"corpsetype", ITEM_PARSE_CORPSETYPE},
+	{"containersize", ITEM_PARSE_CONTAINERSIZE},
+	{"fluidsource", ITEM_PARSE_FLUIDSOURCE},
+	{"readable", ITEM_PARSE_READABLE},
+	{"writeable", ITEM_PARSE_WRITEABLE},
+	{"maxtextlen", ITEM_PARSE_MAXTEXTLEN},
+	{"writeonceitemid", ITEM_PARSE_WRITEONCEITEMID},
+	{"weapontype", ITEM_PARSE_WEAPONTYPE},
+	{"slottype", ITEM_PARSE_SLOTTYPE},
+	{"ammotype", ITEM_PARSE_AMMOTYPE},
+	{"shoottype", ITEM_PARSE_SHOOTTYPE},
+	{"effect", ITEM_PARSE_EFFECT},
+	{"range", ITEM_PARSE_RANGE},
+	{"stopduration", ITEM_PARSE_STOPDURATION},
+	{"decayto", ITEM_PARSE_DECAYTO},
+	{"transformequipto", ITEM_PARSE_TRANSFORMEQUIPTO},
+	{"transformdeequipto", ITEM_PARSE_TRANSFORMDEEQUIPTO},
+	{"duration", ITEM_PARSE_DURATION},
+	{"showduration", ITEM_PARSE_SHOWDURATION},
+	{"charges", ITEM_PARSE_CHARGES},
+	{"showcharges", ITEM_PARSE_SHOWCHARGES},
+	{"showattributes", ITEM_PARSE_SHOWATTRIBUTES},
+	{"hitchance", ITEM_PARSE_HITCHANCE},
+	{"maxhitchance", ITEM_PARSE_MAXHITCHANCE},
+	{"invisible", ITEM_PARSE_INVISIBLE},
+	{"speed", ITEM_PARSE_SPEED},
+	{"healthgain", ITEM_PARSE_HEALTHGAIN},
+	{"healthticks", ITEM_PARSE_HEALTHTICKS},
+	{"managain", ITEM_PARSE_MANAGAIN},
+	{"manaticks", ITEM_PARSE_MANATICKS},
+	{"manashield", ITEM_PARSE_MANASHIELD},
+	{"skillsword", ITEM_PARSE_SKILLSWORD},
+	{"skillaxe", ITEM_PARSE_SKILLAXE},
+	{"skillclub", ITEM_PARSE_SKILLCLUB},
+	{"skilldist", ITEM_PARSE_SKILLDIST},
+	{"skillfish", ITEM_PARSE_SKILLFISH},
+	{"skillshield", ITEM_PARSE_SKILLSHIELD},
+	{"skillfist", ITEM_PARSE_SKILLFIST},
+	{"maxhitpoints", ITEM_PARSE_MAXHITPOINTS},
+	{"maxhitpointspercent", ITEM_PARSE_MAXHITPOINTSPERCENT},
+	{"maxmanapoints", ITEM_PARSE_MAXMANAPOINTS},
+	{"maxmanapointspercent", ITEM_PARSE_MAXMANAPOINTSPERCENT},
+	{"magicpoints", ITEM_PARSE_MAGICPOINTS},
+	{"magiclevelpoints", ITEM_PARSE_MAGICPOINTS},
+	{"magicpointspercent", ITEM_PARSE_MAGICPOINTSPERCENT},
+	{"criticalhitchance", ITEM_PARSE_CRITICALHITCHANCE},
+	{"criticalhitamount", ITEM_PARSE_CRITICALHITAMOUNT},
+	{"hitpointsleechchance", ITEM_PARSE_HITPOINTSLEECHCHANCE},
+	{"hitpointsleechamount", ITEM_PARSE_HITPOINTSLEECHAMOUNT},
+	{"manapointsleechchance", ITEM_PARSE_MANAPOINTSLEECHCHANCE},
+	{"manapointsleechamount", ITEM_PARSE_MANAPOINTSLEECHAMOUNT},
+	{"fieldabsorbpercentenergy", ITEM_PARSE_FIELDABSORBPERCENTENERGY},
+	{"fieldabsorbpercentfire", ITEM_PARSE_FIELDABSORBPERCENTFIRE},
+	{"fieldabsorbpercentpoison", ITEM_PARSE_FIELDABSORBPERCENTPOISON},
+	{"fieldabsorbpercentearth", ITEM_PARSE_FIELDABSORBPERCENTPOISON},
+	{"absorbpercentall", ITEM_PARSE_ABSORBPERCENTALL},
+	{"absorbpercentallelements", ITEM_PARSE_ABSORBPERCENTALL},
+	{"absorbpercentelements", ITEM_PARSE_ABSORBPERCENTELEMENTS},
+	{"absorbpercentmagic", ITEM_PARSE_ABSORBPERCENTMAGIC},
+	{"absorbpercentenergy", ITEM_PARSE_ABSORBPERCENTENERGY},
+	{"absorbpercentfire", ITEM_PARSE_ABSORBPERCENTFIRE},
+	{"absorbpercentpoison", ITEM_PARSE_ABSORBPERCENTPOISON},
+	{"absorbpercentearth", ITEM_PARSE_ABSORBPERCENTPOISON},
+	{"absorbpercentice", ITEM_PARSE_ABSORBPERCENTICE},
+	{"absorbpercentholy", ITEM_PARSE_ABSORBPERCENTHOLY},
+	{"absorbpercentdeath", ITEM_PARSE_ABSORBPERCENTDEATH},
+	{"absorbpercentlifedrain", ITEM_PARSE_ABSORBPERCENTLIFEDRAIN},
+	{"absorbpercentmanadrain", ITEM_PARSE_ABSORBPERCENTMANADRAIN},
+	{"absorbpercentdrown", ITEM_PARSE_ABSORBPERCENTDROWN},
+	{"absorbpercentphysical", ITEM_PARSE_ABSORBPERCENTPHYSICAL},
+	{"absorbpercenthealing", ITEM_PARSE_ABSORBPERCENTHEALING},
+	{"absorbpercentundefined", ITEM_PARSE_ABSORBPERCENTUNDEFINED},
+	{"suppressdrunk", ITEM_PARSE_SUPPRESSDRUNK},
+	{"suppressenergy", ITEM_PARSE_SUPPRESSENERGY},
+	{"suppressfire", ITEM_PARSE_SUPPRESSFIRE},
+	{"suppresspoison", ITEM_PARSE_SUPPRESSPOISON},
+	{"suppressdrown", ITEM_PARSE_SUPPRESSDROWN},
+	{"suppressphysical", ITEM_PARSE_SUPPRESSPHYSICAL},
+	{"suppressfreeze", ITEM_PARSE_SUPPRESSFREEZE},
+	{"suppressdazzle", ITEM_PARSE_SUPPRESSDAZZLE},
+	{"suppresscurse", ITEM_PARSE_SUPPRESSCURSE},
+	{"field", ITEM_PARSE_FIELD},
+	{"replaceable", ITEM_PARSE_REPLACEABLE},
+	{"partnerdirection", ITEM_PARSE_PARTNERDIRECTION},
+	{"leveldoor", ITEM_PARSE_LEVELDOOR},
+	{"maletransformto", ITEM_PARSE_MALETRANSFORMTO},
+	{"malesleeper", ITEM_PARSE_MALETRANSFORMTO},
+	{"femaletransformto", ITEM_PARSE_FEMALETRANSFORMTO},
+	{"femalesleeper", ITEM_PARSE_FEMALETRANSFORMTO},
+	{"transformto", ITEM_PARSE_TRANSFORMTO},
+	{"destroyto", ITEM_PARSE_DESTROYTO},
+	{"elementice", ITEM_PARSE_ELEMENTICE},
+	{"elementearth", ITEM_PARSE_ELEMENTEARTH},
+	{"elementfire", ITEM_PARSE_ELEMENTFIRE},
+	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
+	{"walkstack", ITEM_PARSE_WALKSTACK},
+	{"blocking", ITEM_PARSE_BLOCKING},
+	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD}
 };
 
 struct Abilities {
@@ -286,6 +298,7 @@ struct Abilities {
 
 	//extra skill modifiers
 	int32_t skills[SKILL_LAST + 1] = { 0 };
+	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
 
 	int32_t speed = 0;
 
@@ -356,7 +369,13 @@ class ItemType
 			return (type == ITEM_TYPE_BED);
 		}
 		bool isRune() const {
-			return type == ITEM_TYPE_RUNE;
+			return (type == ITEM_TYPE_RUNE);
+		}
+		bool isPickupable() const {
+			return (allowPickupable || pickupable);
+		}
+		bool isUseable() const {
+			return (useable);
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
@@ -415,7 +434,7 @@ class ItemType
 		int32_t defense = 0;
 		int32_t extraDefense = 0;
 		int32_t armor = 0;
-		int32_t rotateTo = 0;
+		uint16_t rotateTo = 0;
 		int32_t runeMagLevel = 0;
 		int32_t runeLevel = 0;
 
@@ -490,7 +509,7 @@ class Items
 		bool reload();
 		void clear();
 
-		FILELOADER_ERRORS loadFromOtb(const std::string& file);
+		bool loadFromOtb(const std::string& file);
 
 		const ItemType& operator[](size_t id) const {
 			return getItemType(id);
@@ -508,13 +527,13 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
-		inline size_t size() const {
+		size_t size() const {
 			return items.size();
 		}
 
 		NameMap nameToItems;
 
-	protected:
+	private:
 		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
 };

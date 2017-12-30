@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Orewalker" nameDescription="an orewalker" race="undead" experience="4800" speed="250" manacost="0">
+<monster name="Orewalker" nameDescription="an orewalker" race="undead" experience="4800" speed="250">
 	<health now="7200" max="7200" />
 	<look type="490" corpse="17256" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,8 @@
 		<flag targetdistance="1" />
 		<flag staticattack="80" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" />

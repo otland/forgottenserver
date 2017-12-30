@@ -206,8 +206,8 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-	protected:
-		inline bool hasAttribute(itemAttrTypes type) const {
+	private:
+		bool hasAttribute(itemAttrTypes type) const {
 			return (type & attributeBits) != 0;
 		}
 		void removeAttribute(itemAttrTypes type);
@@ -283,10 +283,10 @@ class ItemAttributes
 		Attribute& getAttr(itemAttrTypes type);
 
 	public:
-		inline static bool isIntAttrType(itemAttrTypes type) {
+		static bool isIntAttrType(itemAttrTypes type) {
 			return (type & 0x7FFE13) != 0;
 		}
-		inline static bool isStrAttrType(itemAttrTypes type) {
+		static bool isStrAttrType(itemAttrTypes type) {
 			return (type & 0x1EC) != 0;
 		}
 
@@ -318,10 +318,10 @@ class Item : virtual public Thing
 
 		bool equals(const Item* otherItem) const;
 
-		Item* getItem() final {
+		Item* getItem() override final {
 			return this;
 		}
-		const Item* getItem() const final {
+		const Item* getItem() const override final {
 			return this;
 		}
 		virtual Teleport* getTeleport() {
@@ -521,7 +521,7 @@ class Item : virtual public Thing
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-		std::string getDescription(int32_t lookDistance) const final;
+		std::string getDescription(int32_t lookDistance) const override final;
 		std::string getNameDescription() const;
 		std::string getWeightDescription() const;
 
@@ -532,10 +532,10 @@ class Item : virtual public Thing
 
 		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
-		bool isPushable() const final {
+		bool isPushable() const override final {
 			return isMoveable();
 		}
-		int32_t getThrowRange() const final {
+		int32_t getThrowRange() const override final {
 			return (isPickupable() ? 15 : 2);
 		}
 
@@ -605,7 +605,7 @@ class Item : virtual public Thing
 		}
 
 		uint32_t getWorth() const;
-		void getLight(LightInfo& lightInfo) const;
+		LightInfo getLightInfo() const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool isBlocking() const {
@@ -670,7 +670,13 @@ class Item : virtual public Thing
 			count = n;
 		}
 
-		static uint32_t countByType(const Item* i, int32_t subType);
+		static uint32_t countByType(const Item* i, int32_t subType) {
+			if (subType == -1 || subType == i->getSubType()) {
+				return i->getItemCount();
+			}
+
+			return 0;
+		}
 
 		void setDefaultSubtype();
 		uint16_t getSubType() const;
@@ -700,6 +706,9 @@ class Item : virtual public Thing
 
 		virtual void startDecaying();
 
+		bool isLoadedFromMap() const {
+			return loadedFromMap;
+		}
 		void setLoadedFromMap(bool value) {
 			loadedFromMap = value;
 		}
@@ -725,29 +734,32 @@ class Item : virtual public Thing
 			}
 		}
 
-		Cylinder* getParent() const {
+		Cylinder* getParent() const override {
 			return parent;
 		}
-		void setParent(Cylinder* cylinder) {
+		void setParent(Cylinder* cylinder) override {
 			parent = cylinder;
 		}
 		Cylinder* getTopParent();
 		const Cylinder* getTopParent() const;
-		Tile* getTile();
-		const Tile* getTile() const;
-		bool isRemoved() const {
+		Tile* getTile() override;
+		const Tile* getTile() const override;
+		bool isRemoved() const override {
 			return !parent || parent->isRemoved();
 		}
 
 	protected:
+		Cylinder* parent = nullptr;
+
+		uint16_t id;  // the same id as in ItemType
+
+	private:
 		std::string getWeightDescription(uint32_t weight) const;
 
-		Cylinder* parent = nullptr;
 		std::unique_ptr<ItemAttributes> attributes;
 
 		uint32_t referenceCounter = 0;
 
-		uint16_t id;  // the same id as in ItemType
 		uint8_t count = 1; // number of stacked items
 
 		bool loadedFromMap = false;
@@ -757,14 +769,5 @@ class Item : virtual public Thing
 
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
-
-inline uint32_t Item::countByType(const Item* i, int32_t subType)
-{
-	if (subType == -1 || subType == i->getSubType()) {
-		return i->getItemCount();
-	}
-
-	return 0;
-}
 
 #endif

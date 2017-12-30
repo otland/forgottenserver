@@ -129,7 +129,6 @@
     <ClCompile Include="..\src\bed.cpp" />
     <ClCompile Include="..\src\chat.cpp" />
     <ClCompile Include="..\src\combat.cpp" />
-    <ClCompile Include="..\src\commands.cpp" />
     <ClCompile Include="..\src\condition.cpp" />
     <ClCompile Include="..\src\configmanager.cpp" />
     <ClCompile Include="..\src\connection.cpp" />
@@ -214,7 +213,6 @@
     <ClInclude Include="..\src\bed.h" />
     <ClInclude Include="..\src\chat.h" />
     <ClInclude Include="..\src\combat.h" />
-    <ClInclude Include="..\src\commands.h" />
     <ClInclude Include="..\src\condition.h" />
     <ClInclude Include="..\src\configmanager.h" />
     <ClInclude Include="..\src\connection.h" />

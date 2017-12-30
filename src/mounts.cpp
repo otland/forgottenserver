@@ -61,6 +61,17 @@ Mount* Mounts::getMountByID(uint8_t id)
 	return it != mounts.end() ? &*it : nullptr;
 }
 
+Mount* Mounts::getMountByName(const std::string& name) {
+	auto mountName = name.c_str();
+	for (auto& it : mounts) {
+		if (strcasecmp(mountName, it.name.c_str()) == 0) {
+			return &it;
+		}
+	}
+
+	return nullptr;
+}
+
 Mount* Mounts::getMountByClientID(uint16_t clientId)
 {
 	auto it = std::find_if(mounts.begin(), mounts.end(), [clientId](const Mount& mount) {

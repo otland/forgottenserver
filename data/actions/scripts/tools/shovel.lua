@@ -11,7 +11,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local groundId = ground:getId()
-	if isInArray(holes, groundId) then
+	if table.contains(holes, groundId) then
 		ground:transform(groundId + 1)
 		ground:decay()
 

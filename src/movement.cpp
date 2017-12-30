@@ -340,7 +340,7 @@ uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot)
 	if (!moveEvent) {
 		return 1;
 	}
-	return moveEvent->fireEquip(player, item, slot, true);
+	return moveEvent->fireEquip(player, item, slot, false);
 }
 
 uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
@@ -647,6 +647,13 @@ uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slo
 		}
 	}
 
+	for (int32_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+		if (it.abilities->specialSkills[i]) {
+			needUpdateSkills = true;
+			player->setVarSpecialSkill(static_cast<SpecialSkills_t>(i), it.abilities->specialSkills[i]);
+		}
+	}
+
 	if (needUpdateSkills) {
 		player->sendSkills();
 	}
@@ -719,6 +726,13 @@ uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 		if (it.abilities->skills[i] != 0) {
 			needUpdateSkills = true;
 			player->setVarSkill(static_cast<skills_t>(i), -it.abilities->skills[i]);
+		}
+	}
+
+	for (int32_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+		if (it.abilities->specialSkills[i] != 0) {
+			needUpdateSkills = true;
+			player->setVarSpecialSkill(static_cast<SpecialSkills_t>(i), -it.abilities->specialSkills[i]);
 		}
 	}
 
@@ -817,19 +831,19 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	return scriptInterface->callFunction(4);
 }
 
-uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool boolean)
+uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		return executeEquip(player, item, slot);
+		return executeEquip(player, item, slot, isCheck);
 	} else {
-		return equipFunction(this, player, item, slot, boolean);
+		return equipFunction(this, player, item, slot, isCheck);
 	}
 }
 
-bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
+bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	//onEquip(player, item, slot)
-	//onDeEquip(player, item, slot)
+	//onEquip(player, item, slot, isCheck)
+	//onDeEquip(player, item, slot, isCheck)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeEquip] Call stack overflow" << std::endl;
 		return false;
@@ -845,8 +859,9 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot)
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	LuaScriptInterface::pushThing(L, item);
 	lua_pushnumber(L, slot);
+	LuaScriptInterface::pushBoolean(L, isCheck);
 
-	return scriptInterface->callFunction(3);
+	return scriptInterface->callFunction(4);
 }
 
 uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& pos)
