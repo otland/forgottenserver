@@ -1,6 +1,7 @@
 os: Visual Studio 2015
 
 platform:
+  - x86
   - x64
 
 configuration:
