@@ -1,18 +1,22 @@
-local combat = {}
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_STUN)
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_EXPLOSION)
+combat:setArea(createCombatArea(AREA_BEAM1))
 
-for i = 45, 65 do
-	local condition = Condition(CONDITION_ATTRIBUTES)
-	condition:setParameter(CONDITION_PARAM_TICKS, 8000)
-	condition:setParameter(CONDITION_PARAM_SKILL_MELEEPERCENT, i)
-	condition:setParameter(CONDITION_PARAM_SKILL_DISTANCEPERCENT, i)
+local parameters = {
+	{key = CONDITION_PARAM_TICKS, value = 8 * 1000},
+	{key = CONDITION_PARAM_SKILL_MELEEPERCENT, value = nil},
+	{key = CONDITION_PARAM_SKILL_DISTANCEPERCENT, value = nil}
+}
 
-	combat[i] = Combat()
-	combat[i]:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_STUN)
-	combat[i]:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_EXPLOSION)
-	combat[i]:setArea(createCombatArea(AREA_BEAM1))
-	combat[i]:addCondition(condition)
+function onTargetCreature(creature, target)
+	target:addAttributeCondition(parameters)
 end
 
+combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
+
 function onCastSpell(creature, variant)
-	return combat[math.random(45, 65)]:execute(creature, variant)
+	parameters[2].value = math.random(45, 65)
+	parameters[3].value = parameters[2].value
+	return combat:execute(creature, variant)
 end

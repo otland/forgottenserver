@@ -220,18 +220,6 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	return nullptr;
 }
 
-uint32_t Spells::getInstantSpellCount(const Player* player) const
-{
-	uint32_t count = 0;
-	for (const auto& it : instants) {
-		InstantSpell* instantSpell = it.second;
-		if (instantSpell->canCast(player)) {
-			++count;
-		}
-	}
-	return count;
-}
-
 InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
 	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
@@ -560,13 +548,18 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
+	if (aggressive && (range < 1 || (range > 0 && !player->getAttackedCreature())) && player->getSkull() == SKULL_BLACK) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return false;
+	}
+
 	if (aggressive && player->hasCondition(CONDITION_PACIFIED)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
-	
-	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
+
+  if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;
 	}
@@ -1170,100 +1163,6 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-namespace {
-
-bool RuneIllusion(const RuneSpell*, Player* player, const Position& posTo)
-{
-	Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_MOVE);
-	if (!thing) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Item* illusionItem = thing->getItem();
-	if (!illusionItem || !illusionItem->isMoveable()) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	ReturnValue ret = Spell::CreateIllusion(player, illusionItem->getID(), 200000);
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
-	return true;
-}
-
-bool Convince(const RuneSpell* spell, Player* player, const Position& posTo)
-{
-	if (!player->hasFlag(PlayerFlag_CanConvinceAll)) {
-		if (player->getSummonCount() >= 2) {
-			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
-		}
-	}
-
-	Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_LOOK);
-	if (!thing) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Creature* convinceCreature = thing->getCreature();
-	if (!convinceCreature) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	uint32_t manaCost = 0;
-	if (convinceCreature->getMonster()) {
-		manaCost = convinceCreature->getMonster()->getManaCost();
-	}
-
-	if (!player->hasFlag(PlayerFlag_HasInfiniteMana) && player->getMana() < manaCost) {
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHMANA);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	if (!convinceCreature->convinceCreature(player)) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	Spell::postCastSpell(player, manaCost, spell->getSoulCost());
-	g_game.updateCreatureType(convinceCreature);
-	g_game.addMagicEffect(player->getPosition(), CONST_ME_MAGIC_RED);
-	return true;
-}
-
-}
-
-bool RuneSpell::loadFunction(const pugi::xml_attribute& attr)
-{
-	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "chameleon") == 0) {
-		runeFunction = RuneIllusion;
-	} else if (strcasecmp(functionName, "convince") == 0) {
-		runeFunction = Convince;
-	} else {
-		std::cout << "[Warning - RuneSpell::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
-	}
-
-	scripted = false;
-	return true;
-}
-
 ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& toPos)
 {
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
@@ -1292,35 +1191,32 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 		return false;
 	}
 
-	bool result = false;
-	if (scripted) {
-		LuaVariant var;
-
-		if (needTarget) {
-			var.type = VARIANT_NUMBER;
-
-			if (target == nullptr) {
-				Tile* toTile = g_game.map.getTile(toPosition);
-				if (toTile) {
-					const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
-					if (visibleCreature) {
-						var.number = visibleCreature->getID();
-					}
-				}
-			} else {
-				var.number = target->getCreature()->getID();
-			}
-		} else {
-			var.type = VARIANT_POSITION;
-			var.pos = toPosition;
-		}
-
-		result = internalCastSpell(player, var, isHotkey);
-	} else if (runeFunction) {
-		result = runeFunction(this, player, toPosition);
+	if (!scripted) {
+		return false;
 	}
 
-	if (!result) {
+	LuaVariant var;
+
+	if (needTarget) {
+		var.type = VARIANT_NUMBER;
+
+		if (target == nullptr) {
+			Tile* toTile = g_game.map.getTile(toPosition);
+			if (toTile) {
+				const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
+				if (visibleCreature) {
+					var.number = visibleCreature->getID();
+				}
+			}
+		} else {
+			var.number = target->getCreature()->getID();
+		}
+	} else {
+		var.type = VARIANT_POSITION;
+		var.pos = toPosition;
+	}
+
+	if (!internalCastSpell(player, var, isHotkey)) {
 		return false;
 	}
 

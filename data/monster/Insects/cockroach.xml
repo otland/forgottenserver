@@ -16,6 +16,9 @@
 		<flag lightcolor="0" />
 		<flag targetdistance="5" />
 		<flag runonhealth="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<loot>
 		<item name="cockroach leg" chance="100000" />

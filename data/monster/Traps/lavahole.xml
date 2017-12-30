@@ -16,6 +16,9 @@
 		<flag staticattack="100" />
 		<flag runonhealth="0" />
 		<flag hidehealth="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="fire" interval="2000" chance="50" range="7" min="0" max="-100">

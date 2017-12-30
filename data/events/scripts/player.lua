@@ -34,7 +34,7 @@ function Player:onLook(thing, position, distance)
 			end
 		elseif thing:isCreature() then
 			local str = "%s\nHealth: %d / %d"
-			if thing:getMaxMana() > 0 then
+			if thing:isPlayer() and thing:getMaxMana() > 0 then
 				str = string.format("%s, Mana: %d / %d", str, thing:getMana(), thing:getMaxMana())
 			end
 			description = string.format(str, description, thing:getHealth(), thing:getMaxHealth()) .. "."
@@ -59,7 +59,7 @@ function Player:onLookInBattleList(creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
 	if self:getGroup():getAccess() then
 		local str = "%s\nHealth: %d / %d"
-		if creature:getMaxMana() > 0 then
+		if creature:isPlayer() and creature:getMaxMana() > 0 then
 			str = string.format("%s, Mana: %d / %d", str, creature:getMana(), creature:getMaxMana())
 		end
 		description = string.format(str, description, creature:getHealth(), creature:getMaxHealth()) .. "."
@@ -86,6 +86,32 @@ function Player:onLookInShop(itemType, count)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	if toPosition.x ~= CONTAINER_POSITION then
+		return true
+	end
+
+	if item:getTopParent() == self and bit.band(toPosition.y, 0x40) == 0 then
+		local itemType, moveItem = ItemType(item:getId())
+		if bit.band(itemType:getSlotPosition(), SLOTP_TWO_HAND) ~= 0 and toPosition.y == CONST_SLOT_LEFT then
+			moveItem = self:getSlotItem(CONST_SLOT_RIGHT)
+		elseif itemType:getWeaponType() == WEAPON_SHIELD and toPosition.y == CONST_SLOT_RIGHT then
+			moveItem = self:getSlotItem(CONST_SLOT_LEFT)
+			if moveItem and bit.band(ItemType(moveItem:getId()):getSlotPosition(), SLOTP_TWO_HAND) == 0 then
+				return true
+			end
+		end
+
+		if moveItem then
+			local parent = item:getParent()
+			if parent:getSize() == parent:getCapacity() then
+				self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM))
+				return false
+			else
+				return moveItem:moveTo(parent)
+			end
+		end
+	end
+
 	return true
 end
 
