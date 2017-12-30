@@ -2293,6 +2293,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
+	registerMethod("Player", "createParty", LuaScriptInterface::luaPlayerCreateParty);
 	registerMethod("Player", "getParty", LuaScriptInterface::luaPlayerGetParty);
 
 	registerMethod("Player", "addOutfit", LuaScriptInterface::luaPlayerAddOutfit);
@@ -8844,6 +8845,32 @@ int LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 		setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCreateParty(lua_State* L)
+{
+	// player:createParty(targetPlayer[, joinTargetPlayer = false])
+	Player* player = getUserdata<Player>(L, 1);
+	Player* targetPlayer = getUserdata<Player>(L, 2);
+	if (!player || !targetPlayer) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Party* partyPlayer = player->getParty();
+	Party* partyInvitedPlayer = targetPlayer->getParty();
+
+	if (!partyPlayer && !partyInvitedPlayer) {
+		partyPlayer = new Party(player);
+		partyPlayer->invitePlayer(*targetPlayer);
+		bool joinTargetPlayer = getBoolean(L, 3, false);
+		if (joinTargetPlayer) {
+			partyPlayer->joinParty(*targetPlayer);
+		}
+		pushUserdata<Party>(L, partyPlayer);
+		setMetatable(L, -1, "Party");
 	}
 	return 1;
 }

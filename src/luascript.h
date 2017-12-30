@@ -927,6 +927,7 @@ class LuaScriptInterface
 
 		static int luaPlayerGetSlotItem(lua_State* L);
 
+		static int luaPlayerCreateParty(lua_State* L);
 		static int luaPlayerGetParty(lua_State* L);
 
 		static int luaPlayerAddOutfit(lua_State* L);
