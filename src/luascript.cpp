@@ -10425,6 +10425,7 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
+
 	const auto& tiles = house->getTiles();
 	lua_newtable(L);
 
