@@ -143,7 +143,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
-	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD}
+	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -533,7 +533,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 		std::string tmpStrValue = asLowerCaseString(keyAttribute.as_string());
 		auto parseAttribute = ItemParseAttributesMap.find(tmpStrValue);
-		if(parseAttribute != ItemParseAttributesMap.end()) {
+		if (parseAttribute != ItemParseAttributesMap.end()) {
 			ItemParseAttributes_t parseType = parseAttribute->second;
 			switch (parseType) {
 				case ITEM_PARSE_TYPE: {
@@ -609,7 +609,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					it.allowPickupable = valueAttribute.as_bool();
 					break;
 				}
-		
+
 				case ITEM_PARSE_FLOORCHANGE: {
 					tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 					auto it2 = TileStatesMap.find(tmpStrValue);
