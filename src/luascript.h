@@ -35,6 +35,7 @@
 #include "database.h"
 #include "enums.h"
 #include "position.h"
+#include <boost/lexical_cast.hpp>
 
 class Thing;
 class Creature;
@@ -703,6 +704,9 @@ class LuaScriptInterface
 		static int luaItemGetAttribute(lua_State* L);
 		static int luaItemSetAttribute(lua_State* L);
 		static int luaItemRemoveAttribute(lua_State* L);
+		static int luaItemGetCustomAttribute(lua_State* L);
+		static int luaItemSetCustomAttribute(lua_State* L);
+		static int luaItemRemoveCustomAttribute(lua_State* L);
 
 		static int luaItemMoveTo(lua_State* L);
 		static int luaItemTransform(lua_State* L);
