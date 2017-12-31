@@ -4,7 +4,6 @@ shallow_clone: true
 
 platform:
   - x64
-  - Win32
 
 configuration:
   - Debug
