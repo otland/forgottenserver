@@ -4,6 +4,7 @@ shallow_clone: true
 
 platform:
   - x64
+	- Win32
 
 configuration:
   - Debug
@@ -22,7 +23,7 @@ install:
 build:
   parallel: true
   # MSBuild verbosity level
-  verbosity: detailed
+  #verbosity: detailed
 
 cache:
   - tfs-sdk-3.2 -> appveyor.yml
