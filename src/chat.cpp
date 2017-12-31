@@ -294,21 +294,34 @@ bool Chat::load()
 		return false;
 	}
 
-	std::forward_list<uint16_t> removedChannels;
-	for (auto& channelEntry : normalChannels) {
-		ChatChannel& channel = channelEntry.second;
-		channel.onSpeakEvent = -1;
-		channel.canJoinEvent = -1;
-		channel.onJoinEvent = -1;
-		channel.onLeaveEvent = -1;
-		removedChannels.push_front(channelEntry.first);
-	}
-
 	for (auto channelNode : doc.child("channels").children()) {
-		ChatChannel channel(pugi::cast<uint16_t>(channelNode.attribute("id").value()), channelNode.attribute("name").as_string());
-		channel.publicChannel = channelNode.attribute("public").as_bool();
-
+		uint16_t channelId = pugi::cast<uint16_t>(channelNode.attribute("id").value());
+		std::string channelName = channelNode.attribute("name").as_string();
+		bool isPublic = channelNode.attribute("public").as_bool();
 		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");
+		
+		auto it = normalChannels.find(channelId);
+		if (it != normalChannels.end()) {
+			ChatChannel& channel = it->second;
+			channel.publicChannel = isPublic;
+			channel.name = channelName;
+
+			if (scriptAttribute) {
+				if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
+					channel.onSpeakEvent = scriptInterface.getEvent("onSpeak");
+					channel.canJoinEvent = scriptInterface.getEvent("canJoin");
+					channel.onJoinEvent = scriptInterface.getEvent("onJoin");
+					channel.onLeaveEvent = scriptInterface.getEvent("onLeave");
+				} else {
+					std::cout << "[Warning - Chat::load] Can not load script: " << scriptAttribute.as_string() << std::endl;
+				}
+			}
+			continue;
+		}
+
+		ChatChannel channel(channelId, channelName);
+		channel.publicChannel = isPublic;
+
 		if (scriptAttribute) {
 			if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
 				channel.onSpeakEvent = scriptInterface.getEvent("onSpeak");
@@ -320,12 +333,7 @@ bool Chat::load()
 			}
 		}
 
-		removedChannels.remove(channel.id);
 		normalChannels[channel.id] = channel;
-	}
-
-	for (uint16_t channelId : removedChannels) {
-		normalChannels.erase(channelId);
 	}
 	return true;
 }
