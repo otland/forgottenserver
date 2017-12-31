@@ -320,7 +320,6 @@ bool Chat::load()
 			UsersMap tempUserMap;
 			tempUserMap.insert(channel.users.begin(), channel.users.end());
 			channel.users.clear();
-			
 			for (const auto& pair : tempUserMap) {
 				channel.addUser(*pair.second);
 			}
