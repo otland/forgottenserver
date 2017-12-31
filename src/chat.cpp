@@ -316,6 +316,15 @@ bool Chat::load()
 					std::cout << "[Warning - Chat::load] Can not load script: " << scriptAttribute.as_string() << std::endl;
 				}
 			}
+
+			UsersMap tempUserMap;
+			tempUserMap.insert(channel.users.begin(), channel.users.end());
+			channel.users.clear();
+			
+			for (const auto& pair : tempUserMap) {
+				channel.addUser(*pair.second);
+			}
+			tempUserMap.clear();
 			continue;
 		}
 
