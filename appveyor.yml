@@ -3,7 +3,6 @@ image: Visual Studio 2017
 shallow_clone: true
 
 platform:
-  - Win32
   - x64
 
 configuration:
@@ -19,6 +18,11 @@ environment:
 install:
   - ps: if (-not (Test-Path tfs-sdk-3.2)) { Start-FileDownload https://static.otland.net/dl/tfs-sdk-3.2.zip; 7z x tfs-sdk-3.2.zip }
   - set TFSSDKDir=%CD%\tfs-sdk-3.2
+
+build:
+  parallel: true
+  # MSBuild verbosity level
+  verbosity: detailed
 
 cache:
   - tfs-sdk-3.2 -> appveyor.yml
