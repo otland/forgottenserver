@@ -13,6 +13,11 @@ configuration:
 matrix:
   fast_finish: true
 
+only_commits:
+  files:
+	  - src/
+		- vc14/
+
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_65_1
 
