@@ -8666,7 +8666,7 @@ int LuaScriptInterface::luaPlayerRemoveMoney(lua_State* L)
 
 int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 {
-	// player:showTextDialog(itemId[, text[, canWrite[, length]]])
+	// player:showTextDialog(id or name or userdata[, text[, canWrite[, length]]])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -8682,18 +8682,22 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 		text = getString(L, 3);
 	}
 
-	uint16_t itemId;
+	Item* item;
 	if (isNumber(L, 2)) {
-		itemId = getNumber<uint16_t>(L, 2);
-	} else {
-		itemId = Item::items.getItemIdByName(getString(L, 2));
-		if (itemId == 0) {
-			lua_pushnil(L);
+		item = Item::CreateItem(getNumber<uint16_t>(L, 2));
+	} else if (isString(L, 2)) {
+		item = Item::CreateItem(Item::items.getItemIdByName(getString(L, 2)));
+	} else if (isUserdata(L, 2)) {
+		if (getUserdataType(L, 2) != LuaData_Item) {
+			pushBoolean(L, false);
 			return 1;
 		}
+
+		item = getUserdata<Item>(L, 2);
+	} else {
+		item = nullptr;
 	}
 
-	Item* item = Item::CreateItem(itemId);
 	if (!item) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
 		pushBoolean(L, false);
