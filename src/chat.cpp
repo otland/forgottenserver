@@ -317,13 +317,10 @@ bool Chat::load()
 				}
 			}
 
-			UsersMap tempUserMap;
-			tempUserMap.insert(channel.users.begin(), channel.users.end());
-			channel.users.clear();
+			UsersMap tempUserMap = std::move(channel.users);
 			for (const auto& pair : tempUserMap) {
 				channel.addUser(*pair.second);
 			}
-			tempUserMap.clear();
 			continue;
 		}
 
