@@ -16,6 +16,7 @@ only_commits:
   files:
     - src/
     - vc14/
+		- appveyor.yml
 
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_65_1
