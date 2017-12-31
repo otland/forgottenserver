@@ -7,7 +7,7 @@ function onTargetCreature(creature, target)
 	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.3) + 2
 	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.6) + 4
 	local rounds = math.random(math.floor(min), math.floor(max))
-	creature:addDamageCondition(target, CONDITION_FIRE, 2, target:isPlayer() and 5 or 10, {8, 10}, rounds)
+	creature:addDamageCondition(target, CONDITION_FIRE, DAMAGELIST_VARYING_PERIOD, target:isPlayer() and 5 or 10, {8, 10}, rounds)
 end
 
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
