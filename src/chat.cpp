@@ -299,7 +299,7 @@ bool Chat::load()
 		std::string channelName = channelNode.attribute("name").as_string();
 		bool isPublic = channelNode.attribute("public").as_bool();
 		pugi::xml_attribute scriptAttribute = channelNode.attribute("script");
-		
+
 		auto it = normalChannels.find(channelId);
 		if (it != normalChannels.end()) {
 			ChatChannel& channel = it->second;
