@@ -37,6 +37,7 @@ std::string getGlobalString(lua_State* L, const char* identifier, const char* de
 {
 	lua_getglobal(L, identifier);
 	if (!lua_isstring(L, -1)) {
+		lua_pop(L, 1);
 		return defaultValue;
 	}
 
@@ -50,6 +51,7 @@ int32_t getGlobalNumber(lua_State* L, const char* identifier, const int32_t defa
 {
 	lua_getglobal(L, identifier);
 	if (!lua_isnumber(L, -1)) {
+		lua_pop(L, 1);
 		return defaultValue;
 	}
 
@@ -63,6 +65,7 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	lua_getglobal(L, identifier);
 	if (!lua_isboolean(L, -1)) {
 		if (!lua_isstring(L, -1)) {
+			lua_pop(L, 1);
 			return defaultValue;
 		}
 
@@ -131,6 +134,7 @@ bool ConfigManager::load()
 	boolean[WARN_UNSAFE_SCRIPTS] = getGlobalBoolean(L, "warnUnsafeScripts", true);
 	boolean[CONVERT_UNSAFE_SCRIPTS] = getGlobalBoolean(L, "convertUnsafeScripts", true);
 	boolean[CLASSIC_EQUIPMENT_SLOTS] = getGlobalBoolean(L, "classicEquipmentSlots", false);
+	boolean[CLASSIC_ATTACK_SPEED] = getGlobalBoolean(L, "classicAttackSpeed", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");

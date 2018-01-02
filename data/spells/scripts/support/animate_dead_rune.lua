@@ -9,7 +9,7 @@ function onCastSpell(creature, variant, isHotkey)
 				local monster = Game.createMonster("Skeleton", position)
 				if monster then
 					corpse:remove()
-					monster:setMaster(creature)
+					creature:addSummon(monster)
 					position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 					return true
 				end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200" manacost="0">
+<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200">
 	<health now="1100" max="1100" />
 	<look type="355" corpse="12631" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,9 @@
 		<flag targetdistance="1" />
 		<flag staticattack="80" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-210" />

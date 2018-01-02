@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="185" manacost="0">
+<monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="185">
 	<health now="1000" max="1000" />
 	<look type="34" corpse="5973" />
 	<targetchange interval="4000" chance="10" />

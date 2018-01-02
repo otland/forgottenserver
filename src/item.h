@@ -23,7 +23,12 @@
 #include "cylinder.h"
 #include "thing.h"
 #include "items.h"
+#include "luascript.h"
+#include "tools.h"
+#include <typeinfo>
 
+#include <boost/variant.hpp>
+#include <boost/lexical_cast.hpp>
 #include <deque>
 
 class Creature;
@@ -97,6 +102,7 @@ enum AttrTypes_t {
 	ATTR_ARMOR = 31,
 	ATTR_HITCHANCE = 32,
 	ATTR_SHOOTRANGE = 33,
+	ATTR_CUSTOM_ATTRIBUTES = 34
 };
 
 enum Attr_ReadValue {
@@ -206,19 +212,149 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-	protected:
-		inline bool hasAttribute(itemAttrTypes type) const {
+		struct CustomAttribute
+		{
+			typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
+			VariantAttribute value;
+
+			CustomAttribute() : value(boost::blank()) {}
+
+			template<typename T>
+			explicit CustomAttribute(const T& v) : value(v) {}
+
+			template<typename T>
+			void set(const T& v) {
+				value = v;
+			}
+
+			template<typename T>
+			const T& get();
+
+			struct PushLuaVisitor : public boost::static_visitor<> {
+				lua_State* L;
+
+				PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
+
+				void operator()(const boost::blank&) const {
+					lua_pushnil(L);
+				}
+
+				void operator()(const std::string& v) const {
+					LuaScriptInterface::pushString(L, v);
+				}
+
+				void operator()(bool v) const {
+					LuaScriptInterface::pushBoolean(L, v);
+				}
+
+				void operator()(const int64_t& v) const {
+					lua_pushnumber(L, v);
+				}
+
+				void operator()(const double& v) const {
+					lua_pushnumber(L, v);
+				}
+			};
+
+			void pushToLua(lua_State* L) const {
+				boost::apply_visitor(PushLuaVisitor(L), value);
+			}
+
+			struct SerializeVisitor : public boost::static_visitor<> {
+				PropWriteStream& propWriteStream;
+
+				SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
+
+				void operator()(const boost::blank&) const {
+				}
+
+				void operator()(const std::string& v) const {
+					propWriteStream.writeString(v);
+				}
+
+				template<typename T>
+				void operator()(const T& v) const {
+					propWriteStream.write<T>(v);
+				}
+			};
+
+			void serialize(PropWriteStream& propWriteStream) const {
+				propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
+				boost::apply_visitor(SerializeVisitor(propWriteStream), value);
+			}
+
+			bool unserialize(PropStream& propStream) {
+				// This is hard coded so it's not general, depends on the position of the variants.
+				uint8_t pos;
+				if (!propStream.read<uint8_t>(pos)) {
+					return false;
+				}
+
+				switch (pos) {
+					case 1:  { // std::string
+						std::string tmp;
+						if (!propStream.readString(tmp)) {
+							return false;
+						}
+						value = tmp;
+						break;
+					}
+
+					case 2: { // int64_t
+						int64_t tmp;
+						if (!propStream.read<int64_t>(tmp)) {
+							return false;
+						}
+						value = tmp;
+						break;
+					}
+
+					case 3: { // double
+						double tmp;
+						if (!propStream.read<double>(tmp)) {
+							return false;
+						}
+						value = tmp;
+						break;
+					}
+
+					case 4: { // bool
+						bool tmp;
+						if (!propStream.read<bool>(tmp)) {
+							return false;
+						}
+						value = tmp;
+						break;
+					}
+
+					default: {
+						value = boost::blank();
+						return false;
+					}
+				}
+				return true;
+			}
+		};
+
+	private:
+		bool hasAttribute(itemAttrTypes type) const {
 			return (type & attributeBits) != 0;
 		}
 		void removeAttribute(itemAttrTypes type);
 
 		static std::string emptyString;
+		static int64_t emptyInt;
+		static double emptyDouble;
+		static bool emptyBool;
+
+		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
 		struct Attribute
 		{
 			union {
 				int64_t integer;
 				std::string* string;
+				CustomAttributeMap* custom;
 			} value;
 			itemAttrTypes type;
 
@@ -231,6 +367,8 @@ class ItemAttributes
 					value.integer = i.value.integer;
 				} else if (ItemAttributes::isStrAttrType(type)) {
 					value.string = new std::string(*i.value.string);
+				} else if (ItemAttributes::isCustomAttrType(type)) {
+					value.custom = new CustomAttributeMap(*i.value.custom);
 				} else {
 					memset(&value, 0, sizeof(value));
 				}
@@ -242,6 +380,8 @@ class ItemAttributes
 			~Attribute() {
 				if (ItemAttributes::isStrAttrType(type)) {
 					delete value.string;
+				} else if (ItemAttributes::isCustomAttrType(type)) {
+					delete value.custom;
 				}
 			}
 			Attribute& operator=(Attribute other) {
@@ -252,6 +392,8 @@ class ItemAttributes
 				if (this != &other) {
 					if (ItemAttributes::isStrAttrType(type)) {
 						delete value.string;
+					} else if (ItemAttributes::isCustomAttrType(type)) {
+						delete value.custom;
 					}
 
 					value = other.value;
@@ -282,12 +424,86 @@ class ItemAttributes
 		const Attribute* getExistingAttr(itemAttrTypes type) const;
 		Attribute& getAttr(itemAttrTypes type);
 
+		CustomAttributeMap* getCustomAttributeMap() {
+			if (!hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
+				return nullptr;
+			}
+
+			return getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom;
+		}
+
+		template<typename R>
+		void setCustomAttribute(int64_t key, R value) {
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			setCustomAttribute(tmp, value);
+		}
+
+		void setCustomAttribute(int64_t key, CustomAttribute& value) {
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			setCustomAttribute(tmp, value);
+		}
+
+		template<typename R>
+		void setCustomAttribute(std::string& key, R value) {
+			toLowerCaseString(key);
+			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
+				removeCustomAttribute(key);
+			} else {
+				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
+			}
+			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(key, value);
+		}
+
+		void setCustomAttribute(std::string& key, CustomAttribute& value) {
+			toLowerCaseString(key);
+			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
+				removeCustomAttribute(key);
+			} else {
+				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
+			}
+			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->insert(std::make_pair(std::move(key), std::move(value)));
+		}
+
+		const CustomAttribute* getCustomAttribute(int64_t key) {
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			return getCustomAttribute(tmp);
+		}
+
+		const CustomAttribute* getCustomAttribute(const std::string& key) {
+			if (const CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
+				auto it = customAttrMap->find(asLowerCaseString(key));
+				if (it != customAttrMap->end()) {
+					return &(it->second);
+				}
+			}
+			return nullptr;
+		}
+
+		bool removeCustomAttribute(int64_t key) {
+			std::string tmp = boost::lexical_cast<std::string>(key);
+			return removeCustomAttribute(tmp);
+		}
+
+		bool removeCustomAttribute(const std::string& key) {
+			if (CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
+				auto it = customAttrMap->find(asLowerCaseString(key));
+				if (it != customAttrMap->end()) {
+					customAttrMap->erase(it);
+					return true;
+				}
+			}
+			return false;
+		}
+
 	public:
-		inline static bool isIntAttrType(itemAttrTypes type) {
+		static bool isIntAttrType(itemAttrTypes type) {
 			return (type & 0x7FFE13) != 0;
 		}
-		inline static bool isStrAttrType(itemAttrTypes type) {
+		static bool isStrAttrType(itemAttrTypes type) {
 			return (type & 0x1EC) != 0;
+		}
+		inline static bool isCustomAttrType(itemAttrTypes type) {
+			return (type & 0x80000000) != 0;
 		}
 
 		const std::forward_list<Attribute>& getList() const {
@@ -318,10 +534,10 @@ class Item : virtual public Thing
 
 		bool equals(const Item* otherItem) const;
 
-		Item* getItem() final {
+		Item* getItem() override final {
 			return this;
 		}
-		const Item* getItem() const final {
+		const Item* getItem() const override final {
 			return this;
 		}
 		virtual Teleport* getTeleport() {
@@ -394,6 +610,31 @@ class Item : virtual public Thing
 				return false;
 			}
 			return attributes->hasAttribute(type);
+		}
+
+		template<typename R>
+		void setCustomAttribute(std::string& key, R value) {
+			getAttributes()->setCustomAttribute(key, value);
+		}
+
+		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
+			getAttributes()->setCustomAttribute(key, value);
+		}
+		
+		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
+			return getAttributes()->getCustomAttribute(key);
+		}
+
+		const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key) {
+			return getAttributes()->getCustomAttribute(key);
+		}
+
+		bool removeCustomAttribute(int64_t key) {
+			return getAttributes()->removeCustomAttribute(key);
+		}
+
+		bool removeCustomAttribute(const std::string& key) {
+			return getAttributes()->removeCustomAttribute(key);
 		}
 
 		void setSpecialDescription(const std::string& desc) {
@@ -521,7 +762,7 @@ class Item : virtual public Thing
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-		std::string getDescription(int32_t lookDistance) const final;
+		std::string getDescription(int32_t lookDistance) const override final;
 		std::string getNameDescription() const;
 		std::string getWeightDescription() const;
 
@@ -532,10 +773,10 @@ class Item : virtual public Thing
 
 		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
-		bool isPushable() const final {
+		bool isPushable() const override final {
 			return isMoveable();
 		}
-		int32_t getThrowRange() const final {
+		int32_t getThrowRange() const override final {
 			return (isPickupable() ? 15 : 2);
 		}
 
@@ -605,7 +846,7 @@ class Item : virtual public Thing
 		}
 
 		uint32_t getWorth() const;
-		void getLight(LightInfo& lightInfo) const;
+		LightInfo getLightInfo() const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool isBlocking() const {
@@ -670,7 +911,13 @@ class Item : virtual public Thing
 			count = n;
 		}
 
-		static uint32_t countByType(const Item* i, int32_t subType);
+		static uint32_t countByType(const Item* i, int32_t subType) {
+			if (subType == -1 || subType == i->getSubType()) {
+				return i->getItemCount();
+			}
+
+			return 0;
+		}
 
 		void setDefaultSubtype();
 		uint16_t getSubType() const;
@@ -700,6 +947,9 @@ class Item : virtual public Thing
 
 		virtual void startDecaying();
 
+		bool isLoadedFromMap() const {
+			return loadedFromMap;
+		}
 		void setLoadedFromMap(bool value) {
 			loadedFromMap = value;
 		}
@@ -725,29 +975,32 @@ class Item : virtual public Thing
 			}
 		}
 
-		Cylinder* getParent() const {
+		Cylinder* getParent() const override {
 			return parent;
 		}
-		void setParent(Cylinder* cylinder) {
+		void setParent(Cylinder* cylinder) override {
 			parent = cylinder;
 		}
 		Cylinder* getTopParent();
 		const Cylinder* getTopParent() const;
-		Tile* getTile();
-		const Tile* getTile() const;
-		bool isRemoved() const {
+		Tile* getTile() override;
+		const Tile* getTile() const override;
+		bool isRemoved() const override {
 			return !parent || parent->isRemoved();
 		}
 
 	protected:
+		Cylinder* parent = nullptr;
+
+		uint16_t id;  // the same id as in ItemType
+
+	private:
 		std::string getWeightDescription(uint32_t weight) const;
 
-		Cylinder* parent = nullptr;
 		std::unique_ptr<ItemAttributes> attributes;
 
 		uint32_t referenceCounter = 0;
 
-		uint16_t id;  // the same id as in ItemType
 		uint8_t count = 1; // number of stacked items
 
 		bool loadedFromMap = false;
@@ -757,14 +1010,5 @@ class Item : virtual public Thing
 
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
-
-inline uint32_t Item::countByType(const Item* i, int32_t subType)
-{
-	if (subType == -1 || subType == i->getSubType()) {
-		return i->getItemCount();
-	}
-
-	return 0;
-}
 
 #endif

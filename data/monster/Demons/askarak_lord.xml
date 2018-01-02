@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Askarak Lord" nameDescription="an askarak lord" race="venom" experience="1200" speed="230" manacost="0">
+<monster name="Askarak Lord" nameDescription="an askarak lord" race="venom" experience="1200" speed="230">
 	<health now="2100" max="2100" />
 	<look type="410" corpse="13956" />
 	<targetchange interval="4000" chance="10" />

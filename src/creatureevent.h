@@ -59,12 +59,12 @@ class CreatureEvents final : public BaseEvents
 
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
-	protected:
-		LuaScriptInterface& getScriptInterface() final;
-		std::string getScriptBaseName() const final;
-		Event* getEvent(const std::string& nodeName) final;
-		bool registerEvent(Event* event, const pugi::xml_node& node) final;
-		void clear() final;
+	private:
+		LuaScriptInterface& getScriptInterface() override;
+		std::string getScriptBaseName() const override;
+		Event* getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		void clear() override;
 
 		//creature events
 		using CreatureEventMap = std::map<std::string, CreatureEvent*>;
@@ -78,7 +78,7 @@ class CreatureEvent final : public Event
 	public:
 		explicit CreatureEvent(LuaScriptInterface* interface);
 
-		bool configureEvent(const pugi::xml_node& node) final;
+		bool configureEvent(const pugi::xml_node& node) override;
 
 		CreatureEventType_t getEventType() const {
 			return type;
@@ -104,12 +104,12 @@ class CreatureEvent final : public Event
 		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
 		void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
-		void executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
+		void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 
-	protected:
-		std::string getScriptEventName() const final;
+	private:
+		std::string getScriptEventName() const override;
 
 		std::string eventName;
 		CreatureEventType_t type;

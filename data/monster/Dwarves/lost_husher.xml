@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lost Husher" nameDescription="a lost husher" race="blood" experience="1800" speed="220" manacost="0">
+<monster name="Lost Husher" nameDescription="a lost husher" race="blood" experience="1800" speed="220">
 	<health now="1600" max="1600" />
 	<look type="537" corpse="19964" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,8 @@
 		<flag targetdistance="4" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
 		<attack name="death" interval="2000" chance="10" length="6" spread="0" min="-150" max="-300">

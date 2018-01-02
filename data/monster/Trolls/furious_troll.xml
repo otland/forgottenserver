@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190" manacost="0">
+<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190">
 	<health now="245" max="245" />
 	<look type="15" corpse="5960" />
 	<targetchange interval="2000" chance="5" />

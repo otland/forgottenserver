@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Shadow Hound" nameDescription="a shadow hound" experience="600" speed="360" race="blood" manacost="0">
+<monster name="Shadow Hound" nameDescription="a shadow hound" experience="600" speed="360" race="blood">
 	<health now="555" max="555" />
 	<targetchange speed="0" chance="8" />
 	<look type="322" corpse="9923" />

@@ -55,9 +55,9 @@ void startupErrorMessage(const std::string& errorStr)
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* servicer);
+void mainLoader(int argc, char* argv[], ServiceManager* services);
 
-void badAllocationHandler()
+[[noreturn]] void badAllocationHandler()
 {
 	// Use functions that only use stack allocation
 	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
@@ -177,7 +177,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
-	if (Item::items.loadFromOtb("data/items/items.otb") != ERROR_NONE) {
+	if (!Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}

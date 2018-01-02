@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Hacker" nameDescription="a hacker" race="blood" experience="45" speed="250" manacost="0">
+<monster name="Hacker" nameDescription="a hacker" race="blood" experience="45" speed="250">
 	<health now="430" max="430" />
 	<look type="8" corpse="5980" />
 	<targetchange interval="5000" chance="8" />

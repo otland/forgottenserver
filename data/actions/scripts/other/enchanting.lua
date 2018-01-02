@@ -125,7 +125,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if targetType.shrine then
-		if not isInArray(targetType.shrine, targetId) then
+		if not table.contains(targetType.shrine, targetId) then
 			player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 			return true
 		end

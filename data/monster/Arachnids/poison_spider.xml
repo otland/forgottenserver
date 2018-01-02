@@ -8,13 +8,15 @@
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="6" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" poison="30" />

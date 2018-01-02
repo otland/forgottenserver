@@ -33,12 +33,6 @@ using Identifier = std::array<char, 4>;
 
 struct Node
 {
-	Node() = default;
-	Node(Node&&) = default;
-	Node& operator=(Node&&) = default;
-	Node(const Node&) = delete;
-	Node& operator=(const Node&) = delete;
-
 	using ChildrenVector = std::vector<Node>;
 
 	ChildrenVector children;
@@ -54,11 +48,11 @@ struct Node
 };
 
 struct LoadError : std::exception {
-	const char* what() const noexcept = 0;
+	const char* what() const noexcept override = 0;
 };
 
-struct InvalidOTBFormat : LoadError {
-	const char* what() const noexcept final {
+struct InvalidOTBFormat final : LoadError {
+	const char* what() const noexcept override {
 		return "Invalid OTBM file format";
 	}
 };
@@ -74,18 +68,6 @@ public:
 };
 
 } //namespace OTB
-
-enum FILELOADER_ERRORS {
-	ERROR_NONE,
-	ERROR_INVALID_FILE_VERSION,
-	ERROR_CAN_NOT_OPEN,
-	ERROR_CAN_NOT_CREATE,
-	ERROR_EOF,
-	ERROR_SEEK_ERROR,
-	ERROR_NOT_OPEN,
-	ERROR_INVALID_NODE,
-	ERROR_INVALID_FORMAT,
-};
 
 class PropStream
 {
@@ -138,7 +120,7 @@ class PropStream
 			return true;
 		}
 
-	protected:
+	private:
 		const char* p = nullptr;
 		const char* end = nullptr;
 };
@@ -178,7 +160,7 @@ class PropWriteStream
 			std::copy(str.begin(), str.end(), std::back_inserter(buffer));
 		}
 
-	protected:
+	private:
 		std::vector<char> buffer;
 };
 

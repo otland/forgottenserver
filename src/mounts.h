@@ -38,6 +38,7 @@ class Mounts
 		bool reload();
 		bool loadFromXml();
 		Mount* getMountByID(uint8_t id);
+		Mount* getMountByName(const std::string& name);
 		Mount* getMountByClientID(uint16_t clientId);
 
 		const std::vector<Mount>& getMounts() const {

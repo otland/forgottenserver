@@ -36,9 +36,6 @@ TalkActions::~TalkActions()
 
 void TalkActions::clear()
 {
-	for (TalkAction* talkAction : talkActions) {
-		delete talkAction;
-	}
 	talkActions.clear();
 
 	scriptInterface.reInitState();
@@ -64,15 +61,16 @@ Event* TalkActions::getEvent(const std::string& nodeName)
 
 bool TalkActions::registerEvent(Event* event, const pugi::xml_node&)
 {
-	talkActions.push_front(static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
+	auto talkAction = std::unique_ptr<TalkAction>(static_cast<TalkAction*>(event)); // event is guaranteed to be a TalkAction
+	talkActions.push_front(std::move(*talkAction));
 	return true;
 }
 
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
 	size_t wordsLength = words.length();
-	for (TalkAction* talkAction : talkActions) {
-		const std::string& talkactionWords = talkAction->getWords();
+	for (const TalkAction& talkAction : talkActions) {
+		const std::string& talkactionWords = talkAction.getWords();
 		size_t talkactionLength = talkactionWords.length();
 		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
 			continue;
@@ -86,7 +84,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 			trim_left(param, ' ');
 
-			char separator = talkAction->getSeparator();
+			char separator = talkAction.getSeparator();
 			if (separator != ' ') {
 				if (!param.empty()) {
 					if (param.front() != separator) {
@@ -98,7 +96,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (talkAction->executeSay(player, param, type)) {
+		if (talkAction.executeSay(player, param, type)) {
 			return TALKACTION_CONTINUE;
 		} else {
 			return TALKACTION_BREAK;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Incineron" nameDescription="Incineron" race="fire" experience="3500" speed="260" manacost="0">
+<monster name="Incineron" nameDescription="Incineron" race="fire" experience="3500" speed="260">
 	<health now="7000" max="7000" />
 	<look type="243" corpse="6324" />
 	<targetchange interval="2000" chance="9" />

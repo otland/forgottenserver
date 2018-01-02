@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lethal Lissy" nameDescription="Lethal Lissy" race="blood" experience="500" speed="240" manacost="0">
+<monster name="Lethal Lissy" nameDescription="Lethal Lissy" race="blood" experience="500" speed="240">
 	<health now="1450" max="1450" />
 	<look type="155" head="77" body="0" legs="76" feet="132" addons="3" corpse="20438" />
 	<targetchange interval="60000" chance="0" />

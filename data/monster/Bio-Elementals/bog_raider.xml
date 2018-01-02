@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="240" manacost="0">
+<monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="240">
 	<health now="1300" max="1300" />
 	<look type="299" corpse="8951" />
 	<targetchange interval="4000" chance="10" />
@@ -14,6 +14,9 @@
 		<flag staticattack="60" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-183" poison="80" />
