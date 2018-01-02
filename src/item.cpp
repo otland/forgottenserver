@@ -805,7 +805,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
-		propWriteStream.write<uint16_t>(ATTR_WRAPID);
+		propWriteStream.write<uint8_t>(ATTR_WRAPID);
 		propWriteStream.write<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_WRAPID));
 	}
 
