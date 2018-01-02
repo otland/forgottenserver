@@ -7087,7 +7087,7 @@ int LuaScriptInterface::luaCreatureSetHealth(lua_State* L)
 		return 1;
 	}
 
-	creature->health = std::max<int32_t>(0, getNumber<uint32_t>(L, 2));
+	creature->health = std::min<int32_t>(getNumber<uint32_t>(L, 2), creature->healthMax);
 	g_game.addCreatureHealth(creature);
 
 	Player* player = creature->getPlayer();
