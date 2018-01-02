@@ -102,8 +102,7 @@ enum AttrTypes_t {
 	ATTR_ARMOR = 31,
 	ATTR_HITCHANCE = 32,
 	ATTR_SHOOTRANGE = 33,
-	ATTR_CUSTOM_ATTRIBUTES = 34,
-	ATTR_WRAPID = 35
+	ATTR_CUSTOM_ATTRIBUTES = 34
 };
 
 enum Attr_ReadValue {
@@ -498,7 +497,7 @@ class ItemAttributes
 
 	public:
 		static bool isIntAttrType(itemAttrTypes type) {
-			return (type & 0xFFFE13) != 0;
+			return (type & 0x7FFE13) != 0;
 		}
 		static bool isStrAttrType(itemAttrTypes type) {
 			return (type & 0x1EC) != 0;

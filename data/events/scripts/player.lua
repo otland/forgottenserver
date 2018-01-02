@@ -276,13 +276,24 @@ end
 
 function Player:onWrapItem(item)
 	local position = item:getPosition()
-	local house = Tile(position):getHouse()
-	if not house or item:getTopParent() == self then
+	local tile = Tile(position)
+	if tile and not tile:getHouse() then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap items inside a house.")
 		return
 	end
-	
-	local previousId = item:getId()
-	item:transform(item:getAttribute("wrapid"))
-	item:setAttribute("wrapid", previousId)
+
+	local wrapId = item:getCustomAttribute("wrapId")
+	local unWrapId = item:getCustomAttribute("unWrapId")
+	if wrapId == 0 or unWrapId == 0 then
+		return
+	end
+
+	local currentId = item:getId()
+	if currentId == wrapId then -- unwrapping
+		item:moveTo(tile)
+		item:transform(unWrapId)
+	elseif currentId == unWrapId then -- wrapping
+		item:moveTo(self)
+		item:transform(wrapId)
+	end
 end

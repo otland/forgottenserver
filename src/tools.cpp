@@ -995,8 +995,6 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_FLUIDTYPE;
 	} else if (str == "doorid") {
 		return ITEM_ATTRIBUTE_DOORID;
-	} else if (str == "wrapid") {
-		return ITEM_ATTRIBUTE_WRAPID;
 	}
 	return ITEM_ATTRIBUTE_NONE;
 }
