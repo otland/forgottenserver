@@ -794,12 +794,12 @@ void Events::eventPlayerOnWrapItem(Player* player, Item* item)
 {
 	// Player:onWrapItem(item)
 	if (info.playerOnWrapItem == -1) {
-		return true;
+		return;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnWrapItem] Call stack overflow" << std::endl;
-		return false;
+		return;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
