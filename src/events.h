@@ -96,7 +96,7 @@ class Events
 		void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
-		bool eventPlayerOnWrapItem(Player* player, Item* item);
+		void eventPlayerOnWrapItem(Player* player, Item* item);
 
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);

@@ -894,7 +894,7 @@ void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 	return scriptInterface.callVoidFunction(2);
 }
 
-bool Events::eventPlayerOnWrapItem(Player* player, Item* item)
+void Events::eventPlayerOnWrapItem(Player* player, Item* item)
 {
 	// Player:onWrapItem(item)
 	if (info.playerOnWrapItem == -1) {
@@ -918,5 +918,5 @@ bool Events::eventPlayerOnWrapItem(Player* player, Item* item)
 	LuaScriptInterface::pushUserdata<Item>(L, item);
 	LuaScriptInterface::setItemMetatable(L, -1, item);
 
-	return scriptInterface.callFunction(2);
+	scriptInterface.callVoidFunction(2);
 }
