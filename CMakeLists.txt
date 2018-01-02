@@ -16,6 +16,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 include(FindCXX11)
+include(FindLTO)
 
 # Find packages.
 find_package(GMP REQUIRED)
