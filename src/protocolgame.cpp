@@ -534,7 +534,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 				checkCreatureAsKnown(creature->getID(), known, removedKnown);
 				AddCreature(msg, creature, known, removedKnown);
 
-				if (count == 8 && playerSpawned == false) { // player still not spawned and we need to send him too
+				if (count == 8 && !playerSpawned) { // player still not spawned and we need to send him too
 					checkCreatureAsKnown(player->getID(), known, removedKnown);
 					AddCreature(msg, player, known, removedKnown);
 					++count;
