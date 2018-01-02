@@ -950,10 +950,10 @@ void ProtocolGame::parseHouseWindow(NetworkMessage& msg)
 
 void ProtocolGame::parseWrapItem(NetworkMessage& msg)
 {
-	Position pos = msg.getPosition();
+	Position& position = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
-	uint8_t stackpos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerWrapItem, player->getID(), pos, stackpos, spriteId);
+	uint8_t stackPos = msg.getByte();
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerWrapItem, player->getID(), position, stackPos, spriteId);
 }
 
 void ProtocolGame::parseLookInShop(NetworkMessage& msg)

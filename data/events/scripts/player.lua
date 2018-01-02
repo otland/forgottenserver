@@ -278,8 +278,7 @@ function Player:onGainSkillTries(skill, tries)
 end
 
 function Player:onWrapItem(item)
-	local position = item:getPosition()
-	local tile = Tile(position)
+	local tile = Tile(item:getPosition())
 	if tile and not tile:getHouse() then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap items inside a house.")
 		return
