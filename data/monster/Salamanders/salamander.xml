@@ -15,6 +15,9 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="10" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-60" poison="10" />
@@ -37,6 +40,6 @@
 		<item name="brass helmet" chance="2180" />
 		<item name="arrow" countmax="3" chance="7890" />
 		<item name="health potion" chance="840" />
-		<item id="19736" countmax="5" chance="32830" /><!-- Insectoid Eggs -->
+		<item name="insectoid eggs" countmax="5" chance="32830" />
 	</loot>
 </monster>

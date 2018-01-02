@@ -59,7 +59,7 @@ bool Items::reload()
 
 constexpr auto OTBI = OTB::Identifier{{'O','T', 'B', 'I'}};
 
-FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
+bool Items::loadFromOtb(const std::string& file)
 {
 	OTB::Loader loader{file, OTBI};
 
@@ -72,27 +72,27 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		//0x01 = version data
 		uint32_t flags;
 		if (!props.read<uint32_t>(flags)) {
-			return ERROR_INVALID_FORMAT;
+			return false;
 		}
 
 		uint8_t attr;
 		if (!props.read<uint8_t>(attr)) {
-			return ERROR_INVALID_FORMAT;
+			return false;
 		}
 
 		if (attr == ROOT_ATTR_VERSION) {
 			uint16_t datalen;
 			if (!props.read<uint16_t>(datalen)) {
-				return ERROR_INVALID_FORMAT;
+				return false;
 			}
 
 			if (datalen != sizeof(VERSIONINFO)) {
-				return ERROR_INVALID_FORMAT;
+				return false;
 			}
 
 			VERSIONINFO vi;
 			if (!props.read(vi)) {
-				return ERROR_INVALID_FORMAT;
+				return false;
 			}
 
 			majorVersion = vi.dwMajorVersion; //items otb format file version
@@ -105,21 +105,21 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
-		return ERROR_INVALID_FORMAT;
+		return false;
 	} else if (minorVersion < CLIENT_VERSION_1098) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
-		return ERROR_INVALID_FORMAT;
+		return false;
 	}
 
-	for(auto & itemNode : root.children) {
+	for (auto& itemNode : root.children) {
 		PropStream stream;
 		if (!loader.getProps(itemNode, stream)) {
-			return ERROR_INVALID_FORMAT;
+			return false;
 		}
 
 		uint32_t flags;
 		if (!stream.read<uint32_t>(flags)) {
-			return ERROR_INVALID_FORMAT;
+			return false;
 		}
 
 		uint16_t serverId = 0;
@@ -134,17 +134,17 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 		while (stream.read<uint8_t>(attrib)) {
 			uint16_t datalen;
 			if (!stream.read<uint16_t>(datalen)) {
-				return ERROR_INVALID_FORMAT;
+				return false;
 			}
 
 			switch (attrib) {
 				case ITEM_ATTR_SERVERID: {
 					if (datalen != sizeof(uint16_t)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					if (!stream.read<uint16_t>(serverId)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					if (serverId > 30000 && serverId < 30100) {
@@ -155,34 +155,34 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_CLIENTID: {
 					if (datalen != sizeof(uint16_t)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					if (!stream.read<uint16_t>(clientId)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 					break;
 				}
 
 				case ITEM_ATTR_SPEED: {
 					if (datalen != sizeof(uint16_t)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					if (!stream.read<uint16_t>(speed)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 					break;
 				}
 
 				case ITEM_ATTR_LIGHT2: {
 					if (datalen != sizeof(lightBlock2)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					lightBlock2 lb2;
 					if (!stream.read(lb2)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					lightLevel = static_cast<uint8_t>(lb2.lightLevel);
@@ -192,22 +192,22 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 
 				case ITEM_ATTR_TOPORDER: {
 					if (datalen != sizeof(uint8_t)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					if (!stream.read<uint8_t>(alwaysOnTopOrder)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 					break;
 				}
 
 				case ITEM_ATTR_WAREID: {
 					if (datalen != sizeof(uint16_t)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 
 					if (!stream.read<uint16_t>(wareId)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 					break;
 				}
@@ -215,7 +215,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 				default: {
 					//skip unknown attributes
 					if (!stream.skip(datalen)) {
-						return ERROR_INVALID_FORMAT;
+						return false;
 					}
 					break;
 				}
@@ -255,7 +255,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_DEPRECATED:
 				break;
 			default:
-				return ERROR_INVALID_FORMAT;
+				return false;
 		}
 
 		iType.blockSolid = hasBitSet(FLAG_BLOCK_SOLID, flags);
@@ -289,7 +289,7 @@ FILELOADER_ERRORS Items::loadFromOtb(const std::string& file)
 	}
 
 	items.shrink_to_fit();
-	return ERROR_NONE;
+	return true;
 }
 
 bool Items::loadFromXml()
@@ -326,7 +326,31 @@ bool Items::loadFromXml()
 			parseItemNode(itemNode, id++);
 		}
 	}
+
+	buildInventoryList();
 	return true;
+}
+
+void Items::buildInventoryList()
+{
+	inventory.reserve(items.size());
+	for (const auto& type: items) {
+		if (type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
+			type.attack != 0 || type.defense != 0 ||
+			type.extraDefense != 0 || type.armor != 0 ||
+			type.slotPosition & SLOTP_NECKLACE ||
+			type.slotPosition & SLOTP_RING ||
+			type.slotPosition & SLOTP_AMMO ||
+			type.slotPosition & SLOTP_FEET ||
+			type.slotPosition & SLOTP_HEAD ||
+			type.slotPosition & SLOTP_ARMOR ||
+			type.slotPosition & SLOTP_LEGS)
+		{
+			inventory.push_back(type.clientId);
+		}
+	}
+	inventory.shrink_to_fit();
+	std::sort(inventory.begin(), inventory.end());
 }
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
@@ -422,6 +446,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.blockProjectile = valueAttribute.as_bool();
 		} else if (tmpStrValue == "allowpickupable" || tmpStrValue == "pickupable") {
 			it.allowPickupable = valueAttribute.as_bool();
+		} else if (tmpStrValue == "forceserialize" || tmpStrValue == "forcesave") {
+			it.forceSerialize = valueAttribute.as_bool();
 		} else if (tmpStrValue == "floorchange") {
 			tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 			if (tmpStrValue == "down") {
@@ -649,6 +675,18 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 			it.getAbilities().stats[STAT_MAGICPOINTS] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "magicpointspercent") {
 			it.getAbilities().statsPercent[STAT_MAGICPOINTS] = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "criticalhitchance") {
+			it.getAbilities().specialSkills[SPECIALSKILL_CRITICALHITCHANCE] = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "criticalhitamount") {
+			it.getAbilities().specialSkills[SPECIALSKILL_CRITICALHITAMOUNT] = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "hitpointsleechchance") {
+			it.getAbilities().specialSkills[SPECIALSKILL_HITPOINTSLEECHCHANCE] = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "hitpointsleechamount") {
+			it.getAbilities().specialSkills[SPECIALSKILL_HITPOINTSLEECHAMOUNT] = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "manapointsleechchance") {
+			it.getAbilities().specialSkills[SPECIALSKILL_MANAPOINTSLEECHCHANCE] = pugi::cast<int32_t>(valueAttribute.value());
+		} else if (tmpStrValue == "manapointsleechamount") {
+			it.getAbilities().specialSkills[SPECIALSKILL_MANAPOINTSLEECHAMOUNT] = pugi::cast<int32_t>(valueAttribute.value());
 		} else if (tmpStrValue == "fieldabsorbpercentenergy") {
 			it.getAbilities().fieldAbsorbPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 		} else if (tmpStrValue == "fieldabsorbpercentfire") {

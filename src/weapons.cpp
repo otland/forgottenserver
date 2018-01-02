@@ -109,21 +109,21 @@ void Weapons::loadDefaults()
 	}
 }
 
-Event* Weapons::getEvent(const std::string& nodeName)
+Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
-		return new WeaponMelee(&scriptInterface);
+		return Event_ptr(new WeaponMelee(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
-		return new WeaponDistance(&scriptInterface);
+		return Event_ptr(new WeaponDistance(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
-		return new WeaponWand(&scriptInterface);
+		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
 }
 
-bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
+bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event); //event is guaranteed to be a Weapon
+	Weapon* weapon = static_cast<Weapon*>(event.release()); //event is guaranteed to be a Weapon
 
 	auto result = weapons.emplace(weapon->getID(), weapon);
 	if (!result.second) {
@@ -871,23 +871,26 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		maxChange = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("type"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "earth") {
-			params.combatType = COMBAT_EARTHDAMAGE;
-		} else if (tmpStrValue == "ice") {
-			params.combatType = COMBAT_ICEDAMAGE;
-		} else if (tmpStrValue == "energy") {
-			params.combatType = COMBAT_ENERGYDAMAGE;
-		} else if (tmpStrValue == "fire") {
-			params.combatType = COMBAT_FIREDAMAGE;
-		} else if (tmpStrValue == "death") {
-			params.combatType = COMBAT_DEATHDAMAGE;
-		} else if (tmpStrValue == "holy") {
-			params.combatType = COMBAT_HOLYDAMAGE;
-		} else {
-			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
-		}
+	attr = node.attribute("type");
+	if (!attr) {
+		return true;
+	}
+
+	std::string tmpStrValue = asLowerCaseString(attr.as_string());
+	if (tmpStrValue == "earth") {
+		params.combatType = COMBAT_EARTHDAMAGE;
+	} else if (tmpStrValue == "ice") {
+		params.combatType = COMBAT_ICEDAMAGE;
+	} else if (tmpStrValue == "energy") {
+		params.combatType = COMBAT_ENERGYDAMAGE;
+	} else if (tmpStrValue == "fire") {
+		params.combatType = COMBAT_FIREDAMAGE;
+	} else if (tmpStrValue == "death") {
+		params.combatType = COMBAT_DEATHDAMAGE;
+	} else if (tmpStrValue == "holy") {
+		params.combatType = COMBAT_HOLYDAMAGE;
+	} else {
+		std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
 	}
 	return true;
 }

@@ -14,6 +14,7 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="0" />
 		<flag runonhealth="75" />
+		<flag canwalkonenergy="0" />
 	</flags>
 	<elements>
 		<element energyPercent="-5" />

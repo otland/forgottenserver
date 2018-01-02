@@ -1,4 +1,9 @@
 function onCastSpell(creature, variant)
+	if creature:getSkull() == SKULL_BLACK then
+		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return false
+	end
+
 	local monsterName = variant:getString()
 	local monsterType = MonsterType(monsterName)
 
@@ -8,7 +13,7 @@ function onCastSpell(creature, variant)
 		return false
 	end
 
-	if not getPlayerFlagValue(creature, PlayerFlag_CanSummonAll) then
+	if not creature:hasFlag(PlayerFlag_CanSummonAll) then
 		if not monsterType:isSummonable() then
 			creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
@@ -23,7 +28,7 @@ function onCastSpell(creature, variant)
 	end
 
 	local manaCost = monsterType:getManaCost()
-	if creature:getMana() < manaCost and not getPlayerFlagValue(creature, PlayerFlag_HasInfiniteMana) then
+	if creature:getMana() < manaCost and not creature:hasFlag(PlayerFlag_HasInfiniteMana) then
 		creature:sendCancelMessage(RETURNVALUE_NOTENOUGHMANA)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false

@@ -15,6 +15,8 @@
 		<flag targetdistance="4" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
 		<attack name="death" interval="2000" chance="10" length="6" spread="0" min="-150" max="-300">
