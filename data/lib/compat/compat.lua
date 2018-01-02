@@ -1052,6 +1052,14 @@ function doSetCreatureOutfit(cid, outfit, time)
 	return true
 end
 
+function doTileAddItemEx(pos, uid, flags)
+	local item = Item(uid)
+	if item then
+		return tile:addItemEx(item, flags)
+	end
+	return false
+end
+
 function isInArray(array, value) return table.contains(array, value) end
 
 function doCreateItem(itemid, count, pos)
