@@ -334,8 +334,8 @@ bool Items::loadFromXml()
 void Items::buildInventoryList()
 {
 	inventory.reserve(items.size());
-	for(const auto& type: items) {
-		if(type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
+	for (const auto& type: items) {
+		if (type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
 			type.attack != 0 || type.defense != 0 ||
 			type.extraDefense != 0 || type.armor != 0 ||
 			type.slotPosition & SLOTP_NECKLACE ||

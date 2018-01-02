@@ -1688,10 +1688,10 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Item* searchForItem(Container* container, uint16_t itemid)
+Item* searchForItem(Container* container, uint16_t itemId)
 {
 	for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-		if ((*it)->getID() == itemid) {
+		if ((*it)->getID() == itemId) {
 			return *it;
 		}
 	}
@@ -1711,7 +1711,7 @@ slots_t getSlotType(const ItemType& it)
 			slot = CONST_SLOT_NECKLACE;
 		} else if (slotPosition & SLOTP_ARMOR) {
 			slot = CONST_SLOT_ARMOR;
-		} else if(slotPosition & SLOTP_LEGS) {
+		} else if (slotPosition & SLOTP_LEGS) {
 			slot = CONST_SLOT_LEGS;
 		} else if (slotPosition & SLOTP_FEET) {
 			slot = CONST_SLOT_FEET ;

@@ -296,7 +296,9 @@ class Items
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
 		void buildInventoryList();
-		const InventoryVector& getInventory() const { return inventory; }
+		const InventoryVector& getInventory() const {
+			return inventory;
+		}
 
 		size_t size() const {
 			return items.size();
