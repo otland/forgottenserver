@@ -26,4 +26,5 @@
 	<event class="Player" method="onGainExperience" enabled="1" />
 	<event class="Player" method="onLoseExperience" enabled="0" />
 	<event class="Player" method="onGainSkillTries" enabled="1" />
+	<event class="Player" method="onWrapItem" enabled="1" />
 </events>

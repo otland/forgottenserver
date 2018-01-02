@@ -273,3 +273,16 @@ function Player:onGainSkillTries(skill, tries)
 	end
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
 end
+
+function Player:onWrapItem(item)
+	local position = item:getPosition()
+	local house = Tile(position):getHouse()
+	if not house or item:getTopParent() == self then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap items inside a house.")
+		return
+	end
+	
+	local previousId = item:getId()
+	item:transform(item:getAttribute("wrapid"))
+	item:setAttribute("wrapid", previousId)
+end

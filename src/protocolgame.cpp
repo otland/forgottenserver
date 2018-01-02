@@ -443,6 +443,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x88: parseUpArrowContainer(msg); break;
 		case 0x89: parseTextWindow(msg); break;
 		case 0x8A: parseHouseWindow(msg); break;
+		case 0x8B: parseWrapItem(msg); break;
 		case 0x8C: parseLookAt(msg); break;
 		case 0x8D: parseLookInBattleList(msg); break;
 		case 0x8E: /* join aggression */ break;
@@ -924,6 +925,14 @@ void ProtocolGame::parseHouseWindow(NetworkMessage& msg)
 	uint32_t id = msg.get<uint32_t>();
 	const std::string text = msg.getString();
 	addGameTask(&Game::playerUpdateHouseWindow, player->getID(), doorId, id, text);
+}
+
+void ProtocolGame::parseWrapItem(NetworkMessage& msg)
+{
+	Position pos = msg.getPosition();
+	uint16_t spriteId = msg.get<uint16_t>();
+	uint8_t stackpos = msg.getByte();
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerWrapItem, player->getID(), pos, stackpos, spriteId);
 }
 
 void ProtocolGame::parseLookInShop(NetworkMessage& msg)

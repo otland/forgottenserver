@@ -55,6 +55,7 @@ class Events
 		int32_t playerOnGainExperience = -1;
 		int32_t playerOnLoseExperience = -1;
 		int32_t playerOnGainSkillTries = -1;
+		int32_t playerOnWrapItem = -1;
 	};
 
 	public:
@@ -88,6 +89,7 @@ class Events
 		void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
+		bool eventPlayerOnWrapItem(Player* player, Item* item);
 
 	private:
 		LuaScriptInterface scriptInterface;
