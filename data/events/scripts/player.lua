@@ -276,8 +276,8 @@ end
 
 function Player:onWrapItem(item)
 	local tile = Tile(item:getPosition())
-	if tile and not tile:getHouse() then
-		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap items inside a house.")
+	if not tile or not tile:getHouse() then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can only wrap and unwrap this item inside a house.")
 		return
 	end
 
