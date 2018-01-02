@@ -39,9 +39,10 @@ enum MoveEvent_t {
 };
 
 class MoveEvent;
+using MoveEvent_ptr = std::unique_ptr<MoveEvent>;
 
 struct MoveEventList {
-	std::list<MoveEvent*> moveEvent[MOVE_EVENT_LAST];
+	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 
 using VocEquipMap = std::map<uint16_t, bool>;
@@ -71,12 +72,12 @@ class MoveEvents final : public BaseEvents
 		void clear() override;
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
-		void addEvent(MoveEvent* moveEvent, int32_t id, MoveListMap& map);
+		void addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map);
 
-		void addEvent(MoveEvent* moveEvent, const Position& pos, MovePosListMap& map);
+		void addEvent(MoveEvent moveEvent, const Position& pos, MovePosListMap& map);
 		MoveEvent* getEvent(const Tile* tile, MoveEvent_t eventType);
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType, slots_t slot);

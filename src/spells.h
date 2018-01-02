@@ -56,18 +56,18 @@ class Spells final : public BaseEvents
 		static Position getCasterPosition(Creature* creature, Direction dir);
 		std::string getScriptBaseName() const override;
 
-		const std::map<std::string, InstantSpell*>& getInstantSpells() const {
+		const std::map<std::string, InstantSpell>& getInstantSpells() const {
 			return instants;
 		};
 
 	private:
 		void clear() override;
 		LuaScriptInterface& getScriptInterface() override;
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
-		std::map<uint16_t, RuneSpell*> runes;
-		std::map<std::string, InstantSpell*> instants;
+		std::map<uint16_t, RuneSpell> runes;
+		std::map<std::string, InstantSpell> instants;
 
 		friend class CombatSpell;
 		LuaScriptInterface scriptInterface { "Spell Interface" };

@@ -51,14 +51,13 @@ bool BaseEvents::loadFromXml()
 	loaded = true;
 
 	for (auto node : doc.child(scriptsName.c_str()).children()) {
-		Event* event = getEvent(node.name());
+		Event_ptr event = getEvent(node.name());
 		if (!event) {
 			continue;
 		}
 
 		if (!event->configureEvent(node)) {
 			std::cout << "[Warning - BaseEvents::loadFromXml] Failed to configure event" << std::endl;
-			delete event;
 			continue;
 		}
 
@@ -72,8 +71,8 @@ bool BaseEvents::loadFromXml()
 			success = event->loadFunction(node.attribute("function"));
 		}
 
-		if (!success || !registerEvent(event, node)) {
-			delete event;
+		if (success) {
+			registerEvent(std::move(event), node);
 		}
 	}
 	return true;

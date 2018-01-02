@@ -24,6 +24,9 @@
 #include "baseevents.h"
 #include "const.h"
 
+class TalkAction;
+using TalkAction_ptr = std::unique_ptr<TalkAction>;
+
 enum TalkActionResult_t {
 	TALKACTION_CONTINUE,
 	TALKACTION_BREAK,
@@ -70,8 +73,8 @@ class TalkActions final : public BaseEvents
 	private:
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 		void clear() override;
 
 		std::forward_list<TalkAction> talkActions;

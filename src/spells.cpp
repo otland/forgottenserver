@@ -99,14 +99,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 
 void Spells::clear()
 {
-	for (const auto& it : runes) {
-		delete it.second;
-	}
 	runes.clear();
-
-	for (const auto& it : instants) {
-		delete it.second;
-	}
 	instants.clear();
 
 	scriptInterface.reInitState();
@@ -122,30 +115,30 @@ std::string Spells::getScriptBaseName() const
 	return "spells";
 }
 
-Event* Spells::getEvent(const std::string& nodeName)
+Event_ptr Spells::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "rune") == 0) {
-		return new RuneSpell(&scriptInterface);
+		return Event_ptr(new RuneSpell(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
-		return new InstantSpell(&scriptInterface);
+		return Event_ptr(new InstantSpell(&scriptInterface));
 	}
 	return nullptr;
 }
 
-bool Spells::registerEvent(Event* event, const pugi::xml_node&)
+bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
+	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
 	if (instant) {
-		auto result = instants.emplace(instant->getWords(), instant);
+		auto result = instants.emplace(instant->getWords(), std::move(*instant));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 		}
 		return result.second;
 	}
 
-	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
+	RuneSpell* rune = dynamic_cast<RuneSpell*>(event.get());
 	if (rune) {
-		auto result = runes.emplace(rune->getRuneItemId(), rune);
+		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 		}
@@ -170,14 +163,14 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 	if (it == runes.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return &it->second;
 }
 
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 {
-	for (const auto& it : runes) {
-		if (strcasecmp(it.second->getName().c_str(), name.c_str()) == 0) {
-			return it.second;
+	for (auto& it : runes) {
+		if (strcasecmp(it.second.getName().c_str(), name.c_str()) == 0) {
+			return &it.second;
 		}
 	}
 	return nullptr;
@@ -187,14 +180,12 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 {
 	InstantSpell* result = nullptr;
 
-	for (const auto& it : instants) {
-		InstantSpell* instantSpell = it.second;
-
-		const std::string& instantSpellWords = instantSpell->getWords();
+	for (auto& it : instants) {
+		const std::string& instantSpellWords = it.second.getWords();
 		size_t spellLen = instantSpellWords.length();
 		if (strncasecmp(instantSpellWords.c_str(), words.c_str(), spellLen) == 0) {
 			if (!result || spellLen > result->getWords().length()) {
-				result = instantSpell;
+				result = &it.second;
 				if (words.length() == spellLen) {
 					break;
 				}
@@ -224,16 +215,16 @@ InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
 	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
 	if (it != instants.end()) {
-		return it->second;
+		return &it->second;
 	}
 	return nullptr;
 }
 
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
-	for (const auto& it : instants) {
-		if (strcasecmp(it.second->getName().c_str(), name.c_str()) == 0) {
-			return it.second;
+	for (auto& it : instants) {
+		if (strcasecmp(it.second.getName().c_str(), name.c_str()) == 0) {
+			return &it.second;
 		}
 	}
 	return nullptr;
