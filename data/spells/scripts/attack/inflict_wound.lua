@@ -18,7 +18,7 @@ function onTargetCreature(creature, target)
 	local min = (creature:getLevel() / 80) + (skill * 0.2) + 2
 	local max = (creature:getLevel() / 80) + (skill * 0.4) + 2
 	local damage = math.random(math.floor(min) * 1000, math.floor(max) * 1000) / 1000
-	creature:addDamageCondition(target, CONDITION_BLEEDING, 1, target:isPlayer() and damage / 4 or damage)
+	creature:addDamageCondition(target, CONDITION_BLEEDING, DAMAGELIST_LOGARITHMIC_DAMAGE, target:isPlayer() and damage / 4 or damage)
 end
 
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
