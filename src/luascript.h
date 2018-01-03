@@ -785,6 +785,7 @@ class LuaScriptInterface
 		static int luaCreatureSetDirection(lua_State* L);
 
 		static int luaCreatureGetHealth(lua_State* L);
+		static int luaCreatureSetHealth(lua_State* L);
 		static int luaCreatureAddHealth(lua_State* L);
 		static int luaCreatureGetMaxHealth(lua_State* L);
 		static int luaCreatureSetMaxHealth(lua_State* L);

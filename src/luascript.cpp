@@ -2149,6 +2149,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "setDirection", LuaScriptInterface::luaCreatureSetDirection);
 
 	registerMethod("Creature", "getHealth", LuaScriptInterface::luaCreatureGetHealth);
+	registerMethod("Creature", "setHealth", LuaScriptInterface::luaCreatureSetHealth);
 	registerMethod("Creature", "addHealth", LuaScriptInterface::luaCreatureAddHealth);
 	registerMethod("Creature", "getMaxHealth", LuaScriptInterface::luaCreatureGetMaxHealth);
 	registerMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
@@ -7074,6 +7075,26 @@ int LuaScriptInterface::luaCreatureGetHealth(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureSetHealth(lua_State* L)
+{
+	// creature:setHealth(health)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	creature->health = std::min<int32_t>(getNumber<uint32_t>(L, 2), creature->healthMax);
+	g_game.addCreatureHealth(creature);
+
+	Player* player = creature->getPlayer();
+	if (player) {
+		player->sendStats();
+	}
+	pushBoolean(L, true);
 	return 1;
 }
 
