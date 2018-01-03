@@ -1053,10 +1053,16 @@ function doSetCreatureOutfit(cid, outfit, time)
 end
 
 function doTileAddItemEx(pos, uid, flags)
+	local tile = Tile(pos)
+	if not tile then
+		return false
+	end
+
 	local item = Item(uid)
 	if item then
 		return tile:addItemEx(item, flags)
 	end
+
 	return false
 end
 
