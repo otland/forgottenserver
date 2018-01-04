@@ -1791,6 +1791,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RELOAD_TYPE_TALKACTIONS)
 	registerEnum(RELOAD_TYPE_WEAPONS)
 
+	registerEnum(ZONE_PROTECTION)
+	registerEnum(ZONE_NOPVP)
+	registerEnum(ZONE_PVP)
+	registerEnum(ZONE_NOLOGOUT)
+	registerEnum(ZONE_NORMAL)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2178,6 +2184,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getPathTo", LuaScriptInterface::luaCreatureGetPathTo);
 	registerMethod("Creature", "move", LuaScriptInterface::luaCreatureMove);
+
+	registerMethod("Creature", "getZone", LuaScriptInterface::luaCreatureGetZone);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
@@ -7524,6 +7532,18 @@ int LuaScriptInterface::luaCreatureMove(lua_State* L)
 			return 1;
 		}
 		lua_pushnumber(L, g_game.internalMoveCreature(*creature, *tile, getNumber<uint32_t>(L, 3)));
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
+{
+	// creature:getZone()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnumber(L, creature->getZone());
+	} else {
+		lua_pushnil(L);
 	}
 	return 1;
 }
