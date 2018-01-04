@@ -3,80 +3,105 @@
 	<!-- Rods -->
 	<wand id="23721" level="1" mana="1" min="3" max="7" type="ice"> <!-- The Chiller -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="2182" level="7" mana="2" min="8" max="18" type="earth"> <!-- Snakebit Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="2186" level="13" mana="3" min="13" max="25" type="ice"> <!-- Moonlight Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="2185" level="19" mana="5" min="27" max="33" type="death"> <!-- Necrotic Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="8911" level="22" mana="5" min="27" max="33" type="ice"> <!-- Northwind Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="2181" level="26" mana="8" min="42" max="48" type="earth"> <!-- Terra Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="2183" level="33" mana="13" min="55" max="75" type="ice"> <!-- Hailstorm Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="8912" level="37" mana="13" min="55" max="75" type="earth"> <!-- Springsprout Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="8910" level="42" mana="13" min="55" max="75" type="death"> <!-- Underworld Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="13872" level="40" mana="13" min="55" max="75" type="ice"> <!-- Shimmer Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="18411" level="65" mana="17" min="70" max="100" type="earth"> <!-- Muck Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 	<wand id="18412" level="65" mana="17" min="70" max="100" type="ice"> <!-- Glacial Rod -->
 		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
 	</wand>
 
 	<!-- Wands -->
 	<wand id="23719" level="1" mana="1" min="3" max="7" type="fire"> <!-- The Scorcher -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="2190" level="7" mana="2" min="8" max="18" type="energy"> <!-- Wand of Vortex -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="2191" level="13" mana="3" min="13" max="25" type="fire"> <!-- Wand of Dragonbreath -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="2188" level="19" mana="5" min="27" max="33" type="death"> <!-- Wand of Decay -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="8921" level="22" mana="5" min="27" max="33" type="fire"> <!-- Wand of Draconia -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="2189" level="26" mana="8" min="42" max="48" type="energy"> <!-- Wand of Cosmic Energy -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="2187" level="33" mana="13" min="55" max="75" type="fire"> <!-- Wand of Inferno -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="8920" level="37" mana="13" min="55" max="75" type="energy"> <!-- Wand of Starmstorm -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="8922" level="42" mana="13" min="55" max="75" type="death"> <!-- Wand of Voodoo -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="13760" level="37" mana="13" min="55" max="75" type="death"> <!-- Wand of Dimensions -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="13880" level="40" mana="13" min="55" max="75" type="energy"> <!-- Shimmer Wand -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="18390" level="65" mana="17" min="70" max="100" type="energy"> <!-- Wand of Defiance -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 	<wand id="18409" level="65" mana="17" min="70" max="100" type="fire"> <!-- Wand of Everblazing -->
 		<vocation name="Sorcerer" />
+		<vocation name="Master Sorcerer" showInDescription="0" />
 	</wand>
 
 	<!-- Swords -->
