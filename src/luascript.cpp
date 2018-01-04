@@ -1791,6 +1791,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RELOAD_TYPE_TALKACTIONS)
 	registerEnum(RELOAD_TYPE_WEAPONS)
 
+	registerEnum(ZONE_PROTECTION)
+	registerEnum(ZONE_NOPVP)
+	registerEnum(ZONE_PVP)
+	registerEnum(ZONE_NOLOGOUT)
+	registerEnum(ZONE_NORMAL)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2178,6 +2184,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getPathTo", LuaScriptInterface::luaCreatureGetPathTo);
 	registerMethod("Creature", "move", LuaScriptInterface::luaCreatureMove);
 
+	registerMethod("Creature", "getZone", LuaScriptInterface::luaCreatureGetZone);
+
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2344,8 +2352,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "hasChaseMode", LuaScriptInterface::luaPlayerHasChaseMode);
 	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
 	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
-
-	registerMethod("Player", "getZone", LuaScriptInterface::luaPlayerGetZone);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -7509,6 +7515,18 @@ int LuaScriptInterface::luaCreatureMove(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
+{
+	// creature:getZone()
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnumber(L, creature->getZone());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Player
 int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
@@ -9565,18 +9583,6 @@ int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->fightMode);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerGetZone(lua_State* L)
-{
-	// player:getZone()
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->getZone());
 	} else {
 		lua_pushnil(L);
 	}

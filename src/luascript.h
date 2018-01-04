@@ -814,6 +814,8 @@ class LuaScriptInterface
 		static int luaCreatureGetPathTo(lua_State* L);
 		static int luaCreatureMove(lua_State* L);
 
+		static int luaCreatureGetZone(lua_State* L);
+
 		// Player
 		static int luaPlayerCreate(lua_State* L);
 
@@ -980,8 +982,6 @@ class LuaScriptInterface
 		static int luaPlayerHasChaseMode(lua_State* L);
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
-
-		static int luaPlayerGetZone(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
