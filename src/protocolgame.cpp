@@ -517,8 +517,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 		for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 			msg.addItem(*it);
 
-			count++;
-			if (tile->getPosition() == player->getPosition() && count == 9) {
+			if (++count == 9 && tile->getPosition() == player->getPosition()) {
 				break;
 			} else if (count == 10) {
 				return;
