@@ -518,9 +518,9 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 			msg.addItem(*it);
 
 			count++;
-			if (tile->getPosition() == player->getPosition() && count == 8) {
+			if (tile->getPosition() == player->getPosition() && count == 9) {
 				break;
-			} else if (count == 9) {
+			} else if (count == 10) {
 				return;
 			}
 		}
@@ -534,7 +534,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 				continue;
 			}
 
-			if (tile->getPosition() == player->getPosition() && count == 8 && !playerAdded) {
+			if (tile->getPosition() == player->getPosition() && count == 9 && !playerAdded) {
 				creature = player;
 			}
 
