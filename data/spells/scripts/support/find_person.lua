@@ -20,17 +20,17 @@ local directions = {
 
 local messages = {
 	[DISTANCE_BESIDE] = {
-		[LEVEL_LOWER] = " is below you",
-		[LEVEL_SAME] = " is standing next to you",
-		[LEVEL_HIGHER] = " is above you"
+		[LEVEL_LOWER] = "is below you",
+		[LEVEL_SAME] = "is standing next to you",
+		[LEVEL_HIGHER] = "is above you"
 	},
 	[DISTANCE_CLOSE] = {
-		[LEVEL_LOWER] = " is on a lower level to the ",
-		[LEVEL_SAME] = " is to the ",
-		[LEVEL_HIGHER] = " is on a higher level to the "
+		[LEVEL_LOWER] = "is on a lower level to the",
+		[LEVEL_SAME] = "is to the",
+		[LEVEL_HIGHER] = "is on a higher level to the"
 	},
-	[DISTANCE_FAR] = " is far to the ",
-	[DISTANCE_VERYFAR] =  " is very far to the "
+	[DISTANCE_FAR] = "is far to the",
+	[DISTANCE_VERYFAR] = "is very far to the"
 }
 
 function onCastSpell(creature, variant)
@@ -43,7 +43,12 @@ function onCastSpell(creature, variant)
 
 	local targetPosition = target:getPosition()
 	local creaturePosition = creature:getPosition()
-	local positionDifference = {x = creaturePosition.x - targetPosition.x, y = creaturePosition.y - targetPosition.y, z = creaturePosition.z - targetPosition.z}
+	local positionDifference = {
+		x = creaturePosition.x - targetPosition.x,
+		y = creaturePosition.y - targetPosition.y,
+		z = creaturePosition.z - targetPosition.z
+	}
+
 	local maxPositionDifference, direction = math.max(math.abs(positionDifference.x), math.abs(positionDifference.y))
 	if maxPositionDifference >= 5 then
 		local positionTangent = positionDifference.x ~= 0 and positionDifference.y / positionDifference.x or 10
@@ -58,7 +63,12 @@ function onCastSpell(creature, variant)
 
 	local level = positionDifference.z > 0 and LEVEL_HIGHER or positionDifference.z < 0 and LEVEL_LOWER or LEVEL_SAME
 	local distance = maxPositionDifference < 5 and DISTANCE_BESIDE or maxPositionDifference < 101 and DISTANCE_CLOSE or maxPositionDifference < 275 and DISTANCE_FAR or DISTANCE_VERYFAR
-	creature:sendTextMessage(MESSAGE_INFO_DESCR, target:getName() ..  (messages[distance][level] or messages[distance]) .. (directions[direction] or "") .. ".")
+	local message = messages[distance][level] or messages[distance]
+	if distance ~= DISTANCE_BESIDE then
+		message = message .. " " .. directions[direction]
+	end
+
+	creature:sendTextMessage(MESSAGE_INFO_DESCR, target:getName() .. " " .. message .. ".")
 	creaturePosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	return true
 end
