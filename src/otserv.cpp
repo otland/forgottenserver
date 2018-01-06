@@ -34,6 +34,7 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include <fstream>
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -122,6 +123,21 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
 	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
 	std::cout << std::endl;
+
+	// check if config.lua or config.lua.dist exist
+	std::ifstream c_test("./config.lua");
+	if (!c_test.is_open()) {
+		std::ifstream config_lua_dist("./config.lua.dist");
+		if (config_lua_dist.is_open()) {
+			std::cout << ">> copying config.lua.dist to config.lua" << std::endl;
+			std::ofstream config_lua("config.lua");
+			config_lua << config_lua_dist.rdbuf();
+			config_lua.close();
+			config_lua_dist.close();
+		}
+	} else {
+		c_test.close();
+	}
 
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
