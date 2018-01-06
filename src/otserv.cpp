@@ -127,12 +127,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// check if config.lua or config.lua.dist exist
 	std::ifstream c_test("./config.lua");
 	if (!c_test.is_open()) {
-		std::cout << ">> config.lua does not exist!" << std::endl;
 		std::ifstream config_lua_dist("./config.lua.dist");
-
 		if (config_lua_dist.is_open()) {
 			std::cout << ">> copying config.lua.dist to config.lua" << std::endl;
-
 			std::ofstream config_lua("config.lua");
 			config_lua << config_lua_dist.rdbuf();
 			config_lua.close();
