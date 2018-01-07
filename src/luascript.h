@@ -554,6 +554,8 @@ class LuaScriptInterface
 		static int luaGameGetClientVersion(lua_State* L);
 
 		static int luaGameReload(lua_State* L);
+	
+		static int luaGameSendAnimatedText(lua_State* L);
 
 		// Variant
 		static int luaVariantCreate(lua_State* L);
