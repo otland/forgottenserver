@@ -48,8 +48,8 @@ function Position:moveUpstairs()
 end
 
 function Position:isInRange(from, to)
-	-- No matter what courner from and to is, we want to make 
-	-- life easier by calculation north-west and south-east
+	-- No matter what corner from and to is, we want to make 
+	-- life easier by calculating north-west and south-east
 	local zone = {
 		nW = {
 			x = (from.x < to.x and from.x or to.x),
@@ -62,6 +62,7 @@ function Position:isInRange(from, to)
 			z = (to.z > from.z and to.z or from.z)
 		}
 	}
+
 	if  self.x >= zone.nW.x and self.x <= zone.sE.x
 	and self.y >= zone.nW.y and self.y <= zone.sE.y 
 	and self.z >= zone.nW.z and self.z <= zone.sE.z then
