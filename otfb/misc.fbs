@@ -1,0 +1,19 @@
+namespace tfs;
+
+struct Identifier32
+{
+	id: uint32;
+}
+
+struct RelativePosition
+{
+	x: uint8;
+	y: uint8;
+}
+
+struct AbsolutePosition
+{
+	x: uint16;
+	y: uint16;
+	z: uint8;
+}

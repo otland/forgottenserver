@@ -1,0 +1,59 @@
+include "misc.fbs";
+include "item.fbs";
+
+namespace tfs.map;
+
+file_identifier "OTFM";
+
+enum TileFlags: uint32 (bit_flags)
+{
+	ProtectionZone,
+	NoPvpZone,
+	NoLogout,
+	PvpZone
+}
+
+table Tile
+{
+	position: RelativePosition(required);
+	houseId: uint32;
+	flags: TileFlags;
+	ground: items.Item;
+	items: [items.Item];
+}
+
+table Sector
+{
+	position: AbsolutePosition(required);
+	tiles: [Tile];
+}
+
+struct ItemsVersion
+{
+	major: uint32;
+	minor: uint32;
+}
+
+struct MapHeader
+{
+	version: uint32;
+	width: uint16;
+	height: uint16;
+	itemsVersion: ItemsVersion;
+}
+
+table Town
+{
+	id: Identifier32(required);
+	name: string(required);
+	templePositon: AbsolutePosition(required);
+}
+
+table MapRoot
+{
+	header: MapHeader(required);
+	sectors: [Sector];
+	towns: [Town];
+}
+
+root_type MapRoot;

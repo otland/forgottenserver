@@ -1,0 +1,59 @@
+include "misc.fbs";
+
+namespace tfs.items;
+
+enum DecayState : uint8
+{
+	Decaying,
+	NotDecaying,
+	Pending
+}
+
+struct SleeperInfo
+{
+	sleeperGuid: uint64; // TODO: Should be 32 bit?
+	sleepStart: uint64;
+}
+
+//Describes an item's properties
+table ItemAttributes
+{
+	count: uint16; // TODO: should charges be separate?
+	actionId: uint16;
+	uniqueId: uint16;
+
+	text: string;
+	writtenDate: uint64;
+	writtenBy: string;
+	description: string;
+	duration: int32;
+	decayState: DecayState;
+
+	name: string;
+	article: string;
+	pluralName: string;
+
+	weight: uint64;
+	attack: uint64; // TODO: Should be 32 bit?
+	defense: uint64; // TODO: Should be 32 bit?
+	extraDefense: uint64; // TODO: Should be 32 bit?
+	armor: uint64; // TODO: Should be 32 bit?
+	hitChance: uint8;
+	shootRange: uint8;
+
+	depotId: uint32; // TODO: Should be 16 bit?
+	houseDoorId: uint16; // TODO: Should be 8 bit?
+
+	sleeper: SleeperInfo;
+
+	teleportDestination: AbsolutePosition;
+}
+
+// Describes a serialized item (either on map or in the database)
+table Item
+{
+	id: uint16;
+	attributes: ItemAttributes;
+	children: [Item];
+}
+

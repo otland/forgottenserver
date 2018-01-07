@@ -1,0 +1,72 @@
+namespace tfs.items;
+
+file_identifier "OTFI";
+
+struct ItemTypesHeader
+{
+	majorVersion: uint32;
+	minorVersion: uint32;
+	buildNumber: uint32;
+}
+
+struct LightSource
+{
+	level: uint8;
+	color: uint8;
+}
+
+struct IdDescriptor
+{
+	serverId: uint16;
+	clientId: uint16;
+}
+
+enum ItemGroup: uint8
+{
+	Deprecated,
+	Container,
+	Door,
+	MagicField,
+	Teleport
+}
+
+enum ItemFlags: uint32(bit_flags)
+{
+	BlockSolid,
+	BlockProjectile,
+	BlockPathFind,
+	HasHeight,
+	Usable,
+	Pickupable,
+	Movable,
+	Stackable,
+	AlwaysOnTop,
+	IsVertical,
+	IsHorizontal,
+	IsHangable,
+	IsAnimation,
+	AllowDistanceRead,
+	Rotatable,
+	CanReadText,
+	LookThrough,
+	ForceUsable,
+}
+
+table ItemType
+{
+	idDescriptor: IdDescriptor(required);
+	group: ItemGroup;
+	speed: uint16;
+	light: LightSource;
+	topOrderPriority: uint8;
+	wareId: uint16;
+	flags: ItemFlags;
+}
+
+table ItemTypesRoot
+{
+	header: ItemTypesHeader(required);
+	itemTypes: [ItemType];
+}
+
+root_type ItemTypesRoot;
