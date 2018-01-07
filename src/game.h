@@ -449,7 +449,11 @@ class Game
 		static void addMagicEffect(const SpectatorHashSet& spectators, const Position& pos, uint8_t effect);
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 		static void addDistanceEffect(const SpectatorHashSet& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
-
+	
+		// animated text support for 10.98/99 otclient
+		void addAnimatedText(const std::string& message, const Position& pos, TextColor_t color);
+		static void addAnimatedText(const SpectatorHashSet& spectators, const std::string& message, const Position& pos, TextColor_t color);
+	
 		void startDecay(Item* item);
 		int32_t getLightHour() const {
 			return lightHour;
