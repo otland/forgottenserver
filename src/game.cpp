@@ -4234,6 +4234,23 @@ void Game::addCreatureHealth(const SpectatorHashSet& spectators, const Creature*
 	}
 }
 
+void Game::addAnimatedText(const std::string& message, const Position& pos, TextColor_t color)
+{
+	SpectatorHashSet spectators;
+	map.getSpectators(spectators, pos, true, true);
+	addAnimatedText(spectators, message, pos, color);
+}
+
+
+void Game::addAnimatedText(const SpectatorHashSet& spectators, const std::string& message, const Position& pos, TextColor_t color)
+{
+	for (Creature* spectator : spectators) {
+		if (Player* tmpPlayer = spectator->getPlayer()) {
+			tmpPlayer->sendAnimatedText(message, pos, color);
+		}
+	}
+}
+
 void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
 	SpectatorHashSet spectators;
