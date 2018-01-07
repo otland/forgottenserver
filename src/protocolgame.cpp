@@ -2707,6 +2707,20 @@ void ProtocolGame::sendVIPEntries()
 	}
 }
 
+void ProtocolGame::sendAnimatedText(const std::string& message, const Position& pos, TextColor_t color)
+{
+	if (!canSee(pos)) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x84);
+	msg.addPosition(pos);
+	msg.addByte(color);
+	msg.addString(message);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendSpellCooldown(uint8_t spellId, uint32_t time)
 {
 	NetworkMessage msg;
