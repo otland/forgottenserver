@@ -9544,10 +9544,10 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 		return 1;
 	}
 
-	std::vector<InstantSpell> spells;
-	for (auto spell : g_spells->getInstantSpells()) {
+	std::vector<InstantSpell*> spells;
+	for (auto& spell : g_spells->getInstantSpells()) {
 		if (spell.second.canCast(player)) {
-			spells.push_back(spell.second);
+			spells.push_back(&spell.second);
 		}
 	}
 
@@ -9555,7 +9555,7 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 
 	int index = 0;
 	for (auto spell : spells) {
-		pushInstantSpell(L, spell);
+		pushInstantSpell(L, *spell);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
