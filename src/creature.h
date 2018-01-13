@@ -290,10 +290,10 @@ class Creature : virtual public Thing
 			return summons;
 		}
 
-		virtual int32_t getArmor() const {
+		virtual uint32_t getArmor() const {
 			return 0;
 		}
-		virtual int32_t getDefense() const {
+		virtual uint32_t getDefense() const {
 			return 0;
 		}
 		virtual float getAttackFactor() const {

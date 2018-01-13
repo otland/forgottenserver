@@ -91,10 +91,10 @@ class Monster final : public Creature
 		RaceType_t getRace() const override {
 			return mType->info.race;
 		}
-		int32_t getArmor() const override {
+		uint32_t getArmor() const override {
 			return mType->info.armor;
 		}
-		int32_t getDefense() const override {
+		uint32_t getDefense() const override {
 			return mType->info.defense;
 		}
 		bool isPushable() const override {

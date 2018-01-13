@@ -520,8 +520,8 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_DEFENSE: {
-			int32_t defense;
-			if (!propStream.read<int32_t>(defense)) {
+			uint32_t defense;
+			if (!propStream.read<uint32_t>(defense)) {
 				return ATTR_READ_ERROR;
 			}
 
@@ -540,8 +540,8 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_ARMOR: {
-			int32_t armor;
-			if (!propStream.read<int32_t>(armor)) {
+			uint32_t armor;
+			if (!propStream.read<uint32_t>(armor)) {
 				return ATTR_READ_ERROR;
 			}
 
@@ -751,7 +751,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 
 	if (hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
 		propWriteStream.write<uint8_t>(ATTR_DEFENSE);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_DEFENSE));
+		propWriteStream.write<uint32_t>(getIntAttr(ITEM_ATTRIBUTE_DEFENSE));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {
@@ -761,7 +761,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 
 	if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
 		propWriteStream.write<uint8_t>(ATTR_ARMOR);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_ARMOR));
+		propWriteStream.write<uint32_t>(getIntAttr(ITEM_ATTRIBUTE_ARMOR));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
@@ -928,7 +928,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 			}
 
-			if (defense != 0 || extraDefense != 0) {
+			if (defense > 0 || extraDefense != 0) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1092,11 +1092,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		if (!begin) {
 			s << ')';
 		}
-	} else if (it.armor != 0 || (item && item->getArmor() != 0) || it.showAttributes) {
+	} else if (it.armor > 0 || (item && item->getArmor() > 0) || it.showAttributes) {
 		bool begin = true;
 
 		int32_t armor = (item ? item->getArmor() : it.armor);
-		if (armor != 0) {
+		if (armor > 0) {
 			s << " (Arm:" << armor;
 			begin = false;
 		}

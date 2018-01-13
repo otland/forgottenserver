@@ -620,7 +620,7 @@ class Item : virtual public Thing
 		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
 			getAttributes()->setCustomAttribute(key, value);
 		}
-		
+
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
 			return getAttributes()->getCustomAttribute(key);
 		}
@@ -817,13 +817,13 @@ class Item : virtual public Thing
 			}
 			return items[id].attack;
 		}
-		int32_t getArmor() const {
+		uint32_t getArmor() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
 				return getIntAttr(ITEM_ATTRIBUTE_ARMOR);
 			}
 			return items[id].armor;
 		}
-		int32_t getDefense() const {
+		uint32_t getDefense() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
 				return getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
 			}
