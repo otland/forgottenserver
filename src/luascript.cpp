@@ -66,7 +66,6 @@ void ScriptEnvironment::resetEnv()
 	callbackId = 0;
 	timerEvent = false;
 	interface = nullptr;
-	localMap.clear();
 	tempResults.clear();
 
 	auto pair = tempItems.equal_range(this);
