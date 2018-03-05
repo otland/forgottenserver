@@ -1031,6 +1031,8 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		if (bed) {
 			bed->wakeUp(this);
 		}
+		
+		Game::updatePremium(IOLoginData::loadAccount(accountNumber));
 
 		std::cout << name << " has logged in." << std::endl;
 
