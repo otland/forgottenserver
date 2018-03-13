@@ -1,6 +1,6 @@
 function onStepOut(creature, item, position, fromPosition)
 	local tile = Tile(position)
-	if tile:getCreatureCount() > 0 then
+	if tile:getCreatureCount() > 1 then
 		return true
 	end
 

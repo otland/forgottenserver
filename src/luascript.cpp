@@ -504,14 +504,14 @@ int LuaScriptInterface::luaErrorHandler(lua_State* L)
 	return 1;
 }
 
-bool LuaScriptInterface::callFunction(int params)
+bool LuaScriptInterface::callFunction(int params, bool defaultReturn /* = false */)
 {
 	bool result = false;
 	int size = lua_gettop(luaState);
 	if (protectedCall(luaState, params, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::getString(luaState, -1));
 	} else {
-		result = LuaScriptInterface::getBoolean(luaState, -1);
+		result = LuaScriptInterface::getBoolean(luaState, -1, defaultReturn);
 	}
 
 	lua_pop(luaState, 1);
@@ -5065,7 +5065,7 @@ int LuaScriptInterface::luaTileHasFlag(lua_State* L)
 
 int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 {
-	// tile:queryAdd(thing[, flags])
+	// tile:queryAdd(thing[, flags = FLAG_PATHFINDING])
 	Tile* tile = getUserdata<Tile>(L, 1);
 	if (!tile) {
 		lua_pushnil(L);
@@ -5074,7 +5074,7 @@ int LuaScriptInterface::luaTileQueryAdd(lua_State* L)
 
 	Thing* thing = getThing(L, 2);
 	if (thing) {
-		uint32_t flags = getNumber<uint32_t>(L, 3, 0);
+		uint32_t flags = getNumber<uint32_t>(L, 3, FLAG_PATHFINDING);
 		lua_pushnumber(L, tile->queryAdd(0, *thing, 1, flags));
 	} else {
 		lua_pushnil(L);
@@ -7358,7 +7358,7 @@ int LuaScriptInterface::luaCreatureTeleportTo(lua_State* L)
 	}
 
 	const Position oldPosition = creature->getPosition();
-	if (g_game.internalTeleport(creature, position, pushMovement) != RETURNVALUE_NOERROR) {
+	if (g_game.internalTeleport(creature, position, pushMovement, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
 		pushBoolean(L, false);
 		return 1;
 	}

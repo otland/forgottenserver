@@ -72,27 +72,19 @@ void Teleport::addThing(Thing* thing)
 
 void Teleport::addThing(int32_t, Thing* thing)
 {
-	Tile* destTile = g_game.map.getTile(destPos);
-	if (!destTile) {
+	if (g_game.internalTeleport(thing, destPos) != RETURNVALUE_NOERROR) {
 		return;
 	}
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;
-
 	if (Creature* creature = thing->getCreature()) {
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? DIRECTION_WEST : DIRECTION_EAST);
-		g_game.map.moveCreature(*creature, *destTile);
-		if (effect != CONST_ME_NONE) {
-			g_game.addMagicEffect(origPos, effect);
-			g_game.addMagicEffect(destTile->getPosition(), effect);
-		}
-	} else if (Item* item = thing->getItem()) {
-		if (effect != CONST_ME_NONE) {
-			g_game.addMagicEffect(destTile->getPosition(), effect);
-			g_game.addMagicEffect(item->getPosition(), effect);
-		}
-		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr);
+	}
+
+	if (effect != CONST_ME_NONE) {
+		g_game.addMagicEffect(thing->getPosition(), effect);
+		g_game.addMagicEffect(destPos, effect);
 	}
 }
 

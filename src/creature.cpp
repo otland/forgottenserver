@@ -389,16 +389,12 @@ void Creature::onRemoveTileItem(const Tile* tile, const Position& pos, const Ite
 	}
 }
 
-void Creature::onCreatureAppear(Creature* creature, bool isLogin)
+void Creature::onCreatureAppear(Creature* creature, bool)
 {
 	if (creature == this) {
 		if (useCacheMap()) {
 			isMapLoaded = true;
 			updateMapCache();
-		}
-
-		if (isLogin) {
-			setLastPosition(getPosition());
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
