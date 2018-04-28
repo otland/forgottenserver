@@ -777,10 +777,7 @@ AStarNode* AStarNodes::getBestNode(const Position& targetPos)
 		return nullptr;
 	}
 
-	int32_t bestNodeF = 1000000;
-	uint32_t bestNode = 0;
 	int32_t diffNode = 0;
-
 	int32_t best_node_f = std::numeric_limits<int32_t>::max();
 	int32_t best_node = -1;
 	for (size_t i = 0; i < curNode; i++) {
