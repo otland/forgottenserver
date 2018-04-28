@@ -781,10 +781,10 @@ AStarNode* AStarNodes::getBestNode(const Position& targetPos)
 	int32_t best_node_f = std::numeric_limits<int32_t>::max();
 	int32_t best_node = -1;
 	for (size_t i = 0; i < curNode; i++) {
-		const int_fast32_t Sx = nodes[0]->x;
-		const int_fast32_t Sy = nodes[0]->y;
-		const int_fast32_t Cx = nodes[i]->x;
-		const int_fast32_t Cy = nodes[i]->y;
+		const int_fast32_t Sx = nodes[0].x;
+		const int_fast32_t Sy = nodes[0].y;
+		const int_fast32_t Cx = nodes[i].x;
+		const int_fast32_t Cy = nodes[i].y;
 		int32_t SdiffX = std::abs(targetPos.x - Sx);
 		int32_t SdiffY = std::abs(targetPos.y - Sy);
 		int32_t NdiffX = std::abs(targetPos.x - Cx);
