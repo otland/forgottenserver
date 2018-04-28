@@ -56,7 +56,7 @@ class AStarNodes
 		AStarNodes(uint32_t x, uint32_t y);
 
 		AStarNode* createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f);
-		AStarNode* getBestNode();
+		AStarNode* getBestNode(const Position& targetPos);
 		void closeNode(AStarNode* node);
 		void openNode(AStarNode* node);
 		int_fast32_t getClosedNodes() const;
@@ -251,8 +251,8 @@ class Map
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-		bool getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList,
-		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
+		bool getPathMatching(const Creature& creature, const Position& targetPos, std::forward_list<Direction>& dirList,
+							const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;
 
