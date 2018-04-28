@@ -561,7 +561,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::forward_list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -588,7 +588,7 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 
 	AStarNode* found = nullptr;
 	while (fpp.maxSearchDist != 0 || nodes.getClosedNodes() < 100) {
-		AStarNode* n = nodes.getBestNode();
+		AStarNode* n = nodes.getBestNode(targetPos);
 		if (!n) {
 			if (found) {
 				break;
@@ -771,17 +771,30 @@ AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint32_t x, uint32_t y,
 	return node;
 }
 
-AStarNode* AStarNodes::getBestNode()
+AStarNode* AStarNodes::getBestNode(const Position& targetPos)
 {
 	if (curNode == 0) {
 		return nullptr;
 	}
 
+	int32_t bestNodeF = 1000000;
+	uint32_t bestNode = 0;
+	int32_t diffNode = 0;
+
 	int32_t best_node_f = std::numeric_limits<int32_t>::max();
 	int32_t best_node = -1;
 	for (size_t i = 0; i < curNode; i++) {
-		if (openNodes[i] && nodes[i].f < best_node_f) {
-			best_node_f = nodes[i].f;
+		const int_fast32_t Sx = nodes[0]->x;
+		const int_fast32_t Sy = nodes[0]->y;
+		const int_fast32_t Cx = nodes[i]->x;
+		const int_fast32_t Cy = nodes[i]->y;
+		int32_t SdiffX = std::abs(targetPos.x - Sx);
+		int32_t SdiffY = std::abs(targetPos.y - Sy);
+		int32_t NdiffX = std::abs(targetPos.x - Cx);
+		int32_t NdiffY = std::abs(targetPos.y - Cy);
+		diffNode = ((nodes[i].f+(((NdiffX-SdiffX)*5)+((NdiffY-SdiffY)*5)))+(std::max(NdiffX, NdiffY)*5));
+		if (openNodes[i] && diffNode < best_node_f) {
+			best_node_f = diffNode;
 			best_node = i;
 		}
 	}
