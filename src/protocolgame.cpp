@@ -285,7 +285,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	try {
 		tokenTime = std::stoul(sessionArgs[3]);
 	} catch (const std::invalid_argument&) {
-		disconnectClient("Malformed token packet.")
+		disconnectClient("Malformed token packet.");
 		return;
 	} catch (const std::out_of_range&) {
 		disconnectClient("Token time is too long.");
