@@ -72,6 +72,9 @@ class Guild
 		uint32_t getResidenceId() const {
 			return residenceId;
 		}
+		void setResidenceId(uint32_t residenceId) {
+			this->residenceId = residenceId;
+		}
 
 	private:
 		std::list<Player*> membersOnline;
