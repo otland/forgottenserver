@@ -2410,6 +2410,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Guild", "getMotd", LuaScriptInterface::luaGuildGetMotd);
 	registerMethod("Guild", "setMotd", LuaScriptInterface::luaGuildSetMotd);
+	
+	registerMethod("Guild", "getResidenceId", LuaScriptInterface::luaGuildGetResidenceId);
 
 	// Group
 	registerClass("Group", "", LuaScriptInterface::luaGroupCreate);
@@ -2492,6 +2494,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
 
 	registerMethod("House", "kickPlayer", LuaScriptInterface::luaHouseKickPlayer);
+	
+	registerMethod("House", "isGuildHall", LuaScriptInterface::luaHouseIsGuildHall);
+	
+	registerMethod("House", "getGuildId", LuaScriptInterface::luaHouseGetGuildId);
+	registerMethod("House", "setGuildId", LuaScriptInterface::luaHouseSetGuildId);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -10124,6 +10131,18 @@ int LuaScriptInterface::luaGuildSetMotd(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGuildGetResidenceId(lua_State* L)
+{
+	// guild:getResidenceId()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getResidenceId());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Group
 int LuaScriptInterface::luaGroupCreate(lua_State* L)
 {
@@ -10920,6 +10939,46 @@ int LuaScriptInterface::luaHouseKickPlayer(lua_State* L)
 	}
 
 	pushBoolean(L, house->kickPlayer(getPlayer(L, 2), getPlayer(L, 3)));
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseIsGuildHall(lua_State* L)
+{
+	// house:isGuildHall()
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushBoolean(L, house->isGuildHall());
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetGuildId(lua_State* L)
+{
+	// house:getGuildId()
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_pushnumber(L, house->getGuildId());
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseSetGuildId(lua_State* L)
+{
+	// house:setGuildId(guildId)
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	house->setGuildId(getNumber<uint32_t>(L, 2));
+	lua_pushboolean(L, true);
 	return 1;
 }
 

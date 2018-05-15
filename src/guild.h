@@ -69,6 +69,9 @@ class Guild
 		void setMotd(const std::string& motd) {
 			this->motd = motd;
 		}
+		uint32_t getResidenceId() const {
+			return residenceId;
+		}
 
 	private:
 		std::list<Player*> membersOnline;
@@ -77,6 +80,7 @@ class Guild
 		std::string motd;
 		uint32_t id;
 		uint32_t memberCount = 0;
+		uint32_t residenceId;
 };
 
 #endif

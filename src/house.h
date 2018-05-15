@@ -199,6 +199,19 @@ class House
 		uint32_t getId() const {
 			return id;
 		}
+		
+		void setGuildHall(bool guildHall) {
+			this->guildHall = guildHall;
+		}
+		bool isGuildHall() const {
+			return guildHall;
+		}
+		void setGuildId(uint32_t guildId) {
+			this->guildId = guildId;
+		}
+		bool getGuildId() const {
+			return guildId;
+		}
 
 		void addDoor(Door* door);
 		void removeDoor(Door* door);
@@ -250,10 +263,12 @@ class House
 		uint32_t rentWarnings = 0;
 		uint32_t rent = 0;
 		uint32_t townId = 0;
+		uint32_t guildId;
 
 		Position posEntry = {};
 
 		bool isLoaded = false;
+		bool guildHall = false;
 };
 
 using HouseMap = std::map<uint32_t, House*>;

@@ -1037,6 +1037,8 @@ class LuaScriptInterface
 
 		static int luaGuildGetMotd(lua_State* L);
 		static int luaGuildSetMotd(lua_State* L);
+		
+		static int luaGuildGetResidenceId(lua_State* L);
 
 		// Group
 		static int luaGroupCreate(lua_State* L);
@@ -1115,6 +1117,11 @@ class LuaScriptInterface
 		static int luaHouseSetAccessList(lua_State* L);
 
 		static int luaHouseKickPlayer(lua_State* L);
+		
+		static int luaHouseIsGuildHall(lua_State* L);
+		
+		static int luaHouseSetGuildId(lua_State* L);
+		static int luaHouseGetGuildId(lua_State* L);
 
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);
