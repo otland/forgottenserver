@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ class AccessList
 		void parseList(const std::string& list);
 		void addPlayer(const std::string& name);
 		void addGuild(const std::string& name);
+		void addGuildRank(const std::string& name, const std::string& rankName);
 		void addExpression(const std::string& expression);
 
 		bool isInList(const Player* player);
@@ -46,7 +47,7 @@ class AccessList
 	private:
 		std::string list;
 		std::unordered_set<uint32_t> playerList;
-		std::unordered_set<uint32_t> guildList; // TODO: include ranks
+		std::unordered_set<uint32_t> guildRankList;
 		std::list<std::string> expressionList;
 		std::list<std::pair<std::regex, bool>> regExList;
 };
@@ -206,7 +207,7 @@ class House
 
 		HouseTransferItem* getTransferItem();
 		void resetTransferItem();
-		bool executeTransfer(HouseTransferItem* item, Player* player);
+		bool executeTransfer(HouseTransferItem* item, Player* newOwner);
 
 		const HouseTileList& getTiles() const {
 			return houseTiles;

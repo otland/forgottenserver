@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -269,7 +269,7 @@ class Combat
 		static void addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		void doCombat(Creature* caster, Creature* target) const;
-		void doCombat(Creature* caster, const Position& pos) const;
+		void doCombat(Creature* caster, const Position& position) const;
 
 		bool setCallback(CallBackParam_t key);
 		CallBack* getCallback(CallBackParam_t key);
@@ -338,6 +338,13 @@ class MagicField final : public Item
 		CombatType_t getCombatType() const {
 			const ItemType& it = items[getID()];
 			return it.combatType;
+		}
+		int32_t getDamage() const {
+			const ItemType& it = items[getID()];
+			if (it.conditionDamage) {
+				return it.conditionDamage->getTotalDamage();
+			}
+			return 0;
 		}
 		void onStepInField(Creature* creature);
 

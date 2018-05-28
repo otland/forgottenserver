@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,6 +123,8 @@ class Monster final : public Creature
 		void setSpawn(Spawn* spawn) {
 			this->spawn = spawn;
 		}
+		bool canWalkOnFieldType(CombatType_t combatType) const;
+
 
 		void onAttackedCreatureDisappear(bool isLogout) override;
 
@@ -140,7 +142,6 @@ class Monster final : public Creature
 		void onThink(uint32_t interval) override;
 
 		bool challengeCreature(Creature* creature) override;
-		bool convinceCreature(Creature* creature) override;
 
 		void setNormalCreatureLight() override;
 		bool getCombatValues(int32_t& min, int32_t& max) override;
@@ -168,6 +169,9 @@ class Monster final : public Creature
 		bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
 		bool isTargetNearby() const {
 			return stepDuration >= 1;
+		}
+		bool isIgnoringFieldDamage() const {
+			return ignoreFieldDamage;
 		}
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
@@ -201,6 +205,8 @@ class Monster final : public Creature
 		bool isIdle = true;
 		bool extraMeleeAttack = false;
 		bool isMasterInRange = false;
+		bool randomStepping = false;
+		bool ignoreFieldDamage = false;
 
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);
@@ -228,7 +234,6 @@ class Monster final : public Creature
 
 		void onAddCondition(ConditionType_t type) override;
 		void onEndCondition(ConditionType_t type) override;
-		void onCreatureConvinced(const Creature* convincer, const Creature* creature) override;
 
 		bool canUseAttack(const Position& pos, const Creature* target) const;
 		bool canUseSpell(const Position& pos, const Position& targetPos,
@@ -266,7 +271,7 @@ class Monster final : public Creature
 		}
 		void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
 		bool useCacheMap() const override {
-			return true;
+			return !randomStepping;
 		}
 
 		friend class LuaScriptInterface;

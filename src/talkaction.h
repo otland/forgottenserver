@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 #include "luascript.h"
 #include "baseevents.h"
 #include "const.h"
+
+class TalkAction;
+using TalkAction_ptr = std::unique_ptr<TalkAction>;
 
 enum TalkActionResult_t {
 	TALKACTION_CONTINUE,
@@ -70,8 +73,8 @@ class TalkActions final : public BaseEvents
 	private:
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 		void clear() override;
 
 		std::forward_list<TalkAction> talkActions;

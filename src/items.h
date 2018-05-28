@@ -1,6 +1,6 @@
-﻿/**
+/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ struct Abilities {
 
 	//extra skill modifiers
 	int32_t skills[SKILL_LAST + 1] = { 0 };
+	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
 
 	int32_t speed = 0;
 
@@ -241,6 +242,7 @@ class ItemType
 		int8_t hitChance = 0;
 
 		bool forceUse = false;
+		bool forceSerialize = false;
 		bool hasHeight = false;
 		bool walkStack = true;
 		bool blockSolid = false;
@@ -272,6 +274,7 @@ class Items
 {
 	public:
 		using NameMap = std::unordered_multimap<std::string, uint16_t>;
+		using InventoryVector = std::vector<uint16_t>;
 
 		Items();
 
@@ -282,7 +285,7 @@ class Items
 		bool reload();
 		void clear();
 
-		FILELOADER_ERRORS loadFromOtb(const std::string& file);
+		bool loadFromOtb(const std::string& file);
 
 		const ItemType& operator[](size_t id) const {
 			return getItemType(id);
@@ -300,6 +303,11 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
+		void buildInventoryList();
+		const InventoryVector& getInventory() const {
+			return inventory;
+		}
+
 		size_t size() const {
 			return items.size();
 		}
@@ -309,5 +317,6 @@ class Items
 	private:
 		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
+		InventoryVector inventory;
 };
 #endif

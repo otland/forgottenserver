@@ -23,7 +23,7 @@ function onStartup()
 	if resultId ~= false then
 		repeat
 			local house = House(result.getDataInt(resultId, "id"))
-			if house ~= nil then
+			if house then
 				local highestBidder = result.getDataInt(resultId, "highest_bidder")
 				local balance = result.getDataLong(resultId, "balance")
 				local lastBid = result.getDataInt(resultId, "last_bid")
@@ -35,5 +35,12 @@ function onStartup()
 			end
 		until not result.next(resultId)
 		result.free(resultId)
+	end
+
+	-- store towns in database
+	db.query("TRUNCATE TABLE `towns`")
+	for i, town in ipairs(Game.getTowns()) do
+		local position = town:getTemplePosition()
+		db.query("INSERT INTO `towns` (`id`, `name`, `posx`, `posy`, `posz`) VALUES (" .. town:getId() .. ", " .. db.escapeString(town:getName()) .. ", " .. position.x .. ", " .. position.y .. ", " .. position.z .. ")")
 	end
 end

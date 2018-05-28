@@ -1,27 +1,28 @@
-function Creature.getClosestFreePosition(self, position, extended)
-	local usePosition = Position(position)
-	local tiles = { Tile(usePosition) }
-	local length = extended and 2 or 1
+function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReachable)
+	maxRadius = maxRadius or 1
 
-	local tile
-	for y = -length, length do
-		for x = -length, length do
-			if x ~= 0 or y ~= 0 then
-				usePosition.x = position.x + x
-				usePosition.y = position.y + y
-
-				tile = Tile(usePosition)
-				if tile then
-					tiles[#tiles + 1] = tile
-				end
-			end
-		end
+	-- backward compatability (extended)
+	if maxRadius == true then
+		maxRadius = 2
 	end
 
-	for i = 1, #tiles do
-		tile = tiles[i]
-		if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) then
-			return tile:getPosition()
+	local checkPosition = Position(position)
+	for radius = 0, maxRadius do
+		checkPosition.x = checkPosition.x - math.min(1, radius)
+		checkPosition.y = checkPosition.y + math.min(1, radius)
+
+		local total = math.max(1, radius * 8)
+		for i = 1, total do
+			if radius > 0 then
+				local direction = math.floor((i - 1) / (radius * 2))
+				checkPosition:getNextPosition(direction)
+			end
+
+			local tile = Tile(checkPosition)
+			if tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) and
+				(not mustBeReachable or self:getPathTo(checkPosition)) then
+				return checkPosition
+			end
 		end
 	end
 	return Position()
@@ -29,6 +30,10 @@ end
 
 function Creature.getPlayer(self)
 	return self:isPlayer() and self or nil
+end
+
+function Creature.isContainer(self)
+	return false
 end
 
 function Creature.isItem(self)
@@ -47,6 +52,10 @@ function Creature.isPlayer(self)
 	return false
 end
 
+function Creature.isTeleport(self)
+	return false
+end
+
 function Creature.isTile(self)
 	return false
 end
@@ -57,7 +66,7 @@ function Creature:setMonsterOutfit(monster, time)
 		return false
 	end
 
-	if self:isPlayer() and not (getPlayerFlagValue(self, PlayerFlag_CanIllusionAll) or monsterType:isIllusionable()) then
+	if self:isPlayer() and not (self:hasFlag(PlayerFlag_CanIllusionAll) or monsterType:isIllusionable()) then
 		return false
 	end
 

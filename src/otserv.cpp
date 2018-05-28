@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include <fstream>
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -55,7 +56,7 @@ void startupErrorMessage(const std::string& errorStr)
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* servicer);
+void mainLoader(int argc, char* argv[], ServiceManager* services);
 
 [[noreturn]] void badAllocationHandler()
 {
@@ -123,6 +124,21 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
 	std::cout << std::endl;
 
+	// check if config.lua or config.lua.dist exist
+	std::ifstream c_test("./config.lua");
+	if (!c_test.is_open()) {
+		std::ifstream config_lua_dist("./config.lua.dist");
+		if (config_lua_dist.is_open()) {
+			std::cout << ">> copying config.lua.dist to config.lua" << std::endl;
+			std::ofstream config_lua("config.lua");
+			config_lua << config_lua_dist.rdbuf();
+			config_lua.close();
+			config_lua_dist.close();
+		}
+	} else {
+		c_test.close();
+	}
+
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
 	if (!g_config.load()) {
@@ -177,7 +193,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
-	if (Item::items.loadFromOtb("data/items/items.otb") != ERROR_NONE) {
+	if (!Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ enum GlobalEvent_t {
 };
 
 class GlobalEvent;
-using GlobalEventMap = std::map<std::string, GlobalEvent*>;
+using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
+using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
 class GlobalEvents final : public BaseEvents
 {
@@ -60,8 +61,8 @@ class GlobalEvents final : public BaseEvents
 		}
 		void clear() override;
 
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
 		LuaScriptInterface& getScriptInterface() override {
 			return scriptInterface;
@@ -80,7 +81,7 @@ class GlobalEvent final : public Event
 		bool configureEvent(const pugi::xml_node& node) override;
 
 		bool executeRecord(uint32_t current, uint32_t old);
-		bool executeEvent();
+		bool executeEvent() const;
 
 		GlobalEvent_t getEventType() const {
 			return eventType;

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,9 @@
 #define FS_BASEEVENTS_H_9994E32C91CE4D95912A5FDD1F41884A
 
 #include "luascript.h"
+
+class Event;
+using Event_ptr = std::unique_ptr<Event>;
 
 class Event
 {
@@ -63,8 +66,8 @@ class BaseEvents
 	private:
 		virtual LuaScriptInterface& getScriptInterface() = 0;
 		virtual std::string getScriptBaseName() const = 0;
-		virtual Event* getEvent(const std::string& nodeName) = 0;
-		virtual bool registerEvent(Event* event, const pugi::xml_node& node) = 0;
+		virtual Event_ptr getEvent(const std::string& nodeName) = 0;
+		virtual bool registerEvent(Event_ptr event, const pugi::xml_node& node) = 0;
 		virtual void clear() = 0;
 
 		bool loaded = false;

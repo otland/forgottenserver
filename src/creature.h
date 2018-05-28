@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -335,13 +335,10 @@ class Creature : virtual public Thing
 
 		virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
 
-		void gainHealth(Creature* attacker, int32_t healthGain);
+		void gainHealth(Creature* healer, int32_t healthGain);
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 
 		virtual bool challengeCreature(Creature*) {
-			return false;
-		}
-		virtual bool convinceCreature(Creature*) {
 			return false;
 		}
 
@@ -393,7 +390,6 @@ class Creature : virtual public Thing
 
 		virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
 
-		virtual void onCreatureConvinced(const Creature*, const Creature*) {}
 		virtual void onPlacedCreature() {}
 
 		virtual bool getCombatValues(int32_t&, int32_t&) {
@@ -408,6 +404,9 @@ class Creature : virtual public Thing
 		}
 		void setSkillLoss(bool skillLoss) {
 			this->skillLoss = skillLoss;
+		}
+		void setUseDefense(bool useDefense) {
+			canUseDefense = useDefense;
 		}
 
 		//creature script events
@@ -525,6 +524,7 @@ class Creature : virtual public Thing
 		bool hasFollowPath = false;
 		bool forceUpdateFollowPath = false;
 		bool hiddenHealth = false;
+		bool canUseDefense = true;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,18 +56,18 @@ class Spells final : public BaseEvents
 		static Position getCasterPosition(Creature* creature, Direction dir);
 		std::string getScriptBaseName() const override;
 
-		const std::map<std::string, InstantSpell*>& getInstantSpells() const {
+		const std::map<std::string, InstantSpell>& getInstantSpells() const {
 			return instants;
 		};
 
 	private:
 		void clear() override;
 		LuaScriptInterface& getScriptInterface() override;
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
-		std::map<uint16_t, RuneSpell*> runes;
-		std::map<std::string, InstantSpell*> instants;
+		std::map<uint16_t, RuneSpell> runes;
+		std::map<std::string, InstantSpell> instants;
 
 		friend class CombatSpell;
 		LuaScriptInterface scriptInterface { "Spell Interface" };
@@ -130,7 +130,7 @@ class Spell : public BaseSpell
 			return name;
 		}
 
-		void postCastSpell(Player* player, bool finishedSpell = true, bool payCost = true) const;
+		void postCastSpell(Player* player, bool finishedCast = true, bool payCost = true) const;
 		static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
 
 		uint32_t getManaCost(const Player* player) const;
@@ -157,10 +157,6 @@ class Spell : public BaseSpell
 		bool isLearnable() const {
 			return learnable;
 		}
-
-		static ReturnValue CreateIllusion(Creature* creature, const Outfit_t& outfit, int32_t time);
-		static ReturnValue CreateIllusion(Creature* creature, const std::string& name, int32_t time);
-		static ReturnValue CreateIllusion(Creature* creature, uint32_t itemId, int32_t time);
 
 		const VocSpellMap& getVocMap() const {
 			return vocSpellMap;
@@ -252,7 +248,6 @@ class RuneSpell final : public Action, public Spell
 		explicit RuneSpell(LuaScriptInterface* interface) : Action(interface) {}
 
 		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const pugi::xml_attribute& attr) override;
 
 		ReturnValue canExecuteAction(const Player* player, const Position& toPos) override;
 		bool hasOwnErrorHandler() override {
@@ -282,7 +277,6 @@ class RuneSpell final : public Action, public Spell
 
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
-		RuneSpellFunction runeFunction;
 		uint16_t runeId = 0;
 		bool hasCharges = true;
 };

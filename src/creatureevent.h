@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@
 #include "baseevents.h"
 #include "enums.h"
 
+class CreatureEvent;
+using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;
+
 enum CreatureEventType_t {
 	CREATURE_EVENT_NONE,
 	CREATURE_EVENT_LOGIN,
@@ -38,39 +41,6 @@ enum CreatureEventType_t {
 	CREATURE_EVENT_HEALTHCHANGE,
 	CREATURE_EVENT_MANACHANGE,
 	CREATURE_EVENT_EXTENDED_OPCODE, // otclient additional network opcodes
-};
-
-class CreatureEvent;
-
-class CreatureEvents final : public BaseEvents
-{
-	public:
-		CreatureEvents();
-		~CreatureEvents();
-
-		// non-copyable
-		CreatureEvents(const CreatureEvents&) = delete;
-		CreatureEvents& operator=(const CreatureEvents&) = delete;
-
-		// global events
-		bool playerLogin(Player* player) const;
-		bool playerLogout(Player* player) const;
-		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
-
-		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
-
-	private:
-		LuaScriptInterface& getScriptInterface() override;
-		std::string getScriptBaseName() const override;
-		Event* getEvent(const std::string& nodeName) override;
-		bool registerEvent(Event* event, const pugi::xml_node& node) override;
-		void clear() override;
-
-		//creature events
-		using CreatureEventMap = std::map<std::string, CreatureEvent*>;
-		CreatureEventMap creatureEvents;
-
-		LuaScriptInterface scriptInterface;
 };
 
 class CreatureEvent final : public Event
@@ -94,8 +64,8 @@ class CreatureEvent final : public Event
 		void copyEvent(CreatureEvent* creatureEvent);
 
 		//scripting
-		bool executeOnLogin(Player* player);
-		bool executeOnLogout(Player* player);
+		bool executeOnLogin(Player* player) const;
+		bool executeOnLogout(Player* player) const;
 		bool executeOnThink(Creature* creature, uint32_t interval);
 		bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 		bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified);
@@ -104,7 +74,7 @@ class CreatureEvent final : public Event
 		void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 		bool executeTextEdit(Player* player, Item* item, const std::string& text);
 		void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
-		void executeManaChange(Creature* creature, Creature* attacker, int32_t& manaChange, CombatOrigin origin);
+		void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 		//
 
@@ -114,6 +84,36 @@ class CreatureEvent final : public Event
 		std::string eventName;
 		CreatureEventType_t type;
 		bool loaded;
+};
+
+class CreatureEvents final : public BaseEvents
+{
+	public:
+		CreatureEvents();
+
+		// non-copyable
+		CreatureEvents(const CreatureEvents&) = delete;
+		CreatureEvents& operator=(const CreatureEvents&) = delete;
+
+		// global events
+		bool playerLogin(Player* player) const;
+		bool playerLogout(Player* player) const;
+		bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
+
+		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
+
+	private:
+		LuaScriptInterface& getScriptInterface() override;
+		std::string getScriptBaseName() const override;
+		Event_ptr getEvent(const std::string& nodeName) override;
+		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+		void clear() override;
+
+		//creature events
+		using CreatureEventMap = std::map<std::string, CreatureEvent>;
+		CreatureEventMap creatureEvents;
+
+		LuaScriptInterface scriptInterface;
 };
 
 #endif

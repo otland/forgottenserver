@@ -9,6 +9,7 @@
 *.suo
 *.user
 *.sln.docstates
+.vscode/
 
 # Build results
 
@@ -171,3 +172,7 @@ pip-log.txt
 .*.swp
 .*.swo
 
+#############
+## TFS / OT
+#############
+config.lua
