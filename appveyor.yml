@@ -39,4 +39,4 @@ cache:
 
 artifacts:
   - path: vc14\**\theforgottenserver.exe
-	- path: vc14\**\*.dll
+  - path: vc14\**\*.dll
