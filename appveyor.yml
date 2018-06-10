@@ -25,7 +25,7 @@ install:
   - cmd : vcpkg install boost-variant:x64-windows
   - cmd : vcpkg install boost-lockfree:x64-windows
   - cmd : vcpkg install luajit:x64-windows
-  - cmd : vcpkg install libmysql:x64-windows
+  - cmd : vcpkg install libmariadb:x64-windows
   - cmd : vcpkg install pugixml:x64-windows
   - cmd : vcpkg install mpir:x64-windows
 
