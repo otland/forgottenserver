@@ -3998,7 +3998,7 @@ bool Player::isInviting(const Player* player) const
 
 bool Player::isPartner(const Player* player) const
 {
-	if (!player || !party) {
+	if (!player || !party || player == this) {
 		return false;
 	}
 	return party == player->party;
