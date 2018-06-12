@@ -1,24 +1,19 @@
 sudo: required
 dist: trusty
-language: cpp
-compiler:
-  - clang
-  - gcc
+language: generic
 env:
-  - LUAJIT=OFF
-  - LUAJIT=ON
-cache: apt
-addons:
-  apt:
-    packages:
-      - libboost-dev
-      - libboost-system-dev
-      - libboost-iostreams-dev
-      - liblua5.2-dev
-      - libluajit-5.1-dev
-      - libmysqlclient-dev
-      - libpugixml-dev
+  matrix:
+    - LUAJIT=OFF CXX=g++
+    - LUAJIT=ON  CXX=g++
+    - LUAJIT=OFF CXX=clang++
+    - LUAJIT=ON  CXX=clang++
+services:
+  - docker
 before_script:
-  - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
-script: make -j2
+  - export MYSQL_PASS="$(openssl rand -base64 32)"
+  - docker-compose up -d db
+script:
+  - docker-compose run compile cmake -DUSE_LUAJIT=${LUAJIT} /source
+  - docker-compose run compile make -j2
+  - docker-compose run server --dry-run
+after_script: docker-compose down
