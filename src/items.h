@@ -205,9 +205,9 @@ class ItemType
 		int32_t maxHitChance = -1;
 		int32_t decayTo = -1;
 		int32_t attack = 0;
-		int32_t defense = 0;
+		uint32_t defense = 0;
 		int32_t extraDefense = 0;
-		int32_t armor = 0;
+		uint32_t armor = 0;
 		uint16_t rotateTo = 0;
 		int32_t runeMagLevel = 0;
 		int32_t runeLevel = 0;

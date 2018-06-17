@@ -637,8 +637,8 @@ class Player final : public Creature, public Cylinder
 		void addManaSpent(uint64_t amount);
 		void addSkillAdvance(skills_t skill, uint64_t count);
 
-		int32_t getArmor() const override;
-		int32_t getDefense() const override;
+		uint32_t getArmor() const override;
+		uint32_t getDefense() const override;
 		float getAttackFactor() const override;
 		float getDefenseFactor() const override;
 

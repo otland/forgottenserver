@@ -289,9 +289,9 @@ int32_t Player::getWeaponSkill(const Item* item) const
 	return attackSkill;
 }
 
-int32_t Player::getArmor() const
+uint32_t Player::getArmor() const
 {
-	int32_t armor = 0;
+	uint32_t armor = 0;
 
 	static const slots_t armorSlots[] = {CONST_SLOT_HEAD, CONST_SLOT_NECKLACE, CONST_SLOT_ARMOR, CONST_SLOT_LEGS, CONST_SLOT_FEET, CONST_SLOT_RING};
 	for (slots_t slot : armorSlots) {
@@ -300,7 +300,7 @@ int32_t Player::getArmor() const
 			armor += inventoryItem->getArmor();
 		}
 	}
-	return static_cast<int32_t>(armor * vocation->armorMultiplier);
+	return static_cast<uint32_t>(armor * vocation->armorMultiplier);
 }
 
 void Player::getShieldAndWeapon(const Item*& shield, const Item*& weapon) const
@@ -333,7 +333,7 @@ void Player::getShieldAndWeapon(const Item*& shield, const Item*& weapon) const
 	}
 }
 
-int32_t Player::getDefense() const
+uint32_t Player::getDefense() const
 {
 	int32_t defenseSkill = getSkillLevel(SKILL_FIST);
 	int32_t defenseValue = 7;
