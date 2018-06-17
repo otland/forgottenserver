@@ -18,12 +18,16 @@ only_commits:
     - vc14/
     - appveyor.yml
 
-environment:
-  BOOST_ROOT: C:\Libraries\boost_1_65_1
-
 install:
-  - ps: if (-not (Test-Path tfs-sdk-3.2)) { Start-FileDownload https://static.otland.net/dl/tfs-sdk-3.2.zip; 7z x tfs-sdk-3.2.zip }
-  - set TFSSDKDir=%CD%\tfs-sdk-3.2
+  - cmd : vcpkg install boost-iostreams:x64-windows
+  - cmd : vcpkg install boost-asio:x64-windows
+  - cmd : vcpkg install boost-system:x64-windows
+  - cmd : vcpkg install boost-variant:x64-windows
+  - cmd : vcpkg install boost-lockfree:x64-windows
+  - cmd : vcpkg install luajit:x64-windows
+  - cmd : vcpkg install libmariadb:x64-windows
+  - cmd : vcpkg install pugixml:x64-windows
+  - cmd : vcpkg install mpir:x64-windows
 
 build:
   parallel: true
@@ -31,7 +35,8 @@ build:
   #verbosity: detailed
 
 cache:
-  - tfs-sdk-3.2 -> appveyor.yml
+  - c:\tools\vcpkg\installed\
 
 artifacts:
   - path: vc14\**\theforgottenserver.exe
+  - path: vc14\**\*.dll
