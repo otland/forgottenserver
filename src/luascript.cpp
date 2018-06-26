@@ -10149,7 +10149,7 @@ int LuaScriptInterface::luaGuildSetHouseId(lua_State* L)
 	// guild:getHouseId()
 	Guild* guild = getUserdata<Guild>(L, 1);
 	if (guild) {
-		guild->setHouseId(getNumber<uint32_t>(L, 2))
+		guild->setHouseId(getNumber<uint32_t>(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

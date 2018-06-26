@@ -75,6 +75,12 @@ class Guild
 		void setHouseId(uint32_t houseId) {
 			this->houseId = houseId;
 		}
+		uint32_t getOwnerId() const {
+			return ownerId;
+		}
+		void setOwnerId(uint32_t ownerId) {
+			this->ownerId = ownerId;
+		}
 
 	private:
 		std::list<Player*> membersOnline;
@@ -84,6 +90,7 @@ class Guild
 		uint32_t id;
 		uint32_t memberCount = 0;
 		uint32_t houseId;
+		uint32_t ownerId;
 };
 
 #endif

@@ -103,9 +103,9 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		
 		owner = guid;
 		ownerName = newOwner->getName();
-		const GuildRank* guildRank = newOwner->getGuildRank();
-		if (guildRank && guildRank->id == 3) {
-			guildId = newOwner->getGuild()->getId();
+		Guild* guild = newOwner->getGuild();
+		if (guild && guild->getOwnerId() == guid) {
+			guildId = guild->getId();
 		}
 	}
 
