@@ -30,7 +30,7 @@ Guild* IOGuild::loadGuild(uint32_t guildId)
 	query << "SELECT `name` FROM `guilds` WHERE `id` = " << guildId;
 	if (DBResult_ptr result = db.storeQuery(query.str())) {
 		Guild* guild = new Guild(guildId, result->getString("name"));
-		guild->setResidenceId(result->getNumber<uint32_t>("residence"));
+		guild->setHouseId(result->getNumber<uint32_t>("residence"));
 
 		query.str(std::string());
 		query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId;

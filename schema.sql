@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `guilds` (
   `ownerid` int(11) NOT NULL,
   `creationdata` int(11) NOT NULL,
   `motd` varchar(255) NOT NULL DEFAULT '',
-  `residence` int(11) NOT NULL,
+  `house_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`),
   UNIQUE KEY (`ownerid`),
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `houses` (
   `highest_bidder` int(11) NOT NULL DEFAULT '0',
   `size` int(11) NOT NULL DEFAULT '0',
   `beds` int(11) NOT NULL DEFAULT '0',
-  `guildid` int(11) NOT NULL,
+  `guild_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`),
   KEY `town_id` (`town_id`)

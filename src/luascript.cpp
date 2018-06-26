@@ -2411,7 +2411,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Guild", "getMotd", LuaScriptInterface::luaGuildGetMotd);
 	registerMethod("Guild", "setMotd", LuaScriptInterface::luaGuildSetMotd);
 	
-	registerMethod("Guild", "getResidenceId", LuaScriptInterface::luaGuildGetResidenceId);
+	registerMethod("Guild", "getHouseId", LuaScriptInterface::luaGuildGetHouseId);
+	registerMethod("Guild", "setHouseId", LuaScriptInterface::luaGuildSetHouseId);
 
 	// Group
 	registerClass("Group", "", LuaScriptInterface::luaGroupCreate);
@@ -10131,12 +10132,25 @@ int LuaScriptInterface::luaGuildSetMotd(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGuildGetResidenceId(lua_State* L)
+int LuaScriptInterface::luaGuildGetHouseId(lua_State* L)
 {
-	// guild:getResidenceId()
+	// guild:getHouseId()
 	Guild* guild = getUserdata<Guild>(L, 1);
 	if (guild) {
-		lua_pushnumber(L, guild->getResidenceId());
+		lua_pushnumber(L, guild->getHouseId());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildSetHouseId(lua_State* L)
+{
+	// guild:getHouseId()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		guild->setHouseId(getNumber<uint32_t>(L, 2))
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}

@@ -209,7 +209,7 @@ class House
 		void setGuildId(uint32_t guildId) {
 			this->guildId = guildId;
 		}
-		bool getGuildId() const {
+		uint32_t getGuildId() const {
 			return guildId;
 		}
 

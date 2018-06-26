@@ -69,11 +69,11 @@ class Guild
 		void setMotd(const std::string& motd) {
 			this->motd = motd;
 		}
-		uint32_t getResidenceId() const {
-			return residenceId;
+		uint32_t getHouseId() const {
+			return houseId;
 		}
-		void setResidenceId(uint32_t residenceId) {
-			this->residenceId = residenceId;
+		void setHouseId(uint32_t houseId) {
+			this->houseId = houseId;
 		}
 
 	private:
@@ -83,7 +83,7 @@ class Guild
 		std::string motd;
 		uint32_t id;
 		uint32_t memberCount = 0;
-		uint32_t residenceId;
+		uint32_t houseId;
 };
 
 #endif

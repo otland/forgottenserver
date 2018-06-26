@@ -92,10 +92,20 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 	}
 
 	if (guid != 0) {
-		std::string name = IOLoginData::getNameByGuid(guid);
-		if (!name.empty()) {
-			owner = guid;
-			ownerName = name;
+		Player* newOwner = g_game.getPlayerByGUID(guid);
+		if (!newOwner) {
+			newOwner = new Player(nullptr);
+			if (!IOLoginData::loadPlayerById(newOwner, guid)) {
+				delete newOwner;
+				return;
+			}
+		}
+		
+		owner = guid;
+		ownerName = newOwner->getName();
+		const GuildRank* guildRank = newOwner->getGuildRank();
+		if (guildRank && guildRank->id == 3) {
+			guildId = newOwner->getGuild()->getId();
 		}
 	}
 
