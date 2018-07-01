@@ -116,7 +116,6 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	return true
 end
 
 function Player:onMoveCreature(creature, fromPosition, toPosition)
