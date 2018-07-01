@@ -1034,6 +1034,8 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 	ReturnValue ret = internalMoveItem(fromCylinder, toCylinder, toIndex, item, count, nullptr, 0, player);
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
+	} else {
+		g_events->eventPlayerOnItemMoved(player, item, count, fromPos, toPos, fromCylinder, toCylinder);
 	}
 }
 

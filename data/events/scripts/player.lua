@@ -115,6 +115,10 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 	return true
 end
 
+function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	return true
+end
+
 function Player:onMoveCreature(creature, fromPosition, toPosition)
 	return true
 end
