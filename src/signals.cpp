@@ -68,8 +68,9 @@ Signals::Signals(boost::asio::io_service& service) :
 	set.add(SIGUSR1);
 	set.add(SIGHUP);
 #else
-	// this must be a blocking call as Windows calls it in a new thread and terminates
-	// the process when the handler returns (or after 5 seconds, whichever is earlier)
+	// This must be a blocking call as Windows calls it in a new thread and terminates
+	// the process when the handler returns (or after 5 seconds, whichever is earlier).
+	// On Windows it is called in a new thread.
 	signal(SIGBREAK, dispatchSignalHandler);
 #endif
 
@@ -88,6 +89,9 @@ void Signals::asyncWait()
 	});
 }
 
+// On Windows this function does not need to be signal-safe,
+// as it is called in a new thread.
+// https://github.com/otland/forgottenserver/pull/2473
 void Signals::dispatchSignalHandler(int signal)
 {
 	switch(signal) {
@@ -107,6 +111,7 @@ void Signals::dispatchSignalHandler(int signal)
 #else
 		case SIGBREAK: //Shuts the server down
 			g_dispatcher.addTask(createTask(sigbreakHandler));
+			// hold the thread until other threads end
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
