@@ -1,7 +1,7 @@
 function Vocation.getBase(self)
-	local v = self
-	while v:getDemotion() do
-		v = v:getDemotion()
+	local base = self
+	while base:getDemotion() do
+		base = base:getDemotion()
 	end
-	return v
+	return base
 end
