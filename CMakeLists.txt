@@ -11,6 +11,8 @@ include(cotire)
 
 add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
 
+set(CMAKE_CXX_FLAGS_PERFORMANCE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-fno-strict-aliasing)
 endif()
