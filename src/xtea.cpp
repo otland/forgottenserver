@@ -124,7 +124,7 @@ struct XTEA {
         length -= blocks;
 
         if (BlockSize != 1) {
-            XTEA<Encrypt, BlockSize / 2u>()(input, length, k);
+            XTEA<Encrypt, (BlockSize + 1u) / 2u>()(input, length, k);
         }
     }
 };
