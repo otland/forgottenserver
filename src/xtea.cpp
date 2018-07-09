@@ -71,7 +71,7 @@ void XTEA_decrypt(uint8_t data[BLOCK_SIZE * 8], const key& k)
         right[i] = data[j+4] | data[j+5] << 8u | data[j+6] << 16u | data[j+7] << 24u;
     }
 
-    uint32_t sum = 0u;
+    uint32_t sum = delta << 5;
     for (auto i = 0u; i < 32; ++i) {
         for (auto j = 0u; j < BLOCK_SIZE; ++j) {
             right[j] -= (((left[j] << 4) ^ (left[j] >> 5)) + left[j]) ^ (sum + k[(sum >> 11) & 3]);
