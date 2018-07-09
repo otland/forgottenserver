@@ -14,13 +14,13 @@ function Party:onShareExperience(exp)
 	local sharedExperienceMultiplier = 1.20 --20%
 	local vocationsIds = {}
 
-	local vocationId = self:getLeader():getVocation():getBase()
+	local vocationId = self:getLeader():getVocation():getBase():getId()
 	if vocationId ~= VOCATION_NONE then
 		table.insert(vocationsIds, vocationId)
 	end
 
 	for _, member in ipairs(self:getMembers()) do
-		vocationId = member:getVocation():getBase()
+		vocationId = member:getVocation():getBase():getId()
 		if not table.contains(vocationsIds, vocationId) and vocationId ~= VOCATION_NONE then
 			table.insert(vocationsIds, vocationId)
 		end
@@ -31,5 +31,5 @@ function Party:onShareExperience(exp)
 		sharedExperienceMultiplier = 1.0 + ((size * (5 * (size - 1) + 10)) / 100)
 	end
 
-	return (exp * sharedExperienceMultiplier) / (self:getMembers() + 1)
+	return (exp * sharedExperienceMultiplier) / (#self:getMembers() + 1)
 end
