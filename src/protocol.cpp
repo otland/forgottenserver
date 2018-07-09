@@ -81,7 +81,7 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 	xtea::decrypt(buffer, msg.getLength() - 6, key);
 
 	uint16_t innerLength = msg.get<uint16_t>();
-	if (innerLength > msg.getLength() - 8) {
+	if (innerLength + 8 > msg.getLength()) {
 		return false;
 	}
 
