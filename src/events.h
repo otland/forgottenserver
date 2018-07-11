@@ -38,6 +38,7 @@ class Events
 		int32_t partyOnJoin = -1;
 		int32_t partyOnLeave = -1;
 		int32_t partyOnDisband = -1;
+		int32_t partyOnShareExperience = -1;
 
 		// Player
 		int32_t playerOnBrowseField = -1;
@@ -72,6 +73,7 @@ class Events
 		bool eventPartyOnJoin(Party* party, Player* player);
 		bool eventPartyOnLeave(Party* party, Player* player);
 		bool eventPartyOnDisband(Party* party);
+		void eventPartyOnShareExperience(Party* party, uint64_t& exp);
 
 		// Player
 		bool eventPlayerOnBrowseField(Player* player, const Position& position);
