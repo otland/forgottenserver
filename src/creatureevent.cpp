@@ -112,12 +112,12 @@ bool CreatureEvents::playerLogin(Player* player) const
 	return true;
 }
 
-bool CreatureEvents::playerLogout(Player* player) const
+bool CreatureEvents::playerLogout(Player* player, bool forced /*= false*/) const
 {
 	//fire global event if is registered
 	for (const auto& it : creatureEvents) {
 		if (it.second.getEventType() == CREATURE_EVENT_LOGOUT) {
-			if (!it.second.executeOnLogout(player)) {
+			if (!it.second.executeOnLogout(player, forced)) {
 				return false;
 			}
 		}
@@ -276,7 +276,7 @@ bool CreatureEvent::executeOnLogin(Player* player) const
 	return scriptInterface->callFunction(1);
 }
 
-bool CreatureEvent::executeOnLogout(Player* player) const
+bool CreatureEvent::executeOnLogout(Player* player, bool forced /*= false*/) const
 {
 	//onLogout(player)
 	if (!scriptInterface->reserveScriptEnv()) {
@@ -292,7 +292,8 @@ bool CreatureEvent::executeOnLogout(Player* player) const
 	scriptInterface->pushFunction(scriptId);
 	LuaScriptInterface::pushUserdata(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	return scriptInterface->callFunction(1);
+	LuaScriptInterface::pushBoolean(L, forced);
+	return scriptInterface->callFunction(2);
 }
 
 bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
