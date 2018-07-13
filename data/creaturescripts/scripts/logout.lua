@@ -1,4 +1,4 @@
-function onLogout(player)
+function onLogout(player, forced)
 	local playerId = player:getId()
 	if nextUseStaminaTime[playerId] then
 		nextUseStaminaTime[playerId] = nil
