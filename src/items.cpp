@@ -200,7 +200,7 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"life", FLUID_LIFE},
 	{"oil", FLUID_OIL},
 	{"urine", FLUID_URINE},
-	{"coconut",	FLUID_COCONUTMILK},
+	{"coconut", FLUID_COCONUTMILK},
 	{"wine", FLUID_WINE},
 	{"mud", FLUID_MUD},
 	{"fruitjuice", FLUID_FRUITJUICE},
