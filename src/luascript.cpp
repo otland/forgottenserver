@@ -8065,7 +8065,7 @@ int LuaScriptInterface::luaPlayerGetSpecialSkill(lua_State* L)
 	// player:getSpecialSkill(specialSkillType)
 	SpecialSkills_t specialSkillType = getNumber<SpecialSkills_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
-	if (player && specialSkillType <= SKILL_LAST) {
+	if (player && specialSkillType <= SPECIALSKILL_LAST) {
 		lua_pushnumber(L, player->getSpecialSkill(specialSkillType));
 	} else {
 		lua_pushnil(L);
