@@ -761,16 +761,16 @@ std::string getSpecialSkillName(uint8_t skillid)
 		case SPECIALSKILL_CRITICALHITAMOUNT:
 			return "critical extra damage";
 
-		case SPECIALSKILL_HITPOINTSLEECHCHANCE:
+		case SPECIALSKILL_LIFELEECHCHANCE:
 			return "hitpoints leech chance";
 
-		case SPECIALSKILL_HITPOINTSLEECHAMOUNT:
+		case SPECIALSKILL_LIFELEECHAMOUNT:
 			return "hitpoints leech amount";
 
-		case SPECIALSKILL_MANAPOINTSLEECHCHANCE:
+		case SPECIALSKILL_MANALEECHCHANCE:
 			return "manapoints leech chance";
 
-		case SPECIALSKILL_MANAPOINTSLEECHAMOUNT:
+		case SPECIALSKILL_MANALEECHAMOUNT:
 			return "mana points leech amount";
 
 		default:

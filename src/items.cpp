@@ -95,10 +95,10 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"magicpointspercent", ITEM_PARSE_MAGICPOINTSPERCENT},
 	{"criticalhitchance", ITEM_PARSE_CRITICALHITCHANCE},
 	{"criticalhitamount", ITEM_PARSE_CRITICALHITAMOUNT},
-	{"hitpointsleechchance", ITEM_PARSE_HITPOINTSLEECHCHANCE},
-	{"hitpointsleechamount", ITEM_PARSE_HITPOINTSLEECHAMOUNT},
-	{"manapointsleechchance", ITEM_PARSE_MANAPOINTSLEECHCHANCE},
-	{"manapointsleechamount", ITEM_PARSE_MANAPOINTSLEECHAMOUNT},
+	{"lifeleechchance", ITEM_PARSE_LIFELEECHCHANCE},
+	{"lifeleechamount", ITEM_PARSE_LIFELEECHAMOUNT},
+	{"manaleechchance", ITEM_PARSE_MANALEECHCHANCE},
+	{"manaleechamount", ITEM_PARSE_MANALEECHAMOUNT},
 	{"fieldabsorbpercentenergy", ITEM_PARSE_FIELDABSORBPERCENTENERGY},
 	{"fieldabsorbpercentfire", ITEM_PARSE_FIELDABSORBPERCENTFIRE},
 	{"fieldabsorbpercentpoison", ITEM_PARSE_FIELDABSORBPERCENTPOISON},
@@ -190,25 +190,25 @@ const std::unordered_map<std::string, WeaponType_t> WeaponTypesMap = {
 };
 
 const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
-	{"water", FLUID_WATER },
+	{"water", FLUID_WATER},
 	{"blood", FLUID_BLOOD},
 	{"beer", FLUID_BEER},
 	{"slime", FLUID_SLIME},
 	{"lemonade", FLUID_LEMONADE},
-	{"milk", FLUID_MILK },
-	{"mana", FLUID_MANA },
-	{"life", FLUID_LIFE },
-	{"oil", FLUID_OIL },
-	{"urine", FLUID_URINE },
-	{"coconut",	FLUID_COCONUTMILK },
-	{"wine", FLUID_WINE },
-	{"mud", FLUID_MUD },
-	{"fruitjuice", FLUID_FRUITJUICE },
-	{"lava", FLUID_LAVA },
-	{"rum", FLUID_RUM },
-	{"swamp", FLUID_SWAMP },
-	{"tea", FLUID_TEA },
-	{"mead", FLUID_MEAD },
+	{"milk", FLUID_MILK},
+	{"mana", FLUID_MANA},
+	{"life", FLUID_LIFE},
+	{"oil", FLUID_OIL},
+	{"urine", FLUID_URINE},
+	{"coconut",	FLUID_COCONUTMILK},
+	{"wine", FLUID_WINE},
+	{"mud", FLUID_MUD},
+	{"fruitjuice", FLUID_FRUITJUICE},
+	{"lava", FLUID_LAVA},
+	{"rum", FLUID_RUM},
+	{"swamp", FLUID_SWAMP},
+	{"tea", FLUID_TEA},
+	{"mead", FLUID_MEAD},
 };
 
 
@@ -925,6 +925,36 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_SKILLFIST: {
 					abilities.skills[SKILL_FIST] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_CRITICALHITAMOUNT: {
+					abilities.specialSkills[SPECIALSKILL_CRITICALHITAMOUNT] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_CRITICALHITCHANCE: {
+					abilities.specialSkills[SPECIALSKILL_CRITICALHITCHANCE] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MANALEECHAMOUNT: {
+					abilities.specialSkills[SPECIALSKILL_MANALEECHAMOUNT] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MANALEECHCHANCE: {
+					abilities.specialSkills[SPECIALSKILL_MANALEECHCHANCE] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_LIFELEECHAMOUNT: {
+					abilities.specialSkills[SPECIALSKILL_LIFELEECHAMOUNT] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_LIFELEECHCHANCE: {
+					abilities.specialSkills[SPECIALSKILL_LIFELEECHCHANCE] = pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 
