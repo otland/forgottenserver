@@ -1031,6 +1031,9 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		if (bed) {
 			bed->wakeUp(this);
 		}
+		
+		Account account = IOLoginData::loadAccount(accountNumber);
+		Game::updatePremium(account);
 
 		std::cout << name << " has logged in." << std::endl;
 
@@ -2922,7 +2925,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<slots_t>(index), false);
 	}
 
-	bool requireListUpdate = true;
+	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
 		const Item* i = (oldParent ? oldParent->getItem() : nullptr);
@@ -2976,7 +2979,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index));
 	}
 
-	bool requireListUpdate = true;
+	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
 		const Item* i = (newParent ? newParent->getItem() : nullptr);
@@ -3998,7 +4001,7 @@ bool Player::isInviting(const Player* player) const
 
 bool Player::isPartner(const Player* player) const
 {
-	if (!player || !party) {
+	if (!player || !party || player == this) {
 		return false;
 	}
 	return party == player->party;
