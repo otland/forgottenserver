@@ -8081,7 +8081,7 @@ int LuaScriptInterface::luaPlayerAddSpecialSkill(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
-	
+
 	SpecialSkills_t specialSkillType = getNumber<SpecialSkills_t>(L, 2);
 	if (specialSkillType > SPECIALSKILL_LAST) {
 		lua_pushnil(L);
