@@ -1438,6 +1438,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_FLUIDTYPE)
 	registerEnum(ITEM_ATTRIBUTE_DOORID)
 
+	registerEnum(ITEM_ABILITY_NONE)
+	registerEnum(ITEM_ABILITY_HEALTHGAIN)
+	registerEnum(ITEM_ABILITY_HEALTHTICKS)
+	registerEnum(ITEM_ABILITY_MANAGAIN)
+	registerEnum(ITEM_ABILITY_MANATICKS)
+
 	registerEnum(ITEM_TYPE_DEPOT)
 	registerEnum(ITEM_TYPE_MAILBOX)
 	registerEnum(ITEM_TYPE_TRASHHOLDER)
@@ -2071,6 +2077,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "hasAttribute", LuaScriptInterface::luaItemHasAttribute);
 	registerMethod("Item", "getAttribute", LuaScriptInterface::luaItemGetAttribute);
 	registerMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
+	registerMethod("Item", "getAbility", LuaScriptInterface::luaItemGetAbility);
+	registerMethod("Item", "setAbility", LuaScriptInterface::luaItemSetAbility);
 	registerMethod("Item", "removeAttribute", LuaScriptInterface::luaItemRemoveAttribute);
 	registerMethod("Item", "getCustomAttribute", LuaScriptInterface::luaItemGetCustomAttribute);
 	registerMethod("Item", "setCustomAttribute", LuaScriptInterface::luaItemSetCustomAttribute);
@@ -6094,6 +6102,55 @@ int LuaScriptInterface::luaItemSetAttribute(lua_State* L)
 		pushBoolean(L, true);
 	} else if (ItemAttributes::isStrAttrType(attribute)) {
 		item->setStrAttr(attribute, getString(L, 3));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemGetAbility(lua_State* L)
+{
+	// item:getAbility(key)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	itemAbilityTypes ability;
+	if (isNumber(L, 2)) {
+		ability = getNumber<itemAbilityTypes>(L, 2);
+	} else {
+		ability = ITEM_ABILITY_NONE;
+	}
+
+	if (ItemAbilities::isAbility(ability)) {
+		lua_pushnumber(L, item->getAbilityInt(ability));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemSetAbility(lua_State* L)
+{
+	// item:setAbility(key, value)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	itemAbilityTypes ability;
+	if (isNumber(L, 2)) {
+		ability = getNumber<itemAbilityTypes>(L, 2);
+	} else {
+		ability = ITEM_ABILITY_NONE;
+	}
+
+	if (ItemAbilities::isAbility(ability)) {
+		item->setAbilityInt(ability, getNumber<int64_t>(L, 3));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

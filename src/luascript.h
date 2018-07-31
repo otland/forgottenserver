@@ -704,6 +704,8 @@ class LuaScriptInterface
 		static int luaItemHasAttribute(lua_State* L);
 		static int luaItemGetAttribute(lua_State* L);
 		static int luaItemSetAttribute(lua_State* L);
+		static int luaItemGetAbility(lua_State* L);
+		static int luaItemSetAbility(lua_State* L);
 		static int luaItemRemoveAttribute(lua_State* L);
 		static int luaItemGetCustomAttribute(lua_State* L);
 		static int luaItemSetCustomAttribute(lua_State* L);

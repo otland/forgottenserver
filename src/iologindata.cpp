@@ -454,7 +454,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	ItemMap itemMap;
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes`, `abilities` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 	if ((result = db.storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -482,7 +482,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	itemMap.clear();
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes`, `abilities` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 	if ((result = db.storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -514,7 +514,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	itemMap.clear();
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes`, `abilities` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
 	if ((result = db.storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -584,8 +584,16 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 		size_t attributesSize;
 		const char* attributes = propWriteStream.getStream(attributesSize);
+		std::string attributeBlob = db.escapeBlob(attributes, attributesSize);
 
-		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+		propWriteStream.clear();
+		item->serializeAbility(propWriteStream);
+
+		size_t abilitiesSize;
+		const char* abilities = propWriteStream.getStream(abilitiesSize);
+		std::string abilitiesBlob = db.escapeBlob(abilities, abilitiesSize);
+
+		ss << player->getGUID() << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << attributeBlob << "," << abilitiesBlob;
 		if (!query_insert.addRow(ss)) {
 			return false;
 		}
@@ -614,8 +622,16 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 			size_t attributesSize;
 			const char* attributes = propWriteStream.getStream(attributesSize);
+			std::string attributeBlob = db.escapeBlob(attributes, attributesSize);
 
-			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+			propWriteStream.clear();
+			item->serializeAbility(propWriteStream);
+
+			size_t abilitiesSize;
+			const char* abilities = propWriteStream.getStream(abilitiesSize);
+			std::string abilitiesBlob = db.escapeBlob(abilities, abilitiesSize);
+
+			ss << player->getGUID() << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << attributeBlob << "," << abilitiesBlob;
 			if (!query_insert.addRow(ss)) {
 				return false;
 			}
@@ -778,7 +794,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`, `abilities`) VALUES ");
 
 	ItemBlockList itemList;
 	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
@@ -801,7 +817,7 @@ bool IOLoginData::savePlayer(Player* player)
 			return false;
 		}
 
-		DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+		DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`, `abilities`) VALUES ");
 		itemList.clear();
 
 		for (const auto& it : player->depotChests) {
@@ -823,7 +839,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`, `abilities`) VALUES ");
 	itemList.clear();
 
 	for (Item* item : player->getInbox()->getItemList()) {
@@ -936,14 +952,21 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 
 		unsigned long attrSize;
 		const char* attr = result->getStream("attributes", attrSize);
+		unsigned long abilitySize;
+		const char* abilities = result->getStream("abilities", abilitySize);
 
-		PropStream propStream;
-		propStream.init(attr, attrSize);
+		PropStream attrPropStream;
+		PropStream abilityPropStream;
+		attrPropStream.init(attr, attrSize);
+		abilityPropStream.init(abilities, abilitySize);
 
 		Item* item = Item::CreateItem(type, count);
 		if (item) {
-			if (!item->unserializeAttr(propStream)) {
-				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
+			if (!item->unserializeAttr(attrPropStream)) {
+				std::cout << "WARNING: Serialize error (attribute) in IOLoginData::loadItems" << std::endl;
+			}
+			if (!item->unserializeAbility(abilityPropStream)) {
+				std::cout << "WARNING: Serialize error (ability) in IOLoginData::loadItems" << std::endl;
 			}
 
 			std::pair<Item*, uint32_t> pair(item, pid);

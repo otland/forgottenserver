@@ -667,6 +667,81 @@ bool Item::unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propS
 	return unserializeAttr(propStream);
 }
 
+Ability_ReadValue Item::readAbility(AbilityTypes_t type, PropStream& propStream)
+{
+	switch (type) {
+		case ABILITY_HEALTHGAIN: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_HEALTHGAIN, value);
+			break;
+		}
+		case ABILITY_HEALTHTICKS: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_HEALTHTICKS, value);
+			break;
+		}
+		case ABILITY_MANAGAIN: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MANAGAIN, value);
+			break;
+		}
+		case ABILITY_MANATICKS: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MANATICKS, value);
+			break;
+		}
+		default:
+			return ABILITY_READ_ERROR;
+	}
+	return ABILITY_READ_CONTINUE;
+}
+
+bool Item::unserializeAbility(PropStream& propStream)
+{
+	uint8_t ability_type;
+	while (propStream.read<uint8_t>(ability_type) && ability_type != 0) {
+		Ability_ReadValue ret = readAbility(static_cast<AbilityTypes_t>(ability_type), propStream);
+		if (ret == ABILITY_READ_ERROR) {
+			return false;
+		} else if (ret == ABILITY_READ_END) {
+			return true;
+		}
+	}
+	return true;
+}
+
+void Item::serializeAbility(PropWriteStream& propWriteStream) const
+{
+	if (hasAbility(ITEM_ABILITY_HEALTHGAIN)) {
+		propWriteStream.write<uint8_t>(ABILITY_HEALTHGAIN);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_HEALTHGAIN));
+	}
+	if (hasAbility(ITEM_ABILITY_HEALTHTICKS)) {
+		propWriteStream.write<uint8_t>(ABILITY_HEALTHTICKS);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_HEALTHTICKS));
+	}
+	if (hasAbility(ITEM_ABILITY_MANAGAIN)) {
+		propWriteStream.write<uint8_t>(ABILITY_MANAGAIN);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANAGAIN));
+	}
+	if (hasAbility(ITEM_ABILITY_MANATICKS)) {
+		propWriteStream.write<uint8_t>(ABILITY_MANATICKS);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANATICKS));
+	}
+}
+
 void Item::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	const ItemType& it = items[id];
@@ -1572,6 +1647,38 @@ LightInfo Item::getLightInfo() const
 {
 	const ItemType& it = items[id];
 	return {it.lightLevel, it.lightColor};
+}
+
+const ItemAbilities::Ability* ItemAbilities::getExistingAbility(itemAbilityTypes type) const
+{
+	if (hasAbility(type)) {
+		for (const Ability& ability : abilities) {
+			if (ability.type == type) {
+				return &ability;
+			}
+		}
+	}
+	return nullptr;
+}
+
+ItemAbilities::Ability& ItemAbilities::getAbility(itemAbilityTypes type)
+{
+	if (hasAbility(type)) {
+		for (Ability& ability : abilities) {
+			if (ability.type == type) {
+				return ability;
+			}
+		}
+	}
+
+	abilityBits |= type;
+	abilities.emplace_front(type);
+	return abilities.front();
+}
+
+void ItemAbilities::setAbilityInt(itemAbilityTypes type, int64_t value)
+{
+	getAbility(type).integer = value;
 }
 
 std::string ItemAttributes::emptyString;
