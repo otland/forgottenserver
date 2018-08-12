@@ -922,6 +922,120 @@ size_t combatTypeToIndex(CombatType_t combatType)
 	}
 }
 
+itemAbilityTypes combatToAbsorb(CombatType_t combatType)
+{
+	switch (combatType) {
+		case COMBAT_PHYSICALDAMAGE:
+			return ITEM_ABILITY_ABSORBPHYSICAL;
+		case COMBAT_ENERGYDAMAGE:
+			return ITEM_ABILITY_ABSORBENERGY;
+		case COMBAT_EARTHDAMAGE:
+			return ITEM_ABILITY_ABSORBEARTH;
+		case COMBAT_FIREDAMAGE:
+			return ITEM_ABILITY_ABSORBFIRE;
+		case COMBAT_DROWNDAMAGE:
+			return ITEM_ABILITY_ABSORBWATER;
+		case COMBAT_ICEDAMAGE:
+			return ITEM_ABILITY_ABSORBICE;
+		case COMBAT_HOLYDAMAGE:
+			return ITEM_ABILITY_ABSORBHOLY;
+		case COMBAT_DEATHDAMAGE:
+			return ITEM_ABILITY_ABSORBDEATH;
+		default:
+			return ITEM_ABILITY_NONE;
+	}
+}
+
+itemAbilityTypes combatToFieldAbsorb(CombatType_t combatType)
+{
+	switch (combatType) {
+		case COMBAT_PHYSICALDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBPHYSICAL;
+		case COMBAT_ENERGYDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBENERGY;
+		case COMBAT_EARTHDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBEARTH;
+		case COMBAT_FIREDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBFIRE;
+		case COMBAT_DROWNDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBWATER;
+		case COMBAT_ICEDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBICE;
+		case COMBAT_HOLYDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBHOLY;
+		case COMBAT_DEATHDAMAGE:
+			return ITEM_ABILITY_FIELDABSORBDEATH;
+		default:
+			return ITEM_ABILITY_NONE;
+	}
+}
+
+std::string abilityToString(itemAbilityTypes type)
+{
+	switch (type) {
+		case ITEM_ABILITY_FIELDABSORBPHYSICAL:
+			return "physical";
+		case ITEM_ABILITY_FIELDABSORBENERGY:
+			return "energy";
+		case ITEM_ABILITY_FIELDABSORBEARTH:
+			return "earth";
+		case ITEM_ABILITY_FIELDABSORBFIRE:
+			return "fire";
+		case ITEM_ABILITY_FIELDABSORBWATER:
+			return "water";
+		case ITEM_ABILITY_FIELDABSORBICE:
+			return "ice";
+		case ITEM_ABILITY_FIELDABSORBHOLY:
+			return "holy";
+		case ITEM_ABILITY_FIELDABSORBDEATH:
+			return "death";
+		default:
+			return "none";
+	}
+}
+
+itemAbilityTypes skillToAbility(uint8_t skillid)
+{
+	switch (skillid) {
+		case SKILL_FIST:
+			return ITEM_ABILITY_SKILLFIST;
+		case SKILL_CLUB:
+			return ITEM_ABILITY_SKILLCLUB;
+		case SKILL_SWORD:
+			return ITEM_ABILITY_SKILLSWORD;
+		case SKILL_AXE:
+			return ITEM_ABILITY_SKILLAXE;
+		case SKILL_DISTANCE:
+			return ITEM_ABILITY_SKILLDISTANCE;
+		case SKILL_SHIELD:
+			return ITEM_ABILITY_SKILLSHIELD;
+		case SKILL_FISHING:
+			return ITEM_ABILITY_SKILLFISHING;
+		default:
+			return ITEM_ABILITY_NONE;
+	}
+}
+
+itemAbilityTypes specialSkillToAbility(uint8_t skillid)
+{
+	switch (skillid) {
+		case SPECIALSKILL_CRITICALHITCHANCE:
+			return ITEM_ABILITY_CRITICALHITCHANCE;
+		case SPECIALSKILL_CRITICALHITAMOUNT:
+			return ITEM_ABILITY_CRITICALHITAMOUNT;
+		case SPECIALSKILL_HITPOINTSLEECHCHANCE:
+			return ITEM_ABILITY_LIFELEECHCHANCE;
+		case SPECIALSKILL_HITPOINTSLEECHAMOUNT:
+			return ITEM_ABILITY_LIFELEECHAMOUNT;
+		case SPECIALSKILL_MANAPOINTSLEECHCHANCE:
+			return ITEM_ABILITY_MANALEECHCHANCE;
+		case SPECIALSKILL_MANAPOINTSLEECHAMOUNT:
+			return ITEM_ABILITY_MANALEECHAMOUNT;
+		default:
+			return ITEM_ABILITY_NONE;
+	}
+}
+
 CombatType_t indexToCombatType(size_t v)
 {
 	return static_cast<CombatType_t>(1 << v);

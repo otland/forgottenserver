@@ -1834,7 +1834,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		}
 
 		const ItemType& it = Item::items[item->getID()];
-		if (!it.abilities) {
+		if (!item->getAbilities() && !it.abilities) {
 			if (damage <= 0) {
 				damage = 0;
 				return BLOCK_ARMOR;
@@ -1843,7 +1843,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 			continue;
 		}
 
-		const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
+		const int16_t& absorbPercent = item->getAbilityValue(combatToAbsorb(combatType));
 		if (absorbPercent != 0) {
 			damage -= std::round(damage * (absorbPercent / 100.));
 
@@ -1854,7 +1854,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		}
 
 		if (field) {
-			const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
+			const int16_t& fieldAbsorbPercent = item->getAbilityValue(combatToFieldAbsorb(combatType));
 			if (fieldAbsorbPercent != 0) {
 				damage -= std::round(damage * (fieldAbsorbPercent / 100.));
 
@@ -3906,7 +3906,7 @@ void Player::updateConditions(Item* item, slots_t slot, bool equip)
 	if (!item->getAbilities() && !it.abilities) {
 		return;
 	}
-	bool invisible = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_INVISIBLE) == 1 : (it.abilities ? it.abilities->invisible : false);
+	bool invisible = item->getAbilityValue(ITEM_ABILITY_INVISIBLE);
 	if (invisible) {
 		if (equip) {
 			Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_INVISIBLE, -1, 0);
@@ -3916,7 +3916,7 @@ void Player::updateConditions(Item* item, slots_t slot, bool equip)
 		}
 	}
 
-	bool manaShield = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_MANASHIELD) == 1 : (it.abilities ? it.abilities->manaShield : false);
+	bool manaShield = item->getAbilityValue(ITEM_ABILITY_MANASHIELD);
 	if (manaShield) {
 		if (equip) {
 			Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_MANASHIELD, -1, 0);
@@ -3926,7 +3926,7 @@ void Player::updateConditions(Item* item, slots_t slot, bool equip)
 		}
 	}
 
-	int32_t speed = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_SPEED) : (it.abilities ? it.abilities->speed : 0);
+	int32_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
 	int32_t difference = item->speedValue != 0 ? -(speed - item->speedValue) : speed;
 	if (speed != 0) {
 		if (equip) {
@@ -3938,7 +3938,7 @@ void Player::updateConditions(Item* item, slots_t slot, bool equip)
 		}
 	}
 
-	uint32_t conditionSuppressions = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS) : (it.abilities ? it.abilities->conditionSuppressions : 0);
+	uint32_t conditionSuppressions = item->getAbilityValue(ITEM_ABILITY_CONDITIONSUPPRESSIONS);
 	if (conditionSuppressions != 0) {
 		if (equip) {
 			addConditionSuppressions(conditionSuppressions);
@@ -3948,29 +3948,29 @@ void Player::updateConditions(Item* item, slots_t slot, bool equip)
 		sendIcons();
 	}
 
-	bool regeneration = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_REGENERATION) == 1 : (it.abilities ? it.abilities->regeneration : false);
+	bool regeneration = item->getAbilityValue(ITEM_ABILITY_REGENERATION);
 	if (regeneration) {
 		if (!equip) {
 			removeCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
 		} else {
 			Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_REGENERATION, -1, 0);
 
-			uint32_t healthGain = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_HEALTHGAIN) : (it.abilities ? it.abilities->healthGain : 0);
+			uint32_t healthGain = item->getAbilityValue(ITEM_ABILITY_HEALTHGAIN);
 			if (healthGain != 0) {
 				condition->setParam(CONDITION_PARAM_HEALTHGAIN, healthGain);
 			}
 
-			uint32_t healthTicks = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_HEALTHTICKS) : (it.abilities ? it.abilities->healthTicks : 0);
+			uint32_t healthTicks = item->getAbilityValue(ITEM_ABILITY_HEALTHTICKS);
 			if (healthTicks != 0) {
 				condition->setParam(CONDITION_PARAM_HEALTHTICKS, healthTicks);
 			}
 
-			uint32_t manaGain = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_MANAGAIN) : (it.abilities ? it.abilities->manaGain : 0);
+			uint32_t manaGain = item->getAbilityValue(ITEM_ABILITY_MANAGAIN);
 			if (manaGain != 0) {
 				condition->setParam(CONDITION_PARAM_MANAGAIN, manaGain);
 			}
 
-			uint32_t manaTicks = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_MANATICKS) : (it.abilities ? it.abilities->manaTicks : 0);
+			uint32_t manaTicks = item->getAbilityValue(ITEM_ABILITY_MANATICKS);
 			if (manaTicks != 0) {
 				condition->setParam(CONDITION_PARAM_MANATICKS, manaTicks);
 			}

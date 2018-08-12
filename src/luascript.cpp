@@ -1450,7 +1450,13 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ABILITY_MAGICPOINTS)
 	registerEnum(ITEM_ABILITY_MAXHITPOINTSPERCENT)
 	registerEnum(ITEM_ABILITY_MAXMANAPOINTSPERCENT)
-	registerEnum(ITEM_ABILITY_MAXMAGICPOINTSPERCENT)
+	registerEnum(ITEM_ABILITY_MAGICPOINTSPERCENT)
+	registerEnum(ITEM_ABILITY_CRITICALHITCHANCE)
+	registerEnum(ITEM_ABILITY_CRITICALHITAMOUNT)
+	registerEnum(ITEM_ABILITY_LIFELEECHCHANCE)
+	registerEnum(ITEM_ABILITY_LIFELEECHAMOUNT)
+	registerEnum(ITEM_ABILITY_MANALEECHCHANCE)
+	registerEnum(ITEM_ABILITY_MANALEECHAMOUNT)
 	registerEnum(ITEM_ABILITY_SKILLFIST)
 	registerEnum(ITEM_ABILITY_SKILLCLUB)
 	registerEnum(ITEM_ABILITY_SKILLSWORD)
@@ -1458,13 +1464,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ABILITY_SKILLDISTANCE)
 	registerEnum(ITEM_ABILITY_SKILLSHIELD)
 	registerEnum(ITEM_ABILITY_SKILLFISHING)
-	registerEnum(ITEM_ABILITY_SKILLFISTPERCENT)
-	registerEnum(ITEM_ABILITY_SKILLCLUBPERCENT)
-	registerEnum(ITEM_ABILITY_SKILLSWORDPERCENT)
-	registerEnum(ITEM_ABILITY_SKILLAXEPERCENT)
-	registerEnum(ITEM_ABILITY_SKILLDISTANCEPERCENT)
-	registerEnum(ITEM_ABILITY_SKILLSHIELDPERCENT)
-	registerEnum(ITEM_ABILITY_SKILLFISHINGPERCENT)
 	registerEnum(ITEM_ABILITY_SPEED)
 	registerEnum(ITEM_ABILITY_ABSORBPHYSICAL)
 	registerEnum(ITEM_ABILITY_ABSORBENERGY)
@@ -6203,7 +6202,7 @@ int LuaScriptInterface::luaItemSetAbility(lua_State* L)
 				for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
 					slots_t slot = static_cast<slots_t>(i);
 					Item* slotItem = player->getInventoryItem(slot);
-					if (slotItem && slotItem == item) {
+					if (slotItem && slotItem == item && player->isItemAbilityEnabled(slot)) {
 						player->sendStats();
 						player->sendSkills();
 						player->updateConditions(item, slot, true);
@@ -6235,10 +6234,11 @@ int LuaScriptInterface::luaItemRemoveAbility(lua_State* L)
 				for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
 					slots_t slot = static_cast<slots_t>(i);
 					Item* slotItem = player->getInventoryItem(slot);
-					if (slotItem && slotItem == item) {
+					if (slotItem && slotItem == item && player->isItemAbilityEnabled(slot)) {
 						player->sendStats();
 						player->sendSkills();
 						player->updateConditions(item, slot, false);
+						break;
 					}
 				}
 			}

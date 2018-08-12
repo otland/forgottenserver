@@ -726,6 +726,14 @@ Ability_ReadValue Item::readAbility(AbilityTypes_t type, PropStream& propStream)
 			setAbilityInt(ITEM_ABILITY_MANATICKS, value);
 			break;
 		}
+		case ABILITY_CONDITIONIMMUNITIES: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_CONDITIONIMMUNITIES, value);
+			break;
+		}
 		case ABILITY_CONDITIONSUPPRESSIONS: {
 			int64_t value;
 			if (!propStream.read<int64_t>(value)) {
@@ -734,12 +742,268 @@ Ability_ReadValue Item::readAbility(AbilityTypes_t type, PropStream& propStream)
 			setAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS, value);
 			break;
 		}
+		case ABILITY_MAXHITPOINTS: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MAXHITPOINTS, value);
+			break;
+		}
+		case ABILITY_MAXMANAPOINTS: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MAXMANAPOINTS, value);
+			break;
+		}
+		case ABILITY_MAGICPOINTS: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MAGICPOINTS, value);
+			break;
+		}
+		case ABILITY_MAXHITPOINTSPERCENT: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MAXHITPOINTSPERCENT, value);
+			break;
+		}
+		case ABILITY_MAXMANAPOINTSPERCENT: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MAXMANAPOINTSPERCENT, value);
+			break;
+		}
+		case ABILITY_MAGICPOINTSPERCENT: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MAGICPOINTSPERCENT, value);
+			break;
+		}
+		case ABILITY_SKILLFIST: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLFIST, value);
+			break;
+		}
+		case ABILITY_SKILLCLUB: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLCLUB, value);
+			break;
+		}
+		case ABILITY_SKILLSWORD: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLSWORD, value);
+			break;
+		}
+		case ABILITY_SKILLAXE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLAXE, value);
+			break;
+		}
+		case ABILITY_CRITICALHITCHANCE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_CRITICALHITCHANCE, value);
+			break;
+		}
+		case ABILITY_CRITICALHITAMOUNT: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_CRITICALHITAMOUNT, value);
+			break;
+		}
+		case ABILITY_LIFELEECHCHANCE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_LIFELEECHCHANCE, value);
+			break;
+		}
+		case ABILITY_LIFELEECHAMOUNT: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_LIFELEECHAMOUNT, value);
+			break;
+		}
+		case ABILITY_MANALEECHCHANCE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MANALEECHCHANCE, value);
+			break;
+		}
+		case ABILITY_MANALEECHAMOUNT: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MANALEECHAMOUNT, value);
+			break;
+		}
 		case ABILITY_SPEED: {
 			int64_t value;
 			if (!propStream.read<int64_t>(value)) {
 				return ABILITY_READ_ERROR;
 			}
 			setAbilityInt(ITEM_ABILITY_SPEED, value);
+			break;
+		}
+		case ABILITY_ABSORBPHYSICAL: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBPHYSICAL, value);
+			break;
+		}
+		case ABILITY_ABSORBENERGY: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBENERGY, value);
+			break;
+		}
+		case ABILITY_ABSORBEARTH: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBEARTH, value);
+			break;
+		}
+		case ABILITY_ABSORBFIRE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBFIRE, value);
+			break;
+		}
+		case ABILITY_ABSORBWATER: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBWATER, value);
+			break;
+		}
+		case ABILITY_ABSORBICE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBICE, value);
+			break;
+		}
+		case ABILITY_ABSORBHOLY: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBHOLY, value);
+			break;
+		}
+		case ABILITY_ABSORBDEATH: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ABSORBDEATH, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBPHYSICAL: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBPHYSICAL, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBENERGY: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBENERGY, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBEARTH: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBEARTH, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBFIRE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBFIRE, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBWATER: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBWATER, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBICE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBICE, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBHOLY: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBHOLY, value);
+			break;
+		}
+		case ABILITY_FIELDABSORBDEATH: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_FIELDABSORBDEATH, value);
 			break;
 		}
 		case ABILITY_ELEMENTTYPE: {
@@ -811,50 +1075,6 @@ void Item::serializeAbility(PropWriteStream& propWriteStream) const
 			propWriteStream.write<int64_t>(getAbilityInt(itemAbility));
 		}
 	}
-	/*
-	if (hasAbility(ITEM_ABILITY_HEALTHGAIN)) {
-		propWriteStream.write<uint8_t>(ABILITY_HEALTHGAIN);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_HEALTHGAIN));
-	}
-	if (hasAbility(ITEM_ABILITY_HEALTHTICKS)) {
-		propWriteStream.write<uint8_t>(ABILITY_HEALTHTICKS);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_HEALTHTICKS));
-	}
-	if (hasAbility(ITEM_ABILITY_MANAGAIN)) {
-		propWriteStream.write<uint8_t>(ABILITY_MANAGAIN);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANAGAIN));
-	}
-	if (hasAbility(ITEM_ABILITY_MANATICKS)) {
-		propWriteStream.write<uint8_t>(ABILITY_MANATICKS);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANATICKS));
-	}
-	if (hasAbility(ITEM_ABILITY_CONDITIONSUPPRESSIONS)) {
-		propWriteStream.write<uint8_t>(ABILITY_CONDITIONSUPPRESSIONS);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS));
-	}
-	if (hasAbility(ITEM_ABILITY_ELEMENTTYPE)) {
-		std::cout << static_cast<uint64_t>(ITEM_ABILITY_ELEMENTTYPE) << std::endl;
-		std::cout << getAbilityInt(ITEM_ABILITY_ELEMENTTYPE) << std::endl;
-		propWriteStream.write<uint8_t>(ABILITY_ELEMENTTYPE);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_ELEMENTTYPE));
-	}
-	if (hasAbility(ITEM_ABILITY_ELEMENTDAMAGE)) {
-		propWriteStream.write<uint8_t>(ABILITY_ELEMENTDAMAGE);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_ELEMENTDAMAGE));
-	}
-	if (hasAbility(ITEM_ABILITY_MANASHIELD)) {
-		propWriteStream.write<uint8_t>(ABILITY_MANASHIELD);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANASHIELD));
-	}
-	if (hasAbility(ITEM_ABILITY_INVISIBLE)) {
-		propWriteStream.write<uint8_t>(ABILITY_INVISIBLE);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_INVISIBLE));
-	}
-	if (hasAbility(ITEM_ABILITY_REGENERATION)) {
-		propWriteStream.write<uint8_t>(ABILITY_REGENERATION);
-		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_REGENERATION));
-	}
-	*/
 }
 
 void Item::serializeAttr(PropWriteStream& propWriteStream) const
@@ -1112,14 +1332,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			if (attack != 0) {
 				begin = false;
 				s << " (Atk:" << attack;
-				if (item->abilities) {
-					int64_t elementType = item->getAbilityInt(ITEM_ABILITY_ELEMENTTYPE);
-					int64_t elementDamage = item->getAbilityInt(ITEM_ABILITY_ELEMENTDAMAGE);
-					if (elementType != COMBAT_NONE && elementDamage != 0) {
-						s << " physical + " << elementDamage << ' ' << getCombatName(static_cast<CombatType_t>(elementType));
-					}
-				} else if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
-					s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
+				int64_t elementType = item->getAbilityValue(ITEM_ABILITY_ELEMENTTYPE);
+				int64_t elementDamage = item->getAbilityValue(ITEM_ABILITY_ELEMENTDAMAGE);
+				if (elementType != COMBAT_NONE && elementDamage != 0) {
+					s << " physical + " << elementDamage << ' ' << getCombatName(static_cast<CombatType_t>(elementType));
 				}
 			}
 
@@ -1138,9 +1354,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 		}
 
-		if (it.abilities) {
+		if (item->abilities || it.abilities) {
 			for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-				if (!it.abilities->skills[i]) {
+				const int16_t skillValue = item->getAbilityValue(skillToAbility(i));
+				if (!skillValue) {
 					continue;
 				}
 
@@ -1151,11 +1368,12 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
+				s << getSkillName(i) << ' ' << std::showpos << skillValue << std::noshowpos;
 			}
 
 			for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; i++) {
-				if (!it.abilities->specialSkills[i]) {
+				const int16_t specialSkillValue = item->getAbilityValue(specialSkillToAbility(i));
+				if (!specialSkillValue) {
 					continue;
 				}
 
@@ -1166,10 +1384,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << getSpecialSkillName(i) << ' ' << std::showpos << it.abilities->specialSkills[i] << '%' << std::noshowpos;
+				s << getSpecialSkillName(i) << ' ' << std::showpos << specialSkillValue << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->stats[STAT_MAGICPOINTS]) {
+			const int16_t magicPoints = item->getAbilityValue(ITEM_ABILITY_MAGICPOINTS);
+			if (magicPoints) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1177,13 +1396,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
+				s << "magic level " << std::showpos << magicPoints << std::noshowpos;
 			}
 
-			int16_t show = it.abilities->absorbPercent[0];
+			int16_t show = item->getAbilityValue(ITEM_ABILITY_ABSORBPHYSICAL);
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] != show) {
+					if (item->getAbilityInt(combatToAbsorb(indexToCombatType(i))) != show) {
 						show = 0;
 						break;
 					}
@@ -1194,7 +1413,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] == 0) {
+					std::cout << "i: " << i << '\n';
+					const int16_t absorbPercent = item->getAbilityValue(combatToAbsorb(indexToCombatType(i)));
+					std::cout << "combat name: " << getCombatName(indexToCombatType(i)) << '\n';
+					std::cout << "absorb percent: " << absorbPercent << '\n';
+					if (absorbPercent == 0) {
 						continue;
 					}
 
@@ -1213,7 +1436,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
+					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << absorbPercent << std::noshowpos << '%';
 				}
 			} else {
 				if (begin) {
@@ -1226,10 +1449,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			show = it.abilities->fieldAbsorbPercent[0];
+			show = item->getAbilityValue(ITEM_ABILITY_FIELDABSORBPHYSICAL);
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] != show) {
+					if (item->getAbilityInt(combatToFieldAbsorb(indexToCombatType(i))) != show) {
 						show = 0;
 						break;
 					}
@@ -1240,7 +1463,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->fieldAbsorbPercent[i] == 0) {
+					const int16_t fieldAbsorbPercent = item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i)));
+					if (fieldAbsorbPercent == 0) {
 						continue;
 					}
 
@@ -1259,7 +1483,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
+					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << fieldAbsorbPercent << std::noshowpos << '%';
 				}
 			} else {
 				if (begin) {
@@ -1272,7 +1496,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			if (it.abilities->speed) {
+			const int16_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
+			if (speed) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1280,7 +1505,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
+				s << "speed " << std::showpos << (speed >> 1) << std::noshowpos;
 			}
 		}
 
@@ -1296,9 +1521,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			begin = false;
 		}
 
-		if (it.abilities) {
+		if (item->abilities || it.abilities) {
 			for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-				if (!it.abilities->skills[i]) {
+				const int16_t skillValue = item->getAbilityValue(skillToAbility(i));
+				if (!skillValue) {
 					continue;
 				}
 
@@ -1309,10 +1535,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
+				s << getSkillName(i) << ' ' << std::showpos << skillValue << std::noshowpos;
 			}
 
-			if (it.abilities->stats[STAT_MAGICPOINTS]) {
+			const int16_t magicPoints = item->getAbilityValue(ITEM_ABILITY_MAGICPOINTS);
+			if (magicPoints) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1320,13 +1547,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
+				s << "magic level " << std::showpos << magicPoints << std::noshowpos;
 			}
 
-			int16_t show = it.abilities->absorbPercent[0];
+			int16_t show = item->getAbilityValue(ITEM_ABILITY_ABSORBPHYSICAL);
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] != show) {
+					if (item->getAbilityValue(combatToAbsorb(indexToCombatType(i))) != show) {
 						show = 0;
 						break;
 					}
@@ -1336,7 +1563,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			if (!show) {
 				bool protectionBegin = true;
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] == 0) {
+					const int16_t absorbPercent = item->getAbilityValue(combatToAbsorb(indexToCombatType(i)));
+					if (absorbPercent == 0) {
 						continue;
 					}
 
@@ -1355,7 +1583,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
+					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << absorbPercent << std::noshowpos << '%';
 				}
 			} else {
 				if (begin) {
@@ -1368,10 +1596,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			show = it.abilities->fieldAbsorbPercent[0];
+			show = item->getAbilityValue(ITEM_ABILITY_FIELDABSORBPHYSICAL);
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->absorbPercent[i] != show) {
+					if (item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i))) != show) {
 						show = 0;
 						break;
 					}
@@ -1382,7 +1610,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					if (it.abilities->fieldAbsorbPercent[i] == 0) {
+					const int16_t fieldAbsorbPercent = item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i)));
+					if (fieldAbsorbPercent == 0) {
 						continue;
 					}
 
@@ -1401,7 +1630,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << ", ";
 					}
 
-					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << it.abilities->fieldAbsorbPercent[i] << std::noshowpos << '%';
+					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << fieldAbsorbPercent << std::noshowpos << '%';
 				}
 			} else {
 				if (begin) {
@@ -1414,7 +1643,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			if (it.abilities->speed) {
+			int64_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
+			if (speed) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1422,7 +1652,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
+				s << "speed " << std::showpos << (speed >> 1) << std::noshowpos;
 			}
 		}
 
@@ -1443,37 +1673,27 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << " (Vol:" << volume << ')';
 		}
 	} else {
-		bool found = true;
-		if (item->abilities) {
-			if (item->getAbilityInt(ITEM_ABILITY_SPEED) > 0) {
-				s << " (speed " << std::showpos << (item->getAbilityInt(ITEM_ABILITY_SPEED) / 2) << std::noshowpos << ')';
-			} else if (hasBitSet(CONDITION_DRUNK, item->getAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS))) {
-				s << " (hard drinking)";
-			} else if (item->getAbilityInt(ITEM_ABILITY_INVISIBLE) == 1) {
-				s << " (invisibility)";
-			} else if (item->getAbilityInt(ITEM_ABILITY_REGENERATION) == 1) {
-				s << " (faster regeneration)";
-			} else if (item->getAbilityInt(ITEM_ABILITY_MANASHIELD) == 1) {
-				s << " (mana shield)";
-			} else {
-				found = false;
-			}
-		} else if (it.abilities) {
-			if (it.abilities->speed > 0) {
-				s << " (speed " << std::showpos << (it.abilities->speed / 2) << std::noshowpos << ')';
-			} else if (hasBitSet(CONDITION_DRUNK, it.abilities->conditionSuppressions)) {
-				s << " (hard drinking)";
-			} else if (it.abilities->invisible) {
-				s << " (invisibility)";
-			} else if (it.abilities->regeneration) {
-				s << " (faster regeneration)";
-			} else if ( it.abilities->manaShield) {
-				s << " (mana shield)";
-			} else {
-				found = false;
-			}
-		} else {
-			found = false;
+		bool found = false;
+		const int16_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
+		if (speed > 0) {
+			s << " (speed " << std::showpos << (speed / 2) << std::noshowpos << ')';
+			found = true;
+		}
+		if (hasBitSet(CONDITION_DRUNK, item->getAbilityValue(ITEM_ABILITY_CONDITIONSUPPRESSIONS))) {
+			s << " (hard drinking)";
+			found = true;
+		}
+		if (item->getAbilityValue(ITEM_ABILITY_INVISIBLE)) {
+			s << " (invisibility)";
+			found = true;
+		}
+		if (item->getAbilityValue(ITEM_ABILITY_REGENERATION)) {
+			s << " (faster regeneration)";
+			found = true;
+		}
+		if (item->getAbilityValue(ITEM_ABILITY_MANASHIELD)) {
+			s << " (mana shield)";
+			found = true;
 		}
 
 		if (!found) {
@@ -1806,6 +2026,113 @@ ItemAbilities::Ability& ItemAbilities::getAbility(itemAbilityTypes type)
 	abilityBits |= type;
 	abilityList.emplace_front(type);
 	return abilityList.front();
+}
+
+int64_t Item::getAbilityValue(itemAbilityTypes type) const
+{
+	const ItemType& it = Item::items[id];
+	if ((!it.abilities && abilities) || (abilities && hasAbility(type))) {
+		return getAbilityInt(type);
+	}
+	if (!it.abilities) {
+		return 0;
+	}
+	switch (type) {
+		case ITEM_ABILITY_HEALTHGAIN:
+			return it.abilities->healthGain;
+		case ITEM_ABILITY_HEALTHTICKS:
+			return it.abilities->healthTicks;
+		case ITEM_ABILITY_MANAGAIN:
+			return it.abilities->manaGain;
+		case ITEM_ABILITY_CONDITIONIMMUNITIES:
+			return it.abilities->conditionImmunities;
+		case ITEM_ABILITY_CONDITIONSUPPRESSIONS:
+			return it.abilities->conditionSuppressions;
+		case ITEM_ABILITY_MAXHITPOINTS:
+			return it.abilities->stats[STAT_MAXHITPOINTS];
+		case ITEM_ABILITY_MAXMANAPOINTS:
+			return it.abilities->stats[STAT_MAXMANAPOINTS];
+		case ITEM_ABILITY_MAGICPOINTS:
+			return it.abilities->stats[STAT_MAGICPOINTS];
+		case ITEM_ABILITY_MAXHITPOINTSPERCENT:
+			return it.abilities->statsPercent[STAT_MAXHITPOINTS];
+		case ITEM_ABILITY_MAXMANAPOINTSPERCENT:
+			return it.abilities->statsPercent[STAT_MAXMANAPOINTS];
+		case ITEM_ABILITY_MAGICPOINTSPERCENT:
+			return it.abilities->statsPercent[STAT_MAGICPOINTS];
+		case ITEM_ABILITY_SKILLFIST:
+			return it.abilities->skills[SKILL_FIST];
+		case ITEM_ABILITY_SKILLCLUB:
+			return it.abilities->skills[SKILL_CLUB];
+		case ITEM_ABILITY_SKILLSWORD:
+			return it.abilities->skills[SKILL_SWORD];
+		case ITEM_ABILITY_SKILLAXE:
+			return it.abilities->skills[SKILL_AXE];
+		case ITEM_ABILITY_SKILLDISTANCE:
+			return it.abilities->skills[SKILL_DISTANCE];
+		case ITEM_ABILITY_SKILLSHIELD:
+			return it.abilities->skills[SKILL_SHIELD];
+		case ITEM_ABILITY_SKILLFISHING:
+			return it.abilities->skills[SKILL_FISHING];
+		case ITEM_ABILITY_CRITICALHITCHANCE:
+			return it.abilities->specialSkills[SPECIALSKILL_CRITICALHITCHANCE];
+		case ITEM_ABILITY_CRITICALHITAMOUNT:
+			return it.abilities->specialSkills[SPECIALSKILL_CRITICALHITAMOUNT];
+		case ITEM_ABILITY_LIFELEECHCHANCE:
+			return it.abilities->specialSkills[SPECIALSKILL_HITPOINTSLEECHCHANCE];
+		case ITEM_ABILITY_LIFELEECHAMOUNT:
+			return it.abilities->specialSkills[SPECIALSKILL_HITPOINTSLEECHAMOUNT];
+		case ITEM_ABILITY_MANALEECHCHANCE:
+			return it.abilities->specialSkills[SPECIALSKILL_MANAPOINTSLEECHCHANCE];
+		case ITEM_ABILITY_MANALEECHAMOUNT:
+			return it.abilities->specialSkills[SPECIALSKILL_MANAPOINTSLEECHAMOUNT];
+		case ITEM_ABILITY_SPEED:
+			return it.abilities->speed;
+		case ITEM_ABILITY_ABSORBPHYSICAL:
+			return it.abilities->absorbPercent[0];
+		case ITEM_ABILITY_ABSORBENERGY:
+			return it.abilities->absorbPercent[1];
+		case ITEM_ABILITY_ABSORBEARTH:
+			return it.abilities->absorbPercent[2];
+		case ITEM_ABILITY_ABSORBFIRE:
+			return it.abilities->absorbPercent[3];
+		case ITEM_ABILITY_ABSORBWATER:
+			return it.abilities->absorbPercent[4];
+		case ITEM_ABILITY_ABSORBICE:
+			return it.abilities->absorbPercent[5];
+		case ITEM_ABILITY_ABSORBHOLY:
+			return it.abilities->absorbPercent[6];
+		case ITEM_ABILITY_ABSORBDEATH:
+			return it.abilities->absorbPercent[7];
+		case ITEM_ABILITY_FIELDABSORBPHYSICAL:
+			return it.abilities->fieldAbsorbPercent[0];
+		case ITEM_ABILITY_FIELDABSORBENERGY:
+			return it.abilities->fieldAbsorbPercent[1];
+		case ITEM_ABILITY_FIELDABSORBEARTH:
+			return it.abilities->fieldAbsorbPercent[2];
+		case ITEM_ABILITY_FIELDABSORBFIRE:
+			return it.abilities->fieldAbsorbPercent[3];
+		case ITEM_ABILITY_FIELDABSORBWATER:
+			return it.abilities->fieldAbsorbPercent[4];
+		case ITEM_ABILITY_FIELDABSORBICE:
+			return it.abilities->fieldAbsorbPercent[5];
+		case ITEM_ABILITY_FIELDABSORBHOLY:
+			return it.abilities->fieldAbsorbPercent[6];
+		case ITEM_ABILITY_FIELDABSORBDEATH:
+			return it.abilities->fieldAbsorbPercent[7];
+		case ITEM_ABILITY_ELEMENTTYPE:
+			return it.abilities->elementType;
+		case ITEM_ABILITY_ELEMENTDAMAGE:
+			return it.abilities->elementDamage;
+		case ITEM_ABILITY_MANASHIELD:
+			return static_cast<int64_t>(it.abilities->manaShield);
+		case ITEM_ABILITY_INVISIBLE:
+			return static_cast<int64_t>(it.abilities->invisible);
+		case ITEM_ABILITY_REGENERATION:
+			return static_cast<int64_t>(it.abilities->regeneration);
+		default:
+			return 0;
+	}
 }
 
 void ItemAbilities::setAbilityInt(itemAbilityTypes type, int64_t value)
