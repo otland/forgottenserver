@@ -1142,7 +1142,6 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
-		void removeAbilityCondition(Item* item, slots_t slot, itemAbilityTypes type, int64_t value);
 		void updateAbilityConditions(Item* item, slots_t slot, bool equip);
 
 	private:

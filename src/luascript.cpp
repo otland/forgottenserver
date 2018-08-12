@@ -6195,23 +6195,6 @@ int LuaScriptInterface::luaItemSetAbility(lua_State* L)
 
 	if (ItemAbilities::isAbility(ability)) {
 		item->setAbilityInt(ability, getNumber<int64_t>(L, 3));
-		/*
-		Cylinder* topParent = item->getTopParent();
-		if (Creature* creature = topParent->getCreature()) {
-			if (Player* player = creature->getPlayer()) {
-				for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
-					slots_t slot = static_cast<slots_t>(i);
-					Item* slotItem = player->getInventoryItem(slot);
-					if (slotItem && slotItem == item && player->isItemAbilityEnabled(slot)) {
-						player->sendStats();
-						player->sendSkills();
-						player->updateAbilityConditions(item, slot, true);
-						break;
-					}
-				}
-			}
-		}
-		*/
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6228,25 +6211,7 @@ int LuaScriptInterface::luaItemRemoveAbility(lua_State* L)
 	}
 	itemAbilityTypes type = getNumber<itemAbilityTypes>(L, 2);
 	if (type != ITEM_ABILITY_NONE) {
-		// int64_t value = item->getAbilityInt(type);
 		item->removeAbility(type);
-		/*
-		Cylinder* topParent = item->getTopParent();
-		if (Creature* creature = topParent->getCreature()) {
-			if (Player* player = creature->getPlayer()) {
-				for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
-					slots_t slot = static_cast<slots_t>(i);
-					Item* slotItem = player->getInventoryItem(slot);
-					if (slotItem && slotItem == item && player->isItemAbilityEnabled(slot)) {
-						player->sendStats();
-						player->sendSkills();
-						player->removeAbilityCondition(item, slot, type, value);
-						break;
-					}
-				}
-			}
-		}
-		*/
 		lua_pushboolean(L, true);
 	} else {
 		lua_pushboolean(L, false);
