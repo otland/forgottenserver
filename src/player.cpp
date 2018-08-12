@@ -2702,7 +2702,6 @@ void Player::addThing(int32_t index, Thing* thing)
 
 void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
-	std::cout << "Player::updateThing (ID: " << itemId << ", Count: " << count << ")" << '\n';
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
