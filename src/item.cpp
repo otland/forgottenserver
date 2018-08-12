@@ -1349,8 +1349,8 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				if (attack != 0) {
 					begin = false;
 					s << " (Atk:" << attack;
-					int64_t elementType = item->getAbilityValue(ITEM_ABILITY_ELEMENTTYPE);
-					int64_t elementDamage = item->getAbilityValue(ITEM_ABILITY_ELEMENTDAMAGE);
+					int64_t elementType = item ? item->getAbilityValue(ITEM_ABILITY_ELEMENTTYPE) : it.abilities->elementType;
+					int64_t elementDamage = item ? item->getAbilityValue(ITEM_ABILITY_ELEMENTDAMAGE) : it.abilities->elementDamage;
 					if (elementType != COMBAT_NONE && elementDamage != 0) {
 						s << " physical + " << elementDamage << ' ' << getCombatName(static_cast<CombatType_t>(elementType));
 					}
@@ -1395,9 +1395,9 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			begin = false;
 		}
 
-		if (item->abilities || it.abilities) {
+		if (item && item->abilities || it.abilities) {
 			for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-				const int16_t skillValue = item->getAbilityValue(skillToAbility(i));
+				const int16_t skillValue = item ? item->getAbilityValue(skillToAbility(i)) : (it.abilities ? it.abilities->skills[i] : 0);
 				if (!skillValue) {
 					continue;
 				}
@@ -1413,7 +1413,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 
 			for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; i++) {
-				const int16_t specialSkillValue = item->getAbilityValue(specialSkillToAbility(i));
+				const int16_t specialSkillValue = item ? item->getAbilityValue(specialSkillToAbility(i)) : (it.abilities ? it.abilities->specialSkills[i] : 0);
 				if (!specialSkillValue) {
 					continue;
 				}
@@ -1428,7 +1428,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << getSpecialSkillName(i) << ' ' << std::showpos << specialSkillValue << '%' << std::noshowpos;
 			}
 
-			const int16_t magicPoints = item->getAbilityValue(ITEM_ABILITY_MAGICPOINTS);
+			const int16_t magicPoints = item ? item->getAbilityValue(ITEM_ABILITY_MAGICPOINTS) : (it.abilities ? it.abilities->stats[STAT_MAGICPOINTS] : 0);
 			if (magicPoints) {
 				if (begin) {
 					begin = false;
@@ -1440,10 +1440,22 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "magic level " << std::showpos << magicPoints << std::noshowpos;
 			}
 
-			int16_t show = item->getAbilityValue(ITEM_ABILITY_ABSORBPHYSICAL);
+			const int16_t magicPointsPercent = item ? item->getAbilityValue(ITEM_ABILITY_MAGICPOINTSPERCENT) : (it.abilities ? it.abilities->statsPercent[STAT_MAGICPOINTS] : 0);
+			if (magicPoints) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "magic level percent " << std::showpos << magicPoints << '%' << std::noshowpos;
+			}
+
+			int16_t show = item ? item->getAbilityValue(ITEM_ABILITY_ABSORBPHYSICAL) : (it.abilities ? it.abilities->absorbPercent[0] : 0);
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (item->getAbilityValue(combatToAbsorb(indexToCombatType(i))) != show) {
+					if (item && item->getAbilityValue(combatToAbsorb(indexToCombatType(i))) != show || it.abilities && it.abilities->absorbPercent[indexToCombatType(i)] != show) {
 						show = 0;
 						break;
 					}
@@ -1453,7 +1465,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			if (!show) {
 				bool protectionBegin = true;
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					const int16_t absorbPercent = item->getAbilityValue(combatToAbsorb(indexToCombatType(i)));
+					const int16_t absorbPercent = item ? item->getAbilityValue(combatToAbsorb(indexToCombatType(i))) : (it.abilities ? it.abilities->absorbPercent[i] : 0);
 					if (absorbPercent == 0) {
 						continue;
 					}
@@ -1486,10 +1498,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			show = item->getAbilityValue(ITEM_ABILITY_FIELDABSORBPHYSICAL);
+			show = item ? item->getAbilityValue(ITEM_ABILITY_FIELDABSORBPHYSICAL) : (it.abilities ? it.abilities->fieldAbsorbPercent[0] : 0);
 			if (show != 0) {
-				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i))) != show) {
+				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+					if (item && item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i))) != show || it.abilities && it.abilities->fieldAbsorbPercent[indexToCombatType(i)] != show) {
 						show = 0;
 						break;
 					}
@@ -1500,7 +1512,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					const int16_t fieldAbsorbPercent = item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i)));
+					const int16_t fieldAbsorbPercent = item ? item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i))): (it.abilities ? it.abilities->fieldAbsorbPercent[i] : 0);
 					if (fieldAbsorbPercent == 0) {
 						continue;
 					}
@@ -1533,7 +1545,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			int64_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
+			int64_t speed = item ? item->getAbilityValue(ITEM_ABILITY_SPEED) : (it.abilities ? it.abilities->speed : 0);
 			if (speed) {
 				if (begin) {
 					begin = false;
@@ -1550,19 +1562,19 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << ')';
 		}
 		bool found = false;
-		if (hasBitSet(CONDITION_DRUNK, item->getAbilityValue(ITEM_ABILITY_CONDITIONSUPPRESSIONS))) {
+		if (hasBitSet(CONDITION_DRUNK, item ? item->getAbilityValue(ITEM_ABILITY_CONDITIONSUPPRESSIONS) : (it.abilities ? it.abilities->conditionSuppressions : 0))) {
 			s << " (hard drinking)";
 			found = true;
 		}
-		if (item->getAbilityValue(ITEM_ABILITY_INVISIBLE)) {
+		if (item ? item->getAbilityValue(ITEM_ABILITY_INVISIBLE) : (it.abilities ? it.abilities->invisible : false)) {
 			s << " (invisibility)";
 			found = true;
 		}
-		if (item->getAbilityValue(ITEM_ABILITY_REGENERATION)) {
+		if (item ? item->getAbilityValue(ITEM_ABILITY_REGENERATION) : (it.abilities ? it.abilities->regeneration : false)) {
 			s << " (faster regeneration)";
 			found = true;
 		}
-		if (item->getAbilityValue(ITEM_ABILITY_MANASHIELD)) {
+		if (item ? item->getAbilityValue(ITEM_ABILITY_MANASHIELD) : (it.abilities ? it.abilities->manaShield : false)) {
 			s << " (mana shield)";
 			found = true;
 		}
