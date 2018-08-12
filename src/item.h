@@ -115,7 +115,54 @@ enum AbilityTypes_t {
 	ABILITY_HEALTHGAIN = 1,
 	ABILITY_HEALTHTICKS = 2,
 	ABILITY_MANAGAIN = 3,
-	ABILITY_MANATICKS = 4
+	ABILITY_MANATICKS = 4,
+	ABILITY_CONDITIONIMMUNITIES = 5,
+	ABILITY_CONDITIONSUPPRESSIONS = 6,
+	ABILITY_MAXHITPOINTS = 7,
+	ABILITY_MAXMANAPOINTS = 8,
+	ABILITY_MAGICPOINTS = 9,
+	ABILITY_MAXHITPOINTSPERCENT = 10,
+	ABILITY_MAXMANAPOINTSPERCENT = 11,
+	ABILITY_MAXMAGICPOINTSPERCENT = 12,
+	ABILITY_SKILLFIST = 13,
+	ABILITY_SKILLCLUB = 14,
+	ABILITY_SKILLSWORD = 15,
+	ABILITY_SKILLAXE = 16,
+	ABILITY_SKILLDISTANCE = 17,
+	ABILITY_SKILLSHIELD = 18,
+	ABILITY_SKILLFISHING = 19,
+	ABILITY_SKILLFISTPERCENT = 20,
+	ABILITY_SKILLCLUBPERCENT = 21,
+	ABILITY_SKILLSWORDPERCENT = 22,
+	ABILITY_SKILLAXEPERCENT = 23,
+	ABILITY_SKILLDISTANCEPERCENT = 24,
+	ABILITY_SKILLSHIELDPERCENT = 25,
+	ABILITY_SKILLFISHINGPERCENT = 26,
+	ABILITY_SPEED = 27,
+	ABILITY_ABSORBPHYSICAL = 28,
+	ABILITY_ABSORBENERGY = 29,
+	ABILITY_ABSORBEARTH = 30,
+	ABILITY_ABSORBFIRE = 31,
+	ABILITY_ABSORBWATER = 32,
+	ABILITY_ABSORBICE = 33,
+	ABILITY_ABSORBHOLY = 34,
+	ABILITY_ABSORBDEATH = 35,
+	ABILITY_FIELDABSORBPHYSICAL = 36,
+	ABILITY_FIELDABSORBENERGY = 37,
+	ABILITY_FIELDABSORBEARTH = 38,
+	ABILITY_FIELDABSORBFIRE = 39,
+	ABILITY_FIELDABSORBWATER = 40,
+	ABILITY_FIELDABSORBICE = 41,
+	ABILITY_FIELDABSORBHOLY = 42,
+	ABILITY_FIELDABSORBDEATH = 43,
+	ABILITY_ELEMENTTYPE = 44,
+	ABILITY_ELEMENTDAMAGE = 45,
+	ABILITY_MANASHIELD = 46,
+	ABILITY_INVISIBLE = 47,
+	ABILITY_REGENERATION = 48,
+
+	ABILITY_START = ABILITY_HEALTHGAIN,
+	ABILITY_END = ABILITY_REGENERATION
 };
 
 enum Ability_ReadValue {
@@ -163,7 +210,7 @@ class ItemAbilities
 			}
 		};
 
-		std::forward_list<Ability> abilities;
+		std::forward_list<Ability> abilityList;
 		uint64_t abilityBits = 0;
 
 		int64_t getAbilityInt(itemAbilityTypes type) const {
@@ -177,17 +224,18 @@ class ItemAbilities
 		bool hasAbility(itemAbilityTypes type) const {
 			return (type & abilityBits) != 0;
 		}
+		void removeAbility(itemAbilityTypes type);
 
 		const Ability* getExistingAbility(itemAbilityTypes type) const;
 		Ability& getAbility(itemAbilityTypes type);
 
 	public:
 		static bool isAbility(itemAbilityTypes type) {
-			return (type & 0xF) != 0;
+			return (type & 0xffffffffffff) != 0;
 		}
 
-		const std::forward_list<Ability>& getList() const {
-			return abilities;
+		const std::forward_list<Ability>& getAbilities() const {
+			return abilityList;
 		}
 
 	friend class Item;
@@ -659,11 +707,13 @@ class Item : virtual public Thing
 			return nullptr;
 		}
 
+		int32_t speedValue = 0;
+
 		int64_t getAbilityInt(itemAbilityTypes type) const {
 			if (!abilities) {
 				return 0;
 			}
-			return abilities->getAbility(type).integer;
+			return abilities->getAbilityInt(type);
 		}
 
 		void setAbilityInt(itemAbilityTypes type, int64_t value) {
@@ -709,6 +759,14 @@ class Item : virtual public Thing
 				return false;
 			}
 			return abilities->hasAbility(type);
+		}
+		void removeAbility(itemAbilityTypes type) {
+			if (abilities) {
+				abilities->removeAbility(type);
+			}
+		}
+		bool hasAbilities() {
+			return !!abilities;
 		}
 
 		template<typename R>

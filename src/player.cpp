@@ -2702,6 +2702,7 @@ void Player::addThing(int32_t index, Thing* thing)
 
 void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 {
+	std::cout << "Player::updateThing (ID: " << itemId << ", Count: " << count << ")" << '\n';
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -3897,6 +3898,87 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 		}
 	}
 	return false;
+}
+
+void Player::updateConditions(Item* item, slots_t slot, bool equip)
+{
+	setItemAbility(slot, equip);
+	const ItemType& it = Item::items[item->getID()];
+	if (!item->getAbilities() && !it.abilities) {
+		return;
+	}
+	bool invisible = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_INVISIBLE) == 1 : (it.abilities ? it.abilities->invisible : false);
+	if (invisible) {
+		if (equip) {
+			Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_INVISIBLE, -1, 0);
+			addCondition(condition);
+		} else {
+			removeCondition(CONDITION_INVISIBLE, static_cast<ConditionId_t>(slot));
+		}
+	}
+
+	bool manaShield = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_MANASHIELD) == 1 : (it.abilities ? it.abilities->manaShield : false);
+	if (manaShield) {
+		if (equip) {
+			Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_MANASHIELD, -1, 0);
+			addCondition(condition);
+		} else {
+			removeCondition(CONDITION_MANASHIELD, static_cast<ConditionId_t>(slot));
+		}
+	}
+
+	int32_t speed = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_SPEED) : (it.abilities ? it.abilities->speed : 0);
+	int32_t difference = item->speedValue != 0 ? -(speed - item->speedValue) : speed;
+	if (speed != 0) {
+		if (equip) {
+			g_game.changeSpeed(this, difference);
+			item->speedValue = speed;
+		} else {
+			g_game.changeSpeed(this, -speed);
+			item->speedValue = 0;
+		}
+	}
+
+	uint32_t conditionSuppressions = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS) : (it.abilities ? it.abilities->conditionSuppressions : 0);
+	if (conditionSuppressions != 0) {
+		if (equip) {
+			addConditionSuppressions(conditionSuppressions);
+		} else {
+			removeConditionSuppressions(conditionSuppressions);
+		}
+		sendIcons();
+	}
+
+	bool regeneration = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_REGENERATION) == 1 : (it.abilities ? it.abilities->regeneration : false);
+	if (regeneration) {
+		if (!equip) {
+			removeCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
+		} else {
+			Condition* condition = Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_REGENERATION, -1, 0);
+
+			uint32_t healthGain = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_HEALTHGAIN) : (it.abilities ? it.abilities->healthGain : 0);
+			if (healthGain != 0) {
+				condition->setParam(CONDITION_PARAM_HEALTHGAIN, healthGain);
+			}
+
+			uint32_t healthTicks = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_HEALTHTICKS) : (it.abilities ? it.abilities->healthTicks : 0);
+			if (healthTicks != 0) {
+				condition->setParam(CONDITION_PARAM_HEALTHTICKS, healthTicks);
+			}
+
+			uint32_t manaGain = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_MANAGAIN) : (it.abilities ? it.abilities->manaGain : 0);
+			if (manaGain != 0) {
+				condition->setParam(CONDITION_PARAM_MANAGAIN, manaGain);
+			}
+
+			uint32_t manaTicks = item->hasAbilities() ? item->getAbilityInt(ITEM_ABILITY_MANATICKS) : (it.abilities ? it.abilities->manaTicks : 0);
+			if (manaTicks != 0) {
+				condition->setParam(CONDITION_PARAM_MANATICKS, manaTicks);
+			}
+
+			addCondition(condition);
+		}
+	}
 }
 
 bool Player::isInWar(const Player* player) const

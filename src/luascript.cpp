@@ -1443,6 +1443,51 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ABILITY_HEALTHTICKS)
 	registerEnum(ITEM_ABILITY_MANAGAIN)
 	registerEnum(ITEM_ABILITY_MANATICKS)
+	registerEnum(ITEM_ABILITY_CONDITIONIMMUNITIES)
+	registerEnum(ITEM_ABILITY_CONDITIONSUPPRESSIONS)
+	registerEnum(ITEM_ABILITY_MAXHITPOINTS)
+	registerEnum(ITEM_ABILITY_MAXMANAPOINTS)
+	registerEnum(ITEM_ABILITY_MAGICPOINTS)
+	registerEnum(ITEM_ABILITY_MAXHITPOINTSPERCENT)
+	registerEnum(ITEM_ABILITY_MAXMANAPOINTSPERCENT)
+	registerEnum(ITEM_ABILITY_MAXMAGICPOINTSPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLFIST)
+	registerEnum(ITEM_ABILITY_SKILLCLUB)
+	registerEnum(ITEM_ABILITY_SKILLSWORD)
+	registerEnum(ITEM_ABILITY_SKILLAXE)
+	registerEnum(ITEM_ABILITY_SKILLDISTANCE)
+	registerEnum(ITEM_ABILITY_SKILLSHIELD)
+	registerEnum(ITEM_ABILITY_SKILLFISHING)
+	registerEnum(ITEM_ABILITY_SKILLFISTPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLCLUBPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLSWORDPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLAXEPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLDISTANCEPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLSHIELDPERCENT)
+	registerEnum(ITEM_ABILITY_SKILLFISHINGPERCENT)
+	registerEnum(ITEM_ABILITY_SPEED)
+	registerEnum(ITEM_ABILITY_ABSORBPHYSICAL)
+	registerEnum(ITEM_ABILITY_ABSORBENERGY)
+	registerEnum(ITEM_ABILITY_ABSORBEARTH)
+	registerEnum(ITEM_ABILITY_ABSORBFIRE)
+	registerEnum(ITEM_ABILITY_ABSORBWATER)
+	registerEnum(ITEM_ABILITY_ABSORBICE)
+	registerEnum(ITEM_ABILITY_ABSORBHOLY)
+	registerEnum(ITEM_ABILITY_ABSORBDEATH)
+	registerEnum(ITEM_ABILITY_FIELDABSORBPHYSICAL)
+	registerEnum(ITEM_ABILITY_FIELDABSORBENERGY)
+	registerEnum(ITEM_ABILITY_FIELDABSORBEARTH)
+	registerEnum(ITEM_ABILITY_FIELDABSORBFIRE)
+	registerEnum(ITEM_ABILITY_FIELDABSORBWATER)
+	registerEnum(ITEM_ABILITY_FIELDABSORBICE)
+	registerEnum(ITEM_ABILITY_FIELDABSORBHOLY)
+	registerEnum(ITEM_ABILITY_FIELDABSORBDEATH)
+	registerEnum(ITEM_ABILITY_ELEMENTTYPE)
+	registerEnum(ITEM_ABILITY_ELEMENTDAMAGE)
+	registerEnum(ITEM_ABILITY_MANASHIELD)
+	registerEnum(ITEM_ABILITY_INVISIBLE)
+	registerEnum(ITEM_ABILITY_REGENERATION)
+	
 
 	registerEnum(ITEM_TYPE_DEPOT)
 	registerEnum(ITEM_TYPE_MAILBOX)
@@ -2079,6 +2124,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "setAttribute", LuaScriptInterface::luaItemSetAttribute);
 	registerMethod("Item", "getAbility", LuaScriptInterface::luaItemGetAbility);
 	registerMethod("Item", "setAbility", LuaScriptInterface::luaItemSetAbility);
+	registerMethod("Item", "removeAbility", LuaScriptInterface::luaItemRemoveAbility);
 	registerMethod("Item", "removeAttribute", LuaScriptInterface::luaItemRemoveAttribute);
 	registerMethod("Item", "getCustomAttribute", LuaScriptInterface::luaItemGetCustomAttribute);
 	registerMethod("Item", "setCustomAttribute", LuaScriptInterface::luaItemSetCustomAttribute);
@@ -6151,9 +6197,55 @@ int LuaScriptInterface::luaItemSetAbility(lua_State* L)
 
 	if (ItemAbilities::isAbility(ability)) {
 		item->setAbilityInt(ability, getNumber<int64_t>(L, 3));
+		Cylinder* topParent = item->getTopParent();
+		if (Creature* creature = topParent->getCreature()) {
+			if (Player* player = creature->getPlayer()) {
+				for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+					slots_t slot = static_cast<slots_t>(i);
+					Item* slotItem = player->getInventoryItem(slot);
+					if (slotItem && slotItem == item) {
+						player->sendStats();
+						player->sendSkills();
+						player->updateConditions(item, slot, true);
+						break;
+					}
+				}
+			}
+		}
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemRemoveAbility(lua_State* L)
+{
+	// item:removeAbility(key)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+	}
+	itemAbilityTypes type = getNumber<itemAbilityTypes>(L, 2);
+	if (type != ITEM_ABILITY_NONE) {
+		item->removeAbility(type);
+		Cylinder* topParent = item->getTopParent();
+		if (Creature* creature = topParent->getCreature()) {
+			if (Player* player = creature->getPlayer()) {
+				for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+					slots_t slot = static_cast<slots_t>(i);
+					Item* slotItem = player->getInventoryItem(slot);
+					if (slotItem && slotItem == item) {
+						player->sendStats();
+						player->sendSkills();
+						player->updateConditions(item, slot, false);
+					}
+				}
+			}
+		}
+		lua_pushboolean(L, true);
+	} else {
+		lua_pushboolean(L, false);
 	}
 	return 1;
 }

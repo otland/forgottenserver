@@ -174,6 +174,9 @@ Item::Item(const Item& i) :
 	if (i.attributes) {
 		attributes.reset(new ItemAttributes(*i.attributes));
 	}
+	if (i.abilities) {
+		abilities.reset(new ItemAbilities(*i.abilities));
+	}
 }
 
 Item* Item::clone() const
@@ -181,6 +184,9 @@ Item* Item::clone() const
 	Item* item = Item::CreateItem(id, count);
 	if (attributes) {
 		item->attributes.reset(new ItemAttributes(*attributes));
+	}
+	if (abilities) {
+		item->abilities.reset(new ItemAbilities(*abilities));
 	}
 	return item;
 }
@@ -191,27 +197,45 @@ bool Item::equals(const Item* otherItem) const
 		return false;
 	}
 
-	if (!attributes) {
-		return !otherItem->attributes;
+	if (!attributes && !abilities) {
+		return !otherItem->attributes && !otherItem->abilities;
 	}
 
-	const auto& otherAttributes = otherItem->attributes;
-	if (!otherAttributes || attributes->attributeBits != otherAttributes->attributeBits) {
-		return false;
-	}
+	if (attributes) {
+		const auto& otherAttributes = otherItem->attributes;
+		if (!otherAttributes || attributes->attributeBits != otherAttributes->attributeBits) {
+			return false;
+		}
 
-	const auto& attributeList = attributes->attributes;
-	const auto& otherAttributeList = otherAttributes->attributes;
-	for (const auto& attribute : attributeList) {
-		if (ItemAttributes::isStrAttrType(attribute.type)) {
-			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type && *attribute.value.string != *otherAttribute.value.string) {
-					return false;
+		const auto& attributeList = attributes->attributes;
+		const auto& otherAttributeList = otherAttributes->attributes;
+		for (const auto& attribute : attributeList) {
+			if (ItemAttributes::isStrAttrType(attribute.type)) {
+				for (const auto& otherAttribute : otherAttributeList) {
+					if (attribute.type == otherAttribute.type && *attribute.value.string != *otherAttribute.value.string) {
+						return false;
+					}
+				}
+			} else {
+				for (const auto& otherAttribute : otherAttributeList) {
+					if (attribute.type == otherAttribute.type && attribute.value.integer != otherAttribute.value.integer) {
+						return false;
+					}
 				}
 			}
-		} else {
-			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type && attribute.value.integer != otherAttribute.value.integer) {
+		}
+	}
+	if (abilities) {
+		const auto& otherAbilities = otherItem->abilities;
+		if (!otherAbilities || abilities->abilityBits != otherAbilities->abilityBits) {
+			return false;
+		}
+
+		const auto& abilityList = abilities->abilityList;
+		const auto& otherAbilityList = otherAbilities->abilityList;
+		for (const auto& ability : abilityList) {
+			for (const auto& otherAbility : otherAbilityList) {
+				if (ability.type == otherAbility.type && ability.integer != otherAbility.integer) {
 					return false;
 				}
 			}
@@ -702,6 +726,62 @@ Ability_ReadValue Item::readAbility(AbilityTypes_t type, PropStream& propStream)
 			setAbilityInt(ITEM_ABILITY_MANATICKS, value);
 			break;
 		}
+		case ABILITY_CONDITIONSUPPRESSIONS: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS, value);
+			break;
+		}
+		case ABILITY_SPEED: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SPEED, value);
+			break;
+		}
+		case ABILITY_ELEMENTTYPE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ELEMENTTYPE, value);
+			break;
+		}
+		case ABILITY_ELEMENTDAMAGE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_ELEMENTDAMAGE, value);
+			break;
+		}
+		case ABILITY_MANASHIELD: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_MANASHIELD, value);
+			break;
+		}
+		case ABILITY_INVISIBLE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_INVISIBLE, value);
+			break;
+		}
+		case ABILITY_REGENERATION: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_REGENERATION, value);
+			break;
+		}
 		default:
 			return ABILITY_READ_ERROR;
 	}
@@ -724,6 +804,14 @@ bool Item::unserializeAbility(PropStream& propStream)
 
 void Item::serializeAbility(PropWriteStream& propWriteStream) const
 {
+	for (uint8_t i = ABILITY_START; i <= ABILITY_END; i++) {
+		itemAbilityTypes itemAbility = static_cast<itemAbilityTypes>(1ULL << (i - 1));
+		if (hasAbility(itemAbility)) {
+			propWriteStream.write<uint8_t>(static_cast<AbilityTypes_t>(i));
+			propWriteStream.write<int64_t>(getAbilityInt(itemAbility));
+		}
+	}
+	/*
 	if (hasAbility(ITEM_ABILITY_HEALTHGAIN)) {
 		propWriteStream.write<uint8_t>(ABILITY_HEALTHGAIN);
 		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_HEALTHGAIN));
@@ -740,6 +828,33 @@ void Item::serializeAbility(PropWriteStream& propWriteStream) const
 		propWriteStream.write<uint8_t>(ABILITY_MANATICKS);
 		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANATICKS));
 	}
+	if (hasAbility(ITEM_ABILITY_CONDITIONSUPPRESSIONS)) {
+		propWriteStream.write<uint8_t>(ABILITY_CONDITIONSUPPRESSIONS);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS));
+	}
+	if (hasAbility(ITEM_ABILITY_ELEMENTTYPE)) {
+		std::cout << static_cast<uint64_t>(ITEM_ABILITY_ELEMENTTYPE) << std::endl;
+		std::cout << getAbilityInt(ITEM_ABILITY_ELEMENTTYPE) << std::endl;
+		propWriteStream.write<uint8_t>(ABILITY_ELEMENTTYPE);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_ELEMENTTYPE));
+	}
+	if (hasAbility(ITEM_ABILITY_ELEMENTDAMAGE)) {
+		propWriteStream.write<uint8_t>(ABILITY_ELEMENTDAMAGE);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_ELEMENTDAMAGE));
+	}
+	if (hasAbility(ITEM_ABILITY_MANASHIELD)) {
+		propWriteStream.write<uint8_t>(ABILITY_MANASHIELD);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_MANASHIELD));
+	}
+	if (hasAbility(ITEM_ABILITY_INVISIBLE)) {
+		propWriteStream.write<uint8_t>(ABILITY_INVISIBLE);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_INVISIBLE));
+	}
+	if (hasAbility(ITEM_ABILITY_REGENERATION)) {
+		propWriteStream.write<uint8_t>(ABILITY_REGENERATION);
+		propWriteStream.write<int64_t>(getAbilityInt(ITEM_ABILITY_REGENERATION));
+	}
+	*/
 }
 
 void Item::serializeAttr(PropWriteStream& propWriteStream) const
@@ -997,8 +1112,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			if (attack != 0) {
 				begin = false;
 				s << " (Atk:" << attack;
-
-				if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
+				if (item->abilities) {
+					int64_t elementType = item->getAbilityInt(ITEM_ABILITY_ELEMENTTYPE);
+					int64_t elementDamage = item->getAbilityInt(ITEM_ABILITY_ELEMENTDAMAGE);
+					if (elementType != COMBAT_NONE && elementDamage != 0) {
+						s << " physical + " << elementDamage << ' ' << getCombatName(static_cast<CombatType_t>(elementType));
+					}
+				} else if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
 					s << " physical + " << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
 				}
 			}
@@ -1324,8 +1444,21 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	} else {
 		bool found = true;
-
-		if (it.abilities) {
+		if (item->abilities) {
+			if (item->getAbilityInt(ITEM_ABILITY_SPEED) > 0) {
+				s << " (speed " << std::showpos << (item->getAbilityInt(ITEM_ABILITY_SPEED) / 2) << std::noshowpos << ')';
+			} else if (hasBitSet(CONDITION_DRUNK, item->getAbilityInt(ITEM_ABILITY_CONDITIONSUPPRESSIONS))) {
+				s << " (hard drinking)";
+			} else if (item->getAbilityInt(ITEM_ABILITY_INVISIBLE) == 1) {
+				s << " (invisibility)";
+			} else if (item->getAbilityInt(ITEM_ABILITY_REGENERATION) == 1) {
+				s << " (faster regeneration)";
+			} else if (item->getAbilityInt(ITEM_ABILITY_MANASHIELD) == 1) {
+				s << " (mana shield)";
+			} else {
+				found = false;
+			}
+		} else if (it.abilities) {
 			if (it.abilities->speed > 0) {
 				s << " (speed " << std::showpos << (it.abilities->speed / 2) << std::noshowpos << ')';
 			} else if (hasBitSet(CONDITION_DRUNK, it.abilities->conditionSuppressions)) {
@@ -1334,7 +1467,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << " (invisibility)";
 			} else if (it.abilities->regeneration) {
 				s << " (faster regeneration)";
-			} else if (it.abilities->manaShield) {
+			} else if ( it.abilities->manaShield) {
 				s << " (mana shield)";
 			} else {
 				found = false;
@@ -1652,7 +1785,7 @@ LightInfo Item::getLightInfo() const
 const ItemAbilities::Ability* ItemAbilities::getExistingAbility(itemAbilityTypes type) const
 {
 	if (hasAbility(type)) {
-		for (const Ability& ability : abilities) {
+		for (const Ability& ability : abilityList) {
 			if (ability.type == type) {
 				return &ability;
 			}
@@ -1664,21 +1797,42 @@ const ItemAbilities::Ability* ItemAbilities::getExistingAbility(itemAbilityTypes
 ItemAbilities::Ability& ItemAbilities::getAbility(itemAbilityTypes type)
 {
 	if (hasAbility(type)) {
-		for (Ability& ability : abilities) {
+		for (Ability& ability : abilityList) {
 			if (ability.type == type) {
 				return ability;
 			}
 		}
 	}
-
 	abilityBits |= type;
-	abilities.emplace_front(type);
-	return abilities.front();
+	abilityList.emplace_front(type);
+	return abilityList.front();
 }
 
 void ItemAbilities::setAbilityInt(itemAbilityTypes type, int64_t value)
 {
 	getAbility(type).integer = value;
+}
+
+void ItemAbilities::removeAbility(itemAbilityTypes type)
+{
+	if (!hasAbility(type)) {
+		return;
+	}
+
+	auto prev_it = abilityList.cbegin();
+	if ((*prev_it).type == type) {
+		abilityList.pop_front();
+	} else {
+		auto it = prev_it, end = abilityList.cend();
+		while (++it != end) {
+			if ((*it).type == type) {
+				abilityList.erase_after(prev_it);
+				break;
+			}
+			prev_it = it;
+		}
+	}
+	abilityBits &= ~type;
 }
 
 std::string ItemAttributes::emptyString;
