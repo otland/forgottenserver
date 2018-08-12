@@ -230,7 +230,7 @@ class ItemAbilities
 
 	public:
 		static bool isAbility(itemAbilityTypes type) {
-			return (type & 0xffffffffffff) != 0;
+			return (type & 0x3fffffffffff) != 0;
 		}
 
 		const std::forward_list<Ability>& getAbilities() const {
