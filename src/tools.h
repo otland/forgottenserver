@@ -87,7 +87,8 @@ itemAbilityTypes combatToAbsorb(CombatType_t combatType);
 itemAbilityTypes combatToFieldAbsorb(CombatType_t combatType);
 itemAbilityTypes skillToAbility(uint8_t skillid);
 itemAbilityTypes specialSkillToAbility(uint8_t skillid);
-std::string abilityToString(itemAbilityTypes type);
+itemAbilityTypes statToAbility(uint8_t statid);
+itemAbilityTypes statToAbilityPercent(uint8_t statid);
 CombatType_t indexToCombatType(size_t v);
 
 uint8_t serverFluidToClient(uint8_t serverFluid);

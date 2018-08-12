@@ -1443,7 +1443,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ABILITY_HEALTHTICKS)
 	registerEnum(ITEM_ABILITY_MANAGAIN)
 	registerEnum(ITEM_ABILITY_MANATICKS)
-	registerEnum(ITEM_ABILITY_CONDITIONIMMUNITIES)
 	registerEnum(ITEM_ABILITY_CONDITIONSUPPRESSIONS)
 	registerEnum(ITEM_ABILITY_MAXHITPOINTS)
 	registerEnum(ITEM_ABILITY_MAXMANAPOINTS)
@@ -6196,6 +6195,7 @@ int LuaScriptInterface::luaItemSetAbility(lua_State* L)
 
 	if (ItemAbilities::isAbility(ability)) {
 		item->setAbilityInt(ability, getNumber<int64_t>(L, 3));
+		/*
 		Cylinder* topParent = item->getTopParent();
 		if (Creature* creature = topParent->getCreature()) {
 			if (Player* player = creature->getPlayer()) {
@@ -6205,12 +6205,13 @@ int LuaScriptInterface::luaItemSetAbility(lua_State* L)
 					if (slotItem && slotItem == item && player->isItemAbilityEnabled(slot)) {
 						player->sendStats();
 						player->sendSkills();
-						player->updateConditions(item, slot, true);
+						player->updateAbilityConditions(item, slot, true);
 						break;
 					}
 				}
 			}
 		}
+		*/
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6227,7 +6228,9 @@ int LuaScriptInterface::luaItemRemoveAbility(lua_State* L)
 	}
 	itemAbilityTypes type = getNumber<itemAbilityTypes>(L, 2);
 	if (type != ITEM_ABILITY_NONE) {
+		// int64_t value = item->getAbilityInt(type);
 		item->removeAbility(type);
+		/*
 		Cylinder* topParent = item->getTopParent();
 		if (Creature* creature = topParent->getCreature()) {
 			if (Player* player = creature->getPlayer()) {
@@ -6237,12 +6240,13 @@ int LuaScriptInterface::luaItemRemoveAbility(lua_State* L)
 					if (slotItem && slotItem == item && player->isItemAbilityEnabled(slot)) {
 						player->sendStats();
 						player->sendSkills();
-						player->updateConditions(item, slot, false);
+						player->removeAbilityCondition(item, slot, type, value);
 						break;
 					}
 				}
 			}
 		}
+		*/
 		lua_pushboolean(L, true);
 	} else {
 		lua_pushboolean(L, false);

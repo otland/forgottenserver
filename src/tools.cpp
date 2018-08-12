@@ -970,30 +970,6 @@ itemAbilityTypes combatToFieldAbsorb(CombatType_t combatType)
 	}
 }
 
-std::string abilityToString(itemAbilityTypes type)
-{
-	switch (type) {
-		case ITEM_ABILITY_FIELDABSORBPHYSICAL:
-			return "physical";
-		case ITEM_ABILITY_FIELDABSORBENERGY:
-			return "energy";
-		case ITEM_ABILITY_FIELDABSORBEARTH:
-			return "earth";
-		case ITEM_ABILITY_FIELDABSORBFIRE:
-			return "fire";
-		case ITEM_ABILITY_FIELDABSORBWATER:
-			return "water";
-		case ITEM_ABILITY_FIELDABSORBICE:
-			return "ice";
-		case ITEM_ABILITY_FIELDABSORBHOLY:
-			return "holy";
-		case ITEM_ABILITY_FIELDABSORBDEATH:
-			return "death";
-		default:
-			return "none";
-	}
-}
-
 itemAbilityTypes skillToAbility(uint8_t skillid)
 {
 	switch (skillid) {
@@ -1011,6 +987,34 @@ itemAbilityTypes skillToAbility(uint8_t skillid)
 			return ITEM_ABILITY_SKILLSHIELD;
 		case SKILL_FISHING:
 			return ITEM_ABILITY_SKILLFISHING;
+		default:
+			return ITEM_ABILITY_NONE;
+	}
+}
+
+itemAbilityTypes statToAbility(uint8_t statid)
+{
+	switch (statid) {
+		case STAT_MAXHITPOINTS:
+			return ITEM_ABILITY_MAXHITPOINTS;
+		case STAT_MAXMANAPOINTS:
+			return ITEM_ABILITY_MAXMANAPOINTS;
+		case STAT_MAGICPOINTS:
+			return ITEM_ABILITY_MAGICPOINTS;
+		default:
+			return ITEM_ABILITY_NONE;
+	}
+}
+
+itemAbilityTypes statToAbilityPercent(uint8_t statid)
+{
+	switch (statid) {
+		case STAT_MAXHITPOINTS:
+			return ITEM_ABILITY_MAXHITPOINTSPERCENT;
+		case STAT_MAXMANAPOINTS:
+			return ITEM_ABILITY_MAXMANAPOINTSPERCENT;
+		case STAT_MAGICPOINTS:
+			return ITEM_ABILITY_MAGICPOINTSPERCENT;
 		default:
 			return ITEM_ABILITY_NONE;
 	}

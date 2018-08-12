@@ -726,14 +726,6 @@ Ability_ReadValue Item::readAbility(AbilityTypes_t type, PropStream& propStream)
 			setAbilityInt(ITEM_ABILITY_MANATICKS, value);
 			break;
 		}
-		case ABILITY_CONDITIONIMMUNITIES: {
-			int64_t value;
-			if (!propStream.read<int64_t>(value)) {
-				return ABILITY_READ_ERROR;
-			}
-			setAbilityInt(ITEM_ABILITY_CONDITIONIMMUNITIES, value);
-			break;
-		}
 		case ABILITY_CONDITIONSUPPRESSIONS: {
 			int64_t value;
 			if (!propStream.read<int64_t>(value)) {
@@ -820,6 +812,30 @@ Ability_ReadValue Item::readAbility(AbilityTypes_t type, PropStream& propStream)
 				return ABILITY_READ_ERROR;
 			}
 			setAbilityInt(ITEM_ABILITY_SKILLAXE, value);
+			break;
+		}
+		case ABILITY_SKILLDISTANCE: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLDISTANCE, value);
+			break;
+		}
+		case ABILITY_SKILLSHIELD: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLSHIELD, value);
+			break;
+		}
+		case ABILITY_SKILLFISHING: {
+			int64_t value;
+			if (!propStream.read<int64_t>(value)) {
+				return ABILITY_READ_ERROR;
+			}
+			setAbilityInt(ITEM_ABILITY_SKILLFISHING, value);
 			break;
 		}
 		case ABILITY_CRITICALHITCHANCE: {
@@ -1292,66 +1308,91 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << " or higher";
 			}
 		}
-	} else if (it.weaponType != WEAPON_NONE) {
-		bool begin = true;
-		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
-			s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
+	} else {
+		if (it.weaponType != WEAPON_NONE) {
+			bool begin = true;
+			if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
+				s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
 
-			int32_t attack;
-			int8_t hitChance;
-			if (item) {
-				attack = item->getAttack();
-				hitChance = item->getHitChance();
-			} else {
-				attack = it.attack;
-				hitChance = it.hitChance;
-			}
-
-			if (attack != 0) {
-				s << ", Atk" << std::showpos << attack << std::noshowpos;
-			}
-
-			if (hitChance != 0) {
-				s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
-			}
-
-			begin = false;
-		} else if (it.weaponType != WEAPON_AMMO) {
-
-			int32_t attack, defense, extraDefense;
-			if (item) {
-				attack = item->getAttack();
-				defense = item->getDefense();
-				extraDefense = item->getExtraDefense();
-			} else {
-				attack = it.attack;
-				defense = it.defense;
-				extraDefense = it.extraDefense;
-			}
-
-			if (attack != 0) {
-				begin = false;
-				s << " (Atk:" << attack;
-				int64_t elementType = item->getAbilityValue(ITEM_ABILITY_ELEMENTTYPE);
-				int64_t elementDamage = item->getAbilityValue(ITEM_ABILITY_ELEMENTDAMAGE);
-				if (elementType != COMBAT_NONE && elementDamage != 0) {
-					s << " physical + " << elementDamage << ' ' << getCombatName(static_cast<CombatType_t>(elementType));
-				}
-			}
-
-			if (defense != 0 || extraDefense != 0) {
-				if (begin) {
-					begin = false;
-					s << " (";
+				int32_t attack;
+				int8_t hitChance;
+				if (item) {
+					attack = item->getAttack();
+					hitChance = item->getHitChance();
 				} else {
-					s << ", ";
+					attack = it.attack;
+					hitChance = it.hitChance;
 				}
 
-				s << "Def:" << defense;
-				if (extraDefense != 0) {
-					s << ' ' << std::showpos << extraDefense << std::noshowpos;
+				if (attack != 0) {
+					s << ", Atk" << std::showpos << attack << std::noshowpos;
+				}
+
+				if (hitChance != 0) {
+					s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
+				}
+
+				begin = false;
+			} else if (it.weaponType != WEAPON_AMMO) {
+
+				int32_t attack, defense, extraDefense;
+				if (item) {
+					attack = item->getAttack();
+					defense = item->getDefense();
+					extraDefense = item->getExtraDefense();
+				} else {
+					attack = it.attack;
+					defense = it.defense;
+					extraDefense = it.extraDefense;
+				}
+
+				if (attack != 0) {
+					begin = false;
+					s << " (Atk:" << attack;
+					int64_t elementType = item->getAbilityValue(ITEM_ABILITY_ELEMENTTYPE);
+					int64_t elementDamage = item->getAbilityValue(ITEM_ABILITY_ELEMENTDAMAGE);
+					if (elementType != COMBAT_NONE && elementDamage != 0) {
+						s << " physical + " << elementDamage << ' ' << getCombatName(static_cast<CombatType_t>(elementType));
+					}
+				}
+
+				if (defense != 0 || extraDefense != 0) {
+					if (begin) {
+						begin = false;
+						s << " (";
+					} else {
+						s << ", ";
+					}
+
+					s << "Def:" << defense;
+					if (extraDefense != 0) {
+						s << ' ' << std::showpos << extraDefense << std::noshowpos;
+					}
 				}
 			}
+		}
+
+		bool begin = true;
+
+		if (it.isContainer() || item && item->getContainer()) {
+			uint32_t volume = 0;
+			if (!item || !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+				if (it.isContainer()) {
+					volume = it.maxItems;
+				} else {
+					volume = item->getContainer()->capacity();
+				}
+			}
+
+			if (volume != 0) {
+				s << " (Vol:" << volume << ')';
+			}
+		}
+
+		int32_t armor = (item ? item->getArmor() : it.armor);
+		if (armor != 0) {
+			s << " (Arm:" << armor;
+			begin = false;
 		}
 
 		if (item->abilities || it.abilities) {
@@ -1385,157 +1426,6 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 
 				s << getSpecialSkillName(i) << ' ' << std::showpos << specialSkillValue << '%' << std::noshowpos;
-			}
-
-			const int16_t magicPoints = item->getAbilityValue(ITEM_ABILITY_MAGICPOINTS);
-			if (magicPoints) {
-				if (begin) {
-					begin = false;
-					s << " (";
-				} else {
-					s << ", ";
-				}
-
-				s << "magic level " << std::showpos << magicPoints << std::noshowpos;
-			}
-
-			int16_t show = item->getAbilityValue(ITEM_ABILITY_ABSORBPHYSICAL);
-			if (show != 0) {
-				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (item->getAbilityInt(combatToAbsorb(indexToCombatType(i))) != show) {
-						show = 0;
-						break;
-					}
-				}
-			}
-
-			if (show == 0) {
-				bool tmp = true;
-
-				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					std::cout << "i: " << i << '\n';
-					const int16_t absorbPercent = item->getAbilityValue(combatToAbsorb(indexToCombatType(i)));
-					std::cout << "combat name: " << getCombatName(indexToCombatType(i)) << '\n';
-					std::cout << "absorb percent: " << absorbPercent << '\n';
-					if (absorbPercent == 0) {
-						continue;
-					}
-
-					if (tmp) {
-						tmp = false;
-
-						if (begin) {
-							begin = false;
-							s << " (";
-						} else {
-							s << ", ";
-						}
-
-						s << "protection ";
-					} else {
-						s << ", ";
-					}
-
-					s << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << absorbPercent << std::noshowpos << '%';
-				}
-			} else {
-				if (begin) {
-					begin = false;
-					s << " (";
-				} else {
-					s << ", ";
-				}
-
-				s << "protection all " << std::showpos << show << std::noshowpos << '%';
-			}
-
-			show = item->getAbilityValue(ITEM_ABILITY_FIELDABSORBPHYSICAL);
-			if (show != 0) {
-				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					if (item->getAbilityInt(combatToFieldAbsorb(indexToCombatType(i))) != show) {
-						show = 0;
-						break;
-					}
-				}
-			}
-
-			if (show == 0) {
-				bool tmp = true;
-
-				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					const int16_t fieldAbsorbPercent = item->getAbilityValue(combatToFieldAbsorb(indexToCombatType(i)));
-					if (fieldAbsorbPercent == 0) {
-						continue;
-					}
-
-					if (tmp) {
-						tmp = false;
-
-						if (begin) {
-							begin = false;
-							s << " (";
-						} else {
-							s << ", ";
-						}
-
-						s << "protection ";
-					} else {
-						s << ", ";
-					}
-
-					s << getCombatName(indexToCombatType(i)) << " field " << std::showpos << fieldAbsorbPercent << std::noshowpos << '%';
-				}
-			} else {
-				if (begin) {
-					begin = false;
-					s << " (";
-				} else {
-					s << ", ";
-				}
-
-				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
-			}
-
-			const int16_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
-			if (speed) {
-				if (begin) {
-					begin = false;
-					s << " (";
-				} else {
-					s << ", ";
-				}
-
-				s << "speed " << std::showpos << (speed >> 1) << std::noshowpos;
-			}
-		}
-
-		if (!begin) {
-			s << ')';
-		}
-	} else if (it.armor != 0 || (item && item->getArmor() != 0) || it.showAttributes) {
-		bool begin = true;
-
-		int32_t armor = (item ? item->getArmor() : it.armor);
-		if (armor != 0) {
-			s << " (Arm:" << armor;
-			begin = false;
-		}
-
-		if (item->abilities || it.abilities) {
-			for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-				const int16_t skillValue = item->getAbilityValue(skillToAbility(i));
-				if (!skillValue) {
-					continue;
-				}
-
-				if (begin) {
-					begin = false;
-					s << " (";
-				} else {
-					s << ", ";
-				}
-
-				s << getSkillName(i) << ' ' << std::showpos << skillValue << std::noshowpos;
 			}
 
 			const int16_t magicPoints = item->getAbilityValue(ITEM_ABILITY_MAGICPOINTS);
@@ -1659,26 +1549,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		if (!begin) {
 			s << ')';
 		}
-	} else if (it.isContainer() || (item && item->getContainer())) {
-		uint32_t volume = 0;
-		if (!item || !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
-			if (it.isContainer()) {
-				volume = it.maxItems;
-			} else {
-				volume = item->getContainer()->capacity();
-			}
-		}
-
-		if (volume != 0) {
-			s << " (Vol:" << volume << ')';
-		}
-	} else {
 		bool found = false;
-		const int16_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
-		if (speed > 0) {
-			s << " (speed " << std::showpos << (speed / 2) << std::noshowpos << ')';
-			found = true;
-		}
 		if (hasBitSet(CONDITION_DRUNK, item->getAbilityValue(ITEM_ABILITY_CONDITIONSUPPRESSIONS))) {
 			s << " (hard drinking)";
 			found = true;
@@ -2044,8 +1915,6 @@ int64_t Item::getAbilityValue(itemAbilityTypes type) const
 			return it.abilities->healthTicks;
 		case ITEM_ABILITY_MANAGAIN:
 			return it.abilities->manaGain;
-		case ITEM_ABILITY_CONDITIONIMMUNITIES:
-			return it.abilities->conditionImmunities;
 		case ITEM_ABILITY_CONDITIONSUPPRESSIONS:
 			return it.abilities->conditionSuppressions;
 		case ITEM_ABILITY_MAXHITPOINTS:

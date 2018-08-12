@@ -3899,13 +3899,179 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	return false;
 }
 
-void Player::updateConditions(Item* item, slots_t slot, bool equip)
+void Player::removeAbilityCondition(Item* item, slots_t slot, itemAbilityTypes type, int64_t value)
+{
+	setItemAbility(slot, item->hasAbilities());
+	std::vector<std::pair<itemAbilityTypes, ConditionParam_t>> conditionPairs {
+		{ITEM_ABILITY_MAXHITPOINTS, CONDITION_PARAM_STAT_MAXHITPOINTS},
+		{ITEM_ABILITY_MAXMANAPOINTS, CONDITION_PARAM_STAT_MAXMANAPOINTS},
+		{ITEM_ABILITY_MAXHITPOINTSPERCENT, CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT},
+		{ITEM_ABILITY_MAXMANAPOINTSPERCENT, CONDITION_PARAM_STAT_MAXMANAPOINTSPERCENT},
+		{ITEM_ABILITY_MAGICPOINTS, CONDITION_PARAM_STAT_MAGICPOINTS},
+		{ITEM_ABILITY_MAGICPOINTSPERCENT, CONDITION_PARAM_STAT_MAGICPOINTSPERCENT},
+		{ITEM_ABILITY_SKILLFIST, CONDITION_PARAM_SKILL_FIST},
+		{ITEM_ABILITY_SKILLCLUB, CONDITION_PARAM_SKILL_CLUB},
+		{ITEM_ABILITY_SKILLSWORD, CONDITION_PARAM_SKILL_SWORD},
+		{ITEM_ABILITY_SKILLAXE, CONDITION_PARAM_SKILL_AXE},
+		{ITEM_ABILITY_SKILLDISTANCE, CONDITION_PARAM_SKILL_DISTANCE},
+		{ITEM_ABILITY_SKILLSHIELD, CONDITION_PARAM_SKILL_SHIELD},
+		{ITEM_ABILITY_SKILLFISHING, CONDITION_PARAM_SKILL_FISHING},
+		{ITEM_ABILITY_CRITICALHITCHANCE, CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE},
+		{ITEM_ABILITY_CRITICALHITAMOUNT, CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT},
+		{ITEM_ABILITY_LIFELEECHCHANCE, CONDITION_PARAM_SPECIALSKILL_HITPOINTSLEECHCHANCE},
+		{ITEM_ABILITY_LIFELEECHAMOUNT, CONDITION_PARAM_SPECIALSKILL_HITPOINTSLEECHAMOUNT},
+		{ITEM_ABILITY_MANALEECHCHANCE, CONDITION_PARAM_SPECIALSKILL_MANAPOINTSLEECHCHANCE},
+		{ITEM_ABILITY_MANALEECHAMOUNT, CONDITION_PARAM_SPECIALSKILL_MANAPOINTSLEECHAMOUNT},
+	};
+
+	for (auto it : conditionPairs) {
+		if (type == it.first) {
+			Condition* condition = getCondition(CONDITION_ATTRIBUTES, static_cast<ConditionId_t>(slot));
+			if (condition) {
+				condition->setParam(it.second, 0);
+			}
+			// fix later, if condition is blank remove it
+			// removeCondition(CONDITION_ATTRIBUTES, static_cast<ConditionId_t>(slot));
+			return;
+		}
+	}
+
+	switch (type) {
+		case ITEM_ABILITY_INVISIBLE:
+			removeCondition(CONDITION_INVISIBLE, static_cast<ConditionId_t>(slot));
+			return;
+		case ITEM_ABILITY_MANASHIELD:
+			removeCondition(CONDITION_MANASHIELD, static_cast<ConditionId_t>(slot));
+			return;
+		case ITEM_ABILITY_REGENERATION:
+			removeCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
+			return;
+		case ITEM_ABILITY_SPEED: {
+			// g_game.changeSpeed(this, -item->speedValue);
+			return;
+		}
+		case ITEM_ABILITY_CONDITIONSUPPRESSIONS:
+			removeConditionSuppressions(value);
+			return;
+		case ITEM_ABILITY_HEALTHGAIN: {
+			Condition* condition = getCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
+			if (condition) {
+				condition->setParam(CONDITION_PARAM_HEALTHGAIN, 0);
+			}
+		}
+		case ITEM_ABILITY_HEALTHTICKS: {
+			Condition* condition = getCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
+			if (condition) {
+				condition->setParam(CONDITION_PARAM_HEALTHTICKS, 0);
+			}
+		}
+		case ITEM_ABILITY_MANAGAIN: {
+			Condition* condition = getCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
+			if (condition) {
+				condition->setParam(CONDITION_PARAM_MANAGAIN, 0);
+			}
+		}
+		case ITEM_ABILITY_MANATICKS: {
+			Condition* condition = getCondition(CONDITION_REGENERATION, static_cast<ConditionId_t>(slot));
+			if (condition) {
+				condition->setParam(CONDITION_PARAM_MANATICKS, 0);
+			}
+		}
+	}
+}
+
+void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 {
 	setItemAbility(slot, equip);
-	const ItemType& it = Item::items[item->getID()];
-	if (!item->getAbilities() && !it.abilities) {
+	const ItemType& itemType = Item::items[item->getID()];
+	if (!item->getAbilities() && !itemType.abilities) {
 		return;
 	}
+
+	bool needUpdateSkills = false;
+
+	for (int32_t i = 0; i <= SKILL_LAST; i++) {
+		itemAbilityTypes type = skillToAbility(i);
+		if (type == ITEM_ABILITY_NONE) {
+			continue;
+		}
+		int64_t value = item->getAbilityValue(type);
+		if (value == 0) {
+			continue;
+		}
+		if (equip) {
+			setVarSkill(static_cast<skills_t>(i), value);
+			needUpdateSkills = true;
+		} else {
+			setVarSkill(static_cast<skills_t>(i), -varSkills[i]);
+			needUpdateSkills = true;
+		}
+	}
+
+	for (int32_t i = 0; i <= SPECIALSKILL_LAST; i++) {
+		itemAbilityTypes type = specialSkillToAbility(i);
+		if (type == ITEM_ABILITY_NONE) {
+			continue;
+		}
+		int64_t value = item->getAbilityValue(type);
+		if (value == 0) {
+			continue;
+		}
+		if (equip) {
+			setVarSpecialSkill(static_cast<SpecialSkills_t>(i), value);
+			needUpdateSkills = true;
+		} else {
+			setVarSpecialSkill(static_cast<SpecialSkills_t>(i), -varSpecialSkills[i]);
+			needUpdateSkills = true;
+		}
+	}
+
+	if (needUpdateSkills) {
+		sendSkills();
+	}
+
+	bool needUpdateStats = false;
+
+	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
+		itemAbilityTypes type = statToAbility(s);
+		if (type == ITEM_ABILITY_NONE) {
+			continue;
+		}
+		int64_t value = item->getAbilityValue(type);
+		if (value == 0) {
+			continue;
+		}
+		if (equip) {
+			setVarStats(static_cast<stats_t>(s), value);
+			needUpdateStats = true;
+		} else {
+			setVarStats(static_cast<stats_t>(s), -varStats[s]);
+			needUpdateStats = true;
+		}
+	}
+
+	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
+		itemAbilityTypes type = statToAbilityPercent(s);
+		if (type == ITEM_ABILITY_NONE) {
+			continue;
+		}
+		int64_t value = item->getAbilityValue(type);
+		if (value == 0) {
+			continue;
+		}
+		if (equip) {
+			setVarStats(static_cast<stats_t>(s), static_cast<int32_t>(getDefaultStats(static_cast<stats_t>(s)) * (value / 100.f)));
+			needUpdateStats = true;
+		} else {
+			setVarStats(static_cast<stats_t>(s), -varStats[s]);
+			needUpdateStats = true;
+		}
+	}
+
+	if (needUpdateStats) {
+		sendStats();
+	}
+
 	bool invisible = item->getAbilityValue(ITEM_ABILITY_INVISIBLE);
 	if (invisible) {
 		if (equip) {
@@ -3927,14 +4093,11 @@ void Player::updateConditions(Item* item, slots_t slot, bool equip)
 	}
 
 	int32_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
-	int32_t difference = item->speedValue != 0 ? -(speed - item->speedValue) : speed;
 	if (speed != 0) {
 		if (equip) {
-			g_game.changeSpeed(this, difference);
-			item->speedValue = speed;
+			g_game.changeSpeed(this, speed);
 		} else {
 			g_game.changeSpeed(this, -speed);
-			item->speedValue = 0;
 		}
 	}
 
