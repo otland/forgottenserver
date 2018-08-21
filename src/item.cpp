@@ -1370,6 +1370,9 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					}
 				}
 			}
+			if (!begin) {
+				s << ')';
+			}
 		}
 
 		bool begin = true;
