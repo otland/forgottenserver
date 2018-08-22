@@ -492,8 +492,38 @@ void Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 		return;
 	}
 
+	Player* attackerPlayer = caster ? caster->getPlayer() : nullptr;
+	Player* targetPlayer = target ? target->getPlayer() : nullptr;
+
+	if (attackerPlayer && damage.primary.value < 0 || damage.secondary.value < 0) {
+		uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHCHANCE);
+		uint16_t skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHAMOUNT);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			CombatDamage lifeLeech;
+			lifeLeech.primary.value = std::round(damage.primary.value * (skill / 100.));
+			lifeLeech.primary.value += std::round(damage.secondary.value * (skill / 100.));
+			g_game.combatChangeHealth(nullptr, attackerPlayer, lifeLeech);
+		}
+
+		chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHCHANCE);
+		skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHAMOUNT);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			CombatDamage manaLeech;
+			manaLeech.primary.value = std::round(damage.primary.value * (skill / 100.));
+			manaLeech.primary.value += std::round(damage.secondary.value * (skill / 100.));
+			g_game.combatChangeMana(nullptr, attackerPlayer, manaLeech);
+		}
+
+		chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
+		skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			damage.primary.value += std::round(damage.primary.value * (skill / 100.));
+			damage.secondary.value += std::round(damage.secondary.value * (skill / 100.));
+			g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
+		}
+	}
+
 	if ((damage.primary.value < 0 || damage.secondary.value < 0) && caster) {
-		Player* targetPlayer = target->getPlayer();
 		if (targetPlayer && caster->getPlayer() && targetPlayer->getSkull() != SKULL_BLACK) {
 			damage.primary.value /= 2;
 			damage.secondary.value /= 2;
@@ -510,8 +540,40 @@ void Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 {
 	assert(damage);
 	CombatDamage damageCopy = *damage;
+
+	Player* attackerPlayer = caster ? caster->getPlayer() : nullptr;
+	Player* targetPlayer = target ? target->getPlayer() : nullptr;
+
+	if (attackerPlayer && damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) {
+		uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHCHANCE);
+		uint16_t skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHAMOUNT);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			CombatDamage lifeLeech;
+			lifeLeech.primary.value = std::round(damageCopy.primary.value * (skill / 100.));
+			lifeLeech.primary.value += std::round(damageCopy.secondary.value * (skill / 100.));
+			g_game.combatChangeHealth(nullptr, attackerPlayer, lifeLeech);
+		}
+
+		chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHCHANCE);
+		skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHAMOUNT);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			CombatDamage manaLeech;
+			manaLeech.primary.value = std::round(damageCopy.primary.value * (skill / 100.));
+			manaLeech.primary.value += std::round(damageCopy.secondary.value * (skill / 100.));
+			g_game.combatChangeMana(nullptr, attackerPlayer, manaLeech);
+		}
+
+		chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
+		skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			damageCopy.primary.value += std::round(damageCopy.primary.value * (skill / 100.));
+			damageCopy.secondary.value += std::round(damageCopy.secondary.value * (skill / 100.));
+			g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
+		}
+	}
+
 	if (damageCopy.primary.value < 0) {
-		if (caster && caster->getPlayer() && target->getPlayer()) {
+		if (attackerPlayer && targetPlayer) {
 			damageCopy.primary.value /= 2;
 		}
 	}
