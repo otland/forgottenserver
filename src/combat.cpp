@@ -495,7 +495,7 @@ void Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 	Player* attackerPlayer = caster ? caster->getPlayer() : nullptr;
 	Player* targetPlayer = target ? target->getPlayer() : nullptr;
 
-	if (attackerPlayer && damage.primary.value < 0 || damage.secondary.value < 0) {
+	if (attackerPlayer && (damage.primary.value < 0 || damage.secondary.value < 0)) {
 		uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHCHANCE);
 		uint16_t skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHAMOUNT);
 		if (chance != 0 && uniform_random(1, 100) <= chance) {
@@ -544,7 +544,7 @@ void Combat::CombatManaFunc(Creature* caster, Creature* target, const CombatPara
 	Player* attackerPlayer = caster ? caster->getPlayer() : nullptr;
 	Player* targetPlayer = target ? target->getPlayer() : nullptr;
 
-	if (attackerPlayer && damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) {
+	if (attackerPlayer && (damageCopy.primary.value < 0 || damageCopy.secondary.value < 0)) {
 		uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHCHANCE);
 		uint16_t skill = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHAMOUNT);
 		if (chance != 0 && uniform_random(1, 100) <= chance) {
