@@ -516,6 +516,32 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 	}
 }
 
+void Player::setVarStatsPercent(stats_t stat, int32_t modifier)
+{
+	varStatsPercent[stat] += modifier;
+	switch (stat) {
+		case STAT_MAXHITPOINTS: {
+			if (getHealth() > getMaxHealth()) {
+				Creature::changeHealth(getMaxHealth() - getHealth());
+			} else {
+				g_game.addCreatureHealth(this);
+			}
+			break;
+		}
+
+		case STAT_MAXMANAPOINTS: {
+			if (getMana() > getMaxMana()) {
+				changeMana(getMaxMana() - getMana());
+			}
+			break;
+		}
+
+		default: {
+			break;
+		}
+	}
+}
+
 int32_t Player::getDefaultStats(stats_t stat) const
 {
 	switch (stat) {
@@ -3909,7 +3935,7 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 
 	bool needUpdateSkills = false;
 
-	for (int32_t i = 0; i <= SKILL_LAST; i++) {
+	for (int32_t i = STAT_FIRST; i <= SKILL_LAST; i++) {
 		itemAbilityTypes type = skillToAbility(i);
 		if (type == ITEM_ABILITY_NONE) {
 			continue;
@@ -3918,13 +3944,8 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 		if (value == 0) {
 			continue;
 		}
-		if (equip) {
-			setVarSkill(static_cast<skills_t>(i), value);
-			needUpdateSkills = true;
-		} else {
-			setVarSkill(static_cast<skills_t>(i), -varSkills[i]);
-			needUpdateSkills = true;
-		}
+		setVarSkill(static_cast<skills_t>(i), equip ? value : -value);
+		needUpdateSkills = true;
 	}
 
 	for (int32_t i = 0; i <= SPECIALSKILL_LAST; i++) {
@@ -3936,13 +3957,8 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 		if (value == 0) {
 			continue;
 		}
-		if (equip) {
-			setVarSpecialSkill(static_cast<SpecialSkills_t>(i), value);
-			needUpdateSkills = true;
-		} else {
-			setVarSpecialSkill(static_cast<SpecialSkills_t>(i), -varSpecialSkills[i]);
-			needUpdateSkills = true;
-		}
+		setVarSpecialSkill(static_cast<SpecialSkills_t>(i), equip ? value : -value);
+		needUpdateSkills = true;
 	}
 
 	if (needUpdateSkills) {
@@ -3960,17 +3976,12 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 		if (value == 0) {
 			continue;
 		}
-		if (equip) {
-			setVarStats(static_cast<stats_t>(s), value);
-			needUpdateStats = true;
-		} else {
-			setVarStats(static_cast<stats_t>(s), -varStats[s]);
-			needUpdateStats = true;
-		}
+		setVarStats(static_cast<stats_t>(s), equip ? value : -value);
+		needUpdateStats = true;
 	}
 
-	for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
-		itemAbilityTypes type = statToAbilityPercent(s);
+	for (int32_t i = STAT_FIRST; i <= SKILL_LAST; i++) {
+		itemAbilityTypes type = statToAbilityPercent(i);
 		if (type == ITEM_ABILITY_NONE) {
 			continue;
 		}
@@ -3978,13 +3989,26 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 		if (value == 0) {
 			continue;
 		}
-		if (equip) {
-			setVarStats(static_cast<stats_t>(s), static_cast<int32_t>(getDefaultStats(static_cast<stats_t>(s)) * (value / 100.f)));
-			needUpdateStats = true;
-		} else {
-			setVarStats(static_cast<stats_t>(s), -varStats[s]);
-			needUpdateStats = true;
+		switch (i) {
+			case STAT_MAXHITPOINTS: {
+				int32_t change = static_cast<int32_t>(getMaxHealth() * ((value - 100) / 100.f));
+				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -varStatsPercent[i]);
+				break;
+			}
+
+			case STAT_MAXMANAPOINTS: {
+				int32_t change = static_cast<int32_t>(getMaxMana() * ((value - 100) / 100.f));
+				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -varStatsPercent[i]);
+				break;
+			}
+
+			case STAT_MAGICPOINTS: {
+				int32_t change = static_cast<int32_t>(getBaseMagicLevel() * ((value - 100) / 100.f));
+				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -varStatsPercent[i]);
+				break;
+			}
 		}
+		needUpdateStats= true;
 	}
 
 	if (needUpdateStats) {
@@ -4013,11 +4037,7 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 
 	int32_t speed = item->getAbilityValue(ITEM_ABILITY_SPEED);
 	if (speed != 0) {
-		if (equip) {
-			g_game.changeSpeed(this, speed);
-		} else {
-			g_game.changeSpeed(this, -speed);
-		}
+		g_game.changeSpeed(this, equip ? speed : -speed);
 	}
 
 	uint32_t conditionSuppressions = item->getAbilityValue(ITEM_ABILITY_CONDITIONSUPPRESSIONS);

@@ -388,7 +388,7 @@ class Player final : public Creature, public Cylinder
 			return levelPercent;
 		}
 		uint32_t getMagicLevel() const {
-			return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]);
+			return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS] + varStatsPercent[STAT_MAGICPOINTS]);
 		}
 		uint32_t getBaseMagicLevel() const {
 			return magLevel;
@@ -472,13 +472,13 @@ class Player final : public Creature, public Cylinder
 		}
 
 		int32_t getMaxHealth() const override {
-			return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]);
+			return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS] + varStatsPercent[STAT_MAXHITPOINTS]);
 		}
 		uint32_t getMana() const {
 			return mana;
 		}
 		uint32_t getMaxMana() const {
-			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]);
+			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS] + varStatsPercent[STAT_MAXHITPOINTS]);
 		}
 
 		Item* getInventoryItem(slots_t slot) const;
@@ -499,6 +499,7 @@ class Player final : public Creature, public Cylinder
 		}
 
 		void setVarStats(stats_t stat, int32_t modifier);
+		void setVarStatsPercent(stats_t stat, int32_t modifier);
 		int32_t getDefaultStats(stats_t stat) const;
 
 		void addConditionSuppressions(uint32_t conditions);
@@ -1271,6 +1272,7 @@ class Player final : public Creature, public Cylinder
 		int32_t varSkills[SKILL_LAST + 1] = {};
 		int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t varStats[STAT_LAST + 1] = {};
+		int32_t varStatsPercent[STAT_LAST + 1] = {};
 		int32_t purchaseCallback = -1;
 		int32_t saleCallback = -1;
 		int32_t MessageBufferCount = 0;

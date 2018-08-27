@@ -1444,7 +1444,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			}
 
 			const int16_t magicPointsPercent = item ? item->getAbilityValue(ITEM_ABILITY_MAGICPOINTSPERCENT) : (it.abilities ? it.abilities->statsPercent[STAT_MAGICPOINTS] : 0);
-			if (magicPoints) {
+			if (magicPointsPercent) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1452,7 +1452,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "magic level percent " << std::showpos << magicPoints << '%' << std::noshowpos;
+				s << "magic level percent " << std::showpos << magicPointsPercent << '%' << std::noshowpos;
 			}
 
 			int16_t show = item ? item->getAbilityValue(ITEM_ABILITY_ABSORBPHYSICAL) : (it.abilities ? it.abilities->absorbPercent[0] : 0);
