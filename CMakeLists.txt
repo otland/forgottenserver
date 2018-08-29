@@ -19,7 +19,7 @@ include(FindCXX11)
 include(FindLTO)
 
 # Find packages.
-find_package(GMP REQUIRED)
+find_package(Crypto++ REQUIRED)
 find_package(PugiXML REQUIRED)
 find_package(MySQL)
 find_package(Threads)
@@ -46,8 +46,8 @@ find_package(Boost 1.53.0 COMPONENTS system iostreams REQUIRED)
 add_subdirectory(src)
 add_executable(tfs ${tfs_SRC})
 
-include_directories(${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${PUGIXML_INCLUDE_DIR} ${GMP_INCLUDE_DIR})
-target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${PUGIXML_LIBRARIES} ${GMP_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+include_directories(${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${PUGIXML_INCLUDE_DIR} ${Crypto++_INCLUDE_DIR})
+target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${PUGIXML_LIBRARIES} ${Crypto++_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
 set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
