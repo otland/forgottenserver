@@ -770,9 +770,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	if (casterPlayer) {
 		Combat::checkLeech(casterPlayer, damage);
 		if (!damage.critical && damage.origin != ORIGIN_CONDITION && (damage.primary.value < 0 || damage.secondary.value < 0)) {
-			uint16_t chance = casterPlayer->getSpecialSkillLevel(SPECIALSKILL_CRITICALHITCHANCE);
+			uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
-				uint16_t criticalHit = casterPlayer->getSpecialSkillLevel(SPECIALSKILL_CRITICALHITAMOUNT);
+				uint16_t criticalHit = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
 				criticalPrimary = std::round(damage.primary.value * (criticalHit / 100.));
 				criticalSecondary = std::round(damage.secondary.value * (criticalHit / 100.));
 				damage.critical = true;
@@ -897,9 +897,9 @@ void Combat::checkCriticalHit(Player* caster, CombatDamage& damage)
 		return;
 	}
 
-	uint16_t chance = caster->getSpecialSkillLevel(SPECIALSKILL_CRITICALHITCHANCE);
+	uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 	if (chance != 0 && normal_random(1, 100) <= chance) {
-		uint16_t criticalHit = caster->getSpecialSkillLevel(SPECIALSKILL_CRITICALHITAMOUNT);
+		uint16_t criticalHit = caster->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
 		damage.primary.value += std::round(damage.primary.value * (criticalHit / 100.));
 		damage.secondary.value += std::round(damage.secondary.value * (criticalHit / 100.));
 		damage.critical = true;
@@ -918,7 +918,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 
 	if (caster->getHealth() != caster->getMaxHealth()) {
 		uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
-		uint16_t skill = caster->getSpecialSkillLevel(SPECIALSKILL_LIFELEECHAMOUNT);
+		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
 			CombatDamage healAmount;
 			healAmount.primary.value += std::round(std::abs(damage.primary.value) * (skill / 100.));
@@ -930,7 +930,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 
 	if (caster->getMana() != caster->getMaxMana()) {
 		uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
-		uint16_t skill = caster->getSpecialSkillLevel(SPECIALSKILL_MANALEECHAMOUNT);
+		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
 			CombatDamage manaAmount;
 			manaAmount.primary.value += std::round(std::abs(damage.primary.value) * (skill / 100.));
