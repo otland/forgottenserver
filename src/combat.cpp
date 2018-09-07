@@ -625,6 +625,22 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 			SpectatorHashSet spectators;
 			g_game.map.getSpectators(spectators, target->getPosition(), true, true);
 
+			if (params.origin != ORIGIN_MELEE) {
+				for (const auto& condition : params.conditionList) {
+					if (caster == target || !target->isImmune(condition->getType())) {
+						Condition* conditionCopy = condition->clone();
+						conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
+						target->addCombatCondition(conditionCopy);
+					}
+				}
+			}
+
+			if (params.dispelType == CONDITION_PARALYZE) {
+				target->removeCondition(CONDITION_PARALYZE);
+			} else {
+				target->removeCombatCondition(params.dispelType);
+			}
+
 			combatTileEffects(spectators, caster, target->getTile(), params);
 
 			if (params.targetCallback) {
@@ -690,6 +706,39 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 			}
 
 			combatTileEffects(spectators, caster, tile, params);
+
+			if (CreatureVector* creatures = tile->getCreatures()) {
+				const Creature* topCreature = tile->getTopCreature();
+				for (Creature* creature : *creatures) {
+					if (params.targetCasterOrTopMost) {
+						if (caster && caster->getTile() == tile) {
+							if (creature != caster) {
+								continue;
+							}
+						} else if (creature != topCreature) {
+							continue;
+						}
+					}
+
+					if (params.origin != ORIGIN_MELEE) {
+						for (const auto& condition : params.conditionList) {
+							if (caster == creature || !creature->isImmune(condition->getType())) {
+								Condition* conditionCopy = condition->clone();
+								conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
+
+								//TODO: infight condition until all aggressive conditions has ended
+								creature->addCombatCondition(conditionCopy);
+							}
+						}
+					}
+
+					if (params.dispelType == CONDITION_PARALYZE) {
+						creature->removeCondition(CONDITION_PARALYZE);
+					} else {
+						creature->removeCombatCondition(params.dispelType);
+					}
+				}
+			}
 		}
 	}
 }
