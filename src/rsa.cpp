@@ -36,10 +36,11 @@ void RSA::decrypt(char* msg) const
 	c.Encode(reinterpret_cast<uint8_t*>(msg), 128);
 }
 
+static const std::string header = "-----BEGIN RSA PRIVATE KEY-----";
+static const std::string footer = "-----END RSA PRIVATE KEY-----";
+
 void RSA::loadPEM(const std::string& filename)
 {
-	static std::string header = "-----BEGIN RSA PRIVATE KEY-----";
-	static std::string footer = "-----END RSA PRIVATE KEY-----";
 	std::ifstream file{filename};
 
 	std::ostringstream oss;
