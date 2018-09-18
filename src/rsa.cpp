@@ -21,72 +21,55 @@
 
 #include "rsa.h"
 
-RSA::RSA()
-{
-	mpz_init(n);
-	mpz_init2(d, 1024);
-}
+#include <cryptopp/base64.h>
+#include <cryptopp/osrng.h>
 
-RSA::~RSA()
-{
-	mpz_clear(n);
-	mpz_clear(d);
-}
+#include <fstream>
+#include <sstream>
 
-void RSA::setKey(const char* pString, const char* qString)
-{
-	mpz_t p, q, e;
-	mpz_init2(p, 1024);
-	mpz_init2(q, 1024);
-	mpz_init(e);
-
-	mpz_set_str(p, pString, 10);
-	mpz_set_str(q, qString, 10);
-
-	// e = 65537
-	mpz_set_ui(e, 65537);
-
-	// n = p * q
-	mpz_mul(n, p, q);
-
-	mpz_t p_1, q_1, pq_1;
-	mpz_init2(p_1, 1024);
-	mpz_init2(q_1, 1024);
-	mpz_init2(pq_1, 1024);
-
-	mpz_sub_ui(p_1, p, 1);
-	mpz_sub_ui(q_1, q, 1);
-
-	// pq_1 = (p -1)(q - 1)
-	mpz_mul(pq_1, p_1, q_1);
-
-	// d = e^-1 mod (p - 1)(q - 1)
-	mpz_invert(d, e, pq_1);
-
-	mpz_clear(p_1);
-	mpz_clear(q_1);
-	mpz_clear(pq_1);
-
-	mpz_clear(p);
-	mpz_clear(q);
-	mpz_clear(e);
-}
+static CryptoPP::AutoSeededRandomPool prng;
 
 void RSA::decrypt(char* msg) const
 {
-	mpz_t c, m;
-	mpz_init2(c, 1024);
-	mpz_init2(m, 1024);
+	CryptoPP::Integer m{reinterpret_cast<uint8_t*>(msg), 128};
+	auto c = pk.CalculateInverse(prng, m);
+	c.Encode(reinterpret_cast<uint8_t*>(msg), 128);
+}
 
-	mpz_import(c, 128, 1, 1, 0, 0, msg);
+static const std::string header = "-----BEGIN RSA PRIVATE KEY-----";
+static const std::string footer = "-----END RSA PRIVATE KEY-----";
 
-	// m = c^d mod n
-	mpz_powm(m, c, d, n);
+void RSA::loadPEM(const std::string& filename)
+{
+	std::ifstream file{filename};
 
-	size_t count = (mpz_sizeinbase(m, 2) + 7) / 8;
-	memset(msg, 0, 128 - count);
-	mpz_export(msg + (128 - count), nullptr, 1, 1, 0, 0, m);
+	std::ostringstream oss;
+	for (std::string line; std::getline(file, line); oss << line);
+	std::string key = oss.str();
 
-	mpz_clear(c);
-	mpz_clear(m);
+	if (key.substr(0, header.size()) != header) {
+		throw std::runtime_error("Missing RSA private key header.");
+	}
+
+	if (key.substr(key.size() - footer.size(), footer.size()) != footer) {
+		throw std::runtime_error("Missing RSA private key footer.");
+	}
+
+	key = key.substr(header.size(), key.size() - footer.size());
+
+	CryptoPP::ByteQueue queue;
+	CryptoPP::Base64Decoder decoder;
+	decoder.Attach(new CryptoPP::Redirector(queue));
+	decoder.Put(reinterpret_cast<const uint8_t*>(key.c_str()), key.size());
+	decoder.MessageEnd();
+
+	try {
+		pk.BERDecodePrivateKey(queue, false, queue.MaxRetrievable());
+
+		if (!pk.Validate(prng, 3)) {
+			throw std::runtime_error("RSA private key is not valid.");
+		}
+	} catch (const CryptoPP::Exception& e) {
+		std::cout << e.what() << '\n';
+	}
 }
