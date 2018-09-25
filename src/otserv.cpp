@@ -156,7 +156,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 #endif
 
 	//set RSA key
-	g_RSA.loadPEM("key.pem");
+	try {
+		g_RSA.loadPEM("key.pem");
+	} catch(const std::exception& e) {
+		startupErrorMessage(e.what());
+		return;
+	}
 
 	std::cout << ">> Establishing database connection..." << std::flush;
 
