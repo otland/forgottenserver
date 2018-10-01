@@ -404,7 +404,7 @@ class LuaScriptInterface
 
 		void registerFunctions();
 
-		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
+		void registerMethod(const std::string& globalName, const std::string& methodName, lua_CFunction func);
 
 		static std::string getErrorDesc(ErrorCode_t code);
 
