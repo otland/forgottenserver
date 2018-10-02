@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
@@ -17,7 +17,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-fno-strict-aliasing)
 endif()
 
-include(FindCXX11)
+set(CMAKE_CXX_STANDARD 11)
 include(FindLTO)
 
 # Find packages.
@@ -49,7 +49,7 @@ add_subdirectory(src)
 add_executable(tfs ${tfs_SRC})
 
 include_directories(${MYSQL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${PUGIXML_INCLUDE_DIR} ${Crypto++_INCLUDE_DIR})
-target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARIES} ${Boost_LIBRARIES} ${PUGIXML_LIBRARIES} ${Crypto++_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(tfs ${MYSQL_CLIENT_LIBS} ${LUA_LIBRARY} ${Boost_LIBRARIES} ${PUGIXML_LIBRARIES} ${Crypto++_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
 set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
