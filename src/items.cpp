@@ -1155,12 +1155,10 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						it.combatType = combatType;
 						it.conditionDamage.reset(conditionDamage);
 
+						uint32_t ticks = 0;
+						int32_t start = 0;
+						int32_t count = 1;
 						for (auto subAttributeNode : attributeNode.children()) {
-							uint32_t ticks = 0;
-							int32_t damage = 0;
-							int32_t start = 0;
-							int32_t count = 1;
-
 							pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 							if (!subKeyAttribute) {
 								continue;
@@ -1179,8 +1177,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 							} else if (tmpStrValue == "start") {
 								start = std::max<int32_t>(0, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "damage") {
-								damage = -pugi::cast<int32_t>(subValueAttribute.value());
-
+								int32_t damage = -pugi::cast<int32_t>(subValueAttribute.value());
 								if (start > 0) {
 									std::list<int32_t> damageList;
 									ConditionDamage::generateDamageList(damage, start, damageList);
