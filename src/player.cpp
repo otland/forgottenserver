@@ -3991,24 +3991,24 @@ void Player::updateAbilityConditions(Item* item, slots_t slot, bool equip)
 		}
 		switch (i) {
 			case STAT_MAXHITPOINTS: {
-				int32_t change = static_cast<int32_t>(getMaxHealth() * ((value - 100) / 100.f));
-				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -varStatsPercent[i]);
+				int32_t change = static_cast<int32_t>(healthMax * (value / 100.f));
+				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -change);
 				break;
 			}
 
 			case STAT_MAXMANAPOINTS: {
-				int32_t change = static_cast<int32_t>(getMaxMana() * ((value - 100) / 100.f));
-				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -varStatsPercent[i]);
+				int32_t change = static_cast<int32_t>(manaMax * (value / 100.f));
+				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -change);
 				break;
 			}
 
 			case STAT_MAGICPOINTS: {
-				int32_t change = static_cast<int32_t>(getBaseMagicLevel() * ((value - 100) / 100.f));
-				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -varStatsPercent[i]);
+				int32_t change = static_cast<int32_t>(magLevel * (value / 100.f));
+				setVarStatsPercent(static_cast<stats_t>(i), equip ? change : -change);
 				break;
 			}
 		}
-		needUpdateStats= true;
+		needUpdateStats = true;
 	}
 
 	if (needUpdateStats) {

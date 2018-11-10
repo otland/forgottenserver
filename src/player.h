@@ -478,7 +478,7 @@ class Player final : public Creature, public Cylinder
 			return mana;
 		}
 		uint32_t getMaxMana() const {
-			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS] + varStatsPercent[STAT_MAXHITPOINTS]);
+			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS] + varStatsPercent[STAT_MAXMANAPOINTS]);
 		}
 
 		Item* getInventoryItem(slots_t slot) const;

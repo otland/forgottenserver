@@ -1559,6 +1559,54 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 				s << "speed " << std::showpos << (speed >> 1) << std::noshowpos;
 			}
+
+			int64_t healthPoints = item ? item->getAbilityValue(ITEM_ABILITY_MAXHITPOINTS) : (it.abilities ? it.abilities->stats[STAT_MAXHITPOINTS] : 0);
+			if (healthPoints != 0) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "max health " << std::showpos << healthPoints << std::noshowpos;
+			}
+
+			int64_t healthPointsPercent = item ? item->getAbilityValue(ITEM_ABILITY_MAXHITPOINTSPERCENT) : (it.abilities ? it.abilities->statsPercent[STAT_MAXHITPOINTS] : 0);
+			if (healthPointsPercent != 0) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "max health " << std::showpos << healthPointsPercent << std::noshowpos << '%';
+			}
+
+			int64_t manaPoints = item ? item->getAbilityValue(ITEM_ABILITY_MAXMANAPOINTS) : (it.abilities ? it.abilities->stats[STAT_MAXMANAPOINTS] : 0);
+			if (manaPoints != 0) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "max mana " << std::showpos << manaPoints << std::noshowpos;
+			}
+
+			int64_t manaPointsPercent = item ? item->getAbilityValue(ITEM_ABILITY_MAXMANAPOINTSPERCENT) : (it.abilities ? it.abilities->statsPercent[STAT_MAXMANAPOINTS] : 0);
+			if (manaPointsPercent != 0) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "max mana " << std::showpos << manaPointsPercent << std::noshowpos << '%';
+			}
 		}
 
 		if (!begin) {
