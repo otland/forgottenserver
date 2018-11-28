@@ -93,6 +93,7 @@ int main(int argc, char* argv[])
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();
+	std::cin.get();
 	return 0;
 }
 
