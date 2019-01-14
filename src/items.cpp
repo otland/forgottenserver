@@ -668,7 +668,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 					auto it2 = TileStatesMap.find(tmpStrValue);
 					if (it2 != TileStatesMap.end()) {
-						it.floorChange = it2->second;
+						it.floorChange |= it2->second;
 					} else {
 						std::cout << "[Warning - Items::parseItemNode] Unknown floorChange: " << valueAttribute.as_string() << std::endl;
 					}
