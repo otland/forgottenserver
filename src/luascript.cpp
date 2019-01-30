@@ -8533,8 +8533,6 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 			intValue = 0;
 		} catch (std::out_of_range& e) {
 			intValue = 0;
-		} catch (...) {
-			intValue = 0;
 		}
 
 		if (intValue || strValue == "0") {

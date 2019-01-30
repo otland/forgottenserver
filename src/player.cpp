@@ -630,8 +630,6 @@ void Player::addStorageValue(const uint32_t key, const std::string& strValue, co
 		value = 0;
 	} catch (std::out_of_range& e) {
 		value = 0;
-	} catch (...) {
-		value = 0;
 	}
 
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
@@ -659,8 +657,6 @@ void Player::addStorageValue(const uint32_t key, const std::string& strValue, co
 		} catch (std::invalid_argument& e) {
 			oldValue = 0;
 		} catch (std::out_of_range& e) {
-			oldValue = 0;
-		} catch (...) {
 			oldValue = 0;
 		}
 
@@ -4107,8 +4103,6 @@ uint8_t Player::getCurrentMount() const
 			value = 0;
 		} catch (std::out_of_range& e) {
 			value = 0;
-		} catch (...) {
-			value = 0;
 		}
 
 		return value;
@@ -4235,8 +4229,6 @@ bool Player::untameMount(uint8_t mountId)
 		value = 0;
 	} catch (std::out_of_range& e) {
 		value = 0;
-	} catch (...) {
-		value = 0;
 	}
 
 	value &= ~(1 << (tmpMountId % 31));
@@ -4279,8 +4271,6 @@ bool Player::hasMount(const Mount* mount) const
 	} catch (std::invalid_argument& e) {
 		value = 0;
 	} catch (std::out_of_range& e) {
-		value = 0;
-	} catch (...) {
 		value = 0;
 	}
 

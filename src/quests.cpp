@@ -35,8 +35,6 @@ std::string Mission::getDescription(Player* player) const
 		value = 0;
 	} catch (std::out_of_range& e) {
 		value = 0;
-	} catch (...) {
-		value = 0;
 	}
 
 	if (!mainDescription.empty()) {
@@ -86,8 +84,6 @@ bool Mission::isStarted(Player* player) const
 		value = 0;
 	} catch (std::out_of_range& e) {
 		value = 0;
-	} catch (...) {
-		value = 0;
 	}
 
 	if (value < startValue) {
@@ -118,8 +114,6 @@ bool Mission::isCompleted(Player* player) const
 	} catch (std::invalid_argument& e) {
 		value = 0;
 	} catch (std::out_of_range& e) {
-		value = 0;
-	} catch (...) {
 		value = 0;
 	}
 
@@ -174,8 +168,6 @@ bool Quest::isStarted(Player* player) const
 	} catch (std::invalid_argument& e) {
 		value = 0;
 	} catch (std::out_of_range& e) {
-		value = 0;
-	} catch (...) {
 		value = 0;
 	}
 
