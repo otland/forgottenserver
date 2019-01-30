@@ -9,6 +9,7 @@
 	<event class="Party" method="onJoin" enabled="0" />
 	<event class="Party" method="onLeave" enabled="0" />
 	<event class="Party" method="onDisband" enabled="0" />
+	<event class="Party" method="onShareExperience" enabled="1" />
 
 	<!-- Player methods -->
 	<event class="Player" method="onBrowseField" enabled="0" />
@@ -17,6 +18,7 @@
 	<event class="Player" method="onLookInTrade" enabled="1" />
 	<event class="Player" method="onLookInShop" enabled="0" />
 	<event class="Player" method="onMoveItem" enabled="1" />
+	<event class="Player" method="onItemMoved" enabled="0" />
 	<event class="Player" method="onMoveCreature" enabled="0" />
 	<event class="Player" method="onReportBug" enabled="1" />
 	<event class="Player" method="onReportRuleViolation" enabled="1" />
