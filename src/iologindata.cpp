@@ -846,7 +846,7 @@ bool IOLoginData::savePlayer(Player* player)
 	player->genReservedStorageRange();
 
 	for (const auto& it : player->storageMap) {
-		query << player->getGUID() << ',' << it.first << ",'" << it.second << "'";
+		query << player->getGUID() << ',' << it.first << ',' << db.escapeString(it.second);
 		if (!storageQuery.addRow(query)) {
 			return false;
 		}
