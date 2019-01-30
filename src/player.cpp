@@ -3678,11 +3678,8 @@ void Player::genReservedStorageRange()
 {
 	//generate outfits range
 	uint32_t base_key = PSTRG_OUTFITS_RANGE_START;
-	std::ostringstream ss;
 	for (const OutfitEntry& entry : outfits) {
-		ss.str("");
-		ss << ((entry.lookType << 16) | entry.addons);
-		storageMap[++base_key] = ss.str();
+		storageMap[++base_key] = std::to_string((entry.lookType << 16) | entry.addons);
 	}
 }
 
@@ -4112,9 +4109,7 @@ uint8_t Player::getCurrentMount() const
 
 void Player::setCurrentMount(uint8_t mountId)
 {
-	std::ostringstream ss;
-	ss << +mountId;
-	addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, ss.str());
+	addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, std::to_string(+mountId));
 }
 
 bool Player::toggleMount(bool mount)
@@ -4232,9 +4227,7 @@ bool Player::untameMount(uint8_t mountId)
 	}
 
 	value &= ~(1 << (tmpMountId % 31));
-	std::ostringstream ss;
-	ss << value;
-	addStorageValue(key, ss.str());
+	addStorageValue(key, std::to_string(value));
 
 	if (getCurrentMount() == mountId) {
 		if (isMounted()) {
