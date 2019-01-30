@@ -339,8 +339,8 @@ class Player final : public Creature, public Cylinder
 
 		bool canOpenCorpse(uint32_t ownerId) const;
 
-		void addStorageValue(const uint32_t key, const int32_t value, const bool isLogin = false);
-		bool getStorageValue(const uint32_t key, int32_t& value) const;
+		void addStorageValue(const uint32_t key, const std::string& value, const bool isLogin = false);
+		bool getStorageValue(const uint32_t key, std::string& value) const;
 		void genReservedStorageRange();
 
 		void setGroup(Group* newGroup) {
@@ -1195,7 +1195,7 @@ class Player final : public Creature, public Cylinder
 		std::map<uint8_t, OpenContainer> openContainers;
 		std::map<uint32_t, DepotLocker*> depotLockerMap;
 		std::map<uint32_t, DepotChest*> depotChests;
-		std::map<uint32_t, int32_t> storageMap;
+		std::map<uint32_t, std::string> storageMap;
 
 		std::vector<OutfitEntry> outfits;
 		GuildWarVector guildWarVector;

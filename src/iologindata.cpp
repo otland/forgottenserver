@@ -545,7 +545,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
 	if ((result = db.storeQuery(query.str()))) {
 		do {
-			player->addStorageValue(result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"), true);
+			player->addStorageValue(result->getNumber<uint32_t>("key"), result->getString("value"), true);
 		} while (result->next());
 	}
 
@@ -846,7 +846,7 @@ bool IOLoginData::savePlayer(Player* player)
 	player->genReservedStorageRange();
 
 	for (const auto& it : player->storageMap) {
-		query << player->getGUID() << ',' << it.first << ',' << it.second;
+		query << player->getGUID() << ',' << it.first << ",'" << it.second << "'";
 		if (!storageQuery.addRow(query)) {
 			return false;
 		}
