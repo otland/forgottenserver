@@ -627,9 +627,9 @@ void Player::addStorageValue(const uint32_t key, const std::string& strValue, co
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
@@ -655,9 +655,9 @@ void Player::addStorageValue(const uint32_t key, const std::string& strValue, co
 		try {
 			oldValue = stoi(oldStrValue);
 		} catch (std::invalid_argument&) {
-			oldValue = 0;
+			oldValue = -1;
 		} catch (std::out_of_range&) {
-			oldValue = 0;
+			oldValue = -1;
 		}
 
 		storageMap[key] = strValue;
@@ -678,7 +678,7 @@ bool Player::getStorageValue(const uint32_t key, std::string& value) const
 {
 	auto it = storageMap.find(key);
 	if (it == storageMap.end()) {
-		value = "-1";
+		value.clear();
 		return false;
 	}
 
@@ -4097,9 +4097,9 @@ uint8_t Player::getCurrentMount() const
 		try {
 			value = stoi(strValue);
 		} catch (std::invalid_argument&) {
-			value = 0;
+			value = -1;
 		} catch (std::out_of_range&) {
-			value = 0;
+			value = -1;
 		}
 
 		return value;
@@ -4221,9 +4221,9 @@ bool Player::untameMount(uint8_t mountId)
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	value &= ~(1 << (tmpMountId % 31));
@@ -4262,9 +4262,9 @@ bool Player::hasMount(const Mount* mount) const
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	return ((1 << (tmpMountId % 31)) & value) != 0;

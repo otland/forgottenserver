@@ -32,9 +32,9 @@ std::string Mission::getDescription(Player* player) const
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	if (!mainDescription.empty()) {
@@ -81,9 +81,9 @@ bool Mission::isStarted(Player* player) const
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	if (value < startValue) {
@@ -112,9 +112,9 @@ bool Mission::isCompleted(Player* player) const
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	if (ignoreEndValue) {
@@ -166,9 +166,9 @@ bool Quest::isStarted(Player* player) const
 	try {
 		value = stoi(strValue);
 	} catch (std::invalid_argument&) {
-		value = 0;
+		value = -1;
 	} catch (std::out_of_range&) {
-		value = 0;
+		value = -1;
 	}
 
 	if (!value || value < startStorageValue) {
