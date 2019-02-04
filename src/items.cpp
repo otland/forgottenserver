@@ -555,7 +555,12 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 	it.name = itemNode.attribute("name").as_string();
 
-	nameToItems.insert({ asLowerCaseString(it.name), id });
+	std::string lowerCaseItemName = asLowerCaseString(it.name);
+	auto itemFound = nameToItems.find(lowerCaseItemName);
+
+	if (itemFound == nameToItems.end()) {
+		nameToItems.insert({ lowerCaseItemName, id });
+	}
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
