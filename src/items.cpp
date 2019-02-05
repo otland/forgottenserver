@@ -1338,10 +1338,15 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
-	auto result = nameToItems.find(asLowerCaseString(name));
+	auto ids = nameToItems.equal_range(asLowerCaseString(name));
 
-	if (result == nameToItems.end())
+	if (ids.first == nameToItems.cend())
 		return 0;
 
-	return result->second;
+	NameMap::iterator id;
+	for (NameMap::iterator it = ids.first; it != ids.second; ++it) {
+		id = it;
+	}
+
+	return id->second;
 }
