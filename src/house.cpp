@@ -89,21 +89,21 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		//reset paid date
 		paidUntil = 0;
 	} else {
-        std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
-        time_t currentTime = time(nullptr);
-        if (strRentPeriod == "yearly") {
-            currentTime += 24 * 60 * 60 * 365;
-        } else if (strRentPeriod == "monthly") {
-            currentTime += 24 * 60 * 60 * 30;
-        } else if (strRentPeriod == "weekly") {
-            currentTime += 24 * 60 * 60 * 7;
-        } else if (strRentPeriod == "daily") {
-            currentTime += 24 * 60 * 60;
-        } else {
-            currentTime = 0;
-        }
+		std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+		time_t currentTime = time(nullptr);
+		if (strRentPeriod == "yearly") {
+		    currentTime += 24 * 60 * 60 * 365;
+		} else if (strRentPeriod == "monthly") {
+		    currentTime += 24 * 60 * 60 * 30;
+		} else if (strRentPeriod == "weekly") {
+		    currentTime += 24 * 60 * 60 * 7;
+		} else if (strRentPeriod == "daily") {
+		    currentTime += 24 * 60 * 60;
+		} else {
+		    currentTime = 0;
+		}
 
-        paidUntil = currentTime;
+		paidUntil = currentTime;
     }
 
     rentWarnings = 0;
