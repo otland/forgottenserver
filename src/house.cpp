@@ -85,9 +85,6 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		for (Door* door : doorSet) {
 			door->setAccessList("");
 		}
-
-		//reset paid date
-		paidUntil = 0;
 	} else {
 		std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
@@ -104,9 +101,9 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		}
 
 		paidUntil = currentTime;
-    }
+	}
 
-    rentWarnings = 0;
+	rentWarnings = 0;
 
 	if (guid != 0) {
 		std::string name = IOLoginData::getNameByGuid(guid);
