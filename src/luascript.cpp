@@ -8528,7 +8528,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	if (player->getStorageValue(key, strValue)) {
 		int32_t intValue;
 		try {
-			intValue = stoi(strValue);
+			intValue = std::stoi(strValue);
 		} catch (std::invalid_argument&) {
 			intValue = -1;
 		} catch (std::out_of_range&) {

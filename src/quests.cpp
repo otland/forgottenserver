@@ -30,7 +30,7 @@ std::string Mission::getDescription(Player* player) const
 
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {
@@ -79,7 +79,7 @@ bool Mission::isStarted(Player* player) const
 
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {
@@ -110,7 +110,7 @@ bool Mission::isCompleted(Player* player) const
 
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {
@@ -164,7 +164,7 @@ bool Quest::isStarted(Player* player) const
 
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {

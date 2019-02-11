@@ -625,7 +625,7 @@ void Player::addStorageValue(const uint32_t key, const std::string& strValue, co
 {
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {
@@ -653,7 +653,7 @@ void Player::addStorageValue(const uint32_t key, const std::string& strValue, co
 		getStorageValue(key, oldStrValue);
 
 		try {
-			oldValue = stoi(oldStrValue);
+			oldValue = std::stoi(oldStrValue);
 		} catch (std::invalid_argument&) {
 			oldValue = -1;
 		} catch (std::out_of_range&) {
@@ -4095,7 +4095,7 @@ uint8_t Player::getCurrentMount() const
 	if (getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, strValue)) {
 		int32_t value;
 		try {
-			value = stoi(strValue);
+			value = std::stoi(strValue);
 		} catch (std::invalid_argument&) {
 			value = -1;
 		} catch (std::out_of_range&) {
@@ -4191,7 +4191,7 @@ bool Player::tameMount(uint8_t mountId)
 	int32_t value;
 	std::string strValue;
 	if (getStorageValue(key, strValue)) {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 		value |= (1 << (tmpMountId % 31));
 	} else {
 		value = (1 << (tmpMountId % 31));
@@ -4219,7 +4219,7 @@ bool Player::untameMount(uint8_t mountId)
 
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {
@@ -4260,7 +4260,7 @@ bool Player::hasMount(const Mount* mount) const
 
 	int32_t value;
 	try {
-		value = stoi(strValue);
+		value = std::stoi(strValue);
 	} catch (std::invalid_argument&) {
 		value = -1;
 	} catch (std::out_of_range&) {
