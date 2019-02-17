@@ -207,7 +207,6 @@ CREATE TABLE IF NOT EXISTS `houses` (
   `highest_bidder` int(11) NOT NULL DEFAULT '0',
   `size` int(11) NOT NULL DEFAULT '0',
   `beds` int(11) NOT NULL DEFAULT '0',
-  `guild_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`),
   KEY `town_id` (`town_id`)
