@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017 Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,26 +17,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_SIGNALHANDLINGTHREAD_H_01C6BF08B0EFE9E200175D108CF0B35F
-#define FS_SIGNALHANDLINGTHREAD_H_01C6BF08B0EFE9E200175D108CF0B35F
+#ifndef TFS_XTEA_H
+#define TFS_XTEA_H
 
-#include <boost/asio.hpp>
+namespace xtea {
 
-class Signals
-{
-	boost::asio::signal_set set;
-	public:
-		explicit Signals(boost::asio::io_service& service);
+using key = std::array<uint32_t, 4>;
 
-	private:
-		void asyncWait();
-		static void dispatchSignalHandler(int signal);
+void encrypt(uint8_t* data, size_t length, const key& k);
+void decrypt(uint8_t* data, size_t length, const key& k);
 
-		static void sigbreakHandler();
-		static void sigintHandler();
-		static void sighupHandler();
-		static void sigtermHandler();
-		static void sigusr1Handler();
-};
+} // namespace xtea
 
-#endif
+#endif // TFS_XTEA_H

@@ -309,7 +309,7 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 						std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y << ", z: " << z << "]." << std::endl;
 						delete item;
 					} else {
-						if (item->getItemCount() <= 0) {
+						if (item->getItemCount() == 0) {
 							item->setItemCount(1);
 						}
 
@@ -372,7 +372,7 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 				std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID() << ", in house: " << house->getId() << ", at position [x: " << x << ", y: " << y << ", z: " << z << "]." << std::endl;
 				delete item;
 			} else {
-				if (item->getItemCount() <= 0) {
+				if (item->getItemCount() == 0) {
 					item->setItemCount(1);
 				}
 

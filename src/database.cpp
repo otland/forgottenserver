@@ -22,7 +22,7 @@
 #include "configmanager.h"
 #include "database.h"
 
-#include <errmsg.h>
+#include <mysql/errmsg.h>
 
 extern ConfigManager g_config;
 
@@ -43,7 +43,7 @@ bool Database::connect()
 	}
 
 	// automatic reconnect
-	my_bool reconnect = true;
+	bool reconnect = true;
 	mysql_options(handle, MYSQL_OPT_RECONNECT, &reconnect);
 
 	// connects to database
