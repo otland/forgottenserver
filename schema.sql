@@ -133,7 +133,6 @@ CREATE TABLE IF NOT EXISTS `guilds` (
   `ownerid` int(11) NOT NULL,
   `creationdata` int(11) NOT NULL,
   `motd` varchar(255) NOT NULL DEFAULT '',
-  `house_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`),
   UNIQUE KEY (`ownerid`),
