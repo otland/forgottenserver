@@ -40,7 +40,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 
 			if query ~= RETURNVALUE_NOERROR then
-				player:sendTextMessage(MESSAGE_STATUS_SMALL, query)
+				player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(query))
 				return true
 			end
 
