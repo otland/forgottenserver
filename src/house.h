@@ -113,7 +113,7 @@ enum AccessHouseLevel_t {
 enum HouseType_t {
 	HOUSE_TYPE_NORMAL = 0,
 	HOUSE_TYPE_GUILDHALL = 1,
-}
+};
 
 using HouseTileList = std::list<HouseTile*>;
 using HouseBedItemList = std::list<BedItem*>;
