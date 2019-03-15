@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 #include <unordered_set>
 
 #include "networkmessage.h"
+
+static constexpr int32_t CONNECTION_WRITE_TIMEOUT = 30;
+static constexpr int32_t CONNECTION_READ_TIMEOUT = 30;
 
 class Protocol;
 using Protocol_ptr = std::shared_ptr<Protocol>;
@@ -62,9 +65,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 		// non-copyable
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
-
-		enum { write_timeout = 30 };
-		enum { read_timeout = 30 };
 
 		enum ConnectionState_t {
 			CONNECTION_STATE_OPEN,

@@ -13,9 +13,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <ObjectFileName>$(IntDir)\obj_d\</ObjectFileName>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>$(TFS_LIBDEPS_D)</AdditionalDependencies>
-    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

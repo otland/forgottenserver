@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -321,11 +321,11 @@ class LuaScriptInterface
 		}
 
 		static std::string getString(lua_State* L, int32_t arg);
-		static CombatDamage getCombatDamage(lua_State* L);
 		static Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
 		static Outfit_t getOutfit(lua_State* L, int32_t arg);
 		static LuaVariant getVariant(lua_State* L, int32_t arg);
+		static InstantSpell* getInstantSpell(lua_State* L, int32_t arg);
 
 		static Thing* getThing(lua_State* L, int32_t arg);
 		static Creature* getCreature(lua_State* L, int32_t arg);
@@ -404,7 +404,7 @@ class LuaScriptInterface
 
 		void registerFunctions();
 
-		void registerMethod(const std::string& className, const std::string& methodName, lua_CFunction func);
+		void registerMethod(const std::string& globalName, const std::string& methodName, lua_CFunction func);
 
 		static std::string getErrorDesc(ErrorCode_t code);
 

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -545,7 +545,11 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, Co
 	if (scriptInterface->protectedCall(L, 7, 4) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		damage = LuaScriptInterface::getCombatDamage(L);
+		damage.primary.value = LuaScriptInterface::getNumber<int32_t>(L, -4);
+		damage.primary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -3);
+		damage.secondary.value = LuaScriptInterface::getNumber<int32_t>(L, -2);
+		damage.secondary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -1);
+		lua_pop(L, 4);
 	}
 
 	scriptInterface->resetScriptEnv();

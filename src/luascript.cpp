@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -693,18 +693,6 @@ void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const
 }
 
 // Get
-CombatDamage LuaScriptInterface::getCombatDamage(lua_State* L)
-{
-	CombatDamage damage;
-	damage.primary.value = getNumber<int32_t>(L, -4);
-	damage.primary.type = getNumber<CombatType_t>(L, -3);
-	damage.secondary.value = getNumber<int32_t>(L, -2);
-	damage.secondary.type = getNumber<CombatType_t>(L, -1);
-
-	lua_pop(L, 4);
-	return damage;
-}
-
 std::string LuaScriptInterface::getString(lua_State* L, int32_t arg)
 {
 	size_t len;
@@ -793,6 +781,13 @@ LuaVariant LuaScriptInterface::getVariant(lua_State* L, int32_t arg)
 		}
 	}
 	return var;
+}
+
+InstantSpell* LuaScriptInterface::getInstantSpell(lua_State* L, int32_t arg)
+{
+	InstantSpell* spell = g_spells->getInstantSpellByName(getFieldString(L, arg, "name"));
+	lua_pop(L, 1);
+	return spell;
 }
 
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
@@ -7551,10 +7546,15 @@ int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 // Player
 int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
-	// Player(id or name or userdata)
+	// Player(id or guid or name or userdata)
 	Player* player;
 	if (isNumber(L, 2)) {
-		player = g_game.getPlayerByID(getNumber<uint32_t>(L, 2));
+		uint32_t id = getNumber<uint32_t>(L, 2);
+		if (id >= 0x10000000 && id <= Player::playerAutoID) {
+			player = g_game.getPlayerByID(id);
+		} else {
+			player = g_game.getPlayerByGUID(id);
+		}
 	} else if (isString(L, 2)) {
 		ReturnValue ret = g_game.getPlayerByNameWildcard(getString(L, 2), player);
 		if (ret != RETURNVALUE_NOERROR) {
@@ -8432,6 +8432,7 @@ int LuaScriptInterface::luaPlayerSetStamina(lua_State* L)
 	if (player) {
 		player->staminaMinutes = std::min<uint16_t>(2520, stamina);
 		player->sendStats();
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
@@ -9544,10 +9545,10 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 		return 1;
 	}
 
-	std::vector<InstantSpell> spells;
-	for (auto spell : g_spells->getInstantSpells()) {
+	std::vector<const InstantSpell*> spells;
+	for (auto& spell : g_spells->getInstantSpells()) {
 		if (spell.second.canCast(player)) {
-			spells.push_back(spell.second);
+			spells.push_back(&spell.second);
 		}
 	}
 
@@ -9555,7 +9556,7 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 
 	int index = 0;
 	for (auto spell : spells) {
-		pushInstantSpell(L, spell);
+		pushInstantSpell(L, *spell);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -12703,7 +12704,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 int LuaScriptInterface::luaSpellGetManaCost(lua_State* L)
 {
 	// spell:getManaCost(player)
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = getInstantSpell(L, 1);
 	Player* player = getUserdata<Player>(L, 2);
 	if (spell && player) {
 		lua_pushnumber(L, spell->getManaCost(player));
@@ -12716,7 +12717,7 @@ int LuaScriptInterface::luaSpellGetManaCost(lua_State* L)
 int LuaScriptInterface::luaSpellGetSoulCost(lua_State* L)
 {
 	// spell:getSoulCost()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+	if (InstantSpell* spell = getInstantSpell(L, 1)) {
 		lua_pushnumber(L, spell->getSoulCost());
 	} else {
 		lua_pushnil(L);
@@ -12727,7 +12728,7 @@ int LuaScriptInterface::luaSpellGetSoulCost(lua_State* L)
 int LuaScriptInterface::luaSpellIsPremium(lua_State* L)
 {
 	// spell:isPremium()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+	if (InstantSpell* spell = getInstantSpell(L, 1)) {
 		pushBoolean(L, spell->isPremium());
 	} else {
 		lua_pushnil(L);
@@ -12738,7 +12739,7 @@ int LuaScriptInterface::luaSpellIsPremium(lua_State* L)
 int LuaScriptInterface::luaSpellIsLearnable(lua_State* L)
 {
 	// spell:isLearnable()
-	if (InstantSpell* spell = getUserdata<InstantSpell>(L, 1)) {
+	if (InstantSpell* spell = getInstantSpell(L, 1)) {
 		pushBoolean(L, spell->isLearnable());
 	} else {
 		lua_pushnil(L);

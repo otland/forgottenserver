@@ -26,12 +26,13 @@ class Signals
 {
 	boost::asio::signal_set set;
 	public:
-		Signals(boost::asio::io_service& service);
+		explicit Signals(boost::asio::io_service& service);
 
 	private:
 		void asyncWait();
 		static void dispatchSignalHandler(int signal);
 
+		static void sigbreakHandler();
 		static void sigintHandler();
 		static void sighupHandler();
 		static void sigtermHandler();
