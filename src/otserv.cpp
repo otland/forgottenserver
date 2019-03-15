@@ -252,14 +252,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_game.setGameState(GAME_STATE_INIT);
 
 	// Game client protocols
-	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
-	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolGame>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
+	services->add<ProtocolLogin>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
-	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
+	services->add<ProtocolStatus>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STATUS_PORT)));
 
 	// Legacy login protocol
-	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
