@@ -1120,7 +1120,7 @@ class LuaScriptInterface
 
 		static int luaHouseKickPlayer(lua_State* L);
 		
-		static int luaHouseIsGuildHall(lua_State* L);
+		static int luaHouseGetType(lua_State* L);
 		
 		static int luaHouseSetGuildId(lua_State* L);
 		static int luaHouseGetGuildId(lua_State* L);

@@ -110,6 +110,11 @@ enum AccessHouseLevel_t {
 	HOUSE_OWNER = 3,
 };
 
+enum HouseType_t {
+	HOUSE_TYPE_NORMAL = 0,
+	HOUSE_TYPE_GUILDHALL = 1,
+}
+
 using HouseTileList = std::list<HouseTile*>;
 using HouseBedItemList = std::list<BedItem*>;
 
@@ -199,12 +204,12 @@ class House
 		uint32_t getId() const {
 			return id;
 		}
-		
-		void setGuildHall(bool guildHall) {
-			this->guildHall = guildHall;
+
+		void setType(HouseType_t type) {
+			this->type = type;
 		}
-		bool isGuildHall() const {
-			return guildHall;
+		HouseType_t getType() const {
+			return type;
 		}
 		void setGuildId(uint32_t guildId) {
 			this->guildId = guildId;
@@ -258,6 +263,8 @@ class House
 
 		time_t paidUntil = 0;
 
+		HouseType_t type = HOUSE_TYPE_NORMAL;
+
 		uint32_t id;
 		uint32_t owner = 0;
 		uint32_t rentWarnings = 0;
@@ -268,7 +275,6 @@ class House
 		Position posEntry = {};
 
 		bool isLoaded = false;
-		bool guildHall = false;
 };
 
 using HouseMap = std::map<uint32_t, House*>;

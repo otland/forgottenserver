@@ -1382,6 +1382,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(GAME_STATE_CLOSING)
 	registerEnum(GAME_STATE_MAINTAIN)
 
+	registerEnum(HOUSE_TYPE_NORMAL)
+	registerEnum(HOUSE_TYPE_GUILDHALL)
+
 	registerEnum(MESSAGE_STATUS_CONSOLE_BLUE)
 	registerEnum(MESSAGE_STATUS_CONSOLE_RED)
 	registerEnum(MESSAGE_STATUS_DEFAULT)
@@ -2503,7 +2506,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "kickPlayer", LuaScriptInterface::luaHouseKickPlayer);
 	
-	registerMethod("House", "isGuildHall", LuaScriptInterface::luaHouseIsGuildHall);
+	registerMethod("House", "getType", LuaScriptInterface::luaHouseGetType);
 	
 	registerMethod("House", "getGuildId", LuaScriptInterface::luaHouseGetGuildId);
 	registerMethod("House", "setGuildId", LuaScriptInterface::luaHouseSetGuildId);
@@ -10963,16 +10966,16 @@ int LuaScriptInterface::luaHouseKickPlayer(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaHouseIsGuildHall(lua_State* L)
+int LuaScriptInterface::luaHouseGetType(lua_State* L)
 {
-	// house:isGuildHall()
+	// house:getType()
 	House* house = getUserdata<House>(L, 1);
 	if (!house) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	pushBoolean(L, house->isGuildHall());
+	lua_pushnumber(L, house->getType());
 	return 1;
 }
 
