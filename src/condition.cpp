@@ -43,7 +43,7 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 		}
 
 		case CONDITION_PARAM_AGGRESSIVE: {
-			isAggressive = (value != 0);
+			aggressive = (value != 0);
 			return true;
 		}
 
@@ -111,7 +111,7 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 				return false;
 			}
 
-			isAggressive = (value != 0);
+			aggressive = (value != 0);
 			return true;
 		}
 
@@ -141,7 +141,7 @@ void Condition::serialize(PropWriteStream& propWriteStream)
 	propWriteStream.write<uint32_t>(subId);
 	
 	propWriteStream.write<uint8_t>(CONDITIONATTR_ISAGGRESSIVE);
-	propWriteStream.write<uint8_t>(isAggressive);
+	propWriteStream.write<uint8_t>(aggressive);
 }
 
 void Condition::setTicks(int32_t newTicks)
@@ -710,7 +710,7 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 		}
 
 		case CONDITION_PARAM_AGGRESSIVE: {
-			isAggressive = (value != 0);
+			aggressive = (value != 0);
 			return true;
 		}
 
