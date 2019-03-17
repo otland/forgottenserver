@@ -1179,10 +1179,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_DISABLE_DEFENSE)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT)
-	registerEnum(CONDITION_PARAM_SPECIALSKILL_HITPOINTSLEECHCHANCE)
-	registerEnum(CONDITION_PARAM_SPECIALSKILL_HITPOINTSLEECHAMOUNT)
-	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANAPOINTSLEECHCHANCE)
-	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANAPOINTSLEECHAMOUNT)
+	registerEnum(CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE)
+	registerEnum(CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT)
+	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE)
+	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT)
 
 	registerEnum(CONST_ME_NONE)
 	registerEnum(CONST_ME_DRAWBLOOD)
@@ -1550,6 +1550,13 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(SKILL_FISHING)
 	registerEnum(SKILL_MAGLEVEL)
 	registerEnum(SKILL_LEVEL)
+
+	registerEnum(SPECIALSKILL_CRITICALHITCHANCE)
+	registerEnum(SPECIALSKILL_CRITICALHITAMOUNT)
+	registerEnum(SPECIALSKILL_LIFELEECHCHANCE)
+	registerEnum(SPECIALSKILL_LIFELEECHAMOUNT)
+	registerEnum(SPECIALSKILL_MANALEECHCHANCE)
+	registerEnum(SPECIALSKILL_MANALEECHAMOUNT)
 
 	registerEnum(SKULL_NONE)
 	registerEnum(SKULL_YELLOW)
@@ -2231,6 +2238,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getSkillPercent", LuaScriptInterface::luaPlayerGetSkillPercent);
 	registerMethod("Player", "getSkillTries", LuaScriptInterface::luaPlayerGetSkillTries);
 	registerMethod("Player", "addSkillTries", LuaScriptInterface::luaPlayerAddSkillTries);
+	registerMethod("Player", "getSpecialSkill", LuaScriptInterface::luaPlayerGetSpecialSkill);
+	registerMethod("Player", "addSpecialSkill", LuaScriptInterface::luaPlayerAddSpecialSkill);
 
 	registerMethod("Player", "addOfflineTrainingTime", LuaScriptInterface::luaPlayerAddOfflineTrainingTime);
 	registerMethod("Player", "getOfflineTrainingTime", LuaScriptInterface::luaPlayerGetOfflineTrainingTime);
@@ -8043,6 +8052,39 @@ int LuaScriptInterface::luaPlayerAddSkillTries(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetSpecialSkill(lua_State* L)
+{
+	// player:getSpecialSkill(specialSkillType)
+	SpecialSkills_t specialSkillType = getNumber<SpecialSkills_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player && specialSkillType <= SPECIALSKILL_LAST) {
+		lua_pushnumber(L, player->getSpecialSkill(specialSkillType));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerAddSpecialSkill(lua_State* L)
+{
+	// player:addSpecialSkill(specialSkillType, value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	SpecialSkills_t specialSkillType = getNumber<SpecialSkills_t>(L, 2);
+	if (specialSkillType > SPECIALSKILL_LAST) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	player->setVarSpecialSkill(specialSkillType, getNumber<int32_t>(L, 3));
+	pushBoolean(L, true);
 	return 1;
 }
 
