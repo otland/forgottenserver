@@ -697,7 +697,7 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 		Item* splash;
 		switch (getRace()) {
 			case RACE_VENOM:
-				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_GREEN);
+				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_SLIME);
 				break;
 
 			case RACE_BLOOD:
@@ -1186,12 +1186,10 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 			}
 		}
 
-		it = conditions.erase(it);
-
 		condition->endCondition(this);
-		delete condition;
-
 		onEndCondition(type);
+		toReleaseConditions.push_back(condition);
+		++it;
 	}
 }
 
@@ -1213,12 +1211,10 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 			}
 		}
 
-		it = conditions.erase(it);
-
 		condition->endCondition(this);
-		delete condition;
-
 		onEndCondition(type);
+		toReleaseConditions.push_back(condition);
+		++it;
 	}
 }
 
@@ -1251,11 +1247,9 @@ void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 		}
 	}
 
-	conditions.erase(it);
-
 	condition->endCondition(this);
 	onEndCondition(condition->getType());
-	delete condition;
+	toReleaseConditions.push_back(condition);
 }
 
 Condition* Creature::getCondition(ConditionType_t type) const
@@ -1280,21 +1274,24 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
+	for (Condition* condition : toReleaseConditions) {
+		auto it = std::find(conditions.begin(), conditions.end(), condition);
+		if (it != conditions.end()) {
+			conditions.erase(it);
+		}
+		delete condition;
+	}
+	toReleaseConditions.clear();
+
 	auto it = conditions.begin(), end = conditions.end();
 	while (it != end) {
 		Condition* condition = *it;
 		if (!condition->executeCondition(this, interval)) {
-			ConditionType_t type = condition->getType();
-
-			it = conditions.erase(it);
-
 			condition->endCondition(this);
-			delete condition;
-
-			onEndCondition(type);
-		} else {
-			++it;
+			onEndCondition(condition->getType());
+			toReleaseConditions.push_back(condition);
 		}
+		++it;
 	}
 }
 

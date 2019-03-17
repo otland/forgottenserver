@@ -12,7 +12,7 @@ function onSay(player, words, param)
 	end
 
 	local kills = math.ceil(skullTime / fragTime)
-	local remainingSeconds = math.floor((skullTime % fragTime) / 1000)
+	local remainingSeconds = math.floor(skullTime % fragTime)
 
 	local hours = math.floor(remainingSeconds / 3600)
 	local minutes = math.floor((remainingSeconds % 3600) / 60)
