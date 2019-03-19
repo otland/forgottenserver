@@ -271,7 +271,7 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 		end
 	end
 
-	if #affectedMembers == 1 then
+	if #affectedMembers <= 1 then
 		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 		self:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
