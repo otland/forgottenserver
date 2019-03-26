@@ -408,9 +408,9 @@ class Creature : virtual public Thing
 		void setUseDefense(bool useDefense) {
 			canUseDefense = useDefense;
 		}
-		void setNoMove(bool cannotMove)
+		void setNoMove(bool canNotMove)
 		{
-			cannotMove = cannotMove;
+			cannotMove = canNotMove;
 			cancelNextWalk = true;
 		}
 		bool canNotMove() const {
