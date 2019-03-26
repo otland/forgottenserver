@@ -659,17 +659,19 @@ void Monster::setIdle(bool idle)
 void Monster::updateIdleStatus()
 {
 	bool idle = false;
-
-	if (conditions.empty()) {
-		if (!isSummon() && targetList.empty()) {
+	if (!isSummon()) {
+		if (conditions.empty() && targetList.empty()) {
 			idle = true;
-		}
-	} else {
-		for (Condition* condition : conditions) {
-			if (condition->isAggressive()) {
-				idle = false;
-				break;
+		} else if (!conditions.empty()) {
+			bool hasAggressiveCondition = false;
+			for (Condition* condition : conditions) {
+				if (condition->isAggressive()) {
+					hasAggressiveCondition = true;
+					break;
+				}
 			}
+
+			idle = !hasAggressiveCondition;
 		}
 	}
 
