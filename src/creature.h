@@ -408,12 +408,12 @@ class Creature : virtual public Thing
 		void setUseDefense(bool useDefense) {
 			canUseDefense = useDefense;
 		}
-		void setNoMove(bool _cannotMove)
+		void setNoMove(bool cannotMove)
 		{
-			cannotMove = _cannotMove;
+			cannotMove = cannotMove;
 			cancelNextWalk = true;
 		}
-		bool isNoMove() const {
+		bool canNotMove() const {
 			return cannotMove;
 		}
 

@@ -2115,7 +2115,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
 	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
-	registerMethod("Creature", "isNoMove", LuaScriptInterface::luaCreatureIsNoMove);
+	registerMethod("Creature", "cannotMove", LuaScriptInterface::luaCreatureCannotMove);
 	registerMethod("Creature", "isImmune", LuaScriptInterface::luaCreatureIsImmune);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
@@ -6750,12 +6750,12 @@ int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureIsNoMove(lua_State* L)
+int LuaScriptInterface::luaCreatureCannotMove(lua_State* L)
 {
-	// creature:isNoMove()
+	// creature:cannotMove()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
-		pushBoolean(L, creature->isNoMove());
+		pushBoolean(L, creature->canNotMove());
 	} else {
 		lua_pushnil(L);
 	}

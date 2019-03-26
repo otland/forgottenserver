@@ -691,7 +691,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 		return;
 	}
 
-	if (movingCreature->isNoMove()) {
+	if (movingCreature->canNotMove()) {
 		player->sendCancelMessage(RETURNVALUE_NOTMOVEABLE);
 		return;
 	}
@@ -1775,7 +1775,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 		return;
 	}
 
-	if (player->isNoMove()) {
+	if (player->canNotMove()) {
 		player->sendCancelWalk();
 		return;
 	}
