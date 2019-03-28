@@ -6755,7 +6755,7 @@ int LuaScriptInterface::luaCreatureCannotMove(lua_State* L)
 	// creature:cannotMove()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
-		pushBoolean(L, creature->canNotMove());
+		pushBoolean(L, creature->cannotMove());
 	} else {
 		lua_pushnil(L);
 	}

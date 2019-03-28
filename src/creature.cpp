@@ -249,7 +249,7 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk(const std::forward_list<Direction>& listDir)
 {
-	if (getPlayer() && getPlayer()->canNotMove()) {
+	if (getPlayer() && getPlayer()->cannotMove()) {
 		getPlayer()->sendCancelWalk();
 		return;
 	}
