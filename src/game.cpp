@@ -2668,8 +2668,6 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			playerRet = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
 			tradePartnerRet = internalRemoveItem(tradePartnerItem, tradePartnerItem->getItemCount(), true);
 			if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
-				Cylinder* playerItemCylinder = playerTradeItem->getParent();
-				Cylinder* partnerItemCylinder = tradePartnerItem->getParent();
 				tradePartnerRet = internalMoveItem(playerTradeItem->getParent(), tradePartner, INDEX_WHEREEVER, playerTradeItem, playerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK, nullptr, tradePartnerItem);
 				if (tradePartnerRet == RETURNVALUE_NOERROR) {
 					internalMoveItem(tradePartnerItem->getParent(), player, INDEX_WHEREEVER, tradePartnerItem, tradePartnerItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
