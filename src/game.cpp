@@ -2638,9 +2638,9 @@ void Game::playerAcceptTrade(uint32_t playerId)
 
 	if (tradePartner->getTradeState() == TRADE_ACCEPT) {
 		Item* playerTradeItem = player->tradeItem;
-		Item* partnerTradeItem = tradePartner->tradeItem;
+		Item* tradePartnerItem = tradePartner->tradeItem;
 
-		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
+		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, tradePartnerItem)) {
 			internalCloseTrade(player);
 			return;
 		}
@@ -2654,7 +2654,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			tradeItems.erase(it);
 		}
 
-		it = tradeItems.find(partnerTradeItem);
+		it = tradeItems.find(tradePartnerItem);
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
@@ -2662,25 +2662,17 @@ void Game::playerAcceptTrade(uint32_t playerId)
 
 		bool isSuccess = false;
 
-		ReturnValue ret1 = internalAddItem(tradePartner, playerTradeItem, INDEX_WHEREEVER, 0, true);
-		ReturnValue ret2 = internalAddItem(player, partnerTradeItem, INDEX_WHEREEVER, 0, true);
-		if (ret1 == RETURNVALUE_NOERROR && ret2 == RETURNVALUE_NOERROR) {
-			ret1 = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
-			ret2 = internalRemoveItem(partnerTradeItem, partnerTradeItem->getItemCount(), true);
-			if (ret1 == RETURNVALUE_NOERROR && ret2 == RETURNVALUE_NOERROR) {
-				Cylinder* cylinder1 = playerTradeItem->getParent();
-				Cylinder* cylinder2 = partnerTradeItem->getParent();
-
-				uint32_t count1 = playerTradeItem->getItemCount();
-				uint32_t count2 = partnerTradeItem->getItemCount();
-
-				ret1 = internalMoveItem(cylinder1, tradePartner, INDEX_WHEREEVER, playerTradeItem, count1, nullptr, FLAG_IGNOREAUTOSTACK, nullptr, tradeItem2);
-				if (ret1 == RETURNVALUE_NOERROR) {
-					internalMoveItem(cylinder2, player, INDEX_WHEREEVER, partnerTradeItem, count2, nullptr, FLAG_IGNOREAUTOSTACK);
-
+		ReturnValue tradePartnerRet = internalAddItem(tradePartner, playerTradeItem, INDEX_WHEREEVER, 0, true);
+		ReturnValue playerRet = internalAddItem(player, tradePartnerItem, INDEX_WHEREEVER, 0, true);
+		if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
+			playerRet = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
+			tradePartnerRet = internalRemoveItem(tradePartnerItem, partnerTradeItem->getItemCount(), true);
+			if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
+				tradePartnerRet = internalMoveItem(playerTradeItem->getParent(), tradePartner, INDEX_WHEREEVER, playerTradeItem, playerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK, nullptr, tradePartnerItem);
+				if (tradePartnerRet == RETURNVALUE_NOERROR) {
+					internalMoveItem(tradePartnerItem->getParent(), player, INDEX_WHEREEVER, tradePartnerItem, tradePartnerItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
 					playerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
-					partnerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, player);
-
+					tradePartnerItem->onTradeEvent(ON_TRADE_TRANSFER, player);
 					isSuccess = true;
 				}
 			}
@@ -2690,13 +2682,13 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			std::string errorDescription;
 
 			if (tradePartner->tradeItem) {
-				errorDescription = getTradeErrorDescription(ret1, playerTradeItem);
+				errorDescription = getTradeErrorDescription(playerItemCylinder, playerTradeItem);
 				tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
 			}
 
 			if (player->tradeItem) {
-				errorDescription = getTradeErrorDescription(ret2, partnerTradeItem);
+				errorDescription = getTradeErrorDescription(partnerItemCylinder, tradePartnerItem);
 				player->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
 			}
