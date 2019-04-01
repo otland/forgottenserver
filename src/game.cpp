@@ -2666,7 +2666,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		ReturnValue playerRet = internalAddItem(player, tradePartnerItem, INDEX_WHEREEVER, 0, true);
 		if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
 			playerRet = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
-			tradePartnerRet = internalRemoveItem(tradePartnerItem, partnerTradeItem->getItemCount(), true);
+			tradePartnerRet = internalRemoveItem(tradePartnerItem, tradePartnerItem->getItemCount(), true);
 			if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
 				Cylinder* playerItemCylinder = playerTradeItem->getParent();
 				Cylinder* partnerItemCylinder = tradePartnerItem->getParent();
@@ -2684,13 +2684,13 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			std::string errorDescription;
 
 			if (tradePartner->tradeItem) {
-				errorDescription = getTradeErrorDescription(playerItemCylinder, playerTradeItem);
+				errorDescription = getTradeErrorDescription(tradePartnerRet, playerTradeItem);
 				tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
 			}
 
 			if (player->tradeItem) {
-				errorDescription = getTradeErrorDescription(partnerItemCylinder, tradePartnerItem);
+				errorDescription = getTradeErrorDescription(playerRet, tradePartnerItem);
 				player->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
 			}
