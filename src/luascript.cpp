@@ -2115,7 +2115,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
 	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
-	registerMethod("Creature", "cannotMove", LuaScriptInterface::luaCreatureCannotMove);
+	registerMethod("Creature", "canMove", LuaScriptInterface::luaCreatureCanMove);
 	registerMethod("Creature", "isImmune", LuaScriptInterface::luaCreatureIsImmune);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
@@ -2156,7 +2156,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getMaxHealth", LuaScriptInterface::luaCreatureGetMaxHealth);
 	registerMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
 	registerMethod("Creature", "setHiddenHealth", LuaScriptInterface::luaCreatureSetHiddenHealth);
-	registerMethod("Creature", "setNoMove", LuaScriptInterface::luaCreatureSetNoMove);
+	registerMethod("Creature", "setMove", LuaScriptInterface::luaCreatureSetMove);
 
 	registerMethod("Creature", "getSkull", LuaScriptInterface::luaCreatureGetSkull);
 	registerMethod("Creature", "setSkull", LuaScriptInterface::luaCreatureSetSkull);
@@ -6750,12 +6750,12 @@ int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureCannotMove(lua_State* L)
+int LuaScriptInterface::luaCreatureCanMove(lua_State* L)
 {
-	// creature:cannotMove()
+	// creature:canMove()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
-		pushBoolean(L, creature->cannotMove());
+		pushBoolean(L, creature->getCanMove());
 	} else {
 		lua_pushnil(L);
 	}
@@ -7182,12 +7182,12 @@ int LuaScriptInterface::luaCreatureSetHiddenHealth(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureSetNoMove(lua_State* L)
+int LuaScriptInterface::luaCreatureSetMove(lua_State* L)
 {
-	// creature:setNoMove(move)
+	// creature:setMove(move)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		creature->setNoMove(getBoolean(L, 2));
+		creature->setCanMove(getBoolean(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

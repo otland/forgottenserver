@@ -408,13 +408,13 @@ class Creature : virtual public Thing
 		void setUseDefense(bool useDefense) {
 			canUseDefense = useDefense;
 		}
-		void setNoMove(bool movingDisabled)
+		void setCanMove(bool move)
 		{
-			isMovingDisabled = movingDisabled;
+			canMove = move;
 			cancelNextWalk = true;
 		}
-		bool cannotMove() const {
-			return isMovingDisabled;
+		bool getCanMove() const {
+			return canMove;
 		}
 
 		//creature script events
@@ -534,7 +534,7 @@ class Creature : virtual public Thing
 		bool forceUpdateFollowPath = false;
 		bool hiddenHealth = false;
 		bool canUseDefense = true;
-		bool isMovingDisabled = false;
+		bool canMove = true;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
