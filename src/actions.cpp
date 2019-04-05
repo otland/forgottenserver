@@ -186,6 +186,71 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	return false;
 }
 
+bool Actions::registerLuaEvent(Event* event)
+{
+	Action_ptr action{ static_cast<Action*>(event) }; //event is guaranteed to be an Action
+	if (action->getIdRange().size() > 0) {
+		if (action->getIdRange().size() == 1) {
+			auto result = useItemMap.emplace(action->getIdRange().at(0), std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << action->getIdRange().at(0) << std::endl;
+			}
+			return result.second;
+		} else {
+			auto v = action->getIdRange();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				auto result = useItemMap.emplace(*i, std::move(*action));
+				if (!result.second) {
+					std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << *i << " in range from id: " << v.at(0) << ", to id: " << v.at(v.size() - 1) << std::endl;
+					continue;
+				}
+			}
+			return true;
+		}
+	}
+	else if (action->getUidRange().size() > 0) {
+		if (action->getUidRange().size() == 1) {
+			auto result = uniqueItemMap.emplace(action->getUidRange().at(0), std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << action->getUidRange().at(0) << std::endl;
+			}
+			return result.second;
+		} else {
+			auto v = action->getUidRange();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				auto result = uniqueItemMap.emplace(*i, std::move(*action));
+				if (!result.second) {
+					std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << *i << " in range from uid: " << v.at(0) << ", to uid: " << v.at(v.size() - 1) << std::endl;
+					continue;
+				}
+			}
+			return true;
+		}
+	}
+	else if (action->getAidRange().size() > 0) {
+		if (action->getAidRange().size() == 1) {
+			auto result = actionItemMap.emplace(action->getAidRange().at(0), std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << action->getAidRange().at(0) << std::endl;
+			}
+			return result.second;
+		} else {
+			auto v = action->getAidRange();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				auto result = actionItemMap.emplace(*i, std::move(*action));
+				if (!result.second) {
+					std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << *i << " in range from aid: " << v.at(0) << ", to aid: " << v.at(v.size() - 1) << std::endl;
+					continue;
+				}
+			}
+			return true;
+		}
+	} else {
+		std::cout << "[Warning - Actions::registerLuaEvent] There is no id / aid / uid set for this event" << std::endl;
+		return false;
+	}
+}
+
 ReturnValue Actions::canUse(const Player* player, const Position& pos)
 {
 	if (pos.x != 0xFFFF) {
@@ -442,17 +507,21 @@ bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&
 
 }
 
-bool Action::loadFunction(const pugi::xml_attribute& attr)
+bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
 	if (strcasecmp(functionName, "market") == 0) {
 		function = enterMarket;
 	} else {
-		std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
+		if (!isScripted) {
+			std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+			return false;
+		}
 	}
 
-	scripted = false;
+	if (!isScripted) {
+		scripted = false;
+	}
 	return true;
 }
 

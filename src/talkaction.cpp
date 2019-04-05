@@ -66,6 +66,13 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 	return true;
 }
 
+bool TalkActions::registerLuaEvent(Event* event)
+{
+	TalkAction_ptr talkAction{ static_cast<TalkAction*>(event) }; // event is guaranteed to be a TalkAction
+	talkActions.push_front(std::move(*talkAction));
+	return true;
+}
+
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
 	size_t wordsLength = words.length();
@@ -84,10 +91,10 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 			trim_left(param, ' ');
 
-			char separator = talkAction.getSeparator();
-			if (separator != ' ') {
+			std::string separator = talkAction.getSeparator();
+			if (separator != " ") {
 				if (!param.empty()) {
-					if (param.front() != separator) {
+					if (param != separator) {
 						continue;
 					} else {
 						param.erase(param.begin());

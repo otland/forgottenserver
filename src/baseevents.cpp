@@ -67,8 +67,9 @@ bool BaseEvents::loadFromXml()
 		if (scriptAttribute) {
 			std::string scriptFile = "scripts/" + std::string(scriptAttribute.as_string());
 			success = event->checkScript(basePath, scriptsName, scriptFile) && event->loadScript(basePath + scriptFile);
+			event->loadFunction(node.attribute("function"), true);
 		} else {
-			success = event->loadFunction(node.attribute("function"));
+			success = event->loadFunction(node.attribute("function"), false);
 		}
 
 		if (success) {
@@ -131,6 +132,24 @@ bool Event::loadScript(const std::string& scriptFile)
 	int32_t id = scriptInterface->getEvent(getScriptEventName());
 	if (id == -1) {
 		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		return false;
+	}
+
+	scripted = true;
+	scriptId = id;
+	return true;
+}
+
+bool Event::loadCallback()
+{
+	if (!scriptInterface || scriptId != 0) {
+		std::cout << "Failure: [Event::loadCallback] scriptInterface == nullptr. scriptid = " << scriptId << std::endl;
+		return false;
+	}
+
+	int32_t id = scriptInterface->getEvent();
+	if (id == -1) {
+		std::cout << "[Warning - Event::loadCallback] Event " << getScriptEventName() << " not found. " << std::endl;
 		return false;
 	}
 

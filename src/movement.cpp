@@ -164,6 +164,119 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	return true;
 }
 
+bool MoveEvents::registerLuaFunction(Event* event) {
+	MoveEvent_ptr moveEvent{ static_cast<MoveEvent*>(event) }; //event is guaranteed to be a MoveEvent
+
+	const MoveEvent_t eventType = moveEvent->getEventType();
+	if (moveEvent->getItemIdRange().size() > 0) {
+		if (moveEvent->getItemIdRange().size() == 1) {
+			uint32_t id = moveEvent->getItemIdRange().at(0);
+			addEvent(*moveEvent, id, itemIdMap);
+			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+				ItemType& it = Item::items.getItemType(id);
+				it.wieldInfo = moveEvent->getWieldInfo();
+				it.minReqLevel = moveEvent->getReqLevel();
+				it.minReqMagicLevel = moveEvent->getReqMagLv();
+				it.vocationString = moveEvent->getVocationString();
+			}
+		} else {
+			uint32_t iterId = 0;
+			while (++iterId < moveEvent->getItemIdRange().size()) {
+				if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+					ItemType& it = Item::items.getItemType(moveEvent->getItemIdRange().at(iterId));
+					it.wieldInfo = moveEvent->getWieldInfo();
+					it.minReqLevel = moveEvent->getReqLevel();
+					it.minReqMagicLevel = moveEvent->getReqMagLv();
+					it.vocationString = moveEvent->getVocationString();
+				}
+				addEvent(*moveEvent, moveEvent->getItemIdRange().at(iterId), itemIdMap);
+			}
+		}
+	} else {
+		return false;
+	}
+	return true;
+}
+
+bool MoveEvents::registerLuaEvent(Event* event)
+{
+	MoveEvent_ptr moveEvent{ static_cast<MoveEvent*>(event) }; //event is guaranteed to be a MoveEvent
+
+	const MoveEvent_t eventType = moveEvent->getEventType();
+	if (moveEvent->getItemIdRange().size() > 0) {
+		if (moveEvent->getItemIdRange().size() == 1) {
+			uint32_t id = moveEvent->getItemIdRange().at(0);
+			addEvent(*moveEvent, id, itemIdMap);
+			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+				ItemType& it = Item::items.getItemType(id);
+				it.wieldInfo = moveEvent->getWieldInfo();
+				it.minReqLevel = moveEvent->getReqLevel();
+				it.minReqMagicLevel = moveEvent->getReqMagLv();
+				it.vocationString = moveEvent->getVocationString();
+			}
+		} else {
+			auto v = moveEvent->getItemIdRange();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+					ItemType& it = Item::items.getItemType(*i);
+					it.wieldInfo = moveEvent->getWieldInfo();
+					it.minReqLevel = moveEvent->getReqLevel();
+					it.minReqMagicLevel = moveEvent->getReqMagLv();
+					it.vocationString = moveEvent->getVocationString();
+				}
+				addEvent(*moveEvent, *i, itemIdMap);
+			}
+		}
+	} else if (moveEvent->getActionIdRange().size() > 0) {
+		if (moveEvent->getActionIdRange().size() == 1) {
+			int32_t id = moveEvent->getActionIdRange().at(0);
+			addEvent(*moveEvent, id, actionIdMap);
+		} else {
+			auto v = moveEvent->getActionIdRange();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				addEvent(*moveEvent, *i, actionIdMap);
+			}
+		}
+	} else if (moveEvent->getUniqueIdRange().size() > 0) {
+		if (moveEvent->getUniqueIdRange().size() == 1) {
+			int32_t id = moveEvent->getUniqueIdRange().at(0);
+			addEvent(*moveEvent, id, uniqueIdMap);
+		} else {
+			auto v = moveEvent->getUniqueIdRange();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				addEvent(*moveEvent, *i, uniqueIdMap);
+			}
+		}
+	} else if (moveEvent->getPosList().size() > 0) {
+		if (moveEvent->getPosList().size() == 1) {
+			std::string tempPos = moveEvent->getPosList().at(0);
+			std::vector<int32_t> temp = vectorAtoi(explodeString(tempPos, ";"));
+			if (temp.size() < 3) {
+				return false;
+			}
+
+			Position pos(temp[0], temp[1], temp[2]);
+			addEvent(*moveEvent, pos, positionMap);
+		} else {
+			auto v = moveEvent->getPosList();
+			for (auto i = v.begin(); i != v.end(); i++) {
+				std::string tempPos = *i;
+				std::vector<int32_t> temp = vectorAtoi(explodeString(tempPos, ";"));
+				if (temp.size() < 3) {
+					return false;
+				}
+
+				Position pos(temp[0], temp[1], temp[2]);
+				addEvent(*moveEvent, pos, positionMap);
+			}
+		}
+	} else {
+		return false;
+	}
+
+	return true;
+}
+
 void MoveEvents::addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map)
 {
 	auto it = map.find(id);
@@ -501,9 +614,11 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-namespace {
-
-uint32_t StepInField(Creature* creature, Item* item, const Position&)
+/*
+	Had to remove the namespace and moved the functions into MoveEvent back in order to properly link them trough.
+	I'm however not fond of this solution as reverting back is the least thing I want to do, if anyone has a better solution feel free to tell me.
+*/
+uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 {
 	MagicField* field = item->getMagicField();
 	if (field) {
@@ -514,12 +629,12 @@ uint32_t StepInField(Creature* creature, Item* item, const Position&)
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t StepOutField(Creature*, Item*, const Position&)
+uint32_t MoveEvent::StepOutField(Creature*, Item*, const Position&)
 {
 	return 1;
 }
 
-uint32_t AddItemField(Item* item, Item*, const Position&)
+uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
 {
 	if (MagicField* field = item->getMagicField()) {
 		Tile* tile = item->getTile();
@@ -533,12 +648,12 @@ uint32_t AddItemField(Item* item, Item*, const Position&)
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t RemoveItemField(Item*, Item*, const Position&)
+uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&)
 {
 	return 1;
 }
 
-uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
+uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (player->isItemAbilityEnabled(slot)) {
 		return 1;
@@ -659,7 +774,7 @@ uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slo
 	return 1;
 }
 
-uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
+uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
 		return 1;
@@ -741,9 +856,8 @@ uint32_t DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 	return 1;
 }
 
-}
 
-bool MoveEvent::loadFunction(const pugi::xml_attribute& attr)
+bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
 	if (strcasecmp(functionName, "onstepinfield") == 0) {
@@ -759,11 +873,15 @@ bool MoveEvent::loadFunction(const pugi::xml_attribute& attr)
 	} else if (strcasecmp(functionName, "ondeequipitem") == 0) {
 		equipFunction = DeEquipItem;
 	} else {
-		std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
-		return false;
+		if (!isScripted) {
+			std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
+			return false;
+		}
 	}
 
-	scripted = false;
+	if (!isScripted) {
+		scripted = false;
+	}
 	return true;
 }
 
@@ -780,6 +898,9 @@ void MoveEvent::setEventType(MoveEvent_t type)
 uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position& pos)
 {
 	if (scripted) {
+		if (stepFunction) {
+			stepFunction(creature, item, pos);
+		}
 		return executeStep(creature, item, pos);
 	} else {
 		return stepFunction(creature, item, pos);
@@ -813,7 +934,11 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		return executeEquip(player, item, slot, isCheck);
+		if (equipFunction(this, player, item, slot, isCheck) == 1) {
+			return executeEquip(player, item, slot, isCheck);
+		} else {
+			return 0;
+		}
 	} else {
 		return equipFunction(this, player, item, slot, isCheck);
 	}
@@ -846,6 +971,9 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCh
 uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& pos)
 {
 	if (scripted) {
+		if (moveFunction) {
+			moveFunction(item, tileItem, pos);
+		}
 		return executeAddRemItem(item, tileItem, pos);
 	} else {
 		return moveFunction(item, tileItem, pos);
