@@ -34,6 +34,7 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "script.h"
 #include <fstream>
 
 DatabaseTasks g_databaseTasks;
@@ -44,6 +45,7 @@ Game g_game;
 ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
+Scripts g_scripts;
 RSA g_RSA;
 
 std::mutex g_loaderLock;
@@ -221,6 +223,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << ">> Loading outfits" << std::endl;
 	if (!Outfits::getInstance().loadFromXml()) {
 		startupErrorMessage("Unable to load outfits!");
+		return;
+	}
+
+	std::cout << ">> Loading lua scripts" << std::endl;
+	if (!g_scripts.loadScripts("scripts", false)) {
+		startupErrorMessage("Failed to load lua scripts");
 		return;
 	}
 

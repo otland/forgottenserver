@@ -43,8 +43,14 @@ class TalkAction : public Event
 		const std::string& getWords() const {
 			return words;
 		}
-		char getSeparator() const {
+		void setWords(std::string word) {
+			words = word;
+		}
+		std::string getSeparator() const {
 			return separator;
+		}
+		void setSeparator(std::string sep) {
+			separator = sep;
 		}
 
 		//scripting
@@ -55,7 +61,7 @@ class TalkAction : public Event
 		std::string getScriptEventName() const override;
 
 		std::string words;
-		char separator = '"';
+		std::string separator = "\"";
 };
 
 class TalkActions final : public BaseEvents
@@ -69,6 +75,8 @@ class TalkActions final : public BaseEvents
 		TalkActions& operator=(const TalkActions&) = delete;
 
 		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
+
+		bool registerLuaEvent(Event* event);
 
 	private:
 		LuaScriptInterface& getScriptInterface() override;

@@ -210,6 +210,7 @@ class LuaScriptInterface
 
 		const std::string& getFileById(int32_t scriptId);
 		int32_t getEvent(const std::string& eventName);
+		int32_t getEvent();
 		int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
 		static ScriptEnvironment* getScriptEnv() {
@@ -548,6 +549,7 @@ class LuaScriptInterface
 		static int luaGameCreateMonster(lua_State* L);
 		static int luaGameCreateNpc(lua_State* L);
 		static int luaGameCreateTile(lua_State* L);
+		static int luaGameCreateMonsterType(lua_State* L);
 
 		static int luaGameStartRaid(lua_State* L);
 
@@ -1214,48 +1216,96 @@ class LuaScriptInterface
 		static int luaMonsterTypeIsIllusionable(lua_State* L);
 		static int luaMonsterTypeIsHostile(lua_State* L);
 		static int luaMonsterTypeIsPushable(lua_State* L);
-		static int luaMonsterTypeIsHealthShown(lua_State* L);
+		static int luaMonsterTypeIsHealthHidden(lua_State* L);
 
 		static int luaMonsterTypeCanPushItems(lua_State* L);
 		static int luaMonsterTypeCanPushCreatures(lua_State* L);
 
-		static int luaMonsterTypeGetName(lua_State* L);
-		static int luaMonsterTypeGetNameDescription(lua_State* L);
+		static int luaMonsterTypeName(lua_State* L);
+		static int luaMonsterTypeNameDescription(lua_State* L);
 
-		static int luaMonsterTypeGetHealth(lua_State* L);
-		static int luaMonsterTypeGetMaxHealth(lua_State* L);
-		static int luaMonsterTypeGetRunHealth(lua_State* L);
-		static int luaMonsterTypeGetExperience(lua_State* L);
+		static int luaMonsterTypeHealth(lua_State* L);
+		static int luaMonsterTypeMaxHealth(lua_State* L);
+		static int luaMonsterTypeRunHealth(lua_State* L);
+		static int luaMonsterTypeExperience(lua_State* L);
 
-		static int luaMonsterTypeGetCombatImmunities(lua_State* L);
-		static int luaMonsterTypeGetConditionImmunities(lua_State* L);
+		static int luaMonsterTypeCombatImmunities(lua_State* L);
+		static int luaMonsterTypeConditionImmunities(lua_State* L);
 
 		static int luaMonsterTypeGetAttackList(lua_State* L);
+		static int luaMonsterTypeAddAttack(lua_State* L);
+
 		static int luaMonsterTypeGetDefenseList(lua_State* L);
+		static int luaMonsterTypeAddDefense(lua_State* L);
+
 		static int luaMonsterTypeGetElementList(lua_State* L);
+		static int luaMonsterTypeAddElement(lua_State* L);
 
 		static int luaMonsterTypeGetVoices(lua_State* L);
+		static int luaMonsterTypeAddVoice(lua_State* L);
+
 		static int luaMonsterTypeGetLoot(lua_State* L);
+		static int luaMonsterTypeAddLoot(lua_State* L);
+
 		static int luaMonsterTypeGetCreatureEvents(lua_State* L);
+		static int luaMonsterTypeRegisterEvent(lua_State* L);
+
+		static int luaMonsterTypeSetScriptFile(lua_State* L);
 
 		static int luaMonsterTypeGetSummonList(lua_State* L);
-		static int luaMonsterTypeGetMaxSummons(lua_State* L);
+		static int luaMonsterTypeAddSummon(lua_State* L);
 
-		static int luaMonsterTypeGetArmor(lua_State* L);
-		static int luaMonsterTypeGetDefense(lua_State* L);
-		static int luaMonsterTypeGetOutfit(lua_State* L);
-		static int luaMonsterTypeGetRace(lua_State* L);
-		static int luaMonsterTypeGetCorpseId(lua_State* L);
-		static int luaMonsterTypeGetManaCost(lua_State* L);
-		static int luaMonsterTypeGetBaseSpeed(lua_State* L);
-		static int luaMonsterTypeGetLight(lua_State* L);
+		static int luaMonsterTypeMaxSummons(lua_State* L);
 
-		static int luaMonsterTypeGetStaticAttackChance(lua_State* L);
-		static int luaMonsterTypeGetTargetDistance(lua_State* L);
-		static int luaMonsterTypeGetYellChance(lua_State* L);
-		static int luaMonsterTypeGetYellSpeedTicks(lua_State* L);
-		static int luaMonsterTypeGetChangeTargetChance(lua_State* L);
-		static int luaMonsterTypeGetChangeTargetSpeed(lua_State* L);
+		static int luaMonsterTypeArmor(lua_State* L);
+		static int luaMonsterTypeDefense(lua_State* L);
+		static int luaMonsterTypeOutfit(lua_State* L);
+		static int luaMonsterTypeRace(lua_State* L);
+		static int luaMonsterTypeCorpseId(lua_State* L);
+		static int luaMonsterTypeManaCost(lua_State* L);
+		static int luaMonsterTypeBaseSpeed(lua_State* L);
+		static int luaMonsterTypeLight(lua_State* L);
+
+		static int luaMonsterTypeStaticAttackChance(lua_State* L);
+		static int luaMonsterTypeTargetDistance(lua_State* L);
+		static int luaMonsterTypeYellChance(lua_State* L);
+		static int luaMonsterTypeYellSpeedTicks(lua_State* L);
+		static int luaMonsterTypeChangeTargetChance(lua_State* L);
+		static int luaMonsterTypeChangeTargetSpeed(lua_State* L);
+
+		// Loot
+		static int luaCreateLoot(lua_State* L);
+		static int luaDeleteLoot(lua_State* L);
+		static int luaLootSetId(lua_State* L);
+		static int luaLootSetMaxCount(lua_State* L);
+		static int luaLootSetSubType(lua_State* L);
+		static int luaLootSetChance(lua_State* L);
+		static int luaLootSetActionId(lua_State* L);
+		static int luaLootSetDescription(lua_State* L);
+		static int luaLootAddChildLoot(lua_State* L);
+
+		// MonsterSpell
+		static int luaCreateMonsterSpell(lua_State* L);
+		static int luaDeleteMonsterSpell(lua_State* L);
+		static int luaMonsterSpellSetType(lua_State* L);
+		static int luaMonsterSpellSetScriptName(lua_State* L);
+		static int luaMonsterSpellSetChance(lua_State* L);
+		static int luaMonsterSpellSetInterval(lua_State* L);
+		static int luaMonsterSpellSetRange(lua_State* L);
+		static int luaMonsterSpellSetCombatValue(lua_State* L);
+		static int luaMonsterSpellSetCombatType(lua_State* L);
+		static int luaMonsterSpellSetAttackValue(lua_State* L);
+		static int luaMonsterSpellSetNeedTarget(lua_State* L);
+		static int luaMonsterSpellSetCombatLength(lua_State* L);
+		static int luaMonsterSpellSetCombatSpread(lua_State* L);
+		static int luaMonsterSpellSetCombatRadius(lua_State* L);
+		static int luaMonsterSpellSetConditionType(lua_State* L);
+		static int luaMonsterSpellSetConditionDamage(lua_State* L);
+		static int luaMonsterSpellSetConditionSpeedChange(lua_State* L);
+		static int luaMonsterSpellSetConditionDuration(lua_State* L);
+		static int luaMonsterSpellSetConditionTickInterval(lua_State* L);
+		static int luaMonsterSpellSetCombatShootEffect(lua_State* L);
+		static int luaMonsterSpellSetCombatEffect(lua_State* L);
 
 		// Party
 		static int luaPartyCreate(lua_State* L);
@@ -1289,6 +1339,56 @@ class LuaScriptInterface
 
 		static int luaSpellIsPremium(lua_State* L);
 		static int luaSpellIsLearnable(lua_State* L);
+
+		// Actions
+		static int luaCreateAction(lua_State* L);
+		static int luaDeleteAction(lua_State* L);
+		static int luaActionOnUse(lua_State* L);
+		static int luaActionRegister(lua_State* L);
+		static int luaActionItemId(lua_State* L);
+		static int luaActionActionId(lua_State* L);
+		static int luaActionUniqueId(lua_State* L);
+		static int luaActionAllowFarUse(lua_State* L);
+		static int luaActionBlockWalls(lua_State* L);
+		static int luaActionCheckFloor(lua_State* L);
+
+		// Talkactions
+		static int luaCreateTalkaction(lua_State* L);
+		static int luaDeleteTalkaction(lua_State* L);
+		static int luaTalkactionOnSay(lua_State* L);
+		static int luaTalkactionRegister(lua_State* L);
+		static int luaTalkactionSeparator(lua_State* L);
+
+		// CreatureEvents
+		static int luaCreateCreatureEvent(lua_State* L);
+		static int luaDeleteCreatureEvent(lua_State* L);
+		static int luaCreatureEventType(lua_State* L);
+		static int luaCreatureEventRegister(lua_State* L);
+		static int luaCreatureEventOnCallback(lua_State* L);
+
+		// MoveEvents
+		static int luaCreateMoveEvent(lua_State* L);
+		static int luaDeleteMoveEvent(lua_State* L);
+		static int luaMoveEventType(lua_State* L);
+		static int luaMoveEventRegister(lua_State* L);
+		static int luaMoveEventOnCallback(lua_State* L);
+		static int luaMoveEventLevel(lua_State* L);
+		static int luaMoveEventSlot(lua_State* L);
+		static int luaMoveEventMagLevel(lua_State* L);
+		static int luaMoveEventPremium(lua_State* L);
+		static int luaMoveEventVocation(lua_State* L);
+		static int luaMoveEventItemId(lua_State* L);
+		static int luaMoveEventActionId(lua_State* L);
+		static int luaMoveEventUniqueId(lua_State* L);
+
+		// GlobalEvents
+		static int luaCreateGlobalEvent(lua_State* L);
+		static int luaDeleteGlobalEvent(lua_State* L);
+		static int luaGlobalEventType(lua_State* L);
+		static int luaGlobalEventRegister(lua_State* L);
+		static int luaGlobalEventOnCallback(lua_State* L);
+		static int luaGlobalEventTime(lua_State* L);
+		static int luaGlobalEventInterval(lua_State* L);
 
 		//
 		std::string lastLuaError;
