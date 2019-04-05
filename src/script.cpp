@@ -21,8 +21,6 @@
 
 #include "script.h"
 #include <boost/filesystem.hpp>
-using namespace std;
-using namespace boost::filesystem;
 
 extern LuaEnvironment g_luaEnvironment;
 
@@ -37,46 +35,47 @@ Scripts::~Scripts()
 	scriptInterface.reInitState();
 }
 
-bool Scripts::loadScripts(string folderName)
+bool Scripts::loadScripts(std::string folderName)
 {
-	const auto dir = current_path() / "\\data\\" / folderName / "\\";
-	if(!exists(dir) || !is_directory(dir)) {
-		cout << "[Warning - Scripts::loadScripts] Can not load folder 'scripts'." << endl;
+	namespace fs = boost::filesystem;
+
+	const auto dir = fs::current_path() / "\\data\\" / folderName / "\\";
+	if(!fs::exists(dir) || !fs::is_directory(dir)) {
+		std::cout << "[Warning - Scripts::loadScripts] Can not load folder '" << folderName << "'." << std::endl;
 		return false;
 	}
 
-	cout << ">> Loading lua scripts" << endl;
-	recursive_directory_iterator endit;
-	typedef vector<path> vec;
-	vec v;
-	string disable = ("#");
-	for(recursive_directory_iterator it(dir); it != endit; ++it) {
-		if(is_regular_file(*it) && it->path().extension() == ".lua") {
+	std::cout << ">> Loading lua scripts" << std::endl;
+	fs::recursive_directory_iterator endit;
+	std::vector<fs::path> v;
+	std::string disable = ("#");
+	for(fs::recursive_directory_iterator it(dir); it != endit; ++it) {
+		if(fs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			size_t found = it->path().filename().string().find(disable);
-			if (found != string::npos) {
-				cout << "> " << it->path().filename().string() << " [disabled]" << endl;
+			if (found != std::string::npos) {
+				std::cout << "> " << it->path().filename().string() << " [disabled]" << std::endl;
 				continue;
 			}
 			v.push_back(it->path());
 		}
 	}
 	sort(v.begin(), v.end());
-	string redir;
-	for (vec::const_iterator it(v.begin()); it != v.end(); ++it) {
-		const string scriptFile = it->string();
+	std::string redir;
+	for (auto it = v.begin(); it != v.end(); ++it) {
+		const std::string scriptFile = it->string();
 		if (redir.empty() || redir != it->parent_path().string()) {
-			auto p = boost::filesystem::path(it->relative_path());
-			cout << ">> [" << p.parent_path().filename() << "]" << endl;
+			auto p = fs::path(it->relative_path());
+			std::cout << ">> [" << p.parent_path().filename() << "]" << std::endl;
 			redir = it->parent_path().string();
 		}
 
 		if(scriptInterface.loadFile(scriptFile) == -1) {
-			cout << "> " << it->filename().string() << " [error]" << endl;
-			cout << "^ " << scriptInterface.getLastLuaError() << endl;
+			std::cout << "> " << it->filename().string() << " [error]" << std::endl;
+			std::cout << "^ " << scriptInterface.getLastLuaError() << std::endl;
 			continue;
 		}
 
-		cout << "> " << it->filename().string() << " [loaded]" << endl;
+		std::cout << "> " << it->filename().string() << " [loaded]" << std::endl;
 	}
 
 	return true;
