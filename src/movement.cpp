@@ -611,10 +611,6 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-/*
-	Had to remove the namespace and moved the functions into MoveEvent back in order to properly link them trough.
-	I'm however not fond of this solution as reverting back is the least thing I want to do, if anyone has a better solution feel free to tell me.
-*/
 uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 {
 	MagicField* field = item->getMagicField();
@@ -852,7 +848,6 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 
 	return 1;
 }
-
 
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
