@@ -1324,9 +1324,11 @@ class LuaScriptInterface
 		static int luaMoveEventLevel(lua_State* L);
 		static int luaMoveEventSlot(lua_State* L);
 		static int luaMoveEventMagLevel(lua_State* L);
-		static int luaMoveEventItemId(lua_State* L);
 		static int luaMoveEventPremium(lua_State* L);
 		static int luaMoveEventVocation(lua_State* L);
+		static int luaMoveEventItemId(lua_State* L);
+		static int luaMoveEventItemAid(lua_State* L);
+		static int luaMoveEventItemUid(lua_State* L);
 
 		// GlobalEvents
 		static int luaCreateGlobalEvent(lua_State* L);

@@ -2756,6 +2756,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MoveEvent", "magicLevel", LuaScriptInterface::luaMoveEventMagLevel);
 	registerMethod("MoveEvent", "slot", LuaScriptInterface::luaMoveEventSlot);
 	registerMethod("MoveEvent", "id", LuaScriptInterface::luaMoveEventItemId);
+	registerMethod("MoveEvent", "aid", LuaScriptInterface::luaMoveEventItemAid);
+	registerMethod("MoveEvent", "uid", LuaScriptInterface::luaMoveEventItemUid);
 	registerMethod("MoveEvent", "premium", LuaScriptInterface::luaMoveEventPremium);
 	registerMethod("MoveEvent", "vocation", LuaScriptInterface::luaMoveEventVocation);
 	registerMethod("MoveEvent", "onEquip", LuaScriptInterface::luaMoveEventOnCallback);
@@ -13427,6 +13429,46 @@ int LuaScriptInterface::luaMoveEventItemId(lua_State* L)
 			}
 		} else {
 			moveevent->addItemId(getNumber<uint32_t>(L, 2));
+		}
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMoveEventItemAid(lua_State* L)
+{
+	// moveevent:aid(ids)
+	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	if (moveevent) {
+		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
+		if (parameters > 1) {
+			for (int i = 0; i < parameters; ++i) {
+				moveevent->addActionId(getNumber<uint32_t>(L, 2 + i));
+			}
+		} else {
+			moveevent->addActionId(getNumber<uint32_t>(L, 2));
+		}
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMoveEventItemUid(lua_State* L)
+{
+	// moveevent:uid(ids)
+	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	if (moveevent) {
+		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
+		if (parameters > 1) {
+			for (int i = 0; i < parameters; ++i) {
+				moveevent->addUniqueId(getNumber<uint32_t>(L, 2 + i));
+			}
+		} else {
+			moveevent->addUniqueId(getNumber<uint32_t>(L, 2));
 		}
 		pushBoolean(L, true);
 	} else {

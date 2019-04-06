@@ -217,8 +217,6 @@ class MoveEvent final : public Event
 			wieldInfo |= info;
 		}
 
-		std::string getScriptEventName() const override;
-
 		static StepFunction StepInField;
 		static StepFunction StepOutField;
 
@@ -232,10 +230,13 @@ class MoveEvent final : public Event
 		StepFunction* stepFunction;
 		MoveFunction* moveFunction;
 		EquipFunction* equipFunction;
+
+	private:
+		std::string getScriptEventName() const override;
+
 		uint32_t slot = SLOTP_WHEREEVER;
 		std::string slotName;
 
-	protected:
 		//onEquip information
 		uint32_t reqLevel = 0;
 		uint32_t reqMagLevel = 0;

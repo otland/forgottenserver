@@ -895,12 +895,6 @@ void MoveEvent::setEventType(MoveEvent_t type)
 uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position& pos)
 {
 	if (scripted) {
-		auto ret = executeStep(creature, item, pos);
-		if (ret) {
-			if (stepFunction) {
-				return stepFunction(creature, item, pos);
-			}
-		}
 		return executeStep(creature, item, pos);
 	} else {
 		return stepFunction(creature, item, pos);
@@ -934,13 +928,14 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		bool ret = executeEquip(player, item, slot, isCheck);
-		if (ret) {
-			if (equipFunction) {
-				return equipFunction(this, player, item, slot, isCheck);
+		if (equipFunction(this, player, item, slot, isCheck) == 1) {
+			if (executeEquip(player, item, slot, isCheck)) {
+				return 1;
+			} else {
+				return 0;
 			}
 		}
-		return executeEquip(player, item, slot, isCheck);
+		return 0;
 	} else {
 		return equipFunction(this, player, item, slot, isCheck);
 	}
@@ -973,12 +968,6 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCh
 uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& pos)
 {
 	if (scripted) {
-		bool ret = executeAddRemItem(item, tileItem, pos);
-		if (ret) {
-			if (moveFunction) {
-				return moveFunction(item, tileItem, pos);
-			}
-		}
 		return executeAddRemItem(item, tileItem, pos);
 	} else {
 		return moveFunction(item, tileItem, pos);
