@@ -96,9 +96,9 @@ class MoveEvents final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-typedef uint32_t(StepFunction)(Creature* creature, Item* item, const Position& pos);
-typedef uint32_t(MoveFunction)(Item* item, Item* tileItem, const Position& pos);
-typedef uint32_t(EquipFunction)(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+using StepFunction = std::function<uint32_t(Creature* creature, Item* item, const Position& pos)>;
+using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Position& pos)>;
+using EquipFunction = std::function<uint32_t(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
 
 class MoveEvent final : public Event
 {
@@ -217,19 +217,19 @@ class MoveEvent final : public Event
 			wieldInfo |= info;
 		}
 
-		static StepFunction StepInField;
-		static StepFunction StepOutField;
+		static uint32_t StepInField(Creature* creature, Item* item, const Position& pos);
+		static uint32_t StepOutField(Creature* creature, Item* item, const Position& pos);
 
-		static MoveFunction AddItemField;
-		static MoveFunction RemoveItemField;
+		static uint32_t AddItemField(Item* item, Item* tileItem, const Position& pos);
+		static uint32_t RemoveItemField(Item* item, Item* tileItem, const Position& pos);
 
-		static EquipFunction EquipItem;
-		static EquipFunction DeEquipItem;
+		static uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+		static uint32_t DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
-		StepFunction* stepFunction;
-		MoveFunction* moveFunction;
-		EquipFunction* equipFunction;
+		StepFunction stepFunction;
+		MoveFunction moveFunction;
+		EquipFunction equipFunction;
 
 	private:
 		std::string getScriptEventName() const override;
