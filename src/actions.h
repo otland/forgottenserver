@@ -61,24 +61,24 @@ class Action : public Event
 			checkFloor = v;
 		}
 
-		std::vector<uint16_t> getIdRange() {
+		std::vector<uint16_t> getItemIdRange() {
 			return ids;
 		}
-		void addId(uint16_t id) {
+		void addItemId(uint16_t id) {
 			ids.emplace_back(id);
 		}
 
-		std::vector<uint16_t> getUidRange() {
+		std::vector<uint16_t> getUniqueIdRange() {
 			return uids;
 		}
-		void addUid(uint16_t id) {
+		void addUniqueId(uint16_t id) {
 			uids.emplace_back(id);
 		}
 
-		std::vector<uint16_t> getAidRange() {
+		std::vector<uint16_t> getActionIdRange() {
 			return aids;
 		}
-		void addAid(uint16_t id) {
+		void addActionId(uint16_t id) {
 			aids.emplace_back(id);
 		}
 
@@ -93,9 +93,9 @@ class Action : public Event
 	private:
 		std::string getScriptEventName() const override;
 
-		bool allowFarUse;
-		bool checkFloor;
-		bool checkLineOfSight;
+		bool allowFarUse = false;
+		bool checkFloor = true;
+		bool checkLineOfSight = true;
 		std::vector<uint16_t> ids;
 		std::vector<uint16_t> uids;
 		std::vector<uint16_t> aids;

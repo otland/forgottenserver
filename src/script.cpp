@@ -35,7 +35,7 @@ Scripts::~Scripts()
 	scriptInterface.reInitState();
 }
 
-bool Scripts::loadScripts(std::string folderName)
+bool Scripts::loadScripts(std::string folderName, bool isLib)
 {
 	namespace fs = boost::filesystem;
 
@@ -45,11 +45,13 @@ bool Scripts::loadScripts(std::string folderName)
 		return false;
 	}
 
-	std::cout << ">> Loading lua scripts" << std::endl;
 	fs::recursive_directory_iterator endit;
 	std::vector<fs::path> v;
 	std::string disable = ("#");
 	for(fs::recursive_directory_iterator it(dir); it != endit; ++it) {
+		if (it->path().parent_path().filename() == "lib" && !isLib) {
+			continue;
+		}
 		if(fs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			size_t found = it->path().filename().string().find(disable);
 			if (found != std::string::npos) {
@@ -63,10 +65,12 @@ bool Scripts::loadScripts(std::string folderName)
 	std::string redir;
 	for (auto it = v.begin(); it != v.end(); ++it) {
 		const std::string scriptFile = it->string();
-		if (redir.empty() || redir != it->parent_path().string()) {
-			auto p = fs::path(it->relative_path());
-			std::cout << ">> [" << p.parent_path().filename() << "]" << std::endl;
-			redir = it->parent_path().string();
+		if (!isLib) {
+			if (redir.empty() || redir != it->parent_path().string()) {
+				auto p = fs::path(it->relative_path());
+				std::cout << ">> [" << p.parent_path().filename() << "]" << std::endl;
+				redir = it->parent_path().string();
+			}
 		}
 
 		if(scriptInterface.loadFile(scriptFile) == -1) {

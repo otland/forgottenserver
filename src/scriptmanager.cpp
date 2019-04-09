@@ -64,6 +64,13 @@ bool ScriptingManager::loadScriptSystems()
 		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/global.lua" << std::endl;
 	}
 
+	g_scripts = new Scripts();
+	std::cout << ">> Loading lua libs" << std::endl;
+	if (!g_scripts->loadScripts("scripts\\lib", true)) {
+		std::cout << "> ERROR: Unable to load lua libs!" << std::endl;
+		return false;
+	}
+
 	g_chat = new Chat();
 
 	g_weapons = new Weapons();
@@ -113,12 +120,6 @@ bool ScriptingManager::loadScriptSystems()
 	g_events = new Events();
 	if (!g_events->load()) {
 		std::cout << "> ERROR: Unable to load events!" << std::endl;
-		return false;
-	}
-
-	g_scripts = new Scripts();
-	if (!g_scripts->loadScripts("scripts")) {
-		std::cout << "> ERROR: Unable to load scripts!" << std::endl;
 		return false;
 	}
 
