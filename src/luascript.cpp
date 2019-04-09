@@ -12088,7 +12088,6 @@ int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 		monsterType = g_monsters.getMonsterType(getString(L, 2));
 		monsterType->name = name;
 		monsterType->nameDescription = "a " + name;
-		monsterType->info.outfit.lookType = 21;
 		pushUserdata<MonsterType>(L, monsterType);
 		setMetatable(L, -1, "MonsterType");
 	} else {
