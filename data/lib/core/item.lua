@@ -1,3 +1,7 @@
+function Item:getOwner()
+	return Creature(self:getAttribute(ITEM_ATTRIBUTE_OWNER))
+end
+
 function Item.getType(self)
 	return ItemType(self:getId())
 end
