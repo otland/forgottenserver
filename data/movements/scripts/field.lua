@@ -49,7 +49,7 @@ function onStepIn(creature, item, position, fromPosition)
 end
 
 function onAddItem(item, tile, position)
-	local owner, field = item:getOwner(), fields[item:getId()]
+	local field, owner = fields[item:getId()], item:getOwner()
 	for _, target in ipairs(Tile(position):getCreatures()) do
 		Creature.addDamageCondition(owner, target, field.type, field.list, {step = field.stepDamage, periodic = field.periodicDamage}, field.period, field.rounds, item)
 	end

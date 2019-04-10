@@ -2194,6 +2194,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerMethod("Player", "isPlayer", LuaScriptInterface::luaPlayerIsPlayer);
+	registerMethod("Player", "isProtected", LuaScriptInterface::luaPlayerIsProtected);
 
 	registerMethod("Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
 	registerMethod("Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
@@ -7594,6 +7595,25 @@ int LuaScriptInterface::luaPlayerIsPlayer(lua_State* L)
 {
 	// player:isPlayer()
 	pushBoolean(L, getUserdata<const Player>(L, 1) != nullptr);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerIsProtected(lua_State* L)
+{
+	// player:isProtected(attacker)
+	const Player* player = getUserdata<const Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const Player* attacker = getUserdata<const Player>(L, 2);
+	if (!attacker) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushBoolean(L, Combat::isProtected(attacker, player));
 	return 1;
 }
 
