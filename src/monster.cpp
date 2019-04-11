@@ -1106,7 +1106,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 
 	bool result = false;
 	if ((!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
-		if (getTimeSinceLastMove() - getStepDuration() > 600) {
+		if (getTimeSinceLastMove() >= 1000) {
 			randomStepping = true;
 			//choose a random direction
 			result = getRandomStep(getPosition(), direction);
