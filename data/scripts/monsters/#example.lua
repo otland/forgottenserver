@@ -1,5 +1,7 @@
 local mType = MonsterType("example")
 local monster = {}
+monster.eventFile = true -- will try to load the file example.lua in data/scripts/monsters/events
+monster.eventFile = "test" -- will try to load the file test.lua in data/scripts/monsters/events
 monster.description = "an example"
 monster.experience = 1
 monster.outfit = {

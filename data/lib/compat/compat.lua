@@ -1226,3 +1226,20 @@ function doCreateItemEx(itemid, count)
 end
 
 function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) end
+
+function createFunctions(class)
+	local exclude = {"get", "set", "is", "add", "can"}
+	local temp = {}
+	for name, func in pairs(class) do
+		if not isInArray(exclude, name:sub(1,3)) then
+			local str = name:sub(1,1):upper()..name:sub(2)
+			local get = "get".. str
+			local set = "set".. str
+			table.insert(temp, {set, get, func})
+		end
+	end
+	for _,func in ipairs(temp) do
+		rawset(class, func[1], func[3])
+		rawset(class, func[2], func[3])
+	end
+end

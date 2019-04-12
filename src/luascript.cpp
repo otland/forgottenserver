@@ -12728,7 +12728,11 @@ int LuaScriptInterface::luaMonsterTypeSetScriptFile(lua_State* L)
 			g_monsters.scriptInterface->initState();
 		}
 
-		if (g_monsters.scriptInterface->loadFile("data/scripts/monsters/" + getString(L, 2), nullptr) == 0) {
+		std::string fileName = monsterType->name + ".lua";
+		if (lua_gettop(L) > 1) {
+			fileName = getString(L, 2) + ".lua";
+		}
+		if (g_monsters.scriptInterface->loadFile("data/scripts/monsters/events/" + fileName, nullptr) == 0) {
 			monsterType->info.scriptInterface = g_monsters.scriptInterface.get();
 			monsterType->info.creatureAppearEvent = g_monsters.scriptInterface->getEvent("onCreatureAppear");
 			monsterType->info.creatureDisappearEvent = g_monsters.scriptInterface->getEvent("onCreatureDisappear");

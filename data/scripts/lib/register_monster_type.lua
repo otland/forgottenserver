@@ -13,9 +13,13 @@ MonsterType.register = function(self, mask)
 	return registerMonsterType(self, mask)
 end
 
-registerMonsterType.file = function(mtype, mask) 
-	if mask.file then 
-		mtype:setScriptFile(mask.file) 
+registerMonsterType.eventFile = function(mtype, mask) 
+	if mask.eventFile then
+		if type(mask.eventFile) == "boolean" then 
+			mtype:setScriptFile()
+		else
+			mtype:setScriptFile(mask.eventFile)
+		end
 	end 
 end
 registerMonsterType.description = function(mtype, mask) 
