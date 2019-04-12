@@ -219,7 +219,20 @@ Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 		const ItemType& it = Item::items[item->getID()];
 		if (it.ammoType != AMMO_NONE) {
 			Item* ammoItem = inventory[CONST_SLOT_AMMO];
-			if (!ammoItem || ammoItem->getAmmoType() != it.ammoType) {
+			if (!ammoItem) {
+				return nullptr;
+			}
+
+			if (Container* container = ammoItem->getContainer()) {
+				for (ContainerIterator iter = container->iterator(); iter.hasNext(); iter.advance()) {
+					if ((*iter)->getAmmoType() == it.ammoType) {
+						item = (*iter);
+						return item;
+					}
+				}
+			}
+
+			if (ammoItem->getAmmoType() != it.ammoType) {
 				return nullptr;
 			}
 			item = ammoItem;
@@ -2424,6 +2437,8 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 
 		case CONST_SLOT_AMMO: {
 			if ((slotPosition & SLOTP_AMMO) || g_config.getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
+				ret = RETURNVALUE_NOERROR;
+			} else if (slotPosition & SLOTP_BACKPACK && item->getName() == "Quiver") {
 				ret = RETURNVALUE_NOERROR;
 			}
 			break;

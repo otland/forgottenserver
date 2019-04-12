@@ -85,7 +85,7 @@ class Container : public Item, public Cylinder
 			return itemlist.empty();
 		}
 		uint32_t capacity() const {
-			return maxSize;
+			return getName() == "Quiver" ? 4 : maxSize;
 		}
 
 		ContainerIterator iterator() const;
