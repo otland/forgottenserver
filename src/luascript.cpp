@@ -1941,6 +1941,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createMonster", LuaScriptInterface::luaGameCreateMonster);
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
+	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
 
@@ -4410,6 +4411,28 @@ int LuaScriptInterface::luaGameCreateTile(lua_State* L)
 
 	pushUserdata(L, tile);
 	setMetatable(L, -1, "Tile");
+	return 1;
+}
+
+int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
+{
+	// Game.createMonsterType(name)
+	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 1));
+	if (monsterType) {
+		pushUserdata<MonsterType>(L, monsterType);
+		setMetatable(L, -1, "MonsterType");
+	} else if (isString(L, 1)) {
+		monsterType = new MonsterType();
+		std::string name = getString(L, 1);
+		g_monsters.addMonsterType(name, monsterType);
+		monsterType = g_monsters.getMonsterType(getString(L, 1));
+		monsterType->name = name;
+		monsterType->nameDescription = "a " + name;
+		pushUserdata<MonsterType>(L, monsterType);
+		setMetatable(L, -1, "MonsterType");
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
@@ -12076,18 +12099,9 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 // MonsterType
 int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 {
-	// MonsterType(name) if it does not exist it'll create it
+	// MonsterType(name)
 	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 2));
 	if (monsterType) {
-		pushUserdata<MonsterType>(L, monsterType);
-		setMetatable(L, -1, "MonsterType");
-	} else if (isString(L, 2)) {
-		monsterType = new MonsterType();
-		std::string name = getString(L, 2);
-		g_monsters.addMonsterType(name, monsterType);
-		monsterType = g_monsters.getMonsterType(getString(L, 2));
-		monsterType->name = name;
-		monsterType->nameDescription = "a " + name;
 		pushUserdata<MonsterType>(L, monsterType);
 		setMetatable(L, -1, "MonsterType");
 	} else {

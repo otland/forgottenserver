@@ -761,7 +761,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 				conditionType = CONDITION_PARALYZE;
 			}
 
-			ConditionSpeed* condition = reinterpret_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
+			ConditionSpeed* condition = static_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
 			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
 			combat->addCondition(condition);
 		} else if (tmpName == "outfit") {
@@ -771,7 +771,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 				duration = spell->duration;
 			}
 
-			ConditionOutfit* condition = reinterpret_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
+			ConditionOutfit* condition = static_cast<ConditionOutfit*>(Condition::createCondition(CONDITIONID_COMBAT, CONDITION_OUTFIT, duration, 0));
 			condition->setOutfit(spell->outfit);
 			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 			combat->addCondition(condition);
@@ -850,6 +850,9 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 	}
 
 	sb.spell = combatSpell;
+	if (combatSpell) {
+		sb.combatSpell = true;
+	}
 	return true;
 }
 
