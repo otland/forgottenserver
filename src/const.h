@@ -392,6 +392,7 @@ enum WeaponAction_t : uint8_t {
 };
 
 enum WieldInfo_t {
+	WIELDINFO_NONE = 0 << 0,
 	WIELDINFO_LEVEL = 1 << 0,
 	WIELDINFO_MAGLV = 1 << 1,
 	WIELDINFO_VOCREQ = 1 << 2,
