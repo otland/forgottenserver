@@ -67,8 +67,8 @@ class MoveEvents final : public BaseEvents
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
 
-		bool registerLuaEvent(Event* event);
-		bool registerLuaFunction(Event* event);
+		bool registerLuaEvent(MoveEvent* event);
+		bool registerLuaFunction(MoveEvent* event);
 
 	private:
 		using MoveListMap = std::map<int32_t, MoveEventList>;

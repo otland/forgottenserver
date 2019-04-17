@@ -118,7 +118,7 @@ class Actions final : public BaseEvents
 		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
 		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-		bool registerLuaEvent(Event* event);
+		bool registerLuaEvent(Action* event);
 
 	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);

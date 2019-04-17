@@ -88,9 +88,10 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 	}
 }
 
-bool CreatureEvents::registerLuaEvent(Event* event)
+bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 {
-	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(event); //event is guaranteed to be a CreatureEvent
+	Event_ptr ptr = Event_ptr(event);
+	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(ptr.release()); //event is guaranteed to be a CreatureEvent
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerLuaEvent] Trying to register event without type!" << std::endl;
 		return false;

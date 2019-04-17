@@ -496,7 +496,7 @@ class Game
 		bool addUniqueItem(uint16_t uniqueId, Item* item);
 		void removeUniqueItem(uint16_t uniqueId);
 
-		bool reload(ReloadTypes_t reloadType);
+		bool reload();
 
 		Groups groups;
 		Map map;

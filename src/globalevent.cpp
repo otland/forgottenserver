@@ -95,9 +95,10 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 	return false;
 }
 
-bool GlobalEvents::registerLuaEvent(Event* event)
+bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 {
-	GlobalEvent_ptr globalEvent{ static_cast<GlobalEvent*>(event) }; //event is guaranteed to be a GlobalEvent
+	Event_ptr ptr = Event_ptr(event);
+	GlobalEvent_ptr globalEvent{ static_cast<GlobalEvent*>(ptr.release()) }; //event is guaranteed to be a GlobalEvent
 	if (globalEvent->getEventType() == GLOBALEVENT_TIMER) {
 		auto result = timerMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {

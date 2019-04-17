@@ -76,7 +76,7 @@ class TalkActions final : public BaseEvents
 
 		TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const;
 
-		bool registerLuaEvent(Event* event);
+		bool registerLuaEvent(TalkAction* event);
 
 	private:
 		LuaScriptInterface& getScriptInterface() override;

@@ -37,6 +37,7 @@
 #include "databasetasks.h"
 #include "movement.h"
 #include "globalevent.h"
+#include "script.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -49,6 +50,7 @@ extern TalkActions* g_talkActions;
 extern CreatureEvents* g_creatureEvents;
 extern MoveEvents* g_moveEvents;
 extern GlobalEvents* g_globalEvents;
+extern Scripts* g_scripts;
 
 ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
 uint32_t ScriptEnvironment::lastResultId = 0;
@@ -1805,23 +1807,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 
 	registerEnum(RELOAD_TYPE_ALL)
-	registerEnum(RELOAD_TYPE_ACTIONS)
-	registerEnum(RELOAD_TYPE_CHAT)
-	registerEnum(RELOAD_TYPE_CONFIG)
-	registerEnum(RELOAD_TYPE_CREATURESCRIPTS)
-	registerEnum(RELOAD_TYPE_EVENTS)
 	registerEnum(RELOAD_TYPE_GLOBAL)
-	registerEnum(RELOAD_TYPE_GLOBALEVENTS)
-	registerEnum(RELOAD_TYPE_ITEMS)
-	registerEnum(RELOAD_TYPE_MONSTERS)
-	registerEnum(RELOAD_TYPE_MOUNTS)
-	registerEnum(RELOAD_TYPE_MOVEMENTS)
-	registerEnum(RELOAD_TYPE_NPCS)
-	registerEnum(RELOAD_TYPE_QUESTS)
-	registerEnum(RELOAD_TYPE_RAIDS)
-	registerEnum(RELOAD_TYPE_SPELLS)
-	registerEnum(RELOAD_TYPE_TALKACTIONS)
-	registerEnum(RELOAD_TYPE_WEAPONS)
 
 	registerEnum(ZONE_PROTECTION)
 	registerEnum(ZONE_NOPVP)
@@ -2764,9 +2750,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Action
 	registerClass("Action", "", LuaScriptInterface::luaCreateAction);
-	registerMetaMethod("Action", "__gc", LuaScriptInterface::luaDeleteAction);
 	registerMethod("Action", "onUse", LuaScriptInterface::luaActionOnUse);
-	registerMethod("Action", "delete", LuaScriptInterface::luaDeleteAction);
 	registerMethod("Action", "register", LuaScriptInterface::luaActionRegister);
 	registerMethod("Action", "id", LuaScriptInterface::luaActionItemId);
 	registerMethod("Action", "aid", LuaScriptInterface::luaActionActionId);
@@ -2777,17 +2761,13 @@ void LuaScriptInterface::registerFunctions()
 
 	// TalkAction
 	registerClass("TalkAction", "", LuaScriptInterface::luaCreateTalkaction);
-	registerMetaMethod("TalkAction", "__gc", LuaScriptInterface::luaDeleteTalkaction);
 	registerMethod("TalkAction", "onSay", LuaScriptInterface::luaTalkactionOnSay);
-	registerMethod("TalkAction", "delete", LuaScriptInterface::luaDeleteTalkaction);
 	registerMethod("TalkAction", "register", LuaScriptInterface::luaTalkactionRegister);
 	registerMethod("TalkAction", "separator", LuaScriptInterface::luaTalkactionSeparator);
 
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
-	registerMetaMethod("CreatureEvent", "__gc", LuaScriptInterface::luaDeleteCreatureEvent);
 	registerMethod("CreatureEvent", "type", LuaScriptInterface::luaCreatureEventType);
-	registerMethod("CreatureEvent", "delete", LuaScriptInterface::luaDeleteCreatureEvent);
 	registerMethod("CreatureEvent", "register", LuaScriptInterface::luaCreatureEventRegister);
 	registerMethod("CreatureEvent", "onLogin", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onLogout", LuaScriptInterface::luaCreatureEventOnCallback);
@@ -2804,9 +2784,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// MoveEvent
 	registerClass("MoveEvent", "", LuaScriptInterface::luaCreateMoveEvent);
-	registerMetaMethod("MoveEvent", "__gc", LuaScriptInterface::luaDeleteMoveEvent);
 	registerMethod("MoveEvent", "type", LuaScriptInterface::luaMoveEventType);
-	registerMethod("MoveEvent", "delete", LuaScriptInterface::luaDeleteMoveEvent);
 	registerMethod("MoveEvent", "register", LuaScriptInterface::luaMoveEventRegister);
 	registerMethod("MoveEvent", "level", LuaScriptInterface::luaMoveEventLevel);
 	registerMethod("MoveEvent", "magicLevel", LuaScriptInterface::luaMoveEventMagLevel);
@@ -2825,9 +2803,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// GlobalEvent
 	registerClass("GlobalEvent", "", LuaScriptInterface::luaCreateGlobalEvent);
-	registerMetaMethod("GlobalEvent", "__gc", LuaScriptInterface::luaDeleteGlobalEvent);
 	registerMethod("GlobalEvent", "type", LuaScriptInterface::luaGlobalEventType);
-	registerMethod("GlobalEvent", "delete", LuaScriptInterface::luaDeleteGlobalEvent);
 	registerMethod("GlobalEvent", "register", LuaScriptInterface::luaGlobalEventRegister);
 	registerMethod("GlobalEvent", "time", LuaScriptInterface::luaGlobalEventTime);
 	registerMethod("GlobalEvent", "interval", LuaScriptInterface::luaGlobalEventInterval);
@@ -4419,6 +4395,9 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 	// Game.createMonsterType(name)
 	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 1));
 	if (monsterType) {
+		monsterType->info.lootItems.clear();
+		monsterType->info.attackSpells.clear();
+		monsterType->info.defenseSpells.clear();
 		pushUserdata<MonsterType>(L, monsterType);
 		setMetatable(L, -1, "MonsterType");
 	} else if (isString(L, 1)) {
@@ -4474,8 +4453,9 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	ReloadTypes_t reloadType = getNumber<ReloadTypes_t>(L, 1);
 	if (reloadType == RELOAD_TYPE_GLOBAL) {
 		pushBoolean(L, g_luaEnvironment.loadFile("data/global.lua") == 0);
+		pushBoolean(L, g_scripts->loadScripts("scripts/lib", true, true));
 	} else {
-		pushBoolean(L, g_game.reload(reloadType));
+		pushBoolean(L, g_game.reload());
 	}
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 	return 1;
@@ -13789,17 +13769,6 @@ int LuaScriptInterface::luaCreateAction(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaDeleteAction(lua_State* L)
-{
-	// action:delete() action:__gc()
-	Action** actionsPtr = getRawUserdata<Action>(L, 1);
-	if (actionsPtr && *actionsPtr) {
-		delete *actionsPtr;
-		*actionsPtr = nullptr;
-	}
-	return 0;
-}
-
 int LuaScriptInterface::luaActionOnUse(lua_State* L)
 {
 	// action:onUse(callback)
@@ -13946,17 +13915,6 @@ int LuaScriptInterface::luaCreateTalkaction(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaDeleteTalkaction(lua_State* L)
-{
-	// talkAction:delete() talkAction:__gc()
-	TalkAction** talkPtr = getRawUserdata<TalkAction>(L, 1);
-	if (talkPtr && *talkPtr) {
-		delete *talkPtr;
-		*talkPtr = nullptr;
-	}
-	return 0;
-}
-
 int LuaScriptInterface::luaTalkactionOnSay(lua_State* L)
 {
 	// talkAction:onSay(callback)
@@ -14014,17 +13972,6 @@ int LuaScriptInterface::luaCreateCreatureEvent(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
-}
-
-int LuaScriptInterface::luaDeleteCreatureEvent(lua_State* L)
-{
-	// creatureevent:delete() creatureevent:__gc()
-	CreatureEvent** creaturePtr = getRawUserdata<CreatureEvent>(L, 1);
-	if (creaturePtr && *creaturePtr) {
-		delete *creaturePtr;
-		*creaturePtr = nullptr;
-	}
-	return 0;
 }
 
 int LuaScriptInterface::luaCreatureEventType(lua_State* L)
@@ -14113,17 +14060,6 @@ int LuaScriptInterface::luaCreateMoveEvent(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
-}
-
-int LuaScriptInterface::luaDeleteMoveEvent(lua_State* L)
-{
-	// moveevent:delete() moveevent:__gc()
-	MoveEvent** movePtr = getRawUserdata<MoveEvent>(L, 1);
-	if (movePtr && *movePtr) {
-		delete *movePtr;
-		*movePtr = nullptr;
-	}
-	return 0;
 }
 
 int LuaScriptInterface::luaMoveEventType(lua_State* L)
@@ -14393,17 +14329,6 @@ int LuaScriptInterface::luaCreateGlobalEvent(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
-}
-
-int LuaScriptInterface::luaDeleteGlobalEvent(lua_State* L)
-{
-	// globalevent:delete() globalevent:__gc()
-	GlobalEvent** globalPtr = getRawUserdata<GlobalEvent>(L, 1);
-	if (globalPtr && *globalPtr) {
-		delete *globalPtr;
-		*globalPtr = nullptr;
-	}
-	return 0;
 }
 
 int LuaScriptInterface::luaGlobalEventType(lua_State* L)
