@@ -1195,13 +1195,6 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		int32_t updateItemIndex = toCylinder->getThingIndex(updateItem);
 		if (updateItemIndex != -1) {
 			toCylinder->postAddNotification(updateItem, fromCylinder, updateItemIndex);
-			if (updateItem->getDuration() > 0) {
-				if (updateItem->getDecaying() != DECAYING_TRUE) {
-					updateItem->incrementReferenceCounter();
-					updateItem->setDecaying(DECAYING_TRUE);
-					g_game.toDecayItems.push_front(updateItem);
-				}
-			}
 		}
 	}
 
