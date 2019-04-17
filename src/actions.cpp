@@ -186,9 +186,9 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	return false;
 }
 
-bool Actions::registerLuaEvent(Event* event)
+bool Actions::registerLuaEvent(Action* event)
 {
-	Action_ptr action{ static_cast<Action*>(event) }; //event is guaranteed to be an Action
+	Action_ptr action{ event };
 	if (action->getItemIdRange().size() > 0) {
 		if (action->getItemIdRange().size() == 1) {
 			auto result = useItemMap.emplace(action->getItemIdRange().at(0), std::move(*action));
@@ -207,8 +207,7 @@ bool Actions::registerLuaEvent(Event* event)
 			}
 			return true;
 		}
-	}
-	else if (action->getUniqueIdRange().size() > 0) {
+	} else if (action->getUniqueIdRange().size() > 0) {
 		if (action->getUniqueIdRange().size() == 1) {
 			auto result = uniqueItemMap.emplace(action->getUniqueIdRange().at(0), std::move(*action));
 			if (!result.second) {
@@ -226,8 +225,7 @@ bool Actions::registerLuaEvent(Event* event)
 			}
 			return true;
 		}
-	}
-	else if (action->getActionIdRange().size() > 0) {
+	} else if (action->getActionIdRange().size() > 0) {
 		if (action->getActionIdRange().size() == 1) {
 			auto result = actionItemMap.emplace(action->getActionIdRange().at(0), std::move(*action));
 			if (!result.second) {

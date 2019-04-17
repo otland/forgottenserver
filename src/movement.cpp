@@ -164,9 +164,9 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	return true;
 }
 
-bool MoveEvents::registerLuaFunction(Event* event)
+bool MoveEvents::registerLuaFunction(MoveEvent* event)
 {
-	MoveEvent_ptr moveEvent{ static_cast<MoveEvent*>(event) }; //event is guaranteed to be a MoveEvent
+	MoveEvent_ptr moveEvent{ event };
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
@@ -197,9 +197,9 @@ bool MoveEvents::registerLuaFunction(Event* event)
 	return true;
 }
 
-bool MoveEvents::registerLuaEvent(Event* event)
+bool MoveEvents::registerLuaEvent(MoveEvent* event)
 {
-	MoveEvent_ptr moveEvent{ static_cast<MoveEvent*>(event) }; //event is guaranteed to be a MoveEvent
+	MoveEvent_ptr moveEvent{ event };
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);

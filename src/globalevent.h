@@ -55,7 +55,7 @@ class GlobalEvents final : public BaseEvents
 		GlobalEventMap getEventMap(GlobalEvent_t type);
 		static void clearMap(GlobalEventMap& map);
 
-		bool registerLuaEvent(Event* event);
+		bool registerLuaEvent(GlobalEvent* event);
 
 	private:
 		std::string getScriptBaseName() const override {
