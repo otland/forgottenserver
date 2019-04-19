@@ -68,8 +68,7 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 
 bool TalkActions::registerLuaEvent(TalkAction* event)
 {
-	Event_ptr ptr = Event_ptr(event);
-	TalkAction_ptr talkAction{ static_cast<TalkAction*>(ptr.release()) }; // event is guaranteed to be a TalkAction
+	TalkAction_ptr talkAction{ event };
 	talkActions.push_front(std::move(*talkAction));
 	return true;
 }

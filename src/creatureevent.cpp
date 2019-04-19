@@ -90,8 +90,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 
 bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 {
-	Event_ptr ptr = Event_ptr(event);
-	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(ptr.release()); //event is guaranteed to be a CreatureEvent
+	CreatureEvent_ptr creatureEvent{ event };
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerLuaEvent] Trying to register event without type!" << std::endl;
 		return false;
@@ -102,7 +101,7 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
-			oldEvent->copyEvent(creatureEvent);
+			oldEvent->copyEvent(creatureEvent.get());
 		}
 
 		return false;

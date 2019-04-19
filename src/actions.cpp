@@ -188,8 +188,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 bool Actions::registerLuaEvent(Action* event)
 {
-	Event_ptr ptr = Event_ptr(event);
-	Action_ptr action{ static_cast<Action*>(ptr.release()) }; //event is guaranteed to be an Action
+	Action_ptr action{ event };
 	if (action->getItemIdRange().size() > 0) {
 		if (action->getItemIdRange().size() == 1) {
 			auto result = useItemMap.emplace(action->getItemIdRange().at(0), std::move(*action));
