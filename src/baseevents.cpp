@@ -67,7 +67,9 @@ bool BaseEvents::loadFromXml()
 		if (scriptAttribute) {
 			std::string scriptFile = "scripts/" + std::string(scriptAttribute.as_string());
 			success = event->checkScript(basePath, scriptsName, scriptFile) && event->loadScript(basePath + scriptFile);
-			event->loadFunction(node.attribute("function"), true);
+			if (node.attribute("function")) {
+				event->loadFunction(node.attribute("function"), true);
+			}
 		} else {
 			success = event->loadFunction(node.attribute("function"), false);
 		}
