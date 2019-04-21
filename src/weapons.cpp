@@ -37,7 +37,7 @@ Weapons::Weapons()
 
 Weapons::~Weapons()
 {
-	clear();
+	clear(false);
 }
 
 const Weapon* Weapons::getWeapon(const Item* item) const
@@ -53,7 +53,7 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	return it->second;
 }
 
-void Weapons::clear()
+void Weapons::clear(bool)
 {
 	for (const auto& it : weapons) {
 		delete it.second;
