@@ -35,26 +35,34 @@ GlobalEvents::GlobalEvents() :
 
 GlobalEvents::~GlobalEvents()
 {
-	clear();
+	clear(false);
 }
 
-void GlobalEvents::clearMap(GlobalEventMap& map)
+void GlobalEvents::clearMap(GlobalEventMap& map, bool fromLua)
 {
-	map.clear();
+	for (auto it = map.begin(); it != map.end(); ) {
+		if (fromLua == it->second.isFromLua()) {
+			it = map.erase(it);
+		} else {
+			++it;
+		}
+	}
 }
 
-void GlobalEvents::clear()
+void GlobalEvents::clear(bool fromLua)
 {
 	g_scheduler.stopEvent(thinkEventId);
 	thinkEventId = 0;
 	g_scheduler.stopEvent(timerEventId);
 	timerEventId = 0;
 
-	clearMap(thinkMap);
-	clearMap(serverMap);
-	clearMap(timerMap);
+	clearMap(thinkMap, fromLua);
+	clearMap(serverMap, fromLua);
+	clearMap(timerMap, fromLua);
 
-	scriptInterface.reInitState();
+	if (!fromLua) {
+		scriptInterface.reInitState();
+	}
 }
 
 Event_ptr GlobalEvents::getEvent(const std::string& nodeName)
