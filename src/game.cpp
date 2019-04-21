@@ -5762,6 +5762,11 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
 			g_scripts->loadScripts("scripts", false, true);
 			return true;
 		}
