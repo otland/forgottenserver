@@ -48,7 +48,7 @@ class Weapons final : public BaseEvents
 		static int32_t getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor);
 
 	private:
-		void clear() final;
+		void clear(bool) final;
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
 		Event_ptr getEvent(const std::string& nodeName) override;

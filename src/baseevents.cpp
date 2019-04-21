@@ -82,7 +82,7 @@ bool BaseEvents::loadFromXml()
 bool BaseEvents::reload()
 {
 	loaded = false;
-	clear();
+	clear(false);
 	return loadFromXml();
 }
 
