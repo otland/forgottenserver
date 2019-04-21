@@ -29,15 +29,21 @@ CreatureEvents::CreatureEvents() :
 	scriptInterface.initState();
 }
 
-void CreatureEvents::clear()
+void CreatureEvents::clear(bool fromLua)
 {
 	//clear creature events
-	for (auto& it : creatureEvents) {
-		it.second.clearEvent();
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ) {
+		if (fromLua == it->second.isFromLua()) {
+			it = creatureEvents.erase(it);
+		} else {
+			++it;
+		}
 	}
 
 	//clear lua state
-	scriptInterface.reInitState();
+	if (!fromLua) {
+		scriptInterface.reInitState();
+	}
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface()

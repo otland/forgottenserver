@@ -69,13 +69,13 @@ class MoveEvents final : public BaseEvents
 
 		bool registerLuaEvent(MoveEvent* event);
 		bool registerLuaFunction(MoveEvent* event);
+		void clear(bool fromLua) override;
 
 	private:
 		using MoveListMap = std::map<int32_t, MoveEventList>;
-		void clearMap(MoveListMap& map);
+		void clearMap(MoveListMap& map, bool fromLua);
 
 		using MovePosListMap = std::map<Position, MoveEventList>;
-		void clear() override;
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
 		Event_ptr getEvent(const std::string& nodeName) override;

@@ -61,7 +61,7 @@ class Spells final : public BaseEvents
 		};
 
 	private:
-		void clear() override;
+		void clear(bool) override;
 		LuaScriptInterface& getScriptInterface() override;
 		Event_ptr getEvent(const std::string& nodeName) override;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;

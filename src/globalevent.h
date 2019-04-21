@@ -53,15 +53,15 @@ class GlobalEvents final : public BaseEvents
 		void execute(GlobalEvent_t type) const;
 
 		GlobalEventMap getEventMap(GlobalEvent_t type);
-		static void clearMap(GlobalEventMap& map);
+		static void clearMap(GlobalEventMap& map, bool fromLua);
 
 		bool registerLuaEvent(GlobalEvent* event);
+		void clear(bool fromLua) override;
 
 	private:
 		std::string getScriptBaseName() const override {
 			return "globalevents";
 		}
-		void clear() override;
 
 		Event_ptr getEvent(const std::string& nodeName) override;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;

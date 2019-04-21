@@ -1807,7 +1807,24 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 
 	registerEnum(RELOAD_TYPE_ALL)
+	registerEnum(RELOAD_TYPE_ACTIONS)
+	registerEnum(RELOAD_TYPE_CHAT)
+	registerEnum(RELOAD_TYPE_CONFIG)
+	registerEnum(RELOAD_TYPE_CREATURESCRIPTS)
+	registerEnum(RELOAD_TYPE_EVENTS)
 	registerEnum(RELOAD_TYPE_GLOBAL)
+	registerEnum(RELOAD_TYPE_GLOBALEVENTS)
+	registerEnum(RELOAD_TYPE_ITEMS)
+	registerEnum(RELOAD_TYPE_MONSTERS)
+	registerEnum(RELOAD_TYPE_MOUNTS)
+	registerEnum(RELOAD_TYPE_MOVEMENTS)
+	registerEnum(RELOAD_TYPE_NPCS)
+	registerEnum(RELOAD_TYPE_QUESTS)
+	registerEnum(RELOAD_TYPE_RAIDS)
+	registerEnum(RELOAD_TYPE_SCRIPTS)
+	registerEnum(RELOAD_TYPE_SPELLS)
+	registerEnum(RELOAD_TYPE_TALKACTIONS)
+	registerEnum(RELOAD_TYPE_WEAPONS)
 
 	registerEnum(ZONE_PROTECTION)
 	registerEnum(ZONE_NOPVP)
@@ -4455,7 +4472,7 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 		pushBoolean(L, g_luaEnvironment.loadFile("data/global.lua") == 0);
 		pushBoolean(L, g_scripts->loadScripts("scripts/lib", true, true));
 	} else {
-		pushBoolean(L, g_game.reload());
+		pushBoolean(L, g_game.reload(reloadType));
 	}
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 	return 1;
@@ -13761,6 +13778,7 @@ int LuaScriptInterface::luaCreateAction(lua_State* L)
 	// Action()
 	Action* action = new Action(getScriptEnv()->getScriptInterface());
 	if (action) {
+		action->setFromLua(true);
 		pushUserdata<Action>(L, action);
 		setMetatable(L, -1, "Action");
 	} else {
@@ -13907,6 +13925,7 @@ int LuaScriptInterface::luaCreateTalkaction(lua_State* L)
 	TalkAction* talk = new TalkAction(getScriptEnv()->getScriptInterface());
 	if (talk) {
 		talk->setWords(getString(L, 2));
+		talk->setFromLua(true);
 		pushUserdata<TalkAction>(L, talk);
 		setMetatable(L, -1, "TalkAction");
 	} else {
@@ -13966,6 +13985,7 @@ int LuaScriptInterface::luaCreateCreatureEvent(lua_State* L)
 	CreatureEvent* creature = new CreatureEvent(getScriptEnv()->getScriptInterface());
 	if (creature) {
 		creature->setName(getString(L, 2));
+		creature->setFromLua(true);
 		pushUserdata<CreatureEvent>(L, creature);
 		setMetatable(L, -1, "CreatureEvent");
 	} else {
@@ -14054,6 +14074,7 @@ int LuaScriptInterface::luaCreateMoveEvent(lua_State* L)
 	// MoveEvent()
 	MoveEvent* moveevent = new MoveEvent(getScriptEnv()->getScriptInterface());
 	if (moveevent) {
+		moveevent->setFromLua(true);
 		pushUserdata<MoveEvent>(L, moveevent);
 		setMetatable(L, -1, "MoveEvent");
 	} else {
@@ -14323,6 +14344,7 @@ int LuaScriptInterface::luaCreateGlobalEvent(lua_State* L)
 	if (global) {
 		global->setName(getString(L, 2));
 		global->setEventType(GLOBALEVENT_NONE);
+		global->setFromLua(true);
 		pushUserdata<GlobalEvent>(L, global);
 		setMetatable(L, -1, "GlobalEvent");
 	} else {

@@ -40,21 +40,29 @@ Actions::Actions() :
 
 Actions::~Actions()
 {
-	clear();
+	clear(false);
 }
 
-void Actions::clearMap(ActionUseMap& map)
+void Actions::clearMap(ActionUseMap& map, bool fromLua)
 {
-	map.clear();
+	for (auto it = map.begin(); it != map.end(); ) {
+		if (fromLua == it->second.isFromLua()) {
+			it = map.erase(it);
+		} else {
+			++it;
+		}
+	}
 }
 
-void Actions::clear()
+void Actions::clear(bool fromLua)
 {
-	clearMap(useItemMap);
-	clearMap(uniqueItemMap);
-	clearMap(actionItemMap);
+	clearMap(useItemMap, fromLua);
+	clearMap(uniqueItemMap, fromLua);
+	clearMap(actionItemMap, fromLua);
 
-	scriptInterface.reInitState();
+	if (!fromLua) {
+		scriptInterface.reInitState();
+	}
 }
 
 LuaScriptInterface& Actions::getScriptInterface()
