@@ -9,14 +9,12 @@ local parameters = {
 	{key = CONDITION_PARAM_SKILL_DISTANCEPERCENT, value = nil}
 }
 
-function onTargetCreature(creature, target)
-	target:addAttributeCondition(parameters)
-end
-
-combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
-
 function onCastSpell(creature, variant)
 	parameters[2].value = math.random(45, 65)
 	parameters[3].value = parameters[2].value
-	return combat:execute(creature, variant)
+
+	for _, target in ipairs(combat:getTargets(creature, variant)) do
+		target:addAttributeCondition(parameters)
+	end
+	return true
 end

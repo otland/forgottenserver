@@ -88,6 +88,35 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 	}
 }
 
+bool CreatureEvents::registerLuaEvent(Event* event)
+{
+	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(event); //event is guaranteed to be a CreatureEvent
+	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
+		std::cout << "Error: [CreatureEvents::registerLuaEvent] Trying to register event without type!" << std::endl;
+		return false;
+	}
+
+	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	if (oldEvent) {
+		//if there was an event with the same that is not loaded
+		//(happens when realoading), it is reused
+		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
+			oldEvent->copyEvent(creatureEvent);
+		}
+
+		return false;
+	} else {
+		//if not, register it normally
+		auto it = creatureEvents.find(creatureEvent->getName());
+		if (it != creatureEvents.end()) {
+			it->second = *creatureEvent;
+		} else {
+			creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+		}
+		return true;
+	}
+}
+
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
 {
 	auto it = creatureEvents.find(name);
@@ -545,7 +574,11 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, Co
 	if (scriptInterface->protectedCall(L, 7, 4) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		damage = LuaScriptInterface::getCombatDamage(L);
+		damage.primary.value = LuaScriptInterface::getNumber<int32_t>(L, -4);
+		damage.primary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -3);
+		damage.secondary.value = LuaScriptInterface::getNumber<int32_t>(L, -2);
+		damage.secondary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -1);
+		lua_pop(L, 4);
 	}
 
 	scriptInterface->resetScriptEnv();
