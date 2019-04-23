@@ -1,11 +1,12 @@
 function Monster:onDropLoot(corpse)
-	if (configManager.getNumber(configKeys.RATE_LOOT) == 0) then
+	if configManager.getNumber(configKeys.RATE_LOOT) == 0 then
 		corpse:decay()
 		return
 	end
-	
+
 	local player = Player(corpse:getCorpseOwner())
 	local mType = self:getType()
+	local text
 	if not player or player:getStamina() > 840 then
 		local monsterLoot = mType:getLoot()
 		for i = 1, #monsterLoot do
@@ -16,7 +17,7 @@ function Monster:onDropLoot(corpse)
 		end
 
 		if player then 
-			local text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
+			text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
 			local party = player:getParty()
 			if party then
 				party:broadcastPartyLoot(text)
@@ -25,7 +26,7 @@ function Monster:onDropLoot(corpse)
 			end
 		end
 	else
-		local text = ("Loot of %s: nothing (due to low stamina)"):format(mType:getNameDescription())
+		text = ("Loot of %s: nothing (due to low stamina)"):format(mType:getNameDescription())
 		local party = player:getParty()
 		if party then
 			party:broadcastPartyLoot(text)
