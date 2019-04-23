@@ -24,23 +24,22 @@ function Container.createLootItem(self, item)
 			for i = 1, #item.childLoot do
 				if not tmpItem:createLootItem(item.childLoot[i]) then
 					tmpItem:remove()
+					return false
 				end
 			end
 		end
 
 		itemCount = itemCount - n
-		if tmpItem then
-			if (item.subType ~= -1) then
-				tmpItem:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
-			end
+		if (item.subType ~= -1) then
+			tmpItem:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
+		end
 
-			if (item.actionId ~= -1) then
-				tmpItem:setActionId(item.actionId)
-			end
+		if (item.actionId ~= -1) then
+			tmpItem:setActionId(item.actionId)
+		end
 
-			if (item.text and item.text ~= "") then
-				tmpItem:setText(item.text)
-			end
+		if (item.text and item.text ~= "") then
+			tmpItem:setText(item.text)
 		end
 	end
 	return true
