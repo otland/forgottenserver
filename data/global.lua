@@ -33,6 +33,48 @@ function getFormattedWorldTime()
 	return hours .. ':' .. minutes
 end
 
+function getLootRandom()
+	return math.random(0, MAX_LOOTCHANCE) / configManager.getNumber(configKeys.RATE_LOOT)
+end
+
+function createLootItem(item)
+	local itemCount = 0
+	local randvalue = getLootRandom()
+	if (randvalue < item.chance) then
+		if (ItemType(item):isStackable()) then
+			itemCount = randvalue % item.countmax + 1
+		else 
+			itemCount = 1
+		end
+	end
+	
+	local itemList = {}
+	while (itemCount > 0) do
+		local n = math.min(itemCount, 100);
+		local tmpItem = Game.createItem(item.itemId, n)
+		if not tmpItem then
+			break
+		end
+
+		itemCount = itemCount - n
+
+		if (item.subType ~= -1) then
+			tmpItem:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
+		end
+
+		if (item.actionId ~= -1) then
+			tmpItem:setActionId(item.actionId)
+		end
+
+		if (item.text and item.text ~= "") then
+			tmpItem:setText(item.text)
+		end
+
+		itemList[#itemList + 1] = tmpItem
+	end
+	return itemList
+end
+
 table.contains = function(array, value)
 	for _, targetColumn in pairs(array) do
 		if targetColumn == value then

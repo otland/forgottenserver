@@ -726,7 +726,7 @@ class LuaScriptInterface
 		static int luaContainerGetSize(lua_State* L);
 		static int luaContainerGetCapacity(lua_State* L);
 		static int luaContainerGetEmptySlots(lua_State* L);
-
+		static int luaContainerGetContentDescription(lua_State* L);
 		static int luaContainerGetItemHoldingCount(lua_State* L);
 		static int luaContainerGetItemCountById(lua_State* L);
 
@@ -734,7 +734,8 @@ class LuaScriptInterface
 		static int luaContainerHasItem(lua_State* L);
 		static int luaContainerAddItem(lua_State* L);
 		static int luaContainerAddItemEx(lua_State* L);
-
+		static int luaContainerGetCorpseOwner(lua_State* L);
+		
 		// Teleport
 		static int luaTeleportCreate(lua_State* L);
 
