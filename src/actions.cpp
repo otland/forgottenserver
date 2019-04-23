@@ -46,7 +46,7 @@ Actions::~Actions()
 void Actions::clearMap(ActionUseMap& map, bool fromLua)
 {
 	for (auto it = map.begin(); it != map.end(); ) {
-		if (fromLua == it->second.isFromLua()) {
+		if (fromLua == it->second.fromLua) {
 			it = map.erase(it);
 		} else {
 			++it;
@@ -60,9 +60,7 @@ void Actions::clear(bool fromLua)
 	clearMap(uniqueItemMap, fromLua);
 	clearMap(actionItemMap, fromLua);
 
-	if (!fromLua) {
-		scriptInterface.reInitState();
-	}
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Actions::getScriptInterface()

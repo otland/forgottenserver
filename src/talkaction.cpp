@@ -37,16 +37,14 @@ TalkActions::~TalkActions()
 void TalkActions::clear(bool fromLua)
 {
 	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
-		if (fromLua == it->second.isFromLua()) {
+		if (fromLua == it->second.fromLua) {
 			it = talkActions.erase(it);
 		} else {
 			++it;
 		}
 	}
 
-	if (!fromLua) {
-		scriptInterface.reInitState();
-	}
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& TalkActions::getScriptInterface()

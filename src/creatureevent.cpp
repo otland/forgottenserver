@@ -31,19 +31,15 @@ CreatureEvents::CreatureEvents() :
 
 void CreatureEvents::clear(bool fromLua)
 {
-	//clear creature events
 	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ) {
-		if (fromLua == it->second.isFromLua()) {
+		if (fromLua == it->second.fromLua) {
 			it = creatureEvents.erase(it);
 		} else {
 			++it;
 		}
 	}
 
-	//clear lua state
-	if (!fromLua) {
-		scriptInterface.reInitState();
-	}
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface()
@@ -72,7 +68,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	}
 
-	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	std::unique_ptr<CreatureEvent> oldEvent(getEventByName(creatureEvent->getName(), false));
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused
@@ -102,7 +98,7 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 		return false;
 	}
 
-	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	std::unique_ptr<CreatureEvent> oldEvent(getEventByName(creatureEvent->getName(), false));
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused

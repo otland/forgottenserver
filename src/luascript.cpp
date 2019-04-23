@@ -13778,7 +13778,7 @@ int LuaScriptInterface::luaCreateAction(lua_State* L)
 	// Action()
 	Action* action = new Action(getScriptEnv()->getScriptInterface());
 	if (action) {
-		action->setFromLua(true);
+		action->fromLua = true;
 		pushUserdata<Action>(L, action);
 		setMetatable(L, -1, "Action");
 	} else {
@@ -13925,7 +13925,7 @@ int LuaScriptInterface::luaCreateTalkaction(lua_State* L)
 	TalkAction* talk = new TalkAction(getScriptEnv()->getScriptInterface());
 	if (talk) {
 		talk->setWords(getString(L, 2));
-		talk->setFromLua(true);
+		talk->fromLua = true;
 		pushUserdata<TalkAction>(L, talk);
 		setMetatable(L, -1, "TalkAction");
 	} else {
@@ -13985,7 +13985,7 @@ int LuaScriptInterface::luaCreateCreatureEvent(lua_State* L)
 	CreatureEvent* creature = new CreatureEvent(getScriptEnv()->getScriptInterface());
 	if (creature) {
 		creature->setName(getString(L, 2));
-		creature->setFromLua(true);
+		creature->fromLua = true;
 		pushUserdata<CreatureEvent>(L, creature);
 		setMetatable(L, -1, "CreatureEvent");
 	} else {
@@ -14074,7 +14074,7 @@ int LuaScriptInterface::luaCreateMoveEvent(lua_State* L)
 	// MoveEvent()
 	MoveEvent* moveevent = new MoveEvent(getScriptEnv()->getScriptInterface());
 	if (moveevent) {
-		moveevent->setFromLua(true);
+		moveevent->fromLua = true;
 		pushUserdata<MoveEvent>(L, moveevent);
 		setMetatable(L, -1, "MoveEvent");
 	} else {
@@ -14344,7 +14344,7 @@ int LuaScriptInterface::luaCreateGlobalEvent(lua_State* L)
 	if (global) {
 		global->setName(getString(L, 2));
 		global->setEventType(GLOBALEVENT_NONE);
-		global->setFromLua(true);
+		global->fromLua = true;
 		pushUserdata<GlobalEvent>(L, global);
 		setMetatable(L, -1, "GlobalEvent");
 	} else {

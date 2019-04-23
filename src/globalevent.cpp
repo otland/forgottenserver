@@ -41,7 +41,7 @@ GlobalEvents::~GlobalEvents()
 void GlobalEvents::clearMap(GlobalEventMap& map, bool fromLua)
 {
 	for (auto it = map.begin(); it != map.end(); ) {
-		if (fromLua == it->second.isFromLua()) {
+		if (fromLua == it->second.fromLua) {
 			it = map.erase(it);
 		} else {
 			++it;
@@ -60,9 +60,7 @@ void GlobalEvents::clear(bool fromLua)
 	clearMap(serverMap, fromLua);
 	clearMap(timerMap, fromLua);
 
-	if (!fromLua) {
-		scriptInterface.reInitState();
-	}
+	reInitState(fromLua);
 }
 
 Event_ptr GlobalEvents::getEvent(const std::string& nodeName)

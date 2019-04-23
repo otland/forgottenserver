@@ -56,7 +56,7 @@ class GlobalEvents final : public BaseEvents
 		static void clearMap(GlobalEventMap& map, bool fromLua);
 
 		bool registerLuaEvent(GlobalEvent* event);
-		void clear(bool fromLua) override;
+		void clear(bool fromLua) override final;
 
 	private:
 		std::string getScriptBaseName() const override {

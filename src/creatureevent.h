@@ -112,7 +112,7 @@ class CreatureEvents final : public BaseEvents
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
 		bool registerLuaEvent(CreatureEvent* event);
-		void clear(bool fromLua) override;
+		void clear(bool fromLua) override final;
 
 	private:
 		LuaScriptInterface& getScriptInterface() override;

@@ -45,7 +45,23 @@ void MoveEvents::clearMap(MoveListMap& map, bool fromLua)
 		for (int eventType = MOVE_EVENT_STEP_IN; eventType < MOVE_EVENT_LAST; ++eventType) {
 			auto& moveEvents = it->second.moveEvent[eventType];
 			for (auto find = moveEvents.begin(); find != moveEvents.end(); ) {
-				if (fromLua == find->isFromLua()) {
+				if (fromLua == find->fromLua) {
+					find = moveEvents.erase(find);
+				} else {
+					++find;
+				}
+			}
+		}
+	}
+}
+
+void MoveEvents::clearPosMap(MovePosListMap& map, bool fromLua)
+{
+	for (auto it = map.begin(); it != map.end(); ++it) {
+		for (int eventType = MOVE_EVENT_STEP_IN; eventType < MOVE_EVENT_LAST; ++eventType) {
+			auto& moveEvents = it->second.moveEvent[eventType];
+			for (auto find = moveEvents.begin(); find != moveEvents.end(); ) {
+				if (fromLua == find->fromLua) {
 					find = moveEvents.erase(find);
 				} else {
 					++find;
@@ -60,11 +76,9 @@ void MoveEvents::clear(bool fromLua)
 	clearMap(itemIdMap, fromLua);
 	clearMap(actionIdMap, fromLua);
 	clearMap(uniqueIdMap, fromLua);
+	clearPosMap(positionMap, fromLua);
 
-	if (!fromLua) {
-		positionMap.clear();
-		scriptInterface.reInitState();
-	}
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& MoveEvents::getScriptInterface()

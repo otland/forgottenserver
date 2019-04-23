@@ -119,7 +119,7 @@ class Actions final : public BaseEvents
 		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
 		bool registerLuaEvent(Action* event);
-		void clear(bool fromLua) final;
+		void clear(bool fromLua) override final;
 
 	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);

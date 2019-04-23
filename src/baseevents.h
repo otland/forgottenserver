@@ -44,13 +44,6 @@ class Event
 			return scripted;
 		}
 
-		bool isFromLua() const {
-			return fromLua;
-		}
-		void setFromLua(bool b) {
-			fromLua = b;
-		}
-
 		bool scripted = false;
 		bool fromLua = false;
 
@@ -72,6 +65,7 @@ class BaseEvents
 		bool isLoaded() const {
 			return loaded;
 		}
+		void reInitState(bool fromLua);
 
 	private:
 		virtual LuaScriptInterface& getScriptInterface() = 0;
