@@ -2,34 +2,46 @@ function Container.isContainer(self)
 	return true
 end
 
-function Container.createLootContainer(self, lootblock)
-	if #lootblock == 0 then
-		return true
+function Container.createLootItem(self, item)
+	local itemCount = 0
+	local randvalue = getLootRandom()
+	if (randvalue < item.chance) then
+		if (ItemType(item):isStackable()) then
+			itemCount = randvalue % item.countmax + 1
+		else 
+			itemCount = 1
+		end
 	end
-	for i = 1, #lootblock do
-		if self:getSize() < self:getCapacity() then
-			local loot = lootblock[i]
-			local itemList = createLootItem(loot)
-			if (#itemList > 0) then
-				for i = 1, #itemList do
-					local item = itemList[i]
-					-- check containers
-					if item:isContainer() then
-						if not item:createLootContainer(loot.childLoot) then
-							print('[Warning] DropLoot:', 'Could not create loot container inside container.')
-							item = nil
-						end
-					end
-					if item then
-						if self:addItemEx(item) ~= RETURNVALUE_NOERROR then
-							print('[Warning] DropLoot:', 'Could not add loot item to container.')
-						end
-					else
-						print('[Warning] DropLoot:', 'Item is nil.')
-					end
+	
+	while (itemCount > 0) do
+		local n = math.min(itemCount, 100);
+		local tmpItem = self:addItem(item.itemId, n)
+		if not tmpItem then
+			return false
+		end
+
+		if tmpItem:isContainer() then
+			for i = 1, #item.childLoot do
+				if not tmpItem:createLootItem(item.childLoot[i]) then
+					tmpItem:remove()
 				end
 			end
 		end
+
+		itemCount = itemCount - n
+		if tmpItem then
+			if (item.subType ~= -1) then
+				tmpItem:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
+			end
+
+			if (item.actionId ~= -1) then
+				tmpItem:setActionId(item.actionId)
+			end
+
+			if (item.text and item.text ~= "") then
+				tmpItem:setText(item.text)
+			end
+		end
 	end
-	return(not (#self:getItems() == 0))
+	return true
 end

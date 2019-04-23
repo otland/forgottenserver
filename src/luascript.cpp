@@ -6800,8 +6800,7 @@ int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
 	Container* container = getUserdata<Container>(L, 1);
 	if (container) {
 		pushString(L, container->getContentDescription());
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
