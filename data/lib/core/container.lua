@@ -3,6 +3,10 @@ function Container.isContainer(self)
 end
 
 function Container.createLootItem(self, item)
+	if self:getEmptySlots() == 0 then
+        return true
+	end
+
 	local itemCount = 0
 	local randvalue = getLootRandom()
 	if randvalue < item.chance then
