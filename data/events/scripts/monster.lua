@@ -1,6 +1,5 @@
 function Monster:onDropLoot(corpse)
 	if configManager.getNumber(configKeys.RATE_LOOT) == 0 then
-		corpse:decay()
 		return
 	end
 
@@ -33,5 +32,4 @@ function Monster:onDropLoot(corpse)
 			player:sendTextMessage(MESSAGE_LOOT, text)
 		end
 	end
-	corpse:decay()
 end
