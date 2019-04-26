@@ -118,13 +118,13 @@ class Actions final : public BaseEvents
 		ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
 		ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-		bool registerLuaEvent(Event* event);
+		bool registerLuaEvent(Action* event);
+		void clear(bool fromLua) override final;
 
 	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
-		void clear() final;
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
 		Event_ptr getEvent(const std::string& nodeName) override;
@@ -136,7 +136,7 @@ class Actions final : public BaseEvents
 		ActionUseMap actionItemMap;
 
 		Action* getAction(const Item* item);
-		void clearMap(ActionUseMap& map);
+		void clearMap(ActionUseMap& map, bool fromLua);
 
 		LuaScriptInterface scriptInterface;
 };
