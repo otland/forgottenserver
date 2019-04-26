@@ -949,9 +949,15 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		if (!equipFunction || executeEquip(player, item, slot, isCheck) == 1) {
+		if (!equipFunction) {
 			if (executeEquip(player, item, slot, isCheck)) {
 				return 1;
+			}
+		} else {
+			if (equipFunction(this, player, item, slot, isCheck) == 1) {
+				if (executeEquip(player, item, slot, isCheck)) {
+					return 1;
+				}
 			}
 		}
 		return 0;
