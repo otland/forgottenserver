@@ -1342,7 +1342,6 @@ class LuaScriptInterface
 
 		// Actions
 		static int luaCreateAction(lua_State* L);
-		static int luaDeleteAction(lua_State* L);
 		static int luaActionOnUse(lua_State* L);
 		static int luaActionRegister(lua_State* L);
 		static int luaActionItemId(lua_State* L);
@@ -1354,21 +1353,18 @@ class LuaScriptInterface
 
 		// Talkactions
 		static int luaCreateTalkaction(lua_State* L);
-		static int luaDeleteTalkaction(lua_State* L);
 		static int luaTalkactionOnSay(lua_State* L);
 		static int luaTalkactionRegister(lua_State* L);
 		static int luaTalkactionSeparator(lua_State* L);
 
 		// CreatureEvents
 		static int luaCreateCreatureEvent(lua_State* L);
-		static int luaDeleteCreatureEvent(lua_State* L);
 		static int luaCreatureEventType(lua_State* L);
 		static int luaCreatureEventRegister(lua_State* L);
 		static int luaCreatureEventOnCallback(lua_State* L);
 
 		// MoveEvents
 		static int luaCreateMoveEvent(lua_State* L);
-		static int luaDeleteMoveEvent(lua_State* L);
 		static int luaMoveEventType(lua_State* L);
 		static int luaMoveEventRegister(lua_State* L);
 		static int luaMoveEventOnCallback(lua_State* L);
@@ -1383,7 +1379,6 @@ class LuaScriptInterface
 
 		// GlobalEvents
 		static int luaCreateGlobalEvent(lua_State* L);
-		static int luaDeleteGlobalEvent(lua_State* L);
 		static int luaGlobalEventType(lua_State* L);
 		static int luaGlobalEventRegister(lua_State* L);
 		static int luaGlobalEventOnCallback(lua_State* L);

@@ -37,7 +37,7 @@ Scripts::~Scripts()
 	scriptInterface.reInitState();
 }
 
-bool Scripts::loadScripts(std::string folderName, bool isLib)
+bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 {
 	namespace fs = boost::filesystem;
 
@@ -87,7 +87,11 @@ bool Scripts::loadScripts(std::string folderName, bool isLib)
 		}
 
 		if (g_config.getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-			std::cout << "> " << it->filename().string() << " [loaded]" << std::endl;
+			if (!reload) {
+				std::cout << "> " << it->filename().string() << " [loaded]" << std::endl;
+			} else {
+				std::cout << "> " << it->filename().string() << " [reloaded]" << std::endl;
+			}
 		}
 	}
 
