@@ -5721,13 +5721,13 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_moveEvents->clear(true);
 			g_talkActions->clear(true);
 			g_globalEvents->clear(true);
+			g_weapons->clear(true);
+			g_weapons->loadDefaults();
 			g_scripts->loadScripts("scripts", false, true);
 			/*
 			Npcs::reload();
 			raids.reload() && raids.startup();
 			Item::items.reload();
-			g_weapons->reload();
-			g_weapons->loadDefaults();
 			quests.reload();
 			mounts.reload();
 			g_config.reload();
@@ -5756,6 +5756,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_talkActions->reload();
 			Item::items.reload();
 			g_weapons->reload();
+			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			quests.reload();
 			mounts.reload();

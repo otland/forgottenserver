@@ -53,14 +53,17 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	return it->second;
 }
 
-void Weapons::clear(bool)
+void Weapons::clear(bool fromLua)
 {
-	for (const auto& it : weapons) {
-		delete it.second;
+	for (auto it = weapons.begin(); it != weapons.end(); ) {
+		if (fromLua == it->second->fromLua) {
+			it = weapons.erase(it);
+		} else {
+			++it;
+		}
 	}
-	weapons.clear();
 
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Weapons::getScriptInterface()
@@ -130,6 +133,19 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 	}
 	return result.second;
+}
+
+bool Weapons::registerLuaEvent(Weapon* event)
+{
+	Event_ptr w{ event };
+	Weapon* weapon = static_cast<Weapon*>(w.release()); //event is guaranteed to be a Weapon
+
+	if (weapons.find(weapon->getID()) != weapons.end()) {
+		weapons[weapon->getID()] = weapon;
+	} else {
+		weapons.emplace(weapon->getID(), weapon);
+	}
+	return true;
 }
 
 //monsters
@@ -291,6 +307,10 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 			return 0;
 		}
 
+		if (player->getHealth() < getHealthCost(player)) {
+			return 0;
+		}
+
 		if (player->getSoul() < soul) {
 			return 0;
 		}
@@ -416,6 +436,11 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 		player->changeMana(-static_cast<int32_t>(manaCost));
 	}
 
+	uint32_t healthCost = getHealthCost(player);
+	if (healthCost != 0) {
+		player->changeHealth(-static_cast<int32_t>(healthCost));
+	}
+
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
 		player->changeSoul(-static_cast<int32_t>(soul));
 	}
@@ -458,6 +483,19 @@ uint32_t Weapon::getManaCost(const Player* player) const
 	}
 
 	return (player->getMaxMana() * manaPercent) / 100;
+}
+
+int32_t Weapon::getHealthCost(const Player* player) const
+{
+	if (health != 0) {
+		return health;
+	}
+
+	if (healthPercent == 0) {
+		return 0;
+	}
+
+	return (player->getMaxHealth() * healthPercent) / 100;
 }
 
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
