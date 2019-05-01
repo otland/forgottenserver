@@ -1397,7 +1397,7 @@ class LuaScriptInterface
 		static int luaWeaponSoul(lua_State* L);
 		static int luaWeaponPremium(lua_State* L);
 		static int luaWeaponBreakChance(lua_State* L);
-		static int luaWeaponType(lua_State* L);
+		static int luaWeaponAction(lua_State* L);
 		static int luaWeaponUnproperly(lua_State* L);
 		static int luaWeaponVocation(lua_State* L);
 		static int luaWeaponOnUseWeapon(lua_State* L);
@@ -1405,7 +1405,6 @@ class LuaScriptInterface
 		static int luaWeaponElement(lua_State* L);
 		static int luaWeaponAttack(lua_State* L);
 		static int luaWeaponDefense(lua_State* L);
-		static int luaWeaponExtraDefense(lua_State* L);
 		static int luaWeaponRange(lua_State* L);
 		static int luaWeaponCharges(lua_State* L);
 		static int luaWeaponDuration(lua_State* L);
@@ -1414,16 +1413,14 @@ class LuaScriptInterface
 		static int luaWeaponTransformDeEquipTo(lua_State* L);
 		static int luaWeaponSlotType(lua_State* L);
 		static int luaWeaponHitChance(lua_State* L);
-		static int luaWeaponExtraElementAttack(lua_State* L);
-		static int luaWeaponExtraElementType(lua_State* L);
+		static int luaWeaponExtraElement(lua_State* L);
 
 		// exclusively for distance weapons
 		static int luaWeaponMaxHitChance(lua_State* L);
 		static int luaWeaponAmmoType(lua_State* L);
 
 		// exclusively for wands
-		static int luaWeaponWandMinChange(lua_State* L);
-		static int luaWeaponWandMaxChange(lua_State* L);
+		static int luaWeaponWandDamage(lua_State* L);
 
 		// exclusively for wands & distance weapons
 		static int luaWeaponShootType(lua_State* L);

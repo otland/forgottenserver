@@ -34,6 +34,8 @@ class WeaponMelee;
 class WeaponDistance;
 class WeaponWand;
 
+using Weapon_ptr = std::unique_ptr<Weapon>;
+
 class Weapons final : public BaseEvents
 {
 	public:

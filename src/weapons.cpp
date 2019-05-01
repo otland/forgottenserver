@@ -137,14 +137,9 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 
 bool Weapons::registerLuaEvent(Weapon* event)
 {
-	Event_ptr w{ event };
-	Weapon* weapon = static_cast<Weapon*>(w.release()); //event is guaranteed to be a Weapon
+	Weapon_ptr weapon{ event };
+	weapons[weapon->getID()] = weapon.release();
 
-	if (weapons.find(weapon->getID()) != weapons.end()) {
-		weapons[weapon->getID()] = weapon;
-	} else {
-		weapons.emplace(weapon->getID(), weapon);
-	}
 	return true;
 }
 
