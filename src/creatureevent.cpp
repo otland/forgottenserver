@@ -68,26 +68,15 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	}
 
-	std::unique_ptr<CreatureEvent> oldEvent(getEventByName(creatureEvent->getName(), false));
-	if (oldEvent) {
-		//if there was an event with the same that is not loaded
-		//(happens when realoading), it is reused
-		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
-			oldEvent->copyEvent(creatureEvent.get());
-		}
-
+	auto it = creatureEvents.find(creatureEvent->getName());
+	if (it != creatureEvents.end()) {
+		std::cout << "[Warning - CreatureEvents::registerEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
 		return false;
 	} else {
-		//if not, register it normally
-		auto it = creatureEvents.find(creatureEvent->getName());
-		if (it != creatureEvents.end()) {
-			it->second = *creatureEvent;
-		} else {
-			creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-		}
-
-		return true;
+		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
 	}
+
+	return true;
 }
 
 bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
@@ -98,25 +87,15 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 		return false;
 	}
 
-	std::unique_ptr<CreatureEvent> oldEvent(getEventByName(creatureEvent->getName(), false));
-	if (oldEvent) {
-		//if there was an event with the same that is not loaded
-		//(happens when realoading), it is reused
-		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
-			oldEvent->copyEvent(creatureEvent.get());
-		}
-
+	auto it = creatureEvents.find(creatureEvent->getName());
+	if (it != creatureEvents.end()) {
+		std::cout << "[Warning - CreatureEvents::registerLuaEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
 		return false;
 	} else {
-		//if not, register it normally
-		auto it = creatureEvents.find(creatureEvent->getName());
-		if (it != creatureEvents.end()) {
-			it->second = *creatureEvent;
-		} else {
-			creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-		}
-		return true;
+		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
 	}
+
+	return true;
 }
 
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
