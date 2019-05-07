@@ -1213,13 +1213,11 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		return retMaxCount;
 	}
 
-	if (moveItem) {
-		if (moveItem->getDuration() > 0) {
-			if (moveItem->getDecaying() != DECAYING_TRUE) {
-				moveItem->incrementReferenceCounter();
-				moveItem->setDecaying(DECAYING_TRUE);
-				g_game.toDecayItems.push_front(moveItem);
-			}
+	if (moveItem && moveItem->getDuration() > 0) {
+		if (moveItem->getDecaying() != DECAYING_TRUE) {
+			moveItem->incrementReferenceCounter();
+			moveItem->setDecaying(DECAYING_TRUE);
+			g_game.toDecayItems.push_front(moveItem);
 		}
 	}
 
