@@ -504,6 +504,8 @@ class Game
 		Raids raids;
 		Quests quests;
 
+		std::forward_list<Item*> toDecayItems;
+
 	private:
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
@@ -522,8 +524,6 @@ class Game
 
 		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
 		std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
-
-		std::forward_list<Item*> toDecayItems;
 
 		std::vector<Creature*> ToReleaseCreatures;
 		std::vector<Item*> ToReleaseItems;
