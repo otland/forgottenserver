@@ -68,15 +68,12 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	}
 
-	auto it = creatureEvents.find(creatureEvent->getName());
-	if (it != creatureEvents.end()) {
+	auto result = creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+	if (!result.second) {
 		std::cout << "[Warning - CreatureEvents::registerEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
-		return false;
-	} else {
-		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
 	}
 
-	return true;
+	return result.second;
 }
 
 bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
@@ -87,15 +84,12 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 		return false;
 	}
 
-	auto it = creatureEvents.find(creatureEvent->getName());
-	if (it != creatureEvents.end()) {
-		std::cout << "[Warning - CreatureEvents::registerLuaEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
-		return false;
-	} else {
-		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+	auto result = creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+	if (!result.second) {
+		std::cout << "[Warning - CreatureEvents::registerEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
 	}
 
-	return true;
+	return result.second;
 }
 
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
