@@ -29,15 +29,17 @@ CreatureEvents::CreatureEvents() :
 	scriptInterface.initState();
 }
 
-void CreatureEvents::clear()
+void CreatureEvents::clear(bool fromLua)
 {
-	//clear creature events
-	for (auto& it : creatureEvents) {
-		it.second.clearEvent();
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ) {
+		if (fromLua == it->second.fromLua) {
+			it = creatureEvents.erase(it);
+		} else {
+			++it;
+		}
 	}
 
-	//clear lua state
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface()
@@ -66,7 +68,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	}
 
-	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	std::unique_ptr<CreatureEvent> oldEvent(getEventByName(creatureEvent->getName(), false));
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused
@@ -88,20 +90,20 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 	}
 }
 
-bool CreatureEvents::registerLuaEvent(Event* event)
+bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 {
-	CreatureEvent* creatureEvent = static_cast<CreatureEvent*>(event); //event is guaranteed to be a CreatureEvent
+	CreatureEvent_ptr creatureEvent{ event };
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerLuaEvent] Trying to register event without type!" << std::endl;
 		return false;
 	}
 
-	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	std::unique_ptr<CreatureEvent> oldEvent(getEventByName(creatureEvent->getName(), false));
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
 		//(happens when realoading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
-			oldEvent->copyEvent(creatureEvent);
+			oldEvent->copyEvent(creatureEvent.get());
 		}
 
 		return false;

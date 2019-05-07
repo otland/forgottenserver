@@ -36,23 +36,49 @@ MoveEvents::MoveEvents() :
 
 MoveEvents::~MoveEvents()
 {
-	clear();
+	clear(false);
 }
 
-void MoveEvents::clearMap(MoveListMap& map)
+void MoveEvents::clearMap(MoveListMap& map, bool fromLua)
 {
-	map.clear();
+	for (auto it = map.begin(); it != map.end(); ++it) {
+		for (int eventType = MOVE_EVENT_STEP_IN; eventType < MOVE_EVENT_LAST; ++eventType) {
+			auto& moveEvents = it->second.moveEvent[eventType];
+			for (auto find = moveEvents.begin(); find != moveEvents.end(); ) {
+				if (fromLua == find->fromLua) {
+					find = moveEvents.erase(find);
+				} else {
+					++find;
+				}
+			}
+		}
+	}
 }
 
-void MoveEvents::clear()
+void MoveEvents::clearPosMap(MovePosListMap& map, bool fromLua)
 {
-	clearMap(itemIdMap);
-	clearMap(actionIdMap);
-	clearMap(uniqueIdMap);
+	for (auto it = map.begin(); it != map.end(); ++it) {
+		for (int eventType = MOVE_EVENT_STEP_IN; eventType < MOVE_EVENT_LAST; ++eventType) {
+			auto& moveEvents = it->second.moveEvent[eventType];
+			for (auto find = moveEvents.begin(); find != moveEvents.end(); ) {
+				if (fromLua == find->fromLua) {
+					find = moveEvents.erase(find);
+				} else {
+					++find;
+				}
+			}
+		}
+	}
+}
 
-	positionMap.clear();
+void MoveEvents::clear(bool fromLua)
+{
+	clearMap(itemIdMap, fromLua);
+	clearMap(actionIdMap, fromLua);
+	clearMap(uniqueIdMap, fromLua);
+	clearPosMap(positionMap, fromLua);
 
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& MoveEvents::getScriptInterface()
@@ -164,9 +190,9 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	return true;
 }
 
-bool MoveEvents::registerLuaFunction(Event* event)
+bool MoveEvents::registerLuaFunction(MoveEvent* event)
 {
-	MoveEvent_ptr moveEvent{ static_cast<MoveEvent*>(event) }; //event is guaranteed to be a MoveEvent
+	MoveEvent_ptr moveEvent{ event };
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
@@ -197,9 +223,9 @@ bool MoveEvents::registerLuaFunction(Event* event)
 	return true;
 }
 
-bool MoveEvents::registerLuaEvent(Event* event)
+bool MoveEvents::registerLuaEvent(MoveEvent* event)
 {
-	MoveEvent_ptr moveEvent{ static_cast<MoveEvent*>(event) }; //event is guaranteed to be a MoveEvent
+	MoveEvent_ptr moveEvent{ event };
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
@@ -923,11 +949,9 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		if (equipFunction(this, player, item, slot, isCheck) == 1) {
+		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == 1) {
 			if (executeEquip(player, item, slot, isCheck)) {
 				return 1;
-			} else {
-				return 0;
 			}
 		}
 		return 0;

@@ -40,6 +40,7 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
+#include "script.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -54,6 +55,7 @@ extern CreatureEvents* g_creatureEvents;
 extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
+extern Scripts* g_scripts;
 
 Game::Game()
 {
@@ -5728,6 +5730,40 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return results;
 		}
 
+		case RELOAD_TYPE_SCRIPTS: {
+			// commented out stuff is TODO, once we approach further in revscriptsys
+			/*
+			if (!g_spells->reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+				std::terminate();
+			}
+			else if (!g_monsters.reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+				std::terminate();
+			}
+			*/
+
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_weapons->clear(true);
+			g_weapons->loadDefaults();
+			g_scripts->loadScripts("scripts", false, true);
+			/*
+			Npcs::reload();
+			raids.reload() && raids.startup();
+			Item::items.reload();
+			quests.reload();
+			mounts.reload();
+			g_config.reload();
+			g_events->load();
+			g_chat->load();
+			*/
+			return true;
+		}
+
 		default: {
 			if (!g_spells->reload()) {
 				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
@@ -5747,13 +5783,22 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_talkActions->reload();
 			Item::items.reload();
 			g_weapons->reload();
+			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			quests.reload();
 			mounts.reload();
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_scripts->loadScripts("scripts", false, true);
 			return true;
 		}
 	}
+	return true;
 }
+

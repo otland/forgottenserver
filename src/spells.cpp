@@ -40,7 +40,7 @@ Spells::Spells()
 
 Spells::~Spells()
 {
-	clear();
+	clear(false);
 }
 
 TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
@@ -97,7 +97,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 	return TALKACTION_FAILED;
 }
 
-void Spells::clear()
+void Spells::clear(bool)
 {
 	runes.clear();
 	instants.clear();

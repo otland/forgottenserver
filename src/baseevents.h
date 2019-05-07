@@ -45,6 +45,7 @@ class Event
 		}
 
 		bool scripted = false;
+		bool fromLua = false;
 
 	protected:
 		virtual std::string getScriptEventName() const = 0;
@@ -64,13 +65,14 @@ class BaseEvents
 		bool isLoaded() const {
 			return loaded;
 		}
+		void reInitState(bool fromLua);
 
 	private:
 		virtual LuaScriptInterface& getScriptInterface() = 0;
 		virtual std::string getScriptBaseName() const = 0;
 		virtual Event_ptr getEvent(const std::string& nodeName) = 0;
 		virtual bool registerEvent(Event_ptr event, const pugi::xml_node& node) = 0;
-		virtual void clear() = 0;
+		virtual void clear(bool) = 0;
 
 		bool loaded = false;
 };
