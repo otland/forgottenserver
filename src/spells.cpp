@@ -97,10 +97,28 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 	return TALKACTION_FAILED;
 }
 
-void Spells::clear(bool)
+void Spells::clearMaps(bool fromLua)
 {
-	runes.clear();
-	instants.clear();
+	for (auto instant = instants.begin(); instant != instants.end(); ) {
+		if (fromLua == instant->second.fromLua) {
+			instant = instants.erase(instant);
+		} else {
+			++instant;
+		}
+	}
+
+	for (auto rune = runes.begin(); rune != runes.end(); ) {
+		if (fromLua == rune->second.fromLua) {
+			rune = runes.erase(rune);
+		} else {
+			++rune;
+		}
+	}
+}
+
+void Spells::clear(bool fromLua)
+{
+	clearMaps(fromLua);
 
 	scriptInterface.reInitState();
 }
@@ -141,6 +159,34 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
+		}
+		return result.second;
+	}
+
+	return false;
+}
+
+bool Spells::registerInstantLuaEvent(InstantSpell* event)
+{
+	InstantSpell_ptr instant { event };
+	if (instant) {
+		auto result = instants.emplace(instant->getWords(), std::move(*instant));
+		if (!result.second) {
+			std::cout << "[Warning - Spells::registerInstantLuaEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
+		}
+		return result.second;
+	}
+
+	return false;
+}
+
+bool Spells::registerRuneLuaEvent(RuneSpell* event)
+{
+	RuneSpell_ptr rune { event };
+	if (rune) {
+		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
+		if (!result.second) {
+			std::cout << "[Warning - Spells::registerRuneLuaEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 		}
 		return result.second;
 	}

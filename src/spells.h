@@ -31,6 +31,8 @@ class RuneSpell;
 class Spell;
 
 using VocSpellMap = std::map<uint16_t, bool>;
+using InstantSpell_ptr = std::unique_ptr<InstantSpell>;
+using RuneSpell_ptr = std::unique_ptr<RuneSpell>;
 
 class Spells final : public BaseEvents
 {
@@ -60,8 +62,12 @@ class Spells final : public BaseEvents
 			return instants;
 		};
 
+		void clearMaps(bool fromLua);
+		void clear(bool fromLua) override final;
+		bool registerInstantLuaEvent(InstantSpell* event);
+		bool registerRuneLuaEvent(RuneSpell* event);
+
 	private:
-		void clear(bool) override final;
 		LuaScriptInterface& getScriptInterface() override;
 		Event_ptr getEvent(const std::string& nodeName) override;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
@@ -129,6 +135,15 @@ class Spell : public BaseSpell
 		const std::string& getName() const {
 			return name;
 		}
+		void setName(std::string n) {
+			name = n;
+		}
+		uint8_t getId() const {
+			return spellId;
+		}
+		void setId(uint8_t id) {
+			spellId = id;
+		}
 
 		void postCastSpell(Player* player, bool finishedCast = true, bool payCost = true) const;
 		static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
@@ -137,30 +152,144 @@ class Spell : public BaseSpell
 		uint32_t getSoulCost() const {
 			return soul;
 		}
+		void setSoulCost(uint32_t s) {
+			soul = s;
+		}
 		uint32_t getLevel() const {
 			return level;
+		}
+		void setLevel(uint32_t lvl) {
+			level = lvl;
 		}
 		uint32_t getMagicLevel() const {
 			return magLevel;
 		}
+		void setMagicLevel(uint32_t lvl) {
+			magLevel = lvl;
+		}
 		uint32_t getMana() const {
 			return mana;
+		}
+		void setMana(uint32_t m) {
+			mana = m;
 		}
 		uint32_t getManaPercent() const {
 			return manaPercent;
 		}
+		void setManaPercent(uint32_t m) {
+			manaPercent = m;
+		}
 		bool isPremium() const {
 			return premium;
+		}
+		void setPremium(bool p) {
+			premium = p;
+		}
+		bool isEnabled() const {
+			return enabled;
+		}
+		void setEnabled(bool e) {
+			enabled = e;
 		}
 
 		virtual bool isInstant() const = 0;
 		bool isLearnable() const {
 			return learnable;
 		}
+		void setLearnable(bool l) {
+			learnable = l;
+		}
 
 		const VocSpellMap& getVocMap() const {
 			return vocSpellMap;
 		}
+		void addVocMap(uint16_t n, bool b) {
+			vocSpellMap[n] = b;
+		}
+
+		const SpellGroup_t getGroup() const {
+			return group;
+		}
+		void setGroup(SpellGroup_t g) {
+			group = g;
+		}
+		const SpellGroup_t getSecondaryGroup() const {
+			return secondaryGroup;
+		}
+		void setSecondaryGroup(SpellGroup_t g) {
+			secondaryGroup = g;
+		}
+
+		uint32_t getCooldown() const {
+			return cooldown;
+		}
+		void setCooldown(uint32_t cd) {
+			cooldown = cd;
+		}
+		uint32_t getSecondaryCooldown() const {
+			return secondaryGroupCooldown;
+		}
+		void setSecondaryCooldown(uint32_t cd) {
+			secondaryGroupCooldown = cd;
+		}
+		uint32_t getGroupCooldown() const {
+			return groupCooldown;
+		}
+		void setGroupCooldown(uint32_t cd) {
+			groupCooldown = cd;
+		}
+
+		int32_t getRange() const {
+			return range;
+		}
+		void setRange(int32_t r) {
+			range = r;
+		}
+
+		bool getNeedTarget() const {
+			return needTarget;
+		}
+		void setNeedTarget(bool n) {
+			needTarget = n;
+		}
+		bool getNeedWeapon() const {
+			return needWeapon;
+		}
+		void setNeedWeapon(bool n) {
+			needWeapon = n;
+		}
+		bool getNeedLearn() const {
+			return learnable;
+		}
+		void setNeedLearn(bool n) {
+			learnable = n;
+		}
+		bool getSelfTarget() const {
+			return selfTarget;
+		}
+		void setSelfTarget(bool s) {
+			selfTarget = s;
+		}
+		bool getBlockingSolid() const {
+			return blockingSolid;
+		}
+		void setBlockingSolid(bool b) {
+			blockingSolid = b;
+		}
+		bool getBlockingCreature() const {
+			return blockingCreature;
+		}
+		void setBlockingCreature(bool b) {
+			blockingCreature = b;
+		}
+		bool getAggressive() const {
+			return aggressive;
+		}
+		void setAggressive(bool a) {
+			aggressive = a;
+		}
+
+		SpellType_t type = SPELL_UNDEFINED;
 
 	protected:
 		bool playerSpellCheck(Player* player) const;
