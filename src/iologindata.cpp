@@ -545,7 +545,17 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
 	if ((result = db.storeQuery(query.str()))) {
 		do {
-			player->addStorageValue(result->getNumber<uint32_t>("key"), result->getString("value"), true);
+			uint32_t key = result->getNumber<uint32_t>("key");
+			int32_t value;
+			std::string strValue = result->getString("value");
+			try {
+				value = stoi(strValue);
+				player->addStorageValue(key, value, true);
+			} catch (std::invalid_argument&) {
+				player->addStorageValue(key, strValue, true);
+			} catch (std::out_of_range&) {
+				player->addStorageValue(key, strValue, true);
+			}
 		} while (result->next());
 	}
 
@@ -846,6 +856,13 @@ bool IOLoginData::savePlayer(Player* player)
 	player->genReservedStorageRange();
 
 	for (const auto& it : player->storageMap) {
+		query << player->getGUID() << ',' << it.first << ',' << db.escapeString(std::to_string(it.second));
+		if (!storageQuery.addRow(query)) {
+			return false;
+		}
+	}
+
+	for (const auto& it : player->storageStringMap) {
 		query << player->getGUID() << ',' << it.first << ',' << db.escapeString(it.second);
 		if (!storageQuery.addRow(query)) {
 			return false;

@@ -25,17 +25,8 @@
 
 std::string Mission::getDescription(Player* player) const
 {
-	std::string strValue;
-	player->getStorageValue(storageID, strValue);
-
 	int32_t value;
-	try {
-		value = std::stoi(strValue);
-	} catch (std::invalid_argument&) {
-		value = -1;
-	} catch (std::out_of_range&) {
-		value = -1;
-	}
+	player->getStorageValue(storageID, value);
 
 	if (!mainDescription.empty()) {
 		std::string desc = mainDescription;
@@ -72,18 +63,9 @@ bool Mission::isStarted(Player* player) const
 		return false;
 	}
 
-	std::string strValue;
-	if (!player->getStorageValue(storageID, strValue)) {
-		return false;
-	}
-
 	int32_t value;
-	try {
-		value = std::stoi(strValue);
-	} catch (std::invalid_argument&) {
-		value = -1;
-	} catch (std::out_of_range&) {
-		value = -1;
+	if (!player->getStorageValue(storageID, value)) {
+		return false;
 	}
 
 	if (value < startValue) {
@@ -103,18 +85,9 @@ bool Mission::isCompleted(Player* player) const
 		return false;
 	}
 
-	std::string strValue;
-	if (!player->getStorageValue(storageID, strValue)) {
-		return false;
-	}
-
 	int32_t value;
-	try {
-		value = std::stoi(strValue);
-	} catch (std::invalid_argument&) {
-		value = -1;
-	} catch (std::out_of_range&) {
-		value = -1;
+	if (!player->getStorageValue(storageID, value)) {
+		return false;
 	}
 
 	if (ignoreEndValue) {
@@ -159,19 +132,8 @@ bool Quest::isStarted(Player* player) const
 		return false;
 	}
 
-	std::string strValue;
-	player->getStorageValue(startStorageID, strValue);
-
 	int32_t value;
-	try {
-		value = std::stoi(strValue);
-	} catch (std::invalid_argument&) {
-		value = -1;
-	} catch (std::out_of_range&) {
-		value = -1;
-	}
-
-	if (!value || value < startStorageValue) {
+	if (!player->getStorageValue(startStorageID, value) || value < startStorageValue) {
 		return false;
 	}
 
