@@ -553,9 +553,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 				value = stoi(strValue);
 				player->addStorageValue(key, value, true);
 			} catch (std::invalid_argument&) {
-				player->addStorageValue(key, strValue, true);
+				player->addStorageValue(key, strValue);
 			} catch (std::out_of_range&) {
-				player->addStorageValue(key, strValue, true);
+				player->addStorageValue(key, strValue);
 			}
 		} while (result->next());
 	}
