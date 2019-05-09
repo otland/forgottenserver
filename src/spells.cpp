@@ -859,6 +859,8 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
+	type = SPELL_INSTANT;
+
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("params"))) {
 		hasParam = attr.as_bool();
@@ -1136,6 +1138,8 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
+	type = SPELL_RUNE;
+
 	pugi::xml_attribute attr;
 	if (!(attr = node.attribute("id"))) {
 		std::cout << "[Error - RuneSpell::configureSpell] Rune spell without id." << std::endl;
@@ -1143,7 +1147,6 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	}
 	runeId = pugi::cast<uint16_t>(attr.value());
 
-	uint32_t charges;
 	if ((attr = node.attribute("charges"))) {
 		charges = pugi::cast<uint32_t>(attr.value());
 	} else {

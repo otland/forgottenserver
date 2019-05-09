@@ -1358,14 +1358,20 @@ class LuaScriptInterface
 		static int luaSpellAggressive(lua_State* L);
 		static int luaSpellVocation(lua_State* L);
 
-		// only for instant spells
+		// only for InstantSpells
 		static int luaSpellWords(lua_State* L);
+		static int luaSpellNeedDirection(lua_State* L);
+		static int luaSpellHasParams(lua_State* L);
+		static int luaSpellHasPlayerNameParam(lua_State* L);
+		static int luaSpellNeedCasterTargetOrDirection(lua_State* L);
+		static int luaSpellIsBlockingWalls(lua_State* L);
 
-		static int luaSpellGetManaCost(lua_State* L);
-		static int luaSpellGetSoulCost(lua_State* L);
-
-		static int luaSpellIsPremium(lua_State* L);
-		static int luaSpellIsLearnable(lua_State* L);
+		// only for RuneSpells
+		static int luaSpellRuneId(lua_State* L);
+		static int luaSpellCharges(lua_State* L);
+		static int luaSpellAllowFarUse(lua_State* L);
+		static int luaSpellBlockWalls(lua_State* L);
+		static int luaSpellCheckFloor(lua_State* L);
 
 		// Actions
 		static int luaCreateAction(lua_State* L);

@@ -353,8 +353,32 @@ class InstantSpell final : public TalkAction, public Spell
 		bool getHasParam() const {
 			return hasParam;
 		}
+		void setHasParam(bool p) {
+			hasParam = p;
+		}
 		bool getHasPlayerNameParam() const {
 			return hasPlayerNameParam;
+		}
+		void setHasPlayerNameParam(bool p) {
+			hasPlayerNameParam = p;
+		}
+		bool getNeedDirection() const {
+			return needDirection;
+		}
+		void setNeedDirection(bool n) {
+			needDirection = n;
+		}
+		bool getNeedCasterTargetOrDirection() const {
+			return casterTargetOrDirection;
+		}
+		void setNeedCasterTargetOrDirection(bool d) {
+			casterTargetOrDirection = d;
+		}
+		bool getBlockWalls() const {
+			return checkLineOfSight;
+		}
+		void setBlockWalls(bool w) {
+			checkLineOfSight = w;
 		}
 		bool canCast(const Player* player) const;
 		bool canThrowSpell(const Creature* creature, const Creature* target) const;
@@ -400,6 +424,21 @@ class RuneSpell final : public Action, public Spell
 		uint16_t getRuneItemId() const {
 			return runeId;
 		}
+		void setRuneItemId(uint16_t i) {
+			runeId = i;
+		}
+		bool getHasCharges() const {
+			return hasCharges;
+		}
+		void setHasCharges(bool c) {
+			hasCharges = c;
+		}
+		uint32_t getCharges() const {
+			return charges;
+		}
+		void setCharges(uint32_t c) {
+			charges = c;
+		}
 
 	private:
 		std::string getScriptEventName() const override;
@@ -407,6 +446,7 @@ class RuneSpell final : public Action, public Spell
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
 		uint16_t runeId = 0;
+		uint32_t charges = 0;
 		bool hasCharges = true;
 };
 
