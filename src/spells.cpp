@@ -257,6 +257,8 @@ bool CombatSpell::loadScriptCombat()
 
 bool CombatSpell::castSpell(Creature* creature)
 {
+	if (!creature)
+		return false;
 	if (scripted) {
 		LuaVariant var;
 		var.type = VARIANT_POSITION;
@@ -283,6 +285,8 @@ bool CombatSpell::castSpell(Creature* creature)
 
 bool CombatSpell::castSpell(Creature* creature, Creature* target)
 {
+	if (!creature || !target)
+		return false;
 	if (scripted) {
 		LuaVariant var;
 
