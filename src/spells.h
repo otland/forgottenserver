@@ -289,7 +289,7 @@ class Spell : public BaseSpell
 			aggressive = a;
 		}
 
-		SpellType_t type = SPELL_UNDEFINED;
+		SpellType_t spellType = SPELL_UNDEFINED;
 
 	protected:
 		bool playerSpellCheck(Player* player) const;

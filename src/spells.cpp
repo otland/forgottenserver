@@ -859,7 +859,7 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	type = SPELL_INSTANT;
+	spellType = SPELL_INSTANT;
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("params"))) {
@@ -1138,7 +1138,7 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	type = SPELL_RUNE;
+	spellType = SPELL_RUNE;
 
 	pugi::xml_attribute attr;
 	if (!(attr = node.attribute("id"))) {
