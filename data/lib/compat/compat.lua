@@ -219,6 +219,17 @@ do
 	rawgetmetatable("GlobalEvent").__newindex = GlobalEventNewIndex
 end
 
+do
+	local function WeaponNewIndex(self, key, value)
+		if key == "onUseWeapon" then
+			self:onUseWeapon(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("Weapon").__newindex = WeaponNewIndex
+end
+
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing then
