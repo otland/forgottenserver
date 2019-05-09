@@ -22,9 +22,11 @@
 #include "monster.h"
 #include "game.h"
 #include "spells.h"
+#include "events.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
+extern Events* g_events;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -1864,11 +1866,15 @@ void Monster::updateLookDirection()
 			if (offsetx < 0 && offsety < 0) {
 				if (dir == DIRECTION_SOUTH) {
 					newDir = DIRECTION_WEST;
+				} else if (dir == DIRECTION_NORTH) {
+					newDir = DIRECTION_WEST;
 				} else if (dir == DIRECTION_EAST) {
 					newDir = DIRECTION_NORTH;
 				}
 			} else if (offsetx < 0 && offsety > 0) {
 				if (dir == DIRECTION_NORTH) {
+					newDir = DIRECTION_WEST;
+				} else if (dir == DIRECTION_SOUTH) {
 					newDir = DIRECTION_WEST;
 				} else if (dir == DIRECTION_EAST) {
 					newDir = DIRECTION_SOUTH;
@@ -1876,11 +1882,15 @@ void Monster::updateLookDirection()
 			} else if (offsetx > 0 && offsety < 0) {
 				if (dir == DIRECTION_SOUTH) {
 					newDir = DIRECTION_EAST;
+				} else if (dir == DIRECTION_NORTH) {
+					newDir = DIRECTION_EAST;
 				} else if (dir == DIRECTION_WEST) {
 					newDir = DIRECTION_NORTH;
 				}
 			} else {
 				if (dir == DIRECTION_NORTH) {
+					newDir = DIRECTION_EAST;
+				} else if (dir == DIRECTION_SOUTH) {
 					newDir = DIRECTION_EAST;
 				} else if (dir == DIRECTION_WEST) {
 					newDir = DIRECTION_SOUTH;
@@ -1895,7 +1905,7 @@ void Monster::updateLookDirection()
 void Monster::dropLoot(Container* corpse, Creature*)
 {
 	if (corpse && lootDrop) {
-		mType->createLoot(corpse);
+		g_events->eventMonsterOnDropLoot(this, corpse);
 	}
 }
 

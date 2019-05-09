@@ -40,6 +40,7 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
+#include "script.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -54,6 +55,7 @@ extern CreatureEvents* g_creatureEvents;
 extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
+extern Scripts* g_scripts;
 
 Game::Game()
 {
@@ -1211,6 +1213,14 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		return retMaxCount;
 	}
 
+	if (moveItem && moveItem->getDuration() > 0) {
+		if (moveItem->getDecaying() != DECAYING_TRUE) {
+			moveItem->incrementReferenceCounter();
+			moveItem->setDecaying(DECAYING_TRUE);
+			g_game.toDecayItems.push_front(moveItem);
+		}
+	}
+
 	return ret;
 }
 
@@ -1295,6 +1305,12 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		}
 	}
 
+	if (item->getDuration() > 0) {
+		item->incrementReferenceCounter();
+		item->setDecaying(DECAYING_TRUE);
+		g_game.toDecayItems.push_front(item);
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1335,6 +1351,9 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 
 		if (item->isRemoved()) {
 			item->onRemoved();
+			if (item->canDecay()) {
+				decayItems->remove(item);
+			}
 			ReleaseItem(item);
 		}
 
@@ -1663,6 +1682,14 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	item->setParent(nullptr);
 	cylinder->postRemoveNotification(item, cylinder, itemIndex);
 	ReleaseItem(item);
+
+	if (newItem->getDuration() > 0) {
+		if (newItem->getDecaying() != DECAYING_TRUE) {
+			newItem->incrementReferenceCounter();
+			newItem->setDecaying(DECAYING_TRUE);
+			g_game.toDecayItems.push_front(newItem);
+		}
+	}
 
 	return newItem;
 }
@@ -2637,10 +2664,10 @@ void Game::playerAcceptTrade(uint32_t playerId)
 	player->setTradeState(TRADE_ACCEPT);
 
 	if (tradePartner->getTradeState() == TRADE_ACCEPT) {
-		Item* tradeItem1 = player->tradeItem;
-		Item* tradeItem2 = tradePartner->tradeItem;
+		Item* playerTradeItem = player->tradeItem;
+		Item* partnerTradeItem = tradePartner->tradeItem;
 
-		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, tradeItem1, tradeItem2)) {
+		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
 			internalCloseTrade(player);
 			return;
 		}
@@ -2648,13 +2675,13 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		player->setTradeState(TRADE_TRANSFER);
 		tradePartner->setTradeState(TRADE_TRANSFER);
 
-		auto it = tradeItems.find(tradeItem1);
+		auto it = tradeItems.find(playerTradeItem);
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
 		}
 
-		it = tradeItems.find(tradeItem2);
+		it = tradeItems.find(partnerTradeItem);
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
@@ -2662,25 +2689,17 @@ void Game::playerAcceptTrade(uint32_t playerId)
 
 		bool isSuccess = false;
 
-		ReturnValue ret1 = internalAddItem(tradePartner, tradeItem1, INDEX_WHEREEVER, 0, true);
-		ReturnValue ret2 = internalAddItem(player, tradeItem2, INDEX_WHEREEVER, 0, true);
-		if (ret1 == RETURNVALUE_NOERROR && ret2 == RETURNVALUE_NOERROR) {
-			ret1 = internalRemoveItem(tradeItem1, tradeItem1->getItemCount(), true);
-			ret2 = internalRemoveItem(tradeItem2, tradeItem2->getItemCount(), true);
-			if (ret1 == RETURNVALUE_NOERROR && ret2 == RETURNVALUE_NOERROR) {
-				Cylinder* cylinder1 = tradeItem1->getParent();
-				Cylinder* cylinder2 = tradeItem2->getParent();
-
-				uint32_t count1 = tradeItem1->getItemCount();
-				uint32_t count2 = tradeItem2->getItemCount();
-
-				ret1 = internalMoveItem(cylinder1, tradePartner, INDEX_WHEREEVER, tradeItem1, count1, nullptr, FLAG_IGNOREAUTOSTACK, nullptr, tradeItem2);
-				if (ret1 == RETURNVALUE_NOERROR) {
-					internalMoveItem(cylinder2, player, INDEX_WHEREEVER, tradeItem2, count2, nullptr, FLAG_IGNOREAUTOSTACK);
-
-					tradeItem1->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
-					tradeItem2->onTradeEvent(ON_TRADE_TRANSFER, player);
-
+		ReturnValue tradePartnerRet = internalAddItem(tradePartner, playerTradeItem, INDEX_WHEREEVER, 0, true);
+		ReturnValue playerRet = internalAddItem(player, partnerTradeItem, INDEX_WHEREEVER, 0, true);
+		if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
+			playerRet = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
+			tradePartnerRet = internalRemoveItem(partnerTradeItem, partnerTradeItem->getItemCount(), true);
+			if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
+				tradePartnerRet = internalMoveItem(playerTradeItem->getParent(), tradePartner, INDEX_WHEREEVER, playerTradeItem, playerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK, nullptr, partnerTradeItem);
+				if (tradePartnerRet == RETURNVALUE_NOERROR) {
+					internalMoveItem(partnerTradeItem->getParent(), player, INDEX_WHEREEVER, partnerTradeItem, partnerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
+					playerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
+					partnerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, player);
 					isSuccess = true;
 				}
 			}
@@ -2690,13 +2709,13 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			std::string errorDescription;
 
 			if (tradePartner->tradeItem) {
-				errorDescription = getTradeErrorDescription(ret1, tradeItem1);
+				errorDescription = getTradeErrorDescription(tradePartnerRet, playerTradeItem);
 				tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
 			}
 
 			if (player->tradeItem) {
-				errorDescription = getTradeErrorDescription(ret2, tradeItem2);
+				errorDescription = getTradeErrorDescription(playerRet, partnerTradeItem);
 				player->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
 			}
@@ -3748,7 +3767,7 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 				case RACE_VENOM:
 					color = TEXTCOLOR_LIGHTGREEN;
 					effect = CONST_ME_HITBYPOISON;
-					splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_GREEN);
+					splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_SLIME);
 					break;
 				case RACE_BLOOD:
 					color = TEXTCOLOR_RED;
@@ -3955,17 +3974,17 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (attackerPlayer) {
-			uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHCHANCE);
+			uint16_t chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
 				CombatDamage lifeLeech;
-				lifeLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_HITPOINTSLEECHAMOUNT) / 100.));
+				lifeLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT) / 100.));
 				g_game.combatChangeHealth(nullptr, attackerPlayer, lifeLeech);
 			}
 
-			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHCHANCE);
+			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
 				CombatDamage manaLeech;
-				manaLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_MANAPOINTSLEECHAMOUNT) / 100.));
+				manaLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT) / 100.));
 				g_game.combatChangeMana(nullptr, attackerPlayer, manaLeech);
 			}
 
@@ -5709,6 +5728,40 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return results;
 		}
 
+		case RELOAD_TYPE_SCRIPTS: {
+			// commented out stuff is TODO, once we approach further in revscriptsys
+			/*
+			if (!g_spells->reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
+				std::terminate();
+			}
+			else if (!g_monsters.reload()) {
+				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
+				std::terminate();
+			}
+			*/
+
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_weapons->clear(true);
+			g_weapons->loadDefaults();
+			g_scripts->loadScripts("scripts", false, true);
+			/*
+			Npcs::reload();
+			raids.reload() && raids.startup();
+			Item::items.reload();
+			quests.reload();
+			mounts.reload();
+			g_config.reload();
+			g_events->load();
+			g_chat->load();
+			*/
+			return true;
+		}
+
 		default: {
 			if (!g_spells->reload()) {
 				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
@@ -5728,13 +5781,22 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_talkActions->reload();
 			Item::items.reload();
 			g_weapons->reload();
+			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			quests.reload();
 			mounts.reload();
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_scripts->loadScripts("scripts", false, true);
 			return true;
 		}
 	}
+	return true;
 }
+

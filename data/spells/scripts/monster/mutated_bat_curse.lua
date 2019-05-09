@@ -4,12 +4,10 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 combat:setArea(createCombatArea(AREA_SQUAREWAVE7))
 
-function onTargetCreature(creature, target)
-	creature:addDamageCondition(target, CONDITION_CURSED, DAMAGELIST_EXPONENTIAL_DAMAGE, math.random(10, 21))
-end
-
-combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
-
 function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
+	local damage = math.random(10, 21)
+	for _, target in ipairs(combat:getTargets(creature, variant)) do
+		creature:addDamageCondition(target, CONDITION_CURSED, DAMAGELIST_EXPONENTIAL_DAMAGE, damage)
+	end
+	return true
 end

@@ -34,6 +34,7 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "script.h"
 #include <fstream>
 
 DatabaseTasks g_databaseTasks;
@@ -44,6 +45,7 @@ Game g_game;
 ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
+extern Scripts* g_scripts;
 RSA g_RSA;
 
 std::mutex g_loaderLock;
@@ -224,6 +226,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	std::cout << ">> Loading lua scripts" << std::endl;
+	if (!g_scripts->loadScripts("scripts", false, false)) {
+		startupErrorMessage("Failed to load lua scripts");
+		return;
+	}
+
 	std::cout << ">> Checking world type... " << std::flush;
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
@@ -252,14 +260,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_game.setGameState(GAME_STATE_INIT);
 
 	// Game client protocols
-	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
-	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolGame>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
+	services->add<ProtocolLogin>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
-	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
+	services->add<ProtocolStatus>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STATUS_PORT)));
 
 	// Legacy login protocol
-	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));

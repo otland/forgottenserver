@@ -18,6 +18,7 @@ addons:
     packages:
       - libboost-dev
       - libboost-system-dev
+      - libboost-filesystem-dev
       - libboost-iostreams-dev
       - libcrypto++-dev
       - liblua5.2-dev

@@ -257,17 +257,7 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 		return false
 	end
 
-	local positions = {}
-	function onTargetTile(creature, position)
-		positions[#positions + 1] = position
-	end
-
-	combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
-
-	if not combat:execute(self, variant) then
-		return false
-	end
-
+	local positions = combat:getPositions(self, variant)
 	local members = party:getMembers()
 	members[#members + 1] = party:getLeader()
 
@@ -281,7 +271,7 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 		end
 	end
 
-	if #affectedMembers == 1 then
+	if #affectedMembers <= 1 then
 		self:sendCancelMessage(RETURNVALUE_NOPARTYMEMBERSINRANGE)
 		self:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false

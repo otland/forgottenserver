@@ -18,7 +18,7 @@ local directions = {
 	[DIRECTION_SOUTHWEST] = "south-west"
 }
 
-local messages = {
+local descriptions = {
 	[DISTANCE_BESIDE] = {
 		[LEVEL_LOWER] = "is below you",
 		[LEVEL_SAME] = "is standing next to you",
@@ -63,12 +63,12 @@ function onCastSpell(creature, variant)
 
 	local level = positionDifference.z > 0 and LEVEL_HIGHER or positionDifference.z < 0 and LEVEL_LOWER or LEVEL_SAME
 	local distance = maxPositionDifference < 5 and DISTANCE_BESIDE or maxPositionDifference < 101 and DISTANCE_CLOSE or maxPositionDifference < 275 and DISTANCE_FAR or DISTANCE_VERYFAR
-	local message = messages[distance][level] or messages[distance]
+	local description = descriptions[distance][level] or descriptions[distance]
 	if distance ~= DISTANCE_BESIDE then
-		message = message .. " " .. directions[direction]
+		description = description .. " " .. directions[direction]
 	end
 
-	creature:sendTextMessage(MESSAGE_INFO_DESCR, target:getName() .. " " .. message .. ".")
+	creature:sendTextMessage(MESSAGE_INFO_DESCR, target:getName() .. " " .. description .. ".")
 	creaturePosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	return true
 end
