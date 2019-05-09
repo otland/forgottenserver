@@ -120,7 +120,7 @@ void Spells::clear(bool fromLua)
 {
 	clearMaps(fromLua);
 
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Spells::getScriptInterface()
