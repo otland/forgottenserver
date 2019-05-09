@@ -13843,6 +13843,13 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		return 1;
 	}
 
+	Spell* userdata = getUserdata<Spell>(L, 2);
+	if (userdata) {
+		pushUserdata<Spell>(L, userdata);
+		setMetatable(L, -1, "Spell");
+		return 1;
+	}
+
 	InstantSpell* spell = nullptr;
 	if (isNumber(L, 2)) {
 		spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
@@ -13855,7 +13862,9 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 	}
 
 	if (spell) {
-		pushInstantSpell(L, *spell);
+		pushUserdata<InstantSpell>(L, spell);
+		setMetatable(L, -1, "Spell");
+		//pushInstantSpell(L, *spell);
 	} else {
 		lua_pushnil(L);
 	}
@@ -13919,7 +13928,7 @@ int LuaScriptInterface::luaSpellRegister(lua_State* L)
 int LuaScriptInterface::luaSpellName(lua_State* L)
 {
 	// spell:name(name)
-	Spell* spell = getUserdata<Spell>(L, 1);
+	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
 	if (spell) {
 		if (lua_gettop(L) == 1) {
 			pushString(L, spell->getName());
