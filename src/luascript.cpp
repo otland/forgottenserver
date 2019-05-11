@@ -13815,6 +13815,15 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 	// Spell(words, name or id) to get an existing spell
 	// Spell(type) ex: Spell(SPELL_INSTANT) or Spell(SPELL_RUNE) to create a new spell
 	SpellType_t type = getNumber<SpellType_t>(L, 2);
+	if (isString(L, 2)) {
+		std::string tmp = asLowerCaseString(getString(L, 2));
+		if (tmp == "instant") {
+			type = SPELL_INSTANT;
+		} else if (tmp == "rune") {
+			type = SPELL_RUNE;
+		}
+	}
+
 	if (type) {
 		switch (type) {
 			case SPELL_INSTANT: {
