@@ -1411,7 +1411,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	//calling movement scripts
 	Creature* creature = thing->getCreature();
 	if (creature) {
-		g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_OUT);
+		g_moveEvents->onCreatureMove(creature, newParent->getTile(), MOVE_EVENT_STEP_OUT);
 	} else {
 		Item* item = thing->getItem();
 		if (item) {
