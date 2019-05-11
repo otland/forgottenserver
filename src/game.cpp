@@ -5736,7 +5736,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_talkActions->clear(true);
 			g_globalEvents->clear(true);
 			g_weapons->clear(true);
-			g_spells->clear(true);
 			g_weapons->loadDefaults();
 			g_spells->clear(true);
 			g_scripts->loadScripts("scripts", false, true);
