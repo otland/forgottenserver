@@ -21,7 +21,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, fromPosition)
+function onStepOut(creature, item, position, nextPosition)
 	item:transform(item.itemid - 1)
 	return true
 end

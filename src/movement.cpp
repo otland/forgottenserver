@@ -925,7 +925,7 @@ uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position
 bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 {
 	//onStepIn(creature, item, pos, fromPosition)
-	//onStepOut(creature, item, pos, fromPosition)
+	//onStepOut(creature, item, pos, nextPosition)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeStep] Call stack overflow" << std::endl;
 		return false;
@@ -941,7 +941,7 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushThing(L, item);
 	LuaScriptInterface::pushPosition(L, pos);
-	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
+	LuaScriptInterface::pushPosition(L, eventType == MOVE_EVENT_STEP_OUT ? creature->getNextPos() : creature->getLastPosition());
 
 	return scriptInterface->callFunction(4);
 }

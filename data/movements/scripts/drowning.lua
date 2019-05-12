@@ -13,7 +13,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, fromPosition)
+function onStepOut(creature, item, position, nextPosition)
 	if not creature:isPlayer() then
 		creature:removeCondition(CONDITION_DROWN)
 	end

@@ -41,7 +41,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, fromPosition)
+function onStepOut(creature, item, position, nextPosition)
 	if not decreasing[item.itemid] then
 		return true
 	end
