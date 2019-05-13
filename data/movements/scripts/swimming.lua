@@ -2,7 +2,7 @@ local condition = Condition(CONDITION_OUTFIT)
 condition:setOutfit({lookType = 267})
 condition:setTicks(-1)
 
-function onStepIn(creature, item, position, fromPosition)
+function onStepIn(creature, item, toPosition, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end
@@ -11,7 +11,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, nextPosition)
+function onStepOut(creature, item, toPosition, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end

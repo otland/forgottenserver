@@ -1,4 +1,4 @@
-function onStepIn(creature, item, position, fromPosition)
+function onStepIn(creature, item, toPosition, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end

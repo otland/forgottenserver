@@ -5,7 +5,7 @@ local traps = {
 	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_EARTHDAMAGE}
 }
 
-function onStepIn(creature, item, position, fromPosition)
+function onStepIn(creature, item, toPosition, fromPosition)
 	local trap = traps[item.itemid]
 	if not trap then
 		return true
@@ -21,7 +21,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, nextPosition)
+function onStepOut(creature, item, toPosition, fromPosition)
 	item:transform(item.itemid - 1)
 	return true
 end
