@@ -14646,7 +14646,7 @@ int LuaScriptInterface::luaSpellRuneId(lua_State* L)
 // only for RuneSpells
 int LuaScriptInterface::luaSpellCharges(lua_State* L)
 {
-	// spell:charges(bool)
+	// spell:charges(charges)
 	RuneSpell* spell = getUserdata<RuneSpell>(L, 1);
 	if (spell) {
 		// if spell == SPELL_UNDEFINED, it means that this actually is no RuneSpell, so we return nil
@@ -14656,10 +14656,9 @@ int LuaScriptInterface::luaSpellCharges(lua_State* L)
 		}
 
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, spell->getCharges());
+			lua_pushnumber(L, spell->getCharges());
 		} else {
 			spell->setCharges(getNumber<uint32_t>(L, 2));
-			spell->setHasCharges(true);
 			pushBoolean(L, true);
 		}
 	} else {
