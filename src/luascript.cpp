@@ -11895,6 +11895,14 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 		return 1;
 	}
 
+	if (isUserdata(L, 2)) {
+		LuaDataType type = getUserdataType(L, 2);
+		if (type != LuaData_Player && type != LuaData_Monster && type != LuaData_Npc) {
+			pushBoolean(L, false);
+			return 1;
+		}
+	}
+
 	Creature* creature = getCreature(L, 2);
 
 	const LuaVariant& variant = getVariant(L, 3);
