@@ -506,6 +506,26 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
+		auto getCleanTiles() const {
+			return cleanTiles;
+		}
+		bool cleanTileExists(Tile* tile) const {
+			auto it = cleanTiles.find(tile);
+			if (it != cleanTiles.end()) {
+				return true;
+			}
+			return false;
+		}
+		void addCleanTile(Tile* tile) {
+			cleanTiles.emplace(tile, 0);
+		}
+		void removeCleanTile(Tile* tile) {
+			cleanTiles.erase(tile);
+		}
+		void clearCleanTiles() {
+			cleanTiles.clear();
+		}
+
 	private:
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
@@ -539,6 +559,8 @@ class Game
 		std::map<Item*, uint32_t> tradeItems;
 
 		std::map<uint32_t, BedItem*> bedSleepersMap;
+
+		std::map<Tile*, uint8_t> cleanTiles;
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 

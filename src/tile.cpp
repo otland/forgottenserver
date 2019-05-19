@@ -398,6 +398,14 @@ void Tile::onAddTileItem(Item* item)
 	for (Creature* spectator : spectators) {
 		spectator->onAddTileItem(this, cylinderMapPos);
 	}
+
+	if (!hasFlag(TILESTATE_PROTECTIONZONE)) {
+		if (item->isCleanable()) {
+			if (!g_game.cleanTileExists(this)) {
+				g_game.addCleanTile(this);
+			}
+		}
+	}
 }
 
 void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType)
@@ -463,6 +471,29 @@ void Tile::onRemoveTileItem(const SpectatorHashSet& spectators, const std::vecto
 	//event methods
 	for (Creature* spectator : spectators) {
 		spectator->onRemoveTileItem(this, cylinderMapPos, iType, item);
+	}
+
+	if (!hasFlag(TILESTATE_PROTECTIONZONE)) {
+		auto it = getItemList();
+		if (!it) {
+			if (g_game.cleanTileExists(this)) {
+				g_game.removeCleanTile(this);
+			}
+			return;
+		}
+
+		bool ret = false;
+		for (auto toCheck : *it) {
+			if (toCheck->isCleanable()) {
+				ret = true;
+			}
+		}
+
+		if (!ret) {
+			if (g_game.cleanTileExists(this)) {
+				g_game.removeCleanTile(this);
+			}
+		}
 	}
 }
 
