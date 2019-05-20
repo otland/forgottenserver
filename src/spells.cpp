@@ -209,6 +209,11 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 {
 	auto it = runes.find(id);
 	if (it == runes.end()) {
+		for (auto& it : runes) {
+			if (it.second.getId() == id) {
+				return &it.second;
+			}
+		}
 		return nullptr;
 	}
 	return &it->second;
@@ -261,9 +266,10 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 
 InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 {
-	auto it = std::next(instants.begin(), std::min<uint32_t>(spellId, instants.size()));
-	if (it != instants.end()) {
-		return &it->second;
+	for (auto& it : instants) {
+		if (it.second.getId() == spellId) {
+			return &it.second;
+		}
 	}
 	return nullptr;
 }

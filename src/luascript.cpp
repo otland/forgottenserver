@@ -2802,9 +2802,9 @@ void LuaScriptInterface::registerFunctions()
 	// only for RuneSpells
 	registerMethod("Spell", "runeId", LuaScriptInterface::luaSpellRuneId);
 	registerMethod("Spell", "charges", LuaScriptInterface::luaSpellCharges);
-	registerMethod("Spell", "allowFarUse", LuaScriptInterface::luaActionAllowFarUse);
-	registerMethod("Spell", "blockWalls", LuaScriptInterface::luaActionBlockWalls);
-	registerMethod("Spell", "checkFloor", LuaScriptInterface::luaActionCheckFloor);
+	registerMethod("Spell", "allowFarUse", LuaScriptInterface::luaSpellAllowFarUse);
+	registerMethod("Spell", "blockWalls", LuaScriptInterface::luaSpellBlockWalls);
+	registerMethod("Spell", "checkFloor", LuaScriptInterface::luaSpellCheckFloor);
 
 	// Action
 	registerClass("Action", "", LuaScriptInterface::luaCreateAction);
@@ -13828,29 +13828,22 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		switch (type) {
 			case SPELL_INSTANT: {
 				InstantSpell* spell = new InstantSpell(getScriptEnv()->getScriptInterface());
-				if (spell) {
-					spell->fromLua = true;
-					pushUserdata<InstantSpell>(L, spell);
-					setMetatable(L, -1, "Spell");
-					spell->spellType = SPELL_INSTANT;
-				} else {
-					lua_pushnil(L);
-				}
+				spell->fromLua = true;
+				pushUserdata<Spell>(L, spell);
+				setMetatable(L, -1, "Spell");
+				spell->spellType = SPELL_INSTANT;
 				break;
 			}
 			case SPELL_RUNE: {
 				RuneSpell* spell = new RuneSpell(getScriptEnv()->getScriptInterface());
-				if (spell) {
-					spell->fromLua = true;
-					pushUserdata<RuneSpell>(L, spell);
-					setMetatable(L, -1, "Spell");
-					spell->spellType = SPELL_RUNE;
-				} else {
-					lua_pushnil(L);
-				}
+				spell->fromLua = true;
+				pushUserdata<Spell>(L, spell);
+				setMetatable(L, -1, "Spell");
+				spell->spellType = SPELL_RUNE;
 				break;
 			}
-			default: {
+			case SPELL_UNDEFINED: {
+				std::cout << "[Error - Spell::luaSpellCreate] Invalid spellType: " << type << std::endl;
 				lua_pushnil(L);
 				break;
 			}
@@ -13858,47 +13851,37 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		return 1;
 	}
 
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
-	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
-		pushUserdata(L, spell);
-		setMetatable(L, -1, "Spell");
-		return 1;
-	}
-
-	if (isNumber(L, 2)) {
-		spell = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
-		if (spell) {
-			pushUserdata<InstantSpell>(L, dynamic_cast<InstantSpell*>(spell));
+	// isNumber(L, 2) doesn't work here for some reason, maybe a bug?
+	if (getNumber<int32_t>(L, 2)) {
+		InstantSpell* instant = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
+		if (instant) {
+			pushUserdata<Spell>(L, instant);
 			setMetatable(L, -1, "Spell");
 			return 1;
 		}
-		spell = g_spells->getRuneSpell(getNumber<uint32_t>(L, 2));
-		if (spell) {
-			pushUserdata<RuneSpell>(L, dynamic_cast<RuneSpell*>(spell));
+		RuneSpell* rune = g_spells->getRuneSpell(getNumber<uint32_t>(L, 2));
+		if (rune) {
+			pushUserdata<Spell>(L, rune);
 			setMetatable(L, -1, "Spell");
 			return 1;
 		}
 	} else if (isString(L, 2)) {
-		std::string arg = getString(L, 2);
-		spell = g_spells->getInstantSpellByName(arg);
-		if (spell) {
-			pushUserdata<InstantSpell>(L, dynamic_cast<InstantSpell*>(spell));
+		std::string& arg = getString(L, 2);
+		InstantSpell* instant = g_spells->getInstantSpellByName(arg);
+		if (instant) {
+			pushUserdata<Spell>(L, instant);
 			setMetatable(L, -1, "Spell");
 			return 1;
 		}
-		spell = g_spells->getInstantSpell(arg);
-		if (spell) {
-			pushUserdata<InstantSpell>(L, dynamic_cast<InstantSpell*>(spell));
+		instant = g_spells->getInstantSpell(arg);
+		if (instant) {
+			pushUserdata<Spell>(L, instant);
 			setMetatable(L, -1, "Spell");
 			return 1;
 		}
-		spell = g_spells->getRuneSpellByName(arg);
-		if (spell) {
-			pushUserdata<RuneSpell>(L, dynamic_cast<RuneSpell*>(spell));
+		RuneSpell* rune = g_spells->getRuneSpellByName(arg);
+		if (rune) {
+			pushUserdata<Spell>(L, rune);
 			setMetatable(L, -1, "Spell");
 			return 1;
 		}
@@ -13911,18 +13894,18 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 int LuaScriptInterface::luaSpellOnCastSpell(lua_State* L)
 {
 	// spell:onCastSpell(callback)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType != SPELL_UNDEFINED) {
-			InstantSpell* instant = getUserdata<InstantSpell>(L, 1);
+		if (spell->spellType == SPELL_INSTANT) {
+			InstantSpell* instant = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 			if (!instant->loadCallback()) {
 				pushBoolean(L, false);
 				return 1;
 			}
 			instant->scripted = true;
 			pushBoolean(L, true);
-		} else {
-			RuneSpell* rune = getUserdata<RuneSpell>(L, 1);
+		} else if (spell->spellType == SPELL_RUNE) {
+			RuneSpell* rune = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 			if (!rune->loadCallback()) {
 				pushBoolean(L, false);
 				return 1;
@@ -13939,21 +13922,17 @@ int LuaScriptInterface::luaSpellOnCastSpell(lua_State* L)
 int LuaScriptInterface::luaSpellRegister(lua_State* L)
 {
 	// spell:register()
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (spell->spellType == SPELL_INSTANT) {
-			InstantSpell* instant = getUserdata<InstantSpell>(L, 1);
+			InstantSpell* instant = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 			if (!instant->isScripted()) {
 				pushBoolean(L, false);
 				return 1;
 			}
 			pushBoolean(L, g_spells->registerInstantLuaEvent(instant));
 		} else if (spell->spellType == SPELL_RUNE) {
-			RuneSpell* rune = getUserdata<RuneSpell>(L, 1);
+			RuneSpell* rune = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 			if (rune->getMagicLevel() != 0 || rune->getLevel() != 0) {
 				//Change information in the ItemType to get accurate description
 				ItemType& iType = Item::items.getItemType(rune->getRuneItemId());
@@ -13977,12 +13956,8 @@ int LuaScriptInterface::luaSpellRegister(lua_State* L)
 int LuaScriptInterface::luaSpellName(lua_State* L)
 {
 	// spell:name(name)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushString(L, spell->getName());
 		} else {
@@ -13998,12 +13973,8 @@ int LuaScriptInterface::luaSpellName(lua_State* L)
 int LuaScriptInterface::luaSpellId(lua_State* L)
 {
 	// spell:id(id)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getId());
 		} else {
@@ -14019,12 +13990,8 @@ int LuaScriptInterface::luaSpellId(lua_State* L)
 int LuaScriptInterface::luaSpellGroup(lua_State* L)
 {
 	// spell:group(primaryGroup[, secondaryGroup])
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getGroup());
 			lua_pushnumber(L, spell->getSecondaryGroup());
@@ -14089,12 +14056,8 @@ int LuaScriptInterface::luaSpellGroup(lua_State* L)
 int LuaScriptInterface::luaSpellCooldown(lua_State* L)
 {
 	// spell:cooldown(primaryGroupCd[, secondaryGroupCd])
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getCooldown());
 			lua_pushnumber(L, spell->getSecondaryCooldown());
@@ -14116,12 +14079,8 @@ int LuaScriptInterface::luaSpellCooldown(lua_State* L)
 int LuaScriptInterface::luaSpellGroupCooldown(lua_State* L)
 {
 	// spell:groupCooldown(cooldown)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getGroupCooldown());
 		} else {
@@ -14137,12 +14096,8 @@ int LuaScriptInterface::luaSpellGroupCooldown(lua_State* L)
 int LuaScriptInterface::luaSpellLevel(lua_State* L)
 {
 	// spell:level(lvl)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getLevel());
 		} else {
@@ -14158,12 +14113,8 @@ int LuaScriptInterface::luaSpellLevel(lua_State* L)
 int LuaScriptInterface::luaSpellMagicLevel(lua_State* L)
 {
 	// spell:magicLevel(lvl)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getMagicLevel());
 		} else {
@@ -14179,12 +14130,8 @@ int LuaScriptInterface::luaSpellMagicLevel(lua_State* L)
 int LuaScriptInterface::luaSpellMana(lua_State* L)
 {
 	// spell:mana(mana)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getMana());
 		} else {
@@ -14200,12 +14147,8 @@ int LuaScriptInterface::luaSpellMana(lua_State* L)
 int LuaScriptInterface::luaSpellManaPercent(lua_State* L)
 {
 	// spell:manaPercent(percent)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getManaPercent());
 		} else {
@@ -14221,12 +14164,8 @@ int LuaScriptInterface::luaSpellManaPercent(lua_State* L)
 int LuaScriptInterface::luaSpellSoul(lua_State* L)
 {
 	// spell:soul(soul)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getSoulCost());
 		} else {
@@ -14242,12 +14181,8 @@ int LuaScriptInterface::luaSpellSoul(lua_State* L)
 int LuaScriptInterface::luaSpellRange(lua_State* L)
 {
 	// spell:range(range)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getRange());
 		} else {
@@ -14263,12 +14198,8 @@ int LuaScriptInterface::luaSpellRange(lua_State* L)
 int LuaScriptInterface::luaSpellPremium(lua_State* L)
 {
 	// spell:isPremium(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->isPremium());
 		} else {
@@ -14284,12 +14215,8 @@ int LuaScriptInterface::luaSpellPremium(lua_State* L)
 int LuaScriptInterface::luaSpellEnabled(lua_State* L)
 {
 	// spell:isEnabled(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->isEnabled());
 		} else {
@@ -14305,12 +14232,8 @@ int LuaScriptInterface::luaSpellEnabled(lua_State* L)
 int LuaScriptInterface::luaSpellNeedTarget(lua_State* L)
 {
 	// spell:needTarget(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->getNeedTarget());
 		} else {
@@ -14326,12 +14249,8 @@ int LuaScriptInterface::luaSpellNeedTarget(lua_State* L)
 int LuaScriptInterface::luaSpellNeedWeapon(lua_State* L)
 {
 	// spell:needWeapon(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->getNeedWeapon());
 		} else {
@@ -14347,12 +14266,8 @@ int LuaScriptInterface::luaSpellNeedWeapon(lua_State* L)
 int LuaScriptInterface::luaSpellNeedLearn(lua_State* L)
 {
 	// spell:needLearn(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->getNeedLearn());
 		} else {
@@ -14368,12 +14283,8 @@ int LuaScriptInterface::luaSpellNeedLearn(lua_State* L)
 int LuaScriptInterface::luaSpellSelfTarget(lua_State* L)
 {
 	// spell:isSelfTarget(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->getSelfTarget());
 		} else {
@@ -14389,12 +14300,8 @@ int LuaScriptInterface::luaSpellSelfTarget(lua_State* L)
 int LuaScriptInterface::luaSpellBlocking(lua_State* L)
 {
 	// spell:isBlocking(blockingSolid, blockingCreature)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->getBlockingSolid());
 			pushBoolean(L, spell->getBlockingCreature());
@@ -14413,12 +14320,8 @@ int LuaScriptInterface::luaSpellBlocking(lua_State* L)
 int LuaScriptInterface::luaSpellAggressive(lua_State* L)
 {
 	// spell:isAggressive(bool)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			pushBoolean(L, spell->getAggressive());
 		} else {
@@ -14434,12 +14337,8 @@ int LuaScriptInterface::luaSpellAggressive(lua_State* L)
 int LuaScriptInterface::luaSpellVocation(lua_State* L)
 {
 	// spell:vocation(vocation[, showInDescription = false)
-	Spell* spell = dynamic_cast<InstantSpell*>(getUserdata<InstantSpell>(L, 1));
+	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
-		if (spell->spellType == SPELL_UNDEFINED) {
-			spell = dynamic_cast<RuneSpell*>(getUserdata<RuneSpell>(L, 1));
-		}
-
 		if (lua_gettop(L) == 1) {
 			lua_createtable(L, 0, 0);
 			auto it = 0;
@@ -14472,10 +14371,10 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 int LuaScriptInterface::luaSpellWords(lua_State* L)
 {
 	// spell:words(words[, separator = ""])
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no InstantSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
+		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14503,10 +14402,10 @@ int LuaScriptInterface::luaSpellWords(lua_State* L)
 int LuaScriptInterface::luaSpellNeedDirection(lua_State* L)
 {
 	// spell:needDirection(bool)
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no InstantSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
+		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14527,10 +14426,10 @@ int LuaScriptInterface::luaSpellNeedDirection(lua_State* L)
 int LuaScriptInterface::luaSpellHasParams(lua_State* L)
 {
 	// spell:hasParams(bool)
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no InstantSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
+		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14551,10 +14450,10 @@ int LuaScriptInterface::luaSpellHasParams(lua_State* L)
 int LuaScriptInterface::luaSpellHasPlayerNameParam(lua_State* L)
 {
 	// spell:hasPlayerNameParam(bool)
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no InstantSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
+		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14575,10 +14474,10 @@ int LuaScriptInterface::luaSpellHasPlayerNameParam(lua_State* L)
 int LuaScriptInterface::luaSpellNeedCasterTargetOrDirection(lua_State* L)
 {
 	// spell:needCasterTargetOrDirection(bool)
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no InstantSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
+		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14599,10 +14498,10 @@ int LuaScriptInterface::luaSpellNeedCasterTargetOrDirection(lua_State* L)
 int LuaScriptInterface::luaSpellIsBlockingWalls(lua_State* L)
 {
 	// spell:blockWalls(bool)
-	InstantSpell* spell = getUserdata<InstantSpell>(L, 1);
+	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no InstantSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
+		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14623,10 +14522,10 @@ int LuaScriptInterface::luaSpellIsBlockingWalls(lua_State* L)
 int LuaScriptInterface::luaSpellRuneId(lua_State* L)
 {
 	// spell:runeId(id)
-	RuneSpell* spell = getUserdata<RuneSpell>(L, 1);
+	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no RuneSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
+		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14647,10 +14546,10 @@ int LuaScriptInterface::luaSpellRuneId(lua_State* L)
 int LuaScriptInterface::luaSpellCharges(lua_State* L)
 {
 	// spell:charges(charges)
-	RuneSpell* spell = getUserdata<RuneSpell>(L, 1);
+	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no RuneSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
+		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14671,10 +14570,10 @@ int LuaScriptInterface::luaSpellCharges(lua_State* L)
 int LuaScriptInterface::luaSpellAllowFarUse(lua_State* L)
 {
 	// spell:allowFarUse(bool)
-	RuneSpell* spell = getUserdata<RuneSpell>(L, 1);
+	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no RuneSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
+		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14695,10 +14594,10 @@ int LuaScriptInterface::luaSpellAllowFarUse(lua_State* L)
 int LuaScriptInterface::luaSpellBlockWalls(lua_State* L)
 {
 	// spell:blockWalls(bool)
-	RuneSpell* spell = getUserdata<RuneSpell>(L, 1);
+	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no RuneSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
+		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
 			return 1;
 		}
@@ -14719,10 +14618,10 @@ int LuaScriptInterface::luaSpellBlockWalls(lua_State* L)
 int LuaScriptInterface::luaSpellCheckFloor(lua_State* L)
 {
 	// spell:checkFloor(bool)
-	RuneSpell* spell = getUserdata<RuneSpell>(L, 1);
+	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	if (spell) {
-		// if spell == SPELL_UNDEFINED, it means that this actually is no RuneSpell, so we return nil
-		if (spell->spellType == SPELL_UNDEFINED) {
+		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
+		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
 			return 1;
 		}
