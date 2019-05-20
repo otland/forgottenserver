@@ -13866,7 +13866,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 			return 1;
 		}
 	} else if (isString(L, 2)) {
-		std::string& arg = getString(L, 2);
+		std::string arg = getString(L, 2);
 		InstantSpell* instant = g_spells->getInstantSpellByName(arg);
 		if (instant) {
 			pushUserdata<Spell>(L, instant);
