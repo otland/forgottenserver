@@ -13814,7 +13814,14 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 {
 	// Spell(words, name or id) to get an existing spell
 	// Spell(type) ex: Spell(SPELL_INSTANT) or Spell(SPELL_RUNE) to create a new spell
+	if (lua_gettop(L) == 1) {
+		std::cout << "[Error - Spell::luaSpellCreate] There is no parameter set!" << std::endl;
+		lua_pushnil(L);
+		return 1;
+	}
+
 	SpellType_t type = getNumber<SpellType_t>(L, 2);
+
 	if (isString(L, 2)) {
 		std::string tmp = asLowerCaseString(getString(L, 2));
 		if (tmp == "instant") {
@@ -13824,35 +13831,24 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		}
 	}
 
-	if (type) {
-		switch (type) {
-			case SPELL_INSTANT: {
-				InstantSpell* spell = new InstantSpell(getScriptEnv()->getScriptInterface());
-				spell->fromLua = true;
-				pushUserdata<Spell>(L, spell);
-				setMetatable(L, -1, "Spell");
-				spell->spellType = SPELL_INSTANT;
-				break;
-			}
-			case SPELL_RUNE: {
-				RuneSpell* spell = new RuneSpell(getScriptEnv()->getScriptInterface());
-				spell->fromLua = true;
-				pushUserdata<Spell>(L, spell);
-				setMetatable(L, -1, "Spell");
-				spell->spellType = SPELL_RUNE;
-				break;
-			}
-			case SPELL_UNDEFINED: {
-				std::cout << "[Error - Spell::luaSpellCreate] Invalid spellType: " << type << std::endl;
-				lua_pushnil(L);
-				break;
-			}
-		}
+	if (type == SPELL_INSTANT) {
+		InstantSpell* spell = new InstantSpell(getScriptEnv()->getScriptInterface());
+		spell->fromLua = true;
+		pushUserdata<Spell>(L, spell);
+		setMetatable(L, -1, "Spell");
+		spell->spellType = SPELL_INSTANT;
+		return 1;
+	} else if (type == SPELL_RUNE) {
+		RuneSpell* spell = new RuneSpell(getScriptEnv()->getScriptInterface());
+		spell->fromLua = true;
+		pushUserdata<Spell>(L, spell);
+		setMetatable(L, -1, "Spell");
+		spell->spellType = SPELL_RUNE;
 		return 1;
 	}
 
 	// isNumber(L, 2) doesn't work here for some reason, maybe a bug?
-	if (getNumber<int32_t>(L, 2)) {
+	if (getNumber<uint32_t>(L, 2)) {
 		InstantSpell* instant = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
 		if (instant) {
 			pushUserdata<Spell>(L, instant);

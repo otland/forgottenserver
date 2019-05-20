@@ -209,9 +209,9 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 {
 	auto it = runes.find(id);
 	if (it == runes.end()) {
-		for (auto& it : runes) {
-			if (it.second.getId() == id) {
-				return &it.second;
+		for (auto& rune : runes) {
+			if (rune.second.getId() == id) {
+				return &rune.second;
 			}
 		}
 		return nullptr;
