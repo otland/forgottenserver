@@ -1251,7 +1251,8 @@ class LuaScriptInterface
 		static int luaMonsterTypeGetCreatureEvents(lua_State* L);
 		static int luaMonsterTypeRegisterEvent(lua_State* L);
 
-		static int luaMonsterTypeSetScriptFile(lua_State* L);
+		static int luaMonsterTypeEventOnCallback(lua_State* L);
+		static int luaMonsterTypeEventType(lua_State* L);
 
 		static int luaMonsterTypeGetSummonList(lua_State* L);
 		static int luaMonsterTypeAddSummon(lua_State* L);
