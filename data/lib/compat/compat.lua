@@ -230,6 +230,17 @@ do
 	rawgetmetatable("Weapon").__newindex = WeaponNewIndex
 end
 
+do
+	local function SpellNewIndex(self, key, value)
+		if key == "onCastSpell" then
+			self:onCastSpell(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("Spell").__newindex = SpellNewIndex
+end
+
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing then
@@ -1239,16 +1250,18 @@ end
 function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) end
 
 function createFunctions(class)
-	local exclude = {"get", "set", "is", "add", "can"}
+	local exclude = {[2] = {"is"}, [3] = {"get", "set", "add", "can"}, [4] = {"need"}}
 	local temp = {}
 	for name, func in pairs(class) do
-		if not table.contains(exclude, name:sub(1,3)) then
-			local str = name:sub(1,1):upper()..name:sub(2)
-			local getFunc = function(self) return func(self) end
-			local setFunc = function(self, ...) return func(self, ...) end
-			local get = "get".. str
-			local set = "set".. str
-			table.insert(temp, {set, setFunc, get, getFunc})
+		for strLen, strTable in pairs(exclude) do
+			if not table.contains(strTable, name:sub(1,strLen)) then
+				local str = name:sub(1,1):upper()..name:sub(2)
+				local getFunc = function(self) return func(self) end
+				local setFunc = function(self, ...) return func(self, ...) end
+				local get = "get".. str
+				local set = "set".. str
+				table.insert(temp, {set, setFunc, get, getFunc})
+			end
 		end
 	end
 	for _,func in ipairs(temp) do
