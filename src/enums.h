@@ -153,6 +153,12 @@ enum SpellGroup_t : uint8_t {
 	SPELLGROUP_SPECIAL = 4,
 };
 
+enum SpellType_t : uint8_t {
+	SPELL_UNDEFINED = 0,
+	SPELL_INSTANT = 1,
+	SPELL_RUNE = 2,
+};
+
 enum AccountType_t : uint8_t {
 	ACCOUNT_TYPE_NORMAL = 1,
 	ACCOUNT_TYPE_TUTOR = 2,

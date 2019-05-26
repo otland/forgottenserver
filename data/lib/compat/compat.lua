@@ -231,6 +231,17 @@ do
 end
 
 do
+	local function SpellNewIndex(self, key, value)
+		if key == "onCastSpell" then
+			self:onCastSpell(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("Spell").__newindex = SpellNewIndex
+end
+
+do
 	local function MonsterTypeNewIndex(self, key, value)
 		if key == "onThink" then
 			self:eventType(MONSTERS_EVENT_THINK)
@@ -602,8 +613,8 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	end
 	return player:addExperience(exp, ...)
 end
-function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana * configManager.getNumber(configKeys.RATE_MAGIC)) or false end
-function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n * configManager.getNumber(configKeys.RATE_SKILL)) or false end
+function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana) or false end
+function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n) or false end
 function doPlayerAddMana(cid, mana, ...) local p = Player(cid) return p and p:addMana(mana, ...) or false end
 function doPlayerJoinParty(cid, leaderId)
 	local player = Player(cid)
@@ -1267,16 +1278,18 @@ end
 function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) end
 
 function createFunctions(class)
-	local exclude = {"get", "set", "is", "add", "can"}
+	local exclude = {[2] = {"is"}, [3] = {"get", "set", "add", "can"}, [4] = {"need"}}
 	local temp = {}
 	for name, func in pairs(class) do
-		if not table.contains(exclude, name:sub(1,3)) then
-			local str = name:sub(1,1):upper()..name:sub(2)
-			local getFunc = function(self) return func(self) end
-			local setFunc = function(self, ...) return func(self, ...) end
-			local get = "get".. str
-			local set = "set".. str
-			table.insert(temp, {set, setFunc, get, getFunc})
+		for strLen, strTable in pairs(exclude) do
+			if not table.contains(strTable, name:sub(1,strLen)) then
+				local str = name:sub(1,1):upper()..name:sub(2)
+				local getFunc = function(self) return func(self) end
+				local setFunc = function(self, ...) return func(self, ...) end
+				local get = "get".. str
+				local set = "set".. str
+				table.insert(temp, {set, setFunc, get, getFunc})
+			end
 		end
 	end
 	for _,func in ipairs(temp) do
