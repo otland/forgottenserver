@@ -574,8 +574,8 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	end
 	return player:addExperience(exp, ...)
 end
-function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana * configManager.getNumber(configKeys.RATE_MAGIC)) or false end
-function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n * configManager.getNumber(configKeys.RATE_SKILL)) or false end
+function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana) or false end
+function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n) or false end
 function doPlayerAddMana(cid, mana, ...) local p = Player(cid) return p and p:addMana(mana, ...) or false end
 function doPlayerJoinParty(cid, leaderId)
 	local player = Player(cid)
