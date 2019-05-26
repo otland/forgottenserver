@@ -1332,15 +1332,11 @@ void Monsters::addMonsterType(const std::string& name, MonsterType* mType)
 bool Monsters::loadCallback(LuaScriptInterface* scriptInterface, MonsterType* mType)
 {
 	if (!scriptInterface) {
-		std::cout << "Failure: [Monsters::loadCallback] scriptInterface == nullptr. scriptid = " << scriptInterface->getScriptEnv()->getScriptId() << std::endl;
+		std::cout << "Failure: [Monsters::loadCallback] scriptInterface == nullptr." << std::endl;
 		return false;
 	}
 
 	int32_t id = scriptInterface->getEvent();
-	if (id == -1) {
-		std::cout << "[Warning - Monsters::loadCallback] Event onThink not found. " << std::endl;
-		return false;
-	}
 
 	if (mType->info.eventType == MONSTERS_EVENT_THINK) {
 		mType->info.thinkEvent = id;
