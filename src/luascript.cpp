@@ -13889,9 +13889,8 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 			setMetatable(L, -1, "Spell");
 			return 1;
 		}
-	} else {
-		lua_pushnil(L);
 	}
+	lua_pushnil(L);
 	return 1;
 }
 
