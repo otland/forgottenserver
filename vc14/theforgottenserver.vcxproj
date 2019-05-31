@@ -70,7 +70,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>D:\OTServers\forgottenserver\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -89,10 +91,12 @@
     <ClCompile>
       <PreprocessorDefinitions>_CONSOLE;$(PREPROCESSOR_DEFS);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>D:\local\boost_1_66_0;D:\local\boost_1_66_0\lib64-msvc-14.1;D:\OTServers\tfs-sdk-3.2\pugixml;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\lib64;D:\OTServers\tfs-sdk-3.2\mpir\lib64;D:\OTServers\tfs-sdk-3.2\LuaJIT\lib64;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\lib;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\include\mysql;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\include;D:\OTServers\tfs-sdk-3.2\mpir\include;D:\OTServers\tfs-sdk-3.2\LuaJIT\include;D:\OTServers\tfs-sdk-3.2\pugixml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>D:\OTServers\tfs-sdk-3.2\mysql-connector-c;D:\OTServers\tfs-sdk-3.2\mpir;D:\OTServers\tfs-sdk-3.2\LuaJIT;D:\local\boost_1_66_0;D:\local\boost_1_66_0\lib64-msvc-14.1;D:\OTServers\tfs-sdk-3.2\pugixml;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\lib64;D:\OTServers\tfs-sdk-3.2\mpir\lib64;D:\OTServers\tfs-sdk-3.2\LuaJIT\lib64;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\lib;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\include\mysql;D:\OTServers\tfs-sdk-3.2\mysql-connector-c\include;D:\OTServers\tfs-sdk-3.2\mpir\include;D:\OTServers\tfs-sdk-3.2\LuaJIT\include;D:\OTServers\tfs-sdk-3.2\pugixml\include;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -22,7 +22,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <mysql/mysql.h>
+#include <mysql.h>
 
 class DBResult;
 using DBResult_ptr = std::shared_ptr<DBResult>;

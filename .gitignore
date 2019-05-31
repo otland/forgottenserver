@@ -176,3 +176,5 @@ pip-log.txt
 ## TFS / OT
 #############
 config.lua
+theforgottenserver.exe
+*.dll
