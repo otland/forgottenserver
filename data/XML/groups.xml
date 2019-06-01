@@ -40,9 +40,7 @@
 	</group>
 	<group id="3" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
 		<flags>
-			<flag cannotusecombat="1" />
 			<flag cannotattackplayer="1" />
-			<flag cannotattackmonster="1" />
 			<flag cannotbeattacked="1" />
 			<flag canconvinceall="1" />
 			<flag cansummonall="1" />
@@ -68,7 +66,6 @@
 			<flag notgainskill="1" />
 			<flag setmaxspeed="1" />
 			<flag specialvip="1" />
-			<flag notgenerateloot="1" />
 			<flag cantalkredchannelanonymous="1" />
 			<flag ignoreprotectionzone="1" />
 			<flag ignorespellcheck="1" />
