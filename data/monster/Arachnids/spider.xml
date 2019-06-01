@@ -24,7 +24,7 @@
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<elements>
-		<element firePercent="-1" />
+		<element firePercent="-20" />
 	</elements>
 	<loot>
 		<item name="gold coin" countmax="5" chance="63333" />
