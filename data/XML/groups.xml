@@ -1,7 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <groups>
-	<group id="1" name="player" access="0" maxdepotitems="0" maxvipentries="0" />
-	<group id="2" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="1" name="player" access="0" maxdepotitems="0" maxvipentries="0">
+		<flags>
+			<flag cannotusecombat="0" />
+			<flag cannotattackplayer="0" />
+			<flag cannotattackmonster="0" />
+			<flag cannotbeattacked="0" />
+			<flag canconvinceall="0" />
+			<flag cansummonall="0" />
+			<flag canillusionall="0" />
+			<flag cansenseinvisibility="0" />
+			<flag ignoredbymonsters="0" />
+			<flag notgaininfight="0" />
+			<flag hasinfinitemana="0" />
+			<flag hasinfinitesoul="0" />
+			<flag hasnoexhaustion="0" />
+			<flag cannotusespells="0" />
+			<flag cannotpickupitem="0" />
+			<flag canalwayslogin="0" />
+			<flag canbroadcast="0" />
+			<flag canedithouses="0" />
+			<flag cannotbebanned="0" />
+			<flag cannotbepushed="0" />
+			<flag hasinfinitecapacity="0" />
+			<flag cannotpushallcreatures="0" />
+			<flag cantalkredprivate="0" />
+			<flag cantalkredchannel="0" />
+			<flag talkorangehelpchannel="0" />
+			<flag notgainexperience="0" />
+			<flag notgainmana="0" />
+			<flag notgainhealth="0" />
+			<flag notgainskill="0" />
+			<flag setmaxspeed="0" />
+			<flag specialvip="0" />
+			<flag notgenerateloot="0" />
+			<flag cantalkredchannelanonymous="0" />
+			<flag ignoreprotectionzone="0" />
+			<flag ignorespellcheck="0" />
+			<flag ignoreweaponcheck="0" />
+			<flag cannotbemuted="0" />
+			<flag isalwayspremium="0" />
+		</flags>
+	</group>
+	<group id="2" name="tutor" access="0" maxdepotitems="0" maxvipentries="200">
+		<flags>
+			<flag cannotusecombat="0" />
+			<flag cannotattackplayer="0" />
+			<flag cannotattackmonster="0" />
+			<flag cannotbeattacked="0" />
+			<flag canconvinceall="0" />
+			<flag cansummonall="0" />
+			<flag canillusionall="0" />
+			<flag cansenseinvisibility="0" />
+			<flag ignoredbymonsters="0" />
+			<flag notgaininfight="0" />
+			<flag hasinfinitemana="0" />
+			<flag hasinfinitesoul="0" />
+			<flag hasnoexhaustion="0" />
+			<flag cannotusespells="0" />
+			<flag cannotpickupitem="0" />
+			<flag canalwayslogin="0" />
+			<flag canbroadcast="0" />
+			<flag canedithouses="0" />
+			<flag cannotbebanned="0" />
+			<flag cannotbepushed="0" />
+			<flag hasinfinitecapacity="0" />
+			<flag cannotpushallcreatures="0" />
+			<flag cantalkredprivate="0" />
+			<flag cantalkredchannel="0" />
+			<flag talkorangehelpchannel="1" />
+			<flag notgainexperience="0" />
+			<flag notgainmana="0" />
+			<flag notgainhealth="0" />
+			<flag notgainskill="0" />
+			<flag setmaxspeed="0" />
+			<flag specialvip="0" />
+			<flag notgenerateloot="0" />
+			<flag cantalkredchannelanonymous="0" />
+			<flag ignoreprotectionzone="0" />
+			<flag ignorespellcheck="0" />
+			<flag ignoreweaponcheck="0" />
+			<flag cannotbemuted="0" />
+			<flag isalwayspremium="1" />
+		</flags>
+	</group>
+	<group id="3" name="senior tutor" access="0" maxdepotitems="0" maxvipentries="200">
+		<flags>
+			<flag cannotusecombat="0" />
+			<flag cannotattackplayer="0" />
+			<flag cannotattackmonster="0" />
+			<flag cannotbeattacked="0" />
+			<flag canconvinceall="0" />
+			<flag cansummonall="0" />
+			<flag canillusionall="0" />
+			<flag cansenseinvisibility="0" />
+			<flag ignoredbymonsters="0" />
+			<flag notgaininfight="0" />
+			<flag hasinfinitemana="0" />
+			<flag hasinfinitesoul="0" />
+			<flag hasnoexhaustion="0" />
+			<flag cannotusespells="0" />
+			<flag cannotpickupitem="0" />
+			<flag canalwayslogin="0" />
+			<flag canbroadcast="0" />
+			<flag canedithouses="0" />
+			<flag cannotbebanned="0" />
+			<flag cannotbepushed="0" />
+			<flag hasinfinitecapacity="0" />
+			<flag cannotpushallcreatures="0" />
+			<flag cantalkredprivate="0" />
+			<flag cantalkredchannel="0" />
+			<flag talkorangehelpchannel="1" />
+			<flag notgainexperience="0" />
+			<flag notgainmana="0" />
+			<flag notgainhealth="0" />
+			<flag notgainskill="0" />
+			<flag setmaxspeed="0" />
+			<flag specialvip="0" />
+			<flag notgenerateloot="0" />
+			<flag cantalkredchannelanonymous="0" />
+			<flag ignoreprotectionzone="0" />
+			<flag ignorespellcheck="0" />
+			<flag ignoreweaponcheck="0" />
+			<flag cannotbemuted="0" />
+			<flag isalwayspremium="1" />
+		</flags>
+	</group>
+	<group id="4" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200" >
 		<flags>
 			<flag cannotusecombat="1" />
 			<flag cannotattackplayer="1" />
@@ -16,10 +141,15 @@
 			<flag hasinfinitemana="1" />
 			<flag hasinfinitesoul="1" />
 			<flag hasnoexhaustion="1" />
+			<flag cannotusespells="1" />
+			<flag cannotpickupitem="1" />
 			<flag canalwayslogin="1" />
+			<flag canbroadcast="1" />
+			<flag canedithouses="1" />
+			<flag cannotbebanned="1" />
 			<flag cannotbepushed="1" />
-			<flag hasinfinitecapacity="1" />
-			<flag cannotpushallcreatures="1" />
+			<flag hasinfinitecapacity="0" />
+			<flag cannotpushallcreatures="0" />
 			<flag cantalkredprivate="1" />
 			<flag cantalkredchannel="1" />
 			<flag talkorangehelpchannel="1" />
@@ -38,7 +168,7 @@
 			<flag isalwayspremium="1" />
 		</flags>
 	</group>
-	<group id="3" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="5" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
 		<flags>
 			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
@@ -53,7 +183,10 @@
 			<flag hasinfinitemana="1" />
 			<flag hasinfinitesoul="1" />
 			<flag hasnoexhaustion="1" />
+			<flag cannotusespells="0" />
+			<flag cannotpickupitem="0" />
 			<flag canalwayslogin="1" />
+			<flag canbroadcast="1" />
 			<flag canedithouses="1" />
 			<flag cannotbebanned="1" />
 			<flag cannotbepushed="1" />
