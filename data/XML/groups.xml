@@ -101,7 +101,7 @@
 			<flag hasnoexhaustion="0" />
 			<flag cannotusespells="0" />
 			<flag cannotpickupitem="0" />
-			<flag canalwayslogin="0" />
+			<flag canalwayslogin="1" />
 			<flag canbroadcast="0" />
 			<flag canedithouses="0" />
 			<flag cannotbebanned="0" />
@@ -146,7 +146,7 @@
 			<flag canalwayslogin="1" />
 			<flag canbroadcast="1" />
 			<flag canedithouses="1" />
-			<flag cannotbebanned="1" />
+			<flag cannotbebanned="0" />
 			<flag cannotbepushed="1" />
 			<flag hasinfinitecapacity="0" />
 			<flag cannotpushallcreatures="0" />
@@ -188,7 +188,7 @@
 			<flag canalwayslogin="1" />
 			<flag canbroadcast="1" />
 			<flag canedithouses="1" />
-			<flag cannotbebanned="1" />
+			<flag cannotbebanned="0" />
 			<flag cannotbepushed="1" />
 			<flag hasinfinitecapacity="1" />
 			<flag cannotpushallcreatures="1" />
