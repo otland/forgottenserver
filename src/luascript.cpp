@@ -12260,9 +12260,9 @@ int LuaScriptInterface::luaMonsterTypeIsSummonable(lua_State* L)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, monsterType->info.isAttackable);
+			pushBoolean(L, monsterType->info.isSummonable);
 		} else {
-			monsterType->info.isAttackable = getBoolean(L, 2);
+			monsterType->info.isSummonable = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
 	} else {
