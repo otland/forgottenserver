@@ -2738,12 +2738,13 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 void ProtocolGame::sendVIPEntries()
 {
 	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
-
 	for (const VIPEntry& entry : vipEntries) {
-		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
-
 		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
+		if (vipPlayer == player) {
+			continue;
+		}
 
+		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
 		if (!vipPlayer || vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
 			vipStatus = VIPSTATUS_OFFLINE;
 		}
