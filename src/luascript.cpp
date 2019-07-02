@@ -15662,14 +15662,9 @@ int LuaScriptInterface::luaWeaponVocation(lua_State* L)
 		weapon->addVocWeaponMap(getString(L, 2));
 		weapon->setWieldInfo(WIELDINFO_VOCREQ);
 		std::string tmp;
-		bool showInDescription = false;
-		bool lastVoc = false;
-		if (getBoolean(L, 3)) {
-			showInDescription = getBoolean(L, 3);
-		}
-		if (getBoolean(L, 4)) {
-			lastVoc = getBoolean(L, 4);
-		}
+		bool showInDescription = getBoolean(L, 3, false);
+		bool lastVoc = getBoolean(L, 4, false);
+
 		if (showInDescription) {
 			if (weapon->getVocationString().empty()) {
 				tmp = asLowerCaseString(getString(L, 2));
@@ -15760,12 +15755,10 @@ int LuaScriptInterface::luaWeaponCharges(lua_State* L)
 	// weapon:charges(charges[, showCharges = true])
 	Weapon* weapon = getUserdata<Weapon>(L, 1);
 	if (weapon) {
-		bool showCharges = true;
-		if (lua_gettop(L) > 2) {
-			showCharges = getBoolean(L, 3);
-		}
+		bool showCharges = getBoolean(L, 3, true);
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
+
 		it.charges = getNumber<uint8_t>(L, 2);
 		it.showCharges = showCharges;
 		pushBoolean(L, true);
@@ -15780,13 +15773,11 @@ int LuaScriptInterface::luaWeaponDuration(lua_State* L)
 	// weapon:duration(duration[, showDuration = true])
 	Weapon* weapon = getUserdata<Weapon>(L, 1);
 	if (weapon) {
-		bool showDuration = true;
-		if (lua_gettop(L) > 2) {
-			showDuration = getBoolean(L, 3);
-		}
+		bool showDuration = getBoolean(L, 3, true);
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
-		it.decayTime = getNumber<uint8_t>(L, 2);
+
+		it.decayTime = getNumber<uint32_t>(L, 2);
 		it.showDuration = showDuration;
 		pushBoolean(L, true);
 	} else {
@@ -15800,12 +15791,10 @@ int LuaScriptInterface::luaWeaponDecayTo(lua_State* L)
 	// weapon:decayTo([itemid = 0]
 	Weapon* weapon = getUserdata<Weapon>(L, 1);
 	if (weapon) {
-		uint16_t itemid = 0;
-		if (lua_gettop(L) > 1) {
-			itemid = getNumber<uint16_t>(L, 2);
-		}
+		uint16_t itemid = getNumber<uint16_t>(L, 2, 0);
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
+
 		it.decayTo = itemid;
 		pushBoolean(L, true);
 	} else {
@@ -15869,9 +15858,9 @@ int LuaScriptInterface::luaWeaponSlotType(lua_State* L)
 		std::string slot = getString(L, 2);
 
 		if (slot == "two-handed") {
-			it.slotPosition = SLOTP_TWO_HAND;
+			it.slotPosition |= SLOTP_TWO_HAND;
 		} else {
-			it.slotPosition = SLOTP_HAND;
+			it.slotPosition |= SLOTP_HAND;
 		}
 		pushBoolean(L, true);
 	} else {
