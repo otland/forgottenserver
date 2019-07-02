@@ -1447,6 +1447,8 @@ class LuaScriptInterface
 		static int luaWeaponSlotType(lua_State* L);
 		static int luaWeaponHitChance(lua_State* L);
 		static int luaWeaponExtraElement(lua_State* L);
+		static int luaWeaponAbsorbPercentAll(lua_State* L);
+		static int luaWeaponAbsorbPercent(lua_State* L);
 
 		// exclusively for distance weapons
 		static int luaWeaponMaxHitChance(lua_State* L);
