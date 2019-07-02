@@ -15961,6 +15961,55 @@ int LuaScriptInterface::luaWeaponExtraElement(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaWeaponAbsorbPercentAll(lua_State* L)
+{
+	// weapon:absorbPercentAll(value)
+	Weapon* weapon = getUserdata<Weapon>(L, 1);
+	if (weapon) {
+		uint16_t id = weapon->getID();
+		ItemType& it = Item::items.getItemType(id);
+		Abilities& abilities = it.getAbilities();
+		int16_t value = getNumber<int16_t>(L, 2);
+
+		for (auto& i : abilities.absorbPercent) {
+			i += value;
+		}
+
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaWeaponAbsorbPercent(lua_State* L)
+{
+	// weapon:absorbPercent(combatType, value)
+	Weapon* weapon = getUserdata<Weapon>(L, 1);
+	if (weapon) {
+		uint16_t id = weapon->getID();
+		ItemType& it = Item::items.getItemType(id);
+		Abilities& abilities = it.getAbilities();
+		std::string type = getString(L, 2);
+		int16_t value = getNumber<int16_t>(L, 3);
+		CombatType_t combatType = getCombatTypeByName(type);
+
+		if (combatType != COMBAT_NONE) {
+			abilities.absorbPercent[combatTypeToIndex(combatType)] += value;
+		}
+		else {
+			std::cout << "[Warning - weapon:absorbPercent] Type \"" << type << "\" does not exist." << std::endl;
+		}
+
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 //
 LuaEnvironment::LuaEnvironment() : LuaScriptInterface("Main Interface") {}
 
