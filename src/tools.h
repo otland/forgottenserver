@@ -84,7 +84,7 @@ std::string getWeaponName(WeaponType_t weaponType);
 
 size_t combatTypeToIndex(CombatType_t combatType);
 CombatType_t indexToCombatType(size_t v);
-CombatType_t getCombatTypeByName(const std::string strValue);
+CombatType_t getCombatTypeByName(const std::string& strValue);
 
 uint8_t serverFluidToClient(uint8_t serverFluid);
 uint8_t clientFluidToServer(uint8_t clientFluid);
