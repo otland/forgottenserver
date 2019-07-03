@@ -725,7 +725,7 @@ std::string getCombatName(CombatType_t combatType)
 	return "unknown";
 }
 
-CombatType_t getCombatTypeByName(std::string name)
+CombatType_t getCombatTypeByName(const std::string& name)
 {
 	for (auto it = combatTypeNames.begin(); it != combatTypeNames.end(); ++it) {
 		if (it->second == name) {
