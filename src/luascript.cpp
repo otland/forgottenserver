@@ -12769,7 +12769,7 @@ int LuaScriptInterface::luaMonsterTypeGetLoot(lua_State* L)
 		return 1;
 	}
 
-	static const std::function<void(const std::vector<LootBlock>&)> parseLoot = [&](const std::vector<LootBlock>& lootList) {
+	static const std::function<void(const std::vector<LootBlock>&)> parseLoot = [L](const std::vector<LootBlock>& lootList) {
 		lua_createtable(L, lootList.size(), 0);
 
 		int index = 0;
