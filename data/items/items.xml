@@ -30761,7 +30761,7 @@
 		<attribute key="weight" value="800" />
 	</item>
 	<item id="23537" article="a" name="mooh'tah plate">
-		<attribute ky="description" value="It can only be wielded properly by knights and paladins." />
+		<attribute key="description" value="It can only be wielded properly by knights and paladins." />
 		<attribute key="armor" value="12" />
 		<attribute key="slotType" value="body" />
 		<attribute key="weight" value="12500" />
