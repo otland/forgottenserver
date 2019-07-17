@@ -30320,7 +30320,7 @@
 	</item>
 	<item id="23316" article="a" name="midnight panther doll">
 		<attribute key="description" value="It is said to be a symbol of perseverance and luck." />
-		<atribute key="weight" value="170" />
+		<attribute key="weight" value="170" />
 	</item>
 	<item id="23343" article="a" name="dead glooth golem">
 		<attribute key="containerSize" value="20" />
