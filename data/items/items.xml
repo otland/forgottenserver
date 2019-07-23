@@ -30320,7 +30320,7 @@
 	</item>
 	<item id="23316" article="a" name="midnight panther doll">
 		<attribute key="description" value="It is said to be a symbol of perseverance and luck." />
-		<atribute key="weight" value="170" />
+		<attribute key="weight" value="170" />
 	</item>
 	<item id="23343" article="a" name="dead glooth golem">
 		<attribute key="containerSize" value="20" />
@@ -30761,7 +30761,7 @@
 		<attribute key="weight" value="800" />
 	</item>
 	<item id="23537" article="a" name="mooh'tah plate">
-		<attribute ky="description" value="It can only be wielded properly by knights and paladins." />
+		<attribute key="description" value="It can only be wielded properly by knights and paladins." />
 		<attribute key="armor" value="12" />
 		<attribute key="slotType" value="body" />
 		<attribute key="weight" value="12500" />
