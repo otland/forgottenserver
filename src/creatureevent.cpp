@@ -77,7 +77,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	} else {
 		//if not, register it normally
-		creatureEvents[creatureEvent->getName()] = *creatureEvent;
+		creatureEvents[creatureEvent->getName()] = std::move(*creatureEvent);
 		return true;
 	}
 }
@@ -101,7 +101,7 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 		return false;
 	} else {
 		//if not, register it normally
-		creatureEvents[creatureEvent->getName()] = *creatureEvent;
+		creatureEvents[creatureEvent->getName()] = std::move(*creatureEvent);
 		return true;
 	}
 }
