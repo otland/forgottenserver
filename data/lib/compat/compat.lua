@@ -241,6 +241,34 @@ do
 	rawgetmetatable("Spell").__newindex = SpellNewIndex
 end
 
+do
+	local function MonsterTypeNewIndex(self, key, value)
+		if key == "onThink" then
+			self:eventType(MONSTERS_EVENT_THINK)
+			self:onThink(value)
+			return
+		elseif key == "onAppear" then
+			self:eventType(MONSTERS_EVENT_APPEAR)
+			self:onAppear(value)
+			return
+		elseif key == "onDisappear" then
+			self:eventType(MONSTERS_EVENT_DISAPPEAR)
+			self:onDisappear(value)
+			return
+		elseif key == "onMove" then
+			self:eventType(MONSTERS_EVENT_MOVE)
+			self:onMove(value)
+			return
+		elseif key == "onSay" then
+			self:eventType(MONSTERS_EVENT_SAY)
+			self:onSay(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("MonsterType").__newindex = MonsterTypeNewIndex
+end
+
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing then
