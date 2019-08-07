@@ -20,11 +20,11 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-25" />
+		<attack name="melee" interval="2000" min="0" max="-9" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<elements>
-		<element firePercent="-1" />
+		<element firePercent="-20" />
 	</elements>
 	<loot>
 		<item name="gold coin" countmax="5" chance="63333" />

@@ -51,7 +51,6 @@ extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern CreatureEvents* g_creatureEvents;
 extern Events* g_events;
-extern CreatureEvents* g_creatureEvents;
 extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
@@ -3984,7 +3983,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
 				CombatDamage manaLeech;
-				manaLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT) / 100.));
+				manaLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT) / 100.));
 				g_game.combatChangeMana(nullptr, attackerPlayer, manaLeech);
 			}
 
