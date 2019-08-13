@@ -100,3 +100,64 @@ function Player.addManaSpent(...)
 	APPLY_SKILL_MULTIPLIER = true
 	return ret
 end
+
+function Player:getWeaponItemType(...)
+	for slot = CONST_SLOT_LEFT, configManager.getBoolean(configKeys.CLASSIC_EQUIPMENT_SLOTS) and CONST_SLOT_RIGHT or CONST_SLOT_LEFT, -1 do
+		local item = self:getSlotItem(slot)
+		if item then
+			local itemType = item:getType()
+			for _, weaponType in ipairs({...}) do
+				if weaponType == itemType:getWeaponType() then
+					return itemType
+				end
+			end
+		end
+	end
+end
+
+function Player:getHighestSkillLevel(...)
+	local highestSkillLevel = 0
+	for _, skillType in ipairs({...}) do
+		local currentSkillLevel = self:getEffectiveSkillLevel(skillType)
+		if highestSkillLevel < currentSkillLevel then
+			highestSkillLevel = currentSkillLevel
+		end
+	end
+	return highestSkillLevel
+end
+
+function Player:getFormulaValues(a, b, c, d, e, f, formula, combat, variant, g, h)
+	local skill
+	if formula == FORMULA_MAGIC then
+		skill = self:getMagicLevel()
+	elseif formula == FORMULA_MELEE then
+		local weapon = self:getWeaponItemType(WEAPON_SWORD, WEAPON_CLUB, WEAPON_AXE)
+		skill = weapon:getAttack() * self:getEffectiveSkillLevel(weapon:getSkillType())
+	elseif formula == FORMULA_DISTANCE then
+		skill = self:getEffectiveSkillLevel(SKILL_DISTANCE)
+	elseif formula == FORMULA_MELEE_HIGHEST_SKILL then
+		skill = self:getHighestSkillLevel(SKILL_CLUB, SKILL_SWORD, SKILL_AXE)
+	end
+
+	if h then
+		skill = math.min(h, skill)
+	end
+
+	local level = self:getLevel()
+	if g then
+		level = math.min(g, level)
+	end
+
+	local minimum = math.floor(level / a) + math.floor(skill * b + c)
+	local maximum = math.floor(level / d) + math.floor(skill * e + f)
+
+	if combat and variant then
+		if combat:aggressive() then
+			minimum, maximum = -minimum, -maximum
+		end
+
+		combat:setFormula(COMBAT_FORMULA_DAMAGE, minimum, 0, maximum, 0)
+		return combat:execute(self, variant)
+	end
+	return minimum, maximum
+end

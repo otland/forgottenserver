@@ -14,3 +14,17 @@ local slotBits = {
 function ItemType.usesSlot(self, slot)
 	return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
 end
+
+local weaponTypeToSkillType = {
+	[WEAPON_SWORD] = SKILL_SWORD,
+	[WEAPON_CLUB] = SKILL_CLUB,
+	[WEAPON_AXE] = SKILL_AXE,
+	[WEAPON_SHIELD] = SKILL_SHIELD,
+	[WEAPON_DISTANCE] = SKILL_DISTANCE,
+	[WEAPON_WAND] = SKILL_MAGIC,
+	[WEAPON_AMMO] = SKILL_DISTANCE
+}
+
+function ItemType:getSkillType()
+	return weaponTypeToSkillType[self:getWeaponType()]
+end
