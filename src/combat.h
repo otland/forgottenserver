@@ -293,6 +293,14 @@ class Combat
 			params.origin = origin;
 		}
 
+		void setAggressive(bool aggressive) {
+			params.aggressive = aggressive;
+		}
+
+		bool getAggressive() const {
+			return params.aggressive;
+		}
+
 	private:
 		static void doCombatDefault(Creature* caster, Creature* target, const CombatParams& params);
 

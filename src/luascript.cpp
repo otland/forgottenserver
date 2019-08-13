@@ -2635,6 +2635,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Combat", "setCallback", LuaScriptInterface::luaCombatSetCallback);
 	registerMethod("Combat", "setOrigin", LuaScriptInterface::luaCombatSetOrigin);
 
+	registerMethod("Combat", "aggressive", LuaScriptInterface::luaCombatAggressive);
 	registerMethod("Combat", "execute", LuaScriptInterface::luaCombatExecute);
 
 	// Condition
@@ -11948,6 +11949,23 @@ int LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
 	if (combat) {
 		combat->setOrigin(getNumber<CombatOrigin>(L, 2));
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCombatAggressive(lua_State* L)
+{
+	// combat:aggressive(value)
+	Combat* combat = getUserdata<Combat>(L, 1);
+	if (combat) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, combat->getAggressive());
+		} else {
+			combat->setAggressive(getBoolean(L, 2));
+			pushBoolean(L, true);
+		}
 	} else {
 		lua_pushnil(L);
 	}

@@ -738,7 +738,7 @@ class LuaScriptInterface
 		static int luaContainerAddItem(lua_State* L);
 		static int luaContainerAddItemEx(lua_State* L);
 		static int luaContainerGetCorpseOwner(lua_State* L);
-		
+
 		// Teleport
 		static int luaTeleportCreate(lua_State* L);
 
@@ -1188,6 +1188,7 @@ class LuaScriptInterface
 		static int luaCombatSetCallback(lua_State* L);
 		static int luaCombatSetOrigin(lua_State* L);
 
+		static int luaCombatAggressive(lua_State* L);
 		static int luaCombatExecute(lua_State* L);
 
 		// Condition
