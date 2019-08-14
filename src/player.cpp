@@ -3866,11 +3866,11 @@ double Player::getLostPercent() const
 	}
 
 	double percentReduction = 0;
-    if (isPromoted()) {
-        percentReduction += 30;
-    }
-    percentReduction += blessingCount * 8;
-    return lossPercent * (1 - (percentReduction / 100.)) / 100.;
+	if (isPromoted()) {
+		percentReduction += 30;
+	}
+	percentReduction += blessingCount * 8;
+	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 
 void Player::learnInstantSpell(const std::string& spellName)
