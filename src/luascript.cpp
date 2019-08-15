@@ -14339,7 +14339,7 @@ int LuaScriptInterface::luaSpellAggressive(lua_State* L)
 
 int LuaScriptInterface::luaSpellVocation(lua_State* L)
 {
-	// spell:vocation(vocation[, showInDescription = false)
+	// spell:vocation(vocation)
 	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
 		if (lua_gettop(L) == 1) {
@@ -14355,22 +14355,20 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 			setMetatable(L, -1, "Spell");
 		} else {
 			int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
-			if (parameters > 1) {
-				for (int i = 0; i < parameters; ++i) {
-					if (getString(L, 2 + i).find(";") != std::string::npos) {
-						std::vector<std::string> vocList = explodeString(getString(L, 2 + i), ";");
-						int32_t vocationId = g_vocations.getVocationId(vocList[0]);
-						if (vocList.size() > 0) {
-							if (vocList[1] == "true") {
-								spell->addVocMap(vocationId, true);
-							} else {
-								spell->addVocMap(vocationId, false);
-							}
+			for (int i = 0; i < parameters; ++i) {
+				if (getString(L, 2 + i).find(";") != std::string::npos) {
+					std::vector<std::string> vocList = explodeString(getString(L, 2 + i), ";");
+					int32_t vocationId = g_vocations.getVocationId(vocList[0]);
+					if (vocList.size() > 0) {
+						if (vocList[1] == "true") {
+							spell->addVocMap(vocationId, true);
+						} else {
+							spell->addVocMap(vocationId, false);
 						}
-					} else {
-						int32_t vocationId = g_vocations.getVocationId(getString(L, 2 + i));
-						spell->addVocMap(vocationId, false);
 					}
+				} else {
+					int32_t vocationId = g_vocations.getVocationId(getString(L, 2 + i));
+					spell->addVocMap(vocationId, false);
 				}
 			}
 			pushBoolean(L, true);
