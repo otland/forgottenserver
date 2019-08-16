@@ -14075,19 +14075,13 @@ int LuaScriptInterface::luaSpellGroup(lua_State* L)
 
 int LuaScriptInterface::luaSpellCooldown(lua_State* L)
 {
-	// spell:cooldown(primaryGroupCd[, secondaryGroupCd])
+	// spell:cooldown(cooldown)
 	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getCooldown());
-			lua_pushnumber(L, spell->getSecondaryCooldown());
-			return 2;
-		} else if (lua_gettop(L) == 2) {
-			spell->setCooldown(getNumber<uint32_t>(L, 2));
-			pushBoolean(L, true);
 		} else {
 			spell->setCooldown(getNumber<uint32_t>(L, 2));
-			spell->setSecondaryCooldown(getNumber<uint32_t>(L, 3));
 			pushBoolean(L, true);
 		}
 	} else {
@@ -14098,13 +14092,19 @@ int LuaScriptInterface::luaSpellCooldown(lua_State* L)
 
 int LuaScriptInterface::luaSpellGroupCooldown(lua_State* L)
 {
-	// spell:groupCooldown(cooldown)
+	// spell:groupCooldown(primaryGroupCd[, secondaryGroupCd])
 	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getGroupCooldown());
+			lua_pushnumber(L, spell->getSecondaryCooldown());
+			return 2;
+		} else if (lua_gettop(L) == 2) {
+			spell->setGroupCooldown(getNumber<uint32_t>(L, 2));
+			pushBoolean(L, true);
 		} else {
 			spell->setGroupCooldown(getNumber<uint32_t>(L, 2));
+			spell->setSecondaryCooldown(getNumber<uint32_t>(L, 3));
 			pushBoolean(L, true);
 		}
 	} else {
@@ -14356,7 +14356,7 @@ int LuaScriptInterface::luaSpellAggressive(lua_State* L)
 
 int LuaScriptInterface::luaSpellVocation(lua_State* L)
 {
-	// spell:vocation(vocation[, showInDescription = false)
+	// spell:vocation(vocation)
 	Spell* spell = getUserdata<Spell>(L, 1);
 	if (spell) {
 		if (lua_gettop(L) == 1) {
@@ -14371,15 +14371,24 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 			}
 			setMetatable(L, -1, "Spell");
 		} else {
-			int32_t vocationId = g_vocations.getVocationId(getString(L, 2));
-			if (vocationId != -1) {
-				bool showInDescription = false;
-				if (lua_gettop(L) == 3) {
-					showInDescription = getBoolean(L, 3);
+			int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
+			for (int i = 0; i < parameters; ++i) {
+				if (getString(L, 2 + i).find(";") != std::string::npos) {
+					std::vector<std::string> vocList = explodeString(getString(L, 2 + i), ";");
+					int32_t vocationId = g_vocations.getVocationId(vocList[0]);
+					if (vocList.size() > 0) {
+						if (vocList[1] == "true") {
+							spell->addVocMap(vocationId, true);
+						} else {
+							spell->addVocMap(vocationId, false);
+						}
+					}
+				} else {
+					int32_t vocationId = g_vocations.getVocationId(getString(L, 2 + i));
+					spell->addVocMap(vocationId, false);
 				}
-				spell->addVocMap(vocationId, showInDescription);
-				pushBoolean(L, true);
 			}
+			pushBoolean(L, true);
 		}
 	} else {
 		lua_pushnil(L);
