@@ -506,7 +506,7 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
-		auto getCleanTiles() const {
+		std::map<Tile*, uint8_t> getCleanTiles() const {
 			return cleanTiles;
 		}
 		bool cleanTileExists(Tile* tile) const {
