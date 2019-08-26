@@ -272,25 +272,12 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 		}
 	} else if (moveEvent->getPosList().size() > 0) {
 		if (moveEvent->getPosList().size() == 1) {
-			std::string tempPos = moveEvent->getPosList().at(0);
-			std::vector<int32_t> temp = vectorAtoi(explodeString(tempPos, ";"));
-			if (temp.size() < 3) {
-				return false;
-			}
-
-			Position pos(temp[0], temp[1], temp[2]);
+			Position pos = moveEvent->getPosList().at(0);
 			addEvent(*moveEvent, pos, positionMap);
 		} else {
 			auto v = moveEvent->getPosList();
 			for (auto i = v.begin(); i != v.end(); i++) {
-				std::string tempPos = *i;
-				std::vector<int32_t> temp = vectorAtoi(explodeString(tempPos, ";"));
-				if (temp.size() < 3) {
-					return false;
-				}
-
-				Position pos(temp[0], temp[1], temp[2]);
-				addEvent(*moveEvent, pos, positionMap);
+				addEvent(*moveEvent, *i, positionMap);
 			}
 		}
 	} else {
