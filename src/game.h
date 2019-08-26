@@ -506,7 +506,7 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
-		std::map<Tile*, uint8_t> getCleanTiles() const {
+		std::set<Tile*> getCleanTiles() const {
 			return cleanTiles;
 		}
 		bool cleanTileExists(Tile* tile) const {
@@ -517,7 +517,7 @@ class Game
 			return false;
 		}
 		void addCleanTile(Tile* tile) {
-			cleanTiles.emplace(tile, 0);
+			cleanTiles.emplace(tile);
 		}
 		void removeCleanTile(Tile* tile) {
 			cleanTiles.erase(tile);
@@ -560,7 +560,7 @@ class Game
 
 		std::map<uint32_t, BedItem*> bedSleepersMap;
 
-		std::map<Tile*, uint8_t> cleanTiles;
+		std::set<Tile*> cleanTiles;
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 

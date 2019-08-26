@@ -953,7 +953,7 @@ uint32_t Map::clean() const
 
 	for (auto tileList : g_game.getCleanTiles()) {
 		++tiles;
-		for (Item* item : *tileList.first->getItemList()) {
+		for (Item* item : *tileList->getItemList()) {
 			if (!item) {
 				continue;
 			}
