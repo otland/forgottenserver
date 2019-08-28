@@ -943,7 +943,7 @@ void QTreeLeafNode::removeCreature(Creature* c)
 uint32_t Map::clean() const
 {
 	uint64_t start = OTSYS_TIME();
-	size_t count = 0, tiles = 0;
+	size_t tiles = 0;
 
 	if (g_game.getGameState() == GAME_STATE_NORMAL) {
 		g_game.setGameState(GAME_STATE_MAINTAIN);
@@ -954,15 +954,9 @@ uint32_t Map::clean() const
 	for (auto tileList : g_game.getCleanTiles()) {
 		++tiles;
 		for (Item* item : *tileList->getItemList()) {
-			if (!item) {
-				continue;
-			}
-
 			if (item->isCleanable()) {
-				++count;
 				toRemove.emplace_back(item);
 			}
-
 		}
 	}
 
@@ -970,11 +964,12 @@ uint32_t Map::clean() const
 		g_game.internalRemoveItem(item, -1);
 	}
 
-	g_game.clearCleanTiles();
-
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		g_game.setGameState(GAME_STATE_NORMAL);
 	}
+
+	size_t count = toRemove.size();
+	g_game.clearCleanTiles();
 
 	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "")
 		<< " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
