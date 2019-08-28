@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -634,7 +634,6 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 			disableDefense = (value != 0);
 			return true;
 		}
-
 		default:
 			return ret;
 	}

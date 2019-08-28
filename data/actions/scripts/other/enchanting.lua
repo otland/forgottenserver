@@ -141,7 +141,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		player:addSoul(-items.valuables.soul)
 		player:addMana(-items.valuables.mana)
-		player:addManaSpent(items.valuables.mana * configManager.getNumber(configKeys.RATE_MAGIC))
+		player:addManaSpent(items.valuables.mana)
 		player:addItem(targetType.id)
 		player:getPosition():sendMagicEffect(items.valuables.effect)
 		item:remove(1)

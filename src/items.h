@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -119,10 +119,10 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_MAGICPOINTSPERCENT,
 	ITEM_PARSE_CRITICALHITCHANCE,
 	ITEM_PARSE_CRITICALHITAMOUNT,
-	ITEM_PARSE_HITPOINTSLEECHCHANCE,
-	ITEM_PARSE_HITPOINTSLEECHAMOUNT,
-	ITEM_PARSE_MANAPOINTSLEECHCHANCE,
-	ITEM_PARSE_MANAPOINTSLEECHAMOUNT,
+	ITEM_PARSE_LIFELEECHCHANCE,
+	ITEM_PARSE_LIFELEECHAMOUNT,
+	ITEM_PARSE_MANALEECHCHANCE,
+	ITEM_PARSE_MANALEECHAMOUNT,
 	ITEM_PARSE_FIELDABSORBPERCENTENERGY,
 	ITEM_PARSE_FIELDABSORBPERCENTFIRE,
 	ITEM_PARSE_FIELDABSORBPERCENTPOISON,

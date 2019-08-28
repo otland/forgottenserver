@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,47 @@
 #include "pugicast.h"
 #include "tools.h"
 
+const std::unordered_map<std::string, PlayerFlags> ParsePlayerFlagMap = {
+	{"cannotusecombat", PlayerFlag_CannotUseCombat},
+	{"cannotattackplayer", PlayerFlag_CannotAttackPlayer},
+	{"cannotattackmonster", PlayerFlag_CannotAttackMonster},
+	{"cannotbeattacked", PlayerFlag_CannotBeAttacked},
+	{"canconvinceall", PlayerFlag_CanConvinceAll},
+	{"cansummonall", PlayerFlag_CanSummonAll},
+	{"canillusionall", PlayerFlag_CanIllusionAll},
+	{"cansenseinvisibility", PlayerFlag_CanSenseInvisibility},
+	{"ignoredbymonsters", PlayerFlag_IgnoredByMonsters},
+	{"notgaininfight", PlayerFlag_NotGainInFight},
+	{"hasinfinitemana", PlayerFlag_HasInfiniteMana},
+	{"hasinfinitesoul", PlayerFlag_HasInfiniteSoul},
+	{"hasnoexhaustion", PlayerFlag_HasNoExhaustion},
+	{"cannotusespells", PlayerFlag_CannotUseSpells},
+	{"cannotpickupitem", PlayerFlag_CannotPickupItem},
+	{"canalwayslogin", PlayerFlag_CanAlwaysLogin},
+	{"canbroadcast", PlayerFlag_CanBroadcast},
+	{"canedithouses", PlayerFlag_CanEditHouses},
+	{"cannotbebanned", PlayerFlag_CannotBeBanned},
+	{"cannotbepushed", PlayerFlag_CannotBePushed},
+	{"hasinfinitecapacity", PlayerFlag_HasInfiniteCapacity},
+	{"cannotpushallcreatures", PlayerFlag_CanPushAllCreatures},
+	{"cantalkredprivate", PlayerFlag_CanTalkRedPrivate},
+	{"cantalkredchannel", PlayerFlag_CanTalkRedChannel},
+	{"talkorangehelpchannel", PlayerFlag_TalkOrangeHelpChannel},
+	{"notgainexperience", PlayerFlag_NotGainExperience},
+	{"notgainmana", PlayerFlag_NotGainMana},
+	{"notgainhealth", PlayerFlag_NotGainHealth},
+	{"notgainskill", PlayerFlag_NotGainSkill},
+	{"setmaxspeed", PlayerFlag_SetMaxSpeed},
+	{"specialvip", PlayerFlag_SpecialVIP},
+	{"notgenerateloot", PlayerFlag_NotGenerateLoot},
+	{"cantalkredchannelanonymous", PlayerFlag_CanTalkRedChannelAnonymous},
+	{"ignoreprotectionzone", PlayerFlag_IgnoreProtectionZone},
+	{"ignorespellcheck", PlayerFlag_IgnoreSpellCheck},
+	{"ignoreweaponcheck", PlayerFlag_IgnoreWeaponCheck},
+	{"cannotbemuted", PlayerFlag_CannotBeMuted},
+	{"isalwayspremium", PlayerFlag_IsAlwaysPremium}
+};
+
 bool Groups::load()
 {
 	pugi::xml_document doc;
@@ -37,10 +78,24 @@ bool Groups::load()
 		Group group;
 		group.id = pugi::cast<uint32_t>(groupNode.attribute("id").value());
 		group.name = groupNode.attribute("name").as_string();
-		group.flags = pugi::cast<uint64_t>(groupNode.attribute("flags").value());
 		group.access = groupNode.attribute("access").as_bool();
 		group.maxDepotItems = pugi::cast<uint32_t>(groupNode.attribute("maxdepotitems").value());
 		group.maxVipEntries = pugi::cast<uint32_t>(groupNode.attribute("maxvipentries").value());
+		group.flags = pugi::cast<uint64_t>(groupNode.attribute("flags").value());
+		if (pugi::xml_node node = groupNode.child("flags")) {
+			for (auto flagNode : node.children()) {
+				pugi::xml_attribute attr = flagNode.first_attribute();
+				if (!attr || (attr && !attr.as_bool())) {
+					continue;
+				}
+
+				auto parseFlag = ParsePlayerFlagMap.find(attr.name());
+				if (parseFlag != ParsePlayerFlagMap.end()) {
+					group.flags |= parseFlag->second;
+				}
+			}
+		}
+		
 		groups.push_back(group);
 	}
 	return true;

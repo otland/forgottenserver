@@ -81,12 +81,6 @@
 	<action itemid="19737" script="other/food.lua" />
 	<action fromid="20100" toid="20101" script="other/food.lua" />
 
-	<!-- Spellbooks -->
-	<action itemid="2175" script="other/spellbook.lua" />
-	<action itemid="6120" script="other/spellbook.lua" />
-	<action fromid="8900" toid="8904" script="other/spellbook.lua" />
-	<action itemid="8918" script="other/spellbook.lua" />
-
 	<!-- Other -->
 	<action itemid="6578" script="other/partyhat.lua" />
 	<action itemid="2114" script="other/piggybank.lua" />

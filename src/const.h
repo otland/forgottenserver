@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -354,6 +354,7 @@ enum WeaponAction_t : uint8_t {
 };
 
 enum WieldInfo_t {
+	WIELDINFO_NONE = 0 << 0,
 	WIELDINFO_LEVEL = 1 << 0,
 	WIELDINFO_MAGLV = 1 << 1,
 	WIELDINFO_VOCREQ = 1 << 2,
@@ -497,6 +498,7 @@ enum ReloadTypes_t : uint8_t  {
 	RELOAD_TYPE_NPCS,
 	RELOAD_TYPE_QUESTS,
 	RELOAD_TYPE_RAIDS,
+	RELOAD_TYPE_SCRIPTS,
 	RELOAD_TYPE_SPELLS,
 	RELOAD_TYPE_TALKACTIONS,
 	RELOAD_TYPE_WEAPONS,

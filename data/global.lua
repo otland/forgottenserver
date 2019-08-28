@@ -33,6 +33,11 @@ function getFormattedWorldTime()
 	return hours .. ':' .. minutes
 end
 
+function getLootRandom()
+	math.randomseed(os.mtime())
+	return math.random(0, MAX_LOOTCHANCE) / configManager.getNumber(configKeys.RATE_LOOT)
+end
+
 table.contains = function(array, value)
 	for _, targetColumn in pairs(array) do
 		if targetColumn == value then

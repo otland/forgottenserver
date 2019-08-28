@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,14 +31,20 @@ TalkActions::TalkActions()
 
 TalkActions::~TalkActions()
 {
-	clear();
+	clear(false);
 }
 
-void TalkActions::clear()
+void TalkActions::clear(bool fromLua)
 {
-	talkActions.clear();
+	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
+		if (fromLua == it->second.fromLua) {
+			it = talkActions.erase(it);
+		} else {
+			++it;
+		}
+	}
 
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& TalkActions::getScriptInterface()
@@ -62,17 +68,25 @@ Event_ptr TalkActions::getEvent(const std::string& nodeName)
 bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
-	talkActions.push_front(std::move(*talkAction));
+	talkActions.emplace(talkAction->getWords(), std::move(*talkAction));
+	return true;
+}
+
+bool TalkActions::registerLuaEvent(TalkAction* event)
+{
+	TalkAction_ptr talkAction{ event };
+	talkActions.emplace(talkAction->getWords(), std::move(*talkAction));
 	return true;
 }
 
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
 	size_t wordsLength = words.length();
-	for (const TalkAction& talkAction : talkActions) {
-		const std::string& talkactionWords = talkAction.getWords();
+	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
+		const std::string& talkactionWords = it->first;
 		size_t talkactionLength = talkactionWords.length();
 		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+			++it;
 			continue;
 		}
 
@@ -80,14 +94,16 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 		if (wordsLength != talkactionLength) {
 			param = words.substr(talkactionLength);
 			if (param.front() != ' ') {
+				++it;
 				continue;
 			}
 			trim_left(param, ' ');
 
-			char separator = talkAction.getSeparator();
-			if (separator != ' ') {
+			std::string separator = it->second.getSeparator();
+			if (separator != " ") {
 				if (!param.empty()) {
-					if (param.front() != separator) {
+					if (param != separator) {
+						++it;
 						continue;
 					} else {
 						param.erase(param.begin());
@@ -96,7 +112,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (talkAction.executeSay(player, param, type)) {
+		if (it->second.executeSay(player, param, type)) {
 			return TALKACTION_CONTINUE;
 		} else {
 			return TALKACTION_BREAK;
