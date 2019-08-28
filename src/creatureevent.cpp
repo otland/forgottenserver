@@ -176,8 +176,6 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		type = CREATURE_EVENT_KILL;
 	} else if (tmpStr == "advance") {
 		type = CREATURE_EVENT_ADVANCE;
-	} else if (tmpStr == "modalwindow") {
-		type = CREATURE_EVENT_MODALWINDOW;
 	} else if (tmpStr == "textedit") {
 		type = CREATURE_EVENT_TEXTEDIT;
 	} else if (tmpStr == "healthchange") {
@@ -219,9 +217,6 @@ std::string CreatureEvent::getScriptEventName() const
 
 		case CREATURE_EVENT_ADVANCE:
 			return "onAdvance";
-
-		case CREATURE_EVENT_MODALWINDOW:
-			return "onModalWindow";
 
 		case CREATURE_EVENT_TEXTEDIT:
 			return "onTextEdit";
@@ -426,30 +421,6 @@ void CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 	LuaScriptInterface::pushUserdata<Creature>(L, target);
 	LuaScriptInterface::setCreatureMetatable(L, -1, target);
 	scriptInterface->callVoidFunction(2);
-}
-
-void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId)
-{
-	//onModalWindow(player, modalWindowId, buttonId, choiceId)
-	if (!scriptInterface->reserveScriptEnv()) {
-		std::cout << "[Error - CreatureEvent::executeModalWindow] Call stack overflow" << std::endl;
-		return;
-	}
-
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(scriptId, scriptInterface);
-
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(scriptId);
-
-	LuaScriptInterface::pushUserdata(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-
-	lua_pushnumber(L, modalWindowId);
-	lua_pushnumber(L, buttonId);
-	lua_pushnumber(L, choiceId);
-
-	scriptInterface->callVoidFunction(4);
 }
 
 bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::string& text)

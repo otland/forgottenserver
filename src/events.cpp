@@ -84,9 +84,7 @@ bool Events::load()
 				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
 			}
 		} else if (className == "Player") {
-			if (methodName == "onBrowseField") {
-				info.playerOnBrowseField = event;
-			} else if (methodName == "onLook") {
+			if (methodName == "onLook") {
 				info.playerOnLook = event;
 			} else if (methodName == "onLookInBattleList") {
 				info.playerOnLookInBattleList = event;
@@ -350,32 +348,6 @@ void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
 }
 
 // Player
-bool Events::eventPlayerOnBrowseField(Player* player, const Position& position)
-{
-	// Player:onBrowseField(position) or Player.onBrowseField(self, position)
-	if (info.playerOnBrowseField == -1) {
-		return true;
-	}
-
-	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPlayerOnBrowseField] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.playerOnBrowseField, &scriptInterface);
-
-	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(info.playerOnBrowseField);
-
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-
-	LuaScriptInterface::pushPosition(L, position);
-
-	return scriptInterface.callFunction(2);
-}
-
 void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
@@ -633,9 +605,9 @@ void Events::eventPlayerOnReportRuleViolation(Player* player, const std::string&
 	scriptInterface.callVoidFunction(6);
 }
 
-bool Events::eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category)
+bool Events::eventPlayerOnReportBug(Player* player, const std::string& message)
 {
-	// Player:onReportBug(message, position, category)
+	// Player:onReportBug(message)
 	if (info.playerOnReportBug == -1) {
 		return true;
 	}
@@ -655,10 +627,8 @@ bool Events::eventPlayerOnReportBug(Player* player, const std::string& message, 
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	LuaScriptInterface::pushString(L, message);
-	LuaScriptInterface::pushPosition(L, position);
-	lua_pushnumber(L, category);
 
-	return scriptInterface.callFunction(4);
+	return scriptInterface.callFunction(2);
 }
 
 bool Events::eventPlayerOnTurn(Player* player, Direction direction)

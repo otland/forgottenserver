@@ -172,12 +172,10 @@
     <ClCompile Include="..\src\guild.cpp" />
     <ClCompile Include="..\src\house.cpp" />
     <ClCompile Include="..\src\housetile.cpp" />
-    <ClCompile Include="..\src\inbox.cpp" />
-    <ClCompile Include="..\src\ioguild.cpp" />
+	<ClCompile Include="..\src\ioguild.cpp" />
     <ClCompile Include="..\src\iologindata.cpp" />
     <ClCompile Include="..\src\iomap.cpp" />
     <ClCompile Include="..\src\iomapserialize.cpp" />
-    <ClCompile Include="..\src\iomarket.cpp" />
     <ClCompile Include="..\src\item.cpp" />
     <ClCompile Include="..\src\items.cpp" />
     <ClCompile Include="..\src\luascript.cpp" />
@@ -185,7 +183,6 @@
     <ClCompile Include="..\src\map.cpp" />
     <ClCompile Include="..\src\monster.cpp" />
     <ClCompile Include="..\src\monsters.cpp" />
-    <ClCompile Include="..\src\mounts.cpp" />
     <ClCompile Include="..\src\movement.cpp" />
     <ClCompile Include="..\src\networkmessage.cpp" />
     <ClCompile Include="..\src\npc.cpp" />
@@ -260,12 +257,10 @@
     <ClInclude Include="..\src\guild.h" />
     <ClInclude Include="..\src\house.h" />
     <ClInclude Include="..\src\housetile.h" />
-    <ClInclude Include="..\src\inbox.h" />
     <ClInclude Include="..\src\ioguild.h" />
     <ClInclude Include="..\src\iologindata.h" />
     <ClInclude Include="..\src\iomap.h" />
     <ClInclude Include="..\src\iomapserialize.h" />
-    <ClInclude Include="..\src\iomarket.h" />
     <ClInclude Include="..\src\item.h" />
     <ClInclude Include="..\src\itemloader.h" />
     <ClInclude Include="..\src\items.h" />
@@ -275,7 +270,6 @@
     <ClInclude Include="..\src\map.h" />
     <ClInclude Include="..\src\monster.h" />
     <ClInclude Include="..\src\monsters.h" />
-    <ClInclude Include="..\src\mounts.h" />
     <ClInclude Include="..\src\movement.h" />
     <ClInclude Include="..\src\networkmessage.h" />
     <ClInclude Include="..\src\npc.h" />

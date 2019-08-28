@@ -34,7 +34,6 @@ class ConfigManager
 			ALLOW_CLONES,
 			BIND_ONLY_GLOBAL_ADDRESS,
 			OPTIMIZE_DATABASE,
-			MARKET_PREMIUM,
 			EMOTE_SPELLS,
 			STAMINA_SYSTEM,
 			WARN_UNSAFE_SCRIPTS,
@@ -46,6 +45,7 @@ class ConfigManager
 		};
 
 		enum string_config_t {
+			IP_STRING,
 			MAP_NAME,
 			HOUSE_RENT_PERIOD,
 			SERVER_NAME,
@@ -53,7 +53,6 @@ class ConfigManager
 			OWNER_EMAIL,
 			URL,
 			LOCATION,
-			IP,
 			MOTD,
 			WORLD_TYPE,
 			MYSQL_HOST,
@@ -68,6 +67,7 @@ class ConfigManager
 		};
 
 		enum integer_config_t {
+			IP,
 			SQL_PORT,
 			MAX_PLAYERS,
 			PZ_LOCKED,
@@ -94,9 +94,6 @@ class ConfigManager
 			LOGIN_PORT,
 			STATUS_PORT,
 			STAIRHOP_DELAY,
-			MARKET_OFFER_DURATION,
-			CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES,
-			MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER,
 			EXP_FROM_PLAYERS_LEVEL_RANGE,
 			MAX_PACKETS_PER_SECOND,
 

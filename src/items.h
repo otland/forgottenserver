@@ -182,7 +182,6 @@ struct Abilities {
 
 	//extra skill modifiers
 	int32_t skills[SKILL_LAST + 1] = { 0 };
-	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
 
 	int32_t speed = 0;
 
@@ -293,7 +292,6 @@ class ItemType
 		uint16_t id = 0;
 		uint16_t clientId = 0;
 		bool stackable = false;
-		bool isAnimation = false;
 
 		std::string name;
 		std::string article;

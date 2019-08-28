@@ -1085,20 +1085,9 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	gainExp /= 2;
 	master->onGainExperience(gainExp, target);
 
-	SpectatorHashSet spectators;
-	g_game.map.getSpectators(spectators, position, false, true);
-	if (spectators.empty()) {
-		return;
-	}
-
-	TextMessage message(MESSAGE_EXPERIENCE_OTHERS, ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point."));
-	message.position = position;
-	message.primary.color = TEXTCOLOR_WHITE_EXP;
-	message.primary.value = gainExp;
-
-	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
-	}
+	std::ostringstream strExp;
+	strExp << ucfirst(getNameDescription()) + " gained " + std::to_string(gainExp) + (gainExp != 1 ? " experience points." : " experience point.");
+	g_game.addAnimatedText(strExp.str(), position, TEXTCOLOR_WHITE);
 }
 
 bool Creature::setMaster(Creature* newMaster) {
@@ -1280,20 +1269,21 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	auto it = conditions.begin(), end = conditions.end();
-	while (it != end) {
-		Condition* condition = *it;
+	ConditionList tempConditions{ conditions };
+	for (Condition* condition : tempConditions) {
+		auto it = std::find(conditions.begin(), conditions.end(), condition);
+		if (it == conditions.end()) {
+			continue;
+		}
+
 		if (!condition->executeCondition(this, interval)) {
-			ConditionType_t type = condition->getType();
-
-			it = conditions.erase(it);
-
-			condition->endCondition(this);
-			delete condition;
-
-			onEndCondition(type);
-		} else {
-			++it;
+			it = std::find(conditions.begin(), conditions.end(), condition);
+			if (it != conditions.end()) {
+				conditions.erase(it);
+				condition->endCondition(this);
+				onEndCondition(condition->getType());
+				delete condition;
+			}
 		}
 	}
 }

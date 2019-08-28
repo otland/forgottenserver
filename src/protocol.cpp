@@ -91,7 +91,7 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg) const
 
 bool Protocol::RSA_decrypt(NetworkMessage& msg)
 {
-	if ((msg.getLength() - msg.getBufferPosition()) < 128) {
+	if ((msg.getLength() - msg.getBufferPosition()) != 128) {
 		return false;
 	}
 

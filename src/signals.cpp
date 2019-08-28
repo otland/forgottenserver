@@ -31,7 +31,6 @@
 #include "weapons.h"
 #include "raids.h"
 #include "quests.h"
-#include "mounts.h"
 #include "globalevent.h"
 #include "monster.h"
 #include "events.h"
@@ -185,9 +184,6 @@ void Signals::sighupHandler()
 
 	g_game.quests.reload();
 	std::cout << "Reloaded quests." << std::endl;
-
-	g_game.mounts.reload();
-	std::cout << "Reloaded mounts." << std::endl;
 
 	g_globalEvents->reload();
 	std::cout << "Reloaded globalevents." << std::endl;

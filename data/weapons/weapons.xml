@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <weapons>
 	<!-- Rods -->
-	<wand id="23721" level="1" mana="1" min="3" max="7" type="ice"> <!-- The Chiller -->
-		<vocation name="Druid" />
-	</wand>
 	<wand id="2182" level="7" mana="2" min="8" max="18" type="earth"> <!-- Snakebit Rod -->
 		<vocation name="Druid" />
 	</wand>
@@ -28,20 +25,8 @@
 	<wand id="8910" level="42" mana="13" min="55" max="75" type="death"> <!-- Underworld Rod -->
 		<vocation name="Druid" />
 	</wand>
-	<wand id="13872" level="40" mana="13" min="55" max="75" type="ice"> <!-- Shimmer Rod -->
-		<vocation name="Druid" />
-	</wand>
-	<wand id="18411" level="65" mana="17" min="70" max="100" type="earth"> <!-- Muck Rod -->
-		<vocation name="Druid" />
-	</wand>
-	<wand id="18412" level="65" mana="17" min="70" max="100" type="ice"> <!-- Glacial Rod -->
-		<vocation name="Druid" />
-	</wand>
 
 	<!-- Wands -->
-	<wand id="23719" level="1" mana="1" min="3" max="7" type="fire"> <!-- The Scorcher -->
-		<vocation name="Sorcerer" />
-	</wand>
 	<wand id="2190" level="7" mana="2" min="8" max="18" type="energy"> <!-- Wand of Vortex -->
 		<vocation name="Sorcerer" />
 	</wand>
@@ -64,18 +49,6 @@
 		<vocation name="Sorcerer" />
 	</wand>
 	<wand id="8922" level="42" mana="13" min="55" max="75" type="death"> <!-- Wand of Voodoo -->
-		<vocation name="Sorcerer" />
-	</wand>
-	<wand id="13760" level="37" mana="13" min="55" max="75" type="death"> <!-- Wand of Dimensions -->
-		<vocation name="Sorcerer" />
-	</wand>
-	<wand id="13880" level="40" mana="13" min="55" max="75" type="energy"> <!-- Shimmer Wand -->
-		<vocation name="Sorcerer" />
-	</wand>
-	<wand id="18390" level="65" mana="17" min="70" max="100" type="energy"> <!-- Wand of Defiance -->
-		<vocation name="Sorcerer" />
-	</wand>
-	<wand id="18409" level="65" mana="17" min="70" max="100" type="fire"> <!-- Wand of Everblazing -->
 		<vocation name="Sorcerer" />
 	</wand>
 
@@ -151,33 +124,6 @@
 		<vocation name="Knight" />
 	</melee>
 	<melee id="11307" level="55" unproperly="1" />
-	<melee id="12649" level="82" unproperly="1" />
-	<melee id="12613" level="58" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="13871" level="40" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="18450" level="62" unproperly="1" />
-	<melee id="20092" level="15" unproperly="1" />
-	<melee id="22398" level="75" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22399" level="120" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22400" level="250" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22401" level="75" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22402" level="120" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22403" level="250" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
 
 	<!-- Fire -->
 	<melee id="7744" action="removecharge" />
@@ -294,29 +240,6 @@
 		<vocation name="Knight" />
 	</melee>
 	<melee id="11323" level="25" unproperly="1" />
-	<melee id="15404" level="80" unproperly="1" />
-	<melee id="15451" level="40" unproperly="1" />
-	<melee id="15454" level="50" unproperly="1" />
-	<melee id="15492" level="70" unproperly="1" />
-	<melee id="13838" level="25" unproperly="1" />
-	<melee id="22404" level="75" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22405" level="120" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22406" level="250" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22407" level="75" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22408" level="120" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22409" level="250" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
 
 	<!-- Fire -->
 	<melee id="7749" level="20" action="removecharge" unproperly="1" />
@@ -422,33 +345,6 @@
 	<melee id="11308" level="55" unproperly="1">
 		<vocation name="Knight" />
 	</melee>
-	<melee id="12648" level="82" unproperly="1" />
-	<melee id="15400" level="38" unproperly="1" />
-	<melee id="15414" level="90" unproperly="1" />
-	<melee id="15647" level="48" unproperly="1" />
-	<melee id="20093" level="15" unproperly="1" />
-	<melee id="20108" level="50" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="20139" level="20" unproperly="1" />
-	<melee id="22410" level="75" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22411" level="120" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22412" level="250" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22413" level="75" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22414" level="120" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
-	<melee id="22415" level="250" unproperly="1">
-		<vocation name="Knight" />
-	</melee>
 
 	<!-- Fire -->
 	<melee id="7754" level="20" action="removecharge" unproperly="1" />
@@ -520,46 +416,6 @@
 	<distance id="8854" level="80" unproperly="1"> <!-- Warsinger Bow -->
 		<vocation name="Paladin" />
 	</distance>
-	<distance id="13873" level="40" unproperly="1"> <!-- Shimmer Bow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="15643" level="85" unproperly="1"> <!-- Hive Bow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="15644" level="50" unproperly="1"> <!-- Ornate Crossbow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="16111" level="150" unproperly="1"> <!-- Thorn Spitter -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="18453" level="90" unproperly="1"> <!-- Crystal Crossbow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="18454" level="105" unproperly="1"> <!-- Mycological Bow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="21690" level="70" unproperly="1"> <!-- Triple Bolt Crossbow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="21696" unproperly="1" /> <!-- Icicle Bow -->
-	<distance id="22416" level="75" unproperly="1"> <!-- Crude Umbral Bow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="22417" level="150" unproperly="1"> <!-- Umbral Bow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="22418" level="250" unproperly="1"> <!-- Umbral Master Bow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="22419" level="75" unproperly="1"> <!-- Crude Umbral Crossbow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="22420" level="150" unproperly="1"> <!-- Umbral Crossbow -->
-		<vocation name="Paladin" />
-	</distance>
-	<distance id="22421" level="250" unproperly="1"> <!-- Umbral Master Crossbow -->
-		<vocation name="Paladin" />
-	</distance>
 
 	<!-- Ammunition -->
 	<distance id="1294" breakchance="3" /> <!-- small stone -->
@@ -585,13 +441,4 @@
 	<distance id="7839" action="removecount" unproperly="1" level="20" /> <!-- Shiver Arrow -->
 	<distance id="7840" action="removecount" unproperly="1" level="20" /> <!-- Flaming Arrow -->
 	<distance id="7850" action="removecount" unproperly="1" level="20" /> <!-- Earth Arrow -->
-	<distance id="15648" action="removecount" unproperly="1" level="30" /> <!-- Tarsal Arrow -->
-	<distance id="15649" action="removecount" unproperly="1" level="40" /> <!-- Vortex Bolt -->
-	<distance id="18303" action="removecount" /> <!-- crystal bolt -->
-	<distance id="18304" action="removecount" unproperly="1" level="90" /> <!-- Crystalline Arrow -->
-	<distance id="18435" action="removecount" unproperly="1" level="90" /> <!-- Prismatic Bolt -->
-	<distance id="18436" action="removecount" unproperly="1" level="70" /> <!-- Drill Bolt -->
-	<distance id="18437" action="removecount" unproperly="1" level="70" /> <!-- Envenomed Arrow -->
-	<distance id="23529" breakchance="31" unproperly="1" level="60" /> <!-- Glooth Spear -->
-	<distance id="23839" action="removecount" unproperly="0" level="1" /> <!-- Simple Arrow -->
 </weapons>

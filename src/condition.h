@@ -166,7 +166,6 @@ class ConditionAttributes final : public ConditionGeneric
 	private:
 		int32_t skills[SKILL_LAST + 1] = {};
 		int32_t skillsPercent[SKILL_LAST + 1] = {};
-		int32_t specialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t stats[STAT_LAST + 1] = {};
 		int32_t statsPercent[STAT_LAST + 1] = {};
 		int32_t currentSkill = 0;
@@ -388,34 +387,6 @@ class ConditionLight final : public Condition
 		LightInfo lightInfo;
 		uint32_t internalLightTicks = 0;
 		uint32_t lightChangeInterval = 0;
-};
-
-class ConditionSpellCooldown final : public ConditionGeneric
-{
-	public:
-		ConditionSpellCooldown(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
-			ConditionGeneric(id, type, ticks, buff, subId) {}
-
-		bool startCondition(Creature* creature) override;
-		void addCondition(Creature* creature, const Condition* condition) override;
-
-		ConditionSpellCooldown* clone() const override {
-			return new ConditionSpellCooldown(*this);
-		}
-};
-
-class ConditionSpellGroupCooldown final : public ConditionGeneric
-{
-	public:
-		ConditionSpellGroupCooldown(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0) :
-			ConditionGeneric(id, type, ticks, buff, subId) {}
-
-		bool startCondition(Creature* creature) override;
-		void addCondition(Creature* creature, const Condition* condition) override;
-
-		ConditionSpellGroupCooldown* clone() const override {
-			return new ConditionSpellGroupCooldown(*this);
-		}
 };
 
 #endif

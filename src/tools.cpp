@@ -575,17 +575,6 @@ MagicEffectNames magicEffectNames = {
 	{"smoke",		CONST_ME_SMOKE},
 	{"insects",		CONST_ME_INSECTS},
 	{"dragonhead",		CONST_ME_DRAGONHEAD},
-	{"orcshaman",		CONST_ME_ORCSHAMAN},
-	{"orcshamanfire",	CONST_ME_ORCSHAMAN_FIRE},
-	{"thunder",		CONST_ME_THUNDER},
-	{"ferumbras",		CONST_ME_FERUMBRAS},
-	{"confettihorizontal",	CONST_ME_CONFETTI_HORIZONTAL},
-	{"confettivertical",	CONST_ME_CONFETTI_VERTICAL},
-	{"blacksmoke",		CONST_ME_BLACKSMOKE},
-	{"redsmoke",		CONST_ME_REDSMOKE},
-	{"yellowsmoke",		CONST_ME_YELLOWSMOKE},
-	{"greensmoke",		CONST_ME_GREENSMOKE},
-	{"purplesmoke",		CONST_ME_PURPLESMOKE},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -630,15 +619,6 @@ ShootTypeNames shootTypeNames = {
 	{"smallearth",		CONST_ANI_SMALLEARTH},
 	{"eartharrow",		CONST_ANI_EARTHARROW},
 	{"explosion",		CONST_ANI_EXPLOSION},
-	{"cake",		CONST_ANI_CAKE},
-	{"tarsalarrow",		CONST_ANI_TARSALARROW},
-	{"vortexbolt",		CONST_ANI_VORTEXBOLT},
-	{"prismaticbolt",	CONST_ANI_PRISMATICBOLT},
-	{"crystallinearrow",	CONST_ANI_CRYSTALLINEARROW},
-	{"drillbolt",		CONST_ANI_DRILLBOLT},
-	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW},
-	{"gloothspear",		CONST_ANI_GLOOTHSPEAR},
-	{"simplearrow",		CONST_ANI_SIMPLEARROW},
 };
 
 CombatTypeNames combatTypeNames = {
@@ -695,7 +675,6 @@ SkullNames skullNames = {
 	{"white",	SKULL_WHITE},
 	{"red",		SKULL_RED},
 	{"black",	SKULL_BLACK},
-	{"orange",	SKULL_ORANGE},
 };
 
 MagicEffectClasses getMagicEffect(const std::string& strValue)
@@ -750,32 +729,6 @@ Skulls_t getSkullType(const std::string& strValue)
 		return skullType->second;
 	}
 	return SKULL_NONE;
-}
-
-std::string getSpecialSkillName(uint8_t skillid)
-{
-	switch (skillid) {
-		case SPECIALSKILL_CRITICALHITCHANCE:
-			return "critical hit chance";
-
-		case SPECIALSKILL_CRITICALHITAMOUNT:
-			return "critical extra damage";
-
-		case SPECIALSKILL_HITPOINTSLEECHCHANCE:
-			return "hitpoints leech chance";
-
-		case SPECIALSKILL_HITPOINTSLEECHAMOUNT:
-			return "hitpoints leech amount";
-
-		case SPECIALSKILL_MANAPOINTSLEECHCHANCE:
-			return "manapoints leech chance";
-
-		case SPECIALSKILL_MANAPOINTSLEECHAMOUNT:
-			return "mana points leech amount";
-
-		default:
-			return "unknown";
-	}
 }
 
 std::string getSkillName(uint8_t skillid)

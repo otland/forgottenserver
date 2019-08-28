@@ -23,8 +23,6 @@
 
 #include "game.h"
 
-#include "iomarket.h"
-
 #include "configmanager.h"
 #include "scriptmanager.h"
 #include "rsa.h"
@@ -121,6 +119,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
+	std::cout << "Downgraded and further developed by Nekiro" << std::endl;
 	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
 	std::cout << std::endl;
 
@@ -252,14 +251,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_game.setGameState(GAME_STATE_INIT);
 
 	// Game client protocols
-	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
-	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolGame>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
+	services->add<ProtocolLogin>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
-	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
+	services->add<ProtocolStatus>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STATUS_PORT)));
 
 	// Legacy login protocol
-	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
@@ -277,9 +276,6 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	g_game.map.houses.payHouses(rentPeriod);
-
-	IOMarket::checkExpiredOffers();
-	IOMarket::getInstance().updateStatistics();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 

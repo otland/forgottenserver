@@ -289,7 +289,7 @@ bool Items::loadFromOtb(const std::string& file)
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return false;
-	} else if (minorVersion < CLIENT_VERSION_1098) {
+	} else if (minorVersion < CLIENT_VERSION_860_OLD) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return false;
 	}
@@ -458,7 +458,6 @@ bool Items::loadFromOtb(const std::string& file)
 		iType.rotatable = hasBitSet(FLAG_ROTATABLE, flags);
 		iType.canReadText = hasBitSet(FLAG_READABLE, flags);
 		iType.lookThrough = hasBitSet(FLAG_LOOKTHROUGH, flags);
-		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
 		// iType.walkStack = !hasBitSet(FLAG_FULLTILE, flags);
 		iType.forceUse = hasBitSet(FLAG_FORCEUSE, flags);
 

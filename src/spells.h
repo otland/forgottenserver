@@ -169,12 +169,7 @@ class Spell : public BaseSpell
 
 		VocSpellMap vocSpellMap;
 
-		SpellGroup_t group = SPELLGROUP_NONE;
-		SpellGroup_t secondaryGroup = SPELLGROUP_NONE;
-
 		uint32_t cooldown = 1000;
-		uint32_t groupCooldown = 1000;
-		uint32_t secondaryGroupCooldown = 0;
 		uint32_t level = 0;
 		uint32_t magLevel = 0;
 		int32_t range = -1;

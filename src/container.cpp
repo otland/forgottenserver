@@ -28,41 +28,13 @@ extern Game g_game;
 Container::Container(uint16_t type) :
 	Container(type, items[type].maxItems) {}
 
-Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
-	Item(type),
-	maxSize(size),
-	unlocked(unlocked),
-	pagination(pagination)
-{}
-
-Container::Container(Tile* tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
-{
-	TileItemVector* itemVector = tile->getItemList();
-	if (itemVector) {
-		for (Item* item : *itemVector) {
-			if ((item->getContainer() || item->hasProperty(CONST_PROP_MOVEABLE)) && !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
-				itemlist.push_front(item);
-				item->setParent(this);
-			}
-		}
-	}
-
-	setParent(tile);
-}
+Container::Container(uint16_t type, uint16_t size) : Item(type), maxSize(size) {}
 
 Container::~Container()
 {
-	if (getID() == ITEM_BROWSEFIELD) {
-		g_game.browseFields.erase(getTile());
-
-		for (Item* item : itemlist) {
-			item->setParent(parent);
-		}
-	} else {
-		for (Item* item : itemlist) {
-			item->setParent(nullptr);
-			item->decrementReferenceCounter();
-		}
+	for (Item* item : itemlist) {
+		item->setParent(nullptr);
+		item->decrementReferenceCounter();
 	}
 }
 
@@ -83,11 +55,6 @@ Container* Container::getParentContainer()
 		return nullptr;
 	}
 	return thing->getContainer();
-}
-
-bool Container::hasParent() const
-{
-	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
 }
 
 void Container::addItem(Item* item)
@@ -271,10 +238,6 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (!unlocked) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	const Item* item = thing.getItem();
 	if (item == nullptr) {
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -293,10 +256,6 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		while (cylinder) {
 			if (cylinder == &thing) {
 				return RETURNVALUE_THISISIMPOSSIBLE;
-			}
-
-			if (dynamic_cast<const Inbox*>(cylinder)) {
-				return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 			}
 
 			cylinder = cylinder->getParent();
@@ -401,10 +360,6 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 		uint32_t& flags)
 {
-	if (!unlocked) {
-		*destItem = nullptr;
-		return this;
-	}
 
 	if (index == 254 /*move up*/) {
 		index = INDEX_WHEREEVER;

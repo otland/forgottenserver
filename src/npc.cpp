@@ -104,7 +104,6 @@ void Npc::reset()
 	attackable = false;
 	ignoreHeight = true;
 	focusCreature = 0;
-	speechBubble = SPEECHBUBBLE_NONE;
 
 	delete npcEventHandler;
 	npcEventHandler = nullptr;
@@ -170,10 +169,6 @@ bool Npc::loadFromXml()
 		ignoreHeight = attr.as_bool();
 	}
 
-	if ((attr = npcNode.attribute("speechbubble"))) {
-		speechBubble = pugi::cast<uint32_t>(attr.value());
-	}
-
 	if ((attr = npcNode.attribute("skull"))) {
 		setSkull(getSkullType(asLowerCaseString(attr.as_string())));
 	}
@@ -206,7 +201,6 @@ bool Npc::loadFromXml()
 		} else if ((attr = lookNode.attribute("typeex"))) {
 			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
-		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
 
 		currentOutfit = defaultOutfit;
 	}
@@ -836,7 +830,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 
 	npc->addShopPlayer(player);
 	player->setShopOwner(npc, buyCallback, sellCallback);
-	player->openShopWindow(npc, items);
+	player->openShopWindow(items);
 
 	pushBoolean(L, true);
 	return 1;
@@ -1041,7 +1035,7 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 	npc->addShopPlayer(player);
 
 	player->setShopOwner(npc, buyCallback, sellCallback);
-	player->openShopWindow(npc, items);
+	player->openShopWindow(items);
 
 	pushBoolean(L, true);
 	return 1;

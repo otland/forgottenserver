@@ -232,7 +232,7 @@ class House
 		AccessList guestList;
 		AccessList subOwnerList;
 
-		Container transfer_container{ITEM_LOCKER1};
+		Container transfer_container{ITEM_LOCKER};
 
 		HouseTileList houseTiles;
 		std::set<Door*> doorSet;

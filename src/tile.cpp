@@ -372,14 +372,6 @@ Thing* Tile::getTopVisibleThing(const Creature* creature)
 
 void Tile::onAddTileItem(Item* item)
 {
-	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
-		auto it = g_game.browseFields.find(this);
-		if (it != g_game.browseFields.end()) {
-			it->second->addItemBack(item);
-			item->setParent(this);
-		}
-	}
-
 	setTileFlags(item);
 
 	const Position& cylinderMapPos = getPosition();
@@ -402,24 +394,6 @@ void Tile::onAddTileItem(Item* item)
 
 void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType)
 {
-	if (newItem->hasProperty(CONST_PROP_MOVEABLE) || newItem->getContainer()) {
-		auto it = g_game.browseFields.find(this);
-		if (it != g_game.browseFields.end()) {
-			int32_t index = it->second->getThingIndex(oldItem);
-			if (index != -1) {
-				it->second->replaceThing(index, newItem);
-				newItem->setParent(this);
-			}
-		}
-	} else if (oldItem->hasProperty(CONST_PROP_MOVEABLE) || oldItem->getContainer()) {
-		auto it = g_game.browseFields.find(this);
-		if (it != g_game.browseFields.end()) {
-			Cylinder* oldParent = oldItem->getParent();
-			it->second->removeThing(oldItem, oldItem->getItemCount());
-			oldItem->setParent(oldParent);
-		}
-	}
-
 	const Position& cylinderMapPos = getPosition();
 
 	SpectatorHashSet spectators;
@@ -440,13 +414,6 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 
 void Tile::onRemoveTileItem(const SpectatorHashSet& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item)
 {
-	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
-		auto it = g_game.browseFields.find(this);
-		if (it != g_game.browseFields.end()) {
-			it->second->removeThing(item, item->getItemCount());
-		}
-	}
-
 	resetTileFlags(item);
 
 	const Position& cylinderMapPos = getPosition();
