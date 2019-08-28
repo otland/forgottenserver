@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Mantassin Scout" nameDescription="a quara mantassin scout" race="blood" experience="100" speed="270" manacost="480">
+	<health now="220" max="220"/>
+	<look type="72" corpse="6064"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="45" attack="40"/>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="invisible" interval="1000" chance="30" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zuerk Pachak!"/>
+		<voice sentence="Shrrrr"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="29" chance="27000"/><!-- gold coin -->
+		<item id="2229" chance="11800"/><!-- skull -->
+		<item id="2464" chance="10000"/><!-- chain armor -->
+		<item id="2654" chance="8750"/><!-- cape -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2377" chance="12950"/><!-- two handed sword -->
+				<item id="5895"  chance="1200"/><!-- fish fin -->
+				<item id="2165" chance="2000"/><!-- stealth ring -->
+				<item id="2146" chance="750"/><!-- small sapphire -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="General Murius" nameDescription="the general Murius" race="blood" experience="300" speed="240" manacost="0">
+	<health now="550" max="550"/>
+	<look type="202" corpse="5983"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="55"/>
+		<attack name="physical" interval="1000" chance="12" range="7" min="-50" max="-120">
+			<attribute key="shootEffect" value="bolt"/>
+		</attack>
+		<attack name="physical" interval="1000" chance="10" radius="3" target="0" min="-50" max="-80">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+	</attacks>
+	<defenses armor="16" defense="22">
+		<defense name="healing" interval="1000" chance="15" min="50" max="100">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Minotaur Archer" interval="1000" chance="15" max="2"/>
+		<summon name="Minotaur Guard" interval="1000" chance="12" max="2"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Feel the power of the Mooh'Tah!"/>
+		<voice sentence="You will get what you deserve!"/>
+		<voice sentence="For the king!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="30" chance="100000"/><!-- gold coin -->
+		<item id="2410" countmax="2" chance="50000"/><!-- throwing knife -->
+		<item id="2419" chance="10000"/><!-- scimitar -->
+		<item id="2510" chance="5000"/><!-- plate shield -->
+		<item id="2667" countmax="1" chance="20000"/><!-- fish -->
+		<item id="2647" chance="1818"/><!-- plate legs -->
+		<item id="2413" chance="2857"/><!-- broadsword -->
+		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+		<item id="1988" chance="2857"><!-- backpack -->
+			
+				<item id="2148" countmax="1" chance="2857"/><!-- gold coin -->
+			
+		</item>
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2207" chance="2000"/><!-- sword ring -->
+				<item id="2666" countmax="2" chance="33333"/><!-- meat -->
+				<item id="2379" chance="6666"/><!-- dagger -->
+				<item id="2475" chance="1000"/><!-- warrior helmet -->
+				<item id="2397" chance="10000"/><!-- longsword -->
+				<item id="2652" chance="2500"/><!-- green tunic -->
+				<item id="2478" chance="2857"/><!-- brass legs -->
+				<item id="2463" chance="1818"/><!-- plate armor -->
+			
+		</item>
+	</loot>
+</monster>

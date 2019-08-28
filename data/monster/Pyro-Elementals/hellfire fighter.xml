@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hellfire Fighter" nameDescription="a hellfire fighter" race="fire" experience="3900" speed="260" manacost="0">
+	<health now="3800" max="3800"/>
+	<look type="243" corpse="6324"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="120" attack="80"/>
+		<attack name="firefield" interval="3000" chance="30" range="7" radius="4" target="0">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="40" range="5" length="8" spread="3" min="-700" max="-1115">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="melee" interval="1000" chance="25" range="7" radius="3" target="0" min="-150" max="-250">
+			<attribute key="areaEffect" value="explosionarea"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25"/>
+	<elements>
+		<element firePercent="100"/>
+		<element energyPercent="40"/>
+		<element physicalPercent="24"/>
+		<element deathPercent="22"/>
+		<element icePercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="85" chance="61000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="61000"/><!-- gold coin -->
+		<item id="2260" chance="52000"/><!-- blank rune -->
+		<item id="2239" chance="47000"/><!-- burnt scroll -->
+		<item id="6500" chance="14500"/><!-- demonic essence -->
+		<item id="2127" chance="2200"/><!-- emerald bangle -->
+		<item id="2392" chance="5000"/><!-- fire sword -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="7894" chance="850"/><!-- magma legs -->
+		<item id="7899" chance="1300"/><!-- magma coat -->
+		<item id="5022" countmax="2" chance="4000"/><!-- orichalcum pearl -->
+		<item id="2152" chance="850"/><!-- platinum coin -->
+		<item id="2145" chance="13200"/><!-- small diamond -->
+		<item id="2147" countmax="4" chance="7000"/><!-- small ruby -->
+		<item id="5944" chance="14850"/><!-- soul orb -->
+		<item id="2187" chance="8000"/><!-- wand of inferno -->
+		<item id="2432" chance="800"/><!-- fire axe -->
+		<item id="2136" chance="300"/><!-- demonbone amulet -->
+			
+		</item>
+	</loot>
+</monster>

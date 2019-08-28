@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mummy" nameDescription="a mummy" race="undead" experience="150" speed="220" manacost="0">
+	<health now="240" max="240"/>
+	<look type="65" corpse="6004"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="28" poison="65"/>
+		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-30" max="-40"/>
+		<attack name="speed" interval="1000" chance="8" range="7" speedchange="-600" duration="10000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="14" defense="20"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element icePercent="22"/>
+		<element holyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="I will ssswallow your sssoul!"/>
+		<voice sentence="Mort ulhegh dakh visss."/>
+		<voice sentence="Flesssh to dussst!"/>
+		<voice sentence="I will tassste life again!"/>
+		<voice sentence="Ahkahra exura belil mort!"/>
+		<voice sentence="Yohag Sssetham!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="46" chance="15000"/><!-- gold coin -->
+		<item id="2148" countmax="45" chance="15000"/><!-- gold coin -->
+		<item id="3976" countmax="3" chance="50000"/><!-- worm -->
+		<item id="2162" chance="15750"/><!-- magic lightwand -->
+		<item id="2406" chance="8350"/><!-- short sword -->
+		<item id="2134" chance="5000"/><!-- silver brooch -->
+		<item id="2161" chance="4650"/><!-- strange talisman -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2124" chance="2222"/><!-- crystal ring -->
+				<item id="2411" chance="1900"/><!-- poison dagger -->
+				<item id="2144" chance="1270"/><!-- black pearl -->
+				<item id="2170" chance="110"/><!-- silver amulet -->
+				<item id="5914" chance="250"/><!-- yellow piece of cloth -->
+				<item id="2529" chance="110"/><!-- black shield -->
+			
+		</item>
+	</loot>
+</monster>

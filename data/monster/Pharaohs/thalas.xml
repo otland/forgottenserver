@@ -1,72 +1,75 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Thalas" nameDescription="Thalas" race="undead" experience="2950" speed="320">
-	<health now="4100" max="4100" />
-	<look type="90" corpse="6025" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Thalas" nameDescription="a thalas" race="undead" experience="2950" speed="320" manacost="0">
+	<health now="4100" max="4100"/>
+	<look type="90" corpse="6025"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-900" />
-		<attack name="earth" interval="2000" chance="25" range="7" min="-150" max="-650">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="poison" />
+		<attack name="melee" interval="2000" min="-10" skill="140" attack="120"/>
+		<attack name="poison" interval="2000" chance="25" range="7" min="-150" max="-650">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 		<attack name="melee" interval="3000" chance="20" range="7" radius="1" target="1" min="-150" max="-650">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="poison" />
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 		<attack name="speed" interval="1000" chance="6" range="7" speedchange="-800" duration="20000">
-			<attribute key="areaEffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 		<attack name="poisoncondition" interval="1000" chance="15" radius="5" target="0" min="-34" max="-35">
-			<attribute key="areaEffect" value="poison" />
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
-		<attack name="earth" interval="3000" chance="17" length="8" spread="3" min="-55" max="-550">
-			<attribute key="areaEffect" value="poison" />
+		<attack name="poison" interval="3000" chance="17" length="8" spread="3" min="-55" max="-550">
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="30">
 		<defense name="healing" interval="1000" chance="20" min="150" max="450">
-			<attribute key="areaEffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="-23" />
+		<element earthPercent="100"/>
+		<element firePercent="-23"/>
 	</elements>
 	<immunities>
-		<immunity earth="1" />
-		<immunity invisible="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="8">
-		<summon name="Slime" interval="2000" chance="100" max="8" />
+		<summon name="Slime2" interval="2000" chance="30000000" max="8"/>
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="You will become a feast for my maggots." />
+		<voice sentence="You will become a feast for my maggots."/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="small emerald" countmax="3" chance="7000" />
-		<item name="green gem" chance="500" />
-		<item name="stealth ring" chance="1500" />
-		<item id="2169" chance="7000" /><!-- time ring -->
-		<item name="cobrafang dagger" chance="100000" />
-		<item name="serpent sword" chance="500" />
-		<item name="poison dagger" chance="7000" />
-		<item name="djinn blade" chance="200" />
-		<item name="great health potion" chance="1500" />
+		<item id="2148" countmax="80" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="50000"/><!-- gold coin -->
+		<item id="2149" countmax="3" chance="7000"/><!-- small emerald -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2411" chance="7000"/><!-- poison dagger -->
+		<item id="2169" chance="7000"/><!-- time ring -->
+		<item id="2165" chance="1500"/><!-- stealth ring -->
+		<item id="7591" chance="1500"/><!-- great health potion-->
+		<item id="2409" chance="500"/><!-- serpent sword -->
+		<item id="2155" chance="500"/><!-- green gem-->
+		<item id="2451" chance="200"/><!-- djinn blade -->
+		<item id="2351" chance="100000"/><!-- cobrafang dagger -->
+			
+		</item>
 	</loot>
 </monster>

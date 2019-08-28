@@ -1,55 +1,58 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="170">
-	<health now="255" max="255" />
-	<look type="120" corpse="6047" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="240" manacost="0">
+	<health now="255" max="255"/>
+	<look type="120" corpse="6047"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-100" poison="100" />
-		<attack name="earth" interval="2000" chance="15" range="7" min="-60" max="-95">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="greenbubble" />
+		<attack name="melee" interval="2000" skill="30" attack="50" poison="5"/>
+		<attack name="poison" interval="1000" chance="25" range="7" min="-60" max="-90">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-800" duration="30000">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="greenbubble" />
+		<attack name="speed" interval="1000" chance="34" range="7" speedchange="-850" duration="30000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="10" radius="3" target="0" min="-40" max="-130">
-			<attribute key="areaEffect" value="poison" />
+		<attack name="poison" interval="1000" chance="12" radius="3" target="0" min="-40" max="-130">
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="26" defense="10"/>
 	<elements>
-		<element energyPercent="10" />
-		<element icePercent="35" />
-		<element firePercent="-20" />
+		<element earthPercent="100"/>
+		<element energyPercent="10"/>
+		<element icePercent="7"/>
+		<element firePercent="-20"/>
 	</elements>
 	<immunities>
-		<immunity earth="1" />
-		<immunity invisible="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="40" chance="60000" />
-		<item name="corncob" chance="890" />
-		<item name="dark mushroom" chance="7692" />
-		<item name="sling herb" countmax="2" chance="446" />
-		<item name="shadow herb" chance="880" />
-		<item name="seeds" chance="490" />
-		<item name="carniphila seeds" chance="4166" />
-		<item name="carrot on a stick" chance="170" />
+		<item id="2148" countmax="37" chance="43000"/><!-- gold coin -->
+		<item id="2666" countmax="2" chance="36500"/><!-- meat -->
+		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
+		<item id="2802" chance="8000"/><!-- sling herb -->
+		<item id="2804" chance="8000"/><!-- shadow herb -->
+		<item id="2747" chance="7500"/><!-- grave flower-->
+		<item id="1987" chance="90000"><!-- bag -->
+			
+		<item id="2792" chance="10000"/><!-- dark mushroom -->
+		<item id="7732" chance="3000"/><!-- seeds -->
+			
+		</item>
 	</loot>
 </monster>

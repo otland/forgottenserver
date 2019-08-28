@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mutated Human" nameDescription="a mutated human" race="blood" experience="150" speed="245" manacost="0">
+	<health now="240" max="240"/>
+	<look type="323" corpse="9107"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="30" poison="300"/>
+		<attack name="death" interval="3000" chance="20" length="8" spread="3" min="-40" max="-50">
+			<attribute key="areaEffect" value="poison"/>
+		</attack> 
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element icePercent="20"/>
+		<element holyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity death="1"/>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity lifedrain="1"/>
+		<immunity drunk="1"/>
+		<immunity drown="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Take that creature off my back!! I can fell it!"/>
+		<voice sentence="HEEEEEEEELP!"/>
+		<voice sentence="You will be the next infected one... GRAAAAAAAAARRR!"/>
+		<voice sentence="Science... is a curse."/>
+		<voice sentence="Run as fast as you can."/>
+		<voice sentence="Oh by the gods! What is this... aaaaaargh!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="80" chance="27000"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="27000"/><!-- gold coin -->
+		<item id="3976" countmax="3" chance="44000"/><!-- worm -->
+		<item id="2226" chance="11000"/><!-- fishbone -->
+		<item id="2696" chance="6500"/><!-- cheese -->
+		<item id="2406" chance="10000"/><!-- short sword -->
+		<item id="2484" chance="9000"/><!-- studded armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2161" chance="4600"/><!-- strange talisman -->
+		<item id="2460" chance="6825"/><!-- brass helmet -->
+		<item id="2483" chance="5900"/><!-- scale armor -->
+		<item id="2376" chance="4500"/><!-- sword -->
+		<item id="9808" chance="2250"/><!-- rusty armor -->
+		<item id="7910" chance="600"/><!-- peanut -->
+		<item id="2801" chance="350"/><!-- fern -->
+		<item id="2170" chance="100"/><!-- silver amulet -->
+			
+		</item>
+	</loot>
+</monster>

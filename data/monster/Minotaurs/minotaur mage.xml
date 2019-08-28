@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Mage" nameDescription="a minotaur mage" race="blood" experience="150" speed="170" manacost="0">
+	<health now="155" max="155"/>
+	<look type="23" corpse="5981"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="20"/>
+		<attack name="energy" interval="1000" chance="17" range="7" min="-15" max="-45">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="10" range="7" radius="1" target="1" min="-35" max="-95">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="energyfield" interval="1000" chance="12" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="energy"/>
+		</attack>
+	</attacks>
+	<defenses armor="18" defense="20"/>
+	<elements>
+		<element energyPercent="20"/>
+		<element earthPercent="15"/>
+		<element holyPercent="10"/>
+		<element icePercent="-5"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Learrn tha secrret uf deathhh!"/>
+		<voice sentence="Kaplar!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="40" chance="37000"/><!-- gold coin -->
+		<item id="2684" countmax="8" chance="7150"/><!-- carrot -->
+		<item id="2050" chance="20000"/><!-- torch -->
+		<item id="2817" chance="17500"/><!-- dead snake -->
+		<item id="2649" chance="13500"/><!-- leather legs -->
+		<item id="2403" chance="10000"/><!-- knife -->
+		<item id="2461" chance="8000"/><!-- leather helmet -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2817" chance="17500"/><!-- dead snake -->
+				<item id="2050" chance="20000"/><!-- torch -->
+				<item id="2465" chance="3500"/><!-- brass armor -->
+				<item id="5878" chance="3250"/><!-- minotaur leather -->
+				<item id="2404" chance="3000"/><!-- combat knife -->
+				<item id="2648" chance="2500"/><!-- chain legs -->
+				<item id="7425" chance="1000"/><!-- taurus mace -->
+				<item id="2189" chance="1000"/><!-- wand of cosmic energy -->
+				<item id="7620" chance="750"/><!-- mana potion -->
+			
+		</item>
+	</loot>
+</monster>

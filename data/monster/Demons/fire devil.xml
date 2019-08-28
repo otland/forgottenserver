@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Fire Devil" nameDescription="a fire devil" race="blood" experience="145" speed="190" manacost="530">
+	<health now="200" max="200"/>
+	<look type="40" corpse="5985"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="35"/>
+		<attack name="fire" interval="4000" chance="12" range="7" radius="4" target="1" min="-60" max="-90">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="25" range="7" radius="2" target="1" min="-20" max="-50">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+	</attacks>
+	<defenses armor="13" defense="15"/>
+	<elements>
+		<element firePercent="100"/>
+		<element energyPercent="30"/>
+		<element earthPercent="25"/>
+		<element deathPercent="15"/>
+		<element physicalPercent="10"/>
+		<element icePercent="-20"/>
+		<element holyPercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hot, eh?"/>
+		<voice sentence="Hell, oh hell!"/>
+	</voices>
+	<loot>
+		<item id="2548" chance="50000"/><!-- Pitch Fork -->
+		<item id="2050" chance="10000"/><!-- torch -->
+		<item id="2260" chance="12750"/><!-- blank rune -->
+		<item id="2568" chance="9000"/><!-- cleaver -->
+		<item id="2419" chance="5300"/><!-- scimitar -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2050" chance="10000"/><!-- torch -->
+		<item id="2387" chance="1500"/><!-- double axe -->
+		<item id="2150" chance="100"/><!-- small amethyst -->
+		<item id="2515" chance="700"/><!-- guardian shield -->
+		<item id="2191" chance="450"/><!-- wand of dragonbreath -->
+		<item id="2185" chance="400"/><!-- necrotic rod -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,60 +1,65 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Gargoyle" nameDescription="a gargoyle" race="undead" experience="150" speed="200">
-	<health now="250" max="250" />
-	<look type="95" corpse="6027" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gargoyle" nameDescription="a gargoyle" race="blood" experience="150" speed="250" manacost="0">
+	<health now="450" max="450"/>
+	<look type="95" corpse="6027"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="70" />
-		<flag runonhealth="30" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-65" />
+		<attack name="melee" interval="2000" skill="55" attack="20"/>
+		<attack name="physical" interval="1000" chance="24" range="7" min="-50" max="-110">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
-		<defense name="healing" interval="2000" chance="20" min="5" max="15">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="26" defense="20">
+		<defense name="healing" interval="1000" chance="10" min="5" max="15">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="40" />
-		<element deathPercent="1" />
-		<element firePercent="-10" />
+		<element earthPercent="100"/>
+		<element physicalPercent="22"/>
+		<element deathPercent="20"/>
+		<element firePercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity lifedrain="1" />
-		<immunity earth="1" />
+		<immunity lifedrain="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Harrrr Harrrr!" />
-		<voice sentence="Stone sweet stone." />
-		<voice sentence="Feel my claws, softskin." />
-		<voice sentence="Chhhhhrrrrk!" />
-		<voice sentence="There is a stone in your shoe!" />
+		<voice sentence="Harrrr Harrrr!"/>
+		<voice sentence="Stone sweet stone."/>
+		<voice sentence="Feel my claws, softskin."/>
+		<voice sentence="Chhhhhrrrrk!"/>
+		<voice sentence="There is a stone in your shoe!"/>
 	</voices>
 	<loot>
-		<item name="wolf tooth chain" chance="1480" />
-		<item name="gold coin" countmax="30" chance="88000" />
-		<item name="mysterious fetish" countmax="10" chance="15800" />
-		<item name="club ring" chance="260" />
-		<item name="morning star" chance="2150" />
-		<item name="steel helmet" chance="850" />
-		<item name="dark armor" chance="300" />
-		<item name="battle shield" chance="1000" />
-		<item name="strawberry" countmax="5" chance="1810" />
-		<item name="potato" countmax="2" chance="9220" />
-		<item name="stone wing" chance="11730" />
-		<item name="shiny stone" chance="190" />
-		<item name="piece of marble rock" chance="630" />
+		<item id="2148" countmax="30" chance="24000"/><!-- gold coin -->
+		<item id="2513" chance="1200"/><!-- battle shield -->
+		<item id="2671" chance="17500"/><!-- ham -->
+		<item id="2666" countmax="2" chance="27500"/><!-- meat -->
+		<item id="2394" chance="1750"/><!-- morning star -->
+		<item id="2449" chance="10000"/><!-- bone club -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2194" countmax="10" chance="8000"/><!-- small stone -->
+				<item id="2457" chance="6000"/><!-- steel helmet -->
+				<item id="2448" chance="5300"/><!-- studdedd club -->
+				<item id="2489" chance="750"/><!-- dark armor -->
+				<item id="2129" chance="500"/><!-- wolf tooth chain -->
+				<item id="2209" chance="300"/><!-- club ring -->				
+			
+		</item>
 	</loot>
 </monster>

@@ -1,95 +1,102 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="220">
-	<health now="3500" max="3500" />
-	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="20527" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="220" manacost="0">
+	<health now="3500" max="3500"/>
+	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="6080"/>
+	<targetchange interval="5000" chance="30"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="4" />
-		<flag staticattack="90" />
-		<flag runonhealth="900" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="800"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-130" />
-		<attack name="energy" interval="2000" chance="25" range="7" min="-90" max="-180">
-			<attribute key="shootEffect" value="energy" />
+		<attack name="melee" interval="2000" skill="42" attack="50"/>
+		<attack name="physical" interval="1000" chance="35" range="7" min="-85" max="-185">
+			<attribute key="shootEffect" value="energy"/>
 		</attack>
-		<attack name="warlock skill reducer" range="5" interval="2000" chance="5" />
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-120" />
-		<attack name="fire" interval="2000" chance="20" range="7" radius="3" target="1" min="-50" max="-180">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="firearea" />
+		<attack name="manadrain" interval="1000" chance="17" range="7" min="-75" max="-160"/>
+		<attack name="speed" interval="1000" chance="12" range="7" speedchange="-600" duration="40000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="firefield" interval="2000" chance="10" range="7" radius="2" target="1">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="fire" interval="2000" chance="45" range="7" radius="3" target="1" min="-150" max="-220">
+			<attribute key="shootEffect" value="burstarrow"/>
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="energy" interval="2000" chance="10" length="8" spread="0" min="-150" max="-230">
-			<attribute key="areaEffect" value="bigclouds" />
+		<attack name="firefield" interval="1000" chance="20" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="fire"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="20000">
-			<attribute key="areaEffect" value="redshimmer" />
+		<attack name="energy" interval="2000" chance="25" length="8" spread="0" min="-165" max="-245">
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="speed" interval="6000" chance="10" range="5" speedchange="-600" duration="20000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="20">
-		<defense name="healing" interval="2000" chance="20" min="100" max="225">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="25" defense="30">
+		<defense name="healing" interval="1000" chance="25" min="60" max="100">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="invisible" interval="2000" chance="20" duration="10000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<defense name="invisible" interval="5000" chance="50" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="95" />
-		<element holyPercent="-5" />
-		<element physicalPercent="-5" />
+		<element firePercent="100"/>
+		<element energyPercent="100"/>
+		<element icePercent="100"/>
+		<element earthPercent="90"/>
+		<element holyPercent="-25"/>
+		<element physicalPercent="-33"/>
 	</elements>
 	<immunities>
-		<immunity fire="1" />
-		<immunity energy="1" />
-		<immunity ice="1" />
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="stone golem" interval="2000" chance="10" max="1" />
+		<summon name="stone golem" interval="2000" chance="10" max="1"/>
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Learn the secret of our magic! YOUR death!" />
-		<voice sentence="Even a rat is a better mage than you." />
-		<voice sentence="We don't like intruders!" />
+		<voice sentence="Learn the secret of our magic! YOUR death!"/>
+		<voice sentence="Even a rat is a better mage than you."/>
+		<voice sentence="We don't like intruders!"/>
 	</voices>
 	<loot>
-		<item name="red tome" chance="300" />
-		<item name="candlestick" chance="1500" />
-		<item name="piggy bank" chance="60" />
-		<item name="ring of the sky" chance="430" />
-		<item id="2124" chance="700" /><!-- crystal ring -->
-		<item name="small sapphire" chance="1190" />
-		<item name="gold coin" countmax="80" chance="29340" />
-		<item name="talon" chance="1150" />
-		<item name="energy ring" chance="2200" />
-		<item name="mind stone" chance="2000" />
-		<item name="stone skin amulet" chance="330" />
-		<item name="poison dagger" chance="7600" />
-		<item name="skull staff" chance="6370" />
-		<item name="golden armor" chance="240" />
-		<item name="inkwell" chance="1000" />
-		<item name="blue robe" chance="1410" />
-		<item name="cherry" countmax="4" chance="19000" />
-		<item name="bread" chance="9000" />
-		<item name="dark mushroom" chance="3000" />
-		<item name="assassin star" countmax="4" chance="3500" />
-		<item name="assassin star" countmax="4" chance="3470" />
-		<item name="great mana potion" chance="4760" />
-		<item name="great health potion" chance="5190" />
-		<item name="lightning robe" chance="1000" />
-		<item name="luminous orb" chance="510" />
+		<item id="2148" countmax="80" chance="36500"/><!-- gold coin -->
+		<item id="2148" countmax="70" chance="3t6500"/><!-- gold coin -->
+		<item id="2679" countmax="5" chance="55000"/><!-- cherry -->
+		<item id="2689" chance="22500"/><!-- bread -->
+		<item id="2047" chance="15000"/><!-- candlestick -->
+		<item id="2124" chance="7000"/><!-- crystal ring -->
+		<item id="2792" countmax="5" chance="5000"/><!-- dark mushroom -->
+		<item id="2167" chance="3000"/><!-- energy ring -->
+		<item id="2600" chance="10000"/><!-- inkwell -->
+		<item id="2178" chance="2500"/><!-- mind stone -->
+		<item id="2411" chance="3000"/><!-- poison dagger -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2436" chance="3000"/><!-- skull staff -->
+		<item id="2151" chance="5500"/><!-- talon -->
+		<item id="7591" chance="12500"/><!-- great health potion -->
+		<item id="7590" chance="10000"/><!-- great mana potion -->
+		<item id="2656" chance="2000"/><!-- blue robe -->
+		<item id="7368" countmax="4" chance="1200"/><!-- assassin star -->
+		<item id="2146" chance="1400"/><!-- small sapphire -->
+		<item id="1986" chance="800"/><!-- red tome -->
+		<item id="2123" chance="850"/><!-- ring of the sky -->
+		<item id="2197" chance="750"/><!-- stone skin amulet -->
+		<item id="7898" chance="450"/><!-- lightning robe -->
+		<item id="7895" chance="450"/><!-- lightning legs -->
+		<item id="2466" chance="375"/><!-- golden armor -->
+		<item id="2114" chance="100"/><!-- piggy bank -->		
+			
+		</item>
 	</loot>
 </monster>

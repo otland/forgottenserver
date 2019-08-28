@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Island Troll" nameDescription="an island troll" race="blood" experience="20" speed="190" manacost="290">
+	<health now="50" max="50"/>
+	<look type="282" corpse="7930"/>
+	<targetchange interval="5000" chance="20"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="15"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="10"/>
+	</attacks>
+	<defenses armor="7" defense="9"/>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hmmm, turtles"/>
+		<voice sentence="Hmmm, dogs"/>
+		<voice sentence="Hmmm, wormds"/>
+		<voice sentence="Groar"/>
+		<voice sentence="Gruntz!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="10" chance="35000"/><!-- gold coin -->
+		<item id="5901" chance="15000"/><!-- wood -->
+		<item id="2389" chance="23000"/><!-- spear -->
+		<item id="2380" chance="17000"/><!-- hand axe -->
+		<item id="2512" chance="15000"/><!-- wooden shield -->
+		<item id="2666" chance="15000"/><!-- meat -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="5901" chance="15000"/><!-- wood -->		
+				<item id="2643" chance="11500"/><!-- leather boots -->
+				<item id="2461" chance="10000"/><!-- leather helmet -->
+				<item id="2120" chance="7250"/><!-- rope -->
+				<item id="2448" chance="6000"/><!-- studded club -->
+				<item id="2170" chance="50"/><!-- silver amulet -->
+				<item id="7963" chance="150"/><!-- marlin -->
+			
+		</item>
+	</loot>
+</monster>

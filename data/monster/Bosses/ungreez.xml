@@ -1,64 +1,67 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ungreez" nameDescription="Ungreez" race="blood" experience="500" speed="330" manacost="10000">
-	<health now="8200" max="8200" />
-	<look type="35" corpse="5995" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ungreez" nameDescription="ungreez" race="blood" experience="5000" speed="330" manacost="10000">
+	<health now="8200" max="8200"/>
+	<look type="35" corpse="5995"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-480" />
+		<attack name="melee" interval="2000" skill="70" attack="120"/>
 		<attack name="manadrain" interval="2000" chance="13" range="7" min="0" max="-110">
-			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="shootEffect" value="suddendeath"/>
 		</attack>
 		<attack name="fire" interval="1000" chance="14" range="7" radius="7" target="1" min="-150" max="-250">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="firearea" />
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 		<attack name="energy" interval="2000" chance="18" min="-200" max="-400">
-			<attribute key="shootEffect" value="energy" />
-			<attribute key="areaEffect" value="purpleenergy" />
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="purpleenergy"/>
 		</attack>
 		<attack name="energy" interval="1000" chance="12" length="8" spread="0" min="-300" max="-380">
-			<attribute key="areaEffect" value="purpleenergy" />
+			<attribute key="areaEffect" value="purpleenergy"/>
 		</attack>
 	</attacks>
 	<defenses armor="55" defense="55">
 		<defense name="healing" interval="2000" chance="15" min="90" max="150">
-			<attribute key="areaEffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="25" />
-		<element icePercent="-15" />
+		<element physicalPercent="25"/>
+		<element icePercent="-15"/>
 	</elements>
 	<immunities>
-		<immunity energy="1" />
-		<immunity fire="1" />
-		<immunity lifedrain="1" />
-		<immunity paralyze="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity physical="0"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity poison="0"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="I'll teach you that even heros can die" yell="1" />
-		<voice sentence="You wil die Begging like the others did" yell="1" />
+		<voice sentence="I'll teach you that even heros can die" yell="1"/>
+		<voice sentence="You wil die Begging like the others did" yell="1"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="21000" />
-		<item name="fire mushroom" countmax="6" chance="10000" />
-		<item name="great mana potion" chance="20000" />
-		<item name="great health potion" chance="20000" />
+		<item id="2148" countmax="90" chance="21000"/><!-- gold coin -->
+		<item id="2795" countmax="6" chance="10000"/><!-- fire mushroom -->
+		<item id="7590" chance="20000"/><!-- great mana potion -->
+		<item id="7591" chance="20000"/><!-- great health potion -->
 	</loot>
 </monster>

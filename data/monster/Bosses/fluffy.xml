@@ -1,55 +1,67 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Fluffy" nameDescription="Fluffy" race="blood" experience="3550" speed="310">
-	<health now="4500" max="4500" />
-	<look type="240" corpse="6332" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Fluffy" nameDescription="fluffy" race="blood" experience="3550" speed="310" manacost="0">
+	<health now="4500" max="4500"/>
+	<look type="240" corpse="6332"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" min="0" max="-648" />
+		<attack name="melee" interval="1000" skill="98" attack="120"/>
 		<attack name="energy" interval="1500" chance="300" length="8" spread="3" min="-100" max="-200">
-			<attribute key="areaEffect" value="bluebubble" />
+			<attribute key="areaEffect" value="bluebubble"/>
 		</attack>
-		<attack name="earth" interval="1000" chance="150" length="8" spread="3" min="-120" max="-300">
-			<attribute key="areaEffect" value="poison" />
+		<attack name="poison" interval="1000" chance="150" length="8" spread="3" min="-120" max="-300">
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 		<attack name="physical" interval="1000" chance="25" range="7" min="-105" max="-235">
-			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="shootEffect" value="suddendeath"/>
 		</attack>
-		<attack name="earth" interval="1000" chance="20" range="7" radius="6" target="0" min="-135" max="-255">
-			<attribute key="areaEffect" value="bluebubble" />
+		<attack name="poison" interval="1000" chance="20" range="7" radius="6" target="0" min="-135" max="-255">
+			<attribute key="areaEffect" value="bluebubble"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="35" />
+	<defenses armor="25" defense="35"/>
 	<immunities>
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="0"/>
+		<immunity poison="0"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Wooof!" />
+		<voice sentence="Wooof!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="20" chance="100000" />
-		<item id="2230" chance="25000" /><!-- bone -->
-		<item name="spike sword" chance="2500" />
-		<item name="knight axe" chance="2857" />
-		<item name="ham" countmax="8" chance="50000" />
-		<item name="soul orb" chance="5555" />
-		<item name="demonic essence" chance="7200" />
-		<item name="concentrated demonic blood" chance="8888" />
-		<item id="6570" chance="5538" countmax="4" /><!-- blue surprise bag -->
-		<item id="6571" chance="1538" /><!-- red surprise bag -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
+		<item id="5944" chance="5555"/><!-- soul orb -->
+		<item id="6570" chance="5538" countmax="4"/><!-- blue surprise bag -->
+		<item id="6571" chance="1538"/><!-- red surprise bag -->
+		<item id="2671" countmax="8" chance="50000"/><!-- ham -->
+		<item id="2230" chance="25000"/><!-- bone -->
+		<item id="6500" chance="7200"/><!-- demonic essence -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2430" chance="2857"/><!-- knight axe -->
+				<item id="2383" chance="2500"/><!-- spike sword -->
+				<item id="6558" chance="8888"/><!-- concentrated demonic blood -->
+			
+		</item>
 	</loot>
 </monster>

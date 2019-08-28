@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spit Nettle" nameDescription="a spit nettle" race="venom" experience="20" speed="0" manacost="0">
+	<health now="150" max="150"/>
+	<look type="221" corpse="6062"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="150"/>
+	</flags>
+	<attacks>
+		<attack name="poison" interval="1000" chance="15" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="12" defense="13">
+		<defense name="healing" interval="1000" chance="13" min="8" max="16">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="100"/>
+		<element icePercent="10"/>
+		<element firePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="5" chance="12500"/><!-- gold coin -->
+		<item id="2804" chance="10000"/><!-- shadow herb -->
+		<item id="2802" countmax="2" chance="7500"/><!-- sling herb -->
+		<item id="1987" chance="90000"><!-- bag -->
+			
+		<item id="2802" chance="3000"/><!-- grave flower -->
+		<item id="2802" chance="2500"/><!-- seeds-->
+			
+		</item>
+	</loot>
+</monster>

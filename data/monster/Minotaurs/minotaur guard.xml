@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Guard" nameDescription="a minotaur guard" race="blood" experience="160" speed="190" manacost="550">
+	<health now="185" max="185"/>
+	<look type="29" corpse="5983"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+	</attacks>
+	<defenses armor="15" defense="25"/>
+	<elements>
+		<element firePercent="20"/>
+		<element holyPercent="10"/>
+		<element icePercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Kirll Karrrl!"/>
+		<voice sentence="Kaplar!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="20" chance="32500"/><!-- gold coin -->
+		<item id="2649" chance="14000"/><!-- leather legs -->
+		<item id="2388" chance="11750"/><!-- hatchet -->
+		<item id="2666" chance="11500"/><!-- meat -->
+		<item id="2580" chance="5750"/><!-- fishing rod -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+			<item id="2465" chance="3500"/><!-- brass armor -->
+			<item id="2464" chance="3000"/><!-- chain armor -->
+			<item id="2513" chance="2150"/><!-- battle shield -->
+			<item id="5878" chance="1000"/><!-- minotaur leather -->
+			<item id="2648" chance="600"/><!-- chain legs -->
+			<item id="2387" chance="500"/><!-- double axe -->
+			<item id="7618" chance="500"/><!-- health potion -->
+			<item id="2458" chance="7000"/><!-- chain helmet -->
+			<item id="7588" chance="150"/><!-- strong health potion -->
+			<item id="7401" chance="100"/><!-- minotaur trophy -->		
+			
+		</item>
+	</loot>
+</monster>

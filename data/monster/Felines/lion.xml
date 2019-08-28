@@ -1,40 +1,37 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lion" nameDescription="a lion" race="blood" experience="30" speed="190" manacost="320">
-	<health now="80" max="80" />
-	<look type="41" corpse="5986" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lion" nameDescription="a lion" race="blood" experience="30" speed="180" manacost="320">
+	<health now="80" max="80"/>
+	<look type="41" corpse="5986"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="10" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="melee" interval="2000" skill="30" attack="20"/>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="6" defense="13"/>
 	<elements>
-		<element earthPercent="20" />
-		<element holyPercent="20" />
-		<element icePercent="-15" />
-		<element deathPercent="-8" />
+		<element earthPercent="22"/>
+		<element holyPercent="17"/>
+		<element icePercent="-8"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Groarrr!" />
+		<voice sentence="Groarrr!"/>
 	</voices>
 	<loot>
-		<item name="meat" countmax="4" chance="45000" />
-		<item name="ham" countmax="2" chance="18430" />
-		<item name="lion's mane" chance="1400" />
+		<item id="2671" countmax="2" chance="18000"/><!-- ham -->
+		<item id="2666" countmax="4" chance="17000"/><!-- meat -->
 	</loot>
 </monster>

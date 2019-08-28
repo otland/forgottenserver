@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Pincher Scout" nameDescription="a quara pincher scout" race="blood" experience="600" speed="250" manacost="0">
+	<health now="775" max="775"/>
+	<look type="77" corpse="6063"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="50" attack="80"/>
+		<attack name="speed" interval="1000" chance="12" range="7" speedchange="-850" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="35"/>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="1"/>
+		<immunity poison="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<elements>
+		<element energyPercent="-10"/>
+		<element physicalPercent="10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Clank clank!"/>
+		<voice sentence="Clap!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="49" chance="100000"/><!-- gold coin -->
+		<item id="2398" chance="5000"/><!-- mace -->
+		<item id="2463" chance="5000"/><!-- plate armor -->
+		<item id="2394" chance="5000"/><!-- morning star -->
+		<item id="2381" chance="2222"/><!-- halberd -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2147" chance="1538"/><!-- small ruby -->
+				<item id="2177" chance="1538"/><!-- life crystal -->
+				<item id="5895" chance="2000"/><!-- fish fin -->
+			
+		</item>
+	</loot>
+</monster>

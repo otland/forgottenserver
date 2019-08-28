@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc Leader" nameDescription="a orc leader" race="blood" experience="270" speed="230" manacost="640">
+	<health now="450" max="450"/>
+	<look type="59" corpse="6001"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="74"/>
+		<attack name="physical" interval="1000" chance="17" range="7" min="-50" max="-70">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="30"/>
+	<elements>
+	<element firePercent="100"/>
+	<element energyPercent="20"/>
+	<element holyPercent="10"/>
+	<element earthPercent="-10"/>
+	<element deathPercent="-5"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ulderek futgyr human!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="35" chance="17000"/><!-- gold coin -->
+		<item id="2667" chance="29000"/><!-- fish -->
+		<item id="2379" chance="26500"/><!-- dagger -->
+		<item id="2410" countmax="4" chance="6250"/><!-- throwing knife -->
+		<item id="2666" countmax="2" chance="12500"/><!-- meat -->
+		<item id="2419" chance="6700"/><!-- scimitar -->
+		<item id="1988" chance="20000"><!-- backpack -->
+			
+				<item id="2478" chance="2500"/><!-- brass legs -->
+				<item id="2463" chance="1250"/><!-- plate armor -->
+				<item id="7378" chance="1000"/><!-- royal spear -->
+				<item id="2207" chance="750"/><!-- sword ring -->
+				<item id="2647" chance="800"/><!-- plate legs -->
+				<item id="2413" chance="750"/><!-- broadsword -->	
+				<item id="7618" chance="400"/><!-- health potion -->	
+				<item id="2475" chance="200"/><!-- warrior helmet -->
+			
+		</item>
+	</loot>
+</monster>

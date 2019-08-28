@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mr. Punish" nameDescription="a mr. punish" race="undead" experience="5500" speed="470" manacost="0">
+	<health now="12000" max="12000"/>
+	<look type="234" corpse="6331"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="2000"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-660" max="-1280"/>
+	</attacks>
+	<defenses armor="64" defense="72"/>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity poison="1"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="0"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="6537" chance="100000"/><!-- mr punish's handcuffs -->
+	</loot>
+</monster>

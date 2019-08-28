@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bovinus" nameDescription="Bovinus" race="blood" experience="60" speed="170">
-	<health now="150" max="150" />
-	<look type="25" corpse="7349" />
+<monster name="Bovinus" nameDescription="bovinus" race="blood" experience="60" speed="170" manacost="0">
+	<health now="150" max="150"/>
+	<look type="25" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag targetdistance="1" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-50" />
+		<attack name="melee" interval="2000" skill="10" attack="50"/>
 	</attacks>
-	<defenses armor="9" defense="11" />
 	<elements>
-		<element firePercent="20" />
+		<element firePercent="20"/>
 	</elements>
 	<immunities>
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
+	<defenses armor="9" defense="11"/>
 </monster>

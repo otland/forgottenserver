@@ -1,73 +1,82 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Necropharus" nameDescription="Necropharus" race="blood" experience="1050" speed="240">
-	<health now="750" max="750" />
-	<look type="209" corpse="20574" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Necropharus" nameDescription="necropharus" race="blood" experience="700" speed="240" manacost="0">
+	<health now="750" max="750"/>
+	<look type="209" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="4" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-102" poison="95" />
+		<attack name="melee" interval="2000" skill="35" attack="45" poison="95"/>
 		<attack name="lifedrain" interval="1000" chance="20" range="1" min="-80" max="-120">
-			<attribute key="areaEffect" value="redspark" />
+			<attribute key="areaEffect" value="redspark"/>
 		</attack>
-		<attack name="earth" interval="1000" chance="17" range="7" min="-50" max="-140">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="poison" />
+		<attack name="poison" interval="1000" chance="17" range="7" min="-50" max="-140">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
 	<defenses armor="25" defense="25">
 		<defense name="healing" interval="1000" chance="25" min="60" max="90">
-			<attribute key="areaEffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity earth="1" />
-		<immunity lifedrain="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="0"/>
+		<immunity poison="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="ghoul" interval="1000" chance="20" max="2" />
-		<summon name="ghost" interval="1000" chance="17" max="1" />
-		<summon name="mummy" interval="1000" chance="15" max="1" />
+		<summon name="ghoul" interval="1000" chance="20" max="2"/>
+		<summon name="ghost" interval="1000" chance="17" max="1"/>
+		<summon name="mummy" interval="1000" chance="15" max="1"/>
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="You will rise as my servant!" />
-		<voice sentence="Praise to my master Urgith!" />
+		<voice sentence="You will rise as my servant!"/>
+		<voice sentence="Praise to my master Urgith!"/>
 	</voices>
 	<loot>
-		<item id="2032" chance="10000" /><!-- bowl -->
-		<item name="gold coin" countmax="40" chance="100000" />
-		<item name="moonlight rod" chance="500" />
-		<item name="boots of haste" chance="666" />
-		<item id="2229" countmax="3" chance="20000" /><!-- skull -->
-		<item id="2230" countmax="1" chance="30000" /><!-- bone -->
-		<item id="2231" countmax="1" chance="6000" /><!-- big bone -->
-		<item name="fire sword" chance="220" />
-		<item name="katana" chance="10000" />
-		<item name="clerical mace" chance="5000" />
-		<item name="skull staff" chance="833" />
-		<item name="bone club" countmax="1" chance="19900" />
-		<item name="scale armor" countmax="1" chance="8500" />
-		<item name="bone shield" chance="7500" />
-		<item name="mystic turban" chance="909" />
-		<item name="grave flower" chance="20000" />
-		<item name="green mushroom" countmax="1" chance="22500" />
-		<item name="shadow herb" countmax="2" chance="20000" />
-		<item name="horseman helmet" chance="150" />
-		<item name="worm" countmax="10" chance="50000" />
-		<item name="soul stone" chance="100000" />
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2032" chance="10000"/><!-- bowl -->
+		<item id="3969" chance="150"/><!-- horseman helmet -->
+		<item id="2392" chance="220"/><!-- fire sword -->
+		<item id="2804" countmax="2" chance="20000"/><!-- shadow herb -->
+		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+		<item id="5809" chance="100000"/><!-- soul stone -->
+		<item id="2186" chance="500"/><!-- moonlight rod -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2483" countmax="1" chance="8500"/><!-- scale armor -->
+				<item id="2796" countmax="1" chance="22500"/><!-- green mushroom -->
+				<item id="2231" countmax="1" chance="6000"/><!-- big bone -->
+				<item id="2230" countmax="1" chance="30000"/><!-- bone -->
+				<item id="2449" countmax="1" chance="19900"/><!-- bone club -->
+				<item id="2541" chance="7500"/><!-- bone shield -->
+				<item id="2412" chance="10000"/><!-- katana -->
+				<item id="2229" countmax="3" chance="20000"/><!-- skull -->
+				<item id="2747" chance="20000"/><!-- grave flower -->
+				<item id="2436" chance="833"/><!-- skull staff -->
+				<item id="2663" chance="909"/><!-- mystic turban -->
+				<item id="2195" chance="666"/><!-- boots of haste -->
+				<item id="2423" chance="5000"/><!-- clerical mace -->
+			
+		</item>
 	</loot>
 </monster>

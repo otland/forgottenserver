@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Old Widow" nameDescription="the Old Widow" race="blood" experience="2800" speed="240" manacost="0">
+	<health now="3200" max="3200"/>
+	<look type="208" corpse="5977"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-100" max="-500"/>
+		<attack name="poison" interval="1000" chance="15" range="7" min="-250" max="-300">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="20" range="7" speedchange="-850" duration="25000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="poisonfield" interval="1000" chance="10" range="7" radius="4" target="1">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="17" defense="21">
+		<defense name="healing" interval="1000" chance="17" min="225" max="275">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="speed" interval="1000" chance="8" speedchange="345" duration="6000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="1"/>
+		<immunity poison="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="giant spider" interval="1000" chance="13" max="2"/>
+	</summons>
+	<loot>
+		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
+		<item id="2463" chance="4000"/><!-- plate armor -->
+		<item id="2171" chance="400"/><!-- platinum amulet -->
+		<item id="2459" chance="20000"/><!-- iron helmet -->
+		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+		<item id="5879" countmax="1" chance="5000"/><!-- giant spider silk -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2457" countmax="1" chance="10000"/><!-- steel helmet -->
+				<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+				<item id="2476" chance="1000"/><!-- knight armor -->
+				<item id="2477" chance="500"/><!-- knight legs -->
+				<item id="2478" chance="10000"/><!-- brass legs -->
+				<item id="2169" chance="800"/><!-- time ring -->
+			
+		</item>
+	</loot>
+</monster>

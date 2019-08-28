@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="195" manacost="490">
+	<health now="275" max="275"/>
+	<look type="265" corpse="7330"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="8"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="30"/>
+	</attacks>
+	<defenses armor="22" defense="23"/>
+	<elements>
+		<element icePercent="100"/>
+		<element firePercent="20"/>
+		<element holyPercent="10"/>
+		<element energyPercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<voices interval="2000" chance="5">
+		<voice sentence="Ymirs Mjalle!"/>
+		<voice sentence="No run so much, must stay fat!"/>
+		<voice sentence="Horre, Sjan Flan!"/>
+		<voice sentence="Damned fast food."/>
+		<voice sentence="Come kiss the cook!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2666" countmax="2" chance="33333"/><!-- meat -->
+		<item id="2671" countmax="2" chance="33333"/><!-- ham -->
+		<item id="2406" chance="25000"/><!-- short sword -->
+		<item id="2510" chance="5333"/><!-- plate shield -->
+		<item id="7441" chance="3444"/><!-- ice cube -->
+		<item id="2513" chance="2500"/><!-- battle shield -->
+		<item id="7460" chance="2500"/><!-- norse shield -->
+		<item id="1294" countmax="3" chance="2500"/><!-- small stone -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2129" chance="1955"/><!-- wolf tooth chain -->
+				<item id="2209" chance="2055"/><!-- club ring -->
+				<item id="2381" chance="1955"/><!-- halberd -->
+				<item id="2490" chance="2777"/><!-- dark helmet -->	
+				<item id="7290" chance="4444"/><!-- shard -->
+				<item id="7620" chance="2777"/><!-- mana potion -->
+				<item id="7892" chance="2777"/><!-- glacier shoes -->			
+			
+		</item>
+	</loot>
+</monster>

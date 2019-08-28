@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ice Golem" nameDescription="an ice golem" race="undead" experience="295" speed="195" manacost="0">
+	<health now="385" max="385"/>
+	<look type="261" corpse="7282"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="100" attack="40"/>
+		<attack name="speed" interval="1000" chance="13" length="8" spread="0" speedchange="-800" duration="20000">
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="physical" interval="1000" chance="15" range="7" min="-0" max="-85">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
+		<attack name="melee" interval="2000" chance="15" range="7" radius="3" target="0" min="-10" max="-80">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="26"/>
+	<elements>
+		<element icePercent="100"/>
+		<element firePercent="100"/>
+		<element deathPercent="100"/>
+		<element holyPercent="100"/>
+		<element physicalPercent="40"/>
+		<element energyPercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Chrr."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="53" chance="10000"/><!-- gold coin -->
+		<item id="7441" chance="7000"/><!-- ice cube -->
+		<item id="2144" chance="2700"/><!-- black pearl -->
+		<item id="7588" chance="1500"/><!-- strong health potion -->
+		<item id="2145" chance="500"/><!-- small diamond -->
+		<item id="1987" chance="100000"><!-- bag -->
+					
+				<item id="2396" chance="550"/><!-- ice rapier -->
+				<item id="2146" chance="750"/><!-- small sapphire -->
+				<item id="7449" chance="500"/><!-- crystal sword -->
+				<item id="2479" chance="600"/><!-- strange helmet -->
+				<item id="7290" chance="350"/><!-- shard -->
+				<item id="2383" chance="300"/><!-- spike sword -->
+				<item id="7902" chance="250"/><!-- glacier mask -->
+			
+		</item>
+	</loot>
+</monster>

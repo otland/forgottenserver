@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Slim" nameDescription="Slim" race="undead" experience="580" speed="200">
-	<health now="1025" max="1025" />
-	<look type="101" corpse="7349" />
+<monster name="Slim" nameDescription="slim" race="undead" experience="580" speed="200" manacost="0">
+	<health now="1025" max="1025"/>
+	<look type="101" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag targetdistance="1" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="melee" interval="2000" skill="50" attack="50"/>
 		<attack name="poisonfield" interval="1000" chance="50">
-			<attribute key="shootEffect" value="poison" />
+			<attribute key="shootEffect" value="poison"/>
 		</attack>
 		<attack name="physical" interval="3049" chance="40" min="-10" max="-50">
-			<attribute key="areaEffect" value="blackspark" />
+			<attribute key="areaEffect" value="blackSpark"/>
 		</attack>
 	</attacks>
-	<defenses armor="36" defense="38" />
+	<defenses armor="36" defense="38"/>
 	<elements>
-		<element firePercent="-10" />
-		<element holyPercent="-5" />
+		<element deathPercent="100"/>
+		<element firePercent="-10"/>
+		<element holyPercent="-6"/>
 	</elements>
 	<immunities>
-		<immunity death="1" />
-		<immunity earth="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="2000" chance="5">
-		<voice sentence="Zhroozzzzs." />
+		<voice sentence="Zhroozzzzs."/>
 	</voices>
 </monster>

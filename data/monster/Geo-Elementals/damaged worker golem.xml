@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Damaged Worker Golem" nameDescription="a damaged worker golem" race="energy" experience="95" speed="270" manacost="0">
+	<health now="260" max="260"/>
+	<look type="304" corpse="9801"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="15"/>		
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="1000" chance="7" min="20" max="100">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="50"/>
+		<element holyPercent="30"/>
+		<element firePercent="-10"/>
+		<element energyPercent="-5"/>
+		<element physicalPercent="40"/>
+		<element icePercent="25"/>
+		<element deathPercent="30"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Klonk klonk klonk"/>
+		<voice sentence="Failure! Failire!"/>
+		<voice sentence="Good morning citizen. How may I serve you?"/>
+		<voice sentence="Target identified: Rat! Termination initiated!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="86" chance="21000"/><!-- gold coin -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="9808" chance="13275"/><!-- rusty armor -->
+				<item id="5880" chance="650"/><!-- iron ore -->
+				<item id="2207" chance="650"/><!-- sword ring -->
+				<item id="8309" countmax="3" chance="500"/><!-- nails -->
+			
+		</item>
+	</loot>
+</monster>

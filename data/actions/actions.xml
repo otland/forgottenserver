@@ -205,8 +205,6 @@
 	<action fromid="17235" toid="17238" script="other/doors.lua" />
 	<action fromid="18208" toid="18209" script="other/doors.lua" />
 	<action fromid="13020" toid="13023" script="other/doors.lua" />
-	<action itemid="14405" function="market" />
-	<action fromid="18488" toid="18492" script="other/skilltrainer.lua" />
 	<action itemid="3743" script="other/transforms.lua" />
 	<action itemid="4404" script="other/transforms.lua" />
 </actions>

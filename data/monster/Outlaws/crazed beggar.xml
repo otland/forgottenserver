@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Crazed Beggar" nameDescription="a crazed beggar" race="blood" experience="35" speed="220" manacost="300">
+	<health now="100" max="100"/>
+	<look type="153" body="38" feet="97" head="59" legs="38" addons="3" corpse="3058"/>
+	<targetchange interval="4000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="80"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="15" attack="20"/>
+	</attacks>
+	<defenses armor="11" defense="16"/>
+	<elements>
+		<element physicalPercent="5"/>
+		<element energyPercent="20"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-15"/>
+	</elements>
+	<voices interval="4000" chance="16">
+		<voice sentence="Hehehe!"/>
+		<voice sentence="Raahhh!"/>
+		<voice sentence="You are one of THEM! Die!"/>
+		<voice sentence="Wanna buy roses??"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="9" chance="50000"/><!-- gold coin -->
+		<item id="2237" chance="55000"/><!-- dirty cape -->
+		<item id="2690" chance="22500"/><!-- roll -->
+		<item id="2666" chance="12000"/><!-- meat -->
+		<item id="2567" chance="9750"/><!-- wooden spoon -->
+		<item id="2556" chance="6500"/><!-- wooden hammer  -->
+		<item id="2570" chance="4850"/><!-- rolling pin -->
+		<item id="2744" chance="4800"/><!-- red rose -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="1681" chance="2500"/><!-- blue pillow -->
+				<item id="5553" chance="850"/><!-- rum flak -->
+				<item id="2802" chance="800"/><!-- sling herb -->		
+				<item id="9808" chance="750"/><!-- rusty armor -->
+				<item id="2213" chance="200"/><!-- dwarven ring -->
+				<item id="2072" chance="7500"/><!-- lute -->
+			
+		</item>
+	</loot>
+</monster>

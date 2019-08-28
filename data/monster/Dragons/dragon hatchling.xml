@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dragon Hatchling" nameDescription="a dragon hatchling" race="blood" experience="185" speed="170" manacost="0">
+	<health now="380" max="380"/>
+	<look type="271" corpse="7621"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="70" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="80"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="45" attack="20"/>
+		<attack name="fire" interval="1000" chance="12" length="8" spread="3" min="-10" max="-60">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="14" length="8" spread="3" min="-20" max="-40">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="38">
+		<defense name="healing" interval="1000" chance="13" min="8" max="33">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="100"/>
+		<element earthPercent="60"/>
+		<element icePercent="-10"/>
+		<element energyPercent="-6"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="50">
+		<voice sentence="Fchu?" yell="0"/>
+		<voice sentence="Rooawwrr"/>
+	</voices>
+		<loot>
+		<item id="2148" countmax="55" chance="37500"/><!-- gold coin -->
+		<item id="2672" chance="25000"/><!-- dragon ham -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="7618" chance="5000"/><!-- health potion -->
+			
+		</item>
+	</loot>
+</monster>

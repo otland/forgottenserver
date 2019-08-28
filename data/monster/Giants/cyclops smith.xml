@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cyclops Smith" nameDescription="a cyclops smith" race="blood" experience="255" speed="220" manacost="695">
+	<health now="435" max="435"/>
+	<look type="277" corpse="7740"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="70" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="50"/>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-46" max="-74">
+			<attribute key="shootEffect" value="whirlwindclub"/>
+		</attack>
+		<attack name="drunk" interval="1000" chance="10"/>
+	</attacks>
+	<defenses armor="17" defense="24"/>
+	<elements>
+		<element energyPercent="20"/>
+		<element firePercent="10"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Outis emoi g' onoma."/>
+		<voice sentence="Whack da humy!"/>
+		<voice sentence="Ai humy phary ty kaynon"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="69" chance="31000"/><!-- gold coin -->
+		<item id="2666" countmax="3" chance="12500"/><!-- meat -->
+		<item id="2671" chance="20000"/><!-- ham -->
+		<item id="2513" chance="8000"/><!-- battle shield -->
+		<item id="2417" chance="5000"/><!-- battle hammer -->
+		<item id="2510" chance="2000"/><!-- plate shield -->
+		<item id="2378" chance="3200"/><!-- battle axe -->
+		<item id="2442" chance="1800"/><!-- heavy machete -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+			<item id="2387" chance="1200"/><!-- double axe -->
+			<item id="2490" chance="200"/><!-- dark helmet -->
+			<item id="7398" chance="120"/><!-- cyclops trophy -->
+			<item id="7588" chance="450"/><!-- strong health potion -->
+			<item id="2209" chance="350"/><!-- club ring -->
+			<item id="7452" chance="250"/><!-- spiked squelcher -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,44 +1,42 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lavahole" nameDescription="a lavahole" race="undead" experience="0" speed="0">
-	<health now="1" max="1" />
-	<look typeex="389" />
-	<targetchange interval="4000" chance="10" />
+<monster name="Lavahole" nameDescription="a lavahole" race="undead" experience="0" speed="0" manacost="0">
+	<health now="100" max="100"/>
+	<look typeex="389"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="0" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="100" />
-		<flag runonhealth="0" />
-		<flag hidehealth="1" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="0"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="100"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="fire" interval="2000" chance="50" range="7" min="0" max="-100">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="firearea" />
+		<attack name="fire" interval="3000" chance="30" range="7" min="-0" max="-111">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 	</attacks>
+	<defenses armor="1" defense="1"/>
 	<immunities>
-		<immunity physical="1" />
-		<immunity energy="1" />
-		<immunity fire="1" />
-		<immunity earth="1" />
-		<immunity ice="1" />
-		<immunity holy="1" />
-		<immunity death="1" />
-		<immunity lifedrain="1" />
-		<immunity manadrain="1" />
-		<immunity paralyze="1" />
-		<immunity drunk="1" />
-		<immunity outfit="1" />
-		<immunity invisible="1" />
+		<immunity physical="1"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity poison="1"/>
+		<immunity ice="1"/>
+		<immunity holy="1"/>
+		<immunity death="1"/>
+		<immunity lifedrain="1"/>
+		<immunity manadrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity drunk="1"/>
+		<immunity outfit="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 </monster>

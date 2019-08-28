@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Blightwalker" nameDescription="a blightwalker" race="undead" experience="3350" speed="240" manacost="0">
+	<health now="8900" max="8900"/>
+	<look type="246" corpse="6354"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="88" attack="100"/>
+		<attack name="physical" interval="1500" chance="34" range="7" min="-105" max="-155">
+			<attribute key="shootEffect" value="smallstone"/>
+		</attack>
+		<attack name="manadrain" interval="2000" chance="25" range="7" min="-140" max="-220">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="1000" chance="50" min="75" max="125">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element firePercent="60"/>
+		<element energyPercent="40"/>
+		<element icePercent="33"/>
+		<element physicalPercent="-5"/>
+		<element holyPercent="-30"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="I can see you decaying!"/>
+		<voice sentence="Let me taste your mortality!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="80" chance="627500"/><!-- gold coin -->
+		<item id="2148" countmax="70" chance="627500"/><!-- gold coin -->
+		<item id="2260" chance="29750"/><!-- blank rune -->
+		<item id="2694" countmax="3" chance="33000"/><!-- bunch of wheat -->
+		<item id="6500"  chance="22000"/><!-- demonic essence -->
+		<item id="2179" chance="7800"/><!-- gold ring -->
+		<item id="2152" countmax="3" chance="7500"/><!-- platinum coin -->
+		<item id="2545" countmax="9" chance="627500"/><!-- poison arrow -->
+		<item id="7732" chance="1550"/><!-- seeds -->
+		<item id="5944" chance="15500"/><!-- soul orb -->
+		<item id="2550" chance="5000"/><!-- scythe -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="9810" chance="7800"/><!-- rusty armor -->
+		<item id="2183" chance="700"/><!-- hailstorm rod -->
+		<item id="7885" chance="1550"/><!-- terra legs -->
+		<item id="7884" chance="1750"/><!-- terra mantle -->
+		<item id="2199" chance="750"/><!-- garlic necklace -->
+		<item id="2173" chance="50"/><!-- amulet of loss -->
+		<item id="6300" chance="100"/><!-- death ring -->		
+		<item id="9971" chance="150"/><!-- gold ingot -->		
+		<item id="2436" chance="500"/><!-- skull staff -->		
+			
+		</item>
+	</loot>
+</monster>

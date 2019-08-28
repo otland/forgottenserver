@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Massive Fire Elemental" nameDescription="a massive fire elemental" race="fire" experience="950" speed="260" manacost="0">
+	<health now="1800" max="1800"/>
+	<look type="242" corpse="1492"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="100" fire="200"/>
+		<attack name="firefield" interval="2000" chance="16" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+		<attack name="fire" interval="1000" chance="13" length="7" spread="3" min="-200" max="-700"/>
+		<attack name="fire" interval="1000" chance="11" radius="3" target="0" min="-60" max="-250">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25"/>
+	<elements>
+		<element icePercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+</monster>

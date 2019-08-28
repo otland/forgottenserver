@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Plasmother" nameDescription="the plasmother" race="venom" experience="8900" speed="310" manacost="0">
+	<health now="16050" max="16050"/>
+	<look type="238" corpse="6532"/>
+	<targetchange interval="5500" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+		<attack name="speed" interval="1000" chance="8" radius="6" target="0" speedchange="-800" duration="10000">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="earth" interval="2000" chance="15" target="0" radius="4" min="-200" max="-350">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="earth" interval="3000" chance="15" target="1" radius="4" min="-200" max="-530">
+			<attribute key="areaEffect" value="greenspark"/>
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="1000" chance="75" min="505" max="605">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-20"/>
+		<element energyPercent="15"/>
+	</elements>
+	<immunities>
+		<immunity poison="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Blubb"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="70" chance1="20000" chancemax="0"/><!-- gold coins -->
+		<item id="2148" countmax="60" chance1="20000" chancemax="0"/><!-- gold coins -->
+		<item id="2148" countmax="45" chance1="20000" chancemax="0"/><!-- gold coins -->
+		<item id="2152" countmax="13" chance1="25000" chancemax="0"/><!-- platinum coin -->
+		<item id="6500" chance1="45000" chancemax="0"/><!-- demonic essence -->
+		<item id="2144" countmax="3" chance1="5000" chancemax="0"/><!-- black pearl -->
+		<item id="2146" countmax="3" chance1="5000" chancemax="0"/><!-- small sapphire -->
+		<item id="5944" chance="35000"/><!-- soul orb -->
+		<item id="6535" chance="100000"/><!-- the plasmother's remains -->
+	</loot>
+</monster>

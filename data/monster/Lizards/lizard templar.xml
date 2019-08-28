@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="115" speed="220" manacost="0">
+	<health now="410" max="410"/>
+	<look type="113" corpse="4251"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="35"/>
+	</attacks>
+	<defenses armor="16" defense="19"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="20"/>
+		<element icePercent="10"/>
+		<element firePercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hissss!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="60" chance="29500"/><!-- gold coin -->
+		<item id="2406" chance="7000"/><!-- short sword -->
+		<item id="2457" chance="5500"/><!-- steel helmet -->
+		<item id="2376" chance="6000"/><!-- sword -->
+		<item id="2394" chance="1500"/><!-- morning star -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2463" chance="1500"/><!-- plate armor -->
+				<item id="5876" chance="3000"/><!-- lizard leather -->
+				<item id="3963" chance="750"/><!-- templar scytheblade -->
+				<item id="2149" chance="900"/><!-- small emerald -->
+				<item id="7618" chance="800"/><!-- health potion -->
+				<item id="5881" chance="1000"/><!-- lizard scale -->
+				<item id="3975" chance="500"/><!-- salamander shield -->
+			
+		</item>
+	</loot>
+</monster>

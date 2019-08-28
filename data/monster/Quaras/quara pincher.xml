@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Pincher" nameDescription="a quara pincher" race="blood" experience="1200" speed="540" manacost="0">
+	<health now="1800" max="1800"/>
+	<look type="77" corpse="6063"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="75" attack="80"/>
+		<attack name="speed" interval="1000" chance="12" range="7" speedchange="-850" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="18" defense="25"/>
+	<elements>
+		<element firePercent="100"/>
+		<element icePercent="100"/>
+		<element earthPercent="-12"/>
+		<element energyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Clank clank!"/>
+		<voice sentence="Clap!"/>
+		<voice sentence="Crrrk! Crrrk!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="65" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="55" chance="100000"/><!-- gold coin -->
+		<item id="2398" chance="5000"/><!-- mace -->
+		<item id="2394" chance="5000"/><!-- morning star -->
+		<item id="2381" chance="2222"/><!-- halberd -->
+		<item id="2670" countmax="5" chance="20000"/><!-- shrimp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2147" chance="1538"/><!-- small ruby -->
+				<item id="5895" chance="2000"/><!-- fish fin -->
+				<item id="2475" chance="1333"/><!-- warrior helmet -->
+				<item id="7897" chance="1333"/><!-- glacier robe -->
+				<item id="7591" chance="1333"/><!-- great health potion -->		
+				<item id="2487" chance="500"/><!-- crown armor -->
+			
+		</item>
+	</loot>
+</monster>

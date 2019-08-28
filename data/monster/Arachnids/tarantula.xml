@@ -1,52 +1,53 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="210" manacost="485">
-	<health now="225" max="225" />
-	<look type="219" corpse="6060" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="280" manacost="485">
+	<health now="225" max="225"/>
+	<look type="219" corpse="6060"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-90" poison="40" />
-		<attack name="earth" interval="2000" chance="10" target="1" radius="1" range="1">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="carniphila" />
+		<attack name="melee" interval="2000" skill="30" attack="45" poison="2"/>
+		<attack name="poisonfield" interval="1000" chance="20" range="1">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poff"/>
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10">
-		<defense name="speed" interval="2000" chance="15" speedchange="220" duration="5000">
-			<attribute key="areaEffect" value="redshimmer" />
+	<defenses armor="15" defense="17">
+		<defense name="speed" interval="1000" chance="13" speedchange="334" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="10" />
-		<element firePercent="-15" />
-		<element icePercent="-10" />
+		<element earthPercent="100"/>
+		<element energyPercent="10"/>
+		<element firePercent="-15"/>
+		<element icePercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity earth="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="40" chance="79000" />
-		<item id="2169" chance="120" /><!-- time ring -->
-		<item name="steel helmet" chance="990" />
-		<item name="brass legs" chance="3050" />
-		<item name="plate shield" chance="2000" />
-		<item name="spider fangs" chance="4820" />
-		<item name="tarantula egg" chance="10000" />
+		<item id="2478" chance="3250"/><!-- brass legs -->
+		<item id="2148" countmax="40" chance="23000"/><!-- gold coin -->
+		<item id="2510" chance="1800"/><!-- plate shield -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2457" chance="1250"/><!-- steel helmet -->
+				<item id="2169" chance="200"/><!-- time ring -->
+			
+		</item>
 	</loot>
 </monster>

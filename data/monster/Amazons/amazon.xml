@@ -1,50 +1,51 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Amazon" nameDescription="an amazon" race="blood" experience="60" speed="180" manacost="390">
-	<health now="110" max="110" />
-	<look type="137" head="113" body="120" legs="114" feet="132" corpse="20323" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Amazon" nameDescription="a amazon" race="blood" experience="60" speed="210" manacost="390">
+	<health now="110" max="110"/>
+	<look type="137" head="113" body="120" legs="114" feet="132" corpse="6081"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="4" />
-		<flag staticattack="90" />
-		<flag runonhealth="10" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-45" />
-		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-40">
-			<attribute key="shootEffect" value="throwingknife" />
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="physical" interval="1000" chance="10" range="7" min="-5" max="-40">
+			<attribute key="shootEffect" value="throwingknife"/>
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="11" defense="11"/>
 	<elements>
-		<element physicalPercent="-5" />
-		<element deathPercent="-5" />
+		<element physicalPercent="-8"/>
+		<element deathPercent="-7"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Yeeee ha!" />
-		<voice sentence="Your head shall be mine!" />
-		<voice sentence="Your head will be mine!" />
+		<voice sentence="Yeeee ha!"/>
+		<voice sentence="Your head shall be mine!"/>
 	</voices>
 	<loot>
-		<item id="2050" chance="1005" /><!-- torch -->
-		<item name="crystal necklace" chance="287" />
-		<item name="small ruby" chance="161" />
-		<item name="gold coin" countmax="20" chance="40000" />
-		<item id="2229" countmax="2" chance="80000" /><!-- skull -->
-		<item name="dagger" chance="80000" />
-		<item name="sabre" chance="23000" />
-		<item name="brown bread" chance="30333" />
-		<item name="girlish hair decoration" chance="10000" />
-		<item name="protective charm" chance="5000" />
+		<item id="2148" countmax="10" chance="23000"/><!-- gold coin -->
+		<item id="2229" countmax="2" chance="55500"/><!-- skull -->
+		<item id="2379" chance="81000"/><!-- dagger -->
+		<item id="2467" chance="43000"/><!-- leather armor -->
+		<item id="2691" chance="26000"/><!-- brown bread -->
+		<item id="2385" chance="22000"/><!-- sabre -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2526" chance="7000"/><!-- studded shield -->
+		<item id="2050" chance="5000"/><!-- torch -->
+		<item id="2125" chance="500"/><!-- crystal necklace -->
+		<item id="2147" chance="200"/><!-- small ruby -->	
+			
+		</item>
 	</loot>
 </monster>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Masked Marauder" nameDescription="the masked marauder" race="blood" experience="3500" speed="250" manacost="0">
+	<health now="6800" max="6800"/>
+	<look type="234" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="160"/>
+		<attack name="physical" interval="2000" chance="40" min="-38" max="-150">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="healing" interval="1000" chance="50" min="75" max="125">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Didn't you leave your house door open?"/>
+		<voice sentence="Oops, your shoelaces are open!"/>
+	</voices>
+</monster>

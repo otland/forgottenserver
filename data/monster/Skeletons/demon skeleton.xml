@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demon Skeleton" nameDescription="a demon skeleton" race="undead" experience="240" speed="230" manacost="620">
+	<health now="400" max="400"/>
+	<look type="37" corpse="5963"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="64" attack="50"/>
+		<attack name="lifedrain" interval="2000" chance="10" range="1" min="-30" max="-50"/>
+	</attacks>
+	<defenses armor="25" defense="25"/>
+	<elements>
+		<element firePercent="100"/>
+		<element deathPercent="100"/>
+		<element earthPercent="100"/>
+		<element holyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity drunk="0"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="50" chance="18500"/><!-- gold coin -->
+		<item id="2050" chance="52750"/><!-- torch -->
+		<item id="2399" countmax="3" chance="3000"/><!-- throwing star -->
+		<item id="2417" chance="3000"/><!-- battle hammer -->
+		<item id="2459" chance="2650"/><!-- iron helmet -->
+		<item id="2513" chance="1000"/><!-- battle shield -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2194" chance="400"/><!-- mysterious fetish -->		
+				<item id="7620" chance="900"/><!-- mana potion -->
+				<item id="2178" chance="250"/><!-- mind stone -->
+				<item id="2515" chance="50"/><!-- guardian shield -->
+			
+		</item>
+	</loot>
+</monster>

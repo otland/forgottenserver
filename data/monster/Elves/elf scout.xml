@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Elf Scout" nameDescription="a elf scout" race="blood" experience="75" speed="225" manacost="360">
+	<health now="160" max="160"/>
+	<look type="64" corpse="6012"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="20"/>
+		<attack name="physical" interval="1000" chance="25" range="7" min="-30" max="-60">
+			<attribute key="shootEffect" value="arrow"/>
+		</attack>
+	</attacks>
+	<defenses armor="7" defense="18"/>
+	<elements>
+		<element holyPercent="30"/>
+		<element deathPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Tha'shi Ab'Dendriel!"/>
+		<voice sentence="Feel the sting of my arrows!"/>
+		<voice sentence="Thy blood will quench the soil's thirst!"/>
+		<voice sentence="Evicor guide my arrow."/>
+		<voice sentence="Your existence will end here!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="30" chance="31000"/><!-- gold coin -->
+		<item id="2544" countmax="15" chance="12500"/><!-- arrow -->
+		<item id="2545" countmax="6" chance="7000"/><!-- poison arrow -->
+		<item id="2681" chance="17750"/><!-- grape -->
+		<item id="2031" chance="14250"/><!-- waterskin -->
+		<item id="2484" chance="19750"/><!-- studded armor -->
+		<item id="2642" chance="9370"/><!-- sandals -->
+		<item id="2397" chance="6500"/><!-- longsword -->
+		<item id="2482" chance="7000"/><!-- studded helmet -->
+		<item id="1987" chance="6666"><!-- bag -->
+			
+		<item id="2456" chance="4000"/><!-- bow -->
+		<item id="5921" chance="250"/><!-- heaven blossom -->
+		<item id="7438" chance="50"/><!-- elvish bow -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grynch Clan Goblin" nameDescription="a Grynch Clan Goblin" race="blood" experience="4" speed="870" manacost="0">
+	<health now="80" max="80"/>
+	<look type="61" corpse="6002"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="0" defense="100"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="0"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="11"/>
+		<flag staticattack="0"/>
+		<flag runonhealth="80"/>
+	</flags>
+	<attacks>
+	</attacks>
+	<defenses armor="10" defense="12">
+		<defense name="speed" interval="1000" chance="15" speedchange="500" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="1"/>
+		<immunity poison="0"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="0"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="T'was not me hand in your pocket!"/>
+		<voice sentence="Look! Cool stuff in house. Let's get it!"/>
+		<voice sentence="Uhh! Nobody home!"/>
+		<voice sentence="Me just borrowed it!"/>
+		<voice sentence="Me no steal! Me found it!"/>
+		<voice sentence="Me had it for five minutes. It's family heirloom now!"/>
+		<voice sentence="Nice human won't hurt little, good goblin?"/>
+		<voice sentence="Gimmegimme!"/>
+		<voice sentence="Invite me in you lovely house plx!"/>
+		<voice sentence="Other Goblin stole it!"/>
+		<voice sentence="All presents mine!"/>
+		<voice sentence="Me got ugly ones purse"/>
+		<voice sentence="Free itans plz!"/>
+		<voice sentence="Not me! Not me!"/>
+		<voice sentence="Guys, help me here! Guys? Guys???"/>
+		<voice sentence="That only much dust in me pocket! Honest!"/>
+		<voice sentence="Can me have your stuff?"/>
+		<voice sentence="Halp, Big dumb one is after me!"/>
+		<voice sentence="Uh, So many shiny things!"/>
+		<voice sentence="Utani hur hur hur!"/>
+		<voice sentence="Mee? Stealing? Never!!!"/>
+		<voice sentence="Oh what fun it is to steal a one-horse open sleigh!"/>
+		<voice sentence="Must have it! Must have it!"/>
+		<voice sentence="Where me put me lockpick?"/>
+		<voice sentence="Catch me if you can!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="22" chance="22500"/><!-- gold coin -->
+		<item id="6497" chance="7000"/><!-- present bag -->
+		<item id="2111" countmax="5" chance="7000"/><!-- snowball -->
+		<item id="6277" countmax="3" chance="7000"/><!-- lump of cake dough -->
+		<item id="2675" countmax="3" chance="7000"/><!-- orange -->
+		<item id="2687" countmax="5" chance="7000"/><!-- cookie -->
+		<item id="2679" countmax="4" chance="7000"/><!-- cherry -->
+		<item id="2674" countmax="3" chance="700"/><!-- apple -->
+		<item id="2695" countmax="2" chance="5000"/><!-- egg -->
+		<item id="2688" countmax="3" chance="5000"/><!-- candy cane -->
+		<item id="6394" chance="5000"/><!-- cream cake -->
+		<item id="2072" chance="5000"/><!-- lute -->
+		<item id="2260" chance="5000"/><!-- blank rune -->
+		<item id="2163" chance="4000"/><!-- magic light wand -->
+		<item id="1852" chance="4000"/><!-- landscape picture -->
+		<item id="1988" chance="100000"><!-- backpack -->
+			
+		<item id="2172" chance="4000"/><!-- bronze amulet -->
+		<item id="1949" chance="4000"/><!-- scroll -->
+		<item id="6501" countmax="2" chance="4000"/><!-- gingerbread man -->
+		<item id="2661" chance="4000"/><!-- scarf -->
+		<item id="5890" countmax="5" chance="4000"/><!-- chicken feather -->
+		<item id="5894" countmax="3" chance="4000"/><!-- bat wing -->
+		<item id="5902" chance="4000"/><!-- honeycomb -->
+		<item id="4873" chance="4000"/><!-- explorer brooch -->
+		<item id="7909" countmax="5" chance="3500"/><!-- walnut -->
+		<item id="7910" countmax="100" chance="3500"/><!-- peanut -->
+		<item id="6393" chance="1500"/><!-- valentine cake -->
+		<item id="6091" chance="1500"/><!-- watch -->
+		<item id="2551" chance="1500"/><!-- broom -->
+		<item id="2114" chance="1000"/><!-- piggy bank -->
+		<item id="5792" chance="1000"/><!-- dice -->
+		<item id="2560" chance="1000"/><!-- mirror -->
+		<item id="1686" chance="750"/><!-- blue round pillow -->
+		<item id="1687" chance="750"/><!-- red round pillow -->
+		<item id="1688" chance="750"/><!-- green round pillow -->
+		<item id="1689" chance="750"/><!-- yellow round pillow -->
+		<item id="2102" chance="500"/><!-- flower bowl -->
+		<item id="4839" chance="500"/><!-- bottle -->
+		<item id="2159" countmax="2" chance="500"/><!-- scarab coin -->
+		<item id="5022" countmax="2" chance="500"/><!-- orichalcum pearl  -->
+		<item id="2160" chance="250"/><!-- crystal coin -->
+		<item id="7731" chance="250"/><!-- elvenhair rope -->
+		<item id="2534" chance="250"/><!-- vampire shield -->
+				
+		</item>
+	</loot>
+</monster>

@@ -1,80 +1,77 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Wyrm" nameDescription="a wyrm" race="blood" experience="1550" speed="230">
-	<health now="1825" max="1825" />
-	<look type="291" corpse="8941" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Wyrm" nameDescription="a wyrm" race="blood" experience="1450" speed="300" manacost="0">
+	<health now="1825" max="1825"/>
+	<look type="291" corpse="8941"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
-		<flag targetdistance="1" />
-		<flag runonhealth="1" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-235" />
-		<attack name="energy" interval="2000" chance="15" radius="3" min="-100" max="-220">
-			<attribute key="areaEffect" value="yellowenergy" />
+		<attack name="melee" interval="2000" skill="30" attack="110"/>
+		<attack name="energy" interval="2000" chance="30" radius="3" min="-100" max="-220">
+			<attribute key="areaEffect" value="yellowenergy"/>
 		</attack>
-		<attack name="energy" interval="2000" chance="10" length="5" spread="2" min="-130" max="-200">
-			<attribute key="areaEffect" value="purpleenergy" />
+		<attack name="energy" interval="2000" chance="30" length="5" spread="3" min="-10" max="-170">
+			<attribute key="areaEffect" value="energyarea"/>
 		</attack>
-		<attack name="energy" interval="2000" chance="20" range="7" min="-100" max="-125">
-			<attribute key="shootEffect" value="energy" />
-			<attribute key="areaEffect" value="energy" />
+		<attack name="energy" interval="2000" chance="40" range="7" min="-100" max="-125">
+			<attribute key="shootEffect" value="energy"/>
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="0" min="-98" max="-145">
-			<attribute key="areaEffect" value="poff" />
+		<attack name="lifedrain" interval="2000" chance="20" length="4" spread="0" min="-98" max="-145">
+			<attribute key="areaEffect" value="poff"/>
 		</attack>
 	</attacks>
-	<defenses armor="35" defense="35">
-		<defense name="healing" interval="2000" chance="15" min="100" max="150">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="effect" interval="2000" chance="10" radius="1">
-			<attribute key="areaEffect" value="yellownote" />
+	<defenses armor="30" defense="31">
+		<defense name="healing" interval="3000" chance="40" min="125" max="275">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
-	<elements>
-		<element firePercent="20" />
-		<element earthPercent="75" />
-		<element deathPercent="-5" />
-		<element icePercent="-5" />
-	</elements>
 	<immunities>
-		<immunity energy="1" />
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity lifedrain="1" />
+		<immunity energy="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity lifedrain="1"/>
+		<!-- so they won't damage self. also, we cannot test are they really immune
+		in Cipbia, as there are no spells nor weapons to attack with life drain -->
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="GRRR!" />
-		<voice sentence="GROOOOAAAAAAAAR!" />
+	<voices interval="2000" chance="5">
+		<voice sentence="GRRR!"/>
+		<voice sentence="GROOOOAAAAAAAAR!"/>
 	</voices>
 	<loot>
-		<item name="small diamond" countmax="3" chance="750" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="30" chance="30000" />
-		<item name="crossbow" chance="5920" />
-		<item name="burst arrow" countmax="10" chance="7650" />
-		<item name="dragon ham" countmax="3" chance="34800" />
-		<item name="dragonbone staff" chance="110" />
-		<item name="strong health potion" chance="19970" />
-		<item name="strong mana potion" chance="15310" />
-		<item name="lightning pendant" chance="720" />
-		<item name="composite hornbow" chance="90" />
-		<item name="focus cape" chance="1250" />
-		<item name="hibiscus dress" chance="250" />
-		<item name="wand of starstorm" chance="420" />
-		<item name="wand of draconia" chance="990" />
-		<item name="shockwave amulet" chance="110" />
-		<item name="wyrm scale" chance="15360" />
+		<item id="2148" countmax="90" chance="30000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="30000"/><!-- gold coin -->
+		<item id="2148" countmax="60" chance="30000"/><!-- gold coin -->
+		<item id="2672" countmax="3" chance="15000"/><!-- dragon ham -->
+		<item id="2546" countmax="10" chance="4750"/><!-- burst arrow -->
+		<item id="7588" chance="4750"/><!-- strong health potion -->
+		<item id="2647" chance="1750"/><!-- plate legs -->
+		<item id="8921" chance="700"/><!-- wand of draconia -->
+		<item id="2145" countmax="3" chance="750"/><!-- small diamonds-->
+		<item id="1987" chance="10000"><!-- bag -->
+			
+		<item id="7589" chance="4000"/><!-- strong mana potion -->
+		<item id="2455" chance="15000"/><!-- crossbow -->
+		<item id="2457" chance="7500"/><!-- steel helmet -->
+		<item id="7889" chance="650"/><!-- lightning pendant -->
+		<item id="8871" chance="600"/><!-- focus cape -->
+		<item id="8920" chance="550"/><!-- wand of starstorm -->
+		<item id="8873" chance="750"/><!-- hubiscus dress -->
+		<item id="7430" chance="300"/><!-- dragonbone staff -->
+		<item id="8855" chance="200"/><!-- composite hornbow -->
+			
+		</item>
 	</loot>
 </monster>

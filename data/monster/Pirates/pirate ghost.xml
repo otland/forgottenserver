@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pirate Ghost" nameDescription="a pirate ghost" race="undead" experience="250" speed="230" manacost="0">
+	<health now="275" max="275"/>
+	<look type="196" corpse="6071"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50" poison="20"/>
+		<attack name="lifedrain" interval="1000" chance="34" radius="1" target="0" min="-30" max="-78">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="20" range="7" radius="2" target="1" min="-1" max="-65">
+				<attribute key="areaEffect" value="rednote"/>
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="25">
+		<defense name="healing" interval="1000" chance="15" min="40" max="70">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="100"/>
+		<element deathPercent="100"/>
+		<element earthPercent="100"/>
+		<element holyPercent="-50"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Yooh Ho Hooh Ho!"/>
+		<voice sentence="Hell is waiting for You!"/>
+		<voice sentence="It's alive!"/>
+		<voice sentence="The curse! Aww the curse!"/>
+		<voice sentence="You will not get my treasure!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="69" chance="18000"/><!-- gold coin -->
+		<item id="2237" chance="9000"/><!-- dirty cape -->
+		<item id="2236" chance="6000"/><!-- torn book -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2165" chance="800"/><!-- stealth ring -->
+		<item id="1951" chance="1250"/><!-- parchment -->
+		<item id="2383" chance="600"/><!-- spike sword -->
+		<item id="2655" chance="400"/><!-- red robe -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="340" manacost="0">
+	<health now="1400" max="1400"/>
+	<look type="321" corpse="9919"/>
+	<targetchange interval="5000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="300"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="70"/>
+		<attack name="earth" interval="1000" chance="12" range="7" target="1" radius="4" min="-0" max="-180">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="death" interval="2000" chance="20" range="2" target="1" min="-0" max="-125">
+			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="shootEffect" value="suddendeath"/>
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="speed" interval="1000" chance="19" speedchange="460" duration="8000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+		<defense name="healing" interval="1000" chance="14" min="150" max="230">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-25"/>
+		<element firePercent="45"/>
+		<element energyPercent="20"/>
+		<element icePercent="15"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+		<immunity death="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="7500" chance="20">
+		<voice sentence="Weeeheeheee!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="74" chance="43000"/><!-- gold coin -->
+		<item id="2148" countmax="73" chance="43000"/><!-- gold coin -->
+		<item id="2491" chance="800"/><!-- crown helmet -->
+		<item id="9941" chance="250"/><!-- crystal of focus -->
+		<item id="6300" chance="250"/><!-- death ring -->
+		<item id="7387" chance="400"/><!-- diamond sceptre -->
+		<item id="2387" chance="1000"/><!-- double axe -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="8871" chance="230"/><!-- focus cape -->
+		<item id="2152" countmax="3" chance="800"/><!-- platinum coin -->
+		<item id="2671" countmax="2" chance="20000"/><!-- ham -->
+		<item id="2666" countmax="4" chance="27500"/><!-- meat -->
+		<item id="6574" chance="150"/><!-- bar of chocolate -->	
+		<item id="7451" chance="170"/><!-- shadow sceptre -->
+			
+		</item>
+	</loot>
+</monster>

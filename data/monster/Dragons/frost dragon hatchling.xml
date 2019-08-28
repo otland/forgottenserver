@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frost Dragon Hatchling" nameDescription="a frost dragon hatchling" race="blood" experience="745" speed="170" manacost="0">
+	<health now="800" max="800"/>
+	<look type="283" corpse="7969"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="70" defense="10"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="80"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="40"/>
+		<attack name="ice" interval="1000" chance="12" length="8" spread="3" min="-50" max="-160">
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="ice" interval="1000" chance="15" range="7" min="-60" max="-120">
+			<attribute key="shootEffect" value="ice"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="38">
+	</defenses>
+	<elements>
+		<element energyPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
+		<immunity ice="1"/>
+		<immunity earth="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="50">
+		<voice sentence="Rooawwrr" yell="0"/>
+		<voice sentence="Fchu?" yell="0"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="55" chance="33750"/><!-- gold coin -->
+		<item id="2672" chance="25000"/><!-- dragon ham -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+			<item id="8900" chance="200"/><!-- spellbook of enlightenment -->
+			<item id="7618" chance="5000"/><!-- health potion -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<monster name="Ice Overlord" nameDescription="an ice overlord" race="undead" experience="1950" speed="390" manacost="0">
+	<health now="4000" max="2800"/>
+	<look type="11" corpse="8965"/>
+	<targetchange interval="20000" chance="15"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="85"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="100"/>
+		<attack name="speed" interval="2000" chance="18" radius="6" target="0" speedchange="-800" duration="5000">
+			<attribute key="areaEffect" value="icetornado"/>
+		</attack>
+		<attack name="ice" interval="1000" chance="9" range="7" target="1" min="-50" max="-400">
+			<attribute key="shootEffect" value="smallice"/>
+			<attribute key="areaEffect" value="iceattack"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="25"/>
+		<element energyPercent="-15"/>
+		<element holyPercent="25"/>
+	</elements>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="60" chance="27500"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="27500"/><!-- gold coin -->
+		<item id="2152" countmax="3" chance="45750"/><!-- platinum coin -->
+		<item id="8878" chance="1500"/><!-- cristalline armor -->
+		<item id="8300" chance="100000"/><!-- flawless ice crystal -->
+	</loot>
+</monster>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<monster name="Dire Penguin" nameDescription="dire penguin" race="blood" experience="120" speed="156" manacost="0">
+	<health now="173" max="173"/>
+	<look type="250" corpse="7334"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
+		<attack name="physical" interval="2000" chance="20" range="7" min="-0" max="-60">
+			<attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="mortarea"/>
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity outfit="1"/>
+		<immunity drunk="0"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="10" chance="18000"/><!-- gold coin -->
+		<item id="2667" countmax="4" chance="8000"/><!-- fish -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="7159" chance="7000"/><!-- green perch -->
+		<item id="7158" chance="8000"/><!-- rainbow trout -->
+		<item id="2434"  chance="500"/><!-- dragon hammer -->
+			
+		</item>
+	</loot>
+</monster>

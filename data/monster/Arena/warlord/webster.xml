@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Webster" nameDescription="Webster" race="undead" experience="1200" speed="290">
-	<health now="2950" max="2950" />
-	<look type="263" corpse="7349" />
+<monster name="Webster" nameDescription="a webster" race="undead" experience="1200" speed="290" manacost="0">
+	<health now="1750" max="1750"/>
+	<look type="263" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag targetdistance="1" />
-		<flag canwalkonenergy="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="melee" interval="2000" skill="40" attack="100"/>
 		<attack name="speed" interval="3500" chance="65" radius="1" target="1" range="1" duration="40" speedchange="-500">
-			<attribute key="areaEffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 		<attack name="energy" interval="3000" chance="75" min="-13" max="-80" range="7">
-			<attribute key="shootEffect" value="energy" />
+			<attribute key="shootEffect" value="energy"/>
 		</attack>
 	</attacks>
 	<defenses armor="29" defense="34">
 		<defense name="speed" interval="5000" chance="100" duration="2500" speedchange="500">
-			<attribute key="areaEffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="-20" />
+		<element icePercent="100"/>
+		<element energyPercent="-13"/>
 	</elements>
 	<immunities>
-		<immunity ice="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="2000" chance="5">
-		<voice sentence="You are lost!" />
-		<voice sentence="Come my little morsel." />
+		<voice sentence="You are lost!"/>
+		<voice sentence="Come my little morsel."/>
 	</voices>
 </monster>

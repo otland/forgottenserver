@@ -1,67 +1,69 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Vashresamun" nameDescription="Vashresamun" race="undead" experience="2950" speed="340">
-	<health now="4000" max="4000" />
-	<look type="90" corpse="6025" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Vashresamun" nameDescription="a vashresamun" race="undead" experience="2950" speed="340" manacost="0">
+	<health now="4000" max="4000"/>
+	<look type="90" corpse="6025"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-200" poison="65" />
+		<attack name="melee" interval="2000" skill="40" attack="80" poison="65"/>
 		<attack name="lifedrain" interval="2000" chance="30" radius="5" target="0" min="-200" max="-750">
-			<attribute key="areaEffect" value="purplenote" />
+			<attribute key="areaEffect" value="purplenote"/>
 		</attack>
 	</attacks>
 	<defenses armor="20" defense="35">
 		<defense name="healing" interval="1000" chance="20" min="60" max="450">
-			<attribute key="areaEffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 		<defense name="speed" interval="1000" chance="12" range="7" speedchange="350" duration="30000">
-			<attribute key="areaEffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="20" />
-		<element firePercent="20" />
-		<element energyPercent="20" />
+		<element deathPercent="100"/>
+		<element icePercent="20"/>
+		<element firePercent="20"/>
+		<element energyPercent="20"/>
 	</elements>
 	<immunities>
-		<immunity death="1" />
-		<immunity invisible="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Banshee" interval="2000" chance="20" max="2" />
+		<summon name="Banshee" interval="2000" chance="20" max="2"/>
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Come my maidens, we have visitors!" />
-		<voice sentence="Are you enjoying my music?" />
-		<voice sentence="If music is the food of death, drop dead." />
+	<voice sentence="Come my maidens, we have visitors!"/>
+		<voice sentence="Are you enjoying my music?"/>
+		<voice sentence="If music is the food of death, drop dead."/>
 	</voices>
 	<loot>
-		<item id="2072" chance="7000" /><!-- lute -->
-		<item id="2074" chance="1500" /><!-- panpipes -->
-		<item id="2124" chance="1500" /><!-- crystal ring -->
-		<item name="ancient tiara" chance="300" />
-		<item name="white pearl" chance="7000" />
-		<item name="gold coin" countmax="90" chance="50000" />
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="gold coin" countmax="65" chance="50000" />
-		<item name="blue note" chance="100000" />
-		<item name="crystal mace" chance="500" />
-		<item name="blue robe" chance="2500" />
-		<item id="7691" chance="7000" /><!-- great mana potion -->
+		<item id="2148" countmax="90" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="65" chance="50000"/><!-- gold coin -->
+		<item id="2143" chance="7000"/><!-- white pearl -->
+		<item id="2072" chance="7000"/><!-- lute -->
+		<item id="7691" chance="7000"/><!-- great mana potion -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2656" chance="2500"/><!-- blue robe -->
+		<item id="2124" chance="1500"/><!-- crystal ring -->
+		<item id="2074" chance="1500"/><!-- panpipes -->
+		<item id="2445" chance="500"/><!-- crystal mace -->
+		<item id="2139" chance="300"/><!-- ancient tiara -->
+		<item id="2349" chance="100000"/><!-- blue note -->
+			
+		</item>
 	</loot>
 </monster>

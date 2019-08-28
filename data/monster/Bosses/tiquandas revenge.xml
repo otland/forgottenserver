@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tiquandas Revenge" nameDescription="a tiquandas revenge" race="venom" experience="1755" speed="440" manacost="0">
+	<health now="2000" max="2000"/>
+	<look type="120" corpse="6047"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="400"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="40" poison="95"/>
+		<attack name="poison" interval="1000" chance="25" range="7" min="-60" max="-200">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="34" range="7" speedchange="-850" duration="30000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenspark"/>
+		</attack>
+		<attack name="poison" interval="1000" chance="12" radius="3" target="0" min="-40" max="-130">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="31">
+		<defense name="ultimate healing" interval="1200" chance="35" min="600" max="800"/>
+	</defenses>
+	<elements>
+		<element earthPercent="100"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="10" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2666" countmax="50" chance="33333"/><!-- meat -->
+		<item id="2671" countmax="8" chance="20000"/><!-- ham -->
+		<item id="2145" countmax="3" chance="33333"/><!-- small diamond -->
+		<item id="7732" chance="4000"/><!-- seeds -->
+		<item id="5015" chance="100000"/><!-- mandrake -->
+		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+	</loot>
+</monster>

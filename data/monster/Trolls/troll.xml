@@ -1,52 +1,53 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Troll" nameDescription="a troll" race="blood" experience="20" speed="170" manacost="290">
-	<health now="50" max="50" />
-	<look type="15" corpse="5960" />
-	<targetchange interval="4000" chance="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Troll" nameDescription="a troll" race="blood" experience="20" speed="126" manacost="290">
+	<health now="50" max="50"/>
+	<look type="15" corpse="5960"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="15" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-15" />
+		<attack name="melee" interval="1500" skill="20" attack="16"/>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="6" defense="8"/>
 	<elements>
-		<element energyPercent="25" />
-		<element holyPercent="10" />
-		<element earthPercent="-10" />
-		<element deathPercent="-10" />
+		<element energyPercent="20"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-4"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Grrrr" />
-		<voice sentence="Groar" />
-		<voice sentence="Gruntz!" />
-		<voice sentence="Hmmm, bugs" />
-		<voice sentence="Hmmm, dogs" />
+		<voice sentence="Grrrr"/>
+		<voice sentence="Groar"/>
+		<voice sentence="Gruntz!"/>
+		<voice sentence="Hmmm, bugs."/>
+		<voice sentence="Hmmm, dogs."/>
 	</voices>
 	<loot>
-		<item id="2120" chance="7950" /><!-- rope -->
-		<item name="gold coin" countmax="12" chance="65300" />
-		<item name="silver amulet" chance="80" />
-		<item name="hand axe" chance="18000" />
-		<item name="spear" chance="13000" />
-		<item name="studded club" chance="5000" />
-		<item name="leather helmet" chance="12000" />
-		<item id="2512" chance="4730" /><!-- wooden shield -->
-		<item name="leather boots" chance="10000" />
-		<item name="meat" chance="15000" />
-		<item name="bunch of troll hair" chance="1000" />
+		<item id="2148" countmax="12" chance="26750"/><!-- gold coin -->
+		<item id="2380" chance="18750"/><!-- hand axe -->
+		<item id="2643" chance="8750"/><!-- leather boots -->
+		<item id="2461" chance="9750"/><!-- leather helmet -->
+		<item id="2666" chance="11750"/><!-- meat -->
+		<item id="2120" chance="8750"/><!-- rope -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2389" chance="12000"/><!-- spear -->
+				<item id="2512" chance="15000"/><!-- wooden shield -->
+				<item id="2448" chance="4500"/><!-- studded club -->
+				<item id="2170" chance="50"/><!-- silver amulet -->
+			
+		</item>
 	</loot>
 </monster>

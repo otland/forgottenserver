@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Son of Verminor" nameDescription="a son of verminor" race="venom" experience="5900" speed="120" manacost="0">
+	<health now="8500" max="8500"/>
+	<look type="19" corpse="1496"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="105" attack="80" poison="150"/>
+		<attack name="poisonfield" interval="1000" chance="17" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+		<attack name="melee" interval="3000" chance="15" range="7" radius="3" target="0" min="-80" max="-155">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="20"/>
+	<immunities>
+		<immunity poison="1"/>
+	</immunities>
+</monster>

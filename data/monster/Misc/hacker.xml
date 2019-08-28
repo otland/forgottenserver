@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hacker" nameDescription="a Hacker" race="blood" experience="45" speed="250" manacost="0">
+	<health now="430" max="430"/>
+	<look type="8" corpse="5980"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="429"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="20" attack="55"/>
+	</attacks>
+	<defenses armor="15" defense="12">
+		<defense name="speed" interval="1000" chance="15" speedchange="290" duration="6000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+		<defense name="outfit" interval="10000" chance="15" monster="pig" duration="500">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="1"/>
+		<immunity fire="1"/>
+		<immunity poison="1"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="1"/>
+		<immunity invisible="0"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Feel the wrath of me dos attack!"/>
+		<voice sentence="You're next!"/>
+		<voice sentence="Gimme free gold!"/>
+		<voice sentence="Me sooo smart!"/>
+		<voice sentence="Me have a cheating link for you!"/>
+		<voice sentence="Me is GM!"/>
+		<voice sentence="Gimme your password!"/>
+		<voice sentence="Me just need the code!"/>
+		<voice sentence="Me not stink!"/>
+		<voice sentence="Me other char is highlevel!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="12" chance="100000"/><!-- gold coin -->
+		<item id="2671" chance="50000"/><!-- ham -->
+		<item id="6570" chance="5538"/><!-- blue surprise bag -->
+		<item id="6571" chance="1538"/><!-- red surprise bag -->
+		<item id="2044" chance="6666"/><!-- lamp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2381" chance="10000"/><!-- halberd -->
+				<item id="2386" chance="10000"/><!-- axe -->
+				<item id="2391" chance="5000"/><!-- war hammer -->
+				<item id="2378" chance="5000"/><!-- battle axe -->
+			
+		</item>
+	</loot>
+</monster>

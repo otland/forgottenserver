@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="230" manacost="490">
+	<health now="210" max="210"/>
+	<look type="93" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="50"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="25"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="40"/>
+		<attack name="physical" interval="2000" chance="20" range="7" min="-0" max="-65">
+			<attribute key="shootEffect" value="spear"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="20"/>
+	<elements>
+		<element earthPercent="16"/>
+		<element holyPercent="15"/>
+		<element deathPercent="-7"/>
+		<element firePercent="-8"/>
+		<element energyPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Plundeeeeer!"/>
+		<voice sentence="Give up!"/>
+		<voice sentence="Hiyaa!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="60" chance="20000"/><!-- gold coin -->
+		<item id="2376" chance="9750"/><!-- sword -->
+		<item id="2050" chance="9250"/><!-- torch -->
+		<item id="2389" countmax="2" chance="4000"/><!-- spear -->
+		<item id="2510" chance="4800"/><!-- plate shield -->
+		<item id="2464" chance="2750"/><!-- chain armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="5091" chance="1125"/><!-- treasure map -->
+		<item id="5917" chance="1100"/><!-- bandana-->
+		<item id="6126" chance="600"/><!-- peg leg -->
+		<item id="6097" chance="600"/><!-- hook -->
+		<item id="6098" chance="600"/><!-- eye patch -->
+		<item id="5553" chance="100"/><!-- rum flask -->
+		<item id="5928" chance="200"/><!-- empty goldfish bowl -->
+		<item id="5792" chance="50"/><!-- dice -->		
+		<item id="5927" chance="500"/><!-- pirate bag -->
+			
+		</item>
+	</loot>
+</monster>

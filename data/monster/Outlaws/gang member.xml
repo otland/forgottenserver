@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gang Member" nameDescription="a gang member" race="blood" experience="70" speed="220" manacost="420">
+	<health now="295" max="295"/>
+	<look type="151" head="114" body="19" legs="42" feet="20" corpse="3058"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="45"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="20"/>
+	</attacks>
+	<defenses armor="14" defense="16"/>
+	<elements>
+		<element deathPercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="This is our territory!"/>
+		<voice sentence="Help me guys!"/>
+		<voice sentence="I don't like the way you look!"/>
+		<voice sentence="You're wearing the wrong colours!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="23" chance="22500"/><!-- gold coin -->
+		<item id="2666" chance="20450"/><!-- meat -->
+		<item id="2389" chance="20500"/><!-- mace -->
+		<item id="2050" chance="3500"/><!-- torch -->
+		<item id="2649" chance="2270"/><!-- leather legs -->
+		<item id="2468" chance="9000"/><!-- studded legs -->
+		<item id="1980" chance="100000"><!-- bag -->
+			
+				<item id="2689" chance="7500"/><!-- bread -->
+				<item id="2050" chance="3500"/><!-- torch -->		
+				<item id="2209" chance="1000"/><!-- club ring -->
+			
+		</item>
+	</loot>
+</monster>

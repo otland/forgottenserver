@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Predator Scout" nameDescription="a quara predator scout" race="blood" experience="400" speed="290" manacost="0">
+	<health now="890" max="890"/>
+	<look type="20" corpse="6067"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="95"/>
+	</attacks>
+	<defenses armor="20" defense="29">
+		<defense name="healing" interval="1000" chance="15" min="113" max="180">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity fire="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gnarrr!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="37" chance="100000"/><!-- gold coin -->
+		<item id="2226" chance="2000"/><!-- fishbone -->
+		<item id="2473" chance="3333"/><!-- viking helmet -->
+		<item id="2387" chance="2000"/><!-- double axe -->
+		<item id="2483" chance="2000"/><!-- scale armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2177" chance="1429"/><!-- life crystal -->
+		<item id="2145" chance="1429"/><!-- small diamond -->
+		<item id="5895" chance="2000"/><!-- fish fin -->
+			
+		</item>
+	</loot>
+</monster>

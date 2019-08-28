@@ -1,33 +1,31 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="160" manacost="220">
-	<health now="15" max="15" />
-	<look type="111" corpse="6042" />
-	<targetchange interval="4000" chance="0" />
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="200" manacost="220">
+	<health now="15" max="15"/>
+	<look type="111" corpse="6042"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="0" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="15" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="0"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
 	</flags>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="2"/>
 	<voices interval="5000" chance="10">
-		<voice sentence="Gokgoooook" />
-		<voice sentence="Cluck Cluck" />
+		<voice sentence="gokgoooook"/>
+		<voice sentence="cluck cluck"/>
 	</voices>
 	<loot>
-		<item name="meat" countmax="2" chance="2120" />
-		<item id="2695" chance="950" /><!-- egg -->
-		<item name="worm" countmax="3" chance="10000" />
-		<item name="chicken feather" countmax="1" chance="20000" />
+		<item id="3976" countmax="3" chance="22500"/><!-- worm -->
+		<item id="5890" countmax="1" chance="25000"/><!-- chicken feather -->
+		<item id="2695" chance="1700"/><!-- egg -->
+		<item id="2666" countmax="2" chance="3250"/><!-- meat -->
 	</loot>
 </monster>

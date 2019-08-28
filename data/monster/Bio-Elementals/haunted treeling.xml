@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Haunted Treeling" nameDescription="a haunted treeling" experience="310" speed="260" race="undead" manacost="0">
+	<health now="450" max="450"/>
+	<look type="310" corpse="9867"/>
+	<targetchange speed="0" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="60" range="1"/>
+		<attack name="manadrain" interval="2000" chance="13" min="-30" max="-90" range="7">
+			<attribute key="shootEffect" value="death"/>
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="speed" interval="3000" chance="20" length="8" spread="0" duration="30000" speedchange="-600">
+			<attribute key="areaEffect" value="smallplants"/>
+		</attack> 
+		<attack name="terra strike" interval="2000" chance="12" min="-0" max="-0"/> 
+		<attack name="stone shower" interval="1000" chance="14" min="-0" max="-90"/> 
+	</attacks>
+	<defenses armor="50" defense="55"/>
+	<elements>
+		<element firePercent="-15"/>
+		<element deathPercent="10"/>
+		<element icePercent="10"/>
+		<element holyPercent="20"/>
+	</elements>
+	<immunities>
+		<immunity earth="1"/>
+	</immunities>
+	<loot>
+		<item id="2213" chance="1000"/><!-- dwarven ring -->
+		<item id="2148" countmax="96" chance="35000"/><!-- gold coin -->
+		<item id="7618" chance="7200"/><!-- health potion -->
+		<item id="2790" chance="1000"/><!-- orange mushroom -->
+		<item id="2788" chance="8000"/><!-- red mushroom -->
+		<item id="4860" chance="50000"/><!-- wooden trash -->
+
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2146" chance="1500"/><!-- small emerald -->
+				<item id="7588" chance="1000"/><!-- strong health potion -->
+				<item id="3821" chance="500"/><!-- trunk chair kit -->
+				<item id="2787" countmax="2" chance="2200"/><!-- white mushroom -->
+				<item id="7443" chance="300"/><!-- bullseye potion -->
+			
+		</item>
+	</loot>
+</monster>

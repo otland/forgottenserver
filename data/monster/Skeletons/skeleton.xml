@@ -1,47 +1,45 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Skeleton" nameDescription="a skeleton" race="undead" experience="35" speed="150" manacost="300">
-	<health now="50" max="50" />
-	<look type="33" corpse="5972" />
-	<targetchange interval="4000" chance="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Skeleton" nameDescription="a skeleton" race="undead" experience="35" speed="154" manacost="300">
+	<health now="50" max="50"/>
+	<look type="33" corpse="5972"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-20" />
-		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-7" max="-13" />
+		<attack name="melee" interval="2000" skill="15" attack="16"/>
+		<attack name="lifedrain" interval="1000" chance="9" range="1" min="-7" max="-13"/>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="2" defense="9"/>
 	<elements>
-		<element holyPercent="-5" />
+		<element deathPercent="100"/>
+		<element holyPercent="-25"/>
 	</elements>
-	<immunities>
-		<immunity death="1" />
-		<immunity drown="1" />
-		<immunity lifedrain="1" />
-	</immunities>
 	<loot>
-		<item id="2050" chance="10000" /><!-- torch -->
-		<item id="2050" chance="9880" /><!-- torch -->
-		<item name="gold coin" countmax="10" chance="43900" />
-		<item id="2230" chance="49100" /><!-- bone -->
-		<item id="2376" chance="1940" /><!-- sword -->
-		<item name="hatchet" chance="4850" />
-		<item name="mace" chance="4850" />
-		<item name="viking helmet" chance="7520" />
-		<item name="brass shield" chance="2090" />
-		<item name="pelvis bone" chance="9940" />
+		<item id="2148" countmax="10" chance="24500"/><!-- gold coin -->
+		<item id="2050" chance="25000"/><!-- torch -->
+		<item id="2230" chance="49750"/><!-- bone -->
+		<item id="2388" chance="23750"/><!-- hatchet -->
+		<item id="2398" chance="19500"/><!-- mace -->
+		<item id="1987" chance="100000"><!-- bag -->
+				
+				<item id="2511" chance="13250"/><!-- brass shield -->
+				<item id="2050" chance="25000"/><!-- torch -->	
+				<item id="2473" chance="8250"/><!-- viking helmet -->
+				<item id="2376" chance="1500"/><!-- sword -->
+
+			
+		</item>
 	</loot>
 </monster>

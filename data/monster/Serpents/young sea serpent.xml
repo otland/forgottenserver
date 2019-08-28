@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Young Sea Serpent" nameDescription="a young sea serpent" race="blood" experience="1000" speed="350" manacost="390">
+	<health now="1050" max="1050"/>
+	<look type="317" head="0" body="0" legs="0" feet="0" corpse="8307"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="85"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="300"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="25" attack="80"/>
+		<attack name="earth" interval="1000" chance="5" length="9" spread="3" min="-50" max="-150">
+			<attribute key="areaEffect" value="bigplants"/>
+		</attack>
+		<attack name="ice" interval="1000" chance="7" length="9" spread="3" min="-70" max="-180">
+			<attribute key="areaEffect" value="icearea"/>
+		</attack>
+		<attack name="drowncondition" interval="1000" chance="8" radius="4" target="1" max="-100">
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="16" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="20" max="60">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<voices interval="3000" chance="20">
+		<voice sentence="CHHHRRRR"/>
+		<voice sentence="HISSSS"/>
+	</voices>
+	<elements>
+		<element firePercent="30"/>
+		<element energyPercent="-10"/>
+		<element physicalPercent="-15"/>
+		<element deathPercent="-10"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="65" chance="31000"/><!-- gold coin -->
+		<item id="2148" countmax="55" chance="31000"/><!-- gold coin -->
+		<item id="2148" countmax="45" chance="31000"/><!-- gold coin -->
+		<item id="2666" countmax="4" chance="20000"/><!-- meat -->
+		<item id="2146" chance="1500" countmax="2"/><!-- small saphire -->
+		<item id="2165" chance="750"/><!--stealth ring -->
+		<item id="7589" chance="1000"/><!-- strong mana potion -->
+		<item id="2489" chance="2500"/><!-- dark armor -->
+		<item id="9808" chance="1000"/><!-- rusty armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			<item id="2672" countmax="2" chance="16000"/><!-- dragon ham -->
+			<item id="9808" chance="1000"/><!-- rusty armor -->
+			<item id="2394" chance="8000"/><!-- morningstar -->
+			<item id="2177" chance="800"/><!-- life crystal -->
+			<item id="2417" chance="5000"/><!-- battle hammer -->
+			<item id="2378" chance="3000"/><!-- battle axe -->
+		</item>
+	</loot>
+</monster>
+

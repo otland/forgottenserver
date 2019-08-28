@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dark Monk" nameDescription="a dark monk" race="blood" experience="145" speed="210" manacost="0">
+	<health now="190" max="190"/>
+	<look type="225" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="50"/>
+		<attack name="lifedrain" interval="1000" chance="12" range="1" min="-55" max="-100">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="22" defense="23">
+		<defense name="healing" interval="1000" chance="12" min="25" max="49">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="speed" interval="1000" chance="10" speedchange="300" duration="6000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="40"/>
+		<element holyPercent="-20"/>
+		<element physicalPercent="-12"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="You are no match to us!"/>
+		<voice sentence="This is where your path will end!"/>
+		<voice sentence="Your end has come!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="5" chance="34000"/><!-- gold coin -->
+		<item id="2193" chance="1400"/><!-- ankh -->
+		<item id="2689" chance="20000"/><!-- bread -->
+		<item id="2015" chance="10000"/><!-- brown flask -->
+		<item id="2044" chance="11750"/><!-- lamp -->
+		<item id="2467" chance="3500"/><!-- leather armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2177" chance="2750"/><!-- life crystal -->
+				<item id="7620" chance="700"/><!-- mana potion -->
+				<item id="2166" chance="500"/><!-- power ring -->
+				<item id="1949" chance="18000"/><!-- scroll -->
+				<item id="2401" chance="20000"/><!-- staff -->
+				<item id="2642" chance="8250"/><!-- sandals -->	
+			
+		</item>
+	</loot>
+</monster>

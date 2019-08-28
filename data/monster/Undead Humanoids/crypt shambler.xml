@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Crypt Shambler" nameDescription="a crypt shambler" race="undead" experience="195" speed="180" manacost="0">
+	<health now="330" max="330"/>
+	<look type="100" corpse="6029"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="40"/>
+		<attack name="lifedrain" interval="1000" chance="13" range="1" min="-25" max="-55"/>
+	</attacks>
+	<defenses armor="15" defense="10"/>
+	<elements>
+		<element deathPercent="100"/>
+		<element earthPercent="100"/>
+		<element holyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Uhhhhhhh!"/>
+		<voice sentence="Aaaaahhhh!"/>
+		<voice sentence="Hoooohhh!"/>
+		<voice sentence="Chhhhhhh!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="35" chance="18000"/><!-- gold coin -->
+		<item id="2148" countmax="20" chance="18000"/><!-- gold coin -->
+		<item id="2230" chance="50000"/><!-- bone  -->
+		<item id="2541" chance="1200"/><!-- bone shield -->
+		<item id="2450" chance="900"/><!-- bone sword -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2459" chance="1700"/><!-- iron helmet -->
+				<item id="2227" chance="21500"/><!-- rotten meat -->
+				<item id="2145" countmax="2" chance="750"/><!-- small diamond -->
+				<item id="2399" countmax="3" chance="700"/><!-- throwing star -->
+				<item id="2459" chance="1500"/><!-- two handed sword -->
+				<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc Berserker" nameDescription="a orc berserker" race="blood" experience="195" speed="250" manacost="590">
+	<health now="210" max="210"/>
+	<look type="8" corpse="5980"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="80"/>
+	</attacks>
+	<defenses armor="15" defense="12">
+		<defense name="speed" interval="1000" chance="15" speedchange="290" duration="6000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-20"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="KRAK ORRRRRRK!" yell="1"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="15" chance="26000"/><!-- gold coin -->
+		<item id="2671" chance="20000"/><!-- ham -->
+		<item id="2458" chance="13500"/><!-- chain helmet -->
+		<item id="2464" chance="12500"/><!-- chain armor -->
+		<item id="2044" chance="7000"/><!-- lamp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2381" chance="9000"/><!-- halberd -->
+		<item id="2378" chance="5500"/><!-- battle axe -->
+		<item id="3965" countmax="2" chance="5000"/><!-- hunting spear -->
+			
+		</item>
+	</loot>
+</monster>

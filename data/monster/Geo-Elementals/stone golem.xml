@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stone Golem" nameDescription="a stone golem" race="blood" experience="280" speed="180" manacost="590">
+	<health now="270" max="270"/>
+	<look type="67" corpse="6005"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="45" attack="40"/>
+	</attacks>
+	<defenses armor="10" defense="18"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element physicalPercent="22"/>
+		<element firePercent="20"/>
+		<element energyPercent="13"/>
+		<element deathPercent="10"/>
+		<element icePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="15" chance="9000"/><!-- gold coin -->
+		<item id="1294" countmax="4" chance="8250"/><!-- small stone -->
+		<item id="2509" chance="9750"/><!-- steel shield -->
+		<item id="2050" chance="7250"/><!-- torch -->
+		<item id="2166" chance="5000"/><!-- power ring-->
+		<item id="1987" chance="100000"><!-- bag -->
+				
+		<item id="2483" chance="3250"/><!-- scale armor -->
+		<item id="2395" chance="1100"/><!-- carlin sword -->
+		<item id="5880" chance="2500"/><!-- iron ore -->
+		<item id="2124" chance="200"/><!-- crystal ring -->
+		<item id="2156" chance="150"/><!-- red gem -->
+			
+		</item>
+	</loot>
+</monster>

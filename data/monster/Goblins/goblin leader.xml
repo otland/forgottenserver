@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goblin Leader" nameDescription="a goblin leader" race="blood" experience="50" speed="200" manacost="290">
+	<health now="75" max="75"/>
+	<look type="61" corpse="6002"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="20"/>
+		<attack name="physical" interval="1000" chance="9" range="7" min="-0" max="-32">
+			<attribute key="shootEffect" value="smallstone"/>
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="12"/>
+	<elements>
+		<element energyPercent="20"/>
+		<element holyPercent="20"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-10"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Go go, Gobo attack !!"/>
+		<voice sentence="Me the greenest and the meanest!"/>
+		<voice sentence="Me have power to crush you!"/>
+		<voice sentence="Goblinkiller! Catch him !!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="10" chance="100000"/><!-- gold coin -->
+		<item id="2230" chance="15000"/><!-- bone -->
+		<item id="2461" chance="16000"/><!-- leather helmet -->
+		<item id="2467" chance="9000"/><!-- leather armor -->
+		<item id="2379" chance="17500"/><!-- dagger -->
+		<item id="2667" chance="20000"/><!-- fish -->
+		<item id="2235" chance="9000"/><!-- moldy cheese -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="1294" countmax="4" chance="10000"/><!-- small stone -->
+				<item id="2559" chance="10500"/><!-- small axe -->
+				<item id="2406" chance="12500"/><!-- short sword -->
+				<item id="2449" chance="6000"/><!-- bone club -->
+			
+		</item>
+	</loot>
+</monster>

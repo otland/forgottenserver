@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dog" nameDescription="a dog" race="blood" experience="0" speed="140" manacost="220">
-	<health now="20" max="20" />
-	<look type="32" corpse="5971" />
-	<targetchange interval="4000" chance="0" />
+<monster name="Dog" nameDescription="a dog" race="blood" experience="0" speed="200" manacost="220">
+	<health now="20" max="20"/>
+	<look type="32" corpse="5971"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="0" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="8" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="0"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="8"/>
 	</flags>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="2"/>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="0"/>
+		<immunity poison="0"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="0"/>
+		<immunity invisible="0"/>
+	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Wuff! Wuff!" />
+		<voice sentence="Wuff! Wuff!"/>
 	</voices>
 </monster>

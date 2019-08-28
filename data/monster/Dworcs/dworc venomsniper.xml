@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="30" speed="240" manacost="0">
+	<health now="80" max="80"/>
+	<look type="216" corpse="6059"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="15"/>
+		<attack name="poisoncondition" interval="1000" chance="25" range="5" min="-14" max="-26">
+			<attribute key="shooteffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="3" defense="15"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element holyPercent="18"/>
+		<element firePercent="-15"/>
+		<element deathPercent="-9"/>
+		<element icePercent="-6"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="grak brrretz!"/>
+		<voice sentence="grow truk grrrrr."/>
+		<voice sentence="prek tars, dekklep zurk."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="14" chance="35000"/><!-- gold coin -->
+		<item id="2229" countmax="3" chance="333"/><!-- skull -->
+		<item id="2467" chance="10000"/><!-- leather armor -->
+		<item id="2545" countmax="3" chance="3333"/><!-- poison arrow -->
+		<item id="2050" chance="6000"/><!-- torch -->
+		<item id="2399" countmax="2" chance="5100"/><!-- trowing knife -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2411" chance="1500"/><!-- poison dagger -->
+				<item id="3967" chance="450"/><!-- tribal mask -->
+				<item id="2172" chance="200"/><!--  bronze amulet -->
+				<item id="3983" chance="150"/><!-- bask skirt -->
+				<item id="7732" chance="250"/><!-- seeds -->
+			
+		</item>
+	</loot>
+</monster>

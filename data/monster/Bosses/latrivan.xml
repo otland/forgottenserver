@@ -1,49 +1,54 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Latrivan" nameDescription="Latrivan" race="fire" experience="10000" speed="340">
-	<health now="25000" max="25000" />
-	<look type="12" head="120" body="128" legs="121" feet="111" corpse="6068" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Latrivan" nameDescription="a latrivan" race="fire" experience="10000" speed="340" manacost="0">
+	<health now="40000" max="40000"/>
+	<look type="12" head="120" body="128" legs="121" feet="111" corpse="6068"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="80" defense="20"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="85" />
-		<flag runonhealth="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="85"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-878" />
+		<attack name="melee" interval="2000" skill="120" attack="135"/>
 		<attack name="fire" interval="1000" chance="10" length="7" spread="0" min="-50" max="-850">
-			<attribute key="areaEffect" value="explosion" />
+			<attribute key="areaEffect" value="explosion"/>
 		</attack>
 	</attacks>
-	<defenses armor="35" defense="45" />
+	<defenses armor="35" defense="45"/>
 	<elements>
-		<element icePercent="-10" />
-		<element energyPercent="35" />
-		<element deathPercent="-12" />
+		<element icePercent="-10"/>
+		<element energyPercent="35"/>
+		<element deathPercent="-12"/>
 	</elements>
 	<immunities>
-		<immunity fire="1" />
+		<immunity fire="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="I might reward you for killing my brother ~ with a swift dead!" yell="1" />
+		<voice sentence="I might reward you for killing my brother ~ with a swift dead!" yell="1"/>
 	</voices>
 	<loot>
-		<item name="black pearl" countmax="28" chance="7777" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="50" chance="100000" />
-		<item name="talon" countmax="13" chance="6500" />
-		<item name="platinum coin" countmax="6" chance="80000" />
-		<item name="platinum amulet" chance="12222" />
-		<item name="fire axe" chance="8200" />
-		<item name="golden legs" chance="6555" />
-		<item name="mastermind shield" chance="4500" />
-		<item name="mastermind potion" chance="17000" />
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
+		<item id="2152" countmax="6" chance="80000"/><!-- platinum coin -->
+		<item id="2144" countmax="28" chance="7777"/><!-- black pearl -->
+		<item id="7440" chance="17000"/><!-- mastermind potion -->
+		<item id="2514" chance="4500"/><!-- mastermind shield -->
+		<item id="2171" chance="12222"/><!-- platinum amulet -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2151" countmax="13" chance="6500"/><!-- talon -->
+				<item id="2470" chance="6555"/><!-- golden legs -->
+				<item id="2432" chance="8200"/><!-- fire axe -->
+			
+		</item>
 	</loot>
 </monster>

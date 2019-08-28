@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Axeitus Headbanger" nameDescription="axeitus headbanger" race="blood" experience="140" speed="170" manacost="0">
+	<health now="365" max="365"/>
+	<look type="71" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
+		<attack name="physical" interval="1000" chance="80" range="5" radius="1" target="1" min="0" max="-50">
+			<attribute key="shootEffect" value="smallstone"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="17"/>
+	<elements>
+		<element firePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Hicks!"/>
+		<voice sentence="Stand still! Both of you! hicks"/>
+		<voice sentence="This victory will earn me a casket of beer."/>
+	</voices>
+</monster>

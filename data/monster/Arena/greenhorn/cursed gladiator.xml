@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cursed Gladiator" nameDescription="cursed gladiator" race="undead" experience="215" speed="170" manacost="0">
+	<health now="435" max="435"/>
+	<look type="100" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="60"/>
+		<attack name="lifedrain" interval="4000" chance="50" range="5" radius="1" target="1" min="0" max="50">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="26"/>
+	<elements>
+		<element earthPercent="20"/>
+		<element firePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Death where are you?"/>
+	</voices>
+</monster>

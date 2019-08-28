@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tortoise" nameDescription="a tortoise" race="blood" experience="90" speed="200" manacost="445">
+	<health now="150" max="150"/>
+	<look type="197" corpse="6072"/>
+	<targetchange interval="5000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="20"/>
+	</attacks>
+	<defenses armor="15" defense="15"/>
+	<elements>
+		<element physicalPercent="13"/>
+		<element icePercent="10"/>
+		<element earthPercent="10"/>
+		<element firePercent="-10"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="30" chance="30000"/><!-- gold coin -->
+		<item id="2671" countmax="2" chance="4000"/><!-- ham -->
+		<item id="2510" chance="4500"/><!-- plate shield -->
+		<item id="2667" chance="4000"/><!-- fish -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="5678" countmax="3" chance="1000"/><!-- tortoise egg -->
+		<item id="6131" chance="450"/><!-- tortoise shield -->
+		<item id="5899" chance="1300"/><!-- turtle shell -->
+		<item id="2417" chance="450"/><!-- battle hammer -->
+			
+		</item>
+	</loot>
+</monster>

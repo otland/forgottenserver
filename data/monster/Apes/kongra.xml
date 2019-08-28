@@ -1,53 +1,55 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="210">
-	<health now="340" max="340" />
-	<look type="116" corpse="6043" />
-	<targetchange interval="4000" chance="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="200" manacost="0">
+	<health now="340" max="340"/>
+	<look type="116" corpse="6043"/>
+	<targetchange interval="5000" chance="20"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="10" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-60" />
+		<attack name="melee" interval="2000" skill="20" attack="40"/>
 	</attacks>
-	<defenses armor="20" defense="20">
-		<defense name="speed" interval="2000" chance="15" speedchange="260" duration="3000">
-			<attribute key="areaEffect" value="redshimmer" />
+	<defenses armor="18" defense="14">
+		<defense name="speed" interval="1000" chance="7" speedchange="260" duration="3000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="20" />
-		<element earthPercent="10" />
-		<element energyPercent="5" />
-		<element icePercent="-15" />
-		<element deathPercent="-5" />
+		<element firePercent="20"/>
+		<element earthPercent="10"/>
+		<element energyPercent="5"/>
+		<element icePercent="-15"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Hugah!" />
-		<voice sentence="Ungh! Ungh!" />
-		<voice sentence="Huaauaauaauaa!" />
+		<voice sentence="Hugah!"/>
+		<voice sentence="Ungh! Ungh!"/>
+		<voice sentence="Huaauaauaauaa!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="40" chance="69000" />
-		<item name="power ring" chance="300" />
-		<item name="protection amulet" chance="990" />
-		<item name="club ring" chance="230" />
-		<item name="plate armor" chance="950" />
-		<item name="banana" countmax="12" chance="30000" />
-		<item name="ape fur" chance="980" />
-		<item name="health potion" chance="570" />
-		<item name="kongra's shoulderpad" chance="4900" />
+		<item id="2148" countmax="40" chance="49000"/><!-- gold coin -->
+		<item id="2676" countmax="11" chance="5000"/><!-- banana -->
+		<item id="2463" chance="2500"/><!-- plate armor -->
+		<item id="2200" chance="1500"/><!-- protection amulet -->
+		<item id="5883" chance="1300"/><!-- ape fur -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2166" chance="5000"/><!-- power ring -->
+				<item id="2209" chance="5000"/><!-- club ring -->		
+				<item id="7618" chance="9000"/><!-- health potion -->
+	
+			
+		</item>
 	</loot>
 </monster>

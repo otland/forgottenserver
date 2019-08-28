@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goblin Assassin" nameDescription="a goblin assassin" race="blood" experience="52" speed="220" manacost="360">
+	<health now="75" max="75"/>
+	<look type="296" corpse="6002"/>
+	<targetchange interval="10000" chance="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="15"/>
+		<attack name="drunk" interval="5000" chance="15" duration="10000">
+			<attribute key="shootEffect" value="poison"/>
+			<attriubte key="shootEffect" value="poison"/>
+		</attack>
+		<attack name="physical" interval="1000" chance="9" range="6" min="-15" max="-25">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="1">
+		<defense name="invisible" interval="7500" chance="10" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10"/>
+		<element earthPercent="-10"/>
+		<element holyPercent="5"/>
+		<element deathPercent="-15"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Goblin Powahhh!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="9" chance="30000"/><!-- gold coin -->
+		<item id="2667"  chance="13750"/><!-- fish -->
+		<item id="2449" chance="5000"/><!-- bone club -->
+		<item id="2406" chance="10000"/><!-- short sword -->
+		<item id="2230" chance="15000"/><!-- bone -->
+		<item id="2379" chance="20000"/><!-- dagger -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2467" chance="10000"/><!-- leather armor -->
+				<item id="2559" chance="8750"/><!-- small axe -->
+				<item id="1294" countmax="4" chance="9000"/><!-- small stone -->
+				<item id="2235" chance="9000"/><!-- moldy cheese -->
+				<item id="2461" chance="13000"/><!-- leather helmet -->
+			
+		</item>
+	</loot>
+</monster>

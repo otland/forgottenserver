@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Jagged Earth Elemental" nameDescription="a jagged earth elemental" race="undead" experience="1300" speed="280" manacost="0">
+	<health now="1500" max="1500"/>
+	<look type="285" corpse="8933"/>
+	<targetchange interval="20000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="80"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="60"/>
+		<attack name="earth" interval="1000" chance="10" length="6" spread="0" min="-100" max="-250">
+			<attribute key="areaEffect" value="stones"/>
+		</attack>
+		<attack name="earth" interval="1000" chance="11" target="1" range="7" radius="6" min="0" max="-200">
+			<attribute key="shootEffect" value="smallearth"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25"/>
+	<elements>
+		<element deathPercent="20"/>
+		<element icePercent="20"/>
+		<element energyPercent="20"/>
+		<element firePercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity earth="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Stomp STOMP"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="90" chance="27000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="27000"/><!-- gold coin -->
+		<item id="5880" countmax="2" chance="800"/><!-- iron ore -->
+		<item id="8298" chance="9000"/><!-- natural soil -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="7732" chance="1600"/><!-- seeds -->
+		<item id="2149" countmax="2" chance="3750"/><!-- small emerald -->
+		<item id="2244" chance="10000"/><!-- leaves -->
+		<item id="2245" chance="18000"/><!-- twigs -->
+		<item id="2148" countmax="10" chance="1500"/><!-- small stone -->
+
+			
+		</item>
+	</loot>
+</monster>

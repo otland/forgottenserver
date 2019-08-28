@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Svoren the Mad" nameDescription="svoren the mad" race="blood" experience="3000" speed="180" manacost="0">
+	<health now="6300" max="6300"/>
+	<look type="254" head="80" body="99" legs="118" feet="38" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="150"/>
+		<attack name="speed" interval="3500" chance="35" radius="1" target="1" range="1" duration="40" speedchange="-250">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<!--<attack name="dark music" interval="4300" chance="40" min="-20" max="-100"/> -->
+	</attacks>
+	<defenses armor="25" defense="27"/>
+	<elements>
+		<element firePercent="100"/>
+		<element energyPercent="100"/>
+	</elements>
+	<immunities>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="NO mommy NO. Leave me alone!"/>
+		<voice sentence="Not that tower again!"/>
+	</voices>
+</monster>

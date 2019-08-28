@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Butterfly" nameDescription="a butterfly" race="venom" experience="0" speed="300" manacost="0">
+	<health now="2" max="2"/>
+	<look type="228" corpse="4313"/>
+	<targetchange interval="5000" chance="20"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="6"/>
+		<flag runonhealth="2"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="5" attack="0"/>
+	</attacks>
+	<defenses armor="0" defense="4"/>
+	<immunities>
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="0"/>
+		<immunity poison="1"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="1"/>
+		<immunity outfit="0"/>
+		<immunity drunk="1"/>
+		<immunity invisible="0"/>
+	</immunities>
+</monster>

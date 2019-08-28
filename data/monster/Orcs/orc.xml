@@ -1,48 +1,48 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Orc" nameDescription="an orc" race="blood" experience="25" speed="150" manacost="300">
-	<health now="70" max="70" />
-	<look type="5" corpse="5966" />
-	<targetchange interval="4000" chance="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc" nameDescription="a orc" race="blood" experience="25" speed="150" manacost="300">
+	<health now="70" max="70"/>
+	<look type="5" corpse="5966"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="15" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-35" />
+		<attack name="melee" interval="2000" skill="25" attack="20"/>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="4" defense="8"/>
 	<elements>
-		<element energyPercent="20" />
-		<element holyPercent="10" />
-		<element earthPercent="-10" />
-		<element deathPercent="-5" />
+		<element energyPercent="20"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-20"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Grak brrretz!" />
-		<voice sentence="Grow truk grrrrr." />
-		<voice sentence="Prek tars, dekklep zurk." />
+		<voice sentence="Grak brrretz!"/>
+		<voice sentence="Grow truk grrrrr."/>
+		<voice sentence="Prek tars, dekklep zurk."/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="14" chance="84810" />
-		<item name="sabre" chance="5850" />
-		<item name="axe" chance="4960" />
-		<item name="studded helmet" chance="2950" />
-		<item name="studded armor" chance="7860" />
-		<item name="studded shield" chance="7300" />
-		<item name="meat" chance="10160" />
-		<item name="orc tooth" chance="210" />
-		<item name="orc leather" chance="590" />
+		<item id="2148" countmax="15" chance="17500"/><!-- gold coin -->
+		<item id="2666" countmax="2" chance="22500"/><!-- meat -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2484" chance="15000"/><!-- studded armor -->
+		<item id="2482" chance="10000"/><!-- studded helmet -->
+		<item id="2526" chance="1600"/><!-- studded shield -->
+		<item id="2385" chance="17500"/><!-- sabre -->
+		<item id="2386" chance="18000"/><!-- axe -->
+			
+		</item>
 	</loot>
 </monster>

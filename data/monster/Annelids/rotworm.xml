@@ -1,35 +1,39 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="150" manacost="305">
-	<health now="65" max="65" />
-	<look type="26" corpse="5967" />
-	<targetchange interval="4000" chance="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="176" manacost="305">
+	<health now="65" max="65"/>
+	<look type="26" corpse="5967"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="70" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="melee" interval="2000" skill="30" attack="20"/>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="8" defense="11"/>
 	<loot>
-		<item name="gold coin" countmax="17" chance="71760" />
-		<item id="2376" chance="3000" /><!-- sword -->
-		<item name="mace" chance="4500" />
-		<item name="meat" chance="20000" />
-		<item name="ham" chance="20120" />
-		<item name="worm" countmax="3" chance="3000" />
-		<item name="lump of dirt" chance="10000" />
+		<item id="2148" countmax="18" chance="26750"/><!-- gold coin -->
+		<item id="3976" countmax="5" chance="50000"/><!-- worm -->
+		<item id="2666" countmax="2" chance="20000"/><!-- meat -->
+		<item id="2671" countmax="2" chance="18000"/><!-- ham -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2376" chance="3000"/><!-- sword -->
+				<item id="2398" chance="8000"/><!-- mace -->
+				<item id="2480" chance="2000"/><!-- legion helmet -->
+				<item id="2530" chance="500"/><!-- copper shield -->
+				<item id="2412" chance="500"/><!-- katana -->
+			
+		</item>
 	</loot>
 </monster>

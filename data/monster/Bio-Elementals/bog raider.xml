@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="300" manacost="0">
+	<health now="1300" max="1300"/>
+	<look type="299" corpse="8951"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="15"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="59" attack="60" poison="4"/>
+		<attack name="lifedrain" interval="2000" min="-90" max="-140" target="1">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="physical" interval="1000" chance="40" radius="2" target="0" min="-100" max="-175">
+			<attribute key="shootEffect" value="smallearth"/>
+		</attack>
+		<attack name="paralyze" interval="3000" chance="40" target="1">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="15">
+		<defense name="speed" interval="10000" chance="40" speedchange="310" duration="20000">
+			<attribute key="areaEffect" value="greenshimmer"/>
+		</defense>
+		<defense name="healing" interval="5000" chance="60" min="50" max="80">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10"/>
+		<element earthPercent="-25"/>
+		<element icePercent="10"/>
+		<element holyPercent="10"/>
+		<element deathPercent="-20"/>
+		<element firePercent="-80"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Tchhh!"/>
+		<voice sentence="Slurp!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="65" chance="28000"/><!-- gold coin -->
+		<item id="2148" countmax="64" chance="28000"/><!-- gold coin -->
+		<item id="7591" chance="5500"/><!-- great health potion -->
+		<item id="2647" chance="2000"/><!-- plate legs -->
+		<item id="8473" chance="3500"/><!-- ultimate health potion -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="8472" chance="3500"/><!-- great spirit potion -->
+		<item id="8872" chance="1000"/><!-- belted cape -->
+		<item id="8912" chance="800"/><!-- springsprout rod -->
+		<item id="8873" chance="300"/><!-- hibiscus dress -->
+		<item id="8891" chance="200"/><!-- paladin armor -->
+			
+		</item>
+	</loot>
+</monster>

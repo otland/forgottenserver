@@ -1,80 +1,82 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Nightmare" nameDescription="a nightmare" race="blood" experience="2150" speed="240">
-	<health now="2700" max="2700" />
-	<look type="245" corpse="6340" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nightmare" nameDescription="a nightmare" race="blood" experience="2150" speed="270" manacost="0">
+	<health now="2700" max="2700"/>
+	<look type="245" corpse="6340"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="300" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-150" />
-		<attack name="death" interval="2000" chance="10" range="7" radius="1" target="1" min="-120" max="-170">
-			<attribute key="shootEffect" value="death" />
-			<attribute key="areaEffect" value="mortarea" />
-			<attribute key="areaEffect" value="smallclouds" />
+		<attack name="melee" interval="2000" skill="50" attack="50"/>
+		<attack name="energy" interval="2000" chance="20" range="7" radius="1" target="1" min="-130" max="-170">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="energy"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="20" range="7" radius="4" target="1" min="-150" max="-350">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="poison" />
+		<attack name="melee" interval="3000" chance="18" range="7" radius="4" target="1" min="-250" max="-400">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
-		<defense name="healing" interval="2000" chance="10" min="60" max="100">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="25" defense="20">
+		<defense name="healing" interval="1000" chance="50" min="100" max="155">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="speed" interval="2000" chance="15" speedchange="420" duration="5000">
-			<attribute key="areaEffect" value="redshimmer" />
+		<defense name="speed" interval="1000" chance="40" speedchange="360" duration="80000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="20" />
-		<element energyPercent="20" />
-		<element icePercent="10" />
-		<element holyPercent="-25" />
+		<element deathPercent="100"/>
+		<element firePercent="25"/>
+		<element energyPercent="20"/>
+		<element earthPercent="10"/>
+		<element icePercent="10"/>
+		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
-		<immunity invisible="1" />
-		<immunity death="1" />
-		<immunity earth="1" />
-		<immunity lifedrain="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Close your eyes... I want to show you something." />
-		<voice sentence="I will haunt you forever!" />
-		<voice sentence="Pffffrrrrrrrrrrrr." />
-		<voice sentence="I will make you scream." />
-		<voice sentence="Take a ride with me." />
-		<voice sentence="Weeeheeheeeheee!" />
+		<voice sentence="Close your eyes... I want to show you something!"/>
+		<voice sentence="I will haunt you forever!"/>
+		<voice sentence="I will make you scream!"/>
+		<voice sentence="Pffffrrrrrrrrrrrr."/>
+		<voice sentence="Take a ride with me."/>
+		<voice sentence="Weeeheeheeeheee!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="55" chance="50000" />
-		<item name="platinum coin" countmax="3" chance="2564" />
-		<item name="boots of haste" chance="337" />
-		<item name="war axe" chance="95" />
-		<item name="knight legs" chance="961" />
-		<item name="ancient shield" chance="990" />
-		<item name="power bolt" countmax="4" chance="9090" />
-		<item name="ham" countmax="2" chance="29000" />
-		<item name="mysterious voodoo skull" chance="123" />
-		<item name="soul orb" chance="20000" />
-		<item id="6300" chance="1298" /><!-- death ring -->
-		<item name="demonic essence" chance="10000" />
-		<item name="skeleton decoration" chance="337" />
-		<item name="concentrated demonic blood" countmax="2" chance="19666" />
-		<item name="essence of a bad dream" chance="15240" />
-		<item name="scythe leg" chance="9090" />
+		<item id="2148" countmax="75" chance="50000"/><!-- gold coin -->
+		<item id="2148" countmax="45" chance="50000"/><!-- gold coin -->
+		<item id="2532" chance="800"/><!-- ancient shield -->
+		<item id="2195" chance="300"/><!-- boots of haste -->
+		<item id="6558" countmax="2" chance="13500"/><!-- concentrated demonic blood -->
+		<item id="6300" chance="1429"/><!-- death ring -->
+		<item id="6500" chance="10000"/><!-- demonic essence -->
+		<item id="2387" chance="15000"/><!-- double axe -->
+		<item id="2671" countmax="2" chance="15000"/><!-- ham -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2477" chance="3333"/><!-- knight legs -->
+		<item id="2666" countmax="4" chance="17500"/><!-- meat -->
+		<item id="5669" chance="100"/><!-- mysterious voodoo skull -->
+		<item id="2152" countmax="4" chance="1000"/><!-- platinum coin -->
+		<item id="2547" countmax="4" chance="7000"/><!-- power bolt -->
+		<item id="6526" chance="500"/><!-- skeleton decoration -->
+		<item id="5944" chance="20000"/><!-- soul orb -->
+		<item id="2457" chance="500"/><!-- steel helmet -->
+		<item id="2454" chance="100"/><!-- war axe -->
+			
+		</item>
 	</loot>
 </monster>

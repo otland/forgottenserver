@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Badger" namedescription="a badger" race="blood" experience="5" speed="180" manacost="200">
+	<health now="20" max="20"/>
+	<look type="105" corpse="6034"/>
+	<targetchange interval="2000" chance="20"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="12"/>
+	</attacks>
+	<defenses armor="1" defense="3"/>
+	<loot>
+		<item id="3976" chance="20000"/><!-- worm -->
+		<item id="2671" chance="20000"/><!-- ham -->
+	</loot>
+</monster>

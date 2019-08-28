@@ -1,53 +1,56 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Cyclops" nameDescription="a cyclops" race="blood" experience="150" speed="200" manacost="490">
-	<health now="260" max="260" />
-	<look type="22" corpse="5962" />
-	<targetchange interval="4000" chance="10" />
+	<health now="260" max="260"/>
+	<look type="22" corpse="5962"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-105" />
+		<attack name="melee" interval="2000" skill="60" attack="30"/>
 	</attacks>
-	<defenses armor="20" defense="20" />
+	<defenses armor="15" defense="20"/>
 	<elements>
-		<element energyPercent="25" />
-		<element holyPercent="20" />
-		<element earthPercent="-10" />
-		<element deathPercent="-10" />
+		<element energyPercent="25"/>
+		<element holyPercent="20"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-10"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Il lorstok human!" />
-		<voice sentence="Toks utat." />
-		<voice sentence="Human, uh whil dyh!" />
-		<voice sentence="Youh ah trak!" />
-		<voice sentence="Let da mashing begin!" />
+		<voice sentence="Il lorstok human!"/>
+		<voice sentence="Toks utat."/>
+		<voice sentence="Human, uh whil dyh!"/>
+		<voice sentence="Youh ah trak!"/>
+		<voice sentence="Let da mashing begin!"/>
 	</voices>
 	<loot>
-		<item name="wolf tooth chain" chance="190" />
-		<item name="gold coin" countmax="47" chance="82000" />
-		<item name="club ring" chance="90" />
-		<item name="halberd" chance="1003" />
-		<item name="short sword" chance="8000" />
-		<item name="dark helmet" chance="220" />
-		<item name="plate shield" chance="2500" />
-		<item name="battle shield" chance="1400" />
-		<item name="meat" chance="30070" />
-		<item id="7398" chance="80" /><!-- cyclops trophy -->
-		<item name="health potion" chance="210" />
-		<item name="cyclops toe" chance="4930" />
+		<item id="2148" countmax="33" chance="22500"/><!-- gold coin -->
+		<item id="2148" countmax="22" chance="22500"/><!-- gold coin -->
+		<item id="2671" countmax="4" chance="4500"/><!-- ham -->
+		<item id="7618" chance="250"/><!-- health potion -->	
+		<item id="2666" countmax="3" chance="18333"/><!-- meat -->
+		<item id="2510" chance="2500"/><!-- plate shield -->
+		<item id="2406" chance="7000"/><!-- short sword -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2513" chance="2300"/><!-- battle shield -->
+				<item id="2129" chance="400"/><!-- wolf tooth chain -->
+				<item id="2381" chance="800"/><!-- halberd -->
+				<item id="2490" chance="250"/><!-- dark helmet -->
+				<item id="2209" chance="100"/><!-- club ring -->			
+				<item id="7398" chance="70"/><!-- cyclops trophy -->
+			
+		</item>
 	</loot>
 </monster>

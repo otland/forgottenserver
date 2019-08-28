@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<monster name="Slick Water Elemental" nameDescription="a slick water elemental" race="undead" experience="450" speed="280" manacost="0">
+	<health now="550" max="550"/>
+	<look type="286" corpse="8965"/>
+	<targetchange interval="20000" chance="15"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="85"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="70"/>
+		<attack name="earth" interval="2000" chance="20" range="7" target="1" min="0" max="-130">
+			<attribute key="shootEffect" value="earth"/>
+		</attack>
+		<attack name="ice" interval="1000" chance="10" range="6" target="1" min="0" max="-220">
+			<attribute key="shootEffect" value="snowball"/>
+		</attack>
+		<attack name="ice" interval="2000" chance="18" range="4" target="1" min="0" max="-103">
+			<attribute key="shootEffect" value="smallice"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="40"/>
+	</elements>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Blubb"/>
+		<voice sentence="Splipsh Splash"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="70" chance="22500"/><!-- gold coin -->
+		<item id="2148" countmax="60" chance="22500"/><!-- gold coin -->
+		<item id="7839" chance="2575" countmax="3"/><!-- shiver arrow -->
+		<item id="8302" chance="6000"/><!-- iced soil -->
+	</loot>
+</monster>

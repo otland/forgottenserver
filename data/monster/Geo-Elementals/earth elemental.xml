@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Earth Elemental" nameDescription="an earth elemental" race="undead" experience="450" speed="330" manacost="0">
+	<health now="650" max="650"/>
+	<look type="301" corpse="8933"/>
+	<targetchange interval="20000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="80"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="45" attack="40"/>
+		<attack name="physical" interval="2000" chance="20" range="7" min="-25" max="-195">
+			<attribute key="shootEffect" value="largerock"/>
+		</attack>
+		<attack name="poisoncondition" interval="1000" chance="10" length="6" spread="0" min="0" max="-260">
+			<attribute key="areaEffect" value="groundshaker"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-450" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element deathPercent="20"/>
+		<element icePercent="20"/>
+		<element physicalPercent="20"/>
+		<element holyPercent="20"/>
+		<element firePercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity earth="1"/>
+		<immunity energy="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="80" chance="37000"/><!-- gold coin -->
+		<item id="2148" countmax="49" chance="37000"/><!-- gold coin -->
+		<item id="2260" chance="7850"/><!-- blank rune -->
+		<item id="7850" countmax="30" chance="9200"/><!-- earth arrow -->
+		<item id="2398" chance="8500"/><!-- mace -->
+		<item id="2394" chance="4250"/><!-- morning star -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="9808" chance="5600"/><!-- rusty armor -->
+		<item id="1294" countmax="10" chance="4250"/><!-- small stone -->
+		<item id="9970" chance="1300"/><!-- small topaz -->
+		<item id="2509" chance="8000"/><!-- steel shield -->
+		<item id="7589" chance="2600"/><!-- strong mana potion -->
+		<item id="2150" countmax="2" chance="300"/><!-- small amethyst -->
+			
+		</item>
+	</loot>
+</monster>

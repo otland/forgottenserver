@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pirate Buccaneer" nameDescription="a pirate buccaneer" race="blood" experience="250" speed="230" manacost="595">
+	<health now="425" max="425"/>
+	<look type="97" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="50"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="80"/>
+		<attack name="physical" interval="3000" chance="17" range="4" min="-0" max="-80">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="23"/>
+	<elements>
+		<element earthPercent="25"/>
+		<element holyPercent="20"/>
+		<element deathPercent="-7"/>
+		<element firePercent="-10"/>
+		<element energyPercent="-10"/>
+		<element icePercent="-10"/>
+		<element physicalPercent="-11"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Give up!"/>
+		<voice sentence="Hiyaa"/>
+		<voice sentence="Plundeeeeer!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="59" chance="26500"/><!-- gold coin -->
+		<item id="2410" countmax="6" chance="4000"/><!-- throwing knife -->
+		<item id="2385" chance="10750"/><!-- sabre -->
+		<item id="2238" chance="9750"/><!-- worn leather boots -->
+		<item id="2050" chance="8800"/><!-- torch -->
+		<item id="2376" chance="5000"/><!-- sword -->
+		<item id="2513" chance="3500"/><!-- battle shield -->
+		<item id="5091" chance="1100"/><!-- treasure map -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="6095" chance="1000"/><!-- pirate shirt -->
+		<item id="2463" chance="950"/><!-- plate armor -->
+		<item id="6126" chance="600"/><!-- peg leg -->
+		<item id="6098" chance="600"/><!-- eye patch -->
+		<item id="7588" chance="500"/><!-- strong health potion -->
+		<item id="6097" chance="600"/><!-- hook -->
+		<item id="5926" chance="500"/><!-- pirate backpack -->
+		<item id="5792" chance="50"/><!-- dice -->
+			
+		</item>
+	</loot>
+</monster>

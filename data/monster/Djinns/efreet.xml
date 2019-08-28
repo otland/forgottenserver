@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="270" manacost="0">
+	<health now="550" max="550"/>
+	<look type="103" corpse="6032"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="45" attack="40"/>
+		<attack name="fire" interval="2000" chance="50" range="7" min="-40" max="-110">
+			<attribute key="shootEffect" value="fire"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="25" range="7" min="-65" max="-115">
+			<attribute key="shootEffect" value="energy"/>
+		</attack>
+		<attack name="lifedrain" interval="3000" chance="20" range="7" min="-60" max="-120">
+			<attribute key="shootEffect" value="suddendeath"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="13" range="7" speedchange="-650" duration="15000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="drunk" interval="1000" chance="20" range="7">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
+		<attack name="outfit" interval="1000" chance="17" range="7" monster="rat" duration="30000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</attack>
+		<attack name="energycondition" interval="1000" chance="17" radius="3" target="0" min="-60" max="-100">
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="20">
+		<defense name="healing" interval="1000" chance="15" min="50" max="80">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="90"/>
+		<element energyPercent="60"/>
+		<element earthPercent="40"/>
+		<element deathPercent="30"/>
+		<element icePercent="-10"/>
+		<element holyPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="green djinn" interval="1000" chance="15" max="2"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I grant you a deathwish!"/>
+		<voice sentence="Good wishes are for fairytales"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="75" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="40000"/><!-- gold coin -->
+		<item id="2673" countmax="12" chance="6000"/><!-- pear -->
+		<item id="7378" countmax="3" chance="3500"/><!-- royal spear -->
+		<item id="2442" chance="5000"/><!-- heavy machete -->
+		<item id="2063" chance="20000"/><!-- small oil lamp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2149" countmax="4" chance="1000"/><!-- small emerald -->
+				<item id="7732" countmax="2" chance="2000"/><!-- seeds -->
+				<item id="1860" chance="1000"/><!-- green tapestry -->
+				<item id="5910" chance="5000"/><!-- green piece of cloth -->
+				<item id="2187" chance="900"/><!-- wand of inferno -->
+				<item id="2663" chance="750"/><!-- mystic turban -->
+				<item id="7900" chance="100"/><!-- magma monocle -->
+				<item id="7589" chance="3500"/><!-- strong mana potion -->
+				<item id="2155" chance="200"/><!-- green gem -->
+				
+		</item>
+	</loot>
+</monster>

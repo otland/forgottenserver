@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Chakoya Windcaller" nameDescription="a chakoya windcaller" race="blood" experience="48" speed="270" manacost="305">
+	<health now="84" max="84"/>
+	<look type="260" corpse="7320"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="4"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="12" attack="20"/>
+		<attack name="energy" interval="1000" chance="20" range="7" min="-5" max="-35">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="18" length="3" spread="2" min="-5" max="-20">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element icePercent="100"/>
+		<element firePercent="50"/>
+		<element holyPercent="20"/>
+		<element energyPercent="-15"/>
+		<element deathPercent="-10"/>
+	</elements>
+	<voices interval="2000" chance="5">
+		<voice sentence="Mupi! Si siyoqua jinuma!"/>
+		<voice sentence="Siqsiq ji jusipa!"/>
+		<voice sentence="Jagura taluka taqua!"/>
+		<voice sentence="Quatu nguraka!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="36" chance="20000"/><!-- gold coin -->
+		<item id="2667" countmax="4" chance="9000"/><!-- fish -->
+		<item id="2666" chance="20000"/><!-- meat -->
+		<item id="2398" chance="7500"/><!-- mace-->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2541" chance="2000"/><!-- bone shield -->
+		<item id="7441" chance="1000"/><!-- ice cube -->
+		<item id="7158" chance="750"/><!-- rainbow trout -->
+		<item id="2669" chance="700"/><!-- northern pike -->
+			
+		</item>
+	</loot>
+</monster>

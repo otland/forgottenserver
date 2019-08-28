@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<monster name="Gnorre Chyllson" nameDescription="gnorre chyllson" race="blood" experience="4000" speed="370" manacost="0">
+	<health now="7100" max="7100"/>
+	<look type="251" head="11" body="9" legs="11" feet="85" addons="1" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="130"/>
+		<attack name="melee" interval="3000" chance="50" target="0" min="-500" max="-800">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+		<attack name="ice" interval="1000" chance="15" range="7" min="-170" max="-200">
+			<attribute key="shootEffect" value="snowball"/>
+		</attack>
+	</attacks>
+	<defenses armor="51" defense="52"/>
+	<elements>
+		<element firePercent="100"/>
+		<element icePercent="100"/>
+		<element earthPercent="100"/>
+		<element holyPercent="23"/>
+		<element deathPercent="-11"/>
+		<element physicalPercent="-17"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="I am like the merciless northwind."/>
+		<voice sentence="Snow will be your death shroud."/>
+		<voice sentence="Feel the wrath of father chyll!"/>
+	</voices>
+</monster>

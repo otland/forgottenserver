@@ -1,57 +1,46 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Thul" nameDescription="Thul" race="blood" experience="2700" speed="520" manacost="670">
-	<health now="2950" max="2950" />
-	<look type="46" corpse="6065" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Thul" nameDescription="thul" race="undead" experience="1800" speed="300" manacost="0">
+	<health now="3000" max="3000"/>
+	<look type="46" corpse="6065"/>
+	<targetchange interval="2000" chance="5"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag staticattack="90" />
-		<flag targetdistance="1" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-1354" />
-		<attack name="physical" interval="2000" chance="25" radius="3" min="0" max="-170">
-			<attribute key="areaEffect" value="blackspark" />
-		</attack>
-		<attack name="poisonfield" interval="2000" chance="19" range="7" radius="3" target="0">
-			<attribute key="shootEffect" value="poison" />
-		</attack>
-		<attack name="speed" interval="2000" chance="18" range="7" speedchange="-360" duration="5000">
-			<attribute key="shootEffect" value="snowball" />
-		</attack>
-		<attack name="ice" interval="2000" chance="20" range="7" target="1" min="-108" max="-137">
-			<attribute key="shootEffect" value="ice" />
-			<attribute key="areaEffect" value="icearea" />
+		<attack name="melee" interval="2000" min="-0" max="-285"/>
+		<attack name="melee" interval="3000" chance="15" range="7" radius="3" target="0" min="-0" max="-170">
+			<attribute key="areaEffect" value="blackspark"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="35" defense="40"/>
 	<elements>
-		<element energyPercent="-15" />
+		<element icePercent="100"/>
+		<element energyPercent="-20"/>
 	</elements>
 	<immunities>
-		<immunity lifedrain="1" />
-		<immunity ice="1" />
-		<immunity earth="1" />
+		<immunity lifedrain="0"/>
 	</immunities>
-	<summons maxSummons="2">
-		<summon name="Massive Water Elementals" interval="2000" chance="10" max="2" />
-	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Gaaahhh!" />
+		<voice sentence="Gaaahhh!"/>
 	</voices>
+	<summons maxSummons="2">
+		<summon name="massive water elemental" interval="1000" chance="13"/>
+	</summons>
 	<loot>
-		<item name="gold coin" countmax="77" chance="50000" />
-		<item name="shrimp" chance="25000" />
-		<item name="fish fin" chance="100000" />
-		<item name="relic sword" chance="50000" />
+		<item id="2148" countmax="90" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="100000"/><!-- gold coin -->
+		<item id="5895" countmax="1" chance="100000"/><!-- fish fin -->
 	</loot>
 </monster>

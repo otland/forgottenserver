@@ -1,56 +1,57 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Goblin" nameDescription="a goblin" race="blood" experience="25" speed="150" manacost="290">
-	<health now="50" max="50" />
-	<look type="61" corpse="6002" />
-	<targetchange interval="5000" chance="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goblin" nameDescription="a goblin" race="blood" experience="25" speed="200" manacost="290">
+	<health now="50" max="50"/>
+	<look type="61" corpse="6002"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="15" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="15"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-10" />
-		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-25">
-			<attribute key="shootEffect" value="smallstone" />
+		<attack name="melee" interval="2000" skill="10" attack="10"/>
+		<attack name="physical" interval="1000" chance="9" range="7" min="-15" max="-25">
+			<attribute key="shootEffect" value="smallstone"/>
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="6" defense="8"/>
 	<elements>
-		<element energyPercent="20" />
-		<element holyPercent="1" />
-		<element earthPercent="-12" />
-		<element deathPercent="-10" />
+		<element energyPercent="20"/>
+		<element holyPercent="20"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Me have him!" />
-		<voice sentence="Zig Zag! Gobo attack!" />
-		<voice sentence="Help! Goblinkiller!" />
-		<voice sentence="Bugga! Bugga!" />
-		<voice sentence="Me green, me mean!" />
+		<voice sentence="Me have him!"/>
+		<voice sentence="Zig Zag! Gobo attack!"/>
+		<voice sentence="Help! Goblinkiller!"/>
+		<voice sentence="Bugga! Bugga!"/>
+		<voice sentence="Me green, me mean!"/>
 	</voices>
 	<loot>
-		<item name="small stone" countmax="3" chance="15290" />
-		<item name="gold coin" countmax="9" chance="50320" />
-		<item id="2230" chance="1130" /><!-- bone -->
-		<item name="mouldy cheese" chance="1000" />
-		<item name="dagger" chance="1800" />
-		<item name="short sword" chance="8870" />
-		<item name="bone club" chance="4900" />
-		<item name="leather helmet" chance="1940" />
-		<item name="leather armor" chance="2510" />
-		<item name="small axe" chance="9700" />
-		<item id="2667" chance="12750" /><!-- fish -->
-		<item name="goblin ear" chance="910" />
+		<item id="2148" countmax="9" chance="28750"/><!-- gold coin -->
+		<item id="2230" chance="13750"/><!-- bone -->
+		<item id="2449" chance="4000"/><!-- bone club -->
+		<item id="2379" chance="16000"/><!-- dagger -->
+		<item id="2667" chance="13750"/><!-- fish -->
+		<item id="2467" chance="6750"/><!-- leather armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+				
+		<item id="2461" chance="12570"/><!-- leather helmet -->
+		<item id="2235" chance="7000"/><!-- moldy cheese -->	
+		<item id="2406" chance="10000"/><!-- short sword -->
+		<item id="2559" chance="7750"/><!-- small axe -->
+		<item id="1294" countmax="3" chance="7000"/><!-- small stone -->
+			
+		</item>
 	</loot>
 </monster>

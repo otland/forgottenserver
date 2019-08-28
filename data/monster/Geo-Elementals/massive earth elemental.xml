@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Massive Earth Elemental" nameDescription="a massive earth elemental" race="undead" experience="850" speed="290" manacost="0">
+	<health now="1330" max="1330"/>
+	<look type="285" corpse="8933"/>
+	<targetchange interval="20000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="80"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="45" attack="40"/>
+		<attack name="earth" interval="2000" chance="15" range="7" min="-25" max="-140">
+			<attribute key="shootEffect" value="earth"/>
+		</attack>
+		<attack name="earth" interval="1000" chance="10" length="6" spread="0" min="0" max="-260">
+			<attribute key="areaEffect" value="smallplants"/>
+		</attack>
+		<attack name="physical" interval="1000" chance="9" target="0" radius="4" min="0" max="-240">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element deathPercent="20"/>
+		<element icePercent="20"/>
+		<element physicalPercent="20"/>
+		<element holyPercent="20"/>
+		<element firePercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity earth="1"/>
+		<immunity energy="1"/>
+	</immunities>
+	<loot>
+		<item id="2148" countmax="90" chance="32000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="32000"/><!-- gold coin -->
+		<item id="2148" countmax="51" chance="32000"/><!-- gold coin -->
+		<item id="1294" countmax="10" chance="1200"/><!-- small stone -->
+		<item id="2510" chance="8750"/><!-- plate shield-->
+		<item id="2666" chance="9000"/><!-- meat -->
+
+		<item id="2200" chance="9000"/><!-- protection amulet -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2145" countmax="2" chance="1000"/><!-- small diamond -->
+		<item id="2436" chance="10000"/><!-- plate armor -->
+		<item id="9809" chance="3500"/><!-- rusty armor -->
+		<item id="2213" chance="3500"/><!-- dwarven ring -->
+		<item id="9970" countmax="2" chance="3500"/><!-- small topaz-->
+		<item id="2197" chance="300"/><!-- stone skin amulet -->
+		<item id="7887" chance="250"/><!-- terra amulet -->
+		<item id="7387" chance="200"/><!-- diamond sceptre-->
+			
+		</item>
+	</loot>
+</monster>

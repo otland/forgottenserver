@@ -1,47 +1,49 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Smuggler" nameDescription="a smuggler" race="blood" experience="48" speed="170" manacost="390">
-	<health now="130" max="130" />
-	<look type="134" head="95" body="0" legs="113" feet="115" corpse="20507" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Smuggler" nameDescription="a smuggler" race="blood" experience="48" speed="210" manacost="390">
+	<health now="130" max="130"/>
+	<look type="134" head="95" body="0" legs="113" feet="115" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="15" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="18"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-60" />
+		<attack name="melee" interval="2000" skill="20" attack="40"/>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="10" defense="13"/>
 	<elements>
-		<element physicalPercent="-5" />
-		<element deathPercent="-5" />
+		<element physicalPercent="-12"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="I will silence you forever!" />
-		<voice sentence="You saw something you shouldn't!" />
+		<voice sentence="I will silence you forever!"/>
+		<voice sentence="You saw something you shouldn't!"/>
 	</voices>
 	<loot>
-		<item id="2050" countmax="2" chance="30200" /><!-- torch -->
-		<item name="gold coin" countmax="10" chance="80000" />
-		<item id="2376" chance="5000" /><!-- sword -->
-		<item name="knife" chance="9920" />
-		<item name="combat knife" chance="4400" />
-		<item name="short sword" chance="10000" />
-		<item name="leather helmet" chance="10050" />
-		<item name="leather legs" chance="14840" />
-		<item name="ham" chance="10200" />
-		<item id="7397" chance="110" /><!-- deer trophy -->
-		<item name="raspberry" countmax="5" chance="5000" />
+		<item id="2148" countmax="10" chance="43000"/><!-- gold coin -->
+		<item id="2050" chance="50000"/><!-- torch -->
+		<item id="2666" countmax="2" chance="22500"/><!-- meat -->
+		<item id="2649" chance="17650"/><!-- leather legs -->
+		<item id="2403" chance="10000"/><!-- knife -->
+		<item id="2671" countmax="2" chance="6000"/><!-- ham -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2406" chance="8000"/><!-- short sword -->
+				<item id="2461" chance="7850"/><!-- leather helmet -->
+				<item id="2404" chance="4400"/><!-- combat knife -->
+				<item id="2376" chance="5650"/><!-- sword -->
+				<item id="7397" chance="500"/><!-- deer trophy -->
+			
+		</item>
 	</loot>
 </monster>

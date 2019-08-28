@@ -1,53 +1,65 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Xenia" nameDescription="Xenia" race="blood" experience="255" speed="176" manacost="450">
-	<health now="200" max="200" />
-	<look type="137" head="95" body="115" legs="115" feet="95" corpse="20542" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Xenia" nameDescription="xenia" race="blood" experience="255" speed="176" manacost="450">
+	<health now="290" max="290"/>
+	<look type="139" head="113" body="57" legs="95" feet="113" corpse="6081"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="10" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-50" />
+		<attack name="melee" interval="2000" skill="40" attack="28"/>
 		<attack name="physical" interval="1000" chance="15" range="7" min="-28" max="-42">
-			<attribute key="shootEffect" value="spear" />
+			<attribute key="shootEffect" value="spear"/>
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="14" />
+	<defenses armor="12" defense="14"/>
 	<elements>
-		<element icePercent="10" />
-		<element firePercent="10" />
-		<element holyPercent="7" />
-		<element deathPercent="-7" />
-		<element physicalPercent="-6" />
+		<element icePercent="10"/>
+		<element firePercent="10"/>
+		<element holyPercent="7"/>
+		<element deathPercent="-7"/>
+		<element physicalPercent="-6"/>
 	</elements>
+	<immunities>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="0"/>
+		<immunity invisible="0"/>
+	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Stand still!" />
-		<voice sentence="One more head for me!" />
-		<voice sentence="Head off!" />
+		<voice sentence="Stand still!"/>
+		<voice sentence="One more head for me!"/>
+		<voice sentence="Head off!"/>
 	</voices>
 	<loot>
-		<item name="crystal necklace" chance="2500" />
-		<item name="small diamond" countmax="2" chance="2500" />
-		<item name="small ruby" countmax="2" chance="2500" />
-		<item name="gold coin" countmax="45" chance="100000" />
-		<item name="protection amulet" chance="1000" />
-		<item name="double axe" chance="3333" />
-		<item name="machete" chance="10000" />
-		<item name="chain helmet" chance="5000" />
-		<item name="plate armor" chance="1333" />
-		<item name="chain armor" chance="6666" />
-		<item name="meat" countmax="3" chance="20000" />
-		<item name="red apple" countmax="4" chance="10000" />
-		<item name="worm" countmax="10" chance="50000" />
+		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
+		<item id="2464" chance="6666"/><!-- chain armor -->
+		<item id="2125" chance="2500"/><!-- crystal necklace -->
+		<item id="2387" chance="3333"/><!-- double axe -->
+		<item id="2458" chance="5000"/><!-- chain helmet -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2674" countmax="4" chance="10000"/><!-- red apple -->
+				<item id="2420" chance="10000"/><!-- machete -->
+				<item id="2666" countmax="3" chance="20000"/><!-- meat -->
+				<item id="2147" countmax="2" chance="2500"/><!-- small ruby -->
+				<item id="2145" countmax="2" chance="2500"/><!-- small diamond -->
+				<item id="2200" chance="1000"/><!-- protection amulet -->
+				<item id="2463" chance="1333"/><!-- plate armor -->
+			
+		</item>
 	</loot>
 </monster>

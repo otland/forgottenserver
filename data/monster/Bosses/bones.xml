@@ -1,58 +1,72 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Bones" nameDescription="Bones" race="undead" experience="3750" speed="300">
-	<health now="9500" max="9500" />
-	<look type="231" corpse="6306" />
-	<targetchange interval="5000" chance="8" />
+<?xml version="1.0" encoding="UTF-8"?>
+	<monster name="Bones" nameDescription="bones" race="undead" experience="3750" speed="300" manacost="0">
+	<health now="9500" max="9500"/>
+	<look type="231" corpse="6306"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag staticattack="90" />
-		<flag targetdistance="1" />
-		<flag runonhealth="1" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-845" />
-		<attack name="lifedrain" interval="1000" chance="13" radius="1" target="1" min="-400" max="-600" />
+		<attack name="melee" interval="2000" skill="120" attack="130"/>
+		<attack name="lifedrain" interval="1000" chance="13" radius="1" target="1" min="-400" max="-600"/>
 		<attack name="death" interval="3000" chance="34" range="1" radius="1" target="1" min="-180" max="-500">
-			<attribute key="shootEffect" value="death" />
+			<attribute key="shootEffect" value="death"/>
 		</attack>
-		<!--
-		<attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230" />
-		-->
+		<!-- <attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230">
+		</attack> -->
 	</attacks>
 	<defenses armor="50" defense="55">
 		<defense name="healing" interval="5000" chance="25" min="60" max="100">
-			<attribute key="areaEffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<immunities>
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity physical="0"/>
+		<immunity energy="0"/>
+		<immunity fire="0"/>
+		<immunity poison="0"/>
+		<immunity lifedrain="0"/>
+		<immunity paralyze="0"/>
+		<immunity outfit="0"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
+	<summons maxSummons="0">
+		<summon name="" interval="" chance=""/>
+	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Your new name is breakfast." />
-		<voice sentence="Keep that dog away!" />
-		<voice sentence="Out Fluffy! Out! Bad dog!" />
+		<voice sentence="Your new name is breakfast."/>
+		<voice sentence="Keep that dog away!"/>
+		<voice sentence="Out Fluffy! Out! Bad dog!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="90" chance="50000" />
-		<item name="sword ring" chance="10000" />
-		<item name="broadsword" chance="4000" />
-		<item name="magic plate armor" chance="2000" />
-		<item name="spectral stone" chance="800" />
-		<item name="skull helmet" chance="50000" />
-		<item name="soul orb" chance="10000" />
-		<item id="6300" chance="4000" /><!-- death ring -->
-		<item name="demonic essence" chance="1538" />
-		<item id="6570" countmax="3" chance="5538" /><!-- surprise bag -->
-		<item id="6571" chance="1538" /><!-- surprise bag -->
-		<item name="dragonbone staff" chance="50000" />
+		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="50000"/><!-- gold coin -->
+		<item id="5741" chance="50000"/><!-- skull helmet -->
+		<item id="6500" chance="1538"/><!-- demonic essence -->
+		<item id="6570" countmax="3" chance="5538"/><!-- surprise bag -->
+		<item id="6571" chance="1538"/><!-- surprise bag -->
+		<item id="2472" chance="2000"/><!-- magic plate armor -->
+		<item id="6300" chance="4000"/><!-- death ring -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="5944" chance="10000"/><!-- soul orb -->
+				<item id="4851" chance="800"/><!-- life crystal -->
+				<item id="2207" chance="10000"/><!-- sword ring -->
+				<item id="7430" chance="50000"/><!-- dragonbone staff -->
+				<item id="2413" chance="4000"/><!-- broadsword -->
+			
+		</item>
 	</loot>
 </monster>

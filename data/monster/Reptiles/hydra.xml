@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hydra" nameDescription="a hydra" race="blood" experience="2100" speed="260" manacost="0">
+	<health now="2350" max="2350"/>
+	<look type="121" corpse="6048"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="300"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="80" attack="60"/>
+		<attack name="speed" interval="1000" chance="17" range="7" radius="4" target="1" speedchange="-600" duration="15000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="greenbubble"/>
+		</attack>
+		<attack name="physical" interval="3000" chance="17" length="8" spread="3" min="-150" max="-250">
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+		<attack name="poison" interval="2000" chance="20" length="8" spread="3" min="-60" max="-300">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="healing" interval="1000" chance="25" min="200" max="400">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="100"/>
+		<element icePercent="40"/>
+		<element holyPercent="25"/>
+		<element physicalPercent="-15"/>
+		<element energyPercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="FCHHHHH"/>
+		<voice sentence="HISSSS"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="90" chance="24000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="24000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="24000"/><!-- gold coin -->
+		<item id="2666" countmax="4" chance="37500"/><!-- meat -->
+		<item id="2671" countmax="4" chance="25000"/><!-- ham -->
+		<item id="7589" chance="200"/><!-- strong mana potion -->
+		<item id="2177" chance="500"/><!-- life crystal -->
+		<item id="2197" chance="900"/><!-- stone skin amulet -->
+		<item id="2146" chance="5000"/><!-- small sapphire -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="4850" chance="600"/><!-- hydra egg -->
+		<item id="2214" chance="1050"/><!-- ring of healing -->
+		<item id="2475" chance="1000"/><!-- warrior helmet -->
+		<item id="2476" chance="1200"/><!-- knight armor -->
+		<item id="2536" chance="200"/><!-- medusa shield -->
+		<item id="2498" chance="200"/><!-- royal helmet -->
+		<item id="2195" chance="120"/><!-- boots of haste -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,53 +1,52 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="205" manacost="420">
-	<health now="160" max="160" />
-	<look type="146" head="114" body="20" legs="22" feet="2" addons="2" corpse="20466" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="215" manacost="420">
+	<health now="160" max="160"/>
+	<look type="146" head="114" body="20" legs="22" feet="2" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="15" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="18"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-80" />
-		<attack name="physical" interval="2000" chance="10" target="0" radius="1">
-			<attribute key="areaeffect" value="whitenote" />
-		</attack>
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="10" defense="13"/>
 	<elements>
-		<element firePercent="20" />
-		<element holyPercent="20" />
-		<element physicalPercent="-10" />
-		<element icePercent="-10" />
-		<element deathPercent="-10" />
+		<element firePercent="20"/>
+		<element holyPercent="10"/>
+		<element physicalPercent="-12"/>
+		<element icePercent="-10"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="We are the true sons of the desert!" />
-		<voice sentence="I will leave your remains to the vultures!" />
-		<voice sentence="We are swift as the wind of the desert!" />
+		<voice sentence="We are the true sons of the desert!"/>
+		<voice sentence="I will leave your remains to the vultures!"/>
+		<voice sentence="We are swift as the wind of the desert!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="40" chance="56250" />
-		<item name="axe" chance="2730" />
-		<item name="mace" chance="2120" />
-		<item name="iron helmet" chance="650" />
-		<item name="brass armor" chance="2350" />
-		<item name="steel shield" chance="920" />
-		<item name="nomad parchment" chance="200" />
-		<item name="potato" countmax="3" chance="4840" />
-		<item name="dirty turban" chance="2160" />
-		<item name="rope belt" chance="6420" />
+		<item id="2148" countmax="51" chance="16250"/><!-- gold coin -->
+		<item id="2666" countmax="2" chance="22500"/><!-- meat -->
+		<item id="2386" chance="28000"/><!-- axe -->
+		<item id="2511" chance="20000"/><!-- brass shield -->
+		<item id="2649" chance="13750"/><!-- leather legs -->
+		<item id="2398" chance="12500"/><!-- mace -->
+		<item id="2458" chance="4500"/><!-- chain helmet -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2465" chance="1500"/><!-- brass armor -->
+		<item id="2509" chance="750"/><!-- steel shield -->
+		<item id="2459" chance="450"/><!-- iron helmet -->
+			
+		</item>
 	</loot>
 </monster>

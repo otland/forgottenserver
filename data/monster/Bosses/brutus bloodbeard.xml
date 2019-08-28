@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Brutus Bloodbeard" nameDescription="Brutus Bloodbeard" race="blood" experience="500" speed="240" manacost="0">
+	<health now="1200" max="1200"/>
+	<look type="98" corpse="6080"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-450" max="-500"/>
+		<!--<attack name="drunk explosion" interval="2000"/>-->
+	</attacks>
+	<defenses armor="35" defense="50"/>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<loot>
+		<item id="6099" chance="100000"/><!-- brutus bloodbeard's hat -->
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2476" chance="1200"/><!-- knight armor -->
+		<item id="2463" chance="4000"/><!-- plate armor -->
+		<item id="2320" chance="100000"/><!-- skull -->
+	</loot>
+</monster>

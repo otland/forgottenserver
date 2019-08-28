@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc Warlord" nameDescription="a orc warlord" race="blood" experience="670" speed="290" manacost="0">
+	<health now="950" max="950"/>
+	<look type="2" corpse="6008"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="50"/>
+		<attack name="physical" interval="3000" chance="25" range="7" min="-100" max="-120">
+			<attribute key="shootEffect" value="throwingstar"/>
+		</attack>
+	</attacks>
+	<defenses armor="22" defense="35">
+		<defense name="invisible" interval="1000" chance="4" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="80"/>
+		<element energyPercent="40"/>
+		<element holyPercent="20"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ranat Ulderek!"/>
+		<voice sentence="Orc buta bana!"/>
+		<voice sentence="Ikem rambo zambo!"/>
+		<voice sentence="Futchi maruk buta!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="50" chance="15000"/><!-- gold coin -->
+		<item id="2399" chance="4000" countmax="22"/><!-- throwing star -->
+		<item id="2667" countmax="2" chance="12500"/><!-- fish -->
+		<item id="2419" chance="29500"/><!-- scimitar -->
+		<item id="2666" countmax="2" chance="9000"/><!-- meat -->
+		<item id="2428" chance="17650"/><!-- orcish axe -->
+		<item id="2463" chance="6000"/><!-- plate armor -->
+		<item id="2200" chance="7500"/><!-- protection amulet -->
+		<item id="2647" chance="6000"/><!-- plate legs -->
+		<item id="3965" chance="7000"/><!-- hunting spear -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2478" chance="9000"/><!-- brass legs -->
+				<item id="2465" chance="9000"/><!-- brass armor -->		
+				<item id="2490" chance="6500"/><!-- dark helmet -->
+				<item id="2377" chance="5000"/><!-- two-handed sword -->
+				<item id="2434" chance="1000"/><!-- dragon hammer -->
+				<item id="2497" chance="750"/><!-- crusader helmet -->
+				<item id="2165" chance="900"/><!-- stealth ring -->
+				<item id="7618" chance="1000"/><!-- health potion -->
+				<item id="7395" chance="100"/><!-- orc trophy -->
+				<item id="2179" chance="100"/><!-- golden ring -->
+				<item id="7891" chance="100"/><!-- magma boots -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,51 +1,55 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ghost" nameDescription="a ghost" race="undead" experience="120" speed="160" manacost="100">
-	<health now="150" max="150" />
-	<look type="48" corpse="5993" />
-	<targetchange interval="4000" chance="0" />
+	<health now="150" max="150"/>
+	<look type="48" corpse="5993"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-80" />
-		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-45">
-			<attribute key="areaEffect" value="redshimmer" />
-		</attack>
+		<attack name="melee" interval="2000" skill="30" attack="40"/>
+		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-25" max="-45"/>
 	</attacks>
+	<defenses armor="10" defense="10"/>
+	<elements>
+		<element physicalPercent="100"/>
+		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+	</elements>
 	<immunities>
-		<immunity physical="1" />
-		<immunity drown="1" />
-		<immunity earth="1" />
-		<immunity death="1" />
-		<immunity lifedrain="1" />
-		<immunity paralyze="1" />
+		<immunity physical="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Huh!" />
-		<voice sentence="Shhhhhh" />
-		<voice sentence="Buuuuuh" />
+		<voice sentence="Huh!"/>
+		<voice sentence="Shhhhhh"/>
+		<voice sentence="Buuuuuh"/>
 	</voices>
 	<loot>
-		<item id="1962" chance="1310" /><!-- orange book -->
-		<item name="stealth ring" chance="180" />
-		<item name="morning star" chance="10610" />
-		<item name="combat knife" chance="7002" />
-		<item name="ancient shield" chance="860" />
-		<item name="cape" chance="8800" />
-		<item name="shadow herb" chance="14400" />
-		<item name="white piece of cloth" chance="1940" />
-		<item name="ghostly tissue" chance="1870" />
+		<item id="2642" chance="23750"/><!-- sandals -->
+		<item id="2394" chance="17000"/><!-- morning star -->
+		<item id="2404" chance="7000"/><!-- combat knife -->
+		<item id="2804" chance="5000"/><!-- shadow herb -->
+		<item id="2654" chance="5000"/><!-- cape -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="1962" chance="3600"/><!-- book -->
+				<item id="5909" chance="1800"/><!-- white piece of cloth -->		
+				<item id="2532" chance="1700"/><!-- ancient shield -->
+				<item id="2165" chance="500"/><!-- stealth ring -->
+			
+		</item>
 	</loot>
 </monster>

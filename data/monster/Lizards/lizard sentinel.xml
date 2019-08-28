@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard Sentinel" nameDescription="a lizard sentinel" race="blood" experience="110" speed="240" manacost="0">
+	<health now="265" max="265"/>
+	<look type="114" corpse="6040"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="10"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
+		<attack name="physical" interval="1000" chance="7" range="7" min="-40" max="-70">
+			<attribute key="shootEffect" value="spear"/>
+		</attack>
+	</attacks>
+	<defenses armor="17" defense="14"/>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="10"/>
+		<element icePercent="5"/>
+		<element firePercent="-10"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Tssss!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="60" chance="25000"/><!-- gold coin -->
+		<item id="2389" countmax="3" chance="12000"/><!-- spear -->
+		<item id="2464" chance="10000"/><!-- chain armor -->
+		<item id="2483" chance="8800"/><!-- scale armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="3965" chance="6000"/><!-- hunting spear -->
+		<item id="5881" chance="650"/><!-- lizard scale -->
+		<item id="2425" chance="3000"/><!-- obsidian lance -->
+		<item id="3974" chance="1000"/><!-- sentinel shield -->
+		<item id="5876" chance="2500"/><!-- lizard leather -->
+		<item id="7618" chance="500"/><!-- health potion -->
+		<item id="2381" chance="2000"/><!-- halberd -->
+		<item id="2145" chance="300"/><!-- small diamond -->
+			
+		</item>
+	</loot>
+</monster>

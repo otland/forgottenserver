@@ -1,52 +1,54 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="200">
-	<health now="120" max="120" />
-	<look type="128" head="78" body="116" legs="95" feet="114" corpse="20511" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="210" manacost="0">
+	<health now="150" max="150"/>
+	<look type="128" head="95" body="116" legs="95" feet="114" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-70" />
-		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-20" max="-30">
-			<attribute key="areaEffect" value="redshimmer" />
+		<attack name="melee" interval="2000" skill="60" attack="20"/>
+		<attack name="lifedrain" interval="1000" chance="100" range="1" min="-20" max="-30">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15">
-		<defense name="invisible" interval="2000" chance="40" duration="6000">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="14" defense="10">
+		<defense name="invisible" interval="1000" chance="25" duration="9000">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="5" />
-		<element physicalPercent="-20" />
-		<element holyPercent="-5" />
+		<element deathPercent="10"/>
+		<element physicalPercent="-12"/>
+		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
-		<immunity invisible="1" />
-		<immunity lifedrain="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="8" chance="13000" />
-		<item name="blank rune" chance="8670" />
-		<item name="throwing knife" countmax="2" chance="11170" />
-		<item name="katana" chance="530" />
-		<item name="obsidian lance" chance="1210" />
-		<item name="brass legs" chance="3500" />
-		<item name="brass legs" chance="5510" />
-		<item name="miraculum" chance="1550" />
+		<item id="2148" countmax="8" chance="5000"/><!-- gold coin -->
+		<item id="2410" countmax="2" chance="3000"/><!-- throwing knife -->
+		<item id="2649" chance="9500"/><!-- leather legs -->
+		<item id="2478" chance="7000"/><!-- brass legs -->
+		<item id="2260" chance="6000"/><!-- blank rune -->
+		<item id="1988" chance="100000"><!-- backpack -->
+			
+				<item id="2412" chance="5500"/><!-- katana -->
+				<item id="2425" chance="1000"/><!-- obsidian lance -->		
+				<item id="2165" chance="300"/><!-- stealth ring -->		
+
+			
+		</item>
 	</loot>
 </monster>

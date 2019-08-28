@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Avalanche" nameDescription="Avalanche" race="undead" experience="305" speed="195">
-	<health now="550" max="550" />
-	<look type="261" corpse="7349" />
+<monster name="Avalanche" nameDescription="avalanche" race="undead" experience="305" speed="195" manacost="0">
+	<health now="550" max="550"/>
+	<look type="261" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag targetdistance="1" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-180" />
+		<attack name="melee" interval="2000" skill="50" attack="60"/>
 		<attack name="drown" interval="1000" chance="100" length="5" spread="6" min="-10" max="-50">
-			<attribute key="areaEffect" value="energyarea" />
+			<attribute key="areaEffect" value="energyarea"/>
 		</attack>
 		<attack name="speed" interval="4000" chance="100" radius="3" duration="10000" speedchange="-400">
-			<attribute key="areaEffect" value="poff" />
+			<attribute key="areaEffect" value="poff"/>
 		</attack>
 		<attack name="physical" interval="6000" chance="100" radius="1" target="1" range="5" min="0" max="-40">
-			<attribute key="shootEffect" value="largerock" />
+			<attribute key="shootEffect" value="largerock"/>
 		</attack>
 	</attacks>
-	<defenses armor="26" defense="27" />
+	<defenses armor="26" defense="27"/>
 	<elements>
-		<element firePercent="30" />
-		<element energyPercent="-10" />
+		<element firePercent="30"/>
+		<element energyPercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity ice="1" />
-		<immunity earth="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="5">
-		<voice sentence="You will pay for imprisoning me here." />
-		<voice sentence="Puny warmblood." />
+		<voice sentence="You will pay for imprisoning me here."/>
 	</voices>
 </monster>

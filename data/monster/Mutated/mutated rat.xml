@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mutated Rat" nameDescription="a mutated rat" race="blood" experience="450" speed="245" manacost="0">
+	<health now="550" max="550"/>
+	<look type="305" corpse="9871"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="50" poison="300"/>
+		<attack name="earth" interval="2000" chance="18" range="7" min="-45" max="-85">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+		<attack name="poisoncondition" interval="3000" chance="20" length="8" spread="0" min="-30" max="-100">
+			<attribute key="areaEffect" value="smallplants"/>
+		</attack> 
+		<attack name="speed" interval="3000" chance="10" range="7" target="1" duration="30000" speedchange="-600">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack> 
+		<attack name="lifedrain" interval="1000" chance="10" range="7" radius="3" target="0" min="-0" max="-50">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30"/>
+	<elements>
+		<element firePercent="-10"/>
+		<element holyPercent="10"/>
+	</elements>
+	<immunities>
+		<immunity death="1"/>
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity lifedrain="1"/>
+		<immunity drunk="1"/>
+		<immunity drown="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Grrrrrrrrrrrrrr!"/>
+		<voice sentence="Fcccccchhhhhh"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="65" chance="23000"/><!-- gold coin -->
+		<item id="2148" countmax="65" chance="23000"/><!-- gold coin -->
+		<item id="2320" chance="18500"/><!-- skull -->
+		<item id="2235" chance="11500"/><!-- moldy cheese -->
+		<item id="2799" chance="4500"/><!-- stone herb -->
+		<item id="2796" chance="1300"/><!-- green mushroom -->
+		<item id="2510" chance="5500"/><!-- plate shield -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2381" chance="3000"/><!-- halberd -->
+				<item id="2165" chance="700"/><!-- stealth ring -->
+				<item id="8900" chance="325"/><!-- spellbook of enlightenment -->
+				<item id="7618" chance="800"/><!-- health potion -->
+				<item id="2528" chance="150"/><!-- tower shield -->
+			
+		</item>
+	</loot>
+</monster>

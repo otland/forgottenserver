@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="War Golem" nameDescription="a war golem" race="energy" experience="2550" speed="280" manacost="0">
+	<health now="4300" max="4300"/>
+	<look type="326" corpse="10005"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="100"/>
+		<attack name="energy" interval="1000" chance="7" range="7" min="-0" max="-220">
+			<attribute key="shootEffect" value="energy"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="25" length="8" spread="0" min="-0" max="-280">
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="outfit" interval="1000" chance="9" range="7" monster="skeleton" duration="5000">
+			<attribute key="areaeffect" value="blueshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="speed" interval="1000" chance="7" speedchange="290" duration="4000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+		<defense name="healing" interval="1000" chance="25" min="200" max="400">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="50"/>
+		<element holyPercent="30"/>
+		<element firePercent="45"/>
+		<element energyPercent="35"/>
+		<element physicalPercent="40"/>
+		<element icePercent="25"/>
+		<element deathPercent="30"/>
+	</elements>
+	<immunities>
+		<immunity invisible="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="2500" chance="10">
+		<voice sentence="Azerus barada nikto!"/>
+		<voice sentence="Klonk klonk klonk"/>
+		<voice sentence="Engaging Enemy!"/>
+		<voice sentence="Threat level processed."/>
+		<voice sentence="Charging weapon systems!"/>
+		<voice sentence="Auto repair in progress."/>
+		<voice sentence="The battle is joined!"/>
+		<voice sentence="Termination initialized!"/>
+		<voice sentence="Rrrtttarrrttarrrtta"/>		
+	</voices>
+	<loot>
+		<item id="2148" countmax="90" chance="37500"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="375000"/><!-- gold coin -->
+		<item id="8309" countmax="5" chance="9000"/><!-- nails -->
+		<item id="2377" chance="5500"/><!-- two handed sword -->
+		<item id="2510" chance="9000"/><!-- plate shield -->
+		<item id="2394" chance="7000"/><!-- morning star -->
+		<item id="2513" chance="6500"/><!-- battle shield -->
+		<item id="8473" chance="5000"/><!-- ultimate health potion -->
+		<item id="7590" chance="5500"/><!-- great mana potion -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="5880" chance="3500"/><!-- iron ore -->
+				<item id="7439" chance="4000"/><!-- berserk potion -->
+				<item id="2438" chance="3500"/><!-- epee -->
+				<item id="9808" chance="5000"/><!-- rusty armor-->
+				<item id="2209" chance="1000"/><!-- club ring -->
+				<item id="2213" chance="10000"/><!-- dwarven ring -->
+				<item id="9980" chance="300"/><!-- crystal of power -->
+				<item id="7893" chance="400"/><!-- lightning boots -->
+				<item id="2645" chance="400"/><!-- steel boots -->
+				<item id="7403" chance="250"/><!-- berserker -->
+				<item id="7422" chance="250"/><!-- jade hammer -->
+				<item id="7428" chance="300"/><!-- bonebreaker -->
+				<item id="2177" chance="300"/><!-- life crystal -->
+			
+		</item>
+	</loot>
+</monster>

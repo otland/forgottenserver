@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frost Dragon" nameDescription="a frost dragon" race="undead" experience="2300" speed="260" manacost="0">
+	<health now="1800" max="1800"/>
+	<look type="248" corpse="7091"/>
+	<targetchange interval="5000" chance="6"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="70"/>
+		<flag runonhealth="250"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="110" attack="67"/>
+		<attack name="physical" interval="2000" chance="28" range="7" radius="4" target="1" min="-80" max="-180">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+		<attack name="physical" interval="3000" chance="22" length="7" spread="3" min="-100" max="-260">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+		<attack name="melee" interval="2000" chance="35" range="7" radius="3" target="0" min="-0" max="-70">
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+		<attack name="speed" interval="4000" chance="25" range="7" target="1" speedchange="-600" duration="50000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="ice" interval="3000" chance="11" range="4" radius="4" target="0" min="-100" max="-270">
+			<attribute key="areaEffect" value="icetornado"/>
+		</attack>
+	</attacks>
+	<defenses armor="22" defense="35">
+		<defense name="healing" interval="1000" chance="25" min="80" max="120">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="100"/>
+		<element icePercent="100"/>
+		<element earthPercent="100"/>
+		<element physicalPercent="15"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+			<immunity paralyze="1"/>
+			<immunity invisible="1"/>
+		</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="YOU WILL FREEZE!" yell="1"/>
+		<voice sentence="ZCHHHHH!" yell="1"/>
+		<voice sentence="I am so cool" yell="1"/>
+		<voice sentence="Chill out!." yell="1"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="95" chance="23000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="23000"/><!-- gold coin -->
+		<item id="2148" countmax="85" chance="23000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="23000"/><!-- gold coin -->
+		<item id="2672" countmax="5" chance="11500"/><!-- dragon ham -->
+		<item id="2547" countmax="6" chance="4100"/><!-- power bolt -->
+		<item id="2796" chance="11000"/><!-- green mushroom -->
+		<item id="1976" chance="9500"/><!-- gemmed book -->
+		<item id="2146" chance="6200"/><!-- small sapphire -->
+		<item id="7441" chance="5500"/><!-- ice cube -->
+		<item id="2167" chance="5500"/><!-- energy ring -->
+		<item id="2033" chance="3000"/><!-- golden mug -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="7290" chance="500"/><!-- shard -->
+		<item id="2177" chance="400"/><!-- life crystal -->
+		<item id="2492" chance="300"/><!-- dragon scale mail -->
+		<item id="2479" chance="300"/><!-- strange helmet -->
+		<item id="2498" chance="300"/><!-- royal helmet -->
+		<item id="2528" chance="200"/><!-- tower shield -->
+		<item id="7402" chance="100"/><!-- dragon slayer -->
+		<item id="2396" chance="100"/><!-- ice rapier -->
+			
+		</item>
+	</loot>
+</monster>

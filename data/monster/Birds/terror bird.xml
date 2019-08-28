@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Terror Bird" nameDescription="a terror bird" race="blood" experience="150" speed="280" manacost="490">
+	<health now="300" max="300"/>
+	<look type="218" corpse="6057"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="35" attack="40"/>
+	</attacks>
+	<defenses armor="13" defense="21"/>
+	<elements>
+		<element energyPercent="20"/>
+		<element icePercent="20"/>
+		<element firePercent="-10"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-5"/>
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="CRAAAHHH!"/>
+		<voice sentence="Gruuuh Gruuuh."/>
+		<voice sentence="Carrah Carrah!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="30" chance="22500"/><!-- gold coin -->
+		<item id="3976" countmax="3" chance="15000"/><!-- worm -->
+		<item id="2148" countmax="3" chance="11000"/><!-- meat -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="3970" chance="2000"/><!-- health potion -->
+		<item id="3970" chance="750"/><!-- feather headdress -->
+		<item id="3970" chance="2500"/><!-- seeds -->
+			
+		</item>
+	</loot>
+</monster>

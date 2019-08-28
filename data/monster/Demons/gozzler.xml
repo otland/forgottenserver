@@ -1,62 +1,65 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Gozzler" nameDescription="a gozzler" race="undead" experience="180" speed="190" manacost="800">
-	<health now="240" max="240" />
-	<look type="313" corpse="9938" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gozzler" nameDescription="a gozzler" race="blood" experience="180" speed="200" manacost="800">
+	<health now="240" max="240"/>
+	<look type="313" corpse="9938"/>
+	<targetchange interval="4000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
-		<flag staticattack="70" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-110" />
-		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-32" max="-135">
-			<attribute key="areaEffect" value="redspark" />
+		<attack name="melee" interval="2000" skill="45" attack="40"/>
+		<attack name="lifedrain" interval="1000" chance="20" range="1" min="-32" max="-100">
+			<attribute key="areaEffect" value="redspark"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15">
-		<defense name="healing" interval="2000" chance="10" min="30" max="50">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="42" max="68">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
-		<defense name="speed" interval="2000" chance="15" speedchange="210" duration="5000">
-			<attribute key="areaEffect" value="redshimmer" />
+		<defense name="speed" interval="1000" chance="9" speedchange="1201" duration="3000">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element deathPercent="50" />
-		<element holyPercent="50" />
-		<element physicalPercent="-5" />
+		<element deathPercent="50"/>
+		<element holyPercent="50"/>
+		<element physicalPercent="-30"/>
 	</elements>
 	<immunities>
-		<immunity invisible="1" />
+		<immunity invisible="1"/>
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Huhuhuhuuu!" />
-		<voice sentence="Let the fun begin!" />
-		<voice sentence="Yihahaha!" />
-		<voice sentence="I'll bite you! Nyehehehehe!" />
+	<voices interval="3500" chance="10">
+		<voice sentence="Huhuhuhuuu!"/>
+		<voice sentence="Let the fun begin!"/>
+		<voice sentence="Yihahaha!"/>
+		<voice sentence="I'll bite you! Nyehehehehe!"/>
 	</voices>
 	<loot>
-		<item name="brown flask" chance="8750" />
-		<item name="small sapphire" chance="360" />
-		<item name="gold coin" countmax="70" chance="52500" />
-		<item name="dwarven ring" chance="190" />
-		<item name="battle axe" chance="3100" />
-		<item name="sabre" chance="8250" />
-		<item name="morning star" chance="5000" />
-		<item name="serpent sword" chance="250" />
-		<item name="clerical mace" chance="900" />
-		<item name="plate shield" chance="10000" />
+		<item id="2148" countmax="90" chance="22500"/><!-- gold coin -->
+		<item id="2378" chance="3100"/><!-- battle axe -->
+		<item id="2015" chance="8750"/><!-- brown flask -->
+		<item id="2423" chance="900"/><!-- clerical mace -->
+		<item id="2394" chance="5000"/><!-- morning star -->
+		<item id="2510" chance="10000"/><!-- plate shield -->
+		<item id="2385" chance="7250"/><!-- sabre -->
+		<item id="2051" chance="7500"/><!-- torch -->
+		<item id="1987" chance="100000"><!-- bag -->
+						
+				<item id="2409" chance="1000"/><!-- serpent sword -->
+				<item id="2213" chance="400"/><!-- dwarven ring -->
+				<item id="2146" chance="300"/><!-- small sapphire -->
+			
+		</item>
 	</loot>
 </monster>

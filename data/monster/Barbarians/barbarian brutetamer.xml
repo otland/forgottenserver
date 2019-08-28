@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<monster name="Barbarian Brutetamer" nameDescription="a barbarian brutetamer" race="blood" experience="90" speed="270" manacost="0">
+	<health now="145" max="145"/>
+	<look type="264" head="78" body="116" legs="95" feet="121" corpse="6081"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="90"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="4"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="10" attack="20"/>
+		<attack name="physical" interval="2000" chance="34" range="7" radius="1" target="1" min="-30" max="-80">
+			<attribute key="shootEffect" value="snowball"/>
+		</attack>
+		<attack name="energy" interval="3000" chance="20" range="7" min="-35" max="-70">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10">
+	<defense name="healing" interval="1000" chance="25" min="50" max="80">
+		<attribute key="areaEffect" value="blueshimmer"/>
+	</defense>
+	</defenses>
+	<elements>
+		<element icePercent="50"/>
+		<element holyPercent="20"/>
+		<element energyPercent="20"/>
+		<element earthPercent="-13"/>
+		<element physicalPercent="-10"/>
+		<element deathPercent="-7"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity outfit="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="War Wolf" interval="2000" chance="40"/>
+	</summons>
+	<voices interval="2000" chance="5">
+		<voice sentence="To me, creatures of the wild!"/>
+		<voice sentence="My instincts tell me about your cowardice."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="15" chance="48000"/><!-- gold coin -->
+		<item id="2671" countmax="3" chance="6300"/><!-- ham -->
+		<item id="3965" chance="8650"/><!-- hunting spear -->
+		<item id="2686" countmax="2" chance="8000"/><!-- corncob -->
+		<item id="2464" chance="8100"/><!-- chain armor -->
+		<item id="2401" chance="5500"/><!-- staff -->
+		<item id="7343" chance="100000"><!-- fur bag -->
+			
+				<item id="1958" chance="9000"/><!-- grey small book -->
+				<item id="7620" chance="3000"/><!-- mana potion -->
+				<item id="7379" chance="850"/><!-- brutetamer's staff -->
+				<item id="7457" chance="650"/><!-- fur boots -->
+				<item id="7464" chance="300"/><!-- mammoth fur shorts -->
+				<item id="7463" chance="300"/><!-- mammoth fur cape -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Predator" nameDescription="a quara predator" race="blood" experience="1600" speed="520" manacost="0">
+	<health now="2200" max="2200"/>
+	<look type="20" corpse="6067"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="235"/>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="speed" interval="10000" chance="40" speedchange="210" duration="20000">
+			<attribute key="areaEffect" value="greenshimmer"/>
+		</defense>
+		<defense name="healing" interval="1000" chance="25" min="113" max="187">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="100"/>
+		<element icePercent="100"/>
+		<element earthPercent="-12"/>
+		<element energyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Rrrah!"/>
+		<voice sentence="Rraaar!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="70" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="60" chance="100000"/><!-- gold coin -->
+		<item id="7378" countmax="7" chance="100000"/><!-- royal spear -->
+		<item id="2226" chance="2000"/><!-- fishbone -->
+		<item id="2387" chance="2000"/><!-- double axe -->
+		<item id="2473" chance="3333"/><!-- viking helmet -->
+		<item id="2145" chance="1429"/><!-- small diamond -->
+		<item id="2670" countmax="5" chance="20000"/><!-- shrimp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="7591" chance="2000"/><!-- great health potion -->
+		<item id="5895" chance="2000"/><!-- fish fin -->
+		<item id="5741" chance="956"/><!-- skull helmet -->
+		<item id="7368" countmax="2" chance="956"/><!-- assassin star -->
+		<item id="7383" chance="2000"/><!-- relic sword -->
+		<item id="7897" chance="800"/><!-- glacier robe -->
+			
+		</item>
+	</loot>
+</monster>

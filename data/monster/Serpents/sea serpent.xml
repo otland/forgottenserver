@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Sea Serpent" nameDescription="a sea serpent" race="blood" experience="2300" speed="658" manacost="390">
+	<health now="3200" max="3200"/>
+	<look type="275" corpse="8307"/>
+	<targetchange interval="2000" chance="50"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="0"/>
+		<flag runonhealth="300"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="40" attack="100"/>
+		<attack name="earth" interval="1000" chance="8" length="9" spread="3" min="-60" max="-275">
+			<attribute key="areaEffect" value="bigplants"/>
+		</attack>
+		<attack name="ice" interval="1000" chance="10" length="9" spread="3" min="-120" max="-300">
+			<attribute key="areaEffect" value="icearea"/>
+		</attack>
+		<attack name="drown" interval="1000" chance="11" radius="4" target ="1" min ="-15" max="-20">
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="16" defense="25">
+		<defense name="healing" interval="1000" chance="25" min="50" max="150">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity ice="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<voices interval="3000" chance="200">
+		<voice sentence="CHHHRRRR"/>
+		<voice sentence="HISSSS"/>
+	</voices>
+	<elements>
+		<element firePercent="20"/>
+		<element energyPercent="-15"/>
+		<element physicalPercent="-15"/>
+		<element deathPercent="-15"/>
+	</elements>
+	<loot>
+		<item id="2148" countmax="90" chance="31000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="31000"/><!-- gold coin -->
+		<item id="2148" countmax="75" chance="31000"/><!-- gold coin -->
+		<item id="2672" countmax="3" chance="35000"/><!-- dragon ham -->
+		<item id="2473" chance="26000"/><!-- viking helmet -->
+		<item id="2376" chance="16000"/><!-- sword -->
+		<item id="2647" chance="11350"/><!-- plate legs -->
+		<item id="2146" countmax="3" chance="3500"/><!-- small saphire -->
+		<item id="7588" chance="5500"/><!-- strong health potion -->
+		<item id="7589" chance="3850"/><!-- strong mana potion -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2409" chance="3500"/><!-- serpet sword -->
+				<item id="7590" chance="1000"/><!-- great mana potion -->
+				<item id="8870" chance="3500"/><!-- spirit cloak -->
+				<item id="2214" chance="1100"/><!-- ring of healing -->
+				<item id="8911" chance="1100"/><!-- northwind rod -->
+				<item id="7888" chance="800"/><!-- glacier amulet -->
+				<item id="2165" chance="400"/><!-- stealth ring -->
+				<item id="7896" chance="350"/><!-- glacier kilt -->
+				<item id="8871" chance="350"/><!-- focus cape -->
+				<item id="8884" chance="200"/><!-- leviathan's amulet -->
+				<item id="8878" chance="50"/><!-- crystalline armor -->
+				
+		</item>
+	</loot>
+</monster>

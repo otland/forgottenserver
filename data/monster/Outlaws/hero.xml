@@ -1,78 +1,81 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Hero" nameDescription="a hero" race="blood" experience="1200" speed="240">
-	<health now="1400" max="1400" />
-	<look type="73" corpse="20415" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hero" nameDescription="a hero" race="blood" experience="1200" speed="268" manacost="0">
+	<health now="1400" max="1400"/>
+	<look type="73" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-240" />
-		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-120">
-			<attribute key="shootEffect" value="arrow" />
+		<attack name="melee" interval="2000" skill="70" attack="60"/>
+		<attack name="physical" interval="3000" chance="25" range="7" min="-20" max="-120">
+			<attribute key="shootEffect" value="arrow"/>
 		</attack>
 	</attacks>
-	<defenses armor="40" defense="40">
-		<defense name="healing" interval="2000" chance="20" min="200" max="250">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="30" defense="20">
+		<defense name="healing" interval="1000" chance="10" min="100" max="200">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="40" />
-		<element icePercent="10" />
-		<element firePercent="30" />
-		<element holyPercent="50" />
-		<element earthPercent="50" />
-		<element physicalPercent="30" />
-		<element deathPercent="-20" />
+		<element energyPercent="25"/>
+		<element icePercent="20"/>
+		<element firePercent="20"/>
+		<element holyPercent="20"/>
+		<element earthPercent="20"/>
+		<element physicalPercent="15"/>
+		<element deathPercent="-37"/>
 	</elements>
 	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Let's have a fight!" />
-		<voice sentence="Welcome to my battleground." />
-		<voice sentence="Have you seen princess Lumelia?" />
-		<voice sentence="I will sing a tune at your grave." />
+		<voice sentence="Let's have a fight!"/>
+		<voice sentence="Welcome to my battleground."/>
+		<voice sentence="Have you seen princess Lumelia?"/>
+		<voice sentence="I will sing a tune at your grave."/>
 	</voices>
 	<loot>
-		<item id="1949" chance="45000" /><!-- scroll -->
-		<item id="2071" chance="1640" /><!-- lyre -->
-		<item name="piggy bank" chance="80" />
-		<item id="2120" chance="2190" /><!-- rope -->
-		<item name="wedding ring" chance="4910" />
-		<item name="gold coin" countmax="100" chance="59500" />
-		<item name="might ring" chance="470" />
-		<item name="two handed sword" chance="1500" />
-		<item name="war hammer" chance="870" />
-		<item name="fire sword" chance="550" />
-		<item name="bow" chance="13300" />
-		<item name="crown armor" chance="490" />
-		<item name="crown legs" chance="660" />
-		<item name="crown helmet" chance="450" />
-		<item name="crown shield" chance="280" />
-		<item name="arrow" countmax="13" chance="26000" />
-		<item name="green tunic" chance="8000" />
-		<item name="scarf" chance="1110" />
-		<item name="meat" countmax="3" chance="8200" />
-		<item name="grapes" chance="19850" />
-		<item name="red rose" chance="20450" />
-		<item name="red piece of cloth" chance="2006" />
-		<item name="sniper arrow" countmax="4" chance="11400" />
-		<item name="great health potion" chance="720" />
-		<item name="small notebook" chance="930" />
-		<item name="scroll of heroic deeds" chance="5000" />
+		<item id="2148" countmax="55" chance="42500"/><!-- gold coin -->
+		<item id="2148" countmax="45" chance="42500"/><!-- gold coin -->
+		<item id="2544" countmax="15" chance="21000"/><!-- arrow -->
+		<item id="2120" chance="20000"/><!-- rope -->
+		<item id="1949" chance="50000"/><!-- scroll -->
+		<item id="2071" chance="25000"/><!-- lyre -->
+		<item id="2652" chance="7000"/><!-- green tunic -->
+		<item id="2456" chance="12500"/><!-- bow -->
+		<item id="2661" chance="9750"/><!-- scarf -->
+		<item id="2666" countmax="3" chance="17500"/><!-- meat -->
+		<item id="2681" chance="17500"/><!-- grapes -->
+		<item id="2744" chance="20000"/><!-- red rose -->
+		<item id="2121" chance="6775"/><!-- wedding ring -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2377" chance="7550"/><!-- two handed sword -->
+				<item id="7364" countmax="6" chance="2000"/><!-- sniper arrow -->
+				<item id="2391" chance="2500"/><!-- war hammer -->
+				<item id="5911" chance="5000"/><!-- red piece of cloth -->
+				<item id="2487" chance="900"/><!-- crown armor -->
+				<item id="2519" chance="1000"/><!-- crown shield -->
+				<item id="2491" chance="1250"/><!-- crown helmet -->
+				<item id="2392" chance="750"/><!-- fire sword -->
+				<item id="7591" chance="875"/><!-- great health potion -->
+				<item id="2114" chance="200"/><!-- piggy bank -->
+				<item id="2164" chance="175"/><!-- might ring -->
+				<item id="2488" chance="400"/><!-- crown legs -->		
+			
+		</item>
 	</loot>
 </monster>

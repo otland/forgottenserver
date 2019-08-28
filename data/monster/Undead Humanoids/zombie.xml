@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zombie" nameDescription="a zombie" race="undead" experience="280" speed="180" manacost="0">
+	<health now="500" max="500"/>
+	<look type="311" corpse="9875"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="42" attack="50"/>
+		<attack name="manadrain" interval="1000" chance="13" range="1" min="-0" max="-45"/>
+	</attacks>
+	<defenses armor="15" defense="10"/>
+	<elements>
+		<element firePercent="-40"/>
+	</elements>
+	<immunities>
+		<immunity death="1"/>
+		<immunity energy="1"/>
+		<immunity ice="1"/>
+		<immunity earth="1"/>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Mst.... klll...."/>
+		<voice sentence="Whrrrr... ssss.... mmm.... grrrrl"/>
+		<voice sentence="Dnnnt... cmmm... clsrrr...."/>
+		<voice sentence="Httt.... hmnnsss..."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="64" chance="24000"/><!-- gold coin -->
+		<item id="2227" chance="45000"/><!-- rotten meat -->
+		<item id="2050" chance="46250"/><!-- torch -->
+		<item id="2460" chance="8700"/><!-- brass helmet -->
+		<item id="2457" chance="8700"/><!-- steel helmet -->
+		<item id="2398" chance="7250"/><!-- mace -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="9808" chance="7250"/><!-- rusty armor -->			
+				<item id="2381" chance="2900"/><!-- battle hammer -->
+				<item id="2381" chance="4350"/><!-- halberd -->
+				<item id="2205" chance="2900"/><!-- life ring -->
+				<item id="7620" chance="1450"/><!-- mana potion -->
+				<item id="2657" chance="900"/><!-- simple dress -->
+			
+		</item>
+	</loot>
+</monster>

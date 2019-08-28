@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Hydromancer" nameDescription="a quara hydromancer" race="blood" experience="800" speed="520" manacost="0">
+	<health now="1100" max="1100"/>
+	<look type="47" corpse="6066"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="30"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" skill="30" attack="40"/>
+		<attack name="poison" interval="1000" chance="12" length="8" spread="10" min="-100" max="-160">
+			<attribute key="areaEffect" value="bubbles"/>
+		</attack>
+		<attack name="poison" interval="1000" chance="20" range="7" radius="3" target="0" min="-55" max="-105">
+			<attribute key="areaEffect" value="bubbles"/>
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="18"/>
+	<elements>
+		<element firePercent="100"/>
+		<element icePercent="100"/>
+		<element earthPercent="-12"/>
+		<element energyPercent="-25"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+		<immunity drown="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Qua hah tsh!"/>
+		<voice sentence="Teech tsha tshul!"/>
+		<voice sentence="Quara tsha Fach!"/>
+		<voice sentence="Tssssha Quara!"/>
+		<voice sentence="Blubber."/>
+		<voice sentence="Blup."/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="50" chance="100000"/><!-- gold coin -->
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2401" chance="2857"/><!-- staff -->
+		<item id="2240" chance="10000"/><!-- fish remains -->
+		<item id="2670" countmax="5" chance="20000"/><!-- shrimp -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2143" chance="1333"/><!-- white pearl -->
+		<item id="2144" chance="1429"/><!-- black pearl -->
+		<item id="2149" chance="1000"/><!-- small emerald -->
+		<item id="2189" chance="1333"/><!-- wand of cosmic energy -->
+		<item id="2214" chance="1538"/><!-- ring of healing -->
+		<item id="5895" chance="3333"/><!-- fish fin -->
+		<item id="7590" chance="1333"/><!-- great mana potion -->		
+		<item id="2476" chance="500"/><!-- knight armor -->
+			
+		</item>
+	</loot>
+</monster>

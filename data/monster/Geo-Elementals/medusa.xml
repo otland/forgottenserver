@@ -1,75 +1,78 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Medusa" nameDescription="a medusa" race="blood" experience="4050" speed="280">
-	<health now="4500" max="4500" />
-	<look type="330" corpse="10524" />
-	<targetchange interval="4000" chance="20" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Medusa" nameDescription="a medusa" race="blood" experience="4050" speed="240" manacost="0">
+	<health now="4500" max="4500"/>
+	<look type="330" corpse="10524"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="80" />
-		<flag runonhealth="600" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="275"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-450" poison="840" />
-		<attack name="lifedrain" interval="2000" chance="20" count="5" range="7" target="1" min="-21" max="-350">
-			<attribute key="shootEffect" value="earth" />
-			<attribute key="areaEffect" value="carniphila" />
+		<attack name="melee" interval="2000" skill="50" attack="100" poison="920"/>
+		<attack name="earth" interval="1000" chance="10" length="8" spread="3" min="-250" max="-350">
+			<attribute key="areaEffect" value="carniphila"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="15" length="8" spread="3" min="-250" max="-500">
-			<attribute key="areaEffect" value="carniphila" />
+		<attack name="lifedrain" interval="1000" chance="15" range="7" min="-20" max="-200"> 
+			<attribute key="shootEffect" value="earth"/>
+			<attribute key="areaeffect" value="carniphila"/>
 		</attack>
-		<attack name="speed" interval="2000" chance="25" radius="7" target="1" speedchange="-900">
-			<attribute key="areaEffect" value="poff" />
+		<attack name="speed" interval="1000" chance="10" radius="5" target="0" duration="12000" speedchange="-700">
+			<attribute key="areaEffect" value="poff"/>
 		</attack>
-		<attack name="outfit" interval="2000" chance="1" target="1" range="7" monster="clay guardian" duration="3000" />
+		<attack name="speed" interval="1000" chance="30" range="7" duration="12000" speedchange="-700">
+			<attribute key="areaEffect" value="redshimmer"/>
+			<outfit type="333"/>
+		</attack>
 	</attacks>
-	<defenses armor="30" defense="30">
-		<defense name="healing" interval="2000" chance="25" min="150" max="300">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="1000" chance="18" min="200" max="400">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element icePercent="20" />
-		<element firePercent="-5" />
-		<element energyPercent="-10" />
+		<element icePercent="20"/>
+		<element firePercent="-5"/>
+		<element energyPercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity earth="1" />
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity lifedrain="1" />
-		<immunity drown="1" />
+		<immunity earth="1"/>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="You will make ssuch a fine ssstatue!" />
-		<voice sentence="There isss no chhhanccce of esscape" />
-		<voice sentence="Jusssst look at me!" />
-		<voice sentence="Are you tired or why are you moving thhat sslow&lt;chuckle&gt;" />
+		<voice sentence="You will ssuch a fine ssstatue!"/>
+		<voice sentence="There isss no chhhanccce of esscape"/>
+		<voice sentence="Are you tired or why are you moving thhat sslow"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="90" chance="50000" />
-		<item name="small emerald" countmax="4" chance="3770" />
-		<item name="platinum coin" countmax="6" chance="74810" />
-		<item name="knight armor" chance="1840" />
-		<item name="medusa shield" chance="3040" />
-		<item name="titan axe" chance="1160" />
-		<item name="great mana potion" countmax="2" chance="10000" />
-		<item name="terra mantle" chance="870" />
-		<item name="terra legs" chance="420" />
-		<item name="terra amulet" chance="4060" />
-		<item name="ultimate health potion" countmax="2" chance="9290" />
-		<item id="9810" chance="500" /><!-- rusty armor -->
-		<item name="sacred tree amulet" chance="850" />
-		<item name="strand of medusa hair" chance="9900" />
+		<item id="2148" countmax="80" chance="46000"/><!-- gold coin -->
+		<item id="2148" countmax="70" chance="46000"/><!-- gold coin -->
+		<item id="8473" chance="6250"/><!-- ultimate health potion -->
+		<item id="7590" chance="6750"/><!-- great mana potion -->
+		<item id="2476" chance="2600"/><!-- knight armor -->
+		<item id="2152" countmax="2" chance="565000"/><!-- platinum coin -->
+		<item id="2149" countmax="3" chance="4000"/><!-- small emerald -->
+		<item id="2143" chance="7750"/><!-- white pearl -->
+		<item id="1987" chance="100000"><!-- bag -->
+			<item id="2536" chance="2600"/><!-- medusa shield -->
+			<item id="7590" chance="6750"/><!-- great mana potion -->
+			<item id="8473" chance="6250"/><!-- ultimate health potion -->
+			<item id="7887" chance="3550"/><!-- terra amulet -->	
+			<item id="7884" chance="550"/><!-- terra mantle -->
+			<item id="7413" chance="1300"/><!-- titan axe -->	
+			<item id="10219" chance="1500"/><!-- sacred tree amulet -->
+			<item id="9810" chance="650"/><!-- rusty amor -->
+			<item id="7885" chance="250"/><!-- terra legs -->
+		</item>
 	</loot>
 </monster>

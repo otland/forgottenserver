@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Drasilla" nameDescription="Drasilla" race="blood" experience="700" speed="170">
-	<health now="1260" max="1260" />
-	<look type="34" corpse="7349" />
+<monster name="Drasilla" nameDescription="drasilla" race="blood" experience="700" speed="170" manacost="0">
+	<health now="1320" max="1320"/>
+	<look type="34" corpse="7349"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag targetdistance="1" />
-		<flag runonhealth="100" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="100"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-120" />
+		<attack name="melee" interval="2000" skill="30" attack="60"/>
 		<attack name="fire" interval="6000" chance="60" min="-100" max="-180" length="8" spread="3">
-			<attribute key="areaEffect" value="firearea" />
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 		<attack name="fire" interval="3000" range="10" radius="5" target="1" chance="50" min="-70" max="-115">
-			<attribute key="areaEffect" value="firearea" />
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 	</attacks>
 	<defenses armor="32" defense="33">
 		<defense name="healing" interval="6000" chance="65" min="20" max="50">
-			<attribute key="areaEffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="20" />
-		<element icePercent="-10" />
+		<element firePercent="100"/>
+		<element energyPercent="20"/>
+		<element icePercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity fire="1" />
-		<immunity outfit="1" />
-		<immunity drunk="1" />
-		<immunity invisible="1" />
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="2000" chance="5">
-		<voice sentence="FCHHHHHHHH!" />
-		<voice sentence="GROOOOAAAAAAAAR!" />
-		<voice sentence="DIRTY LITTLE HUMANS" />
-		<voice sentence="YOU CAN'T KEEP ME HERE FOREVER" />
+		<voice sentence="FCHHHHHHHH!"/>
+		<voice sentence="GROOOOAAAAAAAAR!"/>
+		<voice sentence="DIRTY LITTLE HUMANS"/>
+		<voice sentence="YOU CAN'T KEEP ME HERE FOREVER"/>
 	</voices>
 </monster>

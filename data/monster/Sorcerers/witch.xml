@@ -1,64 +1,63 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Witch" nameDescription="a witch" race="blood" experience="120" speed="195">
-	<health now="300" max="300" />
-	<look type="54" corpse="20535" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Witch" nameDescription="a witch" race="blood" experience="120" speed="180" manacost="0">
+	<health now="300" max="300"/>
+	<look type="54" corpse="6081"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="4" />
-		<flag staticattack="90" />
-		<flag runonhealth="30" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="30"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-20" />
-		<attack name="fire" interval="2000" chance="20" range="7" min="-30" max="-75">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="fire" />
+		<attack name="melee" interval="2000" skill="10" attack="20"/>
+		<attack name="fire" interval="1000" chance="20" range="7" min="-30" max="-75">
+			<attribute key="shootEffect" value="fire"/>
 		</attack>
-		<attack name="firefield" interval="2000" chance="10" range="7" radius="1" target="1">
-			<attribute key="shootEffect" value="fire" />
+		<attack name="firefield" interval="1000" chance="13" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="fire"/>
 		</attack>
-		<attack name="outfit" interval="2000" chance="1" target="1" range="5" monster="green frog" duration="2000" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="8" defense="12"/>
 	<elements>
-		<element earthPercent="20" />
-		<element deathPercent="-5" />
-		<element physicalPercent="-10" />
+		<element energyPercent="100"/>
+		<element earthPercent="30"/>
+		<element deathPercent="-5"/>
+		<element physicalPercent="-14"/>
 	</elements>
 	<immunities>
-		<immunity invisible="1" />
-		<immunity energy="1" />
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Horax pokti!" />
-		<voice sentence="Herba budinia ex!" />
-		<voice sentence="Hihihihi!" />
+		<voice sentence="Horax pokti! Hihihihi!"/>
+		<voice sentence="Herba budinia ex!"/>
 	</voices>
 	<loot>
-		<item name="wolf tooth chain" chance="10120" />
-		<item name="gold coin" countmax="40" chance="64000" />
-		<item name="necrotic rod" chance="1140" />
-		<item name="garlic necklace" chance="1000" />
-		<item name="silver dagger" chance="500" />
-		<item name="sickle" chance="3910" />
-		<item name="leather boots" chance="4950" />
-		<item name="coat" chance="2010" />
-		<item name="cape" chance="4870" />
-		<item name="cookie" countmax="8" chance="29750" />
-		<item name="star herb" chance="8950" />
-		<item name="witch broom" chance="10000" />
-		<item name="witch hat" chance="80" />
-		<item name="stuffed toad" chance="10" />
-		<item name="bag of apple slices" chance="920" />
+		<item id="2148" countmax="10" chance="13000"/><!-- gold coin -->
+		<item id="2687" countmax="8" chance="15750"/><!-- cookie -->
+		<item id="2643" chance="67000"/><!-- leather boots -->
+		<item id="2696" chance="58750"/><!-- cheese -->
+		<item id="2405" chance="52500"/><!-- sickle -->
+		<item id="2654" chance="48500"/><!-- cape -->
+		<item id="2324" chance="29000"/><!-- broom -->
+		<item id="2651" chance="19500"/><!-- coat -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2129" chance="15500"/><!-- wolf tooth chain -->
+				<item id="2800" chance="10500"/><!-- star herb-->
+				<item id="2199" chance="1000"/><!-- garlic necklace -->
+				<item id="2402" chance="2000"/><!-- silver dagger -->
+				<item id="2185" chance="1000"/><!-- necrotic rod -->
+				<item id="2801" chance="300"/><!-- fern -->
+			
+		</item>
 	</loot>
 </monster>

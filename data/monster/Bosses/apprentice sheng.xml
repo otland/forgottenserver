@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Apprentice Sheng" nameDescription="apprentice sheng" race="blood" experience="100" speed="170" manacost="0">
+	<health now="95" max="95"/>
+	<look type="23" corpse="5981"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="15" attack="10"/>
+		<attack name="energy" interval="1000" chance="14" range="7" min="-15" max="-25">
+			<attribute key="shootEffect" value="energyball"/>
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
+		<attack name="fire" interval="2000" chance="10" range="7" radius="1" target="1" min="-15" max="-45">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="energyfield" interval="1000" chance="8" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="energy"/>
+		</attack>
+		<attack name="physical" interval="10500" chance="100" radius="3" target="0" min="0" max="0">
+			<atttibute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="12" defense="13"/>
+	<immunities>
+		<immunity energy="1"/>
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Hyena" interval="10500" chance="100"/>
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I will protect the secrets of my master!"/>
+		<voice sentence="This isle will become ours alone!"/>
+		<voice sentence="Kaplar!"/>
+	</voices>
+	<loot>
+		<item id="3976" countmax="10" chance="50000"/><!-- worm -->
+		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
+		<item id="2050" chance="10000"/><!-- torch -->
+		<item id="2461" chance="8000"/><!-- leather helmet -->
+		<item id="2649" chance="8000"/><!-- leather legs -->
+		<item id="5878" chance="100000"/><!-- minotaur leather -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2404" chance="10000"/><!-- combat knife -->
+				<item id="2362" countmax="5" chance="20000"/><!-- carrot of doom -->
+				<item id="2817" chance="10000"/><!-- dead snake -->
+				<item id="2311" chance="2857"/><!-- heavy magic missile rune -->
+				<item id="7425" chance="1000"/><!-- taurus mace -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,72 +1,75 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Necromancer" nameDescription="a necromancer" race="blood" experience="580" speed="200">
-	<health now="580" max="580" />
-	<look type="9" corpse="20455" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Necromancer" nameDescription="a necromancer" race="blood" experience="580" speed="200" manacost="0">
+	<health now="580" max="580"/>
+	<look type="9" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="4" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-80" poison="160" />
-		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-60" max="-120">
-			<attribute key="shootEffect" value="death" />
-			<attribute key="areaEffect" value="smallclouds" />
+		<attack name="melee" interval="2000" skill="30" attack="40" poison="90"/>
+		<attack name="lifedrain" interval="1000" chance="20" range="1" min="-60" max="-100">
+			<attribute key="areaEffect" value="redspark"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="20" range="7" min="-65" max="-120">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="poison" />
+		<attack name="poison" interval="3000" chance="17" range="7" min="-35" max="-95">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
-		<defense name="healing" interval="2000" chance="25" min="50" max="80">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="1000" chance="25" min="42" max="68">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="20" />
-		<element deathPercent="50" />
-		<element physicalPercent="-5" />
-		<element firePercent="-5" />
-		<element holyPercent="-5" />
+		<element earthPercent="100"/>
+		<element energyPercent="20"/>
+		<element icePercent="10"/>
+		<element deathPercent="10"/>
+		<element physicalPercent="-15"/>
+		<element firePercent="-5"/>
+		<element holyPercent="-5"/>
 	</elements>
 	<immunities>
-		<immunity invisible="1" />
-		<immunity earth="1" />
-		<immunity drown="1" />
+		<immunity invisible="1"/>
 	</immunities>
-	<summons maxSummons="2">
-		<summon name="Ghoul" interval="2000" chance="15" />
-		<summon name="Ghost" interval="2000" chance="5" />
-		<summon name="Mummy" interval="2000" chance="5" />
+	<summons maxSummons="4">
+		<summon name="Ghoul" interval="1000" chance="17" max="2"/>
+		<summon name="Ghost" interval="1000" chance="15" max="1"/>
+		<summon name="Mummy" interval="1000" chance="13" max="1"/>
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Your corpse will be mine!" />
-		<voice sentence="Taste the sweetness of death!" />
+		<voice sentence="Your corpse will be mine!"/>
+		<voice sentence="Taste the sweetness of death!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="30050" />
-		<item name="boots of haste" chance="210" />
-		<item name="clerical mace" chance="390" />
-		<item name="skull staff" chance="100" />
-		<item name="poison arrow" countmax="5" chance="15000" />
-		<item name="mystic turban" chance="500" />
-		<item name="green mushroom" chance="1470" />
-		<item name="noble axe" chance="10" />
-		<item name="strong mana potion" chance="300" />
-		<item name="spellbook of warding" chance="130" />
-		<item name="book of necromantic rituals" chance="10130" />
-		<item name="necromantic robe" chance="1001" />
+		<item id="2148" countmax="60" chance="8250"/><!-- gold coin -->
+		<item id="2148" countmax="30" chance="8250"/><!-- gold coin -->
+		<item id="2545" countmax="5" chance="4000"/><!-- poison arrow -->
+		<item id="2406" chance="14000"/><!-- short sword -->
+		<item id="2483" chance="10500"/><!-- scale armor -->
+		<item id="2796" chance="3000"/><!-- green mushroom -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2423" chance="1700"/><!-- clerical mace -->
+				<item id="7589" chance="1250"/><!-- strong mana potion -->
+				<item id="2663" chance="375"/><!-- mystic turban -->
+				<item id="2436" chance="125"/><!-- skull staff -->
+				<item id="7456" chance="50"/><!-- noble axe -->
+				<item id="8901" chance="125"/><!-- spellbook of warding -->
+				<item id="2195" chance="275"/><!-- boots of haste -->
+			
+		</item>
 	</loot>
 </monster>

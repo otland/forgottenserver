@@ -1,82 +1,79 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Spectre" nameDescription="a spectre" race="undead" experience="2100" speed="230">
-	<health now="1350" max="1350" />
-	<look type="235" head="20" corpse="6348" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spectre" nameDescription="a spectre" race="undead" experience="2100" speed="250" manacost="0">
+	<health now="1350" max="1350"/>
+	<look type="235" head="20" corpse="6348"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-308" poison="300" />
-		<attack name="drunk" interval="2000" chance="15" radius="4" target="0" duration="6000">
-			<attribute key="areaEffect" value="purplenote" />
+		<attack name="melee" interval="2000" skill="50" attack="90"/>
+		<attack name="poison" interval="2000" chance="10" range="7" radius="4" target="1" min="-150" max="-350">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="rednote"/>
 		</attack>
-		<attack name="spectre drown" interval="2000" chance="15" />
-		<attack name="manadrain" interval="2000" chance="15" range="7" min="-100" max="-400" />
-		<attack name="lifedrain" interval="2000" chance="20" range="7" min="-300" max="-550">
-			<attribute key="areaEffect" value="redshimmer" />
+		<attack name="poisonfield" interval="1000" chance="17" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="poison"/>
+		</attack>
+		<attack name="manadrain" interval="3000" chance="25" range="7" min="-10" max="-400">
+			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
-	<defenses armor="35" defense="35">
-		<defense name="healing" interval="2000" chance="25" min="100" max="250">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="healing" interval="2000" chance="10" min="370" max="700">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="5000">
-			<attribute key="areaEffect" value="redshimmer" />
+	<defenses armor="25" defense="20">
+		<defense name="healing" interval="1000" chance="50" min="75" max="125">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="90" />
-		<element icePercent="1" />
-		<element firePercent="-8" />
-		<element energyPercent="-8" />
+		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element physicalPercent="60"/>
+		<element icePercent="55"/>
+		<element firePercent="-23"/>
+		<element energyPercent="-20"/>
 	</elements>
 	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drown="1" />
-		<immunity lifedrain="1" />
-		<immunity earth="1" />
-		<immunity death="1" />
-		<immunity drunk="1" />
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Revenge ... is so ... sweet!" />
-		<voice sentence="Life...force! Feed me your... lifeforce!" />
+		<voice sentence="Revenge ... is so ... sweet!"/>
+		<voice sentence="Life...force! Feed me your... lifeforce!"/>
 	</voices>
 	<loot>
-		<item id="2071" chance="9620" /><!-- lyre -->
-		<item name="silver brooch" chance="850" />
-		<item name="silver brooch" chance="110" />
-		<item id="2136" chance="110" /><!--demonbone amulet -->
-		<item name="gold coin" countmax="100" chance="33000" />
-		<item name="gold coin" countmax="100" chance="33000" />
-		<item name="gold coin" countmax="97" chance="33000" />
-		<item name="platinum coin" countmax="7" chance="3850" />
-		<item name="stealth ring" chance="190" />
-		<item name="wand of cosmic energy" chance="9800" />
-		<item name="blank rune" countmax="2" chance="30310" />
-		<item name="white piece of cloth" chance="3800" />
-		<item name="soul orb" chance="6005" />
-		<item id="6300" chance="280" /><!-- death ring -->
-		<item name="demonic essence" chance="6270" />
-		<item name="relic sword" chance="700" />
-		<item name="great mana potion" chance="920" />
-		<item name="shiny stone" chance="1000" />
+		<item id="2148" countmax="100" chance="39000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="39000"/><!-- gold coin -->
+		<item id="2148" countmax="100" chance="39000"/><!-- gold coin -->
+		<item id="2260" chance="25000"/><!-- blank rune -->
+		<item id="2152" countmax="7" chance="2000"/><!-- platinum coin -->
+		<item id="2642" chance="21000"/><!-- sandals -->
+		<item id="5944" chance="8000"/><!-- soul orb -->
+		<item id="2165" chance="400"/><!-- stealth ring -->
+		<item id="2189" chance="9250"/><!-- wand of cosmic energy -->
+		<item id="6500" chance="6000"/><!-- demonic essence -->
+		<item id="2071" chance="11000"/><!-- lyre -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+			<item id="2260" chance="25000"/><!-- blank rune -->
+			<item id="7383" chance="950"/><!-- relic sword -->
+			<item id="2134" chance="1100"/><!-- silver brooch -->	
+			<item id="5909" chance="4250"/><!-- white piece of cloth -->
+			<item id="6300" chance="1100"/><!-- death ring -->
+			<item id="7590" chance="550"/><!-- great mana potion -->
+			<item id="2134" chance="200"/><!-- shadow sceptre -->
+			<item id="2136" chance="100"/><!--demonbone amulet -->
+			
+		</item>
 	</loot>
 </monster>

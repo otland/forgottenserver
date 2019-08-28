@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lethal Lissy" nameDescription="lethal lissy" race="blood" experience="500" speed="240" manacost="0">
+	<health now="1450" max="1450"/>
+	<look type="155" head="77" body="0" legs="76" feet="132" addons="3" corpse="6081"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-150" max="-250"/>
+	</attacks>
+	<defenses armor="35" defense="50">
+		<defense name="healing" interval="6000" chance="65" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Pirate Cutthroat" interval="2000" chance="50"/>
+	</summons>
+	<loot>
+		<item id="6100" chance="100000"/><!-- lethal lissy's shirt -->
+		<item id="2148" countmax="40" chance="100000"/><!-- gold coin -->
+		<item id="2476" chance="1200"/><!-- knight armor -->
+		<item id="2387" chance="1500"/><!-- double axe -->
+		<item id="2463" chance="4000"/><!-- plate armor -->
+		<item id="2145" chance="100000"/><!-- small diamond -->
+		<item id="2320" countmax="1" chance="100000"/><!-- skull -->
+	</loot>
+</monster>

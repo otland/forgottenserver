@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deadeye Devious" nameDescription="deadeye devious" race="blood" experience="500" speed="300" manacost="0">
+	<health now="2000" max="2000"/>
+	<look type="151" head="115" body="76" legs="35" feet="117" addons="2" corpse="6080"/>
+	<targetchange interval="60000" chance="0"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag staticattack="50"/>
+		<flag lightlevel="0"/>
+		<flag lightcolor="0"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-250" max="-550"/>
+		<attack name="physical" interval="4000" chance="60" min="-200" max="-250">
+			<attribute key="shootEffect" value="throwingknife"/>
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="50">
+		<defense name="healing" interval="6000" chance="65" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Let's kill 'em"/>
+		<voice sentence="Arrrgh!"/>
+		<voice sentence="You'll never take me alive!"/>
+	</voices>
+	<loot>
+		<item id="6102" chance="100000"/><!-- deadeye devious' eye patch -->
+		<item id="2148" countmax="65" chance="100000"/><!-- gold coin -->
+		<item id="2476" chance="1200"/><!-- knight armor -->
+		<item id="2463" chance="4000"/><!-- plate armor -->
+		<item id="2320" countmax="2" chance="100000"/><!-- skull -->
+		<item id="5926" chance="4000"/><!-- pirate backpack -->
+		<item id="2666" chance="100000"/><!-- meat -->
+	</loot>
+</monster>

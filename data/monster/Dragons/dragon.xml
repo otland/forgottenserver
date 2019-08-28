@@ -1,72 +1,78 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="185">
-	<health now="1000" max="1000" />
-	<look type="34" corpse="5973" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="180" manacost="0">
+	<health now="1000" max="1000"/>
+	<look type="34" corpse="5973"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
-		<flag targetdistance="1" />
-		<flag staticattack="80" />
-		<flag runonhealth="300" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="300"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-120" />
-		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-60" max="-140">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="firearea" />
+		<attack name="melee" interval="2000" skill="50" attack="40"/>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-45" max="-65">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
-		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-100" max="-170">
-			<attribute key="areaEffect" value="firearea" />
+		<attack name="fire" interval="3000" chance="8" length="8" spread="3" min="-90" max="-150">
+			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="30">
-		<defense name="healing" interval="2000" chance="15" min="40" max="70">
-			<attribute key="areaEffect" value="blueshimmer" />
+	<defenses armor="25" defense="18">
+		<defense name="healing" interval="1000" chance="13" min="34" max="56">
+			<attribute key="areaEffect" value="blueshimmer"/>
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="80" />
-		<element energyPercent="20" />
-		<element icePercent="-10" />
+		<element firePercent="100"/>
+		<element earthPercent="80"/>
+		<element energyPercent="20"/>
+		<element icePercent="-10"/>
 	</elements>
 	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity fire="1" />
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="GROOAAARRR" yell="1" />
-		<voice sentence="FCHHHHH" yell="1" />
+		<voice sentence="GROOAAARRR" yell="1"/>
+		<voice sentence="FCHHHHH" yell="1"/>
 	</voices>
 	<loot>
-		<item name="small diamond" chance="380" />
-		<item name="gold coin" countmax="70" chance="47500" />
-		<item name="gold coin" countmax="45" chance="37500" />
-		<item name="life crystal" chance="120" />
-		<item name="wand of inferno" chance="1005" />
-		<item name="double axe" chance="960" />
-		<item name="longsword" chance="4000" />
-		<item name="serpent sword" chance="420" />
-		<item name="broadsword" chance="1950" />
-		<item name="dragon hammer" chance="560" />
-		<item name="crossbow" chance="10000" />
-		<item name="steel helmet" chance="3000" />
-		<item name="steel shield" chance="15000" />
-		<item name="dragon shield" chance="320" />
-		<item name="burst arrow" countmax="10" chance="8060" />
-		<item name="plate legs" chance="2000" />
-		<item name="dragon ham" countmax="3" chance="65500" />
-		<item name="green dragon leather" chance="1005" />
-		<item name="green dragon scale" chance="1000" />
-		<item name="dragonbone staff" chance="110" />
-		<item name="strong health potion" chance="1000" />
-		<item name="dragon's tail" chance="9740" />
+		<item id="2148" countmax="70" chance="37500"/><!-- gold coin -->
+		<item id="2148" countmax="50" chance="37500"/><!-- gold coin -->
+		<item id="2546" countmax="12" chance="4000"/><!-- burst arrow -->
+		<item id="2672" countmax="3" chance="15500"/><!-- dragon ham -->
+		<item id="2406" chance="25000"/><!-- short sword -->
+		<item id="2398" chance="21500"/><!-- mace -->
+		<item id="2509" chance="14000"/><!-- steel shield -->
+		<item id="2455" chance="10000"/><!-- crossbow -->
+		<item id="2397" chance="5000"/><!-- longsword -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2457" chance="3000"/><!-- steel helmet -->
+		<item id="2647" chance="2000"/><!-- plate legs -->
+		<item id="2413" chance="1950"/><!-- broadsword -->
+		<item id="7588" chance="1750"/><!-- strong health potion -->
+		<item id="2387" chance="1333"/><!-- double axe -->
+		<item id="2187" chance="1200"/><!-- wand of inferno -->
+		<item id="5920" chance="850"/><!-- green dragon scale -->
+		<item id="2434" chance="600"/><!-- dragon hammer -->
+		<item id="5877" chance="500"/><!-- green dragon leather -->
+		<item id="2145" chance="500"/><!-- small diamond -->
+		<item id="2516" chance="400"/><!-- dragon shield -->
+		<item id="2409" chance="400"/><!-- serpent sword -->
+		<item id="7430" chance="250"/><!-- dragonbone staff -->
+		<item id="2177" chance="150"/><!-- life crystal -->	
+			
+		</item>
 	</loot>
 </monster>

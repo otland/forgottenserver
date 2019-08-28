@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ancient Scarab" nameDescription="a ancient scarab" race="venom" experience="720" speed="330" manacost="0">
+	<health now="1000" max="1000"/>
+	<look type="79" corpse="6021"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="30" attack="105" poison="100"/>
+		<attack name="poison" interval="1000" chance="12" range="7" min="-15" max="-135">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="13" range="7" speedchange="-700" duration="25000">
+			<attribute key="shootEffect" value="poison"/>
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="poisoncondition" interval="3000" chance="17" radius="5" target="0" min="-30" max="-100">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="20">
+		<defense name="speed" interval="1000" chance="8" speedchange="350" duration="9000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="100"/>
+		<element energyPercent="20"/>
+		<element physicalPercent="10"/>
+		<element firePercent="-15"/>
+		<element icePercent="-5"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Larva" interval="1000" chance="15" max="3"/>
+	</summons>
+	<loot>
+		<item id="2148" countmax="90" chance="27000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="27000"/><!-- gold coin -->
+		<item id="2148" countmax="60" chance="27000"/><!-- gold coin -->
+		<item id="2162" chance="13800"/><!-- magic lightwand -->
+		<item id="2159" countmax="4" chance="555"/><!-- scarab coin -->
+		<item id="2463" chance="13800"/><!-- plate armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="2149" countmax="3" chance="4000"/><!-- small emerald -->
+				<item id="2142" chance="1700"/><!-- ancient amulet -->
+				<item id="2150" countmax="4" chance="3400"/><!-- small amethyst -->
+				<item id="2135" chance="750"/><!-- scarab amulet -->
+				<item id="7589" chance="1500"/><!-- strong mana potion -->
+				<item id="2440" chance="300"/><!-- daramanian waraxe -->
+				<item id="2540"  chance="500"/><!-- scarab shield -->
+				<item id="7903" chance="350"/><!-- terra hood -->
+			
+		</item>
+	</loot>
+</monster>

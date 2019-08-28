@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Count" nameDescription="the count" race="undead" experience="1750" speed="370" manacost="0">
+	<health now="4600" max="4600"/>
+	<look type="287" corpse="8937"/>
+	<targetchange interval="5000" chance="10"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="130" attack="135"/>
+		<attack name="lifedrain" interval="1000" chance="9" target="0" radius="4" min="0" max="-300">
+			<attribute key="areaEffect" value="smallclouds"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="1000" chance="25" min="100" max="195">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="3000" chance="30" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="20"/>
+		<element holyPercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity death="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+		<summons maxSummons="1">
+		<summon name="Banshee" interval="4000" chance="50"/>
+	</summons>
+	<loot>
+		<item id="2148" countmax="98" chance="40000"/><!-- gold coin -->
+		<item id="8752" chance="100000"/><!-- the ring of the count -->
+		<item id="2391" chance="2300"/><!-- war hammer -->
+	</loot>
+</monster>

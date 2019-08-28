@@ -1,51 +1,52 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Minotaur" nameDescription="a minotaur" race="blood" experience="50" speed="170" manacost="330">
-	<health now="100" max="100" />
-	<look type="25" corpse="5969" />
-	<targetchange interval="4000" chance="0" />
+	<health now="100" max="100"/>
+	<look type="25" corpse="5969"/>
+	<targetchange interval="2000" chance="0"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="1"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-45" />
+		<attack name="melee" interval="2000" skill="20" attack="30"/>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="11" defense="11"/>
 	<elements>
-		<element firePercent="20" />
-		<element holyPercent="10" />
-		<element icePercent="-10" />
-		<element deathPercent="-5" />
-		<element energyPercent="-15" />
+		<element firePercent="20"/>
+		<element holyPercent="10"/>
+		<element icePercent="-10"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Kaplar!" />
-		<voice sentence="Hurr!" />
+		<voice sentence="Kaplar!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="25" chance="67500" />
-		<item name="bronze amulet" chance="110" />
-		<item id="2376" chance="5000" /><!-- sword -->
-		<item name="axe" chance="4000" />
-		<item name="mace" chance="12840" />
-		<item name="brass helmet" chance="7700" />
-		<item name="chain armor" chance="10000" />
-		<item name="plate shield" chance="20020" />
-		<item id="2554" chance="310" /><!-- shovel -->
-		<item name="meat" chance="5000" />
-		<item name="minotaur leather" chance="990" />
-		<item name="minotaur horn" countmax="2" chance="2090" />
+		<item id="2148" countmax="28" chance="17500"/><!-- gold coin -->
+		<item id="2510" chance="17750"/><!-- plate shield -->
+		<item id="2649" chance="15000"/><!-- leather legs -->
+		<item id="2398" chance="8500"/><!-- mace -->
+		<item id="2376" chance="9500"/><!-- sword -->
+		<item id="1987" chance="100000"><!-- bag -->
+				
+			<item id="2464" chance="9200"/><!-- chain armor -->
+			<item id="2666" chance="9000"/><!-- meat -->
+			<item id="2460" chance="7250"/><!-- brass helmet -->
+			<item id="2458" chance="4500"/><!-- chain helmet -->
+			<item id="2386" chance="3950"/><!-- axe -->
+			<item id="2554" chance="2400"/><!-- shovel -->
+			<item id="5878" chance="850"/><!-- minotaur leather -->
+			<item id="2172" chance="250"/><!-- bronze amulet -->
+			
+		</item>
 	</loot>
 </monster>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Soul" nameDescription="a lost soul" race="undead" experience="4000" speed="250" manacost="0">
+	<health now="5800" max="5800"/>
+	<look type="232" corpse="6310"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
+	<flags>
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="0"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="1"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="60" attack="120"/>
+		<attack name="lifedrain" interval="1000" chance="20" range="7" radius="4" target="0" min="-150" max="-250">
+			<attribute key="shootEffect" value="burstarrow"/>
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="1" target="1" speedchange="-400" duration="30000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+		<attack name="physical" interval="1000" chance="20" range="7" radius="7" target="0" min="-100" max="-220">
+			<attribute key="areaEffect" value="yellowbubble"/>
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="speed" interval="1000" chance="35" speedchange="370" duration="30000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="100"/>
+		<element deathPercent="100"/>
+		<element earthPercent="100"/>
+		<element icePercent="50"/>
+		<element energyPercent="30"/>
+		<element holyPercent="-20"/>
+	</elements>
+	<immunities>
+		<immunity paralyze="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="5000" chance="30">
+		<voice sentence="Forgive Meeeee!"/>
+		<voice sentence="Mouuuurn meeee!"/>
+	</voices>
+	<loot>
+		<item id="2148" countmax="90" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="90" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="80" chance="40000"/><!-- gold coin -->
+		<item id="2148" countmax="70" chance="40000"/><!-- gold coin -->
+		<item id="2050" chance="20000"/><!-- torch -->
+		<item id="2260" chance="25250"/><!-- blank rune -->
+		<item id="2230" chance="3000"/><!-- bone -->
+		<item id="6500" chance="7500"/><!-- demonic essence -->
+		<item id="7590" chance="7500"/><!-- great mana potion -->
+		<item id="2463" chance="3000"/><!-- plate armor -->
+		<item id="2152" countmax="3" chance="4500"/><!-- platinum coin -->
+		<item id="2227" countmax="2" chance="25000"/><!-- rotten meat -->
+		<item id="9808" chance="7000"/><!-- rusty armor -->
+		<item id="2483" chance="10500"/><!-- scale armor -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+				<item id="9808" chance="7000"/><!-- rusty armor -->
+				<item id="5806" chance="4500"/><!-- silver goblet -->
+				<item id="2457" chance="10500"/><!-- steel helmet -->
+				<item id="2133" chance="1500"/><!-- ruby necklace -->
+				<item id="5944" chance="4500"/><!-- soul orb -->
+				<item id="2197" chance="2000"/><!-- stone skin amulet -->
+				<item id="7413" chance="2500"/><!-- titan axe -->
+				<item id="6300" chance="750"/><!-- death ring -->
+				<item id="6526" chance="900"/><!-- skeleton decoration -->
+				<item id="5801" chance="500"/><!-- key ring -->
+				<item id="2436" chance="650"/><!-- skull staff -->
+				<item id="2173" chance="50"/><!-- amulet of loss -->
+				<item id="8903" chance="100"/><!-- spellbook of lost souls -->
+			
+		</item>
+	</loot>
+</monster>

@@ -1,44 +1,44 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="185" manacost="530">
-	<health now="90" max="90" />
-	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="20487" />
-	<targetchange interval="5000" chance="0" />
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="205" manacost="530">
+	<health now="90" max="90"/>
+	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="6080"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="1" />
-		<flag staticattack="90" />
-		<flag runonhealth="5" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="0"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="1"/>
+		<flag convinceable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="4"/>
+		<flag staticattack="90"/>
+		<flag runonhealth="5"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-35" />
-		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-35">
-			<attribute key="shootEffect" value="arrow" />
+		<attack name="melee" interval="2000" skill="25" attack="20"/>
+		<attack name="physical" interval="2000" chance="50" range="7" min="-10" max="-35">
+			<attribute key="shootEffect" value="arrow"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="8" defense="10"/>
 	<voices interval="5000" chance="10">
-		<voice sentence="You will not live to tell anyone!" />
-		<voice sentence="You are my game today!" />
-		<voice sentence="Look what has stepped into my trap!" />
+		<voice sentence="You will not live to tell anyone!"/>
+		<voice sentence="You are my game today!"/>
+		<voice sentence="Look what has stepped into my trap!"/>
 	</voices>
 	<loot>
-		<item id="2050" chance="4180" /><!-- torch -->
-		<item name="bow" chance="14930" />
-		<item name="leather helmet" chance="30600" />
-		<item name="arrow" countmax="17" chance="49500" />
-		<item name="poison arrow" countmax="3" chance="2930" />
-		<item name="closed trap" chance="710" />
-		<item name="leather legs" chance="26740" />
-		<item name="roll" countmax="2" chance="11110" />
+		<item id="2649" chance="40000"/><!-- leather legs -->
+		<item id="2461" chance="20000"/><!-- leather helmet -->
+		<item id="2690" countmax="2" chance="20000"/><!-- roll -->
+		<item id="1987" chance="100000"><!-- bag -->
+			<item id="2456" chance="6000"/><!-- bow -->
+			<item id="2544" countmax="17" chance="23500"/><!-- arrow -->
+			<item id="2545" countmax="3" chance="10000"/><!-- poison arrow -->
+			<item id="2050" chance="15000"/><!-- torch -->
+			<item id="2578" chance="3000"/><!-- closed trap -->
+		</item>
 	</loot>
 </monster>

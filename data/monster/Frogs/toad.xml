@@ -1,50 +1,48 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Toad" nameDescription="a toad" race="blood" experience="60" speed="210" manacost="400">
-	<health now="135" max="135" />
-	<look type="222" corpse="6077" />
-	<targetchange interval="4000" chance="10" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Toad" nameDescription="a toad" race="blood" experience="60" speed="240" manacost="400">
+	<health now="135" max="135"/>
+	<look type="222" corpse="6077"/>
+	<targetchange interval="5000" chance="8"/>
+	<strategy attack="100" defense="0"/>
 	<flags>
-		<flag summonable="1" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
-		<flag pushable="1" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag staticattack="90" />
-		<flag targetdistance="1" />
-		<flag runonhealth="10" />
-		<flag canwalkonenergy="0" />
-		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag summonable="1"/>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag illusionable="0"/>
+		<flag convinceable="0"/>
+		<flag pushable="1"/>
+		<flag canpushitems="1"/>
+		<flag canpushcreatures="0"/>
+		<flag staticattack="90"/>
+		<flag targetdistance="1"/>
+		<flag runonhealth="20"/>
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-30" poison="20" />
-		<attack name="physical" interval="2000" chance="20" range="7" min="-8" max="-17">
-			<attribute key="shootEffect" value="poison" />
-			<attribute key="areaEffect" value="greenbubble" />
+		<attack name="melee" interval="2000" skill="30" attack="15"/>
+		<attack name="physical" interval="1000" chance="15" range="7" min="-5" max="-20">
+			<attribute key="shootEffect" value="poison"/>
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15">
-		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="5000">
-			<attribute key="areaEffect" value="redshimmer" />
-		</defense>
-	</defenses>
+	<defenses armor="12" defense="10"/>
 	<elements>
-		<element earthPercent="20" />
-		<element icePercent="20" />
-		<element firePercent="-10" />
+		<element earthPercent="40"/>
+		<element icePercent="25"/>
+		<element firePercent="-10"/>
 	</elements>
-	<voices interval="5000" chance="10">
-		<voice sentence="Ribbit, ribbit!" />
-		<voice sentence="Ribbit!" />
+	<voices interval="5000" chance="30">
+		<voice sentence="Ribbit, ribbit!"/>
+		<voice sentence="Ribbit!"/>
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="20" chance="80000" />
-		<item name="war hammer" chance="148" />
-		<item name="mace" chance="2854" />
-		<item id="2667" chance="20000" /><!-- fish -->
-		<item name="poisonous slime" chance="4761" />
+		<item id="2148" countmax="12" chance="41000"/><!-- gold coin -->
+		<item id="2666" countmax="2" chance="10500"/><!-- meat -->
+		<item id="2667" chance="25000"/><!-- fish -->
+		<item id="2398" chance="4500"/><!-- mace -->
+		<item id="2382" chance="7000"/><!-- club -->
+		<item id="1987" chance="100000"><!-- bag -->
+			
+		<item id="2391" chance="250"/><!-- war hammer -->
+			
+		</item>
 	</loot>
 </monster>
