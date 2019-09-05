@@ -1,4 +1,4 @@
-	local combat = Combat()
+local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ICETORNADO)
 combat:setArea(createCombatArea(AREA_CIRCLE5X5))
