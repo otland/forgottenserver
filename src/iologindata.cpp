@@ -1107,6 +1107,31 @@ void PlayerCacheManager::cachePlayer(uint32_t guid, Player* player)
 	addToSaveList(guid);
 }
 
+void PlayerCacheManager::clear()
+{
+	listLock.lock();
+
+	for (auto& it : playersCache) {
+		delete it.second;
+	}
+	playersCache.clear();
+
+	listLock.unlock();
+}
+
+void PlayerCacheManager::clear(uint32_t guid)
+{
+	listLock.lock();
+
+	auto it = playersCache.find(guid);
+	if (it != playersCache.end()) {
+		delete it->second;
+		playersCache.erase(it);
+	}
+
+	listLock.unlock();
+}
+
 void PlayerCacheManager::start()
 {
 	db.connect();

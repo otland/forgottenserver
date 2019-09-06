@@ -79,6 +79,8 @@ class PlayerCacheManager : public ThreadHolder<PlayerCacheManager>
 
 		bool loadCachedPlayer(uint32_t guid, Player* player);
 		void cachePlayer(uint32_t guid, Player* player);
+		void clear();
+		void clear(uint32_t guid);
 
 		void start();
 		void flush();
