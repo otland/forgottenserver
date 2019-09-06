@@ -65,6 +65,7 @@ class IOLoginData
 	private:
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
+		static void loadPlayerItems(Player* player, Database* db);
 		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
 		static bool saveItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
 };
