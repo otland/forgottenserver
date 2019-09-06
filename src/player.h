@@ -1350,6 +1350,7 @@ class Player final : public Creature, public Cylinder
 		friend class Actions;
 		friend class IOLoginData;
 		friend class ProtocolGame;
+		friend class PlayerCacheData;
 };
 
 #endif

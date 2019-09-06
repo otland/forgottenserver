@@ -23,6 +23,7 @@
 #include "account.h"
 #include "player.h"
 #include "database.h"
+#include "inbox.h"
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
@@ -59,11 +60,65 @@ class IOLoginData
 		static void addPremiumDays(uint32_t accountId, int32_t addDays);
 		static void removePremiumDays(uint32_t accountId, int32_t removeDays);
 
+		static bool savePlayerItems(uint32_t guid, Item** inventory, std::map<uint32_t, DepotChest*>& depotChests, Inbox* inbox, int16_t lastDepotId, Database* database = nullptr);
+
 	private:
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
 		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
+		static bool saveItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
+};
+
+class PlayerCacheData;
+
+class PlayerCacheManager : public ThreadHolder<PlayerCacheManager>
+{
+	public:
+		PlayerCacheManager() = default;
+
+		bool loadCachedPlayer(uint32_t guid, Player* player);
+		void cachePlayer(uint32_t guid, Player* player);
+
+		void start();
+		void flush();
+		void shutdown();
+
+		void addToSaveList(uint32_t guid);
+
+		void threadMain();
+
+	private:
+		PlayerCacheData* getCachedPlayer(uint32_t guid, bool autoCreate = false);
+
+		bool saveCachedItems(uint32_t guid);
+
+		Database db;
+		std::thread thread;
+		std::list<uint32_t> toSaveList;
+		std::mutex listLock;
+		std::condition_variable listSignal;
+
+		std::map<uint32_t, PlayerCacheData*> playersCache;
+};
+
+class PlayerCacheData
+{
+	public:
+		~PlayerCacheData();
+		PlayerCacheData* clone();
+		void copyDataFromPlayer(Player* player);
+		void copyDataToPlayer(Player* player);
+
+	private:
+		void clear();
+
+		Item* inventory[CONST_SLOT_LAST + 1] = {};
+		std::map<uint32_t, DepotChest*> depotChests;
+		Inbox* inbox = nullptr;
+		int16_t lastDepotId = -1;
+		std::mutex dataLock;
+
+		friend class PlayerCacheManager;
 };
 
 #endif
