@@ -87,19 +87,17 @@ class PlayerCacheManager : public ThreadHolder<PlayerCacheManager>
 		void shutdown();
 
 		void addToSaveList(uint32_t guid);
+		bool saveCachedItems(uint32_t guid);
 
 		void threadMain();
 
 	private:
 		PlayerCacheData* getCachedPlayer(uint32_t guid, bool autoCreate = false);
 
-		bool saveCachedItems(uint32_t guid);
-
 		Database db;
 		std::thread thread;
-		std::list<uint32_t> toSaveList;
+		std::map<uint32_t, int64_t> toSave;
 		std::mutex listLock;
-		std::condition_variable listSignal;
 
 		std::map<uint32_t, PlayerCacheData*> playersCache;
 };

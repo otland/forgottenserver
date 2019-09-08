@@ -2436,6 +2436,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("PlayerCacheManager", "clearCache", LuaScriptInterface::luaPlayerCacheManagerClearCache);
 	registerMethod("PlayerCacheManager", "clearPlayerCache", LuaScriptInterface::luaPlayerCacheManagerClearPlayerCache);
 	registerMethod("PlayerCacheManager", "loadPlayerCache", LuaScriptInterface::luaPlayerCacheManagerLoadPlayerCache);
+	registerMethod("PlayerCacheManager", "savePlayerCache", LuaScriptInterface::luaPlayerCacheManagerSavePlayerCache);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -10008,6 +10009,14 @@ int LuaScriptInterface::luaPlayerCacheManagerLoadPlayerCache(lua_State* L)
 
 	g_playerCacheManager.cachePlayer(guid, &tmpPlayer);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCacheManagerSavePlayerCache(lua_State* L)
+{
+	// PlayerCacheManager.savePlayerCache(guid)
+	auto guid = getNumber<uint32_t>(L, 2);
+	g_playerCacheManager.saveCachedItems(guid);
 	return 1;
 }
 

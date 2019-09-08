@@ -1141,39 +1141,40 @@ void PlayerCacheManager::start()
 void PlayerCacheManager::threadMain()
 {
 	std::unique_lock<std::mutex> listLockUnique(listLock, std::defer_lock);
+
 	while (getState() != THREAD_STATE_TERMINATED) {
 		listLockUnique.lock();
-		if (toSaveList.empty()) {
-			listSignal.wait(listLockUnique);
-		}
 
-		if (!toSaveList.empty()) {
-			uint32_t guidToSave = toSaveList.front();
-			toSaveList.pop_front();
+		if (!toSave.empty()) {
+			int64_t currentTime = OTSYS_TIME();
+			uint32_t guidToSave = 0;
+			for (auto it : toSave) {
+				if (it.second + g_config.getNumber(ConfigManager::PLAYER_ITEMS_CACHE_SAVE_THRESHOLD) < currentTime) {
+					guidToSave = it.first;
+					toSave.erase(it.first);
+					break;
+				}
+			}
 			listLockUnique.unlock();
-			if (!saveCachedItems(guidToSave)) {
+
+			if (guidToSave > 0 && !saveCachedItems(guidToSave)) {
 				std::cout << "Error while saving player items: " << guidToSave << std::endl;
 			}
 		}
 		else {
 			listLockUnique.unlock();
 		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }
 
 void PlayerCacheManager::addToSaveList(uint32_t guid)
 {
-	bool signal = false;
 	listLock.lock();
 
-	signal = toSaveList.empty();
-	toSaveList.emplace_back(guid);
+	toSave[guid] = OTSYS_TIME();
 
 	listLock.unlock();
-
-	if (signal) {
-		listSignal.notify_one();
-	}
 }
 
 bool PlayerCacheManager::saveCachedItems(uint32_t guid)
@@ -1185,9 +1186,7 @@ bool PlayerCacheManager::saveCachedItems(uint32_t guid)
 	}
 
 	PlayerCacheData* playerCacheDataClone = playerCacheData->clone();
-
 	bool saved = IOLoginData::savePlayerItems(guid, playerCacheDataClone->inventory, playerCacheDataClone->depotChests, playerCacheDataClone->inbox, playerCacheDataClone->lastDepotId, &db);
-
 	delete playerCacheDataClone;
 
 	return saved;
@@ -1196,13 +1195,19 @@ bool PlayerCacheManager::saveCachedItems(uint32_t guid)
 void PlayerCacheManager::flush()
 {
 	std::unique_lock<std::mutex> guard{ listLock };
-	while (!toSaveList.empty()) {
-		auto guidToSave = toSaveList.front();
-		toSaveList.pop_front();
+	while (!toSave.empty()) {
+		uint32_t guidToSave = 0;
+		for (auto it : toSave) {
+			guidToSave = it.first;
+			toSave.erase(it.first);
+			break;
+		}
 		guard.unlock();
+
 		if (!saveCachedItems(guidToSave)) {
 			std::cout << "Error while saving player items: " << guidToSave << std::endl;
 		}
+
 		guard.lock();
 	}
 }
@@ -1210,11 +1215,10 @@ void PlayerCacheManager::flush()
 void PlayerCacheManager::shutdown()
 {
 	listLock.lock();
-	setState(THREAD_STATE_TERMINATED);
-	listLock.unlock();
 
-	flush();
-	listSignal.notify_one();
+	setState(THREAD_STATE_TERMINATED);
+
+	listLock.unlock();
 }
 
 PlayerCacheData::~PlayerCacheData() {

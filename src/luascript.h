@@ -996,6 +996,7 @@ class LuaScriptInterface
 		static int luaPlayerCacheManagerClearCache(lua_State* L);
 		static int luaPlayerCacheManagerClearPlayerCache(lua_State* L);
 		static int luaPlayerCacheManagerLoadPlayerCache(lua_State* L);
+		static int luaPlayerCacheManagerSavePlayerCache(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
