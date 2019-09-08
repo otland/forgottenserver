@@ -254,7 +254,12 @@ void IOLoginData::loadPlayerItems(Player* player, Database* db) {
 	ItemMap itemMap;
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if (g_config.getBoolean(ConfigManager::BINARY_PLAYER_ITEMS)) {
+		query << "SELECT `items` FROM `player_binary_items` WHERE `player_id` = " << player->getGUID() << " AND `type` = " << BINARY_TYPE_ITEMS;
+	}
+	else {
+		query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	}
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -282,7 +287,12 @@ void IOLoginData::loadPlayerItems(Player* player, Database* db) {
 	itemMap.clear();
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if (g_config.getBoolean(ConfigManager::BINARY_PLAYER_ITEMS)) {
+		query << "SELECT `items` FROM `player_binary_items` WHERE `player_id` = " << player->getGUID() << " AND `type` = " << BINARY_TYPE_DEPOTITEMS;
+	}
+	else {
+		query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	}
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -314,7 +324,12 @@ void IOLoginData::loadPlayerItems(Player* player, Database* db) {
 	itemMap.clear();
 
 	query.str(std::string());
-	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if (g_config.getBoolean(ConfigManager::BINARY_PLAYER_ITEMS)) {
+		query << "SELECT `items` FROM `player_binary_items` WHERE `player_id` = " << player->getGUID() << " AND `type` = " << BINARY_TYPE_INBOX;
+	}
+	else {
+		query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	}
 	if ((result = db->storeQuery(query.str()))) {
 		loadItems(itemMap, result);
 
@@ -575,50 +590,87 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	return true;
 }
 
-bool IOLoginData::saveItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream)
+bool IOLoginData::saveItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream, BinaryPlayerDataType type /* = BINARY_TYPE_NONE */)
 {
-	std::ostringstream ss;
+	if (g_config.getBoolean(ConfigManager::BINARY_PLAYER_ITEMS)) {
+		std::list<Container*> listContainer;
+		std::ostringstream ss;
 
-	using ContainerBlock = std::pair<Container*, int32_t>;
-	std::list<ContainerBlock> queue;
+		using ContainerBlock = std::pair<Container*, int32_t>;
+		std::list<ContainerBlock> queue;
 
-	int32_t runningId = 100;
+		int32_t runningId = 100;
 
-	Database& db = Database::getInstance();
-	for (const auto& it : itemList) {
-		int32_t pid = it.first;
-		Item* item = it.second;
-		++runningId;
+		PropWriteStream binData;
+		for (const auto& it : itemList) {
+			int32_t pid = it.first;
+			Item* item = it.second;
+			++runningId;
 
-		propWriteStream.clear();
-		item->serializeAttr(propWriteStream);
+			size_t attributesSize;
 
-		size_t attributesSize;
-		const char* attributes = propWriteStream.getStream(attributesSize);
+			propWriteStream.clear();
+			item->serializeAttr(propWriteStream);
+			const char* attributes = propWriteStream.getStream(attributesSize);
 
-		ss << guid << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+			binData.write<uint32_t>(pid);
+			binData.write<uint32_t>(runningId);
+			binData.write<uint16_t>(item->getID());
+			binData.write<uint16_t>(item->getSubType());
+			binData.writeString(std::string(attributes, attributesSize));
+
+			if (Container * container = item->getContainer()) {
+				queue.emplace_back(container, runningId);
+			}
+		}
+
+		while (!queue.empty()) {
+			const ContainerBlock& cb = queue.front();
+			Container* container = cb.first;
+			int32_t parentId = cb.second;
+			queue.pop_front();
+
+			for (Item* item : container->getItemList()) {
+				++runningId;
+				if (Container * sub = item->getContainer()) {
+					queue.emplace_back(sub, runningId);
+				}
+
+				size_t attributesSize;
+
+				propWriteStream.clear();
+				item->serializeAttr(propWriteStream);
+				const char* attributes = propWriteStream.getStream(attributesSize);
+
+				binData.write<uint32_t>(parentId);
+				binData.write<uint32_t>(runningId);
+				binData.write<uint16_t>(item->getID());
+				binData.write<uint16_t>(item->getSubType());
+				binData.writeString(std::string(attributes, attributesSize));
+			}
+		}
+
+		size_t itemsSize;
+		const char* items = binData.getStream(itemsSize);
+		ss << guid << ",  " << type << ", " << Database::getInstance().escapeBlob(items, itemsSize);
+
 		if (!query_insert.addRow(ss)) {
 			return false;
 		}
-
-		if (Container* container = item->getContainer()) {
-			queue.emplace_back(container, runningId);
-		}
 	}
+	else {
+		std::ostringstream ss;
 
-	while (!queue.empty()) {
-		const ContainerBlock& cb = queue.front();
-		Container* container = cb.first;
-		int32_t parentId = cb.second;
-		queue.pop_front();
+		using ContainerBlock = std::pair<Container*, int32_t>;
+		std::list<ContainerBlock> queue;
 
-		for (Item* item : container->getItemList()) {
+		int32_t runningId = 100;
+
+		Database& db = Database::getInstance();
+		for (const auto& it : itemList) {
+			int32_t pid = it.first;
+			Item* item = it.second;
 			++runningId;
-
-			Container* subContainer = item->getContainer();
-			if (subContainer) {
-				queue.emplace_back(subContainer, runningId);
-			}
 
 			propWriteStream.clear();
 			item->serializeAttr(propWriteStream);
@@ -626,12 +678,44 @@ bool IOLoginData::saveItems(uint32_t guid, const ItemBlockList& itemList, DBInse
 			size_t attributesSize;
 			const char* attributes = propWriteStream.getStream(attributesSize);
 
-			ss << guid << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+			ss << guid << ',' << pid << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
 			if (!query_insert.addRow(ss)) {
 				return false;
 			}
+
+			if (Container * container = item->getContainer()) {
+				queue.emplace_back(container, runningId);
+			}
+		}
+
+		while (!queue.empty()) {
+			const ContainerBlock& cb = queue.front();
+			Container* container = cb.first;
+			int32_t parentId = cb.second;
+			queue.pop_front();
+
+			for (Item* item : container->getItemList()) {
+				++runningId;
+
+				Container* subContainer = item->getContainer();
+				if (subContainer) {
+					queue.emplace_back(subContainer, runningId);
+				}
+
+				propWriteStream.clear();
+				item->serializeAttr(propWriteStream);
+
+				size_t attributesSize;
+				const char* attributes = propWriteStream.getStream(attributesSize);
+
+				ss << guid << ',' << parentId << ',' << runningId << ',' << item->getID() << ',' << item->getSubType() << ',' << db.escapeBlob(attributes, attributesSize);
+				if (!query_insert.addRow(ss)) {
+					return false;
+				}
+			}
 		}
 	}
+
 	return query_insert.execute();
 }
 
@@ -641,68 +725,135 @@ bool IOLoginData::savePlayerItems(uint32_t guid, Item** inventory, std::map<uint
 		db = &Database::getInstance();
 	}
 
-	std::ostringstream query;
-	PropWriteStream propWriteStream;
-
-	query << "DELETE FROM `player_items` WHERE `player_id` = " << guid;
-	if (!db->executeQuery(query.str())) {
-		return false;
-	}
-
-	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
-
-	ItemBlockList itemList;
-	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
-		Item* item = inventory[slotId];
-		if (item) {
-			itemList.emplace_back(slotId, item);
-		}
-	}
-
-	if (!saveItems(guid, itemList, itemsQuery, propWriteStream)) {
-		return false;
-	}
-
-	if (lastDepotId != -1) {
-		//save depot items
-		query.str(std::string());
-		query << "DELETE FROM `player_depotitems` WHERE `player_id` = " << guid;
-
+	if (g_config.getBoolean(ConfigManager::BINARY_PLAYER_ITEMS)) {
+		std::ostringstream query;
+		PropWriteStream propWriteStream;
+		
+		query << "DELETE FROM `player_binary_items` WHERE `player_id` = " << guid << " AND `type` = " << BINARY_TYPE_ITEMS;
 		if (!db->executeQuery(query.str())) {
 			return false;
 		}
 
-		DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
-		itemList.clear();
+		DBInsert itemsQuery("INSERT INTO `player_binary_items` (`player_id`, `type`, `items`) VALUES ", db);
 
-		for (const auto& it : depotChests) {
-			DepotChest* depotChest = it.second;
-			for (Item* item : depotChest->getItemList()) {
-				itemList.emplace_back(it.first, item);
+		ItemBlockList itemList;
+		for (int32_t slotId = 1; slotId <= 10; ++slotId) {
+			Item* item = inventory[slotId];
+			if (item) {
+				itemList.emplace_back(slotId, item);
 			}
 		}
 
-		if (!saveItems(guid, itemList, depotQuery, propWriteStream)) {
+		if (!saveItems(guid, itemList, itemsQuery, propWriteStream, BINARY_TYPE_ITEMS)) {
+			return false;
+		}
+
+		if (lastDepotId != -1) {
+			//save depot items
+			query.str(std::string());
+			query << "DELETE FROM `player_binary_items` WHERE `player_id` = " << guid << " AND `type` = " << BINARY_TYPE_DEPOTITEMS;
+
+			if (!db->executeQuery(query.str())) {
+				return false;
+			}
+
+			DBInsert depotQuery("INSERT INTO `player_binary_items` (`player_id`, `type`, `items`) VALUES ", db);
+			itemList.clear();
+
+			for (const auto& it : depotChests) {
+				DepotChest* depotChest = it.second;
+				for (Item* item : depotChest->getItemList()) {
+					itemList.emplace_back(it.first, item);
+				}
+			}
+
+			if (!saveItems(guid, itemList, depotQuery, propWriteStream, BINARY_TYPE_DEPOTITEMS)) {
+				return false;
+			}
+		}
+
+		//save inbox items
+		query.str(std::string());
+		query << "DELETE FROM `player_binary_items` WHERE `player_id` = " << guid << " AND `type` = " << BINARY_TYPE_INBOX;
+		if (!db->executeQuery(query.str())) {
+			return false;
+		}
+
+		DBInsert inboxQuery("INSERT INTO `player_binary_items` (`player_id`, `type`, `items`) VALUES ", db);
+		itemList.clear();
+
+		for (Item* item : inbox->getItemList()) {
+			itemList.emplace_back(0, item);
+		}
+
+		if (!saveItems(guid, itemList, inboxQuery, propWriteStream, BINARY_TYPE_INBOX)) {
 			return false;
 		}
 	}
+	else {
+		std::ostringstream query;
+		PropWriteStream propWriteStream;
 
-	//save inbox items
-	query.str(std::string());
-	query << "DELETE FROM `player_inboxitems` WHERE `player_id` = " << guid;
-	if (!db->executeQuery(query.str())) {
-		return false;
-	}
+		query << "DELETE FROM `player_items` WHERE `player_id` = " << guid;
+		if (!db->executeQuery(query.str())) {
+			return false;
+		}
 
-	DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
-	itemList.clear();
+		DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
 
-	for (Item* item : inbox->getItemList()) {
-		itemList.emplace_back(0, item);
-	}
+		ItemBlockList itemList;
+		for (int32_t slotId = 1; slotId <= 10; ++slotId) {
+			Item* item = inventory[slotId];
+			if (item) {
+				itemList.emplace_back(slotId, item);
+			}
+		}
 
-	if (!saveItems(guid, itemList, inboxQuery, propWriteStream)) {
-		return false;
+		if (!saveItems(guid, itemList, itemsQuery, propWriteStream)) {
+			return false;
+		}
+
+		if (lastDepotId != -1) {
+			//save depot items
+			query.str(std::string());
+			query << "DELETE FROM `player_depotitems` WHERE `player_id` = " << guid;
+
+			if (!db->executeQuery(query.str())) {
+				return false;
+			}
+
+			DBInsert depotQuery("INSERT INTO `player_depotitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
+			itemList.clear();
+
+			for (const auto& it : depotChests) {
+				DepotChest* depotChest = it.second;
+				for (Item* item : depotChest->getItemList()) {
+					itemList.emplace_back(it.first, item);
+				}
+			}
+
+			if (!saveItems(guid, itemList, depotQuery, propWriteStream)) {
+				return false;
+			}
+		}
+
+		//save inbox items
+		query.str(std::string());
+		query << "DELETE FROM `player_inboxitems` WHERE `player_id` = " << guid;
+		if (!db->executeQuery(query.str())) {
+			return false;
+		}
+
+		DBInsert inboxQuery("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
+		itemList.clear();
+
+		for (Item* item : inbox->getItemList()) {
+			itemList.emplace_back(0, item);
+		}
+
+		if (!saveItems(guid, itemList, inboxQuery, propWriteStream)) {
+			return false;
+		}
 	}
 
 	return true;
@@ -962,28 +1113,60 @@ bool IOLoginData::formatPlayerName(std::string& name)
 
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 {
-	do {
-		uint32_t sid = result->getNumber<uint32_t>("sid");
-		uint32_t pid = result->getNumber<uint32_t>("pid");
-		uint16_t type = result->getNumber<uint16_t>("itemtype");
-		uint16_t count = result->getNumber<uint16_t>("count");
+	if (g_config.getBoolean(ConfigManager::BINARY_PLAYER_ITEMS)) {
+		unsigned long itemsSize;
+		const char* items = result->getStream("items", itemsSize);
+		PropStream itemsStream;
+		itemsStream.init(items, itemsSize);
 
-		unsigned long attrSize;
-		const char* attr = result->getStream("attributes", attrSize);
+		while (itemsStream.size() >= 14) {
+			uint32_t pid, sid;
+			uint16_t type, count;
+			std::string attr;
+			itemsStream.read<uint32_t>(pid);
+			itemsStream.read<uint32_t>(sid);
+			itemsStream.read<uint16_t>(type);
+			itemsStream.read<uint16_t>(count);
+			itemsStream.readString(attr);
 
-		PropStream propStream;
-		propStream.init(attr, attrSize);
+			PropStream propStream;
+			propStream.init(attr.c_str(), attr.size());
 
-		Item* item = Item::CreateItem(type, count);
-		if (item) {
-			if (!item->unserializeAttr(propStream)) {
-				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
+			Item* item = Item::CreateItem(type, count);
+			if (item) {
+				if (!item->unserializeAttr(propStream)) {
+					std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
+				}
+				
+				std::pair<Item*, uint32_t> pair(item, pid);
+				itemMap[sid] = pair;
 			}
-
-			std::pair<Item*, uint32_t> pair(item, pid);
-			itemMap[sid] = pair;
 		}
-	} while (result->next());
+	}
+	else {
+		do {
+			uint32_t sid = result->getNumber<uint32_t>("sid");
+			uint32_t pid = result->getNumber<uint32_t>("pid");
+			uint16_t type = result->getNumber<uint16_t>("itemtype");
+			uint16_t count = result->getNumber<uint16_t>("count");
+
+			unsigned long attrSize;
+			const char* attr = result->getStream("attributes", attrSize);
+
+			PropStream propStream;
+			propStream.init(attr, attrSize);
+
+			Item* item = Item::CreateItem(type, count);
+			if (item) {
+				if (!item->unserializeAttr(propStream)) {
+					std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
+				}
+
+				std::pair<Item*, uint32_t> pair(item, pid);
+				itemMap[sid] = pair;
+			}
+		} while (result->next());
+	}
 }
 
 void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)

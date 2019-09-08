@@ -67,7 +67,7 @@ class IOLoginData
 
 		static void loadPlayerItems(Player* player, Database* db);
 		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-		static bool saveItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
+		static bool saveItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream, BinaryPlayerDataType type = BINARY_TYPE_NONE);
 };
 
 class PlayerCacheData;
