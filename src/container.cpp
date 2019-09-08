@@ -76,6 +76,16 @@ Item* Container::clone() const
 	return clone;
 }
 
+Item* Container::cloneWithoutDecay() const
+{
+	Container* clone = static_cast<Container*>(Item::cloneWithoutDecay());
+	for (Item* item : itemlist) {
+		clone->addItem(item->cloneWithoutDecay());
+	}
+	clone->totalWeight = totalWeight;
+	return clone;
+}
+
 Container* Container::getParentContainer()
 {
 	Thing* thing = getParent();
