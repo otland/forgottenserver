@@ -1121,7 +1121,7 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 
 		while (itemsStream.size() >= 14) {
 			uint32_t pid, sid;
-			uint16_t type, count;
+			uint16_t type = 0, count = 0;
 			std::string attr;
 			itemsStream.read<uint32_t>(pid);
 			itemsStream.read<uint32_t>(sid);
