@@ -53,6 +53,7 @@ extern MoveEvents* g_moveEvents;
 extern GlobalEvents* g_globalEvents;
 extern Scripts* g_scripts;
 extern Weapons* g_weapons;
+extern PlayerCacheManager g_playerCacheManager;
 
 ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
 uint32_t ScriptEnvironment::lastResultId = 0;
@@ -2428,6 +2429,14 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "hasChaseMode", LuaScriptInterface::luaPlayerHasChaseMode);
 	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
 	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
+
+	// Game
+	registerTable("PlayerCacheManager");
+
+	registerMethod("PlayerCacheManager", "clearCache", LuaScriptInterface::luaPlayerCacheManagerClearCache);
+	registerMethod("PlayerCacheManager", "clearPlayerCache", LuaScriptInterface::luaPlayerCacheManagerClearPlayerCache);
+	registerMethod("PlayerCacheManager", "loadPlayerCache", LuaScriptInterface::luaPlayerCacheManagerLoadPlayerCache);
+	registerMethod("PlayerCacheManager", "savePlayerCache", LuaScriptInterface::luaPlayerCacheManagerSavePlayerCache);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -9967,6 +9976,47 @@ int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+// PlayerCacheManager
+int LuaScriptInterface::luaPlayerCacheManagerClearCache(lua_State* L)
+{
+	// PlayerCacheManager.clearCache()
+	g_playerCacheManager.clear();
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCacheManagerClearPlayerCache(lua_State* L)
+{
+	// PlayerCacheManager.clearPlayerCache(guid)
+	auto guid = getNumber<uint32_t>(L, 2);
+	g_playerCacheManager.clear(guid);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCacheManagerLoadPlayerCache(lua_State* L)
+{
+	// PlayerCacheManager.loadPlayerCache(guid)
+	auto guid = getNumber<uint32_t>(L, 2);
+
+	Player tmpPlayer(nullptr);
+	g_playerCacheManager.clear(guid);
+	if (!IOLoginData::loadPlayerById(&tmpPlayer, guid)) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	g_playerCacheManager.cachePlayer(guid, &tmpPlayer);
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCacheManagerSavePlayerCache(lua_State* L)
+{
+	// PlayerCacheManager.savePlayerCache(guid)
+	auto guid = getNumber<uint32_t>(L, 2);
+	g_playerCacheManager.saveCachedItems(guid);
 	return 1;
 }
 

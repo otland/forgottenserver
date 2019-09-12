@@ -190,6 +190,16 @@ Item* Item::clone() const
 	return item;
 }
 
+Item* Item::cloneWithoutDecay() const
+{
+	Item* item = Item::CreateItem(id, count);
+	if (attributes) {
+		item->attributes.reset(new ItemAttributes(*attributes));
+		item->setDecaying(DECAYING_FALSE);
+	}
+	return item;
+}
+
 bool Item::equals(const Item* otherItem) const
 {
 	if (!otherItem || id != otherItem->id) {

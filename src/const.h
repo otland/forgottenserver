@@ -550,6 +550,13 @@ enum ReloadTypes_t : uint8_t  {
 	RELOAD_TYPE_WEAPONS,
 };
 
+enum BinaryPlayerDataType : uint8_t {
+	BINARY_TYPE_NONE = 0,
+	BINARY_TYPE_ITEMS = 1,
+	BINARY_TYPE_DEPOT_ITEMS = 2,
+	BINARY_TYPE_INBOX = 3,
+};
+
 static constexpr int32_t CHANNEL_GUILD = 0x00;
 static constexpr int32_t CHANNEL_PARTY = 0x01;
 static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;

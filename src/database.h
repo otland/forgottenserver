@@ -189,7 +189,7 @@ class DBResult
 class DBInsert
 {
 	public:
-		explicit DBInsert(std::string query);
+		explicit DBInsert(std::string query, Database* db = nullptr);
 		bool addRow(const std::string& row);
 		bool addRow(std::ostringstream& row);
 		bool execute();
@@ -198,6 +198,7 @@ class DBInsert
 		std::string query;
 		std::string values;
 		size_t length;
+		Database* database;
 };
 
 class DBTransaction
