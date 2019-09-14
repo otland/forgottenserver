@@ -9990,7 +9990,7 @@ int LuaScriptInterface::luaPlayerCacheManagerClearCache(lua_State* L)
 int LuaScriptInterface::luaPlayerCacheManagerClearPlayerCache(lua_State* L)
 {
 	// PlayerCacheManager.clearPlayerCache(guid)
-	auto guid = getNumber<uint32_t>(L, 2);
+	auto guid = getNumber<uint32_t>(L, 1);
 	g_playerCacheManager.clear(guid);
 	return 1;
 }
@@ -9998,7 +9998,7 @@ int LuaScriptInterface::luaPlayerCacheManagerClearPlayerCache(lua_State* L)
 int LuaScriptInterface::luaPlayerCacheManagerLoadPlayerCache(lua_State* L)
 {
 	// PlayerCacheManager.loadPlayerCache(guid)
-	auto guid = getNumber<uint32_t>(L, 2);
+	auto guid = getNumber<uint32_t>(L, 1);
 
 	Player tmpPlayer(nullptr);
 	g_playerCacheManager.clear(guid);
@@ -10015,7 +10015,7 @@ int LuaScriptInterface::luaPlayerCacheManagerLoadPlayerCache(lua_State* L)
 int LuaScriptInterface::luaPlayerCacheManagerSavePlayerCache(lua_State* L)
 {
 	// PlayerCacheManager.savePlayerCache(guid)
-	auto guid = getNumber<uint32_t>(L, 2);
+	auto guid = getNumber<uint32_t>(L, 1);
 	g_playerCacheManager.saveCachedItems(guid);
 	return 1;
 }
