@@ -39,6 +39,11 @@ void RSA::decrypt(char* msg) const
 static const std::string header = "-----BEGIN RSA PRIVATE KEY-----";
 static const std::string footer = "-----END RSA PRIVATE KEY-----";
 
+static inline std::string ltrim(std::string s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int c) {return !std::isspace(c);}));
+    return s;
+}
+
 void RSA::loadPEM(const std::string& filename)
 {
 	std::ifstream file{filename};
@@ -49,7 +54,8 @@ void RSA::loadPEM(const std::string& filename)
 
 	std::ostringstream oss;
 	for (std::string line; std::getline(file, line); oss << line);
-	std::string key = oss.str();
+	std::string ops = oss.str();
+	std::string key = ltrim(ops);
 
 	if (key.substr(0, header.size()) != header) {
 		throw std::runtime_error("Missing RSA private key header.");
