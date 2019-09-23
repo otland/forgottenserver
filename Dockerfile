@@ -33,7 +33,6 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
 	boost-dev
 
 RUN ln -s /usr/lib/libcryptopp.so /usr/lib/libcryptopp.so.5.6
-COPY ./config.lua.dist ./config.lua
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs
 COPY data /srv/data/
 COPY LICENSE README.md *.dist *.sql key.pem /srv/
