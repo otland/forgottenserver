@@ -16,10 +16,5 @@ function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	player:teleportTo(fromPosition, false)
 	return true
 end
-	<action itemid="430" script="other/teleport.lua" />
-	<action itemid="1369" script="other/teleport.lua" />
-	<action itemid="1386" script="other/teleport.lua" />
-	<action itemid="3678" script="other/teleport.lua" />
-	<action itemid="5543" script="other/teleport.lua" />
 
-action:id(430, 1369, 1386)
+action:id(430, 1369, 1386, 3678, 5543)
