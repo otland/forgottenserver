@@ -24,11 +24,6 @@ local windows = {
 local action = Action()
 
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local window = windows[item:getId()]
-	if not window then
-		return false
-	end
-
 	local tile = Tile(fromPosition)
 	local house = tile and tile:getHouse()
 	if not house then
@@ -47,7 +42,7 @@ function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	item:transform(window)
+	item:transform(windows[item:getId()])
 	return true
 end
 

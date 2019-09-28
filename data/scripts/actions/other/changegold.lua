@@ -1,4 +1,4 @@
-local config = {
+local coins = {
 	[ITEM_GOLD_COIN] = {changeTo = ITEM_PLATINUM_COIN},
 	[ITEM_PLATINUM_COIN] = {changeBack = ITEM_GOLD_COIN, changeTo = ITEM_CRYSTAL_COIN},
 	[ITEM_CRYSTAL_COIN] = {changeBack = ITEM_PLATINUM_COIN}
@@ -7,7 +7,7 @@ local config = {
 local action = Action()
 
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local coin = config[item:getId()]
+	local coin = coins[item:getId()]
 	if coin.changeTo and item.type == 100 then
 		item:remove()
 		player:addItem(coin.changeTo, 1)
@@ -20,7 +20,7 @@ function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-for key in ipairs(config) do
+for key in pairs(coins) do
 	action:id(key)
 end
 

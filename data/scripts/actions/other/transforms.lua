@@ -5,12 +5,7 @@ local transformItems = {
 local action = Action()
 
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local transformIds = transformItems[item:getId()]
-	if not transformIds then
-		return false
-	end
-
-	item:transform(transformIds)
+	item:transform(transformItems[item:getId()])
 	return true
 end
 

@@ -1,13 +1,5 @@
 local drunk = Condition(CONDITION_DRUNK)
-drunk:setParameter(CONDITION_PARAM_TICKS, 60000)
-
-local poison = Condition(CONDITION_POISON)
-poison:setParameter(CONDITION_PARAM_DELAYED, true)
-poison:setParameter(CONDITION_PARAM_MINVALUE, -50)
-poison:setParameter(CONDITION_PARAM_MAXVALUE, -120)
-poison:setParameter(CONDITION_PARAM_STARTVALUE, -5)
-poison:setParameter(CONDITION_PARAM_TICKINTERVAL, 4000)
-poison:setParameter(CONDITION_PARAM_FORCEUPDATE, true)
+drunk:setParameter(CONDITION_PARAM_TICKS, 1 * 60 * 1000)
 
 local fluidMessage = {
 	[3] = "Aah...",
@@ -22,6 +14,7 @@ local fluidMessage = {
 	[43] = "Aaaah..."
 }
 
+local fluids = {2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2023, 1775, 2031, 2032, 2033, 2034, 2574, 2575, 2576, 2577}
 local action = Action()
 
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -45,7 +38,7 @@ function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			if table.contains({3, 15, 43}, item.type) then
 				player:addCondition(drunk)
 			elseif item.type == 4 then
-				player:addCondition(poison)
+				player:addDamageCondition(player, CONDITION_POISON, DAMAGELIST_LOGARITHMIC_DAMAGE, math.random(3, 6))
 			elseif item.type == 7 then
 				player:addMana(math.random(50, 150))
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
@@ -76,5 +69,5 @@ function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-action:id(2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2023, 1775, 2031, 2032, 2033, 2034, 2574, 2575, 2576, 2577)
+action:id(table.unpack(fluids))
 action:register()

@@ -17,10 +17,6 @@ local action = Action()
 
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local kit = constructionKits[item.itemid]
-	if not kit then
-		return false
-	end
-
 	if fromPosition.x == CONTAINER_POSITION then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
 	elseif not Tile(fromPosition):getHouse() then

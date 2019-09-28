@@ -12,10 +12,6 @@ local action = Action()
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local count = 1
 	local targetItem = presents[item.itemid]
-	if not targetItem then
-		return true
-	end
-
 	local gift = targetItem[math.random(#targetItem)]
 	if type(gift) == "table" then
 		gift = gift[1]

@@ -20,7 +20,7 @@ local action = Action()
 
 function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local newBed = beds[item:getId()]
-	if not newBed or type(target) ~= "userdata" or not target:isItem() then
+	if type(target) ~= "userdata" or not target:isItem() then
 		return false
 	end
 
