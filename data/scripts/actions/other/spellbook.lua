@@ -1,6 +1,6 @@
-local spellbook = Action()
+local action = Action()
 
-function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+function action.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local text = {}
 	local spells = {}
 	for _, spell in ipairs(player:getInstantSpells()) do
@@ -32,5 +32,5 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return true
 end
 
-spellbook:id(2175, 6120, 8900, 8901, 8902, 8903, 8904, 8918)
-spellbook:register()
+action:id(2175, 6120, 8900, 8901, 8902, 8903, 8904, 8918)
+action:register()
