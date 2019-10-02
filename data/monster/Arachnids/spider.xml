@@ -18,19 +18,11 @@
 		<flag runonhealth="6"/>
 	</flags>
 	<attacks>
-<<<<<<< HEAD
 		<attack name="melee" interval="2000" skill="10" attack="25"/>
-=======
-		<attack name="melee" interval="2000" min="0" max="-9" />
->>>>>>> master
 	</attacks>
 	<defenses armor="2" defense="2"/>
 	<elements>
-<<<<<<< HEAD
 		<element firePercent="-10"/>
-=======
-		<element firePercent="-20" />
->>>>>>> master
 	</elements>
 	<loot>
 		<item id="2148" countmax="5" chance="20000"/><!-- gold coin -->

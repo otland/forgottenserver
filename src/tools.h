@@ -94,6 +94,5 @@ const char* getReturnMessage(ReturnValue value);
 
 int64_t OTSYS_TIME();
 
-SpellGroup_t stringToSpellGroup(std::string value);
 
 #endif

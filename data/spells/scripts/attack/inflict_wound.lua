@@ -13,13 +13,16 @@ local function getHighestSkillLevel(creature)
 	return skillLevel
 end
 
-function onCastSpell(creature, variant)
+function onTargetCreature(creature, target)
 	local skill = getHighestSkillLevel(creature)
 	local min = (creature:getLevel() / 80) + (skill * 0.2) + 2
 	local max = (creature:getLevel() / 80) + (skill * 0.4) + 2
 	local damage = math.random(math.floor(min) * 1000, math.floor(max) * 1000) / 1000
-	for _, target in ipairs(combat:getTargets(creature, variant)) do
-		creature:addDamageCondition(target, CONDITION_BLEEDING, DAMAGELIST_LOGARITHMIC_DAMAGE, target:isPlayer() and damage / 4 or damage)
-	end
-	return true
+	creature:addDamageCondition(target, CONDITION_BLEEDING, DAMAGELIST_LOGARITHMIC_DAMAGE, target:isPlayer() and damage / 4 or damage)
+end
+
+combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
+
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

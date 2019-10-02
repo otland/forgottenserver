@@ -496,7 +496,7 @@ bool Action::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool Action::loadFunction(const pugi::xml_attribute& attr)
+bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
 	std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;

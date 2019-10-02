@@ -3,10 +3,12 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_DEATHDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_SMALLCLOUDS)
 combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_DEATH)
 
+function onTargetCreature(creature, target)
+	creature:addDamageCondition(target, CONDITION_CURSED, DAMAGELIST_EXPONENTIAL_DAMAGE, math.random(74, 107))
+end
+
+combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
+
 function onCastSpell(creature, variant)
-	local damage = math.random(74, 107)
-	for _, target in ipairs(combat:getTargets(creature, variant)) do
-		creature:addDamageCondition(target, CONDITION_CURSED, DAMAGELIST_EXPONENTIAL_DAMAGE, damage)
-	end
-	return true
+	return combat:execute(creature, variant)
 end

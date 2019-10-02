@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_FIRE)
-condition:setParameter(CONDITION_PARAM_DELAYED, true)
+condition:setParameterCONDITION_PARAM_DELAYED, 1)
 condition:addDamage(5, 3000, -25)
 condition:addDamage(1, 5000, -666)
 

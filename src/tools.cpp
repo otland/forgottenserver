@@ -1176,18 +1176,3 @@ int64_t OTSYS_TIME()
 	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-SpellGroup_t stringToSpellGroup(std::string value)
-{
-	std::string tmpStr = asLowerCaseString(value);
-	if (tmpStr == "attack" || tmpStr == "1") {
-		return SPELLGROUP_ATTACK;
-	} else if (tmpStr == "healing" || tmpStr == "2") {
-		return SPELLGROUP_HEALING;
-	} else if (tmpStr == "support" || tmpStr == "3") {
-		return SPELLGROUP_SUPPORT;
-	} else if (tmpStr == "special" || tmpStr == "4") {
-		return SPELLGROUP_SPECIAL;
-	}
-
-	return SPELLGROUP_NONE;
-}

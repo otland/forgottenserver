@@ -125,6 +125,12 @@ enum AccountType_t : uint8_t {
 	ACCOUNT_TYPE_GOD = 5
 };
 
+enum SpellType_t : uint8_t {
+	SPELL_UNDEFINED = 0,
+	SPELL_INSTANT = 1,
+	SPELL_RUNE = 2,
+};
+
 enum RaceType_t : uint8_t {
 	RACE_NONE,
 	RACE_VENOM,

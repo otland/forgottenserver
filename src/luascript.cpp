@@ -1395,7 +1395,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MESSAGE_EVENT_DEFAULT)
 	registerEnum(MESSAGE_EVENT_ORANGE)
 	registerEnum(MESSAGE_STATUS_CONSOLE_ORANGE)
-	registerEnum(MESSAGE_LOOT)
 
 	registerEnum(CREATURETYPE_PLAYER)
 	registerEnum(CREATURETYPE_MONSTER)
@@ -1556,13 +1555,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(SKILL_FISHING)
 	registerEnum(SKILL_MAGLEVEL)
 	registerEnum(SKILL_LEVEL)
-
-	registerEnum(SPECIALSKILL_CRITICALHITCHANCE)
-	registerEnum(SPECIALSKILL_CRITICALHITAMOUNT)
-	registerEnum(SPECIALSKILL_LIFELEECHCHANCE)
-	registerEnum(SPECIALSKILL_LIFELEECHAMOUNT)
-	registerEnum(SPECIALSKILL_MANALEECHCHANCE)
-	registerEnum(SPECIALSKILL_MANALEECHAMOUNT)
 
 	registerEnum(SKULL_NONE)
 	registerEnum(SKULL_YELLOW)
@@ -2220,8 +2212,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getSkillPercent", LuaScriptInterface::luaPlayerGetSkillPercent);
 	registerMethod("Player", "getSkillTries", LuaScriptInterface::luaPlayerGetSkillTries);
 	registerMethod("Player", "addSkillTries", LuaScriptInterface::luaPlayerAddSkillTries);
-	registerMethod("Player", "getSpecialSkill", LuaScriptInterface::luaPlayerGetSpecialSkill);
-	registerMethod("Player", "addSpecialSkill", LuaScriptInterface::luaPlayerAddSpecialSkill);
 
 	registerMethod("Player", "getItemCount", LuaScriptInterface::luaPlayerGetItemCount);
 	registerMethod("Player", "getItemById", LuaScriptInterface::luaPlayerGetItemById);
@@ -2700,9 +2690,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Spell", "register", LuaScriptInterface::luaSpellRegister);
 	registerMethod("Spell", "name", LuaScriptInterface::luaSpellName);
 	registerMethod("Spell", "id", LuaScriptInterface::luaSpellId);
-	registerMethod("Spell", "group", LuaScriptInterface::luaSpellGroup);
 	registerMethod("Spell", "cooldown", LuaScriptInterface::luaSpellCooldown);
-	registerMethod("Spell", "groupCooldown", LuaScriptInterface::luaSpellGroupCooldown);
 	registerMethod("Spell", "level", LuaScriptInterface::luaSpellLevel);
 	registerMethod("Spell", "magicLevel", LuaScriptInterface::luaSpellMagicLevel);
 	registerMethod("Spell", "mana", LuaScriptInterface::luaSpellMana);
@@ -4461,29 +4449,6 @@ int LuaScriptInterface::luaGameStartRaid(lua_State* L)
 	g_game.raids.setRunning(raid);
 	raid->startRaid();
 	lua_pushnumber(L, RETURNVALUE_NOERROR);
-	return 1;
-}
-
-int LuaScriptInterface::luaGameSendAnimatedText(lua_State* L)
-{
-	// Game.sendAnimatedText(message, position, color)
-	int parameters = lua_gettop(L);
-	if (parameters < 3) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	TextColor_t color = getNumber<TextColor_t>(L, 3);
-	const Position& position = getPosition(L, 2);
-	const std::string& message = getString(L, 1);
-
-	if (!position.x || !position.y) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	g_game.addAnimatedText(message, position, color);
-	pushBoolean(L, true);
 	return 1;
 }
 
@@ -13483,72 +13448,6 @@ int LuaScriptInterface::luaSpellId(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaSpellGroup(lua_State* L)
-{
-	// spell:group(primaryGroup[, secondaryGroup])
-	Spell* spell = getUserdata<Spell>(L, 1);
-	if (spell) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, spell->getGroup());
-			lua_pushnumber(L, spell->getSecondaryGroup());
-			return 2;
-		} else if (lua_gettop(L) == 2) {
-			SpellGroup_t group = getNumber<SpellGroup_t>(L, 2);
-			if (group) {
-				spell->setGroup(group);
-				pushBoolean(L, true);
-			} else if (isString(L, 2)) {
-				group = stringToSpellGroup(getString(L, 2));
-				if (group != SPELLGROUP_NONE) {
-					spell->setGroup(group);
-				} else {
-					std::cout << "[Warning - Spell::group] Unknown group: " << getString(L, 2) << std::endl;
-					pushBoolean(L, false);
-					return 1;
-				}
-				pushBoolean(L, true);
-			} else {
-				std::cout << "[Warning - Spell::group] Unknown group: " << getString(L, 2) << std::endl;
-				pushBoolean(L, false);
-				return 1;
-			}
-		} else {
-			SpellGroup_t primaryGroup = getNumber<SpellGroup_t>(L, 2);
-			SpellGroup_t secondaryGroup = getNumber<SpellGroup_t>(L, 2);
-			if (primaryGroup && secondaryGroup) {
-				spell->setGroup(primaryGroup);
-				spell->setSecondaryGroup(secondaryGroup);
-				pushBoolean(L, true);
-			} else if (isString(L, 2) && isString(L, 3)) {
-				primaryGroup = stringToSpellGroup(getString(L, 2));
-				if (primaryGroup != SPELLGROUP_NONE) {
-					spell->setGroup(primaryGroup);
-				} else {
-					std::cout << "[Warning - Spell::group] Unknown primaryGroup: " << getString(L, 2) << std::endl;
-					pushBoolean(L, false);
-					return 1;
-				}
-				secondaryGroup = stringToSpellGroup(getString(L, 3));
-				if (secondaryGroup != SPELLGROUP_NONE) {
-					spell->setSecondaryGroup(secondaryGroup);
-				} else {
-					std::cout << "[Warning - Spell::group] Unknown secondaryGroup: " << getString(L, 3) << std::endl;
-					pushBoolean(L, false);
-					return 1;
-				}
-				pushBoolean(L, true);
-			} else {
-				std::cout << "[Warning - Spell::group] Unknown primaryGroup: " << getString(L, 2) << " or secondaryGroup: " << getString(L, 3) << std::endl;
-				pushBoolean(L, false);
-				return 1;
-			}
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaSpellCooldown(lua_State* L)
 {
 	// spell:cooldown(cooldown)
@@ -13558,29 +13457,6 @@ int LuaScriptInterface::luaSpellCooldown(lua_State* L)
 			lua_pushnumber(L, spell->getCooldown());
 		} else {
 			spell->setCooldown(getNumber<uint32_t>(L, 2));
-			pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaSpellGroupCooldown(lua_State* L)
-{
-	// spell:groupCooldown(primaryGroupCd[, secondaryGroupCd])
-	Spell* spell = getUserdata<Spell>(L, 1);
-	if (spell) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, spell->getGroupCooldown());
-			lua_pushnumber(L, spell->getSecondaryCooldown());
-			return 2;
-		} else if (lua_gettop(L) == 2) {
-			spell->setGroupCooldown(getNumber<uint32_t>(L, 2));
-			pushBoolean(L, true);
-		} else {
-			spell->setGroupCooldown(getNumber<uint32_t>(L, 2));
-			spell->setSecondaryCooldown(getNumber<uint32_t>(L, 3));
 			pushBoolean(L, true);
 		}
 	} else {
@@ -14388,8 +14264,6 @@ int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 			creature->setEventType(CREATURE_EVENT_KILL);
 		} else if (tmpStr == "advance") {
 			creature->setEventType(CREATURE_EVENT_ADVANCE);
-		} else if (tmpStr == "modalwindow") {
-			creature->setEventType(CREATURE_EVENT_MODALWINDOW);
 		} else if (tmpStr == "textedit") {
 			creature->setEventType(CREATURE_EVENT_TEXTEDIT);
 		} else if (tmpStr == "healthchange") {
