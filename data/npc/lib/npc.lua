@@ -57,7 +57,8 @@ end
 
 local func = function(cid, text, type, e, pcid)
 	if Player(pcid):isPlayer() then
-		doCreatureSay(cid, text, type, false, pcid, Creature(cid):getPosition())
+		local creature = Creature(cid)
+		creature:say(text, type, false, pcid, creature:getPosition())
 		e.done = true
 	end
 end
