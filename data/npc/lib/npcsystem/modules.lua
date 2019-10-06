@@ -959,7 +959,7 @@ if Modules == nil then
 			self.npcHandler.talkStart[cid] = os.time()
 
 			if a > 0 then
-				if not player:removeMoney(((a * shopItem.buy) + (b * 20))) then
+				if not player:removeMoney((a * shopItem.buy) + (b * 20)) then
 					return false
 				end
 				return true
