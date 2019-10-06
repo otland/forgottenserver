@@ -70,36 +70,9 @@ function doCreatureSayWithDelay(cid, text, type, delay, e, pcid)
 	end
 end
 
-function doPlayerTakeItem(cid, itemid, count)
-	local player = Player(cid)
-	if player:getItemCount(itemid) < count then
-		return false
-	end
-
-	while count > 0 do
-		local tempcount = 0
-		if ItemType(itemid):isStackable() then
-			tempcount = math.min (100, count)
-		else
-			tempcount = 1
-		end
-
-		if not player:removeItem(itemid, tempcount) then
-			return false
-		else
-			count = count - tempcount
-		end
-	end
-
-	if count ~= 0 then
-		return false
-	end
-	return true
-end
-
 function doPlayerSellItem(cid, itemid, count, cost)
 	local player = Player(cid)
-	if doPlayerTakeItem(cid, itemid, count) == true then
+	if player:removeItem(itemid, count) then
 		if not player:addMoney(cost) then
 			error('Could not add money to ' .. player:getName() .. '(' .. cost .. 'gp)')
 		end
