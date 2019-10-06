@@ -22,7 +22,7 @@
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
-		<attack name="fire" interval="2000" chance="25" lenght="8" spread="3" min="-120" max="-460">
+		<attack name="fire" interval="2000" chance="25" length="8" spread="3" min="-120" max="-460">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="firearea" />
 		</attack>

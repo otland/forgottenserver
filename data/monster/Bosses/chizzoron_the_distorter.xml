@@ -24,7 +24,7 @@
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="poison" />
 		</attack>
-		<attack name="fire" interval="2000" chance="10" lenght="8" spread="3" max="-874">
+		<attack name="fire" interval="2000" chance="10" length="8" spread="3" max="-874">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
