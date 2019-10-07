@@ -41,7 +41,7 @@ function onUpdateDatabase()
 						local resultId3 = db.storeQuery("SELECT * FROM `player_depotitems` WHERE `player_id` = " .. playerId .. " AND `pid` = " .. sid)
 						if resultId3 ~= false then
 							repeat
-								local attr, attrSize = result.getDataStream(resultId3, "attributes")
+								local attr, attrSize = result.getStream(resultId3, "attributes")
 								runningId = runningId + 1
 								stmt = stmt .. "(" .. playerId .. "," .. runningId .. ",0," .. result.getNumber(resultId3, "itemtype") .. "," .. result.getNumber(resultId3, "count") .. "," .. db.escapeBlob(attr, attrSize) .. "),"
 								sids[#sids + 1] = result.getNumber(resultId3, "sid")
