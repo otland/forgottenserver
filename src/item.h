@@ -495,15 +495,24 @@ class ItemAttributes
 			return false;
 		}
 
+		const static uint32_t intAttrType = ITEM_ATTRIBUTE_ACTIONID | ITEM_ATTRIBUTE_UNIQUEID | ITEM_ATTRIBUTE_DATE
+			| ITEM_ATTRIBUTE_WEIGHT | ITEM_ATTRIBUTE_ATTACK | ITEM_ATTRIBUTE_DEFENSE | ITEM_ATTRIBUTE_EXTRADEFENSE
+			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
+			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
+			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID;
+		const static uint32_t stringAttrType = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
+			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
+		const static uint32_t customAttrType = ITEM_ATTRIBUTE_CUSTOM;
+
 	public:
 		static bool isIntAttrType(itemAttrTypes type) {
-			return (type & 0x7FFE13) != 0;
+			return (type & intAttrType) == type;
 		}
 		static bool isStrAttrType(itemAttrTypes type) {
-			return (type & 0x1EC) != 0;
+			return (type & stringAttrType) == type;
 		}
 		inline static bool isCustomAttrType(itemAttrTypes type) {
-			return (type & 0x80000000) != 0;
+			return (type & customAttrType) == type;
 		}
 
 		const std::forward_list<Attribute>& getList() const {
