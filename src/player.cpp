@@ -678,6 +678,10 @@ bool Player::canSee(const Position& pos) const
 
 bool Player::canSeeCreature(const Creature* creature) const
 {
+	if (!creature) {
+		return false;
+	}
+	
 	if (creature == this) {
 		return true;
 	}
