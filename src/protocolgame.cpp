@@ -2984,7 +2984,7 @@ void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, const Creature* creat
 
 	msg.addByte(0x6C);
 	msg.add<uint16_t>(0xFFFF);
-	msg.addByte(creature->getID());
+	msg.add<uint32_t>(creature->getID());
 }
 
 void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos)
