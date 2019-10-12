@@ -22,6 +22,7 @@
 #include "iologindata.h"
 #include "configmanager.h"
 #include "game.h"
+#include "sha256.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -92,7 +93,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 		return false;
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	if (sha256(password) != result->getString("password")) {
 		return false;
 	}
 
@@ -140,7 +141,7 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		}
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	if (sha256(password) != result->getString("password")) {
 		return 0;
 	}
 
