@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ constexpr auto decrypt_v = XTEA<false, InitialBlockSize>();
 
 } // anonymous namespace
 
-void encrypt(uint8_t* i, size_t l, const key& k) { encrypt_v(i, l, k); }
-void decrypt(uint8_t* i, size_t l, const key& k) { decrypt_v(i, l, k); }
+void encrypt(uint8_t* data, size_t length, const key& k) { encrypt_v(data, length, k); }
+void decrypt(uint8_t* data, size_t length, const key& k) { decrypt_v(data, length, k); }
 
 } // namespace xtea

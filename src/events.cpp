@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,6 +118,12 @@ bool Events::load()
 				info.playerOnGainSkillTries = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
+			}
+		} else if (className == "Monster") {
+			if (methodName == "onDropLoot") {
+				info.monsterOnDropLoot = event;
+			} else {
+				std::cout << "[Warning - Events::load] Unknown monster method: " << methodName << std::endl;
 			}
 		} else {
 			std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
@@ -857,4 +863,31 @@ void Events::eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_
 	}
 
 	scriptInterface.resetScriptEnv();
+}
+
+void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
+{
+	// Monster:onDropLoot(corpse)
+	if (info.monsterOnDropLoot == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventMonsterOnDropLoot] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.monsterOnDropLoot, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.monsterOnDropLoot);
+
+	LuaScriptInterface::pushUserdata<Monster>(L, monster);
+	LuaScriptInterface::setMetatable(L, -1, "Monster");
+
+	LuaScriptInterface::pushUserdata<Container>(L, corpse);
+	LuaScriptInterface::setMetatable(L, -1, "Container");
+
+	return scriptInterface.callVoidFunction(2);
 }

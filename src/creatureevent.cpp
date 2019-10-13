@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,15 +29,15 @@ CreatureEvents::CreatureEvents() :
 	scriptInterface.initState();
 }
 
-void CreatureEvents::clear()
+void CreatureEvents::clear(bool fromLua)
 {
-	//clear creature events
-	for (auto& it : creatureEvents) {
-		it.second.clearEvent();
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ++it) {
+		if (fromLua == it->second.fromLua) {
+			it->second.clearEvent();
+		}
 	}
 
-	//clear lua state
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface()
@@ -77,13 +77,31 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	} else {
 		//if not, register it normally
-		auto it = creatureEvents.find(creatureEvent->getName());
-		if (it != creatureEvents.end()) {
-			it->second = *creatureEvent;
-		} else {
-			creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+		return true;
+	}
+}
+
+bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
+{
+	CreatureEvent_ptr creatureEvent{ event };
+	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
+		std::cout << "Error: [CreatureEvents::registerLuaEvent] Trying to register event without type!" << std::endl;
+		return false;
+	}
+
+	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	if (oldEvent) {
+		//if there was an event with the same that is not loaded
+		//(happens when realoading), it is reused
+		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
+			oldEvent->copyEvent(creatureEvent.get());
 		}
 
+		return false;
+	} else {
+		//if not, register it normally
+		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
 		return true;
 	}
 }
@@ -545,7 +563,11 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, Co
 	if (scriptInterface->protectedCall(L, 7, 4) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
-		damage = LuaScriptInterface::getCombatDamage(L);
+		damage.primary.value = LuaScriptInterface::getNumber<int32_t>(L, -4);
+		damage.primary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -3);
+		damage.secondary.value = LuaScriptInterface::getNumber<int32_t>(L, -2);
+		damage.secondary.type = LuaScriptInterface::getNumber<CombatType_t>(L, -1);
+		lua_pop(L, 4);
 	}
 
 	scriptInterface->resetScriptEnv();

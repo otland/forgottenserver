@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017 Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019 Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1444,7 +1444,7 @@ void Player::onThink(uint32_t interval)
 	}
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
-		checkSkullTicks(interval);
+		checkSkullTicks(interval / 1000);
 	}
 
 	addOfflineTrainingTime(interval);
@@ -3823,16 +3823,16 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	}
 }
 
-void Player::checkSkullTicks(int32_t ticks)
+void Player::checkSkullTicks(int64_t ticks)
 {
-	int32_t newTicks = skullTicks - ticks;
+	int64_t newTicks = skullTicks - ticks;
 	if (newTicks < 0) {
 		skullTicks = 0;
 	} else {
 		skullTicks = newTicks;
 	}
 
-	if ((skull == SKULL_RED || skull == SKULL_BLACK) && skullTicks < 1000 && !hasCondition(CONDITION_INFIGHT)) {
+	if ((skull == SKULL_RED || skull == SKULL_BLACK) && skullTicks < 1 && !hasCondition(CONDITION_INFIGHT)) {
 		setSkull(SKULL_NONE);
 	}
 }
@@ -3865,11 +3865,12 @@ double Player::getLostPercent() const
 		lossPercent = 10;
 	}
 
+	double percentReduction = 0;
 	if (isPromoted()) {
-		lossPercent *= 0.7;
+		percentReduction += 30;
 	}
-
-	return lossPercent * pow(0.92, blessingCount) / 100;
+	percentReduction += blessingCount * 8;
+	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 
 void Player::learnInstantSpell(const std::string& spellName)

@@ -6,6 +6,7 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   build-base \
   clang \
   cmake \
+  crypto++-dev \
   gcc \
   gmp-dev \
   luajit-dev \
@@ -24,14 +25,16 @@ FROM alpine:edge
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
   boost-iostreams \
   boost-system \
+  crypto++ \
   gmp \
   luajit \
   mariadb-connector-c \
   pugixml
 
+RUN ln -s /usr/lib/libcryptopp.so /usr/lib/libcryptopp.so.5.6
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs
 COPY data /srv/data/
-COPY LICENSE README.md *.dist *.sql /srv/
+COPY LICENSE README.md *.dist *.sql key.pem /srv/
 
 EXPOSE 7171 7172
 WORKDIR /srv

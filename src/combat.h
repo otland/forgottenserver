@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,7 +193,7 @@ class AreaCombat
 		};
 
 		MatrixArea* createArea(const std::list<uint32_t>& list, uint32_t rows);
-		void copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op) const;
+		static void copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op);
 
 		MatrixArea* getArea(const Position& centerPos, const Position& targetPos) const {
 			int32_t dx = Position::getOffsetX(targetPos, centerPos);

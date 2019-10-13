@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -666,23 +666,23 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 			return true;
 		}
 
-		case CONDITION_PARAM_SPECIALSKILL_HITPOINTSLEECHCHANCE: {
-			specialSkills[SPECIALSKILL_HITPOINTSLEECHCHANCE] = value;
+		case CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE: {
+			specialSkills[SPECIALSKILL_LIFELEECHCHANCE] = value;
 			return true;
 		}
 
-		case CONDITION_PARAM_SPECIALSKILL_HITPOINTSLEECHAMOUNT: {
-			specialSkills[SPECIALSKILL_HITPOINTSLEECHAMOUNT] = value;
+		case CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT: {
+			specialSkills[SPECIALSKILL_LIFELEECHAMOUNT] = value;
 			return true;
 		}
 
-		case CONDITION_PARAM_SPECIALSKILL_MANAPOINTSLEECHCHANCE: {
-			specialSkills[SPECIALSKILL_MANAPOINTSLEECHCHANCE] = value;
+		case CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE: {
+			specialSkills[SPECIALSKILL_MANALEECHCHANCE] = value;
 			return true;
 		}
 
-		case CONDITION_PARAM_SPECIALSKILL_MANAPOINTSLEECHAMOUNT: {
-			specialSkills[SPECIALSKILL_MANAPOINTSLEECHAMOUNT] = value;
+		case CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT: {
+			specialSkills[SPECIALSKILL_MANALEECHAMOUNT] = value;
 			return true;
 		}
 

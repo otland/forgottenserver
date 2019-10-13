@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -761,16 +761,16 @@ std::string getSpecialSkillName(uint8_t skillid)
 		case SPECIALSKILL_CRITICALHITAMOUNT:
 			return "critical extra damage";
 
-		case SPECIALSKILL_HITPOINTSLEECHCHANCE:
+		case SPECIALSKILL_LIFELEECHCHANCE:
 			return "hitpoints leech chance";
 
-		case SPECIALSKILL_HITPOINTSLEECHAMOUNT:
+		case SPECIALSKILL_LIFELEECHAMOUNT:
 			return "hitpoints leech amount";
 
-		case SPECIALSKILL_MANAPOINTSLEECHCHANCE:
+		case SPECIALSKILL_MANALEECHCHANCE:
 			return "manapoints leech chance";
 
-		case SPECIALSKILL_MANAPOINTSLEECHAMOUNT:
+		case SPECIALSKILL_MANALEECHAMOUNT:
 			return "mana points leech amount";
 
 		default:
@@ -1222,4 +1222,20 @@ const char* getReturnMessage(ReturnValue value)
 int64_t OTSYS_TIME()
 {
 	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+SpellGroup_t stringToSpellGroup(std::string value)
+{
+	std::string tmpStr = asLowerCaseString(value);
+	if (tmpStr == "attack" || tmpStr == "1") {
+		return SPELLGROUP_ATTACK;
+	} else if (tmpStr == "healing" || tmpStr == "2") {
+		return SPELLGROUP_HEALING;
+	} else if (tmpStr == "support" || tmpStr == "3") {
+		return SPELLGROUP_SUPPORT;
+	} else if (tmpStr == "special" || tmpStr == "4") {
+		return SPELLGROUP_SPECIAL;
+	}
+
+	return SPELLGROUP_NONE;
 }

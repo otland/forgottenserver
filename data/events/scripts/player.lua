@@ -103,7 +103,7 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 
 		if moveItem then
 			local parent = item:getParent()
-			if parent:getSize() == parent:getCapacity() then
+			if parent:isContainer() and parent:getSize() == parent:getCapacity() then
 				self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM))
 				return false
 			else

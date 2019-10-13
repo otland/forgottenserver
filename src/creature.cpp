@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -697,7 +697,7 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 		Item* splash;
 		switch (getRace()) {
 			case RACE_VENOM:
-				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_GREEN);
+				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_SLIME);
 				break;
 
 			case RACE_BLOOD:
@@ -1280,20 +1280,21 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	auto it = conditions.begin(), end = conditions.end();
-	while (it != end) {
-		Condition* condition = *it;
+	ConditionList tempConditions{ conditions };
+	for (Condition* condition : tempConditions) {
+		auto it = std::find(conditions.begin(), conditions.end(), condition);
+		if (it == conditions.end()) {
+			continue;
+		}
+
 		if (!condition->executeCondition(this, interval)) {
-			ConditionType_t type = condition->getType();
-
-			it = conditions.erase(it);
-
-			condition->endCondition(this);
-			delete condition;
-
-			onEndCondition(type);
-		} else {
-			++it;
+			it = std::find(conditions.begin(), conditions.end(), condition);
+			if (it != conditions.end()) {
+				conditions.erase(it);
+				condition->endCondition(this);
+				onEndCondition(condition->getType());
+				delete condition;
+			}
 		}
 	}
 }
@@ -1310,7 +1311,7 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 			continue;
 		}
 
-		if (condition->getEndTime() >= timeNow) {
+		if (condition->getEndTime() >= timeNow || condition->getTicks() == -1) {
 			return true;
 		}
 	}
@@ -1474,6 +1475,10 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 	}
 
 	for (CreatureEvent* creatureEvent : eventsList) {
+		if (!creatureEvent->isLoaded()) {
+			continue;
+		}
+		
 		if (creatureEvent->getEventType() == type) {
 			tmpEventList.push_back(creatureEvent);
 		}

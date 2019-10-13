@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -682,7 +682,7 @@ class Player final : public Creature, public Cylinder
 				client->sendCreatureSkull(creature);
 			}
 		}
-		void checkSkullTicks(int32_t ticks);
+		void checkSkullTicks(int64_t ticks);
 
 		bool canWear(uint32_t lookType, uint8_t addons) const;
 		void addOutfit(uint16_t lookType, uint8_t addons);

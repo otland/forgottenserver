@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,10 @@ static const std::string footer = "-----END RSA PRIVATE KEY-----";
 void RSA::loadPEM(const std::string& filename)
 {
 	std::ifstream file{filename};
+
+	if (!file.is_open()) {
+		throw std::runtime_error("Missing file " + filename + ".");
+ 	}
 
 	std::ostringstream oss;
 	for (std::string line; std::getline(file, line); oss << line);

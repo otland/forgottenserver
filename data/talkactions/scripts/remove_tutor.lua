@@ -11,6 +11,7 @@ function onSay(player, words, param)
 
 	if result.getDataInt(resultId, "account_type") ~= ACCOUNT_TYPE_TUTOR then
 		player:sendCancelMessage("You can only demote a tutor to a normal player.")
+		result.free(resultId)
 		return false
 	end
 
