@@ -1297,3 +1297,10 @@ function createFunctions(class)
 		rawset(class, func[3], func[4])
 	end
 end
+
+function doPlayerTakeItem(cid, itemid, count)
+	if not Player(cid):removeItem(itemid, count) then
+		return false
+	end
+	return true
+end
