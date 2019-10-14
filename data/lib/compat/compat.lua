@@ -1299,5 +1299,5 @@ function createFunctions(class)
 end
 
 function doPlayerTakeItem(cid, itemid, count)
-	return Player(cid):removeItem(itemid, count) then
+	return Player(cid):removeItem(itemid, count)
 end
