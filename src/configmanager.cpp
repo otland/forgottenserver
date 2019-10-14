@@ -191,13 +191,13 @@ bool ConfigManager::reload()
 	return result;
 }
 
-static std::string dummy;
+static std::string dummyStr;
 
 const std::string& ConfigManager::getString(string_config_t what) const
 {
 	if (what >= LAST_STRING_CONFIG) {
 		std::cout << "[Warning - ConfigManager::getString] Accessing invalid index: " << what << std::endl;
-		return dummy;
+		return dummyStr;
 	}
 	return string[what];
 }
