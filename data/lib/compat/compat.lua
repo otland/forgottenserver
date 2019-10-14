@@ -1299,8 +1299,5 @@ function createFunctions(class)
 end
 
 function doPlayerTakeItem(cid, itemid, count)
-	if not Player(cid):removeItem(itemid, count) then
-		return false
-	end
-	return true
+	return Player(cid):removeItem(itemid, count) then
 end
