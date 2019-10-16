@@ -451,6 +451,11 @@
 	<movevent event="DeEquip" itemid="22516" slot="ring" function="onDeEquipItem" />
 
 	<!-- Helmets -->
+	<movevent event="Equip" itemid="2664" slot="head" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="2664" slot="head" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="5461" slot="head" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="5461" slot="head" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="2474" slot="head" function="onEquipItem" />
