@@ -1750,7 +1750,7 @@
 		<attribute key="decayTo" value="2043" />
 		<attribute key="duration" value="180" />
 	</item>
-	<item id="2043" article="an" name="used candelabrum">
+	<item id="2043" article="a" name="used candelabrum">
 		<attribute key="slotType" value="ammo" />
 		<attribute key="weight" value="4500" />
 	</item>
@@ -1765,7 +1765,7 @@
 		<attribute key="decayTo" value="2046" />
 		<attribute key="duration" value="180" />
 	</item>
-	<item id="2046" article="an" name="used lamp">
+	<item id="2046" article="a" name="used lamp">
 		<attribute key="slotType" value="ammo" />
 		<attribute key="weight" value="3000" />
 	</item>
@@ -1780,7 +1780,7 @@
 		<attribute key="decayTo" value="2049" />
 		<attribute key="duration" value="240" />
 	</item>
-	<item id="2049" article="an" name="used candlestick">
+	<item id="2049" article="a" name="used candlestick">
 		<attribute key="slotType" value="ammo" />
 		<attribute key="weight" value="200" />
 		<attribute key="decayTo" value="0" />
@@ -17430,7 +17430,7 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="9934" article="" name="worn leather boots" editorsuffix=" (Old worn firewalker boots)">
+	<item id="9934" article="a" name="worn leather boots" editorsuffix=" (Old worn firewalker boots)">
 		<attribute key="weight" value="900" />
 	</item>
 	<item id="9935" article="a" name="dead gozzler">
@@ -18951,7 +18951,7 @@
 	<item id="10602" article="a" name="vampire teeth" plural="vampire's teeth">
 		<attribute key="weight" value="50" />
 	</item>
-	<item id="10603" article="a" name="swamp grass">
+	<item id="10603" name="swamp grass">
 		<attribute key="weight" value="94" />
 	</item>
 	<item id="10605" article="a" name="bundle of cursed straw" plural="bundles of cursed straw">
@@ -19133,7 +19133,7 @@
 		<attribute key="description" value="It looks hungry." />
 		<attribute key="weight" value="45" />
 	</item>
-	<item id="10944" article="an" name="universal tool">
+	<item id="10944" article="a" name="universal tool">
 		<attribute key="description" value="The tool of choice for any gadgeteer." />
 		<attribute key="weight" value="300" />
 	</item>
@@ -21729,7 +21729,7 @@
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
 		<attribute key="weight" value="200" />
 	</item>
-	<item id="13296" article="" name="draptor scales">
+	<item id="13296" name="draptor scales">
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="13297" article="a" name="haunch of boar">
@@ -25746,7 +25746,7 @@
 		<attribute key="weight" value="5000" />
 		<attribute key="description" value="This sword was forged with the enthusiasm and dreams of the Rookgaardians." />
 	</item>
-	<item id="18554" article="a" name="crystal rubbish" />
+	<item id="18554" name="crystal rubbish" />
 	<item id="18559" article="an" name="adventurer's stone">
 		<attribute key="weight" value="30" />
 		<attribute key="description" value="Use it in major temples to travel to the adventurers guild. A replacement is available at temples." />
@@ -29690,7 +29690,7 @@
 		<attribute key="description" value="It is delicately carved out of the bone of some animal and bears strange inscriptions." />
 		<attribute key="weight" value="100" />
 	</item>
-	<item id="21585" article="a" name="smoking coal">
+	<item id="21585" name="smoking coal">
 		<attribute key="description" value="This coal is smoking and emmits quite a stench." />
 		<attribute key="weight" value="1000" />
 	</item>
@@ -29905,7 +29905,7 @@
 	<item fromid="21795" toid="21796" article="a" name="strange window" />
 	<item fromid="21797" toid="21798" article="a" name="window shutter" />
 	<item fromid="21799" toid="21804" article="a" name="strange wall" />
-	<item fromid="21813" toid="21824" article="a" name="flowing water" />
+	<item fromid="21813" toid="21824" name="flowing water" />
 	<item fromid="21825" toid="21826" article="a" name="small brook">
 		<attribute key="description" value="You see the silvery movement of fish." />
 	</item>
@@ -29990,7 +29990,7 @@
 		<attribute key="weight" value="10" />
 		<attribute key="description" value="The fragment of a dream. Strange pictures seem to flit through the shards." />
 	</item>
-	<item id="22364" article="a" name="dream sand">
+	<item id="22364" name="dream sand">
 		<attribute key="weight" value="10" />
 		<attribute key="description" value="A fine glowing powder and crystalline nuggets." />
 	</item>
@@ -31337,14 +31337,14 @@
 		<attribute key="slotType" value="body" />
 		<attribute key="weight" value="5500" />
 	</item>
-	<item id="23539" article="an" name="alloy legs">
+	<item id="23539" name="alloy legs">
 		<attribute key="description" value="It can only be wielded properly by players of level 60 or higher." />
 		<attribute key="armor" value="6" />
 		<attribute key="slotType" value="legs" />
 		<attribute key="speed" value="20" />
 		<attribute key="weight" value="4500" />
 	</item>
-	<item id="23540" article="a" name="metal spats">
+	<item id="23540" name="metal spats">
 		<attribute key="description" value="It can only be wielded properly by knights and paladins of level 50 or higher." />
 		<attribute key="armor" value="1" />
 		<attribute key="slotType" value="feet" />
@@ -31542,7 +31542,7 @@
 		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="9600" />
 	</item>
-	<item id="23662" article="a" name="juicy roots">
+	<item id="23662" name="juicy roots">
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="23663" article="a" name="feedbag">
@@ -31587,9 +31587,9 @@
 		<attribute key="defense" value="8" />
 		<attribute key="weaponType" value="shield" />
 	</item>
-	<item id="23787" article="a" name="worn out pirate boots" />
+	<item id="23787" name="worn out pirate boots" />
 	<item id="23788" article="a" name="worn dress" />
-	<item id="23789" article="a" name="smelly leather legs" />
+	<item id="23789" name="smelly leather legs" />
 	<item id="23798" article="a" name="paladin's bow" >
 		<attribute key="description" value="A simple bow, yet well crafted." />
 	</item>
@@ -31639,11 +31639,11 @@
 	<item id="23805" article="a" name="light stone shower rune">
 		<attribute key="description" value="It holds some fragment of the power of the earth." />
 	</item>
-	<item id="23806" article="an" name="black knight doll">
+	<item id="23806" article="a" name="black knight doll">
 		<attribute key="weight" value="1800" />
 		<attribute key="description" value="My sad story is told by few living humans but many dead warriors." />
 	</item>
-	<item id="23807" article="an" name="black knight doll">
+	<item id="23807" article="a" name="black knight doll">
 		<attribute key="weight" value="1800" />
 		<attribute key="description" value="My sad story is told by few living humans but many dead warriors." />
 	</item>
