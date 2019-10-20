@@ -50,7 +50,7 @@ end
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do
-		res[#res + 1] = v
+		res[#res + 1] = v:trim()
 	end
 	return res
 end
