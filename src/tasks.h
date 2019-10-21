@@ -27,15 +27,38 @@
 const int DISPATCHER_TASK_EXPIRATION = 2000;
 const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));
 
+/* A task is a wrapper (that might have an expiration) around a function.
+This is done so the dispatcher can efficiently manage computations in the server. TODO DOC*/
 class Task
 {
 	public:
-		// DO NOT allocate this class on the stack
+		/* This is a special class function called 'move constructor'.
+		We know it because of the rvalue reference (&&) parameter.
+		It is called everytime we create an object of this class with an rvalue.
+		Because the only way to create a dispatcher task is the 'createTask' function
+		(and it converts a lvalue to an rvalue with 'std::move()'),
+		we end up always using this constructor. This prevents unnecessary copies.
+		However, in the scope of the constructor, the argument is seen as an lvalue.
+		In order to prevent copying, we also cast 'f' to an xvalue inside it.
+		After all that, a task's 'func' variable "owns" that resource without unnecessary copies .*/
 		explicit Task(std::function<void (void)>&& f) : func(std::move(f)) {}
-		Task(uint32_t ms, std::function<void (void)>&& f) :
-			expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f)) {}
 
+		/* This is also a move constructor, but with two parameters. */
+		Task(uint32_t ms, std::function<void (void)>&& f)
+			/* This is the time of the task's creation + some miliseconds. */
+			: expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms))
+			, func(std::move(f))
+		{}
+
+		/* The '~' (tilde) character tells the compiler this is this class' 'destructor'.
+		When we assign a 'default' value to a class' special function, we're tell the compiler
+		to automatically generate it. */
 		virtual ~Task() = default;
+
+		 /* This is another type of special class function, it is an 'operator overloading'.
+		 In this case we are overloading the 'function call' operator.
+		 By doing so, we enable an object of this class to execute an arbitrary function
+		 inside its 'func' member variable like this: "someTask()". */
 		void operator()() {
 			func();
 		}
@@ -52,19 +75,25 @@ class Task
 		}
 
 	protected:
+		/* The time the task expires. Defaults to not expiring. */
 		std::chrono::system_clock::time_point expiration = SYSTEM_TIME_ZERO;
 
 	private:
-		// Expiration has another meaning for scheduler tasks,
-		// then it is the time the task should be added to the
-		// dispatcher
+		/* This variable holds a function and its arguments, it's the actual "task"
+		that the dispatcher will execute. As we don't want to waste memory and processing,
+		we use move semantics to avoid copying it around.
+		DEV NOTE: Possible to use perfect forwarding? */
 		std::function<void (void)> func;
 };
 
 Task* createTask(std::function<void (void)> f);
+
 Task* createTask(uint32_t expiration, std::function<void (void)> f);
 
-class Dispatcher : public ThreadHolder<Dispatcher> {
+/* The dispatcher's job is to concurrently execute the server's tasks
+in its own thread. This makes it take advantage of multiple cores. TODO DOC */
+class Dispatcher : public ThreadHolder<Dispatcher>
+{
 	public:
 		void addTask(Task* task, bool push_front = false);
 
@@ -81,6 +110,8 @@ class Dispatcher : public ThreadHolder<Dispatcher> {
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
 
+		/* Because our tasks are allocated in the heap at different times,
+		a constant access time, memory location independent container is necessary.*/
 		std::list<Task*> taskList;
 		uint64_t dispatcherCycle = 0;
 };
