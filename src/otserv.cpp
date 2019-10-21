@@ -18,13 +18,9 @@
  */
 
 #include "otpch.h"
-
 #include "server.h"
-
 #include "game.h"
-
 #include "iomarket.h"
-
 #include "configmanager.h"
 #include "scriptmanager.h"
 #include "rsa.h"
@@ -37,20 +33,31 @@
 #include "script.h"
 #include <fstream>
 
-DatabaseTasks g_databaseTasks;
-Dispatcher g_dispatcher;
-Scheduler g_scheduler;
+extern Scripts* g_scripts; // Holds '*.lua' scripts from '/data'. Extern means it's defined elsewhere.
 
-Game g_game;
-ConfigManager g_config;
-Monsters g_monsters;
-Vocations g_vocations;
-extern Scripts* g_scripts;
-RSA g_RSA;
+DatabaseTasks g_databaseTasks;	// Runs on separate thread, handles database queries
+Scheduler g_scheduler;			// Runs on separate thread, handles planned executions
+Dispatcher g_dispatcher;		// Runs on separate thread, handles immediate executions
 
+Game g_game;			// Holds and mutates game state (map, players, monsters, NPCs, etc)
+ConfigManager g_config; // Holds configuration from '/config.lua'
+Monsters g_monsters;	// Holds monster definitions from /data/monster (XMLs)
+Vocations g_vocations;	// Holds vocations definitions from '/data/XML/vocations.xml'
+RSA g_RSA;				// Holds private key from '/key.pem' and decrypts data
+
+// Prevents 'main()' from continuing execution without 'mainLoader()'
 std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
+
+/* Entry point 'main()' at the end of the file. */
+
+[[noreturn]] void badAllocationHandler()
+{
+	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
+	getchar();
+	exit(-1);
+}
 
 void startupErrorMessage(const std::string& errorStr)
 {
@@ -60,73 +67,33 @@ void startupErrorMessage(const std::string& errorStr)
 
 void mainLoader(int argc, char* argv[], ServiceManager* services);
 
-[[noreturn]] void badAllocationHandler()
-{
-	// Use functions that only use stack allocation
-	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
-	getchar();
-	exit(-1);
-}
-
-int main(int argc, char* argv[])
-{
-	// Setup bad allocation handler
-	std::set_new_handler(badAllocationHandler);
-
-	ServiceManager serviceManager;
-
-	g_dispatcher.start();
-	g_scheduler.start();
-
-	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
-
-	g_loaderSignal.wait(g_loaderUniqueLock);
-
-	if (serviceManager.is_running()) {
-		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
-		serviceManager.run();
-	} else {
-		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler.shutdown();
-		g_databaseTasks.shutdown();
-		g_dispatcher.shutdown();
-	}
-
-	g_scheduler.join();
-	g_databaseTasks.join();
-	g_dispatcher.join();
-	return 0;
-}
-
-void mainLoader(int, char*[], ServiceManager* services)
-{
-	//dispatcher thread
+void mainLoader(int, char* [], ServiceManager* services) {
 	g_game.setGameState(GAME_STATE_STARTUP);
 
 	srand(static_cast<unsigned int>(OTSYS_TIME()));
-#ifdef _WIN32
+#	ifdef _WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
-#endif
+#	endif
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
 	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
 	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
 
-#if defined(__amd64__) || defined(_M_X64)
+#	if defined(__amd64__) || defined(_M_X64)
 	std::cout << "x64" << std::endl;
-#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
+#	elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
 	std::cout << "x86" << std::endl;
-#elif defined(__arm__)
+#	elif defined(__arm__)
 	std::cout << "ARM" << std::endl;
-#else
+#	else
 	std::cout << "unknown" << std::endl;
-#endif
+#	endif
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
 	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
 	std::cout << std::endl;
 
-	// check if config.lua or config.lua.dist exist
+	// Check if 'config.lua' or 'config.lua.dist' exist on '/'
 	std::ifstream c_test("./config.lua");
 	if (!c_test.is_open()) {
 		std::ifstream config_lua_dist("./config.lua.dist");
@@ -141,105 +108,111 @@ void mainLoader(int, char*[], ServiceManager* services)
 		c_test.close();
 	}
 
-	// read global config
+	// Load '/config.lua' into 'g_config'
 	std::cout << ">> Loading config" << std::endl;
 	if (!g_config.load()) {
 		startupErrorMessage("Unable to load config.lua!");
 		return;
 	}
 
-#ifdef _WIN32
+#	ifdef _WIN32
 	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
 	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
+	}
+	else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
-#endif
+#	endif
 
-	//set RSA key
+	// Load RSA key from '/key.pem' to 'g_RSA'
 	try {
 		g_RSA.loadPEM("key.pem");
-	} catch(const std::exception& e) {
+	} catch (const std::exception & e) {
 		startupErrorMessage(e.what());
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Establishing database connection..." << std::flush;
-
 	if (!Database::getInstance().connect()) {
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
-
 	std::cout << " MySQL " << Database::getClientVersion() << std::endl;
-
-	// run database manager
 	std::cout << ">> Running database manager" << std::endl;
 
+	// TODO DOC
 	if (!DatabaseManager::isDatabaseSetup()) {
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
 	g_databaseTasks.start();
-
 	DatabaseManager::updateDatabase();
 
 	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
-	//load vocations
+	// Load vocations from '/XML/vocations.xml'
 	std::cout << ">> Loading vocations" << std::endl;
 	if (!g_vocations.loadFromXml()) {
 		startupErrorMessage("Unable to load vocations!");
 		return;
 	}
 
-	// load item data
+	// TODO DOC
 	std::cout << ">> Loading items" << std::endl;
 	if (!Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
 
+	// TODO DOC
 	if (!Item::items.loadFromXml()) {
 		startupErrorMessage("Unable to load items (XML)!");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Loading script systems" << std::endl;
 	if (!ScriptingManager::getInstance().loadScriptSystems()) {
 		startupErrorMessage("Failed to load script systems");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Loading lua scripts" << std::endl;
 	if (!g_scripts->loadScripts("scripts", false, false)) {
 		startupErrorMessage("Failed to load lua scripts");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Loading monsters" << std::endl;
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Loading lua monsters" << std::endl;
 	if (!g_scripts->loadScripts("monster", false, false)) {
 		startupErrorMessage("Failed to load lua monsters");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Loading outfits" << std::endl;
 	if (!Outfits::getInstance().loadFromXml()) {
 		startupErrorMessage("Unable to load outfits!");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Checking world type... " << std::flush;
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
+
 	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	} else if (worldType == "no-pvp") {
@@ -256,12 +229,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 	std::cout << asUpperCaseString(worldType) << std::endl;
 
+	// TODO DOC
 	std::cout << ">> Loading map" << std::endl;
 	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");
 		return;
 	}
 
+	// TODO DOC
 	std::cout << ">> Initializing gamestate" << std::endl;
 	g_game.setGameState(GAME_STATE_INIT);
 
@@ -297,13 +272,55 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 
-#ifndef _WIN32
+#	ifndef _WIN32
 	if (getuid() == 0 || geteuid() == 0) {
 		std::cout << "> Warning: " << STATUS_SERVER_NAME << " has been executed as root user, please consider running it as a normal user." << std::endl;
 	}
-#endif
+#	endif
 
 	g_game.start(services);
 	g_game.setGameState(GAME_STATE_NORMAL);
+
+	// Signals 'main()' it can continue its execution
 	g_loaderSignal.notify_all();
+}
+
+int main(int argc, char* argv[])
+{
+	std::set_new_handler(badAllocationHandler);
+
+	ServiceManager serviceManager; // Handles networking
+
+	// Initiates dispatcher and scheduler threads
+	g_dispatcher.start();
+	g_scheduler.start();
+
+	/* This is the first dispatcher's task: execute 'mainLoader()' (above) while the main thread
+	waits for it to be finished. Open 'tasks.h' and 'tasks.cpp' */
+	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
+
+	/* Prevents further execution of this thread until the dispatcher thread finishes
+	the 'mainLoader' function passed to it, which notifies/signals when it's done. */
+	g_loaderSignal.wait(g_loaderUniqueLock);
+
+	/* Checks if the server is listening to connections, else shuts everything down. */
+	if (serviceManager.is_running()) {
+		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!"
+			<< std::endl << std::endl;
+		serviceManager.run();
+	} else {
+		std::cout << ">> No services running. The server is NOT online." << std::endl;
+		g_scheduler.shutdown();
+		g_databaseTasks.shutdown();
+		g_dispatcher.shutdown();
+	}
+
+	/* Makes the current thread waits for these other threads to be terminated. */
+	g_scheduler.join();
+	g_databaseTasks.join();
+	g_dispatcher.join();
+
+	/* By the time the main thread reach this statement, everything must've shutdown gracefully.
+	If that's the case, we return 0, which means the program exited with no errors. */
+	return 0;
 }
