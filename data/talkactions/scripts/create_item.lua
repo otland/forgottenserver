@@ -11,7 +11,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	local split = param:split(",")
+	local split = param:splitTrimmed(",")
 
 	local itemType = ItemType(split[1])
 	if itemType:getId() == 0 then
