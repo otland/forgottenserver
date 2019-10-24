@@ -1,0 +1,30 @@
+version: "3.6"
+
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TFS_MYSQL_ROOT_PASSWORD:-r00tp@ssword}
+      MYSQL_DATABASE: ${TFS_MYSQL_DATABASE:-forgottenserver}
+      MYSQL_USER: ${TFS_MYSQL_USER:-forgottenserver}
+      MYSQL_PASSWORD: ${TFS_MYSQL_PASS:-forgottenserver}
+    volumes:
+      - forgottenserver_db:/var/lib/mysql
+
+  forgottenserver:
+    image: otland/forgottenserver
+    environment:
+      TFS_MYSQL_HOST: ${TFS_MYSQL_HOST:-mysql}
+      TFS_MYSQL_DATABASE: ${TFS_MYSQL_DATABASE:-forgottenserver}
+      TFS_MYSQL_USER: ${TFS_MYSQL_USER:-forgottenserver}
+      TFS_MYSQL_PASS: ${TFS_MYSQL_PASS:-forgottenserver}
+    volumes:
+      - forgottenserver:/srv
+    ports:
+      - 7171:7171
+      - 7172:7172
+
+volumes:
+  forgottenserver:
+  forgottenserver_db:
+  
