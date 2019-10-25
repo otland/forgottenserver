@@ -31723,6 +31723,11 @@
 		<attribute key="defense" value="8" />
 		<attribute key="weaponType" value="shield" />
 	</item>
+	<item id="23782" article="a" name="shopping bag">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="23787" name="worn out pirate boots" />
 	<item id="23788" article="a" name="worn dress" />
 	<item id="23789" name="smelly leather legs" />
