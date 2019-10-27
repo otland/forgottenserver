@@ -96,4 +96,18 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(std::string value);
 
+template<typename T>
+void fastVectorRemoveOne(std::vector<T>& vec, T obj)
+{
+	for (size_t i = 0, len = vec.size(); i < len; i++) {
+		if (vec[i] == obj) {
+			T tmp = vec[len-1];
+			vec[len-1] = vec[i];
+			vec[i] = tmp;
+			vec.pop_back();
+			break;
+		}
+	}
+}
+
 #endif
