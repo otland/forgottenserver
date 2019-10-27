@@ -129,7 +129,7 @@ if Modules == nil then
 			error("StdModule.bless called without any npcHandler instance.")
 		end
 
-		if not npcHandler:isFocused(cid) or getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+		if not npcHandler:isFocused(cid) or Game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
 			return false
 		end
 
@@ -365,7 +365,7 @@ if Modules == nil then
 				elseif i == 6 then
 					premium = temp == "true"
 				else
-					print("[Warning : " .. getCreatureName(getNpcCid()) .. "] NpcSystem:", "Unknown parameter found in travel destination parameter.", temp, destination)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in travel destination parameter.", temp, destination)
 				end
 				i = i + 1
 			end
@@ -923,10 +923,10 @@ if Modules == nil then
 			return false
 		end
 
-		local backpack = 1988
+		local backpack = 23782
 		local totalCost = amount * shopItem.buy
 		if inBackpacks then
-			totalCost = isItemStackable(itemid) == TRUE and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / getContainerCapById(backpack))) * 20)
+			totalCost = ItemType(itemid):isStackable() == TRUE and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(backpack):getCapacity())) * 20)
 		end
 
 		local player = Player(cid)
@@ -1088,7 +1088,7 @@ if Modules == nil then
 				return false
 			end
 
-			local a, b = doNpcSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_subtype[cid], false, false, 1988)
+			local a, b = doNpcSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_subtype[cid], false, false, 23782)
 			if a < shop_amount[cid] then
 				local msgId = MESSAGE_NEEDMORESPACE
 				if a == 0 then
@@ -1103,7 +1103,7 @@ if Modules == nil then
 						return false
 					end
 					if shop_itemid[cid] == ITEM_PARCEL then
-						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, 1988)
+						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, 23782)
 					end
 					return true
 				end
@@ -1116,7 +1116,7 @@ if Modules == nil then
 					return false
 				end
 				if shop_itemid[cid] == ITEM_PARCEL then
-					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, 1988)
+					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, 23782)
 				end
 				return true
 			end
