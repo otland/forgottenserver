@@ -16405,6 +16405,8 @@
 	<item id="8983" article="a" name="heavily bound book">
 		<attribute key="description" value="It contains the scribings of many knowledgeable." />
 		<attribute key="weight" value="7800" />
+		<attribute key="writeable" value="1" />
+		<attribute key="maxTextLen" value="199" />
 	</item>
 	<item id="8984" article="an" name="abacus">
 		<attribute key="weight" value="1200" />
@@ -29966,7 +29968,7 @@
 	<item id="22124" article="a" name="ruined window" />
 	<item fromid="22125" toid="22130" article="a" name="giant face" />
 	<item fromid="22131" toid="22132" article="a" name="giant hand" />
-	<item fromid="22133" toid="22134" article="an" name="instable vortex" />
+	<item fromid="22133" toid="22134" article="an" name="unstable vortex" />
 	<item fromid="22135" toid="22136" article="a" name="strange vortex" />
 	<item id="22137" article="a" name="large vortex" />
 	<item id="22138" article="a" name="strange vortex" />
@@ -30304,10 +30306,20 @@
 	<item id="22441" article="a" name="cormo dementi">
 		<attribute key="description" value="It looks as if it swallowed something." />
 	</item>
-	<item id="22442" article="a" name="blister egg plant">
-		<attribute key="description" value="This special urn seems to hum slightly." />
-	</item>
+	<item id="22442" article="a" name="blister egg plant" />
 	<item fromid="22443" toid="22444" name="pester maws" />
+	<item id="22445" article="an" name="ether captor" />
+	<item id="22446" article="a" name="rooted evil" />
+	<item id="22447" article="a" name="crimson fin" />
+	<item id="22448" article="a" name="cormo dementi" />
+	<item id="22449" article="a" name="blister egg plant" />
+	<item fromid="22450" toid="22451" name="dry cypress" />
+	<item fromid="22452" toid="22453" article="a" name="sleepless twine"/>
+	<item id="22455" article="a" name="strange vortex"/>
+	<item id="22456" article="an" name="unstable vortex">
+		<attribute key="description" value="This vortex seems suck you right in."/>
+	</item>
+	<item id="22457" article="a" name="stairs"/>
 	<item id="22458" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
@@ -30341,11 +30353,19 @@
 		<attribute key="description" value="Just looking at it makes you feel better. What could possibly go wrong." />
 		<attribute key="weight" value="30" />
 	</item>
+	<item id="22474" article="an" name="eerie song book">
+		<attribute key="weight" value="1300"/>
+		<attribute key="description" value="The songs in it are... special. Very special. Not for weak stomachs."/>
+		<attribute key="defense" value="0"/>
+		<attribute key="weaponType" value="shield"/>
+	</item>
 	<item id="22475" article="a" name="pendulum">
 		<attribute key="description" value="Sometimes it swings out of its own accord." />
 		<attribute key="weight" value="3500" />
 	</item>
-	<item fromid="22476" toid="22477" article="a" name="ruined stair" />
+	<item fromid="22476" toid="22477" name="ruined stairs">
+		<attribute key="type" value="teleport"/>
+	</item>
 	<item id="22478" article="a" name="dead sight of surrender">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22479" />
@@ -30486,18 +30506,18 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="22503" name="gravel and chalk in a bucket">
+	<item id="22499" article="a" name="silencer excretion">
+		<attribute key="weight" value="50"/>
+		<attribute key="description" value="This dung smells extremely awful and deteriorates quickly."/>
+	</item>
+	<item id="22502" article="a" name="message in a bottle"/>
+	<item id="22503" article="a" name="gravel and chalk in a bucket">
+		<attribute key="weight" value="2800"/>
 		<attribute key="description" value="This contains a mixture of gravel and chalk." />
 	</item>
 	<item id="22504" article="a" name="bucket full of mortar">
+		<attribute key="weight" value="3000"/>
 		<attribute key="description" value="This mortar seems to be perfect for construction or repair works." />
-	</item>
-	<item id="22508" article="a" name="dead retching horror">
-		<attribute key="containerSize" value="20" />
-		<attribute key="decayTo" value="22505" />
-		<attribute key="duration" value="10" />
-		<attribute key="corpseType" value="blood" />
-		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="22505" article="a" name="dead retching horror">
 		<attribute key="containerSize" value="20" />
@@ -30520,6 +30540,16 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
+	<item id="22508" article="a" name="dead retching horror">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="22505" />
+		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
+	</item>
+	<item id="22509" article="a" name="crack"/>
+	<item fromid="22511" toid="22512" article="a" name="watermill" />
+	<item fromid="22513" toid="22514" article="a" name="large pile of various bones" />
 	<item id="22516" article="a" name="ring of ending">
 		<attribute key="description" value="This constantly rotating ring is perfectly weightless, yet feels infinitely heavy at the same time." />
 		<attribute key="slotType" value="ring" />
@@ -30533,10 +30563,28 @@
 		<attribute key="weight" value="1400" />
 		<attribute key="slotType" value="head" />
 	</item>
+	<item fromid="22519" toid="22520" name="broken pottery"/>
+	<item id="22521" article="a" name="dead shimmying butterfly">
+		<attribute key="weight" value="60000"/>
+		<attribute key="containerSize" value="8"/>
+		<attribute key="decayTo" value="22522"/>
+		<attribute key="duration" value="10"/>
+	</item>
+	<item id="22522" article="a" name="dead shimmying butterfly">
+		<attribute key="weight" value="600"/>
+		<attribute key="containerSize" value="8"/>
+		<attribute key="decayTo" value="0"/>
+		<attribute key="duration" value="300"/>
+	</item>
 	<item id="22523" article="a" name="tea spoon">
 		<attribute key="description" value="Engraved in the back is &quot;From Mommy, with love&quot;." />
 		<attribute key="weight" value="100" />
 	</item>
+	<item id="22524" article="a" name="bowl of tea leaves">
+		<attribute key="weight" value="1000"/>
+		<attribute key="description" value="It contains some strange tea leaves."/>
+	</item>
+	<item fromid="22525" toid="22531" article="a" name="poison spine"/>
 	<item id="22532" article="a" name="frazzle tongue">
 		<attribute key="weight" value="680" />
 	</item>
@@ -30568,6 +30616,14 @@
 	<item id="22541" article="a" name="pool of chitinous glue">
 		<attribute key="weight" value="270" />
 	</item>
+	<item id="22542" article="a" name="string of mending">
+		<attribute key="weight" value="0"/>
+		<attribute key="description" value="This extraordinary smooth string feels quite cool to the touch."/>
+	</item>
+	<item id="22543" article="an" name="unstable ring of ending">
+		<attribute key="weight" value="60"/>
+		<attribute key="description" value="Something is happening to this ring."/>
+	</item>
 	<item id="22546" article="a" name="dead demon outcast">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22547" />
@@ -30596,12 +30652,19 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
+	<item id="22550" article="a" name="trough for mortar">
+		<attribute key="description" value="This trough should hold a large amount of mortar."/>
+	</item>
+	<item fromid="22551" toid="22552" article="a" name="ruined foundation"/>
+	<item fromid="22553" toid="22554" article="a" name="ruined pillar"/>
+	<item fromid="22555" toid="22557" article="a" name="strange wall"/>
 	<item id="22558" article="a" name="ruined stair">
 		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="22559" article="a" name="ruined stair">
 		<attribute key="floorchange" value="west" />
 	</item>
+	<item fromid="22560" toid="22561" article="a" name="ruined pillar"/>
 	<item id="22562" article="a" name="dead gaz'haragoth">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22563" />
@@ -30658,6 +30721,12 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
+	<item fromid="22571" toid="22572" article="a" name="lava hole" />
+	<item fromid="22573" toid="22576" article="an" name="energy prison" />
+	<item fromid="22577" toid="22578" article="a" name="prison wall" />
+	<item fromid="22579" toid="22580" article="an" name="iron ring" />
+	<item fromid="22581" toid="22583" name="strange stones" />
+	<item fromid="22584" toid="22585" article="a" name="small unstable vortex" />
 	<item id="22587" article="a" name="stair">
 		<attribute key="floorchange" value="north" />
 	</item>
@@ -30717,6 +30786,7 @@
 	<item id="22616" article="a" name="nightmare hook">
 		<attribute key="weight" value="500" />
 	</item>
+	<item fromid="22617" toid="22628" article="the dreamcatcher device"/>
 	<item id="22629" article="a" name="dead mawhawk">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="22630" />
@@ -30745,6 +30815,10 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
+	<item fromid="22634" toid="22635" article="a" name="copper lock pedestal"/>
+	<item fromid="22636" toid="22637" article="a" name="bronze lock pedestal"/>
+	<item fromid="22638" toid="22639" article="a" name="silver lock pedestal"/>
+	<item fromid="22640" toid="22641" article="a" name="golden lock pedestal"/>
 	<item id="22642" article="a" name="frazzlemaw santa">
 		<attribute key="weight" value="600" />
 	</item>
@@ -30754,8 +30828,15 @@
 	<item id="22644" article="a" name="christmas cookie tray">
 		<attribute key="weight" value="650" />
 	</item>
-	<item fromid="22645" toid="22646" article="a" name="snow globe">
-		<attribute key="weight" value="1000" />
+	<item id="22645" article="a" name="snow globe">
+		<attribute key="weight" value="1000"/>
+		<attribute key="slotType" value="ammo"/>
+		<attribute key="transformEquipTo" value="22646"/>
+	</item>
+	<item id="22646" article="a" name="snow globe">
+		<attribute key="weight" value="1000"/>
+		<attribute key="slotType" value="ammo"/>
+		<attribute key="transformDeEquipTo" value="22645"/>
 	</item>
 	<item fromid="22647" toid="22648" article="a" name="santa music box">
 		<attribute key="weight" value="750" />
@@ -30786,6 +30867,29 @@
 	<item id="22699" article="a" name="cake tapestry">
 		<attribute key="weight" value="1000" />
 	</item>
+	<item fromid="22717" toid="22720" article="a" name="large basin"/>
+	<item id="22726" article="a" name="melting horn">
+		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it."/>
+		<attribute key="weight" value="200"/>
+	</item>
+	<item id="22727" article="a" name="fireproof horn">
+		<attribute key="description" value="It's very sturdy and could even be considered fireproof."/>
+		<attribute key="weight" value="200"/>
+	</item>
+	<item id="22728" article="a" name="tinder box">
+		<attribute key="description" value="It is a delicate box and fully stuffed with tinder as well as igniters."/>
+		<attribute key="weight" value="200"/>
+	</item>
+	<item fromid="22729" toid="22731" name="frozen ursagrodon" />
+	<item id="22732" name="ice" />
+	<item id="22733" article="an" name="unstable geyser" />
+	<item fromid="22745" toid="22762" article="a" name="stone floor" />
+	<item fromid="22763" toid="22777" article="a" name="wall" />
+	<item fromid="22778" toid="22789" article="a" name="small wall" />
+	<item fromid="22790" toid="22793" name="city foundation" />
+	<item fromid="22794" toid="22795" article="a" name="wall" />
+	<item fromid="22796" toid="22811" article="a" name="buttress" />
+	<item fromid="22812" toid="22813" article="an" name="open window" />
 	<item id="22814" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
@@ -30870,6 +30974,47 @@
 	<item id="22867" article="a" name="stair">
 		<attribute key="floorchange" value="east" />
 	</item>
+	<item fromid="22868" toid="22871" article="a" name="street lamp" />
+	<item fromid="22872" toid="22875" article="a" name="candle" />
+	<item fromid="22876" toid="22879" name="gear wheels" />
+	<item fromid="22888" toid="22903" article="a" name="sewer pipe" />
+	<item fromid="22904" toid="22940" article="a" name="stone floor" />
+	<item fromid="22941" toid="22943" article="a" name="wall" />
+	<item id="22944" name="rungs in the wall" />
+	<item fromid="22945" toid="22948" article="a" name="wall" />
+	<item id="22949" name="rungs in the wall" />
+	<item id="22950" article="a" name="wall" />
+	<item id="22951" article="a" name="sewer duct" />
+	<item id="22952" article="a" name="barred sewer duct" />
+	<item id="22953" article="a" name="sewer duct" />
+	<item fromid="22954" toid="22966" article="a" name="wall" />
+	<item fromid="22967" toid="22969" name="broken iron bars" />
+	<item fromid="22970" toid="22983" name="stone construction" />
+	<item id="22984" name="broken iron bars" />
+	<item fromid="22985" toid="22992" article="a" name="damaged structure" />
+	<item fromid="22993" toid="22994" article="a" name="wall" />
+	<item fromid="22995" toid="22999" name="plant sludge" />
+	<item fromid="23000" toid="23005" article="a" name="wall" />
+	<item fromid="23007" toid="23011" name="plant sludge" />
+	<item id="23012" article="a" name="damaged structure" />
+	<item fromid="23013" toid="23022" article="a" name="massive metal statue" />
+	<item fromid="23023" toid="23028" name="ooze" />
+	<item fromid="23033" toid="23040" article="a" name="buttress" />
+	<item fromid="23041" toid="23048" article="a" name="tube" />
+	<item id="23049" article="a" name="plug" />
+	<item fromid="23050" toid="23059" article="a" name="tube" />
+	<item id="23060" article="a" name="plug" />
+	<item id="23061" article="a" name="tube" />
+	<item fromid="23062" toid="23067" article="a" name="switch" />
+	<item fromid="23068" toid="23071" article="a" name="pressure gauge" />
+	<item fromid="23072" toid="23075" article="a" name="small pressure gauge" />
+	<item fromid="23076" toid="23079" article="a" name="control switch" />
+	<item fromid="23080" toid="23082" article="a" name="generator" />
+	<item id="23083" article="a" name="stone floor" />
+	<item fromid="23084" toid="23098" article="a" name="parquet floor" />
+	<item fromid="23099" toid="23116" article="a" name="metal statue" />
+	<item fromid="23118" toid="23120" article="a" name="wall" />
+	<item id="23117" article="a" name="tap" />
 	<item id="23121" article="a" name="stair">
 		<attribute key="floorchange" value="north" />
 	</item>
@@ -31220,6 +31365,15 @@
 	<item id="23474" article="a" name="glooth injection tube">
 		<attribute key="weight" value="1400" />
 	</item>
+	<item fromid="23475" toid="23476" name="juicy root"/>
+	<item id="23477" article="a" name="harvested root">
+		<attribute key="decayTo" value="23475"/>
+		<attribute key="duration" value="300"/>
+	</item>
+	<item id="23478" article="a" name="harvested root">
+		<attribute key="decayTo" value="23476"/>
+		<attribute key="duration" value="300"/>
+	</item>
 	<item id="23479" article="a" name="dead glooth blob">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="23480" />
@@ -31301,7 +31455,6 @@
 		<attribute key="weight" value="6000" />
 	</item>
 	<item id="23529" article="a" name="glooth spear">
-		<attribute key="description" value="It can only be wielded properly by players of level 60 or higher." />
 		<attribute key="attack" value="55" />
 		<attribute key="weaponType" value="distance" />
 		<attribute key="shootType" value="gloothspear" />
@@ -31310,7 +31463,6 @@
 		<attribute key="weight" value="2600" />
 	</item>
 	<item id="23535" article="a" name="glooth cape">
-		<attribute key="description" value="It can only be wielded properly by druids and sorcerers of level 40 or higher." />
 		<attribute key="armor" value="9" />
 		<attribute key="slotType" value="body" />
 		<attribute key="absorbPercentEarth" value="5" />
@@ -31318,7 +31470,6 @@
 		<attribute key="weight" value="2900" />
 	</item>
 	<item id="23536" article="a" name="rubber cap">
-		<attribute key="description" value="It can only be wielded properly by druids and sorcerers of level 70 or higher." />
 		<attribute key="armor" value="5" />
 		<attribute key="slotType" value="head" />
 		<attribute key="absorbPercentEarth" value="3" />
@@ -31327,7 +31478,6 @@
 		<attribute key="weight" value="800" />
 	</item>
 	<item id="23537" article="a" name="mooh'tah plate">
-		<attribute key="description" value="It can only be wielded properly by knights and paladins." />
 		<attribute key="armor" value="12" />
 		<attribute key="slotType" value="body" />
 		<attribute key="weight" value="12500" />
@@ -31338,41 +31488,35 @@
 		<attribute key="weight" value="5500" />
 	</item>
 	<item id="23539" name="alloy legs">
-		<attribute key="description" value="It can only be wielded properly by players of level 60 or higher." />
 		<attribute key="armor" value="6" />
 		<attribute key="slotType" value="legs" />
 		<attribute key="speed" value="20" />
 		<attribute key="weight" value="4500" />
 	</item>
 	<item id="23540" name="metal spats">
-		<attribute key="description" value="It can only be wielded properly by knights and paladins of level 50 or higher." />
 		<attribute key="armor" value="1" />
 		<attribute key="slotType" value="feet" />
 		<attribute key="absorbPercentPhysical" value="1" />
 		<attribute key="weight" value="1800" />
 	</item>
 	<item id="23541" article="a" name="gearwheel chain">
-		<attribute key="description" value="It can only be wielded properly by players of level 75 or higher." />
 		<attribute key="armor" value="3" />
 		<attribute key="slotType" value="necklace" />
 		<attribute key="weight" value="1000" />
 	</item>
 	<item id="23542" article="a" name="metal bat">
-		<attribute key="description" value="It can only be wielded properly by players of level 55 or higher." />
 		<attribute key="defense" value="20" />
 		<attribute key="attack" value="44" />
 		<attribute key="weaponType" value="club" />
 		<attribute key="weight" value="5100" />
 	</item>
 	<item id="23543" article="a" name="glooth whip">
-		<attribute key="description" value="It can only be wielded properly by players of level 25 or higher." />
 		<attribute key="defense" value="19" />
 		<attribute key="attack" value="33" />
 		<attribute key="weaponType" value="club" />
 		<attribute key="weight" value="3200" />
 	</item>
 	<item id="23544" article="a" name="moohtant cudgel">
-		<attribute key="description" value="It can only be wielded properly by players of level 60 or higher." />
 		<attribute key="defense" value="21" />
 		<attribute key="attack" value="47" />
 		<attribute key="weaponType" value="club" />
@@ -31380,7 +31524,6 @@
 		<attribute key="weight" value="8500" />
 	</item>
 	<item id="23545" article="a" name="mino lance">
-		<attribute key="description" value="It can only be wielded properly by players of level 45 or higher." />
 		<attribute key="defense" value="23" />
 		<attribute key="attack" value="40" />
 		<attribute key="weaponType" value="axe" />
@@ -31392,7 +31535,6 @@
 		<attribute key="weight" value="6500" />
 	</item>
 	<item id="23547" article="an" name="execowtioner axe">
-		<attribute key="description" value="It can only be wielded properly by players of level 55 or higher." />
 		<attribute key="defense" value="18" />
 		<attribute key="attack" value="46" />
 		<attribute key="weaponType" value="axe" />
@@ -31400,7 +31542,6 @@
 		<attribute key="weight" value="8200" />
 	</item>
 	<item id="23548" article="a" name="cowtana">
-		<attribute key="description" value="It can only be wielded properly by players of level 25 or higher." />
 		<attribute key="defense" value="19" />
 		<attribute key="extradef" value="1" />
 		<attribute key="attack" value="34" />
@@ -31408,7 +31549,6 @@
 		<attribute key="weight" value="2800" />
 	</item>
 	<item id="23549" article="a" name="glooth club">
-		<attribute key="description" value="It can only be wielded properly by knights of level 75 or higher." />
 		<attribute key="defense" value="1" />
 		<attribute key="attack" value="39" />
 		<attribute key="weaponType" value="club" />
@@ -31418,7 +31558,6 @@
 		<attribute key="weight" value="1900" />
 	</item>
 	<item id="23550" article="a" name="glooth blade">
-		<attribute key="description" value="It can only be wielded properly by knights of level 75 or higher." />
 		<attribute key="defense" value="1" />
 		<attribute key="attack" value="39" />
 		<attribute key="weaponType" value="sword" />
@@ -31428,7 +31567,6 @@
 		<attribute key="weight" value="1900" />
 	</item>
 	<item id="23551" article="a" name="glooth axe">
-		<attribute key="description" value="It can only be wielded properly by knights of level 75 or higher." />
 		<attribute key="defense" value="1" />
 		<attribute key="attack" value="39" />
 		<attribute key="weaponType" value="axe" />
@@ -31441,7 +31579,6 @@
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="23554" article="a" name="glooth amulet">
-		<attribute key="description" value="It can only be wielded properly by sorcerers and druids of level 75 or higher." />
 		<attribute key="slotType" value="necklace" />
 		<attribute key="charges" value="20" />
 		<attribute key="showcharges" value="1" />
@@ -31535,7 +31672,6 @@
 		<attribute key="weight" value="650" />
 	</item>
 	<item id="23590" article="an" name="one hit wonder">
-		<attribute key="description" value="It can only be wielded properly by players of level 70 or higher." />
 		<attribute key="defense" value="22" />
 		<attribute key="attack" value="49" />
 		<attribute key="weaponType" value="club" />
@@ -31586,6 +31722,11 @@
 		<attribute key="weight" value="1400" />
 		<attribute key="defense" value="8" />
 		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="23782" article="a" name="shopping bag">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
 	</item>
 	<item id="23787" name="worn out pirate boots" />
 	<item id="23788" article="a" name="worn dress" />
@@ -31747,6 +31888,21 @@
 		<attribute key="shootType" value="simplearrow" />
 		<attribute key="maxHitChance" value="91" />
 	</item>
+	<item id="24301" article="a" name="receipt">
+		<attribute key="weight" value="25" />
+		<attribute key="description" value="This receipt serves as a reference to a successful guild bank transfer." />
+	</item>
+	<item id="24302" article="a" name="receipt">
+		<attribute key="weight" value="25" />
+		<attribute key="description" value="This receipt serves as a reference to a unsuccessful guild bank transfer." />
+	</item>
+	<item id="24261" article="a" name="crest of the deep seas">
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="7" />
+		<attribute key="speed" value="10" />
+		<attribute key="absorbPercentIce" value="5" />
+		<attribute key="weight" value="4500" />
+	</item>
 	<item id="24331" article="an" name="assassin doll">
 		<attribute key="weight" value="2504" />
 		<attribute key="description" value="Only the real killers can touch me!" />
@@ -31754,6 +31910,92 @@
 	<item id="24332" article="an" name="assassin doll">
 		<attribute key="weight" value="2504" />
 		<attribute key="description" value="Only the real killers can touch me!" />
+	</item>
+	<item id="24740" article="a" name="wolf backpack">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+	</item>
+	<item id="24774" name="Forgotten coin">
+		<attribute key="weight" value="0" />
+		<attribute key="description" value="Forgotten Coins are needed to shop exclusive products in the Store, including fabulous mounts, classy outfits, a Name Change or even Premium Time." />
+	</item>
+	<item id="24776" name="Little Adventurer Doll">
+		<attribute key="weight" value="2613" />
+		<attribute key="description" value="This little fellow has faced many dangers. He will follow you anywhere." />
+	</item>
+	<item id="24777" name="Little Adventurer Doll">
+		<attribute key="weight" value="2613" />
+		<attribute key="description" value="This little fellow has faced many dangers. He will follow you anywhere." />
+	</item>
+	<item id="25453" article="a" name="depot box I">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25454" article="a" name="depot box II">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25455" article="a" name="depot box III">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25456" article="a" name="depot box IV">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25457" article="a" name="depot box V">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25458" article="a" name="depot box VI">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25459" article="a" name="depot box VII">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25460" article="a" name="depot box VIII">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25461" article="a" name="depot box IX">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25462" article="a" name="depot box X">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25463" article="a" name="depot box XI">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25464" article="a" name="depot box XII">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25465" article="a" name="depot box XIII">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25466" article="a" name="depot box XIV">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25467" article="a" name="depot box XV">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25468" article="a" name="depot box XVI">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="25469" article="a" name="depot box XVII">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="26029" article="an" name="ultimate mana potion">
+		<attribute key="weight" value="310" />
+		<attribute key="description" value="This potion can only be consumed by sorcerers and druids of level 130 or higher." />
+	</item>
+	<item id="26031" article="a" name="supreme health potion">
+		<attribute key="weight" value="350" />
+		<attribute key="description" value="This potion can only be consumed by knights of level 200 or higher." />
+	</item>
+	<item id="26030" article="an" name="ultimate spirit potion">
+		<attribute key="weight" value="310" />
+		<attribute key="description" value="This potion can only be consumed by paladins of level 130 or higher." />
+	</item>
+	<item id="26052" name="your store inbox">
+		<attribute key="containerSize" value="20" />
+	</item>
+	<item id="26054" article="a" name="decoration kit">
+		<attribute key="description" value="You bought this item in the Store or gained it as a daily reward. This item cannot be traded." />
 	</item>
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
