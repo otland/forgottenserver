@@ -14365,6 +14365,7 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 
 	if (lua_gettop(L) == 1) {
 		lua_createtable(L, 0, 0);
+		int i = 0;
 		for (auto& voc : spell->getVocMap()) {
 			std::string name = g_vocations.getVocation(voc.first)->getVocName();
 			setField(L, std::to_string(++i).c_str(), name);
@@ -14375,7 +14376,7 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 		for (int i = 0; i < parameters; ++i) {
 			std::vector<std::string> vocList = explodeString(getString(L, 2 + i), ";");
 			if (vocList.size() > 1) {
-				spell->addVocMap(g_vocations.getVocationId(vocList[0]), booleanString(vocList[1]);
+				spell->addVocMap(g_vocations.getVocationId(vocList[0]), booleanString(vocList[1]));
 			}
 		}
 		pushBoolean(L, true);
