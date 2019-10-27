@@ -234,25 +234,10 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
-	SpectatorVec spectators;
+	SpectatorVec spectators, newPosSpectators;
 	getSpectators(spectators, oldPos, true);
-	SpectatorVec newPosSpectators;
 	getSpectators(newPosSpectators, newPos, true);
-
-	const size_t spectatorsSize = spectators.size();
-	for (Creature* spectator : newPosSpectators) {
-		bool duplicate = false;
-		for (size_t i = 0; i < spectatorsSize; ++i) {
-			if (spectators[i] == spectator) {
-				duplicate = true;
-				break;
-			}
-		}
-
-		if (!duplicate) {
-			spectators.emplace_back(spectator);
-		}
-	}
+	spectators.addSpectators(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : spectators) {

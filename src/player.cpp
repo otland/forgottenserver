@@ -1607,7 +1607,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 
 		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, position, false, true);
-		fastVectorRemoveOne<Creature*>(spectators, this);
+		spectators.erase(this);
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
@@ -1690,7 +1690,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 
 		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, position, false, true);
-		fastVectorRemoveOne<Creature*>(spectators, this);
+		spectators.erase(this);
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;

@@ -23,6 +23,7 @@
 #include "cylinder.h"
 #include "item.h"
 #include "tools.h"
+#include "spectators.h"
 
 class Creature;
 class Teleport;
@@ -34,7 +35,6 @@ class BedItem;
 
 using CreatureVector = std::vector<Creature*>;
 using ItemVector = std::vector<Item*>;
-using SpectatorVec = std::vector<Creature*>;
 
 enum tileflags_t : uint32_t {
 	TILESTATE_NONE = 0,

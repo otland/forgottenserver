@@ -4378,26 +4378,10 @@ void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, u
 
 void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	SpectatorVec spectators;
+	SpectatorVec spectators, toPosSpectators;
 	map.getSpectators(spectators, fromPos, false, true);
-
-	SpectatorVec toPosSpectators;
 	map.getSpectators(toPosSpectators, toPos, false, true);
-
-	const size_t spectatorsSize = spectators.size();
-	for (Creature* spectator : toPosSpectators) {
-		bool duplicate = false;
-		for (size_t i = 0; i < spectatorsSize; ++i) {
-			if (spectators[i] == spectator) {
-				duplicate = true;
-				break;
-			}
-		}
-
-		if (!duplicate) {
-			spectators.emplace_back(spectator);
-		}
-	}
+	spectators.addSpectators(toPosSpectators);
 
 	addDistanceEffect(spectators, fromPos, toPos, effect);
 }

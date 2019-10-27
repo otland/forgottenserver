@@ -766,7 +766,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 
 				SpectatorVec spectators;
 				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
-				fastVectorRemoveOne<Creature*>(spectators, player);
+				spectators.erase(player);
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " was healed for " + healString;
@@ -797,7 +797,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 
 				SpectatorVec spectators;
 				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
-				fastVectorRemoveOne<Creature*>(spectators, player);
+				spectators.erase(player);
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " gained " + manaGainString + " mana.";
