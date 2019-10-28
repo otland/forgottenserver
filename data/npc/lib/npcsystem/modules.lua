@@ -34,6 +34,8 @@ if Modules == nil then
 
 	StdModule = {}
 
+	backpackContainerId = 23782
+
 	-- These callback function must be called with parameters.npcHandler = npcHandler in the parameters table or they will not work correctly.
 	-- Notice: The members of StdModule have not yet been tested. If you find any bugs, please report them to me.
 	-- Usage:
@@ -923,10 +925,9 @@ if Modules == nil then
 			return false
 		end
 
-		local backpack = 23782
 		local totalCost = amount * shopItem.buy
 		if inBackpacks then
-			totalCost = ItemType(itemid):isStackable() == TRUE and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(backpack):getCapacity())) * 20)
+			totalCost = ItemType(itemid):isStackable() == TRUE and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(backpackContainerId):getCapacity())) * 20)
 		end
 
 		local player = Player(cid)
@@ -1103,7 +1104,7 @@ if Modules == nil then
 						return false
 					end
 					if shop_itemid[cid] == ITEM_PARCEL then
-						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, 23782)
+						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, backpackContainerId)
 					end
 					return true
 				end
@@ -1116,7 +1117,7 @@ if Modules == nil then
 					return false
 				end
 				if shop_itemid[cid] == ITEM_PARCEL then
-					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, 23782)
+					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, backpackContainerId)
 				end
 				return true
 			end
