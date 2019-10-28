@@ -1089,7 +1089,7 @@ if Modules == nil then
 				return false
 			end
 
-			local a, b = doNpcSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_subtype[cid], false, false, 23782)
+			local a, b = doNpcSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_subtype[cid], false, false, backpackContainerId)
 			if a < shop_amount[cid] then
 				local msgId = MESSAGE_NEEDMORESPACE
 				if a == 0 then
