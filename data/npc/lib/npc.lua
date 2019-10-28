@@ -17,7 +17,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	if ItemType(itemid):isStackable() then
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			item = stuff:addItemEx(itemid, math.min(100, amount))
+			item = stuff:addItem(itemid, math.min(100, amount))
 		else
 			stuff = Game.createItem(itemid, math.min(100, amount))
 		end
@@ -28,7 +28,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	if inBackpacks then
 		local container, b = Game.createItem(backpack, 1), 1
 		for i = 1, amount do
-			local item = container:addItemEx(itemid, subType)
+			local item = container:addItem(itemid, subType)
 			if table.contains({(ItemType(backpack):getCapacity() * b), amount}, i) then
 				if Player(cid):addItemEx(container, ignoreCap) ~= RETURNVALUE_NOERROR then
 					b = b - 1
@@ -90,7 +90,7 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	for i = 1, count do
 		local container = Game.createItem(containerid, 1)
 		for x = 1, ItemType(containerid):getCapacity() do
-			container:addItemEx(itemid, charges)
+			container:addItem(itemid, charges)
 		end
 
 		if player:addItemEx(container, true) ~= RETURNVALUE_NOERROR then
