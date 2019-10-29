@@ -31916,9 +31916,9 @@
 		<attribute key="containerSize" value="20" />
 		<attribute key="slotType" value="backpack" />
 	</item>
-	<item id="24774" name="Forgotten coin">
+	<item id="24774" name="Store coin">
 		<attribute key="weight" value="0" />
-		<attribute key="description" value="Forgotten Coins are needed to shop exclusive products in the Store, including fabulous mounts, classy outfits, a Name Change or even Premium Time." />
+		<attribute key="description" value="Store Coins are needed to shop exclusive products in the Store, including fabulous mounts, classy outfits, a Name Change or even Premium Time." />
 	</item>
 	<item id="24776" name="Little Adventurer Doll">
 		<attribute key="weight" value="2613" />
