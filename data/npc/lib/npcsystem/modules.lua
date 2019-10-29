@@ -925,7 +925,7 @@ if Modules == nil then
 
 		local totalCost = amount * shopItem.buy
 		if inBackpacks then
-			totalCost = ItemType(itemid):isStackable() == true and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(ITEM_SHOPPING_BAG):getCapacity())) * 20)
+			totalCost = ItemType(itemid):isStackable() and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(ITEM_SHOPPING_BAG):getCapacity())) * 20)
 		end
 
 		local player = Player(cid)
