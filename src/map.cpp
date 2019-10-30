@@ -448,14 +448,12 @@ void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos,
 	}
 }
 
-void Map::clearSpectatorCache()
+void Map::clearSpectatorCache(bool clearPlayer /*= false*/)
 {
 	spectatorCache.clear();
-}
-
-void Map::clearPlayersSpectatorCache()
-{
-	playersSpectatorCache.clear();
+	if (clearPlayer) {
+		playersSpectatorCache.clear();
+	}
 }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
