@@ -225,6 +225,7 @@ class Map
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
 
 		void clearSpectatorCache();
+		void clearPlayersSpectatorCache();
 
 		/**
 		  * Checks if you can throw an object to that position

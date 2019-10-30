@@ -451,6 +451,10 @@ void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos,
 void Map::clearSpectatorCache()
 {
 	spectatorCache.clear();
+}
+
+void Map::clearPlayersSpectatorCache()
+{
 	playersSpectatorCache.clear();
 }
 

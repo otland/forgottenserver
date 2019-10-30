@@ -830,6 +830,10 @@ void Tile::addThing(int32_t, Thing* thing)
 	Creature* creature = thing->getCreature();
 	if (creature) {
 		g_game.map.clearSpectatorCache();
+		if (creature->getPlayer()) {
+			g_game.map.clearPlayersSpectatorCache();
+		}
+
 		creature->setParent(this);
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
@@ -1035,6 +1039,10 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 			auto it = std::find(creatures->begin(), creatures->end(), thing);
 			if (it != creatures->end()) {
 				g_game.map.clearSpectatorCache();
+				if (creature->getPlayer()) {
+					g_game.map.clearPlayersSpectatorCache();
+				}
+
 				creatures->erase(it);
 			}
 		}
@@ -1432,6 +1440,10 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 	Creature* creature = thing->getCreature();
 	if (creature) {
 		g_game.map.clearSpectatorCache();
+		if (creature->getPlayer()) {
+			g_game.map.clearPlayersSpectatorCache();
+		}
+
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
 	} else {
