@@ -574,7 +574,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	map.getSpectators(spectators, tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
-			oldStackPosVector.push_back(player->canSeeCreature(creature) ? tile->getStackposOfCreature(player, creature) : -1);
+			oldStackPosVector.push_back(player->canSeeCreature(*creature) ? tile->getStackposOfCreature(player, creature) : -1);
 		}
 	}
 
@@ -3039,7 +3039,7 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
-	if (!player->canSeeCreature(creature)) {
+	if (!player->canSeeCreature(*creature)) {
 		return;
 	}
 
@@ -3543,7 +3543,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	//send to client
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
+			if (!ghostMode || tmpPlayer->canSeeCreature(*creature)) {
 				tmpPlayer->sendCreatureSay(creature, type, text, pos);
 			}
 		}

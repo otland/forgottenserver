@@ -676,17 +676,17 @@ bool Player::canSee(const Position& pos) const
 	return client->canSee(pos);
 }
 
-bool Player::canSeeCreature(const Creature* creature) const
+bool Player::canSeeCreature(const Creature& creature) const
 {
-	if (creature == this) {
+	if (&creature == this) {
 		return true;
 	}
 
-	if (creature->isInGhostMode() && !group->access) {
+	if (creature.isInGhostMode() && !group->access) {
 		return false;
 	}
 
-	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
+	if (!creature.getPlayer() && !canSeeInvisibility() && creature.isInvisible()) {
 		return false;
 	}
 	return true;

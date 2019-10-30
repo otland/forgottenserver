@@ -487,7 +487,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 	const Position& myPos = getPosition();
 
 	for (Creature* creature : targetList) {
-		if (followCreature != creature && isTarget(creature)) {
+		if (followCreature != creature && isTarget(*creature)) {
 			if (searchType == TARGETSEARCH_RANDOM || canUseAttack(myPos, creature)) {
 				resultList.push_back(creature);
 			}
@@ -517,7 +517,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 			} else {
 				int32_t minRange = std::numeric_limits<int32_t>::max();
 				for (Creature* creature : targetList) {
-					if (!isTarget(creature)) {
+					if (!isTarget(*creature)) {
 						continue;
 					}
 
@@ -607,14 +607,14 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 }
 
 
-bool Monster::isTarget(const Creature* creature) const
+bool Monster::isTarget(const Creature& creature) const
 {
-	if (creature->isRemoved() || !creature->isAttackable() ||
-	        creature->getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
+	if (creature.isRemoved() || !creature.isAttackable() ||
+	        creature.getZone() == ZONE_PROTECTION || !canSeeCreature(creature)) {
 		return false;
 	}
 
-	if (creature->getPosition().z != getPosition().z) {
+	if (creature.getPosition().z != getPosition().z) {
 		return false;
 	}
 	return true;
@@ -622,7 +622,7 @@ bool Monster::isTarget(const Creature* creature) const
 
 bool Monster::selectTarget(Creature* creature)
 {
-	if (!isTarget(creature)) {
+	if (creature && !isTarget(*creature)) {
 		return false;
 	}
 

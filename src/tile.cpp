@@ -264,7 +264,7 @@ Creature* Tile::getTopVisibleCreature(const Creature* creature) const
 			}
 
 			for (Creature* tileCreature : *creatures) {
-				if (creature->canSeeCreature(tileCreature)) {
+				if (creature->canSeeCreature(*tileCreature)) {
 					return tileCreature;
 				}
 			}
@@ -292,7 +292,7 @@ const Creature* Tile::getBottomVisibleCreature(const Creature* creature) const
 			}
 
 			for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-				if (creature->canSeeCreature(*it)) {
+				if (creature->canSeeCreature(*(*it))) {
 					return *it;
 				}
 			}
@@ -1191,7 +1191,7 @@ int32_t Tile::getClientIndexOfCreature(const Player* player, const Creature* cre
 		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
 			if (c == creature) {
 				return n;
-			} else if (player->canSeeCreature(c)) {
+			} else if (player->canSeeCreature(*c)) {
 				++n;
 			}
 		}
@@ -1220,7 +1220,7 @@ int32_t Tile::getStackposOfCreature(const Player* player, const Creature* creatu
 		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
 			if (c == creature) {
 				return n;
-			} else if (player->canSeeCreature(c)) {
+			} else if (player->canSeeCreature(*c)) {
 				if (++n >= 10) {
 					return -1;
 				}
@@ -1260,7 +1260,7 @@ int32_t Tile::getStackposOfItem(const Player* player, const Item* item) const
 
 	if (const CreatureVector* creatures = getCreatures()) {
 		for (const Creature* creature : *creatures) {
-			if (player->canSeeCreature(creature)) {
+			if (player->canSeeCreature(*creature)) {
 				if (++n >= 10) {
 					return -1;
 				}

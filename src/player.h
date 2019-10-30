@@ -510,7 +510,7 @@ class Player final : public Creature, public Cylinder
 		bool isNearDepotBox() const;
 
 		bool canSee(const Position& pos) const override;
-		bool canSeeCreature(const Creature* creature) const override;
+		bool canSeeCreature(const Creature& creature) const override;
 
 		bool canWalkthrough(const Creature* creature) const;
 		bool canWalkthroughEx(const Creature* creature) const;
@@ -745,7 +745,7 @@ class Player final : public Creature, public Cylinder
 			}
 		}
 		void sendCreatureTurn(const Creature* creature) {
-			if (client && canSeeCreature(creature)) {
+			if (client && canSeeCreature(*creature)) {
 				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
 				if (stackpos != -1) {
 					client->sendCreatureTurn(creature, stackpos);

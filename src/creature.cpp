@@ -77,9 +77,9 @@ bool Creature::canSee(const Position& pos) const
 	return canSee(getPosition(), pos, Map::maxViewportX, Map::maxViewportY);
 }
 
-bool Creature::canSeeCreature(const Creature* creature) const
+bool Creature::canSeeCreature(const Creature& creature) const
 {
-	if (!canSeeInvisibility() && creature->isInvisible()) {
+	if (!canSeeInvisibility() && creature.isInvisible()) {
 		return false;
 	}
 	return true;
@@ -129,11 +129,11 @@ void Creature::onThink(uint32_t interval)
 		updateMapCache();
 	}
 
-	if (followCreature && master != followCreature && !canSeeCreature(followCreature)) {
+	if (followCreature && master != followCreature && !canSeeCreature(*followCreature)) {
 		onCreatureDisappear(followCreature, false);
 	}
 
-	if (attackedCreature && master != attackedCreature && !canSeeCreature(attackedCreature)) {
+	if (attackedCreature && master != attackedCreature && !canSeeCreature(*attackedCreature)) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 

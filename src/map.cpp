@@ -241,7 +241,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			if (tmpPlayer->canSeeCreature(&creature)) {
+			if (tmpPlayer->canSeeCreature(creature)) {
 				oldStackPosVector.push_back(oldTile.getClientIndexOfCreature(tmpPlayer, &creature));
 			} else {
 				oldStackPosVector.push_back(-1);

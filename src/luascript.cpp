@@ -7092,7 +7092,7 @@ int LuaScriptInterface::luaCreatureCanSeeCreature(lua_State* L)
 	const Creature* creature = getUserdata<const Creature>(L, 1);
 	if (creature) {
 		const Creature* otherCreature = getCreature(L, 2);
-		pushBoolean(L, creature->canSeeCreature(otherCreature));
+		pushBoolean(L, otherCreature && creature->canSeeCreature(*otherCreature));
 	} else {
 		lua_pushnil(L);
 	}
@@ -10071,7 +10071,7 @@ int LuaScriptInterface::luaMonsterIsTarget(lua_State* L)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
 		const Creature* creature = getCreature(L, 2);
-		pushBoolean(L, monster->isTarget(creature));
+		pushBoolean(L, creature && monster->isTarget(*creature));
 	} else {
 		lua_pushnil(L);
 	}
