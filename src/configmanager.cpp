@@ -177,6 +177,11 @@ bool ConfigManager::load()
 	integer[MAX_MARKET_OFFERS_AT_A_TIME_PER_PLAYER] = getGlobalNumber(L, "maxMarketOffersAtATimePerPlayer", 100);
 	integer[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 
+	boolean[NOTIFY_SERVER_SAVE] = getGlobalBoolean(L, "notifyServerSave", true);
+	boolean[CLEAN_MAP_AT_SERVER_SAVE] = getGlobalBoolean(L, "cleanMapAtServerSave", false);
+	boolean[CLOSE_AT_SERVER_SAVE] = getGlobalBoolean(L, "closeAtServerSave", false);
+	boolean[SHUTDOWN_AT_SERVER_SAVE] = getGlobalBoolean(L, "shutdownAtServerSave", true);
+
 	loaded = true;
 	lua_close(L);
 	return true;

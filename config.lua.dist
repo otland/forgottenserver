@@ -76,6 +76,12 @@ classicEquipmentSlots = false
 classicAttackSpeed = false
 showScriptsLogInConsole = true
 
+-- Server Save
+notifyServerSave = true
+cleanMapAtServerSave = false
+closeAtServerSave = false
+shutdownAtServerSave = true -- If you set close and shutdown to 'true' it will close and then shutdown the server.
+
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
 rateExp = 5
