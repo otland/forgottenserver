@@ -1,12 +1,15 @@
-local condition = Condition(CONDITION_ATTRIBUTES)
-condition:setParameter(CONDITION_PARAM_TICKS, 6000)
-condition:setParameter(CONDITION_PARAM_SKILL_DISTANCEPERCENT, 50)
-
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_RED)
 combat:setArea(createCombatArea(AREA_CIRCLE2X2))
-combat:setCondition(condition)
+
+local parameters = {
+	{key = CONDITION_PARAM_TICKS, value = 6 * 1000},
+	{key = CONDITION_PARAM_SKILL_DISTANCEPERCENT, value = 50}
+}
 
 function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
+	for _, target in ipairs(combat:getTargets(creature, variant)) do
+		target:addAttributeCondition(parameters)
+	end
+	return true
 end

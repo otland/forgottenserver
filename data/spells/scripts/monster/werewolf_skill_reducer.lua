@@ -1,13 +1,16 @@
-local condition = Condition(CONDITION_ATTRIBUTES)
-condition:setParameter(CONDITION_PARAM_TICKS, 4000)
-condition:setParameter(CONDITION_PARAM_SKILL_SHIELDPERCENT, 65)
-condition:setParameter(CONDITION_PARAM_SKILL_MELEEPERCENT, 65)
-
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_DRAWBLOOD)
 combat:setArea(createCombatArea(AREA_BEAM1))
-combat:setCondition(condition)
+
+local parameters = {
+	{key = CONDITION_PARAM_TICKS, value = 4 * 1000},
+	{key = CONDITION_PARAM_SKILL_SHIELDPERCENT, value = 65},
+	{key = CONDITION_PARAM_SKILL_MELEEPERCENT, value = 65}
+}
 
 function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
+	for _, target in ipairs(combat:getTargets(creature, variant)) do
+		target:addAttributeCondition(parameters)
+	end
+	return true
 end

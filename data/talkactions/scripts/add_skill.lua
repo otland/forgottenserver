@@ -30,7 +30,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	local split = param:split(",")
+	local split = param:splitTrimmed(",")
 	if not split[2] then
 		player:sendCancelMessage("Insufficient parameters.")
 		return false
@@ -42,11 +42,8 @@ function onSay(player, words, param)
 		return false
 	end
 
-	-- Trim left
-	split[2] = split[2]:gsub("^%s*(.-)$", "%1")
-
 	local count = 1
-	if split[3] ~= nil then
+	if split[3] then
 		count = tonumber(split[3])
 	end
 

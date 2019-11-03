@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ ReturnValue TrashHolder::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Cre
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing&, uint32_t queryCount, uint32_t& maxQueryCount, uint32_t) const
+ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t& maxQueryCount, uint32_t) const
 {
-	maxQueryCount = std::max<uint32_t>(1, queryCount);
+	maxQueryCount = std::max<uint32_t>(1, count);
 	return RETURNVALUE_NOERROR;
 }
 

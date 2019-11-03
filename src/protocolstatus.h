@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,14 +36,14 @@ class ProtocolStatus final : public Protocol
 
 		explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
 
-		void onRecvFirstMessage(NetworkMessage& msg) final;
+		void onRecvFirstMessage(NetworkMessage& msg) override;
 
 		void sendStatusString();
 		void sendInfo(uint16_t requestedInfo, const std::string& characterName);
 
 		static const uint64_t start;
 
-	protected:
+	private:
 		static std::map<uint32_t, int64_t> ipConnectMap;
 };
 

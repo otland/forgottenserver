@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <mysql.h>
+#include <mysql/mysql.h>
 
 class DBResult;
 using DBResult_ptr = std::shared_ptr<DBResult>;
@@ -117,7 +117,7 @@ class Database
 			return maxPacketSize;
 		}
 
-	protected:
+	private:
 		/**
 		 * Transaction related methods.
 		 *
@@ -129,7 +129,6 @@ class Database
 		bool rollback();
 		bool commit();
 
-	private:
 		MYSQL* handle = nullptr;
 		std::recursive_mutex databaseLock;
 		uint64_t maxPacketSize = 1048576;
@@ -195,7 +194,7 @@ class DBInsert
 		bool addRow(std::ostringstream& row);
 		bool execute();
 
-	protected:
+	private:
 		std::string query;
 		std::string values;
 		size_t length;
@@ -226,7 +225,7 @@ class DBTransaction
 				return false;
 			}
 
-			state = STEATE_COMMIT;
+			state = STATE_COMMIT;
 			return Database::getInstance().commit();
 		}
 
@@ -234,7 +233,7 @@ class DBTransaction
 		enum TransactionStates_t {
 			STATE_NO_START,
 			STATE_START,
-			STEATE_COMMIT,
+			STATE_COMMIT,
 		};
 
 		TransactionStates_t state = STATE_NO_START;

@@ -3,7 +3,7 @@ local maxDeathRecords = 5
 
 function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDamageUnjustified)
 	local playerId = player:getId()
-	if nextUseStaminaTime[playerId] ~= nil then
+	if nextUseStaminaTime[playerId] then
 		nextUseStaminaTime[playerId] = nil
 	end
 
@@ -14,7 +14,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 
 	local byPlayer = 0
 	local killerName
-	if killer ~= nil then
+	if killer then
 		if killer:isPlayer() then
 			byPlayer = 1
 		else
@@ -31,7 +31,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 
 	local byPlayerMostDamage = 0
 	local mostDamageKillerName
-	if mostDamageKiller ~= nil then
+	if mostDamageKiller then
 		if mostDamageKiller:isPlayer() then
 			byPlayerMostDamage = 1
 		else
@@ -76,7 +76,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDama
 				local warId = false
 				resultId = db.storeQuery("SELECT `id` FROM `guild_wars` WHERE `status` = 1 AND ((`guild1` = " .. killerGuild .. " AND `guild2` = " .. targetGuild .. ") OR (`guild1` = " .. targetGuild .. " AND `guild2` = " .. killerGuild .. "))")
 				if resultId ~= false then
-					warId = result.getDataInt(resultId, "id")
+					warId = result.getNumber(resultId, "id")
 					result.free(resultId)
 				end
 

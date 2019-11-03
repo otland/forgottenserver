@@ -15,13 +15,16 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="10" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-12" />
 	</attacks>
 	<defenses armor="5" defense="5" />
 	<loot>
-		<item id="7965" chance="10230" /><!-- badger fur -->
+		<item id="11216" chance="10230" /><!-- badger fur -->
 		<item name="beetroot" chance="40710" />
 		<item name="acorn" chance="5130" />
 	</loot>

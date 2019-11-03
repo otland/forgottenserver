@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,24 +20,24 @@
 #ifndef FS_RSA_H_C4E277DA8E884B578DDBF0566F504E91
 #define FS_RSA_H_C4E277DA8E884B578DDBF0566F504E91
 
-#include <gmp.h>
+#include <cryptopp/rsa.h>
+
+#include <string>
 
 class RSA
 {
 	public:
-		RSA();
-		~RSA();
+		RSA() = default;
 
 		// non-copyable
 		RSA(const RSA&) = delete;
 		RSA& operator=(const RSA&) = delete;
 
-		void setKey(const char* pString, const char* qString);
+		void loadPEM(const std::string& filename);
 		void decrypt(char* msg) const;
 
 	private:
-		//use only GMP
-		mpz_t n, d;
+		CryptoPP::RSA::PrivateKey pk;
 };
 
 #endif

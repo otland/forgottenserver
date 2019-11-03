@@ -15,6 +15,7 @@
 		<flag targetdistance="4" />
 		<flag staticattack="90" />
 		<flag runonhealth="400" />
+		<flag canwalkonenergy="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-240" poison="160" />

@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class ValueCallback final : public CallBack
 		explicit ValueCallback(formulaType_t type): type(type) {}
 		void getMinMaxValues(Player* player, CombatDamage& damage, bool useCharges) const;
 
-	protected:
+	private:
 		formulaType_t type;
 };
 
@@ -46,18 +46,12 @@ class TileCallback final : public CallBack
 {
 	public:
 		void onTileCombat(Creature* creature, Tile* tile) const;
-
-	protected:
-		formulaType_t type;
 };
 
 class TargetCallback final : public CallBack
 {
 	public:
 		void onTargetCombat(Creature* creature, Creature* target) const;
-
-	protected:
-		formulaType_t type;
 };
 
 struct CombatParams {
@@ -158,7 +152,7 @@ class MatrixArea
 			return data_[i];
 		}
 
-	protected:
+	private:
 		uint32_t centerX;
 		uint32_t centerY;
 
@@ -188,7 +182,7 @@ class AreaCombat
 		void setupExtArea(const std::list<uint32_t>& list, uint32_t rows);
 		void clear();
 
-	protected:
+	private:
 		enum MatrixOperation_t {
 			MATRIXOPERATION_COPY,
 			MATRIXOPERATION_MIRROR,
@@ -199,7 +193,7 @@ class AreaCombat
 		};
 
 		MatrixArea* createArea(const std::list<uint32_t>& list, uint32_t rows);
-		void copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op) const;
+		static void copyArea(const MatrixArea* input, MatrixArea* output, MatrixOperation_t op);
 
 		MatrixArea* getArea(const Position& centerPos, const Position& targetPos) const {
 			int32_t dx = Position::getOffsetX(targetPos, centerPos);
@@ -275,7 +269,7 @@ class Combat
 		static void addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		void doCombat(Creature* caster, Creature* target) const;
-		void doCombat(Creature* caster, const Position& pos) const;
+		void doCombat(Creature* caster, const Position& position) const;
 
 		bool setCallback(CallBackParam_t key);
 		CallBack* getCallback(CallBackParam_t key);
@@ -287,7 +281,7 @@ class Combat
 		bool hasArea() const {
 			return area != nullptr;
 		}
-		void setCondition(const Condition* condition) {
+		void addCondition(const Condition* condition) {
 			params.conditionList.emplace_front(condition);
 		}
 		void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
@@ -299,7 +293,7 @@ class Combat
 			params.origin = origin;
 		}
 
-	protected:
+	private:
 		static void doCombatDefault(Creature* caster, Creature* target, const CombatParams& params);
 
 		static void CombatFunc(Creature* caster, const Position& pos, const AreaCombat* area, const CombatParams& params, CombatFunction func, CombatDamage* data);
@@ -331,10 +325,10 @@ class MagicField final : public Item
 	public:
 		explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME()) {}
 
-		MagicField* getMagicField() final {
+		MagicField* getMagicField() override {
 			return this;
 		}
-		const MagicField* getMagicField() const final {
+		const MagicField* getMagicField() const override {
 			return this;
 		}
 
@@ -344,6 +338,13 @@ class MagicField final : public Item
 		CombatType_t getCombatType() const {
 			const ItemType& it = items[getID()];
 			return it.combatType;
+		}
+		int32_t getDamage() const {
+			const ItemType& it = items[getID()];
+			if (it.conditionDamage) {
+				return it.conditionDamage->getTotalDamage();
+			}
+			return 0;
 		}
 		void onStepInField(Creature* creature);
 

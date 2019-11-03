@@ -32,6 +32,10 @@ function Player.getDepotItems(self, depotId)
 	return self:getDepotChest(depotId, true):getItemHoldingCount()
 end
 
+function Player.hasFlag(self, flag)
+	return self:getGroup():hasFlag(flag)
+end
+
 function Player.getLossPercent(self)
 	local blessings = 0
 	local lossPercent = {

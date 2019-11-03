@@ -15,16 +15,18 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
-	<defenses>
+	<defenses armor="15" defense="15">
 		<defense name="healing" interval="2000" chance="15" min="5" max="15">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<defenses armor="15" defense="15" />
 	<elements>
 		<element energyPercent="30" />
 		<element earthPercent="20" />

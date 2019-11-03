@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -211,17 +211,17 @@ std::string generateToken(const std::string& key, uint32_t ticks)
 
 	// hmac concat outer pad with message, conversion from hex to int needed
 	for (uint8_t i = 0; i < message.length(); i += 2) {
-		oKeyPad.push_back(static_cast<char>(std::stol(message.substr(i, 2), nullptr, 16)));
+		oKeyPad.push_back(static_cast<char>(std::strtoul(message.substr(i, 2).c_str(), nullptr, 16)));
 	}
 
 	// hmac second pass
 	message.assign(transformToSHA1(oKeyPad));
 
 	// calculate hmac offset
-	uint32_t offset = static_cast<uint32_t>(std::stol(message.substr(39, 1), nullptr, 16) & 0xF);
+	uint32_t offset = static_cast<uint32_t>(std::strtoul(message.substr(39, 1).c_str(), nullptr, 16) & 0xF);
 
 	// get truncated hash
-	uint32_t truncHash = std::stol(message.substr(2 * offset, 8), nullptr, 16) & 0x7FFFFFFF;
+	uint32_t truncHash = static_cast<uint32_t>(std::strtoul(message.substr(2 * offset, 8).c_str(), nullptr, 16)) & 0x7FFFFFFF;
 	message.assign(std::to_string(truncHash));
 
 	// return only last AUTHENTICATOR_DIGITS (default 6) digits, also asserts exactly 6 digits
@@ -752,6 +752,32 @@ Skulls_t getSkullType(const std::string& strValue)
 	return SKULL_NONE;
 }
 
+std::string getSpecialSkillName(uint8_t skillid)
+{
+	switch (skillid) {
+		case SPECIALSKILL_CRITICALHITCHANCE:
+			return "critical hit chance";
+
+		case SPECIALSKILL_CRITICALHITAMOUNT:
+			return "critical extra damage";
+
+		case SPECIALSKILL_LIFELEECHCHANCE:
+			return "hitpoints leech chance";
+
+		case SPECIALSKILL_LIFELEECHAMOUNT:
+			return "hitpoints leech amount";
+
+		case SPECIALSKILL_MANALEECHCHANCE:
+			return "manapoints leech chance";
+
+		case SPECIALSKILL_MANALEECHAMOUNT:
+			return "mana points leech amount";
+
+		default:
+			return "unknown";
+	}
+}
+
 std::string getSkillName(uint8_t skillid)
 {
 	switch (skillid) {
@@ -1196,4 +1222,20 @@ const char* getReturnMessage(ReturnValue value)
 int64_t OTSYS_TIME()
 {
 	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+SpellGroup_t stringToSpellGroup(std::string value)
+{
+	std::string tmpStr = asLowerCaseString(value);
+	if (tmpStr == "attack" || tmpStr == "1") {
+		return SPELLGROUP_ATTACK;
+	} else if (tmpStr == "healing" || tmpStr == "2") {
+		return SPELLGROUP_HEALING;
+	} else if (tmpStr == "support" || tmpStr == "3") {
+		return SPELLGROUP_SUPPORT;
+	} else if (tmpStr == "special" || tmpStr == "4") {
+		return SPELLGROUP_SPECIAL;
+	}
+
+	return SPELLGROUP_NONE;
 }

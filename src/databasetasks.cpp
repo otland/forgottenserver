@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,9 +85,13 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 
 void DatabaseTasks::flush()
 {
+	std::unique_lock<std::mutex> guard{ taskLock };
 	while (!tasks.empty()) {
-		runTask(tasks.front());
+		auto task = std::move(tasks.front());
 		tasks.pop_front();
+		guard.unlock();
+		runTask(task);
+		guard.lock();
 	}
 }
 
@@ -95,7 +99,7 @@ void DatabaseTasks::shutdown()
 {
 	taskLock.lock();
 	setState(THREAD_STATE_TERMINATED);
-	flush();
 	taskLock.unlock();
+	flush();
 	taskSignal.notify_one();
 }

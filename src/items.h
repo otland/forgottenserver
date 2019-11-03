@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +57,116 @@ enum ItemTypes_t {
 	ITEM_TYPE_LAST
 };
 
+enum ItemParseAttributes_t {
+	ITEM_PARSE_TYPE,
+	ITEM_PARSE_DESCRIPTION,
+	ITEM_PARSE_RUNESPELLNAME,
+	ITEM_PARSE_WEIGHT,
+	ITEM_PARSE_SHOWCOUNT,
+	ITEM_PARSE_ARMOR,
+	ITEM_PARSE_DEFENSE,
+	ITEM_PARSE_EXTRADEF,
+	ITEM_PARSE_ATTACK,
+	ITEM_PARSE_ROTATETO,
+	ITEM_PARSE_MOVEABLE,
+	ITEM_PARSE_BLOCKPROJECTILE,
+	ITEM_PARSE_PICKUPABLE,
+	ITEM_PARSE_FORCESERIALIZE,
+	ITEM_PARSE_FLOORCHANGE,
+	ITEM_PARSE_CORPSETYPE,
+	ITEM_PARSE_CONTAINERSIZE,
+	ITEM_PARSE_FLUIDSOURCE,
+	ITEM_PARSE_READABLE,
+	ITEM_PARSE_WRITEABLE,
+	ITEM_PARSE_MAXTEXTLEN,
+	ITEM_PARSE_WRITEONCEITEMID,
+	ITEM_PARSE_WEAPONTYPE,
+	ITEM_PARSE_SLOTTYPE,
+	ITEM_PARSE_AMMOTYPE,
+	ITEM_PARSE_SHOOTTYPE,
+	ITEM_PARSE_EFFECT,
+	ITEM_PARSE_RANGE,
+	ITEM_PARSE_STOPDURATION,
+	ITEM_PARSE_DECAYTO,
+	ITEM_PARSE_TRANSFORMEQUIPTO,
+	ITEM_PARSE_TRANSFORMDEEQUIPTO,
+	ITEM_PARSE_DURATION,
+	ITEM_PARSE_SHOWDURATION,
+	ITEM_PARSE_CHARGES,
+	ITEM_PARSE_SHOWCHARGES,
+	ITEM_PARSE_SHOWATTRIBUTES,
+	ITEM_PARSE_HITCHANCE,
+	ITEM_PARSE_MAXHITCHANCE,
+	ITEM_PARSE_INVISIBLE,
+	ITEM_PARSE_SPEED,
+	ITEM_PARSE_HEALTHGAIN,
+	ITEM_PARSE_HEALTHTICKS,
+	ITEM_PARSE_MANAGAIN,
+	ITEM_PARSE_MANATICKS,
+	ITEM_PARSE_MANASHIELD,
+	ITEM_PARSE_SKILLSWORD,
+	ITEM_PARSE_SKILLAXE,
+	ITEM_PARSE_SKILLCLUB,
+	ITEM_PARSE_SKILLDIST,
+	ITEM_PARSE_SKILLFISH,
+	ITEM_PARSE_SKILLSHIELD,
+	ITEM_PARSE_SKILLFIST,
+	ITEM_PARSE_MAXHITPOINTS,
+	ITEM_PARSE_MAXHITPOINTSPERCENT,
+	ITEM_PARSE_MAXMANAPOINTS,
+	ITEM_PARSE_MAXMANAPOINTSPERCENT,
+	ITEM_PARSE_MAGICPOINTS,
+	ITEM_PARSE_MAGICPOINTSPERCENT,
+	ITEM_PARSE_CRITICALHITCHANCE,
+	ITEM_PARSE_CRITICALHITAMOUNT,
+	ITEM_PARSE_LIFELEECHCHANCE,
+	ITEM_PARSE_LIFELEECHAMOUNT,
+	ITEM_PARSE_MANALEECHCHANCE,
+	ITEM_PARSE_MANALEECHAMOUNT,
+	ITEM_PARSE_FIELDABSORBPERCENTENERGY,
+	ITEM_PARSE_FIELDABSORBPERCENTFIRE,
+	ITEM_PARSE_FIELDABSORBPERCENTPOISON,
+	ITEM_PARSE_ABSORBPERCENTALL,
+	ITEM_PARSE_ABSORBPERCENTELEMENTS,
+	ITEM_PARSE_ABSORBPERCENTMAGIC,
+	ITEM_PARSE_ABSORBPERCENTENERGY,
+	ITEM_PARSE_ABSORBPERCENTFIRE,
+	ITEM_PARSE_ABSORBPERCENTPOISON,
+	ITEM_PARSE_ABSORBPERCENTICE,
+	ITEM_PARSE_ABSORBPERCENTHOLY,
+	ITEM_PARSE_ABSORBPERCENTDEATH,
+	ITEM_PARSE_ABSORBPERCENTLIFEDRAIN,
+	ITEM_PARSE_ABSORBPERCENTMANADRAIN,
+	ITEM_PARSE_ABSORBPERCENTDROWN,
+	ITEM_PARSE_ABSORBPERCENTPHYSICAL,
+	ITEM_PARSE_ABSORBPERCENTHEALING,
+	ITEM_PARSE_ABSORBPERCENTUNDEFINED,
+	ITEM_PARSE_SUPPRESSDRUNK,
+	ITEM_PARSE_SUPPRESSENERGY,
+	ITEM_PARSE_SUPPRESSFIRE,
+	ITEM_PARSE_SUPPRESSPOISON,
+	ITEM_PARSE_SUPPRESSDROWN,
+	ITEM_PARSE_SUPPRESSPHYSICAL,
+	ITEM_PARSE_SUPPRESSFREEZE,
+	ITEM_PARSE_SUPPRESSDAZZLE,
+	ITEM_PARSE_SUPPRESSCURSE,
+	ITEM_PARSE_FIELD,
+	ITEM_PARSE_REPLACEABLE,
+	ITEM_PARSE_PARTNERDIRECTION,
+	ITEM_PARSE_LEVELDOOR,
+	ITEM_PARSE_MALETRANSFORMTO,
+	ITEM_PARSE_FEMALETRANSFORMTO,
+	ITEM_PARSE_TRANSFORMTO,
+	ITEM_PARSE_DESTROYTO,
+	ITEM_PARSE_ELEMENTICE,
+	ITEM_PARSE_ELEMENTEARTH,
+	ITEM_PARSE_ELEMENTFIRE,
+	ITEM_PARSE_ELEMENTENERGY,
+	ITEM_PARSE_WALKSTACK,
+	ITEM_PARSE_BLOCKING,
+	ITEM_PARSE_ALLOWDISTREAD,
+};
+
 struct Abilities {
 	uint32_t healthGain = 0;
 	uint32_t healthTicks = 0;
@@ -72,6 +182,7 @@ struct Abilities {
 
 	//extra skill modifiers
 	int32_t skills[SKILL_LAST + 1] = { 0 };
+	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
 
 	int32_t speed = 0;
 
@@ -142,7 +253,13 @@ class ItemType
 			return (type == ITEM_TYPE_BED);
 		}
 		bool isRune() const {
-			return type == ITEM_TYPE_RUNE;
+			return (type == ITEM_TYPE_RUNE);
+		}
+		bool isPickupable() const {
+			return (allowPickupable || pickupable);
+		}
+		bool isUseable() const {
+			return (useable);
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
@@ -201,7 +318,7 @@ class ItemType
 		int32_t defense = 0;
 		int32_t extraDefense = 0;
 		int32_t armor = 0;
-		int32_t rotateTo = 0;
+		uint16_t rotateTo = 0;
 		int32_t runeMagLevel = 0;
 		int32_t runeLevel = 0;
 
@@ -235,6 +352,7 @@ class ItemType
 		int8_t hitChance = 0;
 
 		bool forceUse = false;
+		bool forceSerialize = false;
 		bool hasHeight = false;
 		bool walkStack = true;
 		bool blockSolid = false;
@@ -266,6 +384,7 @@ class Items
 {
 	public:
 		using NameMap = std::unordered_multimap<std::string, uint16_t>;
+		using InventoryVector = std::vector<uint16_t>;
 
 		Items();
 
@@ -276,7 +395,7 @@ class Items
 		bool reload();
 		void clear();
 
-		FILELOADER_ERRORS loadFromOtb(const std::string& file);
+		bool loadFromOtb(const std::string& file);
 
 		const ItemType& operator[](size_t id) const {
 			return getItemType(id);
@@ -294,14 +413,20 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
+		void buildInventoryList();
+		const InventoryVector& getInventory() const {
+			return inventory;
+		}
+
 		size_t size() const {
 			return items.size();
 		}
 
 		NameMap nameToItems;
 
-	protected:
+	private:
 		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
+		InventoryVector inventory;
 };
 #endif

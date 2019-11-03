@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ Weapons::Weapons()
 
 Weapons::~Weapons()
 {
-	clear();
+	clear(false);
 }
 
 const Weapon* Weapons::getWeapon(const Item* item) const
@@ -53,14 +53,17 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	return it->second;
 }
 
-void Weapons::clear()
+void Weapons::clear(bool fromLua)
 {
-	for (const auto& it : weapons) {
-		delete it.second;
+	for (auto it = weapons.begin(); it != weapons.end(); ) {
+		if (fromLua == it->second->fromLua) {
+			it = weapons.erase(it);
+		} else {
+			++it;
+		}
 	}
-	weapons.clear();
 
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Weapons::getScriptInterface()
@@ -109,27 +112,35 @@ void Weapons::loadDefaults()
 	}
 }
 
-Event* Weapons::getEvent(const std::string& nodeName)
+Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
 	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
-		return new WeaponMelee(&scriptInterface);
+		return Event_ptr(new WeaponMelee(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
-		return new WeaponDistance(&scriptInterface);
+		return Event_ptr(new WeaponDistance(&scriptInterface));
 	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
-		return new WeaponWand(&scriptInterface);
+		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
 }
 
-bool Weapons::registerEvent(Event* event, const pugi::xml_node&)
+bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event); //event is guaranteed to be a Weapon
+	Weapon* weapon = static_cast<Weapon*>(event.release()); //event is guaranteed to be a Weapon
 
 	auto result = weapons.emplace(weapon->getID(), weapon);
 	if (!result.second) {
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 	}
 	return result.second;
+}
+
+bool Weapons::registerLuaEvent(Weapon* event)
+{
+	Weapon_ptr weapon{ event };
+	weapons[weapon->getID()] = weapon.release();
+
+	return true;
 }
 
 //monsters
@@ -291,6 +302,10 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 			return 0;
 		}
 
+		if (player->getHealth() < getHealthCost(player)) {
+			return 0;
+		}
+
 		if (player->getSoul() < soul) {
 			return 0;
 		}
@@ -416,6 +431,11 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 		player->changeMana(-static_cast<int32_t>(manaCost));
 	}
 
+	uint32_t healthCost = getHealthCost(player);
+	if (healthCost != 0) {
+		player->changeHealth(-static_cast<int32_t>(healthCost));
+	}
+
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
 		player->changeSoul(-static_cast<int32_t>(soul));
 	}
@@ -458,6 +478,19 @@ uint32_t Weapon::getManaCost(const Player* player) const
 	}
 
 	return (player->getMaxMana() * manaPercent) / 100;
+}
+
+int32_t Weapon::getHealthCost(const Player* player) const
+{
+	if (health != 0) {
+		return health;
+	}
+
+	if (healthPercent == 0) {
+		return 0;
+	}
+
+	return (player->getMaxHealth() * healthPercent) / 100;
 }
 
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
@@ -871,23 +904,26 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		maxChange = pugi::cast<int32_t>(attr.value());
 	}
 
-	if ((attr = node.attribute("type"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
-		if (tmpStrValue == "earth") {
-			params.combatType = COMBAT_EARTHDAMAGE;
-		} else if (tmpStrValue == "ice") {
-			params.combatType = COMBAT_ICEDAMAGE;
-		} else if (tmpStrValue == "energy") {
-			params.combatType = COMBAT_ENERGYDAMAGE;
-		} else if (tmpStrValue == "fire") {
-			params.combatType = COMBAT_FIREDAMAGE;
-		} else if (tmpStrValue == "death") {
-			params.combatType = COMBAT_DEATHDAMAGE;
-		} else if (tmpStrValue == "holy") {
-			params.combatType = COMBAT_HOLYDAMAGE;
-		} else {
-			std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
-		}
+	attr = node.attribute("type");
+	if (!attr) {
+		return true;
+	}
+
+	std::string tmpStrValue = asLowerCaseString(attr.as_string());
+	if (tmpStrValue == "earth") {
+		params.combatType = COMBAT_EARTHDAMAGE;
+	} else if (tmpStrValue == "ice") {
+		params.combatType = COMBAT_ICEDAMAGE;
+	} else if (tmpStrValue == "energy") {
+		params.combatType = COMBAT_ENERGYDAMAGE;
+	} else if (tmpStrValue == "fire") {
+		params.combatType = COMBAT_FIREDAMAGE;
+	} else if (tmpStrValue == "death") {
+		params.combatType = COMBAT_DEATHDAMAGE;
+	} else if (tmpStrValue == "holy") {
+		params.combatType = COMBAT_HOLYDAMAGE;
+	} else {
+		std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
 	}
 	return true;
 }

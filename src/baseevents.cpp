@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,14 +51,13 @@ bool BaseEvents::loadFromXml()
 	loaded = true;
 
 	for (auto node : doc.child(scriptsName.c_str()).children()) {
-		Event* event = getEvent(node.name());
+		Event_ptr event = getEvent(node.name());
 		if (!event) {
 			continue;
 		}
 
 		if (!event->configureEvent(node)) {
 			std::cout << "[Warning - BaseEvents::loadFromXml] Failed to configure event" << std::endl;
-			delete event;
 			continue;
 		}
 
@@ -68,12 +67,15 @@ bool BaseEvents::loadFromXml()
 		if (scriptAttribute) {
 			std::string scriptFile = "scripts/" + std::string(scriptAttribute.as_string());
 			success = event->checkScript(basePath, scriptsName, scriptFile) && event->loadScript(basePath + scriptFile);
+			if (node.attribute("function")) {
+				event->loadFunction(node.attribute("function"), true);
+			}
 		} else {
-			success = event->loadFunction(node.attribute("function"));
+			success = event->loadFunction(node.attribute("function"), false);
 		}
 
-		if (!success || !registerEvent(event, node)) {
-			delete event;
+		if (success) {
+			registerEvent(std::move(event), node);
 		}
 	}
 	return true;
@@ -82,8 +84,15 @@ bool BaseEvents::loadFromXml()
 bool BaseEvents::reload()
 {
 	loaded = false;
-	clear();
+	clear(false);
 	return loadFromXml();
+}
+
+void BaseEvents::reInitState(bool fromLua)
+{
+	if (!fromLua) {
+		getScriptInterface().reInitState();
+	}
 }
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
@@ -132,6 +141,24 @@ bool Event::loadScript(const std::string& scriptFile)
 	int32_t id = scriptInterface->getEvent(getScriptEventName());
 	if (id == -1) {
 		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		return false;
+	}
+
+	scripted = true;
+	scriptId = id;
+	return true;
+}
+
+bool Event::loadCallback()
+{
+	if (!scriptInterface || scriptId != 0) {
+		std::cout << "Failure: [Event::loadCallback] scriptInterface == nullptr. scriptid = " << scriptId << std::endl;
+		return false;
+	}
+
+	int32_t id = scriptInterface->getEvent();
+	if (id == -1) {
+		std::cout << "[Warning - Event::loadCallback] Event " << getScriptEventName() << " not found. " << std::endl;
 		return false;
 	}
 

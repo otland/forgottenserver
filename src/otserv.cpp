@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
+#include "script.h"
+#include <fstream>
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -43,6 +45,7 @@ Game g_game;
 ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
+extern Scripts* g_scripts;
 RSA g_RSA;
 
 std::mutex g_loaderLock;
@@ -55,9 +58,9 @@ void startupErrorMessage(const std::string& errorStr)
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* servicer);
+void mainLoader(int argc, char* argv[], ServiceManager* services);
 
-void badAllocationHandler()
+[[noreturn]] void badAllocationHandler()
 {
 	// Use functions that only use stack allocation
 	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
@@ -123,6 +126,21 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
 	std::cout << std::endl;
 
+	// check if config.lua or config.lua.dist exist
+	std::ifstream c_test("./config.lua");
+	if (!c_test.is_open()) {
+		std::ifstream config_lua_dist("./config.lua.dist");
+		if (config_lua_dist.is_open()) {
+			std::cout << ">> copying config.lua.dist to config.lua" << std::endl;
+			std::ofstream config_lua("config.lua");
+			config_lua << config_lua_dist.rdbuf();
+			config_lua.close();
+			config_lua_dist.close();
+		}
+	} else {
+		c_test.close();
+	}
+
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
 	if (!g_config.load()) {
@@ -140,9 +158,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 #endif
 
 	//set RSA key
-	const char* p("14299623962416399520070177382898895550795403345466153217470516082934737582776038882967213386204600674145392845853859217990626450972452084065728686565928113");
-	const char* q("7630979195970404721891201847792002125535401292779123937207447574596692788513647179235335529307251350570728407373705564708871762033017096809910315212884101");
-	g_RSA.setKey(p, q);
+	try {
+		g_RSA.loadPEM("key.pem");
+	} catch(const std::exception& e) {
+		startupErrorMessage(e.what());
+		return;
+	}
 
 	std::cout << ">> Establishing database connection..." << std::flush;
 
@@ -177,7 +198,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
-	if (Item::items.loadFromOtb("data/items/items.otb") != ERROR_NONE) {
+	if (!Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
@@ -193,9 +214,21 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	std::cout << ">> Loading lua scripts" << std::endl;
+	if (!g_scripts->loadScripts("scripts", false, false)) {
+		startupErrorMessage("Failed to load lua scripts");
+		return;
+	}
+
 	std::cout << ">> Loading monsters" << std::endl;
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
+		return;
+	}
+
+	std::cout << ">> Loading lua monsters" << std::endl;
+	if (!g_scripts->loadScripts("monster", false, false)) {
+		startupErrorMessage("Failed to load lua monsters");
 		return;
 	}
 
@@ -233,14 +266,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_game.setGameState(GAME_STATE_INIT);
 
 	// Game client protocols
-	services->add<ProtocolGame>(g_config.getNumber(ConfigManager::GAME_PORT));
-	services->add<ProtocolLogin>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolGame>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
+	services->add<ProtocolLogin>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
-	services->add<ProtocolStatus>(g_config.getNumber(ConfigManager::STATUS_PORT));
+	services->add<ProtocolStatus>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STATUS_PORT)));
 
 	// Legacy login protocol
-	services->add<ProtocolOld>(g_config.getNumber(ConfigManager::LOGIN_PORT));
+	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));

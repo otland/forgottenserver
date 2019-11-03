@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,9 +127,10 @@ class QTreeNode
 		QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
 
 	protected:
-		QTreeNode* child[4] = {};
-
 		bool leaf = false;
+
+	private:
+		QTreeNode* child[4] = {};
 
 		friend class Map;
 };
@@ -152,7 +153,7 @@ class QTreeLeafNode final : public QTreeNode
 		void addCreature(Creature* c);
 		void removeCreature(Creature* c);
 
-	protected:
+	private:
 		static bool newLeaf;
 		QTreeLeafNode* leafS = nullptr;
 		QTreeLeafNode* leafE = nullptr;
@@ -224,6 +225,7 @@ class Map
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
 
 		void clearSpectatorCache();
+		void clearPlayersSpectatorCache();
 
 		/**
 		  * Checks if you can throw an object to that position
@@ -262,7 +264,8 @@ class Map
 		Spawns spawns;
 		Towns towns;
 		Houses houses;
-	protected:
+
+	private:
 		SpectatorCache spectatorCache;
 		SpectatorCache playersSpectatorCache;
 

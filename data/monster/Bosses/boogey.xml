@@ -15,6 +15,9 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="1200" min="0" max="-120" />
@@ -26,7 +29,7 @@
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
-		<attack name="physical" interval="1500" chance="40" lenght="8" spread="3" min="-20" max="-30">
+		<attack name="physical" interval="1500" chance="40" length="8" spread="3" min="-20" max="-30">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
