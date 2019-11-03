@@ -336,9 +336,7 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   `config` varchar(50) NOT NULL,
   `value` varchar(256) NOT NULL DEFAULT '',
   PRIMARY KEY `config` (`config`)
-) ENGINE=InnoDB;
-
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '20'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
