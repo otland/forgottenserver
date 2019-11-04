@@ -15,7 +15,7 @@ end
 local function ServerSaveWarning(time)
 	local remaningTime = tonumber(time) - 60000
 
-	if configManager.getBoolean(configKeys.NOTIFY_SERVER_SAVE) then
+	if configManager.getBoolean(configKeys.NOTIFY_AT_SERVER_SAVE) then
 		Game.broadcastMessage("Server is saving game in " .. (remaningTime/60000) .."  minute(s). Please logout.", MESSAGE_STATUS_WARNING)
 	end
 
@@ -27,7 +27,7 @@ local function ServerSaveWarning(time)
 end
 
 function onTime(interval)
-	if configManager.getBoolean(configKeys.NOTIFY_SERVER_SAVE) then
+	if configManager.getBoolean(configKeys.NOTIFY_AT_SERVER_SAVE) then
 		Game.broadcastMessage("Server is saving game in 5 minutes. Please logout.", MESSAGE_STATUS_WARNING)
 	end
 
