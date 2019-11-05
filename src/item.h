@@ -535,6 +535,7 @@ class Item : virtual public Thing
 		Item(const uint16_t type, uint16_t count = 0);
 		Item(const Item& i);
 		virtual Item* clone() const;
+		virtual Item* cloneWithoutDecay() const;
 
 		virtual ~Item() = default;
 

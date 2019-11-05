@@ -23,6 +23,7 @@
 #include "account.h"
 #include "player.h"
 #include "database.h"
+#include "inbox.h"
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
@@ -59,11 +60,71 @@ class IOLoginData
 		static void addPremiumDays(uint32_t accountId, int32_t addDays);
 		static void removePremiumDays(uint32_t accountId, int32_t removeDays);
 
+		static bool savePlayerRelationalItems(uint32_t guid, Item** inventory, std::map<uint32_t, DepotChest*>& depotChests, Inbox* inbox, int16_t lastDepotId, Database* database = nullptr);
+		static bool savePlayerBinaryItems(uint32_t guid, Item** inventory, std::map<uint32_t, DepotChest*>& depotChests, Inbox* inbox, int16_t lastDepotId, Database* db = nullptr);
+
 	private:
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
-		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
+		static bool saveRelationalItems(uint32_t guid, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
+		static void saveBinaryItem(Item* item, PropWriteStream& itemsStream);
+
+		static void loadPlayerRelationalItems(Player* player, Database* db);
+		static void loadPlayerBinaryItems(Player* player, Database* db);
+		static void loadRelationalItems(ItemMap& itemMap, DBResult_ptr result);
+		static Item* loadBinaryItem(PropStream& itemsStream, Container* parent);
+};
+
+class PlayerCacheData;
+
+class PlayerCacheManager : public ThreadHolder<PlayerCacheManager>
+{
+public:
+	PlayerCacheManager() = default;
+
+	bool loadCachedPlayer(uint32_t guid, Player* player);
+	void cachePlayer(uint32_t guid, Player* player);
+	void clear();
+	void clear(uint32_t guid);
+
+	void start();
+	void flush();
+	void shutdown();
+
+	void addToSaveList(uint32_t guid);
+	bool saveCachedItems(uint32_t guid);
+
+	void threadMain();
+
+private:
+	PlayerCacheData* getCachedPlayer(uint32_t guid, bool autoCreate = false);
+
+	Database db;
+	std::thread thread;
+	std::map<uint32_t, int64_t> toSave;
+	std::mutex listLock;
+
+	std::map<uint32_t, PlayerCacheData*> playersCache;
+};
+
+class PlayerCacheData
+{
+	public:
+		~PlayerCacheData();
+		PlayerCacheData *clone();
+		void copyDataFromPlayer(Player *player);
+		void copyDataToPlayer(Player *player);
+
+	private:
+		void clear();
+
+		Item *inventory[CONST_SLOT_LAST + 1] = {};
+		std::map<uint32_t, DepotChest *> depotChests;
+		Inbox *inbox = nullptr;
+		int16_t lastDepotId = -1;
+		std::mutex dataLock;
+
+		friend class PlayerCacheManager;
 };
 
 #endif

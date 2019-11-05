@@ -75,6 +75,9 @@ emoteSpells = false
 classicEquipmentSlots = false
 classicAttackSpeed = false
 showScriptsLogInConsole = true
+playerItemsCache = false
+playerItemsCacheSaveThreshold = 5000
+binaryPlayerItems = false
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml

@@ -59,6 +59,7 @@ class Container : public Item, public Cylinder
 		Container& operator=(const Container&) = delete;
 
 		Item* clone() const override final;
+		Item* cloneWithoutDecay() const override final;
 
 		Container* getContainer() override final {
 			return this;

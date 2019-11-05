@@ -172,6 +172,10 @@ pip-log.txt
 .*.swp
 .*.swo
 
+# CLion files
+.idea
+cmake-build*
+
 #############
 ## TFS / OT
 #############
