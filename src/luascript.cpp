@@ -1831,6 +1831,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE)
 	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
 	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
+	registerEnum(RETURNVALUE_PREYINTERNALERROR)
+	registerEnum(RETURNVALUE_NOTENOUGHMONEYFORREROLL)
+	registerEnum(RETURNVALUE_NOAVAILABLEBONUSREROLL)
 
 	registerEnum(RELOAD_TYPE_ALL)
 	registerEnum(RELOAD_TYPE_ACTIONS)
@@ -1868,6 +1871,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTERS_EVENT_DISAPPEAR)
 	registerEnum(MONSTERS_EVENT_MOVE)
 	registerEnum(MONSTERS_EVENT_SAY)
+
+	registerEnum(STATE_LOCKED)
+	registerEnum(STATE_INACTIVE)
+	registerEnum(STATE_ACTIVE)
+	registerEnum(STATE_SELECTION)
+	registerEnum(STATE_SELECTION_CHANGE_MONSTER)
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
@@ -2434,6 +2443,12 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "hasChaseMode", LuaScriptInterface::luaPlayerHasChaseMode);
 	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
 	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
+
+	registerMethod("Player", "getPreyState", LuaScriptInterface::luaPlayerGetPreyState);
+	registerMethod("Player", "changePreyState", LuaScriptInterface::luaPlayerChangePreyState);
+
+	registerMethod("Player", "getBonusRerollCount", LuaScriptInterface::luaPlayerGetBonusRerollCount);
+	registerMethod("Player", "setBonusRerollCount", LuaScriptInterface::luaPlayerSetBonusRerollCount);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -8795,8 +8810,7 @@ int LuaScriptInterface::luaPlayerSetStamina(lua_State* L)
 	uint16_t stamina = getNumber<uint16_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->staminaMinutes = std::min<uint16_t>(2520, stamina);
-		player->sendStats();
+		player->setStamina(stamina);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -9970,6 +9984,68 @@ int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->fightMode);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetPreyState(lua_State* L)
+{
+	// player:getPreyState(preySlotId)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		uint8_t preySlotId = getNumber<uint8_t>(L, 2);
+	if (preySlotId >= PREY_SLOTCOUNT) {
+			lua_pushnil(L);
+		} else {
+			lua_pushnumber(L, player->preyData[preySlotId].state);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerChangePreyState(lua_State* L)
+{
+	// player:changePreyState(preySlotId, stateId[, monsterIndex = 0])
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		uint8_t preySlotId = getNumber<uint8_t>(L, 2);
+		PreyState stateId = getNumber<PreyState>(L, 3);
+		uint8_t monsterIndex = getNumber<uint8_t>(L, 3, 0);
+		
+		if (preySlotId >= PREY_SLOTCOUNT) {
+			lua_pushnil(L);
+		} else {
+			lua_pushnumber(L, player->changePreyDataState(preySlotId, stateId, monsterIndex));
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetBonusRerollCount(lua_State* L)
+{
+	// player:getBonusRerollCount()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getBonusRerollCount());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetBonusRerollCount(lua_State* L)
+{
+	// player:setBonusRerollCount(count)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		int64_t count = getNumber<int64_t>(L, 2);
+		player->setBonusRerollCount(count);
 	} else {
 		lua_pushnil(L);
 	}

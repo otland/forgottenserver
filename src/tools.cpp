@@ -1214,6 +1214,15 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE:
 			return "You can not trade this house.";
 
+		case RETURNVALUE_PREYINTERNALERROR:
+			return "An internal error occurred. Please try again.";
+
+		case RETURNVALUE_NOTENOUGHMONEYFORREROLL:
+			return "Not enough money for reroll.";
+		
+		case RETURNVALUE_NOAVAILABLEBONUSREROLL:
+			return "You don't have any available bonus reroll.";
+
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}

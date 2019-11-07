@@ -500,6 +500,18 @@ void Combat::CombatHealthFunc(Creature* caster, Creature* target, const CombatPa
 		}
 	}
 
+	if (caster) {
+		if (Player* casterPlayer = caster->getPlayer()) {
+			casterPlayer->applyBonusDamageBoost(damage, target);
+		}
+	}
+
+	if (target) {
+		if (Player* targetPlayer = target->getPlayer()) {
+			targetPlayer->applyBonusDamageReduction(damage, caster);
+		}
+	}
+
 	if (g_game.combatChangeHealth(caster, target, damage)) {
 		CombatConditionFunc(caster, target, params, &damage);
 		CombatDispelFunc(caster, target, params, nullptr);

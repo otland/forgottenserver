@@ -262,9 +262,10 @@ class Game
 		  * \param cylinder to remove the money from
 		  * \param money is the amount to remove
 		  * \param flags optional flags to modifiy the default behaviour
+		  * \param useBank to use bank balance instead of player gold
 		  * \returns true if the removal was successful
 		  */
-		bool removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags = 0);
+		bool removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags = 0, bool useBank = false);
 
 		/**
 		  * Add item(s) with monetary value
@@ -399,6 +400,8 @@ class Game
 		void playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spriteId, uint16_t amount, uint32_t price, bool anonymous);
 		void playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter);
 		void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
+		void playerRequestResourceData(uint32_t playerId, ResourceType_t resourceType);
+		void playerPreyAction(uint32_t playerId, uint8_t preySlotId, PreyAction_t preyAction, uint8_t monsterIndex);
 
 		void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
 

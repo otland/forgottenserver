@@ -163,6 +163,10 @@ class ProtocolGame final : public Protocol
 		void parseOpenPrivateChannel(NetworkMessage& msg);
 		void parseCloseChannel(NetworkMessage& msg);
 
+		//Prey system
+		void parseRequestResourceData(NetworkMessage& msg);
+		void parsePreyAction(NetworkMessage& msg);
+
 		//Send functions
 		void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel);
 		void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent);
@@ -194,6 +198,11 @@ class ProtocolGame final : public Protocol
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
 		void sendBasicData();
+		void sendPreyData(uint8_t preySlotId);
+		void sendRerollPrice(uint32_t price);
+		void sendFreeListRerollAvailability(uint8_t preySlotId, uint16_t time);
+		void sendPreyTimeLeft(uint8_t preySlotId, uint16_t timeLeft);
+		void sendMessageDialog(MessageDialog_t type, const std::string& message);
 		void sendTextMessage(const TextMessage& message);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
 
@@ -268,6 +277,9 @@ class ProtocolGame final : public Protocol
 
 		//messages
 		void sendModalWindow(const ModalWindow& modalWindow);
+
+		//Prey System
+		void sendResourceData(ResourceType_t resourceType, int64_t amount);
 
 		//Help functions
 
