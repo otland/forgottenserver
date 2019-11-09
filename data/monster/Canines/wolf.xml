@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Wolf" nameDescription="a wolf" race="blood" experience="18" speed="160" manacost="255">
+<monster name="Wolf" nameDescription="a wolf" race="blood" experience="18" speed="164" manacost="255">
 	<health now="25" max="25" />
 	<look type="27" corpse="5968" />
 	<targetchange interval="4000" chance="0" />
@@ -20,21 +20,20 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-20" />
+		<attack name="melee" interval="2000" min="0" max="-17" />
 	</attacks>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="1" />
 	<elements>
-		<element earthPercent="5" />
-		<element holyPercent="5" />
-		<element icePercent="-5" />
+		<element holyPercent="30" />
+		<element icePercent="-10" />
 		<element deathPercent="-5" />
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Yoooohhuuu!" />
-		<voice sentence="Grrrrrr" />
+		<voice sentence="Yoooohhuuuu!" />
+		<voice sentence="Grrrrrrr" />
 	</voices>
 	<loot>
-		<item name="meat" countmax="2" chance="55000" />
-		<item name="wolf paw" chance="980" />
+		<item name="meat" countmax="2" chance="70000" />
+		<item name="wolf paw" chance="1000" />
 	</loot>
 </monster>

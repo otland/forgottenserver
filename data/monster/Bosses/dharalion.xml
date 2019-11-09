@@ -73,7 +73,7 @@
 		<item name="green tunic" chance="5000" />
 		<item name="melon" chance="6666" />
 		<item name="bread" countmax="3" chance="20000" />
-		<item name="sling herb" countmax="1" chance="10000" />
+		<item name="sling herb" chance="10000" />
 		<item name="worm" countmax="10" chance="50000" />
 	</loot>
 </monster>

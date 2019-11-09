@@ -1494,7 +1494,7 @@
 		<attribute key="writeOnceItemId" value="1960" />
 		<attribute key="weight" value="1300" />
 	</item>
-	<item id="1976" article="a" name="gemmed book">
+	<item id="1976" article="a" name="book">
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="1100" />
 		<attribute key="weight" value="1300" />

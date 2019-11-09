@@ -95,13 +95,13 @@
 		<voice sentence="DON'T BE AFRAID! I AM COMING IN PEACE!" yell="1" />
 	</voices>
 	<loot>
-		<item name="purple tome" countmax="1" chance="2600" />
-		<item name="golden mug" countmax="1" chance="7500" />
-		<item name="teddy bear" countmax="1" chance="14500" />
-		<item name="ring of the sky" countmax="1" chance="3500" />
-		<item id="2124" countmax="1" chance="5500" />
-		<item name="crystal necklace" countmax="1" chance="1500" />
-		<item name="ancient amulet" countmax="1" chance="3500" />
+		<item name="purple tome" chance="2600" />
+		<item name="golden mug" chance="7500" />
+		<item name="teddy bear" chance="14500" />
+		<item name="ring of the sky" chance="3500" />
+		<item id="2124" chance="5500" />
+		<item name="crystal necklace" chance="1500" />
+		<item name="ancient amulet" chance="3500" />
 		<item name="white pearl" countmax="15" chance="12500" />
 		<item name="black pearl" countmax="15" chance="15000" />
 		<item name="small diamond" countmax="5" chance="9500" />
@@ -113,44 +113,44 @@
 		<item name="small emerald" countmax="10" chance="15500" />
 		<item name="small amethyst" countmax="20" chance="13500" />
 		<item name="talon" countmax="7" chance="14000" />
-		<item name="green gem" countmax="1" chance="1500" />
-		<item name="blue gem" countmax="1" chance="1500" />
-		<item id="2162" countmax="1" chance="11500" />
-		<item name="might ring" countmax="1" chance="5000" />
-		<item name="stealth ring" countmax="1" chance="9500" />
-		<item name="energy ring" countmax="1" chance="13500" />
-		<item name="silver amulet" countmax="1" chance="13000" />
-		<item name="platinum amulet" countmax="1" chance="4500" />
-		<item name="strange symbol" countmax="1" chance="2500" />
-		<item name="orb" countmax="1" chance="12000" />
-		<item name="life crystal" countmax="1" chance="1000" />
-		<item name="mind stone" countmax="1" chance="4000" />
-		<item name="gold ring" countmax="1" chance="8000" />
-		<item name="snakebite rod" countmax="1" chance="3500" />
-		<item name="necrotic rod" countmax="1" chance="3500" />
-		<item name="moonlight rod" countmax="1" chance="3500" />
-		<item name="wand of decay" countmax="1" chance="2500" />
-		<item id="2192" countmax="1" chance="2500" />
-		<item name="boots of haste" countmax="1" chance="4000" />
-		<item name="stone skin amulet" countmax="1" chance="4000" />
-		<item name="protection amulet" countmax="1" chance="4500" />
-		<item name="ring of healing" countmax="1" chance="13000" />
-		<item id="2231" countmax="1" chance="9000" />
-		<item name="two handed sword" countmax="1" chance="20000" />
-		<item name="double axe" countmax="1" chance="20000" />
-		<item name="giant sword" countmax="1" chance="12500" />
-		<item name="ice rapier" countmax="1" chance="7500" />
-		<item name="silver dagger" countmax="1" chance="15500" />
-		<item name="golden sickle" countmax="1" chance="4500" />
-		<item name="thunder hammer" countmax="1" chance="13500" />
-		<item name="fire axe" countmax="1" chance="17000" />
-		<item name="dragon hammer" countmax="1" chance="4500" />
-		<item name="skull staff" countmax="1" chance="5000" />
-		<item name="devil helmet" countmax="1" chance="11000" />
-		<item name="golden legs" countmax="1" chance="5000" />
-		<item name="magic plate armor" countmax="1" chance="3000" />
-		<item name="mastermind shield" countmax="1" chance="7500" />
-		<item name="demon shield" countmax="1" chance="15500" />
-		<item id="3955" countmax="1" chance="100" />
+		<item name="green gem" chance="1500" />
+		<item name="blue gem" chance="1500" />
+		<item id="2162" chance="11500" />
+		<item name="might ring" chance="5000" />
+		<item name="stealth ring" chance="9500" />
+		<item name="energy ring" chance="13500" />
+		<item name="silver amulet" chance="13000" />
+		<item name="platinum amulet" chance="4500" />
+		<item name="strange symbol" chance="2500" />
+		<item name="orb" chance="12000" />
+		<item name="life crystal" chance="1000" />
+		<item name="mind stone" chance="4000" />
+		<item name="gold ring" chance="8000" />
+		<item name="snakebite rod" chance="3500" />
+		<item name="necrotic rod" chance="3500" />
+		<item name="moonlight rod" chance="3500" />
+		<item name="wand of decay" chance="2500" />
+		<item id="2192" chance="2500" />
+		<item name="boots of haste" chance="4000" />
+		<item name="stone skin amulet" chance="4000" />
+		<item name="protection amulet" chance="4500" />
+		<item name="ring of healing" chance="13000" />
+		<item id="2231" chance="9000" />
+		<item name="two handed sword" chance="20000" />
+		<item name="double axe" chance="20000" />
+		<item name="giant sword" chance="12500" />
+		<item name="ice rapier" chance="7500" />
+		<item name="silver dagger" chance="15500" />
+		<item name="golden sickle" chance="4500" />
+		<item name="thunder hammer" chance="13500" />
+		<item name="fire axe" chance="17000" />
+		<item name="dragon hammer" chance="4500" />
+		<item name="skull staff" chance="5000" />
+		<item name="devil helmet" chance="11000" />
+		<item name="golden legs" chance="5000" />
+		<item name="magic plate armor" chance="3000" />
+		<item name="mastermind shield" chance="7500" />
+		<item name="demon shield" chance="15500" />
+		<item id="3955" chance="100" />
 	</loot>
 </monster>

@@ -63,7 +63,7 @@
 		<item name="plate legs" chance="1818" />
 		<item name="green tunic" chance="2500" />
 		<item name="meat" countmax="2" chance="33333" />
-		<item id="2667" countmax="1" chance="20000" /><!-- fish -->
+		<item id="2667" chance="20000" /><!-- fish -->
 		<item name="worm" countmax="10" chance="50000" />
 		<item name="nose ring" chance="100000" />
 	</loot>
