@@ -22,12 +22,12 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-9" />
 	</attacks>
-	<defenses armor="5" defense="5" />
+	<defenses armor="2" defense="2" />
 	<elements>
 		<element firePercent="-20" />
 	</elements>
 	<loot>
-		<item name="gold coin" countmax="5" chance="63333" />
-		<item name="spider fangs" chance="810" />
+		<item name="gold coin" countmax="5" chance="65000" />
+		<item name="spider fangs" chance="950" />
 	</loot>
 </monster>
