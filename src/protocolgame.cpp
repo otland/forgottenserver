@@ -1529,7 +1529,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 {
 	NetworkMessage msg;
 	msg.addByte(0x7B);
-	msg.add<uint64_t>(player->getMoney());
+	msg.add<uint64_t>(player->getMoney() + player->getBankBalance());
 
 	std::map<uint16_t, uint32_t> saleMap;
 
