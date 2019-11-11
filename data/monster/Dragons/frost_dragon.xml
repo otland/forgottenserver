@@ -68,7 +68,7 @@
 		<voice sentence="Chill out!." />
 	</voices>
 	<loot>
-		<item name="gemmed book" chance="8500" />
+		<item id="1976" chance="8500" /><!-- book (gemmed) -->
 		<item name="golden mug" chance="3000" />
 		<item name="small sapphire" chance="5200" />
 		<item name="gold coin" countmax="100" chance="33000" />

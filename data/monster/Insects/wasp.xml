@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Wasp" nameDescription="a wasp" race="venom" experience="24" speed="260" manacost="280">
+<monster name="Wasp" nameDescription="a wasp" race="venom" experience="24" speed="320" manacost="280">
 	<health now="35" max="35" />
 	<look type="44" corpse="5989" />
 	<targetchange interval="4000" chance="10" />
@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1500" min="0" max="-20" poison="20" />
+		<attack name="melee" interval="2000" min="0" max="-20" poison="20" />
 	</attacks>
 	<defenses armor="10" defense="10" />
 	<elements>

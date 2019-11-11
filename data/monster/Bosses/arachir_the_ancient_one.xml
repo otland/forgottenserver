@@ -55,9 +55,9 @@
 		<voice sentence="Can you feel the passage of time, mortal?" />
 	</voices>
 	<loot>
-		<item name="black pearl" chance="8980" countmax="1" />
-		<item name="gold coin" chance="100000" countmax="98" />
-		<item name="platinum coin" chance="50000" countmax="5" />
+		<item name="black pearl" chance="8980" />
+		<item name="gold coin" countmax="98" chance="100000" />
+		<item name="platinum coin" countmax="5" chance="50000" />
 		<item name="ring of healing (faster regeneration)" chance="11111" />
 		<item id="2229" chance="10000" />
 		<item name="vampire shield" chance="6300" />

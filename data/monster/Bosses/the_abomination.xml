@@ -50,6 +50,6 @@
 		<item name="gold coin" countmax="100" chance="100000" />
 		<item name="platinum coin" countmax="3" chance="10000" />
 		<item name="soul orb" chance="2500" />
-		<item name="demonic essence" countmax="1" chance="2857" />
+		<item name="demonic essence" chance="2857" />
 	</loot>
 </monster>
