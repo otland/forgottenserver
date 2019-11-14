@@ -12877,17 +12877,14 @@ int LuaScriptInterface::luaMonsterTypeRegisterEvent(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeEventOnCallback(lua_State* L)
 {
-	// monstertype:onThink / onAppear / etc. (callback)
-	MonsterType* mType = getUserdata<MonsterType>(L, 1);
-	if (mType) {
-		LuaScriptInterface* scriptsInterface = &g_scripts->getScriptInterface();
-		if (!g_monsters.scriptInterface) {
-			g_monsters.scriptInterface.reset(scriptsInterface);
-			g_monsters.scriptInterface->initState();
-		}
-
-		mType->info.scriptInterface = g_monsters.scriptInterface.get();
-		if (g_monsters.loadCallback(scriptsInterface, mType)) {
+	// monsterType:onThink(callback)
+	// monsterType:onAppear(callback)
+	// monsterType:onDisappear(callback)
+	// monsterType:onMove(callback)
+	// monsterType:onSay(callback)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (monsterType->loadCallback(&g_scripts->getScriptInterface())) {
 			pushBoolean(L, true);
 			return 1;
 		}
@@ -12901,9 +12898,9 @@ int LuaScriptInterface::luaMonsterTypeEventOnCallback(lua_State* L)
 int LuaScriptInterface::luaMonsterTypeEventType(lua_State* L)
 {
 	// monstertype:eventType(event)
-	MonsterType* mType = getUserdata<MonsterType>(L, 1);
-	if (mType) {
-		mType->info.eventType = getNumber<MonstersEvent_t>(L, 2);
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		monsterType->info.eventType = getNumber<MonstersEvent_t>(L, 2);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
