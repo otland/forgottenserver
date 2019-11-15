@@ -12,6 +12,8 @@ trim_trailing_whitespace = true
 # Options not ubiquitous, but useful
 indent_brace_style = K&R
 spaces_around_brackets = none
+indent_style = tab
+indent_size = 4
 
 [.travis.yml]
 indent_style = spaces
