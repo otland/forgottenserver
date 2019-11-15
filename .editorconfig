@@ -8,14 +8,14 @@ indent_style = tab
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+[*.{cpp,h,lua,xml}]
+indent_style = tab
+indent_size = 4
+
 [**.{.cpp,.h}]
 # Options not ubiquitous, but useful
 indent_brace_style = K&R
 spaces_around_brackets = none
-
-[*.{.cpp,.h,.lua}]
-indent_style = tab
-indent_size = 4
 
 [.travis.yml]
 indent_style = spaces
