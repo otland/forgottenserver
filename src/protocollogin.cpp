@@ -126,6 +126,12 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(2); // client OS
 
 	uint16_t version = msg.get<uint16_t>();
+
+	// if the player is connecting using the deprecated c++ client
+	if (version >= 1111) {
+		enableSequence();
+	}
+
 	if (version >= 971) {
 		msg.skipBytes(17);
 	} else {

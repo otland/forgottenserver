@@ -244,6 +244,9 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 	version = msg.get<uint16_t>();
+	if (version >= 1111) {
+		enableSequence();
+	}
 
 	msg.skipBytes(7); // U32 client version, U8 client type, U16 dat revision
 
@@ -1007,6 +1010,13 @@ void ProtocolGame::parseEditVip(NetworkMessage& msg)
 	const std::string description = msg.getString();
 	uint32_t icon = std::min<uint32_t>(10, msg.get<uint32_t>()); // 10 is max icon in 9.63
 	bool notify = msg.getByte() != 0;
+	if (version >= 1110) {
+		int groupCount = msg.getByte();
+		for (int i = 0; i < groupCount; i++) {
+			msg.getByte(); // group id
+		}
+	}
+
 	addGameTask(&Game::playerRequestEditVip, player->getID(), guid, description, icon, notify);
 }
 
@@ -1334,6 +1344,7 @@ void ProtocolGame::sendBasicData()
 		msg.add<uint32_t>(0);
 	}
 	msg.addByte(player->getVocation()->getClientId());
+	msg.addByte(player->getVocation()->getId() != VOCATION_NONE ? 0x01 : 0x00);
 	msg.add<uint16_t>(0xFF); // number of known spells
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
@@ -1997,6 +2008,10 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		msg.addString(ss.str());
 	} else {
 		msg.add<uint16_t>(0x00);
+	}
+
+	if (version >= 1101) {
+		msg.add<uint16_t>(0x00); // imbuement slots
 	}
 
 	MarketStatistics* statistics = IOMarket::getInstance().getPurchaseStatistics(itemId);
@@ -2732,6 +2747,9 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 	msg.add<uint32_t>(std::min<uint32_t>(10, icon));
 	msg.addByte(notify ? 0x01 : 0x00);
 	msg.addByte(status);
+	if (version >= 1110) {
+		msg.addByte(0x00); // group count
+	}
 	writeToOutputBuffer(msg);
 }
 
@@ -2861,6 +2879,10 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.addByte(creatureType); // Type (for summons)
 	msg.addByte(creature->getSpeechBubble());
 	msg.addByte(0xFF); // MARK_UNMARKED
+
+	if (version >= 1110) {
+		msg.addByte(0x00); // inspection state
+	}
 
 	if (otherPlayer) {
 		msg.add<uint16_t>(otherPlayer->getHelpers());

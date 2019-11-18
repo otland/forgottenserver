@@ -67,10 +67,10 @@ void Connection::close(bool force)
 	ConnectionManager::getInstance().releaseConnection(shared_from_this());
 
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
-	if (connectionState != CONNECTION_STATE_OPEN) {
+	if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		return;
 	}
-	connectionState = CONNECTION_STATE_CLOSED;
+	connectionState = CONNECTION_STATE_DISCONNECTED;
 
 	if (protocol) {
 		g_dispatcher.addTask(
@@ -108,6 +108,7 @@ void Connection::accept(Protocol_ptr protocol)
 {
 	this->protocol = protocol;
 	g_dispatcher.addTask(createTask(std::bind(&Protocol::onConnect, protocol)));
+	connectionState = CONNECTION_STATE_CONNECTING;
 
 	accept();
 }
@@ -119,14 +120,51 @@ void Connection::accept()
 		readTimer.expires_from_now(boost::posix_time::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
-		// Read size of the first packet
-		boost::asio::async_read(socket,
-		                        boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
-		                        std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
+		if (connectionState == CONNECTION_STATE_CONNECTING) {
+			// Read one-by-one ascii characters (new-line-terminated) to verify world name
+			boost::asio::async_read(socket,
+									boost::asio::buffer(msg.getBuffer(), 1),
+									std::bind(&Connection::parseProxyWorldNameIdentification, shared_from_this(), std::placeholders::_1));
+		} else {
+			// Read size of the first packet
+			boost::asio::async_read(socket,
+									boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
+									std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
+		}
+
+		
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
 	}
+}
+
+void Connection::parseProxyWorldNameIdentification(const boost::system::error_code& error)
+{
+	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	readTimer.cancel();
+
+	if (error) {
+		close(FORCE_CLOSE);
+		return;
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
+		return;
+	}
+
+	char b = msg.getBuffer()[0];
+	if (b == 0x0A) {
+		if (worldName != g_config.getString(ConfigManager::SERVER_NAME)) {
+			std::cout << convertIPToString(getIP()) << " disconnected for sending invalid world name." << std::endl;
+			close();
+			return;
+		}
+
+		connectionState = CONNECTION_STATE_CONNECTED;
+	} else {
+		worldName.push_back(b);
+	}
+
+	accept();
 }
 
 void Connection::parseHeader(const boost::system::error_code& error)
@@ -137,7 +175,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	if (error) {
 		close(FORCE_CLOSE);
 		return;
-	} else if (connectionState != CONNECTION_STATE_OPEN) {
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		return;
 	}
 
@@ -182,7 +220,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	if (error) {
 		close(FORCE_CLOSE);
 		return;
-	} else if (connectionState != CONNECTION_STATE_OPEN) {
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		return;
 	}
 
@@ -195,10 +233,20 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		checksum = 0;
 	}
 
-	uint32_t recvChecksum = msg.get<uint32_t>();
-	if (recvChecksum != checksum) {
-		// it might not have been the checksum, step back
-		msg.skipBytes(-NetworkMessage::CHECKSUM_LENGTH);
+	bool checksummed = true;
+	if (worldName.empty()) {
+		checksummed = msg.get<uint32_t>() == checksum;
+		if (!checksummed) {
+			// it might not have been the checksum, step back
+			msg.skipBytes(-NetworkMessage::CHECKSUM_LENGTH);
+		}
+	} else {
+		uint32_t sequenceNumber = msg.get<uint32_t>();
+		if (!receivedFirst || lastSequenceNumber - sequenceNumber == 1) {
+			lastSequenceNumber = sequenceNumber;
+		} else {
+			// the client has sent some data that was lost
+		}
 	}
 
 	if (!receivedFirst) {
@@ -207,7 +255,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 		if (!protocol) {
 			// Game protocol has already been created at this point
-			protocol = service_port->make_protocol(recvChecksum == checksum, msg, shared_from_this());
+			protocol = service_port->make_protocol(checksummed, msg, shared_from_this());
 			if (!protocol) {
 				close(FORCE_CLOSE);
 				return;
@@ -239,7 +287,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 void Connection::send(const OutputMessage_ptr& msg)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
-	if (connectionState != CONNECTION_STATE_OPEN) {
+	if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		return;
 	}
 
@@ -295,7 +343,7 @@ void Connection::onWriteOperation(const boost::system::error_code& error)
 
 	if (!messageQueue.empty()) {
 		internalSend(messageQueue.front());
-	} else if (connectionState == CONNECTION_STATE_CLOSED) {
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		closeSocket();
 	}
 }

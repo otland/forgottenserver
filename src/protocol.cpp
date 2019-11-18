@@ -26,14 +26,14 @@
 
 extern RSA g_RSA;
 
-void Protocol::onSendMessage(const OutputMessage_ptr& msg) const
+void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!rawMessages) {
 		msg->writeMessageLength();
 
 		if (encryptionEnabled) {
 			XTEA_encrypt(*msg);
-			msg->addCryptoHeader(checksumEnabled);
+			msg->addCryptoHeader(sequenceEnabled, checksumEnabled, sequenceNumber);
 		}
 	}
 }
