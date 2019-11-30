@@ -26,6 +26,13 @@
 
 #include <boost/lockfree/stack.hpp>
 
+/*
+ * we use this to avoid instantiating multiple free lists for objects of the
+ * same size and it can be replaced by a variable template in C++14
+ *
+ * template <std::size_t TSize, size_t CAPACITY>
+ * boost::lockfree::stack<void*, boost::lockfree::capacity<CAPACITY> lockfreeFreeList;
+ */
 template <std::size_t TSize, size_t CAPACITY>
 struct LockfreeFreeList
 {
