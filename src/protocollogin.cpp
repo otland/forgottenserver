@@ -86,15 +86,19 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	//Add char list
 	output->addByte(0x64);
 
-	output->addByte(1); // number of worlds
-
-	output->addByte(0); // world id
-	output->addString(g_config.getString(ConfigManager::SERVER_NAME));
-	output->addString(g_config.getString(ConfigManager::IP));
-	output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
-	output->addByte(0);
-
 	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
+
+	output->addByte(size); // number of worlds
+
+	for (uint8_t i = 0; i < size; i++) {
+		const std::string& character = account.characters[i];
+		output->addByte(0); // world id
+		output->addString((g_game.getCreatureByName(character) ? "Online" : "Offline"));
+		output->addString(g_config.getString(ConfigManager::IP));
+		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->addByte(0);
+	}
+
 	output->addByte(size);
 	for (uint8_t i = 0; i < size; i++) {
 		output->addByte(0);
