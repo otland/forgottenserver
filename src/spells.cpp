@@ -840,6 +840,7 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost)
 uint32_t Spell::getManaCost(const Player* player) const
 {
 	uint32_t finalMana = 0;
+	uint32_t test = 0;
 	if (mana != 0) {
 		finalMana = mana;
 	}
