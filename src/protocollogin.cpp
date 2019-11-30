@@ -110,7 +110,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	output->addByte(size);
 	for (uint8_t i = 0; i < size; i++) {
-		output->addByte(i);
+		output->addByte(g_config.getBoolean(ConfigManager::ONLINE_OFFLINE_CHARLIST) ? i : 0);
 		output->addString(account.characters[i]);
 	}
 
