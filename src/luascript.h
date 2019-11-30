@@ -1355,6 +1355,8 @@ class LuaScriptInterface
 		static int luaSpellMagicLevel(lua_State* L);
 		static int luaSpellMana(lua_State* L);
 		static int luaSpellManaPercent(lua_State* L);
+		static int luaSpellHealth(lua_State* L);
+		static int luaSpellHealthPercent(lua_State* L);
 		static int luaSpellSoul(lua_State* L);
 		static int luaSpellRange(lua_State* L);
 		static int luaSpellPremium(lua_State* L);
