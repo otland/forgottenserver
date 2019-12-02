@@ -1501,6 +1501,21 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_TYPE_KEY)
 	registerEnum(ITEM_TYPE_RUNE)
 
+	registerEnum(ITEM_GROUP_GROUND)
+	registerEnum(ITEM_GROUP_CONTAINER)
+	registerEnum(ITEM_GROUP_WEAPON) 
+	registerEnum(ITEM_GROUP_AMMUNITION) 
+	registerEnum(ITEM_GROUP_ARMOR) 
+	registerEnum(ITEM_GROUP_CHARGES)
+	registerEnum(ITEM_GROUP_TELEPORT) 
+	registerEnum(ITEM_GROUP_MAGICFIELD) 
+	registerEnum(ITEM_GROUP_WRITEABLE) 
+	registerEnum(ITEM_GROUP_KEY) 
+	registerEnum(ITEM_GROUP_SPLASH)
+	registerEnum(ITEM_GROUP_FLUID)
+	registerEnum(ITEM_GROUP_DOOR) 
+	registerEnum(ITEM_GROUP_DEPRECATED)
+
 	registerEnum(ITEM_BAG)
 	registerEnum(ITEM_SHOPPING_BAG)
 	registerEnum(ITEM_GOLD_COIN)
@@ -1528,6 +1543,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_WILDGROWTH)
 	registerEnum(ITEM_WILDGROWTH_PERSISTENT)
 	registerEnum(ITEM_WILDGROWTH_SAFE)
+
+	registerEnum(WIELDINFO_NONE)
+	registerEnum(WIELDINFO_LEVEL)
+	registerEnum(WIELDINFO_MAGLV)
+	registerEnum(WIELDINFO_VOCREQ)
+	registerEnum(WIELDINFO_PREMIUM)
 
 	registerEnum(PlayerFlag_CannotUseCombat)
 	registerEnum(PlayerFlag_CannotAttackPlayer)
@@ -2159,6 +2180,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "decay", LuaScriptInterface::luaItemDecay);
 
 	registerMethod("Item", "getDescription", LuaScriptInterface::luaItemGetDescription);
+	registerMethod("Item", "getSpecialDescription", LuaScriptInterface::luaItemGetSpecialDescription);
+	registerMethod("Item", "getSubTypeName", LuaScriptInterface::luaItemGetSubTypeName);
 
 	registerMethod("Item", "hasProperty", LuaScriptInterface::luaItemHasProperty);
 	registerMethod("Item", "isLoadedFromMap", LuaScriptInterface::luaItemIsLoadedFromMap);
@@ -2594,6 +2617,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "isPickupable", LuaScriptInterface::luaItemTypeIsPickupable);
 
 	registerMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
+	registerMethod("ItemType", "getGroup", LuaScriptInterface::luaItemTypeGetGroup);
 	registerMethod("ItemType", "getId", LuaScriptInterface::luaItemTypeGetId);
 	registerMethod("ItemType", "getClientId", LuaScriptInterface::luaItemTypeGetClientId);
 	registerMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
@@ -2626,6 +2650,21 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getRequiredLevel", LuaScriptInterface::luaItemTypeGetRequiredLevel);
 	registerMethod("ItemType", "getAmmoType", LuaScriptInterface::luaItemTypeGetAmmoType);
 	registerMethod("ItemType", "getCorpseType", LuaScriptInterface::luaItemTypeGetCorpseType);
+
+	registerMethod("ItemType", "getAbilities", LuaScriptInterface::luaItemTypeGetAbilities);
+
+	registerMethod("ItemType", "hasShowAttributes", LuaScriptInterface::luaItemTypeHasShowAttributes);
+	registerMethod("ItemType", "hasShowCount", LuaScriptInterface::luaItemTypeHasShowCount);
+	registerMethod("ItemType", "hasShowCharges", LuaScriptInterface::luaItemTypeHasShowCharges);
+	registerMethod("ItemType", "hasShowDuration", LuaScriptInterface::luaItemTypeHasShowDuration);
+	registerMethod("ItemType", "hasAllowDistRead", LuaScriptInterface::luaItemTypeHasAllowDistRead);
+	registerMethod("ItemType", "getWieldInfo", LuaScriptInterface::luaItemTypeGetWieldInfo);
+	registerMethod("ItemType", "getDuration", LuaScriptInterface::luaItemTypeGetDuration);
+	registerMethod("ItemType", "getLevelDoor", LuaScriptInterface::luaItemTypeGetLevelDoor);
+	registerMethod("ItemType", "getVocationString", LuaScriptInterface::luaItemTypeGetVocationString);
+	registerMethod("ItemType", "getMinReqLevel", LuaScriptInterface::luaItemTypeGetMinReqLevel);
+	registerMethod("ItemType", "getMinReqMagicLevel", LuaScriptInterface::luaItemTypeGetMinReqMagicLevel);
+
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
@@ -6662,6 +6701,33 @@ int LuaScriptInterface::luaItemGetDescription(lua_State* L)
 	if (item) {
 		int32_t distance = getNumber<int32_t>(L, 2);
 		pushString(L, item->getDescription(distance));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemGetSpecialDescription(lua_State* L)
+{
+	// item:getSpecialDescription()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushString(L, item->getSpecialDescription());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemGetSubTypeName(lua_State* L)
+{
+	// item:getSubTypeName()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		int32_t subType = item->getSubType();
+		if (subType > 0) {
+			pushString(L, Item::items[subType].name);
+		}
 	} else {
 		lua_pushnil(L);
 	}
@@ -11487,6 +11553,18 @@ int LuaScriptInterface::luaItemTypeGetType(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemTypeGetGroup(lua_State* L)
+{
+	// itemType:getGroup()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->group);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaItemTypeGetId(lua_State* L)
 {
 	// itemType:getId()
@@ -11725,6 +11803,213 @@ int LuaScriptInterface::luaItemTypeGetCorpseType(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->corpseType);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetAbilities(lua_State* L)
+{
+	// itemType:getAbilities()
+	ItemType* itemType = getUserdata<ItemType>(L, 1);
+	if (itemType) {
+		Abilities& abilities = itemType->getAbilities();
+		lua_createtable(L, 6, 12);
+		setField(L, "healthGain", abilities.healthGain);
+		setField(L, "healthTicks", abilities.healthTicks);
+		setField(L, "manaGain", abilities.manaGain);
+		setField(L, "manaTicks", abilities.manaTicks);
+		setField(L, "conditionImmunities", abilities.conditionImmunities);
+		setField(L, "conditionSuppressions", abilities.conditionSuppressions);
+		setField(L, "speed", abilities.speed);
+		setField(L, "elementDamage", abilities.elementDamage);
+		setField(L, "elementType", abilities.elementType);
+
+		lua_pushboolean(L, abilities.manaShield);
+		lua_setfield(L, -2, "manaShield");
+		lua_pushboolean(L, abilities.invisible);
+		lua_setfield(L, -2, "invisible");
+		lua_pushboolean(L, abilities.regeneration);
+		lua_setfield(L, -2, "regeneration");
+
+		// Stats
+		lua_createtable(L, 0, STAT_LAST + 1);
+		for (int32_t i = STAT_FIRST; i <= STAT_LAST; i++) {
+			lua_pushnumber(L, abilities.stats[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		lua_setfield(L, -2, "stats");
+
+		// Stats percent
+		lua_createtable(L, 0, STAT_LAST + 1);
+		for (int32_t i = STAT_FIRST; i <= STAT_LAST; i++) {
+			lua_pushnumber(L, abilities.statsPercent[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		lua_setfield(L, -2, "statsPercent");
+
+		// Skills
+		lua_createtable(L, 0, SKILL_LAST + 1);
+		for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
+			lua_pushnumber(L, abilities.skills[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		lua_setfield(L, -2, "skills");
+
+		// Special skills
+		lua_createtable(L, 0, SPECIALSKILL_LAST + 1);
+		for (int32_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; i++) {
+			lua_pushnumber(L, abilities.specialSkills[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		lua_setfield(L, -2, "specialSkills");
+
+		// Field absorb percent
+		lua_createtable(L, 0, COMBAT_COUNT);
+		for (int32_t i = 0; i < COMBAT_COUNT; i++) {
+			lua_pushnumber(L, abilities.fieldAbsorbPercent[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		lua_setfield(L, -2, "fieldAbsorbPercent");
+
+		// Absorb percent
+		lua_createtable(L, 0, COMBAT_COUNT);
+		for (int32_t i = 0; i < COMBAT_COUNT; i++) {
+			lua_pushnumber(L, abilities.absorbPercent[i]);
+			lua_rawseti(L, -2, i + 1);
+		}
+		lua_setfield(L, -2, "absorbPercent");
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeHasShowAttributes(lua_State* L)
+{
+	// itemType:hasShowAttributes()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->showAttributes);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeHasShowCount(lua_State* L)
+{
+	// itemType:hasShowCount()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->showCount);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeHasShowCharges(lua_State* L)
+{
+	// itemType:hasShowCharges()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->showCharges);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeHasShowDuration(lua_State* L)
+{
+	// itemType:hasShowDuration()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->showDuration);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeHasAllowDistRead(lua_State* L)
+{
+	// itemType:hasAllowDistRead()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->allowDistRead);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetWieldInfo(lua_State* L)
+{
+	// itemType:getWieldInfo()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->wieldInfo);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetDuration(lua_State* L)
+{
+	// itemType:getDuration()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->decayTime);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetLevelDoor(lua_State* L)
+{
+	// itemType:getLevelDoor()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->levelDoor);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetVocationString(lua_State* L)
+{
+	// itemType:getVocationString()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushString(L, itemType->vocationString);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetMinReqLevel(lua_State* L)
+{
+	// itemType:getMinReqLevel()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->minReqLevel);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetMinReqMagicLevel(lua_State* L)
+{
+	// itemType:getMinReqMagicLevel()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->minReqMagicLevel);
 	} else {
 		lua_pushnil(L);
 	}

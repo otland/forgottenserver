@@ -723,6 +723,8 @@ class LuaScriptInterface
 		static int luaItemDecay(lua_State* L);
 
 		static int luaItemGetDescription(lua_State* L);
+		static int luaItemGetSpecialDescription(lua_State* L);
+		static int luaItemGetSubTypeName(lua_State* L);
 
 		static int luaItemHasProperty(lua_State* L);
 		static int luaItemIsLoadedFromMap(lua_State* L);
@@ -1147,6 +1149,7 @@ class LuaScriptInterface
 		static int luaItemTypeIsPickupable(lua_State* L);
 
 		static int luaItemTypeGetType(lua_State* L);
+		static int luaItemTypeGetGroup(lua_State* L);
 		static int luaItemTypeGetId(lua_State* L);
 		static int luaItemTypeGetClientId(lua_State* L);
 		static int luaItemTypeGetName(lua_State* L);
@@ -1178,6 +1181,18 @@ class LuaScriptInterface
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
 		static int luaItemTypeGetAmmoType(lua_State* L);
 		static int luaItemTypeGetCorpseType(lua_State* L);
+		static int luaItemTypeHasShowCount(lua_State* L);
+		static int luaItemTypeGetAbilities(lua_State* L);
+		static int luaItemTypeHasShowAttributes(lua_State* L);
+		static int luaItemTypeHasShowCharges(lua_State* L);
+		static int luaItemTypeHasShowDuration(lua_State* L);
+		static int luaItemTypeHasAllowDistRead(lua_State* L);
+		static int luaItemTypeGetWieldInfo(lua_State* L);
+		static int luaItemTypeGetDuration(lua_State* L);
+		static int luaItemTypeGetLevelDoor(lua_State* L);
+		static int luaItemTypeGetVocationString(lua_State* L);
+		static int luaItemTypeGetMinReqLevel(lua_State* L);
+		static int luaItemTypeGetMinReqMagicLevel(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
 
