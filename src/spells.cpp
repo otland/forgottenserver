@@ -858,34 +858,30 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t healthCost
 
 uint32_t Spell::getManaCost(const Player* player) const
 {
-	uint32_t finalMana = 0;
+	uint32_t manaCost = 0;
 	if (mana != 0) {
-		finalMana = mana;
+		manaCost = mana;
 	}
 
 	if (manaPercent != 0) {
 		uint32_t maxMana = player->getMaxMana();
-		uint32_t manaCost = (maxMana * manaPercent) / 100;
-		finalMana = finalMana + manaCost;
+		manaCost += ((maxMana * manaPercent) / 100);
 	}
-
-	return finalMana;
+	return manaCost;
 }
 
 uint32_t Spell::getHealthCost(const Player* player) const
 {
-	uint32_t finalHealth = 0;
+	uint32_t healthCost = 0;
 	if (health != 0) {
-		finalHealth = health;
+		healthCost = health;
 	}
 
 	if (healthPercent != 0) {
 		uint32_t maxHealth = player->getMaxHealth();
-		uint32_t healthCost = (maxHealth * healthPercent) / 100;
-		finalHealth = finalHealth + healthCost;
+		healthCost += ((maxHealth * healthPercent) / 100);
 	}
-
-	return finalHealth;
+	return healthCost;
 }
 
 std::string InstantSpell::getScriptEventName() const
