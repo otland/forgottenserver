@@ -921,6 +921,7 @@ void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spel
 	setField(L, "manapercent", spell.getManaPercent());
 	setField(L, "health", spell.getHealth());
 	setField(L, "healthpercent", spell.getHealthPercent());
+	setField(L, "soul", spell.getSoulCost());
 
 	setMetatable(L, -1, "Spell");
 }
