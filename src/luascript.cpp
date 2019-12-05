@@ -8413,6 +8413,7 @@ int LuaScriptInterface::luaPlayerAddSpecialSkill(lua_State* L)
 	}
 
 	player->setVarSpecialSkill(specialSkillType, getNumber<int32_t>(L, 3));
+	player->sendSkills();
 	pushBoolean(L, true);
 	return 1;
 }
