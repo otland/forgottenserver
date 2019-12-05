@@ -14386,10 +14386,9 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 			lua_createtable(L, 0, 0);
 			auto it = 0;
 			for (auto voc : spell->getVocMap()) {
-				++it;
 				std::string name = g_vocations.getVocation(voc.first)->getVocName();
 				pushString(L, name);
-				lua_rawseti(L, -2, it);
+				lua_rawseti(L, -2, ++it);
 			}
 			setMetatable(L, -1, "Spell");
 		} else {
