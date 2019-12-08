@@ -998,12 +998,6 @@ void LuaScriptInterface::registerFunctions()
 	//getDepotId(uid)
 	lua_register(luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
 
-	//getWorldTime()
-	lua_register(luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
-
-	//getWorldLight()
-	lua_register(luaState, "getWorldLight", LuaScriptInterface::luaGetWorldLight);
-
 	//getWorldUpTime()
 	lua_register(luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
 
@@ -2435,6 +2429,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
 	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
 
+	registerMethod("Player", "sendWorldLight", LuaScriptInterface::luaPlayerSendWorldLight);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -3170,23 +3166,6 @@ int LuaScriptInterface::luaDebugPrint(lua_State* L)
 	//debugPrint(text)
 	reportErrorFunc(getString(L, -1));
 	return 0;
-}
-
-int LuaScriptInterface::luaGetWorldTime(lua_State* L)
-{
-	//getWorldTime()
-	uint32_t time = g_game.getLightHour();
-	lua_pushnumber(L, time);
-	return 1;
-}
-
-int LuaScriptInterface::luaGetWorldLight(lua_State* L)
-{
-	//getWorldLight()
-	LightInfo lightInfo = g_game.getWorldLightInfo();
-	lua_pushnumber(L, lightInfo.level);
-	lua_pushnumber(L, lightInfo.color);
-	return 2;
 }
 
 int LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
@@ -9977,6 +9956,20 @@ int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->fightMode);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSendWorldLight(lua_State* L)
+{
+	// player:sendWorldLight(intensity, color)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player && isNumber(L, 2) && isNumber(L, 3)) {
+		LightInfo lightInfo(getNumber<uint8_t>(L, 2), getNumber<uint8_t>(L, 3));
+		player->sendWorldLight(lightInfo);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}

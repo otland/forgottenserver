@@ -23,15 +23,41 @@ function getDistanceBetween(firstPosition, secondPosition)
 	return posDif
 end
 
-function getFormattedWorldTime()
-	local worldTime = getWorldTime()
-	local hours = math.floor(worldTime / 60)
+function getWorldTime()
+	local realSeconds = tonumber(os.date("%S"))
+	local realMinutes = tonumber(os.date("%M"))
 
-	local minutes = worldTime % 60
-	if minutes < 10 then
-		minutes = '0' .. minutes
+	local worldMinutes = math.floor((realSeconds + (realMinutes * 60)) / 2.5)
+	return worldMinutes
+end
+
+function getFormattedWorldTime()
+	local hoursPrefix = ""
+	local minutesPrefix = ""
+
+	local worldMinutes = getWorldTime()
+	local worldHours = math.floor(worldMinutes/60)
+	
+	worldMinutes = worldMinutes%60
+
+	if worldHours < 10 then hoursPrefix = "0" end
+	if worldMinutes < 10 then minutesPrefix = "0" end
+
+	return hoursPrefix..worldHours..":"..minutesPrefix..worldMinutes
+end
+
+do
+	local noon = 720
+	local changePerMinute = 0.29
+	function getWorldLight()
+		local intensity = nil
+		if getWorldTime() > noon then
+			intensity = math.floor(noon - (getWorldTime() - noon)*changePerMinute+40)
+		else
+			intensity = math.floor(getWorldTime()*changePerMinute+40)
+		end
+		return intensity, 215
 	end
-	return hours .. ':' .. minutes
 end
 
 function getLootRandom()

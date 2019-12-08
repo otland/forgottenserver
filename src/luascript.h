@@ -445,8 +445,6 @@ class LuaScriptInterface
 		static int luaGetDepotId(lua_State* L);
 
 		//get world info
-		static int luaGetWorldTime(lua_State* L);
-		static int luaGetWorldLight(lua_State* L);
 		static int luaGetWorldUpTime(lua_State* L);
 
 		//type validation
@@ -995,6 +993,8 @@ class LuaScriptInterface
 		static int luaPlayerHasChaseMode(lua_State* L);
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
+
+		static int luaPlayerSendWorldLight(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);

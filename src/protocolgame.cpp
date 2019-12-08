@@ -2456,9 +2456,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendStats();
 	sendSkills();
 
-	//gameworld light-settings
-	sendWorldLight(g_game.getWorldLightInfo());
-
 	//player light level
 	sendCreatureLight(creature);
 
