@@ -24,26 +24,14 @@ function getDistanceBetween(firstPosition, secondPosition)
 end
 
 function getWorldTime()
-	local realSeconds = tonumber(os.date("%S"))
-	local realMinutes = tonumber(os.date("%M"))
-
-	local worldMinutes = math.floor((realSeconds + (realMinutes * 60)) / 2.5)
-	return worldMinutes
+	return math.floor((tonumber(os.date("%S")) + (tonumber(os.date("%M")) * 60)) / 2.5)
 end
 
 function getFormattedWorldTime()
-	local hoursPrefix = ""
-	local minutesPrefix = ""
-
 	local worldMinutes = getWorldTime()
-	local worldHours = math.floor(worldMinutes/60)
-	
-	worldMinutes = worldMinutes%60
-
-	if worldHours < 10 then hoursPrefix = "0" end
-	if worldMinutes < 10 then minutesPrefix = "0" end
-
-	return hoursPrefix..worldHours..":"..minutesPrefix..worldMinutes
+	local worldHours = math.floor(worldMinutes / 60)
+	worldMinutes = worldMinutes % 60
+	return string.format("%02d:%02d", worldHours, worldMinutes)
 end
 
 do
@@ -52,9 +40,9 @@ do
 	function getWorldLight()
 		local intensity = nil
 		if getWorldTime() > noon then
-			intensity = math.floor(noon - (getWorldTime() - noon)*changePerMinute+40)
+			intensity = math.floor(noon - (getWorldTime() - noon) * changePerMinute + 40)
 		else
-			intensity = math.floor(getWorldTime()*changePerMinute+40)
+			intensity = math.floor(getWorldTime() * changePerMinute + 40)
 		end
 		return intensity, 215
 	end

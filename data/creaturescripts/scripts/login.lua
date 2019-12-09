@@ -1,5 +1,5 @@
 function onLogin(player)
-	local intensity,color = getWorldLight()
+	local intensity, color = getWorldLight()
 	player:sendWorldLight(intensity, color)
 	local loginStr = "Welcome to " .. configManager.getString(configKeys.SERVER_NAME) .. "!"
 	if player:getLastLoginSaved() <= 0 then
