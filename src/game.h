@@ -428,7 +428,7 @@ class Game
 		void addCreatureHealth(const Creature* target);
 		static void addCreatureHealth(const SpectatorVec& spectators, const Creature* target);
 		void addAnimatedText(const std::string& message, const Position& pos, TextColor_t color);
-		static void addAnimatedText(const SpectatorHashSet& list, const std::string& message, const Position& pos, TextColor_t color);
+		static void addAnimatedText(const SpectatorVec& list, const std::string& message, const Position& pos, TextColor_t color);
 		void addMagicEffect(const Position& pos, uint8_t effect);
 		static void addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect);
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);

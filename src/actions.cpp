@@ -499,14 +499,11 @@ bool Action::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
+bool Action::loadFunction(const pugi::xml_attribute& attr, bool)
 {
 	const char* functionName = attr.as_string();
 	std::cout << "[Warning - Action::loadFunction] Function \"" << functionName << "\" does not exist." << std::endl;
 	return false;
-
-	/*scripted = false;
-	return true;*/
 }
 
 std::string Action::getScriptEventName() const
