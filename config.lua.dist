@@ -75,6 +75,15 @@ emoteSpells = false
 classicEquipmentSlots = false
 classicAttackSpeed = false
 showScriptsLogInConsole = true
+showOnlineStatusInCharlist = false
+
+-- Server Save
+-- NOTE: serverSaveNotifyDuration in minutes
+serverSaveNotifyMessage = true
+serverSaveNotifyDuration = 5
+serverSaveCleanMap = false
+serverSaveClose = false
+serverSaveShutdown = true
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml

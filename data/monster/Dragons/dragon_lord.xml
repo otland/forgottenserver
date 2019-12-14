@@ -49,27 +49,25 @@
 		<voice sentence="YOU WILL BURN!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gemmed book" chance="9000" />
-		<item name="golden mug" chance="3190" />
-		<item name="small sapphire" chance="5300" />
-		<item name="gold coin" countmax="100" chance="33750" />
-		<item name="gold coin" countmax="100" chance="33750" />
-		<item name="gold coin" countmax="45" chance="33750" />
-		<item name="energy ring" chance="5250" />
-		<item name="life crystal" chance="680" />
-		<item name="fire sword" chance="290" />
-		<item name="strange helmet" chance="360" />
-		<item name="dragon scale mail" chance="170" />
-		<item name="royal helmet" chance="280" />
-		<item name="tower shield" chance="250" />
-		<item name="power bolt" countmax="7" chance="6700" />
+		<item name="gold coin" countmax="245" chance="95000" />
 		<item name="dragon ham" countmax="5" chance="80000" />
 		<item name="green mushroom" chance="12000" />
+		<item name="royal spear" countmax="3" chance="9000" />
+		<item id="1976" chance="9000" /><!-- book (gemmed) -->
+		<item name="power bolt" countmax="7" chance="6700" />
+		<item name="energy ring" chance="5250" />
+		<item name="small sapphire" chance="5300" />
+		<item name="golden mug" chance="3190" />
 		<item name="red dragon scale" chance="1920" />
 		<item name="red dragon leather" chance="1040" />
-		<item name="royal spear" countmax="3" chance="8800" />
-		<item name="dragon lord trophy" chance="80" />
-		<item name="dragon slayer" chance="100" />
 		<item name="strong health potion" chance="970" />
+		<item name="life crystal" chance="680" />
+		<item name="strange helmet" chance="360" />
+		<item name="fire sword" chance="290" />
+		<item name="tower shield" chance="250" />
+		<item name="royal helmet" chance="280" />
+		<item name="dragon scale mail" chance="170" />
+		<item name="dragon slayer" chance="110" />
+		<item name="dragon lord trophy" chance="90" />
 	</loot>
 </monster>

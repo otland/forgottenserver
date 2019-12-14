@@ -22,6 +22,7 @@
 
 #include <regex>
 #include <set>
+#include <unordered_set>
 
 #include "container.h"
 #include "housetile.h"

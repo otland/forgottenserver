@@ -56,9 +56,8 @@
 	</voices>
 	<loot>
 		<item name="small diamond" countmax="3" chance="8800" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="99" chance="50000" />
-		<item name="platinum coin" countmax="5" chance="100000" />
+		<item name="gold coin" countmax="200" chance="100000" />
+		<item name="platinum coin" countmax="5" chance="95000" />
 		<item name="yellow gem" chance="1030" />
 		<item name="energy ring" chance="1650" />
 		<item name="fire sword" chance="1680" />
@@ -81,7 +80,6 @@
 		<item name="blue crystal splinter" countmax="2" chance="8500" />
 		<item name="green crystal fragment" chance="7000" />
 		<item name="magma clump" chance="11600" />
-		<item name="blazing bone" countmax="1" chance="11500" />
-		<item name="blazing bone" chance="12220" />
+		<item name="blazing bone" chance="11500" />
 	</loot>
 </monster>

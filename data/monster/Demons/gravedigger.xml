@@ -63,7 +63,7 @@
 		<item name="platinum coin" chance="24470" />
 		<item name="yellow gem" chance="800" />
 		<item name="wand of inferno" chance="5590" />
-		<item name="sudden death rune" countmaxe="9" chance="7300" />
+		<item name="sudden death rune" countmax="9" chance="7300" />
 		<item name="skull staff" chance="130" />
 		<item name="mysterious voodoo skull" chance="100" />
 		<item name="hardened bone" chance="50" />

@@ -169,6 +169,8 @@ class MonsterType
 		MonsterType(const MonsterType&) = delete;
 		MonsterType& operator=(const MonsterType&) = delete;
 
+		bool loadCallback(LuaScriptInterface* scriptInterface);
+
 		std::string name;
 		std::string nameDescription;
 
@@ -239,7 +241,6 @@ class Monsters
 		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 		std::unique_ptr<LuaScriptInterface> scriptInterface;
-		bool loadCallback(LuaScriptInterface* scriptInterface, MonsterType* mType);
 
 	private:
 		ConditionDamage* getDamageCondition(ConditionType_t conditionType,
