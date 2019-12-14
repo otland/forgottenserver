@@ -1,3 +1,4 @@
+math.randomseed(os.time())
 dofile('data/lib/lib.lua')
 
 STORAGEVALUE_PROMOTION = 30018
@@ -34,7 +35,6 @@ function getFormattedWorldTime()
 end
 
 function getLootRandom()
-	math.randomseed(os.mtime())
 	return math.random(0, MAX_LOOTCHANCE) / configManager.getNumber(configKeys.RATE_LOOT)
 end
 
@@ -51,6 +51,14 @@ string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do
 		res[#res + 1] = v
+	end
+	return res
+end
+
+string.splitTrimmed = function(str, sep)
+	local res = {}
+	for v in str:gmatch("([^" .. sep .. "]+)") do
+		res[#res + 1] = v:trim()
 	end
 	return res
 end

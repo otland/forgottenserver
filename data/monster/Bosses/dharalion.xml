@@ -60,6 +60,7 @@
 		<voice sentence="My powers are divine!"/>
 	</voices>
 	<loot>
+<<<<<<< HEAD
 		<item id="2148" countmax="20" chance="100000"/><!-- gold coin -->
 		<item id="1949" chance="10000"/><!-- scroll -->
 		<item id="2578" chance="5000"/><!-- closed trap -->
@@ -83,5 +84,26 @@
 				<item id="2154" chance="1333"/><!-- yellow gem -->
 			
 		</item>
+=======
+		<item id="1949" chance="10000" /><!-- scroll -->
+		<item id="2032" chance="4000" /><!-- bowl -->
+		<item name="oil lamp" chance="2857" />
+		<item name="crystal necklace" chance="1818" />
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item name="yellow gem" chance="1333" />
+		<item name="life crystal" chance="2857" />
+		<item name="blank rune" chance="4000" />
+		<item id="2401" chance="3000" /><!-- staff -->
+		<item name="bow" chance="10000" />
+		<item name="arrow" countmax="10" chance="20000" />
+		<item name="closed trap" chance="5000" />
+		<item name="inkwell" chance="33333" />
+		<item name="sandals" chance="20000" />
+		<item name="green tunic" chance="5000" />
+		<item name="melon" chance="6666" />
+		<item name="bread" countmax="3" chance="20000" />
+		<item name="sling herb" chance="10000" />
+		<item name="worm" countmax="10" chance="50000" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>

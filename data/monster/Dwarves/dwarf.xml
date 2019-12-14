@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="170" manacost="320">
 	<health now="90" max="90"/>
 	<look type="69" corpse="6007"/>
 	<targetchange interval="2000" chance="0"/>
 	<strategy attack="100" defense="0"/>
+=======
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="170" manacost="320">
+	<health now="90" max="90" />
+	<look type="69" corpse="6007" />
+	<targetchange interval="4000" chance="0" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -20,7 +28,11 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="20" attack="20"/>
 	</attacks>
+<<<<<<< HEAD
 	<defenses armor="8" defense="10"/>
+=======
+	<defenses armor="8" defense="8" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	<elements>
 		<element earthPercent="70"/>
 		<element firePercent="-5"/>
@@ -30,6 +42,7 @@
 		<voice sentence="Hail Durin!"/>
 	</voices>
 	<loot>
+<<<<<<< HEAD
 		<item id="2148" countmax="8" chance="20000"/><!-- gold coin -->
 		<item id="2787" countmax="2" chance="20000"/><!-- white mushroom -->
 		<item id="2388" chance="25000"/><!-- hatchet -->
@@ -45,5 +58,18 @@
 		<item id="2213" chance="200"/><!-- dwarven ring -->
 			
 		</item>
+=======
+		<item name="white mushroom" chance="50000" />
+		<item name="gold coin" countmax="8" chance="35000" />
+		<item name="hatchet" chance="25000" />
+		<item name="axe" chance="15000" />
+		<item name="pick" chance="10000" />
+		<item name="copper shield" chance="10000" />
+		<item name="leather legs" chance="10000" />
+		<item name="studded armor" chance="8000" />
+		<item name="letter" chance="8000" />
+		<item name="dwarven ring" chance="100" />
+		<item name="iron ore" chance="100" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>

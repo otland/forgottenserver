@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hunter" nameDescription="a hunter" race="blood" experience="150" speed="215" manacost="0">
 	<health now="150" max="150"/>
 	<look type="129" head="95" body="116" legs="121" feet="115" corpse="6080"/>
 	<targetchange interval="5000" chance="8"/>
 	<strategy attack="100" defense="0"/>
+=======
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Hunter" nameDescription="a hunter" race="blood" experience="150" speed="210" manacost="530">
+	<health now="150" max="150" />
+	<look type="129" head="95" body="116" legs="121" feet="115" corpse="20419" />
+	<targetchange interval="4000" chance="10" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -23,10 +31,17 @@
 			<attribute key="shootEffect" value="arrow"/>
 		</attack>
 	</attacks>
+<<<<<<< HEAD
 	<defenses armor="8" defense="10"/>
 	<elements>
 		<element holyPercent="20"/>
 		<element physicalPercent="-20"/>
+=======
+	<defenses armor="8" defense="8" />
+	<elements>
+		<element holyPercent="20" />
+		<element physicalPercent="-5" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="Guess who we're hunting, haha!"/>
@@ -35,6 +50,7 @@
 		<voice sentence="You'll make a nice trophy!"/>
 	</voices>
 	<loot>
+<<<<<<< HEAD
 		<item id="2545" countmax="2" chance="12500"/><!-- poison arrow -->
 		<item id="2544" countmax="24" chance="9000"/><!-- arrow -->
 		<item id="2675" countmax="2" chance="22500"/><!-- orange -->
@@ -55,5 +71,24 @@
 				<item id="2147" chance="100"/><!-- small ruby -->		
 			
 		</item>
+=======
+		<item name="arrow" countmax="22" chance="82000" />
+		<item name="orange" countmax="2" chance="20300" />
+		<item name="roll" countmax="2" chance="11370" />
+		<item name="hunter's quiver" chance="10240" />
+		<item name="bow" chance="5770" />
+		<item name="burst arrow" countmax="3" chance="5360" />
+		<item name="brass armor" chance="5070" />
+		<item name="brass helmet" chance="5050" />
+		<item name="poison arrow" countmax="4" chance="4500" />
+		<item name="dragon necklace" chance="3000" />
+		<item id="2050" chance="3300" /><!-- torch -->
+		<item name="sniper gloves" chance="610" />
+		<item id="7397" chance="520" /><!-- deer trophy -->
+		<item name="small ruby" chance="170" />
+		<item id="7400" chance="140" /><!-- lion trophy -->
+		<item id="7394" chance="130" /><!-- wolf trophy -->
+		<item name="slingshot" chance="120" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>

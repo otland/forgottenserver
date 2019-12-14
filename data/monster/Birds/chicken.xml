@@ -23,9 +23,16 @@
 		<voice sentence="cluck cluck"/>
 	</voices>
 	<loot>
+<<<<<<< HEAD
 		<item id="3976" countmax="3" chance="22500"/><!-- worm -->
 		<item id="5890" countmax="1" chance="25000"/><!-- chicken feather -->
 		<item id="2695" chance="1700"/><!-- egg -->
 		<item id="2666" countmax="2" chance="3250"/><!-- meat -->
+=======
+		<item name="meat" countmax="2" chance="2120" />
+		<item id="2695" chance="950" /><!-- egg -->
+		<item name="worm" countmax="3" chance="10000" />
+		<item name="chicken feather" chance="20000" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>

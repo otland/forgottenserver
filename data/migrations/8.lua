@@ -9,7 +9,7 @@ function onUpdateDatabase()
 	local resultId = db.storeQuery("SELECT `player_id`, `pid`, (SELECT `dp2`.`sid` FROM `player_depotitems` AS `dp2` WHERE `dp2`.`player_id` = `dp1`.`player_id` AND `dp2`.`pid` = `dp1`.`sid` AND `itemtype` = 2594) AS `sid` FROM `player_depotitems` AS `dp1` WHERE `itemtype` = 2589")
 	if resultId ~= false then
 		repeat
-			db.query("UPDATE `player_depotitems` SET `pid` = " .. result.getDataInt(resultId, "pid") .. " WHERE `player_id` = " .. result.getDataInt(resultId, "player_id") .. " AND `pid` = " .. result.getDataInt(resultId, "sid"))
+			db.query("UPDATE `player_depotitems` SET `pid` = " .. result.getNumber(resultId, "pid") .. " WHERE `player_id` = " .. result.getNumber(resultId, "player_id") .. " AND `pid` = " .. result.getNumber(resultId, "sid"))
 		until not result.next(resultId)
 		result.free(resultId)
 	end
@@ -23,7 +23,7 @@ function onUpdateDatabase()
 	resultId = db.storeQuery("SELECT DISTINCT `player_id` FROM `player_depotitems` WHERE `itemtype` = 14404")
 	if resultId ~= false then
 		repeat
-			local playerId = result.getDataInt(resultId, "player_id")
+			local playerId = result.getNumber(resultId, "player_id")
 
 			local runningId = 100
 
@@ -33,7 +33,7 @@ function onUpdateDatabase()
 			if resultId2 ~= false then
 				repeat
 					local sids = {}
-					sids[#sids + 1] = result.getDataInt(resultId2, "sid")
+					sids[#sids + 1] = result.getNumber(resultId2, "sid")
 					while #sids > 0 do
 						local sid = sids[#sids]
 						sids[#sids] = nil
@@ -41,12 +41,12 @@ function onUpdateDatabase()
 						local resultId3 = db.storeQuery("SELECT * FROM `player_depotitems` WHERE `player_id` = " .. playerId .. " AND `pid` = " .. sid)
 						if resultId3 ~= false then
 							repeat
-								local attr, attrSize = result.getDataStream(resultId3, "attributes")
+								local attr, attrSize = result.getStream(resultId3, "attributes")
 								runningId = runningId + 1
-								stmt = stmt .. "(" .. playerId .. "," .. runningId .. ",0," .. result.getDataInt(resultId3, "itemtype") .. "," .. result.getDataInt(resultId3, "count") .. "," .. db.escapeBlob(attr, attrSize) .. "),"
-								sids[#sids + 1] = result.getDataInt(resultId3, "sid")
+								stmt = stmt .. "(" .. playerId .. "," .. runningId .. ",0," .. result.getNumber(resultId3, "itemtype") .. "," .. result.getNumber(resultId3, "count") .. "," .. db.escapeBlob(attr, attrSize) .. "),"
+								sids[#sids + 1] = result.getNumber(resultId3, "sid")
 
-								db.query("DELETE FROM `player_depotitems` WHERE `player_id` = " .. result.getDataInt(resultId, "player_id") .. " AND `sid` = " .. result.getDataInt(resultId3, "sid"))
+								db.query("DELETE FROM `player_depotitems` WHERE `player_id` = " .. result.getNumber(resultId, "player_id") .. " AND `sid` = " .. result.getNumber(resultId3, "sid"))
 							until not result.next(resultId3)
 							result.free(resultId3)
 						end

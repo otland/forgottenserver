@@ -358,6 +358,19 @@ if NpcHandler == nil then
 	-- Handles onCreatureAppear events. If you with to handle this yourself, please use the CALLBACK_CREATURE_APPEAR callback.
 	function NpcHandler:onCreatureAppear(creature)
 		local cid = creature:getId()
+<<<<<<< HEAD
+=======
+		if cid == getNpcCid() and next(self.shopItems) then
+			local npc = Npc()
+			local speechBubble = npc:getSpeechBubble()
+			if speechBubble == SPEECHBUBBLE_QUEST then
+				npc:setSpeechBubble(SPEECHBUBBLE_QUESTTRADER)
+			else
+				npc:setSpeechBubble(SPEECHBUBBLE_TRADE)
+			end
+		end
+
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 		local callback = self:getCallback(CALLBACK_CREATURE_APPEAR)
 		if callback == nil or callback(cid) then
 			if self:processModuleCallback(CALLBACK_CREATURE_APPEAR, cid) then

@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Bear" namedescription="a bear" race="blood" experience="23" speed="176" manacost="300">
 	<health now="80" max="80"/>
 	<look type="16" corpse="5975"/>
 	<targetchange interval="2000" chance="0"/>
 	<strategy attack="100" defense="0"/>
+=======
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Bear" namedescription="a bear" race="blood" experience="23" speed="156" manacost="300">
+	<health now="80" max="80" />
+	<look type="16" corpse="5975" />
+	<targetchange interval="4000" chance="0" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -20,7 +28,11 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="40" attack="10"/>
 	</attacks>
+<<<<<<< HEAD
 	<defenses armor="6" defense="6"/>
+=======
+	<defenses armor="6" defense="6" />
+>>>>>>> 89203a39009bea437895026081a6798d744731af
 	<elements>
 		<element earthPercent="20"/>
 		<element holyPercent="7"/>
