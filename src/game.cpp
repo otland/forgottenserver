@@ -4099,12 +4099,12 @@ void Game::addCreatureHealth(const SpectatorVec& spectators, const Creature* tar
 
 void Game::addAnimatedText(const std::string& message, const Position& pos, TextColor_t color)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, pos, true, true);
 	addAnimatedText(spectators, message, pos, color);
 }
 
-void Game::addAnimatedText(const SpectatorHashSet& spectators, const std::string& message, const Position& pos, TextColor_t color)
+void Game::addAnimatedText(const SpectatorVec& spectators, const std::string& message, const Position& pos, TextColor_t color)
 {
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
