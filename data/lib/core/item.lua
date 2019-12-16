@@ -73,7 +73,7 @@ function setAuxFunctions()
 			local attr = self:getAttribute(def.key)
 			if def.cmp and def.cmp(attr) then
 				return attr
-			elseif not def.cmp and attr ~= 0 then
+			elseif not def.cmp and attr and attr ~= 0 then
 				return attr
 			end
 			local default = ItemType['get'.. name]
