@@ -53,95 +53,38 @@ function StringStream.isEmpty(self)
 	return #self.str == 0
 end
 
-function Item.getDefense(self)
-	local defense = self:getAttribute(ITEM_ATTRIBUTE_DEFENSE)
-	if defense > 0 then
-		return defense
-	end
-	return self:getType():getDefense()
-end
+local aux = {
+	['Duration'] = {key = ITEM_ATTRIBUTE_DURATION},
+	['Defense'] = {key = ITEM_ATTRIBUTE_DEFENSE},
+	['ExtraDefense'] = {key = ITEM_ATTRIBUTE_EXTRADEFENSE},
+	['Attack'] = {key = ITEM_ATTRIBUTE_ATTACK},
+	['HitChance'] = {key = ITEM_ATTRIBUTE_HITCHANCE},
+	['ShootRange'] = {key = ITEM_ATTRIBUTE_SHOOTRANGE},
+	['Armor'] = {key = ITEM_ATTRIBUTE_ARMOR},
+	['Duration'] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
+	['Text'] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= '' end},
+	['Date'] = {key = ITEM_ATTRIBUTE_DATE},
+	['Writer'] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= '' end}
+}
 
-function Item.getExtraDefense(self)
-	local extraDef = self:getAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)
-	if extraDef > 0 then
-		return extraDef
-	end
-	return self:getType():getExtraDefense()
-end
-
-function Item.getAttack(self)
-	local attack = self:getAttribute(ITEM_ATTRIBUTE_ATTACK)
-	if attack > 0 then
-		return attack
-	end
-	return self:getType():getAttack()
-end
-
-function Item.getHitChance(self)
-	local hitChance = self:getAttribute(ITEM_ATTRIBUTE_HITCHANCE)
-	if hitChance > 0 then
-		return hitChance
-	end
-	return self:getType():getHitChance()
-end
-
-function Item.getShootRange(self)
-	local shootRange = self:getAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)
-	if shootRange > 0 then
-		return shootRange
-	end
-	return self:getType():getShootRange()
-end
-
-function Item.getArmor(self)
-	local armor = self:getAttribute(ITEM_ATTRIBUTE_ARMOR)
-	if armor > 0 then
-		return armor
-	end
-	return self:getType():getArmor()
-end
-
-function Item.getDuration(self)
-	local duration = self:getAttribute(ITEM_ATTRIBUTE_DURATION)
-	if duration > 0 then
-		return duration
-	end
-	return self:getType():getDuration()
-end
-
-function Item.getText(self)
-	local text = self:getAttribute(ITEM_ATTRIBUTE_TEXT)
-	return text ~= '' and text or nil
-end
-
-function Item.getDate(self)
-	local date = self:getAttribute(ITEM_ATTRIBUTE_DATE)
-	return data ~= 0 and date or nil
-end
-
-function Item.getWriter(self)
-	local writer = self:getAttribute(ITEM_ATTRIBUTE_WRITER)
-	return writer ~= '' and writer or nil
-end
-
-do -- fix str keys for constant iteration
-	local __spellvocation = Spell.vocation
-	function Spell.vocation(self, ...)
-		local args = {...}
-		if #args == 0 then
-			local vocMap = __spellvocation(self)
-			local tmp = {}
-			for k, v in pairs(vocMap) do
-				tmp[tonumber(k)] = v
+function setAuxFunctions()
+	for name, def in pairs(aux) do
+		Item['get'.. name] = function(self)
+			local attr = self:getAttribute(def.key)
+			if def.cmp and def.cmp(attr) then
+				return attr
+			elseif not def.cmp and attr ~= 0 then
+				return attr
 			end
-			return tmp
+			local default = ItemType['get'.. name]
+			return default and default(self:getType()) or nil
 		end
-		return __spellvocation(self, ...)
 	end
 end
 
+setAuxFunctions()
 
-function Item.__getNameDescription(self, addArticle)
+function Item.getNameDescription(self, addArticle)
 	local itemType = self:getType()
 	local subType = self:getSubType()
 	local s = ''
@@ -166,13 +109,15 @@ end
 
 do
 	local function addSeparator(ss, begin)
-		if begin[1] then
-			begin[1] = false
+		if begin then
+			begin = false
 			ss:append(' (')
 		else
 			ss:append(', ')
 		end
+		return begin
 	end
+
 	local function addGenerics(self, it, abilities, ss, begin)
 		if it:getWeaponType() == WEAPON_DISTANCE and it:getAmmoType() ~= 0 then
 			ss:append(' (Range:%d', self:getShootRange())
@@ -186,14 +131,14 @@ do
 				ss:append(', Hit%%%s%d', showpos(hitChance), hitChance)
 			end
 
-			begin[1] = false
+			begin = false
 		elseif it:getWeaponType() ~= WEAPON_AMMO then
 			local attack = self:getAttack()
 			local defense = self:getDefense()
 			local extraDefense = self:getExtraDefense()
 
 			if attack ~= 0 then
-				begin[1] = false
+				begin = false
 				ss:append(' (Atk:%d', attack)
 				
 				if abilities.elementType ~= COMBAT_NONE and abilities.elementDamage ~= 0 then
@@ -202,7 +147,7 @@ do
 			end
 
 			if defense ~= 0 or extraDefense ~= 0 then
-				addSeparator(ss, begin)
+				begin = addSeparator(ss, begin)
 				ss:append('Def:%d', defense)
 				if extraDefense ~= 0 then
 					ss:append(' %s%d', showpos(extraDefense), extraDefense)
@@ -213,7 +158,7 @@ do
 		-- Skills
 		for skill, value in ipairs(abilities.skills) do
 			if value ~= 0 then
-				addSeparator(ss, begin)
+				begin = addSeparator(ss, begin)
 				ss:append('%s %s%d', getSkillName(skill - 1), showpos(value), value)
 			end
 		end
@@ -221,14 +166,14 @@ do
 		-- Special Skills
 		for specialSkill, value in ipairs(abilities.specialSkills) do
 			if value ~= 0 then
-				addSeparator(ss, begin)
+				begin = addSeparator(ss, begin)
 				ss:append('%s %s%d%%', getSpecialSkillName(specialSkill - 1), showpos(value), value)
 			end
 		end
 
 		local magicPoints = abilities.stats[4]
 		if magicPoints ~= 0 then
-			addSeparator(ss, begin)
+			begin = addSeparator(ss, begin)
 			ss:append('magic level %s%d', showpos(magicPoints), magicPoints)
 		end
 
@@ -249,7 +194,7 @@ do
 				if value ~= 0 then
 					if tmp then
 						tmp = false
-						addSeparator(ss, begin)
+						begin = addSeparator(ss, begin)
 						ss:append('protection ')
 					else
 						ss:append(', ')
@@ -258,7 +203,7 @@ do
 				end
 			end
 		else
-			addSeparator(ss, begin)
+			begin = addSeparator(ss, begin)
 			ss:append('protection all %s%d%%', showpos(show), show)
 		end
 
@@ -279,7 +224,7 @@ do
 				if value ~= 0 then
 					if tmp then
 						tmp = false
-						addSeparator(ss, begin)
+						begin = addSeparator(ss, begin)
 						ss:append('protection ')
 					else
 						ss:append(', ')
@@ -288,26 +233,25 @@ do
 				end
 			end
 		else
-			addSeparator(ss, begin)
+			begin = addSeparator(ss, begin)
 			ss:append('protection all fields %s%d%%', showpos(show), show)
 		end
 
 		if abilities.speed ~= 0 then
-			addSeparator(ss, begin)
+			begin = addSeparator(ss, begin)
 			ss:append('speed %s%d', showpos(abilities.speed), abilities.speed / 2)
 		end
+		return begin
 	end
 
-	function Item.__getDescription(self, lookDistance)
-		local start = os.mtime()
+	function Item.getDescription(self, lookDistance)
 		local it = self:getType()
 		local abilities = it:getAbilities()
-		local nameDesc = self:__getNameDescription(true)
+		local nameDesc = self:getNameDescription(true)
 		local ss = StringStream()
 		local subType = self:getSubType()
-		local begin = {true} -- reference so we can pass & edit through auxiliary functions
-
-		-- table.print(abilities)
+		local text = nil
+		local begin = true
 
 		ss:append(nameDesc)
 
@@ -360,22 +304,22 @@ do
 					ss:append(' or higher')
 				end
 
-				if not begin[1] then
+				if not begin then
 					ss:append(')')
 				end
 			end
 		elseif it:getWeaponType() ~= WEAPON_NONE then
-			addGenerics(self, it, abilities, ss, begin)
-			if not begin[1] then
+			begin = addGenerics(self, it, abilities, ss, begin)
+			if not begin then
 				ss:append(')')
 			end
 		elseif self:getArmor() ~= 0 or it:hasShowAttributes() then
 			if self:getArmor() ~= 0 then
 				ss:append(' (Arm:%d', self:getArmor())
-				begin[1] = false
+				begin = false
 			end
-			addGenerics(self, it, abilities, ss, begin)
-			if not begin[1] then
+			begin = addGenerics(self, it, abilities, ss, begin)
+			if not begin then
 				ss:append(')')
 			end
 		elseif self:isContainer() then
@@ -422,7 +366,9 @@ do
 				elseif it:hasAllowDistRead() and (it:getId() < 7369 or it:getId() > 7371) then
 					ss:append('.\n')
 					if lookDistance <= 4 then
-						local text = self:getText()
+						if not text then
+							text = self:getText()
+						end
 						if text then
 							local writer = self:getWriter()
 							if writer then
@@ -495,8 +441,9 @@ do
 		if not it:hasAllowDistRead() or (it:getId() >= 7369 and it:getId() <= 7371) then
 			ss:append('.')
 		else
-			local text = self:getText()
-
+			if not text then
+				text = self:getText()
+			end
 			if not text then
 				ss:append('.')
 			end
@@ -554,19 +501,14 @@ do
 		end
 
 		if it:hasAllowDistRead() or (it:getId() >= 7369 and it:getId() <= 7371) then
-			local text = self:getText()
-			if text then
-				ss:append('\n%s', text)
+			if not text then
+				text = self:getText()
+				if text then
+					ss:append('\n%s', text)
+				end
 			end
 		end
 
-		ss:append('\n\nGenerated in '.. (os.mtime() - start) .. ' milliseconds')
 		return ss:build()
 	end
-end
-
-function Item.getTestDescription(self, player)
-	local s = 'You see ' .. self:__getDescription(self:getPosition():getDistance(player:getPosition()))
-
-	return s
 end
