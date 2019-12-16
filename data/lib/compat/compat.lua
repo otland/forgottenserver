@@ -1283,20 +1283,22 @@ function createFunctions(class)
 	for name, func in pairs(class) do
 		local add = true
 		for strLen, strTable in pairs(exclude) do
-			if table.contains(strTable, name:sub(1,strLen)) then
+			if table.contains(strTable, name:sub(1, strLen)) then
 				add = false
 			end
 		end
 		if add then
-			local str = name:sub(1,1):upper()..name:sub(2)
+			local str = name:sub(1, 1):upper() .. name:sub(2)
 			local getFunc = function(self) return func(self) end
 			local setFunc = function(self, ...) return func(self, ...) end
-			local get = "get".. str
-			local set = "set".. str
-			table.insert(temp, {set, setFunc, get, getFunc})
+			local get = "get" .. str
+			local set = "set" .. str
+			if not (rawget(class, get) and rawget(class, set)) then
+				table.insert(temp, {set, setFunc, get, getFunc})
+			end
 		end
 	end
-	for _,func in ipairs(temp) do
+	for _, func in ipairs(temp) do
 		rawset(class, func[1], func[2])
 		rawset(class, func[3], func[4])
 	end
