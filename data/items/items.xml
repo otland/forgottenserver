@@ -21313,8 +21313,6 @@
 		<attribute key="description" value="They will expire within a short time, sell them back to Esrik before they do." />
 		<attribute key="weight" value="2500" />
 	</item>
-<<<<<<< HEAD
-=======
 	<item id="12661" name="remains of a water elemental">
 		<attribute key="description" value="Something is wobbling inside. Maybe with a fishing rod you could reach it." />
 		<attribute key="containerSize" value="20" />
@@ -31995,7 +31993,6 @@
 	<item id="26054" article="a" name="decoration kit">
 		<attribute key="description" value="You bought this item in the Store or gained it as a daily reward. This item cannot be traded." />
 	</item>
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
 	<item id="30003" name="beer" />

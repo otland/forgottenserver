@@ -1,17 +1,8 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="180" manacost="0">
-	<health now="1000" max="1000"/>
-	<look type="34" corpse="5973"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
-=======
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="172">
 	<health now="1000" max="1000" />
 	<look type="34" corpse="5973" />
 	<targetchange interval="4000" chance="10" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -35,15 +26,9 @@
 			<attribute key="areaEffect" value="firearea"/>
 		</attack>
 	</attacks>
-<<<<<<< HEAD
-	<defenses armor="25" defense="18">
-		<defense name="healing" interval="1000" chance="13" min="34" max="56">
-			<attribute key="areaEffect" value="blueshimmer"/>
-=======
 	<defenses armor="25" defense="25">
 		<defense name="healing" interval="2000" chance="15" min="40" max="70">
 			<attribute key="areaEffect" value="blueshimmer" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 		</defense>
 	</defenses>
 	<elements>
@@ -61,35 +46,6 @@
 		<voice sentence="FCHHHHH" yell="1"/>
 	</voices>
 	<loot>
-<<<<<<< HEAD
-		<item id="2148" countmax="70" chance="37500"/><!-- gold coin -->
-		<item id="2148" countmax="50" chance="37500"/><!-- gold coin -->
-		<item id="2546" countmax="12" chance="4000"/><!-- burst arrow -->
-		<item id="2672" countmax="3" chance="15500"/><!-- dragon ham -->
-		<item id="2406" chance="25000"/><!-- short sword -->
-		<item id="2398" chance="21500"/><!-- mace -->
-		<item id="2509" chance="14000"/><!-- steel shield -->
-		<item id="2455" chance="10000"/><!-- crossbow -->
-		<item id="2397" chance="5000"/><!-- longsword -->
-		<item id="1987" chance="100000"><!-- bag -->
-			
-		<item id="2457" chance="3000"/><!-- steel helmet -->
-		<item id="2647" chance="2000"/><!-- plate legs -->
-		<item id="2413" chance="1950"/><!-- broadsword -->
-		<item id="7588" chance="1750"/><!-- strong health potion -->
-		<item id="2387" chance="1333"/><!-- double axe -->
-		<item id="2187" chance="1200"/><!-- wand of inferno -->
-		<item id="5920" chance="850"/><!-- green dragon scale -->
-		<item id="2434" chance="600"/><!-- dragon hammer -->
-		<item id="5877" chance="500"/><!-- green dragon leather -->
-		<item id="2145" chance="500"/><!-- small diamond -->
-		<item id="2516" chance="400"/><!-- dragon shield -->
-		<item id="2409" chance="400"/><!-- serpent sword -->
-		<item id="7430" chance="250"/><!-- dragonbone staff -->
-		<item id="2177" chance="150"/><!-- life crystal -->	
-			
-		</item>
-=======
 		<item name="gold coin" countmax="105" chance="90000" />
 		<item name="dragon ham" countmax="3" chance="65500" />
 		<item name="steel shield" chance="15000" />
@@ -111,6 +67,5 @@
 		<item name="dragon shield" chance="320" />
 		<item name="life crystal" chance="120" />
 		<item name="dragonbone staff" chance="110" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>

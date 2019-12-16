@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<monster name="Dog" nameDescription="a dog" race="blood" experience="0" speed="200" manacost="220">
-	<health now="20" max="20"/>
-	<look type="32" corpse="5971"/>
-	<targetchange interval="2000" chance="0"/>
-	<strategy attack="100" defense="0"/>
-=======
 <monster name="Dog" nameDescription="a dog" race="blood" experience="0" speed="124" manacost="220">
 	<health now="20" max="20" />
 	<look type="32" corpse="5971" />
 	<targetchange interval="4000" chance="0" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -24,25 +16,8 @@
 		<flag staticattack="90"/>
 		<flag runonhealth="8"/>
 	</flags>
-<<<<<<< HEAD
-	<defenses armor="1" defense="2"/>
-	<immunities>
-		<immunity physical="0"/>
-		<immunity energy="0"/>
-		<immunity fire="0"/>
-		<immunity poison="0"/>
-		<immunity lifedrain="0"/>
-		<immunity paralyze="0"/>
-		<immunity outfit="0"/>
-		<immunity drunk="0"/>
-		<immunity invisible="0"/>
-	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Wuff! Wuff!"/>
-=======
 	<defenses armor="1" defense="1" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Wuff wuff" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	</voices>
 </monster>

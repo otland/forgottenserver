@@ -1,17 +1,8 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="220" manacost="0">
-	<health now="3500" max="3500"/>
-	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="6080"/>
-	<targetchange interval="5000" chance="30"/>
-	<strategy attack="100" defense="0"/>
-=======
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="230">
 	<health now="3500" max="3500" />
 	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="20527" />
 	<targetchange interval="4000" chance="10" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="0"/>
 		<flag attackable="1"/>
@@ -57,18 +48,9 @@
 		</defense>
 	</defenses>
 	<elements>
-<<<<<<< HEAD
-		<element firePercent="100"/>
-		<element energyPercent="100"/>
-		<element icePercent="100"/>
-		<element earthPercent="90"/>
-		<element holyPercent="-25"/>
-		<element physicalPercent="-33"/>
-=======
 		<element earthPercent="95" />
 		<element holyPercent="-8" />
 		<element physicalPercent="-5" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>

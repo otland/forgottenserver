@@ -1,17 +1,8 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wasp" nameDescription="a wasp" race="venom" experience="25" speed="460" manacost="280">
-	<health now="35" max="35"/>
-	<look type="44" corpse="5989"/>
-	<targetchange interval="5000" chance="8"/>
-	<strategy attack="100" defense="0"/>
-=======
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wasp" nameDescription="a wasp" race="venom" experience="24" speed="320" manacost="280">
 	<health now="35" max="35" />
 	<look type="44" corpse="5989" />
 	<targetchange interval="4000" chance="10" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	<flags>
 		<flag summonable="1"/>
 		<flag attackable="1"/>
@@ -26,11 +17,7 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-<<<<<<< HEAD
-		<attack name="melee" interval="1500" skill="30" attack="10" poison="2"/>
-=======
 		<attack name="melee" interval="2000" min="0" max="-20" poison="20" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	</attacks>
 	<defenses armor="4" defense="8"/>
 	<elements>

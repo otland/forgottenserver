@@ -40,22 +40,10 @@
 		<summon name="Rat" interval="2000" chance="20" max="2"/>
 	</summons>
 	<loot>
-<<<<<<< HEAD
-		<item id="2148" countmax="16" chance="100000"/><!-- gold coin -->
-		<item id="2696" chance="50000"/><!-- cheese -->
-		<item id="1987" chance="100000"><!-- bag -->
-			
-				<item id="2687" countmax="1" chance="5000"/><!-- cookie -->
-				<item id="2650" chance="50000"/><!-- jacket -->
-				<item id="2449" chance="5000"/><!-- bone club -->
-			
-		</item>
-=======
 		<item name="gold coin" countmax="16" chance="100000" />
 		<item name="bone club" chance="5000" />
 		<item name="jacket" chance="50000" />
 		<item name="cookie" chance="5000" />
 		<item id="2696" chance="50000" /><!-- cheese -->
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>

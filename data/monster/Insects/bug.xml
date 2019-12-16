@@ -20,21 +20,12 @@
 	<attacks>
 		<attack name="melee" interval="2000" skill="20" attack="15"/>
 	</attacks>
-<<<<<<< HEAD
-	<defenses armor="2" defense="3"/>
-=======
 	<defenses armor="2" defense="2" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	<elements>
 		<element firePercent="-10"/>
 	</elements>
 	<loot>
-<<<<<<< HEAD
-		<item id="2148" countmax="6" chance="21000"/><!-- gold coin -->
-		<item id="2679" countmax="3" chance="6600"/><!-- cherry -->
-=======
 		<item name="gold coin" countmax="6" chance="50000" />
 		<item name="cherry" countmax="3" chance="3000" />
->>>>>>> 89203a39009bea437895026081a6798d744731af
 	</loot>
 </monster>
