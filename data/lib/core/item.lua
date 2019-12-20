@@ -34,23 +34,17 @@ StringStream = {}
 
 setmetatable(StringStream, {
 	__call = function(self)
-		local obj = {
-			str = {}
-		}
+		local obj = {}
 		return setmetatable(obj, {__index = StringStream})
 	end
 })
 
 function StringStream.append(self, str, ...)
-	self.str[#self.str+1] = string.format(str, ...)
+	self[#self+1] = string.format(str, ...)
 end
 
 function StringStream.build(self, sep)
-	return table.concat(self.str, sep)
-end
-
-function StringStream.isEmpty(self)
-	return #self.str == 0
+	return table.concat(self, sep)
 end
 
 local aux = {
