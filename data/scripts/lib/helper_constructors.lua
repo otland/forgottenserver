@@ -16,9 +16,11 @@ for _, class in ipairs(classes) do
 		local hasCallback = false
 
 		for f, args in pairs(def) do
-			if f:sub(1, 2) == 'on' then
+			-- Strictly check if a correct callback is passed
+			if f:sub(1, 2) == "on" and type(args) == "function" and rawget(class, f) then
 				hasCallback = true
 			end 
+
 			if f ~= "register" then
 				local method = self[f]
 				if method then
@@ -34,9 +36,10 @@ for _, class in ipairs(classes) do
 		-- Only register if callback has already been defined, otherwise defining afterwards will not work
 		if def.register then
 			if not hasCallback then
-				print('Warning: Registering an event with no callback.')
+				print("Warning: Registering an event with no callback.")
+			else
+				obj:register()
 			end
-			obj:register()
 		end
 
 		return obj
