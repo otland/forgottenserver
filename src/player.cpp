@@ -755,7 +755,6 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
 	depotChest->incrementReferenceCounter();
-	depotChest->setMaxDepotItems(getMaxDepotItems());
 	depotChests[depotId] = depotChest;
 	return depotChest;
 }
@@ -4034,16 +4033,6 @@ size_t Player::getMaxVIPEntries() const
 		return 100;
 	}
 	return 20;
-}
-
-size_t Player::getMaxDepotItems() const
-{
-	if (group->maxDepotItems != 0) {
-		return group->maxDepotItems;
-	} else if (isPremium()) {
-		return 2000;
-	}
-	return 1000;
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const

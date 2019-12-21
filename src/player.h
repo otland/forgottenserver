@@ -630,7 +630,6 @@ class Player final : public Creature, public Cylinder
 		bool canLogout();
 
 		size_t getMaxVIPEntries() const;
-		size_t getMaxDepotItems() const;
 
 		//tile
 		//send methods

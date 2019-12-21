@@ -23,37 +23,11 @@
 #include "tools.h"
 
 DepotChest::DepotChest(uint16_t type) :
-	Container(type), maxDepotItems(1500) {}
+	Container(type) {}
 
 ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t flags, Creature* actor/* = nullptr*/) const
 {
-	const Item* item = thing.getItem();
-	if (item == nullptr) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
-	bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
-	if (!skipLimit) {
-		int32_t addCount = 0;
-
-		if ((item->isStackable() && item->getItemCount() != count)) {
-			addCount = 1;
-		}
-
-		if (item->getTopParent() != this) {
-			if (const Container* container = item->getContainer()) {
-				addCount = container->getItemHoldingCount() + 1;
-			} else {
-				addCount = 1;
-			}
-		}
-
-		if (getItemHoldingCount() + addCount > maxDepotItems) {
-			return RETURNVALUE_DEPOTISFULL;
-		}
-	}
-
 	return Container::queryAdd(index, thing, count, flags, actor);
 }
 
@@ -71,10 +45,3 @@ void DepotChest::postRemoveNotification(Thing* thing, const Cylinder* newParent,
 	}
 }
 
-/*Cylinder* DepotChest::getParent() const
-{
-	if (parent) {
-		return parent->getParent();
-	}
-	return nullptr;
-}*/
