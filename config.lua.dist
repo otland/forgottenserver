@@ -79,6 +79,12 @@ showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 
+-- World Light
+-- NOTE: if defaultWorldLight is set to true the world light algorithm will
+-- be handled in the sources. set it to false to avoid conflicts if you wish
+-- to make use of the function setWorldLight(level, color)
+defaultWorldLight = true
+
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
 serverSaveNotifyMessage = true

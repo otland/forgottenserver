@@ -48,6 +48,7 @@ class ConfigManager
 			SERVER_SAVE_SHUTDOWN,
 			ONLINE_OFFLINE_CHARLIST,
 			YELL_ALLOW_PREMIUM,
+			DEFAULT_WORLD_LIGHT,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

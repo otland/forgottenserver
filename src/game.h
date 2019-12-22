@@ -63,14 +63,8 @@ enum GameState_t {
 	GAME_STATE_MAINTAIN,
 };
 
-enum LightState_t {
-	LIGHT_STATE_DAY,
-	LIGHT_STATE_NIGHT,
-	LIGHT_STATE_SUNSET,
-	LIGHT_STATE_SUNRISE,
-};
-
 static constexpr int32_t EVENT_LIGHTINTERVAL = 10000;
+static constexpr int32_t EVENT_WORLDTIMEINTERVAL = 2500;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
 static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
 
@@ -229,7 +223,17 @@ class Game
 			return playersRecord;
 		}
 
-		LightInfo getWorldLightInfo() const;
+		LightInfo getWorldLightInfo() const {
+			return {lightLevel, lightColor};
+		}
+		void setWorldLightInfo(LightInfo lightInfo) {
+			lightLevel = lightInfo.level;
+			lightColor = lightInfo.color;
+			for (const auto& it : players) {
+				it.second->sendWorldLight(lightInfo);
+			}
+		}
+		void updateWorldLightLevel();
 
 		ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 		ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
@@ -453,9 +457,9 @@ class Game
 		static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		void startDecay(Item* item);
-		int32_t getLightHour() const {
-			return lightHour;
-		}
+
+		int16_t getWorldTime() { return worldTime; }
+		void updateWorldTime();
 
 		bool loadExperienceStages();
 		uint64_t getExperienceStage(uint32_t level);
@@ -544,19 +548,24 @@ class Game
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 
-		static constexpr int32_t LIGHT_LEVEL_DAY = 250;
-		static constexpr int32_t LIGHT_LEVEL_NIGHT = 40;
-		static constexpr int32_t SUNSET = 1305;
-		static constexpr int32_t SUNRISE = 430;
+		static constexpr uint8_t LIGHT_DAY = 250;
+		static constexpr uint8_t LIGHT_NIGHT = 40;
+		// 1h realtime   = 1day worldtime
+		// 2.5s realtime = 1min worldtime
+		// worldTime is calculated in minutes
+		static constexpr int16_t GAME_SUNRISE = 360;
+		static constexpr int16_t GAME_DAYTIME = 480;
+		static constexpr int16_t GAME_SUNSET = 1080;
+		static constexpr int16_t GAME_NIGHTTIME = 1200;
+		static constexpr float LIGHT_CHANGE_SUNRISE = static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_DAYTIME - GAME_SUNRISE)) * 100) / 100.0f;
+		static constexpr float LIGHT_CHANGE_SUNSET = static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_NIGHTTIME - GAME_SUNSET)) * 100) / 100.0f;
+
+		uint8_t lightLevel = LIGHT_DAY;
+		uint8_t lightColor = 215;
+		int16_t worldTime = 0;
 
 		GameState_t gameState = GAME_STATE_NORMAL;
 		WorldType_t worldType = WORLD_TYPE_PVP;
-
-		LightState_t lightState = LIGHT_STATE_DAY;
-		uint8_t lightLevel = LIGHT_LEVEL_DAY;
-		int32_t lightHour = SUNRISE + (SUNSET - SUNRISE) / 2;
-		// (1440 minutes/day)/(3600 seconds/day)*10 seconds event interval
-		int32_t lightHourDelta = 1400 * 10 / 3600;
 
 		ServiceManager* serviceManager = nullptr;
 
