@@ -20,19 +20,19 @@ for _, class in ipairs(classes) do
 		-- Call each method from definition table with the value as params
 		local hasCallback = false
 
-		for f, args in pairs(def) do
+		for methodName, value in pairs(def) do
 			-- Strictly check if a correct callback is passed
-			if f:sub(1, 2) == "on" and type(args) == "function" and rawget(class, f) then
+			if methodName:sub(1, 2) == "on" and type(value) == "function" and rawget(class, methodName) then
 				hasCallback = true
 			end 
 
-			if f ~= "register" then
-				local method = self[f]
+			if methodName ~= "register" then
+				local method = rawget(self, methodName)
 				if method then
-					if type(args) == "table" then
-						method(obj, unpack(args))
+					if type(value) == "table" then
+						method(obj, unpack(value))
 					else
-						method(obj, args)
+						method(obj, value)
 					end
 				end
 			end
@@ -41,7 +41,7 @@ for _, class in ipairs(classes) do
 		-- Only register if callback has already been defined, otherwise defining afterwards will not work
 		if def.register then
 			if not hasCallback then
-				print("Warning: Registering an event with no callback.")
+				print("Warning: Event not registered due to there being no callback.")
 			else
 				obj:register()
 			end
