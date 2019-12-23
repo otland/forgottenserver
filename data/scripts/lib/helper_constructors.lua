@@ -5,11 +5,16 @@ for _, class in ipairs(classes) do
 	local DefaultConstructor = MT.__call
 
 	MT.__call = function(self, def, ...)
-		local obj = DefaultConstructor(self, def, ...)
-
 		-- Backwards compatibility for default obj() constructor
 		if type(def) ~= "table" then
-			return obj
+			return DefaultConstructor(self, def, ...)
+		end
+
+		local obj = nil
+		if def.init then
+			obj = DefaultConstructor(self, unpack(def.init))
+		else
+			obj = DefaultConstructor(self)
 		end
 
 		-- Call each method from definition table with the value as params
