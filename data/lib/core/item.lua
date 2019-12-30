@@ -78,27 +78,37 @@ end
 
 setAuxFunctions()
 
-function Item.getNameDescription(self, addArticle)
-	local itemType = self:getType()
-	local subType = self:getSubType()
-	local s = ''
-	local name = self:getName()
-	if name ~= '' then
-		if itemType:isStackable() and subType >  1 then
-			if itemType:hasShowCount() then
-				s = string.format('%s%d ', s, subType)
+do
+	local function internalItemGetNameDescription(it, item, subType, addArticle)
+		local subType = subType or (item and item:getSubType() or -1)
+		local ss = StringStream()
+		local obj = item or it
+		local name = obj:getName()
+		if name ~= '' then
+			if it:isStackable() and subType >  1 then
+				if it:hasShowCount() then
+					ss:append('%d ', subType)
+				end
+				ss:append('%s', obj:getPluralName())
+			else
+				if addArticle and obj:getArticle() ~= '' then
+					ss:append('%s ', obj:getArticle())
+				end
+				ss:append('%s', obj:getName())
 			end
-			s = string.format('%s%s', s, self:getPluralName())
 		else
-			if addArticle and self:getArticle() ~= '' then
-				s = string.format('%s%s ', s, self:getArticle())
-			end
-			s = string.format('%s%s', s, self:getName())
+			ss:append('an item of type %d', obj:getId())
 		end
-	else
-		s = 'an item of type '.. self:getId()
+		return ss:build()
 	end
-	return s
+
+	function Item.getNameDescription(self, subType, addArticle)
+		return internalItemGetNameDescription(self:getType(), self, subType, addArticle)
+	end
+
+	function ItemType.getNameDescription(self, subType, addArticle)
+		return internalItemGetNameDescription(self, nil, subType, addArticle)
+	end
 end
 
 do
@@ -112,11 +122,12 @@ do
 		return begin
 	end
 
-	local function addGenerics(self, it, abilities, ss, begin)
+	local function addGenerics(item, it, abilities, ss, begin)
+		local obj = item or it
 		if it:getWeaponType() == WEAPON_DISTANCE and it:getAmmoType() ~= 0 then
-			ss:append(' (Range:%d', self:getShootRange())
-			local attack = self:getAttack()
-			local hitChance = self:getHitChance()
+			ss:append(' (Range:%d', obj:getShootRange())
+			local attack = obj:getAttack()
+			local hitChance = obj:getHitChance()
 			if attack ~= 0 then
 				ss:append(', Atk%s%d', showpos(attack), attack)
 			end
@@ -127,9 +138,9 @@ do
 
 			begin = false
 		elseif it:getWeaponType() ~= WEAPON_AMMO then
-			local attack = self:getAttack()
-			local defense = self:getDefense()
-			local extraDefense = self:getExtraDefense()
+			local attack = obj:getAttack()
+			local defense = obj:getDefense()
+			local extraDefense = obj:getExtraDefense()
 
 			if attack ~= 0 then
 				begin = false
@@ -238,19 +249,22 @@ do
 		return begin
 	end
 
-	function Item.getDescription(self, lookDistance)
-		local it = self:getType()
+	local function internalItemGetDescription(it, lookDistance, item, subType, addArticle)
 		local abilities = it:getAbilities()
-		local nameDesc = self:getNameDescription(true)
 		local ss = StringStream()
-		local subType = self:getSubType()
+		local subType = subType or (item and item:getSubType() or -1)
 		local text = nil
 		local begin = true
+		local obj = item or it
 
-		ss:append(nameDesc)
+		if item then
+			ss:append(item:getNameDescription(subType, addArticle or true))
+		else
+			ss:append(it:getNameDescription(subType, addArticle or true))
+		end
 
 		if it:isRune() then
-			local rune = Spell(self:getId())
+			local rune = Spell(it:getId())
 			if rune then
 				if rune:getLevel() > 0 or rune:getMagicLevel() > 0 then
 					local tmpVocMap = rune:vocation()
@@ -303,22 +317,31 @@ do
 				end
 			end
 		elseif it:getWeaponType() ~= WEAPON_NONE then
-			begin = addGenerics(self, it, abilities, ss, begin)
+			begin = addGenerics(item, it, abilities, ss, begin)
 			if not begin then
 				ss:append(')')
 			end
-		elseif self:getArmor() ~= 0 or it:hasShowAttributes() then
-			if self:getArmor() ~= 0 then
-				ss:append(' (Arm:%d', self:getArmor())
+		elseif obj:getArmor() ~= 0 or it:hasShowAttributes() then
+			if obj:getArmor() ~= 0 then
+				ss:append(' (Arm:%d', obj:getArmor())
 				begin = false
 			end
-			begin = addGenerics(self, it, abilities, ss, begin)
+			begin = addGenerics(item, it, abilities, ss, begin)
 			if not begin then
 				ss:append(')')
 			end
-		elseif self:isContainer() then
-			local volume = self:getCapacity()
-			if volume ~= 0 and not self:hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) then
+		elseif it:isContainer() or item and item:isContainer() then
+			local volume = 0
+
+			if not item or not item:hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) then
+				if it:isContainer() then
+					volume = it:getCapacity()
+				else
+					volume = item:getCapacity()
+				end
+			end
+
+			if volume ~= 0 then
 				ss:append(' (Vol:%d)', volume)
 			end
 		else
@@ -340,17 +363,17 @@ do
 
 			if not found then
 				if it:getType() == ITEM_TYPE_KEY then
-					local aid = self:getActionId()
+					local aid = item and item:getActionId() or 0
 					ss:append(' (Key:%s)', ('0'):rep(4 - #tostring(aid)) .. aid)
 				elseif it:getGroup() == ITEM_GROUP_FLUID then
 					if subType > 0 then
-						local name = self:getSubTypeName()
+						local name = getSubTypeName(subType)
 						ss:append(' of %s', name ~= '' and name or 'unknown')
 					else
 						ss:append('. It is empty')
 					end
 				elseif it:getGroup() == ITEM_GROUP_SPLASH then
-					local name = self:getSubTypeName()
+					local name = getSubTypeName(subType)
 					ss:append(' of ')
 					if subType > 0 and name ~= '' then
 						ss:append(name)
@@ -360,30 +383,34 @@ do
 				elseif it:hasAllowDistRead() and (it:getId() < 7369 or it:getId() > 7371) then
 					ss:append('.\n')
 					if lookDistance <= 4 then
-						if not text then
-							text = self:getText()
-						end
-						if text then
-							local writer = self:getWriter()
-							if writer then
-								local date = self:getDate()
-								ss:append('%s wrote', writer)
-								if date then
-									ss:append(' on %s', os.date('%d %b %Y'))
-								end
-								ss:append(': ')
-							else
-								ss:append('You read: ')
+						if item then
+							if not text then
+								text = item:getText()
 							end
-							ss:append(text)
+							if text then
+								local writer = item:getWriter()
+								if writer then
+									local date = item:getDate()
+									ss:append('%s wrote', writer)
+									if date then
+										ss:append(' on %s', os.date('%d %b %Y'))
+									end
+									ss:append(': ')
+								else
+									ss:append('You read: ')
+								end
+								ss:append(text)
+							else
+								ss:append('Nothing is written on it')
+							end
 						else
 							ss:append('Nothing is written on it')
 						end
 					else
 						ss:append('You are too far away to read it.')
 					end
-				elseif it:getLevelDoor() ~= 0 then
-					local aid = self:getActionId()
+				elseif it:getLevelDoor() ~= 0 and item then
+					local aid = item:getActionId()
 					if aid >= it:getLevelDoor() then
 						ss:append(' for level %d', aid - it:getLevelDoor())
 					end
@@ -397,8 +424,8 @@ do
 
 		-- show duration
 		if it:hasShowDuration() then
-			local duration = self:getDuration() / 1000
-			if self:hasAttribute(ITEM_ATTRIBUTE_DURATION) then
+			if item and item:hasAttribute(ITEM_ATTIRUBTE_DURATION) then
+				local duration = item:getDuration() / 1000
 				if duration > 0 then
 					ss:append(' that will expire in ')
 
@@ -435,10 +462,10 @@ do
 		if not it:hasAllowDistRead() or (it:getId() >= 7369 and it:getId() <= 7371) then
 			ss:append('.')
 		else
-			if not text then
-				text = self:getText()
+			if not text and item then
+				text = item:getText()
 			end
-			if not text then
+			if not text or text == '' then
 				ss:append('.')
 			end
 		end
@@ -474,10 +501,11 @@ do
 		end
 
 		if lookDistance <= 1 then
-			local weight = self:getWeight()
+			local weight = obj:getWeight()
+			local count = item and item:getCount() or  1
 			if weight ~= 0 and it:isPickupable() then
 				ss:append('\n')
-				if it:isStackable() and self:getCount() > 1 and it:hasShowCount() then
+				if it:isStackable() and count > 1 and it:hasShowCount() then
 					ss:append('They weigh ')
 				else
 					ss:append('It weighs ')
@@ -486,23 +514,36 @@ do
 			end
 		end
 
-		local specialDesc = self:getSpecialDescription()
 		local desc = it:getDescription()
-		if specialDesc ~= '' then
-			ss:append('\n%s', specialDesc)
+		if item then
+			local specialDesc = item:getSpecialDescription()
+			if specialDesc ~= '' then
+				ss:append('\n%s', specialDesc)
+			elseif lookDistance <= 1 and desc ~= '' then
+				ss:append('\n%s', desc)
+			end
 		elseif lookDistance <= 1 and desc ~= '' then
-			ss:append('\n%s', desc)
+			ss:append('\n%s', it:getDescription())
 		end
 
 		if it:hasAllowDistRead() or (it:getId() >= 7369 and it:getId() <= 7371) then
-			if not text then
-				text = self:getText()
-				if text then
-					ss:append('\n%s', text)
-				end
+			if not text and item then
+				text = item:getText()
+			end
+
+			if text and text ~= '' then
+				ss:append('\n%s', text)
 			end
 		end
 
 		return ss:build()
+	end
+
+	function Item.getDescription(self, lookDistance, subType)
+		return internalItemGetDescription(self:getType(), lookDistance, self, subType)
+	end
+
+	function ItemType.getItemDescription(self, lookDistance, subType)
+		return internalItemGetDescription(self, lookDistance, nil, subType)
 	end
 end

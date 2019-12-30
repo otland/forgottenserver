@@ -1007,6 +1007,9 @@ void LuaScriptInterface::registerFunctions()
 	//getWorldUpTime()
 	lua_register(luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
 
+	// getSubTypeName(subType)
+	lua_register(luaState, "getSubTypeName", LuaScriptInterface::luaGetSubTypeName);
+
 	//createCombatArea( {area}, <optional> {extArea} )
 	lua_register(luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
@@ -2182,7 +2185,6 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Item", "getDescription", LuaScriptInterface::luaItemGetDescription);
 	registerMethod("Item", "getSpecialDescription", LuaScriptInterface::luaItemGetSpecialDescription);
-	registerMethod("Item", "getSubTypeName", LuaScriptInterface::luaItemGetSubTypeName);
 
 	registerMethod("Item", "hasProperty", LuaScriptInterface::luaItemHasProperty);
 	registerMethod("Item", "isLoadedFromMap", LuaScriptInterface::luaItemIsLoadedFromMap);
@@ -3234,6 +3236,18 @@ int LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
 	//getWorldUpTime()
 	uint64_t uptime = (OTSYS_TIME() - ProtocolStatus::start) / 1000;
 	lua_pushnumber(L, uptime);
+	return 1;
+}
+
+int LuaScriptInterface::luaGetSubTypeName(lua_State* L)
+{
+	// getSubTypeName(subType)
+	int32_t subType = getNumber<int32_t>(L, 1);
+	if (subType > 0) {
+		pushString(L, Item::items[subType].name);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
@@ -6714,21 +6728,6 @@ int LuaScriptInterface::luaItemGetSpecialDescription(lua_State* L)
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		pushString(L, item->getSpecialDescription());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaItemGetSubTypeName(lua_State* L)
-{
-	// item:getSubTypeName()
-	Item* item = getUserdata<Item>(L, 1);
-	if (item) {
-		int32_t subType = item->getSubType();
-		if (subType > 0) {
-			pushString(L, Item::items[subType].name);
-		}
 	} else {
 		lua_pushnil(L);
 	}

@@ -82,6 +82,7 @@ function Player:onLookInTrade(partner, item, distance)
 end
 
 function Player:onLookInShop(itemType, count)
+	self:sendTextMessage(MESSAGE_INFO_DESCR, "You see ".. itemType:getItemDescription(1, count))
 	return true
 end
 

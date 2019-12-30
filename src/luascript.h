@@ -449,6 +449,9 @@ class LuaScriptInterface
 		static int luaGetWorldLight(lua_State* L);
 		static int luaGetWorldUpTime(lua_State* L);
 
+		//get subtype name
+		static int luaGetSubTypeName(lua_State* L);
+
 		//type validation
 		static int luaIsDepot(lua_State* L);
 		static int luaIsMoveable(lua_State* L);
@@ -724,7 +727,6 @@ class LuaScriptInterface
 
 		static int luaItemGetDescription(lua_State* L);
 		static int luaItemGetSpecialDescription(lua_State* L);
-		static int luaItemGetSubTypeName(lua_State* L);
 
 		static int luaItemHasProperty(lua_State* L);
 		static int luaItemIsLoadedFromMap(lua_State* L);
