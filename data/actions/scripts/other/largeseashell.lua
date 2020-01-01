@@ -1,5 +1,5 @@
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if player:getStorageValue(43000) <= os.time() then
+	if player:getStorageValue(DELAY_LARGE_SEASHELL) <= os.time() then
 		local chance = math.random(100)
 		local msg = ""
 		if chance <= 16 then
@@ -13,12 +13,10 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		player:say(msg, TALKTYPE_MONSTER_SAY, false, player, item:getPosition())
 		item:transform(7553)
-		player:setStorageValue(43000, os.time() + 72000)
+		player:setStorageValue(DELAY_LARGE_SEASHELL, os.time() + 72000)
 		item:getPosition():sendMagicEffect(CONST_ME_BUBBLES)
-		return true
 	else
 		player:say("You have already opened a shell today.", TALKTYPE_MONSTER_SAY, false, player, item:getPosition())
-		return false
 	end
-	return false
+	return true
 end
