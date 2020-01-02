@@ -457,7 +457,7 @@ class Game
 		}
 
 		bool loadExperienceStages();
-		float getExperienceStage(uint32_t level);
+		double getExperienceStage(uint32_t level);
 
 		void loadMotdNum();
 		void saveMotdNum() const;
@@ -520,7 +520,7 @@ class Game
 		std::unordered_map<std::string, Player*> mappedPlayerNames;
 		std::unordered_map<uint32_t, Guild*> guilds;
 		std::unordered_map<uint16_t, Item*> uniqueItems;
-		std::map<float, float> stages;
+		std::map<uint32_t, double> stages;
 
 		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
 		std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
