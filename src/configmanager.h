@@ -23,6 +23,9 @@
 class ConfigManager
 {
 	public:
+		ConfigManager();
+		virtual ~ConfigManager() {}
+
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT,
 			ONE_PLAYER_ON_ACCOUNT,
@@ -69,6 +72,7 @@ class ConfigManager
 			MYSQL_SOCK,
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
+			CONFIG_FILE,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
@@ -116,6 +120,10 @@ class ConfigManager
 		const std::string& getString(string_config_t what) const;
 		int32_t getNumber(integer_config_t what) const;
 		bool getBoolean(boolean_config_t what) const;
+
+		bool setString(string_config_t what, const std::string& value);
+		bool setNumber(integer_config_t what, int32_t value);
+		bool setBoolean(boolean_config_t what, bool value);
 
 	private:
 		std::string string[LAST_STRING_CONFIG] = {};
