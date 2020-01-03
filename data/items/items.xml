@@ -31907,6 +31907,18 @@
 		<attribute key="weight" value="2504" />
 		<attribute key="description" value="Only the real killers can touch me!" />
 	</item>
+	<item id="24621" name="snow">
+		<attribute key="description" value="There is a hole in the ceiling." />
+	</item>
+	<item id="24622" name="rock soil">
+		<attribute key="description" value="There is a hole in the ceiling." />
+	</item>
+	<item id="24623" name="grass">
+		<attribute key="description" value="There is a hole in the ceiling." />
+	</item>
+	<item id="24624" name="ocean floor">
+		<attribute key="description" value="There is a hole in the ceiling." />
+	</item>
 	<item id="24740" article="a" name="wolf backpack">
 		<attribute key="weight" value="1800" />
 		<attribute key="containerSize" value="20" />
