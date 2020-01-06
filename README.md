@@ -36,6 +36,12 @@ To stop:
 docker-compose down
 ```
 
+To rebuild container after source code changes:
+
+```bash
+docker-compose up -d --build
+```
+
 Additionally, it also creates a database explorer available at `localhost:8080`.
 
 ##### Issues on startup
