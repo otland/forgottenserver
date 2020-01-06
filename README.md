@@ -37,3 +37,8 @@ docker-compose down
 ```
 
 Additionally, it also creates a database explorer available at `localhost:8080`.
+
+##### Issues on startup
+
+During startup the server container is created after database, however, the database might not be initially available.
+This is why the server will restart a couple of times before it successfully establishes the connection.
