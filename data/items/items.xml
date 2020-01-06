@@ -13166,6 +13166,8 @@
 	</item>
 	<item id="7553" article="a" name="large seashell">
 		<attribute key="description" value="It is empty." />
+		<attribute key="decayTo" value="7552"/>
+		<attribute key="duration" value="300"/>
 	</item>
 	<item fromid="7554" toid="7557" article="a" name="spider victim">
 		<attribute key="description" value="This poor guy has been wrapped up in spider silk." />

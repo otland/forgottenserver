@@ -2,6 +2,7 @@ math.randomseed(os.time())
 dofile('data/lib/lib.lua')
 
 STORAGEVALUE_PROMOTION = 30018
+STORAGEVALUE_DELAY_LARGE_SEASHELL = 30019
 
 ropeSpots = {384, 418, 8278, 8592, 13189, 14435, 14436, 15635, 19518, 24621, 24622, 24623, 24624}
 
