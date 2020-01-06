@@ -59,7 +59,7 @@ maxMarketOffersAtATimePerPlayer = 100
 mysqlHost = "db"
 mysqlUser = "root"
 mysqlPass = "<your_db_password>"
-mysqlDatabase = "forgottenserver"
+mysqlDatabase = "forgotten-server-db"
 mysqlPort = 3306
 mysqlSock = ""
 

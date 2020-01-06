@@ -15,3 +15,25 @@ If you need help, please visit the [support forum on OTLand](https://otland.net/
 ### Issues
 
 We use the [issue tracker on GitHub](https://github.com/otland/forgottenserver/issues). Keep in mind that everyone who is watching the repository gets notified by e-mail when there is activity, so be thoughtful and avoid writing comments that aren't meaningful for an issue (e.g. "+1"). If you'd like for an issue to be fixed faster, you should either fix it yourself and submit a pull request, or place a bounty on the issue.
+
+### Docker Compose
+
+There is also a way of running the server + database at once using `docker-compose`.
+By default it:
+ * Creates a database named `forgotten-server-db`.
+ * Executes `schema.sql` file, so that you don't have to manually import it.
+ * Saves all the database files in `./db` directory.
+ 
+
+To start:
+
+```bash
+docker-compose up -d
+```
+
+To stop:
+```bash
+docker-compose down
+```
+
+Additionally, it also creates a database explorer available at `localhost:8080`.

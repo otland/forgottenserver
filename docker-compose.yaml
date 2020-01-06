@@ -18,7 +18,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: <your_db_password>
       # Automatically creates a database
-      MYSQL_DATABASE: forgottenserver
+      MYSQL_DATABASE: forgotten-server-db
     volumes:
       # Saves all the data in ./db directory
       - ./db:/var/lib/mysql
