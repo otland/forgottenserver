@@ -22,7 +22,7 @@ There is also a way of running the server + database at once using `docker-compo
 By default it:
  * Creates a database named `forgotten-server-db`.
  * Executes `schema.sql` file, so that you don't have to manually import it.
- * Saves all the database files in `./db` directory.
+ * Saves all the database files in `./db` local directory.
  
 
 To start:
