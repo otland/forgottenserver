@@ -178,3 +178,4 @@ pip-log.txt
 config.lua
 cmake-build-debug
 .idea
+db

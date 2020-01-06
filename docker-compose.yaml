@@ -4,6 +4,36 @@ services:
   server:
     build:
       context: .
+    restart: always
     ports:
       - "7171:7171"
       - "7172:7172"
+    depends_on:
+      - db
+    networks:
+      - db-network
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: <your_db_password>
+      # Automatically creates a database
+      MYSQL_DATABASE: forgottenserver
+    volumes:
+      - ./db:/var/lib/mysql
+      # Automatically executes schema.sql on startup
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - db-network
+
+  db-adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - db-network
+
+networks:
+  db-network:
+
