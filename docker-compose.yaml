@@ -1,0 +1,9 @@
+version: "3.0"
+
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - "7171:7171"
+      - "7172:7172"
