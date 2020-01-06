@@ -20,6 +20,7 @@ services:
       # Automatically creates a database
       MYSQL_DATABASE: forgottenserver
     volumes:
+      # Saves all the data in ./db directory
       - ./db:/var/lib/mysql
       # Automatically executes schema.sql on startup
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
