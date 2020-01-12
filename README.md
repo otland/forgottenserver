@@ -55,9 +55,16 @@ docker-compose down
 docker-compose up -d --build
 ```
 
-Additionally, it also creates a database explorer available at `localhost:8080`.
+#### Created services:
 
-##### Issues on startup
+1. The Forgotten Server - `localhost:7171`, `localhost:7172`.
+2. Database - direct connection hidden to the outside world.
+3. Database explorer - `localhost:8080`. It allows viewing what's inside the database.
 
-During startup the server container is created after database, however, the database might not be initially available.
+#### Docker-compose issues:
+
+1. During startup the server container is created after database, however, the database might not be initially available.
 This is why the server will restart a couple of times before it successfully establishes the connection.
+
+2. If you are using Docker Toolbox for Windows and it uses VirtualBox,
+ then the server and database explorer address host name will be `192.168.99.100` insead of `localhost`.
