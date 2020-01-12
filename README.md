@@ -26,7 +26,7 @@ By default it:
  
 ##### Preparation:
 
-Update your `configu.lua.dist` with these values, so that server properly connects to the database:
+1. Update your `configu.lua.dist` with these values, so that server properly connects to the database:
 
 ```lua
 -- MySQL
@@ -37,6 +37,13 @@ mysqlDatabase = "forgottenserver"
 mysqlPort = 3306
 mysqlSock = ""
 ```
+
+2. Change your database user password by replacing 
+`<your_db_password>` with your password of choice. 
+**Remember** to also update it in `docker-compose.yml`.
+
+3. Change your database root password by replacing 
+`<your_root_password>` in `docker-compose.yml`.
 
 ##### Start:
 
@@ -59,7 +66,7 @@ docker-compose up -d --build
 
 1. The Forgotten Server - `localhost:7171`, `localhost:7172`.
 2. Database - direct connection hidden to the outside world.
-3. Database explorer - `localhost:8080`. It allows viewing what's inside the database.
+3. Database explorer - `localhost:8080`. Allows viewing what's inside the database.
 
 #### Docker-compose issues:
 
