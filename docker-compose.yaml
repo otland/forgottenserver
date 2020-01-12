@@ -16,6 +16,7 @@ services:
     image: mysql
     restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: ECpkF11U6ofV9sD3FJFqVS9Myv4GpdN6Fgr6u0sPkdE8bVPn2d4UzRjIJ
       MYSQL_USER: forgottenserver
       MYSQL_PASSWORD: <your_db_password>
       # Automatically creates a database

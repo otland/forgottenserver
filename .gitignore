@@ -176,6 +176,5 @@ pip-log.txt
 ## TFS / OT
 #############
 config.lua
-cmake-build-debug
 .idea
 db
