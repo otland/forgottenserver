@@ -20,23 +20,36 @@ We use the [issue tracker on GitHub](https://github.com/otland/forgottenserver/i
 
 There is also a way of running the server + database at once using `docker-compose`.
 By default it:
- * Creates a database named `forgotten-server-db`.
+ * Creates a database named `forgottenserver`.
  * Executes `schema.sql` file, so that you don't have to manually import it.
- * Saves all the database files in `./db` local directory.
+ * Saves all the database files inside a `./db` local directory.
  
+##### Preparation:
 
-To start:
+Update your `configu.lua.dist` with these values, so that server properly connects to the database:
+
+```lua
+-- MySQL
+mysqlHost = "db"
+mysqlUser = "forgottenserver"
+mysqlPass = "<your_db_password>"
+mysqlDatabase = "forgottenserver"
+mysqlPort = 3306
+mysqlSock = ""
+```
+
+##### Start:
 
 ```bash
 docker-compose up -d
 ```
 
-To stop:
+##### Stop:
 ```bash
 docker-compose down
 ```
 
-To rebuild container after source code changes:
+##### Rebuild container after source code changes:
 
 ```bash
 docker-compose up -d --build
