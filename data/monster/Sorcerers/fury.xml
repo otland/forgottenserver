@@ -89,7 +89,7 @@
 		<item name="assassin dagger" chance="660" />
 		<item name="noble axe" chance="2000" />
 		<item name="great health potion" chance="10500" />
-		<item name="jalapeño pepper" countmax="4" chance="29280" />
+		<item name="jalapeno pepper" countmax="4" chance="29280" />
 		<item id="9813" chance="1920" /><!-- rusty legs -->
 	</loot>
 </monster>
