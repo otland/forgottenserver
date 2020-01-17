@@ -8122,7 +8122,7 @@ int LuaScriptInterface::luaPlayerGetDeathPenalty(lua_State* L)
 	// player:getDeathPenalty()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, static_cast<uint32_t>(player->getLostPercent() * 100));
+		lua_pushnumber(L, player->getLostPercent() * 100);
 	} else {
 		lua_pushnil(L);
 	}
