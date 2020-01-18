@@ -24,7 +24,6 @@ class ConfigManager
 {
 	public:
 		ConfigManager();
-		virtual ~ConfigManager() {}
 
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT,

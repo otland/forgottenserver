@@ -59,7 +59,7 @@ void startupErrorMessage(const std::string& errorStr)
 }
 
 void mainLoader(int argc, char* argv[], ServiceManager* services);
-bool argumentsHandler(StringVector args);
+bool argumentsHandler(const StringVector& args);
 
 [[noreturn]] void badAllocationHandler()
 {
@@ -314,12 +314,10 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_loaderSignal.notify_all();
 }
 
-bool argumentsHandler(StringVector args)
+bool argumentsHandler(const StringVector& args)
 {
-	StringVector tmp;
-
-	for(StringVector::iterator it = args.begin(); it != args.end(); ++it) {
-		if((*it) == "--help") {
+	for (const auto& arg : args) {
+		if ((*it) == "--help") {
 			std::clog << "Usage:\n"
 			"\n"
 			"\t--config=$1\t\tAlternate configuration file path.\n"
@@ -328,7 +326,7 @@ bool argumentsHandler(StringVector args)
 			"\t--login-port=$1\tPort for login server to listen on.\n"
 			"\t--game-port=$1\tPort for game server to listen on.\n";
 			return false;
-		} else if((*it) == "--version") {
+		} else if ((*it) == "--version") {
 			std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
 			std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
 			std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
@@ -345,7 +343,8 @@ bool argumentsHandler(StringVector args)
 			return false;
 		}
 
-		tmp = explodeString((*it), "=");
+		StringVector tmp = explodeString((*it), "=");
+
 		if (tmp[0] == "--config")
 			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
 		else if (tmp[0] == "--ip")
