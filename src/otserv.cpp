@@ -317,7 +317,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 bool argumentsHandler(const StringVector& args)
 {
 	for (const auto& arg : args) {
-		if ((*it) == "--help") {
+		if (arg == "--help") {
 			std::clog << "Usage:\n"
 			"\n"
 			"\t--config=$1\t\tAlternate configuration file path.\n"
@@ -326,7 +326,7 @@ bool argumentsHandler(const StringVector& args)
 			"\t--login-port=$1\tPort for login server to listen on.\n"
 			"\t--game-port=$1\tPort for game server to listen on.\n";
 			return false;
-		} else if ((*it) == "--version") {
+		} else if (arg == "--version") {
 			std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
 			std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
 			std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
@@ -343,7 +343,7 @@ bool argumentsHandler(const StringVector& args)
 			return false;
 		}
 
-		StringVector tmp = explodeString((*it), "=");
+		StringVector tmp = explodeString(arg, "=");
 
 		if (tmp[0] == "--config")
 			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
