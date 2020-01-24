@@ -23,6 +23,11 @@ registerMonsterType.experience = function(mtype, mask)
 		mtype:experience(mask.experience)
 	end
 end
+registerMonsterType.skull = function(mtype, mask)
+	if mask.skull then
+		mtype:skull(mask.skull)
+	end
+end
 registerMonsterType.outfit = function(mtype, mask)
 	if mask.outfit then
 		mtype:outfit(mask.outfit)
