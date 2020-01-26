@@ -12542,13 +12542,17 @@ int LuaScriptInterface::luaMonsterTypeExperience(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeSkull(lua_State* L)
 {
-	// get: monsterType:skull() set: monsterType:skull(str)
+	// get: monsterType:skull() set: monsterType:skull(str/constant)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, monsterType->info.skull);
 		} else {
-			monsterType->info.skull = getSkullType(getString(L, 2));
+			if (isString(L, 2)) {
+				monsterType->info.skull = getSkullType(getString(L, 2));
+			} else {
+				monsterType->info.skull = getNumber<Skulls_t>(L, 2);
+			}
 			pushBoolean(L, true);
 		}
 	} else {
