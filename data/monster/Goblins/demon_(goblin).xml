@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Demon" nameDescription="a demon" race="blood" experience="25" speed="150">
+<monster name="Demon" nameDescription="a demon" race="blood" experience="25" speed="120">
 	<health now="50" max="50" />
-	<look type="35" corpse="5995" />
+	<look type="35" corpse="6002" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -10,11 +10,14 @@
 		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
-		<flag canpushitems="1" />
-		<flag canpushcreatures="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
-		<flag staticattack="40" />
+		<flag staticattack="90" />
 		<flag runonhealth="15" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-10" />
@@ -22,25 +25,25 @@
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="6" defense="6" />
 	<elements>
 		<element energyPercent="20" />
-		<element holyPercent="1" />
-		<element earthPercent="-12" />
+		<element holyPercent="20" />
+		<element earthPercent="-10" />
 		<element deathPercent="-10" />
 	</elements>
 	<loot>
-		<item name="small stone" countmax="3" chance="15290" />
 		<item name="gold coin" countmax="9" chance="50320" />
-		<item id="2230" chance="1130" /><!-- bone -->
-		<item name="mouldy cheese" chance="1000" />
-		<item name="dagger" chance="1800" />
+		<item name="small stone" chance="15290" />
+		<item id="2667" chance="12750" /><!-- fish -->
+		<item name="small axe" chance="9700" />
 		<item name="short sword" chance="8870" />
 		<item name="bone club" chance="4900" />
-		<item name="leather helmet" chance="1940" />
 		<item name="leather armor" chance="2510" />
-		<item name="small axe" chance="9700" />
-		<item id="2667" chance="12750" /><!-- fish -->
-		<item name="goblin ear" chance="910" />
+		<item name="leather helmet" chance="1940" />
+		<item name="dagger" chance="1800" />
+		<item id="2230" chance="1130" /><!-- bone -->
+		<item name="mouldy cheese" chance="1000" />
+		<item name="goblin ear" chance="940" />
 	</loot>
 </monster>
