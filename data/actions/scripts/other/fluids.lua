@@ -10,6 +10,7 @@ poison:setParameter(CONDITION_PARAM_TICKINTERVAL, 4000)
 poison:setParameter(CONDITION_PARAM_FORCEUPDATE, true)
 
 local fluidMessage = {
+	[2] = "Aaaah...",
 	[3] = "Aah...",
 	[4] = "Urgh!",
 	[5] = "Mmmh.",
@@ -18,8 +19,7 @@ local fluidMessage = {
 	[11] = "Urgh!",
 	[13] = "Urgh!",
 	[15] = "Aah...",
-	[19] = "Urgh!",
-	[43] = "Aaaah..."
+	[19] = "Urgh!"
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -40,14 +40,14 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if item.type == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		elseif target.uid == player.uid then
-			if table.contains({3, 15, 43}, item.type) then
+			if table.contains({3, 15}, item.type) then
 				player:addCondition(drunk)
 			elseif item.type == 4 then
 				player:addCondition(poison)
 			elseif item.type == 7 then
 				player:addMana(math.random(50, 150))
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
-			elseif item.type == 10 then
+			elseif item.type == 2 then
 				player:addHealth(60)
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			end

@@ -19,6 +19,8 @@
 	<action itemid="2554" script="tools/shovel.lua" />
 	<action itemid="2120" script="tools/rope.lua" />
 	<action itemid="2553" script="tools/pick.lua" />
+	<action itemid="5908" script="tools/skinning.lua" />
+	<action itemid="5942" script="tools/skinning.lua" />	
 
 	<!-- Transform and decay -->
 	<action fromid="1479" toid="1480" script="other/decayto.lua" />
@@ -80,6 +82,17 @@
 	<action itemid="18397" script="other/food.lua" />
 	<action itemid="19737" script="other/food.lua" />
 	<action fromid="20100" toid="20101" script="other/food.lua" />
+	
+	<!-- Special Foods -->
+	<action itemid="9992" script="special_foods/rotworm_stew.lua"/>
+	<action itemid="9993" script="special_foods/hydra_tongue_salad.lua"/>
+	<action itemid="9994" script="special_foods/roasted_dragon_wings.lua"/>
+	<action itemid="9995" script="special_foods/fried_tropical_terrorbird.lua"/>
+	<action itemid="9997" script="special_foods/veggie_casserole.lua"/>
+	<action itemid="9998" script="special_foods/filled_jalapeno_peppers.lua"/>
+	<action itemid="9999" script="special_foods/blessed_steak.lua"/>
+	<action itemid="10000" script="special_foods/carrot_cake.lua"/>
+	<action itemid="10001" script="special_foods/northern_fishburger.lua"/>	
 
 	<!-- Other -->
 	<action itemid="6578" script="other/partyhat.lua" />
@@ -140,7 +153,7 @@
 	<action itemid="1775" script="other/fluids.lua" />
 	<action fromid="2031" toid="2034" script="other/fluids.lua" />
 	<action fromid="2574" toid="2577" script="other/fluids.lua" />
-	<action fromid="5792" toid="5797" script="other/die.lua" />
+	<action fromid="5792" toid="5797" script="other/dice.lua" />
 	<action itemid="6558" script="other/potions.lua" />
 	<action fromid="7439" toid="7440" script="other/potions.lua" />
 	<action itemid="7443" script="other/potions.lua" />

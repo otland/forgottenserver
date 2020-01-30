@@ -1,4 +1,4 @@
-local waterIds = {493, 4608, 4609, 4610, 4611, 4612, 4613, 4614, 4615, 4616, 4617, 4618, 4619, 4620, 4621, 4622, 4623, 4624, 4625, 7236, 10499, 15401, 15402}
+local waterIds = {493, 4608, 4609, 4610, 4611, 4612, 4613, 4614, 4615, 4616, 4617, 4618, 4619, 4620, 4621, 4622, 4623, 4624, 4625, 7236, 10499}
 local lootTrash = {2234, 2238, 2376, 2509, 2667}
 local lootCommon = {2152, 2167, 2168, 2669, 7588, 7589}
 local lootRare = {2143, 2146, 2149, 7158, 7159}
@@ -38,7 +38,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 	end
 
-	if targetId == 493 or targetId == 15402 then
+	if targetId == 493 then
 		return true
 	end
 
@@ -48,15 +48,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 
-		if targetId == 15401 then
-			target:transform(targetId + 1)
-			target:decay()
-
-			if math.random(1, 100) >= 97 then
-				player:addItem(15405, 1)
-				return true
-			end
-		elseif targetId == 7236 then
+		if targetId == 7236 then
 			target:transform(targetId + 1)
 			target:decay()
 

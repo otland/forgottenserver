@@ -71,29 +71,6 @@ local items = {
 			[COMBAT_FIREDAMAGE] = {id = 9933, say = {text = "Take the boots off first."}},
 			slot = {type = CONST_SLOT_FEET, check = true}
 		},
-		[24716] = { -- werewolf amulet
-			[COMBAT_NONE] = {
-				id = 24717,
-				effects = {failure = CONST_ME_POFF, success = CONST_ME_THUNDER},
-				message = {text = "The amulet cannot be enchanted while worn."}
-			},
-			slot = {type = CONST_SLOT_NECKLACE, check = true}
-		},
-		[24718] = { -- werewolf helmet
-			[COMBAT_NONE] = {
-				id = {
-					[SKILL_CLUB] = {id = 24783},
-					[SKILL_SWORD] = {id = 24783},
-					[SKILL_AXE] = {id = 24783},
-					[SKILL_DISTANCE] = {id = 24783},
-					[SKILL_MAGLEVEL] = {id = 24783}
-				},
-				effects = {failure = CONST_ME_POFF, success = CONST_ME_THUNDER},
-				message = {text = "The helmet cannot be enchanted while worn."},
-				usesStorage = true
-			},
-			slot = {type = CONST_SLOT_HEAD, check = true}
-		},
 		charges = 1000, effect = CONST_ME_MAGIC_RED
 	},
 
@@ -110,7 +87,6 @@ local items = {
 	[7760] = {combatType = COMBAT_FIREDAMAGE}, -- small enchanted ruby
 	[7761] = {combatType = COMBAT_EARTHDAMAGE}, -- small enchanted emerald
 	[7762] = {combatType = COMBAT_ENERGYDAMAGE}, -- small enchanted amethyst
-	[24739] = {combatType = COMBAT_NONE} -- moonlight crystals
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)

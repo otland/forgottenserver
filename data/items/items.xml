@@ -15661,7 +15661,7 @@
 	<item id="8843" article="an" name="onion">
 		<attribute key="weight" value="140" />
 	</item>
-	<item id="8844" name="jalapeño pepper" article="a">
+	<item id="8844" name="jalapeï¿½o pepper" article="a">
 		<attribute key="weight" value="30" />
 	</item>
 	<item id="8845" article="a" name="beetroot">
@@ -17694,7 +17694,7 @@
 		<attribute key="description" value="This one would be quite healthy if it wasn't for all the melted cheese on top." />
 		<attribute key="weight" value="1100" />
 	</item>
-	<item id="9998" article="a" name="filled jalapeño peppers">
+	<item id="9998" article="a" name="filled jalapeï¿½o peppers">
 		<attribute key="description" value="The creamy cheese makes a great combination with the spicy peppers." />
 		<attribute key="weight" value="650" />
 	</item>
@@ -21317,13 +21317,13 @@
 		<attribute key="weight" value="2500" />
 	</item>
 	<item id="30001" name="water" />
-	<item id="30002" name="blood" />
+	<item id="30002" name="lifefluid" />
 	<item id="30003" name="beer" />
 	<item id="30004" name="slime" />
 	<item id="30005" name="lemonade" />
 	<item id="30006" name="milk" />
 	<item id="30007" name="manafluid" />
-	<item id="30010" name="lifefluid" />
+	<item id="30010" name="blood" />
 	<item id="30011" name="oil" />
 	<item id="30013" name="urine" />
 	<item id="30014" name="coconut milk" />
