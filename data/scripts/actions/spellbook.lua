@@ -4,9 +4,9 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 	local text = {}
 	local spells = {}
 	for _, spell in ipairs(player:getInstantSpells()) do
-		if spell.level ~= 0 then
-			if spell.manapercent > 0 then
-				spell.mana = spell.manapercent .. "%"
+		if spell:level() ~= 0 then
+			if spell:manaPercent() > 0 then
+				spell.mana = spell:manaPercent() .. "%"
 			end
 			spells[#spells + 1] = spell
 		end
@@ -16,16 +16,17 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 
 	local prevLevel = -1
 	for i, spell in ipairs(spells) do
-		if prevLevel ~= spell.level then
+		if prevLevel ~= spell:level() then
 			if i == 1 then
 				text[#text == nil and 1 or #text+1] = "Spells for Level "
 			else
 				text[#text+1] = "\nSpells for Level "
 			end
-			text[#text+1] = spell.level .. "\n"
-			prevLevel = spell.level
+			text[#text+1] = spell:level() .. "\n"
+			prevLevel = spell:level()
 		end
-		text[#text+1] = spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
+		local words, wordsSeparator = spell:words()
+		text[#text+1] = words .. " - " .. spell:name() .. " : " .. spell:mana() .. "\n"
 	end
 
 	player:showTextDialog(item:getId(), table.concat(text))
