@@ -80,6 +80,10 @@
 	<action itemid="18397" script="other/food.lua" />
 	<action itemid="19737" script="other/food.lua" />
 	<action fromid="20100" toid="20101" script="other/food.lua" />
+	<action itemid="24841" script="other/food.lua" />
+	<action itemid="24843" script="other/food.lua" />
+	<action itemid="26191" script="other/food.lua" />
+	<action itemid="26201" script="other/food.lua" />
 
 	<!-- Other -->
 	<action itemid="6578" script="other/partyhat.lua" />
