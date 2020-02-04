@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-20" poison="15" />
+		<attack name="melee" interval="2000" min="0" max="-20" poison="30" />
 	</attacks>
 	<defenses armor="2" defense="2" />
 	<elements>
