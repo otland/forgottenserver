@@ -130,6 +130,7 @@
 	<action itemid="5786" script="other/music.lua" />
 	<action fromid="6572" toid="6573" script="other/music.lua" />
 	<action itemid="13759" script="other/music.lua" />
+	<action itemid="23923" script="other/music.lua" />
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="1369" script="other/teleport.lua" />
 	<action itemid="1386" script="other/teleport.lua" />
@@ -213,6 +214,9 @@
 	<action fromid="1846" toid="1847" script="other/wallmirror.lua" />
 	<action fromid="1849" toid="1850" script="other/wallmirror.lua" />
 	<action itemid="486" script="other/snowheap.lua" />
+	<action itemid="2095" script="other/birdcage.lua" />
+	<action itemid="2093" script="other/waterpipe.lua" />
+	<action itemid="2099" script="other/waterpipe.lua" />
 	<action itemid="3743" script="other/transforms.lua" />
 	<action itemid="4404" script="other/transforms.lua" />
 </actions>
