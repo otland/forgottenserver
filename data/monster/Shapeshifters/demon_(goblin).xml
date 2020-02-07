@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Goblin" nameDescription="a goblin" race="blood" experience="25" speed="120" manacost="290">
+<monster name="Demon" nameDescription="a demon" race="blood" experience="25" speed="120">
 	<health now="50" max="50" />
-	<look type="61" corpse="6002" />
-	<targetchange interval="5000" chance="0" />
+	<look type="35" corpse="6002" />
+	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="1" />
+		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
-		<flag pushable="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
@@ -24,6 +24,17 @@
 		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-25">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="0" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="1" min="0" max="0">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="0" max="0">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" range="1" min="0" max="0">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
 	</attacks>
 	<defenses armor="6" defense="6" />
 	<elements>
@@ -32,13 +43,6 @@
 		<element earthPercent="-10" />
 		<element deathPercent="-10" />
 	</elements>
-	<voices interval="5000" chance="10">
-		<voice sentence="Me have him!" />
-		<voice sentence="Zig Zag! Gobo attack!" />
-		<voice sentence="Help! Goblinkiller!" />
-		<voice sentence="Bugga! Bugga!" />
-		<voice sentence="Me green, me mean!" />
-	</voices>
 	<loot>
 		<item name="gold coin" countmax="9" chance="50320" />
 		<item name="small stone" countmax="3" chance="15290" />
