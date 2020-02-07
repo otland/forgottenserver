@@ -21,6 +21,9 @@
 		<attack name="energy" interval="2000" chance="25" radius="2" target="0" min="-200" max="-400">
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
+		<attack name="energy" interval="2000" chance="10" length="5" spread="0" min="-100" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
 	</attacks>
 	<defenses armor="199" defense="199" />
 	<immunities>
