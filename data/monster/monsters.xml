@@ -527,7 +527,6 @@
 	<monster name="Blue Butterfly" file="Insects/blue_butterfly.xml" />
 	<monster name="Brimstone Bug" file="Insects/brimstone_bug.xml" />
 	<monster name="Bug" file="Insects/bug.xml" />
-	<monster name="Butterfly" file="Insects/butterfly.xml" />
 	<monster name="Cockroach" file="Insects/cockroach.xml" />
 	<monster name="Emerald Damselfly" file="Insects/emerald_damselfly.xml" />
 	<monster name="Hive Overseer" file="Insects/hive_overseer.xml" />
@@ -540,7 +539,6 @@
 	<monster name="Larva" file="Insects/larva.xml" />
 	<monster name="Lesser Swarmer" file="Insects/lesser_swarmer.xml" />
 	<monster name="Parasite" file="Insects/parasite.xml" />
-	<monster name="Pink Butterfly" file="Insects/pink_butterfly.xml" />
 	<monster name="Purple Butterfly" file="Insects/purple_butterfly.xml" />
 	<monster name="Red Butterfly" file="Insects/red_butterfly.xml" />
 	<monster name="Sandcrawler" file="Insects/sandcrawler.xml" />
