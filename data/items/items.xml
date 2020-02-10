@@ -32923,6 +32923,12 @@
 	</item>
 	<item id="25536" name="grass" />
 	<item id="25537" name="dry grass" />
+	<item id="26019" name="dark stone floor">
+		<attribute key="description" value="There is a hole in the ceiling." />
+	</item>
+	<item id="26020" article="a" name="hole">
+		<attribute key="floorchange" value="down" />
+	</item>
 	<item id="26029" article="an" name="ultimate mana potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by sorcerers and druids of level 130 or higher." />
