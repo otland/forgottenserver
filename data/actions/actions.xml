@@ -90,6 +90,7 @@
 	<action fromid="1728" toid="1731" script="other/watch.lua" />
 	<action itemid="3900" script="other/watch.lua" />
 	<action itemid="7828" script="other/watch.lua" />
+	<action itemid="6092" script="other/watch.lua" />
 	<action itemid="2785" script="other/blueberrybush.lua" />
 	<action itemid="2579" script="other/trap.lua" />
 	<action itemid="2148" script="other/changegold.lua" />
