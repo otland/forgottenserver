@@ -1,5 +1,5 @@
 Storage = {
-    annihilatorReward = {
+    annihilator = {
         Reward = 30015,
     }
     
