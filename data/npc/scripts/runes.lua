@@ -121,7 +121,7 @@ function creatureSayCallback(cid, type, msg)
 		if npcHandler.topic[cid] == 1 then
 			player:addItem(items[vocationId], 1)
 			selfSay('Here you are young adept, take care yourself.', cid)
-			player:setStorageValue(30002, 1)
+			player:setStorageValue(Storage.firstRod, 1)
 		end
 		npcHandler.topic[cid] = 0
 	elseif msgcontains(msg, 'no') and npcHandler.topic[cid] == 1 then
