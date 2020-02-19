@@ -13143,7 +13143,7 @@
 		<attribute key="weight" value="200" />
 		<attribute key="description" value="It says 'Roses are red, and so is my blood.' Damn, that sounds stupid. You have to start over." />
 	</item>
-	<item id="7536" name="the remains of a spider egg" />
+	<item id="7536" name="the remains of a spider egg">
 		<attribute key="decayTo" value="7537" />
 		<attribute key="duration" value="300" />
 	</item>
