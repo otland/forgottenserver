@@ -13144,6 +13144,9 @@
 		<attribute key="description" value="It says 'Roses are red, and so is my blood.' Damn, that sounds stupid. You have to start over." />
 	</item>
 	<item id="7536" name="the remains of a spider egg" />
+		<attribute key="decayTo" value="7537" />
+		<attribute key="duration" value="300" />
+	</item>
 	<item id="7537" article="a" name="spider egg" />
 	<item id="7538" article="a" name="spider web">
 		<attribute key="destroyTo" value="7544" />
