@@ -176,6 +176,3 @@ pip-log.txt
 ## TFS / OT
 #############
 config.lua
-
-# We don't want to merge any data changes
-**/data
