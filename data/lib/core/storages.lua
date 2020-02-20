@@ -1,4 +1,4 @@
-StorageKey = {
+StorageKeys = {
     annihilator = {
         reward = 30015,
     }
@@ -8,5 +8,5 @@ StorageKey = {
     firstRod = 30020,
 }
 
-GlobalStorage = {
+GlobalStorageKeys = {
 }
