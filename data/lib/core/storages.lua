@@ -1,9 +1,9 @@
-Storage = {
+StorageKey = {
     annihilator = {
-        Reward = 30015,
+        reward = 30015,
     }
-    
-    Promotion = 30018,
+
+    promotion = 30018,
     delayLargeSeaShell = 30019,
     firstRod = 30020,
 }

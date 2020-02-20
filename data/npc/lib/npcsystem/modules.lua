@@ -85,7 +85,7 @@ if Modules == nil then
 			else
 				npcHandler:say(parameters.text, cid)
 				player:setVocation(promotion)
-				player:setStorageValue(Storage.Promotion, 1)
+				player:setStorageValue(StorageKey.promotion, 1)
 			end
 		else
 			npcHandler:say("You need a premium account in order to get promoted.", cid)
