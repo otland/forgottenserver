@@ -28,13 +28,11 @@ function carpets.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the item on the floor first.")
 	elseif not tile or not tile:getHouse() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may use this only inside a house.")
-	else if carpetStack > 1 then
+	elseif carpetStack > 1 then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
-	else
-		item:transform(carpet)
-		end
 	end
+	item:transform(carpet)
 	return true
 end
 
