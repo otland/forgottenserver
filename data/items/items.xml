@@ -3114,8 +3114,8 @@
 	<item id="2370" article="a" name="lute">
 		<attribute key="weight" value="3400" />
 	</item>
-	<item id="2371" article="a" name="horn of sundering">
-		<attribute key="weight" value="1500" />
+	<item id="2371" article="the" name="horn of sundering">
+		<attribute key="weight" value="2300" />
 	</item>
 	<item id="2372" article="a" name="lyre">
 		<attribute key="weight" value="1250" />
@@ -31906,6 +31906,10 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="shootType" value="simplearrow" />
 		<attribute key="maxHitChance" value="91" />
+	</item>
+	<item id="23923" article="a" name="small crystal bell">
+		<attribute key="weight" value="280" />
+		<attribute key="description" value="It seems fragile and precious." />
 	</item>
 	<item id="24301" article="a" name="receipt">
 		<attribute key="weight" value="25" />
