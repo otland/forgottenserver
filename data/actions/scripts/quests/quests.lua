@@ -12,7 +12,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemWeight = itemType:getWeight()
 	local playerCap = player:getFreeCapacity()
 	if table.contains(annihilatorReward, item.uid) then
-		if player:getStorageValue(StorageKeys.annihilatorReward) == -1 then
+		if player:getStorageValue(PlayerStorageKeys.annihilatorReward) == -1 then
 			if playerCap >= itemWeight then
 				if item.uid == 1990 then
 					player:addItem(1990, 1):addItem(2326, 1)
@@ -20,7 +20,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					player:addItem(item.uid, 1)
 				end
 				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. '.')
-				player:setStorageValue(StorageKeys.annihilatorReward, 1)
+				player:setStorageValue(PlayerStorageKeys.annihilatorReward, 1)
 			else
 				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 			end
