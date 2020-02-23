@@ -6,16 +6,16 @@ local instruments = {
 	[2074] = {effect = CONST_ME_SOUND_GREEN}, -- panpipes
 	[2075] = {effect = CONST_ME_SOUND_GREEN}, -- simple fanfare
 	[2076] = {effect = CONST_ME_SOUND_GREEN}, -- fanfare
-	[2077] = {effect = CONST_ME_SOUND_GREEN}, -- royal fanfare (actual effect is unknown)
+	[2077] = {effect = CONST_ME_SOUND_GREEN}, -- royal fanfare
 	[2078] = {effect = CONST_ME_SOUND_GREEN}, -- post horn
 	[2079] = {effect = CONST_ME_SOUND_GREEN}, -- war horn
-	[2080] = {effect = CONST_ME_SOUND_BLUE}, -- piano (actual effect is unknown)
-	[2081] = {effect = CONST_ME_SOUND_BLUE}, -- piano
-	[2082] = {effect = CONST_ME_SOUND_BLUE}, -- piano
-	[2083] = {effect = CONST_ME_SOUND_BLUE}, -- piano
-	[2084] = {effect = CONST_ME_SOUND_BLUE}, -- harp (actual effect is unknown)
-	[2085] = {effect = CONST_ME_SOUND_BLUE}, -- harp
-	[2332] = {effect = CONST_ME_SOUND_BLUE}, -- Waldo's post horn (actual effect is unknown)
+	[2080] = {effects = {failure = CONST_ME_SOUND_PURPLE, success = CONST_ME_SOUND_GREEN}, chance = 50}, -- piano
+	[2081] = {effects = {failure = CONST_ME_SOUND_PURPLE, success = CONST_ME_SOUND_GREEN}, chance = 50}, -- piano
+	[2082] = {effects = {failure = CONST_ME_SOUND_PURPLE, success = CONST_ME_SOUND_GREEN}, chance = 50}, -- piano
+	[2083] = {effects = {failure = CONST_ME_SOUND_PURPLE, success = CONST_ME_SOUND_GREEN}, chance = 50}, -- piano
+	[2084] = {effect = CONST_ME_SOUND_GREEN}, -- harp
+	[2085] = {effect = CONST_ME_SOUND_GREEN}, -- harp
+	[2332] = {effect = CONST_ME_SOUND_GREEN}, -- Waldo's post horn
 	[2367] = {effect = CONST_ME_SOUND_GREEN}, -- drum (immovable)
 	[2368] = {effect = CONST_ME_SOUND_GREEN}, -- simple fanfare (immovable)
 	[2369] = {effect = CONST_ME_SOUND_YELLOW, itemId = 2681, itemCount = 10, chance = 80, remove = true}, -- cornucopia (immovable)
@@ -30,7 +30,8 @@ local instruments = {
 	[5786] = {effects = {failure = CONST_ME_SOUND_RED, success = CONST_ME_SOUND_YELLOW}, monster = "war wolf", chance = 60, remove = true}, -- wooden whistle
 	[6572] = {effect = CONST_ME_SOUND_GREEN, text = "TOOOOOOT", transformId = 13578, decayId = 6572}, -- party trumpet
 	[6573] = {effect = CONST_ME_SOUND_GREEN, text = "TOOOOOOT", transformId = 13578, decayId = 6573}, -- party trumpet
-	[13759] = {effect = CONST_ME_SOUND_BLUE} -- small whistle (actual effect is unknown)
+	[13759] = {effect = CONST_ME_SOUND_BLUE}, -- small whistle (actual effect is unknown)
+	[23923] = {effect = CONST_ME_SOUND_WHITE} -- small crystal bell
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)

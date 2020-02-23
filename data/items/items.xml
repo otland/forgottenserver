@@ -3114,8 +3114,8 @@
 	<item id="2370" article="a" name="lute">
 		<attribute key="weight" value="3400" />
 	</item>
-	<item id="2371" article="a" name="horn of sundering">
-		<attribute key="weight" value="1500" />
+	<item id="2371" article="the" name="horn of sundering">
+		<attribute key="weight" value="2300" />
 	</item>
 	<item id="2372" article="a" name="lyre">
 		<attribute key="weight" value="1250" />
@@ -11979,6 +11979,8 @@
 		<attribute key="weight" value="850" />
 	</item>
 	<item id="7184" article="a" name="baby seal doll">
+		<attribute key="decayTo" value="7183" />
+		<attribute key="duration" value="3" />
 		<attribute key="weight" value="850" />
 	</item>
 	<item id="7185" article="a" name="small crack in the ice">
@@ -13141,7 +13143,10 @@
 		<attribute key="weight" value="200" />
 		<attribute key="description" value="It says 'Roses are red, and so is my blood.' Damn, that sounds stupid. You have to start over." />
 	</item>
-	<item id="7536" name="the remains of a spider egg" />
+	<item id="7536" name="the remains of a spider egg">
+		<attribute key="decayTo" value="7537" />
+		<attribute key="duration" value="300" />
+	</item>
 	<item id="7537" article="a" name="spider egg" />
 	<item id="7538" article="a" name="spider web">
 		<attribute key="destroyTo" value="7544" />
@@ -17867,9 +17872,15 @@
 	<item id="10062" name="Amarie's favourite book">
 		<attribute key="weight" value="800" />
 	</item>
-	<item fromid="10063" toid="10064" article="an" name="Epaminondas doll">
+	<item id="10063" name="Epaminondas doll">
 		<attribute key="description" value="He talks, moves and sings just like a real person." />
 		<attribute key="weight" value="777" />
+	</item>
+	<item id="10064" name="Epaminondas doll">
+		<attribute key="description" value="He talks, moves and sings just like a real person." />
+		<attribute key="weight" value="777" />
+		<attribute key="decayTo" value="10063" />
+		<attribute key="duration" value="3" />
 	</item>
 	<item id="10066" article="a" name="dark essence">
 		<attribute key="weight" value="260" />
@@ -22275,6 +22286,8 @@
 	<item id="13581" name="dread doll">
 		<attribute key="description" value="It is shining with positive energy and was awarded by the gods." />
 		<attribute key="weight" value="1100" />
+		<attribute key="decayTo" value="13559" />
+		<attribute key="duration" value="3" />
 	</item>
 	<item id="13582" name="Impward">
 		<attribute key="weight" value="600" />
@@ -24329,8 +24342,14 @@
 		<attribute key="description" value="Her hair's snakes are still alive." />
 		<attribute key="weight" value="1000" />
 	</item>
-	<item fromid="16107" toid="16108" article="a" name="doll of Durin The Almighty">
+	<item id="16107" article="a" name="doll of Durin The Almighty">
 		<attribute key="weight" value="4000" />
+		<attribute key="description" value="The mightiest. The only. God of all dwarfs." />
+	</item>
+	<item id="16108" article="a" name="doll of Durin The Almighty">
+		<attribute key="weight" value="4000" />
+		<attribute key="decayTo" value="16107" />
+		<attribute key="duration" value="3" />
 		<attribute key="description" value="The mightiest. The only. God of all dwarfs." />
 	</item>
 	<item fromid="16109" toid="16110" article="a" name="majestic shield">
@@ -31783,6 +31802,8 @@
 		<attribute key="description" value="My sad story is told by few living humans but many dead warriors." />
 	</item>
 	<item id="23807" article="a" name="black knight doll">
+		<attribute key="decayTo" value="23806" />
+		<attribute key="duration" value="3" />
 		<attribute key="weight" value="1800" />
 		<attribute key="description" value="My sad story is told by few living humans but many dead warriors." />
 	</item>
@@ -31886,6 +31907,10 @@
 		<attribute key="shootType" value="simplearrow" />
 		<attribute key="maxHitChance" value="91" />
 	</item>
+	<item id="23923" article="a" name="small crystal bell">
+		<attribute key="weight" value="280" />
+		<attribute key="description" value="It seems fragile and precious." />
+	</item>
 	<item id="24301" article="a" name="receipt">
 		<attribute key="weight" value="25" />
 		<attribute key="description" value="This receipt serves as a reference to a successful guild bank transfer." />
@@ -31901,11 +31926,27 @@
 		<attribute key="absorbPercentIce" value="5" />
 		<attribute key="weight" value="4500" />
 	</item>
+	<item id="24316" article="a" name="midnight panther doll">
+		<attribute key="weight" value="1700" />
+		<attribute key="description" value="It is said to be a symbol of perseverance and luck." />
+	</item>
+	<item id="24317" article="a" name="midnight panther doll">
+		<attribute key="decayTo" value="24316" />
+		<attribute key="duration" value="3" />
+		<attribute key="weight" value="1700" />
+		<attribute key="description" value="It is said to be a symbol of perseverance and luck." />
+	</item>
+	<item id="24324" article="a" name="sweetheart ring">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+	</item>
 	<item id="24331" article="an" name="assassin doll">
 		<attribute key="weight" value="2504" />
 		<attribute key="description" value="Only the real killers can touch me!" />
 	</item>
 	<item id="24332" article="an" name="assassin doll">
+		<attribute key="decayTo" value="24331" />
+		<attribute key="duration" value="3" />
 		<attribute key="weight" value="2504" />
 		<attribute key="description" value="Only the real killers can touch me!" />
 	</item>
@@ -31930,11 +31971,17 @@
 		<attribute key="weight" value="0" />
 		<attribute key="description" value="Store Coins are needed to shop exclusive products in the Store, including fabulous mounts, classy outfits, a Name Change or even Premium Time." />
 	</item>
-	<item fromid="24776" toid="24777" name="Little Adventurer Doll">
+	<item id="24776" name="Little Adventurer Doll">
 		<attribute key="weight" value="2613" />
 		<attribute key="description" value="This little fellow has faced many dangers. He will follow you anywhere." />
 	</item>
-	<item fromid="24807" toid="24808" name="doll">
+	<item id="24777" name="Little Adventurer Doll">
+		<attribute key="weight" value="2613" />
+		<attribute key="description" value="This little fellow has faced many dangers. He will follow you anywhere." />
+		<attribute key="decayTo" value="24776" />
+		<attribute key="duration" value="3" />
+	</item>
+	<item fromid="24807" toid="24808" article="a" name="doll">
 		<attribute key="weight" value="1500" />
 	</item>
 	<item fromid="24809" toid="24810" name="dark wizard's crown">
@@ -32880,6 +32927,12 @@
 	</item>
 	<item id="25536" name="grass" />
 	<item id="25537" name="dry grass" />
+	<item id="26019" name="dark stone floor">
+		<attribute key="description" value="There is a hole in the ceiling." />
+	</item>
+	<item id="26020" article="a" name="hole">
+		<attribute key="floorchange" value="down" />
+	</item>
 	<item id="26029" article="an" name="ultimate mana potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by sorcerers and druids of level 130 or higher." />
