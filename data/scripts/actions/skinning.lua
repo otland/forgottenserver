@@ -1,7 +1,7 @@
 local config = {
 	[5908] = {
 		-- Minotaurs
-		[2830] = {chance = 7000, newItem = 5878, after = 2831}, -- minotaur
+		[3090] = {chance = 7000, newItem = 5878, after = 2831}, -- minotaur
 		[5969] = {chance = 7000, newItem = 5878, after = 2831}, -- minotaur, after being killed
 		[2871] = {chance = 7000, newItem = 5878, after = 2872}, -- minotaur archer
 		[5982] = {chance = 7000, newItem = 5878, after = 2872}, -- minotaur archer, after being killed
@@ -61,15 +61,17 @@ local config = {
 		[25398] = {chance = 50000, newItem = 24842, after = 25400}, -- after being killed
 
 		-- Piece of Marble Rock
-		[11343] = { {chance = 530, newItem = 11346, desc = "This little figurine of a goddess was masterfully sculpted by |PLAYERNAME|."},
-					{chance = 9600, newItem = 11345, desc = "This little figurine made by |PLAYERNAME| has some room for improvement."},
-					{chance = 24000, newItem = 11344, desc = "This shoddy work was made by |PLAYERNAME|."} },
+		[11343] = {
+			{chance = 530, newItem = 11346, desc = "This little figurine of a goddess was masterfully sculpted by |PLAYERNAME|."},
+			{chance = 9600, newItem = 11345, desc = "This little figurine made by |PLAYERNAME| has some room for improvement."},
+			{chance = 24000, newItem = 11344, desc = "This shoddy work was made by |PLAYERNAME|."}
+		},
 
 		-- Ice Cube
 		[7441] = {chance = 22000, newItem = 7442},
 		[7442] = {chance = 4800, newItem = 7444},
 		[7444] = {chance = 900, newItem = 7445},
-		[7445] = {chance = 40, newItem = 7446},
+		[7445] = {chance = 40, newItem = 7446}
 	},
 	[5942] = {
 		-- Demon
@@ -95,38 +97,39 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		return true
 	end
 
-	local random, effect, transform = math.random(1, 100000), CONST_ME_MAGIC_GREEN, true
+	local randomChance = math.random(1, 100000)
+	local effect = CONST_ME_MAGIC_GREEN
+	local transform = true
 	if type(skin[1]) == "table" then
 		local added = false
 		local _skin
 		for i = 1, #skin do
 			_skin = skin[i]
-			if random <= _skin.chance then
+			if randomChance <= _skin.chance then
 				if target.itemid == 11343 then
-					target:getPosition():sendMagicEffect(CONST_ME_ICEAREA)
 					local marble = player:addItem(_skin.newItem, _skin.amount or 1)
 					if marble then
-						marble:setDescription(_skin.desc:gsub("|PLAYERNAME|", player:getName()))
+						marble:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, _skin.desc:gsub("|PLAYERNAME|", player:getName()))
 					end
+					effect = CONST_ME_HITAREA
 					target:remove()
 					added = true
 				else
 					target:transform(_skin.newItem, _skin.amount or 1)
+					effect = CONST_ME_HITAREA
 					added = true
 				end
 				break
 			end
 		end
 
-		if not added and target.itemid == 8961 then
-			effect = CONST_ME_POFF
-			transform = false
-		elseif not added and target.itemid == 11343 then
-			effect = CONST_ME_POFF
+		if not added and target.itemid == 11343 then
+			effect = CONST_ME_HITAREA
+			player:say("Your attempt at shaping that marble rock failed miserably.", TALKTYPE_MONSTER_SAY)
 			transform = false
 			target:remove()
 		end
-	elseif random <= skin.chance then
+	elseif randomChance <= skin.chance then
 		if table.contains({7441, 7442, 7444, 7445}, target.itemid) then
 			target:transform(skin.newItem, 1)
 			effect = CONST_ME_HITAREA
@@ -139,8 +142,11 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			effect = CONST_ME_HITAREA
 			target:remove()
 		else
-			effect = CONST_ME_POFF
+			effect = CONST_ME_BLOCKHIT
 		end
+	end
+	if toPosition.x == CONTAINER_POSITION then
+		toPosition = player:getPosition()
 	end
 	toPosition:sendMagicEffect(effect)
 	if transform then
