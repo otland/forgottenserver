@@ -389,6 +389,10 @@ uint16_t Player::getClientIcons() const
 		}
 	}
 
+	if (pzLocked) {
+		icons |= ICON_REDSWORDS;
+	}
+
 	if (tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		icons |= ICON_PIGEON;
 
