@@ -4306,7 +4306,6 @@ int LuaScriptInterface::luaGameGetMonsterTypes(lua_State* L)
 	auto& type = g_monsters.monsters;
 	lua_createtable(L, type.size(), 0);
 
-	int index = 0;
 	for (auto& mType : type) {
 		pushUserdata<MonsterType>(L, &mType.second);
 		setMetatable(L, -1, "MonsterType");
