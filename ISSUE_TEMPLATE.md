@@ -5,6 +5,9 @@
       support matter (use https://otland.net/forums/support.16/ for support)
 - [ ] This issue is reproducible without changes to the code in this repository
 
+## Please add your protocol version in title AND in description (7.72, 8.6 etc)
+Issues are common for all branches.
+
 ### Steps to reproduce (include any configuration/script required to reproduce)
 1.
 2.
