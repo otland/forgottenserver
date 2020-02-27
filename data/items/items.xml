@@ -16780,6 +16780,12 @@
 	<item id="9440" article="a" name="fire basin" />
 	<item id="9441" article="a" name="blood basin" />
 	<item id="9442" article="a" name="family banner" />
+	<item id="9443" article="an" name="old clock">
+		<attribute key="rotateTo" value="9444" />
+	</item>
+	<item id="9444" article="an" name="old clock">
+		<attribute key="rotateTo" value="9443" />
+	</item>
 	<item fromid="9445" toid="9446" article="a" name="brass throne" />
 	<item id="9447" article="a" name="blood goblet">
 		<attribute key="weight" value="490" />
@@ -17893,6 +17899,12 @@
 		<attribute key="containerSize" value="8" />
 		<attribute key="slotType" value="backpack" />
 	</item>
+	<item id="10077" article="a" name="vortex of elemental water">
+		<attribute key="description" value="It contains the raw elemental force of water." />
+	</item>
+	<item id="10078" name="pile of chaos matter">
+		<attribute key="description" value="The chaos matter is sizzeling." />
+	</item>
 	<item id="10089" article="an" name="antidote potion">
 		<attribute key="weight" value="175" />
 	</item>
@@ -17912,6 +17924,7 @@
 		<attribute key="description" value="You read the numbers 5261 on the back of the doll." />
 		<attribute key="weight" value="650" />
 	</item>
+	<item id="10098" name="the remains of a pirate"/>
 	<item id="10099" name="the top right part of a map">
 		<attribute key="weight" value="790" />
 	</item>
@@ -17948,34 +17961,35 @@
 		<attribute key="description" value="It also contains an old dress of Queen Eloise." />
 		<attribute key="weight" value="900" />
 	</item>
+	<item id="10110" article="a" name="yalahari inkwell"/>
 	<item id="10111" article="a" name="book">
 		<attribute key="weight" value="100" />
 	</item>
-	<item id="10112" article="a" name="stone pile">
+	<item id="10112" article="a" name="wormhole">
 		<attribute key="decayTo" value="10115" />
 		<attribute key="duration" value="7" />
 	</item>
-	<item id="10113" article="a" name="stone pile">
+	<item id="10113" article="a" name="wormhole">
 		<attribute key="decayTo" value="10114" />
 		<attribute key="duration" value="4" />
 	</item>
-	<item id="10114" article="a" name="drilling worm">
+	<item id="10114" article="a" name="wormhole">
 		<attribute key="decayTo" value="10112" />
 		<attribute key="duration" value="2" />
 	</item>
-	<item id="10115" article="a" name="carrion worm">
+	<item id="10115" article="a" name="wormhole">
 		<attribute key="decayTo" value="10113" />
 		<attribute key="duration" value="2" />
 	</item>
-	<item id="10116" article="a" name="stone pile">
+	<item id="10116" article="a" name="wormhole">
 		<attribute key="decayTo" value="10112" />
 		<attribute key="duration" value="9" />
 	</item>
-	<item id="10117" article="a" name="stone pile">
+	<item id="10117" article="a" name="wormhole">
 		<attribute key="decayTo" value="10113" />
 		<attribute key="duration" value="13" />
 	</item>
-	<item id="10118" article="a" name="stone pile">
+	<item id="10118" article="a" name="wormhole">
 		<attribute key="decayTo" value="10114" />
 		<attribute key="duration" value="17" />
 	</item>
@@ -18170,9 +18184,12 @@
 		<attribute key="description" value="This power core has seen better days." />
 		<attribute key="weight" value="780" />
 	</item>
+	<item id="10176" article="a" name="button" />
 	<item id="10173" article="a" name="golem head">
 		<attribute key="weight" value="3000" />
 	</item>
+	<item id="10174" name="golem parts" />
+	<item id="10175" name="stone floor" />
 	<item id="10176" name="dirt" />
 	<item fromid="10177" toid="10187" article="a" name="limestone wall" />
 	<item fromid="10188" toid="10189" article="a" name="broken limestone wall" />
