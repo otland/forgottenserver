@@ -18184,7 +18184,7 @@
 		<attribute key="description" value="This power core has seen better days." />
 		<attribute key="weight" value="780" />
 	</item>
-	<item id="10176" article="a" name="button" />
+	<item id="10172" article="a" name="button" />
 	<item id="10173" article="a" name="golem head">
 		<attribute key="weight" value="3000" />
 	</item>
