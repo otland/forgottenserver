@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mad Sheep" nameDescription="a mad sheep" race="blood" experience="0" speed="116">
 	<health now="22" max="22" />
 	<look type="14" corpse="5991" />
