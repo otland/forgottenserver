@@ -19,20 +19,19 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 	end
 
 	local rewards = {}
-	repeat
+	while #rewards < 7 do
 		local count = 1
 		local rand = math.random(#targetItem)
 		local gift = targetItem[rand]
 		if type(gift) == "table" then
-			count = gift[2]
-			gift = gift[1]
+			gift, count = unpack(gift)
 		end
 		rewards[#rewards + 1] = {gift, count}
 		table.remove(targetItem, rand)
-	until #rewards == 7
+	end
 
 	for i = 1, #rewards do
-		player:addItem(rewards[i][1], rewards[i][2])
+		player:addItem(unpack(rewards[i]))
 	end
 	item:remove(1)
 	fromPosition:sendMagicEffect(CONST_ME_GIFT_WRAPS)
