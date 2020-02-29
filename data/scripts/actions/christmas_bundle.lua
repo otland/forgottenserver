@@ -34,7 +34,7 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 		player:addItem(unpack(rewards[i]))
 	end
 	item:remove(1)
-	fromPosition:sendMagicEffect(CONST_ME_GIFT_WRAPS)
+	player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
 	return true
 end
 
