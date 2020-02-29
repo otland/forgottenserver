@@ -1,11 +1,13 @@
-local jungleGrass = { 2782, 3985, 19433 }
 local wildGrowth = { 1499, 11099 }
+local jungleGrass = {
+	[2782] = 2781,
+	[3985] = 3984,
+	[19433] = 19431
+}
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetId = target.itemid
-	if table.contains(jungleGrass, targetId) then
-		target:transform(targetId == 19433 and 19431 or targetId - 1)
-		target:decay()
+	if not targetId then
 		return true
 	end
 
@@ -14,5 +16,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		target:remove()
 		return true
 	end
+
+	local grass = jungleGrass[targetId]
+	if grass then
+		target:transform(grass)
+		target:decay()
+		return true
+	end
+
 	return destroyItem(player, target, toPosition)
 end
