@@ -1,14 +1,14 @@
 local christmasBundle = Action()
 
 function christmasBundle.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local presents = {
-		[6507] = { -- red christmas bundle
+	local presents = { -- [christmas bundle item id] = {{reward item id, count}, ...}
+		[6507] = { -- red bundle
 			{6569, 15}, {2687, 20}, {2688, 10}, {2675, 10}, {2674, 5}, 6501, 6502, 6490, 6504, 6388
 		},
-		[6508] = { -- blue christmas bundle
+		[6508] = { -- blue bundle
 			{6569, 15}, {2687, 20}, {2688, 10}, {2675, 10}, {2674, 5}, 6501, 6502, 6490, 6505, 6388
 		},
-		[6509] = { -- green christmas bundle
+		[6509] = { -- green bundle
 			{6569, 15}, {2687, 20}, {2688, 10}, {2675, 10}, {2674, 5}, 6501, 6502, 6490, 6503, 6388
 		}
 	}
