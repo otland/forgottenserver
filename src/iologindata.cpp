@@ -84,15 +84,12 @@ std::string decodeSecret(const std::string& secret)
 bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
 {
 	Database& db = Database::getInstance();
-
+	std::string leastUsedAccountId = getLeastUsedAccountId();
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `secret`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `name` = " << db.escapeString(name);
+
+	query << "SELECT `id`, `name`, `password`, `secret`, `type`, `premdays`, `lastday` FROM `accounts` WHERE `id` = " << db.escapeString(leastUsedAccountId);
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
-		return false;
-	}
-
-	if (transformToSHA1(password) != result->getString("password")) {
 		return false;
 	}
 
@@ -627,6 +624,10 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 bool IOLoginData::savePlayer(Player* player)
 {
+	if (g_config.getBoolean(ConfigManager::STATIC_PLAYERS)) {
+		return true;
+	}
+
 	if (player->getHealth() <= 0) {
 		player->changeHealth(1);
 	}
@@ -925,6 +926,23 @@ bool IOLoginData::formatPlayerName(std::string& name)
 
 	name = result->getString("name");
 	return true;
+}
+
+std::string IOLoginData::getLeastUsedAccountId() {
+	Database& db = Database::getInstance();
+	std::ostringstream leastUsedAccountQuery;
+	leastUsedAccountQuery << "SELECT COUNT(player_id) as count, players.account_id AS least_used_account FROM players LEFT OUTER JOIN players_online ON players_online.player_id = players.id GROUP BY least_used_account ORDER BY count LIMIT 1;";
+	DBResult_ptr result = db.storeQuery(leastUsedAccountQuery.str());
+
+	if (!result) {
+		leastUsedAccountQuery.clear();
+		leastUsedAccountQuery << "SELECT id FROM accounts LIMIT 1;";
+		DBResult_ptr firstAccountResult = db.storeQuery(leastUsedAccountQuery.str());
+		
+		return firstAccountResult->getString("id");
+	}
+
+	return result->getString("least_used_account");
 }
 
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)

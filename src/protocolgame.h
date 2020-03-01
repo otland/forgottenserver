@@ -66,7 +66,7 @@ class ProtocolGame final : public Protocol
 
 		explicit ProtocolGame(Connection_ptr connection) : Protocol(connection) {}
 
-		void login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem);
+		void login(const std::string& name, OperatingSystem_t operatingSystem);
 		void logout(bool displayEffect, bool forced);
 
 		uint16_t getVersion() const {

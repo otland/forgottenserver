@@ -46,6 +46,7 @@ class ConfigManager
 			SERVER_SAVE_CLEAN_MAP,
 			SERVER_SAVE_CLOSE,
 			SERVER_SAVE_SHUTDOWN,
+			STATIC_PLAYERS,
 			ONLINE_OFFLINE_CHARLIST,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */

@@ -54,7 +54,7 @@ void ProtocolGame::release()
 	Protocol::release();
 }
 
-void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
+void ProtocolGame::login(const std::string& name, OperatingSystem_t operatingSystem)
 {
 	//dispatcher thread
 	Player* foundPlayer = g_game.getPlayerByName(name);
@@ -88,24 +88,6 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
 			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
-		}
-
-		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-			BanInfo banInfo;
-			if (IOBan::isAccountBanned(accountId, banInfo)) {
-				if (banInfo.reason.empty()) {
-					banInfo.reason = "(none)";
-				}
-
-				std::ostringstream ss;
-				if (banInfo.expiresAt > 0) {
-					ss << "Your account has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-				} else {
-					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-				}
-				disconnectClient(ss.str());
-				return;
-			}
 		}
 
 		WaitingList& waitingList = WaitingList::getInstance();
@@ -278,24 +260,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	std::string& accountName = sessionArgs[0];
-	std::string& password = sessionArgs[1];
-	std::string& token = sessionArgs[2];
-	uint32_t tokenTime = 0;
-	try {
-		tokenTime = std::stoul(sessionArgs[3]);
-	} catch (const std::invalid_argument&) {
-		disconnectClient("Malformed token packet.");
-		return;
-	} catch (const std::out_of_range&) {
-		disconnectClient("Token time is too long.");
-		return;
-	}
 
-	if (accountName.empty()) {
-		disconnectClient("You must enter your account name.");
-		return;
-	}
 
 	std::string characterName = msg.getString();
 
@@ -335,13 +300,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
-	if (accountId == 0) {
-		disconnectClient("Account name or password is not correct.");
-		return;
-	}
-
-	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, getThis(), characterName, accountId, operatingSystem)));
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::login, getThis(), characterName, operatingSystem)));
 }
 
 void ProtocolGame::onConnect()

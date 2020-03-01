@@ -210,16 +210,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	std::string accountName = msg.getString();
-	if (accountName.empty()) {
-		disconnectClient("Invalid account name.", version);
-		return;
-	}
-
 	std::string password = msg.getString();
-	if (password.empty()) {
-		disconnectClient("Invalid password.", version);
-		return;
-	}
 
 	// read authenticator token and stay logged in flag from last 128 bytes
 	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
