@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="180">
+<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="140">
 	<health now="120" max="120" />
 	<look type="109" corpse="6036" />
 	<targetchange interval="4000" chance="10" />
@@ -25,7 +25,7 @@
 		</attack>
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="-10" max="-35" />
 	</attacks>
-	<defenses armor="5" defense="5" />
+	<defenses armor="4" defense="4" />
 	<elements>
 		<element icePercent="20" />
 		<element energyPercent="10" />
@@ -41,7 +41,7 @@
 		<voice sentence="Me need mana!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="16" chance="65000" />
+		<item name="gold coin" countmax="24" chance="99000" />
 		<item name="small flask of eyedrops" chance="3330" />
 	</loot>
 </monster>

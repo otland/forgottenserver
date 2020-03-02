@@ -48,7 +48,7 @@
 		<voice sentence="I WILL PROTECT MY BROOD!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gemmed book" chance="3333" />
+		<item id="1976" chance="3333" /><!-- book (gemmed) -->
 		<item name="golden mug" chance="1818" />
 		<item name="small sapphire" countmax="2" chance="2222" />
 		<item name="gold coin" countmax="100" chance="100000" />
@@ -62,10 +62,10 @@
 		<item name="burst arrow" countmax="5" chance="2222" />
 		<item name="power bolt" countmax="10" chance="2222" />
 		<item name="dragon ham" countmax="2" chance="20000" />
-		<item name="green mushroom" countmax="1" chance="6666" />
+		<item name="green mushroom" chance="6666" />
 		<item name="worm" countmax="10" chance="50000" />
-		<item name="red dragon scale" countmax="1" chance="5000" />
+		<item name="red dragon scale" chance="5000" />
 		<item id="5919" chance="100000" /><!-- dragon claw -->
-		<item name="red dragon leather" countmax="1" chance="5000" />
+		<item name="red dragon leather" chance="5000" />
 	</loot>
 </monster>

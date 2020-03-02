@@ -210,6 +210,7 @@
     <ClCompile Include="..\src\raids.cpp" />
     <ClCompile Include="..\src\rsa.cpp" />
     <ClCompile Include="..\src\scheduler.cpp" />
+    <ClCompile Include="..\src\script.cpp" />
     <ClCompile Include="..\src\scriptmanager.cpp" />
     <ClCompile Include="..\src\server.cpp" />
     <ClCompile Include="..\src\signals.cpp" />
@@ -294,10 +295,12 @@
     <ClInclude Include="..\src\raids.h" />
     <ClInclude Include="..\src\rsa.h" />
     <ClInclude Include="..\src\scheduler.h" />
+    <ClInclude Include="..\src\script.h" />
     <ClInclude Include="..\src\scriptmanager.h" />
     <ClInclude Include="..\src\server.h" />
     <ClInclude Include="..\src\signals.h" />
     <ClInclude Include="..\src\spawn.h" />
+    <ClInclude Include="..\src\spectators.h" />
     <ClInclude Include="..\src\spells.h" />
     <ClInclude Include="..\src\protocolstatus.h" />
     <ClInclude Include="..\src\talkaction.h" />

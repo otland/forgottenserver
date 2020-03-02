@@ -7,12 +7,9 @@ local parameters = {
 	{key = CONDITION_PARAM_SKILL_MELEEPERCENT, value = 45}
 }
 
-function onTargetCreature(creature, target)
-	target:addAttributeCondition(parameters)
-end
-
-combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
-
 function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
+	for _, target in ipairs(combat:getTargets(creature, variant)) do
+		target:addAttributeCondition(parameters)
+	end
+	return true
 end

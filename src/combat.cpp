@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -484,7 +484,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 	return nullptr;
 }
 
-void Combat::combatTileEffects(const SpectatorHashSet& spectators, Creature* caster, Tile* tile, const CombatParams& params)
+void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params)
 {
 	if (params.itemId != 0) {
 		uint16_t itemId = params.itemId;
@@ -829,7 +829,6 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		}
 	}
 
-	SpectatorHashSet spectators;
 	uint32_t maxX = 0;
 	uint32_t maxY = 0;
 
@@ -850,7 +849,8 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 
 	const int32_t rangeX = maxX + Map::maxViewportX;
 	const int32_t rangeY = maxY + Map::maxViewportY;
-	g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, pos, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	postCombatEffects(caster, position, params);
 

@@ -74,6 +74,6 @@
 		<item name="crystal mace" chance="1000" />
 		<item name="djinn blade" chance="800" />
 		<item name="worm" countmax="10" chance="50000" />
-		<item name="bonelord eye" countmax="1" chance="5000" />
+		<item name="bonelord eye" chance="5000" />
 	</loot>
 </monster>

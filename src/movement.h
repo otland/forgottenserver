@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 #include "baseevents.h"
 #include "item.h"
 #include "luascript.h"
+#include "vocation.h"
+
+extern Vocations g_vocations;
 
 enum MoveEvent_t {
 	MOVE_EVENT_STEP_IN,
@@ -64,12 +67,16 @@ class MoveEvents final : public BaseEvents
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
 
+		bool registerLuaEvent(MoveEvent* event);
+		bool registerLuaFunction(MoveEvent* event);
+		void clear(bool fromLua) override final;
+
 	private:
 		using MoveListMap = std::map<int32_t, MoveEventList>;
-		void clearMap(MoveListMap& map);
-
 		using MovePosListMap = std::map<Position, MoveEventList>;
-		void clear() override;
+		void clearMap(MoveListMap& map, bool fromLua);
+		void clearPosMap(MovePosListMap& map, bool fromLua);
+
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
 		Event_ptr getEvent(const std::string& nodeName) override;
@@ -103,7 +110,7 @@ class MoveEvent final : public Event
 		void setEventType(MoveEvent_t type);
 
 		bool configureEvent(const pugi::xml_node& node) override;
-		bool loadFunction(const pugi::xml_attribute& attr) override;
+		bool loadFunction(const pugi::xml_attribute& attr, bool isScripted) override;
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
@@ -132,21 +139,104 @@ class MoveEvent final : public Event
 		const std::string& getVocationString() const {
 			return vocationString;
 		}
+		void setVocationString(const std::string& str) {
+			vocationString = str;
+		}
 		uint32_t getWieldInfo() const {
 			return wieldInfo;
 		}
 		const VocEquipMap& getVocEquipMap() const {
 			return vocEquipMap;
 		}
+		void addVocEquipMap(std::string vocName) {
+			int32_t vocationId = g_vocations.getVocationId(vocName);
+			if (vocationId != -1) {
+				vocEquipMap[vocationId] = true;
+			}
+		}
+		bool getTileItem() const {
+			return tileItem;
+		}
+		void setTileItem(bool b) {
+			tileItem = b;
+		}
+		std::vector<uint32_t> getItemIdRange() {
+			return itemIdRange;
+		}
+		void addItemId(uint32_t id) {
+			itemIdRange.emplace_back(id);
+		}
+		std::vector<uint32_t> getActionIdRange() {
+			return actionIdRange;
+		}
+		void addActionId(uint32_t id) {
+			actionIdRange.emplace_back(id);
+		}
+		std::vector<uint32_t> getUniqueIdRange() {
+			return uniqueIdRange;
+		}
+		void addUniqueId(uint32_t id) {
+			uniqueIdRange.emplace_back(id);
+		}
+		std::vector<Position> getPosList() {
+			return posList;
+		}
+		void addPosList(Position pos) {
+			posList.emplace_back(pos);
+		}
+		std::string getSlotName() {
+			return slotName;
+		}
+		void setSlotName(std::string name) {
+			slotName = name;
+		}
+		void setSlot(uint32_t s) {
+			slot = s;
+		}
+		uint32_t getRequiredLevel() {
+			return reqLevel;
+		}
+		void setRequiredLevel(uint32_t level) {
+			reqLevel = level;
+		}
+		uint32_t getRequiredMagLevel() {
+			return reqMagLevel;
+		}
+		void setRequiredMagLevel(uint32_t level) {
+			reqMagLevel = level;
+		}
+		bool needPremium() {
+			return premium;
+		}
+		void setNeedPremium(bool b) {
+			premium = b;
+		}
+		uint32_t getWieldInfo() {
+			return wieldInfo;
+		}
+		void setWieldInfo(WieldInfo_t info) {
+			wieldInfo |= info;
+		}
 
-	private:
-		std::string getScriptEventName() const override;
+		static uint32_t StepInField(Creature* creature, Item* item, const Position& pos);
+		static uint32_t StepOutField(Creature* creature, Item* item, const Position& pos);
+
+		static uint32_t AddItemField(Item* item, Item* tileItem, const Position& pos);
+		static uint32_t RemoveItemField(Item* item, Item* tileItem, const Position& pos);
+
+		static uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+		static uint32_t DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
 		StepFunction stepFunction;
 		MoveFunction moveFunction;
 		EquipFunction equipFunction;
+
+	private:
+		std::string getScriptEventName() const override;
+
 		uint32_t slot = SLOTP_WHEREEVER;
+		std::string slotName;
 
 		//onEquip information
 		uint32_t reqLevel = 0;
@@ -155,6 +245,12 @@ class MoveEvent final : public Event
 		std::string vocationString;
 		uint32_t wieldInfo = 0;
 		VocEquipMap vocEquipMap;
+		bool tileItem = false;
+
+		std::vector<uint32_t> itemIdRange;
+		std::vector<uint32_t> actionIdRange;
+		std::vector<uint32_t> uniqueIdRange;
+		std::vector<Position> posList;
 };
 
 #endif

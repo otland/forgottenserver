@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2017 Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019 Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1438,7 +1438,7 @@ void Player::onThink(uint32_t interval)
 			kickPlayer(true);
 		} else if (client && idleTime == 60000 * kickAfterMinutes) {
 			std::ostringstream ss;
-			ss << "You have been idle for " << kickAfterMinutes << " minutes. You will be disconnected in one minute if you are still idle then.";
+			ss << "There was no variation in your behaviour for " << kickAfterMinutes << " minutes. You will be disconnected in one minute if there is no change in your actions until then.";
 			client->sendTextMessage(TextMessage(MESSAGE_STATUS_WARNING, ss.str()));
 		}
 	}
@@ -1605,7 +1605,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		message.primary.color = TEXTCOLOR_WHITE_EXP;
 		sendTextMessage(message);
 
-		SpectatorHashSet spectators;
+		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, position, false, true);
 		spectators.erase(this);
 		if (!spectators.empty()) {
@@ -1688,7 +1688,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		message.primary.color = TEXTCOLOR_RED;
 		sendTextMessage(message);
 
-		SpectatorHashSet spectators;
+		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, position, false, true);
 		spectators.erase(this);
 		if (!spectators.empty()) {
@@ -3865,11 +3865,12 @@ double Player::getLostPercent() const
 		lossPercent = 10;
 	}
 
+	double percentReduction = 0;
 	if (isPromoted()) {
-		lossPercent *= 0.7;
+		percentReduction += 30;
 	}
-
-	return lossPercent * pow(0.92, blessingCount) / 100;
+	percentReduction += blessingCount * 8;
+	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 
 void Player::learnInstantSpell(const std::string& spellName)

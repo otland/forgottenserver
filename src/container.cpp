@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -215,7 +215,7 @@ bool Container::isHoldingItem(const Item* item) const
 
 void Container::onAddContainerItem(Item* item)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
@@ -231,7 +231,7 @@ void Container::onAddContainerItem(Item* item)
 
 void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send to client
@@ -247,7 +247,7 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 void Container::onRemoveContainerItem(uint32_t index, Item* item)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
 
 	//send change to client

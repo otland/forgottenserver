@@ -478,7 +478,7 @@
 	<rune group="attack" spellid="116" name="Light Stone Shower Rune" id="23722" allowfaruse="1" charges="4" level="1" magiclevel="0" cooldown="2000" groupcooldown="2000" script="attack/light_stone_shower_rune.lua" />
 	<rune group="attack" spellid="7" name="Lightest Magic Missile Rune" id="19392" allowfaruse="1" charges="10" level="1" cooldown="2000" groupcooldown="2000" magiclevel="0" needtarget="1" blocktype="solid" script="attack/lightest_magic_missile_rune.lua" />
 	<rune group="attack" spellid="7" name="Lightest Missile Rune" id="23723" allowfaruse="1" charges="10" level="1" cooldown="2000" groupcooldown="2000" magiclevel="0" needtarget="1" blocktype="solid" script="attack/lightest_missile_rune.lua" />
-	<rune group="attack" spellid="86" name="Magic Wall Rune" id="2293" allowfaruse="1" charges="3" level="32" magiclevel="9" cooldown="2000" groupcooldown="2000" blocktype="all" script="support/magic_wall_rune.lua" />
+	<rune group="attack" spellid="86" name="Magic Wall Rune" id="2293" allowfaruse="1" charges="3" level="32" magiclevel="9" cooldown="2000" groupcooldown="2000" blocktype="all" script="attack/magic_wall_rune.lua" />
 	<rune group="attack" spellid="91" name="Poison Bomb Rune" id="2286" allowfaruse="1" charges="2" level="25" magiclevel="4" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_bomb_rune.lua" />
 	<rune group="attack" spellid="26" name="Poison Field Rune" id="2285" allowfaruse="1" charges="3" level="14" magiclevel="0" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_field_rune.lua" />
 	<rune group="attack" spellid="32" name="Poison Wall Rune" id="2289" allowfaruse="1" charges="4" level="29" magiclevel="5" cooldown="2000" groupcooldown="2000" blocktype="solid" script="attack/poison_wall_rune.lua" />
@@ -501,11 +501,11 @@
 	<rune group="support" spellid="14" name="Chameleon Rune" id="2291" allowfaruse="1" charges="1" level="27" magiclevel="4" cooldown="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" script="support/chameleon.lua" />
 	<rune group="support" spellid="78" name="Disintegrate Rune" id="2310" allowfaruse="0" charges="3" level="21" magiclevel="4" cooldown="2000" groupcooldown="2000" range="1" script="support/disintegrate_rune.lua" />
 	<rune group="support" spellid="30" name="Destroy Field Rune" id="2261" allowfaruse="1" charges="3" level="17" magiclevel="3" cooldown="2000" groupcooldown="2000" aggressive="0" range="5" script="support/destroy_field_rune.lua" />
-	<rune group="support" spellid="94" name="Wild Growth Rune" id="2269" allowfaruse="1" charges="2" level="27" magiclevel="8" cooldown="2000" groupcooldown="2000" blocktype="all" script="support/wild_growth_rune.lua">
+	<rune group="attack" spellid="94" name="Wild Growth Rune" id="2269" allowfaruse="1" charges="2" level="27" magiclevel="8" cooldown="2000" groupcooldown="2000" blocktype="all" script="attack/wild_growth_rune.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" showInDescription="0" />
 	</rune>
-	<rune group="support" spellid="54" name="Paralyze Rune" id="2278" allowfaruse="1" charges="1" level="54" magiclevel="18" cooldown="2000" groupcooldown="2000" mana="1400" needtarget="1" blocktype="solid" script="support/paralyze_rune.lua">
+	<rune group="attack" spellid="54" name="Paralyze Rune" id="2278" allowfaruse="1" charges="1" level="54" magiclevel="18" cooldown="2000" groupcooldown="2000" mana="1400" needtarget="1" blocktype="solid" script="attack/paralyze_rune.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" showInDescription="0" />
 	</rune>
@@ -800,4 +800,5 @@
 	<instant name="betrayed wraith skill reducer" words="###48" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/betrayed_wraith_skill_reducer.lua" />
 	<instant name="pirate corsair skill reducer" words="###49" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/pirate_corsair_skill_reducer.lua" />
 	<instant name="monster soulfire" words="###50" aggressive="1" blockwalls="1" range="7" needtarget="1" needlearn="1" script="monster/monster_soulfire.lua" />
+	<instant name="dipthrah skill reducer" words="###51" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/dipthrah_skill_reducer.lua" />
 </spells>

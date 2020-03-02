@@ -30,8 +30,8 @@
 		</defense>
 		<defense name="invisible" interval="3000" chance="25" duration="6000">
 			<attribute key="areaEffect" value="blueshimmer" />
-		<defense name="outfit" interval="4500" chance="30" monster="bat" duration="4000" />
 		</defense>
+		<defense name="outfit" interval="4500" chance="30" monster="bat" duration="4000" />
 	</defenses>
 	<elements>
 		<element physicalPercent="20" />

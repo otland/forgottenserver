@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,6 +89,7 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_CHARGES = 1 << 20,
 	ITEM_ATTRIBUTE_FLUIDTYPE = 1 << 21,
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
+	ITEM_ATTRIBUTE_DECAYTO = 1 << 23,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -151,6 +152,12 @@ enum SpellGroup_t : uint8_t {
 	SPELLGROUP_HEALING = 2,
 	SPELLGROUP_SUPPORT = 3,
 	SPELLGROUP_SPECIAL = 4,
+};
+
+enum SpellType_t : uint8_t {
+	SPELL_UNDEFINED = 0,
+	SPELL_INSTANT = 1,
+	SPELL_RUNE = 2,
 };
 
 enum AccountType_t : uint8_t {
@@ -415,6 +422,7 @@ enum ReturnValue {
 	RETURNVALUE_NOTENOUGHMANA,
 	RETURNVALUE_NOTENOUGHSOUL,
 	RETURNVALUE_YOUAREEXHAUSTED,
+	RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST,
 	RETURNVALUE_PLAYERISNOTREACHABLE,
 	RETURNVALUE_CANONLYUSETHISRUNEONCREATURES,
 	RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE,
@@ -609,5 +617,14 @@ struct CombatDamage
 using MarketOfferList = std::list<MarketOffer>;
 using HistoryMarketOfferList = std::list<HistoryMarketOffer>;
 using ShopInfoList = std::list<ShopInfo>;
+
+enum MonstersEvent_t : uint8_t {
+	MONSTERS_EVENT_NONE = 0,
+	MONSTERS_EVENT_THINK = 1,
+	MONSTERS_EVENT_APPEAR = 2,
+	MONSTERS_EVENT_DISAPPEAR = 3,
+	MONSTERS_EVENT_MOVE = 4,
+	MONSTERS_EVENT_SAY = 5,
+};
 
 #endif

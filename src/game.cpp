@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
+#include "script.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -50,10 +51,10 @@ extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern CreatureEvents* g_creatureEvents;
 extern Events* g_events;
-extern CreatureEvents* g_creatureEvents;
 extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
+extern Scripts* g_scripts;
 
 Game::Game()
 {
@@ -473,12 +474,11 @@ Player* Game::getPlayerByGUID(const uint32_t& guid)
 		return nullptr;
 	}
 
-	for (const auto& it : players) {
-		if (guid == it.second->getGUID()) {
-			return it.second;
-		}
+	auto it = mappedPlayerGuids.find(guid);
+	if (it == mappedPlayerGuids.end()) {
+		return nullptr;
 	}
-	return nullptr;
+	return it->second;
 }
 
 ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
@@ -540,7 +540,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		return false;
 	}
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -569,7 +569,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 
 	std::vector<int32_t> oldStackPosVector;
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
@@ -1211,6 +1211,14 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		return retMaxCount;
 	}
 
+	if (moveItem && moveItem->getDuration() > 0) {
+		if (moveItem->getDecaying() != DECAYING_TRUE) {
+			moveItem->incrementReferenceCounter();
+			moveItem->setDecaying(DECAYING_TRUE);
+			toDecayItems.push_front(moveItem);
+		}
+	}
+
 	return ret;
 }
 
@@ -1295,6 +1303,12 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		}
 	}
 
+	if (item->getDuration() > 0) {
+		item->incrementReferenceCounter();
+		item->setDecaying(DECAYING_TRUE);
+		toDecayItems.push_front(item);
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1335,6 +1349,9 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 
 		if (item->isRemoved()) {
 			item->onRemoved();
+			if (item->canDecay()) {
+				decayItems->remove(item);
+			}
 			ReleaseItem(item);
 		}
 
@@ -1598,7 +1615,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			} else {
 				int32_t newItemId = newId;
 				if (curType.id == newType.id) {
-					newItemId = curType.decayTo;
+					newItemId = item->getDecayTo();
 				}
 
 				if (newItemId < 0) {
@@ -1663,6 +1680,14 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 	item->setParent(nullptr);
 	cylinder->postRemoveNotification(item, cylinder, itemIndex);
 	ReleaseItem(item);
+
+	if (newItem->getDuration() > 0) {
+		if (newItem->getDecaying() != DECAYING_TRUE) {
+			newItem->incrementReferenceCounter();
+			newItem->setDecaying(DECAYING_TRUE);
+			toDecayItems.push_front(newItem);
+		}
+	}
 
 	return newItem;
 }
@@ -1924,7 +1949,7 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 		return;
 	}
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (Creature* spectator : spectators) {
 		if (Npc* npc = spectator->getNpc()) {
@@ -2637,10 +2662,10 @@ void Game::playerAcceptTrade(uint32_t playerId)
 	player->setTradeState(TRADE_ACCEPT);
 
 	if (tradePartner->getTradeState() == TRADE_ACCEPT) {
-		Item* tradeItem1 = player->tradeItem;
-		Item* tradeItem2 = tradePartner->tradeItem;
+		Item* playerTradeItem = player->tradeItem;
+		Item* partnerTradeItem = tradePartner->tradeItem;
 
-		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, tradeItem1, tradeItem2)) {
+		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
 			internalCloseTrade(player);
 			return;
 		}
@@ -2648,13 +2673,13 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		player->setTradeState(TRADE_TRANSFER);
 		tradePartner->setTradeState(TRADE_TRANSFER);
 
-		auto it = tradeItems.find(tradeItem1);
+		auto it = tradeItems.find(playerTradeItem);
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
 		}
 
-		it = tradeItems.find(tradeItem2);
+		it = tradeItems.find(partnerTradeItem);
 		if (it != tradeItems.end()) {
 			ReleaseItem(it->first);
 			tradeItems.erase(it);
@@ -2662,25 +2687,17 @@ void Game::playerAcceptTrade(uint32_t playerId)
 
 		bool isSuccess = false;
 
-		ReturnValue ret1 = internalAddItem(tradePartner, tradeItem1, INDEX_WHEREEVER, 0, true);
-		ReturnValue ret2 = internalAddItem(player, tradeItem2, INDEX_WHEREEVER, 0, true);
-		if (ret1 == RETURNVALUE_NOERROR && ret2 == RETURNVALUE_NOERROR) {
-			ret1 = internalRemoveItem(tradeItem1, tradeItem1->getItemCount(), true);
-			ret2 = internalRemoveItem(tradeItem2, tradeItem2->getItemCount(), true);
-			if (ret1 == RETURNVALUE_NOERROR && ret2 == RETURNVALUE_NOERROR) {
-				Cylinder* cylinder1 = tradeItem1->getParent();
-				Cylinder* cylinder2 = tradeItem2->getParent();
-
-				uint32_t count1 = tradeItem1->getItemCount();
-				uint32_t count2 = tradeItem2->getItemCount();
-
-				ret1 = internalMoveItem(cylinder1, tradePartner, INDEX_WHEREEVER, tradeItem1, count1, nullptr, FLAG_IGNOREAUTOSTACK, nullptr, tradeItem2);
-				if (ret1 == RETURNVALUE_NOERROR) {
-					internalMoveItem(cylinder2, player, INDEX_WHEREEVER, tradeItem2, count2, nullptr, FLAG_IGNOREAUTOSTACK);
-
-					tradeItem1->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
-					tradeItem2->onTradeEvent(ON_TRADE_TRANSFER, player);
-
+		ReturnValue tradePartnerRet = internalAddItem(tradePartner, playerTradeItem, INDEX_WHEREEVER, 0, true);
+		ReturnValue playerRet = internalAddItem(player, partnerTradeItem, INDEX_WHEREEVER, 0, true);
+		if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
+			playerRet = internalRemoveItem(playerTradeItem, playerTradeItem->getItemCount(), true);
+			tradePartnerRet = internalRemoveItem(partnerTradeItem, partnerTradeItem->getItemCount(), true);
+			if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
+				tradePartnerRet = internalMoveItem(playerTradeItem->getParent(), tradePartner, INDEX_WHEREEVER, playerTradeItem, playerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK, nullptr, partnerTradeItem);
+				if (tradePartnerRet == RETURNVALUE_NOERROR) {
+					internalMoveItem(partnerTradeItem->getParent(), player, INDEX_WHEREEVER, partnerTradeItem, partnerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
+					playerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
+					partnerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, player);
 					isSuccess = true;
 				}
 			}
@@ -2690,13 +2707,13 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			std::string errorDescription;
 
 			if (tradePartner->tradeItem) {
-				errorDescription = getTradeErrorDescription(ret1, tradeItem1);
+				errorDescription = getTradeErrorDescription(tradePartnerRet, playerTradeItem);
 				tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
 			}
 
 			if (player->tradeItem) {
-				errorDescription = getTradeErrorDescription(ret2, tradeItem2);
+				errorDescription = getTradeErrorDescription(playerRet, partnerTradeItem);
 				player->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
 				player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
 			}
@@ -3382,7 +3399,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 
 void Game::playerWhisper(Player* player, const std::string& text)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), false, false,
 	              Map::maxClientViewportX, Map::maxClientViewportX,
 	              Map::maxClientViewportY, Map::maxClientViewportY);
@@ -3455,7 +3472,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 
 void Game::playerSpeakToNpc(Player* player, const std::string& text)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (Creature* spectator : spectators) {
 		if (spectator->getNpc()) {
@@ -3485,7 +3502,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 	creature->setDirection(dir);
 
 	//send to client
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureTurn(creature);
@@ -3494,7 +3511,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-                               bool ghostMode, SpectatorHashSet* spectatorsPtr/* = nullptr*/, const Position* pos/* = nullptr*/)
+                               bool ghostMode, SpectatorVec* spectatorsPtr/* = nullptr*/, const Position* pos/* = nullptr*/)
 {
 	if (text.empty()) {
 		return false;
@@ -3504,10 +3521,10 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		pos = &creature->getPosition();
 	}
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 
 	if (!spectatorsPtr || spectatorsPtr->empty()) {
-		// This somewhat complex construct ensures that the cached SpectatorHashSet
+		// This somewhat complex construct ensures that the cached SpectatorVec
 		// is used if available and if it can be used, else a local vector is
 		// used (hopefully the compiler will optimize away the construction of
 		// the temporary when it's not used).
@@ -3619,7 +3636,7 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	creature->setSpeed(varSpeed);
 
 	//send to clients
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), false, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendChangeSpeed(creature, creature->getStepSpeed());
@@ -3639,7 +3656,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	}
 
 	//send to clients
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
@@ -3649,7 +3666,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 {
 	//send to clients
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureChangeVisible(creature, visible);
@@ -3659,7 +3676,7 @@ void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 void Game::changeLight(const Creature* creature)
 {
 	//send to clients
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureLight(creature);
@@ -3883,7 +3900,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			message.primary.value = realHealthChange;
 			message.primary.color = TEXTCOLOR_PASTELRED;
 
-			SpectatorHashSet spectators;
+			SpectatorVec spectators;
 			map.getSpectators(spectators, targetPos, false, true);
 			for (Creature* spectator : spectators) {
 				Player* tmpPlayer = spectator->getPlayer();
@@ -3957,7 +3974,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		TextMessage message;
 		message.position = targetPos;
 
-		SpectatorHashSet spectators;
+		SpectatorVec spectators;
 		if (targetPlayer && target->hasCondition(CONDITION_MANASHIELD) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 			if (manaDamage != 0) {
@@ -4258,7 +4275,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		message.primary.value = manaLoss;
 		message.primary.color = TEXTCOLOR_BLUE;
 
-		SpectatorHashSet spectators;
+		SpectatorVec spectators;
 		map.getSpectators(spectators, targetPos, false, true);
 		for (Creature* spectator : spectators) {
 			Player* tmpPlayer = spectator->getPlayer();
@@ -4306,12 +4323,12 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 
 void Game::addCreatureHealth(const Creature* target)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, target->getPosition(), true, true);
 	addCreatureHealth(spectators, target);
 }
 
-void Game::addCreatureHealth(const SpectatorHashSet& spectators, const Creature* target)
+void Game::addCreatureHealth(const SpectatorVec& spectators, const Creature* target)
 {
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -4322,12 +4339,12 @@ void Game::addCreatureHealth(const SpectatorHashSet& spectators, const Creature*
 
 void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, pos, true, true);
 	addMagicEffect(spectators, pos, effect);
 }
 
-void Game::addMagicEffect(const SpectatorHashSet& spectators, const Position& pos, uint8_t effect)
+void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -4338,13 +4355,15 @@ void Game::addMagicEffect(const SpectatorHashSet& spectators, const Position& po
 
 void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators, toPosSpectators;
 	map.getSpectators(spectators, fromPos, false, true);
-	map.getSpectators(spectators, toPos, false, true);
+	map.getSpectators(toPosSpectators, toPos, false, true);
+	spectators.addSpectators(toPosSpectators);
+
 	addDistanceEffect(spectators, fromPos, toPos, effect);
 }
 
-void Game::addDistanceEffect(const SpectatorHashSet& spectators, const Position& fromPos, const Position& toPos, uint8_t effect)
+void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -4377,7 +4396,7 @@ void Game::internalDecayItem(Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
 	if (it.decayTo != 0) {
-		Item* newItem = transformItem(item, it.decayTo);
+		Item* newItem = transformItem(item, item->getDecayTo());
 		startDecay(newItem);
 	} else {
 		ReturnValue ret = internalRemoveItem(item);
@@ -4555,7 +4574,7 @@ void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 void Game::updateCreatureWalkthrough(const Creature* creature)
 {
 	//send to clients
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		Player* tmpPlayer = spectator->getPlayer();
@@ -4569,7 +4588,7 @@ void Game::updateCreatureSkull(const Creature* creature)
 		return;
 	}
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureSkull(creature);
@@ -4578,7 +4597,7 @@ void Game::updateCreatureSkull(const Creature* creature)
 
 void Game::updatePlayerShield(Player* player)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureShield(player);
@@ -4590,7 +4609,7 @@ void Game::updatePlayerHelpers(const Player& player)
 	uint32_t creatureId = player.getID();
 	uint16_t helpers = player.getHelpers();
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, player.getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureHelpers(creatureId, helpers);
@@ -4614,7 +4633,7 @@ void Game::updateCreatureType(Creature* creature)
 	}
 
 	//send to clients
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 
 	if (creatureType == CREATURETYPE_SUMMON_OTHERS) {
@@ -5516,6 +5535,7 @@ void Game::addPlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
 	mappedPlayerNames[lowercase_name] = player;
+	mappedPlayerGuids[player->getGUID()] = player;
 	wildcardTree.insert(lowercase_name);
 	players[player->getID()] = player;
 }
@@ -5524,6 +5544,7 @@ void Game::removePlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
 	mappedPlayerNames.erase(lowercase_name);
+	mappedPlayerGuids.erase(player->getGUID());
 	wildcardTree.remove(lowercase_name);
 	players.erase(player->getID());
 }
@@ -5687,6 +5708,30 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return results;
 		}
 
+		case RELOAD_TYPE_SCRIPTS: {
+			// commented out stuff is TODO, once we approach further in revscriptsys
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_weapons->clear(true);
+			g_weapons->loadDefaults();
+			g_spells->clear(true);
+			g_scripts->loadScripts("scripts", false, true);
+			/*
+			Npcs::reload();
+			raids.reload() && raids.startup();
+			Item::items.reload();
+			quests.reload();
+			mounts.reload();
+			g_config.reload();
+			g_events->load();
+			g_chat->load();
+			*/
+			return true;
+		}
+
 		default: {
 			if (!g_spells->reload()) {
 				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
@@ -5706,13 +5751,23 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_talkActions->reload();
 			Item::items.reload();
 			g_weapons->reload();
+			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			quests.reload();
 			mounts.reload();
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
+			g_actions->clear(true);
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_spells->clear(true);
+			g_scripts->loadScripts("scripts", false, true);
 			return true;
 		}
 	}
+	return true;
 }
+

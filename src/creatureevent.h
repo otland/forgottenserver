@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,11 +53,20 @@ class CreatureEvent final : public Event
 		CreatureEventType_t getEventType() const {
 			return type;
 		}
+		void setEventType(CreatureEventType_t eventType) {
+			type = eventType;
+		}
 		const std::string& getName() const {
 			return eventName;
 		}
+		void setName(const std::string& name) {
+			eventName = name;
+		}
 		bool isLoaded() const {
 			return loaded;
+		}
+		void setLoaded(bool b) {
+			loaded = b;
 		}
 
 		void clearEvent();
@@ -102,12 +111,14 @@ class CreatureEvents final : public BaseEvents
 
 		CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
 
+		bool registerLuaEvent(CreatureEvent* event);
+		void clear(bool fromLua) override final;
+
 	private:
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
 		Event_ptr getEvent(const std::string& nodeName) override;
 		bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
-		void clear() override;
 
 		//creature events
 		using CreatureEventMap = std::map<std::string, CreatureEvent>;
