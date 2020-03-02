@@ -622,7 +622,7 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 		}
 	} else {
 		if (!params.aggressive || (caster != target && Combat::canDoCombat(caster, target) == RETURNVALUE_NOERROR)) {
-			SpectatorHashSet spectators;
+			SpectatorVec spectators;
 			g_game.map.getSpectators(spectators, target->getPosition(), true, true);
 
 			if (params.origin != ORIGIN_MELEE) {
@@ -675,7 +675,7 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 			getCombatArea(position, position, area.get(), tileList);
 		}
 
-		SpectatorHashSet spectators;
+		SpectatorVec spectators;
 		uint32_t maxX = 0;
 		uint32_t maxY = 0;
 
@@ -849,8 +849,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 
 	const int32_t rangeX = maxX + Map::maxViewportX;
 	const int32_t rangeY = maxY + Map::maxViewportY;
+
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, pos, true, true, rangeX, rangeX, rangeY, rangeY);
+	g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	postCombatEffects(caster, position, params);
 
