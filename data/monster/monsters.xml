@@ -792,6 +792,7 @@
 	<monster name="Horse1" file="Ungulates/horse(brown).xml" />
 	<monster name="Horse2" file="Ungulates/horse(fire).xml" />
 	<monster name="Horse3" file="Ungulates/horse(grey).xml" />
+	<monster name="Mad Sheep" file="Ungulates/mad_sheep.xml" />
 	<monster name="Mammoth" file="Ungulates/mammoth.xml" />
 	<monster name="Mushroom Sniffer" file="Ungulates/mushroom_sniffer.xml" />
 	<monster name="Pig" file="Ungulates/pig.xml" />
