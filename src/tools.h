@@ -96,4 +96,8 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(std::string value);
 
+ItemCustomAttributes_t combatTypeToCustomBoostAttribute(CombatType_t combatType);
+ItemCustomAttributes_t combatTypeToCustomReflectPercentAttribute(CombatType_t combatType);
+ItemCustomAttributes_t combatTypeToCustomReflectChanceAttribute(CombatType_t combatType);
+
 #endif

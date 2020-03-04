@@ -867,6 +867,10 @@ class Item : virtual public Thing
 		uint32_t getWorth() const;
 		LightInfo getLightInfo() const;
 
+		int16_t getReflectPercent(CombatType_t combatType);
+		int16_t getReflectChance(CombatType_t combatType);
+		int16_t getBoostPercent(CombatType_t combatType);
+
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool isBlocking() const {
 			return items[id].blockSolid;

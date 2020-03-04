@@ -1826,6 +1826,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		return BLOCK_ARMOR;
 	}
 
+	size_t combatIndex = combatTypeToIndex(combatType);
 	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 		if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 			continue;
@@ -1846,7 +1847,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 			continue;
 		}
 
-		const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
+		const int16_t& absorbPercent = it.abilities->absorbPercent[combatIndex];
 		if (absorbPercent != 0) {
 			damage -= std::round(damage * (absorbPercent / 100.));
 
@@ -1856,8 +1857,19 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 			}
 		}
 
+		int16_t reflectPercent = item->getReflectPercent(combatType);
+		int16_t reflectChance = std::min<int16_t>(100, item->getReflectChance(combatType));
+		std::cout << reflectPercent << " " << reflectChance << " " << (uniform_random(1, 100) <= reflectChance) << std::endl;
+		if (reflectChance > 0 && reflectPercent != 0 && uniform_random(1, 100) <= reflectChance) {
+			CombatDamage reflectDamage;
+			reflectDamage.primary.type = combatType;
+			reflectDamage.primary.value = -std::round(damage * (reflectPercent / 100.));
+			reflectDamage.origin = ORIGIN_REFLECT;
+			g_game.combatChangeHealth(this, attacker, reflectDamage);
+		}
+
 		if (field) {
-			const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
+			const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatIndex];
 			if (fieldAbsorbPercent != 0) {
 				damage -= std::round(damage * (fieldAbsorbPercent / 100.));
 
@@ -1867,7 +1879,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				}
 			}
 		}
-	}
+	}	
 
 	if (damage <= 0) {
 		damage = 0;
@@ -4529,3 +4541,5 @@ void Player::setGuild(Guild* guild)
 		oldGuild->removeMember(this);
 	}
 }
+
+
