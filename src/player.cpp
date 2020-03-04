@@ -1859,7 +1859,6 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 
 		int16_t reflectPercent = item->getReflectPercent(combatType);
 		int16_t reflectChance = std::min<int16_t>(100, item->getReflectChance(combatType));
-		std::cout << reflectPercent << " " << reflectChance << " " << (uniform_random(1, 100) <= reflectChance) << std::endl;
 		if (reflectChance > 0 && reflectPercent != 0 && uniform_random(1, 100) <= reflectChance) {
 			CombatDamage reflectDamage;
 			reflectDamage.primary.type = combatType;
@@ -1879,7 +1878,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				}
 			}
 		}
-	}	
+	}
 
 	if (damage <= 0) {
 		damage = 0;
@@ -4541,5 +4540,3 @@ void Player::setGuild(Guild* guild)
 		oldGuild->removeMember(this);
 	}
 }
-
-

@@ -546,7 +546,6 @@ enum ItemCustomAttributes_t {
 	ITEM_CUSTOMATTRIBUTE_BOOSTPERCENTDEATH,
 };
 
-
 enum PlayerFlags : uint64_t {
 	PlayerFlag_CannotUseCombat = 1 << 0,
 	PlayerFlag_CannotAttackPlayer = 1 << 1,
