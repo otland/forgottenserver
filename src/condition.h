@@ -275,6 +275,10 @@ class ConditionDamage final : public Condition
 		}
 		int32_t getTotalDamage() const;
 
+		void setInitDamage(int32_t initDamage) {
+			this->initDamage = initDamage;
+		}
+
 		//serialization
 		void serialize(PropWriteStream& propWriteStream) override;
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
@@ -286,6 +290,7 @@ class ConditionDamage final : public Condition
 		int32_t periodDamage = 0;
 		int32_t periodDamageTick = 0;
 		int32_t tickInterval = 2000;
+		int32_t initDamage = 0;
 
 		bool forceUpdate = false;
 		bool delayed = false;
