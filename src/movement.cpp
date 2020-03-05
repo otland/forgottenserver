@@ -427,20 +427,20 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 	return ret;
 }
 
-uint32_t MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck)
+ReturnValue MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_EQUIP, slot);
 	if (!moveEvent) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, isCheck);
 }
 
-uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot)
+ReturnValue MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
 	if (!moveEvent) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, false);
 }
@@ -659,29 +659,33 @@ uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&)
 	return 1;
 }
 
-uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
+ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (player->isItemAbilityEnabled(slot)) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
+		if (player->getLevel() < moveEvent->getReqLevel()) {
+			return RETURNVALUE_NOTENOUGHLEVEL;
+		}
+
 		if (player->getLevel() < moveEvent->getReqLevel() || player->getMagicLevel() < moveEvent->getReqMagLv()) {
-			return 0;
+			return RETURNVALUE_NOTENOUGHMAGICLEVEL;
 		}
 
 		if (moveEvent->isPremium() && !player->isPremium()) {
-			return 0;
+			return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
 		}
 
 		const VocEquipMap& vocEquipMap = moveEvent->getVocEquipMap();
 		if (!vocEquipMap.empty() && vocEquipMap.find(player->getVocationId()) == vocEquipMap.end()) {
-			return 0;
+			return RETURNVALUE_CANNOTBEDRESSED;
 		}
 	}
 
 	if (isCheck) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	const ItemType& it = Item::items[item->getID()];
@@ -693,7 +697,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	}
 
 	if (!it.abilities) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (it.abilities->invisible) {
@@ -777,13 +781,13 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 		player->sendStats();
 	}
 
-	return 1;
+	return RETURNVALUE_NOERROR;
 }
 
-uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
+ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	player->setItemAbility(slot, false);
@@ -795,7 +799,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	}
 
 	if (!it.abilities) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (it.abilities->invisible) {
@@ -859,7 +863,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 		player->sendStats();
 	}
 
-	return 1;
+	return RETURNVALUE_NOERROR;
 }
 
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
@@ -933,15 +937,15 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	return scriptInterface->callFunction(4);
 }
 
-uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
+ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
 		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == 1) {
 			if (executeEquip(player, item, slot, isCheck)) {
-				return 1;
+				return RETURNVALUE_NOERROR;
 			}
 		}
-		return 0;
+		return RETURNVALUE_CANNOTBEDRESSED;
 	} else {
 		return equipFunction(this, player, item, slot, isCheck);
 	}
