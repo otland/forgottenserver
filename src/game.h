@@ -404,8 +404,6 @@ class Game
 
 		std::forward_list<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, DepotChest* depotChest, Inbox* inbox);
 
-		static void updatePremium(Account& account);
-
 		void cleanup();
 		void shutdown();
 		void ReleaseCreature(Creature* creature);

@@ -56,7 +56,7 @@ function Player.getLossPercent(self)
 end
 
 function Player.isPremium(self)
-	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
+	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
 function Player.sendCancelMessage(self, message)

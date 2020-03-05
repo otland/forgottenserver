@@ -26,9 +26,8 @@ struct Account {
 	std::vector<std::string> characters;
 	std::string name;
 	std::string key;
-	time_t lastDay = 0;
 	uint32_t id = 0;
-	uint16_t premiumDays = 0;
+	int32_t premEnd = 0;
 	AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
 	Account() = default;

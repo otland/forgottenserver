@@ -2397,9 +2397,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "removeMount", LuaScriptInterface::luaPlayerRemoveMount);
 	registerMethod("Player", "hasMount", LuaScriptInterface::luaPlayerHasMount);
 
-	registerMethod("Player", "getPremiumDays", LuaScriptInterface::luaPlayerGetPremiumDays);
-	registerMethod("Player", "addPremiumDays", LuaScriptInterface::luaPlayerAddPremiumDays);
-	registerMethod("Player", "removePremiumDays", LuaScriptInterface::luaPlayerRemovePremiumDays);
+	registerMethod("Player", "getPremiumTime", LuaScriptInterface::luaPlayerGetPremiumTime);
+	registerMethod("Player", "addPremiumTime", LuaScriptInterface::luaPlayerAddPremiumTime);
+	registerMethod("Player", "removePremiumTime", LuaScriptInterface::luaPlayerRemovePremiumTime);
 
 	registerMethod("Player", "hasBlessing", LuaScriptInterface::luaPlayerHasBlessing);
 	registerMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
@@ -9479,56 +9479,54 @@ int LuaScriptInterface::luaPlayerHasMount(lua_State* L) {
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetPremiumDays(lua_State* L)
+int LuaScriptInterface::luaPlayerGetPremiumTime(lua_State* L)
 {
-	// player:getPremiumDays()
+	// player:getPremiumTime()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->premiumDays);
+		lua_pushnumber(L, std::max<int32_t>(0, player->premEnd - time(nullptr)));
 	} else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerAddPremiumDays(lua_State* L)
+int LuaScriptInterface::luaPlayerAddPremiumTime(lua_State* L)
 {
-	// player:addPremiumDays(days)
+	// player:addPremiumTime(seconds)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (player->premiumDays != std::numeric_limits<uint16_t>::max()) {
-		uint16_t days = getNumber<uint16_t>(L, 2);
-		int32_t addDays = std::min<int32_t>(0xFFFE - player->premiumDays, days);
-		if (addDays > 0) {
-			player->setPremiumDays(player->premiumDays + addDays);
-			IOLoginData::addPremiumDays(player->getAccount(), addDays);
-		}
-	}
+	int32_t seconds = std::max<int32_t>(0, getNumber<int32_t>(L, 2));
+	int32_t oldTime = std::max<int32_t>(0, player->premEnd - time(nullptr));
+	player->setPremiumTime(time(nullptr) + oldTime + seconds);
+	IOLoginData::updatePremiumTime(player->getAccount(), player->premEnd);
 	pushBoolean(L, true);
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerRemovePremiumDays(lua_State* L)
+int LuaScriptInterface::luaPlayerRemovePremiumTime(lua_State* L)
 {
-	// player:removePremiumDays(days)
+	// player:removePremiumTime(seconds)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (player->premiumDays != std::numeric_limits<uint16_t>::max()) {
-		uint16_t days = getNumber<uint16_t>(L, 2);
-		int32_t removeDays = std::min<int32_t>(player->premiumDays, days);
-		if (removeDays > 0) {
-			player->setPremiumDays(player->premiumDays - removeDays);
-			IOLoginData::removePremiumDays(player->getAccount(), removeDays);
-		}
+	int32_t seconds = std::max<int32_t>(0, getNumber<int32_t>(L, 2));
+	int32_t oldTime = std::max<int32_t>(0, player->premEnd - time(nullptr));
+	if (oldTime < seconds) {
+		player->setPremiumTime(0);
+		IOLoginData::updatePremiumTime(player->getAccount(), 0);
+	} else {
+		player->setPremiumTime(time(nullptr) + (oldTime - seconds));
+		IOLoginData::updatePremiumTime(player->getAccount(), player->premEnd);
 	}
+
 	pushBoolean(L, true);
 	return 1;
 }
