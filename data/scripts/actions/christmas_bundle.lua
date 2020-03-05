@@ -38,7 +38,5 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 	return true
 end
 
-for k,v in pairs(presents) do
-	christmasBundle:id(k)
-end
+christmasBundle:id(6507,6508,6509)
 christmasBundle:register()
