@@ -31841,6 +31841,12 @@
 		<attribute key="slotType" value="backpack" />
 		<attribute key="weight" value="1800" />
 	</item>
+	<item id="23704" name="belongings of a deceased" editorsuffix=" (The Ravager)">
+		<attribute key="weight" value="5300" />
+	</item>
+	<item id="23705" name="belongings of a deceased" editorsuffix=" (Death Priest Shargon)">
+		<attribute key="weight" value="11000" />
+	</item>
 	<item id="23719" article="the" name="scorcher">
 		<attribute key="description" value="It's warm to the touch." />
 		<attribute key="weight" value="1500" />
