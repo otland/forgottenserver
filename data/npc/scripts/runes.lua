@@ -108,7 +108,7 @@ function creatureSayCallback(cid, type, msg)
 
 	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
 		if table.contains({1, 2, 5, 6}, vocationId) then
-			if player:getStorageValue(30002) == -1 then
+			if player:getStorageValue(PlayerStorageKeys.firstRod) == -1 then
 				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your advanture?', cid)
 				npcHandler.topic[cid] = 1
 			else

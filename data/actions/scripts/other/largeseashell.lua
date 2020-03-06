@@ -1,5 +1,5 @@
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if player:getStorageValue(STORAGEVALUE_DELAY_LARGE_SEASHELL) <= os.time() then
+	if player:getStorageValue(PlayerStorageKeys.delayLargeSeaShell) <= os.time() then
 		local chance = math.random(100)
 		local msg = ""
 		if chance <= 16 then
