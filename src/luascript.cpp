@@ -9526,7 +9526,6 @@ int LuaScriptInterface::luaPlayerRemovePremiumTime(lua_State* L)
 		player->setPremiumTime(time(nullptr) + (oldTime - seconds));
 		IOLoginData::updatePremiumTime(player->getAccount(), player->premEnd);
 	}
-
 	pushBoolean(L, true);
 	return 1;
 }

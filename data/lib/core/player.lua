@@ -55,6 +55,18 @@ function Player.getLossPercent(self)
 	return lossPercent[blessings]
 end
 
+function Player.getPremiumDays(self)
+	return self:getPremiumTime() * 86400
+end
+
+function Player.addPremiumDays(self, days)
+	return self:addPremiumTime(days * 86400)
+end
+
+function Player.removePremiumDays(self, days)
+	return self:removePremiumTime(days * 86400)
+end
+
 function Player.isPremium(self)
 	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
