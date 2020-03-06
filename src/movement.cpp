@@ -670,7 +670,7 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 			return RETURNVALUE_NOTENOUGHLEVEL;
 		}
 
-		if (player->getLevel() < moveEvent->getReqLevel() || player->getMagicLevel() < moveEvent->getReqMagLv()) {
+		if (player->getMagicLevel() < moveEvent->getReqMagLv()) {
 			return RETURNVALUE_NOTENOUGHMAGICLEVEL;
 		}
 
