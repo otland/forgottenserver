@@ -56,15 +56,15 @@ function Player.getLossPercent(self)
 end
 
 function Player.getPremiumDays(self)
-	return self:getPremiumTime() * 86400
+	return math.floor(self:getPremiumTime() / 86400)
 end
 
 function Player.addPremiumDays(self, days)
-	return self:addPremiumTime(days * 86400)
+	return self:addPremiumTime(math.floor(days / 86400))
 end
 
 function Player.removePremiumDays(self, days)
-	return self:removePremiumTime(days * 86400)
+	return self:removePremiumTime(math.floor(days / 86400))
 end
 
 function Player.isPremium(self)
