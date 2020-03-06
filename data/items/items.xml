@@ -22716,7 +22716,7 @@
 	</item>
 	<item id="13867" name="big stone pile" />
 	<item id="13868" name="greasy stone" />
-	<item id="13868" name="hole" />
+	<item id="13869" name="hole" />
 	<item id="13870" name="eye of a deepling">
 		<attribute key="description" value="Did it just twitch...? No, must have been an optical illusion." />
 		<attribute key="weight" value="240" />
