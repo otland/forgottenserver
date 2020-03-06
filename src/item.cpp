@@ -1896,7 +1896,9 @@ int16_t Item::getReflectPercent(CombatType_t combatType)
 	}
 
 	if (const auto& attr = getCustomAttribute(combatTypeToCustomReflectPercentAttribute(combatType))) {
-		reflectPercent += boost::get<int64_t>(attr->value);
+		if (attr->value.type() == typeid(int64_t)) {
+			reflectPercent += boost::get<int64_t>(attr->value);
+		}
 	}
 	return reflectPercent;
 }
@@ -1910,7 +1912,9 @@ int16_t Item::getReflectChance(CombatType_t combatType)
 	}
 
 	if (const auto& attr = getCustomAttribute(combatTypeToCustomReflectChanceAttribute(combatType))) {
-		reflectChance += boost::get<int64_t>(attr->value);
+		if (attr->value.type() == typeid(int64_t)) {
+			reflectChance += boost::get<int64_t>(attr->value);
+		}
 	}
 	return reflectChance;
 }
@@ -1924,7 +1928,9 @@ int16_t Item::getBoostPercent(CombatType_t combatType)
 	}
 
 	if (const auto& attr = getCustomAttribute(combatTypeToCustomBoostAttribute(combatType))) {
-		boostPercent += boost::get<int64_t>(attr->value);
+		if (attr->value.type() == typeid(int64_t)) {
+			boostPercent += boost::get<int64_t>(attr->value);
+		}
 	}
 	return boostPercent;
 }
