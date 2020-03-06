@@ -20910,7 +20910,7 @@
 		<attribute key="weight" value="950" />
 	</item>
 	<item id="12544" article="a" name="sweet mangonaise elixir">
-		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing a magical ring with time limit." />
+		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing a volatile magical ring with time limit." />
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="12545" article="the" name="dead Glitterscale">
@@ -22716,7 +22716,7 @@
 	</item>
 	<item id="13867" name="big stone pile" />
 	<item id="13868" name="greasy stone" />
-	<item id="13868" name="hole" />
+	<item id="13869" name="hole" />
 	<item id="13870" name="eye of a deepling">
 		<attribute key="description" value="Did it just twitch...? No, must have been an optical illusion." />
 		<attribute key="weight" value="240" />
@@ -30993,6 +30993,22 @@
 	<item id="22670" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
+	<item id="22678" article="an" name="arcane staff">
+		<attribute key="weight" value="4000" />
+	</item>
+	<item id="22690" article="a" name="light rapier">
+		<attribute key="weight" value="1500" />
+		<attribute key="defense" value="8" />
+		<attribute key="attack" value="10" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="extradef" value="1" />
+		<attribute key="description" value="It has been used a lot, judging by its jagged blade." />
+	</item>
+	<item id="22691" article="a" name="jade amulet">
+		<attribute key="description" value="Golden lines are embedded in the amulet and show mysterious symbols. It was awarded by the gods." />
+		<attribute key="weight" value="400" />
+		<attribute key="slotType" value="necklace" />
+	</item>
 	<item id="22696" article="a" name="cake backpack">
 		<attribute key="weight" value="1800" />
 		<attribute key="containerSize" value="20" />
@@ -31824,6 +31840,12 @@
 		<attribute key="containerSize" value="20" />
 		<attribute key="slotType" value="backpack" />
 		<attribute key="weight" value="1800" />
+	</item>
+	<item id="23704" name="belongings of a deceased" editorsuffix=" (The Ravager)">
+		<attribute key="weight" value="5300" />
+	</item>
+	<item id="23705" name="belongings of a deceased" editorsuffix=" (Death Priest Shargon)">
+		<attribute key="weight" value="11000" />
 	</item>
 	<item id="23719" article="the" name="scorcher">
 		<attribute key="description" value="It's warm to the touch." />
