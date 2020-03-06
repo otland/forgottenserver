@@ -30993,6 +30993,22 @@
 	<item id="22670" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
+	<item id="22678" article="an" name="arcane staff">
+		<attribute key="weight" value="4000" />
+	</item>
+	<item id="22690" article="a" name="light rapier">
+		<attribute key="weight" value="1500" />
+		<attribute key="defense" value="8" />
+		<attribute key="attack" value="10" />
+		<attribute key="weaponType" value="sword" />
+		<attribute key="extradef" value="1" />
+		<attribute key="description" value="It has been used a lot, judging by its jagged blade." />
+	</item>
+	<item id="22691" article="a" name="jade amulet">
+		<attribute key="description" value="Golden lines are embedded in the amulet and show mysterious symbols. It was awarded by the gods." />
+		<attribute key="weight" value="400" />
+		<attribute key="slotType" value="necklace" />
+	</item>
 	<item id="22696" article="a" name="cake backpack">
 		<attribute key="weight" value="1800" />
 		<attribute key="containerSize" value="20" />
