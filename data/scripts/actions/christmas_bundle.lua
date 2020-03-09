@@ -3,13 +3,40 @@ local christmasBundle = Action()
 function christmasBundle.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local presents = { -- [christmas bundle item id] = {{reward item id, count}, ...}
 		[6507] = { -- red bundle
-			{6569, 15}, {2687, 20}, {2688, 10}, {2675, 10}, {2674, 5}, 6501, 6502, 6490, 6504, 6388
+			{6569, 15}, -- candy
+			{2687, 20}, -- cookie
+			{2688, 10}, -- candy cane
+			{2675, 10}, -- orange
+			{2674, 5}, -- red apple
+			6501, -- gingerbreadman
+			6502, -- christmas wreath
+			6490, -- christmas branch
+			6504, -- red christmas garland
+			6388 -- christmas card
 		},
 		[6508] = { -- blue bundle
-			{6569, 15}, {2687, 20}, {2688, 10}, {2675, 10}, {2674, 5}, 6501, 6502, 6490, 6505, 6388
+			{6569, 15}, -- candy
+			{2687, 20}, -- cookie
+			{2688, 10}, -- candy cane
+			{2675, 10}, -- orange
+			{2674, 5}, -- red apple
+			6501, -- gingerbreadman
+			6502, -- christmas wreath
+			6490, -- christmas branch
+			6505, -- blue christmas garland
+			6388 -- christmas card
 		},
 		[6509] = { -- green bundle
-			{6569, 15}, {2687, 20}, {2688, 10}, {2675, 10}, {2674, 5}, 6501, 6502, 6490, 6503, 6388
+			{6569, 15}, -- candy
+			{2687, 20}, -- cookie
+			{2688, 10}, -- candy cane
+			{2675, 10}, -- orange
+			{2674, 5}, -- red apple
+			6501, -- gingerbreadman
+			6502, -- christmas wreath
+			6490, -- christmas branch
+			6503, -- christmas garland
+			6388 -- christmas card
 		}
 	}
 
