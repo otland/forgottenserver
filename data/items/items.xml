@@ -13347,21 +13347,21 @@
 	<item id="7670" article="a" name="flower pot">
 		<attribute key="description" value="The plant in there sprouted, but only gardeners might recognise what it will develop into." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7678"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7678" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item fromid="7671" toid="7672" name="dirt" />
 	<item id="7673" article="a" name="flower pot">
 		<attribute key="description" value="Something has been planted in there, but you cannot see what it is yet." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7679"/>
+		<attribute key="decayTo" value="7679" />
 		<attribute key="duration" value="72000"/>
 	</item>
 	<item fromid="7674" toid="7677" article="a" name="withered plant">
 		<attribute key="description" value="This plant urgently needs some water, else it will wither away and disappear completely." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7655"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7655" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7678" article="a" name="flower pot">
 		<attribute key="description" value="The plant in there sprouted, but only gardeners might recognise what it will develop into." />
@@ -13374,8 +13374,8 @@
 	<item id="7680" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be a lizard tongue fern." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7681"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7681" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7681" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be a lizard tongue fern." />
@@ -13384,8 +13384,8 @@
 	<item id="7682" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be a dryad's heart flower." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7683"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7683" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7683" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be a dryad's heart flower." />
@@ -13394,8 +13394,8 @@
 	<item id="7684" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be a midnight bloom flower." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7685"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7685" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7685" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be a midnight bloom flower." />
@@ -13404,8 +13404,8 @@
 	<item id="7686" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be an ember queen flower." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7687"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7687" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7687" article="a" name="flower pot">
 		<attribute key="description" value="The plant in it seems to be an ember queen flower." />
@@ -13414,50 +13414,50 @@
 	<item id="7688" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown lizard tongue plant in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7689"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7689" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7689" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown lizard tongue plant in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7674"/>
-		<attribute key="duration" value="259200"/>
+		<attribute key="decayTo" value="7674" />
+		<attribute key="duration" value="259200" />
 	</item>
 	<item id="7690" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown dryad's heart flower in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7691"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7691" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7691" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown dryad's heart flower in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7675"/>
-		<attribute key="duration" value="259200"/>
+		<attribute key="decayTo" value="7675" />
+		<attribute key="duration" value="259200" />
 	</item>
 	<item id="7692" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown midnight bloom flower in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7693"/>
+		<attribute key="decayTo" value="7693" />
 		<attribute key="duration" value="72000"/>
 	</item>
 	<item id="7693" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown midnight bloom flower in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7676"/>
-		<attribute key="duration" value="259200"/>
+		<attribute key="decayTo" value="7676" />
+		<attribute key="duration" value="259200" />
 	</item>
 	<item id="7694" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown ember queen flower in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7695"/>
-		<attribute key="duration" value="72000"/>
+		<attribute key="decayTo" value="7695" />
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7695" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown ember queen flower in it." />
 		<attribute key="weight" value="150" />
-		<attribute key="decayTo" value="7677"/>
-		<attribute key="duration" value="259200"/>
+		<attribute key="decayTo" value="7677" />
+		<attribute key="duration" value="259200" />
 	</item>
 	<item id="7696" article="a" name="parchment">
 		<attribute key="weight" value="120" />
