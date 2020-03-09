@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="180">
+<monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="234">
 	<health now="550" max="550" />
 	<look type="103" corpse="6032" />
 	<targetchange interval="4000" chance="10" />
@@ -42,7 +42,7 @@
 		</attack>
 		<attack name="djinn electrify" interval="2000" range="5" chance="15" />
 	</attacks>
-	<defenses armor="20" defense="20">
+	<defenses armor="24" defense="24">
 		<defense name="healing" interval="2000" chance="15" min="50" max="80">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -60,29 +60,27 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="green djinn" interval="2000" chance="10" max="2" />
+		<summon name="green djinn" interval="2000" chance="10" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="I grant you a deathwish!" />
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>
 	<loot>
-		<item id="1860" chance="2200" /><!-- green tapestry -->
-		<item name="small oil lamp" chance="160" />
-		<item name="gold coin" countmax="75" chance="50000" />
-		<item name="gold coin" countmax="50" chance="60000" />
-		<item name="small emerald" chance="7000" />
-		<item name="green gem" chance="200" />
-		<item name="wand of inferno" chance="390" />
-		<item name="heavy machete" chance="5000" />
-		<item name="mystic turban" chance="160" />
-		<item name="pear" countmax="5" chance="9390" />
-		<item name="green piece of cloth" chance="3000" />
+		<item name="gold coin" countmax="130" chance="98000" />
 		<item name="royal spear" countmax="3" chance="15570" />
-		<item name="strong mana potion" chance="3500" />
-		<item name="seeds" countmax="2" chance="2000" />
-		<item name="magma monocle" chance="360" />
+		<item name="strong mana potion" chance="10500" />
+		<item name="pear" countmax="5" chance="9390" />
 		<item name="jewelled belt" chance="8540" />
+		<item name="small emerald" chance="7200" />
+		<item name="heavy machete" chance="5000" />
+		<item name="green piece of cloth" chance="3000" />
+		<item id="1860" chance="2200" /><!-- green tapestry -->
 		<item name="noble turban" chance="1130" />
+		<item name="magma monocle" chance="420" />
+		<item name="wand of inferno" chance="390" />
+		<item name="mystic turban" chance="180" />
+		<item name="small oil lamp" chance="180" />
+		<item name="green gem" chance="150" />
 	</loot>
 </monster>

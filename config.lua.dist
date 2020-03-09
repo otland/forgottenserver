@@ -75,6 +75,7 @@ emoteSpells = false
 classicEquipmentSlots = false
 classicAttackSpeed = false
 showScriptsLogInConsole = true
+showOnlineStatusInCharlist = false
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes

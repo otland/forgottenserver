@@ -19,6 +19,9 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<script>
+		<event name="GiantSpiderWyda"/>
+	</script>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-9" />
 	</attacks>

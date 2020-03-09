@@ -23,6 +23,11 @@ registerMonsterType.experience = function(mtype, mask)
 		mtype:experience(mask.experience)
 	end
 end
+registerMonsterType.skull = function(mtype, mask)
+	if mask.skull then
+		mtype:skull(mask.skull)
+	end
+end
 registerMonsterType.outfit = function(mtype, mask)
 	if mask.outfit then
 		mtype:outfit(mask.outfit)
@@ -70,28 +75,28 @@ registerMonsterType.corpse = function(mtype, mask)
 end
 registerMonsterType.flags = function(mtype, mask)
 	if mask.flags then
-		if mask.flags.attackable then
+		if mask.flags.attackable ~= nil then
 			mtype:isAttackable(mask.flags.attackable)
 		end
-		if mask.flags.healthHidden then
+		if mask.flags.healthHidden ~= nil then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
-		if mask.flags.convinceable then
+		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
-		if mask.flags.illusionable then
+		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
-		if mask.flags.hostile then
+		if mask.flags.hostile ~= nil then
 			mtype:isHostile(mask.flags.hostile)
 		end
-		if mask.flags.pushable then
+		if mask.flags.pushable ~= nil then
 			mtype:isPushable(mask.flags.pushable)
 		end
-		if mask.flags.canPushItems then
+		if mask.flags.canPushItems ~= nil then
 			mtype:canPushItems(mask.flags.canPushItems)
 		end
-		if mask.flags.canPushCreatures then
+		if mask.flags.canPushCreatures ~= nil then
 			mtype:canPushCreatures(mask.flags.canPushCreatures)
 		end
 		if mask.flags.targetDistance then

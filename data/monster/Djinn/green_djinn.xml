@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Green Djinn" nameDescription="a green djinn" race="blood" experience="215" speed="180">
+<monster name="Green Djinn" nameDescription="a green djinn" race="blood" experience="215" speed="220">
 	<health now="330" max="330" />
 	<look type="51" corpse="6016" />
 	<targetchange interval="4000" chance="10" />
@@ -38,7 +38,7 @@
 		<attack name="djinn electrify" interval="2000" range="5" chance="15" />
 		<attack name="djinn cancel invisibility" interval="2000" chance="10" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="20" defense="20" />
 	<elements>
 		<element firePercent="80" />
 		<element energyPercent="50" />
@@ -58,17 +58,16 @@
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>
 	<loot>
-		<item id="1965" chance="2280" /><!-- green book -->
-		<item name="oil lamp" chance="830" />
-		<item name="gold coin" countmax="70" chance="41000" />
-		<item name="gold coin" countmax="45" chance="51000" />
-		<item name="small emerald" countmax="4" chance="2960" />
-		<item name="mystic turban" chance="140" />
-		<item id="2696" chance="23500" /><!-- cheese -->
-		<item name="grave flower" chance="1000" />
-		<item name="green piece of cloth" chance="2000" />
+		<item name="gold coin" countmax="115" chance="88000" />
+		<item id="2696" chance="24500" /><!-- cheese -->
 		<item name="royal spear" countmax="2" chance="4870" />
-		<item name="mana potion" chance="490" />
+		<item name="small emerald" countmax="4" chance="2960" />
+		<item id="1965" chance="2280" /><!-- book (green) -->
 		<item name="dirty turban" chance="2210" />
+		<item name="green piece of cloth" chance="2000" />
+		<item name="grave flower" chance="1000" />
+		<item name="small oil lamp" chance="910" />
+		<item name="mana potion" chance="490" />
+		<item name="mystic turban" chance="140" />
 	</loot>
 </monster>

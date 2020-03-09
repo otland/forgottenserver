@@ -474,12 +474,11 @@ Player* Game::getPlayerByGUID(const uint32_t& guid)
 		return nullptr;
 	}
 
-	for (const auto& it : players) {
-		if (guid == it.second->getGUID()) {
-			return it.second;
-		}
+	auto it = mappedPlayerGuids.find(guid);
+	if (it == mappedPlayerGuids.end()) {
+		return nullptr;
 	}
-	return nullptr;
+	return it->second;
 }
 
 ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
@@ -1216,7 +1215,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		if (moveItem->getDecaying() != DECAYING_TRUE) {
 			moveItem->incrementReferenceCounter();
 			moveItem->setDecaying(DECAYING_TRUE);
-			g_game.toDecayItems.push_front(moveItem);
+			toDecayItems.push_front(moveItem);
 		}
 	}
 
@@ -1307,7 +1306,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 	if (item->getDuration() > 0) {
 		item->incrementReferenceCounter();
 		item->setDecaying(DECAYING_TRUE);
-		g_game.toDecayItems.push_front(item);
+		toDecayItems.push_front(item);
 	}
 
 	return RETURNVALUE_NOERROR;
@@ -1686,7 +1685,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		if (newItem->getDecaying() != DECAYING_TRUE) {
 			newItem->incrementReferenceCounter();
 			newItem->setDecaying(DECAYING_TRUE);
-			g_game.toDecayItems.push_front(newItem);
+			toDecayItems.push_front(newItem);
 		}
 	}
 
@@ -3977,20 +3976,20 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
 				CombatDamage lifeLeech;
 				lifeLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT) / 100.));
-				g_game.combatChangeHealth(nullptr, attackerPlayer, lifeLeech);
+				combatChangeHealth(nullptr, attackerPlayer, lifeLeech);
 			}
 
 			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
 				CombatDamage manaLeech;
 				manaLeech.primary.value = std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT) / 100.));
-				g_game.combatChangeMana(nullptr, attackerPlayer, manaLeech);
+				combatChangeMana(nullptr, attackerPlayer, manaLeech);
 			}
 
 			chance = attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
 				healthChange += std::round(healthChange * (attackerPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT) / 100.));
-				g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
+				addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
 			}
 		}
 
@@ -5558,6 +5557,7 @@ void Game::addPlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
 	mappedPlayerNames[lowercase_name] = player;
+	mappedPlayerGuids[player->getGUID()] = player;
 	wildcardTree.insert(lowercase_name);
 	players[player->getID()] = player;
 }
@@ -5566,6 +5566,7 @@ void Game::removePlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
 	mappedPlayerNames.erase(lowercase_name);
+	mappedPlayerGuids.erase(player->getGUID());
 	wildcardTree.remove(lowercase_name);
 	players.erase(player->getID());
 }
