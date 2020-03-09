@@ -153,5 +153,7 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-dolls:id(5080, 5669, 6566, 6388, 6512, 8974, 8977, 8981, 8982, 23806, 24331, 20624, 16107, 13030, 13559, 10063, 24776, 24316)
+for k,v in pairs(dollsTable) do
+	dolls:id(k)
+end
 dolls:register()
