@@ -13172,8 +13172,8 @@
 	</item>
 	<item id="7553" article="a" name="large seashell">
 		<attribute key="description" value="It is empty." />
-		<attribute key="decayTo" value="7552"/>
-		<attribute key="duration" value="300"/>
+		<attribute key="decayTo" value="7552" />
+		<attribute key="duration" value="300" />
 	</item>
 	<item fromid="7554" toid="7557" article="a" name="spider victim">
 		<attribute key="description" value="This poor guy has been wrapped up in spider silk." />
@@ -17991,7 +17991,7 @@
 		<attribute key="description" value="You read the numbers 5261 on the back of the doll." />
 		<attribute key="weight" value="650" />
 	</item>
-	<item id="10098" name="the remains of a pirate"/>
+	<item id="10098" name="the remains of a pirate" />
 	<item id="10099" name="the top right part of a map">
 		<attribute key="weight" value="790" />
 	</item>
@@ -18028,7 +18028,7 @@
 		<attribute key="description" value="It also contains an old dress of Queen Eloise." />
 		<attribute key="weight" value="900" />
 	</item>
-	<item id="10110" article="a" name="yalahari inkwell"/>
+	<item id="10110" article="a" name="yalahari inkwell" />
 	<item id="10111" article="a" name="book">
 		<attribute key="weight" value="100" />
 	</item>
@@ -21816,7 +21816,7 @@
 	<item id="13233" article="a" name="verocious bat">
 		<attribute key="weight" value="000" />
 	</item>
-	<item fromid="13234" toid="12235" article="a" name="skull in a stone"/>
+	<item fromid="13234" toid="12235" article="a" name="skull in a stone" />
 	<item id="13236" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
@@ -21844,7 +21844,7 @@
 	<item id="13262" article="a" name="sugar">
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="13263" article="a" name="book"/>
+	<item id="13263" article="a" name="book" />
 	<item fromid="13264" toid="13268" name="pressed winterberries" />
 	<item fromid="13269" toid="13271" article="a" name="skull in a stone" />
 	<item id="13272" article="a" name="magic tile">
@@ -22870,7 +22870,7 @@
 		<attribute key="duration" value="604800" />
 		<attribute key="showduration" value="0" />
 	</item>
-	<item id="13874" article="a" name="shimmer swimmer"/>
+	<item id="13874" article="a" name="shimmer swimmer" />
 	<item id="13875" article="a" name="shimmer glower">
 		<attribute key="weight" value="1000" />
 	</item>
@@ -23164,8 +23164,8 @@
 	<item id="13983" name="fan doll of Queen Eloise">
 		<attribute key="weight" value="1560" />
 	</item>
-	<item id="13929" article="an" name="orc dummy"/>
-	<item id="13931" article="an" name="orc warlord dummy"/>
+	<item id="13929" article="an" name="orc dummy" />
+	<item id="13931" article="an" name="orc warlord dummy" />
 	<item id="14320" article="a" name="special flask">
 		<attribute key="description" value="It contains the smell of a freshly slain slime." />
 		<attribute key="weight" value="180" />
@@ -23858,9 +23858,9 @@
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="venom" />
 	</item>
-	<item fromid="15358" toid="15359" article="a" name="golden anchor"/>
-	<item fromid="15360" toid="15371" name="hivecomb floor"/>
-	<item fromid="15372" toid="15383" article="a" name="dark hivecomb floor"/>
+	<item fromid="15358" toid="15359" article="a" name="golden anchor" />
+	<item fromid="15360" toid="15371" name="hivecomb floor" />
+	<item fromid="15372" toid="15383" article="a" name="dark hivecomb floor" />
 	<item id="15384" article="an" name="insectoid cocoon">
 		<attribute key="weight" value="500" />
 	</item>
@@ -23898,7 +23898,7 @@
 	<item id="15390" article="a" name="blob bomb">
 		<attribute key="weight" value="110" />
 	</item>
-	<item id="15391" article="a" name="hive floor"/>
+	<item id="15391" article="a" name="hive floor" />
 	<item id="15392" article="a" name="dead spitter">
 		<attribute key="weight" value="26000" />
 		<attribute key="containerSize" value="36" />
@@ -24206,8 +24206,8 @@
 		<attribute key="weight" value="150" />
 		<attribute key="description" value="It is unstable and will lose its aggressive properties soon." />
 	</item>
-	<item id="15467" name="hive pore"/>
-	<item id="15468" name="overgrown hive pore"/>
+	<item id="15467" name="hive pore" />
+	<item id="15468" name="overgrown hive pore" />
 	<item fromid="15469" toid="15474" article="a" name="seashell bookcase">
 		<attribute key="containerSize" value="6" />
 		<attribute key="description" value="A filigree case made of seashell. It seems there is a small lock on the side of the case." />
@@ -24338,8 +24338,8 @@
 	<item id="15565" article="a" name="rough red gem">
 		<attribute key="description" value="This blood red gem is still rough." />
 	</item>
-	<item id="15566" name="fossilised coral"/>
-	<item id="15567" article="a" name="ramp"/>
+	<item id="15566" name="fossilised coral" />
+	<item id="15567" article="a" name="ramp" />
 	<item id="15568" article="a" name="crate full of coral">
 		<attribute key="weight" value="1500" />
 		<attribute key="decayTo" value="1739" />
@@ -24351,7 +24351,7 @@
 		<attribute key="description" value="This crate is full of fossilised coral. It needs to be obstructed in time or it will corrode." />
 	</item>
 	<item id="15570" name="deepling spawn" />
-	<item id="15571" name="hive pore"/>
+	<item id="15571" name="hive pore" />
 	<item id="15572" article="a" name="gooey mass" plural="gooey masses">
 		<attribute key="weight" value="5500" />
 		<attribute key="description" value="Perhaps it contains something useful." />
@@ -25146,7 +25146,7 @@
 	<item id="18216" name="some mushroom fertilizer">
 		<attribute key="weight" value="700" />
 	</item>
-	<item id="18217" article="a" name="mushroom"/>
+	<item id="18217" article="a" name="mushroom" />
 	<item id="18218" name="churned ground">
 		<attribute key="decayTo" value="18340" />
 		<attribute key="duration" value="40" />
@@ -29488,34 +29488,34 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="21270" article="a" name="slain the pale count">
-		<attribute key="corpsetype" value="blood"/>
-		<attribute key="containersize" value="20"/>
-		<attribute key="decayto" value="21271"/>
-		<attribute key="duration" value="10"/>
-		<attribute key="fluidSource" value="blood"/>
+		<attribute key="corpsetype" value="blood" />
+		<attribute key="containersize" value="20" />
+		<attribute key="decayto" value="21271" />
+		<attribute key="duration" value="10" />
+		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="21271" article="a" name="slain the pale count">
-		<attribute key="corpsetype" value="blood"/>
-		<attribute key="containersize" value="20"/>
-		<attribute key="decayto" value="21272"/>
-		<attribute key="duration" value="300"/>
-		<attribute key="fluidSource" value="blood"/>
+		<attribute key="corpsetype" value="blood" />
+		<attribute key="containersize" value="20" />
+		<attribute key="decayto" value="21272" />
+		<attribute key="duration" value="300" />
+		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="21272" article="a" name="slain the pale count">
-		<attribute key="corpsetype" value="blood"/>
-		<attribute key="containersize" value="10"/>
-		<attribute key="decayto" value="21273"/>
-		<attribute key="duration" value="300"/>
+		<attribute key="corpsetype" value="blood" />
+		<attribute key="containersize" value="10" />
+		<attribute key="decayto" value="21273" />
+		<attribute key="duration" value="300" />
 	</item>
 	<item id="21273" article="a" name="slain the pale count">
-		<attribute key="corpsetype" value="blood"/>
-		<attribute key="decayto" value="0"/>
-		<attribute key="duration" value="60"/>
+		<attribute key="corpsetype" value="blood" />
+		<attribute key="decayto" value="0" />
+		<attribute key="duration" value="60" />
 	</item>
 	<item id="21274" article="a" name="slain nightfiend">
-		<attribute key="corpsetype" value="blood"/>
-		<attribute key="decayto" value="0"/>
-		<attribute key="duration" value="60"/>
+		<attribute key="corpsetype" value="blood" />
+		<attribute key="decayto" value="0" />
+		<attribute key="duration" value="60" />
 	</item>
 	<item id="21275" article="a" name="slain vampire viscount">
 		<attribute key="containerSize" value="15" />
@@ -30709,7 +30709,7 @@
 		<attribute key="weaponType" value="shield" />
 	</item>
 	<item id="22425" article="a" name="bed chamber" />
-	<item fromid="22426" toid="22427" article="a" name="watermill"/>
+	<item fromid="22426" toid="22427" article="a" name="watermill" />
 	<item id="22428" article="a" name="tea cup">
 		<attribute key="weight" value="200" />
 		<attribute key="description" value="You see a chipped mug with tea stains. Someone really uses this mug a lot." />
@@ -30733,12 +30733,12 @@
 	<item id="22448" article="a" name="cormo dementi" />
 	<item id="22449" article="a" name="blister egg plant" />
 	<item fromid="22450" toid="22451" name="dry cypress" />
-	<item fromid="22452" toid="22453" article="a" name="sleepless twine"/>
-	<item id="22455" article="a" name="strange vortex"/>
+	<item fromid="22452" toid="22453" article="a" name="sleepless twine" />
+	<item id="22455" article="a" name="strange vortex" />
 	<item id="22456" article="an" name="unstable vortex">
-		<attribute key="description" value="This vortex seems suck you right in."/>
+		<attribute key="description" value="This vortex seems suck you right in." />
 	</item>
-	<item id="22457" article="a" name="stairs"/>
+	<item id="22457" name="stairs" />
 	<item id="22458" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
@@ -30773,17 +30773,17 @@
 		<attribute key="weight" value="30" />
 	</item>
 	<item id="22474" article="an" name="eerie song book">
-		<attribute key="weight" value="1300"/>
-		<attribute key="description" value="The songs in it are... special. Very special. Not for weak stomachs."/>
-		<attribute key="defense" value="0"/>
-		<attribute key="weaponType" value="shield"/>
+		<attribute key="weight" value="1300" />
+		<attribute key="description" value="The songs in it are... special. Very special. Not for weak stomachs." />
+		<attribute key="defense" value="0" />
+		<attribute key="weaponType" value="shield" />
 	</item>
 	<item id="22475" article="a" name="pendulum">
 		<attribute key="description" value="Sometimes it swings out of its own accord." />
 		<attribute key="weight" value="3500" />
 	</item>
 	<item fromid="22476" toid="22477" name="ruined stairs">
-		<attribute key="type" value="teleport"/>
+		<attribute key="type" value="teleport" />
 	</item>
 	<item id="22478" article="a" name="dead sight of surrender">
 		<attribute key="containerSize" value="40" />
@@ -30926,16 +30926,18 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="22499" article="a" name="silencer excretion">
-		<attribute key="weight" value="50"/>
-		<attribute key="description" value="This dung smells extremely awful and deteriorates quickly."/>
+		<attribute key="weight" value="50" />
+		<attribute key="description" value="This dung smells extremely awful and deteriorates quickly." />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="3600" />
 	</item>
-	<item id="22502" article="a" name="message in a bottle"/>
+	<item id="22502" article="a" name="message in a bottle" />
 	<item id="22503" article="a" name="gravel and chalk in a bucket">
-		<attribute key="weight" value="2800"/>
+		<attribute key="weight" value="2800" />
 		<attribute key="description" value="This contains a mixture of gravel and chalk." />
 	</item>
 	<item id="22504" article="a" name="bucket full of mortar">
-		<attribute key="weight" value="3000"/>
+		<attribute key="weight" value="3000" />
 		<attribute key="description" value="This mortar seems to be perfect for construction or repair works." />
 	</item>
 	<item id="22505" article="a" name="dead retching horror">
@@ -30966,7 +30968,7 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="22509" article="a" name="crack"/>
+	<item id="22509" article="a" name="crack" />
 	<item fromid="22511" toid="22512" article="a" name="watermill" />
 	<item fromid="22513" toid="22514" article="a" name="large pile of various bones" />
 	<item id="22516" article="a" name="ring of ending">
@@ -30982,7 +30984,7 @@
 		<attribute key="weight" value="1400" />
 		<attribute key="slotType" value="head" />
 	</item>
-	<item fromid="22519" toid="22520" name="broken pottery"/>
+	<item fromid="22519" toid="22520" name="broken pottery" />
 	<item id="22521" article="a" name="dead shimmying butterfly">
 		<attribute key="weight" value="60000" />
 		<attribute key="containerSize" value="8" />
@@ -31003,7 +31005,7 @@
 		<attribute key="weight" value="1000" />
 		<attribute key="description" value="It contains some strange tea leaves." />
 	</item>
-	<item fromid="22525" toid="22531" article="a" name="poison spine"/>
+	<item fromid="22525" toid="22531" article="a" name="poison spine" />
 	<item id="22532" article="a" name="frazzle tongue">
 		<attribute key="weight" value="680" />
 	</item>
@@ -31076,18 +31078,18 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="22550" article="a" name="trough for mortar">
-		<attribute key="description" value="This trough should hold a large amount of mortar."/>
+		<attribute key="description" value="This trough should hold a large amount of mortar." />
 	</item>
-	<item fromid="22551" toid="22552" article="a" name="ruined foundation"/>
-	<item fromid="22553" toid="22554" article="a" name="ruined pillar"/>
-	<item fromid="22555" toid="22557" article="a" name="strange wall"/>
+	<item fromid="22551" toid="22552" article="a" name="ruined foundation" />
+	<item fromid="22553" toid="22554" article="a" name="ruined pillar" />
+	<item fromid="22555" toid="22557" article="a" name="strange wall" />
 	<item id="22558" article="a" name="ruined stair">
 		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="22559" article="a" name="ruined stair">
 		<attribute key="floorchange" value="west" />
 	</item>
-	<item fromid="22560" toid="22561" article="a" name="ruined pillar"/>
+	<item fromid="22560" toid="22561" article="a" name="ruined pillar" />
 	<item id="22562" article="a" name="dead gaz'haragoth">
 		<attribute key="containerSize" value="40" />
 		<attribute key="decayTo" value="22563" />
@@ -31169,8 +31171,8 @@
 	<item id="22598" article="an" name="unrealized dream">
 		<attribute key="weight" value="3300" />
 	</item>
-	<item fromid="22600" toid="22601" article="a" name="prison wall"/>
-	<item fromid="22602" toid="22603" article="an" name="energy prison"/>
+	<item fromid="22600" toid="22601" article="a" name="prison wall" />
+	<item fromid="22602" toid="22603" article="an" name="energy prison" />
 	<item id="22604" article="a" name="silver prison key">
 		<attribute key="description" value="You dreamt that this key unlocks the prison of a powerful horror that you had to face on your own." />
 		<attribute key="weight" value="200" />
@@ -31212,7 +31214,7 @@
 	<item id="22616" article="a" name="nightmare hook">
 		<attribute key="weight" value="500" />
 	</item>
-	<item fromid="22617" toid="22628" article="the dreamcatcher device"/>
+	<item fromid="22617" toid="22628" article="the dreamcatcher device" />
 	<item id="22629" article="a" name="dead mawhawk">
 		<attribute key="containerSize" value="40" />
 		<attribute key="decayTo" value="22630" />
@@ -31779,7 +31781,7 @@
 	<item fromid="23379" toid="23382" article="a" name="cracked sewer pipe" />
 	<item fromid="23383" toid="23404" article="a" name="cracked tube" />
 	<item id="23405" article="a" name="sewer cover">
-		<attribute key="floorchange" value="down"/>
+		<attribute key="floorchange" value="down" />
 	</item>
 	<item fromid="23406" toid="23414" article="a" name="generator" />
 	<item fromid="23415" toid="23416" article="a" name="valve" />
@@ -31885,7 +31887,7 @@
 	<item id="23474" article="a" name="glooth injection tube">
 		<attribute key="weight" value="1400" />
 	</item>
-	<item fromid="23475" toid="23476" name="juicy root"/>
+	<item fromid="23475" toid="23476" name="juicy root" />
 	<item id="23477" article="a" name="harvested root">
 		<attribute key="decayTo" value="23475" />
 		<attribute key="duration" value="300" />
@@ -32300,7 +32302,7 @@
 		<attribute key="description" value="A strangely shaped hollow rests in the center of this broken workbench." />
 	</item>
 	<item id="23668" name="pungs in the wall" />
-	<item id="23669" name="sewer grate"/>
+	<item id="23669" name="sewer grate" />
 	<item id="23672" article="a" name="crude primitive printout">
 		<attribute key="weight" value="50" />
 		<attribute key="description" value="This printout is nearly unreadable. One column of numbers on it is followed by the word: Doubleday." />
@@ -32331,10 +32333,10 @@
 	</item>
 	<item id="23712" article="a" name="loose stone pile" />
 	<item id="23713" article="a" name="hole">
-		<attribute key="floorchange" value="down"/>
+		<attribute key="floorchange" value="down" />
 	</item>
 	<item id="23715" article="a" name="hole">
-		<attribute key="floorchange" value="down"/>
+		<attribute key="floorchange" value="down" />
 	</item>
 	<item id="23716" article="a" name="stone floor" />
 	<item id="23717" article="a" name="white marble floor" />
@@ -32785,7 +32787,7 @@
 		<attribute key="weight" value="250" />
 		<attribute key="description" value="A rest of some strange substance still glows and glitters inside the fragments." />
 	</item>
-	<item id="24122" article="a" name="nacre slab"/>
+	<item id="24122" article="a" name="nacre slab" />
 	<item id="24123" article="a" name="sea ear">
 		<attribute key="weight" value="260" />
 		<attribute key="description" value="A sea shell formed like a listening ear, shimmering enticingly." />
@@ -34468,7 +34470,7 @@
 		<attribute key="weight" value="250" />
 		<attribute key="description" value="This pure soul is powerful enough to destroy Sin Devourers. The soul is fading away quickly though." />
 	</item>
-	<item id="25359" article="a" name="crystal trail"/>
+	<item id="25359" article="a" name="crystal trail" />
 	<item id="25360" article="a" name="botanist's container">
 		<attribute key="weight" value="1800" />
 		<attribute key="description" value="It holds a sample of the rare skull orchid." />
@@ -34959,6 +34961,7 @@
 		<attribute key="description" value="This floor is very gluey." />
 	</item>
 	<item fromid="25845" toid="25869" name="rift wall" />
+	<item fromid="25870" toid="25878" name="glowing effect" />
 	<item id="25879" article="a" name="blade of mayhem">
 		<attribute key="defense" value="33" />
 		<attribute key="attack" value="50" />
@@ -34969,7 +34972,7 @@
 		<attribute key="defense" value="32" />
 		<attribute key="attack" value="52" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="7000" />
 	</item>
 	<item id="25881" article="an" name="axe of mayhem">
@@ -34982,7 +34985,7 @@
 		<attribute key="defense" value="32" />
 		<attribute key="attack" value="52" />
 		<attribute key="weaponType" value="axe" />
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="7000" />
 	</item>
 	<item id="25883" article="a" name="mace of mayhem">
@@ -35028,48 +35031,48 @@
 		<attribute key="shootType" value="ice" />
 		<attribute key="range" value="3" />
 	</item>
-	<item id="25889" article="a" name="blade of mayhem"/>
-	<item id="25890" article="a" name="slayer of mayhem"/>
-	<item id="25891" article="an" name="axe of mayhem"/>
-	<item id="25892" article="a" name="chopper of mayhem"/>
-	<item id="25893" article="a" name="mace of mayhem"/>
-	<item id="25894" article="a" name="hammer of mayhem"/>
-	<item id="25895" article="a" name="bow of mayhem"/>
-	<item id="25896" article="a" name="crossbow of mayhem"/>
-	<item id="25897" article="a" name="wand of mayhem"/>
-	<item id="25898" article="a" name="rod of carving"/>
-	<item id="25899" article="a" name="blade of mayhem"/>
-	<item id="25900" article="a" name="slayer of mayhem"/>
-	<item id="25901" article="an" name="axe of mayhem"/>
-	<item id="25902" article="a" name="chopper of mayhem"/>
-	<item id="25903" article="a" name="bow of mayhem"/>
-	<item id="25904" article="a" name="hammer of mayhem"/>
-	<item id="25905" article="a" name="chopper of mayhem"/>
-	<item id="25906" article="a" name="mace of mayhem"/>
-	<item id="25907" article="a" name="wand of mayhem"/>
-	<item id="25908" article="a" name="rod of mayhem"/>
-	<item id="25909" article="a" name="blade of mayhem"/>
-	<item id="25910" article="a" name="slayer of mayhem"/>
-	<item id="25911" article="an" name="axe of mayhem"/>
-	<item id="25912" article="a" name="chopper of mayhem"/>
-	<item id="25913" article="a" name="wand of mayhem"/>
-	<item id="25914" article="a" name="hammer of mayhem"/>
-	<item id="25915" article="a" name="bow of mayhem"/>
-	<item id="25916" article="a" name="crossbow of mayhem"/>
-	<item id="25917" article="a" name="wand of mayhem"/>
-	<item id="25918" article="a" name="rod of mayhem"/>
+	<item id="25889" article="a" name="blade of mayhem" />
+	<item id="25890" article="a" name="slayer of mayhem" />
+	<item id="25891" article="an" name="axe of mayhem" />
+	<item id="25892" article="a" name="chopper of mayhem" />
+	<item id="25893" article="a" name="mace of mayhem" />
+	<item id="25894" article="a" name="hammer of mayhem" />
+	<item id="25895" article="a" name="bow of mayhem" />
+	<item id="25896" article="a" name="crossbow of mayhem" />
+	<item id="25897" article="a" name="wand of mayhem" />
+	<item id="25898" article="a" name="rod of carving" />
+	<item id="25899" article="a" name="blade of mayhem" />
+	<item id="25900" article="a" name="slayer of mayhem" />
+	<item id="25901" article="an" name="axe of mayhem" />
+	<item id="25902" article="a" name="chopper of mayhem" />
+	<item id="25903" article="a" name="bow of mayhem" />
+	<item id="25904" article="a" name="hammer of mayhem" />
+	<item id="25905" article="a" name="chopper of mayhem" />
+	<item id="25906" article="a" name="mace of mayhem" />
+	<item id="25907" article="a" name="wand of mayhem" />
+	<item id="25908" article="a" name="rod of mayhem" />
+	<item id="25909" article="a" name="blade of mayhem" />
+	<item id="25910" article="a" name="slayer of mayhem" />
+	<item id="25911" article="an" name="axe of mayhem" />
+	<item id="25912" article="a" name="chopper of mayhem" />
+	<item id="25913" article="a" name="wand of mayhem" />
+	<item id="25914" article="a" name="hammer of mayhem" />
+	<item id="25915" article="a" name="bow of mayhem" />
+	<item id="25916" article="a" name="crossbow of mayhem" />
+	<item id="25917" article="a" name="wand of mayhem" />
+	<item id="25918" article="a" name="rod of mayhem" />
 	<item id="25919" article="a" name="blade of remedy">
 		<attribute key="defense" value="33" />
 		<attribute key="attack" value="50" />
 		<attribute key="weaponType" value="sword" />
 		<attribute key="weight" value="5000" />
 	</item>
-	<item id="25922" article="a" name="blade of remedy"/>
+	<item id="25922" article="a" name="blade of remedy" />
 	<item id="25923" article="a" name="slayer of remedy">
 		<attribute key="defense" value="32" />
 		<attribute key="attack" value="52" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="7000" />
 	</item>
 	<item id="25927" article="an" name="axe of remedy">
@@ -35082,7 +35085,7 @@
 		<attribute key="defense" value="32" />
 		<attribute key="attack" value="52" />
 		<attribute key="weaponType" value="axe" />
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="7000" />
 	</item>
 	<item id="25935" article="a" name="mace of remedy">
@@ -35138,7 +35141,7 @@
 		<attribute key="defense" value="32" />
 		<attribute key="attack" value="52" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="7000" />
 	</item>
 	<item id="25967" article="an" name="axe of carving">
@@ -35151,7 +35154,7 @@
 		<attribute key="defense" value="32" />
 		<attribute key="attack" value="52" />
 		<attribute key="weaponType" value="axe" />
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="slotType" value="two-handed" />
 		<attribute key="weight" value="7000" />
 	</item>
 	<item id="25975" article="a" name="mace of carving">
