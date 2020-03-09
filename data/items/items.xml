@@ -11014,7 +11014,7 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="6344" name="remains of a phantasm">
-		<attribute key="containerSize" value="32 />
+		<attribute key="containerSize" value="32" />
 		<attribute key="decayTo" value="6345" />
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="undead" />
@@ -35252,30 +35252,42 @@
 	<item id="26044" article="a" name="dead sparkion">
 		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="26045" />
-		<attribute key="duration" value="40" />
-	</item>
-	<item id="26134" article="a" name="dead dread intruder">
-		<attribute key="containerSize" value="30" />
-		<attribute key="duration" value="40" />
+		<attribute key="duration" value="10" />
 	</item>
 	<item id="26045" article="a" name="dead sparkion">
 		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="26046" />
-		<attribute key="duration" value="10" />
+		<attribute key="duration" value="600" />
 	</item>
 	<item id="26046" article="a" name="dead sparkion">
 		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="26047" />
-		<attribute key="duration" value="10" />
+		<attribute key="duration" value="300" />
 	</item>
 	<item id="26047" article="a" name="dead sparkion">
 		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="10" />
+		<attribute key="duration" value="300" />
 	</item>
-	<item id="26048" article="a" name="dead breach brood">
+	<item id="26048" article="a" name="slain breach brood">
 		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26049" />
 		<attribute key="duration" value="40" />
+	</item>
+	<item id="26049" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26050" />
+		<attribute key="duration" value="600" />
+	</item>
+	<item id="26050" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26051" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26051" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
 	</item>
 	<item id="26052" name="your store inbox">
 		<attribute key="containerSize" value="20" />
@@ -35338,7 +35350,6 @@
 	</item>
 	<item id="26070" article="a" name="ferocious table">
 		<attribute key="rotateTo" value="26067" />
-		<attribute key="wrapableTo" value="26054" />
 	</item>
 	<item id="26071" article="a" name="slain reality reaver">
 		<attribute key="containerSize" value="30" />
@@ -35534,6 +35545,26 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 	</item>
+	<item id="26134" article="a" name="dead dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="duration" value="10" />
+		<attribute key="decayTo" value="26135" />
+	</item>
+	<item id="26135" article="a" name="dead dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="duration" value="600" />
+		<attribute key="decayTo" value="26136" />
+	</item>
+	<item id="26136" article="a" name="dead dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="duration" value="300" />
+		<attribute key="decayTo" value="26137" />
+	</item>
+	<item id="26137" article="a" name="dead dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="duration" value="300" />
+		<attribute key="decayTo" value="0" />
+	</item>
 	<item fromid="26138" toid="26140" name="vortex" >
 		<attribute key="type" value="teleport" />
 	</item>
@@ -35652,6 +35683,97 @@
 		<attribute key="containerSize" value="24" />
 		<attribute key="slotType" value="backpack" />
 	</item>
+	<item id="26182" article="a" name="collar of blue plasma">
+		<attribute key="weight" value="500" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+		<attribute key="skillDist" value="4" />
+		<attribute key="magiclevelpoints" value="2" />
+		<attribute key="showduration" value="1" />
+		<attribute key="transformDeEquipTo" value="26198" />
+	</item>
+	<item id="26183" article="a" name="collar of green plasma (faster regeneration)">
+		<attribute key="weight" value="500" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+		<attribute key="healthGain" value="2" />
+		<attribute key="healthTicks" value="6000" />
+		<attribute key="manaGain" value="8" />
+		<attribute key="manaTicks" value="6000" />
+		<attribute key="magiclevelpoints" value="3" />
+		<attribute key="showduration" value="1" />
+		<attribute key="transformDeEquipTo" value="26199" />
+	</item>
+	<item id="26184" article="a" name="collar of red plasma">
+		<attribute key="weight" value="500" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+		<attribute key="skillSword" value="4" />
+		<attribute key="skillClub" value="4" />
+		<attribute key="skillAxe" value="4" />
+		<attribute key="absorbPercentPhysical" value="5" />
+		<attribute key="showduration" value="1" />
+		<attribute key="transformDeEquipTo" value="26200" />
+	</item>
+	<item id="26185" name="ring of blue plasma">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="transformEquipTo" value="26186" />
+		<attribute key="stopduration" value="1" />
+		<attribute key="showduration" value="1" />
+	</item>
+	<item id="26186" name="ring of blue plasma">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+		<attribute key="skillDist" value="3" />
+		<attribute key="magiclevelpoints" value="1" />
+		<attribute key="showduration" value="1" />
+		<attribute key="transformDeEquipTo" value="26185" />
+	</item>
+	<item id="26187" name="ring of green plasma">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="transformEquipTo" value="26188" />
+		<attribute key="stopduration" value="1" />
+		<attribute key="showduration" value="1" />
+	</item>
+	<item id="26188" name="ring of green plasma (faster regeneration)">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+		<attribute key="healthGain" value="1" />
+		<attribute key="healthTicks" value="6000" />
+		<attribute key="manaGain" value="4" />
+		<attribute key="manaTicks" value="6000" />
+		<attribute key="magiclevelpoints" value="2" />
+		<attribute key="showduration" value="1" />
+		<attribute key="transformDeEquipTo" value="26187" />
+	</item>
+	<item id="26189" name="ring of red plasma">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="transformEquipTo" value="26190" />
+		<attribute key="stopduration" value="1" />
+		<attribute key="showduration" value="1" />
+	</item>
+	<item id="26190" name="ring of red plasma">
+		<attribute key="weight" value="90" />
+		<attribute key="slotType" value="ring" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+		<attribute key="skillSword" value="3" />
+		<attribute key="skillClub" value="3" />
+		<attribute key="skillAxe" value="3" />
+		<attribute key="absorbPercentPhysical" value="3" />
+		<attribute key="showduration" value="1" />
+		<attribute key="transformDeEquipTo" value="26189" />
+	</item>
 	<item id="26191" article="an" name="energy bar">
 		<attribute key="weight" value="750" />
 	</item>
@@ -35672,11 +35794,225 @@
 	<item id="26197" article="a" name="blue sphere">
 		<attribute key="weight" value="1000" />
 	</item>
+	<item id="26198" article="a" name="collar of blue plasma">
+		<attribute key="weight" value="500" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="transformEquipTo" value="26182" />
+		<attribute key="stopduration" value="1" />
+		<attribute key="showduration" value="1" />
+	</item>
+	<item id="26199" article="a" name="collar of green plasma">
+		<attribute key="weight" value="500" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="transformEquipTo" value="26183" />
+		<attribute key="stopduration" value="1" />
+		<attribute key="showduration" value="1" />
+	</item>
+	<item id="26200" article="a" name="collar of red plasma">
+		<attribute key="weight" value="500" />
+		<attribute key="slotType" value="necklace" />
+		<attribute key="transformEquipTo" value="26184" />
+		<attribute key="stopduration" value="1" />
+		<attribute key="showduration" value="1" />
+	</item>
 	<item id="26201" article="an" name="energy drink">
 		<attribute key="weight" value="900" />
 	</item>
+	<item id="26202" name="arena leaderboard" />
+	<item id="26203" name="arena certificates" />
+	<item fromid="26204" toid="26208" name="arena leaderboard" />
+	<item id="26209" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26210" />
+		<attribute key="duration" value="10" />
+	</item>
+	<item id="26210" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26211" />
+		<attribute key="duration" value="600" />
+	</item>
+	<item id="26211" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26212" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26212" article="a" name="slain breach brood">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26213" article="a" name="slain dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26214" />
+		<attribute key="duration" value="10" />
+	</item>
+	<item id="26214" article="a" name="slain dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26215" />
+		<attribute key="duration" value="600" />
+	</item>
+	<item id="26215" article="a" name="slain dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="26216" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26216" article="a" name="slain dread intruder">
+		<attribute key="containerSize" value="30" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26217" article="a" name="slain monster">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="26218" />
+		<attribute key="duration" value="600" />
+	</item>
+	<item id="26218" article="a" name="slain monster">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="26219" />
+		<attribute key="duration" value="600" />
+	</item>
+	<item id="26219" article="a" name="slain monster">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26220" article="a" name="slain monster">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="26221" />
+		<attribute key="duration" value="600" />
+	</item>
+	<item id="26221" article="a" name="slain monster">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="26222" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item id="26222" article="a" name="slain monster">
+		<attribute key="containerSize" value="20" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="300" />
+	</item>
+	<item fromid="26223" toid="26225" name="energy remains" />
+	<item id="26226" article="a" name="purple stone" />
+	<item id="26227" article="a" name="wrecked opticorder forge">
+		<attribute key="description" value="A strangely shaped hollow rests in the center of this broken workbench. You can see several broken devices beneath its socket." />
+	</item>
+	<item id="26228" article="a" name="complete opticording sphere" />
+	<item id="26229" article="a" name="broken opticording sphere" />
+	<item id="26230" article="a" name="green vortex" />
+	<item fromid="26231" toid="26232" article="a" name="waterfall" />
+	<item id="26332" name="hand puppets">
+		<attribute key="weight" value="5" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26333" article="a" name="music box">
+		<attribute key="weight" value="2700" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26334" article="an" name="encyclopedia">
+		<attribute key="weight" value="1337" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26335" article="a" name="doll of Durin The Almighty">
+		<attribute key="weight" value="4000" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26336" article="a" name="medusa skull">
+		<attribute key="weight" value="1000" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26337" article="a" name="golden newspaper">
+		<attribute key="weight" value="2400" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26338" article="a" name="bag of oriental spices">
+		<attribute key="weight" value="1508" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26339" name="Imortus">
+		<attribute key="weight" value="4690" />
+		<attribute key="description" value="Souvenir from Thais Museum." />
+	</item>
+	<item id="26340" article="a" name="crackling egg">
+		<attribute key="weight" value="850" />
+		<attribute key="description" value="It is of unnerving, greenish colour and pulses steadily. It seems that something is moving inside." />
+	</item>
+	<item id="26341" article="a" name="menacing egg">
+		<attribute key="weight" value="850" />
+		<attribute key="description" value="It is of foreboding, reddish colour and pulses steadily. You have the feeling that something dangerous is moving inside." />
+	</item>
+	<item id="26342" article="a" name="devourer core">
+		<attribute key="description" value="The core of the devourer has the power to provide you with a powerfull charge that allows you to challenge him again immediately." />
+		<attribute key="weight" value="560" />
+	</item>
+	<item id="26343" article="a" name="burnt out devourer core">
+		<attribute key="slotType" value="ammo" />
+		<attribute key="weight" value="560" />
+	</item>
+	<item id="26347" article="a" name="fish in a tank">
+		<attribute key="description" value="A small fish is minding his own business in this tank." />
+	</item>
+	<item id="26349" article="a" name="rustic chair">
+		<attribute key="rotateTo" value="26350" />
+	</item>
+	<item id="26350" article="a" name="rustic chair">
+		<attribute key="rotateTo" value="26351" />
+	</item>
+	<item id="26351" article="a" name="rustic chair">
+		<attribute key="rotateTo" value="26352" />
+	</item>
+	<item id="26352" article="a" name="rustic chair">
+		<attribute key="rotateTo" value="26349" />
+	</item>
+	<item id="26353" article="a" name="dog house">
+		<attribute key="description" value="This dog is waiting quite eagerly for attention." />
+		<attribute key="decayTo" value="26359" />
+		<attribute key="duration" value="4" />
+	</item>
+	<item id="26354" article="a" name="rustic table">
+		<attribute key="rotateTo" value="26355" />
+	</item>
+	<item id="26355" article="a" name="rustic table">
+		<attribute key="rotateTo" value="26354" />
+	</item>
+	<item id="26356" article="a" name="rustic cabinet">
+		<attribute key="containerSize" value="8" />
+		<attribute key="rotateTo" value="26357" />
+	</item>
+	<item id="26357" article="a" name="rustic cabinet">
+		<attribute key="containerSize" value="8" />
+		<attribute key="rotateTo" value="26356" />
+	</item>
+	<item id="26358" article="a" name="rustic trunk">
+		<attribute key="containerSize" value="10" />
+		<attribute key="rotateTo" value="26360" />
+	</item>
+	<item id="26359" article="a" name="dog house">
+		<attribute key="description" value="This dog is waiting quite eagerly for attention." />
+		<attribute key="decayTo" value="26364" />
+		<attribute key="duration" value="2" />
+	</item>
+	<item id="26360" article="a" name="rustic trunk">
+		<attribute key="containerSize" value="10" />
+		<attribute key="rotateTo" value="26361" />
+	</item>
+	<item id="26361" article="a" name="rustic trunk">
+		<attribute key="containerSize" value="10" />
+		<attribute key="rotateTo" value="26362" />
+	</item>
+	<item id="26362" article="a" name="rustic trunk">
+		<attribute key="containerSize" value="10" />
+		<attribute key="rotateTo" value="26358" />
+	</item>
 	<item id="26363" article="a" name="rolled-up crimson carpet">
 		<attribute key="forceSerialize" value="1" />
+	</item>
+	<item id="26364" article="a" name="dog house">
+		<attribute key="description" value="This dog is waiting quite eagerly for attention." />
+	</item>
+	<item id="26365" article="a" name="dog house">
+		<attribute key="description" value="This dog is waiting quite eagerly for attention." />
+		<attribute key="decayTo" value="26353" />
+		<attribute key="duration" value="2" />
 	</item>
 	<item id="26366" article="a" name="rolled-up azure carpet">
 		<attribute key="forceSerialize" value="1" />
@@ -35721,8 +36057,10 @@
 		<attribute key="charges" value="500" />
 		<attribute key="showcharges" value="1" />
 		<attribute key="showduration" value="1" />
-		<attribute key="showattributes" value="1" />
 	</item>
+	<item id="26379" article="a" name="golden dragon tapestry" />
+	<item id="26380" article="a" name="sword tapestry" />
+	<item id="26381" article="a" name="brocade tapestry" />
 	<item id="30001" name="water" />
 	<item id="30002" name="blood" />
 	<item id="30003" name="beer" />
