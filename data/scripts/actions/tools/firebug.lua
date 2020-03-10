@@ -2,7 +2,7 @@ local fireBug = Action()
 
 function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local chance = math.random(10)
-	if chance >= 4 then -- Success 6% chance
+	if chance > 4 then -- Success 6% chance
 		if target.itemid == 7538 then -- Destroy spider webs/North - South
 			toPosition:sendMagicEffect(CONST_ME_HITBYFIRE)
 			target:transform(7544)
@@ -19,7 +19,7 @@ function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			toPosition:sendMagicEffect(CONST_ME_HITBYFIRE)
 			target:transform(1484)
 		end
-	elseif chance == 2 then -- It removes the firebug 2% chance
+	elseif chance == 2 then -- It removes the firebug 1% chance
 		item:remove(1)
 		toPosition:sendMagicEffect(CONST_ME_POFF)
 	elseif chance == 1 then -- It explodes on the user 1% chance

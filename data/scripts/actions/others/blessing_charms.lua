@@ -23,7 +23,7 @@ function blessingCharms.onUse(player, item, fromPosition, target, toPosition, is
 	return true
 end
 
-for k,v in pairs(items) do
+for k, v in pairs(items) do
 	blessingCharms:id(k)
 end
 blessingCharms:register()
