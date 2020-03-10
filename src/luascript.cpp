@@ -4475,13 +4475,11 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 		if (g_game.placeCreature(monster, position, extended, force)) {
 			pushUserdata<Monster>(L, monster);
 			setMetatable(L, -1, "Monster");
-		}
-		else {
+		} else {
 			delete monster;
 			lua_pushnil(L);
 		}
-	}
-	else {
+	} else {
 		delete monster;
 		lua_pushnil(L);
 	}

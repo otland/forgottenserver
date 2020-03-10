@@ -207,8 +207,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 			if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
 				return false;
 			}
-		}
-		else {
+		} else {
 			if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
 				return false;
 			}
