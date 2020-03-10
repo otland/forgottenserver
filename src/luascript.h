@@ -1394,6 +1394,8 @@ class LuaScriptInterface
 		static int luaSpellIsBlockingWalls(lua_State* L);
 
 		// only for RuneSpells
+		static int luaSpellRuneLevel(lua_State* L);
+		static int luaSpellRuneMagicLevel(lua_State* L);
 		static int luaSpellRuneId(lua_State* L);
 		static int luaSpellCharges(lua_State* L);
 		static int luaSpellAllowFarUse(lua_State* L);

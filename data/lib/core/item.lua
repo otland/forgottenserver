@@ -129,11 +129,11 @@ do
 			local attack = obj:getAttack()
 			local hitChance = obj:getHitChance()
 			if attack ~= 0 then
-				ss:append(', Atk%s%d', showpos(attack), attack)
+				ss:append(', Atk%s%d', showpos(attack), math.abs(attack))
 			end
 
 			if hitChance ~= 0 then
-				ss:append(', Hit%%%s%d', showpos(hitChance), hitChance)
+				ss:append(', Hit%%%s%d', showpos(hitChance), math.abs(hitChance))
 			end
 
 			begin = false
@@ -155,7 +155,7 @@ do
 				begin = addSeparator(ss, begin)
 				ss:append('Def:%d', defense)
 				if extraDefense ~= 0 then
-					ss:append(' %s%d', showpos(extraDefense), extraDefense)
+					ss:append(' %s%d', showpos(extraDefense), math.abs(extraDefense))
 				end
 			end
 		end
@@ -164,7 +164,7 @@ do
 		for skill, value in ipairs(abilities.skills) do
 			if value ~= 0 then
 				begin = addSeparator(ss, begin)
-				ss:append('%s %s%d', getSkillName(skill - 1), showpos(value), value)
+				ss:append('%s %s%d', getSkillName(skill - 1), showpos(value), math.abs(value))
 			end
 		end
 
@@ -172,14 +172,14 @@ do
 		for specialSkill, value in ipairs(abilities.specialSkills) do
 			if value ~= 0 then
 				begin = addSeparator(ss, begin)
-				ss:append('%s %s%d%%', getSpecialSkillName(specialSkill - 1), showpos(value), value)
+				ss:append('%s %s%d%%', getSpecialSkillName(specialSkill - 1), showpos(value), math.abs(value))
 			end
 		end
 
 		local magicPoints = abilities.stats[4]
 		if magicPoints ~= 0 then
 			begin = addSeparator(ss, begin)
-			ss:append('magic level %s%d', showpos(magicPoints), magicPoints)
+			ss:append('magic level %s%d', showpos(magicPoints), math.abs(magicPoints))
 		end
 
 		-- Absorb
@@ -209,7 +209,7 @@ do
 			end
 		else
 			begin = addSeparator(ss, begin)
-			ss:append('protection all %s%d%%', showpos(show), show)
+			ss:append('protection all %s%d%%', showpos(show), math.abs(show))
 		end
 
 		-- Field absorb
@@ -239,12 +239,12 @@ do
 			end
 		else
 			begin = addSeparator(ss, begin)
-			ss:append('protection all fields %s%d%%', showpos(show), show)
+			ss:append('protection all fields %s%d%%', showpos(show), math.abs(show))
 		end
 
 		if abilities.speed ~= 0 then
 			begin = addSeparator(ss, begin)
-			ss:append('speed %s%d', showpos(abilities.speed), abilities.speed / 2)
+			ss:append('speed %s%d', showpos(abilities.speed), math.abs(abilities.speed / 2))
 		end
 		return begin
 	end
@@ -266,7 +266,7 @@ do
 		if it:isRune() then
 			local rune = Spell(it:getId())
 			if rune then
-				if rune:getLevel() > 0 or rune:getMagicLevel() > 0 then
+				if rune:runeLevel() and rune:runeLevel() > 0 or rune:runeMagicLevel() and rune:runeMagicLevel() > 0 then
 					local tmpVocMap = rune:vocation()
 					local vocMap = {}
 					for k, vocName in ipairs(tmpVocMap) do
@@ -298,15 +298,15 @@ do
 
 					ss:append(' with')
 
-					if rune:level() > 0 then
-						ss:append(' level %d', rune:level())
+					if rune:runeLevel() > 0 then
+						ss:append(' level %d', rune:runeLevel())
 					end
 
-					if rune:magicLevel() > 0 then
-						if rune:level() > 0 then
+					if rune:runeMagicLevel() > 0 then
+						if rune:runeLevel() > 0 then
 							ss:append(' and ')
 						end
-						ss:append('magic level %d', rune:magicLevel())
+						ss:append('magic level %d', rune:runeMagicLevel())
 					end
 
 					ss:append(' or higher')
@@ -348,7 +348,7 @@ do
 			local found = true
 
 			if abilities.speed > 0 then
-				ss:append(' (speed %s%d', showpos(abilities.speed), abilities.speed / 2)
+				ss:append(' (speed %s%d)', showpos(abilities.speed), math.abs(abilities.speed / 2))
 			elseif bit.band(abilities.conditionSuppressions, CONDITION_DRUNK) == 1 then
 				ss:append(' (hard drinking)')
 			elseif abilities.invisible then
@@ -424,7 +424,7 @@ do
 
 		-- show duration
 		if it:hasShowDuration() then
-			if item and item:hasAttribute(ITEM_ATTIRUBTE_DURATION) then
+			if item and item:hasAttribute(ITEM_ATTRIBUTE_DURATION) then
 				local duration = item:getDuration() / 1000
 				if duration > 0 then
 					ss:append(' that will expire in ')
@@ -502,7 +502,7 @@ do
 
 		if lookDistance <= 1 then
 			local weight = obj:getWeight()
-			local count = item and item:getCount() or  1
+			local count = item and item:getCount() or 1
 			if weight ~= 0 and it:isPickupable() then
 				ss:append('\n')
 				if it:isStackable() and count > 1 and it:hasShowCount() then
