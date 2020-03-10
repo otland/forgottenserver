@@ -13896,9 +13896,40 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		return 1;
 	}
 
-	SpellType_t type = getNumber<SpellType_t>(L, 2);
+	SpellType_t type = SPELL_UNDEFINED;
 
-	if (isString(L, 2)) {
+	if (isNumber(L, 2)) {
+		int32_t id = getNumber<int32_t>(L, 2);
+		RuneSpell* rune = g_spells->getRuneSpell(id);
+
+		if (rune) {
+			pushUserdata<Spell>(L, rune);
+			setMetatable(L, -1, "Spell");
+			return 1;
+		}
+
+		type = static_cast<SpellType_t>(id);
+	} else if (isString(L, 2)) {
+		std::string arg = getString(L, 2);
+		InstantSpell* instant = g_spells->getInstantSpellByName(arg);
+		if (instant) {
+			pushUserdata<Spell>(L, instant);
+			setMetatable(L, -1, "Spell");
+			return 1;
+		}
+		instant = g_spells->getInstantSpell(arg);
+		if (instant) {
+			pushUserdata<Spell>(L, instant);
+			setMetatable(L, -1, "Spell");
+			return 1;
+		}
+		RuneSpell* rune = g_spells->getRuneSpellByName(arg);
+		if (rune) {
+			pushUserdata<Spell>(L, rune);
+			setMetatable(L, -1, "Spell");
+			return 1;
+		}
+
 		std::string tmp = asLowerCaseString(getString(L, 2));
 		if (tmp == "instant") {
 			type = SPELL_INSTANT;
@@ -13923,41 +13954,6 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		return 1;
 	}
 
-	// isNumber(L, 2) doesn't work here for some reason, maybe a bug?
-	if (getNumber<uint32_t>(L, 2)) {
-		InstantSpell* instant = g_spells->getInstantSpellById(getNumber<uint32_t>(L, 2));
-		if (instant) {
-			pushUserdata<Spell>(L, instant);
-			setMetatable(L, -1, "Spell");
-			return 1;
-		}
-		RuneSpell* rune = g_spells->getRuneSpell(getNumber<uint32_t>(L, 2));
-		if (rune) {
-			pushUserdata<Spell>(L, rune);
-			setMetatable(L, -1, "Spell");
-			return 1;
-		}
-	} else if (isString(L, 2)) {
-		std::string arg = getString(L, 2);
-		InstantSpell* instant = g_spells->getInstantSpellByName(arg);
-		if (instant) {
-			pushUserdata<Spell>(L, instant);
-			setMetatable(L, -1, "Spell");
-			return 1;
-		}
-		instant = g_spells->getInstantSpell(arg);
-		if (instant) {
-			pushUserdata<Spell>(L, instant);
-			setMetatable(L, -1, "Spell");
-			return 1;
-		}
-		RuneSpell* rune = g_spells->getRuneSpellByName(arg);
-		if (rune) {
-			pushUserdata<Spell>(L, rune);
-			setMetatable(L, -1, "Spell");
-			return 1;
-		}
-	}
 	lua_pushnil(L);
 	return 1;
 }
