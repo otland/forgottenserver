@@ -1058,9 +1058,9 @@ function rollRarity(container, forced)
 				end
 				-- If item has a description, retain it instead of over-writing it
 				if it_id:getDescription() == "" then
-					it_u:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "\n" .. table.concat(stat_desc, "\n"))
+					it_u:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, table.concat(stat_desc, "\n"))
 				else
-					it_u:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, it_id:getDescription() .. "\n" .. "\n" .. table.concat(stat_desc, "\n"))
+					it_u:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, table.concat(stat_desc, "\n")  .. "\n" .. it_id:getDescription()) -- This is how I like it - before flavour text, no double spacing
 				end
 				-- Capitalize tier.prefix to be used for the animated text above corpses
 				rare_text = (tiers[tier].prefix:gsub("^%l", string.upper) .. "!")
