@@ -10,6 +10,7 @@ local stats = { -- Define the attribute and their rolls
 		base = ITEM_ATTRIBUTE_ATTACK -- If attribute is a vanilla stat, it should have a default or 'base' amount, what is it?
 	},
 	[2] = { -- Defense
+		attribute = {
 			name = 'Defense',
 			rare = {1, 2},
 			epic = {3, 4},
