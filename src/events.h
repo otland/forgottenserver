@@ -60,12 +60,16 @@ class Events
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
+		int32_t monsterOnSpawn = -1;
 	};
 
 	public:
 		Events();
 
 		bool load();
+
+		// Monster
+		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
 
 		// Creature
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
