@@ -604,11 +604,13 @@ struct CombatDamage
 	} primary, secondary;
 
 	CombatOrigin origin;
+	bool critical;
 	CombatDamage()
 	{
 		origin = ORIGIN_NONE;
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
+		critical = false;
 	}
 };
 
