@@ -116,16 +116,12 @@ bool Events::load()
 				info.playerOnLoseExperience = event;
 			} else if (methodName == "onGainSkillTries") {
 				info.playerOnGainSkillTries = event;
-			} else if (methodName == "onInventoryUpdate") {
-				info.playerOnInventoryUpdate = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
 		} else if (className == "Monster") {
 			if (methodName == "onDropLoot") {
 				info.monsterOnDropLoot = event;
-			} else if (methodName == "onSpawn") {
-				info.monsterOnSpawn = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown monster method: " << methodName << std::endl;
 			}
@@ -134,34 +130,6 @@ bool Events::load()
 		}
 	}
 	return true;
-}
-
-// Monster
-bool Events::eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial)
-{
-	// Monster:onSpawn(position)
-	if (info.monsterOnSpawn == -1) {
-		return true;
-	}
-
-	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::monsterOnSpawn] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.monsterOnSpawn, &scriptInterface);
-
-	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(info.monsterOnSpawn);
-
-	LuaScriptInterface::pushUserdata<Monster>(L, monster);
-	LuaScriptInterface::setMetatable(L, -1, "Monster");
-	LuaScriptInterface::pushPosition(L, position);
-	LuaScriptInterface::pushBoolean(L, startup);
-	LuaScriptInterface::pushBoolean(L, artificial);
-
-	return scriptInterface.callFunction(4);
 }
 
 // Creature
@@ -895,36 +863,6 @@ void Events::eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_
 	}
 
 	scriptInterface.resetScriptEnv();
-}
-
-void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
-{
-	// Player:onInventoryUpdate(item, slot, equip)
-	if (info.playerOnInventoryUpdate == -1) {
-		return;
-	}
-
-	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPlayerOnInventoryUpdate] Call stack overflow" << std::endl;
-		return;
-	}
-
-	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.playerOnInventoryUpdate, &scriptInterface);
-
-	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(info.playerOnInventoryUpdate);
-
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-
-	LuaScriptInterface::pushUserdata<Item>(L, item);
-	LuaScriptInterface::setItemMetatable(L, -1, item);
-
-	lua_pushnumber(L, slot);
-	LuaScriptInterface::pushBoolean(L, equip);
-
-	scriptInterface.callVoidFunction(4);
 }
 
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)

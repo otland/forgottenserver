@@ -26,12 +26,10 @@
 #include "scheduler.h"
 
 #include "pugicast.h"
-#include "events.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;
-extern Events* g_events;
 
 static constexpr int32_t MINSPAWN_INTERVAL = 1000;
 
@@ -200,18 +198,14 @@ bool Spawn::isInSpawnZone(const Position& pos)
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	bool result = g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false);
-	if (result) {
-		if (startup) {
-			//No need to send out events to the surrounding since there is no one out there to listen!
-			if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
-				return false;
-			}
+	if (startup) {
+		//No need to send out events to the surrounding since there is no one out there to listen!
+		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
+			return false;
 		}
-		else {
-			if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
-				return false;
-			}
+	} else {
+		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
+			return false;
 		}
 	}
 
@@ -221,11 +215,9 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 	monster->setMasterPos(pos);
 	monster->incrementReferenceCounter();
 
-	if (result) {
-		spawnedMap.insert(spawned_pair(spawnId, monster));
-	}
+	spawnedMap.insert(spawned_pair(spawnId, monster));
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
-	return result;
+	return true;
 }
 
 void Spawn::startup()

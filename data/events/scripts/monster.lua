@@ -33,7 +33,3 @@ function Monster:onDropLoot(corpse)
 		end
 	end
 end
-
-function Monster:onSpawn(position, startup, artificial)
-   return true
-end
