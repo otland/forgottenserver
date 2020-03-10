@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Banshee" nameDescription="a banshee" race="undead" experience="900" speed="200">
+<monster name="Banshee" nameDescription="a banshee" race="undead" experience="900" speed="220">
 	<health now="1000" max="1000" />
 	<look type="78" corpse="6019" />
 	<targetchange interval="4000" chance="10" />
@@ -14,7 +14,7 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="500" />
+		<flag runonhealth="599" />
 		<flag canwalkonenergy="0" />
 	</flags>
 	<attacks>
@@ -57,26 +57,26 @@
 	</voices>
 	<loot>
 		<item name="candlestick" chance="70000" />
-		<item name="wedding ring" chance="460" />
-		<item id="2124" chance="60" /><!-- crystal ring -->
-		<item name="silver brooch" chance="1250" />
-		<item name="white pearl" chance="1010" />
-		<item name="black pearl" chance="2030" />
 		<item name="gold coin" countmax="80" chance="30000" />
-		<item name="silver amulet" chance="8700" />
-		<item id="2175" chance="520" /><!-- spellbook -->
-		<item name="life crystal" chance="70" />
+		<item name="silver amulet" chance="9400" />
+		<item name="simple dress" chance="6300" />
+		<item name="hair of a banshee" chance="5000" />
+		<item name="petrified scream" chance="4250" />
+		<item name="black pearl" chance="2130" />
+		<item name="silver brooch" chance="1550" />
+		<item name="poison dagger" chance="1550" />
+		<item name="white pearl" chance="1110" />
+		<item id="2372" chance="970" /><!-- lyre -->
 		<item name="stone skin amulet" chance="820" />
-		<item name="ring of healing" chance="730" />
-		<item id="2372" chance="910" /><!-- lyre -->
-		<item name="poison dagger" chance="1350" />
-		<item name="red robe" chance="150" />
+		<item name="strong mana potion" chance="770" />
+		<item name="ring of healing" chance="750" />
 		<item name="blue robe" chance="700" />
-		<item name="simple dress" chance="6050" />
-		<item name="strong mana potion" chance="680" />
+		<item name="wedding ring" chance="560" />
+		<item id="2175" chance="520" /><!-- spellbook -->
 		<item name="terra mantle" chance="340" />
-		<item name="petrified scream" chance="4150" />
-		<item name="hair of a banshee" chance="4810" />
+		<item id="2124" chance="180" /><!-- crystal ring -->
+		<item name="red robe" chance="150" />
+		<item name="life crystal" chance="100" />
 		<item name="sweet smelling bait" chance="40" />
 	</loot>
 </monster>

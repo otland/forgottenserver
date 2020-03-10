@@ -14,10 +14,13 @@
 
 	<!-- Tools -->
 	<action itemid="2420" script="tools/machete.lua" />
+	<action itemid="2442" script="tools/machete.lua" />
 	<action itemid="2550" script="tools/scythe.lua" />
 	<action itemid="2580" script="tools/fishing.lua" allowfaruse="1" />
 	<action itemid="2554" script="tools/shovel.lua" />
+	<action itemid="5710" script="tools/shovel.lua" />
 	<action itemid="2120" script="tools/rope.lua" />
+	<action itemid="7731" script="tools/rope.lua" />
 	<action itemid="2553" script="tools/pick.lua" />
 
 	<!-- Transform and decay -->
@@ -80,6 +83,10 @@
 	<action itemid="18397" script="other/food.lua" />
 	<action itemid="19737" script="other/food.lua" />
 	<action fromid="20100" toid="20101" script="other/food.lua" />
+	<action itemid="24841" script="other/food.lua" />
+	<action itemid="24843" script="other/food.lua" />
+	<action itemid="26191" script="other/food.lua" />
+	<action itemid="26201" script="other/food.lua" />
 
 	<!-- Other -->
 	<action itemid="6578" script="other/partyhat.lua" />
@@ -88,6 +95,10 @@
 	<action itemid="6576" script="other/fireworksrocket.lua" />
 	<action itemid="2036" script="other/watch.lua" />
 	<action fromid="1728" toid="1731" script="other/watch.lua" />
+	<action itemid="3900" script="other/watch.lua" />
+	<action itemid="7828" script="other/watch.lua" />
+	<action itemid="6092" script="other/watch.lua" />
+	<action fromid="9443" toid="9444" script="other/watch.lua" />
 	<action itemid="2785" script="other/blueberrybush.lua" />
 	<action itemid="2579" script="other/trap.lua" />
 	<action itemid="2148" script="other/changegold.lua" />
@@ -114,6 +125,7 @@
 	<action itemid="20257" script="other/constructionkits.lua" />
 	<action fromid="7904" toid="7907" script="other/bed_modification_kits.lua" />
 	<action itemid="20252" script="other/bed_modification_kits.lua" />
+	<action itemid="7552" script="other/largeseashell.lua" />
 	<action fromid="2070" toid="2085" script="other/music.lua" />
 	<action itemid="2332" script="other/music.lua" />
 	<action itemid="2364" script="other/music.lua" />
@@ -123,6 +135,7 @@
 	<action itemid="5786" script="other/music.lua" />
 	<action fromid="6572" toid="6573" script="other/music.lua" />
 	<action itemid="13759" script="other/music.lua" />
+	<action itemid="23923" script="other/music.lua" />
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="1369" script="other/teleport.lua" />
 	<action itemid="1386" script="other/teleport.lua" />
@@ -130,7 +143,8 @@
 	<action itemid="5543" script="other/teleport.lua" />
 	<action fromid="2376" toid="2404" script="other/destroy.lua" />
 	<action fromid="2406" toid="2419" script="other/destroy.lua" />
-	<action fromid="2421" toid="2453" script="other/destroy.lua" />
+	<action fromid="2421" toid="2441" script="other/destroy.lua" />
+	<action fromid="2443" toid="2453" script="other/destroy.lua" />
 	<action fromid="2005" toid="2009" script="other/fluids.lua" />
 	<action fromid="2011" toid="2015" script="other/fluids.lua" />
 	<action itemid="2023" script="other/fluids.lua" />
@@ -201,6 +215,14 @@
 	<action fromid="13020" toid="13023" script="other/doors.lua" />
 	<action itemid="14405" function="market" />
 	<action fromid="18488" toid="18492" script="other/skilltrainer.lua" />
+	<action fromid="1816" toid="1817" script="other/wallmirror.lua" />
+	<action fromid="1843" toid="1844" script="other/wallmirror.lua" />
+	<action fromid="1846" toid="1847" script="other/wallmirror.lua" />
+	<action fromid="1849" toid="1850" script="other/wallmirror.lua" />
+	<action itemid="486" script="other/snowheap.lua" />
+	<action itemid="2095" script="other/birdcage.lua" />
+	<action itemid="2093" script="other/waterpipe.lua" />
+	<action itemid="2099" script="other/waterpipe.lua" />
 	<action itemid="3743" script="other/transforms.lua" />
 	<action itemid="4404" script="other/transforms.lua" />
 </actions>

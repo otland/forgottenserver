@@ -37,6 +37,9 @@
 	<wand id="18412" level="65" mana="17" min="70" max="100" type="ice"> <!-- Glacial Rod -->
 		<vocation name="Druid" />
 	</wand>
+	<wand id="24839" level="37" mana="13" min="56" max="74" type="earth"> <!-- Ogre Scepta -->
+		<vocation name="Druid" />
+	</wand>
 
 	<!-- Wands -->
 	<wand id="23719" level="1" mana="1" min="3" max="7" type="fire"> <!-- The Scorcher -->
@@ -76,6 +79,12 @@
 		<vocation name="Sorcerer" />
 	</wand>
 	<wand id="18409" level="65" mana="17" min="70" max="100" type="fire"> <!-- Wand of Everblazing -->
+		<vocation name="Sorcerer" />
+	</wand>
+	<wand id="25421" level="65" mana="17" min="65" max="95" type="energy"> <!-- Ferumbras' Staff (Failed) -->
+		<vocation name="Sorcerer" />
+	</wand>
+	<wand id="25422" level="100" mana="19" min="80" max="110" type="energy"> <!-- Ferumbras' Staff (Enchanted) -->
 		<vocation name="Sorcerer" />
 	</wand>
 
@@ -178,6 +187,7 @@
 	<melee id="22403" level="250" unproperly="1">
 		<vocation name="Knight" />
 	</melee>
+	<melee id="25416" level="150" unproperly="1" />
 
 	<!-- Fire -->
 	<melee id="7744" action="removecharge" />
@@ -317,6 +327,9 @@
 	<melee id="22409" level="250" unproperly="1">
 		<vocation name="Knight" />
 	</melee>
+	<melee id="24828" level="25" unproperly="1" />
+	<melee id="25383" level="70" unproperly="1" />
+	<melee id="25415" level="150" unproperly="1" />
 
 	<!-- Fire -->
 	<melee id="7749" level="20" action="removecharge" unproperly="1" />
@@ -449,6 +462,9 @@
 	<melee id="22415" level="250" unproperly="1">
 		<vocation name="Knight" />
 	</melee>
+	<melee id="24827" level="50" unproperly="1" />
+	<melee id="25418" level="150" unproperly="1" />
+	<melee id="25420" level="100" unproperly="1" />
 
 	<!-- Fire -->
 	<melee id="7754" level="20" action="removecharge" unproperly="1" />
@@ -560,6 +576,12 @@
 	<distance id="22421" level="250" unproperly="1"> <!-- Umbral Master Crossbow -->
 		<vocation name="Paladin" />
 	</distance>
+	<distance id="25522" level="120" unproperly="1"> <!-- Rift Bow -->
+		<vocation name="Paladin" />
+	</distance>
+	<distance id="25523" level="120" unproperly="1"> <!-- Rift Crossbow -->
+		<vocation name="Paladin" />
+	</distance>
 
 	<!-- Ammunition -->
 	<distance id="1294" breakchance="3" /> <!-- small stone -->
@@ -594,4 +616,5 @@
 	<distance id="18437" action="removecount" unproperly="1" level="70" /> <!-- Envenomed Arrow -->
 	<distance id="23529" breakchance="31" unproperly="1" level="60" /> <!-- Glooth Spear -->
 	<distance id="23839" action="removecount" unproperly="0" level="1" /> <!-- Simple Arrow -->
+	<distance id="25526" breakchance="10" /> <!-- throwing star of Sula -->
 </weapons>
