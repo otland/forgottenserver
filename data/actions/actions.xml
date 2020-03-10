@@ -38,8 +38,7 @@
 	<action fromid="2096" toid="2097" script="other/decayto.lua" />
 	<action fromid="2162" toid="2163" script="other/decayto.lua" />
 	<action itemid="2578" script="other/decayto.lua" />
-	<action itemid="7184" script="other/decayto.lua" />
-	<action itemid="6572" script="other/decayto.lua" />
+	<action itemid="7183" script="other/decayto.lua" />
 	<action fromid="3947" toid="3948" script="other/decayto.lua" />
 	<action fromid="5812" toid="5813" script="other/decayto.lua" />
 	<action fromid="6489" toid="6490" script="other/decayto.lua" />
