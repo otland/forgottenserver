@@ -278,4 +278,5 @@ function Player:onGainSkillTries(skill, tries)
 end
 
 function Player:onInventoryUpdate(item, slot, equip)
+    itemAttributes(self, item, slot, equip)
 end

@@ -28,9 +28,34 @@ function onLogin(player)
 	elseif not promotion then
 		player:setVocation(vocation:getDemotion())
 	end
+	
+	-- Activate Custom Item Attributes
+	for i = 1,10 do -- CONST_SLOT_FIRST,CONST_SLOT_LAST
+		local item = player:getSlotItem(i)
+		if item then
+			itemAttributes(player, item, i, true)
+		end
+	end
+	-- If player logged with more 'current health' than their db 'max health' due to an item attribute
+	local query = db.storeQuery("SELECT `health`,`mana` FROM players where `id`="..player:getGuid())
+	if query then
+		local health = tonumber(result.getDataString(query, 'health'))
+		local mana = tonumber(result.getDataString(query, 'mana'))
+		local playerHealth = player:getHealth()
+		local playerMana = player:getMana()
+		if playerHealth < health then
+			player:addHealth(health - playerHealth)
+		end
+		if playerMana < mana then
+			player:addMana(mana - playerMana)
+		end
+		result.free(query)
+	end
 
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
+	player:registerEvent("rollHealth")
+	player:registerEvent("rollMana")
 	return true
 end

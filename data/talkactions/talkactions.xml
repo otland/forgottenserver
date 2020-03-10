@@ -33,6 +33,7 @@
 	<talkaction words="/hide" script="hide.lua" />
 	<talkaction words="/reload" separator=" " script="reload.lua" />
 	<talkaction words="/raid" separator=" " script="force_raid.lua" />
+	<talkaction words="/roll" separator=" " script="roll.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buyprem.lua" />
