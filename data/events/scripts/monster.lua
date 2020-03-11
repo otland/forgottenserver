@@ -5,6 +5,7 @@ local rare_effect_id = CONST_ME_STUN
 
 -- Custom special item drops
 local jewelDrops = true
+local jewelChance = 2 -- 2%
 local jewelCorpse = {
     [5995] = { -- Demon
         2493, -- Demon Helmet
@@ -207,7 +208,7 @@ function Monster:onDropLoot(corpse)
 		
 		if jewelDrops then
 			if jewelCorpse[corpse:getId()] then
-				if math.random(1,50) == 1 then -- 1/50 = 2%
+				if math.random(1,100) <= jewelChance then
 					local jewelCase = corpse:addItem(6104, 1)
 					if jewelCase then
 						local jewelItem = jewelCase:addItem(jewelCorpse[corpse:getId()][math.random(1,#jewelCorpse[corpse:getId()])], 1)
