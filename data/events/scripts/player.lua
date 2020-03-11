@@ -283,7 +283,7 @@ function Player:onWrapItem(item, position)
 		return
 	end
 
-	local tile = Tile(cylinder:getPosition())
+	local tile = Tile(topCylinder:getPosition())
 	if not tile then
 		return
 	end
