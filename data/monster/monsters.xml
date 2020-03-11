@@ -514,7 +514,10 @@
 	<monster name="Goblin Assassin" file="Goblins/goblin_assassin.xml" />
 	<monster name="Goblin Leader" file="Goblins/goblin_leader.xml" />
 	<monster name="Goblin Scavenger" file="Goblins/goblin_scavenger.xml" />
-	<monster name="Demon (Goblin)" file="Goblins/demon_(goblin).xml" />
+
+	<!-- Hyaenids -->
+	<monster name="Ghoulish Hyaena" file="Hyaenids/ghoulish_hyaena.xml" />
+	<monster name="Hyaena" file="Hyaenids/hyaena.xml" />
 
 	<!-- Hydro-Elementals -->
 	<monster name="Massive Water Elemental" file="Hydro-Elementals/massive_water_elemental.xml" />
@@ -578,6 +581,7 @@
 
 	<!-- Misc -->
 	<!-- Misc Mammals -->
+
 	<monster name="Badger" file="Misc/Misc Mammals/badger.xml" />
 	<monster name="Ghoulish Hyaena" file="Misc/Misc Mammals/ghoulish_hyaena.xml" />
 	<monster name="Hyaena" file="Misc/Misc Mammals/hyaena.xml" />
@@ -602,6 +606,10 @@
 	<!-- Monks -->
 	<monster name="Dark Monk" file="Monks/dark_monk.xml" />
 	<monster name="Monk" file="Monks/monk.xml" />
+
+	<!-- Mustelids -->
+	<monster name="Badger" file="Mustelids/badger.xml" />
+	<monster name="Skunk" file="Mustelids/skunk.xml" />
 
 	<!-- Mutated -->
 	<monster name="Mutated Human" file="Mutated/mutated_human.xml" />
@@ -707,6 +715,7 @@
 	<monster name="Young Sea Serpent" file="Serpents/young_sea_serpent.xml" />
 
 	<!-- Shapeshifters -->
+	<monster name="Demon (Goblin)" file="Shapeshifters/demon_(goblin).xml" />
 	<monster name="Mimic" file="Shapeshifters/mimic.xml" />
 
 	<!-- Skeletons -->
@@ -785,6 +794,7 @@
 	<monster name="Horse1" file="Ungulates/horse(brown).xml" />
 	<monster name="Horse2" file="Ungulates/horse(fire).xml" />
 	<monster name="Horse3" file="Ungulates/horse(grey).xml" />
+	<monster name="Mad Sheep" file="Ungulates/mad_sheep.xml" />
 	<monster name="Mammoth" file="Ungulates/mammoth.xml" />
 	<monster name="Mushroom Sniffer" file="Ungulates/mushroom_sniffer.xml" />
 	<monster name="Pig" file="Ungulates/pig.xml" />

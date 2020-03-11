@@ -1237,6 +1237,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeMaxHealth(lua_State* L);
 		static int luaMonsterTypeRunHealth(lua_State* L);
 		static int luaMonsterTypeExperience(lua_State* L);
+		static int luaMonsterTypeSkull(lua_State* L);
 
 		static int luaMonsterTypeCombatImmunities(lua_State* L);
 		static int luaMonsterTypeConditionImmunities(lua_State* L);

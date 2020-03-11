@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Elder Bonelord" nameDescription="an elder bonelord" race="blood" experience="280" speed="180">
+<monster name="Elder Bonelord" nameDescription="an elder bonelord" race="blood" experience="280" speed="170">
 	<health now="500" max="500" />
 	<look type="108" corpse="6037" />
 	<targetchange interval="4000" chance="10" />
@@ -42,7 +42,7 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="13" defense="13" />
 	<elements>
 		<element energyPercent="20" />
 		<element icePercent="30" />
@@ -61,18 +61,21 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="Let me take a look at you!" />
 		<voice sentence="Inferior creatures, bow before my power!" />
+		<voice sentence="659978 54764!" />
+		<voice sentence="653768764!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="86" chance="30000" />
-		<item id="2175" chance="7500" /><!-- spellbook -->
-		<item name="two handed sword" chance="6000" />
-		<item name="steel shield" chance="6000" />
-		<item name="bonelord shield" chance="150" />
-		<item name="bonelord helmet" chance="150" />
-		<item name="sniper arrow" countmax="5" chance="10000" />
-		<item name="strong mana potion" chance="1000" />
-		<item name="elder bonelord tentacle" chance="21725" />
-		<item name="giant eye" chance="850" />
-		<item name="small flask of eyedrops" chance="10025" />
+		<item name="gold coin" countmax="90" chance="99000" />
+		<item name="elder bonelord tentacle" chance="20000" />
+		<item name="small flask of eyedrops" chance="9700" />
+		<item name="sniper arrow" countmax="4" chance="8700" />
+		<item name="two handed sword" chance="3000" />
+		<item name="steel shield" chance="2000" />
+		<item name="bonelord eye" chance="2000" />
+		<item id="2175" chance="1000" /><!-- spellbook -->
+		<item name="strong mana potion" chance="830" />
+		<item name="giant eye" chance="460" />
+		<item name="bonelord shield" chance="90" />
+		<item name="bonelord helmet" chance="90" />
 	</loot>
 </monster>

@@ -13,7 +13,7 @@
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
-		<flag staticattack="70" />
+		<flag staticattack="90" />
 		<flag runonhealth="30" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
@@ -21,14 +21,14 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-65" />
 	</attacks>
-	<defenses armor="25" defense="25">
+	<defenses armor="26" defense="26">
 		<defense name="healing" interval="2000" chance="20" min="5" max="15">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="40" />
-		<element deathPercent="1" />
+		<element physicalPercent="20" />
+		<element deathPercent="40" />
 		<element firePercent="-10" />
 	</elements>
 	<immunities>
@@ -43,18 +43,18 @@
 		<voice sentence="There is a stone in your shoe!" />
 	</voices>
 	<loot>
-		<item name="wolf tooth chain" chance="1480" />
 		<item name="gold coin" countmax="30" chance="88000" />
-		<item name="mysterious fetish" countmax="10" chance="15800" />
-		<item name="club ring" chance="260" />
-		<item name="morning star" chance="2150" />
-		<item name="steel helmet" chance="850" />
-		<item name="dark armor" chance="300" />
-		<item name="battle shield" chance="1000" />
-		<item name="strawberry" countmax="5" chance="1810" />
-		<item name="potato" countmax="2" chance="9220" />
+		<item name="small stone" countmax="10" chance="15800" />
 		<item name="stone wing" chance="11730" />
+		<item name="potato" countmax="2" chance="9220" />
+		<item name="strawberry" countmax="5" chance="1910" />
+		<item name="morning star" chance="1500" />
+		<item name="battle shield" chance="1300" />
+		<item name="wolf tooth chain" chance="1180" />
+		<item name="steel helmet" chance="850" />
+		<item name="piece of marble rock" chance="450" />
+		<item name="dark armor" chance="300" />
+		<item name="club ring" chance="260" />
 		<item name="shiny stone" chance="190" />
-		<item name="piece of marble rock" chance="630" />
 	</loot>
 </monster>

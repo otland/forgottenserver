@@ -40,15 +40,16 @@
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="30">
-		<defense name="healing" interval="1000" chance="20" min="20" max="800">
+	<defenses armor="42" defense="42">
+		<defense name="healing" interval="2000" chance="40" min="150" max="600">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="45" />
-		<element holyPercent="-22" />
-		<element icePercent="-25" />
+		<element energyPercent="20" />
+		<element earthPercent="20" />
+		<element holyPercent="-20" />
+		<element icePercent="-10" />
 	</elements>
 	<immunities>
 		<immunity fire="1" />
@@ -62,20 +63,20 @@
 		<voice sentence="Ashes to ashes!" />
 		<voice sentence="Fire, Fire!" />
 		<voice sentence="The eternal flame demands its due!" />
-		<voice sentence="This is why I'm hot." />
+		<voice sentence="Burnnnnnnnnn!" />
 		<voice sentence="May my flames engulf you!" />
+		<voice sentence="This is why I'm hot." />
 	</voices>
 	<loot>
-		<item name="holy falcon" chance="500" />
-		<item name="small ruby" countmax="3" chance="7000" />
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="gold coin" countmax="70" chance="50000" />
-		<item name="gold coin" countmax="64" chance="50000" />
-		<item name="red gem" chance="1500" />
-		<item name="life ring" chance="1500" />
 		<item name="burning heart" chance="100000" />
-		<item name="fire axe" chance="750" />
-		<item name="phoenix shield" chance="300" />
-		<item name="great health potion" chance="1500" />
+		<item name="gold coin" countmax="230" chance="88000" />
+		<item name="small ruby" countmax="3" chance="12000" />
+		<item name="great health potion" chance="10500" />
+		<item name="life ring" chance="6700" />
+		<item name="fire axe" chance="1050" />
+		<item name="red gem" chance="600" />
+		<item name="holy falcon" chance="150" />
+		<item name="mini mummy" chance="110" />
+		<item name="phoenix shield" chance="110" />
 	</loot>
 </monster>

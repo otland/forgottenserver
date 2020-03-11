@@ -22,7 +22,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-10" />
 	</attacks>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="1" />
 	<elements>
 		<element firePercent="-10" />
 	</elements>
@@ -32,8 +32,8 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="2" chance="85000" />
-		<item name="cookie" chance="750" />
 		<item id="2696" chance="30000" /><!-- cheese -->
-		<item name="worm" countmax="2" chance="9700" />
+		<item name="worm" countmax="2" chance="10000" />
+		<item name="cookie" chance="940" />
 	</loot>
 </monster>
