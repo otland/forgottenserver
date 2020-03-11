@@ -4,7 +4,7 @@ local rare_effect = true
 local rare_effect_id = CONST_ME_STUN
 
 -- Custom special item drops
-local jewelDrops = true
+local jewelDrops = false -- turned off by default
 local jewelChance = 2 -- 2%
 local jewelCorpse = {
     [5995] = { -- Demon
