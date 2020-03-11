@@ -68,9 +68,6 @@ class Events
 
 		bool load();
 
-		// Monster
-		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
-
 		// Creature
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
 		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
@@ -102,6 +99,7 @@ class Events
 
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
+		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
 
 	private:
 		LuaScriptInterface scriptInterface;

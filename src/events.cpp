@@ -137,7 +137,7 @@ bool Events::load()
 // Monster
 bool Events::eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial)
 {
-	// Monster:onSpawn(position)
+	// Monster:onSpawn(position, startup, artificial)
 	if (info.monsterOnSpawn == -1) {
 		return true;
 	}

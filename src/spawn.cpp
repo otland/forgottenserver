@@ -200,8 +200,9 @@ bool Spawn::isInSpawnZone(const Position& pos)
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	bool result = g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false);
-	if (result) {
+	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {
+		return false;
+	} else {
 		if (startup) {
 			//No need to send out events to the surrounding since there is no one out there to listen!
 			if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
@@ -220,11 +221,9 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 	monster->setMasterPos(pos);
 	monster->incrementReferenceCounter();
 
-	if (result) {
-		spawnedMap.insert(spawned_pair(spawnId, monster));
-	}
+	spawnedMap.insert(spawned_pair(spawnId, monster));
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
-	return result;
+	return true;
 }
 
 void Spawn::startup()
