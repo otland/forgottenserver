@@ -84,6 +84,11 @@ function getResistences(resistanceitemdesc, resistances, attackerisplayer)
 	end
 end
 
+-- Paralyze condition for ice weapons
+local paralyze = Condition(CONDITION_PARALYZE)
+paralyze:setParameter(CONDITION_PARAM_TICKS, 3000)
+paralyze:setParameter(CONDITION_PARAM_SPEED, -150)
+								
 -- Stun animation loop
 function stunanimation(stunnedcreature, stunnedpos, counter)
 	if counter ~= 0 and Creature(stunnedcreature) then
@@ -315,44 +320,21 @@ function statChange(creature, attacker, primaryDamage, primaryType, secondaryDam
 									if resistances[COMBAT_FIREDAMAGE].Custom ~= 0 or resistances[COMBAT_FIREDAMAGE].Native ~= 0 then
 										local resistancePercent = (100 - (resistances[COMBAT_FIREDAMAGE].Custom + resistances[COMBAT_FIREDAMAGE].Native))
 										burnDamage = (resistancePercent / 100) * burnDamage
+										if burnDamage ~= 0 then
+											attacker:addDamageCondition(creature, CONDITION_FIRE, DAMAGELIST_CONSTANT_PERIOD, burnDamage, 2, 10)
+										end
 									end
 								elseif creature:isMonster() then
-									local resistance = creature:getType():getElementList()
-									local immunity = creature:getType():getCombatImmunities()
-									if resistance[COMBAT_FIREDAMAGE] then
-										local resistancePercent = (100 - resistance[COMBAT_FIREDAMAGE])
-										burnDamage = (resistancePercent / 100) * burnDamage
+									if bit.band(creature:getType():getCombatImmunities(), COMBAT_FIREDAMAGE) ~= COMBAT_FIREDAMAGE then -- Monster isn't immune to fire
+										attacker:addDamageCondition(creature, CONDITION_FIRE, DAMAGELIST_CONSTANT_PERIOD, 20, 2, 10)
 									end
-									if bit.band(immunity, COMBAT_FIREDAMAGE) == COMBAT_FIREDAMAGE then
-										burnDamage = 0
-									end
-								end
-								if burnDamage ~= 0 then
-								--[[
-									-- These don't work now that combat changes have been done
-									local conditionfire = Condition(CONDITION_FIRE)
-									conditionfire:setParameter(CONDITION_PARAM_DELAYED, true)
-									conditionfire:addDamage(10, 2000, burnDamage)
-									
-									local combatfire = Combat()
-									combatfire:setParameter(COMBAT_PARAM_TYPE, COMBAT_FIREDAMAGE)
-									combatfire:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_FIRE)
-									combatfire:addCondition(conditionfire)
-									
-									combatfire:execute(attacker, Variant(creature))
-								--]]
 								end
 							end
 						end
 						if slotitemdesc:find "%[Enhanced Ice Damage" then
 							primaryDamage, primaryType, secondaryDamage, secondaryType, elementalroll = elementalDmg(slotitemdesc, COMBAT_ICEDAMAGE, false, creature, resistances, primaryDamage, primaryType, secondaryDamage, secondaryType, elementalroll)
 							if math.random(1,5) == 5 then -- 20% to paralyze/slow
-								--[[
-								local condition = createConditionObject(CONDITION_PARALYZE)
-								setConditionParam(condition, CONDITION_PARAM_TICKS, 3000)
-								setConditionParam(condition, CONDITION_PARAM_SPEED, -300)
-								doTargetCombatCondition(attacker, creature, condition, CONST_ME_MAGIC_ICEAREA)
-								--]]
+								creature:addCondition(paralyze)
 							end
 						end
 						if slotitemdesc:find "%[Enhanced Energy Damage" then
