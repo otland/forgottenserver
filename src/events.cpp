@@ -867,6 +867,7 @@ void Events::eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_
 	scriptInterface.resetScriptEnv();
 }
 
+<<<<<<< HEAD
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 {
 	// Monster:onDropLoot(corpse)
