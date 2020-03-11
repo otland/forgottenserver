@@ -901,7 +901,7 @@ function rollRarity(container, forced)
 					table.insert(available_stats, stats[21]) -- Spell Damage
 					table.insert(available_stats, stats[33]) -- Max Mana
 					table.insert(available_stats, stats[31]) -- Magic Level
-					table.insert(available_stats, stats[38]) -- Mana Leech Chance
+					table.insert(available_stats, stats[39]) -- Mana Leech Amount
 				
 				-- Sword, Clubs and Axes
 				elseif table.contains({WEAPON_SWORD, WEAPON_CLUB, WEAPON_AXE}, wp) then -- Melee Weapon
