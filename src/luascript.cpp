@@ -13896,7 +13896,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 		return 1;
 	}
 
-	SpellType_t type = SPELL_UNDEFINED;
+	SpellType_t spellType = SPELL_UNDEFINED;
 
 	if (isNumber(L, 2)) {
 		int32_t id = getNumber<int32_t>(L, 2);
@@ -13908,7 +13908,7 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 			return 1;
 		}
 
-		type = static_cast<SpellType_t>(id);
+		spellType = static_cast<SpellType_t>(id);
 	} else if (isString(L, 2)) {
 		std::string arg = getString(L, 2);
 		InstantSpell* instant = g_spells->getInstantSpellByName(arg);
@@ -13930,22 +13930,22 @@ int LuaScriptInterface::luaSpellCreate(lua_State* L)
 			return 1;
 		}
 
-		std::string tmp = asLowerCaseString(getString(L, 2));
+		std::string tmp = asLowerCaseString(arg);
 		if (tmp == "instant") {
-			type = SPELL_INSTANT;
+			spellType = SPELL_INSTANT;
 		} else if (tmp == "rune") {
-			type = SPELL_RUNE;
+			spellType = SPELL_RUNE;
 		}
 	}
 
-	if (type == SPELL_INSTANT) {
+	if (spellType == SPELL_INSTANT) {
 		InstantSpell* spell = new InstantSpell(getScriptEnv()->getScriptInterface());
 		spell->fromLua = true;
 		pushUserdata<Spell>(L, spell);
 		setMetatable(L, -1, "Spell");
 		spell->spellType = SPELL_INSTANT;
 		return 1;
-	} else if (type == SPELL_RUNE) {
+	} else if (spellType == SPELL_RUNE) {
 		RuneSpell* spell = new RuneSpell(getScriptEnv()->getScriptInterface());
 		spell->fromLua = true;
 		pushUserdata<Spell>(L, spell);
