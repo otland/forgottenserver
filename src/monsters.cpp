@@ -332,26 +332,22 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			if ((attr = node.attribute("speedchange"))) {
-				minSpeedChange = std::max(-1000, pugi::cast<int32_t>(attr.value()));
-				maxSpeedChange = minSpeedChange;
+				minSpeedChange = maxSpeedChange = std::max(-1000, pugi::cast<int32_t>(attr.value()));
 			} else if ((attr = node.attribute("minspeedchange"))) {
-				minSpeedChange = std::max(-1000, pugi::cast<int32_t>(attr.value()));
-				maxSpeedChange = minSpeedChange;
+				minSpeedChange = maxSpeedChange = std::max(-1000, pugi::cast<int32_t>(attr.value()));
 
-				attr = node.attribute("maxspeedchange");
-
-				if (attr) {
+				if ((attr = node.attribute("maxspeedchange"))) {
 					maxSpeedChange = std::max(-1000, pugi::cast<int32_t>(attr.value()));
 				}
 
-				if (!hasSameSign(minSpeedChange, maxSpeedChange)) {
+				if ((minSpeedChange ^ maxSpeedChange) < 0) {
 					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - invalid speed change range: " << name << std::endl;
 					delete combat;
 					return false;
 				}
 
 				if (minSpeedChange > maxSpeedChange) {
-					std::swap(minSpeedChange, maxSpeedChange);
+					std::tie(minSpeedChange, maxSpeedChange) = std::minmax(minSpeedChange, maxSpeedChange);
 				}
 			}
 
@@ -364,7 +360,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			ConditionSpeed* condition = static_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
-			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
+			condition->setFormulaVars(minSpeedChange / 1000.0, 0, maxSpeedChange / 1000.0, 0);
 			combat->addCondition(condition);
 		} else if (tmpName == "outfit") {
 			int32_t duration = 10000;
