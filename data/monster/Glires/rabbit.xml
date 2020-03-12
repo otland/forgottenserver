@@ -19,9 +19,9 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="1" />
 	<loot>
-		<item name="meat" countmax="2" chance="85620" />
+		<item name="meat" countmax="2" chance="82000" />
 		<item id="2684" countmax="2" chance="10000" /><!-- carrot -->
 	</loot>
 </monster>

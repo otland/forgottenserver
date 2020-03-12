@@ -38,7 +38,7 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="35">
+	<defenses armor="40" defense="40">
 		<defense name="healing" interval="1000" chance="20" min="200" max="500">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -47,9 +47,10 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="94" />
-		<element energyPercent="92" />
-		<element holyPercent="-25" />
+		<element firePercent="95" />
+		<element energyPercent="95" />
+		<element physicalPercent="-40" />
+		<element holyPercent="-1" />
 	</elements>
 	<immunities>
 		<immunity ice="1" />
@@ -59,29 +60,27 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="Demon" interval="1000" chance="12" max="1" />
+		<summon name="Demon" interval="1000" chance="12" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="It's a kind of magic." />
 		<voice sentence="Abrah Kadabrah!" />
 		<voice sentence="Nothing hidden in my wrappings." />
 		<voice sentence="It's not a trick, it's Rahemos." />
-		<voice sentence="Meet my friend from hell." />
+		<voice sentence="Meet my friend from hell!" />
 		<voice sentence="I will make you believe in magic." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="50000" />
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="gold coin" countmax="60" chance="50000" />
-		<item name="small amethyst" countmax="3" chance="7000" />
-		<item name="violet gem" chance="500" />
-		<item name="orb" chance="500" />
-		<item name="crystal wand" chance="500" />
-		<item name="necrotic rod" chance="500" />
-		<item name="ring of healing" chance="7000" />
 		<item name="ancient rune" chance="100000" />
+		<item name="gold coin" countmax="242" chance="90000" />
+		<item name="great mana potion" chance="9000" />
+		<item name="small amethyst" countmax="3" chance="8000" />
+		<item name="ring of healing" chance="4000" />
+		<item name="magician hat" chance="1600" />
+		<item name="violet gem" chance="1100" />
+		<item name="orb" chance="300" />
 		<item name="twin axe" chance="200" />
-		<item name="magician hat" chance="300" />
-		<item name="great mana potion" chance="7000" />
+		<item name="crystal wand" chance="150" />
+		<item name="mini mummy" chance="150" />
 	</loot>
 </monster>

@@ -14,7 +14,7 @@
 		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="15" />
+		<flag runonhealth="35" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
@@ -23,6 +23,17 @@
 		<attack name="melee" interval="2000" min="0" max="-10" />
 		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-25">
 			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="0" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="1" min="0" max="0">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="0" max="0">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" range="1" min="0" max="0">
+			<attribute key="shootEffect" value="energy" />
 		</attack>
 	</attacks>
 	<defenses armor="6" defense="6" />
