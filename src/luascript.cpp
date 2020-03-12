@@ -1801,6 +1801,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_NOTENOUGHMANA)
 	registerEnum(RETURNVALUE_NOTENOUGHSOUL)
 	registerEnum(RETURNVALUE_YOUAREEXHAUSTED)
+	registerEnum(RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST)
 	registerEnum(RETURNVALUE_PLAYERISNOTREACHABLE)
 	registerEnum(RETURNVALUE_CANONLYUSETHISRUNEONCREATURES)
 	registerEnum(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE)
@@ -2691,6 +2692,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "maxHealth", LuaScriptInterface::luaMonsterTypeMaxHealth);
 	registerMethod("MonsterType", "runHealth", LuaScriptInterface::luaMonsterTypeRunHealth);
 	registerMethod("MonsterType", "experience", LuaScriptInterface::luaMonsterTypeExperience);
+	registerMethod("MonsterType", "skull", LuaScriptInterface::luaMonsterTypeSkull);
 
 	registerMethod("MonsterType", "combatImmunities", LuaScriptInterface::luaMonsterTypeCombatImmunities);
 	registerMethod("MonsterType", "conditionImmunities", LuaScriptInterface::luaMonsterTypeConditionImmunities);
@@ -12531,6 +12533,27 @@ int LuaScriptInterface::luaMonsterTypeExperience(lua_State* L)
 			lua_pushnumber(L, monsterType->info.experience);
 		} else {
 			monsterType->info.experience = getNumber<uint64_t>(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeSkull(lua_State* L)
+{
+	// get: monsterType:skull() set: monsterType:skull(str/constant)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, monsterType->info.skull);
+		} else {
+			if (isNumber(L, 2)) {
+				monsterType->info.skull = getNumber<Skulls_t>(L, 2);
+			} else {
+				monsterType->info.skull = getSkullType(getString(L, 2));
+			}
 			pushBoolean(L, true);
 		}
 	} else {

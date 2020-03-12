@@ -38,35 +38,37 @@
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="30">
+	<defenses armor="40" defense="40">
 		<defense name="healing" interval="1000" chance="20" min="150" max="450">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="-23" />
+		<element holyPercent="-20" />
+		<element firePercent="-10" />
+		<element icePercent="-10" />
+		<element energyPercent="20" />
 	</elements>
 	<immunities>
+		<immunity death="1" />
 		<immunity earth="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="8">
-		<summon name="Slime" interval="2000" chance="100" max="8" />
+		<summon name="Slime" interval="2000" chance="100" />
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="You will become a feast for my maggots." />
+		<voice sentence="You will become a feast for my maggots!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="small emerald" countmax="3" chance="7000" />
-		<item name="green gem" chance="500" />
-		<item name="stealth ring" chance="1500" />
-		<item id="2169" chance="7000" /><!-- time ring -->
 		<item name="cobrafang dagger" chance="100000" />
-		<item name="serpent sword" chance="500" />
-		<item name="poison dagger" chance="7000" />
-		<item name="djinn blade" chance="200" />
-		<item name="great health potion" chance="1500" />
+		<item name="gold coin" countmax="238" chance="91000" />
+		<item name="poison dagger" chance="21000" />
+		<item name="small emerald" countmax="3" chance="9000" />
+		<item name="great health potion" chance="8200" />
+		<item id="2169" chance="5200" /><!-- time ring -->
+		<item name="serpent sword" chance="2700" />
+		<item name="djinn blade" chance="1000" />
+		<item name="green gem" chance="100" />
 	</loot>
 </monster>
