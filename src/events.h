@@ -21,6 +21,7 @@
 #define FS_EVENTS_H_BD444CC0EE167E5777E4C90C766B36DC
 
 #include "luascript.h"
+#include "const.h"
 
 class Party;
 class ItemType;
