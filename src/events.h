@@ -33,6 +33,7 @@ class Events
 		int32_t creatureOnChangeOutfit = -1;
 		int32_t creatureOnAreaCombat = -1;
 		int32_t creatureOnTargetCombat = -1;
+		int32_t creatureOnHear = -1;
 
 		// Party
 		int32_t partyOnJoin = -1;
@@ -72,6 +73,7 @@ class Events
 		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
 		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
+		void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string words, SpeakClasses type, Position pos);
 
 		// Party
 		bool eventPartyOnJoin(Party* party, Player* player);
