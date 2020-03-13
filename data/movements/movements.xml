@@ -1160,7 +1160,7 @@
 	<movevent event="Equip" itemid="23539" slot="legs" level="60" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="23539" slot="legs" function="onDeEquipItem" />
 
-	<!-- Weapons -->	
+	<!-- Weapons -->
 	<movevent event="Equip" itemid="18390" slot="hand" level="65" function="onEquipItem">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" showInDescription="0" />
