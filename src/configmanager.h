@@ -47,6 +47,7 @@ class ConfigManager
 			SERVER_SAVE_CLOSE,
 			SERVER_SAVE_SHUTDOWN,
 			ONLINE_OFFLINE_CHARLIST,
+			YELL_ALLOW_PREMIUM,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -106,6 +107,7 @@ class ConfigManager
 			EXP_FROM_PLAYERS_LEVEL_RANGE,
 			MAX_PACKETS_PER_SECOND,
 			SERVER_SAVE_NOTIFY_DURATION,
+			YELL_MINIMUM_LEVEL,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
