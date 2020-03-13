@@ -17,7 +17,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:say(messages[math.random(1, #messages)], TALKTYPE_MONSTER_SAY)
 		player:setStorageValue(PlayerStorageKeys.delayWallMirror, os.time() + 72000)
 	else
-		player:say("Don't be so vain about your appearance.", TALKTYPE_MONSTER_SAY, false, player, item:getPosition())
+		player:say("Don't be so vain about your appearance.", TALKTYPE_MONSTER_SAY)
 	end
 	return true
 end
