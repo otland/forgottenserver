@@ -38,6 +38,7 @@
 	<action fromid="2096" toid="2097" script="other/decayto.lua" />
 	<action fromid="2162" toid="2163" script="other/decayto.lua" />
 	<action itemid="2578" script="other/decayto.lua" />
+	<action itemid="7183" script="other/decayto.lua" />
 	<action fromid="3947" toid="3948" script="other/decayto.lua" />
 	<action fromid="5812" toid="5813" script="other/decayto.lua" />
 	<action fromid="6489" toid="6490" script="other/decayto.lua" />
@@ -46,6 +47,10 @@
 	<action fromid="9575" toid="9582" script="other/decayto.lua" />
 	<action fromid="9747" toid="9750" script="other/decayto.lua" />
 	<action fromid="19691" toid="19692" script="other/decayto.lua" />
+	<action fromid="10719" toid="10720" script="other/decayto.lua" />
+	<action fromid="11401" toid="11402" script="other/decayto.lua" />
+	<action fromid="25545" toid="25546" script="other/decayto.lua" />
+	<action fromid="26098" toid="26099" script="other/decayto.lua" />
 
 	<!-- Food -->
 	<action itemid="2362" script="other/food.lua" />

@@ -76,6 +76,8 @@ classicEquipmentSlots = false
 classicAttackSpeed = false
 showScriptsLogInConsole = true
 showOnlineStatusInCharlist = false
+yellMinimumLevel = 2
+yellAlwaysAllowPremium = false
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
