@@ -102,20 +102,18 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	local transform = true
 	if type(skin[1]) == "table" then
 		local added = false
-		local _skin
-		for i = 1, #skin do
-			_skin = skin[i]
-			if randomChance <= _skin.chance then
+		for _, skinChild in ipairs(skin) do
+			if randomChance <= skinChild.chance then
 				if target.itemid == 11343 then
-					local marble = player:addItem(_skin.newItem, _skin.amount or 1)
+					local marble = player:addItem(skinChild.newItem, skinChild.amount or 1)
 					if marble then
-						marble:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, _skin.desc:gsub("|PLAYERNAME|", player:getName()))
+						marble:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, skinChild.desc:gsub("|PLAYERNAME|", player:getName()))
 					end
 					effect = CONST_ME_HITAREA
 					target:remove()
 					added = true
 				else
-					target:transform(_skin.newItem, _skin.amount or 1)
+					target:transform(skinChild.newItem, skinChild.amount or 1)
 					effect = CONST_ME_HITAREA
 					added = true
 				end
