@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Yaga The Crone" nameDescription="Yaga the Crone" race="blood" experience="375" speed="240">
 	<health now="620" max="620" />
 	<look type="54" corpse="6081" />

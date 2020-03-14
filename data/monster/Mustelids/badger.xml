@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Badger" namedescription="a badger" race="blood" experience="5" speed="140" manacost="200">
 	<health now="23" max="23" />
 	<look type="105" corpse="6034" />

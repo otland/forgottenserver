@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dworc Voodoomaster" namedescription="a dworc voodoomaster" race="blood" experience="55" speed="190">
 	<health now="80" max="80" />
 	<look type="214" corpse="6055" />

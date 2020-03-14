@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Blood Crab" nameDescription="a blood crab" race="undead" experience="160" speed="220" manacost="505">
 	<health now="290" max="290" />
 	<look type="200" corpse="6075" />

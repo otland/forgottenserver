@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Winter Wolf" nameDescription="a winter wolf" race="blood" experience="20" speed="160" manacost="260">
 	<health now="30" max="30" />
 	<look type="52" corpse="5997" />

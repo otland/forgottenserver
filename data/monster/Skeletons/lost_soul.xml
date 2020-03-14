@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lost Soul" nameDescription="a lost soul" race="undead" experience="4000" speed="220">
 	<health now="5800" max="5800" />
 	<look type="232" corpse="6310" />

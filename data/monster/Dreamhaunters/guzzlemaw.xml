@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Guzzlemaw" nameDescription="a guzzlemaw" race="blood" experience="5500" speed="270">
 	<health now="6400" max="6400" />
 	<look type="584" corpse="22485" />

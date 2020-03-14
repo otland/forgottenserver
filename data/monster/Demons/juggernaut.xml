@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Juggernaut" nameDescription="a juggernaut" race="blood" experience="14000" speed="290">
 	<health now="20000" max="20000" />
 	<look type="244" corpse="6336" />

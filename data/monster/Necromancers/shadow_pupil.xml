@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shadow Pupil" nameDescription="a shadow pupil" race="blood" experience="410" speed="210">
 	<health now="450" max="450" />
 	<look type="551" corpse="21254" />

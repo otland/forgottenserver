@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Bloodtusk" nameDescription="The Bloodtusk" race="blood" experience="300" speed="190">
 	<health now="600" max="600" />
 	<look type="199" corpse="6074" />

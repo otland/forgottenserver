@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Plaguesmith" nameDescription="a plaguesmith" race="venom" experience="4500" speed="240">
 	<health now="8250" max="8250" />
 	<look type="247" corpse="6516" />

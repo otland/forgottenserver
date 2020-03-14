@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lava Golem" nameDescription="a lava golem" race="fire" experience="6200" speed="290">
 	<health now="9000" max="9000" />
 	<look type="491" corpse="17333" />

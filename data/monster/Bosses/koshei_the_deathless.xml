@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Koshei The Deathless" nameDescription="Koshei the Deathless" race="undead" experience="0" speed="390">
 	<health now="3000" max="3000" />
 	<look type="99" head="95" body="116" legs="119" feet="115" corpse="6028" />

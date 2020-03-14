@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dwarf Soldier" nameDescription="a dwarf soldier" race="blood" experience="70" speed="170" manacost="360">
 	<health now="135" max="135" />
 	<look type="71" corpse="6014" />

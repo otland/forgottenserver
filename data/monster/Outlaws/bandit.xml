@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bandit" nameDescription="a bandit" race="blood" experience="65" speed="180" manacost="450">
 	<health now="245" max="245" />
 	<look type="129" head="58" body="59" legs="45" feet="114" corpse="20331" />

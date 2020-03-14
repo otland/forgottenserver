@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Werewolf" nameDescription="a werewolf" experience="1900" speed="200" race="blood">
 	<health now="1955" max="1955" />
 	<targetchange interval="4000" chance="10" />

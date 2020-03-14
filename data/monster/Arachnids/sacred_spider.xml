@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485">
 	<health now="550" max="550" />
 	<look type="219" corpse="6060" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tomb Servant" nameDescription="a tomb servant" race="undead" experience="215" speed="190">
 	<health now="475" max="475" />
 	<look type="100" corpse="6029" />

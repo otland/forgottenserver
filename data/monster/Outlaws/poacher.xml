@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="185" manacost="530">
 	<health now="90" max="90" />
 	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="20487" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dworc Fleshhunter" nameDescription="a dworc fleshhunter" race="blood" experience="40" speed="180">
 	<health now="85" max="85" />
 	<look type="215" corpse="6058" />

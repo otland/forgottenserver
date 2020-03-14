@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fluffy" nameDescription="Fluffy" race="blood" experience="3550" speed="310">
 	<health now="4500" max="4500" />
 	<look type="240" corpse="6332" />

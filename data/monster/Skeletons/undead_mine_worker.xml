@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Undead Mine Worker" nameDescription="an undead mine worker" race="undead" experience="45" speed="150">
 	<health now="65" max="65" />
 	<look type="33" corpse="5972" />

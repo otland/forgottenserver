@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lost Berserker" nameDescription="a lost berserker" race="blood" experience="4400" speed="250">
 	<health now="5900" max="5900" />
 	<look type="496" corpse="17416" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ashmunrah" nameDescription="Ashmunrah" race="undead" experience="3100" speed="430">
 	<health now="5000" max="5000" />
 	<look type="87" corpse="6031" />

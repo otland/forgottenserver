@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="205" manacost="420">
 	<health now="160" max="160" />
 	<look type="146" head="114" body="20" legs="22" feet="2" addons="2" corpse="20466" />

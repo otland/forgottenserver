@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Witch" nameDescription="a witch" race="blood" experience="120" speed="195">
 	<health now="300" max="300" />
 	<look type="54" corpse="20535" />

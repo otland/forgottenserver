@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Orc Leader" nameDescription="an orc leader" race="blood" experience="270" speed="220" manacost="640">
 	<health now="450" max="450" />
 	<look type="59" corpse="6001" />

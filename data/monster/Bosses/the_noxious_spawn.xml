@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Noxious Spawn" nameDescription="The Noxious Spawn" race="venom" experience="6000" speed="360">
 	<health now="9500" max="9500" />
 	<look type="220" corpse="4323" />

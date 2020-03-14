@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Panda" nameDescription="a panda" race="blood" experience="23" speed="150" manacost="300">
 	<health now="80" max="80" />
 	<look type="123" corpse="6049" />

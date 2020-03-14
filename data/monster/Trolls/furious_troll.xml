@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190">
 	<health now="245" max="245" />
 	<look type="15" corpse="5960" />

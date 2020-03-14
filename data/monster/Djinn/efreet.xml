@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="234">
 	<health now="550" max="550" />
 	<look type="103" corpse="6032" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Yakchal" nameDescription="Yakchal" race="blood" experience="4400" speed="200">
 	<health now="5750" max="5750" />
 	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20546" />

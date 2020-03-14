@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crimson Frog" nameDescription="a crimson frog" race="blood" experience="20" speed="200" manacost="305">
 	<health now="60" max="60" />
 	<look type="226" head="94" body="78" legs="94" feet="78" corpse="6079" />

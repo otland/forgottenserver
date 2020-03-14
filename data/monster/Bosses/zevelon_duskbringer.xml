@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Zevelon Duskbringer" nameDescription="Zevelon Duskbringer" race="undead" experience="1800" speed="310">
 	<health now="1400" max="1400" />
 	<look type="287" corpse="8937" />

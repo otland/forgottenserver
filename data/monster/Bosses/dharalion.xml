@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dharalion" nameDescription="Dharalion" race="blood" experience="570" speed="240">
 	<health now="380" max="380" />
 	<look type="203" corpse="6011" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hairman The Huge" nameDescription="Hairman the Huge" race="blood" experience="335" speed="230">
 	<health now="600" max="600" />
 	<look type="116" head="20" body="30" legs="40" feet="50" corpse="6043" />
