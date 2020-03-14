@@ -81,6 +81,9 @@
 	<wand id="18409" level="65" mana="17" min="70" max="100" type="fire"> <!-- Wand of Everblazing -->
 		<vocation name="Sorcerer" />
 	</wand>
+	<wand id="19391" level="1" mana="2" min="8" max="18" type="energy"> <!-- Sorc and Druid Staff -->
+		<vocation name="None" />
+	</wand>
 	<wand id="25421" level="65" mana="17" min="65" max="95" type="energy"> <!-- Ferumbras' Staff (Failed) -->
 		<vocation name="Sorcerer" />
 	</wand>
