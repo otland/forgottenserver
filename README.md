@@ -21,3 +21,7 @@ We use the [issue tracker on GitHub](https://github.com/nekiro/forgottenserver-1
 
 Pull requests are always welcome, if you feel like you can make this repository better, don't think twice, submit a pull request. I will happily review it!
 Also one last note, please use english everywhere, in issues, pull requests even in the code, so we don't have problems with understanding ourselves.
+
+## Like my work?  
+[Buy](https://nekiro.best/donate) me a coffee (or pizza). Thanks!
+
