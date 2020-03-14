@@ -247,7 +247,7 @@ ReturnValue Events::eventCreatureOnTargetCombat(Creature* creature, Creature* ta
 	return returnValue;
 }
 
-void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string words, SpeakClasses type, Position pos)
+void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type, const Position& pos)
 {
 	// Creature:onHear(speaker, words, type, pos)
 	if (info.creatureOnHear == -1) {
