@@ -661,11 +661,12 @@ uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&)
 
 ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	if (player->isItemAbilityEnabled(slot)) {
-		return RETURNVALUE_NOERROR;
-	}
-
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
+		const VocEquipMap& vocEquipMap = moveEvent->getVocEquipMap();
+		if (!vocEquipMap.empty() && vocEquipMap.find(player->getVocationId()) == vocEquipMap.end()) {
+			return RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION;
+		}
+
 		if (player->getLevel() < moveEvent->getReqLevel()) {
 			return RETURNVALUE_NOTENOUGHLEVEL;
 		}
@@ -677,14 +678,13 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 		if (moveEvent->isPremium() && !player->isPremium()) {
 			return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
 		}
-
-		const VocEquipMap& vocEquipMap = moveEvent->getVocEquipMap();
-		if (!vocEquipMap.empty() && vocEquipMap.find(player->getVocationId()) == vocEquipMap.end()) {
-			return RETURNVALUE_CANNOTBEDRESSED;
-		}
 	}
 
 	if (isCheck) {
+		return RETURNVALUE_NOERROR;
+	}
+
+	if (player->isItemAbilityEnabled(slot)) {
 		return RETURNVALUE_NOERROR;
 	}
 

@@ -1217,6 +1217,9 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE:
 			return "You can not trade this house.";
 
+		case RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION:
+			return "You don't have the required profession.";
+
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
