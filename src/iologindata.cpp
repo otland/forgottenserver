@@ -22,9 +22,12 @@
 #include "iologindata.h"
 #include "configmanager.h"
 #include "game.h"
+#include "prey.h"
+
 
 extern ConfigManager g_config;
 extern Game g_game;
+extern Prey g_prey;
 
 Account IOLoginData::loadAccount(uint32_t accno)
 {
@@ -233,7 +236,7 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = " << id;
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `bonusrerollcount`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = " << id;
 	return loadPlayer(player, db.storeQuery(query.str()));
 }
 
@@ -241,7 +244,7 @@ bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = " << db.escapeString(name);
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `bonusrerollcount`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = " << db.escapeString(name);
 	return loadPlayer(player, db.storeQuery(query.str()));
 }
 
@@ -344,6 +347,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->defaultOutfit.lookAddons = result->getNumber<uint16_t>("lookaddons");
 	player->currentOutfit = player->defaultOutfit;
 	player->direction = static_cast<Direction> (result->getNumber<uint16_t>("direction"));
+	player->setBonusRerollCount(result->getNumber<int64_t>("bonusrerollcount"));
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		const time_t skullSeconds = result->getNumber<time_t>("skulltime") - time(nullptr);
@@ -559,10 +563,133 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		} while (result->next());
 	}
 
+	//load preydata
+	query.str(std::string());
+	query << "SELECT `data` FROM `player_preydata` WHERE `player_id` = " << player->getGUID();
+	if ((result = db.storeQuery(query.str()))) {
+		std::vector<PreyData> preyData(3);
+		loadPreyData(preyData, result);
+		player->setPreyData(std::move(preyData));
+	} else {
+		player->generatePreyData();
+	}
+
+	//send resource
+	player->sendResourceData(RESOURCETYPE_BANK_GOLD, player->getBankBalance());
+	player->sendResourceData(RESOURCETYPE_INVENTORY_GOLD, player->getMoney());
+	player->sendResourceData(RESOURCETYPE_PREY_BONUS_REROLLS, player->getBonusRerollCount());
+
 	player->updateBaseSpeed();
 	player->updateInventoryWeight();
 	player->updateItemsLight(true);
 	return true;
+}
+
+void IOLoginData::readPreyList(std::vector<std::string>& preyList, PropStream& propStream)
+{
+	uint8_t preyListSize;
+	if (propStream.read<uint8_t>(preyListSize) && preyListSize > 0) {
+		for (uint8_t i = 0; i < preyListSize; i++) {
+			std::string preyName;
+			if (propStream.readString(preyName)) {
+				preyList.emplace_back(std::move(preyName));
+			}
+		}
+	}
+}
+
+void IOLoginData::loadPreyData(std::vector<PreyData>& preyData, DBResult_ptr result)
+{
+	/*
+	{
+		PREYSLOTID
+			LASTFREEREROLLTIME
+			STATEID
+				-> (0x00 locked)     : PREYLIST SIZE: 0x00
+				-> (0x01 inactive)   : PREYLIST SIZE: 0x00
+				-> (0x02 active)     : STRING PREYNAME, TIMELEFT, BONUSTYPE, BONUSVALUE, BONUSGRADE, PREYLIST SIZE: Variable, PREYLIST
+				-> (0x03 selection)  : PREYLIST SIZE: Variable, PREYLIST
+				-> (0X04 selectionc) : BONUSTYPE, BONUSVALUE, BONUSGRADE, PREYLIST SIZE: Variable, PREYLIST
+	} x 3
+	*/
+
+	unsigned long dataSize;
+	const char* data = result->getStream("data", dataSize);
+
+	PropStream propStream;
+	propStream.init(data, dataSize);
+
+	PreyState stateId = STATE_LOCKED;
+	uint64_t lastReroll = 0;
+	uint8_t preySlotId;
+
+	for (int blocks = 0; blocks < PREY_SLOTCOUNT; blocks++) {
+		if (propStream.read<uint8_t>(preySlotId) && preySlotId < PREY_SLOTCOUNT) {
+			PreyData& currentPrey = preyData[preySlotId];
+			
+			if (!propStream.read<uint64_t>(lastReroll)) {
+				continue;
+			}
+
+			if (propStream.read<PreyState>(stateId)) {
+
+				std::string preyMonster;
+				uint16_t timeLeft = 0;
+				BonusType bonusType = BONUS_NONE;
+				uint16_t bonusValue = 0;
+				uint8_t bonusGrade = 0;
+
+				if (stateId == STATE_ACTIVE) {
+					if (!propStream.readString(preyMonster)) {
+						continue;
+					} else if (!propStream.read<uint16_t>(timeLeft)) {
+						continue;
+					} else if (!propStream.read<BonusType>(bonusType)) {
+						continue;
+					} else if (!propStream.read<uint16_t>(bonusValue)) {
+						continue;
+					} else if (!propStream.read<uint8_t>(bonusGrade)) {
+						continue;
+					}
+				} else if (stateId == STATE_SELECTION_CHANGE_MONSTER) {
+					if (!propStream.read<BonusType>(bonusType)) {
+						continue;
+					} else if (!propStream.read<uint16_t>(bonusValue)) {
+						continue;
+					} else if (!propStream.read<uint8_t>(bonusGrade)) {
+						continue;
+					}
+				}
+
+				currentPrey.state = stateId;
+				currentPrey.preyMonster = preyMonster;
+				currentPrey.timeLeft = timeLeft;
+				currentPrey.bonusType = bonusType;
+				currentPrey.bonusGrade = bonusGrade;
+				currentPrey.bonusValue = bonusValue;
+				currentPrey.lastReroll = lastReroll;
+				readPreyList(currentPrey.preyList, propStream);
+			}
+		}
+	}
+}
+
+bool IOLoginData::savePreyData(const Player* player)
+{
+	Database& db = Database::getInstance();
+
+	PropWriteStream propWriteStream;
+	player->serializePreyData(propWriteStream);
+
+	size_t dataSize;
+	const char* data = propWriteStream.getStream(dataSize);
+
+	std::ostringstream ss;
+	DBInsert preyQuery("INSERT INTO `player_preydata` (`player_id`, `data`) VALUES ");
+
+	ss << player->getGUID() << ',' << db.escapeBlob(data, dataSize);
+	preyQuery.addRow(ss);
+	return preyQuery.execute();
 }
 
 bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream)
@@ -717,6 +844,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 	query << "`lastlogout` = " << player->getLastLogout() << ',';
 	query << "`balance` = " << player->bankBalance << ',';
+	query << "`bonusrerollcount` = " << player->getBonusRerollCount() << ',';
 	query << "`offlinetraining_time` = " << player->getOfflineTrainingTime() / 1000 << ',';
 	query << "`offlinetraining_skill` = " << player->getOfflineTrainingSkill() << ',';
 	query << "`stamina` = " << player->getStaminaMinutes() << ',';
@@ -832,6 +960,16 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!saveItems(player, itemList, inboxQuery, propWriteStream)) {
+		return false;
+	}
+
+	query.str(std::string());
+	query << "DELETE FROM `player_preydata` WHERE `player_id` = " << player->getGUID();
+	if (!db.executeQuery(query.str())) {
+		return false;
+	}
+
+	if (!savePreyData(player)) {
 		return false;
 	}
 

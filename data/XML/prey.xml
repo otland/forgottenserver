@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prey>
+	<configs>
+		<config timeToFreeReroll="1200" /> <!-- minutes -->
+		<config preyDuration="7200" /> <!-- seconds -->
+		<config rerollPricePerLevel	="50" />
+	</configs>
+	<bonuses>
+		<bonus type="damageReduction" initialValue="12" step="2" />
+		<bonus type="damageBoost" initialValue="7" step="2" />
+		<bonus type="bonusExperience" initialValue="13" step="3" />
+		<bonus type="improvedLoot" initialValue="13" step="3" />
+	</bonuses>
+	<monsters>
+		<monster name="Magma Crawler" />
+		<monster name="Energy Elemental" />
+		<monster name="Purple Butterfly" />
+		<monster name="Infected Weeper" />
+		<monster name="Feversleep" />
+		<monster name="Brimstone Bug" />
+		<monster name="Tomb Servant" />
+		<monster name="Mimic" />
+		<monster name="Ashmunrah" />
+		<monster name="Draken Spellweaver" />
+		<monster name="Shadow Hound" />
+		<monster name="Slim" />
+		<monster name="Yeti" />
+		<monster name="Blistering Fire Elemental" />
+		<monster name="Terror Bird" />
+		<monster name="Axeitus Headbanger" />
+		<monster name="Thul" />
+		<monster name="Minotaur" />
+		<monster name="Ice Witch" />
+		<monster name="Squirrel" />
+		<monster name="Rottie the Rotworm" />
+		<monster name="Manta Ray" />
+		<monster name="Lizard Sentinel" />
+		<monster name="Plaguesmith" />
+		<monster name="Lizard Legionnaire" />
+		<monster name="Battlemaster Zunzu" />
+		<monster name="Orshabaal" />
+		<monster name="Hacker" />
+		<monster name="Hellgorak" />
+		<monster name="Humorless Fungus" />
+		<monster name="Kraknaknork" />
+		<monster name="Kraknaknork Demon" />
+		<monster name="Askarak Prince" />
+		<monster name="Rocky" />
+		<monster name="The Imperor" />
+		<monster name="Charged Energy Elemental" />
+		<monster name="The Many" />
+		<monster name="The Old Widow" />
+		<monster name="Crustacea Gigantica" />
+		<monster name="Witch" />
+		<monster name="Pirate Skeleton" />
+		<monster name="Grave Guard" />
+		<monster name="Azerus" />
+		<monster name="Lion" />
+		<monster name="Lethal Lissy" />
+		<monster name="Deepling Tyrant" />
+		<monster name="Bones" />
+		<monster name="Starving Wolf" />
+		<monster name="Fallen Mooh'tah Master Ghar" />
+		<monster name="Chizzoron the Distorter" />
+	</monsters>
+</prey>
