@@ -14241,7 +14241,8 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 		int i = 0;
 		for (auto& voc : spell->getVocMap()) {
 			std::string name = g_vocations.getVocation(voc.first)->getVocName();
-			setField(L, std::to_string(++i).c_str(), name);
+			pushString(L, name);
+			lua_rawseti(L, -2, ++i);
 		}
 		setMetatable(L, -1, "Spell");
 	} else {
