@@ -680,6 +680,10 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 						continue;
 					}
 
+					if (!item->isPickupable()) {
+						return RETURNVALUE_NOTENOUGHROOM;
+					}
+
 					if (!iiType.hasHeight || iiType.pickupable || iiType.isBed()) {
 						return RETURNVALUE_NOTENOUGHROOM;
 					}
