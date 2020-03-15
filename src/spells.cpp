@@ -849,7 +849,7 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t healthCost
 			player->addManaSpent(healthCost);
 		}
 		if (player->getAccountType() >= ACCOUNT_TYPE_GAMEMASTER && player->isAccessPlayer()) {
-			if (player->getHealth() >= static_cast<int32_t>(getHealthCost(player))) {
+			if (player->getHealth() >= static_cast<int32_t>(healthCost)) {
 				player->changeHealth(-static_cast<int32_t>(healthCost));
 			}
 		} else {
