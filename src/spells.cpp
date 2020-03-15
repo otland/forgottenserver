@@ -848,11 +848,7 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t healthCost
 		if (g_config.getBoolean(ConfigManager::HEALTH_COST_SPELLS_TRAIN_MAGIC)) {
 			player->addManaSpent(healthCost);
 		}
-		if (player->getAccountType() >= ACCOUNT_TYPE_GAMEMASTER && player->isAccessPlayer()) {
-			if (player->getHealth() >= static_cast<int32_t>(healthCost)) {
-				player->changeHealth(-static_cast<int32_t>(healthCost));
-			}
-		} else {
+		if (player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && !player->isAccessPlayer()) {
 			player->changeHealth(-static_cast<int32_t>(healthCost));
 		}
 	}
