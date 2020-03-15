@@ -646,7 +646,7 @@ bool Spell::playerSpellCheck(Player* player) const
 	}
 
 	if (player->getHealth() < static_cast<int32_t>(getHealthCost(player)) && !player->hasFlag(PlayerFlag_HasInfiniteMana)) {
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHMANA);
+		player->sendCancelMessage(RETURNVALUE_NOTENOUGHHEALTH);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
