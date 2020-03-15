@@ -927,6 +927,28 @@ void Tile::addThing(int32_t, Thing* thing)
 						}
 					}
 				}
+			} else if (itemType.stackable) {
+				// find suitable item to stack with
+				for (ItemVector::const_iterator it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
+					Item* toItem = *it;
+					if (item->equals(toItem) && toItem->getItemCount() != 100) {
+						uint32_t n = std::min<uint32_t>(100 - (*it)->getItemCount(), item->getItemCount());
+						updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
+
+						int32_t newCount = item->getItemCount() - n;
+						if (newCount > 0) {
+							Item* newItem = item->clone();
+							newItem->setItemCount(newCount);
+							addThing(newItem);
+						}
+
+						int32_t updateItemIndex = getThingIndex(toItem);
+						if (updateItemIndex != -1) {
+							postAddNotification(toItem, this, updateItemIndex);
+						}
+						return;
+					}
+				}
 			}
 
 			items = makeItemList();
