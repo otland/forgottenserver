@@ -3372,7 +3372,7 @@ void Player::onCombatRemoveCondition(Condition* condition)
 	}
 }
 
-void Player::onAttackedCreature(Creature* target)
+void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true */)
 {
 	Creature::onAttackedCreature(target);
 
@@ -3381,7 +3381,9 @@ void Player::onAttackedCreature(Creature* target)
 	}
 
 	if (target == this) {
-		addInFightTicks();
+		if (addFightTicks) {
+			addInFightTicks();
+		}
 		return;
 	}
 
@@ -3395,6 +3397,8 @@ void Player::onAttackedCreature(Creature* target)
 			pzLocked = true;
 			sendIcons();
 		}
+
+		targetPlayer->addInFightTicks();
 
 		if (getSkull() == SKULL_NONE && getSkullClient(targetPlayer) == SKULL_YELLOW) {
 			addAttacked(targetPlayer);
@@ -3419,7 +3423,9 @@ void Player::onAttackedCreature(Creature* target)
 		}
 	}
 
-	addInFightTicks();
+	if (addFightTicks) {
+		addInFightTicks();
+	}
 }
 
 void Player::onAttacked()
