@@ -1,4 +1,4 @@
-local holes = {468, 481, 483}
+local holes = {468, 481, 483, 7932, 23712}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local tile = Tile(toPosition)
 	if not tile then

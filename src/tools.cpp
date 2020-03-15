@@ -995,6 +995,8 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_FLUIDTYPE;
 	} else if (str == "doorid") {
 		return ITEM_ATTRIBUTE_DOORID;
+	} else if (str == "wrapid") {
+		return ITEM_ATTRIBUTE_WRAPID;
 	}
 	return ITEM_ATTRIBUTE_NONE;
 }
@@ -1216,6 +1218,9 @@ const char* getReturnMessage(ReturnValue value)
 
 		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE:
 			return "You can not trade this house.";
+
+		case RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION:
+			return "You don't have the required profession.";
 
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
