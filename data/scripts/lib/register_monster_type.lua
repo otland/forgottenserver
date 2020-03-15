@@ -280,7 +280,12 @@ registerMonsterType.attacks = function(mtype, mask)
 						spell:setConditionDuration(attack.duration)
 					end
 					if attack.speed then
-						spell:setConditionSpeedChange(attack.speed)
+						if type(attack.speed) ~= "table" then
+							spell:setConditionSpeedChange(attack.speed)
+						end
+					end
+					if attack.speed.min and attack.speed.max then
+						spell:setConditionSpeedChange(attack.speed.min, attack.speed.max)
 					end
 					if attack.target then
 						spell:setNeedTarget(attack.target)
@@ -394,7 +399,12 @@ registerMonsterType.defenses = function(mtype, mask)
 							spell:setConditionDuration(defense.duration)
 						end
 						if defense.speed then
-							spell:setConditionSpeedChange(defense.speed)
+							if type(defense.speed) ~= "table" then
+								spell:setConditionSpeedChange(defense.speed)
+							end
+						end
+						if defense.speed.min and defense.speed.max then
+							spell:setConditionSpeedChange(defense.speed.min, defense.speed.max)
 						end
 						if defense.target then
 							spell:setNeedTarget(defense.target)
