@@ -845,7 +845,9 @@ void Spell::postCastSpell(Player* player, uint32_t manaCost, uint32_t healthCost
 	}
 
 	if (healthCost > 0) {
-		player->addManaSpent(healthCost);
+		if (g_config.getBoolean(ConfigManager::HEALTH_COST_SPELLS_TRAIN_MAGIC)) {
+			player->addManaSpent(healthCost);
+		}
 		player->changeHealth(-static_cast<int32_t>(healthCost));
 	}
 

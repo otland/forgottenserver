@@ -14199,13 +14199,11 @@ int LuaScriptInterface::luaSpellHealth(lua_State* L)
 	if (spell) {
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getHealth());
-		}
-		else {
+		} else {
 			spell->setHealth(getNumber<uint32_t>(L, 2));
 			pushBoolean(L, true);
 		}
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
@@ -14235,13 +14233,11 @@ int LuaScriptInterface::luaSpellHealthPercent(lua_State* L)
 	if (spell) {
 		if (lua_gettop(L) == 1) {
 			lua_pushnumber(L, spell->getHealthPercent());
-		}
-		else {
+		} else {
 			spell->setHealthPercent(getNumber<uint32_t>(L, 2));
 			pushBoolean(L, true);
 		}
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
