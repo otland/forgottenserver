@@ -204,6 +204,17 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 		return false;
 	}
 
+	if (startup) {
+		//No need to send out events to the surrounding since there is no one out there to listen!
+		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
+			return false;
+		}
+	} else {
+		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
+			return false;
+		}
+	}
+
 	Monster* monster = monster_ptr.release();
 	monster->setDirection(dir);
 	monster->setSpawn(this);
