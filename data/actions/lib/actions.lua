@@ -5,7 +5,7 @@ local jungleGrass = { -- grass destroyable by machete
 	[19433] = 19431
 }
 local groundIds = {354, 355} -- pick usable ground
-local holeId = { -- usable rope spots
+local holeId = { -- usable rope holes, for rope spots see global.lua
 	294, 369, 370, 383, 392, 408, 409, 410, 427, 428, 429, 430, 462, 469, 470, 482,
 	484, 485, 489, 924, 1369, 3135, 3136, 4835, 4837, 7933, 7938, 8170, 8249, 8250,
 	8251, 8252, 8254, 8255, 8256, 8276, 8277, 8279, 8281, 8284, 8285, 8286, 8323,
