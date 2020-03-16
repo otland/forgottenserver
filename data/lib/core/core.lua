@@ -1,3 +1,4 @@
+dofile('data/lib/core/achievements.lua')
 dofile('data/lib/core/combat.lua')
 dofile('data/lib/core/constants.lua')
 dofile('data/lib/core/container.lua')

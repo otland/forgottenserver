@@ -7,8 +7,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		position:sendMagicEffect(CONST_ME_EXPLOSIONAREA)
 		player:say("Ouch! Rather place it on the ground next time.", TALKTYPE_MONSTER_SAY)
 		player:addHealth(-10)
+		player:addAchievementProgress("Rocket in Pocket", 3)
 	end
-
+	player:addAchievementProgress("Fireworks in the Sky", 250)
 	item:remove()
 	return true
 end
