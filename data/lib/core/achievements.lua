@@ -18,14 +18,11 @@ Functions:
 	isAchievementSecret(achievement_id/name)
 	Player:getAchievementPoints()
 	Player:addAchievementProgress()
+Storages:
+	PlayerStorageKeys.achievementsBase -- base storage
+	PlayerStorageKeys.achievementsCounter -- this storage will be used to save the process to obtain the certain achievement
+	(Ex: this storage + the id of achievement 'Allowance Collector' to save how many piggy banks has been broken
 ]]
-
--- base storage
-ACHIEVEMENTS_BASE = 300000 
-
--- this storage will be used to save the process to obtain the certain achievement
--- (Ex: this storage + the id of achievement 'Allowance Collector' to save how many piggy banks has been broken
-ACHIEVEMENTS_ACTION_BASE = 20000 	
 
 achievements =
 {
@@ -474,7 +471,7 @@ function getAchievementInfoById(id)
 		if k == id then
 			local t = {}
 			t.id = k
-			t.actionStorage = ACHIEVEMENTS_ACTION_BASE + k
+			t.actionStorage = PlayerStorageKeys.achievementsCounter + k
 			for inf, it in pairs(v) do
 				t[inf] = it
 			end
@@ -489,7 +486,7 @@ function getAchievementInfoByName(name)
 		if v.name:lower() == name:lower() then
 			local t = {}
 			t.id = k
-			t.actionStorage = ACHIEVEMENTS_ACTION_BASE + k
+			t.actionStorage = PlayerStorageKeys.achievementsCounter + k
 			for inf, it in pairs(v) do
 				t[inf] = it
 			end
@@ -544,7 +541,7 @@ function Player.hasAchievement(self, ach)
 	end
 	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
 
-	return self:getStorageValue(ACHIEVEMENTS_BASE + achievement.id) > 0
+	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
 end
 
 function Player.getAchievements(self)
@@ -567,7 +564,7 @@ function Player.addAchievement(self, ach, denyMsg)
 	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
 
 	if not self:hasAchievement(achievement.id) then
-		self:setStorageValue(ACHIEVEMENTS_BASE + achievement.id, 1)
+		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, 1)
 		if not denyMsg then
 			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. achievement.name .. "\".")
 		end
@@ -585,7 +582,7 @@ function Player.removeAchievement(self, ach)
 	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
 
 	if self:hasAchievement(achievement.id) then
-		self:setStorageValue(ACHIEVEMENTS_BASE + achievement.id, -1)
+		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, -1)
 	end
 	return true
 end
@@ -647,7 +644,7 @@ function Player.addAchievementProgress(self, ach, value)
 		return true
 	end
 
-	local storage = ACHIEVEMENTS_ACTION_BASE + achievement.id
+	local storage = PlayerStorageKeys.achievementsCounter + achievement.id
 	local progress = self:getStorageValue(storage)
 	if progress < value then
 		self:setStorageValue(storage, math.max(1, progress) + 1)
