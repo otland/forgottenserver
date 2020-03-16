@@ -247,9 +247,9 @@ ReturnValue Events::eventCreatureOnTargetCombat(Creature* creature, Creature* ta
 	return returnValue;
 }
 
-void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type, const Position& pos)
+void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type)
 {
-	// Creature:onHear(speaker, words, type, pos)
+	// Creature:onHear(speaker, words, type)
 	if (info.creatureOnHear == -1) {
 		return;
 	}
@@ -273,9 +273,8 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 
 	LuaScriptInterface::pushString(L, words);
 	lua_pushnumber(L, type);
-	LuaScriptInterface::pushPosition(L, pos);
 
-	scriptInterface.callVoidFunction(5);
+	scriptInterface.callVoidFunction(4);
 }
 
 // Party

@@ -3600,7 +3600,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	for (Creature* spectator : spectators) {
 		spectator->onCreatureSay(creature, type, text);
 		if (creature != spectator) {
-			g_events->eventCreatureOnHear(spectator, creature, text, type, creature->getPosition());
+			g_events->eventCreatureOnHear(spectator, creature, text, type);
 		}
 	}
 	return true;
