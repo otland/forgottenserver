@@ -3,9 +3,9 @@
 	<group id="1" name="player" access="0" maxdepotitems="0" maxvipentries="0" />
 	<group id="2" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200" >
 		<flags>
-			<flag cannotusecombat="1" />
+			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
-			<flag cannotattackmonster="1" />
+			<flag cannotattackmonster="0" />
 			<flag cannotbeattacked="1" />
 			<flag canconvinceall="1" />
 			<flag cansummonall="1" />
@@ -29,7 +29,7 @@
 			<flag notgainskill="1" />
 			<flag setmaxspeed="1" />
 			<flag specialvip="1" />
-			<flag notgenerateloot="1" />
+			<flag notgenerateloot="0" />
 			<flag cantalkredchannelanonymous="1" />
 			<flag ignoreprotectionzone="1" />
 			<flag ignorespellcheck="1" />
@@ -40,9 +40,9 @@
 	</group>
 	<group id="3" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
 		<flags>
-			<flag cannotusecombat="1" />
+			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
-			<flag cannotattackmonster="1" />
+			<flag cannotattackmonster="0" />
 			<flag cannotbeattacked="1" />
 			<flag canconvinceall="1" />
 			<flag cansummonall="1" />
@@ -68,7 +68,7 @@
 			<flag notgainskill="1" />
 			<flag setmaxspeed="1" />
 			<flag specialvip="1" />
-			<flag notgenerateloot="1" />
+			<flag notgenerateloot="0" />
 			<flag cantalkredchannelanonymous="1" />
 			<flag ignoreprotectionzone="1" />
 			<flag ignorespellcheck="1" />
