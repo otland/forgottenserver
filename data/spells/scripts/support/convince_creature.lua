@@ -32,6 +32,5 @@ function onCastSpell(creature, variant, isHotkey)
 	creature:addManaSpent(manaCost)
 	creature:addSummon(target)
 	creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
-	target:getPosition():notifySummonAppear(target)
 	return true
 end
