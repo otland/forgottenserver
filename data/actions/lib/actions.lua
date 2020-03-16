@@ -1,4 +1,4 @@
-local wildGrowth = { 1499, 11099 } -- wild growth destroyable by machete
+local wildGrowth = {1499, 11099} -- wild growth destroyable by machete
 local jungleGrass = { -- grass destroyable by machete
 	[2782] = 2781,
 	[3985] = 3984,
@@ -222,9 +222,8 @@ function onUseKitchenKnife(player, item, fromPosition, target, toPosition, isHot
 		target:remove(1)
 		player:addItem(6279, 1)
 		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
-	else
-		return false
+		return true
 	end
 
-	return true
+	return false
 end
