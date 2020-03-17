@@ -516,10 +516,6 @@
 	<monster name="Goblin Leader" file="Goblins/goblin_leader.xml" />
 	<monster name="Goblin Scavenger" file="Goblins/goblin_scavenger.xml" />
 
-	<!-- Hyaenids -->
-	<monster name="Ghoulish Hyaena" file="Hyaenids/ghoulish_hyaena.xml" />
-	<monster name="Hyaena" file="Hyaenids/hyaena.xml" />
-
 	<!-- Hydro-Elementals -->
 	<monster name="Massive Water Elemental" file="Hydro-Elementals/massive_water_elemental.xml" />
 	<monster name="Roaring Water Elemental" file="Hydro-Elementals/roaring_water_elemental.xml" />
@@ -607,10 +603,6 @@
 	<!-- Monks -->
 	<monster name="Dark Monk" file="Monks/dark_monk.xml" />
 	<monster name="Monk" file="Monks/monk.xml" />
-
-	<!-- Mustelids -->
-	<monster name="Badger" file="Mustelids/badger.xml" />
-	<monster name="Skunk" file="Mustelids/skunk.xml" />
 
 	<!-- Mutated -->
 	<monster name="Mutated Human" file="Mutated/mutated_human.xml" />
