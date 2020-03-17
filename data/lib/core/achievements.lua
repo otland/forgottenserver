@@ -527,7 +527,10 @@ function isAchievementSecret(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
-	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
+	if not achievement then
+		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+		return false
+	end
 
 	return achievement.secret
 end
@@ -539,7 +542,10 @@ function Player.hasAchievement(self, ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
-	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
+	if not achievement then
+		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+		return false
+	end
 
 	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
 end
@@ -561,7 +567,10 @@ function Player.addAchievement(self, ach, denyMsg)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
-	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
+	if not achievement then
+		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+		return false
+	end
 
 	if not self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, 1)
@@ -579,7 +588,10 @@ function Player.removeAchievement(self, ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
-	if not achievement then return print("[!] -> Invalid achievement \"" .. ach .. "\".") and false end
+	if not achievement then
+		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+		return false
+	end
 
 	if self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, -1)
