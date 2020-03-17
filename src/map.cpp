@@ -24,6 +24,7 @@
 #include "combat.h"
 #include "creature.h"
 #include "game.h"
+#include "monster.h"
 
 extern Game g_game;
 
@@ -848,7 +849,8 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 
 	if (const MagicField* field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType))) {
+		const Monster* monster = creature.getMonster();
+		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType)) && (monster && !monster->canWalkOnFieldType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
 		}
 	}
