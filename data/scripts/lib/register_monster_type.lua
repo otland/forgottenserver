@@ -159,9 +159,12 @@ registerMonsterType.events = function(mtype, mask)
 end
 registerMonsterType.loot = function(mtype, mask)
 	if type(mask.loot) == "table" then
+		local lootError = false
 		for _, loot in pairs(mask.loot) do
 			local parent = Loot()
-			parent:setId(loot.id)
+			if not parent:setId(loot.id) then
+				lootError = true
+			end
 			if loot.chance then
 				parent:setChance(loot.chance)
 			end
@@ -180,7 +183,9 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.child then
 				for _, children in pairs(loot.child) do
 					local child = Loot()
-					child:setId(children.id)
+					if not child:setId(children.id) then
+						lootError = true
+					end
 					if children.chance then
 						child:setChance(children.chance)
 					end
@@ -200,6 +205,9 @@ registerMonsterType.loot = function(mtype, mask)
 				end
 			end
 			mtype:addLoot(parent)
+		end
+		if lootError then
+			print("[Warning - end] Monster: \"".. mtype:name() .. "\" loot could not correctly be load.")
 		end
 	end
 end
