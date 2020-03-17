@@ -13124,15 +13124,13 @@ int LuaScriptInterface::luaLootSetId(lua_State* L)
 				return 1;
 			}
 
-			uint32_t id = ids.first->second;
-
 			if (std::next(ids.first) != ids.second) {
 				std::cout << "[Warning - Loot:setId] Non-unique loot item \"" << name << "\". " << std::endl;
 				pushBoolean(L, false);
 				return 1;
 			}
 
-			loot->lootBlock.id = id;
+			loot->lootBlock.id = ids.first->second;
 		}
 		pushBoolean(L, true);
 	} else {
