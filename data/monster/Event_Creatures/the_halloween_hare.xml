@@ -36,7 +36,7 @@
 			<attribute key="areaEffect" value="poff" />
 		</attack>
 	</attacks>
-	<defenses armor="5" defense="5"/>
+	<defenses armor="5" defense="5" />
 	<immunities>
 		<immunity physical="1" />
 		<immunity energy="1" />
