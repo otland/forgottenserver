@@ -18860,7 +18860,7 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="10512" article="a" name="sneaky stabber of eliteness">
-		<attribute key="description" value="This nifty gadget can be used for many vital and less vital purposes. If it's not jammed, that is." />
+		<attribute key="description" value="Argh! It's jammed right now! Should hopefully work again within a short time though." />
 		<attribute key="weight" value="300" />
 		<attribute key="decayTo" value="10511" />
 		<attribute key="duration" value="60" />
@@ -18870,7 +18870,7 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="10514" article="a" name="squeezing gear of girlpower">
-		<attribute key="description" value="This nifty gadget can be used for many vital and less vital purposes. If it's not jammed, that is." />
+		<attribute key="description" value="Argh! It's jammed right now! Should hopefully work again within a short time though." />
 		<attribute key="weight" value="300" />
 		<attribute key="decayTo" value="10513" />
 		<attribute key="duration" value="60" />
@@ -18880,7 +18880,7 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="10516" article="a" name="whacking driller of fate">
-		<attribute key="description" value="This nifty gadget can be used for many vital and less vital purposes. If it's not jammed, that is." />
+		<attribute key="description" value="Argh! It's jammed right now! Should hopefully work again within a short time though." />
 		<attribute key="weight" value="300" />
 		<attribute key="decayTo" value="10515" />
 		<attribute key="duration" value="60" />
