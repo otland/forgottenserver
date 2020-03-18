@@ -85,7 +85,7 @@
 		<item name="great mana potion" countmax="3" chance="15150" />
 		<item name="great health potion" countmax="2" chance="15150" />
 		<item name="magma legs" chance="1270" />
-		<item id="9810" chance="4500" /><!-- rusty armor -->
+		<item id="9810" chance="4500" /><!-- rusty armor (rare) -->
 		<item name="gold ingot" chance="1500" />
 		<item name="hellhound slobber" chance="18000" />
 	</loot>

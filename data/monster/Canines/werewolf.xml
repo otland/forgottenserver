@@ -81,7 +81,7 @@
 		<item name="berserk potion" chance="1200" />
 		<item name="strong health potion" chance="5000" />
 		<item name="ultimate health potion" chance="2400" />
-		<item id="9809" chance="210" /><!-- rusty armor -->
+		<item id="9809" chance="210" /><!-- rusty armor (semi-rare) -->
 		<item name="werewolf fur" chance="10650" />
 	</loot>
 </monster>
