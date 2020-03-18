@@ -82,6 +82,6 @@
 		<item name="bright sword" chance="20000" />
 		<item name="warlord sword" chance="6000" />
 		<item name="patched boots" chance="7000" />
-		<item id="6530" chance="16000" /><!-- Worn Soft Boots -->
+		<item id="6530" chance="16000" /><!-- worn soft boots -->
 	</loot>
 </monster>
