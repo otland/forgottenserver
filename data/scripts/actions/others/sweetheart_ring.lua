@@ -1,8 +1,7 @@
 local sweetheartRing = Action()
 
 function sweetheartRing.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local ringItem = player:getSlotItem(CONST_SLOT_RING)
-	if item == ringItem then
+	if item == player:getSlotItem(CONST_SLOT_RING) then
 		player:getPosition():sendMagicEffect(CONST_ME_HEARTS)
 		return true
 	end
