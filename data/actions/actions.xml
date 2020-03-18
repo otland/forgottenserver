@@ -22,6 +22,11 @@
 	<action itemid="2120" script="tools/rope.lua" />
 	<action itemid="7731" script="tools/rope.lua" />
 	<action itemid="2553" script="tools/pick.lua" />
+	<action itemid="2416" script="tools/crowbar.lua" />
+	<action itemid="2566" script="tools/kitchen_knife.lua" />
+	<action itemid="10511" script="tools/toolgear.lua" />
+	<action itemid="10513" script="tools/toolgear.lua" />
+	<action itemid="10515" script="tools/toolgear.lua" />
 
 	<!-- Transform and decay -->
 	<action fromid="1479" toid="1480" script="other/decayto.lua" />
@@ -147,7 +152,8 @@
 	<action itemid="3678" script="other/teleport.lua" />
 	<action itemid="5543" script="other/teleport.lua" />
 	<action fromid="2376" toid="2404" script="other/destroy.lua" />
-	<action fromid="2406" toid="2419" script="other/destroy.lua" />
+	<action fromid="2406" toid="2415" script="other/destroy.lua" />
+	<action fromid="2417" toid="2419" script="other/destroy.lua" />
 	<action fromid="2421" toid="2441" script="other/destroy.lua" />
 	<action fromid="2443" toid="2453" script="other/destroy.lua" />
 	<action fromid="2005" toid="2009" script="other/fluids.lua" />

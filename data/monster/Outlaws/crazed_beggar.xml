@@ -53,6 +53,6 @@
 		<item name="sling herb" chance="420" />
 		<item name="rum flask" chance="420" />
 		<item id="6092" chance="300" /><!-- very noble-looking watch -->
-		<item id="9808" chance="80" /><!-- rusty armor -->
+		<item id="9808" chance="80" /><!-- rusty armor (common) -->
 	</loot>
 </monster>
