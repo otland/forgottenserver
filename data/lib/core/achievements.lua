@@ -508,7 +508,7 @@ end
 
 function getPublicAchievements()
 	local t = {}
-	for k, v in pairs(achivements) do
+	for k, v in pairs(achievements) do
 		if not v.secret then
 			t[#t + 1] = k
 		end
