@@ -84,6 +84,6 @@
 		<item name="demonic essence" chance="9033" />
 		<item name="onyx arrow" countmax="4" chance="7692" />
 		<item name="great health potion" chance="10000" />
-		<item id="9810" chance="540" /><!-- rusty armor-->
+		<item id="9810" chance="540" /><!-- rusty armor (rare) -->
 	</loot>
 </monster>

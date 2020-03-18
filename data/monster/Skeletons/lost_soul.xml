@@ -67,8 +67,8 @@
 		<item name="titan axe" chance="1000" />
 		<item name="great mana potion" countmax="2" chance="14200" />
 		<item name="great health potion" countmax="2" chance="8800" />
-		<item id="9809" chance="3500" /><!-- rusty armor -->
-		<item id="9810" chance="3500" /><!-- rusty armor -->
+		<item id="9809" chance="3500" /><!-- rusty armor (semi-rare) -->
+		<item id="9810" chance="3500" /><!-- rusty armor (rare) -->
 		<item name="unholy bone" chance="33010" />
 	</loot>
 </monster>
