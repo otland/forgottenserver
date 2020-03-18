@@ -78,7 +78,7 @@
 		<item name="lightning boots" chance="90" />
 		<item name="nail" countmax="5" chance="5260" />
 		<item name="ultimate health potion" chance="10080" />
-		<item id="9809" chance="260" /><!-- rusty armor-->
+		<item id="9809" chance="260" /><!-- rusty armor (semi-rare) -->
 		<item id="9978" chance="1080" /><!-- crystal pedestal -->
 		<item name="crystal of power" chance="130" />
 	</loot>

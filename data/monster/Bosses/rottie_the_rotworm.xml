@@ -22,7 +22,7 @@
 	<defenses armor="8" defense="11" />
 	<loot>
 		<item name="gold coin" countmax="30" chance="6230" />
-		<item id="2376" chance="3335" />
+		<item id="2376" chance="3335" /><!-- sword -->
 		<item name="mace" chance="3335" />
 		<item name="katana" chance="900" />
 		<item name="legion helmet" chance="1250" />
