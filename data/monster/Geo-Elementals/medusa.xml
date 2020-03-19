@@ -84,7 +84,7 @@
 		<item name="terra legs" chance="420" />
 		<item name="terra amulet" chance="4060" />
 		<item name="ultimate health potion" countmax="2" chance="9290" />
-		<item id="9810" chance="500" /><!-- rusty armor -->
+		<item id="9810" chance="500" /><!-- rusty armor (rare) -->
 		<item name="sacred tree amulet" chance="850" />
 		<item name="strand of medusa hair" chance="9900" />
 	</loot>

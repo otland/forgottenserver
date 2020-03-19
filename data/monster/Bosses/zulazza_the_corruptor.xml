@@ -72,7 +72,7 @@
 		<item name="ultimate health potion" chance="10500" />
 		<item name="earthborn titan armor" chance="5500" />
 		<item name="paladin armor" chance="5500" />
-		<item id="9808" chance="50500" /><!-- rusty armor -->
+		<item id="9808" chance="50500" /><!-- rusty armor (common) -->
 		<item name="gold ingot" countmax="4" chance="33000" />
 		<item name="dragon scale boots" chance="5500" />
 	</loot>

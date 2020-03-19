@@ -101,7 +101,7 @@
 		<item name="ring of the sky" chance="3500" />
 		<item id="2124" chance="5500" />
 		<item name="crystal necklace" chance="1500" />
-		<item name="ancient amulet" chance="3500" />
+		<item id="2142" chance="3500" /><!-- ancient amulet -->
 		<item name="white pearl" countmax="15" chance="12500" />
 		<item name="black pearl" countmax="15" chance="15000" />
 		<item name="small diamond" countmax="5" chance="9500" />
