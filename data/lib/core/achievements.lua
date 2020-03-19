@@ -469,13 +469,13 @@ ACHIEVEMENT_LAST = #achievements
 function getAchievementInfoById(id)
 	for k, v in pairs(achievements) do
 		if k == id then
-			local t = {}
-			t.id = k
-			t.actionStorage = PlayerStorageKeys.achievementsCounter + k
+			local targetAchievement = {}
+			targetAchievement.id = k
+			targetAchievement.actionStorage = PlayerStorageKeys.achievementsCounter + k
 			for inf, it in pairs(v) do
-				t[inf] = it
+				targetAchievement[inf] = it
 			end
-			return t
+			return targetAchievement
 		end
 	end
 	return false
@@ -484,36 +484,36 @@ end
 function getAchievementInfoByName(name)
 	for k, v in pairs(achievements) do
 		if v.name:lower() == name:lower() then
-			local t = {}
-			t.id = k
-			t.actionStorage = PlayerStorageKeys.achievementsCounter + k
+			local targetAchievement = {}
+			targetAchievement.id = k
+			targetAchievement.actionStorage = PlayerStorageKeys.achievementsCounter + k
 			for inf, it in pairs(v) do
-				t[inf] = it
+				targetAchievement[inf] = it
 			end
-			return t
+			return targetAchievement
 		end
 	end
 	return false
 end
 
 function getSecretAchievements()
-	local t = {}
+	local targetAchievement = {}
 	for k, v in pairs(achievements) do
 		if v.secret then
-			t[#t + 1] = k
+			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-	return t
+	return targetAchievement
 end
 
 function getPublicAchievements()
-	local t = {}
+	local targetAchievement = {}
 	for k, v in pairs(achievements) do
 		if not v.secret then
-			t[#t + 1] = k
+			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-	return t
+	return targetAchievement
 end
 
 function getAchievements()
@@ -551,16 +551,16 @@ function Player.hasAchievement(self, ach)
 end
 
 function Player.getAchievements(self)
-	local t = {}
+	local targetAchievement = {}
 	for k = 1, #achievements do
 		if self:hasAchievement(k) then
-			t[#t + 1] = k
+			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-	return t
+	return targetAchievement
 end
 
-function Player.addAchievement(self, ach, denyMsg)
+function Player.addAchievement(self, ach, showMsg)
 	local achievement
 	if tonumber(ach) ~= nil then
 		achievement = getAchievementInfoById(ach)
@@ -574,7 +574,7 @@ function Player.addAchievement(self, ach, denyMsg)
 
 	if not self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, 1)
-		if not denyMsg then
+		if not showMsg then
 			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. achievement.name .. "\".")
 		end
 	end
@@ -599,9 +599,9 @@ function Player.removeAchievement(self, ach)
 	return true
 end
 
-function Player.addAllAchievements(self, denyMsg)
+function Player.addAllAchievements(self, showMsg)
 	for i = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
-		self:addAchievement(i, denyMsg)
+		self:addAchievement(i, showMsg)
 	end
 	return true
 end
@@ -616,23 +616,23 @@ function Player.removeAllAchievements(self)
 end
 
 function Player.getSecretAchievements(self)
-	local t = {}
+	local targetAchievement = {}
 	for k, v in pairs(achievements) do
 		if self:hasAchievement(k) and v.secret then
-			t[#t + 1] = k
+			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-	return t
+	return targetAchievement
 end
 
 function Player.getPublicAchievements(self)
-	local t = {}
+	local targetAchievement = {}
 	for k, v in pairs(achievements) do
 		if self:hasAchievement(k) and not v.secret then
-			t[#t + 1] = k
+			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-	return t
+	return targetAchievement
 end
 
 function Player.getAchievementPoints(self)
@@ -640,9 +640,9 @@ function Player.getAchievementPoints(self)
 	local list = self:getAchievements()
 	if #list > 0 then -- has achievements
 		for i = 1, #list do
-			local a = getAchievementInfoById(list[i])
-			if a.points > 0 then -- avoid achievements with unknow points
-				points = points + a.points
+			local targetAchievement = getAchievementInfoById(list[i])
+			if targetAchievement.points > 0 then -- avoid achievements with unknow points
+				points = points + targetAchievement.points
 			end
 		end
 	end
