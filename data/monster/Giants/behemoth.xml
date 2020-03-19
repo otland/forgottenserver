@@ -47,7 +47,8 @@
 		<voice sentence="Crush the intruders!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="200" chance="99700" />
+		<item name="gold coin" countmax="100" chance="59000" />
+		<item name="gold coin" countmax="100" chance="40000" />
 		<item name="platinum coin" countmax="5" chance="60000" />
 		<item name="meat" countmax="6" chance="30000" />
 		<item name="battle stone" chance="14000" />

@@ -82,7 +82,9 @@
 	</voices>
 	<loot>
 		<item name="Ferumbras' hat" chance="100000" />
-		<item name="gold coin" countmax="270" chance="97000" />
+		<item name="gold coin" countmax="100" chance="97000" />
+		<item name="gold coin" countmax="100" chance="97000" />
+		<item name="gold coin" countmax="70" chance="33000" />
 		<item name="gold ingot" countmax="2" chance="75000" />
 		<item name="great shield" chance="26000" />
 		<item name="spellbook of lost souls" chance="26000" />
