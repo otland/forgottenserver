@@ -378,7 +378,7 @@
 	<movevent event="Equip" itemid="25429" slot="feet" level="100" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="25429" slot="feet" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="26132" slot="feet" level="150" function="onEquipItem" />
-	<movevent event="DeEquip" itemid="26132" slot="feet" function="onDeEquipItem" />	
+	<movevent event="DeEquip" itemid="26132" slot="feet" function="onDeEquipItem" />
 
 	<!-- Amulets -->
 	<movevent event="Equip" itemid="2161" slot="necklace" function="onEquipItem" />

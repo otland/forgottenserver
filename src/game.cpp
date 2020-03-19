@@ -99,7 +99,7 @@ void Game::setWorldType(WorldType_t type)
 void Game::setGameState(GameState_t newState)
 {
 	if (gameState == GAME_STATE_SHUTDOWN) {
-		return;    //this cannot be stopped
+		return; //this cannot be stopped
 	}
 
 	if (gameState == newState) {
@@ -1067,7 +1067,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	//destination is the same as the source?
 	if (item == toItem) {
-		return RETURNVALUE_NOERROR;    //silently ignore move
+		return RETURNVALUE_NOERROR; //silently ignore move
 	}
 
 	//check if we can add this item
@@ -4875,7 +4875,7 @@ void Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
 	if (playerId == invitedId) {
 		return;
 	}
-	
+
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
