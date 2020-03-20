@@ -100,7 +100,7 @@
 	<action itemid="24843" script="other/food.lua" />
 	<action itemid="26191" script="other/food.lua" />
 	<action itemid="26201" script="other/food.lua" />
-	
+
 	<!-- Other -->
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="486" script="other/snowheap.lua" />
