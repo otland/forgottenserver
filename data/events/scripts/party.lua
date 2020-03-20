@@ -1,18 +1,19 @@
 function Party:onJoin(player)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONJON) and EventCallback(EVENT_CALLBACK_ONJON, self, player) or true
 end
 
 function Party:onLeave(player)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONLEAVE) and EventCallback(EVENT_CALLBACK_ONLEAVE, self, player) or true
 end
 
 function Party:onDisband()
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONDISBAND) and EventCallback(EVENT_CALLBACK_ONDISBAND, self) or true
 end
 
 function Party:onShareExperience(exp)
 	local sharedExperienceMultiplier = 1.20 --20%
 	local vocationsIds = {}
+	local rawExp = exp
 
 	local vocationId = self:getLeader():getVocation():getBase():getId()
 	if vocationId ~= VOCATION_NONE then
@@ -31,5 +32,6 @@ function Party:onShareExperience(exp)
 		sharedExperienceMultiplier = 1.0 + ((size * (5 * (size - 1) + 10)) / 100)
 	end
 
-	return (exp * sharedExperienceMultiplier) / (#self:getMembers() + 1)
+	exp = (exp * sharedExperienceMultiplier) / (#self:getMembers() + 1)
+	return hasEventCallback(EVENT_CALLBACK_ONSHAREEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONSHAREEXPERIENCE, self, exp, rawExp) or exp
 end

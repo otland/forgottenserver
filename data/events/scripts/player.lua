@@ -1,5 +1,5 @@
 function Player:onBrowseField(position)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) and EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position) or true
 end
 
 function Player:onLook(thing, position, distance)
@@ -52,7 +52,8 @@ function Player:onLook(thing, position, distance)
 			end
 		end
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOK) and EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance, description) or description
+	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
 end
 
 function Player:onLookInBattleList(creature, distance)
@@ -74,131 +75,50 @@ function Player:onLookInBattleList(creature, distance)
 			description = string.format("%s\nIP: %s", description, Game.convertIpToString(creature:getIp()))
 		end
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST) and EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance, description) or description
+	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
 end
 
 function Player:onLookInTrade(partner, item, distance)
-	self:sendTextMessage(MESSAGE_INFO_DESCR, "You see " .. item:getDescription(distance))
+	local description = "You see " .. item:getDescription(distance)
+	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) and EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description) or description
+	self:sendTextMessage(MESSAGE_INFO_DESCR, EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description))
 end
 
 function Player:onLookInShop(itemType, count)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) and EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count) or true
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if toPosition.x ~= CONTAINER_POSITION then
-		return true
-	end
-
-	if item:getTopParent() == self and bit.band(toPosition.y, 0x40) == 0 then
-		local itemType, moveItem = ItemType(item:getId())
-		if bit.band(itemType:getSlotPosition(), SLOTP_TWO_HAND) ~= 0 and toPosition.y == CONST_SLOT_LEFT then
-			moveItem = self:getSlotItem(CONST_SLOT_RIGHT)
-		elseif itemType:getWeaponType() == WEAPON_SHIELD and toPosition.y == CONST_SLOT_RIGHT then
-			moveItem = self:getSlotItem(CONST_SLOT_LEFT)
-			if moveItem and bit.band(ItemType(moveItem:getId()):getSlotPosition(), SLOTP_TWO_HAND) == 0 then
-				return true
-			end
-		end
-
-		if moveItem then
-			local parent = item:getParent()
-			if parent:isContainer() and parent:getSize() == parent:getCapacity() then
-				self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM))
-				return false
-			else
-				return moveItem:moveTo(parent)
-			end
-		end
-	end
-
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) and EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder) or true
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	EventCallback(EVENT_CALLBACK_ONITEMMOVED, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 end
 
 function Player:onMoveCreature(creature, fromPosition, toPosition)
-	return true
-end
-
-local function hasPendingReport(name, targetName, reportType)
-	local f = io.open(string.format("data/reports/players/%s-%s-%d.txt", name, targetName, reportType), "r")
-	if f then
-		io.close(f)
-		return true
-	else
-		return false
-	end
+	return hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) and EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition) or true
 end
 
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
-	local name = self:getName()
-	if hasPendingReport(name, targetName, reportType) then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your report is being processed.")
-		return
-	end
-
-	local file = io.open(string.format("data/reports/players/%s-%s-%d.txt", name, targetName, reportType), "a")
-	if not file then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")
-		return
-	end
-
-	io.output(file)
-	io.write("------------------------------\n")
-	io.write("Reported by: " .. name .. "\n")
-	io.write("Target: " .. targetName .. "\n")
-	io.write("Type: " .. reportType .. "\n")
-	io.write("Reason: " .. reportReason .. "\n")
-	io.write("Comment: " .. comment .. "\n")
-	if reportType ~= REPORT_TYPE_BOT then
-		io.write("Translation: " .. translation .. "\n")
-	end
-	io.write("------------------------------\n")
-	io.close(file)
-	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Thank you for reporting %s. Your report will be processed by %s team as soon as possible.", targetName, configManager.getString(configKeys.SERVER_NAME)))
-	return
+	EventCallback(EVENT_CALLBACK_ONREPORTRULEVIOLATION, self, targetName, reportType, reportReason, comment, translation)
 end
 
 function Player:onReportBug(message, position, category)
-	if self:getAccountType() == ACCOUNT_TYPE_NORMAL then
-		return false
-	end
-
-	local name = self:getName()
-	local file = io.open("data/reports/bugs/" .. name .. " report.txt", "a")
-
-	if not file then
-		self:sendTextMessage(MESSAGE_EVENT_DEFAULT, "There was an error when processing your report, please contact a gamemaster.")
-		return true
-	end
-
-	io.output(file)
-	io.write("------------------------------\n")
-	io.write("Name: " .. name)
-	if category == BUG_CATEGORY_MAP then
-		io.write(" [Map position: " .. position.x .. ", " .. position.y .. ", " .. position.z .. "]")
-	end
-	local playerPosition = self:getPosition()
-	io.write(" [Player Position: " .. playerPosition.x .. ", " .. playerPosition.y .. ", " .. playerPosition.z .. "]\n")
-	io.write("Comment: " .. message .. "\n")
-	io.close(file)
-
-	self:sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your report has been sent to " .. configManager.getString(configKeys.SERVER_NAME) .. ".")
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) and EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category) or true
 end
 
 function Player:onTurn(direction)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONTURN) and EventCallback(EVENT_CALLBACK_ONTURN, self, direction) or true
 end
 
 function Player:onTradeRequest(target, item)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) and EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item) or true
 end
 
 function Player:onTradeAccept(target, item, targetItem)
-	return true
+	return hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) and EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem) or true
 end
 
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
@@ -259,49 +179,33 @@ function Player:onGainExperience(source, exp, rawExp)
 		end
 	end
 
-	return exp
+	return hasEventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE, self, source, exp, rawExp) or exp
 end
 
 function Player:onLoseExperience(exp)
-	return exp
+	return hasEventCallback(EVENT_CALLBACK_ONLOSEEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONLOSEEXPERIENCE, self, exp) or exp
 end
 
 function Player:onGainSkillTries(skill, tries)
 	if APPLY_SKILL_MULTIPLIER == false then
-		return tries
+		return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 	end
 
 	if skill == SKILL_MAGLEVEL then
-		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
+		tries = tries * configManager.getNumber(configKeys.RATE_MAGIC)
+		return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 	end
-	return tries * configManager.getNumber(configKeys.RATE_SKILL)
+	tries = tries * configManager.getNumber(configKeys.RATE_SKILL)
+	return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 end
 
 function Player:onWrapItem(item, position)
-	local topCylinder = item:getTopParent()
-	if not topCylinder then
-		return
-	end
-
-	local tile = Tile(topCylinder:getPosition())
-	if not tile then
-		return
-	end
-
-	if not tile:getHouse() then
-		self:sendCancelMessage("You can only wrap and unwrap this item inside a house.")
-		return
-	end
-
-	local wrapId = item:getAttribute("wrapid")
-	if wrapId == 0 then
-		return
-	end
-
-	local oldId = item:getId()
-	item:remove(1)
-	local item = tile:addItem(wrapId)
-	if item then
-		item:setAttribute("wrapid", oldId)
+	if not hasEventCallback(EVENT_CALLBACK_ONWRAPITEM) or EventCallback(EVENT_CALLBACK_ONWRAPITEM, self, item, position) then
+		local oldId = item:getId()
+		item:remove(1)
+		local item = tile:addItem(wrapId)
+		if item then
+			item:setAttribute("wrapid", oldId)
+		end
 	end
 end
