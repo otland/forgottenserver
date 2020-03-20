@@ -1116,7 +1116,6 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					if (modifier == 0) {
 						continue;
 					}
-					std::cout << modifier << std::endl;
 
 					if (tmp) {
 						tmp = false;
