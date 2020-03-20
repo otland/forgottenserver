@@ -1238,7 +1238,8 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 
 	target = g_game.getCreatureByID(var.number);
 	if (getPzLock() && target) {
-		player->onAttackedCreature(target->getCreature());
+		// NOTICE: we are passing false there, because player will get inFightTicks from Spell:postCastSpell
+		player->onAttackedCreature(target->getCreature(), false);
 	}
 
 	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
