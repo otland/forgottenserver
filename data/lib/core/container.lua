@@ -4,7 +4,7 @@ end
 
 function Container.createLootItem(self, item)
 	if self:getEmptySlots() == 0 then
-        return true
+		return true
 	end
 
 	local itemCount = 0

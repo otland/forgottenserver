@@ -1,7 +1,7 @@
 -- recursive dump function
 function dumpLevel(input, level)
 	local indent = ''
-	
+
 	for i = 1, level do
 		indent = indent .. '    '
 	end
@@ -9,16 +9,16 @@ function dumpLevel(input, level)
 	if type(input) == 'table' then
 		local str = '{ \n'
 		local lines = {}
-		
+
 		for k, v in pairs(input) do
-			if type(k) ~= 'number' then 
-				k = '"' .. k .. '"' 
+			if type(k) ~= 'number' then
+				k = '"' .. k .. '"'
 			end
-			
-			if type(v) == 'string' then 
-				v = '"' .. v .. '"' 
+
+			if type(v) == 'string' then
+				v = '"' .. v .. '"'
 			end
-			
+
 			table.insert(lines, indent .. '    [' .. k .. '] = ' .. dumpLevel(v, level + 1))
 		end
 		return str .. table.concat(lines, ',\n') .. '\n' .. indent .. '}'

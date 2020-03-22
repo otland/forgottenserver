@@ -630,7 +630,7 @@ class Item : virtual public Thing
 		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
 			getAttributes()->setCustomAttribute(key, value);
 		}
-		
+
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
 			return getAttributes()->getCustomAttribute(key);
 		}
@@ -1012,7 +1012,7 @@ class Item : virtual public Thing
 	protected:
 		Cylinder* parent = nullptr;
 
-		uint16_t id;  // the same id as in ItemType
+		uint16_t id; // the same id as in ItemType
 
 	private:
 		std::string getWeightDescription(uint32_t weight) const;

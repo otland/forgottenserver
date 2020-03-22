@@ -50,11 +50,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="FCHHHHH" />
-		<voice sentence="HISSSS" />
+		<voice sentence="FCHHHHH" yell="1" />
+		<voice sentence="HISSSS" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="246" chance="87000" />
+		<item name="gold coin" countmax="100" chance="34000" />
+		<item name="gold coin" countmax="100" chance="34000" />	
+		<item name="gold coin" countmax="46" chance="20000" />
 		<item name="ham" countmax="4" chance="60000" />
 		<item name="platinum coin" countmax="3" chance="49000" />
 		<item name="hydra head" chance="10120" />
