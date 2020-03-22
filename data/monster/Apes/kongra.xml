@@ -40,7 +40,7 @@
 		<voice sentence="Huaauaauaauaa!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="61" chance="87000" />
+		<item name="gold coin" countmax="55" chance="90000" />
 		<item name="banana" countmax="13" chance="30000" />
 		<item name="kongra's shoulderpad" chance="9500" />
 		<item name="protection amulet" chance="1000" />

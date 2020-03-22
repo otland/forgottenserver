@@ -1031,7 +1031,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		if (bed) {
 			bed->wakeUp(this);
 		}
-		
+
 		Account account = IOLoginData::loadAccount(accountNumber);
 		Game::updatePremium(account);
 
