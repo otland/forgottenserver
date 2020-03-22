@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="General Murius" nameDescription="General Murius" race="blood" experience="450" speed="240">
 	<health now="550" max="550" />
-	<look type="611" corpse="23462"/>
+	<look type="611" corpse="23462" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
@@ -50,12 +50,12 @@
 		<item name="platinum coin" countmax="3" chance="92000" />
 		<item name="brass armor" chance="76000" />
 		<item name="double axe" chance="76000" />
-		<item name="piercing bolt" countmax="7" chance="40000"/>
+		<item name="piercing bolt" countmax="7" chance="40000" />
 		<item name="meat" countmax="2" chance="30000" />
 		<item name="battle shield" chance="23000" />
 		<item name="chain legs" chance="23000" />
-		<item id="7401" chance="23000"/><!-- minotaur trophy -->
-		<item name="power bolt" countmax="7" chance="23000"/>
+		<item id="7401" chance="23000" /><!-- minotaur trophy -->
+		<item name="power bolt" countmax="7" chance="23000" />
 		<item name="dwarven helmet" chance="100" />
 	</loot>
 </monster>

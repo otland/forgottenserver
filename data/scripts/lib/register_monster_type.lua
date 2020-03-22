@@ -129,7 +129,7 @@ registerMonsterType.changeTarget = function(mtype, mask)
 end
 registerMonsterType.voices = function(mtype, mask)
 	if type(mask.voices) == "table" then
-		local interval; local chance;
+		local interval, chance
 		if mask.voices.interval then
 			interval = mask.voices.interval
 		end
