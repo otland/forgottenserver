@@ -1,13 +1,13 @@
 function Party:onJoin(player)
-	return hasEventCallback(EVENT_CALLBACK_ONJON) and EventCallback(EVENT_CALLBACK_ONJON, self, player) or true
+	if hasEventCallback(EVENT_CALLBACK_ONJON) then return EventCallback(EVENT_CALLBACK_ONJON, self, player) else return true end
 end
 
 function Party:onLeave(player)
-	return hasEventCallback(EVENT_CALLBACK_ONLEAVE) and EventCallback(EVENT_CALLBACK_ONLEAVE, self, player) or true
+	if hasEventCallback(EVENT_CALLBACK_ONLEAVE) then return EventCallback(EVENT_CALLBACK_ONLEAVE, self, player) else return true end
 end
 
 function Party:onDisband()
-	return hasEventCallback(EVENT_CALLBACK_ONDISBAND) and EventCallback(EVENT_CALLBACK_ONDISBAND, self) or true
+	if hasEventCallback(EVENT_CALLBACK_ONDISBAND) then return EventCallback(EVENT_CALLBACK_ONDISBAND, self) else return true end
 end
 
 function Party:onShareExperience(exp)

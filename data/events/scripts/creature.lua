@@ -1,5 +1,5 @@
 function Creature:onChangeOutfit(outfit)
-	return hasEventCallback(EVENT_CALLBACK_ONCHANGEOUTFIT) and EventCallback(EVENT_CALLBACK_ONCHANGEOUTFIT, self, outfit) or true
+	if hasEventCallback(EVENT_CALLBACK_ONCHANGEOUTFIT) then return EventCallback(EVENT_CALLBACK_ONCHANGEOUTFIT, self, outfit) else return true end
 end
 
 function Creature:onAreaCombat(tile, isAggressive)

@@ -66,9 +66,12 @@ local callbacks = {
 	["onSpawn"] = EVENT_CALLBACK_ONSPAWN
 }
 
-EventCallbackData = {}
-for i = 1, EVENT_CALLBACK_LAST do
-	EventCallbackData[i] = {}
+-- can't be overwritten on /reload global/libs now
+if not EventCallbackData then
+	EventCallbackData = {}
+	for i = 1, EVENT_CALLBACK_LAST do
+		EventCallbackData[i] = {}
+	end
 end
 EventCallback = {}
 setmetatable(EventCallback,
@@ -90,10 +93,10 @@ setmetatable(EventCallback,
 	function(self, callbackType, ...)
 		local ret = true
 		for _, func in pairs(EventCallbackData[callbackType]) do
-			if ret == false then
-				break
-			end
 			ret = func(...)
+			if ret == false then
+				return false
+			end
 		end
 		if ret == nil then
 			ret = true

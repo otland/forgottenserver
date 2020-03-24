@@ -1,5 +1,5 @@
 function Player:onBrowseField(position)
-	return hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) and EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position) or true
+	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position) else return true end
 end
 
 function Player:onLook(thing, position, distance)
@@ -92,7 +92,7 @@ function Player:onLookInShop(itemType, count, description)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	return hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) and EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder) or true
+	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder) else return true end
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
@@ -100,7 +100,7 @@ function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder,
 end
 
 function Player:onMoveCreature(creature, fromPosition, toPosition)
-	return hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) and EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition) or true
+	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition) else return true end
 end
 
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
@@ -108,19 +108,19 @@ function Player:onReportRuleViolation(targetName, reportType, reportReason, comm
 end
 
 function Player:onReportBug(message, position, category)
-	return hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) and EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category) or true
+	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category) else return true end
 end
 
 function Player:onTurn(direction)
-	return hasEventCallback(EVENT_CALLBACK_ONTURN) and EventCallback(EVENT_CALLBACK_ONTURN, self, direction) or true
+	if hasEventCallback(EVENT_CALLBACK_ONTURN) then return EventCallback(EVENT_CALLBACK_ONTURN, self, direction) else return true end
 end
 
 function Player:onTradeRequest(target, item)
-	return hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) and EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item) or true
+	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item) else return true end
 end
 
 function Player:onTradeAccept(target, item, targetItem)
-	return hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) and EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem) or true
+	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem) else return true end
 end
 
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
@@ -201,8 +201,28 @@ function Player:onGainSkillTries(skill, tries)
 	return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 end
 
-function Player:onWrapItem(item, position)
-	if not hasEventCallback(EVENT_CALLBACK_ONWRAPITEM) or EventCallback(EVENT_CALLBACK_ONWRAPITEM, self, item, position) then
+function Player:onWrapItem(item)
+	local topCylinder = item:getTopParent()
+	if not topCylinder then
+		return
+	end
+
+	local tile = Tile(topCylinder:getPosition())
+	if not tile then
+		return
+	end
+
+	if not tile:getHouse() then
+		self:sendCancelMessage("You can only wrap and unwrap this item inside a house.")
+		return
+	end
+
+	local wrapId = item:getAttribute("wrapid")
+	if wrapId == 0 then
+		return
+	end
+
+	if not hasEventCallback(EVENT_CALLBACK_ONWRAPITEM) or EventCallback(EVENT_CALLBACK_ONWRAPITEM, self, item) then
 		local oldId = item:getId()
 		item:remove(1)
 		local item = tile:addItem(wrapId)
