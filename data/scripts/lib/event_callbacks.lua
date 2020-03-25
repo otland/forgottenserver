@@ -78,30 +78,42 @@ setmetatable(EventCallback,
 {
 	__index =
 	function(self)
-		return self
+		if isScriptsInterface() then
+			return self
+		else
+			return nil
+		end
 	end,
 
 	__newindex = 
 	function(self, key, value)
-		if self[key] then
-			local ecd = EventCallbackData
-			ecd[callbacks[key]][#ecd[callbacks[key]] + 1] = value
+		if isScriptsInterface() then
+			if self[key] then
+				local ecd = EventCallbackData
+				ecd[callbacks[key]][#ecd[callbacks[key]] + 1] = value
+			end
+		else
+			return nil
 		end
 	end,
 
 	__call =
 	function(self, callbackType, ...)
-		local ret = true
-		for _, func in pairs(EventCallbackData[callbackType]) do
-			ret = func(...)
-			if ret == false then
-				return false
+		if isScriptsInterface() then
+			local ret = true
+			for _, func in pairs(EventCallbackData[callbackType]) do
+				ret = func(...)
+				if ret == false then
+					return false
+				end
 			end
+			if ret == nil then
+				ret = true
+			end
+			return ret
+		else
+			return nil
 		end
-		if ret == nil then
-			ret = true
-		end
-		return ret
 	end
 })
 
