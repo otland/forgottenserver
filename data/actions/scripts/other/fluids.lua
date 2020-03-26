@@ -63,7 +63,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		local fluidSource = targetItemType and targetItemType:getFluidSource() or 0
 		if fluidSource ~= 0 then
 			item:transform(item:getId(), fluidSource)
-		elseif item.itemid == 5553 and table.contains(distillery, target.itemid) then
+		elseif table.contains(distillery, target.itemid) then
 			local tmp = distillery[target.itemid]
 			if tmp then
 				item:transform(item:getId(), 0)
