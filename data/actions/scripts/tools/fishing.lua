@@ -60,6 +60,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif targetId == 7236 then
 			target:transform(targetId + 1)
 			target:decay()
+			player:addAchievementProgress("Exquisite Taste", 250)
 
 			local rareChance = math.random(1, 100)
 			if rareChance == 1 then
@@ -73,6 +74,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				return true
 			end
 		end
+		player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 		player:addItem(2667, 1)
 	end
 	return true

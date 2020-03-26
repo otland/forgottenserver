@@ -8,6 +8,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif chance > 16 and chance <= 64 then
 			Game.createItem(math.random(7632,7633), 1, player:getPosition())
 			msg = "You found a beautiful pearl."
+			player:addAchievementProgress("Shell Seeker", 100)
 		else
 			msg = "Nothing is inside."
 		end

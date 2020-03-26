@@ -21,6 +21,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				end
 				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. '.')
 				player:setStorageValue(PlayerStorageKeys.annihilatorReward, 1)
+				player:addAchievement("Annihilator")
 			else
 				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 			end

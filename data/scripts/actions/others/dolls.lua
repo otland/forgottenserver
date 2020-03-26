@@ -126,6 +126,7 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:addHealth(-1)
 		end
 	elseif item.itemid == 5669 then
+		player:addAchievementProgress("Superstitious", 100)
 		fromPosition:sendMagicEffect(CONST_ME_MAGIC_RED)
 		item:transform(item.itemid + 1)
 		item:decay()
