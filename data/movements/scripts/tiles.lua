@@ -28,6 +28,7 @@ function onStepIn(creature, item, position, fromPosition)
 		if depotItem then
 			local depotItems = creature:getDepotChest(getDepotId(depotItem:getUniqueId()), true):getItemHoldingCount()
 			creature:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Your depot contains " .. depotItems .. " item" .. (depotItems > 1 and "s." or "."))
+			creature:addAchievementProgress("Safely Stored Away", 1000)
 			return true
 		end
 	end

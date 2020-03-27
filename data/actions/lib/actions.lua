@@ -92,6 +92,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:addItem(2145) -- 49% chance of getting small diamond
 		end
+		player:addAchievementProgress("Petrologist", 100)
 		target:getPosition():sendMagicEffect(CONST_ME_BLOCKHIT)
 		target:remove(1)
 		return true
