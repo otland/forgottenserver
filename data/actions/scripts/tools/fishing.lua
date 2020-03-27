@@ -55,6 +55,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 			if math.random(1, 100) >= 97 then
 				player:addItem(15405, 1)
+				player:addAchievement("Desert Fisher")
 				return true
 			end
 		elseif targetId == 7236 then
