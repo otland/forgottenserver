@@ -118,9 +118,13 @@ setmetatable(EventCallback,
 })
 
 function hasEventCallback(callbackType)
-	if #EventCallbackData[callbackType] == 0 then
-		return false
+	if isScriptsInterface() then
+		if #EventCallbackData[callbackType] == 0 then
+			return false
+		end
+		return true
+	else
+		return nil
 	end
-	return true
 end
 
