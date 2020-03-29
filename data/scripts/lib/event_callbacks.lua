@@ -99,32 +99,24 @@ setmetatable(EventCallback,
 
 	__call =
 	function(self, callbackType, ...)
-		if isScriptsInterface() then
-			local ret = true
-			for _, func in pairs(EventCallbackData[callbackType]) do
-				ret = func(...)
-				if ret == false then
-					return false
-				end
+		local ret = true
+		for _, func in pairs(EventCallbackData[callbackType]) do
+			ret = func(...)
+			if ret == false then
+				return false
 			end
-			if ret == nil then
-				ret = true
-			end
-			return ret
-		else
-			return nil
 		end
+		if ret == nil then
+			ret = true
+		end
+		return ret
 	end
 })
 
 function hasEventCallback(callbackType)
-	if isScriptsInterface() then
-		if #EventCallbackData[callbackType] == 0 then
-			return false
-		end
-		return true
-	else
-		return nil
+	if #EventCallbackData[callbackType] == 0 then
+		return false
 	end
+	return true
 end
 
