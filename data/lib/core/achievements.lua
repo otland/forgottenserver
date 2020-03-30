@@ -1,6 +1,4 @@
 --[[
-Achievements Lib Created By Eduardo Montilva (Darkhaos)
-
 Functions:
 	getAchievementInfoById(achievement_id)
 	getAchievementInfoByName(achievement_name)
