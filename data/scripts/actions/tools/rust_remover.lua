@@ -99,11 +99,21 @@ function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 	end
 
 	if not index then
-		if table.contains({9808, 9809, 9810}, target.itemid) then msg = "The armor was already damaged so badly that it broke when you tried to clean it." end
-		if table.contains({9811, 9812, 9813}, target.itemid) then msg = "The legs were already damaged so badly that they broke when you tried to clean them." end
-		if table.contains({9814, 9815, 9816}, target.itemid) then msg = "The shield was already damaged so badly that it broke when you tried to clean it." end
-		if table.contains({9817, 9818, 9819}, target.itemid) then msg = "The boots were already damaged so badly that they broke when you tried to clean them." end
-		if table.contains({9820, 9821, 9822}, target.itemid) then msg = "The helmet was already damaged so badly that it broke when you tried to clean it." end
+		if table.contains({9808, 9809, 9810}, target.itemid) then
+			msg = "The armor was already damaged so badly that it broke when you tried to clean it."
+		end
+		if table.contains({9811, 9812, 9813}, target.itemid) then
+			msg = "The legs were already damaged so badly that they broke when you tried to clean them."
+		end
+		if table.contains({9814, 9815, 9816}, target.itemid) then
+			msg = "The shield was already damaged so badly that it broke when you tried to clean it."
+		end
+		if table.contains({9817, 9818, 9819}, target.itemid) then
+			msg = "The boots were already damaged so badly that they broke when you tried to clean them."
+		end
+		if table.contains({9820, 9821, 9822}, target.itemid) then
+			msg = "The helmet was already damaged so badly that it broke when you tried to clean it."
+		end
 		player:say(msg, TALKTYPE_MONSTER_SAY)
 		target:getPosition():sendMagicEffect(CONST_ME_BLOCKHIT)
 		target:remove()
