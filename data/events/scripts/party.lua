@@ -1,5 +1,5 @@
 function Party:onJoin(player)
-	if hasEventCallback(EVENT_CALLBACK_ONJON) then return EventCallback(EVENT_CALLBACK_ONJON, self, player) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONJOIN) then return EventCallback(EVENT_CALLBACK_ONJOIN, self, player) else return true end
 end
 
 function Party:onLeave(player)
