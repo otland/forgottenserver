@@ -529,6 +529,7 @@ class LuaScriptInterface
 		static int luaGameGetMonsterCount(lua_State* L);
 		static int luaGameGetPlayerCount(lua_State* L);
 		static int luaGameGetNpcCount(lua_State* L);
+		static int luaGameGetMonsterTypes(lua_State* L);
 
 		static int luaGameGetTowns(lua_State* L);
 		static int luaGameGetHouses(lua_State* L);
@@ -732,7 +733,7 @@ class LuaScriptInterface
 		static int luaContainerAddItem(lua_State* L);
 		static int luaContainerAddItemEx(lua_State* L);
 		static int luaContainerGetCorpseOwner(lua_State* L);
-		
+
 		// Teleport
 		static int luaTeleportCreate(lua_State* L);
 

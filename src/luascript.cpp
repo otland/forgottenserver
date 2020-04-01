@@ -1816,6 +1816,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE)
 	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
 	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
+	registerEnum(RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION)
 
 	registerEnum(RELOAD_TYPE_ALL)
 	registerEnum(RELOAD_TYPE_ACTIONS)
@@ -1955,6 +1956,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getMonsterCount", LuaScriptInterface::luaGameGetMonsterCount);
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
+	registerMethod("Game", "getMonsterTypes", LuaScriptInterface::luaGameGetMonsterTypes);
 
 	registerMethod("Game", "getTowns", LuaScriptInterface::luaGameGetTowns);
 	registerMethod("Game", "getHouses", LuaScriptInterface::luaGameGetHouses);
@@ -4107,6 +4109,20 @@ int LuaScriptInterface::luaGameGetNpcCount(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGameGetMonsterTypes(lua_State* L)
+{
+	// Game.getMonsterTypes()
+	auto& type = g_monsters.monsters;
+	lua_createtable(L, type.size(), 0);
+
+	for (auto& mType : type) {
+		pushUserdata<MonsterType>(L, &mType.second);
+		setMetatable(L, -1, "MonsterType");
+		lua_setfield(L, -2, mType.first.c_str());
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaGameGetTowns(lua_State* L)
 {
 	// Game.getTowns()
@@ -4276,18 +4292,15 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	const Position& position = getPosition(L, 2);
 	bool extended = getBoolean(L, 3, false);
 	bool force = getBoolean(L, 4, false);
-	bool result = g_events->eventMonsterOnSpawn(monster, position, false, true);
-	if (result) {
+	if (g_events->eventMonsterOnSpawn(monster, position, false, true) || force) {
 		if (g_game.placeCreature(monster, position, extended, force)) {
 			pushUserdata<Monster>(L, monster);
 			setMetatable(L, -1, "Monster");
-		}
-		else {
+		} else {
 			delete monster;
 			lua_pushnil(L);
 		}
-	}
-	else {
+	} else {
 		delete monster;
 		lua_pushnil(L);
 	}
@@ -13098,13 +13111,26 @@ int LuaScriptInterface::luaLootSetId(lua_State* L)
 {
 	// loot:setId(id or name)
 	Loot* loot = getUserdata<Loot>(L, 1);
-	uint16_t item;
 	if (loot) {
 		if (isNumber(L, 2)) {
 			loot->lootBlock.id = getNumber<uint16_t>(L, 2);
 		} else {
-			item = Item::items.getItemIdByName(getString(L, 2));
-			loot->lootBlock.id = item;
+			auto name = getString(L, 2);
+			auto ids = Item::items.nameToItems.equal_range(asLowerCaseString(name));
+
+			if (ids.first == Item::items.nameToItems.cend()) {
+				std::cout << "[Warning - Loot:setId] Unknown loot item \"" << name << "\". " << std::endl;
+				pushBoolean(L, false);
+				return 1;
+			}
+
+			if (std::next(ids.first) != ids.second) {
+				std::cout << "[Warning - Loot:setId] Non-unique loot item \"" << name << "\". " << std::endl;
+				pushBoolean(L, false);
+				return 1;
+			}
+
+			loot->lootBlock.id = ids.first->second;
 		}
 		pushBoolean(L, true);
 	} else {
@@ -14235,7 +14261,8 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 		int i = 0;
 		for (auto& voc : spell->getVocMap()) {
 			std::string name = g_vocations.getVocation(voc.first)->getVocName();
-			setField(L, std::to_string(++i).c_str(), name);
+			pushString(L, name);
+			lua_rawseti(L, -2, ++i);
 		}
 		setMetatable(L, -1, "Spell");
 	} else {

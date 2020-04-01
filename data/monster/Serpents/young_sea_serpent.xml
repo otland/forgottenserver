@@ -61,8 +61,8 @@
 		<item name="battle hammer" chance="5000" />
 		<item name="strong health potion" chance="5000" />
 		<item name="strong mana potion" chance="4000" />
-		<item id="9808" chance="7940" /><!-- rusty armor -->
-		<item id="9809" chance="7940" /><!-- rusty armor -->
+		<item id="9808" chance="7940" /><!-- rusty armor (common) -->
+		<item id="9809" chance="7940" /><!-- rusty armor (semi-rare) -->
 		<item name="sea serpent scale" chance="5000" />
 	</loot>
 </monster>

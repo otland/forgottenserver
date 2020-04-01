@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="160" manacost="220">
+<monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="128" manacost="220">
 	<health now="15" max="15" />
 	<look type="111" corpse="6042" />
 	<targetchange interval="4000" chance="0" />
@@ -19,15 +19,15 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="1" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Gokgoooook" />
 		<voice sentence="Cluck Cluck" />
 	</voices>
 	<loot>
-		<item name="meat" countmax="2" chance="2120" />
-		<item id="2695" chance="950" /><!-- egg -->
-		<item name="worm" countmax="3" chance="10000" />
 		<item name="chicken feather" chance="20000" />
+		<item name="worm" chance="10000" />
+		<item name="meat" countmax="2" chance="2120" />
+		<item id="2695" chance="1000" /><!-- egg -->
 	</loot>
 </monster>

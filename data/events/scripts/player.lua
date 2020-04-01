@@ -277,6 +277,35 @@ function Player:onGainSkillTries(skill, tries)
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
 end
 
+function Player:onWrapItem(item, position)
+	local topCylinder = item:getTopParent()
+	if not topCylinder then
+		return
+	end
+
+	local tile = Tile(topCylinder:getPosition())
+	if not tile then
+		return
+	end
+
+	if not tile:getHouse() then
+		self:sendCancelMessage("You can only wrap and unwrap this item inside a house.")
+		return
+	end
+
+	local wrapId = item:getAttribute("wrapid")
+	if wrapId == 0 then
+		return
+	end
+
+	local oldId = item:getId()
+	item:remove(1)
+	local item = tile:addItem(wrapId)
+	if item then
+		item:setAttribute("wrapid", oldId)
+	end
+end
+
 function Player:onInventoryUpdate(item, slot, equip)
     itemAttributes(self, item, slot, equip)
 end

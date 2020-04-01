@@ -205,7 +205,7 @@ function Monster:onDropLoot(corpse)
 				corpse:getPosition():sendMagicEffect(rare_effect_id)
 			end
 		end
-		
+
 		if jewelDrops then
 			if jewelCorpse[corpse:getId()] then
 				if math.random(1,100) <= jewelChance then
@@ -219,7 +219,7 @@ function Monster:onDropLoot(corpse)
 				end
 			end
 		end
-		
+
 		if player then
 			local text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
 			local party = player:getParty()

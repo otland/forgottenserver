@@ -51,7 +51,7 @@
 	</summons>
 	<loot>
 		<item name="scarab amulet" chance="2063" />
-		<item name="ancient amulet" chance="2564" />
+		<item id="2142" chance="2564" /><!-- ancient amulet -->
 		<item name="gold coin" countmax="90" chance="100000" />
 		<item name="gold coin" countmax="90" chance="100000" />
 		<item name="small emerald" countmax="3" chance="4347" />
