@@ -196,12 +196,10 @@ bool Item::equals(const Item* otherItem) const
 		return false;
 	}
 
-	if (!attributes) {
-		return otherItem->attributes ? (otherItem->attributes->attributeBits == 0) : true;
-	}
-
 	const auto& otherAttributes = otherItem->attributes;
-	if (!otherAttributes) {
+	if (!attributes) {
+		return !otherAttributes || (otherAttributes->attributeBits == 0);
+	} else if (!otherAttributes) {
 		return (attributes->attributeBits == 0);
 	}
 
