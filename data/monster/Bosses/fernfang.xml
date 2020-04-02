@@ -23,7 +23,7 @@
 		</attack>
 		<attack name="holy" interval="2000" chance="80" range="7" min="-65" max="-180">
 			<attribute key="shootEffect" value="holy" />
-			<attribute key="areaEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
 		</attack>
 	</attacks>
 	<defenses armor="15" defense="10">
