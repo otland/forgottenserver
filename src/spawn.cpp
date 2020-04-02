@@ -209,10 +209,9 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
 			return false;
 		}
-		else {
-			if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
-				return false;
-			}
+	} else {
+		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
+			return false;
 		}
 	}
 
@@ -222,11 +221,9 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 	monster->setMasterPos(pos);
 	monster->incrementReferenceCounter();
 
-	if (result) {
-		spawnedMap.insert(spawned_pair(spawnId, monster));
-	}
+	spawnedMap.insert(spawned_pair(spawnId, monster));
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
-	return result;
+	return true;
 }
 
 void Spawn::startup()
