@@ -5,6 +5,7 @@ local jungleGrass = { -- grass destroyable by machete
 	[19433] = 19431
 }
 local groundIds = {354, 355} -- pick usable ground
+local sandIds = {231, 9059} -- desert sand
 local holeId = { -- usable rope holes, for rope spots see global.lua
 	294, 369, 370, 383, 392, 408, 409, 410, 427, 428, 429, 430, 462, 469, 470, 482,
 	484, 485, 489, 924, 1369, 3135, 3136, 4835, 4837, 7933, 7938, 8170, 8249, 8250,
@@ -106,15 +107,14 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if (ground.uid > 65535 or ground.actionid == 0) and not table.contains(groundIds, ground.itemid) then
-		return false
+	if table.contains(groundIds, ground.itemid) and (ground:hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) or ground:hasAttribute(ITEM_ATTRIBUTE_ACTIONID)) then
+		ground:transform(392)
+		ground:decay()
+
+		toPosition.z = toPosition.z + 1
+		tile:relocateTo(toPosition)
 	end
 
-	ground:transform(392)
-	ground:decay()
-
-	toPosition.z = toPosition.z + 1
-	tile:relocateTo(toPosition)
 	return true
 end
 
@@ -170,9 +170,12 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
-	elseif groundId == 231 then
+	elseif table.contains(sandIds, groundId) then
 		local randomValue = math.random(1, 100)
-		if randomValue == 1 then
+		if target.actionid == 100 and randomValue <= 20 then
+			ground:transform(489)
+			ground:decay()
+		elseif randomValue == 1 then
 			Game.createItem(2159, 1, toPosition)
 		elseif randomValue > 95 then
 			Game.createMonster("Scarab", toPosition)
