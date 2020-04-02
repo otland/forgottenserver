@@ -43,6 +43,6 @@
 		<voice sentence="I'll take your ears as a trophy!" />
 	</voices>
 	<loot>
-		<item name="Morik's helmet" chance="9999999" />
+		<item name="Morik's helmet" chance="100000" />
 	</loot>
 </monster>

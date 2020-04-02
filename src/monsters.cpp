@@ -1298,7 +1298,10 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 	}
 
 	if ((attr = node.attribute("chance")) || (attr = node.attribute("chance1"))) {
-		lootBlock.chance = std::min<int32_t>(MAX_LOOTCHANCE, pugi::cast<int32_t>(attr.value()));
+		int32_t chance = pugi::cast<int32_t>(attr.value());
+		if (chance > MAX_LOOTCHANCE) {
+			std::cout << "[Warning - Monsters::loadMonster] Invalid \"chance\" "<< chance <<" used for loot, the max is " << MAX_LOOTCHANCE << ". " << std::endl;
+		} lootBlock.chance = std::min<int32_t>(MAX_LOOTCHANCE, chance);
 	} else {
 		lootBlock.chance = MAX_LOOTCHANCE;
 	}
