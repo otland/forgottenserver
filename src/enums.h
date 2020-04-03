@@ -83,7 +83,6 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_FLUIDTYPE = 1 << 21,
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
 	ITEM_ATTRIBUTE_DECAYTO = 1 << 23,
-	ITEM_ATTRIBUTE_WRAPID = 1 << 24,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -478,13 +477,11 @@ struct CombatDamage
 	} primary, secondary;
 
 	CombatOrigin origin;
-	bool critical;
 	CombatDamage()
 	{
 		origin = ORIGIN_NONE;
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
-		critical = false;
 	}
 };
 
