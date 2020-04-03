@@ -71,6 +71,12 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	for (auto monsterNode : doc.child("monsters").children()) {
 		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
 		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
+		auto forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+		if (forceLoad) {
+			loadMonster(file, name, true);
+			continue;
+		}
+
 		if (reloading && monsters.find(name) != monsters.end()) {
 			loadMonster(file, name, true);
 		} else {
