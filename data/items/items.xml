@@ -21051,7 +21051,6 @@
 		<attribute key="speed" value="600" />
 		<attribute key="decayTo" value="5461" />
 		<attribute key="duration" value="21600" />
-		<attribute key="transformDeEquipTo" value="5461" />
 		<attribute key="showduration" value="1" />
 		<attribute key="showattributes" value="1" />
 	</item>
@@ -24530,6 +24529,12 @@
 		<attribute key="weight" value="4600" />
 		<attribute key="armor" value="8" />
 		<attribute key="slotType" value="head" />
+		<attribute key="suppressDrown" value="1" />
+		<attribute key="speed" value="600" />
+		<attribute key="decayTo" value="15408" />
+		<attribute key="duration" value="21600" />
+		<attribute key="showduration" value="1" />
+		<attribute key="showattributes" value="1" />
 	</item>
 	<item fromid="15820" toid="15823" name="counter" />
 	<item id="15985" article="a" name="slain pharaoh" />
