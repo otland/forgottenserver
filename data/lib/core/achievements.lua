@@ -5,10 +5,10 @@ Functions:
 	getSecretAchievements()
 	getPublicAchievements()
 	getAchievements()
-	Player:addAchievement(achievement_id/name[, showMsg])
+	Player:addAchievement(achievement_id/name[, hideMsg])
 	Player:removeAchievement(achievement_id/name)
 	Player:hasAchievement(achievement_id/name)
-	Player:addAllAchievements([showMsg])
+	Player:addAllAchievements([hideMsg])
 	Player:removeAllAchievements()
 	Player:getSecretAchievements()
 	Player:getPublicAchievements()
@@ -458,7 +458,6 @@ achievements =
 	-- 10.94
 	[397] = {name = "Ender of the End", grade = 2, points = 5, description = "You have entered the heart of destruction and valiantly defeated the world devourer. By your actions you have postponed the end of the world — at least for a while."},
 	[398] = {name = "Vortex Tamer", grade = 2, points = 5, description = "After a long journey and dedication you were favoured by fortune and have tamed all three elusive beasts of the vortex. Unless the Vortexion decides you're a tasty morsel you can enjoy your small stable of ravaging beasts from beyond."},
-
 }
 
 ACHIEVEMENT_FIRST = 1
@@ -558,7 +557,7 @@ function Player.getAchievements(self)
 	return targetAchievement
 end
 
-function Player.addAchievement(self, ach, showMsg)
+function Player.addAchievement(self, ach, hideMsg)
 	local achievement
 	if tonumber(ach) ~= nil then
 		achievement = getAchievementInfoById(ach)
@@ -572,7 +571,7 @@ function Player.addAchievement(self, ach, showMsg)
 
 	if not self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, 1)
-		if not showMsg then
+		if not hideMsg then
 			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. achievement.name .. "\".")
 		end
 	end
@@ -597,9 +596,9 @@ function Player.removeAchievement(self, ach)
 	return true
 end
 
-function Player.addAllAchievements(self, showMsg)
+function Player.addAllAchievements(self, hideMsg)
 	for i = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
-		self:addAchievement(i, showMsg)
+		self:addAchievement(i, hideMsg)
 	end
 	return true
 end
