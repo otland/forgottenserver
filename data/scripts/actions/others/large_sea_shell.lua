@@ -1,6 +1,6 @@
 local largeSeaShell = Action()
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+function largeSeaShell.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if player:getStorageValue(PlayerStorageKeys.delayLargeSeaShell) <= os.time() then
 		local chance = math.random(100)
 		local msg = ""

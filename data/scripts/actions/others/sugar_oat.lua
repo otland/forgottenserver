@@ -1,17 +1,17 @@
 local machines = {
-	[5469] = 5513,
-	[5470] = 5514
+	[5468] = 5512,
+	[5469] = 5514
 }
 
 local sugarOat = Action()
 
 function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetId = target.itemid
-	if targetId == 2694 then
+	if targetId == 3605 then
 		if toPosition.x ~= CONTAINER_POSITION then
-			Game.createItem(13939, 1, toPosition)
+			Game.createItem(12802, 1, toPosition)
 		else
-			player:addItem(13939, 1)
+			player:addItem(12802, 1)
 			toPosition = player:getPosition()
 		end
 		toPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
@@ -29,5 +29,5 @@ function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	return true
 end
 
-sugarOat:id(5467)
+sugarOat:id(5466)
 sugarOat:register()
