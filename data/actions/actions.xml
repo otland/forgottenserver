@@ -158,6 +158,7 @@
 	<action fromid="5303" toid="5304" script="other/windows.lua" />
 	<action fromid="5515" toid="5518" script="other/doors.lua" />
 	<action itemid="5543" script="other/teleport.lua" />
+	<action itemid="5553" script="other/fluids.lua" />
 	<action fromid="5732" toid="5737" script="other/doors.lua" />
 	<action fromid="5745" toid="5749" script="other/doors.lua" />
 	<action itemid="5786" script="other/music.lua" />
