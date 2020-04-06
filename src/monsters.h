@@ -24,7 +24,6 @@
 
 
 const uint32_t MAX_LOOTCHANCE = 100000;
-const uint32_t MAX_STATICWALK = 100;
 
 struct LootBlock {
 	uint16_t id;
