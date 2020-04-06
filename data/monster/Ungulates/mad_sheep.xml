@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mad Sheep" nameDescription="a mad sheep" race="blood" experience="0" speed="116">
+<monster name="Mad Sheep" nameDescription="a mad sheep" race="blood" experience="0" speed="272">
 	<health now="22" max="22" />
 	<look type="14" corpse="5991" />
 	<targetchange interval="4000" chance="0" />
@@ -23,10 +23,10 @@
 		<attack name="melee" interval="2000" min="0" max="-1" />
 	</attacks>
 	<defenses armor="1" defense="1">
-		<defense name="healing" interval="2000" chance="30" min="5" max="10">
+		<defense name="healing" interval="2000" chance="50" min="5" max="10">
 			<attribute key="areaEffect" value="hearts" />
 		</defense>
-		<defense name="speed" interval="2000" chance="15" speedchange="136" duration="5000" />
+		<defense name="speed" interval="2000" chance="15" speedchange="292" duration="5000" />
 	</defenses>
 	<elements>
 		<element firePercent="-1" />

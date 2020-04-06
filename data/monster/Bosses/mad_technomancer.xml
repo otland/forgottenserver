@@ -50,6 +50,6 @@
 		<voice sentence="Gentlemen, you can't fight here! This is the War Room!" />
 	</voices>
 	<loot>
-		<item name="technomancer beard" chance="1000000" />
+		<item name="technomancer beard" chance="100000" />
 	</loot>
 </monster>
