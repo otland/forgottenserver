@@ -102,14 +102,11 @@ setmetatable(EventCallback,
 		local ret = true
 		for _, func in pairs(EventCallbackData[callbackType]) do
 			ret = func(...)
-			if ret == false then
+			if type(ret) == "boolean" and not ret then
 				return false
 			end
 		end
-		if ret == nil then
-			ret = true
-		end
-		return ret
+		return type(ret) == "nil" and true or select(1, func(...))
 	end
 })
 
