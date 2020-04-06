@@ -71,6 +71,7 @@ mysqlSock = ""
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
 -- forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes, you can change to false if all of your monster files don't throw errors to save up memory.
+-- changeSexCost in premium days, set -1 to disable the ingame change sex functionality
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
@@ -83,6 +84,7 @@ showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
+changeSexCost = 3
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
