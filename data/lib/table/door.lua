@@ -1,5 +1,3 @@
--- Note: The closedDoorUnlocked transform the door closed (only with onUse of the player) to the door locked (with onUse of the key), only need add the id of closedDoor and the lockedDoor.
--- The rest of the variables are self-explanatory, create more variables within the table and add the door ids in their variables.
 -- Be careful, do not add quest door inside the level door table or contrariwise, this will lock the doors.
 
 -- Keys doors start.
