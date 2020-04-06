@@ -49,7 +49,7 @@
 	<loot>
 		<item name="amphora" chance="100" />
 		<item name="crystal necklace" chance="2530" />
-		<item name="gold coin" countmax="100" chance="595300" />
+		<item name="gold coin" countmax="100" chance="59530" />
 		<item name="gold coin" countmax="99" chance="40000" />
 		<item name="small amethyst" countmax="5" chance="6380" />
 		<item name="platinum coin" countmax="5" chance="59800" />
