@@ -99,14 +99,15 @@ setmetatable(EventCallback,
 
 	__call =
 	function(self, callbackType, ...)
-		local ret = true
+		local args = {select(2, ...)}
+		local obj = (select(1, ...))
 		for _, func in pairs(EventCallbackData[callbackType]) do
-			ret = func(...)
-			if type(ret) == "boolean" and not ret then
+			args = {func(obj, unpack(args))}
+			if #args == 1 and args[1] == false then
 				return false
 			end
 		end
-		return type(ret) == "nil" and true or select(1, func(...))
+		return args[1] == nil and true or unpack(args)
 	end
 })
 
