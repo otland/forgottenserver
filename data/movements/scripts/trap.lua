@@ -12,7 +12,7 @@ function onStepIn(creature, item, position, fromPosition)
 	end
 
 	if creature:isMonster() then
-		doTargetCombatHealth(0, creature, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
+		doTargetCombat(0, creature, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
 	end
 
 	if trap.transformTo then
