@@ -100,7 +100,7 @@
 		<item name="great health potion" chance="20000" />
 		<item name="great spirit potion" chance="20000" />
 		<item name="ultimate health potion" chance="20000" />
-		<item id="9808" chance="20000" /><!-- rusty armor -->
+		<item id="9808" chance="20000" /><!-- rusty armor (common) -->
 		<item name="gold ingot" chance="16666" />
 	</loot>
 </monster>

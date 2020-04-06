@@ -6,6 +6,7 @@ function yellowPillow.onStepIn(player, item, position, fromPosition)
 		return true
 	end
 	player:say("Faaart!", TALKTYPE_MONSTER_SAY)
+	item:getPosition():sendMagicEffect(CONST_ME_POFF)
 	return true
 end
 

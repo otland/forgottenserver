@@ -23,7 +23,7 @@ function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:remove(1)
 		toPosition:sendMagicEffect(CONST_ME_POFF)
 	elseif chance == 1 then -- It explodes on the user 1% chance
-		doTargetCombatHealth(0, player, COMBAT_FIREDAMAGE, -5, -5, CONST_ME_HITBYFIRE)
+		doTargetCombat(0, player, COMBAT_FIREDAMAGE, -5, -5, CONST_ME_HITBYFIRE)
 		player:say('OUCH!', TALKTYPE_MONSTER_SAY)
 		item:remove(1)
 	else

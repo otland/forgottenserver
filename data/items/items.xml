@@ -3176,7 +3176,6 @@
 		<attribute key="weaponType" value="club" />
 	</item>
 	<item id="2383" article="a" name="spike sword">
-		<attribute key="description" value="It can be enchanted with an element." />
 		<attribute key="weight" value="5000" />
 		<attribute key="defense" value="21" />
 		<attribute key="attack" value="24" />
@@ -13357,7 +13356,7 @@
 		<attribute key="description" value="Something has been planted in there, but you cannot see what it is yet." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="7679" />
-		<attribute key="duration" value="72000"/>
+		<attribute key="duration" value="72000" />
 	</item>
 	<item fromid="7674" toid="7677" article="a" name="withered plant">
 		<attribute key="description" value="This plant urgently needs some water, else it will wither away and disappear completely." />
@@ -13441,7 +13440,7 @@
 		<attribute key="description" value="There is a fully grown midnight bloom flower in it." />
 		<attribute key="weight" value="150" />
 		<attribute key="decayTo" value="7693" />
-		<attribute key="duration" value="72000"/>
+		<attribute key="duration" value="72000" />
 	</item>
 	<item id="7693" article="a" name="flower pot">
 		<attribute key="description" value="There is a fully grown midnight bloom flower in it." />
@@ -18860,7 +18859,7 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="10512" article="a" name="sneaky stabber of eliteness">
-		<attribute key="description" value="This nifty gadget can be used for many vital and less vital purposes. If it's not jammed, that is." />
+		<attribute key="description" value="Argh! It's jammed right now! Should hopefully work again within a short time though." />
 		<attribute key="weight" value="300" />
 		<attribute key="decayTo" value="10511" />
 		<attribute key="duration" value="60" />
@@ -18870,7 +18869,7 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="10514" article="a" name="squeezing gear of girlpower">
-		<attribute key="description" value="This nifty gadget can be used for many vital and less vital purposes. If it's not jammed, that is." />
+		<attribute key="description" value="Argh! It's jammed right now! Should hopefully work again within a short time though." />
 		<attribute key="weight" value="300" />
 		<attribute key="decayTo" value="10513" />
 		<attribute key="duration" value="60" />
@@ -18880,7 +18879,7 @@
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="10516" article="a" name="whacking driller of fate">
-		<attribute key="description" value="This nifty gadget can be used for many vital and less vital purposes. If it's not jammed, that is." />
+		<attribute key="description" value="Argh! It's jammed right now! Should hopefully work again within a short time though." />
 		<attribute key="weight" value="300" />
 		<attribute key="decayTo" value="10515" />
 		<attribute key="duration" value="60" />
@@ -29325,7 +29324,7 @@
 	<item id="21037" article="a" name="ramp">
 		<attribute key="floorchange" value="north" />
 	</item>
-	<item id="21038" article="a" name="ramp" />	
+	<item id="21038" article="a" name="ramp" />
 	<item id="21039" article="a" name="ramp">
 		<attribute key="floorchange" value="east" />
 	</item>
@@ -29341,7 +29340,7 @@
 	<item id="21045" article="a" name="ramp">
 		<attribute key="floorchange" value="north" />
 	</item>
-	<item id="21046" article="a" name="ramp" />	
+	<item id="21046" article="a" name="ramp" />
 	<item id="21047" article="a" name="ramp">
 		<attribute key="floorchange" value="east" />
 	</item>
@@ -33364,7 +33363,7 @@
 	<item id="24628" article="a" name="pitfall" />
 	<item id="24629" name="some cracks">
 		<attribute key="floorchange" value="down" />
-	</item>	
+	</item>
 	<item id="24630" article="a" name="golden lotus brooch">
 		<attribute key="weight" value="100" />
 	</item>
