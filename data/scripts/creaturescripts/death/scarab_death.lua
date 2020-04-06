@@ -1,4 +1,4 @@
-local creatureevent = CreatureEvent("ScarabDeath")
+local creatureevent = CreatureEvent("Scarab Death")
 
 function creatureevent.onDeath(creature, corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified)
 	if math.random(100) < 10 then

@@ -1,4 +1,7 @@
-function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unjustified)
+local dropLoot = CreatureEvent("Drop Loot")
+
+function dropLoot.onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unjustified)
+
 	if player:hasFlag(PlayerFlag_NotGenerateLoot) or player:getVocation():getId() == VOCATION_NONE then
 		return true
 	end
@@ -38,3 +41,5 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 	end
 	return true
 end
+
+dropLoot:register()

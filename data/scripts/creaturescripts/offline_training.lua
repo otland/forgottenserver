@@ -1,4 +1,6 @@
-function onLogin(player)
+local offlineTraining = CreatureEvent("Offline Training")
+
+function offlineTraining.onLogin(player)
 	local lastLogout = player:getLastLogout()
 	local offlineTime = lastLogout ~= 0 and math.min(os.time() - lastLogout, 86400 * 21) or 0
 	local offlineTrainingSkill = player:getOfflineTrainingSkill()
@@ -73,3 +75,5 @@ function onLogin(player)
 
 	return true
 end
+
+offlineTraining:register()

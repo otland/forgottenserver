@@ -1,4 +1,12 @@
-function onLogin(player)
+local login = CreatureEvent("Player Login")
+
+function login.onLogin(player)
+
+local events = {
+	'Player Death',
+    'Drop Loot'
+}
+
 	local loginStr = "Welcome to " .. configManager.getString(configKeys.SERVER_NAME) .. "!"
 	if player:getLastLoginSaved() <= 0 then
 		loginStr = loginStr .. " Please choose your outfit."
@@ -30,7 +38,10 @@ function onLogin(player)
 	end
 
 	-- Events
-	player:registerEvent("PlayerDeath")
-	player:registerEvent("DropLoot")
+	for i = 1, #events do
+        player:registerEvent(events[i])
+    end
 	return true
 end
+
+login:register()

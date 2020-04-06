@@ -1,6 +1,8 @@
+local extendedOpcode = CreatureEvent("Extended Opcode")
 local OPCODE_LANGUAGE = 1
 
-function onExtendedOpcode(player, opcode, buffer)
+function extendedOpcode.onExtendedOpcode(player, opcode, buffer)
+
 	if opcode == OPCODE_LANGUAGE then
 		-- otclient language
 		if buffer == 'en' or buffer == 'pt' then
@@ -11,3 +13,5 @@ function onExtendedOpcode(player, opcode, buffer)
 		-- other opcodes can be ignored, and the server will just work fine...
 	end
 end
+
+extendedOpcode:register()

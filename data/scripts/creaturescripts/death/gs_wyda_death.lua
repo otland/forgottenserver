@@ -1,4 +1,4 @@
-local creatureevent = CreatureEvent("GiantSpiderWyda")
+local creatureevent = CreatureEvent("Giant Spider Wyda")
 
 function creatureevent.onDeath(creature, corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified)
 	creature:say("It seems this was just an illusion.", TALKTYPE_MONSTER_SAY)
