@@ -399,6 +399,7 @@ void Creature::onCreatureAppear(Creature* creature, bool isLogin)
 
 		if (isLogin) {
 			setLastPosition(getPosition());
+			setNextPos(getPosition());
 		}
 	} else if (isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {

@@ -441,6 +441,13 @@ class Creature : virtual public Thing
 			lastPosition = newLastPos;
 		}
 
+		const Position& getNextPos() const {
+			return nextPosition;
+		}
+		void setNextPos(Position newNextPos) {
+			nextPosition = newNextPos;
+		}
+
 		static bool canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY);
 
 		double getDamageRatio(Creature* attacker) const;
@@ -507,6 +514,7 @@ class Creature : virtual public Thing
 		Outfit_t defaultOutfit;
 
 		Position lastPosition;
+		Position nextPosition;
 		LightInfo internalLight;
 
 		Direction direction = DIRECTION_SOUTH;

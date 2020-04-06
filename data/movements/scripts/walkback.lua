@@ -1,4 +1,4 @@
-function onStepIn(creature, item, position, fromPosition)
+function onStepIn(creature, item, toPosition, fromPosition)
 	if item.uid > 0 and item.uid <= 65535 then
 		creature:teleportTo(fromPosition, false)
 	end
