@@ -1,7 +1,7 @@
 math.randomseed(os.time())
 dofile('data/lib/lib.lua')
 
-ropeSpots = {386, 421, 12935, 12936, 14238, 17238, 21501, 21965, 21966, 21967, 21968, 23363}
+ropeSpots = {386, 421, 7762, 12202, 12935, 12936, 13381, 14238, 17238, 21501, 21965, 21966, 21967, 21968, 23363}
 
 function getDistanceBetween(firstPosition, secondPosition)
 	local xDif = math.abs(firstPosition.x - secondPosition.x)
@@ -59,8 +59,4 @@ end
 
 if not nextUseStaminaTime then
 	nextUseStaminaTime = {}
-end
-
-function isNumber(str)
-	return tonumber(str) ~= nil
 end
