@@ -6,3 +6,6 @@ dofile('data/lib/compat/compat.lua')
 
 -- Debugging helper function for Lua developers
 dofile('data/lib/debugging/dump.lua')
+
+-- Library for tables
+dofile('data/lib/table/table.lua')

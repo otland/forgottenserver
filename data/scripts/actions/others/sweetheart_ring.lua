@@ -8,5 +8,5 @@ function sweetheartRing.onUse(player, item, fromPosition, target, toPosition, is
 	return false
 end
 
-sweetheartRing:id(24324)
+sweetheartRing:id(21955)
 sweetheartRing:register()

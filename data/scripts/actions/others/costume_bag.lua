@@ -1,7 +1,7 @@
 local config = {
-	[7737] = {"orc warrior", "pirate cutthroat", "dworc voodoomaster", "dwarf guard", "minotaur mage"}, -- common
-	[7739] = {"serpent spawn", "demon", "juggernaut", "behemoth", "ashmunrah"}, -- deluxe
-	[9076] = {"quara hydromancer", "diabolic imp", "banshee", "frost giant", "lich"} -- uncommon
+	[653] = {"orc warrior", "pirate cutthroat", "dworc voodoomaster", "dwarf guard", "minotaur mage"}, -- common
+	[654] = {"quara hydromancer", "diabolic imp", "banshee", "frost giant", "lich"}, -- uncommon
+	[655] = {"serpent spawn", "demon", "juggernaut", "behemoth", "ashmunrah"}, -- deluxe
 }
 
 local costumeBag = Action()
@@ -17,7 +17,8 @@ function costumeBag.onUse(player, item, fromPosition, target, toPosition, isHotk
 	return true
 end
 
-for k,v in pairs(config) do
-	costumeBag:id(k)
+for index, value in pairs(config) do
+	costumeBag:id(index)
 end
+
 costumeBag:register()
