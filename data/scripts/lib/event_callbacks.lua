@@ -107,7 +107,10 @@ setmetatable(EventCallback,
 				return false
 			end
 		end
-		return args[1] == nil and true or unpack(args)
+		if args[1] == nil then
+			return true
+		end
+		return unpack(args)
 	end
 })
 
