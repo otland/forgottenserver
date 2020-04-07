@@ -91,6 +91,10 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 			self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 			return false
 		end
+		if Tile(toPosition):getItemByType(ITEM_TYPE_DOOR) and item:getAttribute("wrapid") ~= 0 then
+			self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+			return false
+		end
 	end
 
 	if toPosition.x ~= CONTAINER_POSITION then
