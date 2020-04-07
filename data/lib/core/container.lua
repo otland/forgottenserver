@@ -23,7 +23,7 @@ function Container.createLootItem(self, item)
 			end
 			if stacks > 1 then
 				randvalue = getLootRandom()
-				if randvalue < item.chance then
+				if randvalue >= item.chance then
 					i = i + 1
 				end
 			end
