@@ -86,14 +86,16 @@ function Player:onLookInShop(itemType, count)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION then
-		if not Tile(toPosition):getHouse() and item:getAttribute("wrapid") ~= 0 then
-			self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
-			return false
-		end
-		if Tile(toPosition):getItemByType(ITEM_TYPE_DOOR) and item:getAttribute("wrapid") ~= 0 then
-			self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
-			return false
+	if item:getAttribute("wrapid") ~= 0 then
+		if fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION then
+			local tile = Tile(toPosition)
+			if tile then
+				local house = tile:getHouse()
+				if not house or (house and tile:getItemByType(ITEM_TYPE_DOOR)) then
+					self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+					return false
+				end
+			end
 		end
 	end
 
