@@ -1,7 +1,10 @@
-local increasing = {[416] = 417, [426] = 425, [446] = 447, [3216] = 3217, [3202] = 3215, [11062] = 11063}
-local decreasing = {[417] = 416, [425] = 426, [447] = 446, [3217] = 3216, [3215] = 3202, [11063] = 11062}
+local increasing = {[419] = 420, [431] = 430, [452] = 453, [563] = 564, [549] = 562, [10145] = 10146}
+local decreasing = {[420] = 419, [430] = 431, [453] = 452, [564] = 563, [562] = 549, [10146] = 10145}
 
-function onStepIn(creature, item, position, fromPosition)
+-- onStepIn
+local tileStepIn = MoveEvent()
+
+function tileStepIn.onStepIn(creature, item, position, fromPosition)
 	if not increasing[item.itemid] then
 		return true
 	end
@@ -41,7 +44,15 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, fromPosition)
+for k, v in pairs(increasing) do
+	tileStepIn:id(k)
+end
+tileStepIn:register()
+
+-- onStepOut
+local tileStepOut = MoveEvent()
+
+function tileStepOut.onStepOut(creature, item, position, fromPosition)
 	if not decreasing[item.itemid] then
 		return true
 	end
@@ -52,4 +63,9 @@ function onStepOut(creature, item, position, fromPosition)
 
 	item:transform(decreasing[item.itemid])
 	return true
+	end
+	
+for k, v in pairs(decreasing) do
+	tileStepOut:id(k)
 end
+tileStepOut:register()
