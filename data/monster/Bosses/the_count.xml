@@ -45,6 +45,6 @@
 	<loot>
 		<item name="gold coin" countmax="98" chance="40000" />
 		<item name="war hammer" chance="2300" />
-		<item name="the ring of the count" chance="100000" />
+		<item name="ring of the count" chance="100000" />
 	</loot>
 </monster>

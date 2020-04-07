@@ -78,7 +78,7 @@
 		<item id="6300" chance="999" /><!-- death ring -->
 		<item name="demonic essence" chance="7777" />
 		<item name="infernal bolt" countmax="5" chance="5000" />
-		<item name="the Imperor's trident" chance="100000" />
+		<item name="Imperor's trident" chance="100000" />
 		<item name="concentrated demonic blood" chance="2222" />
 		<item name="magma boots" chance="2000" />
 		<item name="magma coat" chance="2000" />

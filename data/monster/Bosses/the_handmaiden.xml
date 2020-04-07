@@ -49,6 +49,6 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="the Handmaiden's protector" chance="35000" />
+		<item name="Handmaiden's protector" chance="35000" />
 	</loot>
 </monster>

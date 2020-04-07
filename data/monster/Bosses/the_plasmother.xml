@@ -56,6 +56,6 @@
 		<item name="platinum coin" countmax="13" chance="25000" />
 		<item name="soul orb" chance="35000" />
 		<item name="demonic essence" chance="45000" />
-		<item name="the Plasmother's remains" chance="100000" />
+		<item name="Plasmother's remains" chance="100000" />
 	</loot>
 </monster>
