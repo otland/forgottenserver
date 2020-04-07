@@ -2,9 +2,9 @@ function Container.isContainer(self)
 	return true
 end
 
-function Container:createLootItem(item, player, bonus)
+function Container.createLootItem(self, item)
 	if self:getEmptySlots() == 0 then
-        return true
+		return true
 	end
 
 	local itemCount = 0
@@ -43,7 +43,7 @@ function Container:createLootItem(item, player, bonus)
 			if item.actionId ~= -1 then
 				itm:setActionId(item.actionId)
 			end
-			
+
 			if item.text and item.text ~= "" then
 				itm:setAttribute(ITEM_ATTRIBUTE_TEXT, item.text)
 			end
