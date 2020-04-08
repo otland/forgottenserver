@@ -106,6 +106,12 @@ setmetatable(EventCallback,
 			if #args == 1 and args[1] == false then
 				return false
 			end
+			-- handling for RETURNVALUE type of Events
+			if isInArray({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) then
+				if args[1] ~= RETURNVALUE_NOERROR then
+					return unpack(args)
+				end
+			end
 		end
 		if args[1] == nil then
 			return true
