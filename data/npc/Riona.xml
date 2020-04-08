@@ -4,6 +4,10 @@
 	<look type="138" head="57" body="59" legs="40" feet="76" addons="0" />
 	<parameters>
 		<parameter key="module_shop" value="1" />
-		<parameter key="shop_buyable" value="backpack,1988,20;pick,2553,10;shovel,2554,20;rope,2120,50" />
+		<parameter key="shop_buyable" value="
+			backpack,2854,20;
+			pick,3456,10;
+			shovel,3457,20;
+			rope,3003,50" />
 	</parameters>
 </npc>

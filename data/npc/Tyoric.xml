@@ -4,7 +4,15 @@
 	<look type="134" head="57" body="59" legs="40" feet="76" addons="0" />
 	<parameters>
 		<parameter key="module_shop" value="1" />
-		<parameter key="shop_sellable" value="crossbow,2455,150;bow,2456,130" />
-		<parameter key="shop_buyable" value="crossbow,2455,360;bow,2456,200;spear,2389,20;poison arrow,2545,18;bolt,2543,3;arrow,2544,2" />
+		<parameter key="shop_sellable" value="
+			crossbow,3349,150;
+			bow,3350,130" />
+		<parameter key="shop_buyable" value="
+			crossbow,3349,360;
+			bow,3350,200;
+			spear,3277,20;
+			poison arrow,3448,18;
+			bolt,3446,3;
+			arrow,3447,2" />
 	</parameters>
 </npc>
