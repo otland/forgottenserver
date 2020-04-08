@@ -4600,7 +4600,7 @@
 	<item id="2680" article="a" name="strawberry" plural="strawberries">
 		<attribute key="weight" value="20" />
 	</item>
-	<item id="2681" name="grapes" plural="grapes">
+	<item id="2681" name="grapes">
 		<attribute key="weight" value="250" />
 		<attribute key="showcount" value="0" />
 	</item>
