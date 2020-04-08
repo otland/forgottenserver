@@ -1240,12 +1240,15 @@
 	<item fromid="752" toid="755" article="a" name="celestial map"/>
 	<item fromid="756" toid="760" name="dirt"/>
 	<item id="761" article="a" name="flash arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="762" article="a" name="shiver arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="763" article="a" name="flaming arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="764" article="a" name="straw mat">
@@ -1293,6 +1296,7 @@
 		<attribute key="duration" value="300"/>
 	</item>
 	<item id="774" article="an" name="earth arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="775" article="a" name="mystic flame">
@@ -5909,18 +5913,23 @@
 		<attribute key="weaponType" value="shield"/>
 	</item>
 	<item id="3446" article="a" name="bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="3447" article="an" name="arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="3448" article="a" name="poison arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="3449" article="a" name="burst arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="90"/>
 	</item>
 	<item id="3450" article="a" name="power bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="3451" article="a" name="pitchfork">
@@ -12382,6 +12391,7 @@
 		<attribute key="weight" value="6400"/>
 	</item>
 	<item id="6528" article="an" name="infernal bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="90"/>
 	</item>
 	<item id="6529" article="a" name="pair of soft boots">
@@ -13366,12 +13376,15 @@
 	</item>
 	<item fromid="7361" toid="7362" article="a" name="sarcophagus"/>
 	<item id="7363" article="a" name="piercing bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="7364" article="a" name="sniper arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="7365" article="an" name="onyx arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="7366" article="a" name="viper star">
@@ -22573,9 +22586,11 @@
 		<attribute key="weight" value="8900"/>
 	</item>
 	<item id="14251" article="a" name="tarsal arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="14252" article="a" name="vortex bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="14253" article="a" name="drum">
@@ -23066,9 +23081,11 @@
 	<item fromid="15786" toid="15789" name="bones"/>
 	<item fromid="15790" toid="15791" name="icy bones"/>
 	<item id="15792" article="a" name="crystal bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="15793" article="a" name="crystalline arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="75"/>
 	</item>
 	<item id="15794" article="a" name="fresh mushroom beer">
@@ -23752,12 +23769,15 @@
 		<attribute key="weight" value="160"/>
 	</item>
 	<item id="16141" article="a" name="prismatic bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="85"/>
 	</item>
 	<item id="16142" article="a" name="drill bolt">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="80"/>
 	</item>
 	<item id="16143" article="an" name="envenomed arrow">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="70"/>
 	</item>
 	<item id="16144" article="a" name="dead dragonling">
@@ -30488,6 +30508,7 @@
 		<attribute key="weight" value="020"/>
 	</item>
 	<item id="21470" article="a" name="simple arrow" plural="simple arrows">
+		<attribute key="slotType" value="ammo"/>
 		<attribute key="weight" value="60"/>
 	</item>
 	<item id="21471" article="a" name="dead sacred snake">
