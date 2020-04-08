@@ -87,8 +87,8 @@ end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if item:getAttribute("wrapid") ~= 0 then
-		if fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION then
-			local tile = Tile(toPosition)
+		local tile = Tile(toPosition)
+		if (fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION) or tile and not tile:getHouse() then
 			if tile and not tile:getHouse() then
 				self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 				return false
