@@ -19,20 +19,24 @@ function carpets.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if not carpet then
 		return false
 	end
+	if fromPosition.x == CONTAINER_POSITION then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the item on the floor first.")
+		return true
+		end
 	local tile = Tile(item:getPosition())
-	if tile and tile:getHouse() and tile:getItemByType(ITEM_TYPE_DOOR) then
-		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
-		return false
+	if not tile:getHouse() then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may use this only inside a house.")
+		return true
+	end
+	if tile:getItemByType(ITEM_TYPE_DOOR) then
+		player:sendCancelMessage("You cannot use this item on house doors.")
+		return true
 	end
 	local carpetStack = 0
 	for _, carpetId in pairs(transformID) do
 		carpetStack = carpetStack + tile:getItemCountById(carpetId)
 	end
-	if fromPosition.x == CONTAINER_POSITION then
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the item on the floor first.")
-	elseif not tile or not tile:getHouse() then
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may use this only inside a house.")
-	elseif carpetStack > 1 then
+	if carpetStack > 1 then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
