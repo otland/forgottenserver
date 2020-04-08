@@ -5,7 +5,7 @@ function goldfishBowl.onUse(player, item, fromPosition, target, toPosition, isHo
 		return false
 	end
 
-	target:remove()
+	target:remove(1)
 	item:transform(5929)
 	return true
 end
