@@ -3,11 +3,11 @@ function Creature:onChangeOutfit(outfit)
 end
 
 function Creature:onAreaCombat(tile, isAggressive)
-	return hasEventCallback(EVENT_CALLBACK_ONAREACOMBAT) and EventCallback(EVENT_CALLBACK_ONAREACOMBAT, self, tile, isAggressive) or RETURNVALUE_NOERROR
+	if hasEventCallback(EVENT_CALLBACK_ONAREACOMBAT) then return EventCallback(EVENT_CALLBACK_ONAREACOMBAT, self, tile, isAggressive) else return RETURNVALUE_NOERROR end
 end
 
 function Creature:onTargetCombat(target)
-	return hasEventCallback(EVENT_CALLBACK_ONTARGETCOMBAT) and EventCallback(EVENT_CALLBACK_ONTARGETCOMBAT, self, target) or RETURNVALUE_NOERROR
+	if hasEventCallback(EVENT_CALLBACK_ONTARGETCOMBAT) then return EventCallback(EVENT_CALLBACK_ONTARGETCOMBAT, self, target) else return RETURNVALUE_NOERROR end
 end
 
 function Creature:onHear(speaker, words, type)
