@@ -6,6 +6,7 @@ PlayerStorageKeys = {
 	delayWallMirror = 30021,
 	specialFoods = 30022,
 	madSheepSummon = 30023,
+	potOfBlackjack = 30025,
 }
 
 GlobalStorageKeys = {
