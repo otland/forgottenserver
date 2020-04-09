@@ -141,24 +141,4 @@ class Actions final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-template <class Fn>
-struct converter
-{
-	using result_type = decltype(std::declval<Fn&&>()());
-
-	operator result_type() &&
-	{
-		return std::move(fn)();
-	}
-
-	Fn fn;
-};
-
-template <class Container, class... Args>
-auto try_emplace(Container& c, Args&&... args) -> decltype(c.emplace(std::forward<Args>(args)...))
-{
-	auto fn = [&]() { return typename Container::value_type(std::forward<Args>(args)...); };
-	return c.emplace(converter<decltype(fn)>{fn});
-}
-
 #endif
