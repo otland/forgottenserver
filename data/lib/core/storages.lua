@@ -5,9 +5,9 @@ PlayerStorageKeys = {
 	firstRod = 30020,
 	delayWallMirror = 30021,
 	madSheepSummon = 30023,
-	AfflictedOutfit = 30026,
-	AfflictedPlagueMask = 30027,
-	AfflictedPlagueBell = 30028,
+	afflictedOutfit = 30026,
+	afflictedPlagueMask = 30027,
+	afflictedPlagueBell = 30028,
 }
 
 GlobalStorageKeys = {

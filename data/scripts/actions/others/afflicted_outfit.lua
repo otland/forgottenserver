@@ -1,29 +1,29 @@
 local afflictedOutfit = Action()
 
 function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local hasOutfit = player:getStorageValue(PlayerStorageKeys.AfflictedOutfit) == 1
+	local hasOutfit = player:getStorageValue(PlayerStorageKeys.afflictedOutfit) == 1
 	if item.itemid == 13925 then -- plague mask
 		if not hasOutfit then
 			return false
 		end
-		if player:getStorageValue(PlayerStorageKeys.AfflictedPlagueMask) == 1 then
+		if player:getStorageValue(PlayerStorageKeys.afflictedPlagueMask) == 1 then
 			return false
 		end
 		player:addOutfitAddon(430, 2)
 		player:addOutfitAddon(431, 2)
-		player:setStorageValue(PlayerStorageKeys.AfflictedPlagueMask, 1)
+		player:setStorageValue(PlayerStorageKeys.afflictedPlagueMask, 1)
 		player:say("You gained a plague mask for your outfit.", TALKTYPE_MONSTER_SAY, false, player)
 		item:remove(1)
 	elseif item.itemid == 13926 then -- plague bell
 		if not hasOutfit then
 			return false
 		end
-		if player:getStorageValue(PlayerStorageKeys.AddonPlagueBell) == 1 then
+		if player:getStorageValue(PlayerStorageKeys.addonPlagueBell) == 1 then
 			return false
 		end
 		player:addOutfitAddon(430, 1)
 		player:addOutfitAddon(431, 1)
-		player:setStorageValue(PlayerStorageKeys.AddonPlagueBell, 1)
+		player:setStorageValue(PlayerStorageKeys.addonPlagueBell, 1)
 		player:say("You gained a plague bell for your outfit.", TALKTYPE_MONSTER_SAY, false, player)
 		item:remove(1)
 	else -- outfit
@@ -41,7 +41,7 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 		player:addOutfit(430)
 		player:addOutfit(431)
 		player:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
-		player:setStorageValue(PlayerStorageKeys.AfflictedOutfit, 1)
+		player:setStorageValue(PlayerStorageKeys.afflictedOutfit, 1)
 		player:say("You have restored an outfit.", TALKTYPE_MONSTER_SAY, false, player)
 	end
 	return true
