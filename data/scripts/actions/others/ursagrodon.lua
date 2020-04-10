@@ -8,7 +8,7 @@ function frozenUrsagrodon.onUse(player, item, fromPosition, target, toPosition, 
 
 	if target.itemid == 22729 then
 		local chance = math.random(100)
-		if chance > 52 then
+		if chance > 12 then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The ice cracked and the frozen creature with it - be more careful next time!")
 			item:remove(1)
 			target:transform(22732)
@@ -23,7 +23,7 @@ function frozenUrsagrodon.onUse(player, item, fromPosition, target, toPosition, 
 	end
 	if target.itemid == 22730 then
 		local chance = math.random(100)
-		if chance > 52 then
+		if chance > 12 then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The ice cracked and the frozen creature with it - be more careful next time!")
 			item:remove(1)
 			target:transform(22732)
@@ -38,7 +38,7 @@ function frozenUrsagrodon.onUse(player, item, fromPosition, target, toPosition, 
 	end
 	if target.itemid == 22731 then
 		local chance = math.random(100)
-		if chance > 52 then
+		if chance > 12 then
 			item:remove(1)
 			target:transform(22732)
 			target:decay()
