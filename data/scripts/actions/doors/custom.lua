@@ -1,7 +1,5 @@
 local doorIds = {}
 
-local custom = Action()
-
 for index, value in ipairs(customDoor) do
     if not table.contains(doorIds, value.openDoor) then
         table.insert(doorIds, value.openDoor)
@@ -11,6 +9,8 @@ for index, value in ipairs(customDoor) do
         table.insert(doorIds, value.closedDoor)
     end
 end
+
+local custom = Action()
 
 function custom.onUse(player, item, fromPosition, target, toPosition, isHotkey)
     local doorCreature = Tile(toPosition):getTopCreature()

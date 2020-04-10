@@ -1,15 +1,16 @@
 local doorIds = {}
 
-local quest = Action()
-
 for index, value in ipairs(questDoor) do
     if not table.contains(doorIds, value.openDoor) then
         table.insert(doorIds, value.openDoor)
     end
+
     if not table.contains(doorIds, value.closedDoor) then
         table.insert(doorIds, value.closedDoor)
     end
 end
+
+local quest = Action()
 
 function quest.onUse(player, item, fromPosition, target, toPosition, isHotkey)
     local itemId = item:getId()

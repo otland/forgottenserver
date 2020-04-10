@@ -1,15 +1,16 @@
 local doorIds = {}
 
-local level = Action()
-
 for index, value in ipairs(levelDoor) do
     if not table.contains(doorIds, value.openDoor) then
         table.insert(doorIds, value.openDoor)
     end
+
     if not table.contains(doorIds, value.closedDoor) then
         table.insert(doorIds, value.closedDoor)
     end
 end
+
+local level = Action()
 
 function level.onUse(player, item, fromPosition, target, toPosition, isHotkey)
     local itemId = item:getId()
