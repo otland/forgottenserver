@@ -130,4 +130,3 @@ function Player.withdrawMoney(self, amount)
 	self:setBankBalance(balance - amount)
 	return true
 end
-
