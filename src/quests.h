@@ -32,7 +32,7 @@ using QuestsList = std::list<Quest>;
 class Mission
 {
 	public:
-		Mission(std::string name, int32_t storageID, int32_t startValue, int32_t endValue, bool ignoreEndValue) :
+		Mission(std::string name, int32_t storageID, int64_t startValue, int64_t endValue, bool ignoreEndValue) :
 			name(std::move(name)), storageID(storageID), startValue(startValue), endValue(endValue), ignoreEndValue(ignoreEndValue) {}
 
 		bool isCompleted(Player* player) const;
@@ -43,10 +43,10 @@ class Mission
 		uint32_t getStorageId() const {
 			return storageID;
 		}
-		int32_t getStartStorageValue() const {
+		int64_t getStartStorageValue() const {
 			return startValue;
 		}
-		int32_t getEndStorageValue() const {
+		int64_t getEndStorageValue() const {
 			return endValue;
 		}
 
@@ -56,14 +56,14 @@ class Mission
 	private:
 		std::string name;
 		uint32_t storageID;
-		int32_t startValue, endValue;
+		int64_t startValue, endValue;
 		bool ignoreEndValue;
 };
 
 class Quest
 {
 	public:
-		Quest(std::string name, uint16_t id, int32_t startStorageID, int32_t startStorageValue) :
+		Quest(std::string name, uint16_t id, int32_t startStorageID, int64_t startStorageValue) :
 			name(std::move(name)), startStorageID(startStorageID), startStorageValue(startStorageValue), id(id) {}
 
 		bool isCompleted(Player* player) const;
@@ -79,7 +79,7 @@ class Quest
 		uint32_t getStartStorageId() const {
 			return startStorageID;
 		}
-		int32_t getStartStorageValue() const {
+		int64_t getStartStorageValue() const {
 			return startStorageValue;
 		}
 
@@ -91,7 +91,7 @@ class Quest
 		std::string name;
 
 		uint32_t startStorageID;
-		int32_t startStorageValue;
+		int64_t startStorageValue;
 		uint16_t id;
 
 		MissionsList missions;
@@ -108,7 +108,7 @@ class Quests
 
 		bool loadFromXml();
 		Quest* getQuestByID(uint16_t id);
-		bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const;
+		bool isQuestStorage(const uint32_t key, const int64_t value, const int64_t oldValue) const;
 		uint16_t getQuestsCount(Player* player) const;
 		bool reload();
 
