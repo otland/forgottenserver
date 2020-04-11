@@ -52,6 +52,7 @@ class ConfigManager
 			ONLINE_OFFLINE_CHARLIST,
 			YELL_ALLOW_PREMIUM,
 			FORCE_MONSTERTYPE_LOAD,
+			HOUSE_ACCOUNT_OWNER,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

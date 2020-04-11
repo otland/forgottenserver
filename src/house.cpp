@@ -141,6 +141,13 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 		return HOUSE_OWNER;
 	}
 
+	if (g_config.getBoolean(ConfigManager::HOUSE_ACCOUNT_OWNER)) {
+		uint32_t accountOwner = IOLoginData::getAccountIdByPlayerName(ownerName);
+		if (accountOwner == player->getAccount()) {
+			return HOUSE_OWNER;
+		}
+	}
+
 	if (player->hasFlag(PlayerFlag_CanEditHouses)) {
 		return HOUSE_OWNER;
 	}
