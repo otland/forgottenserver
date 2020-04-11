@@ -973,7 +973,7 @@ uint32_t Map::clean() const
 
 				for (auto& row : floor->tiles) {
 					for (auto tile : row) {
-						if (!tile || || (!g_config.getBoolean(ConfigManager::CLEAN_PROTECTED_ZONES) && tile->hasFlag(TILESTATE_PROTECTIONZONE))) {
+						if (!tile || (!g_config.getBoolean(ConfigManager::CLEAN_PROTECTED_ZONES) && tile->hasFlag(TILESTATE_PROTECTIONZONE))) {
 							continue;
 						}
 
