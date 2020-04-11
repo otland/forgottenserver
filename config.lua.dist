@@ -83,6 +83,7 @@ showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
+cleanProtectedZones = false
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
