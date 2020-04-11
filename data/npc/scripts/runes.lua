@@ -7,7 +7,7 @@ function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid) 
 function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
 function onThink()                          npcHandler:onThink()                        end
 
-local voices = {text = "Runes, wands, rods, health and mana potions! Have a look!"}
+local voices = { {text = "Runes, wands, rods, health and mana potions! Have a look!"} }
 npcHandler:addModule(VoiceModule:new(voices))
 
 local shopModule = ShopModule:new()
