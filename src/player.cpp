@@ -2030,7 +2030,7 @@ void Player::death(Creature* lastHitCreature)
 		auto it = conditions.begin(), end = conditions.end();
 		while (it != end) {
 			Condition* condition = *it;
-			if (condition->isPersistent()) {
+			if (!condition->isPersistent()) {
 				it = conditions.erase(it);
 
 				condition->endCondition(this);
@@ -2046,7 +2046,7 @@ void Player::death(Creature* lastHitCreature)
 		auto it = conditions.begin(), end = conditions.end();
 		while (it != end) {
 			Condition* condition = *it;
-			if (condition->isPersistent()) {
+			if (!condition->isPersistent()) {
 				it = conditions.erase(it);
 
 				condition->endCondition(this);

@@ -263,14 +263,14 @@ bool Condition::startCondition(Creature*)
 bool Condition::isPersistent() const
 {
 	if (ticks == -1) {
-		return false;
+		return true;
 	}
 
-	if (!(id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT || conditionType == CONDITION_MUTED)) {
-		return false;
+	if (id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT) {
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 uint32_t Condition::getIcons() const
