@@ -443,6 +443,7 @@
 	<monster name="Manta Ray" file="Fish/manta_ray.xml" />
 	<monster name="Northern Pike" file="Fish/northern_pike.xml" />
 	<monster name="Shark" file="Fish/shark.xml" />
+	<monster name="Slippery Northern Pike" file="Fish/slippery_northern_pike.xml" />
 
 	<!-- Frogs -->
 	<monster name="Azure Frog" file="Frogs/azure_frog.xml" />
