@@ -5,6 +5,7 @@ PlayerStorageKeys = {
 	firstRod = 30020,
 	delayWallMirror = 30021,
 	madSheepSummon = 30023,
+	nailCaseUseCount = 30031,
 }
 
 GlobalStorageKeys = {
