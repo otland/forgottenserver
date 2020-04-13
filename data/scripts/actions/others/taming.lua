@@ -329,6 +329,22 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if not mount then
 		return false
 	end
+	
+	if target:getName():lower() == "horse" and item.itemid == 13939 then
+		player:say("The horse happily munches the sugar oat and runs on. You shouldn't steal one of the horse station's horses anyway.", TALKTYPE_MONSTER_SAY)
+		item:remove(1)
+		return true
+	end
+
+	if target:getName():lower() == "white deer" and item.itemid == 13539 then
+		player:say("You should try to enrage this deer before your taming attempt. That way you make sure it's strong enough to carry you.", TALKTYPE_MONSTER_SAY)
+		return true
+	end
+
+	if target:getName():lower() == "desperate white deer" and item.itemid == 13539 then
+		player:say("This deer doesn't show enough strength and is too desperate already. Only enraged deer have the necessary power to carry you.", TALKTYPE_MONSTER_SAY)
+		return true
+	end
 
 	local targetName = target:getName():lower()
 	if mount.type ~= target.type
