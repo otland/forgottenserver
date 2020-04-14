@@ -1,13 +1,13 @@
-local frozenUrsagrodon = Action()
+local meltingHorn = Action()
 
-function frozenUrsagrodon.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if player:hasMount(38) then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You already have the obedience of the ursagrodon.")
 		return true
 	end
 
 	if target.itemid == 22729 or target.itemid == 22730 or target.itemid == 22731 then
-		if math.random(100) > 52 then
+		if math.random(100) > 32 then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The ice cracked and the frozen creature with it - be more careful next time!")
 			item:remove(1)
 			target:transform(22732)
@@ -28,5 +28,5 @@ function frozenUrsagrodon.onUse(player, item, fromPosition, target, toPosition, 
 	return true
 end
 
-frozenUrsagrodon:id(22726)
-frozenUrsagrodon:register()
+meltingHorn:id(22726)
+meltingHorn:register()
