@@ -233,7 +233,7 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = " << id;
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `spells`, `storages`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = " << id;
 	return loadPlayer(player, db.storeQuery(query.str()));
 }
 
@@ -241,7 +241,7 @@ bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = " << db.escapeString(name);
+	query << "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `spells`, `storages`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = " << db.escapeString(name);
 	return loadPlayer(player, db.storeQuery(query.str()));
 }
 
@@ -313,6 +313,31 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			delete condition;
 		}
 		condition = Condition::createCondition(propStream);
+	}
+
+	//load spells
+	unsigned long attrSize;
+	const char* attr = result->getStream("spells", attrSize);
+	propStream.init(attr, attrSize);
+
+	std::string spell;
+	while (propStream.readString(spell)) {
+		player->learnedInstantSpellList.push_front(spell);
+	}
+
+	//load storage map
+	attr = result->getStream("storages", attrSize);
+	propStream.init(attr, attrSize);
+
+	size_t storagesSize;
+	if (propStream.read<size_t>(storagesSize)) {
+		player->storageMap.reserve(storagesSize);
+
+		uint32_t key;
+		int32_t value;
+		while (propStream.read<uint32_t>(key) && propStream.read<int32_t>(value)) {
+			player->addStorageValue(key, value, true);
+		}
 	}
 
 	if (!player->setVocation(result->getNumber<uint16_t>("vocation"))) {
@@ -443,14 +468,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
-	query.str(std::string());
-	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
-	if ((result = db.storeQuery(query.str()))) {
-		do {
-			player->learnedInstantSpellList.emplace_front(result->getString("name"));
-		} while (result->next());
-	}
-
 	//load inventory items
 	ItemMap itemMap;
 
@@ -539,15 +556,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 				}
 			}
 		}
-	}
-
-	//load storage map
-	query.str(std::string());
-	query << "SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = " << player->getGUID();
-	if ((result = db.storeQuery(query.str()))) {
-		do {
-			player->addStorageValue(result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"), true);
-		} while (result->next());
 	}
 
 	//load vip
@@ -655,8 +663,8 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
-	size_t conditionsSize;
-	const char* conditions = propWriteStream.getStream(conditionsSize);
+	size_t attributesSize;
+	const char* attributes = propWriteStream.getStream(attributesSize);
 
 	//First, an UPDATE query to write the player itself
 	query.str(std::string());
@@ -696,7 +704,28 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastip` = " << player->lastIP << ',';
 	}
 
-	query << "`conditions` = " << db.escapeBlob(conditions, conditionsSize) << ',';
+	query << "`conditions` = " << db.escapeBlob(attributes, attributesSize) << ',';
+
+	//serialize learned spells
+	propWriteStream.clear();
+	for (const auto& learnedSpell : player->learnedInstantSpellList) {
+		propWriteStream.writeString(learnedSpell);
+	}
+
+	propWriteStream.getStream(attributesSize);
+	query << "`spells` = " << db.escapeBlob(attributes, attributesSize) << ',';
+
+	//serialize storages
+	player->genReservedStorageRange();
+	propWriteStream.clear();
+	propWriteStream.write<size_t>(player->storageMap.size());
+	for (const auto& it : player->storageMap) {
+		propWriteStream.write<uint32_t>(it.first);
+		propWriteStream.write<int32_t>(it.second);
+	}
+
+	attributes = propWriteStream.getStream(attributesSize);
+	query << "`storages` = " << db.escapeBlob(attributes, attributesSize) << ',';
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		int64_t skullTime = 0;
@@ -752,28 +781,8 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	// learned spells
-	query.str(std::string());
-	query << "DELETE FROM `player_spells` WHERE `player_id` = " << player->getGUID();
-	if (!db.executeQuery(query.str())) {
-		return false;
-	}
-
-	query.str(std::string());
-
-	DBInsert spellsQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
-	for (const std::string& spellName : player->learnedInstantSpellList) {
-		query << player->getGUID() << ',' << db.escapeString(spellName);
-		if (!spellsQuery.addRow(query)) {
-			return false;
-		}
-	}
-
-	if (!spellsQuery.execute()) {
-		return false;
-	}
-
 	//item saving
+	query.str(std::string());
 	query << "DELETE FROM `player_items` WHERE `player_id` = " << player->getGUID();
 	if (!db.executeQuery(query.str())) {
 		return false;
@@ -832,28 +841,6 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!saveItems(player, itemList, inboxQuery, propWriteStream)) {
-		return false;
-	}
-
-	query.str(std::string());
-	query << "DELETE FROM `player_storage` WHERE `player_id` = " << player->getGUID();
-	if (!db.executeQuery(query.str())) {
-		return false;
-	}
-
-	query.str(std::string());
-
-	DBInsert storageQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
-	player->genReservedStorageRange();
-
-	for (const auto& it : player->storageMap) {
-		query << player->getGUID() << ',' << it.first << ',' << it.second;
-		if (!storageQuery.addRow(query)) {
-			return false;
-		}
-	}
-
-	if (!storageQuery.execute()) {
 		return false;
 	}
 
