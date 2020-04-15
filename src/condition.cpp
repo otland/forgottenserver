@@ -266,7 +266,7 @@ bool Condition::isPersistent() const
 		return true;
 	}
 
-	if (id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT || conditionType == CONDITION_MUTED) {
+	if (conditionType == CONDITION_MUTED) {
 		return true;
 	}
 
