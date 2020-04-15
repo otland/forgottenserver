@@ -1209,8 +1209,7 @@ if Modules == nil then
 		voiceCount = 0,
 		lastVoice = 0,
 		timeout = nil,
-		chance = nil,
-		npcHandler = nil
+		chance = nil
 	}
 
 	-- VoiceModule: makes the NPC says/yell random lines from a table, with delay, chance and yell optional 
