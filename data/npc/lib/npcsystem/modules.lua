@@ -1212,7 +1212,7 @@ if Modules == nil then
 		chance = nil
 	}
 
-	-- VoiceModule: makes the NPC says/yell random lines from a table, with delay, chance and yell optional 
+	-- VoiceModule: makes the NPC say/yell random lines from a table, with delay, chance and yell optional 
 	function VoiceModule:new(voices, timeout, chance)
 		local obj = {}
 		setmetatable(obj, self)
