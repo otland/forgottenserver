@@ -304,13 +304,34 @@ local function creatureSayCallback(cid, type, msg)
 	return true
 end
 
-keywordHandler:addKeyword({"money"}, StdModule.say, {npcHandler = npcHandler, text = "We can {change} money for you. You can also access your {bank account}."})
-keywordHandler:addKeyword({"change"}, StdModule.say, {npcHandler = npcHandler, text = "There are three different coin types: 100 gold coins equal 1 platinum coin, 100 platinum coins equal 1 crystal coin. So if you'd like to change 100 gold into 1 platinum, simply say '{change gold}' and then '1 platinum'."})
-keywordHandler:addKeyword({"advanced"}, StdModule.say, {npcHandler = npcHandler, text = "Your bank account will be used automatically when you want to {rent} a house or place an offer on an item on the {market}. Let me know if you want to know about how either one works."})
-keywordHandler:addKeyword({"help"}, StdModule.say, {npcHandler = npcHandler, text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."})
-keywordHandler:addKeyword({"functions"}, StdModule.say, {npcHandler = npcHandler, text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."})
-keywordHandler:addKeyword({"basic"}, StdModule.say, {npcHandler = npcHandler, text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."})
-keywordHandler:addKeyword({"job"}, StdModule.say, {npcHandler = npcHandler, text = "I work in this bank. I can change money for you and help you with your bank account."})
+keywordHandler:addKeyword({"money"}, StdModule.say,{
+	npcHandler = npcHandler,
+	text = "We can {change} money for you. You can also access your {bank account}."
+})
+keywordHandler:addKeyword({"change"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "There are three different coin types: 100 gold coins equal 1 platinum coin, 100 platinum coins equal 1 crystal coin. So if you'd like to change 100 gold into 1 platinum, simply say '{change gold}' and then '1 platinum'."
+})
+keywordHandler:addKeyword({"advanced"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "Your bank account will be used automatically when you want to {rent} a house or place an offer on an item on the {market}. Let me know if you want to know about how either one works."
+})
+keywordHandler:addKeyword({"help"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."
+})
+keywordHandler:addKeyword({"functions"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."
+})
+keywordHandler:addKeyword({"basic"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."
+})
+keywordHandler:addKeyword({"job"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "I work in this bank. I can change money for you and help you with your bank account."
+})
 
 npcHandler:setMessage(MESSAGE_GREET, "Welcome to the bank, |PLAYERNAME|! What can I do for you?")
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
