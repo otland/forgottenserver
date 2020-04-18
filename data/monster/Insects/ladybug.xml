@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Lady Bug" nameDescription="Lady Bug" race="venom" experience="70" speed="200">
+<monster name="Ladybug" nameDescription="a ladybug" race="venom" experience="70" speed="200">
 	<health now="255" max="255" />
 	<look type="448" corpse="15272" />
 	<targetchange interval="5000" chance="0" />
