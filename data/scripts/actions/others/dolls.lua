@@ -122,8 +122,7 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif chance == 4 then
 			fromPosition:sendMagicEffect(CONST_ME_FIREAREA)
 		elseif chance == 5 then
-			player:sendMagicEffect(CONST_ME_EXPLOSIONHIT)
-			player:addHealth(-1)
+			doTargetCombat(0, player, COMBAT_PHYSICALDAMAGE, -1, -1, CONST_ME_EXPLOSIONHIT)
 		end
 	elseif item.itemid == 5669 then
 		fromPosition:sendMagicEffect(CONST_ME_MAGIC_RED)
@@ -153,7 +152,7 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-for k,v in pairs(dollsTable) do
+for k, v in pairs(dollsTable) do
 	dolls:id(k)
 end
 dolls:register()
