@@ -131,3 +131,12 @@ function Player.withdrawMoney(self, amount)
 	self:setBankBalance(balance - amount)
 	return true
 end
+
+function Player.depositMoney(self, amount)
+	if not self:removeMoney(amount) then
+		return false
+	end
+
+	self:setBankBalance(self:getBankBalance() + amount)
+	return true
+end

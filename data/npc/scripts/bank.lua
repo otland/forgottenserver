@@ -172,12 +172,12 @@ local function creatureSayCallback(cid, type, msg)
 		end
 		if playerExists(transfer[cid]) then
 			local transferPlayer = Player(transfer[cid])
-            local currentVocation = transferPlayer and transferPlayer:getVocation():getId() or getPlayerVocationAux(transfer[cid])
-            if currentVocation == VOCATION_NONE then
-                npcHandler:say("I'm afraid this character only holds a junior account at our bank. Do not worry, though. Once he has chosen his vocation, his account will be upgraded.", cid)
-                npcHandler.topic[cid] = 0
+			local currentVocation = transferPlayer and transferPlayer:getVocation():getId() or getPlayerVocationAux(transfer[cid])
+			if currentVocation == VOCATION_NONE then
+				npcHandler:say("I'm afraid this character only holds a junior account at our bank. Do not worry, though. Once he has chosen his vocation, his account will be upgraded.", cid)
+				npcHandler.topic[cid] = 0
 				return true
-            end
+			end
 			npcHandler:say("So you would like to transfer " .. count[cid] .. " gold to " .. transfer[cid] .. "?", cid)
 			npcHandler.topic[cid] = 13
 		else
@@ -210,8 +210,8 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 15 then
 		if msgcontains(msg, "yes") then
-			if player:removeItem(2148, count[cid] * 100) then
-				player:addItem(2152, count[cid])
+			if player:removeItem(ITEM_GOLD_COIN, count[cid] * 100) then
+				player:addItem(ITEM_PLATINUM_COIN, count[cid])
 				npcHandler:say("Here you are.", cid)
 			else
 				npcHandler:say("Sorry, you do not have enough gold coins.", cid)
@@ -245,8 +245,8 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 18 then
 		if msgcontains(msg, "yes") then
-			if player:removeItem(2152, count[cid]) then
-				player:addItem(2148, count[cid] * 100)
+			if player:removeItem(ITEM_PLATINUM_COIN, count[cid]) then
+				player:addItem(ITEM_GOLD_COIN, count[cid] * 100)
 				npcHandler:say("Here you are.", cid)
 			else
 				npcHandler:say("Sorry, you do not have enough platinum coins.", cid)
@@ -266,8 +266,8 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 20 then
 		if msgcontains(msg, "yes") then
-			if player:removeItem(2152, count[cid] * 100) then
-				player:addItem(2160, count[cid])
+			if player:removeItem(ITEM_PLATINUM_COIN, count[cid] * 100) then
+				player:addItem(ITEM_CRYSTAL_COIN, count[cid])
 				npcHandler:say("Here you are.", cid)
 			else
 				npcHandler:say("Sorry, you do not have enough platinum coins.", cid)
@@ -290,8 +290,8 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 22 then
 		if msgcontains(msg, "yes") then
-			if player:removeItem(2160, count[cid])  then
-				player:addItem(2152, count[cid] * 100)
+			if player:removeItem(ITEM_CRYSTAL_COIN, count[cid]) then
+				player:addItem(ITEM_PLATINUM_COIN, count[cid] * 100)
 				npcHandler:say("Here you are.", cid)
 			else
 				npcHandler:say("Sorry, you do not have enough crystal coins.", cid)
