@@ -79,11 +79,11 @@ function playerExists(name)
 end
 
 function getPlayerVocationAux(name)
-    local query = db.storeQuery("SELECT `vocation` FROM `players` WHERE `name` = " .. db.escapeString(name))
-    if not query then
-        return false
-    end
+	local query = db.storeQuery("SELECT `vocation` FROM `players` WHERE `name` = " .. db.escapeString(name))
+	if not query then
+		return false
+	end
 	local value = result.getNumber(query, "vocation")
 	result.free(query)
-    return value
+	return value
 end

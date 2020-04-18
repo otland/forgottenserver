@@ -101,6 +101,7 @@ function Player.addManaSpent(...)
 	return ret
 end
 
+-- Always pass the number through the isValidMoney function first before using the transferMoneyTo
 function Player.transferMoneyTo(self, target, amount)
 	local balance = self:getBankBalance()
 	if amount > balance then
@@ -114,7 +115,7 @@ function Player.transferMoneyTo(self, target, amount)
 		if not playerExists(target) then
 			return false
 		end
-		db.query("UPDATE `players` SET `balance` = `balance` + '" .. amount .. "' WHERE `name` = " .. db.escapeString(target))
+		db.query("UPDATE `players` SET `balance` = `balance` + " .. amount .. " WHERE `name` = " .. db.escapeString(target))
 	end
 
 	self:setBankBalance(self:getBankBalance() - amount)

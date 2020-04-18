@@ -5,10 +5,10 @@ NpcSystem.parseParameters(npcHandler)
 local count = {}
 local transfer = {}
 
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()		npcHandler:onThink()		end
+function onCreatureAppear(cid)              npcHandler:onCreatureAppear(cid)            end
+function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid)         end
+function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
+function onThink()                          npcHandler:onThink()                        end
 
 local function greetCallback(cid)
 	count[cid], transfer[cid] = nil, nil
@@ -110,7 +110,7 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler:say("Are you sure you wish to withdraw " .. count[cid] .. " gold from your bank account?", cid)
 				npcHandler.topic[cid] = 7
 			else
-				npcHandler:say("There is not enough gold on your account.", cid)
+				npcHandler:say("There is not enough gold in your account.", cid)
 				npcHandler.topic[cid] = 0
 			end
 			return true
@@ -125,7 +125,7 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("Are you sure you wish to withdraw " .. count[cid] .. " gold from your bank account?", cid)
 			npcHandler.topic[cid] = 7
 		else
-			npcHandler:say("There is not enough gold on your account.", cid)
+			npcHandler:say("There is not enough gold in your account.", cid)
 			npcHandler.topic[cid] = 0
 		end
 		return true
@@ -133,7 +133,7 @@ local function creatureSayCallback(cid, type, msg)
 		if msgcontains(msg, "yes") then
 			if player:getFreeCapacity() >= getMoneyWeight(count[cid]) then
 				if not player:withdrawMoney(count[cid]) then
-					npcHandler:say("There is not enough gold on your account.", cid)
+					npcHandler:say("There is not enough gold in your account.", cid)
 				else
 					npcHandler:say("Here you are, " .. count[cid] .. " gold. Please let me know if there is something else I can do for you.", cid)
 				end
@@ -152,7 +152,7 @@ local function creatureSayCallback(cid, type, msg)
 	elseif npcHandler.topic[cid] == 11 then
 		count[cid] = getMoneyCount(msg)
 		if player:getBankBalance() < count[cid] then
-			npcHandler:say("There is not enough gold on your account.", cid)
+			npcHandler:say("There is not enough gold in your account.", cid)
 			npcHandler.topic[cid] = 0
 			return true
 		end
@@ -160,7 +160,7 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("Who would you like transfer " .. count[cid] .. " gold to?", cid)
 			npcHandler.topic[cid] = 12
 		else
-			npcHandler:say("There is not enough gold on your account.", cid)
+			npcHandler:say("There is not enough gold in your account.", cid)
 			npcHandler.topic[cid] = 0
 		end
 	elseif npcHandler.topic[cid] == 12 then
