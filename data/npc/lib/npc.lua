@@ -134,7 +134,7 @@ function Player.getTotalMoney(self)
 end
 
 function isValidMoney(money)
-	return isNumber(money) and money > 0 and money < 4294967296
+	return isNumber(money) and money > 0
 end
 
 function getMoneyCount(string)
