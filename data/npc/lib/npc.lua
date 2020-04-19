@@ -152,5 +152,5 @@ function getMoneyWeight(money)
 	gold = gold - crystal * 10000
 	local platinum = math.floor(gold / 100)
 	gold = gold - platinum * 100
-	return (ItemType(2160):getWeight() * crystal) + (ItemType(2152):getWeight() * platinum) + (ItemType(2148):getWeight() * gold)
+	return (ItemType(ITEM_CRYSTAL_COIN):getWeight() * crystal) + (ItemType(ITEM_PLATINUM_COIN):getWeight() * platinum) + (ItemType(ITEM_GOLD_COIN):getWeight() * gold)
 end
