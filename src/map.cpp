@@ -951,9 +951,9 @@ uint32_t Map::clean() const
 
 	std::vector<Item*> toRemove;
 
-	for (auto tileList : g_game.getCleanTiles()) {
+	for (auto tileList : g_game.getTilesToClean()) {
 		++tiles;
-		for (Item* item : *tileList->getItemList()) {
+		for (auto* item : *tileList->getItemList()) {
 			if (item->isCleanable()) {
 				toRemove.emplace_back(item);
 			}
@@ -964,12 +964,12 @@ uint32_t Map::clean() const
 		g_game.internalRemoveItem(item, -1);
 	}
 
+	size_t count = toRemove.size();
+	g_game.clearTilesToClean();
+
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		g_game.setGameState(GAME_STATE_NORMAL);
 	}
-
-	size_t count = toRemove.size();
-	g_game.clearCleanTiles();
 
 	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "")
 		<< " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "

@@ -506,17 +506,17 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
-		std::unordered_set<Tile*> getCleanTiles() const {
-			return cleanTiles;
+		std::unordered_set<Tile*> getTilesToClean() const {
+			return tilesToClean;
 		}
-		void addCleanTile(Tile* tile) {
-			cleanTiles.emplace(tile);
+		void addTileToClean(Tile* tile) {
+			tilesToClean.emplace(tile);
 		}
-		void removeCleanTile(Tile* tile) {
-			cleanTiles.erase(tile);
+		void removeTileToClean(Tile* tile) {
+			tilesToClean.erase(tile);
 		}
-		void clearCleanTiles() {
-			cleanTiles.clear();
+		void clearTilesToClean() {
+			tilesToClean.clear();
 		}
 
 	private:
@@ -553,7 +553,7 @@ class Game
 
 		std::map<uint32_t, BedItem*> bedSleepersMap;
 
-		std::unordered_set<Tile*> cleanTiles;
+		std::unordered_set<Tile*> tilesToClean;
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 

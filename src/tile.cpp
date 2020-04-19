@@ -401,7 +401,7 @@ void Tile::onAddTileItem(Item* item)
 
 	if (!hasFlag(TILESTATE_PROTECTIONZONE)) {
 		if (item->isCleanable()) {
-			g_game.addCleanTile(this);
+			g_game.addTileToClean(this);
 		}
 	}
 }
@@ -474,7 +474,7 @@ void Tile::onRemoveTileItem(const SpectatorHashSet& spectators, const std::vecto
 	if (!hasFlag(TILESTATE_PROTECTIONZONE)) {
 		auto it = getItemList();
 		if (it->size() == 0) { // it->empty() does not work for some strange reason here
-			g_game.removeCleanTile(this);
+			g_game.removeTileToClean(this);
 			return;
 		}
 
@@ -487,7 +487,7 @@ void Tile::onRemoveTileItem(const SpectatorHashSet& spectators, const std::vecto
 		}
 
 		if (!ret) {
-			g_game.removeCleanTile(this);
+			g_game.removeTileToClean(this);
 		}
 	}
 }
