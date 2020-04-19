@@ -399,10 +399,8 @@ void Tile::onAddTileItem(Item* item)
 		spectator->onAddTileItem(this, cylinderMapPos);
 	}
 
-	if (!hasFlag(TILESTATE_PROTECTIONZONE)) {
-		if (item->isCleanable()) {
-			g_game.addTileToClean(this);
-		}
+	if (!hasFlag(TILESTATE_PROTECTIONZONE) && item->isCleanable()) {
+		g_game.addTileToClean(this);
 	}
 }
 
