@@ -22,7 +22,7 @@ function carpets.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if fromPosition.x == CONTAINER_POSITION then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the item on the floor first.")
 		return true
-		end
+	end
 	local tile = Tile(item:getPosition())
 	if not tile:getHouse() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may use this only inside a house.")
