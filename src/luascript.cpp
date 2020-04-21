@@ -2008,6 +2008,8 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("Tile", "", LuaScriptInterface::luaTileCreate);
 	registerMetaMethod("Tile", "__eq", LuaScriptInterface::luaUserdataCompare);
 
+	registerMethod("Tile", "remove", LuaScriptInterface::luaTileRemove);
+
 	registerMethod("Tile", "getPosition", LuaScriptInterface::luaTileGetPosition);
 	registerMethod("Tile", "getGround", LuaScriptInterface::luaTileGetGround);
 	registerMethod("Tile", "getThing", LuaScriptInterface::luaTileGetThing);
@@ -4662,6 +4664,20 @@ int LuaScriptInterface::luaTileCreate(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTileRemove(lua_State* L)
+{
+	// tile:remove()
+	Tile* tile = getUserdata<Tile>(L, 1);
+	if (!tile) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	g_game.map.removeTile(tile->getPosition());
+	pushBoolean(L, true);
 	return 1;
 }
 

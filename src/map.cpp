@@ -154,6 +154,40 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	}
 }
 
+void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
+{
+	if (z >= MAP_MAX_LAYERS) {
+		return;
+	}
+
+	const QTreeLeafNode* leaf = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, x, y);
+	if (!leaf) {
+		return;
+	}
+
+	const Floor* floor = leaf->getFloor(z);
+	if (!floor) {
+		return;
+	}
+
+	Tile* tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
+	if (tile) {
+		TileItemVector* items = tile->getItemList();
+		if (items) {
+			for (auto it = items->begin(), end = items->end(); it != end; ++it) {
+				g_game.internalRemoveItem(*it);
+			}
+			items->clear();
+		}
+
+		Item* ground = tile->getGround();
+		if (ground) {
+			g_game.internalRemoveItem(ground);
+			tile->setGround(nullptr);
+		}
+	}
+}
+
 bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/)
 {
 	bool foundTile;
