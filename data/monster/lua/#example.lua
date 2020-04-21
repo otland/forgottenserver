@@ -1,7 +1,5 @@
-local mType = MonsterType("example")
+local mType = Game.createMonsterType("example")
 local monster = {}
-monster.eventFile = true -- will try to load the file example.lua in data/scripts/monsters/events
-monster.eventFile = "test" -- will try to load the file test.lua in data/scripts/monsters/events
 monster.description = "an example"
 monster.experience = 1
 monster.outfit = {
@@ -40,14 +38,14 @@ monster.voices = {
 	interval = 5000,
 	chance = 10,
 	{text = "I'm an example", yell = false},
-	{text = "You shall bow", yell = false},
+	{text = "You shall bow", yell = false}
 }
 
 monster.loot = {
 	{id = "gold coin", chance = 60000, maxCount = 100},
-	{id = "bag", chance = 60000, 
+	{id = "bag", chance = 60000,
 		child = {
-			{id = "platin coin", chance = 60000, maxCount = 100},
+			{id = "platinum coin", chance = 60000, maxCount = 100},
 			{id = "crystal coin", chance = 60000, maxCount = 100}
 		}
 	}
@@ -86,5 +84,31 @@ monster.immunities = {
 	{type = "paralyze", condition = true},
 	{type = "invisible", condition = true}
 }
+
+mType.onThink = function(monster, interval)
+	print("I'm thinking")
+end
+
+mType.onAppear = function(monster, creature)
+	if monster:getId() == creature:getId() then
+		print(monster:getId(), creature:getId())
+	end
+end
+
+mType.onDisappear = function(monster, creature)
+	if monster:getId() == creature:getId() then
+		print(monster:getId(), creature:getId())
+	end
+end
+
+mType.onMove = function(monster, creature, fromPosition, toPosition)
+	if monster:getId() == creature:getId() then
+		print(monster:getId(), creature:getId(), fromPosition, toPosition)
+	end
+end
+
+mType.onSay = function(monster, creature, type, message)
+	print(monster:getId(), creature:getId(), type, message)
+end
 
 mType:register(monster)

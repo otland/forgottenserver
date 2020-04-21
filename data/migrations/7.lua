@@ -16,7 +16,7 @@ function onUpdateDatabase()
 	local resultId = db.storeQuery("SELECT `account_id`, `player_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id`, `player_id` HAVING COUNT(*) > 1")
 	if resultId ~= false then
 		repeat
-			db.query("DELETE FROM `account_viplist` WHERE `account_id` = " .. result.getDataInt(resultId, "account_id") .. " AND `player_id` = " .. result.getDataInt(resultId, "player_id") .. " LIMIT " .. (result.getDataInt(resultId, "count") - 1))
+			db.query("DELETE FROM `account_viplist` WHERE `account_id` = " .. result.getNumber(resultId, "account_id") .. " AND `player_id` = " .. result.getNumber(resultId, "player_id") .. " LIMIT " .. (result.getNumber(resultId, "count") - 1))
 		until not result.next(resultId)
 		result.free(resultId)
 	end
@@ -25,7 +25,7 @@ function onUpdateDatabase()
 	resultId = db.storeQuery("SELECT `account_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id` HAVING COUNT(*) > 200")
 	if resultId ~= false then
 		repeat
-			db.query("DELETE FROM `account_viplist` WHERE `account_id` = " .. result.getDataInt(resultId, "account_id") .. " LIMIT " .. (result.getDataInt(resultId, "count") - 200))
+			db.query("DELETE FROM `account_viplist` WHERE `account_id` = " .. result.getNumber(resultId, "account_id") .. " LIMIT " .. (result.getNumber(resultId, "count") - 200))
 		until not result.next(resultId)
 		result.free(resultId)
 	end

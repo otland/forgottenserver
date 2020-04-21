@@ -46,14 +46,14 @@
 	<loot>
 		<item id="2050" chance="10190" /><!-- torch -->
 		<item name="gold coin" countmax="59" chance="67740" />
-		<item name="worn leather boots" chance="9900" />
+		<item id="2238" chance="9900" /><!-- worn leather boots -->
 		<item name="sabre" chance="10100" />
 		<item name="throwing knife" countmax="5" chance="9000" />
 		<item name="plate armor" chance="1130" />
 		<item name="battle shield" chance="3850" />
 		<item id="5091" chance="1000" /><!-- treasure map -->
 		<item name="rum flask" chance="120" />
-		<item id="5792" chance="40" /><!-- dice -->
+		<item id="5792" chance="40" /><!-- die -->
 		<item name="pirate backpack" chance="430" />
 		<item name="pirate shirt" chance="1200" />
 		<item name="hook" chance="450" />

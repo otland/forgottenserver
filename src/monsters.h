@@ -24,7 +24,6 @@
 
 
 const uint32_t MAX_LOOTCHANCE = 100000;
-const uint32_t MAX_STATICWALK = 100;
 
 struct LootBlock {
 	uint16_t id;
@@ -158,6 +157,8 @@ class MonsterType
 		bool canWalkOnEnergy = true;
 		bool canWalkOnFire = true;
 		bool canWalkOnPoison = true;
+
+		MonstersEvent_t eventType = MONSTERS_EVENT_NONE;
 	};
 
 	public:
@@ -166,6 +167,8 @@ class MonsterType
 		// non-copyable
 		MonsterType(const MonsterType&) = delete;
 		MonsterType& operator=(const MonsterType&) = delete;
+
+		bool loadCallback(LuaScriptInterface* scriptInterface);
 
 		std::string name;
 		std::string nameDescription;
@@ -237,6 +240,7 @@ class Monsters
 		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 		std::unique_ptr<LuaScriptInterface> scriptInterface;
+		std::map<std::string, MonsterType> monsters;
 
 	private:
 		ConditionDamage* getDamageCondition(ConditionType_t conditionType,
@@ -248,7 +252,6 @@ class Monsters
 		void loadLootContainer(const pugi::xml_node& node, LootBlock&);
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
-		std::map<std::string, MonsterType> monsters;
 		std::map<std::string, std::string> unloadedMonsters;
 
 		bool loaded = false;

@@ -103,7 +103,7 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 
 		if moveItem then
 			local parent = item:getParent()
-			if parent:getSize() == parent:getCapacity() then
+			if parent:isContainer() and parent:getSize() == parent:getCapacity() then
 				self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM))
 				return false
 			else
@@ -275,4 +275,33 @@ function Player:onGainSkillTries(skill, tries)
 		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
 	end
 	return tries * configManager.getNumber(configKeys.RATE_SKILL)
+end
+
+function Player:onWrapItem(item, position)
+	local topCylinder = item:getTopParent()
+	if not topCylinder then
+		return
+	end
+
+	local tile = Tile(topCylinder:getPosition())
+	if not tile then
+		return
+	end
+
+	if not tile:getHouse() then
+		self:sendCancelMessage("You can only wrap and unwrap this item inside a house.")
+		return
+	end
+
+	local wrapId = item:getAttribute("wrapid")
+	if wrapId == 0 then
+		return
+	end
+
+	local oldId = item:getId()
+	item:remove(1)
+	local item = tile:addItem(wrapId)
+	if item then
+		item:setAttribute("wrapid", oldId)
+	end
 end

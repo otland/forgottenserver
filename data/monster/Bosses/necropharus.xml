@@ -53,18 +53,18 @@
 		<item name="moonlight rod" chance="500" />
 		<item name="boots of haste" chance="666" />
 		<item id="2229" countmax="3" chance="20000" /><!-- skull -->
-		<item id="2230" countmax="1" chance="30000" /><!-- bone -->
-		<item id="2231" countmax="1" chance="6000" /><!-- big bone -->
+		<item id="2230" chance="30000" /><!-- bone -->
+		<item id="2231" chance="6000" /><!-- big bone -->
 		<item name="fire sword" chance="220" />
 		<item name="katana" chance="10000" />
 		<item name="clerical mace" chance="5000" />
 		<item name="skull staff" chance="833" />
-		<item name="bone club" countmax="1" chance="19900" />
-		<item name="scale armor" countmax="1" chance="8500" />
+		<item name="bone club" chance="19900" />
+		<item name="scale armor" chance="8500" />
 		<item name="bone shield" chance="7500" />
 		<item name="mystic turban" chance="909" />
 		<item name="grave flower" chance="20000" />
-		<item name="green mushroom" countmax="1" chance="22500" />
+		<item name="green mushroom" chance="22500" />
 		<item name="shadow herb" countmax="2" chance="20000" />
 		<item name="horseman helmet" chance="150" />
 		<item name="worm" countmax="10" chance="50000" />

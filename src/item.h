@@ -102,7 +102,9 @@ enum AttrTypes_t {
 	ATTR_ARMOR = 31,
 	ATTR_HITCHANCE = 32,
 	ATTR_SHOOTRANGE = 33,
-	ATTR_CUSTOM_ATTRIBUTES = 34
+	ATTR_CUSTOM_ATTRIBUTES = 34,
+	ATTR_DECAYTO = 35,
+	ATTR_WRAPID = 36
 };
 
 enum Attr_ReadValue {
@@ -411,7 +413,7 @@ class ItemAttributes
 			}
 		};
 
-		std::forward_list<Attribute> attributes;
+		std::vector<Attribute> attributes;
 		uint32_t attributeBits = 0;
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
@@ -495,18 +497,26 @@ class ItemAttributes
 			return false;
 		}
 
+		const static uint32_t intAttributeTypes = ITEM_ATTRIBUTE_ACTIONID | ITEM_ATTRIBUTE_UNIQUEID | ITEM_ATTRIBUTE_DATE
+			| ITEM_ATTRIBUTE_WEIGHT | ITEM_ATTRIBUTE_ATTACK | ITEM_ATTRIBUTE_DEFENSE | ITEM_ATTRIBUTE_EXTRADEFENSE
+			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
+			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
+			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID;
+		const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
+			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
+
 	public:
 		static bool isIntAttrType(itemAttrTypes type) {
-			return (type & 0x7FFE13) != 0;
+			return (type & intAttributeTypes) == type;
 		}
 		static bool isStrAttrType(itemAttrTypes type) {
-			return (type & 0x1EC) != 0;
+			return (type & stringAttributeTypes) == type;
 		}
 		inline static bool isCustomAttrType(itemAttrTypes type) {
-			return (type & 0x80000000) != 0;
+			return (type & ITEM_ATTRIBUTE_CUSTOM) == type;
 		}
 
-		const std::forward_list<Attribute>& getList() const {
+		const std::vector<Attribute>& getList() const {
 			return attributes;
 		}
 
@@ -620,7 +630,7 @@ class Item : virtual public Thing
 		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
 			getAttributes()->setCustomAttribute(key, value);
 		}
-		
+
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
 			return getAttributes()->getCustomAttribute(key);
 		}
@@ -756,6 +766,16 @@ class Item : virtual public Thing
 				return DECAYING_FALSE;
 			}
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
+		}
+
+		void setDecayTo(int32_t decayTo) {
+			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
+		}
+		int32_t getDecayTo() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DECAYTO)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DECAYTO);
+			}
+			return items[id].decayTo;
 		}
 
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
@@ -992,7 +1012,7 @@ class Item : virtual public Thing
 	protected:
 		Cylinder* parent = nullptr;
 
-		uint16_t id;  // the same id as in ItemType
+		uint16_t id; // the same id as in ItemType
 
 	private:
 		std::string getWeightDescription(uint32_t weight) const;

@@ -60,8 +60,8 @@
 		<item name="star herb" chance="5060" />
 		<item name="bat wing" countmax="2" chance="4900" />
 		<item name="mercenary sword" chance="110" />
-		<item id="9808" chance="12530" /><!-- rusty armor -->
-		<item id="9809" countmax="2" chance="12530" /><!-- rusty armor -->
+		<item id="9808" chance="12530" /><!-- rusty armor (common) -->
+		<item id="9809" countmax="2" chance="12530" /><!-- rusty armor (semi-rare) -->
 		<item name="batwing hat" chance="80" />
 		<item name="mutated bat ear" chance="4900" />
 	</loot>

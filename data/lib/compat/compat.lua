@@ -230,6 +230,45 @@ do
 	rawgetmetatable("Weapon").__newindex = WeaponNewIndex
 end
 
+do
+	local function SpellNewIndex(self, key, value)
+		if key == "onCastSpell" then
+			self:onCastSpell(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("Spell").__newindex = SpellNewIndex
+end
+
+do
+	local function MonsterTypeNewIndex(self, key, value)
+		if key == "onThink" then
+			self:eventType(MONSTERS_EVENT_THINK)
+			self:onThink(value)
+			return
+		elseif key == "onAppear" then
+			self:eventType(MONSTERS_EVENT_APPEAR)
+			self:onAppear(value)
+			return
+		elseif key == "onDisappear" then
+			self:eventType(MONSTERS_EVENT_DISAPPEAR)
+			self:onDisappear(value)
+			return
+		elseif key == "onMove" then
+			self:eventType(MONSTERS_EVENT_MOVE)
+			self:onMove(value)
+			return
+		elseif key == "onSay" then
+			self:eventType(MONSTERS_EVENT_SAY)
+			self:onSay(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("MonsterType").__newindex = MonsterTypeNewIndex
+end
+
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing then
@@ -271,6 +310,11 @@ setCombatCondition = function(...)
 	print("[Warning] Function setCombatCondition was renamed to addCombatCondition and will be removed in the future")
 	Combat.addCondition(...)
 end
+
+function doTargetCombatHealth(...) return doTargetCombat(...) end
+function doAreaCombatHealth(...) return doAreaCombat(...) end
+function doTargetCombatMana(cid, target, min, max, effect) return doTargetCombat(cid, target, COMBAT_MANADRAIN, min, max, effect) end
+function doAreaCombatMana(cid, pos, area, min, max, effect) return doAreaCombat(cid, COMBAT_MANADRAIN, pos, area, min, max, effect) end
 
 createConditionObject = Condition
 setConditionParam = Condition.setParameter
@@ -574,8 +618,8 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	end
 	return player:addExperience(exp, ...)
 end
-function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana * configManager.getNumber(configKeys.RATE_MAGIC)) or false end
-function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n * configManager.getNumber(configKeys.RATE_SKILL)) or false end
+function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana) or false end
+function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n) or false end
 function doPlayerAddMana(cid, mana, ...) local p = Player(cid) return p and p:addMana(mana, ...) or false end
 function doPlayerJoinParty(cid, leaderId)
 	local player = Player(cid)
@@ -1239,20 +1283,32 @@ end
 function doMoveCreature(cid, direction) local c = Creature(cid) return c ~= nil and c:move(direction) end
 
 function createFunctions(class)
-	local exclude = {"get", "set", "is", "add", "can"}
+	local exclude = {[2] = {"is"}, [3] = {"get", "set", "add", "can"}, [4] = {"need"}}
 	local temp = {}
 	for name, func in pairs(class) do
-		if not table.contains(exclude, name:sub(1,3)) then
-			local str = name:sub(1,1):upper()..name:sub(2)
+		local add = true
+		for strLen, strTable in pairs(exclude) do
+			if table.contains(strTable, name:sub(1, strLen)) then
+				add = false
+			end
+		end
+		if add then
+			local str = name:sub(1, 1):upper() .. name:sub(2)
 			local getFunc = function(self) return func(self) end
 			local setFunc = function(self, ...) return func(self, ...) end
-			local get = "get".. str
-			local set = "set".. str
-			table.insert(temp, {set, setFunc, get, getFunc})
+			local get = "get" .. str
+			local set = "set" .. str
+			if not (rawget(class, get) and rawget(class, set)) then
+				table.insert(temp, {set, setFunc, get, getFunc})
+			end
 		end
 	end
-	for _,func in ipairs(temp) do
+	for _, func in ipairs(temp) do
 		rawset(class, func[1], func[2])
 		rawset(class, func[3], func[4])
 	end
+end
+
+function doPlayerTakeItem(cid, itemid, count)
+	return Player(cid):removeItem(itemid, count)
 end

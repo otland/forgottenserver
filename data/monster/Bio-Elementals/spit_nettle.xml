@@ -27,7 +27,7 @@
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15">
+	<defenses armor="12" defense="12">
 		<defense name="healing" interval="2000" chance="10" min="8" max="16">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -43,12 +43,12 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="5" chance="10600" />
-		<item name="sling herb" countmax="2" chance="5263" />
-		<item name="sling herb" chance="1010" />
-		<item name="sling herb" chance="362" />
-		<item name="shadow herb" chance="10650" />
-		<item name="nettle blossom" chance="833" />
-		<item name="nettle spit" chance="10000" />
+		<item name="shadow herb" chance="11000" />
+		<item name="gold coin" countmax="5" chance="10800" />
+		<item name="nettle spit" chance="9500" />
+		<item name="sling herb" countmax="2" chance="5763" />
+		<item name="grave flower" chance="1010" />
+		<item name="nettle blossom" chance="980" />
+		<item name="seeds" chance="340" />
 	</loot>
 </monster>

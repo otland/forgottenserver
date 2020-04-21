@@ -61,8 +61,8 @@ class MoveEvents final : public BaseEvents
 		MoveEvents& operator=(const MoveEvents&) = delete;
 
 		uint32_t onCreatureMove(Creature* creature, const Tile* tile, MoveEvent_t eventType);
-		uint32_t onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
-		uint32_t onPlayerDeEquip(Player* player, Item* item, slots_t slot);
+		ReturnValue onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
+		ReturnValue onPlayerDeEquip(Player* player, Item* item, slots_t slot);
 		uint32_t onItemMove(Item* item, Tile* tile, bool isAdd);
 
 		MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
@@ -99,7 +99,7 @@ class MoveEvents final : public BaseEvents
 
 using StepFunction = std::function<uint32_t(Creature* creature, Item* item, const Position& pos)>;
 using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Position& pos)>;
-using EquipFunction = std::function<uint32_t(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
+using EquipFunction = std::function<ReturnValue(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
 
 class MoveEvent final : public Event
 {
@@ -114,7 +114,7 @@ class MoveEvent final : public Event
 
 		uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
 		uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
-		uint32_t fireEquip(Player* player, Item* item, slots_t slot, bool isCheck);
+		ReturnValue fireEquip(Player* player, Item* item, slots_t slot, bool isCheck);
 
 		uint32_t getSlot() const {
 			return slot;
@@ -178,10 +178,10 @@ class MoveEvent final : public Event
 		void addUniqueId(uint32_t id) {
 			uniqueIdRange.emplace_back(id);
 		}
-		std::vector<std::string> getPosList() {
+		std::vector<Position> getPosList() {
 			return posList;
 		}
-		void addPosList(std::string pos) {
+		void addPosList(Position pos) {
 			posList.emplace_back(pos);
 		}
 		std::string getSlotName() {
@@ -224,8 +224,8 @@ class MoveEvent final : public Event
 		static uint32_t AddItemField(Item* item, Item* tileItem, const Position& pos);
 		static uint32_t RemoveItemField(Item* item, Item* tileItem, const Position& pos);
 
-		static uint32_t EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
-		static uint32_t DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+		static ReturnValue EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+		static ReturnValue DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
 		StepFunction stepFunction;
@@ -250,7 +250,7 @@ class MoveEvent final : public Event
 		std::vector<uint32_t> itemIdRange;
 		std::vector<uint32_t> actionIdRange;
 		std::vector<uint32_t> uniqueIdRange;
-		std::vector<std::string> posList;
+		std::vector<Position> posList;
 };
 
 #endif

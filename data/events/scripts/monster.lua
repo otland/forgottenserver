@@ -14,7 +14,7 @@ function Monster:onDropLoot(corpse)
 			end
 		end
 
-		if player then 
+		if player then
 			local text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
 			local party = player:getParty()
 			if party then
@@ -32,4 +32,8 @@ function Monster:onDropLoot(corpse)
 			player:sendTextMessage(MESSAGE_LOOT, text)
 		end
 	end
+end
+
+function Monster:onSpawn(position, startup, artificial)
+	return true
 end

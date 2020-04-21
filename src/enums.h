@@ -89,6 +89,8 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_CHARGES = 1 << 20,
 	ITEM_ATTRIBUTE_FLUIDTYPE = 1 << 21,
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
+	ITEM_ATTRIBUTE_DECAYTO = 1 << 23,
+	ITEM_ATTRIBUTE_WRAPID = 1 << 24,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -151,6 +153,12 @@ enum SpellGroup_t : uint8_t {
 	SPELLGROUP_HEALING = 2,
 	SPELLGROUP_SUPPORT = 3,
 	SPELLGROUP_SPECIAL = 4,
+};
+
+enum SpellType_t : uint8_t {
+	SPELL_UNDEFINED = 0,
+	SPELL_INSTANT = 1,
+	SPELL_RUNE = 2,
 };
 
 enum AccountType_t : uint8_t {
@@ -415,6 +423,7 @@ enum ReturnValue {
 	RETURNVALUE_NOTENOUGHMANA,
 	RETURNVALUE_NOTENOUGHSOUL,
 	RETURNVALUE_YOUAREEXHAUSTED,
+	RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST,
 	RETURNVALUE_PLAYERISNOTREACHABLE,
 	RETURNVALUE_CANONLYUSETHISRUNEONCREATURES,
 	RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE,
@@ -447,6 +456,7 @@ enum ReturnValue {
 	RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE,
 	RETURNVALUE_TRADEPLAYERHIGHESTBIDDER,
 	RETURNVALUE_YOUCANNOTTRADETHISHOUSE,
+	RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION,
 };
 
 enum SpeechBubble_t
@@ -596,16 +606,27 @@ struct CombatDamage
 	} primary, secondary;
 
 	CombatOrigin origin;
+	bool critical;
 	CombatDamage()
 	{
 		origin = ORIGIN_NONE;
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
+		critical = false;
 	}
 };
 
 using MarketOfferList = std::list<MarketOffer>;
 using HistoryMarketOfferList = std::list<HistoryMarketOffer>;
 using ShopInfoList = std::list<ShopInfo>;
+
+enum MonstersEvent_t : uint8_t {
+	MONSTERS_EVENT_NONE = 0,
+	MONSTERS_EVENT_THINK = 1,
+	MONSTERS_EVENT_APPEAR = 2,
+	MONSTERS_EVENT_DISAPPEAR = 3,
+	MONSTERS_EVENT_MOVE = 4,
+	MONSTERS_EVENT_SAY = 5,
+};
 
 #endif

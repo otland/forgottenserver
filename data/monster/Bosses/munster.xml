@@ -31,7 +31,7 @@
 		<item name="gold coin" countmax="16" chance="100000" />
 		<item name="bone club" chance="5000" />
 		<item name="jacket" chance="50000" />
-		<item name="cookie" countmax="1" chance="5000" />
+		<item name="cookie" chance="5000" />
 		<item id="2696" chance="50000" /><!-- cheese -->
 	</loot>
 </monster>

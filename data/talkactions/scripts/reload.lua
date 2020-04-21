@@ -1,7 +1,6 @@
 local reloadTypes = {
 	["all"] = RELOAD_TYPE_ALL,
 
-	["global"] = RELOAD_TYPE_GLOBAL,
 	["action"] = RELOAD_TYPE_ACTIONS,
 	["actions"] = RELOAD_TYPE_ACTIONS,
 

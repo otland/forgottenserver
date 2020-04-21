@@ -10,7 +10,7 @@ function onUpdateDatabase()
 	if resultId ~= false then
 		local stmt = "INSERT INTO `guild_membership` (`player_id`, `guild_id`, `rank_id`, `nick`) VALUES "
 		repeat
-			stmt = stmt .. "(" .. result.getDataInt(resultId, "player_id") .. "," .. result.getDataInt(resultId, "guild_id") .. "," .. result.getDataInt(resultId, "rank_id") .. "," .. db.escapeString(result.getDataString(resultId, "guild_nick")) .. "),"
+			stmt = stmt .. "(" .. result.getNumber(resultId, "player_id") .. "," .. result.getNumber(resultId, "guild_id") .. "," .. result.getNumber(resultId, "rank_id") .. "," .. db.escapeString(result.getString(resultId, "guild_nick")) .. "),"
 		until not result.next(resultId)
 		result.free(resultId)
 
