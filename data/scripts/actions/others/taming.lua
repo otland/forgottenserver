@@ -346,16 +346,14 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	local targetName = target:getName():lower()
 	if mount.type ~= target.type
 			or (mount.lookType and mount.lookType ~= target:getOutfit().lookType)
-			or (mount.name and mount.name ~= targetName) then
+			or (mount.name and mount.name ~= target:getName():lower()) then
 		return false
 	end
 
 	if player:hasMount(mount.id) then
-		player:say("You already tamed a " .. (mount.mountName or targetName) .. ".", TALKTYPE_MONSTER_SAY)
-		return true
+		return false
 	end
 
 	if target.type == TYPE_MONSTER then
