@@ -53,15 +53,13 @@ function musicBox.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		return false
 	end
 
-	local targetName = target:getName():lower()
-	local monsterConfig = config[targetName]
+	local monsterConfig = config[target:getName():lower()]
 	if not monsterConfig then
-		return true
+		return false
 	end
 
 	if player:hasMount(monsterConfig.mountId) then
-		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
-		return true
+		return false
 	end
 
 	player:addMount(monsterConfig.mountId)
