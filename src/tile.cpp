@@ -31,9 +31,11 @@
 #include "movement.h"
 #include "teleport.h"
 #include "trashholder.h"
+#include "configmanager.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
+extern ConfigManager g_config;
 
 StaticTile real_nullptr_tile(0xFFFF, 0xFFFF, 0xFF);
 Tile& Tile::nullptr_tile = real_nullptr_tile;
@@ -399,7 +401,7 @@ void Tile::onAddTileItem(Item* item)
 		spectator->onAddTileItem(this, cylinderMapPos);
 	}
 
-	if (!hasFlag(TILESTATE_PROTECTIONZONE) && item->isCleanable()) {
+	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || (g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES) && hasFlag(TILESTATE_PROTECTIONZONE))) && item->isCleanable()) {
 		g_game.addTileToClean(this);
 	}
 }
@@ -469,7 +471,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 		spectator->onRemoveTileItem(this, cylinderMapPos, iType, item);
 	}
 
-	if (!hasFlag(TILESTATE_PROTECTIONZONE)) {
+	if (!hasFlag(TILESTATE_PROTECTIONZONE) || (g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES) && hasFlag(TILESTATE_PROTECTIONZONE))) {
 		auto it = getItemList();
 		if (it->size() == 0) { // it->empty() does not work for some strange reason here
 			g_game.removeTileToClean(this);
