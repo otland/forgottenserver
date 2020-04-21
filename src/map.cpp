@@ -172,12 +172,16 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 
 	Tile* tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 	if (tile) {
-		TileItemVector* items = tile->getItemList();
-		if (items) {
+		if (const CreatureVector* creatures = tile->getCreatures()) {
+			for (int32_t i = creatures->size(); --i >= 0;) {
+				g_game.removeCreature((*creatures)[i]);
+			}
+		}
+
+		if (TileItemVector* items = tile->getItemList()) {
 			for (auto it = items->begin(), end = items->end(); it != end; ++it) {
 				g_game.internalRemoveItem(*it);
 			}
-			items->clear();
 		}
 
 		Item* ground = tile->getGround();
