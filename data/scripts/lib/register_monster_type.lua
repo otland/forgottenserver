@@ -105,6 +105,15 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.staticAttackChance then
 			mtype:staticAttackChance(mask.flags.staticAttackChance)
 		end
+		if mask.flags.canWalkOnEnergy ~= nil then
+			mtype:canWalkOnEnergy(mask.flags.canWalkOnEnergy)
+		end
+		if mask.flags.canWalkOnFire ~= nil then
+			mtype:canWalkOnFire(mask.flags.canWalkOnFire)
+		end
+		if mask.flags.canWalkOnPoison ~= nil then
+			mtype:canWalkOnPoison(mask.flags.canWalkOnPoison)
+		end
 	end
 end
 registerMonsterType.light = function(mtype, mask)
