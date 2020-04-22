@@ -24950,9 +24950,6 @@
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="venom" />
 	</item>
-	<item id="17432" article="a" name="purse">
-		<attribute key="containerSize" value="30" />
-	</item>
 	<item fromid="17433" toid="17434" name="stone" />
 	<item id="17435" article="an" name="open door">
 		<attribute key="type" value="door" />
