@@ -44,6 +44,6 @@
 		<item name="gold coin" countmax="50" chance="100000" />
 		<item name="life ring" chance="50000" />
 		<item name="hunting spear" countmax="4" chance="25000" />
-		<item id="9808" chance="14285" /><!-- rusty armor -->
+		<item id="9808" chance="14285" /><!-- rusty armor (common) -->
 	</loot>
 </monster>

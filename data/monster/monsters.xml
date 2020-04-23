@@ -71,6 +71,12 @@
 	<monster name="Barbarian Headsplitter" file="Barbarians/barbarian_headsplitter.xml" />
 	<monster name="Barbarian Skullhunter" file="Barbarians/barbarian_skullhunter.xml" />
 
+	<!-- Bats -->
+	<monster name="Bat" file="Bats/bat.xml" />
+	<monster name="Mutated Bat" file="Bats/mutated_bat.xml" />
+	<monster name="Nightfiend" file="Bats/nightfiend.xml" />
+	<monster name="Vicious Manbat" file="Bats/vicious_manbat.xml" />
+
 	<!-- Bears -->
 	<monster name="Bear" file="Bears/bear.xml" />
 	<monster name="Panda" file="Bears/panda.xml" />
@@ -509,10 +515,6 @@
 	<monster name="Goblin Leader" file="Goblins/goblin_leader.xml" />
 	<monster name="Goblin Scavenger" file="Goblins/goblin_scavenger.xml" />
 
-	<!-- Hyaenids -->
-	<monster name="Ghoulish Hyaena" file="Hyaenids/ghoulish_hyaena.xml" />
-	<monster name="Hyaena" file="Hyaenids/hyaena.xml" />
-
 	<!-- Hydro-Elementals -->
 	<monster name="Massive Water Elemental" file="Hydro-Elementals/massive_water_elemental.xml" />
 	<monster name="Roaring Water Elemental" file="Hydro-Elementals/roaring_water_elemental.xml" />
@@ -524,7 +526,6 @@
 	<monster name="Blue Butterfly" file="Insects/blue_butterfly.xml" />
 	<monster name="Brimstone Bug" file="Insects/brimstone_bug.xml" />
 	<monster name="Bug" file="Insects/bug.xml" />
-	<monster name="Butterfly" file="Insects/butterfly.xml" />
 	<monster name="Cockroach" file="Insects/cockroach.xml" />
 	<monster name="Emerald Damselfly" file="Insects/emerald_damselfly.xml" />
 	<monster name="Hive Overseer" file="Insects/hive_overseer.xml" />
@@ -532,12 +533,11 @@
 	<monster name="Insectoid Scout" file="Insects/insectoid_scout.xml" />
 	<monster name="Insectoid Worker" file="Insects/insectoid_worker.xml" />
 	<monster name="Kollos" file="Insects/kollos.xml" />
-	<monster name="Lady Bug" file="Insects/ladybug.xml" />
+	<monster name="Ladybug" file="Insects/ladybug.xml" />
 	<monster name="Lancer Beetle" file="Insects/lancer_beetle.xml" />
 	<monster name="Larva" file="Insects/larva.xml" />
 	<monster name="Lesser Swarmer" file="Insects/lesser_swarmer.xml" />
 	<monster name="Parasite" file="Insects/parasite.xml" />
-	<monster name="Pink Butterfly" file="Insects/pink_butterfly.xml" />
 	<monster name="Purple Butterfly" file="Insects/purple_butterfly.xml" />
 	<monster name="Red Butterfly" file="Insects/red_butterfly.xml" />
 	<monster name="Sandcrawler" file="Insects/sandcrawler.xml" />
@@ -577,7 +577,11 @@
 
 	<!-- Misc -->
 	<!-- Misc Mammals -->
-	<monster name="Bat" file="Misc/Misc Mammals/bat.xml" />
+
+	<monster name="Badger" file="Misc/Misc Mammals/badger.xml" />
+	<monster name="Ghoulish Hyaena" file="Misc/Misc Mammals/ghoulish_hyaena.xml" />
+	<monster name="Hyaena" file="Misc/Misc Mammals/hyaena.xml" />
+	<monster name="Skunk" file="Misc/Misc Mammals/skunk.xml" />
 	<monster name="Water Buffalo" file="Misc/Misc Mammals/water_buffalo.xml" />
 
 	<!-- Misc Mounts -->
@@ -599,12 +603,7 @@
 	<monster name="Dark Monk" file="Monks/dark_monk.xml" />
 	<monster name="Monk" file="Monks/monk.xml" />
 
-	<!-- Mustelids -->
-	<monster name="Badger" file="Mustelids/badger.xml" />
-	<monster name="Skunk" file="Mustelids/skunk.xml" />
-
 	<!-- Mutated -->
-	<monster name="Mutated Bat" file="Mutated/mutated_bat.xml" />
 	<monster name="Mutated Human" file="Mutated/mutated_human.xml" />
 	<monster name="Mutated Rat" file="Mutated/mutated_rat.xml" />
 	<monster name="Mutated Tiger" file="Mutated/mutated_tiger.xml" />
@@ -768,13 +767,8 @@
 	<monster name="Grim Reaper" file="Undead_Humanoids/grim_reaper.xml" />
 	<monster name="Lich" file="Undead_Humanoids/lich.xml" />
 	<monster name="Mummy" file="Undead_Humanoids/mummy.xml" />
-	<monster name="Vampire" file="Undead_Humanoids/vampire.xml" />
-	<monster name="Vampire Bride" file="Undead_Humanoids/vampire_bride.xml" />
-	<monster name="Vampire Viscount" file="Undead_Humanoids/vampire_viscount.xml" />
-	<monster name="Vicious Manbat" file="Undead_Humanoids/vicious_manbat.xml" />
 	<monster name="Zombie" file="Undead_Humanoids/zombie.xml" />
 	<monster name="Undead Prospector" file="Undead_Humanoids/undead_prospector.xml" />
-	<monster name="Nightfiend" file="Undead_Humanoids/nightfiend.xml" />
 	<monster name="Tomb Servant" file="Undead_Humanoids/tomb_servant.xml" />
 
 	<!-- Ungulates -->
@@ -801,6 +795,11 @@
 	<monster name="Terrified Elephant" file="Ungulates/terrified_elephant.xml" />
 	<monster name="Vampire Pig" file="Ungulates/vampire_pig.xml" />
 	<monster name="White Deer" file="Ungulates/white_deer.xml" />
+
+	<!-- Vampires -->
+	<monster name="Vampire" file="Vampires/vampire.xml" />
+	<monster name="Vampire Bride" file="Vampires/vampire_bride.xml" />
+	<monster name="Vampire Viscount" file="Vampires/vampire_viscount.xml" />
 
 	<!-- Voodoo_Cultists -->
 	<monster name="Acolyte of the Cult" file="Voodoo_Cultists/acolyte_of_the_cult.xml" />

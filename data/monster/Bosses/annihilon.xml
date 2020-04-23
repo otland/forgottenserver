@@ -92,8 +92,8 @@
 		<item name="lavos armor" chance="1851" />
 		<item name="paladin armor" chance="10000" />
 		<item name="obsidian truncheon" chance="1234" />
-		<item id="9808" chance="1234" /><!-- rusty armor -->
-		<item id="9810" chance="50000" /><!-- rusty armor -->
+		<item id="9808" chance="1234" /><!-- rusty armor (common) -->
+		<item id="9810" chance="50000" /><!-- rusty armor (rare) -->
 		<item name="gold ingot" chance="20000" />
 	</loot>
 </monster>

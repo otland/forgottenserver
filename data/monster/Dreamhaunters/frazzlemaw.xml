@@ -73,7 +73,7 @@
 		<item name="iron ore" chance="3000" />
 		<item name="fish fin" chance="4700" />
 		<item name="hardened bone" chance="5000" />
-		<item name="fish tail" chance="10800" />
+		<item id="5951" chance="10800" /><!-- fish tail -->
 		<item name="assassin dagger" chance="1000" />
 		<item name="haunted blade" chance="2240" />
 		<item name="nightmare blade" chance="1100" />
