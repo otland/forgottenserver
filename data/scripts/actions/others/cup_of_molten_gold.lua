@@ -6,14 +6,14 @@ function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, i
 		return false
 	end
 	if math.random(100) <= 10 then
-		if targetId == 21428 then
-			item:transform(13539)
+		if targetId == 21428 then -- fir cone
+			item:transform(13539) -- golden fir cone
 		else
 			player:addItem(13539, 1)
 		end
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Drizzling all over a fir cone you picked from the tree, the molten gold only covers about half of it - not enough.")
-		if targetId == 21428 then
+		if targetId == 21428 then -- fir cone
 			target:remove(1)
 		end
 		item:remove(1)
@@ -21,5 +21,5 @@ function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, i
 	return true
 end
 
-cupOfMoltenGold:id(13941)
+cupOfMoltenGold:id(13941) -- cup of molten gold
 cupOfMoltenGold:register()
