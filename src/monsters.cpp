@@ -889,6 +889,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				mType->info.runAwayHealth = pugi::cast<int32_t>(attr.value());
 			} else if (strcasecmp(attrName, "hidehealth") == 0) {
 				mType->info.hiddenHealth = attr.as_bool();
+			} else if (strcasecmp(attrName, "isblockable") == 0) {
+				mType->info.isBlockable = attr.as_bool();
 			} else if (strcasecmp(attrName, "canwalkonenergy") == 0) {
 				mType->info.canWalkOnEnergy = attr.as_bool();
 			} else if (strcasecmp(attrName, "canwalkonfire") == 0) {

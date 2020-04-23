@@ -251,12 +251,17 @@ void Spawn::checkSpawn()
 
 		spawnBlock_t& sb = it.second;
 		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
-			if (findPlayer(sb.pos)) {
+			if (sb.mType->info.isBlockable && findPlayer(sb.pos)) {
 				sb.lastSpawn = OTSYS_TIME();
 				continue;
 			}
 
-			spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
+			if (sb.mType->info.isBlockable) {
+				spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
+			} else {
+				scheduleSpawn(spawnId, sb, 3 * 1400);
+			}
+
 			if (++spawnCount >= static_cast<uint32_t>(g_config.getNumber(ConfigManager::RATE_SPAWN))) {
 				break;
 			}
@@ -265,6 +270,17 @@ void Spawn::checkSpawn()
 
 	if (spawnedMap.size() < spawnMap.size()) {
 		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+	}
+}
+
+void Spawn::scheduleSpawn(uint32_t spawnId, spawnBlock_t& sb, uint16_t interval)
+{
+	auto delayedSpawn = g_config.getBoolean(ConfigManager::NEW_DELAYED_SPAWN);
+	if (delayedSpawn) {
+		g_game.addMagicEffect(sb.pos, CONST_ME_TELEPORT);
+		g_scheduler.addEvent(createSchedulerTask(1400, std::bind(&Spawn::scheduleSpawn, this, spawnId, sb, interval - 1400)));
+	} else {
+		spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
 	}
 }
 
