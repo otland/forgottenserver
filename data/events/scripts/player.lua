@@ -322,3 +322,6 @@ function Player:onWrapItem(item, position)
 		item:setAttribute("wrapid", oldId)
 	end
 end
+
+function Player:onInventoryUpdate(item, slot, equip)
+end
