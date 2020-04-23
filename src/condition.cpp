@@ -785,8 +785,7 @@ int32_t ConditionAttributes::getParam(ConditionParam_t param)
 		}
 
 		case CONDITION_PARAM_STAT_MAGICPOINTS: {
-			stats[STAT_MAGICPOINTS] = value;
-			return true;
+			return stats[STAT_MAGICPOINTS];
 		}
 
 		case CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT: {
