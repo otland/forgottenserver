@@ -411,6 +411,7 @@ void AccessList::parseList(const std::string& list)
 	guildRankList.clear();
 	expressionList.clear();
 	regExList.clear();
+	regExCache.clear();
 	this->list = list;
 	if (list.empty()) {
 		return;
@@ -536,22 +537,31 @@ void AccessList::addExpression(const std::string& expression)
 
 bool AccessList::isInList(const Player* player)
 {
+	const auto cachedResultIt = regExCache.find(player->getGUID());
+	if (cachedResultIt != regExCache.end()) {
+		return cachedResultIt->second;
+	}
+
 	std::string name = asLowerCaseString(player->getName());
 	std::cmatch what;
 
 	for (const auto& it : regExList) {
 		if (std::regex_match(name.c_str(), what, it.first)) {
+			regExCache.insert({ player->getGUID(), it.second });
 			return it.second;
 		}
 	}
 
 	auto playerIt = playerList.find(player->getGUID());
 	if (playerIt != playerList.end()) {
+		regExCache.insert({ player->getGUID(), true });
 		return true;
 	}
 
 	const GuildRank* rank = player->getGuildRank();
-	return rank && guildRankList.find(rank->id) != guildRankList.end();
+	const auto result = rank && guildRankList.find(rank->id) != guildRankList.end();
+	regExCache.insert({ player->getGUID(), result });
+	return result;
 }
 
 void AccessList::getList(std::string& list) const

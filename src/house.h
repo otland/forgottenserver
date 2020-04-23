@@ -51,6 +51,7 @@ class AccessList
 		std::unordered_set<uint32_t> guildRankList;
 		std::list<std::string> expressionList;
 		std::list<std::pair<std::regex, bool>> regExList;
+		std::unordered_map<uint32_t, bool> regExCache; // maps Player's GUID to result of regexp evaluation
 };
 
 class Door final : public Item
