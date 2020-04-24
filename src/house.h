@@ -48,6 +48,7 @@ class AccessList
 		std::string list;
 		std::unordered_set<uint32_t> playerList;
 		std::unordered_set<uint32_t> guildRankList;
+		bool allowEveryone = false;
 };
 
 class Door final : public Item
