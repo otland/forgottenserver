@@ -24373,6 +24373,9 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="15501" article="a" name="dragon's nest" />
+	<item id="15502" article="a" name="dragon's nest">
+		<attribute key="description" value="The young dragons have just hatched." />
+	</item>
 	<item id="15515" article="a" name="bar of gold">
 		<attribute key="weight" value="2100" />
 	</item>
@@ -24604,9 +24607,7 @@
 		<attribute key="description" value="Use it in your house to construct an easel." />
 		<attribute key="weight" value="7500" />
 	</item>
-	<item id="16093" article="a" name="surprise nest">
-		<attribute key="description" value="Use it to get a little surprise." />
-	</item>
+	<item id="16093" article="a" name="hidden nest" />
 	<item id="16094" article="a" name="pirates surprise">
 		<attribute key="weight" value="1200" />
 	</item>
@@ -24624,6 +24625,9 @@
 	<item id="16099" article="a" name="cake cabinet kit">
 		<attribute key="description" value="Use it in your house to construct a cake cabinet." />
 		<attribute key="weight" value="7500" />
+	</item>
+	<item id="16100" article="a" name="dragon's nest">
+		<attribute key="description" value="Young dragons will hatch soon." />
 	</item>
 	<item id="16101" article="a" name="premium scroll">
 		<attribute key="description" value="Using this scroll will add 30 days of premium time to your account once." />
