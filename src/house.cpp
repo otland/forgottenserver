@@ -419,8 +419,15 @@ void AccessList::parseList(const std::string& list)
 
 	std::istringstream listStream(list);
 	std::string line;
+	int lineNo = 1;
 
 	while (getline(listStream, line)) {
+		// we parse max 100 lines
+		if (lineNo > 100) {
+			break;
+		}
+		lineNo++;
+
 		trimString(line);
 		trim_left(line, '\t');
 		trim_right(line, '\t');
@@ -440,7 +447,10 @@ void AccessList::parseList(const std::string& list)
 				addGuildRank(line.substr(0, at_pos - 1), line.substr(at_pos + 1));
 			}
 		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos || line.find("?") != std::string::npos) {
-			addExpression(line);
+			// max one * character
+			if (std::count(line.begin(), line.end(), '*') < 2) {
+				addExpression(line);
+			}
 		} else {
 			addPlayer(line);
 		}
