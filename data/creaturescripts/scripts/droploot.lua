@@ -3,8 +3,8 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 		return true
 	end
 
-	local isRedOrBlack = table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull())
 	local amulet = player:getSlotItem(CONST_SLOT_NECKLACE)
+	local isRedOrBlack = table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull())
 	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not isRedOrBlack then
 		local isPlayer = false
 		if killer then
@@ -22,24 +22,13 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 			player:removeItem(ITEM_AMULETOFLOSS, 1, -1, false)
 		end
 	else
-		if isRedOrBlack then 
-			for i = CONST_SLOT_HEAD, CONST_SLOT_AMMO do
-				local item = player:getSlotItem(i)
-				if item then
+		for i = CONST_SLOT_HEAD, CONST_SLOT_AMMO do
+			local item = player:getSlotItem(i)
+			local lossPercent = player:getLossPercent()
+			if item then
+				if isRedOrBlack or math.random(item:isContainer() and 100 or 1000) < lossPercent then
 					if not item:moveTo(corpse) then
 						item:remove()
-					end
-				end
-			end
-		else 
-			for i = CONST_SLOT_HEAD, CONST_SLOT_AMMO do
-				local item = player:getSlotItem(i)
-				local lossPercent = player:getLossPercent()
-				if item then
-					if math.random(item:isContainer() and 100 or 1000) <= lossPercent then
-						if not item:moveTo(corpse) then
-							item:remove()
-						end
 					end
 				end
 			end
