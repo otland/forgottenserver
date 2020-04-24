@@ -39,7 +39,6 @@ class AccessList
 		void addPlayer(const std::string& name);
 		void addGuild(const std::string& name);
 		void addGuildRank(const std::string& name, const std::string& rankName);
-		void addExpression(const std::string& expression);
 
 		bool isInList(const Player* player);
 
@@ -49,8 +48,6 @@ class AccessList
 		std::string list;
 		std::unordered_set<uint32_t> playerList;
 		std::unordered_set<uint32_t> guildRankList;
-		std::list<std::string> expressionList;
-		std::list<std::pair<std::regex, bool>> regExList;
 };
 
 class Door final : public Item

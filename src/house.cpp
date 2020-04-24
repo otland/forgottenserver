@@ -409,8 +409,6 @@ void AccessList::parseList(const std::string& list)
 {
 	playerList.clear();
 	guildRankList.clear();
-	expressionList.clear();
-	regExList.clear();
 	this->list = list;
 	if (list.empty()) {
 		return;
@@ -419,7 +417,12 @@ void AccessList::parseList(const std::string& list)
 	std::istringstream listStream(list);
 	std::string line;
 
+	int lineNo = 1;
 	while (getline(listStream, line)) {
+		if (++lineNo > 100) {
+			break;
+		}
+
 		trimString(line);
 		trim_left(line, '\t');
 		trim_right(line, '\t');
@@ -439,7 +442,7 @@ void AccessList::parseList(const std::string& list)
 				addGuildRank(line.substr(0, at_pos - 1), line.substr(at_pos + 1));
 			}
 		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos || line.find("?") != std::string::npos) {
-			addExpression(line);
+			continue; // regexp no longer supported
 		} else {
 			addPlayer(line);
 		}
@@ -499,51 +502,10 @@ void AccessList::addGuildRank(const std::string& name, const std::string& rankNa
 	}
 }
 
-void AccessList::addExpression(const std::string& expression)
-{
-	if (std::find(expressionList.begin(), expressionList.end(), expression) != expressionList.end()) {
-		return;
-	}
-
-	std::string outExp;
-	outExp.reserve(expression.length());
-
-	std::string metachars = ".[{}()\\+|^$";
-	for (const char c : expression) {
-		if (metachars.find(c) != std::string::npos) {
-			outExp.push_back('\\');
-		}
-		outExp.push_back(c);
-	}
-
-	replaceString(outExp, "*", ".*");
-	replaceString(outExp, "?", ".?");
-
-	try {
-		if (!outExp.empty()) {
-			expressionList.push_back(outExp);
-
-			if (outExp.front() == '!') {
-				if (outExp.length() > 1) {
-					regExList.emplace_front(std::regex(outExp.substr(1)), false);
-				}
-			} else {
-				regExList.emplace_back(std::regex(outExp), true);
-			}
-		}
-	} catch (...) {}
-}
-
 bool AccessList::isInList(const Player* player)
 {
 	std::string name = asLowerCaseString(player->getName());
 	std::cmatch what;
-
-	for (const auto& it : regExList) {
-		if (std::regex_match(name.c_str(), what, it.first)) {
-			return it.second;
-		}
-	}
 
 	auto playerIt = playerList.find(player->getGUID());
 	if (playerIt != playerList.end()) {
