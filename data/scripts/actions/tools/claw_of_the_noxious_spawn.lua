@@ -9,19 +9,22 @@ cursed:setParameter(CONDITION_PARAM_FORCEUPDATE, true) -- re-update condition wh
 local clawOfTheNoxiousSpawn = Action()
 
 function clawOfTheNoxiousSpawn.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if math.random(100) <= 5 then
-		player:addCondition(cursed)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are cursed by The Noxious Spawn!")
-		item:transform(10312)
-		item:decay()
-		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
-	else
-		player:removeCondition(CONDITION_POISON)
-		item:transform(10311)
-		item:decay()
-		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
+	if item == player:getSlotItem(CONST_SLOT_RING) then
+		if math.random(100) <= 5 then
+			player:addCondition(cursed)
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are cursed by The Noxious Spawn!")
+			item:transform(10312)
+			item:decay()
+			player:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
+		else
+			player:removeCondition(CONDITION_POISON)
+			item:transform(10311)
+			item:decay()
+			player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
+		end
+		return true
 	end
-	return true
+	return false
 end
 
 clawOfTheNoxiousSpawn:id(10309)

@@ -18588,11 +18588,13 @@
 		<attribute key="description" value="It feels tight and uncomfortable on your hand." />
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="ring" />
+		<attribute key="transformDeEquipTo" value="10310" />
 	</item>
 	<item id="10310" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="It's like a glove and you can't wear a ring on it. You are not sure if you should really put it on." />
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="ring" />
+		<attribute key="transformEquipTo" value="10309" />
 	</item>
 	<item id="10311" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
