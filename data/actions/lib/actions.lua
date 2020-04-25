@@ -175,9 +175,9 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 		if randomValue <= 20 then
 			ground:transform(489)
 			ground:decay()
-		elseif randomValue >= 98 then
+		elseif randomValue > 99 then
 			Game.createItem(2159, 1, toPosition)
-		elseif randomValue >= 93 then
+		elseif randomValue >= 95 then
 			Game.createMonster("Scarab", toPosition)
 		end
 		toPosition:sendMagicEffect(CONST_ME_POFF)
