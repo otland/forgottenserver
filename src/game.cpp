@@ -2731,10 +2731,17 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
 				tradePartnerRet = internalMoveItem(playerTradeItem->getParent(), tradePartner, INDEX_WHEREEVER, playerTradeItem, playerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK, nullptr, partnerTradeItem);
 				if (tradePartnerRet == RETURNVALUE_NOERROR) {
-					internalMoveItem(partnerTradeItem->getParent(), player, INDEX_WHEREEVER, partnerTradeItem, partnerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
-					playerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
-					partnerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, player);
-					isSuccess = true;
+					// check again if we can move this item to player
+					playerRet = internalAddItem(player, partnerTradeItem, INDEX_WHEREEVER, 0, true);
+					if (playerRet != RETURNVALUE_NOERROR) {
+						// we cant, so container was probably moved (or any item that removed the free spot/spots), so revert the first move
+						internalMoveItem(playerTradeItem->getParent(), player, INDEX_WHEREEVER, playerTradeItem, playerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK, nullptr, partnerTradeItem);
+					} else {
+						internalMoveItem(partnerTradeItem->getParent(), player, INDEX_WHEREEVER, partnerTradeItem, partnerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
+						playerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
+						partnerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, player);
+						isSuccess = true;
+					}
 				}
 			}
 		}
