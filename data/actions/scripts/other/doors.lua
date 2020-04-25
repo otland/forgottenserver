@@ -9,7 +9,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		return true
 	elseif table.contains(levelDoors, itemId) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - 1000 then
+		if item.actionid > 0 and player:getLevel() >= item.actionid - aId.levelDoor then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else

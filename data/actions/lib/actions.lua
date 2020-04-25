@@ -107,7 +107,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if table.contains(groundIds, ground.itemid) and (ground:hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) or ground:hasAttribute(ITEM_ATTRIBUTE_ACTIONID)) then
+	if table.contains(groundIds, ground.itemid) and ground.actionid == aId.pickHole then
 		ground:transform(392)
 		ground:decay()
 
@@ -172,7 +172,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 		tile:relocateTo(toPosition)
 	elseif table.contains(sandIds, groundId) then
 		local randomValue = math.random(1, 100)
-		if target.actionid == 100 and randomValue <= 20 then
+		if target.actionid == aId.sandHole and randomValue <= 20 then
 			ground:transform(489)
 			ground:decay()
 		elseif randomValue == 1 then

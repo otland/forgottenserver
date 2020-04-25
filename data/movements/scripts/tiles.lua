@@ -12,8 +12,8 @@ function onStepIn(creature, item, position, fromPosition)
 
 	item:transform(increasing[item.itemid])
 
-	if item.actionid >= 1000 then
-		if creature:getLevel() < item.actionid - 1000 then
+	if item.actionid >= aId.levelDoor then
+		if creature:getLevel() < item.actionid - aId.levelDoor then
 			creature:teleportTo(fromPosition, false)
 			position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			creature:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
