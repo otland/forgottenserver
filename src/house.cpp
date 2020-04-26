@@ -510,9 +510,6 @@ bool AccessList::isInList(const Player* player)
 		return true;
 	}
 
-	std::string name = asLowerCaseString(player->getName());
-	std::cmatch what;
-
 	auto playerIt = playerList.find(player->getGUID());
 	if (playerIt != playerList.end()) {
 		return true;
