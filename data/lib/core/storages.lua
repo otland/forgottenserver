@@ -6,7 +6,7 @@ PlayerStorageKeys = {
 	delayWallMirror = 30021,
 	madSheepSummon = 30023,
 	crateUsable = 30024,
-	swampDigging = 30031,
+	swampDigging = 30032,
 }
 
 GlobalStorageKeys = {
