@@ -1,0 +1,112 @@
+local mType = Game.createMonsterType("askarak lord")
+local monster = {}
+
+monster.name = "Askarak Lord"
+monster.description = "an askarak lord"
+monster.experience = 1200
+monster.outfit = {
+	lookType = 410,
+	lookHead = 0,
+	lookBody = 0,
+	lookLegs = 0,
+	lookFeet = 0,
+	lookAddons = 0,
+	lookMount = 0
+}
+
+monster.health = 2100
+monster.maxHealth = 2100
+monster.runHealth = 0
+monster.race = "venom"
+monster.corpse = 13956
+monster.speed = 230
+monster.summonCost = 0
+monster.maxSummons = 0
+
+monster.changeTarget = {
+	interval = 4000,
+	chance = 10
+}
+
+monster.flags = {
+	summonable = false,
+	attackable = true,
+	hostile = true,
+	convinceable = false,
+	pushable = false,
+	boss = false,
+	illusionable = false,
+	canPushItems = true,
+	canPushCreatures = true,
+	staticAttackChance = 80,
+	targetDistance = 1,
+	healthHidden = false,
+	canWalkOnEnergy = false,
+	canWalkOnFire = false,
+	canWalkOnPoison = false
+}
+
+monster.light = {
+	level = 0,
+	color = 0
+}
+
+monster.voices = {
+	interval = 5000,
+	chance = 10,
+	{text = "WE RULE!", yell = false},
+	{text = "RED IS MAD", yell = false}
+}
+
+monster.immunities = {
+	{type = "paralyze", condition = true},
+	{type = "outfit", condition = false},
+	{type = "invisible", condition = true},
+	{type = "bleed", condition = false}
+}
+
+monster.elements = {
+	{type = COMBAT_PHYSICALDAMAGE, percent = 0},
+	{type = COMBAT_ENERGYDAMAGE, percent = 50},
+	{type = COMBAT_EARTHDAMAGE, percent = 100},
+	{type = COMBAT_FIREDAMAGE, percent = -10},
+	{type = COMBAT_LIFEDRAIN, percent = 0},
+	{type = COMBAT_MANADRAIN, percent = 0},
+	{type = COMBAT_DROWNDAMAGE, percent = 0},
+	{type = COMBAT_ICEDAMAGE, percent = 50},
+	{type = COMBAT_HOLYDAMAGE , percent = 0},
+	{type = COMBAT_DEATHDAMAGE , percent = 0}
+}
+
+monster.attacks = {
+	{name ="melee", interval = 2000, chance = 100, minDamage = 0, maxDamage = -186, effect = CONST_ME_DRAWBLOOD},
+	{name ="combat", interval = 2000, chance = 20, type = COMBAT_EARTHDAMAGE, minDamage = -40, maxDamage = -80, range = 7, radius = 6, target = false, ShootEffect = CONST_ANI_POISON, effect = CONST_ME_GREEN_RINGS},
+	{name ="combat", interval = 2000, chance = 15, type = COMBAT_EARTHDAMAGE, minDamage = -95, maxDamage = -180, length = 4, spread = 3, effect = CONST_ME_GREEN_RINGS},
+	{name ="combat", interval = 2000, chance = 10, type = COMBAT_EARTHDAMAGE, minDamage = -130, maxDamage = -180, length = 4, spread = 0, effect = CONST_ME_GREEN_RINGS},
+	{name ="speed", interval = 2000, chance = 15, speed = {min = -650, max = -650}, duration = 15000, radius = 1, target = true, effect = CONST_ME_MAGIC_RED}
+}
+
+monster.defenses = {
+	defense = 20,
+	armor = 20,
+	{name ="combat", interval = 2000, chance = 10, type = COMBAT_HEALING, minDamage = 120, maxDamage = 160, effect = CONST_ME_MAGIC_BLUE}
+}
+
+monster.loot = {
+	{id = "gold coin", chance = 50000, maxCount = 100},
+	{id = "gold coin", chance = 50000, maxCount = 90},
+	{id = "small emerald", chance = 5882, maxCount = 5},
+	{id = "platinum coin", chance = 35333, maxCount = 2},
+	{id = "energy ring", chance = 606},
+	{id = "brown mushroom", chance = 5263, maxCount = 5},
+	{id = "magic sulphur", chance = 620},
+	{id = "assassin star", chance = 70, maxCount = 5},
+	{id = "dreaded cleaver", chance = 30},
+	{id = "mastermind potion", chance = 750},
+	{id = "strong health potion", chance = 6250},
+	{id = "strong mana potion", chance = 7692},
+	{id = "terra mantle", chance = 70},
+	{id = "springsprout rod", chance = 1010}
+}
+
+mType:register(monster)
