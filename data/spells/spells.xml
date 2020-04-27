@@ -487,6 +487,10 @@
 	<rune group="attack" spellid="116" name="Stone Shower Rune" id="2288" allowfaruse="1" charges="4" level="28" magiclevel="4" cooldown="2000" groupcooldown="2000" script="attack/stone_shower_rune.lua" />
 	<rune group="attack" spellid="21" name="Sudden Death Rune" id="2268" allowfaruse="1" charges="3" level="45" magiclevel="15" cooldown="2000" groupcooldown="2000" needtarget="1" blocktype="solid" script="attack/sudden_death_rune.lua" />
 	<rune group="attack" spellid="117" name="Thunderstorm Rune" id="2315" allowfaruse="1" charges="4" level="28" magiclevel="4" cooldown="2000" groupcooldown="2000" script="attack/thunderstorm_rune.lua" />
+	<rune group="attack" spellid="54" name="Paralyze Rune" id="2278" allowfaruse="1" charges="1" level="54" magiclevel="18" aggressive="1" cooldown="2000" groupcooldown="2000" mana="1400" needtarget="1" blocktype="solid" script="attack/paralyze_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
+	</rune>
 
 	<!-- Healing Runes -->
 	<rune group="healing" spellid="31" name="Cure Poison Rune" id="2266" allowfaruse="1" charges="1" level="15" magiclevel="0" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/cure_poison_rune.lua" />
@@ -502,10 +506,6 @@
 	<rune group="support" spellid="78" name="Disintegrate Rune" id="2310" allowfaruse="0" charges="3" level="21" magiclevel="4" cooldown="2000" groupcooldown="2000" range="1" script="support/disintegrate_rune.lua" />
 	<rune group="support" spellid="30" name="Destroy Field Rune" id="2261" allowfaruse="1" charges="3" level="17" magiclevel="3" cooldown="2000" groupcooldown="2000" aggressive="0" range="5" script="support/destroy_field_rune.lua" />
 	<rune group="attack" spellid="94" name="Wild Growth Rune" id="2269" allowfaruse="1" charges="2" level="27" magiclevel="8" cooldown="2000" groupcooldown="2000" blocktype="all" script="attack/wild_growth_rune.lua">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" showInDescription="0" />
-	</rune>
-	<rune group="attack" spellid="54" name="Paralyze Rune" id="2278" allowfaruse="1" charges="1" level="54" magiclevel="18" cooldown="2000" groupcooldown="2000" mana="1400" needtarget="1" blocktype="solid" script="attack/paralyze_rune.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" showInDescription="0" />
 	</rune>
