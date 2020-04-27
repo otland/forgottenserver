@@ -2728,13 +2728,11 @@ void Game::playerAcceptTrade(uint32_t playerId)
 
 		// if player is trying to trade its own backpack
 		if (tradePartner->getInventoryItem(CONST_SLOT_BACKPACK) == partnerTradeItem) {
-			slots_t playerSlotItem = getSlotType(Item::items[playerTradeItem->getID()]);
-			tradePartnerRet = (tradePartner->getInventoryItem(playerSlotItem) ? RETURNVALUE_NOTENOUGHROOM : RETURNVALUE_NOERROR);
+			tradePartnerRet = (tradePartner->getInventoryItem(getSlotType(Item::items[playerTradeItem->getID()])) ? RETURNVALUE_NOTENOUGHROOM : RETURNVALUE_NOERROR);
 		}
 
 		if (player->getInventoryItem(CONST_SLOT_BACKPACK) == playerTradeItem) {
-			slots_t partnerSlotItem = getSlotType(Item::items[partnerTradeItem->getID()]);
-			playerRet = (player->getInventoryItem(partnerSlotItem) ? RETURNVALUE_NOTENOUGHROOM : RETURNVALUE_NOERROR);
+			playerRet = (player->getInventoryItem(getSlotType(Item::items[partnerTradeItem->getID()])) ? RETURNVALUE_NOTENOUGHROOM : RETURNVALUE_NOERROR);
 		}
 
 		if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
