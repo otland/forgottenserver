@@ -2723,25 +2723,17 @@ void Game::playerAcceptTrade(uint32_t playerId)
 
 		bool isSuccess = false;
 		
-		// assign item as itemType
-		const ItemType& partnerItemType = Item::items[partnerTradeItem->getID()];
-		const ItemType& playerItemType = Item::items[playerTradeItem->getID()];
-
-		// retrieve slot type for given item
-		slots_t partnerSlotItem = getSlotType(partnerItemType);
-		slots_t playerSlotItem = getSlotType(playerItemType);
-
-		// initialise default variables
 		ReturnValue tradePartnerRet = RETURNVALUE_NOERROR;
 		ReturnValue playerRet = RETURNVALUE_NOERROR;
 
 		// if player is trying to trade its own backpack
 		if (tradePartner->getInventoryItem(CONST_SLOT_BACKPACK) == partnerTradeItem) {
-			// check if player will have free slot available
+			slots_t playerSlotItem = getSlotType(Item::items[playerTradeItem->getID()]);
 			tradePartnerRet = (tradePartner->getInventoryItem(playerSlotItem) ? RETURNVALUE_NOTENOUGHROOM : RETURNVALUE_NOERROR);
 		}
 
 		if (player->getInventoryItem(CONST_SLOT_BACKPACK) == playerTradeItem) {
+			slots_t partnerSlotItem = getSlotType(Item::items[partnerTradeItem->getID()]);
 			playerRet = (player->getInventoryItem(partnerSlotItem) ? RETURNVALUE_NOTENOUGHROOM : RETURNVALUE_NOERROR);
 		}
 
