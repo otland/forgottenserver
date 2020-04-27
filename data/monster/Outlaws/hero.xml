@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Hero" nameDescription="a hero" race="blood" experience="1200" speed="240">
+<monster name="Hero" nameDescription="a hero" race="blood" experience="1200" speed="280">
 	<health now="1400" max="1400" />
 	<look type="73" corpse="20415" />
 	<targetchange interval="4000" chance="10" />
@@ -23,7 +23,7 @@
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
 	</attacks>
-	<defenses armor="40" defense="40">
+	<defenses armor="35" defense="35">
 		<defense name="healing" interval="2000" chance="20" min="200" max="250">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -34,7 +34,7 @@
 		<element firePercent="30" />
 		<element holyPercent="50" />
 		<element earthPercent="50" />
-		<element physicalPercent="30" />
+		<element physicalPercent="10" />
 		<element deathPercent="-20" />
 	</elements>
 	<immunities>
@@ -48,31 +48,31 @@
 		<voice sentence="I will sing a tune at your grave." />
 	</voices>
 	<loot>
+		<item name="gold coin" countmax="100" chance="60000" />
 		<item id="1949" chance="45000" /><!-- scroll -->
-		<item id="2071" chance="1640" /><!-- lyre -->
-		<item name="piggy bank" chance="80" />
-		<item id="2120" chance="2190" /><!-- rope -->
-		<item name="wedding ring" chance="4910" />
-		<item name="gold coin" countmax="100" chance="59500" />
-		<item name="might ring" chance="470" />
-		<item name="two handed sword" chance="1500" />
-		<item name="war hammer" chance="870" />
-		<item name="fire sword" chance="550" />
-		<item name="bow" chance="13300" />
-		<item name="crown armor" chance="490" />
-		<item name="crown legs" chance="660" />
-		<item name="crown helmet" chance="450" />
-		<item name="crown shield" chance="280" />
 		<item name="arrow" countmax="13" chance="26000" />
-		<item name="green tunic" chance="8000" />
-		<item name="scarf" chance="1110" />
-		<item name="meat" countmax="3" chance="8200" />
-		<item name="grapes" chance="19850" />
 		<item name="red rose" chance="20450" />
-		<item name="red piece of cloth" chance="2006" />
+		<item name="grapes" chance="19850" />
+		<item name="bow" chance="13300" />
 		<item name="sniper arrow" countmax="4" chance="11400" />
-		<item name="great health potion" chance="720" />
-		<item name="small notebook" chance="930" />
+		<item name="meat" countmax="3" chance="8200" />
+		<item name="green tunic" chance="8000" />
+		<item name="wedding ring" chance="5200" />
 		<item name="scroll of heroic deeds" chance="5000" />
+		<item id="2120" chance="2190" /><!-- rope -->
+		<item name="red piece of cloth" chance="2006" />
+		<item id="2071" chance="1640" /><!-- lyre -->
+		<item name="two handed sword" chance="1500" />
+		<item name="scarf" chance="1110" />
+		<item name="small notebook" chance="930" />
+		<item name="war hammer" chance="910" />
+		<item name="great health potion" chance="720" />
+		<item name="crown armor" chance="650" />
+		<item name="crown legs" chance="590" />
+		<item name="might ring" chance="500" />
+		<item name="fire sword" chance="490" />
+		<item name="crown helmet" chance="460" />
+		<item name="crown shield" chance="210" />
+		<item name="piggy bank" chance="80" />
 	</loot>
 </monster>

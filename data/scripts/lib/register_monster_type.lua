@@ -23,6 +23,11 @@ registerMonsterType.experience = function(mtype, mask)
 		mtype:experience(mask.experience)
 	end
 end
+registerMonsterType.skull = function(mtype, mask)
+	if mask.skull then
+		mtype:skull(mask.skull)
+	end
+end
 registerMonsterType.outfit = function(mtype, mask)
 	if mask.outfit then
 		mtype:outfit(mask.outfit)
@@ -70,28 +75,28 @@ registerMonsterType.corpse = function(mtype, mask)
 end
 registerMonsterType.flags = function(mtype, mask)
 	if mask.flags then
-		if mask.flags.attackable then
+		if mask.flags.attackable ~= nil then
 			mtype:isAttackable(mask.flags.attackable)
 		end
-		if mask.flags.healthHidden then
+		if mask.flags.healthHidden ~= nil then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
-		if mask.flags.convinceable then
+		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
-		if mask.flags.illusionable then
+		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
-		if mask.flags.hostile then
+		if mask.flags.hostile ~= nil then
 			mtype:isHostile(mask.flags.hostile)
 		end
-		if mask.flags.pushable then
+		if mask.flags.pushable ~= nil then
 			mtype:isPushable(mask.flags.pushable)
 		end
-		if mask.flags.canPushItems then
+		if mask.flags.canPushItems ~= nil then
 			mtype:canPushItems(mask.flags.canPushItems)
 		end
-		if mask.flags.canPushCreatures then
+		if mask.flags.canPushCreatures ~= nil then
 			mtype:canPushCreatures(mask.flags.canPushCreatures)
 		end
 		if mask.flags.targetDistance then
@@ -124,7 +129,7 @@ registerMonsterType.changeTarget = function(mtype, mask)
 end
 registerMonsterType.voices = function(mtype, mask)
 	if type(mask.voices) == "table" then
-		local interval; local chance;
+		local interval, chance
 		if mask.voices.interval then
 			interval = mask.voices.interval
 		end
@@ -154,9 +159,12 @@ registerMonsterType.events = function(mtype, mask)
 end
 registerMonsterType.loot = function(mtype, mask)
 	if type(mask.loot) == "table" then
+		local lootError = false
 		for _, loot in pairs(mask.loot) do
 			local parent = Loot()
-			parent:setId(loot.id)
+			if not parent:setId(loot.id) then
+				lootError = true
+			end
 			if loot.chance then
 				parent:setChance(loot.chance)
 			end
@@ -175,7 +183,9 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.child then
 				for _, children in pairs(loot.child) do
 					local child = Loot()
-					child:setId(children.id)
+					if not child:setId(children.id) then
+						lootError = true
+					end
 					if children.chance then
 						child:setChance(children.chance)
 					end
@@ -195,6 +205,9 @@ registerMonsterType.loot = function(mtype, mask)
 				end
 			end
 			mtype:addLoot(parent)
+		end
+		if lootError then
+			print("[Warning - end] Monster: \"".. mtype:name() .. "\" loot could not correctly be load.")
 		end
 	end
 end

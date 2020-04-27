@@ -18,8 +18,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<defenses armor="5" defense="5" />
+	<defenses armor="1" defense="1" />
 	<loot>
-		<item name="downy feather" chance="700" />
+		<item name="downy feather" chance="1000" />
 	</loot>
 </monster>

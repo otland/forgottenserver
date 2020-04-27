@@ -80,7 +80,7 @@
 		<item name="great mana potion" chance="35000" />
 		<item name="great health potion" chance="32000" />
 		<item name="skullcracker armor" chance="400" />
-		<item id="9810" chance="3000" /><!-- rusty armor -->
+		<item id="9810" chance="3000" /><!-- rusty armor (rare) -->
 		<item name="gold ingot" countmax="2" chance="7692" />
 	</loot>
 </monster>

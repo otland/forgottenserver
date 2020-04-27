@@ -1,3 +1,7 @@
+---
+name: Bug Report
+about: Reporting a bug reproducible using files only in this repository
+---
 <!-- Welcome to the issues section if it's your first time! -->
 
 ### Before creating an issue, please ensure:

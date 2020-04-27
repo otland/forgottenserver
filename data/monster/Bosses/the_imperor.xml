@@ -66,7 +66,7 @@
 	<loot>
 		<item id="2050" chance="15000" /><!-- torch -->
 		<item name="gold coin" countmax="79" chance="100000" />
-		<item name="small amethyst" countmax="1" chance="8888" />
+		<item name="small amethyst" chance="8888" />
 		<item name="stealth ring" chance="4555" />
 		<item name="necrotic rod" chance="833" />
 		<item name="blank rune" chance="18000" />
@@ -76,7 +76,7 @@
 		<item name="pitchfork" chance="20000" />
 		<item name="soul orb" chance="5666" />
 		<item id="6300" chance="999" /><!-- death ring -->
-		<item name="demonic essence" countmax="1" chance="7777" />
+		<item name="demonic essence" chance="7777" />
 		<item name="infernal bolt" countmax="5" chance="5000" />
 		<item name="the Imperor's trident" chance="100000" />
 		<item name="concentrated demonic blood" chance="2222" />

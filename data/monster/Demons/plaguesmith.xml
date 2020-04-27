@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1500" min="0" max="-539" poison="200" />
+		<attack name="melee" interval="2000" min="0" max="-539" poison="200" />
 		<attack name="earth" interval="2000" chance="15" radius="4" target="0" min="-60" max="-114">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
@@ -84,6 +84,6 @@
 		<item name="demonic essence" chance="9033" />
 		<item name="onyx arrow" countmax="4" chance="7692" />
 		<item name="great health potion" chance="10000" />
-		<item id="9810" chance="540" /><!-- rusty armor-->
+		<item id="9810" chance="540" /><!-- rusty armor (rare) -->
 	</loot>
 </monster>

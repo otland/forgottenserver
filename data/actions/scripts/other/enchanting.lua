@@ -67,6 +67,12 @@ local items = {
 			[COMBAT_FIREDAMAGE] = {id = 8906}, [COMBAT_ICEDAMAGE] = {id = 8907},
 			[COMBAT_EARTHDAMAGE] = {id = 8909}, [COMBAT_ENERGYDAMAGE] = {id = 8908}
 		},
+		[9949] = { -- dracoyle statue
+			[COMBAT_EARTHDAMAGE] = {id = 9948} -- dracoyle statue (enchanted)
+		},
+		[9954] = { -- dracoyle statue
+			[COMBAT_EARTHDAMAGE] = {id = 9953} -- dracoyle statue (enchanted)
+		},
 		[10022] = { -- worn firewalker boots
 			[COMBAT_FIREDAMAGE] = {id = 9933, say = {text = "Take the boots off first."}},
 			slot = {type = CONST_SLOT_FEET, check = true}
