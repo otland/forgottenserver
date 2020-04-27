@@ -21,7 +21,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" poison="20" />
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="4" defense="4" />
 	<elements>
 		<element firePercent="-10" />
 	</elements>
