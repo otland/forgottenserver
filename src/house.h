@@ -20,7 +20,6 @@
 #ifndef FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
 #define FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
 
-#include <regex>
 #include <set>
 #include <unordered_set>
 
