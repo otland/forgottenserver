@@ -1305,6 +1305,7 @@ class Player final : public Creature, public Cylinder
 		bool isConnecting = false;
 		bool addAttackSkillPoint = false;
 		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+		bool tradeOwner = false;
 
 		static uint32_t playerAutoID;
 
