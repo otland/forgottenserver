@@ -2734,7 +2734,6 @@ void Game::playerAcceptTrade(uint32_t playerId)
 					internalMoveItem(partnerTradeItem->getParent(), player, INDEX_WHEREEVER, partnerTradeItem, partnerTradeItem->getItemCount(), nullptr, FLAG_IGNOREAUTOSTACK);
 					playerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, tradePartner);
 					partnerTradeItem->onTradeEvent(ON_TRADE_TRANSFER, player);
-					g_events->eventPlayerOnTradeSuccess(player, tradePartner, playerTradeItem, partnerTradeItem);
 					isSuccess = true;
 				}
 			}
@@ -2755,6 +2754,8 @@ void Game::playerAcceptTrade(uint32_t playerId)
 				player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
 			}
 		}
+
+		g_events->eventPlayerOnTradeCompleted(player, tradePartner, playerTradeItem, partnerTradeItem, isSuccess);
 
 		player->setTradeState(TRADE_NONE);
 		player->tradeItem = nullptr;

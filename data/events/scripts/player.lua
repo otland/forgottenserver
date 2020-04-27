@@ -211,7 +211,7 @@ function Player:onTradeAccept(target, item, targetItem)
 	return true
 end
 
-function Player:onTradeSuccess(target, item, targetItem)
+function Player:onTradeCompleted(target, item, targetItem, isSuccess)
 	return
 end
 

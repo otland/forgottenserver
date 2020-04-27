@@ -100,8 +100,8 @@ bool Events::load()
 				info.playerOnTradeRequest = event;
 			} else if (methodName == "onTradeAccept") {
 				info.playerOnTradeAccept = event;
-			} else if (methodName == "onTradeSuccess") {
-				info.playerOnTradeSuccess = event;
+			} else if (methodName == "onTradeCompleted") {
+				info.playerOnTradeCompleted = event;
 			} else if (methodName == "onMoveItem") {
 				info.playerOnMoveItem = event;
 			} else if (methodName == "onItemMoved") {
@@ -822,10 +822,10 @@ bool Events::eventPlayerOnTradeAccept(Player* player, Player* target, Item* item
 	return scriptInterface.callFunction(4);
 }
 
-void Events::eventPlayerOnTradeSuccess(Player* player, Player* target, Item* item, Item* targetItem)
+void Events::eventPlayerOnTradeCompleted(Player* player, Player* target, Item* item, Item* targetItem, bool isSuccess)
 {
 	// Player:onTradeSuccess(target, item, targetItem)
-	if (info.playerOnTradeSuccess == -1) {
+	if (info.playerOnTradeCompleted == -1) {
 		return;
 	}
 
@@ -835,10 +835,10 @@ void Events::eventPlayerOnTradeSuccess(Player* player, Player* target, Item* ite
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.playerOnTradeSuccess, &scriptInterface);
+	env->setScriptId(info.playerOnTradeCompleted, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(info.playerOnTradeSuccess);
+	scriptInterface.pushFunction(info.playerOnTradeCompleted);
 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
@@ -852,7 +852,9 @@ void Events::eventPlayerOnTradeSuccess(Player* player, Player* target, Item* ite
 	LuaScriptInterface::pushUserdata<Item>(L, targetItem);
 	LuaScriptInterface::setItemMetatable(L, -1, targetItem);
 
-	return scriptInterface.callVoidFunction(4);
+	LuaScriptInterface::pushBoolean(L, isSuccess);
+
+	return scriptInterface.callVoidFunction(5);
 }
 
 void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)
