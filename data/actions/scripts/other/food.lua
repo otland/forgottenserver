@@ -39,7 +39,8 @@ local foods = {
 	[2795] = {36, "Munch."}, -- fire mushroom
 	[2796] = {5, "Munch."}, -- green mushroom
 	[5097] = {4, "Yum."}, -- mango
-	[6125] = {8, "Gulp."}, -- tortoise egg
+	[5678] = {8, "Gulp."}, -- tortoise egg
+	[6125] = {8, "Gulp."}, -- tortoise egg from Nargor
 	[6278] = {10, "Mmmm."}, -- cake
 	[6279] = {15, "Mmmm."}, -- decorated cake
 	[6393] = {12, "Mmmm."}, -- valentine's cake
@@ -96,10 +97,14 @@ local foods = {
 	[19737] = {10, "Urgh."}, -- insectoid eggs
 	[20100] = {15, "Smack."}, -- soft cheese
 	[20101] = {12, "Smack."}, -- rat cheese
+	[23514] = {15, "Munch."}, -- glooth sandwich
+	[23515] = {7, "Slurp."}, -- bowl of glooth soup
+	[23516] = {6, "Burp."}, -- bottle of glooth wine
+	[23517] = {25, "Chomp."}, -- glooth steak
 	[24841] = {12, "Yum."}, -- prickly pear
 	[24843] = {60, "Chomp."}, -- roasted meat
-	[26191] = {30, "Mmmm."}, -- energy bar
-	[26201] = {18, "Mmmm."} -- energy drink
+	[26191] = {25, "Mmmm."}, -- energy bar
+	[26201] = {15, "Mmmm."} -- energy drink
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
