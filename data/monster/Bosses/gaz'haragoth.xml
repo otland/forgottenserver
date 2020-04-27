@@ -77,7 +77,7 @@
 		<item name="infernal bolt" chance="6000" />
 		<item name="assassin star" countmax="100" chance="10000" />
 		<item name="great mana potion" countmax="100" chance="10000" />
-		<item id="7632" chance="6000" /><!-- Giant Shimmering Pearl -->
+		<item id="7632" chance="6000" /><!-- giant shimmering pearl -->
 		<item name="magma coat" chance="6000" />
 		<item name="great spirit potion" countmax="100" chance="10000" />
 		<item name="ultimate health potion" countmax="100" chance="10000" />
@@ -125,6 +125,6 @@
 		<item name="psychedelic tapestry" chance="6000" />
 		<item name="demonic tapestry" chance="6000" />
 		<item name="eye pod" chance="6000" />
-		<item id="22614" chance="6000" /><!-- Nightmare Beacon -->
+		<item id="22614" chance="6000" /><!-- nightmare beacon -->
 	</loot>
 </monster>
