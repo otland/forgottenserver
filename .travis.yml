@@ -32,6 +32,8 @@ addons:
     build_command_prepend: "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} .."
     build_command: "make -j2"
     branch_pattern: coverity_scan
+    # Where email notification of build analysis results will be sent
+    notification_email: coverity@otland.net
 before_install:
   - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 before_script:
