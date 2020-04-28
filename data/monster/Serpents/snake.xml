@@ -21,9 +21,9 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-8" poison="15" />
 	</attacks>
-	<defenses armor="5" defense="5" />
+	<defenses armor="0" defense="0" />
 	<elements>
-		<element earthPercent="5" />
+		<element earthPercent="40" />
 		<element energyPercent="20" />
 		<element firePercent="-10" />
 		<element icePercent="-10" />
