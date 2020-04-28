@@ -42,6 +42,7 @@
 		<item name="short sword" chance="8000" />
 		<item name="cyclops toe" chance="4930" />
 		<item name="plate shield" chance="2500" />
+		<!-- Heavy Old Tome 2.02% -->
 		<item name="battle shield" chance="1400" />
 		<item name="halberd" chance="730" />
 		<item name="wolf tooth chain" chance="360" />
