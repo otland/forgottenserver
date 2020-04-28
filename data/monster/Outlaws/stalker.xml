@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="200">
+<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="260">
 	<health now="120" max="120" />
 	<look type="128" head="78" body="116" legs="95" feet="114" corpse="20511" />
 	<targetchange interval="4000" chance="10" />
@@ -25,8 +25,8 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15">
-		<defense name="invisible" interval="2000" chance="40" duration="6000">
+	<defenses armor="14" defense="14">
+		<defense name="invisible" interval="2000" chance="30" duration="15000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -41,12 +41,12 @@
 	</immunities>
 	<loot>
 		<item name="gold coin" countmax="8" chance="13000" />
-		<item name="blank rune" chance="8670" />
 		<item name="throwing knife" countmax="2" chance="11170" />
-		<item name="katana" chance="530" />
-		<item name="obsidian lance" chance="1210" />
-		<item name="brass legs" chance="3500" />
-		<item name="brass legs" chance="5510" />
+		<item name="blank rune" chance="8670" />
+		<item name="brass shield" chance="5600" />
+		<item name="brass legs" chance="3510" />
 		<item name="miraculum" chance="1550" />
+		<item name="obsidian lance" chance="1210" />
+		<item name="katana" chance="530" />
 	</loot>
 </monster>
