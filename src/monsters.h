@@ -154,7 +154,7 @@ class MonsterType
 		bool isAttackable = true;
 		bool isHostile = true;
 		bool hiddenHealth = false;
-		bool isBlockable = false;
+		bool isBlockable = true;
 		bool canWalkOnEnergy = true;
 		bool canWalkOnFire = true;
 		bool canWalkOnPoison = true;
