@@ -18584,26 +18584,26 @@
 		<attribute key="description" value="The kings fan club premium membership card is issued to 'The Evil Mastermind'." />
 		<attribute key="weight" value="150" />
 	</item>
-	<item id="10309" name="claw of 'The Noxious Spawn'">
+	<item id="10309" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="It feels tight and uncomfortable on your hand." />
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="transformDeEquipTo" value="10310" />
 	</item>
-	<item id="10310" name="claw of 'The Noxious Spawn'">
+	<item id="10310" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="It's like a glove and you can't wear a ring on it. You are not sure if you should really put it on." />
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="transformEquipTo" value="10309" />
 	</item>
-	<item id="10311" name="claw of 'The Noxious Spawn'">
+	<item id="10311" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
 		<attribute key="weight" value="500" />
 		<attribute key="decayTo" value="10309" />
 		<attribute key="duration" value="10" />
 		<attribute key="transformDeEquipTo" value="10315" />
 	</item>
-	<item id="10312" name="claw of 'The Noxious Spawn'">
+	<item id="10312" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
 		<attribute key="weight" value="500" />
 		<attribute key="decayTo" value="10310" />
