@@ -4541,20 +4541,3 @@ void Player::setGuild(Guild* guild)
 	}
 }
 
-void Player::executeParsePacketEvent(uint8_t recvbyte, NetworkMessage* msg)
-{
-	if (!hasEventRegistered(CREATURE_EVENT_PARSE_PACKET)) {
-		return;
-	}
-
-	for (CreatureEvent* creatureEvent : eventsList) {
-		if (!creatureEvent->isLoaded()) {
-			continue;
-		}
-
-		if (creatureEvent->getEventType() == CREATURE_EVENT_PARSE_PACKET && creatureEvent->getRecvbyte() == recvbyte) {
-			creatureEvent->executeParsePacket(this, recvbyte, msg);
-			return;
-		}
-	}
-}

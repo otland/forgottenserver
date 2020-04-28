@@ -5582,6 +5582,29 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 	}
 }
 
+void Game::playerExecuteParsePacketEvent(uint32_t playerId, uint8_t recvbyte, NetworkMessage* message)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	if (!player->hasEventRegistered(CREATURE_EVENT_PARSE_PACKET)) {
+		return;
+	}
+
+	for (CreatureEvent* creatureEvent : player->eventsList) {
+		if (!creatureEvent->isLoaded()) {
+			continue;
+		}
+
+		if (creatureEvent->getEventType() == CREATURE_EVENT_PARSE_PACKET && creatureEvent->getRecvbyte() == recvbyte) {
+			creatureEvent->executeParsePacket(player, recvbyte, message);
+			return;
+		}
+	}
+}
+
 void Game::addPlayer(Player* player)
 {
 	const std::string& lowercase_name = asLowerCaseString(player->getName());
