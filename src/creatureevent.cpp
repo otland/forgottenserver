@@ -22,6 +22,7 @@
 #include "creatureevent.h"
 #include "tools.h"
 #include "player.h"
+#include "pugicast.h"
 
 CreatureEvents::CreatureEvents() :
 	scriptInterface("CreatureScript Interface")
@@ -204,9 +205,22 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		type = CREATURE_EVENT_MANACHANGE;
 	} else if (tmpStr == "extendedopcode") {
 		type = CREATURE_EVENT_EXTENDED_OPCODE;
+	} else if (tmpStr == "parsepacket") {
+		type = CREATURE_EVENT_PARSE_PACKET;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << eventName << std::endl;
 		return false;
+	}
+
+	if (type == CREATURE_EVENT_PARSE_PACKET) {
+		// look for recvbyte
+		pugi::xml_attribute recvbyteAttribute = node.attribute("recvbyte");
+		if (!recvbyteAttribute) {
+			std::cout << "[Error - CreatureEvent::configureEvent] Missing recvbyte for parse packet creature event: " << eventName << std::endl;
+			return false;
+		}
+
+		recvbyte = static_cast<uint8_t>(pugi::cast<uint16_t>(recvbyteAttribute.value()));
 	}
 
 	loaded = true;
@@ -253,6 +267,9 @@ std::string CreatureEvent::getScriptEventName() const
 		case CREATURE_EVENT_EXTENDED_OPCODE:
 			return "onExtendedOpcode";
 
+		case CREATURE_EVENT_PARSE_PACKET:
+			return "onParsePacket";
+
 		case CREATURE_EVENT_NONE:
 		default:
 			return std::string();
@@ -265,6 +282,10 @@ void CreatureEvent::copyEvent(CreatureEvent* creatureEvent)
 	scriptInterface = creatureEvent->scriptInterface;
 	scripted = creatureEvent->scripted;
 	loaded = creatureEvent->loaded;
+
+	if (type == CREATURE_EVENT_PARSE_PACKET) {
+		recvbyte = creatureEvent->getRecvbyte();
+	}
 }
 
 void CreatureEvent::clearEvent()
@@ -593,6 +614,32 @@ void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 
 	lua_pushnumber(L, opcode);
 	LuaScriptInterface::pushString(L, buffer);
+
+	scriptInterface->callVoidFunction(3);
+}
+
+void CreatureEvent::executeParsePacket(Player* player, uint8_t recvbyte, const NetworkMessage& message)
+{
+	//onParsePacket(player, recvbyte, msg)
+	if (!scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeParsePacket] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
+
+	lua_State* L = scriptInterface->getLuaState();
+
+	scriptInterface->pushFunction(scriptId);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, recvbyte);
+
+	LuaScriptInterface::pushUserdata<NetworkMessage>(L, new NetworkMessage(message));
+	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
 
 	scriptInterface->callVoidFunction(3);
 }

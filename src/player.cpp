@@ -4540,3 +4540,22 @@ void Player::setGuild(Guild* guild)
 		oldGuild->removeMember(this);
 	}
 }
+
+CreatureEvent* Player::getParsePacketEvent(uint8_t recvbyte)
+{
+	if (!hasEventRegistered(CREATURE_EVENT_PARSE_PACKET)) {
+		return nullptr;
+	}
+
+	for (CreatureEvent* creatureEvent : eventsList) {
+		if (!creatureEvent->isLoaded()) {
+			continue;
+		}
+
+		if (creatureEvent->getEventType() == CREATURE_EVENT_PARSE_PACKET && creatureEvent->getRecvbyte() == recvbyte) {
+			return creatureEvent;
+		}
+	}
+
+	return nullptr;
+}

@@ -214,6 +214,8 @@ class Player final : public Creature, public Cylinder
 			bankBalance = balance;
 		}
 
+		CreatureEvent* getParsePacketEvent(uint8_t recvbyte);
+
 		Guild* getGuild() const {
 			return guild;
 		}
