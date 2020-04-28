@@ -4540,4 +4540,3 @@ void Player::setGuild(Guild* guild)
 		oldGuild->removeMember(this);
 	}
 }
-
