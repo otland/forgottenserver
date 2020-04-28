@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="230">
 	<health now="3500" max="3500" />
-	<look type="130" head="19" body="71" legs="128" feet="128" addons="1" corpse="20527" />
+	<look type="130" head="0" body="52" legs="128" feet="128" addons="1" corpse="20527" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -37,7 +37,7 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="20">
+	<defenses armor="33" defense="33">
 		<defense name="healing" interval="2000" chance="20" min="100" max="225">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -58,7 +58,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="stone golem" interval="2000" chance="10" max="1" />
+		<summon name="stone golem" interval="2000" chance="10" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Learn the secret of our magic! YOUR death!" />
@@ -66,30 +66,29 @@
 		<voice sentence="We don't like intruders!" />
 	</voices>
 	<loot>
-		<item name="red tome" chance="300" />
-		<item name="candlestick" chance="1500" />
-		<item name="piggy bank" chance="60" />
-		<item name="ring of the sky" chance="430" />
-		<item id="2124" chance="700" /><!-- crystal ring -->
-		<item name="small sapphire" chance="1190" />
-		<item name="gold coin" countmax="80" chance="29340" />
-		<item name="talon" chance="1150" />
-		<item name="energy ring" chance="2200" />
-		<item name="mind stone" chance="2000" />
-		<item name="stone skin amulet" chance="330" />
-		<item name="poison dagger" chance="7600" />
-		<item name="skull staff" chance="6370" />
-		<item name="golden armor" chance="240" />
-		<item name="inkwell" chance="1000" />
-		<item name="blue robe" chance="1410" />
+		<item name="gold coin" countmax="80" chance="30000" />
 		<item name="cherry" countmax="4" chance="19000" />
 		<item name="bread" chance="9000" />
-		<item name="dark mushroom" chance="3000" />
+		<item name="poison dagger" chance="7600" />
+		<item name="skull staff" chance="6370" />
+		<item name="great health potion" chance="5000" />
+		<item name="great mana potion" chance="5000" />
 		<item name="assassin star" countmax="4" chance="3500" />
-		<item name="assassin star" countmax="4" chance="3470" />
-		<item name="great mana potion" chance="4760" />
-		<item name="great health potion" chance="5190" />
+		<item name="dark mushroom" chance="3000" />
+		<item name="mind stone" chance="2000" />
+		<item name="energy ring" chance="2000" />
+		<item name="blue robe" chance="1500" />
+		<item name="candlestick" chance="1500" />
+		<item name="small sapphire" chance="1200" />
+		<item name="talon" chance="1150" />
 		<item name="lightning robe" chance="1000" />
-		<item name="luminous orb" chance="510" />
+		<item name="inkwell" chance="1000" />
+		<item id="2124" chance="730" /><!-- crystal ring -->
+		<item name="luminous orb" chance="450" />
+		<item name="ring of the sky" chance="380" />
+		<item name="stone skin amulet" chance="330" />
+		<item name="red tome" chance="240" />
+		<item name="golden armor" chance="210" />
+		<item name="piggy bank" chance="60" />
 	</loot>
 </monster>

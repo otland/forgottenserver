@@ -50,6 +50,7 @@
 		<item name="worm" countmax="2" chance="10000" />
 		<item id="2050" chance="5000" /><!-- torch -->
 		<item name="ghoul snack" chance="5130" />
+		<!-- Heavy Old Tome 2.06% -->
 		<item name="viking helmet" chance="1000" />
 		<item name="brown piece of cloth" chance="1000" />
 		<item name="pile of grave earth" chance="950" />
