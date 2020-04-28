@@ -172,7 +172,6 @@
 	<monster name="Dreadwing" file="monsters/dreadwing.xml" />
 	<monster name="Drillworm" file="monsters/drillworm.xml" />
 	<monster name="Dromedary" file="monsters/dromedary.xml" />
-
 	<monster name="Dwarf Geomancer" file="monsters/dwarf_geomancer.xml" />
 	<monster name="Dwarf Guard" file="monsters/dwarf_guard.xml" />
 	<monster name="Dwarf Miner" file="monsters/dwarf_miner.xml" />
@@ -645,6 +644,7 @@
 	<monster name="Wild Fire Magic" file="monsters/wild_fire_magic.xml" />
 	<monster name="Wild Fury Magic" file="monsters/wild_fury_magic.xml" />
 	<monster name="Wild Nature Magic" file="monsters/wild_nature_magic.xml" />
+	<monster name="Wild Horse" file="monsters/wild_horse.xml" />
 	<monster name="Wild Warrior" file="monsters/wild_warrior.xml" />
 	<monster name="Wild Water Magic" file="monsters/wild_water_magic.xml" />
 	<monster name="Wilting Leaf Golem" file="monsters/wilting_leaf_golem.xml" />
