@@ -796,6 +796,7 @@
 	<monster name="Terrified Elephant" file="Ungulates/terrified_elephant.xml" />
 	<monster name="Vampire Pig" file="Ungulates/vampire_pig.xml" />
 	<monster name="White Deer" file="Ungulates/white_deer.xml" />
+	<monster name="Wild Horse" file="Ungulates/wild_horse.xml" />
 
 	<!-- Vampires -->
 	<monster name="Vampire" file="Vampires/vampire.xml" />
