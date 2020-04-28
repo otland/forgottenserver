@@ -21,7 +21,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" />
-		<attack name="energy" interval="2000" chance="15" range="7" min="-20" max="-59">
+		<attack name="energy" interval="2000" chance="15" range="7" min="-20" max="-58">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energy" />
 		</attack>
@@ -33,13 +33,13 @@
 			<attribute key="shootEffect" value="energyball" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="18" defense="18" />
 	<elements>
 		<element energyPercent="20" />
 		<element earthPercent="20" />
 		<element holyPercent="10" />
 		<element icePercent="-10" />
-		<element deathPercent="-10" />
+		<element deathPercent="-5" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
@@ -49,16 +49,16 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item id="2050" chance="4950" /><!-- torch -->
 		<item name="gold coin" countmax="35" chance="85780" />
-		<item name="wand of cosmic energy" chance="600" />
-		<item name="leather helmet" chance="3000" />
-		<item name="leather legs" chance="5190" />
 		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
+		<item name="purple robe" chance="6430" />
+		<item id="2050" chance="5000" /><!-- torch -->
+		<item name="leather legs" chance="4950" />
+		<item name="leather helmet" chance="3100" />
+		<item name="minotaur horn" countmax="2" chance="3020" />
 		<item name="minotaur leather" chance="2290" />
 		<item name="taurus mace" chance="1000" />
+		<item name="wand of cosmic energy" chance="600" />
 		<item name="mana potion" chance="490" />
-		<item name="minotaur horn" countmax="2" chance="3020" />
-		<item name="purple robe" countmax="2" chance="6430" />
 	</loot>
 </monster>
