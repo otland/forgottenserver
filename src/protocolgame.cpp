@@ -416,7 +416,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 
 	if (CreatureEvent* creatureEvent = player->getParsePacketEvent(recvbyte)) {
-		creatureEvent->executeParsePacket(player, recvbyte, msg);
+		g_dispatcher.addTask(createTask(std::bind(&CreatureEvent::executeParsePacket, creatureEvent, player, recvbyte, msg)));
 		return;
 	}
 
