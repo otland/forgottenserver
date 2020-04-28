@@ -2858,6 +2858,7 @@ void LuaScriptInterface::registerFunctions()
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
 	registerMethod("CreatureEvent", "type", LuaScriptInterface::luaCreatureEventType);
+	registerMethod("CreatureEvent", "recvbyte", LuaScriptInterface::luaCreatureEventRecvbyte);
 	registerMethod("CreatureEvent", "register", LuaScriptInterface::luaCreatureEventRegister);
 	registerMethod("CreatureEvent", "onLogin", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onLogout", LuaScriptInterface::luaCreatureEventOnCallback);
@@ -2871,6 +2872,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("CreatureEvent", "onHealthChange", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onManaChange", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onExtendedOpcode", LuaScriptInterface::luaCreatureEventOnCallback);
+	registerMethod("CreatureEvent", "onParsePacket", LuaScriptInterface::luaCreatureEventOnCallback);
 
 	// MoveEvent
 	registerClass("MoveEvent", "", LuaScriptInterface::luaCreateMoveEvent);
@@ -14823,11 +14825,26 @@ int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 			creature->setEventType(CREATURE_EVENT_MANACHANGE);
 		} else if (tmpStr == "extendedopcode") {
 			creature->setEventType(CREATURE_EVENT_EXTENDED_OPCODE);
+		} else if (tmpStr == "parsepacket") {
+			creature->setEventType(CREATURE_EVENT_PARSE_PACKET);
 		} else {
 			std::cout << "[Error - CreatureEvent::configureLuaEvent] Invalid type for creature event: " << typeName << std::endl;
 			pushBoolean(L, false);
 		}
 		creature->setLoaded(true);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureEventRecvbyte(lua_State* L)
+{
+	// creatureevent:recvbyte(byte)
+	CreatureEvent* creature = getUserdata<CreatureEvent>(L, 1);
+	if (creature && creature->getEventType() == CREATURE_EVENT_PARSE_PACKET) {
+		creature->setRecvbyte(getNumber<uint8_t>(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

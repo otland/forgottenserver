@@ -70,6 +70,9 @@ class CreatureEvent final : public Event
 		void setLoaded(bool b) {
 			loaded = b;
 		}
+		void setRecvbyte(uint8_t recvbyte) {
+			this->recvbyte = recvbyte;
+		}
 		uint8_t getRecvbyte() {
 			return recvbyte;
 		}
