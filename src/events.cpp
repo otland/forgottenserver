@@ -824,7 +824,7 @@ bool Events::eventPlayerOnTradeAccept(Player* player, Player* target, Item* item
 
 void Events::eventPlayerOnTradeCompleted(Player* player, Player* target, Item* item, Item* targetItem, bool isSuccess)
 {
-	// Player:onTradeSuccess(target, item, targetItem)
+	// Player:onTradeCompleted(target, item, targetItem, isSuccess)
 	if (info.playerOnTradeCompleted == -1) {
 		return;
 	}
