@@ -518,6 +518,15 @@
 		<vocation name="Elite Knight" showInDescription="0" />
 	</movevent>
 	<movevent event="DeEquip" itemid="26189" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10309" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10309" slot="ring" function="onDeEquipItem" />
+	<movevent event="DeEquip" itemid="10310" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10311" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10311" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10312" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10312" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10314" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10314" slot="ring" function="onDeEquipItem" />
 
 	<!-- Helmets -->
 	<movevent event="Equip" itemid="2323" slot="head" function="onEquipItem">

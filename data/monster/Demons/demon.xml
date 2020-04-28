@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Demon" nameDescription="a demon" race="fire" experience="6000" speed="280">
+<monster name="Demon" nameDescription="a demon" race="fire" experience="6000" speed="256">
 	<health now="8200" max="8200" />
 	<look type="35" corpse="5995" />
 	<targetchange interval="4000" chance="20" />
@@ -17,27 +17,27 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-520" />
-		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-120" />
-		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="1" min="-150" max="-250">
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-30" max="-120" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="7" target="0" min="-150" max="-250">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
 		<attack name="firefield" interval="2000" chance="10" range="7" radius="1" target="1">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
-		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-480">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
 		<attack name="energy" interval="2000" chance="10" range="1" min="-210" max="-300">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
-		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-700" duration="30000">
+		<attack name="speed" interval="2000" chance="15" range="7" radius="1" target="1" speedchange="-700" duration="30000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="55" defense="55">
-		<defense name="healing" interval="2000" chance="15" min="180" max="250">
+	<defenses armor="44" defense="44">
+		<defense name="healing" interval="2000" chance="15" min="80" max="250">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
@@ -45,12 +45,12 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="30" />
-		<element deathPercent="30" />
+		<element physicalPercent="25" />
+		<element deathPercent="20" />
 		<element energyPercent="50" />
 		<element earthPercent="40" />
-		<element icePercent="-10" />
-		<element holyPercent="-10" />
+		<element icePercent="-12" />
+		<element holyPercent="-12" />
 	</elements>
 	<immunities>
 		<immunity fire="1" />
@@ -65,39 +65,43 @@
 	<voices interval="5000" chance="10">
 		<voice sentence="Your soul will be mine!" />
 		<voice sentence="MUHAHAHAHA!" />
-		<voice sentence="CHAMEK ATH UTHUL ARAK!" />
-		<voice sentence="I SMELL FEEEEAAAAAR!" />
+		<voice sentence="CHAMEK ATH UTHUL ARAK!" yell="1" />
+		<voice sentence="I SMELL FEEEEAAAAAR!" yell="1" />
 		<voice sentence="Your resistance is futile!" />
 	</voices>
 	<loot>
-		<item name="purple tome" chance="1190" />
-		<item name="gold coin" countmax="100" chance="60000" />
-		<item name="gold coin" countmax="99" chance="60000" />
-		<item name="small emerald" chance="10000" />
-		<item name="talon" chance="3571" />
-		<item name="platinum coin" countmax="6" chance="100000" />
-		<item name="might ring" chance="170" />
-		<item name="stealth ring" chance="1333" />
-		<item name="platinum amulet" chance="813" />
-		<item name="orb" chance="2854" />
-		<item name="gold ring" chance="1010" />
-		<item name="ring of healing" chance="473" />
-		<item name="double axe" chance="14285" />
-		<item name="giant sword" chance="2000" />
-		<item name="ice rapier" chance="666" />
-		<item name="golden sickle" chance="1428" />
-		<item name="fire axe" chance="3703" />
-		<item name="devil helmet" chance="1204" />
-		<item name="golden legs" chance="413" />
-		<item name="magic plate armor" chance="70" />
-		<item name="mastermind shield" chance="389" />
-		<item name="demon shield" chance="649" />
-		<item name="fire mushroom" countmax="6" chance="20740" />
-		<item name="demon horn" chance="467" />
-		<item name="assassin star" countmax="5" chance="5263" />
-		<item name="demonrage sword" chance="80" />
-		<item id="7393" chance="100" /><!-- demon trophy -->
-		<item name="great mana potion" countmax="3" chance="14285" />
+		<item name="gold coin" countmax="200" chance="100000" />
+		<item name="platinum coin" countmax="8" chance="100000" />
+		<item name="great mana potion" countmax="3" chance="25000" />
+		<item name="great spirit potion" countmax="3" chance="25000" />
+		<item name="demon horn" chance="20000" />
+		<item name="demonic essence" chance="20000" />
 		<item name="ultimate health potion" countmax="3" chance="20000" />
+		<item name="fire mushroom" countmax="6" chance="20000" />
+		<item name="assassin star" countmax="10" chance="15263" />
+		<item name="small topaz" countmax="5" chance="10000" />
+		<item name="small ruby" countmax="5" chance="10000" />
+		<item name="small emerald" countmax="5" chance="10000" />
+		<item name="small amethyst" countmax="5" chance="10000" />
+		<item name="fire axe" chance="4000" />
+		<item name="talon" chance="3571" />
+		<item name="orb" chance="2900" />
+		<item name="red gem" chance="2900" />
+		<item name="ring of healing" chance="2600" />
+		<item name="might ring" chance="2500" />
+		<item name="stealth ring" chance="2300" />
+		<item name="giant sword" chance="2000" />
+		<item name="ice rapier" chance="1800" />
+		<item name="golden sickle" chance="1428" />
+		<item name="purple tome" chance="1190" />
+		<item name="devil helmet" chance="1204" />
+		<item name="gold ring" chance="1010" />
+		<item name="demon shield" chance="750" />
+		<item name="platinum amulet" chance="710" />
+		<item name="mastermind shield" chance="470" />
+		<item name="golden legs" chance="400" />
+		<item id="7393" chance="100" /><!-- demon trophy -->
+		<item name="magic plate armor" chance="80" />
+		<item name="demonrage sword" chance="60" />
 	</loot>
 </monster>
