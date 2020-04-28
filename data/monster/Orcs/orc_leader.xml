@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Orc Leader" nameDescription="an orc leader" race="blood" experience="270" speed="220" manacost="640">
+<monster name="Orc Leader" nameDescription="an orc leader" race="blood" experience="270" speed="230" manacost="640">
 	<health now="450" max="450" />
 	<look type="59" corpse="6001" />
 	<targetchange interval="4000" chance="10" />
@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag canwalkonfire="1" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
@@ -24,12 +25,12 @@
 			<attribute key="shootEffect" value="throwingknife" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25" />
+	<defenses armor="20" defense="20" />
 	<elements>
 		<element energyPercent="20" />
 		<element holyPercent="20" />
 		<element earthPercent="-10" />
-		<element deathPercent="-5" />
+		<element deathPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
@@ -39,23 +40,23 @@
 		<voice sentence="Ulderek futgyr human!" />
 	</voices>
 	<loot>
+		<item id="2667" chance="30000" /><!-- fish -->
 		<item name="gold coin" countmax="35" chance="28000" />
+		<item name="orc leather" chance="19510" />
+		<item name="plate shield" chance="10000" />
+		<item name="throwing knife" countmax="4" chance="9950" />
+		<item name="brown mushroom" chance="9650" />
 		<item name="sword ring" chance="3920" />
 		<item name="longsword" chance="2800" />
-		<item name="throwing knife" countmax="4" chance="9950" />
-		<item name="broadsword" chance="610" />
-		<item id="2419" chance="1860" /><!-- scimitar -->
+		<item name="royal spear" chance="2600" />
+		<item name="brass legs" chance="2400" />
+		<item id="2419" chance="2160" /><!-- scimitar -->
+		<item name="skull belt" chance="2100" />
 		<item name="plate armor" chance="1650" />
-		<item name="warrior helmet" chance="180" />
-		<item name="brass legs" chance="3100" />
-		<item name="plate shield" chance="1650" />
-		<item name="plate legs" chance="440" />
-		<item id="2667" chance="29400" /><!-- fish -->
-		<item name="brown mushroom" chance="9650" />
-		<item name="royal spear" chance="2400" />
-		<item name="health potion" chance="550" />
 		<item name="orc tooth" chance="1030" />
-		<item name="orc leather" chance="19510" />
-		<item name="skull belt" chance="2008" />
+		<item name="broadsword" chance="760" />
+		<item name="health potion" chance="550" />
+		<item name="plate legs" chance="400" />
+		<item name="warrior helmet" chance="180" />
 	</loot>
 </monster>
