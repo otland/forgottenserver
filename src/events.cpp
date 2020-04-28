@@ -830,7 +830,7 @@ void Events::eventPlayerOnTradeCompleted(Player* player, Player* target, Item* i
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPlayerOnTradeAccept] Call stack overflow" << std::endl;
+		std::cout << "[Error - Events::eventPlayerOnTradeCompleted] Call stack overflow" << std::endl;
 		return;
 	}
 
