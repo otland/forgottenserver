@@ -8,6 +8,9 @@ PlayerStorageKeys = {
 	madSheepSummon = 30023,
 	crateUsable = 30024,
 	potOfBlackjack = 30025,
+	afflictedOutfit = 30026,
+	afflictedPlagueMask = 30027,
+	afflictedPlagueBell = 30028,
 }
 
 GlobalStorageKeys = {

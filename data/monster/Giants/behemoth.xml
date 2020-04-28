@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Behemoth" nameDescription="a behemoth" race="blood" experience="2500" speed="260">
+<monster name="Behemoth" nameDescription="a behemoth" race="blood" experience="2500" speed="340">
 	<health now="4000" max="4000" />
 	<look type="55" corpse="5999" />
 	<targetchange interval="4000" chance="10" />
@@ -18,13 +18,13 @@
 		<flag canwalkonenergy="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="melee" interval="2000" min="0" max="-455" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-200">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
 	</attacks>
-	<defenses armor="45" defense="45">
-		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+	<defenses armor="50" defense="50">
+		<defense name="speed" interval="2000" chance="15" speedchange="390" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
@@ -47,30 +47,30 @@
 		<voice sentence="Crush the intruders!" />
 	</voices>
 	<loot>
-		<item name="amphora" chance="100" />
-		<item name="crystal necklace" chance="2530" />
-		<item name="gold coin" countmax="100" chance="59530" />
-		<item name="gold coin" countmax="99" chance="40000" />
-		<item name="small amethyst" countmax="5" chance="6380" />
-		<item name="platinum coin" countmax="5" chance="59800" />
-		<item name="strange symbol" chance="750" />
-		<item id="2231" chance="670" /><!-- big bone -->
-		<item name="two handed sword" chance="5980" />
-		<item name="double axe" chance="10510" />
-		<item name="giant sword" chance="1006" />
-		<item name="crowbar" chance="100" />
-		<item name="war axe" chance="50" />
-		<item name="plate armor" chance="3930" />
-		<item name="dark armor" chance="4370" />
-		<item name="pick" chance="650" />
-		<item name="steel boots" chance="380" />
+		<item name="gold coin" countmax="100" chance="59000" />
+		<item name="gold coin" countmax="100" chance="40000" />
+		<item name="platinum coin" countmax="5" chance="60000" />
 		<item name="meat" countmax="6" chance="30000" />
-		<item name="perfect behemoth fang" chance="1090" />
-		<item name="behemoth claw" chance="430" />
-		<item name="assassin star" countmax="5" chance="9750" />
-		<item id="7396" chance="170" /><!-- behemoth trophy -->
-		<item name="titan axe" chance="90" />
-		<item name="great health potion" chance="5120" />
 		<item name="battle stone" chance="14000" />
+		<item name="assassin star" countmax="5" chance="10000" />
+		<item name="double axe" chance="9900" />
+		<item name="small amethyst" countmax="5" chance="6380" />
+		<item name="two handed sword" chance="5980" />
+		<item name="great health potion" chance="5120" />
+		<item name="dark armor" chance="4370" />
+		<item name="plate armor" chance="3930" />
+		<item name="crystal necklace" chance="2530" />
+		<item name="perfect behemoth fang" chance="1090" />
+		<item name="giant sword" chance="1006" />
+		<item name="strange symbol" chance="820" />
+		<item id="2231" chance="720" /><!-- big bone -->
+		<item name="pick" chance="650" />
+		<item name="behemoth claw" chance="460" />
+		<item name="steel boots" chance="440" />
+		<item name="crowbar" chance="130" />
+		<item id="7396" chance="170" /><!-- behemoth trophy -->
+		<item name="amphora" chance="90" />
+		<item name="titan axe" chance="70" />
+		<item name="war axe" chance="60" />
 	</loot>
 </monster>
