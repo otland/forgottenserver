@@ -245,6 +245,7 @@ class House
 
 		uint32_t id;
 		uint32_t owner = 0;
+		uint32_t ownerAccountId = 0;
 		uint32_t rentWarnings = 0;
 		uint32_t rent = 0;
 		uint32_t townId = 0;
