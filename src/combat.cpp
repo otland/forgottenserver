@@ -777,7 +777,9 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 			for (const auto& condition : params.conditionList) {
 				if (caster == target || !target->isImmune(condition->getType())) {
 					Condition* conditionCopy = condition->clone();
-					conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
+					if (caster) {
+						conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
+					}
 
 					//TODO: infight condition until all aggressive conditions has ended
 					target->addCombatCondition(conditionCopy);
