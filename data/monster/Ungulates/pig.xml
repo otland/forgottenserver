@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Pig" nameDescription="a pig" race="blood" experience="0" speed="130" manacost="255">
+<monster name="Pig" nameDescription="a pig" race="blood" experience="0" speed="114" manacost="255">
 	<health now="25" max="25" />
 	<look type="60" corpse="6000" />
 	<targetchange interval="4000" chance="0" />
@@ -19,12 +19,13 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<defenses armor="2" defense="2" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Oink oink" />
 		<voice sentence="Oink" />
 	</voices>
 	<loot>
-		<item name="meat" countmax="4" chance="64000" />
-		<item name="pig foot" chance="950" />
+		<item name="meat" countmax="4" chance="65000" />
+		<item name="pig foot" chance="1200" />
 	</loot>
 </monster>

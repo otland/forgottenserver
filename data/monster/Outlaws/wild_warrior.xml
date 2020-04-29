@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Wild Warrior" nameDescription="a wild warrior" race="blood" experience="60" speed="190" manacost="420">
 	<health now="135" max="135" />
-	<look type="131" head="57" body="57" legs="57" feet="57" corpse="20531" />
+	<look type="131" head="38" body="38" legs="38" feet="38" corpse="20531" />
 	<targetchange interval="4000" chance="0" />
 	<flags>
 		<flag summonable="1" />
