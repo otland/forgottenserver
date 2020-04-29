@@ -2774,6 +2774,8 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			}
 		}
 
+		g_events->eventPlayerOnTradeCompleted(player, tradePartner, playerTradeItem, partnerTradeItem, isSuccess);
+
 		player->setTradeState(TRADE_NONE);
 		player->tradeItem = nullptr;
 		player->tradePartner = nullptr;
