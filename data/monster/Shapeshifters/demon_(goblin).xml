@@ -45,8 +45,8 @@
 	</elements>
 	<loot>
 		<item name="gold coin" countmax="9" chance="50320" />
-		<item name="small stone" countmax="3" chance="15290" />
-		<item id="2667" chance="13750" /><!-- fish -->
+		<item name="small stone" chance="15290" />
+		<item id="2667" chance="12750" /><!-- fish -->
 		<item name="small axe" chance="9700" />
 		<item name="short sword" chance="8870" />
 		<item name="bone club" chance="4900" />
