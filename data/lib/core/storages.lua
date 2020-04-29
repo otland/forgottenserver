@@ -10,6 +10,7 @@ PlayerStorageKeys = {
 	afflictedPlagueMask = 30027,
 	afflictedPlagueBell = 30028,
 	nailCaseUseCount = 30031,
+	swampDigging = 30032,
 }
 
 GlobalStorageKeys = {
