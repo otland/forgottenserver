@@ -1,7 +1,8 @@
 function onCastSpell(creature, variant)
 	local creaturePos = creature:getPosition()
 	creaturePos:getNextPosition(creature:getDirection())
-	local house = Tile(creaturePos):getHouse()
+	local tile = Tile(creaturePos)
+	local house = tile and tile:getHouse()
 	local doorId = house and house:getDoorIdByPosition(creaturePos)
 	if not doorId or not house:canEditAccessList(doorId, creature) then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
