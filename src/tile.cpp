@@ -473,7 +473,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 
 	if (!hasFlag(TILESTATE_PROTECTIONZONE) || (g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES) && hasFlag(TILESTATE_PROTECTIONZONE))) {
 		auto it = getItemList();
-		if (it->size() == 0) { // it->empty() does not work for some strange reason here
+		if (it->empty()) {
 			g_game.removeTileToClean(this);
 			return;
 		}
