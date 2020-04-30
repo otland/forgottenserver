@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dwarf Guard" nameDescription="a dwarf guard" race="blood" experience="165" speed="205" manacost="650">
+<monster name="Dwarf Guard" nameDescription="a dwarf guard" race="blood" experience="165" speed="206" manacost="650">
 	<health now="245" max="245" />
 	<look type="70" corpse="6013" />
 	<targetchange interval="4000" chance="10" />
@@ -22,10 +22,10 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-140" />
 	</attacks>
-	<defenses armor="30" defense="30" />
+	<defenses armor="15" defense="15" />
 	<elements>
 		<element earthPercent="20" />
-		<element physicalPercent="10" />
+		<element physicalPercent="20" />
 		<element firePercent="-5" />
 		<element deathPercent="-5" />
 	</elements>
@@ -36,19 +36,18 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
+		<item name="white mushroom" countmax="2" chance="55000" />
+		<item name="leather boots" chance="40000" />
 		<item name="gold coin" countmax="30" chance="40000" />
-		<item name="small amethyst" chance="140" />
-		<item name="axe ring" chance="190" />
-		<item name="double axe" chance="600" />
-		<item name="battle hammer" chance="4000" />
-		<item name="steel helmet" chance="1600" />
-		<item name="iron helmet" chance="250" />
 		<item name="scale armor" chance="9200" />
 		<item name="battle shield" chance="6000" />
-		<item name="leather boots" chance="40000" />
-		<item name="white mushroom" countmax="2" chance="55000" />
+		<item name="battle hammer" chance="4000" />
+		<item name="steel helmet" chance="1600" />
+		<item name="double axe" chance="600" />
 		<item name="iron ore" chance="510" />
-		<item name="health potion" chance="380" />
-		<item id="13757" chance="280" /><!-- coal -->
+		<item name="health potion" chance="400" />
+		<item name="axe ring" chance="200" />
+		<item id="13757" chance="190" /><!-- coal -->
+		<item name="small amethyst" chance="100" />
 	</loot>
 </monster>
