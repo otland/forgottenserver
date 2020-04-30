@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Elf" nameDescription="an elf" race="blood" experience="42" speed="170" manacost="320">
+<monster name="Elf" nameDescription="an elf" race="blood" experience="42" speed="190" manacost="320">
 	<health now="100" max="100" />
 	<look type="62" corpse="6003" />
 	<targetchange interval="4000" chance="0" />
 	<flags>
-		<flag summonable="1" />
+		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="1" />
@@ -25,10 +25,10 @@
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="6" defense="6" />
 	<elements>
 		<element holyPercent="20" />
-		<element deathPercent="-1" />
+		<element deathPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
@@ -42,14 +42,14 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="30" chance="44000" />
-		<item name="longsword" chance="10800" />
-		<item name="studded helmet" chance="13500" />
-		<item name="studded armor" chance="8960" />
-		<item name="plate shield" chance="9300" />
-		<item name="arrow" countmax="3" chance="7060" />
-		<item name="leather boots" chance="11410" />
-		<item id="5921" chance="940" /><!-- heaven blossom -->
 		<item name="plum" countmax="2" chance="20000" />
-		<item name="elvish talisman" chance="2100" />
+		<item name="studded helmet" chance="15000" />
+		<item name="leather boots" chance="11410" />
+		<item name="longsword" chance="10800" />
+		<item name="studded armor" chance="9000" />
+		<item name="plate shield" chance="8900" />
+		<item name="arrow" countmax="3" chance="7060" />
+		<item name="elvish talisman" chance="2000" />
+		<item id="5921" chance="1000" /><!-- heaven blossom -->
 	</loot>
 </monster>
