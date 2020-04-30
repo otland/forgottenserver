@@ -101,6 +101,10 @@ rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
 
+-- Formulas
+-- NOTE: default experienceForLevel formula = ((50 * lv * lv * lv) - (150 * lv * lv) + (400 * lv)) / 3
+experienceForLevel = {50, 150, 400, 3}
+
 -- Monsters
 deSpawnRange = 2
 deSpawnRadius = 50

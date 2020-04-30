@@ -117,17 +117,25 @@ class ConfigManager
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
 
+		enum table_num_config_t {
+			EXPERIENCE_FOR_LEVEL,
+
+			LAST_TABLENUM_CONFIG /* this must be the last one */
+		};
+
 		bool load();
 		bool reload();
 
 		const std::string& getString(string_config_t what) const;
 		int32_t getNumber(integer_config_t what) const;
 		bool getBoolean(boolean_config_t what) const;
+		std::vector<double> getTableNum(table_num_config_t what) const;
 
 	private:
 		std::string string[LAST_STRING_CONFIG] = {};
 		int32_t integer[LAST_INTEGER_CONFIG] = {};
 		bool boolean[LAST_BOOLEAN_CONFIG] = {};
+		std::vector<double> tableNum[LAST_TABLENUM_CONFIG] = {};
 
 		bool loaded = false;
 };

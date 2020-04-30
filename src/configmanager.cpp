@@ -84,6 +84,27 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	return val != 0;
 }
 
+std::vector<double> getGlobalTableNum(lua_State* L, const char* identifier, const std::vector<double> defaultValue = {})
+{
+	lua_getglobal(L, identifier);
+	if (!lua_istable(L, -1)) {
+		lua_pop(L, 1);
+		return defaultValue;
+	}
+
+	std::vector<double> resultT;
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0) {
+		if (!lua_isnumber(L, -1)) {
+			return defaultValue;
+		}
+		resultT.emplace_back(lua_tonumber(L, -1));
+		lua_pop(L, 1);
+	}
+	lua_pop(L, 2);
+	return resultT;
+}
+
 }
 
 bool ConfigManager::load()
@@ -190,6 +211,8 @@ bool ConfigManager::load()
 	integer[SERVER_SAVE_NOTIFY_DURATION] = getGlobalNumber(L, "serverSaveNotifyDuration", 5);
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
 
+	tableNum[EXPERIENCE_FOR_LEVEL] = getGlobalTableNum(L, "experienceForLevel", { 50, 150, 400, 3 });
+
 	loaded = true;
 	lua_close(L);
 	return true;
@@ -231,4 +254,13 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 		return false;
 	}
 	return boolean[what];
+}
+
+std::vector<double> ConfigManager::getTableNum(table_num_config_t what) const
+{
+	if (what >= LAST_TABLENUM_CONFIG) {
+		std::cout << "[Warning - ConfigManager::getTableNum] Accessing invalid index: " << what << std::endl;
+		return {};
+	}
+	return tableNum[what];
 }

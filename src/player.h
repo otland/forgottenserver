@@ -36,6 +36,7 @@
 #include "groups.h"
 #include "town.h"
 #include "mounts.h"
+#include "configmanager.h"
 
 class House;
 class NetworkMessage;
@@ -107,6 +108,8 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
+
+extern ConfigManager g_config;
 
 class Player final : public Creature, public Cylinder
 {
@@ -181,7 +184,8 @@ class Player final : public Creature, public Cylinder
 
 		static uint64_t getExpForLevel(int32_t lv) {
 			lv--;
-			return ((50ULL * lv * lv * lv) - (150ULL * lv * lv) + (400ULL * lv)) / 3ULL;
+			std::vector<double> F = g_config.getTableNum(ConfigManager::EXPERIENCE_FOR_LEVEL);
+			return static_cast<uint64_t>(((F[0] * lv * lv * lv) - (F[1] * lv * lv) + (F[2] * lv)) / F[3]);
 		}
 
 		uint16_t getStaminaMinutes() const {

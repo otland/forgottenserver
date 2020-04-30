@@ -1048,6 +1048,9 @@ void LuaScriptInterface::registerFunctions()
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
+	//getExpForLevel(level)
+	lua_register(luaState, "getExpForLevel", LuaScriptInterface::luaGetExpForLevel);
+
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
@@ -3696,6 +3699,14 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	std::string message = getString(L, 3);
 	channel->sendToAll(message, type);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaGetExpForLevel(lua_State* L)
+{
+	//getExpForLevel(level)
+	int32_t level = getNumber<int32_t>(L, 1);
+	lua_pushnumber(L, Player::getExpForLevel(level));
 	return 1;
 }
 
