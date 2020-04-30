@@ -523,6 +523,7 @@
 	<monster name="Slick Water Elemental" file="monsters/slick_water_elemental.xml" />
 	<monster name="Slim" file="monsters/slim.xml" />
 	<monster name="Slime" file="monsters/slime.xml" />
+	<monster name="Slippery Northern Pike" file="monsters/slippery_northern_pike.xml" />
 	<monster name="Slug" file="monsters/slug.xml" />
 	<monster name="Smuggler" file="monsters/smuggler.xml" />
 	<monster name="Snake God Essence" file="monsters/snake_god_essence.xml" />
