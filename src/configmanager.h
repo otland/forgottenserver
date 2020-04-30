@@ -53,7 +53,6 @@ class ConfigManager
 			YELL_ALLOW_PREMIUM,
 			FORCE_MONSTERTYPE_LOAD,
 			HOUSE_OWNED_BY_ACCOUNT,
-			NEW_DELAYED_SPAWN,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

@@ -275,11 +275,11 @@ void Spawn::checkSpawn()
 
 void Spawn::scheduleSpawn(uint32_t spawnId, spawnBlock_t& sb, uint16_t interval)
 {
-	if (g_config.getBoolean(ConfigManager::NEW_DELAYED_SPAWN)) {
+	if (interval <= 0) {
+		spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
+	} else {
 		g_game.addMagicEffect(sb.pos, CONST_ME_TELEPORT);
 		g_scheduler.addEvent(createSchedulerTask(1400, std::bind(&Spawn::scheduleSpawn, this, spawnId, sb, interval - 1400)));
-	} else {
-		spawnMonster(spawnId, sb.mType, sb.pos, sb.direction);
 	}
 }
 

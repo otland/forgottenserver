@@ -104,7 +104,6 @@ rateSpawn = 1
 -- Monsters
 deSpawnRange = 2
 deSpawnRadius = 50
-newDelayedSpawn = true
 
 -- Stamina
 staminaSystem = true
