@@ -959,6 +959,9 @@ uint32_t Map::clean() const
 	std::vector<Item*> toRemove;
 
 	for (auto tileList : g_game.getTilesToClean()) {
+		if (!tileList) {
+			continue;
+		}
 		++tiles;
 		for (auto* item : *tileList->getItemList()) {
 			if (item->isCleanable()) {
