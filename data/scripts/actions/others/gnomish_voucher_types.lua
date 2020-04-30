@@ -1,17 +1,16 @@
 local config = {
+	[18517] = {female = 514, male = 516, effect = CONST_ME_GREEN_RINGS}, -- gnomish voucher type MB
+	[18518] = {female = 514, male = 516, addon = 1, effect = CONST_ME_GREEN_RINGS}, -- gnomish voucher type MA1
+	[18519] = {female = 514, male = 516, addon = 2, effect = CONST_ME_GREEN_RINGS}, -- gnomish voucher type MA2
 	[18520] = {female = 513, male = 512, effect = CONST_ME_GIANTICE}, -- gnomish voucher type CB
 	[18521] = {female = 513, male = 512, addon = 1, effect = CONST_ME_GIANTICE}, -- gnomish voucher type CA1
 	[18522] = {female = 513, male = 512, addon = 2, effect = CONST_ME_GIANTICE} -- gnomish voucher type CA2
 }
 
-local crystalWarlord = Action()
+local gnomishVoucher = Action()
 
-function crystalWarlord.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+function gnomishVoucher.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local useItem = config[item.itemid]
-	if not useItem then
-		return true
-	end
-
 	local looktype = player:getSex() == PLAYERSEX_FEMALE and useItem.female or useItem.male
 	if useItem.addon then
 		if not player:isPremium()
@@ -38,6 +37,6 @@ function crystalWarlord.onUse(player, item, fromPosition, target, toPosition, is
 end
 
 for k, v in pairs(config) do
-	crystalWarlord:id(k)
+	gnomishVoucher:id(k)
 end
-crystalWarlord:register()
+gnomishVoucher:register()
