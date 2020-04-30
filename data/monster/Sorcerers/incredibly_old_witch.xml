@@ -54,7 +54,6 @@
 			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
 	</attacks>
-	<defenses armor="199" defense="199" />
 	<immunities>
 		<immunity physical="1" />
 		<immunity energy="1" />
