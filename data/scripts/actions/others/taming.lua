@@ -393,7 +393,7 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	player:addMount(mount.id)
-	target:say(mount.success.text, TALKTYPE_MONSTER_SAY)
+	player:say(mount.success.text, TALKTYPE_MONSTER_SAY, false, player, target:getPosition())
 	player:say(mount.success.sound, TALKTYPE_MONSTER_SAY, false, 0, toPosition)
 	target:remove()
 	item:remove(1)
