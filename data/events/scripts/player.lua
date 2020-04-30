@@ -211,6 +211,10 @@ function Player:onTradeAccept(target, item, targetItem)
 	return true
 end
 
+function Player:onTradeCompleted(target, item, targetItem, isSuccess)
+	return
+end
+
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
 soulCondition:setTicks(4 * 60 * 1000)
 soulCondition:setParameter(CONDITION_PARAM_SOULGAIN, 1)
