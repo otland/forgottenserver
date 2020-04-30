@@ -18,5 +18,5 @@ indent_brace_style = K&R
 spaces_around_brackets = none
 
 [.travis.yml]
-indent_style = spaces
+indent_style = space
 indent_size = 2
