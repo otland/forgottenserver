@@ -21,6 +21,7 @@
 
 #include "teleport.h"
 #include "game.h"
+#include <boost/format.hpp>
 
 extern Game g_game;
 
@@ -70,10 +71,33 @@ void Teleport::addThing(Thing* thing)
 	return addThing(0, thing);
 }
 
+bool Teleport::checkInfinityLoop(Tile* destTile)
+{
+	if (!destTile) {
+		return false;
+	}
+
+	if (Teleport* teleport = destTile->getTeleportItem()) {
+		Position nextDestPos = teleport->getDestPos();
+		if (getPosition() == nextDestPos) {
+			return true;
+		}
+		return checkInfinityLoop(g_game.map.getTile(nextDestPos));
+	}
+	return false;
+}
+
 void Teleport::addThing(int32_t, Thing* thing)
 {
 	Tile* destTile = g_game.map.getTile(destPos);
 	if (!destTile) {
+		return;
+	}
+
+	// Prevent infinity loop (anti fools)
+	if (checkInfinityLoop(destTile)) {
+		const Position pos = getPosition();
+		std::cout << boost::format("Warning: infinity loop teleport. (x:%1%, y:%2%, z:%3%)\n") % pos.getX() % pos.getY() % pos.getZ();
 		return;
 	}
 
