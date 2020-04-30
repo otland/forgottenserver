@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" target="1" monster="rat" duration="60000">
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="rat" duration="60000">
 			<attribute key="areaEffect" value="teleport" />
 			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
