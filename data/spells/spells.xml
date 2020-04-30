@@ -744,7 +744,7 @@
 	</instant>
 
 	<!-- House Spells -->
-	<instant name="House Door List" words="aleta grav" casterTargetOrDirection="1" aggressive="0" script="house/edit_door_list.lua" />
+	<instant name="House Door List" words="aleta grav" aggressive="0" script="house/edit_door_list.lua" />
 	<instant name="House Guest List" words="aleta sio" aggressive="0" script="house/edit_guest_list.lua" />
 	<instant name="House Kick" words="alana sio" aggressive="0" playernameparam="1" params="1" script="house/kick.lua" />
 	<instant name="House Subowner List" words="aleta som" aggressive="0" script="house/edit_subowner_list.lua" />
