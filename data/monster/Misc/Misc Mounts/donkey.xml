@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Donkey" nameDescription="a donkey" race="blood" experience="0" speed="150">
 	<health now="45" max="45" />
-	<look type="387" corpse="13509" />
+	<look type="399" corpse="13509" />
 	<targetchange interval="2000" chance="20" />
 	<flags>
 		<flag summonable="0" />
