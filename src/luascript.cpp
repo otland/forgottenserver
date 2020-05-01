@@ -1869,6 +1869,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::ONE_PLAYER_ON_ACCOUNT)
 	registerEnumIn("configKeys", ConfigManager::AIMBOT_HOTKEY_ENABLED)
 	registerEnumIn("configKeys", ConfigManager::REMOVE_RUNE_CHARGES)
+	registerEnumIn("configKeys", ConfigManager::REMOVE_WEAPON_AMMO)
+	registerEnumIn("configKeys", ConfigManager::REMOVE_WEAPON_CHARGES)
+	registerEnumIn("configKeys", ConfigManager::REMOVE_POTION_CHARGES)
 	registerEnumIn("configKeys", ConfigManager::EXPERIENCE_FROM_PLAYERS)
 	registerEnumIn("configKeys", ConfigManager::FREE_PREMIUM)
 	registerEnumIn("configKeys", ConfigManager::REPLACE_KICK_ON_LOGIN)
@@ -4370,25 +4373,25 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 		return 1;
 	}
 
-	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 1));
-	if (monsterType) {
+	const std::string& name = getString(L, 1);
+	if (name.length() == 0) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	MonsterType* monsterType = g_monsters.getMonsterType(name, false);
+	if (!monsterType) {
+		monsterType = &g_monsters.monsters[asLowerCaseString(name)];
+		monsterType->name = name;
+		monsterType->nameDescription = "a " + name;
+	} else {
 		monsterType->info.lootItems.clear();
 		monsterType->info.attackSpells.clear();
 		monsterType->info.defenseSpells.clear();
-		pushUserdata<MonsterType>(L, monsterType);
-		setMetatable(L, -1, "MonsterType");
-	} else if (isString(L, 1)) {
-		monsterType = new MonsterType();
-		std::string name = getString(L, 1);
-		g_monsters.addMonsterType(name, monsterType);
-		monsterType = g_monsters.getMonsterType(getString(L, 1));
-		monsterType->name = name;
-		monsterType->nameDescription = "a " + name;
-		pushUserdata<MonsterType>(L, monsterType);
-		setMetatable(L, -1, "MonsterType");
-	} else {
-		lua_pushnil(L);
 	}
+
+	pushUserdata<MonsterType>(L, monsterType);
+	setMetatable(L, -1, "MonsterType");
 	return 1;
 }
 
@@ -13429,10 +13432,11 @@ int LuaScriptInterface::luaMonsterSpellSetConditionDamage(lua_State* L)
 
 int LuaScriptInterface::luaMonsterSpellSetConditionSpeedChange(lua_State* L)
 {
-	// monsterSpell:setConditionSpeedChange(speed)
+	// monsterSpell:setConditionSpeedChange(minSpeed[, maxSpeed])
 	MonsterSpell* spell = getUserdata<MonsterSpell>(L, 1);
 	if (spell) {
-		spell->speedChange = getNumber<int32_t>(L, 2);
+		spell->minSpeedChange = getNumber<int32_t>(L, 2);
+		spell->maxSpeedChange = getNumber<int32_t>(L, 3, 0);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

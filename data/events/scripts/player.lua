@@ -86,6 +86,16 @@ function Player:onLookInShop(itemType, count)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	if item:getAttribute("wrapid") ~= 0 then
+		local tile = Tile(toPosition)
+		if (fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION) or tile and not tile:getHouse() then
+			if tile and not tile:getHouse() then
+				self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+				return false
+			end
+		end
+	end
+
 	if toPosition.x ~= CONTAINER_POSITION then
 		return true
 	end
@@ -201,6 +211,10 @@ function Player:onTradeAccept(target, item, targetItem)
 	return true
 end
 
+function Player:onTradeCompleted(target, item, targetItem, isSuccess)
+	return
+end
+
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
 soulCondition:setTicks(4 * 60 * 1000)
 soulCondition:setParameter(CONDITION_PARAM_SOULGAIN, 1)
@@ -288,8 +302,14 @@ function Player:onWrapItem(item, position)
 		return
 	end
 
-	if not tile:getHouse() then
+	local house = tile:getHouse()
+	if not house then
 		self:sendCancelMessage("You can only wrap and unwrap this item inside a house.")
+		return
+	end
+
+	if house ~= self:getHouse() and not string.find(house:getAccessList(SUBOWNER_LIST):lower(), "%f[%a]" .. self:getName():lower() .. "%f[%A]") then
+		self:sendCancelMessage("You cannot wrap or unwrap items from a house, which you are only guest to.")
 		return
 	end
 

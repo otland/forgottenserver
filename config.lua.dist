@@ -7,8 +7,11 @@ killsToRedSkull = 3
 killsToBlackSkull = 6
 pzLocked = 60000
 removeChargesFromRunes = true
-timeToDecreaseFrags = 24 * 60 * 60 * 1000
-whiteSkullTime = 15 * 60 * 1000
+removeChargesFromPotions = true
+removeWeaponAmmunition = true
+removeWeaponCharges = true
+timeToDecreaseFrags = 24 * 60 * 60
+whiteSkullTime = 15 * 60
 stairJumpExhaustion = 2000
 experienceByKillingPlayers = false
 expFromPlayersLevelRange = 75
@@ -39,6 +42,7 @@ deathLosePercent = -1
 -- NOTE: set housePriceEachSQM to -1 to disable the ingame buy house functionality
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
+houseOwnedByAccount = false
 
 -- Item Usage
 timeBetweenActions = 200

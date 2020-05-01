@@ -447,12 +447,14 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
-			Weapon::decrementItemCount(item);
+			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
+				Weapon::decrementItemCount(item);
+			}
 			break;
 
 		case WEAPONACTION_REMOVECHARGE: {
 			uint16_t charges = item->getCharges();
-			if (charges != 0) {
+			if (charges != 0 && g_config.getBoolean(ConfigManager::REMOVE_WEAPON_CHARGES)) {
 				g_game.transformItem(item, item->getID(), charges - 1);
 			}
 			break;
@@ -643,14 +645,14 @@ void WeaponDistance::configureWeapon(const ItemType& it)
 
 bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) const
 {
-	int32_t damageModifier;
+	int32_t damageModifier = 0;
 	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_AMMO) {
 		Item* mainWeaponItem = player->getWeapon(true);
 		const Weapon* mainWeapon = g_weapons->getWeapon(mainWeaponItem);
 		if (mainWeapon) {
 			damageModifier = mainWeapon->playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
-		} else {
+		} else if (mainWeaponItem) {
 			damageModifier = playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
 		}
 	} else {

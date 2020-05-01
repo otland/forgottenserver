@@ -24,7 +24,6 @@
 
 
 const uint32_t MAX_LOOTCHANCE = 100000;
-const uint32_t MAX_STATICWALK = 100;
 
 struct LootBlock {
 	uint16_t id;
@@ -206,7 +205,8 @@ class MonsterSpell
 		int32_t conditionMaxDamage = 0;
 		int32_t conditionStartDamage = 0;
 		int32_t tickInterval = 0;
-		int32_t speedChange = 0;
+		int32_t minSpeedChange = 0;
+		int32_t maxSpeedChange = 0;
 		int32_t duration = 0;
 
 		bool isScripted = false;
@@ -236,8 +236,7 @@ class Monsters
 		}
 		bool reload();
 
-		MonsterType* getMonsterType(const std::string& name);
-		void addMonsterType(const std::string& name, MonsterType* mType);
+		MonsterType* getMonsterType(const std::string& name, bool loadFromFile = true);
 		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 		std::unique_ptr<LuaScriptInterface> scriptInterface;
