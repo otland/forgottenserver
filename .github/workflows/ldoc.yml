@@ -1,0 +1,36 @@
+name: LDoc
+
+on:
+  push:
+    branches:
+      - master
+      - v*
+
+    paths:
+      - data/**.lua
+      - src/**.cpp
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - uses: leafo/gh-actions-lua@v5
+      - uses: leafo/gh-actions-luarocks@v2
+
+      - name: install ldoc
+        run: luarocks install ldoc
+
+      - name: build documentation
+        run: ldoc .
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.2.3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: docs
