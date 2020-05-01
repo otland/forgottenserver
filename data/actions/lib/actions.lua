@@ -74,6 +74,7 @@ function onUseMachete(player, item, fromPosition, target, toPosition, isHotkey)
 	if grass then
 		target:transform(grass)
 		target:decay()
+		player:addAchievementProgress("Nothing Can Stop Me", 100)
 		return true
 	end
 
@@ -92,6 +93,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:addItem(2145) -- 49% chance of getting small diamond
 		end
+		player:addAchievementProgress("Petrologist", 100)
 		target:getPosition():sendMagicEffect(CONST_ME_BLOCKHIT)
 		target:remove(1)
 		return true
@@ -170,6 +172,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
+		player:addAchievementProgress("The Undertaker", 500)
 	elseif target.itemid == 20230 then -- swamp digging
 		if (player:getStorageValue(PlayerStorageKeys.swampDigging)) <= os.time() then
 			local chance = math.random(100)
@@ -193,6 +196,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 			ground:decay()
 		elseif randomValue == 1 then
 			Game.createItem(2159, 1, toPosition)
+			player:addAchievementProgress("Gold Digger", 100)
 		elseif randomValue > 95 then
 			Game.createMonster("Scarab", toPosition)
 		end
@@ -213,12 +217,14 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 		target:transform(2737)
 		target:decay()
 		Game.createItem(2694, 1, toPosition) -- bunch of wheat
+		player:addAchievementProgress("Happy Farmer", 200)
 		return true
 	end
 	if target.itemid == 5465 then -- burning sugar cane
 		target:transform(5464)
 		target:decay()
 		Game.createItem(5467, 1, toPosition) -- bunch of sugar cane
+		player:addAchievementProgress("Natural Sweetener", 50)
 		return true
 	end
 	return destroyItem(player, target, toPosition)

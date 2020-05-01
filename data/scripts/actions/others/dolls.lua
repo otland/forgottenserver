@@ -125,6 +125,7 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			doTargetCombat(0, player, COMBAT_PHYSICALDAMAGE, -1, -1, CONST_ME_EXPLOSIONHIT)
 		end
 	elseif item.itemid == 5669 then
+		player:addAchievementProgress("Superstitious", 100)
 		fromPosition:sendMagicEffect(CONST_ME_MAGIC_RED)
 		item:transform(item.itemid + 1)
 		item:decay()
