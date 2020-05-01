@@ -160,6 +160,11 @@ do
 			end
 		end
 
+		local fist = item and item:getAbility(ITEM_ABILITY_SKILLFIST) or 0
+		if fist ~= 0 then
+			ss:append('fist %s%d', showpos(fist), math.abs(fist))
+		end
+
 		-- Skills
 		for skill, value in ipairs(abilities.skills) do
 			if value ~= 0 then

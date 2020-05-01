@@ -971,7 +971,7 @@ void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t sl
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.playeronInventoryUpdate, &scriptInterface);
+	env->setScriptId(info.playerOnInventoryUpdate, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.playerOnInventoryUpdate);

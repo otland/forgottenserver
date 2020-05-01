@@ -324,4 +324,5 @@ function Player:onWrapItem(item, position)
 end
 
 function Player:onInventoryUpdate(item, slot, equip)
+	ItemAbilities.internalInventoryUpdate(self, item, slot, equip)
 end
