@@ -81,8 +81,8 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.healthHidden ~= nil then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
-		if mask.flags.Blockable ~= nil then
-			mtype:isBlockable(mask.flags.Blockable)
+		if mask.flags.blockable ~= nil then
+			mtype:isBlockable(mask.flags.blockable)
 		end
 		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
