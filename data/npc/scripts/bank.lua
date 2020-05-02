@@ -340,6 +340,14 @@ keywordHandler:addKeyword({"job"}, StdModule.say, {
 	npcHandler = npcHandler,
 	text = "I work in this bank. I can change money for you and help you with your bank account."
 })
+keywordHandler:addKeyword({"rent"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "Once you have acquired a house the rent will be charged automatically from your bank account every month."
+})
+keywordHandler:addKeyword({"market"}, StdModule.say, {
+	npcHandler = npcHandler,
+	text = "If you buy an item from the market, the required gold will be deducted from your bank account automatically. On the other hand, money you earn for selling items via the market will be added to your account. It's easy!"
+})
 
 npcHandler:setMessage(MESSAGE_GREET, "Welcome to the bank, |PLAYERNAME|! What can I do for you?")
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
