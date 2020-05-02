@@ -13,6 +13,8 @@ PlayerStorageKeys = {
 	afflictedPlagueBell = 30028,
 	nailCaseUseCount = 30031,
 	swampDigging = 30032,
+	achievementsBase = 300000, -- range 300000 to 301000+ reserved for achievements
+	achievementsCounter = 20000, -- range 20000 to 21000+ reserved for achievement progress
 }
 
 GlobalStorageKeys = {

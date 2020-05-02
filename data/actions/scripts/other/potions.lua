@@ -67,6 +67,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			target:removeCondition(CONDITION_POISON)
 		end
 
+		player:addAchievementProgress("Potion Addict", 100000)
 		player:addItem(potion.flask)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
