@@ -329,7 +329,7 @@ class Spell : public BaseSpell
 		bool blockingSolid = false;
 		bool blockingCreature = false;
 		bool aggressive = true;
-		bool pzLock = true;
+		bool pzLock = false;
 		bool learnable = false;
 		bool enabled = true;
 		bool premium = false;
