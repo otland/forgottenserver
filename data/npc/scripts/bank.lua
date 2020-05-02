@@ -270,15 +270,11 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 20 then
 		if msgcontains(msg, "yes") then
-			if player:getFreeCapacity() >= getMoneyWeight(count[cid]) then
-				if player:removeItem(ITEM_PLATINUM_COIN, count[cid] * 100) then
-					player:addItem(ITEM_CRYSTAL_COIN, count[cid])
-					npcHandler:say("Here you are.", cid)
-				else
-					npcHandler:say("Sorry, you do not have enough platinum coins.", cid)
-				end
+			if player:removeItem(ITEM_PLATINUM_COIN, count[cid] * 100) then
+				player:addItem(ITEM_CRYSTAL_COIN, count[cid])
+				npcHandler:say("Here you are.", cid)
 			else
-				npcHandler:say("Whoah, hold on, you have no room in your inventory to carry all those coins. I don't want you to drop it on the floor, maybe come back with a cart!", cid)
+				npcHandler:say("Sorry, you do not have enough platinum coins.", cid)
 			end
 		else
 			npcHandler:say("Well, can I help you with something else?", cid)
@@ -298,11 +294,15 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == 22 then
 		if msgcontains(msg, "yes") then
-			if player:removeItem(ITEM_CRYSTAL_COIN, count[cid]) then
-				player:addItem(ITEM_PLATINUM_COIN, count[cid] * 100)
-				npcHandler:say("Here you are.", cid)
+			if player:getFreeCapacity() >= getMoneyWeight(count[cid]) then
+				if player:removeItem(ITEM_CRYSTAL_COIN, count[cid]) then
+					player:addItem(ITEM_PLATINUM_COIN, count[cid] * 100)
+					npcHandler:say("Here you are.", cid)
+				else
+					npcHandler:say("Sorry, you do not have enough crystal coins.", cid)
+				end
 			else
-				npcHandler:say("Sorry, you do not have enough crystal coins.", cid)
+				npcHandler:say("Whoah, hold on, you have no room in your inventory to carry all those coins. I don't want you to drop it on the floor, maybe come back with a cart!", cid)
 			end
 		else
 			npcHandler:say("Well, can I help you with something else?", cid)
