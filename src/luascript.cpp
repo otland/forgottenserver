@@ -10973,7 +10973,12 @@ int LuaScriptInterface::luaHouseGetDoors(lua_State* L)
 	}
 	return 1;
 }
-
+/***
+ * Get number of doors in the house.
+ * @table house
+ * @function getDoorCount
+ * @return number or doors
+*/
 int LuaScriptInterface::luaHouseGetDoorCount(lua_State* L)
 {
 	// house:getDoorCount()
