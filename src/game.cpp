@@ -3474,10 +3474,8 @@ void Game::playerWhisper(Player* player, const std::string& text)
 				}
 			}
 		}
-	}
 
-	//event method
-	for (Creature* spectator : spectators) {
+		//event method
 		spectator->onCreatureSay(player, TALKTYPE_WHISPER, text);
 	}
 }
@@ -3614,17 +3612,16 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->onCreatureSay(creature, type, text);
-
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
-
-				//event method
 				if (g_events->eventCreatureOnHear(spectator, creature, text, type)) {
 					tmpPlayer->sendCreatureSay(creature, type, text, pos);
 				}
 			}
 		}
+
+		//event method
+		spectator->onCreatureSay(creature, type, text);
 	}
 	return true;
 }
