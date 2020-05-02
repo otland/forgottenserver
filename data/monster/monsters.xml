@@ -304,7 +304,7 @@
 
 	<!-- Crustaceans -->
 	<monster name="Blood Crab" file="Crustaceans/blood_crab.xml" />
-	<monster name="Blood Crab Underwater" file="Crustaceans/blood_crab_underwater.xml" />
+	<monster name="Deepsea Blood Crab" file="Crustaceans/deepsea_blood_crab.xml" />
 	<monster name="Crab" file="Crustaceans/crab.xml" />
 	<monster name="Crustacea Gigantica" file="Crustaceans/crustacea_gigantica.xml" />
 
