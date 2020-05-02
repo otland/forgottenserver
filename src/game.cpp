@@ -3612,16 +3612,12 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
-				tmpPlayer->sendCreatureSay(creature, type, text, pos);
-			}
-		}
-	}
 
-	//event method
-	for (Creature* spectator : spectators) {
-		spectator->onCreatureSay(creature, type, text);
-		if (creature != spectator) {
-			g_events->eventCreatureOnHear(spectator, creature, text, type);
+				//event method
+				if (g_events->eventCreatureOnHear(spectator, creature, text, type)) {
+					tmpPlayer->sendCreatureSay(creature, type, text, pos);
+				}
+			}
 		}
 	}
 	return true;

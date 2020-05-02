@@ -279,16 +279,16 @@ ReturnValue Events::eventCreatureOnTargetCombat(Creature* creature, Creature* ta
 	return returnValue;
 }
 
-void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type)
+bool Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type)
 {
 	// Creature:onHear(speaker, words, type)
 	if (info.creatureOnHear == -1) {
-		return;
+		return true;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventCreatureOnHear] Call stack overflow" << std::endl;
-		return;
+		return true;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -306,7 +306,7 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 	LuaScriptInterface::pushString(L, words);
 	lua_pushnumber(L, type);
 
-	scriptInterface.callVoidFunction(4);
+	return scriptInterface.callFunction(4);
 }
 
 // Party
