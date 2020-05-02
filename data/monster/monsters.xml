@@ -49,7 +49,6 @@
 	<monster name="Blazing Fire Elemental" file="monsters/blazing_fire_elemental.xml" />
 	<monster name="Blightwalker" file="monsters/blightwalker.xml" />
 	<monster name="Blistering Fire Elemental" file="monsters/blistering_fire_elemental.xml" />
-	<monster name="Blood Crab Underwater" file="monsters/blood_crab_underwater.xml" />
 	<monster name="Blood Crab" file="monsters/blood_crab.xml" />
 	<monster name="Blood Hand" file="monsters/blood_hand.xml" />
 	<monster name="Blood Priest" file="monsters/blood_priest.xml" />
@@ -132,6 +131,7 @@
 	<monster name="Deepling Tyrant" file="monsters/deepling_tyrant.xml" />
 	<monster name="Deepling Warrior" file="monsters/deepling_warrior.xml" />
 	<monster name="Deepling worker" file="monsters/deepling_worker.xml" />
+	<monster name="Deepsea Blood Crab" file="monsters/deepsea_blood_crab.xml" />
 	<monster name="Deer" file="monsters/deer.xml" />
 	<monster name="Defiler" file="monsters/defiler.xml" />
 	<monster name="Demodras" file="monsters/demodras.xml" />
