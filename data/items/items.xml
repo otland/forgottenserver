@@ -31433,8 +31433,19 @@
 		<attribute key="description" value="It is a delicate box and fully stuffed with tinder as well as igniters." />
 		<attribute key="weight" value="200" />
 	</item>
-	<item fromid="22729" toid="22731" name="frozen ursagrodon" />
-	<item id="22732" name="ice" />
+	<item id="22729" article="a" name="frozen ursagrodon" />
+	<item id="22730" article="a" name="half-frozen ursagrodon">
+		<attribute key="decayTo" value="22729" />
+		<attribute key="duration" value="60" />
+	</item>
+	<item id="22731" article="a" name="half-frozen ursagrodon">
+		<attribute key="decayTo" value="22729" />
+		<attribute key="duration" value="60" />
+	</item>
+	<item id="22732" name="ice">
+		<attribute key="decayTo" value="22729" />
+		<attribute key="duration" value="900" />
+	</item>
 	<item id="22733" article="an" name="unstable geyser" />
 	<item fromid="22745" toid="22762" article="a" name="stone floor" />
 	<item fromid="22763" toid="22777" article="a" name="wall" />

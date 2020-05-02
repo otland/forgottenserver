@@ -62,6 +62,7 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 	end
 	item:remove(1)
 	player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
+	player:addAchievementProgress("Santa's Li'l Helper", 25)
 	return true
 end
 
