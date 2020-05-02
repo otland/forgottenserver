@@ -3469,8 +3469,7 @@ void Game::playerWhisper(Player* player, const std::string& text)
 			if (g_events->eventCreatureOnHear(spectatorPlayer, player, text, TALKTYPE_WHISPER)) {
 				if (!Position::areInRange<1, 1>(player->getPosition(), spectatorPlayer->getPosition())) {
 					spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, "pspsps");
-				}
-				else {
+				} else {
 					spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, text);
 				}
 			}
