@@ -3528,15 +3528,22 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		type = TALKTYPE_PRIVATE_FROM;
 	}
 
-	toPlayer->sendPrivateMessage(player, type, text);
+	bool messageSent = false;
+	if (g_events->eventCreatureOnHear(toPlayer, player, text, type)) {
+		toPlayer->sendPrivateMessage(player, type, text);
+		messageSent = true;
+	}
+
 	toPlayer->onCreatureSay(player, type, text);
 
-	if (toPlayer->isInGhostMode() && !player->isAccessPlayer()) {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name is not online.");
-	} else {
-		std::ostringstream ss;
-		ss << "Message sent to " << toPlayer->getName() << '.';
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, ss.str());
+	if (messageSent) {
+		if (toPlayer->isInGhostMode() && !player->isAccessPlayer()) {
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name is not online.");
+		} else {
+			std::ostringstream ss;
+			ss << "Message sent to " << toPlayer->getName() << '.';
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, ss.str());
+		}
 	}
 	return true;
 }
