@@ -9076,11 +9076,18 @@ int LuaScriptInterface::luaPlayerSendPrivateMessage(lua_State* L)
 		return 1;
 	}
 
-	const Player* speaker = getUserdata<const Player>(L, 2);
+	Player* speaker = getUserdata<Player>(L, 2);
 	const std::string& text = getString(L, 3);
 	SpeakClasses type = getNumber<SpeakClasses>(L, 4, TALKTYPE_PRIVATE_FROM);
-	player->sendPrivateMessage(speaker, type, text);
-	pushBoolean(L, true);
+
+	if (g_events->eventCreatureOnHear(player, speaker, text, type)) {
+		player->sendPrivateMessage(speaker, type, text);
+		pushBoolean(L, true);
+	} else {
+		pushBoolean(L, false);
+	}
+
+	
 	return 1;
 }
 
