@@ -3614,6 +3614,8 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 
 	//send to client
 	for (Creature* spectator : spectators) {
+		spectator->onCreatureSay(creature, type, text);
+
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
 
