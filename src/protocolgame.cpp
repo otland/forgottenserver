@@ -1484,7 +1484,15 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 		msg.addString("Browse Field");
 	} else {
 		msg.addItem(container);
-		msg.addString(container->getName());
+
+		std::string containerName = container->getName();
+		if (containerName.empty()) {
+			std::ostringstream ss;
+			ss << "item of type " << container->getID();
+			containerName = ss.str();
+		}
+
+		msg.addString(containerName);
 	}
 
 	msg.addByte(container->capacity());
