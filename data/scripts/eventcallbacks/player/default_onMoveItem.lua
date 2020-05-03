@@ -1,6 +1,16 @@
 local ec = EventCallback
 
 ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	if item:getAttribute("wrapid") ~= 0 then
+		local tile = Tile(toPosition)
+		if (fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION) or tile and not tile:getHouse() then
+			if tile and not tile:getHouse() then
+				self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+				return false
+			end
+		end
+	end
+
 	if toPosition.x ~= CONTAINER_POSITION then
 		return true
 	end
