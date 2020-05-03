@@ -93,7 +93,7 @@ class CreatureEvent final : public Event
 		void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 		void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 		void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
-		void executeParsePacket(Player* player, uint8_t recvbyte, NetworkMessage* message);
+		void executeParsePacket(Player* player, uint8_t recvbyte, std::unique_ptr<NetworkMessage>& message);
 		//
 
 	private:
