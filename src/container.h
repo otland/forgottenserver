@@ -101,7 +101,7 @@ class Container : public Item, public Cylinder
 			return itemlist.rend();
 		}
 
-		std::string getName() const;
+		std::string getName(bool addArticle = false) const;
 
 		bool hasParent() const;
 		void addItem(Item* item);
