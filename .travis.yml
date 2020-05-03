@@ -16,7 +16,7 @@ cache: apt
 addons:
   apt:
     packages:
-      - libboost-dev
+      - libboost-date-time-dev
       - libboost-system-dev
       - libboost-filesystem-dev
       - libboost-iostreams-dev
