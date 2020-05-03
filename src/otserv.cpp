@@ -36,6 +36,9 @@
 #include "databasetasks.h"
 #include "script.h"
 #include <fstream>
+#if __has_include("gitmetadata.h")
+	#include "gitmetadata.h"
+#endif
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -107,10 +110,20 @@ void mainLoader(int, char*[], ServiceManager* services)
 #ifdef _WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
 #endif
+#if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
+	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
+	std::cout << "Git SHA1 " << GIT_SHORT_SHA1  << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
+	std::cout << "Git message: " << GIT_COMMIT_SUBJECT << std::endl;
+	#if GIT_IS_DIRTY
+	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
+	#endif
+#else
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
+#endif
+	std::cout << std::endl;
+
 	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
 	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
-
 #if defined(__amd64__) || defined(_M_X64)
 	std::cout << "x64" << std::endl;
 #elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
@@ -119,6 +132,11 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "ARM" << std::endl;
 #else
 	std::cout << "unknown" << std::endl;
+#endif
+#if defined(LUAJIT_VERSION)
+	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
+#else
+	std::cout << "Linked with " << LUA_RELEASE << " for Lua support"  << std::endl;
 #endif
 	std::cout << std::endl;
 
