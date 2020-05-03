@@ -9,13 +9,13 @@ on:
       - data/**.xml
 
 jobs:
-  luac:
+  xmllint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Install xmllint
-        run: apt-get install -y libxml2-utils
+        run: sudo apt-get install -y libxml2-utils
 
       - name: Test XML syntax
         run: find data/ -name '*.xml' -print0 | xargs -0 -n1 xmllint --noout
