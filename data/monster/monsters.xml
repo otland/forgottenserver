@@ -96,6 +96,7 @@
 	<monster name="Slime" file="Bio-Elementals/slime.xml" />
 	<monster name="Son of Verminor" file="Bio-Elementals/son_of_verminor.xml" />
 	<monster name="Spit Nettle" file="Bio-Elementals/spit_nettle.xml" />
+	<monster name="Squidgy Slime" file="Bio-Elementals/squidgy_slime.xml" />
 	<monster name="Strange Slime" file="Bio-Elementals/strange_slime.xml" />
 	<monster name="Swampling" file="Bio-Elementals/swampling.xml" />
 	<monster name="Wilting Leaf Golem" file="Bio-Elementals/wilting_leaf_golem.xml" />
@@ -303,7 +304,7 @@
 
 	<!-- Crustaceans -->
 	<monster name="Blood Crab" file="Crustaceans/blood_crab.xml" />
-	<monster name="Blood Crab Underwater" file="Crustaceans/blood_crab_underwater.xml" />
+	<monster name="Deepsea Blood Crab" file="Crustaceans/deepsea_blood_crab.xml" />
 	<monster name="Crab" file="Crustaceans/crab.xml" />
 	<monster name="Crustacea Gigantica" file="Crustaceans/crustacea_gigantica.xml" />
 
@@ -443,6 +444,7 @@
 	<monster name="Manta Ray" file="Fish/manta_ray.xml" />
 	<monster name="Northern Pike" file="Fish/northern_pike.xml" />
 	<monster name="Shark" file="Fish/shark.xml" />
+	<monster name="Slippery Northern Pike" file="Fish/slippery_northern_pike.xml" />
 
 	<!-- Frogs -->
 	<monster name="Azure Frog" file="Frogs/azure_frog.xml" />
@@ -533,7 +535,7 @@
 	<monster name="Insectoid Scout" file="Insects/insectoid_scout.xml" />
 	<monster name="Insectoid Worker" file="Insects/insectoid_worker.xml" />
 	<monster name="Kollos" file="Insects/kollos.xml" />
-	<monster name="Lady Bug" file="Insects/ladybug.xml" />
+	<monster name="Ladybug" file="Insects/ladybug.xml" />
 	<monster name="Lancer Beetle" file="Insects/lancer_beetle.xml" />
 	<monster name="Larva" file="Insects/larva.xml" />
 	<monster name="Lesser Swarmer" file="Insects/lesser_swarmer.xml" />
@@ -795,6 +797,7 @@
 	<monster name="Terrified Elephant" file="Ungulates/terrified_elephant.xml" />
 	<monster name="Vampire Pig" file="Ungulates/vampire_pig.xml" />
 	<monster name="White Deer" file="Ungulates/white_deer.xml" />
+	<monster name="Wild Horse" file="Ungulates/wild_horse.xml" />
 
 	<!-- Vampires -->
 	<monster name="Vampire" file="Vampires/vampire.xml" />

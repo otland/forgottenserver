@@ -15,6 +15,7 @@
 		<flag targetdistance="4" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-102" poison="95" />
@@ -48,26 +49,20 @@
 		<voice sentence="Praise to my master Urgith!" />
 	</voices>
 	<loot>
-		<item id="2032" chance="10000" /><!-- bowl -->
-		<item name="gold coin" countmax="40" chance="100000" />
-		<item name="moonlight rod" chance="500" />
-		<item name="boots of haste" chance="666" />
-		<item id="2229" countmax="3" chance="20000" /><!-- skull -->
-		<item id="2230" chance="30000" /><!-- bone -->
-		<item id="2231" chance="6000" /><!-- big bone -->
-		<item name="fire sword" chance="220" />
-		<item name="katana" chance="10000" />
-		<item name="clerical mace" chance="5000" />
-		<item name="skull staff" chance="833" />
-		<item name="bone club" chance="19900" />
-		<item name="scale armor" chance="8500" />
-		<item name="bone shield" chance="7500" />
-		<item name="mystic turban" chance="909" />
-		<item name="grave flower" chance="20000" />
-		<item name="green mushroom" chance="22500" />
-		<item name="shadow herb" countmax="2" chance="20000" />
-		<item name="horseman helmet" chance="150" />
-		<item name="worm" countmax="10" chance="50000" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="book of necromantic rituals" chance="100000" />
+		<item name="necromantic robe" chance="100000" />
 		<item name="soul stone" chance="100000" />
+		<item name="clerical mace" chance="55000" />
+		<item name="skull staff" chance="44000" />
+		<item name="bone club" chance="36000" />
+		<item name="green mushroom" chance="25000" />
+		<item id="2229" chance="13000" /><!-- skull -->
+		<item name="mystic turban" chance="11000" />
+		<item name="moonlight rod" chance="8300" />
+		<item id="2231" chance="5500" /><!-- big bone -->
+		<item name="bone shield" chance="5500" />
+		<item name="boots of haste" chance="2700" />
+		<item name="strong mana potion" chance="2700" />
 	</loot>
 </monster>

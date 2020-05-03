@@ -123,6 +123,10 @@ function Player:onTradeAccept(target, item, targetItem)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem) else return true end
 end
 
+function Player:onTradeCompleted(target, item, targetItem, isSuccess)
+	EventCallback(EVENT_CALLBACK_ONTRADECOMPLETED, self, target, item, targetItem, isSuccess)
+end
+
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
 soulCondition:setTicks(4 * 60 * 1000)
 soulCondition:setParameter(CONDITION_PARAM_SOULGAIN, 1)
@@ -212,8 +216,14 @@ function Player:onWrapItem(item)
 		return
 	end
 
-	if not tile:getHouse() then
+	local house = tile:getHouse()
+	if not house then
 		self:sendCancelMessage("You can only wrap and unwrap this item inside a house.")
+		return
+	end
+
+	if house ~= self:getHouse() and not string.find(house:getAccessList(SUBOWNER_LIST):lower(), "%f[%a]" .. self:getName():lower() .. "%f[%A]") then
+		self:sendCancelMessage("You cannot wrap or unwrap items from a house, which you are only guest to.")
 		return
 	end
 

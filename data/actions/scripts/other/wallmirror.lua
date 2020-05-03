@@ -15,7 +15,8 @@ local messages = {
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if player:getStorageValue(PlayerStorageKeys.delayWallMirror) <= os.time() then
 		player:say(messages[math.random(1, #messages)], TALKTYPE_MONSTER_SAY)
-		player:setStorageValue(PlayerStorageKeys.delayWallMirror, os.time() + 72000)
+		player:setStorageValue(PlayerStorageKeys.delayWallMirror, os.time() + 20 * 60 * 60)
+		player:addAchievementProgress("Vanity", 300)
 	else
 		player:say("Don't be so vain about your appearance.", TALKTYPE_MONSTER_SAY)
 	end

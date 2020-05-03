@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Slime" nameDescription="a slime" race="venom" experience="160" speed="180">
+<monster name="Slime" nameDescription="a slime" race="venom" experience="160" speed="120">
 	<health now="150" max="150" />
 	<look type="19" corpse="1496" />
 	<targetchange interval="4000" chance="10" />
@@ -21,7 +21,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="3" defense="3" />
 	<elements>
 		<element icePercent="20" />
 		<element firePercent="-10" />
@@ -31,7 +31,7 @@
 		<immunity earth="1" />
 	</immunities>
 	<summons maxSummons="3">
-		<summon name="Slime" interval="2000" chance="10" />
+		<summon name="Squidgy Slime" interval="2000" chance="10" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Blubb" />
