@@ -662,7 +662,7 @@ void Monster::updateIdleStatus()
 	if (!isSummon()) {
 		if (conditions.empty() && targetList.empty()) {
 			idle = true;
-		} else if (!targetList.empty()) {
+		} else if (targetList.empty()) {
 			bool hasAggressiveCondition = false;
 			for (Condition* condition : conditions) {
 				if (condition->isAggressive()) {
