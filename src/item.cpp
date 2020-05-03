@@ -1510,7 +1510,10 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 			s << name;
 		}
 	} else {
-		s << "an item of type " << it.id;
+		if (addArticle) {
+			s << "an ";
+		}
+		s << "item of type " << it.id;
 	}
 	return s.str();
 }

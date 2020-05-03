@@ -85,6 +85,11 @@ Container* Container::getParentContainer()
 	return thing->getContainer();
 }
 
+std::string Container::getName() const {
+	const ItemType& it = items[id];
+	return getNameDescription(it, this, -1, false);
+}
+
 bool Container::hasParent() const
 {
 	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
