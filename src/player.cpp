@@ -1643,7 +1643,11 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
-		g_game.updateCreatureWalkthrough(this);
+
+		const uint32_t protectionLevel = g_config.getNumber(ConfigManager::PROTECTION_LEVEL);
+		if (prevLevel < protectionLevel && level >= protectionLevel) {
+			g_game.updateCreatureWalkthrough(this);
+		}
 
 		if (party) {
 			party->updateSharedExperience();
@@ -1721,7 +1725,11 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
-		g_game.updateCreatureWalkthrough(this);
+		
+		const uint32_t protectionLevel = static_cast<uint32_t>(g_config.getNumber(ConfigManager::PROTECTION_LEVEL));
+		if (prevLevel >= protectionLevel && level < protectionLevel) {
+			g_game.updateCreatureWalkthrough(this);
+		}
 
 		if (party) {
 			party->updateSharedExperience();
