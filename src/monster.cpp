@@ -659,20 +659,11 @@ void Monster::setIdle(bool idle)
 void Monster::updateIdleStatus()
 {
 	bool idle = false;
-	if (!isSummon()) {
-		if (conditions.empty() && targetList.empty()) {
-			idle = true;
-		} else if (targetList.empty()) {
-			bool hasAggressiveCondition = false;
-			for (Condition* condition : conditions) {
-				if (condition->isAggressive()) {
-					hasAggressiveCondition = true;
-					break;
-				}
-			}
-
-			idle = !hasAggressiveCondition;
-		}
+	if (!isSummon() && targetList.empty()) {
+		// check if there are aggressive conditions
+		idle = std::find_if(conditions.begin(), conditions.end(), [](Condition* condition) {
+			return condition->isAggressive();
+		}) == conditions.end();
 	}
 
 	setIdle(idle);
