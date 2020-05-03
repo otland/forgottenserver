@@ -5600,7 +5600,7 @@ void Game::playerExecuteParsePacketEvent(uint32_t playerId, uint8_t recvbyte, Ne
 		}
 
 		if (creatureEvent->getEventType() == CREATURE_EVENT_PARSE_PACKET && creatureEvent->getRecvbyte() == recvbyte) {
-			creatureEvent->executeParsePacket(player, recvbyte, msgPtr);
+			creatureEvent->executeParsePacket(player, recvbyte, std::move(msgPtr));
 			return;
 		}
 	}
