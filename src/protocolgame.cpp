@@ -1485,14 +1485,8 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	} else {
 		msg.addItem(container);
 
-		std::string containerName = container->getName();
-		if (containerName.empty()) {
-			std::ostringstream ss;
-			ss << "item of type " << container->getID();
-			containerName = ss.str();
-		}
-
-		msg.addString(containerName);
+		const std::string& containerName = container->getName();
+		msg.addString(containerName.empty() ? "item of type " + std::to_string(container->getID()) : containerName);
 	}
 
 	msg.addByte(container->capacity());
