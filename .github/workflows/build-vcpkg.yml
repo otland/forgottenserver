@@ -6,13 +6,13 @@ on:
       - master
       - v*
 
-    tags:
-      - v*
+#    tags:
+#      - v*
 
-    paths:
-      - cmake/**
-      - src/**
-      - CMakeLists.txt
+#    paths:
+#      - cmake/**
+#      - src/**
+#      - CMakeLists.txt
 
   pull_request:
     paths:
@@ -22,27 +22,44 @@ on:
 
 jobs:
   job:
-    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       max-parallel: 8
       matrix:
-        os: [ubuntu, windows, macos]
+        name: [ubuntu-gcc, ubuntu-clang, macos-clang, windows-msvc]
         buildtype: [Debug, Release]
         luajit: [on, off]
         include:
-          - os: windows
+          - name: windows-msvc
+            os: windows
+            cxx: cl.exe
+            cc: cl.exe
             triplet: x64-windows
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua luajit libmariadb pugixml cryptopp
-          - os: ubuntu
+          - name: ubuntu-gcc
+            os: ubuntu
+            cxx: g++
+            cc: gcc
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua libmariadb pugixml cryptopp
-          - os: macos
+          - name: ubuntu-clang
+            os: ubuntu
+            cxx: clang++
+            cc: clang
+            triplet: x64-linux
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua libmariadb pugixml cryptopp
+          - name: macos-clang
+            os: macos
+            cxx: clang++
+            cc: clang
             triplet: x64-osx
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
@@ -74,13 +91,19 @@ jobs:
         run: rm -r -fo C:/mysql-5.7.21-winx64
         if: contains( matrix.os, 'windows')
 
+      - uses: lukka/set-shell-env@v1
+        with:
+          CXX: ${{ matrix.cxx }}
+          CC: ${{ matrix.cc }}
+
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v2
         with:
           vcpkgArguments: ${{ matrix.packages }}
-          vcpkgDirectory: ${{ runner.workspace }}/vcpkg
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
-          vcpkgGitCommitId: c444db5f5a954bd53c8dad004cee39c4064d844e
+          vcpkgGitCommitId: d3e83b0964db500eb8eda5c0e92590a17d652ae4
+          vcpkgGitURL: https://github.com/strega-nil/vcpkg
 
       - name: Build with CMake
         uses: lukka/run-cmake@v2
