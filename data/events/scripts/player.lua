@@ -1,5 +1,9 @@
 function Player:onBrowseField(position)
-	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then
+		return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position)
+	else
+		return true
+	end
 end
 
 function Player:onLook(thing, position, distance)
@@ -92,39 +96,69 @@ function Player:onLookInShop(itemType, count, description)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
+		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	else
+		return true
+	end
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	EventCallback(EVENT_CALLBACK_ONITEMMOVED, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	if hasEventCallback(EVENT_CALLBACK_ONITEMMOVED) then
+		EventCallback(EVENT_CALLBACK_ONITEMMOVED, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	end
 end
 
 function Player:onMoveCreature(creature, fromPosition, toPosition)
-	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then
+		return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition)
+	else
+		return true
+	end
 end
 
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
-	EventCallback(EVENT_CALLBACK_ONREPORTRULEVIOLATION, self, targetName, reportType, reportReason, comment, translation)
+	if hasEventCallback(EVENT_CALLBACK_ONREPORTRULEVIOLATION) then
+		EventCallback(EVENT_CALLBACK_ONREPORTRULEVIOLATION, self, targetName, reportType, reportReason, comment, translation)
+	end
 end
 
 function Player:onReportBug(message, position, category)
-	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then
+		return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category)
+	else
+		return true
+	end
 end
 
 function Player:onTurn(direction)
-	if hasEventCallback(EVENT_CALLBACK_ONTURN) then return EventCallback(EVENT_CALLBACK_ONTURN, self, direction) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONTURN) then
+		return EventCallback(EVENT_CALLBACK_ONTURN, self, direction)
+	else
+		return true
+	end
 end
 
 function Player:onTradeRequest(target, item)
-	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then
+		return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item)
+	else
+		return true
+	end
 end
 
 function Player:onTradeAccept(target, item, targetItem)
-	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem) else return true end
+	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then
+		return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem)
+	else
+		return true
+	end
 end
 
 function Player:onTradeCompleted(target, item, targetItem, isSuccess)
-	EventCallback(EVENT_CALLBACK_ONTRADECOMPLETED, self, target, item, targetItem, isSuccess)
+	if hasEventCallback(EVENT_CALLBACK_ONTRADECOMPLETED) then
+		EventCallback(EVENT_CALLBACK_ONTRADECOMPLETED, self, target, item, targetItem, isSuccess)
+	end
 end
 
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
