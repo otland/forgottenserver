@@ -72,7 +72,10 @@ CHECK_OPTIONAL_VARIABLE(GIT_WORKING_DIR "${CMAKE_SOURCE_DIR}")
 # Check the optional git variable.
 # If it's not set, we'll try to find it using the CMake packaging system.
 if(NOT DEFINED GIT_EXECUTABLE)
-    find_package(Git QUIET REQUIRED)
+    find_package(Git QUIET)
+    if (NOT Git_FOUND)
+        return()
+    endif()
 endif()
 CHECK_REQUIRED_VARIABLE(GIT_EXECUTABLE)
 
