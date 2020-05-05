@@ -18,6 +18,3 @@
 
 // When HEAD was committed.
 #define GIT_COMMIT_DATE_ISO8601 "@GIT_COMMIT_DATE_ISO8601@"
-
-// The subject line for the HEAD commit.
-#define GIT_COMMIT_SUBJECT "@GIT_COMMIT_SUBJECT@"
