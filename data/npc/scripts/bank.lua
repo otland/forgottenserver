@@ -172,8 +172,8 @@ local function creatureSayCallback(cid, type, msg)
 		end
 		if playerExists(transfer[cid]) then
 			local transferPlayer = Player(transfer[cid])
-			local currentVocation = transferPlayer and transferPlayer:getVocation():getId() or getPlayerVocationAux(transfer[cid])
-			if currentVocation == VOCATION_NONE then
+			local targetVocation = transferPlayer and transferPlayer:getVocation():getId() or getPlayerVocationAux(transfer[cid])
+			if targetVocation == VOCATION_NONE then
 				npcHandler:say("I'm afraid this character only holds a junior account at our bank. Do not worry, though. Once he has chosen his vocation, his account will be upgraded.", cid)
 				npcHandler.topic[cid] = 0
 				return true
