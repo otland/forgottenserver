@@ -93,7 +93,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 		return;
 	}
 
-	// Prevent infinity loop (anti fools)
+	// Prevent infinity loop
 	if (checkInfinityLoop(destTile)) {
 		const Position& pos = getPosition();
 		std::cout << "Warning: infinity loop teleport. " << pos << std::endl;
