@@ -316,10 +316,6 @@ keywordHandler:addKeyword({"money"}, StdModule.say,{
 	npcHandler = npcHandler,
 	text = "We can {change} money for you. You can also access your {bank account}."
 })
-keywordHandler:addKeyword({"change"}, StdModule.say, {
-	npcHandler = npcHandler,
-	text = "There are three different coin types: 100 gold coins equal 1 platinum coin, 100 platinum coins equal 1 crystal coin. So if you'd like to change 100 gold into 1 platinum, simply say '{change gold}' and then '1 platinum'."
-})
 keywordHandler:addKeyword({"advanced"}, StdModule.say, {
 	npcHandler = npcHandler,
 	text = "Your bank account will be used automatically when you want to {rent} a house or place an offer on an item on the {market}. Let me know if you want to know about how either one works."
