@@ -6,13 +6,13 @@ on:
       - master
       - v*
 
-#    tags:
-#      - v*
+    tags:
+      - v*
 
-#    paths:
-#      - cmake/**
-#      - src/**
-#      - CMakeLists.txt
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
 
   pull_request:
     paths:
@@ -102,8 +102,7 @@ jobs:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
-          vcpkgGitCommitId: d3e83b0964db500eb8eda5c0e92590a17d652ae4
-          vcpkgGitURL: https://github.com/strega-nil/vcpkg
+          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
 
       - name: Build with CMake
         uses: lukka/run-cmake@v2
