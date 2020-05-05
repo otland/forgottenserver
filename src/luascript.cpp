@@ -12136,8 +12136,7 @@ int LuaScriptInterface::luaOutfitCreate(lua_State* L)
 	const Outfit* outfit = Outfits::getInstance().getOutfitByLookType(getNumber<uint16_t>(L, 2));
 	if (outfit) {
 		pushOutfit(L, outfit);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;
