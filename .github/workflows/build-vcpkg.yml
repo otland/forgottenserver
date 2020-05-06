@@ -1,0 +1,126 @@
+name: Build with vcpkg
+
+on:
+  push:
+    branches:
+      - master
+      - v*
+
+    tags:
+      - v*
+
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+
+  pull_request:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+
+jobs:
+  job:
+    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        os: [ubuntu, windows, macos]
+        buildtype: [Debug, Release]
+        luajit: [on, off]
+        include:
+          - os: windows
+            triplet: x64-windows
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua luajit libmariadb pugixml cryptopp
+          - os: ubuntu
+            triplet: x64-linux
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua libmariadb pugixml cryptopp
+          - os: macos
+            triplet: x64-osx
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua libmariadb pugixml cryptopp
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
+
+      - name: Ubuntu - install luajit, remove libmysqlclient-dev
+        run: |
+          sudo apt-get install libluajit-5.1-dev
+          sudo apt-get remove -y libmysqlclient-dev
+        if: contains( matrix.os, 'ubuntu')
+
+      - name: MacOS - install luajit pkgconfig
+        run: brew install luajit pkgconfig
+        if: contains( matrix.os, 'macos')
+
+      - name: Windows - remove C:/mysql*
+        run: rm -r -fo C:/mysql-5.7.21-winx64
+        if: contains( matrix.os, 'windows')
+
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v2
+        with:
+          vcpkgArguments: ${{ matrix.packages }}
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg
+          vcpkgTriplet: ${{ matrix.triplet }}
+          vcpkgGitCommitId: c444db5f5a954bd53c8dad004cee39c4064d844e
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@v2
+        with:
+          useVcpkgToolchainFile: true
+          buildDirectory: ${{ runner.workspace }}/build
+          cmakeBuildType: ${{ matrix.buildtype }}
+          cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
+
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - name: Upload artifact binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/tfs
+        if: "! contains( matrix.os, 'windows')"
+
+      - name: Upload artifact binary (exe)
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/tfs.exe
+        if: contains( matrix.os, 'windows')
+
+      - name: Upload artifact binary (dlls)
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/*.dll
+        if: contains( matrix.os, 'windows')
+
+      - name: Prepare datapack contents
+        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+        shell: bash
+
+      - name: Upload datapack contents
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ github.workspace }}
