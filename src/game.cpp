@@ -3020,6 +3020,12 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 	}
 
 	g_events->eventPlayerOnLookInShop(player, &it, subType);
+
+	if (!g_config.getBoolean(ConfigManager::LUA_ITEM_DESC)) {
+		std::ostringstream ss;
+		ss << "You see " << Item::getDescription(it, 1, nullptr, subType);
+		player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	}
 }
 
 void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos)

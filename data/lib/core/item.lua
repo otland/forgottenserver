@@ -539,11 +539,13 @@ do
 		return ss:build()
 	end
 
-	function Item.getDescription(self, lookDistance, subType)
-		return internalItemGetDescription(self:getType(), lookDistance, self, subType)
-	end
+	if configKeys.LUA_ITEM_DESC then
+		function Item.getDescription(self, lookDistance, subType)
+			return internalItemGetDescription(self:getType(), lookDistance, self, subType)
+		end
 
-	function ItemType.getItemDescription(self, lookDistance, subType)
-		return internalItemGetDescription(self, lookDistance, nil, subType)
+		function ItemType.getItemDescription(self, lookDistance, subType)
+			return internalItemGetDescription(self, lookDistance, nil, subType)
+		end
 	end
 end
