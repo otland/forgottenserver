@@ -759,6 +759,10 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 		health = std::max<int32_t>(0, health + healthChange);
 	}
 
+	if (health < 1) {
+		g_dispatcher.addTask(createTask(std::bind(&Game::executeDeath, &g_game, getID())));
+	}
+
 	if (sendHealthChange && oldHealth != health) {
 		g_game.addCreatureHealth(this);
 	}
