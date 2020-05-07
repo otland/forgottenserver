@@ -146,9 +146,10 @@ class Spell : public BaseSpell
 		}
 
 		void postCastSpell(Player* player, bool finishedCast = true, bool payCost = true) const;
-		static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
+		static void postCastSpell(Player* player, uint32_t manaCost, uint32_t healthCost, uint32_t soulCost);
 
 		uint32_t getManaCost(const Player* player) const;
+		uint32_t getHealthCost(const Player* player) const;
 		uint32_t getSoulCost() const {
 			return soul;
 		}
@@ -173,11 +174,23 @@ class Spell : public BaseSpell
 		void setMana(uint32_t m) {
 			mana = m;
 		}
+		uint32_t getHealth() const {
+			return health;
+		}
+		void setHealth(uint32_t m) {
+			health = m;
+		}
 		uint32_t getManaPercent() const {
 			return manaPercent;
 		}
 		void setManaPercent(uint32_t m) {
 			manaPercent = m;
+		}
+		uint32_t getHealthPercent() const {
+			return healthPercent;
+		}
+		void setHealthPercent(uint32_t m) {
+			healthPercent = m;
 		}
 		bool isPremium() const {
 			return premium;
@@ -317,6 +330,8 @@ class Spell : public BaseSpell
 
 		uint32_t mana = 0;
 		uint32_t manaPercent = 0;
+		uint32_t health = 0;
+		uint32_t healthPercent = 0;
 		uint32_t soul = 0;
 
 		bool needWeapon = false;

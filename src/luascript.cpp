@@ -921,6 +921,9 @@ void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spel
 	setField(L, "mlevel", spell.getMagicLevel());
 	setField(L, "mana", spell.getMana());
 	setField(L, "manapercent", spell.getManaPercent());
+	setField(L, "health", spell.getHealth());
+	setField(L, "healthpercent", spell.getHealthPercent());
+	setField(L, "soul", spell.getSoulCost());
 
 	setMetatable(L, -1, "Spell");
 }
@@ -2812,6 +2815,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Spell", "magicLevel", LuaScriptInterface::luaSpellMagicLevel);
 	registerMethod("Spell", "mana", LuaScriptInterface::luaSpellMana);
 	registerMethod("Spell", "manaPercent", LuaScriptInterface::luaSpellManaPercent);
+	registerMethod("Spell", "health", LuaScriptInterface::luaSpellHealth);
+	registerMethod("Spell", "healthPercent", LuaScriptInterface::luaSpellHealthPercent);
 	registerMethod("Spell", "soul", LuaScriptInterface::luaSpellSoul);
 	registerMethod("Spell", "range", LuaScriptInterface::luaSpellRange);
 	registerMethod("Spell", "isPremium", LuaScriptInterface::luaSpellPremium);
@@ -14079,6 +14084,23 @@ int LuaScriptInterface::luaSpellMana(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaSpellHealth(lua_State* L)
+{
+	// spell:health(health)
+	Spell* spell = getUserdata<Spell>(L, 1);
+	if (spell) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, spell->getHealth());
+		} else {
+			spell->setHealth(getNumber<uint32_t>(L, 2));
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaSpellManaPercent(lua_State* L)
 {
 	// spell:manaPercent(percent)
@@ -14088,6 +14110,23 @@ int LuaScriptInterface::luaSpellManaPercent(lua_State* L)
 			lua_pushnumber(L, spell->getManaPercent());
 		} else {
 			spell->setManaPercent(getNumber<uint32_t>(L, 2));
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellHealthPercent(lua_State* L)
+{
+	// spell:healthPercent(percent)
+	Spell* spell = getUserdata<Spell>(L, 1);
+	if (spell) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, spell->getHealthPercent());
+		} else {
+			spell->setHealthPercent(getNumber<uint32_t>(L, 2));
 			pushBoolean(L, true);
 		}
 	} else {
