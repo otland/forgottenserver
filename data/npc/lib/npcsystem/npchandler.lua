@@ -361,10 +361,10 @@ if NpcHandler == nil then
 		if cid == getNpcCid() and next(self.shopItems) then
 			local npc = Npc()
 			local speechBubble = npc:getSpeechBubble()
-			if speechBubble == 3 then
-				npc:setSpeechBubble(4)
+			if speechBubble == SPEECHBUBBLE_QUEST then
+				npc:setSpeechBubble(SPEECHBUBBLE_QUESTTRADER)
 			else
-				npc:setSpeechBubble(2)
+				npc:setSpeechBubble(SPEECHBUBBLE_TRADE)
 			end
 		end
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="200">
+<monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="214">
 	<health now="225" max="225" />
 	<look type="118" corpse="6045" />
 	<targetchange interval="4000" chance="10" />
@@ -47,13 +47,13 @@
 		<voice sentence="Ahhuuaaa!" />
 	</voices>
 	<loot>
-		<item name="small stone" countmax="3" chance="30060" />
-		<item name="gold coin" countmax="35" chance="56000" />
-		<item name="orange" countmax="5" chance="19840" />
+		<item name="gold coin" countmax="35" chance="88000" />
 		<item name="banana" countmax="12" chance="30000" />
+		<item name="small stone" countmax="3" chance="30000" />
+		<item name="orange" countmax="5" chance="20000" />
+		<item name="banana sash" chance="5000" />
 		<item name="coconut" countmax="3" chance="1960" />
 		<item name="melon" chance="1000" />
 		<item name="ape fur" chance="1000" />
-		<item name="banana sash" chance="5000" />
 	</loot>
 </monster>

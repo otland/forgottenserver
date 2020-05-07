@@ -238,7 +238,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
-			isMasterInRange = true;    //Follow master again
+			isMasterInRange = true; //Follow master again
 		}
 
 		updateIdleStatus();
@@ -365,7 +365,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true);
 	spectators.erase(this);
 	for (Creature* spectator : spectators) {
@@ -774,11 +774,11 @@ void Monster::doAttacking(uint32_t interval)
 
 	for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
 		bool inRange = false;
-		
+
 		if (attackedCreature == nullptr) {
 			break;
 		}
-		
+
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
 				if (updateLook) {
@@ -866,6 +866,14 @@ void Monster::onThinkTarget(uint32_t interval)
 		if (mType->info.changeTargetSpeed != 0) {
 			bool canChangeTarget = true;
 
+			if (challengeFocusDuration > 0) {
+				challengeFocusDuration -= interval;
+
+				if (challengeFocusDuration <= 0) {
+					challengeFocusDuration = 0;
+				}
+			}
+
 			if (targetChangeCooldown > 0) {
 				targetChangeCooldown -= interval;
 
@@ -883,6 +891,10 @@ void Monster::onThinkTarget(uint32_t interval)
 				if (targetChangeTicks >= mType->info.changeTargetSpeed) {
 					targetChangeTicks = 0;
 					targetChangeCooldown = mType->info.changeTargetSpeed;
+
+					if (challengeFocusDuration > 0) {
+						challengeFocusDuration = 0;
+					}
 
 					if (mType->info.changeTargetChance >= uniform_random(1, 100)) {
 						if (mType->info.targetDistance <= 1) {
@@ -1948,6 +1960,7 @@ bool Monster::challengeCreature(Creature* creature)
 	bool result = selectTarget(creature);
 	if (result) {
 		targetChangeCooldown = 8000;
+		challengeFocusDuration = targetChangeCooldown;
 		targetChangeTicks = 0;
 	}
 	return result;

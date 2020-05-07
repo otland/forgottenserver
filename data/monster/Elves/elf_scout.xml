@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Elf Scout" nameDescription="an elf scout" race="blood" experience="75" speed="170" manacost="360">
+<monster name="Elf Scout" nameDescription="an elf scout" race="blood" experience="75" speed="220" manacost="360">
 	<health now="160" max="160" />
 	<look type="64" corpse="6012" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="1" />
+		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="1" />
@@ -25,10 +25,10 @@
 			<attribute key="shootEffect" value="arrow" />
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="7" defense="7" />
 	<elements>
 		<element holyPercent="20" />
-		<element deathPercent="-1" />
+		<element deathPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
@@ -41,16 +41,16 @@
 		<voice sentence="Your existence will end here!" />
 	</voices>
 	<loot>
-		<item name="waterskin" chance="1350" />
 		<item name="gold coin" countmax="25" chance="75000" />
-		<item name="bow" chance="4000" />
 		<item name="arrow" countmax="12" chance="30710" />
-		<item name="poison arrow" countmax="4" chance="15400" />
-		<item name="sandals" chance="1180" />
 		<item name="grapes" chance="17750" />
+		<item name="poison arrow" countmax="4" chance="15400" />
+		<item name="elven scouting glass" chance="9750" />
+		<item name="elvish talisman" chance="5200" />
+		<item name="bow" chance="4000" />
+		<item name="waterskin" chance="1350" />
+		<item name="sandals" chance="1180" />
 		<item id="5921" chance="1130" /><!-- heaven blossom -->
 		<item name="elvish bow" chance="140" />
-		<item name="elvish talisman" chance="5200" />
-		<item name="elven scouting glass" chance="9750" />
 	</loot>
 </monster>

@@ -40,7 +40,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="15" chance="50000" />
-		<item name="scarab coin" countmax="1" chance="2600" />
+		<item name="scarab coin" chance="2600" />
 		<item name="mace" chance="3760" />
 		<item id="2419" chance="1640" /><!-- scimitar -->
 		<item name="brown mushroom" countmax="2" chance="6120" />

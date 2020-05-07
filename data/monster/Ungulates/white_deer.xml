@@ -25,4 +25,7 @@
 		<voice sentence="*sniff*" />
 		<voice sentence="*bell*" />
 	</voices>
+	<script>
+		<event name="WhiteDeerDeath" />
+	</script>
 </monster>

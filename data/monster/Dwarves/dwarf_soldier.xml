@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dwarf Soldier" nameDescription="a dwarf soldier" race="blood" experience="70" speed="170" manacost="360">
+<monster name="Dwarf Soldier" nameDescription="a dwarf soldier" race="blood" experience="70" speed="176" manacost="360">
 	<health now="135" max="135" />
 	<look type="71" corpse="6014" />
 	<targetchange interval="4000" chance="10" />
@@ -25,7 +25,7 @@
 			<attribute key="shootEffect" value="bolt" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="9" defense="9" />
 	<elements>
 		<element earthPercent="10" />
 		<element firePercent="-5" />
@@ -35,17 +35,17 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
+		<item name="white mushroom" countmax="2" chance="40000" />
+		<item name="bolt" countmax="7" chance="38000" />
 		<item name="gold coin" countmax="12" chance="28000" />
-		<item name="axe ring" chance="120" />
-		<item name="battle axe" chance="2500" />
-		<item name="crossbow" chance="3000" />
-		<item name="chain armor" chance="8000" />
 		<item name="soldier helmet" chance="12000" />
-		<item name="dwarven shield" chance="3000" />
-		<item name="bolt" countmax="7" chance="40000" />
 		<item id="2554" chance="10000" /><!-- shovel -->
-		<item name="white mushroom" countmax="3" chance="40000" />
-		<item name="iron ore" chance="300" />
+		<item name="chain armor" chance="8000" />
 		<item name="piercing bolt" countmax="3" chance="4000" />
+		<item name="dwarven shield" chance="3000" />
+		<item name="crossbow" chance="3000" />
+		<item name="battle axe" chance="2500" />
+		<item name="iron ore" chance="300" />
+		<item name="axe ring" chance="120" />
 	</loot>
 </monster>

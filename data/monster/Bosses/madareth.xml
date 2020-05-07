@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag staticattack="85" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<defenses armor="48" defense="46" />
 	<elements>

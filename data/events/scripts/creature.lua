@@ -9,3 +9,6 @@ end
 function Creature:onTargetCombat(target)
 	return RETURNVALUE_NOERROR
 end
+
+function Creature:onHear(speaker, words, type)
+end
