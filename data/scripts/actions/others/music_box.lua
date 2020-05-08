@@ -63,6 +63,7 @@ function musicBox.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	end
 
 	player:addMount(monsterConfig.mountId)
+	player:addAchievement("Natural Born Cowboy")
 	player:say(monsterConfig.tameMessage, TALKTYPE_MONSTER_SAY)
 	toPosition:sendMagicEffect(CONST_ME_SOUND_RED)
 
