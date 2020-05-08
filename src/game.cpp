@@ -3580,7 +3580,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-                               bool ghostMode, SpectatorVec* spectatorsPtr/* = nullptr*/, const Position* pos/* = nullptr*/)
+                               bool ghostMode, SpectatorVec* spectatorsPtr/* = nullptr*/, const Position* pos/* = nullptr*/, bool echo/* = false*/)
 {
 	if (text.empty()) {
 		return false;
@@ -3618,10 +3618,12 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	}
 
 	//event method
-	for (Creature* spectator : spectators) {
-		spectator->onCreatureSay(creature, type, text);
-		if (creature != spectator) {
-			g_events->eventCreatureOnHear(spectator, creature, text, type);
+	if (!echo) {
+		for (Creature* spectator : spectators) {
+			spectator->onCreatureSay(creature, type, text);
+			if (creature != spectator) {
+				g_events->eventCreatureOnHear(spectator, creature, text, type);
+			}
 		}
 	}
 	return true;

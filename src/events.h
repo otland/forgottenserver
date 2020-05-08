@@ -27,6 +27,10 @@ class Party;
 class ItemType;
 class Tile;
 
+enum class EventInfoId {
+	EVENT_INFO_ONHEAR
+};
+
 class Events
 {
 	struct EventsInfo {
@@ -107,6 +111,16 @@ class Events
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
 		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
+
+		int32_t getScriptId(EventInfoId eventInfoId) {
+			switch (eventInfoId)
+			{
+			case EventInfoId::EVENT_INFO_ONHEAR:
+				return info.creatureOnHear;
+			default:
+				return -1;
+			}
+		};
 
 	private:
 		LuaScriptInterface scriptInterface;
