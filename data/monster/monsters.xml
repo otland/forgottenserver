@@ -739,6 +739,7 @@
 	<monster name="Yalahari" file="Sorcerers/yalahari.xml" />
 
 	<!-- Traps -->
+	<monster name="a carved stone tile" file="Traps/a_carved_stone_tile.xml" />
 	<monster name="Deathslicer" file="Traps/deathslicer.xml" />
 	<monster name="Flamethrower" file="Traps/flamethrower.xml" />
 	<monster name="Hive Pore" file="Traps/hive_pore.xml" />
