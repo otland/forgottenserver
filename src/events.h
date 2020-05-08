@@ -28,7 +28,7 @@ class ItemType;
 class Tile;
 
 enum class EventInfoId {
-	EVENT_INFO_ONHEAR
+	CREATURE_ONHEAR
 };
 
 class Events
@@ -115,7 +115,7 @@ class Events
 		int32_t getScriptId(EventInfoId eventInfoId) {
 			switch (eventInfoId)
 			{
-			case EventInfoId::EVENT_INFO_ONHEAR:
+			case EventInfoId::CREATURE_ONHEAR:
 				return info.creatureOnHear;
 			default:
 				return -1;
