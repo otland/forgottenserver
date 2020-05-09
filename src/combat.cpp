@@ -1445,15 +1445,6 @@ void AreaCombat::setupExtArea(const std::list<uint32_t>& list, uint32_t rows)
 
 void MagicField::onStepInField(Creature* creature)
 {
-	//remove magic walls/wild growth
-	if (id == ITEM_MAGICWALL || id == ITEM_WILDGROWTH || id == ITEM_MAGICWALL_SAFE || id == ITEM_WILDGROWTH_SAFE || isBlocking()) {
-		if (!creature->isInGhostMode()) {
-			g_game.internalRemoveItem(this, 1);
-		}
-
-		return;
-	}
-
 	const ItemType& it = items[getID()];
 	if (it.conditionDamage) {
 		Condition* conditionCopy = it.conditionDamage->clone();
