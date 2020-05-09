@@ -41,6 +41,7 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	target:remove()
 	player:addMount(39)
 	player:addAchievement("Natural Born Cowboy")
+	player:addAchievement("Blacknailed")
 	return true
 end
 
