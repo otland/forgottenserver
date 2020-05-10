@@ -23,18 +23,14 @@ local function findPushPosition(creature, round)
 		if tile then
 			local creatureCount = tile:getCreatureCount()
 			if round == 1 then
-				if tile:queryAdd(creature) == 0 and creatureCount == 0 then
-					if tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz() then
-						return offsetPosition
-					elseif not tile:hasFlag(TILESTATE_PROTECTIONZONE) then
+				if tile:queryAdd(creature) == RETURNVALUE_NOERROR and creatureCount == 0 then
+					if not tile:hasFlag(TILESTATE_PROTECTIONZONE) or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz()) then
 						return offsetPosition
 					end
 				end
 			elseif round == 2 then
 				if creatureCount > 0 then
-					if tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz() then
-						return offsetPosition
-					elseif not tile:hasFlag(TILESTATE_PROTECTIONZONE) then
+					if not tile:hasFlag(TILESTATE_PROTECTIONZONE) or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz()) then
 						return offsetPosition
 					end
 				end
@@ -52,7 +48,7 @@ local function findPushPosition(creature, round)
 			end
 		end
 	end
-	if round ~= 4 then
+	if round < 4 then
 		return findPushPosition(creature, round + 1)
 	end
 end
@@ -93,6 +89,10 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if #doorCreatures > 0 then
 			for _, doorCreature in pairs(doorCreatures) do
 				local pushPosition = findPushPosition(doorCreature, 1)
+				if not pushPosition then
+					player:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
+					return true
+				end
 				table.insert(creaturePositionTable, {creature = doorCreature, position = pushPosition})
 			end
 			for _, tableCreature in ipairs(creaturePositionTable) do

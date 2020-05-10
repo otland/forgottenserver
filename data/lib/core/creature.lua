@@ -168,7 +168,6 @@ function Creature:addDamageCondition(target, type, list, damage, period, rounds)
 	return true
 end
 
-
 function Creature:canAccessPz()
 	if self:isMonster() or (self:isPlayer() and self:isPzLocked()) then
 		return false
