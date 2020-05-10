@@ -612,7 +612,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 void Game::executeDeath(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && !creature->isRemoved() && creature->getHealth() < 1) {
+	if (creature && !creature->isRemoved()) {
 		creature->onDeath();
 	}
 }
