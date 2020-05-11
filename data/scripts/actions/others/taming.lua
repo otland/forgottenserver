@@ -370,6 +370,11 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
+	if not player:isPremium() then
+		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
+		return true
+	end
+
 	if player:hasMount(mount.id) then
 		return false
 	end
