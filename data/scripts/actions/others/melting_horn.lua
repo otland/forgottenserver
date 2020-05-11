@@ -20,6 +20,8 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The freed ursagrodon look at you with glowing, obedient eyes.")
 				item:remove(1)
 				player:addMount(38)
+				player:addAchievement("Natural Born Cowboy")
+				player:addAchievement("Icy Glare")
 			end
 			target:transform(target.itemid + 1)
 		end
