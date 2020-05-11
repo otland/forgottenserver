@@ -1,6 +1,10 @@
 local afflictedOutfit = Action()
 
 function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+	if not player:isPremium() then
+		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
+		return true
+	end
 	local hasOutfit = player:getStorageValue(PlayerStorageKeys.afflictedOutfit) == 1
 	if item.itemid == 13925 then -- plague mask
 		if not hasOutfit then
