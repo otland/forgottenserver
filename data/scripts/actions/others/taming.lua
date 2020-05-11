@@ -419,6 +419,7 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		local action = mount.fail[math.random(#mount.fail)]
 		player:say(action.text, TALKTYPE_MONSTER_SAY)
 		if action.run then
+			target:getPosition():sendMagicEffect(CONST_ME_POFF)
 			target:remove()
 		elseif action.broke then
 			item:remove(1)
