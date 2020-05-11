@@ -71,7 +71,24 @@ local config = {
 		[7441] = {chance = 22000, newItem = 7442},
 		[7442] = {chance = 4800, newItem = 7444},
 		[7444] = {chance = 900, newItem = 7445},
-		[7445] = {chance = 40, newItem = 7446}
+		[7445] = {chance = 40, newItem = 7446},
+		
+		-- The Mutated Pumpkin
+		[26383] = {
+			{chance = 6000, newItem = 8860}, -- spiderwebs
+			{chance = 6000, newItem = 9006}, -- toy spider
+			{chance = 6000, newItem = 6492}, -- bat decoration
+			{chance = 6000, newItem = 6526}, -- skeleton decoration
+			{chance = 6000, newItem = 9005, amount = 20}, -- yummy gummy worm
+			{chance = 6000, newItem = 6570}, -- surprise bag (red)
+			{chance = 6000, newItem = 6571}, -- surprise bag (blue)
+			{chance = 6000, newItem = 6574}, -- bar of chocolate
+			{chance = 6000, newItem = 2096}, -- pumpkinhead
+			{chance = 6000, newItem = 2683}, -- pumpkin
+			{chance = 6000, newItem = 2688, amount = 50}, -- candy cane
+			{chance = 6000, newItem = 6569, amount = 50}, -- candy
+			{chance = 6000, newItem = 6574, amount = 50} -- bars of chocolate
+		},
 	},
 	[5942] = {
 		-- Demon
@@ -96,7 +113,6 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
-
 	local randomChance = math.random(1, 100000)
 	local effect = CONST_ME_MAGIC_GREEN
 	local transform = true
@@ -156,16 +172,27 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			effect = CONST_ME_BLOCKHIT
 		end
 	end
-	if toPosition.x == CONTAINER_POSITION then
-		toPosition = player:getPosition()
-	end
-	toPosition:sendMagicEffect(effect)
 	if transform then
 		target:transform(skin.after or target:getType():getDecayId() or target.itemid + 1)
 	else
 		target:remove()
 	end
-
+	if target.itemid == 26383 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
+		player:setStorageValue(PlayerStorageKeys.mutatedPumpkin, os.time() + 4 * 60 * 60)
+		player:say("Happy Halloween!", TALKTYPE_MONSTER_SAY)
+		player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
+		player:addAchievement("Mutated Presents")
+		local reward = math.random(1, #skin)
+		player:addItem(skin[reward].newItem, skin[reward].amount or 1)
+		effect = CONST_ME_HITAREA
+	else
+		player:sendCancelMessage("You already used your knife on the corpse.")
+		return true
+	end
+	if toPosition.x == CONTAINER_POSITION then
+		toPosition = player:getPosition()
+	end
+	toPosition:sendMagicEffect(effect)
 	return true
 end
 

@@ -413,6 +413,7 @@
 	<monster name="Shadow Hound" file="Event_Creatures/shadow_hound.xml" />
 	<monster name="Spectral Scum" file="Event_Creatures/spectral_scum.xml" />
 	<monster name="The Halloween Hare" file="Event_Creatures/the_halloween_hare.xml" />
+	<monster name="The Mutated Pumpkin" file="Event_Creatures/the_mutated_pumpkin.xml" />
 	<monster name="Undead Minion" file="Event_Creatures/undead_minion.xml" />
 
 	<!-- Elves -->
