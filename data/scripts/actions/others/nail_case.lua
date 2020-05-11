@@ -12,6 +12,11 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		return false
 	end
 
+	if not player:isPremium() then
+		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
+		return true
+	end
+
 	if target:getName():lower() ~= "gravedigger" then
 		return true
 	end
