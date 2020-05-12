@@ -1518,40 +1518,33 @@ void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 		return;
 	}
 
-	uint32_t crystalCoins = money / 10000;
-	money -= crystalCoins * 10000;
-	while (crystalCoins > 0) {
-		const uint16_t count = std::min<uint32_t>(100, crystalCoins);
+	for (auto it : Item::items.moneyItems) {
+		const uint64_t worth = it.first;
+		const uint16_t itemId = it.second;
 
-		Item* remaindItem = Item::CreateItem(ITEM_CRYSTAL_COIN, count);
-
-		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
-		if (ret != RETURNVALUE_NOERROR) {
-			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		uint64_t coins = money / worth;
+		money -= coins * worth;
+		if (!coins) {
+			continue;
 		}
 
-		crystalCoins -= count;
-	}
+		do {
+			uint32_t remainderCount = 0;
+			Item* remaindItem = Item::CreateItem(itemId, std::min<uint16_t>(100, coins));
+			ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+			if (ret != RETURNVALUE_NOERROR) {
+				if (remainderCount) {
+					delete remaindItem;
+					remaindItem = Item::CreateItem(itemId, remainderCount);
+				}
 
-	uint16_t platinumCoins = money / 100;
-	if (platinumCoins != 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_PLATINUM_COIN, platinumCoins);
-
-		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
-		if (ret != RETURNVALUE_NOERROR) {
-			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		}
-
-		money -= platinumCoins * 100;
-	}
-
-	if (money != 0) {
-		Item* remaindItem = Item::CreateItem(ITEM_GOLD_COIN, money);
-
-		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
-		if (ret != RETURNVALUE_NOERROR) {
-			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
-		}
+				ret = internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, flags);
+				if (ret != RETURNVALUE_NOERROR) {
+					delete remaindItem;
+				}
+			}
+			coins -= std::min<uint64_t>(100, coins);
+		} while (coins > 0);
 	}
 }
 

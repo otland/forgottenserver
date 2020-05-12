@@ -384,6 +384,7 @@ class Items
 {
 	public:
 		using NameMap = std::unordered_multimap<std::string, uint16_t>;
+		using MoneyMap = std::map<uint64_t, uint16_t, std::greater<uint64_t>>;
 		using InventoryVector = std::vector<uint16_t>;
 
 		Items();
@@ -423,6 +424,7 @@ class Items
 		}
 
 		NameMap nameToItems;
+		MoneyMap moneyItems;
 
 	private:
 		std::map<uint16_t, uint16_t> reverseItemMap;
