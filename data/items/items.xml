@@ -36150,7 +36150,7 @@
 	<item id="26379" article="a" name="golden dragon tapestry" />
 	<item id="26380" article="a" name="sword tapestry" />
 	<item id="26381" article="a" name="brocade tapestry" />
-	<item id="26383" article="a" name="slain mutated pumpkin">
+	<item id="13583" article="a" name="slain mutated pumpkin">
 		<attribute key="description" value="Who knows how long it will remain dead? Use an obsidian knife on its corpse to retrieve some goods." />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="1800" />

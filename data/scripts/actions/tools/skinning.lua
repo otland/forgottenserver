@@ -74,7 +74,7 @@ local config = {
 		[7445] = {chance = 40, newItem = 7446},
 		
 		-- The Mutated Pumpkin
-		[26383] = {
+		[13583] = {
 			{chance = 6000, newItem = 8860}, -- spiderwebs
 			{chance = 6000, newItem = 9006}, -- toy spider
 			{chance = 6000, newItem = 6492}, -- bat decoration
@@ -177,7 +177,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	else
 		target:remove()
 	end
-	if target.itemid == 26383 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
+	if target.itemid == 13583 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
 		player:setStorageValue(PlayerStorageKeys.mutatedPumpkin, os.time() + 4 * 60 * 60)
 		player:say("Happy Halloween!", TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
