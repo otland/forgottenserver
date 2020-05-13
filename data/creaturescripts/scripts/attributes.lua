@@ -433,12 +433,12 @@ function statChange(creature, attacker, primaryDamage, primaryType, secondaryDam
 				end
 			elseif origin == ORIGIN_SPELL then	
 				-- Reduce spell damage based on custom resistances
-				--if primaryType ~= 0 then
+				if resistances[primaryType] then
 					if resistances[primaryType].Custom ~= 0 then
 						local resistancePercent = (100 - resistances[primaryType].Custom)
 						primaryDamage = (resistancePercent / 100) * primaryDamage
 					end
-				--end
+				end
 				
 				-- Check slots that can roll the following attributes
 				for i = 1,#checkweaponslots do
