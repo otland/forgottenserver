@@ -11338,8 +11338,8 @@
 		<attribute key="containerSize" value="32" />
 		<attribute key="decayTo" value="6520" />
 		<attribute key="duration" value="10" />
-		<attribute key="corpseType" value="venom" />
-		<attribute key="fluidSource" value="slime" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="6517" article="a" name="christmas wreath" />
 	<item fromid="6518" toid="6519" article="a" name="christmas garland" />
@@ -11347,19 +11347,19 @@
 		<attribute key="containerSize" value="32" />
 		<attribute key="decayTo" value="6521" />
 		<attribute key="duration" value="900" />
-		<attribute key="corpseType" value="venom" />
-		<attribute key="fluidSource" value="slime" />
+		<attribute key="corpseType" value="blood" />
+		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="6521" article="a" name="dead plaguesmith">
 		<attribute key="containerSize" value="32" />
 		<attribute key="decayTo" value="6522" />
 		<attribute key="duration" value="600" />
-		<attribute key="corpseType" value="venom" />
+		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="6522" article="a" name="dead plaguesmith">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="600" />
-		<attribute key="corpseType" value="venom" />
+		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="6523" article="a" name="gingerbread recipe">
 		<attribute key="description" value="Use it to learn how to make Gingerbreadman in the christmas bakery." />
@@ -16379,27 +16379,27 @@
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="8961" />
 		<attribute key="duration" value="10" />
-		<attribute key="corpseType" value="venom" />
+		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="8961" article="a" name="slain mutated pumpkin">
 		<attribute key="weight" value="30000" />
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="8962" />
 		<attribute key="duration" value="900" />
-		<attribute key="corpseType" value="venom" />
+		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="8962" article="a" name="slain mutated pumpkin">
 		<attribute key="weight" value="30000" />
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="8963" />
 		<attribute key="duration" value="500" />
-		<attribute key="corpseType" value="venom" />
+		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="8963" article="a" name="slain mutated pumpkin">
 		<attribute key="weight" value="30000" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="300" />
-		<attribute key="corpseType" value="venom" />
+		<attribute key="corpseType" value="undead" />
 	</item>
 	<item id="8964" name="the remains of an elemental">
 		<attribute key="weight" value="25000" />
