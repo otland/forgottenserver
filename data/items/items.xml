@@ -22237,7 +22237,7 @@
 	</item>
 	<item id="13495" name="remains of a canopic jar" />
 	<item fromid="13496" toid="13497" article="a" name="large painting" />
-	<item id="13498" name="scorpion sceptre">
+	<item id="13498" article="a" name="scorpion sceptre">
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
 		<attribute key="weight" value="200" />
 	</item>
