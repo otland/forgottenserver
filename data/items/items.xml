@@ -22237,7 +22237,7 @@
 	</item>
 	<item id="13495" name="remains of a canopic jar" />
 	<item fromid="13496" toid="13497" article="a" name="large painting" />
-	<item id="13498" name="scorpion sceptre">
+	<item id="13498" article="a" name="scorpion sceptre">
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
 		<attribute key="weight" value="200" />
 	</item>
@@ -23687,6 +23687,11 @@
 	</item>
 	<item fromid="15232" toid="15237" name="brown sea floor" />
 	<item fromid="15250" toid="15267" article="an" name="enormous statue" />
+	<item id="15269" article="an" name="ice flower" />
+	<item id="15270" article="a" name="harvested ice flower">
+		<attribute key="decayTo" value="15269" />
+		<attribute key="duration" value="14400" />
+	</item>
 	<item id="15271" name="ice flower seeds">
 		<attribute key="description" value="They seem to have strange effects on other plants and can also be grown into an own plant." />
 		<attribute key="weight" value="50" />

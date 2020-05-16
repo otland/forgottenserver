@@ -2727,7 +2727,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		}
 
 		bool isSuccess = false;
-		
+
 		ReturnValue tradePartnerRet = RETURNVALUE_NOERROR;
 		ReturnValue playerRet = RETURNVALUE_NOERROR;
 
