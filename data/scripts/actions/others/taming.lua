@@ -359,14 +359,6 @@ local config = {
 			{sound = "GRRRRRRRRR", text = "The noble lion majestically rejects your amulet."}
 		},
 		success = {sound = "Grrr", text = "The noble lion will now accompany you as a friend and ally."}
-	},
-	[26194] = { -- vibrant egg
-		name = "sparkion",
-		id = 94,
-		type = TYPE_MONSTER,
-		achievement = "Vortex Tamer",
-		chance = 100,
-		success = {text = "You receive the permission to ride a sparkion."}
 	}
 }
 

@@ -1,4 +1,9 @@
 local config = {
+	[26194] = { -- vibrant egg
+		name = "vortexion",
+		mountId = 94,
+		tameMessage = "You receive the permission to ride a sparkion."
+	},
 	[26340] = { -- crackling egg
 		name = "neon sparkid",
 		mountId = 98,
@@ -28,8 +33,18 @@ function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, 
 	if player:hasMount(useItem.mountId) then
 		return false
 	end
+	
+	if table.contains({26194, 26340, 26341}, useItem) then
+		local storage = player:getStorageValue(PlayerStorageKeys.vortexTamer)
+		if storage == 3 then
+			player:addAchievement("Vortex Tamer")
+		else
+			player:setStorageValue(PlayerStorageKeys.vortexTamer, storage + 1)
+		end
+	end
 
 	player:addMount(useItem.mountId)
+	player:addAchievement("Natural Born Cowboy")
 	player:say(useItem.tameMessage, TALKTYPE_MONSTER_SAY)
 	item:remove(1)
 	return true
