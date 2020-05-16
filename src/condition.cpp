@@ -373,6 +373,8 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 		return propStream.read<int32_t>(skills[currentSkill++]);
 	} else if (attr == CONDITIONATTR_STATS) {
 		return propStream.read<int32_t>(stats[currentStat++]);
+	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
+		return propStream.read<bool>(disableDefense);
 	}
 	return Condition::unserializeProp(attr, propStream);
 }
@@ -390,6 +392,9 @@ void ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.write<uint8_t>(CONDITIONATTR_STATS);
 		propWriteStream.write<int32_t>(stats[i]);
 	}
+
+	propWriteStream.write<uint8_t>(CONDITIONATTR_DISABLEDEFENSE);
+	propWriteStream.write<bool>(disableDefense);
 }
 
 bool ConditionAttributes::startCondition(Creature* creature)

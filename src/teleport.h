@@ -45,6 +45,8 @@ class Teleport final : public Item, public Cylinder
 			destPos = std::move(pos);
 		}
 
+		bool checkInfinityLoop(Tile* destTile);
+
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature* actor = nullptr) const override;
