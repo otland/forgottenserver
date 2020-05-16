@@ -7,6 +7,7 @@ function goldfishBowl.onUse(player, item, fromPosition, target, toPosition, isHo
 
 	target:remove(1)
 	item:transform(5929)
+	player:addAchievement("Silent Pet")
 	return true
 end
 
