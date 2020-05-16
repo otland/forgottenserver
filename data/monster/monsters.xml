@@ -24,7 +24,6 @@
 	<monster name="Sacred Spider" file="Arachnids/sacred_spider.xml" />
 	<monster name="Sandstone Scorpion" file="Arachnids/sandstone_scorpion.xml" />
 	<monster name="Scorpion" file="Arachnids/scorpion.xml" />
-	<monster name="Sparkion" file="Arachnids/sparkion.xml" />
 	<monster name="Spider" file="Arachnids/spider.xml" />
 	<monster name="Tarantula" file="Arachnids/tarantula.xml" />
 	<monster name="Wailing Widow" file="Arachnids/wailing_widow.xml" />
