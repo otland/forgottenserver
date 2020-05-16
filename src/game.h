@@ -457,9 +457,6 @@ class Game
 			return lightHour;
 		}
 
-		bool loadExperienceStages();
-		uint64_t getExperienceStage(uint32_t level);
-
 		void loadMotdNum();
 		void saveMotdNum() const;
 		const std::string& getMotdHash() const { return motdHash; }
@@ -522,7 +519,6 @@ class Game
 		std::unordered_map<uint32_t, Player*> mappedPlayerGuids;
 		std::unordered_map<uint32_t, Guild*> guilds;
 		std::unordered_map<uint16_t, Item*> uniqueItems;
-		std::map<uint32_t, uint32_t> stages;
 
 		std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
 		std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
@@ -565,10 +561,6 @@ class Game
 
 		std::string motdHash;
 		uint32_t motdNum = 0;
-
-		uint32_t lastStageLevel = 0;
-		bool stagesEnabled = false;
-		bool useLastStageLevel = false;
 };
 
 #endif

@@ -66,3 +66,15 @@ end
 function Game.setStorageValue(key, value)
 	globalStorageTable[key] = value
 end
+
+function Game.getExperienceStage(level)
+	if not stagesEnabled then
+		return configManager.getNumber(configKeys.RATE_EXPERIENCE)
+	end
+
+	if useLastStageLevel and level >= lastStageLevel then
+		return stagesMap[lastStageLevel]
+	end
+
+	return stagesMap[level]
+end
