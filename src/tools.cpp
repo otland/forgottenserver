@@ -37,7 +37,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	uint32_t currentLine = 1;
 	std::string line;
 
-	size_t offset = static_cast<size_t>(result.offset);
+	auto offset = static_cast<size_t>(result.offset);
 	size_t lineOffsetPosition = 0;
 	size_t index = 0;
 	size_t bytes;
@@ -1232,7 +1232,7 @@ int64_t OTSYS_TIME()
 	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-SpellGroup_t stringToSpellGroup(std::string value)
+SpellGroup_t stringToSpellGroup(const std::string& value)
 {
 	std::string tmpStr = asLowerCaseString(value);
 	if (tmpStr == "attack" || tmpStr == "1") {
