@@ -531,6 +531,7 @@
 	<monster name="Snake" file="monsters/snake.xml" />
 	<monster name="Son of Verminor" file="monsters/son_of_verminor.xml" />
 	<monster name="Souleater" file="monsters/souleater.xml" />
+	<monster name="Sparkion" file="monsters/sparkion.xml" />
 	<monster name="Spectral Scum" file="monsters/spectral_scum.xml" />
 	<monster name="Spectre" file="monsters/spectre.xml" />
 	<monster name="Spider Queen" file="monsters/spider_queen.xml" />
