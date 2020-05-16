@@ -367,22 +367,6 @@ local config = {
 		achievement = "Vortex Tamer",
 		chance = 100,
 		success = {text = "You receive the permission to ride a sparkion."}
-	},
-	[26340] = { -- crackling egg
-		name = "neon sparkid",
-		id = 98,
-		type = TYPE_MONSTER,
-		achievement = "Vortex Tamer",
-		chance = 100,
-		success = {text = "You receive the permission to ride a neon sparkid."}
-	},
-	[26341] = { -- menacing egg
-		name = "vortexion",
-		id = 99,
-		type = TYPE_MONSTER,
-		achievement = "Vortex Tamer",
-		chance = 100,
-		success = {text = "You receive the permission to ride a vortexion."}
 	}
 }
 
