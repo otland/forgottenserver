@@ -288,6 +288,12 @@ class Spell : public BaseSpell
 		void setAggressive(bool a) {
 			aggressive = a;
 		}
+		bool getPzLock() const {
+			return pzLock;
+		}
+		void setPzLock(bool pzLock) {
+			this->pzLock = pzLock;
+		}
 
 		SpellType_t spellType = SPELL_UNDEFINED;
 
@@ -323,6 +329,7 @@ class Spell : public BaseSpell
 		bool blockingSolid = false;
 		bool blockingCreature = false;
 		bool aggressive = true;
+		bool pzLock = false;
 		bool learnable = false;
 		bool enabled = true;
 		bool premium = false;

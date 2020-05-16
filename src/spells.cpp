@@ -555,6 +555,10 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		}
 	}
 
+	if ((attr = node.attribute("pzlock"))) {
+		pzLock = booleanString(attr.as_string());
+	}
+
 	if ((attr = node.attribute("aggressive"))) {
 		aggressive = booleanString(attr.as_string());
 	}
@@ -593,18 +597,18 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (aggressive && (range < 1 || (range > 0 && !player->getAttackedCreature())) && player->getSkull() == SKULL_BLACK) {
+	if ((aggressive || pzLock) && (range < 1 || (range > 0 && !player->getAttackedCreature())) && player->getSkull() == SKULL_BLACK) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return false;
 	}
 
-	if (aggressive && player->hasCondition(CONDITION_PACIFIED)) {
+	if ((aggressive || pzLock) && player->hasCondition(CONDITION_PACIFIED)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
 
-	if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
+	if ((aggressive || pzLock) && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;
 	}
@@ -1233,8 +1237,8 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 	postCastSpell(player);
 
 	target = g_game.getCreatureByID(var.number);
-	if (target && getAggressive()) {
-		player->onAttackedCreature(target->getCreature(), false);
+	if (getPzLock() && target) {
+		player->onAttackedCreature(target->getCreature());
 	}
 
 	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {

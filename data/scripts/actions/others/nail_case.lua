@@ -12,6 +12,11 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		return false
 	end
 
+	if not player:isPremium() then
+		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
+		return true
+	end
+
 	if target:getName():lower() ~= "gravedigger" then
 		return true
 	end
@@ -40,6 +45,8 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	item:remove(1)
 	target:remove()
 	player:addMount(39)
+	player:addAchievement("Natural Born Cowboy")
+	player:addAchievement("Blacknailed")
 	return true
 end
 
