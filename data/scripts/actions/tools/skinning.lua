@@ -86,8 +86,7 @@ local config = {
 			{chance = 50000, newItem = 2096}, -- pumpkinhead
 			{chance = 50000, newItem = 2683}, -- pumpkin
 			{chance = 50000, newItem = 2688, amount = 50}, -- candy cane
-			{chance = 50000, newItem = 6569, amount = 50}, -- candy
-			{chance = 5000, newItem = 6574, amount = 50} -- bars of chocolate
+			{chance = 50000, newItem = 6569, amount = 50} -- candy
 		},
 	},
 	[5942] = {
