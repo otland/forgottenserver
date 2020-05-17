@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Bonebeast" nameDescription="a bonebeast" race="undead" experience="580" speed="210">
+<monster name="Bonebeast" nameDescription="a bonebeast" race="undead" experience="580" speed="218">
 	<health now="515" max="515" />
 	<look type="101" corpse="6030" />
 	<targetchange interval="4000" chance="10" />
@@ -35,14 +35,14 @@
 		</attack>
 		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-600" duration="13000" />
 	</attacks>
-	<defenses armor="30" defense="30">
+	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="15" min="50" max="60">
 			<attribute key="areaEffect" value="greenspark" />
 		</defense>
 	</defenses>
 	<elements>
 		<element firePercent="-10" />
-		<element holyPercent="-20" />
+		<element holyPercent="-25" />
 	</elements>
 	<immunities>
 		<immunity death="1" />
@@ -58,17 +58,16 @@
 		<voice sentence="Knooorrrrr!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="50" chance="14000" />
-		<item name="gold coin" countmax="40" chance="16000" />
+		<item id="2230" chance="49750" /><!-- bone -->
+		<item name="gold coin" countmax="90" chance="30000" />
 		<item id="2229" chance="20000" /><!-- skull -->
-		<item id="2230" chance="47750" /><!-- bone -->
-		<item name="bone club" chance="4950" />
+		<item name="bony tail" chance="9980" />
 		<item name="plate armor" chance="8000" />
+		<item name="bone club" chance="4950" />
 		<item name="bone shield" chance="2000" />
-		<item name="green mushroom" chance="1350" />
-		<item name="hardened bone" chance="960" />
+		<item name="green mushroom" chance="1450" />
+		<item name="hardened bone" chance="1000" />
 		<item name="health potion" chance="540" />
 		<item name="bonebeast trophy" chance="120" />
-		<item name="bony tail" chance="9780" />
 	</loot>
 </monster>

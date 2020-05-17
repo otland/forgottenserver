@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Terror Bird" nameDescription="a terror bird" race="blood" experience="150" speed="220" manacost="490">
+<monster name="Terror Bird" nameDescription="a terror bird" race="blood" experience="150" speed="212" manacost="490">
 	<health now="300" max="300" />
 	<look type="218" corpse="6057" />
 	<targetchange interval="4000" chance="10" />
@@ -22,7 +22,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="13" defense="13" />
 	<elements>
 		<element energyPercent="20" />
 		<element icePercent="20" />
@@ -36,13 +36,13 @@
 		<voice sentence="Carrah Carrah!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="30" chance="81500" />
-		<item name="gold coin" countmax="3" chance="48000" />
-		<item name="feather headdress" chance="630" />
-		<item name="feather headdress" chance="150" />
-		<item name="feather headdress" chance="260" />
-		<item name="worm" countmax="3" chance="10000" />
-		<item name="terrorbird beak" chance="11000" />
+		<item name="gold coin" countmax="30" chance="82500" />
+		<item name="meat" countmax="3" chance="48000" />
+		<item name="terrorbird beak" chance="10000" />
+		<item name="worm" chance="9500" />
 		<item name="colourful feather" chance="3000" />
+		<item name="health potion" chance="690" />
+		<item name="seeds" chance="230" />
+		<item name="feather headdress" chance="100" />
 	</loot>
 </monster>

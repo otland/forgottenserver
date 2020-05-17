@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,10 @@
 #ifndef FS_TILE_H_96C7EE7CF8CD48E59D5D554A181F0C56
 #define FS_TILE_H_96C7EE7CF8CD48E59D5D554A181F0C56
 
-#include <unordered_set>
-
 #include "cylinder.h"
 #include "item.h"
 #include "tools.h"
+#include "spectators.h"
 
 class Creature;
 class Teleport;
@@ -36,7 +35,6 @@ class BedItem;
 
 using CreatureVector = std::vector<Creature*>;
 using ItemVector = std::vector<Item*>;
-using SpectatorHashSet = std::unordered_set<Creature*>;
 
 enum tileflags_t : uint32_t {
 	TILESTATE_NONE = 0,
@@ -287,8 +285,8 @@ class Tile : public Cylinder
 	private:
 		void onAddTileItem(Item* item);
 		void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
-		void onRemoveTileItem(const SpectatorHashSet& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
-		void onUpdateTile(const SpectatorHashSet& spectators);
+		void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
+		void onUpdateTile(const SpectatorVec& spectators);
 
 		void setTileFlags(const Item* item);
 		void resetTileFlags(const Item* item);

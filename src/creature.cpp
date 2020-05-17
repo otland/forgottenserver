@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1085,7 +1085,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	gainExp /= 2;
 	master->onGainExperience(gainExp, target);
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, false, true);
 	if (spectators.empty()) {
 		return;
@@ -1186,10 +1186,12 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 			}
 		}
 
+		it = conditions.erase(it);
+
 		condition->endCondition(this);
+		delete condition;
+
 		onEndCondition(type);
-		toReleaseConditions.push_back(condition);
-		++it;
 	}
 }
 
@@ -1211,10 +1213,12 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 			}
 		}
 
+		it = conditions.erase(it);
+
 		condition->endCondition(this);
+		delete condition;
+
 		onEndCondition(type);
-		toReleaseConditions.push_back(condition);
-		++it;
 	}
 }
 
@@ -1247,9 +1251,11 @@ void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 		}
 	}
 
+	conditions.erase(it);
+
 	condition->endCondition(this);
 	onEndCondition(condition->getType());
-	toReleaseConditions.push_back(condition);
+	delete condition;
 }
 
 Condition* Creature::getCondition(ConditionType_t type) const
@@ -1274,24 +1280,22 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	for (Condition* condition : toReleaseConditions) {
+	ConditionList tempConditions{ conditions };
+	for (Condition* condition : tempConditions) {
 		auto it = std::find(conditions.begin(), conditions.end(), condition);
-		if (it != conditions.end()) {
-			conditions.erase(it);
+		if (it == conditions.end()) {
+			continue;
 		}
-		delete condition;
-	}
-	toReleaseConditions.clear();
 
-	auto it = conditions.begin(), end = conditions.end();
-	while (it != end) {
-		Condition* condition = *it;
 		if (!condition->executeCondition(this, interval)) {
-			condition->endCondition(this);
-			onEndCondition(condition->getType());
-			toReleaseConditions.push_back(condition);
+			it = std::find(conditions.begin(), conditions.end(), condition);
+			if (it != conditions.end()) {
+				conditions.erase(it);
+				condition->endCondition(this);
+				onEndCondition(condition->getType());
+				delete condition;
+			}
 		}
-		++it;
 	}
 }
 
@@ -1307,7 +1311,7 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 			continue;
 		}
 
-		if (condition->getEndTime() >= timeNow) {
+		if (condition->getEndTime() >= timeNow || condition->getTicks() == -1) {
 			return true;
 		}
 	}
@@ -1471,6 +1475,10 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 	}
 
 	for (CreatureEvent* creatureEvent : eventsList) {
+		if (!creatureEvent->isLoaded()) {
+			continue;
+		}
+
 		if (creatureEvent->getEventType() == type) {
 			tmpEventList.push_back(creatureEvent);
 		}

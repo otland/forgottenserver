@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -679,7 +679,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 					auto it2 = RaceTypesMap.find(tmpStrValue);
 					if (it2 != RaceTypesMap.end()) {
-						it.corpseType = it2->second; 
+						it.corpseType = it2->second;
 					} else {
 						std::cout << "[Warning - Items::parseItemNode] Unknown corpseType: " << valueAttribute.as_string() << std::endl;
 					}

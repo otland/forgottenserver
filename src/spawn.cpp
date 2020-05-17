@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,10 +26,12 @@
 #include "scheduler.h"
 
 #include "pugicast.h"
+#include "events.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
 extern Game g_game;
+extern Events* g_events;
 
 static constexpr int32_t MINSPAWN_INTERVAL = 1000;
 
@@ -180,7 +182,7 @@ Spawn::~Spawn()
 
 bool Spawn::findPlayer(const Position& pos)
 {
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, pos, false, true);
 	for (Creature* spectator : spectators) {
 		if (!spectator->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) {
@@ -198,6 +200,10 @@ bool Spawn::isInSpawnZone(const Position& pos)
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
+	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {
+		return false;
+	}
+
 	if (startup) {
 		//No need to send out events to the surrounding since there is no one out there to listen!
 		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {

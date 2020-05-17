@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -396,6 +396,8 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 		return propStream.read<int32_t>(skills[currentSkill++]);
 	} else if (attr == CONDITIONATTR_STATS) {
 		return propStream.read<int32_t>(stats[currentStat++]);
+	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
+		return propStream.read<bool>(disableDefense);
 	}
 	return Condition::unserializeProp(attr, propStream);
 }
@@ -413,6 +415,9 @@ void ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.write<uint8_t>(CONDITIONATTR_STATS);
 		propWriteStream.write<int32_t>(stats[i]);
 	}
+
+	propWriteStream.write<uint8_t>(CONDITIONATTR_DISABLEDEFENSE);
+	propWriteStream.write<bool>(disableDefense);
 }
 
 bool ConditionAttributes::startCondition(Creature* creature)
@@ -792,7 +797,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				message.primary.color = TEXTCOLOR_MAYABLUE;
 				player->sendTextMessage(message);
 
-				SpectatorHashSet spectators;
+				SpectatorVec spectators;
 				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
 				spectators.erase(player);
 				if (!spectators.empty()) {
@@ -823,7 +828,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				message.primary.color = TEXTCOLOR_MAYABLUE;
 				player->sendTextMessage(message);
 
-				SpectatorHashSet spectators;
+				SpectatorVec spectators;
 				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
 				spectators.erase(player);
 				if (!spectators.empty()) {

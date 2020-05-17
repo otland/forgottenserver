@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Witch" nameDescription="a witch" race="blood" experience="120" speed="195">
+<monster name="Witch" nameDescription="a witch" race="blood" experience="120" speed="202">
 	<health now="300" max="300" />
 	<look type="54" corpse="20535" />
 	<targetchange interval="4000" chance="10" />
@@ -29,11 +29,11 @@
 		</attack>
 		<attack name="outfit" interval="2000" chance="1" target="1" range="5" monster="green frog" duration="2000" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="8" defense="8" />
 	<elements>
 		<element earthPercent="20" />
 		<element deathPercent="-5" />
-		<element physicalPercent="-10" />
+		<element physicalPercent="-5" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
@@ -45,20 +45,20 @@
 		<voice sentence="Hihihihi!" />
 	</voices>
 	<loot>
-		<item name="wolf tooth chain" chance="10120" />
 		<item name="gold coin" countmax="40" chance="64000" />
-		<item name="necrotic rod" chance="1140" />
-		<item name="garlic necklace" chance="1000" />
-		<item name="silver dagger" chance="500" />
-		<item name="sickle" chance="3910" />
-		<item name="leather boots" chance="4950" />
-		<item name="coat" chance="2010" />
-		<item name="cape" chance="4870" />
-		<item name="cookie" countmax="8" chance="29750" />
-		<item name="star herb" chance="8950" />
+		<item name="cookie" countmax="8" chance="30000" />
+		<item name="wolf tooth chain" chance="10120" />
 		<item name="witch broom" chance="10000" />
-		<item name="witch hat" chance="80" />
-		<item name="stuffed toad" chance="10" />
+		<item name="star herb" chance="9000" />
+		<item name="leather boots" chance="5000" />
+		<item name="cape" chance="4870" />
+		<item name="sickle" chance="3910" />
+		<item name="garlic necklace" chance="2500" />
+		<item name="coat" chance="2010" />
+		<item name="necrotic rod" chance="1140" />
 		<item name="bag of apple slices" chance="920" />
+		<item name="silver dagger" chance="560" />
+		<item name="witch hat" chance="90" />
+		<item name="stuffed toad" chance="10" />
 	</loot>
 </monster>

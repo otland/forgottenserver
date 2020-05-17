@@ -13,6 +13,7 @@
 		<flag canpushitems="0" />
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
+		<flag staticattack="90" />
 		<flag runonhealth="0" />
 		<flag hidehealth="1" />
 		<flag canwalkonenergy="0" />
@@ -30,6 +31,7 @@
 		<immunity energy="1" />
 		<immunity fire="1" />
 		<immunity earth="1" />
+		<immunity drown="1" />
 		<immunity ice="1" />
 		<immunity holy="1" />
 		<immunity death="1" />

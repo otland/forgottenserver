@@ -48,7 +48,7 @@
 		<item name="life ring" chance="2127" />
 		<item name="hunting spear" countmax="3" chance="14285" />
 		<item name="fish fin" chance="310" />
-		<item id="9809" chance="925" /><!-- rusty armor -->
+		<item id="9809" chance="925" /><!-- rusty armor (semi-rare) -->
 		<item name="flask of rust remover" chance="111" />
 		<item name="heavy trident" chance="505" />
 		<item name="eye of a deepling" chance="310" />

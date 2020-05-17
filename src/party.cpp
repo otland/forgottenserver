@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -333,15 +333,6 @@ void Party::broadcastPartyMessage(MessageClasses msgClass, const std::string& ms
 		for (Player* invitee : inviteList) {
 			invitee->sendTextMessage(msgClass, msg);
 		}
-	}
-}
-
-void Party::broadcastPartyLoot(const std::string& loot)
-{
-	leader->sendTextMessage(MESSAGE_INFO_DESCR, loot);
-
-	for (Player* member : memberList) {
-		member->sendTextMessage(MESSAGE_INFO_DESCR, loot);
 	}
 }
 
