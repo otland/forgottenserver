@@ -25,6 +25,7 @@
 #include "creature.h"
 #include "tasks.h"
 
+class Map;
 class NetworkMessage;
 class Player;
 class Game;
@@ -314,6 +315,9 @@ class ProtocolGame final : public Protocol
 		void addGameTaskTimed(uint32_t delay, Callable function, Args&&... args) {
 			g_dispatcher.addTask(createTask(delay, std::bind(function, &g_game, std::forward<Args>(args)...)));
 		}
+
+		int32_t rangex = Map::maxClientViewportX;
+		int32_t rangey = Map::maxClientViewportY;
 
 		std::unordered_set<uint32_t> knownCreatureSet;
 		Player* player = nullptr;

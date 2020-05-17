@@ -178,6 +178,14 @@ class Map
 		static constexpr int32_t maxClientViewportX = 8;
 		static constexpr int32_t maxClientViewportY = 6;
 
+		static int32_t getWidth() {
+			return (maxClientViewportX * 2) + 2;
+		}
+
+		static int32_t getHeight() {
+			return (maxClientViewportY * 2) + 2;
+		}
+
 		uint32_t clean() const;
 
 		/**
