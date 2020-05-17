@@ -2231,6 +2231,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
 	registerMethod("Creature", "setHiddenHealth", LuaScriptInterface::luaCreatureSetHiddenHealth);
 
+	registerMethod("Creature", "isMoveLocked", LuaScriptInterface::luaCreatureIsMoveLocked);
+	registerMethod("Creature", "setMoveLocked", LuaScriptInterface::luaCreatureSetMoveLocked);
+
 	registerMethod("Creature", "getSkull", LuaScriptInterface::luaCreatureGetSkull);
 	registerMethod("Creature", "setSkull", LuaScriptInterface::luaCreatureSetSkull);
 
@@ -7335,6 +7338,31 @@ int LuaScriptInterface::luaCreatureSetHiddenHealth(lua_State* L)
 	if (creature) {
 		creature->setHiddenHealth(getBoolean(L, 2));
 		g_game.addCreatureHealth(creature);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureIsMoveLocked(lua_State* L)
+{
+	// creature:isMoveLocked()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isMoveLocked());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureSetMoveLocked(lua_State* L)
+{
+	// creature:setMoveLocked(moveLocked)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		creature->setMoveLocked(getBoolean(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

@@ -172,6 +172,13 @@ class Creature : virtual public Thing
 			hiddenHealth = b;
 		}
 
+		bool isMoveLocked() const {
+			return moveLocked;
+		}
+		void setMoveLocked(bool locked) {
+			moveLocked = locked;
+		}
+
 		int32_t getThrowRange() const override final {
 			return 1;
 		}
@@ -525,6 +532,7 @@ class Creature : virtual public Thing
 		bool forceUpdateFollowPath = false;
 		bool hiddenHealth = false;
 		bool canUseDefense = true;
+		bool moveLocked = false;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {
