@@ -23,6 +23,8 @@
 #include "game.h"
 #include "waitlist.h"
 
+#include <tuple>
+
 extern ConfigManager g_config;
 extern Game g_game;
 
@@ -142,4 +144,4 @@ bool WaitingList::clientLogin(const Player* player, std::size_t& currentSlot)
 	return false;
 }
 
-WaitingList::WaitingList() : info(std::make_unique<WaitListInfo>()) {}
+WaitingList::WaitingList() : info(new WaitListInfo) {}
