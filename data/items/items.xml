@@ -14944,7 +14944,7 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="2" />
 	</item>
-	<item id="8072" article="a" name="yellow pillow"  editorsuffix=" (Supersoft)">
+	<item id="8072" article="a" name="yellow pillow" editorsuffix=" (Supersoft)">
 		<attribute key="weight" value="1600" />
 	</item>
 	<item id="8075" article="a" name="bed">
@@ -22330,7 +22330,7 @@
 		<attribute key="fluidSource" value="slime" />
 	</item>
 	<item id="13515" article="a" name="dead slug">
-		<attribute key="containerSize" value="10" />
+		<attribute key="containerSize" value="22" />
 		<attribute key="decayTo" value="13522" />
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="venom" />
@@ -22374,14 +22374,14 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="13522" article="a" name="dead slug">
-		<attribute key="containerSize" value="10" />
+		<attribute key="containerSize" value="22" />
 		<attribute key="decayTo" value="13523" />
 		<attribute key="duration" value="900" />
 		<attribute key="corpseType" value="venom" />
 		<attribute key="fluidSource" value="slime" />
 	</item>
 	<item id="13523" article="a" name="dead slug">
-		<attribute key="containerSize" value="10" />
+		<attribute key="containerSize" value="22" />
 		<attribute key="decayTo" value="13524" />
 		<attribute key="duration" value="600" />
 		<attribute key="corpseType" value="venom" />
@@ -22619,7 +22619,7 @@
 	</item>
 	<item fromid="13671" toid="13672" name="strange hole" />
 	<item id="13676" name="young fraelofingu" />
-	<item id="13678" name="greasy stone" />
+	<item id="13678" article="a" name="greasy stone" />
 	<item id="13681" article="a" name="strange bonepile" />
 	<item id="13682" article="a" name="floating stone" />
 	<item fromid="13686" toid="13687" article="a" name="rocky wall" />
@@ -22688,7 +22688,7 @@
 	<item id="13758" name="slime mould">
 		<attribute key="weight" value="300" />
 	</item>
-	<item id="13759" name="small whistle">
+	<item id="13759" article="a" name="small whistle">
 		<attribute key="description" value="This small whistle seems used. It seems to make absolutely no sound at all when it is blown." />
 		<attribute key="weight" value="5000" />
 	</item>
