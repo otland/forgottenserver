@@ -23,113 +23,86 @@
 
 void Scheduler::threadMain()
 {
-	std::unique_lock<std::mutex> eventLockUnique(eventLock, std::defer_lock);
-	while (getState() != THREAD_STATE_TERMINATED) {
-		std::cv_status ret = std::cv_status::no_timeout;
-
-		eventLockUnique.lock();
-		if (eventList.empty()) {
-			eventSignal.wait(eventLockUnique);
-		} else {
-			ret = eventSignal.wait_until(eventLockUnique, eventList.top()->getCycle());
-		}
-
-		// the mutex is locked again now...
-		if (ret == std::cv_status::timeout && !eventList.empty()) {
-			// ok we had a timeout, so there has to be an event we have to execute...
-			SchedulerTask* task = eventList.top();
-			eventList.pop();
-
-			// check if the event was stopped
-			auto it = eventIds.find(task->getEventId());
-			if (it == eventIds.end()) {
-				eventLockUnique.unlock();
-				delete task;
-				continue;
-			}
-			eventIds.erase(it);
-			eventLockUnique.unlock();
-
-			task->setDontExpire();
-			g_dispatcher.addTask(task, true);
-		} else {
-			eventLockUnique.unlock();
-		}
-	}
+	io_service.run();
 }
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
-	eventLock.lock();
-
-	if (getState() != THREAD_STATE_RUNNING) {
-		eventLock.unlock();
-		delete task;
-		return 0;
-	}
-
 	// check if the event has a valid id
 	if (task->getEventId() == 0) {
+		uint32_t tmpEventId = ++lastEventId;
 		// if not generate one
-		if (++lastEventId == 0) {
-			lastEventId = 1;
+		if (tmpEventId == 0) {
+			tmpEventId = ++lastEventId;
 		}
-
-		task->setEventId(lastEventId);
+		task->setEventId(tmpEventId);
 	}
 
 	// insert the event id in the list of active events
-	uint32_t eventId = task->getEventId();
-	eventIds.insert(eventId);
+	io_service.post([this, task]() {
+		boost::asio::deadline_timer* timer;
+		if (timerCacheVec.empty()) {
+			timer = new boost::asio::deadline_timer(io_service);
+		} else {
+			timer = timerCacheVec.back();
+			timerCacheVec.pop_back();
+		}
+		eventIdTimerMap[task->getEventId()] = timer;
 
-	// add the event to the queue
-	eventList.push(task);
+		timer->expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
+		timer->async_wait([this, task, timer](const boost::system::error_code& error) {
+			timerCacheVec.push_back(timer);
+			eventIdTimerMap.erase(task->getEventId());
 
-	// if the list was empty or this event is the top in the list
-	// we have to signal it
-	bool do_signal = (task == eventList.top());
+			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
+				// the timer has been manually cancelled(timer->cancel()) or Scheduler::shutdown has been called
+				delete task;
+				return;
+			}
 
-	eventLock.unlock();
+			g_dispatcher.addTask(task, true);
+		});
+	});
 
-	if (do_signal) {
-		eventSignal.notify_one();
-	}
-
-	return eventId;
+	return task->getEventId();
 }
 
-bool Scheduler::stopEvent(uint32_t eventId)
+void Scheduler::stopEvent(uint32_t eventId)
 {
 	if (eventId == 0) {
-		return false;
+		return;
 	}
 
-	std::lock_guard<std::mutex> lockClass(eventLock);
-
-	// search the event id..
-	auto it = eventIds.find(eventId);
-	if (it == eventIds.end()) {
-		return false;
-	}
-
-	eventIds.erase(it);
-	return true;
+	io_service.post([this, eventId]() {
+		// search the event id..
+		auto it = eventIdTimerMap.find(eventId);
+		if (it == eventIdTimerMap.end()) {
+			return;
+		}
+		it->second->cancel();
+	});
 }
 
 void Scheduler::shutdown()
 {
 	setState(THREAD_STATE_TERMINATED);
-	eventLock.lock();
+	io_service.post([this]() {
+		// cancel all active timers
+		for (auto& it : eventIdTimerMap) {
+			it.second->cancel();
+		}
 
-	//this list should already be empty
-	while (!eventList.empty()) {
-		delete eventList.top();
-		eventList.pop();
-	}
+		// thanks to cancel we will have all the timers in timerCacheVec
+		// deleted them to prevent memory leak
+		// this must be a new task since timer->cancel() adds a new task for each cancel so we want to delete the timers only after all cancel callbacks were called
+		io_service.post([this]() {
+			for (auto* timer : timerCacheVec) {
+				delete timer;
+			}
+		});
 
-	eventIds.clear();
-	eventLock.unlock();
-	eventSignal.notify_one();
+		io_service.stop();
+	});
 }
 
 SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f)
