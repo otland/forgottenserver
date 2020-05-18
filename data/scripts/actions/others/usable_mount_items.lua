@@ -34,12 +34,11 @@ function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, 
 		return false
 	end
 	
-	if table.contains({26194, 26340, 26341}, useItem) then
+	if table.contains({26194, 26340, 26341}, item.itemid) then
 		local storage = player:getStorageValue(PlayerStorageKeys.vortexTamer)
-		if storage == 3 then
+		player:setStorageValue(PlayerStorageKeys.vortexTamer, storage + 1)
+		if storage == 1 then
 			player:addAchievement("Vortex Tamer")
-		else
-			player:setStorageValue(PlayerStorageKeys.vortexTamer, storage + 1)
 		end
 	end
 
