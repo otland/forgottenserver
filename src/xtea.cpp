@@ -54,7 +54,7 @@ void apply_rounds(uint8_t* data, size_t length, Round round)
 
 void encrypt(uint8_t* data, size_t length, const key& k)
 {
-    for (auto i = 0u, sum = 0u, next_sum = sum + delta; i < 32u; ++i, sum = next_sum, next_sum += delta) {
+    for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < 32; ++i, sum = next_sum, next_sum += delta) {
         apply_rounds(data, length, [&](uint32_t& left, uint32_t& right) {
             left += ((right << 4 ^ right >> 5) + right) ^ (sum + k[sum & 3]);
             right += ((left << 4 ^ left >> 5) + left) ^ (next_sum + k[(next_sum >> 11) & 3]);
@@ -64,7 +64,7 @@ void encrypt(uint8_t* data, size_t length, const key& k)
 
 void decrypt(uint8_t* data, size_t length, const key& k)
 {
-    for (auto i = 0u, sum = delta * 32, next_sum = sum - delta; i < 32u; ++i, sum = next_sum, next_sum -= delta) {
+    for (uint32_t i = 0, sum = delta << 5, next_sum = sum - delta; i < 32; ++i, sum = next_sum, next_sum -= delta) {
         apply_rounds(data, length, [&](uint32_t& left, uint32_t& right) {
             right -= ((left << 4 ^ left >> 5) + left) ^ (sum + k[(sum >> 11) & 3]);
             left -= ((right << 4 ^ right >> 5) + right) ^ (next_sum + k[next_sum & 3]);
