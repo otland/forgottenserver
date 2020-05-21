@@ -10,7 +10,7 @@ function onSay(player, words, param)
 	end
 
 	if not player:isPremium() and premiumToBuyHouse then
-		player:sendCancelMessage("You need a premium account.")
+		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
 		return false
 	end
 

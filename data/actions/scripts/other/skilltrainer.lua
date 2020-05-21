@@ -8,7 +8,7 @@ local statues = {
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local skill = statues[item:getId()]
-	if not player:isPremium() then
+	if not player:isPremium() and premiumToOfflineTraining then
 		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
 		return true
 	end
