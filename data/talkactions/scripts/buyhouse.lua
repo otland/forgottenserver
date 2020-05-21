@@ -4,7 +4,12 @@ function onSay(player, words, param)
 		return true
 	end
 
-	if not player:isPremium() then
+	if player:getLevel() < levelToBuyHouse then
+		player:sendCancelMessage("You need to be at least of level " .. levelToBuyHouse .. " to buy a house.")
+		return false
+	end
+
+	if not player:isPremium() and premiumToBuyHouse then
 		player:sendCancelMessage("You need a premium account.")
 		return false
 	end
@@ -30,7 +35,7 @@ function onSay(player, words, param)
 	end
 
 	local price = house:getTileCount() * housePrice
-	if not player:removeMoney(price) then
+	if not player:removeTotalMoney(price) then
 		player:sendCancelMessage("You do not have enough money.")
 		return false
 	end
