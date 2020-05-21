@@ -16,5 +16,9 @@ changeSexEnabled = true
 changeSexDaysCost = 3
 premiumToOfflineTraining = true
 diceEnabledOnDepot = true
+sharedExperienceMultiplier = 1.20 -- 20%
+deathListEnabled = true
+maxDeathRecords = 5
+useWormsToFishing = true
 
 print(">> Loading additional config")
