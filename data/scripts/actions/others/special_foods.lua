@@ -57,32 +57,7 @@ condition_light_:setParameter(CONDITION_PARAM_LIGHT_LEVEL, 14)
 condition_light_:setParameter(CONDITION_PARAM_LIGHT_COLOR, 154)
 condition_light_:setParameter(CONDITION_PARAM_TICKS, 2 * 60 * 60 * 1000) -- 2 hours
 
-local helmetList = {
-	[5464] = 12541, -- helmet of the deep
-	[15408] = 15651 -- depth galea
-}
-
-local ringList = {
-	[2164] = 2164, -- might ring
-	[2202] = 2165, -- stealth ring
-	[2203] = 2166, -- power ring
-	[2204] = 2167, -- energy ring
-	[2205] = 2168, -- life ring
-	[2206] = 2169, -- time ring
-	[2210] = 2207, -- sword ring
-	[2211] = 2208, -- axe ring
-	[2212] = 2209, -- club ring
-	[2215] = 2213, -- dwarven ring
-	[2216] = 2214, -- ring of healing
-	[6301] = 6300, -- death ring
-	[13826] = 13825, -- star ring
-	[18528] = 18408, -- prismatic ring
-	[26186] = 26185, -- ring of blue plasma
-	[26188] = 26187, -- ring of green plasma
-	[26190] = 26189 -- ring of red plasma
-}
-
-local foods = {
+local foodList = {
 	[9992] = { -- rotworm stew
 		text_say = "Gulp.",
 		text_status = "You were healed completely.",
@@ -155,7 +130,7 @@ local foods = {
 local specialFoods = Action()
 
 function specialFoods.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local foodId = foods[item:getId()]
+	local foods = foodList[item:getId()]
 
 	if player:getStorageValue(PlayerStorageKeys.specialFoods) > os.time() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are full or you've already eaten a dish within 10 minutes.")
@@ -163,60 +138,91 @@ function specialFoods.onUse(player, item, fromPosition, target, toPosition, isHo
 	end
 	player:setStorageValue(PlayerStorageKeys.specialFoods, os.time() + 10 * 60)
 
-	if foodId == 9992 then -- rotworm stew (restores full health)
+	if item.itemid == 9992 then -- rotworm stew (restores full health)
 		player:addHealth(player:getMaxHealth() - player:getHealth())
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9993 then -- hydra tongue salad (remove all negative conditions)
+	elseif item.itemid == 9993 then -- hydra tongue salad (remove all negative conditions)
 		for i = 1, #conditions do
 			player:removeCondition(conditions[i])
 		end
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9994 then -- roasted dragon wings (+10 shielding for one hour)
+	elseif item.itemid == 9994 then -- roasted dragon wings (+10 shielding for one hour)
 		player:addCondition(condition_shield)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9995 then -- tropical fried terrorbird (+5 magic level for one hour)
+	elseif item.itemid == 9995 then -- tropical fried terrorbird (+5 magic level for one hour)
 		player:addCondition(condition_magiclevel)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9996 then -- banana chocolate shake (do nothing)
+	elseif item.itemid == 9996 then -- banana chocolate shake (do nothing)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9997 then -- veggie casserole (+10 melee for one hour)
+	elseif item.itemid == 9997 then -- veggie casserole (+10 melee for one hour)
 		player:addCondition(condition_melee)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9998 then -- filled jalapeno peppers (haste for one hour)
+	elseif item.itemid == 9998 then -- filled jalapeno peppers (haste for one hour)
 		player:addCondition(condition_speed)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 9999 then -- blessed steak (restores full mana)
+	elseif item.itemid == 9999 then -- blessed steak (restores full mana)
 		player:addMana(player:getMaxMana() - player:getMana())
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 10000 then -- carrot cake (+10 distance skill for one hour)
+	elseif item.itemid == 10000 then -- carrot cake (+10 distance skill for one hour)
 		player:addCondition(condition_distance)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 10001 then -- northern fishburger (+50 fishing skill for one hour)
+	elseif item.itemid == 10001 then -- northern fishburger (+50 fishing skill for one hour)
 		player:addCondition(condition_fishing)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 12540 then -- coconut shrimp bake (boost underwater speed by 300 speed levels for 24 hours)
-		local playerHelmet = player:getSlotItem(CONST_SLOT_HEAD)
-		if playerHelmet.itemid == 0 then
-			player:say("You should only eat this dish when wearing a helmet of the deep or a depth galea and walking underwater.", TALKTYPE_MONSTER_SAY)
-			return true
-		end
-		if playerHelmet and helmetList[playerHelmet:getId()] then
-			playerHelmet:transform(helmetList[playerHelmet:getId()])
-			playerHelmet:decay()
-		end
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Your underwater walking speed while wearing a " ..ItemType(playerHelmet:getId()):getName().. " has increased for twenty-four hours.")
-		return true
-	elseif foodId == 12542 then -- pot of blackjack
-		if player:getStorageValue(PlayerStorageKeys.potOfBlackjack) == 4 then
+	elseif item.itemid == 12542 then -- pot of blackjack
+		local storage = player:getStorageValue(PlayerStorageKeys.potOfBlackjack)
+		player:setStorageValue(PlayerStorageKeys.potOfBlackjack, storage + 1)
+		if storage == 1 then
 			item:remove(1)
+			player:setStorageValue(PlayerStorageKeys.potOfBlackjack, -1)
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You take the last gulp from the large bowl. No leftovers!")
-		else
-			player:setStorageValue(PlayerStorageKeys.potOfBlackjack, player:getStorageValue(PlayerStorageKeys.potOfBlackjack + 1))
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You take a gulp from the large bowl, but there's still some blackjack in it.")
 		end
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You take a gulp from the large bowl, but there's still some blackjack in it.")
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:getPosition():sendMagicEffect(foods.effect)
 		player:addHealth(5000)
 		return true
-	elseif foodId == 12543 then -- demonic candy ball
+	elseif item.itemid == 12543 then -- demonic candy ball
 		local bonus = {condition_shield, condition_magiclevel, condition_melee, condition_distance, condition_speed}
 		local chance = math.random(4)
 		if chance == 1 then
@@ -229,37 +235,15 @@ function specialFoods.onUse(player, item, fromPosition, target, toPosition, isHo
 			player:addHealth(player:getMaxHealth() - player:getHealth())
 			player:addMana(player:getMaxMana() - player:getMana())
 		end
-			player:say(foodId.text_say, TALKTYPE_MONSTER_SAY)
-			fromPosition:sendMagicEffect(foodId.effect)
+		item:remove(1)
+		player:say(foods.text_say, TALKTYPE_MONSTER_SAY)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, foods.text_status)
+		player:getPosition():sendMagicEffect(foods.effect)
 		return true
-	elseif foodId == 12544 then -- sweet mangonaise elixir
-		local ring = player:getSlotItem(CONST_SLOT_RING)
-		if ring.itemid == 0 then
-			player:say("You can only drink this elixir while wearing a time-based ring you'd like to charge.", TALKTYPE_MONSTER_SAY)
-			return true
-		end
-		if ringList[ring.itemid] ~= nil then
-			item:remove(1)
-			if ring.itemid == ringList[ring:getId()] then
-				ringAmount = 20
-			else
-				ringAmount = 1
-			end
-			for i = 1, 10 do
-				player:addItem(ringList[ring:getId()], ringAmount)
-			end
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, "Your " ..ItemType(ring:getId()):getName().. " was multiplied!")
-			player:say(foodId.text_say, TALKTYPE_MONSTER_SAY)
-			fromPosition:sendMagicEffect(foodId.effect)
-			return true
-		else
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, "This ring cannot be multiplied.")
-			return true
-		end
 	end
 end
 
-for k, v in pairs(foods) do
+for k, v in pairs(foodList) do
 	specialFoods:id(k)
 end
 specialFoods:register()
