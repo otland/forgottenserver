@@ -12,7 +12,7 @@ function onSay(player, words, param)
 			player:addPremiumDays(buyPremiumDays)
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "You have bought " .. buyPremiumDays .." days of premium account.")
 		else
-			player:sendCancelMessage("You don't have enough money, " .. buyPremiumMaxDays .. " days premium account costs " .. buyPremiumPrice .. " gold coins.")
+			player:sendCancelMessage("You don't have enough money, " .. buyPremiumDays .. " days premium account costs " .. buyPremiumPrice .. " gold coins.")
 			player:getPosition():sendMagicEffect(CONST_ME_POFF)
 		end
 	else
