@@ -506,7 +506,7 @@ void AccessList::addGuildRank(const std::string& name, const std::string& rankNa
 {
 	const Guild* guild = getGuildByName(name);
 	if (guild) {
-		const GuildRank* rank = guild->getRankByName(rankName);
+		GuildRank_ptr rank = guild->getRankByName(rankName);
 		if (rank) {
 			guildRankList.insert(rank->id);
 		}
@@ -524,7 +524,7 @@ bool AccessList::isInList(const Player* player)
 		return true;
 	}
 
-	const GuildRank* rank = player->getGuildRank();
+	GuildRank_ptr rank = player->getGuildRank();
 	return rank && guildRankList.find(rank->id) != guildRankList.end();
 }
 

@@ -1725,7 +1725,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
-		
+
 		const uint32_t protectionLevel = static_cast<uint32_t>(g_config.getNumber(ConfigManager::PROTECTION_LEVEL));
 		if (oldLevel >= protectionLevel && level < protectionLevel) {
 			g_game.updateCreatureWalkthrough(this);
@@ -4536,7 +4536,7 @@ void Player::setGuild(Guild* guild)
 	this->guildRank = nullptr;
 
 	if (guild) {
-		const GuildRank* rank = guild->getRankByLevel(1);
+		GuildRank_ptr rank = guild->getRankByLevel(1);
 		if (!rank) {
 			return;
 		}
