@@ -1,4 +1,4 @@
--- Combat settings
+-- Combat Settings
 -- NOTE: valid values for worldType are: "pvp", "no-pvp" and "pvp-enforced"
 worldType = "pvp"
 hotkeyAimbotEnabled = true
@@ -46,7 +46,7 @@ houseOwnedByAccount = false
 premiumToBuyHouse = true
 levelToBuyHouse = 8
 
--- Buy premium talkaction
+-- Buy Premium TalkAction
 buyPremiumEnabled = true
 buyPremiumDays = 90
 buyPremiumPrice = 10000
@@ -135,7 +135,7 @@ convertUnsafeScripts = true
 defaultPriority = "high"
 startupDatabaseOptimization = false
 
--- Status server information
+-- Status Server Information
 ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
