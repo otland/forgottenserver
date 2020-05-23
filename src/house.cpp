@@ -496,8 +496,8 @@ void AccessList::addGuild(const std::string& name)
 {
 	const Guild* guild = getGuildByName(name);
 	if (guild) {
-		for (const auto& rank : guild->getRanks()) {
-			guildRankList.insert(rank.id);
+		for (auto rank : guild->getRanks()) {
+			guildRankList.insert(rank->id);
 		}
 	}
 }
