@@ -49,9 +49,9 @@ void Guild::removeMember(Player* player)
 
 GuildRank_ptr Guild::getRankById(uint32_t rankId)
 {
-	for (auto& rank : ranks) {
-		if (rank.id == rankId) {
-			return &rank;
+	for (auto rank : ranks) {
+		if (rank->id == rankId) {
+			return rank;
 		}
 	}
 	return nullptr;
@@ -59,9 +59,9 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 
 GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
-	for (const auto& rank : ranks) {
-		if (rank.name == name) {
-			return &rank;
+	for (auto rank : ranks) {
+		if (rank->name == name) {
+			return rank;
 		}
 	}
 	return nullptr;
@@ -69,9 +69,9 @@ GuildRank_ptr Guild::getRankByName(const std::string& name) const
 
 GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 {
-	for (const auto& rank : ranks) {
-		if (rank.level == level) {
-			return &rank;
+	for (auto rank : ranks) {
+		if (rank->level == level) {
+			return rank;
 		}
 	}
 	return nullptr;
@@ -79,5 +79,5 @@ GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 
 void Guild::addRank(uint32_t rankId, const std::string& rankName, uint8_t level)
 {
-	ranks.emplace_back(rankId, rankName, level);
+	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }
