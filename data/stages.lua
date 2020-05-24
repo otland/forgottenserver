@@ -1,6 +1,3 @@
--- set to true to enable experience stages
-stagesEnabled = false
-
 experienceStages = {
 	{minlevel = 1, maxlevel = 8, multiplier = 7},
 	{minlevel = 9, maxlevel = 20, multiplier = 6},
