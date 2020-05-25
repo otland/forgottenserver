@@ -1200,7 +1200,9 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 							}
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
-							if (tmpStrValue == "ticks") {
+							if (tmpStrValue == "initdamage") {
+								conditionDamage->setInitDamage(-pugi::cast<int32_t>(subValueAttribute.value()));
+							} else if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
 								count = std::max<int32_t>(1, pugi::cast<int32_t>(subValueAttribute.value()));
