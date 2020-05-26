@@ -71,10 +71,5 @@ function Game.getExperienceStage(level)
 	if not configManager.getBoolean(configKeys.EXPERIENCE_STAGES) then
 		return configManager.getNumber(configKeys.RATE_EXPERIENCE)
 	end
-
-	if useLastStageLevel and level >= lastStageLevel then
-		return stagesMap[lastStageLevel]
-	end
-
-	return stagesMap[level]
+	return stagesMap[level] or stagesMap[lastStageLevel]
 end

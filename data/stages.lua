@@ -7,24 +7,16 @@ experienceStages = {
 }
 
 stagesMap = {}
-useLastStageLevel = false
 lastStageLevel = 0
 
 for _, stage in ipairs(experienceStages) do
-	local minlevel = stage.minlevel or 1
-	local maxlevel = stage.maxlevel or 0
 	local multiplier = stage.multiplier or 1.0
-
 	if not stage.maxlevel then
-		lastStageLevel = minlevel
-		useLastStageLevel = true
-	end
-
-	if not useLastStageLevel then
-		for i = stage.minlevel, stage.maxlevel do
-			stagesMap[i] = stage.multiplier
-		end
-	else
+		lastStageLevel = stage.minlevel or 1
 		stagesMap[lastStageLevel] = multiplier
+	else
+		for i = stage.minlevel, stage.maxlevel do
+			stagesMap[i] = multiplier
+		end
 	end
 end
