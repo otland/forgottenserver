@@ -127,7 +127,7 @@ void House::updateDoorDescription() const
 		ss << "It belongs to house '" << houseName << "'. Nobody owns this house.";
 
 		const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
-		if (housePrice != -1 && (g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE))) {
+		if (housePrice != -1 && g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE)) {
 			ss << " It costs " << (houseTiles.size() * housePrice) << " gold coins.";
 		}
 	}
