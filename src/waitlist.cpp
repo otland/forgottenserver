@@ -72,16 +72,16 @@ struct WaitListInfo
 		std::size_t slot = 1;
 		for (auto it = priorityWaitList.begin(), end = priorityWaitList.end(); it != end; ++it, ++slot) {
 			if (it->playerGUID == player->getGUID()) {
-				return {priorityWaitList, it, slot};
+				return std::make_tuple(std::ref(priorityWaitList), it, slot);
 			}
 		}
 
 		for (auto it = waitList.begin(), end = waitList.end(); it != end; ++it, ++slot) {
 			if (it->playerGUID == player->getGUID()) {
-				return {waitList, it, slot};
+				return std::make_tuple(std::ref(waitList), it, slot);
 			}
 		}
-		return {waitList, waitList.end(), slot};
+		return std::make_tuple(std::ref(waitList), waitList.end(), slot);
 	}
 };
 
