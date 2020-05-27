@@ -1960,6 +1960,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
 	registerMethod("Game", "getMonsterTypes", LuaScriptInterface::luaGameGetMonsterTypes);
+	registerMethod("Game", "getMoneyItems", LuaScriptInterface::luaGameGetMoneyItems);
 
 	registerMethod("Game", "getTowns", LuaScriptInterface::luaGameGetTowns);
 	registerMethod("Game", "getHouses", LuaScriptInterface::luaGameGetHouses);
@@ -4123,6 +4124,27 @@ int LuaScriptInterface::luaGameGetMonsterTypes(lua_State* L)
 		pushUserdata<MonsterType>(L, &mType.second);
 		setMetatable(L, -1, "MonsterType");
 		lua_setfield(L, -2, mType.first.c_str());
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetMoneyItems(lua_State* L)
+{
+	// Game.getMoneyItems()
+	const auto& moneyIts = Item::items.moneyItems;
+	size_t size = moneyIts.size();
+	lua_createtable(L, size, 0);
+
+	int index = size;
+	for (auto it : Item::items.moneyItems) {
+		const uint64_t worth = it.first;
+		const uint16_t itemId = it.second;
+		lua_createtable(L, 2, 0);
+		lua_pushnumber(L, itemId);
+		lua_setfield(L, -2, "itemId");
+		lua_pushnumber(L, worth);
+		lua_setfield(L, -2, "worth");
+		lua_rawseti(L, -2, index--);
 	}
 	return 1;
 }
