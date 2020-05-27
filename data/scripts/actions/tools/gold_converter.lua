@@ -9,7 +9,6 @@ local goldConverter = Action()
 
 function goldConverter.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local coin = config[target.itemid]
-
 	if coin then
 		local charges = item:getCharges()
 		if coin.changeTo and target.type == 100 then
