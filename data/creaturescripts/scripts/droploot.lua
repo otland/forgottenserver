@@ -1,4 +1,5 @@
-function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unjustified)
+function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+	local player = creature:getPlayer()
 	if player:hasFlag(PlayerFlag_NotGenerateLoot) or player:getVocation():getId() == VOCATION_NONE then
 		return true
 	end

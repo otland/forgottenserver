@@ -1,8 +1,9 @@
 local deathListEnabled = true
 local maxDeathRecords = 5
 
-function onDeath(player, corpse, killer, mostDamageKiller, unjustified, mostDamageUnjustified)
+function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	local playerId = player:getId()
+	local player = creature:getPlayer()
 	if nextUseStaminaTime[playerId] then
 		nextUseStaminaTime[playerId] = nil
 	end
