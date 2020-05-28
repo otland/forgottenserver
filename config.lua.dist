@@ -94,7 +94,7 @@ serverSaveClose = false
 serverSaveShutdown = true
 
 -- Rates
-experienceStages = false
+useStages = false
 rateExp = 5
 rateSkill = 3
 rateLoot = 2

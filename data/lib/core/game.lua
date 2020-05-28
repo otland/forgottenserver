@@ -68,7 +68,7 @@ function Game.setStorageValue(key, value)
 end
 
 function Game.getExperienceStage(level)
-	if not configManager.getBoolean(configKeys.EXPERIENCE_STAGES) then
+	if not configManager.getBoolean(configKeys.USE_STAGES) then
 		return configManager.getNumber(configKeys.RATE_EXPERIENCE)
 	end
 	return stagesMap[level] or stagesMap[lastStageLevel]
