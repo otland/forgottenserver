@@ -10352,6 +10352,7 @@
 		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="5666" />
 		<attribute key="duration" value="10" />
+		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="6075" article="a" name="dead blood crab">
@@ -10379,7 +10380,7 @@
 		<attribute key="containerSize" value="40" />
 		<attribute key="decayTo" value="5931" />
 		<attribute key="duration" value="10" />
-		<attribute key="corpseType" value="undead" />
+		<attribute key="corpseType" value="venom" />
 	</item>
 	<item id="6079" article="a" name="dead frog">
 		<attribute key="containerSize" value="9" />
