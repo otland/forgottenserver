@@ -1180,6 +1180,7 @@ class LuaScriptInterface
 		static int luaCombatSetCallback(lua_State* L);
 		static int luaCombatSetOrigin(lua_State* L);
 
+		static int luaCombatAggressive(lua_State* L);
 		static int luaCombatExecute(lua_State* L);
 
 		// Condition

@@ -288,6 +288,14 @@ class Combat
 			params.origin = origin;
 		}
 
+		void setAggressive(bool aggressive) {
+			params.aggressive = aggressive;
+		}
+
+		bool getAggressive() const {
+			return params.aggressive;
+		}
+
 	private:
 		static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params);
 		CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
