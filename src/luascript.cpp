@@ -1226,6 +1226,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT)
+	registerEnum(CONDITION_PARAM_AGGRESSIVE)
 
 	registerEnum(CONST_ME_NONE)
 	registerEnum(CONST_ME_DRAWBLOOD)
@@ -1915,6 +1916,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::SERVER_SAVE_CLOSE)
 	registerEnumIn("configKeys", ConfigManager::SERVER_SAVE_SHUTDOWN)
 	registerEnumIn("configKeys", ConfigManager::ONLINE_OFFLINE_CHARLIST)
+	registerEnumIn("configKeys", ConfigManager::LUA_ITEM_DESC)
 
 	registerEnumIn("configKeys", ConfigManager::MAP_NAME)
 	registerEnumIn("configKeys", ConfigManager::HOUSE_RENT_PERIOD)
@@ -2710,6 +2712,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "isHostile", LuaScriptInterface::luaMonsterTypeIsHostile);
 	registerMethod("MonsterType", "isPushable", LuaScriptInterface::luaMonsterTypeIsPushable);
 	registerMethod("MonsterType", "isHealthHidden", LuaScriptInterface::luaMonsterTypeIsHealthHidden);
+	registerMethod("MonsterType", "isBoss", LuaScriptInterface::luaMonsterTypeIsBoss);
 
 	registerMethod("MonsterType", "canPushItems", LuaScriptInterface::luaMonsterTypeCanPushItems);
 	registerMethod("MonsterType", "canPushCreatures", LuaScriptInterface::luaMonsterTypeCanPushCreatures);
@@ -4428,25 +4431,25 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 		return 1;
 	}
 
-	MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 1));
-	if (monsterType) {
+	const std::string& name = getString(L, 1);
+	if (name.length() == 0) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	MonsterType* monsterType = g_monsters.getMonsterType(name, false);
+	if (!monsterType) {
+		monsterType = &g_monsters.monsters[asLowerCaseString(name)];
+		monsterType->name = name;
+		monsterType->nameDescription = "a " + name;
+	} else {
 		monsterType->info.lootItems.clear();
 		monsterType->info.attackSpells.clear();
 		monsterType->info.defenseSpells.clear();
-		pushUserdata<MonsterType>(L, monsterType);
-		setMetatable(L, -1, "MonsterType");
-	} else if (isString(L, 1)) {
-		monsterType = new MonsterType();
-		std::string name = getString(L, 1);
-		g_monsters.addMonsterType(name, monsterType);
-		monsterType = g_monsters.getMonsterType(getString(L, 1));
-		monsterType->name = name;
-		monsterType->nameDescription = "a " + name;
-		pushUserdata<MonsterType>(L, monsterType);
-		setMetatable(L, -1, "MonsterType");
-	} else {
-		lua_pushnil(L);
 	}
+
+	pushUserdata<MonsterType>(L, monsterType);
+	setMetatable(L, -1, "MonsterType");
 	return 1;
 }
 
@@ -12523,6 +12526,23 @@ int LuaScriptInterface::luaMonsterTypeIsHealthHidden(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterTypeIsBoss(lua_State* L)
+{
+	// get: monsterType:isBoss() set: monsterType:isBoss(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.isBoss);
+		} else {
+			monsterType->info.isBoss = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaMonsterTypeCanPushItems(lua_State* L)
 {
 	// get: monsterType:canPushItems() set: monsterType:canPushItems(bool)
@@ -13718,10 +13738,11 @@ int LuaScriptInterface::luaMonsterSpellSetConditionDamage(lua_State* L)
 
 int LuaScriptInterface::luaMonsterSpellSetConditionSpeedChange(lua_State* L)
 {
-	// monsterSpell:setConditionSpeedChange(speed)
+	// monsterSpell:setConditionSpeedChange(minSpeed[, maxSpeed])
 	MonsterSpell* spell = getUserdata<MonsterSpell>(L, 1);
 	if (spell) {
-		spell->speedChange = getNumber<int32_t>(L, 2);
+		spell->minSpeedChange = getNumber<int32_t>(L, 2);
+		spell->maxSpeedChange = getNumber<int32_t>(L, 3, 0);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

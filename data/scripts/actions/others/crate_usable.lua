@@ -26,6 +26,7 @@ function crateUsable.onUse(player, item, fromPosition, target, toPosition, isHot
 					local str = ("You found %s %s!"):format(count > 1 and count or item:getArticle(), count > 1 and item:getPluralName() or item:getName())
 					player:say(str, TALKTYPE_MONSTER_SAY, false, player, toPosition)
 					player:setStorageValue(PlayerStorageKeys.crateUsable, os.time() + 20 * 60 * 60)
+					player:addAchievementProgress("Free Items!", 50)
 				else
 					player:say("You found nothing useful.", TALKTYPE_MONSTER_SAY, false, player, toPosition)
 				end

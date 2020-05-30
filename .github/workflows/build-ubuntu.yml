@@ -1,0 +1,53 @@
+name: Build on Ubuntu
+
+on:
+  push:
+    branches:
+      - master
+      - v*
+
+    tags:
+      - v*
+
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+
+  pull_request:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: >
+          sudo apt-get install git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
+          libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
+          libpugixml-dev libcrypto++-dev
+
+      - name: Build with cmake
+        uses: ashutoshvarma/action-cmake-build@master
+        with:
+          build-dir: ${{ runner.workspace }}/build
+          # will set the CC & CXX for cmake
+          cc: gcc
+          cxx: g++
+          build-type: Release
+          # Extra options pass to cmake while configuring project
+          configure-options: -DUSE_LUAJIT=on
+          # run build using '-j [parallel]' to use multiple threads to build
+          parallel: 2
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: ubuntu-tfs-amd64-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/tfs

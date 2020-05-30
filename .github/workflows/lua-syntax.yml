@@ -1,16 +1,20 @@
 name: Lua syntax check
 
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - data/**.lua
+  push:
+    paths:
+      - data/**.lua
 
 jobs:
-  build:
-
+  luac:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - uses: leafo/gh-actions-lua@v5
+      - uses: leafo/gh-actions-lua@v5
 
-    - name: Test Lua syntax
-      run: find data/ -name '*.lua' -print0 | xargs -0 -n1 luac -p
+      - name: Test Lua syntax
+        run: find data/ -name '*.lua' -print0 | xargs -0 -n1 luac -p

@@ -42,6 +42,11 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 			return true;
 		}
 
+		case CONDITION_PARAM_AGGRESSIVE: {
+			aggressive = (value != 0);
+			return true;
+		}
+
 		default: {
 			return false;
 		}
@@ -100,6 +105,16 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 			return propStream.read<uint32_t>(subId);
 		}
 
+		case CONDITIONATTR_ISAGGRESSIVE: {
+			uint8_t value;
+			if (!propStream.read<uint8_t>(value)) {
+				return false;
+			}
+
+			aggressive = (value != 0);
+			return true;
+		}
+
 		case CONDITIONATTR_END:
 			return true;
 
@@ -124,6 +139,9 @@ void Condition::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SUBID);
 	propWriteStream.write<uint32_t>(subId);
+	
+	propWriteStream.write<uint8_t>(CONDITIONATTR_ISAGGRESSIVE);
+	propWriteStream.write<uint8_t>(aggressive);
 }
 
 void Condition::setTicks(int32_t newTicks)
@@ -143,7 +161,7 @@ bool Condition::executeCondition(Creature*, int32_t interval)
 	return getEndTime() >= OTSYS_TIME();
 }
 
-Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param/* = 0*/, bool buff/* = false*/, uint32_t subId/* = 0*/)
+Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param/* = 0*/, bool buff/* = false*/, uint32_t subId/* = 0*/, bool aggressive/* = false */)
 {
 	switch (type) {
 		case CONDITION_POISON:
@@ -154,35 +172,35 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_DAZZLED:
 		case CONDITION_CURSED:
 		case CONDITION_BLEEDING:
-			return new ConditionDamage(id, type, buff, subId);
+			return new ConditionDamage(id, type, buff, subId, aggressive);
 
 		case CONDITION_HASTE:
 		case CONDITION_PARALYZE:
-			return new ConditionSpeed(id, type, ticks, buff, subId, param);
+			return new ConditionSpeed(id, type, ticks, buff, subId, param, aggressive);
 
 		case CONDITION_INVISIBLE:
-			return new ConditionInvisible(id, type, ticks, buff, subId);
+			return new ConditionInvisible(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_OUTFIT:
-			return new ConditionOutfit(id, type, ticks, buff, subId);
+			return new ConditionOutfit(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_LIGHT:
-			return new ConditionLight(id, type, ticks, buff, subId, param & 0xFF, (param & 0xFF00) >> 8);
+			return new ConditionLight(id, type, ticks, buff, subId, param & 0xFF, (param & 0xFF00) >> 8, aggressive);
 
 		case CONDITION_REGENERATION:
-			return new ConditionRegeneration(id, type, ticks, buff, subId);
+			return new ConditionRegeneration(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_SOUL:
-			return new ConditionSoul(id, type, ticks, buff, subId);
+			return new ConditionSoul(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_ATTRIBUTES:
-			return new ConditionAttributes(id, type, ticks, buff, subId);
+			return new ConditionAttributes(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_SPELLCOOLDOWN:
-			return new ConditionSpellCooldown(id, type, ticks, buff, subId);
+			return new ConditionSpellCooldown(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_SPELLGROUPCOOLDOWN:
-			return new ConditionSpellGroupCooldown(id, type, ticks, buff, subId);
+			return new ConditionSpellGroupCooldown(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_INFIGHT:
 		case CONDITION_DRUNK:
@@ -194,7 +212,7 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_YELLTICKS:
 		case CONDITION_PACIFIED:
 		case CONDITION_MANASHIELD:
-			return new ConditionGeneric(id, type, ticks, buff, subId);
+			return new ConditionGeneric(id, type, ticks, buff, subId, aggressive);
 
 		default:
 			return nullptr;
@@ -249,7 +267,12 @@ Condition* Condition::createCondition(PropStream& propStream)
 		return nullptr;
 	}
 
-	return createCondition(static_cast<ConditionId_t>(id), static_cast<ConditionType_t>(type), ticks, 0, buff != 0, subId);
+	uint8_t aggressive;
+	if (!propStream.read<uint8_t>(aggressive)) {
+		return nullptr;
+	}
+
+	return createCondition(static_cast<ConditionId_t>(id), static_cast<ConditionType_t>(type), ticks, 0, buff != 0, subId, aggressive);
 }
 
 bool Condition::startCondition(Creature*)
@@ -373,6 +396,8 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 		return propStream.read<int32_t>(skills[currentSkill++]);
 	} else if (attr == CONDITIONATTR_STATS) {
 		return propStream.read<int32_t>(stats[currentStat++]);
+	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
+		return propStream.read<bool>(disableDefense);
 	}
 	return Condition::unserializeProp(attr, propStream);
 }
@@ -390,6 +415,9 @@ void ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.write<uint8_t>(CONDITIONATTR_STATS);
 		propWriteStream.write<int32_t>(stats[i]);
 	}
+
+	propWriteStream.write<uint8_t>(CONDITIONATTR_DISABLEDEFENSE);
+	propWriteStream.write<bool>(disableDefense);
 }
 
 bool ConditionAttributes::startCondition(Creature* creature)
@@ -683,6 +711,11 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 
 		case CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT: {
 			specialSkills[SPECIALSKILL_MANALEECHAMOUNT] = value;
+			return true;
+		}
+
+		case CONDITION_PARAM_AGGRESSIVE: {
+			aggressive = (value != 0);
 			return true;
 		}
 
@@ -1078,15 +1111,15 @@ bool ConditionDamage::startCondition(Creature* creature)
 		return false;
 	}
 
-	if (!init()) {
-		return false;
+	if (!delayed) {
+		// delayed condition does no initial damage
+		if (!doDamage(creature, initDamage)) {
+			return false;
+		}
 	}
 
-	if (!delayed) {
-		int32_t damage;
-		if (getNextDamage(damage)) {
-			return doDamage(creature, damage);
-		}
+	if (!init()) {
+		return false;
 	}
 	return true;
 }
@@ -1149,8 +1182,8 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 
 bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 {
-	if (creature->isSuppress(getType())) {
-		return true;
+	if (creature->isSuppress(getType()) || creature->isImmune(getType())) {
+		return false;
 	}
 
 	CombatDamage damage;
@@ -1173,6 +1206,7 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 	if (g_game.combatBlockHit(damage, attacker, creature, false, false, field)) {
 		return false;
 	}
+
 	return g_game.combatChangeHealth(attacker, creature, damage);
 }
 

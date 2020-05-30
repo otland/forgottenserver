@@ -9,6 +9,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		or onUseKitchenKnife(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		player:say("Oh no! Your tool is jammed and can't be used for a minute.", TALKTYPE_MONSTER_SAY)
+		player:addAchievementProgress("Bad Timming", 10)
 		item:transform(item.itemid + 1)
 		item:decay()
 	end
