@@ -113,7 +113,7 @@ function Item.getAbilities(self)
 	return ret
 end
 
-function Player.getAbilities(self)
+function Player.getAbilities(self, keymap)
 	local abilities = {}
 	for slot = 1, 10 do
 		local item = self:getSlotItem(slot)
@@ -128,9 +128,17 @@ function Player.getAbilities(self)
 	end
 	local temp = {}
 	for key, value in pairs(abilities) do
-		temp[#temp+1] = {key = key, value = value}
+		if keymap then
+			temp[key] = value
+		else
+			temp[#temp+1] = {key = key, value = value}
+		end
 	end
 	return temp
+end
+
+function Player.getAbilityValue(self, ability)
+	return self:getAbilities(true)[ability] or 0
 end
 
 do

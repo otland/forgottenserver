@@ -20,6 +20,11 @@ local function damageFunc(creature, attacker, primaryDamage, primaryType, second
 	local abilities = player:getAbilities()
 	local primaryKey = combatToAbilityType(primaryType)
 	local secondaryKey = combatToAbilityType(secondaryType)
+	local dodge = player:getAbilityValue(ITEM_ABILITY_DODGE)
+	if math.random(100) <= dodge then
+		player:getPosition():sendMagicEffect(CONST_ME_ASSASSIN)
+		return 0, primaryType, 0, secondaryType
+	end
 	for id, ability in ipairs(abilities) do
 		local changed = false
 		if primaryKey and ability.key == primaryKey then

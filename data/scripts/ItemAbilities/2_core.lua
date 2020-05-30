@@ -24,8 +24,19 @@ function ItemAbilities.internalInventoryUpdate(player, item, slot, equip)
 					player:removeCondition(def.conditionType, CONDITIONID_DEFAULT, def.subId)
 				end
 			end
+			local def = ItemAbilities.getTempCondition(ability.key)
+			if def then
+				local condition = player:getTempCondition(def.type, def.id)
+				if condition then
+					condition:setValue(ability.value)
+				end
+			end
 		end
 	end
+end
+
+function ItemAbilities.getTempCondition(player, key, value)
+	return ABILITY_TEMPCONDITIONS[key]
 end
 
 function ItemAbilities.getCondition(key, value)

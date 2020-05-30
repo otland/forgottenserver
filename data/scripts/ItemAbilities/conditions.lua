@@ -1,3 +1,10 @@
+ABILITY_TEMPCONDITIONS = {
+	IA_DODGE = {
+		type = 'Dodge',
+		id = 'IA_DODGE_ID'
+	}
+}
+
 abilityRegenCondition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 abilityRegenCondition:setParameter(CONDITION_PARAM_SUBID, 5879)
 
