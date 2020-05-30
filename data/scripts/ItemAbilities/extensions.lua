@@ -50,6 +50,7 @@ function Item.getAbilities(self)
 		manaGain = fallback(abilities.IA_MANAGAIN),
 		manaTicks = fallback(abilities.IA_MANATICKS),
 		speed = fallback(abilities.IA_SPEED),
+		dodge = fallback(abilities.IA_DODGE),
 		skills = {
 			[1] = fallback(abilities.IA_SKILLFIST),
 			[2] = fallback(abilities.IA_SKILLCLUB),
@@ -98,11 +99,11 @@ function Item.getAbilities(self)
 	-- use default ability value from itemType if dynamic one is 0 
 	for k, v in pairs(ret) do
 		if v == 'default' then
-			ret[k] = default[k]
+			ret[k] = default[k] or 0
 		elseif type(v) == 'table' then
 			for _k, _v in pairs(v) do
 				if _v == 'default' then
-					ret[k][_k] = default[k][_k]
+					ret[k][_k] = default[k][_k] or 0
 				end
 			end
 		end

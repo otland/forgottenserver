@@ -253,6 +253,11 @@ do
 			begin = addSeparator(ss, begin)
 			ss:append('speed %s%d', showpos(abilities.speed), math.abs(abilities.speed / 2))
 		end
+
+		if abilities.dodge ~= 0 then
+			begin = addSeparator(ss, begin)
+			ss:append('dodge %d%%', abilities.dodge)
+		end
 		return begin
 	end
 
