@@ -17,7 +17,8 @@ function ItemAbilities.internalInventoryUpdate(player, item, slot, equip)
 		for _, ability in ipairs(player:getAbilities()) do
 			local def = ItemAbilities.getCondition(ability.key, ability.value)
 			if def then
-				if equip then
+				if (equip and ability.value ~= 0) or ability.value ~= 0 then
+					-- update if equipped or deequiped but still has ability value from elsewhere
 					player:addCondition(def.condition)
 				else
 					player:removeCondition(def.conditionType, CONDITIONID_DEFAULT, def.subId)
@@ -31,7 +32,14 @@ function ItemAbilities.getCondition(key, value)
 	local def = ABILITY_CONDITIONS[key]
 	if def then
 		-- update condition value before updating player
-		def.condition:setParameter(def.key, value)
+		if def.key then
+			def.condition:setParameter(def.key, value)
+		elseif def.formula then
+			if key == 'IA_SPEED' then
+				value = value * 2 -- since client divides speed / 2
+			end
+			def.condition:setFormula(0, value, 0, value)
+		end
 	end
 	return def
 end

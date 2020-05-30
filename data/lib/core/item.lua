@@ -257,12 +257,12 @@ do
 	end
 
 	local function internalItemGetDescription(it, lookDistance, item, subType, addArticle)
-		local abilities = it:getAbilities()
 		local ss = StringStream()
 		local subType = subType or (item and item:getSubType() or -1)
 		local text = nil
 		local begin = true
 		local obj = item or it
+		local abilities = obj:getAbilities()
 
 		if item then
 			ss:append(item:getNameDescription(subType, addArticle or true))
