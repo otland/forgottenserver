@@ -30,6 +30,8 @@ function Item.isTile(self)
 	return false
 end
 
+-- Helper class to make string formatting prettier
+
 StringStream = {}
 
 setmetatable(StringStream, {
@@ -43,7 +45,7 @@ function StringStream.append(self, str, ...)
 	self[#self+1] = string.format(str, ...)
 end
 
-function StringStream.build(self, sep)
+function StringStream.concat(self, sep)
 	return table.concat(self, sep)
 end
 
@@ -99,7 +101,7 @@ do
 		else
 			ss:append('an item of type %d', obj:getId())
 		end
-		return ss:build()
+		return ss:concat()
 	end
 
 	function Item.getNameDescription(self, subType, addArticle)
@@ -536,7 +538,7 @@ do
 			end
 		end
 
-		return ss:build()
+		return ss:concat()
 	end
 
 	if not oldItemDesc then
