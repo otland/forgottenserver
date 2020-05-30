@@ -539,7 +539,11 @@ do
 		return ss:build()
 	end
 
-	if configKeys.LUA_ITEM_DESC then
+	if not oldItemDesc then
+		oldItemDesc = Item.getDescription
+	end
+
+	if configManager.getBoolean(configKeys.LUA_ITEM_DESC) then
 		function Item.getDescription(self, lookDistance, subType)
 			return internalItemGetDescription(self:getType(), lookDistance, self, subType)
 		end
@@ -547,5 +551,7 @@ do
 		function ItemType.getItemDescription(self, lookDistance, subType)
 			return internalItemGetDescription(self, lookDistance, nil, subType)
 		end
+	else
+		Item.getDescription = oldItemDesc
 	end
 end
