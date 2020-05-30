@@ -16,7 +16,7 @@ env:
 jobs:
   # Push image to GitHub Package Registry.
   # See also https://docs.docker.com/docker-hub/builds/
-  push:
+  docker-image:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
@@ -31,7 +31,7 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_ID=$(echo "docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME" | awk '{print tolower($0)}')
 
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')

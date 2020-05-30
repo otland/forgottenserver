@@ -16,7 +16,7 @@ cache: apt
 addons:
   apt:
     packages:
-      - libboost-dev
+      - libboost-date-time-dev
       - libboost-system-dev
       - libboost-filesystem-dev
       - libboost-iostreams-dev
@@ -27,11 +27,12 @@ addons:
       - libpugixml-dev
   coverity_scan:
     project:
-      name: "otland/forgottenserver"
-      description: "A free and open-source MMORPG server emulator written in C++"
-    build_command_prepend: "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} .."
-    build_command: "make -j2"
+      name: otland/forgottenserver
+      description: A free and open-source MMORPG server emulator written in C++
+    build_command_prepend: "cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} .."
+    build_command: make -j2
     branch_pattern: coverity_scan
+    notification_email: coverity@otland.net
 before_install:
   - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 before_script:

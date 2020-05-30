@@ -81,6 +81,9 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.healthHidden ~= nil then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
+		if mask.flags.boss ~= nil then
+			mtype:isBoss(mask.flags.boss)
+		end
 		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
@@ -288,7 +291,13 @@ registerMonsterType.attacks = function(mtype, mask)
 						spell:setConditionDuration(attack.duration)
 					end
 					if attack.speed then
-						spell:setConditionSpeedChange(attack.speed)
+						if type(attack.speed) ~= "table" then
+							spell:setConditionSpeedChange(attack.speed)
+						elseif type(attack.speed) == "table" then
+							if attack.speed.min and attack.speed.max then
+								spell:setConditionSpeedChange(attack.speed.min, attack.speed.max)
+							end
+						end
 					end
 					if attack.target then
 						spell:setNeedTarget(attack.target)
@@ -402,7 +411,13 @@ registerMonsterType.defenses = function(mtype, mask)
 							spell:setConditionDuration(defense.duration)
 						end
 						if defense.speed then
-							spell:setConditionSpeedChange(defense.speed)
+							if type(defense.speed) ~= "table" then
+								spell:setConditionSpeedChange(defense.speed)
+							elseif type(defense.speed) == "table" then
+								if defense.speed.min and defense.speed.max then
+									spell:setConditionSpeedChange(defense.speed.min, defense.speed.max)
+								end
+							end
 						end
 						if defense.target then
 							spell:setNeedTarget(defense.target)

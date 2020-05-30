@@ -271,6 +271,7 @@ enum ConditionParam_t {
 	CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT = 51,
 	CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE = 52,
 	CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT = 53,
+	CONDITION_PARAM_AGGRESSIVE = 54,
 };
 
 enum BlockType_t : uint8_t {
@@ -606,10 +607,12 @@ struct CombatDamage
 	} primary, secondary;
 
 	CombatOrigin origin;
+	BlockType_t blockType;
 	bool critical;
 	CombatDamage()
 	{
 		origin = ORIGIN_NONE;
+		blockType = BLOCK_NONE;
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
 		critical = false;

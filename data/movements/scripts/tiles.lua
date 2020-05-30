@@ -12,11 +12,11 @@ function onStepIn(creature, item, position, fromPosition)
 
 	item:transform(increasing[item.itemid])
 
-	if item.actionid >= 1000 then
-		if creature:getLevel() < item.actionid - 1000 then
+	if item.actionid >= actionIds.levelDoor then
+		if creature:getLevel() < item.actionid - actionIds.levelDoor then
 			creature:teleportTo(fromPosition, false)
 			position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
-			creature:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
+			creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The tile seems to be protected against unwanted intruders.")
 		end
 		return true
 	end
@@ -28,6 +28,7 @@ function onStepIn(creature, item, position, fromPosition)
 		if depotItem then
 			local depotItems = creature:getDepotChest(getDepotId(depotItem:getUniqueId()), true):getItemHoldingCount()
 			creature:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Your depot contains " .. depotItems .. " item" .. (depotItems > 1 and "s." or "."))
+			creature:addAchievementProgress("Safely Stored Away", 1000)
 			return true
 		end
 	end
@@ -35,7 +36,7 @@ function onStepIn(creature, item, position, fromPosition)
 	if item.actionid ~= 0 and creature:getStorageValue(item.actionid) <= 0 then
 		creature:teleportTo(fromPosition, false)
 		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
-		creature:sendTextMessage(MESSAGE_INFO_DESCR, "The tile seems to be protected against unwanted intruders.")
+		creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The tile seems to be protected against unwanted intruders.")
 		return true
 	end
 	return true

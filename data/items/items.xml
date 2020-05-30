@@ -10380,7 +10380,7 @@
 		<attribute key="fluidSource" value="blood" />
 	</item>
 	<item id="6078" name="remains of Ferumbras">
-		<attribute key="containerSize" value="10" />
+		<attribute key="containerSize" value="40" />
 		<attribute key="decayTo" value="5931" />
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="undead" />
@@ -18584,26 +18584,26 @@
 		<attribute key="description" value="The kings fan club premium membership card is issued to 'The Evil Mastermind'." />
 		<attribute key="weight" value="150" />
 	</item>
-	<item id="10309" name="claw of 'The Noxious Spawn'">
+	<item id="10309" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="It feels tight and uncomfortable on your hand." />
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="transformDeEquipTo" value="10310" />
 	</item>
-	<item id="10310" name="claw of 'The Noxious Spawn'">
+	<item id="10310" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="It's like a glove and you can't wear a ring on it. You are not sure if you should really put it on." />
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="transformEquipTo" value="10309" />
 	</item>
-	<item id="10311" name="claw of 'The Noxious Spawn'">
+	<item id="10311" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
 		<attribute key="weight" value="500" />
 		<attribute key="decayTo" value="10309" />
 		<attribute key="duration" value="10" />
 		<attribute key="transformDeEquipTo" value="10315" />
 	</item>
-	<item id="10312" name="claw of 'The Noxious Spawn'">
+	<item id="10312" article="a" name="claw of 'The Noxious Spawn'">
 		<attribute key="description" value="Its power is depleted at the moment." />
 		<attribute key="weight" value="500" />
 		<attribute key="decayTo" value="10310" />
@@ -22237,7 +22237,7 @@
 	</item>
 	<item id="13495" name="remains of a canopic jar" />
 	<item fromid="13496" toid="13497" article="a" name="large painting" />
-	<item id="13498" name="scorpion sceptre">
+	<item id="13498" article="a" name="scorpion sceptre">
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
 		<attribute key="weight" value="200" />
 	</item>
@@ -23687,6 +23687,11 @@
 	</item>
 	<item fromid="15232" toid="15237" name="brown sea floor" />
 	<item fromid="15250" toid="15267" article="an" name="enormous statue" />
+	<item id="15269" article="an" name="ice flower" />
+	<item id="15270" article="a" name="harvested ice flower">
+		<attribute key="decayTo" value="15269" />
+		<attribute key="duration" value="14400" />
+	</item>
 	<item id="15271" name="ice flower seeds">
 		<attribute key="description" value="They seem to have strange effects on other plants and can also be grown into an own plant." />
 		<attribute key="weight" value="50" />
@@ -24373,6 +24378,9 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="15501" article="a" name="dragon's nest" />
+	<item id="15502" article="a" name="dragon's nest">
+		<attribute key="description" value="The young dragons have just hatched." />
+	</item>
 	<item id="15515" article="a" name="bar of gold">
 		<attribute key="weight" value="2100" />
 	</item>
@@ -24604,9 +24612,7 @@
 		<attribute key="description" value="Use it in your house to construct an easel." />
 		<attribute key="weight" value="7500" />
 	</item>
-	<item id="16093" article="a" name="surprise nest">
-		<attribute key="description" value="Use it to get a little surprise." />
-	</item>
+	<item id="16093" article="a" name="hidden nest" />
 	<item id="16094" article="a" name="pirates surprise">
 		<attribute key="weight" value="1200" />
 	</item>
@@ -24624,6 +24630,9 @@
 	<item id="16099" article="a" name="cake cabinet kit">
 		<attribute key="description" value="Use it in your house to construct a cake cabinet." />
 		<attribute key="weight" value="7500" />
+	</item>
+	<item id="16100" article="a" name="dragon's nest">
+		<attribute key="description" value="Young dragons will hatch soon." />
 	</item>
 	<item id="16101" article="a" name="premium scroll">
 		<attribute key="description" value="Using this scroll will add 30 days of premium time to your account once." />
@@ -31429,8 +31438,19 @@
 		<attribute key="description" value="It is a delicate box and fully stuffed with tinder as well as igniters." />
 		<attribute key="weight" value="200" />
 	</item>
-	<item fromid="22729" toid="22731" name="frozen ursagrodon" />
-	<item id="22732" name="ice" />
+	<item id="22729" article="a" name="frozen ursagrodon" />
+	<item id="22730" article="a" name="half-frozen ursagrodon">
+		<attribute key="decayTo" value="22729" />
+		<attribute key="duration" value="60" />
+	</item>
+	<item id="22731" article="a" name="half-frozen ursagrodon">
+		<attribute key="decayTo" value="22729" />
+		<attribute key="duration" value="60" />
+	</item>
+	<item id="22732" name="ice">
+		<attribute key="decayTo" value="22729" />
+		<attribute key="duration" value="900" />
+	</item>
 	<item id="22733" article="an" name="unstable geyser" />
 	<item fromid="22745" toid="22762" article="a" name="stone floor" />
 	<item fromid="22763" toid="22777" article="a" name="wall" />

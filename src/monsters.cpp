@@ -329,7 +329,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_HEALING);
 			combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 		} else if (tmpName == "speed") {
-			int32_t speedChange = 0;
+			int32_t minSpeedChange = 0;
+			int32_t maxSpeedChange = 0;
 			int32_t duration = 10000;
 
 			if ((attr = node.attribute("duration"))) {
@@ -337,15 +338,32 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			if ((attr = node.attribute("speedchange"))) {
-				speedChange = pugi::cast<int32_t>(attr.value());
-				if (speedChange < -1000) {
-					//cant be slower than 100%
-					speedChange = -1000;
+				minSpeedChange = pugi::cast<int32_t>(attr.value());
+			} else if ((attr = node.attribute("minspeedchange"))) {
+				minSpeedChange = pugi::cast<int32_t>(attr.value());
+
+				if ((attr = node.attribute("maxspeedchange"))) {
+					maxSpeedChange = pugi::cast<int32_t>(attr.value());
+				}
+
+				if (minSpeedChange == 0) {
+					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - missing speedchange/minspeedchange value" << std::endl;
+					delete combat;
+					return false;
+				}
+
+				if (minSpeedChange < -1000) {
+					std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - you cannot reduce a creatures speed below -1000 (100%)" << std::endl;
+					minSpeedChange = -1000;
+				}
+
+				if (maxSpeedChange == 0) {
+					maxSpeedChange = minSpeedChange; // static speedchange value
 				}
 			}
 
 			ConditionType_t conditionType;
-			if (speedChange > 0) {
+			if (minSpeedChange >= 0) {
 				conditionType = CONDITION_HASTE;
 				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 			} else {
@@ -353,7 +371,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			ConditionSpeed* condition = static_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
-			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
+			condition->setFormulaVars(minSpeedChange / 1000.0, 0, maxSpeedChange / 1000.0, 0);
 			combat->addCondition(condition);
 		} else if (tmpName == "outfit") {
 			int32_t duration = 10000;
@@ -621,23 +639,35 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			}
 			combat->setParam(COMBAT_PARAM_TYPE, spell->combatType);
 		} else if (tmpName == "speed") {
-			int32_t speedChange = 0;
+			int32_t minSpeedChange = 0;
+			int32_t maxSpeedChange = 0;
 			int32_t duration = 10000;
 
 			if (spell->duration != 0) {
 				duration = spell->duration;
 			}
 
-			if (spell->speedChange != 0) {
-				speedChange = spell->speedChange;
-				if (speedChange < -1000) {
-					//cant be slower than 100%
-					speedChange = -1000;
-				}
+			if (spell->minSpeedChange != 0) {
+				minSpeedChange = spell->minSpeedChange;
+			} else {
+				std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - missing speedchange/minspeedchange value" << std::endl;
+				delete spell;
+				return false;
+			}
+
+			if (minSpeedChange < -1000) {
+				std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - you cannot reduce a creatures speed below -1000 (100%)" << std::endl;
+				minSpeedChange = -1000;
+			}
+
+			if (spell->maxSpeedChange != 0) {
+				maxSpeedChange = spell->maxSpeedChange;
+			} else {
+				maxSpeedChange = minSpeedChange; // static speedchange value
 			}
 
 			ConditionType_t conditionType;
-			if (speedChange > 0) {
+			if (minSpeedChange >= 0) {
 				conditionType = CONDITION_HASTE;
 				combat->setParam(COMBAT_PARAM_AGGRESSIVE, 0);
 			} else {
@@ -645,7 +675,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			}
 
 			ConditionSpeed* condition = static_cast<ConditionSpeed*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, duration, 0));
-			condition->setFormulaVars(speedChange / 1000.0, 0, speedChange / 1000.0, 0);
+			condition->setFormulaVars(minSpeedChange / 1000.0, 0, maxSpeedChange / 1000.0, 0);
 			combat->addCondition(condition);
 		} else if (tmpName == "outfit") {
 			int32_t duration = 10000;
@@ -867,6 +897,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				mType->info.isConvinceable = attr.as_bool();
 			} else if (strcasecmp(attrName, "pushable") == 0) {
 				mType->info.pushable = attr.as_bool();
+			} else if (strcasecmp(attrName, "isboss") == 0) {
+				mType->info.isBoss = attr.as_bool();
 			} else if (strcasecmp(attrName, "canpushitems") == 0) {
 				mType->info.canPushItems = attr.as_bool();
 			} else if (strcasecmp(attrName, "canpushcreatures") == 0) {
@@ -1341,7 +1373,7 @@ void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 	}
 }
 
-MonsterType* Monsters::getMonsterType(const std::string& name)
+MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile /*= true */)
 {
 	std::string lowerCaseName = asLowerCaseString(name);
 
@@ -1352,13 +1384,11 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 			return nullptr;
 		}
 
+		if (!loadFromFile) {
+			return nullptr;
+		}
+
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;
 }
-
-void Monsters::addMonsterType(const std::string& name, MonsterType* mType)
-{
-	mType = &monsters[asLowerCaseString(name)];
-}
-

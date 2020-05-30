@@ -24,6 +24,7 @@ function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			target:decay()
 			item:remove(1)
 			player:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
+			player:addAchievementProgress("Homebrewed", 50)
 		end
 	end
 	return true
