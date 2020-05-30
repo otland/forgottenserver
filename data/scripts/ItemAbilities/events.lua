@@ -70,6 +70,7 @@ function login.onLogin(player)
 		end
 	end
 	player:registerEvent('IA_logout')
+	player:registerEvent('IA_death')
 	player:registerEvent('IA_healthChange')
 	player:registerEvent('IA_manaChange')
 	return true
@@ -91,3 +92,18 @@ function logout.onLogout(player)
 end
 
 logout:register()
+
+local death = CreatureEvent('IA_death')
+death:type('death')
+
+function death.onDeath(player)
+	for i = 1, 10 do
+		local item = player:getSlotItem(i)
+		if item then
+			ItemAbilities.internalInventoryUpdate(player, item, i, false)
+		end
+	end
+	return true
+end
+
+death:register()
