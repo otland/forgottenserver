@@ -37,9 +37,9 @@ table.sort(extraction) -- Sort the table
 
 -- Scroll through the extracted table for duplicates
 if #extraction > 1 then
-  	for i = 1, #extraction - 1 do
-    	if extraction[i] == extraction[i+1] then
-      		print("Duplicate storage value found: ".. extraction[i])
+	for i = 1, #extraction - 1 do
+		if extraction[i] == extraction[i+1] then
+			print("Duplicate storage value found: ".. extraction[i])
 		end
 	end
 
