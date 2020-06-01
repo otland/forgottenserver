@@ -29,7 +29,6 @@ local function extractValues(tab, ret)
 	end
 end
 
-local benchmark = os.clock()
 local extraction = {}
 extractValues(PlayerStorageKeys, extraction)  -- Call function
 table.sort(extraction) -- Sort the table
@@ -42,6 +41,4 @@ if #extraction > 1 then
 			print("Duplicate storage value found: ".. extraction[i])
 		end
 	end
-
-	print(string.format("Processed in %.4f(s)", os.clock() - benchmark))
 end
