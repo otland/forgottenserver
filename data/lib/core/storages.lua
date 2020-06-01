@@ -18,7 +18,7 @@ PlayerStorageKeys = {
 GlobalStorageKeys = {
 }
 
--- Values extraction function
+-- Checking for duplicate storages:
 local function extractValues(tab, ret)
 	if type(tab) == "number" then
 		table.insert(ret, tab)
@@ -30,11 +30,9 @@ local function extractValues(tab, ret)
 end
 
 local extraction = {}
-extractValues(PlayerStorageKeys, extraction)  -- Call function
-table.sort(extraction) -- Sort the table
--- The choice of sorting is due to the fact that sorting is very cheap O (n log2 (n)) and then we can simply compare one by one the elements finding duplicates in O(n)
+extractValues(PlayerStorageKeys, extraction)
+table.sort(extraction)
 
--- Scroll through the extracted table for duplicates
 if #extraction > 1 then
 	for i = 1, #extraction - 1 do
 		if extraction[i] == extraction[i+1] then
