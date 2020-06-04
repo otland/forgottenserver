@@ -20,12 +20,8 @@ GlobalStorageKeys = {
 
 -- Checking for duplicate storages:
 local function extractValues(tab, ret)
-	if type(tab) == "number" then
-		table.insert(ret, tab)
-	else
-		for _, v in pairs(tab) do
-			extractValues(v, ret)
-		end
+	for _, v in pairs(tab) do
+ 		table.insert(ret, tab)
 	end
 end
 
