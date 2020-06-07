@@ -96,7 +96,7 @@ bool ConfigManager::load()
 
 	luaL_openlibs(L);
 
-	if (luaL_dofile(L, string[CONFIG_FILE].c_str())) {
+	if (luaL_dofile(L, getString(CONFIG_FILE).c_str())) {
 		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
 		lua_close(L);
 		return false;
@@ -107,8 +107,9 @@ bool ConfigManager::load()
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
 
-		if (string[IP] == "")
+		if (string[IP] == "") {
 			string[IP] = getGlobalString(L, "ip", "127.0.0.1");
+		}
 
 		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		string[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
@@ -121,11 +122,13 @@ bool ConfigManager::load()
 
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 
-		if (integer[GAME_PORT] == 0)
+		if (integer[GAME_PORT] == 0) {
 			integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
+		}
 
-		if (integer[LOGIN_PORT] == 0)
+		if (integer[LOGIN_PORT] == 0) {
 			integer[LOGIN_PORT] = getGlobalNumber(L, "loginProtocolPort", 7171);
+		}
 
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
 
