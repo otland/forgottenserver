@@ -9,6 +9,7 @@
 *.suo
 *.user
 *.sln.docstates
+.idea/
 .vscode/
 
 # Build results
@@ -19,6 +20,7 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+cmake-build-*/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -47,6 +49,8 @@ build/
 *.pidb
 *.log
 *.scc
+*.dll
+*.exe
 
 # Visual C++ cache files
 ipch/

@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-592" poison="165" />
@@ -62,7 +63,7 @@
 		<item name="twin axe" chance="2500" />
 		<item name="great mana potion" countmax="3" chance="10000" />
 		<item name="great health potion" countmax="4" chance="5000" />
-		<item id="9811" chance="2500" /><!-- rusty legs -->
+		<item id="9813" chance="2500" /><!-- rusty legs (rare) -->
 		<item name="mini mummy" chance="2500" />
 		<item id="13472" chance="16666" /><!-- pharaoh banner -->
 		<item name="scorpion sceptre" chance="100000" />

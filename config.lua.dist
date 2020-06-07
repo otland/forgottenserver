@@ -7,8 +7,11 @@ killsToRedSkull = 3
 killsToBlackSkull = 6
 pzLocked = 60000
 removeChargesFromRunes = true
-timeToDecreaseFrags = 24 * 60 * 60 * 1000
-whiteSkullTime = 15 * 60 * 1000
+removeChargesFromPotions = true
+removeWeaponAmmunition = true
+removeWeaponCharges = true
+timeToDecreaseFrags = 24 * 60 * 60
+whiteSkullTime = 15 * 60
 stairJumpExhaustion = 2000
 experienceByKillingPlayers = false
 expFromPlayersLevelRange = 75
@@ -39,6 +42,7 @@ deathLosePercent = -1
 -- NOTE: set housePriceEachSQM to -1 to disable the ingame buy house functionality
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
+houseOwnedByAccount = false
 
 -- Item Usage
 timeBetweenActions = 200
@@ -67,6 +71,7 @@ mysqlSock = ""
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
+-- forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes, you can change to false if all of your monster files don't throw errors to save up memory.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
@@ -74,6 +79,19 @@ maxMessageBuffer = 4
 emoteSpells = false
 classicEquipmentSlots = false
 classicAttackSpeed = false
+showScriptsLogInConsole = true
+showOnlineStatusInCharlist = false
+yellMinimumLevel = 2
+yellAlwaysAllowPremium = false
+forceMonsterTypesOnLoad = true
+
+-- Server Save
+-- NOTE: serverSaveNotifyDuration in minutes
+serverSaveNotifyMessage = true
+serverSaveNotifyDuration = 5
+serverSaveCleanMap = false
+serverSaveClose = false
+serverSaveShutdown = true
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml

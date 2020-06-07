@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ Weapons::Weapons()
 
 Weapons::~Weapons()
 {
-	clear();
+	clear(false);
 }
 
 const Weapon* Weapons::getWeapon(const Item* item) const
@@ -53,14 +53,17 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	return it->second;
 }
 
-void Weapons::clear()
+void Weapons::clear(bool fromLua)
 {
-	for (const auto& it : weapons) {
-		delete it.second;
+	for (auto it = weapons.begin(); it != weapons.end(); ) {
+		if (fromLua == it->second->fromLua) {
+			it = weapons.erase(it);
+		} else {
+			++it;
+		}
 	}
-	weapons.clear();
 
-	scriptInterface.reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Weapons::getScriptInterface()
@@ -130,6 +133,14 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 	}
 	return result.second;
+}
+
+bool Weapons::registerLuaEvent(Weapon* event)
+{
+	Weapon_ptr weapon{ event };
+	weapons[weapon->getID()] = weapon.release();
+
+	return true;
 }
 
 //monsters
@@ -291,6 +302,10 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 			return 0;
 		}
 
+		if (player->getHealth() < getHealthCost(player)) {
+			return 0;
+		}
+
 		if (player->getSoul() < soul) {
 			return 0;
 		}
@@ -352,7 +367,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 	damage.primary.type = params.combatType;
 	damage.primary.value = -normal_random(0, maxDamage);
 
-	Combat::doCombatHealth(player, target, damage, params);
+	Combat::doTargetCombat(player, target, damage, params);
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
 		player->addSkillAdvance(SKILL_FIST, 1);
 	}
@@ -379,7 +394,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		damage.primary.value = (getWeaponDamage(player, target, item) * damageModifier) / 100;
 		damage.secondary.type = getElementType();
 		damage.secondary.value = getElementDamage(player, target, item);
-		Combat::doCombatHealth(player, target, damage, params);
+		Combat::doTargetCombat(player, target, damage, params);
 	}
 
 	onUsedWeapon(player, item, target->getTile());
@@ -416,6 +431,11 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 		player->changeMana(-static_cast<int32_t>(manaCost));
 	}
 
+	uint32_t healthCost = getHealthCost(player);
+	if (healthCost != 0) {
+		player->changeHealth(-static_cast<int32_t>(healthCost));
+	}
+
 	if (!player->hasFlag(PlayerFlag_HasInfiniteSoul) && soul > 0) {
 		player->changeSoul(-static_cast<int32_t>(soul));
 	}
@@ -427,12 +447,14 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
-			Weapon::decrementItemCount(item);
+			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
+				Weapon::decrementItemCount(item);
+			}
 			break;
 
 		case WEAPONACTION_REMOVECHARGE: {
 			uint16_t charges = item->getCharges();
-			if (charges != 0) {
+			if (charges != 0 && g_config.getBoolean(ConfigManager::REMOVE_WEAPON_CHARGES)) {
 				g_game.transformItem(item, item->getID(), charges - 1);
 			}
 			break;
@@ -458,6 +480,19 @@ uint32_t Weapon::getManaCost(const Player* player) const
 	}
 
 	return (player->getMaxMana() * manaPercent) / 100;
+}
+
+int32_t Weapon::getHealthCost(const Player* player) const
+{
+	if (health != 0) {
+		return health;
+	}
+
+	if (healthPercent == 0) {
+		return 0;
+	}
+
+	return (player->getMaxHealth() * healthPercent) / 100;
 }
 
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
@@ -610,14 +645,14 @@ void WeaponDistance::configureWeapon(const ItemType& it)
 
 bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) const
 {
-	int32_t damageModifier;
+	int32_t damageModifier = 0;
 	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_AMMO) {
 		Item* mainWeaponItem = player->getWeapon(true);
 		const Weapon* mainWeapon = g_weapons->getWeapon(mainWeaponItem);
 		if (mainWeapon) {
 			damageModifier = mainWeapon->playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
-		} else {
+		} else if (mainWeaponItem) {
 			damageModifier = playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
 		}
 	} else {

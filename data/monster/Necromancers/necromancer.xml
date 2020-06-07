@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Necromancer" nameDescription="a necromancer" race="blood" experience="580" speed="200">
+<monster name="Necromancer" nameDescription="a necromancer" race="blood" experience="580" speed="188">
 	<health now="580" max="580" />
 	<look type="9" corpse="20455" />
 	<targetchange interval="4000" chance="10" />
@@ -29,12 +29,13 @@
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
+	<defenses armor="50" defense="50">
 		<defense name="healing" interval="2000" chance="25" min="50" max="80">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<elements>
+		<element icePercent="10" />
 		<element energyPercent="20" />
 		<element deathPercent="50" />
 		<element physicalPercent="-5" />
@@ -57,16 +58,16 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="90" chance="30050" />
-		<item name="boots of haste" chance="210" />
-		<item name="clerical mace" chance="390" />
-		<item name="skull staff" chance="100" />
 		<item name="poison arrow" countmax="5" chance="15000" />
-		<item name="mystic turban" chance="500" />
-		<item name="green mushroom" chance="1470" />
-		<item name="noble axe" chance="10" />
-		<item name="strong mana potion" chance="300" />
-		<item name="spellbook of warding" chance="130" />
 		<item name="book of necromantic rituals" chance="10130" />
+		<item name="green mushroom" chance="1470" />
 		<item name="necromantic robe" chance="1001" />
+		<item name="mystic turban" chance="500" />
+		<item name="clerical mace" chance="390" />
+		<item name="strong mana potion" chance="300" />
+		<item name="boots of haste" chance="210" />
+		<item name="spellbook of warding" chance="130" />
+		<item name="skull staff" chance="100" />
+		<item name="noble axe" chance="10" />
 	</loot>
 </monster>

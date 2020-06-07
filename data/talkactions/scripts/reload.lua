@@ -1,56 +1,59 @@
 local reloadTypes = {
-	["all"] = { targetType = RELOAD_TYPE_ALL, name = "all" },
+	["all"] = RELOAD_TYPE_ALL,
 
-	["action"] = { targetType = RELOAD_TYPE_ACTIONS, name = "actions" },
-	["actions"] = { targetType = RELOAD_TYPE_ACTIONS, name = "actions" },
+	["action"] = RELOAD_TYPE_ACTIONS,
+	["actions"] = RELOAD_TYPE_ACTIONS,
 
-	["chat"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
-	["channel"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
-	["chatchannels"] = { targetType = RELOAD_TYPE_CHAT, name = "chatchannels" },
+	["chat"] = RELOAD_TYPE_CHAT,
+	["channel"] = RELOAD_TYPE_CHAT,
+	["chatchannels"] = RELOAD_TYPE_CHAT,
 
-	["config"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
-	["configuration"] = { targetType = RELOAD_TYPE_CONFIG, name = "config" },
+	["config"] = RELOAD_TYPE_CONFIG,
+	["configuration"] = RELOAD_TYPE_CONFIG,
 
-	["creaturescript"] = { targetType = RELOAD_TYPE_CREATURESCRIPTS, name = "creature scripts" },
-	["creaturescripts"] = { targetType = RELOAD_TYPE_CREATURESCRIPTS, name = "creature scripts" },
+	["creaturescript"] = RELOAD_TYPE_CREATURESCRIPTS,
+	["creaturescripts"] = RELOAD_TYPE_CREATURESCRIPTS,
 
-	["events"] = { targetType = RELOAD_TYPE_EVENTS, name = "events" },
+	["events"] = RELOAD_TYPE_EVENTS,
 
-	["global"] = { targetType = RELOAD_TYPE_GLOBAL, name = "global.lua" },
+	["global"] = RELOAD_TYPE_GLOBAL,
 
-	["globalevent"] = { targetType = RELOAD_TYPE_GLOBALEVENTS, name = "globalevents" },
-	["globalevents"] = { targetType = RELOAD_TYPE_GLOBALEVENTS, name = "globalevents" },
+	["globalevent"] = RELOAD_TYPE_GLOBALEVENTS,
+	["globalevents"] = RELOAD_TYPE_GLOBALEVENTS,
 
-	["items"] = { targetType = RELOAD_TYPE_ITEMS, name = "items" },
+	["items"] = RELOAD_TYPE_ITEMS,
 
-	["monster"] = { targetType = RELOAD_TYPE_MONSTERS, name = "monsters" },
-	["monsters"] = { targetType = RELOAD_TYPE_MONSTERS, name = "monsters" },
+	["monster"] = RELOAD_TYPE_MONSTERS,
+	["monsters"] = RELOAD_TYPE_MONSTERS,
 
-	["mount"] = { targetType = RELOAD_TYPE_MOUNTS, name = "mounts" },
-	["mounts"] = { targetType = RELOAD_TYPE_MOUNTS, name = "mounts" },
+	["mount"] = RELOAD_TYPE_MOUNTS,
+	["mounts"] = RELOAD_TYPE_MOUNTS,
 
-	["move"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements" },
-	["movement"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements" },
-	["movements"] = { targetType = RELOAD_TYPE_MOVEMENTS, name = "movements" },
+	["move"] = RELOAD_TYPE_MOVEMENTS,
+	["movement"] = RELOAD_TYPE_MOVEMENTS,
+	["movements"] = RELOAD_TYPE_MOVEMENTS,
 
-	["npc"] = { targetType = RELOAD_TYPE_NPCS, name = "npcs" },
-	["npcs"] = { targetType = RELOAD_TYPE_NPCS, name = "npcs" },
+	["npc"] = RELOAD_TYPE_NPCS,
+	["npcs"] = RELOAD_TYPE_NPCS,
 
-	["quest"] = { targetType = RELOAD_TYPE_QUESTS, name = "quests" },
-	["quests"] = { targetType = RELOAD_TYPE_QUESTS, name = "quests" },
+	["quest"] = RELOAD_TYPE_QUESTS,
+	["quests"] = RELOAD_TYPE_QUESTS,
 
-	["raid"] = { targetType = RELOAD_TYPE_RAIDS, name = "raids" },
-	["raids"] = { targetType = RELOAD_TYPE_RAIDS, name = "raids" },
+	["raid"] = RELOAD_TYPE_RAIDS,
+	["raids"] = RELOAD_TYPE_RAIDS,
 
-	["spell"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells" },
-	["spells"] = { targetType = RELOAD_TYPE_SPELLS, name = "spells" },
+	["spell"] = RELOAD_TYPE_SPELLS,
+	["spells"] =  RELOAD_TYPE_SPELLS,
 
-	["talk"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
-	["talkaction"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
-	["talkactions"] = { targetType = RELOAD_TYPE_TALKACTIONS, name = "talk actions" },
+	["talk"] = RELOAD_TYPE_TALKACTIONS,
+	["talkaction"] = RELOAD_TYPE_TALKACTIONS,
+	["talkactions"] = RELOAD_TYPE_TALKACTIONS,
 
-	["weapon"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" },
-	["weapons"] = { targetType = RELOAD_TYPE_WEAPONS, name = "weapons" }
+	["weapon"] = RELOAD_TYPE_WEAPONS,
+	["weapons"] = RELOAD_TYPE_WEAPONS,
+
+	["scripts"] = RELOAD_TYPE_SCRIPTS,
+	["libs"] = RELOAD_TYPE_GLOBAL
 }
 
 function onSay(player, words, param)
@@ -64,13 +67,13 @@ function onSay(player, words, param)
 
 	logCommand(player, words, param)
 
-	local reloadType = reloadTypes[param and param:lower()]
+	local reloadType = reloadTypes[param:lower()]
 	if not reloadType then
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.")
 		return false
 	end
 
-	Game.reload(reloadType.targetType)
-	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", reloadType.name))
+	Game.reload(reloadType)
+	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", param:lower()))
 	return false
 end

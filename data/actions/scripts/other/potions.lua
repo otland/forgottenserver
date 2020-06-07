@@ -31,7 +31,7 @@ local potions = {
 	[8474] = {antidote = true, flask = 7636},
 	[8704] = {health = {60, 90}, flask = 7636},
 	[26029] = {mana = {425, 575}, vocations = {1, 2, 5, 6}, level = 130, flask = 7635, description = "Only druids and sorcerers of level 130 or above may drink this fluid."},
-	[26030] = {health = {420, 580}, mana = {250, 350}, vocations = {3, 7}, level = 130, flask = 7635, description = "Only paladins of level 130 or above may drink this fluid."},
+	[26030] = {health = {420, 580}, mana = {200, 350}, vocations = {3, 7}, level = 130, flask = 7635, description = "Only paladins of level 130 or above may drink this fluid."},
 	[26031] = {health = {875, 1125}, vocations = {4, 8}, level = 200, flask = 7635, description = "Only knights of level 200 or above may drink this fluid."}
 }
 
@@ -56,20 +56,25 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	else
 		if potion.health then
-			doTargetCombatHealth(0, target, COMBAT_HEALING, potion.health[1], potion.health[2])
+			doTargetCombat(0, target, COMBAT_HEALING, potion.health[1], potion.health[2])
 		end
 
 		if potion.mana then
-			doTargetCombatMana(0, target, potion.mana[1], potion.mana[2])
+			doTargetCombat(0, target, COMBAT_MANADRAIN, potion.mana[1], potion.mana[2])
 		end
 
 		if potion.antidote then
 			target:removeCondition(CONDITION_POISON)
 		end
 
+		player:addAchievementProgress("Potion Addict", 100000)
 		player:addItem(potion.flask)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
+	end
+	
+	if not configManager.getBoolean(configKeys.REMOVE_POTION_CHARGES) then
+		return true
 	end
 
 	item:remove(1)

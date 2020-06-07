@@ -64,8 +64,8 @@
 		<item name="nail" countmax="5" chance="5000" />
 		<item name="great spirit potion" chance="830" />
 		<item name="gear wheel" chance="1007" />
-		<item id="9809" chance="200" /><!-- rusty armor -->
-		<item id="9812" chance="50" /><!-- rusty legs -->
+		<item id="9809" chance="200" /><!-- rusty armor (semi-rare) -->
+		<item id="9812" chance="50" /><!-- rusty legs (semi-rare) -->
 		<item id="9979" chance="2270" /><!-- crystal pedestal -->
 		<item name="gear crystal" chance="2270" />
 	</loot>

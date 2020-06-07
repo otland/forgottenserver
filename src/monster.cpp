@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +22,11 @@
 #include "monster.h"
 #include "game.h"
 #include "spells.h"
+#include "events.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
+extern Events* g_events;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -236,7 +238,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
-			isMasterInRange = true;    //Follow master again
+			isMasterInRange = true; //Follow master again
 		}
 
 		updateIdleStatus();
@@ -363,7 +365,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true);
 	spectators.erase(this);
 	for (Creature* spectator : spectators) {
@@ -659,11 +661,11 @@ void Monster::setIdle(bool idle)
 void Monster::updateIdleStatus()
 {
 	bool idle = false;
-
-	if (conditions.empty()) {
-		if (!isSummon() && targetList.empty()) {
-			idle = true;
-		}
+	if (!isSummon() && targetList.empty()) {
+		// check if there are aggressive conditions
+		idle = std::find_if(conditions.begin(), conditions.end(), [](Condition* condition) {
+			return condition->isAggressive();
+		}) == conditions.end();
 	}
 
 	setIdle(idle);
@@ -773,6 +775,10 @@ void Monster::doAttacking(uint32_t interval)
 	for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
 		bool inRange = false;
 
+		if (attackedCreature == nullptr) {
+			break;
+		}
+
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
 				if (updateLook) {
@@ -860,6 +866,14 @@ void Monster::onThinkTarget(uint32_t interval)
 		if (mType->info.changeTargetSpeed != 0) {
 			bool canChangeTarget = true;
 
+			if (challengeFocusDuration > 0) {
+				challengeFocusDuration -= interval;
+
+				if (challengeFocusDuration <= 0) {
+					challengeFocusDuration = 0;
+				}
+			}
+
 			if (targetChangeCooldown > 0) {
 				targetChangeCooldown -= interval;
 
@@ -877,6 +891,10 @@ void Monster::onThinkTarget(uint32_t interval)
 				if (targetChangeTicks >= mType->info.changeTargetSpeed) {
 					targetChangeTicks = 0;
 					targetChangeCooldown = mType->info.changeTargetSpeed;
+
+					if (challengeFocusDuration > 0) {
+						challengeFocusDuration = 0;
+					}
 
 					if (mType->info.changeTargetChance >= uniform_random(1, 100)) {
 						if (mType->info.targetDistance <= 1) {
@@ -1106,7 +1124,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 
 	bool result = false;
 	if ((!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
-		if (getWalkDelay() <= 0) {
+		if (getTimeSinceLastMove() >= 1000) {
 			randomStepping = true;
 			//choose a random direction
 			result = getRandomStep(getPosition(), direction);
@@ -1903,7 +1921,7 @@ void Monster::updateLookDirection()
 void Monster::dropLoot(Container* corpse, Creature*)
 {
 	if (corpse && lootDrop) {
-		mType->createLoot(corpse);
+		g_events->eventMonsterOnDropLoot(this, corpse);
 	}
 }
 
@@ -1942,6 +1960,7 @@ bool Monster::challengeCreature(Creature* creature)
 	bool result = selectTarget(creature);
 	if (result) {
 		targetChangeCooldown = 8000;
+		challengeFocusDuration = targetChangeCooldown;
 		targetChangeTicks = 0;
 	}
 	return result;

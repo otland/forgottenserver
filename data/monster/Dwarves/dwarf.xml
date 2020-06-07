@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="180" manacost="320">
+<monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="170" manacost="320">
 	<health now="90" max="90" />
 	<look type="69" corpse="6007" />
 	<targetchange interval="4000" chance="0" />
@@ -22,7 +22,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="8" defense="8" />
 	<elements>
 		<element earthPercent="10" />
 		<element firePercent="-5" />
@@ -32,16 +32,16 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="8" chance="35000" />
-		<item name="dwarven ring" chance="100" />
-		<item name="axe" chance="15000" />
-		<item name="hatchet" chance="25000" />
-		<item name="studded armor" chance="8000" />
-		<item name="copper shield" chance="10000" />
-		<item name="pick" chance="10000" />
-		<item name="letter" chance="8000" />
-		<item name="leather legs" chance="10000" />
 		<item name="white mushroom" chance="50000" />
-		<item name="iron ore" chance="700" />
+		<item name="gold coin" countmax="8" chance="35000" />
+		<item name="hatchet" chance="25000" />
+		<item name="axe" chance="15000" />
+		<item name="pick" chance="10000" />
+		<item name="copper shield" chance="10000" />
+		<item name="leather legs" chance="10000" />
+		<item name="studded armor" chance="8000" />
+		<item name="letter" chance="8000" />
+		<item name="dwarven ring" chance="100" />
+		<item name="iron ore" chance="100" />
 	</loot>
 </monster>

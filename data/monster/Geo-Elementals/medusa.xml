@@ -20,7 +20,23 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" poison="840" />
-		<attack name="lifedrain" interval="2000" chance="20" count="5" range="7" target="1" min="-21" max="-350">
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="7" min="-75" max="-150">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="7" min="-75" max="-150">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="7" min="-75" max="-150">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="7" min="-75" max="-150">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="7" min="-75" max="-150">
 			<attribute key="shootEffect" value="earth" />
 			<attribute key="areaEffect" value="carniphila" />
 		</attack>
@@ -68,7 +84,7 @@
 		<item name="terra legs" chance="420" />
 		<item name="terra amulet" chance="4060" />
 		<item name="ultimate health potion" countmax="2" chance="9290" />
-		<item id="9810" chance="500" /><!-- rusty armor -->
+		<item id="9810" chance="500" /><!-- rusty armor (rare) -->
 		<item name="sacred tree amulet" chance="850" />
 		<item name="strand of medusa hair" chance="9900" />
 	</loot>
