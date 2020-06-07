@@ -2191,7 +2191,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "isCreature", LuaScriptInterface::luaCreatureIsCreature);
 	registerMethod("Creature", "isInGhostMode", LuaScriptInterface::luaCreatureIsInGhostMode);
 	registerMethod("Creature", "isHealthHidden", LuaScriptInterface::luaCreatureIsHealthHidden);
-	registerMethod("Creature", "canMove", LuaScriptInterface::luaCreatureCanMove);
+	registerMethod("Creature", "isMovementBlocked", LuaScriptInterface::luaCreatureIsMovementBlocked);
 	registerMethod("Creature", "isImmune", LuaScriptInterface::luaCreatureIsImmune);
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
@@ -2232,7 +2232,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "getMaxHealth", LuaScriptInterface::luaCreatureGetMaxHealth);
 	registerMethod("Creature", "setMaxHealth", LuaScriptInterface::luaCreatureSetMaxHealth);
 	registerMethod("Creature", "setHiddenHealth", LuaScriptInterface::luaCreatureSetHiddenHealth);
-	registerMethod("Creature", "setMove", LuaScriptInterface::luaCreatureSetMove);
+	registerMethod("Creature", "setMovementBlocked", LuaScriptInterface::luaCreatureSetMovementBlocked);
 
 	registerMethod("Creature", "getSkull", LuaScriptInterface::luaCreatureGetSkull);
 	registerMethod("Creature", "setSkull", LuaScriptInterface::luaCreatureSetSkull);
@@ -6925,15 +6925,11 @@ int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureCanMove(lua_State* L)
+int LuaScriptInterface::luaCreatureIsMovementBlocked(lua_State* L)
 {
-	// creature:canMove()
+	// creature:isMovementBlocked()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
-	if (creature) {
-		pushBoolean(L, creature->getCanMove());
-	} else {
-		lua_pushnil(L);
-	}
+	creature ? pushBoolean(L, creature->isMovementBlocked()) : lua_pushnil(L);
 	return 1;
 }
 
@@ -7357,12 +7353,12 @@ int LuaScriptInterface::luaCreatureSetHiddenHealth(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaCreatureSetMove(lua_State* L)
+int LuaScriptInterface::luaCreatureSetMovementBlocked(lua_State* L)
 {
-	// creature:setMove(move)
+	// creature:setMovementBlocked(state)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		creature->setCanMove(getBoolean(L, 2));
+		creature->setMovementBlocked(getBoolean(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

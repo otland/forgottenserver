@@ -691,7 +691,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 		return;
 	}
 
-	if (!movingCreature->getCanMove()) {
+	if (movingCreature->isMovementBlocked()) {
 		player->sendCancelMessage(RETURNVALUE_NOTMOVEABLE);
 		return;
 	}
@@ -1805,7 +1805,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 		return;
 	}
 
-	if (!player->getCanMove()) {
+	if (player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}

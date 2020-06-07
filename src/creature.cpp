@@ -249,8 +249,9 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk(const std::forward_list<Direction>& listDir)
 {
-	if (getPlayer() && !getPlayer()->getCanMove()) {
-		getPlayer()->sendCancelWalk();
+	Player* player = getPlayer();
+	if (player && player->isMovementBlocked()) {
+		player->sendCancelWalk();
 		return;
 	}
 
