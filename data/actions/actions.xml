@@ -16,7 +16,7 @@
 	<action uniqueid="30015" script="quests/annihilator.lua" />
 
 	<!-- Tools -->
-	<action itemid="2120;7731" script="tools/rope.lua" />
+	<action itemid="2120,7731" script="tools/rope.lua" />
 	<action itemid="2416" script="tools/crowbar.lua" />
 	<action itemid="2420" script="tools/machete.lua" />
 	<action itemid="2442" script="tools/machete.lua" />
