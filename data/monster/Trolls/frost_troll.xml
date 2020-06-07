@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Frost Troll" nameDescription="a frost troll" race="blood" experience="23" speed="190" manacost="300">
+<monster name="Frost Troll" nameDescription="a frost troll" race="blood" experience="23" speed="140" manacost="300">
 	<health now="55" max="55" />
 	<look type="53" corpse="5998" />
 	<targetchange interval="4000" chance="0" />
@@ -22,26 +22,26 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="6" defense="6" />
 	<elements>
-		<element firePercent="50" />
+		<element firePercent="40" />
 		<element holyPercent="10" />
 		<element earthPercent="-10" />
-		<element energyPercent="-10" />
-		<element deathPercent="-15" />
+		<element energyPercent="-15" />
+		<element deathPercent="-10" />
 	</elements>
 	<voices interval="5000" chance="10">
-		<voice sentence="Brrrr" />
+		<voice sentence="Brrr" />
 		<voice sentence="Broar!" />
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="12" chance="50840" />
-		<item name="twigs" chance="8300" />
-		<item name="rapier" chance="15500" />
 		<item name="spear" chance="21500" />
-		<item id="2512" chance="15850" /><!-- wooden shield -->
-		<item name="coat" chance="1200" />
 		<item id="2667" chance="18000" /><!-- fish -->
+		<item id="2512" chance="15850" /><!-- wooden shield -->
+		<item name="rapier" chance="15500" />
+		<item name="twigs" chance="8300" />
 		<item name="frosty ear of a troll" chance="2000" />
+		<item name="coat" chance="1200" />
 	</loot>
 </monster>

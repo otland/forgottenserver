@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Ghazbaran" nameDescription="Ghazbaran" race="undead" experience="15000" speed="400">
+<monster name="Ghazbaran" nameDescription="Ghazbaran" race="fire" experience="15000" speed="400">
 	<health now="60000" max="60000" />
-	<look type="12" head="0" body="123" legs="97" feet="94" corpse="6068" />
+	<look type="12" head="0" body="66" legs="98" feet="75" corpse="6068" />
 	<targetchange interval="10000" chance="20" />
 	<flags>
 		<flag summonable="0" />
@@ -15,13 +15,14 @@
 		<flag staticattack="98" />
 		<flag targetdistance="1" />
 		<flag runonhealth="3500" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-2191" />
-		<attack name="melee" interval="2000" chance="40" range="7" radius="6" target="0" min="-250" max="-500">
+		<attack name="physical" interval="2000" chance="40" range="7" radius="6" target="0" min="-250" max="-500">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
-		<attack name="melee" interval="3000" chance="34" range="7" radius="1" target="1" min="-120" max="-500">
+		<attack name="physical" interval="3000" chance="34" range="7" radius="1" target="1" min="-120" max="-500">
 			<attribute key="shootEffect" value="whirlwindsword" />
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
@@ -37,7 +38,7 @@
 		<attack name="physical" interval="4000" chance="18" radius="14" target="0" min="-200" max="-600">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>
-		<attack name="melee" interval="3000" chance="15" range="7" radius="4" target="0" min="-200" max="-750">
+		<attack name="physical" interval="3000" chance="15" range="7" radius="4" target="0" min="-200" max="-750">
 			<attribute key="areaEffect" value="energyarea" />
 		</attack>
 	</attacks>

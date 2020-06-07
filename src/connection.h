@@ -32,7 +32,7 @@ using Protocol_ptr = std::shared_ptr<Protocol>;
 class OutputMessage;
 using OutputMessage_ptr = std::shared_ptr<OutputMessage>;
 class Connection;
-using Connection_ptr = std::shared_ptr<Connection> ;
+using Connection_ptr = std::shared_ptr<Connection>;
 using ConnectionWeak_ptr = std::weak_ptr<Connection>;
 class ServiceBase;
 using Service_ptr = std::shared_ptr<ServiceBase>;

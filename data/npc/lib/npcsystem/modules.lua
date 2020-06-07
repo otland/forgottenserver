@@ -76,7 +76,7 @@ if Modules == nil then
 		local player = Player(cid)
 		if player:isPremium() or not parameters.premium then
 			local promotion = player:getVocation():getPromotion()
-			if player:getStorageValue(STORAGEVALUE_PROMOTION) == 1 then
+			if player:getStorageValue(PlayerStorageKeys.promotion) == 1 then
 				npcHandler:say("You are already promoted!", cid)
 			elseif player:getLevel() < parameters.level then
 				npcHandler:say("I am sorry, but I can only promote you once you have reached level " .. parameters.level .. ".", cid)
@@ -85,7 +85,7 @@ if Modules == nil then
 			else
 				npcHandler:say(parameters.text, cid)
 				player:setVocation(promotion)
-				player:setStorageValue(STORAGEVALUE_PROMOTION, 1)
+				player:setStorageValue(PlayerStorageKeys.promotion, 1)
 			end
 		else
 			npcHandler:say("You need a premium account in order to get promoted.", cid)
@@ -1200,6 +1200,52 @@ if Modules == nil then
 			local msg = module.npcHandler:getMessage(MESSAGE_BUY)
 			msg = module.npcHandler:parseMessage(msg, parseInfo)
 			module.npcHandler:say(msg, cid)
+		end
+		return true
+	end
+
+	VoiceModule = {
+		voices = nil,
+		voiceCount = 0,
+		lastVoice = 0,
+		timeout = nil,
+		chance = nil
+	}
+
+	-- VoiceModule: makes the NPC say/yell random lines from a table, with delay, chance and yell optional 
+	function VoiceModule:new(voices, timeout, chance)
+		local obj = {}
+		setmetatable(obj, self)
+		self.__index = self
+
+		obj.voices = voices
+		for i = 1, #obj.voices do
+			local voice = obj.voices[i]
+			if voice.yell then
+				voice.yell = nil
+				voice.talktype = TALKTYPE_YELL
+			else
+				voice.talktype = TALKTYPE_SAY
+			end
+		end
+
+		obj.voiceCount = #voices
+		obj.timeout = timeout or 10
+		obj.chance = chance or 10
+		return obj
+	end
+
+	function VoiceModule:init(handler)
+		return true
+	end
+
+	function VoiceModule:callbackOnThink()
+		if self.lastVoice < os.time() then
+			self.lastVoice = os.time() + self.timeout
+			if math.random(100) <= self.chance  then
+				local voice = self.voices[math.random(self.voiceCount)]
+				Npc():say(voice.text, voice.talktype)
+			end
 		end
 		return true
 	end

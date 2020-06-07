@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-122" />
@@ -25,7 +26,7 @@
 			<attribute key="shootEffect" value="bolt" />
 		</attack>
 	</attacks>
-	<defenses armor="17" defense="16">
+	<defenses armor="16" defense="16">
 		<defense name="healing" interval="1000" chance="15" min="25" max="75">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
@@ -33,6 +34,10 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element deathPercent="-1" />
+		<element icePercent="-1" />
+	</elements>
 	<immunities>
 		<immunity invisible="1" />
 	</immunities>
@@ -48,23 +53,18 @@
 		<voice sentence="Help me, boys!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="30" chance="100000" />
-		<item name="wand of cosmic energy" chance="1333" />
-		<item name="sword ring" chance="2000" />
-		<item name="dagger" chance="6666" />
-		<item name="longsword" chance="10000" />
-		<item name="throwing knife" countmax="2" chance="50000" />
-		<item name="broadsword" chance="2857" />
-		<item id="2419" chance="10000" /><!-- scimitar -->
-		<item name="plate armor" chance="1818" />
-		<item name="warrior helmet" chance="1000" />
-		<item name="brass legs" chance="2857" />
-		<item name="plate shield" chance="5000" />
-		<item name="plate legs" chance="1818" />
-		<item name="green tunic" chance="2500" />
-		<item name="meat" countmax="2" chance="33333" />
-		<item id="2667" chance="20000" /><!-- fish -->
-		<item name="worm" countmax="10" chance="50000" />
 		<item name="nose ring" chance="100000" />
+		<item name="gold coin" countmax="99" chance="97000" />
+		<item name="minotaur leather" chance="97000" />
+		<item name="minotaur horn" countmax="2" chance="93000" />
+		<item name="piece of warrior armor" chance="81000" />
+		<item name="piercing bolt" countmax="14" chance="46000" />
+		<item name="brass armor" chance="28000" />
+		<item name="meat" chance="15000" />
+		<item name="battle shield" chance="12150" />
+		<item name="dwarven helmet" chance="9300" />
+		<item name="strong health potion" chance="9300" />
+		<item name="fishing rod" chance="6250" />
+		<item name="double axe" chance="3130" />
 	</loot>
 </monster>

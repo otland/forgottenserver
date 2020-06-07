@@ -20,11 +20,7 @@
 #ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 #define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
 #include <lua.hpp>
-#endif
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -460,18 +456,8 @@ class LuaScriptInterface
 		//
 		static int luaCreateCombatArea(lua_State* L);
 
-		static int luaDoAreaCombatHealth(lua_State* L);
-		static int luaDoTargetCombatHealth(lua_State* L);
-
-		//
-		static int luaDoAreaCombatMana(lua_State* L);
-		static int luaDoTargetCombatMana(lua_State* L);
-
-		static int luaDoAreaCombatCondition(lua_State* L);
-		static int luaDoTargetCombatCondition(lua_State* L);
-
-		static int luaDoAreaCombatDispel(lua_State* L);
-		static int luaDoTargetCombatDispel(lua_State* L);
+		static int luaDoAreaCombat(lua_State* L);
+		static int luaDoTargetCombat(lua_State* L);
 
 		static int luaDoChallengeCreature(lua_State* L);
 
@@ -539,6 +525,7 @@ class LuaScriptInterface
 		static int luaGameGetMonsterCount(lua_State* L);
 		static int luaGameGetPlayerCount(lua_State* L);
 		static int luaGameGetNpcCount(lua_State* L);
+		static int luaGameGetMonsterTypes(lua_State* L);
 
 		static int luaGameGetTowns(lua_State* L);
 		static int luaGameGetHouses(lua_State* L);
@@ -742,7 +729,7 @@ class LuaScriptInterface
 		static int luaContainerAddItem(lua_State* L);
 		static int luaContainerAddItemEx(lua_State* L);
 		static int luaContainerGetCorpseOwner(lua_State* L);
-		
+
 		// Teleport
 		static int luaTeleportCreate(lua_State* L);
 
@@ -1226,6 +1213,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeIsHostile(lua_State* L);
 		static int luaMonsterTypeIsPushable(lua_State* L);
 		static int luaMonsterTypeIsHealthHidden(lua_State* L);
+		static int luaMonsterTypeIsBoss(lua_State* L);
 
 		static int luaMonsterTypeCanPushItems(lua_State* L);
 		static int luaMonsterTypeCanPushCreatures(lua_State* L);
@@ -1237,6 +1225,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeMaxHealth(lua_State* L);
 		static int luaMonsterTypeRunHealth(lua_State* L);
 		static int luaMonsterTypeExperience(lua_State* L);
+		static int luaMonsterTypeSkull(lua_State* L);
 
 		static int luaMonsterTypeCombatImmunities(lua_State* L);
 		static int luaMonsterTypeConditionImmunities(lua_State* L);

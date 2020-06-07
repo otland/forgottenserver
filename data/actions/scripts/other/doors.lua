@@ -5,15 +5,15 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
-			player:sendTextMessage(MESSAGE_INFO_DESCR, "The door seems to be sealed against unwanted intruders.")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The door seems to be sealed against unwanted intruders.")
 		end
 		return true
 	elseif table.contains(levelDoors, itemId) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - 1000 then
+		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
-			player:sendTextMessage(MESSAGE_INFO_DESCR, "Only the worthy may pass.")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Only the worthy may pass.")
 		end
 		return true
 	elseif table.contains(keys, itemId) then
@@ -57,7 +57,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if item.actionid == 0 then
 			item:transform(doors[itemId])
 		else
-			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is locked.")
 		end
 		return true
 	end

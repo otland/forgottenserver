@@ -57,7 +57,7 @@
 		<item name="sword ring" chance="570" />
 		<item name="iron ore" chance="400" />
 		<item name="nail" chance="1460" />
-		<item id="9808" chance="790" /><!-- rusty armor -->
+		<item id="9808" chance="790" /><!-- rusty armor (common) -->
 		<item name="gear crystal" chance="200" />
 	</loot>
 </monster>
