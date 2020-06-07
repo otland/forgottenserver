@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-380" />
@@ -52,7 +53,7 @@
 		<item name="platinum coin" chance="50000" countmax="5" />
 		<item name="sword ring" chance="1400" />
 		<item name="ring of healing (faster regeneration)" chance="17111" />
-		<item id="2229" chance="15000" />
+		<item id="2229" chance="15000" /><!-- skull -->
 		<item name="vampire shield" chance="6300" />
 		<item name="chaos mace" chance="250" />
 		<item name="strong health potion" chance="1500" />

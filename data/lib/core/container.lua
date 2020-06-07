@@ -4,19 +4,19 @@ end
 
 function Container.createLootItem(self, item)
 	if self:getEmptySlots() == 0 then
-        return true
+		return true
 	end
 
 	local itemCount = 0
 	local randvalue = getLootRandom()
 	if randvalue < item.chance then
-		if ItemType(item):isStackable() then
-			itemCount = randvalue % item.countmax + 1
-		else 
+		if ItemType(item.itemId):isStackable() then
+			itemCount = randvalue % item.maxCount + 1
+		else
 			itemCount = 1
 		end
 	end
-	
+
 	if itemCount > 0 then
 		local tmpItem = self:addItem(item.itemId, math.min(itemCount, 100))
 		if not tmpItem then

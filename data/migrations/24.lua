@@ -1,6 +1,5 @@
 function onUpdateDatabase()
-	print("> Updating database to version 25 (change type of `player_storage`.`value` from int to string)")
-
-	db.query("ALTER TABLE `player_storage` CHANGE `value` `value` VARCHAR(255) NOT NULL DEFAULT '0'")
+	print("> Updating database to version 25 (Optimize player direction 4 -> 1 byte)")
+	db.query("ALTER TABLE `players` MODIFY COLUMN `direction` tinyint(1) unsigned NOT NULL DEFAULT 2")
 	return true
 end

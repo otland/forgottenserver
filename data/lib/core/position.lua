@@ -48,7 +48,7 @@ function Position:moveUpstairs()
 end
 
 function Position:isInRange(from, to)
-	-- No matter what corner from and to is, we want to make 
+	-- No matter what corner from and to is, we want to make
 	-- life easier by calculating north-west and south-east
 	local zone = {
 		nW = {
@@ -64,9 +64,18 @@ function Position:isInRange(from, to)
 	}
 
 	if  self.x >= zone.nW.x and self.x <= zone.sE.x
-	and self.y >= zone.nW.y and self.y <= zone.sE.y 
+	and self.y >= zone.nW.y and self.y <= zone.sE.y
 	and self.z >= zone.nW.z and self.z <= zone.sE.z then
 		return true
 	end
 	return false
+end
+
+function Position:notifySummonAppear(summon)
+	local spectators = Game.getSpectators(self)
+	for _, spectator in ipairs(spectators) do
+		if spectator:isMonster() and spectator ~= summon then
+			spectator:addTarget(summon)
+		end
+	end
 end

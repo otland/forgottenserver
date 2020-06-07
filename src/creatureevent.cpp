@@ -1,6 +1,6 @@
 /**
  * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
+ * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,15 +31,22 @@ CreatureEvents::CreatureEvents() :
 
 void CreatureEvents::clear(bool fromLua)
 {
-	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ) {
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ++it) {
 		if (fromLua == it->second.fromLua) {
-			it = creatureEvents.erase(it);
-		} else {
-			++it;
+			it->second.clearEvent();
 		}
 	}
 
 	reInitState(fromLua);
+}
+
+void CreatureEvents::removeInvalidEvents()
+{
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ++it) {
+		if (it->second.getScriptId() == 0) {
+			creatureEvents.erase(it->second.getName());
+		}
+	}
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface()
@@ -68,12 +75,20 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return false;
 	}
 
-	auto result = creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-	if (!result.second) {
-		std::cout << "[Warning - CreatureEvents::registerEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
-	}
+	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	if (oldEvent) {
+		//if there was an event with the same that is not loaded
+		//(happens when realoading), it is reused
+		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
+			oldEvent->copyEvent(creatureEvent.get());
+		}
 
-	return result.second;
+		return false;
+	} else {
+		//if not, register it normally
+		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+		return true;
+	}
 }
 
 bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
@@ -84,12 +99,20 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 		return false;
 	}
 
-	auto result = creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-	if (!result.second) {
-		std::cout << "[Warning - CreatureEvents::registerEvent] Duplicate registered creature event with name: " << creatureEvent->getName() << std::endl;
-	}
+	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	if (oldEvent) {
+		//if there was an event with the same that is not loaded
+		//(happens when realoading), it is reused
+		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
+			oldEvent->copyEvent(creatureEvent.get());
+		}
 
-	return result.second;
+		return false;
+	} else {
+		//if not, register it normally
+		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+		return true;
+	}
 }
 
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)

@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `looklegs` int(11) NOT NULL DEFAULT '0',
   `looktype` int(11) NOT NULL DEFAULT '136',
   `lookaddons` int(11) NOT NULL DEFAULT '0',
+  `direction` tinyint(1) unsigned NOT NULL DEFAULT '2',
   `maglevel` int(11) NOT NULL DEFAULT '0',
   `mana` int(11) NOT NULL DEFAULT '0',
   `manamax` int(11) NOT NULL DEFAULT '0',
@@ -44,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `lastip` int(10) unsigned NOT NULL DEFAULT '0',
   `save` tinyint(1) NOT NULL DEFAULT '1',
   `skull` tinyint(1) NOT NULL DEFAULT '0',
-  `skulltime` int(11) NOT NULL DEFAULT '0',
+  `skulltime` bigint(20) NOT NULL DEFAULT '0',
   `lastlogout` bigint(20) unsigned NOT NULL DEFAULT '0',
   `blessings` tinyint(2) NOT NULL DEFAULT '0',
   `onlinetime` int(11) NOT NULL DEFAULT '0',
@@ -94,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `account_ban_history` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `ip_bans` (
   `ip` int(10) unsigned NOT NULL,
@@ -322,8 +323,6 @@ CREATE TABLE IF NOT EXISTS `server_config` (
   PRIMARY KEY `config` (`config`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '21'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
-
 CREATE TABLE IF NOT EXISTS `tile_store` (
   `house_id` int(11) NOT NULL,
   `data` longblob NOT NULL,
@@ -339,6 +338,8 @@ CREATE TABLE IF NOT EXISTS `towns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '24'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

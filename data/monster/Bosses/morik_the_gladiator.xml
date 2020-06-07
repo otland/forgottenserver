@@ -15,6 +15,7 @@
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag runonhealth="10" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-250" />
@@ -43,6 +44,6 @@
 		<voice sentence="I'll take your ears as a trophy!" />
 	</voices>
 	<loot>
-		<item name="Morik's helmet" chance="9999999" />
+		<item name="Morik's helmet" chance="100000" />
 	</loot>
 </monster>

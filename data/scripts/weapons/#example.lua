@@ -1,5 +1,5 @@
 --[[
-		
+
 	Burst Arrow example
 
 ]]
@@ -34,7 +34,7 @@ burstarrow:maxHitChance(100)
 burstarrow:register()
 
 --[[
-		
+
 	Wand of Vortex example
 
 ]]
@@ -49,7 +49,7 @@ wov:vocation("master sorcerer")
 wov:register()
 
 --[[
-		
+
 	Arbalest example
 
 ]]
@@ -65,7 +65,7 @@ arbalest:wieldedUnproperly(true)
 arbalest:register()
 
 --[[
-		
+
 	Earth Barbarian Axe example
 
 ]]

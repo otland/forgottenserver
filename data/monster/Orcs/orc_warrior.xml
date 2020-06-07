@@ -14,7 +14,7 @@
 		<flag canpushcreatures="0" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="11" />
+		<flag runonhealth="10" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
@@ -22,7 +22,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-60" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="8" defense="8" />
 	<elements>
 		<element energyPercent="30" />
 		<element holyPercent="10" />
@@ -36,13 +36,14 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="15" chance="65000" />
-		<item name="poison dagger" chance="120" />
-		<item name="chain armor" chance="7360" />
-		<item name="copper shield" chance="560" />
 		<item name="meat" chance="15000" />
-		<item name="orc tooth" chance="700" />
 		<item name="broken helmet" chance="10800" />
+		<item name="chain armor" chance="7360" />
 		<item name="orc leather" chance="4000" />
-		<item name="skull belt" chance="980" />
+		<!-- Heavy Old Tome 2.03% -->
+		<item name="skull belt" chance="870" />
+		<item name="copper shield" chance="670" />
+		<item name="orc tooth" chance="620" />
+		<item name="poison dagger" chance="30" />
 	</loot>
 </monster>
