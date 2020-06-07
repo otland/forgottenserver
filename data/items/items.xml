@@ -20064,7 +20064,7 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="11320" article="a" name="dead insect swarm">
-		<attribute key="duration" value="5" />
+		<attribute key="duration" value="1" />
 		<attribute key="decayTo" value="0" />
 	</item>
 	<item id="11321" article="a" name="bone shoulderplate">
