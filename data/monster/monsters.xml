@@ -777,6 +777,7 @@
 	<!-- Ungulates -->
 	<monster name="Black Sheep" file="Ungulates/black_sheep.xml" />
 	<monster name="Boar" file="Ungulates/boar.xml" />
+	<monster name="Brown Horse" file="Ungulates/brown_horse.xml" />
 	<monster name="Deer" file="Ungulates/deer.xml" />
 	<monster name="Desperate White Deer" file="Ungulates/desperate_white_deer.xml" />
 	<monster name="Doom Deer" file="Ungulates/doom_deer.xml" />
@@ -785,10 +786,8 @@
 	<monster name="Enraged White Deer" file="Ungulates/enraged_white_deer.xml" />
 	<monster name="Evil Sheep Lord" file="Ungulates/evil_sheep_lord.xml" />
 	<monster name="Evil Sheep" file="Ungulates/evil_sheep.xml" />
-	<monster name="Horse" file="Ungulates/horse.xml" />
-	<monster name="Horse1" file="Ungulates/horse(brown).xml" />
-	<monster name="Horse2" file="Ungulates/horse(fire).xml" />
-	<monster name="Horse3" file="Ungulates/horse(grey).xml" />
+	<monster name="Horse" file="Ungulates/taupe_horse.xml" />
+	<monster name="Gray Horse" file="Ungulates/gray_horse.xml" />
 	<monster name="Mad Sheep" file="Ungulates/mad_sheep.xml" />
 	<monster name="Mammoth" file="Ungulates/mammoth.xml" />
 	<monster name="Mushroom Sniffer" file="Ungulates/mushroom_sniffer.xml" />
