@@ -13,6 +13,10 @@ npcHandler:addModule(VoiceModule:new(voices))
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
 
+keywordHandler:addKeyword({'stuff'}, StdModule.say, {npcHandler = npcHandler, text = 'Just ask me for a {trade} to see my offers.'})
+keywordHandler:addAliasKeyword({'wares'})
+keywordHandler:addAliasKeyword({'offer'})
+
 shopModule:addBuyableItem({'spellbook'}, 2175, 150, 'spellbook')
 shopModule:addBuyableItem({'magic lightwand'}, 2163, 400, 'magic lightwand')
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Monk" nameDescription="a monk" race="blood" experience="200" speed="240" manacost="600">
 	<health now="240" max="240" />
-	<look type="57" corpse="20559" />
+	<look type="57" corpse="20371" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="1" />
