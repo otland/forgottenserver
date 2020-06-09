@@ -1725,7 +1725,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);
-		
+
 		const uint32_t protectionLevel = static_cast<uint32_t>(g_config.getNumber(ConfigManager::PROTECTION_LEVEL));
 		if (oldLevel >= protectionLevel && level < protectionLevel) {
 			g_game.updateCreatureWalkthrough(this);
@@ -2266,7 +2266,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 	if (childIsOwner) {
 		//a child container is querying the player, just check if enough capacity
 		bool skipLimit = hasBitSet(FLAG_NOLIMIT, flags);
-		if (skipLimit || hasCapacity(item, item->getItemCount())) {
+		if (skipLimit || hasCapacity(item, count)) {
 			return RETURNVALUE_NOERROR;
 		}
 		return RETURNVALUE_NOTENOUGHCAPACITY;
@@ -2454,7 +2454,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 	}
 
 	//check if enough capacity
-	if (!hasCapacity(item, item->getItemCount())) {
+	if (!hasCapacity(item, count)) {
 		return RETURNVALUE_NOTENOUGHCAPACITY;
 	}
 
@@ -3093,7 +3093,7 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 	}
 
 	//index == 0 means we should equip this item at the most appropiate slot (no action required here)
-	if (index > 0 && index < 11) {
+	if (index > CONST_SLOT_WHEREEVER && index <= CONST_SLOT_LAST) {
 		if (inventory[index]) {
 			return;
 		}
@@ -4536,7 +4536,7 @@ void Player::setGuild(Guild* guild)
 	this->guildRank = nullptr;
 
 	if (guild) {
-		const GuildRank* rank = guild->getRankByLevel(1);
+		GuildRank_ptr rank = guild->getRankByLevel(1);
 		if (!rank) {
 			return;
 		}

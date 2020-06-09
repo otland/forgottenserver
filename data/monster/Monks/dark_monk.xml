@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Dark Monk" nameDescription="a dark monk" race="blood" experience="145" speed="230" manacost="480">
 	<health now="190" max="190" />
-	<look type="225" corpse="20371" />
+	<look type="225" corpse="20562" />
 	<targetchange interval="5000" chance="0" />
 	<flags>
 		<flag summonable="0" />
