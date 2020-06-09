@@ -45,9 +45,9 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="50" chance="50000" />
 		<item name="stealth ring" chance="20000" />
-		<item id="crown legs" chance="5000" />
-		<item id="focus cape" chance="5000" />
-		<item id="red robe" chance="5000" />
-		<item id="spike sword" chance="5000" />
+		<item name="crown legs" chance="5000" />
+		<item name="focus cape" chance="5000" />
+		<item name="red robe" chance="5000" />
+		<item name="spike sword" chance="5000" />
 	</loot>
 </monster>
