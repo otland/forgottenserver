@@ -127,7 +127,7 @@ void House::updateDoorDescription() const
 		ss << "It belongs to house '" << houseName << "'. Nobody owns this house.";
 
 		const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
-		if (housePrice != -1) {
+		if (housePrice != -1 && g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE)) {
 			ss << " It costs " << (houseTiles.size() * housePrice) << " gold coins.";
 		}
 	}
@@ -496,8 +496,8 @@ void AccessList::addGuild(const std::string& name)
 {
 	const Guild* guild = getGuildByName(name);
 	if (guild) {
-		for (const auto& rank : guild->getRanks()) {
-			guildRankList.insert(rank.id);
+		for (auto rank : guild->getRanks()) {
+			guildRankList.insert(rank->id);
 		}
 	}
 }
@@ -506,7 +506,7 @@ void AccessList::addGuildRank(const std::string& name, const std::string& rankNa
 {
 	const Guild* guild = getGuildByName(name);
 	if (guild) {
-		const GuildRank* rank = guild->getRankByName(rankName);
+		GuildRank_ptr rank = guild->getRankByName(rankName);
 		if (rank) {
 			guildRankList.insert(rank->id);
 		}
@@ -524,7 +524,7 @@ bool AccessList::isInList(const Player* player)
 		return true;
 	}
 
-	const GuildRank* rank = player->getGuildRank();
+	GuildRank_ptr rank = player->getGuildRank();
 	return rank && guildRankList.find(rank->id) != guildRankList.end();
 }
 

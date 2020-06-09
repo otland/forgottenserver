@@ -433,7 +433,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		if (guild) {
 			player->guild = guild;
-			const GuildRank* rank = guild->getRankById(playerRankId);
+			GuildRank_ptr rank = guild->getRankById(playerRankId);
 			if (!rank) {
 				query.str(std::string());
 				query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = " << playerRankId;
@@ -480,7 +480,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
 			int32_t pid = pair.second;
-			if (pid >= 1 && pid <= 10) {
+			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
@@ -799,7 +799,7 @@ bool IOLoginData::savePlayer(Player* player)
 	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 
 	ItemBlockList itemList;
-	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
+	for (int32_t slotId = CONST_SLOT_FIRST; slotId <= CONST_SLOT_LAST; ++slotId) {
 		Item* item = player->inventory[slotId];
 		if (item) {
 			itemList.emplace_back(slotId, item);
