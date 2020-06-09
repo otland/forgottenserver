@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Insect Swarm" nameDescription="an insect swarm" race="undead" experience="40" speed="150">
 	<health now="50" max="50" />
-	<look type="349" corpse="0" />
+	<look type="349" corpse="11320" />
 	<targetchange interval="5000" chance="0" />
 	<flags>
 		<flag summonable="0" />
