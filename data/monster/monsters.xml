@@ -641,7 +641,7 @@
 	<monster name="Wailing Widow" file="monsters/wailing_widow.xml" />
 	<monster name="Walker" file="monsters/walker.xml" />
 	<monster name="War Golem" file="monsters/war_golem.xml" />
-	<monster name="War wolf" file="monsters/war_wolf.xml" />
+	<monster name="War Wolf" file="monsters/war_wolf.xml" />
 	<monster name="Warlock" file="monsters/warlock.xml" />
 	<monster name="Warlord Ruzad" file="monsters/warlord_ruzad.xml" />
 	<monster name="Wasp" file="monsters/wasp.xml" />
