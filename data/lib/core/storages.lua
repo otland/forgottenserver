@@ -17,6 +17,8 @@ PlayerStorageKeys = {
 	afflictedPlagueBell = 30028,
 	nailCaseUseCount = 30031,
 	swampDigging = 30032,
+	insectoidCell = 30033,
+	vortexTamer = 30034,
 	achievementsBase = 300000,
 	achievementsCounter = 20000,
 }
