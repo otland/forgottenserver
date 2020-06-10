@@ -68,22 +68,3 @@ end
 if not nextUseStaminaTime then
 	nextUseStaminaTime = {}
 end
-
-function playerExists(name)
-	local query = db.storeQuery("SELECT `name` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if query then
-		result.free(query)
-		return true
-	end
-	return false
-end
-
-function getPlayerVocationAux(name)
-	local query = db.storeQuery("SELECT `vocation` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if not query then
-		return false
-	end
-	local value = result.getNumber(query, "vocation")
-	result.free(query)
-	return value
-end

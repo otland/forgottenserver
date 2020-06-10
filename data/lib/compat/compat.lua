@@ -1312,7 +1312,3 @@ end
 function doPlayerTakeItem(cid, itemid, count)
 	return Player(cid):removeItem(itemid, count)
 end
-
-function isNumber(str)
-	return tonumber(str) ~= nil
-end
