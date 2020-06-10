@@ -68,3 +68,28 @@ end
 if not nextUseStaminaTime then
 	nextUseStaminaTime = {}
 end
+
+function capitalize(str)
+	return str:gsub("%a+", function(c) return c:sub(1, 1):upper() .. c:sub(2) end)
+end
+
+-- check if offline player exist
+function playerExists(name)
+	local query = db.storeQuery("SELECT `name` FROM `players` WHERE `name` = " .. db.escapeString(name))
+	if query then
+		result.free(query)
+		return true
+	end
+	return false
+end
+
+-- return vocation ID of offline player by name
+function getPlayerVocationAux(name)
+	local query = db.storeQuery("SELECT `vocation` FROM `players` WHERE `name` = " .. db.escapeString(name))
+	if not query then
+		return false
+	end
+	local value = result.getNumber(query, "vocation")
+	result.free(query)
+	return value
+end
