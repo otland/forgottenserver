@@ -25,3 +25,22 @@ PlayerStorageKeys = {
 
 GlobalStorageKeys = {
 }
+
+-- Checking for duplicate storages:
+local function extractValues(tab, ret)
+	for _, v in pairs(tab) do
+ 		table.insert(ret, tab)
+	end
+end
+
+local extraction = {}
+extractValues(PlayerStorageKeys, extraction)
+table.sort(extraction)
+
+if #extraction > 1 then
+	for i = 1, #extraction - 1 do
+		if extraction[i] == extraction[i+1] then
+			print("Duplicate storage value found: ".. extraction[i])
+		end
+	end
+end
