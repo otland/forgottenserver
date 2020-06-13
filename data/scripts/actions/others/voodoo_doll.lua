@@ -8,6 +8,7 @@ function voodooDoll.onUse(player, item, fromPosition, target, toPosition, isHotk
 	local text = ""
 	if math.random(100) <= 5 then
 		text = "You concentrate on your victim and hit the needle in the doll."
+		player:addAchievement("Dark Voodoo Priest")
 		toPosition:sendMagicEffect(CONST_ME_DRAWBLOOD, player)
 	else
 		text = "You concentrate on your victim, hit the needle in the doll.......but nothing happens."

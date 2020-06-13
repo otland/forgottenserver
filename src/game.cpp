@@ -2727,7 +2727,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		}
 
 		bool isSuccess = false;
-		
+
 		ReturnValue tradePartnerRet = RETURNVALUE_NOERROR;
 		ReturnValue playerRet = RETURNVALUE_NOERROR;
 
@@ -3819,12 +3819,14 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 	if (damage.secondary.type != COMBAT_NONE) {
 		damage.secondary.value = -damage.secondary.value;
 		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field);
-
 		damage.secondary.value = -damage.secondary.value;
 		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition());
 	} else {
 		secondaryBlockType = BLOCK_NONE;
 	}
+
+	damage.blockType = primaryBlockType;
+
 	return (primaryBlockType != BLOCK_NONE) && (secondaryBlockType != BLOCK_NONE);
 }
 

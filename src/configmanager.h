@@ -54,6 +54,7 @@ class ConfigManager
 			FORCE_MONSTERTYPE_LOAD,
 			HOUSE_OWNED_BY_ACCOUNT,
 			CLEAN_PROTECTION_ZONES,
+			HOUSE_DOOR_SHOW_PRICE,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

@@ -1,83 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Incredibly Old Witch" nameDescription="an incredibly old witch" race="blood" experience="0" speed="180">
-	<health now="1" max="1" />
-	<look type="54" head="20" body="30" legs="40" feet="50" corpse="6081" />
-	<targetchange interval="5000" chance="8" />
+<monster name="Incredibly Old Witch" nameDescription="an incredibly old witch" race="blood" experience="0" speed="202">
+	<health now="100" max="100" />
+	<look type="54" corpse="20535" />
+	<targetchange interval="5000" chance="20" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
 		<flag targetdistance="4" />
 		<flag staticattack="90" />
-		<flag runonhealth="1000000" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="rat" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="rat" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="chicken" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="chicken" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="green frog" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="green frog" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="bug" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="bug" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="pig" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="pig" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="kongra" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="kongra" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="dog" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="dog" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="skunk" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="skunk" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
-		<attack name="outfit" interval="1000" chance="12" range="7" radius="4" monster="donkey" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
+		<attack name="outfit" interval="2000" chance="12" range="7" radius="4" target="1" monster="donkey" duration="60000">
+			<attribute key="areaEffect" value="teleport" />
+			<attribute key="shootEffect" value="suddendeath" />
 		</attack>
 	</attacks>
-	<defenses>
-		<defense name="outfit" interval="2000" chance="5" monster="rat" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="chicken" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="green frog" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="bug" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="pig" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="kongra" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="dog" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="skunk" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-		<defense name="outfit" interval="2000" chance="5" monster="donkey" duration="2000">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-	</defenses>
+	<immunities>
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity manadrain="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Feel the wrath of the witch!" />
 		<voice sentence="Oh how you will regret to have distubed me!" />
 		<voice sentence="Everyone is so stupid!" />
 		<voice sentence="Stupid people!" />
+		<voice sentence="I will teach them all to leave me alone!" />
 	</voices>
 </monster>

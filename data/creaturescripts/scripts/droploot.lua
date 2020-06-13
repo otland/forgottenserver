@@ -1,10 +1,11 @@
-function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unjustified)
+function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if player:hasFlag(PlayerFlag_NotGenerateLoot) or player:getVocation():getId() == VOCATION_NONE then
 		return true
 	end
 
 	local amulet = player:getSlotItem(CONST_SLOT_NECKLACE)
-	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull()) then
+	local isRedOrBlack = table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull())
+	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not isRedOrBlack then
 		local isPlayer = false
 		if killer then
 			if killer:isPlayer() then
@@ -23,9 +24,10 @@ function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unj
 	else
 		for i = CONST_SLOT_HEAD, CONST_SLOT_AMMO do
 			local item = player:getSlotItem(i)
+			local lossPercent = player:getLossPercent()
 			if item then
-				if table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull()) or math.random(item:isContainer() and 100 or 1000) <= player:getLossPercent() then
-					if not item:moveTo(corpse) then
+				if isRedOrBlack or math.random(item:isContainer() and 100 or 1000) <= lossPercent then
+					if (isRedOrBlack or lossPercent ~= 0) and not item:moveTo(corpse) then
 						item:remove()
 					end
 				end

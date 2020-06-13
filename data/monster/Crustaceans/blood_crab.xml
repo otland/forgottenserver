@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Blood Crab" nameDescription="a blood crab" race="undead" experience="160" speed="220" manacost="505">
+<monster name="Blood Crab" nameDescription="a blood crab" race="blood" experience="160" speed="160" manacost="505">
 	<health now="290" max="290" />
 	<look type="200" corpse="6075" />
 	<targetchange interval="4000" chance="10" />
@@ -7,8 +7,8 @@
 		<flag summonable="1" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="0" />
-		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
@@ -19,11 +19,11 @@
 		<flag canwalkonfire="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-113" />
+		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>
-	<defenses armor="20" defense="20" />
+	<defenses armor="28" defense="28" />
 	<elements>
-		<element physicalPercent="20" />
+		<element physicalPercent="5" />
 		<element firePercent="-10" />
 		<element energyPercent="-5" />
 	</elements>
@@ -33,11 +33,11 @@
 		<immunity drown="1" />
 	</immunities>
 	<loot>
-		<item name="white pearl" chance="480" />
 		<item name="gold coin" countmax="20" chance="90000" />
-		<item name="chain armor" chance="5555" />
-		<item name="brass legs" chance="2170" />
-		<item id="2667" chance="13000" /><!-- fish -->
-		<item name="bloody pincers" chance="6260" />
+		<item id="2667" chance="9700" /><!-- fish -->
+		<item name="bloody pincers" chance="6300" />
+		<item name="chain armor" chance="4555" />
+		<item name="brass legs" chance="2970" />
+		<item name="white pearl" chance="500" />
 	</loot>
 </monster>
