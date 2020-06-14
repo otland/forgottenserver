@@ -2407,19 +2407,19 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 				sendUpdateTile(tile, pos);
 			}
 			return;
+		} else {
+			// if stackpos is -1, the client will automatically detect it
+			NetworkMessage msg;
+			msg.addByte(0x6A);
+			msg.addPosition(pos);
+			msg.addByte(stackpos);
+
+			bool known;
+			uint32_t removedKnown;
+			checkCreatureAsKnown(creature->getID(), known, removedKnown);
+			AddCreature(msg, creature, known, removedKnown);
+			writeToOutputBuffer(msg);
 		}
-
-		// if stackpos is -1, the client will automatically detect it
-		NetworkMessage msg;
-		msg.addByte(0x6A);
-		msg.addPosition(pos);
-		msg.addByte(stackpos);
-
-		bool known;
-		uint32_t removedKnown;
-		checkCreatureAsKnown(creature->getID(), known, removedKnown);
-		AddCreature(msg, creature, known, removedKnown);
-		writeToOutputBuffer(msg);
 
 		if (isLogin) {
 			sendMagicEffect(pos, CONST_ME_TELEPORT);

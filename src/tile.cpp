@@ -1121,8 +1121,6 @@ void Tile::removeCreature(Creature* creature)
 	removeThing(creature, 0);
 }
 
-// @todo: verify that using items on stack-invisible creatures triggers no visual effect
-// ref: Game::playerUseWithCreature
 int32_t Tile::getThingIndex(const Thing* thing) const
 {
 	int32_t n = -1;
@@ -1195,38 +1193,6 @@ int32_t Tile::getClientIndexOfCreature(const Player* player, const Creature* cre
 				return n;
 			} else if (player->canSeeCreature(c)) {
 				++n;
-			}
-		}
-	}
-	return -1;
-}
-
-// @todo: deprecated and no longer referenced, use getClientIndexOfCreature
-int32_t Tile::getStackposOfCreature(const Player* player, const Creature* creature) const
-{
-	int32_t n;
-	if (ground) {
-		n = 1;
-	} else {
-		n = 0;
-	}
-
-	const TileItemVector* items = getItemList();
-	if (items) {
-		n += items->getTopItemCount();
-		if (n >= 10) {
-			return -1;
-		}
-	}
-
-	if (const CreatureVector* creatures = getCreatures()) {
-		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
-			if (c == creature) {
-				return n;
-			} else if (player->canSeeCreature(c)) {
-				if (++n >= 10) {
-					return -1;
-				}
 			}
 		}
 	}
