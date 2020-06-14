@@ -2105,8 +2105,14 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
 
 	NetworkMessage msg;
 	msg.addByte(0x6B);
-	msg.addPosition(creature->getPosition());
-	msg.addByte(stackPos);
+	if (stackPos >= 10) {
+		msg.add<uint16_t>(0xFFFF);
+		msg.add<uint32_t>(creature->getID());
+	} else {
+		msg.addPosition(creature->getPosition());
+		msg.addByte(stackPos);
+	}
+
 	msg.add<uint16_t>(0x63);
 	msg.add<uint32_t>(creature->getID());
 	msg.addByte(creature->getDirection());
@@ -2389,9 +2395,21 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	if (creature != player) {
+		// stack pos is always real index now, so it can exceed the limit
+		// if stack pos exceeds the limit, we need to refresh the tile instead
+		// 1. this is a rare case, and is only triggered by forcing summon in a position
+		// 2. since no stackpos will be send to the client about that creature, removing
+		//    it must be done with its id if its stackpos remains >= 10. this is done to
+		//    add creatures to battle list instead of rendering on screen
+		if (stackpos >= 10) {
+			// @todo: should we avoid this check?
+			if (const Tile* tile = creature->getTile()) {
+				sendUpdateTile(tile, pos);
+			}
+			return;
+		}
+
 		// if stackpos is -1, the client will automatically detect it
-		// if the amount of creatures exceeds the limit of the tile (10)
-		// it will just add it to battle-list without rendering it to the map
 		NetworkMessage msg;
 		msg.addByte(0x6A);
 		msg.addPosition(pos);
