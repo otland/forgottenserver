@@ -402,9 +402,9 @@ void Tile::onAddTileItem(Item* item)
 	}
 
 	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || (g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES) && hasFlag(TILESTATE_PROTECTIONZONE))) && item->isCleanable()) {
-                if (!dynamic_cast<HouseTile*>(this)) {
-		        g_game.addTileToClean(this);
-                }
+		if (!dynamic_cast<HouseTile*>(this)) {
+			g_game.addTileToClean(this);
+		}
 	}
 }
 
