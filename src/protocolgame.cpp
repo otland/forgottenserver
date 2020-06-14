@@ -2406,7 +2406,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			if (const Tile* tile = creature->getTile()) {
 				sendUpdateTile(tile, pos);
 			}
-			return;
 		} else {
 			// if stackpos is -1, the client will automatically detect it
 			NetworkMessage msg;
