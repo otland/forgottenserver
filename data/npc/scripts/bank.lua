@@ -178,7 +178,7 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler.topic[cid] = 0
 				return true
 			end
-			npcHandler:say("So you would like to transfer " .. count[cid] .. " gold to " .. capitalize(transfer[cid]) .. "?", cid)
+			npcHandler:say("So you would like to transfer " .. count[cid] .. " gold to " .. transfer[cid] .. "?", cid)
 			npcHandler.topic[cid] = 13
 		else
 			npcHandler:say("This player does not exist.", cid)
@@ -189,7 +189,7 @@ local function creatureSayCallback(cid, type, msg)
 			if not player:transferMoneyTo(transfer[cid], count[cid]) then
 				npcHandler:say("You cannot transfer money to this account.", cid)
 			else
-				npcHandler:say("Very well. You have transfered " .. count[cid] .. " gold to " .. capitalize(transfer[cid]) ..".", cid)
+				npcHandler:say("Very well. You have transfered " .. count[cid] .. " gold to " .. transfer[cid] ..".", cid)
 				transfer[cid] = nil
 			end
 		elseif msgcontains(msg, "no") then
