@@ -173,7 +173,7 @@ function Player.canCarryMoney(self, amount)
 	end
 
 	-- If player don't have enough capacity to carry this money
-	if self:getFreeCapacity() <= totalWeight then
+	if self:getFreeCapacity() < totalWeight then
 		return false
 	end
 
