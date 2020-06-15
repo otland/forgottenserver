@@ -91,7 +91,7 @@ WaitingList& WaitingList::getInstance()
 	return waitingList;
 }
 
-int64_t WaitingList::getTime(std::size_t slot)
+uint8_t WaitingList::getTime(std::size_t slot)
 {
 	if (slot < 5) {
 		return 5;
