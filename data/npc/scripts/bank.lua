@@ -405,7 +405,7 @@ keywordHandler:addKeyword({"advanced"}, StdModule.say, {
 })
 keywordHandler:addKeyword({"help"}, StdModule.say, {
 	npcHandler = npcHandler,
-	text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can also {transfer} money to other characters, provided that they have a vocation."
+	text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can {transfer} money to other characters, provided that they have a vocation, or {change} the coins in your inventory."
 })
 keywordHandler:addAliasKeyword({'functions'})
 keywordHandler:addAliasKeyword({'basic'})
