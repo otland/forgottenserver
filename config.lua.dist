@@ -94,6 +94,7 @@ showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
+cleanProtectionZones = false
 changeSexEnabled = true
 changeSexDaysCost = 3
 premiumToOfflineTraining = true
