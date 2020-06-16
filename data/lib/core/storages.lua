@@ -1,3 +1,9 @@
+--[[
+Reserved storage ranges:
+- 300000 to 301000+ reserved for achievements
+- 20000 to 21000+ reserved for achievement progress
+- 10000000 to 20000000 reserved for outfits and mounts on source
+]]--
 PlayerStorageKeys = {
 	annihilatorReward = 30015,
 	promotion = 30018,
@@ -14,8 +20,8 @@ PlayerStorageKeys = {
 	insectoidCell = 30033,
 	vortexTamer = 30034,
 	mutatedPumpkin = 30035,
-	achievementsBase = 300000, -- range 300000 to 301000+ reserved for achievements
-	achievementsCounter = 20000, -- range 20000 to 21000+ reserved for achievement progress
+	achievementsBase = 300000,
+	achievementsCounter = 20000,
 }
 
 GlobalStorageKeys = {
