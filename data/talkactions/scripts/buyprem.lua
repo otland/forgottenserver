@@ -8,7 +8,7 @@ function onSay(player, words, param)
 	end
 
 	if player:getPremiumDays() <= buyPremiumMaxDays then
-		if player:removeTotalMoney(buyPremiumPrice) then
+		if player:removeMoney(buyPremiumPrice) then
 			player:addPremiumDays(buyPremiumDays)
 			player:sendTextMessage(MESSAGE_INFO_DESCR, "You have bought " .. buyPremiumDays .." days of premium account.")
 		else
