@@ -491,6 +491,10 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" showInDescription="0" />
 	</rune>
+	<rune group="attack" spellid="94" name="Wild Growth Rune" id="2269" allowfaruse="1" charges="2" level="27" magiclevel="8" cooldown="2000" groupcooldown="2000" blocktype="all" script="attack/wild_growth_rune.lua">
+		<vocation name="Druid" />
+		<vocation name="Elder Druid" showInDescription="0" />
+	</rune>
 
 	<!-- Healing Runes -->
 	<rune group="healing" spellid="31" name="Cure Poison Rune" id="2266" allowfaruse="1" charges="1" level="15" magiclevel="0" cooldown="2000" groupcooldown="2000" aggressive="0" needtarget="1" blocktype="solid" script="healing/cure_poison_rune.lua" />
@@ -505,10 +509,6 @@
 	<rune group="support" spellid="14" name="Chameleon Rune" id="2291" allowfaruse="1" charges="1" level="27" magiclevel="4" cooldown="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" script="support/chameleon.lua" />
 	<rune group="support" spellid="78" name="Disintegrate Rune" id="2310" allowfaruse="0" charges="3" level="21" magiclevel="4" cooldown="2000" groupcooldown="2000" range="1" script="support/disintegrate_rune.lua" />
 	<rune group="support" spellid="30" name="Destroy Field Rune" id="2261" allowfaruse="1" charges="3" level="17" magiclevel="3" cooldown="2000" groupcooldown="2000" aggressive="0" range="5" script="support/destroy_field_rune.lua" />
-	<rune group="attack" spellid="94" name="Wild Growth Rune" id="2269" allowfaruse="1" charges="2" level="27" magiclevel="8" cooldown="2000" groupcooldown="2000" blocktype="all" script="attack/wild_growth_rune.lua">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" showInDescription="0" />
-	</rune>
 
 	<!-- Conjuring Spells -->
 	<instant group="support" name="Animate Dead Rune" words="adana mort" level="27" mana="600" soul="5" premium="1" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/animate_dead_rune.lua">
