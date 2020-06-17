@@ -108,8 +108,8 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			}
 		}
 
-		std::size_t currentSlot;
-		if (!WaitingList::getInstance().clientLogin(player, currentSlot)) {
+		std::size_t currentSlot = WaitingList::getInstance().clientLogin(player);
+		if (currentSlot > 0) {
 			uint8_t retryTime = WaitingList::getTime(currentSlot);
 			std::ostringstream ss;
 

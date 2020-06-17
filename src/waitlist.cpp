@@ -106,10 +106,12 @@ uint8_t WaitingList::getTime(std::size_t slot)
 	}
 }
 
-bool WaitingList::clientLogin(const Player* player, std::size_t& currentSlot)
+std::size_t WaitingList::clientLogin(const Player* player)
 {
+	// Currentslot = position in wait list, 0 for direct access
+	std::size_t currentSlot = 0;
 	if (player->hasFlag(PlayerFlag_CanAlwaysLogin) || player->getAccountType() >= ACCOUNT_TYPE_GAMEMASTER) {
-		return true;
+		return currentSlot;
 	}
 
 	cleanupList(info->priorityWaitList);
@@ -117,21 +119,21 @@ bool WaitingList::clientLogin(const Player* player, std::size_t& currentSlot)
 
 	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
 	if (maxPlayers == 0 || (info->priorityWaitList.empty() && info->waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
-		return true;
+		return currentSlot;
 	}
 
 	auto result = info->findClient(player);
 	if (std::get<1>(result) != std::get<0>(result).end()) {
 		currentSlot = std::get<2>(result);
+		// If server has capacity for this client, let him in even though his current slot might be higher than 0.
 		if ((g_game.getPlayersOnline() + currentSlot) <= maxPlayers) {
-			//should be able to login now
 			std::get<0>(result).erase(std::get<1>(result));
-			return true;
+			return 0;
 		}
 
 		//let them wait a bit longer
 		std::get<1>(result)->timeout = OTSYS_TIME() + (getTimeout(currentSlot) * 1000);
-		return false;
+		return currentSlot;
 	}
 
 	currentSlot = info->priorityWaitList.size();
@@ -141,7 +143,7 @@ bool WaitingList::clientLogin(const Player* player, std::size_t& currentSlot)
 		currentSlot += info->waitList.size();
 		info->waitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player->getGUID());
 	}
-	return false;
+	return currentSlot;
 }
 
 WaitingList::WaitingList() : info(new WaitListInfo) {}
