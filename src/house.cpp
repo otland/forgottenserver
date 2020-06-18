@@ -120,11 +120,16 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 
 void House::updateDoorDescription() const
 {
+	std::string houseType = "house";
+	if (type == HOUSE_TYPE_GUILDHALL) {
+		houseType = "guildhall";
+	}
+
 	std::ostringstream ss;
 	if (owner != 0) {
-		ss << "It belongs to house '" << houseName << "'. " << ownerName << " owns this house.";
+		ss << "It belongs to " << houseType << " '" << houseName << "'. " << ownerName << " owns this " << houseType << ".";
 	} else {
-		ss << "It belongs to house '" << houseName << "'. Nobody owns this house.";
+		ss << "It belongs to " << houseType << " '" << houseName << "'. Nobody owns this " << houseType << ".";
 
 		const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
 		if (housePrice != -1 && g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE)) {
