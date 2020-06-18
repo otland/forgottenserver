@@ -108,6 +108,13 @@ enum AccessHouseLevel_t {
 	HOUSE_OWNER = 3,
 };
 
+// this enum should represent DB `houses`.`type`
+// MySQL enum indexes start at 1
+enum HouseType_t {
+	HOUSE_TYPE_NORMAL = 1,
+	HOUSE_TYPE_GUILDHALL = 2,
+};
+
 using HouseTileList = std::list<HouseTile*>;
 using HouseBedItemList = std::list<BedItem*>;
 
@@ -198,6 +205,13 @@ class House
 			return id;
 		}
 
+		void setType(HouseType_t type) {
+			this->type = type;
+		}
+		HouseType_t getType() const {
+			return type;
+		}
+
 		void addDoor(Door* door);
 		void removeDoor(Door* door);
 		Door* getDoorByNumber(uint32_t doorId) const;
@@ -251,6 +265,8 @@ class House
 		uint32_t townId = 0;
 
 		Position posEntry = {};
+
+		HouseType_t type = HOUSE_TYPE_NORMAL;
 
 		bool isLoaded = false;
 };

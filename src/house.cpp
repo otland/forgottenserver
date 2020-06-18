@@ -652,6 +652,9 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 		house->setRent(pugi::cast<uint32_t>(houseNode.attribute("rent").value()));
 		house->setTownId(pugi::cast<uint32_t>(houseNode.attribute("townid").value()));
+		if (houseNode.attribute("guildhall").as_bool()) {
+			house->setType(HOUSE_TYPE_GUILDHALL);
+		}
 
 		house->setOwner(0, false);
 	}
