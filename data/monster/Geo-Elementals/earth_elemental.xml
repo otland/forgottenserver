@@ -64,7 +64,7 @@
 		<item name="blank rune" chance="10000" />
 		<item name="strong mana potion" chance="1910" />
 		<item name="earth arrow" countmax="30" chance="20160" />
-		<item id="9808" chance="350" /><!-- rusty armor -->
+		<item id="9808" chance="350" /><!-- rusty armor (common) -->
 		<item name="small topaz" chance="620" />
 		<item name="lump of earth" chance="20460" />
 		<item name="clay lump" chance="570" />

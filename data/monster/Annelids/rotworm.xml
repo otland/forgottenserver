@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="150" manacost="305">
+<monster name="Rotworm" nameDescription="a rotworm" race="blood" experience="40" speed="116" manacost="305">
 	<health now="65" max="65" />
 	<look type="26" corpse="5967" />
 	<targetchange interval="4000" chance="0" />
@@ -22,14 +22,14 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-40" />
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="8" defense="8" />
 	<loot>
 		<item name="gold coin" countmax="17" chance="71760" />
-		<item id="2376" chance="3000" /><!-- sword -->
-		<item name="mace" chance="4500" />
-		<item name="meat" chance="20000" />
 		<item name="ham" chance="20120" />
-		<item name="worm" countmax="3" chance="3000" />
+		<item name="meat" chance="20000" />
 		<item name="lump of dirt" chance="10000" />
+		<item name="mace" chance="4500" />
+		<item name="worm" countmax="3" chance="3000" />
+		<item id="2376" chance="3000" /><!-- sword -->
 	</loot>
 </monster>

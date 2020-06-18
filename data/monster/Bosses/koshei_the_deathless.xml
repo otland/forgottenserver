@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-170" poison="300" />
@@ -64,10 +65,10 @@
 		<item name="gold coin" countmax="12" chance="80000" />
 		<item name="stealth ring" chance="888" />
 		<item name="platinum amulet" chance="1666" />
-		<item id="2175" chance="10000" />
+		<item id="2175" chance="10000" /><!-- spellbook -->
 		<item name="gold ring" chance="900" />
 		<item name="dirty cape" chance="10000" />
-		<item id="2401" chance="10000" />
+		<item id="2401" chance="10000" /><!-- staff -->
 		<item name="castle shield" chance="588" />
 		<item name="blue robe" chance="709" />
 		<item name="lich staff" chance="1000" />

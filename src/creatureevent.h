@@ -114,6 +114,8 @@ class CreatureEvents final : public BaseEvents
 		bool registerLuaEvent(CreatureEvent* event);
 		void clear(bool fromLua) override final;
 
+		void removeInvalidEvents();
+
 	private:
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;

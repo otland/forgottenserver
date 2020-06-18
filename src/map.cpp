@@ -24,6 +24,7 @@
 #include "combat.h"
 #include "creature.h"
 #include "game.h"
+#include "monster.h"
 
 extern Game g_game;
 
@@ -234,9 +235,10 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
-	SpectatorHashSet spectators;
+	SpectatorVec spectators, newPosSpectators;
 	getSpectators(spectators, oldPos, true);
-	getSpectators(spectators, newPos, true);
+	getSpectators(newPosSpectators, newPos, true);
+	spectators.addSpectators(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : spectators) {
@@ -299,7 +301,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	newTile.postAddNotification(&creature, &oldTile, 0);
 }
 
-void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
+void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
 {
 	int_fast16_t min_y = centerPos.y + minRangeY;
 	int_fast16_t min_x = centerPos.x + minRangeX;
@@ -339,7 +341,7 @@ void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& ce
 						continue;
 					}
 
-					spectators.insert(creature);
+					spectators.emplace_back(creature);
 				}
 				leafE = leafE->leafE;
 			} else {
@@ -355,7 +357,7 @@ void Map::getSpectatorsInternal(SpectatorHashSet& spectators, const Position& ce
 	}
 }
 
-void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -374,8 +376,8 @@ void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos,
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!spectators.empty()) {
-					const SpectatorHashSet& cachedSpectators = it->second;
-					spectators.insert(cachedSpectators.begin(), cachedSpectators.end());
+					const SpectatorVec& cachedSpectators = it->second;
+					spectators.insert(spectators.end(), cachedSpectators.begin(), cachedSpectators.end());
 				} else {
 					spectators = it->second;
 				}
@@ -389,16 +391,16 @@ void Map::getSpectators(SpectatorHashSet& spectators, const Position& centerPos,
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
 					if (!spectators.empty()) {
-						const SpectatorHashSet& cachedSpectators = it->second;
-						spectators.insert(cachedSpectators.begin(), cachedSpectators.end());
+						const SpectatorVec& cachedSpectators = it->second;
+						spectators.insert(spectators.end(), cachedSpectators.begin(), cachedSpectators.end());
 					} else {
 						spectators = it->second;
 					}
 				} else {
-					const SpectatorHashSet& cachedSpectators = it->second;
+					const SpectatorVec& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
-							spectators.insert(spectator);
+							spectators.emplace_back(spectator);
 						}
 					}
 				}
@@ -847,7 +849,8 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 
 	if (const MagicField* field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType))) {
+		const Monster* monster = creature.getMonster();
+		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType)) && (monster && !monster->canWalkOnFieldType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
 		}
 	}
@@ -947,68 +950,39 @@ void QTreeLeafNode::removeCreature(Creature* c)
 uint32_t Map::clean() const
 {
 	uint64_t start = OTSYS_TIME();
-	size_t count = 0, tiles = 0;
+	size_t tiles = 0;
 
 	if (g_game.getGameState() == GAME_STATE_NORMAL) {
 		g_game.setGameState(GAME_STATE_MAINTAIN);
 	}
 
-	std::vector<const QTreeNode*> nodes {
-		&root
-	};
 	std::vector<Item*> toRemove;
-	do {
-		const QTreeNode* node = nodes.back();
-		nodes.pop_back();
-		if (node->isLeaf()) {
-			const QTreeLeafNode* leafNode = static_cast<const QTreeLeafNode*>(node);
-			for (uint8_t z = 0; z < MAP_MAX_LAYERS; ++z) {
-				Floor* floor = leafNode->getFloor(z);
-				if (!floor) {
-					continue;
-				}
 
-				for (auto& row : floor->tiles) {
-					for (auto tile : row) {
-						if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
-							continue;
-						}
-
-						TileItemVector* itemList = tile->getItemList();
-						if (!itemList) {
-							continue;
-						}
-
-						++tiles;
-						for (Item* item : *itemList) {
-							if (item->isCleanable()) {
-								toRemove.push_back(item);
-							}
-						}
-
-						for (Item* item : toRemove) {
-							g_game.internalRemoveItem(item, -1);
-						}
-						count += toRemove.size();
-						toRemove.clear();
-					}
-				}
-			}
-		} else {
-			for (auto childNode : node->child) {
-				if (childNode) {
-					nodes.push_back(childNode);
-				}
+	for (auto tileList : g_game.getTilesToClean()) {
+		if (!tileList) {
+			continue;
+		}
+		++tiles;
+		for (auto* item : *tileList->getItemList()) {
+			if (item->isCleanable()) {
+				toRemove.emplace_back(item);
 			}
 		}
-	} while (!nodes.empty());
+	}
+
+	for (auto item : toRemove) {
+		g_game.internalRemoveItem(item, -1);
+	}
+
+	size_t count = toRemove.size();
+	g_game.clearTilesToClean();
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		g_game.setGameState(GAME_STATE_NORMAL);
 	}
 
 	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "")
-	          << " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
-	          << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+		<< " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
+		<< (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 	return count;
 }

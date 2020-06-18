@@ -105,6 +105,7 @@ function Creature:addSummon(monster)
 	summon:setDropLoot(false)
 	summon:setSkillLoss(false)
 	summon:setMaster(self)
+	summon:getPosition():notifySummonAppear(summon)
 
 	return true
 end
@@ -164,5 +165,12 @@ function Creature:addDamageCondition(target, type, list, damage, period, rounds)
 	end
 
 	target:addCondition(condition)
+	return true
+end
+
+function Creature:canAccessPz()
+	if self:isMonster() or (self:isPlayer() and self:isPzLocked()) then
+		return false
+	end
 	return true
 end

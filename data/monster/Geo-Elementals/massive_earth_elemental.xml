@@ -68,7 +68,7 @@
 		<item name="dwarven ring" chance="2790" />
 		<item name="diamond sceptre" chance="150" />
 		<item name="terra amulet" chance="500" />
-		<item id="9809" chance="3300" /><!-- rusty armor -->
+		<item id="9809" chance="3300" /><!-- rusty armor (semi-rare) -->
 		<item name="small topaz" countmax="2" chance="5280" />
 		<item name="lump of earth" chance="40680" />
 		<item name="clay lump" chance="480" />

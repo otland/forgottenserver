@@ -16,6 +16,7 @@
 		<flag lightcolor="0" />
 		<flag targetdistance="4" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-389" />
@@ -65,7 +66,7 @@
 		<item name="skull staff" chance="4500" />
 		<item name="crystal mace" chance="4000" />
 		<item name="blue piece of cloth" chance="5000" />
-		<item name="shard" chance="1000000" />
+		<item name="shard" chance="100000" />
 		<item name="queen's sceptre" chance="1500" />
 		<item name="berserk potion" chance="1500" />
 		<item name="mastermind potion" chance="1500" />
