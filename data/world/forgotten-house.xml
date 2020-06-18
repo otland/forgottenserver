@@ -27,7 +27,7 @@
 	<house name="Hilltop 1" houseid="27" entryx="166" entryy="409" entryz="6" rent="0" townid="2" size="28" />
 	<house name="Hilltop 2" houseid="28" entryx="177" entryy="400" entryz="6" rent="0" townid="2" size="33" />
 	<house name="Hilltop 3" houseid="29" entryx="178" entryy="412" entryz="6" rent="0" townid="2" size="42" />
-	<house name="Hilltop Hall" houseid="30" entryx="193" entryy="405" entryz="5" rent="0" townid="2" size="158" />
+	<house name="Hilltop Hall" houseid="30" entryx="193" entryy="405" entryz="5" rent="0" guildhall="true" townid="2" size="158" />
 	<house name="Rhyves Flats 1" houseid="31" entryx="166" entryy="365" entryz="7" rent="0" townid="2" size="10" />
 	<house name="Rhyves Flats 2" houseid="32" entryx="166" entryy="361" entryz="7" rent="0" townid="2" size="10" />
 	<house name="Rhyves Flats 3" houseid="33" entryx="166" entryy="358" entryz="7" rent="0" townid="2" size="10" />
@@ -55,8 +55,8 @@
 	<house name="Kazgal Close6" houseid="55" entryx="215" entryy="457" entryz="12" rent="0" townid="3" size="30" />
 	<house name="Kazgal Close 7" houseid="56" entryx="218" entryy="454" entryz="12" rent="0" townid="3" size="30" />
 	<house name="Kazgal Close 8" houseid="57" entryx="224" entryy="454" entryz="12" rent="0" townid="3" size="30" />
-	<house name="Hammersmith Hall" houseid="58" entryx="230" entryy="439" entryz="12" rent="0" townid="3" size="164" />
-	<house name="Varnack's Cavern" houseid="59" entryx="253" entryy="444" entryz="12" rent="0" townid="3" size="185" />
+	<house name="Hammersmith Hall" houseid="58" entryx="230" entryy="439" entryz="12" rent="0" guildhall="true" townid="3" size="164" />
+	<house name="Varnack's Cavern" houseid="59" entryx="253" entryy="444" entryz="12" rent="0" guildhall="true" townid="3" size="185" />
 	<house name="Saund Street 1" houseid="60" entryx="231" entryy="550" entryz="6" rent="0" townid="5" size="10" />
 	<house name="Saund Street 2" houseid="61" entryx="226" entryy="550" entryz="6" rent="0" townid="5" size="14" />
 	<house name="Saund Street 3" houseid="62" entryx="241" entryy="554" entryz="6" rent="0" townid="5" size="10" />
@@ -102,7 +102,7 @@
 	<house name="Farm Lane 4" houseid="102" entryx="116" entryy="399" entryz="7" rent="0" townid="2" size="30" />
 	<house name="The Square 1" houseid="103" entryx="127" entryy="406" entryz="7" rent="0" townid="2" size="22" />
 	<house name="The Square 2 (Shop)" houseid="104" entryx="121" entryy="398" entryz="7" rent="0" townid="2" size="26" />
-	<house name="Central Hall" houseid="105" entryx="125" entryy="381" entryz="7" rent="0" townid="2" size="163" />
+	<house name="Central Hall" houseid="105" entryx="125" entryy="381" entryz="7" rent="0" guildhall="true" townid="2" size="163" />
 	<house name="The Square 3" houseid="106" entryx="136" entryy="380" entryz="7" rent="0" townid="2" size="18" />
 	<house name="The Square 4 (Shop)" houseid="107" entryx="143" entryy="391" entryz="7" rent="0" townid="2" size="33" />
 	<house name="Church Avenue 6" houseid="108" entryx="158" entryy="404" entryz="7" rent="0" townid="2" size="20" />
