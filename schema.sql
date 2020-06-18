@@ -143,15 +143,15 @@ CREATE TABLE IF NOT EXISTS `guilds` (
 
 CREATE TABLE IF NOT EXISTS `guild_transactions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `to_guild_id` int(11) NOT NULL,
-  `from_guild_id` int(11) DEFAULT NULL,
+  `to_guild` int(11) NOT NULL,
+  `from_guild` int(11) DEFAULT NULL,
   `player_id` int(11) DEFAULT NULL,
-  `type` TINYINT(3) NOT NULL,
+  `type` ENUM('DEPOSIT', 'WITHDRAWAL') NOT NULL,
   `balance` bigint(20) unsigned NOT NULL DEFAULT '0',
   `time` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`to_guild_id`) REFERENCES `guilds`(`id`) ON DELETE CASCADE
-  FOREIGN KEY (`from_guild_id`) REFERENCES `guilds`(`id`) ON DELETE SET NULL
+  FOREIGN KEY (`to_guild`) REFERENCES `guilds`(`id`) ON DELETE CASCADE
+  FOREIGN KEY (`from_guild`) REFERENCES `guilds`(`id`) ON DELETE SET NULL
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `houses` (
   `highest_bidder` int(11) NOT NULL DEFAULT '0',
   `size` int(11) NOT NULL DEFAULT '0',
   `beds` int(11) NOT NULL DEFAULT '0',
-  `type` TINYINT(3) NOT NULL DEFAULT '0',
+  `type` ENUM('House', 'Guildhall') NOT NULL DEFAULT 'House',
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`),
   KEY `town_id` (`town_id`)
