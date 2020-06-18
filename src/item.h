@@ -632,10 +632,16 @@ class Item : virtual public Thing
 		}
 
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->getCustomAttribute(key);
 		}
 
 		const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->getCustomAttribute(key);
 		}
 
