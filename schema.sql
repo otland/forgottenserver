@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `guild_transactions` (
   `to_guild` int(11) NOT NULL,
   `from_guild` int(11) DEFAULT NULL,
   `player_id` int(11) DEFAULT NULL,
-  `type` ENUM('DEPOSIT', 'WITHDRAWAL') NOT NULL,
+  `type` ENUM('DEPOSIT', 'WITHDRAW') NOT NULL,
   `balance` bigint(20) unsigned NOT NULL DEFAULT '0',
   `time` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
