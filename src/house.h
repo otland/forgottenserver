@@ -168,7 +168,7 @@ class House
 			return houseName;
 		}
 
-		void setOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
+		void setOwner(uint32_t guid_guild, bool updateDatabase = true, Player* previousPlayer = nullptr);
 		uint32_t getOwner() const {
 			return owner;
 		}

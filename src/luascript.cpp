@@ -10879,9 +10879,22 @@ int LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 	// house:setOwnerGuid(guid[, updateDatabase = true])
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		uint32_t guid = getNumber<uint32_t>(L, 2);
+		uint32_t guid_guild = getNumber<uint32_t>(L, 2);
 		bool updateDatabase = getBoolean(L, 3, true);
-		house->setOwner(guid, updateDatabase);
+		// If house is guildhall and player happens to be in a guild
+		// We can pull the guild_id and pass it over to house->setOwner
+		if (house->getType() == HOUSE_TYPE_GUILDHALL) {
+			Database& db = Database::getInstance();
+			std::ostringstream query;
+			query << "SELECT `guild_id` FROM `guild_membership` WHERE `player_id`='" << guid_guild << "'";
+			if (DBResult_ptr result = db.storeQuery(query.str())) {
+				guid_guild = result->getNumber<uint32_t>("guild_id");
+			} else {
+				pushBoolean(L, true);
+				return 1;
+			}
+		}
+		house->setOwner(guid_guild, updateDatabase);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
