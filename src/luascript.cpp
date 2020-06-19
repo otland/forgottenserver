@@ -10890,7 +10890,7 @@ int LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 			if (DBResult_ptr result = db.storeQuery(query.str())) {
 				guid_guild = result->getNumber<uint32_t>("guild_id");
 			} else {
-				pushBoolean(L, true);
+				pushBoolean(L, false);
 				return 1;
 			}
 		}
