@@ -60,9 +60,7 @@ class Guild
 		uint64_t getBankBalance() const {
 			return bankBalance;
 		}
-		void setBankBalance(uint64_t balance) {
-			bankBalance = balance;
-		}
+		void setBankBalance(uint64_t balance);
 
 		uint32_t getOwnerGUID() const {
 			return ownerGUID;

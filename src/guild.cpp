@@ -81,3 +81,12 @@ void Guild::addRank(uint32_t rankId, const std::string& rankName, uint8_t level)
 {
 	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }
+
+void Guild::setBankBalance(uint64_t balance) {
+	bankBalance = balance;
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "UPDATE `guilds` SET `balance`='" << bankBalance << "' ";
+	query << "WHERE `id`='" << id << "'";
+	db.executeQuery(query.str());
+}
