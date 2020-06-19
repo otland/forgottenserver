@@ -303,6 +303,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 		rentPeriod = RENTPERIOD_MONTHLY;
 	} else if (strRentPeriod == "daily") {
 		rentPeriod = RENTPERIOD_DAILY;
+	} else if (strRentPeriod == "dev") {
+		rentPeriod = RENTPERIOD_DEV;
 	} else {
 		rentPeriod = RENTPERIOD_NEVER;
 	}

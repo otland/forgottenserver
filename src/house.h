@@ -279,6 +279,7 @@ enum RentPeriod_t {
 	RENTPERIOD_MONTHLY,
 	RENTPERIOD_YEARLY,
 	RENTPERIOD_NEVER,
+	RENTPERIOD_DEV,// 5 minutes rent period for testing purposes
 };
 
 class Houses

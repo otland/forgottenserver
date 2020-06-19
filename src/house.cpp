@@ -196,35 +196,37 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 	if (!player) {
 		return HOUSE_OWNER;
 	}
-
-	if (g_config.getBoolean(ConfigManager::HOUSE_OWNED_BY_ACCOUNT)) {
-		if (ownerAccountId == player->getAccount()) {
-			return HOUSE_OWNER;
-		}
-	}
-
 	if (player->hasFlag(PlayerFlag_CanEditHouses)) {
 		return HOUSE_OWNER;
 	}
 
 	uint32_t guid = player->getGUID();
-	if (guid == owner) {
-		return HOUSE_OWNER;
-	}
 
-	Guild* guild = player->getGuild();
-	if (guild && guild->getOwnerGUID() == guid) {
-		return HOUSE_OWNER;
+	if (type == HOUSE_TYPE_NORMAL) {
+		if (g_config.getBoolean(ConfigManager::HOUSE_OWNED_BY_ACCOUNT)) {
+			if (ownerAccountId == player->getAccount()) {
+				return HOUSE_OWNER;
+			}
+		}
+		if (guid == owner) {
+			return HOUSE_OWNER;
+		}
+
+	} else { // HOUSE_TYPE_GUILDHALL
+		Guild* guild = player->getGuild();
+		if (guild && guild->getId() == owner) {
+			if (guild->getOwnerGUID() == guid) {
+				return HOUSE_OWNER;
+			}
+			if (player->getGuildRank() == guild->getRankByLevel(2)) {
+				return HOUSE_SUBOWNER;
+			}
+		}
 	}
 
 	if (subOwnerList.isInList(player)) {
 		return HOUSE_SUBOWNER;
 	}
-
-	if (guild && player->getGuildRank() == guild->getRankByLevel(2)) {
-		return HOUSE_SUBOWNER;
-	}
-
 	if (guestList.isInList(player)) {
 		return HOUSE_GUEST;
 	}
@@ -290,18 +292,42 @@ bool House::transferToDepot() const
 		return false;
 	}
 
-	Player* player = g_game.getPlayerByGUID(owner);
-	if (player) {
-		transferToDepot(player);
-	} else {
-		Player tmpPlayer(nullptr);
-		if (!IOLoginData::loadPlayerById(&tmpPlayer, owner)) {
-			return false;
-		}
+	if (type == HOUSE_TYPE_NORMAL) {
+		Player* player = g_game.getPlayerByGUID(owner);
+		if (player) {
+			transferToDepot(player);
+		} else {
+			Player tmpPlayer(nullptr);
+			if (!IOLoginData::loadPlayerById(&tmpPlayer, owner)) {
+				return false;
+			}
 
-		transferToDepot(&tmpPlayer);
-		IOLoginData::savePlayer(&tmpPlayer);
+			transferToDepot(&tmpPlayer);
+			IOLoginData::savePlayer(&tmpPlayer);
+		}
+	} else { // HOUSE_TYPE_GUILDHALL WIP
+		Guild* guild = g_game.getGuild(owner);
+		if (!guild) {
+			guild = IOGuild::loadGuild(owner);
+			if (!guild) {
+				std::cout << "Warning: [Houses::transferToDepot] Failed to find guild associated to guildhall = " << id << ". Guild = " << owner << std::endl;
+				return false;
+			}
+		}
+		Player* player = g_game.getPlayerByGUID(guild->getOwnerGUID());
+		if (player) {
+			transferToDepot(player);
+		} else {
+			Player tmpPlayer(nullptr);
+			if (!IOLoginData::loadPlayerById(&tmpPlayer, guild->getOwnerGUID())) {
+				return false;
+			}
+
+			transferToDepot(&tmpPlayer);
+			IOLoginData::savePlayer(&tmpPlayer);
+		}
 	}
+
 	return true;
 }
 
@@ -774,6 +800,9 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 					case RENTPERIOD_YEARLY:
 						paidUntil += 24 * 60 * 60 * 365;
 						break;
+					case RENTPERIOD_DEV:
+						paidUntil += 5 * 60;
+						break;
 					default:
 						break;
 				}
@@ -803,6 +832,10 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 							period = "annual";
 							break;
 
+						case RENTPERIOD_DEV:
+							period = "dev";
+							break;
+
 						default:
 							break;
 					}
@@ -830,9 +863,17 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 
 			// If guild can afford paying rent
 			if (guild->getBankBalance() >= rent) {
+				std::cout << "[Info - Houses::payHouses] House entry not set"
+				    << " - Name: " << house->getName()
+				    << " - House id: " << house->getId()
+					<< " - Guild: " << guild->getName()
+					<< " - Balance " << guild->getBankBalance()
+					<< " - Rent " << rent
+					<< " - New balance " << guild->getBankBalance() - rent << std::endl;
 				guild->setBankBalance(guild->getBankBalance() - rent);
 
 				time_t paidUntil = currentTime;
+
 				switch (rentPeriod) {
 					case RENTPERIOD_DAILY:
 						paidUntil += 24 * 60 * 60;
@@ -846,12 +887,16 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 					case RENTPERIOD_YEARLY:
 						paidUntil += 24 * 60 * 60 * 365;
 						break;
+					case RENTPERIOD_DEV:
+						paidUntil += 5 * 60;
+						break;
 					default:
 						break;
 				}
 
 				house->setPaidUntil(paidUntil);
 			} else { // guild cannot afford rent
+				std::cout << "a guild cannot afford their rent " << house->getPayRentWarnings() << std::endl;
 				Player player(nullptr);
 				if (!IOLoginData::loadPlayerById(&player, guild->getOwnerGUID())) {
 					// Player doesn't exist, reset house owner
@@ -883,6 +928,10 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 
 						case RENTPERIOD_YEARLY:
 							period = "annual";
+							break;
+
+						case RENTPERIOD_DEV:
+							period = "dev";
 							break;
 
 						default:
