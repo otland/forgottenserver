@@ -207,11 +207,21 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 		return HOUSE_OWNER;
 	}
 
-	if (player->getGUID() == owner) {
+	uint32_t guid = player->getGUID();
+	if (guid == owner) {
+		return HOUSE_OWNER;
+	}
+
+	Guild* guild = player->getGuild();
+	if (guild && guild->getOwnerGUID() == guid) {
 		return HOUSE_OWNER;
 	}
 
 	if (subOwnerList.isInList(player)) {
+		return HOUSE_SUBOWNER;
+	}
+
+	if (guild && player->getGuildRank() == guild->getRankByLevel(2)) {
 		return HOUSE_SUBOWNER;
 	}
 
