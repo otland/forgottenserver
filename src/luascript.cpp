@@ -1717,6 +1717,9 @@ void LuaScriptInterface::registerFunctions()
 	// Use with house:getAccessList, house:setAccessList
 	registerEnum(GUEST_LIST)
 	registerEnum(SUBOWNER_LIST)
+	// Use with house:getType
+	registerEnum(HOUSE_TYPE_NORMAL)
+	registerEnum(HOUSE_TYPE_GUILDHALL)
 
 	// Use with npc:setSpeechBubble
 	registerEnum(SPEECHBUBBLE_NONE)
@@ -2485,6 +2488,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Guild", "getMotd", LuaScriptInterface::luaGuildGetMotd);
 	registerMethod("Guild", "setMotd", LuaScriptInterface::luaGuildSetMotd);
 
+	registerMethod("Guild", "getBankBalance", LuaScriptInterface::luaGuildGetBankBalance);
+	registerMethod("Guild", "setBankBalance", LuaScriptInterface::luaGuildSetBankBalance);
+
+	registerMethod("Guild", "getOwnerGUID", LuaScriptInterface::luaGuildGetOwnerGUID);
+
 	// Group
 	registerClass("Group", "", LuaScriptInterface::luaGroupCreate);
 	registerMetaMethod("Group", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2541,6 +2549,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("House", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerMethod("House", "getId", LuaScriptInterface::luaHouseGetId);
+	registerMethod("House", "getType", LuaScriptInterface::luaHouseGetType);
 	registerMethod("House", "getName", LuaScriptInterface::luaHouseGetName);
 	registerMethod("House", "getTown", LuaScriptInterface::luaHouseGetTown);
 	registerMethod("House", "getExitPosition", LuaScriptInterface::luaHouseGetExitPosition);
@@ -2548,6 +2557,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
 	registerMethod("House", "setOwnerGuid", LuaScriptInterface::luaHouseSetOwnerGuid);
+	registerMethod("House", "getOwnerGuild", LuaScriptInterface::luaHouseGetOwnerGuild);
 	registerMethod("House", "startTrade", LuaScriptInterface::luaHouseStartTrade);
 
 	registerMethod("House", "getBeds", LuaScriptInterface::luaHouseGetBeds);
@@ -10344,6 +10354,44 @@ int LuaScriptInterface::luaGuildSetMotd(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGuildGetBankBalance(lua_State* L)
+{
+	// guild:getBankBalance()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getBankBalance());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildSetBankBalance(lua_State* L)
+{
+	// guild:setBankBalance(balance)
+	uint64_t balance = getNumber<uint32_t>(L, 2);
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		guild->setBankBalance(balance);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildGetOwnerGUID(lua_State* L)
+{
+	// guild:getOwnerGUID()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getOwnerGUID());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Group
 int LuaScriptInterface::luaGroupCreate(lua_State* L)
 {
@@ -10807,6 +10855,18 @@ int LuaScriptInterface::luaHouseGetId(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaHouseGetType(lua_State* L)
+{
+	// house:getType()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		lua_pushnumber(L, house->getType());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaHouseGetName(lua_State* L)
 {
 	// house:getName()
@@ -10867,7 +10927,27 @@ int LuaScriptInterface::luaHouseGetOwnerGuid(lua_State* L)
 	// house:getOwnerGuid()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		lua_pushnumber(L, house->getOwner());
+		if (house->getType() == HOUSE_TYPE_NORMAL) {
+			lua_pushnumber(L, house->getOwner());
+		} else {
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetOwnerGuild(lua_State* L)
+{
+	// house:getOwnerGuild()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		if (house->getType() == HOUSE_TYPE_GUILDHALL) {
+			lua_pushnumber(L, house->getOwner());
+		} else {
+			lua_pushnil(L);
+		}
 	} else {
 		lua_pushnil(L);
 	}

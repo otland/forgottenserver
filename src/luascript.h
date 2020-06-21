@@ -1038,6 +1038,11 @@ class LuaScriptInterface
 		static int luaGuildGetMotd(lua_State* L);
 		static int luaGuildSetMotd(lua_State* L);
 
+		static int luaGuildGetBankBalance(lua_State* L);
+		static int luaGuildSetBankBalance(lua_State* L);
+
+		static int luaGuildGetOwnerGUID(lua_State* L);
+
 		// Group
 		static int luaGroupCreate(lua_State* L);
 
@@ -1090,12 +1095,14 @@ class LuaScriptInterface
 		static int luaHouseCreate(lua_State* L);
 
 		static int luaHouseGetId(lua_State* L);
+		static int luaHouseGetType(lua_State* L);
 		static int luaHouseGetName(lua_State* L);
 		static int luaHouseGetTown(lua_State* L);
 		static int luaHouseGetExitPosition(lua_State* L);
 		static int luaHouseGetRent(lua_State* L);
 
 		static int luaHouseGetOwnerGuid(lua_State* L);
+		static int luaHouseGetOwnerGuild(lua_State* L);
 		static int luaHouseSetOwnerGuid(lua_State* L);
 		static int luaHouseStartTrade(lua_State* L);
 
