@@ -238,6 +238,8 @@ class House
 		}
 
 	private:
+		std::tuple<uint32_t, uint32_t, std::string, uint32_t, std::string> initializeOwnerDataFromDatabase(uint32_t guid_guild, HouseType_t type);
+
 		bool transferToDepot() const;
 		bool transferToDepot(Player* player) const;
 
@@ -320,6 +322,8 @@ class Houses
 		bool loadHousesXML(const std::string& filename);
 
 		void payHouses(RentPeriod_t rentPeriod) const;
+		std::string getRentPeriod(RentPeriod_t rentPeriod) const;
+		time_t increasePaidUntil(RentPeriod_t rentPeriod, time_t paidUntil) const;
 
 		const HouseMap& getHouses() const {
 			return houseMap;

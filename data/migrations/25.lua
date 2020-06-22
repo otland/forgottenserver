@@ -1,6 +1,6 @@
 function onUpdateDatabase()
 	print("> Updating database to version 26 (guildhalls, guild banks #2213)")
-	db.query("ALTER TABLE `houses` ADD `type` ENUM('House', 'Guildhall') NOT NULL DEFAULT 'House' AFTER `id`")
+	db.query("ALTER TABLE `houses` ADD `type` ENUM('HOUSE', 'GUILDHALL') NOT NULL DEFAULT 'HOUSE' AFTER `id`")
 	db.query("ALTER TABLE `guilds` ADD `balance` bigint(20) unsigned NOT NULL DEFAULT '0'")
 	db.query([[
 		CREATE TABLE IF NOT EXISTS `guild_transactions` (

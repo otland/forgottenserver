@@ -86,7 +86,6 @@ void Guild::setBankBalance(uint64_t balance) {
 	bankBalance = balance;
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "UPDATE `guilds` SET `balance`='" << bankBalance << "' ";
-	query << "WHERE `id`='" << id << "'";
+	query << "UPDATE `guilds` SET `balance`=" << bankBalance << " WHERE `id`=" << id;
 	db.executeQuery(query.str());
 }

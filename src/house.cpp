@@ -38,48 +38,57 @@ void House::addTile(HouseTile* tile)
 	houseTiles.push_back(tile);
 }
 
+std::tuple<uint32_t, uint32_t, std::string, uint32_t, std::string> House::initializeOwnerDataFromDatabase(uint32_t guid_guild, HouseType_t type) {
+	if (guid_guild == 0) {
+		return std::make_tuple(0, 0, "", 0, "");
+	}
+
+	Database& db = Database::getInstance();
+
+	if (type == HOUSE_TYPE_NORMAL) {
+		std::ostringstream query;
+		query << "SELECT `id`, `name`, `account_id` FROM `players` WHERE `id`=" << guid_guild;
+		if (DBResult_ptr result = db.storeQuery(query.str())) {
+			return std::make_tuple(
+				result->getNumber<uint32_t>("id"), // sqlPlayerGuid
+				result->getNumber<uint32_t>("account_id"), // sqlAccountId
+				result->getString("name"), // sqlPlayerName
+				0, // sqlGuildId
+				"" // sqlGuildName
+			);
+		}
+		throw std::runtime_error("Error in House::setOwner - Failed to find player GUID");
+	}
+
+	// HOUSE_TYPE_GUILDHALL
+	std::ostringstream query;
+	query << "SELECT `g`.`id`, `g`.`name` as `guild_name`, `g`.`ownerid`, `p`.`name`, `p`.`account_id` ";
+	query << "FROM `guilds` as `g` INNER JOIN `players` AS `p` ON `g`.`ownerid` = `p`.`id` ";
+	query << "WHERE `g`.`id`=" << guid_guild;
+	if (DBResult_ptr result = db.storeQuery(query.str())) {
+		return std::make_tuple(
+			result->getNumber<uint32_t>("ownerid"), // sqlPlayerGuid
+			result->getNumber<uint32_t>("account_id"), // sqlAccountId
+			result->getString("name"), // sqlPlayerName
+			result->getNumber<uint32_t>("id"), // sqlGuildId
+			result->getString("guild_name") // sqlGuildName
+		);
+	}
+	throw std::runtime_error("Error in House::setOwner - Failed to find guild ID");
+}
+
 // Param: guid_guild is either 0 (remove owner), player->getGUID() or guild->getId()
 void House::setOwner(uint32_t guid_guild, bool updateDatabase/* = true*/, Player* previousPlayer/* = nullptr*/)
 {
 
-	uint32_t sqlAccountId = 0;
-	uint32_t sqlPlayerGuid = 0;
-	std::string sqlPlayerName = "";
+	uint32_t sqlAccountId, sqlPlayerGuid, sqlGuildId;
+	std::string sqlPlayerName, sqlGuildName;
 
-	uint32_t sqlGuildId = 0;
-	std::string sqlGuildName = "";
-
-	if (guid_guild != 0) {
-		Database& db = Database::getInstance();
-
-		if (type == HOUSE_TYPE_NORMAL) {
-			std::ostringstream query;
-			query << "SELECT `id` AS `player_guid`, `name` as `player_name`, `account_id` ";
-			query << "FROM `players` WHERE `id`='" << guid_guild << "'";
-
-			if (DBResult_ptr result = db.storeQuery(query.str())) {
-				sqlPlayerGuid = result->getNumber<uint32_t>("player_guid");
-				sqlAccountId = result->getNumber<uint32_t>("account_id");
-				sqlPlayerName = result->getString("player_name");
-			} else {
-				std::cout << "Error in House::setOwner - Failed to find player GUID";
-			}
-
-		} else { // HOUSE_TYPE_GUILDHALL
-			std::ostringstream query;
-			query << "SELECT `g`.`id` AS `guild_id`, `g`.`name` as `guild_name`, `g`.`ownerid` AS `player_guid`, `p`.`name` as `player_name`, `p`.`account_id` ";
-			query << "FROM `guilds` as `g` INNER JOIN `players` AS `p` ON `g`.`ownerid` = `p`.`id` ";
-			query << "WHERE `g`.`id`='" << guid_guild << "'";
-			if (DBResult_ptr result = db.storeQuery(query.str())) {
-				sqlGuildId = result->getNumber<uint32_t>("guild_id");
-				sqlPlayerGuid = result->getNumber<uint32_t>("player_guid");
-				sqlAccountId = result->getNumber<uint32_t>("account_id");
-				sqlGuildName = result->getString("guild_name");
-				sqlPlayerName = result->getString("player_name");
-			} else {
-				std::cout << "Error in House::setOwner - Failed to find guild ID";
-			}
-		}
+	try {
+		std::tie(sqlPlayerGuid, sqlAccountId, sqlPlayerName, sqlGuildId, sqlGuildName) = initializeOwnerDataFromDatabase(guid_guild, type);
+	} catch (const std::runtime_error& err) {
+		std::cout << err.what();
+		return;
 	}
 
 	// If the old owner of this house is not the new owner
@@ -305,7 +314,7 @@ bool House::transferToDepot() const
 			transferToDepot(&tmpPlayer);
 			IOLoginData::savePlayer(&tmpPlayer);
 		}
-	} else { // HOUSE_TYPE_GUILDHALL WIP
+	} else { // HOUSE_TYPE_GUILDHALL
 		Guild* guild = g_game.getGuild(owner);
 		if (!guild) {
 			guild = IOGuild::loadGuild(owner);
@@ -751,6 +760,42 @@ bool Houses::loadHousesXML(const std::string& filename)
 	return true;
 }
 
+time_t Houses::increasePaidUntil(RentPeriod_t rentPeriod, time_t paidUntil) const
+{
+	switch (rentPeriod) {
+		case RENTPERIOD_DAILY:
+			return paidUntil += 24 * 60 * 60;
+		case RENTPERIOD_WEEKLY:
+			return paidUntil += 24 * 60 * 60 * 7;
+		case RENTPERIOD_MONTHLY:
+			return paidUntil += 24 * 60 * 60 * 30;
+		case RENTPERIOD_YEARLY:
+			return paidUntil += 24 * 60 * 60 * 365;
+		case RENTPERIOD_DEV:
+			return paidUntil += 5 * 60;
+		default:
+			return paidUntil;
+	}
+}
+
+std::string Houses::getRentPeriod(RentPeriod_t rentPeriod) const
+{
+	switch (rentPeriod) {
+		case RENTPERIOD_DAILY:
+			return "daily";
+		case RENTPERIOD_WEEKLY:
+			return "weekly";
+		case RENTPERIOD_MONTHLY:
+			return "monthly";
+		case RENTPERIOD_YEARLY:
+			return "annual";
+		case RENTPERIOD_DEV:
+			return "dev";
+		default:
+			return "never";
+	}
+}
+
 void Houses::payHouses(RentPeriod_t rentPeriod) const
 {
 	if (rentPeriod == RENTPERIOD_NEVER) {
@@ -786,59 +831,14 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 			if (player.getBankBalance() >= rent) {
 				player.setBankBalance(player.getBankBalance() - rent);
 
-				time_t paidUntil = currentTime;
-				switch (rentPeriod) {
-					case RENTPERIOD_DAILY:
-						paidUntil += 24 * 60 * 60;
-						break;
-					case RENTPERIOD_WEEKLY:
-						paidUntil += 24 * 60 * 60 * 7;
-						break;
-					case RENTPERIOD_MONTHLY:
-						paidUntil += 24 * 60 * 60 * 30;
-						break;
-					case RENTPERIOD_YEARLY:
-						paidUntil += 24 * 60 * 60 * 365;
-						break;
-					case RENTPERIOD_DEV:
-						paidUntil += 5 * 60;
-						break;
-					default:
-						break;
-				}
-
+				time_t paidUntil = increasePaidUntil(rentPeriod, currentTime);
 				house->setPaidUntil(paidUntil);
 			} else {
 				if (house->getPayRentWarnings() < 7) {
 					int32_t daysLeft = 7 - house->getPayRentWarnings();
 
 					Item* letter = Item::CreateItem(ITEM_LETTER_STAMPED);
-					std::string period;
-
-					switch (rentPeriod) {
-						case RENTPERIOD_DAILY:
-							period = "daily";
-							break;
-
-						case RENTPERIOD_WEEKLY:
-							period = "weekly";
-							break;
-
-						case RENTPERIOD_MONTHLY:
-							period = "monthly";
-							break;
-
-						case RENTPERIOD_YEARLY:
-							period = "annual";
-							break;
-
-						case RENTPERIOD_DEV:
-							period = "dev";
-							break;
-
-						default:
-							break;
-					}
+					std::string period = getRentPeriod(rentPeriod);
 
 					std::ostringstream ss;
 					ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName() << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";
@@ -863,7 +863,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 
 			// If guild can afford paying rent
 			if (guild->getBankBalance() >= rent) {
-				std::cout << "[Info - Houses::payHouses] House entry not set"
+				std::cout << "[Info - Houses::payHouses] Paying rent info"
 				    << " - Name: " << house->getName()
 				    << " - House id: " << house->getId()
 					<< " - Guild: " << guild->getName()
@@ -872,28 +872,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 					<< " - New balance " << guild->getBankBalance() - rent << std::endl;
 				guild->setBankBalance(guild->getBankBalance() - rent);
 
-				time_t paidUntil = currentTime;
-
-				switch (rentPeriod) {
-					case RENTPERIOD_DAILY:
-						paidUntil += 24 * 60 * 60;
-						break;
-					case RENTPERIOD_WEEKLY:
-						paidUntil += 24 * 60 * 60 * 7;
-						break;
-					case RENTPERIOD_MONTHLY:
-						paidUntil += 24 * 60 * 60 * 30;
-						break;
-					case RENTPERIOD_YEARLY:
-						paidUntil += 24 * 60 * 60 * 365;
-						break;
-					case RENTPERIOD_DEV:
-						paidUntil += 5 * 60;
-						break;
-					default:
-						break;
-				}
-
+				time_t paidUntil = increasePaidUntil(rentPeriod, currentTime);
 				house->setPaidUntil(paidUntil);
 			} else { // guild cannot afford rent
 				std::cout << "a guild cannot afford their rent " << house->getPayRentWarnings() << std::endl;
@@ -911,32 +890,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 					int32_t daysLeft = 7 - house->getPayRentWarnings();
 
 					Item* letter = Item::CreateItem(ITEM_LETTER_STAMPED);
-					std::string period;
-
-					switch (rentPeriod) {
-						case RENTPERIOD_DAILY:
-							period = "daily";
-							break;
-
-						case RENTPERIOD_WEEKLY:
-							period = "weekly";
-							break;
-
-						case RENTPERIOD_MONTHLY:
-							period = "monthly";
-							break;
-
-						case RENTPERIOD_YEARLY:
-							period = "annual";
-							break;
-
-						case RENTPERIOD_DEV:
-							period = "dev";
-							break;
-
-						default:
-							break;
-					}
+					std::string period = getRentPeriod(rentPeriod);
 
 					std::ostringstream ss;
 					ss << "Warning! \nThe " << period << " rent of " << house->getRent() << " gold for your house \"" << house->getName() << "\" is payable. Have it within " << daysLeft << " days or you will lose this house.";

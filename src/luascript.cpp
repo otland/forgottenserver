@@ -10966,7 +10966,7 @@ int LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 		if (house->getType() == HOUSE_TYPE_GUILDHALL) {
 			Database& db = Database::getInstance();
 			std::ostringstream query;
-			query << "SELECT `guild_id` FROM `guild_membership` WHERE `player_id`='" << guid_guild << "'";
+			query << "SELECT `guild_id` FROM `guild_membership` WHERE `player_id`=" << guid_guild;
 			if (DBResult_ptr result = db.storeQuery(query.str())) {
 				guid_guild = result->getNumber<uint32_t>("guild_id");
 			} else {
