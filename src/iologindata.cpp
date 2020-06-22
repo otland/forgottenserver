@@ -433,7 +433,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		if (guild) {
 			player->guild = guild;
-			const GuildRank* rank = guild->getRankById(playerRankId);
+			GuildRank_ptr rank = guild->getRankById(playerRankId);
 			if (!rank) {
 				query.str(std::string());
 				query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = " << playerRankId;

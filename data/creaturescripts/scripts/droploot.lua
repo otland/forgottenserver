@@ -1,4 +1,4 @@
-function onDeath(player, corpse, killer, mostDamage, unjustified, mostDamage_unjustified)
+function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if player:hasFlag(PlayerFlag_NotGenerateLoot) or player:getVocation():getId() == VOCATION_NONE then
 		return true
 	end

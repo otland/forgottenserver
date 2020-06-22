@@ -43,6 +43,7 @@ deathLosePercent = -1
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
 houseOwnedByAccount = false
+houseDoorShowPrice = true
 
 -- Item Usage
 timeBetweenActions = 200
@@ -84,6 +85,7 @@ showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
+cleanProtectionZones = false
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes

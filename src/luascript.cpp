@@ -2381,6 +2381,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "removeOutfit", LuaScriptInterface::luaPlayerRemoveOutfit);
 	registerMethod("Player", "removeOutfitAddon", LuaScriptInterface::luaPlayerRemoveOutfitAddon);
 	registerMethod("Player", "hasOutfit", LuaScriptInterface::luaPlayerHasOutfit);
+	registerMethod("Player", "canWearOutfit", LuaScriptInterface::luaPlayerCanWearOutfit);
 	registerMethod("Player", "sendOutfitWindow", LuaScriptInterface::luaPlayerSendOutfitWindow);
 
 	registerMethod("Player", "addMount", LuaScriptInterface::luaPlayerAddMount);
@@ -8552,7 +8553,7 @@ int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 		return 1;
 	}
 
-	const GuildRank* rank = player->getGuild()->getRankByLevel(level);
+	GuildRank_ptr rank = player->getGuild()->getRankByLevel(level);
 	if (!rank) {
 		pushBoolean(L, false);
 	} else {
@@ -9220,6 +9221,20 @@ int LuaScriptInterface::luaPlayerRemoveOutfitAddon(lua_State* L)
 int LuaScriptInterface::luaPlayerHasOutfit(lua_State* L)
 {
 	// player:hasOutfit(lookType[, addon = 0])
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		uint16_t lookType = getNumber<uint16_t>(L, 2);
+		uint8_t addon = getNumber<uint8_t>(L, 3, 0);
+		pushBoolean(L, player->hasOutfit(lookType, addon));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerCanWearOutfit(lua_State* L)
+{
+	// player:canWearOutfit(lookType[, addon = 0])
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		uint16_t lookType = getNumber<uint16_t>(L, 2);
@@ -10269,7 +10284,7 @@ int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 	}
 
 	uint32_t id = getNumber<uint32_t>(L, 2);
-	GuildRank* rank = guild->getRankById(id);
+	GuildRank_ptr rank = guild->getRankById(id);
 	if (rank) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
@@ -10291,7 +10306,7 @@ int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 	}
 
 	uint8_t level = getNumber<uint8_t>(L, 2);
-	const GuildRank* rank = guild->getRankByLevel(level);
+	GuildRank_ptr rank = guild->getRankByLevel(level);
 	if (rank) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
@@ -14948,6 +14963,11 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 	// moveevent:register()
 	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
 	if (moveevent) {
+		if ((moveevent->getEventType() == MOVE_EVENT_EQUIP || moveevent->getEventType() == MOVE_EVENT_DEEQUIP) && moveevent->getSlot() == SLOTP_WHEREEVER) {
+			uint32_t id = moveevent->getItemIdRange().at(0);
+			ItemType& it = Item::items.getItemType(id);
+			moveevent->setSlot(it.slotPosition);
+		}
 		if (!moveevent->isScripted()) {
 			pushBoolean(L, g_moveEvents->registerLuaFunction(moveevent));
 			return 1;
