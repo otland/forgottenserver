@@ -87,7 +87,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
-		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ","));
+		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		bool success = true;
 
 		for (size_t i = 0; i < idList.size(); i++) {
@@ -126,7 +126,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 		return success;
 	} else if ((attr = node.attribute("uniqueid"))) {
-		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ","));
+		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		bool success = true;
 
 		for (size_t i = 0; i < uidList.size(); i++) {
@@ -165,7 +165,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 		return success;
 	} else if ((attr = node.attribute("actionid"))) {
-		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ","));
+		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		bool success = true;
 
 		for (size_t i = 0; i < aidList.size(); i++) {
