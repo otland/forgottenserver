@@ -72,6 +72,18 @@ local function creatureSayCallback(cid, type, msg)
 				player:save()
 				guild:setBankBalance(guild:getBankBalance() + deposit)
 				npcHandler:say("Alright, we have added the amount of " .. deposit .. " gold to the guild " .. guild:getName() .. ".", cid)
+				local currentTime = os.time()
+				local insertData = table.concat({
+					guild:getId(),
+					player:getGuid(),
+					"'DEPOSIT'",
+					deposit,
+					currentTime
+				},',')
+				db.query("INSERT INTO `guild_transactions` (`to_guild`,`player_id`,`type`,`balance`,`time`) VALUES ("..insertData..");")
+				local receipt = Game.createItem(ITEM_RECEIPT_SUCCESS, 1)
+				receipt:setAttribute(ITEM_ATTRIBUTE_TEXT, "Date: " .. os.date("%d. %b %Y - %H:%M:%S", currentTime) .. "\nType: Guild Deposit\nGold Amount: " .. deposit .. "\nReceipt Owner: " .. player:getName() .. "\nRecipient: The " .. guild:getName() .. "\n\nWe are happy to inform you that your transfer request was successfully carried out.")
+				player:addItemEx(receipt)
 			else
 				npcHandler:say("You do not have enough gold.", cid)
 			end
@@ -115,6 +127,18 @@ local function creatureSayCallback(cid, type, msg)
 					player:setBankBalance(player:getBankBalance() + withdraw)
 					player:save()
 					npcHandler:say("Alright, we have removed the amount of " .. withdraw .. " gold from the guild " .. guild:getName() .. ", and added it to your {personal} account.", cid)
+					local currentTime = os.time()
+					local insertData = table.concat({
+						guild:getId(),
+						player:getGuid(),
+						"'WITHDRAW'",
+						withdraw,
+						currentTime
+					},',')
+					db.query("INSERT INTO `guild_transactions` (`to_guild`,`player_id`,`type`,`balance`,`time`) VALUES ("..insertData..");")
+					local receipt = Game.createItem(ITEM_RECEIPT_SUCCESS, 1)
+					receipt:setAttribute(ITEM_ATTRIBUTE_TEXT, "Date: " .. os.date("%d. %b %Y - %H:%M:%S", currentTime) .. "\nType: Guild Withdraw\nGold Amount: " .. withdraw .. "\nReceipt Owner: " .. player:getName() .. "\nRecipient: The " .. guild:getName() .. "\n\nWe are happy to inform you that your transfer request was successfully carried out.")
+					player:addItemEx(receipt)
 				else
 					npcHandler:say("Sorry, you are not authorized for withdrawals. Only Leaders and Vice-leaders are allowed to withdraw funds from guild accounts.", cid)
 				end
@@ -237,13 +261,75 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("Alright, is there something else I can do for you?", cid)
 		end
 		npcHandler.topic[cid] = 0
+	elseif msgcontains(msg, "ledger") then
+		if player:getGuid() ~= guild:getOwnerGUID() then
+			npcHandler.topic[cid] = 0
+			npcHandler:say("Sorry, this is confidential between me and your Guild Leader!", cid)
+			return true
+		end
+		npcHandler.topic[cid] = 14
+		npcHandler:say("To your advantage, I'm a man who got his papers sorted out. I have ledger records of all transaction requests for your {guild account}. Would you like to get a copy?", cid)
+		return true
+	elseif msgcontains(msg, "yes") and npcHandler.topic[cid] == 14 then
+		local dbTransactions = db.storeQuery([[
+			SELECT
+				`g`.`name` as `to_guild_name`,
+				`g2`.`name` as `from_guild_name`,
+				`p`.`name` as `player_name`,
+				`t`.`type`,
+				`t`.`balance`,
+				`t`.`time`
+			FROM `guild_transactions` as `t`
+			JOIN `guilds` as `g`
+				ON `t`.`to_guild` = `g`.`id`
+			LEFT JOIN `guilds` as `g2`
+				ON `t`.`from_guild` = `g2`.`id`
+			LEFT JOIN `players` as `p`
+				ON `t`.`player_id` = `p`.`id`
+			WHERE `to_guild` = ]] .. guild:getId() .. [[
+			ORDER BY `t`.`time` DESC
+		]])
+		local ledger_text = "Ledger Date: " .. os.date("%d. %b %Y - %H:%M:%S", os.time()) .. ".\nOfficial ledger for Guild: " .. guild:getName() .. ".\nGuild balance: " .. guild:getBankBalance() .. ".\n\n"
+		local records = {}
+
+		if dbTransactions ~= false then
+			repeat
+				local to_guild_name = result.getString(dbTransactions, 'to_guild_name')
+				local from_guild_name = result.getString(dbTransactions, 'from_guild_name')
+				local player_name = result.getString(dbTransactions, 'player_name')
+				local type = (result.getString(dbTransactions, 'type') == "WITHDRAW" and "Withdraw" or "Deposit")
+				local balance = result.getNumber(dbTransactions, 'balance')
+				local time = result.getNumber(dbTransactions, 'time')
+
+	            table.insert(records, "Date: " .. os.date("%d. %b %Y - %H:%M:%S", time) .. "\nType: Guild "..type.."\nGold Amount: " .. balance .. "\nReceipt Owner: " .. player_name .. "\nRecipient: The " .. to_guild_name)
+
+			until not result.next(dbTransactions)
+			result.free(dbTransactions)
+	    else -- No transactions exist
+			npcHandler.topic[cid] = 0
+			npcHandler:say("Ohh, your ledger is actually empty. You should start using your {guild account}!", cid)
+			return true
+		end
+
+		local ledger = Game.createItem(ITEM_DOCUMENT_RO, 1)
+		ledger:setAttribute(ITEM_ATTRIBUTE_TEXT, ledger_text .. table.concat(records, "\n\n"))
+		player:addItemEx(ledger)
+
+		npcHandler.topic[cid] = 0
+		npcHandler:say("Here is your ledger "..player:getName()..". Feel free to come back anytime should you need an updated copy.", cid)
+
+		return true
+	elseif msgcontains(msg, "no") and npcHandler.topic[cid] == 14 then
+		npcHandler.topic[cid] = 0
+		npcHandler:say("No worries, I will keep it updated for a later date then.", cid)
+		return true
 	end
 	return true
 end
 
 keywordHandler:addKeyword({"help"}, StdModule.say, {
 	npcHandler = npcHandler,
-	text = "You can check the {balance} of your guild account and {deposit} money to it. Guild Leaders and Vice-leaders can also {withdraw}, Guild Leaders can {transfer} money to other guilds."
+	text = "You can check the {balance} of your guild account and {deposit} money to it. Guild Leaders and Vice-leaders can also {withdraw}, Guild Leaders can {transfer} money to other guilds and check their guild {ledger}."
 })
 keywordHandler:addAliasKeyword({'money'})
 keywordHandler:addAliasKeyword({'guild account'})

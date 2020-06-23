@@ -33346,10 +33346,12 @@
 	<item fromid="24283" toid="24300" article="a" name="hoard of cursed gold" />
 	<item id="24301" article="a" name="receipt">
 		<attribute key="weight" value="25" />
+		<attribute key="readable" value="1" />
 		<attribute key="description" value="This receipt serves as a reference to a successful guild bank transfer." />
 	</item>
 	<item id="24302" article="a" name="receipt">
 		<attribute key="weight" value="25" />
+		<attribute key="readable" value="1" />
 		<attribute key="description" value="This receipt serves as a reference to a unsuccessful guild bank transfer." />
 	</item>
 	<item id="24303" name="black crystals" />
