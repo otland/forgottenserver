@@ -1,5 +1,5 @@
 local traps = {
-	[1510] = { -- strange
+	[1510] = { -- strange slits
 		transformTo = 1511,
 		damage = {-50, -100}
 	},
