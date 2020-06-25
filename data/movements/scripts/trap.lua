@@ -1,17 +1,29 @@
 local traps = {
-	[1510] = {transformTo = 1511, damage = {-50, -100}},
-	[1513] = {damage = {-50, -100}},
-	[2579] = {transformTo = 2578, damage = {-15, -30}},
-	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_EARTHDAMAGE}
+	[1510] = { -- strange
+		transformTo = 1511,
+		damage = {-50, -100}
+	},
+	[1513] = { -- spikes
+		damage = {-50, -100}
+	},
+	[2579] = { -- trap
+		transformTo = 2578,
+		damage = {-15, -30}
+	},
+	[4208] = { -- jungle maw
+		transformTo = 4209,
+		damage = {-15, -30},
+		type = COMBAT_EARTHDAMAGE
+	},
+	[25331] = { -- lava (walkable)
+		damage = {-500, -500},
+		type = COMBAT_FIREDAMAGE
+	}
 }
 
 function onStepIn(creature, item, position, fromPosition)
 	local trap = traps[item.itemid]
 	if not trap then
-		return true
-	end
-	
-	if Tile(position):hasFlag(TILESTATE_PROTECTIONZONE) then
 		return true
 	end
 
