@@ -20,6 +20,7 @@ addons:
       - libboost-system-dev
       - libboost-filesystem-dev
       - libboost-iostreams-dev
+      - libboost-program-options-dev
       - libcrypto++-dev
       - liblua5.2-dev
       - libluajit-5.1-dev
@@ -37,5 +38,5 @@ before_install:
   - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 before_script:
   - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
+  - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} -DBUILD_TOOLS=ON ..
 script: if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j2; fi
