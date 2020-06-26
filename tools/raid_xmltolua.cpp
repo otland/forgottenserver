@@ -17,12 +17,6 @@ namespace {
 namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
-template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&&... args)
-{
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-
 enum LogLevel {
 	WARNING = 0,
 	INFO = 1,
@@ -111,7 +105,7 @@ struct AnnounceEvent : public RaidEvent
 			}
 		}(eventNode.attribute("type"));
 
-		return make_unique<AnnounceEvent>(delay, message.as_string(), messageType);
+		return std::make_unique<AnnounceEvent>(delay, message.as_string(), messageType);
 	}
 
 	void to_script(std::ostringstream& ss) const override
@@ -157,7 +151,7 @@ struct SingleSpawnEvent : public RaidEvent
 			require<int16_t>(eventNode, "z"),
 		};
 
-		return make_unique<SingleSpawnEvent>(delay, monsterName.as_string(), std::move(pos));
+		return std::make_unique<SingleSpawnEvent>(delay, monsterName.as_string(), std::move(pos));
 	}
 
 	void to_script(std::ostringstream& ss) const override
@@ -234,7 +228,7 @@ struct AreaSpawnEvent : public RaidEvent
 				require<int16_t>(eventNode, "toz"),
 			};
 
-			return make_unique<AreaSpawnEvent>(delay, from, to, 0, parseSpawnList(eventNode));
+			return std::make_unique<AreaSpawnEvent>(delay, from, to, 0, parseSpawnList(eventNode));
 		} else {
 			Position center{
 				require<int32_t>(eventNode, "centerx"),
@@ -242,7 +236,7 @@ struct AreaSpawnEvent : public RaidEvent
 				require<int16_t>(eventNode, "centerz"),
 			};
 
-			return make_unique<AreaSpawnEvent>(delay, center, center, radius, parseSpawnList(eventNode));
+			return std::make_unique<AreaSpawnEvent>(delay, center, center, radius, parseSpawnList(eventNode));
 		}
 	}
 
@@ -360,7 +354,7 @@ std::unique_ptr<RaidEvent> parseEvent(const std::string& eventType, const pugi::
 		}
 		return AreaSpawnEvent::from(delay, eventNode, radius);
 	} else if (eventType == "script") {
-		return make_unique<ScriptEvent>(delay);
+		return std::make_unique<ScriptEvent>(delay);
 	}
 	throw InvalidEventType{eventType};
 }
