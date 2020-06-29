@@ -5,16 +5,17 @@ function onUpdateDatabase()
 	db.query([[
 		CREATE TABLE IF NOT EXISTS `guild_transactions` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
-			`to_guild` int(11) NOT NULL,
-			`from_guild` int(11) DEFAULT NULL,
-			`player_id` int(11) DEFAULT NULL,
+			`guild_id` int(11) NOT NULL,
+			`guild_associated` int(11) DEFAULT NULL,
+			`player_associated` int(11) DEFAULT NULL,
 			`type` ENUM('DEPOSIT', 'WITHDRAW') NOT NULL,
+			`category` ENUM ('OTHER', 'RENT', 'MATERIAL', 'SERVICES', 'REVENUE', 'CONTRIBUTION') NOT NULL DEFAULT 'OTHER',
 			`balance` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
 			`time` bigint(20) NOT NULL,
 			PRIMARY KEY (`id`),
-			FOREIGN KEY (`to_guild`) REFERENCES `guilds`(`id`) ON DELETE CASCADE,
-			FOREIGN KEY (`from_guild`) REFERENCES `guilds`(`id`) ON DELETE SET NULL,
-			FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE SET NULL
+			FOREIGN KEY (`guild_id`) REFERENCES `guilds`(`id`) ON DELETE CASCADE,
+			FOREIGN KEY (`guild_associated`) REFERENCES `guilds`(`id`) ON DELETE SET NULL,
+			FOREIGN KEY (`player_associated`) REFERENCES `players`(`id`) ON DELETE SET NULL
 		) ENGINE=InnoDB;
 	]])
 	return true

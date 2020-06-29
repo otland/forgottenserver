@@ -872,6 +872,12 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 					<< " - New balance " << guild->getBankBalance() - rent << std::endl;
 				guild->setBankBalance(guild->getBankBalance() - rent);
 
+				// Log guild transaction
+				Database& db = Database::getInstance();
+				std::ostringstream query;
+				query << "INSERT INTO `guild_transactions` (`guild_id`,`type`,`category`,`balance`,`time`) VALUES (" << ownerId << ",'WITHDRAW','RENT'," << rent << "," << currentTime << ");";
+				db.executeQuery(query.str());
+
 				time_t paidUntil = increasePaidUntil(rentPeriod, currentTime);
 				house->setPaidUntil(paidUntil);
 			} else { // guild cannot afford rent
