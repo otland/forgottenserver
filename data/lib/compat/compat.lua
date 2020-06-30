@@ -600,8 +600,6 @@ function getAccountNumberByPlayerName(name)
 	return 0
 end
 
-function getChannelUsers(channelId) return Game.getChannelUsers(channelId) end
-
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
 
