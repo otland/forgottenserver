@@ -333,6 +333,7 @@ function isItem(uid) return Item(uid) end
 function isContainer(uid) return Container(uid) end
 
 function getCreatureName(cid) local c = Creature(cid) return c and c:getName() or false end
+function getCreatureStorage(uid, key) local c = Creature(uid) return c and c:getStorageValue(key) or false end
 function getCreatureHealth(cid) local c = Creature(cid) return c and c:getHealth() or false end
 function getCreatureMaxHealth(cid) local c = Creature(cid) return c and c:getMaxHealth() or false end
 function getCreatureMana(cid) local c = Creature(cid) return c and c:getMana() or false end
@@ -379,8 +380,12 @@ end
 getCreaturePos = getCreaturePosition
 
 function doCreatureAddHealth(cid, health) local c = Creature(cid) return c and c:addHealth(health) or false end
+function doCreatureAddMana(cid, mana) local c = Creature(cid) return c and c:addHealth(mana) or false end
 function doRemoveCreature(cid) local c = Creature(cid) return c and c:remove() or false end
+function doCreatureSetStorage(uid, key, value) local c = Creature(uid) return c and c:setStorageValue(key, value) or false end
 function doCreatureSetLookDir(cid, direction) local c = Creature(cid) return c and c:setDirection(direction) or false end
+function setCreatureMaxHealth(cid, health) local c = Creature(cid) return c and c:setMaxHealth(health) or false end
+function setCreatureMaxMana(cid, mana) local c = Creature(cid) return c and c:setMaxMana(mana) or false end
 function doCreatureSetHideHealth(cid, hide) local c = Creature(cid) return c and c:setHiddenHealth(hide) or false end
 function doCreatureSetSpeakType(cid, hide) local c = Creature(cid) return c and c:setSpeakType(type) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c and c:say(text, type, ...) or false end
@@ -547,6 +552,7 @@ function getOnlinePlayers()
 	end
 	return result
 end
+getPlayersOnline = getOnlinePlayers
 function getPlayersByAccountNumber(accountNumber)
 	local result = {}
 	for _, player in ipairs(Game.getPlayers()) do
@@ -585,16 +591,26 @@ function getAccountNumberByPlayerName(name)
 	return 0
 end
 
+function getChannelUsers(channelId) return Game.getChannelUsers(channelId) end
+
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
 
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p and p:setStorageValue(key, value) or false end
 function doPlayerSetNameDescription(cid, desc) local p = Player(cid) return p and p:setDescription(desc) or false end
+function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setMaxCap(cap) or false end
 function doPlayerSetSpecialDescription(cid, desc) local p = Player(cid) return p and p:setSpecialDescription(desc) or false end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p and p:setBankBalance(balance) or false end
 function doPlayerSetPromotionLevel(cid, level) local p = Player(cid) return p and p:setPromotion(level) or false end
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p and p:addMoney(money) or false end
 function doPlayerRemoveMoney(cid, money) local p = Player(cid) return p and p:removeMoney(money) or false end
+function doPlayerTransferMoneyTo(cid, target, money)
+	if not isValidMoney(money) then
+		return false
+	end
+	local p = Player(cid)
+	return p and p:transferMoneyTo(target, money) or false
+end
 function doPlayerAddSoul(cid, soul) local p = Player(cid) return p and p:addSoul(soul) or false end
 function doPlayerSetVocation(cid, vocation) local p = Player(cid) return p and p:setVocation(Vocation(vocation)) or false end
 function doPlayerSetTown(cid, town) local p = Player(cid) return p and p:setTown(Town(town)) or false end
@@ -629,11 +645,18 @@ function doPlayerSendOutfitWindow(cid) local p = Player(cid) return p and p:send
 function doPlayerSendCancel(cid, text) local p = Player(cid) return p and p:sendCancelMessage(text) or false end
 function doPlayerFeed(cid, food) local p = Player(cid) return p and p:feed(food) or false end
 function playerLearnInstantSpell(cid, name) local p = Player(cid) return p and p:learnSpell(name) or false end
+doPlayerLearnInstantSpell = playerLearnInstantSpell
+function doPlayerUnlearnInstantSpell(cid, name) local p = Player(cid) return p and p:forgetSpell(name) or false end
 function doPlayerPopupFYI(cid, message) local p = Player(cid) return p and p:popupFYI(message) or false end
 function doSendTutorial(cid, tutorialId) local p = Player(cid) return p and p:sendTutorial(tutorialId) or false end
 function doAddMapMark(cid, pos, type, description) local p = Player(cid) return p and p:addMapMark(pos, type, description or "") or false end
 function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) return p and p:sendTextMessage(type, text, ...) or false end
+function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel) local p = Player(cid) return p and p:sendChannelMessage(author, message, SpeakClasses, channel) or false end
+function doPlayerSendToChannel(cid, targetId, SpeakClasses, message, channel, ...) local p = Player(cid) return p and p:sendChannelMessage(targetId, SpeakClasses, message, channel, ...) or false end
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
+function doPlayerSetSkillLevel(cid, skill, value) local p = Player(cid) return p and p:addSkill(skillId, value) end
+function doPlayerSetMagicLevel(cid, value) local p = Player(cid) return p and p:addMagicLevel(value) end
+function doPlayerAddLevel(cid, amount, round) local p = Player(cid) return p and p:addLevel(amount, round) end
 function doPlayerAddExp(cid, exp, useMult, ...)
 	local player = Player(cid)
 	if player == nil then
@@ -645,7 +668,9 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	end
 	return player:addExperience(exp, ...)
 end
+doPlayerAddExperience = doPlayerAddExp
 function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana) or false end
+doPlayerAddSpentMana = doPlayerAddManaSpent
 function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n) or false end
 function doPlayerAddMana(cid, mana, ...) local p = Player(cid) return p and p:addMana(mana, ...) or false end
 function doPlayerJoinParty(cid, leaderId)
@@ -746,6 +771,7 @@ function doSetMonsterTarget(cid, target)
 	monster:selectTarget(target)
 	return true
 end
+doMonsterSetTarget = doSetMonsterTarget
 function doMonsterChangeTarget(cid)
 	local monster = Monster(cid)
 	if monster == nil then
@@ -765,6 +791,7 @@ end
 function doSummonCreature(name, pos, ...)
 	local m = Game.createMonster(name, pos, ...) return m and m:getId() or false
 end
+doCreateMonster = doSummonCreature
 function doConvinceCreature(cid, target)
 	local creature = Creature(cid)
 	if creature == nil then
@@ -777,6 +804,19 @@ function doConvinceCreature(cid, target)
 	end
 
 	creature:addSummon(targetCreature)
+	return true
+end
+function doSummonMonster(cid, name)
+	local player = Player(cid)
+	local position = player:getPosition()
+	local monster = Game.createMonster(name, position)
+	if monster then
+		player:addSummon(monster)
+		monster:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
+	else
+		player:sendCancelMessage("There is not enough room.")
+		position:sendMagicEffect(CONST_ME_POFF)
+	end
 	return true
 end
 
@@ -1097,6 +1137,7 @@ function getThingPos(uid)
 	position.stackpos = stackpos
 	return position
 end
+getThingPosition = getThingPos
 
 function getThingfromPos(pos)
 	local tile = Tile(pos)
@@ -1181,12 +1222,12 @@ saveData = saveServer
 function getGlobalStorageValue(key)
 	return Game.getStorageValue(key) or -1
 end
-
+getStorage = getGlobalStorageValue
 function setGlobalStorageValue(key, value)
 	Game.setStorageValue(key, value)
 	return true
 end
-
+doSetStorage = setGlobalStorageValue
 getWorldType = Game.getWorldType
 
 numberToVariant = Variant
@@ -1343,12 +1384,3 @@ end
 function isNumber(str)
 	return tonumber(str) ~= nil
 end
-
-function doPlayerAddLevel(cid, amount, round) local p = Player(cid) return p and p:addLevel(amount, round) end
-
-function getExperienceForLevel(level)
-	local level = level - 1
-	return (((50 * level * level * level) - (150 * level * level) + (400 * level))/3) 
-end
-
-doPlayerAddExperience = doPlayerAddExp

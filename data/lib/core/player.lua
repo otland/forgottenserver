@@ -214,6 +214,14 @@ function Player.addLevel(self, amount, round)
 	return self:addExperience(experience)
 end
 
+function Player.addSkill(self, skillId, value)
+	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+end
+
+function Player.addMagicLevel(self, value)
+	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+end
+
 function Player.getWeaponType()
 	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
 	if (weapon) then
