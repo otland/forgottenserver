@@ -654,7 +654,7 @@ function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) ret
 function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel) local p = Player(cid) return p and p:sendChannelMessage(author, message, SpeakClasses, channel) or false end
 function doPlayerSendToChannel(cid, targetId, SpeakClasses, message, channel, ...) local p = Player(cid) return p and p:sendChannelMessage(targetId, SpeakClasses, message, channel, ...) or false end
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
-function doPlayerSetSkillLevel(cid, skill, value) local p = Player(cid) return p and p:addSkill(skillId, value) end
+function doPlayerSetSkillLevel(cid, skill, value, ...) local p = Player(cid) return p and p:addSkill(skillId, value, round) end
 function doPlayerSetMagicLevel(cid, value) local p = Player(cid) return p and p:addMagicLevel(value) end
 function doPlayerAddLevel(cid, amount, round) local p = Player(cid) return p and p:addLevel(amount, round) end
 function doPlayerAddExp(cid, exp, useMult, ...)
