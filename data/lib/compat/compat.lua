@@ -886,7 +886,7 @@ function getGuildId(guildName)
 		return false
 	end
 
-	local guildId = result.getDataInt(resultId, "id")
+	local guildId = result.getNumber(resultId, "id")
 	result.free(resultId)
 	return guildId
 end
