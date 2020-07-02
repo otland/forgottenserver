@@ -66,3 +66,25 @@ end
 function Game.setStorageValue(key, value)
 	globalStorageTable[key] = value
 end
+
+if(CLIENT_VERSION_MIN < 900) then
+	function Game.sendAnimatedText(message, pos, color, player)
+		local msg = NetworkMessage()
+		msg:addByte(0x84)
+		msg:addPosition(pos)
+		msg:addByte(color)
+		msg:addString(message)
+
+		local spectators = nil
+		if player ~= nil then
+			spectators = {player}
+		else
+			spectators = Game.getSpectators(pos)
+		end
+
+		for i = 1, #spectators do
+			msg:sendToPlayer(spectators[i])
+		end
+		msg:delete()
+	end
+end
