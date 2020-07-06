@@ -15374,6 +15374,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 				pushUserdata<WeaponMelee>(L, weapon);
 				setMetatable(L, -1, "Weapon");
 				weapon->weaponType = type;
+				weapon->fromLua = true;
 			} else {
 				lua_pushnil(L);
 			}
@@ -15386,6 +15387,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 				pushUserdata<WeaponDistance>(L, weapon);
 				setMetatable(L, -1, "Weapon");
 				weapon->weaponType = type;
+				weapon->fromLua = true;
 			} else {
 				lua_pushnil(L);
 			}
@@ -15397,6 +15399,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 				pushUserdata<WeaponWand>(L, weapon);
 				setMetatable(L, -1, "Weapon");
 				weapon->weaponType = type;
+				weapon->fromLua = true;
 			} else {
 				lua_pushnil(L);
 			}
