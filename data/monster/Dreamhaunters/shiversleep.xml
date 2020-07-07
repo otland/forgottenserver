@@ -44,8 +44,8 @@
 		<voice sentence="Knorrrr!" />
 	</voices>
 	<loot>
-		<item name="white pearl" countmax="1" chance="866" />
-		<item name="black pearl" countmax="1" chance="866" />
+		<item name="white pearl" chance="866" />
+		<item name="black pearl" chance="866" />
 		<item name="gold coin" countmax="100" chance="30000" />
 		<item name="platinum coin" countmax="10" chance="33333" />
 		<item name="giant sword" chance="422" />

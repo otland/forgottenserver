@@ -2,7 +2,7 @@ function spellCallback(cid, position, count)
 	if Creature(cid) then
 		if count > 0 or math.random(0, 1) == 1 then
 			position:sendMagicEffect(CONST_ME_HITBYFIRE)
-			doAreaCombatHealth(cid, COMBAT_FIREDAMAGE, position, 0, -100, -100, CONST_ME_EXPLOSIONHIT)
+			doAreaCombat(cid, COMBAT_FIREDAMAGE, position, 0, -100, -100, CONST_ME_EXPLOSIONHIT)
 		end
 
 		if count < 5 then

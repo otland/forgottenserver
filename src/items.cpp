@@ -221,7 +221,7 @@ Items::Items()
 void Items::clear()
 {
 	items.clear();
-	reverseItemMap.clear();
+	clientIdToServerIdMap.clear();
 	nameToItems.clear();
 }
 
@@ -405,7 +405,7 @@ bool Items::loadFromOtb(const std::string& file)
 			}
 		}
 
-		reverseItemMap.emplace(clientId, serverId);
+		clientIdToServerIdMap.emplace(clientId, serverId);
 
 		// store the found item
 		if (serverId >= items.size()) {
@@ -679,7 +679,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					tmpStrValue = asLowerCaseString(valueAttribute.as_string());
 					auto it2 = RaceTypesMap.find(tmpStrValue);
 					if (it2 != RaceTypesMap.end()) {
-						it.corpseType = it2->second; 
+						it.corpseType = it2->second;
 					} else {
 						std::cout << "[Warning - Items::parseItemNode] Unknown corpseType: " << valueAttribute.as_string() << std::endl;
 					}
@@ -1200,7 +1200,9 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 							}
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
-							if (tmpStrValue == "ticks") {
+							if (tmpStrValue == "initdamage") {
+								conditionDamage->setInitDamage(-pugi::cast<int32_t>(subValueAttribute.value()));
+							} else if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
 								count = std::max<int32_t>(1, pugi::cast<int32_t>(subValueAttribute.value()));
@@ -1359,9 +1361,10 @@ const ItemType& Items::getItemType(size_t id) const
 
 const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 {
-	auto it = reverseItemMap.find(spriteId);
-	if (it != reverseItemMap.end()) {
-		return getItemType(it->second);
+	if (spriteId >= 100) {
+		if (uint16_t serverId = clientIdToServerIdMap.getServerId(spriteId)) {
+			return getItemType(serverId);
+		}
 	}
 	return items.front();
 }

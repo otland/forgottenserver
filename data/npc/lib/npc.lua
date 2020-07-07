@@ -83,7 +83,7 @@ end
 
 function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges)
 	local player = Player(cid)
-	if not player:removeMoney(cost) then
+	if not player:removeTotalMoney(cost) then
 		return false
 	end
 
@@ -103,4 +103,54 @@ end
 function getCount(string)
 	local b, e = string:find("%d+")
 	return b and e and tonumber(string:sub(b, e)) or -1
+end
+
+function Player.removeTotalMoney(self, amount)
+	local moneyCount = self:getMoney()
+	local bankCount = self:getBankBalance()
+
+	if amount <= moneyCount then
+		self:removeMoney(amount)
+		return true
+
+	elseif amount <= (moneyCount + bankCount) then
+		if moneyCount ~= 0 then
+			self:removeMoney(moneyCount)
+			local remains = amount - moneyCount
+			self:setBankBalance(bankCount - remains)
+			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
+			return true
+		else
+			self:setBankBalance(bankCount - amount)
+			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
+			return true
+		end
+	end
+	return false
+end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
+end
+
+function isValidMoney(money)
+	return isNumber(money) and money > 0
+end
+
+function getMoneyCount(string)
+	local b, e = string:find("%d+")
+	local money = b and e and tonumber(string:sub(b, e)) or -1
+	if isValidMoney(money) then
+		return money
+	end
+	return -1
+end
+
+function getMoneyWeight(money)
+	local gold = money
+	local crystal = math.floor(gold / 10000)
+	gold = gold - crystal * 10000
+	local platinum = math.floor(gold / 100)
+	gold = gold - platinum * 100
+	return (ItemType(ITEM_CRYSTAL_COIN):getWeight() * crystal) + (ItemType(ITEM_PLATINUM_COIN):getWeight() * platinum) + (ItemType(ITEM_GOLD_COIN):getWeight() * gold)
 end

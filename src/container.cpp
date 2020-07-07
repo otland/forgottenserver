@@ -85,6 +85,11 @@ Container* Container::getParentContainer()
 	return thing->getContainer();
 }
 
+std::string Container::getName(bool addArticle /* = false*/) const {
+	const ItemType& it = items[id];
+	return getNameDescription(it, this, -1, addArticle);
+}
+
 bool Container::hasParent() const
 {
 	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
@@ -347,18 +352,16 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
-					uint32_t remainder = (100 - containerItem->getItemCount());
-					if (queryAdd(slotIndex++, *item, remainder, flags) == RETURNVALUE_NOERROR) {
-						n += remainder;
+					if (queryAdd(slotIndex++, *item, count, flags) == RETURNVALUE_NOERROR) {
+						n += 100 - containerItem->getItemCount();
 					}
 				}
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
 			if (item->equals(destItem) && destItem->getItemCount() < 100) {
-				uint32_t remainder = 100 - destItem->getItemCount();
-				if (queryAdd(index, *item, remainder, flags) == RETURNVALUE_NOERROR) {
-					n = remainder;
+				if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) {
+					n = 100 - destItem->getItemCount();
 				}
 			}
 		}
@@ -453,6 +456,10 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
+		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < 100) {
+			return this;
+		}
+
 		//try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
