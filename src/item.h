@@ -646,10 +646,16 @@ class Item : virtual public Thing
 		}
 
 		bool removeCustomAttribute(int64_t key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
 		bool removeCustomAttribute(const std::string& key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
