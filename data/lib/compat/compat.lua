@@ -606,7 +606,7 @@ function doPlayerPopupFYI(cid, message) local p = Player(cid) return p and p:pop
 function doSendTutorial(cid, tutorialId) local p = Player(cid) return p and p:sendTutorial(tutorialId) or false end
 function doAddMapMark(cid, pos, type, description) local p = Player(cid) return p and p:addMapMark(pos, type, description or "") or false end
 function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) return p and p:sendTextMessage(type, text, ...) or false end
-if Game.getClientVersion < 900 then
+if Game.getClientVersion().min < 900 then
 	function doSendAnimatedText(pos, text, color, player) Game.sendAnimatedText(text, pos, color, player) return true end
 else
 	function doSendAnimatedText() debugPrint("Deprecated function.") return true end

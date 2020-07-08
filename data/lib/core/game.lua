@@ -67,7 +67,7 @@ function Game.setStorageValue(key, value)
 	globalStorageTable[key] = value
 end
 
-if Game.getClientVersion < 900 then
+if Game.getClientVersion().min < 900 then
 	function Game.sendAnimatedText(message, position, color, player)
 		local msg = NetworkMessage()
 		msg:addByte(0x84)
