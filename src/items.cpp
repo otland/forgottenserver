@@ -1188,8 +1188,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						uint32_t ticks = 0;
 						int32_t start = 0;
 						int32_t count = 1;
-						int32_t initDamage = 0;
-						bool initDamageConfigured = false;
+						int32_t initDamage = -1;
 						int32_t damage = 0;
 						for (auto subAttributeNode : attributeNode.children()) {
 							pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
@@ -1204,8 +1203,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
 							if (tmpStrValue == "initdamage") {
-								initDamage = -pugi::cast<int32_t>(subValueAttribute.value());
-								initDamageConfigured = true;
+								initDamage = pugi::cast<int32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
@@ -1230,10 +1228,10 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
 						// To avoid any initialdamage, add initialdamage xml property and set it to 0.
-						if (!initDamageConfigured && damage != 0) {
+						if (initDamage > 0) {
+							conditionDamage->setInitDamage(-initDamage);
+						} else if (initDamage == -1 && damage != 0) {
 							conditionDamage->setInitDamage(damage);
-						} else if (initDamageConfigured && initDamage != 0) {
-							conditionDamage->setInitDamage(initDamage);
 						}
 
 						conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
