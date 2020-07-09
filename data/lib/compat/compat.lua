@@ -458,7 +458,7 @@ function getPlayerPremiumDays(cid) local p = Player(cid) return p and p:getPremi
 function getPlayerBlessing(cid, blessing) local p = Player(cid) return p and p:hasBlessing(blessing) or false end
 function getPlayerFlagValue(cid, flag) local p = Player(cid) return p ~= nil and p:hasFlag(flag) or false end
 function getPlayerCustomFlagValue() debugPrint("Deprecated function, use player:hasFlag(flag) instead.") return true end
-function getPlayerPromotionLevel(cid) local p = Player(cid) return p ~= nil and p:getPromotion() or false end
+
 function getPlayerParty(cid)
 	local player = Player(cid)
 	if player == nil then
@@ -878,6 +878,7 @@ function getPromotedVocation(vocationId)
 	end
 	return promotedVocation:getId()
 end
+getPlayerPromotionLevel = getPromotedVocation
 
 function getGuildId(guildName)
 	local resultId = db.storeQuery("SELECT `id` FROM `guilds` WHERE `name` = " .. db.escapeString(guildName))
