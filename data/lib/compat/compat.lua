@@ -383,7 +383,7 @@ end
 getCreaturePos = getCreaturePosition
 
 function doCreatureAddHealth(cid, health) local c = Creature(cid) return c and c:addHealth(health) or false end
-function doCreatureAddMana(cid, mana) local c = Creature(cid) return c and c:addHealth(mana) or false end
+function doCreatureAddMana(cid, mana) local c = Creature(cid) return c and c:addMana(mana) or false end
 function doRemoveCreature(cid) local c = Creature(cid) return c and c:remove() or false end
 function doCreatureSetStorage(uid, key, value) local c = Creature(uid) return c and c:setStorageValue(key, value) or false end
 function doCreatureSetLookDir(cid, direction) local c = Creature(cid) return c and c:setDirection(direction) or false end
@@ -391,7 +391,6 @@ function doCreatureSetSkullType(cid, skull) local c = Creature(cid) return c and
 function setCreatureMaxHealth(cid, health) local c = Creature(cid) return c and c:setMaxHealth(health) or false end
 function setCreatureMaxMana(cid, mana) local c = Creature(cid) return c and c:setMaxMana(mana) or false end
 function doCreatureSetHideHealth(cid, hide) local c = Creature(cid) return c and c:setHiddenHealth(hide) or false end
-function doCreatureSetSpeakType(cid, hide) local c = Creature(cid) return c and c:setSpeakType(type) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c and c:say(text, type, ...) or false end
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c and c:setOutfit(outfit) or false end
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c and c:setDropLoot(doDrop) or false end
@@ -411,19 +410,20 @@ function getPlayerByName(name) local p = Player(name) return p and p:getId() or 
 function getIPByPlayerName(name) local p = Player(name) return p and p:getIp() or false end
 function getPlayerGUID(cid) local p = Player(cid) return p and p:getGuid() or false end
 function getPlayerNameDescription(cid) local p = Player(cid) return p and p:getDescription() or false end
-function getPlayerSpecialDescription(cid) local p = Player(cid) return p and p:getSpecialDescription() or false end
+function getPlayerSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
 function getPlayerAccountId(cid) local p = Player(cid) return p and p:getAccountId() or false end
-function getPlayerAccount(cid) local p = Player(cid) return p and p:getAccount() or false end
+getPlayerAccount = getPlayerAccountId
 function getPlayerIp(cid) local p = Player(cid) return p and p:getIp() or false end
 function getPlayerAccountType(cid) local p = Player(cid) return p and p:getAccountType() or false end
 function getPlayerLastLoginSaved(cid) local p = Player(cid) return p and p:getLastLoginSaved() or false end
 getPlayerLastLogin = getPlayerLastLoginSaved
 function getPlayerName(cid) local p = Player(cid) return p and p:getName() or false end
+getPlayerNameDescription = getPlayerName
 function getPlayerFreeCap(cid) local p = Player(cid) return p and (p:getFreeCapacity() / 100) or false end
 function getPlayerPosition(cid) local p = Player(cid) return p and p:getPosition() or false end
 function getPlayerMagLevel(cid) local p = Player(cid) return p and p:getMagicLevel() or false end
 function getPlayerSpentMana(cid) local p = Player(cid) return p and p:getManaSpent() or false end
-function getPlayerRequiredMana(cid) local p = Player(cid) return p and p:getRequiredMana() or false end
+function getPlayerRequiredMana(cid) local p = Player(cid) return p and p:getRequiredManaSpent() or false end
 function getPlayerRequiredSkillTries(cid, skillId) local p = Player(cid) return p and p:getRequiredSkillTries(skillId) or false end
 function getPlayerAccess(cid)
 	local player = Player(cid)
@@ -432,7 +432,6 @@ function getPlayerAccess(cid)
 	end
 	return player:getGroup():getAccess() and 1 or 0
 end
-function getPlayerGhostAccess(cid) local p = Player(cid) return p and p:getGhostAccess() or false end
 function getPlayerSkill(cid, skillId) local p = Player(cid) return p and p:getSkillLevel(skillId) or false end
 getPlayerSkillLevel = getPlayerSkill
 function getPlayerSkillTries(cid, skillId) local p = Player(cid) return p and p:getSkillTries(skillId) or false end
@@ -458,7 +457,7 @@ function getPlayerMount(cid, mountId) local p = Player(cid) return p and p:hasMo
 function getPlayerPremiumDays(cid) local p = Player(cid) return p and p:getPremiumDays() or false end
 function getPlayerBlessing(cid, blessing) local p = Player(cid) return p and p:hasBlessing(blessing) or false end
 function getPlayerFlagValue(cid, flag) local p = Player(cid) return p ~= nil and p:hasFlag(flag) or false end
-function getPlayerCustomFlagValue(cid, flag) local p = Player(cid) return p ~= nil and p:getCustomFlagValue(flag) or false end
+function getPlayerCustomFlagValue() debugPrint("Deprecated function, use player:hasFlag(flag) instead.") return true end
 function getPlayerPromotionLevel(cid) local p = Player(cid) return p ~= nil and p:getPromotion() or false end
 function getPlayerParty(cid)
 	local player = Player(cid)
@@ -511,7 +510,7 @@ function getPlayerGuildRank(cid)
 	local rank = guild:getRankByLevel(player:getGuildLevel())
 	return rank and rank.name or false
 end
-function getPlayerGuildRankId(cid) local p = Player(cid) return p and p:getGuildRankId() or false end
+function getPlayerGuildRankId(cid) local p = Player(cid) return p and p:getGuildLevel() or false end
 function getPlayerGuildNick(cid) local p = Player(cid) return p and p:getGuildNick() or false end
 function getPlayerMasterPos(cid) local p = Player(cid) return p and p:getTown():getTemplePosition() or false end
 function getPlayerItemCount(cid, itemId, ...) local p = Player(cid) return p and p:getItemCount(itemId, ...) or false end
@@ -604,9 +603,9 @@ getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
 
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p and p:setStorageValue(key, value) or false end
-function doPlayerSetNameDescription(cid, desc) local p = Player(cid) return p and p:setDescription(desc) or false end
-function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setMaxCap(cap) or false end
-function doPlayerSetSpecialDescription(cid, desc) local p = Player(cid) return p and p:setSpecialDescription(desc) or false end
+function doPlayerSetNameDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
+function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setCapacity(cap) or false end
+function doPlayerSetSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p and p:setBankBalance(balance) or false end
 function doPlayerSetPromotionLevel(cid, level) local p = Player(cid) return p and p:setPromotion(level) or false end
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p and p:addMoney(money) or false end
@@ -618,7 +617,7 @@ function doPlayerTransferMoneyTo(cid, target, money)
 	local p = Player(cid)
 	return p and p:transferMoneyTo(target, money) or false
 end
-function doPlayerSave(cid, ...) local p = Player(cid) return p and p:savePlayer(shallow or false) or false end
+function doPlayerSave(cid) local p = Player(cid) return p and p:save() or false end
 function doPlayerAddSoul(cid, soul) local p = Player(cid) return p and p:addSoul(soul) or false end
 function doPlayerSetVocation(cid, vocation) local p = Player(cid) return p and p:setVocation(Vocation(vocation)) or false end
 function doPlayerSetTown(cid, town) local p = Player(cid) return p and p:setTown(Town(town)) or false end
@@ -1414,5 +1413,5 @@ function isNumber(str)
 end
 
 function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel)
-	return sendChannelMessage(channel, SpeakClasses, message)
+	return Player(cid):sendChannelMessage(author, message, SpeakClasses, channel)
 end
