@@ -909,6 +909,7 @@ isItemMoveable = isItemMovable
 isMoveable = isMovable
 
 function getItemName(itemId) return ItemType(itemId):getName() end
+getItemNameById = getItemName
 function getItemWeight(itemId, ...) return ItemType(itemId):getWeight(...) / 100 end
 function getItemDescriptions(itemId)
 	local itemType = ItemType(itemId)
