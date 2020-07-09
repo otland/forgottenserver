@@ -1188,6 +1188,9 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						uint32_t ticks = 0;
 						int32_t start = 0;
 						int32_t count = 1;
+						int32_t initdamage = 0;
+						bool initdamageConfigured = false;
+						int32_t damage = 0;
 						for (auto subAttributeNode : attributeNode.children()) {
 							pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 							if (!subKeyAttribute) {
@@ -1201,15 +1204,16 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
 							if (tmpStrValue == "initdamage") {
-								conditionDamage->setInitDamage(-pugi::cast<int32_t>(subValueAttribute.value()));
-							} else if (tmpStrValue == "ticks") {
+								initdamage = -pugi::cast<int32_t>(subValueAttribute.value());
+								initdamageConfigured = true;
+							} if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
 								count = std::max<int32_t>(1, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "start") {
 								start = std::max<int32_t>(0, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "damage") {
-								int32_t damage = -pugi::cast<int32_t>(subValueAttribute.value());
+								damage = -pugi::cast<int32_t>(subValueAttribute.value());
 								if (start > 0) {
 									std::list<int32_t> damageList;
 									ConditionDamage::generateDamageList(damage, start, damageList);
@@ -1222,6 +1226,14 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 									conditionDamage->addDamage(count, ticks, damage);
 								}
 							}
+						}
+
+						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
+						// To avoid any initialdamage, add initialdamage xml property and set it to 0.
+						if (!initdamageConfigured && damage != 0) {
+							conditionDamage->setInitDamage(damage);
+						} else if (initdamageConfigured && initdamage != 0) {
+							conditionDamage->setInitDamage(initdamage);
 						}
 
 						conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
