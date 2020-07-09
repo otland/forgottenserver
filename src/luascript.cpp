@@ -15374,6 +15374,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 				pushUserdata<WeaponMelee>(L, weapon);
 				setMetatable(L, -1, "Weapon");
 				weapon->weaponType = type;
+				// Fixed #3123, this comment is only for to activate builds AppVeyor/TravisCI
 				weapon->fromLua = true;
 			} else {
 				lua_pushnil(L);
