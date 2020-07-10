@@ -1227,8 +1227,9 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						}
 
 						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
-						// To avoid any initialdamage, add initialdamage xml property and set it to 0.
-						if (initDamage > 0) {
+						// initDamage = 0 (dont override initDamage with damage, dont set any initDamage)
+						// initDamage = -1 (undefined, override initDamage with damage)
+						if (initDamage > 0 || initDamage < -1) {
 							conditionDamage->setInitDamage(-initDamage);
 						} else if (initDamage == -1 && damage != 0) {
 							conditionDamage->setInitDamage(damage);
