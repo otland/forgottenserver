@@ -86,7 +86,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if table.contains(horizontalOpenDoors, itemId) or table.contains(verticalOpenDoors, itemId) then
 		local creaturePositionTable = {}
 		local doorCreatures = Tile(toPosition):getCreatures()
-		if #doorCreatures > 0 then
+		if doorCreatures and #doorCreatures > 0 then
 			for _, doorCreature in pairs(doorCreatures) do
 				local pushPosition = findPushPosition(doorCreature, 1)
 				if not pushPosition then
