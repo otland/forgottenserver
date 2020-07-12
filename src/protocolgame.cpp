@@ -2289,8 +2289,7 @@ void ProtocolGame::sendCreatureHealth(const Creature* creature)
 	if (creature->isHealthHidden()) {
 		msg.addByte(0x00);
 	} else {
-		int32_t maxHealth = std::max(creature->getMaxHealth(), 1);
-		msg.addByte(std::ceil((static_cast<double>(std::min(creature->getHealth(), maxHealth)) / maxHealth) * 100));
+		msg.addByte(std::ceil((static_cast<double>(creature->getHealth()) / std::max<int32_t>(creature->getMaxHealth(), 1)) * 100));
 	}
 	writeToOutputBuffer(msg);
 }
