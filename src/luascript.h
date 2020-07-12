@@ -1042,6 +1042,7 @@ class LuaScriptInterface
 		static int luaGuildSetBankBalance(lua_State* L);
 
 		static int luaGuildGetOwnerGUID(lua_State* L);
+		static int luaGuildGetHouseId(lua_State* L);
 
 		// Group
 		static int luaGroupCreate(lua_State* L);

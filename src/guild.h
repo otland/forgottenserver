@@ -62,6 +62,13 @@ class Guild
 		}
 		void setBankBalance(uint64_t balance);
 
+		uint32_t getHouseId() const {
+			return houseId;
+		}
+		void setHouseId(uint32_t id) {
+			houseId = id;
+		}
+
 		uint32_t getOwnerGUID() const {
 			return ownerGUID;
 		}
@@ -93,6 +100,7 @@ class Guild
 		uint32_t memberCount = 0;
 		uint64_t bankBalance = 0;
 		uint32_t ownerGUID = 0;
+		uint32_t houseId = 0;
 };
 
 #endif

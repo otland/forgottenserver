@@ -27,11 +27,25 @@ Guild* IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `name`, `balance`, `ownerid` FROM `guilds` WHERE `id` = " << guildId;
+	/* Readable SQL representation
+	query << "
+		SELECT
+			`g`.`name`,
+			`g`.`balance`,
+			`g`.`ownerid`,
+			IFNULL(`h`.`id`, 0) as `house_id`
+		FROM `guilds` AS `g`
+		LEFT JOIN `houses` AS `h`
+			ON `h`.`type` = 'Guildhall'
+			AND `h`.`owner` = " << guildId << "
+		WHERE `g`.`id` = " << guildId;
+	*/
+	query << "SELECT `g`.`name`, `g`.`balance`, `g`.`ownerid`, IFNULL(`h`.`id`, 0) as `house_id` FROM `guilds` AS `g` LEFT JOIN `houses` AS `h` ON `h`.`type` = 'Guildhall' AND `h`.`owner` = " << guildId << " WHERE `g`.`id` = " << guildId;
 	if (DBResult_ptr result = db.storeQuery(query.str())) {
 		Guild* guild = new Guild(guildId, result->getString("name"));
 		guild->setBankBalance(result->getNumber<uint64_t>("balance"));
 		guild->setOwnerGUID(result->getNumber<uint32_t>("ownerid"));
+		guild->setHouseId(result->getNumber<uint32_t>("house_id"));
 
 		query.str(std::string());
 		query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId;

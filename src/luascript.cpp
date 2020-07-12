@@ -2497,6 +2497,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Guild", "setBankBalance", LuaScriptInterface::luaGuildSetBankBalance);
 
 	registerMethod("Guild", "getOwnerGUID", LuaScriptInterface::luaGuildGetOwnerGUID);
+	registerMethod("Guild", "getHouseId", LuaScriptInterface::luaGuildGetHouseId);
 
 	// Group
 	registerClass("Group", "", LuaScriptInterface::luaGroupCreate);
@@ -10391,6 +10392,23 @@ int LuaScriptInterface::luaGuildGetOwnerGUID(lua_State* L)
 	Guild* guild = getUserdata<Guild>(L, 1);
 	if (guild) {
 		lua_pushnumber(L, guild->getOwnerGUID());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildGetHouseId(lua_State* L)
+{
+	// guild:getHouseId()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		uint32_t houseId = guild->getHouseId();
+		if (houseId > 0) {
+			lua_pushnumber(L, houseId);
+		} else {
+			lua_pushnil(L);
+		}
 	} else {
 		lua_pushnil(L);
 	}
