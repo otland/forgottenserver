@@ -54,6 +54,11 @@ function onSay(player, words, param)
 		return false
 	end
 
+	if guild:getOwnerGuid() ~= player:getGuid() then
+		player:sendCancelMessage("Only Guild Leaders can buy guildhalls.")
+		return false
+	end
+
 	local price = house:getTileCount() * housePrice
 	local balance = guild:getBankBalance()
 	if price > balance then
