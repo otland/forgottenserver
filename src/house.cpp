@@ -766,11 +766,11 @@ time_t Houses::increasePaidUntil(RentPeriod_t rentPeriod, time_t paidUntil) cons
 		case RENTPERIOD_DAILY:
 			return paidUntil += 24 * 60 * 60;
 		case RENTPERIOD_WEEKLY:
-			return paidUntil += 24 * 60 * 60 * 7;
+			return paidUntil += 7 * 24 * 60 * 60;
 		case RENTPERIOD_MONTHLY:
-			return paidUntil += 24 * 60 * 60 * 30;
+			return paidUntil += 30 * 24 * 60 * 60;
 		case RENTPERIOD_YEARLY:
-			return paidUntil += 24 * 60 * 60 * 365;
+			return paidUntil += 365 * 24 * 60 * 60;
 		case RENTPERIOD_DEV:
 			return paidUntil += 5 * 60;
 		default:
