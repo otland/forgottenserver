@@ -76,9 +76,21 @@ function onSay(player, words, param)
 		price,
 		currentTime
 	},',')
-	db.query("INSERT INTO `guild_transactions` (`guild_id`,`player_associated`,`type`,`category`,`balance`,`time`) VALUES ("..insertData..");")
+	db.query("INSERT INTO `guild_transactions` (`guild_id`, `player_associated`, `type`, `category`, `balance`, `time`) VALUES ("..insertData..");")
+
 	local receipt = Game.createItem(ITEM_RECEIPT_SUCCESS, 1)
-	receipt:setAttribute(ITEM_ATTRIBUTE_TEXT, "Date: " .. os.date("%d. %b %Y - %H:%M:%S", currentTime) .. "\nType: Guild Withdraw\nCategory: House rent\nHouse: ".. house:getName() .. "\nGold Amount: " .. price .. "\nReceipt Owner: " .. player:getName() .. "\nRecipient: The " .. guild:getName() .. "\n\nWe are happy to inform you that your transfer request was successfully carried out.")
+
+	receipt:setAttribute(ITEM_ATTRIBUTE_TEXT, table.concat({
+		"Date: " .. os.date("%d. %b %Y - %H:%M:%S", currentTime),
+		"Type: Guild Withdraw",
+		"Category: House rent",
+		"House: ".. house:getName(),
+		"Gold Amount: " .. price,
+		"Receipt Owner: " .. player:getName(),
+		"Recipient: The " .. guild:getName(),
+		"\nWe are happy to inform you that your transfer request was successfully carried out."
+	},"\n"))
+
 	player:addItemEx(receipt)
 
 	house:setOwnerGuid(player:getGuid())
