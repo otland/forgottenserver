@@ -83,40 +83,39 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 {
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
-		const std::string& talkactionWords = it->first;
-		size_t talkactionLength = talkactionWords.length();
-		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
-			++it;
-			continue;
-		}
-
-		std::string param;
-		if (wordsLength != talkactionLength) {
-			param = words.substr(talkactionLength);
-			if (param.front() != ' ') {
-				++it;
+		for (auto& talkactionWords : it->second.getWothers()) {
+			size_t talkactionLength = talkactionWords.length();
+			if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
 				continue;
 			}
-			trim_left(param, ' ');
 
-			std::string separator = it->second.getSeparator();
-			if (separator != " ") {
-				if (!param.empty()) {
-					if (param != separator) {
-						++it;
-						continue;
-					} else {
-						param.erase(param.begin());
+			std::string param;
+			if (wordsLength != talkactionLength) {
+				param = words.substr(talkactionLength);
+				if (param.front() != ' ') {
+					continue;
+				}
+				trim_left(param, ' ');
+
+				std::string separator = it->second.getSeparator();
+				if (separator != " ") {
+					if (!param.empty()) {
+						if (param != separator) {
+							continue;
+						} else {
+							param.erase(param.begin());
+						}
 					}
 				}
 			}
-		}
 
-		if (it->second.executeSay(player, param, type)) {
-			return TALKACTION_CONTINUE;
-		} else {
-			return TALKACTION_BREAK;
+			if (it->second.executeSay(player, param, type)) {
+				return TALKACTION_CONTINUE;
+			} else {
+				return TALKACTION_BREAK;
+			}
 		}
+		++it;
 	}
 	return TALKACTION_CONTINUE;
 }
@@ -134,7 +133,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		separator = pugi::cast<char>(separatorAttribute.value());
 	}
 
-	words = wordsAttribute.as_string();
+	setWords(wordsAttribute.as_string());
 	return true;
 }
 

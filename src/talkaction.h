@@ -26,6 +26,7 @@
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
+using TalkAction_words = std::vector<std::string>;
 
 enum TalkActionResult_t {
 	TALKACTION_CONTINUE,
@@ -45,12 +46,16 @@ class TalkAction : public Event
 		}
 		void setWords(std::string word) {
 			words = word;
+			wothers.push_back(word);
 		}
 		std::string getSeparator() const {
 			return separator;
 		}
 		void setSeparator(std::string sep) {
 			separator = sep;
+		}
+		const TalkAction_words getWothers() const {
+			return wothers;
 		}
 
 		//scripting
@@ -62,6 +67,7 @@ class TalkAction : public Event
 
 		std::string words;
 		std::string separator = "\"";
+		TalkAction_words wothers = {};
 };
 
 class TalkActions final : public BaseEvents
