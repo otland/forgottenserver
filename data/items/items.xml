@@ -610,7 +610,6 @@
 		<attribute key="decayTo" value="1489" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="10" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -627,7 +626,6 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="poison">
-			<attribute key="initdamage" value="100" />
 			<attribute key="ticks" value="5000" />
 			<attribute key="start" value="5" />
 			<attribute key="damage" value="100" />
@@ -657,7 +655,6 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="10" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -681,7 +678,6 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="poison">
-			<attribute key="initdamage" value="100" />
 			<attribute key="ticks" value="5000" />
 			<attribute key="start" value="5" />
 			<attribute key="damage" value="100" />
@@ -717,7 +713,6 @@
 		<attribute key="decayTo" value="1502" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="10" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -734,7 +729,6 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="poison">
-			<attribute key="initdamage" value="100" />
 			<attribute key="ticks" value="5000" />
 			<attribute key="start" value="5" />
 			<attribute key="damage" value="100" />
@@ -760,7 +754,6 @@
 		<attribute key="duration" value="10" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="300" />
 			<attribute key="damage" value="300" />
 		</attribute>
 	</item>
@@ -770,7 +763,6 @@
 		<attribute key="duration" value="10" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="300" />
 			<attribute key="damage" value="300" />
 		</attribute>
 	</item>
@@ -13005,7 +12997,6 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="300" />
 			<attribute key="damage" value="300" />
 		</attribute>
 	</item>
@@ -19344,7 +19335,6 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="initdamage" value="10" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -34560,7 +34550,7 @@
 	<item id="25332" article="a" name="dragon's nest">
 		<attribute key="description" value="The young dragons have just hatched." />
 	</item>
-	<item id="25333" article="a" name="stone" />
+	<item id="25331" article="a" name="stone" />
 	<item id="25334" article="an" name="Opticorder analyser">
 		<attribute key="description" value="A strangely shaped hollow rests in the center of a desk." />
 	</item>
@@ -35424,7 +35414,6 @@
 	</item>
 	<item id="26024" article="a" name="poison trap">
 		<attribute key="type" value="magicfield" />
-		<attribute key="initdamage" value="100" />
 		<attribute key="field" value="poison">
 		<attribute key="ticks" value="5000" />
 		<attribute key="start" value="5" />
