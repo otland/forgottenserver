@@ -36,11 +36,17 @@ end
 registerMonsterType.maxHealth = function(mtype, mask)
 	if mask.maxHealth then
 		mtype:maxHealth(mask.maxHealth)
+		if mask.maxHealth < mtype:health() then
+			mtype:health(mask.maxHealth)
+		end
 	end
 end
 registerMonsterType.health = function(mtype, mask)
 	if mask.health then
 		mtype:health(mask.health)
+		if mask.health > mtype:maxHealth() then
+			mtype:maxHealth(mask.health)
+		end
 	end
 end
 registerMonsterType.runHealth = function(mtype, mask)
