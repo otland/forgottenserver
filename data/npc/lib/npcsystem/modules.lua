@@ -998,7 +998,7 @@ if Modules == nil then
 			[TAG_ITEMNAME] = shopItem.name
 		}
 
-		if not isItemFluidContainer(itemid) then
+		if not ItemType(itemid):isFluidContainer() then
 			subType = -1
 		end
 
