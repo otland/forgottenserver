@@ -507,7 +507,13 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 		return false;
 	}
 
-	setOwner(newOwner->getGUID());
+	if (type == HOUSE_TYPE_NORMAL) {
+		setOwner(newOwner->getGUID());
+	} else {
+		Guild* newOwnerGuild = newOwner->getGuild();
+		setOwner(newOwnerGuild->getId());
+	}
+
 	transferItem = nullptr;
 	return true;
 }

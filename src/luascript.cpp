@@ -1826,6 +1826,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
 	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 	registerEnum(RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION)
+	registerEnum(RETURNVALUE_TRADEPLAYERNOTINAGUILD)
+	registerEnum(RETURNVALUE_TRADEGUILDALREADYOWNSAHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERNOTGUILDLEADER)
+	registerEnum(RETURNVALUE_YOUARENOTGUILDLEADER)
 
 	registerEnum(RELOAD_TYPE_ALL)
 	registerEnum(RELOAD_TYPE_ACTIONS)
@@ -11022,17 +11026,63 @@ int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 		return 1;
 	}
 
-	if (house->getOwner() != player->getGUID()) {
+	if (house->getType() == HOUSE_TYPE_NORMAL) {
+		if (house->getOwner() != player->getGUID()) {
+			lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
+			return 1;
+		}
+
+		if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
+			lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+			return 1;
+		}
+
+		if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+			lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
+			return 1;
+		}
+
+		Item* transferItem = house->getTransferItem();
+		if (!transferItem) {
+			lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
+			return 1;
+		}
+
+		transferItem->getParent()->setParent(player);
+		if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+			house->resetTransferItem();
+		}
+
+		lua_pushnumber(L, RETURNVALUE_NOERROR);
+		return 1;
+	}
+
+	// HOUSE_TYPE_GUILDHALL
+	Guild* guild = player->getGuild();
+	if (!guild || house->getOwner() != guild->getId()) {
 		lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
 		return 1;
 	}
 
-	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
-		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+	Guild* tradeGuild = tradePartner->getGuild();
+	if (!tradeGuild) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERNOTINAGUILD);
+		return 1;
+	}
+	if (tradeGuild->getHouseId() > 0) {
+		lua_pushnumber(L, RETURNVALUE_TRADEGUILDALREADYOWNSAHOUSE);
+		return 1;
+	}
+	if (player->getGUID() != guild->getOwnerGUID()) {
+		lua_pushnumber(L, RETURNVALUE_YOUARENOTGUILDLEADER);
+		return 1;
+	}
+	if (tradePartner->getGUID() != tradeGuild->getOwnerGUID()) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERNOTGUILDLEADER);
 		return 1;
 	}
 
-	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+	if (IOLoginData::hasBiddedOnHouse(tradeGuild->getId())) {
 		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
 		return 1;
 	}

@@ -977,12 +977,13 @@ void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 	Database::getInstance().executeQuery(query.str());
 }
 
-bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
+// guid_guild = player->getGUID() or guild->getId()
+bool IOLoginData::hasBiddedOnHouse(uint32_t guid_guild)
 {
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id` FROM `houses` WHERE `highest_bidder` = " << guid << " LIMIT 1";
+	query << "SELECT `id` FROM `houses` WHERE `highest_bidder` = " << guid_guild << " LIMIT 1";
 	return db.storeQuery(query.str()).get() != nullptr;
 }
 
