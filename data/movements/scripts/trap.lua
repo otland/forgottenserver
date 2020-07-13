@@ -26,10 +26,6 @@ function onStepIn(creature, item, position, fromPosition)
 	if not trap then
 		return true
 	end
-	
-	if Tile(position):hasFlag(TILESTATE_PROTECTIONZONE) then
-		return true
-	end
 
 	if creature:isMonster() or creature:isPlayer() then
 		doTargetCombat(0, creature, trap.type or COMBAT_PHYSICALDAMAGE, trap.damage[1], trap.damage[2], CONST_ME_NONE)
