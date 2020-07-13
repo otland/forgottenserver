@@ -139,8 +139,6 @@
 	<action fromid="2443" toid="2453" script="other/destroy.lua" />
 	<action fromid="2574" toid="2577" script="other/fluids.lua" />
 	<action itemid="2579" script="other/trap.lua" />
-	<action itemid="2692" script="other/createbread.lua" />
-	<action itemid="2694" script="other/createbread.lua" />
 	<action itemid="2785" script="other/blueberrybush.lua" />
 	<action fromid="3535" toid="3552" script="other/doors.lua" />
 	<action itemid="3678" script="other/teleport.lua" />
