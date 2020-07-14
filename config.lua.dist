@@ -104,7 +104,7 @@ rateMagic = 3
 
 -- Monsters
 -- spawnIntervalRate control the rate of monster spawning interval
--- 100 = default, 50 = half spawntime, 200 = double spawntime
+-- its in percentage so 100 = 100%, 50 = 50% and so on
 deSpawnRange = 2
 deSpawnRadius = 50
 spawnIntervalRate = 100
