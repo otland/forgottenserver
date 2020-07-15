@@ -90,7 +90,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
 					centerPos.z
 				);
-				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000 * (g_config.getNumber(ConfigManager::SPAWN_INTERVAL_RATE) / 100);
+				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000 / g_config.getNumber(ConfigManager::SPAWN_INTERVAL_RATE);
 				if (interval > MINSPAWN_INTERVAL) {
 					spawn.addMonster(nameAttribute.as_string(), pos, dir, interval);
 				} else {

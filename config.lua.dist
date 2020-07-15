@@ -103,11 +103,11 @@ rateLoot = 2
 rateMagic = 3
 
 -- Monsters
--- spawnIntervalRate control the rate of monster spawning interval
--- its in percentage so 100 = 100%, 50 = 50% and so on
+-- spawnIntervalRate controls the rate of monster spawning interval
+-- (spawntime divided by spawnIntervalRate) 1 = 100%, 2 = 50%, etc
 deSpawnRange = 2
 deSpawnRadius = 50
-spawnIntervalRate = 100
+spawnIntervalRate = 1
 
 -- Stamina
 staminaSystem = true
