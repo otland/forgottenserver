@@ -32913,8 +32913,8 @@
 		<attribute key="description" value="It draws you nearer." />
 		<attribute key="type" value="teleport" />
 	</item>
-	<item id="24109" article="a" name="water vortex">
-		<attribute key="description" value="It draws you nearer." />
+	<item id="24109" article="a" name="water channel">
+		<attribute key="description" value="A cold maelstrom pulls you down." />
 		<attribute key="type" value="teleport" />
 	</item>
 	<item id="24110" article="a" name="hot geyser">
