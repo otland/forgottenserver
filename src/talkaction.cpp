@@ -68,14 +68,24 @@ Event_ptr TalkActions::getEvent(const std::string& nodeName)
 bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
-	talkActions.emplace(talkAction->getWords(), std::move(*talkAction));
+	std::vector<std::string> words = talkAction->getWordsMap();
+
+	for (const auto& word : words) {
+		talkActions.emplace(word, std::move(*talkAction));
+	}
+
 	return true;
 }
 
 bool TalkActions::registerLuaEvent(TalkAction* event)
 {
 	TalkAction_ptr talkAction{ event };
-	talkActions.emplace(talkAction->getWords(), std::move(*talkAction));
+	std::vector<std::string> words = talkAction->getWordsMap();
+
+	for (const auto& word : words) {
+		talkActions.emplace(word, std::move(*talkAction));
+	}
+
 	return true;
 }
 
@@ -134,7 +144,8 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		separator = pugi::cast<char>(separatorAttribute.value());
 	}
 
-	words = wordsAttribute.as_string();
+	wordsMap = explodeString(wordsAttribute.as_string(), ";");
+	words = wordsMap[0]; // to retain backwards compatibility
 	return true;
 }
 
