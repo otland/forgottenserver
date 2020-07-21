@@ -70,8 +70,12 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
 	std::vector<std::string> words = talkAction->getWordsMap();
 
-	for (const auto& word : words) {
-		talkActions.emplace(word, std::move(*talkAction));
+	for (size_t i = 0; i < words.size(); i++) {
+		if (i == words.size() - 1) {
+			talkActions.emplace(words[i], std::move(*talkAction));
+		} else {
+			talkActions.emplace(words[i], *talkAction);
+		}
 	}
 
 	return true;
@@ -82,8 +86,12 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 	TalkAction_ptr talkAction{ event };
 	std::vector<std::string> words = talkAction->getWordsMap();
 
-	for (const auto& word : words) {
-		talkActions.emplace(word, std::move(*talkAction));
+	for (size_t i = 0; i < words.size(); i++) {
+		if (i == words.size() - 1) {
+			talkActions.emplace(words[i], std::move(*talkAction));
+		} else {
+			talkActions.emplace(words[i], *talkAction);
+		}
 	}
 
 	return true;
@@ -122,7 +130,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (it->second.executeSay(player, param, type)) {
+		if (it->second.executeSay(player, words, param, type)) {
 			return TALKACTION_CONTINUE;
 		} else {
 			return TALKACTION_BREAK;
@@ -154,7 +162,7 @@ std::string TalkAction::getScriptEventName() const
 	return "onSay";
 }
 
-bool TalkAction::executeSay(Player* player, const std::string& param, SpeakClasses type) const
+bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
 	//onSay(player, words, param, type)
 	if (!scriptInterface->reserveScriptEnv()) {
