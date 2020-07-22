@@ -1,5 +1,5 @@
 function onSay(player, words, param)
-	if not changeSexEnabled then
+	if not configManager.getBoolean(configKeys.CHANGE_SEX_ENABLED) then
 		return false
 	end
 
@@ -9,6 +9,7 @@ function onSay(player, words, param)
 		return false
 	end
 
+	local changeSexDaysCost = configManager.getNumber(configKeys.CHANGE_SEX_DAYS_COST)
 	if player:getPremiumDays() >= changeSexDaysCost then
 		player:removePremiumDays(changeSexDaysCost)
 		player:setSex(player:getSex() == PLAYERSEX_FEMALE and PLAYERSEX_MALE or PLAYERSEX_FEMALE)

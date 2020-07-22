@@ -3,10 +3,13 @@ function onSay(player, words, param)
 		return true
 	end
 
-	if not buyPremiumEnabled then
+	if not configManager.getBoolean(configKeys.BUY_PREMIUM_ENABLED) then
 		return false
 	end
 
+	local buyPremiumPrice = configManager.getNumber(configKeys.BUY_PREMIUM_PRICE)
+	local buyPremiumMaxDays = configManager.getNumber(configKeys.BUY_PREMIUM_MAXDAYS)
+	local buyPremiumDays = configManager.getNumber(configKeys.BUY_PREMIUM_DAYS)
 	if player:getPremiumDays() <= buyPremiumMaxDays then
 		if player:removeTotalMoney(buyPremiumPrice) then
 			player:addPremiumDays(buyPremiumDays)

@@ -44,7 +44,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	player:addSkillTries(SKILL_FISHING, 1)
 	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
-		if useWormsToFishing and not player:removeItem(3976, 1) then
+		if configManager.getBoolean(configKeys.USE_WORMS_TO_FISHING) and not player:removeItem(3976, 1) then
 			return true
 		end
 

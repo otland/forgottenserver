@@ -4,12 +4,13 @@ function onSay(player, words, param)
 		return true
 	end
 
+	local levelToBuyHouse = configManager.getNumber(configKeys.LEVEL_TO_BUY_HOUSE)
 	if player:getLevel() < levelToBuyHouse then
 		player:sendCancelMessage("You need to be at least of level " .. levelToBuyHouse .. " to buy a house.")
 		return false
 	end
 
-	if not player:isPremium() and premiumToBuyHouse then
+	if not player:isPremium() and configManager.getBoolean(configKeys.PREMIUM_TO_BUY_HOUSE) then
 		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
 		return false
 	end

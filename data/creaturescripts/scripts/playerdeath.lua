@@ -5,7 +5,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 	end
 
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are dead.")
-	if not deathListEnabled then
+	if not configManager.getBoolean(configKeys.DEATHLIST_ENABLED) then
 		return
 	end
 
@@ -58,7 +58,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 		result.free(resultId)
 	end
 
-	local limit = deathRecords - maxDeathRecords
+	local limit = deathRecords - configManager.getNumber(configKeys.MAX_DEATH_RECORDS)
 	if limit > 0 then
 		db.asyncQuery("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT " .. limit)
 	end
