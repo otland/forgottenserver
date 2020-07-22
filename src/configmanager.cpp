@@ -149,6 +149,12 @@ bool ConfigManager::load()
 	boolean[HOUSE_OWNED_BY_ACCOUNT] = getGlobalBoolean(L, "houseOwnedByAccount", false);
 	boolean[CLEAN_PROTECTION_ZONES] = getGlobalBoolean(L, "cleanProtectionZones", false);
 	boolean[HOUSE_DOOR_SHOW_PRICE] = getGlobalBoolean(L, "houseDoorShowPrice", true);
+	boolean[PREMIUM_TO_BUY_HOUSE] = getGlobalBoolean(L, "premiumToBuyHouse", true);
+	boolean[BUY_PREMIUM_ENABLED] = getGlobalBoolean(L, "buyPremiumEnabled", true);
+	boolean[CHANGE_SEX_ENABLED] = getGlobalBoolean(L, "changeSexEnabled", true);
+	boolean[PREMIUM_TO_OFFLINE_TRAINING] = getGlobalBoolean(L, "premiumToOfflineTraining", true);
+	boolean[DEATHLIST_ENABLED] = getGlobalBoolean(L, "deathListEnabled", true);
+	boolean[USE_WORMS_TO_FISHING] = getGlobalBoolean(L, "useWormsToFishing", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -187,6 +193,12 @@ bool ConfigManager::load()
 	integer[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 	integer[SERVER_SAVE_NOTIFY_DURATION] = getGlobalNumber(L, "serverSaveNotifyDuration", 5);
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
+	integer[LEVEL_TO_BUY_HOUSE] = getGlobalNumber(L, "levelToBuyHouse", 8);
+	integer[BUY_PREMIUM_DAYS] = getGlobalNumber(L, "buyPremiumDays", 90);
+	integer[BUY_PREMIUM_PRICE] = getGlobalNumber(L, "buyPremiumPrice", 10000);
+	integer[BUY_PREMIUM_MAXDAYS] = getGlobalNumber(L, "buyPremiumMaxDays", 365);
+	integer[CHANGE_SEX_DAYS_COST] = getGlobalNumber(L, "changeSexDaysCost", 3);
+	integer[MAX_DEATH_RECORDS] = getGlobalNumber(L, "maxDeathRecords", 5);
 
 	loaded = true;
 	lua_close(L);

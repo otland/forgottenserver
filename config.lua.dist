@@ -81,7 +81,6 @@ mysqlSock = ""
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
 -- forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes, you can change to false if all of your monster files don't throw errors to save up memory.
--- sharedExperienceMultiplier 1.20 = 20%
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
@@ -98,8 +97,6 @@ cleanProtectionZones = false
 changeSexEnabled = true
 changeSexDaysCost = 3
 premiumToOfflineTraining = true
-diceEnabledOnDepot = true
-sharedExperienceMultiplier = 1.20
 deathListEnabled = true
 maxDeathRecords = 5
 useWormsToFishing = true
