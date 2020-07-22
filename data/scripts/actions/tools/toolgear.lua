@@ -1,4 +1,10 @@
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+if Game.getClientVersion().min < 850 then
+	return
+end
+
+local toolgear = Action()
+
+function toolgear.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if math.random(100) > 5 then
 		return onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 		or onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
@@ -15,3 +21,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return true
 end
+
+toolgear:id(10511, 10513, 10515)
+toolgear:register()

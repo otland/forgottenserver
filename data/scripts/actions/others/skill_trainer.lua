@@ -1,3 +1,7 @@
+if Game.getClientVersion().min < 960 then
+	return
+end
+
 local statues = {
 	[18488] = SKILL_SWORD,
 	[18489] = SKILL_AXE,
@@ -6,7 +10,9 @@ local statues = {
 	[18492] = SKILL_MAGLEVEL
 }
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+local training = Action()
+
+function training.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local skill = statues[item:getId()]
 	if not player:isPremium() then
 		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
@@ -21,3 +27,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	player:remove()
 	return true
 end
+
+for k, v in pairs(statues) do
+	training:id(k)
+end
+training:register()

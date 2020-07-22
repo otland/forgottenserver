@@ -1,4 +1,10 @@
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+if Game.getClientVersion().min < 790 then
+	return
+end
+
+local fireworks = Action()
+
+function fireworks.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if fromPosition.x ~= CONTAINER_POSITION then
 		fromPosition:sendMagicEffect(math.random(CONST_ME_FIREWORK_YELLOW, CONST_ME_FIREWORK_BLUE))
 	else
@@ -12,3 +18,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	item:remove()
 	return true
 end
+
+fireworks:id(6576)
+fireworks:register()

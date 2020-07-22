@@ -1,4 +1,10 @@
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+if Game.getClientVersion().min < 730 then
+	return
+end
+
+local piggyBank = Action()
+
+function piggyBank.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if math.random(6) == 1 then
 		item:getPosition():sendMagicEffect(CONST_ME_POFF)
 		player:addItem(ITEM_GOLD_COIN, 1)
@@ -10,3 +16,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return true
 end
+
+piggyBank:id(2114)
+piggyBank:register()

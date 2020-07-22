@@ -1,3 +1,23 @@
+local spellbooks = {
+	--{itemid, client_version}
+	{25411, 1090}, -- book of lies
+	{23771, 1055}, -- spellbook of the novice
+	{22424, 1030}, -- umbral master spellbook
+	{22423, 1030}, -- umbral spellbook
+	{22422, 1030}, -- crude umbral spellbook
+	{18401, 960}, -- spellbook of vigilance
+	{16112, 960}, -- spellbook of ancient arcana
+	{12647, 860}, -- snake god's wristguard
+	{8918, 820}, -- spellbook of dark mysteries
+	{8904, 820}, -- spellscroll of prophecies
+	{8903, 820}, -- spellbook of lost souls
+	{8902, 820}, -- spellbook of mind control
+	{8901, 820}, -- spellbook of warding
+	{8900, 820}, -- spellbook of enlightenment
+	{6120, 780}, -- Dragha's spellbook
+	{2175, 0} -- spellbook
+}
+
 local spellbook = Action()
 
 function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -32,5 +52,9 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return true
 end
 
-spellbook:id(2175, 6120, 8900, 8901, 8902, 8903, 8904, 8918, 16112, 18401, 22422, 22423, 22424, 23771)
+for _, s in ipairs(spellbooks) do
+	if Game.getClientVersion().min >= s[2] then
+		spellbook:id(s[1])
+	end
+end
 spellbook:register()

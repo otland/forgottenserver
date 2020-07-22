@@ -25,7 +25,9 @@ local fluidMessage = {
 
 local distillery = {[5513] = 5469, [5514] = 5470}
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+local fluid = Action()
+
+function fluid.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target.itemid)
 	if targetItemType and targetItemType:isFluidContainer() then
 		if target.type == 0 and item.type ~= 0 then
@@ -83,3 +85,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return true
 end
+
+fluid:id(1775, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2023, 2031, 2032, 2033, 2034, 2562, 2574, 2575, 2576, 2577)
+fluid:register()

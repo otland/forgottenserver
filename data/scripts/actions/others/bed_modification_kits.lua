@@ -1,3 +1,7 @@
+if Game.getClientVersion().min < 810 then
+	return
+end
+
 local beds = {
 	[7904] = {{7811, 7812}, {7813, 7814}}, -- green kit
 	[7905] = {{7819, 7820}, {7821, 7822}}, -- yellow kit
@@ -16,7 +20,9 @@ local function internalBedTransform(item, targetItem, toPosition, itemArray)
 	item:remove()
 end
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+local modificationKit = Action()
+
+function modificationKit.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local newBed = beds[item:getId()]
 	if not newBed or type(target) ~= "userdata" or not target:isItem() then
 		return false
@@ -48,3 +54,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return true
 end
+
+if Game.getClientVersion().min >= 980 then
+	modificationKit:id(20252)
+end
+modificationKit:id(7904, 7905, 7906, 7907)
+modificationKit:register()

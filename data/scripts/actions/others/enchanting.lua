@@ -1,3 +1,7 @@
+if Game.getClientVersion().min < 810 then
+	return
+end
+
 local items = {
 	equipment = {
 		[2147] = { -- small ruby
@@ -119,7 +123,9 @@ local items = {
 	[24739] = {combatType = COMBAT_NONE} -- moonlight crystals
 }
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+local enchanting = Action()
+
+function enchanting.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if not target or not target:isItem() then
 		return false
 	end
@@ -208,3 +214,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return true
 end
+
+if Game.getClientVersion().min >= 1080 then
+	enchanting:id(24739)
+end
+enchanting:id(2146, 2147, 2149, 2150, 2342, 7759, 7760, 7761, 7762)
+enchanting:register()

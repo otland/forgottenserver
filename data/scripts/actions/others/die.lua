@@ -1,4 +1,10 @@
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+if Game.getClientVersion().min < 780 then
+	return
+end
+
+local dice = Action()
+
+function dice.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local position = item:getPosition()
 	local value = math.random(1, 6)
 	local isInGhostMode = player:isInGhostMode()
@@ -13,3 +19,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	item:transform(5791 + value)
 	return true
 end
+
+dice:id(5792, 5793, 5794, 5795, 5796, 5797)
+dice:register()

@@ -1,4 +1,10 @@
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+if Game.getClientVersion().min < 780 then
+	return
+end
+
+local largeSeashell = Action()
+
+function largeSeashell.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if player:getStorageValue(PlayerStorageKeys.delayLargeSeaShell) <= os.time() then
 		local chance = math.random(100)
 		local msg = ""
@@ -22,3 +28,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return true
 end
+
+largeSeashell:id(7552)
+largeSeashell:register()
