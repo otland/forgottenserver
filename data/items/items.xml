@@ -22294,8 +22294,8 @@
 	<item id="13506" article="a" name="medicine pouch">
 		<attribute key="weight" value="1200" />
 	</item>
-	<item id="13495" name="golden slime" />
-	<item id="13507" name="golden slime" />
+	<item id="13495" article="a" name="faint glow" />
+	<item id="13507" article="a" name="faint glow" />
 	<item id="13508" article="a" name="slug drug">
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
 		<attribute key="weight" value="200" />
@@ -22621,9 +22621,9 @@
 	<item fromid="13636" toid="13643" name="rocky floor" />
 	<item fromid="13644" toid="13654" name="rocky wall" />
 	<item fromid="13658" toid="13659" name="rocky wall" />
-	<item fromid="13661" toid="13662" name="golden slime" />
+	<item fromid="13661" toid="13662" article="a" name="faint glow" />
 	<item fromid="13663" toid="13668" article="a" name="rocky wall" />
-	<item id="13669" name="golden slime" />
+	<item id="13669" article="a" name="faint glow" />
 	<item id="13670" name="belongings of a deceased">
 		<attribute key="weight" value="3000" />
 	</item>
