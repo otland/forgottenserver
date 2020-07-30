@@ -192,8 +192,6 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
-
-	TALKTYPE_CHANNEL_R2 = 0xFF, //#d
 };
 
 enum MessageClasses : uint8_t {
