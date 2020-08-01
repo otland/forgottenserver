@@ -1188,6 +1188,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						uint32_t ticks = 0;
 						int32_t start = 0;
 						int32_t count = 1;
+						int32_t initDamage = -1;
+						int32_t damage = 0;
 						for (auto subAttributeNode : attributeNode.children()) {
 							pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 							if (!subKeyAttribute) {
@@ -1201,7 +1203,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
 							if (tmpStrValue == "initdamage") {
-								conditionDamage->setInitDamage(-pugi::cast<int32_t>(subValueAttribute.value()));
+								initDamage = pugi::cast<int32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
@@ -1209,7 +1211,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 							} else if (tmpStrValue == "start") {
 								start = std::max<int32_t>(0, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "damage") {
-								int32_t damage = -pugi::cast<int32_t>(subValueAttribute.value());
+								damage = -pugi::cast<int32_t>(subValueAttribute.value());
 								if (start > 0) {
 									std::list<int32_t> damageList;
 									ConditionDamage::generateDamageList(damage, start, damageList);
@@ -1222,6 +1224,15 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 									conditionDamage->addDamage(count, ticks, damage);
 								}
 							}
+						}
+
+						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
+						// initDamage = 0 (dont override initDamage with damage, dont set any initDamage)
+						// initDamage = -1 (undefined, override initDamage with damage)
+						if (initDamage > 0 || initDamage < -1) {
+							conditionDamage->setInitDamage(-initDamage);
+						} else if (initDamage == -1 && damage != 0) {
+							conditionDamage->setInitDamage(damage);
 						}
 
 						conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
