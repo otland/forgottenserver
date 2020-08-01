@@ -9585,13 +9585,16 @@ int LuaScriptInterface::luaPlayerGetClient(lua_State* L)
 	// player:getClient()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_createtable(L, 0, 2);
+		lua_createtable(L, 0, 5);
 		setField(L, "version", player->getProtocolVersion());
 		setField(L, "os", player->getOperatingSystem());
+		setField(L, "otcv8", player->getOTCv8Version());
+		setField(L, "ping", player->getLocalPing());
+		setField(L, "fps", player->getFPS());
 	} else {
 		lua_pushnil(L);
 	}
-	return 1;
+	return 1;	
 }
 
 int LuaScriptInterface::luaPlayerGetHouse(lua_State* L)

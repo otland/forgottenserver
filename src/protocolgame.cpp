@@ -428,6 +428,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x1D: addGameTask(&Game::playerReceivePingBack, player->getID()); break;
 		case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
 		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode
+		case 0x40: parseNewPing(msg); break;
 		case 0x42: parseChangeAwareRange(msg); break;
 		case 0x45: parseNewWalking(msg); break;
 		case 0x64: parseAutoWalk(msg); break;
@@ -3202,7 +3203,8 @@ void ProtocolGame::sendFeatures()
 	features[GameExtendedOpcode] = true;
 	features[GameChangeMapAwareRange] = true;
 	features[GameNewWalking] = true;
-	features[GameEnvironmentEffect] = false; // disable it, useless
+	features[GameEnvironmentEffect] = false; // disable it, useless 2 byte with every tile
+	features[GameExtendedClientPing] = true; 
 
 	// packet compression
 	// we don't send feature, because feature assumes all packets are compressed
@@ -3358,4 +3360,25 @@ void ProtocolGame::sendNewCancelWalk()
 	writeToOutputBuffer(msg);
 	walkId += 1;
 	sendWalkId();
+}
+
+void ProtocolGame::parseNewPing(NetworkMessage& msg)
+{
+	uint32_t pingId = msg.get<uint32_t>();
+	uint16_t localPing = msg.get<uint16_t>();
+	uint16_t fps = msg.get<uint16_t>();
+
+	addGameTask(&Game::playerReceiveNewPing, player->getID(), localPing, fps);
+	g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::sendNewPing, getThis(), pingId)));
+}
+
+void ProtocolGame::sendNewPing(uint32_t pingId)
+{
+	if (!otclientV8)
+		return;
+
+	NetworkMessage msg;
+	msg.addByte(0x40);
+	msg.add<uint32_t>(pingId);
+	writeToOutputBuffer(msg);
 }
