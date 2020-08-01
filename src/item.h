@@ -597,16 +597,16 @@ class Item : virtual public Thing
 			getAttributes()->setStrAttr(type, value);
 		}
 
-		int32_t getIntAttr(itemAttrTypes type) const {
+		int64_t getIntAttr(itemAttrTypes type) const {
 			if (!attributes) {
 				return 0;
 			}
 			return attributes->getIntAttr(type);
 		}
-		void setIntAttr(itemAttrTypes type, int32_t value) {
+		void setIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->setIntAttr(type, value);
 		}
-		void increaseIntAttr(itemAttrTypes type, int32_t value) {
+		void increaseIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->increaseIntAttr(type, value);
 		}
 
