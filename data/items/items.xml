@@ -29219,7 +29219,6 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="45" />
-		<attribute key="blocking" value="1" />
 	</item>
 	<item fromid="20671" toid="20691" article="a" name="basalt crystal wall" />
 	<item fromid="20692" toid="20700" name="the spike of a crystal drill" />
