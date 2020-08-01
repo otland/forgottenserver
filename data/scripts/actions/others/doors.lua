@@ -53,7 +53,9 @@ local function findPushPosition(creature, round)
 	end
 end
 
-function onUse(player, item, fromPosition, target, toPosition, isHotkey)
+local door = Action()
+
+function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if table.contains(questDoors, itemId) then
 		if player:getStorageValue(item.actionid) ~= -1 then
@@ -100,7 +102,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 
-		if not table.contains(openSpecialDoors, itemId) then
+		if not(table.contains(openQuestDoors, itemId)) and not(table.contains(openLevelDoors, itemId)) then
 			item:transform(itemId - 1)
 		end
 		return true
@@ -116,3 +118,16 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	return false
 end
+
+local doorsSet = {} -- unique value set for door ids
+for _, d in ipairs(questDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for _, d in ipairs(levelDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for _, d in ipairs(keys) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for _, d in ipairs(horizontalOpenDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for _, d in ipairs(verticalOpenDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for d, _ in pairs(doors) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for i, _ in pairs(doorsSet) do
+	door:id(i)
+end
+doorsSet = nil
+door:register()
