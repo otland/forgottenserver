@@ -22550,6 +22550,11 @@
 	<item id="13582" name="Impward">
 		<attribute key="weight" value="600" />
 	</item>
+	<item id="13583" article="a" name="slain mutated pumpkin">
+		<attribute key="description" value="Who knows how long it will remain dead? Use an obsidian knife on its corpse to retrieve some goods." />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+	</item>
 	<item id="13584" article="a" name="dead crystal wolf">
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="13595" />
