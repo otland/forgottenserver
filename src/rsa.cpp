@@ -55,6 +55,10 @@ void RSA::loadPEM(const std::string& filename)
 	for (std::string line; std::getline(file, line); oss << line);
 	std::string key = oss.str();
 
+	// fixes "Missing RSA private key footer." error
+	key.erase(0, key.find_first_not_of(" \t\f\v\n\r"));
+	key.erase(key.find_last_not_of(" \t\f\v\n\r") + 1);
+
 	if (key.substr(0, header.size()) != header) {
 		throw std::runtime_error("Missing RSA private key header.");
 	}

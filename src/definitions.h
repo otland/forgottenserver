@@ -25,8 +25,8 @@ static constexpr auto STATUS_SERVER_VERSION = "1.3";
 static constexpr auto STATUS_SERVER_DEVELOPERS = "Mark Samman";
 
 static constexpr auto CLIENT_VERSION_MIN = 1097;
-static constexpr auto CLIENT_VERSION_MAX = 1098;
-static constexpr auto CLIENT_VERSION_STR = "10.98";
+static constexpr auto CLIENT_VERSION_MAX = 1099;
+static constexpr auto CLIENT_VERSION_STR = "10.99";
 
 static constexpr auto AUTHENTICATOR_DIGITS = 6U;
 static constexpr auto AUTHENTICATOR_PERIOD = 30U;
