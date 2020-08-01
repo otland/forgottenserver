@@ -24,6 +24,7 @@
 #include "chat.h"
 #include "creature.h"
 #include "tasks.h"
+#include "walkmatrix.h"
 
 class NetworkMessage;
 class Player;
@@ -310,6 +311,12 @@ class ProtocolGame final : public Protocol
 		void updateAwareRange(int width, int height);
 		void sendAwareRange();
 
+		void parseNewWalking(NetworkMessage& msg);
+		void checkPredictiveWalking(const Position& pos);
+		void sendPredictiveCancel(const Position& pos, int value);
+		void sendWalkId();
+		void sendNewCancelWalk();
+
 		friend class Player;
 
 		// Helpers so we don't need to bind every time
@@ -347,6 +354,9 @@ class ProtocolGame final : public Protocol
 			int horizontal() const { return width + 1; }
 			int vertical() const { return height + 1; }
 		} awareRange;
+
+		uint32_t walkId = 0;
+		WalkMatrix walkMatrix;
 };
 
 #endif

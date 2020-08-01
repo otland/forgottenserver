@@ -429,6 +429,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
 		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode
 		case 0x42: parseChangeAwareRange(msg); break;
+		case 0x45: parseNewWalking(msg); break;
 		case 0x64: parseAutoWalk(msg); break;
 		case 0x65: addGameTask(&Game::playerMove, player->getID(), DIRECTION_NORTH); break;
 		case 0x66: addGameTask(&Game::playerMove, player->getID(), DIRECTION_EAST); break;
@@ -520,10 +521,33 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 
 void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 {
-	msg.add<uint16_t>(0x00); //environmental effects
+	Item* ground = tile->getGround();
+	if (otclientV8) { // OTCLIENTV8 new walking
+		uint16_t groundSpeed = 150;
+		// I've noticed that sometimes ground speed was incorrect in otclient,
+		// so server just sends 100% correct ground speed
+		bool isBlocking = false;
+		// if isBlocking is true, next prewalking from this tile will be impossible
+		// till server confirmation/rejection, used for teleport or stairs
+		if (ground) {
+			groundSpeed = (uint16_t)Item::items[ground->getID()].speed;
+			if (groundSpeed == 0) {
+				groundSpeed = 150;
+			}
+			// you can uncomment to make walk animation slower when going into stairs, looks cool
+			// floor change speed is the same, only animation is slower 
+			//if(tile->hasFlag(TILESTATE_FLOORCHANGE))
+			//    groundSpeed *= 3;
+			if (tile->hasFlag(TILESTATE_FLOORCHANGE) || tile->hasFlag(TILESTATE_TELEPORT))
+				isBlocking = true;
+		}
+		msg.add<uint16_t>(groundSpeed);
+		msg.add<uint8_t>(isBlocking ? 1 : 0);
+	} else {
+		msg.add<uint16_t>(0x00); //environmental effects
+	}
 
 	int32_t count;
-	Item* ground = tile->getGround();
 	if (ground) {
 		msg.addItem(ground);
 		count = 1;
@@ -537,7 +561,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 			msg.addItem(*it);
 
 			count++;
-			if (count == 9 && tile->getPosition() == player->getPosition()) {
+			if (count == 9 && tile->getPosition() == player->getPosition() && !otclientV8) {
 				break;
 			} else if (count == 10) {
 				return;
@@ -553,7 +577,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 				continue;
 			}
 
-			if (tile->getPosition() == player->getPosition() && count == 9 && !playerAdded) {
+			if (tile->getPosition() == player->getPosition() && count == 9 && !playerAdded && !otclientV8) {
 				creature = player;
 			}
 
@@ -754,7 +778,7 @@ void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 
 	msg.skipBytes(numdirs);
 
-	std::forward_list<Direction> path;
+	std::list<Direction> path;
 	for (uint8_t i = 0; i < numdirs; ++i) {
 		uint8_t rawdir = msg.getPreviousByte();
 		switch (rawdir) {
@@ -2369,6 +2393,8 @@ void ProtocolGame::sendAddTileItem(const Position& pos, uint32_t stackpos, const
 	msg.addByte(stackpos);
 	msg.addItem(item);
 	writeToOutputBuffer(msg);
+
+	checkPredictiveWalking(pos);
 }
 
 void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item)
@@ -2383,6 +2409,8 @@ void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, co
 	msg.addByte(stackpos);
 	msg.addItem(item);
 	writeToOutputBuffer(msg);
+
+	checkPredictiveWalking(pos);
 }
 
 void ProtocolGame::sendRemoveTileThing(const Position& pos, uint32_t stackpos)
@@ -2466,6 +2494,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		if (isLogin) {
 			sendMagicEffect(pos, CONST_ME_TELEPORT);
 		}
+
+		checkPredictiveWalking(pos);
 		return;
 	}
 
@@ -2540,6 +2570,9 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 				msg.addPosition(oldPos);
 				msg.addByte(oldStackPos);
 				msg.addPosition(newPos);
+				if (otclientV8) {
+					msg.add<uint16_t>(creature->getStepDuration(true));
+				}
 			}
 
 			if (newPos.z > oldPos.z) {
@@ -2575,7 +2608,12 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 			msg.addPosition(oldPos);
 			msg.addByte(oldStackPos);
 			msg.addPosition(creature->getPosition());
+			if (otclientV8) {
+				msg.add<uint16_t>(creature->getStepDuration(true));
+			}
 			writeToOutputBuffer(msg);
+			checkPredictiveWalking(oldPos);
+			checkPredictiveWalking(newPos);
 		}
 	} else if (canSee(oldPos)) {
 		sendRemoveTileThing(oldPos, oldStackPos);
@@ -3163,6 +3201,8 @@ void ProtocolGame::sendFeatures()
 	// place for non-standard OTCv8 features
 	features[GameExtendedOpcode] = true;
 	features[GameChangeMapAwareRange] = true;
+	features[GameNewWalking] = true;
+	features[GameEnvironmentEffect] = false; // disable it, useless
 
 	// packet compression
 	// we don't send feature, because feature assumes all packets are compressed
@@ -3223,3 +3263,99 @@ void ProtocolGame::sendAwareRange()
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::parseNewWalking(NetworkMessage& msg)
+{
+	uint32_t playerWalkId = msg.get<uint32_t>();
+	int32_t predictiveWalkId = msg.get<int32_t>(); // extension for proxy system, currently not used
+	Position playerPosition = msg.getPosition(); // local player position before moving, including prewalk
+	uint8_t flags = msg.getByte(); // 0x01 - prewalk, 0x02 - autowalk
+
+	uint16_t numdirs = msg.get<uint16_t>();
+	if (numdirs == 0 || numdirs > 4096) {
+		return;
+	}
+
+	std::list<Direction> path;
+	for (uint16_t i = 0; i < numdirs; ++i) {
+		uint8_t rawdir = msg.getByte();
+		switch (rawdir) {
+		case 1: path.push_back(DIRECTION_EAST); break;
+		case 2: path.push_back(DIRECTION_NORTHEAST); break;
+		case 3: path.push_back(DIRECTION_NORTH); break;
+		case 4: path.push_back(DIRECTION_NORTHWEST); break;
+		case 5: path.push_back(DIRECTION_WEST); break;
+		case 6: path.push_back(DIRECTION_SOUTHWEST); break;
+		case 7: path.push_back(DIRECTION_SOUTH); break;
+		case 8: path.push_back(DIRECTION_SOUTHEAST); break;
+		default: break;
+		}
+	}
+
+
+	uint32_t playerId = player->getID();
+
+	auto self(getThis());
+	g_dispatcher.addTask(createTask([self, playerWalkId, predictiveWalkId, playerId, playerPosition, flags, path] {
+		bool preWalk = flags & 0x01;
+		Position destination = getNextPosition(*(path.begin()), playerPosition);
+		if (preWalk && predictiveWalkId < self->walkMatrix.get(destination)) {
+			self->walkId += 1;
+			self->sendWalkId();
+			return;
+		}
+
+		if (playerWalkId < self->walkId) {
+			// this walk has been sent before player received previous newCancelWalk, so it's invalid, ignore it
+			return;
+		}
+
+		g_game.playerNewWalk(playerId, playerPosition, flags, path);
+	}));
+}
+
+void ProtocolGame::checkPredictiveWalking(const Position& pos)
+{
+	if (!otclientV8)
+		return;
+
+	if (walkMatrix.inRange(pos) && !g_game.map.canWalkTo(*player, pos)) {
+		int newValue = walkMatrix.update(pos);
+		sendPredictiveCancel(pos, newValue);
+	}
+}
+
+void ProtocolGame::sendPredictiveCancel(const Position& pos, int value)
+{
+	if (!otclientV8)
+		return;
+
+	NetworkMessage msg;
+	msg.addByte(0x46);
+	msg.addPosition(pos);
+	msg.addByte(player->getDirection());
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendWalkId()
+{
+	if (!otclientV8)
+		return;
+
+	NetworkMessage msg;
+	msg.addByte(0x47);
+	msg.add<uint32_t>(walkId);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendNewCancelWalk()
+{
+	if (!otclientV8)
+		return;
+
+	NetworkMessage msg;
+	msg.addByte(0x45);
+	msg.addByte(player->getDirection());
+	writeToOutputBuffer(msg);
+	walkId += 1;
+	sendWalkId();
+}

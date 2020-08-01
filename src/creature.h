@@ -192,9 +192,9 @@ class Creature : virtual public Thing
 		int32_t getWalkDelay() const;
 		int64_t getTimeSinceLastMove() const;
 
-		int64_t getEventStepTicks(bool onlyDelay = false) const;
+		int64_t getEventStepTicks() const;
 		int64_t getStepDuration(Direction dir) const;
-		int64_t getStepDuration() const;
+		int64_t getStepDuration(bool forAnimation = false) const;
 		virtual int32_t getStepSpeed() const {
 			return getSpeed();
 		}
@@ -242,8 +242,8 @@ class Creature : virtual public Thing
 		}
 
 		//walk functions
-		void startAutoWalk(const std::forward_list<Direction>& listDir);
-		void addEventWalk(bool firstStep = false);
+		void startAutoWalk(const std::list<Direction>& listDir);
+		void addEventWalk();
 		void stopEventWalk();
 		virtual void goToFollowCreature();
 
@@ -445,8 +445,8 @@ class Creature : virtual public Thing
 
 		double getDamageRatio(Creature* attacker) const;
 
-		bool getPathTo(const Position& targetPos, std::forward_list<Direction>& dirList, const FindPathParams& fpp) const;
-		bool getPathTo(const Position& targetPos, std::forward_list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
+		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, const FindPathParams& fpp) const;
+		bool getPathTo(const Position& targetPos, std::list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
 
 		void incrementReferenceCounter() {
 			++referenceCounter;
@@ -456,6 +456,12 @@ class Creature : virtual public Thing
 				delete this;
 			}
 		}
+
+		std::list<Direction>& getListWalkDir()
+		{
+			return listWalkDir;
+		}
+		bool tryToFixAutoWalk(Direction dir);
 
 	protected:
 		virtual bool useCacheMap() const {
@@ -481,7 +487,7 @@ class Creature : virtual public Thing
 		CreatureEventList eventsList;
 		ConditionList conditions;
 
-		std::forward_list<Direction> listWalkDir;
+		std::list<Direction> listWalkDir;
 
 		Tile* tile = nullptr;
 		Creature* attackedCreature = nullptr;

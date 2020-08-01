@@ -695,7 +695,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 
 	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
 		//need to walk to the creature first before moving it
-		std::forward_list<Direction> listDir;
+		std::list<Direction> listDir;
 		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -932,7 +932,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 
 	if (!Position::areInRange<1, 1>(playerPos, mapFromPos)) {
 		//need to walk to the item first before using it
-		std::forward_list<Direction> listDir;
+		std::list<Direction> listDir;
 		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -991,7 +991,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 				internalGetPosition(moveItem, itemPos, itemStackPos);
 			}
 
-			std::forward_list<Direction> listDir;
+			std::list<Direction> listDir;
 			if (player->getPathTo(walkPos, listDir, 0, 0, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
@@ -1803,7 +1803,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	player->resetIdleTime();
 	player->setNextWalkActionTask(nullptr);
 
-	player->startAutoWalk(std::forward_list<Direction> { direction });
+	player->startAutoWalk(std::list<Direction> { direction });
 }
 
 bool Game::playerBroadcastMessage(Player* player, const std::string& text) const
@@ -1983,7 +1983,7 @@ void Game::playerReceivePingBack(uint32_t playerId)
 	player->sendPingBack();
 }
 
-void Game::playerAutoWalk(uint32_t playerId, const std::forward_list<Direction>& listDir)
+void Game::playerAutoWalk(uint32_t playerId, const std::list<Direction>& listDir)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -1992,6 +1992,79 @@ void Game::playerAutoWalk(uint32_t playerId, const std::forward_list<Direction>&
 
 	player->resetIdleTime();
 	player->setNextWalkTask(nullptr);
+	player->startAutoWalk(listDir);
+}
+
+void Game::playerNewWalk(uint32_t playerId, Position pos, uint8_t flags, std::list<Direction> listDir)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	player->resetIdleTime();
+	player->setNextWalkTask(nullptr);
+	player->setNextWalkActionTask(nullptr);
+
+	//bool withPreWalk = flags & 0x01;
+	bool autoWalk = flags & 0x04;
+
+	if (pos.x != 0 && pos.y != 0 && pos != player->getPosition()) {
+		auto& dirs = player->getListWalkDir();
+		Position nextpos = player->getPosition();
+
+		int limit = 3;
+		for (auto& dir : dirs) {
+			nextpos = getNextPosition(dir, nextpos);
+			if (--limit == 0) break;
+		}
+
+		if (!autoWalk) {
+			// manual walk desync, check if can be fixed           
+			if (limit == 0 || nextpos != pos) {
+				player->sendNewCancelWalk();
+				return;
+			}
+
+			for (auto& dir : listDir) {
+				dirs.push_back(dir);
+			}
+			return;
+		} else {
+			// auto walk desync, check if can be fixed            
+			if (limit > 0 && nextpos == pos) {
+				for (auto& dir : listDir) {
+					dirs.push_back(dir);
+				}
+				return;
+			}
+
+			// can't be fixed, so maybe find another way
+			// WARNING: This loop may use extra cpu but makes autowalk (map click) much better
+			for (int x = 0; x < 3; ++x) {
+				if (listDir.empty()) {
+					player->sendNewCancelWalk();
+					return;
+				}
+
+				for (int i = 0; i < 2; ++i) {
+					if (listDir.empty())
+						break;
+					pos = getNextPosition(listDir.front(), pos);
+					listDir.pop_front();
+				}
+
+				std::list<Direction> newPath;
+				if (player->getPathTo(pos, newPath, 0, 0, false, true)) {
+					newPath.reverse();
+					for (auto& it : newPath)
+						listDir.push_front(it);
+					break;
+				}
+			}
+		}
+	}
+
 	player->startAutoWalk(listDir);
 }
 
@@ -2058,7 +2131,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 				internalGetPosition(moveItem, itemPos, itemStackPos);
 			}
 
-			std::forward_list<Direction> listDir;
+			std::list<Direction> listDir;
 			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk, this, player->getID(), listDir)));
 
@@ -2117,7 +2190,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	ReturnValue ret = g_actions->canUse(player, pos);
 	if (ret != RETURNVALUE_NOERROR) {
 		if (ret == RETURNVALUE_TOOFARAWAY) {
-			std::forward_list<Direction> listDir;
+			std::list<Direction> listDir;
 			if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
@@ -2212,7 +2285,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 				internalGetPosition(moveItem, itemPos, itemStackPos);
 			}
 
-			std::forward_list<Direction> listDir;
+			std::list<Direction> listDir;
 			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				                                this, player->getID(), listDir)));
@@ -2323,7 +2396,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	}
 
 	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
-		std::forward_list<Direction> listDir;
+		std::list<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -2417,7 +2490,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	}
 
 	if (!Position::areInRange<1, 1>(playerPos, pos)) {
-		std::forward_list<Direction> listDir;
+		std::list<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
@@ -2520,7 +2593,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 	}
 
 	if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
-		std::forward_list<Direction> listDir;
+		std::list<Direction> listDir;
 		if (player->getPathTo(position, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 				this, player->getID(), listDir)));
@@ -2583,7 +2656,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	if (!Position::areInRange<1, 1>(tradeItemPosition, playerPosition)) {
-		std::forward_list<Direction> listDir;
+		std::list<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
 			                                this, player->getID(), listDir)));
