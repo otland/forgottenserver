@@ -55,6 +55,7 @@ class ConfigManager
 			HOUSE_OWNED_BY_ACCOUNT,
 			CLEAN_PROTECTION_ZONES,
 			HOUSE_DOOR_SHOW_PRICE,
+			PACKET_COMPRESSION,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

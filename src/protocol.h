@@ -20,6 +20,8 @@
 #ifndef FS_PROTOCOL_H_D71405071ACF4137A4B1203899DE80E1
 #define FS_PROTOCOL_H_D71405071ACF4137A4B1203899DE80E1
 
+#include <zlib.h>
+
 #include "connection.h"
 #include "xtea.h"
 
@@ -27,7 +29,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 {
 	public:
 		explicit Protocol(Connection_ptr connection) : connection(connection) {}
-		virtual ~Protocol() = default;
+		virtual ~Protocol();
 
 		// non-copyable
 		Protocol(const Protocol&) = delete;
@@ -84,12 +86,14 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		void setRawMessages(bool value) {
 			rawMessages = value;
 		}
+		void enableCompression();
 
 		virtual void release() {}
 
 	private:
 		void XTEA_encrypt(OutputMessage& msg) const;
 		bool XTEA_decrypt(NetworkMessage& msg) const;
+		void compress(OutputMessage& msg) const;
 
 		friend class Connection;
 
@@ -100,6 +104,8 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		bool encryptionEnabled = false;
 		bool checksumEnabled = true;
 		bool rawMessages = false;
+		bool compression = false;
+		mutable z_stream zstream = {0};
 };
 
 #endif

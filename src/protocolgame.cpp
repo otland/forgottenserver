@@ -3117,15 +3117,23 @@ void ProtocolGame::sendFeatures()
 	// place for non-standard OTCv8 features
 	features[GameExtendedOpcode] = true;
 
+	// packet compression
+	// we don't send feature, because feature assumes all packets are compressed
+	// if adler32 is enabled then compression can be detected automaticly, just adlre32 must be 0
+	if (g_config.getBoolean(ConfigManager::PACKET_COMPRESSION)) {
+		enableCompression();
+	}
+
 	if(features.empty())
 		return;
 
-	NetworkMessage msg;
-	msg.addByte(0x43);
-	msg.add<uint16_t>(features.size());
+	auto msg = getOutputBuffer(1024);
+	msg->addByte(0x43);
+	msg->add<uint16_t>(features.size());
 	for(auto& feature : features) {
-		msg.addByte((uint8_t)feature.first);
-		msg.addByte(feature.second ? 1 : 0);
+		msg->addByte((uint8_t)feature.first);
+		msg->addByte(feature.second ? 1 : 0);
 	}
-	writeToOutputBuffer(msg);
+
+	send(std::move(getCurrentBuffer())); // send this packet immediately
 }

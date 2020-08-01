@@ -51,7 +51,7 @@ Position NetworkMessage::getPosition()
 void NetworkMessage::addString(const std::string& value)
 {
 	size_t stringLen = value.length();
-	if (!canAdd(stringLen + 2) || stringLen > 8192) {
+	if (!canAdd(stringLen + 2)) {
 		return;
 	}
 
@@ -69,7 +69,7 @@ void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
 
 void NetworkMessage::addBytes(const char* bytes, size_t size)
 {
-	if (!canAdd(size) || size > 8192) {
+	if (!canAdd(size)) {
 		return;
 	}
 

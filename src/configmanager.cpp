@@ -19,7 +19,16 @@
 
 #include "otpch.h"
 
+#if defined(_MSC_VER)
+extern "C"
+{
+#include <luajit/lua.h>
+#include <luajit/lualib.h>
+#include <luajit/lauxlib.h>
+}
+#else
 #include <lua.hpp>
+#endif
 
 #include "configmanager.h"
 #include "game.h"
@@ -149,6 +158,7 @@ bool ConfigManager::load()
 	boolean[HOUSE_OWNED_BY_ACCOUNT] = getGlobalBoolean(L, "houseOwnedByAccount", false);
 	boolean[CLEAN_PROTECTION_ZONES] = getGlobalBoolean(L, "cleanProtectionZones", false);
 	boolean[HOUSE_DOOR_SHOW_PRICE] = getGlobalBoolean(L, "houseDoorShowPrice", true);
+	boolean[PACKET_COMPRESSION] = getGlobalBoolean(L, "packetCompression", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
