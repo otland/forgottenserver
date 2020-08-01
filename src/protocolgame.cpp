@@ -1514,10 +1514,10 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	msg.addByte(cid);
 
 	if (container->getID() == ITEM_BROWSEFIELD) {
-		msg.addItem(ITEM_BAG, 1);
+		msg.addItem(ITEM_BAG, 1, otclientV8);
 		msg.addString("Browse Field");
 	} else {
-		msg.addItem(container);
+		msg.addItem(container, otclientV8);
 		msg.addString(container->getName());
 	}
 
@@ -1536,7 +1536,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 
 		msg.addByte(itemsToSend);
 		for (auto it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
-			msg.addItem(*it);
+			msg.addItem(*it, otclientV8);
 		}
 	} else {
 		msg.addByte(0x00);
@@ -2131,11 +2131,11 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 
 		msg.addByte(itemList.size());
 		for (const Item* listItem : itemList) {
-			msg.addItem(listItem);
+			msg.addItem(listItem, otclientV8);
 		}
 	} else {
 		msg.addByte(0x01);
-		msg.addItem(item);
+		msg.addItem(item, otclientV8);
 	}
 	writeToOutputBuffer(msg);
 }
@@ -2629,7 +2629,7 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 	if (item) {
 		msg.addByte(0x78);
 		msg.addByte(slot);
-		msg.addItem(item);
+		msg.addItem(item, otclientV8);
 	} else {
 		msg.addByte(0x79);
 		msg.addByte(slot);
@@ -2665,7 +2665,7 @@ void ProtocolGame::sendAddContainerItem(uint8_t cid, uint16_t slot, const Item* 
 	msg.addByte(0x70);
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
-	msg.addItem(item);
+	msg.addItem(item, otclientV8);
 	writeToOutputBuffer(msg);
 }
 
@@ -2675,7 +2675,7 @@ void ProtocolGame::sendUpdateContainerItem(uint8_t cid, uint16_t slot, const Ite
 	msg.addByte(0x71);
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
-	msg.addItem(item);
+	msg.addItem(item, otclientV8);
 	writeToOutputBuffer(msg);
 }
 
@@ -2686,7 +2686,7 @@ void ProtocolGame::sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Ite
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
 	if (lastItem) {
-		msg.addItem(lastItem);
+		msg.addItem(lastItem, otclientV8);
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
@@ -2698,7 +2698,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	NetworkMessage msg;
 	msg.addByte(0x96);
 	msg.add<uint32_t>(windowTextId);
-	msg.addItem(item);
+	msg.addItem(item, otclientV8);
 
 	if (canWrite) {
 		msg.add<uint16_t>(maxlen);
@@ -2731,7 +2731,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, uint32_t itemId, const 
 	NetworkMessage msg;
 	msg.addByte(0x96);
 	msg.add<uint32_t>(windowTextId);
-	msg.addItem(itemId, 1);
+	msg.addItem(itemId, 1, otclientV8);
 	msg.add<uint16_t>(text.size());
 	msg.addString(text);
 	msg.add<uint16_t>(0x00);
@@ -3205,6 +3205,7 @@ void ProtocolGame::sendFeatures()
 	features[GameNewWalking] = true;
 	features[GameEnvironmentEffect] = false; // disable it, useless 2 byte with every tile
 	features[GameExtendedClientPing] = true; 
+	features[GameItemTooltip] = true; // fully available from version 2.6
 
 	// packet compression
 	// we don't send feature, because feature assumes all packets are compressed
