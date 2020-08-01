@@ -305,6 +305,11 @@ class ProtocolGame final : public Protocol
 		//OTCv8
 		void sendFeatures();
 
+		void sendFloorDescription(const Position& pos, int floor);
+		void parseChangeAwareRange(NetworkMessage& msg);
+		void updateAwareRange(int width, int height);
+		void sendAwareRange();
+
 		friend class Player;
 
 		// Helpers so we don't need to bind every time
@@ -331,6 +336,17 @@ class ProtocolGame final : public Protocol
 		bool acceptPackets = false;
 
 		uint16_t otclientV8 = 0;
+		struct AwareRange {
+			int width = 17;
+			int height = 13;
+
+			int left() const { return width / 2; }
+			int right() const { return 1 + width / 2; }
+			int top() const { return height / 2; }
+			int bottom() const { return 1 + height / 2; }
+			int horizontal() const { return width + 1; }
+			int vertical() const { return height + 1; }
+		} awareRange;
 };
 
 #endif
