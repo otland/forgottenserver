@@ -278,6 +278,10 @@
 	<movevent event="AddItem" itemid="1507" function="onAddField" />
 	<movevent event="StepIn" itemid="7359" function="onStepInField" />
 	<movevent event="AddItem" itemid="7360" function="onAddField" />
+	<movevent event="StepIn" itemid="20669" function="onStepInField" />
+	<movevent event="AddItem" itemid="20669" function="onAddField" />
+	<movevent event="StepIn" itemid="20670" function="onStepInField" />
+	<movevent event="AddItem" itemid="20670" function="onAddField" />
 
 	<!-- Swimming -->
 	<movevent event="StepIn" fromid="4620" toid="4625" script="swimming.lua" />
