@@ -597,16 +597,16 @@ class Item : virtual public Thing
 			getAttributes()->setStrAttr(type, value);
 		}
 
-		int32_t getIntAttr(itemAttrTypes type) const {
+		int64_t getIntAttr(itemAttrTypes type) const {
 			if (!attributes) {
 				return 0;
 			}
 			return attributes->getIntAttr(type);
 		}
-		void setIntAttr(itemAttrTypes type, int32_t value) {
+		void setIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->setIntAttr(type, value);
 		}
-		void increaseIntAttr(itemAttrTypes type, int32_t value) {
+		void increaseIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->increaseIntAttr(type, value);
 		}
 
@@ -632,18 +632,30 @@ class Item : virtual public Thing
 		}
 
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->getCustomAttribute(key);
 		}
 
 		const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->getCustomAttribute(key);
 		}
 
 		bool removeCustomAttribute(int64_t key) {
+			if (!attributes) {
+				return false;
+			}
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
 		bool removeCustomAttribute(const std::string& key) {
+			if (!attributes) {
+				return false;
+			}
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -885,6 +897,9 @@ class Item : virtual public Thing
 			return items[id].isMagicField();
 		}
 		bool isMoveable() const {
+			if (id == ITEM_STORE_INBOX) {
+				return false;
+			}
 			return items[id].moveable;
 		}
 		bool isPickupable() const {
