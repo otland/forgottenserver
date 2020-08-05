@@ -48,6 +48,7 @@ class TalkAction : public Event
 		}
 		void setWords(std::string word) {
 			words = word;
+			wordsMap.push_back(word);
 		}
 		std::string getSeparator() const {
 			return separator;

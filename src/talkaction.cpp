@@ -152,8 +152,9 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		separator = pugi::cast<char>(separatorAttribute.value());
 	}
 
-	wordsMap = explodeString(wordsAttribute.as_string(), ";");
-	words = wordsMap[0]; // to retain backwards compatibility
+	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
+		setWords(word);
+	}
 	return true;
 }
 
