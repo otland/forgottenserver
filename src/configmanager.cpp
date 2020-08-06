@@ -201,7 +201,7 @@ bool ConfigManager::load()
 	integer[SERVER_SAVE_NOTIFY_DURATION] = getGlobalNumber(L, "serverSaveNotifyDuration", 5);
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
 
-	floating[SHARED_EXPERIENCE_MULTIPLIER] = getGlobalFloat(L, "sharedExperienceMultiplier", 1.20);
+	floating[SHARED_EXPERIENCE_MULTIPLIER] = getGlobalFloat(L, "sharedExperienceMultiplier", 1.2f);
 
 	loaded = true;
 	lua_close(L);
