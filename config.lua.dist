@@ -107,6 +107,10 @@ rateSpawn = 1
 deSpawnRange = 2
 deSpawnRadius = 50
 
+-- Party
+-- NOTE: 1.20 = 20%
+sharedExperienceMultiplier = 1.20
+
 -- Stamina
 staminaSystem = true
 

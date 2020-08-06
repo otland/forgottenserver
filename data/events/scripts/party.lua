@@ -11,7 +11,7 @@ function Party:onDisband()
 end
 
 function Party:onShareExperience(exp)
-	local sharedExperienceMultiplier = 1.20 --20%
+	local sharedExperienceMultiplier = configManager.getGlobalFloat(configKeys.SHARED_EXPERIENCE_MULTIPLIER)
 	local vocationsIds = {}
 
 	local vocationId = self:getLeader():getVocation():getBase():getId()
