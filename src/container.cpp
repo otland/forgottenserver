@@ -379,7 +379,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
