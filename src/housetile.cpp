@@ -121,7 +121,7 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 	return Tile::queryDestination(index, thing, destItem, flags);
 }
 
-ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /* = nullptr*/) const
+ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr*/) const
 {
 	if (thing.getItem() && actor) {
 		Player* actorPlayer = actor->getPlayer();
