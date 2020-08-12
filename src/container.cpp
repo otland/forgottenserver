@@ -634,7 +634,7 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 	return countMap;
 }
 
-std::vector<Item*> Container::getItems(bool recursive /*= false*/)
+ItemVector Container::getItems(bool recursive /*= false*/)
 {
 	ItemVector containerItems;
 	if (recursive) {
