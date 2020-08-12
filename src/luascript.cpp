@@ -6781,7 +6781,7 @@ int LuaScriptInterface::luaContainerGetItems(lua_State* L)
 	int index = 0;
 	for (Item* item : items) {
 		pushUserdata(L, item);
-		setMetatable(L, -1, item->getContainer() ? "Container" : "Item");
+		setItemMetatable(L, -1, item);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
