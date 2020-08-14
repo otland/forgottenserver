@@ -57,7 +57,6 @@ const std::unordered_map<std::string, PlayerFlags> ParsePlayerFlagMap = {
 	{"setmaxspeed", PlayerFlag_SetMaxSpeed},
 	{"specialvip", PlayerFlag_SpecialVIP},
 	{"notgenerateloot", PlayerFlag_NotGenerateLoot},
-	{"cantalkredchannelanonymous", PlayerFlag_CanTalkRedChannelAnonymous},
 	{"ignoreprotectionzone", PlayerFlag_IgnoreProtectionZone},
 	{"ignorespellcheck", PlayerFlag_IgnoreSpellCheck},
 	{"ignoreweaponcheck", PlayerFlag_IgnoreWeaponCheck},

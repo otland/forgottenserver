@@ -25,7 +25,7 @@
 		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-850" duration="60000">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
-		<attack name="strength" interval="1000" chance="10" radius="5" target="0" min="-600" max="-1450">
+		<attack name="physical" interval="1000" chance="10" radius="5" target="0" min="-600" max="-1450">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
 		<attack name="fire" interval="3000" chance="13" range="7" radius="7" target="1" min="-300" max="-800">
