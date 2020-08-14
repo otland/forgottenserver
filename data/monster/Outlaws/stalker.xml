@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="260">
 	<health now="120" max="120" />
-	<look type="128" head="78" body="116" legs="95" feet="114" corpse="20511" />
+	<look type="128" head="97" body="116" legs="95" feet="95" corpse="20511" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />

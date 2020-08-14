@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dwarf Henchman" nameDescription="a dwarf henchman" race="blood" experience="15" speed="210">
 	<health now="350" max="350" />
-	<look type="160" head="115" body="77" legs="112" feet="114" addons="0" corpse="6007" />
+	<look type="160" head="115" body="77" legs="94" feet="114" corpse="6007" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />

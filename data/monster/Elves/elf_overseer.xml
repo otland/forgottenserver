@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Elf Overseer" nameDescription="an elf overseer" race="blood" experience="290" speed="176">
+	<health now="500" max="500" />
+	<look type="159" head="21" body="76" legs="95" feet="116" corpse="20596" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-75" />
+		<attack name="drown" interval="2000" chance="10" length="6" spread="0" min="-50" max="-90">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="drown" interval="2000" chance="10" target="1" range="4" radius="2" min="-40" max="-50">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="50" max="72">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-5" />
+		<element energyPercent="20" />
+		<element icePercent="10" />
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Do YOU want some more water, yes? YES?" />
+		<voice sentence="DOWN WITH THE FIRES OF IGNORANCE!!" yell="1" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="50" chance="51000" />
+		<item name="elvish talisman" chance="20000" />
+		<item name="bread" countmax="3" chance="14000" />
+		<item name="health potion" chance="14000" />
+		<item name="battle shield" chance="11000" />
+		<item name="holy orchid" chance="8500" />
+		<item name="mana potion" chance="8500" />
+		<item name="crystal sword" chance="5700" />
+	</loot>
+</monster>
