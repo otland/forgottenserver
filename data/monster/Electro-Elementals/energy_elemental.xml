@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="0" />
 		<flag staticattack="85" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 		<flag canwalkonpoison="0" />
