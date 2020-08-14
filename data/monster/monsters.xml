@@ -418,6 +418,7 @@
 	<monster name="Shadow Hound" file="Event_Creatures/shadow_hound.xml" />
 	<monster name="Spectral Scum" file="Event_Creatures/spectral_scum.xml" />
 	<monster name="The Halloween Hare" file="Event_Creatures/the_halloween_hare.xml" />
+	<monster name="The Mutated Pumpkin" file="Event_Creatures/the_mutated_pumpkin.xml" />
 	<monster name="The Ruthless Herald" file="Event_Creatures/the_ruthless_herald.xml" />
 	<monster name="Undead Jester" file="Event_Creatures/undead_jester.xml" />
 	<monster name="Undead Minion" file="Event_Creatures/undead_minion.xml" />
@@ -751,6 +752,7 @@
 	<monster name="Yalahari" file="Sorcerers/yalahari.xml" />
 
 	<!-- Traps -->
+	<monster name="a carved stone tile" file="Traps/a_carved_stone_tile.xml" />
 	<monster name="Deathslicer" file="Traps/deathslicer.xml" />
 	<monster name="Dwarf Dispenser" file="Traps/dwarf_dispenser.xml" />
 	<monster name="Flamethrower" file="Traps/flamethrower.xml" />
