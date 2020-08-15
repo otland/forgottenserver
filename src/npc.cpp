@@ -214,6 +214,9 @@ bool Npc::loadFromXml()
 		if ((attr = lookNode.attribute("aura"))) {
 			defaultOutfit.lookAura = pugi::cast<uint16_t>(attr.value());
 		}
+		if ((attr = lookNode.attribute("shader"))) {
+			defaultOutfit.lookShader = attr.as_string();
+		}
 
 		currentOutfit = defaultOutfit;
 	}

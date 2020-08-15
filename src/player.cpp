@@ -4340,6 +4340,27 @@ void Player::setCurrentAura(uint8_t auraId)
 	addStorageValue(PSTRG_AURAS_CURRENTAURA, auraId);
 }
 
+bool Player::hasShader(const Shader* shader) const
+{
+	if (isAccessPlayer()) {
+		return true;
+	}
+
+	if (shader->premium && !isPremium()) {
+		return false;
+	}
+
+	const uint8_t tmpShaderId = shader->id - 1;
+
+	int32_t value;
+	if (!getStorageValue(PSTRG_SHADERS_RANGE_START + (tmpShaderId / 31), value)) {
+		return false;
+	}
+
+	return ((1 << (tmpShaderId % 31)) & value) != 0;
+}
+
+
 bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 {
 	if (tries == 0 || skill == SKILL_LEVEL) {

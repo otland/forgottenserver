@@ -514,6 +514,7 @@ struct Outfit_t {
 	uint8_t lookLegs = 0;
 	uint8_t lookFeet = 0;
 	uint8_t lookAddons = 0;
+	std::string lookShader;
 };
 
 struct LightInfo {

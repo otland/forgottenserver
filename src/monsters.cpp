@@ -994,6 +994,10 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.outfit.lookWings = pugi::cast<uint16_t>(attr.value());
 		}
 
+		if ((attr = node.attribute("shader"))) {
+			mType->info.outfit.lookShader = attr.as_string();
+		}
+
 		if ((attr = node.attribute("corpse"))) {
 			mType->info.lookcorpse = pugi::cast<uint16_t>(attr.value());
 		}

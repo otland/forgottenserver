@@ -226,6 +226,7 @@
     <ClCompile Include="..\src\script.cpp" />
     <ClCompile Include="..\src\scriptmanager.cpp" />
     <ClCompile Include="..\src\server.cpp" />
+    <ClCompile Include="..\src\shaders.cpp" />
     <ClCompile Include="..\src\signals.cpp" />
     <ClCompile Include="..\src\spawn.cpp" />
     <ClCompile Include="..\src\spells.cpp" />
@@ -313,6 +314,7 @@
     <ClInclude Include="..\src\script.h" />
     <ClInclude Include="..\src\scriptmanager.h" />
     <ClInclude Include="..\src\server.h" />
+    <ClInclude Include="..\src\shaders.h" />
     <ClInclude Include="..\src\signals.h" />
     <ClInclude Include="..\src\spawn.h" />
     <ClInclude Include="..\src\spectators.h" />

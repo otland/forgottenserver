@@ -35,6 +35,9 @@ local reloadTypes = {
 	["wing"] = RELOAD_TYPE_WINGS,
 	["wings"] = RELOAD_TYPE_WINGS,
 
+	["shader"] = RELOAD_TYPE_SHADERS,
+	["shaders"] = RELOAD_TYPE_SHADERS,
+
 	["move"] = RELOAD_TYPE_MOVEMENTS,
 	["movement"] = RELOAD_TYPE_MOVEMENTS,
 	["movements"] = RELOAD_TYPE_MOVEMENTS,

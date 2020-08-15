@@ -123,6 +123,7 @@ void Game::setGameState(GameState_t newState)
 			mounts.loadFromXml();
 			auras.loadFromXml();
 			wings.loadFromXml();
+			shaders.loadFromXml();
 
 			loadMotdNum();
 			loadPlayersRecord();
@@ -3363,7 +3364,7 @@ void Game::playerRequestOutfit(uint32_t playerId)
 	player->sendOutfitWindow();
 }
 
-void Game::playerToggleOutfitExtension(uint32_t playerId, int mount, int wings, int aura)
+void Game::playerToggleOutfitExtension(uint32_t playerId, int mount, int wings, int aura, int shader)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -3390,6 +3391,7 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		outfit.lookMount = 0;
 		outfit.lookWings = 0;
 		outfit.lookAura = 0;
+		outfit.lookShader = "";
 	}
 
 	if (outfit.lookMount != 0) {
@@ -3415,6 +3417,39 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 		}
 	} else if (player->isMounted()) {
 		player->dismount();
+	}
+
+	if (outfit.lookWings != 0) {
+		Wing* wing = wings.getWingByID(outfit.lookWings);
+		if (!wing) {
+			return;
+		}
+
+		if (!player->hasWing(wing)) {
+			return;
+		}
+	}
+
+	if (outfit.lookAura != 0) {
+		Aura* aura = auras.getAuraByID(outfit.lookAura);
+		if (!aura) {
+			return;
+		}
+
+		if (!player->hasAura(aura)) {
+			return;
+		}
+	}
+
+	if (!outfit.lookShader.empty()) {
+		Shader* shader = shaders.getShaderByName(outfit.lookShader);
+		if (!shader) {
+			return;
+		}
+
+		if (!player->hasShader(shader)) {
+			return;
+		}
 	}
 
 	if (player->canWear(outfit.lookType, outfit.lookAddons)) {
@@ -5857,7 +5892,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 
 		case RELOAD_TYPE_QUESTS: return quests.reload();
 		case RELOAD_TYPE_RAIDS: return raids.reload() && raids.startup();
-
+		case RELOAD_TYPE_SHADERS: return shaders.reload();
 		case RELOAD_TYPE_SPELLS: {
 			if (!g_spells->reload()) {
 				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
@@ -5899,6 +5934,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			mounts.reload();
 			auras.reload();
 			wings.reload();
+			shaders.reload();
 			g_config.reload();
 			g_events->load();
 			g_chat->load();
@@ -5931,6 +5967,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			auras.reload();
 			mounts.reload();
 			wings.reload();
+			shaders.reload();
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
