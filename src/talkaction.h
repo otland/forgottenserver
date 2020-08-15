@@ -54,7 +54,7 @@ class TalkAction : public Event
 		}
 
 		//scripting
-		bool executeSay(Player* player, const std::string& param, SpeakClasses type) const;
+		bool executeSay(Player* player, const std::string& word, const std::string& param, SpeakClasses type) const;
 		//
 
 	private:
