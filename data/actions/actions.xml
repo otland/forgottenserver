@@ -174,7 +174,6 @@
 	<action fromid="6448" toid="6449" script="other/windows.lua" />
 	<action fromid="6450" toid="6473" script="other/windows.lua" />
 	<action itemid="6558" script="other/potions.lua" />
-	<action fromid="6570" toid="6571" script="other/surprisebag.lua" />
 	<action fromid="6572" toid="6573" script="other/music.lua" />
 	<action itemid="6576" script="other/fireworksrocket.lua" />
 	<action itemid="6578" script="other/partyhat.lua" />
