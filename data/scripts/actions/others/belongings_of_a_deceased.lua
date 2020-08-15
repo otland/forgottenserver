@@ -25,11 +25,10 @@ local config = {
 	{chanceFrom = 9843, chanceTo = 9886, itemId = 2110}, -- doll
 	{chanceFrom = 9887, chanceTo = 9929, itemId = 5880}, -- iron ore
 	{chanceFrom = 9930, chanceTo = 9968, itemId = 5895}, -- fish fin
-	{chanceFrom = 9969, chanceTo = 9996, itemId = 13508}, -- slug drug
-	{chanceFrom = 9997, chanceTo = 9997, itemId = 2195}, -- boots of haste
-	{chanceFrom = 9998, chanceTo = 9998, itemId = 5885}, -- flask of warrior's sweat
-	{chanceFrom = 9999, chanceTo = 9999, itemId = 5804}, -- nose ring
-	{chanceFrom = 10000, chanceTo = 10000, itemId = 5875} -- sniper gloves
+	{chanceFrom = 9969, chanceTo = 9995, itemId = 13508}, -- slug drug
+	{chanceFrom = 9996, chanceTo = 9997, itemId = 2195}, -- boots of haste
+	{chanceFrom = 9998, chanceTo = 9999, itemId = 5885}, -- flask of warrior's sweat
+	{chanceFrom = 9999, chanceTo = 10000, itemId = 5804} -- nose ring
 }
 
 local belongings = Action()

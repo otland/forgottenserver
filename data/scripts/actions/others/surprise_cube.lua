@@ -38,6 +38,7 @@ function surpriseCube.onUse(player, item, fromPosition, target, toPosition, isHo
 				player:addItem(gift, count)
 			end
 
+			item:getPosition():sendMagicEffect(CONST_ME_CRAPS)
 			item:remove(1)
 			return true
 		end
