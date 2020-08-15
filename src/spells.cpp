@@ -57,8 +57,9 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 
 	std::string param;
 
+	const std::string& spellWords = instantSpell->getWords().front();
 	if (instantSpell->getHasParam()) {
-		size_t spellLen = instantSpell->getWords().length();
+		size_t spellLen = spellWords.length();
 		size_t paramLen = str_words.length() - spellLen;
 		std::string paramText = str_words.substr(spellLen, paramLen);
 		if (!paramText.empty() && paramText.front() == ' ') {
@@ -85,7 +86,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 	}
 
 	if (instantSpell->playerCastInstant(player, param)) {
-		words = instantSpell->getWords();
+		words = spellWords;
 
 		if (instantSpell->getHasParam() && !param.empty()) {
 			words += " \"" + param + "\"";
@@ -147,9 +148,10 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
 	if (instant) {
-		auto result = instants.emplace(instant->getWords(), std::move(*instant));
+		std::string words = instant->getWords().front();
+		auto result = instants.emplace(words, std::move(*instant));
 		if (!result.second) {
-			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
+			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << words << std::endl;
 		}
 		return result.second;
 	}
@@ -170,8 +172,8 @@ bool Spells::registerInstantLuaEvent(InstantSpell* event)
 {
 	InstantSpell_ptr instant { event };
 	if (instant) {
-		std::string words = instant->getWords();
-		auto result = instants.emplace(instant->getWords(), std::move(*instant));
+		std::string words = instant->getWords().front();
+		auto result = instants.emplace(words, std::move(*instant));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerInstantLuaEvent] Duplicate registered instant spell with words: " << words << std::endl;
 		}
@@ -234,10 +236,9 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	InstantSpell* result = nullptr;
 
 	for (auto& it : instants) {
-		const std::string& instantSpellWords = it.second.getWords();
-		size_t spellLen = instantSpellWords.length();
-		if (strncasecmp(instantSpellWords.c_str(), words.c_str(), spellLen) == 0) {
-			if (!result || spellLen > result->getWords().length()) {
+		size_t spellLen = it.second.getWords().front().length();
+		if (strncasecmp(it.second.getWords().front().c_str(), words.c_str(), spellLen) == 0) {
+			if (!result || spellLen > result->getWords().front().length()) {
 				result = &it.second;
 				if (words.length() == spellLen) {
 					break;
@@ -247,13 +248,12 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	}
 
 	if (result) {
-		const std::string& resultWords = result->getWords();
-		if (words.length() > resultWords.length()) {
+		if (words.length() > result->getWords().front().length()) {
 			if (!result->getHasParam()) {
 				return nullptr;
 			}
 
-			size_t spellLen = resultWords.length();
+			size_t spellLen = result->getWords().front().length();
 			size_t paramLen = words.length() - spellLen;
 			if (paramLen < 2 || words[spellLen] != ' ') {
 				return nullptr;

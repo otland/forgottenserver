@@ -68,14 +68,14 @@ Event_ptr TalkActions::getEvent(const std::string& nodeName)
 bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
-	talkActions.emplace(talkAction->getWords(), std::move(*talkAction));
+	talkActions.emplace(talkAction->getWords().front(), std::move(*talkAction));
 	return true;
 }
 
 bool TalkActions::registerLuaEvent(TalkAction* event)
 {
 	TalkAction_ptr talkAction{ event };
-	talkActions.emplace(talkAction->getWords(), std::move(*talkAction));
+	talkActions.emplace(talkAction->getWords().front(), std::move(*talkAction));
 	return true;
 }
 
@@ -83,7 +83,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 {
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
-		for (auto& talkactionWords : it->second.getWothers()) {
+		for (auto& talkactionWords : it->second.getWords()) {
 			size_t talkactionLength = talkactionWords.length();
 			if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
 				continue;

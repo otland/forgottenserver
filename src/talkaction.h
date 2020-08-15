@@ -26,7 +26,6 @@
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
-using TalkAction_words = std::vector<std::string>;
 
 enum TalkActionResult_t {
 	TALKACTION_CONTINUE,
@@ -41,21 +40,17 @@ class TalkAction : public Event
 
 		bool configureEvent(const pugi::xml_node& node) override;
 
-		const std::string& getWords() const {
+		std::vector<std::string> getWords() const {
 			return words;
 		}
 		void setWords(std::string word) {
-			words = word;
-			wothers.push_back(word);
+			words.push_back(word);
 		}
 		std::string getSeparator() const {
 			return separator;
 		}
 		void setSeparator(std::string sep) {
 			separator = sep;
-		}
-		const TalkAction_words getWothers() const {
-			return wothers;
 		}
 
 		//scripting
@@ -65,9 +60,8 @@ class TalkAction : public Event
 	private:
 		std::string getScriptEventName() const override;
 
-		std::string words;
+		std::vector<std::string> words;
 		std::string separator = "\"";
-		TalkAction_words wothers = {};
 };
 
 class TalkActions final : public BaseEvents
