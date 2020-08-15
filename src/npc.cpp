@@ -208,6 +208,12 @@ bool Npc::loadFromXml()
 			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
 		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
+		if ((attr = lookNode.attribute("wings"))) {
+			defaultOutfit.lookWings = pugi::cast<uint16_t>(attr.value());
+		}
+		if ((attr = lookNode.attribute("aura"))) {
+			defaultOutfit.lookAura = pugi::cast<uint16_t>(attr.value());
+		}
 
 		currentOutfit = defaultOutfit;
 	}

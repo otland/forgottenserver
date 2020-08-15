@@ -630,7 +630,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 				value & 0xFF
 			);
 			return;
-		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
+		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE) || IS_IN_KEYRANGE(key, WINGS_RANGE) || IS_IN_KEYRANGE(key, AURAS_RANGE)) {
 			// do nothing
 		} else {
 			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
@@ -3297,7 +3297,7 @@ void Player::onAddCondition(ConditionType_t type)
 {
 	Creature::onAddCondition(type);
 
-	if (type == CONDITION_OUTFIT && isMounted()) {
+	if (type == CONDITION_OUTFIT) {
 		dismount();
 	}
 
@@ -4270,6 +4270,74 @@ void Player::dismount()
 	}
 
 	defaultOutfit.lookMount = 0;
+}
+
+bool Player::hasWing(const Wing* wing) const
+{
+	if (isAccessPlayer()) {
+		return true;
+	}
+
+	if (wing->premium && !isPremium()) {
+		return false;
+	}
+
+	const uint8_t tmpWingId = wing->id - 1;
+
+	int32_t value;
+	if (!getStorageValue(PSTRG_WINGS_RANGE_START + (tmpWingId / 31), value)) {
+		return false;
+	}
+
+	return ((1 << (tmpWingId % 31)) & value) != 0;
+}
+
+uint8_t Player::getCurrentWing() const
+{
+	int32_t value;
+	if (getStorageValue(PSTRG_WINGS_CURRENTWINGS, value)) {
+		return value;
+	}
+	return 0;
+}
+
+void Player::setCurrentWing(uint8_t wingId)
+{
+	addStorageValue(PSTRG_WINGS_CURRENTWINGS, wingId);
+}
+
+bool Player::hasAura(const Aura* aura) const
+{
+	if (isAccessPlayer()) {
+		return true;
+	}
+
+	if (aura->premium && !isPremium()) {
+		return false;
+	}
+
+	const uint8_t tmpAuraId = aura->id - 1;
+
+	int32_t value;
+	if (!getStorageValue(PSTRG_AURAS_RANGE_START + (tmpAuraId / 31), value)) {
+		return false;
+	}
+
+	return ((1 << (tmpAuraId % 31)) & value) != 0;
+}
+
+uint8_t Player::getCurrentAura() const
+{
+	int32_t value;
+	if (getStorageValue(PSTRG_AURAS_CURRENTAURA, value)) {
+		return value;
+	}
+	return 0;
+}
+
+void Player::setCurrentAura(uint8_t auraId)
+{
+	addStorageValue(PSTRG_AURAS_CURRENTAURA, auraId);
 }
 
 bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)

@@ -121,6 +121,8 @@ void Game::setGameState(GameState_t newState)
 
 			quests.loadFromXml();
 			mounts.loadFromXml();
+			auras.loadFromXml();
+			wings.loadFromXml();
 
 			loadMotdNum();
 			loadPlayersRecord();
@@ -3361,14 +3363,15 @@ void Game::playerRequestOutfit(uint32_t playerId)
 	player->sendOutfitWindow();
 }
 
-void Game::playerToggleMount(uint32_t playerId, bool mount)
+void Game::playerToggleOutfitExtension(uint32_t playerId, int mount, int wings, int aura)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
 
-	player->toggleMount(mount);
+	if(mount != -1)
+		player->toggleMount(mount == 1);
 }
 
 void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
@@ -3385,6 +3388,8 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(player->getSex(), outfit.lookType);
 	if (!playerOutfit) {
 		outfit.lookMount = 0;
+		outfit.lookWings = 0;
+		outfit.lookAura = 0;
 	}
 
 	if (outfit.lookMount != 0) {
@@ -5831,6 +5836,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 {
 	switch (reloadType) {
 		case RELOAD_TYPE_ACTIONS: return g_actions->reload();
+		case RELOAD_TYPE_AURAS: return auras.reload();
 		case RELOAD_TYPE_CHAT: return g_chat->load();
 		case RELOAD_TYPE_CONFIG: return g_config.reload();
 		case RELOAD_TYPE_CREATURESCRIPTS: {
@@ -5871,6 +5877,8 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return results;
 		}
 
+		case RELOAD_TYPE_WINGS: return wings.reload();
+
 		case RELOAD_TYPE_SCRIPTS: {
 			// commented out stuff is TODO, once we approach further in revscriptsys
 			g_actions->clear(true);
@@ -5889,6 +5897,8 @@ bool Game::reload(ReloadTypes_t reloadType)
 			Item::items.reload();
 			quests.reload();
 			mounts.reload();
+			auras.reload();
+			wings.reload();
 			g_config.reload();
 			g_events->load();
 			g_chat->load();
@@ -5918,7 +5928,9 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			quests.reload();
+			auras.reload();
 			mounts.reload();
+			wings.reload();
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();

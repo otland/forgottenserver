@@ -812,13 +812,20 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	newOutfit.lookFeet = msg.getByte();
 	newOutfit.lookAddons = msg.getByte();
 	newOutfit.lookMount = msg.get<uint16_t>();
+	newOutfit.lookWings = otclientV8 ? msg.get<uint16_t>() : 0;
+	newOutfit.lookAura = otclientV8 ? msg.get<uint16_t>() : 0;
 	addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
 }
 
 void ProtocolGame::parseToggleMount(NetworkMessage& msg)
 {
-	bool mount = msg.getByte() != 0;
-	addGameTask(&Game::playerToggleMount, player->getID(), mount);
+	int mount = msg.get<int8_t>();
+	int wings = -1, aura = -1;
+	if (otclientV8 >= 254) {
+		wings = msg.get<int8_t>();
+		aura = msg.get<int8_t>();
+	}
+	addGameTask(&Game::playerToggleOutfitExtension, player->getID(), mount, wings, aura);
 }
 
 void ProtocolGame::parseUseItem(NetworkMessage& msg)
@@ -2802,6 +2809,34 @@ void ProtocolGame::sendOutfitWindow()
 		msg.addString(mount->name);
 	}
 
+	if (otclientV8) {
+		std::vector<const Wing*> wings;
+		for (const Wing& wing: g_game.wings.getWings()) {
+			if (player->hasWing(&wing)) {
+				wings.push_back(&wing);
+			}
+		}
+
+		msg.addByte(wings.size());
+		for (const Wing* wing : wings) {
+			msg.add<uint16_t>(wing->clientId);
+			msg.addString(wing->name);
+		}
+
+		std::vector<const Aura*> auras;
+		for (const Aura& aura : g_game.auras.getAuras()) {
+			if (player->hasAura(&aura)) {
+				auras.push_back(&aura);
+			}
+		}
+
+		msg.addByte(auras.size());
+		for (const Aura* aura : auras) {
+			msg.add<uint16_t>(aura->clientId);
+			msg.addString(aura->name);
+		}
+	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -3037,6 +3072,10 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 	}
 
 	msg.add<uint16_t>(outfit.lookMount);
+	if (otclientV8) {
+		msg.add<uint16_t>(outfit.lookWings);
+		msg.add<uint16_t>(outfit.lookAura);
+	}
 }
 
 void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
@@ -3206,6 +3245,7 @@ void ProtocolGame::sendFeatures()
 	features[GameEnvironmentEffect] = false; // disable it, useless 2 byte with every tile
 	features[GameExtendedClientPing] = true; 
 	features[GameItemTooltip] = true; // fully available from version 2.6
+	features[GameWingsAndAura] = true;
 
 	// packet compression
 	// we don't send feature, because feature assumes all packets are compressed
