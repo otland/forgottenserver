@@ -109,7 +109,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 				}
 			}
 
-			if (it->second.executeSay(player, param, type)) {
+			if (it->second.executeSay(player, talkactionWords, param, type)) {
 				return TALKACTION_CONTINUE;
 			} else {
 				return TALKACTION_BREAK;
