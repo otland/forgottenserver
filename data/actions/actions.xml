@@ -39,7 +39,6 @@
 	<action fromid="2050" toid="2055" script="other/decayto.lua" />
 	<action fromid="2162" toid="2163" script="other/decayto.lua" />
 	<action fromid="5812" toid="5813" script="other/decayto.lua" />
-	<action fromid="6489" toid="6490" script="other/decayto.lua" />
 	<action itemid="7183" script="other/decayto.lua" />
 	<action fromid="10719" toid="10720" script="other/decayto.lua" />
 	<action fromid="11401" toid="11402" script="other/decayto.lua" />
