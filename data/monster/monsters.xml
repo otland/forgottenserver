@@ -171,7 +171,7 @@
 	<monster name="Fatality" file="Bosses/fatality.xml" />
 	<monster name="Fernfang" file="Bosses/fernfang.xml" />
 	<monster name="Ferumbras" file="Bosses/ferumbras.xml" />
-	<monster name="Ferumbras" file="Bosses/ferumbras_mortal_shell.xml" />
+	<monster name="Ferumbras Mortal Shell" file="Bosses/ferumbras_mortal_shell.xml" />
 	<monster name="Fleshslicer" file="Bosses/fleshslicer.xml" />
 	<monster name="Fluffy" file="Bosses/fluffy.xml" />
 	<monster name="Foreman Kneebiter" file="Bosses/foreman_kneebiter.xml" />
@@ -297,7 +297,7 @@
 	<monster name="Poodle" file="Canines/poodle.xml" />
 	<monster name="Starving Wolf" file="Canines/starving_wolf.xml" />
 	<monster name="Thornfire Wolf" file="Canines/thornfire_wolf.xml" />
-	<monster name="War wolf" file="Canines/war_wolf.xml" />
+	<monster name="War Wolf" file="Canines/war_wolf.xml" />
 	<monster name="Werewolf" file="Canines/werewolf.xml" />
 	<monster name="Wild Dog" file="Canines/wild_dog.xml" />
 	<monster name="Winter wolf" file="Canines/winter_wolf.xml" />
