@@ -125,9 +125,7 @@
 	<!-- Bonelords -->
 	<monster name="Bonelord" file="Bonelords/bonelord.xml" />
 	<monster name="Braindeath" file="Bonelords/braindeath.xml" />
-	<monster name="Elder Beholder" file="Bonelords/elder_bonelord.xml" />
 	<monster name="Gazer" file="Bonelords/gazer.xml" />
-	<monster name="Beholder" file="Bonelords/bonelord.xml" />
 	<monster name="Elder Bonelord" file="Bonelords/elder_bonelord.xml" />
 	<monster name="Eye of the Seven" file="Bonelords/eye_of_the_seven.xml" />
 
