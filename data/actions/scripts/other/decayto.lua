@@ -17,7 +17,12 @@ local decayItems = {
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	item:transform(decayItems[item.itemid])
+	local transformIds = decayItems[item:getId()]
+	if not transformIds then
+		return false
+	end
+
+	item:transform(transformIds)
 	item:decay()
 	return true
 end
