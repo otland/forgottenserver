@@ -110,6 +110,8 @@ void Game::setGameState(GameState_t newState)
 	switch (newState) {
 		case GAME_STATE_INIT: {
 			loadExperienceStages();
+			loadSkillStages();
+			loadMagicLevelStages();
 
 			groups.load();
 			g_chat->load();
