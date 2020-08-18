@@ -60,7 +60,7 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="QJELL AFAR GOU JEY!!" />
 		<voice sentence="DIE!! KENH!!" />
 	</voices>
