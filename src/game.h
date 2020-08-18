@@ -460,6 +460,12 @@ class Game
 		bool loadExperienceStages();
 		uint64_t getExperienceStage(uint32_t level);
 
+		bool loadSkillStages();
+		uint64_t getSkillStage(uint32_t level);
+
+		bool loadMagicLevelStages();
+		uint64_t getMagicLevelStage(uint32_t level);
+
 		void loadMotdNum();
 		void saveMotdNum() const;
 		const std::string& getMotdHash() const { return motdHash; }
