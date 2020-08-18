@@ -43,6 +43,10 @@ local transformItems = {
 	[9840] = 9841, [9841] = 9840, -- wall lamp
 	[9842] = 9843, [9843] = 9842, -- wall lamp
 	[9844] = 9845, [9845] = 9844, -- wall lamp
+	[9976] = 9977, -- crystal pedestal
+	[9977] = 9978, -- crystal pedestal
+	[9978] = 9979, -- crystal pedestal
+	[9979] = 9976, -- crystal pedestal
 	[10029] = 10030, [10030] = 10029, -- lever
 	[10044] = 10045, [10045] = 10044, -- lever
 	[10971] = 10972, [10972] = 10971, -- wall lamp
