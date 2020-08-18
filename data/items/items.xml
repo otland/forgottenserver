@@ -28960,26 +28960,26 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20579" article="a" name="dead unused assassin">
+	<item id="20579" article="a" name="dead nightslayer">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="20580" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20580" article="a" name="dead unused assassin">
+	<item id="20580" article="a" name="dead nightslayer">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="20581" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20581" article="a" name="dead unused assassin">
+	<item id="20581" article="a" name="dead nightslayer">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 	</item>
-	<item id="20582" article="a" name="dead unused assassin">
+	<item id="20582" article="a" name="dead nightslayer">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="20579" />
 		<attribute key="duration" value="10" />
