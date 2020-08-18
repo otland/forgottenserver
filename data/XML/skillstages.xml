@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skillstages>
+	<skills enabled="0">
+		<skill minskill="0" maxskill="50" multiplier="7" />
+		<skill minskill="51" maxskill="70" multiplier="4" />
+		<skill minskill="71" maxskill="100" multiplier="3" />
+		<skill minskill="101" multiplier="1" />
+	</skills>
+
+	<magiclevel enabled="0">
+		<ml minmagic="0" maxmagic="50" multiplier="7" />
+		<ml minmagic="51" maxmagic="70" multiplier="4" />
+		<ml minmagic="71" maxmagic="100" multiplier="3" />
+		<ml minmagic="101" multiplier="1" />
+	</magiclevel>
+</skillstages>

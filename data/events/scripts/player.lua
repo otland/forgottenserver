@@ -286,9 +286,9 @@ function Player:onGainSkillTries(skill, tries)
 	end
 
 	if skill == SKILL_MAGLEVEL then
-		return tries * configManager.getNumber(configKeys.RATE_MAGIC)
+		return tries * Game.getMagicLevelStage(self:getMagicLevel())
 	end
-	return tries * configManager.getNumber(configKeys.RATE_SKILL)
+	return tries * Game.getSkillStage(self:getSkillLevel(skill))
 end
 
 function Player:onWrapItem(item, position)
