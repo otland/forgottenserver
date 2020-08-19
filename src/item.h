@@ -967,6 +967,9 @@ class Item : virtual public Thing
 			}
 		}
 		uint32_t getDefaultDuration() const {
+			if (items[id].decayTimeMax) {
+				return normal_random(items[id].decayTime, items[id].decayTimeMax) * 1000;
+			}
 			return items[id].decayTime * 1000;
 		}
 		bool canDecay() const;

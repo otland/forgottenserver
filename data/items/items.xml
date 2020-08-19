@@ -686,7 +686,7 @@
 	<item id="1497" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="duration" value="14;20" />
 	</item>
 	<item id="1498" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
@@ -694,7 +694,7 @@
 	<item id="1499" article="a" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="duration" value="38;45" />
 		<attribute key="blocking" value="1" />
 	</item>
 	<item id="1500" article="a" name="fire field">

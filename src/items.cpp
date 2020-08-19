@@ -805,7 +805,14 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_DECAYTO: {
-					it.decayTo = pugi::cast<int32_t>(valueAttribute.value());
+					auto split = explodeString(valueAttribute.as_string(), ";");
+					if (split.size() == 2) {
+						it.decayTime = pugi::cast<uint32_t>(split[0].c_str());
+						it.decayTimeMax = pugi::cast<uint32_t>(split[1].c_str());
+					}
+					else {
+						it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
+					}
 					break;
 				}
 

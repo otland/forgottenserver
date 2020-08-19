@@ -308,6 +308,7 @@ class ItemType
 		uint32_t weight = 0;
 		uint32_t levelDoor = 0;
 		uint32_t decayTime = 0;
+		uint32_t decayTimeMax = 0;
 		uint32_t wieldInfo = 0;
 		uint32_t minReqLevel = 0;
 		uint32_t minReqMagicLevel = 0;
