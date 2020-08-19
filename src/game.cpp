@@ -3040,9 +3040,7 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnLookInShop(player, &it, subType)) {
-		return;
-	}
+	g_events->eventPlayerOnLookInShop(player, &it, subType);
 
 	if (!g_config.getBoolean(ConfigManager::LUA_ITEM_DESC)) {
 		std::ostringstream ss;
