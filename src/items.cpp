@@ -143,6 +143,8 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"elementearth", ITEM_PARSE_ELEMENTEARTH},
 	{"elementfire", ITEM_PARSE_ELEMENTFIRE},
 	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
+	{"elementdeath", ITEM_PARSE_ELEMENTDEATH},
+	{"elementholy", ITEM_PARSE_ELEMENTHOLY},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
@@ -1319,6 +1321,18 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				case ITEM_PARSE_ELEMENTENERGY: {
 					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
 					abilities.elementType = COMBAT_ENERGYDAMAGE;
+					break;
+				}
+
+				case ITEM_PARSE_ELEMENTDEATH: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_DEATHDAMAGE;
+					break;
+				}
+
+				case ITEM_PARSE_ELEMENTHOLY: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_HOLYDAMAGE;
 					break;
 				}
 
