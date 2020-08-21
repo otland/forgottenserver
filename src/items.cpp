@@ -66,6 +66,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"transformequipto", ITEM_PARSE_TRANSFORMEQUIPTO},
 	{"transformdeequipto", ITEM_PARSE_TRANSFORMDEEQUIPTO},
 	{"duration", ITEM_PARSE_DURATION},
+	{"durationmax", ITEM_PARSE_DURATIONMAX},
 	{"showduration", ITEM_PARSE_SHOWDURATION},
 	{"charges", ITEM_PARSE_CHARGES},
 	{"showcharges", ITEM_PARSE_SHOWCHARGES},
@@ -805,14 +806,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_DECAYTO: {
-					auto split = explodeString(valueAttribute.as_string(), ";");
-					if (split.size() == 2) {
-						it.decayTime = pugi::cast<uint32_t>(split[0].c_str());
-						it.decayTimeMax = pugi::cast<uint32_t>(split[1].c_str());
-					}
-					else {
-						it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
-					}
+					it.decayTo = pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 
@@ -827,7 +821,27 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_DURATION: {
-					it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
+					auto split = explodeString(valueAttribute.as_string(), ";");
+					if (split.size() == 2) {
+						it.decayTime = pugi::cast<uint32_t>(split[0].c_str());
+						uint32_t value = pugi::cast<uint32_t>(split[1].c_str());
+						if (it.decayTimeMax) {
+							std::cout << "[Warning - Items::parseItemNode] decayTimeMax is being overwritten to: " << value << std::endl;
+						}
+						it.decayTimeMax = value;
+					}
+					else {
+						it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
+					}
+					break;
+				}
+
+				case ITEM_PARSE_DURATIONMAX: {
+					uint32_t value = pugi::cast<uint32_t>(valueAttribute.value());
+					if (it.decayTimeMax) {
+						std::cout << "[Warning - Items::parseItemNode] decayTimeMax is being overwritten to: " << value << std::endl;
+					}
+					it.decayTimeMax = value;
 					break;
 				}
 
