@@ -379,7 +379,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr */) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -397,6 +397,14 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
+	}
+
+	const Cylinder* topParent = getTopParent();
+	if (topParent) {
+		const HouseTile* houseTile = dynamic_cast<const HouseTile*>(topParent);
+		if (houseTile) {
+			return houseTile->queryRemove(thing, count, flags, actor);
+		}
 	}
 	return RETURNVALUE_NOERROR;
 }
