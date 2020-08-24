@@ -167,5 +167,5 @@ end
 
 function getExperienceForLevel(level)
 	local level = level - 1
-	return (((50 * level * level * level) - (150 * level * level) + (400 * level))/3) 
+	return (50 * level * level * level - 150 * level * level + 400 * level) / 3
 end
