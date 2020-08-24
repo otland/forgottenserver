@@ -7976,7 +7976,7 @@
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="water" />
 	</item>
-	<item fromid="4620" toid="4625" name="shallow water">
+	<item fromid="4620" toid="4625" name="shallow water" editorsuffix=" (Swimmable)">
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="1" />
@@ -8011,7 +8011,7 @@
 	<item fromid="4760" toid="4783" name="sand" />
 	<item fromid="4784" toid="4795" name="grass" />
 	<item fromid="4796" toid="4819" name="dirt" />
-	<item fromid="4820" toid="4825" name="shallow water">
+	<item fromid="4820" toid="4825" name="shallow water" editorsuffix=" (Swimmable)">
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="water" />
