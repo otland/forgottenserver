@@ -1930,17 +1930,28 @@ void Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 		return;
 	}
 
-	if (!IOLoginData::formatPlayerName(receiver)) {
-		player->sendCancelMessage("A player with this name does not exist.");
-		return;
-	}
-
 	if (player->getName() == receiver) {
 		player->sendCancelMessage("You cannot set up a private message channel with yourself.");
 		return;
 	}
 
-	player->sendOpenPrivateChannel(receiver);
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "SELECT `name` FROM `players` WHERE `name` = " << db.escapeString(receiver);
+
+	g_databaseTasks.addTask(query.str(), [playerId](DBResult_ptr result, bool) {
+		Player* tmpPlayer = g_game.getPlayerByID(playerId);
+		if (!tmpPlayer) {
+			return;
+		}
+
+		if (!result) {
+			tmpPlayer->sendCancelMessage("A player with this name does not exist.");
+			return;
+		}
+
+		tmpPlayer->sendOpenPrivateChannel(result->getString("name"));
+	}, true);
 }
 
 void Game::playerCloseNpcChannel(uint32_t playerId)
