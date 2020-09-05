@@ -94,8 +94,8 @@ class Vocation
 	private:
 		friend class Vocations;
 
-		std::map<uint32_t, uint64_t> cacheMana;
-		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
+		std::unordered_map<uint32_t, uint64_t> cacheMana;
+		std::unordered_map<uint32_t, uint64_t> cacheSkill[SKILL_LAST + 1];
 
 		std::string name = "none";
 		std::string description;

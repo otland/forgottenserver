@@ -187,13 +187,14 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 		return 0;
 	}
 
-	auto it = cacheSkill[skill].find(level);
-	if (it != cacheSkill[skill].end()) {
+	auto& skillMap = cacheSkill[skill];
+	auto it = skillMap.find(level);
+	if (it != skillMap.end()) {
 		return it->second;
 	}
 
-	uint64_t tries = static_cast<uint64_t>(skillBase[skill] * std::pow(static_cast<double>(skillMultipliers[skill]), level - 11));
-	cacheSkill[skill][level] = tries;
+	const uint64_t tries = std::floor<uint64_t>(skillBase[skill] * std::pow<double>(skillMultipliers[skill], static_cast<int32_t>(level) - 11));
+	skillMap.insert({level, tries});
 	return tries;
 }
 
@@ -204,7 +205,7 @@ uint64_t Vocation::getReqMana(uint32_t magLevel)
 		return it->second;
 	}
 
-	uint64_t reqMana = std::floor<uint64_t>(1600 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
-	cacheMana[magLevel] = reqMana;
+	const uint64_t reqMana = std::floor<uint64_t>(1600 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
+	cacheMana.insert({magLevel, reqMana});
 	return reqMana;
 }
