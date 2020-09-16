@@ -814,7 +814,9 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	newOutfit.lookMount = msg.get<uint16_t>();
 	newOutfit.lookWings = otclientV8 ? msg.get<uint16_t>() : 0;
 	newOutfit.lookAura = otclientV8 ? msg.get<uint16_t>() : 0;
-	newOutfit.lookShader = otclientV8 ? msg.getString() : "";
+	std::string shaderName = otclientV8 ? msg.getString() : "";
+	Shader* shader = g_game.shaders.getShaderByName(shaderName);
+	newOutfit.lookShader = shader ? shader->id : 0;
 	addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
 }
 
@@ -3090,7 +3092,8 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 	if (otclientV8) {
 		msg.add<uint16_t>(outfit.lookWings);
 		msg.add<uint16_t>(outfit.lookAura);
-		msg.addString(outfit.lookShader);
+		Shader* shader = g_game.shaders.getShaderByID(outfit.lookShader);
+		msg.addString(shader ? shader->name : "");
 	}
 }
 

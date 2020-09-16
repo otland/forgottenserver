@@ -171,7 +171,7 @@ class Player final : public Creature, public Cylinder
 		}
 		bool hasShader() const
 		{
-			return !defaultOutfit.lookShader.empty();
+			return defaultOutfit.lookShader != 0;
 		}
 		bool toggleMount(bool mount);
 		bool tameMount(uint8_t mountId);

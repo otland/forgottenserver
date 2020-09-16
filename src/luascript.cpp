@@ -784,7 +784,7 @@ Outfit_t LuaScriptInterface::getOutfit(lua_State* L, int32_t arg)
 	outfit.lookTypeEx = getField<uint16_t>(L, arg, "lookTypeEx");
 	outfit.lookType = getField<uint16_t>(L, arg, "lookType");
 
-	outfit.lookShader = getFieldString(L, arg, "lookShader");
+	outfit.lookShader = getField<uint16_t>(L, arg, "lookShader");
 
 	lua_pop(L, 8);
 	return outfit;
@@ -12099,7 +12099,7 @@ int LuaScriptInterface::luaConditionSetOutfit(lua_State* L)
 	if (isTable(L, 2)) {
 		outfit = getOutfit(L, 2);
 	} else {
-		outfit.lookShader = getString(L, 12);
+		outfit.lookShader = getNumber<uint16_t>(L, 12, outfit.lookShader);
 		outfit.lookAura = getNumber<uint16_t>(L, 11, outfit.lookAura);
 		outfit.lookWings = getNumber<uint16_t>(L, 10, outfit.lookWings);
 		outfit.lookMount = getNumber<uint16_t>(L, 9, outfit.lookMount);

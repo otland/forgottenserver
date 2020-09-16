@@ -30,7 +30,7 @@ allowClones = false
 serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
-maxPacketsPerSecond = 25
+maxPacketsPerSecond = 50
 packetCompression = true
 
 -- Deaths
