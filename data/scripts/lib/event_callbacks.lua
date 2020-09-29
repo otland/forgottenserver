@@ -94,7 +94,7 @@ setmetatable(EventCallback,
 		if isScriptsInterface() then
 			if self[key] then
 				local ecd = EventCallbackData
-				ecd[callbacks[key]][#ecd[callbacks[key]] + 1] = value
+				ecd[callbacks[key]][#ecd == nil and 1 or #ecd[callbacks[key]] + 1] = value
 			end
 		else
 			return nil
@@ -102,26 +102,15 @@ setmetatable(EventCallback,
 	end,
 
 	__call =
-	function(self, callbackType, ...)
-		local args = {select(2, ...)}
-		local obj = (select(1, ...))
-		for _, func in pairs(EventCallbackData[callbackType]) do
-			args = {func(obj, unpack(args))}
-			if #args == 1 and args[1] == false then
-				return false
-			end
-			-- handling for RETURNVALUE type of Events
-			if isInArray({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) then
-				if args[1] ~= RETURNVALUE_NOERROR then
-					return unpack(args)
-				end
-			end
-		end
-		if args[1] == nil then
-			return true
-		end
-		return unpack(args)
-	end
+    function(self, callbackType, ...)
+        local result
+        local key, event = next(EventCallbackData[callbackType])
+        repeat
+            result = {event(...)}
+            key, event = next(EventCallbackData[callbackType], key)
+        until event == nil or (result ~= nil and (result == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) and result ~= RETURNVALUE_NOERROR))
+        return unpack(result)
+    end
 })
 
 function hasEventCallback(callbackType)

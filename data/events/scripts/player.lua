@@ -7,92 +7,25 @@ function Player:onBrowseField(position)
 end
 
 function Player:onLook(thing, position, distance)
-	local description = "You see " .. thing:getDescription(distance)
-	if self:getGroup():getAccess() then
-		if thing:isItem() then
-			description = string.format("%s\nItem ID: %d", description, thing:getId())
-
-			local actionId = thing:getActionId()
-			if actionId ~= 0 then
-				description = string.format("%s, Action ID: %d", description, actionId)
-			end
-
-			local uniqueId = thing:getAttribute(ITEM_ATTRIBUTE_UNIQUEID)
-			if uniqueId > 0 and uniqueId < 65536 then
-				description = string.format("%s, Unique ID: %d", description, uniqueId)
-			end
-
-			local itemType = thing:getType()
-
-			local transformEquipId = itemType:getTransformEquipId()
-			local transformDeEquipId = itemType:getTransformDeEquipId()
-			if transformEquipId ~= 0 then
-				description = string.format("%s\nTransforms to: %d (onEquip)", description, transformEquipId)
-			elseif transformDeEquipId ~= 0 then
-				description = string.format("%s\nTransforms to: %d (onDeEquip)", description, transformDeEquipId)
-			end
-
-			local decayId = itemType:getDecayId()
-			if decayId ~= -1 then
-				description = string.format("%s\nDecays to: %d", description, decayId)
-			end
-		elseif thing:isCreature() then
-			local str = "%s\nHealth: %d / %d"
-			if thing:isPlayer() and thing:getMaxMana() > 0 then
-				str = string.format("%s, Mana: %d / %d", str, thing:getMana(), thing:getMaxMana())
-			end
-			description = string.format(str, description, thing:getHealth(), thing:getMaxHealth()) .. "."
-		end
-
-		local position = thing:getPosition()
-		description = string.format(
-			"%s\nPosition: %d, %d, %d",
-			description, position.x, position.y, position.z
-		)
-
-		if thing:isCreature() then
-			if thing:isPlayer() then
-				description = string.format("%s\nIP: %s.", description, Game.convertIpToString(thing:getIp()))
-			end
-		end
-	end
-	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOK) and EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance, description) or description
+	local ret = EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance)
 	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
 end
 
 function Player:onLookInBattleList(creature, distance)
-	local description = "You see " .. creature:getDescription(distance)
-	if self:getGroup():getAccess() then
-		local str = "%s\nHealth: %d / %d"
-		if creature:isPlayer() and creature:getMaxMana() > 0 then
-			str = string.format("%s, Mana: %d / %d", str, creature:getMana(), creature:getMaxMana())
-		end
-		description = string.format(str, description, creature:getHealth(), creature:getMaxHealth()) .. "."
-
-		local position = creature:getPosition()
-		description = string.format(
-			"%s\nPosition: %d, %d, %d",
-			description, position.x, position.y, position.z
-		)
-
-		if creature:isPlayer() then
-			description = string.format("%s\nIP: %s", description, Game.convertIpToString(creature:getIp()))
-		end
-	end
-	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST) and EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance, description) or description
+	local ret = EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance)
 	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
 end
 
 function Player:onLookInTrade(partner, item, distance)
 	local description = "You see " .. item:getDescription(distance)
 	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) and EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description) or description
-	self:sendTextMessage(MESSAGE_INFO_DESCR, EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description))
+	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
 end
 
 function Player:onLookInShop(itemType, count, description)
 	local description = "You see " .. description
 	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) and EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description) or description
-	self:sendTextMessage(MESSAGE_INFO_DESCR, EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description))
+	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
