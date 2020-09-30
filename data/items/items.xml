@@ -2119,6 +2119,7 @@
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="2148" article="a" name="gold coin">
+		<attribute key="worth" value="1" />
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="2149" article="a" name="small emerald">
@@ -2132,6 +2133,7 @@
 		<attribute key="description" value="There are many rumours about these magic gems." />
 	</item>
 	<item id="2152" article="a" name="platinum coin">
+		<attribute key="worth" value="100" />
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="2153" article="a" name="violet gem">
@@ -2156,6 +2158,7 @@
 		<attribute key="weight" value="20" />
 	</item>
 	<item id="2160" article="a" name="crystal coin">
+		<attribute key="worth" value="10000" />
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="2161" article="a" name="strange talisman">
