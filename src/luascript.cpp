@@ -14993,7 +14993,7 @@ int LuaScriptInterface::luaMoveEventSlot(lua_State* L)
 			moveevent->setSlot(SLOTP_NECKLACE);
 		} else if (slotName == "backpack") {
 			moveevent->setSlot(SLOTP_BACKPACK);
-		} else if (slotName == "armor" || tmpStr == "body") {
+		} else if (slotName == "armor" || slotName == "body") {
 			moveevent->setSlot(SLOTP_ARMOR);
 		} else if (slotName == "right-hand") {
 			moveevent->setSlot(SLOTP_RIGHT);
