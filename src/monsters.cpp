@@ -607,16 +607,13 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(spell->skill, spell->attack);
 			}
 
-			ConditionType_t conditionType = CONDITION_NONE;
-			int32_t minDamage = 0;
-			int32_t maxDamage = 0;
-			uint32_t tickInterval = 2000;
-
 			if (spell->conditionType != CONDITION_NONE) {
-				conditionType = spell->conditionType;
+				ConditionType_t conditionType = spell->conditionType;
 
-				minDamage = spell->conditionMinDamage;
-				maxDamage = minDamage;
+				int32_t minDamage = spell->conditionMinDamage;
+				int32_t maxDamage = minDamage;
+
+				uint32_t tickInterval = 2000;
 				if (spell->tickInterval != 0) {
 					tickInterval = spell->tickInterval;
 				}

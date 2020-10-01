@@ -1664,7 +1664,6 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 				attributes.pop_back();
 				break;
 			}
-			prev_it = it;
 		}
 	}
 	attributeBits &= ~type;
