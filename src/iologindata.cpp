@@ -592,7 +592,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 	using ContainerBlock = std::pair<Container*, int32_t>;
 	std::vector<ContainerBlock> containers;
-	containers.reserve(150);
+	containers.reserve(32);
 
 	int32_t runningId = 100;
 
