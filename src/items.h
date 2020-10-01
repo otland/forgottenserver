@@ -283,6 +283,10 @@ class ItemType
 				return name;
 			}
 
+			if (name.empty() || name.back() == 's') {
+				return name;
+			}
+
 			std::string str;
 			str.reserve(name.length() + 1);
 			str.assign(name);
