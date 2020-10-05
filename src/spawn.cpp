@@ -77,7 +77,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 		}
 
 		spawnList.emplace_front(centerPos, radius);
-		Spawn& spawn = spawnList.front();
+		Spawn& spawn = spawnList.back();
 
 		for (auto childNode : spawnNode.children()) {
 			if (strcasecmp(childNode.name(), "monster") == 0) {
@@ -101,7 +101,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 					centerPos.z
 				);
 				int32_t interval = pugi::cast<int32_t>(childNode.attribute("spawntime").value()) * 1000;
-				if (interval > MINSPAWN_INTERVAL && interval <= MAXSPAWN_INTERVAL) {
+				if (interval >= MINSPAWN_INTERVAL && interval <= MAXSPAWN_INTERVAL) {
 					spawn.addMonster(nameAttribute.as_string(), pos, dir, static_cast<uint32_t>(interval));
 				} else {
 					if (interval < MINSPAWN_INTERVAL) {
