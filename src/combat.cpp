@@ -759,7 +759,6 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 			}
 
 			Combat::checkCriticalHit(casterPlayer, damage);
-			Combat::checkLeech(casterPlayer, damage);
 		}
 	}
 
@@ -776,7 +775,9 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 		if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
 			return;
 		}
-
+		if (casterPlayer) {
+			Combat::checkLeech(casterPlayer, damage);
+		}
 		success = g_game.combatChangeHealth(caster, target, damage);
 	} else {
 		success = g_game.combatChangeMana(caster, target, damage);
@@ -823,7 +824,6 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
 	if (casterPlayer) {
-		Combat::checkLeech(casterPlayer, damage);
 		if (!damage.critical && damage.origin != ORIGIN_CONDITION && (damage.primary.value < 0 || damage.secondary.value < 0)) {
 			uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 			if (chance != 0 && uniform_random(1, 100) <= chance) {
@@ -904,6 +904,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					if (damageCopy.primary.type != COMBAT_MANADRAIN) {
 						if (g_game.combatBlockHit(damageCopy, caster, creature, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
 							continue;
+						}
+						if (casterPlayer && !damage.leeched) {
+							Combat::checkLeech(casterPlayer, damageCopy);
+							damage.leeched = true;
 						}
 						success = g_game.combatChangeHealth(caster, creature, damageCopy);
 					} else {

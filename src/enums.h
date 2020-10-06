@@ -609,6 +609,7 @@ struct CombatDamage
 	CombatOrigin origin;
 	BlockType_t blockType;
 	bool critical;
+	bool leeched;
 	CombatDamage()
 	{
 		origin = ORIGIN_NONE;
@@ -616,6 +617,7 @@ struct CombatDamage
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
 		critical = false;
+		leeched = false;
 	}
 };
 
