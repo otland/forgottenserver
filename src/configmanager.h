@@ -53,6 +53,7 @@ class ConfigManager
 			YELL_ALLOW_PREMIUM,
 			FORCE_MONSTERTYPE_LOAD,
 			HOUSE_OWNED_BY_ACCOUNT,
+			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
