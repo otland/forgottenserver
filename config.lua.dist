@@ -43,7 +43,6 @@ deathLosePercent = -1
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
 houseOwnedByAccount = false
-onlyInvitedCanMoveHouseItems = true
 houseDoorShowPrice = true
 onlyInvitedCanMoveHouseItems = true
 
