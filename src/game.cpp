@@ -2578,7 +2578,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tradeItem->getTile())) {
 			House* house = houseTile->getHouse();
-			if (house && house->isInvited(player)) {
+			if (house && !house->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 				return;
 			}
