@@ -435,7 +435,6 @@ class LuaScriptInterface
 
 		//lua functions
 		static int luaDoPlayerAddItem(lua_State* L);
-		static int luaDoSetCreatureLight(lua_State* L);
 
 		//get item info
 		static int luaGetDepotId(lua_State* L);
@@ -937,6 +936,7 @@ class LuaScriptInterface
 		static int luaPlayerRemoveOutfit(lua_State* L);
 		static int luaPlayerRemoveOutfitAddon(lua_State* L);
 		static int luaPlayerHasOutfit(lua_State* L);
+		static int luaPlayerCanWearOutfit(lua_State* L);
 		static int luaPlayerSendOutfitWindow(lua_State* L);
 
 		static int luaPlayerAddMount(lua_State* L);

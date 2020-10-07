@@ -24,6 +24,7 @@
 	<monster name="Sacred Spider" file="Arachnids/sacred_spider.xml" />
 	<monster name="Sandstone Scorpion" file="Arachnids/sandstone_scorpion.xml" />
 	<monster name="Scorpion" file="Arachnids/scorpion.xml" />
+	<monster name="Sparkion" file="Arachnids/sparkion.xml" />
 	<monster name="Spider" file="Arachnids/spider.xml" />
 	<monster name="Tarantula" file="Arachnids/tarantula.xml" />
 	<monster name="Wailing Widow" file="Arachnids/wailing_widow.xml" />
@@ -99,6 +100,7 @@
 	<monster name="Squidgy Slime" file="Bio-Elementals/squidgy_slime.xml" />
 	<monster name="Strange Slime" file="Bio-Elementals/strange_slime.xml" />
 	<monster name="Swampling" file="Bio-Elementals/swampling.xml" />
+	<monster name="Walker" file="Bio-Elementals/walker.xml" />
 	<monster name="Wilting Leaf Golem" file="Bio-Elementals/wilting_leaf_golem.xml" />
 
 	<!-- Birds -->
@@ -145,6 +147,7 @@
 	<monster name="Bones" file="Bosses/bones.xml" />
 	<monster name="Boogey" file="Bosses/boogey.xml" />
 	<monster name="Brutus Bloodbeard" file="Bosses/brutus_bloodbeard.xml" />
+	<monster name="Captain Jones" file="Bosses/captain_jones.xml" />
 	<monster name="Chizzoron the Distorter" file="Bosses/chizzoron_the_distorter.xml" />
 	<monster name="Coldheart" file="Bosses/coldheart.xml" />
 	<monster name="Countess Sorrow" file="Bosses/countess_sorrow.xml" />
@@ -179,6 +182,7 @@
 	<monster name="Gnomevil" file="Bosses/gnomevil.xml" />
 	<monster name="Golgordan" file="Bosses/golgordan.xml" />
 	<monster name="Grand Mother Foulscale" file="Bosses/grand_mother_foulscale.xml" />
+	<monster name="Grandfather Tridian" file="Bosses/grandfather_tridian.xml" />
 	<monster name="Groam" file="Bosses/groam.xml" />
 	<monster name="Grorlam" file="Bosses/grorlam.xml" />
 	<monster name="Hairman the Huge" file="Bosses/hairman_the_huge.xml" />
@@ -388,6 +392,7 @@
 	<!-- Dwarves -->
 	<monster name="Dwarf Geomancer" file="Dwarves/dwarf_geomancer.xml" />
 	<monster name="Dwarf Guard" file="Dwarves/dwarf_guard.xml" />
+	<monster name="Dwarf Henchman" file="Dwarves/dwarf_henchman.xml" />
 	<monster name="Dwarf Miner" file="Dwarves/dwarf_miner.xml" />
 	<monster name="Dwarf Soldier" file="Dwarves/dwarf_soldier.xml" />
 	<monster name="Dwarf" file="Dwarves/dwarf.xml" />
@@ -413,7 +418,11 @@
 	<monster name="Shadow Hound" file="Event_Creatures/shadow_hound.xml" />
 	<monster name="Spectral Scum" file="Event_Creatures/spectral_scum.xml" />
 	<monster name="The Halloween Hare" file="Event_Creatures/the_halloween_hare.xml" />
+	<monster name="The Mutated Pumpkin" file="Event_Creatures/the_mutated_pumpkin.xml" />
+	<monster name="The Ruthless Herald" file="Event_Creatures/the_ruthless_herald.xml" />
+	<monster name="Undead Jester" file="Event_Creatures/undead_jester.xml" />
 	<monster name="Undead Minion" file="Event_Creatures/undead_minion.xml" />
+	<monster name="World Bug" file="Event_Creatures/world_bug.xml" />
 
 	<!-- Elves -->
 	<monster name="Elf" file="Elves/elf.xml" />
@@ -435,8 +444,11 @@
 
 	<!-- Felines -->
 	<monster name="Cat" file="Felines/cat.xml" />
+	<monster name="Kitty" file="Felines/kitty.xml" />
 	<monster name="Lion" file="Felines/lion.xml" />
 	<monster name="Tiger" file="Felines/tiger.xml" />
+	<monster name="Noble Lion" file="Felines/noble_lion.xml" />
+	<monster name="Roaring Lion" file="Felines/roaring_lion.xml" />
 	<monster name="Midnight Panther" file="Felines/midnight_panther.xml" />
 
 	<!-- Fish -->
@@ -652,6 +664,7 @@
 	<monster name="Poacher" file="Outlaws/poacher.xml" />
 	<monster name="Smuggler" file="Outlaws/smuggler.xml" />
 	<monster name="Stalker" file="Outlaws/stalker.xml" />
+	<monster name="Thief" file="Outlaws/thief.xml" />
 	<monster name="Wild Warrior" file="Outlaws/wild_warrior.xml" />
 	<monster name="Feverish Citizen" file="Outlaws/feverish_citizen.xml" />
 	<monster name="Crypt Defiler" file="Outlaws/crypt_defiler.xml" />
@@ -739,12 +752,16 @@
 	<monster name="Yalahari" file="Sorcerers/yalahari.xml" />
 
 	<!-- Traps -->
+	<monster name="a carved stone tile" file="Traps/a_carved_stone_tile.xml" />
 	<monster name="Deathslicer" file="Traps/deathslicer.xml" />
+	<monster name="Dwarf Dispenser" file="Traps/dwarf_dispenser.xml" />
 	<monster name="Flamethrower" file="Traps/flamethrower.xml" />
+	<monster name="Hell Hole" file="Traps/hell_hole.xml" />
 	<monster name="Hive Pore" file="Traps/hive_pore.xml" />
 	<monster name="Lavahole" file="Traps/lavahole.xml" />
 	<monster name="Magic Pillar" file="Traps/magic_pillar.xml" />
 	<monster name="Magicthrower" file="Traps/magicthrower.xml" />
+	<monster name="Pillar" file="Traps/pillar.xml" />
 	<monster name="Plaguethrower" file="Traps/plaguethrower.xml" />
 	<monster name="Shredderthrower" file="Traps/shredderthrower.xml" />
 
@@ -776,6 +793,7 @@
 	<!-- Ungulates -->
 	<monster name="Black Sheep" file="Ungulates/black_sheep.xml" />
 	<monster name="Boar" file="Ungulates/boar.xml" />
+	<monster name="Brown Horse" file="Ungulates/brown_horse.xml" />
 	<monster name="Deer" file="Ungulates/deer.xml" />
 	<monster name="Desperate White Deer" file="Ungulates/desperate_white_deer.xml" />
 	<monster name="Doom Deer" file="Ungulates/doom_deer.xml" />
@@ -784,10 +802,8 @@
 	<monster name="Enraged White Deer" file="Ungulates/enraged_white_deer.xml" />
 	<monster name="Evil Sheep Lord" file="Ungulates/evil_sheep_lord.xml" />
 	<monster name="Evil Sheep" file="Ungulates/evil_sheep.xml" />
-	<monster name="Horse" file="Ungulates/horse.xml" />
-	<monster name="Horse1" file="Ungulates/horse(brown).xml" />
-	<monster name="Horse2" file="Ungulates/horse(fire).xml" />
-	<monster name="Horse3" file="Ungulates/horse(grey).xml" />
+	<monster name="Horse" file="Ungulates/taupe_horse.xml" />
+	<monster name="Gray Horse" file="Ungulates/gray_horse.xml" />
 	<monster name="Mad Sheep" file="Ungulates/mad_sheep.xml" />
 	<monster name="Mammoth" file="Ungulates/mammoth.xml" />
 	<monster name="Mushroom Sniffer" file="Ungulates/mushroom_sniffer.xml" />

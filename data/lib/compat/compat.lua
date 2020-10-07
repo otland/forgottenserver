@@ -1312,3 +1312,21 @@ end
 function doPlayerTakeItem(cid, itemid, count)
 	return Player(cid):removeItem(itemid, count)
 end
+
+function isNumber(str)
+	return tonumber(str) ~= nil
+end
+
+function doSetCreatureLight(cid, lightLevel, lightColor, time)
+	local creature = Creature(cid)
+	if not creature then
+		return false
+	end
+
+	local condition = Condition(CONDITION_LIGHT)
+	condition:setParameter(CONDITION_PARAM_LIGHT_LEVEL, lightLevel)
+	condition:setParameter(CONDITION_PARAM_LIGHT_COLOR, lightColor)
+	condition:setTicks(time)
+	creature:addCondition(condition)
+	return true
+end
