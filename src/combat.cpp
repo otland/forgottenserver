@@ -860,7 +860,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	postCombatEffects(caster, position, params);
-
+	CombatDamage leechAmount; //Setup new CombatDamage to keep highest damage
 	for (Tile* tile : tileList) {
 		if (canDoCombat(caster, tile, params.aggressive) != RETURNVALUE_NOERROR) {
 			continue;
@@ -905,9 +905,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 						if (g_game.combatBlockHit(damageCopy, caster, creature, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
 							continue;
 						}
-						if (casterPlayer && !damage.leeched) {
-							Combat::checkLeech(casterPlayer, damageCopy);
-							damage.leeched = true;
+						if (casterPlayer) {
+							if ((damageCopy.primary.value + damageCopy.secondary.value) < leechAmount.primary.value) { //Checking for highest damage done.
+								leechAmount.primary.value = (damageCopy.primary.value + damageCopy.secondary.value);
+							}
 						}
 						success = g_game.combatChangeHealth(caster, creature, damageCopy);
 					} else {
@@ -946,6 +947,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 				}
 			}
 		}
+	}
+	if (casterPlayer && leechAmount.primary.value < 0) {
+		Combat::checkLeech(casterPlayer, leechAmount); //Will check leech on highest damage done.
 	}
 }
 
