@@ -35,7 +35,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 
 		virtual void parsePacket(NetworkMessage&) {}
 
-		virtual void onSendMessage(const OutputMessage_ptr& msg) const;
+		virtual void onSendMessage(const OutputMessage_ptr& msg);
 		void onRecvMessage(NetworkMessage& msg);
 		virtual void onRecvFirstMessage(NetworkMessage& msg) = 0;
 		virtual void onConnect() {}
@@ -78,6 +78,9 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		void disableChecksum() {
 			checksumEnabled = false;
 		}
+		void enableSequence() {
+			sequenceEnabled = true;
+		}
 
 		static bool RSA_decrypt(NetworkMessage& msg);
 
@@ -99,7 +102,9 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		xtea::key key;
 		bool encryptionEnabled = false;
 		bool checksumEnabled = true;
+		bool sequenceEnabled = false;
 		bool rawMessages = false;
+		uint32_t sequenceNumber = 0;
 };
 
 #endif
