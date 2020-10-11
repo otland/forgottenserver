@@ -77,7 +77,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 		}
 
 		spawnList.emplace_front(centerPos, radius);
-		Spawn& spawn = spawnList.back();
+		Spawn& spawn = spawnList.front();
 
 		for (auto childNode : spawnNode.children()) {
 			if (strcasecmp(childNode.name(), "monster") == 0) {
