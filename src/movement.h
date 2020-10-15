@@ -218,8 +218,8 @@ class MoveEvent final : public Event
 		static uint32_t AddItemField(Item* item, Item* tileItem, const Position& pos);
 		static uint32_t RemoveItemField(Item* item, Item* tileItem, const Position& pos);
 
-		static ReturnValue EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
-		static ReturnValue DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+		static ReturnValue EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck);
+		static ReturnValue DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool);
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
 		StepFunction stepFunction;

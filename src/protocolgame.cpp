@@ -388,7 +388,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() <= 0) {
+	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() == 0) {
 		return;
 	}
 
@@ -687,7 +687,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 		if (z > 7) {
 			return false;
 		}
-	} else if (myPos.z >= 8) {
+	} else { // if (myPos.z >= 8) {
 		//we are underground (8 -> 15)
 		//view is +/- 2 from the floor we stand on
 		if (std::abs(myPos.getZ() - z) > 2) {
