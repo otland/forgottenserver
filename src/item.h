@@ -897,9 +897,6 @@ class Item : virtual public Thing
 			return items[id].isMagicField();
 		}
 		bool isMoveable() const {
-			if (id == ITEM_STORE_INBOX) {
-				return false;
-			}
 			return items[id].moveable;
 		}
 		bool isPickupable() const {

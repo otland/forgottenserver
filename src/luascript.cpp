@@ -2424,6 +2424,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "hasSecureMode", LuaScriptInterface::luaPlayerHasSecureMode);
 	registerMethod("Player", "getFightMode", LuaScriptInterface::luaPlayerGetFightMode);
 
+	registerMethod("Player", "getStoreInbox", LuaScriptInterface::luaPlayerGetStoreInbox);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -9809,6 +9811,26 @@ int LuaScriptInterface::luaPlayerGetFightMode(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetStoreInbox(lua_State* L)
+{
+	// player:getStoreInbox()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Container* storeInbox = player->inventory[CONST_SLOT_STORE_INBOX] ? player->inventory[CONST_SLOT_STORE_INBOX]->getContainer() : nullptr;
+	if (!storeInbox) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushUserdata<Container>(L, storeInbox);
+	setMetatable(L, -1, "Container");
 	return 1;
 }
 

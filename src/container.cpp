@@ -285,10 +285,6 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (getID() == ITEM_STORE_INBOX && !hasBitSet(FLAG_NOLIMIT, flags)) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	if (!item->isPickupable()) {
 		return RETURNVALUE_CANNOTPICKUP;
 	}
