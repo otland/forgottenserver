@@ -511,12 +511,10 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 		int32_t move_ver = std::abs(A * (start.x) + B * (start.y + my) + C);
 		int32_t move_cross = std::abs(A * (start.x + mx) + B * (start.y + my) + C);
 
-		if (start.y != destination.y && (start.x == destination.x || move_hor > move_ver || move_hor > move_cross)) {
-			start.y += my;
-		}
-
 		if (start.x != destination.x && (start.y == destination.y || move_ver > move_hor || move_ver > move_cross)) {
 			start.x += mx;
+		} else if (start.y != destination.y && (start.x == destination.x || move_hor > move_ver || move_hor > move_cross)) {
+			start.y += my;
 		}
 
 		const Tile* tile = getTile(start.x, start.y, start.z);
