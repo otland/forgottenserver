@@ -383,7 +383,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -402,6 +402,12 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
+
+	const HouseTile* houseTile = dynamic_cast<const HouseTile*>(getTopParent());
+	if (houseTile) {
+		return houseTile->queryRemove(thing, count, flags, actor);
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -636,6 +642,21 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 		countMap[item->getID()] += item->getItemCount();
 	}
 	return countMap;
+}
+
+ItemVector Container::getItems(bool recursive /*= false*/)
+{
+	ItemVector containerItems;
+	if (recursive) {
+		for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
+			containerItems.push_back(*it);
+		}
+	} else {
+		for (Item* item : itemlist) {
+			containerItems.push_back(item);
+		}
+	}
+	return containerItems;
 }
 
 Thing* Container::getThing(size_t index) const

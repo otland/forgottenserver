@@ -162,6 +162,8 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ELEMENTEARTH,
 	ITEM_PARSE_ELEMENTFIRE,
 	ITEM_PARSE_ELEMENTENERGY,
+	ITEM_PARSE_ELEMENTDEATH,
+	ITEM_PARSE_ELEMENTHOLY,
 	ITEM_PARSE_WALKSTACK,
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
@@ -278,6 +280,10 @@ class ItemType
 			}
 
 			if (showCount == 0) {
+				return name;
+			}
+
+			if (name.empty() || name.back() == 's') {
 				return name;
 			}
 
