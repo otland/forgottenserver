@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monsters>
+	<monster name="a carved stone tile" file="monsters/a_carved_stone_tile.xml" />
 	<monster name="Abyssador" file="monsters/abyssador.xml" />
 	<monster name="Achad" file="monsters/achad.xml" />
 	<monster name="Acid Blob" file="monsters/acid_blob.xml" />

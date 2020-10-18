@@ -401,7 +401,7 @@ void Tile::onAddTileItem(Item* item)
 		spectator->onAddTileItem(this, cylinderMapPos);
 	}
 
-	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || (g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES) && hasFlag(TILESTATE_PROTECTIONZONE))) && item->isCleanable()) {
+	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) && item->isCleanable()) {
 		if (!dynamic_cast<HouseTile*>(this)) {
 			g_game.addTileToClean(this);
 		}
@@ -473,15 +473,15 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 		spectator->onRemoveTileItem(this, cylinderMapPos, iType, item);
 	}
 
-	if (!hasFlag(TILESTATE_PROTECTIONZONE) || (g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES) && hasFlag(TILESTATE_PROTECTIONZONE))) {
-		auto it = getItemList();
-		if (it->empty()) {
+	if (!hasFlag(TILESTATE_PROTECTIONZONE) || g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) {
+		auto items = getItemList();
+		if (!items || items->empty()) {
 			g_game.removeTileToClean(this);
 			return;
 		}
 
 		bool ret = false;
-		for (auto toCheck : *it) {
+		for (auto toCheck : *items) {
 			if (toCheck->isCleanable()) {
 				ret = true;
 				break;
@@ -728,7 +728,7 @@ ReturnValue Tile::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t&
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {

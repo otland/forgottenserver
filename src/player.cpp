@@ -2554,7 +2554,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 	}
 }
 
-ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr*/) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -3796,14 +3796,6 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 	const Player* player = creature->getPlayer();
 	if (!player || player->getSkull() != SKULL_NONE) {
 		return Creature::getSkullClient(creature);
-	}
-
-	if (isInWar(player)) {
-		return SKULL_GREEN;
-	}
-
-	if (!player->getGuildWarVector().empty() && guild == player->getGuild()) {
-		return SKULL_GREEN;
 	}
 
 	if (player->hasAttacked(this)) {
