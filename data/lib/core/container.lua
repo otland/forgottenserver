@@ -31,7 +31,7 @@ function Container.createLootItem(self, item)
 				end
 			end
 
-			if tmpItem:getSize() == 0 then
+			if #item.childLoot > 0 and tmpItem:getSize() == 0 then
 				tmpItem:remove()
 				return true
 			end
