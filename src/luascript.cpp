@@ -1045,6 +1045,9 @@ void LuaScriptInterface::registerFunctions()
 	//sendGuildChannelMessage(guildId, type, message)
 	lua_register(luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
+	//isScriptsInterface()
+	lua_register(luaState, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
+
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
@@ -3677,6 +3680,18 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	std::string message = getString(L, 3);
 	channel->sendToAll(message, type);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
+{
+	//isScriptsInterface()
+	if (getScriptEnv()->getScriptInterface() == &g_scripts->getScriptInterface()) {
+		pushBoolean(L, true);
+	} else {
+		reportErrorFunc("EventCallback: can only be called inside (data/scripts/)");
+		pushBoolean(L, false);
+	}
 	return 1;
 }
 
