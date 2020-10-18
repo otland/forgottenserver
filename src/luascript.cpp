@@ -1385,7 +1385,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_SLOT_FEET)
 	registerEnum(CONST_SLOT_RING)
 	registerEnum(CONST_SLOT_AMMO)
-	registerEnum(CONST_SLOT_STORE_INBOX)
 
 	registerEnum(CREATURE_EVENT_NONE)
 	registerEnum(CREATURE_EVENT_LOGIN)
@@ -2151,6 +2150,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "hasProperty", LuaScriptInterface::luaItemHasProperty);
 	registerMethod("Item", "isLoadedFromMap", LuaScriptInterface::luaItemIsLoadedFromMap);
 
+	registerMethod("Item", "setStoreItem", LuaScriptInterface::luaItemSetStoreItem);
+	registerMethod("Item", "isStoreItem", LuaScriptInterface::luaItemIsStoreItem);
+
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
 	registerMetaMethod("Container", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2619,6 +2621,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getCorpseType", LuaScriptInterface::luaItemTypeGetCorpseType);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
+
+	registerMethod("ItemType", "isStoreItem", LuaScriptInterface::luaItemIsStoreItem);
 
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
@@ -6510,6 +6514,31 @@ int LuaScriptInterface::luaItemIsLoadedFromMap(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemSetStoreItem(lua_State* L)
+{
+	// item:setStoreItem(storeItem)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	item->setStoreItem(getBoolean(L, 2, false));
+	return 1;
+}
+
+int LuaScriptInterface::luaItemIsStoreItem(lua_State* L)
+{
+	// item:isStoreItem()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushBoolean(L, item->isStoreItem());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Container
 int LuaScriptInterface::luaContainerCreate(lua_State* L)
 {
@@ -9823,7 +9852,7 @@ int LuaScriptInterface::luaPlayerGetStoreInbox(lua_State* L)
 		return 1;
 	}
 
-	Container* storeInbox = player->inventory[CONST_SLOT_STORE_INBOX] ? player->inventory[CONST_SLOT_STORE_INBOX]->getContainer() : nullptr;
+	Container* storeInbox = player->getStoreInbox();
 	if (!storeInbox) {
 		lua_pushnil(L);
 		return 1;
@@ -11688,6 +11717,18 @@ int LuaScriptInterface::luaItemTypeHasSubType(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushBoolean(L, itemType->hasSubType());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeIsStoreItem(lua_State* L)
+{
+	// itemType:isStoreItem()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->isStoreItem());
 	} else {
 		lua_pushnil(L);
 	}

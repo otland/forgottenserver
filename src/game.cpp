@@ -331,6 +331,10 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 
 	//inventory
 	slots_t slot = static_cast<slots_t>(pos.y);
+	if (slot == CONST_SLOT_STORE_INBOX) {
+		return player->getStoreInbox();
+	}
+
 	return player->getInventoryItem(slot);
 }
 

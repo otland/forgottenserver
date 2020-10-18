@@ -224,6 +224,7 @@
     <ClCompile Include="..\src\signals.cpp" />
     <ClCompile Include="..\src\spawn.cpp" />
     <ClCompile Include="..\src\spells.cpp" />
+    <ClCompile Include="..\src\storeinbox.cpp" />
     <ClCompile Include="..\src\protocolstatus.cpp" />
     <ClCompile Include="..\src\talkaction.cpp" />
     <ClCompile Include="..\src\tasks.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="..\src\spawn.h" />
     <ClInclude Include="..\src\spectators.h" />
     <ClInclude Include="..\src\spells.h" />
+    <ClInclude Include="..\src\storeinbox.h" />
     <ClInclude Include="..\src\protocolstatus.h" />
     <ClInclude Include="..\src\talkaction.h" />
     <ClInclude Include="..\src\tasks.h" />

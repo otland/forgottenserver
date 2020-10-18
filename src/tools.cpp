@@ -1222,6 +1222,9 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION:
 			return "You don't have the required profession.";
 
+		case RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM:
+			return "You cannot move this item into your Store inbox as it was not bought in the Store.";
+
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}
