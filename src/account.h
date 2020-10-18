@@ -27,7 +27,7 @@ struct Account {
 	std::string name;
 	std::string key;
 	uint32_t id = 0;
-	int32_t premEnd = 0;
+	int32_t premiumEndsAt = 0;
 	AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
 	Account() = default;

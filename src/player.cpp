@@ -3927,12 +3927,12 @@ bool Player::isPremium() const
 		return true;
 	}
 
-	return (premEnd - time(nullptr)) > 0;
+	return (premiumEndsAt - time(nullptr)) > 0;
 }
 
 void Player::setPremiumTime(int32_t time)
 {
-	premEnd = time;
+	premiumEndsAt = time;
 	sendBasicData();
 }
 

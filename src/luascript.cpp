@@ -9484,7 +9484,7 @@ int LuaScriptInterface::luaPlayerGetPremiumTime(lua_State* L)
 	// player:getPremiumTime()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, std::max<int32_t>(0, player->premEnd - time(nullptr)));
+		lua_pushnumber(L, std::max<int32_t>(0, player->premiumEndsAt - time(nullptr)));
 	} else {
 		lua_pushnil(L);
 	}
@@ -9501,9 +9501,9 @@ int LuaScriptInterface::luaPlayerAddPremiumTime(lua_State* L)
 	}
 
 	int32_t seconds = std::max<int32_t>(0, getNumber<int32_t>(L, 2));
-	int32_t oldTime = std::max<int32_t>(0, player->premEnd - time(nullptr));
+	int32_t oldTime = std::max<int32_t>(0, player->premiumEndsAt - time(nullptr));
 	player->setPremiumTime(time(nullptr) + oldTime + seconds);
-	IOLoginData::updatePremiumTime(player->getAccount(), player->premEnd);
+	IOLoginData::updatePremiumTime(player->getAccount(), player->premiumEndsAt);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -9518,13 +9518,13 @@ int LuaScriptInterface::luaPlayerRemovePremiumTime(lua_State* L)
 	}
 
 	int32_t seconds = std::max<int32_t>(0, getNumber<int32_t>(L, 2));
-	int32_t oldTime = std::max<int32_t>(0, player->premEnd - time(nullptr));
+	int32_t oldTime = std::max<int32_t>(0, player->premiumEndsAt - time(nullptr));
 	if (oldTime < seconds) {
 		player->setPremiumTime(0);
 		IOLoginData::updatePremiumTime(player->getAccount(), 0);
 	} else {
 		player->setPremiumTime(time(nullptr) + (oldTime - seconds));
-		IOLoginData::updatePremiumTime(player->getAccount(), player->premEnd);
+		IOLoginData::updatePremiumTime(player->getAccount(), player->premiumEndsAt);
 	}
 	pushBoolean(L, true);
 	return 1;
