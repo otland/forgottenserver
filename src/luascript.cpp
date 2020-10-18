@@ -916,7 +916,7 @@ void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spel
 	lua_createtable(L, 0, 6);
 
 	setField(L, "name", spell.getName());
-	setField(L, "words", spell.getWords());
+	setField(L, "words", spell.getWords().front());
 	setField(L, "level", spell.getLevel());
 	setField(L, "mlevel", spell.getMagicLevel());
 	setField(L, "mana", spell.getMana());
@@ -14324,7 +14324,7 @@ int LuaScriptInterface::luaSpellWords(lua_State* L)
 		}
 
 		if (lua_gettop(L) == 1) {
-			pushString(L, spell->getWords());
+			pushString(L, spell->getWords().front());
 			pushString(L, spell->getSeparator());
 			return 2;
 		} else {
@@ -14748,7 +14748,9 @@ int LuaScriptInterface::luaCreateTalkaction(lua_State* L)
 
 	TalkAction* talk = new TalkAction(getScriptEnv()->getScriptInterface());
 	if (talk) {
-		talk->setWords(getString(L, 2));
+		for (int i = 2; i <= lua_gettop(L); i++) {
+			talk->setWords(getString(L, i));
+		}
 		talk->fromLua = true;
 		pushUserdata<TalkAction>(L, talk);
 		setMetatable(L, -1, "TalkAction");
