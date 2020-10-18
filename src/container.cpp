@@ -638,6 +638,21 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 	return countMap;
 }
 
+ItemVector Container::getItems(bool recursive /*= false*/)
+{
+	ItemVector containerItems;
+	if (recursive) {
+		for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
+			containerItems.push_back(*it);
+		}
+	} else {
+		for (Item* item : itemlist) {
+			containerItems.push_back(item);
+		}
+	}
+	return containerItems;
+}
+
 Thing* Container::getThing(size_t index) const
 {
 	return getItemByIndex(index);

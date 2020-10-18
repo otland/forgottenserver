@@ -2159,6 +2159,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
 	registerMethod("Container", "getContentDescription", LuaScriptInterface::luaContainerGetContentDescription);
+	registerMethod("Container", "getItems", LuaScriptInterface::luaContainerGetItems);
 	registerMethod("Container", "getItemHoldingCount", LuaScriptInterface::luaContainerGetItemHoldingCount);
 	registerMethod("Container", "getItemCountById", LuaScriptInterface::luaContainerGetItemCountById);
 
@@ -6737,6 +6738,29 @@ int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
 		pushString(L, container->getContentDescription());
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaContainerGetItems(lua_State* L)
+{
+	// container:getItems([recursive = false])
+	Container* container = getUserdata<Container>(L, 1);
+	if (!container) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	bool recursive = getBoolean(L, 2, false);
+	std::vector<Item*> items = container->getItems(recursive);
+
+	lua_createtable(L, items.size(), 0);
+
+	int index = 0;
+	for (Item* item : items) {
+		pushUserdata(L, item);
+		setItemMetatable(L, -1, item);
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
