@@ -55,6 +55,7 @@ class ConfigManager
 			HOUSE_OWNED_BY_ACCOUNT,
 			CLEAN_PROTECTION_ZONES,
 			HOUSE_DOOR_SHOW_PRICE,
+			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
