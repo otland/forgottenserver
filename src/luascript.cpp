@@ -11728,7 +11728,7 @@ int LuaScriptInterface::luaItemTypeIsStoreItem(lua_State* L)
 	// itemType:isStoreItem()
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
-		pushBoolean(L, itemType->isStoreItem());
+		pushBoolean(L, itemType->storeItem);
 	} else {
 		lua_pushnil(L);
 	}
