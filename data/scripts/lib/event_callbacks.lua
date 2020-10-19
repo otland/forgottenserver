@@ -108,7 +108,7 @@ setmetatable(EventCallback,
         repeat
             result = {event(...)}
             key, event = next(EventCallbackData[callbackType], key)
-        until event == nil or (result ~= nil and (result == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) and result ~= RETURNVALUE_NOERROR))
+        until event == nil or (result[1] ~= nil and (result[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) and result[1] ~= RETURNVALUE_NOERROR))
         return unpack(result)
     end
 })
