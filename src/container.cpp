@@ -293,6 +293,11 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
+	// NOTE: dynamic_cast because DepotChest::queryAdd fallbacks to Container::queryAdd
+	if (item->isStoreItem() && !dynamic_cast<const DepotChest*>(this)) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	const Cylinder* cylinder = getParent();
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		while (cylinder) {

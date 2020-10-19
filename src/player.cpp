@@ -2284,6 +2284,10 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		return RETURNVALUE_CANNOTPICKUP;
 	}
 
+	if (item->isStoreItem()) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	ReturnValue ret = RETURNVALUE_NOERROR;
 
 	const int32_t& slotPosition = item->getSlotPosition();
