@@ -42,6 +42,11 @@ ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t
 		return RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
 	}
 
+	const Container* container = item->getContainer();
+	if (container && !container->empty()) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
