@@ -1,7 +1,17 @@
 function onUpdateDatabase()
 	print("> Updating database to version 26 (Better premium time handling)")
-	db.query("ALTER TABLE `accounts` DROP COLUMN `lastday`")
-	db.query("ALTER TABLE `accounts` CHANGE COLUMN `premdays` `premium_ends_at` int(11) NOT NULL DEFAULT 0");
-	db.query("UPDATE `accounts` SET `premium_ends_at` = `premium_ends_at` * 86400 + " .. os.time())
+	db.asyncQuery("ALTER TABLE `accounts` DROP COLUMN `lastday`")
+
+	local resultId = db.storeQuery("SELECT `premdays` FROM `accounts`")
+
+	db.query("ALTER TABLE `accounts` DROP COLUMN `premdays`")
+	db.query("ALTER TABLE `accounts` ADD COLUMN `premium_ends_at` datetime NOT NULL DEFAULT NOW() AFTER `type`")
+
+	if resultId then
+		repeat
+			local premDays = result.getNumber(resultId, "premdays")
+			db.asyncQuery("UPDATE `accounts` SET `premium_ends_at` = FROM_UNIXTIME("  .. premDays .. " * 86400 + " .. os.time() .. ")")
+		until not result.next(resultId)
+	end
 	return true
 end
