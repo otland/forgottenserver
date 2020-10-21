@@ -174,7 +174,11 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	if (tile) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				g_game.removeCreature((*creatures)[i]);
+				if (Player* player = (*creatures)[i]->getPlayer()) {
+					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
+				} else {
+					g_game.removeCreature((*creatures)[i]);
+				}
 			}
 		}
 
