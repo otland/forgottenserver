@@ -574,6 +574,8 @@ class LuaScriptInterface
 		// Tile
 		static int luaTileCreate(lua_State* L);
 
+		static int luaTileRemove(lua_State* L);
+
 		static int luaTileGetPosition(lua_State* L);
 		static int luaTileGetGround(lua_State* L);
 		static int luaTileGetThing(lua_State* L);
