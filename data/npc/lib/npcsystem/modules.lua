@@ -594,7 +594,7 @@ if Modules == nil then
 			end
 
 			local it = ItemType(itemid)
-			if it:getId() == 100 then
+			if it:getId() == 0 then
 				-- invalid item
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
 			else
@@ -665,7 +665,7 @@ if Modules == nil then
 			end
 
 			local it = ItemType(itemid)
-			if it:getId() == 100 then
+			if it:getId() == 0 then
 				-- invalid item
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
 			else
