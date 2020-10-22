@@ -29,6 +29,7 @@
 class Container;
 class DepotChest;
 class DepotLocker;
+class StoreInbox;
 
 class ContainerIterator
 {
@@ -72,6 +73,13 @@ class Container : public Item, public Cylinder
 			return nullptr;
 		}
 		virtual const DepotLocker* getDepotLocker() const {
+			return nullptr;
+		}
+
+		virtual StoreInbox* getStoreInbox() {
+			return nullptr;
+		}
+		virtual const StoreInbox* getStoreInbox() const {
 			return nullptr;
 		}
 

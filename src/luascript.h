@@ -717,6 +717,9 @@ class LuaScriptInterface
 		static int luaItemHasProperty(lua_State* L);
 		static int luaItemIsLoadedFromMap(lua_State* L);
 
+		static int luaItemSetStoreItem(lua_State* L);
+		static int luaItemIsStoreItem(lua_State* L);
+
 		// Container
 		static int luaContainerCreate(lua_State* L);
 
@@ -988,6 +991,8 @@ class LuaScriptInterface
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
 
+		static int luaPlayerGetStoreInbox(lua_State* L);
+
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
 
@@ -1172,6 +1177,8 @@ class LuaScriptInterface
 		static int luaItemTypeGetCorpseType(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
+
+		static int luaItemTypeIsStoreItem(lua_State* L);
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);
