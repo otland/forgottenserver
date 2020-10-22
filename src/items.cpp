@@ -823,18 +823,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_DURATION:
 				case ITEM_PARSE_DURATIONMIN: {
-					auto split = explodeString(valueAttribute.as_string(), ";");
-					if (split.size() == 2) {
-						it.decayTime = pugi::cast<uint32_t>(split[0].c_str());
-						uint32_t value = pugi::cast<uint32_t>(split[1].c_str());
-						if (it.decayTimeMax) {
-							std::cout << "[Warning - Items::parseItemNode] decayTimeMax is being overwritten to: " << value << std::endl;
-						}
-						it.decayTimeMax = value;
-					}
-					else {
-						it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
-					}
+					it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
 					break;
 				}
 
