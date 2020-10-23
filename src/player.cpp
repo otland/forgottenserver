@@ -3930,7 +3930,7 @@ bool Player::isPremium() const
 	return (premiumEndsAt - time(nullptr)) > 0;
 }
 
-void Player::setPremiumTime(int32_t time)
+void Player::setPremiumTime(uint32_t time)
 {
 	premiumEndsAt = time;
 	sendBasicData();
