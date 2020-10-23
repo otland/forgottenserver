@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `password` char(40) NOT NULL,
   `secret` char(16) DEFAULT NULL,
   `type` int(11) NOT NULL DEFAULT '1',
-  `premend` int(11) NOT NULL DEFAULT '0',
+  `premium_ends_at` int(11) NOT NULL DEFAULT '0',
   `email` varchar(255) NOT NULL DEFAULT '',
   `creation` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
