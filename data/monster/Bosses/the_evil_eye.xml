@@ -11,10 +11,11 @@
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="3" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
+		<flag isboss="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
@@ -65,15 +66,23 @@
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Inferior creatures, bow before my power!" />
+		<voice sentence="653768764!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="45" chance="100000" />
-		<item name="gold coin" countmax="90" chance="80000" />
-		<item name="war hammer" chance="1333" />
-		<item name="clerical mace" chance="5000" />
-		<item name="crystal mace" chance="1000" />
-		<item name="djinn blade" chance="800" />
-		<item name="worm" countmax="10" chance="50000" />
-		<item name="bonelord eye" chance="5000" />
+		<item name="bonelord eye" chance="100000" />
+		<item name="gold coin" countmax="29" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="small flask of eyedrops" chance="100000" />
+		<item name="morning star" chance="50000" />
+		<item name="steel shield" chance="50000" />
+		<item name="two handed sword" chance="34000" />
+		<item name="longsword" chance="23000" />
+		<item id="2175" chance="23000" /><!-- spellbook -->
+		<item name="great mana potion" chance="15000" />
+		<item name="bonelord shield" chance="11000" />
+		<item name="terra mantle" chance="11000" />
+		<item name="terra rod" chance="500" />
+		<item name="bonelord helmet" chance="100" />
 	</loot>
 </monster>

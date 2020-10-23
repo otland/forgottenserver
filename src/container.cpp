@@ -85,6 +85,11 @@ Container* Container::getParentContainer()
 	return thing->getContainer();
 }
 
+std::string Container::getName(bool addArticle /* = false*/) const {
+	const ItemType& it = items[id];
+	return getNameDescription(it, this, -1, addArticle);
+}
+
 bool Container::hasParent() const
 {
 	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
@@ -288,7 +293,22 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
+	// store items can be only moved into depot chest or store inbox
+	if (item->isStoreItem() && !dynamic_cast<const DepotChest*>(this)) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	const Cylinder* cylinder = getParent();
+
+	// don't allow moving items into container that is store item and is in store inbox
+	if (isStoreItem() && dynamic_cast<const StoreInbox*>(cylinder)) {
+		ReturnValue ret = RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		if (!item->isStoreItem()) {
+			ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
+		}
+		return ret;
+	}
+
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		while (cylinder) {
 			if (cylinder == &thing) {
@@ -347,18 +367,16 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
-					uint32_t remainder = (100 - containerItem->getItemCount());
-					if (queryAdd(slotIndex++, *item, remainder, flags) == RETURNVALUE_NOERROR) {
-						n += remainder;
+					if (queryAdd(slotIndex++, *item, count, flags) == RETURNVALUE_NOERROR) {
+						n += 100 - containerItem->getItemCount();
 					}
 				}
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
 			if (item->equals(destItem) && destItem->getItemCount() < 100) {
-				uint32_t remainder = 100 - destItem->getItemCount();
-				if (queryAdd(index, *item, remainder, flags) == RETURNVALUE_NOERROR) {
-					n = remainder;
+				if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) {
+					n = 100 - destItem->getItemCount();
 				}
 			}
 		}
@@ -376,7 +394,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -395,6 +413,12 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
+
+	const HouseTile* houseTile = dynamic_cast<const HouseTile*>(getTopParent());
+	if (houseTile) {
+		return houseTile->queryRemove(thing, count, flags, actor);
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -453,6 +477,10 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
+		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < 100) {
+			return this;
+		}
+
 		//try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
@@ -625,6 +653,21 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 		countMap[item->getID()] += item->getItemCount();
 	}
 	return countMap;
+}
+
+ItemVector Container::getItems(bool recursive /*= false*/)
+{
+	ItemVector containerItems;
+	if (recursive) {
+		for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
+			containerItems.push_back(*it);
+		}
+	} else {
+		for (Item* item : itemlist) {
+			containerItems.push_back(item);
+		}
+	}
+	return containerItems;
 }
 
 Thing* Container::getThing(size_t index) const

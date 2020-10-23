@@ -68,7 +68,7 @@
 		<item name="terra boots" chance="9510" />
 		<item name="great spirit potion" countmax="2" chance="29460" />
 		<item name="ultimate health potion" chance="24700" />
-		<item id="9810" chance="180" /><!-- rusty armor -->
+		<item id="9810" chance="180" /><!-- rusty armor (rare) -->
 		<item name="shiny stone" chance="860" />
 		<item name="guardian boots" chance="200" />
 		<item name="Zaoan armor" chance="870" />

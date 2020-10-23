@@ -238,7 +238,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 		}
 
 		if (canSeeNewPos && isSummon() && getMaster() == creature) {
-			isMasterInRange = true;    //Follow master again
+			isMasterInRange = true; //Follow master again
 		}
 
 		updateIdleStatus();
@@ -661,11 +661,11 @@ void Monster::setIdle(bool idle)
 void Monster::updateIdleStatus()
 {
 	bool idle = false;
-
-	if (conditions.empty()) {
-		if (!isSummon() && targetList.empty()) {
-			idle = true;
-		}
+	if (!isSummon() && targetList.empty()) {
+		// check if there are aggressive conditions
+		idle = std::find_if(conditions.begin(), conditions.end(), [](Condition* condition) {
+			return condition->isAggressive();
+		}) == conditions.end();
 	}
 
 	setIdle(idle);
@@ -774,11 +774,11 @@ void Monster::doAttacking(uint32_t interval)
 
 	for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
 		bool inRange = false;
-		
+
 		if (attackedCreature == nullptr) {
 			break;
 		}
-		
+
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
 				if (updateLook) {

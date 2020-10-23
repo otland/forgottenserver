@@ -24,7 +24,7 @@ for _, class in ipairs(classes) do
 			-- Strictly check if a correct callback is passed
 			if methodName:sub(1, 2) == "on" and type(value) == "function" and rawget(class, methodName) then
 				hasCallback = true
-			end 
+			end
 
 			if methodName ~= "register" then
 				local method = rawget(self, methodName)

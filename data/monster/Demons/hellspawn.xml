@@ -69,8 +69,8 @@
 		<item name="spiked squelcher" chance="970" />
 		<item name="great health potion" chance="40333" />
 		<item name="ultimate health potion" chance="9090" />
-		<item id="9809" chance="3125" /><!-- rusty armor -->
-		<item id="9810" chance="3125" /><!-- rusty armor -->
+		<item id="9809" chance="3125" /><!-- rusty armor (semi-rare) -->
+		<item id="9810" chance="3125" /><!-- rusty armor (rare) -->
 		<item id="9948" chance="140" /><!-- dracoyle statue -->
 		<item name="black skull" chance="151" />
 		<item name="small topaz" countmax="3" chance="5882" />

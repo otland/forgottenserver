@@ -158,6 +158,19 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	return accountId;
 }
 
+uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
+{
+	Database& db = Database::getInstance();
+
+	std::ostringstream query;
+	query << "SELECT `account_id` FROM `players` WHERE `name` = " << db.escapeString(playerName);
+	DBResult_ptr result = db.storeQuery(query.str());
+	if (!result) {
+		return 0;
+	}
+	return result->getNumber<uint32_t>("account_id");
+}
+
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
 	std::ostringstream query;
@@ -401,12 +414,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		Guild* guild = g_game.getGuild(guildId);
 		if (!guild) {
 			guild = IOGuild::loadGuild(guildId);
-			g_game.addGuild(guild);
+			if (guild) {
+				g_game.addGuild(guild);
+			} else {
+				std::cout << "[Warning - IOLoginData::loadPlayer] " << player->name << " has Guild ID " << guildId << " which doesn't exist" << std::endl;
+			}
 		}
 
 		if (guild) {
 			player->guild = guild;
-			const GuildRank* rank = guild->getRankById(playerRankId);
+			GuildRank_ptr rank = guild->getRankById(playerRankId);
 			if (!rank) {
 				query.str(std::string());
 				query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = " << playerRankId;
@@ -453,7 +470,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			const std::pair<Item*, int32_t>& pair = it->second;
 			Item* item = pair.first;
 			int32_t pid = pair.second;
-			if (pid >= 1 && pid <= 10) {
+			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
@@ -516,6 +533,36 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			if (pid >= 0 && pid < 100) {
 				player->getInbox()->internalAddThing(item);
+			} else {
+				ItemMap::const_iterator it2 = itemMap.find(pid);
+
+				if (it2 == itemMap.end()) {
+					continue;
+				}
+
+				Container* container = it2->second.first->getContainer();
+				if (container) {
+					container->internalAddThing(item);
+				}
+			}
+		}
+	}
+
+	//load store inbox items
+	itemMap.clear();
+
+	query.str(std::string());
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_storeinboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if ((result = db.storeQuery(query.str()))) {
+		loadItems(itemMap, result);
+
+		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
+			const std::pair<Item*, int32_t>& pair = it->second;
+			Item* item = pair.first;
+			int32_t pid = pair.second;
+
+			if (pid >= 0 && pid < 100) {
+				player->getStoreInbox()->internalAddThing(item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
 
@@ -772,7 +819,7 @@ bool IOLoginData::savePlayer(Player* player)
 	DBInsert itemsQuery("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 
 	ItemBlockList itemList;
-	for (int32_t slotId = 1; slotId <= 10; ++slotId) {
+	for (int32_t slotId = CONST_SLOT_FIRST; slotId <= CONST_SLOT_LAST; ++slotId) {
 		Item* item = player->inventory[slotId];
 		if (item) {
 			itemList.emplace_back(slotId, item);
@@ -822,6 +869,24 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!saveItems(player, itemList, inboxQuery, propWriteStream)) {
+		return false;
+	}
+
+	//save store inbox items
+	query.str(std::string());
+	query << "DELETE FROM `player_storeinboxitems` WHERE `player_id` = " << player->getGUID();
+	if (!db.executeQuery(query.str())) {
+		return false;
+	}
+
+	DBInsert storeInboxQuery("INSERT INTO `player_storeinboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	itemList.clear();
+
+	for (Item* item : player->getStoreInbox()->getItemList()) {
+		itemList.emplace_back(0, item);
+	}
+
+	if (!saveItems(player, itemList, storeInboxQuery, propWriteStream)) {
 		return false;
 	}
 

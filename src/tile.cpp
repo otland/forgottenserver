@@ -31,9 +31,11 @@
 #include "movement.h"
 #include "teleport.h"
 #include "trashholder.h"
+#include "configmanager.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
+extern ConfigManager g_config;
 
 StaticTile real_nullptr_tile(0xFFFF, 0xFFFF, 0xFF);
 Tile& Tile::nullptr_tile = real_nullptr_tile;
@@ -398,6 +400,12 @@ void Tile::onAddTileItem(Item* item)
 	for (Creature* spectator : spectators) {
 		spectator->onAddTileItem(this, cylinderMapPos);
 	}
+
+	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) && item->isCleanable()) {
+		if (!dynamic_cast<HouseTile*>(this)) {
+			g_game.addTileToClean(this);
+		}
+	}
 }
 
 void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType)
@@ -463,6 +471,26 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 	//event methods
 	for (Creature* spectator : spectators) {
 		spectator->onRemoveTileItem(this, cylinderMapPos, iType, item);
+	}
+
+	if (!hasFlag(TILESTATE_PROTECTIONZONE) || g_config.getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) {
+		auto items = getItemList();
+		if (!items || items->empty()) {
+			g_game.removeTileToClean(this);
+			return;
+		}
+
+		bool ret = false;
+		for (auto toCheck : *items) {
+			if (toCheck->isCleanable()) {
+				ret = true;
+				break;
+			}
+		}
+
+		if (!ret) {
+			g_game.removeTileToClean(this);
+		}
 	}
 }
 
@@ -631,6 +659,10 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			return RETURNVALUE_NOERROR;
 		}
 
+		if (item->isStoreItem()) {
+			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		}
+
 		bool itemIsHangable = item->isHangable();
 		if (ground == nullptr && !itemIsHangable) {
 			return RETURNVALUE_NOTPOSSIBLE;
@@ -700,7 +732,7 @@ ReturnValue Tile::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32_t&
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -808,7 +840,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 	if (destTile == nullptr) {
 		destTile = this;
 	} else {
-		flags |= FLAG_NOLIMIT;    //Will ignore that there is blocking items/creatures
+		flags |= FLAG_NOLIMIT; //Will ignore that there is blocking items/creatures
 	}
 
 	if (destTile) {

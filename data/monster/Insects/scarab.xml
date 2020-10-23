@@ -41,7 +41,7 @@
 		<immunity paralyze="1" />
 	</immunities>
 	<script>
-		<event name="ScarabDeath"/>
+		<event name="ScarabDeath" />
 	</script>
 	<loot>
 		<item name="gold coin" countmax="52" chance="87000" />

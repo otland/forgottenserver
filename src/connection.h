@@ -32,7 +32,7 @@ using Protocol_ptr = std::shared_ptr<Protocol>;
 class OutputMessage;
 using OutputMessage_ptr = std::shared_ptr<OutputMessage>;
 class Connection;
-using Connection_ptr = std::shared_ptr<Connection> ;
+using Connection_ptr = std::shared_ptr<Connection>;
 using ConnectionWeak_ptr = std::weak_ptr<Connection>;
 class ServiceBase;
 using Service_ptr = std::shared_ptr<ServiceBase>;
@@ -65,11 +65,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 		// non-copyable
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
-
-		enum ConnectionState_t {
-			CONNECTION_STATE_OPEN,
-			CONNECTION_STATE_CLOSED,
-		};
 
 		enum { FORCE_CLOSE = true };
 
@@ -126,7 +121,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 		time_t timeConnected;
 		uint32_t packetsSent = 0;
 
-		bool connectionState = CONNECTION_STATE_OPEN;
+		bool closed = false;
 		bool receivedFirst = false;
 };
 

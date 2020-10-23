@@ -7,8 +7,15 @@ function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid) 
 function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
 function onThink()                          npcHandler:onThink()                        end
 
+local voices = { {text = "Runes, wands, rods, health and mana potions! Have a look!"} }
+npcHandler:addModule(VoiceModule:new(voices))
+
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
+
+keywordHandler:addKeyword({'stuff'}, StdModule.say, {npcHandler = npcHandler, text = 'Just ask me for a {trade} to see my offers.'})
+keywordHandler:addAliasKeyword({'wares'})
+keywordHandler:addAliasKeyword({'offer'})
 
 shopModule:addBuyableItem({'spellbook'}, 2175, 150, 'spellbook')
 shopModule:addBuyableItem({'magic lightwand'}, 2163, 400, 'magic lightwand')
@@ -28,7 +35,7 @@ shopModule:addSellableItem({'normal potion flask', 'normal flask'}, 7636, 5, 'em
 shopModule:addSellableItem({'strong potion flask', 'strong flask'}, 7634, 10, 'empty strong potion flask')
 shopModule:addSellableItem({'great potion flask', 'great flask'}, 7635, 15, 'empty great potion flask')
 
-shopModule:addBuyableItem({'instense healing'}, 2265, 95, 1, 'intense healing rune')
+shopModule:addBuyableItem({'intense healing'}, 2265, 95, 1, 'intense healing rune')
 shopModule:addBuyableItem({'ultimate healing'}, 2273, 175, 1, 'ultimate healing rune')
 shopModule:addBuyableItem({'magic wall'}, 2293, 350, 3, 'magic wall rune')
 shopModule:addBuyableItem({'destroy field'}, 2261, 45, 3, 'destroy field rune')
@@ -37,12 +44,11 @@ shopModule:addBuyableItem({'heavy magic missile'}, 2311, 120, 10, 'heavy magic m
 shopModule:addBuyableItem({'great fireball'}, 2304, 180, 4, 'great fireball rune')
 shopModule:addBuyableItem({'explosion'}, 2313, 250, 6, 'explosion rune')
 shopModule:addBuyableItem({'sudden death'}, 2268, 350, 3, 'sudden death rune')
-shopModule:addBuyableItem({'death arrow'}, 2263, 300, 3, 'death arrow rune')
 shopModule:addBuyableItem({'paralyze'}, 2278, 700, 1, 'paralyze rune')
 shopModule:addBuyableItem({'animate dead'}, 2316, 375, 1, 'animate dead rune')
 shopModule:addBuyableItem({'convince creature'}, 2290, 80, 1, 'convince creature rune')
 shopModule:addBuyableItem({'chameleon'}, 2291, 210, 1, 'chameleon rune')
-shopModule:addBuyableItem({'desintegrate'}, 2310, 80, 3, 'desintegreate rune')
+shopModule:addBuyableItem({'disintegrate'}, 2310, 80, 3, 'disintegrate rune')
 
 shopModule:addBuyableItemContainer({'bp ap'}, 2002, 8378, 2000, 1, 'backpack of antidote potions')
 shopModule:addBuyableItemContainer({'bp slhp'}, 2000, 8610, 400, 1, 'backpack of small health potions')
@@ -108,8 +114,8 @@ function creatureSayCallback(cid, type, msg)
 
 	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
 		if table.contains({1, 2, 5, 6}, vocationId) then
-			if player:getStorageValue(30002) == -1 then
-				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your advanture?', cid)
+			if player:getStorageValue(PlayerStorageKeys.firstRod) == -1 then
+				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your adventure?', cid)
 				npcHandler.topic[cid] = 1
 			else
 				selfSay('What? I have already gave you one {' .. ItemType(items[vocationId]):getName() .. '}!', cid)

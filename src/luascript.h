@@ -20,11 +20,7 @@
 #ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 #define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
 #include <lua.hpp>
-#endif
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -439,7 +435,6 @@ class LuaScriptInterface
 
 		//lua functions
 		static int luaDoPlayerAddItem(lua_State* L);
-		static int luaDoSetCreatureLight(lua_State* L);
 
 		//get item info
 		static int luaGetDepotId(lua_State* L);
@@ -460,18 +455,8 @@ class LuaScriptInterface
 		//
 		static int luaCreateCombatArea(lua_State* L);
 
-		static int luaDoAreaCombatHealth(lua_State* L);
-		static int luaDoTargetCombatHealth(lua_State* L);
-
-		//
-		static int luaDoAreaCombatMana(lua_State* L);
-		static int luaDoTargetCombatMana(lua_State* L);
-
-		static int luaDoAreaCombatCondition(lua_State* L);
-		static int luaDoTargetCombatCondition(lua_State* L);
-
-		static int luaDoAreaCombatDispel(lua_State* L);
-		static int luaDoTargetCombatDispel(lua_State* L);
+		static int luaDoAreaCombat(lua_State* L);
+		static int luaDoTargetCombat(lua_State* L);
 
 		static int luaDoChallengeCreature(lua_State* L);
 
@@ -488,6 +473,8 @@ class LuaScriptInterface
 
 		static int luaSendChannelMessage(lua_State* L);
 		static int luaSendGuildChannelMessage(lua_State* L);
+
+		static int luaIsScriptsInterface(lua_State* L);
 
 #ifndef LUAJIT_VERSION
 		static int luaBitNot(lua_State* L);
@@ -539,6 +526,7 @@ class LuaScriptInterface
 		static int luaGameGetMonsterCount(lua_State* L);
 		static int luaGameGetPlayerCount(lua_State* L);
 		static int luaGameGetNpcCount(lua_State* L);
+		static int luaGameGetMonsterTypes(lua_State* L);
 
 		static int luaGameGetTowns(lua_State* L);
 		static int luaGameGetHouses(lua_State* L);
@@ -585,6 +573,8 @@ class LuaScriptInterface
 
 		// Tile
 		static int luaTileCreate(lua_State* L);
+
+		static int luaTileRemove(lua_State* L);
 
 		static int luaTileGetPosition(lua_State* L);
 		static int luaTileGetGround(lua_State* L);
@@ -727,6 +717,9 @@ class LuaScriptInterface
 		static int luaItemHasProperty(lua_State* L);
 		static int luaItemIsLoadedFromMap(lua_State* L);
 
+		static int luaItemSetStoreItem(lua_State* L);
+		static int luaItemIsStoreItem(lua_State* L);
+
 		// Container
 		static int luaContainerCreate(lua_State* L);
 
@@ -734,6 +727,7 @@ class LuaScriptInterface
 		static int luaContainerGetCapacity(lua_State* L);
 		static int luaContainerGetEmptySlots(lua_State* L);
 		static int luaContainerGetContentDescription(lua_State* L);
+		static int luaContainerGetItems(lua_State* L);
 		static int luaContainerGetItemHoldingCount(lua_State* L);
 		static int luaContainerGetItemCountById(lua_State* L);
 
@@ -742,7 +736,7 @@ class LuaScriptInterface
 		static int luaContainerAddItem(lua_State* L);
 		static int luaContainerAddItemEx(lua_State* L);
 		static int luaContainerGetCorpseOwner(lua_State* L);
-		
+
 		// Teleport
 		static int luaTeleportCreate(lua_State* L);
 
@@ -950,6 +944,7 @@ class LuaScriptInterface
 		static int luaPlayerRemoveOutfit(lua_State* L);
 		static int luaPlayerRemoveOutfitAddon(lua_State* L);
 		static int luaPlayerHasOutfit(lua_State* L);
+		static int luaPlayerCanWearOutfit(lua_State* L);
 		static int luaPlayerSendOutfitWindow(lua_State* L);
 
 		static int luaPlayerAddMount(lua_State* L);
@@ -995,6 +990,8 @@ class LuaScriptInterface
 		static int luaPlayerHasChaseMode(lua_State* L);
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
+
+		static int luaPlayerGetStoreInbox(lua_State* L);
 
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
@@ -1181,6 +1178,8 @@ class LuaScriptInterface
 
 		static int luaItemTypeHasSubType(lua_State* L);
 
+		static int luaItemTypeIsStoreItem(lua_State* L);
+
 		// Combat
 		static int luaCombatCreate(lua_State* L);
 
@@ -1226,6 +1225,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeIsHostile(lua_State* L);
 		static int luaMonsterTypeIsPushable(lua_State* L);
 		static int luaMonsterTypeIsHealthHidden(lua_State* L);
+		static int luaMonsterTypeIsBoss(lua_State* L);
 
 		static int luaMonsterTypeCanPushItems(lua_State* L);
 		static int luaMonsterTypeCanPushCreatures(lua_State* L);

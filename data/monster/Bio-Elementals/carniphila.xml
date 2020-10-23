@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="170">
+<monster name="Carniphila" nameDescription="a carniphila" race="venom" experience="150" speed="110">
 	<health now="255" max="255" />
 	<look type="120" corpse="6047" />
 	<targetchange interval="4000" chance="10" />
@@ -32,10 +32,10 @@
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="22" defense="22" />
 	<elements>
 		<element energyPercent="10" />
-		<element icePercent="35" />
+		<element icePercent="20" />
 		<element firePercent="-20" />
 	</elements>
 	<immunities>
@@ -43,13 +43,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="40" chance="60000" />
-		<item name="corncob" chance="890" />
-		<item name="dark mushroom" chance="7692" />
-		<item name="sling herb" countmax="2" chance="446" />
-		<item name="shadow herb" chance="880" />
-		<item name="seeds" chance="490" />
-		<item name="carniphila seeds" chance="4166" />
-		<item name="carrot on a stick" chance="170" />
+		<item name="gold coin" countmax="40" chance="87000" />
+		<item name="dark mushroom" chance="8000" />
+		<item name="carniphila seeds" chance="4000" />
+		<item name="shadow herb" chance="1000" />
+		<item name="corncob" chance="1000" />
+		<item name="sling herb" countmax="2" chance="500" />
+		<item name="seeds" chance="500" />
+		<item name="carrot on a stick" chance="150" />
 	</loot>
 </monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Elf Arcanist" nameDescription="an elf arcanist" race="blood" experience="175" speed="170">
+<monster name="Elf Arcanist" nameDescription="an elf arcanist" race="blood" experience="175" speed="220">
 	<health now="220" max="220" />
 	<look type="63" corpse="6011" />
 	<targetchange interval="4000" chance="10" />
@@ -30,7 +30,6 @@
 		</attack>
 		<attack name="death" interval="2000" chance="10" range="7" min="-70" max="-85">
 			<attribute key="shootEffect" value="suddendeath" />
-			<attribute key="areaEffect" value="smallclouds" />
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 	</attacks>
@@ -56,26 +55,26 @@
 		<voice sentence="Vihil Ealuel!" />
 	</voices>
 	<loot>
-		<item id="1949" chance="31000" /><!-- scroll -->
-		<item name="candlestick" chance="2100" />
 		<item name="gold coin" countmax="47" chance="37000" />
-		<item name="yellow gem" chance="50" />
-		<item name="life crystal" chance="970" />
-		<item name="wand of cosmic energy" chance="1160" />
-		<item name="elven amulet" chance="1999" />
-		<item name="blank rune" chance="18000" />
-		<item name="arrow" countmax="3" chance="6000" />
-		<item name="inkwell" chance="1000" />
-		<item name="sandals" chance="950" />
-		<item name="green tunic" chance="7000" />
+		<item id="1949" chance="31000" /><!-- scroll -->
 		<item name="melon" chance="22000" />
+		<item name="blank rune" chance="18000" />
 		<item name="bread" chance="14000" />
-		<item name="grave flower" chance="880" />
-		<item name="sling herb" chance="5000" />
-		<item name="holy orchid" chance="2100" />
-		<item name="strong mana potion" chance="3000" />
-		<item name="health potion" chance="4000" />
 		<item name="elvish talisman" chance="10000" />
 		<item name="elven astral observer" chance="7710" />
+		<item name="green tunic" chance="7000" />
+		<item name="arrow" countmax="3" chance="6000" />
+		<item name="sling herb" chance="5000" />
+		<item name="health potion" chance="4000" />
+		<item name="strong mana potion" chance="3000" />
+		<item name="candlestick" chance="2100" />
+		<item name="elven amulet" chance="2000" />
+		<item name="holy orchid" chance="2000" />
+		<item name="wand of cosmic energy" chance="1160" />
+		<item name="life crystal" chance="970" />
+		<item name="inkwell" chance="1000" />
+		<item name="sandals" chance="950" />
+		<item name="grave flower" chance="880" />
+		<item name="yellow gem" chance="50" />
 	</loot>
 </monster>
