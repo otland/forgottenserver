@@ -9412,13 +9412,7 @@ int LuaScriptInterface::luaPlayerAddPremiumTime(lua_State* L)
 		return 1;
 	}
 
-	int32_t seconds = getNumber<int32_t>(L, 2);
-	if (seconds < 0) {
-		reportErrorFunc("Value argument cannot be negative.");
-		lua_pushnil(L);
-		return 1;
-	}
-
+	uint32_t seconds = getNumber<uint32_t>(L, 2);
 	int32_t oldTime = std::max<int32_t>(0, player->premiumEndsAt - time(nullptr));
 	player->setPremiumTime(time(nullptr) + oldTime + seconds);
 	IOLoginData::updatePremiumTime(player->getAccount(), player->premiumEndsAt);
@@ -9435,13 +9429,7 @@ int LuaScriptInterface::luaPlayerRemovePremiumTime(lua_State* L)
 		return 1;
 	}
 
-	int32_t seconds = getNumber<int32_t>(L, 2);
-	if (seconds < 0) {
-		reportErrorFunc("Value argument cannot be negative.");
-		lua_pushnil(L);
-		return 1;
-	}
-
+	uint32_t seconds = getNumber<uint32_t>(L, 2);
 	int32_t oldTime = std::max<int32_t>(0, player->premiumEndsAt - time(nullptr));
 	if (oldTime < seconds) {
 		player->setPremiumTime(0);

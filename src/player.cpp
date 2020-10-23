@@ -3976,7 +3976,7 @@ bool Player::isPremium() const
 		return true;
 	}
 
-	return (premiumEndsAt - time(nullptr)) > 0;
+	return premiumEndsAt > time(nullptr);
 }
 
 void Player::setPremiumTime(uint32_t time)

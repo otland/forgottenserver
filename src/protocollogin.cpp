@@ -121,7 +121,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(1);
 		output->add<uint32_t>(0);
 	} else {
-		output->addByte((account.premiumEndsAt - time(nullptr)) > 0 ? 1 : 0);
+		output->addByte(account.premiumEndsAt > time(nullptr) ? 1 : 0);
 		output->add<uint32_t>(account.premiumEndsAt);
 	}
 
