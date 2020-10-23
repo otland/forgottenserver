@@ -43,6 +43,7 @@ enum slots_t : uint8_t {
 	CONST_SLOT_FEET = 8,
 	CONST_SLOT_RING = 9,
 	CONST_SLOT_AMMO = 10,
+	CONST_SLOT_STORE_INBOX = 11,
 
 	CONST_SLOT_FIRST = CONST_SLOT_HEAD,
 	CONST_SLOT_LAST = CONST_SLOT_AMMO,
@@ -353,7 +354,7 @@ class Creature : virtual public Thing
 		virtual void onEndCondition(ConditionType_t type);
 		void onTickCondition(ConditionType_t type, bool& bRemove);
 		virtual void onCombatRemoveCondition(Condition* condition);
-		virtual void onAttackedCreature(Creature*) {}
+		virtual void onAttackedCreature(Creature*, bool = true) {}
 		virtual void onAttacked();
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 		virtual void onTargetCreatureGainHealth(Creature*, int32_t) {}

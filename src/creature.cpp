@@ -1478,7 +1478,7 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 		if (!creatureEvent->isLoaded()) {
 			continue;
 		}
-		
+
 		if (creatureEvent->getEventType() == type) {
 			tmpEventList.push_back(creatureEvent);
 		}

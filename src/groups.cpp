@@ -57,7 +57,6 @@ const std::unordered_map<std::string, PlayerFlags> ParsePlayerFlagMap = {
 	{"setmaxspeed", PlayerFlag_SetMaxSpeed},
 	{"specialvip", PlayerFlag_SpecialVIP},
 	{"notgenerateloot", PlayerFlag_NotGenerateLoot},
-	{"cantalkredchannelanonymous", PlayerFlag_CanTalkRedChannelAnonymous},
 	{"ignoreprotectionzone", PlayerFlag_IgnoreProtectionZone},
 	{"ignorespellcheck", PlayerFlag_IgnoreSpellCheck},
 	{"ignoreweaponcheck", PlayerFlag_IgnoreWeaponCheck},
@@ -85,7 +84,7 @@ bool Groups::load()
 		if (pugi::xml_node node = groupNode.child("flags")) {
 			for (auto flagNode : node.children()) {
 				pugi::xml_attribute attr = flagNode.first_attribute();
-				if (!attr || (attr && !attr.as_bool())) {
+				if (!attr || !attr.as_bool()) {
 					continue;
 				}
 
@@ -95,7 +94,7 @@ bool Groups::load()
 				}
 			}
 		}
-		
+
 		groups.push_back(group);
 	}
 	return true;

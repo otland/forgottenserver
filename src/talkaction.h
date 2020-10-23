@@ -40,11 +40,11 @@ class TalkAction : public Event
 
 		bool configureEvent(const pugi::xml_node& node) override;
 
-		const std::string& getWords() const {
+		std::vector<std::string> getWords() const {
 			return words;
 		}
 		void setWords(std::string word) {
-			words = word;
+			words.push_back(word);
 		}
 		std::string getSeparator() const {
 			return separator;
@@ -54,13 +54,13 @@ class TalkAction : public Event
 		}
 
 		//scripting
-		bool executeSay(Player* player, const std::string& param, SpeakClasses type) const;
+		bool executeSay(Player* player, const std::string& word, const std::string& param, SpeakClasses type) const;
 		//
 
 	private:
 		std::string getScriptEventName() const override;
 
-		std::string words;
+		std::vector<std::string> words;
 		std::string separator = "\"";
 };
 

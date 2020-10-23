@@ -311,6 +311,11 @@ setCombatCondition = function(...)
 	Combat.addCondition(...)
 end
 
+function doTargetCombatHealth(...) return doTargetCombat(...) end
+function doAreaCombatHealth(...) return doAreaCombat(...) end
+function doTargetCombatMana(cid, target, min, max, effect) return doTargetCombat(cid, target, COMBAT_MANADRAIN, min, max, effect) end
+function doAreaCombatMana(cid, pos, area, min, max, effect) return doAreaCombat(cid, COMBAT_MANADRAIN, pos, area, min, max, effect) end
+
 createConditionObject = Condition
 setConditionParam = Condition.setParameter
 setConditionFormula = Condition.setFormula
@@ -1307,3 +1312,24 @@ end
 function doPlayerTakeItem(cid, itemid, count)
 	return Player(cid):removeItem(itemid, count)
 end
+
+function isNumber(str)
+	return tonumber(str) ~= nil
+end
+
+function doSetCreatureLight(cid, lightLevel, lightColor, time)
+	local creature = Creature(cid)
+	if not creature then
+		return false
+	end
+
+	local condition = Condition(CONDITION_LIGHT)
+	condition:setParameter(CONDITION_PARAM_LIGHT_LEVEL, lightLevel)
+	condition:setParameter(CONDITION_PARAM_LIGHT_COLOR, lightColor)
+	condition:setTicks(time)
+	creature:addCondition(condition)
+	return true
+end
+
+-- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
+if unpack == nil then unpack = table.unpack end

@@ -19,8 +19,11 @@ local fluidMessage = {
 	[13] = "Urgh!",
 	[15] = "Aah...",
 	[19] = "Urgh!",
+	[27] = "Aah...",
 	[43] = "Aaaah..."
 }
+
+local distillery = {[5513] = 5469, [5514] = 5470}
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target.itemid)
@@ -61,6 +64,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		local fluidSource = targetItemType and targetItemType:getFluidSource() or 0
 		if fluidSource ~= 0 then
 			item:transform(item:getId(), fluidSource)
+		elseif table.contains(distillery, target.itemid) then
+			local tmp = distillery[target.itemid]
+			if tmp then
+				item:transform(item:getId(), 0)
+			else
+				player:sendCancelMessage("You have to process the bunch into the distillery to get rum.")
+			end
 		elseif item.type == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		else

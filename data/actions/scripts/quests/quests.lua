@@ -19,24 +19,25 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				else
 					player:addItem(item.uid, 1)
 				end
-				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. '.')
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. '.')
 				player:setStorageValue(PlayerStorageKeys.annihilatorReward, 1)
+				player:addAchievement("Annihilator")
 			else
-				player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 			end
 		else
-			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is empty.")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is empty.")
 		end
 	elseif player:getStorageValue(item.uid) == -1 then
 		if playerCap >= itemWeight then
-			player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. '.')
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. '.')
 			player:addItem(item.uid, 1)
 			player:setStorageValue(item.uid, 1)
 		else
-			player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 		end
 	else
-		player:sendTextMessage(MESSAGE_INFO_DESCR, "It is empty.")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is empty.")
 	end
 	return true
 end

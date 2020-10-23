@@ -210,6 +210,14 @@ class Map
 		}
 
 		/**
+		  * Removes a single tile.
+		  */
+		void removeTile(uint16_t x, uint16_t y, uint8_t z);
+		void removeTile(const Position& pos) {
+			removeTile(pos.x, pos.y, pos.z);
+		}
+
+		/**
 		  * Place a creature on the map
 		  * \param centerPos The position to place the creature
 		  * \param creature Creature to place on the map

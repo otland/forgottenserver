@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="180">
+<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="152">
 	<health now="80" max="80" />
 	<look type="216" corpse="6059" />
 	<targetchange interval="4000" chance="0" />
@@ -8,7 +8,7 @@
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
@@ -24,11 +24,11 @@
 			<attribute key="shooteffect" value="poison" />
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="3" defense="3" />
 	<elements>
-		<element holyPercent="20" />
-		<element firePercent="-15" />
-		<element deathPercent="-10" />
+		<element holyPercent="15" />
+		<element firePercent="-13" />
+		<element deathPercent="-8" />
 		<element icePercent="-13" />
 	</elements>
 	<immunities>
@@ -40,16 +40,16 @@
 		<voice sentence="Prek tars, dekklep zurk." />
 	</voices>
 	<loot>
-		<item id="2050" chance="6000" /><!-- torch -->
 		<item name="gold coin" countmax="13" chance="75000" />
-		<item name="bronze amulet" chance="110" />
-		<item id="2229" countmax="2" chance="1000" /><!-- skull -->
-		<item name="throwing star" countmax="2" chance="8000" />
-		<item name="poison dagger" chance="1500" />
 		<item name="leather armor" chance="10000" />
+		<item name="throwing knife" countmax="2" chance="8000" />
+		<item id="2050" chance="5400" /><!-- torch -->
 		<item name="poison arrow" countmax="3" chance="5000" />
+		<item name="poison dagger" chance="1500" />
+		<item id="2229" countmax="2" chance="1000" /><!-- skull -->
 		<item name="tribal mask" chance="510" />
-		<item name="bast skirt" chance="100" />
 		<item name="seeds" chance="200" />
+		<item name="bast skirt" chance="100" />
+		<item name="bronze amulet" chance="100" />
 	</loot>
 </monster>
