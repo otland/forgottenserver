@@ -31,7 +31,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	Account account;
 
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `type`, UNIX_TIMESTAMP(`premium_ends_at`) AS `premium_ends_at` FROM `accounts` WHERE `id` = " << accno;
+	query << "SELECT `id`, `name`, `password`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = " << accno;
 	DBResult_ptr result = Database::getInstance().storeQuery(query.str());
 	if (!result) {
 		return account;
@@ -47,7 +47,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 bool IOLoginData::saveAccount(const Account& acc)
 {
 	std::ostringstream query;
-	query << "UPDATE `accounts` SET `premium_ends_at` = FROM_UNIXTIME(" << acc.premiumEndsAt << ") WHERE `id` = " << acc.id;
+	query << "UPDATE `accounts` SET `premium_ends_at` = " << acc.premiumEndsAt << " WHERE `id` = " << acc.id;
 	return Database::getInstance().executeQuery(query.str());
 }
 
@@ -85,7 +85,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `name`, `password`, `secret`, `type`, UNIX_TIMESTAMP(`premium_ends_at`) AS premium_ends_at FROM `accounts` WHERE `name` = " << db.escapeString(name);
+	query << "SELECT `id`, `name`, `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = " << db.escapeString(name);
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -198,7 +198,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	std::ostringstream query;
 	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		query << ", (SELECT UNIX_TIMESTAMP(`premium_ends_at`) FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premiumEnd`";
+		query << ", (SELECT `premium_ends_at` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premiumEnd`";
 	}
 	query << " FROM `players` WHERE `name` = " << db.escapeString(name);
 	DBResult_ptr result = db.storeQuery(query.str());
