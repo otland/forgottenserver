@@ -290,7 +290,6 @@ class LuaScriptInterface
 				std::ostringstream ss;
 				ss << "Passed argument " << arg << " has invalid value" << std::endl;
 				reportErrorFunc(ss.str());
-				return 0;
 			}
 
 			return static_cast<T>(luaNum);
@@ -305,7 +304,6 @@ class LuaScriptInterface
 				std::ostringstream ss;
 				ss << "Passed argument " << arg << " has invalid value" << std::endl;
 				reportErrorFunc(ss.str());
-				return 0;
 			}
 
 			return static_cast<T>(luaNum);
