@@ -788,7 +788,7 @@ void ProtocolGame::parseToggleMount(NetworkMessage& msg)
 
 void ProtocolGame::parseUseItem(NetworkMessage& msg)
 {
-	Position pos = msg.getPosition();
+	const Position& pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
 	uint8_t index = msg.getByte();
@@ -797,10 +797,10 @@ void ProtocolGame::parseUseItem(NetworkMessage& msg)
 
 void ProtocolGame::parseUseItemEx(NetworkMessage& msg)
 {
-	Position fromPos = msg.getPosition();
+	const Position& fromPos = msg.getPosition();
 	uint16_t fromSpriteId = msg.get<uint16_t>();
 	uint8_t fromStackPos = msg.getByte();
-	Position toPos = msg.getPosition();
+	const Position& toPos = msg.getPosition();
 	uint16_t toSpriteId = msg.get<uint16_t>();
 	uint8_t toStackPos = msg.getByte();
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerUseItemEx, player->getID(), fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
@@ -808,7 +808,7 @@ void ProtocolGame::parseUseItemEx(NetworkMessage& msg)
 
 void ProtocolGame::parseUseWithCreature(NetworkMessage& msg)
 {
-	Position fromPos = msg.getPosition();
+	const Position& fromPos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t fromStackPos = msg.getByte();
 	uint32_t creatureId = msg.get<uint32_t>();
@@ -835,10 +835,10 @@ void ProtocolGame::parseUpdateContainer(NetworkMessage& msg)
 
 void ProtocolGame::parseThrow(NetworkMessage& msg)
 {
-	Position fromPos = msg.getPosition();
+	const Position& fromPos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t fromStackpos = msg.getByte();
-	Position toPos = msg.getPosition();
+	const Position& toPos = msg.getPosition();
 	uint8_t count = msg.getByte();
 
 	if (toPos != fromPos) {
@@ -848,7 +848,7 @@ void ProtocolGame::parseThrow(NetworkMessage& msg)
 
 void ProtocolGame::parseLookAt(NetworkMessage& msg)
 {
-	Position pos = msg.getPosition();
+	const Position& pos = msg.getPosition();
 	msg.skipBytes(2); // spriteId
 	uint8_t stackpos = msg.getByte();
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerLookAt, player->getID(), pos, stackpos);
@@ -949,7 +949,7 @@ void ProtocolGame::parseHouseWindow(NetworkMessage& msg)
 
 void ProtocolGame::parseWrapItem(NetworkMessage& msg)
 {
-	Position pos = msg.getPosition();
+	const Position& pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerWrapItem, player->getID(), pos, stackpos, spriteId);
@@ -983,7 +983,7 @@ void ProtocolGame::parsePlayerSale(NetworkMessage& msg)
 
 void ProtocolGame::parseRequestTrade(NetworkMessage& msg)
 {
-	Position pos = msg.getPosition();
+	const Position& pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
 	uint32_t playerId = msg.get<uint32_t>();
@@ -1020,7 +1020,7 @@ void ProtocolGame::parseEditVip(NetworkMessage& msg)
 
 void ProtocolGame::parseRotateItem(NetworkMessage& msg)
 {
-	Position pos = msg.getPosition();
+	const Position& pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRotateItem, player->getID(), pos, stackpos, spriteId);
