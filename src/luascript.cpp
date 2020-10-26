@@ -790,8 +790,8 @@ Outfit LuaScriptInterface::getOutfitClass(lua_State* L, int32_t arg)
 {
 	uint16_t lookType = getField<uint16_t>(L, arg, "lookType");
 	const std::string& name = getFieldString(L, arg, "name");
-	bool premium = getField<uint8_t>(L, arg, "premium") == 1 ? true : false;
-	bool unlocked = getField<uint8_t>(L, arg, "unlocked") == 1 ? true : false;
+	bool premium = getField<uint8_t>(L, arg, "premium") == 1;
+	bool unlocked = getField<uint8_t>(L, arg, "unlocked") == 1;
 	lua_pop(L, 4);
 	return Outfit(name, lookType, premium, unlocked);
 }
