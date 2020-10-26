@@ -28,7 +28,7 @@ struct Outfit {
 
 	bool operator==(const Outfit& otherOutfit) const
 	{
-		return (name == otherOutfit.name) && (lookType == otherOutfit.lookType) && (premium == otherOutfit.premium) && (unlocked == otherOutfit.unlocked);
+		return name == otherOutfit.name && lookType == otherOutfit.lookType && premium == otherOutfit.premium && unlocked == otherOutfit.unlocked;
 	}
 
 	std::string name;
