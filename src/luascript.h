@@ -474,6 +474,8 @@ class LuaScriptInterface
 		static int luaSendChannelMessage(lua_State* L);
 		static int luaSendGuildChannelMessage(lua_State* L);
 
+		static int luaIsScriptsInterface(lua_State* L);
+
 #ifndef LUAJIT_VERSION
 		static int luaBitNot(lua_State* L);
 		static int luaBitAnd(lua_State* L);
@@ -571,6 +573,8 @@ class LuaScriptInterface
 
 		// Tile
 		static int luaTileCreate(lua_State* L);
+
+		static int luaTileRemove(lua_State* L);
 
 		static int luaTileGetPosition(lua_State* L);
 		static int luaTileGetGround(lua_State* L);
@@ -713,6 +717,9 @@ class LuaScriptInterface
 		static int luaItemHasProperty(lua_State* L);
 		static int luaItemIsLoadedFromMap(lua_State* L);
 
+		static int luaItemSetStoreItem(lua_State* L);
+		static int luaItemIsStoreItem(lua_State* L);
+
 		// Container
 		static int luaContainerCreate(lua_State* L);
 
@@ -720,6 +727,7 @@ class LuaScriptInterface
 		static int luaContainerGetCapacity(lua_State* L);
 		static int luaContainerGetEmptySlots(lua_State* L);
 		static int luaContainerGetContentDescription(lua_State* L);
+		static int luaContainerGetItems(lua_State* L);
 		static int luaContainerGetItemHoldingCount(lua_State* L);
 		static int luaContainerGetItemCountById(lua_State* L);
 
@@ -983,6 +991,8 @@ class LuaScriptInterface
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
 
+		static int luaPlayerGetStoreInbox(lua_State* L);
+
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
 
@@ -1167,6 +1177,8 @@ class LuaScriptInterface
 		static int luaItemTypeGetCorpseType(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
+
+		static int luaItemTypeIsStoreItem(lua_State* L);
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);

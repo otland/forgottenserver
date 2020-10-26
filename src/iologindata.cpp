@@ -496,10 +496,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
-	if (!player->inventory[CONST_SLOT_STORE_INBOX]) {
-		player->internalAddThing(CONST_SLOT_STORE_INBOX, Item::CreateItem(ITEM_STORE_INBOX));
-	}
-
 	//load depot items
 	itemMap.clear();
 
@@ -547,6 +543,36 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			if (pid >= 0 && pid < 100) {
 				player->getInbox()->internalAddThing(item);
+			} else {
+				ItemMap::const_iterator it2 = itemMap.find(pid);
+
+				if (it2 == itemMap.end()) {
+					continue;
+				}
+
+				Container* container = it2->second.first->getContainer();
+				if (container) {
+					container->internalAddThing(item);
+				}
+			}
+		}
+	}
+
+	//load store inbox items
+	itemMap.clear();
+
+	query.str(std::string());
+	query << "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_storeinboxitems` WHERE `player_id` = " << player->getGUID() << " ORDER BY `sid` DESC";
+	if ((result = db.storeQuery(query.str()))) {
+		loadItems(itemMap, result);
+
+		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
+			const std::pair<Item*, int32_t>& pair = it->second;
+			Item* item = pair.first;
+			int32_t pid = pair.second;
+
+			if (pid >= 0 && pid < 100) {
+				player->getStoreInbox()->internalAddThing(item);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
 
@@ -853,6 +879,24 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!saveItems(player, itemList, inboxQuery, propWriteStream)) {
+		return false;
+	}
+
+	//save store inbox items
+	query.str(std::string());
+	query << "DELETE FROM `player_storeinboxitems` WHERE `player_id` = " << player->getGUID();
+	if (!db.executeQuery(query.str())) {
+		return false;
+	}
+
+	DBInsert storeInboxQuery("INSERT INTO `player_storeinboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
+	itemList.clear();
+
+	for (Item* item : player->getStoreInbox()->getItemList()) {
+		itemList.emplace_back(0, item);
+	}
+
+	if (!saveItems(player, itemList, storeInboxQuery, propWriteStream)) {
 		return false;
 	}
 

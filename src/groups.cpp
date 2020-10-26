@@ -84,7 +84,7 @@ bool Groups::load()
 		if (pugi::xml_node node = groupNode.child("flags")) {
 			for (auto flagNode : node.children()) {
 				pugi::xml_attribute attr = flagNode.first_attribute();
-				if (!attr || (attr && !attr.as_bool())) {
+				if (!attr || !attr.as_bool()) {
 					continue;
 				}
 

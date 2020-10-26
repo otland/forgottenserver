@@ -17,41 +17,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_TRASHHOLDER_H_BA162024D67B4D388147F5EE06F33098
-#define FS_TRASHHOLDER_H_BA162024D67B4D388147F5EE06F33098
+#ifndef FS_STOREINBOX_H_074FB99DD3FEDB823AAD2D2CD6F10119
+#define FS_STOREINBOX_H_074FB99DD3FEDB823AAD2D2CD6F10119
 
-#include "item.h"
-#include "cylinder.h"
-#include "const.h"
+#include "container.h"
 
-class TrashHolder final : public Item, public Cylinder
+class StoreInbox final : public Container
 {
 	public:
-		explicit TrashHolder(uint16_t itemId) : Item(itemId) {}
+		explicit StoreInbox(uint16_t type);
 
-		TrashHolder* getTrashHolder() override {
+		StoreInbox* getStoreInbox() override {
 			return this;
 		}
-		const TrashHolder* getTrashHolder() const override {
+		const StoreInbox* getStoreInbox() const override {
 			return this;
 		}
 
 		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
-		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags) const override;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
-		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
-
-		void addThing(Thing* thing) override;
-		void addThing(int32_t index, Thing* thing) override;
-
-		void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
-		void replaceThing(uint32_t index, Thing* thing) override;
-
-		void removeThing(Thing* thing, uint32_t count) override;
+		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
+			uint32_t flags, Creature* actor = nullptr) const override;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
+
+		bool canRemove() const override {
+			return false;
+		}
 };
 
 #endif

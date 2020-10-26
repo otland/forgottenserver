@@ -1430,3 +1430,6 @@ end
 function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel)
 	return Player(cid):sendChannelMessage(author, message, SpeakClasses, channel)
 end
+
+-- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
+if unpack == nil then unpack = table.unpack end

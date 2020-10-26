@@ -36,6 +36,7 @@
 #include "groups.h"
 #include "town.h"
 #include "mounts.h"
+#include "storeinbox.h"
 
 class House;
 class NetworkMessage;
@@ -247,6 +248,10 @@ class Player final : public Creature, public Cylinder
 
 		Inbox* getInbox() const {
 			return inbox;
+		}
+
+		StoreInbox* getStoreInbox() const {
+			return storeInbox;
 		}
 
 		uint16_t getClientIcons() const;
@@ -1168,7 +1173,7 @@ class Player final : public Creature, public Cylinder
 				uint32_t flags, Creature* actor = nullptr) const override;
 		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 				uint32_t flags) const override;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const override;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 				uint32_t& flags) override;
 
@@ -1248,6 +1253,7 @@ class Player final : public Creature, public Cylinder
 		SchedulerTask* walkTask = nullptr;
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;
+		StoreInbox* storeInbox = nullptr;
 
 		uint32_t inventoryWeight = 0;
 		uint32_t capacity = 40000;
