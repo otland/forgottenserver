@@ -36,6 +36,7 @@
 #include "enums.h"
 #include "position.h"
 #include <boost/lexical_cast.hpp>
+#include "outfit.h"
 
 class Thing;
 class Creature;
@@ -327,6 +328,7 @@ class LuaScriptInterface
 		static Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
 		static Position getPosition(lua_State* L, int32_t arg);
 		static Outfit_t getOutfit(lua_State* L, int32_t arg);
+		static Outfit getOutfitClass(lua_State* L, int32_t arg);
 		static LuaVariant getVariant(lua_State* L, int32_t arg);
 		static InstantSpell* getInstantSpell(lua_State* L, int32_t arg);
 
@@ -377,6 +379,7 @@ class LuaScriptInterface
 		static void pushInstantSpell(lua_State* L, const InstantSpell& spell);
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
+		static void pushOutfit(lua_State* L, const Outfit* outfit);
 		static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList);
 
 		//
@@ -1214,6 +1217,10 @@ class LuaScriptInterface
 		static int luaConditionSetOutfit(lua_State* L);
 
 		static int luaConditionAddDamage(lua_State* L);
+
+		// Outfit
+		static int luaOutfitCreate(lua_State* L);
+		static int luaOutfitCompare(lua_State* L);
 
 		// MonsterType
 		static int luaMonsterTypeCreate(lua_State* L);

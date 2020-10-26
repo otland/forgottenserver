@@ -786,6 +786,16 @@ Outfit_t LuaScriptInterface::getOutfit(lua_State* L, int32_t arg)
 	return outfit;
 }
 
+Outfit LuaScriptInterface::getOutfitClass(lua_State* L, int32_t arg)
+{
+	uint16_t lookType = getField<uint16_t>(L, arg, "lookType");
+	const std::string& name = getFieldString(L, arg, "name");
+	bool premium = getField<uint8_t>(L, arg, "premium") == 1 ? true : false;
+	bool unlocked = getField<uint8_t>(L, arg, "unlocked") == 1 ? true : false;
+	lua_pop(L, 4);
+	return Outfit(name, lookType, premium, unlocked);
+}
+
 LuaVariant LuaScriptInterface::getVariant(lua_State* L, int32_t arg)
 {
 	LuaVariant var;
@@ -948,6 +958,16 @@ void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 	setField(L, "lookFeet", outfit.lookFeet);
 	setField(L, "lookAddons", outfit.lookAddons);
 	setField(L, "lookMount", outfit.lookMount);
+}
+
+void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit* outfit)
+{
+	lua_createtable(L, 0, 4);
+	setField(L, "lookType", outfit->lookType);
+	setField(L, "name", outfit->name);
+	setField(L, "premium", outfit->premium);
+	setField(L, "unlocked", outfit->unlocked);
+	setMetatable(L, -1, "Outfit");
 }
 
 void LuaScriptInterface::pushLoot(lua_State* L, const std::vector<LootBlock>& lootList)
@@ -2667,6 +2687,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Condition", "setOutfit", LuaScriptInterface::luaConditionSetOutfit);
 
 	registerMethod("Condition", "addDamage", LuaScriptInterface::luaConditionAddDamage);
+
+	// Outfit
+	registerClass("Outfit", "", LuaScriptInterface::luaOutfitCreate);
+	registerMetaMethod("Outfit", "__eq", LuaScriptInterface::luaOutfitCompare);
 
 	// MonsterType
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
@@ -12213,6 +12237,28 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+// Outfit
+int LuaScriptInterface::luaOutfitCreate(lua_State* L)
+{
+	// Outfit(looktype)
+	const Outfit* outfit = Outfits::getInstance().getOutfitByLookType(getNumber<uint16_t>(L, 2));
+	if (outfit) {
+		pushOutfit(L, outfit);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaOutfitCompare(lua_State* L)
+{
+	// outfit == outfitEx
+	Outfit outfitEx = getOutfitClass(L, 2);
+	Outfit outfit = getOutfitClass(L, 1);
+	pushBoolean(L, outfit == outfitEx);
 	return 1;
 }
 
