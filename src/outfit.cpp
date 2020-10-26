@@ -78,7 +78,7 @@ const Outfit* Outfits::getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) c
 
 const Outfit* Outfits::getOutfitByLookType(uint16_t lookType) const
 {
-	for (uint8_t sex = 0; sex <= 1; sex++) {
+	for (uint8_t sex = PLAYERSEX_FEMALE; sex <= PLAYERSEX_LAST; sex++) {
 		for (const Outfit& outfit : outfits[sex]) {
 			if (outfit.lookType == lookType) {
 				return &outfit;
