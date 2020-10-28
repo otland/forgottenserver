@@ -408,7 +408,7 @@ class Player final : public Creature, public Cylinder
 			return group->access;
 		}
 		bool isPremium() const;
-		void setPremiumTime(uint32_t time);
+		void setPremiumTime(time_t premiumEndsAt);
 
 		uint16_t getHelpers() const;
 
@@ -1223,6 +1223,7 @@ class Player final : public Creature, public Cylinder
 
 		time_t lastLoginSaved = 0;
 		time_t lastLogout = 0;
+		time_t premiumEndsAt = 0;
 
 		uint64_t experience = 0;
 		uint64_t manaSpent = 0;
@@ -1273,7 +1274,6 @@ class Player final : public Creature, public Cylinder
 		uint32_t editListId = 0;
 		uint32_t mana = 0;
 		uint32_t manaMax = 0;
-		uint32_t premiumEndsAt = 0;
 		int32_t varSkills[SKILL_LAST + 1] = {};
 		int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t varStats[STAT_LAST + 1] = {};

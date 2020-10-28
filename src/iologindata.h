@@ -57,7 +57,7 @@ class IOLoginData
 		static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
 		static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
-		static void updatePremiumTime(uint32_t accountId, uint32_t endTime);
+		static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
 	private:
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;

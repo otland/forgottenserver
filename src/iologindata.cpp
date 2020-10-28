@@ -40,7 +40,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	account.id = result->getNumber<uint32_t>("id");
 	account.name = result->getString("name");
 	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
-	account.premiumEndsAt = result->getNumber<uint32_t>("premium_ends_at");
+	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 	return account;
 }
 
@@ -99,7 +99,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	account.name = result->getString("name");
 	account.key = decodeSecret(result->getString("secret"));
 	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
-	account.premiumEndsAt = result->getNumber<uint32_t>("premium_ends_at");
+	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 
 	query.str(std::string());
 	query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
@@ -211,7 +211,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	std::ostringstream query;
 	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
 	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		query << ", (SELECT `premium_ends_at` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premiumEnd`";
+		query << ", (SELECT `premium_ends_at` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_ends_at`";
 	}
 	query << " FROM `players` WHERE `name` = " << db.escapeString(name);
 	DBResult_ptr result = db.storeQuery(query.str());
@@ -232,7 +232,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	player->setGroup(group);
 	player->accountNumber = result->getNumber<uint32_t>("account_id");
 	player->accountType = static_cast<AccountType_t>(result->getNumber<uint16_t>("account_type"));
-	player->premiumEndsAt = result->getNumber<uint32_t>("premiumEnd");
+	player->premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 	return true;
 }
 
@@ -1071,7 +1071,7 @@ void IOLoginData::removeVIPEntry(uint32_t accountId, uint32_t guid)
 	Database::getInstance().executeQuery(query.str());
 }
 
-void IOLoginData::updatePremiumTime(uint32_t accountId, uint32_t endTime)
+void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 {
 	std::ostringstream query;
 	query << "UPDATE `accounts` SET `premium_ends_at` = " << endTime << " WHERE `id` = " << accountId;
