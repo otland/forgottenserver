@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `password` char(40) NOT NULL,
   `secret` char(16) DEFAULT NULL,
   `type` int(11) NOT NULL DEFAULT '1',
-  `premdays` int(11) NOT NULL DEFAULT '0',
-  `lastday` int(10) unsigned NOT NULL DEFAULT '0',
+  `premium_ends_at` int(11) unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) NOT NULL DEFAULT '',
   `creation` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -350,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '25'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '26'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

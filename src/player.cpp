@@ -1039,7 +1039,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		}
 
 		Account account = IOLoginData::loadAccount(accountNumber);
-		Game::updatePremium(account);
 
 		std::cout << name << " has logged in." << std::endl;
 
@@ -3977,12 +3976,12 @@ bool Player::isPremium() const
 		return true;
 	}
 
-	return premiumDays > 0;
+	return premiumEndsAt > time(nullptr);
 }
 
-void Player::setPremiumDays(int32_t v)
+void Player::setPremiumTime(time_t premiumEndsAt)
 {
-	premiumDays = v;
+	this->premiumEndsAt = premiumEndsAt;
 	sendBasicData();
 }
 
