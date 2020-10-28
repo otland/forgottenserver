@@ -42,7 +42,7 @@
 			<flag isalwayspremium="1" />
 		</flags>
 	</group>
-	<group id="3" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="3" name="community manager" access="1" maxdepotitems="0" maxvipentries="200" >
 		<flags>
 			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
