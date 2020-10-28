@@ -2392,9 +2392,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "removeMount", LuaScriptInterface::luaPlayerRemoveMount);
 	registerMethod("Player", "hasMount", LuaScriptInterface::luaPlayerHasMount);
 
-	registerMethod("Player", "getPremiumTime", LuaScriptInterface::luaPlayerGetPremiumTime);
-	registerMethod("Player", "addPremiumTime", LuaScriptInterface::luaPlayerAddPremiumTime);
-	registerMethod("Player", "removePremiumTime", LuaScriptInterface::luaPlayerRemovePremiumTime);
+	registerMethod("Player", "getPremiumEndsAt", LuaScriptInterface::luaPlayerGetPremiumEndsAt);
+	registerMethod("Player", "setPremiumEndsAt", LuaScriptInterface::luaPlayerSetPremiumEndsAt);
 
 	registerMethod("Player", "hasBlessing", LuaScriptInterface::luaPlayerHasBlessing);
 	registerMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
@@ -9391,50 +9390,31 @@ int LuaScriptInterface::luaPlayerHasMount(lua_State* L) {
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetPremiumTime(lua_State* L)
+int LuaScriptInterface::luaPlayerGetPremiumEndsAt(lua_State* L)
 {
-	// player:getPremiumTime()
+	// player:getPremiumEndsAt()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, std::max<int32_t>(0, player->premiumEndsAt - time(nullptr)));
+		lua_pushnumber(L, player->premiumEndsAt);
 	} else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerAddPremiumTime(lua_State* L)
+int LuaScriptInterface::luaPlayerSetPremiumEndsAt(lua_State* L)
 {
-	// player:addPremiumTime(seconds)
+	// player:setPremiumEndsAt(timestamp)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (player->premiumEndsAt == 0) {
-		player->premiumEndsAt = time(nullptr);
-	}
+	time_t timestamp = getNumber<time_t>(L, 2);
 
-	uint32_t seconds = getNumber<uint32_t>(L, 2);
-	player->setPremiumTime(player->premiumEndsAt + seconds);
-	IOLoginData::updatePremiumTime(player->getAccount(), player->premiumEndsAt);
-	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerRemovePremiumTime(lua_State* L)
-{
-	// player:removePremiumTime(seconds)
-	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	uint32_t seconds = getNumber<uint32_t>(L, 2);
-	player->setPremiumTime(std::max<int32_t>(std::numeric_limits<int32_t>::max(), player->premiumEndsAt - seconds));
-	IOLoginData::updatePremiumTime(player->getAccount(), player->premiumEndsAt);
+	player->setPremiumTime(timestamp);
+	IOLoginData::updatePremiumTime(player->getAccount(), timestamp);
 	pushBoolean(L, true);
 	return 1;
 }

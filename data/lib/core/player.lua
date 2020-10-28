@@ -55,6 +55,30 @@ function Player.getLossPercent(self)
 	return lossPercent[blessings]
 end
 
+function Player.getPremiumTime(self)
+	return math.max(0, self:getPremiumEndsAt() - os.time())
+end
+
+function Player.setPremiumTime(self, seconds)
+	self:setPremiumEndsAt(os.time() + seconds)
+	return true
+end
+
+function Player.addPremiumTime(self, seconds)
+	self:setPremiumTime(self:getPremiumTime() + seconds)
+	return true
+end
+
+function Player.removePremiumTime(self, seconds)
+	local currentTime = self:getPremiumTime()
+	if currentTime < seconds then
+		return false
+	end
+
+	self:setPremiumTime(currentTime - seconds)
+	return true
+end
+
 function Player.getPremiumDays(self)
 	return math.floor(self:getPremiumTime() / 86400)
 end
