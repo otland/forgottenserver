@@ -195,9 +195,11 @@ void Creature::onWalk()
 		if (getNextStep(dir, flags)) {
 			ReturnValue ret = g_game.internalMoveCreature(this, dir, flags);
 			if (player && ret != RETURNVALUE_NOERROR) { // it's player and walk path is invalid
-				if (tryToFixAutoWalk(dir)) { // correction for auto walking
-					ret = g_game.internalMoveCreature(this, dir, flags);
-				}
+				if (tryToFixAutoWalk(dir)) { // found new path
+                    if (getNextStep(dir, flags)) {
+                        ret = g_game.internalMoveCreature(this, dir, flags);
+                    }
+                }
 			}
 			if (ret != RETURNVALUE_NOERROR) {
 				if (player) {

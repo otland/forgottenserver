@@ -586,13 +586,25 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		case ATTR_WRAPID: {
+		case ATTR_WRAPID:
+		{
 			uint16_t wrapId;
 			if (!propStream.read<uint16_t>(wrapId)) {
 				return ATTR_READ_ERROR;
 			}
 
 			setIntAttr(ITEM_ATTRIBUTE_WRAPID, wrapId);
+			break;
+		}
+
+		case ATTR_AUTOOPEN:
+		{
+			int8_t autoOpen;
+			if (!propStream.read<int8_t>(autoOpen)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setIntAttr(ITEM_ATTRIBUTE_AUTOOPEN, autoOpen);
 			break;
 		}
 
@@ -809,6 +821,11 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 		propWriteStream.write<uint8_t>(ATTR_WRAPID);
 		propWriteStream.write<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_WRAPID));
+	}
+
+	if (hasAttribute(ITEM_ATTRIBUTE_AUTOOPEN)) {
+		propWriteStream.write<uint8_t>(ATTR_AUTOOPEN);
+		propWriteStream.write<int8_t>(getIntAttr(ITEM_ATTRIBUTE_AUTOOPEN));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {

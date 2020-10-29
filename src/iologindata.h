@@ -64,7 +64,7 @@ class IOLoginData
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
 		static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
+		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream, std::map<Container*, int>& openContainers);
 };
 
 #endif
