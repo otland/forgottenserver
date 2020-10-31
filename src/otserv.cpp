@@ -31,6 +31,7 @@
 #include "protocolold.h"
 #include "protocollogin.h"
 #include "protocolstatus.h"
+#include "protocolluaapi.h"
 #include "databasemanager.h"
 #include "scheduler.h"
 #include "databasetasks.h"
@@ -291,6 +292,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// Legacy login protocol
 	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
+
+	// Lua API protocol
+	services->add<ProtocolLuaApi>(static_cast<uint16_t>(7173));
 
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
