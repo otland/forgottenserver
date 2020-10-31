@@ -115,6 +115,11 @@ void Connection::accept(Protocol_ptr protocol)
 void Connection::accept()
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	std::cout << "received packet (byte): " << msg.getByte() << std::endl;
+	std::cout << "received packet (headerLength): " << msg.getLengthHeader() << std::endl;
+	std::cout << "received packet (bodyBuffer): " << msg.getBodyBuffer() << std::endl;
+	std::cout << "received packet (buffer): " << msg.getBuffer() << std::endl;
+	std::cout << "received packet (string): " << msg.getString() << std::endl;
 	try {
 		readTimer.expires_from_now(boost::posix_time::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
