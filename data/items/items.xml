@@ -17673,23 +17673,15 @@
 	</item>
 	<item id="9976" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9977" />
-		<attribute key="duration" value="15" />
 	</item>
 	<item id="9977" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9978" />
-		<attribute key="duration" value="10" />
 	</item>
 	<item id="9978" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9979" />
-		<attribute key="duration" value="11" />
 	</item>
 	<item id="9979" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9976" />
-		<attribute key="duration" value="9" />
 	</item>
 	<item id="9980" article="a" name="crystal of power">
 		<attribute key="description" value="It is said to make you more resistant to weaknesses and to supply you with energy." />
