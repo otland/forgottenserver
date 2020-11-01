@@ -20,9 +20,13 @@
 #include "otpch.h"
 #include "protocolluaapi.h"
 #include "outputmessage.h"
+#include "script.h"
+
+extern Scripts* g_scripts;
 
 void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 {
+	g_scripts->executeString(msg.getString());
 	std::cout << "receiving packet (byte): " << msg.getByte() << std::endl;
 	std::cout << "receiving packet (string): " << msg.getString() << std::endl;
 	auto output = OutputMessagePool::getOutputMessage();

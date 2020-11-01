@@ -22,6 +22,7 @@
 
 #include "networkmessage.h"
 #include "protocol.h"
+#include "luascript.h"
 
 class ProtocolLuaApi final : public Protocol
 {
@@ -38,11 +39,7 @@ class ProtocolLuaApi final : public Protocol
 
 		void onRecvFirstMessage(NetworkMessage& msg) override;
 
-		//void sendStatusString();
-		//void sendInfo(uint16_t requestedInfo, const std::string& characterName);
-
 	private:
-		bool rawMessages = true;
 };
 
 #endif

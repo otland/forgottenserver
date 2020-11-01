@@ -210,6 +210,7 @@ class LuaScriptInterface
 		bool reInitState();
 
 		int32_t loadFile(const std::string& file, Npc* npc = nullptr);
+		int32_t loadString(const std::string& string);
 
 		const std::string& getFileById(int32_t scriptId);
 		int32_t getEvent(const std::string& eventName);

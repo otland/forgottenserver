@@ -338,6 +338,39 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 	return 0;
 }
 
+int32_t LuaScriptInterface::loadString(const std::string& string)
+{
+	//loads file as a chunk at stack top
+	int ret = luaL_loadstring(luaState, string.c_str());
+	if (ret != 0) {
+		lastLuaError = popString(luaState);
+		return -1;
+	}
+
+	//check that it is loaded as a function
+	if (!isFunction(luaState, -1)) {
+		return -1;
+	}
+
+	if (!reserveScriptEnv()) {
+		return -1;
+	}
+
+	ScriptEnvironment* env = getScriptEnv();
+	env->setScriptId(EVENT_ID_LOADING, this);
+
+	//execute it
+	ret = protectedCall(luaState, 0, 0);
+	if (ret != 0) {
+		reportError(nullptr, popString(luaState));
+		resetScriptEnv();
+		return -1;
+	}
+
+	resetScriptEnv();
+	return 0;
+}
+
 int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 {
 	//get our events table
