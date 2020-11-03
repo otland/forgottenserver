@@ -26,7 +26,9 @@ local function ServerSaveWarning(time)
 	end
 end
 
-function onTime(interval)
+local serverSave = GlobalEvent("serverSave")
+
+function serverSave.onTime(interval)
 	local remaningTime = configManager.getNumber(configKeys.SERVER_SAVE_NOTIFY_DURATION) * 60000
 	if configManager.getBoolean(configKeys.SERVER_SAVE_NOTIFY_MESSAGE) then
 		Game.broadcastMessage("Server is saving game in " .. (remaningTime/60000) .."  minute(s). Please logout.", MESSAGE_STATUS_WARNING)
@@ -35,3 +37,6 @@ function onTime(interval)
 	addEvent(ServerSaveWarning, 60000, remaningTime)
 	return not configManager.getBoolean(configKeys.SERVER_SAVE_SHUTDOWN)
 end
+
+serverSave:time("09:55:00")
+serverSave:register()
