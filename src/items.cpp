@@ -217,8 +217,8 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 
 Items::Items()
 {
-	items.reserve(30000);
-	nameToItems.reserve(30000);
+	items.reserve(RESERVED_ITEM_START);
+	nameToItems.reserve(RESERVED_ITEM_START);
 }
 
 void Items::clear()
@@ -333,8 +333,8 @@ bool Items::loadFromOtb(const std::string& file)
 						return false;
 					}
 
-					if (serverId > 30000 && serverId < 30100) {
-						serverId -= 30000;
+					if (serverId > RESERVED_ITEM_START && serverId < RESERVED_ITEM_END) {
+						serverId -= RESERVED_ITEM_START;
 					}
 					break;
 				}
@@ -541,8 +541,8 @@ void Items::buildInventoryList()
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
-	if (id > 30000 && id < 30100) {
-		id -= 30000;
+	if (id > RESERVED_ITEM_START && id < RESERVED_ITEM_END) {
+		id -= RESERVED_ITEM_START;
 
 		if (id >= items.size()) {
 			items.resize(id + 1);
