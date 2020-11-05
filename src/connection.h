@@ -66,11 +66,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
 
-		enum ConnectionState_t {
-			CONNECTION_STATE_OPEN,
-			CONNECTION_STATE_CLOSED,
-		};
-
 		enum { FORCE_CLOSE = true };
 
 		Connection(boost::asio::io_service& io_service,
@@ -126,7 +121,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 		time_t timeConnected;
 		uint32_t packetsSent = 0;
 
-		bool connectionState = CONNECTION_STATE_OPEN;
+		bool closed = false;
 		bool receivedFirst = false;
 };
 

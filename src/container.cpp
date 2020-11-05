@@ -285,10 +285,6 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (getID() == ITEM_STORE_INBOX && !hasBitSet(FLAG_NOLIMIT, flags)) {
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	if (!item->isPickupable()) {
 		return RETURNVALUE_CANNOTPICKUP;
 	}
@@ -297,7 +293,22 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
+	// store items can be only moved into depot chest or store inbox
+	if (item->isStoreItem() && !dynamic_cast<const DepotChest*>(this)) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	const Cylinder* cylinder = getParent();
+
+	// don't allow moving items into container that is store item and is in store inbox
+	if (isStoreItem() && dynamic_cast<const StoreInbox*>(cylinder)) {
+		ReturnValue ret = RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		if (!item->isStoreItem()) {
+			ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
+		}
+		return ret;
+	}
+
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		while (cylinder) {
 			if (cylinder == &thing) {
@@ -383,7 +394,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -402,6 +413,12 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
+
+	const HouseTile* houseTile = dynamic_cast<const HouseTile*>(getTopParent());
+	if (houseTile) {
+		return houseTile->queryRemove(thing, count, flags, actor);
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -636,6 +653,21 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 		countMap[item->getID()] += item->getItemCount();
 	}
 	return countMap;
+}
+
+ItemVector Container::getItems(bool recursive /*= false*/)
+{
+	ItemVector containerItems;
+	if (recursive) {
+		for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
+			containerItems.push_back(*it);
+		}
+	} else {
+		for (Item* item : itemlist) {
+			containerItems.push_back(item);
+		}
+	}
+	return containerItems;
 }
 
 Thing* Container::getThing(size_t index) const
