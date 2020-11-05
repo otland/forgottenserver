@@ -1,4 +1,4 @@
-local talk = TalkAction("/pos", "/position", "!pos", "!position")
+local talk = TalkAction("/pos")
 
 function talk.onSay(player, words, param)
 	if player:getGroup():getAccess() and param ~= "" then
