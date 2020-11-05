@@ -409,8 +409,7 @@ class Creature : virtual public Thing
 		void setUseDefense(bool useDefense) {
 			canUseDefense = useDefense;
 		}
-		void setMovementBlocked(bool state)
-		{
+		void setMovementBlocked(bool state) {
 			movementBlocked = state;
 			cancelNextWalk = true;
 		}
