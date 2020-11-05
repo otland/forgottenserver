@@ -33,7 +33,7 @@ function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, 
 	if player:hasMount(useItem.mountId) then
 		return false
 	end
-	
+
 	if table.contains({26194, 26340, 26341}, item.itemid) then
 		local storage = player:getStorageValue(PlayerStorageKeys.vortexTamer)
 		player:setStorageValue(PlayerStorageKeys.vortexTamer, storage + 1)

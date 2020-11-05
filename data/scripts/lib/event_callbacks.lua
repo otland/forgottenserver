@@ -89,7 +89,7 @@ setmetatable(EventCallback,
 		end
 	end,
 
-	__newindex = 
+	__newindex =
 	function(self, key, value)
 		if isScriptsInterface() then
 			if self[key] then
