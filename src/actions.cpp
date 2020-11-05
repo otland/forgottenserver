@@ -90,10 +90,10 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		bool success = true;
 
-		for (size_t i = 0; i < idList.size(); i++) {
-			auto result = useItemMap.emplace(idList[i], std::move(*action));
+		for (const auto& id : idList) {
+			auto result = useItemMap.emplace(id, std::move(*action));
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << idList[i] << std::endl;
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
 				success = false;
 			}
 		}
@@ -129,10 +129,10 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		bool success = true;
 
-		for (size_t i = 0; i < uidList.size(); i++) {
-			auto result = uniqueItemMap.emplace(uidList[i], std::move(*action));
+		for (const auto& uid : uidList) {
+			auto result = uniqueItemMap.emplace(uid, std::move(*action));
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uidList[i] << std::endl;
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
 				success = false;
 			}
 		}
@@ -168,10 +168,10 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		bool success = true;
 
-		for (size_t i = 0; i < aidList.size(); i++) {
-			auto result = actionItemMap.emplace(aidList[i], std::move(*action));
+		for (const auto& aid : aidList) {
+			auto result = actionItemMap.emplace(aid, std::move(*action));
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aidList[i] << std::endl;
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
 				success = false;
 			}
 		}

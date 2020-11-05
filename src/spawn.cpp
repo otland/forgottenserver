@@ -33,7 +33,8 @@ extern Monsters g_monsters;
 extern Game g_game;
 extern Events* g_events;
 
-static constexpr int32_t MINSPAWN_INTERVAL = 1000;
+static constexpr int32_t MINSPAWN_INTERVAL = 10 * 1000; // 10 seconds to match RME
+static constexpr int32_t MAXSPAWN_INTERVAL = 24 * 60 * 60 * 1000; // 1 day
 
 bool Spawns::loadFromXml(const std::string& filename)
 {
@@ -66,6 +67,15 @@ bool Spawns::loadFromXml(const std::string& filename)
 			radius = -1;
 		}
 
+		if (radius > 30) {
+			std::cout << "[Warning - Spawns::loadFromXml] Radius size bigger than 30 at position: " << centerPos << ", consider lowering it." << std::endl;
+		}
+
+		if (!spawnNode.first_child()) {
+			std::cout << "[Warning - Spawns::loadFromXml] Empty spawn at position: " << centerPos << " with radius: " << radius << '.' << std::endl;
+			continue;
+		}
+
 		spawnList.emplace_front(centerPos, radius);
 		Spawn& spawn = spawnList.front();
 
@@ -90,11 +100,15 @@ bool Spawns::loadFromXml(const std::string& filename)
 					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
 					centerPos.z
 				);
-				uint32_t interval = pugi::cast<uint32_t>(childNode.attribute("spawntime").value()) * 1000;
-				if (interval > MINSPAWN_INTERVAL) {
-					spawn.addMonster(nameAttribute.as_string(), pos, dir, interval);
+				int32_t interval = pugi::cast<int32_t>(childNode.attribute("spawntime").value()) * 1000;
+				if (interval >= MINSPAWN_INTERVAL && interval <= MAXSPAWN_INTERVAL) {
+					spawn.addMonster(nameAttribute.as_string(), pos, dir, static_cast<uint32_t>(interval));
 				} else {
-					std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+					if (interval < MINSPAWN_INTERVAL) {
+						std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be less than " << MINSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+					} else {
+						std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be more than " << MAXSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
+					}
 				}
 			} else if (strcasecmp(childNode.name(), "npc") == 0) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
@@ -131,7 +145,10 @@ void Spawns::startup()
 	}
 
 	for (Npc* npc : npcList) {
-		g_game.placeCreature(npc, npc->getMasterPos(), false, true);
+		if (!g_game.placeCreature(npc, npc->getMasterPos(), false, true)) {
+			std::cout << "[Warning - Spawns::startup] Couldn't spawn npc \"" << npc->getName() << "\" on position: " << npc->getMasterPos() << '.' << std::endl;
+			delete npc;
+		}
 	}
 	npcList.clear();
 
@@ -207,6 +224,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 	if (startup) {
 		//No need to send out events to the surrounding since there is no one out there to listen!
 		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
+			std::cout << "[Warning - Spawns::startup] Couldn't spawn monster \"" << monster_ptr->getName() << "\" on position: " << pos << '.' << std::endl;
 			return false;
 		}
 	} else {
@@ -294,7 +312,7 @@ bool Spawn::addMonster(const std::string& name, const Position& pos, Direction d
 {
 	MonsterType* mType = g_monsters.getMonsterType(name);
 	if (!mType) {
-		std::cout << "[Spawn::addMonster] Can not find " << name << std::endl;
+		std::cout << "[Warning - Spawn::addMonster] Can not find " << name << std::endl;
 		return false;
 	}
 

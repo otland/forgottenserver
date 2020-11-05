@@ -124,15 +124,15 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	if ((attr = node.attribute("itemid"))) {
 		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
 
-		for (size_t i = 0; i < idList.size(); i++) {
+		for (const auto& id : idList) {
 			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-				ItemType& it = Item::items.getItemType(idList[i]);
+				ItemType& it = Item::items.getItemType(id);
 				it.wieldInfo = moveEvent->getWieldInfo();
 				it.minReqLevel = moveEvent->getReqLevel();
 				it.minReqMagicLevel = moveEvent->getReqMagLv();
 				it.vocationString = moveEvent->getVocationString();
 			}
-			addEvent(std::move(*moveEvent), idList[i], itemIdMap);
+			addEvent(std::move(*moveEvent), id, itemIdMap);
 		}
 	} else if ((attr = node.attribute("fromid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
@@ -164,8 +164,8 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	} else if ((attr = node.attribute("uniqueid"))) {
 		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 
-		for (size_t i = 0; i < uidList.size(); i++) {
-			addEvent(std::move(*moveEvent), uidList[i], uniqueIdMap);
+		for (const auto& uid : uidList) {
+			addEvent(std::move(*moveEvent), uid, uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("fromuid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
@@ -177,8 +177,8 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	} else if ((attr = node.attribute("actionid"))) {
 		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 
-		for (size_t i = 0; i < aidList.size(); i++) {
-			addEvent(std::move(*moveEvent), aidList[i], actionIdMap);
+		for (const auto& aid : aidList) {
+			addEvent(std::move(*moveEvent), aid, actionIdMap);
 		}
 	} else if ((attr = node.attribute("fromaid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());

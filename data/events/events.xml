@@ -17,7 +17,7 @@
 	<event class="Player" method="onLook" enabled="1" />
 	<event class="Player" method="onLookInBattleList" enabled="1" />
 	<event class="Player" method="onLookInTrade" enabled="1" />
-	<event class="Player" method="onLookInShop" enabled="0" />
+	<event class="Player" method="onLookInShop" enabled="1" />
 	<event class="Player" method="onMoveItem" enabled="1" />
 	<event class="Player" method="onItemMoved" enabled="0" />
 	<event class="Player" method="onMoveCreature" enabled="0" />

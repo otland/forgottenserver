@@ -192,8 +192,6 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_PRIVATE_RED_TO = 16, //@name@text
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
-
-	TALKTYPE_CHANNEL_R2 = 0xFF, //#d
 };
 
 enum MessageClasses : uint8_t {
@@ -542,7 +540,7 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_SetMaxSpeed = 1 << 29,
 	PlayerFlag_SpecialVIP = 1 << 30,
 	PlayerFlag_NotGenerateLoot = static_cast<uint64_t>(1) << 31,
-	PlayerFlag_CanTalkRedChannelAnonymous = static_cast<uint64_t>(1) << 32,
+	// PlayerFlag with exponent 32 existed but was deprecated (feature dropped from client).
 	PlayerFlag_IgnoreProtectionZone = static_cast<uint64_t>(1) << 33,
 	PlayerFlag_IgnoreSpellCheck = static_cast<uint64_t>(1) << 34,
 	PlayerFlag_IgnoreWeaponCheck = static_cast<uint64_t>(1) << 35,

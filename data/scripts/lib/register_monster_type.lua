@@ -102,6 +102,11 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.canPushCreatures ~= nil then
 			mtype:canPushCreatures(mask.flags.canPushCreatures)
 		end
+		-- if a monster can push creatures,
+		-- it should not be pushable
+		if mask.flags.canPushCreatures then
+			mtype:isPushable(false)
+		end
 		if mask.flags.targetDistance then
 			mtype:targetDistance(mask.flags.targetDistance)
 		end

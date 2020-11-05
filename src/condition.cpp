@@ -267,6 +267,10 @@ Condition* Condition::createCondition(PropStream& propStream)
 		return nullptr;
 	}
 
+	if (!propStream.read<uint8_t>(attr) || attr != CONDITIONATTR_ISAGGRESSIVE) {
+		return nullptr;
+	}
+
 	uint8_t aggressive;
 	if (!propStream.read<uint8_t>(aggressive)) {
 		return nullptr;
