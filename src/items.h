@@ -162,9 +162,12 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ELEMENTEARTH,
 	ITEM_PARSE_ELEMENTFIRE,
 	ITEM_PARSE_ELEMENTENERGY,
+	ITEM_PARSE_ELEMENTDEATH,
+	ITEM_PARSE_ELEMENTHOLY,
 	ITEM_PARSE_WALKSTACK,
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
+	ITEM_PARSE_STOREITEM,
 };
 
 struct Abilities {
@@ -281,6 +284,10 @@ class ItemType
 				return name;
 			}
 
+			if (name.empty() || name.back() == 's') {
+				return name;
+			}
+
 			std::string str;
 			str.reserve(name.length() + 1);
 			str.assign(name);
@@ -351,6 +358,7 @@ class ItemType
 		uint8_t shootRange = 1;
 		int8_t hitChance = 0;
 
+		bool storeItem = false;
 		bool forceUse = false;
 		bool forceSerialize = false;
 		bool hasHeight = false;
