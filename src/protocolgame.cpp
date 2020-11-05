@@ -108,10 +108,9 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			}
 		}
 
-		WaitingList& waitingList = WaitingList::getInstance();
-		if (!waitingList.clientLogin(player)) {
-			uint32_t currentSlot = waitingList.getClientSlot(player);
-			uint32_t retryTime = WaitingList::getTime(currentSlot);
+		std::size_t currentSlot = WaitingList::getInstance().clientLogin(player);
+		if (currentSlot > 0) {
+			uint8_t retryTime = WaitingList::getTime(currentSlot);
 			std::ostringstream ss;
 
 			ss << "Too many players online.\nYou are at place "
@@ -389,7 +388,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() <= 0) {
+	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() == 0) {
 		return;
 	}
 
@@ -688,7 +687,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 		if (z > 7) {
 			return false;
 		}
-	} else if (myPos.z >= 8) {
+	} else { // if (myPos.z >= 8) {
 		//we are underground (8 -> 15)
 		//view is +/- 2 from the floor we stand on
 		if (std::abs(myPos.getZ() - z) > 2) {
@@ -1337,7 +1336,7 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(0x9F);
 	if (player->isPremium()) {
 		msg.addByte(1);
-		msg.add<uint32_t>(time(nullptr) + (player->premiumDays * 86400));
+		msg.add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
 	} else {
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
@@ -2175,9 +2174,6 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 	msg.add<uint32_t>(++statementId);
 	if (!creature) {
 		msg.add<uint32_t>(0x00);
-	} else if (type == TALKTYPE_CHANNEL_R2) {
-		msg.add<uint32_t>(0x00);
-		type = TALKTYPE_CHANNEL_R1;
 	} else {
 		msg.addString(creature->getName());
 		//Add level only for players
@@ -2461,6 +2457,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
 	}
+
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
 
 	sendStats();
 	sendSkills();

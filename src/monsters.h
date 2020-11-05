@@ -176,7 +176,7 @@ class MonsterType
 
 		MonsterInfo info;
 
-		void loadLoot(MonsterType* monsterType, LootBlock lootblock);
+		void loadLoot(MonsterType* monsterType, LootBlock lootBlock);
 };
 
 class MonsterSpell

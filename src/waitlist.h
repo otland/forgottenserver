@@ -29,9 +29,8 @@ class WaitingList
 	public:
 		static WaitingList& getInstance();
 
-		bool clientLogin(const Player* player);
-		std::size_t getClientSlot(const Player* player);
-		static std::size_t getTime(std::size_t slot);
+		std::size_t clientLogin(const Player* player);
+		static uint8_t getTime(std::size_t slot);
 
 	private:
 		WaitingList();

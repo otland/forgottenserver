@@ -55,8 +55,44 @@ function Player.getLossPercent(self)
 	return lossPercent[blessings]
 end
 
+function Player.getPremiumTime(self)
+	return math.max(0, self:getPremiumEndsAt() - os.time())
+end
+
+function Player.setPremiumTime(self, seconds)
+	self:setPremiumEndsAt(os.time() + seconds)
+	return true
+end
+
+function Player.addPremiumTime(self, seconds)
+	self:setPremiumTime(self:getPremiumTime() + seconds)
+	return true
+end
+
+function Player.removePremiumTime(self, seconds)
+	local currentTime = self:getPremiumTime()
+	if currentTime < seconds then
+		return false
+	end
+
+	self:setPremiumTime(currentTime - seconds)
+	return true
+end
+
+function Player.getPremiumDays(self)
+	return math.floor(self:getPremiumTime() / 86400)
+end
+
+function Player.addPremiumDays(self, days)
+	return self:addPremiumTime(days * 86400)
+end
+
+function Player.removePremiumDays(self, days)
+	return self:removePremiumTime(days * 86400)
+end
+
 function Player.isPremium(self)
-	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
+	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
 function Player.sendCancelMessage(self, message)
@@ -99,4 +135,138 @@ function Player.addManaSpent(...)
 	local ret = addManaSpentFunc(...)
 	APPLY_SKILL_MULTIPLIER = true
 	return ret
+end
+
+-- Always pass the number through the isValidMoney function first before using the transferMoneyTo
+function Player.transferMoneyTo(self, target, amount)
+	if not target then
+		return false
+	end
+
+	-- See if you can afford this transfer
+	local balance = self:getBankBalance()
+	if amount > balance then
+		return false
+	end
+
+	-- See if player is online
+	local targetPlayer = Player(target.guid)
+	if targetPlayer then
+		targetPlayer:setBankBalance(targetPlayer:getBankBalance() + amount)
+	else
+		db.query("UPDATE `players` SET `balance` = `balance` + " .. amount .. " WHERE `id` = '" .. target.guid .. "'")
+	end
+
+	self:setBankBalance(self:getBankBalance() - amount)
+	return true
+end
+
+function Player.canCarryMoney(self, amount)
+	-- Anyone can carry as much imaginary money as they desire
+	if amount == 0 then
+		return true
+	end
+
+	-- The 3 below loops will populate these local variables
+	local totalWeight = 0
+	local inventorySlots = 0
+
+	-- Add crystal coins to totalWeight and inventorySlots
+	local type_crystal = ItemType(ITEM_CRYSTAL_COIN)
+	local crystalCoins = math.floor(amount / 10000)
+	if crystalCoins > 0 then
+		amount = amount - (crystalCoins * 10000)
+		while crystalCoins > 0 do
+			local count = math.min(100, crystalCoins)
+			totalWeight = totalWeight + type_crystal:getWeight(count)
+			crystalCoins = crystalCoins - count
+			inventorySlots = inventorySlots + 1
+		end
+	end
+
+	-- Add platinum coins to totalWeight and inventorySlots
+	local type_platinum = ItemType(ITEM_PLATINUM_COIN)
+	local platinumCoins = math.floor(amount / 100)
+	if platinumCoins > 0 then
+		amount = amount - (platinumCoins * 100)
+		while platinumCoins > 0 do
+			local count = math.min(100, platinumCoins)
+			totalWeight = totalWeight + type_platinum:getWeight(count)
+			platinumCoins = platinumCoins - count
+			inventorySlots = inventorySlots + 1
+		end
+	end
+
+	-- Add gold coins to totalWeight and inventorySlots
+	local type_gold = ItemType(ITEM_GOLD_COIN)
+	if amount > 0 then
+		while amount > 0 do
+			local count = math.min(100, amount)
+			totalWeight = totalWeight + type_gold:getWeight(count)
+			amount = amount - count
+			inventorySlots = inventorySlots + 1
+		end
+	end
+
+	-- If player don't have enough capacity to carry this money
+	if self:getFreeCapacity() < totalWeight then
+		return false
+	end
+
+	-- If player don't have enough available inventory slots to carry this money
+	local backpack = self:getSlotItem(CONST_SLOT_BACKPACK)
+	if not backpack or backpack:getEmptySlots(true) < inventorySlots then
+		return false
+	end
+	return true
+end
+
+function Player.withdrawMoney(self, amount)
+	local balance = self:getBankBalance()
+	if amount > balance or not self:addMoney(amount) then
+		return false
+	end
+
+	self:setBankBalance(balance - amount)
+	return true
+end
+
+function Player.depositMoney(self, amount)
+	if not self:removeMoney(amount) then
+		return false
+	end
+
+	self:setBankBalance(self:getBankBalance() + amount)
+	return true
+end
+
+function Player.addLevel(self, amount, round)
+	local experience, level, amount = 0, self:getLevel(), amount or 1
+	if amount > 0 then
+		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
+	else
+		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+	end
+	return self:addExperience(experience)
+end
+
+function Player.addMagicLevel(self, value)
+	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+end
+
+function Player.addSkill(self, skillId, value, round)
+	if skillId == SKILL_LEVEL then
+		return self:addLevel(value, round)
+	elseif skillId == SKILL_MAGLEVEL then
+		return self:addMagicLevel(value)
+	end
+	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+end
+
+function Player.getWeaponType()
+	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
+	if weapon then
+		return ItemType(weapon:getId()):getWeaponType()
+	end
+	return WEAPON_NONE
 end

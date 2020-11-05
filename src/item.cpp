@@ -596,6 +596,17 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		case ATTR_STOREITEM: {
+			uint8_t storeItem;
+			if (!propStream.read<uint8_t>(storeItem)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, storeItem);
+			break;
+		}
+
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values
@@ -809,6 +820,11 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 		propWriteStream.write<uint8_t>(ATTR_WRAPID);
 		propWriteStream.write<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_WRAPID));
+	}
+
+	if (hasAttribute(ITEM_ATTRIBUTE_STOREITEM)) {
+		propWriteStream.write<uint8_t>(ATTR_STOREITEM);
+		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_STOREITEM));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
@@ -1664,7 +1680,6 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 				attributes.pop_back();
 				break;
 			}
-			prev_it = it;
 		}
 	}
 	attributeBits &= ~type;
