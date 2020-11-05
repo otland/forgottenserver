@@ -6929,7 +6929,11 @@ int LuaScriptInterface::luaCreatureIsMovementBlocked(lua_State* L)
 {
 	// creature:isMovementBlocked()
 	const Creature* creature = getUserdata<const Creature>(L, 1);
-	creature ? pushBoolean(L, creature->isMovementBlocked()) : lua_pushnil(L);
+	if (creature) {
+		pushBoolean(L, creature->isMovementBlocked());
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
