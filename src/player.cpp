@@ -663,7 +663,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 	storageStringMap.erase(key);
 }
 
-void Player::addStorageValue(const uint32_t key, const std::string value)
+void Player::addStorageValue(const uint32_t key, const std::string& value)
 {
 	if (value.empty() || value == "-1") {
 		storageStringMap.erase(key);
