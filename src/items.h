@@ -162,9 +162,12 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ELEMENTEARTH,
 	ITEM_PARSE_ELEMENTFIRE,
 	ITEM_PARSE_ELEMENTENERGY,
+	ITEM_PARSE_ELEMENTDEATH,
+	ITEM_PARSE_ELEMENTHOLY,
 	ITEM_PARSE_WALKSTACK,
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
+	ITEM_PARSE_STOREITEM,
 };
 
 struct Abilities {
@@ -281,6 +284,10 @@ class ItemType
 				return name;
 			}
 
+			if (name.empty() || name.back() == 's') {
+				return name;
+			}
+
 			std::string str;
 			str.reserve(name.length() + 1);
 			str.assign(name);
@@ -351,6 +358,7 @@ class ItemType
 		uint8_t shootRange = 1;
 		int8_t hitChance = 0;
 
+		bool storeItem = false;
 		bool forceUse = false;
 		bool forceSerialize = false;
 		bool hasHeight = false;
@@ -425,8 +433,37 @@ class Items
 		NameMap nameToItems;
 
 	private:
-		std::map<uint16_t, uint16_t> reverseItemMap;
 		std::vector<ItemType> items;
 		InventoryVector inventory;
+		class ClientIdToServerIdMap
+		{
+			public:
+				ClientIdToServerIdMap() {
+					vec.reserve(30000);
+				}
+
+				void emplace(uint16_t clientId, uint16_t serverId) {
+					if (clientId >= vec.size()) {
+						vec.resize(clientId + 1, 0);
+					}
+					if (vec[clientId] == 0) {
+						vec[clientId] = serverId;
+					}
+				}
+
+				uint16_t getServerId(uint16_t clientId) const {
+					uint16_t serverId = 0;
+					if (clientId < vec.size()) {
+						serverId = vec[clientId];
+					}
+					return serverId;
+				}
+
+				void clear() {
+					vec.clear();
+				}
+			private:
+				std::vector<uint16_t> vec;
+		} clientIdToServerIdMap;
 };
 #endif
