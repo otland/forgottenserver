@@ -66,9 +66,6 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0);
 	}
 
-	//Update premium days
-	Game::updatePremium(account);
-
 	const std::string& motd = g_config.getString(ConfigManager::MOTD);
 	if (!motd.empty()) {
 		//Add MOTD
@@ -124,8 +121,8 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(1);
 		output->add<uint32_t>(0);
 	} else {
-		output->addByte(account.premiumDays > 0 ? 1 : 0);
-		output->add<uint32_t>(time(nullptr) + (account.premiumDays * 86400));
+		output->addByte(account.premiumEndsAt > time(nullptr) ? 1 : 0);
+		output->add<uint32_t>(account.premiumEndsAt);
 	}
 
 	send(output);

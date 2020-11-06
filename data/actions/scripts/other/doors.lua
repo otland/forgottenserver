@@ -1,3 +1,58 @@
+local positionOffsets = {
+	Position(1, 0, 0), -- east
+	Position(0, 1, 0), -- south
+	Position(-1, 0, 0), -- west
+	Position(0, -1, 0) -- north
+}
+
+--[[
+When closing a door with a creature in it findPushPosition will find the most appropriate
+adjacent position following a prioritization order.
+The function returns the position of the first tile that fulfills all the checks in a round.
+The function loops trough east -> south -> west -> north on each following line in that order.
+In round 1 it checks if there's an unhindered walkable tile without any creature.
+In round 2 it checks if there's a tile with a creature.
+In round 3 it checks if there's a tile blocked by a movable tile-blocking item.
+In round 4 it checks if there's a tile blocked by a magic wall or wild growth.
+]]
+local function findPushPosition(creature, round)
+	local pos = creature:getPosition()
+	for _, offset in ipairs(positionOffsets) do
+		local offsetPosition = pos + offset
+		local tile = Tile(offsetPosition)
+		if tile then
+			local creatureCount = tile:getCreatureCount()
+			if round == 1 then
+				if tile:queryAdd(creature) == RETURNVALUE_NOERROR and creatureCount == 0 then
+					if not tile:hasFlag(TILESTATE_PROTECTIONZONE) or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz()) then
+						return offsetPosition
+					end
+				end
+			elseif round == 2 then
+				if creatureCount > 0 then
+					if not tile:hasFlag(TILESTATE_PROTECTIONZONE) or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz()) then
+						return offsetPosition
+					end
+				end
+			elseif round == 3 then
+				local topItem = tile:getTopDownItem()
+				if topItem then
+					if topItem:getType():isMovable() then
+						return offsetPosition
+					end
+				end
+			else
+				if tile:getItemById(ITEM_MAGICWALL) or tile:getItemById(ITEM_WILDGROWTH) then
+					return offsetPosition
+				end
+			end
+		end
+	end
+	if round < 4 then
+		return findPushPosition(creature, round + 1)
+	end
+end
+
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if table.contains(questDoors, itemId) then
@@ -29,22 +84,20 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if table.contains(horizontalOpenDoors, itemId) or table.contains(verticalOpenDoors, itemId) then
-		local doorCreature = Tile(toPosition):getTopCreature()
-		if doorCreature then
-			toPosition.x = toPosition.x + 1
-			local query = Tile(toPosition):queryAdd(doorCreature, bit.bor(FLAG_IGNOREBLOCKCREATURE, FLAG_PATHFINDING))
-			if query ~= RETURNVALUE_NOERROR then
-				toPosition.x = toPosition.x - 1
-				toPosition.y = toPosition.y + 1
-				query = Tile(toPosition):queryAdd(doorCreature, bit.bor(FLAG_IGNOREBLOCKCREATURE, FLAG_PATHFINDING))
+		local creaturePositionTable = {}
+		local doorCreatures = Tile(toPosition):getCreatures()
+		if doorCreatures and #doorCreatures > 0 then
+			for _, doorCreature in pairs(doorCreatures) do
+				local pushPosition = findPushPosition(doorCreature, 1)
+				if not pushPosition then
+					player:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
+					return true
+				end
+				table.insert(creaturePositionTable, {creature = doorCreature, position = pushPosition})
 			end
-
-			if query ~= RETURNVALUE_NOERROR then
-				player:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(query))
-				return true
+			for _, tableCreature in ipairs(creaturePositionTable) do
+				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end
-
-			doorCreature:teleportTo(toPosition, true)
 		end
 
 		if not table.contains(openSpecialDoors, itemId) then
