@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Seagull" nameDescription="a seagull" race="blood" experience="0" speed="260" manacost="250">
 	<health now="25" max="25" />
 	<look type="223" corpse="6076" />
