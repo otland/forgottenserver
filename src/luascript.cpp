@@ -2647,7 +2647,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
-	registerMethod("ItemType", "isStoreItem", LuaScriptInterface::luaItemIsStoreItem);
+	registerMethod("ItemType", "isStoreItem", LuaScriptInterface::luaItemTypeIsStoreItem);
 
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
