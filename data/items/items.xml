@@ -522,7 +522,7 @@
 	<item fromid="1421" toid="1422" article="a" name="campfire" />
 	<item fromid="1423" toid="1425" article="a" name="campfire">
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20" />
+			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="4000" />
 			<attribute key="count" value="2" />
 			<attribute key="damage" value="10" />
@@ -599,7 +599,7 @@
 		<attribute key="decayTo" value="1488" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20" />
+			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -636,7 +636,7 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="energy">
-			<attribute key="damage" value="30" />
+			<attribute key="initdamage" value="30" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="damage" value="25" />
 		</attribute>
@@ -645,7 +645,7 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20" />
+			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -669,7 +669,7 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="energy">
-			<attribute key="damage" value="30" />
+			<attribute key="initdamage" value="30" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="damage" value="25" />
 		</attribute>
@@ -702,7 +702,7 @@
 		<attribute key="decayTo" value="1501" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20" />
+			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -739,7 +739,7 @@
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="120" />
 		<attribute key="field" value="energy">
-			<attribute key="damage" value="30" />
+			<attribute key="initdamage" value="30" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="damage" value="25" />
 		</attribute>
@@ -7973,7 +7973,7 @@
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="water" />
 	</item>
-	<item fromid="4620" toid="4625" name="shallow water">
+	<item fromid="4620" toid="4625" name="shallow water" editorsuffix=" (Swimmable)">
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="1" />
@@ -8008,7 +8008,7 @@
 	<item fromid="4760" toid="4783" name="sand" />
 	<item fromid="4784" toid="4795" name="grass" />
 	<item fromid="4796" toid="4819" name="dirt" />
-	<item fromid="4820" toid="4825" name="shallow water">
+	<item fromid="4820" toid="4825" name="shallow water" editorsuffix=" (Swimmable)">
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="water" />
@@ -17670,23 +17670,15 @@
 	</item>
 	<item id="9976" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9977" />
-		<attribute key="duration" value="15" />
 	</item>
 	<item id="9977" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9978" />
-		<attribute key="duration" value="10" />
 	</item>
 	<item id="9978" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9979" />
-		<attribute key="duration" value="11" />
 	</item>
 	<item id="9979" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9976" />
-		<attribute key="duration" value="9" />
 	</item>
 	<item id="9980" article="a" name="crystal of power">
 		<attribute key="description" value="It is said to make you more resistant to weaknesses and to supply you with energy." />
@@ -18302,6 +18294,7 @@
 	<item id="10167" article="a" name="mago mechanic core">
 		<attribute key="weight" value="135" />
 	</item>
+	<item id="10168" article="a" name="machine" />
 	<item id="10169" article="an" name="elemental crystal">
 		<attribute key="weight" value="320" />
 	</item>
@@ -18309,6 +18302,7 @@
 		<attribute key="description" value="This power core has seen better days." />
 		<attribute key="weight" value="780" />
 	</item>
+	<item id="10171" article="a" name="machine" />
 	<item id="10172" article="a" name="button" />
 	<item id="10173" article="a" name="golem head">
 		<attribute key="weight" value="3000" />
@@ -19322,7 +19316,7 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20" />
+			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -19332,7 +19326,6 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="10" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -19342,7 +19335,7 @@
 		<attribute key="type" value="magicfield" />
 		<attribute key="replaceable" value="0" />
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="5" />
+			<attribute key="initdamage" value="5" />
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
 			<attribute key="damage" value="10" />
@@ -19693,7 +19686,7 @@
 	<item id="11238" article="a" name="mammoth tusk">
 		<attribute key="weight" value="600" />
 	</item>
-	<item id="11239" article="a" name="statue">
+	<item id="11239" article="a" name="stone tree">
 		<attribute key="allowDistRead" value="true" />
 	</item>
 	<item id="11240" name="guardian boots">
@@ -20466,9 +20459,13 @@
 	<item fromid="11775" toid="11778" name="ground" />
 	<item fromid="11785" toid="11792" name="muddy floor" />
 	<item fromid="11793" toid="11795" article="a" name="skull pillar" />
-	<item id="11796" article="a" name="dimensional portal" />
+	<item id="11796" article="an" name="energy gate">
+		<attribute key="type" value="teleport" />
+	</item>
 	<item id="11797" article="a" name="skull pillar" />
-	<item id="11798" article="a" name="dimensional portal" />
+	<item id="11798" article="an" name="energy gate">
+		<attribute key="type" value="teleport" />
+	</item>
 	<item id="11812" article="a" name="pillar vine" />
 	<item id="11813" article="a" name="pillar growth" />
 	<item id="11817" article="a" name="tangerine tail" />
@@ -20487,7 +20484,8 @@
 	<item fromid="11917" toid="11920" article="a" name="tapestry" />
 	<item fromid="11921" toid="11922" name="decorative spear's" />
 	<item fromid="11923" toid="11924" article="a" name="decorative shield" />
-	<item fromid="11931" toid="11932" article="a" name="statue" />
+	<item fromid="11927" toid="11928" name="part of a giant stone dragon" />
+	<item fromid="11929" toid="11932" article="a" name="statue" />
 	<item id="11933" article="a" name="sapphire stand" />
 	<item fromid="11934" toid="11935" article="a" name="chair" />
 	<item fromid="11937" toid="11946" article="a" name="corrupted wall" />
@@ -20505,8 +20503,8 @@
 	<item fromid="11995" toid="11998" article="a" name="torch" />
 	<item fromid="11999" toid="12002" article="a" name="dragon statue" />
 	<item id="12003" article="a" name="pillar" />
-	<item fromid="12004" toid="12006" article="a" name="torch" />
-	<item fromid="12007" toid="12008" article="a" name="lamp" />
+	<item fromid="12004" toid="12006" article="a" name="jade basin" />
+	<item fromid="12007" toid="12008" article="a" name="jade floor lamp" />
 	<item id="12009" article="a" name="pillar" />
 	<item fromid="12010" toid="12011" article="a" name="torch" />
 	<item id="12012" article="a" name="table" />
@@ -20580,8 +20578,10 @@
 	<item id="12105" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
+	<item fromid="12106" toid="12112" article="a" name="dragon structure" />
 	<item id="12113" name="timbers" />
-	<item fromid="12115" toid="12124" name="carpet" />
+	<item id="12114" article="a" name="dragon structure" />
+	<item fromid="12115" toid="12124" article="a" name="carpet" />
 	<item fromid="12125" toid="12137" name="roof" />
 	<item fromid="12138" toid="12141" article="a" name="decorative spear" />
 	<item fromid="12142" toid="12143" article="an" name="altar" />
@@ -20591,6 +20591,9 @@
 	<item fromid="12158" toid="12164" article="a" name="corrupted wall" />
 	<item id="12165" article="a" name="timber" />
 	<item id="12166" article="a" name="dragon statue" />
+	<item fromid="12167" toid="12169" article="a" name="dragon structure" />
+	<item fromid="12170" toid="12175" article="a" name="banner structure" />
+	<item id="12176" article="a" name="dragon structure" />
 	<item fromid="12177" toid="12187" name="roof" />
 	<item id="12188" article="a" name="closed door">
 		<attribute key="type" value="door" />
@@ -20650,15 +20653,13 @@
 	</item>
 	<item fromid="12206" toid="12207" article="a" name="mirror" />
 	<item fromid="12208" toid="12211" article="a" name="wall lamp" />
-	<item id="12212" article="a" name="jade railing" />
-	<item id="12213" article="a" name="sign" />
-	<item id="12214" article="a" name="jade railing" />
+	<item fromid="12212" toid="12214" article="an" name="observation slit" />
 	<item fromid="12215" toid="12218" article="a" name="banner" />
 	<item fromid="12219" toid="12220" article="a" name="tapestry" />
 	<item fromid="12221" toid="12227" article="a" name="dragon statue" />
 	<item fromid="12228" toid="12233" article="a" name="corrupted wall" />
-	<item fromid="12266" toid="12271" article="a" name="sign" />
-	<item id="12274" article="a" name="sign" />
+	<item fromid="12266" toid="12271" article="an" name="observation slit" />
+	<item id="12274" article="an" name="observation slit" />
 	<item id="12284" article="a" name="marked crate">
 		<attribute key="description" value="This crate has been marked with lizard symbols. It is large enough for a grown person to fit in." />
 		<attribute key="weight" value="8000" />
@@ -21011,8 +21012,7 @@
 		<attribute key="description" value="It is able to store memories and thoughts." />
 		<attribute key="weight" value="140" />
 	</item>
-	<item fromid="12509" toid="12510" article="a" name="magic portal">
-		<attribute key="description" value="You can see the other side through it." />
+	<item fromid="12509" toid="12510" article="a" name="gate of deathstruction">
 		<attribute key="type" value="teleport" />
 		<attribute key="effect" value="teleport" />
 	</item>
@@ -22282,8 +22282,8 @@
 	<item id="13506" article="a" name="medicine pouch">
 		<attribute key="weight" value="1200" />
 	</item>
-	<item id="13495" name="golden slime" />
-	<item id="13507" name="golden slime" />
+	<item id="13495" article="a" name="faint glow" />
+	<item id="13507" article="a" name="faint glow" />
 	<item id="13508" article="a" name="slug drug">
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
 		<attribute key="weight" value="200" />
@@ -22539,6 +22539,11 @@
 	<item id="13582" name="Impward">
 		<attribute key="weight" value="600" />
 	</item>
+	<item id="13583" article="a" name="slain mutated pumpkin">
+		<attribute key="description" value="Who knows how long it will remain dead? Use an obsidian knife on its corpse to retrieve some goods." />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="1800" />
+	</item>
 	<item id="13584" article="a" name="dead crystal wolf">
 		<attribute key="containerSize" value="10" />
 		<attribute key="decayTo" value="13595" />
@@ -22609,9 +22614,9 @@
 	<item fromid="13636" toid="13643" name="rocky floor" />
 	<item fromid="13644" toid="13654" name="rocky wall" />
 	<item fromid="13658" toid="13659" name="rocky wall" />
-	<item fromid="13661" toid="13662" name="golden slime" />
+	<item fromid="13661" toid="13662" article="a" name="faint glow" />
 	<item fromid="13663" toid="13668" article="a" name="rocky wall" />
-	<item id="13669" name="golden slime" />
+	<item id="13669" article="a" name="faint glow" />
 	<item id="13670" name="belongings of a deceased">
 		<attribute key="weight" value="3000" />
 	</item>
@@ -23008,7 +23013,9 @@
 		<attribute key="description" value="A good item to paralyse fast and rowdy orcs." />
 		<attribute key="weight" value="10" />
 	</item>
-	<item id="13934" article="a" name="magic portal" />
+	<item id="13934" article="an" name="energy gate">
+		<attribute key="type" value="teleport" />
+	</item>
 	<item id="13936" name="stairs">
 		<attribute key="floorchange" value="down" />
 	</item>
@@ -24485,6 +24492,7 @@
 		<attribute key="weight" value="190" />
 	</item>
 	<item id="15623" article="a" name="pitch black gap" />
+	<item fromid="15624" toid="15633" name="strange pipes" />
 	<item id="15634" article="a" name="soft green chair">
 		<attribute key="description" value="The chair is tied to this strange machine. You could use this if you had appropriate instructions." />
 	</item>
@@ -24562,6 +24570,7 @@
 		<attribute key="armor" value="8" />
 		<attribute key="slotType" value="head" />
 	</item>
+	<item id="15652" article="a" name="strange machine" />
 	<item fromid="15820" toid="15823" name="counter" />
 	<item id="15985" article="a" name="slain pharaoh" />
 	<item id="16000" article="an" name="anniversary remains" />
@@ -31929,11 +31938,15 @@
 	<item id="23430" article="a" name="switch" />
 	<item fromid="23431" toid="23434" article="an" name="elevator" />
 	<item fromid="23435" toid="23458" article="a" name="slimy growth" />
-	<item id="23459" article="a" name="peppermoon bells" />
-	<item id="23460" article="a" name="blue pollen">
+	<item id="23459" name="peppermoon bells" />
+	<item id="23460" name="blue pollen">
 		<attribute key="weight" value="50" />
 	</item>
-	<item id="23461" name="grass earth lump" />
+	<item id="23461" name="peppermoon bells">
+		<attribute key="decayTo" value="23459" />
+		<attribute key="duration" value="300" />
+		<attribute key="description" value="This one has no pollen left." />
+	</item>
 	<item id="23462" article="a" name="dead mooh'tah warrior">
 		<attribute key="containerSize" value="40" />
 		<attribute key="decayTo" value="23463" />
@@ -32893,8 +32906,8 @@
 		<attribute key="description" value="It draws you nearer." />
 		<attribute key="type" value="teleport" />
 	</item>
-	<item id="24109" article="a" name="water vortex">
-		<attribute key="description" value="It draws you nearer." />
+	<item id="24109" article="a" name="water channel">
+		<attribute key="description" value="A cold maelstrom pulls you down." />
 		<attribute key="type" value="teleport" />
 	</item>
 	<item id="24110" article="a" name="hot geyser">
@@ -34548,7 +34561,7 @@
 	<item id="25332" article="a" name="dragon's nest">
 		<attribute key="description" value="The young dragons have just hatched." />
 	</item>
-	<item id="25331" article="a" name="stone" />
+	<item id="25333" article="a" name="stone" />
 	<item id="25334" article="an" name="Opticorder analyser">
 		<attribute key="description" value="A strangely shaped hollow rests in the center of a desk." />
 	</item>
@@ -35397,7 +35410,7 @@
 	<item id="26022" article="an" name="energy trap">
 		<attribute key="type" value="magicfield" />
 		<attribute key="field" value="energy">
-		<attribute key="damage" value="30" />
+		<attribute key="initdamage" value="30" />
 		<attribute key="ticks" value="10000" />
 		<attribute key="damage" value="25" />
 	</attribute>
@@ -35405,7 +35418,7 @@
 	<item id="26023" article="a" name="toxic trap">
 		<attribute key="type" value="magicfield" />
 		<attribute key="field" value="poison">
-		<attribute key="damage" value="30" />
+		<attribute key="initdamage" value="30" />
 		<attribute key="ticks" value="10000" />
 		<attribute key="damage" value="25" />
 	</attribute>

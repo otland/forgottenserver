@@ -55,8 +55,44 @@ function Player.getLossPercent(self)
 	return lossPercent[blessings]
 end
 
+function Player.getPremiumTime(self)
+	return math.max(0, self:getPremiumEndsAt() - os.time())
+end
+
+function Player.setPremiumTime(self, seconds)
+	self:setPremiumEndsAt(os.time() + seconds)
+	return true
+end
+
+function Player.addPremiumTime(self, seconds)
+	self:setPremiumTime(self:getPremiumTime() + seconds)
+	return true
+end
+
+function Player.removePremiumTime(self, seconds)
+	local currentTime = self:getPremiumTime()
+	if currentTime < seconds then
+		return false
+	end
+
+	self:setPremiumTime(currentTime - seconds)
+	return true
+end
+
+function Player.getPremiumDays(self)
+	return math.floor(self:getPremiumTime() / 86400)
+end
+
+function Player.addPremiumDays(self, days)
+	return self:addPremiumTime(days * 86400)
+end
+
+function Player.removePremiumDays(self, days)
+	return self:removePremiumTime(days * 86400)
+end
+
 function Player.isPremium(self)
-	return self:getPremiumDays() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
+	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
 function Player.sendCancelMessage(self, message)
@@ -202,4 +238,35 @@ function Player.depositMoney(self, amount)
 
 	self:setBankBalance(self:getBankBalance() + amount)
 	return true
+end
+
+function Player.addLevel(self, amount, round)
+	local experience, level, amount = 0, self:getLevel(), amount or 1
+	if amount > 0 then
+		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
+	else
+		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+	end
+	return self:addExperience(experience)
+end
+
+function Player.addMagicLevel(self, value)
+	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+end
+
+function Player.addSkill(self, skillId, value, round)
+	if skillId == SKILL_LEVEL then
+		return self:addLevel(value, round)
+	elseif skillId == SKILL_MAGLEVEL then
+		return self:addMagicLevel(value)
+	end
+	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+end
+
+function Player.getWeaponType()
+	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
+	if weapon then
+		return ItemType(weapon:getId()):getWeaponType()
+	end
+	return WEAPON_NONE
 end
