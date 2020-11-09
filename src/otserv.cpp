@@ -107,15 +107,8 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void mainLoader(int, char*[], ServiceManager* services)
+void printServerVersion()
 {
-	//dispatcher thread
-	g_game.setGameState(GAME_STATE_STARTUP);
-
-	srand(static_cast<unsigned int>(OTSYS_TIME()));
-#ifdef _WIN32
-	SetConsoleTitle(STATUS_SERVER_NAME);
-#endif
 #if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
 	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
 	std::cout << "Git SHA1 " << GIT_SHORT_SHA1  << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
@@ -148,14 +141,27 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
 	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
 	std::cout << std::endl;
+}
+
+void mainLoader(int, char*[], ServiceManager* services)
+{
+	//dispatcher thread
+	g_game.setGameState(GAME_STATE_STARTUP);
+
+	srand(static_cast<unsigned int>(OTSYS_TIME()));
+#ifdef _WIN32
+	SetConsoleTitle(STATUS_SERVER_NAME);
+#endif
+
+	printServerVersion();
 
 	// check if config.lua or config.lua.dist exist
 	const std::string& configFile = g_config.getString(ConfigManager::CONFIG_FILE);
 	std::ifstream c_test("./" + configFile);
 	if (!c_test.is_open()) {
-		std::ifstream config_lua_dist("./" + configFile + ".dist");
+		std::ifstream config_lua_dist("./config.lua.dist");
 		if (config_lua_dist.is_open()) {
-			std::cout << ">> copying " << configFile << ".dist to " << configFile << std::endl;
+			std::cout << ">> copying config.lua.dist to " << configFile << std::endl;
 			std::ofstream config_lua(configFile);
 			config_lua << config_lua_dist.rdbuf();
 			config_lua.close();
@@ -345,19 +351,7 @@ bool argumentsHandler(const StringVector& args)
 			"\t--game-port=$1\tPort for game server to listen on.\n";
 			return false;
 		} else if (arg == "--version") {
-			std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
-			std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
-			std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
-
-#if defined(__amd64__) || defined(_M_X64)
-			std::cout << "x64" << std::endl;
-#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
-			std::cout << "x86" << std::endl;
-#elif defined(__arm__)
-			std::cout << "ARM" << std::endl;
-#else
-			std::cout << "unknown" << std::endl;
-#endif
+			printServerVersion();
 			return false;
 		}
 
