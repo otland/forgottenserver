@@ -68,14 +68,32 @@ Event_ptr TalkActions::getEvent(const std::string& nodeName)
 bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
-	talkActions.emplace(talkAction->getWords().front(), std::move(*talkAction));
+	std::vector<std::string> words = talkAction->getWordsMap();
+
+	for (size_t i = 0; i < words.size(); i++) {
+		if (i == words.size() - 1) {
+			talkActions.emplace(words[i], std::move(*talkAction));
+		} else {
+			talkActions.emplace(words[i], *talkAction);
+		}
+	}
+
 	return true;
 }
 
 bool TalkActions::registerLuaEvent(TalkAction* event)
 {
 	TalkAction_ptr talkAction{ event };
-	talkActions.emplace(talkAction->getWords().front(), std::move(*talkAction));
+	std::vector<std::string> words = talkAction->getWordsMap();
+
+	for (size_t i = 0; i < words.size(); i++) {
+		if (i == words.size() - 1) {
+			talkActions.emplace(words[i], std::move(*talkAction));
+		} else {
+			talkActions.emplace(words[i], *talkAction);
+		}
+	}
+
 	return true;
 }
 
@@ -83,39 +101,40 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 {
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
-		for (auto& talkactionWords : it->second.getWords()) {
-			size_t talkactionLength = talkactionWords.length();
-			if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+		const std::string& talkactionWords = it->first;
+		size_t talkactionLength = talkactionWords.length();
+		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+			++it;
+			continue;
+		}
+
+		std::string param;
+		if (wordsLength != talkactionLength) {
+			param = words.substr(talkactionLength);
+			if (param.front() != ' ') {
+				++it;
 				continue;
 			}
+			trim_left(param, ' ');
 
-			std::string param;
-			if (wordsLength != talkactionLength) {
-				param = words.substr(talkactionLength);
-				if (param.front() != ' ') {
-					continue;
-				}
-				trim_left(param, ' ');
-
-				std::string separator = it->second.getSeparator();
-				if (separator != " ") {
-					if (!param.empty()) {
-						if (param != separator) {
-							continue;
-						} else {
-							param.erase(param.begin());
-						}
+			std::string separator = it->second.getSeparator();
+			if (separator != " ") {
+				if (!param.empty()) {
+					if (param != separator) {
+						++it;
+						continue;
+					} else {
+						param.erase(param.begin());
 					}
 				}
 			}
-
-			if (it->second.executeSay(player, talkactionWords, param, type)) {
-				return TALKACTION_CONTINUE;
-			} else {
-				return TALKACTION_BREAK;
-			}
 		}
-		++it;
+
+		if (it->second.executeSay(player, words, param, type)) {
+			return TALKACTION_CONTINUE;
+		} else {
+			return TALKACTION_BREAK;
+		}
 	}
 	return TALKACTION_CONTINUE;
 }
@@ -133,8 +152,8 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 		separator = pugi::cast<char>(separatorAttribute.value());
 	}
 
-	for (auto w : explodeString(wordsAttribute.as_string(), ";")) {
-		setWords(w);
+	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
+		setWords(word);
 	}
 	return true;
 }
@@ -144,7 +163,7 @@ std::string TalkAction::getScriptEventName() const
 	return "onSay";
 }
 
-bool TalkAction::executeSay(Player* player, const std::string& word, const std::string& param, SpeakClasses type) const
+bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
 	//onSay(player, words, param, type)
 	if (!scriptInterface->reserveScriptEnv()) {
@@ -162,7 +181,7 @@ bool TalkAction::executeSay(Player* player, const std::string& word, const std::
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	LuaScriptInterface::pushString(L, word);
+	LuaScriptInterface::pushString(L, words);
 	LuaScriptInterface::pushString(L, param);
 	lua_pushnumber(L, type);
 

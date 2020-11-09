@@ -72,7 +72,7 @@ local config = {
 		[7442] = {chance = 4800, newItem = 7444},
 		[7444] = {chance = 900, newItem = 7445},
 		[7445] = {chance = 40, newItem = 7446},
-		
+
 		-- The Mutated Pumpkin
 		[13583] = {
 			{chance = 5000, newItem = 8860}, -- spiderwebs

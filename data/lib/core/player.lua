@@ -239,3 +239,34 @@ function Player.depositMoney(self, amount)
 	self:setBankBalance(self:getBankBalance() + amount)
 	return true
 end
+
+function Player.addLevel(self, amount, round)
+	local experience, level, amount = 0, self:getLevel(), amount or 1
+	if amount > 0 then
+		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
+	else
+		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+	end
+	return self:addExperience(experience)
+end
+
+function Player.addMagicLevel(self, value)
+	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+end
+
+function Player.addSkill(self, skillId, value, round)
+	if skillId == SKILL_LEVEL then
+		return self:addLevel(value, round)
+	elseif skillId == SKILL_MAGLEVEL then
+		return self:addMagicLevel(value)
+	end
+	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+end
+
+function Player.getWeaponType()
+	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
+	if weapon then
+		return ItemType(weapon:getId()):getWeaponType()
+	end
+	return WEAPON_NONE
+end
