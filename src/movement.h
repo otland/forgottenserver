@@ -184,12 +184,6 @@ class MoveEvent final : public Event
 		void addPosList(Position pos) {
 			posList.emplace_back(pos);
 		}
-		std::string getSlotName() {
-			return slotName;
-		}
-		void setSlotName(std::string name) {
-			slotName = name;
-		}
 		void setSlot(uint32_t s) {
 			slot = s;
 		}
@@ -224,8 +218,8 @@ class MoveEvent final : public Event
 		static uint32_t AddItemField(Item* item, Item* tileItem, const Position& pos);
 		static uint32_t RemoveItemField(Item* item, Item* tileItem, const Position& pos);
 
-		static ReturnValue EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
-		static ReturnValue DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean);
+		static ReturnValue EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck);
+		static ReturnValue DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool);
 
 		MoveEvent_t eventType = MOVE_EVENT_NONE;
 		StepFunction stepFunction;
@@ -236,7 +230,6 @@ class MoveEvent final : public Event
 		std::string getScriptEventName() const override;
 
 		uint32_t slot = SLOTP_WHEREEVER;
-		std::string slotName;
 
 		//onEquip information
 		uint32_t reqLevel = 0;

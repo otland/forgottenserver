@@ -164,3 +164,8 @@ function getPlayerDatabaseInfo(name_or_guid)
 	result.free(query)
 	return info
 end
+
+function getExperienceForLevel(level)
+	local level = level - 1
+	return (50 * level * level * level - 150 * level * level + 400 * level) / 3
+end

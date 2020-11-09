@@ -40,7 +40,7 @@ ReturnValue Mailbox::queryMaxCount(int32_t, const Thing&, uint32_t count, uint32
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Mailbox::queryRemove(const Thing&, uint32_t, uint32_t) const
+ReturnValue Mailbox::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*= nullptr */) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }

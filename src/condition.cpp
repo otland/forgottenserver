@@ -139,7 +139,7 @@ void Condition::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SUBID);
 	propWriteStream.write<uint32_t>(subId);
-	
+
 	propWriteStream.write<uint8_t>(CONDITIONATTR_ISAGGRESSIVE);
 	propWriteStream.write<uint8_t>(aggressive);
 }

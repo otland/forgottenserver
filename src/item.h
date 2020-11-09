@@ -104,7 +104,8 @@ enum AttrTypes_t {
 	ATTR_SHOOTRANGE = 33,
 	ATTR_CUSTOM_ATTRIBUTES = 34,
 	ATTR_DECAYTO = 35,
-	ATTR_WRAPID = 36
+	ATTR_WRAPID = 36,
+	ATTR_STOREITEM = 37
 };
 
 enum Attr_ReadValue {
@@ -501,7 +502,7 @@ class ItemAttributes
 			| ITEM_ATTRIBUTE_WEIGHT | ITEM_ATTRIBUTE_ATTACK | ITEM_ATTRIBUTE_DEFENSE | ITEM_ATTRIBUTE_EXTRADEFENSE
 			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
 			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
-			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID;
+			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID | ITEM_ATTRIBUTE_STOREITEM;
 		const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
 			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
 
@@ -897,9 +898,6 @@ class Item : virtual public Thing
 			return items[id].isMagicField();
 		}
 		bool isMoveable() const {
-			if (id == ITEM_STORE_INBOX) {
-				return false;
-			}
 			return items[id].moveable;
 		}
 		bool isPickupable() const {
@@ -919,6 +917,15 @@ class Item : virtual public Thing
 			return items[id].walkStack;
 		}
 
+		void setStoreItem(bool storeItem) {
+			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, static_cast<int64_t>(storeItem));
+		}
+		bool isStoreItem() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_STOREITEM)) {
+				return getIntAttr(ITEM_ATTRIBUTE_STOREITEM) == 1;
+			}
+			return items[id].storeItem;
+		}
 		const std::string& getName() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
 				return getStrAttr(ITEM_ATTRIBUTE_NAME);

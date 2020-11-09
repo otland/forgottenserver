@@ -504,7 +504,7 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 		} else if (type != TALKTYPE_CHANNEL_Y) {
 			type = TALKTYPE_CHANNEL_Y;
 		}
-	} else if (type != TALKTYPE_CHANNEL_Y && (channelId == CHANNEL_PRIVATE || channelId == CHANNEL_PARTY)) {
+	} else if (channelId == CHANNEL_PRIVATE || channelId == CHANNEL_PARTY) {
 		type = TALKTYPE_CHANNEL_Y;
 	}
 

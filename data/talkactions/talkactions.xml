@@ -43,7 +43,7 @@
 	<talkaction words="!uptime" script="uptime.lua" />
 	<talkaction words="!deathlist" script="deathlist.lua" />
 	<talkaction words="!kills" script="kills.lua" />
-	<talkaction words="!online" script="online.lua" />
+	<talkaction words="!online;/online" script="online.lua" />
 	<talkaction words="!serverinfo" script="serverinfo.lua" />
 
 	<!-- test talkactions -->
