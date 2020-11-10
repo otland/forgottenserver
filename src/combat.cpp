@@ -1462,6 +1462,14 @@ void MagicField::onStepInField(Creature* creature)
 		return;
 	}
 
+	//remove magic walls/wild growth ( only nopvp tiles/world )
+	if (id == ITEM_MAGICWALL_NOPVP || id == ITEM_WILDGROWTH_NOPVP) {
+		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
+			g_game.internalRemoveItem(this, 1);
+		}
+		return;
+	}
+
 	const ItemType& it = items[getID()];
 	if (it.conditionDamage) {
 		Condition* conditionCopy = it.conditionDamage->clone();
