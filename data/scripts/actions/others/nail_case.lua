@@ -40,7 +40,7 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		player:say(message, TALKTYPE_MONSTER_SAY)
 		return true
 	end
-	
+
 	player:say("You did it! A completely manicured gravedigger is ready to follow you as your own personal trusty mount until the bitter end!", TALKTYPE_MONSTER_SAY)
 	item:remove(1)
 	target:remove()

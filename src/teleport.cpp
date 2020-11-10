@@ -55,7 +55,7 @@ ReturnValue Teleport::queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, 
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Teleport::queryRemove(const Thing&, uint32_t, uint32_t) const
+ReturnValue Teleport::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*= nullptr */) const
 {
 	return RETURNVALUE_NOERROR;
 }

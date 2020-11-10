@@ -7976,7 +7976,7 @@
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="water" />
 	</item>
-	<item fromid="4620" toid="4625" name="shallow water">
+	<item fromid="4620" toid="4625" name="shallow water" editorsuffix=" (Swimmable)">
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="1" />
@@ -8011,7 +8011,7 @@
 	<item fromid="4760" toid="4783" name="sand" />
 	<item fromid="4784" toid="4795" name="grass" />
 	<item fromid="4796" toid="4819" name="dirt" />
-	<item fromid="4820" toid="4825" name="shallow water">
+	<item fromid="4820" toid="4825" name="shallow water" editorsuffix=" (Swimmable)">
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="water" />
@@ -17673,23 +17673,15 @@
 	</item>
 	<item id="9976" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9977" />
-		<attribute key="duration" value="15" />
 	</item>
 	<item id="9977" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9978" />
-		<attribute key="duration" value="10" />
 	</item>
 	<item id="9978" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9979" />
-		<attribute key="duration" value="11" />
 	</item>
 	<item id="9979" article="a" name="crystal pedestal">
 		<attribute key="weight" value="4000" />
-		<attribute key="decayTo" value="9976" />
-		<attribute key="duration" value="9" />
 	</item>
 	<item id="9980" article="a" name="crystal of power">
 		<attribute key="description" value="It is said to make you more resistant to weaknesses and to supply you with energy." />
