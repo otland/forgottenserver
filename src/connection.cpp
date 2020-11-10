@@ -135,11 +135,9 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	readTimer.cancel();
 
 	if (error) {
-		std::cout << "error in parseHeader" << std::endl;
 		close(FORCE_CLOSE);
 		return;
 	} else if (closed) {
-		std::cout << "parseHeader closed = true" << std::endl;
 		return;
 	}
 
@@ -183,11 +181,9 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	readTimer.cancel();
 
 	if (error) {
-		std::cout << "parsePacket returned an error" << std::endl;
 		close(FORCE_CLOSE);
 		return;
 	} else if (closed) {
-		std::cout << "parsePacket closed = true" << std::endl;
 		return;
 	}
 
@@ -207,27 +203,22 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 
 	if (!receivedFirst) {
-		std::cout << "receivedFirst = true" << std::endl;
 		// First message received
 		receivedFirst = true;
 
 		if (!protocol) {
-			std::cout << "there was no protocol, we try to create it" << std::endl;
 			// Game protocol has already been created at this point
 			protocol = service_port->make_protocol(recvChecksum == checksum, msg, shared_from_this());
 			if (!protocol) {
-				std::cout << "could not create protocol for some reason" << std::endl;
 				close(FORCE_CLOSE);
 				return;
 			}
 		} else {
-			std::cout << "protocol was already created and we skip bytes" << std::endl;
 			msg.skipBytes(1); // Skip protocol ID
 		}
 
 		protocol->onRecvFirstMessage(msg);
 	} else {
-		std::cout << "this is not handled yet" << std::endl;
 		protocol->onRecvMessage(msg); // Send the packet to the current protocol
 	}
 
