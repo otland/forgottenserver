@@ -11795,7 +11795,7 @@ int LuaScriptInterface::luaItemTypeGetDefaultDurationMin(lua_State* L)
 	// itemType:getDefaultDurationMin()
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
-		pushBoolean(L, itemType->getDefaultDuration());
+		lua_pushnumber(L, itemType->decayTime);
 	} else {
 		lua_pushnil(L);
 	}
@@ -11807,7 +11807,7 @@ int LuaScriptInterface::luaItemTypeGetDefaultDurationMax(lua_State* L)
 	// itemType:getDefaultDurationMax()
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
-		pushBoolean(L, itemType->getDefaultDurationMax());
+		lua_pushnumber(L, itemType->decayTimeMax);
 	} else {
 		lua_pushnil(L);
 	}
