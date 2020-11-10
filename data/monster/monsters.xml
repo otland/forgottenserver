@@ -175,6 +175,7 @@
 	<monster name="Dreadwing" file="monsters/dreadwing.xml" />
 	<monster name="Drillworm" file="monsters/drillworm.xml" />
 	<monster name="Dromedary" file="monsters/dromedary.xml" />
+	<monster name="Dryad" file="monsters/dryad.xml" />
 	<monster name="Dwarf Geomancer" file="monsters/dwarf_geomancer.xml" />
 	<monster name="Dwarf Guard" file="monsters/dwarf_guard.xml" />
 	<monster name="Dwarf Henchman" file="monsters/dwarf_henchman.xml" />

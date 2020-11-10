@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Corym Skirmisher" nameDescription="a corym skirmisher" race="blood" experience="260" speed="200" manacost="695">
 	<health now="450" max="450" />
-	<look type="533" head="0" body="57" legs="82" feet="0" corpse="19726" />
+	<look type="533" head="0" body="76" legs="83" feet="0" corpse="19726" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />

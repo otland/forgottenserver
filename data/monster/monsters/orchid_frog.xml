@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Orchid Frog" nameDescription="an orchid frog" race="blood" experience="20" speed="200" manacost="305">
 	<health now="60" max="60" />
-	<look type="226" head="71" body="16" legs="90" feet="71" corpse="6079" />
+	<look type="226" head="71" body="14" legs="71" feet="70" corpse="6079" />
 	<targetchange interval="5000" chance="20" />
 	<flags>
 		<flag summonable="0" />

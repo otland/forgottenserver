@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Corym Vanguard" nameDescription="a corym vanguard" race="blood" experience="490" speed="210">
 	<health now="700" max="700" />
-	<look type="534" head="0" body="38" legs="102" feet="0" corpse="19734" />
+	<look type="534" head="0" body="19" legs="121" feet="0" corpse="19734" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />

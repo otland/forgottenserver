@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crazed Beggar" nameDescription="a crazed beggar" race="blood" experience="35" speed="200" manacost="300">
 	<health now="100" max="100" />
-	<look type="153" body="38" feet="97" head="59" legs="38" addons="3" corpse="20351" />
+	<look type="153" body="40" feet="19" head="21" legs="97" addons="3" corpse="20351" />
 	<targetchange interval="4000" chance="0" />
 	<flags>
 		<flag summonable="1" />
