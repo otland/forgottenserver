@@ -9141,17 +9141,18 @@ int LuaScriptInterface::luaPlayerSendTextMessage(lua_State* L)
 int LuaScriptInterface::luaPlayerSendChannelMessage(lua_State* L)
 {
 	// player:sendChannelMessage(author, text, type, channelId)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
 	uint16_t channelId = getNumber<uint16_t>(L, 5);
 	SpeakClasses type = getNumber<SpeakClasses>(L, 4);
 	const std::string& text = getString(L, 3);
 	const std::string& author = getString(L, 2);
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		player->sendChannelMessage(author, text, type, channelId);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
+	player->sendChannelMessage(author, text, type, channelId);
+	pushBoolean(L, true);
 	return 1;
 }
 
