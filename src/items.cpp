@@ -66,6 +66,8 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"transformequipto", ITEM_PARSE_TRANSFORMEQUIPTO},
 	{"transformdeequipto", ITEM_PARSE_TRANSFORMDEEQUIPTO},
 	{"duration", ITEM_PARSE_DURATION},
+	{"durationMin", ITEM_PARSE_DURATION},
+	{"durationMax", ITEM_PARSE_DURATION_MAX},
 	{"showduration", ITEM_PARSE_SHOWDURATION},
 	{"charges", ITEM_PARSE_CHARGES},
 	{"showcharges", ITEM_PARSE_SHOWCHARGES},
@@ -824,6 +826,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_DURATION: {
 					it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_DURATION_MAX: {
+					it.decayTimeMax = pugi::cast<uint32_t>(valueAttribute.value());
 					break;
 				}
 
