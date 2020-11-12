@@ -9,10 +9,12 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   crypto++-dev \
   gcc \
   gmp-dev \
-  luajit-dev \
   make \
   mariadb-connector-c-dev \
   pugixml-dev
+# luajit-dev is in edge/main
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/main/ \
+	  luajit-dev 
 
 COPY cmake /usr/src/forgottenserver/cmake/
 COPY src /usr/src/forgottenserver/src/
@@ -28,9 +30,11 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   boost-filesystem \
   crypto++ \
   gmp \
-  luajit \
   mariadb-connector-c \
   pugixml
+# luajit is in edge/main
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/main/ \
+	  luajit 
 
 RUN ln -s /usr/lib/libcryptopp.so /usr/lib/libcryptopp.so.5.6
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs
