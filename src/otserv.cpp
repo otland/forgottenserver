@@ -362,9 +362,9 @@ bool argumentsHandler(const StringVector& args)
 		else if (tmp[0] == "--ip")
 			g_config.setString(ConfigManager::IP, tmp[1]);
 		else if (tmp[0] == "--login-port")
-			g_config.setNumber(ConfigManager::LOGIN_PORT, atoi(tmp[1].c_str()));
+			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1]));
 		else if (tmp[0] == "--game-port")
-			g_config.setNumber(ConfigManager::GAME_PORT, atoi(tmp[1].c_str()));
+			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
 	}
 
 	return true;
