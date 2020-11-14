@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mimic" nameDescription="a mimic" race="blood" experience="0" speed="170">
 	<health now="30" max="30" />
 	<look type="92" corpse="1740" />

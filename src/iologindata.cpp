@@ -209,11 +209,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `id`, `account_id`, `group_id`, `deletion`, (SELECT `type` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `account_type`";
-	if (!g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
-		query << ", (SELECT `premium_ends_at` FROM `accounts` WHERE `accounts`.`id` = `account_id`) AS `premium_ends_at`";
-	}
-	query << " FROM `players` WHERE `name` = " << db.escapeString(name);
+	query << "SELECT `p`.`id`, `p`.`account_id`, `p`.`group_id`, `p`.`deletion`,`a`.`type`,`a`.`premium_ends_at` FROM `players` as `p` JOIN `accounts` as `a` ON `a`.`id` = `p`.`account_id` WHERE `p`.`name` = " << db.escapeString(name);
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
 		return false;
@@ -231,7 +227,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	}
 	player->setGroup(group);
 	player->accountNumber = result->getNumber<uint32_t>("account_id");
-	player->accountType = static_cast<AccountType_t>(result->getNumber<uint16_t>("account_type"));
+	player->accountType = static_cast<AccountType_t>(result->getNumber<uint16_t>("type"));
 	player->premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 	return true;
 }
