@@ -271,6 +271,8 @@ class ProtocolGame final : public Protocol
 		//messages
 		void sendModalWindow(const ModalWindow& modalWindow);
 
+		void sendProgressbar(uint32_t id, uint32_t duration, bool ltr = true);
+
 		//Help functions
 
 		// translate a tile to clientreadable format
