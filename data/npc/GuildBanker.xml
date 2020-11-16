@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Guild Banker" script="guildbank.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="132" head="38" body="85" legs="78" feet="116" addons="3" />
+</npc>

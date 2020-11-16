@@ -57,6 +57,25 @@ class Guild
 			memberCount = count;
 		}
 
+		uint64_t getBankBalance() const {
+			return bankBalance;
+		}
+		void setBankBalance(uint64_t balance);
+
+		uint32_t getHouseId() const {
+			return houseId;
+		}
+		void setHouseId(uint32_t id) {
+			houseId = id;
+		}
+
+		uint32_t getOwnerGUID() const {
+			return ownerGUID;
+		}
+		void setOwnerGUID(uint32_t guid) {
+			ownerGUID = guid;
+		}
+
 		const std::vector<GuildRank_ptr>& getRanks() const {
 			return ranks;
 		}
@@ -79,6 +98,9 @@ class Guild
 		std::string motd;
 		uint32_t id;
 		uint32_t memberCount = 0;
+		uint64_t bankBalance = 0;
+		uint32_t ownerGUID = 0;
+		uint32_t houseId = 0;
 };
 
 #endif

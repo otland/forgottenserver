@@ -108,6 +108,13 @@ enum AccessHouseLevel_t {
 	HOUSE_OWNER = 3,
 };
 
+// this enum should represent DB `houses`.`type`
+// MySQL enum indexes start at 1
+enum HouseType_t {
+	HOUSE_TYPE_NORMAL = 1,
+	HOUSE_TYPE_GUILDHALL = 2,
+};
+
 using HouseTileList = std::list<HouseTile*>;
 using HouseBedItemList = std::list<BedItem*>;
 
@@ -161,7 +168,7 @@ class House
 			return houseName;
 		}
 
-		void setOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
+		void setOwner(uint32_t guid_guild, bool updateDatabase = true, Player* previousPlayer = nullptr);
 		uint32_t getOwner() const {
 			return owner;
 		}
@@ -198,6 +205,13 @@ class House
 			return id;
 		}
 
+		void setType(HouseType_t type) {
+			this->type = type;
+		}
+		HouseType_t getType() const {
+			return type;
+		}
+
 		void addDoor(Door* door);
 		void removeDoor(Door* door);
 		Door* getDoorByNumber(uint32_t doorId) const;
@@ -224,6 +238,8 @@ class House
 		}
 
 	private:
+		std::tuple<uint32_t, uint32_t, std::string, uint32_t, std::string> initializeOwnerDataFromDatabase(uint32_t guid_guild, HouseType_t type);
+
 		bool transferToDepot() const;
 		bool transferToDepot(Player* player) const;
 
@@ -252,6 +268,8 @@ class House
 
 		Position posEntry = {};
 
+		HouseType_t type = HOUSE_TYPE_NORMAL;
+
 		bool isLoaded = false;
 };
 
@@ -263,6 +281,7 @@ enum RentPeriod_t {
 	RENTPERIOD_MONTHLY,
 	RENTPERIOD_YEARLY,
 	RENTPERIOD_NEVER,
+	RENTPERIOD_DEV,// 5 minutes rent period for testing purposes
 };
 
 class Houses
@@ -303,6 +322,8 @@ class Houses
 		bool loadHousesXML(const std::string& filename);
 
 		void payHouses(RentPeriod_t rentPeriod) const;
+		std::string getRentPeriod(RentPeriod_t rentPeriod) const;
+		time_t increasePaidUntil(RentPeriod_t rentPeriod, time_t paidUntil) const;
 
 		const HouseMap& getHouses() const {
 			return houseMap;

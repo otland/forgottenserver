@@ -1533,6 +1533,11 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_WILDGROWTH)
 	registerEnum(ITEM_WILDGROWTH_PERSISTENT)
 	registerEnum(ITEM_WILDGROWTH_SAFE)
+	registerEnum(ITEM_LETTER)
+	registerEnum(ITEM_LETTER_STAMPED)
+	registerEnum(ITEM_DOCUMENT_RO)
+	registerEnum(ITEM_RECEIPT_SUCCESS)
+	registerEnum(ITEM_RECEIPT_FAIL)
 
 	registerEnum(PlayerFlag_CannotUseCombat)
 	registerEnum(PlayerFlag_CannotAttackPlayer)
@@ -1735,6 +1740,9 @@ void LuaScriptInterface::registerFunctions()
 	// Use with house:getAccessList, house:setAccessList
 	registerEnum(GUEST_LIST)
 	registerEnum(SUBOWNER_LIST)
+	// Use with house:getType
+	registerEnum(HOUSE_TYPE_NORMAL)
+	registerEnum(HOUSE_TYPE_GUILDHALL)
 
 	// Use with npc:setSpeechBubble
 	registerEnum(SPEECHBUBBLE_NONE)
@@ -1836,6 +1844,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RETURNVALUE_TRADEPLAYERHIGHESTBIDDER)
 	registerEnum(RETURNVALUE_YOUCANNOTTRADETHISHOUSE)
 	registerEnum(RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION)
+	registerEnum(RETURNVALUE_TRADEPLAYERNOTINAGUILD)
+	registerEnum(RETURNVALUE_TRADEGUILDALREADYOWNSAHOUSE)
+	registerEnum(RETURNVALUE_TRADEPLAYERNOTGUILDLEADER)
+	registerEnum(RETURNVALUE_YOUARENOTGUILDLEADER)
 
 	registerEnum(RELOAD_TYPE_ALL)
 	registerEnum(RELOAD_TYPE_ACTIONS)
@@ -2510,6 +2522,12 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Guild", "getMotd", LuaScriptInterface::luaGuildGetMotd);
 	registerMethod("Guild", "setMotd", LuaScriptInterface::luaGuildSetMotd);
 
+	registerMethod("Guild", "getBankBalance", LuaScriptInterface::luaGuildGetBankBalance);
+	registerMethod("Guild", "setBankBalance", LuaScriptInterface::luaGuildSetBankBalance);
+
+	registerMethod("Guild", "getOwnerGUID", LuaScriptInterface::luaGuildGetOwnerGUID);
+	registerMethod("Guild", "getHouseId", LuaScriptInterface::luaGuildGetHouseId);
+
 	// Group
 	registerClass("Group", "", LuaScriptInterface::luaGroupCreate);
 	registerMetaMethod("Group", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2566,6 +2584,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("House", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerMethod("House", "getId", LuaScriptInterface::luaHouseGetId);
+	registerMethod("House", "getType", LuaScriptInterface::luaHouseGetType);
 	registerMethod("House", "getName", LuaScriptInterface::luaHouseGetName);
 	registerMethod("House", "getTown", LuaScriptInterface::luaHouseGetTown);
 	registerMethod("House", "getExitPosition", LuaScriptInterface::luaHouseGetExitPosition);
@@ -2573,6 +2592,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
 	registerMethod("House", "setOwnerGuid", LuaScriptInterface::luaHouseSetOwnerGuid);
+	registerMethod("House", "getOwnerGuild", LuaScriptInterface::luaHouseGetOwnerGuild);
 	registerMethod("House", "startTrade", LuaScriptInterface::luaHouseStartTrade);
 
 	registerMethod("House", "getBeds", LuaScriptInterface::luaHouseGetBeds);
@@ -10426,6 +10446,61 @@ int LuaScriptInterface::luaGuildSetMotd(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGuildGetBankBalance(lua_State* L)
+{
+	// guild:getBankBalance()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getBankBalance());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildSetBankBalance(lua_State* L)
+{
+	// guild:setBankBalance(balance)
+	uint64_t balance = getNumber<uint32_t>(L, 2);
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		guild->setBankBalance(balance);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildGetOwnerGUID(lua_State* L)
+{
+	// guild:getOwnerGUID()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getOwnerGUID());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildGetHouseId(lua_State* L)
+{
+	// guild:getHouseId()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		uint32_t houseId = guild->getHouseId();
+		if (houseId > 0) {
+			lua_pushnumber(L, houseId);
+		} else {
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Group
 int LuaScriptInterface::luaGroupCreate(lua_State* L)
 {
@@ -10889,6 +10964,18 @@ int LuaScriptInterface::luaHouseGetId(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaHouseGetType(lua_State* L)
+{
+	// house:getType()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		lua_pushnumber(L, house->getType());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaHouseGetName(lua_State* L)
 {
 	// house:getName()
@@ -10949,7 +11036,27 @@ int LuaScriptInterface::luaHouseGetOwnerGuid(lua_State* L)
 	// house:getOwnerGuid()
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		lua_pushnumber(L, house->getOwner());
+		if (house->getType() == HOUSE_TYPE_NORMAL) {
+			lua_pushnumber(L, house->getOwner());
+		} else {
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetOwnerGuild(lua_State* L)
+{
+	// house:getOwnerGuild()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		if (house->getType() == HOUSE_TYPE_GUILDHALL) {
+			lua_pushnumber(L, house->getOwner());
+		} else {
+			lua_pushnil(L);
+		}
 	} else {
 		lua_pushnil(L);
 	}
@@ -10961,9 +11068,22 @@ int LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 	// house:setOwnerGuid(guid[, updateDatabase = true])
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		uint32_t guid = getNumber<uint32_t>(L, 2);
+		uint32_t guid_guild = getNumber<uint32_t>(L, 2);
 		bool updateDatabase = getBoolean(L, 3, true);
-		house->setOwner(guid, updateDatabase);
+		// If house is guildhall and player happens to be in a guild
+		// We can pull the guild_id and pass it over to house->setOwner
+		if (house->getType() == HOUSE_TYPE_GUILDHALL) {
+			Database& db = Database::getInstance();
+			std::ostringstream query;
+			query << "SELECT `guild_id` FROM `guild_membership` WHERE `player_id`=" << guid_guild;
+			if (DBResult_ptr result = db.storeQuery(query.str())) {
+				guid_guild = result->getNumber<uint32_t>("guild_id");
+			} else {
+				pushBoolean(L, false);
+				return 1;
+			}
+		}
+		house->setOwner(guid_guild, updateDatabase);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -10988,17 +11108,63 @@ int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 		return 1;
 	}
 
-	if (house->getOwner() != player->getGUID()) {
+	if (house->getType() == HOUSE_TYPE_NORMAL) {
+		if (house->getOwner() != player->getGUID()) {
+			lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
+			return 1;
+		}
+
+		if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
+			lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+			return 1;
+		}
+
+		if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+			lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
+			return 1;
+		}
+
+		Item* transferItem = house->getTransferItem();
+		if (!transferItem) {
+			lua_pushnumber(L, RETURNVALUE_YOUCANNOTTRADETHISHOUSE);
+			return 1;
+		}
+
+		transferItem->getParent()->setParent(player);
+		if (!g_game.internalStartTrade(player, tradePartner, transferItem)) {
+			house->resetTransferItem();
+		}
+
+		lua_pushnumber(L, RETURNVALUE_NOERROR);
+		return 1;
+	}
+
+	// HOUSE_TYPE_GUILDHALL
+	Guild* guild = player->getGuild();
+	if (!guild || house->getOwner() != guild->getId()) {
 		lua_pushnumber(L, RETURNVALUE_YOUDONTOWNTHISHOUSE);
 		return 1;
 	}
 
-	if (g_game.map.houses.getHouseByPlayerId(tradePartner->getGUID())) {
-		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE);
+	Guild* tradeGuild = tradePartner->getGuild();
+	if (!tradeGuild) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERNOTINAGUILD);
+		return 1;
+	}
+	if (tradeGuild->getHouseId() > 0) {
+		lua_pushnumber(L, RETURNVALUE_TRADEGUILDALREADYOWNSAHOUSE);
+		return 1;
+	}
+	if (player->getGUID() != guild->getOwnerGUID()) {
+		lua_pushnumber(L, RETURNVALUE_YOUARENOTGUILDLEADER);
+		return 1;
+	}
+	if (tradePartner->getGUID() != tradeGuild->getOwnerGUID()) {
+		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERNOTGUILDLEADER);
 		return 1;
 	}
 
-	if (IOLoginData::hasBiddedOnHouse(tradePartner->getGUID())) {
+	if (IOLoginData::hasBiddedOnHouse(tradeGuild->getId())) {
 		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERHIGHESTBIDDER);
 		return 1;
 	}

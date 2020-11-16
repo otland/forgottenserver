@@ -1213,6 +1213,18 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE:
 			return "Trade player already owns a house.";
 
+		case RETURNVALUE_TRADEPLAYERNOTINAGUILD:
+			return "Trade player is not in a guild.";
+
+		case RETURNVALUE_TRADEGUILDALREADYOWNSAHOUSE:
+			return "Trade guild already owns a guildhall.";
+
+		case RETURNVALUE_TRADEPLAYERNOTGUILDLEADER:
+			return "Trade player is not a guild leader.";
+
+		case RETURNVALUE_YOUARENOTGUILDLEADER:
+			return "You are not a guild leader.";
+
 		case RETURNVALUE_TRADEPLAYERHIGHESTBIDDER:
 			return "Trade player is currently the highest bidder of an auctioned house.";
 
