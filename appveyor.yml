@@ -27,7 +27,7 @@ install:
   - cmd : vcpkg install boost-lockfree:x64-windows
   - cmd : vcpkg install cryptopp:x64-windows
   - cmd : vcpkg install luajit:x64-windows
-  - cmd : vcpkg install libmariadb:x64-windows
+  - cmd : vcpkg install --recurse libmariadb:x64-windows
   - cmd : vcpkg install pugixml:x64-windows
 
 build:
