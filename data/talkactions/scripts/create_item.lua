@@ -43,7 +43,7 @@ function onSay(player, words, param)
 		end
 	end
 
-	local result = player:addItem(itemType:getId(), count)
+	local result
 	if itemType:isPickupable() then
 		result = player:addItem(itemType:getId(), count)
 	else
