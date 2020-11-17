@@ -44,6 +44,12 @@ function onSay(player, words, param)
 	end
 
 	local result = player:addItem(itemType:getId(), count)
+	if itemType:isPickupable() then
+		result = player:addItem(itemType:getId(), count)
+	else
+		result = Game.createItem(itemType:getId(), count, player:getPosition())
+	end
+	
 	if result then
 		if not itemType:isStackable() then
 			if type(result) == "table" then
