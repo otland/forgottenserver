@@ -7,7 +7,7 @@
 	<monster name="Acolyte of the Cult" file="monsters/acolyte_of_the_cult.xml" />
 	<monster name="Adept of the Cult" file="monsters/adept_of_the_cult.xml" />
 	<monster name="Adventurer" file="monsters/adventurer.xml" />
-	<monster name="Amarie" file="monsters/amarie_(creature).xml" />
+	<monster name="Amarie" file="monsters/amarie.xml" />
 	<monster name="Amazon" file="monsters/amazon.xml" />
 	<monster name="Ancient Scarab" file="monsters/ancient_scarab.xml" />
 	<monster name="Angry Adventurer" file="monsters/angry_adventurer.xml" />
@@ -281,7 +281,7 @@
 	<monster name="Grim Reaper" file="monsters/grim_reaper.xml" />
 	<monster name="Grimgor Guteater" file="monsters/grimgor_guteater.xml" />
 	<monster name="Groam" file="monsters/groam.xml" />
-	<monster name="Grodrik" file="monsters/grodrik_(creature).xml" />
+	<monster name="Grodrik" file="monsters/grodrik.xml" />
 	<monster name="Grorlam" file="monsters/grorlam.xml" />
 	<monster name="Grynch Clan Goblin" file="monsters/grynch_clan_goblin.xml" />
 	<monster name="Guzzlemaw" file="monsters/guzzlemaw.xml" />
