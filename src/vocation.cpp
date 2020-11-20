@@ -183,7 +183,7 @@ uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
-	if (skill > SKILL_LAST) {
+	if (skill > SKILL_LAST || level <= 10) {
 		return 0;
 	}
 
@@ -199,6 +199,10 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
 {
+	if (magLevel == 0) {
+		return 0;
+	}
+
 	auto it = cacheMana.find(magLevel);
 	if (it != cacheMana.end()) {
 		return it->second;
