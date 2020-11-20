@@ -96,4 +96,16 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
+constexpr double fast_pow(double base, uint32_t exp) {
+	double result = 1.0;
+	while (exp) {
+		if (exp & 1) {
+			result *= base;
+		}
+		exp >>= 1;
+		base *= base;
+	}
+	return result;
+}
+
 #endif

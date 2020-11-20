@@ -1,4 +1,4 @@
-/**
+getReqSkillTries/**
  * The Forgotten Server - a free and open-source MMORPG server emulator
  * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
  *
@@ -34,7 +34,7 @@ class Vocation
 		const std::string& getVocDescription() const {
 			return description;
 		}
-		uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
+		uint64_t getReqSkillTries(uint8_t skill, uint32_t level);
 		uint64_t getReqMana(uint32_t magLevel);
 
 		uint16_t getId() const {
@@ -94,14 +94,14 @@ class Vocation
 	private:
 		friend class Vocations;
 
-		std::map<uint32_t, uint64_t> cacheMana;
-		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
+		std::vector<uint64_t> cacheMana;
+		std::vector<uint64_t> cacheSkill[SKILL_LAST + 1];
 
 		std::string name = "none";
 		std::string description;
 
-		float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};
-		float manaMultiplier = 4.0f;
+		double skillMultipliers[SKILL_LAST + 1] = {1.5, 2.0, 2.0, 2.0, 2.0, 1.5, 1.1};
+		double manaMultiplier = 4.0;
 
 		uint32_t gainHealthTicks = 6;
 		uint32_t gainHealthAmount = 1;
