@@ -502,6 +502,8 @@ class Game
 
 		bool reload(ReloadTypes_t reloadType);
 
+		void startProgressbar(Creature* creature, uint32_t duration, bool ltr = true);
+
 		Auras auras;
 		Groups groups;
 		Map map;		
