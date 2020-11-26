@@ -18,6 +18,7 @@ expFromPlayersLevelRange = 75
 
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
+-- allowWalkthrough is only applicable to players
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
@@ -27,6 +28,7 @@ maxPlayers = 0
 motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
+allowWalkthrough = true
 serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
