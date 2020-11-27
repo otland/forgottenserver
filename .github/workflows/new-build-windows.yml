@@ -73,5 +73,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
+          path: ${{ runner.workspace }}\build\tfs
         if: contains( matrix.os, 'windows')
