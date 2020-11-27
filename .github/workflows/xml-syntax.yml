@@ -1,12 +1,21 @@
 name: XML syntax check
 
 on:
+  push:
+    branches:
+      - master
+      - FixChecks
+      - v*
+      
+    tags:
+      - v*
+      
   pull_request:
     paths:
-      - data/**.xml
-  push:
-    paths:
-      - data/**.xml
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - .github/**
 
 jobs:
   xmllint:
