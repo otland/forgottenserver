@@ -1,0 +1,77 @@
+name: Reworked Build on Windows
+
+on:
+  push:
+    branches:
+      - master
+      - FixChecks
+      - v*
+      
+    tags:
+      - v*
+      
+  pull_request:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - .github/**
+
+jobs:
+  build:
+    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [windows]
+        buildtype: [Debug, Release]
+        luajit: [on, off]
+        include:
+          - os: windows
+            triplet: x64-windows
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua luajit libmariadb pugixml cryptopp
+              
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+
+      - name: Get latest CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Windows - remove C:/mysql*
+        run: rm -r -fo C:/mysql-5.7.21-winx64
+        if: contains( matrix.os, 'windows')
+
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v5
+        with:
+          vcpkgArguments: ${{ matrix.packages }}
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
+          vcpkgTriplet: ${{ matrix.triplet }}
+          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@v3.2
+        with:
+          useVcpkgToolchainFile: true
+          buildDirectory: ${{ runner.workspace }}/build
+          cmakeBuildType: ${{ matrix.buildtype }}
+          cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
+
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - name: Upload datapack
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/tfs
+        if: contains( matrix.os, 'windows')

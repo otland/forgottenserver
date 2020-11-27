@@ -11,14 +11,14 @@ env:
 
 jobs:
   scan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.repository == 'otland/forgottenserver'
     steps:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
         run: >
-          sudo apt-get install git cmake build-essential libluajit-5.1-dev libgmp3-dev libmysqlclient-dev
+          sudo apt install git cmake build-essential libluajit-5.1-dev libgmp3-dev libmysqlclient-dev
           libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
           libpugixml-dev libcrypto++-dev
 

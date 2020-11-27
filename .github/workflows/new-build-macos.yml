@@ -1,0 +1,88 @@
+name: Reworked Build on MacOS
+
+on:
+  push:
+    branches:
+      - master
+      - FixChecks
+      - v*
+      
+    tags:
+      - v*
+      
+  pull_request:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - .github/**
+
+jobs:
+  build:
+    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        name: [macos-clang]
+        buildtype: [Debug, Release]
+        luajit: [on, off]
+        include:
+          - name: macos-clang
+            os: macos
+            cxx: clang++
+            cc: clang
+            triplet: x64-osx
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua libmariadb pugixml cryptopp
+              
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+
+      - name: Get latest CMake
+        uses: lukka/get-cmake@latest
+
+      - name: MacOS - install luajit pkgconfig
+        run: brew install luajit pkgconfig
+        if: contains( matrix.os, 'macos')
+
+      - name: Set Environment vars
+        run: |
+          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@main
+        with:
+          vcpkgArguments: ${{ matrix.packages }}
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
+          vcpkgTriplet: ${{ matrix.triplet }}
+          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@main
+        with:
+          useVcpkgToolchainFile: true
+          buildDirectory: ${{ runner.workspace }}/build
+          cmakeBuildType: ${{ matrix.buildtype }}
+          cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
+
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - name: Prepare datapack contents
+        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+        shell: bash
+
+      - name: Upload datapack contents
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/tfs

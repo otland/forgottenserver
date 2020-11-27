@@ -1,0 +1,56 @@
+name: Reworked Build on Ubuntu
+
+on:
+  push:
+    branches:
+      - master
+      - FixChecks
+      - v*
+      
+    tags:
+      - v*
+      
+  pull_request:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - .github/**
+
+jobs:
+  build:
+    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+        buildtype: [Debug, Release]
+        luajit: [on, off]
+        
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Install Dependencies
+      run: >
+        sudo apt update && sudo apt install git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
+        libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
+        libpugixml-dev libcrypto++-dev libboost-date-time-dev
+          
+    - name: Prepare Build Environment
+      run: |
+        mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.buildtype }} -DUSE_LUAJIT=${{ matrix.luajit }} ..   
+        
+    - name: Build
+      run: |
+        make
+
+    - name: Clean Workspace
+      shell: bash
+      run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+ 
+    - name: Upload Binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.os }}-tfs-amd64-${{ matrix.buildtype }}-LUAJIT=${{ matrix.luajit }}-${{ github.sha }}
+        path: ${{ runner.workspace }}/build/tfs
