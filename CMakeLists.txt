@@ -32,6 +32,11 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-fno-strict-aliasing)
 endif ()
 
+if (UNIX)
+  find_package(Threads REQUIRED)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif ()
+
 # Find packages.
 find_package(CryptoPP QUIET)
 if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
