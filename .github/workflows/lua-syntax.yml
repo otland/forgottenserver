@@ -1,12 +1,21 @@
 name: Lua syntax check
 
 on:
+  push:
+    branches:
+      - master
+      - FixChecks
+      - v*
+      
+    tags:
+      - v*
+      
   pull_request:
     paths:
-      - data/**.lua
-  push:
-    paths:
-      - data/**.lua
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - .github/**
 
 jobs:
   luac:
