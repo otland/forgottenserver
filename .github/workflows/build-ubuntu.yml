@@ -48,5 +48,5 @@ jobs:
     - name: Upload Binary
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ matrix.os }}-tfs-amd64-${{ matrix.buildtype }}-LUAJIT=${{ matrix.luajit }}-${{ github.sha }}
-        path: ${{ runner.workspace }}/build
+        name: ${{ matrix.os }}-tfs-amd64-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+        path: ${{ runner.workspace }}/theforgottenserver/build/tfs

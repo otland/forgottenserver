@@ -71,5 +71,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}\build
+          path: ${{ runner.workspace }}\theforgottenserver\build\tfs
         if: contains( matrix.os, 'windows')
