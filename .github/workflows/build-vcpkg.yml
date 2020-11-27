@@ -97,7 +97,7 @@ jobs:
           CC: ${{ matrix.cc }}
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v2
+        uses: lukka/run-vcpkg@v5
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
