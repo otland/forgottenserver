@@ -1,21 +1,12 @@
-name: XML syntax check
+name: XML Syntax Check
 
 on:
-  push:
-    branches:
-      - master
-      - FixChecks
-      - v*
-      
-    tags:
-      - v*
-      
   pull_request:
     paths:
-      - cmake/**
-      - src/**
-      - CMakeLists.txt
-      - .github/**
+      - data/**.xml
+  push:
+    paths:
+      - data/**.xml
 
 jobs:
   xmllint:
@@ -26,5 +17,5 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
-      - name: Test XML syntax
+      - name: Test XML Syntax
         run: find data/ -name '*.xml' -print0 | xargs -0 -n1 xmllint --noout

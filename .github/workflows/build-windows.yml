@@ -1,10 +1,9 @@
-name: Reworked Build on Windows
+name: Build on Windows
 
 on:
   push:
     branches:
       - master
-      - FixChecks
       - v*
       
     tags:
@@ -15,7 +14,6 @@ on:
       - cmake/**
       - src/**
       - CMakeLists.txt
-      - .github/**
 
 jobs:
   build:
@@ -50,7 +48,7 @@ jobs:
         if: contains( matrix.os, 'windows')
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v5
+        uses: lukka/run-vcpkg@main
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
@@ -58,7 +56,7 @@ jobs:
           vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
 
       - name: Build with CMake
-        uses: lukka/run-cmake@v3.2
+        uses: lukka/run-cmake@main
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
