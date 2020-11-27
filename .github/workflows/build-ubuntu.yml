@@ -35,12 +35,17 @@ jobs:
         libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
         libpugixml-dev libcrypto++-dev libboost-date-time-dev liblua5.2-dev libpthread-stubs0-dev
           
-    - name: Build With CMake
-      run: |
-        mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=${{ matrix.buildtype }} -DUSE_LUAJIT=${{ matrix.luajit }} ..
-        make
+    - name: Build with CMake
+      uses: lukka/run-cmake@main
+      with:
+        buildDirectory: ${{ runner.workspace }}/build
+        cmakeBuildType: ${{ matrix.buildtype }}
+        cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
 
+    - name: dir
+      run: find $RUNNER_WORKSPACE
+      shell: bash
+      
     - name: Clean Workspace
       shell: bash
       run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
@@ -49,4 +54,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.os }}-tfs-amd64-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-        path: ${{ runner.workspace }}/theforgottenserver/build/tfs
+        path: ${{ runner.workspace }}/build/tfs

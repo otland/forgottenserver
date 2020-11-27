@@ -66,10 +66,14 @@ jobs:
       - name: dir
         run: find $RUNNER_WORKSPACE
         shell: bash
+        
+      - name: Clean Workspace
+        shell: bash
+        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
 
       - name: Upload datapack
         uses: actions/upload-artifact@v2
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}\theforgottenserver\build\tfs
+          path: ${{ runner.workspace }}\build\tfs
         if: contains( matrix.os, 'windows')

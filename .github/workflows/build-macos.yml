@@ -75,9 +75,9 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
 
-      - name: Prepare datapack contents
-        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+      - name: Clean Workspace
         shell: bash
+        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
 
       - name: Upload datapack contents
         uses: actions/upload-artifact@v2
