@@ -35,7 +35,7 @@ jobs:
       run: >
         sudo apt update && sudo apt install git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
         libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
-        libpugixml-dev libcrypto++-dev libboost-date-time-dev lua5.1 libpthread-stubs0-dev
+        libpugixml-dev libcrypto++-dev libboost-date-time-dev liblua5.2-dev libpthread-stubs0-dev
           
     - name: Build With CMake
       run: |
