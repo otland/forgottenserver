@@ -2,9 +2,6 @@ name: Build with vcpkg
 
 on:
   push:
-    branches:
-      - master
-      - v*
 
     tags:
       - v*
@@ -97,7 +94,7 @@ jobs:
           CC: ${{ matrix.cc }}
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v5
+        uses: lukka/run-vcpkg@v4
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
@@ -105,7 +102,7 @@ jobs:
           vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
 
       - name: Build with CMake
-        uses: lukka/run-cmake@v2
+        uses: lukka/run-cmake@v3
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
