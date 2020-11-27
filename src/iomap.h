@@ -143,7 +143,7 @@ class IOMap
 			return errorString;
 		}
 
-		void setLastErrorString(std::string error) {
+		void setLastErrorString(const std::string& error) {
 			errorString = error;
 		}
 

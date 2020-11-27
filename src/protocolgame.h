@@ -43,11 +43,11 @@ struct TextMessage
 	MessageClasses type = MESSAGE_STATUS_DEFAULT;
 	std::string text;
 	Position position;
-	uint16_t channelId;
+	uint16_t channelId{};
 	struct {
 		int32_t value = 0;
 		TextColor_t color;
-	} primary, secondary;
+	} primary{}, secondary{};
 
 	TextMessage() = default;
 	TextMessage(MessageClasses type, std::string text) : type(type), text(std::move(text)) {}

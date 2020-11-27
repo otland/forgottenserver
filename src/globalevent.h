@@ -95,7 +95,7 @@ class GlobalEvent final : public Event
 		const std::string& getName() const {
 			return name;
 		}
-		void setName(std::string eventName) {
+		void setName(const std::string& eventName) {
 			name = eventName;
 		}
 

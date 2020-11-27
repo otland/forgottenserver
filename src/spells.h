@@ -133,7 +133,7 @@ class Spell : public BaseSpell
 		const std::string& getName() const {
 			return name;
 		}
-		void setName(std::string n) {
+		void setName(const std::string& n) {
 			name = n;
 		}
 		uint8_t getId() const {

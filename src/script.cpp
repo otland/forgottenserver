@@ -37,7 +37,7 @@ Scripts::~Scripts()
 	scriptInterface.reInitState();
 }
 
-bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
+bool Scripts::loadScripts(const std::string folderName, bool isLib, bool reload)
 {
 	namespace fs = boost::filesystem;
 

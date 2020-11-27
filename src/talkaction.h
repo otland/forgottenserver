@@ -53,7 +53,7 @@ class TalkAction : public Event
 		std::string getSeparator() const {
 			return separator;
 		}
-		void setSeparator(std::string sep) {
+		void setSeparator(const std::string& sep) {
 			separator = sep;
 		}
 

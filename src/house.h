@@ -154,7 +154,7 @@ class House
 			return posEntry;
 		}
 
-		void setName(std::string houseName) {
+		void setName(const std::string& houseName) {
 			this->houseName = houseName;
 		}
 		const std::string& getName() const {

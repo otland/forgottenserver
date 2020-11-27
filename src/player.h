@@ -232,7 +232,7 @@ class Player final : public Creature, public Cylinder
 		const std::string& getGuildNick() const {
 			return guildNick;
 		}
-		void setGuildNick(std::string nick) {
+		void setGuildNick(const std::string& nick) {
 			guildNick = nick;
 		}
 
