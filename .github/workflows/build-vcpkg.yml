@@ -3,20 +3,6 @@ name: Build with vcpkg
 on:
   push:
 
-    tags:
-      - v*
-
-    paths:
-      - cmake/**
-      - src/**
-      - CMakeLists.txt
-
-  pull_request:
-    paths:
-      - cmake/**
-      - src/**
-      - CMakeLists.txt
-
 jobs:
   job:
     name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
