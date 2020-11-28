@@ -51,7 +51,7 @@ jobs:
         uses: lukka/run-vcpkg@main
         with:
           vcpkgArguments: ${{ matrix.packages }}
-          vcpkgDirectory: ${{ runner.workspace }}\vcpkg\
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
 
@@ -59,7 +59,7 @@ jobs:
         uses: lukka/run-cmake@main
         with:
           useVcpkgToolchainFile: true
-          buildDirectory: ${{ runner.workspace }}\build
+          buildDirectory: ${{ runner.workspace }}/build
           cmakeBuildType: ${{ matrix.buildtype }}
           cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
 
@@ -75,5 +75,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}\build
+          path: ${{ runner.workspace }}/build/tfs.exe
         if: contains( matrix.os, 'windows')
