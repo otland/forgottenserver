@@ -100,7 +100,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 
 std::string Scripts::executeString(const std::string text)
 {
-	std::string& ret = scriptInterface.loadString(text);
+	std::string ret = scriptInterface.loadString(text);
 	if (!ret.empty()) {
 		return ret;
 	}
