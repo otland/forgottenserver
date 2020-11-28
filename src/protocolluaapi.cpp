@@ -63,7 +63,7 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 	switch (recvbyte) {
 		case 100: {
 			std::string text = msg.getString();
-			std::string& returnvalue = g_scripts->executeString(text);
+			std::string returnvalue = g_scripts->executeString(text);
 			if (!returnvalue.empty()) {
 				g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendErrorMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
 					returnvalue)));
