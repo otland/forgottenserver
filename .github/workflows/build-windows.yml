@@ -53,6 +53,7 @@ jobs:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
+          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
           appendedCacheKey: ${{ hashFiles(env.vcpkgResponseFile) }}
 
 

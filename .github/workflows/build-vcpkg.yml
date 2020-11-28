@@ -99,10 +99,8 @@ jobs:
         uses: lukka/run-vcpkg@v5
         with:
           vcpkgArguments: ${{ matrix.packages }}
-          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
-          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
           appendedCacheKey: ${{ hashFiles(env.vcpkgResponseFile) }}
           
       - name: Build with CMake
