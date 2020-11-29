@@ -72,7 +72,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
-	
+
 	if not configManager.getBoolean(configKeys.REMOVE_POTION_CHARGES) then
 		return true
 	end
