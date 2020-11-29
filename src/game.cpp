@@ -2291,7 +2291,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 		if (!g_events->eventPlayerOnBrowseField(player, tile->getPosition())) {
 			return;
 		}
-		
+
 		auto it = browseFields.find(tile);
 		if (it == browseFields.end()) {
 			parentContainer = new Container(tile);
