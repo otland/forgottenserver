@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - v*
+      - CacheV2
       
     tags:
       - v*
@@ -18,17 +19,16 @@ on:
 jobs:
   build:
     name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: macos-11.0
     strategy:
       fail-fast: false
-      max-parallel: 8
       matrix:
         name: [macos-clang]
         buildtype: [Debug, Release]
         luajit: [on, off]
         include:
           - name: macos-clang
-            os: macos
+            os: macos-11.0
             cxx: clang++
             cc: clang
             triplet: x64-osx
@@ -61,7 +61,7 @@ jobs:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
-          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
+          vcpkgGitCommitId: 0e1a03e061ce0af558c653e19f3a333bcd3c9da6
           appendedCacheKey: ${{ hashFiles(env.vcpkgResponseFile) }}
 
 
@@ -84,5 +84,5 @@ jobs:
       - name: Upload datapack contents
         uses: actions/upload-artifact@v2
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
           path: ${{ runner.workspace }}/build/tfs
