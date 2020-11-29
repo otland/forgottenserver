@@ -18,7 +18,7 @@ on:
 jobs:
   build:
     name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
-    runs-on: macos-11.0
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -27,7 +27,7 @@ jobs:
         luajit: [on, off]
         include:
           - name: macos-clang
-            os: macos-11.0
+            os: macos-latest
             cxx: clang++
             cc: clang
             triplet: x64-osx
