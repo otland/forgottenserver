@@ -107,7 +107,9 @@ rateSpawn = 1
 
 -- Monsters
 -- spawnIntervalRate controls the rate of monster spawning interval
--- its in percentage so 100 = 100%, 50 = 50% and so on
+-- its in percentage so 100 = 100% (normal spawn), 50 = 50% (half spawn time) and so on
+-- the higher the number, the spawn will be less frequent
+-- NOTE: minimum spawn interval is 10 seconds while maximum is 1 day for the map spawn file
 deSpawnRange = 2
 deSpawnRadius = 50
 spawnIntervalRate = 100
