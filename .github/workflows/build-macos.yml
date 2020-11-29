@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - v*
-      - CacheV2
       
     tags:
       - v*
@@ -68,7 +67,6 @@ jobs:
       - name: Build with CMake
         uses: lukka/run-cmake@main
         with:
-          useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
           cmakeBuildType: ${{ matrix.buildtype }}
           cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
