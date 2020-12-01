@@ -29,7 +29,8 @@
 	<movevent event="StepIn" itemid="1387" script="citizen.lua" />
 
 	<!-- Walkback when walking on quest chest -->
-	<movevent event="StepIn" itemid="1738;1740" script="walkback.lua" />
+	<movevent event="StepIn" itemid="1738" script="walkback.lua" />
+	<movevent event="StepIn" itemid="1740" script="walkback.lua" />
 	<movevent event="StepIn" fromid="1746" toid="1749" script="walkback.lua" />
 
 	<!-- (Level & quest) doors -->
