@@ -347,6 +347,7 @@ function getCreatureBaseSpeed(cid) local c = Creature(cid) return c and c:getBas
 function getCreatureLookDirection(cid) local c = Creature(cid) return c and c:getDirection() or false end
 function getCreatureHideHealth(cid) local c = Creature(cid) return c and c:isHealthHidden() or false end
 function getCreatureSkullType(cid) local c = Creature(cid) return c and c:getSkull() or false end
+function getCreatureNoMove(cid) local c = Creature(cid) return c and c:isMovementBlocked() or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
@@ -390,6 +391,7 @@ function doCreatureSetSkullType(cid, skull) local c = Creature(cid) return c and
 function setCreatureMaxHealth(cid, health) local c = Creature(cid) return c and c:setMaxHealth(health) or false end
 function setCreatureMaxMana(cid, mana) local c = Creature(cid) return c and c:setMaxMana(mana) or false end
 function doCreatureSetHideHealth(cid, hide) local c = Creature(cid) return c and c:setHiddenHealth(hide) or false end
+function doCreatureSetNoMove(cid, block) local c = Creature(cid) return c and c:setMovementBlocked(block) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c and c:say(text, type, ...) or false end
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c and c:setOutfit(outfit) or false end
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c and c:setDropLoot(doDrop) or false end
