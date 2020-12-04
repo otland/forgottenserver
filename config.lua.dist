@@ -18,7 +18,7 @@ expFromPlayersLevelRange = 75
 
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
--- allowWalkthrough is only applicable to players
+-- NOTE: allowWalkthrough is only applicable to players
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
@@ -42,6 +42,8 @@ deathLosePercent = -1
 
 -- Houses
 -- NOTE: set housePriceEachSQM to -1 to disable the ingame buy house functionality
+-- NOTE: valid values for houseRentPeriod are: "daily", "weekly", "monthly", "yearly"
+-- use any other value to disable the rent system
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
 houseOwnedByAccount = false
@@ -75,7 +77,8 @@ mysqlSock = ""
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
--- forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes, you can change to false if all of your monster files don't throw errors to save up memory.
+-- NOTE: forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes,
+-- you can change to false if all of your monster files don't throw errors to save up memory.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
@@ -123,7 +126,7 @@ convertUnsafeScripts = true
 defaultPriority = "high"
 startupDatabaseOptimization = false
 
--- Status server information
+-- Status Server Information
 ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
