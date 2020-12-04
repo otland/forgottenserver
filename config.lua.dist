@@ -77,8 +77,8 @@ mysqlSock = ""
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
--- NOTE: forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes,
--- you can change to false if all of your monster files don't throw errors to save up memory.
+-- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
+-- You can disable it to save some memory if you don't see any errors at startup.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
