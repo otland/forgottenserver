@@ -2692,7 +2692,7 @@ void ProtocolGame::sendOutfitWindow()
 		}
 
 		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
-		if (protocolOutfits.size() == 255) { // FIXME: Figure out the current limit
+		if (protocolOutfits.size() == 255) { // FIXME: Game client currently doesn't allow more than 255 outfits
 			break;
 		}
 	}
