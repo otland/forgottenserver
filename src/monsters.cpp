@@ -917,7 +917,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				mType->info.light.color = pugi::cast<uint16_t>(attr.value());
 			} else if (strcasecmp(attrName, "targetdistance") == 0) {
 				int32_t targetDistance = pugi::cast<int32_t>(attr.value());
-				if(targetDistance < 1) {
+				if (targetDistance < 1) {
 					targetDistance = 1;
 					std::cout << "[Warning - Monsters::loadMonster] targetdistance less than 1. " << file << std::endl;
 				}
@@ -943,7 +943,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.pushable = false;
 		}
 	}
-	if(mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
+	if (mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
 		std::cout << "[Warning - Monsters::loadMonster] manaCost missing or zero on monster with summonable and/or convinceable flags: " << file << std::endl;
 	}
 
@@ -956,7 +956,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 		if ((attr = node.attribute("chance"))) {
 			int32_t chance = pugi::cast<int32_t>(attr.value());
-			if(chance > 100) {
+			if (chance > 100) {
 				chance = 100;
 				std::cout << "[Warning - Monsters::loadMonster] targetchange chance value out of bounds. " << file << std::endl;
 			}
@@ -1163,7 +1163,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 		if ((attr = node.attribute("chance"))) {
 			uint32_t chance = pugi::cast<uint32_t>(attr.value());
-			if(chance > 100) {
+			if (chance > 100) {
 				chance = 100;
 				std::cout << "[Warning - Monsters::loadMonster] yell chance value out of bounds. " << file << std::endl;
 			}
