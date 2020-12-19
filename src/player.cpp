@@ -2115,7 +2115,7 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 				ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature->getNameDescription() << '.';
 			} else if (mostDamageCreature && names[mostDamageCreature->getName()] >= 1) {
 				ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << mostDamageCreature->getNameDescription();
-				if (names[lastHitCreature->getName()] == 1) {
+				if (lastHitCreature != mostDamageCreature && names[lastHitCreature->getName()] == 1) {
 					ss << " and " << lastHitCreature->getNameDescription();
 					if (countNames > 2) {
 						ss << " and others.";
