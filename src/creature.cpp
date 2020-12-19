@@ -614,6 +614,24 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 	}
 }
 
+std::vector<Creature*> Creature::getKillers()
+{
+	std::vector<Creature*> killers;
+	const int64_t timeNow = OTSYS_TIME();
+	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	for (const auto& it : damageMap) {
+		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
+			CountBlock_t cb = it.second;
+			if (timeNow - cb.ticks <= inFightTicks) {
+				if (attacker != this) {
+					killers.emplace_back(attacker);
+				}
+			}
+		}
+	}
+	return killers;
+}
+
 void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;

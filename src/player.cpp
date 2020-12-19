@@ -2098,8 +2098,32 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
 		std::ostringstream ss;
+		auto killers = getKillers();
+		std::map<std::string, uint16_t> names;
+		for (auto& killer : killers) {
+			std::string killerName = killer->getName();
+			if (names.find(killerName) != names.end()) {
+				names[killerName]++;
+			} else {
+				names[killerName] = 1;
+			}
+		}
+
+		size_t countNames = names.size();
 		if (lastHitCreature) {
-			ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature->getNameDescription() << '.';
+			if (countNames == 1) {
+				ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << lastHitCreature->getNameDescription() << '.';
+			} else if (mostDamageCreature && names[mostDamageCreature->getName()] >= 1) {
+				ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by " << mostDamageCreature->getNameDescription();
+				if (names[lastHitCreature->getName()] == 1) {
+					ss << " and " << lastHitCreature->getNameDescription();
+					if (countNames > 2) {
+						ss << " and others.";
+					}
+				} else {
+					ss << " and others.";
+				}
+			}
 		} else {
 			ss << "You recognize " << getNameDescription() << '.';
 		}
