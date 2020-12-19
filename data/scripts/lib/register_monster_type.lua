@@ -117,11 +117,8 @@ registerMonsterType.flags = function(mtype, mask)
 end
 registerMonsterType.light = function(mtype, mask)
 	if mask.light then
-		if mask.light.color then
-			local color = mask.light.color
-		end
-		if mask.light.level then
-			mtype:light(color, mask.light.level)
+		if mask.light.color and mask.light.level then
+			mtype:light(mask.light.color, mask.light.level)
 		end
 	end
 end
@@ -154,7 +151,7 @@ end
 registerMonsterType.summons = function(mtype, mask)
 	if type(mask.summons) == "table" then
 		for k, v in pairs(mask.summons) do
-			mtype:addSummon(v.name, v.interval, v.chance)
+			mtype:addSummon(v.name, v.interval, v.chance, v.max or mtype:maxSummons())
 		end
 	end
 end
@@ -247,8 +244,12 @@ registerMonsterType.attacks = function(mtype, mask)
 			if attack.name then
 				if attack.name == "melee" then
 					spell:setType("melee")
-					if attack.attack and attack.skill then
-						spell:setAttackValue(attack.attack, attack.skill)
+					if attack.attack and attack.skill then						
+						if attack.attack ~= 0 and attack.skill ~= 0 then
+							spell:setAttackValue(attack.attack, attack.skill)
+						elseif attack.minDamage and attack.maxDamage then
+							spell:setCombatValue(attack.minDamage, attack.maxDamage)
+						end
 					end
 					if attack.interval then
 						spell:setInterval(attack.interval)
