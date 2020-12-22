@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
-		<flag targetdistance="4" />
+		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="65" />
 		<flag canwalkonenergy="0" />
