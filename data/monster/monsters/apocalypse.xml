@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Apocalypse" nameDescription="Apocalypse" race="fire" experience="35000" speed="380">
-	<health now="80000" max="80000" />
-	<look type="12" head="38" body="114" legs="0" feet="94" corpse="6068" />
+<monster name="Apocalypse" nameDescription="Apocalypse" race="fire" experience="30000" speed="380">
+	<health now="125000" max="125000" />
+	<look type="12" head="58" body="13" legs="58" feet="85" corpse="6068" />
 	<targetchange interval="5000" chance="20" />
 	<flags>
 		<flag summonable="0" />

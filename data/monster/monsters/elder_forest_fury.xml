@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Elder Forest Fury" nameDescription="an elder forest fury" race="blood" experience="330" speed="240">
+	<health now="670" max="670" />
+	<look type="569" corpse="21359" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="3" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-53" poison="5" />
+		<attack name="physical" interval="1500" chance="40" radius="4" target="1" range="5" min="0" max="-100">
+			<attribute key="shootEffect" value="huntingspear" />
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element deathPercent="40" />
+		<element holyPercent="10" />
+		<element firePercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="To arms, sisters!" />
+		<voice sentence="Feel the wrath of mother forest!" />
+		<voice sentence="By the power of Greenskull!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="68" chance="90000" />
+		<item name="bolt" countmax="15" chance="45000" />
+		<item name="hunting spear" countmax="2" chance="45000" />
+		<item name="venison" chance="21000" />
+		<item name="meat" chance="18000" />
+		<item name="piercing bolt" countmax="5" chance="16000" />
+		<item name="elven hoof" chance="12000" />
+		<item name="hunting spear" countmax="2" chance="8000" />
+		<item name="small emerald" chance="3600" />
+		<item name="crossbow" chance="2350" />
+		<item name="raspberry" countmax="3" chance="670" />
+		<item name="bullseye potion" chance="340" />
+		<item name="terra rod" chance="340" />
+	</loot>
+</monster>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Horadron" nameDescription="Horadron" race="fire" experience="18000" speed="320">
+	<health now="30000" max="30000" />
+	<look type="12" head="78" body="61" legs="115" feet="58" addons="0" corpse="6068" />
+	<targetchange interval="2000" chance="25" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="110" attack="100" />
+		<attack name="earth" interval="2000" chance="25" length="8" spread="0" min="-600" max="-1000">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="25" length="8" spread="3" min="-600" max="-1000">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="30" range="7" target="1" min="-100" max="-235">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="25" radius="3" target="0" min="-100" max="-250">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="25" radius="3" target="0" min="-300" max="-450">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+        	</attacks>
+	<defenses armor="55" defense="65">
+		<defense name="healing" interval="2000" chance="35" min="400" max="700">
+			<attribute key="areaEffect" value="redspark" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element deathPercent="30" />
+		<element energyPercent="30" />
+		<element firePercent="30" />
+		<element icePercent="30" />
+		<element holyPercent="30" />
+	</elements>
+	<immunities>
+		<immunity poison="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Defiler" interval="2000" chance="12" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Even I fear the wrath of the princes. And the cold touch of those whom they serve! You are not prepared!" />
+		<voice sentence="You foolish mortals with you medding you brought the end upon your world!" />
+		<voice sentence="After all those aeons I smell freedom at last!" />
+	</voices>
+	<loot>
+		<item id="22396" chance="100000" /><!-- cluster of solace -->
+		<item id="5954" chance="100000" /><!-- demon horn -->
+		<item id="6500" chance="100000" /><!-- demonic essence -->
+		<item id="22397" chance="13850" /><!-- dream matter -->
+		<item id="22610" chance="5380" /><!-- dream warden mask -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="50" chance="100000" /><!-- platinum coin -->
+		<item id="22598" chance="100000" /><!-- unrealized dream -->
+		<item id="8903" chance="5130" /><!-- spellbook of lost souls -->
+		<item id="8901" chance="35900" /><!-- spellbook of warding -->
+		<item id="8902" chance="10260" /><!-- spellbook of mind control -->
+		<item id="3962" chance="33330" /><!-- beastslayer axe -->
+		<item id="7456" chance="12820" /><!-- noble axe -->
+		<item id="7453" chance="2560" /><!-- executioner -->
+		<item id="7388" chance="2560" /><!-- vile axe -->
+		<item id="2466" chance="1220" /><!-- golden armor -->
+		<item id="2656" chance="1220" /><!-- blue robe -->
+		<item id="2487" chance="17950" /><!-- crown armor -->
+		<item id="2470" chance="250" /><!-- golden legs -->
+		<item id="2415" chance="90" /><!-- great axe -->
+		<item id="8926" chance="90" /><!-- demoonwing axe -->
+		<item id="7895" chance="1750" /><!-- lightning legs -->
+		<item id="2477" chance="1750" /><!-- knight legs -->
+		<item id="2488" chance="20510" /><!-- crown legs -->
+		<item id="2645" chance="15380" /><!-- steel boots -->
+		<item id="2145" countmax="25" chance="17950" /><!-- small diamond -->
+		<item id="2150" countmax="25" chance="5130" /><!-- small amethyst -->
+		<item id="2149" countmax="25" chance="10260" /><!-- small emerald -->
+		<item id="2146" countmax="25" chance="28210" /><!-- small sapphire -->
+		<item id="9970" countmax="25" chance="15380" /><!-- small topaz -->
+		<item id="2147" countmax="25" chance="20510" /><!-- small ruby -->
+	</loot>
+</monster>

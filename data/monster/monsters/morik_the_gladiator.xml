@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Morik the Gladiator" nameDescription="Morik the Gladiator" race="blood" experience="160" speed="200">
 	<health now="1235" max="1235" />
-	<look type="131" head="57" body="57" legs="57" feet="57" addons="1" corpse="20531" />
+	<look type="131" head="57" body="57" legs="57" feet="57" addons="1" corpse="20450" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="0" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
@@ -35,9 +35,9 @@
 		<element deathPercent="-10" />
 	</elements>
 	<summons maxSummons="2">
-		<summon name="gladiator" interval="2000" chance="10" max="2" />
+		<summon name="gladiator" interval="2000" chance="10" />
 	</summons>
-	<voices interval="4000" chance="10">
+	<voices interval="5000" chance="10">
 		<voice sentence="To be the one you'll have to beat the one!" />
 		<voice sentence="Where did I put my ultimate health potion again?" />
 		<voice sentence="I am the best!" />

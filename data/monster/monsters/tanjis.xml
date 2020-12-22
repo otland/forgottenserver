@@ -63,7 +63,7 @@
 		<element physicalPercent="-20" />
 		<element deathPercent="-20" />
 	</elements>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="JAUL QJELL, JAKNH JEH KENH!!" />
 	</voices>
 	<loot>

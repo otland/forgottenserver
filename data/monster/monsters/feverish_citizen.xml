@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185">
 	<health now="125" max="125" />
-	<look type="425" corpse="20395" />
+	<look type="425" addons="2" corpse="20395" />
 	<targetchange interval="4000" chance="0" />
 	<flags>
 		<flag summonable="0" />
