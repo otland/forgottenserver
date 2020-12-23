@@ -42,7 +42,7 @@
 		<item id="2667" countmax="2" chance="20290" /><!-- Fish -->
 		<item name="worm" countmax="2" chance="15000" />
 		<item name="seeds" chance="120" />
-		<item id="19740" chance="7180" /><!-- Marsh Stalker Beak -->
+		<item id="19741" chance="7180" /><!-- Marsh Stalker Beak -->
 		<item name="marsh stalker beak" chance="9300" />
 	</loot>
 </monster>
