@@ -625,7 +625,7 @@ std::vector<Creature*> Creature::getKillers()
 			CountBlock_t cb = it.second;
 			if (timeNow - cb.ticks <= inFightTicks) {
 				if (attacker != this) {
-					killers.emplace_back(attacker);
+					killers.push_back(attacker);
 				}
 			}
 		}
