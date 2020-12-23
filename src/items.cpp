@@ -556,6 +556,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		return;
 	}
 
+	if (!it.name.empty()) {
+		std::cout << "[Warning - Items::parseItemNode] Duplicate item with id: " << id << std::endl;
+		return;
+	}
+
 	it.name = itemNode.attribute("name").as_string();
 
 	nameToItems.insert({ asLowerCaseString(it.name), id });
