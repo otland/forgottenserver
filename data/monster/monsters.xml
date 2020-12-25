@@ -286,7 +286,7 @@
 	<monster name="Grynch Clan Goblin" file="monsters/grynch_clan_goblin.xml" />
 	<monster name="Guzzlemaw" file="monsters/guzzlemaw.xml" />
 	<monster name="Hacker" file="monsters/hacker.xml" />
-	<monster name="Hairman the Huge" file="monsters/hairman_the_huge.xml" />
+	<monster name="Hairman The Huge" file="monsters/hairman_the_huge.xml" />
 	<monster name="Hand of Cursed Fate" file="monsters/hand_of_cursed_fate.xml" />
 	<monster name="Haunted Treeling" file="monsters/haunted_treeling.xml" />
 	<monster name="Haunter" file="monsters/haunter.xml" />
@@ -414,7 +414,7 @@
 	<monster name="Monstor" file="monsters/monstor.xml" />
 	<monster name="Morgaroth" file="monsters/morgaroth.xml" />
 	<monster name="Morguthis" file="monsters/morguthis.xml" />
-	<monster name="Morik the Gladiator" file="monsters/morik_the_gladiator.xml" />
+	<monster name="Morik The Gladiator" file="monsters/morik_the_gladiator.xml" />
 	<monster name="Mornenion" file="monsters/mornenion.xml" />
 	<monster name="Mr. Punish" file="monsters/mr._punish.xml" />
 	<monster name="Muddy Earth Elemental" file="monsters/muddy_earth_elemental.xml" />
@@ -509,7 +509,7 @@
 	<monster name="Rocky" file="monsters/rocky.xml" />
 	<monster name="Ron the Ripper" file="monsters/ron_the_ripper.xml" />
 	<monster name="Rorc" file="monsters/rorc.xml" />
-	<monster name="Rottie the Rotworm" file="monsters/rottie_the_rotworm.xml" />
+	<monster name="Rottie The Rotworm" file="monsters/rottie_the_rotworm.xml" />
 	<monster name="Rotworm Queen" file="monsters/rotworm_queen.xml" />
 	<monster name="Rotworm" file="monsters/rotworm.xml" />
 	<monster name="Sacred Spider" file="monsters/sacred_spider.xml" />

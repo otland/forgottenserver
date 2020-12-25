@@ -70,7 +70,8 @@
 		<voice sentence="Your resistance is futile!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="200" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="platinum coin" countmax="8" chance="100000" />
 		<item name="great mana potion" countmax="3" chance="25000" />
 		<item name="great spirit potion" countmax="3" chance="25000" />

@@ -30,17 +30,16 @@
 			<attribute key="areaeffect" value="carniphila" />
 		</attack>
 	</attacks>
-	<defenses armor="75" defense="75">
-	</defenses>
+	<defenses armor="75" defense="75" />
 	<elements>
-		<element energyPercent="20" />
-		<element earthPercent="20" />
-		<element deathPercent="-40" />
+		<element holyPercent="-10" />
+		<element firePercent="15" />
+		<element energyPercent="30" />
+		<element icePercent="30" />
 	</elements>
 	<immunities>
 		<immunity death="1" />
 		<immunity lifedrain="1" />
-		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="4">

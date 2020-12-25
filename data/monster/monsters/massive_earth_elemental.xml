@@ -54,7 +54,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity earth="1" />
-		<immunity energy="1" />
+		<immunity ice="1" />
 	</immunities>
 	<loot>
 		<item name="small stone" countmax="10" chance="25280" />

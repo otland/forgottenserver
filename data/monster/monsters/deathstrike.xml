@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Deathstrike" nameDescription="Deathstrike" race="blood" experience="40000" speed="470">
+<monster name="Deathstrike" nameDescription="Deathstrike" race="undead" experience="40000" speed="470">
 	<health now="200000" max="200000" />
 	<look type="500" corpse="18384" />
 	<targetchange interval="5000" chance="8" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="50" />
 		<flag runonhealth="10000" />
 		<flag isboss="1" />
