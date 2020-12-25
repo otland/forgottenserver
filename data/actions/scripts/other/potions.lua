@@ -51,8 +51,15 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:say(potion.text, TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(potion.effect)
 	elseif potion.transform then
-		item:transform(potion.transform[math.random(#potion.transform)])
+		local reward = potion.transform[math.random(#potion.transform)]
+		if fromPosition.x == CONTAINER_POSITION then
+			local targetContainer = Container(item:getParent().uid)
+			targetContainer:addItem(reward, 1)
+		else
+			Game.createItem(reward, 1, fromPosition)
+		end
 		item:getPosition():sendMagicEffect(potion.effect)
+		item:remove(1)
 		return true
 	else
 		if potion.health then
