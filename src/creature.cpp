@@ -61,6 +61,11 @@ bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRa
 		}
 	} else if (myPos.z >= 8) {
 		//we are underground (8 -> 15)
+		// we can't see floors above 8
+		if (pos.z < 8) {
+			return false;
+		}
+
 		//view is +/- 2 from the floor we stand on
 		if (Position::getDistanceZ(myPos, pos) > 2) {
 			return false;
