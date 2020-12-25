@@ -35,7 +35,7 @@ ReturnValue TrashHolder::queryMaxCount(int32_t, const Thing&, uint32_t count, ui
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue TrashHolder::queryRemove(const Thing&, uint32_t, uint32_t) const
+ReturnValue TrashHolder::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*= nullptr*/) const
 {
 	return RETURNVALUE_NOTPOSSIBLE;
 }

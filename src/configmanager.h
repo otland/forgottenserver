@@ -23,6 +23,8 @@
 class ConfigManager
 {
 	public:
+		ConfigManager();
+
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT,
 			ONE_PLAYER_ON_ACCOUNT,
@@ -35,6 +37,7 @@ class ConfigManager
 			FREE_PREMIUM,
 			REPLACE_KICK_ON_LOGIN,
 			ALLOW_CLONES,
+			ALLOW_WALKTHROUGH,
 			BIND_ONLY_GLOBAL_ADDRESS,
 			OPTIMIZE_DATABASE,
 			MARKET_PREMIUM,
@@ -55,6 +58,7 @@ class ConfigManager
 			HOUSE_OWNED_BY_ACCOUNT,
 			CLEAN_PROTECTION_ZONES,
 			HOUSE_DOOR_SHOW_PRICE,
+			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 			PREMIUM_TO_BUY_HOUSE,
 			BUY_PREMIUM_ENABLED,
 			CHANGE_SEX_ENABLED,
@@ -83,6 +87,7 @@ class ConfigManager
 			MYSQL_SOCK,
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
+			CONFIG_FILE,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
@@ -137,6 +142,10 @@ class ConfigManager
 		const std::string& getString(string_config_t what) const;
 		int32_t getNumber(integer_config_t what) const;
 		bool getBoolean(boolean_config_t what) const;
+
+		bool setString(string_config_t what, const std::string& value);
+		bool setNumber(integer_config_t what, int32_t value);
+		bool setBoolean(boolean_config_t what, bool value);
 
 	private:
 		std::string string[LAST_STRING_CONFIG] = {};

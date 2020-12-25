@@ -18,6 +18,7 @@ expFromPlayersLevelRange = 75
 
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
+-- NOTE: allowWalkthrough is only applicable to players
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
@@ -27,6 +28,7 @@ maxPlayers = 0
 motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
+allowWalkthrough = true
 serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
@@ -40,10 +42,13 @@ deathLosePercent = -1
 
 -- Houses
 -- NOTE: set housePriceEachSQM to -1 to disable the ingame buy house functionality
+-- NOTE: valid values for houseRentPeriod are: "daily", "weekly", "monthly", "yearly"
+-- use any other value to disable the rent system
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
 houseOwnedByAccount = false
 houseDoorShowPrice = true
+onlyInvitedCanMoveHouseItems = true
 premiumToBuyHouse = true
 levelToBuyHouse = 8
 
@@ -80,7 +85,8 @@ mysqlSock = ""
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
 -- may cause high CPU usage with many players and potentially affect performance!
--- forceMonsterTypesOnLoad server loads all monster types on startup for debugging purposes, you can change to false if all of your monster files don't throw errors to save up memory.
+-- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
+-- You can disable it to save some memory if you don't see any errors at startup.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
