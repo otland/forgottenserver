@@ -1351,7 +1351,16 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 {
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("id"))) {
-		lootBlock.id = pugi::cast<int32_t>(attr.value());
+		int32_t id = pugi::cast<int32_t>(attr.value());
+		const ItemType& it = Item::items.getItemType(id);
+
+		if (it.name.empty()) {
+			std::cout << "[Warning - Monsters::loadMonster] Unknown loot item id \"" << id << "\". " << std::endl;
+			return false;
+		}
+
+		lootBlock.id = id;
+
 	} else if ((attr = node.attribute("name"))) {
 		auto name = attr.as_string();
 		auto ids = Item::items.nameToItems.equal_range(asLowerCaseString(name));
