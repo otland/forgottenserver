@@ -75,6 +75,7 @@ struct CombatParams {
 	bool targetCasterOrTopMost = false;
 	bool aggressive = true;
 	bool useCharges = false;
+	bool ignoreResistances = false;
 };
 
 class MatrixArea

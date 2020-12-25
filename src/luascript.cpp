@@ -3322,7 +3322,7 @@ int LuaScriptInterface::luaDoAreaCombat(lua_State* L)
 
 int LuaScriptInterface::luaDoTargetCombat(lua_State* L)
 {
-	//doTargetCombat(cid, target, type, min, max, effect[, origin = ORIGIN_SPELL])
+	//doTargetCombat(cid, target, type, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield = false[, ignoreResistances = false]]]])
 	Creature* creature = getCreature(L, 1);
 	if (!creature && (!isNumber(L, 1) || getNumber<uint32_t>(L, 1) != 0)) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -3342,6 +3342,9 @@ int LuaScriptInterface::luaDoTargetCombat(lua_State* L)
 	CombatParams params;
 	params.combatType = combatType;
 	params.impactEffect = getNumber<uint8_t>(L, 6);
+	params.blockedByArmor = getBoolean(L, 8, false);
+	params.blockedByShield = getBoolean(L, 9, false);
+	params.ignoreResistances = getBoolean(L, 10, false);
 
 	CombatDamage damage;
 	damage.origin = getNumber<CombatOrigin>(L, 7, ORIGIN_SPELL);

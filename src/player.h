@@ -605,7 +605,7 @@ class Player final : public Creature, public Cylinder
 			return pzLocked;
 		}
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 		void doAttacking(uint32_t interval) override;
 		bool hasExtraSwing() override {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());

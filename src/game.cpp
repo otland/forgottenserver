@@ -3778,7 +3778,7 @@ void Game::changeLight(const Creature* creature)
 	}
 }
 
-bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field)
+bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field, bool ignoreResistances /*= false */)
 {
 	if (damage.primary.type == COMBAT_NONE && damage.secondary.type == COMBAT_NONE) {
 		return true;
@@ -3831,7 +3831,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 	BlockType_t primaryBlockType, secondaryBlockType;
 	if (damage.primary.type != COMBAT_NONE) {
 		damage.primary.value = -damage.primary.value;
-		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense, checkArmor, field);
+		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense, checkArmor, field, ignoreResistances);
 
 		damage.primary.value = -damage.primary.value;
 		sendBlockEffect(primaryBlockType, damage.primary.type, target->getPosition());
@@ -3841,7 +3841,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 
 	if (damage.secondary.type != COMBAT_NONE) {
 		damage.secondary.value = -damage.secondary.value;
-		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field);
+		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field, ignoreResistances);
 		damage.secondary.value = -damage.secondary.value;
 		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition());
 	} else {
