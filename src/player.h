@@ -1155,6 +1155,10 @@ class Player final : public Creature, public Cylinder
 			return dead;
 		}
 
+		int64_t getLastPong() const {
+			return lastPong;
+		}
+
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
 

@@ -420,8 +420,14 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			sendAddCreature(player, player->getPosition(), 0, false);
 		}
 
+		if (OTSYS_TIME() - player->getLastPong() >= 60000) {
+			disconnect();
+			addGameTask(&Game::removeCreature, player, false, true);
+			return;
+		}
+
 		if (recvbyte != 0x1D && recvbyte != 0x1E) {
-			// keep connection alive
+			// keep the connection alive
 			return;
 		}
 	}
