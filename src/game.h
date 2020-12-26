@@ -212,6 +212,7 @@ class Game
 		  * \param c Creature to remove
 		  */
 		bool removeCreature(Creature* creature, bool isLogout = true, bool onlyRelease = false);
+		void executeDeath(uint32_t creatureId);
 
 		void addCreatureCheck(Creature* creature);
 		static void removeCreatureCheck(Creature* creature);
