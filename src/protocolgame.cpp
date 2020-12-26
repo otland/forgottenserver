@@ -394,7 +394,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 
 	uint8_t recvbyte = msg.getByte();
 
-	if (!player) {
+	if (!player || player->isRemoved()) {
 		if (recvbyte == 0x0F) {
 			disconnect();
 		}
@@ -403,13 +403,25 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 
 	//a dead player can not performs actions
-	if (player->isRemoved() || player->getHealth() <= 0) {
-		if (recvbyte == 0x0F) {
+	if (player->isDead() || player->getHealth() <= 0) {
+		if (recvbyte == 0x14) {
 			disconnect();
+			g_game.removeCreature(player, false, true);
 			return;
 		}
 
-		if (recvbyte != 0x14) {
+		if (recvbyte == 0x0F) {
+			if (!player->spawn()) {
+				disconnect();
+				g_game.removeCreature(player, false, true);
+				return;
+			}
+
+			sendAddCreature(player, player->getPosition(), 0, false);
+		}
+
+		if (recvbyte != 0x1D && recvbyte != 0x1E) {
+			// keep connection alive
 			return;
 		}
 	}

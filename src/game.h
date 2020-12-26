@@ -211,7 +211,7 @@ class Game
 		  * Removes the Creature the map
 		  * \param c Creature to remove
 		  */
-		bool removeCreature(Creature* creature, bool isLogout = true);
+		bool removeCreature(Creature* creature, bool isLogout = true, bool onlyRelease = false);
 
 		void addCreatureCheck(Creature* creature);
 		static void removeCreatureCheck(Creature* creature);

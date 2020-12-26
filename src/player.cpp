@@ -2081,6 +2081,88 @@ void Player::death(Creature* lastHitCreature)
 		onIdleStatus();
 		sendStats();
 	}
+
+	despawn();
+}
+
+bool Player::spawn()
+{
+	setDead(false);
+
+	if (!g_game.map.placeCreature(getLoginPosition(), this, false, true)) {
+		return false;
+	}
+
+	const Position& pos = getPosition();
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, pos, true);
+	for (Creature* spectator : spectators) {
+		if (Player* tmpPlayer = spectator->getPlayer()) {
+			tmpPlayer->sendCreatureAppear(this, pos, false);
+		}
+	}
+
+	for (Creature* spectator : spectators) {
+		spectator->onCreatureAppear(this, false);
+	}
+
+	getParent()->postAddNotification(this, nullptr, 0);
+	g_game.addCreatureCheck(this);
+
+	for (const auto& it : g_game.getPlayers()) {
+		it.second->notifyStatusChange(this, VIPSTATUS_ONLINE);
+	}
+	return true;
+}
+
+void Player::despawn()
+{
+	if (isDead()) {
+		return;
+	}
+
+	// remove check
+	g_game.removeCreatureCheck(this);
+
+	// remove from map
+	Tile* tile = getTile();
+
+	std::vector<int32_t> oldStackPosVector;
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, tile->getPosition(), true);
+	for (Creature* spectator : spectators) {
+		if (Player* player = spectator->getPlayer()) {
+			oldStackPosVector.push_back(player->canSeeCreature(this) ? tile->getStackposOfCreature(player, this) : -1);
+		}
+	}
+
+	tile->removeCreature(this);
+
+	const Position& tilePosition = tile->getPosition();
+
+	//send to client
+	size_t i = 0;
+	for (Creature* spectator : spectators) {
+		if (Player* player = spectator->getPlayer()) {
+			player->sendRemoveTileThing(tilePosition, oldStackPosVector[i++]);
+		}
+	}
+
+	//event method
+	for (Creature* spectator : spectators) {
+		spectator->onRemoveCreature(this, false);
+	}
+
+	getParent()->postRemoveNotification(this, nullptr, 0);
+
+	// show player as pending
+	for (const auto& it : g_game.getPlayers()) {
+		it.second->notifyStatusChange(this, VIPSTATUS_PENDING);
+	}
+
+	setDead(true);
 }
 
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)

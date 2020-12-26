@@ -1148,6 +1148,13 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
+		void setDead(bool isDead) {
+			dead = isDead;
+		}
+		bool isDead() const {
+			return dead;
+		}
+
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1165,6 +1172,8 @@ class Player final : public Creature, public Cylinder
 		void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
 
 		void death(Creature* lastHitCreature) override;
+		bool spawn();
+		void despawn();
 		bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified) override;
 		Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) override;
 
@@ -1303,6 +1312,7 @@ class Player final : public Creature, public Cylinder
 		fightMode_t fightMode = FIGHTMODE_ATTACK;
 		AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
+		bool dead = false;
 		bool chaseMode = false;
 		bool secureMode = false;
 		bool inMarket = false;

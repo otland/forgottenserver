@@ -682,7 +682,7 @@ void Creature::onDeath()
 		setMaster(nullptr);
 	}
 
-	if (droppedCorpse) {
+	if (droppedCorpse && !getPlayer()) {
 		g_game.removeCreature(this, false);
 	}
 }
