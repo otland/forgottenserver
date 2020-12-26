@@ -406,14 +406,14 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	if (player->isDead() || player->getHealth() <= 0) {
 		if (recvbyte == 0x14) {
 			disconnect();
-			g_game.removeCreature(player, false, true);
+			addGameTask(&Game::removeCreature, player, false, true);
 			return;
 		}
 
 		if (recvbyte == 0x0F) {
 			if (!player->spawn()) {
 				disconnect();
-				g_game.removeCreature(player, false, true);
+				addGameTask(&Game::removeCreature, player, false, true);
 				return;
 			}
 
