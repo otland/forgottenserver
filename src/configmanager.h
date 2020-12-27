@@ -64,7 +64,7 @@ class ConfigManager
 			CHANGE_SEX_ENABLED,
 			PREMIUM_TO_OFFLINE_TRAINING,
 			DEATHLIST_ENABLED,
-			USE_WORMS_TO_FISHING,
+			USE_WORMS_FOR_FISHING,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

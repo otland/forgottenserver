@@ -171,7 +171,7 @@ bool ConfigManager::load()
 	boolean[CHANGE_SEX_ENABLED] = getGlobalBoolean(L, "changeSexEnabled", true);
 	boolean[PREMIUM_TO_OFFLINE_TRAINING] = getGlobalBoolean(L, "premiumToOfflineTraining", true);
 	boolean[DEATHLIST_ENABLED] = getGlobalBoolean(L, "deathListEnabled", true);
-	boolean[USE_WORMS_TO_FISHING] = getGlobalBoolean(L, "useWormsToFishing", true);
+	boolean[USE_WORMS_FOR_FISHING] = getGlobalBoolean(L, "useWormsForFishing", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");

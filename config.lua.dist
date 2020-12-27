@@ -105,7 +105,7 @@ changeSexDaysCost = 3
 premiumToOfflineTraining = true
 deathListEnabled = true
 maxDeathRecords = 5
-useWormsToFishing = true
+useWormsForFishing = true
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
