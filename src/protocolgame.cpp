@@ -204,7 +204,10 @@ void ProtocolGame::spawn()
 	}
 
 	if (!player->spawn()) {
-		disconnect();
+		if (player->client) {
+			player->client->disconnect();
+		}
+
 		g_game.removeCreature(player, false, true);
 		return;
 	}
