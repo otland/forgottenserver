@@ -204,17 +204,12 @@ void ProtocolGame::spawn()
 	}
 
 	if (!player->spawn()) {
-		if (player->client) {
-			player->client->disconnect();
-		}
-
+		disconnect();
 		g_game.removeCreature(player, false, true);
 		return;
 	}
 
-	if (player->client) {
-		player->client->sendAddCreature(player, player->getPosition(), 0, false);
-	}
+	sendAddCreature(player, player->getPosition(), 0, false);
 }
 
 void ProtocolGame::despawn()
@@ -227,10 +222,7 @@ void ProtocolGame::despawn()
 	//fire onLogout
 	g_creatureEvents->playerLogout(player);
 
-	if (player->client) {
-		player->client->disconnect();
-	}
-
+	disconnect();
 	g_game.removeCreature(player, false, true);
 }
 
