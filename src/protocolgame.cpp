@@ -196,6 +196,41 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	acceptPackets = true;
 }
 
+void ProtocolGame::spawn()
+{
+	//dispatcher thread
+	if (!player) {
+		return;
+	}
+
+	if (!player->spawn()) {
+		disconnect();
+		g_game.removeCreature(player, false, true);
+		return;
+	}
+
+	if (player->client) {
+		player->client->sendAddCreature(player, player->getPosition(), 0, false);
+	}
+}
+
+void ProtocolGame::despawn()
+{
+	//dispatcher thread
+	if (!player) {
+		return;
+	}
+
+	//fire onLogout
+	g_creatureEvents->playerLogout(player);
+
+	if (player->client) {
+		player->client->disconnect();
+	}
+
+	g_game.removeCreature(player, false, true);
+}
+
 void ProtocolGame::logout(bool displayEffect, bool forced)
 {
 	//dispatcher thread
@@ -405,24 +440,17 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	//a dead player can not performs actions
 	if (player->isDead() || player->getHealth() <= 0) {
 		if (recvbyte == 0x14) {
-			disconnect();
-			addGameTask(&Game::removeCreature, player, false, true);
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::despawn, getThis())));
 			return;
 		}
 
 		if (recvbyte == 0x0F) {
-			if (!player->spawn()) {
-				disconnect();
-				addGameTask(&Game::removeCreature, player, false, true);
-				return;
-			}
-
-			sendAddCreature(player, player->getPosition(), 0, false);
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::spawn, getThis())));
+			return;
 		}
 
 		if (OTSYS_TIME() - player->getLastPong() >= 60000) {
-			disconnect();
-			addGameTask(&Game::removeCreature, player, false, true);
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::despawn, getThis())));
 			return;
 		}
 
