@@ -2097,15 +2097,9 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
-		const auto& killers = getKillers();
 		std::map<std::string, uint16_t> names;
-		for (auto& killer : killers) {
-			const std::string& killerName = killer->getName();
-			if (names.find(killerName) != names.end()) {
-				names[killerName]++;
-			} else {
-				names[killerName] = 1;
-			}
+		for (const auto& killer : getKillers()) {
+			names[killer->getName()]++;
 		}
 
 		std::ostringstream ss;
