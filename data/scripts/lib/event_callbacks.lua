@@ -70,6 +70,12 @@ local callbacks = {
 	["onSpawn"] = EVENT_CALLBACK_ONSPAWN
 }
 
+local feedbackParams = {
+	[EVENT_CALLBACK_ONGAINEXPERIENCE] = {3},
+	[EVENT_CALLBACK_ONLOSEEXPERIENCE] = {2},
+	[EVENT_CALLBACK_ONGAINSKILLTRIES] = {3}
+}
+
 -- can't be overwritten on /reload global/libs now
 if not EventCallbackData then
 	EventCallbackData = {}
@@ -103,10 +109,17 @@ setmetatable(EventCallback,
 
 	__call =
     function(self, callbackType, ...)
-        local result
-        local key, event = next(EventCallbackData[callbackType])
-        repeat
-            result = {event(...)}
+		local params = {...}
+		local result
+		local key, event = next(EventCallbackData[callbackType])
+		repeat
+			result = {event(unpack(params))}
+			local feedbackParam = feedbackParams[callbackType]
+			if feedbackParam then
+				for _, pos in pairs(feedbackParam) do
+					params[pos] = result[1]
+				end
+			end
             key, event = next(EventCallbackData[callbackType], key)
         until event == nil or (result[1] ~= nil and (result[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) and result[1] ~= RETURNVALUE_NOERROR))
         return unpack(result)
