@@ -150,8 +150,8 @@ bool IOMap::loadMap(Map* map, const std::string& fileName)
 				return false;
 			}
 		}
-	} catch (std::exception& ex) {
-		setLastErrorString(ex.what());
+	} catch (const OTB::InvalidOTBFormat& err) {
+		setLastErrorString(err.what());
 		return false;
 	}
 
