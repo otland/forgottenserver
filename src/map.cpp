@@ -541,12 +541,7 @@ std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
 		return line;
 	}
 
-	bool isSteep = abs(y1 - y0) > abs(x1 - x0);
-	bool changeGrad = false;
-
-	if (y1 < y0) {
-		changeGrad = true;
-	}
+	bool isSteep = std::abs(y1 - y0) > std::abs(x1 - x0);
 
 	if (isSteep) {
 		std::swap(x0, y0);
@@ -555,9 +550,7 @@ std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
 
 	if (x0 > x1) {
 		std::swap(x0, x1);
-		if (y0 < y1) {
-			std::swap(y0, y1);
-		}
+		std::swap(y0, y1);
 	}
 
 	float dx = x1 - x0;
@@ -566,10 +559,9 @@ std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
 
 	if (dx != 0) {
 		grad = dy * 1.0 / dx;
-	}
-
-	if (changeGrad) {
-		grad = grad * -1;
+		if (grad > 0) { // We need to offset the line for isometric layout
+			grad = grad + .03;
+		}
 	}
 
 	float interY = y0 + grad; //first y - intersection for the main loop
@@ -581,8 +573,7 @@ std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
 			line.push_back({ newX, newY });
 			interY += grad;
 		}
-	}
-	else {
+	} else {
 		for (int x = x0 + 1; x < x1; x++) {
 			int newX = x;
 			int newY = std::floor(interY);
