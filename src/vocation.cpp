@@ -183,7 +183,7 @@ uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint32_t level)
 {
-	if (skill > SKILL_LAST || level <= 10) {
+	if (skill > SKILL_LAST || level < 11) {
 		return 0;
 	}
 
