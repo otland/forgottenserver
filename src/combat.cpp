@@ -969,9 +969,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-			CombatDamage healAmount;
-			healAmount.primary.value += std::round((std::abs(damage.primary.value) + std::abs(damage.secondary.value)) * (skill / 100.));
-			g_game.combatChangeHealth(nullptr, caster, healAmount);
+			caster->changeHealth(std::round((std::abs(damage.primary.value) + std::abs(damage.secondary.value)) * (skill / 100.)));
 			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_RED);
 		}
 	}
@@ -980,9 +978,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-			CombatDamage manaAmount;
-			manaAmount.primary.value += std::round((std::abs(damage.primary.value) + std::abs(damage.secondary.value)) * (skill / 100.));
-			g_game.combatChangeMana(nullptr, caster, manaAmount);
+			caster->changeMana(std::round((std::abs(damage.primary.value) + std::abs(damage.secondary.value)) * (skill / 100.)));
 			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_BLUE);
 		}
 	}
