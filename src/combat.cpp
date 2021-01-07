@@ -758,8 +758,21 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				damage.secondary.value /= 2;
 			}
 
-			Combat::checkCriticalHit(casterPlayer, damage);
-			Combat::checkLeech(casterPlayer, damage);
+			if (damage.origin != ORIGIN_CONDITION) {
+				if (!damage.critical) {
+					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
+					uint16_t criticalHit = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
+					if (criticalHit != 0 && chance != 0 && normal_random(1, 100) <= chance) {
+						damage.primary.value += std::round(damage.primary.value * (criticalHit / 100.));
+						damage.secondary.value += std::round(damage.secondary.value * (criticalHit / 100.));
+						damage.critical = true;
+					}
+				}
+
+				if (!damage.leeched) {
+					Combat::checkLeech(casterPlayer, damage);
+				}
+			}
 		}
 	}
 
@@ -822,16 +835,13 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
-	if (casterPlayer) {
-		Combat::checkLeech(casterPlayer, damage);
-		if (!damage.critical && damage.origin != ORIGIN_CONDITION && (damage.primary.value < 0 || damage.secondary.value < 0)) {
-			uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
-			if (chance != 0 && uniform_random(1, 100) <= chance) {
-				uint16_t criticalHit = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
-				criticalPrimary = std::round(damage.primary.value * (criticalHit / 100.));
-				criticalSecondary = std::round(damage.secondary.value * (criticalHit / 100.));
-				damage.critical = true;
-			}
+	if (casterPlayer && !damage.critical && damage.origin != ORIGIN_CONDITION && (damage.primary.value < 0 || damage.secondary.value < 0)) {
+		uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
+		if (chance != 0 && uniform_random(1, 100) <= chance) {
+			uint16_t criticalHit = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
+			criticalPrimary = std::round(damage.primary.value * (criticalHit / 100.));
+			criticalSecondary = std::round(damage.secondary.value * (criticalHit / 100.));
+			damage.critical = true;
 		}
 	}
 
@@ -886,10 +896,17 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					bool playerCombatReduced = false;
 					if ((damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) && caster) {
 						Player* targetPlayer = creature->getPlayer();
-						if (targetPlayer && caster->getPlayer() && targetPlayer->getSkull() != SKULL_BLACK) {
-							damageCopy.primary.value /= 2;
-							damageCopy.secondary.value /= 2;
-							playerCombatReduced = true;
+						if (casterPlayer) {
+							if (targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
+								damageCopy.primary.value /= 2;
+								damageCopy.secondary.value /= 2;
+								playerCombatReduced = true;
+							}
+
+							if (!damage.leeched && damage.origin != ORIGIN_CONDITION) {
+								Combat::checkLeech(casterPlayer, damageCopy); // passing copy, because its damage can be altered by player combat.
+								damage.leeched = true;
+							}
 						}
 					}
 
@@ -945,36 +962,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	}
 }
 
-void Combat::checkCriticalHit(Player* caster, CombatDamage& damage)
-{
-	if (damage.critical || damage.origin == ORIGIN_CONDITION) {
-		return;
-	}
-
-	if (damage.primary.value > 0 || damage.secondary.value > 0) {
-		return;
-	}
-
-	uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
-	uint16_t criticalHit = caster->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
-	if (criticalHit != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-		damage.primary.value += std::round(damage.primary.value * (criticalHit / 100.));
-		damage.secondary.value += std::round(damage.secondary.value * (criticalHit / 100.));
-		damage.critical = true;
-	}
-}
-
 void Combat::checkLeech(Player* caster, CombatDamage& damage)
 {
-	if (damage.origin == ORIGIN_CONDITION) {
-		return;
-	}
-
-	if (damage.primary.value > 0 || damage.secondary.value > 0) {
-		return;
-	}
-
-	if (caster->getHealth() != caster->getMaxHealth()) {
+	if (caster->getHealth() < caster->getMaxHealth()) {
 		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
@@ -986,7 +976,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 		}
 	}
 
-	if (caster->getMana() != caster->getMaxMana()) {
+	if (caster->getMana() < caster->getMaxMana()) {
 		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
