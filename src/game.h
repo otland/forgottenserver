@@ -211,7 +211,7 @@ class Game
 		  * Removes the Creature the map
 		  * \param c Creature to remove
 		  */
-		bool removeCreature(Creature* creature, bool isLogout = true, bool onlyRelease = false);
+		bool removeCreature(Creature* creature, bool isLogout = true);
 		void executeDeath(uint32_t creatureId);
 
 		void addCreatureCheck(Creature* creature);

@@ -563,13 +563,13 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 	return true;
 }
 
-bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/, bool onlyRelease /* = false */)
+bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 {
 	if (creature->isRemoved()) {
 		return false;
 	}
 
-	if (onlyRelease) {
+	if (creature->isDead()) {
 		creature->removeList();
 		creature->setRemoved();
 		ReleaseCreature(creature);

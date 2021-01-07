@@ -205,7 +205,7 @@ void ProtocolGame::spawn()
 
 	if (!player->spawn()) {
 		disconnect();
-		g_game.removeCreature(player, false, true);
+		g_game.removeCreature(player, false);
 		return;
 	}
 
@@ -223,7 +223,7 @@ void ProtocolGame::despawn()
 	g_creatureEvents->playerLogout(player);
 
 	disconnect();
-	g_game.removeCreature(player, false, true);
+	g_game.removeCreature(player, false);
 }
 
 void ProtocolGame::logout(bool displayEffect, bool forced)

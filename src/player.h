@@ -1148,13 +1148,6 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
-		void setDead(bool isDead) {
-			dead = isDead;
-		}
-		bool isDead() const {
-			return dead;
-		}
-
 		int64_t getLastPong() const {
 			return lastPong;
 		}
@@ -1316,7 +1309,6 @@ class Player final : public Creature, public Cylinder
 		fightMode_t fightMode = FIGHTMODE_ATTACK;
 		AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
-		bool dead = false;
 		bool chaseMode = false;
 		bool secureMode = false;
 		bool inMarket = false;
