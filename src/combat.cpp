@@ -971,16 +971,6 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 	leechCombat.origin = ORIGIN_NONE;
 	leechCombat.leeched = true;
 
-	if (caster->getHealth() < caster->getMaxHealth()) {
-		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
-		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
-		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-			leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
-			g_game.combatChangeHealth(nullptr, caster, leechCombat);
-			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_RED);
-		}
-	}
-
 	if (caster->getMana() < caster->getMaxMana()) {
 		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
@@ -988,6 +978,17 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 			leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
 			g_game.combatChangeMana(nullptr, caster, leechCombat);
 			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_BLUE);
+		}
+	}
+
+	// NOTE: health is second, because combatChangeHealth can modify the CombatDamage struct, while combatChangeMana does not
+	if (caster->getHealth() < caster->getMaxHealth()) {
+		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
+		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
+		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
+			leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+			g_game.combatChangeHealth(nullptr, caster, leechCombat);
+			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_RED);
 		}
 	}
 }
