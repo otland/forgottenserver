@@ -771,6 +771,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 
 				if (!damage.leeched) {
 					Combat::checkLeech(casterPlayer, damage);
+					damage.leeched = true;
 				}
 			}
 		}
@@ -969,8 +970,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
 			CombatDamage healAmount;
-			healAmount.primary.value += std::round(std::abs(damage.primary.value) * (skill / 100.));
-			healAmount.secondary.value += std::round(std::abs(damage.secondary.value) * (skill / 100.));
+			healAmount.primary.value += std::round((std::abs(damage.primary.value) + std::abs(damage.secondary.value)) * (skill / 100.));
 			g_game.combatChangeHealth(nullptr, caster, healAmount);
 			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_RED);
 		}
@@ -981,8 +981,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage)
 		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
 			CombatDamage manaAmount;
-			manaAmount.primary.value += std::round(std::abs(damage.primary.value) * (skill / 100.));
-			manaAmount.secondary.value += std::round(std::abs(damage.secondary.value) * (skill / 100.));
+			manaAmount.primary.value += std::round((std::abs(damage.primary.value) + std::abs(damage.secondary.value)) * (skill / 100.));
 			g_game.combatChangeMana(nullptr, caster, manaAmount);
 			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_BLUE);
 		}
