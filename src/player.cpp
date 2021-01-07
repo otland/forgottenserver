@@ -2110,9 +2110,7 @@ bool Player::spawn()
 	getParent()->postAddNotification(this, nullptr, 0);
 	g_game.addCreatureCheck(this);
 
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(this, VIPSTATUS_ONLINE);
-	}
+	addList();
 	return true;
 }
 
@@ -2156,6 +2154,8 @@ void Player::despawn()
 	}
 
 	getParent()->postRemoveNotification(this, nullptr, 0);
+
+	g_game.removePlayer(this);
 
 	// show player as pending
 	for (const auto& it : g_game.getPlayers()) {
