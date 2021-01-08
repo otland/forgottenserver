@@ -814,13 +814,6 @@ void Monster::doAttacking(uint32_t interval)
 	}
 }
 
-void Monster::setExtraSwing(bool swing) {
-	if (swing) {
-		extraMeleeAttack = true;
-	}
-	extraMeleeAttack = false;
-}
-
 bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 {
 	if (isHostile()) {
