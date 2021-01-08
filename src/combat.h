@@ -260,7 +260,7 @@ class Combat
 		static void doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params);
 		static void doAreaCombat(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage, const CombatParams& params);
 
-		static void checkLeech(Player* caster, CombatDamage& damage);
+		static void checkLeech(Player* caster, CombatDamage& damage, int16_t targets = -1);
 
 		bool setCallback(CallBackParam_t key);
 		CallBack* getCallback(CallBackParam_t key);
