@@ -102,7 +102,7 @@ bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 void Monster::onAttackedCreatureDisappear(bool)
 {
 	attackTicks = 0;
-	extraMeleeAttack = true;
+	// extraMeleeAttack = true;
 }
 
 void Monster::onCreatureAppear(Creature* creature, bool isLogin)
@@ -399,6 +399,9 @@ void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
 
 	if (isOpponent(creature)) {
 		addTarget(creature, pushFront);
+		if (isTarget(creature) && OTSYS_TIME() > lastMeleeAttack + 500) {
+			extraMeleeAttack = true;
+		}
 	}
 
 	updateIdleStatus();
@@ -809,6 +812,13 @@ void Monster::doAttacking(uint32_t interval)
 	if (resetTicks) {
 		attackTicks = 0;
 	}
+}
+
+void Monster::setExtraSwing(bool swing) {
+	if (swing) {
+		extraMeleeAttack = true;
+	}
+	extraMeleeAttack = false;
 }
 
 bool Monster::canUseAttack(const Position& pos, const Creature* target) const
