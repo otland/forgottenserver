@@ -960,7 +960,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		}
 	}
 
-	if (!damage.leeched && damage.origin != ORIGIN_CONDITION) {
+	if (casterPlayer && !damage.leeched && damage.origin != ORIGIN_CONDITION) {
 		Combat::checkLeech(casterPlayer, damage, damagedTargets);
 		damage.leeched = true;
 	}
