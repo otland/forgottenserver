@@ -2120,6 +2120,8 @@ void Player::despawn()
 		return;
 	}
 
+	sendCancelWalk();
+
 	// remove check
 	g_game.removeCreatureCheck(this);
 
