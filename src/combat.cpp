@@ -982,7 +982,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage, int16_t targets /*
 				// non aoe
 				leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
 			} else {
-				leechCombat.primary.value = std::ceil(totalDamage * ((skill / 100.) + ((targets - 1) * ((skill / 100.) / 10))) / 2);
+				leechCombat.primary.value = std::ceil(totalDamage * ((skill / 100.) + ((targets - 1) * ((skill / 100.) / 10.))) / targets);
 			}
 
 			g_game.combatChangeHealth(nullptr, caster, leechCombat);
@@ -998,7 +998,7 @@ void Combat::checkLeech(Player* caster, CombatDamage& damage, int16_t targets /*
 				// non aoe
 				leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
 			} else {
-				leechCombat.primary.value = std::ceil(totalDamage * ((skill / 100.) + ((targets - 1) * ((skill / 100.) / 10))) / 2);
+				leechCombat.primary.value = std::ceil(totalDamage * ((skill / 100.) + ((targets - 1) * ((skill / 100.) / 10.))) / targets);
 			}
 
 			g_game.combatChangeMana(nullptr, caster, leechCombat);
