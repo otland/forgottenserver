@@ -803,6 +803,8 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 
 	if (attacker) {
 		attacker->onAttackedCreatureDrainHealth(this, damage);
+	} else {
+		lastHitCreatureId = 0;
 	}
 }
 
