@@ -559,9 +559,8 @@ std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
 
 	if (dx != 0) {
 		grad = dy * 1.0 / dx;
-		if (grad > 0) { // We need to offset the line for isometric layout
-			grad = grad + .03;
-		}
+		// We need to offset the line for isometric layout
+		grad = grad + .03;
 	}
 
 	float interY = y0 + grad; //first y - intersection for the main loop
