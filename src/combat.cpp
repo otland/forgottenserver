@@ -749,46 +749,34 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 
 void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
+	if (caster && target && params.distanceEffect != CONST_ANI_NONE) {
+		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
+	}
+
 	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
-	if (casterPlayer) {
-		if (damage.primary.value < 0 || damage.secondary.value < 0) {
+
+	bool success = false;
+	if (damage.primary.type != COMBAT_MANADRAIN) {
+		if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
+			return;
+		}
+
+		if (casterPlayer) {
 			Player* targetPlayer = target ? target->getPlayer() : nullptr;
 			if (targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
 				damage.primary.value /= 2;
 				damage.secondary.value /= 2;
 			}
 
-			if (damage.origin != ORIGIN_CONDITION) {
-				if (!damage.critical) {
-					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
-					uint16_t criticalHit = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
-					if (criticalHit != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-						damage.primary.value += std::round(damage.primary.value * (criticalHit / 100.));
-						damage.secondary.value += std::round(damage.secondary.value * (criticalHit / 100.));
-						damage.critical = true;
-					}
-				}
-
-				if (!damage.leeched) {
-					Combat::checkLeech(casterPlayer, damage);
-					damage.leeched = true;
+			if (!damage.critical && damage.origin != ORIGIN_CONDITION) {
+				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
+				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
+				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
+					damage.primary.value += std::round(damage.primary.value * (skill / 100.));
+					damage.secondary.value += std::round(damage.secondary.value * (skill / 100.));
+					damage.critical = true;
 				}
 			}
-		}
-	}
-
-	if (caster && target && params.distanceEffect != CONST_ANI_NONE) {
-		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
-	}
-
-	if (damage.critical && target) {
-		g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
-	}
-
-	bool success = false;
-	if (damage.primary.type != COMBAT_MANADRAIN) {
-		if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
-			return;
 		}
 
 		success = g_game.combatChangeHealth(caster, target, damage);
@@ -807,6 +795,40 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 
 					//TODO: infight condition until all aggressive conditions has ended
 					target->addCombatCondition(conditionCopy);
+				}
+			}
+		}
+
+		if (damage.critical) {
+			g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
+		}
+
+		if (casterPlayer && damage.origin != ORIGIN_CONDITION) {
+			if (!damage.leeched) {
+				CombatDamage leechCombat;
+				leechCombat.origin = ORIGIN_NONE;
+				leechCombat.leeched = true;
+
+				int32_t totalDamage = std::abs(damage.primary.value + damage.secondary.value);
+
+				if (casterPlayer->getHealth() < casterPlayer->getMaxHealth()) {
+					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
+					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
+					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
+						leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+						g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
+						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
+					}
+				}
+
+				if (casterPlayer->getMana() < casterPlayer->getMaxMana()) {
+					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
+					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
+					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
+						leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+						g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
+						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
+					}
 				}
 			}
 		}
@@ -838,10 +860,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	int32_t criticalSecondary = 0;
 	if (casterPlayer && !damage.critical && damage.origin != ORIGIN_CONDITION && (damage.primary.value < 0 || damage.secondary.value < 0)) {
 		uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
-		if (chance != 0 && uniform_random(1, 100) <= chance) {
-			uint16_t criticalHit = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
-			criticalPrimary = std::round(damage.primary.value * (criticalHit / 100.));
-			criticalSecondary = std::round(damage.secondary.value * (criticalHit / 100.));
+		uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
+		if (chance > 0 && skill > 0 && uniform_random(1, 100) <= chance) {
+			criticalPrimary = std::round(damage.primary.value * (skill / 100.));
+			criticalSecondary = std::round(damage.secondary.value * (skill / 100.));
 			damage.critical = true;
 		}
 	}
@@ -872,7 +894,8 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 
 	postCombatEffects(caster, position, params);
 
-	int16_t damagedTargets = 0;
+	std::vector<int32_t> damageMap;
+
 	for (Tile* tile : tileList) {
 		if (canDoCombat(caster, tile, params.aggressive) != RETURNVALUE_NOERROR) {
 			continue;
@@ -939,7 +962,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 							}
 						}
 
-						damagedTargets += 1;
+						damageMap.push_back(std::abs(damageCopy.primary.value + damageCopy.secondary.value));
 
 						if (params.dispelType == CONDITION_PARALYZE) {
 							creature->removeCondition(CONDITION_PARALYZE);
@@ -960,49 +983,33 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		}
 	}
 
-	if (casterPlayer && !damage.leeched && damage.origin != ORIGIN_CONDITION) {
-		Combat::checkLeech(casterPlayer, damage, damagedTargets);
-		damage.leeched = true;
-	}
-}
+	if (!damageMap.empty() && casterPlayer && !damage.leeched && damage.origin != ORIGIN_CONDITION) {
+		int32_t targetsCount = damageMap.size();
 
-void Combat::checkLeech(Player* caster, CombatDamage& damage, int16_t targets /*= -1 */)
-{
-	int32_t totalDamage = std::abs(damage.primary.value) + std::abs(damage.secondary.value);
+		CombatDamage leechCombat;
+		leechCombat.origin = ORIGIN_NONE;
+		leechCombat.leeched = true;
 
-	CombatDamage leechCombat;
-	leechCombat.origin = ORIGIN_NONE;
-	leechCombat.leeched = true;
-
-	if (targets != 0 && caster->getHealth() < caster->getMaxHealth()) {
-		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
-		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
-		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-			if (targets == -1) {
-				// non aoe
-				leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
-			} else {
-				leechCombat.primary.value = std::ceil(totalDamage * ((skill / 100.) + ((targets - 1) * ((skill / 100.) / 10.))) / targets);
+		for (const auto& damage : damageMap) {
+			if (casterPlayer->getHealth() < casterPlayer->getMaxHealth()) {
+				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
+				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
+				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
+					leechCombat.primary.value = std::ceil(damage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) / targetsCount);
+					g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
+					casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
+				}
 			}
 
-			g_game.combatChangeHealth(nullptr, caster, leechCombat);
-			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_RED);
-		}
-	}
-
-	if (targets != 0 && caster->getMana() < caster->getMaxMana()) {
-		uint16_t chance = caster->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
-		uint16_t skill = caster->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
-		if (skill != 0 && chance != 0 && normal_random(1, 100) <= chance) {
-			if (targets == -1) {
-				// non aoe
-				leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
-			} else {
-				leechCombat.primary.value = std::ceil(totalDamage * ((skill / 100.) + ((targets - 1) * ((skill / 100.) / 10.))) / targets);
+			if (casterPlayer->getMana() < casterPlayer->getMaxMana()) {
+				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
+				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
+				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
+					leechCombat.primary.value = std::ceil(damage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) / targetsCount);
+					g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
+					casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
+				}
 			}
-
-			g_game.combatChangeMana(nullptr, caster, leechCombat);
-			caster->sendMagicEffect(caster->getPosition(), CONST_ME_MAGIC_BLUE);
 		}
 	}
 }
