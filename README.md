@@ -7,7 +7,9 @@ unrealtfs [![Build Status](https://travis-ci.com/Unreal-TFS/forgottenserver.svg?
 @@ we want everything to be compact and easy to install, @@
 @@  it is intended that the user does not need to compile too much, @@
 @@ since that everything can be done through lua. @@
-@@ In the following link you could find a web page where you can find resources 100% compatible with this server.@@
+
+@@ In the following link you could find a web page, @@
+@@ where you can find resources 100% compatible with this server. @@
 @@ link: is comming soom... ❤️ @@
 ```
 
