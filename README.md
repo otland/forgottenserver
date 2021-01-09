@@ -1,6 +1,16 @@
 unrealtfs [![Build Status](https://travis-ci.com/Unreal-TFS/forgottenserver.svg?branch=master)](https://travis-ci.com/github/Unreal-TFS/forgottenserver "Travis CI status") [![Build status](https://ci.appveyor.com/api/projects/status/j04b5320bmsfw2g2?svg=true)](https://ci.appveyor.com/project/MillhioreBT/unrealtfs "Download builds for Windows")
 ===============
 
+```diff
+@@ Despite the fact that this fork wants to maintain the regime of the Tibia RL mechanics, @@
+@@ it also aims to be very customizable through lua coding, @@
+@@ we want everything to be compact and easy to install, @@
+@@  it is intended that the user does not need to compile too much, @@
+@@ since that everything can be done through lua. @@
+@@ In the following link you could find a web page where you can find resources 100% compatible with this server.@@
+@@ link: is comming soom... ❤️ @@
+```
+
 The Forgotten Server is a free and open-source MMORPG server emulator written in C++. It is a fork of the [OpenTibia Server](https://github.com/opentibia/server) project. To connect to the server, you can use [OTClient](https://github.com/edubart/otclient) or [OpenTibiaUnity](https://github.com/slavidodo/OpenTibia-Unity).
 
 ### Getting Started
