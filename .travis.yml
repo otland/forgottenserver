@@ -10,9 +10,8 @@ env:
     #   via the "travis encrypt" command using the project repo's public key
     - secure: "AAAAB3NzaC1yc2EAAAADAQABAAACAQDMJN06ob3kHn5Dcgkbbe0FcuztYTU6wEybH6TBk32PznuGxHJi192UaBJOnzA/gD2NZepvWjrt2xVx0WYI+wFXDn+UmDjsvf128lCuEkFpn0WvzRaYlG9G/Z9x9UjSKazNufuBN09XvB9l+N24M4z44zN7BOKsHD6cGlghvKwQk00SAxs0qQjxvnsplogRP1OJHecLErb6yHfTtDq0Qagf+S1SgEkoHGpjEPwNR17FSfXngXB6wjtBXvyC7tVIFhAmq3AKdKsO5KprBzmLHujQmU556JiuXPuBYxj7BU+kj5jsigPyl8dr2YP8+t7SOB+Cm11wLuhYKo0/c5hGm2NuMp1aGu3uu4NijyKvpVBE2zqcy71j9OQSMV7vLXs2TCNldQvW5hmSnM8rJ6zEWQLUOIMGQ5Yhc8QnIAo0mHfNOEQkdSHvMCE4dlDBCjTmsPhuDglh2EEEn72rzl8Af+KoYQ59YcbXjvHoIl97s2Mvk9CJSSlh/8Phz8SVOhOYuLvz5nzRVjFfcEVdvkSF1nIlWmndtq3NMWIgy4/KoYX5rQqE5BKJiu4b1goEixbs/H4QPsbrnykiM/KOSzNB7hT0f4PkDTXgmhSUqEBU8Lesmh3P1UHek6+K3vuZ6qjALGT/HT+mBk9dpTIG8OE//T22AppdnPi8h8q3u3wq38+nmQ=="
   jobs:
-    matrix:
-      - LUAJIT=OFF
-      - LUAJIT=ON
+    - LUAJIT=OFF
+    - LUAJIT=ON
 cache: apt
 addons:
   apt:
