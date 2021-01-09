@@ -74,6 +74,7 @@ class AStarNodes
 };
 
 using SpectatorCache = std::map<Position, SpectatorVec>;
+using WuLine = std::vector<std::pair<uint16_t, uint16_t>>;
 
 static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
