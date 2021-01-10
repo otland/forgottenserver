@@ -809,7 +809,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				leechCombat.origin = ORIGIN_NONE;
 				leechCombat.leeched = true;
 
-				int32_t totalDamage = std::abs(damageCopy.primary.value + damageCopy.secondary.value);
+				int32_t totalDamage = std::abs(damage.primary.value + damage.secondary.value);
 
 				if (casterPlayer->getHealth() < casterPlayer->getMaxHealth()) {
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
@@ -978,7 +978,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 				}
 			}
 
-			int32_t totalDamage = std::abs(damage.primary.value + damage.secondary.value);
+			int32_t totalDamage = std::abs(damageCopy.primary.value + damageCopy.secondary.value);
 
 			if (casterPlayer && !damage.leeched && damage.origin != ORIGIN_CONDITION) {
 				int32_t targetsCount = toDamageCreatures.size();
