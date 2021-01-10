@@ -968,13 +968,17 @@ class Item : virtual public Thing
 		void setUniqueId(uint16_t n);
 
 		void setDefaultDuration() {
-			uint32_t duration = getDefaultDuration();
+			uint32_t durationMax = getDefaultDurationMax();
+			uint32_t duration = (durationMax != 0 ? normal_random(getDefaultDuration(), durationMax) : getDefaultDuration());
 			if (duration != 0) {
 				setDuration(duration);
 			}
 		}
 		uint32_t getDefaultDuration() const {
 			return items[id].decayTime * 1000;
+		}
+		uint32_t getDefaultDurationMax() const {
+			return items[id].decayTimeMax * 1000;
 		}
 		bool canDecay() const;
 
