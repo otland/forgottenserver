@@ -2089,22 +2089,22 @@ bool Player::spawn()
 {
 	setDead(false);
 
-	if (!g_game.map.placeCreature(getLoginPosition(), this, false, true)) {
+	const Position& pos = getLoginPosition();
+
+	if (!g_game.map.placeCreature(pos, this, false, true)) {
 		return false;
 	}
-
-	const Position& pos = getPosition();
 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, pos, true);
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendCreatureAppear(this, pos, false);
+			tmpPlayer->sendCreatureAppear(this, pos, true);
 		}
 	}
 
 	for (Creature* spectator : spectators) {
-		spectator->onCreatureAppear(this, false);
+		spectator->onCreatureAppear(this, true);
 	}
 
 	getParent()->postAddNotification(this, nullptr, 0);
@@ -2120,10 +2120,9 @@ void Player::despawn()
 		return;
 	}
 
-	if (!listWalkDir.empty()) {
-		listWalkDir.clear();
-		onWalkAborted();
-	}
+	listWalkDir.clear();
+	stopEventWalk();
+	onWalkAborted();
 
 	// remove check
 	g_game.removeCreatureCheck(this);
