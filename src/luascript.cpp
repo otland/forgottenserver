@@ -8844,8 +8844,11 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 
 	uint32_t key = getNumber<uint32_t>(L, 2);
 	int32_t value;
+	std::string strValue;
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
+	} else if (player->getStorageValue(key, strValue)) {
+		pushString(L, strValue);
 	} else {
 		lua_pushnumber(L, -1);
 	}
@@ -8855,7 +8858,6 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 {
 	// player:setStorageValue(key, value)
-	int32_t value = getNumber<int32_t>(L, 3);
 	uint32_t key = getNumber<uint32_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
@@ -8867,7 +8869,11 @@ int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 	}
 
 	if (player) {
-		player->addStorageValue(key, value);
+		if (isNumber(L, 3)) {
+			player->addStorageValue(key, getNumber<int32_t>(L, 3));
+		} else {
+			player->addStorageValue(key, getString(L, 3));
+		}
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);

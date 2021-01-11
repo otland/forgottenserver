@@ -660,6 +660,17 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 	} else {
 		storageMap.erase(key);
 	}
+	storageStringMap.erase(key);
+}
+
+void Player::addStorageValue(const uint32_t key, const std::string& value)
+{
+	if (value.empty() || value == "-1") {
+		storageStringMap.erase(key);
+	} else {
+		storageStringMap[key] = value;
+	}
+	storageMap.erase(key);
 }
 
 bool Player::getStorageValue(const uint32_t key, int32_t& value) const
@@ -667,6 +678,18 @@ bool Player::getStorageValue(const uint32_t key, int32_t& value) const
 	auto it = storageMap.find(key);
 	if (it == storageMap.end()) {
 		value = -1;
+		return false;
+	}
+
+	value = it->second;
+	return true;
+}
+
+bool Player::getStorageValue(const uint32_t key, std::string& value) const
+{
+	auto it = storageStringMap.find(key);
+	if (it == storageStringMap.end()) {
+		value.clear();
 		return false;
 	}
 
