@@ -559,6 +559,8 @@ std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Positi
 		std::swap(y0, y1);
 	}
 
+	int sizeOfLine = x1 - x0;
+	line.reserve(sizeOfLine);
 	float dx = x1 - x0;
 	float dy = y1 - y0;
 	float grad = 1.0;
@@ -572,17 +574,15 @@ std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Positi
 	float interY = y0 + grad; //first y - intersection for the main loop
 
 	if (isSteep) {
-		for (int y = x0 + 1; y < x1; y++) {
+		for (int y = x0 + 1; y < x1; ++y) {
 			int newX = std::floor(interY);
-			int newY = y;
-			line.emplace_back(newX, newY);
+			line.emplace_back(newX, y);
 			interY += grad;
 		}
 	} else {
-		for (int x = x0 + 1; x < x1; x++) {
-			int newX = x;
+		for (int x = x0 + 1; x < x1; ++x) {
 			int newY = std::floor(interY);
-			line.emplace_back(newX, newY);
+			line.emplace_back(x, newY);
 			interY += grad;
 		}
 	}
