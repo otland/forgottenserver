@@ -535,6 +535,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 // get a line between two points
 // based on Xiaolin Wu algorithm
 // https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C.2B.2B
+
 std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Position& toPos)
 {
 	std::vector<std::pair<int, int>> line;
@@ -561,14 +562,12 @@ std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Positi
 
 	int sizeOfLine = x1 - x0;
 	line.reserve(sizeOfLine);
+
 	float dx = x1 - x0;
 	float dy = y1 - y0;
-	float grad = 1.0;
-
-	if (dx != 0) {
-		grad = dy * 1.0 / dx;
-		// We need to offset the line for isometric layout
-		grad = grad + .03;
+	float grad = (dy / dx) + 0.01;
+	if (dx == 0.0) {
+		grad = 1.0;
 	}
 
 	float interY = y0 + grad; //first y - intersection for the main loop
