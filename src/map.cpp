@@ -532,11 +532,17 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-//get a line between two points
-//based on Xiaolin Wu algorithm
-std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
+// get a line between two points
+// based on Xiaolin Wu algorithm
+// https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C.2B.2B
+std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Position& toPos)
 {
-	std::vector< std::pair<int, int> > line;
+	std::vector<std::pair<int, int>> line;
+	int x0 = fromPos.x;
+	int x1 = toPos.x;
+	int y0 = fromPos.y;
+	int y1 = toPos.y;
+
 	if (x0 == x1 && y0 == y1) {
 		return line;
 	}
@@ -569,25 +575,24 @@ std::vector< std::pair<int, int> > get2DLine(int x0, int y0, int x1, int y1)
 		for (int y = x0 + 1; y < x1; y++) {
 			int newX = std::floor(interY);
 			int newY = y;
-			line.push_back({ newX, newY });
+			line.emplace_back(newX, newY);
 			interY += grad;
 		}
 	} else {
 		for (int x = x0 + 1; x < x1; x++) {
 			int newX = x;
 			int newY = std::floor(interY);
-			line.push_back({ newX, newY });
+			line.emplace_back(newX, newY);
 			interY += grad;
 		}
 	}
-
 	// now we need to perform a jump between floors to see if everything is clear (literally)
 	return line;
 }
 
 bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 {
-	std::vector< std::pair<int, int> > line = get2DLine(static_cast<int>(fromPos.x), static_cast<int>(fromPos.y), static_cast<int>(toPos.x), static_cast<int>(toPos.y));
+	std::vector<std::pair<int, int>> line = get2DLine(fromPos, toPos);
 
 	for (const auto& it : line) {
 		uint16_t x = static_cast<uint16_t>(it.first);
@@ -598,7 +603,6 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -626,7 +630,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	//(used for throwing items)
 
 	//can't throw higher than one floor above us
-	if ( (toPos.z < fromPos.z) && (fromPos.z - toPos.z > 1) ) {
+	if ((toPos.z < fromPos.z) && (fromPos.z - toPos.z > 1)) {
 		return false;
 	}
 
@@ -659,22 +663,17 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 		if (fromPos.z > toPos.z) {
 			return true;
 		}
-
 		currentZ = fromPos.z - 1;
 	}
 
 	//check toPos shaft
-	while (currentZ < toPos.z) {
+	for (int z = currentZ; z != toPos.z; z++) {
 		const Tile* tile = getTile(toPos.x, toPos.y, currentZ);
 		bool obstacleFound = tile && (tile->getGround() || tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
-
 		if (obstacleFound) {
 			return false;
 		}
-
-		++currentZ;
 	}
-
 	return true;
 }
 
