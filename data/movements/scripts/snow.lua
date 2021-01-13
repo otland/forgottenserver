@@ -1,6 +1,6 @@
 function onStepOut(creature, item, position, fromPosition)
 	if not creature:isPlayer() or creature:isInGhostMode() then
-		return false
+		return true
 	end
 
 	if item:getId() == 670 then
