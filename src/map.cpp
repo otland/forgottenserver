@@ -532,60 +532,55 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-// get a line between two points
-// based on Xiaolin Wu algorithm
-// https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C.2B.2B
-
+//get a line between two points
+//based on Xiaolin Wu algorithm
+//https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C.2B.2B
 std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Position& toPos)
 {
 	std::vector<std::pair<int, int>> line;
-	int x0 = fromPos.x;
-	int x1 = toPos.x;
-	int y0 = fromPos.y;
-	int y1 = toPos.y;
-
-	if (x0 == x1 && y0 == y1) {
+	Position& newFromPos = const_cast<Position&>(fromPos);
+	Position& newToPos = const_cast<Position&>(toPos);
+	if (newFromPos.x == newToPos.x && newFromPos.y == newToPos.y) {
 		return line;
 	}
 
-	bool isSteep = std::abs(y1 - y0) > std::abs(x1 - x0);
+	bool isSteep = std::abs(newToPos.y - newFromPos.y) > std::abs(newToPos.x - newFromPos.x);
 
 	if (isSteep) {
-		std::swap(x0, y0);
-		std::swap(x1, y1);
+		std::swap(newFromPos.x, newFromPos.y);
+		std::swap(newToPos.x, newToPos.y);
 	}
 
-	if (x0 > x1) {
-		std::swap(x0, x1);
-		std::swap(y0, y1);
+	if (newFromPos.x > newToPos.x) {
+		std::swap(newFromPos.x, newToPos.x);
+		std::swap(newFromPos.y, newToPos.y);
 	}
 
-	int sizeOfLine = x1 - x0;
+	int sizeOfLine = newToPos.x - newFromPos.x;
 	line.reserve(sizeOfLine);
 
-	float dx = x1 - x0;
-	float dy = y1 - y0;
+	float dx = newToPos.x - newFromPos.x;
+	float dy = newToPos.y - newFromPos.y;
 	float grad = (dy / dx) + 0.01;
 	if (dx == 0.0) {
 		grad = 1.0;
 	}
 
-	float interY = y0 + grad; //first y - intersection for the main loop
+	float interY = newFromPos.y + grad; //first y - intersection for the main loop
 
 	if (isSteep) {
-		for (int y = x0 + 1; y < x1; ++y) {
+		for (int y = newFromPos.x + 1; y < newToPos.x; ++y) {
 			int newX = std::floor(interY);
 			line.emplace_back(newX, y);
 			interY += grad;
 		}
 	} else {
-		for (int x = x0 + 1; x < x1; ++x) {
+		for (int x = newFromPos.x + 1; x < newToPos.x; ++x) {
 			int newY = std::floor(interY);
 			line.emplace_back(x, newY);
 			interY += grad;
 		}
 	}
-	// now we need to perform a jump between floors to see if everything is clear (literally)
 	return line;
 }
 
@@ -615,7 +610,6 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 		return false;
 	}
 
-	// Cast two converging rays and see if either yields a result.
 	//check if 2d sight line is clear
 	bool sightLineClear = checkSightLine(fromPos, toPos);
 
@@ -627,7 +621,6 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 
 	//floorCheck is off and clear sight line was not found so we attempt to find 3D path now
 	//(used for throwing items)
-
 	//can't throw higher than one floor above us
 	if ((toPos.z < fromPos.z) && (fromPos.z - toPos.z > 1)) {
 		return false;
@@ -666,7 +659,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	}
 
 	//check toPos shaft
-	for (int z = currentZ; z != toPos.z; z++) {
+	for (int z = currentZ; z != toPos.z; ++z) {
 		const Tile* tile = getTile(toPos.x, toPos.y, currentZ);
 		bool obstacleFound = tile && (tile->getGround() || tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
 		if (obstacleFound) {
