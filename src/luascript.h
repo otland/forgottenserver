@@ -153,7 +153,7 @@ class ScriptEnvironment
 
 	private:
 		using VariantVector = std::vector<const LuaVariant*>;
-		using StorageMap = std::map<uint32_t, int32_t>;
+		using StorageMap = std::map<uint32_t, int64_t>;
 		using DBResultMap = std::map<uint32_t, DBResult_ptr>;
 
 		LuaScriptInterface* interface;

@@ -8843,7 +8843,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	}
 
 	uint32_t key = getNumber<uint32_t>(L, 2);
-	int32_t value;
+	int64_t value;
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
 	} else {
@@ -8855,7 +8855,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 {
 	// player:setStorageValue(key, value)
-	int32_t value = getNumber<int32_t>(L, 3);
+	int64_t value = getNumber<int64_t>(L, 3);
 	uint32_t key = getNumber<uint32_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {

@@ -25,7 +25,7 @@
 
 std::string Mission::getDescription(Player* player) const
 {
-	int32_t value;
+	int64_t value;
 	player->getStorageValue(storageID, value);
 
 	if (!mainDescription.empty()) {
@@ -36,7 +36,7 @@ std::string Mission::getDescription(Player* player) const
 	}
 
 	if (ignoreEndValue) {
-		for (int32_t current = endValue; current >= startValue; current--) {
+		for (int64_t current = endValue; current >= startValue; current--) {
 			if (value >= current) {
 				auto sit = descriptions.find(current);
 				if (sit != descriptions.end()) {
@@ -45,7 +45,7 @@ std::string Mission::getDescription(Player* player) const
 			}
 		}
 	} else {
-		for (int32_t current = endValue; current >= startValue; current--) {
+		for (int64_t current = endValue; current >= startValue; current--) {
 			if (value == current) {
 				auto sit = descriptions.find(current);
 				if (sit != descriptions.end()) {
@@ -63,7 +63,7 @@ bool Mission::isStarted(Player* player) const
 		return false;
 	}
 
-	int32_t value;
+	int64_t value;
 	if (!player->getStorageValue(storageID, value)) {
 		return false;
 	}
@@ -85,7 +85,7 @@ bool Mission::isCompleted(Player* player) const
 		return false;
 	}
 
-	int32_t value;
+	int64_t value;
 	if (!player->getStorageValue(storageID, value)) {
 		return false;
 	}
@@ -132,7 +132,7 @@ bool Quest::isStarted(Player* player) const
 		return false;
 	}
 
-	int32_t value;
+	int64_t value;
 	if (!player->getStorageValue(startStorageID, value) || value < startStorageValue) {
 		return false;
 	}
@@ -161,7 +161,7 @@ bool Quests::loadFromXml()
 			questNode.attribute("name").as_string(),
 			++id,
 			pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
-			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
+			pugi::cast<int64_t>(questNode.attribute("startstoragevalue").value())
 		);
 		Quest& quest = quests.back();
 
@@ -171,8 +171,8 @@ bool Quests::loadFromXml()
 			quest.missions.emplace_back(
 				missionNode.attribute("name").as_string(),
 				pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
-				pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
-				pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
+				pugi::cast<int64_t>(missionNode.attribute("startvalue").value()),
+				pugi::cast<int64_t>(missionNode.attribute("endvalue").value()),
 				missionNode.attribute("ignoreendvalue").as_bool()
 			);
 			Mission& mission = quest.missions.back();
@@ -211,7 +211,7 @@ uint16_t Quests::getQuestsCount(Player* player) const
 	return count;
 }
 
-bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const
+bool Quests::isQuestStorage(const uint32_t key, const int64_t value, const int64_t oldValue) const
 {
 	for (const Quest& quest : quests) {
 		if (quest.getStartStorageId() == key && quest.getStartStorageValue() == value) {
