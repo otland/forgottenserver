@@ -1259,8 +1259,9 @@ function doSetGameState(state)
 end
 
 function doExecuteRaid(raidName)
-	return Game.startRaid(raidName)
+	return Game.startEvent(raidName)
 end
+Game.startRaid = Game.startEvent
 
 numberToVariant = Variant
 stringToVariant = Variant

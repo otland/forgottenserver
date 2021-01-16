@@ -56,7 +56,7 @@ constexpr const char* INDENT = "    ";
 
 struct RaidEvent
 {
-	explicit RaidEvent(uint32_t delay) : delay{delay} {}
+	explicit RaidEvent(uint32_t delay): delay{delay} {}
 	virtual ~RaidEvent() = default;
 
 	virtual void to_script(std::ostringstream& ss) const { ss << '\n'; };
@@ -75,10 +75,9 @@ static const std::unordered_map<std::string, std::string> messageTypes{
 };
 static const std::string defaultMessageType{"MESSAGE_EVENT_ADVANCE"};
 
-struct AnnounceEvent : public RaidEvent
+struct AnnounceEvent: public RaidEvent
 {
-	AnnounceEvent(uint32_t delay, std::string msg, std::string type) :
-			RaidEvent{delay}, message{std::move(msg)}, type{std::move(type)} {}
+	AnnounceEvent(uint32_t delay, std::string msg, std::string type): RaidEvent{delay}, message{std::move(msg)}, type{std::move(type)} {}
 
 	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode)
 	{
@@ -89,18 +88,14 @@ struct AnnounceEvent : public RaidEvent
 
 		std::string messageType = [](const pugi::xml_attribute& type) {
 			if (not type) {
-				std::cout << "[Notice] Raid: type tag missing for announce "
-				             "event. Using default: " << defaultMessageType <<
-							 "\n";
+				std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << defaultMessageType << "\n";
 				return defaultMessageType;
 			}
 
 			try {
 				return messageTypes.at(type.as_string());
 			} catch (const std::out_of_range&) {
-				std::cout << "[Notice] Raid: Unknown type tag for announce "
-				             "event. Using default: " << defaultMessageType <<
-							 "\n";
+				std::cout << "[Notice] Raid: Unknown type tag for announce event. Using default: " << defaultMessageType << "\n";
 				return defaultMessageType;
 			}
 		}(eventNode.attribute("type"));
@@ -110,8 +105,7 @@ struct AnnounceEvent : public RaidEvent
 
 	void to_script(std::ostringstream& ss) const override
 	{
-		ss << INDENT << "Game.broadcastMessage(\"" << message << "\", " << type
-		   << ")\n";
+		ss << INDENT << "Game.broadcastMessage(\"" << message << "\", " << type << ")\n";
 	}
 
 	std::string message, type;
@@ -133,10 +127,9 @@ T require(const pugi::xml_node& node, const std::string& tag)
 	throw MissingTag{tag};
 }
 
-struct SingleSpawnEvent : public RaidEvent
+struct SingleSpawnEvent: public RaidEvent
 {
-	SingleSpawnEvent(uint32_t delay, std::string name, Position pos) :
-			RaidEvent{delay}, name{std::move(name)}, pos{std::move(pos)} {}
+	SingleSpawnEvent(uint32_t delay, std::string name, Position pos): RaidEvent{delay}, name{std::move(name)}, pos{std::move(pos)} {}
 
 	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode)
 	{
@@ -156,8 +149,7 @@ struct SingleSpawnEvent : public RaidEvent
 
 	void to_script(std::ostringstream& ss) const override
 	{
-		ss << INDENT << "Game.createMonster(\"" << name << "\", Position("
-			<< pos.x << ", " << pos.y << ", " << pos.z << "))\n";
+		ss << INDENT << "Game.createMonster(\"" << name << "\", Position(" << pos.x << ", " << pos.y << ", " << pos.z << "))\n";
 	}
 
 	std::string name;
@@ -198,8 +190,7 @@ std::vector<Spawn> parseSpawnList(const pugi::xml_node& monsterNode)
 
 	for (auto&& node: monsterNode.children()) {
 		try {
-			auto&& spawn = parseSpawnNode(node);
-			spawnList.emplace_back(std::move(spawn));
+			spawnList.push_back(parseSpawnNode(node));
 		} catch (const std::runtime_error& err) {
 			std::cout << "[Error - parseSpawn] " << err.what() << std::endl;
 		}
@@ -208,10 +199,9 @@ std::vector<Spawn> parseSpawnList(const pugi::xml_node& monsterNode)
 	return spawnList;
 }
 
-struct AreaSpawnEvent : public RaidEvent
+struct AreaSpawnEvent: public RaidEvent
 {
-	AreaSpawnEvent(uint32_t delay, Position from, Position to, uint32_t radius, std::vector<Spawn> spawnList) :
-			RaidEvent{delay}, from_{std::move(from)}, to{std::move(to)}, radius{radius}, spawnList{std::move(spawnList)} {}
+	AreaSpawnEvent(uint32_t delay, Position from, Position to, uint32_t radius, std::vector<Spawn> spawnList): RaidEvent{delay}, from_{std::move(from)}, to{std::move(to)}, radius{radius}, spawnList{std::move(spawnList)} {}
 
 	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode, uint16_t radius)
 	{
@@ -243,44 +233,27 @@ struct AreaSpawnEvent : public RaidEvent
 	void to_script(std::ostringstream& ss) const override
 	{
 		if (radius == 0) {
-			ss << INDENT << "local from, to, z = {x=" << from_.x << ", y="
-				<< from_.y << "}, {x=" << to.x << ", y=" << to.y << "}, "
-				<< to.z << '\n';
+			ss << INDENT << "local from, to, z = {x=" << from_.x << ", y=" << from_.y << "}, {x=" << to.x << ", y=" << to.y << "}, " << to.z << '\n';
 			for (auto&& spawn: spawnList) {
 				if (spawn.minAmount == spawn.maxAmount) {
-					ss << INDENT << "for _ = 1, " << spawn.minAmount
-					   << " do\n";
+					ss << INDENT << "for _ = 1, " << spawn.minAmount << " do\n";
 				} else {
-					ss << INDENT << "for _ = 1, math.random("
-					   << spawn.minAmount << ", " << spawn.maxAmount
-					   << ") do\n";
+					ss << INDENT << "for _ = 1, math.random(" << spawn.minAmount << ", " << spawn.maxAmount << ") do\n";
 				}
-				ss << INDENT << INDENT
-				   << "local x, y = "
-				      "math.random(from.x, to.x), "
-				      "math.random(from.y, to.y)\n"
-				   << INDENT << INDENT << "Game.createMonster(\""
-				   << spawn.name << "\", Position(x, y, z))\n"
+				ss << INDENT << INDENT << "local x, y = math.random(from.x, to.x), math.random(from.y, to.y)\n"
+				   << INDENT << INDENT << "Game.createMonster(\"" << spawn.name << "\", Position(x, y, z))\n"
 				   << INDENT << "end\n";
 			}
 		} else {
-			ss << INDENT << "local center, radius, z = {x=" << to.x	<< ", y="
-				<< to.y << "}, " << radius << ", " << to.z << '\n';
+			ss << INDENT << "local center, radius, z = {x=" << to.x	<< ", y=" << to.y << "}, " << radius << ", " << to.z << '\n';
 			for (auto&& spawn: spawnList) {
 				if (spawn.minAmount == spawn.maxAmount) {
-					ss << INDENT << "for _ = 1, " << spawn.minAmount
-					   << " do\n";
+					ss << INDENT << "for _ = 1, " << spawn.minAmount << " do\n";
 				} else {
-					ss << INDENT << "for _ = 1, math.random("
-					   << spawn.minAmount << ", " << spawn.maxAmount
-					   << ") do\n";
+					ss << INDENT << "for _ = 1, math.random(" << spawn.minAmount << ", " << spawn.maxAmount << ") do\n";
 				}
-				ss << INDENT << INDENT
-				   << "local x, y = "
-				      "math.random(center.x - radius, center.x + radius), "
-				      "math.random(center.y - radius, center.y + radius)\n"
-				   << INDENT << INDENT << "Game.createMonster(\""
-				   << spawn.name << "\", Position(x, y, z))\n"
+				ss << INDENT << INDENT << "local x, y = math.random(center.x - radius, center.x + radius), math.random(center.y - radius, center.y + radius)\n"
+				   << INDENT << INDENT << "Game.createMonster(\"" << spawn.name << "\", Position(x, y, z))\n"
 				   << INDENT << "end\n";
 			}
 		}
@@ -291,9 +264,9 @@ struct AreaSpawnEvent : public RaidEvent
 	std::vector<Spawn> spawnList;
 };
 
-struct ScriptEvent : public RaidEvent
+struct ScriptEvent: public RaidEvent
 {
-	ScriptEvent(uint32_t delay) : RaidEvent{delay} {}
+	ScriptEvent(uint32_t delay): RaidEvent{delay} {}
 };
 
 struct RaidInfo
@@ -306,8 +279,7 @@ struct RaidInfo
 
 struct Raid
 {
-	Raid(std::vector<std::unique_ptr<RaidEvent>> eventList, RaidInfo info) :
-			eventList{std::move(eventList)}, info{std::move(info)} {}
+	Raid(std::vector<std::unique_ptr<RaidEvent>> eventList, RaidInfo info): eventList{std::move(eventList)}, info{std::move(info)} {}
 
 	std::string to_script() const
 	{
@@ -323,8 +295,7 @@ struct Raid
 			++counter;
 		}
 
-		prelude << "function onTime(interval)\n" << callback.str() << INDENT
-			<< "return true\nend";
+		prelude << "function onTime(interval)\n" << callback.str() << INDENT << "return true\nend";
 
 		return prelude.str();
 	}
@@ -372,8 +343,7 @@ Raid loadRaid(RaidInfo info, const fs::path& raids_path)
 	std::vector<std::unique_ptr<RaidEvent>> eventList;
 	for (auto&& eventNode: doc.child("raid").children()) {
 		try {
-			auto&& event = parseEvent(eventNode.name(), eventNode);
-			eventList.emplace_back(std::move(event));
+			eventList.push_back(parseEvent(eventNode.name(), eventNode));
 		} catch (const ParseEventError& err) {
 			std::cout << "[Error - loadRaid] " << info.path << ": " << err.what() << std::endl;
 		}
@@ -442,8 +412,7 @@ std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
 		}
 
 		try {
-			Raid&& raid = loadRaid({name, file, interval, margin, repeat}, raids_path);
-			raidList.emplace_back(std::move(raid));
+			raidList.push_back(loadRaid({name, file, interval, margin, repeat}, raids_path));
 		} catch (const std::runtime_error& err) {
 			std::cout << "[Error - loadRaids] Failed to load raid \"" << name << "\": " << err.what() << std::endl;
 		}
