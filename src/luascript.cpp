@@ -5645,7 +5645,6 @@ int LuaScriptInterface::luaNetworkMessageLength(lua_State* L)
 	return 1;
 }
 
-
 int LuaScriptInterface::luaNetworkMessageSkipBytes(lua_State* L)
 {
 	// networkMessage:skipBytes(number)
