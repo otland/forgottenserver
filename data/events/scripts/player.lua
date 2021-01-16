@@ -1,29 +1,3 @@
--- minlevel and multiplier are MANDATORY
--- maxlevel is OPTIONAL, but is considered infinite by default
--- create a stage with minlevel 1 and no maxlevel to disable stages
-local experienceStages = {
-	{
-		minlevel = 1,
-		maxlevel = 8,
-		multiplier = 7
-	}, {
-		minlevel = 9,
-		maxlevel = 20,
-		multiplier = 6
-	}, {
-		minlevel = 21,
-		maxlevel = 50,
-		multiplier = 5
-	}, {
-		minlevel = 51,
-		maxlevel = 100,
-		multiplier = 4
-	}, {
-		minlevel = 101,
-		multiplier = 3
-	}
-}
-
 function Player:onBrowseField(position)
 	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then
 		return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position)
@@ -151,16 +125,6 @@ local function useStamina(player)
 	player:setStamina(staminaMinutes)
 end
 
-local function getRateFromTable(t, level, default)
-	for _, rate in ipairs(t) do
-		if level >= rate.minlevel and (not rate.maxlevel or level <= rate.maxlevel) then
-			return rate.multiplier
-		end
-	end
-
-	return default
-end
-
 function Player:onGainExperience(source, exp, rawExp)
 	if not source or source:isPlayer() then
 		return exp
@@ -174,7 +138,7 @@ function Player:onGainExperience(source, exp, rawExp)
 	end
 
 	-- Apply experience stage multiplier
-	exp = exp * getRateFromTable(experienceStages, self:getLevel(), configManager.getNumber(configKeys.RATE_EXP))
+	exp = exp * Game.getExperienceStage(self:getLevel())
 
 	-- Stamina modifier
 	if configManager.getBoolean(configKeys.STAMINA_SYSTEM) then
