@@ -369,9 +369,7 @@ void Monster::updateTargetList()
 	g_game.map.getSpectators(spectators, position, true);
 	spectators.erase(this);
 	for (Creature* spectator : spectators) {
-		if (canSee(spectator->getPosition())) {
-			onCreatureFound(spectator);
-		}
+		onCreatureFound(spectator);
 	}
 }
 
@@ -393,6 +391,14 @@ void Monster::clearFriendList()
 
 void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
 {
+	if (!creature) {
+		return;
+	}
+	
+	if (!canSee(creature->getPosition())) {
+		return;
+	}
+	
 	if (isFriend(creature)) {
 		addFriend(creature);
 	}
