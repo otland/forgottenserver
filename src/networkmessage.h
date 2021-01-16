@@ -130,7 +130,7 @@ class NetworkMessage
 
 		bool setBufferPosition(MsgSize_t pos) {
 			if (pos < NETWORKMESSAGE_MAXSIZE - INITIAL_BUFFER_POSITION) {
-				position = pos + INITIAL_BUFFER_POSITION;
+				info.position = pos + INITIAL_BUFFER_POSITION;
 				return true;
 			}
 			return false;
