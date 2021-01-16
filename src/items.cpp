@@ -143,9 +143,12 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"elementearth", ITEM_PARSE_ELEMENTEARTH},
 	{"elementfire", ITEM_PARSE_ELEMENTFIRE},
 	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
+	{"elementdeath", ITEM_PARSE_ELEMENTDEATH},
+	{"elementholy", ITEM_PARSE_ELEMENTHOLY},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
+	{"storeitem", ITEM_PARSE_STOREITEM},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -221,7 +224,7 @@ Items::Items()
 void Items::clear()
 {
 	items.clear();
-	reverseItemMap.clear();
+	clientIdToServerIdMap.clear();
 	nameToItems.clear();
 }
 
@@ -405,7 +408,7 @@ bool Items::loadFromOtb(const std::string& file)
 			}
 		}
 
-		reverseItemMap.emplace(clientId, serverId);
+		clientIdToServerIdMap.emplace(clientId, serverId);
 
 		// store the found item
 		if (serverId >= items.size()) {
@@ -538,18 +541,18 @@ void Items::buildInventoryList()
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
-	if (id > 30000 && id < 30100) {
-		id -= 30000;
-
-		if (id >= items.size()) {
-			items.resize(id + 1);
-		}
+	if (id > 0 && id < 100) {
 		ItemType& iType = items[id];
 		iType.id = id;
 	}
 
 	ItemType& it = getItemType(id);
 	if (it.id == 0) {
+		return;
+	}
+
+	if (!it.name.empty()) {
+		std::cout << "[Warning - Items::parseItemNode] Duplicate item with id: " << id << std::endl;
 		return;
 	}
 
@@ -1188,6 +1191,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						uint32_t ticks = 0;
 						int32_t start = 0;
 						int32_t count = 1;
+						int32_t initDamage = -1;
+						int32_t damage = 0;
 						for (auto subAttributeNode : attributeNode.children()) {
 							pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 							if (!subKeyAttribute) {
@@ -1200,14 +1205,16 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 							}
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
-							if (tmpStrValue == "ticks") {
+							if (tmpStrValue == "initdamage") {
+								initDamage = pugi::cast<int32_t>(subValueAttribute.value());
+							} else if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
 								count = std::max<int32_t>(1, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "start") {
 								start = std::max<int32_t>(0, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "damage") {
-								int32_t damage = -pugi::cast<int32_t>(subValueAttribute.value());
+								damage = -pugi::cast<int32_t>(subValueAttribute.value());
 								if (start > 0) {
 									std::list<int32_t> damageList;
 									ConditionDamage::generateDamageList(damage, start, damageList);
@@ -1220,6 +1227,15 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 									conditionDamage->addDamage(count, ticks, damage);
 								}
 							}
+						}
+
+						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
+						// initDamage = 0 (dont override initDamage with damage, dont set any initDamage)
+						// initDamage = -1 (undefined, override initDamage with damage)
+						if (initDamage > 0 || initDamage < -1) {
+							conditionDamage->setInitDamage(-initDamage);
+						} else if (initDamage == -1 && damage != 0) {
+							conditionDamage->setInitDamage(damage);
 						}
 
 						conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
@@ -1309,6 +1325,18 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
+				case ITEM_PARSE_ELEMENTDEATH: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_DEATHDAMAGE;
+					break;
+				}
+
+				case ITEM_PARSE_ELEMENTHOLY: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_HOLYDAMAGE;
+					break;
+				}
+
 				case ITEM_PARSE_WALKSTACK: {
 					it.walkStack = valueAttribute.as_bool();
 					break;
@@ -1321,6 +1349,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ALLOWDISTREAD: {
 					it.allowDistRead = booleanString(valueAttribute.as_string());
+					break;
+				}
+
+				case ITEM_PARSE_STOREITEM: {
+					it.storeItem = booleanString(valueAttribute.as_string());
 					break;
 				}
 
@@ -1359,9 +1392,10 @@ const ItemType& Items::getItemType(size_t id) const
 
 const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 {
-	auto it = reverseItemMap.find(spriteId);
-	if (it != reverseItemMap.end()) {
-		return getItemType(it->second);
+	if (spriteId >= 100) {
+		if (uint16_t serverId = clientIdToServerIdMap.getServerId(spriteId)) {
+			return getItemType(serverId);
+		}
 	}
 	return items.front();
 }

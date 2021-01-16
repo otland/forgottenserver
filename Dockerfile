@@ -1,5 +1,5 @@
 FROM alpine:edge AS build
-# pugixml-dev is in edge/testing
+# crypto++-dev is in edge/testing
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
   binutils \
   boost-dev \
@@ -21,11 +21,11 @@ WORKDIR /usr/src/forgottenserver/build
 RUN cmake .. && make
 
 FROM alpine:edge
-# pugixml-dev is in edge/testing
+# crypto++-dev is in edge/testing
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
   boost-iostreams \
   boost-system \
-	boost-filesystem \
+  boost-filesystem \
   crypto++ \
   gmp \
   luajit \

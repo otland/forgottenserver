@@ -93,6 +93,7 @@ class TileItemVector : private ItemVector
 		using ItemVector::const_iterator;
 		using ItemVector::reverse_iterator;
 		using ItemVector::const_reverse_iterator;
+		using ItemVector::empty;
 
 		iterator getBeginDownItem() {
 			return begin();
@@ -240,7 +241,7 @@ class Tile : public Cylinder
 				uint32_t flags, Creature* actor = nullptr) const override;
 		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t& maxQueryCount, uint32_t flags) const override final;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const override final;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 		Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
 		void addThing(Thing* thing) override final;

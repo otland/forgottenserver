@@ -1,6 +1,6 @@
 function onUpdateDatabase()
 	print("> Updating database to version 9 (global inbox)")
-	db.query("CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int(11) NOT NULL, `sid` int(11) NOT NULL, `pid` int(11) NOT NULL DEFAULT '0', `itemtype` smallint(6) NOT NULL, `count` smallint(5) NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`,`sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1")
+	db.query("CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int NOT NULL, `sid` int NOT NULL, `pid` int NOT NULL DEFAULT '0', `itemtype` smallint NOT NULL, `count` smallint NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`,`sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1")
 
 	-- Delete "market" item
 	db.query("DELETE FROM `player_depotitems` WHERE `itemtype` = 14405")

@@ -73,6 +73,14 @@ function onSay(player, words, param)
 		return false
 	end
 
+	-- need to clear EventCallbackData or we end up having duplicated events on /reload scripts
+	if reloadType == RELOAD_TYPE_SCRIPTS or reloadType == RELOAD_TYPE_ALL then
+		EventCallbackData = {}
+		for i = 1, EVENT_CALLBACK_LAST do
+			EventCallbackData[i] = {}
+		end
+	end
+
 	Game.reload(reloadType)
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", param:lower()))
 	return false

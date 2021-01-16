@@ -26,6 +26,11 @@ struct Outfit {
 	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) :
 		name(std::move(name)), lookType(lookType), premium(premium), unlocked(unlocked) {}
 
+	bool operator==(const Outfit& otherOutfit) const
+	{
+		return name == otherOutfit.name && lookType == otherOutfit.lookType && premium == otherOutfit.premium && unlocked == otherOutfit.unlocked;
+	}
+
 	std::string name;
 	uint16_t lookType;
 	bool premium;
@@ -52,6 +57,7 @@ class Outfits
 		bool loadFromXml();
 
 		const Outfit* getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const;
+		const Outfit* getOutfitByLookType(uint16_t lookType) const;
 		const std::vector<Outfit>& getOutfits(PlayerSex_t sex) const {
 			return outfits[sex];
 		}

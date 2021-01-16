@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Waspoid" nameDescription="Waspoid" race="venom" experience="830" speed="210">
+	<health now="1100" max="1100" />
+	<look type="462" corpse="15396" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-248" poison="400" />
+		<attack name="earth" interval="2000" chance="15" target="1" radius="3" min="-110" max="-180">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" range="7" min="-80" max="-100">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element deathPercent="5" />
+		<element energyPercent="25" />
+		<element physicalPercent="-5" />
+		<element holyPercent="-5" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Peeex!" />
+	</voices>
+	<loot>
+		<item name="emerald bangle" chance="2040" />
+		<item name="black pearl" chance="4230" />
+		<item name="gold coin" countmax="100" chance="40000" />
+		<item name="gold coin" countmax="35" chance="50000" />
+		<item name="platinum coin" chance="40430" />
+		<item name="yellow gem" chance="1040" />
+		<item name="waspoid claw" chance="9096" />
+		<item name="waspoid wing" chance="13890" />
+		<item name="compound eye" chance="6060" />
+		<item name="grasshopper legs" chance="230" />
+		<item name="carapace shield" chance="120" />
+		<item name="hive scythe" chance="330" />
+	</loot>
+</monster>

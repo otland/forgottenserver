@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Orchid Frog" nameDescription="an orchid frog" race="blood" experience="20" speed="200" manacost="305">
+	<health now="60" max="60" />
+	<look type="226" head="71" body="14" legs="71" feet="70" corpse="6079" />
+	<targetchange interval="5000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-24" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<elements>
+		<element icePercent="10" />
+		<element firePercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ribbit!" />
+		<voice sentence="Ribbit! Ribbit!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="10" chance="73230" />
+		<item name="worm" chance="8000" />
+	</loot>
+</monster>

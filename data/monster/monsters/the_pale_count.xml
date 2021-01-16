@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Pale Count" nameDescription="The Pale Count" race="blood" experience="28000" speed="300">
+	<health now="50000" max="50000" />
+	<look type="558" corpse="21279" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-540" />
+		<attack name="speed" interval="1000" chance="17" range="7" radius="4" target="1" speedchange="-600" duration="1500">
+		</attack>
+		<attack name="ice" interval="2000" chance="21" range="6" radius="2" target="1" min="-130" max="-350">
+			<attribute key="shootEffect" value="smallice" />
+			<attribute key="areaEffect" value="giantice" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="15" range="7" min="-60" max="-120">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaeffect" value="carniphila" />
+		</attack>
+	</attacks>
+	<defenses armor="75" defense="75" />
+	<elements>
+		<element holyPercent="-10" />
+		<element firePercent="15" />
+		<element energyPercent="30" />
+		<element icePercent="30" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Nightfiend" interval="2000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Feel the hungry kiss of death!" />
+		<voice sentence="The monsters in the mirror will come eat your dreams." />
+		<voice sentence="Your pitiful life has come to an end!" />
+		<voice sentence="I will squish you like a maggot and suck you dry!" />
+		<voice sentence="Yield to the inevitable!" />
+		<voice sentence="Some day I shall see my beautiful face in a mirror again." />
+	</voices>
+	<loot>
+		<item id="9020" chance="100000" /><!-- vampire lord token -->
+		<item id="21244" chance="100000" /><!-- vampire's cape chain -->
+		<item id="21253" chance="5000" /><!-- the vampire count's medal -->
+		<item id="21252" chance="5000" /><!-- vampire's signet ring -->
+		<item id="12405" chance="50000" /><!-- blood preservation -->
+		<item id="10602" chance="50000" /><!-- vampire teeth -->
+		<item id="21400" chance="5000" /><!-- silver raid token -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2152" countmax="5" chance="100000" /><!-- platinum coin -->
+		<item id="7589" countmax="3" chance="50000" /><!-- strong mana potion -->
+		<item id="7588" countmax="3" chance="50000" /><!-- strong health potion -->
+		<item id="2165" chance="10000" /><!-- stealth ring -->
+		<item id="2214" chance="10000" /><!-- ring of healing -->
+		<item id="5909" chance="10000" /><!-- white piece of cloth -->
+		<item id="5911" chance="10000" /><!-- red piece of cloth -->
+		<item id="5912" chance="10000" /><!-- blue piece of cloth -->
+		<item id="7427" chance="5000" /><!-- chaos mace -->
+		<item id="2438" chance="10000" /><!-- epee -->
+		<item id="7419" chance="5000" /><!-- dreaded cleaver -->
+		<item id="8903" chance="5000" /><!-- spellbook of lost souls -->
+		<item id="21707" chance="5000" /><!-- haunted mirror piece -->
+		<item id="2534" chance="5000" /><!-- vampire shield -->
+		<item id="21708" chance="5000" /><!-- vampire silk slippers -->
+		<item id="2145" countmax="5" chance="50000" /><!-- small diamond -->
+		<item id="2144" countmax="5" chance="50000" /><!-- black pearl -->
+		<item id="2146" countmax="5" chance="50000" /><!-- small sapphire -->
+		<item id="2149" countmax="5" chance="50000" /><!-- small emerald -->
+		<item id="2153" chance="10000" /><!-- violet gem -->
+	</loot>
+</monster>

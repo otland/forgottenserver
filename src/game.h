@@ -206,6 +206,7 @@ class Game
 		  * \param c Creature to remove
 		  */
 		bool removeCreature(Creature* creature, bool isLogout = true);
+		void executeDeath(uint32_t creatureId);
 
 		void addCreatureCheck(Creature* creature);
 		static void removeCreatureCheck(Creature* creature);
@@ -239,7 +240,7 @@ class Game
 		ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
 
 		ReturnValue internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
-		                             Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr, Item* tradeItem = nullptr);
+		                             Item* item, uint32_t count, Item** _moveItem, uint32_t flags = 0, Creature* actor = nullptr, Item* tradeItem = nullptr, const Position* fromPos = nullptr, const Position* toPos = nullptr);
 
 		ReturnValue internalAddItem(Cylinder* toCylinder, Item* item, int32_t index = INDEX_WHEREEVER,
 		                            uint32_t flags = 0, bool test = false);
@@ -409,8 +410,6 @@ class Game
 
 		std::forward_list<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, DepotChest* depotChest, Inbox* inbox);
 
-		static void updatePremium(Account& account);
-
 		void cleanup();
 		void shutdown();
 		void ReleaseCreature(Creature* creature);
@@ -511,6 +510,19 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
+		std::unordered_set<Tile*> getTilesToClean() const {
+			return tilesToClean;
+		}
+		void addTileToClean(Tile* tile) {
+			tilesToClean.emplace(tile);
+		}
+		void removeTileToClean(Tile* tile) {
+			tilesToClean.erase(tile);
+		}
+		void clearTilesToClean() {
+			tilesToClean.clear();
+		}
+
 	private:
 		bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
 		void playerWhisper(Player* player, const std::string& text);
@@ -545,6 +557,8 @@ class Game
 		std::map<Item*, uint32_t> tradeItems;
 
 		std::map<uint32_t, BedItem*> bedSleepersMap;
+
+		std::unordered_set<Tile*> tilesToClean;
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 
