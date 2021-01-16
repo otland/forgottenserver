@@ -321,8 +321,8 @@ CREATE TABLE IF NOT EXISTS `player_spells` (
 
 CREATE TABLE IF NOT EXISTS `player_storage` (
   `player_id` int NOT NULL DEFAULT '0',
-  `key` bigint unsigned NOT NULL DEFAULT '0',
-  `value` int NOT NULL DEFAULT '0',
+  `key` int unsigned NOT NULL DEFAULT '0',
+  `value` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`player_id`,`key`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
