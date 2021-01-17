@@ -127,7 +127,7 @@ ExperienceStages loadXMLStages()
 	ExperienceStages stages;
 	for (auto stageNode : doc.child("stages").children()) {
 		if (strcasecmp(stageNode.name(), "config") == 0) {
-			if (stageNode.attribute("enabled").as_bool()) {
+			if (!stageNode.attribute("enabled").as_bool()) {
 				return {};
 			}
 		} else {
