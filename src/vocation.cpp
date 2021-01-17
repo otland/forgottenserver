@@ -186,13 +186,10 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-
-	uint64_t tries = static_cast<uint64_t>(skillBase[skill] * std::pow<double>(skillMultipliers[skill], level - 11));
-	return tries;
+	return static_cast<uint64_t>(skillBase[skill] * std::pow<double>(skillMultipliers[skill], level - 11));
 }
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
 {
-	uint64_t reqMana = std::floor<uint64_t>(1600 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
-	return reqMana;
+	return std::floor<uint64_t>(1600 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
 }
