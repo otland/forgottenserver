@@ -286,6 +286,7 @@ bool ConfigManager::load()
 	} else {
 		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, consider moving to config.lua." << std::endl;
 	}
+	expStages.shrink_to_fit();
 
 	loaded = true;
 	lua_close(L);
