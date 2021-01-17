@@ -179,7 +179,7 @@ uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
 	return VOCATION_NONE;
 }
 
-static uint32_t skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
+static const uint32_t skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
