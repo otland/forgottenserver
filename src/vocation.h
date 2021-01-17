@@ -94,9 +94,6 @@ class Vocation
 	private:
 		friend class Vocations;
 
-		std::map<uint32_t, uint64_t> cacheMana;
-		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
-
 		std::string name = "none";
 		std::string description;
 
@@ -119,8 +116,6 @@ class Vocation
 
 		uint8_t soulMax = 100;
 		uint8_t clientId = 0;
-
-		static uint32_t skillBase[SKILL_LAST + 1];
 };
 
 class Vocations
