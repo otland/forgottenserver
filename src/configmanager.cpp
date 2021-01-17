@@ -333,10 +333,6 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 
 float ConfigManager::getExperienceStage(uint32_t level) const
 {
-	if (expStages.empty()) {
-		return getNumber(ConfigManager::RATE_EXPERIENCE);
-	}
-
 	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
 		return level >= std::get<0>(stage) && level <= std::get<1>(stage);
 	});
