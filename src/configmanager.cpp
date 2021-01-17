@@ -133,20 +133,17 @@ ExperienceStages loadXMLStages()
 		} else {
 			uint32_t minLevel, maxLevel, multiplier;
 
-			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
-			if (minLevelAttribute) {
+			if (auto minLevelAttribute = stageNode.attribute("minlevel")) {
 				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
 			} else {
 				minLevel = 1;
 			}
 
-			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
-			if (maxLevelAttribute) {
+			if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
 				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
 			}
 
-			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
-			if (multiplierAttribute) {
+			if (auto multiplierAttribute = stageNode.attribute("multiplier")) {
 				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
 			} else {
 				multiplier = 1;
