@@ -16,7 +16,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
+x
 #include "otpch.h"
 
 #include "iomap.h"
@@ -564,7 +564,7 @@ std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Positi
 	float dx = x1 - x0;
 	float dy = y1 - y0;
 	float grad = (dy / dx) + 0.01;
-	if (dx != 0.0) {
+	if (dx == 0.0) {
 		grad = 1.0;
 	}
 
