@@ -537,45 +537,47 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 //https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C.2B.2B
 std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Position& toPos)
 {
+	int x0 = fromPos.x;
+	int x1 = toPos.x;
+	int y0 = fromPos.y;
+	int y1 = toPos.y;
+
 	std::vector<std::pair<int, int>> line;
-	Position& newFromPos = const_cast<Position&>(fromPos);
-	Position& newToPos = const_cast<Position&>(toPos);
-	if (newFromPos.x == newToPos.x && newFromPos.y == newToPos.y) {
+	if (x0 == x1 && y0 == y1) {
 		return line;
 	}
 
-	bool isSteep = std::abs(newToPos.y - newFromPos.y) > std::abs(newToPos.x - newFromPos.x);
-
+	bool isSteep = abs(y1 - y0) > abs(x1 - x0);
 	if (isSteep) {
-		std::swap(newFromPos.x, newFromPos.y);
-		std::swap(newToPos.x, newToPos.y);
+		std::swap(x0, y0);
+		std::swap(x1, y1);
 	}
 
-	if (newFromPos.x > newToPos.x) {
-		std::swap(newFromPos.x, newToPos.x);
-		std::swap(newFromPos.y, newToPos.y);
+	if (x0 > x1) {
+		std::swap(x0, x1);
+		std::swap(y0, y1);
 	}
 
-	int sizeOfLine = newToPos.x - newFromPos.x;
+	int sizeOfLine = x1 - x0;
 	line.reserve(sizeOfLine);
 
-	float dx = newToPos.x - newFromPos.x;
-	float dy = newToPos.y - newFromPos.y;
+	float dx = x1 - x0;
+	float dy = y1 - y0;
 	float grad = (dy / dx) + 0.01;
-	if (dx == 0.0) {
+	if (dx != 0.0) {
 		grad = 1.0;
 	}
 
-	float interY = newFromPos.y + grad; //first y - intersection for the main loop
+	float interY = y0 + grad; //first y - intersection for the main loop
 
 	if (isSteep) {
-		for (int y = newFromPos.x + 1; y < newToPos.x; ++y) {
+		for (int y = x0 + 1; y < x1; ++y) {
 			int newX = std::floor(interY);
 			line.emplace_back(newX, y);
 			interY += grad;
 		}
 	} else {
-		for (int x = newFromPos.x + 1; x < newToPos.x; ++x) {
+		for (int x = x0 + 1; x < x1; ++x) {
 			int newY = std::floor(interY);
 			line.emplace_back(x, newY);
 			interY += grad;
