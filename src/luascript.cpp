@@ -2092,6 +2092,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("NetworkMessage", "addItemId", LuaScriptInterface::luaNetworkMessageAddItemId);
 
 	registerMethod("NetworkMessage", "reset", LuaScriptInterface::luaNetworkMessageReset);
+	registerMethod("NetworkMessage", "seek", LuaScriptInterface::luaNetworkMessageSeek);
+	registerMethod("NetworkMessage", "tell", LuaScriptInterface::luaNetworkMessageTell);
+	registerMethod("NetworkMessage", "len", LuaScriptInterface::luaNetworkMessageLength);
 	registerMethod("NetworkMessage", "skipBytes", LuaScriptInterface::luaNetworkMessageSkipBytes);
 	registerMethod("NetworkMessage", "sendToPlayer", LuaScriptInterface::luaNetworkMessageSendToPlayer);
 
@@ -5600,6 +5603,42 @@ int LuaScriptInterface::luaNetworkMessageReset(lua_State* L)
 	if (message) {
 		message->reset();
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNetworkMessageSeek(lua_State* L)
+{
+	// networkMessage:seek(position)
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (message && isNumber(L, 2)) {
+		pushBoolean(L, message->setBufferPosition(getNumber<uint16_t>(L, 2)));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNetworkMessageTell(lua_State* L)
+{
+	// networkMessage:tell()
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (message) {
+		lua_pushnumber(L, message->getBufferPosition() - message->INITIAL_BUFFER_POSITION);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNetworkMessageLength(lua_State* L)
+{
+	// networkMessage:len()
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (message) {
+		lua_pushnumber(L, message->getLength());
 	} else {
 		lua_pushnil(L);
 	}
