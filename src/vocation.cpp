@@ -116,7 +116,7 @@ bool Vocations::loadFromXml()
 				if (skillIdAttribute) {
 					uint16_t skill_id = pugi::cast<uint16_t>(skillIdAttribute.value());
 					if (skill_id <= SKILL_LAST) {
-						voc.skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
+						voc.skillMultipliers[skill_id] = pugi::cast<double>(childNode.attribute("multiplier").value());
 					} else {
 						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skill_id << " for vocation: " << voc.id << std::endl;
 					}
@@ -186,10 +186,10 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-	return static_cast<uint64_t>(skillBase[skill] * std::pow<double>(skillMultipliers[skill], level - 11));
+	return skillBase[skill] * std::pow(skillMultipliers[skill], level - 11);
 }
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
 {
-	return std::floor<uint64_t>(1600 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
+	return 1600 * std::pow(manaMultiplier, magLevel - 1);
 }
