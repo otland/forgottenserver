@@ -30,12 +30,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
 	// check if the event has a valid id
 	if (task->getEventId() == 0) {
-		uint32_t tmpEventId = ++lastEventId;
-		// if not generate one
-		if (tmpEventId == 0) {
-			tmpEventId = ++lastEventId;
-		}
-		task->setEventId(tmpEventId);
+		task->setEventId(++lastEventId);
 	}
 
 	// insert the event id in the list of active events
