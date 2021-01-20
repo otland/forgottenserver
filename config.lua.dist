@@ -103,6 +103,7 @@ serverSaveShutdown = true
 
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
+-- rateSpawn limits the number of monsters that will spawn within the same spawn object
 rateExp = 5
 rateSkill = 3
 rateLoot = 2
@@ -110,8 +111,13 @@ rateMagic = 3
 rateSpawn = 1
 
 -- Monsters
+-- spawnIntervalRate controls the rate of monster spawning interval
+-- its in percentage so 100 = 100% (normal spawn), 50 = 50% (half spawn time) and so on
+-- the higher the number, the less frequent spawn will be
+-- NOTE: minimum spawn interval is 10 seconds while maximum is 1 day for the map spawn file
 deSpawnRange = 2
 deSpawnRadius = 50
+spawnIntervalRate = 100
 
 -- Stamina
 staminaSystem = true
