@@ -65,10 +65,9 @@ void Scheduler::stopEvent(uint32_t eventId)
 	io_service.post([this, eventId]() {
 		// search the event id..
 		auto it = eventIdTimerMap.find(eventId);
-		if (it == eventIdTimerMap.end()) {
-			return;
+		if (it != eventIdTimerMap.end()) {
+			it->second->cancel();
 		}
-		it->second->cancel();
 	});
 }
 
