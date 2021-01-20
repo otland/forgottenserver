@@ -63,10 +63,10 @@ class Scheduler : public ThreadHolder<Scheduler>
 		void threadMain();
 	private:
 		std::thread thread;
-		std::atomic<uint32_t> lastEventId {0};
+		std::atomic<uint32_t> lastEventId{0};
 		std::unordered_map<uint32_t, std::unique_ptr<boost::asio::deadline_timer>> eventIdTimerMap;
-		boost::asio::io_service io_service;
-		boost::asio::io_service::work work {io_service};
+		boost::asio::io_context io_context;
+		boost::asio::io_context::work work{io_context};
 };
 
 extern Scheduler g_scheduler;

@@ -20,11 +20,12 @@
 #include "otpch.h"
 
 #include "scheduler.h"
+#include <boost/asio/post.hpp>
 #include <memory>
 
 void Scheduler::threadMain()
 {
-	io_service.run();
+	io_context.run();
 }
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
@@ -35,9 +36,9 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	}
 
 	// insert the event id in the list of active events
-	io_service.post([this, task]() {
+	boost::asio::post(io_context, [this, task]() {
 		auto& timer = eventIdTimerMap[task->getEventId()];
-		timer.reset(new boost::asio::deadline_timer(io_service));
+		timer.reset(new boost::asio::deadline_timer(io_context));
 
 		timer->expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
 		timer->async_wait([this, task](const boost::system::error_code& error) {
@@ -62,7 +63,7 @@ void Scheduler::stopEvent(uint32_t eventId)
 		return;
 	}
 
-	io_service.post([this, eventId]() {
+	boost::asio::post(io_context, [this, eventId]() {
 		// search the event id..
 		auto it = eventIdTimerMap.find(eventId);
 		if (it != eventIdTimerMap.end()) {
@@ -74,13 +75,13 @@ void Scheduler::stopEvent(uint32_t eventId)
 void Scheduler::shutdown()
 {
 	setState(THREAD_STATE_TERMINATED);
-	io_service.post([this]() {
+	boost::asio::post(io_context, [this]() {
 		// cancel all active timers
 		for (auto& it : eventIdTimerMap) {
 			it.second->cancel();
 		}
 
-		io_service.stop();
+		io_context.stop();
 	});
 }
 
