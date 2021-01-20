@@ -37,7 +37,7 @@
 		<item name="leather helmet" chance="30600" />
 		<item name="arrow" countmax="17" chance="49500" />
 		<item name="poison arrow" countmax="3" chance="2930" />
-		<item name="closed trap" chance="710" />
+		<item id="2578" chance="710" /><!-- closed trap -->
 		<item name="leather legs" chance="26740" />
 		<item name="roll" countmax="2" chance="11110" />
 	</loot>

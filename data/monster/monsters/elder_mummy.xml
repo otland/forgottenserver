@@ -42,7 +42,8 @@
 		<item id="2124" chance="1650" /><!-- crystal ring -->
 		<item name="silver brooch" chance="4000" />
 		<item name="black pearl" chance="1340" />
-		<item name="gold coin" countmax="160" chance="87000" />
+		<item name="gold coin" countmax="100" chance="43000" />
+		<item name="gold coin" countmax="60" chance="43000" />
 		<item name="scarab coin" countmax="3" chance="10000" />
 		<item name="strange talisman" chance="4500" />
 		<item id="2162" chance="6000" /><!-- magic lightwand -->

@@ -58,7 +58,8 @@
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="115" chance="88000" />
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="15" chance="44000" />
 		<item id="2696" chance="24500" /><!-- cheese -->
 		<item name="royal spear" countmax="2" chance="4870" />
 		<item name="small emerald" countmax="4" chance="2960" />

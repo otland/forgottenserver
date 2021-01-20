@@ -64,7 +64,8 @@
 		<voice sentence="Come to me my children!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="139" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="39" chance="50000" />
 		<item name="platinum coin" chance="19720" />
 		<item id="2175" chance="10000" /><!-- spellbook -->
 		<item name="strong mana potion" chance="7700" />

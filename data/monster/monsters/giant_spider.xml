@@ -43,10 +43,11 @@
 		<immunity earth="1" />
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Poison Spider" interval="2000" chance="10" max="2" />
+		<summon name="Poison Spider" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item name="gold coin" countmax="195" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="95" chance="50000" />
 		<item name="poison arrow" countmax="12" chance="12500" />
 		<item name="plate armor" chance="10000" />
 		<item name="plate legs" chance="8000" />

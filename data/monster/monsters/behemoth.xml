@@ -69,7 +69,7 @@
 		<item name="steel boots" chance="440" />
 		<item name="crowbar" chance="130" />
 		<item id="7396" chance="170" /><!-- behemoth trophy -->
-		<item name="amphora" chance="90" />
+		<item id="2023" chance="90" /><!-- amphora -->
 		<item name="titan axe" chance="70" />
 		<item name="war axe" chance="60" />
 	</loot>

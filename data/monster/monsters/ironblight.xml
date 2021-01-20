@@ -56,7 +56,8 @@
 		<voice sentence="Yowl!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="199" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="50000" />
 		<item name="small emerald" countmax="3" chance="10890" />
 		<item name="small amethyst" countmax="3" chance="15020" />
 		<item name="platinum coin" countmax="8" chance="100000" />

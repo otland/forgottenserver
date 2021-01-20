@@ -49,7 +49,9 @@
 		<voice sentence="YOU WILL BURN!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="245" chance="95000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="45" chance="32000" />
 		<item name="dragon ham" countmax="5" chance="80000" />
 		<item name="green mushroom" chance="12000" />
 		<item name="royal spear" countmax="3" chance="9000" />

@@ -83,7 +83,7 @@
 		<item name="violet crystal shard" chance="3000" />
 		<item name="brown crystal splinter" countmax="2" chance="12000" />
 		<item name="red crystal fragment" chance="7600" />
-		<item name="crystal rubbish" chance="12000" />
+		<item id="18554" chance="12000" /><!-- crystal rubbish -->
 		<item name="cluster of solace" chance="920" />
 		<item name="frazzle tongue" chance="15000" />
 		<item name="frazzle skin" chance="14000" />

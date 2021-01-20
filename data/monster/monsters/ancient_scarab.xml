@@ -52,7 +52,8 @@
 		<summon name="Larva" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item name="gold coin" countmax="187" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="87" chance="50000" />
 		<item id="2162" chance="10300" /><!-- magic lightwand -->
 		<item name="scarab coin" countmax="2" chance="8100" />
 		<item name="scarab pincers" chance="7140" />
