@@ -36,11 +36,11 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 
 	// insert the event id in the list of active events
 	io_service.post([this, task]() {
-		auto timer = std::make_shared<boost::asio::deadline_timer>(io_service);
-		eventIdTimerMap[task->getEventId()] = timer;
+		auto& timer = eventIdTimerMap[task->getEventId()];
+		timer.reset(new boost::asio::deadline_timer(io_service));
 
 		timer->expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
-		timer->async_wait([this, task, timer](const boost::system::error_code& error) {
+		timer->async_wait([this, task](const boost::system::error_code& error) {
 			eventIdTimerMap.erase(task->getEventId());
 
 			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
