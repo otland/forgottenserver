@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include "scheduler.h"
+#include <memory>
 
 void Scheduler::threadMain()
 {
@@ -35,8 +36,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 
 	// insert the event id in the list of active events
 	io_service.post([this, task]() {
-		boost::asio::deadline_timer* timer;
-		timer = new boost::asio::deadline_timer(io_service);
+		auto timer = std::make_shared<boost::asio::deadline_timer>(io_service);
 		eventIdTimerMap[task->getEventId()] = timer;
 
 		timer->expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
