@@ -65,7 +65,6 @@ class Scheduler : public ThreadHolder<Scheduler>
 		std::thread thread;
 		std::atomic<uint32_t> lastEventId {0};
 		std::unordered_map<uint32_t, boost::asio::deadline_timer*> eventIdTimerMap;
-		std::vector<boost::asio::deadline_timer*> timerCacheVec;
 		boost::asio::io_service io_service;
 		boost::asio::io_service::work work {io_service};
 };

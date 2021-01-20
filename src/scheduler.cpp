@@ -41,17 +41,11 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	// insert the event id in the list of active events
 	io_service.post([this, task]() {
 		boost::asio::deadline_timer* timer;
-		if (timerCacheVec.empty()) {
-			timer = new boost::asio::deadline_timer(io_service);
-		} else {
-			timer = timerCacheVec.back();
-			timerCacheVec.pop_back();
-		}
+		timer = new boost::asio::deadline_timer(io_service);
 		eventIdTimerMap[task->getEventId()] = timer;
 
 		timer->expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
 		timer->async_wait([this, task, timer](const boost::system::error_code& error) {
-			timerCacheVec.push_back(timer);
 			eventIdTimerMap.erase(task->getEventId());
 
 			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
@@ -91,15 +85,6 @@ void Scheduler::shutdown()
 		for (auto& it : eventIdTimerMap) {
 			it.second->cancel();
 		}
-
-		// thanks to cancel we will have all the timers in timerCacheVec
-		// deleted them to prevent memory leak
-		// this must be a new task since timer->cancel() adds a new task for each cancel so we want to delete the timers only after all cancel callbacks were called
-		io_service.post([this]() {
-			for (auto* timer : timerCacheVec) {
-				delete timer;
-			}
-		});
 
 		io_service.stop();
 	});
