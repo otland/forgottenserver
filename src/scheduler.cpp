@@ -37,11 +37,11 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 
 	// insert the event id in the list of active events
 	boost::asio::post(io_context, [this, task]() {
-		auto& timer = eventIdTimerMap[task->getEventId()];
-		timer.reset(new boost::asio::deadline_timer(io_context));
+		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::deadline_timer{io_context});
+		auto& timer = it.first->second;
 
-		timer->expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
-		timer->async_wait([this, task](const boost::system::error_code& error) {
+		timer.expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
+		timer.async_wait([this, task](const boost::system::error_code& error) {
 			eventIdTimerMap.erase(task->getEventId());
 
 			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
@@ -67,7 +67,7 @@ void Scheduler::stopEvent(uint32_t eventId)
 		// search the event id..
 		auto it = eventIdTimerMap.find(eventId);
 		if (it != eventIdTimerMap.end()) {
-			it->second->cancel();
+			it->second.cancel();
 		}
 	});
 }
@@ -78,7 +78,7 @@ void Scheduler::shutdown()
 	boost::asio::post(io_context, [this]() {
 		// cancel all active timers
 		for (auto& it : eventIdTimerMap) {
-			it.second->cancel();
+			it.second.cancel();
 		}
 
 		io_context.stop();
