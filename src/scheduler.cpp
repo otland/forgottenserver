@@ -36,22 +36,20 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	}
 
 	// insert the event id in the list of active events
-	boost::asio::post(io_context, [this, task]() {
-		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::deadline_timer{io_context});
-		auto& timer = it.first->second;
+	auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::deadline_timer{io_context});
+	auto& timer = it.first->second;
 
-		timer.expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
-		timer.async_wait([this, task](const boost::system::error_code& error) {
-			eventIdTimerMap.erase(task->getEventId());
+	timer.expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
+	timer.async_wait([this, task](const boost::system::error_code& error) {
+		eventIdTimerMap.erase(task->getEventId());
 
-			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
-				// the timer has been manually cancelled(timer->cancel()) or Scheduler::shutdown has been called
-				delete task;
-				return;
-			}
+		if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
+			// the timer has been manually cancelled(timer->cancel()) or Scheduler::shutdown has been called
+			delete task;
+			return;
+		}
 
-			g_dispatcher.addTask(task, true);
-		});
+		g_dispatcher.addTask(task, true);
 	});
 
 	return task->getEventId();
