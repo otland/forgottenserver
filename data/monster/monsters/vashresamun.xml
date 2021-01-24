@@ -57,7 +57,9 @@
 	</voices>
 	<loot>
 		<item name="blue note" chance="100000" />
-		<item name="gold coin" countmax="250" chance="91000" />
+		<item name="gold coin" countmax="100" chance="31000" />
+		<item name="gold coin" countmax="100" chance="31000" />
+		<item name="gold coin" countmax="50" chance="31000" />
 		<item name="white pearl" chance="10000" />
 		<item id="2072" chance="9200" /><!-- lute -->
 		<item name="great mana potion" chance="8000" />

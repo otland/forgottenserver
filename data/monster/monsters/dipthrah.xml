@@ -62,7 +62,9 @@
 	</voices>
 	<loot>
 		<item name="ornamented ankh" chance="100000" />
-		<item name="gold coin" countmax="226" chance="90000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="26" chance="30000" />
 		<item name="small sapphire" countmax="3" chance="9800" />
 		<item name="great mana potion" chance="8900" />
 		<item name="energy ring" chance="4800" />

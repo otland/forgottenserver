@@ -59,7 +59,8 @@
 		<voice sentence="Put it there!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="137" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="37" chance="50000" />
 		<item name="platinum coin" chance="24470" />
 		<item name="yellow gem" chance="800" />
 		<item name="wand of inferno" chance="5590" />

@@ -63,7 +63,8 @@
 	<loot>
 		<item name="emerald bangle" chance="1100" />
 		<item name="small diamond" countmax="2" chance="1020" />
-		<item name="gold coin" countmax="149" chance="90000" />
+		<item name="gold coin" countmax="100" chance="45000" />
+		<item name="gold coin" countmax="49" chance="45000" />
 		<item name="platinum coin" chance="9910" />
 		<item name="moonlight rod" chance="5500" />
 		<item name="boots of haste" chance="220" />

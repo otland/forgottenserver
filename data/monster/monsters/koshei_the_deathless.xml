@@ -50,7 +50,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="bonebeast" interval="1000" chance="16" max="1" />
+		<summon name="bonebeast" interval="1000" chance="16" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Your pain will be beyond imagination!" />
@@ -67,7 +67,7 @@
 		<item name="platinum amulet" chance="1666" />
 		<item id="2175" chance="10000" /><!-- spellbook -->
 		<item name="gold ring" chance="900" />
-		<item name="dirty cape" chance="10000" />
+		<item id="2237" chance="10000" /><!-- dirty cape -->
 		<item id="2401" chance="10000" /><!-- staff -->
 		<item name="castle shield" chance="588" />
 		<item name="blue robe" chance="709" />

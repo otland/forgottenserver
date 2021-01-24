@@ -72,7 +72,7 @@
 		<item name="holy orchid" chance="2000" />
 		<item name="wand of cosmic energy" chance="1160" />
 		<item name="life crystal" chance="970" />
-		<item name="inkwell" chance="1000" />
+		<item id="2600" chance="1000" /><!-- inkwell -->
 		<item name="sandals" chance="950" />
 		<item name="grave flower" chance="880" />
 		<item name="yellow gem" chance="50" />
