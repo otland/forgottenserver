@@ -4125,7 +4125,7 @@ int LuaScriptInterface::luaGameGetExperienceStage(lua_State* L)
 {
 	// Game.getExperienceStage(level)
 	uint32_t level = getNumber<uint32_t>(L, 1);
-	lua_pushnumber(L, g_game.getExperienceStage(level));
+	lua_pushnumber(L, g_config.getExperienceStage(level));
 	return 1;
 }
 

@@ -19,10 +19,12 @@
 
 #include "otpch.h"
 
+#include <algorithm>
 #include <lua.hpp>
 
 #include "configmanager.h"
 #include "game.h"
+#include "pugicast.h"
 
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
@@ -85,6 +87,76 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 ConfigManager::ConfigManager()
 {
 	string[CONFIG_FILE] = "config.lua";
+}
+
+namespace {
+
+ExperienceStages loadLuaStages(lua_State* L)
+{
+	ExperienceStages stages;
+
+	lua_getglobal(L, "experienceStages");
+	if (!lua_istable(L, -1)) {
+		return {};
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0) {
+		const auto tableIndex = lua_gettop(L);
+		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel");
+		auto maxLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel");
+		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier");
+		stages.emplace_back(minLevel, maxLevel, multiplier);
+		lua_pop(L, 4);
+	}
+	lua_pop(L, 1);
+
+	std::sort(stages.begin(), stages.end());
+	return stages;
+}
+
+ExperienceStages loadXMLStages()
+{
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
+	if (!result) {
+		printXMLError("Error - loadXMLStages", "data/XML/stages.xml", result);
+		return {};
+	}
+
+	ExperienceStages stages;
+	for (auto stageNode : doc.child("stages").children()) {
+		if (strcasecmp(stageNode.name(), "config") == 0) {
+			if (!stageNode.attribute("enabled").as_bool()) {
+				return {};
+			}
+		} else {
+			uint32_t minLevel, maxLevel, multiplier;
+
+			if (auto minLevelAttribute = stageNode.attribute("minlevel")) {
+				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
+			} else {
+				minLevel = 1;
+			}
+
+			if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
+				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
+			}
+
+			if (auto multiplierAttribute = stageNode.attribute("multiplier")) {
+				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
+			} else {
+				multiplier = 1;
+			}
+
+			stages.emplace_back(minLevel, maxLevel, multiplier);
+		}
+	}
+
+	std::sort(stages.begin(), stages.end());
+	return stages;
+}
+
 }
 
 bool ConfigManager::load()
@@ -205,6 +277,14 @@ bool ConfigManager::load()
 	integer[SERVER_SAVE_NOTIFY_DURATION] = getGlobalNumber(L, "serverSaveNotifyDuration", 5);
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
 
+	expStages = loadXMLStages();
+	if (expStages.empty()) {
+		expStages = loadLuaStages(L);
+	} else {
+		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, consider moving to config.lua." << std::endl;
+	}
+	expStages.shrink_to_fit();
+
 	loaded = true;
 	lua_close(L);
 	return true;
@@ -246,6 +326,20 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 		return false;
 	}
 	return boolean[what];
+}
+
+
+float ConfigManager::getExperienceStage(uint32_t level) const
+{
+	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
+		return level >= std::get<0>(stage) && level <= std::get<1>(stage);
+	});
+	
+	if (it == expStages.end()) {
+		return getNumber(ConfigManager::RATE_EXPERIENCE);
+	}
+
+	return std::get<2>(*it);
 }
 
 bool ConfigManager::setString(string_config_t what, const std::string& value)
