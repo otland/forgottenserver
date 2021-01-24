@@ -1385,12 +1385,12 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 	}
 
 	if ((attr = node.attribute("countmax"))) {
-		int32_t lootCountmax = pugi::cast<int32_t>(attr.value());
-		if (lootCountmax > 100) {
-			std::cout << "[Warning - Monsters::loadMonster] Invalid \"countmax\" "<< lootCountmax <<" used for loot, the max allowed value is 100. " << std::endl;
+		int32_t lootCountMax = pugi::cast<int32_t>(attr.value());
+		if (lootCountMax > 100) {
+			std::cout << "[Warning - Monsters::loadMonster] Invalid \"countmax\" "<< lootCountMax <<" used for loot, the max allowed value is 100. " << std::endl;
 			return false;
 		}
-		lootBlock.countmax = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
+		lootBlock.countmax = std::max<int32_t>(1, lootCountMax);
 	} else {
 		lootBlock.countmax = 1;
 	}
