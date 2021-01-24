@@ -619,6 +619,16 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	if (floorCheck || (sameFloor && sightLineClear)) {
 		return sightLineClear;
 	}
+	
+	// Force true if same floor and sightline is clear
+	if (sameFloor && sightLineClear) {
+		return true;
+	}
+
+	// Force false if same floor and sightline is not clear
+	if (sameFloor && !sightLineClear) {
+		return false;
+	}
 
 	//floorCheck is off and clear sight line was not found so we attempt to find 3D path now
 	//(used for throwing items)
