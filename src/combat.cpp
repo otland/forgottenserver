@@ -531,6 +531,10 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 						itemId = ITEM_POISONFIELD_NOPVP;
 					} else if (itemId == ITEM_ENERGYFIELD_PVP) {
 						itemId = ITEM_ENERGYFIELD_NOPVP;
+					} else if (itemId == ITEM_MAGICWALL) {
+						itemId = ITEM_MAGICWALL_NOPVP;
+					} else if (itemId == ITEM_WILDGROWTH) {
+						itemId = ITEM_WILDGROWTH_NOPVP;
 					}
 				} else if (itemId == ITEM_FIREFIELD_PVP_FULL || itemId == ITEM_POISONFIELD_PVP || itemId == ITEM_ENERGYFIELD_PVP) {
 					casterPlayer->addInFightTicks();
@@ -1477,6 +1481,14 @@ void MagicField::onStepInField(Creature* creature)
 			g_game.internalRemoveItem(this, 1);
 		}
 
+		return;
+	}
+
+	//remove magic walls/wild growth ( only nopvp tiles/world )
+	if (id == ITEM_MAGICWALL_NOPVP || id == ITEM_WILDGROWTH_NOPVP) {
+		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
+			g_game.internalRemoveItem(this, 1);
+		}
 		return;
 	}
 
