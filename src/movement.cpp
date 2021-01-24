@@ -122,15 +122,18 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-			ItemType& it = Item::items.getItemType(id);
-			it.wieldInfo = moveEvent->getWieldInfo();
-			it.minReqLevel = moveEvent->getReqLevel();
-			it.minReqMagicLevel = moveEvent->getReqMagLv();
-			it.vocationString = moveEvent->getVocationString();
+		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
+
+		for (const auto& id : idList) {
+			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+				ItemType& it = Item::items.getItemType(id);
+				it.wieldInfo = moveEvent->getWieldInfo();
+				it.minReqLevel = moveEvent->getReqLevel();
+				it.minReqMagicLevel = moveEvent->getReqMagLv();
+				it.vocationString = moveEvent->getVocationString();
+			}
+			addEvent(std::move(*moveEvent), id, itemIdMap);
 		}
-		addEvent(std::move(*moveEvent), id, itemIdMap);
 	} else if ((attr = node.attribute("fromid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toid").value());
@@ -159,7 +162,11 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			}
 		}
 	} else if ((attr = node.attribute("uniqueid"))) {
-		addEvent(std::move(*moveEvent), pugi::cast<int32_t>(attr.value()), uniqueIdMap);
+		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
+
+		for (const auto& uid : uidList) {
+			addEvent(std::move(*moveEvent), uid, uniqueIdMap);
+		}
 	} else if ((attr = node.attribute("fromuid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("touid").value());
@@ -168,7 +175,11 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			addEvent(*moveEvent, id, uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("actionid"))) {
-		addEvent(std::move(*moveEvent), pugi::cast<int32_t>(attr.value()), actionIdMap);
+		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
+
+		for (const auto& aid : aidList) {
+			addEvent(std::move(*moveEvent), aid, actionIdMap);
+		}
 	} else if ((attr = node.attribute("fromaid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toaid").value());
