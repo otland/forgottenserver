@@ -161,22 +161,18 @@ Vocation* Vocations::getVocation(uint16_t id)
 
 int32_t Vocations::getVocationId(const std::string& name) const
 {
-	for (const auto& it : vocationsMap) {
-		if (strcasecmp(it.second.name.c_str(), name.c_str()) == 0) {
-			return it.first;
-		}
-	}
-	return -1;
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [&name](decltype(vocationsMap)::value_type it) {
+		return it.second.name == name;
+	});
+	return it != vocationsMap.end() ? it->first : -1;
 }
 
-uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
+uint16_t Vocations::getPromotedVocation(uint16_t id) const
 {
-	for (const auto& it : vocationsMap) {
-		if (it.second.fromVocation == vocationId && it.first != vocationId) {
-			return it.first;
-		}
-	}
-	return VOCATION_NONE;
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](decltype(vocationsMap)::value_type it) {
+		return it.second.fromVocation == id && it.first != id;
+	});
+	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 
 uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
