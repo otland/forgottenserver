@@ -39,7 +39,8 @@
 	</immunities>
 	<loot>
 		<item name="white pearl" chance="3000" />
-		<item name="gold coin" countmax="144" chance="70000" />
+		<item name="gold coin" countmax="100" chance="35000" />
+		<item name="gold coin" countmax="44" chance="35000" />
 		<item name="scarab coin" countmax="3" chance="10000" />
 		<item id="2175" chance="6800" /><!-- spellbook -->
 		<item name="ring of healing" chance="1000" />

@@ -640,6 +640,9 @@ class LuaScriptInterface
 		static int luaNetworkMessageAddItemId(lua_State* L);
 
 		static int luaNetworkMessageReset(lua_State* L);
+		static int luaNetworkMessageSeek(lua_State* L);
+		static int luaNetworkMessageTell(lua_State* L);
+		static int luaNetworkMessageLength(lua_State* L);
 		static int luaNetworkMessageSkipBytes(lua_State* L);
 		static int luaNetworkMessageSendToPlayer(lua_State* L);
 
@@ -757,6 +760,7 @@ class LuaScriptInterface
 		static int luaCreatureIsCreature(lua_State* L);
 		static int luaCreatureIsInGhostMode(lua_State* L);
 		static int luaCreatureIsHealthHidden(lua_State* L);
+		static int luaCreatureIsMovementBlocked(lua_State* L);
 		static int luaCreatureIsImmune(lua_State* L);
 
 		static int luaCreatureCanSee(lua_State* L);
@@ -797,6 +801,7 @@ class LuaScriptInterface
 		static int luaCreatureGetMaxHealth(lua_State* L);
 		static int luaCreatureSetMaxHealth(lua_State* L);
 		static int luaCreatureSetHiddenHealth(lua_State* L);
+		static int luaCreatureSetMovementBlocked(lua_State* L);
 
 		static int luaCreatureGetSkull(lua_State* L);
 		static int luaCreatureSetSkull(lua_State* L);

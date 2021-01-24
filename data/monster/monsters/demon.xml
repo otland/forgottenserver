@@ -63,14 +63,15 @@
 		<summon name="fire elemental" interval="2000" chance="10" />
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Your soul will be mine!" />
-		<voice sentence="MUHAHAHAHA!" />
+		<voice sentence="Your soul will be mine!" yell="1" />
+		<voice sentence="MUHAHAHAHA!" yell="1" />
 		<voice sentence="CHAMEK ATH UTHUL ARAK!" yell="1" />
 		<voice sentence="I SMELL FEEEEAAAAAR!" yell="1" />
 		<voice sentence="Your resistance is futile!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="200" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="platinum coin" countmax="8" chance="100000" />
 		<item name="great mana potion" countmax="3" chance="25000" />
 		<item name="great spirit potion" countmax="3" chance="25000" />

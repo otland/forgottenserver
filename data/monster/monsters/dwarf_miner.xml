@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="Dwarf Miner" nameDescription="a dwarf miner" race="blood" experience="60" speed="210" manacost="420">
+<monster name="Dwarf Miner" nameDescription="a dwarf miner" race="blood" experience="60" speed="170" manacost="420">
 	<health now="120" max="120" />
-	<look type="160" head="77" body="101" legs="97" feet="115" corpse="6007" />
+	<look type="160" head="77" body="100" legs="97" feet="116" corpse="6007" />
 	<flags>
 		<flag summonable="1" />
 		<flag attackable="1" />
@@ -19,9 +19,9 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-26" />
+		<attack name="melee" interval="2000" min="0" max="-35" />
 	</attacks>
-	<defenses armor="7" defense="10" />
+	<defenses armor="7" defense="7" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Work, work!" />
 		<voice sentence="Intruders in the mines!" />

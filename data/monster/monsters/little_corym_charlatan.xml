@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Little Corym Charlatan" nameDescription="a little corym charlatan" race="blood" experience="40" speed="170">
 	<health now="90" max="90" />
-	<look type="532" body="97" legs="116" corpse="19729" />
+	<look type="532" head="0" body="79" legs="80" feet="0" corpse="19970" />
 	<targetchange interval="5000" chance="0" />
 	<flags>
 		<flag summonable="0" />
@@ -17,9 +17,9 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-10" />
+		<attack name="melee" interval="2000" min="0" max="-14" />
 	</attacks>
-	<defenses armor="10" defense="10" />
+	<defenses armor="3" defense="3" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Squeeeeeeak!" />
 		<voice sentence="Must have it! Must have it!" />

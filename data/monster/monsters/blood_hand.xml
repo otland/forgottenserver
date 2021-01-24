@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
@@ -55,7 +55,8 @@
 		<voice sentence="Die, filth!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="130" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="30" chance="50000" />
 		<item name="necrotic rod" chance="3000" />
 		<item name="boots of haste" chance="210" />
 		<item name="skull staff" chance="130" />

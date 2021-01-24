@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Crypt Defiler" nameDescription="a crypt defiler" race="blood" experience="70" speed="205">
 	<health now="180" max="180" />
-	<look type="146" head="115" body="115" legs="61" feet="96" addons="3" corpse="20359" />
+	<look type="146" head="62" body="132" legs="42" feet="75" addons="3" corpse="20359" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Ushuriel" nameDescription="Ushuriel" race="fire" experience="10500" speed="350">
 	<health now="31500" max="31500" />
-	<look type="12" head="0" body="95" legs="19" feet="112" corpse="6068" />
+	<look type="12" head="0" body="57" legs="0" feet="61" corpse="6068" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
@@ -68,7 +68,8 @@
 		<voice sentence="The judgement is guilty! The sentence is death!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="190" chance="50000" />
+		<item name="gold coin" countmax="90" chance="25000" />
+		<item name="gold coin" countmax="100" chance="25000" />
 		<item name="platinum coin" countmax="26" chance="20000" />
 		<item name="orb" chance="16666" />
 		<item name="life crystal" chance="16666" />

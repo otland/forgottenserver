@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Deathspawn" namedescription="a deathspawn" race="blood" experience="20" speed="230" manacost="305">
 	<health now="225" max="225" />
-	<look type="226" head="114" body="98" legs="97" feet="114" corpse="2220" />
+	<look type="226" head="76" body="0" legs="57" feet="0" corpse="2220" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

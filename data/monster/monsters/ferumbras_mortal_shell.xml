@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ferumbras Mortal Shell" nameDescription="Ferumbras Mortal Shell" race="venom" experience="100000" speed="390">
+	<health now="300000" max="300000" />
+	<look type="229" corpse="6078" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag isboss="1" />
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="2500" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="200" />
+		<attack name="poisoncondition" interval="2000" chance="20" radius="6" target="0" min="-250" max="-520">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="16" radius="6" target="0" min="-225" max="-410">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" radius="9" target="0" min="-425" max="-810">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="energy" interval="2000" chance="21" radius="9" target="0" min="-400" max="-650">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="21" radius="6" target="0" min="-200" max="-450">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="17" length="8" spread="0" min="-590" max="-1050">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+	</attacks>
+	<defenses armor="100" defense="120">
+		<defense name="healing" interval="2000" chance="23" min="600" max="2490">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="3" min="20000" max="35000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="14" speedchange="700" duration="7000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="10" duration="9000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="65" />
+		<element deathPercent="65" />
+		<element icePercent="65" />
+		<element earthPercent="65" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Demon" interval="2000" chance="11" />
+	</summons>
+	<voices interval="2000" chance="5">
+		<voice sentence="INSECTS!" yell="1" />
+		<voice sentence="I' STILL POWERFUL ENOUGH TO CRUSH YOU!" yell="1" />
+		<voice sentence="If you strike me down, I shall become more powerful than you could possibly imagine!" />
+	</voices>
+	<loot>
+		<item id="7895" chance="800" /><!-- lightning legs -->
+		<item id="8869" chance="400" /><!-- greenwood coat -->
+		<item id="2146" countmax="10" chance="10000" /><!-- small sapphire -->
+		<item id="7416" chance="800" /><!-- bloody edge -->
+		<item id="7427" chance="800" /><!-- chaos mace -->
+		<item id="2466" chance="800" /><!-- golden armor -->
+		<item id="8930" chance="400" /><!-- emerald sword -->
+		<item id="25429" chance="800" /><!-- boots of homecoming -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2149" countmax="10" chance="10000" /><!-- small emerald -->
+		<item id="7632" chance="1000" /><!-- giant shimmering pearl -->
+		<item id="2156" chance="1000" /><!-- red gem -->
+		<item id="8868" chance="300" /><!-- velvet mantle -->
+		<item id="2127" chance="1000" /><!-- emerald bangle -->
+		<item id="7423" chance="300" /><!-- skullcrusher -->
+		<item id="2150" countmax="10" chance="10000" /><!-- small amethyst -->
+		<item id="25420" chance="800" /><!-- ferumbra's staff [club] -->
+		<item id="7422" chance="800" /><!-- jade hammer -->
+		<item id="2143" countmax="5" chance="10000" /><!-- white pearl -->
+		<item id="7418" chance="600" /><!-- nightmare blade -->
+		<item id="2539" chance="800" /><!-- phoenix shield -->
+		<item id="2520" chance="800" /><!-- demon shield -->
+		<item id="25521" chance="150" /><!-- mysterious scroll -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="7896" chance="800" /><!-- glacier kilt -->
+		<item id="2472" chance="400" /><!-- magic plate armor -->
+		<item id="25414" chance="100" /><!-- death gaze -->
+		<item id="7403" chance="800" /><!-- berserker -->
+		<item id="25522" chance="500" /><!-- rift bow -->
+		<item id="8926" chance="300" /><!-- demonwing axe -->
+		<item id="25387" chance="3000" /><!-- rift tapestry -->
+		<item id="7410" chance="800" /><!-- queen's sceptre -->
+		<item id="2158" chance="800" /><!-- blue gem -->
+		<item id="2152" countmax="25" chance="100000" /><!-- platinum coin -->
+		<item id="8928" chance="400" /><!-- obsidian truncheon -->
+		<item id="7414" chance="800" /><!-- abyss hammer -->
+		<item id="5903" chance="100" /><!-- ferumbras' hat -->
+		<item id="25425" chance="800" /><!-- ferumbras' mana keg -->
+		<item id="7382" chance="800" /><!-- demonrage sword -->
+		<item id="2155" chance="4000" /><!-- green gem -->
+		<item id="2514" chance="600" /><!-- mastermind shield -->
+		<item id="7435" chance="800" /><!-- impaler -->
+		<item id="25172" countmax="3" chance="100000" /><!-- silver token -->
+		<item id="2144" countmax="5" chance="10000" /><!-- black pearl -->
+		<item id="2145" countmax="10" chance="10000" /><!-- small diamond -->
+		<item id="25427" chance="800" /><!-- scroll of ascension -->
+		<item id="9970" countmax="10" chance="10000" /><!-- small topaz -->
+		<item id="25423" chance="800" /><!-- ferumbras' amulet -->
+		<item id="25523" chance="500" /><!-- rift crossbow -->
+		<item id="8885" chance="800" /><!-- divine plate -->
+		<item id="2415" chance="700" /><!-- great axe -->
+		<item id="2522" chance="100" /><!-- great shield -->
+		<item id="7894" chance="800" /><!-- magma legs -->
+		<item id="9971" chance="800" /><!-- gold ingot -->
+		<item id="7405" chance="800" /><!-- havoc blade -->
+		<item id="7411" chance="400" /><!-- ornamented axe -->
+		<item id="25393" chance="3500" /><!-- folded rift carpet -->
+	</loot>
+</monster>

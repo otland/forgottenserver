@@ -56,7 +56,8 @@
 	</voices>
 	<loot>
 		<item name="small diamond" countmax="3" chance="8800" />
-		<item name="gold coin" countmax="200" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="platinum coin" countmax="5" chance="95000" />
 		<item name="yellow gem" chance="1030" />
 		<item name="energy ring" chance="1650" />

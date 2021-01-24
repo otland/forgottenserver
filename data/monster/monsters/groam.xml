@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 		<flag isboss="1" />
 	</flags>
@@ -35,7 +35,7 @@
 		<immunity drown="1" />
 		<immunity fire="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="Njaaarh!!" />
 		<voice sentence="Begjone, intrjuder!!" />
 		<voice sentence="Djon't djare stjare injo the eyes of the djeep!" />

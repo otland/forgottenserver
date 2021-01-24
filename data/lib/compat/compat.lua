@@ -329,7 +329,7 @@ function doCombat(cid, combat, var) return combat:execute(cid, var) end
 function isCreature(cid) return Creature(cid) end
 function isPlayer(cid) return Player(cid) end
 function isMonster(cid) return Monster(cid) end
-function isSummon(cid) return Creature(cid):getMaster() end
+function isSummon(cid) local c = Creature(cid) return c and c:getMaster() end
 function isNpc(cid) return Npc(cid) end
 function isItem(uid) return Item(uid) end
 function isContainer(uid) return Container(uid) end
@@ -347,6 +347,7 @@ function getCreatureBaseSpeed(cid) local c = Creature(cid) return c and c:getBas
 function getCreatureLookDirection(cid) local c = Creature(cid) return c and c:getDirection() or false end
 function getCreatureHideHealth(cid) local c = Creature(cid) return c and c:isHealthHidden() or false end
 function getCreatureSkullType(cid) local c = Creature(cid) return c and c:getSkull() or false end
+function getCreatureNoMove(cid) local c = Creature(cid) return c and c:isMovementBlocked() or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
@@ -390,6 +391,7 @@ function doCreatureSetSkullType(cid, skull) local c = Creature(cid) return c and
 function setCreatureMaxHealth(cid, health) local c = Creature(cid) return c and c:setMaxHealth(health) or false end
 function setCreatureMaxMana(cid, mana) local c = Creature(cid) return c and c:setMaxMana(mana) or false end
 function doCreatureSetHideHealth(cid, hide) local c = Creature(cid) return c and c:setHiddenHealth(hide) or false end
+function doCreatureSetNoMove(cid, block) local c = Creature(cid) return c and c:setMovementBlocked(block) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c and c:say(text, type, ...) or false end
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c and c:setOutfit(outfit) or false end
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c and c:setDropLoot(doDrop) or false end
@@ -603,12 +605,14 @@ getIpByName = getIPByPlayerName
 
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p and p:setStorageValue(key, value) or false end
 function doPlayerSetNameDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
+function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel) local p = Player(cid) return p and p:sendChannelMessage(author, message, SpeakClasses, channel) or false end
 function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setCapacity(cap) or false end
 function doPlayerSetSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p and p:setBankBalance(balance) or false end
 function doPlayerSetPromotionLevel(cid, level) local p = Player(cid) return p and p:setVocation(p:getVocation():getPromotion()) or false end
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p and p:addMoney(money) or false end
 function doPlayerRemoveMoney(cid, money) local p = Player(cid) return p and p:removeMoney(money) or false end
+function doPlayerTakeItem(cid, itemid, count) local p = Player(cid) return p and p:removeItem(itemid, count) or false end
 function doPlayerTransferMoneyTo(cid, target, money)
 	if not isValidMoney(money) then
 		return false
@@ -1405,10 +1409,6 @@ function createFunctions(class)
 	end
 end
 
-function doPlayerTakeItem(cid, itemid, count)
-	return Player(cid):removeItem(itemid, count)
-end
-
 function isNumber(str)
 	return tonumber(str) ~= nil
 end
@@ -1425,10 +1425,6 @@ function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	condition:setTicks(time)
 	creature:addCondition(condition)
 	return true
-end
-
-function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel)
-	return Player(cid):sendChannelMessage(author, message, SpeakClasses, channel)
 end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack

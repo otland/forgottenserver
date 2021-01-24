@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Elvira Hammerthrust" nameDescription="Elvira Hammerthrust" race="blood" experience="165" speed="103">
+	<health now="245" max="245" />
+	<look type="70" corpse="6013" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-140" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Didn't think a dwarf girl could be so pretty and strong at the same time, did you?" />
+		<voice sentence="Hail no one except for me!" />
+		<voice sentence="You won't get this bag, I worked hard for this!" />
+	</voices>
+	<loot>
+		<item name="bag with stolen gold" chance="100000" />
+		<item name="platinum coin" countmax="100" chance="77000" />
+	</loot>
+</monster>

@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 		<flag isboss="1" />
 	</flags>
@@ -60,7 +60,7 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="QJELL AFAR GOU JEY!!" />
 		<voice sentence="DIE!! KENH!!" />
 	</voices>

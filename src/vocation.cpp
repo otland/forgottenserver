@@ -116,7 +116,7 @@ bool Vocations::loadFromXml()
 				if (skillIdAttribute) {
 					uint16_t skill_id = pugi::cast<uint16_t>(skillIdAttribute.value());
 					if (skill_id <= SKILL_LAST) {
-						voc.skillMultipliers[skill_id] = pugi::cast<float>(childNode.attribute("multiplier").value());
+						voc.skillMultipliers[skill_id] = pugi::cast<double>(childNode.attribute("multiplier").value());
 					} else {
 						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skill_id << " for vocation: " << voc.id << std::endl;
 					}
@@ -161,50 +161,31 @@ Vocation* Vocations::getVocation(uint16_t id)
 
 int32_t Vocations::getVocationId(const std::string& name) const
 {
-	for (const auto& it : vocationsMap) {
-		if (strcasecmp(it.second.name.c_str(), name.c_str()) == 0) {
-			return it.first;
-		}
-	}
-	return -1;
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [&name](decltype(vocationsMap)::value_type it) {
+		return it.second.name == name;
+	});
+	return it != vocationsMap.end() ? it->first : -1;
 }
 
-uint16_t Vocations::getPromotedVocation(uint16_t vocationId) const
+uint16_t Vocations::getPromotedVocation(uint16_t id) const
 {
-	for (const auto& it : vocationsMap) {
-		if (it.second.fromVocation == vocationId && it.first != vocationId) {
-			return it.first;
-		}
-	}
-	return VOCATION_NONE;
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](decltype(vocationsMap)::value_type it) {
+		return it.second.fromVocation == id && it.first != id;
+	});
+	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 
-uint32_t Vocation::skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
+static const uint32_t skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-
-	auto it = cacheSkill[skill].find(level);
-	if (it != cacheSkill[skill].end()) {
-		return it->second;
-	}
-
-	uint64_t tries = static_cast<uint64_t>(skillBase[skill] * std::pow(static_cast<double>(skillMultipliers[skill]), level - 11));
-	cacheSkill[skill][level] = tries;
-	return tries;
+	return skillBase[skill] * std::pow(skillMultipliers[skill], level - 11);
 }
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
 {
-	auto it = cacheMana.find(magLevel);
-	if (it != cacheMana.end()) {
-		return it->second;
-	}
-
-	uint64_t reqMana = std::floor<uint64_t>(1600 * std::pow<double>(manaMultiplier, static_cast<int32_t>(magLevel) - 1));
-	cacheMana[magLevel] = reqMana;
-	return reqMana;
+	return 1600 * std::pow(manaMultiplier, magLevel - 1);
 }

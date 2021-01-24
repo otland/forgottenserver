@@ -69,7 +69,8 @@
 		<voice sentence="Be careful what you wish." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="129" chance="98000" />
+		<item name="gold coin" countmax="100" chance="49000" />
+		<item name="gold coin" countmax="29" chance="49000" />
 		<item name="blueberry" countmax="25" chance="25000" />
 		<item name="royal spear" countmax="3" chance="15500" />
 		<item name="strong mana potion" chance="9800" />

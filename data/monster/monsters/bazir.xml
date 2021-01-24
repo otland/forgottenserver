@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <monster name="Bazir" nameDescription="Bazir" race="fire" experience="30000" speed="530">
 	<health now="110000" max="110000" />
-	<look type="35" head="0" body="0" legs="0" feet="0" corpse="2916" />
+	<look type="35" corpse="2916" />
 	<targetchange interval="2000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -87,7 +87,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<summon name="bazir" interval="1000" chance="15" max="1" />
+		<summon name="bazir" interval="1000" chance="15" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="COME HERE! FREE ITEMS FOR EVERYONE!" yell="1" />

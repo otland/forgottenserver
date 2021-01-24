@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <items>
+	<item id="1" name="water" />
+	<item id="2" name="blood" />
+	<item id="3" name="beer" />
+	<item id="4" name="slime" />
+	<item id="5" name="lemonade" />
+	<item id="6" name="milk" />
+	<item id="7" name="manafluid" />
+	<item id="10" name="lifefluid" />
+	<item id="11" name="oil" />
+	<item id="13" name="urine" />
+	<item id="14" name="coconut milk" />
+	<item id="15" name="wine" />
+	<item id="19" name="mud" />
+	<item id="21" name="fruit juice" />
+	<item id="26" name="lava" />
+	<item id="27" name="rum" />
+	<item id="28" name="swamp" />
+	<item id="35" name="tea" />
+	<item id="43" name="mead" />
+
 	<item id="100" name="void" />
 	<item id="101" name="earth" />
 	<item id="103" name="dirt" />
@@ -21547,7 +21567,9 @@
 	</item>
 	<item id="12672" article="a" name="telescope" />
 	<item id="12673" article="a" name="red chair" />
-	<item id="12673" article="a" name="rocking horse" />
+	<item id="12674" article="a" name="large amphora" />
+	<item id="12675" article="a" name="globe" />
+	<item id="12676" article="a" name="rocking horse" />
 	<item fromid="12678" toid="12679" article="a" name="timber wall" />
 	<item id="12680" article="a" name="dead rabbit" />
 	<item id="12681" name="wooden planks" />
@@ -22282,7 +22304,6 @@
 	<item id="13506" article="a" name="medicine pouch">
 		<attribute key="weight" value="1200" />
 	</item>
-	<item id="13495" article="a" name="faint glow" />
 	<item id="13507" article="a" name="faint glow" />
 	<item id="13508" article="a" name="slug drug">
 		<attribute key="description" value="A hermit near Carlin might be able to tell you more about it." />
@@ -23238,8 +23259,6 @@
 	<item id="13983" name="fan doll of Queen Eloise">
 		<attribute key="weight" value="1560" />
 	</item>
-	<item id="13929" article="an" name="orc dummy" />
-	<item id="13931" article="an" name="orc warlord dummy" />
 	<item id="14320" article="a" name="special flask">
 		<attribute key="description" value="It contains the smell of a freshly slain slime." />
 		<attribute key="weight" value="180" />
@@ -28949,26 +28968,26 @@
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20579" article="a" name="dead unused assassin">
+	<item id="20579" article="a" name="dead nightslayer">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="20580" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20580" article="a" name="dead unused assassin">
+	<item id="20580" article="a" name="dead nightslayer">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="20581" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20581" article="a" name="dead unused assassin">
+	<item id="20581" article="a" name="dead nightslayer">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 	</item>
-	<item id="20582" article="a" name="dead unused assassin">
+	<item id="20582" article="a" name="dead nightslayer">
 		<attribute key="containerSize" value="20" />
 		<attribute key="decayTo" value="20579" />
 		<attribute key="duration" value="10" />
@@ -29271,7 +29290,6 @@
 		<attribute key="allowpickupable" value="1" />
 		<attribute key="fluidSource" value="blood" />
 	</item>
-	<item id="20937" name="blood" />
 	<item fromid="20938" toid="20942" article="a" name="sandy rock pile" />
 	<item id="20946" article="a" name="sandy rock pile" />
 	<item fromid="20947" toid="20958" article="a" name="sandstone mountain" />
@@ -30145,8 +30163,8 @@
 	</item>
 	<item id="21442" name="red effect" />
 	<item id="21443" name="green effect" />
-	<item id="21443" name="blue effect" />
-	<item id="21443" name="yellow effect" />
+	<item id="21444" name="blue effect" />
+	<item id="21445" name="yellow effect" />
 	<item id="21446" name="shadow ashes">
 		<attribute key="weight" value="5" />
 		<attribute key="description" value="The ashes are warm and greasy to the touch. They emit a faint, dark glow." />
@@ -30235,10 +30253,6 @@
 	<item id="21482" name="Omrabas' bone key">
 		<attribute key="description" value="It is delicately carved out of the bone of some animal and bears strange inscriptions." />
 		<attribute key="weight" value="100" />
-	</item>
-	<item id="21585" name="smoking coal">
-		<attribute key="description" value="This coal is smoking and emmits quite a stench." />
-		<attribute key="weight" value="1000" />
 	</item>
 	<item id="21489" name="Omrabas' copper key">
 		<attribute key="weight" value="100" />
@@ -34171,7 +34185,6 @@
 	</item>
 	<item id="24817" article="a" name="lit strange statue" />
 	<item id="24818" article="a" name="coffin" />
-	<item id="24819" article="a" name="grave" />
 	<item id="24819" article="a" name="strange statue" />
 	<item fromid="24820" toid="24821" article="a" name="dark stone wall" />
 	<item fromid="24822" toid="24825" article="a" name="blood fountain" />
@@ -36262,23 +36275,4 @@
 	<item id="26379" article="a" name="golden dragon tapestry" />
 	<item id="26380" article="a" name="sword tapestry" />
 	<item id="26381" article="a" name="brocade tapestry" />
-	<item id="30001" name="water" />
-	<item id="30002" name="blood" />
-	<item id="30003" name="beer" />
-	<item id="30004" name="slime" />
-	<item id="30005" name="lemonade" />
-	<item id="30006" name="milk" />
-	<item id="30007" name="manafluid" />
-	<item id="30010" name="lifefluid" />
-	<item id="30011" name="oil" />
-	<item id="30013" name="urine" />
-	<item id="30014" name="coconut milk" />
-	<item id="30015" name="wine" />
-	<item id="30019" name="mud" />
-	<item id="30021" name="fruit juice" />
-	<item id="30026" name="lava" />
-	<item id="30027" name="rum" />
-	<item id="30028" name="swamp" />
-	<item id="30035" name="tea" />
-	<item id="30043" name="mead" />
 </items>
