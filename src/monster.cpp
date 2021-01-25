@@ -23,6 +23,7 @@
 #include "game.h"
 #include "spells.h"
 #include "events.h"
+#include "configmanager.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
@@ -393,11 +394,11 @@ void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
 	if (!creature) {
 		return;
 	}
-	
+
 	if (!canSee(creature->getPosition())) {
 		return;
 	}
-	
+
 	if (isFriend(creature)) {
 		addFriend(creature);
 	}
@@ -724,8 +725,13 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		g_game.internalTeleport(this, masterPos);
-		setIdle(true);
+		bool removeMonster = g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN);
+		if (removeMonster) {
+			g_game.removeCreature(this, false);
+		} else {
+			g_game.internalTeleport(this, masterPos);
+			setIdle(true);
+		}
 	} else {
 		updateIdleStatus();
 
