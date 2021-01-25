@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Calamary" nameDescription="a calamary" race="undead" experience="0" speed="160">
 	<health now="75" max="75" />
 	<look type="451" corpse="15280" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Insectoid Worker" nameDescription="an insectoid worker" race="venom" experience="650" speed="200">
 	<health now="950" max="950" />
 	<look type="403" corpse="13514" />

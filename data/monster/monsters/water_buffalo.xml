@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Water Buffalo" nameDescription="a water buffalo" race="blood" experience="20" speed="210">
 	<health now="390" max="390" />
 	<look type="523" corpse="19701" />

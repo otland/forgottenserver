@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Elf Arcanist" nameDescription="an elf arcanist" race="blood" experience="175" speed="220">
 	<health now="220" max="220" />
 	<look type="63" corpse="6011" />

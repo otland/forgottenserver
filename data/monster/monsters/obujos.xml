@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Obujos" nameDescription="Obujos" race="blood" experience="20000" speed="560">
 	<health now="35000" max="35000" />
 	<look type="445" corpse="15224" />

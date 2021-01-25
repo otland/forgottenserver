@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Berserker Chicken" namedescription="a berserker chicken" race="blood" experience="220" speed="300" manacost="220">
 	<health now="465" max="465" />
 	<look type="111" corpse="6042" />

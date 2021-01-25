@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dragonling" nameDescription="a dragonling" race="blood" experience="2200" speed="330">
 	<health now="2600" max="2600" />
 	<look type="505" corpse="18438" />

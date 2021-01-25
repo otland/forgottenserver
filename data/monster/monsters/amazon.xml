@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Amazon" nameDescription="an amazon" race="blood" experience="60" speed="172" manacost="390">
 	<health now="110" max="110" />
 	<look type="137" head="113" body="120" legs="95" feet="115" corpse="20323" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Quara Mantassin" nameDescription="a quara mantassin" race="blood" experience="400" speed="260" manacost="480">
 	<health now="800" max="800" />
 	<look type="72" corpse="6064" />

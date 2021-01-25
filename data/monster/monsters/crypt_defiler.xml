@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crypt Defiler" nameDescription="a crypt defiler" race="blood" experience="70" speed="205">
 	<health now="180" max="180" />
 	<look type="146" head="62" body="132" legs="42" feet="75" addons="3" corpse="20359" />

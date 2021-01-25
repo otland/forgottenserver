@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Terror Bird" nameDescription="a terror bird" race="blood" experience="150" speed="212" manacost="490">
 	<health now="300" max="300" />
 	<look type="218" corpse="6057" />

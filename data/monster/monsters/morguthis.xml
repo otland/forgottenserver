@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Morguthis" nameDescription="Morguthis" race="undead" experience="3000" speed="320">
 	<health now="4800" max="4800" />
 	<look type="90" corpse="6025" />
