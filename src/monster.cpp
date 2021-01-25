@@ -28,6 +28,7 @@
 extern Game g_game;
 extern Monsters g_monsters;
 extern Events* g_events;
+extern ConfigManager g_config;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
