@@ -255,7 +255,7 @@ class Map
 		  *	\param floorCheck if true then view is not clear if fromPos.z is not the same as toPos.z
 		  *	\returns The result if there is no obstacles
 		  */
-		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
+		int isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
 		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
