@@ -625,8 +625,16 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 		return true;
 	}
 
-	// Force false if same floor and sightline is not clear
+	// Force false if same floor and sightline is not clear and 1 floor above is not clear.
 	if (sameFloor && !sightLineClear) {
+		if (fromPos.z > 0 && fromPos.z <= 7) {
+			Position upperPathFrom = Position(fromPos.x, fromPos.y, fromPos.z - 1);
+			Position upperPathTo = Position(toPos.x, toPos.y, toPos.z - 1);
+
+			if (checkSightLine(upperPathFrom, upperPathTo)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
