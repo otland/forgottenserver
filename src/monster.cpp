@@ -726,8 +726,8 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		bool removeMonster = g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN);
-		if (removeMonster) {
+		if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
+			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
 			g_game.removeCreature(this, false);
 		} else {
 			g_game.internalTeleport(this, masterPos);
