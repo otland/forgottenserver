@@ -585,7 +585,7 @@ std::vector<std::pair<int, int>> get2DLine(const Position& fromPos, const Positi
 	return line;
 }
 
-bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
+int Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 {
 	std::vector<std::pair<int, int>> line = get2DLine(fromPos, toPos);
 
@@ -594,11 +594,16 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 		uint16_t y = static_cast<uint16_t>(it.second);
 
 		const Tile* tile = getTile(x, y, fromPos.z);
+
 		if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-			return false;
+			MagicField* field = tile->getFieldItem();
+			if (field) {
+				return 2;
+			}
+				return 0;
 		}
 	}
-	return true;
+	return 1;
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
@@ -612,30 +617,18 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	}
 
 	//check if 2d sight line is clear
-	bool sightLineClear = checkSightLine(fromPos, toPos);
+	int sightLineClear = checkSightLine(fromPos, toPos);
+
+	if (sightLineClear == 2) {
+		return false;
+	}
+
+	bool getSightLineBool = sightLineClear == 1 ? true : false;
 
 	//if floorCheck is enabled, we end checking the sight line after doing 2D check
 	//alternatively we can end the calculations if clear sight line was found and the target is on the same floor
-	if (floorCheck || (sameFloor && sightLineClear)) {
-		return sightLineClear;
-	}
-	
-	// Force true if same floor and sightline is clear
-	if (sameFloor && sightLineClear) {
-		return true;
-	}
-
-	// Force false if same floor and sightline is not clear and 1 floor above is not clear.
-	if (sameFloor && !sightLineClear) {
-		if (fromPos.z > 0 && fromPos.z <= 7) {
-			Position upperPathFrom = Position(fromPos.x, fromPos.y, fromPos.z - 1);
-			Position upperPathTo = Position(toPos.x, toPos.y, toPos.z - 1);
-
-			if (checkSightLine(upperPathFrom, upperPathTo)) {
-				return true;
-			}
-		}
-		return false;
+	if (floorCheck || (sameFloor && getSightLineBool)) {
+		return getSightLineBool;
 	}
 
 	//floorCheck is off and clear sight line was not found so we attempt to find 3D path now
@@ -653,10 +646,11 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	uint8_t currentZ;
 
 	//check if the path is clear or we have to attempt throwing above the obstacle
-	if (sightLineClear && (fromPos.z < toPos.z || sameFloor)) {
+	if (getSightLineBool && (fromPos.z < toPos.z || sameFloor)) {
 		//path was found
 		currentZ = fromPos.z;
-	} else {
+	}
+	else {
 		//try throwing above the obstacle
 		//check path and fromPos shaft
 		const Tile* tile = getTile(fromPos.x, fromPos.y, fromPos.z - 1);
@@ -666,7 +660,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 		Position upperPathTo = Position(toPos.x, toPos.y, toPos.z - 1);
 
 		//obstacles were detected on higher floor as well so we return false
-		if (obstacleFound || !checkSightLine(upperPathFrom, upperPathTo)) {
+		if (obstacleFound || checkSightLine(upperPathFrom, upperPathTo) == 0 || checkSightLine(upperPathFrom, upperPathTo) == 2) {
 			return false;
 		}
 
@@ -681,7 +675,15 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	for (int z = currentZ; z != toPos.z; ++z) {
 		const Tile* tile = getTile(toPos.x, toPos.y, currentZ);
 		bool obstacleFound = tile && (tile->getGround() || tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
-		if (obstacleFound) {
+		bool fieldFound = false;
+		if (tile) {
+			MagicField* field = tile->getFieldItem();
+			if (field) {
+				fieldFound = true;
+			}
+		}
+
+		if (obstacleFound || fieldFound) {
 			return false;
 		}
 	}
