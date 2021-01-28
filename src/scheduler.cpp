@@ -23,11 +23,6 @@
 #include <boost/asio/post.hpp>
 #include <memory>
 
-void Scheduler::threadMain()
-{
-	io_context.run();
-}
-
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
 	// check if the event has a valid id

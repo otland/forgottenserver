@@ -60,7 +60,7 @@ class Scheduler : public ThreadHolder<Scheduler>
 
 		void shutdown();
 
-		void threadMain();
+		void threadMain() { io_context.run(); }
 	private:
 		std::atomic<uint32_t> lastEventId{0};
 		std::unordered_map<uint32_t, boost::asio::deadline_timer> eventIdTimerMap;
