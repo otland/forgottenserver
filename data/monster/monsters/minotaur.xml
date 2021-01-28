@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Minotaur" nameDescription="a minotaur" race="blood" experience="50" speed="168" manacost="330">
 	<health now="100" max="100" />
 	<look type="25" corpse="5969" />

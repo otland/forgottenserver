@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Killer Rabbit" nameDescription="a killer rabbit" race="blood" experience="160" speed="300" manacost="220">
 	<health now="205" max="205" />
 	<look type="74" corpse="6017" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Blue Djinn" nameDescription="a blue djinn" race="blood" experience="215" speed="220">
 	<health now="330" max="330" />
 	<look type="80" corpse="6020" />

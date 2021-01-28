@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Kongra" nameDescription="a kongra" race="blood" experience="115" speed="184">
 	<health now="340" max="340" />
 	<look type="116" corpse="6043" />

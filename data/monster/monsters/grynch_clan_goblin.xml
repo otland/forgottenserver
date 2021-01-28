@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Grynch Clan Goblin" nameDescription="Grynch Clan Goblin" race="blood" experience="4" speed="870">
 	<health now="80" max="80" />
 	<look type="61" corpse="6002" />

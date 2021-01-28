@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Armenius" nameDescription="Armenius" race="venom" experience="500" speed="330">
 	<health now="550" max="550" />
 	<look type="79" corpse="6021" />

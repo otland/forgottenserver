@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Vampire Viscount" nameDescription="a vampire viscount" race="blood" experience="800" speed="250">
 	<health now="1200" max="1200" />
 	<look type="555" corpse="21275" />

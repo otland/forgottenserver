@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Morgaroth" nameDescription="Morgaroth" race="fire" experience="15000" speed="400">
 	<health now="55000" max="55000" />
 	<look type="12" head="1" body="75" legs="59" feet="1" corpse="6068" />

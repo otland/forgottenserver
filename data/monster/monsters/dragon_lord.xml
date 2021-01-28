@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dragon Lord" nameDescription="a dragon lord" race="blood" experience="2100" speed="200">
 	<health now="1900" max="1900" />
 	<look type="39" corpse="5984" />

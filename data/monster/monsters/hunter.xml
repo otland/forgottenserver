@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hunter" nameDescription="a hunter" race="blood" experience="150" speed="210" manacost="530">
 	<health now="150" max="150" />
 	<look type="129" head="95" body="116" legs="120" feet="115" corpse="20419" />

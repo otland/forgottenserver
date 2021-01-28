@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Raging Mage" nameDescription="a raging mage" race="blood" experience="3250" speed="200">
 	<health now="3500" max="3500" />
 	<look type="416" corpse="13834" />

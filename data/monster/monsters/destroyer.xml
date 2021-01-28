@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Destroyer" nameDescription="a destroyer" race="undead" experience="2500" speed="270">
 	<health now="3700" max="3700" />
 	<look type="236" corpse="6320" />

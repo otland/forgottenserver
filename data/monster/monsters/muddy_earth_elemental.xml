@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Muddy Earth Elemental" nameDescription="a muddy earth elemental" race="undead" experience="450" speed="260">
 	<health now="650" max="650" />
 	<look type="301" corpse="8933" />

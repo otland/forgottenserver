@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="210" manacost="490">
 	<health now="275" max="275" />
 	<look type="265" corpse="7330" />
