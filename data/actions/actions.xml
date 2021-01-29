@@ -224,7 +224,6 @@
 	<action itemid="5543" script="other/teleport.lua" />
 	<action fromid="5792" toid="5797" script="other/die.lua" />
 	<action itemid="6092" script="other/watch.lua" />
-	<action fromid="6570" toid="6571" script="other/surprise_bag.lua" />
 	<action itemid="6576" script="other/fireworks_rocket.lua" />
 	<action itemid="6578" script="other/party_hat.lua" />
 	<action itemid="7552" script="other/large_seashell.lua" />
