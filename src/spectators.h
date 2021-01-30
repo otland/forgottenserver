@@ -35,32 +35,22 @@ public:
 	}
 
 	void addSpectators(const SpectatorVec& spectators) {
-		const size_t size = vec.size();
 		for (Creature* spectator : spectators.vec) {
-			bool duplicate = false;
-			for (size_t i = 0; i < size; ++i) {
-				if (vec[i] == spectator) {
-					duplicate = true;
-					break;
-				}
+			auto it = std::find(begin(), end(), spectator);
+			if (it != end()) {
+				continue;
 			}
-
-			if (!duplicate) {
-				vec.emplace_back(spectator);
-			}
+			vec.emplace_back(spectator);
 		}
 	}
 
 	void erase(Creature* spectator) {
-		for (size_t i = 0, len = vec.size(); i < len; i++) {
-			if (vec[i] == spectator) {
-				Creature* tmp = vec[len - 1];
-				vec[len - 1] = vec[i];
-				vec[i] = tmp;
-				vec.pop_back();
-				break;
-			}
+		auto it = std::find(begin(), end(), spectator);
+		if (it == end()) {
+			return;
 		}
+		std::iter_swap(it, end());
+		vec.pop_back();
 	}
 
 	inline size_t size() const { return vec.size(); }
@@ -71,7 +61,7 @@ public:
 	inline Iterator end() { return vec.end(); }
 	inline ConstIterator end() const { return vec.end(); }
 	inline ConstIterator cend() const { return vec.cend(); }
-	inline void emplace_back(Creature* c) { return vec.emplace_back(c); }
+	inline void emplace_back(Creature* c) { vec.emplace_back(c); }
 
 	template<class InputIterator>
 	inline void insert(Iterator pos, InputIterator first, InputIterator last) { vec.insert(pos, first, last); }
