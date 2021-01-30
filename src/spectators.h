@@ -36,7 +36,7 @@ public:
 
 	void addSpectators(const SpectatorVec& spectators) {
 		for (Creature* spectator : spectators.vec) {
-			auto it = std::find(begin(), end(), spectator);
+			auto it = std::find(vec.begin(), vec.end(), spectator);
 			if (it != end()) {
 				continue;
 			}
@@ -45,7 +45,7 @@ public:
 	}
 
 	void erase(Creature* spectator) {
-		auto it = std::find(begin(), end(), spectator);
+		auto it = std::find(vec.begin(), vec.end(), spectator);
 		if (it == end()) {
 			return;
 		}
@@ -53,18 +53,13 @@ public:
 		vec.pop_back();
 	}
 
-	inline size_t size() const { return vec.size(); }
-	inline bool empty() const { return vec.empty(); }
-	inline Iterator begin() { return vec.begin(); }
-	inline ConstIterator begin() const { return vec.begin(); }
-	inline ConstIterator cbegin() const { return vec.cbegin(); }
-	inline Iterator end() { return vec.end(); }
-	inline ConstIterator end() const { return vec.end(); }
-	inline ConstIterator cend() const { return vec.cend(); }
-	inline void emplace_back(Creature* c) { vec.emplace_back(c); }
-
-	template<class InputIterator>
-	inline void insert(Iterator pos, InputIterator first, InputIterator last) { vec.insert(pos, first, last); }
+	size_t size() const { return vec.size(); }
+	bool empty() const { return vec.empty(); }
+	Iterator begin() { return vec.begin(); }
+	ConstIterator begin() const { return vec.begin(); }
+	Iterator end() { return vec.end(); }
+	ConstIterator end() const { return vec.end(); }
+	void emplace_back(Creature* c) { vec.emplace_back(c); }
 
 private:
 	Vec vec;

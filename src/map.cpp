@@ -419,7 +419,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 			if (it != playersSpectatorCache.end()) {
 				if (!spectators.empty()) {
 					const SpectatorVec& cachedSpectators = it->second;
-					spectators.insert(spectators.end(), cachedSpectators.begin(), cachedSpectators.end());
+					spectators.addSpectators(cachedSpectators);
 				} else {
 					spectators = it->second;
 				}
@@ -434,7 +434,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				if (!onlyPlayers) {
 					if (!spectators.empty()) {
 						const SpectatorVec& cachedSpectators = it->second;
-						spectators.insert(spectators.end(), cachedSpectators.begin(), cachedSpectators.end());
+						spectators.addSpectators(cachedSpectators);
 					} else {
 						spectators = it->second;
 					}
