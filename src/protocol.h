@@ -88,9 +88,6 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		virtual void release() {}
 
 	private:
-		void XTEA_encrypt(OutputMessage& msg) const;
-		bool XTEA_decrypt(NetworkMessage& msg) const;
-
 		friend class Connection;
 
 		OutputMessage_ptr outputBuffer;
