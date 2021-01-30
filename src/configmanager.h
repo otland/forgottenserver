@@ -20,9 +20,16 @@
 #ifndef FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
 #define FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
 
+#include <utility>
+#include <vector>
+
+using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
+
 class ConfigManager
 {
 	public:
+		ConfigManager();
+
 		enum boolean_config_t {
 			ALLOW_CHANGEOUTFIT,
 			ONE_PLAYER_ON_ACCOUNT,
@@ -35,6 +42,7 @@ class ConfigManager
 			FREE_PREMIUM,
 			REPLACE_KICK_ON_LOGIN,
 			ALLOW_CLONES,
+			ALLOW_WALKTHROUGH,
 			BIND_ONLY_GLOBAL_ADDRESS,
 			OPTIMIZE_DATABASE,
 			MARKET_PREMIUM,
@@ -55,6 +63,7 @@ class ConfigManager
 			HOUSE_OWNED_BY_ACCOUNT,
 			CLEAN_PROTECTION_ZONES,
 			HOUSE_DOOR_SHOW_PRICE,
+			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -77,6 +86,7 @@ class ConfigManager
 			MYSQL_SOCK,
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
+			CONFIG_FILE,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
@@ -125,11 +135,18 @@ class ConfigManager
 		const std::string& getString(string_config_t what) const;
 		int32_t getNumber(integer_config_t what) const;
 		bool getBoolean(boolean_config_t what) const;
+		float getExperienceStage(uint32_t level) const;
+
+		bool setString(string_config_t what, const std::string& value);
+		bool setNumber(integer_config_t what, int32_t value);
+		bool setBoolean(boolean_config_t what, bool value);
 
 	private:
 		std::string string[LAST_STRING_CONFIG] = {};
 		int32_t integer[LAST_INTEGER_CONFIG] = {};
 		bool boolean[LAST_BOOLEAN_CONFIG] = {};
+
+		ExperienceStages expStages = {};
 
 		bool loaded = false;
 };

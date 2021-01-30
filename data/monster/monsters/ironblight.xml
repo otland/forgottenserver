@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Ironblight" nameDescription="Ironblight" race="undead" experience="4400" speed="220">
+	<health now="6600" max="6600" />
+	<look type="498" corpse="17424" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="260" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="poisoncondition" interval="2000" chance="10" target="0" radius="6" min="-460" max="-480">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" target="0" length="7" spread="0" min="-260" max="-350">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" target="1" radius="2" min="-180" max="-250">
+			<attribute key="shootEffect" value="greenstar" />
+			<attribute key="areaEffect" value="bigplants" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="invisible" interval="2000" chance="20" duration="7000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="50" />
+		<element icePercent="20" />
+		<element firePercent="60" />
+		<element energyPercent="25" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Clonk!" />
+		<voice sentence="Yowl!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="50000" />
+		<item name="small emerald" countmax="3" chance="10890" />
+		<item name="small amethyst" countmax="3" chance="15020" />
+		<item name="platinum coin" countmax="8" chance="100000" />
+		<item name="red gem" chance="3510" />
+		<item name="blue gem" chance="480" />
+		<item name="twigs" chance="620" />
+		<item name="epee" chance="480" />
+		<item name="magic sulphur" chance="830" />
+		<item name="sapphire hammer" chance="480" />
+		<item name="great mana potion" chance="17640" />
+		<item name="terra legs" chance="1110" />
+		<item name="ultimate health potion" chance="18330" />
+		<item name="composite hornbow" chance="210" />
+		<item name="springsprout rod" chance="1720" />
+		<item name="crystal of balance" chance="4480" />
+		<item name="crystal of power" chance="2480" />
+		<item name="war crystal" chance="21230" />
+		<item name="shiny stone" chance="15230" />
+		<item name="jade hat" chance="210" />
+		<item name="glacial rod" chance="960" />
+		<item name="green crystal shard" chance="5720" />
+		<item name="brown crystal splinter" countmax="2" chance="12610" />
+		<item name="red crystal fragment" chance="10540" />
+		<item name="green crystal fragment" chance="10540" />
+		<item name="crystalline spikes" chance="18400" />
+	</loot>
+</monster>

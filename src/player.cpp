@@ -48,9 +48,12 @@ MuteCountMap Player::muteCountMap;
 uint32_t Player::playerAutoID = 0x10000000;
 
 Player::Player(ProtocolGame_ptr p) :
-	Creature(), lastPing(OTSYS_TIME()), lastPong(lastPing), inbox(new Inbox(ITEM_INBOX)), client(std::move(p))
+	Creature(), lastPing(OTSYS_TIME()), lastPong(lastPing), inbox(new Inbox(ITEM_INBOX)), storeInbox(new StoreInbox(ITEM_STORE_INBOX)), client(std::move(p))
 {
 	inbox->incrementReferenceCounter();
+
+	storeInbox->setParent(this);
+	storeInbox->incrementReferenceCounter();
 }
 
 Player::~Player()
@@ -68,6 +71,9 @@ Player::~Player()
 	}
 
 	inbox->decrementReferenceCounter();
+
+	storeInbox->setParent(nullptr);
+	storeInbox->decrementReferenceCounter();
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
@@ -699,7 +705,7 @@ bool Player::canWalkthrough(const Creature* creature) const
 	}
 
 	const Player* player = creature->getPlayer();
-	if (!player) {
+	if (!player || !g_config.getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
 
@@ -735,7 +741,7 @@ bool Player::canWalkthroughEx(const Creature* creature) const
 	}
 
 	const Player* player = creature->getPlayer();
-	if (!player) {
+	if (!player || !g_config.getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
 
@@ -1033,7 +1039,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		}
 
 		Account account = IOLoginData::loadAccount(accountNumber);
-		Game::updatePremium(account);
 
 		std::cout << name << " has logged in." << std::endl;
 
@@ -1821,9 +1826,9 @@ bool Player::hasShield() const
 }
 
 BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                             bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool field /* = false*/)
+                             bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool field /* = false*/, bool ignoreResistances /* = false*/)
 {
-	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field);
+	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field, ignoreResistances);
 
 	if (attacker) {
 		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
@@ -1838,44 +1843,46 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		return BLOCK_ARMOR;
 	}
 
-	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-		if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
-			continue;
-		}
-
-		Item* item = inventory[slot];
-		if (!item) {
-			continue;
-		}
-
-		const ItemType& it = Item::items[item->getID()];
-		if (!it.abilities) {
-			if (damage <= 0) {
-				damage = 0;
-				return BLOCK_ARMOR;
+	if (!ignoreResistances) {
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_AMMO; ++slot) {
+			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+				continue;
 			}
 
-			continue;
-		}
-
-		const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
-		if (absorbPercent != 0) {
-			damage -= std::round(damage * (absorbPercent / 100.));
-
-			uint16_t charges = item->getCharges();
-			if (charges != 0) {
-				g_game.transformItem(item, item->getID(), charges - 1);
+			Item* item = inventory[slot];
+			if (!item) {
+				continue;
 			}
-		}
 
-		if (field) {
-			const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
-			if (fieldAbsorbPercent != 0) {
-				damage -= std::round(damage * (fieldAbsorbPercent / 100.));
+			const ItemType& it = Item::items[item->getID()];
+			if (!it.abilities) {
+				if (damage <= 0) {
+					damage = 0;
+					return BLOCK_ARMOR;
+				}
+
+				continue;
+			}
+
+			const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
+			if (absorbPercent != 0) {
+				damage -= std::round(damage * (absorbPercent / 100.));
 
 				uint16_t charges = item->getCharges();
 				if (charges != 0) {
 					g_game.transformItem(item, item->getID(), charges - 1);
+				}
+			}
+
+			if (field) {
+				const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
+				if (fieldAbsorbPercent != 0) {
+					damage -= std::round(damage * (fieldAbsorbPercent / 100.));
+
+					uint16_t charges = item->getCharges();
+					if (charges != 0) {
+						g_game.transformItem(item, item->getID(), charges - 1);
+					}
 				}
 			}
 		}
@@ -2278,6 +2285,10 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		return RETURNVALUE_CANNOTPICKUP;
 	}
 
+	if (item->isStoreItem()) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	ReturnValue ret = RETURNVALUE_NOERROR;
 
 	const int32_t& slotPosition = item->getSlotPosition();
@@ -2554,7 +2565,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 	}
 }
 
-ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr*/) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -3967,12 +3978,12 @@ bool Player::isPremium() const
 		return true;
 	}
 
-	return premiumDays > 0;
+	return premiumEndsAt > time(nullptr);
 }
 
-void Player::setPremiumDays(int32_t v)
+void Player::setPremiumTime(time_t premiumEndsAt)
 {
-	premiumDays = v;
+	this->premiumEndsAt = premiumEndsAt;
 	sendBasicData();
 }
 

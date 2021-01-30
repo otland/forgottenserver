@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190">
+	<health now="245" max="245" />
+	<look type="15" corpse="5960" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Mechanical Fighter" interval="2000" chance="90" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Slice! Slice!" />
+		<voice sentence="DIE!!!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="47000" />
+		<item name="gold coin" countmax="46" chance="47000" />
+		<item name="platinum coin" chance="6000" />
+		<item name="war hammer" chance="750" />
+		<item name="bunch of troll hair" chance="4400" />
+	</loot>
+</monster>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Deathstrike" nameDescription="Deathstrike" race="undead" experience="40000" speed="470">
+	<health now="200000" max="200000" />
+	<look type="500" corpse="18384" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="50" />
+		<flag runonhealth="10000" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1300" min="0" max="-540" />
+		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-400" duration="2500">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+		</attack>
+		<attack name="fire" interval="2000" chance="100" range="7" min="-820" max="-950">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" range="3" target="1" min="-350" max="-800">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="healing" interval="1000" chance="25" min="1000" max="5500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10" />
+		<element deathPercent="-20" />
+		<element energyPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Deeestructiooon!" />
+		<voice sentence="Maaahhhrrr!" />
+		<voice sentence="You are nothing!" />
+		<voice sentence="Taaake ... this!" />
+	</voices>
+	<loot>
+		<item name="Deathstrike's snippet" chance="100000" />
+		<item name="crystalline sword" chance="10480" />
+		<item name="crystalline axe" chance="11430" />
+		<item name="mycological mace" chance="8570" />
+		<item name="crystal crossbow" chance="12380" />
+		<item name="mycological bow" chance="11430" />
+		<item name="shiny blade" chance="11430" />
+	</loot>
+</monster>

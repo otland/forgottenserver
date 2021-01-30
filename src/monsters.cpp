@@ -132,8 +132,11 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		uint32_t chance = pugi::cast<uint32_t>(attr.value());
 		if (chance > 100) {
 			chance = 100;
+			std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Chance value out of bounds for spell: " << name << std::endl;
 		}
 		sb.chance = chance;
+	} else if (asLowerCaseString(name) != "melee") {
+		std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Missing chance value on non-melee spell: " << name << std::endl;
 	}
 
 	if ((attr = node.attribute("range"))) {
@@ -607,16 +610,13 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(spell->skill, spell->attack);
 			}
 
-			ConditionType_t conditionType = CONDITION_NONE;
-			int32_t minDamage = 0;
-			int32_t maxDamage = 0;
-			uint32_t tickInterval = 2000;
-
 			if (spell->conditionType != CONDITION_NONE) {
-				conditionType = spell->conditionType;
+				ConditionType_t conditionType = spell->conditionType;
 
-				minDamage = spell->conditionMinDamage;
-				maxDamage = minDamage;
+				int32_t minDamage = spell->conditionMinDamage;
+				int32_t maxDamage = minDamage;
+
+				uint32_t tickInterval = 2000;
 				if (spell->tickInterval != 0) {
 					tickInterval = spell->tickInterval;
 				}
@@ -916,7 +916,12 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			} else if (strcasecmp(attrName, "lightcolor") == 0) {
 				mType->info.light.color = pugi::cast<uint16_t>(attr.value());
 			} else if (strcasecmp(attrName, "targetdistance") == 0) {
-				mType->info.targetDistance = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
+				int32_t targetDistance = pugi::cast<int32_t>(attr.value());
+				if (targetDistance < 1) {
+					targetDistance = 1;
+					std::cout << "[Warning - Monsters::loadMonster] targetdistance less than 1. " << file << std::endl;
+				}
+				mType->info.targetDistance = targetDistance;
 			} else if (strcasecmp(attrName, "runonhealth") == 0) {
 				mType->info.runAwayHealth = pugi::cast<int32_t>(attr.value());
 			} else if (strcasecmp(attrName, "hidehealth") == 0) {
@@ -938,6 +943,9 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.pushable = false;
 		}
 	}
+	if (mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
+		std::cout << "[Warning - Monsters::loadMonster] manaCost missing or zero on monster with summonable and/or convinceable flags: " << file << std::endl;
+	}
 
 	if ((node = monsterNode.child("targetchange"))) {
 		if ((attr = node.attribute("speed")) || (attr = node.attribute("interval"))) {
@@ -947,7 +955,12 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		}
 
 		if ((attr = node.attribute("chance"))) {
-			mType->info.changeTargetChance = pugi::cast<int32_t>(attr.value());
+			int32_t chance = pugi::cast<int32_t>(attr.value());
+			if (chance > 100) {
+				chance = 100;
+				std::cout << "[Warning - Monsters::loadMonster] targetchange chance value out of bounds. " << file << std::endl;
+			}
+			mType->info.changeTargetChance = chance;
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing targetchange chance. " << file << std::endl;
 		}
@@ -1149,7 +1162,12 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		}
 
 		if ((attr = node.attribute("chance"))) {
-			mType->info.yellChance = pugi::cast<uint32_t>(attr.value());
+			uint32_t chance = pugi::cast<uint32_t>(attr.value());
+			if (chance > 100) {
+				chance = 100;
+				std::cout << "[Warning - Monsters::loadMonster] yell chance value out of bounds. " << file << std::endl;
+			}
+			mType->info.yellChance = chance;
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing voices chance. " << file << std::endl;
 		}
@@ -1186,24 +1204,54 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		for (auto elementNode : node.children()) {
 			if ((attr = elementNode.attribute("physicalPercent"))) {
 				mType->info.elementMap[COMBAT_PHYSICALDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_PHYSICALDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"physical\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("icePercent"))) {
 				mType->info.elementMap[COMBAT_ICEDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_ICEDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"ice\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("poisonPercent")) || (attr = elementNode.attribute("earthPercent"))) {
 				mType->info.elementMap[COMBAT_EARTHDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_EARTHDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"earth\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("firePercent"))) {
 				mType->info.elementMap[COMBAT_FIREDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_FIREDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"fire\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("energyPercent"))) {
 				mType->info.elementMap[COMBAT_ENERGYDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_ENERGYDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"energy\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("holyPercent"))) {
 				mType->info.elementMap[COMBAT_HOLYDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_HOLYDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"holy\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("deathPercent"))) {
 				mType->info.elementMap[COMBAT_DEATHDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_DEATHDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"death\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("drownPercent"))) {
 				mType->info.elementMap[COMBAT_DROWNDAMAGE] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_DROWNDAMAGE) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"drown\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("lifedrainPercent"))) {
 				mType->info.elementMap[COMBAT_LIFEDRAIN] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_LIFEDRAIN) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"lifedrain\" on immunity and element tags. " << file << std::endl;
+				}
 			} else if ((attr = elementNode.attribute("manadrainPercent"))) {
 				mType->info.elementMap[COMBAT_MANADRAIN] = pugi::cast<int32_t>(attr.value());
+				if (mType->info.damageImmunities & COMBAT_MANADRAIN) {
+					std::cout << "[Warning - Monsters::loadMonster] Same element \"manadrain\" on immunity and element tags. " << file << std::endl;
+				}
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown element percent. " << file << std::endl;
 			}
@@ -1229,6 +1277,10 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 			if ((attr = summonNode.attribute("chance"))) {
 				chance = pugi::cast<int32_t>(attr.value());
+				if (chance > 100) {
+					chance = 100;
+					std::cout << "[Warning - Monsters::loadMonster] Summon chance value out of bounds. " << file << std::endl;
+				}
 			}
 
 			if ((attr = summonNode.attribute("max"))) {
@@ -1299,7 +1351,16 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 {
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("id"))) {
-		lootBlock.id = pugi::cast<int32_t>(attr.value());
+		int32_t id = pugi::cast<int32_t>(attr.value());
+		const ItemType& it = Item::items.getItemType(id);
+
+		if (it.name.empty()) {
+			std::cout << "[Warning - Monsters::loadMonster] Unknown loot item id \"" << id << "\". " << std::endl;
+			return false;
+		}
+
+		lootBlock.id = id;
+
 	} else if ((attr = node.attribute("name"))) {
 		auto name = attr.as_string();
 		auto ids = Item::items.nameToItems.equal_range(asLowerCaseString(name));
@@ -1365,7 +1426,9 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 
 void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 {
-	for (auto subNode : node.children()) {
+	// NOTE: <inside> attribute was left for backwards compatibility with pre 1.x TFS versions.
+	// Please don't use it, if you don't have to.
+	for (auto subNode : node.child("inside") ? node.child("inside").children() : node.children()) {
 		LootBlock lootBlock;
 		if (loadLootItem(subNode, lootBlock)) {
 			lBlock.childLoot.emplace_back(std::move(lootBlock));

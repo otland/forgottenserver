@@ -154,6 +154,48 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	}
 }
 
+void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
+{
+	if (z >= MAP_MAX_LAYERS) {
+		return;
+	}
+
+	const QTreeLeafNode* leaf = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, x, y);
+	if (!leaf) {
+		return;
+	}
+
+	const Floor* floor = leaf->getFloor(z);
+	if (!floor) {
+		return;
+	}
+
+	Tile* tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
+	if (tile) {
+		if (const CreatureVector* creatures = tile->getCreatures()) {
+			for (int32_t i = creatures->size(); --i >= 0;) {
+				if (Player* player = (*creatures)[i]->getPlayer()) {
+					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
+				} else {
+					g_game.removeCreature((*creatures)[i]);
+				}
+			}
+		}
+
+		if (TileItemVector* items = tile->getItemList()) {
+			for (auto it = items->begin(), end = items->end(); it != end; ++it) {
+				g_game.internalRemoveItem(*it);
+			}
+		}
+
+		Item* ground = tile->getGround();
+		if (ground) {
+			g_game.internalRemoveItem(ground);
+			tile->setGround(nullptr);
+		}
+	}
+}
+
 bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/)
 {
 	bool foundTile;
@@ -287,7 +329,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getStackposOfCreature(tmpPlayer, &creature), oldPos, stackpos, teleport);
+				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getClientIndexOfCreature(tmpPlayer, &creature), oldPos, stackpos, teleport);
 			}
 		}
 	}
@@ -958,14 +1000,17 @@ uint32_t Map::clean() const
 
 	std::vector<Item*> toRemove;
 
-	for (auto tileList : g_game.getTilesToClean()) {
-		if (!tileList) {
+	for (auto tile : g_game.getTilesToClean()) {
+		if (!tile) {
 			continue;
 		}
-		++tiles;
-		for (auto* item : *tileList->getItemList()) {
-			if (item->isCleanable()) {
-				toRemove.emplace_back(item);
+
+		if (auto items = tile->getItemList()) {
+			++tiles;
+			for (auto item : *items) {
+				if (item->isCleanable()) {
+					toRemove.emplace_back(item);
+				}
 			}
 		}
 	}

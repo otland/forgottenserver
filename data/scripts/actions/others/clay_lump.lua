@@ -27,7 +27,7 @@ function clayLump.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			if tmpItem.description then
 				item:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, tmpItem.description:gsub('|PLAYERNAME|', player:getName()))
 			end
-			
+
 			if tmpItem.achievement then
 				player:addAchievement("Clay Fighter")
 				player:addAchievementProgress("Clay to Fame", 5)

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Mornenion" nameDescription="Mornenion" race="blood" experience="115" speed="110">
+	<health now="190" max="190" />
+	<look type="64" corpse="6012" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="physical" interval="2000" chance="15" range="5" min="0" max="-40">
+			<attribute key="shootEffect" value="arrow" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Let us leave safely and maybe we'll give you a few coins." />
+	</voices>
+	<loot>
+		<item name="bag with stolen gold" chance="100000" />
+		<item name="platinum coin" countmax="88" chance="100000" />
+	</loot>
+</monster>

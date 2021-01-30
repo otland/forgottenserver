@@ -36,6 +36,7 @@
 #include "groups.h"
 #include "town.h"
 #include "mounts.h"
+#include "storeinbox.h"
 
 class House;
 class NetworkMessage;
@@ -249,6 +250,10 @@ class Player final : public Creature, public Cylinder
 			return inbox;
 		}
 
+		StoreInbox* getStoreInbox() const {
+			return storeInbox;
+		}
+
 		uint16_t getClientIcons() const;
 
 		const GuildWarVector& getGuildWarVector() const {
@@ -403,7 +408,7 @@ class Player final : public Creature, public Cylinder
 			return group->access;
 		}
 		bool isPremium() const;
-		void setPremiumDays(int32_t v);
+		void setPremiumTime(time_t premiumEndsAt);
 
 		uint16_t getHelpers() const;
 
@@ -600,7 +605,7 @@ class Player final : public Creature, public Cylinder
 			return pzLocked;
 		}
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 		void doAttacking(uint32_t interval) override;
 		bool hasExtraSwing() override {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());
@@ -719,6 +724,11 @@ class Player final : public Creature, public Cylinder
 				client->sendRemoveTileThing(pos, stackpos);
 			}
 		}
+		void sendRemoveTileCreature(const Creature* creature, const Position& pos, int32_t stackpos) {
+			if (client) {
+				client->sendRemoveTileCreature(creature, pos, stackpos);
+			}
+		}
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
 			if (client) {
 				client->sendUpdateTile(tile, pos);
@@ -737,7 +747,7 @@ class Player final : public Creature, public Cylinder
 		}
 		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
 			if (client) {
-				client->sendAddCreature(creature, pos, creature->getTile()->getStackposOfCreature(this, creature), isLogin);
+				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), isLogin);
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport) {
@@ -747,7 +757,7 @@ class Player final : public Creature, public Cylinder
 		}
 		void sendCreatureTurn(const Creature* creature) {
 			if (client && canSeeCreature(creature)) {
-				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
+				int32_t stackpos = creature->getTile()->getClientIndexOfCreature(this, creature);
 				if (stackpos != -1) {
 					client->sendCreatureTurn(creature, stackpos);
 				}
@@ -788,7 +798,7 @@ class Player final : public Creature, public Cylinder
 			} else if (canSeeInvisibility()) {
 				client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
 			} else {
-				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
+				int32_t stackpos = creature->getTile()->getClientIndexOfCreature(this, creature);
 				if (stackpos == -1) {
 					return;
 				}
@@ -796,7 +806,7 @@ class Player final : public Creature, public Cylinder
 				if (visible) {
 					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
 				} else {
-					client->sendRemoveTileThing(creature->getPosition(), stackpos);
+					client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
 				}
 			}
 		}
@@ -1168,7 +1178,7 @@ class Player final : public Creature, public Cylinder
 				uint32_t flags, Creature* actor = nullptr) const override;
 		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 				uint32_t flags) const override;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const override;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 				uint32_t& flags) override;
 
@@ -1218,6 +1228,7 @@ class Player final : public Creature, public Cylinder
 
 		time_t lastLoginSaved = 0;
 		time_t lastLogout = 0;
+		time_t premiumEndsAt = 0;
 
 		uint64_t experience = 0;
 		uint64_t manaSpent = 0;
@@ -1248,6 +1259,7 @@ class Player final : public Creature, public Cylinder
 		SchedulerTask* walkTask = nullptr;
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;
+		StoreInbox* storeInbox = nullptr;
 
 		uint32_t inventoryWeight = 0;
 		uint32_t capacity = 40000;
@@ -1273,7 +1285,6 @@ class Player final : public Creature, public Cylinder
 		int32_t purchaseCallback = -1;
 		int32_t saleCallback = -1;
 		int32_t MessageBufferCount = 0;
-		int32_t premiumDays = 0;
 		int32_t bloodHitCount = 0;
 		int32_t shieldBlockCount = 0;
 		int32_t offlineTrainingSkill = -1;

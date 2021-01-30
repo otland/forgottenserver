@@ -91,6 +91,7 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
 	ITEM_ATTRIBUTE_DECAYTO = 1 << 23,
 	ITEM_ATTRIBUTE_WRAPID = 1 << 24,
+	ITEM_ATTRIBUTE_STOREITEM = 1 << 25,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -458,6 +459,8 @@ enum ReturnValue {
 	RETURNVALUE_TRADEPLAYERHIGHESTBIDDER,
 	RETURNVALUE_YOUCANNOTTRADETHISHOUSE,
 	RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION,
+	RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM,
+	RETURNVALUE_ITEMCANNOTBEMOVEDTHERE,
 };
 
 enum SpeechBubble_t
@@ -609,6 +612,7 @@ struct CombatDamage
 	CombatOrigin origin;
 	BlockType_t blockType;
 	bool critical;
+	bool leeched;
 	CombatDamage()
 	{
 		origin = ORIGIN_NONE;
@@ -616,6 +620,7 @@ struct CombatDamage
 		primary.type = secondary.type = COMBAT_NONE;
 		primary.value = secondary.value = 0;
 		critical = false;
+		leeched = false;
 	}
 };
 

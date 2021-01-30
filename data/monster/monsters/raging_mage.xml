@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Raging Mage" nameDescription="a raging mage" race="blood" experience="3250" speed="200">
+	<health now="3500" max="3500" />
+	<look type="416" corpse="13834" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="300" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-78" />
+		<attack name="energy" interval="2000" chance="35" range="7" target="1" radius="5" min="-100" max="-200">
+			<attribute key="shootEffect" value="energyball" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="15" range="7" min="-100" max="-200" />
+		<attack name="energyfield" interval="2000" chance="15" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="20" length="8" spread="0" min="-101" max="-300">
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element physicalPercent="-25" />
+		<element deathPercent="15" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity outfit="1" />
+		<immunity fire="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="golden servant" interval="2000" chance="50" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Behold the all permeating powers I draw from this gate!!" />
+		<voice sentence="ENERGY!!" />
+	</voices>
+	<loot>
+		<item name="ring of the sky" chance="1830" />
+		<item name="small sapphire" countmax="5" chance="1830" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="69" chance="47000" />
+		<item name="platinum coin" countmax="8" chance="77400" />
+		<item name="stealth ring" chance="4880" />
+		<item name="mind stone" chance="9760" />
+		<item name="boots of haste" chance="610" />
+		<item name="dark mushroom" countmax="3" chance="3600" />
+		<item name="skull helmet" chance="610" />
+		<item name="red piece of cloth" chance="31100" />
+		<item name="assassin star" countmax="7" chance="1830" />
+		<item name="bullseye potion" chance="6710" />
+		<item name="great mana potion" countmax="5" chance="23170" />
+		<item name="great health potion" countmax="5" chance="26830" />
+		<item name="focus cape" chance="4880" />
+		<item name="spellbook of mind control" chance="610" />
+		<item name="royal tapestry" chance="1220" />
+		<item name="luminous orb" chance="4270" />
+		<item id="13940" chance="1220" /><!-- elemental spikes -->
+	</loot>
+</monster>

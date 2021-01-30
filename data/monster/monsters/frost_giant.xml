@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Frost Giant" nameDescription="a frost giant" race="blood" experience="150" speed="200" manacost="490">
+	<health now="270" max="270" />
+	<look type="257" corpse="7330" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-90">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hmm Humansoup" />
+		<voice sentence="Stand still ya tasy snack!" />
+		<voice sentence="Joh Thun!" />
+		<voice sentence="Brore Smode!" />
+		<voice sentence="Horre Sjan Flan!" />
+		<voice sentence="Forle Bramma!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="40" chance="82000" />
+		<item name="club ring" chance="130" />
+		<item name="halberd" chance="560" />
+		<item name="short sword" chance="8140" />
+		<item name="dark helmet" chance="180" />
+		<item name="battle shield" chance="1350" />
+		<item name="meat" countmax="2" chance="4970" />
+		<item name="shard" chance="60" />
+		<item id="7441" chance="2180" /><!-- ice cube -->
+		<item name="norse shield" chance="250" />
+		<item name="health potion" chance="819" />
+		<item name="frost giant pelt" chance="5000" />
+	</loot>
+</monster>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Lich" nameDescription="a lich" race="undead" experience="900" speed="210">
+	<health now="880" max="880" />
+	<look type="99" corpse="6028" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-75" />
+		<attack name="lifedrain" interval="2000" chance="10" length="7" spread="0" min="-140" max="-190">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" length="7" spread="0" min="-300" max="-400">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="1" min="-200" max="-245">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-300" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-130" max="-195">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="50">
+		<defense name="healing" interval="2000" chance="15" min="80" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="80" />
+		<element holyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="Bonebeast" interval="2000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Doomed be the living!" />
+		<voice sentence="Death awaits all!" />
+		<voice sentence="Thy living flesh offends me!" />
+		<voice sentence="Death and Decay!" />
+		<voice sentence="You will endure agony beyond thy death!" />
+		<voice sentence="Pain sweet pain!" />
+		<voice sentence="Come to me my children!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="39" chance="50000" />
+		<item name="platinum coin" chance="19720" />
+		<item id="2175" chance="10000" /><!-- spellbook -->
+		<item name="strong mana potion" chance="7700" />
+		<item name="black pearl" countmax="3" chance="5160" />
+		<item name="white pearl" chance="5000" />
+		<item name="small topaz" countmax="3" chance="2530" />
+		<item name="small emerald" countmax="3" chance="2230" />
+		<item name="ancient shield" chance="2022" />
+		<item name="ring of healing" chance="1640" />
+		<item name="yellow gem" chance="770" />
+		<item name="strange helmet" chance="740" />
+		<item name="mind stone" chance="450" />
+		<item name="platinum amulet" chance="400" />
+		<item name="skull staff" chance="310" />
+		<item name="castle shield" chance="250" />
+		<item name="blue robe" chance="200" />
+		<item name="lightning boots" chance="200" />
+		<item name="maxilla maximus" chance="50" />
+	</loot>
+</monster>

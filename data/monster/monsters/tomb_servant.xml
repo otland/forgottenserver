@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Tomb Servant" nameDescription="a tomb servant" race="undead" experience="215" speed="190">
+	<health now="475" max="475" />
+	<look type="100" corpse="6029" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="lifedrain" interval="2000" chance="20" target="1" range="7" min="-40" max="-55">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Chaarr!!" />
+		<voice sentence="Ngl..Nglll...Gll" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="41000" />
+		<item name="gold coin" countmax="8" chance="41000" />
+		<item name="scarab coin" chance="8210" />
+		<item name="rotten meat" chance="2000" />
+		<item id="2230" chance="49000" /><!-- bone -->
+		<item name="longsword" chance="6560" />
+		<item name="bone shield" chance="5300" />
+		<item name="worm" countmax="12" chance="25325" />
+		<item name="half-digested piece of meat" chance="1000" />
+		<item name="fist on a stick" chance="230" />
+	</loot>
+</monster>

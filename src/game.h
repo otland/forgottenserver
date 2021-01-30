@@ -212,6 +212,7 @@ class Game
 		  * \param c Creature to remove
 		  */
 		bool removeCreature(Creature* creature, bool isLogout = true);
+		void executeDeath(uint32_t creatureId);
 
 		void addCreatureCheck(Creature* creature);
 		static void removeCreatureCheck(Creature* creature);
@@ -405,8 +406,6 @@ class Game
 
 		std::forward_list<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, DepotChest* depotChest, Inbox* inbox);
 
-		static void updatePremium(Account& account);
-
 		void cleanup();
 		void shutdown();
 		void ReleaseCreature(Creature* creature);
@@ -437,7 +436,7 @@ class Game
 		void checkCreatures(size_t index);
 		void checkLight();
 
-		bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field);
+		bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field, bool ignoreResistances = false);
 
 		void combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect);
 
@@ -456,9 +455,6 @@ class Game
 		int32_t getLightHour() const {
 			return lightHour;
 		}
-
-		bool loadExperienceStages();
-		uint64_t getExperienceStage(uint32_t level);
 
 		void loadMotdNum();
 		void saveMotdNum() const;

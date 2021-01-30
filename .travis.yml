@@ -1,4 +1,4 @@
-sudo: required
+os: linux
 dist: bionic
 language: cpp
 compiler:
@@ -9,7 +9,7 @@ env:
     # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
     #   via the "travis encrypt" command using the project repo's public key
     - secure: "jg/5nV1Xe6ePlplxIyRmyTaSEDmKhOxF/Z3cMMU6xOnEyhMTnKgcvi88YB0JA/Y7y3SBFyHdvzSfADgTPYsE+TDp2BTlhPpaS/x987nXfB+0jWB3WyEdxtUuscis9m3vAfdO9OraOfrthQDKQgt1mEoJcdVfLabnZ2hs+wzuFGA="
-  matrix:
+  jobs:
     - LUAJIT=OFF
     - LUAJIT=ON
 cache: apt

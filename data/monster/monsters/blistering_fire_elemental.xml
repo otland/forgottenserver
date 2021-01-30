@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Blistering Fire Elemental" nameDescription="a blistering fire elemental" race="fire" experience="1300" speed="230">
+	<health now="1500" max="1500" />
+	<look type="242" corpse="8964" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="fire" interval="1000" chance="11" length="7" spread="3" min="-65" max="-510" />
+		<attack name="firecondition" interval="1000" chance="12" radius="6" target="0" min="-50" max="-200">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="15" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element icePercent="-15" />
+		<element energyPercent="20" />
+		<element physicalPercent="25" />
+		<element deathPercent="40" />
+		<element earthPercent="50" />
+	</elements>
+	<immunities>
+		<immunity holy="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="FCHHHRRR" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="70" chance="44000" />
+		<item name="fiery heart" chance="10000" />
+		<item name="glimmering soil" chance="9500" />
+		<item name="small ruby" countmax="3" chance="5000" />
+		<item name="wand of draconia" chance="500" />
+		<item id="13757" chance="500" /><!-- coal -->
+	</loot>
+</monster>

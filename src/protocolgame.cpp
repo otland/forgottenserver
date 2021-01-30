@@ -388,7 +388,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() <= 0) {
+	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() == 0) {
 		return;
 	}
 
@@ -526,43 +526,28 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 		for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 			msg.addItem(*it);
 
-			count++;
-			if (count == 9 && tile->getPosition() == player->getPosition()) {
+			if (++count == 10) {
 				break;
-			} else if (count == 10) {
-				return;
 			}
 		}
 	}
 
 	const CreatureVector* creatures = tile->getCreatures();
 	if (creatures) {
-		bool playerAdded = false;
 		for (const Creature* creature : boost::adaptors::reverse(*creatures)) {
 			if (!player->canSeeCreature(creature)) {
 				continue;
-			}
-
-			if (tile->getPosition() == player->getPosition() && count == 9 && !playerAdded) {
-				creature = player;
-			}
-
-			if (creature->getID() == player->getID()) {
-				playerAdded = true;
 			}
 
 			bool known;
 			uint32_t removedKnown;
 			checkCreatureAsKnown(creature->getID(), known, removedKnown);
 			AddCreature(msg, creature, known, removedKnown);
-
-			if (++count == 10) {
-				return;
-			}
+			++count;
 		}
 	}
 
-	if (items) {
+	if (items && count < 10) {
 		for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
 			msg.addItem(*it);
 
@@ -687,7 +672,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 		if (z > 7) {
 			return false;
 		}
-	} else if (myPos.z >= 8) {
+	} else { // if (myPos.z >= 8) {
 		//we are underground (8 -> 15)
 		//view is +/- 2 from the floor we stand on
 		if (std::abs(myPos.getZ() - z) > 2) {
@@ -1336,7 +1321,7 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(0x9F);
 	if (player->isPremium()) {
 		msg.addByte(1);
-		msg.add<uint32_t>(time(nullptr) + (player->premiumDays * 86400));
+		msg.add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
 	} else {
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
@@ -2128,8 +2113,14 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
 
 	NetworkMessage msg;
 	msg.addByte(0x6B);
-	msg.addPosition(creature->getPosition());
-	msg.addByte(stackPos);
+	if (stackPos >= 10) {
+		msg.add<uint16_t>(0xFFFF);
+		msg.add<uint32_t>(creature->getID());
+	} else {
+		msg.addPosition(creature->getPosition());
+		msg.addByte(stackPos);
+	}
+
 	msg.add<uint16_t>(0x63);
 	msg.add<uint32_t>(creature->getID());
 	msg.addByte(creature->getDirection());
@@ -2174,9 +2165,6 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 	msg.add<uint32_t>(++statementId);
 	if (!creature) {
 		msg.add<uint32_t>(0x00);
-	} else if (type == TALKTYPE_CHANNEL_R2) {
-		msg.add<uint32_t>(0x00);
-		type = TALKTYPE_CHANNEL_R1;
 	} else {
 		msg.addString(creature->getName());
 		//Add level only for players
@@ -2351,6 +2339,13 @@ void ProtocolGame::sendRemoveTileThing(const Position& pos, uint32_t stackpos)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
+{
+	NetworkMessage msg;
+	RemoveTileCreature(msg, creature, pos, stackpos);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendUpdateTile(const Tile* tile, const Position& pos)
 {
 	if (!canSee(pos)) {
@@ -2405,7 +2400,19 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	if (creature != player) {
-		if (stackpos != -1) {
+		// stack pos is always real index now, so it can exceed the limit
+		// if stack pos exceeds the limit, we need to refresh the tile instead
+		// 1. this is a rare case, and is only triggered by forcing summon in a position
+		// 2. since no stackpos will be send to the client about that creature, removing
+		//    it must be done with its id if its stackpos remains >= 10. this is done to
+		//    add creatures to battle list instead of rendering on screen
+		if (stackpos >= 10) {
+			// @todo: should we avoid this check?
+			if (const Tile* tile = creature->getTile()) {
+				sendUpdateTile(tile, pos);
+			}
+		} else {
+			// if stackpos is -1, the client will automatically detect it
 			NetworkMessage msg;
 			msg.addByte(0x6A);
 			msg.addPosition(pos);
@@ -2461,6 +2468,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
 	}
 
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+
 	sendStats();
 	sendSkills();
 
@@ -2479,21 +2488,22 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport)
 {
 	if (creature == player) {
-		if (oldStackPos >= 10) {
-			sendMapDescription(newPos);
-		} else if (teleport) {
-			NetworkMessage msg;
-			RemoveTileThing(msg, oldPos, oldStackPos);
-			writeToOutputBuffer(msg);
+		if (teleport) {
+			sendRemoveTileCreature(creature, oldPos, oldStackPos);
 			sendMapDescription(newPos);
 		} else {
 			NetworkMessage msg;
 			if (oldPos.z == 7 && newPos.z >= 8) {
-				RemoveTileThing(msg, oldPos, oldStackPos);
+				RemoveTileCreature(msg, creature, oldPos, oldStackPos);
 			} else {
 				msg.addByte(0x6D);
-				msg.addPosition(oldPos);
-				msg.addByte(oldStackPos);
+				if (oldStackPos < 10) {
+					msg.addPosition(oldPos);
+					msg.addByte(oldStackPos);
+				} else {
+					msg.add<uint16_t>(0xFFFF);
+					msg.add<uint32_t>(creature->getID());
+				}
 				msg.addPosition(newPos);
 			}
 
@@ -2521,19 +2531,24 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 			writeToOutputBuffer(msg);
 		}
 	} else if (canSee(oldPos) && canSee(creature->getPosition())) {
-		if (teleport || (oldPos.z == 7 && newPos.z >= 8) || oldStackPos >= 10) {
-			sendRemoveTileThing(oldPos, oldStackPos);
+		if (teleport || (oldPos.z == 7 && newPos.z >= 8)) {
+			sendRemoveTileCreature(creature, oldPos, oldStackPos);
 			sendAddCreature(creature, newPos, newStackPos, false);
 		} else {
 			NetworkMessage msg;
 			msg.addByte(0x6D);
-			msg.addPosition(oldPos);
-			msg.addByte(oldStackPos);
+			if (oldStackPos < 10) {
+				msg.addPosition(oldPos);
+				msg.addByte(oldStackPos);
+			} else {
+				msg.add<uint16_t>(0xFFFF);
+				msg.add<uint32_t>(creature->getID());
+			}
 			msg.addPosition(creature->getPosition());
 			writeToOutputBuffer(msg);
 		}
 	} else if (canSee(oldPos)) {
-		sendRemoveTileThing(oldPos, oldStackPos);
+		sendRemoveTileCreature(creature, oldPos, oldStackPos);
 	} else if (canSee(creature->getPosition())) {
 		sendAddCreature(creature, newPos, newStackPos, false);
 	}
@@ -2693,7 +2708,7 @@ void ProtocolGame::sendOutfitWindow()
 		}
 
 		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
-		if (protocolOutfits.size() == 100) { // Game client doesn't allow more than 100 outfits
+		if (protocolOutfits.size() == std::numeric_limits<uint8_t>::max()) { // Game client currently doesn't allow more than 255 outfits
 			break;
 		}
 	}
@@ -2982,6 +2997,18 @@ void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uin
 	msg.addByte(0x6C);
 	msg.addPosition(pos);
 	msg.addByte(stackpos);
+}
+
+void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, const Creature* creature, const Position& pos, uint32_t stackpos)
+{
+	if (stackpos < 10) {
+		RemoveTileThing(msg, pos, stackpos);
+		return;
+	}
+
+	msg.addByte(0x6C);
+	msg.add<uint16_t>(0xFFFF);
+	msg.add<uint32_t>(creature->getID());
 }
 
 void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos)

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Troll Legionnaire" nameDescription="a troll legionnaire" race="blood" experience="140" speed="190">
+	<health now="210" max="210" />
+	<look type="53" corpse="5998" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+		<attack name="physical" interval="2000" chance="18" target="1" range="6" min="0" max="-130">
+			<attribute key="shootEffect" value="throwingstar" />
+		</attack>
+	</attacks>
+	<defenses armor="7" defense="9">
+		<defense name="invisible" interval="2000" chance="18" duration="20000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="28" min="17" max="25">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="9">
+		<voice sentence="Attack!" />
+		<voice sentence="Graaaaar!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="46000" />
+		<item name="gold coin" countmax="55" chance="46000" />
+		<item name="stealth ring" chance="560" />
+		<item name="throwing star" countmax="10" chance="28000" />
+		<item name="frosty ear of a troll" chance="5120" />
+	</loot>
+</monster>

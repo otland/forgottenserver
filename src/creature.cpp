@@ -61,6 +61,11 @@ bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRa
 		}
 	} else if (myPos.z >= 8) {
 		//we are underground (8 -> 15)
+		// we can't see floors above 8
+		if (pos.z < 8) {
+			return false;
+		}
+
 		//view is +/- 2 from the floor we stand on
 		if (Position::getDistanceZ(myPos, pos) > 2) {
 			return false;
@@ -249,6 +254,12 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk(const std::forward_list<Direction>& listDir)
 {
+	Player* player = getPlayer();
+	if (player && player->isMovementBlocked()) {
+		player->sendCancelWalk();
+		return;
+	}
+
 	listWalkDir = listDir;
 
 	size_t size = 0;
@@ -762,6 +773,10 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 	if (sendHealthChange && oldHealth != health) {
 		g_game.addCreatureHealth(this);
 	}
+
+	if (health <= 0) {
+		g_dispatcher.addTask(createTask(std::bind(&Game::executeDeath, &g_game, getID())));
+	}
 }
 
 void Creature::gainHealth(Creature* healer, int32_t healthGain)
@@ -782,7 +797,7 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 }
 
 BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                               bool checkDefense /* = false */, bool checkArmor /* = false */, bool /* field  = false */)
+                               bool checkDefense /* = false */, bool checkArmor /* = false */, bool /* field = false */, bool /* ignoreResistances = false */)
 {
 	BlockType_t blockType = BLOCK_NONE;
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Thalas" nameDescription="Thalas" race="undead" experience="2950" speed="320">
+	<health now="4100" max="4100" />
+	<look type="90" corpse="6025" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-900" />
+		<attack name="earth" interval="2000" chance="25" range="7" min="-150" max="-650">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="melee" interval="3000" chance="20" range="7" radius="1" target="1" min="-150" max="-650">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="1000" chance="6" range="7" speedchange="-800" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="poisoncondition" interval="1000" chance="15" radius="5" target="0" min="-34" max="-35">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="3000" chance="17" length="8" spread="3" min="-55" max="-550">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="1000" chance="20" min="150" max="450">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-20" />
+		<element firePercent="-10" />
+		<element icePercent="-10" />
+		<element energyPercent="20" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="8">
+		<summon name="Slime" interval="2000" chance="100" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="You will become a feast for my maggots!" />
+	</voices>
+	<loot>
+		<item name="cobrafang dagger" chance="100000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="38" chance="30000" />
+		<item name="poison dagger" chance="21000" />
+		<item name="small emerald" countmax="3" chance="9000" />
+		<item name="great health potion" chance="8200" />
+		<item id="2169" chance="5200" /><!-- time ring -->
+		<item name="serpent sword" chance="2700" />
+		<item name="djinn blade" chance="1000" />
+		<item name="green gem" chance="100" />
+	</loot>
+</monster>

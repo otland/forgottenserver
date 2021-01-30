@@ -109,8 +109,6 @@ void Game::setGameState(GameState_t newState)
 	gameState = newState;
 	switch (newState) {
 		case GAME_STATE_INIT: {
-			loadExperienceStages();
-
 			groups.load();
 			g_chat->load();
 
@@ -331,6 +329,10 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 
 	//inventory
 	slots_t slot = static_cast<slots_t>(pos.y);
+	if (slot == CONST_SLOT_STORE_INBOX) {
+		return player->getStoreInbox();
+	}
+
 	return player->getInventoryItem(slot);
 }
 
@@ -573,7 +575,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	map.getSpectators(spectators, tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
-			oldStackPosVector.push_back(player->canSeeCreature(creature) ? tile->getStackposOfCreature(player, creature) : -1);
+			oldStackPosVector.push_back(player->canSeeCreature(creature) ? tile->getClientIndexOfCreature(player, creature) : -1);
 		}
 	}
 
@@ -585,7 +587,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
-			player->sendRemoveTileThing(tilePosition, oldStackPosVector[i++]);
+			player->sendRemoveTileCreature(creature, tilePosition, oldStackPosVector[i++]);
 		}
 	}
 
@@ -607,6 +609,14 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 		removeCreature(summon);
 	}
 	return true;
+}
+
+void Game::executeDeath(uint32_t creatureId)
+{
+	Creature* creature = getCreatureByID(creatureId);
+	if (creature && !creature->isRemoved()) {
+		creature->onDeath();
+	}
 }
 
 void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
@@ -688,6 +698,11 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 		SchedulerTask* task = createSchedulerTask(delay, std::bind(&Game::playerMoveCreatureByID,
 			this, player->getID(), movingCreature->getID(), movingCreatureOrigPos, toTile->getPosition()));
 		player->setNextActionTask(task);
+		return;
+	}
+
+	if (movingCreature->isMovementBlocked()) {
+		player->sendCancelMessage(RETURNVALUE_NOTMOVEABLE);
 		return;
 	}
 
@@ -1085,7 +1100,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 				return retExchangeMaxCount;
 			}
 
-			if (toCylinder->queryRemove(*toItem, toItem->getItemCount(), flags) == RETURNVALUE_NOERROR) {
+			if (toCylinder->queryRemove(*toItem, toItem->getItemCount(), flags, actor) == RETURNVALUE_NOERROR) {
 				int32_t oldToItemIndex = toCylinder->getThingIndex(toItem);
 				toCylinder->removeThing(toItem, toItem->getItemCount());
 				fromCylinder->addThing(toItem);
@@ -1126,7 +1141,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	Item* moveItem = item;
 
 	//check if we can remove this item
-	ret = fromCylinder->queryRemove(*item, m, flags);
+	ret = fromCylinder->queryRemove(*item, m, flags, actor);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1800,6 +1815,11 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 		return;
 	}
 
+	if (player->isMovementBlocked()) {
+		player->sendCancelWalk();
+		return;
+	}
+
 	player->resetIdleTime();
 	player->setNextWalkActionTask(nullptr);
 
@@ -2274,6 +2294,10 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 			return;
 		}
 
+		if (!g_events->eventPlayerOnBrowseField(player, tile->getPosition())) {
+			return;
+		}
+
 		auto it = browseFields.find(tile);
 		if (it == browseFields.end()) {
 			parentContainer = new Container(tile);
@@ -2573,6 +2597,16 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	if (tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
+	}
+
+	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tradeItem->getTile())) {
+			House* house = houseTile->getHouse();
+			if (house && !house->isInvited(player)) {
+				player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+				return;
+			}
+		}
 	}
 
 	const Position& playerPosition = player->getPosition();
@@ -3040,13 +3074,8 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnLookInShop(player, &it, subType)) {
-		return;
-	}
-
-	std::ostringstream ss;
-	ss << "You see " << Item::getDescription(it, 1, nullptr, subType);
-	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	const std::string& description = Item::getDescription(it, 1, nullptr, subType);
+	g_events->eventPlayerOnLookInShop(player, &it, subType, description);
 }
 
 void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos)
@@ -3686,8 +3715,6 @@ void Game::checkCreatures(size_t index)
 				creature->onThink(EVENT_CREATURE_THINK_INTERVAL);
 				creature->onAttacking(EVENT_CREATURE_THINK_INTERVAL);
 				creature->executeConditions(EVENT_CREATURE_THINK_INTERVAL);
-			} else {
-				creature->onDeath();
 			}
 			++it;
 		} else {
@@ -3755,7 +3782,7 @@ void Game::changeLight(const Creature* creature)
 	}
 }
 
-bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field)
+bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field, bool ignoreResistances /*= false */)
 {
 	if (damage.primary.type == COMBAT_NONE && damage.secondary.type == COMBAT_NONE) {
 		return true;
@@ -3808,7 +3835,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 	BlockType_t primaryBlockType, secondaryBlockType;
 	if (damage.primary.type != COMBAT_NONE) {
 		damage.primary.value = -damage.primary.value;
-		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense, checkArmor, field);
+		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense, checkArmor, field, ignoreResistances);
 
 		damage.primary.value = -damage.primary.value;
 		sendBlockEffect(primaryBlockType, damage.primary.type, target->getPosition());
@@ -3818,7 +3845,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 
 	if (damage.secondary.type != COMBAT_NONE) {
 		damage.secondary.value = -damage.secondary.value;
-		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field);
+		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false, field, ignoreResistances);
 		damage.secondary.value = -damage.secondary.value;
 		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition());
 	} else {
@@ -4726,40 +4753,6 @@ void Game::updateCreatureType(Creature* creature)
 	}
 }
 
-void Game::updatePremium(Account& account)
-{
-	bool save = false;
-	time_t timeNow = time(nullptr);
-
-	if (account.premiumDays != 0 && account.premiumDays != std::numeric_limits<uint16_t>::max()) {
-		if (account.lastDay == 0) {
-			account.lastDay = timeNow;
-			save = true;
-		} else {
-			uint32_t days = (timeNow - account.lastDay) / 86400;
-			if (days > 0) {
-				if (days >= account.premiumDays) {
-					account.premiumDays = 0;
-					account.lastDay = 0;
-				} else {
-					account.premiumDays -= days;
-					time_t remainder = (timeNow - account.lastDay) % 86400;
-					account.lastDay = timeNow - remainder;
-				}
-
-				save = true;
-			}
-		}
-	} else if (account.lastDay != 0) {
-		account.lastDay = 0;
-		save = true;
-	}
-
-	if (save && !IOLoginData::saveAccount(account)) {
-		std::cout << "> ERROR: Failed to save account: " << account.name << "!" << std::endl;
-	}
-}
-
 void Game::loadMotdNum()
 {
 	Database& db = Database::getInstance();
@@ -4828,69 +4821,6 @@ void Game::loadPlayersRecord()
 	} else {
 		db.executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");
 	}
-}
-
-uint64_t Game::getExperienceStage(uint32_t level)
-{
-	if (!stagesEnabled) {
-		return g_config.getNumber(ConfigManager::RATE_EXPERIENCE);
-	}
-
-	if (useLastStageLevel && level >= lastStageLevel) {
-		return stages[lastStageLevel];
-	}
-
-	return stages[level];
-}
-
-bool Game::loadExperienceStages()
-{
-	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
-	if (!result) {
-		printXMLError("Error - Game::loadExperienceStages", "data/XML/stages.xml", result);
-		return false;
-	}
-
-	for (auto stageNode : doc.child("stages").children()) {
-		if (strcasecmp(stageNode.name(), "config") == 0) {
-			stagesEnabled = stageNode.attribute("enabled").as_bool();
-		} else {
-			uint32_t minLevel, maxLevel, multiplier;
-
-			pugi::xml_attribute minLevelAttribute = stageNode.attribute("minlevel");
-			if (minLevelAttribute) {
-				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
-			} else {
-				minLevel = 1;
-			}
-
-			pugi::xml_attribute maxLevelAttribute = stageNode.attribute("maxlevel");
-			if (maxLevelAttribute) {
-				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
-			} else {
-				maxLevel = 0;
-				lastStageLevel = minLevel;
-				useLastStageLevel = true;
-			}
-
-			pugi::xml_attribute multiplierAttribute = stageNode.attribute("multiplier");
-			if (multiplierAttribute) {
-				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
-			} else {
-				multiplier = 1;
-			}
-
-			if (useLastStageLevel) {
-				stages[lastStageLevel] = multiplier;
-			} else {
-				for (uint32_t i = minLevel; i <= maxLevel; ++i) {
-					stages[i] = multiplier;
-				}
-			}
-		}
-	}
-	return true;
 }
 
 void Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
