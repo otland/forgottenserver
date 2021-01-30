@@ -32,7 +32,6 @@
 #include "game.h"
 #include "iologindata.h"
 #include "iomarket.h"
-#include "waitlist.h"
 #include "ban.h"
 #include "scheduler.h"
 
@@ -40,6 +39,104 @@ extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+
+namespace {
+
+using WaitList = std::deque<std::pair<int64_t, uint32_t>>; // (timeout, player guid)
+
+WaitList priorityWaitList, waitList;
+
+std::tuple<WaitList&, WaitList::iterator, WaitList::size_type> findClient(const Player& player) {
+	const auto fn = [&](const WaitList::value_type& it) { return it.second == player.getGUID(); };
+
+	auto it = std::find_if(priorityWaitList.begin(), priorityWaitList.end(), fn);
+	if (it != priorityWaitList.end()) {
+		return std::make_tuple(std::ref(priorityWaitList), it, std::distance(it, priorityWaitList.end()) + 1);
+	}
+
+	it = std::find_if(waitList.begin(), waitList.end(), fn);
+	if (it != waitList.end()) {
+		return std::make_tuple(std::ref(waitList), it, priorityWaitList.size() + std::distance(it, waitList.end()) + 1);
+	}
+
+	return std::make_tuple(std::ref(waitList), waitList.end(), priorityWaitList.size() + waitList.size());
+}
+
+uint8_t getWaitTime(std::size_t slot)
+{
+	if (slot < 5) {
+		return 5;
+	} else if (slot < 10) {
+		return 10;
+	} else if (slot < 20) {
+		return 20;
+	} else if (slot < 50) {
+		return 60;
+	} else {
+		return 120;
+	}
+}
+
+int64_t getTimeout(std::size_t slot)
+{
+	// timeout is set to 15 seconds longer than expected retry attempt
+	return getWaitTime(slot) + 15;
+}
+
+void cleanupList(WaitList& list)
+{
+	int64_t time = OTSYS_TIME();
+
+	auto it = list.begin();
+	while (it != list.end()) {
+		if (it->first <= time) {
+			it = list.erase(it);
+		} else {
+			++it;
+		}
+	}
+}
+
+std::size_t clientLogin(const Player& player)
+{
+	// Currentslot = position in wait list, 0 for direct access
+	if (player.hasFlag(PlayerFlag_CanAlwaysLogin) || player.getAccountType() >= ACCOUNT_TYPE_GAMEMASTER) {
+		return 0;
+	}
+
+	cleanupList(priorityWaitList);
+	cleanupList(waitList);
+
+	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+	if (maxPlayers == 0 || (priorityWaitList.empty() && waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
+		return 0;
+	}
+
+	auto result = findClient(player);
+	if (std::get<1>(result) != std::get<0>(result).end()) {
+		auto currentSlot = std::get<2>(result);
+		// If server has capacity for this client, let him in even though his current slot might be higher than 0.
+		if ((g_game.getPlayersOnline() + currentSlot) <= maxPlayers) {
+			std::get<0>(result).erase(std::get<1>(result));
+			return 0;
+		}
+
+		//let them wait a bit longer
+		std::get<1>(result)->second = OTSYS_TIME() + (getTimeout(currentSlot) * 1000);
+		return currentSlot;
+	}
+
+	auto currentSlot = priorityWaitList.size();
+	if (player.isPremium()) {
+		priorityWaitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player.getGUID());
+	} else {
+		currentSlot += waitList.size();
+		waitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player.getGUID());
+	}
+	return currentSlot;
+}
+
+}
 
 void ProtocolGame::release()
 {
@@ -108,9 +205,8 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			}
 		}
 
-		std::size_t currentSlot = WaitingList::getInstance().clientLogin(player);
-		if (currentSlot > 0) {
-			uint8_t retryTime = WaitingList::getTime(currentSlot);
+		if (std::size_t currentSlot = clientLogin(*player)) {
+			uint8_t retryTime = getWaitTime(currentSlot);
 			std::ostringstream ss;
 
 			ss << "Too many players online.\nYou are at place "
