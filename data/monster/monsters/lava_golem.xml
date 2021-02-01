@@ -53,7 +53,8 @@
 		<voice sentence="Grrrrunt" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="199" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="50000" />
 		<item name="platinum coin" countmax="11" chance="100000" />
 		<item name="yellow gem" chance="6480" />
 		<item name="red gem" chance="1180" />

@@ -46,7 +46,8 @@
 		<voice sentence="FCHHHHH" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="105" chance="90000" />
+		<item name="gold coin" countmax="100" chance="45000" />
+		<item name="gold coin" countmax="5" chance="45000" />
 		<item name="dragon ham" countmax="3" chance="65500" />
 		<item name="steel shield" chance="15000" />
 		<item name="crossbow" chance="10000" />

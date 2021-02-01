@@ -115,8 +115,21 @@ serverSaveCleanMap = false
 serverSaveClose = false
 serverSaveShutdown = true
 
+-- Experience stages
+-- NOTE: to use a flat experience multiplier, set experienceStages to nil
+-- minlevel and multiplier are MANDATORY
+-- maxlevel is OPTIONAL, but is considered infinite by default
+-- to disable stages, create a stage with minlevel 1 and no maxlevel
+experienceStages = {
+	{ minlevel = 1, maxlevel = 8, multiplier = 7 },
+	{ minlevel = 9, maxlevel = 20, multiplier = 6 },
+	{ minlevel = 21, maxlevel = 50, multiplier = 5 },
+	{ minlevel = 51, maxlevel = 100, multiplier = 4 },
+	{ minlevel = 101, multiplier = 3 }
+}
+
 -- Rates
--- NOTE: rateExp is not used if you have enabled stages in data/XML/stages.xml
+-- NOTE: rateExp is not used if you have enabled stages above
 rateExp = 5
 rateSkill = 3
 rateLoot = 2

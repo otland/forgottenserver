@@ -541,12 +541,7 @@ void Items::buildInventoryList()
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
-	if (id > 30000 && id < 30100) {
-		id -= 30000;
-
-		if (id >= items.size()) {
-			items.resize(id + 1);
-		}
+	if (id > 0 && id < 100) {
 		ItemType& iType = items[id];
 		iType.id = id;
 	}

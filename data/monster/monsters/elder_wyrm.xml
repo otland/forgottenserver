@@ -51,7 +51,8 @@
 	</voices>
 	<loot>
 		<item name="small diamond" countmax="5" chance="4000" />
-		<item name="gold coin" countmax="174" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="74" chance="50000" />
 		<item name="platinum coin" countmax="3" chance="25150" />
 		<item name="crossbow" chance="9690" />
 		<item name="dragon ham" countmax="2" chance="32420" />

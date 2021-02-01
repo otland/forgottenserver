@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `vocation` int NOT NULL DEFAULT '0',
   `health` int NOT NULL DEFAULT '150',
   `healthmax` int NOT NULL DEFAULT '150',
-  `experience` bigint NOT NULL DEFAULT '0',
+  `experience` bigint unsigned NOT NULL DEFAULT '0',
   `lookbody` int NOT NULL DEFAULT '0',
   `lookfeet` int NOT NULL DEFAULT '0',
   `lookhead` int NOT NULL DEFAULT '0',
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `maglevel` int NOT NULL DEFAULT '0',
   `mana` int NOT NULL DEFAULT '0',
   `manamax` int NOT NULL DEFAULT '0',
-  `manaspent` int unsigned NOT NULL DEFAULT '0',
+  `manaspent` bigint unsigned NOT NULL DEFAULT '0',
   `soul` int unsigned NOT NULL DEFAULT '0',
   `town_id` int NOT NULL DEFAULT '1',
   `posx` int NOT NULL DEFAULT '0',
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `skulltime` bigint NOT NULL DEFAULT '0',
   `lastlogout` bigint unsigned NOT NULL DEFAULT '0',
   `blessings` tinyint NOT NULL DEFAULT '0',
-  `onlinetime` int NOT NULL DEFAULT '0',
+  `onlinetime` bigint NOT NULL DEFAULT '0',
   `deletion` bigint NOT NULL DEFAULT '0',
   `balance` bigint unsigned NOT NULL DEFAULT '0',
   `offlinetraining_time` smallint unsigned NOT NULL DEFAULT '43200',
@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '26'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '27'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

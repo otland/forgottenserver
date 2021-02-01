@@ -43,7 +43,7 @@
 		<item id="2072" chance="360" /><!-- lute -->
 		<item name="gold coin" countmax="9" chance="99000" />
 		<item name="dwarven ring" chance="120" />
-		<item name="dirty cape" chance="55000" />
+		<item id="2237" chance="55000" /><!-- dirty cape -->
 		<item name="wooden hammer" chance="6500" />
 		<item name="wooden spoon" chance="9750" />
 		<item id="2570" chance="5650" /><!-- rolling pin -->

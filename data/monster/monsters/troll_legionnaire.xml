@@ -38,7 +38,8 @@
 		<voice sentence="Graaaaar!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="155" chance="92000" />
+		<item name="gold coin" countmax="100" chance="46000" />
+		<item name="gold coin" countmax="55" chance="46000" />
 		<item name="stealth ring" chance="560" />
 		<item name="throwing star" countmax="10" chance="28000" />
 		<item name="frosty ear of a troll" chance="5120" />

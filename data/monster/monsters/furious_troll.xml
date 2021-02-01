@@ -31,7 +31,8 @@
 		<voice sentence="DIE!!!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="146" chance="93000" />
+		<item name="gold coin" countmax="100" chance="47000" />
+		<item name="gold coin" countmax="46" chance="47000" />
 		<item name="platinum coin" chance="6000" />
 		<item name="war hammer" chance="750" />
 		<item name="bunch of troll hair" chance="4400" />

@@ -75,7 +75,10 @@
 		<voice sentence="You will be history soon." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="304" chance="100000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="4" chance="50000" />
 		<item name="great mana potion" chance="12500" />
 		<item name="might ring" chance="4600" />
 		<item name="silver brooch" chance="4000" />

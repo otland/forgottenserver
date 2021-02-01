@@ -67,7 +67,7 @@
 		<item name="club ring" chance="4761" />
 		<item name="piece of iron" chance="20000" />
 		<item name="mouldy cheese" chance="50000" />
-		<item name="dirty cape" chance="60000" />
+		<item id="2237" chance="60000" /><!-- dirty cape -->
 		<item name="two handed sword" chance="20000" />
 		<item name="war hammer" chance="2127" />
 		<item name="morning star" chance="29000" />
