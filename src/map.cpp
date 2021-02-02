@@ -649,8 +649,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	if (getSightLineBool && (fromPos.z < toPos.z || sameFloor)) {
 		//path was found
 		currentZ = fromPos.z;
-	}
-	else {
+	} else {
 		//try throwing above the obstacle
 		//check path and fromPos shaft
 		const Tile* tile = getTile(fromPos.x, fromPos.y, fromPos.z - 1);
