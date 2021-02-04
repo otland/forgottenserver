@@ -74,9 +74,15 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		return true
 	elseif table.contains(keys, itemId) then
+		local tile = Tile(toPosition)
+		if not tile then
+			return false
+		end
+		target = tile:getTopVisibleThing()
 		if target.actionid > 0 then
-			if item.actionid == target.actionid and doors[target.itemid] then
-				target:transform(doors[target.itemid])
+			if item.actionid == target.actionid then
+				local transformTo = doors[target.itemid] and doors[target.itemid] or target.itemid - 1
+				target:transform(transformTo)
 				return true
 			end
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
