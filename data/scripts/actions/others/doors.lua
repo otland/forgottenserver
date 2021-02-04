@@ -79,9 +79,14 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return false
 		end
 		target = tile:getTopVisibleThing()
-		if target.actionid > 0 then
+		if target.actionid > 0 and not table.contains(keys, target.itemid) then
 			if item.actionid == target.actionid then
+				local DOORSTATE = target:getCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE) == DOOR_STATE_UNLOCKED and DOOR_STATE_LOCKED or DOOR_STATE_UNLOCKED
 				local transformTo = doors[target.itemid] and doors[target.itemid] or target.itemid - 1
+				target:setCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE, DOORSTATE)
+				if DOORSTATE == DOOR_STATE_LOCKED and doors[target.itemid] then
+					return true
+				end
 				target:transform(transformTo)
 				return true
 			end
@@ -115,7 +120,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if doors[itemId] then
-		if item.actionid == 0 then
+		if item.actionid == 0 or item:getCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE) == DOOR_STATE_UNLOCKED then
 			item:transform(doors[itemId])
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is locked.")
