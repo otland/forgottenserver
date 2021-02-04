@@ -81,10 +81,10 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		target = tile:getTopVisibleThing()
 		if target.actionid > 0 and not table.contains(keys, target.itemid) then
 			if item.actionid == target.actionid then
-				local DOORSTATE = target:getCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE) == DOOR_STATE_UNLOCKED and DOOR_STATE_LOCKED or DOOR_STATE_UNLOCKED
+				local doorState = target:getCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE) == DOOR_STATE_UNLOCKED and DOOR_STATE_LOCKED or DOOR_STATE_UNLOCKED
 				local transformTo = doors[target.itemid] and doors[target.itemid] or target.itemid - 1
-				target:setCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE, DOORSTATE)
-				if DOORSTATE == DOOR_STATE_LOCKED and doors[target.itemid] then
+				target:setCustomAttribute(ITEM_ATTRIBUTE_DOORSTATE, doorState)
+				if doorState == DOOR_STATE_LOCKED and doors[target.itemid] then
 					return true
 				end
 				target:transform(transformTo)
