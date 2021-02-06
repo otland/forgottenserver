@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<monster name="raging mage" nameDescription="a raging mage" race="blood" experience="3250" speed="200">
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Raging Mage" nameDescription="a raging mage" race="blood" experience="3250" speed="200">
 	<health now="3500" max="3500" />
 	<look type="416" corpse="13834" />
 	<targetchange interval="4000" chance="10" />
@@ -70,6 +70,6 @@
 		<item name="spellbook of mind control" chance="610" />
 		<item name="royal tapestry" chance="1220" />
 		<item name="luminous orb" chance="4270" />
-		<item id="133940" chance="1220" /><!-- elemental spikes -->
+		<item id="13940" chance="1220" /><!-- elemental spikes -->
 	</loot>
 </monster>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Goblin Assassin" nameDescription="a goblin assassin" race="blood" experience="52" speed="200" manacost="360">
 	<health now="75" max="75" />
 	<look type="296" corpse="6002" />

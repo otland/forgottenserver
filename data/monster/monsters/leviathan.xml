@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Leviathan" nameDescription="Leviathan" race="blood" experience="5000" speed="758">
 	<health now="6000" max="6000" />
 	<look type="275" corpse="8307" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="600" />
 		<flag isboss="1" />
 	</flags>
@@ -45,7 +45,7 @@
 		<immunity invisible="1" />
 		<immunity drown="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="CHHHRRRR" />
 		<voice sentence="HISSSS" />
 	</voices>

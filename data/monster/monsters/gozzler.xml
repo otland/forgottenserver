@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Gozzler" nameDescription="a gozzler" race="undead" experience="180" speed="190" manacost="800">
 	<health now="240" max="240" />
 	<look type="313" corpse="9938" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="70" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />

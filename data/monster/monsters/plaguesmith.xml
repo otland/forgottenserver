@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Plaguesmith" nameDescription="a plaguesmith" race="venom" experience="4500" speed="240">
 	<health now="8250" max="8250" />
 	<look type="247" corpse="6516" />
@@ -67,7 +67,7 @@
 		<item name="club ring" chance="4761" />
 		<item name="piece of iron" chance="20000" />
 		<item name="mouldy cheese" chance="50000" />
-		<item name="dirty cape" chance="60000" />
+		<item id="2237" chance="60000" /><!-- dirty cape -->
 		<item name="two handed sword" chance="20000" />
 		<item name="war hammer" chance="2127" />
 		<item name="morning star" chance="29000" />

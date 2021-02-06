@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Splasher" nameDescription="Splasher" race="blood" experience="500" speed="520" manacost="480">
-	<health now="1000" max="1000" />
-	<look type="72" head="0" body="0" legs="0" feet="0" corpse="6064" />
+<monster name="Splasher" nameDescription="Splasher" race="blood" experience="500" speed="520">
+	<health now="1700" max="1700" />
+	<look type="72" corpse="6064" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="0" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag runonhealth="40" />
@@ -55,4 +55,7 @@
 		<voice sentence="Blubber." />
 		<voice sentence="Blup." />
 	</voices>
+	<loot>
+		<item name="gold coin" countmax="4" chance="13000" />
+	</loot>
 </monster>

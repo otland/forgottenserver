@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="264" manacost="420">
 	<health now="140" max="140" />
 	<look type="3" corpse="6009" />

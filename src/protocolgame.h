@@ -249,6 +249,7 @@ class ProtocolGame final : public Protocol
 		void sendAddTileItem(const Position& pos, uint32_t stackpos, const Item* item);
 		void sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item);
 		void sendRemoveTileThing(const Position& pos, uint32_t stackpos);
+		void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
 		void sendUpdateTile(const Tile* tile, const Position& pos);
 
 		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, bool isLogin);
@@ -292,6 +293,7 @@ class ProtocolGame final : public Protocol
 
 		//tiles
 		static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
+		static void RemoveTileCreature(NetworkMessage& msg, const Creature* creature, const Position& pos, uint32_t stackpos);
 
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);

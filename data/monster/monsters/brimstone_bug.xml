@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Brimstone Bug" namedescription="a brimstone bug" race="venom" experience="900" speed="200">
 	<health now="1300" max="1300" />
 	<look type="352" corpse="12527" />

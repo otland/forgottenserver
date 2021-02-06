@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Abyssador" nameDescription="Abyssador" race="blood" experience="50000" speed="470">
 	<health now="300000" max="300000" />
 	<look type="495" corpse="17413" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="50" />
 		<flag runonhealth="100" />
 		<flag isboss="1" />

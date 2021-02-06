@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Golgordan" nameDescription="Golgordan" race="fire" experience="10000" speed="350">
 	<health now="40000" max="40000" />
-	<look type="12" head="108" body="100" legs="105" feet="114" corpse="6068" />
+	<look type="12" head="128" body="62" legs="95" feet="15" corpse="8721" />
 	<targetchange interval="7000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -13,7 +13,7 @@
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
-		<flag staticattack="85" />
+		<flag staticattack="90" />
 		<flag runonhealth="0" />
 		<flag isboss="1" />
 	</flags>

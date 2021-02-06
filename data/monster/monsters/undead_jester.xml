@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Undead Jester" nameDescription="an undead jester" race="blood" experience="5" speed="224">
 	<health now="355" max="355" />
-	<look type="273" head="0" body="0" legs="114" feet="0" addons="3" corpse="20522" />
+	<look type="273" head="0" body="0" legs="114" feet="0" addons="2" corpse="20522" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

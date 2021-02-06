@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dragon" nameDescription="a dragon" race="blood" experience="700" speed="172">
 	<health now="1000" max="1000" />
 	<look type="34" corpse="5973" />
@@ -46,7 +46,8 @@
 		<voice sentence="FCHHHHH" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="105" chance="90000" />
+		<item name="gold coin" countmax="100" chance="45000" />
+		<item name="gold coin" countmax="5" chance="45000" />
 		<item name="dragon ham" countmax="3" chance="65500" />
 		<item name="steel shield" chance="15000" />
 		<item name="crossbow" chance="10000" />

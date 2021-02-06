@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Massive Earth Elemental" nameDescription="a massive earth elemental" race="undead" experience="950" speed="240">
 	<health now="1330" max="1330" />
 	<look type="285" corpse="8933" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
@@ -56,7 +54,7 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity earth="1" />
-		<immunity energy="1" />
+		<immunity ice="1" />
 	</immunities>
 	<loot>
 		<item name="small stone" countmax="10" chance="25280" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Efreet" nameDescription="an efreet" race="blood" experience="410" speed="234">
 	<health now="550" max="550" />
 	<look type="103" corpse="6032" />
@@ -67,7 +67,8 @@
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="130" chance="98000" />
+		<item name="gold coin" countmax="100" chance="47000" />
+		<item name="gold coin" countmax="30" chance="47000" />
 		<item name="royal spear" countmax="3" chance="15570" />
 		<item name="strong mana potion" chance="10500" />
 		<item name="pear" countmax="5" chance="9390" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Swamp Troll" nameDescription="a swamp troll" race="blood" experience="25" speed="128" manacost="320">
 	<health now="55" max="55" />
 	<look type="76" corpse="6018" />

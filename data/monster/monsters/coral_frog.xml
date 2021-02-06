@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Coral Frog" namedescription="a coral frog" race="blood" experience="20" speed="200" manacost="305">
 	<health now="60" max="60" />
-	<look type="226" head="114" body="98" legs="97" feet="114" corpse="6079" />
+	<look type="226" head="114" body="79" legs="78" feet="114" corpse="6079" />
 	<targetchange interval="4000" chance="0" />
 	<flags>
 		<flag summonable="1" />

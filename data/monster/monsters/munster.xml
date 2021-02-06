@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Munster" nameDescription="Munster" race="blood" experience="35" speed="200" manacost="250">
 	<health now="58" max="58" />
 	<look type="56" corpse="2813" />
@@ -12,8 +12,6 @@
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
 		<flag runonhealth="10" />
 		<flag isboss="1" />

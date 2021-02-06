@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Grand Mother Foulscale" nameDescription="Grand Mother Foulscale" race="blood" experience="1400" speed="180">
 	<health now="1850" max="1850" />
 	<look type="34" corpse="5973" />

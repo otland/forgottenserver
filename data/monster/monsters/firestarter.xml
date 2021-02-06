@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180">
 	<health now="180" max="180" />
 	<look type="159" head="94" body="77" legs="78" feet="79" corpse="20599" />
 	<targetchange interval="4000" chance="0" />
 	<flags>
-		<flag summonable="1" />
+		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />

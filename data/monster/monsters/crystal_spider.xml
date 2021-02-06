@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crystal Spider" nameDescription="a crystal spider" race="undead" experience="900" speed="220">
 	<health now="1250" max="1250" />
 	<look type="263" corpse="7344" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />

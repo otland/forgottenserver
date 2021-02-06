@@ -128,6 +128,14 @@ class NetworkMessage
 			return info.position;
 		}
 
+		bool setBufferPosition(MsgSize_t pos) {
+			if (pos < NETWORKMESSAGE_MAXSIZE - INITIAL_BUFFER_POSITION) {
+				info.position = pos + INITIAL_BUFFER_POSITION;
+				return true;
+			}
+			return false;
+		}
+
 		uint16_t getLengthHeader() const {
 			return static_cast<uint16_t>(buffer[0] | buffer[1] << 8);
 		}

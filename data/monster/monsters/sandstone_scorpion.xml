@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Sandstone Scorpion" nameDescription="a sandstone scorpion" race="undead" experience="680" speed="230">
 	<health now="900" max="900" />
 	<look type="398" corpse="13501" />
@@ -41,7 +41,8 @@
 		<voice sentence="*tak tak tak*" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="128" chance="90000" />
+		<item name="gold coin" countmax="100" chance="45000" />
+		<item name="gold coin" countmax="28" chance="45000" />
 		<item name="small emerald" countmax="2" chance="9900" />
 		<item name="platinum coin" countmax="2" chance="11111" />
 		<item name="daramian mace" chance="6250" />

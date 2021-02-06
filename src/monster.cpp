@@ -23,10 +23,12 @@
 #include "game.h"
 #include "spells.h"
 #include "events.h"
+#include "configmanager.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
 extern Events* g_events;
+extern ConfigManager g_config;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -102,7 +104,6 @@ bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 void Monster::onAttackedCreatureDisappear(bool)
 {
 	attackTicks = 0;
-	extraMeleeAttack = true;
 }
 
 void Monster::onCreatureAppear(Creature* creature, bool isLogin)
@@ -369,9 +370,7 @@ void Monster::updateTargetList()
 	g_game.map.getSpectators(spectators, position, true);
 	spectators.erase(this);
 	for (Creature* spectator : spectators) {
-		if (canSee(spectator->getPosition())) {
-			onCreatureFound(spectator);
-		}
+		onCreatureFound(spectator);
 	}
 }
 
@@ -393,6 +392,14 @@ void Monster::clearFriendList()
 
 void Monster::onCreatureFound(Creature* creature, bool pushFront/* = false*/)
 {
+	if (!creature) {
+		return;
+	}
+
+	if (!canSee(creature->getPosition())) {
+		return;
+	}
+
 	if (isFriend(creature)) {
 		addFriend(creature);
 	}
@@ -583,7 +590,7 @@ void Monster::onFollowCreatureComplete(const Creature* creature)
 }
 
 BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                              bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool /* field = false */)
+                              bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool /* field = false */, bool /* ignoreResistances = false */)
 {
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor);
 
@@ -719,8 +726,14 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		g_game.internalTeleport(this, masterPos);
-		setIdle(true);
+		if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
+			g_game.removeCreature(this, false);
+		} else {
+			g_game.internalTeleport(this, masterPos);
+			setIdle(true);
+		}
+
+		g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
 	} else {
 		updateIdleStatus();
 
@@ -791,14 +804,14 @@ void Monster::doAttacking(uint32_t interval)
 				spellBlock.spell->castSpell(this, attackedCreature);
 
 				if (spellBlock.isMelee) {
-					extraMeleeAttack = false;
+					lastMeleeAttack = OTSYS_TIME();
 				}
 			}
 		}
 
 		if (!inRange && spellBlock.isMelee) {
 			//melee swing out of reach
-			extraMeleeAttack = true;
+			lastMeleeAttack = 0;
 		}
 	}
 
@@ -831,17 +844,11 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 {
 	inRange = true;
 
-	if (sb.isMelee && isFleeing()) {
-		return false;
-	}
-
-	if (extraMeleeAttack) {
-		lastMeleeAttack = OTSYS_TIME();
-	} else if (sb.isMelee && (OTSYS_TIME() - lastMeleeAttack) < 1500) {
-		return false;
-	}
-
-	if (!sb.isMelee || !extraMeleeAttack) {
+	if (sb.isMelee) {
+		if (isFleeing() || (OTSYS_TIME() - lastMeleeAttack) < sb.speed) {
+			return false;
+		}
+	} else {
 		if (sb.speed > attackTicks) {
 			resetTicks = false;
 			return false;

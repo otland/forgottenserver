@@ -75,6 +75,7 @@ struct CombatParams {
 	bool targetCasterOrTopMost = false;
 	bool aggressive = true;
 	bool useCharges = false;
+	bool ignoreResistances = false;
 };
 
 class MatrixArea
@@ -259,9 +260,6 @@ class Combat
 
 		static void doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params);
 		static void doAreaCombat(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage, const CombatParams& params);
-
-		static void checkCriticalHit(Player* caster, CombatDamage& damage);
-		static void checkLeech(Player* caster, CombatDamage& damage);
 
 		bool setCallback(CallBackParam_t key);
 		CallBack* getCallback(CallBackParam_t key);

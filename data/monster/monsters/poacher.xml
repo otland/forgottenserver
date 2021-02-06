@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Poacher" nameDescription="a poacher" race="blood" experience="70" speed="185" manacost="530">
 	<health now="90" max="90" />
-	<look type="129" head="115" body="119" legs="119" feet="115" addons="1" corpse="20487" />
+	<look type="129" head="60" body="118" legs="118" feet="116" addons="1" corpse="20487" />
 	<targetchange interval="5000" chance="0" />
 	<flags>
 		<flag summonable="0" />
@@ -37,7 +37,7 @@
 		<item name="leather helmet" chance="30600" />
 		<item name="arrow" countmax="17" chance="49500" />
 		<item name="poison arrow" countmax="3" chance="2930" />
-		<item name="closed trap" chance="710" />
+		<item id="2578" chance="710" /><!-- closed trap -->
 		<item name="leather legs" chance="26740" />
 		<item name="roll" countmax="2" chance="11110" />
 	</loot>

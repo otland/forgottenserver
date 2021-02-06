@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deepling Tyrant" nameDescription="a deepling tyrant" race="blood" experience="4200" speed="260">
 	<health now="4900" max="4900" />
 	<look type="442" corpse="15188" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="70" />
 		<flag runonhealth="20" />
 		<flag canwalkonenergy="0" />

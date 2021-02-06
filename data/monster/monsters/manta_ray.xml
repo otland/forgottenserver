@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Manta Ray" nameDescription="a manta ray" race="blood" experience="125" speed="200">
 	<health now="680" max="680" />
 	<look type="449" corpse="15276" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>

@@ -1826,9 +1826,9 @@ bool Player::hasShield() const
 }
 
 BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-                             bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool field /* = false*/)
+                             bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool field /* = false*/, bool ignoreResistances /* = false*/)
 {
-	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field);
+	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field, ignoreResistances);
 
 	if (attacker) {
 		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
@@ -1843,44 +1843,46 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		return BLOCK_ARMOR;
 	}
 
-	for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_AMMO; ++slot) {
-		if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
-			continue;
-		}
-
-		Item* item = inventory[slot];
-		if (!item) {
-			continue;
-		}
-
-		const ItemType& it = Item::items[item->getID()];
-		if (!it.abilities) {
-			if (damage <= 0) {
-				damage = 0;
-				return BLOCK_ARMOR;
+	if (!ignoreResistances) {
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_AMMO; ++slot) {
+			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+				continue;
 			}
 
-			continue;
-		}
-
-		const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
-		if (absorbPercent != 0) {
-			damage -= std::round(damage * (absorbPercent / 100.));
-
-			uint16_t charges = item->getCharges();
-			if (charges != 0) {
-				g_game.transformItem(item, item->getID(), charges - 1);
+			Item* item = inventory[slot];
+			if (!item) {
+				continue;
 			}
-		}
 
-		if (field) {
-			const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
-			if (fieldAbsorbPercent != 0) {
-				damage -= std::round(damage * (fieldAbsorbPercent / 100.));
+			const ItemType& it = Item::items[item->getID()];
+			if (!it.abilities) {
+				if (damage <= 0) {
+					damage = 0;
+					return BLOCK_ARMOR;
+				}
+
+				continue;
+			}
+
+			const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
+			if (absorbPercent != 0) {
+				damage -= std::round(damage * (absorbPercent / 100.));
 
 				uint16_t charges = item->getCharges();
 				if (charges != 0) {
 					g_game.transformItem(item, item->getID(), charges - 1);
+				}
+			}
+
+			if (field) {
+				const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
+				if (fieldAbsorbPercent != 0) {
+					damage -= std::round(damage * (fieldAbsorbPercent / 100.));
+
+					uint16_t charges = item->getCharges();
+					if (charges != 0) {
+						g_game.transformItem(item, item->getID(), charges - 1);
+					}
 				}
 			}
 		}

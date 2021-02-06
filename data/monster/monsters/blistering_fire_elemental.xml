@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Blistering Fire Elemental" nameDescription="a blistering fire elemental" race="fire" experience="1300" speed="230">
 	<health now="1500" max="1500" />
 	<look type="242" corpse="8964" />
@@ -7,7 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -30,16 +30,27 @@
 	</attacks>
 	<defenses armor="20" defense="20" />
 	<elements>
-		<element icePercent="-25" />
+		<element icePercent="-15" />
+		<element energyPercent="20" />
+		<element physicalPercent="25" />
+		<element deathPercent="40" />
+		<element earthPercent="50" />
 	</elements>
 	<immunities>
+		<immunity holy="1" />
 		<immunity fire="1" />
+		<immunity invisible="1" />
 	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="FCHHHRRR" />
+	</voices>
 	<loot>
-		<item name="small ruby" countmax="3" chance="3200" />
-		<item name="gold coin" countmax="65" chance="12500" />
-		<item name="gold coin" countmax="60" chance="12500" />
-		<item name="glimmering soil" chance="2500" />
-		<item name="wand of draconia" chance="1250" />
+		<item name="gold coin" countmax="100" chance="44000" />
+		<item name="gold coin" countmax="70" chance="44000" />
+		<item name="fiery heart" chance="10000" />
+		<item name="glimmering soil" chance="9500" />
+		<item name="small ruby" countmax="3" chance="5000" />
+		<item name="wand of draconia" chance="500" />
+		<item id="13757" chance="500" /><!-- coal -->
 	</loot>
 </monster>

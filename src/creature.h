@@ -269,7 +269,7 @@ class Creature : virtual public Thing
 		}
 		virtual bool setAttackedCreature(Creature* creature);
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false);
 
 		bool setMaster(Creature* newMaster);
 

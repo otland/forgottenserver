@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Arachir The Ancient One" nameDescription="Arachir The Ancient One" race="undead" experience="1800" speed="300">
 	<health now="1600" max="1600" />
 	<look type="287" corpse="8937" />
