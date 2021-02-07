@@ -49,7 +49,7 @@ public:
 		if (it == end()) {
 			return;
 		}
-		std::iter_swap(it, end());
+		std::iter_swap(it, end() - 1);
 		vec.pop_back();
 	}
 
