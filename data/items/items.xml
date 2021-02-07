@@ -2272,8 +2272,7 @@
 	<item id="2173" article="an" name="amulet of loss">
 		<attribute key="weight" value="420" />
 		<attribute key="slotType" value="necklace" />
-		<attribute key="charges" value="5" />
-		<attribute key="showcharges" value="1" />
+		<attribute key="charges" value="1" />
 	</item>
 	<item id="2174" article="a" name="strange symbol">
 		<attribute key="slotType" value="ammo" />
@@ -4440,11 +4439,11 @@
 		<attribute key="slotType" value="feet" />
 		<attribute key="decayTo" value="10021" />
 		<attribute key="transformDeEquipTo" value="6132" />
-		<attribute key="duration" value="86400" />
-		<attribute key="healthGain" value="100" />
-		<attribute key="healthTicks" value="1000" />
-		<attribute key="manaGain" value="100" />
-		<attribute key="manaTicks" value="1000" />
+		<attribute key="duration" value="14400" />
+		<attribute key="healthGain" value="3" />
+		<attribute key="healthTicks" value="6000" />
+		<attribute key="manaGain" value="12" />
+		<attribute key="manaTicks" value="6000" />
 		<attribute key="showduration" value="1" />
 		<attribute key="showattributes" value="1" />
 	</item>
