@@ -418,8 +418,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!spectators.empty()) {
-					const SpectatorVec& cachedSpectators = it->second;
-					spectators.addSpectators(cachedSpectators);
+					spectators.addSpectators(it->second);
 				} else {
 					spectators = it->second;
 				}
