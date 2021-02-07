@@ -65,8 +65,8 @@ Game::Game()
 	offlineTrainingWindow.choices.emplace_back("Magic Level and Shielding", SKILL_MAGLEVEL);
 	offlineTrainingWindow.buttons.emplace_back("Okay", 1);
 	offlineTrainingWindow.buttons.emplace_back("Cancel", 0);
-	offlineTrainingWindow.defaultEnterButton = 1;
-	offlineTrainingWindow.defaultEscapeButton = 0;
+	offlineTrainingWindow.defaultEnterButton = 0;
+	offlineTrainingWindow.defaultEscapeButton = 1;
 	offlineTrainingWindow.priority = true;
 }
 
