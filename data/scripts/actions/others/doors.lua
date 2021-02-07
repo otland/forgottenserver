@@ -131,8 +131,8 @@ end
 
 local doorTables = {keys, openDoors, closedDoors, lockedDoors, openExtraDoors, closedExtraDoors, openHouseDoors, closedHouseDoors, closedQuestDoors, closedLevelDoors}
 for _, doors in pairs(doorTables) do
-    for _, doorId in pairs(doors) do
+	for _, doorId in pairs(doors) do
 		door:id(doorId)
-    end
+	end
 end
 door:register()
