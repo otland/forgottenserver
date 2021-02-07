@@ -129,19 +129,10 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return false
 end
 
-local doorsSet = {} -- unique value set for door ids
-for _, d in ipairs(keys) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(openDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(closedDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(lockedDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(openExtraDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(closedExtraDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(openHouseDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(closedHouseDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(closedQuestDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(closedLevelDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for i, _ in pairs(doorsSet) do
-	door:id(i)
+local doorTables = {keys, openDoors, closedDoors, lockedDoors, openExtraDoors, closedExtraDoors, openHouseDoors, closedHouseDoors, closedQuestDoors, closedLevelDoors}
+for _, doors in pairs(doorTables) do
+    for _, doorId in pairs(doors) do
+		door:id(doorId)
+    end
 end
-doorsSet = nil
 door:register()
