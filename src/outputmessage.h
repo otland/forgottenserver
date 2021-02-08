@@ -90,9 +90,6 @@ class OutputMessagePool
 			return instance;
 		}
 
-		void sendAll();
-		void scheduleSendAll();
-
 		static OutputMessage_ptr getOutputMessage();
 
 		void addProtocolToAutosend(Protocol_ptr protocol);
