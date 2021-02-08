@@ -338,8 +338,6 @@ class ConditionSpeed final : public Condition
 		bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
 	private:
-		void getFormulaValues(int32_t var, int32_t& min, int32_t& max) const;
-
 		int32_t speedDelta;
 
 		//formula variables
