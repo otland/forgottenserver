@@ -2097,7 +2097,7 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
-		std::map<std::string, uint16_t> names;
+		std::unordered_map<std::string, uint16_t> names;
 		for (const auto& killer : getKillers()) {
 			names[killer->getName()]++;
 		}

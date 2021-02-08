@@ -623,10 +623,8 @@ std::vector<Creature*> Creature::getKillers()
 	for (const auto& it : damageMap) {
 		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
 			CountBlock_t cb = it.second;
-			if (timeNow - cb.ticks <= inFightTicks) {
-				if (attacker != this) {
-					killers.push_back(attacker);
-				}
+			if (attacker != this && timeNow - cb.ticks <= inFightTicks) {
+				killers.push_back(attacker);
 			}
 		}
 	}
