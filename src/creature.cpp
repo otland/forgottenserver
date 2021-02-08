@@ -617,17 +617,14 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 std::vector<Creature*> Creature::getKillers()
 {
 	std::vector<Creature*> killers;
-	killers.reserve(damageMap.size());
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
-	for (const auto& it : damageMap) {
-		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
-			CountBlock_t cb = it.second;
-			if (attacker != this && timeNow - cb.ticks <= inFightTicks) {
-				killers.push_back(attacker);
-			}
+	std::for_each(damageMap.begin(), damageMap.end(), [this, &killers, timeNow, inFightTicks](decltype(damageMap)::value_type it) {
+		Creature* attacker = g_game.getCreatureByID(it.first);
+		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
+			killers.push_back(attacker);
 		}
-	}
+	});
 	return killers;
 }
 
