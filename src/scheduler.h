@@ -22,7 +22,6 @@
 
 #include "tasks.h"
 #include <unordered_map>
-#include <atomic>
 
 #include "thread_holder_base.h"
 
