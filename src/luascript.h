@@ -1189,6 +1189,7 @@ class LuaScriptInterface
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);
+		static int luaCombatDelete(lua_State* L);
 
 		static int luaCombatSetParameter(lua_State* L);
 		static int luaCombatSetFormula(lua_State* L);
