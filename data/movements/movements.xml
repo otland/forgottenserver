@@ -279,6 +279,10 @@
 	<movevent event="StepIn" itemid="7359" function="onStepInField" />
 	<movevent event="AddItem" itemid="7360" function="onAddField" />
 
+	<!-- Magic Wall NoPvp / Wild Growth NoPvp -->
+	<movevent event="StepIn" itemid="20669" function="onStepInField" />
+	<movevent event="StepIn" itemid="20670" function="onStepInField" />
+
 	<!-- Swimming -->
 	<movevent event="StepIn" fromid="4620" toid="4625" script="swimming.lua" />
 	<movevent event="StepOut" fromid="4620" toid="4625" script="swimming.lua" />

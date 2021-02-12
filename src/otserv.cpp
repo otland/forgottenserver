@@ -62,6 +62,7 @@ void startupErrorMessage(const std::string& errorStr)
 }
 
 void mainLoader(int argc, char* argv[], ServiceManager* services);
+bool argumentsHandler(const StringVector& args);
 
 [[noreturn]] void badAllocationHandler()
 {
@@ -73,6 +74,11 @@ void mainLoader(int argc, char* argv[], ServiceManager* services);
 
 int main(int argc, char* argv[])
 {
+	StringVector args = StringVector(argv, argv + argc);
+	if(argc > 1 && !argumentsHandler(args)) {
+		return 0;
+	}
+
 	// Setup bad allocation handler
 	std::set_new_handler(badAllocationHandler);
 
@@ -101,15 +107,8 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void mainLoader(int, char*[], ServiceManager* services)
+void printServerVersion()
 {
-	//dispatcher thread
-	g_game.setGameState(GAME_STATE_STARTUP);
-
-	srand(static_cast<unsigned int>(OTSYS_TIME()));
-#ifdef _WIN32
-	SetConsoleTitle(STATUS_SERVER_NAME);
-#endif
 #if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
 	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
 	std::cout << "Git SHA1 " << GIT_SHORT_SHA1  << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
@@ -142,14 +141,28 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
 	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
 	std::cout << std::endl;
+}
+
+void mainLoader(int, char*[], ServiceManager* services)
+{
+	//dispatcher thread
+	g_game.setGameState(GAME_STATE_STARTUP);
+
+	srand(static_cast<unsigned int>(OTSYS_TIME()));
+#ifdef _WIN32
+	SetConsoleTitle(STATUS_SERVER_NAME);
+#endif
+
+	printServerVersion();
 
 	// check if config.lua or config.lua.dist exist
-	std::ifstream c_test("./config.lua");
+	const std::string& configFile = g_config.getString(ConfigManager::CONFIG_FILE);
+	std::ifstream c_test("./" + configFile);
 	if (!c_test.is_open()) {
 		std::ifstream config_lua_dist("./config.lua.dist");
 		if (config_lua_dist.is_open()) {
-			std::cout << ">> copying config.lua.dist to config.lua" << std::endl;
-			std::ofstream config_lua("config.lua");
+			std::cout << ">> copying config.lua.dist to " << configFile << std::endl;
+			std::ofstream config_lua(configFile);
 			config_lua << config_lua_dist.rdbuf();
 			config_lua.close();
 			config_lua_dist.close();
@@ -161,7 +174,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
 	if (!g_config.load()) {
-		startupErrorMessage("Unable to load config.lua!");
+		startupErrorMessage("Unable to load " + configFile + "!");
 		return;
 	}
 
@@ -323,4 +336,36 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_game.start(services);
 	g_game.setGameState(GAME_STATE_NORMAL);
 	g_loaderSignal.notify_all();
+}
+
+bool argumentsHandler(const StringVector& args)
+{
+	for (const auto& arg : args) {
+		if (arg == "--help") {
+			std::clog << "Usage:\n"
+			"\n"
+			"\t--config=$1\t\tAlternate configuration file path.\n"
+			"\t--ip=$1\t\t\tIP address of the server.\n"
+			"\t\t\t\tShould be equal to the global IP.\n"
+			"\t--login-port=$1\tPort for login server to listen on.\n"
+			"\t--game-port=$1\tPort for game server to listen on.\n";
+			return false;
+		} else if (arg == "--version") {
+			printServerVersion();
+			return false;
+		}
+
+		StringVector tmp = explodeString(arg, "=");
+
+		if (tmp[0] == "--config")
+			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
+		else if (tmp[0] == "--ip")
+			g_config.setString(ConfigManager::IP, tmp[1]);
+		else if (tmp[0] == "--login-port")
+			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1]));
+		else if (tmp[0] == "--game-port")
+			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
+	}
+
+	return true;
 }

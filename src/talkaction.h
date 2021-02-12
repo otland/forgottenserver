@@ -43,8 +43,12 @@ class TalkAction : public Event
 		const std::string& getWords() const {
 			return words;
 		}
+		const std::vector<std::string>& getWordsMap() const {
+			return wordsMap;
+		}
 		void setWords(std::string word) {
 			words = word;
+			wordsMap.push_back(word);
 		}
 		std::string getSeparator() const {
 			return separator;
@@ -54,13 +58,14 @@ class TalkAction : public Event
 		}
 
 		//scripting
-		bool executeSay(Player* player, const std::string& param, SpeakClasses type) const;
+		bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
 		//
 
 	private:
 		std::string getScriptEventName() const override;
 
 		std::string words;
+		std::vector<std::string> wordsMap;
 		std::string separator = "\"";
 };
 

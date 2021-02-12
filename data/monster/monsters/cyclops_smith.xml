@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cyclops Smith" nameDescription="a cyclops smith" race="blood" experience="255" speed="210" manacost="695">
+	<health now="435" max="435" />
+	<look type="277" corpse="7740" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-70">
+			<attribute key="shootEffect" value="whirlwindclub" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" duration="4000">
+			<attribute key="shootEffect" value="whirlwindclub" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element energyPercent="20" />
+		<element firePercent="10" />
+		<element holyPercent="1" />
+		<element earthPercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Outis emoi g' onoma." />
+		<voice sentence="Whack da humy!" />
+		<voice sentence="Ai humy phary ty kaynon" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="70" chance="82920" />
+		<item name="club ring" chance="90" />
+		<item name="battle axe" chance="5450" />
+		<item name="double axe" chance="880" />
+		<item name="battle hammer" chance="5200" />
+		<item name="heavy machete" chance="2000" />
+		<item name="dark helmet" chance="200" />
+		<item name="plate shield" chance="2000" />
+		<item name="battle shield" chance="6190" />
+		<item name="meat" chance="49950" />
+		<item id="7398" chance="140" /><!-- cyclops trophy -->
+		<item name="spiked squelcher" chance="150" />
+		<item name="strong health potion" chance="390" />
+		<item name="cyclops toe" chance="10280" />
+	</loot>
+</monster>

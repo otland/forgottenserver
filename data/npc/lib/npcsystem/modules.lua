@@ -566,6 +566,7 @@ if Modules == nil then
 
 	-- Parse a string contaning a set of buyable items.
 	function ShopModule:parseBuyable(data)
+		local alreadyParsedIds = {}
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
 
@@ -593,6 +594,17 @@ if Modules == nil then
 			end
 
 			local it = ItemType(itemid)
+			if it:getId() == 0 then
+				-- invalid item
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+			else
+				if alreadyParsedIds[itemid] then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+				else
+					alreadyParsedIds[itemid] = true
+				end
+			end
+
 			if subType == nil and it:getCharges() ~= 0 then
 				subType = it:getCharges()
 			end
@@ -625,6 +637,7 @@ if Modules == nil then
 
 	-- Parse a string contaning a set of sellable items.
 	function ShopModule:parseSellable(data)
+		local alreadyParsedIds = {}
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
 
@@ -649,6 +662,18 @@ if Modules == nil then
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in sellable items parameter.", temp, item)
 				end
 				i = i + 1
+			end
+
+			local it = ItemType(itemid)
+			if it:getId() == 0 then
+				-- invalid item
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+			else
+				if alreadyParsedIds[itemid] then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+				else
+					alreadyParsedIds[itemid] = true
+				end
 			end
 
 			if SHOPMODULE_MODE == SHOPMODULE_MODE_TRADE then
@@ -998,7 +1023,7 @@ if Modules == nil then
 			[TAG_ITEMNAME] = shopItem.name
 		}
 
-		if not isItemFluidContainer(itemid) then
+		if not ItemType(itemid):isFluidContainer() then
 			subType = -1
 		end
 
@@ -1212,7 +1237,7 @@ if Modules == nil then
 		chance = nil
 	}
 
-	-- VoiceModule: makes the NPC say/yell random lines from a table, with delay, chance and yell optional 
+	-- VoiceModule: makes the NPC say/yell random lines from a table, with delay, chance and yell optional
 	function VoiceModule:new(voices, timeout, chance)
 		local obj = {}
 		setmetatable(obj, self)

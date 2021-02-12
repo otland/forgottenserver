@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Mage" nameDescription="a minotaur mage" race="blood" experience="150" speed="170">
+	<health now="155" max="155" />
+	<look type="23" corpse="5981" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-20" />
+		<attack name="energy" interval="2000" chance="15" range="7" min="-20" max="-58">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" radius="1" target="1" min="-50" max="-105">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="energyfield" interval="2000" chance="10" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="energyball" />
+		</attack>
+	</attacks>
+	<defenses armor="18" defense="18" />
+	<elements>
+		<element energyPercent="20" />
+		<element earthPercent="20" />
+		<element holyPercent="10" />
+		<element icePercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Learrn tha secrret uf deathhh!" />
+		<voice sentence="Kaplar!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="35" chance="85780" />
+		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
+		<item name="purple robe" chance="6430" />
+		<item id="2050" chance="5000" /><!-- torch -->
+		<item name="leather legs" chance="4950" />
+		<item name="leather helmet" chance="3100" />
+		<item name="minotaur horn" countmax="2" chance="3020" />
+		<item name="minotaur leather" chance="2290" />
+		<item name="taurus mace" chance="1000" />
+		<item name="wand of cosmic energy" chance="600" />
+		<item name="mana potion" chance="490" />
+	</loot>
+</monster>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Giant Spider" nameDescription="a giant spider" race="venom" experience="900" speed="230">
+	<health now="1300" max="1300" />
+	<look type="38" corpse="5977" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" poison="160" />
+		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" range="7" radius="1" target="1" min="-40" max="-70">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="390" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element icePercent="20" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Poison Spider" interval="2000" chance="10" />
+	</summons>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="95" chance="50000" />
+		<item name="poison arrow" countmax="12" chance="12500" />
+		<item name="plate armor" chance="10000" />
+		<item name="plate legs" chance="8000" />
+		<item name="two handed sword" chance="5000" />
+		<item name="steel helmet" chance="5000" />
+		<item name="strong health potion" chance="3571" />
+		<item name="spider silk" chance="2000" />
+		<item name="knight legs" chance="870" />
+		<item id="2169" chance="710" /><!-- time ring -->
+		<item name="knight armor" chance="500" />
+		<item name="platinum amulet" chance="280" />
+		<item name="lightning headband" chance="270" />
+	</loot>
+</monster>

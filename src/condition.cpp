@@ -139,7 +139,7 @@ void Condition::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_SUBID);
 	propWriteStream.write<uint32_t>(subId);
-	
+
 	propWriteStream.write<uint8_t>(CONDITIONATTR_ISAGGRESSIVE);
 	propWriteStream.write<uint8_t>(aggressive);
 }
@@ -264,6 +264,10 @@ Condition* Condition::createCondition(PropStream& propStream)
 
 	uint32_t subId;
 	if (!propStream.read<uint32_t>(subId)) {
+		return nullptr;
+	}
+
+	if (!propStream.read<uint8_t>(attr) || attr != CONDITIONATTR_ISAGGRESSIVE) {
 		return nullptr;
 	}
 
