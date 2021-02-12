@@ -1823,7 +1823,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	player->resetIdleTime();
 	player->setNextWalkActionTask(nullptr);
 
-	player->startAutoWalk(std::vector<Direction> { direction });
+	player->startAutoWalk(direction);
 }
 
 bool Game::playerBroadcastMessage(Player* player, const std::string& text) const

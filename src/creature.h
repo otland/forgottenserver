@@ -244,6 +244,7 @@ class Creature : virtual public Thing
 
 		//walk functions
 		void startAutoWalk();
+		void startAutoWalk(Direction direction);
 		void startAutoWalk(const std::vector<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();

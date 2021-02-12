@@ -260,7 +260,20 @@ void Creature::startAutoWalk()
 		return;
 	}
 
-	addEventWalk(listWalkDir.size() > 0);
+	addEventWalk(listWalkDir.size() == 1);
+}
+
+void Creature::startAutoWalk(Direction direction)
+{
+	Player* player = getPlayer();
+	if (player && player->isMovementBlocked()) {
+		player->sendCancelWalk();
+		return;
+	}
+
+	listWalkDir.clear();
+	listWalkDir.push_back(direction);
+	addEventWalk(true);
 }
 
 void Creature::startAutoWalk(const std::vector<Direction>& listDir)
@@ -271,8 +284,8 @@ void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 		return;
 	}
 
-	listWalkDir.assign(listDir.begin(), listDir.end());
-	addEventWalk(listWalkDir.size() > 0);
+	listWalkDir = listDir;
+	addEventWalk(listWalkDir.size() == 1);
 }
 
 void Creature::addEventWalk(bool firstStep)
