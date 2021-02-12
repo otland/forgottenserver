@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `market_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `player_id` int NOT NULL,
   `sale` tinyint NOT NULL DEFAULT '0',
-  `itemtype` int unsigned NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `amount` smallint unsigned NOT NULL,
   `price` int unsigned NOT NULL DEFAULT '0',
   `expires_at` bigint unsigned NOT NULL,
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `market_offers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `player_id` int NOT NULL,
   `sale` tinyint NOT NULL DEFAULT '0',
-  `itemtype` int unsigned NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `amount` smallint unsigned NOT NULL,
   `created` bigint unsigned NOT NULL,
   `anonymous` tinyint NOT NULL DEFAULT '0',
@@ -273,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `player_depotitems` (
   `player_id` int NOT NULL,
   `sid` int NOT NULL COMMENT 'any given range eg 0-100 will be reserved for depot lockers and all > 100 will be then normal items inside depots',
   `pid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   UNIQUE KEY `player_id_2` (`player_id`, `sid`),
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `player_inboxitems` (
   `player_id` int NOT NULL,
   `sid` int NOT NULL,
   `pid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   UNIQUE KEY `player_id_2` (`player_id`, `sid`),
@@ -295,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `player_storeinboxitems` (
   `player_id` int NOT NULL,
   `sid` int NOT NULL,
   `pid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   UNIQUE KEY `player_id_2` (`player_id`, `sid`),
@@ -306,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `player_items` (
   `player_id` int NOT NULL DEFAULT '0',
   `pid` int NOT NULL DEFAULT '0',
   `sid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL DEFAULT '0',
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE,
@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '27'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '28'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;
