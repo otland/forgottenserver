@@ -761,21 +761,21 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 		prevy = pos.y;
 
 		if (dx == 1 && dy == 1) {
-			dirList.emplace_back(DIRECTION_NORTHWEST);
+			dirList.push_back(DIRECTION_NORTHWEST);
 		} else if (dx == -1 && dy == 1) {
-			dirList.emplace_back(DIRECTION_NORTHEAST);
+			dirList.push_back(DIRECTION_NORTHEAST);
 		} else if (dx == 1 && dy == -1) {
-			dirList.emplace_back(DIRECTION_SOUTHWEST);
+			dirList.push_back(DIRECTION_SOUTHWEST);
 		} else if (dx == -1 && dy == -1) {
-			dirList.emplace_back(DIRECTION_SOUTHEAST);
+			dirList.push_back(DIRECTION_SOUTHEAST);
 		} else if (dx == 1) {
-			dirList.emplace_back(DIRECTION_WEST);
+			dirList.push_back(DIRECTION_WEST);
 		} else if (dx == -1) {
-			dirList.emplace_back(DIRECTION_EAST);
+			dirList.push_back(DIRECTION_EAST);
 		} else if (dy == 1) {
-			dirList.emplace_back(DIRECTION_NORTH);
+			dirList.push_back(DIRECTION_NORTH);
 		} else if (dy == -1) {
-			dirList.emplace_back(DIRECTION_SOUTH);
+			dirList.push_back(DIRECTION_SOUTH);
 		}
 
 		found = found->parent;

@@ -915,7 +915,7 @@ void Creature::goToFollowCreature()
 
 			if (dir != DIRECTION_NONE) {
 				listWalkDir.clear();
-				listWalkDir.emplace_back(dir);
+				listWalkDir.push_back(dir);
 
 				hasFollowPath = true;
 				startAutoWalk();
