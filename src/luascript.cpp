@@ -7828,8 +7828,8 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 		lua_newtable(L);
 
 		int index = 0;
-		for (Direction dir : boost::adaptors::reverse(dirList)) {
-			lua_pushnumber(L, dir);
+		for (auto it = dirList.rbegin(); it != dirList.rend(); ++it) {
+			lua_pushnumber(L, *it);
 			lua_rawseti(L, -2, ++index);
 		}
 	} else {
