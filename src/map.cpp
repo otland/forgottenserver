@@ -608,7 +608,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -761,21 +761,21 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 		prevy = pos.y;
 
 		if (dx == 1 && dy == 1) {
-			dirList.push_front(DIRECTION_NORTHWEST);
+			dirList.emplace_back(DIRECTION_NORTHWEST);
 		} else if (dx == -1 && dy == 1) {
-			dirList.push_front(DIRECTION_NORTHEAST);
+			dirList.emplace_back(DIRECTION_NORTHEAST);
 		} else if (dx == 1 && dy == -1) {
-			dirList.push_front(DIRECTION_SOUTHWEST);
+			dirList.emplace_back(DIRECTION_SOUTHWEST);
 		} else if (dx == -1 && dy == -1) {
-			dirList.push_front(DIRECTION_SOUTHEAST);
+			dirList.emplace_back(DIRECTION_SOUTHEAST);
 		} else if (dx == 1) {
-			dirList.push_front(DIRECTION_WEST);
+			dirList.emplace_back(DIRECTION_WEST);
 		} else if (dx == -1) {
-			dirList.push_front(DIRECTION_EAST);
+			dirList.emplace_back(DIRECTION_EAST);
 		} else if (dy == 1) {
-			dirList.push_front(DIRECTION_NORTH);
+			dirList.emplace_back(DIRECTION_NORTH);
 		} else if (dy == -1) {
-			dirList.push_front(DIRECTION_SOUTH);
+			dirList.emplace_back(DIRECTION_SOUTH);
 		}
 
 		found = found->parent;
