@@ -927,9 +927,12 @@ void Player::sendAddContainerItem(const Container* container, const Item* item)
 				slot = containerSize;
 			}
 		} else if (openContainer.index >= container->capacity()) {
-			item = container->getItemByIndex(openContainer.index - 1);
+			item = container->getItemByIndex(openContainer.index);
 		}
-		client->sendAddContainerItem(it.first, slot, item);
+
+		if (item) {
+			client->sendAddContainerItem(it.first, slot, item);
+		}
 	}
 }
 
