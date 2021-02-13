@@ -619,12 +619,12 @@ std::vector<Creature*> Creature::getKillers()
 	std::vector<Creature*> killers;
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
-	std::for_each(damageMap.begin(), damageMap.end(), [this, &killers, timeNow, inFightTicks](decltype(damageMap)::value_type it) {
+	for (const auto& it : damageMap) {
 		Creature* attacker = g_game.getCreatureByID(it.first);
 		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
 			killers.push_back(attacker);
 		}
-	});
+	}
 	return killers;
 }
 
