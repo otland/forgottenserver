@@ -1347,6 +1347,15 @@ bool MonsterType::loadCallback(LuaScriptInterface* scriptInterface)
 	return true;
 }
 
+void MonsterType::clearCallbacks()
+{
+	info.thinkEvent = -1;
+	info.creatureAppearEvent = -1;
+	info.creatureDisappearEvent = -1;
+	info.creatureMoveEvent = -1;
+	info.creatureSayEvent = -1;
+}
+
 bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 {
 	pugi::xml_attribute attr;

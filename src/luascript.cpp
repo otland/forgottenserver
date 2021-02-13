@@ -4427,6 +4427,8 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 		monsterType->info.lootItems.clear();
 		monsterType->info.attackSpells.clear();
 		monsterType->info.defenseSpells.clear();
+		monsterType->info.scripts.clear();
+		monsterType->clearCallbacks();
 	}
 
 	pushUserdata<MonsterType>(L, monsterType);

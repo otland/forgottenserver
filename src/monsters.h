@@ -170,6 +170,7 @@ class MonsterType
 		MonsterType& operator=(const MonsterType&) = delete;
 
 		bool loadCallback(LuaScriptInterface* scriptInterface);
+		void clearCallbacks();
 
 		std::string name;
 		std::string nameDescription;
