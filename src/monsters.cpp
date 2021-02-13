@@ -882,7 +882,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 		if (mType->info.health > mType->info.healthMax) {
 			mType->info.health = mType->info.healthMax;
-			std::cout << "[Warning - Monsters::loadMonster] Health now greater than health max." << file << std::endl;
+			std::cout << "[Warning - Monsters::loadMonster] Health now is greater than health max." << file << std::endl;
 		}
 	}
 
