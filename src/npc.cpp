@@ -192,6 +192,11 @@ bool Npc::loadFromXml()
 		} else {
 			healthMax = 100;
 		}
+
+		if (health > healthMax) {
+			health = healthMax;
+			std::cout << "[Warning - Npc::loadFromXml] Health now is greater than health max in " << filename << std::endl;
+		}
 	}
 
 	pugi::xml_node lookNode = npcNode.child("look");
