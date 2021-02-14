@@ -31,10 +31,10 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 	}
 
 	// insert the event id in the list of active events
-	auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::deadline_timer{io_context});
+	auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::steady_timer{io_context});
 	auto& timer = it.first->second;
 
-	timer.expires_from_now(boost::posix_time::milliseconds(task->getDelay()));
+	timer.expires_from_now(std::chrono::milliseconds(task->getDelay()));
 	timer.async_wait([this, task](const boost::system::error_code& error) {
 		eventIdTimerMap.erase(task->getEventId());
 
