@@ -92,6 +92,7 @@ yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
+luaItemDesc = false
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes
