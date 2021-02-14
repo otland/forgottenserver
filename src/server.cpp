@@ -63,7 +63,7 @@ void ServiceManager::stop()
 
 	acceptors.clear();
 
-	death_timer.expires_from_now(boost::posix_time::seconds(3));
+	death_timer.expires_from_now(std::chrono::seconds(3));
 	death_timer.async_wait(std::bind(&ServiceManager::die, this));
 }
 
