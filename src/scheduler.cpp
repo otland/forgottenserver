@@ -30,7 +30,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 		task->setEventId(++lastEventId);
 	}
 
-	io_context.post([this, task]() {
+	boost::asio::post(io_context, [this, task]() {
 		// insert the event id in the list of active events
 		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::steady_timer{io_context});
 		auto& timer = it.first->second;
