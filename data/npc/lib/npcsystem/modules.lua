@@ -598,7 +598,7 @@ if Modules == nil then
 				-- invalid item
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
 			else
-				if alreadyParsedIds[itemid] then
+				if alreadyParsedIds[itemid] and not it:getFluidSource() then
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
 				else
 					alreadyParsedIds[itemid] = true
@@ -669,7 +669,7 @@ if Modules == nil then
 				-- invalid item
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
 			else
-				if alreadyParsedIds[itemid] then
+				if alreadyParsedIds[itemid] and not it:getFluidSource() then
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
 				else
 					alreadyParsedIds[itemid] = true
