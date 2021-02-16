@@ -24,14 +24,14 @@
 
 extern Game g_game;
 
-Task* createTask(std::function<void (void)> f)
+Task* createTask(TaskFunc&& f)
 {
-	return new Task(std::move(f));
+	return new Task(std::forward<TaskFunc>(f));
 }
 
-Task* createTask(uint32_t expiration, std::function<void (void)> f)
+Task* createTask(uint32_t expiration, TaskFunc&& f)
 {
-	return new Task(expiration, std::move(f));
+	return new Task(expiration, std::forward<TaskFunc>(f));
 }
 
 void Dispatcher::threadMain()
