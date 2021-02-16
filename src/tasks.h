@@ -67,7 +67,7 @@ Task* createTask(uint32_t expiration, TaskFunc&& f);
 
 class Dispatcher : public ThreadHolder<Dispatcher> {
 	public:
-		void addTask(Task* task, bool push_front = false);
+		void addTask(Task* task);
 
 		void shutdown();
 
@@ -81,7 +81,7 @@ class Dispatcher : public ThreadHolder<Dispatcher> {
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
 
-		std::list<Task*> taskList;
+		std::vector<Task*> taskList;
 		uint64_t dispatcherCycle = 0;
 };
 
