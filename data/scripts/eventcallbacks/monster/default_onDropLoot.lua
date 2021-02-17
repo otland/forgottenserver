@@ -1,4 +1,4 @@
-local ec = EventCallback
+local ec = EventCallback()
 
 ec.onDropLoot = function(self, corpse)
 	if configManager.getNumber(configKeys.RATE_LOOT) == 0 then
@@ -35,3 +35,5 @@ ec.onDropLoot = function(self, corpse)
 		end
 	end
 end
+
+ec:register(-math.huge)
