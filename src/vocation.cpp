@@ -187,5 +187,8 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
 {
+	if (magLevel == 0) {
+		return 0;
+	}
 	return 1600 * std::pow(manaMultiplier, static_cast<int32_t>(magLevel - 1));
 }
