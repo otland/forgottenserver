@@ -1,4 +1,4 @@
-local ec = EventCallback()
+local ec = EventCallback
 
 ec.onLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
@@ -22,4 +22,4 @@ ec.onLookInBattleList = function(self, creature, distance)
 	return description
 end
 
-ec:register(-math.huge)
+ec:register()

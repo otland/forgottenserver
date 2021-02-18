@@ -76,83 +76,64 @@ local auxargs = {
 	[EVENT_CALLBACK_ONGAINSKILLTRIES] = {[3] = 1}
 }
 
+EventCallbackData = {}
+hasEventCallback = function (type)
+	return #EventCallbackData[type] > 0
+end
+
 EventCallback = {
-	__index = function (self, k)
+	register = function (self, index)
 		if isScriptsInterface() then
-			return self
-		else
-			return nil
-		end
-	end,
-	__newindex = function (ev, k, v)
-		if isScriptsInterface() then
-			local type = callbacks[k]
-			if type then
-				rawset(ev, "type", type)
-				rawset(ev, "call", v)
+			local type, call = rawget(self, "type"), rawget(self, "call")
+			if type and call then
+				index = tonumber(index)
+				EventCallbackData[type][#EventCallbackData[type] + 1] = {call, index or -math.huge}
+				if index then
+					table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
+				end
+				return rawset(self, "type", nil) and rawset(self, "call", nil)
 			else
-				return nil
+				debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
 			end
 		end
 	end,
-	register = function (ev, index)
-		if ev.registered then
-			debugPrint("[EventCallback - Warning] The event was ignored, because it is already registered.")
-			return nil
+	clear = function (self)
+		EventCallbackData = {}
+		for i = 1, EVENT_CALLBACK_LAST do
+			EventCallbackData[i] = {}
 		end
-		if ev.type then
-			local doSort = type(index) == "number"
-			if doSort then
-				rawset(ev, 'index', index)
-			end
-			rawset(ev, 'registered', true)
-			EventCallback.data[ev.type][#EventCallback.data[ev.type] + 1] = ev
-			if doSort and #EventCallback.data[ev.type] > 1 then
-				table.sort(EventCallback.data[ev.type], function (ea, eb) return ea.index < eb.index end)
+	end
+}
+
+setmetatable(EventCallback, {
+	__index = function (self) return self end,
+	__newindex = function (self, k, v)
+		if isScriptsInterface() then
+			local ecType = callbacks[k]
+			if ecType then
+				if type(v) == "function" then
+					return rawset(self, "type", ecType) and rawset(self, "call", v)
+				end
+				debugPrint(string.format("[Warning - EventCallback::%s] a function is expected.", k))
+			else
+				debugPrint(string.format("[Warning - EventCallback::%s] is not a valid callback.", k))
 			end
 		end
 	end,
-	get = function (self, type, ...)
-		local args = table.pack(...)
-		local eventTable, ret = self.data[type]
-		local events = #eventTable
+	__call = function (self, type, ...)
+		local eventTable, ret = EventCallbackData[type]
+		local args, events = table.pack(...), #eventTable
 		for k, ev in pairs(eventTable) do
-			ret = {ev.call(unpack(args))}
+			ret = {ev[1](unpack(args))}
 			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
-				break
+			return unpack(ret)
 			end
 			for k, v in pairs(auxargs[type] or {}) do
 				args[k] = ret[v]
 			end
 		end
-		return unpack(ret)
-	end,
-	clear = function (self)
-		self.data = {}
-		for i = 1, EVENT_CALLBACK_LAST do
-			self.data[i] = {}
-		end
-	end,
-	has = function (self, type)
-		return #self.data[type] > 0
 	end
-}
-EventCallback.__index = EventCallback
-
-setmetatable(EventCallback, {
-	__call = function (self)
-		if isScriptsInterface() then
-			local ev = {}
-			ev.index = math.huge
-			setmetatable(ev, EventCallback)
-			return ev
-		else
-			return nil
-		end
-	end
-})
+	})
 
 -- can't be overwritten on reloads
-if not EventCallback.data then
-	EventCallback:clear()
-end
+EventCallback:clear()

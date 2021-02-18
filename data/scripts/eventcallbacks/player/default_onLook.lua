@@ -1,4 +1,4 @@
-local ec = EventCallback()
+local ec = EventCallback
 
 ec.onLook = function(self, thing, position, distance, description)
 	local description = "You see " .. thing:getDescription(distance)
@@ -53,4 +53,4 @@ ec.onLook = function(self, thing, position, distance, description)
 	return description
 end
 
-ec:register(-math.huge)
+ec:register()

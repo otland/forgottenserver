@@ -1,4 +1,4 @@
-local ec = EventCallback()
+local ec = EventCallback
 
 ec.onReportBug = function(self, message, position, category)
 	if self:getAccountType() == ACCOUNT_TYPE_NORMAL then
@@ -28,4 +28,4 @@ ec.onReportBug = function(self, message, position, category)
 	return true
 end
 
-ec:register(-math.huge)
+ec:register()

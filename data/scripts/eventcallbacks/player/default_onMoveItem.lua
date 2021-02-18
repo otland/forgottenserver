@@ -1,4 +1,4 @@
-local ec = EventCallback()
+local ec = EventCallback
 
 ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if item:getAttribute("wrapid") ~= 0 then
@@ -40,4 +40,4 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 	return true
 end
 
-ec:register(-math.huge)
+ec:register()
