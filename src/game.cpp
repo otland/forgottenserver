@@ -80,8 +80,11 @@ Game::~Game()
 void Game::start(ServiceManager* manager)
 {
 	serviceManager = manager;
+	updateWorldTime();
 
-	g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
+	if (g_config.getBoolean(ConfigManager::DEFAULT_WORLD_LIGHT)) {
+		g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
+	}
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, std::bind(&Game::checkCreatures, this, 0)));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, std::bind(&Game::checkDecay, this)));
 }
@@ -4554,59 +4557,33 @@ void Game::checkDecay()
 void Game::checkLight()
 {
 	g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
+	updateWorldLightLevel();
+	LightInfo lightInfo = getWorldLightInfo();
 
-	lightHour += lightHourDelta;
-
-	if (lightHour > 1440) {
-		lightHour -= 1440;
-	}
-
-	if (std::abs(lightHour - SUNRISE) < 2 * lightHourDelta) {
-		lightState = LIGHT_STATE_SUNRISE;
-	} else if (std::abs(lightHour - SUNSET) < 2 * lightHourDelta) {
-		lightState = LIGHT_STATE_SUNSET;
-	}
-
-	int32_t newLightLevel = lightLevel;
-	bool lightChange = false;
-
-	switch (lightState) {
-		case LIGHT_STATE_SUNRISE: {
-			newLightLevel += (LIGHT_LEVEL_DAY - LIGHT_LEVEL_NIGHT) / 30;
-			lightChange = true;
-			break;
-		}
-		case LIGHT_STATE_SUNSET: {
-			newLightLevel -= (LIGHT_LEVEL_DAY - LIGHT_LEVEL_NIGHT) / 30;
-			lightChange = true;
-			break;
-		}
-		default:
-			break;
-	}
-
-	if (newLightLevel <= LIGHT_LEVEL_NIGHT) {
-		lightLevel = LIGHT_LEVEL_NIGHT;
-		lightState = LIGHT_STATE_NIGHT;
-	} else if (newLightLevel >= LIGHT_LEVEL_DAY) {
-		lightLevel = LIGHT_LEVEL_DAY;
-		lightState = LIGHT_STATE_DAY;
-	} else {
-		lightLevel = newLightLevel;
-	}
-
-	if (lightChange) {
-		LightInfo lightInfo = getWorldLightInfo();
-
-		for (const auto& it : players) {
-			it.second->sendWorldLight(lightInfo);
-		}
+	for (const auto& it : players) {
+		it.second->sendWorldLight(lightInfo);
 	}
 }
 
-LightInfo Game::getWorldLightInfo() const
+void Game::updateWorldLightLevel()
 {
-	return {lightLevel, 0xD7};
+	if (getWorldTime() >= GAME_SUNRISE && getWorldTime() <= GAME_DAYTIME) {
+		lightLevel = ((GAME_DAYTIME - GAME_SUNRISE) - (GAME_DAYTIME - getWorldTime())) * float(LIGHT_CHANGE_SUNRISE) + LIGHT_NIGHT;
+	} else if (getWorldTime() >= GAME_SUNSET && getWorldTime() <= GAME_NIGHTTIME) {
+		lightLevel = LIGHT_DAY - ((getWorldTime() - GAME_SUNSET) * float(LIGHT_CHANGE_SUNSET));
+	} else if (getWorldTime() >= GAME_NIGHTTIME || getWorldTime() < GAME_SUNRISE) {
+		lightLevel = LIGHT_NIGHT;
+	} else {
+		lightLevel = LIGHT_DAY;
+	}
+}
+
+void Game::updateWorldTime()
+{
+	g_scheduler.addEvent(createSchedulerTask(EVENT_WORLDTIMEINTERVAL, std::bind(&Game::updateWorldTime, this)));
+	time_t osTime = time(nullptr);
+	tm* timeInfo = localtime(&osTime);
+	worldTime = (timeInfo->tm_sec + (timeInfo->tm_min * 60)) / 2.5f;
 }
 
 void Game::shutdown()

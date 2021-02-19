@@ -112,9 +112,17 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 	if table.contains(groundIds, ground.itemid) and ground.actionid == actionIds.pickHole then
 		ground:transform(392)
 		ground:decay()
+		toPosition:sendMagicEffect(CONST_ME_POFF)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
+	end
+
+	-- Ice fishing hole
+	if ground.itemid == 7200 then
+		ground:transform(7236)
+		ground:decay()
+		toPosition:sendMagicEffect(CONST_ME_HITAREA)
 	end
 
 	return true
