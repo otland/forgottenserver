@@ -631,6 +631,11 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			combat->setParam(COMBAT_PARAM_BLOCKSHIELD, 1);
 			combat->setOrigin(ORIGIN_MELEE);
 		} else if (tmpName == "combat") {
+			if (spell->combatType == COMBAT_UNDEFINEDDAMAGE) {
+				std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - spell has undefined damage" << std::endl;
+				combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
+			}
+
 			if (spell->combatType == COMBAT_PHYSICALDAMAGE) {
 				combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
 				combat->setOrigin(ORIGIN_RANGED);
