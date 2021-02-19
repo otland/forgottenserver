@@ -308,13 +308,13 @@ class ProtocolGame final : public Protocol
 
 		// Helpers so we don't need to bind every time
 		template <typename Callable, typename... Args>
-		void addGameTask(Callable function, Args&&... args) {
-			g_dispatcher.addTask(createTask(std::bind(function, &g_game, std::forward<Args>(args)...)));
+		void addGameTask(Callable&& function, Args&&... args) {
+			g_dispatcher.addTask(createTask(std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
 		}
 
 		template <typename Callable, typename... Args>
-		void addGameTaskTimed(uint32_t delay, Callable function, Args&&... args) {
-			g_dispatcher.addTask(createTask(delay, std::bind(function, &g_game, std::forward<Args>(args)...)));
+		void addGameTaskTimed(uint32_t delay, Callable&& function, Args&&... args) {
+			g_dispatcher.addTask(createTask(delay, std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
 		}
 
 		std::unordered_set<uint32_t> knownCreatureSet;
