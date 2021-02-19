@@ -45,7 +45,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 				return;
 			}
 
-			g_dispatcher.addTask(task, true);
+			g_dispatcher.addTask(task);
 		});
 	});
 
