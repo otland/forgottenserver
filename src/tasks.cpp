@@ -43,14 +43,11 @@ void Dispatcher::threadMain()
 	while (getState() != THREAD_STATE_TERMINATED) {
 		// check if there are tasks waiting
 		taskLockUnique.lock();
-
 		if (taskList.empty()) {
 			//if the list is empty wait for signal
 			taskSignal.wait(taskLockUnique);
 		}
-
-		tmpTaskList = taskList;
-		taskList.clear();
+		tmpTaskList.swap(taskList);
 		taskLockUnique.unlock();
 
 		for (Task* task : tmpTaskList) {
@@ -61,6 +58,7 @@ void Dispatcher::threadMain()
 			}
 			delete task;
 		}
+		tmpTaskList.clear();
 	}
 }
 
