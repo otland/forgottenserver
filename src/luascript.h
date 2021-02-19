@@ -35,7 +35,6 @@
 #include "database.h"
 #include "enums.h"
 #include "position.h"
-#include <boost/lexical_cast.hpp>
 #include "outfit.h"
 
 class Thing;
