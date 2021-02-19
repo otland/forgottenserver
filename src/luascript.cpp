@@ -7910,13 +7910,13 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 	fpp.clearSight = getBoolean(L, 6, fpp.clearSight);
 	fpp.maxSearchDist = getNumber<int32_t>(L, 7, fpp.maxSearchDist);
 
-	std::forward_list<Direction> dirList;
+	std::vector<Direction> dirList;
 	if (creature->getPathTo(position, dirList, fpp)) {
 		lua_newtable(L);
 
 		int index = 0;
-		for (Direction dir : dirList) {
-			lua_pushnumber(L, dir);
+		for (auto it = dirList.rbegin(); it != dirList.rend(); ++it) {
+			lua_pushnumber(L, *it);
 			lua_rawseti(L, -2, ++index);
 		}
 	} else {
