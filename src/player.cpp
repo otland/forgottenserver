@@ -4519,8 +4519,9 @@ uint64_t Player::getMoney() const
 
 size_t Player::getMaxVIPEntries() const
 {
-	if (group->maxVipEntries != 0)
+	if (group->maxVipEntries != 0) {
 		return group->maxVipEntries;
+	}
 
 	return g_config.getNumber(isPremium() ?
 		ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREEMIUM_LIMIT
