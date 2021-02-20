@@ -2188,6 +2188,11 @@ bool Player::removeVIP(uint32_t vipGuid)
 
 bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status)
 {
+	if (getGUID() == vipGuid) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add yourself.");
+		return false;
+	}
+
 	if (VIPList.size() >= getMaxVIPEntries() || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add more buddies.");
 		return false;

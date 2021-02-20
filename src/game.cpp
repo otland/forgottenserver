@@ -3229,11 +3229,6 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 		return;
 	}
 
-	if (player->getName() == name) {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add yourself.");
-		return;
-	}
-
 	Player* vipPlayer = getPlayerByName(name);
 	if (!vipPlayer) {
 		uint32_t guid;
