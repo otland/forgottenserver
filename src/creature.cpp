@@ -54,19 +54,19 @@ Creature::~Creature()
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
 {
 	if (myPos.z <= 7) {
-		//we are on ground level or above (7 -> 0)
-		//view is from 7 -> 0
+		// we are on ground level or above (7 -> 0)
+		// view is from 7 -> 0
 		if (pos.z > 7) {
 			return false;
 		}
 	} else if (myPos.z >= 8) {
-		//we are underground (8 -> 15)
+		// we are underground (8 -> 15)
 		// we can't see floors above 8
 		if (pos.z < 8) {
 			return false;
 		}
 
-		//view is +/- 2 from the floor we stand on
+		// view is +/- 2 from the floor we stand on
 		if (Position::getDistanceZ(myPos, pos) > 2) {
 			return false;
 		}
@@ -912,7 +912,7 @@ void Creature::goToFollowCreature()
 
 			if (monster->isFleeing()) {
 				monster->getDistanceStep(followCreature->getPosition(), dir, true);
-			} else { //maxTargetDist > 1
+			} else { // maxTargetDist > 1
 				if (!monster->getDistanceStep(followCreature->getPosition(), dir)) {
 					// if we can't get anything then let the A* calculate
 					listWalkDir.clear();

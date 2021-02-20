@@ -40,7 +40,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 			eventIdTimerMap.erase(task->getEventId());
 
 			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
-				// the timer has been manually cancelled(timer->cancel()) or Scheduler::shutdown has been called
+				// the timer has been manually canceled(timer->cancel()) or Scheduler::shutdown has been called
 				delete task;
 				return;
 			}
@@ -59,7 +59,7 @@ void Scheduler::stopEvent(uint32_t eventId)
 	}
 
 	boost::asio::post(io_context, [this, eventId]() {
-		// search the event id..
+		// search the event id
 		auto it = eventIdTimerMap.find(eventId);
 		if (it != eventIdTimerMap.end()) {
 			it->second.cancel();

@@ -459,9 +459,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 
 		if (multifloor) {
 			if (centerPos.z > 7) {
-				//underground
-
-				//8->15
+				//underground (8->15)
 				minRangeZ = std::max<int32_t>(centerPos.getZ() - 2, 0);
 				maxRangeZ = std::min<int32_t>(centerPos.getZ() + 2, MAP_MAX_LAYERS - 1);
 			} else if (centerPos.z == 6) {

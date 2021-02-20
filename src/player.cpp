@@ -1251,7 +1251,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 
 	// close modal windows
 	if (!modalWindows.empty()) {
-		// TODO: This shouldn't be hardcoded
+		// TODO: This shouldn't be hard-coded
 		for (uint32_t modalWindowId : modalWindows) {
 			if (modalWindowId == std::numeric_limits<uint32_t>::max()) {
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Offline training aborted.");
@@ -3108,7 +3108,7 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 		return;
 	}
 
-	//index == 0 means we should equip this item at the most appropiate slot (no action required here)
+	//index == 0 means we should equip this item at the most appropriate slot (no action required here)
 	if (index > CONST_SLOT_WHEREEVER && index <= CONST_SLOT_LAST) {
 		if (inventory[index]) {
 			return;

@@ -128,7 +128,7 @@ class Game
 		Monster* getMonsterByID(uint32_t id);
 
 		/**
-		  * Returns a npc based on the unique creature identifier
+		  * Returns an npc based on the unique creature identifier
 		  * \param id is the unique npc id to get a npc pointer to
 		  * \returns A NPC pointer to the npc
 		  */
@@ -183,7 +183,8 @@ class Game
 		  */
 		Player* getPlayerByAccount(uint32_t acc);
 
-		/* Place Creature on the map without sending out events to the surrounding.
+		/**
+		  * Place Creature on the map without sending out events to the surrounding.
 		  * \param creature Creature to place on the map
 		  * \param pos The position to place the creature
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
@@ -202,7 +203,7 @@ class Game
 
 		/**
 		  * Remove Creature from the map.
-		  * Removes the Creature the map
+		  * Removes the Creature from the map
 		  * \param c Creature to remove
 		  */
 		bool removeCreature(Creature* creature, bool isLogout = true);
@@ -266,7 +267,7 @@ class Game
 		  * Remove/Add item(s) with a monetary value
 		  * \param cylinder to remove the money from
 		  * \param money is the amount to remove
-		  * \param flags optional flags to modifiy the default behaviour
+		  * \param flags optional flags to modify the default behavior
 		  * \returns true if the removal was successful
 		  */
 		bool removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags = 0);
@@ -284,7 +285,7 @@ class Game
 		  * \param item is the item to transform
 		  * \param newId is the new itemid
 		  * \param newCount is the new count value, use default value (-1) to not change it
-		  * \returns true if the tranformation was successful
+		  * \returns true if the transformation was successful
 		  */
 		Item* transformItem(Item* item, uint16_t newId, int32_t newCount = -1);
 
