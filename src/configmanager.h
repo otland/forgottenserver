@@ -128,6 +128,8 @@ class ConfigManager
 			MAX_PACKETS_PER_SECOND,
 			SERVER_SAVE_NOTIFY_DURATION,
 			YELL_MINIMUM_LEVEL,
+			VIP_FREEMIUM_LIMIT,
+			VIP_PREMIUM_LIMIT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};

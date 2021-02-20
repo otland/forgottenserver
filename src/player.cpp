@@ -2188,7 +2188,7 @@ bool Player::removeVIP(uint32_t vipGuid)
 
 bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status)
 {
-	if (VIPList.size() >= getMaxVIPEntries() || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
+	if (VIPList.size() >= getMaxVIPEntries()) {
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add more buddies.");
 		return false;
 	}
@@ -2208,7 +2208,7 @@ bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t st
 
 bool Player::addVIPInternal(uint32_t vipGuid)
 {
-	if (VIPList.size() >= getMaxVIPEntries() || VIPList.size() == 200) { // max number of buddies is 200 in 9.53
+	if (VIPList.size() >= getMaxVIPEntries()) {
 		return false;
 	}
 
@@ -4519,12 +4519,12 @@ uint64_t Player::getMoney() const
 
 size_t Player::getMaxVIPEntries() const
 {
-	if (group->maxVipEntries != 0) {
+	if (group->maxVipEntries != 0)
 		return group->maxVipEntries;
-	} else if (isPremium()) {
-		return 100;
-	}
-	return 20;
+
+	return g_config.getNumber(isPremium() ?
+		ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREEMIUM_LIMIT
+	);
 }
 
 size_t Player::getMaxDepotItems() const
