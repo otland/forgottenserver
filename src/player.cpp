@@ -4524,7 +4524,7 @@ size_t Player::getMaxVIPEntries() const
 	}
 
 	return g_config.getNumber(isPremium() ?
-		ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREEMIUM_LIMIT
+		ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT
 	);
 }
 

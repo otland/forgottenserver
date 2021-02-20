@@ -95,7 +95,7 @@ cleanProtectionZones = false
 luaItemDesc = false
 
 -- VIP
-vipFreemiumLimit = 20
+vipFreeLimit = 20
 vipPremiumLimit = 100
 
 -- World Light
