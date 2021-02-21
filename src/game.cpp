@@ -5757,3 +5757,4 @@ bool Game::reload(ReloadTypes_t reloadType)
 	}
 	return true;
 }
+
