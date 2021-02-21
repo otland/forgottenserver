@@ -57,25 +57,6 @@ extern Events* g_events;
 extern Chat* g_chat;
 extern LuaEnvironment g_luaEnvironment;
 
-Signals::Signals(boost::asio::io_service& service) :
-	set(service)
-{
-	set.add(SIGINT);
-	set.add(SIGTERM);
-#ifndef _WIN32
-	set.add(SIGUSR1);
-	set.add(SIGHUP);
-#else
-	// This must be a blocking call as Windows calls it in a new thread and terminates
-	// the process when the handler returns (or after 5 seconds, whichever is earlier).
-	// On Windows it is called in a new thread.
-	signal(SIGBREAK, dispatchSignalHandler);
-#endif
-
-	asyncWait();
-}
-
-
 namespace {
 
 void sigbreakHandler()
@@ -200,6 +181,23 @@ void dispatchSignalHandler(int signal)
 	}
 }
 
+}
+
+Signals::Signals(boost::asio::io_service& service): set(service)
+{
+	set.add(SIGINT);
+	set.add(SIGTERM);
+#ifndef _WIN32
+	set.add(SIGUSR1);
+	set.add(SIGHUP);
+#else
+	// This must be a blocking call as Windows calls it in a new thread and terminates
+	// the process when the handler returns (or after 5 seconds, whichever is earlier).
+	// On Windows it is called in a new thread.
+	signal(SIGBREAK, dispatchSignalHandler);
+#endif
+
+	asyncWait();
 }
 
 void Signals::asyncWait()
