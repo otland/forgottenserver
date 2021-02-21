@@ -2188,7 +2188,9 @@ bool Player::removeVIP(uint32_t vipGuid)
 
 bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status)
 {
-	if (guid == vipGuid) {
+	const bool isSameGuid = guid == vipGuid;
+	const bool preventSelfAdd = g_config.getBoolean(ConfigManager::VIP_PREVENT_SELF_ADD);
+	if (isSameGuid && preventSelfAdd) {
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add yourself.");
 		return false;
 	}

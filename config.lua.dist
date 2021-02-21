@@ -94,6 +94,9 @@ forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
 
+-- VIP
+vipPreventSelfAdd = true
+
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will
 -- be handled in the sources. set it to false to avoid conflicts if you wish

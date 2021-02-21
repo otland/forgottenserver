@@ -67,6 +67,7 @@ class ConfigManager
 			HOUSE_DOOR_SHOW_PRICE,
 			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 			REMOVE_ON_DESPAWN,
+			VIP_PREVENT_SELF_ADD,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
