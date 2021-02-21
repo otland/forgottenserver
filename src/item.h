@@ -28,7 +28,6 @@
 #include <typeinfo>
 
 #include <boost/variant.hpp>
-#include <boost/lexical_cast.hpp>
 #include <deque>
 
 class Creature;
@@ -437,12 +436,12 @@ class ItemAttributes
 
 		template<typename R>
 		void setCustomAttribute(int64_t key, R value) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			setCustomAttribute(tmp, value);
 		}
 
 		void setCustomAttribute(int64_t key, CustomAttribute& value) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			setCustomAttribute(tmp, value);
 		}
 
@@ -468,7 +467,7 @@ class ItemAttributes
 		}
 
 		const CustomAttribute* getCustomAttribute(int64_t key) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			return getCustomAttribute(tmp);
 		}
 
@@ -483,7 +482,7 @@ class ItemAttributes
 		}
 
 		bool removeCustomAttribute(int64_t key) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			return removeCustomAttribute(tmp);
 		}
 

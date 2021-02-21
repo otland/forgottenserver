@@ -280,6 +280,8 @@ bool ConfigManager::load()
 	integer[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 	integer[SERVER_SAVE_NOTIFY_DURATION] = getGlobalNumber(L, "serverSaveNotifyDuration", 5);
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
+	integer[VIP_FREE_LIMIT] = getGlobalNumber(L, "vipFreeLimit", 20);
+	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
