@@ -30,13 +30,6 @@ class Signals
 
 	private:
 		void asyncWait();
-		static void dispatchSignalHandler(int signal);
-
-		static void sigbreakHandler();
-		static void sigintHandler();
-		static void sighupHandler();
-		static void sigtermHandler();
-		static void sigusr1Handler();
 };
 
 #endif
