@@ -82,5 +82,5 @@ void Scheduler::shutdown()
 
 SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f)
 {
-	return new SchedulerTask(delay, std::forward<TaskFunc>(f));
+	return new SchedulerTask(delay, std::move(f));
 }
