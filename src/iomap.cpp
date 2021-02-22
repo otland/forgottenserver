@@ -88,8 +88,8 @@ bool IOMap::loadMap(Map* map, const std::string& fileName)
 		uint32_t headerVersion = root_header.version;
 		if (headerVersion == 0) {
 			//In otbm version 1 the count variable after splashes/fluidcontainers and stackables
-			//are saved as attributes instead, this solves alot of problems with items
-			//that is changed (stackable/charges/fluidcontainer/splash) during an update.
+			//are saved as attributes instead, this solves a lot of problems with items
+			//that are changed (stackable/charges/fluidcontainer/splash) during an update.
 			setLastErrorString("This map need to be upgraded by using the latest map editor version to be able to load correctly.");
 			return false;
 		}

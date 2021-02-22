@@ -286,7 +286,7 @@ class ItemAttributes
 			}
 
 			bool unserialize(PropStream& propStream) {
-				// This is hard coded so it's not general, depends on the position of the variants.
+				// This is hard-coded so it's not general, depends on the position of the variants.
 				uint8_t pos;
 				if (!propStream.read<uint8_t>(pos)) {
 					return false;

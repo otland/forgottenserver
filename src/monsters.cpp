@@ -947,8 +947,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			}
 		}
 
-		//if a monster can push creatures,
-		// it should not be pushable
+		// if a monster can push creatures,
+		// it should not be pushable.
 		if (mType->info.canPushCreatures) {
 			mType->info.pushable = false;
 		}

@@ -583,7 +583,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		} while (result->next());
 	}
 
-	//load vip
+	//load vip list
 	query.str(std::string());
 	query << "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = " << player->getAccount();
 	if ((result = db.storeQuery(query.str()))) {

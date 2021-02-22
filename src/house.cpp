@@ -203,7 +203,7 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 			door->setAccessList(textlist);
 		}
 
-		// We dont have kick anyone
+		// We do not have to kick anyone
 		return;
 	}
 

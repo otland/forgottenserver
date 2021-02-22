@@ -290,7 +290,7 @@ class Combat
 		static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params);
 		CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
 
-		//configureable
+		//configurable
 		CombatParams params;
 
 		//formula variables

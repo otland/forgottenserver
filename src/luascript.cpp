@@ -1035,10 +1035,10 @@ void LuaScriptInterface::registerFunctions()
 	//createCombatArea( {area}, <optional> {extArea} )
 	lua_register(luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
-	//doAreaCombat(cid, type, pos, area, min, max, effect)
+	//doAreaCombat(cid, type, pos, area, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield = false[, ignoreResistances = false]]]])
 	lua_register(luaState, "doAreaCombat", LuaScriptInterface::luaDoAreaCombat);
 
-	//doTargetCombat(cid, target, type, min, max, effect)
+	//doTargetCombat(cid, target, type, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield = false[, ignoreResistances = false]]]])
 	lua_register(luaState, "doTargetCombat", LuaScriptInterface::luaDoTargetCombat);
 
 	//doChallengeCreature(cid, target)
@@ -1514,17 +1514,17 @@ void LuaScriptInterface::registerFunctions()
 
 	registerEnum(ITEM_GROUP_GROUND)
 	registerEnum(ITEM_GROUP_CONTAINER)
-	registerEnum(ITEM_GROUP_WEAPON) 
-	registerEnum(ITEM_GROUP_AMMUNITION) 
-	registerEnum(ITEM_GROUP_ARMOR) 
+	registerEnum(ITEM_GROUP_WEAPON)
+	registerEnum(ITEM_GROUP_AMMUNITION)
+	registerEnum(ITEM_GROUP_ARMOR)
 	registerEnum(ITEM_GROUP_CHARGES)
-	registerEnum(ITEM_GROUP_TELEPORT) 
-	registerEnum(ITEM_GROUP_MAGICFIELD) 
-	registerEnum(ITEM_GROUP_WRITEABLE) 
-	registerEnum(ITEM_GROUP_KEY) 
+	registerEnum(ITEM_GROUP_TELEPORT)
+	registerEnum(ITEM_GROUP_MAGICFIELD)
+	registerEnum(ITEM_GROUP_WRITEABLE)
+	registerEnum(ITEM_GROUP_KEY)
 	registerEnum(ITEM_GROUP_SPLASH)
 	registerEnum(ITEM_GROUP_FLUID)
-	registerEnum(ITEM_GROUP_DOOR) 
+	registerEnum(ITEM_GROUP_DOOR)
 	registerEnum(ITEM_GROUP_DEPRECATED)
 
 	registerEnum(ITEM_BAG)

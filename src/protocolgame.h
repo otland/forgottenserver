@@ -273,14 +273,14 @@ class ProtocolGame final : public Protocol
 
 		//Help functions
 
-		// translate a tile to clientreadable format
+		// translate a tile to client-readable format
 		void GetTileDescription(const Tile* tile, NetworkMessage& msg);
 
-		// translate a floor to clientreadable format
+		// translate a floor to client-readable format
 		void GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z,
 		                         int32_t width, int32_t height, int32_t offset, int32_t& skip);
 
-		// translate a map area to clientreadable format
+		// translate a map area to client-readable format
 		void GetMapDescription(int32_t x, int32_t y, int32_t z,
 		                       int32_t width, int32_t height, NetworkMessage& msg);
 
