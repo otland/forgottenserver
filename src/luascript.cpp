@@ -15353,7 +15353,7 @@ int LuaScriptInterface::luaTalkactionSeparator(lua_State* L)
 
 int LuaScriptInterface::luaTalkactionAccess(lua_State* L)
 {
-	// talkAction:permission(needAccess = false)
+	// talkAction:access(needAccess = false)
 	TalkAction* talk = getUserdata<TalkAction>(L, 1);
 	if (talk) {
 		talk->setNeedAccess(getBoolean(L, 2));
