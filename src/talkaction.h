@@ -59,7 +59,22 @@ class TalkAction : public Event
 
 		//scripting
 		bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
-		//
+
+		AccountType_t getRequiredAccountType() const {
+			return requiredAccountType;
+		}
+
+		void setRequiredAccountType(AccountType_t reqAccType) {
+			requiredAccountType = reqAccType;
+		}
+
+		bool getNeedAccess() const {
+			return needAccess;
+		}
+
+		void setNeedAccess(bool b) {
+			needAccess = b;
+		}
 
 	private:
 		std::string getScriptEventName() const override;
@@ -67,6 +82,10 @@ class TalkAction : public Event
 		std::string words;
 		std::vector<std::string> wordsMap;
 		std::string separator = "\"";
+
+		bool needAccess = false;
+
+		AccountType_t requiredAccountType = ACCOUNT_TYPE_NORMAL;
 };
 
 class TalkActions final : public BaseEvents
