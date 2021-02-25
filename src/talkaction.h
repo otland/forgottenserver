@@ -82,9 +82,7 @@ class TalkAction : public Event
 		std::string words;
 		std::vector<std::string> wordsMap;
 		std::string separator = "\"";
-
 		bool needAccess = false;
-
 		AccountType_t requiredAccountType = ACCOUNT_TYPE_NORMAL;
 };
 
