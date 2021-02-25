@@ -33,6 +33,39 @@ extern Events* g_events;
 
 namespace {
 
+MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows)
+{
+	uint32_t cols;
+	if (rows == 0) {
+		cols = 0;
+	} else {
+		cols = vec.size() / rows;
+	}
+
+	MatrixArea area{rows, cols};
+
+	uint32_t x = 0;
+	uint32_t y = 0;
+
+	for (uint32_t value : vec) {
+		if (value == 1 || value == 3) {
+			area(y, x) = true;
+		}
+
+		if (value == 2 || value == 3) {
+			area.setCenter(y, x);
+		}
+
+		++x;
+
+		if (cols == x) {
+			x = 0;
+			++y;
+		}
+	}
+	return area;
+}
+
 std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos)
 {
 	std::vector<Tile*> vec;
@@ -1236,39 +1269,6 @@ MatrixArea MatrixArea::rotate270() const {
         newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
     }
     return {{center.first, rows - center.second}, cols, rows, std::move(newArr)};
-}
-
-MatrixArea AreaCombat::createArea(const std::vector<uint32_t>& vec, uint32_t rows)
-{
-	uint32_t cols;
-	if (rows == 0) {
-		cols = 0;
-	} else {
-		cols = vec.size() / rows;
-	}
-
-	MatrixArea area{rows, cols};
-
-	uint32_t x = 0;
-	uint32_t y = 0;
-
-	for (uint32_t value : vec) {
-		if (value == 1 || value == 3) {
-			area(y, x) = true;
-		}
-
-		if (value == 2 || value == 3) {
-			area.setCenter(y, x);
-		}
-
-		++x;
-
-		if (cols == x) {
-			x = 0;
-			++y;
-		}
-	}
-	return area;
 }
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const {

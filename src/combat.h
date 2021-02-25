@@ -127,8 +127,6 @@ class AreaCombat
 		const MatrixArea& getArea(const Position& centerPos, const Position& targetPos) const;
 
 	private:
-		MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows);
-
 		std::vector<MatrixArea> areas;
 		bool hasExtArea = false;
 };
