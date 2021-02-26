@@ -4034,16 +4034,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					message.text = fmt::format("{:s} was healed for {:s}", ucfirst(target->getNameDescription()), damageString);
 				} else if (attacker == target) {
 					message.type = MESSAGE_HEALED_OTHERS;
-					const auto pronoun = [=]() {
-						if (targetPlayer) {
-							switch (targetPlayer->getSex()) {
-								case PLAYERSEX_FEMALE: return "herself";
-								case PLAYERSEX_MALE: return "himself";
-							};
-						}
-						return "itself";
-					}();
-					message.text = fmt::format("{:s} healed {:s} for {:s}", ucfirst(attacker->getNameDescription()), pronoun, damageString);
+					message.text = fmt::format("{:s} healed {:s}self for {:s}", ucfirst(attacker->getNameDescription()), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
 				} else {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = fmt::format("{:s} healed {:s} for {:s}", ucfirst(attacker->getNameDescription()), target->getNameDescription(), damageString);
@@ -4223,16 +4214,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					message.text = fmt::format("{:s} loses {:s}.", ucfirst(target->getNameDescription()), damageString);
 				} else if (attacker == target) {
 					message.type = MESSAGE_DAMAGE_OTHERS;
-					const auto pronoun = [=]() {
-						if (targetPlayer) {
-							switch (targetPlayer->getSex()) {
-								case PLAYERSEX_FEMALE: return "her";
-								case PLAYERSEX_MALE: return "his";
-							};
-						}
-						return "its";
-					}();
-					message.text = fmt::format("{:s} loses {:s} due to {:s} own attack.", ucfirst(target->getNameDescription()), damageString, pronoun);
+					message.text = fmt::format("{:s} loses {:s} due to {:s} own attack.", ucfirst(target->getNameDescription()), damageString, targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
 				} else {
 					message.type = MESSAGE_DAMAGE_OTHERS;
 					message.text = fmt::format("{:s} loses {:s} due to an attack by {:s}.", ucfirst(target->getNameDescription()), damageString, attacker->getNameDescription());
