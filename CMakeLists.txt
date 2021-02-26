@@ -39,6 +39,7 @@ if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
 else()
     find_package(Crypto++ REQUIRED)
 endif ()
+find_package(fmt REQUIRED)
 find_package(MySQL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(PugiXML REQUIRED)
@@ -68,6 +69,7 @@ target_link_libraries(tfs PRIVATE
         Boost::system
         Boost::filesystem
         Boost::iostreams
+        fmt::fmt
         ${CMAKE_THREAD_LIBS_INIT}
         ${Crypto++_LIBRARIES}
         ${LUA_LIBRARIES}
