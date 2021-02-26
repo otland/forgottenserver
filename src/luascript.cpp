@@ -2942,6 +2942,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("TalkAction", "onSay", LuaScriptInterface::luaTalkactionOnSay);
 	registerMethod("TalkAction", "register", LuaScriptInterface::luaTalkactionRegister);
 	registerMethod("TalkAction", "separator", LuaScriptInterface::luaTalkactionSeparator);
+	registerMethod("TalkAction", "access", LuaScriptInterface::luaTalkactionAccess);
+	registerMethod("TalkAction", "accountType", LuaScriptInterface::luaTalkactionAccountType);
 	registerMethod("TalkAction", "getWords", LuaScriptInterface::luaTalkactionGetWords);
 
 	// CreatureEvent
@@ -15359,6 +15361,32 @@ int LuaScriptInterface::luaTalkactionSeparator(lua_State* L)
 	TalkAction* talk = getUserdata<TalkAction>(L, 1);
 	if (talk) {
 		talk->setSeparator(getString(L, 2).c_str());
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionAccess(lua_State* L)
+{
+	// talkAction:access(needAccess = false)
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		talk->setNeedAccess(getBoolean(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
+{
+	// talkAction:accountType(AccountType_t = ACCOUNT_TYPE_NORMAL)
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		talk->setRequiredAccountType(getNumber<AccountType_t>(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
