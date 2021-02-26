@@ -1227,7 +1227,7 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 
 MatrixArea MatrixArea::flip() const {
     Container newArr(arr.size());
-    for (auto i = 0; i < rows; ++i) {
+    for (uint32_t i = 0; i < rows; ++i) {
         // assign rows, top to bottom, to the current rows, bottom to top
         newArr[std::slice(i * cols, cols, 1)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
     }
@@ -1236,7 +1236,7 @@ MatrixArea MatrixArea::flip() const {
 
 MatrixArea MatrixArea::mirror() const {
     Container newArr(arr.size());
-    for (auto i = 0; i < cols; ++i) {
+    for (uint32_t i = 0; i < cols; ++i) {
         // assign cols, left to right, to the current rows, right to left
         newArr[std::slice(i, cols, rows)] = arr[std::slice(cols - i - 1, cols, rows)];
     }
@@ -1249,7 +1249,7 @@ MatrixArea MatrixArea::transpose() const {
 
 MatrixArea MatrixArea::rotate90() const {
     Container newArr(arr.size());
-    for (auto i = 0; i < rows; ++i) {
+    for (uint32_t i = 0; i < rows; ++i) {
         // assign rows, top to bottom, to the current cols, right to left
         newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
     }
@@ -1264,7 +1264,7 @@ MatrixArea MatrixArea::rotate180() const {
 
 MatrixArea MatrixArea::rotate270() const {
     Container newArr(arr.size());
-    for (auto i = 0; i < cols; ++i) {
+    for (uint32_t i = 0; i < cols; ++i) {
         // assign cols, left to right, to the current rows, bottom to top
         newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
     }
