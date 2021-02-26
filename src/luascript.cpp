@@ -2942,6 +2942,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("TalkAction", "onSay", LuaScriptInterface::luaTalkactionOnSay);
 	registerMethod("TalkAction", "register", LuaScriptInterface::luaTalkactionRegister);
 	registerMethod("TalkAction", "separator", LuaScriptInterface::luaTalkactionSeparator);
+	registerMethod("TalkAction", "getWords", LuaScriptInterface::luaTalkactionGetWords);
 
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
@@ -15362,6 +15363,19 @@ int LuaScriptInterface::luaTalkactionSeparator(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionGetWords(lua_State* L)
+{
+	// talkAction:getWords()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		pushString(L, talk->getWords());
+		return 1;
+	}
+
+	lua_pushnil(L);
 	return 1;
 }
 
