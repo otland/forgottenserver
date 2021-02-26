@@ -16673,7 +16673,7 @@ void LuaEnvironment::clearCombatObjects(LuaScriptInterface* interface)
 			combatMap.erase(itt);
 		}
 	}
-	it->second = {};
+	it->second.clear();
 }
 
 AreaCombat* LuaEnvironment::getAreaObject(uint32_t id) const
@@ -16706,7 +16706,7 @@ void LuaEnvironment::clearAreaObjects(LuaScriptInterface* interface)
 			areaMap.erase(itt);
 		}
 	}
-	it->second = {};
+	it->second.clear();
 }
 
 void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
