@@ -2032,6 +2032,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
+	registerMethod("Game", "getTalkactions", LuaScriptInterface::luaGameGetTalkactions);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -4552,6 +4553,21 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 		pushBoolean(L, g_game.reload(reloadType));
 	}
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetTalkactions(lua_State* L)
+{
+	// Game.getTalkactions()
+	std::map<std::string, TalkAction> talkMap = g_talkActions->getTalkactions();
+	lua_createtable(L, talkMap.size(), 0);
+
+	int index = 0;
+	for (auto& ta: talkMap) {
+		pushUserdata<TalkAction>(L, &(ta.second));
+		setMetatable(L, -1, "TalkAction");
+		lua_rawseti(L, -2, ++index);
+	}
 	return 1;
 }
 

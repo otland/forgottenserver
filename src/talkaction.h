@@ -84,6 +84,10 @@ class TalkActions final : public BaseEvents
 		bool registerLuaEvent(TalkAction* event);
 		void clear(bool fromLua) override final;
 
+		std::map<std::string, TalkAction> getTalkactions() {
+			return talkActions;
+		}
+
 	private:
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
