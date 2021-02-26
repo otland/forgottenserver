@@ -1253,13 +1253,13 @@ MatrixArea MatrixArea::rotate90() const {
         // assign rows, top to bottom, to the current cols, right to left
         newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
     }
-    return {{cols - center.first, center.second}, cols, rows, std::move(newArr)};
+    return {{rows - center.second - 1, center.first}, cols, rows, std::move(newArr)};
 }
 
 MatrixArea MatrixArea::rotate180() const {
     Container newArr(arr.size());
     std::reverse_copy(std::begin(arr), std::end(arr), std::begin(newArr));
-    return {{cols - center.first, rows - center.second}, rows, cols, std::move(newArr)};
+    return {{cols - center.first - 1, rows - center.second - 1}, rows, cols, std::move(newArr)};
 }
 
 MatrixArea MatrixArea::rotate270() const {
@@ -1268,7 +1268,7 @@ MatrixArea MatrixArea::rotate270() const {
         // assign cols, left to right, to the current rows, bottom to top
         newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
     }
-    return {{center.first, rows - center.second}, cols, rows, std::move(newArr)};
+    return {{center.second, cols - center.first - 1}, cols, rows, std::move(newArr)};
 }
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const {
