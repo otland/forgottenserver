@@ -1430,6 +1430,8 @@ class LuaScriptInterface
 		static int luaTalkactionOnSay(lua_State* L);
 		static int luaTalkactionRegister(lua_State* L);
 		static int luaTalkactionSeparator(lua_State* L);
+		static int luaTalkactionAccess(lua_State* L);
+		static int luaTalkactionAccountType(lua_State* L);
 
 		// CreatureEvents
 		static int luaCreateCreatureEvent(lua_State* L);
