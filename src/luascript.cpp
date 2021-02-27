@@ -4563,13 +4563,45 @@ int LuaScriptInterface::luaGameGetTalkactions(lua_State* L)
 {
 	// Game.getTalkactions()
 	std::map<std::string, TalkAction> talkMap = g_talkActions->getTalkactions();
-	lua_createtable(L, talkMap.size(), 0);
+	std::map<AccountType_t, std::vector<std::string>> finalMap;
+	for (auto &ta: talkMap) {
+		if (!ta.second.fromLua) {
+			continue;
+		}
 
-	int index = 0;
-	for (auto& ta: talkMap) {
-		pushUserdata<TalkAction>(L, &(ta.second));
-		setMetatable(L, -1, "TalkAction");
-		lua_rawseti(L, -2, ++index);
+		AccountType_t accType = ta.second.getRequiredAccountType();
+		std::vector<std::string> wordsMap = ta.second.getWordsMap();
+
+		if (finalMap.count(accType) == 0) {
+			finalMap.insert(std::make_pair(accType, wordsMap));
+			continue;
+		}
+
+		std::map<AccountType_t, std::vector<std::string>>::iterator it = finalMap.find(accType);
+		for (auto &word: wordsMap) {
+			// TalkAction("!pos", "/pos", "-pos")
+			// .. counts as 3 seperate talkactions ( o.O )
+			if (std::find(it->second.begin(), it->second.end(), word) != it->second.end()) {
+				continue;
+			}
+
+			it->second.push_back(word);
+		}
+	}
+
+	lua_createtable(L, finalMap.size(), 0);
+
+	for (auto &ta: finalMap) {
+		lua_pushnumber(L, ta.first);
+		lua_createtable(L, ta.second.size(), 0);
+		uint32_t index = 0;
+
+		for (auto &word: ta.second) {
+			pushString(L, word);
+			lua_rawseti(L, -2, ++index);
+		}
+
+		lua_rawset(L, -3);
 	}
 	return 1;
 }
