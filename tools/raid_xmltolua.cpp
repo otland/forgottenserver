@@ -1,20 +1,21 @@
 #include <getopt.h>
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <sstream>
 #include <unordered_map>
 #include <vector>
 
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include <pugixml.hpp>
 #include "../src/pugicast.h"
 
 namespace {
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace po = boost::program_options;
 
 enum LogLevel {
@@ -285,18 +286,25 @@ struct Raid
 
 	std::string to_script() const
 	{
-		std::ostringstream prelude, callback;
+		std::map<uint32_t, std::vector<RaidEvent*>> eventByDelay;
+		for (auto&& event: eventList) {
+			eventByDelay[event->delay].push_back(event.get());
+		}
 
+		std::ostringstream prelude, callback;
 		prelude << "local raid = GlobalEvent(\"" << info.name << "\")\n";
 		prelude << "raid:type(\"timer\")\n";
 		prelude << "raid:interval(" << info.interval << ")\n\n";
 
 		uint32_t counter = 0u;
-		for (auto&& event: eventList) {
-			prelude << "local function event" << counter << "()\n";
-			event->to_script(prelude);
+		for (auto&& entry: eventByDelay) {
+			prelude << "local function event" << counter << "()";
+			for (auto&& event: entry.second) {
+				prelude << '\n';
+				event->to_script(prelude);
+			}
 			prelude << "end\n\n";
-			callback << INDENT << "addEvent(event" << counter << ", " << event->delay << ")\n";
+			callback << INDENT << "addEvent(event" << counter << ", " << entry.first << ")\n";
 
 			++counter;
 		}
