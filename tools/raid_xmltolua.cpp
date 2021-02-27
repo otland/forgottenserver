@@ -52,7 +52,7 @@ struct MissingTag: public ParseEventError
 	}
 };
 
-constexpr const char* INDENT = "    ";
+constexpr auto INDENT = "    ";
 
 struct RaidEvent
 {
@@ -64,7 +64,9 @@ struct RaidEvent
 	uint32_t delay;
 };
 
-static const std::unordered_map<std::string, std::string> messageTypes{
+using RaidPtr = std::unique_ptr<RaidEvent>;
+
+const std::unordered_map<std::string, std::string> messageTypes{
 	{"warning", "MESSAGE_STATUS_WARNING"},
 	{"event", "MESSAGE_EVENT_ADVANCE"},
 	{"default", "MESSAGE_EVENT_DEFAULT"},
@@ -73,15 +75,15 @@ static const std::unordered_map<std::string, std::string> messageTypes{
 	{"blueconsole", "MESSAGE_STATUS_CONSOLE_BLUE"},
 	{"redconsole", "MESSAGE_STATUS_CONSOLE_RED"},
 };
-static const std::string defaultMessageType{"MESSAGE_EVENT_ADVANCE"};
+const std::string defaultMessageType{"MESSAGE_EVENT_ADVANCE"};
 
 struct AnnounceEvent: public RaidEvent
 {
 	AnnounceEvent(uint32_t delay, std::string msg, std::string type): RaidEvent{delay}, message{std::move(msg)}, type{std::move(type)} {}
 
-	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode)
+	static RaidPtr from(uint32_t delay, const pugi::xml_node& eventNode)
 	{
-		pugi::xml_attribute message = eventNode.attribute("message");
+		auto message = eventNode.attribute("message");
 		if (not message) {
 			throw MissingTag{"message"};
 		}
@@ -121,7 +123,7 @@ struct Position
 template<class T>
 T require(const pugi::xml_node& node, const std::string& tag)
 {
-	if (pugi::xml_attribute attr = node.attribute(tag.c_str())) {
+	if (auto attr = node.attribute(tag.c_str())) {
 		return pugi::cast<T>(attr.value());
 	}
 	throw MissingTag{tag};
@@ -131,9 +133,9 @@ struct SingleSpawnEvent: public RaidEvent
 {
 	SingleSpawnEvent(uint32_t delay, std::string name, Position pos): RaidEvent{delay}, name{std::move(name)}, pos{std::move(pos)} {}
 
-	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode)
+	static RaidPtr from(uint32_t delay, const pugi::xml_node& eventNode)
 	{
-		pugi::xml_attribute monsterName = eventNode.attribute("name");
+		auto monsterName = eventNode.attribute("name");
 		if (not monsterName) {
 			throw MissingTag{"name"};
 		}
@@ -164,16 +166,16 @@ struct Spawn
 
 Spawn parseSpawnNode(const pugi::xml_node& monsterNode)
 {
-	pugi::xml_attribute name = monsterNode.attribute("name");
+	auto name = monsterNode.attribute("name");
 	if (not name) {
 		throw MissingTag{"name"};
 	}
 
 	uint32_t minAmount = 0, maxAmount = 0;
-	if (pugi::xml_attribute attr = monsterNode.attribute("minamount")) {
+	if (auto attr = monsterNode.attribute("minamount")) {
 		minAmount = pugi::cast<uint32_t>(attr.value());
 	}
-	if (pugi::xml_attribute attr = monsterNode.attribute("maxamount")) {
+	if (auto attr = monsterNode.attribute("maxamount")) {
 		maxAmount = pugi::cast<uint32_t>(attr.value());
 	}
 
@@ -203,7 +205,7 @@ struct AreaSpawnEvent: public RaidEvent
 {
 	AreaSpawnEvent(uint32_t delay, Position from, Position to, uint32_t radius, std::vector<Spawn> spawnList): RaidEvent{delay}, from_{std::move(from)}, to{std::move(to)}, radius{radius}, spawnList{std::move(spawnList)} {}
 
-	static std::unique_ptr<RaidEvent> from(uint32_t delay, const pugi::xml_node& eventNode, uint16_t radius)
+	static RaidPtr from(uint32_t delay, const pugi::xml_node& eventNode, uint16_t radius)
 	{
 		if (radius == 0) {
 			Position from{
@@ -279,11 +281,15 @@ struct RaidInfo
 
 struct Raid
 {
-	Raid(std::vector<std::unique_ptr<RaidEvent>> eventList, RaidInfo info): eventList{std::move(eventList)}, info{std::move(info)} {}
+	Raid(std::vector<RaidPtr> eventList, RaidInfo info): eventList{std::move(eventList)}, info{std::move(info)} {}
 
 	std::string to_script() const
 	{
 		std::ostringstream prelude, callback;
+
+		prelude << "local raid = GlobalEvent(\"" << info.name << "\")\n";
+		prelude << "raid:type(\"timer\")\n";
+		prelude << "raid:interval(" << info.interval << ")\n\n";
 
 		uint32_t counter = 0u;
 		for (auto&& event: eventList) {
@@ -295,20 +301,21 @@ struct Raid
 			++counter;
 		}
 
-		prelude << "function onTime(interval)\n" << callback.str() << INDENT << "return true\nend";
+		prelude << "function raid.onTime(interval)\n" << callback.str() << INDENT << "return true\nend\n\n";
+		prelude << "raid:register()\n";
 
 		return prelude.str();
 	}
 
 	fs::path stem() const { return info.path.stem(); }
 
-	std::vector<std::unique_ptr<RaidEvent>> eventList;
+	std::vector<RaidPtr> eventList;
 	RaidInfo info;
 };
 
-std::unique_ptr<RaidEvent> parseEvent(const std::string& eventType, const pugi::xml_node& eventNode)
+RaidPtr parseEvent(const std::string& eventType, const pugi::xml_node& eventNode)
 {
-	pugi::xml_attribute delayAttr = eventNode.attribute("delay");
+	auto delayAttr = eventNode.attribute("delay");
 	if (not delayAttr) {
 		throw MissingTag{"delay"};
 	}
@@ -332,15 +339,15 @@ std::unique_ptr<RaidEvent> parseEvent(const std::string& eventType, const pugi::
 
 Raid loadRaid(RaidInfo info, const fs::path& raids_path)
 {
-	fs::path xml_path = raids_path / info.path.filename();
+	auto xml_path = raids_path / info.path.filename();
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file(xml_path.c_str());
+	auto result = doc.load_file(xml_path.c_str());
 	if (not result) {
 		throw std::runtime_error(result.description());
 	}
 
-	std::vector<std::unique_ptr<RaidEvent>> eventList;
+	std::vector<RaidPtr> eventList;
 	for (auto&& eventNode: doc.child("raid").children()) {
 		try {
 			eventList.push_back(parseEvent(eventNode.name(), eventNode));
@@ -349,23 +356,19 @@ Raid loadRaid(RaidInfo info, const fs::path& raids_path)
 		}
 	}
 
-	std::sort(eventList.begin(), eventList.end(), [](
-			const std::unique_ptr<RaidEvent>& lhs,
-			const std::unique_ptr<RaidEvent>& rhs
-	) {
+	std::sort(eventList.begin(), eventList.end(), [](const RaidPtr& lhs, const RaidPtr& rhs) {
 		return lhs->delay < rhs->delay;
 	});
 
 	return {std::move(eventList), std::move(info)};
 }
 
-std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
+std::vector<Raid> loadRaids(const fs::path& data_path, bool, bool)
 {
-	fs::path xml_path = raids_path / "raids.xml";
-	/* std::cout << xml_path << std::endl; */
+	auto xml_path = data_path / "raids" / "raids.xml";
 
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file(xml_path.c_str());
+	auto result = doc.load_file(xml_path.c_str());
 	if (not result) {
 		std::cout << "[Error - loadRaids] " << result.description() << std::endl;
 		return {};
@@ -373,10 +376,8 @@ std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
 
 	std::vector<Raid> raidList;
 	for (auto&& raidNode: doc.child("raids").children()) {
-		pugi::xml_attribute attr;
-
 		std::string name;
-		if ((attr = raidNode.attribute("name"))) {
+		if (auto attr = raidNode.attribute("name")) {
 			name = attr.as_string();
 		} else {
 			std::cout << "[Error - loadRaids] Name tag missing for raid" << std::endl;
@@ -384,7 +385,7 @@ std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
 		}
 
 		std::string file;
-		if ((attr = raidNode.attribute("file"))) {
+		if (auto attr = raidNode.attribute("file")) {
 			file = attr.as_string();
 		} else {
 			std::ostringstream ss;
@@ -400,19 +401,19 @@ std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
 		}
 
 		uint32_t margin = 0;
-		if ((attr = raidNode.attribute("margin"))) {
+		if (auto attr = raidNode.attribute("margin")) {
 			margin = pugi::cast<uint32_t>(attr.value()) * 60 * 1000;
 		} else {
 			std::cout << "[Warning - loadRaids] margin tag missing for raid: " << name << std::endl;
 		}
 
 		bool repeat = false;
-		if ((attr = raidNode.attribute("repeat"))) {
+		if (auto attr = raidNode.attribute("repeat")) {
 			repeat = pugi::cast<bool>(attr.as_string());
 		}
 
 		try {
-			raidList.push_back(loadRaid({name, file, interval, margin, repeat}, raids_path));
+			raidList.push_back(loadRaid({name, file, interval, margin, repeat}, data_path / "raids"));
 		} catch (const std::runtime_error& err) {
 			std::cout << "[Error - loadRaids] Failed to load raid \"" << name << "\": " << err.what() << std::endl;
 		}
@@ -421,10 +422,12 @@ std::vector<Raid> loadRaids(const fs::path& raids_path, bool, bool)
 	return raidList;
 }
 
-void storeRaids(const fs::path& globalevents_path, const std::vector<Raid>& raidList, bool dryrun, bool)
+void storeRaids(const fs::path& data_path, const std::vector<Raid>& raidList, bool dryrun, bool)
 {
+	fs::create_directories(data_path / "scripts" / "globalevents");
+
 	for (auto&& raid: raidList) {
-		fs::path script_path = globalevents_path / "scripts" / raid.stem();
+		auto script_path = data_path / "scripts" / "globalevents" / raid.stem();
 		script_path += ".lua";
 
 		std::cout << raid.info.path << " -> " << script_path << std::endl;
@@ -447,15 +450,14 @@ void storeRaids(const fs::path& globalevents_path, const std::vector<Raid>& raid
 int main(int argc, char** argv)
 {
 	std::ios::sync_with_stdio(false);
-	fs::path globalevents, raids;
+	fs::path data;
 	bool dryrun, verbose;
 
 	po::options_description desc{"Usage"};
 	desc.add_options()
 		("help,h", "print help message")
-		("dry-run,d", po::bool_switch(&dryrun), "do not write files")
-		("globalevents,g", po::value(&globalevents)->required(), "path to globalevents folder (required)")
-		("raids,r", po::value(&raids)->required(), "path to raids folder (required)")
+		("dry-run,n", po::bool_switch(&dryrun), "do not write files")
+		("data,d", po::value(&data)->required(), "path to data folder (required)")
 		("verbose,v", po::bool_switch(&verbose), "print debug messages");
 
 	po::variables_map vm;
@@ -473,21 +475,13 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	if (globalevents.empty() and raids.empty()) {
+	if (data.empty()) {
 		std::cout << desc << std::endl;
 		return 1;
 	}
 
-	if (globalevents.empty()) {
-		raids = raids.remove_trailing_separator();
-		globalevents = raids.parent_path() / "globalevents";
-	} else if (raids.empty()) {
-		globalevents = globalevents.remove_trailing_separator();
-		raids = globalevents.parent_path() / "raids";
-	}
+	std::cout << "Output path: " << data / "scripts" / "globalevents" << '\n';
+	std::cout << "XML path: " << data / "raids" / "raids.xml" << '\n';
 
-	std::cout << "Output path: " << globalevents << '\n';
-	std::cout << "XML path: " << raids << '\n';
-
-	storeRaids(globalevents, loadRaids(raids, dryrun, verbose), dryrun, verbose);
+	storeRaids(data, loadRaids(data, dryrun, verbose), dryrun, verbose);
 }
