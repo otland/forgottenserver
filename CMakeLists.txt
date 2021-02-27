@@ -60,7 +60,7 @@ else ()
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system filesystem iostreams)
+find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system filesystem iostreams program_options)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 target_link_libraries(tfs PRIVATE
@@ -74,6 +74,11 @@ target_link_libraries(tfs PRIVATE
         ${MYSQL_CLIENT_LIBS}
         ${PUGIXML_LIBRARIES}
         )
+
+option(BUILD_TOOLS "Build compatibility tools" OFF)
+if (BUILD_TOOLS)
+    add_subdirectory(tools)
+endif()
 
 ### INTERPROCEDURAL_OPTIMIZATION ###
 cmake_policy(SET CMP0069 NEW)

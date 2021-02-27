@@ -43,6 +43,7 @@
 
 extern Chat* g_chat;
 extern Game g_game;
+extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
@@ -2028,7 +2029,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
 
-	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+	registerMethod("Game", "startEvent", LuaScriptInterface::luaGameStartEvent);
 
 	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
@@ -4535,25 +4536,18 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameStartRaid(lua_State* L)
+int LuaScriptInterface::luaGameStartEvent(lua_State* L)
 {
-	// Game.startRaid(raidName)
-	const std::string& raidName = getString(L, 1);
+	// Game.startEvent(event)
+	const std::string& eventName = getString(L, 1);
 
-	Raid* raid = g_game.raids.getRaidByName(raidName);
-	if (!raid || !raid->isLoaded()) {
-		lua_pushnumber(L, RETURNVALUE_NOSUCHRAIDEXISTS);
-		return 1;
+	const auto& eventMap = g_globalEvents->getEventMap(GLOBALEVENT_TIMER);
+	try {
+		const auto& event = eventMap.at(eventName);
+		lua_pushboolean(L, event.executeEvent());
+	} catch (const std::out_of_range&) {
+		lua_pushnil(L);
 	}
-
-	if (g_game.raids.getRunning()) {
-		lua_pushnumber(L, RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING);
-		return 1;
-	}
-
-	g_game.raids.setRunning(raid);
-	raid->startRaid();
-	lua_pushnumber(L, RETURNVALUE_NOERROR);
 	return 1;
 }
 
@@ -15835,6 +15829,8 @@ int LuaScriptInterface::luaGlobalEventType(lua_State* L)
 			global->setEventType(GLOBALEVENT_SHUTDOWN);
 		} else if (tmpStr == "record") {
 			global->setEventType(GLOBALEVENT_RECORD);
+		} else if (tmpStr == "timer") {
+			global->setEventType(GLOBALEVENT_TIMER);
 		} else {
 			std::cout << "[Error - CreatureEvent::configureLuaEvent] Invalid type for global event: " << typeName << std::endl;
 			pushBoolean(L, false);

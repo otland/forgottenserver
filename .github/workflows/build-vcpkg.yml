@@ -12,12 +12,14 @@ on:
     paths:
       - cmake/**
       - src/**
+      - tools/**
       - CMakeLists.txt
 
   pull_request:
     paths:
       - cmake/**
       - src/**
+      - tools/**
       - CMakeLists.txt
 
 jobs:
@@ -38,7 +40,7 @@ jobs:
             cc: cl.exe
             triplet: x64-windows
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree boost-program-options
               lua luajit libmariadb pugixml cryptopp
           - name: ubuntu-gcc
             os: ubuntu
@@ -46,7 +48,7 @@ jobs:
             cc: gcc
             triplet: x64-linux
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree boost-program-options
               lua libmariadb pugixml cryptopp
           - name: ubuntu-clang
             os: ubuntu
@@ -54,7 +56,7 @@ jobs:
             cc: clang
             triplet: x64-linux
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree boost-program-options
               lua libmariadb pugixml cryptopp
           - name: macos-clang
             os: macos
@@ -62,7 +64,7 @@ jobs:
             cc: clang
             triplet: x64-osx
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree boost-program-options
               lua libmariadb pugixml cryptopp
 
     steps:
@@ -110,7 +112,7 @@ jobs:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
           cmakeBuildType: ${{ matrix.buildtype }}
-          cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
+          cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }} -BUILD_TOOLS=on
 
       - name: dir
         run: find $RUNNER_WORKSPACE
