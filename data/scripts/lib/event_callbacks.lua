@@ -70,53 +70,70 @@ local callbacks = {
 	["onSpawn"] = EVENT_CALLBACK_ONSPAWN
 }
 
--- can't be overwritten on /reload global/libs now
-if not EventCallbackData then
-	EventCallbackData = {}
-	for i = 1, EVENT_CALLBACK_LAST do
-		EventCallbackData[i] = {}
-	end
-end
-EventCallback = {}
-setmetatable(EventCallback,
-{
-	__index =
-	function(self)
-		if isScriptsInterface() then
-			return self
-		else
-			return nil
-		end
-	end,
+local auxargs = {
+	[EVENT_CALLBACK_ONGAINEXPERIENCE] = {[3] = 1},
+	[EVENT_CALLBACK_ONLOSEEXPERIENCE] = {[2] = 1},
+	[EVENT_CALLBACK_ONGAINSKILLTRIES] = {[3] = 1}
+}
 
-	__newindex =
-	function(self, key, value)
+EventCallbackData = {}
+hasEventCallback = function (type)
+	return #EventCallbackData[type] > 0
+end
+
+EventCallback = {
+	register = function (self, index)
 		if isScriptsInterface() then
-			if self[key] then
-				local ecd = EventCallbackData
-				ecd[callbacks[key]][#ecd == nil and 1 or #ecd[callbacks[key]] + 1] = value
+			local type, call = rawget(self, "type"), rawget(self, "call")
+			if type and call then
+				index = tonumber(index)
+				EventCallbackData[type][#EventCallbackData[type] + 1] = {call, index or -math.huge}
+				if index then
+					table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
+				end
+				return rawset(self, "type", nil) and rawset(self, "call", nil)
+			else
+				debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
 			end
-		else
-			return nil
 		end
 	end,
-
-	__call =
-    function(self, callbackType, ...)
-        local result
-        local key, event = next(EventCallbackData[callbackType])
-        repeat
-            result = {event(...)}
-            key, event = next(EventCallbackData[callbackType], key)
-        until event == nil or (result[1] ~= nil and (result[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, callbackType) and result[1] ~= RETURNVALUE_NOERROR))
-        return unpack(result)
-    end
-})
-
-function hasEventCallback(callbackType)
-	if #EventCallbackData[callbackType] == 0 then
-		return false
+	clear = function (self)
+		EventCallbackData = {}
+		for i = 1, EVENT_CALLBACK_LAST do
+			EventCallbackData[i] = {}
+		end
 	end
-	return true
-end
+}
 
+setmetatable(EventCallback, {
+	__index = function (self) return self end,
+	__newindex = function (self, k, v)
+		if isScriptsInterface() then
+			local ecType = callbacks[k]
+			if ecType then
+				if type(v) == "function" then
+					return rawset(self, "type", ecType) and rawset(self, "call", v)
+				end
+				debugPrint(string.format("[Warning - EventCallback::%s] a function is expected.", k))
+			else
+				debugPrint(string.format("[Warning - EventCallback::%s] is not a valid callback.", k))
+			end
+		end
+	end,
+	__call = function (self, type, ...)
+		local eventTable, ret = EventCallbackData[type]
+		local args, events = table.pack(...), #eventTable
+		for k, ev in pairs(eventTable) do
+			ret = {ev[1](unpack(args))}
+			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
+			return unpack(ret)
+			end
+			for k, v in pairs(auxargs[type] or {}) do
+				args[k] = ret[v]
+			end
+		end
+	end
+	})
+
+-- can't be overwritten on reloads
+EventCallback:clear()

@@ -27,3 +27,5 @@ ec.onReportBug = function(self, message, position, category)
 	self:sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your report has been sent to " .. configManager.getString(configKeys.SERVER_NAME) .. ".")
 	return true
 end
+
+ec:register()

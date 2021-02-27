@@ -522,6 +522,7 @@ class LuaScriptInterface
 
 		// table
 		static int luaTableCreate(lua_State* L);
+		static int luaTablePack(lua_State* L);
 
 		// Game
 		static int luaGameGetSpectators(lua_State* L);
@@ -1432,7 +1433,6 @@ class LuaScriptInterface
 		static int luaTalkactionSeparator(lua_State* L);
 		static int luaTalkactionAccess(lua_State* L);
 		static int luaTalkactionAccountType(lua_State* L);
-		static int luaTalkactionGetWords(lua_State* L);
 
 		// CreatureEvents
 		static int luaCreateCreatureEvent(lua_State* L);

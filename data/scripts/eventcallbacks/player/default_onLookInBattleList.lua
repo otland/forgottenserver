@@ -21,3 +21,5 @@ ec.onLookInBattleList = function(self, creature, distance)
 	end
 	return description
 end
+
+ec:register()

@@ -1995,6 +1995,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// table
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
+	registerMethod("table", "pack", LuaScriptInterface::luaTablePack);
 
 	// Game
 	registerTable("Game");
@@ -2944,7 +2945,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("TalkAction", "separator", LuaScriptInterface::luaTalkactionSeparator);
 	registerMethod("TalkAction", "access", LuaScriptInterface::luaTalkactionAccess);
 	registerMethod("TalkAction", "accountType", LuaScriptInterface::luaTalkactionAccountType);
-	registerMethod("TalkAction", "getWords", LuaScriptInterface::luaTalkactionGetWords);
 
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
@@ -4145,6 +4145,23 @@ int LuaScriptInterface::luaTableCreate(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaTablePack(lua_State* L)
+{
+	// table.pack(...)
+	int i;
+	int n = lua_gettop(L);  /* number of elements to pack */
+	lua_createtable(L, n, 1);  /* create result table */
+	lua_insert(L, 1);  /* put it at index 1 */
+	for (i = n; i >= 1; i--)  /* assign elements */
+		lua_rawseti(L, 1, i);
+		if (luaL_callmeta(L, -1, "__index") != 0) {
+			lua_replace(L, -2);
+		}
+	lua_pushinteger(L, n);
+	lua_setfield(L, 1, "n");  /* t.n = number of elements */
+	return 1;  /* return table */
+}
+
 // Game
 int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 {
@@ -4506,6 +4523,12 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 		monsterType->info.lootItems.clear();
 		monsterType->info.attackSpells.clear();
 		monsterType->info.defenseSpells.clear();
+		monsterType->info.scripts.clear();
+		monsterType->info.thinkEvent = -1;
+		monsterType->info.creatureAppearEvent = -1;
+		monsterType->info.creatureDisappearEvent = -1;
+		monsterType->info.creatureMoveEvent = -1;
+		monsterType->info.creatureSayEvent = -1;
 	}
 
 	pushUserdata<MonsterType>(L, monsterType);
@@ -15423,19 +15446,6 @@ int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTalkactionGetWords(lua_State* L)
-{
-	// talkAction:getWords()
-	TalkAction* talk = getUserdata<TalkAction>(L, 1);
-	if (talk) {
-		pushString(L, talk->getWords());
-		return 1;
-	}
-
-	lua_pushnil(L);
 	return 1;
 }
 
