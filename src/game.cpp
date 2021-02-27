@@ -4006,7 +4006,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		realHealthChange = target->getHealth() - realHealthChange;
 
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
-			auto damageString = fmt::format("{:d} hitpoint{:s}.", realHealthChange, realHealthChange != 1 ? "s" : "");
+			auto damageString = fmt::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
 
 			TextMessage message;
 			message.position = targetPos;
@@ -4019,25 +4019,25 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				Player* tmpPlayer = spectator->getPlayer();
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
-					message.text = fmt::format("You heal {:s} for {:s}", target->getNameDescription(), damageString);
+					message.text = fmt::format("You heal {:s} for {:s}.", target->getNameDescription(), damageString);
 				} else if (tmpPlayer == targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					if (!attacker) {
-						message.text = fmt::format("You were healed for {:d}", damageString);
+						message.text = fmt::format("You were healed for {:d}.", damageString);
 					} else if (targetPlayer == attackerPlayer) {
-						message.text = fmt::format("You healed yourself for {:d}", damageString);
+						message.text = fmt::format("You healed yourself for {:d}.", damageString);
 					} else {
-						message.text = fmt::format("You were healed by {:d} for {:s}", attacker->getNameDescription(), damageString);
+						message.text = fmt::format("You were healed by {:d} for {:s}.", attacker->getNameDescription(), damageString);
 					}
 				} else if (!attacker) {
 					message.type = MESSAGE_HEALED_OTHERS;
-					message.text = fmt::format("{:s} was healed for {:s}", ucfirst(target->getNameDescription()), damageString);
+					message.text = fmt::format("{:s} was healed for {:s}.", ucfirst(target->getNameDescription()), damageString);
 				} else if (attacker == target) {
 					message.type = MESSAGE_HEALED_OTHERS;
-					message.text = fmt::format("{:s} healed {:s}self for {:s}", ucfirst(attacker->getNameDescription()), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
+					message.text = fmt::format("{:s} healed {:s}self for {:s}.", ucfirst(attacker->getNameDescription()), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
 				} else {
 					message.type = MESSAGE_HEALED_OTHERS;
-					message.text = fmt::format("{:s} healed {:s} for {:s}", ucfirst(attacker->getNameDescription()), target->getNameDescription(), damageString);
+					message.text = fmt::format("{:s} healed {:s} for {:s}.", ucfirst(attacker->getNameDescription()), target->getNameDescription(), damageString);
 				}
 				tmpPlayer->sendTextMessage(message);
 			}
@@ -4189,7 +4189,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
-			auto damageString = fmt::format("{:d} hitpoint{:s}.", realDamage, realDamage != 1 ? "s" : "");
+			auto damageString = fmt::format("{:d} hitpoint{:s}", realDamage, realDamage != 1 ? "s" : "");
 
 			for (Creature* spectator : spectators) {
 				Player* tmpPlayer = spectator->getPlayer();
