@@ -69,7 +69,7 @@ target_link_libraries(tfs PRIVATE
         Boost::system
         Boost::filesystem
         Boost::iostreams
-	fmt::fmt
+        fmt::fmt
         ${CMAKE_THREAD_LIBS_INIT}
         ${Crypto++_LIBRARIES}
         ${LUA_LIBRARIES}
