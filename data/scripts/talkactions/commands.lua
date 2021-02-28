@@ -16,17 +16,19 @@ function ta.onSay(player, words, param)
 
 	for i = config.ACCOUNT_TYPE_MAX, config.ACCOUNT_TYPE_MIN, -1 do
 		local talkActionPairs = talkActions[i]
-		for k, v in pairs(talkActionPairs) do
-			local word = v[1]
-			local talkaction = v[2]
-			local tAccess  = talkaction:getAccess()
-			local tAccType = talkaction:getAccountType()
-			if (not tAccess or (access and tAccess)) and (tAccType <= accType) then
-				description = description .. word .. '\n'
+		if talkActionPairs then
+			for k, v in pairs(talkActionPairs) do
+				local word = v[1]
+				local talkaction = v[2]
+				local tAccess  = talkaction:getAccess()
+				local tAccType = talkaction:getAccountType()
+				if (not tAccess or (access and tAccess)) and (tAccType <= accType) then
+					description = description .. word .. '\n'
+				end
 			end
-		end
-		if description ~= '' then
-			description = description .. '\n'
+			if description ~= '' then
+				description = description .. '\n'
+			end
 		end
 	end
 
