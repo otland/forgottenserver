@@ -4606,8 +4606,6 @@ int LuaScriptInterface::luaGameGetTalkactions(lua_State* L)
 	}
 
 	lua_createtable(L, finalMap.size(), 0);
-
-	uint32_t index = 0;
 	for (auto &ta: finalMap) {
 		if (!ta.second.fromLua) {
 			continue;
@@ -4615,9 +4613,8 @@ int LuaScriptInterface::luaGameGetTalkactions(lua_State* L)
 
 		pushUserdata<TalkAction>(L, &(ta.second));
 		setMetatable(L, -1, "TalkAction");
-		lua_rawseti(L, -2, ++index);
+		lua_setfield(L, -2, ta.first.c_str());
 	}
-
 	return 1;
 }
 
