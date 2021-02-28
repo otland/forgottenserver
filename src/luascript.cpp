@@ -15436,6 +15436,19 @@ int LuaScriptInterface::luaTalkactionAccess(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaTalkactionGetAccess(lua_State* L)
+{
+	// talkaction:getAccess()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		pushBoolean(L, talk->getNeedAccess());
+		return 1;
+	}
+
+	lua_pushnil(L);
+	return 1;
+}
+
 int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 {
 	// talkAction:accountType(AccountType_t = ACCOUNT_TYPE_NORMAL)
@@ -15446,6 +15459,32 @@ int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionGetAccountType(lua_State* L)
+{
+	// talkaction:getAccountType()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		lua_pushnumber(L, talk->getRequiredAccountType());
+		return 1;
+	}
+
+	lua_pushnil(L);
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionGetWords(lua_State* L)
+{
+	// talkaction:getWords()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		pushString(L, talk->getWords());
+		return 1;
+	}
+
+	lua_pushnil(L);
 	return 1;
 }
 
