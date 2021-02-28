@@ -1,25 +1,24 @@
 local ta = TalkAction('/commands','!commands')
 
 local config = {
-	path = 'data/scripts/cache/commands/',
-	ext = '.txt',
-	dialogIcon = 1950
+	dialogIcon = 2160
 }
 
 function ta.onSay(player, words, param)
+	local access = player:getGroup():getAccess()
 	local accType = player:getAccountType()
-	local commands = ''
+	local description = ''
 
-	for i = accType, ACCOUNT_TYPE_NORMAL, -1 do
-		local file = config.path .. i .. config.ext
-		if file_exists(file) then
-			for line in io.lines(file) do
-				commands = commands .. line .. '\n'
-			end
+	local talkActions = Game.getTalkactions()
+	for i = 1, #talkActions do
+		local tAccess  = talkActions[i]:getAccess()
+		local tAccType = talkActions[i]:getAccountType()
+		if (not tAccess or (access and tAccess)) and (tAccType <= accType) then
+			description = description .. talkActions[i]:getWords() .. '\n'
 		end
 	end
 
-	player:showTextDialog(config.dialogIcon, commands)
+	player:showTextDialog(config.dialogIcon, description)
 	return false
 end
 
@@ -27,9 +26,3 @@ ta:access(false)
 ta:accountType(ACCOUNT_TYPE_NORMAL)
 ta:separator(' ')
 ta:register()
-
-function file_exists(file)
-	local f = io.open(file, 'r')
-	if f then f:close() end
-	return f ~= nil
-end
