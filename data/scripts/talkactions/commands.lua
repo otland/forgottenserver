@@ -1,7 +1,9 @@
 local ta = TalkAction('/commands','!commands')
 
 local config = {
-	dialogIcon = 2160
+	dialogIcon = 2160,
+	ACCOUNT_TYPE_MAX = ACCOUNT_TYPE_GOD,
+	ACCOUNT_TYPE_MIN = ACCOUNT_TYPE_NORMAL
 }
 
 function ta.onSay(player, words, param)
@@ -10,11 +12,18 @@ function ta.onSay(player, words, param)
 	local description = ''
 
 	local talkActions = Game.getTalkactions()
-	for i = 1, #talkActions do
-		local tAccess  = talkActions[i]:getAccess()
-		local tAccType = talkActions[i]:getAccountType()
-		if (not tAccess or (access and tAccess)) and (tAccType <= accType) then
-			description = description .. talkActions[i]:getWords() .. '\n'
+	talkActions = categorizeCommands(talkActions)
+
+	for i = config.ACCOUNT_TYPE_MAX, config.ACCOUNT_TYPE_MIN, -1 do
+		local talkActionPairs = talkActions[i]
+		for k, v in pairs(talkActionPairs) do
+			local word = v[1]
+			local talkaction = v[2]
+			local tAccess  = talkaction:getAccess()
+			local tAccType = talkaction:getAccountType()
+			if (not tAccess or (access and tAccess)) and (tAccType <= accType) then
+				description = description .. word .. '\n'
+			end
 		end
 	end
 
@@ -26,3 +35,26 @@ ta:access(false)
 ta:accountType(ACCOUNT_TYPE_NORMAL)
 ta:separator(' ')
 ta:register()
+
+--[[
+	returns new table containing categorized talkactions
+	{
+		[1] = {
+			{word, talkaction}
+			{word, talkaction}
+		},
+		...
+	}
+]]
+function categorizeCommands(talkactions)
+	local sorted = {}
+	for word, talkaction in pairs(talkactions) do
+		local accType = talkaction:getAccountType()
+		if not sorted[accType] then
+			sorted[accType] = {{word, talkaction}}
+		else
+			table.insert(sorted[accType], {word, talkaction})
+		end
+	end
+	return sorted
+end
