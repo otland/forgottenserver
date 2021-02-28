@@ -2945,6 +2945,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("TalkAction", "separator", LuaScriptInterface::luaTalkactionSeparator);
 	registerMethod("TalkAction", "access", LuaScriptInterface::luaTalkactionAccess);
 	registerMethod("TalkAction", "accountType", LuaScriptInterface::luaTalkactionAccountType);
+	registerMethod("TalkAction", "getAccess", LuaScriptInterface::luaTalkactionGetAccess);
+	registerMethod("TalkAction", "getAccountType", LuaScriptInterface::luaTalkactionGetAccountType);
+	registerMethod("TalkAction", "getWords", LuaScriptInterface::luaTalkactionGetWords);
 
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
