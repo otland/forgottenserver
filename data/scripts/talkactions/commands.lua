@@ -25,6 +25,9 @@ function ta.onSay(player, words, param)
 				description = description .. word .. '\n'
 			end
 		end
+		if description ~= '' then
+			description = description .. '\n'
+		end
 	end
 
 	player:showTextDialog(config.dialogIcon, description)
