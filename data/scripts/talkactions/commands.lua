@@ -1,7 +1,7 @@
 local ta = TalkAction('/commands','!commands')
 
 local config = {
-	dialogIcon = 2160,
+	dialogIcon = 1950,
 	ACCOUNT_TYPE_MAX = ACCOUNT_TYPE_GOD,
 	ACCOUNT_TYPE_MIN = ACCOUNT_TYPE_NORMAL
 }
