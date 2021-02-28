@@ -4008,6 +4008,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			auto damageString = fmt::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
 
+			std::string spectatorMessage;
+
 			TextMessage message;
 			message.position = targetPos;
 			message.primary.value = realHealthChange;
@@ -4029,17 +4031,20 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					} else {
 						message.text = fmt::format("You were healed by {:s} for {:s}.", attacker->getNameDescription(), damageString);
 					}
-				} else if (!attacker) {
-					message.type = MESSAGE_HEALED_OTHERS;
-					message.text = fmt::format("{:s} was healed for {:s}.", target->getNameDescription(), damageString);
-				} else if (attacker == target) {
-					message.type = MESSAGE_HEALED_OTHERS;
-					message.text = fmt::format("{:s} healed {:s}self for {:s}.", attacker->getNameDescription(), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
 				} else {
 					message.type = MESSAGE_HEALED_OTHERS;
-					message.text = fmt::format("{:s} healed {:s} for {:s}.", attacker->getNameDescription(), target->getNameDescription(), damageString);
+					if (spectatorMessage.empty()) {
+						if (!attacker) {
+							spectatorMessage = fmt::format("{:s} was healed for {:s}.", target->getNameDescription(), damageString);
+						} else if (attacker == target) {
+							spectatorMessage = fmt::format("{:s} healed {:s}self for {:s}.", attacker->getNameDescription(), targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "him") : "it", damageString);
+						} else {
+							spectatorMessage = fmt::format("{:s} healed {:s} for {:s}.", attacker->getNameDescription(), target->getNameDescription(), damageString);
+						}
+						spectatorMessage[0] = std::toupper(spectatorMessage[0]);
+					}
+					message.text = spectatorMessage;
 				}
-				message.text[0] = std::toupper(message.text[0]);
 				tmpPlayer->sendTextMessage(message);
 			}
 		}
@@ -4096,6 +4101,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				map.getSpectators(spectators, targetPos, true, true);
 				addMagicEffect(spectators, targetPos, CONST_ME_LOSEENERGY);
 
+				std::string spectatorMessage;
+
 				message.primary.value = manaDamage;
 				message.primary.color = TEXTCOLOR_BLUE;
 
@@ -4108,6 +4115,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 						message.type = MESSAGE_DAMAGE_DEALT;
 						message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaDamage);
+						message.text[0] = std::toupper(message.text[0]);
 					} else if (tmpPlayer == targetPlayer) {
 						message.type = MESSAGE_DAMAGE_RECEIVED;
 						if (!attacker) {
@@ -4117,17 +4125,20 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						} else {
 							message.text = fmt::format("You lose {:d} mana due to an attack by {:s}.", manaDamage, attacker->getNameDescription());
 						}
-					} else if (!attacker) {
-						message.type = MESSAGE_DAMAGE_OTHERS;
-						message.text = fmt::format("{:s} loses {:d} mana.", target->getNameDescription(), manaDamage);
-					} else if (attacker == target) {
-						message.type = MESSAGE_DAMAGE_OTHERS;
-						message.text = fmt::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaDamage, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
 					} else {
 						message.type = MESSAGE_DAMAGE_OTHERS;
-						message.text = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaDamage, attacker->getNameDescription());
+						if (spectatorMessage.empty()) {
+							if (!attacker) {
+								spectatorMessage = fmt::format("{:s} loses {:d} mana.", target->getNameDescription(), manaDamage);
+							} else if (attacker == target) {
+								spectatorMessage = fmt::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaDamage, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
+							} else {
+								spectatorMessage = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaDamage, attacker->getNameDescription());
+							}
+							spectatorMessage[0] = std::toupper(spectatorMessage[0]);
+						}
+						message.text = spectatorMessage;
 					}
-					message.text[0] = std::toupper(message.text[0]);
 					tmpPlayer->sendTextMessage(message);
 				}
 
@@ -4193,6 +4204,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
 			auto damageString = fmt::format("{:d} hitpoint{:s}", realDamage, realDamage != 1 ? "s" : "");
 
+			std::string spectatorMessage;
+
 			for (Creature* spectator : spectators) {
 				Player* tmpPlayer = spectator->getPlayer();
 				if (tmpPlayer->getPosition().z != targetPos.z) {
@@ -4202,6 +4215,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_DAMAGE_DEALT;
 					message.text = fmt::format("{:s} loses {:s} due to your attack.", target->getNameDescription(), damageString);
+					message.text[0] = std::toupper(message.text[0]);
 				} else if (tmpPlayer == targetPlayer) {
 					message.type = MESSAGE_DAMAGE_RECEIVED;
 					if (!attacker) {
@@ -4211,17 +4225,20 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					} else {
 						message.text = fmt::format("You lose {:s} due to an attack by {:s}.", damageString, attacker->getNameDescription());
 					}
-				} else if (!attacker) {
-					message.type = MESSAGE_DAMAGE_OTHERS;
-					message.text = fmt::format("{:s} loses {:s}.", target->getNameDescription(), damageString);
-				} else if (attacker == target) {
-					message.type = MESSAGE_DAMAGE_OTHERS;
-					message.text = fmt::format("{:s} loses {:s} due to {:s} own attack.", target->getNameDescription(), damageString, targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
 				} else {
 					message.type = MESSAGE_DAMAGE_OTHERS;
-					message.text = fmt::format("{:s} loses {:s} due to an attack by {:s}.", target->getNameDescription(), damageString, attacker->getNameDescription());
+					if (spectatorMessage.empty()) {
+						if (!attacker) {
+							spectatorMessage = fmt::format("{:s} loses {:s}.", target->getNameDescription(), damageString);
+						} else if (attacker == target) {
+							spectatorMessage = fmt::format("{:s} loses {:s} due to {:s} own attack.", target->getNameDescription(), damageString, targetPlayer ? (targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his") : "its");
+						} else {
+							spectatorMessage = fmt::format("{:s} loses {:s} due to an attack by {:s}.", target->getNameDescription(), damageString, attacker->getNameDescription());
+						}
+						spectatorMessage[0] = std::toupper(spectatorMessage[0]);
+					}
+					message.text = spectatorMessage;
 				}
-				message.text[0] = std::toupper(message.text[0]);
 				tmpPlayer->sendTextMessage(message);
 			}
 		}
@@ -4323,6 +4340,8 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 
 		targetPlayer->drainMana(attacker, manaLoss);
 
+		std::string spectatorMessage;
+
 		TextMessage message;
 		message.position = targetPos;
 		message.primary.value = manaLoss;
@@ -4335,6 +4354,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
 				message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaLoss);
+				message.text[0] = std::toupper(message.text[0]);
 			} else if (tmpPlayer == targetPlayer) {
 				message.type = MESSAGE_DAMAGE_RECEIVED;
 				if (!attacker) {
@@ -4344,17 +4364,20 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 				} else {
 					message.text = fmt::format("You lose {:d} mana due to an attack by {:s}.", manaLoss, attacker->getNameDescription());
 				}
-			} else if (!attacker) {
-				message.type = MESSAGE_DAMAGE_OTHERS;
-				message.text = fmt::format("{:s} loses {:d} mana.", target->getNameDescription(), manaLoss);
-			} else if (attacker == target) {
-				message.type = MESSAGE_DAMAGE_OTHERS;
-				message.text = fmt::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaLoss, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
 			} else {
 				message.type = MESSAGE_DAMAGE_OTHERS;
-				message.text = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaLoss, attacker->getNameDescription());
+				if (spectatorMessage.empty()) {
+					if (!attacker) {
+						spectatorMessage = fmt::format("{:s} loses {:d} mana.", target->getNameDescription(), manaLoss);
+					} else if (attacker == target) {
+						spectatorMessage = fmt::format("{:s} loses {:d} mana due to {:s} own attack.", target->getNameDescription(), manaLoss, targetPlayer->getSex() == PLAYERSEX_FEMALE ? "her" : "his");
+					} else {
+						spectatorMessage = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaLoss, attacker->getNameDescription());
+					}
+					spectatorMessage[0] = std::toupper(spectatorMessage[0]);
+				}
+				message.text = spectatorMessage;
 			}
-			message.text[0] = std::toupper(message.text[0]);
 			tmpPlayer->sendTextMessage(message);
 		}
 	}
