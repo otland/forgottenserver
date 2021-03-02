@@ -1405,7 +1405,7 @@ function createFunctions(class)
 			end
 		end
 	end
-	for _,func in ipairs(temp) do
+	for _, func in ipairs(temp) do
 		rawset(class, func[1], func[2])
 		rawset(class, func[3], func[4])
 		rawset(class, func[5], func[6])
