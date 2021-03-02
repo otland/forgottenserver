@@ -275,7 +275,7 @@ function pushThing(thing)
 		if thing:isItem() then
 			t.uid = thing:getUniqueId()
 			t.itemid = thing:getId()
-			if ItemType(t.itemid):hasSubType() then
+			if ItemType(t.itemid):subType() then
 				t.type = thing:getSubType()
 			end
 			t.actionid = thing:getActionId()
@@ -1390,6 +1390,7 @@ function createFunctions(class)
 		for strLen, strTable in pairs(exclude) do
 			if table.contains(strTable, name:sub(1, strLen)) then
 				add = false
+				break
 			end
 		end
 		if add then
@@ -1398,14 +1399,16 @@ function createFunctions(class)
 			local setFunc = function(self, ...) return func(self, ...) end
 			local get = "get" .. str
 			local set = "set" .. str
-			if not (rawget(class, get) and rawget(class, set)) then
-				table.insert(temp, {set, setFunc, get, getFunc})
+			local is = "is" .. str
+			if not (rawget(class, get) and rawget(class, set) and rawget(class, is)) then
+				table.insert(temp, {set, setFunc, get, getFunc, is, getFunc})
 			end
 		end
 	end
-	for _, func in ipairs(temp) do
+	for _,func in ipairs(temp) do
 		rawset(class, func[1], func[2])
 		rawset(class, func[3], func[4])
+		rawset(class, func[5], func[6])
 	end
 end
 

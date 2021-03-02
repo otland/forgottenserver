@@ -36265,13 +36265,6 @@
 		<attribute key="containerSize" value="40" />
 		<attribute key="description" value="Tired of carrying lots and lots of backpacks filled with money? In a Gold Pouch you can carry as many gold, platinum or crystal coins as your capacity allows." />
 	</item>
-	<item id="26378" article="a" name="gold converter">
-		<attribute key="weight" value="1800" />
-		<attribute key="duration" value="604800" />
-		<attribute key="charges" value="500" />
-		<attribute key="showcharges" value="1" />
-		<attribute key="showduration" value="1" />
-	</item>
 	<item id="26379" article="a" name="golden dragon tapestry" />
 	<item id="26380" article="a" name="sword tapestry" />
 	<item id="26381" article="a" name="brocade tapestry" />

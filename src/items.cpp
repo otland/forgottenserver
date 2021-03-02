@@ -23,11 +23,13 @@
 #include "spells.h"
 #include "movement.h"
 #include "weapons.h"
+#include "script.h"
 
 #include "pugicast.h"
 
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
+extern Scripts* g_scripts;
 
 const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributesMap = {
 	{"type", ITEM_PARSE_TYPE},
@@ -214,7 +216,6 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"mead", FLUID_MEAD},
 };
 
-
 Items::Items()
 {
 	items.reserve(30000);
@@ -237,6 +238,8 @@ bool Items::reload()
 		return false;
 	}
 
+	g_scripts->loadScripts("items", false, true);
+	buildInventoryList();
 	g_moveEvents->reload();
 	g_weapons->reload();
 	g_weapons->loadDefaults();
@@ -513,7 +516,6 @@ bool Items::loadFromXml()
 		}
 	}
 
-	buildInventoryList();
 	return true;
 }
 
@@ -1371,6 +1373,89 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 	//check bed items
 	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
 		std::cout << "[Warning - Items::parseItemNode] Item " << it.id << " is not set as a bed-type" << std::endl;
+	}
+}
+
+void Items::parseItemLua(ItemType* itemType)
+{
+	if (itemType->id > 0 && itemType->id < 100) {
+		ItemType& iType = items[itemType->id];
+		iType.id = itemType->id;
+	}
+
+	ItemType& it = getItemType(itemType->id);
+	if (it.id == 0) {
+		return;
+	}
+
+	if (!it.name.empty()) {
+		std::cout << "[Warning - Items::parseItemLua] Duplicate item with id: " << itemType->id << std::endl;
+		return;
+	}
+
+	nameToItems.insert({ asLowerCaseString(itemType->name), itemType->id });
+	it.name = itemType->name;
+	it.article = itemType->article;
+	it.pluralName = itemType->pluralName;
+	it.type = itemType->type;
+	it.description = itemType->description;
+	it.runeSpellName = itemType->runeSpellName;
+	it.weight = itemType->weight;
+	it.showCount = itemType->showCount;
+	it.armor = itemType->armor;
+	it.defense = itemType->defense;
+	it.extraDefense = itemType->extraDefense;
+	it.attack = itemType->attack;
+	it.rotatable = itemType->hasEdited["rotatable"] ? itemType->rotatable : it.rotatable;
+	it.useable = itemType->hasEdited["useable"] ? itemType->useable : it.useable;
+	it.moveable = itemType->hasEdited["moveable"] ? itemType->moveable : it.moveable;
+	it.stackable = itemType->hasEdited["stackable"] ? itemType->stackable : it.stackable;
+	it.blockProjectile = itemType->hasEdited["blockProjectile"] ? itemType->blockProjectile : it.blockProjectile;
+	it.allowPickupable = itemType->allowPickupable;
+	it.pickupable = itemType->hasEdited["pickupable"] ? itemType->pickupable : it.pickupable;
+	it.floorChange = itemType->floorChange;
+	it.corpseType = itemType->corpseType;
+	it.maxItems = itemType->maxItems;
+	it.fluidSource = itemType->fluidSource;
+	it.canReadText = itemType->hasEdited["canReadText"] ? itemType->canReadText : it.canReadText;
+	it.canWriteText = itemType->canWriteText;
+	it.maxTextLen = itemType->maxTextLen;
+	it.writeOnceItemId = itemType->writeOnceItemId;
+	it.weaponType = itemType->weaponType;
+	it.slotPosition = itemType->slotPosition;
+	it.ammoType = itemType->ammoType;
+	it.shootType = itemType->shootType;
+	it.magicEffect = itemType->magicEffect;
+	it.shootRange = itemType->shootRange;
+	it.stopTime = itemType->stopTime;
+	it.decayTo = itemType->decayTo;
+	it.transformEquipTo = itemType->transformEquipTo;
+	it.transformDeEquipTo = itemType->transformDeEquipTo;
+	it.decayTime = itemType->decayTime;
+	it.showDuration = itemType->showDuration;
+	it.charges = itemType->charges;
+	it.showCharges = itemType->showCharges;
+	it.showAttributes = itemType->showAttributes;
+	it.hitChance = itemType->hitChance;
+	it.maxHitChance = itemType->maxHitChance;
+	it.replaceable = itemType->replaceable;
+	it.bedPartnerDir = itemType->bedPartnerDir;
+	it.levelDoor = itemType->levelDoor;
+	it.transformToOnUse[PLAYERSEX_FEMALE] = itemType->transformToOnUse[PLAYERSEX_FEMALE];
+	it.transformToOnUse[PLAYERSEX_MALE] = itemType->transformToOnUse[PLAYERSEX_MALE];
+	it.transformToFree = itemType->transformToFree;
+	it.destroyTo = itemType->destroyTo;
+	it.walkStack = itemType->walkStack;
+	it.blockSolid = itemType->hasEdited["blockSolid"] ? itemType->blockSolid : it.blockSolid;
+	it.allowDistRead = itemType->hasEdited["allowDistRead"] ? itemType->allowDistRead : it.allowDistRead;
+	it.storeItem = itemType->storeItem;
+	it.combatType = itemType->combatType;
+	it.abilities = std::move(itemType->abilities);
+	it.conditionDamage = std::move(itemType->conditionDamage);
+
+	//check bed items
+	if ((it.transformToFree != 0 || it.transformToOnUse[PLAYERSEX_FEMALE] != 0 || it.transformToOnUse[PLAYERSEX_MALE] != 0) && it.type != ITEM_TYPE_BED) {
+		std::cout << "[Warning - Items::parseItemLua] Item " << it.id << " is not set as a bed-type" << std::endl;
 	}
 }
 

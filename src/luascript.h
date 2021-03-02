@@ -97,6 +97,7 @@ class Cylinder;
 class Game;
 
 struct LootBlock;
+struct FieldBlock;
 
 class ScriptEnvironment
 {
@@ -330,6 +331,7 @@ class LuaScriptInterface
 		static Outfit getOutfitClass(lua_State* L, int32_t arg);
 		static LuaVariant getVariant(lua_State* L, int32_t arg);
 		static InstantSpell* getInstantSpell(lua_State* L, int32_t arg);
+		static void getFieldBlock(lua_State* L, int32_t arg, FieldBlock& fieldBlock);
 
 		static Thing* getThing(lua_State* L, int32_t arg);
 		static Creature* getCreature(lua_State* L, int32_t arg);
@@ -380,6 +382,7 @@ class LuaScriptInterface
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 		static void pushOutfit(lua_State* L, const Outfit* outfit);
 		static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList);
+		static void pushFieldBlock(lua_State* L, const FieldBlock& fieldBlock);
 
 		//
 		static void setField(lua_State* L, const char* index, lua_Number value)
@@ -552,6 +555,7 @@ class LuaScriptInterface
 		static int luaGameCreateNpc(lua_State* L);
 		static int luaGameCreateTile(lua_State* L);
 		static int luaGameCreateMonsterType(lua_State* L);
+		static int luaGameCreateItemType(lua_State* L);
 
 		static int luaGameStartRaid(lua_State* L);
 
@@ -1140,70 +1144,90 @@ class LuaScriptInterface
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);
 
-		static int luaItemTypeIsCorpse(lua_State* L);
-		static int luaItemTypeIsDoor(lua_State* L);
-		static int luaItemTypeIsContainer(lua_State* L);
-		static int luaItemTypeIsFluidContainer(lua_State* L);
-		static int luaItemTypeIsMovable(lua_State* L);
-		static int luaItemTypeIsRune(lua_State* L);
-		static int luaItemTypeIsStackable(lua_State* L);
-		static int luaItemTypeIsReadable(lua_State* L);
-		static int luaItemTypeIsWritable(lua_State* L);
-		static int luaItemTypeIsBlocking(lua_State* L);
-		static int luaItemTypeIsGroundTile(lua_State* L);
-		static int luaItemTypeIsMagicField(lua_State* L);
-		static int luaItemTypeIsUseable(lua_State* L);
-		static int luaItemTypeIsPickupable(lua_State* L);
+		static int luaItemTypeCorpse(lua_State* L);
+		static int luaItemTypeDoor(lua_State* L);
+		static int luaItemTypeContainer(lua_State* L);
+		static int luaItemTypeFluidContainer(lua_State* L);
+		static int luaItemTypeMovable(lua_State* L);
+		static int luaItemTypeRune(lua_State* L);
+		static int luaItemTypeStackable(lua_State* L);
+		static int luaItemTypeReadable(lua_State* L);
+		static int luaItemTypeWritable(lua_State* L);
+		static int luaItemTypeEffect(lua_State* L);
+		static int luaItemTypeContainerSize(lua_State* L);
+		static int luaItemTypeRotateTo(lua_State* L);
+		static int luaItemTypePartnerDirection(lua_State* L);
+		static int luaItemTypeFemaleSleeper(lua_State* L);
+		static int luaItemTypeMaleSleeper(lua_State* L);
+		static int luaItemTypeMaxTextLen(lua_State* L);
+		static int luaItemTypeWriteOnceItemId(lua_State* L);
+		static int luaItemTypeRuneSpellName(lua_State* L);
+		static int luaItemTypeWalkStack(lua_State* L);
+		static int luaItemTypeField(lua_State* L);
+		static int luaItemTypeBlocking(lua_State* L);
+		static int luaItemTypeBlockProjectile(lua_State* L);
+		static int luaItemTypeRotatable(lua_State* L);
+		static int luaItemTypeGroundTile(lua_State* L);
+		static int luaItemTypeMagicField(lua_State* L);
+		static int luaItemTypeUseable(lua_State* L);
+		static int luaItemTypePickupable(lua_State* L);
+		static int luaItemTypeAllowPickupable(lua_State* L);
 
-		static int luaItemTypeGetType(lua_State* L);
-		static int luaItemTypeGetGroup(lua_State* L);
-		static int luaItemTypeGetId(lua_State* L);
-		static int luaItemTypeGetClientId(lua_State* L);
-		static int luaItemTypeGetName(lua_State* L);
-		static int luaItemTypeGetPluralName(lua_State* L);
-		static int luaItemTypeGetArticle(lua_State* L);
-		static int luaItemTypeGetDescription(lua_State* L);
-		static int luaItemTypeGetSlotPosition(lua_State *L);
+		static int luaItemTypeType(lua_State* L);
+		static int luaItemTypeGroup(lua_State* L);
+		static int luaItemTypeId(lua_State* L);
+		static int luaItemTypeClientId(lua_State* L);
+		static int luaItemTypeName(lua_State* L);
+		static int luaItemTypePluralName(lua_State* L);
+		static int luaItemTypeArticle(lua_State* L);
+		static int luaItemTypeDescription(lua_State* L);
+		static int luaItemTypeSlotPosition(lua_State *L);
 
-		static int luaItemTypeGetCharges(lua_State* L);
-		static int luaItemTypeGetFluidSource(lua_State* L);
-		static int luaItemTypeGetCapacity(lua_State* L);
-		static int luaItemTypeGetWeight(lua_State* L);
+		static int luaItemTypeCharges(lua_State* L);
+		static int luaItemTypeFluidSource(lua_State* L);
+		static int luaItemTypeCapacity(lua_State* L);
+		static int luaItemTypeWeight(lua_State* L);
 
-		static int luaItemTypeGetHitChance(lua_State* L);
-		static int luaItemTypeGetShootRange(lua_State* L);
-		static int luaItemTypeGetAttack(lua_State* L);
-		static int luaItemTypeGetDefense(lua_State* L);
-		static int luaItemTypeGetExtraDefense(lua_State* L);
-		static int luaItemTypeGetArmor(lua_State* L);
-		static int luaItemTypeGetWeaponType(lua_State* L);
+		static int luaItemTypeHitChance(lua_State* L);
+		static int luaItemTypeMaxHitChance(lua_State* L);
+		static int luaItemTypeShootRange(lua_State* L);
+		static int luaItemTypeShootType(lua_State* L);
+		static int luaItemTypeAttack(lua_State* L);
+		static int luaItemTypeDefense(lua_State* L);
+		static int luaItemTypeExtraDefense(lua_State* L);
+		static int luaItemTypeArmor(lua_State* L);
+		static int luaItemTypeWeaponType(lua_State* L);
 
-		static int luaItemTypeGetElementType(lua_State* L);
-		static int luaItemTypeGetElementDamage(lua_State* L);
+		static int luaItemTypeElementType(lua_State* L);
+		static int luaItemTypeElementDamage(lua_State* L);
 
-		static int luaItemTypeGetTransformEquipId(lua_State* L);
-		static int luaItemTypeGetTransformDeEquipId(lua_State* L);
-		static int luaItemTypeGetDestroyId(lua_State* L);
-		static int luaItemTypeGetDecayId(lua_State* L);
-		static int luaItemTypeGetRequiredLevel(lua_State* L);
-		static int luaItemTypeGetAmmoType(lua_State* L);
-		static int luaItemTypeGetCorpseType(lua_State* L);
-		static int luaItemTypeHasShowCount(lua_State* L);
-		static int luaItemTypeGetAbilities(lua_State* L);
-		static int luaItemTypeHasShowAttributes(lua_State* L);
-		static int luaItemTypeHasShowCharges(lua_State* L);
-		static int luaItemTypeHasShowDuration(lua_State* L);
-		static int luaItemTypeHasAllowDistRead(lua_State* L);
-		static int luaItemTypeGetWieldInfo(lua_State* L);
-		static int luaItemTypeGetDuration(lua_State* L);
-		static int luaItemTypeGetLevelDoor(lua_State* L);
-		static int luaItemTypeGetVocationString(lua_State* L);
-		static int luaItemTypeGetMinReqLevel(lua_State* L);
-		static int luaItemTypeGetMinReqMagicLevel(lua_State* L);
+		static int luaItemTypeTransformEquipId(lua_State* L);
+		static int luaItemTypeTransformDeEquipId(lua_State* L);
+		static int luaItemTypeDestroyId(lua_State* L);
+		static int luaItemTypeDecayId(lua_State* L);
+		static int luaItemTypeRequiredLevel(lua_State* L);
+		static int luaItemTypeAmmoType(lua_State* L);
+		static int luaItemTypeCorpseType(lua_State* L);
+		static int luaItemTypeShowCount(lua_State* L);
+		static int luaItemTypeAbilities(lua_State* L);
+		static int luaItemTypeShowAttributes(lua_State* L);
+		static int luaItemTypeShowCharges(lua_State* L);
+		static int luaItemTypeStopDuration(lua_State* L);
+		static int luaItemTypeShowDuration(lua_State* L);
+		static int luaItemTypeAllowDistRead(lua_State* L);
+		static int luaItemTypeWieldInfo(lua_State* L);
+		static int luaItemTypeReplaceable(lua_State* L);
+		static int luaItemTypeDuration(lua_State* L);
+		static int luaItemTypeFloorChange(lua_State* L);
+		static int luaItemTypeLevelDoor(lua_State* L);
+		static int luaItemTypeVocationString(lua_State* L);
+		static int luaItemTypeMinReqLevel(lua_State* L);
+		static int luaItemTypeMinReqMagicLevel(lua_State* L);
 
-		static int luaItemTypeHasSubType(lua_State* L);
+		static int luaItemTypeSubType(lua_State* L);
 
-		static int luaItemTypeIsStoreItem(lua_State* L);
+		static int luaItemTypeStoreItem(lua_State* L);
+		static int luaItemTypeRegister(lua_State* L);
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);

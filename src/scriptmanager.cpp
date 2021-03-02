@@ -73,6 +73,12 @@ bool ScriptingManager::loadScriptSystems()
 
 	g_chat = new Chat();
 
+	if (!g_scripts->loadScripts("items", false, false)) {
+		std::cout << "> ERROR: Unable to load items (LUA)!" << std::endl;
+		return false;
+	}
+	Item::items.buildInventoryList();
+
 	g_weapons = new Weapons();
 	if (!g_weapons->loadFromXml()) {
 		std::cout << "> ERROR: Unable to load weapons!" << std::endl;
