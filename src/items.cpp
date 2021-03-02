@@ -1441,6 +1441,9 @@ void Items::parseItemLua(ItemType* itemType)
 	it.replaceable = itemType->replaceable;
 	it.bedPartnerDir = itemType->bedPartnerDir;
 	it.levelDoor = itemType->levelDoor;
+	it.vocationString = itemType->vocationString;
+	it.minReqLevel = itemType->minReqLevel;
+	it.minReqMagicLevel = itemType->minReqMagicLevel;
 	it.transformToOnUse[PLAYERSEX_FEMALE] = itemType->transformToOnUse[PLAYERSEX_FEMALE];
 	it.transformToOnUse[PLAYERSEX_MALE] = itemType->transformToOnUse[PLAYERSEX_MALE];
 	it.transformToFree = itemType->transformToFree;

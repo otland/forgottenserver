@@ -12034,10 +12034,16 @@ int LuaScriptInterface::luaItemTypeLevelDoor(lua_State* L)
 
 int LuaScriptInterface::luaItemTypeVocationString(lua_State* L)
 {
-	// itemType:getVocationString()
-	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	// get: itemType:vocationString() set: itemType:vocationString(string)
+	ItemType* itemType = getUserdata<ItemType>(L, 1);
 	if (itemType) {
-		pushString(L, itemType->vocationString);
+		if (lua_gettop(L) == 1) {
+			pushString(L, itemType->vocationString);
+		}
+		else {
+			itemType->vocationString = getString(L, 2);
+			pushBoolean(L, true);
+		}
 	}
 	else {
 		lua_pushnil(L);

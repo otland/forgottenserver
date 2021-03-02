@@ -112,7 +112,7 @@ registerItemType.container = function(itype, container)
 	end
 end
 
-registerItemType.fluidContainer = function(itype, fluidContainer)
+registerItemType.fluidcontainer = function(itype, fluidContainer)
 	if fluidContainer then
 		itype:fluidContainer(fluidContainer)
 	end
@@ -173,7 +173,7 @@ registerItemType.rotatable = function(itype, rotatable)
 	end
 end
 
-registerItemType.groundTile = function(itype, groundTile)
+registerItemType.groundtile = function(itype, groundTile)
 	if groundTile then
 		itype:groundTile(groundTile)
 	end
@@ -554,13 +554,19 @@ registerItemType.field = function(itype, field)
 	end
 end
 
-registerItemType.minReqLevel = function(itype, minReqLevel)
+registerItemType.vocationstring = function(itype, vocationString)
+	if vocationString then
+		itype:vocationString(vocationString)
+	end
+end
+
+registerItemType.minreqlevel = function(itype, minReqLevel)
 	if minReqLevel then
 		itype:minReqLevel(minReqLevel)
 	end
 end
 
-registerItemType.minReqMagicLevel = function(itype, minReqMagicLevel)
+registerItemType.minreqmagiclevel = function(itype, minReqMagicLevel)
 	if minReqMagicLevel then
 		itype:minReqMagicLevel(minReqMagicLevel)
 	end
