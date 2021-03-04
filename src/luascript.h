@@ -433,7 +433,7 @@ class LuaScriptInterface
 
 		std::string getStackTrace(const std::string& error_desc);
 
-		static bool getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows);
+		static bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows);
 
 		//lua functions
 		static int luaDoPlayerAddItem(lua_State* L);

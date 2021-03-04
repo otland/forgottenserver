@@ -3308,7 +3308,7 @@ int LuaScriptInterface::luaGetSubTypeName(lua_State* L)
 	return 1;
 }
 
-bool LuaScriptInterface::getArea(lua_State* L, std::list<uint32_t>& list, uint32_t& rows)
+bool LuaScriptInterface::getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows)
 {
 	lua_pushnil(L);
 	for (rows = 0; lua_next(L, -2) != 0; ++rows) {
@@ -3321,7 +3321,7 @@ bool LuaScriptInterface::getArea(lua_State* L, std::list<uint32_t>& list, uint32
 			if (!isNumber(L, -1)) {
 				return false;
 			}
-			list.push_back(getNumber<uint32_t>(L, -1));
+			vec.push_back(getNumber<uint32_t>(L, -1));
 			lua_pop(L, 1);
 		}
 
@@ -3348,24 +3348,24 @@ int LuaScriptInterface::luaCreateCombatArea(lua_State* L)
 	int parameters = lua_gettop(L);
 	if (parameters >= 2) {
 		uint32_t rowsExtArea;
-		std::list<uint32_t> listExtArea;
-		if (!isTable(L, 2) || !getArea(L, listExtArea, rowsExtArea)) {
+		std::vector<uint32_t> vecExtArea;
+		if (!isTable(L, 2) || !getArea(L, vecExtArea, rowsExtArea)) {
 			reportErrorFunc("Invalid extended area table.");
 			pushBoolean(L, false);
 			return 1;
 		}
-		area->setupExtArea(listExtArea, rowsExtArea);
+		area->setupExtArea(vecExtArea, rowsExtArea);
 	}
 
 	uint32_t rowsArea = 0;
-	std::list<uint32_t> listArea;
-	if (!isTable(L, 1) || !getArea(L, listArea, rowsArea)) {
+	std::vector<uint32_t> vecArea;
+	if (!isTable(L, 1) || !getArea(L, vecArea, rowsArea)) {
 		reportErrorFunc("Invalid area table.");
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	area->setupArea(listArea, rowsArea);
+	area->setupArea(vecArea, rowsArea);
 	lua_pushnumber(L, areaId);
 	return 1;
 }
