@@ -3822,8 +3822,17 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 
 int LuaScriptInterface::luaLoadOutfits(lua_State* L)
 {
-	if(!isTable(L, -1)) {
-		printf("[Outfits]: not a table.");
+	//loadOutfits(outfits)
+	if (!isTable(L, -1)) {
+		reportErrorFunc("[LuaLoadOutfits::ERROR] Outfits table missing!");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	size_t len = lua_objlen(L, -1);
+	if (len == 0) {
+		reportErrorFunc("[LuaLoadOutfits::ERROR] Cannot find outfits");
+		pushBoolean(L, false);
 		return 1;
 	}
 
