@@ -887,6 +887,12 @@ Player* LuaScriptInterface::getPlayer(lua_State* L, int32_t arg)
 	return g_game.getPlayerByID(getNumber<uint32_t>(L, arg));
 }
 
+bool LuaScriptInterface::getFieldBoolean(lua_State* L, int32_t arg, const std::string& key)
+{
+	lua_getfield(L, arg, key.c_str());
+	return getBoolean(L, -1);
+}
+
 std::string LuaScriptInterface::getFieldString(lua_State* L, int32_t arg, const std::string& key)
 {
 	lua_getfield(L, arg, key.c_str());
