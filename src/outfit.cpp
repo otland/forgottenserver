@@ -24,6 +24,14 @@
 #include "pugicast.h"
 #include "tools.h"
 
+bool Outfits::loadFromLua(PlayerSex_t playerSex, uint16_t lookType, std::string name, bool premium, bool unlocked, bool enabled)
+{
+	if (enabled) {
+		outfits[playerSex].emplace_back(name.c_str(), lookType, premium, unlocked);
+	}
+	return true;
+}
+
 bool Outfits::loadFromXml()
 {
 	pugi::xml_document doc;

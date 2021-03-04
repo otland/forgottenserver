@@ -55,6 +55,7 @@ class Outfits
 		}
 
 		bool loadFromXml();
+		bool loadFromLua(PlayerSex_t playerSex, uint16_t lookType, std::string name, bool premium, bool unlocked, bool enabled);
 
 		const Outfit* getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) const;
 		const Outfit* getOutfitByLookType(uint16_t lookType) const;

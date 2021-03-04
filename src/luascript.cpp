@@ -1074,6 +1074,9 @@ void LuaScriptInterface::registerFunctions()
 	//isScriptsInterface()
 	lua_register(luaState, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
 
+	//loadOutfits(outfits)
+	lua_register(luaState, "loadOutfits", LuaScriptInterface::luaLoadOutfits);
+
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
@@ -3812,6 +3815,46 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 	} else {
 		reportErrorFunc("EventCallback: can only be called inside (data/scripts/)");
 		pushBoolean(L, false);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLoadOutfits(lua_State* L)
+{
+	if(!isTable(L, -1)) {
+		printf("[Outfits]: not a table.");
+		return 1;
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0)
+	{
+		PlayerSex_t playerSex;
+		uint16_t lookType;
+		std::string name;
+		bool premium, unlocked, enabled;
+
+		lua_pushnil(L);
+		while (lua_next(L, -2) != 0)
+		{
+			if (getString(L, -2) == "sex") {
+				playerSex = getNumber<PlayerSex_t>(L, -1);
+			} else if (getString(L, -2) == "lookType") {
+				lookType = getNumber<uint16_t>(L, -1);
+			} else if (getString(L, -2) == "name") {
+				name = getString(L, -1);
+			} else if (getString(L, -2) == "premium") {
+				premium = getBoolean(L, -1);
+			} else if (getString(L, -2) == "unlocked") {
+				unlocked = getBoolean(L, -1);
+			} else if (getString(L, -2) == "enabled") {
+				enabled = getBoolean(L, -1);
+			}
+			lua_pop(L, 1);
+		}
+
+		Outfits::getInstance().loadFromLua(playerSex, lookType, name, premium, unlocked, enabled);
+		lua_pop(L, 1);
 	}
 	return 1;
 }

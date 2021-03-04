@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <outfits>
-	<!-- Female outfits -->
+	<!-- Female outfits
 	<outfit type="0" looktype="136" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
 	<outfit type="0" looktype="137" name="Hunter" premium="no" unlocked="yes" enabled="yes" />
 	<outfit type="0" looktype="138" name="Mage" premium="no" unlocked="yes" enabled="yes" />
@@ -57,7 +57,6 @@
 	<outfit type="0" looktype="885" name="Arena Champion" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="900" name="Lupine Warden" premium="no" unlocked="no" enabled="yes" />
 
-	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
 	<outfit type="1" looktype="129" name="Hunter" premium="no" unlocked="yes" enabled="yes" />
 	<outfit type="1" looktype="130" name="Mage" premium="no" unlocked="yes" enabled="yes" />
@@ -113,4 +112,5 @@
 	<outfit type="1" looktype="873" name="Philosopher" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="884" name="Arena Champion" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="899" name="Lupine Warden" premium="no" unlocked="no" enabled="yes" />
+-->
 </outfits>
