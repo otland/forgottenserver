@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include <boost/range/adaptor/reversed.hpp>
+#include <fmt/format.h>
 
 #include "luascript.h"
 #include "chat.h"
@@ -9059,9 +9060,7 @@ int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 	uint32_t key = getNumber<uint32_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
-		std::ostringstream ss;
-		ss << "Accessing reserved range: " << key;
-		reportErrorFunc(ss.str());
+		reportErrorFunc(fmt::format("Accessing reserved range: {:d}", key));
 		pushBoolean(L, false);
 		return 1;
 	}
