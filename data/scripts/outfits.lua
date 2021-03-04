@@ -1,3 +1,8 @@
+if configManager.getBoolean(configKeys.LOAD_OUTFITS_FROM_LUA) == false then
+	return
+end
+
+print(">> Loading LUA outfits")
 loadOutfits({
 	{sex = PLAYERSEX_MALE, lookType = 128, name = "Citizen", premium = false, unlocked = true, enabled = true},
 	{sex = PLAYERSEX_MALE, lookType = 129, name = "Hunter", premium = false, unlocked = true, enabled = true},
