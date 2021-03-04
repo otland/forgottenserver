@@ -3843,35 +3843,17 @@ int LuaScriptInterface::luaLoadOutfits(lua_State* L)
 	}
 
 	lua_pushnil(L);
-	while (lua_next(L, -2) != 0)
-	{
-		PlayerSex_t playerSex;
-		uint16_t lookType;
-		std::string name;
-		bool premium, unlocked, enabled;
-
-		lua_pushnil(L);
-		while (lua_next(L, -2) != 0)
-		{
-			if (getString(L, -2) == "sex") {
-				playerSex = getNumber<PlayerSex_t>(L, -1);
-			} else if (getString(L, -2) == "lookType") {
-				lookType = getNumber<uint16_t>(L, -1);
-			} else if (getString(L, -2) == "name") {
-				name = getString(L, -1);
-			} else if (getString(L, -2) == "premium") {
-				premium = getBoolean(L, -1);
-			} else if (getString(L, -2) == "unlocked") {
-				unlocked = getBoolean(L, -1);
-			} else if (getString(L, -2) == "enabled") {
-				enabled = getBoolean(L, -1);
-			}
-			lua_pop(L, 1);
-		}
-
+	while (lua_next(L, -2) != 0) {
+		PlayerSex_t playerSex   = getField<PlayerSex_t>(L, -1, "sex");   lua_pop(L, 1);
+		uint16_t lookType       = getField<uint16_t>(L, -1, "lookType"); lua_pop(L, 1);
+		const std::string& name = getFieldString(L, -1, "name");         lua_pop(L, 1);
+		bool premium            = getFieldBoolean(L, -1, "premium");     lua_pop(L, 1);
+		bool unlocked           = getFieldBoolean(L, -1, "unlocked");    lua_pop(L, 1);
+		bool enabled            = getFieldBoolean(L, -1, "enabled");     lua_pop(L, 2);
 		Outfits::getInstance().loadFromLua(playerSex, lookType, name, premium, unlocked, enabled);
-		lua_pop(L, 1);
 	}
+	lua_pop(L, 1);
+	pushBoolean(L, true);
 	return 1;
 }
 
