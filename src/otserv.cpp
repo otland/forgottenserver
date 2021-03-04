@@ -262,7 +262,6 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
-	std::cout << "LOAD_OUTFITS_FROM_LUA = " << g_config.getBoolean(ConfigManager::LOAD_OUTFITS_FROM_LUA) << std::endl;
 	if (!g_config.getBoolean(ConfigManager::LOAD_OUTFITS_FROM_LUA)) {
 		std::cout << ">> Loading XML outfits" << std::endl;
 		if (!Outfits::getInstance().loadFromXml()) {
