@@ -39,7 +39,7 @@ jobs:
             triplet: x64-windows
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua luajit libmariadb pugixml cryptopp
+              lua luajit libmariadb pugixml cryptopp fmt
           - name: ubuntu-gcc
             os: ubuntu
             cxx: g++
@@ -47,7 +47,7 @@ jobs:
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp
+              lua libmariadb pugixml cryptopp fmt
           - name: ubuntu-clang
             os: ubuntu
             cxx: clang++
@@ -55,7 +55,7 @@ jobs:
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp
+              lua libmariadb pugixml cryptopp fmt
           - name: macos-clang
             os: macos
             cxx: clang++
@@ -63,7 +63,7 @@ jobs:
             triplet: x64-osx
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp
+              lua libmariadb pugixml cryptopp fmt
 
     steps:
       - uses: actions/checkout@v2

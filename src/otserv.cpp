@@ -36,6 +36,7 @@
 #include "databasetasks.h"
 #include "script.h"
 #include <fstream>
+#include <fmt/format.h>
 #if __has_include("gitmetadata.h")
 	#include "gitmetadata.h"
 #endif
@@ -278,10 +279,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	} else {
 		std::cout << std::endl;
-
-		std::ostringstream ss;
-		ss << "> ERROR: Unknown world type: " << g_config.getString(ConfigManager::WORLD_TYPE) << ", valid world types are: pvp, no-pvp and pvp-enforced.";
-		startupErrorMessage(ss.str());
+		startupErrorMessage(fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.", g_config.getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
 	std::cout << asUpperCaseString(worldType) << std::endl;

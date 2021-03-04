@@ -7,6 +7,7 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   clang \
   cmake \
   crypto++-dev \
+  fmt \
   gcc \
   gmp-dev \
   luajit-dev \
@@ -27,6 +28,7 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   boost-system \
   boost-filesystem \
   crypto++ \
+  fmt \
   gmp \
   luajit \
   mariadb-connector-c \

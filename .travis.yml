@@ -21,6 +21,7 @@ addons:
       - libboost-filesystem-dev
       - libboost-iostreams-dev
       - libcrypto++-dev
+      - libfmt-dev
       - liblua5.2-dev
       - libluajit-5.1-dev
       - libmysqlclient-dev
