@@ -1302,6 +1302,7 @@ function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+doBroadcastMessage = broadcastMessage
 
 function Guild.addMember(self, player)
 	return player:setGuild(guild)
