@@ -3684,7 +3684,7 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 
 	LuaTimerEventDesc eventDesc;
 	eventDesc.parameters.reserve(parameters - 2); // safe to use -2 since we garanteed that there is at least two parameters
-	for (int i = 0; i < parameters - 2; ++i) { // safe to use -2 since we garanteed that there is at least two parameters
+	for (int i = 0; i < parameters - 2; ++i) {
 		eventDesc.parameters.push_back(luaL_ref(globalState, LUA_REGISTRYINDEX));
 	}
 
