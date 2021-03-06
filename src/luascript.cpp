@@ -3836,7 +3836,12 @@ int LuaScriptInterface::luaLoadOutfits(lua_State* L)
 		return 1;
 	}
 
-	size_t len = lua_objlen(L, -1);
+	#ifdef LUAJIT_VERSION
+		size_t len = lua_objlen(L, -1);
+	#else
+		size_t len = lua_rawlen(L, -1);
+	#endif
+
 	if (len == 0) {
 		reportErrorFunc("[LuaLoadOutfits::ERROR] Cannot find outfits");
 		pushBoolean(L, false);
