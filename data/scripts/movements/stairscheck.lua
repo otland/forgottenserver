@@ -14,14 +14,7 @@ function stairscheck.onStepIn(creature, item, position, fromPosition)
 	end
 
 	local p = item:getPosition()
-	local destinationTile = Tile(p.x, p.y, p.z + 1)
-	if not destinationTile then
-		item:transform(findReplacementItem(p))
-		p:sendMagicEffect(CONST_ME_POFF)
-		return false
-	end
-
-	if ItemType(destinationTile:getGround():getId()):isBlocking() then
+	if not p:getNextPosition(nil, nil, true) then
 		creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "[Warning] Invalid stairs found. Notify staff " .. positionToReadable(p))
 		creature:teleportTo(fromPosition)
 
