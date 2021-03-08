@@ -106,8 +106,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		NetworkMessage msg;
 
-		boost::asio::steady_timer readTimer;
-		boost::asio::steady_timer writeTimer;
+		boost::asio::deadline_timer readTimer;
+		boost::asio::deadline_timer writeTimer;
 
 		std::recursive_mutex connectionLock;
 

@@ -20,67 +20,119 @@
 #include "otpch.h"
 
 #include "scheduler.h"
-#include <boost/asio/post.hpp>
-#include <memory>
+
+void Scheduler::threadMain()
+{
+	std::unique_lock<std::mutex> eventLockUnique(eventLock, std::defer_lock);
+	while (getState() != THREAD_STATE_TERMINATED) {
+		std::cv_status ret = std::cv_status::no_timeout;
+
+		eventLockUnique.lock();
+		if (eventList.empty()) {
+			eventSignal.wait(eventLockUnique);
+		} else {
+			ret = eventSignal.wait_until(eventLockUnique, eventList.top()->getCycle());
+		}
+
+		// the mutex is locked again now...
+		if (ret == std::cv_status::timeout && !eventList.empty()) {
+			// ok we had a timeout, so there has to be an event we have to execute...
+			SchedulerTask* task = eventList.top();
+			eventList.pop();
+
+			// check if the event was stopped
+			auto it = eventIds.find(task->getEventId());
+			if (it == eventIds.end()) {
+				eventLockUnique.unlock();
+				delete task;
+				continue;
+			}
+			eventIds.erase(it);
+			eventLockUnique.unlock();
+
+			task->setDontExpire();
+			g_dispatcher.addTask(task);
+		} else {
+			eventLockUnique.unlock();
+		}
+	}
+}
 
 uint32_t Scheduler::addEvent(SchedulerTask* task)
 {
+	eventLock.lock();
+
+	if (getState() != THREAD_STATE_RUNNING) {
+		eventLock.unlock();
+		delete task;
+		return 0;
+	}
+
 	// check if the event has a valid id
 	if (task->getEventId() == 0) {
-		task->setEventId(++lastEventId);
+		// if not generate one
+		if (++lastEventId == 0) {
+			lastEventId = 1;
+		}
+
+		task->setEventId(lastEventId);
 	}
 
-	boost::asio::post(io_context, [this, task]() {
-		// insert the event id in the list of active events
-		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::steady_timer{io_context});
-		auto& timer = it.first->second;
+	// insert the event id in the list of active events
+	uint32_t eventId = task->getEventId();
+	eventIds.insert(eventId);
 
-		timer.expires_from_now(std::chrono::milliseconds(task->getDelay()));
-		timer.async_wait([this, task](const boost::system::error_code& error) {
-			eventIdTimerMap.erase(task->getEventId());
+	// add the event to the queue
+	eventList.push(task);
 
-			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
-				// the timer has been manually canceled(timer->cancel()) or Scheduler::shutdown has been called
-				delete task;
-				return;
-			}
+	// if the list was empty or this event is the top in the list
+	// we have to signal it
+	bool do_signal = (task == eventList.top());
 
-			g_dispatcher.addTask(task);
-		});
-	});
+	eventLock.unlock();
 
-	return task->getEventId();
+	if (do_signal) {
+		eventSignal.notify_one();
+	}
+
+	return eventId;
 }
 
-void Scheduler::stopEvent(uint32_t eventId)
+bool Scheduler::stopEvent(uint32_t eventId)
 {
 	if (eventId == 0) {
-		return;
+		return false;
 	}
 
-	boost::asio::post(io_context, [this, eventId]() {
-		// search the event id
-		auto it = eventIdTimerMap.find(eventId);
-		if (it != eventIdTimerMap.end()) {
-			it->second.cancel();
-		}
-	});
+	std::lock_guard<std::mutex> lockClass(eventLock);
+
+	// search the event id..
+	auto it = eventIds.find(eventId);
+	if (it == eventIds.end()) {
+		return false;
+	}
+
+	eventIds.erase(it);
+	return true;
 }
 
 void Scheduler::shutdown()
 {
 	setState(THREAD_STATE_TERMINATED);
-	boost::asio::post(io_context, [this]() {
-		// cancel all active timers
-		for (auto& it : eventIdTimerMap) {
-			it.second.cancel();
-		}
+	eventLock.lock();
 
-		io_context.stop();
-	});
+	//this list should already be empty
+	while (!eventList.empty()) {
+		delete eventList.top();
+		eventList.pop();
+	}
+
+	eventIds.clear();
+	eventLock.unlock();
+	eventSignal.notify_one();
 }
 
-SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f)
+SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f)
 {
 	return new SchedulerTask(delay, std::move(f));
 }
