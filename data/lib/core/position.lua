@@ -26,7 +26,7 @@ function Position:getNextPosition(direction, steps, isFloorchange)
 	end
 end
 
-function Position:moveUpstairs()
+function Position:moveUpstairs(cancelStep)
 	local swap = function (lhs, rhs)
 		lhs.x, rhs.x = rhs.x, lhs.x
 		lhs.y, rhs.y = rhs.y, lhs.y
@@ -49,6 +49,11 @@ function Position:moveUpstairs()
 				swap(self, position)
 				return self
 			end
+		end
+
+		-- no avilable/walkable tiles were found
+		if cancelStep then
+			return false
 		end
 	end
 	swap(self, defaultPosition)

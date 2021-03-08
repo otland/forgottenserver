@@ -6,6 +6,11 @@ local stairs = {
 	8564,8565,8566,9574,9606,9846
 }
 
+local ramps = {
+	1385, 1388, 1390, 1394, 1392, 1396, 1398, 1400, 1402, 1404, 3687, 3688, 5259,
+	5258, 5260, 6909, 6911, 6913, 6915, 7924, 7925, 8376, 8372, 8374, 8378, 9573
+}
+
 local stairscheck = MoveEvent()
 
 function stairscheck.onStepIn(creature, item, position, fromPosition)
@@ -14,6 +19,17 @@ function stairscheck.onStepIn(creature, item, position, fromPosition)
 	end
 
 	local p = item:getPosition()
+	if table.contains(ramps, item:getId()) then
+		if not p:moveUpstairs(fromPosition) then
+			creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "[Warning] Invalid ramps found. Notify staff " .. positionToReadable(p))
+			creature:teleportTo(fromPosition)
+			item:remove(1)
+			p:sendMagicEffect(CONST_ME_POFF)
+			print("[Warning] Invalid ramps at position " .. positionToReadable(p))
+		end
+		return false
+	end
+
 	if not p:getNextPosition(nil, nil, true) then
 		creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "[Warning] Invalid stairs found. Notify staff " .. positionToReadable(p))
 		creature:teleportTo(fromPosition)
@@ -25,7 +41,7 @@ function stairscheck.onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-stairscheck:id(unpack(stairs))
+stairscheck:id(unpack(table.merge(stairs, ramps)))
 stairscheck:register()
 
 function findReplacementItem(position)

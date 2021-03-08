@@ -46,6 +46,13 @@ table.contains = function(array, value)
 	return false
 end
 
+table.merge = function(t1,t2)
+    for i=1, #t2 do
+        t1[#t1+1] = t2[i]
+    end
+    return t1
+end
+
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do
