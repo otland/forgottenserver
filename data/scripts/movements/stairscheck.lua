@@ -19,7 +19,9 @@ function stairscheck.onStepIn(creature, item, position, fromPosition)
 	end
 
 	local p = item:getPosition()
-	if table.contains(ramps, item:getId()) then
+	local t = Tile(p)
+	-- must be a ramp if it isn't 'down'
+	if t and not t:hasFlag(TILESTATE_FLOORCHANGE_DOWN) then
 		if not p:moveUpstairs(fromPosition) then
 			creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "[Warning] Invalid ramps found. Notify staff " .. positionToReadable(p))
 			creature:teleportTo(fromPosition)
