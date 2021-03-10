@@ -706,7 +706,8 @@
 	<item id="1497" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="durationMin" value="14" />
+		<attribute key="durationMax" value="20" />
 	</item>
 	<item id="1498" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
@@ -714,7 +715,8 @@
 	<item id="1499" article="a" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="durationMin" value="38" />
+		<attribute key="durationMax" value="45" />
 		<attribute key="blocking" value="1" />
 	</item>
 	<item id="1500" article="a" name="fire field">
@@ -19388,12 +19390,14 @@
 	<item id="11098" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="durationMin" value="14" />
+		<attribute key="durationMax" value="20" />
 	</item>
 	<item id="11099" article="a" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="durationMin" value="38" />
+		<attribute key="durationMax" value="45" />
 	</item>
 	<item id="11100" article="a" name="flask with beaver bait">
 		<attribute key="description" value="It smells like a mixture of wood and fish. Phew." />
@@ -29238,12 +29242,14 @@
 	<item id="20669" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="durationMin" value="14" />
+		<attribute key="durationMax" value="20" />
 	</item>
 	<item id="20670" article="a" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="durationMin" value="38" />
+		<attribute key="durationMax" value="45" />
 		<attribute key="blocking" value="1" />
 	</item>
 	<item fromid="20671" toid="20691" article="a" name="basalt crystal wall" />

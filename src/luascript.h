@@ -1205,6 +1205,9 @@ class LuaScriptInterface
 
 		static int luaItemTypeIsStoreItem(lua_State* L);
 
+		static int luaItemTypeGetDefaultDurationMin(lua_State* L);
+		static int luaItemTypeGetDefaultDurationMax(lua_State* L);
+
 		// Combat
 		static int luaCombatCreate(lua_State* L);
 
