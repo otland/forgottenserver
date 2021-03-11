@@ -3578,8 +3578,20 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 {
 	//addEvent(callback, delay, ...)
 	int parameters = lua_gettop(L);
-	if (!isFunction(L, -parameters)) { //-parameters means the first parameter from left to right
+	if (parameters < 2) {
+		reportErrorFunc(L, fmt::format("Not enough parameters: {:d}.", parameters));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	if (!isFunction(L, 1)) {
 		reportErrorFunc(L, "callback parameter should be a function.");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	if (!isNumber(L, 2)) {
+		reportErrorFunc(L, "delay parameter should be a number.");
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -3659,7 +3671,8 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	}
 
 	LuaTimerEventDesc eventDesc;
-	for (int i = 0; i < parameters - 2; ++i) { //-2 because addEvent needs at least two parameters
+	eventDesc.parameters.reserve(parameters - 2); // safe to use -2 since we garanteed that there is at least two parameters
+	for (int i = 0; i < parameters - 2; ++i) {
 		eventDesc.parameters.push_back(luaL_ref(L, LUA_REGISTRYINDEX));
 	}
 
