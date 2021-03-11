@@ -177,7 +177,7 @@ class ScriptEnvironment
 		static DBResultMap tempResults;
 };
 
-#define reportErrorFunc(a)  reportError(__FUNCTION__, a, true)
+#define reportErrorFunc(L, a)  LuaScriptInterface::reportError(__FUNCTION__, a, L, true)
 
 enum ErrorCode_t {
 	LUA_ERROR_PLAYER_NOT_FOUND,
@@ -229,7 +229,7 @@ class LuaScriptInterface
 			scriptEnv[scriptEnvIndex--].resetEnv();
 		}
 
-		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
+		static void reportError(const char* function, const std::string& error_desc, lua_State* L = nullptr, bool stack_trace = false);
 
 		const std::string& getInterfaceName() const {
 			return interfaceName;
@@ -431,7 +431,7 @@ class LuaScriptInterface
 		void registerGlobalVariable(const std::string& name, lua_Number value);
 		void registerGlobalBoolean(const std::string& name, bool value);
 
-		std::string getStackTrace(const std::string& error_desc);
+		static std::string getStackTrace(lua_State* L, const std::string& error_desc);
 
 		static bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows);
 
