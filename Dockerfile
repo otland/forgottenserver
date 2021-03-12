@@ -1,4 +1,4 @@
-FROM alpine:3.12.0 AS build
+FROM alpine:3.13.0 AS build
 # crypto++-dev is in edge/testing
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
   binutils \
@@ -7,7 +7,7 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   clang \
   cmake \
   crypto++-dev \
-  fmt \
+  fmt-dev \
   gcc \
   gmp-dev \
   luajit-dev \
@@ -21,8 +21,8 @@ COPY CMakeLists.txt /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver/build
 RUN cmake .. && make
 
-FROM alpine:3.12.0
-# crypto++-dev is in edge/testing
+FROM alpine:3.13.0
+# crypto++ is in edge/testing
 RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
   boost-iostreams \
   boost-system \
@@ -34,7 +34,6 @@ RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/test
   mariadb-connector-c \
   pugixml
 
-RUN ln -s /usr/lib/libcryptopp.so /usr/lib/libcryptopp.so.5.6
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs
 COPY data /srv/data/
 COPY LICENSE README.md *.dist *.sql key.pem /srv/
