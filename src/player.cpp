@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include <bitset>
+#include <fmt/format.h>
 
 #include "bed.h"
 #include "chat.h"
@@ -1270,6 +1271,8 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 		party->updateSharedExperience();
 	}
 
+	checkInvalidStair(newTile, newPos, oldPos);
+
 	if (teleport || oldPos.z != newPos.z) {
 		int32_t ticks = g_config.getNumber(ConfigManager::STAIRHOP_DELAY);
 		if (ticks > 0) {
@@ -1277,6 +1280,64 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 				addCondition(condition);
 			}
 		}
+	}
+}
+
+void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, const Position& oldPos)
+{
+	if (!newTile->hasFlag(TILESTATE_FLOORCHANGE)) {
+		return;
+	}
+
+	if (newTile->hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
+		Tile* tileBelow = g_game.map.getTile(newPos.x, newPos.y, newPos.z + 1);
+		if (!tileBelow || !tileBelow->isWalkable()) {
+			g_game.internalTeleport(this, oldPos);
+			sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, 
+				fmt::format(
+					"Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})", 
+					newPos.x, newPos.y, newPos.z
+				)
+			);
+		}
+		return;
+	}
+
+	bool walkableTileFound = false;
+
+	Position tileNextPos = newTile->getFloorchangeOffset() + newPos;
+	tileNextPos.z--;
+
+	Tile* tileNext = g_game.map.getTile(tileNextPos);
+	if (!tileNext) {
+		return;
+	}
+
+	for (uint16_t x = tileNextPos.x-1; x < tileNextPos.x+1; x++) {
+		for (uint16_t y = tileNextPos.y-1; y < tileNextPos.y+1; y++) {
+			if (newPos.x == x && newPos.y == y) {
+				continue;
+			}
+			Tile* tileToCheck = g_game.map.getTile(x, y, tileNextPos.z);
+			if (tileToCheck && tileToCheck->isWalkable()) {
+				walkableTileFound = true;
+				break;
+			}
+		}
+		if (walkableTileFound) {
+			break;
+		}
+	}
+	
+	if (!walkableTileFound) {
+		g_game.internalTeleport(this, oldPos);
+		sendTextMessage(
+			MESSAGE_STATUS_CONSOLE_BLUE, 
+			fmt::format(
+				"Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})", 
+				newPos.x, newPos.y, newPos.z
+			)
+		);
 	}
 }
 

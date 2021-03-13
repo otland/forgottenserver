@@ -1155,6 +1155,8 @@ class Player final : public Creature, public Cylinder
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
 
+		void checkInvalidStair(const Tile* newTile, const Position& newPos, const Position& oldPos);
+
 		void checkTradeState(const Item* item);
 		bool hasCapacity(const Item* item, uint32_t count) const;
 

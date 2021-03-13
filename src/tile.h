@@ -174,6 +174,8 @@ class Tile : public Cylinder
 			return false;
 		}
 
+		Position getFloorchangeOffset() const;
+
 		MagicField* getFieldItem() const;
 		Teleport* getTeleportItem() const;
 		TrashHolder* getTrashHolder() const;
@@ -187,6 +189,7 @@ class Tile : public Cylinder
 		Item* getTopTopItem() const;
 		Item* getTopDownItem() const;
 		bool isMoveableBlocking() const;
+		bool isWalkable() const;
 		Thing* getTopVisibleThing(const Creature* creature);
 		Item* getItemByTopOrder(int32_t topOrder);
 

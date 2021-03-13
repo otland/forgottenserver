@@ -236,6 +236,17 @@ BedItem* Tile::getBedItem() const
 	return nullptr;
 }
 
+Position Tile::getFloorchangeOffset() const
+{
+	if (hasFlag(TILESTATE_FLOORCHANGE_DOWN))  { return Position( 0,  0,  0); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_NORTH)) { return Position( 0, -1,  0); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_WEST))  { return Position(-1,  0,  0); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_SOUTH)) { return Position( 0,  1,  0); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_EAST))  { return Position( 1,  0,  0); }
+	
+	return Position( 0,  0,  0);
+}
+
 Creature* Tile::getTopCreature() const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
@@ -1612,6 +1623,27 @@ void Tile::resetTileFlags(const Item* item)
 bool Tile::isMoveableBlocking() const
 {
 	return !ground || hasFlag(TILESTATE_BLOCKSOLID);
+}
+
+bool Tile::isWalkable() const
+{
+	if (isMoveableBlocking()) {
+		return false;
+	}
+
+	const TileItemVector* tileItems = getItemList();
+	if (!tileItems) {
+		return true;
+	}
+
+	for(const Item* item: *tileItems) {
+		const ItemType& it = Item::items[item->getID()];
+		if (!it.isMagicField() && !it.moveable && item->hasProperty(CONST_PROP_BLOCKSOLID)) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 Item* Tile::getUseItem(int32_t index) const
