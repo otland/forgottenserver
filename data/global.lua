@@ -46,7 +46,7 @@ table.contains = function(array, value)
 	return false
 end
 
-table.merge = function(t1,t2)
+table.merge = function(t1, t2)
     for i=1, #t2 do
         t1[#t1+1] = t2[i]
     end
