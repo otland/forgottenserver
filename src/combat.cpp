@@ -818,7 +818,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				damage.secondary.value /= 2;
 			}
 
-			if (!damage.critical && damage.primary.value < 0 && damage.secondary.value < 0 && damage.origin != ORIGIN_CONDITION) {
+			if (!damage.critical && damage.primary.type != COMBAT_HEALING && damage.origin != ORIGIN_CONDITION) {
 				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
 				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
@@ -900,7 +900,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
-	if (!damage.critical && damage.primary.value < 0 && damage.secondary.value < 0 && casterPlayer && damage.origin != ORIGIN_CONDITION) {
+	if (!damage.critical && damage.primary.type != COMBAT_HEALING && casterPlayer && damage.origin != ORIGIN_CONDITION) {
 		uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 		uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
 		if (chance > 0 && skill > 0 && uniform_random(1, 100) <= chance) {
