@@ -1333,33 +1333,31 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 			}
 		}
 		if (walkableTileFound) {
-			break;
+			return;
 		}
 	}
 
-	if (!walkableTileFound) {
-		if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
-			const TileItemVector* tileItems = newTile->getItemList();
-			for (Item* item: *tileItems) {
-				if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH)) {
-					g_game.internalRemoveItem(item);
-				}
+	if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
+		const TileItemVector* tileItems = newTile->getItemList();
+		for (Item* item: *tileItems) {
+			if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH)) {
+				g_game.internalRemoveItem(item);
 			}
 		}
-
-		std::cout << fmt::format(
-			"[WARNING] Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
-		) << std::endl;
-
-		g_game.internalTeleport(this, oldPos);
-		sendTextMessage(
-			MESSAGE_STATUS_CONSOLE_BLUE,
-			fmt::format(
-				"Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})",
-				newPos.x, newPos.y, newPos.z
-			)
-		);
 	}
+
+	std::cout << fmt::format(
+		"[WARNING] Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
+	) << std::endl;
+
+	g_game.internalTeleport(this, oldPos);
+	sendTextMessage(
+		MESSAGE_STATUS_CONSOLE_BLUE,
+		fmt::format(
+			"Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})",
+			newPos.x, newPos.y, newPos.z
+		)
+	);
 }
 
 //container
