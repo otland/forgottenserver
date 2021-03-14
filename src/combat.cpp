@@ -853,7 +853,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 			g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
 		}
 
-		if (!damage.leeched && damage.primary.value < 0 && damage.secondary.value < 0 && casterPlayer && damage.origin != ORIGIN_CONDITION) {
+		if (!damage.leeched && damage.primary.type != COMBAT_HEALING && casterPlayer && damage.origin != ORIGIN_CONDITION) {
 			CombatDamage leechCombat;
 			leechCombat.origin = ORIGIN_NONE;
 			leechCombat.leeched = true;
@@ -1021,7 +1021,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 
 			int32_t totalDamage = std::abs(damageCopy.primary.value + damageCopy.secondary.value);
 
-			if (casterPlayer && !damage.leeched && damage.origin != ORIGIN_CONDITION) {
+			if (casterPlayer && !damage.leeched && damage.primary.type != COMBAT_HEALING && damage.origin != ORIGIN_CONDITION) {
 				int32_t targetsCount = toDamageCreatures.size();
 
 				if (casterPlayer->getHealth() < casterPlayer->getMaxHealth()) {
