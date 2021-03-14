@@ -863,6 +863,32 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 	return destTile;
 }
 
+void Tile::patch() const
+{
+	uint16_t patchTileId = 0;
+
+	const Position& p = getPosition();
+	for(uint16_t x = p.x-1; x <= p.x+1; x++) {
+		for(uint16_t y = p.y-1; y <= p.y+1; y++) {
+			if (x == p.x && y == p.y) {
+				continue;
+			}
+
+			Tile* t = g_game.map.getTile(x, y, p.z);
+			if (t && t->isWalkable()) {
+				patchTileId = t->getGround()->getID();
+				break;
+			}
+		}
+		if(patchTileId > 0) {
+			break;
+		}
+	}
+
+	// default patch id : 100 (void)
+	g_game.transformItem(ground, patchTileId > 0 ? patchTileId : 100);
+}
+
 void Tile::addThing(Thing* thing)
 {
 	addThing(0, thing);

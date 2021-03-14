@@ -93,6 +93,7 @@ yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
+patchInvalidStairs = false
 
 -- VIP
 vipFreeLimit = 20

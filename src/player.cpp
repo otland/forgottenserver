@@ -1292,6 +1292,9 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 	if (newTile->hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
 		Tile* tileBelow = g_game.map.getTile(newPos.x, newPos.y, newPos.z + 1);
 		if (!tileBelow || !tileBelow->isWalkable()) {
+			if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
+				newTile->patch();
+			}
 			g_game.internalTeleport(this, oldPos);
 			sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, 
 				fmt::format(
@@ -1330,6 +1333,15 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 	}
 	
 	if (!walkableTileFound) {
+		if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
+			const TileItemVector* tileItems = newTile->getItemList();
+			for (Item* item: *tileItems) {
+				if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH)) {
+					g_game.internalRemoveItem(item);
+				}
+			}
+		}
+
 		g_game.internalTeleport(this, oldPos);
 		sendTextMessage(
 			MESSAGE_STATUS_CONSOLE_BLUE, 
