@@ -88,7 +88,7 @@ class MatrixArea
 
 	public:
 		MatrixArea() = default;
-		MatrixArea(uint32_t rows, uint32_t cols): rows{rows}, cols{cols}, arr(rows * cols) {}
+		MatrixArea(uint32_t rows, uint32_t cols): arr(rows * cols), rows{rows}, cols{cols} {}
 
 		bool operator()(uint32_t row, uint32_t col) const { return arr[row * cols + col]; }
 		bool& operator()(uint32_t row, uint32_t col) { return arr[row * cols + col]; }
@@ -110,7 +110,7 @@ class MatrixArea
 
 	private:
 		MatrixArea(Center center, uint32_t rows, uint32_t cols, Container&& arr):
-			rows{rows}, cols{cols}, arr{std::move(arr)}, center{std::move(center)} {}
+			arr{std::move(arr)}, center{std::move(center)}, rows{rows}, cols{cols} {}
 
 		Container arr = {};
 		Center center = {};
