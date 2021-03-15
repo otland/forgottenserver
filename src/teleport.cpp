@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <fmt/format.h>
+
 #include "teleport.h"
 #include "game.h"
 
@@ -91,6 +93,43 @@ void Teleport::addThing(int32_t, Thing* thing)
 	Tile* destTile = g_game.map.getTile(destPos);
 	if (!destTile) {
 		return;
+	}
+
+	// Destination may be non-walkable on purpose ..
+	if (!destTile->isWalkable()) {
+		// .. but make sure players won't get stuck
+		bool pathExists = false;
+		for (uint16_t x = destPos.x-1; x <= destPos.x+1; x++) {
+			for (uint16_t y = destPos.y-1; y <= destPos.y+1; y++) {
+				if (x == destPos.x && y == destPos.y) {
+					continue;
+				}
+
+				if (g_game.map.getTile(x, y, destPos.z)->isWalkable()) {
+					pathExists = true;
+					break;
+				}
+			}
+			if (pathExists) { break; }
+		}
+
+		if (!pathExists) {
+			Creature* creature = thing->getCreature();
+			if (creature) {
+				const Position creaturePos = creature->getPosition();
+				std::cout << fmt::format(
+					"[WARNING] Invalid teleport at position ({:d} / {:d} / {:d}) with destination ({:d} / {:d} / {:d})",
+					creaturePos.x, creaturePos.y, creaturePos.z,
+					destPos.x, destPos.y, destPos.z
+				) << std::endl;
+			} else {
+				std::cout << fmt::format(
+					"[WARNING] Invalid teleport with destionation ({:d} / {:d} / {:d})",
+					destPos.x, destPos.y, destPos.z
+				) << std::endl;
+			}
+			return;
+		}
 	}
 
 	// Prevent infinity loop
