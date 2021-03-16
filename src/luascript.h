@@ -20,7 +20,11 @@
 #ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 #define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 
+#if __has_include("luajit/lua.hpp")
+#include <luajit/lua.hpp>
+#else
 #include <lua.hpp>
+#endif
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -85,7 +89,7 @@ struct LuaVariant {
 struct LuaTimerEventDesc {
 	int32_t scriptId = -1;
 	int32_t function = -1;
-	std::list<int32_t> parameters;
+	std::vector<int32_t> parameters;
 	uint32_t eventId = 0;
 
 	LuaTimerEventDesc() = default;
@@ -177,7 +181,7 @@ class ScriptEnvironment
 		static DBResultMap tempResults;
 };
 
-#define reportErrorFunc(a)  reportError(__FUNCTION__, a, true)
+#define reportErrorFunc(L, a)  LuaScriptInterface::reportError(__FUNCTION__, a, L, true)
 
 enum ErrorCode_t {
 	LUA_ERROR_PLAYER_NOT_FOUND,
@@ -229,7 +233,7 @@ class LuaScriptInterface
 			scriptEnv[scriptEnvIndex--].resetEnv();
 		}
 
-		static void reportError(const char* function, const std::string& error_desc, bool stack_trace = false);
+		static void reportError(const char* function, const std::string& error_desc, lua_State* L = nullptr, bool stack_trace = false);
 
 		const std::string& getInterfaceName() const {
 			return interfaceName;
@@ -431,7 +435,7 @@ class LuaScriptInterface
 		void registerGlobalVariable(const std::string& name, lua_Number value);
 		void registerGlobalBoolean(const std::string& name, bool value);
 
-		std::string getStackTrace(const std::string& error_desc);
+		static std::string getStackTrace(lua_State* L, const std::string& error_desc);
 
 		static bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows);
 

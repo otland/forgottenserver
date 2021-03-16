@@ -92,11 +92,14 @@ endif ()
 ### Git Version ###
 # Define the two required variables before including
 # the source code for watching a git repository.
-set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
-set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
-include(git_watcher)
-if (Git_FOUND)
-    add_dependencies(tfs check_git)
-    target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+option(SKIP_GIT "Skip checking for git updates" OFF)
+if(NOT SKIP_GIT)
+	set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
+	set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
+	include(git_watcher)
+	if(Git_FOUND)
+		add_dependencies(tfs check_git)
+		target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+	endif()
 endif()
 ### END  Git Version ###
