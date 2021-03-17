@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ghoulish Hyaena" nameDescription="a ghoulish hyaena" race="blood" experience="195" speed="200" manacost="275">
 	<health now="400" max="400" />
-	<look type="94" head="20" body="30" legs="40" feet="50" corpse="6026" />
+	<look type="94" corpse="6026" />
 	<targetchange interval="5000" chance="0" />
 	<flags>
 		<flag summonable="1" />
