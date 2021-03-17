@@ -9,15 +9,7 @@ Position.directionOffset = {
 	[DIRECTION_NORTHEAST] = {x = 1, y = -1}
 }
 
-function Position:getNextPosition(direction, steps, isFloorchange)
-	if isFloorchange then
-		local destinationTile = Tile(self.x, self.y, self.z + 1)
-		if not destinationTile:isWalkable() then
-			return false
-		end
-		return self
-	end
-
+function Position:getNextPosition(direction, steps)
 	local offset = Position.directionOffset[direction]
 	if offset then
 		steps = steps or 1
