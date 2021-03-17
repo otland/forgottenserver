@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Abomination" nameDescription="The Abomination" race="venom" experience="25000" speed="340">
-	<health now="38050" max="38050" />
+<monster name="The Abomination" nameDescription="The Abomination" race="venom" experience="8500" speed="340">
+	<health now="285000" max="285000" />
 	<look type="238" corpse="6532" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
+		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
@@ -44,8 +44,9 @@
 		<immunity drunk="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Blubb" />
+	<voices interval="1000" chance="2">
+		<voice sentence="DEATH IS INEVITABLE!" />
+		<voice sentence="I AM THE ESSENCE OF DEATH!" />
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="100" chance="100000" />
