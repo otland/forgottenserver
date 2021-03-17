@@ -204,6 +204,15 @@ struct Abilities {
 	bool regeneration = false;
 };
 
+struct FieldBlock {
+	std::string name = "";
+	uint32_t ticks = 0;
+	int32_t initDamage = -1;
+	int32_t count = 1;
+	int32_t start = 0;
+	int32_t damage = 0;
+};
+
 class ConditionDamage;
 
 class ItemType
@@ -298,6 +307,7 @@ class ItemType
 		itemgroup_t group = ITEM_GROUP_NONE;
 		ItemTypes_t type = ITEM_TYPE_NONE;
 		uint16_t id = 0;
+		uint16_t toId = 0;
 		uint16_t clientId = 0;
 		bool stackable = false;
 		bool isAnimation = false;
@@ -311,6 +321,8 @@ class ItemType
 
 		std::unique_ptr<Abilities> abilities;
 		std::unique_ptr<ConditionDamage> conditionDamage;
+
+		std::map<std::string, bool> hasEdited;
 
 		uint32_t weight = 0;
 		uint32_t levelDoor = 0;
@@ -420,6 +432,7 @@ class Items
 
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
+		void parseItemLua(ItemType* itemType);
 
 		void buildInventoryList();
 		const InventoryVector& getInventory() const {
