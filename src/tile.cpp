@@ -1662,7 +1662,7 @@ bool Tile::isWalkable() const
 		return true;
 	}
 
-	for(const Item* item: *tileItems) {
+	for(const Item* item : *tileItems) {
 		const ItemType& it = Item::items[item->getID()];
 		if (!it.isMagicField() && !it.moveable && item->hasProperty(CONST_PROP_BLOCKSOLID)) {
 			return false;

@@ -99,8 +99,8 @@ void Teleport::addThing(int32_t, Thing* thing)
 	if (!destTile->isWalkable()) {
 		// .. but make sure players won't get stuck
 		bool pathExists = false;
-		for (uint16_t x = destPos.x-1; x <= destPos.x+1; x++) {
-			for (uint16_t y = destPos.y-1; y <= destPos.y+1; y++) {
+		for (uint16_t x = destPos.x - 1; x <= destPos.x + 1; x++) {
+			for (uint16_t y = destPos.y - 1; y <= destPos.y + 1; y++) {
 				if (x == destPos.x && y == destPos.y) {
 					continue;
 				}
