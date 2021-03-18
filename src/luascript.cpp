@@ -2695,7 +2695,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getMinReqLevel", LuaScriptInterface::luaItemTypeGetMinReqLevel);
 	registerMethod("ItemType", "getMinReqMagicLevel", LuaScriptInterface::luaItemTypeGetMinReqMagicLevel);
 
-
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
 	registerMethod("ItemType", "isStoreItem", LuaScriptInterface::luaItemTypeIsStoreItem);
@@ -8539,7 +8538,6 @@ int LuaScriptInterface::luaPlayerAddOfflineTrainingTime(lua_State* L)
 	return 1;
 }
 
-
 int LuaScriptInterface::luaPlayerGetOfflineTrainingTime(lua_State* L)
 {
 	// player:getOfflineTrainingTime()
@@ -13115,7 +13113,6 @@ int LuaScriptInterface::luaMonsterTypeGetDefenseList(lua_State* L)
 	}
 
 	lua_createtable(L, monsterType->info.defenseSpells.size(), 0);
-
 
 	int index = 0;
 	for (const auto& spellBlock : monsterType->info.defenseSpells) {

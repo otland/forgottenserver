@@ -1223,49 +1223,49 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 //**********************************************************//
 
 MatrixArea MatrixArea::flip() const {
-    Container newArr(arr.size());
-    for (uint32_t i = 0; i < rows; ++i) {
-        // assign rows, top to bottom, to the current rows, bottom to top
-        newArr[std::slice(i * cols, cols, 1)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
-    }
-    return {{cols - center.first - 1, center.second}, rows, cols, std::move(newArr)};
+	Container newArr(arr.size());
+	for (uint32_t i = 0; i < rows; ++i) {
+		// assign rows, top to bottom, to the current rows, bottom to top
+		newArr[std::slice(i * cols, cols, 1)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
+	}
+	return {{cols - center.first - 1, center.second}, rows, cols, std::move(newArr)};
 }
 
 MatrixArea MatrixArea::mirror() const {
-    Container newArr(arr.size());
-    for (uint32_t i = 0; i < cols; ++i) {
-        // assign cols, left to right, to the current rows, right to left
-        newArr[std::slice(i, cols, rows)] = arr[std::slice(cols - i - 1, cols, rows)];
-    }
-    return {{center.first, rows - center.second - 1}, rows, cols, std::move(newArr)};
+	Container newArr(arr.size());
+	for (uint32_t i = 0; i < cols; ++i) {
+		// assign cols, left to right, to the current rows, right to left
+		newArr[std::slice(i, cols, rows)] = arr[std::slice(cols - i - 1, cols, rows)];
+	}
+	return {{center.first, rows - center.second - 1}, rows, cols, std::move(newArr)};
 }
 
 MatrixArea MatrixArea::transpose() const {
-    return {{center.second, center.first}, rows, cols, arr[std::gslice(0, {cols, rows}, {1, cols})]};
+	return {{center.second, center.first}, rows, cols, arr[std::gslice(0, {cols, rows}, {1, cols})]};
 }
 
 MatrixArea MatrixArea::rotate90() const {
-    Container newArr(arr.size());
-    for (uint32_t i = 0; i < rows; ++i) {
-        // assign rows, top to bottom, to the current cols, right to left
-        newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
-    }
-    return {{rows - center.second - 1, center.first}, cols, rows, std::move(newArr)};
+	Container newArr(arr.size());
+	for (uint32_t i = 0; i < rows; ++i) {
+		// assign rows, top to bottom, to the current cols, right to left
+		newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
+	}
+	return {{rows - center.second - 1, center.first}, cols, rows, std::move(newArr)};
 }
 
 MatrixArea MatrixArea::rotate180() const {
-    Container newArr(arr.size());
-    std::reverse_copy(std::begin(arr), std::end(arr), std::begin(newArr));
-    return {{cols - center.first - 1, rows - center.second - 1}, rows, cols, std::move(newArr)};
+	Container newArr(arr.size());
+	std::reverse_copy(std::begin(arr), std::end(arr), std::begin(newArr));
+	return {{cols - center.first - 1, rows - center.second - 1}, rows, cols, std::move(newArr)};
 }
 
 MatrixArea MatrixArea::rotate270() const {
-    Container newArr(arr.size());
-    for (uint32_t i = 0; i < cols; ++i) {
-        // assign cols, left to right, to the current rows, bottom to top
-        newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
-    }
-    return {{center.second, cols - center.first - 1}, cols, rows, std::move(newArr)};
+	Container newArr(arr.size());
+	for (uint32_t i = 0; i < cols; ++i) {
+		// assign cols, left to right, to the current rows, bottom to top
+		newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
+	}
+	return {{center.second, cols - center.first - 1}, cols, rows, std::move(newArr)};
 }
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const {

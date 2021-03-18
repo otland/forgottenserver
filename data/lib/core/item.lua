@@ -147,7 +147,7 @@ do
 			if attack ~= 0 then
 				begin = false
 				ss:append(' (Atk:%d', attack)
-				
+
 				if abilities.elementType ~= COMBAT_NONE and abilities.elementDamage ~= 0 then
 					ss:append(' physical + %d %s', abilities.elementDamage, getCombatName(abilities.elementType))
 				end
@@ -194,7 +194,7 @@ do
 				end
 			end
 		end
-		
+
 		if show == 0 then
 			local tmp = true
 			for i, value in ipairs(abilities.absorbPercent) do
@@ -224,7 +224,7 @@ do
 				end
 			end
 		end
-		
+
 		if show == 0 then
 			local tmp = true
 			for i, value in ipairs(abilities.fieldAbsorbPercent) do

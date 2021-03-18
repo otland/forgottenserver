@@ -214,7 +214,6 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"mead", FLUID_MEAD},
 };
 
-
 Items::Items()
 {
 	items.reserve(30000);
