@@ -1297,7 +1297,7 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 			}
 
 			std::cout << fmt::format(
-				"[WARNING] Invalid stairs at position ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
+				"[Warning - Player::onCreatureMove] Invalid stairs at position ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
 			) << std::endl;
 
 			g_game.internalTeleport(this, oldPos);
@@ -1344,7 +1344,7 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 	}
 
 	std::cout << fmt::format(
-		"[WARNING] Invalid stairs at position ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
+		"[Warning - Player::onCreatureMove] Invalid stairs at position ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
 	) << std::endl;
 
 	g_game.internalTeleport(this, oldPos);

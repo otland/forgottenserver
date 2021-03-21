@@ -118,13 +118,13 @@ void Teleport::addThing(int32_t, Thing* thing)
 			if (creature) {
 				const Position creaturePos = creature->getPosition();
 				std::cout << fmt::format(
-					"[WARNING] Invalid teleport at position ({:d} / {:d} / {:d}) with destination ({:d} / {:d} / {:d})",
+					"[Warning - Teleport::addThing] Invalid teleport at position ({:d} / {:d} / {:d}) with destination ({:d} / {:d} / {:d})",
 					creaturePos.x, creaturePos.y, creaturePos.z,
 					destPos.x, destPos.y, destPos.z
 				) << std::endl;
 			} else {
 				std::cout << fmt::format(
-					"[WARNING] Invalid teleport with destionation ({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
+					"[Warning - Teleport::addThing] Invalid teleport with destionation ({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
 				) << std::endl;
 			}
 			return;
