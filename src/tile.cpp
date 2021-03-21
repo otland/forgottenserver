@@ -238,13 +238,13 @@ BedItem* Tile::getBedItem() const
 
 Position Tile::getFloorchangeOffset() const
 {
-	if (hasFlag(TILESTATE_FLOORCHANGE_DOWN))  { return Position( 0,  0,  0); }
-	if (hasFlag(TILESTATE_FLOORCHANGE_NORTH)) { return Position( 0, -1,  0); }
-	if (hasFlag(TILESTATE_FLOORCHANGE_WEST))  { return Position(-1,  0,  0); }
-	if (hasFlag(TILESTATE_FLOORCHANGE_SOUTH)) { return Position( 0,  1,  0); }
-	if (hasFlag(TILESTATE_FLOORCHANGE_EAST))  { return Position( 1,  0,  0); }
-	
-	return Position( 0,  0,  0);
+	const Position p = getPosition();
+	if (hasFlag(TILESTATE_FLOORCHANGE_DOWN))  { return Position(0, 0, 0); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_NORTH)) { return Position(p.x,   p.y-1, p.z); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_WEST))  { return Position(p.x-1, p.y,   p.z); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_SOUTH)) { return Position(p.x,   p.y+1, p.z); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_EAST))  { return Position(p.x+1, p.y,   p.z); }
+	return Position(0, 0, 0);
 }
 
 Creature* Tile::getTopCreature() const
