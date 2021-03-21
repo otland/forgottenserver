@@ -42,7 +42,6 @@ function Position:moveUpstairs()
 				return self
 			end
 		end
-
 	end
 	swap(self, defaultPosition)
 	return self
