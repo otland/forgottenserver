@@ -124,7 +124,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 				) << std::endl;
 			} else {
 				std::cout << fmt::format(
-					"[Warning - Teleport::addThing] Invalid teleport with destionation ({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
+					"[Warning - Teleport::addThing] Invalid teleport with destination ({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
 				) << std::endl;
 			}
 			return;
