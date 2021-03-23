@@ -1301,8 +1301,8 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 			) << std::endl;
 
 			g_game.internalTeleport(this, oldPos);
-			sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, fmt::format(
-				"Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
+			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(
+				"Invalid stairs found. Notify staff members Position({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
 			));
 		}
 		return;
@@ -1348,8 +1348,8 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 	) << std::endl;
 
 	g_game.internalTeleport(this, oldPos);
-	sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, fmt::format(
-		"Invalid stairs found. Notify staff members ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
+	sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(
+		"Invalid stairs found. Notify staff members Position({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
 	));
 }
 
