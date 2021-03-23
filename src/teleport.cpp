@@ -122,6 +122,11 @@ void Teleport::addThing(int32_t, Thing* thing)
 					creaturePos.x, creaturePos.y, creaturePos.z,
 					destPos.x, destPos.y, destPos.z
 				) << std::endl;
+
+				Player* player = creature->getPlayer();
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(
+					"Invalid Destination. Notify staff members Position({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
+				));
 			} else {
 				std::cout << fmt::format(
 					"[Warning - Teleport::addThing] Invalid teleport with destination ({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
