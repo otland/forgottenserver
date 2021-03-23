@@ -3,7 +3,7 @@ raid:type("timer")
 raid:interval(1800)
 
 local function event0()
-    Game.broadcastMessage("Rats are attacking neart Trekolt Temple!", MESSAGE_STATUS_WARNING)
+    Game.broadcastMessage("Rats are attacking near Trekolt Temple!", MESSAGE_STATUS_WARNING)
 end
 
 local function event1()
@@ -50,4 +50,3 @@ function raid.onTime(interval)
 end
 
 raid:register()
-
