@@ -136,7 +136,7 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local ground = tile:getGround()
 
-	if ground and table.contains(ropeSpots, ground:getId()) or tile:getItemById(14435) then
+	if ground and table.contains(ropeSpots, ground:getId()) then
 		tile = Tile(toPosition:moveUpstairs())
 		if not tile then
 			return false
