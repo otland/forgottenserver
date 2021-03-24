@@ -152,7 +152,8 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if table.contains(holeId, target.itemid) then
-		tile = Tile(Position(toPosition.x, toPosition.y, toPosition.z + 1))
+		toPosition.z = toPosition.z + 1
+		tile = Tile(toPosition)
 		if not tile then
 			return false
 		end
