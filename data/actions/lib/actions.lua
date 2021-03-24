@@ -134,31 +134,48 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if table.contains(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
-		if Tile(toPosition:moveUpstairs()):hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
+	local ground = tile:getGround()
+
+	if ground and table.contains(ropeSpots, ground:getId()) then
+		tile = Tile(toPosition:moveUpstairs())
+		if not tile then
+			return false
+		end
+
+		if tile:hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
 			player:sendCancelMessage(RETURNVALUE_PLAYERISPZLOCKED)
 			return true
 		end
+
 		player:teleportTo(toPosition, false)
 		return true
-	elseif table.contains(holeId, target.itemid) then
+	end
+
+	if table.contains(holeId, target.itemid) then
 		toPosition.z = toPosition.z + 1
 		tile = Tile(toPosition)
-		if tile then
-			local thing = tile:getTopVisibleThing()
-			if thing:isPlayer() then
-				if Tile(toPosition:moveUpstairs()):hasFlag(TILESTATE_PROTECTIONZONE) and thing:isPzLocked() then
-					return false
-				end
-				return thing:teleportTo(toPosition, false)
-			end
-			if thing:isItem() and thing:getType():isMovable() then
-				return thing:moveTo(toPosition:moveUpstairs())
-			end
+		if not tile then
+			return false
 		end
-		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+
+		local thing = tile:getTopVisibleThing()
+		if not thing then
+			return true
+		end
+
+		if thing:isPlayer() then
+			if Tile(toPosition:moveUpstairs()):queryAdd(thing) ~= RETURNVALUE_NOERROR then
+				return false
+			end
+
+			return thing:teleportTo(toPosition, false)
+		elseif thing:isItem() and thing:getType():isMovable() then
+			return thing:moveTo(toPosition:moveUpstairs())
+		end
+
 		return true
 	end
+
 	return false
 end
 
