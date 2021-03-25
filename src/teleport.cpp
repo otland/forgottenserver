@@ -121,6 +121,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 			std::string msg = "";
 
 			if (creature) {
+				const Position& creaturePos = creature->getPosition();
 
 				msg = "[Warning - Teleport::addThing] Invalid teleport at position ({0} / {1} / {2}) with destination ({3} / {4} / {5})\n";
 				fmt::print(stdout, msg, creaturePos.x, creaturePos.y, creaturePos.z, destPos.x, destPos.y, destPos.z);
