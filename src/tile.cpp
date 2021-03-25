@@ -239,7 +239,6 @@ BedItem* Tile::getBedItem() const
 Position Tile::getFloorChangeOffset() const
 {
 	const Position p = getPosition();
-	if (hasFlag(TILESTATE_FLOORCHANGE_DOWN))  { return Position(0, 0, 0); }
 	if (hasFlag(TILESTATE_FLOORCHANGE_NORTH)) { return Position(p.x,   p.y-1, p.z); }
 	if (hasFlag(TILESTATE_FLOORCHANGE_WEST))  { return Position(p.x-1, p.y,   p.z); }
 	if (hasFlag(TILESTATE_FLOORCHANGE_SOUTH)) { return Position(p.x,   p.y+1, p.z); }
