@@ -868,8 +868,8 @@ void Tile::patch() const
 	uint16_t patchTileId = 0;
 
 	const Position& p = getPosition();
-	for(uint16_t x = p.x-1; x <= p.x+1; x++) {
-		for(uint16_t y = p.y-1; y <= p.y+1; y++) {
+	for (uint16_t x = p.x - 1; x <= p.x + 1; ++x) {
+		for (uint16_t y = p.y - 1; y <= p.y + 1; ++y) {
 			if (x == p.x && y == p.y) {
 				continue;
 			}
@@ -880,7 +880,8 @@ void Tile::patch() const
 				break;
 			}
 		}
-		if(patchTileId > 0) {
+
+		if (patchTileId > 0) {
 			break;
 		}
 	}
@@ -1662,7 +1663,7 @@ bool Tile::isWalkable() const
 		return true;
 	}
 
-	for(const Item* item : *tileItems) {
+	for (const Item* item : *tileItems) {
 		const ItemType& it = Item::items[item->getID()];
 		if (!it.isMagicField() && !it.moveable && item->hasProperty(CONST_PROP_BLOCKSOLID)) {
 			return false;

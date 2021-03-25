@@ -1314,8 +1314,8 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 		return;
 	}
 
-	for (uint16_t x = tileNextPos.x - 1; x < tileNextPos.x + 1; x++) {
-		for (uint16_t y = tileNextPos.y - 1; y < tileNextPos.y + 1; y++) {
+	for (uint16_t x = tileNextPos.x - 1; x < tileNextPos.x + 1; ++x) {
+		for (uint16_t y = tileNextPos.y - 1; y < tileNextPos.y + 1; ++y) {
 			if (newPos.x == x && newPos.y == y) {
 				continue;
 			}
