@@ -1271,7 +1271,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 		party->updateSharedExperience();
 	}
 
-	checkInvalidStair(newTile, newPos, oldPos);
+	checkStairs(newTile, newPos, oldPos);
 
 	if (teleport || oldPos.z != newPos.z) {
 		int32_t ticks = g_config.getNumber(ConfigManager::STAIRHOP_DELAY);
@@ -1283,7 +1283,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 	}
 }
 
-void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, const Position& oldPos)
+void Player::checkStairs(const Tile* newTile, const Position& newPos, const Position& oldPos)
 {
 	if (!newTile->hasFlag(TILESTATE_FLOORCHANGE)) {
 		return;
