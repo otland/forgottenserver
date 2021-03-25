@@ -265,8 +265,14 @@ bool ConfigManager::load()
 	integer[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
 	integer[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
 	integer[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
-	integer[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
-	integer[KILLS_TO_BLACK] = getGlobalNumber(L, "killsToBlackSkull", 6);
+	integer[RED_DAILY_LIMIT] = getGlobalNumber(L, "redDailyLimit", 3);
+	integer[RED_WEEKLY_LIMIT] = getGlobalNumber(L, "redWeeklyLimit", 5);
+	integer[RED_MONTHLY_LIMIT] = getGlobalNumber(L, "redMonthlyLimit", 10);
+	integer[RED_SKULL_LENGTH] = getGlobalNumber(L, "redSkullLength", 30 * 24 * 60 * 60);
+	integer[BLACK_DAILY_LIMIT] = getGlobalNumber(L, "blackDailyLimit", 6);
+	integer[BLACK_WEEKLY_LIMIT] = getGlobalNumber(L, "blackWeeklyLimit", 10);
+	integer[BLACK_MONTHLY_LIMIT] = getGlobalNumber(L, "blackMonthlyLimit", 20);
+	integer[BLACK_SKULL_LENGTH] = getGlobalNumber(L, "blackSkullLength", 45 * 24 * 60 * 60);
 	integer[ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenActions", 200);
 	integer[EX_ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenExActions", 1000);
 	integer[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxMessageBuffer", 4);
@@ -274,7 +280,6 @@ bool ConfigManager::load()
 	integer[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	integer[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
 	integer[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
-	integer[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60);
 	integer[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60);
 	integer[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);
 	integer[EXP_FROM_PLAYERS_LEVEL_RANGE] = getGlobalNumber(L, "expFromPlayersLevelRange", 75);
