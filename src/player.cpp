@@ -1296,14 +1296,10 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 				newTile->patch();
 			}
 
-			std::cout << fmt::format(
-				"[Warning - Player::onCreatureMove] Invalid stairs at position ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
-			) << std::endl;
-
 			g_game.internalTeleport(this, oldPos);
-			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(
-				"Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.", newPos.x, newPos.y, newPos.z
-			));
+			fmt::print("[Warning - Player::onCreatureMove] Invalid stairs at position ({0} / {1} / {2})\n", newPos.x, newPos.y, newPos.z);
+			std::string msg = "Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.";
+			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, newPos.x, newPos.y, newPos.z));
 		}
 		return;
 	}
@@ -1343,14 +1339,11 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 		}
 	}
 
-	std::cout << fmt::format(
-		"[Warning - Player::onCreatureMove] Invalid stairs at position ({:d} / {:d} / {:d})", newPos.x, newPos.y, newPos.z
-	) << std::endl;
-
 	g_game.internalTeleport(this, oldPos);
-	sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(
-		"Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.", newPos.x, newPos.y, newPos.z
-	));
+	fmt::print("[Warning - Player::onCreatureMove] Invalid stairs at position ({} / {} / {})\n", newPos.x, newPos.y, newPos.z);
+
+	std::string msg = "Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.";
+	sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, newPos.x, newPos.y, newPos.z));
 }
 
 //container

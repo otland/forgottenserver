@@ -115,22 +115,19 @@ void Teleport::addThing(int32_t, Thing* thing)
 
 		if (!pathExists) {
 			Creature* creature = thing->getCreature();
+			std::string msg = "";
+
 			if (creature) {
-				const Position creaturePos = creature->getPosition();
-				std::cout << fmt::format(
-					"[Warning - Teleport::addThing] Invalid teleport at position ({:d} / {:d} / {:d}) with destination ({:d} / {:d} / {:d})",
-					creaturePos.x, creaturePos.y, creaturePos.z,
-					destPos.x, destPos.y, destPos.z
-				) << std::endl;
+
+				msg = "[Warning - Teleport::addThing] Invalid teleport at position ({0} / {1} / {2}) with destination ({3} / {4} / {5})\n";
+				fmt::print(stdout, msg, creaturePos.x, creaturePos.y, creaturePos.z, destPos.x, destPos.y, destPos.z);
 
 				Player* player = creature->getPlayer();
-				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(
-					"Invalid Destination at Position({:d} / {:d} / {:d}). Please notify staff members.", destPos.x, destPos.y, destPos.z
-				));
+				msg = "Invalid Destination at Position({:d} / {:d} / {:d}). Please notify staff members.";
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, destPos.x, destPos.y, destPos.z));
 			} else {
-				std::cout << fmt::format(
-					"[Warning - Teleport::addThing] Invalid teleport with destination ({:d} / {:d} / {:d})", destPos.x, destPos.y, destPos.z
-				) << std::endl;
+				msg = "[Warning - Teleport::addThing] Invalid teleport with destination ({} / {} / {})\n";
+				fmt::print(stdout, msg, destPos.x, destPos.y, destPos.z);
 			}
 			return;
 		}
