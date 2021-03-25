@@ -1298,6 +1298,7 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 
 			g_game.internalTeleport(this, oldPos);
 			fmt::print("[Warning - Player::onCreatureMove] Invalid stairs at position ({0} / {1} / {2})\n", newPos.x, newPos.y, newPos.z);
+
 			std::string msg = "Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.";
 			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, newPos.x, newPos.y, newPos.z));
 		}
