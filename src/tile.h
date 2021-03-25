@@ -174,7 +174,7 @@ class Tile : public Cylinder
 			return false;
 		}
 
-		Position getFloorchangeOffset() const;
+		Position getFloorChangeOffset() const;
 
 		MagicField* getFieldItem() const;
 		Teleport* getTeleportItem() const;

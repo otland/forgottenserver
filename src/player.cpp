@@ -1306,7 +1306,7 @@ void Player::checkInvalidStair(const Tile* newTile, const Position& newPos, cons
 
 	bool walkableTileFound = false;
 
-	Position tileNextPos = newTile->getFloorchangeOffset();
+	Position tileNextPos = newTile->getFloorChangeOffset();
 	tileNextPos.z--;
 
 	Tile* tileNext = g_game.map.getTile(tileNextPos);

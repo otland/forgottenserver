@@ -236,7 +236,7 @@ BedItem* Tile::getBedItem() const
 	return nullptr;
 }
 
-Position Tile::getFloorchangeOffset() const
+Position Tile::getFloorChangeOffset() const
 {
 	const Position p = getPosition();
 	if (hasFlag(TILESTATE_FLOORCHANGE_DOWN))  { return Position(0, 0, 0); }
