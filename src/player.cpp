@@ -3866,18 +3866,17 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
 
 	time_t now = time(nullptr), today = (now - 84600), week = (now - (7 * 84600));
-	std::vector<time_t> killsList;
+	std::vector<time_t> killsList = IOLoginData::getUnjustifiedDates(name, now); // get kills from last month
 	killsList.push_back(now); // add current kill to list
-	IOLoginData::getUnjustifiedDates(name, killsList, now); // add kills from last month to list
 	int32_t todayKills = 0, weekKills = 0, monthKills = killsList.size();
 
 	for (const auto& it : killsList) {
 		if (it > week) {
-			weekKills++;
+			++weekKills;
 		}
 
 		if (it > today) {
-			todayKills++;
+			++todayKills;
 		}
 	}
 
