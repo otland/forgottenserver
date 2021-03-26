@@ -29,6 +29,7 @@
 #include "protocolstatus.h"
 #include "spells.h"
 #include "iologindata.h"
+#include "iomapserialize.h"
 #include "configmanager.h"
 #include "teleport.h"
 #include "databasemanager.h"
@@ -2626,6 +2627,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("House", "setAccessList", LuaScriptInterface::luaHouseSetAccessList);
 
 	registerMethod("House", "kickPlayer", LuaScriptInterface::luaHouseKickPlayer);
+
+	registerMethod("House", "save", LuaScriptInterface::luaHouseSave);
 
 	// ItemType
 	registerClass("ItemType", "", LuaScriptInterface::luaItemTypeCreate);
@@ -11400,6 +11403,19 @@ int LuaScriptInterface::luaHouseKickPlayer(lua_State* L)
 	}
 
 	pushBoolean(L, house->kickPlayer(getPlayer(L, 2), getPlayer(L, 3)));
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseSave(lua_State* L)
+{
+	// house:save()
+	House* house = getUserdata<House>(L, 1);
+	if (!house) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushBoolean(L, IOMapSerialize::saveHouse(house));
 	return 1;
 }
 
