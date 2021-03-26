@@ -109,8 +109,8 @@ jobs:
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
-          cmakeBuildType: ${{ matrix.buildtype }}
-          cmakeAppendedArgs: -DUSE_LUAJIT=${{ matrix.luajit }}
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="${{ matrix.luajit }}"'
 
       - name: dir
         run: find $RUNNER_WORKSPACE
