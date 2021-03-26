@@ -3872,11 +3872,11 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	uint32_t todayKills = 0, weekKills = 0, monthKills = killsList.size();
 
 	for (const auto& it : killsList) {
-		if ((*it) > week) {
+		if (it > week) {
 			weekKills++;
 		}
 
-		if ((*it) > today) {
+		if (it > today) {
 			todayKills++;
 		}
 	}
