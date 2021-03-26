@@ -3869,7 +3869,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	std::vector<time_t> killsList;
 	killsList.push_back(now); // add current kill to list
 	IOLoginData::getUnjustifiedDates(name, killsList, now); // add kills from last month to list
-	uint32_t todayKills = 0, weekKills = 0, monthKills = killsList.size();
+	int32_t todayKills = 0, weekKills = 0, monthKills = killsList.size();
 
 	for (const auto& it : killsList) {
 		if (it > week) {
