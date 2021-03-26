@@ -58,7 +58,7 @@ class IOLoginData
 		static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
 		static void updatePremiumTime(uint32_t accountId, time_t endTime);
-		static void getUnjustifiedDates(std::string name, std::vector<time_t>& dateList, time_t _time);
+		static void getUnjustifiedDates(std::string name, std::vector<time_t>& dateList, time_t offsetTime);
 
 	private:
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;

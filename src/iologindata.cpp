@@ -1074,16 +1074,16 @@ void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 	Database::getInstance().executeQuery(query.str());
 }
 
-void IOLoginData::getUnjustifiedDates(std::string name, std::vector<time_t>& dateList, time_t _time)
+void IOLoginData::getUnjustifiedDates(std::string name, std::vector<time_t>& dateList, time_t offsetTime)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
-	query << "SELECT `time` FROM `player_deaths` WHERE `killed_by` = " << db.escapeString(name) << " AND `unjustified` = 1 AND `time` >= " << (_time - (30 * 86400));
+	query << "SELECT `time` FROM `player_deaths` WHERE `killed_by` = " << db.escapeString(name) << " AND `unjustified` = 1 AND `time` >= " << (offsetTime - (30 * 86400));
 	DBResult_ptr result = db.storeQuery(query.str());
 
 	if (result) {
 		do {
-			dateList.push_back((time_t)result->getNumber<uint32_t>("time"));
+			dateList.push_back(static_cast<time_t>(result->getNumber<uint32_t>("time")));
 		} while (result->next());
 	}
 }
