@@ -622,7 +622,7 @@ CreatureVector Creature::getKillers()
 	for (const auto& it : damageMap) {
 		Creature* attacker = g_game.getCreatureByID(it.first);
 		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
-			killers.push_back(attacker); 
+			killers.push_back(attacker);
 		}
 	}
 	return killers;
