@@ -1074,7 +1074,7 @@ void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 	Database::getInstance().executeQuery(query.str());
 }
 
-static std::vector<time_t> IOLoginData::getUnjustifiedDates(std::string name, time_t offsetTime)
+std::vector<time_t> IOLoginData::getUnjustifiedDates(const std::string& name, time_t offsetTime)
 {
 	std::vector<time_t> killsList;
 	Database& db = Database::getInstance();
