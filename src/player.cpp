@@ -34,6 +34,8 @@
 #include "scheduler.h"
 #include "weapons.h"
 
+#include <fmt/format.h>
+
 extern ConfigManager g_config;
 extern Game g_game;
 extern Chat* g_chat;
@@ -2102,30 +2104,25 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 			names[killer->getName()]++;
 		}
 
-		std::ostringstream ss;
-		ss << "You recognize " << getNameDescription() << ". " << (getSex() == PLAYERSEX_FEMALE ? "She" : "He") << " was killed by ";
 		size_t countNames = names.size();
 
 		if (lastHitCreature) {
 			if (!mostDamageCreature) {
-				ss << lastHitCreature->getNameDescription() << (countNames > 1 ? " and others." : ".");
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(), countNames > 1 ? " and others." : "."));
 			} else {
-				ss << mostDamageCreature->getNameDescription();
 				if (lastHitCreature != mostDamageCreature && names[lastHitCreature->getName()] == 1) {
-					ss << " and " << lastHitCreature->getNameDescription() << (countNames > 2 ? " and others." : ".");
+					corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s} and {:s}{:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(), lastHitCreature->getNameDescription(), countNames > 2 ? " and others." : "."));
 				} else {
-					ss << " and others.";
+					corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
 				}
 			}
 		} else {
 			if (mostDamageCreature) {
-				ss << "something evil and " << mostDamageCreature->getNameDescription() << (countNames > 1 ? " and others." : ".");
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil and {:s}{:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(), countNames > 1 ? " and others." : "."));
 			} else {
-				ss << "something evil" << (countNames ? " and others." : ".");
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil {:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", countNames ? " and others." : "."));
 			}
 		}
-
-		corpse->setSpecialDescription(ss.str());
 	}
 	return corpse;
 }
