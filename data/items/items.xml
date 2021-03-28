@@ -663,7 +663,6 @@
 	</item>
 	<item id="1492" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="fire">
 			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="10000" />
@@ -673,7 +672,6 @@
 	</item>
 	<item id="1493" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="fire">
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
@@ -682,12 +680,10 @@
 	</item>
 	<item id="1494" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="fire" />
 	</item>
 	<item id="1495" article="an" name="energy field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="energy">
 			<attribute key="initdamage" value="30" />
 			<attribute key="ticks" value="10000" />
@@ -696,7 +692,6 @@
 	</item>
 	<item id="1496" article="a" name="poison field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="poison">
 			<attribute key="ticks" value="5000" />
 			<attribute key="start" value="5" />
@@ -766,7 +761,7 @@
 	</item>
 	<item id="1505" name="smoke">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
+		
 	</item>
 	<item id="1506" article="a" name="searing fire">
 		<attribute key="type" value="magicfield" />
@@ -19334,7 +19329,6 @@
 	</item>
 	<item id="10986" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="fire">
 			<attribute key="initdamage" value="20" />
 			<attribute key="ticks" value="10000" />
@@ -19344,7 +19338,6 @@
 	</item>
 	<item id="10987" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="fire">
 			<attribute key="ticks" value="10000" />
 			<attribute key="count" value="7" />
@@ -19353,7 +19346,6 @@
 	</item>
 	<item id="10988" article="a" name="fire field">
 		<attribute key="type" value="magicfield" />
-		<attribute key="replaceable" value="1" />
 		<attribute key="field" value="fire">
 			<attribute key="initdamage" value="5" />
 			<attribute key="ticks" value="10000" />
