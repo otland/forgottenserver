@@ -761,7 +761,6 @@
 	</item>
 	<item id="1505" name="smoke">
 		<attribute key="type" value="magicfield" />
-		
 	</item>
 	<item id="1506" article="a" name="searing fire">
 		<attribute key="type" value="magicfield" />
