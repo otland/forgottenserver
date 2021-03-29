@@ -529,62 +529,125 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
+uint8_t Map::isTileClear(uint16_t x, uint16_t y, uint8_t z) const
 {
-	if (fromPos == toPos) {
-		return true;
+	const Tile* tile = getTile(x, y, z);
+	if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
+		return tile->getFieldItem() ? 2 : 0;
 	}
 
-	Position start(fromPos.z > toPos.z ? toPos : fromPos);
-	Position destination(fromPos.z > toPos.z ? fromPos : toPos);
+	return 1;
+}
 
-	const int8_t mx = start.x < destination.x ? 1 : start.x == destination.x ? 0 : -1;
-	const int8_t my = start.y < destination.y ? 1 : start.y == destination.y ? 0 : -1;
+uint8_t Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	if (x0 == x1 && y0 == y1) {
+		return 1;
+	}
 
-	int32_t A = Position::getOffsetY(destination, start);
-	int32_t B = Position::getOffsetX(start, destination);
-	int32_t C = -(A * destination.x + B * destination.y);
+	bool steep = abs(y1 - y0) > abs(x1 - x0);
+	if (steep) {
+		std::swap(x0, y0);
+		std::swap(x1, y1);
+	}
 
-	while (start.x != destination.x || start.y != destination.y) {
-		int32_t move_hor = std::abs(A * (start.x + mx) + B * (start.y) + C);
-		int32_t move_ver = std::abs(A * (start.x) + B * (start.y + my) + C);
-		int32_t move_cross = std::abs(A * (start.x + mx) + B * (start.y + my) + C);
+	if (x0 > x1) {
+		std::swap(x0, x1);
+		std::swap(y0, y1);
+	}
 
-		if (start.y != destination.y && (start.x == destination.x || move_hor > move_ver || move_hor > move_cross)) {
-			start.y += my;
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+	float grad = (dx == 0) ? 1 : dy / dx;
+	float xy = y0 + grad;
+
+	if (steep) {
+		for (int y = x0 + 1; y < x1; ++y) {
+			uint16_t newX = std::floor(xy);
+			uint8_t tileClear = isTileClear(newX, y, z);
+			if (tileClear != 1) {
+				return tileClear;
+			}
+			xy += grad;
 		}
-
-		if (start.x != destination.x && (start.y == destination.y || move_ver > move_hor || move_ver > move_cross)) {
-			start.x += mx;
-		}
-
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-			return false;
+	} else {
+		for (int x = x0 + 1; x < x1; ++x) {
+			uint16_t newY = std::floor(xy * 10 + 0.10000000000008) / 10;
+			uint8_t tileClear = isTileClear(x, newY, z);
+			if (tileClear != 1) {
+				return tileClear;
+			}
+			xy += grad;
 		}
 	}
 
-	// now we need to perform a jump between floors to see if everything is clear (literally)
-	while (start.z != destination.z) {
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->getThingCount() > 0) {
-			return false;
-		}
-
-		start.z++;
-	}
-
-	return true;
+	return 1;
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
-	if (floorCheck && fromPos.z != toPos.z) {
+	bool sameFloor = fromPos.z == toPos.z;
+
+	//if floorCheck is enabled, same floor clear sight line is required
+	//(used for distance attacks)
+	if (floorCheck && !sameFloor) {
 		return false;
 	}
 
-	// Cast two converging rays and see if either yields a result.
-	return checkSightLine(fromPos, toPos) || checkSightLine(toPos, fromPos);
+	//check if 2d sight line is clear
+	uint8_t sightLine = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
+	bool sightClear = sightLine == 1;
+
+	//fields in theory are infinitely high
+	//in case of encountering obstacles and the destination is on the same floor then we already know that the line of sight is obstructed
+	if (sightLine == 2 || (sameFloor && !sightClear)) {
+		return false;
+	}
+
+	//if floorCheck is enabled, we end checking the sight line after doing 2D check
+	//alternatively we can end the calculations if clear sight line was found and the target is on the same floor
+	if (floorCheck || (sameFloor && sightClear)) {
+		return true;
+	}
+
+	//floorCheck is off and clear sight line was not found so we attempt to find 3D path now
+	//(used for throwing items)
+	//can't throw higher than one floor above us
+	if ((toPos.z < fromPos.z) && (fromPos.z - toPos.z > 1)) {
+		return false;
+	}
+
+	//z = 0 and target is on the same floor so we can throw above the obstacle
+	if (sameFloor && fromPos.z == 0) {
+		return true;
+	}
+
+	//check if the path is clear or we have to attempt throwing above the obstacle
+	bool wasPathFound = (sightClear && (fromPos.z < toPos.z || sameFloor));
+	uint8_t currentZ = wasPathFound ? fromPos.z : fromPos.z - 1; //path was found
+
+	if (!wasPathFound) {
+		//target is above us and upper floor path is clear, no need for more checks
+		if (fromPos.z > toPos.z) {
+			return true;
+		}
+
+		//try throwing above the obstacle
+		//check path and fromPos shaft
+		//obstacles were detected on higher floor as well so we return false
+		if (isTileClear(fromPos.x, fromPos.y, currentZ) != 1 || checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, currentZ) != 1) {
+			return false;
+		}
+	}
+
+	//check toPos shaft
+	for (int z = currentZ; z != toPos.z; ++z) {
+		if (isTileClear(toPos.x, toPos.y, z) != 1) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
