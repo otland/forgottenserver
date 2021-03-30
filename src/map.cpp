@@ -510,7 +510,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	}
 
 	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
-	if (deltaz > 2) {
+	if (fromPos.z > toPos.z && deltaz > 2) {
 		return false;
 	}
 
