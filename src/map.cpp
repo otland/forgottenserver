@@ -532,119 +532,96 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 uint8_t Map::isTileClear(uint16_t x, uint16_t y, uint8_t z) const
 {
 	const Tile* tile = getTile(x, y, z);
-	if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-		return tile->getFieldItem() ? 2 : 0;
+	if (!tile || !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
+		return 0;
 	}
 
-	return 1;
+	return tile->getFieldItem() ? 2 : 1;
 }
 
-uint8_t Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+uint8_t Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
-	if (x0 == x1 && y0 == y1) {
-		return 1;
-	}
-
-	bool steep = abs(y1 - y0) > abs(x1 - x0);
-	if (steep) {
-		std::swap(x0, y0);
-		std::swap(x1, y1);
-	}
-
-	if (x0 > x1) {
-		std::swap(x0, x1);
-		std::swap(y0, y1);
-	}
-
 	float dx = x1 - x0;
 	float dy = y1 - y0;
 	float grad = (dx == 0) ? 1 : dy / dx;
 	float xy = y0 + grad;
 
-	if (steep) {
-		for (int y = x0 + 1; y < x1; ++y) {
-			uint16_t newX = std::floor(xy);
-			uint8_t tileClear = isTileClear(newX, y, z);
-			if (tileClear != 1) {
-				return tileClear;
-			}
-			xy += grad;
+	for (int y = x0 +1; y < x1; ++y) {
+		uint16_t newX = std::floor(xy);
+		uint8_t tileClear = isTileClear(newX, y, z);
+		if (tileClear != 0) {
+			return tileClear;
 		}
-	} else {
-		for (int x = x0 + 1; x < x1; ++x) {
-			uint16_t newY = std::floor(xy * 10 + 0.10000000000008) / 10;
-			uint8_t tileClear = isTileClear(x, newY, z);
-			if (tileClear != 1) {
-				return tileClear;
-			}
-			xy += grad;
-		}
+		xy += grad;
 	}
 
-	return 1;
+	return 0;
+}
+
+uint8_t Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+	float grad = (dx == 0) ? 1 : dy / dx;
+	float xy = y0 + grad;
+
+	for (int x = x0 +1; x < x1; ++x) {
+		uint16_t newY = std::floor(xy + 0.1);
+		uint8_t tileClear = isTileClear(x, newY, z);
+		if (tileClear != 0) {
+			return tileClear;
+		}
+		xy += grad;
+	}
+
+	return 0;
+}
+
+uint8_t Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	if (x0 == x1 && y0 == y1) {
+		return 0;
+	}
+
+	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
+		if (y1 > y0) {
+			return getSteepLine(y0, x0, y1, x1, z);
+		}
+		return getSteepLine(y1, x1, y0, x0, z);
+	}
+
+	if (x0 > x1) {
+		return getSlightLine(x1, y1, x0, y0, z);
+	}
+
+	return getSlightLine(x0, y0, x1, y1, z);
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
-	bool sameFloor = fromPos.z == toPos.z;
-
-	//if floorCheck is enabled, same floor clear sight line is required
-	//(used for distance attacks)
-	if (floorCheck && !sameFloor) {
+	uint8_t z0 = fromPos.z, z1 = toPos.z;
+	if (floorCheck && z0 != z1) {
 		return false;
 	}
 
-	//check if 2d sight line is clear
-	uint8_t sightLine = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
-	bool sightClear = sightLine == 1;
-
-	//fields in theory are infinitely high
-	//in case of encountering obstacles and the destination is on the same floor then we already know that the line of sight is obstructed
-	if (sightLine == 2 || (sameFloor && !sightClear)) {
+	uint16_t x0 = fromPos.x, y0 = fromPos.y, x1 = toPos.x, y1 = toPos.y;
+	uint8_t sightClear = checkSightLine(x0, y0, x1, y1, z0);
+	if (sightClear == 2 || sightClear == 1 && z0 == z1) {
 		return false;
 	}
 
-	//if floorCheck is enabled, we end checking the sight line after doing 2D check
-	//alternatively we can end the calculations if clear sight line was found and the target is on the same floor
-	if (floorCheck || (sameFloor && sightClear)) {
-		return true;
-	}
-
-	//floorCheck is off and clear sight line was not found so we attempt to find 3D path now
-	//(used for throwing items)
-	//can't throw higher than one floor above us
-	if ((toPos.z < fromPos.z) && (fromPos.z - toPos.z > 1)) {
-		return false;
-	}
-
-	//z = 0 and target is on the same floor so we can throw above the obstacle
-	if (sameFloor && fromPos.z == 0) {
-		return true;
-	}
-
-	//check if the path is clear or we have to attempt throwing above the obstacle
-	bool wasPathFound = (sightClear && (fromPos.z < toPos.z || sameFloor));
-	uint8_t currentZ = wasPathFound ? fromPos.z : fromPos.z - 1; //path was found
-
-	if (!wasPathFound) {
-		//target is above us and upper floor path is clear, no need for more checks
-		if (fromPos.z > toPos.z) {
-			return true;
-		}
-
-		//try throwing above the obstacle
-		//check path and fromPos shaft
-		//obstacles were detected on higher floor as well so we return false
-		if (isTileClear(fromPos.x, fromPos.y, currentZ) != 1 || checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, currentZ) != 1) {
+	if (z0 < z1) {
+		if (sightClear == 1 || isTileClear(x1, y1, z0) != 0) {
 			return false;
 		}
-	}
 
-	//check toPos shaft
-	for (int z = currentZ; z != toPos.z; ++z) {
-		if (isTileClear(toPos.x, toPos.y, z) != 1) {
-			return false;
+		for (uint8_t z = z0 +1; z <= z1; ++z) {
+			if (isTileClear(x1, y1, z) != 0 || checkSightLine(x0, y0, x1, y1, z) == 2) {
+				return false;
+			}
 		}
+	} else if (isTileClear(x1, y1, z1) != 0 || checkSightLine(x0, y0, x1, y1, z1) != 0) {
+		return false;
 	}
 
 	return true;
