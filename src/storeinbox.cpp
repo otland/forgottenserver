@@ -23,7 +23,7 @@
 
 StoreInbox::StoreInbox(uint16_t type) : Container(type, 20, true, true) {}
 
-ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
+ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	const Item* item = thing.getItem();
 	if (!item) {
@@ -38,13 +38,15 @@ ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t
 		return RETURNVALUE_CANNOTPICKUP;
 	}
 
-	if (!item->isStoreItem()) {
-		return RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
-	}
+	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
+		if (!item->isStoreItem()) {
+			return RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
+		}
 
-	const Container* container = item->getContainer();
-	if (container && !container->empty()) {
-		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		const Container* container = item->getContainer();
+		if (container && !container->empty()) {
+			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		}
 	}
 
 	return RETURNVALUE_NOERROR;
