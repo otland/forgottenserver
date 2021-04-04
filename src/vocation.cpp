@@ -162,7 +162,7 @@ Vocation* Vocations::getVocation(uint16_t id)
 int32_t Vocations::getVocationId(const std::string& name) const
 {
 	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [&name](decltype(vocationsMap)::value_type it) {
-		return it.second.name == name;
+		return strcasecmp(it.second.name.c_str(), name.c_str()) == 0;
 	});
 	return it != vocationsMap.end() ? it->first : -1;
 }
