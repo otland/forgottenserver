@@ -14826,7 +14826,6 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 			pushString(L, name);
 			lua_rawseti(L, -2, ++i);
 		}
-		setMetatable(L, -1, "Spell");
 	} else {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		for (int i = 0; i < parameters; ++i) {
