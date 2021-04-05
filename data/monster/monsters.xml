@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monsters>
+	<monster name="Blood Beast" file="monsters/blood_beast.xml"/>
+	<monster name="Dawnfire Asura" file="monsters/dawnfire_asura.xml"/>
+	<monster name="Execowtioner" file="monsters/execowtioner.xml"/>
+	<monster name="Glooth Anemone" file="monsters/glooth_anemone.xml"/>
+	<monster name="Glooth Bandit" file="monsters/glooth_bandit.xml"/>
+	<monster name="Glooth Blob" file="monsters/glooth_blob.xml"/>
+	<monster name="Glooth Brigand" file="monsters/glooth_brigand.xml"/>
+	<monster name="Glooth Golem" file="monsters/glooth_golem.xml"/>
+	<monster name="Metal Gargoyle" file="monsters/metal_gargoyle.xml"/>
+	<monster name="Midnight Asura" file="monsters/midnight_asura.xml"/>
+	<monster name="Minotaur Amazon" file="monsters/minotaur_amazon.xml"/>
+	<monster name="Minotaur Hunter" file="monsters/minotaur_hunter.xml"/>
+	<monster name="Mooh'tah Warrior" file="monsters/mooh'tah_warrior.xml"/>
+	<monster name="Moohtant" file="monsters/moohtant.xml"/>
+	<monster name="Nomad (Blue)" file="monsters/nomad_blue.xml"/>
+	<monster name="Nomad (Female)" file="monsters/nomad_female.xml"/>
+	<monster name="Ogre Brute" file="monsters/ogre_brute.xml"/>
+	<monster name="Ogre Savage" file="monsters/ogre_savage.xml"/>
+	<monster name="Ogre Shaman" file="monsters/ogre_shaman.xml"/>
+	<monster name="Renegade Knight" file="monsters/renegade_knight.xml"/>
+	<monster name="Rift Lord" file="monsters/rift_lord.xml"/>
+	<monster name="Rift Phantom" file="monsters/rift_phantom.xml"/>
+	<monster name="Rot Elemental" file="monsters/rot_elemental.xml"/>
+	<monster name="Rustheap Golem" file="monsters/rustheap_golem.xml"/>
+	<monster name="Vicious Squire" file="monsters/vicious_squire.xml"/>
+	<monster name="Vile Grandmaster" file="monsters/vile_grandmaster.xml"/>
+	<monster name="Worm Priestess" file="monsters/worm_priestess.xml"/>
 	<monster name="a carved stone tile" file="monsters/a_carved_stone_tile.xml" />
 	<monster name="Abyssador" file="monsters/abyssador.xml" />
 	<monster name="Achad" file="monsters/achad.xml" />
