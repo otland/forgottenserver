@@ -813,7 +813,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 
 		if (casterPlayer) {
 			Player* targetPlayer = target ? target->getPlayer() : nullptr;
-			if (targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
+			if (targetPlayer && targetPlayer->getSkull() != SKULL_BLACK && damage.primary.type != COMBAT_HEALING) {
 				damage.primary.value /= 2;
 				damage.secondary.value /= 2;
 			}
