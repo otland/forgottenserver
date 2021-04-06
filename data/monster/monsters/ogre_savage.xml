@@ -32,7 +32,7 @@
 		<defense name="speed" interval="2000" chance="15" speedchange="210" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
-  	</defenses>	
+	</defenses>	
 	<elements>
 		<element energyPercent="-10"/>
 		<element deathPercent="10"/>
