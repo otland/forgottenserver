@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Glooth Brigand" nameDescription="a glooth brigand" race="blood" experience="1900" speed="280" manacost="0">
 	<health now="2400" max="2400"/>
-	<look type="137" head="114" body="114" legs="90" feet="114" addons="0" mount="0" corpse="24257"/>
+	<look type="137" head="114" body="114" legs="110" feet="114" addons="0" mount="0" corpse="24257"/>
 	<targetchange interval="2000" chance="2"/>
 	<flags>
 		<flag summonable="0"/>
