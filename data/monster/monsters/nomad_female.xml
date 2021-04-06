@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="190">
+<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="190" manacost="420">
 	<health now="160" max="160" />
 	<look type="150" head="96" body="39" legs="40" feet="2" addons="3" corpse="20462" />
 	<targetchange interval="2000" chance="2" />

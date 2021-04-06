@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="190">
+<monster name="Nomad" nameDescription="a nomad" race="blood" experience="60" speed="190" manacost="420">
 	<health now="160" max="160" />
 	<look type="146" head="85" body="48" legs="49" feet="3" addons="3" corpse="20603" />
 	<targetchange interval="2000" chance="2" />
@@ -8,7 +8,7 @@
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag illusionable="0" />
-		<flag convinceable="0" />
+		<flag convinceable="1" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
