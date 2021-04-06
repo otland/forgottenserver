@@ -18,7 +18,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="82" attack="50"/>
-		<attack name="physical" interval="2000" chance="15" range="7" min="-0" max="-110">
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-110">
 			<attribute key="shootEffect" value="bolt"/>
 		</attack>
 	</attacks>
