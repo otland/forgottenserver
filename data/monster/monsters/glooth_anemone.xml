@@ -49,7 +49,7 @@
 		<immunity poison="1"/>
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Glooth Blob" interval="2000" chance="10" max="2"/>
+		<summon name="Glooth Blob" interval="2000" chance="10"/>
 	</summons>
 	<voices interval="2000" chance="5">
 		<voice sentence="*shglib*"/>
