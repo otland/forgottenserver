@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rift Phantom" nameDescription="a rift phantom" race="undead" experience="0" speed="160" manacost="0">
+<monster name="Rift Phantom" nameDescription="a rift phantom" race="undead" experience="0" speed="160">
 	<health now="100" max="100"/>
 	<look type="48" corpse="10015"/>
 	<targetchange interval="2000" chance="8"/>
@@ -16,11 +16,7 @@
 		<flag staticattack="90"/>
 		<flag runonhealth="0"/>
 	</flags>
-	<attacks>
-	</attacks>
 	<defenses armor="10" defense="10"/>
-	<elements>
-	</elements>
 	<immunities>
 		<immunity physical="1"/>
 		<immunity death="1"/>
@@ -29,6 +25,4 @@
 		<immunity lifedrain="1"/>
 		<immunity paralyze="1"/>
 	</immunities>
-	<voices interval="2000" chance="5">
-	</voices>
 </monster>

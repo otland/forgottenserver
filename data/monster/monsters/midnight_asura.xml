@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Midnight Asura" nameDescription="a midnight asura" race="blood" experience="4100" speed="210" manacost="0">
+<monster name="Midnight Asura" nameDescription="a midnight asura" race="blood" experience="4100" speed="210">
 	<health now="3100" max="3100" />
 	<look type="150" head="0" body="114" legs="90" feet="90" addons="1" corpse="24644" />
 	<targetchange interval="4000" chance="10" />
@@ -57,39 +57,37 @@
 		<voice sentence="May night fall upon you!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />	            <!-- gold coin -->	
-		<item id="2148" countmax="100" chance="80000" />	            <!-- gold coin -->
-		<item id="2148" countmax="42" chance="60000" />	            	<!-- gold coin -->			
-		<item id="2152" countmax="6" chance="18200" />				    <!-- fish -->		
-		<item id="7368" countmax="2" chance="2000" />				    <!-- Assassin Stars -->		
-		<item id="2144" chance="2000" />				                <!--  Black Pearls -->
-		<item id="6558" chance="2000" />				                <!-- Concentrated Demonic Blood -->		
-		<item id="6500" chance="2210" />					            <!-- Demonic Essence -->		
-		<item id="2145" countmax="3" chance="800" />					<!-- Small Diamond -->		
-		<item id="2149" countmax="3" chance="900" />					<!-- Small Emeralds -->		
-		<item id="2147" countmax="3" chance="650" />					<!-- Small Rubbie -->
-		<item id="2146" countmax="3" chance="580" />					<!-- Small Sapphire -->		
-		<item id="9970" countmax="3" chance="580" />					<!-- Small Topaz -->		
-		<item id="7591" chance="700" />					                <!-- Great Health Potion -->	
-		<item id="2143" chance="560" />					<!-- White Pearl -->		
-		<item id="7404" chance="130" />					<!-- Assassin Dagger-->		
-		<item id="2158" chance="320" />					<!--  Blue Gem -->	
-		<item id="2656" chance="300" />					<!-- Blue Robe -->		
-		<item id="9971" chance="300" />					<!--  Gold Ingot -->
-	    <item id="24630" chance="300" />				<!-- Golden Lotus Brooch -->		
-	    <item id="2186" chance="300" />					<!-- Moonlight Rod, -->		
-	    <item id="2185" chance="90" />					<!-- Necrotic Rod -->		
-	    <item id="24637" chance="80" />					<!-- Oriental Shoes -->		
-		<item id="24631" chance="200" />					<!-- Peacock Feather Fan -->
-		<item id="8889" chance="90" />					<!--  Skullcracker Armor -->		
-		<item id="2134" chance="100" />					<!-- Silver Brooch -->
-		<item id="2170" chance="100" />					<!-- Silver amulet -->
-		<item id="5944" chance="100" />					<!-- Soul Orb -->
-		<item id="8902" chance="100" />					<!-- Spellbook of Mind Control -->
-	    <item id="3967" chance="100" />					<!-- Tribal Mask -->	     
-		<item id="8910" chance="70" />					<!-- Underworld Rod  -->
-		<item id="2154" chance="100" />					<!--  Yellow Gem  -->
-	
-
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->	
+		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->
+		<item id="2148" countmax="42" chance="60000" /><!-- gold coin -->			
+		<item id="2152" countmax="6" chance="18200" /><!-- fish -->		
+		<item id="7368" countmax="2" chance="2000" /><!-- assassin stars -->		
+		<item id="2144" chance="2000" /><!--  black pearls -->
+		<item id="6558" chance="2000" /><!-- concentrated demonic blood -->		
+		<item id="6500" chance="2210" /><!-- demonic essence -->		
+		<item id="2145" countmax="3" chance="800" /><!-- small diamond -->		
+		<item id="2149" countmax="3" chance="900" /><!-- small emeralds -->		
+		<item id="2147" countmax="3" chance="650" /><!-- small rubbie -->
+		<item id="2146" countmax="3" chance="580" /><!-- small sapphire -->		
+		<item id="9970" countmax="3" chance="580" /><!-- small topaz -->		
+		<item id="7591" chance="700" /><!-- great health potion -->	
+		<item id="2143" chance="560" /><!-- white pearl -->		
+		<item id="7404" chance="130" /><!-- assassin dagger-->		
+		<item id="2158" chance="320" /><!--  blue gem -->	
+		<item id="2656" chance="300" /><!-- blue robe -->		
+		<item id="9971" chance="300" /><!--  gold ingot -->
+	    <item id="24630" chance="300" /><!-- golden lotus brooch -->		
+	    <item id="2186" chance="300" /><!-- moonlight rod, -->		
+	    <item id="2185" chance="90" /><!-- necrotic rod -->		
+	    <item id="24637" chance="80" /><!-- oriental shoes -->		
+		<item id="24631" chance="200" /><!-- peacock feather fan -->
+		<item id="8889" chance="90" /><!--  skullcracker armor -->		
+		<item id="2134" chance="100" /><!-- silver brooch -->
+		<item id="2170" chance="100" /><!-- silver amulet -->
+		<item id="5944" chance="100" /><!-- soul orb -->
+		<item id="8902" chance="100" /><!-- spellbook of mind control -->
+	    <item id="3967" chance="100" /><!-- tribal mask -->	     
+		<item id="8910" chance="70" /><!-- underworld rod  -->
+		<item id="2154" chance="100" /><!--  yellow gem  -->
 	</loot>
 </monster>

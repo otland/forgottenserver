@@ -256,6 +256,7 @@
 	<monster name="General Murius" file="monsters/general_murius.xml" />
 	<monster name="Ghastly Dragon" file="monsters/ghastly_dragon.xml" />
 	<monster name="Ghazbaran" file="monsters/ghazbaran.xml" />
+	<monster name="Ghost Wolf" file="monsters/ghost_wolf.xml"/>
 	<monster name="Ghost" file="monsters/ghost.xml" />
 	<monster name="Ghoul" file="monsters/ghoul.xml" />
 	<monster name="Ghoulish Hyaena" file="monsters/ghoulish_hyaena.xml" />
@@ -263,6 +264,7 @@
 	<monster name="Giant Spider" file="monsters/giant_spider.xml" />
 	<monster name="Gladiator" file="monsters/gladiator.xml" />
 	<monster name="Glitterscale" file="monsters/glitterscale.xml" />
+	<monster name="Gloom Wolf" file="monsters/gloom_wolf.xml"/>
 	<monster name="Glooth Anemone" file="monsters/glooth_anemone.xml"/>
 	<monster name="Glooth Bandit" file="monsters/glooth_bandit.xml"/>
 	<monster name="Glooth Blob" file="monsters/glooth_blob.xml"/>

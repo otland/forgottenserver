@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dawnfire Asura" nameDescription="a dawnfire asura" race="blood" experience="4100" speed="210" manacost="0">
+<monster name="Dawnfire Asura" nameDescription="a dawnfire asura" race="blood" experience="4100" speed="210">
 	<health now="2900" max="2900" />
 	<look type="150" head="114" body="94" legs="78" feet="79" addons="1" corpse="24643" />
 	<targetchange interval="4000" chance="10" />
@@ -57,32 +57,32 @@
 		<voice sentence="Join me, brothers, for a BLOODY FRENZY!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />	<!-- gold coin -->	
-		<item id="2148" countmax="100" chance="80000" />	<!-- gold coin -->	
-		<item id="2148" countmax="42" chance="60000" />		<!-- gold coin -->			
-		<item id="2152" countmax="6" chance="18200" />				<!-- fish -->		
-		<item id="6558" chance="2000" />				<!-- Concentrated Demonic Blood -->		
-		<item id="7590" chance="2000" />				<!-- Great Mana Potion -->		
-		<item id="2150" countmax="3" chance="210" />					<!-- Small Amethyst -->			
-		<item id="2145" countmax="3" chance="300" />					<!-- Small Diamond -->		
-		<item id="2149" countmax="3" chance="300" />					<!-- Small Emeralds -->		
-		<item id="2147" countmax="3" chance="350" />					<!-- Small Rubbie -->		
-		<item id="9970" countmax="3" chance="280" />					<!-- Small Topaz -->		
-		<item id="2158" chance="300" />					<!-- Blue Gem -->		
-		<item id="6300" chance="260" />					<!-- Death Ring -->		
-		<item id="6500" chance="330" />					<!-- Demonic Essence -->		
-		<item id="8871" chance="220" />					<!--  Focus Cape -->		
-		<item id="24630" chance="500" />					<!-- Golden Lotus Brooch -->		
-		<item id="7899" chance="100" />					<!-- Magma Coat -->
-	    <item id="2194" chance="400" />					<!-- Mysterious Fetish -->
-	    <item id="2663" chance="300" />					<!-- Mystic Turban -->
-	    <item id="24637" chance="300" />					<!-- Oriental Shoes -->
-	    <item id="24631" chance="500" />					<!-- Peacock Feather Fan -->		
-		<item id="5911" chance="300" />					<!-- Red Piece of Cloth -->
-		<item id="2133" chance="400" />					<!--  Ruby Necklace -->
-		<item id="2134" chance="900" />					<!-- Silver Brooch -->
-		<item id="5944" chance="300" />					<!-- Soul Orb -->
-		<item id="8902" chance="100" />					<!-- Spellbook of Mind Control -->
-	    <item id="2187" chance="200" />					<!-- Wand of Inferno -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->	
+		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->	
+		<item id="2148" countmax="42" chance="60000" /><!-- gold coin -->			
+		<item id="2152" countmax="6" chance="18200" /><!-- fish -->		
+		<item id="6558" chance="2000" /><!-- concentrated demonic blood -->		
+		<item id="7590" chance="2000" /><!-- great mana potion -->		
+		<item id="2150" countmax="3" chance="210" /><!-- small amethyst -->			
+		<item id="2145" countmax="3" chance="300" /><!-- small diamond -->		
+		<item id="2149" countmax="3" chance="300" /><!-- small emeralds -->		
+		<item id="2147" countmax="3" chance="350" /><!-- small rubbie -->		
+		<item id="9970" countmax="3" chance="280" /><!-- small topaz -->		
+		<item id="2158" chance="300" /><!-- blue gem -->		
+		<item id="6300" chance="260" /><!-- death ring -->		
+		<item id="6500" chance="330" /><!-- demonic essence -->		
+		<item id="8871" chance="220" /><!--  focus cape -->		
+		<item id="24630" chance="500" /><!-- golden lotus brooch -->		
+		<item id="7899" chance="100" /><!-- magma coat -->
+		<item id="2194" chance="400" /><!-- mysterious fetish -->
+		<item id="2663" chance="300" /><!-- mystic turban -->
+		<item id="24637" chance="300" /><!-- oriental shoes -->
+		<item id="24631" chance="500" /><!-- peacock feather fan -->		
+		<item id="5911" chance="300" /><!-- red piece of cloth -->
+		<item id="2133" chance="400" /><!--  ruby necklace -->
+		<item id="2134" chance="900" /><!-- silver brooch -->
+		<item id="5944" chance="300" /><!-- soul orb -->
+		<item id="8902" chance="100" /><!-- spellbook of mind control -->
+		<item id="2187" chance="200" /><!-- wand of inferno -->
 	</loot>
 </monster>
