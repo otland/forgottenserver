@@ -56,7 +56,7 @@
 	</voices>
 	<loot>
 		<item id="23515" chance="10190"/><!-- bowl of glooth soup -->
-		<item id="23568" chance="21020"/><!--  slimy leaf tentacle -->
+		<item id="23568" chance="21020"/><!-- slimy leaf tentacle -->
 		<item id="2796" chance="3180"/><!-- green mushroom -->
 		<item id="23554" chance="320"/><!-- glooth amulet -->
 		<item id="2148" countmax="100" chance="100000"/><!-- gold coin -->
