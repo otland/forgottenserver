@@ -64,7 +64,7 @@
 		<item id="8473" chance="960" /><!-- ultimate health potion -->
 		<item id="2152" countmax="3" chance="57320" /><!-- platinum coin -->
 		<item id="9970" countmax="3" chance="9240" /><!-- small topaz -->
-		<item id="2149" countmax="3" chance="8600" /><!-- small emeralds -->
+		<item id="2149" countmax="3" chance="8600" /><!-- small emerald -->
 		<item id="2147" countmax="3" chance="11150" /><!-- small rubies -->
 		<item id="23534" chance="640" /><!-- glooth cape -->
 		<item id="23543" chance="5100" /><!-- glooth whip -->

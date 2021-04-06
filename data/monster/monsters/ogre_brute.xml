@@ -30,7 +30,7 @@
 		<attack name="speed" interval="2000" chance="10" range="4" target="1" radius="3" speedchange="-400">
 			<attribute key="shootEffect" value="largerock" />
 			<attribute key="areaEffect" value="stun" />
-		</attack>		
+		</attack>
 	</attacks>
 	<defenses armor="41" defense="24" />
 	<elements>

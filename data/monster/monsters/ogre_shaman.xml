@@ -37,7 +37,7 @@
 		<defense name="healing" interval="2000" chance="25" min="0" max="0">
 			<attribute key="areaEffect" value="mortarea" />
 		</defense>
-	</defenses>	
+	</defenses>
 	<elements>
 		<element firePercent="20" />
 		<element energyPercent="20" />

@@ -77,7 +77,7 @@
 		<item id="5911" chance="1010" /><!-- red piece of cloth -->
 		<item id="2156" chance="430" /><!-- red gem -->
 		<item id="2197" chance="1450" /><!-- stone skin amulet -->
-		<item id="2154" chance="870" />	<!-- yellow gem -->
+		<item id="2154" chance="870" /><!-- yellow gem -->
 		<item id="2475" chance="1160" /><!-- warrior helmet -->
 		<item id="7443" chance="720" /><!-- bullseye potion -->
 	</loot>

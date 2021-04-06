@@ -69,6 +69,6 @@
 		<item id="23551" chance="690" /><!-- glooth axe -->
 		<item id="2154" chance="1030" /><!-- yellow gem -->
 		<item id="9970" countmax="4" chance="7560" /><!-- small topaz -->
-		<item id="2149" countmax="4" chance="8590" /><!-- small emeralds -->
+		<item id="2149" countmax="4" chance="8590" /><!-- small emerald -->
 	</loot>
 </monster>
