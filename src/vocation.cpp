@@ -169,7 +169,7 @@ int32_t Vocations::getVocationId(const std::string& name) const
 
 uint16_t Vocations::getPromotedVocation(uint16_t id) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](decltype(vocationsMap)::value_type it) {
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](auto it) {
 		return it.second.fromVocation == id && it.first != id;
 	});
 	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
