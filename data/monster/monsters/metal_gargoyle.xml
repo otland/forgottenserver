@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Metal Gargoyle" nameDescription="a metla gargoyle" race="energy" experience="1400" speed="190" manacost="0">
+<monster name="Metal Gargoyle" nameDescription="a metal gargoyle" race="energy" experience="1400" speed="190">
 	<health now="2100" max="2100"/>
 	<look type="601" corpse="23347"/>
   <targetchange interval="2000" chance="5" />
