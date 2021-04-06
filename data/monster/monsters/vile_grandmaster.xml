@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Vile Grandmaster" nameDescription="a vile grandmaster" race="blood" experience="1500" speed="210" manacost="0">
 	<health now="1700" max="1700"/>
-	<look type="268" head="97" body="0" legs="95" feet="94" addons="1" corpse="20418"/>
+	<look type="268" head="59" body="19" legs="95" feet="94" addons="1" corpse="20418"/>
 	<targetchange interval="2000" chance="5"/>
 	<flags>
 		<flag summonable="0"/>
