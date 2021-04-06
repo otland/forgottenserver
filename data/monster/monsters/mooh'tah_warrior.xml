@@ -21,7 +21,7 @@
 		<attack name="energy" interval="2000" chance="14" length="4" spread="0" min="-150" max="-200">
 			<attribute key="areaEffect" value="yellowenergy"/>
 		</attack>
-		<attack name="physical" interval="2000" chance="11" range="7" min="-0" max="-135">
+		<attack name="physical" interval="2000" chance="11" range="7" min="0" max="-135">
 			<attribute key="areaEffect" value="explosionarea"/>
 			<attribute key="shootEffect" value="largerock"/>
 		</attack>
