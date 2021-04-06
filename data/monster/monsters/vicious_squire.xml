@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Vicious Squire" nameDescription="a vicious squire" race="blood" experience="900" speed="210" manacost="0">
 	<health now="1000" max="1000"/>
-	<look type="131" head="116" body="45" legs="71" feet="95" addons="1" corpse="20418"/>
+	<look type="131" head="97" body="24" legs="73" feet="116" addons="1" corpse="20418"/>
 	<targetchange interval="2000" chance="5"/>
 	<flags>
 		<flag summonable="0"/>
