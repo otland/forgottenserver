@@ -18,7 +18,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" skill="94" attack="50"/>
-		<attack name="physical" interval="2000" chance="22" range="7" min="-0" max="-225">
+		<attack name="physical" interval="2000" chance="22" range="7" min="0" max="-225">
 			<attribute key="shootEffect" value="whirlwindsword"/>
 		</attack>
 		<attack name="physical" interval="2000" chance="15" radius="4" min="-25" max="-125">
