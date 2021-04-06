@@ -28,7 +28,7 @@
 			<attribute key="shootEffect" value="poison"/>
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
-		<attack name="earth" interval="2000" chance="10" radius="5" target="0" min="-0" max="-0">
+		<attack name="earth" interval="2000" chance="10" radius="5" target="0" min="0" max="0">
 			<attribute key="areaEffect" value="redshimmer"/>
 		</attack>
 	</attacks>
