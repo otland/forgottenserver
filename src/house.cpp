@@ -426,7 +426,7 @@ void AccessList::parseList(const std::string& list)
 	std::istringstream listStream(list);
 	std::string line;
 
-	int lineNo = 1;
+	uint16_t lineNo = 1;
 	while (getline(listStream, line)) {
 		if (++lineNo > 100) {
 			break;
