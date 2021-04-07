@@ -71,18 +71,22 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	for (auto monsterNode : doc.child("monsters").children()) {
 		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
 		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
-		auto forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+		unloadedMonsters.emplace(name, file);
+	}
+
+	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+
+	for (auto it : unloadedMonsters) {
 		if (forceLoad) {
-			loadMonster(file, name, true);
+			loadMonster(it.second, it.first, reloading);
 			continue;
 		}
 
-		if (reloading && monsters.find(name) != monsters.end()) {
-			loadMonster(file, name, true);
-		} else {
-			unloadedMonsters.emplace(name, file);
+		if (reloading && monsters.find(it.first) != monsters.end()) {
+			loadMonster(it.second, it.first, reloading);
 		}
 	}
+
 	return true;
 }
 
@@ -1457,12 +1461,12 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 
 	auto it = monsters.find(lowerCaseName);
 	if (it == monsters.end()) {
-		auto it2 = unloadedMonsters.find(lowerCaseName);
-		if (it2 == unloadedMonsters.end()) {
+		if (!loadFromFile) {
 			return nullptr;
 		}
 
-		if (!loadFromFile) {
+		auto it2 = unloadedMonsters.find(lowerCaseName);
+		if (it2 == unloadedMonsters.end()) {
 			return nullptr;
 		}
 
