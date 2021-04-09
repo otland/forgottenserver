@@ -908,7 +908,7 @@ if Modules == nil then
 				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = -1, sell = cost, subType = itemSubType, name = realName or ItemType(itemid):getName()}
 			else
 				if cost > shopItem.buy then
-					print('[NpcSystem - ShopModule::addSellableItem] Sell price higher than buy price ('.. shopItem.name ..')')
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (".. shopItem.name ..")")
 				end
 				shopItem.sell = cost
 			end
