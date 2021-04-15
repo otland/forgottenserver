@@ -50,7 +50,6 @@ function StringStream.concat(self, sep)
 end
 
 local aux = {
-	['Duration'] = {key = ITEM_ATTRIBUTE_DURATION},
 	['Defense'] = {key = ITEM_ATTRIBUTE_DEFENSE},
 	['ExtraDefense'] = {key = ITEM_ATTRIBUTE_EXTRADEFENSE},
 	['Attack'] = {key = ITEM_ATTRIBUTE_ATTACK},
