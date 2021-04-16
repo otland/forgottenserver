@@ -54,15 +54,31 @@ ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t
 
 void StoreInbox::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	if (parent != nullptr) {
-		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	Cylinder* topParent = getTopParent();
+	if (topParent->getCreature()) {
+		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
+	} else if (topParent == this) {
+		//let the tile class notify surrounding players
+		if (topParent->getParent()) {
+			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
+		}
+	} else {
+		topParent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
 void StoreInbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	if (parent != nullptr) {
-		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	Cylinder* topParent = getTopParent();
+	if (topParent->getCreature()) {
+		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
+	} else if (parent == this) {
+		//let the tile class notify surrounding players
+		if (topParent->getParent()) {
+			topParent->getParent()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+		}
+	} else {
+		topParent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
 
