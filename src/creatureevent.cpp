@@ -231,45 +231,23 @@ std::string CreatureEvent::getScriptEventName() const
 {
 	//Depending on the type script event name is different
 	switch (type) {
-		case CREATURE_EVENT_LOGIN:
-			return "onLogin";
-
-		case CREATURE_EVENT_LOGOUT:
-			return "onLogout";
-
-		case CREATURE_EVENT_THINK:
-			return "onThink";
-
-		case CREATURE_EVENT_PREPAREDEATH:
-			return "onPrepareDeath";
-
-		case CREATURE_EVENT_DEATH:
-			return "onDeath";
-
-		case CREATURE_EVENT_KILL:
-			return "onKill";
-
-		case CREATURE_EVENT_ADVANCE:
-			return "onAdvance";
-
-		case CREATURE_EVENT_MODALWINDOW:
-			return "onModalWindow";
-
-		case CREATURE_EVENT_TEXTEDIT:
-			return "onTextEdit";
-
-		case CREATURE_EVENT_HEALTHCHANGE:
-			return "onHealthChange";
-
-		case CREATURE_EVENT_MANACHANGE:
-			return "onManaChange";
-
-		case CREATURE_EVENT_EXTENDED_OPCODE:
-			return "onExtendedOpcode";
+		case CREATURE_EVENT_LOGIN: return "onLogin";
+		case CREATURE_EVENT_LOGOUT: return "onLogout";
+		case CREATURE_EVENT_THINK: return "onThink";
+		case CREATURE_EVENT_PREPAREDEATH: return "onPrepareDeath";
+		case CREATURE_EVENT_DEATH: return "onDeath";
+		case CREATURE_EVENT_KILL: return "onKill";
+		case CREATURE_EVENT_ADVANCE: return "onAdvance";
+		case CREATURE_EVENT_MODALWINDOW: return "onModalWindow";
+		case CREATURE_EVENT_TEXTEDIT: return "onTextEdit";
+		case CREATURE_EVENT_HEALTHCHANGE: return "onHealthChange";
+		case CREATURE_EVENT_MANACHANGE: return "onManaChange";
+		case CREATURE_EVENT_EXTENDED_OPCODE: return "onExtendedOpcode";
 
 		case CREATURE_EVENT_NONE:
-		default:
+		default: {
 			return std::string();
+		}
 	}
 }
 

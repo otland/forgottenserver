@@ -58,6 +58,7 @@ void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, 
 		signal = tasks.empty();
 		tasks.emplace_back(std::move(query), std::move(callback), store);
 	}
+
 	taskLock.unlock();
 
 	if (signal) {

@@ -107,8 +107,9 @@ void Weapons::loadDefaults()
 				break;
 			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 	}
 }
@@ -464,12 +465,14 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 			break;
 		}
 
-		case WEAPONACTION_MOVE:
+		case WEAPONACTION_MOVE: {
 			g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, nullptr, FLAG_NOLIMIT);
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 
@@ -589,8 +592,9 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 			return true;
 		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 
 	return false;
@@ -691,76 +695,113 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			//chance for one-handed weapons
 			switch (distance) {
 				case 1:
-				case 5:
+				case 5: {
 					chance = std::min<uint32_t>(skill, 74) + 1;
 					break;
-				case 2:
+				}
+
+				case 2: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 28) * 2.40f) + 8;
 					break;
-				case 3:
+				}
+
+				case 3: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 45) * 1.55f) + 6;
 					break;
-				case 4:
+				}
+
+				case 4: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 58) * 1.25f) + 3;
 					break;
-				case 6:
+				}
+
+				case 6: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 90) * 0.80f) + 3;
 					break;
-				case 7:
+				}
+
+				case 7: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 104) * 0.70f) + 2;
 					break;
-				default:
+				}
+
+				default: {
 					chance = it.hitChance;
 					break;
+				}
 			}
 		} else if (maxHitChance == 90) {
 			//formula for two-handed weapons
 			switch (distance) {
 				case 1:
-				case 5:
+				case 5: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 74) * 1.20f) + 1;
 					break;
-				case 2:
+				}
+
+				case 2: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 28) * 3.20f);
 					break;
-				case 3:
+				}
+
+				case 3: {
 					chance = std::min<uint32_t>(skill, 45) * 2;
 					break;
-				case 4:
+				}
+
+				case 4: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 58) * 1.55f);
 					break;
+				}
+
 				case 6:
-				case 7:
+				case 7: {
 					chance = std::min<uint32_t>(skill, 90);
 					break;
-				default:
+				}
+
+				default: {
 					chance = it.hitChance;
 					break;
+				}
 			}
 		} else if (maxHitChance == 100) {
 			switch (distance) {
 				case 1:
-				case 5:
+				case 5: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 73) * 1.35f) + 1;
 					break;
-				case 2:
+				}
+
+				case 2: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 30) * 3.20f) + 4;
 					break;
-				case 3:
+				}
+
+				case 3: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 48) * 2.05f) + 2;
 					break;
-				case 4:
+				}
+
+				case 4: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 65) * 1.50f) + 2;
 					break;
-				case 6:
+				}
+
+				case 6: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 87) * 1.20f) - 4;
 					break;
-				case 7:
+				}
+
+				case 7: {
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 90) * 1.10f) + 1;
 					break;
-				default:
+				}
+
+				default: {
 					chance = it.hitChance;
 					break;
+				}
 			}
 		} else {
 			chance = maxHitChance;
@@ -888,9 +929,10 @@ bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& s
 				break;
 			}
 
-			default:
+			default: {
 				skillpoint = 0;
 				break;
+			}
 		}
 	} else {
 		skillpoint = 0;

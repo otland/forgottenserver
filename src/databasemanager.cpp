@@ -139,6 +139,7 @@ void DatabaseManager::updateDatabase()
 
 		LuaScriptInterface::resetScriptEnv();
 	} while (true);
+
 	lua_close(L);
 }
 

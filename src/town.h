@@ -76,6 +76,7 @@ class Towns
 					return it.second;
 				}
 			}
+
 			return nullptr;
 		}
 
@@ -84,6 +85,7 @@ class Towns
 			if (it == townMap.end()) {
 				return nullptr;
 			}
+
 			return it->second;
 		}
 

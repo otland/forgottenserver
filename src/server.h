@@ -134,14 +134,12 @@ bool ServiceManager::add(uint16_t port)
 	ServicePort_ptr service_port;
 
 	auto foundServicePort = acceptors.find(port);
-
 	if (foundServicePort == acceptors.end()) {
 		service_port = std::make_shared<ServicePort>(io_service);
 		service_port->open(port);
 		acceptors[port] = service_port;
 	} else {
 		service_port = foundServicePort->second;
-
 		if (service_port->is_single_socket() || ProtocolType::server_sends_first) {
 			std::cout << "ERROR: " << ProtocolType::protocol_name() <<
 			          " and " << service_port->get_protocol_names() <<

@@ -82,6 +82,7 @@ const Node& Loader::parseTree()
 				parseStack.push(&child);
 				break;
 			}
+
 			case Node::END: {
 				auto& currentNode = getCurrentNode(parseStack);
 				if (currentNode.children.empty()) {
@@ -91,17 +92,20 @@ const Node& Loader::parseTree()
 				parseStack.pop();
 				break;
 			}
+
 			case Node::ESCAPE: {
 				if (++it == fileContents.end()) {
 					throw InvalidOTBFormat{};
 				}
 				break;
 			}
+
 			default: {
 				break;
 			}
 		}
 	}
+
 	if (!parseStack.empty()) {
 		throw InvalidOTBFormat{};
 	}

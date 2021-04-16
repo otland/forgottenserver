@@ -237,6 +237,7 @@ void Creature::onWalk(Direction& dir)
 			if (r < DIRECTION_DIAGONAL_MASK) {
 				dir = static_cast<Direction>(r);
 			}
+
 			g_game.internalCreatureSay(this, TALKTYPE_MONSTER_SAY, "Hicks!", false);
 		}
 	}
@@ -728,17 +729,20 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 	} else {
 		Item* splash;
 		switch (getRace()) {
-			case RACE_VENOM:
+			case RACE_VENOM: {
 				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_SLIME);
 				break;
+			}
 
-			case RACE_BLOOD:
+			case RACE_BLOOD: {
 				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_BLOOD);
 				break;
+			}
 
-			default:
+			default: {
 				splash = nullptr;
 				break;
+			}
 		}
 
 		Tile* tile = getTile();
@@ -926,6 +930,7 @@ void Creature::goToFollowCreature()
 					} else {
 						hasFollowPath = false;
 					}
+
 					return;
 				}
 			}
@@ -1056,32 +1061,49 @@ void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 	}
 
 	switch (type) {
-		case CONDITION_FIRE:
+		case CONDITION_FIRE: {
 			bRemove = (field->getCombatType() != COMBAT_FIREDAMAGE);
 			break;
-		case CONDITION_ENERGY:
+		}
+
+		case CONDITION_ENERGY: {
 			bRemove = (field->getCombatType() != COMBAT_ENERGYDAMAGE);
 			break;
-		case CONDITION_POISON:
+		}
+
+		case CONDITION_POISON: {
 			bRemove = (field->getCombatType() != COMBAT_EARTHDAMAGE);
 			break;
-		case CONDITION_FREEZING:
+		}
+
+		case CONDITION_FREEZING: {
 			bRemove = (field->getCombatType() != COMBAT_ICEDAMAGE);
 			break;
-		case CONDITION_DAZZLED:
+		}
+
+		case CONDITION_DAZZLED: {
 			bRemove = (field->getCombatType() != COMBAT_HOLYDAMAGE);
 			break;
-		case CONDITION_CURSED:
+		}
+
+		case CONDITION_CURSED: {
 			bRemove = (field->getCombatType() != COMBAT_DEATHDAMAGE);
 			break;
-		case CONDITION_DROWN:
+		}
+
+		case CONDITION_DROWN: {
 			bRemove = (field->getCombatType() != COMBAT_DROWNDAMAGE);
 			break;
-		case CONDITION_BLEEDING:
+		}
+
+		case CONDITION_BLEEDING: {
 			bRemove = (field->getCombatType() != COMBAT_PHYSICALDAMAGE);
 			break;
-		default:
+		}
+
+		default: {
 			break;
+		}
 	}
 }
 
@@ -1502,6 +1524,7 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 		if (curEvent->getEventType() == type) {
 			resetTypeBit = false;
 		}
+
 		++it;
 	}
 

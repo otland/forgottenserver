@@ -109,14 +109,17 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		pugi::xml_attribute tileItemAttribute = node.attribute("tileitem");
 		if (tileItemAttribute && pugi::cast<uint16_t>(tileItemAttribute.value()) == 1) {
 			switch (eventType) {
-				case MOVE_EVENT_ADD_ITEM:
+				case MOVE_EVENT_ADD_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
-					break;
-				case MOVE_EVENT_REMOVE_ITEM:
+					break;}
+
+				case MOVE_EVENT_REMOVE_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
+					break;}
+
+				default: {
 					break;
-				default:
-					break;
+				}
 			}
 		}
 	}
@@ -524,9 +527,11 @@ std::string MoveEvent::getScriptEventName() const
 		case MOVE_EVENT_DEEQUIP: return "onDeEquip";
 		case MOVE_EVENT_ADD_ITEM: return "onAddItem";
 		case MOVE_EVENT_REMOVE_ITEM: return "onRemoveItem";
-		default:
+
+		default: {
 			std::cout << "[Error - MoveEvent::getScriptEventName] Invalid event type" << std::endl;
 			return std::string();
+		}
 	}
 }
 

@@ -91,14 +91,10 @@ bool Monster::canSee(const Position& pos) const
 bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 {
 	switch (combatType) {
-		case COMBAT_ENERGYDAMAGE:
-			return mType->info.canWalkOnEnergy;
-		case COMBAT_FIREDAMAGE:
-			return mType->info.canWalkOnFire;
-		case COMBAT_EARTHDAMAGE:
-			return mType->info.canWalkOnPoison;
-		default:
-			return true;
+		case COMBAT_ENERGYDAMAGE: return mType->info.canWalkOnEnergy;
+		case COMBAT_FIREDAMAGE: return mType->info.canWalkOnFire;
+		case COMBAT_EARTHDAMAGE: return mType->info.canWalkOnPoison;
+		default: return true;
 	}
 }
 
@@ -380,6 +376,7 @@ void Monster::clearTargetList()
 	for (Creature* creature : targetList) {
 		creature->decrementReferenceCounter();
 	}
+
 	targetList.clear();
 }
 
@@ -388,6 +385,7 @@ void Monster::clearFriendList()
 	for (Creature* creature : friendList) {
 		creature->decrementReferenceCounter();
 	}
+
 	friendList.clear();
 }
 
@@ -434,7 +432,6 @@ bool Monster::isFriend(const Creature* creature) const
 			tmpPlayer = creature->getPlayer();
 		} else {
 			const Creature* creatureMaster = creature->getMaster();
-
 			if (creatureMaster && creatureMaster->getPlayer()) {
 				tmpPlayer = creatureMaster->getPlayer();
 			}
@@ -557,7 +554,6 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 			if (searchType == TARGETSEARCH_ATTACKRANGE) {
 				return false;
 			}
-
 			break;
 		}
 	}
@@ -1575,7 +1571,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					direction = DIRECTION_NORTH;
 					return true;
 				}
-
 				/* end of fleeing */
 				break;
 			}
@@ -1639,13 +1634,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					direction = DIRECTION_SOUTH;
 					return true;
 				}
-
 				/* end of fleeing */
 				break;
 			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 	} else {
 		Direction playerDir = offsetx < 0 ? DIRECTION_EAST : DIRECTION_WEST;
@@ -1682,7 +1677,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 						return true;
 					}
 				}
-
 				/* end of fleeing */
 
 				bool se = canWalkTo(creaturePos, DIRECTION_SOUTHEAST);
@@ -1708,7 +1702,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					direction = DIRECTION_WEST;
 					return true;
 				}
-
 				/* end of fleeing */
 				break;
 			}
@@ -1745,7 +1738,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 						return true;
 					}
 				}
-
 				/* end of fleeing */
 
 				bool nw = canWalkTo(creaturePos, DIRECTION_NORTHWEST);
@@ -1771,13 +1763,13 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					direction = DIRECTION_EAST;
 					return true;
 				}
-
 				/* end of fleeing */
 				break;
 			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 	}
 
@@ -1809,6 +1801,7 @@ void Monster::death(Creature*)
 		summon->changeHealth(-summon->getHealth());
 		summon->removeMaster();
 	}
+
 	summons.clear();
 
 	clearTargetList();

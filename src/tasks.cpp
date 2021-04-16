@@ -47,6 +47,7 @@ void Dispatcher::threadMain()
 			//if the list is empty wait for signal
 			taskSignal.wait(taskLockUnique);
 		}
+
 		tmpTaskList.swap(taskList);
 		taskLockUnique.unlock();
 
@@ -56,6 +57,7 @@ void Dispatcher::threadMain()
 				// execute it
 				(*task)();
 			}
+
 			delete task;
 		}
 		tmpTaskList.clear();

@@ -295,11 +295,12 @@ class ItemAttributes
 				}
 
 				switch (pos) {
-					case 1:  { // std::string
+					case 1: { // std::string
 						std::string tmp;
 						if (!propStream.readString(tmp)) {
 							return false;
 						}
+
 						value = tmp;
 						break;
 					}
@@ -309,6 +310,7 @@ class ItemAttributes
 						if (!propStream.read<int64_t>(tmp)) {
 							return false;
 						}
+
 						value = tmp;
 						break;
 					}
@@ -318,6 +320,7 @@ class ItemAttributes
 						if (!propStream.read<double>(tmp)) {
 							return false;
 						}
+
 						value = tmp;
 						break;
 					}
@@ -327,6 +330,7 @@ class ItemAttributes
 						if (!propStream.read<bool>(tmp)) {
 							return false;
 						}
+
 						value = tmp;
 						break;
 					}
@@ -457,6 +461,7 @@ class ItemAttributes
 			} else {
 				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 			}
+
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(key, value);
 		}
 
@@ -467,6 +472,7 @@ class ItemAttributes
 			} else {
 				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 			}
+
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->insert(std::make_pair(std::move(key), std::move(value)));
 		}
 

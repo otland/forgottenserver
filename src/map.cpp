@@ -143,6 +143,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 			for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
 				tile->addThing(*it);
 			}
+
 			items->clear();
 		}
 
@@ -151,6 +152,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 			tile->addThing(ground);
 			newTile->setGround(nullptr);
 		}
+
 		delete newTile;
 	} else {
 		tile = newTile;
@@ -388,6 +390,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 
 					spectators.emplace_back(creature);
 				}
+
 				leafE = leafE->leafE;
 			} else {
 				leafE = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, nx + FLOOR_SIZE, ny);
@@ -643,6 +646,7 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 			if (found) {
 				break;
 			}
+
 			return false;
 		}
 
@@ -686,6 +690,7 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 			} else {
 				neighbors = *dirNeighbors[DIRECTION_SOUTHEAST];
 			}
+
 			dirCount = fpp.allowDiagonal ? 5 : 3;
 		} else {
 			dirCount = 8;
@@ -737,6 +742,7 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 					if (found) {
 						break;
 					}
+
 					return false;
 				}
 			}

@@ -109,36 +109,44 @@ Item* Item::CreateItem(PropStream& propStream)
 	}
 
 	switch (id) {
-		case ITEM_FIREFIELD_PVP_FULL:
+		case ITEM_FIREFIELD_PVP_FULL: {
 			id = ITEM_FIREFIELD_PERSISTENT_FULL;
 			break;
+		}
 
-		case ITEM_FIREFIELD_PVP_MEDIUM:
+		case ITEM_FIREFIELD_PVP_MEDIUM: {
 			id = ITEM_FIREFIELD_PERSISTENT_MEDIUM;
 			break;
+			}
 
-		case ITEM_FIREFIELD_PVP_SMALL:
+		case ITEM_FIREFIELD_PVP_SMALL: {
 			id = ITEM_FIREFIELD_PERSISTENT_SMALL;
 			break;
+		}
 
-		case ITEM_ENERGYFIELD_PVP:
+		case ITEM_ENERGYFIELD_PVP: {
 			id = ITEM_ENERGYFIELD_PERSISTENT;
 			break;
+		}
 
-		case ITEM_POISONFIELD_PVP:
+		case ITEM_POISONFIELD_PVP: {
 			id = ITEM_POISONFIELD_PERSISTENT;
 			break;
+		}
 
-		case ITEM_MAGICWALL:
+		case ITEM_MAGICWALL: {
 			id = ITEM_MAGICWALL_PERSISTENT;
 			break;
+		}
 
-		case ITEM_WILDGROWTH:
+		case ITEM_WILDGROWTH: {
 			id = ITEM_WILDGROWTH_PERSISTENT;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 
 	return Item::CreateItem(id, 0);
@@ -686,8 +694,9 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		default:
+		default: {
 			return ATTR_READ_ERROR;
+		}
 	}
 
 	return ATTR_READ_CONTINUE;
@@ -898,6 +907,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				if (item) {
 					tmpSubType = item->getSubType();
 				}
+
 				s << ". " << (it.stackable && tmpSubType > 1 ? "They" : "It") << " can only be used by ";
 
 				const VocSpellMap& vocMap = rune->getVocMap();
@@ -922,6 +932,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 							s << ", ";
 						}
 					}
+
 					s << asLowerCaseString((*vocLast)->getVocName()) << "s";
 				} else {
 					s << "players";
@@ -1365,10 +1376,12 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 								if (date != 0) {
 									s << " on " << formatDateShort(date);
 								}
+
 								s << ": ";
 							} else {
 								s << "You read: ";
 							}
+
 							s << *text;
 						} else {
 							s << "Nothing is written on it";
@@ -1542,6 +1555,7 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 		if (addArticle) {
 			s << "an ";
 		}
+
 		s << "item of type " << it.id;
 	}
 
@@ -1625,17 +1639,10 @@ bool Item::canDecay() const
 uint32_t Item::getWorth() const
 {
 	switch (id) {
-		case ITEM_GOLD_COIN:
-			return count;
-
-		case ITEM_PLATINUM_COIN:
-			return count * 100;
-
-		case ITEM_CRYSTAL_COIN:
-			return count * 10000;
-
-		default:
-			return 0;
+		case ITEM_GOLD_COIN: return count;
+		case ITEM_PLATINUM_COIN: return count * 100;
+		case ITEM_CRYSTAL_COIN: return count * 10000;
+		default: return 0;
 	}
 }
 

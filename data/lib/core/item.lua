@@ -91,11 +91,13 @@ do
 				if it:hasShowCount() then
 					ss:append('%d ', subType)
 				end
+
 				ss:append('%s', obj:getPluralName())
 			else
 				if addArticle and obj:getArticle() ~= '' then
 					ss:append('%s ', obj:getArticle())
 				end
+
 				ss:append('%s', obj:getName())
 			end
 		else
@@ -208,6 +210,7 @@ do
 					else
 						ss:append(', ')
 					end
+
 					ss:append('%s %s%d%%', getCombatName(indexToCombatType(i - 1)), showpos(value), math.abs(value))
 				end
 			end
@@ -238,6 +241,7 @@ do
 					else
 						ss:append(', ')
 					end
+
 					ss:append('%s field %s%d%%', getCombatName(indexToCombatType(i - 1)), showpos(value), math.abs(value))
 				end
 			end

@@ -20,6 +20,7 @@ function peppermoonBells.onUse(player, item, fromPosition, target, toPosition, i
 		item:transform(23461)
 		item:decay()
 	end
+
 	return true
 end
 

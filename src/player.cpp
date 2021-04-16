@@ -370,11 +370,13 @@ int32_t Player::getDefense() const
 	if (defenseSkill == 0) {
 		switch (fightMode) {
 			case FIGHTMODE_ATTACK:
-			case FIGHTMODE_BALANCED:
+			case FIGHTMODE_BALANCED: {
 				return 1;
+			}
 
-			case FIGHTMODE_DEFENSE:
+			case FIGHTMODE_DEFENSE: {
 				return 2;
+			}
 		}
 	}
 
@@ -1275,6 +1277,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 				break;
 			}
 		}
+
 		modalWindows.clear();
 	}
 
@@ -2307,6 +2310,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		if (skipLimit || hasCapacity(item, count)) {
 			return RETURNVALUE_NOERROR;
 		}
+
 		return RETURNVALUE_NOTENOUGHCAPACITY;
 	}
 
@@ -2482,13 +2486,15 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		}
 
 		case CONST_SLOT_WHEREEVER:
-		case -1:
+		case -1: {
 			ret = RETURNVALUE_NOTENOUGHROOM;
 			break;
+		}
 
-		default:
+		default: {
 			ret = RETURNVALUE_NOTPOSSIBLE;
 			break;
+		}
 	}
 
 	if (ret != RETURNVALUE_NOERROR && ret != RETURNVALUE_NOTENOUGHROOM) {
@@ -3355,40 +3361,49 @@ void Player::onAddCondition(ConditionType_t type)
 void Player::onAddCombatCondition(ConditionType_t type)
 {
 	switch (type) {
-		case CONDITION_POISON:
+		case CONDITION_POISON: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are poisoned.");
 			break;
+		}
 
-		case CONDITION_DROWN:
+		case CONDITION_DROWN: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drowning.");
 			break;
+		}
 
-		case CONDITION_PARALYZE:
+		case CONDITION_PARALYZE: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are paralyzed.");
 			break;
+		}
 
-		case CONDITION_DRUNK:
+		case CONDITION_DRUNK: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drunk.");
 			break;
+		}
 
-		case CONDITION_CURSED:
+		case CONDITION_CURSED: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are cursed.");
 			break;
+		}
 
-		case CONDITION_FREEZING:
+		case CONDITION_FREEZING: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are freezing.");
 			break;
+		}
 
-		case CONDITION_DAZZLED:
+		case CONDITION_DAZZLED: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are dazzled.");
 			break;
+		}
 
-		case CONDITION_BLEEDING:
+		case CONDITION_BLEEDING: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are bleeding.");
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 
@@ -3450,6 +3465,7 @@ void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true *
 		if (addFightTicks) {
 			addInFightTicks();
 		}
+
 		return;
 	}
 

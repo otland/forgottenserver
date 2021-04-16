@@ -74,7 +74,7 @@ function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotke
 				player:say(flower.msg[i], TALKTYPE_MONSTER_SAY)
 				target:decay()
 			end
-		break
+			break
 		end
 	end
 

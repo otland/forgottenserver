@@ -171,8 +171,9 @@ void Game::setGameState(GameState_t newState)
 			break;
 		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 
@@ -748,6 +749,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		}
+
 		return;
 	}
 
@@ -988,6 +990,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		}
+
 		return;
 	}
 
@@ -1402,6 +1405,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 			if (item->canDecay()) {
 				decayItems->remove(item);
 			}
+
 			ReleaseItem(item);
 		}
 
@@ -1646,6 +1650,7 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 		if (newCount != -1) {
 			item->setSubType(newCount);
 		}
+
 		cylinder->addThing(item);
 
 		Cylinder* newParent = item->getParent();
@@ -2276,6 +2281,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 			} else {
 				player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 			}
+
 			return;
 		}
 
@@ -2391,6 +2397,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		}
+
 		return;
 	}
 
@@ -3460,39 +3467,47 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	}
 
 	switch (type) {
-		case TALKTYPE_SAY:
+		case TALKTYPE_SAY: {
 			internalCreatureSay(player, TALKTYPE_SAY, text, false);
 			break;
+		}
 
-		case TALKTYPE_WHISPER:
+		case TALKTYPE_WHISPER: {
 			playerWhisper(player, text);
 			break;
+		}
 
-		case TALKTYPE_YELL:
+		case TALKTYPE_YELL: {
 			playerYell(player, text);
 			break;
+		}
 
 		case TALKTYPE_PRIVATE_TO:
-		case TALKTYPE_PRIVATE_RED_TO:
+		case TALKTYPE_PRIVATE_RED_TO: {
 			playerSpeakTo(player, type, receiver, text);
 			break;
+		}
 
 		case TALKTYPE_CHANNEL_O:
 		case TALKTYPE_CHANNEL_Y:
-		case TALKTYPE_CHANNEL_R1:
+		case TALKTYPE_CHANNEL_R1: {
 			g_chat->talkToChannel(*player, type, text, channelId);
 			break;
+		}
 
-		case TALKTYPE_PRIVATE_PN:
+		case TALKTYPE_PRIVATE_PN: {
 			playerSpeakToNpc(player, text);
 			break;
+		}
 
-		case TALKTYPE_BROADCAST:
+		case TALKTYPE_BROADCAST: {
 			playerBroadcastMessage(player, text);
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 
@@ -3757,6 +3772,7 @@ void Game::checkCreatures(size_t index)
 				creature->onAttacking(EVENT_CREATURE_THINK_INTERVAL);
 				creature->executeConditions(EVENT_CREATURE_THINK_INTERVAL);
 			}
+
 			++it;
 		} else {
 			creature->inCheckCreaturesVector = false;
@@ -3848,6 +3864,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 				case COMBAT_UNDEFINEDDAMAGE: {
 					return;
 				}
+
 				case COMBAT_ENERGYDAMAGE:
 				case COMBAT_FIREDAMAGE:
 				case COMBAT_PHYSICALDAMAGE:
@@ -3856,19 +3873,23 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 					hitEffect = CONST_ME_BLOCKHIT;
 					break;
 				}
+
 				case COMBAT_EARTHDAMAGE: {
 					hitEffect = CONST_ME_GREEN_RINGS;
 					break;
 				}
+
 				case COMBAT_HOLYDAMAGE: {
 					hitEffect = CONST_ME_HOLYDAMAGE;
 					break;
 				}
+
 				default: {
 					hitEffect = CONST_ME_POFF;
 					break;
 				}
 			}
+
 			addMagicEffect(targetPos, hitEffect);
 		}
 	};
@@ -3894,7 +3915,6 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 	}
 
 	damage.blockType = primaryBlockType;
-
 	return (primaryBlockType != BLOCK_NONE) && (secondaryBlockType != BLOCK_NONE);
 }
 
@@ -3904,12 +3924,14 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 		case COMBAT_PHYSICALDAMAGE: {
 			Item* splash = nullptr;
 			switch (target->getRace()) {
-				case RACE_VENOM:
+				case RACE_VENOM: {
 					color = TEXTCOLOR_LIGHTGREEN;
 					effect = CONST_ME_HITBYPOISON;
 					splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_SLIME);
 					break;
-				case RACE_BLOOD:
+				}
+
+				case RACE_BLOOD: {
 					color = TEXTCOLOR_RED;
 					effect = CONST_ME_DRAWBLOOD;
 					if (const Tile* tile = target->getTile()) {
@@ -3918,29 +3940,37 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 						}
 					}
 					break;
-				case RACE_UNDEAD:
+				}
+
+				case RACE_UNDEAD: {
 					color = TEXTCOLOR_LIGHTGREY;
 					effect = CONST_ME_HITAREA;
 					break;
-				case RACE_FIRE:
+				}
+
+				case RACE_FIRE: {
 					color = TEXTCOLOR_ORANGE;
 					effect = CONST_ME_DRAWBLOOD;
 					break;
-				case RACE_ENERGY:
+				}
+
+				case RACE_ENERGY: {
 					color = TEXTCOLOR_ELECTRICPURPLE;
 					effect = CONST_ME_ENERGYHIT;
 					break;
-				default:
+				}
+
+				default: {
 					color = TEXTCOLOR_NONE;
 					effect = CONST_ME_NONE;
 					break;
+				}
 			}
 
 			if (splash) {
 				internalAddItem(target->getTile(), splash, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				startDecay(splash);
 			}
-
 			break;
 		}
 
@@ -3961,31 +3991,37 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 			effect = CONST_ME_LOSEENERGY;
 			break;
 		}
+
 		case COMBAT_FIREDAMAGE: {
 			color = TEXTCOLOR_ORANGE;
 			effect = CONST_ME_HITBYFIRE;
 			break;
 		}
+
 		case COMBAT_ICEDAMAGE: {
 			color = TEXTCOLOR_SKYBLUE;
 			effect = CONST_ME_ICEATTACK;
 			break;
 		}
+
 		case COMBAT_HOLYDAMAGE: {
 			color = TEXTCOLOR_YELLOW;
 			effect = CONST_ME_HOLYDAMAGE;
 			break;
 		}
+
 		case COMBAT_DEATHDAMAGE: {
 			color = TEXTCOLOR_DARKRED;
 			effect = CONST_ME_SMALLCLOUDS;
 			break;
 		}
+
 		case COMBAT_LIFEDRAIN: {
 			color = TEXTCOLOR_RED;
 			effect = CONST_ME_MAGIC_RED;
 			break;
 		}
+
 		default: {
 			color = TEXTCOLOR_NONE;
 			effect = CONST_ME_NONE;
@@ -4020,6 +4056,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				for (CreatureEvent* creatureEvent : events) {
 					creatureEvent->executeHealthChange(target, attacker, damage);
 				}
+
 				damage.origin = ORIGIN_NONE;
 				return combatChangeHealth(attacker, target, damage);
 			}
@@ -4065,10 +4102,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						} else {
 							spectatorMessage = fmt::format("{:s} healed {:s} for {:s}.", attacker->getNameDescription(), target->getNameDescription(), damageString);
 						}
+
 						spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 					}
+
 					message.text = spectatorMessage;
 				}
+
 				tmpPlayer->sendTextMessage(message);
 			}
 		}
@@ -4077,6 +4117,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			if (!target->isInGhostMode()) {
 				addMagicEffect(targetPos, CONST_ME_POFF);
 			}
+
 			return true;
 		}
 
@@ -4113,10 +4154,12 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						for (CreatureEvent* creatureEvent : events) {
 							creatureEvent->executeManaChange(target, attacker, damage);
 						}
+
 						healthChange = damage.primary.value + damage.secondary.value;
 						if (healthChange == 0) {
 							return true;
 						}
+
 						manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 					}
 				}
@@ -4159,10 +4202,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 							} else {
 								spectatorMessage = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaDamage, attacker->getNameDescription());
 							}
+
 							spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 						}
+
 						message.text = spectatorMessage;
 					}
+
 					tmpPlayer->sendTextMessage(message);
 				}
 
@@ -4185,6 +4231,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				for (CreatureEvent* creatureEvent : events) {
 					creatureEvent->executeHealthChange(target, attacker, damage);
 				}
+
 				damage.origin = ORIGIN_NONE;
 				return combatChangeHealth(attacker, target, damage);
 			}
@@ -4259,10 +4306,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						} else {
 							spectatorMessage = fmt::format("{:s} loses {:s} due to an attack by {:s}.", target->getNameDescription(), damageString, attacker->getNameDescription());
 						}
+
 						spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 					}
+
 					message.text = spectatorMessage;
 				}
+
 				tmpPlayer->sendTextMessage(message);
 			}
 		}
@@ -4401,6 +4451,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 					} else {
 						spectatorMessage = fmt::format("{:s} loses {:d} mana due to an attack by {:s}.", target->getNameDescription(), manaLoss, attacker->getNameDescription());
 					}
+
 					spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 				}
 
@@ -4602,11 +4653,13 @@ void Game::cleanup()
 	for (auto creature : ToReleaseCreatures) {
 		creature->decrementReferenceCounter();
 	}
+
 	ToReleaseCreatures.clear();
 
 	for (auto item : ToReleaseItems) {
 		item->decrementReferenceCounter();
 	}
+
 	ToReleaseItems.clear();
 
 	for (Item* item : toDecayItems) {
@@ -4617,6 +4670,7 @@ void Game::cleanup()
 			decayItems[(lastBucket + 1 + dur / 1000) % EVENT_DECAY_BUCKETS].push_back(item);
 		}
 	}
+
 	toDecayItems.clear();
 }
 
@@ -5650,17 +5704,20 @@ bool Game::reload(ReloadTypes_t reloadType)
 		case RELOAD_TYPE_ACTIONS: return g_actions->reload();
 		case RELOAD_TYPE_CHAT: return g_chat->load();
 		case RELOAD_TYPE_CONFIG: return g_config.reload();
+
 		case RELOAD_TYPE_CREATURESCRIPTS: {
 			g_creatureEvents->reload();
 			g_creatureEvents->removeInvalidEvents();
 			return true;
 		}
+
 		case RELOAD_TYPE_EVENTS: return g_events->load();
 		case RELOAD_TYPE_GLOBALEVENTS: return g_globalEvents->reload();
 		case RELOAD_TYPE_ITEMS: return Item::items.reload();
 		case RELOAD_TYPE_MONSTERS: return g_monsters.reload();
 		case RELOAD_TYPE_MOUNTS: return mounts.reload();
 		case RELOAD_TYPE_MOVEMENTS: return g_moveEvents->reload();
+
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
 			return true;

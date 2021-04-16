@@ -51,6 +51,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 					bytes = 0;
 					break;
 				}
+
 				++currentLine;
 				line.clear();
 			} else {
@@ -70,6 +71,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 			std::cout << ' ';
 		}
 	}
+
 	std::cout << '^' << std::endl;
 }
 
@@ -422,44 +424,53 @@ Direction getDirection(const std::string& string)
 Position getNextPosition(Direction direction, Position pos)
 {
 	switch (direction) {
-		case DIRECTION_NORTH:
+		case DIRECTION_NORTH: {
 			pos.y--;
 			break;
+		}
 
-		case DIRECTION_SOUTH:
+		case DIRECTION_SOUTH: {
 			pos.y++;
 			break;
+		}
 
-		case DIRECTION_WEST:
+		case DIRECTION_WEST: {
 			pos.x--;
 			break;
+		}
 
-		case DIRECTION_EAST:
+		case DIRECTION_EAST: {
 			pos.x++;
 			break;
+		}
 
-		case DIRECTION_SOUTHWEST:
+		case DIRECTION_SOUTHWEST: {
 			pos.x--;
 			pos.y++;
 			break;
+		}
 
-		case DIRECTION_NORTHWEST:
+		case DIRECTION_NORTHWEST: {
 			pos.x--;
 			pos.y--;
 			break;
+		}
 
-		case DIRECTION_NORTHEAST:
+		case DIRECTION_NORTHEAST: {
 			pos.x++;
 			pos.y--;
 			break;
+		}
 
-		case DIRECTION_SOUTHEAST:
+		case DIRECTION_SOUTHEAST: {
 			pos.x++;
 			pos.y++;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 
 	return pos;
@@ -768,61 +779,29 @@ Skulls_t getSkullType(const std::string& strValue)
 std::string getSpecialSkillName(uint8_t skillid)
 {
 	switch (skillid) {
-		case SPECIALSKILL_CRITICALHITCHANCE:
-			return "critical hit chance";
-
-		case SPECIALSKILL_CRITICALHITAMOUNT:
-			return "critical extra damage";
-
-		case SPECIALSKILL_LIFELEECHCHANCE:
-			return "hitpoints leech chance";
-
-		case SPECIALSKILL_LIFELEECHAMOUNT:
-			return "hitpoints leech amount";
-
-		case SPECIALSKILL_MANALEECHCHANCE:
-			return "manapoints leech chance";
-
-		case SPECIALSKILL_MANALEECHAMOUNT:
-			return "mana points leech amount";
-
-		default:
-			return "unknown";
+		case SPECIALSKILL_CRITICALHITCHANCE: return "critical hit chance";
+		case SPECIALSKILL_CRITICALHITAMOUNT: return "critical extra damage";
+		case SPECIALSKILL_LIFELEECHCHANCE: return "hitpoints leech chance";
+		case SPECIALSKILL_LIFELEECHAMOUNT: return "hitpoints leech amount";
+		case SPECIALSKILL_MANALEECHCHANCE: return "manapoints leech chance";
+		case SPECIALSKILL_MANALEECHAMOUNT: return "mana points leech amount";
+		default: return "unknown";
 	}
 }
 
 std::string getSkillName(uint8_t skillid)
 {
 	switch (skillid) {
-		case SKILL_FIST:
-			return "fist fighting";
-
-		case SKILL_CLUB:
-			return "club fighting";
-
-		case SKILL_SWORD:
-			return "sword fighting";
-
-		case SKILL_AXE:
-			return "axe fighting";
-
-		case SKILL_DISTANCE:
-			return "distance fighting";
-
-		case SKILL_SHIELD:
-			return "shielding";
-
-		case SKILL_FISHING:
-			return "fishing";
-
-		case SKILL_MAGLEVEL:
-			return "magic level";
-
-		case SKILL_LEVEL:
-			return "level";
-
-		default:
-			return "unknown";
+		case SKILL_FIST: return "fist fighting";
+		case SKILL_CLUB: return "club fighting";
+		case SKILL_SWORD: return "sword fighting";
+		case SKILL_AXE: return "axe fighting";
+		case SKILL_DISTANCE: return "distance fighting";
+		case SKILL_SHIELD: return "shielding";
+		case SKILL_FISHING: return "fishing";
+		case SKILL_MAGLEVEL: return "magic level";
+		case SKILL_LEVEL: return "level";
+		default: return "unknown";
 	}
 }
 
@@ -907,32 +886,19 @@ std::string getWeaponName(WeaponType_t weaponType)
 size_t combatTypeToIndex(CombatType_t combatType)
 {
 	switch (combatType) {
-		case COMBAT_PHYSICALDAMAGE:
-			return 0;
-		case COMBAT_ENERGYDAMAGE:
-			return 1;
-		case COMBAT_EARTHDAMAGE:
-			return 2;
-		case COMBAT_FIREDAMAGE:
-			return 3;
-		case COMBAT_UNDEFINEDDAMAGE:
-			return 4;
-		case COMBAT_LIFEDRAIN:
-			return 5;
-		case COMBAT_MANADRAIN:
-			return 6;
-		case COMBAT_HEALING:
-			return 7;
-		case COMBAT_DROWNDAMAGE:
-			return 8;
-		case COMBAT_ICEDAMAGE:
-			return 9;
-		case COMBAT_HOLYDAMAGE:
-			return 10;
-		case COMBAT_DEATHDAMAGE:
-			return 11;
-		default:
-			return 0;
+		case COMBAT_PHYSICALDAMAGE: return 0;
+		case COMBAT_ENERGYDAMAGE: return 1;
+		case COMBAT_EARTHDAMAGE: return 2;
+		case COMBAT_FIREDAMAGE: return 3;
+		case COMBAT_UNDEFINEDDAMAGE: return 4;
+		case COMBAT_LIFEDRAIN: return 5;
+		case COMBAT_MANADRAIN: return 6;
+		case COMBAT_HEALING: return 7;
+		case COMBAT_DROWNDAMAGE: return 8;
+		case COMBAT_ICEDAMAGE: return 9;
+		case COMBAT_HOLYDAMAGE: return 10;
+		case COMBAT_DEATHDAMAGE: return 11;
+		default: return 0;
 	}
 }
 
@@ -1026,6 +992,7 @@ std::string getFirstLine(const std::string& str)
 		if (c == '\n') {
 			break;
 		}
+
 		firstLine.push_back(c);
 	}
 

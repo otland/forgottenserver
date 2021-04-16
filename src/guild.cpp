@@ -39,6 +39,7 @@ void Guild::removeMember(Player* player)
 	for (Player* member : membersOnline) {
 		g_game.updatePlayerHelpers(*member);
 	}
+
 	g_game.updatePlayerHelpers(*player);
 
 	if (membersOnline.empty()) {

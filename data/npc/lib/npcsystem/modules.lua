@@ -526,6 +526,7 @@ if Modules == nil then
 			else
 				msg = msg .. ", "
 			end
+
 			i = i + 1
 		end
 
@@ -670,6 +671,7 @@ if Modules == nil then
 				else
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in sellable items parameter.", temp, item)
 				end
+
 				i = i + 1
 			end
 
@@ -822,6 +824,7 @@ if Modules == nil then
 				if cost < shopItem.sell then
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (".. shopItem.name ..")")
 				end
+
 				shopItem.buy = cost
 			end
 		end
@@ -829,13 +832,13 @@ if Modules == nil then
 		if names and SHOPMODULE_MODE ~= SHOPMODULE_MODE_TRADE then
 			for i, name in pairs(names) do
 				local parameters = {
-						itemid = itemid,
-						cost = cost,
-						eventType = SHOPMODULE_BUY_ITEM,
-						module = self,
-						realName = realName or ItemType(itemid):getName(),
-						subType = itemSubType or 1
-					}
+					itemid = itemid,
+					cost = cost,
+					eventType = SHOPMODULE_BUY_ITEM,
+					module = self,
+					realName = realName or ItemType(itemid):getName(),
+					subType = itemSubType or 1
+				}
 
 				keywords = {}
 				keywords[#keywords + 1] = "buy"
@@ -884,14 +887,14 @@ if Modules == nil then
 		if names then
 			for i, name in pairs(names) do
 				local parameters = {
-						container = container,
-						itemid = itemid,
-						cost = cost,
-						eventType = SHOPMODULE_BUY_ITEM_CONTAINER,
-						module = self,
-						realName = realName or ItemType(itemid):getName(),
-						subType = subType or 1
-					}
+					container = container,
+					itemid = itemid,
+					cost = cost,
+					eventType = SHOPMODULE_BUY_ITEM_CONTAINER,
+					module = self,
+					realName = realName or ItemType(itemid):getName(),
+					subType = subType or 1
+				}
 
 				keywords = {}
 				keywords[#keywords + 1] = "buy"

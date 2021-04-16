@@ -113,6 +113,7 @@ ExperienceStages loadLuaStages(lua_State* L)
 		stages.emplace_back(minLevel, maxLevel, multiplier);
 		lua_pop(L, 4);
 	}
+
 	lua_pop(L, 1);
 
 	std::sort(stages.begin(), stages.end());
@@ -292,6 +293,7 @@ bool ConfigManager::load()
 	} else {
 		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, consider moving to config.lua." << std::endl;
 	}
+
 	expStages.shrink_to_fit();
 
 	loaded = true;

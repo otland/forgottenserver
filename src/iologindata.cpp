@@ -306,6 +306,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		} else {
 			delete condition;
 		}
+
 		condition = Condition::createCondition(propStream);
 	}
 

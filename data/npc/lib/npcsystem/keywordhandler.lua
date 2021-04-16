@@ -191,6 +191,7 @@ if not KeywordHandler then
 			if not self.lastNode[cid] then
 				return nil
 			end
+
 			self.lastNode[cid] = self.lastNode[cid]:getParent() or self:getRoot()
 		end
 

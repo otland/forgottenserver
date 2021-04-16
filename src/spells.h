@@ -438,6 +438,7 @@ class RuneSpell final : public Action, public Spell
 			if (c > 0) {
 				hasCharges = true;
 			}
+
 			charges = c;
 		}
 

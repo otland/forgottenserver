@@ -207,6 +207,7 @@ local function creatureSayCallback(cid, type, msg)
 			for i = seed, #parts do
 				receiver = receiver .. " " .. parts[i]
 			end
+
 			receiver = receiver:trim()
 
 			-- Immediate topicList.TRANSFER_PLAYER_GOLD simulation

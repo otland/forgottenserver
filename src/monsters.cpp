@@ -50,6 +50,7 @@ void MonsterType::loadLoot(MonsterType* monsterType, LootBlock lootBlock)
 				lootBlock.childLoot.push_back(child);
 			}
 		}
+
 		monsterType->info.lootItems.push_back(lootBlock);
 	} else {
 		monsterType->info.lootItems.push_back(lootBlock);
@@ -550,6 +551,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 	if (spell->range > (Map::maxViewportX * 2)) {
 		spell->range = Map::maxViewportX * 2;
 	}
+
 	sb.range = spell->range;
 
 	sb.minCombatValue = spell->minCombatValue;
@@ -1179,6 +1181,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				chance = 100;
 				std::cout << "[Warning - Monsters::loadMonster] yell chance value out of bounds. " << file << std::endl;
 			}
+
 			mType->info.yellChance = chance;
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Missing voices chance. " << file << std::endl;
@@ -1197,6 +1200,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			} else {
 				vb.yellText = false;
 			}
+
 			mType->info.voiceVector.emplace_back(vb);
 		}
 	}
@@ -1403,6 +1407,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 			std::cout << "[Warning - Monsters::loadMonster] Invalid \"countmax\" "<< lootCountMax <<" used for loot, the max allowed value is 100. " << std::endl;
 			return false;
 		}
+
 		lootBlock.countmax = std::max<int32_t>(1, lootCountMax);
 	} else {
 		lootBlock.countmax = 1;
@@ -1413,6 +1418,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 		if (lootChance > static_cast<int32_t>(MAX_LOOTCHANCE)) {
 			std::cout << "[Warning - Monsters::loadMonster] Invalid \"chance\" "<< lootChance <<" used for loot, the max is " << MAX_LOOTCHANCE << ". " << std::endl;
 		}
+
 		lootBlock.chance = std::min<int32_t>(MAX_LOOTCHANCE, lootChance);
 	} else {
 		lootBlock.chance = MAX_LOOTCHANCE;

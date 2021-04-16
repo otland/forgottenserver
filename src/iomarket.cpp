@@ -55,6 +55,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		} else {
 			offer.playerName = "Anonymous";
 		}
+
 		offerList.push_back(offer);
 	} while (result->next());
 

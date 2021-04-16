@@ -356,14 +356,15 @@ bool argumentsHandler(const StringVector& args)
 
 		StringVector tmp = explodeString(arg, "=");
 
-		if (tmp[0] == "--config")
+		if (tmp[0] == "--config") {
 			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
-		else if (tmp[0] == "--ip")
+		} else if (tmp[0] == "--ip") {
 			g_config.setString(ConfigManager::IP, tmp[1]);
-		else if (tmp[0] == "--login-port")
+		} else if (tmp[0] == "--login-port") {
 			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1]));
-		else if (tmp[0] == "--game-port")
+		} else if (tmp[0] == "--game-port") {
 			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
+		}
 	}
 
 	return true;

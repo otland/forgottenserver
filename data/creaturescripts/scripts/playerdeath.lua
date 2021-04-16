@@ -41,6 +41,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 				byPlayerMostDamage = 1
 			end
 		end
+
 		mostDamageName = mostDamageKiller:getName()
 	else
 		mostDamageName = "field item"

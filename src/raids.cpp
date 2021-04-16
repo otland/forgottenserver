@@ -159,6 +159,7 @@ void Raids::clear()
 		raid->stopEvents();
 		delete raid;
 	}
+
 	raidList.clear();
 
 	loaded = false;

@@ -271,6 +271,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 			result = true;
 			type = LuaScriptInterface::getNumber<SpeakClasses>(L, -1);
 		}
+
 		lua_pop(L, 1);
 	}
 
@@ -325,6 +326,7 @@ bool Chat::load()
 			for (const auto& pair : tempUserMap) {
 				channel.addUser(*pair.second);
 			}
+
 			continue;
 		}
 

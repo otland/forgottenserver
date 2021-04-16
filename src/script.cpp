@@ -62,6 +62,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 				if (g_config.getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
 					std::cout << "> " << it->path().filename().string() << " [disabled]" << std::endl;
 				}
+
 				continue;
 			}
 
@@ -79,6 +80,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 				if (g_config.getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
 					std::cout << ">> [" << p.parent_path().filename() << "]" << std::endl;
 				}
+
 				redir = it->parent_path().string();
 			}
 		}

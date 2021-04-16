@@ -417,30 +417,41 @@ bool Items::loadFromOtb(const std::string& file)
 
 		iType.group = static_cast<itemgroup_t>(itemNode.type);
 		switch (itemNode.type) {
-			case ITEM_GROUP_CONTAINER:
+			case ITEM_GROUP_CONTAINER: {
 				iType.type = ITEM_TYPE_CONTAINER;
 				break;
-			case ITEM_GROUP_DOOR:
+			}
+
+			case ITEM_GROUP_DOOR: {
 				//not used
 				iType.type = ITEM_TYPE_DOOR;
 				break;
-			case ITEM_GROUP_MAGICFIELD:
+			}
+
+			case ITEM_GROUP_MAGICFIELD: {
 				//not used
 				iType.type = ITEM_TYPE_MAGICFIELD;
 				break;
-			case ITEM_GROUP_TELEPORT:
+			}
+
+			case ITEM_GROUP_TELEPORT: {
 				//not used
 				iType.type = ITEM_TYPE_TELEPORT;
 				break;
+			}
+
 			case ITEM_GROUP_NONE:
 			case ITEM_GROUP_GROUND:
 			case ITEM_GROUP_SPLASH:
 			case ITEM_GROUP_FLUID:
 			case ITEM_GROUP_CHARGES:
-			case ITEM_GROUP_DEPRECATED:
+			case ITEM_GROUP_DEPRECATED: {
 				break;
-			default:
+			}
+
+			default: {
 				return false;
+			}
 		}
 
 		iType.blockSolid = hasBitSet(FLAG_BLOCK_SOLID, flags);

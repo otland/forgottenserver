@@ -75,7 +75,6 @@ function Creature:setMonsterOutfit(monster, time)
 	condition:setOutfit(monsterType:getOutfit())
 	condition:setTicks(time)
 	self:addCondition(condition)
-
 	return true
 end
 
@@ -91,7 +90,6 @@ function Creature:setItemOutfit(item, time)
 	})
 	condition:setTicks(time)
 	self:addCondition(condition)
-
 	return true
 end
 
@@ -107,7 +105,6 @@ function Creature:addSummon(monster)
 	summon:setSkillLoss(false)
 	summon:setMaster(self)
 	summon:getPosition():notifySummonAppear(summon)
-
 	return true
 end
 
@@ -122,7 +119,6 @@ function Creature:removeSummon(monster)
 	summon:setDropLoot(true)
 	summon:setSkillLoss(true)
 	summon:setMaster(nil)
-
 	return true
 end
 

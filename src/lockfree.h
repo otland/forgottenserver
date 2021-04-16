@@ -60,6 +60,7 @@ class LockfreePoolingAllocator : public std::allocator<T>
 				//Acquire memory without calling the constructor of T
 				p = operator new (sizeof(T));
 			}
+
 			return static_cast<T*>(p);
 		}
 

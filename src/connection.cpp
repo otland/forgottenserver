@@ -56,6 +56,7 @@ void ConnectionManager::closeAll()
 		} catch (boost::system::system_error&) {
 		}
 	}
+
 	connections.clear();
 }
 
@@ -70,6 +71,7 @@ void Connection::close(bool force)
 	if (closed) {
 		return;
 	}
+
 	closed = true;
 
 	if (protocol) {

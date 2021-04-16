@@ -956,19 +956,22 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	SpeakClasses type = static_cast<SpeakClasses>(msg.getByte());
 	switch (type) {
 		case TALKTYPE_PRIVATE_TO:
-		case TALKTYPE_PRIVATE_RED_TO:
+		case TALKTYPE_PRIVATE_RED_TO: {
 			receiver = msg.getString();
 			channelId = 0;
 			break;
+		}
 
 		case TALKTYPE_CHANNEL_Y:
-		case TALKTYPE_CHANNEL_R1:
+		case TALKTYPE_CHANNEL_R1: {
 			channelId = msg.get<uint16_t>();
 			break;
+		}
 
-		default:
+		default: {
 			channelId = 0;
 			break;
+		}
 	}
 
 	const std::string text = msg.getString();
@@ -1429,6 +1432,7 @@ void ProtocolGame::sendBasicData()
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
 	}
+
 	msg.addByte(player->getVocation()->getClientId());
 	msg.add<uint16_t>(0xFF); // number of known spells
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
@@ -1454,6 +1458,7 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.addByte(message.secondary.color);
 			break;
 		}
+
 		case MESSAGE_HEALED:
 		case MESSAGE_HEALED_OTHERS:
 		case MESSAGE_EXPERIENCE:
@@ -1463,11 +1468,13 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.addByte(message.primary.color);
 			break;
 		}
+
 		case MESSAGE_GUILD:
 		case MESSAGE_PARTY_MANAGEMENT:
 		case MESSAGE_PARTY:
 			msg.add<uint16_t>(message.channelId);
 			break;
+
 		default: {
 			break;
 		}
@@ -2629,6 +2636,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 					msg.add<uint16_t>(0xFFFF);
 					msg.add<uint32_t>(creature->getID());
 				}
+
 				msg.addPosition(newPos);
 			}
 
@@ -2653,6 +2661,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 				msg.addByte(0x68);
 				GetMapDescription(newPos.x - 8, newPos.y - 6, newPos.z, 1, 14, msg);
 			}
+
 			writeToOutputBuffer(msg);
 		}
 	} else if (canSee(oldPos) && canSee(creature->getPosition())) {
@@ -2669,6 +2678,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 				msg.add<uint16_t>(0xFFFF);
 				msg.add<uint32_t>(creature->getID());
 			}
+
 			msg.addPosition(creature->getPosition());
 			writeToOutputBuffer(msg);
 		}
@@ -3205,9 +3215,8 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 			msg.addByte(skip);
 			msg.addByte(0xFF);
 		}
-	}
 	//going further down
-	else if (newPos.z > oldPos.z && newPos.z > 8 && newPos.z < 14) {
+	} else if (newPos.z > oldPos.z && newPos.z > 8 && newPos.z < 14) {
 		int32_t skip = -1;
 		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 2, 18, 14, -3, skip);
 

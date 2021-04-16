@@ -163,6 +163,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with unique id: " << iterUid << " in fromuid: " << fromUid << ", touid: " << toUid << std::endl;
 				continue;
 			}
+
 			success = true;
 		}
 
@@ -203,6 +204,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with action id: " << iterAid << " in fromaid: " << fromAid << ", toaid: " << toAid << std::endl;
 				continue;
 			}
+
 			success = true;
 		}
 
@@ -510,6 +512,7 @@ void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t co
 	} else {
 		ss << "Using one of " << count << ' ' << item->getPluralName() << "...";
 	}
+
 	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
 }
 

@@ -566,7 +566,8 @@ function getPlayerFood(cid)
 		return false
 	end
 
-	local c = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT) return c and math.floor(c:getTicks() / 1000) or 0
+	local c = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+	return c and math.floor(c:getTicks() / 1000) or 0
 end
 function canPlayerLearnInstantSpell(cid, name) local p = Player(cid) return p and p:canLearnSpell(name) or false end
 function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p and p:hasLearnedSpell(name) or false end

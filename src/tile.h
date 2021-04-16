@@ -130,12 +130,14 @@ class TileItemVector : private ItemVector
 			if (getTopItemCount() == 0) {
 				return nullptr;
 			}
+
 			return *(getEndTopItem() - 1);
 		}
 		inline Item* getTopDownItem() const {
 			if (downItemCount == 0) {
 				return nullptr;
 			}
+
 			return *getBeginDownItem();
 		}
 		void addDownItemCount(int32_t increment) {
@@ -195,6 +197,7 @@ class Tile : public Cylinder
 			if (ground) {
 				thingCount++;
 			}
+
 			return thingCount;
 		}
 		// If these return != 0 the associated vectors are guaranteed to exists

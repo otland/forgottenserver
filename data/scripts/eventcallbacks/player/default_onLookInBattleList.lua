@@ -7,6 +7,7 @@ ec.onLookInBattleList = function(self, creature, distance)
 		if creature:isPlayer() and creature:getMaxMana() > 0 then
 			str = string.format("%s, Mana: %d / %d", str, creature:getMana(), creature:getMaxMana())
 		end
+
 		description = string.format(str, description, creature:getHealth(), creature:getMaxHealth()) .. "."
 
 		local position = creature:getPosition()

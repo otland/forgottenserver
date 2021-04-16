@@ -153,30 +153,40 @@ void sigintHandler()
 void dispatchSignalHandler(int signal)
 {
 	switch(signal) {
-		case SIGINT: //Shuts the server down
+		case SIGINT: { //Shuts the server down
 			g_dispatcher.addTask(createTask(sigintHandler));
 			break;
-		case SIGTERM: //Shuts the server down
+		}
+
+		case SIGTERM: { //Shuts the server down
 			g_dispatcher.addTask(createTask(sigtermHandler));
 			break;
+		}
+
 #ifndef _WIN32
-		case SIGHUP: //Reload config/data
+		case SIGHUP: { //Reload config/data
 			g_dispatcher.addTask(createTask(sighupHandler));
 			break;
-		case SIGUSR1: //Saves game state
+		}
+
+		case SIGUSR1: { //Saves game state
 			g_dispatcher.addTask(createTask(sigusr1Handler));
 			break;
+		}
 #else
-		case SIGBREAK: //Shuts the server down
+		case SIGBREAK: { //Shuts the server down
 			g_dispatcher.addTask(createTask(sigbreakHandler));
 			// hold the thread until other threads end
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
 			break;
+		}
 #endif
-		default:
+
+		default: {
 			break;
+		}
 	}
 }
 
@@ -206,6 +216,7 @@ void Signals::asyncWait()
 			std::cerr << "Signal handling error: "  << err.message() << std::endl;
 			return;
 		}
+
 		dispatchSignalHandler(signal);
 		asyncWait();
 	});

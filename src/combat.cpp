@@ -156,32 +156,15 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 {
 	switch (type) {
-		case CONDITION_FIRE:
-			return COMBAT_FIREDAMAGE;
-
-		case CONDITION_ENERGY:
-			return COMBAT_ENERGYDAMAGE;
-
-		case CONDITION_BLEEDING:
-			return COMBAT_PHYSICALDAMAGE;
-
-		case CONDITION_DROWN:
-			return COMBAT_DROWNDAMAGE;
-
-		case CONDITION_POISON:
-			return COMBAT_EARTHDAMAGE;
-
-		case CONDITION_FREEZING:
-			return COMBAT_ICEDAMAGE;
-
-		case CONDITION_DAZZLED:
-			return COMBAT_HOLYDAMAGE;
-
-		case CONDITION_CURSED:
-			return COMBAT_DEATHDAMAGE;
-
-		default:
-			break;
+		case CONDITION_FIRE: return COMBAT_FIREDAMAGE;
+		case CONDITION_ENERGY: return COMBAT_ENERGYDAMAGE;
+		case CONDITION_BLEEDING: return COMBAT_PHYSICALDAMAGE;
+		case CONDITION_DROWN: return COMBAT_DROWNDAMAGE;
+		case CONDITION_POISON: return COMBAT_EARTHDAMAGE;
+		case CONDITION_FREEZING: return COMBAT_ICEDAMAGE;
+		case CONDITION_DAZZLED: return COMBAT_HOLYDAMAGE;
+		case CONDITION_CURSED: return COMBAT_DEATHDAMAGE;
+		default: break;
 	}
 
 	return COMBAT_NONE;
@@ -190,32 +173,15 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 {
 	switch (type) {
-		case COMBAT_FIREDAMAGE:
-			return CONDITION_FIRE;
-
-		case COMBAT_ENERGYDAMAGE:
-			return CONDITION_ENERGY;
-
-		case COMBAT_DROWNDAMAGE:
-			return CONDITION_DROWN;
-
-		case COMBAT_EARTHDAMAGE:
-			return CONDITION_POISON;
-
-		case COMBAT_ICEDAMAGE:
-			return CONDITION_FREEZING;
-
-		case COMBAT_HOLYDAMAGE:
-			return CONDITION_DAZZLED;
-
-		case COMBAT_DEATHDAMAGE:
-			return CONDITION_CURSED;
-
-		case COMBAT_PHYSICALDAMAGE:
-			return CONDITION_BLEEDING;
-
-		default:
-			return CONDITION_NONE;
+		case COMBAT_FIREDAMAGE: return CONDITION_FIRE;
+		case COMBAT_ENERGYDAMAGE: return CONDITION_ENERGY;
+		case COMBAT_DROWNDAMAGE: return CONDITION_DROWN;
+		case COMBAT_EARTHDAMAGE: return CONDITION_POISON;
+		case COMBAT_ICEDAMAGE: return CONDITION_FREEZING;
+		case COMBAT_HOLYDAMAGE: return CONDITION_DAZZLED;
+		case COMBAT_DEATHDAMAGE: return CONDITION_CURSED;
+		case COMBAT_PHYSICALDAMAGE: return CONDITION_BLEEDING;
+		default: return CONDITION_NONE;
 	}
 }
 
@@ -545,36 +511,44 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 	if (params.itemId != 0) {
 		uint16_t itemId = params.itemId;
 		switch (itemId) {
-			case ITEM_FIREFIELD_PERSISTENT_FULL:
+			case ITEM_FIREFIELD_PERSISTENT_FULL: {
 				itemId = ITEM_FIREFIELD_PVP_FULL;
 				break;
+			}
 
-			case ITEM_FIREFIELD_PERSISTENT_MEDIUM:
+			case ITEM_FIREFIELD_PERSISTENT_MEDIUM: {
 				itemId = ITEM_FIREFIELD_PVP_MEDIUM;
 				break;
+			}
 
-			case ITEM_FIREFIELD_PERSISTENT_SMALL:
+			case ITEM_FIREFIELD_PERSISTENT_SMALL: {
 				itemId = ITEM_FIREFIELD_PVP_SMALL;
 				break;
+			}
 
-			case ITEM_ENERGYFIELD_PERSISTENT:
+			case ITEM_ENERGYFIELD_PERSISTENT: {
 				itemId = ITEM_ENERGYFIELD_PVP;
 				break;
+			}
 
-			case ITEM_POISONFIELD_PERSISTENT:
+			case ITEM_POISONFIELD_PERSISTENT: {
 				itemId = ITEM_POISONFIELD_PVP;
 				break;
+			}
 
-			case ITEM_MAGICWALL_PERSISTENT:
+			case ITEM_MAGICWALL_PERSISTENT: {
 				itemId = ITEM_MAGICWALL;
 				break;
+			}
 
-			case ITEM_WILDGROWTH_PERSISTENT:
+			case ITEM_WILDGROWTH_PERSISTENT: {
 				itemId = ITEM_WILDGROWTH;
 				break;
+			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 
 		if (caster) {
@@ -1009,6 +983,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 			if (g_game.combatBlockHit(damageCopy, caster, creature, params.blockedByShield, params.blockedByArmor, params.itemId != 0)) {
 				continue;
 			}
+
 			success = g_game.combatChangeHealth(caster, creature, damageCopy);
 		} else {
 			success = g_game.combatChangeMana(caster, creature, damageCopy);

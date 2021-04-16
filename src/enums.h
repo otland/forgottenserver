@@ -608,7 +608,8 @@ enum CombatOrigin {
 
 struct CombatDamage
 {
-	struct {
+	struct
+	{
 		CombatType_t type;
 		int32_t value;
 	} primary, secondary;

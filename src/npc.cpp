@@ -1053,6 +1053,7 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 		items.push_back(item);
 		lua_pop(L, 6);
 	}
+
 	lua_pop(L, 1);
 
 	player->closeShopWindow(false);

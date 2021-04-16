@@ -679,8 +679,9 @@ bool Spell::playerSpellCheck(Player* player) const
 		switch (player->getWeaponType()) {
 			case WEAPON_SWORD:
 			case WEAPON_CLUB:
-			case WEAPON_AXE:
+			case WEAPON_AXE: {
 				break;
+			}
 
 			default: {
 				player->sendCancelMessage(RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL);

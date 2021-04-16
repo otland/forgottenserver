@@ -81,6 +81,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
+
 			return true;
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
@@ -94,6 +95,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
+
 			return true;
 		}
 	}
@@ -111,6 +113,7 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
+
 			return true;
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
@@ -124,6 +127,7 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
+
 			return true;
 		}
 	}
@@ -191,6 +195,7 @@ void GlobalEvents::think()
 			if (nextExecutionTime < nextScheduledTime) {
 				nextScheduledTime = nextExecutionTime;
 			}
+
 			continue;
 		}
 
@@ -236,9 +241,13 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 					retMap.emplace(it.first, it.second);
 				}
 			}
+
 			return retMap;
 		}
-		default: return GlobalEventMap();
+
+		default:  {
+			return GlobalEventMap();
+		}
 	}
 }
 

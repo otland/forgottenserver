@@ -868,6 +868,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 			*destItem = destThing->getItem();
 		}
 	}
+
 	return destTile;
 }
 

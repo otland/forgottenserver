@@ -97,6 +97,7 @@ bool IOMapSerialize::saveHouseItems()
 				if (!stmt.addRow(fmt::format("{:d},{:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
 					return false;
 				}
+
 				stream.clear();
 			}
 		}
@@ -120,6 +121,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 			return false;
 		}
+
 		container->serializationCount--;
 	}
 
@@ -403,6 +405,7 @@ bool IOMapSerialize::saveHouse(House* house)
 			if (!stmt.addRow(fmt::format("{:d},{:s}", houseId, db.escapeBlob(attributes, attributesSize)))) {
 				return false;
 			}
+
 			stream.clear();
 		}
 	}
