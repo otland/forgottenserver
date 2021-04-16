@@ -494,8 +494,7 @@ enum MapMark_t {
 	MAPMARK_GREENSOUTH = 19,
 };
 
-struct Outfit_t
-{
+struct Outfit_t {
 	uint16_t lookType = 0;
 	uint16_t lookTypeEx = 0;
 	uint16_t lookMount = 0;
@@ -506,16 +505,14 @@ struct Outfit_t
 	uint8_t lookAddons = 0;
 };
 
-struct LightInfo
-{
+struct LightInfo {
 	uint8_t level = 0;
 	uint8_t color = 0;
 	constexpr LightInfo() = default;
 	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
-struct ShopInfo
-{
+struct ShopInfo {
 	uint16_t itemId;
 	int32_t subType;
 	uint32_t buyPrice;
@@ -533,8 +530,7 @@ struct ShopInfo
 		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName)) {}
 };
 
-struct MarketOffer
-{
+struct MarketOffer {
 	uint32_t price;
 	uint32_t timestamp;
 	uint16_t amount;
@@ -543,8 +539,7 @@ struct MarketOffer
 	std::string playerName;
 };
 
-struct MarketOfferEx
-{
+struct MarketOfferEx {
 	MarketOfferEx() = default;
 	MarketOfferEx(MarketOfferEx&& other) :
 		id(other.id), playerId(other.playerId), timestamp(other.timestamp), price(other.price),
@@ -562,8 +557,7 @@ struct MarketOfferEx
 	std::string playerName;
 };
 
-struct HistoryMarketOffer
-{
+struct HistoryMarketOffer {
 	uint32_t timestamp;
 	uint32_t price;
 	uint16_t itemId;
@@ -571,8 +565,7 @@ struct HistoryMarketOffer
 	MarketOfferState_t state;
 };
 
-struct MarketStatistics
-{
+struct MarketStatistics {
 	MarketStatistics() {
 		numTransactions = 0;
 		highestPrice = 0;
@@ -586,8 +579,7 @@ struct MarketStatistics
 	uint32_t lowestPrice;
 };
 
-struct ModalWindow
-{
+struct ModalWindow {
 	std::list<std::pair<std::string, uint8_t>> buttons, choices;
 	std::string title, message;
 	uint32_t id;
@@ -606,10 +598,8 @@ enum CombatOrigin {
 	ORIGIN_RANGED,
 };
 
-struct CombatDamage
-{
-	struct
-	{
+struct CombatDamage {
+	struct {
 		CombatType_t type;
 		int32_t value;
 	} primary, secondary;

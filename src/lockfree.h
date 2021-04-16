@@ -34,8 +34,7 @@
  * boost::lockfree::stack<void*, boost::lockfree::capacity<CAPACITY> lockfreeFreeList;
  */
 template <std::size_t TSize, size_t CAPACITY>
-struct LockfreeFreeList
-{
+struct LockfreeFreeList {
 	using FreeList = boost::lockfree::stack<void*, boost::lockfree::capacity<CAPACITY>>;
 	static FreeList& get() {
 		static FreeList freeList;

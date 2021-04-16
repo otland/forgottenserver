@@ -79,16 +79,14 @@ enum LuaDataType {
 	LuaData_Tile,
 };
 
-struct LuaVariant
-{
+struct LuaVariant {
 	LuaVariantType_t type = VARIANT_NONE;
 	std::string text;
 	Position pos;
 	uint32_t number = 0;
 };
 
-struct LuaTimerEventDesc
-{
+struct LuaTimerEventDesc {
 	int32_t scriptId = -1;
 	int32_t function = -1;
 	std::vector<int32_t> parameters;

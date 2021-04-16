@@ -111,11 +111,13 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			switch (eventType) {
 				case MOVE_EVENT_ADD_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
-					break;}
+					break;
+				}
 
 				case MOVE_EVENT_REMOVE_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
-					break;}
+					break;
+				}
 
 				default: {
 					break;

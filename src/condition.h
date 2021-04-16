@@ -62,8 +62,7 @@ enum ConditionAttr_t {
 	CONDITIONATTR_END = 254,
 };
 
-struct IntervalInfo
-{
+struct IntervalInfo {
 	int32_t timeLeft;
 	int32_t value;
 	int32_t interval;

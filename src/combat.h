@@ -57,8 +57,7 @@ class TargetCallback final : public CallBack
 		void onTargetCombat(Creature* creature, Creature* target) const;
 };
 
-struct CombatParams
-{
+struct CombatParams {
 	std::forward_list<std::unique_ptr<const Condition>> conditionList;
 
 	std::unique_ptr<ValueCallback> valueCallback;

@@ -44,8 +44,7 @@ enum MoveEvent_t {
 class MoveEvent;
 using MoveEvent_ptr = std::unique_ptr<MoveEvent>;
 
-struct MoveEventList
-{
+struct MoveEventList {
 	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 

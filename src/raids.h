@@ -29,8 +29,7 @@ enum RaidState_t {
 	RAIDSTATE_EXECUTING,
 };
 
-struct MonsterSpawn
-{
+struct MonsterSpawn {
 	MonsterSpawn(std::string name, uint32_t minAmount, uint32_t maxAmount) :
 		name(std::move(name)), minAmount(minAmount), maxAmount(maxAmount) {}
 

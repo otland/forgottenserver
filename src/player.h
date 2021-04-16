@@ -75,8 +75,7 @@ enum tradestate_t : uint8_t {
 	TRADE_TRANSFER,
 };
 
-struct VIPEntry
-{
+struct VIPEntry {
 	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
 		guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify) {}
 
@@ -87,22 +86,19 @@ struct VIPEntry
 	bool notify;
 };
 
-struct OpenContainer
-{
+struct OpenContainer {
 	Container* container;
 	uint16_t index;
 };
 
-struct OutfitEntry
-{
+struct OutfitEntry {
 	constexpr OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
 
 	uint16_t lookType;
 	uint8_t addons;
 };
 
-struct Skill
-{
+struct Skill {
 	uint64_t tries = 0;
 	uint16_t level = 10;
 	uint8_t percent = 0;

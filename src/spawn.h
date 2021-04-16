@@ -27,8 +27,7 @@ class Monster;
 class MonsterType;
 class Npc;
 
-struct spawnBlock_t
-{
+struct spawnBlock_t {
 	Position pos;
 	MonsterType* mType;
 	int64_t lastSpawn;

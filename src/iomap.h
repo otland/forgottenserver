@@ -81,8 +81,7 @@ enum OTBM_TileFlag_t : uint32_t {
 
 #pragma pack(1)
 
-struct OTBM_root_header
-{
+struct OTBM_root_header {
 	uint32_t version;
 	uint16_t width;
 	uint16_t height;
@@ -90,15 +89,13 @@ struct OTBM_root_header
 	uint32_t minorVersionItems;
 };
 
-struct OTBM_Destination_coords
-{
+struct OTBM_Destination_coords {
 	uint16_t x;
 	uint16_t y;
 	uint8_t z;
 };
 
-struct OTBM_Tile_coords
-{
+struct OTBM_Tile_coords {
 	uint8_t x;
 	uint8_t y;
 };

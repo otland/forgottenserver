@@ -36,8 +36,7 @@ enum Direction : uint8_t {
 	DIRECTION_NONE = 8,
 };
 
-struct Position
-{
+struct Position {
 	constexpr Position() = default;
 	constexpr Position(uint16_t x, uint16_t y, uint8_t z) : x(x), y(y), z(z) {}
 

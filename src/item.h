@@ -214,8 +214,7 @@ class ItemAttributes
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-		struct CustomAttribute
-		{
+		struct CustomAttribute {
 			typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
 			VariantAttribute value;
 
@@ -232,8 +231,7 @@ class ItemAttributes
 			template<typename T>
 			const T& get();
 
-			struct PushLuaVisitor : public boost::static_visitor<>
-			{
+			struct PushLuaVisitor : public boost::static_visitor<> {
 				lua_State* L;
 
 				explicit PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
@@ -263,8 +261,7 @@ class ItemAttributes
 				boost::apply_visitor(PushLuaVisitor(L), value);
 			}
 
-			struct SerializeVisitor : public boost::static_visitor<>
-			{
+			struct SerializeVisitor : public boost::static_visitor<> {
 				PropWriteStream& propWriteStream;
 
 				explicit SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
@@ -358,8 +355,7 @@ class ItemAttributes
 
 		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
-		struct Attribute
-		{
+		struct Attribute {
 			union {
 				int64_t integer;
 				std::string* string;

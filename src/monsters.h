@@ -24,8 +24,7 @@
 
 const uint32_t MAX_LOOTCHANCE = 100000;
 
-struct LootBlock
-{
+struct LootBlock {
 	uint16_t id;
 	uint32_t countmax;
 	uint32_t chance;
@@ -58,8 +57,7 @@ class Loot
 		LootBlock lootBlock;
 };
 
-struct summonBlock_t
-{
+struct summonBlock_t {
 	std::string name;
 	uint32_t chance;
 	uint32_t speed;
@@ -68,8 +66,7 @@ struct summonBlock_t
 };
 
 class BaseSpell;
-struct spellBlock_t
-{
+struct spellBlock_t {
 	constexpr spellBlock_t() = default;
 	~spellBlock_t();
 	spellBlock_t(const spellBlock_t& other) = delete;
@@ -96,16 +93,14 @@ struct spellBlock_t
 	bool isMelee = false;
 };
 
-struct voiceBlock_t
-{
+struct voiceBlock_t {
 	std::string text;
 	bool yellText;
 };
 
 class MonsterType
 {
-	struct MonsterInfo
-	{
+	struct MonsterInfo {
 		LuaScriptInterface* scriptInterface;
 
 		std::map<CombatType_t, int32_t> elementMap;

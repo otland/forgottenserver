@@ -32,8 +32,7 @@ using MappedFile = boost::iostreams::mapped_file_source;
 using ContentIt  = MappedFile::iterator;
 using Identifier = std::array<char, 4>;
 
-struct Node
-{
+struct Node {
 	using ChildrenVector = std::vector<Node>;
 
 	ChildrenVector children;
@@ -47,13 +46,11 @@ struct Node
 	};
 };
 
-struct LoadError : std::exception
-{
+struct LoadError : std::exception {
 	const char* what() const noexcept override = 0;
 };
 
-struct InvalidOTBFormat final : LoadError
-{
+struct InvalidOTBFormat final : LoadError {
 	const char* what() const noexcept override {
 		return "Invalid OTBM file format";
 	}
