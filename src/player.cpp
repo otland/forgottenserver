@@ -439,8 +439,7 @@ void Player::updateInventoryWeight()
 		}
 	}
 
-	StoreInbox* storeInbox = getStoreInbox();
-	if (storeInbox) {
+	if (StoreInbox* storeInbox = getStoreInbox()) {
 		inventoryWeight += storeInbox->getWeight();
 	}
 }
