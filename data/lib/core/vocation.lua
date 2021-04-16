@@ -3,5 +3,6 @@ function Vocation.getBase(self)
 	while base:getDemotion() do
 		base = base:getDemotion()
 	end
+
 	return base
 end

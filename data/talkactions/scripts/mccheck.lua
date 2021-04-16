@@ -20,6 +20,7 @@ function onSay(player, words, param)
 				ipList[ip] = {}
 				list = ipList[ip]
 			end
+
 			list[#list + 1] = tmpPlayer
 		end
 	end
@@ -33,8 +34,10 @@ function onSay(player, words, param)
 				tmpPlayer = list[i]
 				message = ("%s, %s [%d]"):format(message, tmpPlayer:getName(), tmpPlayer:getLevel())
 			end
+
 			player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, message .. ".")
 		end
 	end
+
 	return false
 end

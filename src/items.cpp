@@ -534,6 +534,7 @@ void Items::buildInventoryList()
 			inventory.push_back(type.clientId);
 		}
 	}
+
 	inventory.shrink_to_fit();
 	std::sort(inventory.begin(), inventory.end());
 }
@@ -1378,6 +1379,7 @@ ItemType& Items::getItemType(size_t id)
 	if (id < items.size()) {
 		return items[id];
 	}
+
 	return items.front();
 }
 
@@ -1386,6 +1388,7 @@ const ItemType& Items::getItemType(size_t id) const
 	if (id < items.size()) {
 		return items[id];
 	}
+
 	return items.front();
 }
 
@@ -1396,15 +1399,16 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 			return getItemType(serverId);
 		}
 	}
+
 	return items.front();
 }
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
 	auto result = nameToItems.find(asLowerCaseString(name));
-
-	if (result == nameToItems.end())
+	if (result == nameToItems.end()) {
 		return 0;
+	}
 
 	return result->second;
 }

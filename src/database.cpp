@@ -56,6 +56,7 @@ bool Database::connect()
 	if (result) {
 		maxPacketSize = result->getNumber<uint64_t>("Value");
 	}
+
 	return true;
 }
 
@@ -107,6 +108,7 @@ bool Database::executeQuery(const std::string& query)
 			success = false;
 			break;
 		}
+
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
@@ -131,6 +133,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053/*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
 			break;
 		}
+
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
@@ -144,6 +147,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 			databaseLock.unlock();
 			return nullptr;
 		}
+
 		goto retry;
 	}
 	databaseLock.unlock();
@@ -153,6 +157,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	if (!result->hasNext()) {
 		return nullptr;
 	}
+
 	return result;
 }
 
@@ -271,6 +276,7 @@ bool DBInsert::addRow(const std::string& row)
 		values.append(row);
 		values.push_back(')');
 	}
+
 	return true;
 }
 

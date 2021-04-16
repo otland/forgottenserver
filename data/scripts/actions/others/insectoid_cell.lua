@@ -8,7 +8,9 @@ function insectoidCell.onUse(player, item, fromPosition, target, toPosition, isH
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The insectoid cell is empty.")
 	end
+
 	return true
 end
+
 insectoidCell:id(14437, 14438)
 insectoidCell:register()

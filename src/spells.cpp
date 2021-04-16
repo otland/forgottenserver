@@ -140,6 +140,7 @@ Event_ptr Spells::getEvent(const std::string& nodeName)
 	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
 		return Event_ptr(new InstantSpell(&scriptInterface));
 	}
+
 	return nullptr;
 }
 
@@ -151,6 +152,7 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 		}
+
 		return result.second;
 	}
 
@@ -160,6 +162,7 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 		}
+
 		return result.second;
 	}
 
@@ -175,6 +178,7 @@ bool Spells::registerInstantLuaEvent(InstantSpell* event)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerInstantLuaEvent] Duplicate registered instant spell with words: " << words << std::endl;
 		}
+
 		return result.second;
 	}
 
@@ -190,6 +194,7 @@ bool Spells::registerRuneLuaEvent(RuneSpell* event)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerRuneLuaEvent] Duplicate registered rune with id: " << id << std::endl;
 		}
+
 		return result.second;
 	}
 
@@ -202,6 +207,7 @@ Spell* Spells::getSpellByName(const std::string& name)
 	if (!spell) {
 		spell = getInstantSpellByName(name);
 	}
+
 	return spell;
 }
 
@@ -214,8 +220,10 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 				return &rune.second;
 			}
 		}
+
 		return nullptr;
 	}
+
 	return &it->second;
 }
 
@@ -226,6 +234,7 @@ RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 			return &it.second;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -259,8 +268,10 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 				return nullptr;
 			}
 		}
+
 		return result;
 	}
+
 	return nullptr;
 }
 
@@ -271,6 +282,7 @@ InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 			return &it.second;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -281,6 +293,7 @@ InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 			return &it.second;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -354,6 +367,7 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 			var.type = VARIANT_NUMBER;
 			var.number = target->getID();
 		}
+
 		return executeCastSpell(creature, var);
 	}
 
@@ -366,6 +380,7 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 	} else {
 		combat->doCombat(creature, target);
 	}
+
 	return true;
 }
 
@@ -580,6 +595,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
 	}
+
 	return true;
 }
 
@@ -794,6 +810,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -891,6 +908,7 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	if ((attr = node.attribute("blockwalls"))) {
 		checkLineOfSight = attr.as_bool();
 	}
+
 	return true;
 }
 
@@ -1041,6 +1059,7 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 			(range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -1079,9 +1098,9 @@ bool InstantSpell::castSpell(Creature* creature, Creature* target)
 		var.type = VARIANT_NUMBER;
 		var.number = target->getID();
 		return internalCastSpell(creature, var);
-	} else {
-		return castSpell(creature);
 	}
+
+	return castSpell(creature);
 }
 
 bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
@@ -1245,6 +1264,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 		g_game.transformItem(item, item->getID(), newCount);
 	}
+
 	return true;
 }
 
@@ -1272,6 +1292,7 @@ bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var, boo
 	} else {
 		result = false;
 	}
+
 	return result;
 }
 

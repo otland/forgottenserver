@@ -70,6 +70,7 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler.topic[cid] = topicList.NONE
 			return false
 		end
+
 		if msgcontains(msg, "all") then
 			count[cid] = player:getMoney()
 			npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
@@ -83,6 +84,7 @@ local function creatureSayCallback(cid, type, msg)
 					npcHandler.topic[cid] = topicList.NONE
 					return false
 				end
+
 				npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 				npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 				return true
@@ -92,6 +94,7 @@ local function creatureSayCallback(cid, type, msg)
 				return true
 			end
 		end
+
 		if not isValidMoney(count[cid]) then
 			npcHandler:say("Sorry, but you can't deposit that much.", cid)
 			npcHandler.topic[cid] = topicList.NONE
@@ -119,6 +122,7 @@ local function creatureSayCallback(cid, type, msg)
 		elseif msgcontains(msg, "no") then
 			npcHandler:say("As you wish. Is there something else I can do for you?", cid)
 		end
+
 		npcHandler.topic[cid] = topicList.NONE
 		return true
 	elseif msgcontains(msg, "withdraw") then
@@ -131,6 +135,7 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler:say("There is not enough gold in your account.", cid)
 				npcHandler.topic[cid] = topicList.NONE
 			end
+
 			return true
 		else
 			npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
@@ -146,6 +151,7 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("There is not enough gold in your account.", cid)
 			npcHandler.topic[cid] = topicList.NONE
 		end
+
 		return true
 	elseif npcHandler.topic[cid] == topicList.WITHDRAW_GOLD then
 		if msgcontains(msg, "yes") then
@@ -158,11 +164,13 @@ local function creatureSayCallback(cid, type, msg)
 			else
 				npcHandler:say("Whoah, hold on, you have no room in your inventory to carry all those coins. I don't want you to drop it on the floor, maybe come back with a cart!", cid)
 			end
+
 			npcHandler.topic[cid] = topicList.NONE
 		elseif msgcontains(msg, "no") then
 			npcHandler:say("The customer is king! Come back anytime you want to if you wish to {withdraw} your money.", cid)
 			npcHandler.topic[cid] = topicList.NONE
 		end
+
 		return true
 	elseif msgcontains(msg, "transfer") then
 		local parts = msg:split(" ")
@@ -176,6 +184,7 @@ local function creatureSayCallback(cid, type, msg)
 					npcHandler.topic[cid] = topicList.NONE
 					return true
 				end
+
 				if isValidMoney(count[cid]) then
 					npcHandler:say("Who would you like transfer " .. count[cid] .. " gold to?", cid)
 					npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_WHO
@@ -194,6 +203,7 @@ local function creatureSayCallback(cid, type, msg)
 			if #parts > 3 then
 				seed = parts[3] == "to" and 4 or 3
 			end
+
 			for i = seed, #parts do
 				receiver = receiver .. " " .. parts[i]
 			end
@@ -206,6 +216,7 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler.topic[cid] = topicList.NONE
 				return true
 			end
+
 			if isValidMoney(count[cid]) then
 				-- Immediate topicList.TRANSFER_PLAYER_WHO simulation
 				transfer[cid] = getPlayerDatabaseInfo(receiver)
@@ -221,6 +232,7 @@ local function creatureSayCallback(cid, type, msg)
 						npcHandler.topic[cid] = topicList.NONE
 						return true
 					end
+
 					npcHandler:say("So you would like to transfer " .. count[cid] .. " gold to " .. transfer[cid].name .. "?", cid)
 					npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_CONSENT
 				else
@@ -240,6 +252,7 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler.topic[cid] = topicList.NONE
 			return true
 		end
+
 		if isValidMoney(count[cid]) then
 			npcHandler:say("Who would you like transfer " .. count[cid] .. " gold to?", cid)
 			npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_WHO
@@ -261,6 +274,7 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler.topic[cid] = topicList.NONE
 				return true
 			end
+
 			npcHandler:say("So you would like to transfer " .. count[cid] .. " gold to " .. transfer[cid].name .. "?", cid)
 			npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_CONSENT
 		else
@@ -407,6 +421,7 @@ local function creatureSayCallback(cid, type, msg)
 		else
 			npcHandler:say("Well, can I help you with something else?", cid)
 		end
+
 		npcHandler.topic[cid] = topicList.NONE
 	end
 	return true

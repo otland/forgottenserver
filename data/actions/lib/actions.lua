@@ -93,6 +93,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:addItem(2145) -- 49% chance of getting small diamond
 		end
+
 		player:addAchievementProgress("Petrologist", 100)
 		target:getPosition():sendMagicEffect(CONST_ME_BLOCKHIT)
 		target:remove(1)
@@ -213,6 +214,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You dug up a leech.")
 				player:addItem(20138)
 			end
+
 			player:setStorageValue(PlayerStorageKeys.swampDigging, os.time() + 7 * 24 * 60 * 60)
 			player:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
 		end
@@ -227,6 +229,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif randomValue > 95 then
 			Game.createMonster("Scarab", toPosition)
 		end
+
 		toPosition:sendMagicEffect(CONST_ME_POFF)
 	else
 		return false
@@ -247,6 +250,7 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Happy Farmer", 200)
 		return true
 	end
+
 	if target.itemid == 5465 then -- burning sugar cane
 		target:transform(5464)
 		target:decay()
@@ -254,6 +258,7 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Natural Sweetener", 50)
 		return true
 	end
+
 	return destroyItem(player, target, toPosition)
 end
 

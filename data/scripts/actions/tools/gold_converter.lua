@@ -29,6 +29,7 @@ function goldConverter.onUse(player, item, fromPosition, target, toPosition, isH
 	if charges == 0 then
 		item:remove()
 	end
+
 	return true
 end
 

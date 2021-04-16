@@ -49,6 +49,7 @@ bool DatabaseManager::optimizeTables()
 			std::cout << " [failed]" << std::endl;
 		}
 	} while (result->next());
+
 	return true;
 }
 
@@ -82,6 +83,7 @@ int32_t DatabaseManager::getDatabaseVersion()
 	if (getDatabaseConfig("db_version", version)) {
 		return version;
 	}
+
 	return -1;
 }
 

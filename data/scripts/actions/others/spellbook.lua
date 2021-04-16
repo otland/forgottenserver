@@ -8,6 +8,7 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 			if spell.manapercent > 0 then
 				spell.mana = spell.manapercent .. "%"
 			end
+
 			spells[#spells + 1] = spell
 		end
 	end
@@ -22,9 +23,11 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 			else
 				text[#text+1] = "\nSpells for Level "
 			end
+
 			text[#text+1] = spell.level .. "\n"
 			prevLevel = spell.level
 		end
+
 		text[#text+1] = spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
 

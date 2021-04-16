@@ -53,6 +53,7 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 		if type(gift) == "table" then
 			gift, count = unpack(gift)
 		end
+
 		rewards[#rewards + 1] = {gift, count}
 		table.remove(targetItem, rand)
 	end
@@ -60,6 +61,7 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 	for i = 1, #rewards do
 		player:addItem(unpack(rewards[i]))
 	end
+
 	item:remove(1)
 	player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
 	player:addAchievementProgress("Santa's Li'l Helper", 25)

@@ -13,5 +13,6 @@ function onCastSpell(creature, variant)
 			doTargetCombat(0, target, COMBAT_HEALING, min, max)
 		end
 	end
+
 	return true
 end

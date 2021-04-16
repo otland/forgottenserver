@@ -14,8 +14,10 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 				spawnMonster:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 			end
 		end
+
 		targetMonster:say("The elves came too late to save the deer, however they might avenge it.", TALKTYPE_MONSTER_SAY)
 	end
+
 	return true
 end
 

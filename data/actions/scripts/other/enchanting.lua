@@ -145,6 +145,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendCancelMessage(RETURNVALUE_NOTENOUGHSOUL)
 			return true
 		end
+
 		player:addSoul(-items.valuables.soul)
 		player:addMana(-items.valuables.mana)
 		player:addManaSpent(items.valuables.mana)
@@ -189,6 +190,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					if not transform then
 						return false
 					end
+
 					target:transform(transform.id)
 				else
 					target:transform(targetItem.id)
@@ -201,10 +203,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				if target:hasAttribute(ITEM_ATTRIBUTE_CHARGES) then
 					target:setAttribute(ITEM_ATTRIBUTE_CHARGES, items.equipment.charges)
 				end
+
 				item:remove(1)
 			end
 		end
+
 		player:getPosition():sendMagicEffect(targetItem.effects and (isInSlot and targetItem.effects.failure or targetItem.effects.success) or items.equipment.effect)
 	end
+
 	return true
 end

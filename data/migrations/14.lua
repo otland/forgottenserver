@@ -26,5 +26,6 @@ function onUpdateDatabase()
 
 		db.query("DROP TABLE `groups`")
 	end
+
 	return true
 end

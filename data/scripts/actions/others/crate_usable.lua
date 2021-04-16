@@ -36,6 +36,7 @@ function crateUsable.onUse(player, item, fromPosition, target, toPosition, isHot
 	else
 		player:say("You found nothing useful.", TALKTYPE_MONSTER_SAY, false, player, toPosition)
 	end
+
 	return true
 end
 

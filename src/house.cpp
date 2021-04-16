@@ -188,6 +188,7 @@ bool House::kickPlayer(Player* player, Player* target)
 		g_game.addMagicEffect(oldPosition, CONST_ME_POFF);
 		g_game.addMagicEffect(getEntryPosition(), CONST_ME_TELEPORT);
 	}
+
 	return true;
 }
 
@@ -238,6 +239,7 @@ bool House::transferToDepot() const
 		transferToDepot(&tmpPlayer);
 		IOLoginData::savePlayer(&tmpPlayer);
 	}
+
 	return true;
 }
 
@@ -268,6 +270,7 @@ bool House::transferToDepot(Player* player) const
 	for (Item* item : moveItemList) {
 		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT);
 	}
+
 	return true;
 }
 
@@ -324,6 +327,7 @@ Door* House::getDoorByNumber(uint32_t doorId) const
 			return door;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -334,6 +338,7 @@ Door* House::getDoorByPosition(const Position& pos)
 			return door;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -546,6 +551,7 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 		setDoorId(doorId);
 		return ATTR_READ_CONTINUE;
 	}
+
 	return Item::readAttr(attr, propStream);
 }
 
@@ -610,6 +616,7 @@ House* Houses::getHouseByPlayerId(uint32_t playerId)
 			return it.second;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -655,6 +662,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 		house->setOwner(0, false);
 	}
+
 	return true;
 }
 

@@ -156,4 +156,5 @@ end
 for k, v in pairs(dollsTable) do
 	dolls:id(k)
 end
+
 dolls:register()

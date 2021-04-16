@@ -46,7 +46,8 @@ using WaitList = std::deque<std::pair<int64_t, uint32_t>>; // (timeout, player g
 
 WaitList priorityWaitList, waitList;
 
-std::tuple<WaitList&, WaitList::iterator, WaitList::size_type> findClient(const Player& player) {
+std::tuple<WaitList&, WaitList::iterator, WaitList::size_type> findClient(const Player& player)
+{
 	const auto fn = [&](const WaitList::value_type& it) { return it.second == player.getGUID(); };
 
 	auto it = std::find_if(priorityWaitList.begin(), priorityWaitList.end(), fn);
@@ -72,9 +73,9 @@ uint8_t getWaitTime(std::size_t slot)
 		return 20;
 	} else if (slot < 50) {
 		return 60;
-	} else {
-		return 120;
 	}
+
+	return 120;
 }
 
 int64_t getTimeout(std::size_t slot)
@@ -133,6 +134,7 @@ std::size_t clientLogin(const Player& player)
 		currentSlot += waitList.size();
 		waitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player.getGUID());
 	}
+
 	return currentSlot;
 }
 
@@ -200,6 +202,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 				} else {
 					ss << "Your account has been permanently banned by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
 				}
+
 				disconnectClient(ss.str());
 				return;
 			}
@@ -258,6 +261,7 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			connect(foundPlayer->getID(), operatingSystem);
 		}
 	}
+
 	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
 }
 
@@ -782,6 +786,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 			(y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
 		return true;
 	}
+
 	return false;
 }
 
@@ -1429,6 +1434,7 @@ void ProtocolGame::sendBasicData()
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -1466,6 +1472,7 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			break;
 		}
 	}
+
 	msg.addString(message.text);
 	writeToOutputBuffer(msg);
 }
@@ -1530,6 +1537,7 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -1589,6 +1597,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	} else {
 		msg.addByte(0x00);
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -2185,6 +2194,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 		msg.addByte(0x01);
 		msg.addItem(item);
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -2285,12 +2295,14 @@ void ProtocolGame::sendPrivateMessage(const Player* speaker, SpeakClasses type, 
 	msg.addByte(0xAA);
 	static uint32_t statementId = 0;
 	msg.add<uint32_t>(++statementId);
+
 	if (speaker) {
 		msg.addString(speaker->getName());
 		msg.add<uint16_t>(speaker->getLevel());
 	} else {
 		msg.add<uint32_t>(0x00);
 	}
+
 	msg.addByte(type);
 	msg.addString(text);
 	writeToOutputBuffer(msg);
@@ -2377,6 +2389,7 @@ void ProtocolGame::sendCreatureHealth(const Creature* creature)
 	} else {
 		msg.addByte(std::ceil((static_cast<double>(creature->getHealth()) / std::max<int32_t>(creature->getMaxHealth(), 1)) * 100));
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -2539,6 +2552,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		if (isLogin) {
 			sendMagicEffect(pos, CONST_ME_TELEPORT);
 		}
+
 		return;
 	}
 
@@ -2676,6 +2690,7 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 		msg.addByte(0x79);
 		msg.addByte(slot);
 	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -2727,11 +2742,13 @@ void ProtocolGame::sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Ite
 	msg.addByte(0x72);
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
+
 	if (lastItem) {
 		msg.addItem(lastItem);
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
+
 	writeToOutputBuffer(msg);
 }
 

@@ -49,7 +49,8 @@ enum slots_t : uint8_t {
 	CONST_SLOT_LAST = CONST_SLOT_AMMO,
 };
 
-struct FindPathParams {
+struct FindPathParams
+{
 	bool fullPathSearch = true;
 	bool clearSight = true;
 	bool allowDiagonal = true;

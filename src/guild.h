@@ -22,7 +22,8 @@
 
 class Player;
 
-struct GuildRank {
+struct GuildRank
+{
 	uint32_t id;
 	std::string name;
 	uint8_t level;

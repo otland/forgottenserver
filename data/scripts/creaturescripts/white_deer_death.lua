@@ -22,6 +22,7 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 			break
 		end
 	end
+
 	return true
 end
 

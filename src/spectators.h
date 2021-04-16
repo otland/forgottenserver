@@ -29,40 +29,43 @@ class SpectatorVec
 	using Vec = std::vector<Creature*>;
 	using Iterator = Vec::iterator;
 	using ConstIterator = Vec::const_iterator;
-public:
-	SpectatorVec() {
-		vec.reserve(32);
-	}
 
-	void addSpectators(const SpectatorVec& spectators) {
-		for (Creature* spectator : spectators.vec) {
-			auto it = std::find(vec.begin(), vec.end(), spectator);
-			if (it != end()) {
-				continue;
+	public:
+		SpectatorVec() {
+			vec.reserve(32);
+		}
+
+		void addSpectators(const SpectatorVec& spectators) {
+			for (Creature* spectator : spectators.vec) {
+				auto it = std::find(vec.begin(), vec.end(), spectator);
+				if (it != end()) {
+					continue;
+				}
+
+				vec.emplace_back(spectator);
 			}
-			vec.emplace_back(spectator);
 		}
-	}
 
-	void erase(Creature* spectator) {
-		auto it = std::find(vec.begin(), vec.end(), spectator);
-		if (it == end()) {
-			return;
+		void erase(Creature* spectator) {
+			auto it = std::find(vec.begin(), vec.end(), spectator);
+			if (it == end()) {
+				return;
+			}
+
+			std::iter_swap(it, end() - 1);
+			vec.pop_back();
 		}
-		std::iter_swap(it, end() - 1);
-		vec.pop_back();
-	}
 
-	size_t size() const { return vec.size(); }
-	bool empty() const { return vec.empty(); }
-	Iterator begin() { return vec.begin(); }
-	ConstIterator begin() const { return vec.begin(); }
-	Iterator end() { return vec.end(); }
-	ConstIterator end() const { return vec.end(); }
-	void emplace_back(Creature* c) { vec.emplace_back(c); }
+		size_t size() const { return vec.size(); }
+		bool empty() const { return vec.empty(); }
+		Iterator begin() { return vec.begin(); }
+		ConstIterator begin() const { return vec.begin(); }
+		Iterator end() { return vec.end(); }
+		ConstIterator end() const { return vec.end(); }
+		void emplace_back(Creature* c) { vec.emplace_back(c); }
 
-private:
-	Vec vec;
+	private:
+		Vec vec;
 };
 
 #endif

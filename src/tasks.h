@@ -65,7 +65,8 @@ class Task
 Task* createTask(TaskFunc&& f);
 Task* createTask(uint32_t expiration, TaskFunc&& f);
 
-class Dispatcher : public ThreadHolder<Dispatcher> {
+class Dispatcher : public ThreadHolder<Dispatcher>
+{
 	public:
 		void addTask(Task* task);
 

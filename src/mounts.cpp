@@ -48,6 +48,7 @@ bool Mounts::loadFromXml()
 			mountNode.attribute("premium").as_bool()
 		);
 	}
+
 	mounts.shrink_to_fit();
 	return true;
 }

@@ -133,6 +133,7 @@ class NetworkMessage
 				info.position = pos + INITIAL_BUFFER_POSITION;
 				return true;
 			}
+
 			return false;
 		}
 
@@ -177,6 +178,7 @@ class NetworkMessage
 				info.overrun = true;
 				return false;
 			}
+
 			return true;
 		}
 };

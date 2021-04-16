@@ -5,6 +5,7 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 		Game.createMonster("Scorpion", creature:getPosition())
 		creature:say("Horestis' curse spawns a vengeful scorpion from the body!", TALKTYPE_MONSTER_SAY)
 	end
+
 	return true
 end
 

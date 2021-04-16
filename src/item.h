@@ -232,7 +232,8 @@ class ItemAttributes
 			template<typename T>
 			const T& get();
 
-			struct PushLuaVisitor : public boost::static_visitor<> {
+			struct PushLuaVisitor : public boost::static_visitor<>
+			{
 				lua_State* L;
 
 				explicit PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
@@ -262,7 +263,8 @@ class ItemAttributes
 				boost::apply_visitor(PushLuaVisitor(L), value);
 			}
 
-			struct SerializeVisitor : public boost::static_visitor<> {
+			struct SerializeVisitor : public boost::static_visitor<>
+			{
 				PropWriteStream& propWriteStream;
 
 				explicit SerializeVisitor(PropWriteStream& propWriteStream) : boost::static_visitor<>(), propWriteStream(propWriteStream) {}
@@ -334,6 +336,7 @@ class ItemAttributes
 						return false;
 					}
 				}
+
 				return true;
 			}
 		};
@@ -404,6 +407,7 @@ class ItemAttributes
 					memset(&other.value, 0, sizeof(value));
 					other.type = ITEM_ATTRIBUTE_NONE;
 				}
+
 				return *this;
 			}
 
@@ -478,6 +482,7 @@ class ItemAttributes
 					return &(it->second);
 				}
 			}
+
 			return nullptr;
 		}
 
@@ -494,6 +499,7 @@ class ItemAttributes
 					return true;
 				}
 			}
+
 			return false;
 		}
 
@@ -591,6 +597,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return ItemAttributes::emptyString;
 			}
+
 			return attributes->getStrAttr(type);
 		}
 		void setStrAttr(itemAttrTypes type, const std::string& value) {
@@ -601,6 +608,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return attributes->getIntAttr(type);
 		}
 		void setIntAttr(itemAttrTypes type, int64_t value) {
@@ -619,6 +627,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+
 			return attributes->hasAttribute(type);
 		}
 
@@ -635,6 +644,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return nullptr;
 			}
+
 			return getAttributes()->getCustomAttribute(key);
 		}
 
@@ -642,6 +652,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return nullptr;
 			}
+
 			return getAttributes()->getCustomAttribute(key);
 		}
 
@@ -649,6 +660,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -656,6 +668,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -707,6 +720,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_ACTIONID));
 		}
 
@@ -714,6 +728,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_UNIQUEID));
 		}
 
@@ -724,6 +739,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_CHARGES));
 		}
 
@@ -734,6 +750,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_FLUIDTYPE));
 		}
 
@@ -744,6 +761,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return getIntAttr(ITEM_ATTRIBUTE_OWNER);
 		}
 
@@ -754,6 +772,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER);
 		}
 
@@ -767,6 +786,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return 0;
 			}
+
 			return getIntAttr(ITEM_ATTRIBUTE_DURATION);
 		}
 
@@ -777,6 +797,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return DECAYING_FALSE;
 			}
+
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
@@ -787,6 +808,7 @@ class Item : virtual public Thing
 			if (hasAttribute(ITEM_ATTRIBUTE_DECAYTO)) {
 				return getIntAttr(ITEM_ATTRIBUTE_DECAYTO);
 			}
+
 			return items[id].decayTo;
 		}
 
@@ -833,6 +855,7 @@ class Item : virtual public Thing
 			if (hasAttribute(ITEM_ATTRIBUTE_SHOOTRANGE)) {
 				return getIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE);
 			}
+
 			return items[id].shootRange;
 		}
 
@@ -841,30 +864,35 @@ class Item : virtual public Thing
 			if (hasAttribute(ITEM_ATTRIBUTE_WEIGHT)) {
 				return getIntAttr(ITEM_ATTRIBUTE_WEIGHT);
 			}
+
 			return items[id].weight;
 		}
 		int32_t getAttack() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ATTACK)) {
 				return getIntAttr(ITEM_ATTRIBUTE_ATTACK);
 			}
+
 			return items[id].attack;
 		}
 		int32_t getArmor() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
 				return getIntAttr(ITEM_ATTRIBUTE_ARMOR);
 			}
+
 			return items[id].armor;
 		}
 		int32_t getDefense() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
 				return getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
 			}
+
 			return items[id].defense;
 		}
 		int32_t getExtraDefense() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {
 				return getIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE);
 			}
+
 			return items[id].extraDefense;
 		}
 		int32_t getSlotPosition() const {
@@ -874,6 +902,7 @@ class Item : virtual public Thing
 			if (hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
 				return getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
 			}
+
 			return items[id].hitChance;
 		}
 
@@ -923,24 +952,28 @@ class Item : virtual public Thing
 			if (hasAttribute(ITEM_ATTRIBUTE_STOREITEM)) {
 				return getIntAttr(ITEM_ATTRIBUTE_STOREITEM) == 1;
 			}
+
 			return items[id].storeItem;
 		}
 		const std::string& getName() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
 				return getStrAttr(ITEM_ATTRIBUTE_NAME);
 			}
+
 			return items[id].name;
 		}
 		const std::string getPluralName() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_PLURALNAME)) {
 				return getStrAttr(ITEM_ATTRIBUTE_PLURALNAME);
 			}
+
 			return items[id].getPluralName();
 		}
 		const std::string& getArticle() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ARTICLE)) {
 				return getStrAttr(ITEM_ATTRIBUTE_ARTICLE);
 			}
+
 			return items[id].article;
 		}
 
@@ -1004,6 +1037,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				attributes.reset(new ItemAttributes());
 			}
+
 			return attributes;
 		}
 

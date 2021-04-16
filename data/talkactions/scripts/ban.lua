@@ -36,4 +36,6 @@ function onSay(player, words, param)
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, name .. " has been banned.")
 	end
+
+	return false
 end

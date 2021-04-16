@@ -43,6 +43,7 @@ function Position:moveUpstairs()
 			end
 		end
 	end
+
 	swap(self, defaultPosition)
 	return self
 end
@@ -68,6 +69,7 @@ function Position:isInRange(from, to)
 	and self.z >= zone.nW.z and self.z <= zone.sE.z then
 		return true
 	end
+
 	return false
 end
 

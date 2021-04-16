@@ -20,13 +20,15 @@
 #ifndef FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 #define FS_BAN_H_CADB975222D745F0BDA12D982F1006E3
 
-struct BanInfo {
+struct BanInfo
+{
 	std::string bannedBy;
 	std::string reason;
 	time_t expiresAt;
 };
 
-struct ConnectBlock {
+struct ConnectBlock
+{
 	constexpr ConnectBlock(uint64_t lastAttempt, uint64_t blockTime, uint32_t count) :
 		lastAttempt(lastAttempt), blockTime(blockTime), count(count) {}
 

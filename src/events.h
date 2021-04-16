@@ -29,7 +29,8 @@ class Tile;
 
 class Events
 {
-	struct EventsInfo {
+	struct EventsInfo
+	{
 		// Creature
 		int32_t creatureOnChangeOutfit = -1;
 		int32_t creatureOnAreaCombat = -1;

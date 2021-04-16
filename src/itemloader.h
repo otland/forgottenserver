@@ -181,14 +181,16 @@ enum itemflags_t {
 //1-byte aligned structs
 #pragma pack(1)
 
-struct VERSIONINFO {
+struct VERSIONINFO
+{
 	uint32_t dwMajorVersion;
 	uint32_t dwMinorVersion;
 	uint32_t dwBuildNumber;
 	uint8_t CSDVersion[128];
 };
 
-struct lightBlock2 {
+struct lightBlock2
+{
 	uint16_t lightLevel;
 	uint16_t lightColor;
 };

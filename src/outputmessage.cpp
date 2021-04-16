@@ -61,6 +61,7 @@ void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 	if (bufferedProtocols.empty()) {
 		scheduleSendAll(bufferedProtocols);
 	}
+
 	bufferedProtocols.emplace_back(protocol);
 }
 

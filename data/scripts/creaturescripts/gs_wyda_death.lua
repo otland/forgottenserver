@@ -5,6 +5,7 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 	if mostdamagekiller:isPlayer() then
 		mostdamagekiller:addAchievement("Someone's Bored")
 	end
+
 	return true
 end
 

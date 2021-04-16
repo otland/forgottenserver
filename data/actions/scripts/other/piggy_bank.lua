@@ -8,5 +8,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:getPosition():sendMagicEffect(CONST_ME_SOUND_YELLOW)
 		player:addItem(ITEM_PLATINUM_COIN, 1)
 	end
+
 	return true
 end

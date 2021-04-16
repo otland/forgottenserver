@@ -7,5 +7,6 @@ function onCastSpell(creature, variant)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		creature:addDamageCondition(target, CONDITION_DROWN, DAMAGELIST_CONSTANT_PERIOD, 20, 5, 6)
 	end
+
 	return true
 end

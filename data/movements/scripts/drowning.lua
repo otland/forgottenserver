@@ -8,6 +8,7 @@ function onStepIn(creature, item, position, fromPosition)
 		creature:addCondition(condition)
 		creature:addAchievementProgress("Deep Sea Diver", 1000000)
 	end
+
 	return true
 end
 
@@ -15,5 +16,6 @@ function onStepOut(creature, item, position, fromPosition)
 	if not creature:isPlayer() then
 		creature:removeCondition(CONDITION_DROWN)
 	end
+
 	return true
 end

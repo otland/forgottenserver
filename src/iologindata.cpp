@@ -109,6 +109,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 			account.characters.push_back(result->getString("name"));
 		} while (result->next());
 	}
+
 	return true;
 }
 
@@ -162,6 +163,7 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 	if (!result) {
 		return 0;
 	}
+
 	return result->getNumber<uint32_t>("account_id");
 }
 
@@ -173,6 +175,7 @@ AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 	if (!result) {
 		return ACCOUNT_TYPE_NORMAL;
 	}
+
 	return static_cast<AccountType_t>(result->getNumber<uint16_t>("type"));
 }
 
@@ -195,6 +198,7 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	} else {
 		query << "DELETE FROM `players_online` WHERE `player_id` = " << guid;
 	}
+
 	Database::getInstance().executeQuery(query.str());
 }
 
@@ -215,6 +219,7 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 		std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID " << result->getNumber<uint16_t>("group_id") << " which doesn't exist." << std::endl;
 		return false;
 	}
+
 	player->setGroup(group);
 	player->accountNumber = result->getNumber<uint32_t>("account_id");
 	player->accountType = static_cast<AccountType_t>(result->getNumber<uint16_t>("type"));
@@ -645,6 +650,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			}
 		}
 	}
+
 	return query_insert.execute();
 }
 
@@ -735,6 +741,7 @@ bool IOLoginData::savePlayer(Player* player)
 		} else if (player->skull == SKULL_BLACK) {
 			skull = SKULL_BLACK;
 		}
+
 		query << "`skull` = " << static_cast<int64_t>(skull) << ',';
 	}
 
@@ -763,6 +770,7 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(nullptr) - player->lastLoginSaved) << ',';
 	}
+
 	query << "`blessings` = " << static_cast<uint32_t>(player->blessings);
 	query << " WHERE `id` = " << player->getGUID();
 
@@ -910,6 +918,7 @@ std::string IOLoginData::getNameByGuid(uint32_t guid)
 	if (!result) {
 		return std::string();
 	}
+
 	return result->getString("name");
 }
 
@@ -923,6 +932,7 @@ uint32_t IOLoginData::getGuidByName(const std::string& name)
 	if (!result) {
 		return 0;
 	}
+
 	return result->getNumber<uint32_t>("id");
 }
 
@@ -1029,6 +1039,7 @@ std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 			);
 		} while (result->next());
 	}
+
 	return entries;
 }
 

@@ -41,6 +41,7 @@ Monster* Monster::createMonster(const std::string& name)
 	if (!mType) {
 		return nullptr;
 	}
+
 	return new Monster(mType);
 }
 
@@ -567,6 +568,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -623,6 +625,7 @@ bool Monster::isTarget(const Creature* creature) const
 	if (creature->getPosition().z != getPosition().z) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -643,6 +646,7 @@ bool Monster::selectTarget(Creature* creature)
 			g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
 		}
 	}
+
 	return setFollowCreature(creature);
 }
 
@@ -833,8 +837,10 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 				return g_game.isSightClear(pos, targetPos, true);
 			}
 		}
+
 		return false;
 	}
+
 	return true;
 }
 
@@ -863,6 +869,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		inRange = false;
 		return false;
 	}
+
 	return true;
 }
 
@@ -1038,6 +1045,7 @@ bool Monster::pushItem(Item* item)
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -1087,6 +1095,7 @@ bool Monster::pushCreature(Creature* creature)
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -1188,6 +1197,7 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) c
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -1274,6 +1284,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 		direction = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
+
 	return false;
 }
 
@@ -1786,6 +1797,7 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -1819,6 +1831,7 @@ Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature
 			}
 		}
 	}
+
 	return corpse;
 }
 
@@ -1970,6 +1983,7 @@ bool Monster::challengeCreature(Creature* creature)
 		challengeFocusDuration = targetChangeCooldown;
 		targetChangeTicks = 0;
 	}
+
 	return result;
 }
 

@@ -19,6 +19,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				else
 					player:addItem(item.uid, 1)
 				end
+
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. '.')
 				player:setStorageValue(PlayerStorageKeys.annihilatorReward, 1)
 				player:addAchievement("Annihilator")
@@ -39,5 +40,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is empty.")
 	end
+
 	return true
 end

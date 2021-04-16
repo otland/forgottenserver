@@ -62,6 +62,7 @@ Event_ptr TalkActions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
 		return nullptr;
 	}
+
 	return Event_ptr(new TalkAction(&scriptInterface));
 }
 
@@ -146,6 +147,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			return TALKACTION_BREAK;
 		}
 	}
+
 	return TALKACTION_CONTINUE;
 }
 
@@ -165,6 +167,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
 		setWords(word);
 	}
+
 	return true;
 }
 

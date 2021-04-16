@@ -21,6 +21,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 		else
 			stuff = Game.createItem(itemid, math.min(100, amount))
 		end
+
 		return Player(cid):addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
 	end
 
@@ -50,6 +51,7 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 		if Player(cid):addItemEx(item, ignoreCap) ~= RETURNVALUE_NOERROR then
 			break
 		end
+
 		a = i
 	end
 	return a, 0
@@ -76,8 +78,10 @@ function doPlayerSellItem(cid, itemid, count, cost)
 		if not player:addMoney(cost) then
 			error('Could not add money to ' .. player:getName() .. '(' .. cost .. 'gp)')
 		end
+
 		return true
 	end
+
 	return false
 end
 
@@ -97,6 +101,7 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 			return false
 		end
 	end
+
 	return true
 end
 
@@ -126,6 +131,7 @@ function Player.removeTotalMoney(self, amount)
 			return true
 		end
 	end
+
 	return false
 end
 
@@ -143,6 +149,7 @@ function getMoneyCount(string)
 	if isValidMoney(money) then
 		return money
 	end
+
 	return -1
 end
 

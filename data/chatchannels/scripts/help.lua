@@ -34,6 +34,7 @@ function onSpeak(player, type, message)
 			else
 				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
 			end
+
 			return false
 		elseif string.sub(message, 1, 8) == "!unmute " then
 			local targetName = string.sub(message, 9)
@@ -52,6 +53,7 @@ function onSpeak(player, type, message)
 			else
 				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
 			end
+
 			return false
 		end
 	end
@@ -73,5 +75,6 @@ function onSpeak(player, type, message)
 			end
 		end
 	end
+
 	return type
 end

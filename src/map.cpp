@@ -48,6 +48,7 @@ bool Map::loadMap(const std::string& identifier, bool loadHouses)
 		IOMapSerialize::loadHouseInfo();
 		IOMapSerialize::loadHouseItems(this);
 	}
+
 	return true;
 }
 
@@ -72,6 +73,7 @@ bool Map::save()
 			break;
 		}
 	}
+
 	return saved;
 }
 
@@ -90,6 +92,7 @@ Tile* Map::getTile(uint16_t x, uint16_t y, uint8_t z) const
 	if (!floor) {
 		return nullptr;
 	}
+
 	return floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 }
 
@@ -526,6 +529,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	if (!checkLineOfSight) {
 		return true;
 	}
+
 	return isSightClear(fromPos, toPos, false);
 }
 
@@ -603,6 +607,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 			return nullptr;
 		}
 	}
+
 	return tile;
 }
 
@@ -778,6 +783,7 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 
 		found = found->parent;
 	}
+
 	return true;
 }
 
@@ -834,6 +840,7 @@ AStarNode* AStarNodes::getBestNode()
 	if (best_node >= 0) {
 		return nodes + best_node;
 	}
+
 	return nullptr;
 }
 
@@ -866,6 +873,7 @@ AStarNode* AStarNodes::getNodeByPosition(uint32_t x, uint32_t y)
 	if (it == nodeTable.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -875,6 +883,7 @@ int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbo
 		//diagonal movement extra cost
 		return MAP_DIAGONALWALKCOST;
 	}
+
 	return MAP_NORMALWALKCOST;
 }
 
@@ -893,6 +902,7 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 			cost += MAP_NORMALWALKCOST * 18;
 		}
 	}
+
 	return cost;
 }
 
@@ -924,6 +934,7 @@ QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 	if (!node) {
 		return nullptr;
 	}
+
 	return node->getLeaf(x << 1, y << 1);
 }
 
@@ -939,8 +950,10 @@ QTreeLeafNode* QTreeNode::createLeaf(uint32_t x, uint32_t y, uint32_t level)
 				QTreeLeafNode::newLeaf = true;
 			}
 		}
+
 		return child[index]->createLeaf(x * 2, y * 2, level - 1);
 	}
+
 	return static_cast<QTreeLeafNode*>(this);
 }
 
@@ -959,6 +972,7 @@ Floor* QTreeLeafNode::createFloor(uint32_t z)
 	if (!array[z]) {
 		array[z] = new Floor();
 	}
+
 	return array[z];
 }
 

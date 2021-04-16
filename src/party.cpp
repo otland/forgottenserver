@@ -53,6 +53,7 @@ void Party::disband()
 		invitee->removePartyInvitation(this);
 		currentLeader->sendCreatureShield(invitee);
 	}
+
 	inviteList.clear();
 
 	for (Player* member : memberList) {
@@ -72,6 +73,7 @@ void Party::disband()
 		currentLeader->sendCreatureSkull(member);
 		g_game.updatePlayerHelpers(*member);
 	}
+
 	memberList.clear();
 	delete this;
 }
@@ -290,6 +292,7 @@ bool Party::invitePlayer(Player& player)
 	for (Player* member : memberList) {
 		g_game.updatePlayerHelpers(*member);
 	}
+
 	g_game.updatePlayerHelpers(*leader);
 
 	leader->sendCreatureShield(&player);
@@ -318,6 +321,7 @@ void Party::updateAllPartyIcons()
 		member->sendCreatureShield(leader);
 		leader->sendCreatureShield(member);
 	}
+
 	leader->sendCreatureShield(leader);
 }
 
@@ -383,6 +387,7 @@ void Party::shareExperience(uint64_t experience, Creature* source/* = nullptr*/)
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
+
 	leader->onGainSharedExperience(shareExperience, source);
 }
 
@@ -420,6 +425,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -434,6 +440,7 @@ bool Party::canEnableSharedExperience()
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -459,5 +466,6 @@ bool Party::canOpenCorpse(uint32_t ownerId) const
 	if (Player* player = g_game.getPlayerByID(ownerId)) {
 		return leader->getID() == ownerId || player->getParty() == this;
 	}
+
 	return false;
 }

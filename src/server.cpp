@@ -89,6 +89,7 @@ std::string ServicePort::get_protocol_names() const
 		str.push_back(' ');
 		str.append(services[i]->get_protocol_name());
 	}
+
 	return str;
 }
 
@@ -144,6 +145,7 @@ Protocol_ptr ServicePort::make_protocol(bool checksummed, NetworkMessage& msg, c
 			return service->make_protocol(connection);
 		}
 	}
+
 	return nullptr;
 }
 

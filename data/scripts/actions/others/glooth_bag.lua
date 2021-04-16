@@ -24,6 +24,7 @@ function gloothBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 				if type(count) == "table" then
 					count = math.random(count[1], count[2])
 				end
+
 				player:addItem(gift, count)
 			end
 
@@ -32,6 +33,7 @@ function gloothBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 			return true
 		end
 	end
+
 	return false
 end
 

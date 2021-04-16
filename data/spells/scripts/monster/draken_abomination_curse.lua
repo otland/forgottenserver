@@ -8,5 +8,6 @@ function onCastSpell(creature, variant)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		creature:addDamageCondition(target, CONDITION_CURSED, DAMAGELIST_EXPONENTIAL_DAMAGE, damage)
 	end
+
 	return true
 end

@@ -20,5 +20,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		player:say("Don't be so vain about your appearance.", TALKTYPE_MONSTER_SAY)
 	end
+
 	return true
 end

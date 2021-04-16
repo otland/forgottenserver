@@ -71,6 +71,7 @@ function setAuxFunctions()
 			elseif not def.cmp and attr and attr ~= 0 then
 				return attr
 			end
+
 			local default = ItemType['get'.. name]
 			return default and default(self:getType()) or nil
 		end
@@ -100,6 +101,7 @@ do
 		else
 			ss:append('an item of type %d', obj:getId())
 		end
+
 		return ss:concat()
 	end
 
@@ -120,6 +122,7 @@ do
 		else
 			ss:append(', ')
 		end
+
 		return begin
 	end
 
@@ -247,6 +250,7 @@ do
 			begin = addSeparator(ss, begin)
 			ss:append('speed %s%d', showpos(abilities.speed), math.abs(abilities.speed / 2))
 		end
+
 		return begin
 	end
 
@@ -293,6 +297,7 @@ do
 								ss:append(',')
 							end
 						end
+
 						local vocName = vocMap[#vocMap]
 						ss:append(' %ss', vocName:lower())
 					end
@@ -307,6 +312,7 @@ do
 						if rune:runeLevel() > 0 then
 							ss:append(' and ')
 						end
+
 						ss:append('magic level %d', rune:runeMagicLevel())
 					end
 
@@ -327,6 +333,7 @@ do
 				ss:append(' (Arm:%d', obj:getArmor())
 				begin = false
 			end
+
 			begin = addGenerics(item, it, abilities, ss, begin)
 			if not begin then
 				ss:append(')')
@@ -388,6 +395,7 @@ do
 							if not text then
 								text = item:getText()
 							end
+
 							if text then
 								local writer = item:getWriter()
 								if writer then
@@ -396,10 +404,12 @@ do
 									if date then
 										ss:append(' on %s', os.date('%d %b %Y'))
 									end
+
 									ss:append(': ')
 								else
 									ss:append('You read: ')
 								end
+
 								ss:append(text)
 							else
 								ss:append('Nothing is written on it')
@@ -466,6 +476,7 @@ do
 			if not text and item then
 				text = item:getText()
 			end
+
 			if not text or text == '' then
 				ss:append('.')
 			end
@@ -496,8 +507,10 @@ do
 				else
 					ss:append(' of')
 				end
+
 				ss:append(' magic level %d or higher', it:getMinReqMagicLevel())
 			end
+
 			ss:append('.')
 		end
 
@@ -511,6 +524,7 @@ do
 				else
 					ss:append('It weighs ')
 				end
+
 				ss:append('%.2f oz.', weight / 100)
 			end
 		end

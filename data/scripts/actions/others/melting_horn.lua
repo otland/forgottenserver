@@ -27,10 +27,13 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 				player:addAchievement("Natural Born Cowboy")
 				player:addAchievement("Icy Glare")
 			end
+
 			target:transform(target.itemid + 1)
 		end
+
 		target:decay()
 	end
+
 	return true
 end
 

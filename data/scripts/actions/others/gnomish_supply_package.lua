@@ -39,6 +39,7 @@ function gnomish.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				if type(count) == "table" then
 					count = math.random(count[1], count[2])
 				end
+
 				player:addItem(gift, count)
 			end
 
@@ -47,6 +48,7 @@ function gnomish.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 	end
+
 	return false
 end
 

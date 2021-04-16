@@ -33,5 +33,6 @@ function onSay(player, words, param)
 	if #players > 0 then
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Other players on same IP: " .. table.concat(players, ", ") .. ".")
 	end
+
 	return false
 end

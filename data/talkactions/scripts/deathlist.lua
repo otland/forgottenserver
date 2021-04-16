@@ -54,9 +54,11 @@ function onSay(player, words, param)
 		if str == "" then
 			str = "No deaths."
 		end
+
 		player:popupFYI("Deathlist for player, " .. targetName .. ".\n\n" .. str)
 	else
 		player:sendCancelMessage("A player with that name does not exist.")
 	end
+
 	return false
 end

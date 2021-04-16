@@ -25,6 +25,7 @@ function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReacha
 			end
 		end
 	end
+
 	return Position()
 end
 

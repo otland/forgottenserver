@@ -78,6 +78,7 @@ Event_ptr Actions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "action") != 0) {
 		return nullptr;
 	}
+
 	return Event_ptr(new Action(&scriptInterface));
 }
 
@@ -88,8 +89,8 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
 		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
-		bool success = true;
 
+		bool success = true;
 		for (const auto& id : idList) {
 			auto result = useItemMap.emplace(id, std::move(*action));
 			if (!result.second) {
@@ -124,11 +125,12 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			}
 			success = true;
 		}
+
 		return success;
 	} else if ((attr = node.attribute("uniqueid"))) {
 		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
-		bool success = true;
 
+		bool success = true;
 		for (const auto& uid : uidList) {
 			auto result = uniqueItemMap.emplace(uid, std::move(*action));
 			if (!result.second) {
@@ -163,11 +165,12 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			}
 			success = true;
 		}
+
 		return success;
 	} else if ((attr = node.attribute("actionid"))) {
 		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
-		bool success = true;
 
+		bool success = true;
 		for (const auto& aid : aidList) {
 			auto result = actionItemMap.emplace(aid, std::move(*action));
 			if (!result.second) {
@@ -202,8 +205,10 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			}
 			success = true;
 		}
+
 		return success;
 	}
+
 	return false;
 }
 
@@ -213,10 +218,12 @@ bool Actions::registerLuaEvent(Action* event)
 	if (action->getItemIdRange().size() > 0) {
 		if (action->getItemIdRange().size() == 1) {
 			auto id = action->getItemIdRange().front();
+
 			auto result = useItemMap.emplace(id, std::move(*action));
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << std::endl;
 			}
+
 			return result.second;
 		} else {
 			auto v = action->getItemIdRange();
@@ -227,15 +234,18 @@ bool Actions::registerLuaEvent(Action* event)
 					continue;
 				}
 			}
+
 			return true;
 		}
 	} else if (action->getUniqueIdRange().size() > 0) {
 		if (action->getUniqueIdRange().size() == 1) {
 			auto uid = action->getUniqueIdRange().front();
+
 			auto result = uniqueItemMap.emplace(uid, std::move(*action));
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << uid << std::endl;
 			}
+
 			return result.second;
 		} else {
 			auto v = action->getUniqueIdRange();
@@ -246,15 +256,18 @@ bool Actions::registerLuaEvent(Action* event)
 					continue;
 				}
 			}
+
 			return true;
 		}
 	} else if (action->getActionIdRange().size() > 0) {
 		if (action->getActionIdRange().size() == 1) {
 			auto aid = action->getActionIdRange().front();
+
 			auto result = actionItemMap.emplace(aid, std::move(*action));
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << aid << std::endl;
 			}
+
 			return result.second;
 		} else {
 			auto v = action->getActionIdRange();
@@ -265,6 +278,7 @@ bool Actions::registerLuaEvent(Action* event)
 					continue;
 				}
 			}
+
 			return true;
 		}
 	} else {
@@ -285,6 +299,7 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 			return RETURNVALUE_TOOFARAWAY;
 		}
 	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -294,6 +309,7 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos, const Ite
 	if (action) {
 		return action->canExecuteAction(player, pos);
 	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -444,6 +460,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 		player->sendCancelMessage(ret);
 		return false;
 	}
+
 	return true;
 }
 
@@ -474,8 +491,10 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 		if (!action->hasOwnErrorHandler()) {
 			player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		}
+
 		return false;
 	}
+
 	return true;
 }
 
@@ -546,6 +565,7 @@ bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 	if (!isScripted) {
 		scripted = false;
 	}
+
 	return true;
 }
 
@@ -558,9 +578,9 @@ ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos
 {
 	if (!allowFarUse) {
 		return g_actions->canUse(player, toPos);
-	} else {
-		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
 	}
+
+	return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
 }
 
 Thing* Action::getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const
@@ -568,6 +588,7 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 	if (targetCreature) {
 		return targetCreature;
 	}
+
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 

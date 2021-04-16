@@ -5,6 +5,7 @@ function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, i
 	if not table.contains({2700, 21428}, targetId) then -- fir tree or fir cone
 		return false
 	end
+
 	if math.random(100) <= 10 then
 		if targetId == 21428 then -- fir cone
 			item:transform(13539) -- golden fir cone
@@ -16,8 +17,10 @@ function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, i
 		if targetId == 21428 then -- fir cone
 			target:remove(1)
 		end
+
 		item:remove(1)
 	end
+
 	return true
 end
 

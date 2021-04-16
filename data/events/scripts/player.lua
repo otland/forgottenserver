@@ -2,6 +2,7 @@ function Player:onBrowseField(position)
 	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then
 		return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position)
 	end
+
 	return true
 end
 
@@ -10,6 +11,7 @@ function Player:onLook(thing, position, distance)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOK) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance, description)
 	end
+
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
@@ -18,6 +20,7 @@ function Player:onLookInBattleList(creature, distance)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance, description)
 	end
+
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
@@ -26,6 +29,7 @@ function Player:onLookInTrade(partner, item, distance)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description)
 	end
+
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
@@ -34,6 +38,7 @@ function Player:onLookInShop(itemType, count, description)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description)
 	end
+
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
@@ -41,6 +46,7 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
 		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
+
 	return true
 end
 
@@ -54,6 +60,7 @@ function Player:onMoveCreature(creature, fromPosition, toPosition)
 	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then
 		return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition)
 	end
+
 	return true
 end
 
@@ -67,6 +74,7 @@ function Player:onReportBug(message, position, category)
 	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then
 		return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category)
 	end
+
 	return true
 end
 
@@ -74,6 +82,7 @@ function Player:onTurn(direction)
 	if hasEventCallback(EVENT_CALLBACK_ONTURN) then
 		return EventCallback(EVENT_CALLBACK_ONTURN, self, direction)
 	end
+
 	return true
 end
 
@@ -81,6 +90,7 @@ function Player:onTradeRequest(target, item)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then
 		return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item)
 	end
+
 	return true
 end
 
@@ -88,6 +98,7 @@ function Player:onTradeAccept(target, item, targetItem)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then
 		return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem)
 	end
+
 	return true
 end
 
@@ -125,6 +136,7 @@ local function useStamina(player)
 		staminaMinutes = staminaMinutes - 1
 		nextUseStaminaTime[playerId] = currentTime + 60
 	end
+
 	player:setStamina(staminaMinutes)
 end
 
@@ -171,6 +183,7 @@ function Player:onGainSkillTries(skill, tries)
 		tries = tries * configManager.getNumber(configKeys.RATE_MAGIC)
 		return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 	end
+
 	tries = tries * configManager.getNumber(configKeys.RATE_SKILL)
 	return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 end

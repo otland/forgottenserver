@@ -11,6 +11,7 @@ function spiderEgg.onUse(player, item, fromPosition, target, toPosition, isHotke
 	else
 		item:getPosition():sendMagicEffect(CONST_ME_POFF)
 	end
+
 	item:transform(7536)
 	item:decay()
 	return true

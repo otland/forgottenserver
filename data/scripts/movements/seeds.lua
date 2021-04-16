@@ -12,6 +12,7 @@ function moveevent.onAddItem(moveitem, tileitem, position)
 		moveitem:remove(1)
 		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
+
 	return true
 end
 

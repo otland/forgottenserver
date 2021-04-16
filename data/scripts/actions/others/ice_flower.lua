@@ -5,6 +5,7 @@ function iceFlower.onUse(player, item, fromPosition, target, toPosition, isHotke
 		player:addItem(15271, 1) -- ice flower seeds
 		player:addAchievementProgress("Ice Harvester", 10)
 	end
+
 	item:transform(15270) -- harvested ice flower
 	item:decay()
 	return true

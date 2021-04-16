@@ -9,5 +9,6 @@ function onSay(player, words, param)
 	else
 		player:sendCancelMessage("Creature not found.")
 	end
+
 	return false
 end

@@ -6,5 +6,6 @@ function onCastSpell(creature, variant)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
+
 	return true
 end

@@ -11,6 +11,7 @@ function costumeBag.onUse(player, item, fromPosition, target, toPosition, isHotk
 	if not creatures then
 		return true
 	end
+
 	player:setMonsterOutfit(creatures[math.random(#creatures)], 5 * 60 * 10 * 1000)
 	player:addAchievementProgress("Masquerader", 100)
 	item:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
@@ -21,4 +22,5 @@ end
 for k,v in pairs(config) do
 	costumeBag:id(k)
 end
+
 costumeBag:register()

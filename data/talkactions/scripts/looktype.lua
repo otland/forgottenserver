@@ -30,5 +30,6 @@ function onSay(player, words, param)
 	else
 		player:sendCancelMessage("A look type with that id does not exist.")
 	end
+
 	return false
 end

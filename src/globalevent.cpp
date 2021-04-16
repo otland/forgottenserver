@@ -68,6 +68,7 @@ Event_ptr GlobalEvents::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "globalevent") != 0) {
 		return nullptr;
 	}
+
 	return Event_ptr(new GlobalEvent(&scriptInterface));
 }
 
@@ -316,6 +317,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		std::cout << "[Error - GlobalEvent::configureEvent] No interval for globalevent with name " << name << std::endl;
 		return false;
 	}
+
 	return true;
 }
 

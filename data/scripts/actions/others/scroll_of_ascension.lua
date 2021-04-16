@@ -6,6 +6,7 @@ function scrollOfAscencion.onUse(player, item, fromPosition, target, toPosition,
 	else
 		player:setMonsterOutfit("Ferumbras", 30 * 10 * 1000)
 	end
+
 	item:transform(25428)
 	item:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
 	item:decay()

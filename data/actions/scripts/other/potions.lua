@@ -147,6 +147,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			Game.createItem(reward, 1, fromPosition)
 		end
+
 		item:getPosition():sendMagicEffect(potion.effect)
 		item:remove(1)
 		return true

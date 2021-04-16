@@ -95,6 +95,7 @@ EventCallback = {
 				if index then
 					table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
 				end
+
 				return rawset(self, "type", nil) and rawset(self, "call", nil)
 			else
 				debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
@@ -118,6 +119,7 @@ setmetatable(EventCallback, {
 				if type(v) == "function" then
 					return rawset(self, "type", ecType) and rawset(self, "call", v)
 				end
+
 				debugPrint(string.format("[Warning - EventCallback::%s] a function is expected.", k))
 			else
 				debugPrint(string.format("[Warning - EventCallback::%s] is not a valid callback.", k))
@@ -130,8 +132,9 @@ setmetatable(EventCallback, {
 		for k, ev in pairs(eventTable) do
 			ret = {ev[1](unpack(args))}
 			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
-			return unpack(ret)
+				return unpack(ret)
 			end
+
 			for k, v in pairs(auxargs[type] or {}) do
 				args[k] = ret[v]
 			end

@@ -170,7 +170,8 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_STOREITEM,
 };
 
-struct Abilities {
+struct Abilities
+{
 	uint32_t healthGain = 0;
 	uint32_t healthTicks = 0;
 	uint32_t manaGain = 0;

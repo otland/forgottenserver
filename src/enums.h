@@ -463,8 +463,7 @@ enum ReturnValue {
 	RETURNVALUE_ITEMCANNOTBEMOVEDTHERE,
 };
 
-enum SpeechBubble_t
-{
+enum SpeechBubble_t {
 	SPEECHBUBBLE_NONE = 0,
 	SPEECHBUBBLE_NORMAL = 1,
 	SPEECHBUBBLE_TRADE = 2,
@@ -472,8 +471,7 @@ enum SpeechBubble_t
 	SPEECHBUBBLE_QUESTTRADER = 4,
 };
 
-enum MapMark_t
-{
+enum MapMark_t {
 	MAPMARK_TICK = 0,
 	MAPMARK_QUESTION = 1,
 	MAPMARK_EXCLAMATION = 2,
@@ -496,7 +494,8 @@ enum MapMark_t
 	MAPMARK_GREENSOUTH = 19,
 };
 
-struct Outfit_t {
+struct Outfit_t
+{
 	uint16_t lookType = 0;
 	uint16_t lookTypeEx = 0;
 	uint16_t lookMount = 0;
@@ -507,14 +506,16 @@ struct Outfit_t {
 	uint8_t lookAddons = 0;
 };
 
-struct LightInfo {
+struct LightInfo
+{
 	uint8_t level = 0;
 	uint8_t color = 0;
 	constexpr LightInfo() = default;
 	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
-struct ShopInfo {
+struct ShopInfo
+{
 	uint16_t itemId;
 	int32_t subType;
 	uint32_t buyPrice;
@@ -532,7 +533,8 @@ struct ShopInfo {
 		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName)) {}
 };
 
-struct MarketOffer {
+struct MarketOffer
+{
 	uint32_t price;
 	uint32_t timestamp;
 	uint16_t amount;
@@ -541,7 +543,8 @@ struct MarketOffer {
 	std::string playerName;
 };
 
-struct MarketOfferEx {
+struct MarketOfferEx
+{
 	MarketOfferEx() = default;
 	MarketOfferEx(MarketOfferEx&& other) :
 		id(other.id), playerId(other.playerId), timestamp(other.timestamp), price(other.price),
@@ -559,7 +562,8 @@ struct MarketOfferEx {
 	std::string playerName;
 };
 
-struct HistoryMarketOffer {
+struct HistoryMarketOffer
+{
 	uint32_t timestamp;
 	uint32_t price;
 	uint16_t itemId;
@@ -567,7 +571,8 @@ struct HistoryMarketOffer {
 	MarketOfferState_t state;
 };
 
-struct MarketStatistics {
+struct MarketStatistics
+{
 	MarketStatistics() {
 		numTransactions = 0;
 		highestPrice = 0;
@@ -593,8 +598,7 @@ struct ModalWindow
 		: title(std::move(title)), message(std::move(message)), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
 };
 
-enum CombatOrigin
-{
+enum CombatOrigin {
 	ORIGIN_NONE,
 	ORIGIN_CONDITION,
 	ORIGIN_SPELL,
@@ -613,8 +617,7 @@ struct CombatDamage
 	BlockType_t blockType;
 	bool critical;
 	bool leeched;
-	CombatDamage()
-	{
+	CombatDamage() {
 		origin = ORIGIN_NONE;
 		blockType = BLOCK_NONE;
 		primary.type = secondary.type = COMBAT_NONE;

@@ -61,6 +61,7 @@ bool Condition::unserialize(PropStream& propStream)
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -284,6 +285,7 @@ bool Condition::startCondition(Creature*)
 	if (ticks > 0) {
 		endTime = ticks + OTSYS_TIME();
 	}
+
 	return true;
 }
 
@@ -403,6 +405,7 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
 		return propStream.read<bool>(disableDefense);
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -754,6 +757,7 @@ bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& pr
 	} else if (attr == CONDITIONATTR_MANAGAIN) {
 		return propStream.read<uint32_t>(manaGain);
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -894,6 +898,7 @@ bool ConditionSoul::unserializeProp(ConditionAttr_t attr, PropStream& propStream
 	} else if (attr == CONDITIONATTR_SOULTICKS) {
 		return propStream.read<uint32_t>(soulTicks);
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1015,6 +1020,7 @@ bool ConditionDamage::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 		}
 		return true;
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1106,6 +1112,7 @@ bool ConditionDamage::init()
 			addDamage(1, tickInterval, -value);
 		}
 	}
+
 	return !damageList.empty();
 }
 
@@ -1125,6 +1132,7 @@ bool ConditionDamage::startCondition(Creature* creature)
 	if (!init()) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -1181,6 +1189,7 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 		}
 		return true;
 	}
+
 	return false;
 }
 
@@ -1276,6 +1285,7 @@ int32_t ConditionDamage::getTotalDamage() const
 	} else {
 		result = minDamage + (maxDamage - minDamage) / 2;
 	}
+
 	return std::abs(result);
 }
 
@@ -1318,6 +1328,7 @@ uint32_t ConditionDamage::getIcons() const
 		default:
 			break;
 	}
+
 	return icons;
 }
 
@@ -1363,6 +1374,7 @@ bool ConditionSpeed::setParam(ConditionParam_t param, int32_t value)
 	} else {
 		conditionType = CONDITION_PARALYZE;
 	}
+
 	return true;
 }
 
@@ -1379,6 +1391,7 @@ bool ConditionSpeed::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 	} else if (attr == CONDITIONATTR_FORMULA_MAXB) {
 		return propStream.read<float>(maxb);
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1478,6 +1491,7 @@ uint32_t ConditionSpeed::getIcons() const
 		default:
 			break;
 	}
+
 	return icons;
 }
 
@@ -1508,6 +1522,7 @@ bool ConditionOutfit::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 	if (attr == CONDITIONATTR_OUTFIT) {
 		return propStream.read<Outfit_t>(outfit);
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1647,6 +1662,7 @@ bool ConditionLight::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 	} else if (attr == CONDITIONATTR_LIGHTINTERVAL) {
 		return propStream.read<uint32_t>(lightChangeInterval);
 	}
+
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1696,6 +1712,7 @@ bool ConditionSpellCooldown::startCondition(Creature* creature)
 			player->sendSpellCooldown(subId, ticks);
 		}
 	}
+
 	return true;
 }
 
@@ -1725,5 +1742,6 @@ bool ConditionSpellGroupCooldown::startCondition(Creature* creature)
 			player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 		}
 	}
+
 	return true;
 }

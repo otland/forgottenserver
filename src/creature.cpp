@@ -87,6 +87,7 @@ bool Creature::canSeeCreature(const Creature* creature) const
 	if (!canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -101,6 +102,7 @@ int64_t Creature::getTimeSinceLastMove() const
 	if (lastStep) {
 		return OTSYS_TIME() - lastStep;
 	}
+
 	return std::numeric_limits<int64_t>::max();
 }
 
@@ -771,6 +773,7 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	if (it == damageMap.end()) {
 		return false;
 	}
+
 	return (OTSYS_TIME() - it->second.ticks) <= g_config.getNumber(ConfigManager::PZ_LOCKED);
 }
 
@@ -888,6 +891,7 @@ bool Creature::setAttackedCreature(Creature* creature)
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(creature);
 	}
+
 	return true;
 }
 
@@ -1107,6 +1111,7 @@ bool Creature::onKilledCreature(Creature* target, bool)
 	for (CreatureEvent* killEvent : killEvents) {
 		killEvent->executeOnKill(this, target);
 	}
+
 	return false;
 }
 
@@ -1155,6 +1160,7 @@ bool Creature::setMaster(Creature* newMaster) {
 			decrementReferenceCounter();
 		}
 	}
+
 	return true;
 }
 
@@ -1299,6 +1305,7 @@ Condition* Creature::getCondition(ConditionType_t type) const
 			return condition;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -1309,6 +1316,7 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 			return condition;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -1349,6 +1357,7 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -1373,6 +1382,7 @@ int64_t Creature::getStepDuration(Direction dir) const
 	if ((dir & DIRECTION_DIAGONAL_MASK) != 0) {
 		stepDuration *= 3;
 	}
+
 	return stepDuration;
 }
 
@@ -1427,6 +1437,7 @@ int64_t Creature::getEventStepTicks(bool onlyDelay) const
 			ret = stepDuration * lastStepCost;
 		}
 	}
+
 	return ret;
 }
 
@@ -1497,6 +1508,7 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 	if (resetTypeBit) {
 		scriptEventsBitField &= ~(static_cast<uint32_t>(1) << type);
 	}
+
 	return true;
 }
 
@@ -1565,6 +1577,7 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -1600,6 +1613,7 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 			return true;
 		}
 	}
+
 	return false;
 }
 

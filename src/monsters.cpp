@@ -525,6 +525,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	if (combatSpell) {
 		sb.combatSpell = true;
 	}
+
 	return true;
 }
 
@@ -770,6 +771,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 	if (combatSpell) {
 		sb.combatSpell = true;
 	}
+
 	return true;
 }
 
@@ -952,6 +954,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.pushable = false;
 		}
 	}
+
 	if (mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
 		std::cout << "[Warning - Monsters::loadMonster] manaCost missing or zero on monster with summonable and/or convinceable flags: " << file << std::endl;
 	}
@@ -1353,6 +1356,7 @@ bool MonsterType::loadCallback(LuaScriptInterface* scriptInterface)
 	} else if (info.eventType == MONSTERS_EVENT_SAY) {
 		info.creatureSayEvent = id;
 	}
+
 	return true;
 }
 
@@ -1435,6 +1439,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 	if ((attr = node.attribute("text"))) {
 		lootBlock.text = attr.as_string();
 	}
+
 	return true;
 }
 
@@ -1467,5 +1472,6 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 
 		return loadMonster(it2->second, name);
 	}
+
 	return &it->second;
 }

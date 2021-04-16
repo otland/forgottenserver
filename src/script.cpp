@@ -55,6 +55,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 		if ((fn == "lib" && !isLib) || fn == "events") {
 			continue;
 		}
+
 		if(fs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			size_t found = it->path().filename().string().find(disable);
 			if (found != std::string::npos) {
@@ -63,9 +64,11 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 				}
 				continue;
 			}
+
 			v.push_back(it->path());
 		}
 	}
+
 	sort(v.begin(), v.end());
 	std::string redir;
 	for (auto it = v.begin(); it != v.end(); ++it) {

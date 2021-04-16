@@ -18,6 +18,7 @@ function Player.feed(self, food)
 
 		self:addCondition(foodCondition)
 	end
+
 	return true
 end
 
@@ -25,6 +26,7 @@ function Player.getClosestFreePosition(self, position, extended)
 	if self:getGroup():getAccess() and self:getAccountType() >= ACCOUNT_TYPE_GOD then
 		return position
 	end
+
 	return Creature.getClosestFreePosition(self, position, extended)
 end
 
@@ -52,6 +54,7 @@ function Player.getLossPercent(self)
 			blessings = blessings + 1
 		end
 	end
+
 	return lossPercent[blessings]
 end
 
@@ -99,6 +102,7 @@ function Player.sendCancelMessage(self, message)
 	if type(message) == "number" then
 		message = Game.getReturnMessage(message)
 	end
+
 	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
 end
 
@@ -218,6 +222,7 @@ function Player.canCarryMoney(self, amount)
 	if not backpack or backpack:getEmptySlots(true) < inventorySlots then
 		return false
 	end
+
 	return true
 end
 
@@ -247,6 +252,7 @@ function Player.addLevel(self, amount, round)
 	else
 		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
 	end
+
 	return self:addExperience(experience)
 end
 
@@ -260,6 +266,7 @@ function Player.addSkill(self, skillId, value, round)
 	elseif skillId == SKILL_MAGLEVEL then
 		return self:addMagicLevel(value)
 	end
+
 	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
 end
 
@@ -268,5 +275,6 @@ function Player.getWeaponType()
 	if weapon then
 		return ItemType(weapon:getId()):getWeaponType()
 	end
+
 	return WEAPON_NONE
 end

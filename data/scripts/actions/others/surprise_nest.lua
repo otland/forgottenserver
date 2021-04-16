@@ -25,6 +25,7 @@ function surpriseNest.onUse(player, item, fromPosition, target, toPosition, isHo
 				if type(count) == "table" then
 					count = math.random(count[1], count[2])
 				end
+
 				player:addItem(gift, count)
 			end
 
@@ -33,6 +34,7 @@ function surpriseNest.onUse(player, item, fromPosition, target, toPosition, isHo
 			return true
 		end
 	end
+
 	return false
 end
 

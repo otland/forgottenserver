@@ -112,6 +112,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
+
 	local randomChance = math.random(1, 100000)
 	local effect = CONST_ME_MAGIC_GREEN
 	local transform = true
@@ -124,10 +125,12 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 					if marble then
 						marble:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, skinChild.desc:gsub("|PLAYERNAME|", player:getName()))
 					end
+
 					if skinChild.newItem == 11346 then
 						player:addAchievement("Marblelous")
 						player:addAchievementProgress("Marble Madness", 5)
 					end
+
 					effect = CONST_ME_HITAREA
 					target:remove()
 					added = true
@@ -152,6 +155,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 				player:addAchievement("Ice Sculptor")
 				player:addAchievementProgress("Cold as Ice", 10)
 			end
+
 			target:transform(skin.newItem, 1)
 			effect = CONST_ME_HITAREA
 		else
@@ -160,6 +164,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			else
 				player:addAchievementProgress("Skin-Deep", 500)
 			end
+
 			player:addItem(skin.newItem, skin.amount or 1)
 		end
 	else
@@ -188,9 +193,11 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		player:sendCancelMessage("You already used your knife on the corpse.")
 		return true
 	end
+
 	if toPosition.x == CONTAINER_POSITION then
 		toPosition = player:getPosition()
 	end
+
 	toPosition:sendMagicEffect(effect)
 	return true
 end

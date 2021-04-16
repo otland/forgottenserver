@@ -5,6 +5,7 @@ function sweetheartRing.onUse(player, item, fromPosition, target, toPosition, is
 		player:getPosition():sendMagicEffect(CONST_ME_HEARTS)
 		return true
 	end
+
 	return false
 end
 

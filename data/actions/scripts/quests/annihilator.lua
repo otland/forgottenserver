@@ -20,6 +20,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 				return false
 			end
+
 			players[#players + 1] = topPlayer
 		end
 
@@ -28,9 +29,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			targetPlayer:teleportTo(newPosition[i], false)
 			targetPlayer:getPosition():sendMagicEffect(CONST_ME_ENERGYAREA)
 		end
+
 		item:transform(1946)
 	elseif item.itemid == 1946 then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
+
 	return true
 end

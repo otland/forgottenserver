@@ -64,98 +64,122 @@ if not NpcSystem then
 		if ret then
 			npcHandler.idleTime = tonumber(ret)
 		end
+
 		local ret = NpcSystem.getParameter('talkradius')
 		if ret then
 			npcHandler.talkRadius = tonumber(ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_greet')
 		if ret then
 			npcHandler:setMessage(MESSAGE_GREET, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_farewell')
 		if ret then
 			npcHandler:setMessage(MESSAGE_FAREWELL, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_decline')
 		if ret then
 			npcHandler:setMessage(MESSAGE_DECLINE, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_needmorespace')
 		if ret then
 			npcHandler:setMessage(MESSAGE_NEEDMORESPACE, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_needspace')
 		if ret then
 			npcHandler:setMessage(MESSAGE_NEEDSPACE, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_sendtrade')
 		if ret then
 			npcHandler:setMessage(MESSAGE_SENDTRADE, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_noshop')
 		if ret then
 			npcHandler:setMessage(MESSAGE_NOSHOP, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_oncloseshop')
 		if ret then
 			npcHandler:setMessage(MESSAGE_ONCLOSESHOP, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_onbuy')
 		if ret then
 			npcHandler:setMessage(MESSAGE_ONBUY, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_onsell')
 		if ret then
 			npcHandler:setMessage(MESSAGE_ONSELL, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_missingmoney')
 		if ret then
 			npcHandler:setMessage(MESSAGE_MISSINGMONEY, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_needmoney')
 		if ret then
 			npcHandler:setMessage(MESSAGE_NEEDMONEY, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_missingitem')
 		if ret then
 			npcHandler:setMessage(MESSAGE_MISSINGITEM, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_needitem')
 		if ret then
 			npcHandler:setMessage(MESSAGE_NEEDITEM, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_idletimeout')
 		if ret then
 			npcHandler:setMessage(MESSAGE_IDLETIMEOUT, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_walkaway')
 		if ret then
 			npcHandler:setMessage(MESSAGE_WALKAWAY, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_alreadyfocused')
 		if ret then
 			npcHandler:setMessage(MESSAGE_ALREADYFOCUSED, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_buy')
 		if ret then
 			npcHandler:setMessage(MESSAGE_BUY, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_sell')
 		if ret then
 			npcHandler:setMessage(MESSAGE_SELL, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_bought')
 		if ret then
 			npcHandler:setMessage(MESSAGE_BOUGHT, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_sold')
 		if ret then
 			npcHandler:setMessage(MESSAGE_SOLD, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_walkaway_male')
 		if ret then
 			npcHandler:setMessage(MESSAGE_WALKAWAY_MALE, ret)
 		end
+
 		local ret = NpcSystem.getParameter('message_walkaway_female')
 		if ret then
 			npcHandler:setMessage(MESSAGE_WALKAWAY_FEMALE, ret)

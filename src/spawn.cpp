@@ -135,6 +135,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 			}
 		}
 	}
+
 	return true;
 }
 
@@ -206,6 +207,7 @@ bool Spawn::findPlayer(const Position& pos)
 			return true;
 		}
 	}
+
 	return false;
 }
 

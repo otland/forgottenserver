@@ -30,8 +30,10 @@ Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 		if (!propStream.read<uint16_t>(destPos.x) || !propStream.read<uint16_t>(destPos.y) || !propStream.read<uint8_t>(destPos.z)) {
 			return ATTR_READ_ERROR;
 		}
+
 		return ATTR_READ_CONTINUE;
 	}
+
 	return Item::readAttr(attr, propStream);
 }
 
@@ -81,8 +83,10 @@ bool Teleport::checkInfinityLoop(Tile* destTile)
 		if (getPosition() == nextDestPos) {
 			return true;
 		}
+
 		return checkInfinityLoop(g_game.map.getTile(nextDestPos));
 	}
+
 	return false;
 }
 

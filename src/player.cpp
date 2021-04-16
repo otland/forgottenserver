@@ -85,6 +85,7 @@ bool Player::setVocation(uint16_t vocId)
 	if (!voc) {
 		return false;
 	}
+
 	vocation = voc;
 
 	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
@@ -94,6 +95,7 @@ bool Player::setVocation(uint16_t vocId)
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
+
 	return true;
 }
 
@@ -102,6 +104,7 @@ bool Player::isPushable() const
 	if (hasFlag(PlayerFlag_CannotBePushed)) {
 		return false;
 	}
+
 	return Creature::isPushable();
 }
 
@@ -188,6 +191,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 	} else {
 		s << ", which has " << memberCount << " members, " << guild->getMembersOnline().size() << " of them online.";
 	}
+
 	return s.str();
 }
 
@@ -196,6 +200,7 @@ Item* Player::getInventoryItem(slots_t slot) const
 	if (slot < CONST_SLOT_FIRST || slot > CONST_SLOT_LAST) {
 		return nullptr;
 	}
+
 	return inventory[slot];
 }
 
@@ -231,6 +236,7 @@ Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 			item = ammoItem;
 		}
 	}
+
 	return item;
 }
 
@@ -245,6 +251,7 @@ Item* Player::getWeapon(bool ignoreAmmo/* = false*/) const
 	if (item) {
 		return item;
 	}
+
 	return nullptr;
 }
 
@@ -254,6 +261,7 @@ WeaponType_t Player::getWeaponType() const
 	if (!item) {
 		return WEAPON_NONE;
 	}
+
 	return item->getWeaponType();
 }
 
@@ -292,6 +300,7 @@ int32_t Player::getWeaponSkill(const Item* item) const
 			break;
 		}
 	}
+
 	return attackSkill;
 }
 
@@ -306,6 +315,7 @@ int32_t Player::getArmor() const
 			armor += inventoryItem->getArmor();
 		}
 	}
+
 	return static_cast<int32_t>(armor * vocation->armorMultiplier);
 }
 
@@ -422,6 +432,7 @@ uint16_t Player::getClientIcons() const
 			--bits_set;
 		}
 	}
+
 	return icon_bitset.to_ulong();
 }
 
@@ -582,6 +593,7 @@ void Player::setContainerIndex(uint8_t cid, uint16_t index)
 	if (it == openContainers.end()) {
 		return;
 	}
+
 	it->second.index = index;
 }
 
@@ -591,6 +603,7 @@ Container* Player::getContainerByID(uint8_t cid)
 	if (it == openContainers.end()) {
 		return nullptr;
 	}
+
 	return it->second.container;
 }
 
@@ -601,6 +614,7 @@ int8_t Player::getContainerID(const Container* container) const
 			return it.first;
 		}
 	}
+
 	return -1;
 }
 
@@ -610,6 +624,7 @@ uint16_t Player::getContainerIndex(uint8_t cid) const
 	if (it == openContainers.end()) {
 		return 0;
 	}
+
 	return it->second.index;
 }
 
@@ -622,9 +637,9 @@ uint16_t Player::getLookCorpse() const
 {
 	if (sex == PLAYERSEX_FEMALE) {
 		return ITEM_FEMALE_CORPSE;
-	} else {
-		return ITEM_MALE_CORPSE;
 	}
+
+	return ITEM_MALE_CORPSE;
 }
 
 void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin/* = false*/)
@@ -679,6 +694,7 @@ bool Player::canSee(const Position& pos) const
 	if (!client) {
 		return false;
 	}
+
 	return client->canSee(pos);
 }
 
@@ -695,6 +711,7 @@ bool Player::canSeeCreature(const Creature* creature) const
 	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -771,6 +788,7 @@ bool Player::isNearDepotBox() const
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -999,8 +1017,7 @@ void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*
 	}
 }
 
-void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType,
-                              const Item* item)
+void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item)
 {
 	Creature::onRemoveTileItem(tile, pos, iType, item);
 
@@ -1475,6 +1492,7 @@ uint32_t Player::isMuted() const
 			muteTicks = condition->getTicks();
 		}
 	}
+
 	return static_cast<uint32_t>(muteTicks) / 1000;
 }
 
@@ -1675,6 +1693,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 	} else {
 		levelPercent = 0;
 	}
+
 	sendStats();
 }
 
@@ -1756,6 +1775,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 	} else {
 		levelPercent = 0;
 	}
+
 	sendStats();
 }
 
@@ -1769,6 +1789,7 @@ uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 	if (result > 100) {
 		return 0;
 	}
+
 	return result;
 }
 
@@ -1825,6 +1846,7 @@ bool Player::hasShield() const
 	if (item && item->getWeaponType() == WEAPON_SHIELD) {
 		return true;
 	}
+
 	return false;
 }
 
@@ -1895,6 +1917,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		damage = 0;
 		blockType = BLOCK_ARMOR;
 	}
+
 	return blockType;
 }
 
@@ -2111,6 +2134,7 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 
 		corpse->setSpecialDescription(ss.str());
 	}
+
 	return corpse;
 }
 
@@ -2203,6 +2227,7 @@ bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t st
 	if (client) {
 		client->sendVIP(vipGuid, vipName, "", 0, false, status);
 	}
+
 	return true;
 }
 
@@ -2264,6 +2289,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 	if (item->isStackable()) {
 		itemWeight *= count;
 	}
+
 	return itemWeight <= getFreeCapacity();
 }
 
@@ -2489,11 +2515,11 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 
 		return RETURNVALUE_NOTENOUGHROOM;
 	}
+
 	return ret;
 }
 
-ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-		uint32_t flags) const
+ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing.getItem();
 	if (item == nullptr) {
@@ -2563,9 +2589,9 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 
 	if (maxQueryCount < count) {
 		return RETURNVALUE_NOTENOUGHROOM;
-	} else {
-		return RETURNVALUE_NOERROR;
 	}
+
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr*/) const
@@ -2591,8 +2617,7 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** destItem,
-		uint32_t& flags)
+Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		*destItem = nullptr;
@@ -2711,9 +2736,9 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		index = INDEX_WHEREEVER;
 		*destItem = nullptr;
 		return subCylinder;
-	} else {
-		return this;
 	}
+
+	return this;
 }
 
 void Player::addThing(int32_t index, Thing* thing)
@@ -2834,6 +2859,7 @@ int32_t Player::getThingIndex(const Thing* thing) const
 			return i;
 		}
 	}
+
 	return -1;
 }
 
@@ -2868,6 +2894,7 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 			}
 		}
 	}
+
 	return count;
 }
 
@@ -2919,6 +2946,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -2938,6 +2966,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 			}
 		}
 	}
+
 	return countMap;
 }
 
@@ -2946,6 +2975,7 @@ Thing* Player::getThing(size_t index) const
 	if (index >= CONST_SLOT_FIRST && index <= CONST_SLOT_LAST) {
 		return inventory[index];
 	}
+
 	return nullptr;
 }
 
@@ -3085,6 +3115,7 @@ bool Player::updateSaleShopList(const Item* item)
 	if (client) {
 		client->sendSaleItemList(shopItemList);
 	}
+
 	return true;
 }
 
@@ -3130,6 +3161,7 @@ bool Player::setFollowCreature(Creature* creature)
 		stopWalk();
 		return false;
 	}
+
 	return true;
 }
 
@@ -3152,6 +3184,7 @@ bool Player::setAttackedCreature(Creature* creature)
 	if (creature) {
 		g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
 	}
+
 	return true;
 }
 
@@ -3227,6 +3260,7 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 			return std::max<uint64_t>(0, std::floor(getLostExperience() * getDamageRatio(attacker) * 0.75));
 		}
 	}
+
 	return 0;
 }
 
@@ -3279,6 +3313,7 @@ LightInfo Player::getCreatureLight() const
 	if (internalLight.level > itemsLight.level) {
 		return internalLight;
 	}
+
 	return itemsLight;
 }
 
@@ -3588,6 +3623,7 @@ bool Player::isImmune(CombatType_t type) const
 	if (hasFlag(PlayerFlag_CannotBeAttacked)) {
 		return true;
 	}
+
 	return Creature::isImmune(type);
 }
 
@@ -3596,6 +3632,7 @@ bool Player::isImmune(ConditionType_t type) const
 	if (hasFlag(PlayerFlag_CannotBeAttacked)) {
 		return true;
 	}
+
 	return Creature::isImmune(type);
 }
 
@@ -3672,9 +3709,11 @@ bool Player::canWear(uint32_t lookType, uint8_t addons) const
 			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0) {
 				return true;
 			}
+
 			return false; //have lookType on list and addons don't match
 		}
 	}
+
 	return false;
 }
 
@@ -3691,12 +3730,14 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 
 	for (const OutfitEntry& outfitEntry : outfits) {
 		if (outfitEntry.lookType == lookType) {
-			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0){
+			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0) {
 				return true;
 			}
+
 			return false; //have lookType on list and addons don't match
 		}
 	}
+
 	return false;
 }
 
@@ -3734,6 +3775,7 @@ void Player::addOutfit(uint16_t lookType, uint8_t addons)
 			return;
 		}
 	}
+
 	outfits.emplace_back(lookType, addons);
 }
 
@@ -3746,6 +3788,7 @@ bool Player::removeOutfit(uint16_t lookType)
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -3757,6 +3800,7 @@ bool Player::removeOutfitAddon(uint16_t lookType, uint8_t addons)
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -3798,6 +3842,7 @@ Skulls_t Player::getSkull() const
 	if (hasFlag(PlayerFlag_NotGainInFight)) {
 		return SKULL_NONE;
 	}
+
 	return skull;
 }
 
@@ -3819,6 +3864,7 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 	if (isPartner(player)) {
 		return SKULL_GREEN;
 	}
+
 	return Creature::getSkullClient(creature);
 }
 
@@ -3922,6 +3968,7 @@ double Player::getLostPercent() const
 	if (isPromoted()) {
 		percentReduction += 30;
 	}
+
 	percentReduction += blessingCount * 8;
 	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
@@ -3953,6 +4000,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -4050,6 +4098,7 @@ bool Player::isInviting(const Player* player) const
 	if (!player || !party || party->getLeader() != this) {
 		return false;
 	}
+
 	return party->isPlayerInvited(player);
 }
 
@@ -4058,6 +4107,7 @@ bool Player::isPartner(const Player* player) const
 	if (!player || !party || player == this) {
 		return false;
 	}
+
 	return party == player->party;
 }
 
@@ -4066,6 +4116,7 @@ bool Player::isGuildMate(const Player* player) const
 	if (!player || !guild) {
 		return false;
 	}
+
 	return guild == player->guild;
 }
 
@@ -4096,6 +4147,7 @@ void Player::clearPartyInvitations()
 	for (Party* invitingParty : invitePartyList) {
 		invitingParty->removeInvite(*this, false);
 	}
+
 	invitePartyList.clear();
 }
 
@@ -4131,6 +4183,7 @@ uint8_t Player::getCurrentMount() const
 	if (getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, value)) {
 		return value;
 	}
+
 	return 0;
 }
 
@@ -4514,6 +4567,7 @@ uint64_t Player::getMoney() const
 			}
 		}
 	}
+
 	return moneyCount;
 }
 
@@ -4523,9 +4577,7 @@ size_t Player::getMaxVIPEntries() const
 		return group->maxVipEntries;
 	}
 
-	return g_config.getNumber(isPremium() ?
-		ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT
-	);
+	return g_config.getNumber(isPremium() ?	ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT);
 }
 
 size_t Player::getMaxDepotItems() const
@@ -4535,6 +4587,7 @@ size_t Player::getMaxDepotItems() const
 	} else if (isPremium()) {
 		return 2000;
 	}
+
 	return 1000;
 }
 
@@ -4553,6 +4606,7 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 
 		muteConditions.push_front(condition);
 	}
+
 	return muteConditions;
 }
 

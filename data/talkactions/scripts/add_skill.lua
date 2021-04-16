@@ -53,5 +53,6 @@ function onSay(player, words, param)
 			target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
 		end
 	end
+
 	return false
 end

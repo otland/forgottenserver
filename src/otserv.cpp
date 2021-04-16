@@ -212,6 +212,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
+
 	g_databaseTasks.start();
 
 	DatabaseManager::updateDatabase();

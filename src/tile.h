@@ -223,9 +223,9 @@ class Tile : public Cylinder
 				return ZONE_NOPVP;
 			} else if (hasFlag(TILESTATE_PVPZONE)) {
 				return ZONE_PVP;
-			} else {
-				return ZONE_NORMAL;
 			}
+
+			return ZONE_NORMAL;
 		}
 
 		bool hasHeight(uint32_t n) const;
@@ -300,9 +300,9 @@ class Tile : public Cylinder
 // items being added/removed
 class DynamicTile : public Tile
 {
-		// By allocating the vectors in-house, we avoid some memory fragmentation
-		TileItemVector items;
-		CreatureVector creatures;
+	// By allocating the vectors in-house, we avoid some memory fragmentation
+	TileItemVector items;
+	CreatureVector creatures;
 
 	public:
 		DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
@@ -368,6 +368,7 @@ class StaticTile final : public Tile
 			if (!items) {
 				items.reset(new TileItemVector);
 			}
+
 			return items.get();
 		}
 
@@ -381,6 +382,7 @@ class StaticTile final : public Tile
 			if (!creatures) {
 				creatures.reset(new CreatureVector);
 			}
+
 			return creatures.get();
 		}
 };

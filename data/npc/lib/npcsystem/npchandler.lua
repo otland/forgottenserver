@@ -147,6 +147,7 @@ if NpcHandler == nil then
 		if callback == nil or callback(newFocus) then
 			self:processModuleCallback(CALLBACK_ONADDFOCUS, newFocus)
 		end
+
 		self:updateFocus()
 	end
 
@@ -157,6 +158,7 @@ if NpcHandler == nil then
 				return true
 			end
 		end
+
 		return false
 	end
 
@@ -169,6 +171,7 @@ if NpcHandler == nil then
 				return
 			end
 		end
+
 		doNpcSetCreatureFocus(0)
 	end
 
@@ -201,6 +204,7 @@ if NpcHandler == nil then
 				pos = k
 			end
 		end
+
 		self.focuses[pos] = nil
 
 		self.eventSay[focus] = nil
@@ -225,6 +229,7 @@ if NpcHandler == nil then
 		if self.callbackFunctions then
 			ret = self.callbackFunctions[id]
 		end
+
 		return ret
 	end
 
@@ -279,11 +284,13 @@ if NpcHandler == nil then
 			elseif id == CALLBACK_MODULE_RESET and module.callbackOnModuleReset then
 				tmpRet = module:callbackOnModuleReset(...)
 			end
+
 			if not tmpRet then
 				ret = false
 				break
 			end
 		end
+
 		return ret
 	end
 
@@ -293,6 +300,7 @@ if NpcHandler == nil then
 		if self.messages then
 			ret = self.messages[id]
 		end
+
 		return ret
 	end
 
@@ -309,6 +317,7 @@ if NpcHandler == nil then
 		for search, replace in pairs(parseInfo) do
 			ret = string.gsub(ret, search, replace)
 		end
+
 		return ret
 	end
 
@@ -352,6 +361,7 @@ if NpcHandler == nil then
 				return
 			end
 		end
+
 		self:addFocus(cid)
 	end
 
@@ -480,6 +490,7 @@ if NpcHandler == nil then
 				return true
 			end
 		end
+
 		return false
 	end
 
@@ -584,6 +595,7 @@ if NpcHandler == nil then
 		for aux = 1, #events do
 			stopEvent(events[aux].event)
 		end
+
 		events = nil
 	end
 
@@ -599,6 +611,7 @@ if NpcHandler == nil then
 			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
 			ret[#ret + 1] = self.eventDelayedSay[pcid][aux]
 		end
+
 		return(ret)
 	end
 
@@ -626,6 +639,7 @@ if NpcHandler == nil then
 			if npc == nil then
 				return
 			end
+
 			local player = Player(focusId)
 			if player then
 				npc:say(message, TALKTYPE_PRIVATE_NP, false, player, npc:getPosition())

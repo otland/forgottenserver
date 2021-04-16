@@ -90,6 +90,7 @@ OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 		send(outputBuffer);
 		outputBuffer = OutputMessagePool::getOutputMessage();
 	}
+
 	return outputBuffer;
 }
 

@@ -15,5 +15,6 @@ function onSay(player, words, param)
 	if returnValue ~= RETURNVALUE_NOERROR then
 		player:sendCancelMessage(returnValue)
 	end
+
 	return false
 end

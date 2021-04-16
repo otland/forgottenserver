@@ -34,6 +34,7 @@ function onStepIn(creature, item, position, fromPosition)
 	if trap.transformTo then
 		item:transform(trap.transformTo)
 	end
+
 	return true
 end
 
@@ -48,5 +49,6 @@ function onRemoveItem(item, tile, position)
 		item:transform(item.itemid - 1)
 		itemPosition:sendMagicEffect(CONST_ME_POFF)
 	end
+
 	return true
 end

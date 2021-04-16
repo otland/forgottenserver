@@ -12,6 +12,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			msg = "Nothing is inside."
 		end
+
 		player:say(msg, TALKTYPE_MONSTER_SAY, false, player, item:getPosition())
 		item:transform(7553)
 		item:decay()
@@ -20,5 +21,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		player:say("You have already opened a shell today.", TALKTYPE_MONSTER_SAY, false, player, item:getPosition())
 	end
+
 	return true
 end

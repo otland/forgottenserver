@@ -40,6 +40,7 @@ if not KeywordHandler then
 				end
 			end
 		end
+
 		return true
 	end
 
@@ -76,6 +77,7 @@ if not KeywordHandler then
 		for i = 1, #prevNode.children do
 			new:addChildKeywordNode(prevNode.children[i])
 		end
+
 		return self:addChildKeywordNode(new)
 	end
 
@@ -136,6 +138,7 @@ if not KeywordHandler then
 				return true
 			end
 		end
+
 		return false
 	end
 
@@ -154,6 +157,7 @@ if not KeywordHandler then
 				self.lastNode[cid] = oldLast
 			end
 		end
+
 		return false
 	end
 
@@ -189,6 +193,7 @@ if not KeywordHandler then
 			end
 			self.lastNode[cid] = self.lastNode[cid]:getParent() or self:getRoot()
 		end
+
 		return self.lastNode[cid]
 	end
 end

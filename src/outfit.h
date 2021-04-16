@@ -22,7 +22,8 @@
 
 #include "enums.h"
 
-struct Outfit {
+struct Outfit
+{
 	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) :
 		name(std::move(name)), lookType(lookType), premium(premium), unlocked(unlocked) {}
 
@@ -37,7 +38,8 @@ struct Outfit {
 	bool unlocked;
 };
 
-struct ProtocolOutfit {
+struct ProtocolOutfit
+{
 	ProtocolOutfit(const std::string& name, uint16_t lookType, uint8_t addons) :
 		name(name), lookType(lookType), addons(addons) {}
 

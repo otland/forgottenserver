@@ -128,6 +128,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 		return false;
 	}
+
 	return true;
 }
 
@@ -211,6 +212,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			}
 		}
 	}
+
 	return true;
 }
 
@@ -295,6 +297,7 @@ bool IOMapSerialize::loadHouseInfo()
 			}
 		} while (result->next());
 	}
+
 	return true;
 }
 
@@ -382,7 +385,7 @@ bool IOMapSerialize::saveHouse(House* house)
 	}
 
 	uint32_t houseId = house->getId();
-	
+
 	//clear old tile data
 	if (!db.executeQuery(fmt::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
 		return false;

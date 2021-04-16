@@ -50,6 +50,7 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	if (it == weapons.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -121,6 +122,7 @@ Event_ptr Weapons::getEvent(const std::string& nodeName)
 	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
+
 	return nullptr;
 }
 
@@ -132,6 +134,7 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 	if (!result.second) {
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 	}
+
 	return result.second;
 }
 
@@ -328,6 +331,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		if (player->getMagicLevel() < getReqMagLv()) {
 			damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
 		}
+
 		return damageModifier;
 	}
 
@@ -588,6 +592,7 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 		default:
 			break;
 	}
+
 	return false;
 }
 
@@ -799,6 +804,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 		Weapon::internalUseWeapon(player, item, destTile);
 	}
+
 	return true;
 }
 
@@ -861,6 +867,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	} else {
 		minValue = 0;
 	}
+
 	return -normal_random(minValue, maxValue);
 }
 
@@ -888,6 +895,7 @@ bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& s
 	} else {
 		skillpoint = 0;
 	}
+
 	return true;
 }
 
@@ -927,6 +935,7 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 	} else {
 		std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
 	}
+
 	return true;
 }
 
@@ -942,5 +951,6 @@ int32_t WeaponWand::getWeaponDamage(const Player*, const Creature*, const Item*,
 	if (maxDamage) {
 		return -maxChange;
 	}
+
 	return -normal_random(minChange, maxChange);
 }

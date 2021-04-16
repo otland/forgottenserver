@@ -137,6 +137,7 @@ bool Events::load()
 			std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
 		}
 	}
+
 	return true;
 }
 

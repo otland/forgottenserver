@@ -9,6 +9,7 @@ function lotteryTicket.onUse(player, item, fromPosition, target, toPosition, isH
 		item:getPosition():sendMagicEffect(CONST_ME_POFF)
 		item:remove(1)
 	end
+
 	return true
 end
 

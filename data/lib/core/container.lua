@@ -51,5 +51,6 @@ function Container.createLootItem(self, item)
 
 		self:addItemEx(tmpItem)
 	end
+
 	return true
 end

@@ -187,6 +187,7 @@ Item* Item::clone() const
 			g_game.toDecayItems.push_front(item);
 		}
 	}
+
 	return item;
 }
 
@@ -224,6 +225,7 @@ bool Item::equals(const Item* otherItem) const
 			}
 		}
 	}
+
 	return true;
 }
 
@@ -288,6 +290,7 @@ Cylinder* Item::getTopParent()
 	if (prevaux) {
 		return prevaux;
 	}
+
 	return aux;
 }
 
@@ -307,6 +310,7 @@ const Cylinder* Item::getTopParent() const
 	if (prevaux) {
 		return prevaux;
 	}
+
 	return aux;
 }
 
@@ -317,6 +321,7 @@ Tile* Item::getTile()
 	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
+
 	return dynamic_cast<Tile*>(cylinder);
 }
 
@@ -327,6 +332,7 @@ const Tile* Item::getTile() const
 	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
+
 	return dynamic_cast<const Tile*>(cylinder);
 }
 
@@ -340,6 +346,7 @@ uint16_t Item::getSubType() const
 	} else if (it.charges != 0) {
 		return getCharges();
 	}
+
 	return count;
 }
 
@@ -353,6 +360,7 @@ Player* Item::getHoldingPlayer() const
 
 		p = p->getParent();
 	}
+
 	return nullptr;
 }
 
@@ -696,6 +704,7 @@ bool Item::unserializeAttr(PropStream& propStream)
 			return true;
 		}
 	}
+
 	return true;
 }
 
@@ -866,6 +875,7 @@ uint32_t Item::getWeight() const
 	if (isStackable()) {
 		return weight * std::max<uint32_t>(1, getItemCount());
 	}
+
 	return weight;
 }
 
@@ -1492,6 +1502,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << '\n' << *text;
 		}
 	}
+
 	return s.str();
 }
 
@@ -1533,6 +1544,7 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 		}
 		s << "item of type " << it.id;
 	}
+
 	return s.str();
 }
 
@@ -1577,6 +1589,7 @@ std::string Item::getWeightDescription() const
 	if (weight == 0) {
 		return std::string();
 	}
+
 	return getWeightDescription(weight);
 }
 
@@ -1647,6 +1660,7 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 	if (!attr) {
 		return emptyString;
 	}
+
 	return *attr->value.string;
 }
 
@@ -1684,6 +1698,7 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 			}
 		}
 	}
+
 	attributeBits &= ~type;
 }
 
@@ -1697,6 +1712,7 @@ int64_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 	if (!attr) {
 		return 0;
 	}
+
 	return attr->value.integer;
 }
 
@@ -1727,6 +1743,7 @@ const ItemAttributes::Attribute* ItemAttributes::getExistingAttr(itemAttrTypes t
 			}
 		}
 	}
+
 	return nullptr;
 }
 
@@ -1771,6 +1788,7 @@ bool Item::hasMarketAttributes() const
 			return false;
 		}
 	}
+
 	return true;
 }
 

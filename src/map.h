@@ -39,7 +39,8 @@ class Map;
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
-struct AStarNode {
+struct AStarNode
+{
 	AStarNode* parent;
 	int_fast32_t f;
 	uint16_t x, y;
@@ -79,7 +80,8 @@ static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
 static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 
-struct Floor {
+struct Floor
+{
 	constexpr Floor() = default;
 	~Floor();
 
@@ -121,6 +123,7 @@ class QTreeNode
 				x <<= 1;
 				y <<= 1;
 			} while (!node->leaf);
+
 			return static_cast<Leaf>(node);
 		}
 

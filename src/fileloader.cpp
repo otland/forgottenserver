@@ -42,10 +42,12 @@ Loader::Loader(const std::string& fileName, const Identifier& acceptedIdentifier
 }
 
 using NodeStack = std::stack<Node*, std::vector<Node*>>;
-static Node& getCurrentNode(const NodeStack& nodeStack) {
+static Node& getCurrentNode(const NodeStack& nodeStack)
+{
 	if (nodeStack.empty()) {
 		throw InvalidOTBFormat{};
 	}
+
 	return *nodeStack.top();
 }
 
@@ -55,6 +57,7 @@ const Node& Loader::parseTree()
 	if (static_cast<uint8_t>(*it) != Node::START) {
 		throw InvalidOTBFormat{};
 	}
+
 	root.type = *(++it);
 	root.propsBegin = ++it;
 	NodeStack parseStack;
@@ -67,11 +70,13 @@ const Node& Loader::parseTree()
 				if (currentNode.children.empty()) {
 					currentNode.propsEnd = it;
 				}
+
 				currentNode.children.emplace_back();
 				auto& child = currentNode.children.back();
 				if (++it == fileContents.end()) {
 					throw InvalidOTBFormat{};
 				}
+
 				child.type = *it;
 				child.propsBegin = it + sizeof(Node::type);
 				parseStack.push(&child);
@@ -82,6 +87,7 @@ const Node& Loader::parseTree()
 				if (currentNode.children.empty()) {
 					currentNode.propsEnd = it;
 				}
+
 				parseStack.pop();
 				break;
 			}
@@ -109,6 +115,7 @@ bool Loader::getProps(const Node& node, PropStream& props)
 	if (size == 0) {
 		return false;
 	}
+
 	propBuffer.resize(size);
 	bool lastEscaped = false;
 
@@ -116,6 +123,7 @@ bool Loader::getProps(const Node& node, PropStream& props)
 		lastEscaped = byte == static_cast<char>(Node::ESCAPE) && !lastEscaped;
 		return !lastEscaped;
 	});
+
 	props.init(&propBuffer[0], std::distance(propBuffer.begin(), escapedPropEnd));
 	return true;
 }

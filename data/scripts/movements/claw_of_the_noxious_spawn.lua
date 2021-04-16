@@ -8,6 +8,7 @@ function clawOfTheNoxiousSpawn.onEquip(player, item, slot, isCheck)
 			return true
 		end
 	end
+
 	return true
 end
 

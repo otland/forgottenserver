@@ -223,6 +223,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addString(STATUS_SERVER_VERSION);
 		output->addString(CLIENT_VERSION_STR);
 	}
+
 	send(output);
 	disconnect();
 }

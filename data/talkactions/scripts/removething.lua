@@ -25,6 +25,7 @@ function onSay(player, words, param)
 			player:sendCancelMessage("You may not remove a ground tile.")
 			return false
 		end
+
 		thing:remove(tonumber(param) or -1)
 	end
 

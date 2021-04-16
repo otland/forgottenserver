@@ -43,6 +43,7 @@ if Modules == nil then
 		if npcHandler == nil then
 			error("StdModule.say called without any npcHandler instance.")
 		end
+
 		local onlyFocus = (parameters.onlyFocus == nil or parameters.onlyFocus == true)
 		if not npcHandler:isFocused(cid) and onlyFocus then
 			return false
@@ -90,6 +91,7 @@ if Modules == nil then
 		else
 			npcHandler:say("You need a premium account in order to get promoted.", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -119,6 +121,7 @@ if Modules == nil then
 		else
 			npcHandler:say("You need a premium account in order to buy " .. parameters.spellName .. ".", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -146,6 +149,7 @@ if Modules == nil then
 		else
 			npcHandler:say("You need a premium account in order to be blessed.", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -182,6 +186,7 @@ if Modules == nil then
 		else
 			npcHandler:say("I'm sorry, but you need a premium account in order to travel onboard our ships.", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -243,6 +248,7 @@ if Modules == nil then
 				end
 			end
 		end
+
 		return false
 	end
 
@@ -470,6 +476,7 @@ if Modules == nil then
 		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
 			return false
 		end
+
 		local parentParameters = node:getParent():getParameters()
 		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
 		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_DECLINE), parseInfo)
@@ -497,6 +504,7 @@ if Modules == nil then
 				destination:sendMagicEffect(CONST_ME_TELEPORT)
 			end
 		end
+
 		return true
 	end
 
@@ -590,6 +598,7 @@ if Modules == nil then
 				else
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
 				end
+
 				i = i + 1
 			end
 
@@ -722,6 +731,7 @@ if Modules == nil then
 				else
 					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
 				end
+
 				i = i + 1
 			end
 
@@ -859,6 +869,7 @@ if Modules == nil then
 				end
 			end
 		end
+
 		return nil
 	end
 
@@ -992,6 +1003,7 @@ if Modules == nil then
 				if not player:removeTotalMoney((a * shopItem.buy) + (b * 20)) then
 					return false
 				end
+
 				return true
 			end
 
@@ -1003,6 +1015,7 @@ if Modules == nil then
 			if not player:removeTotalMoney(totalCost) then
 				return false
 			end
+
 			self.npcHandler.talkStart[cid] = os.time()
 			return true
 		end
@@ -1087,6 +1100,7 @@ if Modules == nil then
 		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
 			return false
 		end
+
 		shop_npcuid[cid] = 0
 
 		local parentParameters = node:getParent():getParameters()
@@ -1135,8 +1149,10 @@ if Modules == nil then
 					if shop_itemid[cid] == ITEM_PARCEL then
 						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
 					end
+
 					return true
 				end
+
 				return false
 			else
 				local msg = module.npcHandler:getMessage(MESSAGE_ONBUY)
@@ -1145,9 +1161,11 @@ if Modules == nil then
 				if not player:removeTotalMoney(cost) then
 					return false
 				end
+
 				if shop_itemid[cid] == ITEM_PARCEL then
 					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
 				end
+
 				return true
 			end
 		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
@@ -1232,6 +1250,7 @@ if Modules == nil then
 			msg = module.npcHandler:parseMessage(msg, parseInfo)
 			module.npcHandler:say(msg, cid)
 		end
+
 		return true
 	end
 
@@ -1278,6 +1297,7 @@ if Modules == nil then
 				Npc():say(voice.text, voice.talktype)
 			end
 		end
+
 		return true
 	end
 end

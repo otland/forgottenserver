@@ -7,5 +7,6 @@ function onSay(player, words, param)
 	for _, targetPlayer in ipairs(Game.getPlayers()) do
 		targetPlayer:sendPrivateMessage(player, param, TALKTYPE_BROADCAST)
 	end
+
 	return false
 end

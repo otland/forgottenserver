@@ -19,5 +19,6 @@ function onCastSpell(creature, variant)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		target:addAttributeCondition({parameters[1], parameters[index]})
 	end
+
 	return true
 end

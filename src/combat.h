@@ -57,7 +57,8 @@ class TargetCallback final : public CallBack
 		void onTargetCombat(Creature* creature, Creature* target) const;
 };
 
-struct CombatParams {
+struct CombatParams
+{
 	std::forward_list<std::unique_ptr<const Condition>> conditionList;
 
 	std::unique_ptr<ValueCallback> valueCallback;
@@ -224,6 +225,7 @@ class MagicField final : public Item
 			if (it.conditionDamage) {
 				return it.conditionDamage->getTotalDamage();
 			}
+
 			return 0;
 		}
 		void onStepInField(Creature* creature);

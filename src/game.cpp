@@ -87,6 +87,7 @@ void Game::start(ServiceManager* manager)
 	if (g_config.getBoolean(ConfigManager::DEFAULT_WORLD_LIGHT)) {
 		g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, std::bind(&Game::checkLight, this)));
 	}
+
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, std::bind(&Game::checkCreatures, this, 0)));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, std::bind(&Game::checkDecay, this)));
 }
@@ -287,6 +288,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 				}
 			}
 		}
+
 		return thing;
 	}
 
@@ -378,6 +380,7 @@ Creature* Game::getCreatureByID(uint32_t id)
 	} else if (id <= Npc::npcAutoID) {
 		return getNpcByID(id);
 	}
+
 	return nullptr;
 }
 
@@ -391,6 +394,7 @@ Monster* Game::getMonsterByID(uint32_t id)
 	if (it == monsters.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -404,6 +408,7 @@ Npc* Game::getNpcByID(uint32_t id)
 	if (it == npcs.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -417,6 +422,7 @@ Player* Game::getPlayerByID(uint32_t id)
 	if (it == players.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -471,6 +477,7 @@ Npc* Game::getNpcByName(const std::string& s)
 			return it.second;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -484,6 +491,7 @@ Player* Game::getPlayerByName(const std::string& s)
 	if (it == mappedPlayerNames.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -497,6 +505,7 @@ Player* Game::getPlayerByGUID(const uint32_t& guid)
 	if (it == mappedPlayerGuids.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -534,6 +543,7 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 			return it.second;
 		}
 	}
+
 	return nullptr;
 }
 
@@ -625,6 +635,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 		summon->setSkillLoss(false);
 		removeCreature(summon);
 	}
+
 	return true;
 }
 
@@ -832,6 +843,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	if (!toTile) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
+
 	return internalMoveCreature(*creature, *toTile, flags);
 }
 
@@ -894,6 +906,7 @@ void Game::playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, 
 	if (!player) {
 		return;
 	}
+
 	playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, nullptr, nullptr);
 }
 
@@ -1462,6 +1475,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 			}
 		}
 	}
+
 	return nullptr;
 }
 
@@ -1541,6 +1555,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			break;
 		}
 	}
+
 	return true;
 }
 
@@ -1753,6 +1768,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 	} else if (Item* item = thing->getItem()) {
 		return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
 	}
+
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
@@ -2469,6 +2485,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		}
+
 		return;
 	}
 
@@ -2572,6 +2589,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		}
+
 		return;
 	}
 
@@ -2645,6 +2663,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 		}
+
 		return;
 	}
 
@@ -2867,6 +2886,7 @@ std::string Game::getTradeErrorDescription(ReturnValue ret, Item* item)
 			return ss.str();
 		}
 	}
+
 	return "Trade could not be completed.";
 }
 
@@ -3543,6 +3563,7 @@ bool Game::playerYell(Player* player, const std::string& text)
 				ss << " or have a premium account";
 			}
 		}
+
 		ss << ".";
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, ss.str());
 		return false;
@@ -3582,6 +3603,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		ss << "Message sent to " << toPlayer->getName() << '.';
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, ss.str());
 	}
+
 	return true;
 }
 
@@ -3622,6 +3644,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureTurn(creature);
 	}
+
 	return true;
 }
 
@@ -3670,6 +3693,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 			g_events->eventCreatureOnHear(spectator, creature, text, type);
 		}
 	}
+
 	return true;
 }
 
@@ -4280,6 +4304,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 				for (CreatureEvent* creatureEvent : events) {
 					creatureEvent->executeManaChange(target, attacker, damage);
 				}
+
 				damage.origin = ORIGIN_NONE;
 				return combatChangeMana(attacker, target, damage);
 			}
@@ -4302,6 +4327,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 			if (!target->isInGhostMode()) {
 				addMagicEffect(targetPos, CONST_ME_POFF);
 			}
+
 			return false;
 		}
 
@@ -4333,6 +4359,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 				for (CreatureEvent* creatureEvent : events) {
 					creatureEvent->executeManaChange(target, attacker, damage);
 				}
+
 				damage.origin = ORIGIN_NONE;
 				return combatChangeMana(attacker, target, damage);
 			}
@@ -4376,8 +4403,10 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 					}
 					spectatorMessage[0] = std::toupper(spectatorMessage[0]);
 				}
+
 				message.text = spectatorMessage;
 			}
+
 			tmpPlayer->sendTextMessage(message);
 		}
 	}
@@ -4735,6 +4764,7 @@ void Game::checkPlayersRecord()
 		for (auto& it : g_globalEvents->getEventMap(GLOBALEVENT_RECORD)) {
 			it.second.executeRecord(playersRecord, previousRecord);
 		}
+
 		updatePlayersRecord();
 	}
 }
@@ -5402,6 +5432,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 			}
 		}
 	} while (!containers.empty());
+
 	return std::forward_list<Item*>();
 }
 
@@ -5516,6 +5547,7 @@ Guild* Game::getGuild(uint32_t id) const
 	if (it == guilds.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -5567,6 +5599,7 @@ BedItem* Game::getBedBySleeper(uint32_t guid) const
 	if (it == bedSleepersMap.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -5589,6 +5622,7 @@ Item* Game::getUniqueItem(uint16_t uniqueId)
 	if (it == uniqueItems.end()) {
 		return nullptr;
 	}
+
 	return it->second;
 }
 
@@ -5598,6 +5632,7 @@ bool Game::addUniqueItem(uint16_t uniqueId, Item* item)
 	if (!result.second) {
 		std::cout << "Duplicate unique id: " << uniqueId << std::endl;
 	}
+
 	return result.second;
 }
 
@@ -5642,6 +5677,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
 				std::terminate();
 			}
+
 			return true;
 		}
 
@@ -5715,6 +5751,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 	}
+
 	return true;
 }
 
