@@ -451,6 +451,10 @@ void Player::updateInventoryWeight()
 			inventoryWeight += item->getWeight();
 		}
 	}
+
+	if (StoreInbox* storeInbox = getStoreInbox()) {
+		inventoryWeight += storeInbox->getWeight();
+	}
 }
 
 void Player::addSkillAdvance(skills_t skill, uint64_t count)
