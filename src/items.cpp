@@ -225,6 +225,7 @@ void Items::clear()
 	items.clear();
 	clientIdToServerIdMap.clear();
 	nameToItems.clear();
+	inventory.clear();
 }
 
 bool Items::reload()
