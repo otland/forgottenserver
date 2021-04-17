@@ -262,7 +262,7 @@ class ItemType
 			return (allowPickupable || pickupable);
 		}
 		bool isUseable() const {
-			return (useable);
+			return useable;
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);

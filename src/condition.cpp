@@ -370,6 +370,11 @@ uint32_t ConditionGeneric::getIcons() const
 			break;
 		}
 
+		case CONDITION_INFIGHT: {
+			icons |= ICON_SWORDS;
+			break;
+		}
+
 		case CONDITION_DRUNK: {
 			icons |= ICON_DRUNK;
 			break;

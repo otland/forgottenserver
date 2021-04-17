@@ -62,7 +62,9 @@ class ChatChannel
 			return 0;
 		}
 
-		bool isPublicChannel() const { return publicChannel; }
+		bool isPublicChannel() const {
+			return publicChannel;
+		}
 
 		bool executeOnJoinEvent(const Player& player);
 		bool executeCanJoinEvent(const Player& player);

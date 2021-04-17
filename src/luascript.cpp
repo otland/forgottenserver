@@ -586,12 +586,12 @@ void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 	lua_createtable(L, 0, 2);
 	setField(L, "type", var.type);
 	switch (var.type) {
-		case VARIANT_NUMBER:{
+		case VARIANT_NUMBER: {
 			setField(L, "number", var.number);
 			break;
 		}
 
-		case VARIANT_STRING:{
+		case VARIANT_STRING: {
 			setField(L, "string", var.text);
 			break;
 		}
@@ -11762,8 +11762,8 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 	int index = 0;
 	for (Tile* tile : tiles) {
 		TileItemVector* itemVector = tile->getItemList();
-		if(itemVector) {
-			for(Item* item : *itemVector) {
+		if (itemVector) {
+			for (Item* item : *itemVector) {
 				pushUserdata<Item>(L, item);
 				setItemMetatable(L, -1, item);
 				lua_rawseti(L, -2, ++index);

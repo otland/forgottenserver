@@ -45,7 +45,7 @@ Actions::~Actions()
 
 void Actions::clearMap(ActionUseMap& map, bool fromLua)
 {
-	for (auto it = map.begin(); it != map.end(); ) {
+	for (auto it = map.begin(); it != map.end();) {
 		if (fromLua == it->second.fromLua) {
 			it = map.erase(it);
 		} else {
@@ -88,9 +88,9 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
-		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
-
 		bool success = true;
+
+		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		for (const auto& id : idList) {
 			auto result = useItemMap.emplace(id, std::move(*action));
 			if (!result.second) {
@@ -117,20 +117,22 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 
 		bool success = result.second;
+
 		while (++iterId <= toId) {
 			result = useItemMap.emplace(iterId, *action);
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << iterId << " in fromid: " << fromId << ", toid: " << toId << std::endl;
 				continue;
 			}
+
 			success = true;
 		}
 
 		return success;
 	} else if ((attr = node.attribute("uniqueid"))) {
-		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
-
 		bool success = true;
+
+		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		for (const auto& uid : uidList) {
 			auto result = uniqueItemMap.emplace(uid, std::move(*action));
 			if (!result.second) {
@@ -157,6 +159,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 
 		bool success = result.second;
+
 		while (++iterUid <= toUid) {
 			result = uniqueItemMap.emplace(iterUid, *action);
 			if (!result.second) {
@@ -169,9 +172,9 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 		return success;
 	} else if ((attr = node.attribute("actionid"))) {
-		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
-
 		bool success = true;
+
+		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
 		for (const auto& aid : aidList) {
 			auto result = actionItemMap.emplace(aid, std::move(*action));
 			if (!result.second) {
@@ -198,6 +201,7 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 
 		bool success = result.second;
+
 		while (++iterAid <= toAid) {
 			result = actionItemMap.emplace(iterAid, *action);
 			if (!result.second) {

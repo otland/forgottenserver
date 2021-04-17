@@ -213,7 +213,7 @@ void Signals::asyncWait()
 {
 	set.async_wait([this](const boost::system::error_code& err, int signal) {
 		if (err) {
-			std::cerr << "Signal handling error: "  << err.message() << std::endl;
+			std::cerr << "Signal handling error: " << err.message() << std::endl;
 			return;
 		}
 

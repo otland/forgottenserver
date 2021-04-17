@@ -99,7 +99,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 
 void Spells::clearMaps(bool fromLua)
 {
-	for (auto instant = instants.begin(); instant != instants.end(); ) {
+	for (auto instant = instants.begin(); instant != instants.end();) {
 		if (fromLua == instant->second.fromLua) {
 			instant = instants.erase(instant);
 		} else {
@@ -107,7 +107,7 @@ void Spells::clearMaps(bool fromLua)
 		}
 	}
 
-	for (auto rune = runes.begin(); rune != runes.end(); ) {
+	for (auto rune = runes.begin(); rune != runes.end();) {
 		if (fromLua == rune->second.fromLua) {
 			rune = runes.erase(rune);
 		} else {

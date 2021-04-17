@@ -36,7 +36,7 @@ TalkActions::~TalkActions()
 
 void TalkActions::clear(bool fromLua)
 {
-	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
+	for (auto it = talkActions.begin(); it != talkActions.end();) {
 		if (fromLua == it->second.fromLua) {
 			it = talkActions.erase(it);
 		} else {
@@ -101,7 +101,7 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
 {
 	size_t wordsLength = words.length();
-	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
+	for (auto it = talkActions.begin(); it != talkActions.end();) {
 		const std::string& talkactionWords = it->first;
 		size_t talkactionLength = talkactionWords.length();
 		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {

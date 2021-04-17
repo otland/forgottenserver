@@ -458,19 +458,31 @@ class Game
 
 		void startDecay(Item* item);
 
-		int16_t getWorldTime() { return worldTime; }
+		int16_t getWorldTime() {
+			return worldTime;
+		}
 		void updateWorldTime();
 
 		void loadMotdNum();
 		void saveMotdNum() const;
-		const std::string& getMotdHash() const { return motdHash; }
-		uint32_t getMotdNum() const { return motdNum; }
-		void incrementMotdNum() { motdNum++; }
+		const std::string& getMotdHash() const {
+			return motdHash;
+		}
+		uint32_t getMotdNum() const {
+			return motdNum;
+		}
+		void incrementMotdNum() {
+			motdNum++;
+		}
 
 		void sendOfflineTrainingDialog(Player* player);
 
-		const std::unordered_map<uint32_t, Player*>& getPlayers() const { return players; }
-		const std::map<uint32_t, Npc*>& getNpcs() const { return npcs; }
+		const std::unordered_map<uint32_t, Player*>& getPlayers() const {
+			return players;
+		}
+		const std::map<uint32_t, Npc*>& getNpcs() const {
+			return npcs;
+		}
 
 		void addPlayer(Player* player);
 		void removePlayer(Player* player);

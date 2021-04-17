@@ -833,7 +833,7 @@ class Item : virtual public Thing
 			return isMoveable();
 		}
 		int32_t getThrowRange() const override final {
-			return (isPickupable() ? 15 : 2);
+			return isPickupable() ? 15 : 2;
 		}
 
 		uint16_t getID() const {

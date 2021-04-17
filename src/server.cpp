@@ -199,7 +199,7 @@ void ServicePort::close()
 
 bool ServicePort::add_service(const Service_ptr& new_svc)
 {
-	if (std::any_of(services.begin(), services.end(), [](const Service_ptr& svc) {return svc->is_single_socket();})) {
+	if (std::any_of(services.begin(), services.end(), [](const Service_ptr& svc) { return svc->is_single_socket(); })) {
 		return false;
 	}
 
