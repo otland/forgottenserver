@@ -165,7 +165,7 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 	return result->getNumber<uint32_t>("account_id");
 }
 
-uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t accountId)
+uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
 {
 	Database& db = Database::getInstance();
 
