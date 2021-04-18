@@ -340,9 +340,8 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	const Cylinder* topParent = getTopParent();
 	if (topParent != this) {
 		return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
-	} else {
-		return RETURNVALUE_NOERROR;
 	}
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,

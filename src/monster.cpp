@@ -90,10 +90,21 @@ bool Monster::canSee(const Position& pos) const
 bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 {
 	switch (combatType) {
-		case COMBAT_ENERGYDAMAGE: return mType->info.canWalkOnEnergy;
-		case COMBAT_FIREDAMAGE: return mType->info.canWalkOnFire;
-		case COMBAT_EARTHDAMAGE: return mType->info.canWalkOnPoison;
-		default: return true;
+		case COMBAT_ENERGYDAMAGE: {
+			return mType->info.canWalkOnEnergy;
+		}
+
+		case COMBAT_FIREDAMAGE: {
+			return mType->info.canWalkOnFire;
+		}
+
+		case COMBAT_EARTHDAMAGE: {
+			return mType->info.canWalkOnPoison;
+		}
+
+		default: {
+			return true;
+		}
 	}
 }
 

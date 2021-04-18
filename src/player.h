@@ -469,9 +469,8 @@ class Player final : public Creature, public Cylinder
 				return 0;
 			} else if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
 				return std::numeric_limits<uint32_t>::max();
-			} else {
-				return std::max<int32_t>(0, capacity - inventoryWeight);
 			}
+			return std::max<int32_t>(0, capacity - inventoryWeight);
 		}
 
 		int32_t getMaxHealth() const override {

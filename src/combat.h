@@ -224,7 +224,6 @@ class MagicField final : public Item
 			if (it.conditionDamage) {
 				return it.conditionDamage->getTotalDamage();
 			}
-
 			return 0;
 		}
 		void onStepInField(Creature* creature);

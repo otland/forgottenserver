@@ -337,9 +337,17 @@ Door* House::getDoorByPosition(const Position& pos)
 bool House::canEditAccessList(uint32_t listId, const Player* player)
 {
 	switch (getHouseAccessLevel(player)) {
-		case HOUSE_OWNER: return true;
-		case HOUSE_SUBOWNER: return listId == GUEST_LIST;
-		default: return false;
+		case HOUSE_OWNER: {
+			return true;
+		}
+
+		case HOUSE_SUBOWNER: {
+			return listId == GUEST_LIST;
+		}
+
+		default: {
+			return false;
+		}
 	}
 }
 

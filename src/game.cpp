@@ -1668,9 +1668,8 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 					cylinder->postRemoveNotification(item, cylinder, itemIndex);
 					ReleaseItem(item);
 					return newItem;
-				} else {
-					return transformItem(item, newItemId);
 				}
+				return transformItem(item, newItemId);
 			}
 		} else {
 			cylinder->postRemoveNotification(item, cylinder, itemIndex);
@@ -3487,10 +3486,8 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	if (result == TALKACTION_BREAK) {
 		if (!g_config.getBoolean(ConfigManager::EMOTE_SPELLS)) {
 			return internalCreatureSay(player, TALKTYPE_SAY, words, false);
-		} else {
-			return internalCreatureSay(player, TALKTYPE_MONSTER_SAY, words, false);
 		}
-
+		return internalCreatureSay(player, TALKTYPE_MONSTER_SAY, words, false);
 	} else if (result == TALKACTION_FAILED) {
 		return true;
 	}
@@ -5651,9 +5648,17 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 bool Game::reload(ReloadTypes_t reloadType)
 {
 	switch (reloadType) {
-		case RELOAD_TYPE_ACTIONS: return g_actions->reload();
-		case RELOAD_TYPE_CHAT: return g_chat->load();
-		case RELOAD_TYPE_CONFIG: return g_config.reload();
+		case RELOAD_TYPE_ACTIONS: {
+			return g_actions->reload();
+		}
+
+		case RELOAD_TYPE_CHAT: {
+			return g_chat->load();
+		}
+
+		case RELOAD_TYPE_CONFIG: {
+			return g_config.reload();
+		}
 
 		case RELOAD_TYPE_CREATURESCRIPTS: {
 			g_creatureEvents->reload();
@@ -5661,20 +5666,42 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 
-		case RELOAD_TYPE_EVENTS: return g_events->load();
-		case RELOAD_TYPE_GLOBALEVENTS: return g_globalEvents->reload();
-		case RELOAD_TYPE_ITEMS: return Item::items.reload();
-		case RELOAD_TYPE_MONSTERS: return g_monsters.reload();
-		case RELOAD_TYPE_MOUNTS: return mounts.reload();
-		case RELOAD_TYPE_MOVEMENTS: return g_moveEvents->reload();
+		case RELOAD_TYPE_EVENTS: {
+			return g_events->load();
+		}
+
+		case RELOAD_TYPE_GLOBALEVENTS: {
+			return g_globalEvents->reload();
+		}
+
+		case RELOAD_TYPE_ITEMS: {
+			return Item::items.reload();
+		}
+
+		case RELOAD_TYPE_MONSTERS: {
+			return g_monsters.reload();
+		}
+
+		case RELOAD_TYPE_MOUNTS: {
+			return mounts.reload();
+		}
+
+		case RELOAD_TYPE_MOVEMENTS: {
+			return g_moveEvents->reload();
+		}
 
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
 			return true;
 		}
 
-		case RELOAD_TYPE_QUESTS: return quests.reload();
-		case RELOAD_TYPE_RAIDS: return raids.reload() && raids.startup();
+		case RELOAD_TYPE_QUESTS: {
+			return quests.reload();
+		}
+
+		case RELOAD_TYPE_RAIDS: {
+			return raids.reload() && raids.startup();
+		}
 
 		case RELOAD_TYPE_SPELLS: {
 			if (!g_spells->reload()) {
@@ -5687,7 +5714,9 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 
-		case RELOAD_TYPE_TALKACTIONS: return g_talkActions->reload();
+		case RELOAD_TYPE_TALKACTIONS: {
+			return g_talkActions->reload();
+		}
 
 		case RELOAD_TYPE_WEAPONS: {
 			bool results = g_weapons->reload();
