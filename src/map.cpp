@@ -278,8 +278,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
 	SpectatorVec spectators, newPosSpectators;
-	getSpectators(spectators, oldPos, true);
-	getSpectators(newPosSpectators, newPos, true);
+	getSpectators(spectators, oldPos, UNDERGROUND_FLOOR);
+	getSpectators(newPosSpectators, newPos, UNDERGROUND_FLOOR);
 	spectators.addSpectators(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
@@ -399,7 +399,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 	}
 }
 
-void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, uint8_t multifloorType /*= 0*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, FloorType_s floorType /*= GROUND_FLOOR*/, bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -413,7 +413,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, uin
 	minRangeY = (minRangeY == 0 ? -maxViewportY : -minRangeY);
 	maxRangeY = (maxRangeY == 0 ? maxViewportY : maxRangeY);
 
-	if (minRangeX == -maxViewportX && maxRangeX == maxViewportX && minRangeY == -maxViewportY && maxRangeY == maxViewportY && multifloorType == 1) {
+	if (minRangeX == -maxViewportX && maxRangeX == maxViewportX && minRangeY == -maxViewportY && maxRangeY == maxViewportY && floorType == UNDERGROUND_FLOOR) {
 		if (onlyPlayers) {
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
@@ -457,7 +457,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, uin
 		int32_t minRangeZ;
 		int32_t maxRangeZ;
 
-		if (multifloorType == 1) {
+		if (floorType == UNDERGROUND_FLOOR) {
 			if (centerPos.z > 7) {
 				//underground
 
@@ -474,7 +474,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, uin
 				minRangeZ = 0;
 				maxRangeZ = 7;
 			}
-		} else if (multifloorType == 2) {
+		} else if (floorType == SURFACE_FLOOR) {
 			minRangeZ = 0;
 			maxRangeZ = 7;
 		} else {

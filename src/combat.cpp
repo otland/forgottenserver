@@ -621,7 +621,7 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 	} else {
 		if (!params.aggressive || (caster != target && Combat::canDoCombat(caster, target) == RETURNVALUE_NOERROR)) {
 			SpectatorVec spectators;
-			g_game.map.getSpectators(spectators, target->getPosition(), true, true);
+			g_game.map.getSpectators(spectators, target->getPosition(), UNDERGROUND_FLOOR, true);
 
 			if (params.origin != ORIGIN_MELEE) {
 				for (const auto& condition : params.conditionList) {
@@ -694,7 +694,7 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 
 		const int32_t rangeX = maxX + Map::maxViewportX;
 		const int32_t rangeY = maxY + Map::maxViewportY;
-		g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
+		g_game.map.getSpectators(spectators, position, UNDERGROUND_FLOOR, true, rangeX, rangeX, rangeY, rangeY);
 
 		postCombatEffects(caster, position, params);
 
@@ -894,7 +894,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	const int32_t rangeY = maxY + Map::maxViewportY;
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
+	g_game.map.getSpectators(spectators, position, UNDERGROUND_FLOOR, true, rangeX, rangeX, rangeY, rangeY);
 
 	postCombatEffects(caster, position, params);
 

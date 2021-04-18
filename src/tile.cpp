@@ -387,7 +387,7 @@ void Tile::onAddTileItem(Item* item)
 	const Position& cylinderMapPos = getPosition();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, cylinderMapPos, true);
+	g_game.map.getSpectators(spectators, cylinderMapPos, UNDERGROUND_FLOOR);
 
 	//send to client
 	for (Creature* spectator : spectators) {
@@ -431,7 +431,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 	const Position& cylinderMapPos = getPosition();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, cylinderMapPos, true);
+	g_game.map.getSpectators(spectators, cylinderMapPos, UNDERGROUND_FLOOR);
 
 	//send to client
 	for (Creature* spectator : spectators) {
@@ -1096,7 +1096,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		ground = nullptr;
 
 		SpectatorVec spectators;
-		g_game.map.getSpectators(spectators, getPosition(), true);
+		g_game.map.getSpectators(spectators, getPosition(), UNDERGROUND_FLOOR);
 		onRemoveTileItem(spectators, std::vector<int32_t>(spectators.size(), 0), item);
 		return;
 	}
@@ -1116,7 +1116,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		std::vector<int32_t> oldStackPosVector;
 
 		SpectatorVec spectators;
-		g_game.map.getSpectators(spectators, getPosition(), true);
+		g_game.map.getSpectators(spectators, getPosition(), UNDERGROUND_FLOOR);
 		for (Creature* spectator : spectators) {
 			if (Player* tmpPlayer = spectator->getPlayer()) {
 				oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
@@ -1140,7 +1140,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 			std::vector<int32_t> oldStackPosVector;
 
 			SpectatorVec spectators;
-			g_game.map.getSpectators(spectators, getPosition(), true);
+			g_game.map.getSpectators(spectators, getPosition(), UNDERGROUND_FLOOR);
 			for (Creature* spectator : spectators) {
 				if (Player* tmpPlayer = spectator->getPlayer()) {
 					oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
@@ -1352,7 +1352,7 @@ Thing* Tile::getThing(size_t index) const
 void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true, true);
+	g_game.map.getSpectators(spectators, getPosition(), UNDERGROUND_FLOOR, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
@@ -1407,7 +1407,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true, true);
+	g_game.map.getSpectators(spectators, getPosition(), UNDERGROUND_FLOOR, true);
 
 	if (getThingCount() > 8) {
 		onUpdateTile(spectators);

@@ -1874,6 +1874,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTERS_EVENT_MOVE)
 	registerEnum(MONSTERS_EVENT_SAY)
 
+	registerEnum(GROUND_FLOOR)
+	registerEnum(UNDERGROUND_FLOOR)
+	registerEnum(SURFACE_FLOOR)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -4069,9 +4073,14 @@ int LuaScriptInterface::luaTableCreate(lua_State* L)
 // Game
 int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 {
-	// Game.getSpectators(position[, multifloor = false[, onlyPlayer = false[, minRangeX = 0[, maxRangeX = 0[, minRangeY = 0[, maxRangeY = 0]]]]]])
+	// Game.getSpectators(position[, floorType = GROUND_FLOOR[, onlyPlayer = false[, minRangeX = 0[, maxRangeX = 0[, minRangeY = 0[, maxRangeY = 0]]]]]])
 	const Position& position = getPosition(L, 1);
-	bool multifloor = getBoolean(L, 2, false);
+	FloorType_s floorType = GROUND_FLOOR;
+	if (isBoolean(L, 2)) {
+		floorType = getBoolean(L, 2) ? UNDERGROUND_FLOOR : GROUND_FLOOR;
+	} else if (isNumber(L, 2)) {
+		floorType = getNumber<FloorType_s>(L, 2, GROUND_FLOOR);
+	}
 	bool onlyPlayers = getBoolean(L, 3, false);
 	int32_t minRangeX = getNumber<int32_t>(L, 4, 0);
 	int32_t maxRangeX = getNumber<int32_t>(L, 5, 0);
@@ -4079,7 +4088,7 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	int32_t maxRangeY = getNumber<int32_t>(L, 7, 0);
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
+	g_game.map.getSpectators(spectators, position, floorType, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 
 	lua_createtable(L, spectators.size(), 0);
 
@@ -9813,7 +9822,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	const Position& position = player->getPosition();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, true, true);
+	g_game.map.getSpectators(spectators, position, UNDERGROUND_FLOOR, true);
 	for (Creature* spectator : spectators) {
 		Player* tmpPlayer = spectator->getPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {

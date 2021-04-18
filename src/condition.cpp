@@ -802,7 +802,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				player->sendTextMessage(message);
 
 				SpectatorVec spectators;
-				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
+				g_game.map.getSpectators(spectators, player->getPosition(), GROUND_FLOOR, true);
 				spectators.erase(player);
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
@@ -833,7 +833,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				player->sendTextMessage(message);
 
 				SpectatorVec spectators;
-				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
+				g_game.map.getSpectators(spectators, player->getPosition(), GROUND_FLOOR, true);
 				spectators.erase(player);
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
