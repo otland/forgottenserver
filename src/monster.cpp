@@ -1349,7 +1349,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			return true;
 		} else if (offsetx <= -1 && offsety <= -1) {
 			//player is SE
-			//escape to NW , W or N [and some extra]
+			//escape to NW, W or N [and some extra]
 			bool w = canWalkTo(creaturePos, DIRECTION_WEST);
 			bool n = canWalkTo(creaturePos, DIRECTION_NORTH);
 

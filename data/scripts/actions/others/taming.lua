@@ -449,4 +449,5 @@ end
 for k, v in pairs(config) do
 	taming:id(k)
 end
+
 taming:register()

@@ -117,4 +117,5 @@ end
 for k, v in pairs(windows) do
 	window:id(k)
 end
+
 window:register()

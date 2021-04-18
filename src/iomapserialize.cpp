@@ -329,7 +329,7 @@ bool IOMapSerialize::saveHouseInfo()
 		query.str(std::string());
 	}
 
-	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
+	DBInsert stmt("INSERT INTO `house_lists` (`house_id`, `listid`, `list`) VALUES ");
 
 	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;

@@ -19,7 +19,7 @@ function costumeBag.onUse(player, item, fromPosition, target, toPosition, isHotk
 	return true
 end
 
-for k,v in pairs(config) do
+for k, v in pairs(config) do
 	costumeBag:id(k)
 end
 

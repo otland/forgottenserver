@@ -133,6 +133,7 @@ for d, _ in pairs(doors) do if doorsSet[d] == nil then doorsSet[d] = true end en
 for i, _ in pairs(doorsSet) do
 	door:id(i)
 end
+
 doorsSet = nil
 
 door:register()
