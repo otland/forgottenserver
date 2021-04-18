@@ -5070,7 +5070,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	if (type == MARKETACTION_SELL) {
-		if (fee > player->bankBalance) {
+		if (fee > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
 
@@ -5101,15 +5101,35 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			}
 		}
 
-		player->bankBalance -= fee;
+		uint64_t playerMoney = player->getMoney();
+		if (fee <= playerMoney) {
+			removeMoney(player, fee);
+		} else if (fee <= (playerMoney + player->bankBalance)) {
+			if (playerMoney > 0) {
+				removeMoney(player, playerMoney);
+				player->bankBalance -= (fee - playerMoney);
+			} else {
+				player->bankBalance -= fee;
+			}
+		}
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > player->bankBalance) {
+		if (totalPrice > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
 
-		player->bankBalance -= totalPrice;
+		uint64_t playerMoney = player->getMoney();
+		if (totalPrice <= playerMoney) {
+			removeMoney(player, totalPrice);
+		} else if (totalPrice <= (playerMoney + player->bankBalance)) {
+			if (playerMoney > 0) {
+				removeMoney(player, playerMoney);
+				player->bankBalance -= (totalPrice - playerMoney);
+			} else {
+				player->bankBalance -= totalPrice;
+			}
+		}
 	}
 
 	IOMarket::createOffer(player->getGUID(), static_cast<MarketAction_t>(type), it.id, amount, price, anonymous);
@@ -5133,6 +5153,11 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	MarketOfferEx offer = IOMarket::getOfferByCounter(timestamp, counter);
 	if (offer.id == 0 || offer.playerId != player->getGUID()) {
+		return;
+	}
+
+	uint32_t offerAccountId = IOLoginData::getAccountIdByPlayerId(offer.playerId);
+	if (offerAccountId == player->getAccount()) {
 		return;
 	}
 
@@ -5288,11 +5313,21 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			buyerPlayer->onReceiveMail();
 		}
 	} else {
-		if (totalPrice > player->bankBalance) {
+		if (totalPrice > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
 
-		player->bankBalance -= totalPrice;
+		uint64_t playerMoney = player->getMoney();
+		if (totalPrice <= playerMoney) {
+			removeMoney(player, totalPrice);
+		} else if (totalPrice <= (playerMoney + player->bankBalance)) {
+			if (playerMoney > 0) {
+				removeMoney(player, playerMoney);
+				player->bankBalance -= (totalPrice - playerMoney);
+			} else {
+				player->bankBalance -= totalPrice;
+			}
+		}
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
