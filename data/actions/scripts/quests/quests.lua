@@ -40,6 +40,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is empty.")
 	end
-
 	return true
 end

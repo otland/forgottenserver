@@ -209,7 +209,6 @@ bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -411,7 +410,6 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 
 		map.setTile(x, y, z, tile);
 	}
-
 	return true;
 }
 
@@ -457,7 +455,6 @@ bool IOMap::parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map
 
 		town->setTemplePos(Position(town_coords.x, town_coords.y, town_coords.z));
 	}
-
 	return true;
 }
 
@@ -489,7 +486,6 @@ bool IOMap::parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, 
 
 		map.waypoints[name] = Position(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z);
 	}
-
 	return true;
 }
 

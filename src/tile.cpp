@@ -53,7 +53,6 @@ bool Tile::hasProperty(ITEMPROPERTY prop) const
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -72,7 +71,6 @@ bool Tile::hasProperty(const Item* exclude, ITEMPROPERTY prop) const
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -101,7 +99,6 @@ bool Tile::hasHeight(uint32_t n) const
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -110,7 +107,6 @@ size_t Tile::getCreatureCount() const
 	if (const CreatureVector* creatures = getCreatures()) {
 		return creatures->size();
 	}
-
 	return 0;
 }
 
@@ -119,7 +115,6 @@ size_t Tile::getItemCount() const
 	if (const TileItemVector* items = getItemList()) {
 		return items->size();
 	}
-
 	return 0;
 }
 
@@ -128,7 +123,6 @@ uint32_t Tile::getTopItemCount() const
 	if (const TileItemVector* items = getItemList()) {
 		return items->getTopItemCount();
 	}
-
 	return 0;
 }
 
@@ -137,7 +131,6 @@ uint32_t Tile::getDownItemCount() const
 	if (const TileItemVector* items = getItemList()) {
 		return items->getDownItemCount();
 	}
-
 	return 0;
 }
 
@@ -159,7 +152,6 @@ Teleport* Tile::getTeleportItem() const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -180,7 +172,6 @@ MagicField* Tile::getFieldItem() const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -201,7 +192,6 @@ TrashHolder* Tile::getTrashHolder() const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -222,7 +212,6 @@ Mailbox* Tile::getMailbox() const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -243,7 +232,6 @@ BedItem* Tile::getBedItem() const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -254,7 +242,6 @@ Creature* Tile::getTopCreature() const
 			return *creatures->begin();
 		}
 	}
-
 	return nullptr;
 }
 
@@ -265,7 +252,6 @@ const Creature* Tile::getBottomCreature() const
 			return *creatures->rbegin();
 		}
 	}
-
 	return nullptr;
 }
 
@@ -294,7 +280,6 @@ Creature* Tile::getTopVisibleCreature(const Creature* creature) const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -323,7 +308,6 @@ const Creature* Tile::getBottomVisibleCreature(const Creature* creature) const
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -332,7 +316,6 @@ Item* Tile::getTopDownItem() const
 	if (const TileItemVector* items = getItemList()) {
 		return items->getTopDownItem();
 	}
-
 	return nullptr;
 }
 
@@ -341,7 +324,6 @@ Item* Tile::getTopTopItem() const
 	if (const TileItemVector* items = getItemList()) {
 		return items->getTopTopItem();
 	}
-
 	return nullptr;
 }
 
@@ -359,7 +341,6 @@ Item* Tile::getItemByTopOrder(int32_t topOrder)
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -386,7 +367,6 @@ Thing* Tile::getTopVisibleThing(const Creature* creature)
 			}
 		}
 	}
-
 	return ground;
 }
 
@@ -599,7 +579,6 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
-
 			return RETURNVALUE_NOERROR;
 		}
 
@@ -741,7 +720,6 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			}
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -770,7 +748,6 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -868,7 +845,6 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 			*destItem = destThing->getItem();
 		}
 	}
-
 	return destTile;
 }
 
@@ -1098,7 +1074,6 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 				creatures->erase(it);
 			}
 		}
-
 		return;
 	}
 
@@ -1231,7 +1206,6 @@ int32_t Tile::getThingIndex(const Thing* thing) const
 			}
 		}
 	}
-
 	return -1;
 }
 
@@ -1258,7 +1232,6 @@ int32_t Tile::getClientIndexOfCreature(const Player* player, const Creature* cre
 			}
 		}
 	}
-
 	return -1;
 }
 
@@ -1309,7 +1282,6 @@ int32_t Tile::getStackposOfItem(const Player* player, const Item* item) const
 			}
 		}
 	}
-
 	return -1;
 }
 
@@ -1338,7 +1310,6 @@ uint32_t Tile::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 			}
 		}
 	}
-
 	return count;
 }
 
@@ -1373,7 +1344,6 @@ Thing* Tile::getThing(size_t index) const
 	if (items && index < items->getDownItemCount()) {
 		return items->at(index);
 	}
-
 	return nullptr;
 }
 
@@ -1652,6 +1622,5 @@ Item* Tile::getUseItem(int32_t index) const
 	if (Thing* thing = getThing(index)) {
 		return thing->getItem();
 	}
-
 	return nullptr;
 }

@@ -65,7 +65,6 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The door seems to be sealed against unwanted intruders.")
 		end
-
 		return true
 	elseif table.contains(levelDoors, itemId) then
 		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor then
@@ -74,7 +73,6 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Only the worthy may pass.")
 		end
-
 		return true
 	elseif table.contains(keys, itemId) then
 		if target.actionid > 0 then
@@ -86,7 +84,6 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
 		end
-
 		return false
 	end
 
@@ -112,7 +109,6 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if not(table.contains(openQuestDoors, itemId)) and not(table.contains(openLevelDoors, itemId)) then
 			item:transform(itemId - 1)
 		end
-
 		return true
 	end
 
@@ -122,10 +118,8 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is locked.")
 		end
-
 		return true
 	end
-
 	return false
 end
 

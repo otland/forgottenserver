@@ -32,7 +32,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:addItem(lootTrash[math.random(#lootTrash)], 1)
 		end
-
 		return true
 	end
 
@@ -80,6 +79,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 		player:addItem(2667, 1)
 	end
-
 	return true
 end

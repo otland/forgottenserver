@@ -39,10 +39,8 @@ Guild* IOGuild::loadGuild(uint32_t guildId)
 				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"), result->getNumber<uint16_t>("level"));
 			} while (result->next());
 		}
-
 		return guild;
 	}
-
 	return nullptr;
 }
 
@@ -57,7 +55,6 @@ uint32_t IOGuild::getGuildIdByName(const std::string& name)
 	if (!result) {
 		return 0;
 	}
-
 	return result->getNumber<uint32_t>("id");
 }
 

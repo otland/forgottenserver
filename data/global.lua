@@ -19,7 +19,6 @@ function getDistanceBetween(firstPosition, secondPosition)
 	if firstPosition.z ~= secondPosition.z then
 		posDif = posDif + 15
 	end
-
 	return posDif
 end
 
@@ -31,7 +30,6 @@ function getFormattedWorldTime()
 	if minutes < 10 then
 		minutes = '0' .. minutes
 	end
-
 	return hours .. ':' .. minutes
 end
 
@@ -45,7 +43,6 @@ table.contains = function(array, value)
 			return true
 		end
 	end
-
 	return false
 end
 
@@ -54,7 +51,6 @@ string.split = function(str, sep)
 	for v in str:gmatch("([^" .. sep .. "]+)") do
 		res[#res + 1] = v
 	end
-
 	return res
 end
 
@@ -63,7 +59,6 @@ string.splitTrimmed = function(str, sep)
 	for v in str:gmatch("([^" .. sep .. "]+)") do
 		res[#res + 1] = v:trim()
 	end
-
 	return res
 end
 

@@ -429,6 +429,7 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif action.removeTransformation then
 			target:removeCondition(CONDITION_OUTFIT)
 		end
+
 		if action.sound then
 			player:say(action.sound, TALKTYPE_MONSTER_SAY, false, 0, toPosition)
 		end

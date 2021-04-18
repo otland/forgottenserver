@@ -139,7 +139,6 @@ bool Party::leaveParty(Player* player)
 	if (missingLeader || empty()) {
 		disband();
 	}
-
 	return true;
 }
 
@@ -253,7 +252,6 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
 
 		g_game.updatePlayerHelpers(*leader);
 	}
-
 	return true;
 }
 
@@ -425,7 +423,6 @@ bool Party::canUseSharedExperience(const Player* player) const
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -440,7 +437,6 @@ bool Party::canEnableSharedExperience()
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -466,6 +462,5 @@ bool Party::canOpenCorpse(uint32_t ownerId) const
 	if (Player* player = g_game.getPlayerByID(ownerId)) {
 		return leader->getID() == ownerId || player->getParty() == this;
 	}
-
 	return false;
 }

@@ -8,7 +8,6 @@ function paintedGourdRattle.onUse(player, item, fromPosition, target, toPosition
 		player:getPosition():sendMagicEffect(CONST_ME_SOUND_RED)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You're shaking the gourd rattle. It clatters, yet nothing else happens.")
 	end
-
 	return true
 end
 

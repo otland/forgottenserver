@@ -51,14 +51,12 @@ do
 			elseif methods.isNpc(self) then
 				creatureType = THING_TYPE_NPC
 			end
-
 			return creatureType
 		elseif key == "itemid" then
 			return 1
 		elseif key == "actionid" then
 			return 0
 		end
-
 		return methods[key]
 	end
 	rawgetmetatable("Player").__index = CreatureIndex
@@ -78,7 +76,6 @@ do
 		elseif key == "type" then
 			return methods.getSubType(self)
 		end
-
 		return methods[key]
 	end
 	rawgetmetatable("Item").__index = ItemIndex
@@ -311,7 +308,6 @@ function pushThing(thing)
 			end
 		end
 	end
-
 	return t
 end
 
@@ -376,7 +372,6 @@ function getCreatureTarget(cid)
 		local target = c:getTarget()
 		return target and target:getId() or 0
 	end
-
 	return false
 end
 
@@ -386,7 +381,6 @@ function getCreatureMaster(cid)
 		local master = c:getMaster()
 		return master and master:getId() or c:getId()
 	end
-
 	return false
 end
 
@@ -400,7 +394,6 @@ function getCreatureSummons(cid)
 	for _, summon in ipairs(c:getSummons()) do
 		result[#result + 1] = summon:getId()
 	end
-
 	return result
 end
 
@@ -455,7 +448,6 @@ function getPlayerAccess(cid)
 	if player == nil then
 		return false
 	end
-
 	return player:getGroup():getAccess() and 1 or 0
 end
 function getPlayerSkill(cid, skillId) local p = Player(cid) return p and p:getSkillLevel(skillId) or false end
@@ -495,7 +487,6 @@ function getPlayerParty(cid)
 	if party == nil then
 		return nil
 	end
-
 	return party:getLeader():getId()
 end
 function getPlayerGuildId(cid)
@@ -508,7 +499,6 @@ function getPlayerGuildId(cid)
 	if guild == nil then
 		return false
 	end
-
 	return guild:getId()
 end
 function getPlayerGuildLevel(cid) local p = Player(cid) return p and p:getGuildLevel() or false end
@@ -522,7 +512,6 @@ function getPlayerGuildName(cid)
 	if guild == nil then
 		return false
 	end
-
 	return guild:getName()
 end
 function getPlayerGuildRank(cid)
@@ -583,7 +572,6 @@ function getPlayersByIPAddress(ip, mask)
 			result[#result + 1] = player:getId()
 		end
 	end
-
 	return result
 end
 getPlayersByIp = getPlayersByIPAddress
@@ -592,7 +580,6 @@ function getOnlinePlayers()
 	for _, player in ipairs(Game.getPlayers()) do
 		result[#result + 1] = player:getName()
 	end
-
 	return result
 end
 getPlayersOnline = getOnlinePlayers
@@ -603,7 +590,6 @@ function getPlayersByAccountNumber(accountNumber)
 			result[#result + 1] = player:getId()
 		end
 	end
-
 	return result
 end
 function getPlayerGUIDByName(name)
@@ -618,7 +604,6 @@ function getPlayerGUIDByName(name)
 		result.free(resultId)
 		return guid
 	end
-
 	return 0
 end
 function getAccountNumberByPlayerName(name)
@@ -633,7 +618,6 @@ function getAccountNumberByPlayerName(name)
 		result.free(resultId)
 		return accountId
 	end
-
 	return 0
 end
 
@@ -719,7 +703,6 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	if useMult then
 		exp = exp * Game.getExperienceStage(player:getLevel())
 	end
-
 	return player:addExperience(exp, ...)
 end
 doPlayerAddExperience = doPlayerAddExp
@@ -772,7 +755,6 @@ function getPartyMembers(cid)
 	for _, member in ipairs(party:getMembers()) do
 		result[#result + 1] = member:getId()
 	end
-
 	return result
 end
 
@@ -790,7 +772,6 @@ function getMonsterTargetList(cid)
 			result[#result + 1] = creature:getId()
 		end
 	end
-
 	return result
 end
 function getMonsterFriendList(cid)
@@ -807,7 +788,6 @@ function getMonsterFriendList(cid)
 			result[#result + 1] = creature:getId()
 		end
 	end
-
 	return result
 end
 function doSetMonsterTarget(cid, target)
@@ -874,7 +854,6 @@ function doSummonMonster(cid, name)
 		player:sendCancelMessage("There is not enough room.")
 		position:sendMagicEffect(CONST_ME_POFF)
 	end
-
 	return true
 end
 
@@ -894,7 +873,6 @@ function getContainerItem(uid, slot)
 	if container == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(container:getItem(slot))
 end
 
@@ -908,7 +886,6 @@ function doAddContainerItemEx(uid, virtualId)
 	if res == nil then
 		return false
 	end
-
 	return res
 end
 
@@ -926,7 +903,6 @@ function getPromotedVocation(vocationId)
 	if promotedVocation == nil then
 		return 0
 	end
-
 	return promotedVocation:getId()
 end
 getPlayerPromotionLevel = getPromotedVocation
@@ -976,7 +952,6 @@ function getItemIdByName(name)
 	if id == 0 then
 		return false
 	end
-
 	return id
 end
 function getItemWeightByUID(uid, ...)
@@ -1003,7 +978,6 @@ function getItemRWInfo(uid)
 	if itemType:isWritable() then
 		rwFlags = bit.bor(rwFlags, 2)
 	end
-
 	return rwFlags
 end
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
@@ -1033,7 +1007,6 @@ function doSetItemText(uid, text)
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_TEXT)
 	end
-
 	return true
 end
 function doSetItemSpecialDescription(uid, desc)
@@ -1047,7 +1020,6 @@ function doSetItemSpecialDescription(uid, desc)
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_DESCRIPTION)
 	end
-
 	return true
 end
 function doDecayItem(uid) local i = Item(uid) return i and i:decay() or false end
@@ -1063,7 +1035,6 @@ function getHouseByPlayerGUID(playerGUID)
 			return house:getId()
 		end
 	end
-
 	return nil
 end
 
@@ -1082,7 +1053,6 @@ function getTilePzInfo(position)
 	if t == nil then
 		return false
 	end
-
 	return t:hasFlag(TILESTATE_PROTECTIONZONE)
 end
 
@@ -1114,7 +1084,6 @@ function getTileItemByType(position, itemType)
 	if t == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(t:getItemByType(itemType))
 end
 
@@ -1123,7 +1092,6 @@ function getTileItemById(position, itemId, ...)
 	if t == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(t:getItemById(itemId, ...))
 end
 
@@ -1140,7 +1108,6 @@ function getTileThingByPos(position)
 	if position.stackpos == -1 then
 		return t:getThingCount()
 	end
-
 	return pushThing(t:getThing(position.stackpos))
 end
 
@@ -1149,7 +1116,6 @@ function getTileThingByTopOrder(position, topOrder)
 	if t == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(t:getItemByTopOrder(topOrder))
 end
 
@@ -1158,7 +1124,6 @@ function getTopCreature(position)
 	if t == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(t:getTopCreature())
 end
 
@@ -1184,7 +1149,6 @@ function doTeleportThing(uid, dest, pushMovement)
 			end
 		end
 	end
-
 	return false
 end
 
@@ -1239,7 +1203,6 @@ function getThingfromPos(pos)
 	else
 		thing = tile:getThing(stackpos)
 	end
-
 	return pushThing(thing)
 end
 
@@ -1269,7 +1232,6 @@ function doRelocate(fromPos, toPos)
 			end
 		end
 	end
-
 	return true
 end
 
@@ -1294,7 +1256,6 @@ function getWorldCreatures(type)
 	elseif type == 2 then
 		return Game.getNpcCount()
 	end
-
 	return Game.getPlayerCount() + Game.getMonsterCount() + Game.getNpcCount()
 end
 
@@ -1361,7 +1322,6 @@ function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	for index, spectator in ipairs(result) do
 		result[index] = spectator:getId()
 	end
-
 	return result
 end
 
@@ -1389,7 +1349,6 @@ function getPlayerInstantSpellInfo(cid, spellId)
 	if not spell or not player:canCast(spell) then
 		return false
 	end
-
 	return spell
 end
 
@@ -1407,7 +1366,6 @@ function doSetCreatureOutfit(cid, outfit, time)
 	})
 	condition:setTicks(time)
 	creature:addCondition(condition)
-
 	return true
 end
 
@@ -1421,7 +1379,6 @@ function doTileAddItemEx(pos, uid, flags)
 	if item then
 		return tile:addItemEx(item, flags)
 	end
-
 	return false
 end
 
@@ -1437,7 +1394,6 @@ function doCreateItem(itemid, count, pos)
 	if item then
 		return item:getUniqueId()
 	end
-
 	return false
 end
 
@@ -1446,7 +1402,6 @@ function doCreateItemEx(itemid, count)
 	if item then
 		return item:getUniqueId()
 	end
-
 	return false
 end
 

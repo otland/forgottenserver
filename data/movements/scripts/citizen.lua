@@ -12,6 +12,5 @@ function onStepIn(creature, item, position, fromPosition)
 		creature:setTown(town)
 		creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are now a citizen of " .. town:getName() .. ".")
 	end
-
 	return true
 end

@@ -258,7 +258,6 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 	for _, position in ipairs(positions) do
 		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
-
 	return true
 end
 

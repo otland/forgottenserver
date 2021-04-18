@@ -23,7 +23,6 @@ function juicyRoot.onUse(player, item, fromPosition, target, toPosition, isHotke
 	if table.contains({23477, 23478}, item.itemid) then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "This root has already been harvested, nothing to gain here.")
 	end
-
 	return true
 end
 

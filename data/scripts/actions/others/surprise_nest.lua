@@ -34,7 +34,6 @@ function surpriseNest.onUse(player, item, fromPosition, target, toPosition, isHo
 			return true
 		end
 	end
-
 	return false
 end
 

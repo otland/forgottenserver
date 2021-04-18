@@ -24,7 +24,6 @@ local function greetCallback(cid)
 		npcHandler:say("YOU ALREADY HAVE A VOCATION!", cid)
 		return false
 	end
-
 	return true
 end
 
@@ -82,7 +81,6 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler.topic[cid] = 2
 		end
 	end
-
 	return true
 end
 

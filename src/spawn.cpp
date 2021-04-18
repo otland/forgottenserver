@@ -136,7 +136,6 @@ bool Spawns::loadFromXml(const std::string& filename)
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -180,7 +179,6 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 	if (radius == -1) {
 		return true;
 	}
-
 	return ((pos.getX() >= centerPos.getX() - radius) && (pos.getX() <= centerPos.getX() + radius) &&
 			(pos.getY() >= centerPos.getY() - radius) && (pos.getY() <= centerPos.getY() + radius));
 }
@@ -210,7 +208,6 @@ bool Spawn::findPlayer(const Position& pos)
 			return true;
 		}
 	}
-
 	return false;
 }
 

@@ -121,7 +121,6 @@ class QTreeNode
 				x <<= 1;
 				y <<= 1;
 			} while (!node->leaf);
-
 			return static_cast<Leaf>(node);
 		}
 

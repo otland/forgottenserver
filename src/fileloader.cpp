@@ -47,7 +47,6 @@ static Node& getCurrentNode(const NodeStack& nodeStack)
 	if (nodeStack.empty()) {
 		throw InvalidOTBFormat{};
 	}
-
 	return *nodeStack.top();
 }
 
@@ -109,7 +108,6 @@ const Node& Loader::parseTree()
 	if (!parseStack.empty()) {
 		throw InvalidOTBFormat{};
 	}
-
 	return root;
 }
 

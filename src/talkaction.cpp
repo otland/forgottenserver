@@ -62,7 +62,6 @@ Event_ptr TalkActions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
 		return nullptr;
 	}
-
 	return Event_ptr(new TalkAction(&scriptInterface));
 }
 
@@ -78,7 +77,6 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 			talkActions.emplace(words[i], *talkAction);
 		}
 	}
-
 	return true;
 }
 
@@ -94,7 +92,6 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 			talkActions.emplace(words[i], *talkAction);
 		}
 	}
-
 	return true;
 }
 
@@ -116,6 +113,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 				++it;
 				continue;
 			}
+
 			trim_left(param, ' ');
 
 			std::string separator = it->second.getSeparator();
@@ -147,7 +145,6 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			return TALKACTION_BREAK;
 		}
 	}
-
 	return TALKACTION_CONTINUE;
 }
 
@@ -167,7 +164,6 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
 		setWords(word);
 	}
-
 	return true;
 }
 

@@ -90,10 +90,8 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 		if (instantSpell->getHasParam() && !param.empty()) {
 			words += " \"" + param + "\"";
 		}
-
 		return TALKACTION_BREAK;
 	}
-
 	return TALKACTION_FAILED;
 }
 
@@ -140,7 +138,6 @@ Event_ptr Spells::getEvent(const std::string& nodeName)
 	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
 		return Event_ptr(new InstantSpell(&scriptInterface));
 	}
-
 	return nullptr;
 }
 
@@ -152,7 +149,6 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 		}
-
 		return result.second;
 	}
 
@@ -162,10 +158,8 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 		}
-
 		return result.second;
 	}
-
 	return false;
 }
 
@@ -178,10 +172,8 @@ bool Spells::registerInstantLuaEvent(InstantSpell* event)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerInstantLuaEvent] Duplicate registered instant spell with words: " << words << std::endl;
 		}
-
 		return result.second;
 	}
-
 	return false;
 }
 
@@ -194,10 +186,8 @@ bool Spells::registerRuneLuaEvent(RuneSpell* event)
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerRuneLuaEvent] Duplicate registered rune with id: " << id << std::endl;
 		}
-
 		return result.second;
 	}
-
 	return false;
 }
 
@@ -207,7 +197,6 @@ Spell* Spells::getSpellByName(const std::string& name)
 	if (!spell) {
 		spell = getInstantSpellByName(name);
 	}
-
 	return spell;
 }
 
@@ -220,10 +209,8 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 				return &rune.second;
 			}
 		}
-
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -234,7 +221,6 @@ RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 			return &it.second;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -268,10 +254,8 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 				return nullptr;
 			}
 		}
-
 		return result;
 	}
-
 	return nullptr;
 }
 
@@ -282,7 +266,6 @@ InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
 			return &it.second;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -293,7 +276,6 @@ InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 			return &it.second;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -333,7 +315,6 @@ bool CombatSpell::castSpell(Creature* creature)
 		} else {
 			var.pos = creature->getPosition();
 		}
-
 		return executeCastSpell(creature, var);
 	}
 
@@ -367,7 +348,6 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 			var.type = VARIANT_NUMBER;
 			var.number = target->getID();
 		}
-
 		return executeCastSpell(creature, var);
 	}
 
@@ -380,7 +360,6 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 	} else {
 		combat->doCombat(creature, target);
 	}
-
 	return true;
 }
 
@@ -595,7 +574,6 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
 	}
-
 	return true;
 }
 
@@ -635,7 +613,6 @@ bool Spell::playerSpellCheck(Player* player) const
 		if (isInstant()) {
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		}
-
 		return false;
 	}
 
@@ -696,7 +673,6 @@ bool Spell::playerSpellCheck(Player* player) const
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
-
 	return true;
 }
 
@@ -741,7 +717,6 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
-
 	return true;
 }
 
@@ -811,7 +786,6 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -870,7 +844,6 @@ uint32_t Spell::getManaCost(const Player* player) const
 		uint32_t manaCost = (maxMana * manaPercent) / 100;
 		return manaCost;
 	}
-
 	return 0;
 }
 
@@ -909,7 +882,6 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	if ((attr = node.attribute("blockwalls"))) {
 		checkLineOfSight = attr.as_bool();
 	}
-
 	return true;
 }
 
@@ -1047,7 +1019,6 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 	if (result) {
 		postCastSpell(player);
 	}
-
 	return result;
 }
 
@@ -1060,7 +1031,6 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 			(range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1079,7 +1049,6 @@ bool InstantSpell::castSpell(Creature* creature)
 			var.number = target->getID();
 			return internalCastSpell(creature, var);
 		}
-
 		return false;
 	} else if (needDirection) {
 		var.type = VARIANT_POSITION;
@@ -1088,7 +1057,6 @@ bool InstantSpell::castSpell(Creature* creature)
 		var.type = VARIANT_POSITION;
 		var.pos = creature->getPosition();
 	}
-
 	return internalCastSpell(creature, var);
 }
 
@@ -1100,7 +1068,6 @@ bool InstantSpell::castSpell(Creature* creature, Creature* target)
 		var.number = target->getID();
 		return internalCastSpell(creature, var);
 	}
-
 	return castSpell(creature);
 }
 
@@ -1151,7 +1118,6 @@ bool InstantSpell::canCast(const Player* player) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1193,7 +1159,6 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 		iType.runeLevel = level;
 		iType.charges = charges;
 	}
-
 	return true;
 }
 
@@ -1215,7 +1180,6 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1265,7 +1229,6 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 		g_game.transformItem(item, item->getID(), newCount);
 	}
-
 	return true;
 }
 
@@ -1293,7 +1256,6 @@ bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var, boo
 	} else {
 		result = false;
 	}
-
 	return result;
 }
 

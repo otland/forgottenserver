@@ -33,7 +33,6 @@ function Tile.relocateTo(self, toPosition)
 			end
 		end
 	end
-
 	return true
 end
 
@@ -51,6 +50,5 @@ function Tile.isWalkable(self)
 			return false
 		end
 	end
-
 	return true
 end

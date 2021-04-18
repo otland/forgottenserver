@@ -28,7 +28,6 @@ function belongingsShargon.onUse(player, item, fromPosition, target, toPosition,
 			return true
 		end
 	end
-
 	return false
 end
 

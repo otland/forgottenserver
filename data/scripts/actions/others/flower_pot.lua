@@ -77,7 +77,6 @@ function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotke
 			break
 		end
 	end
-
 	return true
 end
 

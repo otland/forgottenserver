@@ -22,10 +22,8 @@ function clawOfTheNoxiousSpawn.onUse(player, item, fromPosition, target, toPosit
 			item:decay()
 			player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 		end
-
 		return true
 	end
-
 	return false
 end
 

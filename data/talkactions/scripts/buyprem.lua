@@ -21,6 +21,5 @@ function onSay(player, words, param)
 		player:sendCancelMessage("You can not buy more than " .. config.maxDays .. " days of premium account.")
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 	end
-
 	return false
 end

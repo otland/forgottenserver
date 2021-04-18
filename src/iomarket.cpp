@@ -58,7 +58,6 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 
 		offerList.push_back(offer);
 	} while (result->next());
-
 	return offerList;
 }
 
@@ -85,7 +84,6 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 		offer.itemId = result->getNumber<uint16_t>("itemtype");
 		offerList.push_back(offer);
 	} while (result->next());
-
 	return offerList;
 }
 
@@ -117,7 +115,6 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 
 		offerList.push_back(offer);
 	} while (result->next());
-
 	return offerList;
 }
 
@@ -220,7 +217,6 @@ uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 	if (!result) {
 		return 0;
 	}
-
 	return result->getNumber<int32_t>("count");
 }
 
@@ -253,7 +249,6 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	} else {
 		offer.playerName = "Anonymous";
 	}
-
 	return offer;
 }
 
@@ -341,7 +336,6 @@ MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
 	if (it == purchaseStatistics.end()) {
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -351,6 +345,5 @@ MarketStatistics* IOMarket::getSaleStatistics(uint16_t itemId)
 	if (it == saleStatistics.end()) {
 		return nullptr;
 	}
-
 	return &it->second;
 }

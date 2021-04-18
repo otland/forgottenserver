@@ -19,6 +19,5 @@ function onSay(player, words, param)
 		local msg = table.concat(onlineList, ", ", i, j) .. "."
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, msg)
 	end
-
 	return false
 end

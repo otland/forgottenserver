@@ -366,6 +366,5 @@ bool argumentsHandler(const StringVector& args)
 			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
 		}
 	}
-
 	return true;
 }

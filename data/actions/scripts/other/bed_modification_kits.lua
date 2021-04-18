@@ -46,6 +46,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			break
 		end
 	end
-
 	return true
 end

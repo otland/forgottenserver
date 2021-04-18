@@ -95,7 +95,6 @@ EventCallback = {
 				if index then
 					table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
 				end
-
 				return rawset(self, "type", nil) and rawset(self, "call", nil)
 			else
 				debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")

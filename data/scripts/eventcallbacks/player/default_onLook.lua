@@ -51,7 +51,6 @@ ec.onLook = function(self, thing, position, distance, description)
 			end
 		end
 	end
-
 	return description
 end
 

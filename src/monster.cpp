@@ -41,7 +41,6 @@ Monster* Monster::createMonster(const std::string& name)
 	if (!mType) {
 		return nullptr;
 	}
-
 	return new Monster(mType);
 }
 
@@ -443,7 +442,6 @@ bool Monster::isFriend(const Creature* creature) const
 	} else if (creature->getMonster() && !creature->isSummon()) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -459,7 +457,6 @@ bool Monster::isOpponent(const Creature* creature) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -564,7 +561,6 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -607,7 +603,6 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 			}
 		}
 	}
-
 	return blockType;
 }
 
@@ -621,7 +616,6 @@ bool Monster::isTarget(const Creature* creature) const
 	if (creature->getPosition().z != getPosition().z) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -642,7 +636,6 @@ bool Monster::selectTarget(Creature* creature)
 			g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
 		}
 	}
-
 	return setFollowCreature(creature);
 }
 
@@ -833,10 +826,8 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 				return g_game.isSightClear(pos, targetPos, true);
 			}
 		}
-
 		return false;
 	}
-
 	return true;
 }
 
@@ -865,7 +856,6 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		inRange = false;
 		return false;
 	}
-
 	return true;
 }
 
@@ -1041,7 +1031,6 @@ bool Monster::pushItem(Item* item)
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -1091,7 +1080,6 @@ bool Monster::pushCreature(Creature* creature)
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -1174,7 +1162,6 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			}
 		}
 	}
-
 	return result;
 }
 
@@ -1193,7 +1180,6 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) c
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1280,7 +1266,6 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 		direction = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
-
 	return false;
 }
 
@@ -1361,7 +1346,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (n && canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
 				direction = DIRECTION_NORTH;
 			}
-
 			return true;
 		} else if (offsetx <= -1 && offsety <= -1) {
 			//player is SE
@@ -1409,7 +1393,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (e && canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
 				direction = DIRECTION_EAST;
 			}
-
 			return true;
 		} else if (offsetx >= 1 && offsety <= -1) {
 			//player is SW
@@ -1456,7 +1439,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (s && canWalkTo(creaturePos, DIRECTION_SOUTHEAST)) {
 				direction = DIRECTION_SOUTH;
 			}
-
 			return true;
 		} else if (offsetx <= -1 && offsety >= 1) {
 			// player is NE
@@ -1501,7 +1483,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (n && canWalkTo(creaturePos, DIRECTION_NORTHWEST)) {
 				direction = DIRECTION_NORTH;
 			}
-
 			return true;
 		}
 	}
@@ -1772,7 +1753,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -1789,7 +1769,6 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1824,7 +1803,6 @@ Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature
 			}
 		}
 	}
-
 	return corpse;
 }
 
@@ -1849,7 +1827,6 @@ bool Monster::isInSpawnRange(const Position& pos) const
 	if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1976,7 +1953,6 @@ bool Monster::challengeCreature(Creature* creature)
 		challengeFocusDuration = targetChangeCooldown;
 		targetChangeTicks = 0;
 	}
-
 	return result;
 }
 

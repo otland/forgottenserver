@@ -19,6 +19,5 @@ function onSay(player, words, param)
 		position.x = position.x + 1
 		position:sendMagicEffect(CONST_ME_SMOKE)
 	end
-
 	return false
 end

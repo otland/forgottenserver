@@ -30,10 +30,8 @@ Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 		if (!propStream.read<uint16_t>(destPos.x) || !propStream.read<uint16_t>(destPos.y) || !propStream.read<uint8_t>(destPos.z)) {
 			return ATTR_READ_ERROR;
 		}
-
 		return ATTR_READ_CONTINUE;
 	}
-
 	return Item::readAttr(attr, propStream);
 }
 
@@ -83,10 +81,8 @@ bool Teleport::checkInfinityLoop(Tile* destTile)
 		if (getPosition() == nextDestPos) {
 			return true;
 		}
-
 		return checkInfinityLoop(g_game.map.getTile(nextDestPos));
 	}
-
 	return false;
 }
 
@@ -119,6 +115,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 			g_game.addMagicEffect(item->getPosition(), effect);
 		}
+
 		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT);
 	}
 }

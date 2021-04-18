@@ -76,7 +76,6 @@ std::string decodeSecret(const std::string& secret)
 			key.push_back(static_cast<char>(buffer >> left));
 		}
 	}
-
 	return key;
 }
 
@@ -109,7 +108,6 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 			account.characters.push_back(result->getString("name"));
 		} while (result->next());
 	}
-
 	return true;
 }
 
@@ -163,7 +161,6 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 	if (!result) {
 		return 0;
 	}
-
 	return result->getNumber<uint32_t>("account_id");
 }
 
@@ -175,7 +172,6 @@ AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 	if (!result) {
 		return ACCOUNT_TYPE_NORMAL;
 	}
-
 	return static_cast<AccountType_t>(result->getNumber<uint16_t>("type"));
 }
 
@@ -267,6 +263,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Group ID " << result->getNumber<uint16_t>("group_id") << " which doesn't exist" << std::endl;
 		return false;
 	}
+
 	player->setGroup(group);
 
 	player->bankBalance = result->getNumber<uint64_t>("balance");
@@ -651,7 +648,6 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			}
 		}
 	}
-
 	return query_insert.execute();
 }
 
@@ -906,7 +902,6 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!storageQuery.execute()) {
 		return false;
 	}
-
 	//End the transaction
 	return transaction.commit();
 }
@@ -919,7 +914,6 @@ std::string IOLoginData::getNameByGuid(uint32_t guid)
 	if (!result) {
 		return std::string();
 	}
-
 	return result->getString("name");
 }
 
@@ -933,7 +927,6 @@ uint32_t IOLoginData::getGuidByName(const std::string& name)
 	if (!result) {
 		return 0;
 	}
-
 	return result->getNumber<uint32_t>("id");
 }
 
@@ -1040,7 +1033,6 @@ std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 			);
 		} while (result->next());
 	}
-
 	return entries;
 }
 

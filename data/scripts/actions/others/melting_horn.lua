@@ -33,7 +33,6 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 
 		target:decay()
 	end
-
 	return true
 end
 

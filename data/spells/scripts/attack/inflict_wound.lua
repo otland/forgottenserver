@@ -10,7 +10,6 @@ local function getHighestSkillLevel(creature)
 			skillLevel = creature:getEffectiveSkillLevel(skillType)
 		end
 	end
-
 	return skillLevel
 end
 
@@ -22,6 +21,5 @@ function onCastSpell(creature, variant)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		creature:addDamageCondition(target, CONDITION_BLEEDING, DAMAGELIST_LOGARITHMIC_DAMAGE, target:isPlayer() and damage / 4 or damage)
 	end
-
 	return true
 end

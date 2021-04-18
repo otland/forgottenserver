@@ -60,6 +60,7 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 		}
 		index += bytes;
 	} while (bytes == 32768);
+
 	fclose(file);
 
 	std::cout << "Line " << currentLine << ':' << std::endl;
@@ -185,7 +186,6 @@ std::string transformToSHA1(const std::string& input)
 		hexstring[index] = hexDigits[byte >> 4];
 		hexstring[index + 1] = hexDigits[byte & 15];
 	}
-
 	return std::string(hexstring, 40);
 }
 
@@ -294,7 +294,6 @@ IntegerVector vectorAtoi(const StringVector& stringVector)
 	for (const auto& string : stringVector) {
 		returnVector.push_back(std::stoi(string));
 	}
-
 	return returnVector;
 }
 
@@ -313,7 +312,6 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
 	} else if (minNumber > maxNumber) {
 		std::swap(minNumber, maxNumber);
 	}
-
 	return uniformRand(getRandomGenerator(), std::uniform_int_distribution<int32_t>::param_type(minNumber, maxNumber));
 }
 
@@ -336,7 +334,6 @@ int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 	} else {
 		increment = round(v * diff);
 	}
-
 	return minNumber + increment;
 }
 
@@ -360,7 +357,6 @@ std::string convertIPToString(uint32_t ip)
 	if (res < 0) {
 		return {};
 	}
-
 	return buffer;
 }
 
@@ -376,7 +372,6 @@ std::string formatDate(time_t time)
 	if (res < 0) {
 		return {};
 	}
-
 	return {buffer, 19};
 }
 
@@ -392,7 +387,6 @@ std::string formatDateShort(time_t time)
 	if (res == 0) {
 		return {};
 	}
-
 	return {buffer, 11};
 }
 
@@ -417,7 +411,6 @@ Direction getDirection(const std::string& string)
 	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" || string == "7") {
 		direction = DIRECTION_NORTHEAST;
 	}
-
 	return direction;
 }
 
@@ -472,7 +465,6 @@ Position getNextPosition(Direction direction, Position pos)
 			break;
 		}
 	}
-
 	return pos;
 }
 
@@ -511,7 +503,6 @@ Direction getDirectionTo(const Position& from, const Position& to)
 			}
 		}
 	}
-
 	return dir;
 }
 
@@ -722,7 +713,6 @@ MagicEffectClasses getMagicEffect(const std::string& strValue)
 	if (magicEffect != magicEffectNames.end()) {
 		return magicEffect->second;
 	}
-
 	return CONST_ME_NONE;
 }
 
@@ -732,7 +722,6 @@ ShootType_t getShootType(const std::string& strValue)
 	if (shootType != shootTypeNames.end()) {
 		return shootType->second;
 	}
-
 	return CONST_ANI_NONE;
 }
 
@@ -742,7 +731,6 @@ std::string getCombatName(CombatType_t combatType)
 	if (combatName != combatTypeNames.end()) {
 		return combatName->second;
 	}
-
 	return "unknown";
 }
 
@@ -752,7 +740,6 @@ Ammo_t getAmmoType(const std::string& strValue)
 	if (ammoType != ammoTypeNames.end()) {
 		return ammoType->second;
 	}
-
 	return AMMO_NONE;
 }
 
@@ -762,7 +749,6 @@ WeaponAction_t getWeaponAction(const std::string& strValue)
 	if (weaponAction != weaponActionNames.end()) {
 		return weaponAction->second;
 	}
-
 	return WEAPONACTION_NONE;
 }
 
@@ -772,7 +758,6 @@ Skulls_t getSkullType(const std::string& strValue)
 	if (skullType != skullNames.end()) {
 		return skullType->second;
 	}
-
 	return SKULL_NONE;
 }
 
@@ -827,7 +812,6 @@ uint32_t adlerChecksum(const uint8_t* data, size_t length)
 		a %= adler;
 		b %= adler;
 	}
-
 	return (b << 16) | a;
 }
 
@@ -839,7 +823,6 @@ std::string ucfirst(std::string str)
 			break;
 		}
 	}
-
 	return str;
 }
 
@@ -856,7 +839,6 @@ std::string ucwords(std::string str)
 			str[i] = toupper(str[i]);
 		}
 	}
-
 	return str;
 }
 
@@ -915,7 +897,6 @@ uint8_t serverFluidToClient(uint8_t serverFluid)
 			return i;
 		}
 	}
-
 	return 0;
 }
 
@@ -925,7 +906,6 @@ uint8_t clientFluidToServer(uint8_t clientFluid)
 	if (clientFluid >= size) {
 		return 0;
 	}
-
 	return clientToServerFluidMap[clientFluid];
 }
 
@@ -980,7 +960,6 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 	} else if (str == "wrapid") {
 		return ITEM_ATTRIBUTE_WRAPID;
 	}
-
 	return ITEM_ATTRIBUTE_NONE;
 }
 
@@ -995,7 +974,6 @@ std::string getFirstLine(const std::string& str)
 
 		firstLine.push_back(c);
 	}
-
 	return firstLine;
 }
 
@@ -1235,6 +1213,5 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 	} else if (tmpStr == "special" || tmpStr == "4") {
 		return SPELLGROUP_SPECIAL;
 	}
-
 	return SPELLGROUP_NONE;
 }

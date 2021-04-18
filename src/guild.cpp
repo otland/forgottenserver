@@ -55,7 +55,6 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 			return rank;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -66,7 +65,6 @@ GuildRank_ptr Guild::getRankByName(const std::string& name) const
 			return rank;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -77,7 +75,6 @@ GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 			return rank;
 		}
 	}
-
 	return nullptr;
 }
 

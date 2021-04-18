@@ -210,6 +210,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 		player:getPosition():sendMagicEffect(targetItem.effects and (isInSlot and targetItem.effects.failure or targetItem.effects.success) or items.equipment.effect)
 	end
-
 	return true
 end

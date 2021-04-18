@@ -2,7 +2,6 @@ function Player:onBrowseField(position)
 	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then
 		return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position)
 	end
-
 	return true
 end
 
@@ -46,7 +45,6 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
 		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
-
 	return true
 end
 
@@ -60,7 +58,6 @@ function Player:onMoveCreature(creature, fromPosition, toPosition)
 	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then
 		return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition)
 	end
-
 	return true
 end
 
@@ -74,7 +71,6 @@ function Player:onReportBug(message, position, category)
 	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then
 		return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category)
 	end
-
 	return true
 end
 
@@ -82,7 +78,6 @@ function Player:onTurn(direction)
 	if hasEventCallback(EVENT_CALLBACK_ONTURN) then
 		return EventCallback(EVENT_CALLBACK_ONTURN, self, direction)
 	end
-
 	return true
 end
 
@@ -90,7 +85,6 @@ function Player:onTradeRequest(target, item)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then
 		return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item)
 	end
-
 	return true
 end
 
@@ -98,7 +92,6 @@ function Player:onTradeAccept(target, item, targetItem)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then
 		return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem)
 	end
-
 	return true
 end
 
@@ -166,7 +159,6 @@ function Player:onGainExperience(source, exp, rawExp)
 			exp = exp * 0.5
 		end
 	end
-
 	return hasEventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE, self, source, exp, rawExp) or exp
 end
 

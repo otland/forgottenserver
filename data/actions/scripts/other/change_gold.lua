@@ -15,6 +15,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		return false
 	end
-
 	return true
 end

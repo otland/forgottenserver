@@ -37,7 +37,6 @@ function Game.getReverseDirection(direction)
 	elseif direction == SOUTHEAST then
 		return NORTHWEST
 	end
-
 	return NORTH
 end
 
@@ -53,7 +52,6 @@ function Game.getSkillType(weaponType)
 	elseif weaponType == WEAPON_SHIELD then
 		return SKILL_SHIELD
 	end
-
 	return SKILL_FIST
 end
 

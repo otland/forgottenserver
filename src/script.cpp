@@ -99,6 +99,5 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 			}
 		}
 	}
-
 	return true;
 }

@@ -4,6 +4,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 	end
-
 	return true
 end

@@ -29,7 +29,6 @@ WildcardTreeNode* WildcardTreeNode::getChild(char ch)
 	if (it == children.end()) {
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -39,7 +38,6 @@ const WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
 	if (it == children.end()) {
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -55,7 +53,6 @@ WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
 				std::forward_as_tuple(ch), std::forward_as_tuple(breakpoint));
 		child = &pair.first->second;
 	}
-
 	return child;
 }
 

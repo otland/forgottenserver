@@ -58,7 +58,6 @@ function belongings.onUse(player, item, fromPosition, target, toPosition, isHotk
 			return true
 		end
 	end
-
 	return false
 end
 

@@ -16,6 +16,5 @@ function onSay(player, words, param)
 		player:sendCancelMessage("There is not enough room.")
 		position:sendMagicEffect(CONST_ME_POFF)
 	end
-
 	return false
 end

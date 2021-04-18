@@ -102,7 +102,6 @@ int64_t Creature::getTimeSinceLastMove() const
 	if (lastStep) {
 		return OTSYS_TIME() - lastStep;
 	}
-
 	return std::numeric_limits<int64_t>::max();
 }
 
@@ -383,7 +382,6 @@ int32_t Creature::getWalkCache(const Position& pos) const
 			}
 		}
 	}
-
 	//out of range
 	return 2;
 }
@@ -767,7 +765,6 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 			dropLoot(corpse->getContainer(), lastHitCreature);
 		}
 	}
-
 	return true;
 }
 
@@ -777,7 +774,6 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	if (it == damageMap.end()) {
 		return false;
 	}
-
 	return (OTSYS_TIME() - it->second.ticks) <= g_config.getNumber(ConfigManager::PZ_LOCKED);
 }
 
@@ -895,7 +891,6 @@ bool Creature::setAttackedCreature(Creature* creature)
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(creature);
 	}
-
 	return true;
 }
 
@@ -930,7 +925,6 @@ void Creature::goToFollowCreature()
 					} else {
 						hasFollowPath = false;
 					}
-
 					return;
 				}
 			}
@@ -1003,7 +997,6 @@ double Creature::getDamageRatio(Creature* attacker) const
 	if (totalDamage == 0) {
 		return 0;
 	}
-
 	return (static_cast<double>(attackerDamage) / totalDamage);
 }
 
@@ -1133,7 +1126,6 @@ bool Creature::onKilledCreature(Creature* target, bool)
 	for (CreatureEvent* killEvent : killEvents) {
 		killEvent->executeOnKill(this, target);
 	}
-
 	return false;
 }
 
@@ -1182,7 +1174,6 @@ bool Creature::setMaster(Creature* newMaster) {
 			decrementReferenceCounter();
 		}
 	}
-
 	return true;
 }
 
@@ -1327,7 +1318,6 @@ Condition* Creature::getCondition(ConditionType_t type) const
 			return condition;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -1338,7 +1328,6 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 			return condition;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -1379,7 +1368,6 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId/* = 0*/) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1404,7 +1392,6 @@ int64_t Creature::getStepDuration(Direction dir) const
 	if ((dir & DIRECTION_DIAGONAL_MASK) != 0) {
 		stepDuration *= 3;
 	}
-
 	return stepDuration;
 }
 
@@ -1444,7 +1431,6 @@ int64_t Creature::getStepDuration() const
 	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
 		stepDuration *= 2;
 	}
-
 	return stepDuration;
 }
 
@@ -1459,7 +1445,6 @@ int64_t Creature::getEventStepTicks(bool onlyDelay) const
 			ret = stepDuration * lastStepCost;
 		}
 	}
-
 	return ret;
 }
 
@@ -1531,7 +1516,6 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 	if (resetTypeBit) {
 		scriptEventsBitField &= ~(static_cast<uint32_t>(1) << type);
 	}
-
 	return true;
 }
 
@@ -1552,7 +1536,6 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 			tmpEventList.push_back(creatureEvent);
 		}
 	}
-
 	return tmpEventList;
 }
 
@@ -1600,7 +1583,6 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -1620,7 +1602,6 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 		if (testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist) {
 			return false;
 		}
-
 		return true;
 	} else if (testDist <= fpp.maxTargetDist) {
 		if (testDist < fpp.minTargetDist) {
@@ -1636,7 +1617,6 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 			return true;
 		}
 	}
-
 	return false;
 }
 

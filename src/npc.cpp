@@ -50,7 +50,6 @@ Npc* Npc::createNpc(const std::string& name)
 	if (!npc->load()) {
 		return nullptr;
 	}
-
 	return npc.release();
 }
 
@@ -231,7 +230,6 @@ bool Npc::loadFromXml()
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -240,7 +238,6 @@ bool Npc::canSee(const Position& pos) const
 	if (pos.z != getPosition().z) {
 		return false;
 	}
-
 	return Creature::canSee(getPosition(), pos, 3, 3);
 }
 
@@ -412,7 +409,6 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	if (getTimeSinceLastMove() < walkTicks) {
 		return false;
 	}
-
 	return getRandomStep(dir);
 }
 
@@ -460,7 +456,6 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	if (!ignoreHeight && tile->hasHeight(1)) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -664,7 +659,6 @@ int NpcScriptInterface::luaActionMove(lua_State* L)
 	if (npc) {
 		g_game.internalMoveCreature(npc, getNumber<Direction>(L, 1));
 	}
-
 	return 0;
 }
 
@@ -691,7 +685,6 @@ int NpcScriptInterface::luaActionTurn(lua_State* L)
 	if (npc) {
 		g_game.internalCreatureTurn(npc, getNumber<Direction>(L, 1));
 	}
-
 	return 0;
 }
 
@@ -737,7 +730,6 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 		int32_t dist = std::max<int32_t>(Position::getDistanceX(npcPos, thingPos), Position::getDistanceY(npcPos, thingPos));
 		lua_pushnumber(L, dist);
 	}
-
 	return 1;
 }
 
@@ -748,7 +740,6 @@ int NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 	if (npc) {
 		npc->setCreatureFocus(getCreature(L, -1));
 	}
-
 	return 0;
 }
 
@@ -761,7 +752,6 @@ int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 
@@ -782,7 +772,6 @@ int NpcScriptInterface::luaGetNpcParameter(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 
@@ -980,7 +969,6 @@ int NpcScriptInterface::luaNpcGetParameter(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 
@@ -995,7 +983,6 @@ int NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 

@@ -57,6 +57,5 @@ function onSay(player, words, param)
 
 		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 	end
-
 	return false
 end

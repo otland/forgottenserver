@@ -124,7 +124,6 @@ do
 		else
 			ss:append(', ')
 		end
-
 		return begin
 	end
 
@@ -254,7 +253,6 @@ do
 			begin = addSeparator(ss, begin)
 			ss:append('speed %s%d', showpos(abilities.speed), math.abs(abilities.speed / 2))
 		end
-
 		return begin
 	end
 
@@ -554,7 +552,6 @@ do
 				ss:append('\n%s', text)
 			end
 		end
-
 		return ss:concat()
 	end
 

@@ -20,6 +20,5 @@ function onSay(player, words, param)
 			newPosition:sendMagicEffect(CONST_ME_TELEPORT)
 		end
 	end
-
 	return false
 end

@@ -183,7 +183,6 @@ Raid* Raids::getRaidByName(const std::string& name)
 			return raid;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -285,7 +284,6 @@ RaidEvent* Raid::getNextRaidEvent()
 	if (nextEvent < raidEvents.size()) {
 		return raidEvents[nextEvent];
 	}
-
 	return nullptr;
 }
 
@@ -338,7 +336,6 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		messageType = MESSAGE_EVENT_ADVANCE;
 		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 	}
-
 	return true;
 }
 
@@ -382,7 +379,6 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		std::cout << "[Error] Raid: z tag missing for singlespawn event." << std::endl;
 		return false;
 	}
-
 	return true;
 }
 
@@ -399,7 +395,6 @@ bool SingleSpawnEvent::executeEvent()
 		std::cout << "[Error] Raids: Cant place monster " << monsterName << std::endl;
 		return false;
 	}
-
 	return true;
 }
 
@@ -522,7 +517,6 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 		spawnList.emplace_back(name, minAmount, maxAmount);
 	}
-
 	return true;
 }
 
@@ -551,7 +545,6 @@ bool AreaSpawnEvent::executeEvent()
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -571,7 +564,6 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		std::cout << "Error: [ScriptEvent::configureRaidEvent] Can not load raid script." << std::endl;
 		return false;
 	}
-
 	return true;
 }
 

@@ -25,6 +25,5 @@ function onSay(player, words, param)
 		position:sendDistanceEffect(toPositionLow, effect)
 		position:sendDistanceEffect(toPositionHigh, effect)
 	end
-
 	return false
 end

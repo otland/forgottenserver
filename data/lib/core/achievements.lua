@@ -473,11 +473,9 @@ function getAchievementInfoById(id)
 			for inf, it in pairs(v) do
 				targetAchievement[inf] = it
 			end
-
 			return targetAchievement
 		end
 	end
-
 	return false
 end
 
@@ -490,11 +488,9 @@ function getAchievementInfoByName(name)
 			for inf, it in pairs(v) do
 				targetAchievement[inf] = it
 			end
-
 			return targetAchievement
 		end
 	end
-
 	return false
 end
 
@@ -505,7 +501,6 @@ function getSecretAchievements()
 			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-
 	return targetAchievement
 end
 
@@ -516,7 +511,6 @@ function getPublicAchievements()
 			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-
 	return targetAchievement
 end
 
@@ -536,7 +530,6 @@ function isAchievementSecret(ach)
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
 	end
-
 	return achievement.secret
 end
 
@@ -552,7 +545,6 @@ function Player.hasAchievement(self, ach)
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
 	end
-
 	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
 end
 
@@ -563,7 +555,6 @@ function Player.getAchievements(self)
 			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-
 	return targetAchievement
 end
 
@@ -586,7 +577,6 @@ function Player.addAchievement(self, ach, hideMsg)
 			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. achievement.name .. "\".")
 		end
 	end
-
 	return true
 end
 
@@ -606,7 +596,6 @@ function Player.removeAchievement(self, ach)
 	if self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, -1)
 	end
-
 	return true
 end
 
@@ -614,7 +603,6 @@ function Player.addAllAchievements(self, hideMsg)
 	for i = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
 		self:addAchievement(i, hideMsg)
 	end
-
 	return true
 end
 
@@ -624,7 +612,6 @@ function Player.removeAllAchievements(self)
 			self:removeAchievement(k)
 		end
 	end
-
 	return true
 end
 
@@ -635,7 +622,6 @@ function Player.getSecretAchievements(self)
 			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-
 	return targetAchievement
 end
 
@@ -646,7 +632,6 @@ function Player.getPublicAchievements(self)
 			targetAchievement[#targetAchievement + 1] = k
 		end
 	end
-
 	return targetAchievement
 end
 
@@ -661,7 +646,6 @@ function Player.getAchievementPoints(self)
 			end
 		end
 	end
-
 	return points
 end
 
@@ -680,6 +664,5 @@ function Player.addAchievementProgress(self, ach, value)
 		self:setStorageValue(storage, value + 1)
 		self:addAchievement(achievement.id)
 	end
-
 	return true
 end

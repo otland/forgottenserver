@@ -25,7 +25,6 @@ function spellwand.onUse(player, item, fromPosition, target, toPosition, isHotke
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 		return true
 	end
-
 	return true
 end
 

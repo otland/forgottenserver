@@ -59,7 +59,6 @@ std::tuple<WaitList&, WaitList::iterator, WaitList::size_type> findClient(const 
 	if (it != waitList.end()) {
 		return std::make_tuple(std::ref(waitList), it, priorityWaitList.size() + std::distance(it, waitList.end()) + 1);
 	}
-
 	return std::make_tuple(std::ref(waitList), waitList.end(), priorityWaitList.size() + waitList.size());
 }
 
@@ -74,7 +73,6 @@ uint8_t getWaitTime(std::size_t slot)
 	} else if (slot < 50) {
 		return 60;
 	}
-
 	return 120;
 }
 
@@ -134,7 +132,6 @@ std::size_t clientLogin(const Player& player)
 		currentSlot += waitList.size();
 		waitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player.getGUID());
 	}
-
 	return currentSlot;
 }
 
@@ -498,7 +495,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		if (recvbyte == 0x0F) {
 			disconnect();
 		}
-
 		return;
 	}
 
@@ -750,7 +746,6 @@ bool ProtocolGame::canSee(const Creature* c) const
 	if (!player->canSeeCreature(c)) {
 		return false;
 	}
-
 	return canSee(c->getPosition());
 }
 
@@ -786,7 +781,6 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 			(y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -2559,7 +2553,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		if (isLogin) {
 			sendMagicEffect(pos, CONST_ME_TELEPORT);
 		}
-
 		return;
 	}
 

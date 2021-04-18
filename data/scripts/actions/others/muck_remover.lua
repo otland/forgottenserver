@@ -34,7 +34,6 @@ function muckRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 			break
 		end
 	end
-
 	return true
 end
 

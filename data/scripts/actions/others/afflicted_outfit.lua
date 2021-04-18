@@ -15,6 +15,7 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 		if player:getStorageValue(PlayerStorageKeys.afflictedPlagueMask) == 1 then
 			return false
 		end
+
 		player:addOutfitAddon(430, 2)
 		player:addOutfitAddon(431, 2)
 		player:setStorageValue(PlayerStorageKeys.afflictedPlagueMask, 1)
@@ -63,7 +64,6 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 		player:setStorageValue(PlayerStorageKeys.afflictedOutfit, 1)
 		player:say("You have restored an outfit.", TALKTYPE_MONSTER_SAY, false, player)
 	end
-
 	return true
 end
 

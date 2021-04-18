@@ -56,7 +56,6 @@ if Modules == nil then
 		elseif parameters.moveup then
 			npcHandler.keywordHandler:moveUp(cid, parameters.moveup)
 		end
-
 		return true
 	end
 
@@ -219,7 +218,6 @@ if Modules == nil then
 			obj.callback = FOCUS_FAREWELLWORDS.callback or FocusModule.messageMatcher
 			handler.keywordHandler:addKeyword(obj, FocusModule.onFarewell, {module = self})
 		end
-
 		return true
 	end
 
@@ -248,7 +246,6 @@ if Modules == nil then
 				end
 			end
 		end
-
 		return false
 	end
 
@@ -504,7 +501,6 @@ if Modules == nil then
 				destination:sendMagicEffect(CONST_ME_TELEPORT)
 			end
 		end
-
 		return true
 	end
 
@@ -766,7 +762,6 @@ if Modules == nil then
 				handler.keywordHandler:addKeyword(obj, ShopModule.requestTrade, {module = self})
 			end
 		end
-
 		return true
 	end
 
@@ -779,7 +774,6 @@ if Modules == nil then
 				end
 			end
 		end
-
 		return false
 	end
 
@@ -801,7 +795,6 @@ if Modules == nil then
 		elseif ret > self.maxCount then
 			ret = self.maxCount
 		end
-
 		return ret
 	end
 
@@ -872,7 +865,6 @@ if Modules == nil then
 				end
 			end
 		end
-
 		return nil
 	end
 
@@ -1006,10 +998,8 @@ if Modules == nil then
 				if not player:removeTotalMoney((a * shopItem.buy) + (b * 20)) then
 					return false
 				end
-
 				return true
 			end
-
 			return false
 		else
 			local msg = self.npcHandler:getMessage(MESSAGE_BOUGHT)
@@ -1152,10 +1142,8 @@ if Modules == nil then
 					if shop_itemid[cid] == ITEM_PARCEL then
 						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
 					end
-
 					return true
 				end
-
 				return false
 			else
 				local msg = module.npcHandler:getMessage(MESSAGE_ONBUY)
@@ -1168,7 +1156,6 @@ if Modules == nil then
 				if shop_itemid[cid] == ITEM_PARCEL then
 					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
 				end
-
 				return true
 			end
 		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
@@ -1253,7 +1240,6 @@ if Modules == nil then
 			msg = module.npcHandler:parseMessage(msg, parseInfo)
 			module.npcHandler:say(msg, cid)
 		end
-
 		return true
 	end
 
@@ -1300,7 +1286,6 @@ if Modules == nil then
 				Npc():say(voice.text, voice.talktype)
 			end
 		end
-
 		return true
 	end
 end

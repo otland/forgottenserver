@@ -130,14 +130,12 @@ class TileItemVector : private ItemVector
 			if (getTopItemCount() == 0) {
 				return nullptr;
 			}
-
 			return *(getEndTopItem() - 1);
 		}
 		inline Item* getTopDownItem() const {
 			if (downItemCount == 0) {
 				return nullptr;
 			}
-
 			return *getBeginDownItem();
 		}
 		void addDownItemCount(int32_t increment) {
@@ -197,7 +195,6 @@ class Tile : public Cylinder
 			if (ground) {
 				thingCount++;
 			}
-
 			return thingCount;
 		}
 		// If these return != 0 the associated vectors are guaranteed to exists
@@ -227,7 +224,6 @@ class Tile : public Cylinder
 			} else if (hasFlag(TILESTATE_PVPZONE)) {
 				return ZONE_PVP;
 			}
-
 			return ZONE_NORMAL;
 		}
 
@@ -371,7 +367,6 @@ class StaticTile final : public Tile
 			if (!items) {
 				items.reset(new TileItemVector);
 			}
-
 			return items.get();
 		}
 
@@ -385,7 +380,6 @@ class StaticTile final : public Tile
 			if (!creatures) {
 				creatures.reset(new CreatureVector);
 			}
-
 			return creatures.get();
 		}
 };

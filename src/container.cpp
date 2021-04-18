@@ -83,7 +83,6 @@ Container* Container::getParentContainer()
 	if (!thing) {
 		return nullptr;
 	}
-
 	return thing->getContainer();
 }
 
@@ -110,10 +109,8 @@ Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 		if (!propStream.read<uint32_t>(serializationCount)) {
 			return ATTR_READ_ERROR;
 		}
-
 		return ATTR_READ_END;
 	}
-
 	return Item::readAttr(attr, propStream);
 }
 
@@ -148,7 +145,6 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 		addItem(item);
 		updateItemWeight(item->getWeight());
 	}
-
 	return true;
 }
 
@@ -194,7 +190,6 @@ std::ostringstream& Container::getContentDescription(std::ostringstream& os) con
 	if (firstitem) {
 		os << "nothing";
 	}
-
 	return os;
 }
 
@@ -203,7 +198,6 @@ Item* Container::getItemByIndex(size_t index) const
 	if (index >= size()) {
 		return nullptr;
 	}
-
 	return itemlist[index];
 }
 
@@ -213,7 +207,6 @@ uint32_t Container::getItemHoldingCount() const
 	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
 		++counter;
 	}
-
 	return counter;
 }
 
@@ -224,7 +217,6 @@ bool Container::isHoldingItem(const Item* item) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -316,7 +308,6 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		if (!item->isStoreItem()) {
 			ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
 		}
-
 		return ret;
 	}
 
@@ -402,7 +393,6 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -450,7 +440,6 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 		if (parentContainer) {
 			return parentContainer;
 		}
-
 		return this;
 	}
 
@@ -506,7 +495,6 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 			++n;
 		}
 	}
-
 	return this;
 }
 
@@ -639,7 +627,6 @@ int32_t Container::getThingIndex(const Thing* thing) const
 
 		++index;
 	}
-
 	return -1;
 }
 
@@ -661,7 +648,6 @@ uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType/* = -1*/) 
 			count += countByType(item, subType);
 		}
 	}
-
 	return count;
 }
 
@@ -670,7 +656,6 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 	for (Item* item : itemlist) {
 		countMap[item->getID()] += item->getItemCount();
 	}
-
 	return countMap;
 }
 
@@ -686,7 +671,6 @@ ItemVector Container::getItems(bool recursive /*= false*/)
 			containerItems.push_back(item);
 		}
 	}
-
 	return containerItems;
 }
 
@@ -756,7 +740,6 @@ ContainerIterator Container::iterator() const
 		cit.over.push_back(this);
 		cit.cur = itemlist.begin();
 	}
-
 	return cit;
 }
 

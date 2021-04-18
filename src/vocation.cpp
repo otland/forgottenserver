@@ -146,7 +146,6 @@ bool Vocations::loadFromXml()
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -157,7 +156,6 @@ Vocation* Vocations::getVocation(uint16_t id)
 		std::cout << "[Warning - Vocations::getVocation] Vocation " << id << " not found." << std::endl;
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -168,7 +166,6 @@ int32_t Vocations::getVocationId(const std::string& name) const
 			return std::tolower(a) == std::tolower(b);
 		});
 	});
-
 	return it != vocationsMap.end() ? it->first : -1;
 }
 
@@ -177,7 +174,6 @@ uint16_t Vocations::getPromotedVocation(uint16_t id) const
 	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](auto it) {
 		return it.second.fromVocation == id && it.first != id;
 	});
-
 	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 
@@ -188,7 +184,6 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-
 	return skillBase[skill] * std::pow(skillMultipliers[skill], static_cast<int32_t>(level - 11));
 }
 
@@ -197,6 +192,5 @@ uint64_t Vocation::getReqMana(uint32_t magLevel)
 	if (magLevel == 0) {
 		return 0;
 	}
-
 	return 1600 * std::pow(manaMultiplier, static_cast<int32_t>(magLevel - 1));
 }

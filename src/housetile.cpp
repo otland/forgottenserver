@@ -97,7 +97,6 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 			}
 		}
 	}
-
 	return Tile::queryAdd(index, thing, count, flags, actor);
 }
 
@@ -126,7 +125,6 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 			}
 		}
 	}
-
 	return Tile::queryDestination(index, thing, destItem, flags);
 }
 
@@ -143,6 +141,5 @@ ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	}
-
 	return Tile::queryRemove(thing, count, flags);
 }

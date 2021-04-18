@@ -97,7 +97,6 @@ bool Groups::load()
 
 		groups.push_back(group);
 	}
-
 	return true;
 }
 
@@ -108,6 +107,5 @@ Group* Groups::getGroup(uint16_t id)
 			return &group;
 		}
 	}
-
 	return nullptr;
 }

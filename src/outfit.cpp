@@ -63,7 +63,6 @@ bool Outfits::loadFromXml()
 			outfitNode.attribute("unlocked").as_bool(true)
 		);
 	}
-
 	return true;
 }
 
@@ -74,7 +73,6 @@ const Outfit* Outfits::getOutfitByLookType(PlayerSex_t sex, uint16_t lookType) c
 			return &outfit;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -87,6 +85,5 @@ const Outfit* Outfits::getOutfitByLookType(uint16_t lookType) const
 			}
 		}
 	}
-
 	return nullptr;
 }

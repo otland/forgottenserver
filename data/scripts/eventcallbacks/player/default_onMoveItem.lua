@@ -36,7 +36,6 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 			end
 		end
 	end
-
 	return true
 end
 

@@ -5,7 +5,6 @@ function roastedMeat.onUse(player, item, fromPosition, target, toPosition, isHot
 		item:transform(24843) -- roasted meat
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are roasting the fresh and bloody meat over the fire. Soon it smells appetizing.")
 	end
-
 	return true
 end
 

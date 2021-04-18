@@ -158,7 +158,6 @@ if NpcHandler == nil then
 				return true
 			end
 		end
-
 		return false
 	end
 
@@ -229,7 +228,6 @@ if NpcHandler == nil then
 		if self.callbackFunctions then
 			ret = self.callbackFunctions[id]
 		end
-
 		return ret
 	end
 
@@ -290,7 +288,6 @@ if NpcHandler == nil then
 				break
 			end
 		end
-
 		return ret
 	end
 
@@ -300,7 +297,6 @@ if NpcHandler == nil then
 		if self.messages then
 			ret = self.messages[id]
 		end
-
 		return ret
 	end
 
@@ -317,7 +313,6 @@ if NpcHandler == nil then
 		for search, replace in pairs(parseInfo) do
 			ret = string.gsub(ret, search, replace)
 		end
-
 		return ret
 	end
 
@@ -490,7 +485,6 @@ if NpcHandler == nil then
 				return true
 			end
 		end
-
 		return false
 	end
 
@@ -579,7 +573,6 @@ if NpcHandler == nil then
 		if distance == -1 then
 			return false
 		end
-
 		return distance <= self.talkRadius
 	end
 
@@ -611,7 +604,6 @@ if NpcHandler == nil then
 			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
 			ret[#ret + 1] = self.eventDelayedSay[pcid][aux]
 		end
-
 		return(ret)
 	end
 

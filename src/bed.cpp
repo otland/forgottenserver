@@ -48,7 +48,6 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 					sleeperGUID = guid;
 				}
 			}
-
 			return ATTR_READ_CONTINUE;
 		}
 
@@ -66,7 +65,6 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 	}
-
 	return Item::readAttr(attr, propStream);
 }
 
@@ -93,7 +91,6 @@ BedItem* BedItem::getNextBedItem() const
 	if (!tile) {
 		return nullptr;
 	}
-
 	return tile->getBedItem();
 }
 
@@ -119,7 +116,6 @@ bool BedItem::canUse(Player* player)
 	if (house->getHouseAccessLevel(&sleeper) > house->getHouseAccessLevel(player)) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -137,7 +133,6 @@ bool BedItem::trySleep(Player* player)
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
-
 	return true;
 }
 
@@ -178,7 +173,6 @@ bool BedItem::sleep(Player* player)
 	if (nextBedItem) {
 		nextBedItem->updateAppearance(player);
 	}
-
 	return true;
 }
 

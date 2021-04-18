@@ -60,6 +60,7 @@ void Dispatcher::threadMain()
 
 			delete task;
 		}
+
 		tmpTaskList.clear();
 	}
 }

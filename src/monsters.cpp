@@ -82,7 +82,6 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 			loadMonster(it.second, it.first, reloading);
 		}
 	}
-
 	return true;
 }
 
@@ -526,7 +525,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 	if (combatSpell) {
 		sb.combatSpell = true;
 	}
-
 	return true;
 }
 
@@ -773,7 +771,6 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 	if (combatSpell) {
 		sb.combatSpell = true;
 	}
-
 	return true;
 }
 
@@ -1360,7 +1357,6 @@ bool MonsterType::loadCallback(LuaScriptInterface* scriptInterface)
 	} else if (info.eventType == MONSTERS_EVENT_SAY) {
 		info.creatureSayEvent = id;
 	}
-
 	return true;
 }
 
@@ -1445,7 +1441,6 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 	if ((attr = node.attribute("text"))) {
 		lootBlock.text = attr.as_string();
 	}
-
 	return true;
 }
 
@@ -1475,9 +1470,7 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 		if (it2 == unloadedMonsters.end()) {
 			return nullptr;
 		}
-
 		return loadMonster(it2->second, name);
 	}
-
 	return &it->second;
 }

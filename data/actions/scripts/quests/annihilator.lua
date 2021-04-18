@@ -34,6 +34,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	elseif item.itemid == 1946 then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
-
 	return true
 end

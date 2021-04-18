@@ -8,6 +8,5 @@ function onStepIn(creature, item, position, fromPosition)
 		creature:teleportTo(fromPosition, true)
 		return false
 	end
-
 	return true
 end

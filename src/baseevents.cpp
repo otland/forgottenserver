@@ -78,7 +78,6 @@ bool BaseEvents::loadFromXml()
 			registerEvent(std::move(event), node);
 		}
 	}
-
 	return true;
 }
 
@@ -123,7 +122,6 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
 		return false;
 	}
-
 	return true;
 }
 

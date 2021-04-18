@@ -10,7 +10,6 @@ local function getMonthDayEnding(day)
 	elseif day == "03" or day == "23" then
 		return "rd"
 	end
-
 	return "th"
 end
 
@@ -59,6 +58,5 @@ function onSay(player, words, param)
 	else
 		player:sendCancelMessage("A player with that name does not exist.")
 	end
-
 	return false
 end

@@ -50,7 +50,6 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	if (it == weapons.end()) {
 		return nullptr;
 	}
-
 	return it->second;
 }
 
@@ -123,7 +122,6 @@ Event_ptr Weapons::getEvent(const std::string& nodeName)
 	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
-
 	return nullptr;
 }
 
@@ -135,7 +133,6 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 	if (!result.second) {
 		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID() << std::endl;
 	}
-
 	return result.second;
 }
 
@@ -143,7 +140,6 @@ bool Weapons::registerLuaEvent(Weapon* event)
 {
 	Weapon_ptr weapon{ event };
 	weapons[weapon->getID()] = weapon.release();
-
 	return true;
 }
 
@@ -332,10 +328,8 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		if (player->getMagicLevel() < getReqMagLv()) {
 			damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
 		}
-
 		return damageModifier;
 	}
-
 	return 100;
 }
 
@@ -376,7 +370,6 @@ bool Weapon::useFist(Player* player, Creature* target)
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
 		player->addSkillAdvance(SKILL_FIST, 1);
 	}
-
 	return true;
 }
 
@@ -485,7 +478,6 @@ uint32_t Weapon::getManaCost(const Player* player) const
 	if (manaPercent == 0) {
 		return 0;
 	}
-
 	return (player->getMaxMana() * manaPercent) / 100;
 }
 
@@ -498,7 +490,6 @@ int32_t Weapon::getHealthCost(const Player* player) const
 	if (healthPercent == 0) {
 		return 0;
 	}
-
 	return (player->getMaxHealth() * healthPercent) / 100;
 }
 
@@ -552,6 +543,7 @@ void WeaponMelee::configureWeapon(const ItemType& it)
 		elementType = COMBAT_NONE;
 		elementDamage = 0;
 	}
+
 	Weapon::configureWeapon(it);
 }
 
@@ -596,7 +588,6 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 			break;
 		}
 	}
-
 	return false;
 }
 
@@ -624,7 +615,6 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 	if (maxDamage) {
 		return -maxValue;
 	}
-
 	return -normal_random(0, maxValue);
 }
 
@@ -845,7 +835,6 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 		Weapon::internalUseWeapon(player, item, destTile);
 	}
-
 	return true;
 }
 
@@ -875,7 +864,6 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
 		}
 	}
-
 	return -normal_random(minValue, static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier));
 }
 
@@ -908,7 +896,6 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	} else {
 		minValue = 0;
 	}
-
 	return -normal_random(minValue, maxValue);
 }
 
@@ -937,7 +924,6 @@ bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& s
 	} else {
 		skillpoint = 0;
 	}
-
 	return true;
 }
 
@@ -977,7 +963,6 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 	} else {
 		std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist." << std::endl;
 	}
-
 	return true;
 }
 
@@ -993,6 +978,5 @@ int32_t WeaponWand::getWeaponDamage(const Player*, const Creature*, const Item*,
 	if (maxDamage) {
 		return -maxChange;
 	}
-
 	return -normal_random(minChange, maxChange);
 }

@@ -39,7 +39,6 @@ function redSurpriseBag.onUse(player, item, fromPosition, target, toPosition, is
 			return true
 		end
 	end
-
 	return false
 end
 

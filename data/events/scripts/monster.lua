@@ -8,6 +8,5 @@ function Monster:onSpawn(position, startup, artificial)
 	if hasEventCallback(EVENT_CALLBACK_ONSPAWN) then
 		return EventCallback(EVENT_CALLBACK_ONSPAWN, self, position, startup, artificial)
 	end
-
 	return true
 end

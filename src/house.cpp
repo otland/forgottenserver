@@ -164,7 +164,6 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 	if (guestList.isInList(player)) {
 		return HOUSE_GUEST;
 	}
-
 	return HOUSE_NOT_INVITED;
 }
 
@@ -188,7 +187,6 @@ bool House::kickPlayer(Player* player, Player* target)
 		g_game.addMagicEffect(oldPosition, CONST_ME_POFF);
 		g_game.addMagicEffect(getEntryPosition(), CONST_ME_TELEPORT);
 	}
-
 	return true;
 }
 
@@ -203,7 +201,6 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 		if (door) {
 			door->setAccessList(textlist);
 		}
-
 		// We do not have to kick anyone
 		return;
 	}
@@ -239,7 +236,6 @@ bool House::transferToDepot() const
 		transferToDepot(&tmpPlayer);
 		IOLoginData::savePlayer(&tmpPlayer);
 	}
-
 	return true;
 }
 
@@ -270,7 +266,6 @@ bool House::transferToDepot(Player* player) const
 	for (Item* item : moveItemList) {
 		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT);
 	}
-
 	return true;
 }
 
@@ -288,7 +283,6 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 	if (!door) {
 		return false;
 	}
-
 	return door->getAccessList(list);
 }
 
@@ -327,7 +321,6 @@ Door* House::getDoorByNumber(uint32_t doorId) const
 			return door;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -338,7 +331,6 @@ Door* House::getDoorByPosition(const Position& pos)
 			return door;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -486,7 +478,6 @@ const Guild* getGuildByName(const std::string& name)
 	if (guild) {
 		return guild;
 	}
-
 	return IOGuild::loadGuild(guildId);
 }
 
@@ -546,7 +537,6 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 		setDoorId(doorId);
 		return ATTR_READ_CONTINUE;
 	}
-
 	return Item::readAttr(attr, propStream);
 }
 
@@ -572,7 +562,6 @@ bool Door::canUse(const Player* player)
 	if (house->getHouseAccessLevel(player) >= HOUSE_SUBOWNER) {
 		return true;
 	}
-
 	return accessList->isInList(player);
 }
 
@@ -611,7 +600,6 @@ House* Houses::getHouseByPlayerId(uint32_t playerId)
 			return it.second;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -650,6 +638,7 @@ bool Houses::loadHousesXML(const std::string& filename)
 					    << " - Name: " << house->getName()
 					    << " - House id: " << houseId << std::endl;
 		}
+
 		house->setEntryPos(entryPos);
 
 		house->setRent(pugi::cast<uint32_t>(houseNode.attribute("rent").value()));

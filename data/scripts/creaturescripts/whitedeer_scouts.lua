@@ -17,7 +17,6 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 
 		targetMonster:say("The elves came too late to save the deer, however they might avenge it.", TALKTYPE_MONSTER_SAY)
 	end
-
 	return true
 end
 

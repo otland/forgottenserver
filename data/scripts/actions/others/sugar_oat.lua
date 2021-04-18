@@ -28,7 +28,6 @@ function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			player:addAchievementProgress("Homebrewed", 50)
 		end
 	end
-
 	return true
 end
 

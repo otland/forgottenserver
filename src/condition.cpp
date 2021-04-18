@@ -61,7 +61,6 @@ bool Condition::unserialize(PropStream& propStream)
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -290,7 +289,6 @@ Condition* Condition::createCondition(PropStream& propStream)
 	if (!propStream.read<uint8_t>(aggressive)) {
 		return nullptr;
 	}
-
 	return createCondition(static_cast<ConditionId_t>(id), static_cast<ConditionType_t>(type), ticks, 0, buff != 0, subId, aggressive);
 }
 
@@ -299,7 +297,6 @@ bool Condition::startCondition(Creature*)
 	if (ticks > 0) {
 		endTime = ticks + OTSYS_TIME();
 	}
-
 	return true;
 }
 
@@ -312,7 +309,6 @@ bool Condition::isPersistent() const
 	if (!(id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT || conditionType == CONDITION_MUTED)) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -334,7 +330,6 @@ bool Condition::updateCondition(const Condition* addCondition)
 	if (addCondition->getTicks() >= 0 && getEndTime() > (OTSYS_TIME() + addCondition->getTicks())) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -384,7 +379,6 @@ uint32_t ConditionGeneric::getIcons() const
 			break;
 		}
 	}
-
 	return icons;
 }
 
@@ -423,7 +417,6 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
 		return propStream.read<bool>(disableDefense);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -459,7 +452,6 @@ bool ConditionAttributes::startCondition(Creature* creature)
 		updatePercentStats(player);
 		updateStats(player);
 	}
-
 	return true;
 }
 
@@ -779,7 +771,6 @@ bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& pr
 	} else if (attr == CONDITIONATTR_MANAGAIN) {
 		return propStream.read<uint32_t>(manaGain);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -871,7 +862,6 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 			}
 		}
 	}
-
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
@@ -925,7 +915,6 @@ bool ConditionSoul::unserializeProp(ConditionAttr_t attr, PropStream& propStream
 	} else if (attr == CONDITIONATTR_SOULTICKS) {
 		return propStream.read<uint32_t>(soulTicks);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -952,7 +941,6 @@ bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
 			}
 		}
 	}
-
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
@@ -1030,7 +1018,6 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 			return false;
 		}
 	}
-
 	return ret;
 }
 
@@ -1058,10 +1045,8 @@ bool ConditionDamage::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 		if (ticks != -1) {
 			setTicks(ticks + damageInfo.interval);
 		}
-
 		return true;
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1091,7 +1076,6 @@ bool ConditionDamage::updateCondition(const Condition* addCondition)
 	if (ticks == -1 && conditionDamage.ticks > 0) {
 		return false;
 	}
-
 	return conditionDamage.getTotalDamage() > getTotalDamage();
 }
 
@@ -1123,7 +1107,6 @@ bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
 			setTicks(ticks + damageInfo.interval);
 		}
 	}
-
 	return true;
 }
 
@@ -1153,7 +1136,6 @@ bool ConditionDamage::init()
 			addDamage(1, tickInterval, -value);
 		}
 	}
-
 	return !damageList.empty();
 }
 
@@ -1173,7 +1155,6 @@ bool ConditionDamage::startCondition(Creature* creature)
 	if (!init()) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1213,7 +1194,6 @@ bool ConditionDamage::executeCondition(Creature* creature, int32_t interval)
 			interval = 0;
 		}
 	}
-
 	return Condition::executeCondition(creature, interval);
 }
 
@@ -1228,10 +1208,8 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 		if (ticks != -1) {
 			damageList.pop_front();
 		}
-
 		return true;
 	}
-
 	return false;
 }
 
@@ -1255,14 +1233,12 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 		if (!creature->isInGhostMode()) {
 			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
 		}
-
 		return false;
 	}
 
 	if (g_game.combatBlockHit(damage, attacker, creature, false, false, field)) {
 		return false;
 	}
-
 	return g_game.combatChangeHealth(attacker, creature, damage);
 }
 
@@ -1328,7 +1304,6 @@ int32_t ConditionDamage::getTotalDamage() const
 	} else {
 		result = minDamage + (maxDamage - minDamage) / 2;
 	}
-
 	return std::abs(result);
 }
 
@@ -1380,7 +1355,6 @@ uint32_t ConditionDamage::getIcons() const
 			break;
 		}
 	}
-
 	return icons;
 }
 
@@ -1426,7 +1400,6 @@ bool ConditionSpeed::setParam(ConditionParam_t param, int32_t value)
 	} else {
 		conditionType = CONDITION_PARALYZE;
 	}
-
 	return true;
 }
 
@@ -1443,7 +1416,6 @@ bool ConditionSpeed::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 	} else if (attr == CONDITIONATTR_FORMULA_MAXB) {
 		return propStream.read<float>(maxb);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1546,7 +1518,6 @@ uint32_t ConditionSpeed::getIcons() const
 			break;
 		}
 	}
-
 	return icons;
 }
 
@@ -1577,7 +1548,6 @@ bool ConditionOutfit::unserializeProp(ConditionAttr_t attr, PropStream& propStre
 	if (attr == CONDITIONATTR_OUTFIT) {
 		return propStream.read<Outfit_t>(outfit);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1648,7 +1618,6 @@ bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 			g_game.changeLight(creature);
 		}
 	}
-
 	return Condition::executeCondition(creature, interval);
 }
 
@@ -1720,7 +1689,6 @@ bool ConditionLight::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 	} else if (attr == CONDITIONATTR_LIGHTINTERVAL) {
 		return propStream.read<uint32_t>(lightChangeInterval);
 	}
-
 	return Condition::unserializeProp(attr, propStream);
 }
 
@@ -1770,7 +1738,6 @@ bool ConditionSpellCooldown::startCondition(Creature* creature)
 			player->sendSpellCooldown(subId, ticks);
 		}
 	}
-
 	return true;
 }
 
@@ -1800,6 +1767,5 @@ bool ConditionSpellGroupCooldown::startCondition(Creature* creature)
 			player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 		}
 	}
-
 	return true;
 }

@@ -54,7 +54,6 @@ class NetworkMessage
 			if (!canRead(1)) {
 				return 0;
 			}
-
 			return buffer[info.position++];
 		}
 
@@ -133,7 +132,6 @@ class NetworkMessage
 				info.position = pos + INITIAL_BUFFER_POSITION;
 				return true;
 			}
-
 			return false;
 		}
 
@@ -178,7 +176,6 @@ class NetworkMessage
 				info.overrun = true;
 				return false;
 			}
-
 			return true;
 		}
 };

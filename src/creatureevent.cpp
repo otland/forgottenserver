@@ -64,7 +64,6 @@ Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "event") != 0) {
 		return nullptr;
 	}
-
 	return Event_ptr(new CreatureEvent(&scriptInterface));
 }
 
@@ -124,7 +123,6 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 			return &it->second;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -138,7 +136,6 @@ bool CreatureEvents::playerLogin(Player* player) const
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -152,7 +149,6 @@ bool CreatureEvents::playerLogout(Player* player) const
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -166,7 +162,6 @@ bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldL
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -350,7 +345,6 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 	} else {
 		lua_pushnil(L);
 	}
-
 	return scriptInterface->callFunction(2);
 }
 

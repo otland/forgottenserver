@@ -20,7 +20,6 @@ function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, i
 
 		item:remove(1)
 	end
-
 	return true
 end
 

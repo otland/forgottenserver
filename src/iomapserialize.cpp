@@ -129,7 +129,6 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
 		return false;
 	}
-
 	return true;
 }
 
@@ -213,7 +212,6 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -298,7 +296,6 @@ bool IOMapSerialize::loadHouseInfo()
 			}
 		} while (result->next());
 	}
-
 	return true;
 }
 
@@ -371,7 +368,6 @@ bool IOMapSerialize::saveHouseInfo()
 	if (!stmt.execute()) {
 		return false;
 	}
-
 	return transaction.commit();
 }
 
@@ -412,7 +408,6 @@ bool IOMapSerialize::saveHouse(House* house)
 	if (!stmt.execute()) {
 		return false;
 	}
-
 	//End the transaction
 	return transaction.commit();
 }

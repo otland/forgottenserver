@@ -39,7 +39,6 @@ function gnomishVoucher.onUse(player, item, fromPosition, target, toPosition, is
 		player:getPosition():sendMagicEffect(useItem.effect)
 		item:remove(1)
 	end
-
 	return true
 end
 

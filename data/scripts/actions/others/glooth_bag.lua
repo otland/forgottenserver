@@ -33,7 +33,6 @@ function gloothBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 			return true
 		end
 	end
-
 	return false
 end
 

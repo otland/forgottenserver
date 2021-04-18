@@ -78,7 +78,6 @@ Event_ptr Actions::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "action") != 0) {
 		return nullptr;
 	}
-
 	return Event_ptr(new Action(&scriptInterface));
 }
 
@@ -98,7 +97,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				success = false;
 			}
 		}
-
 		return success;
 	} else if ((attr = node.attribute("fromid"))) {
 		pugi::xml_attribute toIdAttribute = node.attribute("toid");
@@ -127,7 +125,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 			success = true;
 		}
-
 		return success;
 	} else if ((attr = node.attribute("uniqueid"))) {
 		bool success = true;
@@ -140,7 +137,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				success = false;
 			}
 		}
-
 		return success;
 	} else if ((attr = node.attribute("fromuid"))) {
 		pugi::xml_attribute toUidAttribute = node.attribute("touid");
@@ -169,7 +165,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 			success = true;
 		}
-
 		return success;
 	} else if ((attr = node.attribute("actionid"))) {
 		bool success = true;
@@ -182,7 +177,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				success = false;
 			}
 		}
-
 		return success;
 	} else if ((attr = node.attribute("fromaid"))) {
 		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
@@ -211,10 +205,8 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 			success = true;
 		}
-
 		return success;
 	}
-
 	return false;
 }
 
@@ -229,7 +221,6 @@ bool Actions::registerLuaEvent(Action* event)
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << std::endl;
 			}
-
 			return result.second;
 		} else {
 			auto v = action->getItemIdRange();
@@ -240,7 +231,6 @@ bool Actions::registerLuaEvent(Action* event)
 					continue;
 				}
 			}
-
 			return true;
 		}
 	} else if (action->getUniqueIdRange().size() > 0) {
@@ -251,7 +241,6 @@ bool Actions::registerLuaEvent(Action* event)
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << uid << std::endl;
 			}
-
 			return result.second;
 		} else {
 			auto v = action->getUniqueIdRange();
@@ -262,7 +251,6 @@ bool Actions::registerLuaEvent(Action* event)
 					continue;
 				}
 			}
-
 			return true;
 		}
 	} else if (action->getActionIdRange().size() > 0) {
@@ -273,7 +261,6 @@ bool Actions::registerLuaEvent(Action* event)
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << aid << std::endl;
 			}
-
 			return result.second;
 		} else {
 			auto v = action->getActionIdRange();
@@ -284,7 +271,6 @@ bool Actions::registerLuaEvent(Action* event)
 					continue;
 				}
 			}
-
 			return true;
 		}
 	} else {
@@ -305,7 +291,6 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos)
 			return RETURNVALUE_TOOFARAWAY;
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -315,7 +300,6 @@ ReturnValue Actions::canUse(const Player* player, const Position& pos, const Ite
 	if (action) {
 		return action->canExecuteAction(player, pos);
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -337,7 +321,6 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 	if (checkLineOfSight && !g_game.canThrowObjectTo(creaturePos, toPos)) {
 		return RETURNVALUE_CANNOTTHROW;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -361,7 +344,6 @@ Action* Actions::getAction(const Item* item)
 	if (it != useItemMap.end()) {
 		return &it->second;
 	}
-
 	//rune items
 	return g_spells->getRuneSpell(item->getID());
 }
@@ -400,7 +382,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->setBedItem(bed);
 			g_game.sendOfflineTrainingDialog(player);
 		}
-
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -431,7 +412,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->addContainer(index, openContainer);
 			player->onSendContainer(openContainer);
 		}
-
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -444,10 +424,8 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->setWriteItem(nullptr);
 			player->sendTextWindow(item, 0, false);
 		}
-
 		return RETURNVALUE_NOERROR;
 	}
-
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
@@ -466,7 +444,6 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 		player->sendCancelMessage(ret);
 		return false;
 	}
-
 	return true;
 }
 
@@ -497,10 +474,8 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 		if (!action->hasOwnErrorHandler()) {
 			player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		}
-
 		return false;
 	}
-
 	return true;
 }
 
@@ -539,7 +514,6 @@ bool Action::configureEvent(const pugi::xml_node& node)
 	if (checkFloorAttr) {
 		checkFloor = checkFloorAttr.as_bool();
 	}
-
 	return true;
 }
 
@@ -572,7 +546,6 @@ bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 	if (!isScripted) {
 		scripted = false;
 	}
-
 	return true;
 }
 
@@ -586,7 +559,6 @@ ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos
 	if (!allowFarUse) {
 		return g_actions->canUse(player, toPos);
 	}
-
 	return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
 }
 
@@ -595,7 +567,6 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 	if (targetCreature) {
 		return targetCreature;
 	}
-
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 

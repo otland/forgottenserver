@@ -32,7 +32,6 @@ bool PrivateChatChannel::isInvited(uint32_t guid) const
 	if (guid == getOwner()) {
 		return true;
 	}
-
 	return invites.find(guid) != invites.end();
 }
 
@@ -155,7 +154,6 @@ bool ChatChannel::talk(const Player& fromPlayer, SpeakClasses type, const std::s
 	for (const auto& it : users) {
 		it.second->sendToChannel(&fromPlayer, type, text, id);
 	}
-
 	return true;
 }
 
@@ -346,7 +344,6 @@ bool Chat::load()
 
 		normalChannels[channel.id] = channel;
 	}
-
 	return true;
 }
 
@@ -396,7 +393,6 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 		default:
 			break;
 	}
-
 	return nullptr;
 }
 
@@ -445,7 +441,6 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 			break;
 		}
 	}
-
 	return true;
 }
 
@@ -455,7 +450,6 @@ ChatChannel* Chat::addUserToChannel(Player& player, uint16_t channelId)
 	if (channel && channel->addUser(player)) {
 		return channel;
 	}
-
 	return nullptr;
 }
 
@@ -469,7 +463,6 @@ bool Chat::removeUserFromChannel(const Player& player, uint16_t channelId)
 	if (channel->getOwner() == player.getGUID()) {
 		deleteChannel(player, channelId);
 	}
-
 	return true;
 }
 
@@ -522,7 +515,6 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 	if (!channel->executeOnSpeakEvent(player, type, text)) {
 		return false;
 	}
-
 	return channel->talk(player, type, text);
 }
 
@@ -577,7 +569,6 @@ ChannelList Chat::getChannelList(const Player& player)
 	if (!hasPrivate && player.isPremium()) {
 		list.push_front(&dummyPrivate);
 	}
-
 	return list;
 }
 
@@ -623,7 +614,6 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 			break;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -633,7 +623,6 @@ ChatChannel* Chat::getGuildChannelById(uint32_t guildId)
 	if (it == guildChannels.end()) {
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -643,7 +632,6 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 	if (it == normalChannels.end()) {
 		return nullptr;
 	}
-
 	return &it->second;
 }
 
@@ -654,6 +642,5 @@ PrivateChatChannel* Chat::getPrivateChannel(const Player& player)
 			return &it.second;
 		}
 	}
-
 	return nullptr;
 }

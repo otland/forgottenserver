@@ -68,7 +68,6 @@ Event_ptr GlobalEvents::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "globalevent") != 0) {
 		return nullptr;
 	}
-
 	return Event_ptr(new GlobalEvent(&scriptInterface));
 }
 
@@ -81,7 +80,6 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
-
 			return true;
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
@@ -95,7 +93,6 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
-
 			return true;
 		}
 	}
@@ -113,7 +110,6 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 			if (timerEventId == 0) {
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
 			}
-
 			return true;
 		}
 	} else if (globalEvent->getEventType() != GLOBALEVENT_NONE) {
@@ -127,7 +123,6 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 			if (thinkEventId == 0) {
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
 			}
-
 			return true;
 		}
 	}
@@ -241,7 +236,6 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 					retMap.emplace(it.first, it.second);
 				}
 			}
-
 			return retMap;
 		}
 
@@ -326,7 +320,6 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		std::cout << "[Error - GlobalEvent::configureEvent] No interval for globalevent with name " << name << std::endl;
 		return false;
 	}
-
 	return true;
 }
 
@@ -377,6 +370,5 @@ bool GlobalEvent::executeEvent() const
 		lua_pushnumber(L, interval);
 		params = 1;
 	}
-
 	return scriptInterface->callFunction(params);
 }

@@ -121,6 +121,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:say(food[2], TALKTYPE_MONSTER_SAY)
 		item:remove(1)
 	end
-
 	return true
 end

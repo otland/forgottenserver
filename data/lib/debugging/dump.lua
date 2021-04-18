@@ -23,7 +23,6 @@ function dumpLevel(input, level)
 		end
 		return str .. table.concat(lines, ',\n') .. '\n' .. indent .. '}'
 	end
-
 	return tostring(input)
 end
 
@@ -54,6 +53,5 @@ function tdump(title, input)
 	local footer_str = '\n====' .. title_fill .. '====\n'
 
 	print(header_str .. dump_str .. footer_str)
-
 	return dump_str
 end

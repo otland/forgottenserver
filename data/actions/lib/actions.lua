@@ -77,7 +77,6 @@ function onUseMachete(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Nothing Can Stop Me", 100)
 		return true
 	end
-
 	return destroyItem(player, target, toPosition)
 end
 
@@ -127,7 +126,6 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		toPosition:sendMagicEffect(CONST_ME_HITAREA)
 		return true
 	end
-
 	return false
 end
 
@@ -138,7 +136,6 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local ground = tile:getGround()
-
 	if ground and table.contains(ropeSpots, ground:getId()) then
 		tile = Tile(toPosition:moveUpstairs())
 		if not tile then
@@ -170,15 +167,12 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 			if Tile(toPosition:moveUpstairs()):queryAdd(thing) ~= RETURNVALUE_NOERROR then
 				return false
 			end
-
 			return thing:teleportTo(toPosition, false)
 		elseif thing:isItem() and thing:getType():isMovable() then
 			return thing:moveTo(toPosition:moveUpstairs())
 		end
-
 		return true
 	end
-
 	return false
 end
 
@@ -234,7 +228,6 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		return false
 	end
-
 	return true
 end
 
@@ -258,7 +251,6 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Natural Sweetener", 50)
 		return true
 	end
-
 	return destroyItem(player, target, toPosition)
 end
 
@@ -266,7 +258,6 @@ function onUseCrowbar(player, item, fromPosition, target, toPosition, isHotkey)
 	if not table.contains({2416, 10515}, item.itemid) then
 		return false
 	end
-
 	return destroyItem(player, target, toPosition)
 end
 
@@ -281,6 +272,5 @@ function onUseKitchenKnife(player, item, fromPosition, target, toPosition, isHot
 		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 		return true
 	end
-
 	return false
 end

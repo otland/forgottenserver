@@ -294,7 +294,6 @@ class LuaScriptInterface
 			if (parameters == 0 || arg > parameters) {
 				return defaultValue;
 			}
-
 			return getNumber<T>(L, arg);
 		}
 		template<class T>
@@ -303,7 +302,6 @@ class LuaScriptInterface
 			if (!userdata) {
 				return nullptr;
 			}
-
 			return *userdata;
 		}
 		template<class T>
@@ -319,7 +317,6 @@ class LuaScriptInterface
 			if (parameters == 0 || arg > parameters) {
 				return defaultValue;
 			}
-
 			return lua_toboolean(L, arg) != 0;
 		}
 

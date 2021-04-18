@@ -272,7 +272,6 @@ class ItemType
 			if (!abilities) {
 				abilities.reset(new Abilities());
 			}
-
 			return *abilities;
 		}
 
@@ -458,7 +457,6 @@ class Items
 					if (clientId < vec.size()) {
 						serverId = vec[clientId];
 					}
-
 					return serverId;
 				}
 

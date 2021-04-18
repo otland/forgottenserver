@@ -15,6 +15,5 @@ function onSay(player, words, param)
 		player:sendCancelMessage("You do not have enough premium days, changing sex costs " .. premiumDaysCost .. " days of your premium account.")
 		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 	end
-
 	return false
 end

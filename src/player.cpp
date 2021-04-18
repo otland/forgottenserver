@@ -95,7 +95,6 @@ bool Player::setVocation(uint16_t vocId)
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
-
 	return true;
 }
 
@@ -104,7 +103,6 @@ bool Player::isPushable() const
 	if (hasFlag(PlayerFlag_CannotBePushed)) {
 		return false;
 	}
-
 	return Creature::isPushable();
 }
 
@@ -191,7 +189,6 @@ std::string Player::getDescription(int32_t lookDistance) const
 	} else {
 		s << ", which has " << memberCount << " members, " << guild->getMembersOnline().size() << " of them online.";
 	}
-
 	return s.str();
 }
 
@@ -200,7 +197,6 @@ Item* Player::getInventoryItem(slots_t slot) const
 	if (slot < CONST_SLOT_FIRST || slot > CONST_SLOT_LAST) {
 		return nullptr;
 	}
-
 	return inventory[slot];
 }
 
@@ -236,7 +232,6 @@ Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 			item = ammoItem;
 		}
 	}
-
 	return item;
 }
 
@@ -251,7 +246,6 @@ Item* Player::getWeapon(bool ignoreAmmo/* = false*/) const
 	if (item) {
 		return item;
 	}
-
 	return nullptr;
 }
 
@@ -261,7 +255,6 @@ WeaponType_t Player::getWeaponType() const
 	if (!item) {
 		return WEAPON_NONE;
 	}
-
 	return item->getWeaponType();
 }
 
@@ -300,7 +293,6 @@ int32_t Player::getWeaponSkill(const Item* item) const
 			break;
 		}
 	}
-
 	return attackSkill;
 }
 
@@ -315,7 +307,6 @@ int32_t Player::getArmor() const
 			armor += inventoryItem->getArmor();
 		}
 	}
-
 	return static_cast<int32_t>(armor * vocation->armorMultiplier);
 }
 
@@ -379,7 +370,6 @@ int32_t Player::getDefense() const
 			}
 		}
 	}
-
 	return (defenseSkill / 4. + 2.23) * defenseValue * 0.15 * getDefenseFactor() * vocation->defenseMultiplier;
 }
 
@@ -434,7 +424,6 @@ uint16_t Player::getClientIcons() const
 			--bits_set;
 		}
 	}
-
 	return icon_bitset.to_ulong();
 }
 
@@ -609,7 +598,6 @@ Container* Player::getContainerByID(uint8_t cid)
 	if (it == openContainers.end()) {
 		return nullptr;
 	}
-
 	return it->second.container;
 }
 
@@ -620,7 +608,6 @@ int8_t Player::getContainerID(const Container* container) const
 			return it.first;
 		}
 	}
-
 	return -1;
 }
 
@@ -630,7 +617,6 @@ uint16_t Player::getContainerIndex(uint8_t cid) const
 	if (it == openContainers.end()) {
 		return 0;
 	}
-
 	return it->second.index;
 }
 
@@ -644,7 +630,6 @@ uint16_t Player::getLookCorpse() const
 	if (sex == PLAYERSEX_FEMALE) {
 		return ITEM_FEMALE_CORPSE;
 	}
-
 	return ITEM_MALE_CORPSE;
 }
 
@@ -700,7 +685,6 @@ bool Player::canSee(const Position& pos) const
 	if (!client) {
 		return false;
 	}
-
 	return client->canSee(pos);
 }
 
@@ -717,7 +701,6 @@ bool Player::canSeeCreature(const Creature* creature) const
 	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -794,7 +777,6 @@ bool Player::isNearDepotBox() const
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -1499,7 +1481,6 @@ uint32_t Player::isMuted() const
 			muteTicks = condition->getTicks();
 		}
 	}
-
 	return static_cast<uint32_t>(muteTicks) / 1000;
 }
 
@@ -1796,7 +1777,6 @@ uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 	if (result > 100) {
 		return 0;
 	}
-
 	return result;
 }
 
@@ -1853,7 +1833,6 @@ bool Player::hasShield() const
 	if (item && item->getWeaponType() == WEAPON_SHIELD) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -1924,7 +1903,6 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 		damage = 0;
 		blockType = BLOCK_ARMOR;
 	}
-
 	return blockType;
 }
 
@@ -1933,7 +1911,6 @@ uint32_t Player::getIP() const
 	if (client) {
 		return client->getIP();
 	}
-
 	return 0;
 }
 
@@ -2141,7 +2118,6 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 
 		corpse->setSpecialDescription(ss.str());
 	}
-
 	return corpse;
 }
 
@@ -2234,7 +2210,6 @@ bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t st
 	if (client) {
 		client->sendVIP(vipGuid, vipName, "", 0, false, status);
 	}
-
 	return true;
 }
 
@@ -2243,7 +2218,6 @@ bool Player::addVIPInternal(uint32_t vipGuid)
 	if (VIPList.size() >= getMaxVIPEntries()) {
 		return false;
 	}
-
 	return VIPList.insert(vipGuid).second;
 }
 
@@ -2296,7 +2270,6 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 	if (item->isStackable()) {
 		itemWeight *= count;
 	}
-
 	return itemWeight <= getFreeCapacity();
 }
 
@@ -2314,7 +2287,6 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		if (skipLimit || hasCapacity(item, count)) {
 			return RETURNVALUE_NOERROR;
 		}
-
 		return RETURNVALUE_NOTENOUGHCAPACITY;
 	}
 
@@ -2522,10 +2494,8 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		if (cylinder && (dynamic_cast<const DepotChest*>(cylinder) || dynamic_cast<const Player*>(cylinder))) {
 			return RETURNVALUE_NEEDEXCHANGE;
 		}
-
 		return RETURNVALUE_NOTENOUGHROOM;
 	}
-
 	return ret;
 }
 
@@ -2592,7 +2562,6 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 			} else {
 				maxQueryCount = 1;
 			}
-
 			return RETURNVALUE_NOERROR;
 		}
 	}
@@ -2600,7 +2569,6 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 	if (maxQueryCount < count) {
 		return RETURNVALUE_NOTENOUGHROOM;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -2623,7 +2591,6 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -2732,7 +2699,6 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				return tmpContainer;
 			}
 		}
-
 		return this;
 	}
 
@@ -2747,7 +2713,6 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		*destItem = nullptr;
 		return subCylinder;
 	}
-
 	return this;
 }
 
@@ -2869,7 +2834,6 @@ int32_t Player::getThingIndex(const Thing* thing) const
 			return i;
 		}
 	}
-
 	return -1;
 }
 
@@ -2904,7 +2868,6 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 			}
 		}
 	}
-
 	return count;
 }
 
@@ -2956,7 +2919,6 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -2976,7 +2938,6 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 			}
 		}
 	}
-
 	return countMap;
 }
 
@@ -2985,7 +2946,6 @@ Thing* Player::getThing(size_t index) const
 	if (index >= CONST_SLOT_FIRST && index <= CONST_SLOT_LAST) {
 		return inventory[index];
 	}
-
 	return nullptr;
 }
 
@@ -3125,7 +3085,6 @@ bool Player::updateSaleShopList(const Item* item)
 	if (client) {
 		client->sendSaleItemList(shopItemList);
 	}
-
 	return true;
 }
 
@@ -3171,7 +3130,6 @@ bool Player::setFollowCreature(Creature* creature)
 		stopWalk();
 		return false;
 	}
-
 	return true;
 }
 
@@ -3194,7 +3152,6 @@ bool Player::setAttackedCreature(Creature* creature)
 	if (creature) {
 		g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
 	}
-
 	return true;
 }
 
@@ -3270,7 +3227,6 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 			return std::max<uint64_t>(0, std::floor(getLostExperience() * getDamageRatio(attacker) * 0.75));
 		}
 	}
-
 	return 0;
 }
 
@@ -3323,7 +3279,6 @@ LightInfo Player::getCreatureLight() const
 	if (internalLight.level > itemsLight.level) {
 		return internalLight;
 	}
-
 	return itemsLight;
 }
 
@@ -3469,7 +3424,6 @@ void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true *
 		if (addFightTicks) {
 			addInFightTicks();
 		}
-
 		return;
 	}
 
@@ -3604,7 +3558,6 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 			}
 		}
 	}
-
 	return unjustified;
 }
 
@@ -3643,7 +3596,6 @@ bool Player::isImmune(CombatType_t type) const
 	if (hasFlag(PlayerFlag_CannotBeAttacked)) {
 		return true;
 	}
-
 	return Creature::isImmune(type);
 }
 
@@ -3652,7 +3604,6 @@ bool Player::isImmune(ConditionType_t type) const
 	if (hasFlag(PlayerFlag_CannotBeAttacked)) {
 		return true;
 	}
-
 	return Creature::isImmune(type);
 }
 
@@ -3729,11 +3680,9 @@ bool Player::canWear(uint32_t lookType, uint8_t addons) const
 			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0) {
 				return true;
 			}
-
 			return false; //have lookType on list and addons don't match
 		}
 	}
-
 	return false;
 }
 
@@ -3753,11 +3702,9 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0) {
 				return true;
 			}
-
 			return false; //have lookType on list and addons don't match
 		}
 	}
-
 	return false;
 }
 
@@ -3774,7 +3721,6 @@ bool Player::canLogout()
 	if (getTile()->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		return true;
 	}
-
 	return !isPzLocked() && !hasCondition(CONDITION_INFIGHT);
 }
 
@@ -3808,7 +3754,6 @@ bool Player::removeOutfit(uint16_t lookType)
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -3820,7 +3765,6 @@ bool Player::removeOutfitAddon(uint16_t lookType, uint8_t addons)
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -3862,7 +3806,6 @@ Skulls_t Player::getSkull() const
 	if (hasFlag(PlayerFlag_NotGainInFight)) {
 		return SKULL_NONE;
 	}
-
 	return skull;
 }
 
@@ -3884,7 +3827,6 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 	if (isPartner(player)) {
 		return SKULL_GREEN;
 	}
-
 	return Creature::getSkullClient(creature);
 }
 
@@ -3893,7 +3835,6 @@ bool Player::hasAttacked(const Player* attacked) const
 	if (hasFlag(PlayerFlag_NotGainInFight) || !attacked) {
 		return false;
 	}
-
 	return attackedSet.find(attacked->guid) != attackedSet.end();
 }
 
@@ -4020,7 +3961,6 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -4034,7 +3974,6 @@ bool Player::isInWar(const Player* player) const
 	if (!playerGuild) {
 		return false;
 	}
-
 	return isInWarList(playerGuild->getId()) && player->isInWarList(guild->getId());
 }
 
@@ -4048,7 +3987,6 @@ bool Player::isPremium() const
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM) || hasFlag(PlayerFlag_IsAlwaysPremium)) {
 		return true;
 	}
-
 	return premiumEndsAt > time(nullptr);
 }
 
@@ -4074,10 +4012,8 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 				if (party->canUseSharedExperience(player)) {
 					return SHIELD_YELLOW_NOSHAREDEXP;
 				}
-
 				return SHIELD_YELLOW_NOSHAREDEXP_BLINK;
 			}
-
 			return SHIELD_YELLOW;
 		}
 
@@ -4090,10 +4026,8 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 				if (party->canUseSharedExperience(player)) {
 					return SHIELD_BLUE_NOSHAREDEXP;
 				}
-
 				return SHIELD_BLUE_NOSHAREDEXP_BLINK;
 			}
-
 			return SHIELD_BLUE;
 		}
 
@@ -4109,7 +4043,6 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 	if (player->party) {
 		return SHIELD_GRAY;
 	}
-
 	return SHIELD_NONE;
 }
 
@@ -4118,7 +4051,6 @@ bool Player::isInviting(const Player* player) const
 	if (!player || !party || party->getLeader() != this) {
 		return false;
 	}
-
 	return party->isPlayerInvited(player);
 }
 
@@ -4127,7 +4059,6 @@ bool Player::isPartner(const Player* player) const
 	if (!player || !party || player == this) {
 		return false;
 	}
-
 	return party == player->party;
 }
 
@@ -4136,7 +4067,6 @@ bool Player::isGuildMate(const Player* player) const
 	if (!player || !guild) {
 		return false;
 	}
-
 	return guild == player->guild;
 }
 
@@ -4152,7 +4082,6 @@ bool Player::addPartyInvitation(Party* party)
 	if (it != invitePartyList.end()) {
 		return false;
 	}
-
 	invitePartyList.push_front(party);
 	return true;
 }
@@ -4193,7 +4122,6 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	} else if (isInWar(player)) {
 		return GUILDEMBLEM_ENEMY;
 	}
-
 	return GUILDEMBLEM_NEUTRAL;
 }
 
@@ -4203,7 +4131,6 @@ uint8_t Player::getCurrentMount() const
 	if (getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, value)) {
 		return value;
 	}
-
 	return 0;
 }
 
@@ -4324,7 +4251,6 @@ bool Player::untameMount(uint8_t mountId)
 
 		setCurrentMount(0);
 	}
-
 	return true;
 }
 
@@ -4344,7 +4270,6 @@ bool Player::hasMount(const Mount* mount) const
 	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31), value)) {
 		return false;
 	}
-
 	return ((1 << (tmpMountId % 31)) & value) != 0;
 }
 
@@ -4541,7 +4466,6 @@ uint16_t Player::getHelpers() const
 	} else {
 		helpers = 0;
 	}
-
 	return helpers;
 }
 
@@ -4587,7 +4511,6 @@ uint64_t Player::getMoney() const
 			}
 		}
 	}
-
 	return moneyCount;
 }
 
@@ -4596,7 +4519,6 @@ size_t Player::getMaxVIPEntries() const
 	if (group->maxVipEntries != 0) {
 		return group->maxVipEntries;
 	}
-
 	return g_config.getNumber(isPremium() ?	ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT);
 }
 
@@ -4607,7 +4529,6 @@ size_t Player::getMaxDepotItems() const
 	} else if (isPremium()) {
 		return 2000;
 	}
-
 	return 1000;
 }
 
@@ -4626,7 +4547,6 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 
 		muteConditions.push_front(condition);
 	}
-
 	return muteConditions;
 }
 

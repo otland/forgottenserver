@@ -85,7 +85,6 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 
 		newItem->incrementReferenceCounter();
 	}
-
 	return newItem;
 }
 
@@ -148,7 +147,6 @@ Item* Item::CreateItem(PropStream& propStream)
 			break;
 		}
 	}
-
 	return Item::CreateItem(id, 0);
 }
 
@@ -195,7 +193,6 @@ Item* Item::clone() const
 			g_game.toDecayItems.push_front(item);
 		}
 	}
-
 	return item;
 }
 
@@ -233,7 +230,6 @@ bool Item::equals(const Item* otherItem) const
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -298,7 +294,6 @@ Cylinder* Item::getTopParent()
 	if (prevaux) {
 		return prevaux;
 	}
-
 	return aux;
 }
 
@@ -318,7 +313,6 @@ const Cylinder* Item::getTopParent() const
 	if (prevaux) {
 		return prevaux;
 	}
-
 	return aux;
 }
 
@@ -329,7 +323,6 @@ Tile* Item::getTile()
 	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
-
 	return dynamic_cast<Tile*>(cylinder);
 }
 
@@ -340,7 +333,6 @@ const Tile* Item::getTile() const
 	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
-
 	return dynamic_cast<const Tile*>(cylinder);
 }
 
@@ -354,7 +346,6 @@ uint16_t Item::getSubType() const
 	} else if (it.charges != 0) {
 		return getCharges();
 	}
-
 	return count;
 }
 
@@ -368,7 +359,6 @@ Player* Item::getHoldingPlayer() const
 
 		p = p->getParent();
 	}
-
 	return nullptr;
 }
 
@@ -698,7 +688,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			return ATTR_READ_ERROR;
 		}
 	}
-
 	return ATTR_READ_CONTINUE;
 }
 
@@ -713,7 +702,6 @@ bool Item::unserializeAttr(PropStream& propStream)
 			return true;
 		}
 	}
-
 	return true;
 }
 
@@ -1515,7 +1503,6 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 			s << '\n' << *text;
 		}
 	}
-
 	return s.str();
 }
 
@@ -1558,7 +1545,6 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 
 		s << "item of type " << it.id;
 	}
-
 	return s.str();
 }
 
@@ -1603,7 +1589,6 @@ std::string Item::getWeightDescription() const
 	if (weight == 0) {
 		return std::string();
 	}
-
 	return getWeightDescription(weight);
 }
 
@@ -1632,7 +1617,6 @@ bool Item::canDecay() const
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1667,7 +1651,6 @@ const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 	if (!attr) {
 		return emptyString;
 	}
-
 	return *attr->value.string;
 }
 
@@ -1719,7 +1702,6 @@ int64_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 	if (!attr) {
 		return 0;
 	}
-
 	return attr->value.integer;
 }
 
@@ -1750,7 +1732,6 @@ const ItemAttributes::Attribute* ItemAttributes::getExistingAttr(itemAttrTypes t
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -1795,7 +1776,6 @@ bool Item::hasMarketAttributes() const
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -1804,7 +1784,6 @@ const std::string& ItemAttributes::CustomAttribute::get<std::string>() {
 	if (value.type() == typeid(std::string)) {
 		return boost::get<std::string>(value);
 	}
-
 	return emptyString;
 }
 
@@ -1813,7 +1792,6 @@ const int64_t& ItemAttributes::CustomAttribute::get<int64_t>() {
 	if (value.type() == typeid(int64_t)) {
 		return boost::get<int64_t>(value);
 	}
-
 	return emptyInt;
 }
 
@@ -1822,7 +1800,6 @@ const double& ItemAttributes::CustomAttribute::get<double>() {
 	if (value.type() == typeid(double)) {
 		return boost::get<double>(value);
 	}
-
 	return emptyDouble;
 }
 
@@ -1831,6 +1808,5 @@ const bool& ItemAttributes::CustomAttribute::get<bool>() {
 	if (value.type() == typeid(bool)) {
 		return boost::get<bool>(value);
 	}
-
 	return emptyBool;
 }

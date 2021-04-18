@@ -27,6 +27,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		item:transform(kit)
 		fromPosition:sendMagicEffect(CONST_ME_POFF)
 	end
-
 	return true
 end

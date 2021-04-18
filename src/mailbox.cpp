@@ -31,7 +31,6 @@ ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, C
 	if (item && Mailbox::canSend(item)) {
 		return RETURNVALUE_NOERROR;
 	}
-
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
@@ -122,7 +121,6 @@ bool Mailbox::sendItem(Item* item) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -135,7 +133,6 @@ bool Mailbox::getReceiver(Item* item, std::string& name) const
 				return true;
 			}
 		}
-
 		return false;
 	}
 

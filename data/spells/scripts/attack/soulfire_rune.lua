@@ -10,6 +10,5 @@ function onCastSpell(creature, variant, isHotkey)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		creature:addDamageCondition(target, CONDITION_FIRE, DAMAGELIST_VARYING_PERIOD, target:isPlayer() and 5 or 10, {8, 10}, rounds)
 	end
-
 	return true
 end

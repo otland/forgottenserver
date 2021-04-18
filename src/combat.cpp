@@ -63,7 +63,6 @@ MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows)
 			++y;
 		}
 	}
-
 	return area;
 }
 
@@ -91,7 +90,6 @@ std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos)
 
 		tmpPos.x -= area.getCols();
 	}
-
 	return vec;
 }
 
@@ -110,7 +108,6 @@ std::vector<Tile*> getCombatArea(const Position& centerPos, const Position& targ
 		tile = new StaticTile(targetPos.x, targetPos.y, targetPos.z);
 		g_game.map.setTile(targetPos, tile);
 	}
-
 	return {tile};
 }
 
@@ -149,7 +146,6 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 			}
 		}
 	}
-
 	return damage;
 }
 
@@ -166,7 +162,6 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 		case CONDITION_CURSED: return COMBAT_DEATHDAMAGE;
 		default: break;
 	}
-
 	return COMBAT_NONE;
 }
 
@@ -194,7 +189,6 @@ bool Combat::isPlayerCombat(const Creature* target)
 	if (target->isSummon() && target->getMaster()->getPlayer()) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -243,7 +237,6 @@ ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 			return RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
 	}
-
 	return Combat::canDoCombat(attacker, target);
 }
 
@@ -281,7 +274,6 @@ ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool aggressive)
 	if (aggressive && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE;
 	}
-
 	return g_events->eventCreatureOnAreaCombat(caster, tile, aggressive);
 }
 
@@ -304,7 +296,6 @@ bool Combat::isProtected(const Player* attacker, const Player* target)
 	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -389,7 +380,6 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 			}
 		}
 	}
-
 	return g_events->eventCreatureOnTargetCombat(attacker, target);
 }
 
@@ -455,7 +445,6 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -482,7 +471,6 @@ bool Combat::setCallback(CallBackParam_t key)
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -502,7 +490,6 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 			return params.targetCallback.get();
 		}
 	}
-
 	return nullptr;
 }
 
@@ -1214,7 +1201,6 @@ MatrixArea MatrixArea::flip() const {
 		// assign rows, top to bottom, to the current rows, bottom to top
 		newArr[std::slice(i * cols, cols, 1)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
 	}
-
 	return {{cols - center.first - 1, center.second}, rows, cols, std::move(newArr)};
 }
 
@@ -1224,7 +1210,6 @@ MatrixArea MatrixArea::mirror() const {
 		// assign cols, left to right, to the current rows, right to left
 		newArr[std::slice(i, cols, rows)] = arr[std::slice(cols - i - 1, cols, rows)];
 	}
-
 	return {{center.first, rows - center.second - 1}, rows, cols, std::move(newArr)};
 }
 
@@ -1238,7 +1223,6 @@ MatrixArea MatrixArea::rotate90() const {
 		// assign rows, top to bottom, to the current cols, right to left
 		newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
 	}
-
 	return {{rows - center.second - 1, center.first}, cols, rows, std::move(newArr)};
 }
 
@@ -1254,7 +1238,6 @@ MatrixArea MatrixArea::rotate270() const {
 		// assign cols, left to right, to the current rows, bottom to top
 		newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
 	}
-
 	return {{center.second, cols - center.first - 1}, cols, rows, std::move(newArr)};
 }
 
@@ -1290,7 +1273,6 @@ const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position&
 		static MatrixArea empty;
 		return empty;
 	}
-
 	return areas[dir];
 }
 
@@ -1398,7 +1380,6 @@ void MagicField::onStepInField(Creature* creature)
 		if (!creature->isInGhostMode()) {
 			g_game.internalRemoveItem(this, 1);
 		}
-
 		return;
 	}
 

@@ -40,6 +40,7 @@ local function creatureSayCallback(cid, type, msg)
 	if not npcHandler:isFocused(cid) then
 		return false
 	end
+
 	local player = Player(cid)
 	if msgcontains(msg, "bank account") then
 		npcHandler:say("Would you like to know more about the {basic} functions of your bank account, the {advanced} functions, or are you already bored, perhaps?", cid)
@@ -135,7 +136,6 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler:say("There is not enough gold in your account.", cid)
 				npcHandler.topic[cid] = topicList.NONE
 			end
-
 			return true
 		else
 			npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
@@ -151,7 +151,6 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("There is not enough gold in your account.", cid)
 			npcHandler.topic[cid] = topicList.NONE
 		end
-
 		return true
 	elseif npcHandler.topic[cid] == topicList.WITHDRAW_GOLD then
 		if msgcontains(msg, "yes") then
@@ -170,7 +169,6 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("The customer is king! Come back anytime you want to if you wish to {withdraw} your money.", cid)
 			npcHandler.topic[cid] = topicList.NONE
 		end
-
 		return true
 	elseif msgcontains(msg, "transfer") then
 		local parts = msg:split(" ")

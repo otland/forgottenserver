@@ -9,6 +9,5 @@ function onSay(player, words, param)
 	else
 		player:sendCancelMessage("Town not found.")
 	end
-
 	return false
 end

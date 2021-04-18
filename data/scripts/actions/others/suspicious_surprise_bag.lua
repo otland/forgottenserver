@@ -34,7 +34,6 @@ function suspiciousSurpriseBag.onUse(player, item, fromPosition, target, toPosit
 			return true
 		end
 	end
-
 	return false
 end
 

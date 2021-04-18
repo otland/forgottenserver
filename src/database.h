@@ -165,7 +165,6 @@ class DBResult
 			} catch (boost::bad_lexical_cast&) {
 				data = 0;
 			}
-
 			return data;
 		}
 

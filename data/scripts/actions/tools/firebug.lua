@@ -29,7 +29,6 @@ function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		toPosition:sendMagicEffect(CONST_ME_POFF) -- It fails, but don't get removed 3% chance
 	end
-
 	return true
 end
 

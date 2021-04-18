@@ -34,7 +34,6 @@ function blueSurpriseBag.onUse(player, item, fromPosition, target, toPosition, i
 			return true
 		end
 	end
-
 	return false
 end
 

@@ -12,7 +12,6 @@ local function getSkillId(skillName)
 	elseif skillName:sub(1, 4) == "fish" then
 		return SKILL_FISHING
 	end
-
 	return SKILL_FIST
 end
 
@@ -53,6 +52,5 @@ function onSay(player, words, param)
 			target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
 		end
 	end
-
 	return false
 end

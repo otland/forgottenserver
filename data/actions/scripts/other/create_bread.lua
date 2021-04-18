@@ -15,6 +15,5 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addItem(2692, 1)
 		return true
 	end
-
 	return false
 end

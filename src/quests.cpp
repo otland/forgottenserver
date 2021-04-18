@@ -54,7 +54,6 @@ std::string Mission::getDescription(Player* player) const
 			}
 		}
 	}
-
 	return "An error has occurred, please contact a gamemaster.";
 }
 
@@ -76,7 +75,6 @@ bool Mission::isStarted(Player* player) const
 	if (!ignoreEndValue && value > endValue) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -94,7 +92,6 @@ bool Mission::isCompleted(Player* player) const
 	if (ignoreEndValue) {
 		return value >= endValue;
 	}
-
 	return value == endValue;
 }
 
@@ -103,7 +100,6 @@ std::string Mission::getName(Player* player) const
 	if (isCompleted(player)) {
 		return name + " (completed)";
 	}
-
 	return name;
 }
 
@@ -115,7 +111,6 @@ uint16_t Quest::getMissionsCount(Player* player) const
 			count++;
 		}
 	}
-
 	return count;
 }
 
@@ -126,7 +121,6 @@ bool Quest::isCompleted(Player* player) const
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -140,7 +134,6 @@ bool Quest::isStarted(Player* player) const
 	if (!player->getStorageValue(startStorageID, value) || value < startStorageValue) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -191,7 +184,6 @@ bool Quests::loadFromXml()
 			}
 		}
 	}
-
 	return true;
 }
 
@@ -202,7 +194,6 @@ Quest* Quests::getQuestByID(uint16_t id)
 			return &quest;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -214,7 +205,6 @@ uint16_t Quests::getQuestsCount(Player* player) const
 			count++;
 		}
 	}
-
 	return count;
 }
 
@@ -231,6 +221,5 @@ bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32
 			}
 		}
 	}
-
 	return false;
 }

@@ -1391,7 +1391,6 @@ ItemType& Items::getItemType(size_t id)
 	if (id < items.size()) {
 		return items[id];
 	}
-
 	return items.front();
 }
 
@@ -1400,7 +1399,6 @@ const ItemType& Items::getItemType(size_t id) const
 	if (id < items.size()) {
 		return items[id];
 	}
-
 	return items.front();
 }
 
@@ -1411,7 +1409,6 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 			return getItemType(serverId);
 		}
 	}
-
 	return items.front();
 }
 
@@ -1421,6 +1418,5 @@ uint16_t Items::getItemIdByName(const std::string& name)
 	if (result == nameToItems.end()) {
 		return 0;
 	}
-
 	return result->second;
 }

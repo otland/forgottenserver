@@ -30,10 +30,8 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 		if (!propStream.read<uint16_t>(depotId)) {
 			return ATTR_READ_ERROR;
 		}
-
 		return ATTR_READ_CONTINUE;
 	}
-
 	return Item::readAttr(attr, propStream);
 }
 

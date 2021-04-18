@@ -279,7 +279,6 @@ uint32_t Connection::getIP()
 	if (error) {
 		return 0;
 	}
-
 	return htonl(endpoint.address().to_v4().to_ulong());
 }
 

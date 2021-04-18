@@ -58,7 +58,6 @@ Mount* Mounts::getMountByID(uint8_t id)
 	auto it = std::find_if(mounts.begin(), mounts.end(), [id](const Mount& mount) {
 		return mount.id == id;
 	});
-
 	return it != mounts.end() ? &*it : nullptr;
 }
 
@@ -69,7 +68,6 @@ Mount* Mounts::getMountByName(const std::string& name) {
 			return &it;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -78,6 +76,5 @@ Mount* Mounts::getMountByClientID(uint16_t clientId)
 	auto it = std::find_if(mounts.begin(), mounts.end(), [clientId](const Mount& mount) {
 		return mount.clientId == clientId;
 	});
-
 	return it != mounts.end() ? &*it : nullptr;
 }

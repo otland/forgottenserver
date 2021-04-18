@@ -307,7 +307,6 @@ bool ConfigManager::reload()
 	if (transformToSHA1(getString(ConfigManager::MOTD)) != g_game.getMotdHash()) {
 		g_game.incrementMotdNum();
 	}
-
 	return result;
 }
 
@@ -319,7 +318,6 @@ const std::string& ConfigManager::getString(string_config_t what) const
 		std::cout << "[Warning - ConfigManager::getString] Accessing invalid index: " << what << std::endl;
 		return dummyStr;
 	}
-
 	return string[what];
 }
 
@@ -329,7 +327,6 @@ int32_t ConfigManager::getNumber(integer_config_t what) const
 		std::cout << "[Warning - ConfigManager::getNumber] Accessing invalid index: " << what << std::endl;
 		return 0;
 	}
-
 	return integer[what];
 }
 
@@ -339,7 +336,6 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 		std::cout << "[Warning - ConfigManager::getBoolean] Accessing invalid index: " << what << std::endl;
 		return false;
 	}
-
 	return boolean[what];
 }
 
@@ -352,7 +348,6 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 	if (it == expStages.end()) {
 		return getNumber(ConfigManager::RATE_EXPERIENCE);
 	}
-
 	return std::get<2>(*it);
 }
 

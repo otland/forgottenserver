@@ -56,7 +56,6 @@ bool Database::connect()
 	if (result) {
 		maxPacketSize = result->getNumber<uint64_t>("Value");
 	}
-
 	return true;
 }
 
@@ -118,7 +117,6 @@ bool Database::executeQuery(const std::string& query)
 	if (m_res) {
 		mysql_free_result(m_res);
 	}
-
 	return success;
 }
 
@@ -157,7 +155,6 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	if (!result->hasNext()) {
 		return nullptr;
 	}
-
 	return result;
 }
 
@@ -217,7 +214,6 @@ std::string DBResult::getString(const std::string& s) const
 	if (row[it->second] == nullptr) {
 		return std::string();
 	}
-
 	return std::string(row[it->second]);
 }
 
@@ -276,7 +272,6 @@ bool DBInsert::addRow(const std::string& row)
 		values.append(row);
 		values.push_back(')');
 	}
-
 	return true;
 }
 

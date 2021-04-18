@@ -49,7 +49,6 @@ class Task
 			if (expiration == SYSTEM_TIME_ZERO) {
 				return false;
 			}
-
 			return expiration < std::chrono::system_clock::now();
 		}
 

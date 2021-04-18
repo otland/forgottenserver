@@ -32,7 +32,6 @@ namespace pugi {
 		} catch (boost::bad_lexical_cast&) {
 			value = T();
 		}
-
 		return value;
 	}
 }

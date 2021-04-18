@@ -55,7 +55,6 @@ bool Ban::acceptConnection(uint32_t clientIP)
 	} else {
 		connectBlock.count = 1;
 	}
-
 	return true;
 }
 

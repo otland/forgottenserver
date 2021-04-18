@@ -96,7 +96,6 @@ Event_ptr MoveEvents::getEvent(const std::string& nodeName)
 	if (strcasecmp(nodeName.c_str(), "movevent") != 0) {
 		return nullptr;
 	}
-
 	return Event_ptr(new MoveEvent(&scriptInterface));
 }
 
@@ -207,7 +206,6 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 	} else {
 		return false;
 	}
-
 	return true;
 }
 
@@ -242,7 +240,6 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 	} else {
 		return false;
 	}
-
 	return true;
 }
 
@@ -307,7 +304,6 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 	} else {
 		return false;
 	}
-
 	return true;
 }
 
@@ -356,7 +352,6 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 			}
 		}
 	}
-
 	return nullptr;
 }
 
@@ -391,7 +386,6 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType)
 			return &(*moveEventList.begin());
 		}
 	}
-
 	return nullptr;
 }
 
@@ -421,7 +415,6 @@ MoveEvent* MoveEvents::getEvent(const Tile* tile, MoveEvent_t eventType)
 			return &(*moveEventList.begin());
 		}
 	}
-
 	return nullptr;
 }
 
@@ -452,7 +445,6 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 			ret &= moveEvent->fireStepEvent(creature, tileItem, pos);
 		}
 	}
-
 	return ret;
 }
 
@@ -462,7 +454,6 @@ ReturnValue MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, 
 	if (!moveEvent) {
 		return RETURNVALUE_NOERROR;
 	}
-
 	return moveEvent->fireEquip(player, item, slot, isCheck);
 }
 
@@ -472,7 +463,6 @@ ReturnValue MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot
 	if (!moveEvent) {
 		return RETURNVALUE_NOERROR;
 	}
-
 	return moveEvent->fireEquip(player, item, slot, false);
 }
 
@@ -514,7 +504,6 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 			ret &= moveEvent->fireAddRemItem(item, tileItem, tile->getPosition());
 		}
 	}
-
 	return ret;
 }
 
@@ -655,7 +644,6 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			vocationString.push_back('s');
 		}
 	}
-
 	return true;
 }
 
@@ -666,7 +654,6 @@ uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 		field->onStepInField(creature);
 		return 1;
 	}
-
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
@@ -684,10 +671,8 @@ uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
 				field->onStepInField(creature);
 			}
 		}
-
 		return 1;
 	}
-
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
@@ -817,7 +802,6 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 	if (needUpdateStats) {
 		player->sendStats();
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -899,7 +883,6 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 	if (needUpdateStats) {
 		player->sendStats();
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -928,7 +911,6 @@ bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 	if (!isScripted) {
 		scripted = false;
 	}
-
 	return true;
 }
 
@@ -947,7 +929,6 @@ uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position
 	if (scripted) {
 		return executeStep(creature, item, pos);
 	}
-
 	return stepFunction(creature, item, pos);
 }
 
@@ -982,13 +963,10 @@ ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool 
 			if (executeEquip(player, item, slot, isCheck)) {
 				return RETURNVALUE_NOERROR;
 			}
-
 			return RETURNVALUE_CANNOTBEDRESSED;
 		}
-
 		return equipFunction(this, player, item, slot, isCheck);
 	}
-
 	return equipFunction(this, player, item, slot, isCheck);
 }
 
@@ -1021,7 +999,6 @@ uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& p
 	if (scripted) {
 		return executeAddRemItem(item, tileItem, pos);
 	}
-
 	return moveFunction(item, tileItem, pos);
 }
 
