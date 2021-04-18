@@ -170,7 +170,7 @@ uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `account_id` FROM `players` WHERE `id` = " << accountId;
+	query << "SELECT `account_id` FROM `players` WHERE `id` = " << playerId;
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
 		return 0;
