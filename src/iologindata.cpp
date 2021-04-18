@@ -175,7 +175,6 @@ uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
 	if (!result) {
 		return 0;
 	}
-
 	return result->getNumber<uint32_t>("account_id");
 }
 
