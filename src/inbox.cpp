@@ -67,6 +67,5 @@ Cylinder* Inbox::getParent() const
 	if (parent) {
 		return parent->getParent();
 	}
-
 	return nullptr;
 }

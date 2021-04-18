@@ -538,7 +538,6 @@ function getPlayerSlotItem(cid, slot)
 	if player == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(player:getSlotItem(slot))
 end
 function getPlayerItemById(cid, deepSearch, itemId, ...)
@@ -546,7 +545,6 @@ function getPlayerItemById(cid, deepSearch, itemId, ...)
 	if player == nil then
 		return pushThing(nil)
 	end
-
 	return pushThing(player:getItemById(itemId, deepSearch, ...))
 end
 function getPlayerFood(cid)
@@ -1101,7 +1099,6 @@ function getTileThingByPos(position)
 		if position.stackpos == -1 then
 			return -1
 		end
-
 		return pushThing(nil)
 	end
 

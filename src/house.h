@@ -295,7 +295,6 @@ class Houses
 			if (it == houseMap.end()) {
 				return nullptr;
 			}
-
 			return it->second;
 		}
 

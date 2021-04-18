@@ -872,7 +872,6 @@ uint32_t Item::getWeight() const
 	if (isStackable()) {
 		return weight * std::max<uint32_t>(1, getItemCount());
 	}
-
 	return weight;
 }
 

@@ -87,7 +87,6 @@ bool Creature::canSeeCreature(const Creature* creature) const
 	if (!canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
-
 	return true;
 }
 

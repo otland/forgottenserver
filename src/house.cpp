@@ -646,7 +646,6 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 		house->setOwner(0, false);
 	}
-
 	return true;
 }
 
