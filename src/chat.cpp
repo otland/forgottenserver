@@ -324,7 +324,6 @@ bool Chat::load()
 			for (const auto& pair : tempUserMap) {
 				channel.addUser(*pair.second);
 			}
-
 			continue;
 		}
 

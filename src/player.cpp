@@ -1871,7 +1871,6 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 					damage = 0;
 					return BLOCK_ARMOR;
 				}
-
 				continue;
 			}
 
@@ -2664,7 +2663,6 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 						containers.push_back(subContainer);
 					}
 				}
-
 				continue;
 			}
 

@@ -152,7 +152,6 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			it.minReqLevel = moveEvent->getReqLevel();
 			it.minReqMagicLevel = moveEvent->getReqMagLv();
 			it.vocationString = moveEvent->getVocationString();
-
 			while (++id <= endId) {
 				addEvent(*moveEvent, id, itemIdMap);
 
@@ -169,7 +168,6 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 	} else if ((attr = node.attribute("uniqueid"))) {
 		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
-
 		for (const auto& uid : uidList) {
 			addEvent(std::move(*moveEvent), uid, uniqueIdMap);
 		}
@@ -177,13 +175,11 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("touid").value());
 		addEvent(*moveEvent, id, uniqueIdMap);
-
 		while (++id <= endId) {
 			addEvent(*moveEvent, id, uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("actionid"))) {
 		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
-
 		for (const auto& aid : aidList) {
 			addEvent(std::move(*moveEvent), aid, actionIdMap);
 		}
@@ -191,7 +187,6 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toaid").value());
 		addEvent(*moveEvent, id, actionIdMap);
-
 		while (++id <= endId) {
 			addEvent(*moveEvent, id, actionIdMap);
 		}

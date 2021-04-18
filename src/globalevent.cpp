@@ -190,7 +190,6 @@ void GlobalEvents::think()
 			if (nextExecutionTime < nextScheduledTime) {
 				nextScheduledTime = nextExecutionTime;
 			}
-
 			continue;
 		}
 
