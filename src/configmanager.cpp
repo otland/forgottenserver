@@ -285,6 +285,9 @@ bool ConfigManager::load()
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
 	integer[VIP_FREE_LIMIT] = getGlobalNumber(L, "vipFreeLimit", 20);
 	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
+	integer[TILE_LIMIT] = getGlobalNumber(L, "tileLimit", 0);
+	integer[PROTECTION_TILE_LIMIT] = getGlobalNumber(L, "protectionTileLimit", 0);
+	integer[HOUSE_TILE_LIMIT] = getGlobalNumber(L, "houseTileLimit", 0);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

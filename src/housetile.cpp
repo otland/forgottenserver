@@ -96,6 +96,11 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 				return RETURNVALUE_CANNOTTHROW;
 			}
 		}
+
+		const uint32_t itemLimit = g_config.getNumber(ConfigManager::HOUSE_TILE_LIMIT);
+		if (itemLimit && getThingCount() > itemLimit) {
+			return RETURNVALUE_YOUCANNOTADDMOREITEMSONTHISTILE;
+		}
 	}
 	return Tile::queryAdd(index, thing, count, flags, actor);
 }
