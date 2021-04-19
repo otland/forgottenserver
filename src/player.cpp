@@ -1290,7 +1290,20 @@ void Player::checkStairs(const Tile* newTile, const Position& newPos, const Posi
 	}
 
 	if (newTile->hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
-		Tile* tileBelow = g_game.map.getTile(newPos.x, newPos.y, newPos.z + 1);
+		Direction dir = getDirection();
+		// Check diagonal movement
+		const bool isNorthWest = (oldPos.x > newPos.x && oldPos.y > newPos.y);
+		const bool isNorthEast = (oldPos.x < newPos.x && oldPos.y > newPos.y);
+		const bool isSouthWest = (oldPos.x > newPos.x && oldPos.y < newPos.y);
+		const bool isSouthEast = (oldPos.x < newPos.x && oldPos.y < newPos.y);
+
+		dir = (isNorthWest || isNorthEast) ? DIRECTION_NORTH : dir;
+		dir = (isSouthWest || isSouthEast) ? DIRECTION_SOUTH : dir;
+
+		uint16_t offsetY = (dir == DIRECTION_NORTH) ? -1 : 0;
+		uint16_t offsetX = (dir == DIRECTION_WEST)  ? -1 : 0;
+
+		Tile* tileBelow = g_game.map.getTile(newPos.x + offsetX, newPos.y + offsetY, newPos.z + 1);
 		if (!tileBelow || !tileBelow->isWalkable()) {
 			if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
 				newTile->patch();
