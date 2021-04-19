@@ -5070,7 +5070,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	if (type == MARKETACTION_SELL) {
-		if (fee > player->bankBalance) {
+		if (fee > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
 
@@ -5101,15 +5101,21 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			}
 		}
 
-		player->bankBalance -= fee;
+		const auto debitCash = std::min(player->getMoney(), fee);
+		const auto debitBank = fee - debitCash;
+		removeMoney(player, debitCash);
+		player->bankBalance -= debitBank;
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > player->bankBalance) {
+		if (totalPrice > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
 
-		player->bankBalance -= totalPrice;
+		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitBank = totalPrice - debitCash;
+		removeMoney(player, debitCash);
+		player->bankBalance -= debitBank;
 	}
 
 	IOMarket::createOffer(player->getGUID(), static_cast<MarketAction_t>(type), it.id, amount, price, anonymous);
@@ -5202,6 +5208,11 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		return;
 	}
 
+	uint32_t offerAccountId = IOLoginData::getAccountIdByPlayerId(offer.playerId);
+	if (offerAccountId == player->getAccount()) {
+		return;
+	}
+
 	if (amount > offer.amount) {
 		return;
 	}
@@ -5288,11 +5299,14 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			buyerPlayer->onReceiveMail();
 		}
 	} else {
-		if (totalPrice > player->bankBalance) {
+		if (totalPrice > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
 
-		player->bankBalance -= totalPrice;
+		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitBank = totalPrice - debitCash;
+		removeMoney(player, debitCash);
+		player->bankBalance -= debitBank;
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;

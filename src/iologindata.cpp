@@ -165,6 +165,19 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 	return result->getNumber<uint32_t>("account_id");
 }
 
+uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
+{
+	Database& db = Database::getInstance();
+
+	std::ostringstream query;
+	query << "SELECT `account_id` FROM `players` WHERE `id` = " << playerId;
+	DBResult_ptr result = db.storeQuery(query.str());
+	if (!result) {
+		return 0;
+	}
+	return result->getNumber<uint32_t>("account_id");
+}
+
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
 	std::ostringstream query;
