@@ -1228,9 +1228,6 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_ITEMCANNOTBEMOVEDTHERE:
 			return "This item cannot be moved there.";
 
-		case RETURNVALUE_YOUCANNOTADDMOREITEMSONTHISTILE:
-			return "You can not add more items on this tile.";
-
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
 	}

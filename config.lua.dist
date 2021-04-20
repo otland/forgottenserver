@@ -94,11 +94,6 @@ forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
 
--- Limit of items per tile, default 0 (disabled)
-tileLimit = 0
-protectionTileLimit = 0
-houseTileLimit = 0
-
 -- VIP
 vipFreeLimit = 20
 vipPremiumLimit = 100

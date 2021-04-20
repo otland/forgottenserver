@@ -130,9 +130,6 @@ class ConfigManager
 			YELL_MINIMUM_LEVEL,
 			VIP_FREE_LIMIT,
 			VIP_PREMIUM_LIMIT,
-			TILE_LIMIT,
-			PROTECTION_TILE_LIMIT,
-			HOUSE_TILE_LIMIT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
