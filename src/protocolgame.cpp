@@ -415,7 +415,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		}
 	}
 
-	if (player->hasEventRegistered(CREATURE_EVENT_PARSEPACKET)) {
+	if (player->hasEventRegistered(CREATURE_EVENT_PARSE_PACKET)) {
 		addGameTask(&Game::playerExecuteParsePacketEvent, player->getID(), recvbyte, new NetworkMessage(msg));
 	}
 
