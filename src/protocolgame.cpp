@@ -415,7 +415,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		}
 	}
 
-	addGameTask(&Game::playerExecuteParsePacketEvent, player->getID(), recvbyte, new NetworkMessage(msg));
+	if (player->hasEventRegistered(CREATURE_EVENT_PARSEPACKET)) {
+		addGameTask(&Game::playerExecuteParsePacketEvent, player->getID(), recvbyte, new NetworkMessage(msg));
+	}
 
 	switch (recvbyte) {
 		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, getThis(), true, false))); break;
