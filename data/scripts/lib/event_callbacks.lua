@@ -130,8 +130,9 @@ setmetatable(EventCallback, {
 		for k, ev in pairs(eventTable) do
 			ret = {ev[1](unpack(args))}
 			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
-			return unpack(ret)
+				return unpack(ret)
 			end
+
 			for k, v in pairs(auxargs[type] or {}) do
 				args[k] = ret[v]
 			end

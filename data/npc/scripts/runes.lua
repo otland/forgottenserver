@@ -133,7 +133,6 @@ function creatureSayCallback(cid, type, msg)
 		selfSay('Ok then.', cid)
 		npcHandler.topic[cid] = 0
 	end
-
 	return true
 end
 

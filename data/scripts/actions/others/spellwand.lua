@@ -7,10 +7,12 @@ function spellwand.onUse(player, item, fromPosition, target, toPosition, isHotke
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
+
 	if not target:isPlayer() then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
+
 	if math.random(100) <= 33 then
 		item:remove()
 		player:say("The spellwand broke.", TALKTYPE_MONSTER_SAY)

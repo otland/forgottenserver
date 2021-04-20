@@ -23,6 +23,7 @@ function suspiciousSurpriseBag.onUse(player, item, fromPosition, target, toPosit
 				if type(count) == "table" then
 					count = math.random(count[1], count[2])
 				end
+
 				player:addItem(gift, count)
 				item:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
 			else

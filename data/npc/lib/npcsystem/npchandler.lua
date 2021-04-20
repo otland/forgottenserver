@@ -152,7 +152,7 @@ if NpcHandler == nil then
 
 	-- Function used to verify if npc is focused to certain player
 	function NpcHandler:isFocused(focus)
-		for k,v in pairs(self.focuses) do
+		for k, v in pairs(self.focuses) do
 			if v == focus then
 				return true
 			end
@@ -196,7 +196,7 @@ if NpcHandler == nil then
 		end
 
 		local pos = nil
-		for k,v in pairs(self.focuses) do
+		for k, v in pairs(self.focuses) do
 			if v == focus then
 				pos = k
 			end
@@ -279,6 +279,7 @@ if NpcHandler == nil then
 			elseif id == CALLBACK_MODULE_RESET and module.callbackOnModuleReset then
 				tmpRet = module:callbackOnModuleReset(...)
 			end
+
 			if not tmpRet then
 				ret = false
 				break
@@ -568,7 +569,6 @@ if NpcHandler == nil then
 		if distance == -1 then
 			return false
 		end
-
 		return distance <= self.talkRadius
 	end
 
@@ -626,6 +626,7 @@ if NpcHandler == nil then
 			if npc == nil then
 				return
 			end
+
 			local player = Player(focusId)
 			if player then
 				npc:say(message, TALKTYPE_PRIVATE_NP, false, player, npc:getPosition())

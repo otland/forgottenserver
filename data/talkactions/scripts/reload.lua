@@ -43,7 +43,7 @@ local reloadTypes = {
 	["raids"] = RELOAD_TYPE_RAIDS,
 
 	["spell"] = RELOAD_TYPE_SPELLS,
-	["spells"] =  RELOAD_TYPE_SPELLS,
+	["spells"] = RELOAD_TYPE_SPELLS,
 
 	["talk"] = RELOAD_TYPE_TALKACTIONS,
 	["talkaction"] = RELOAD_TYPE_TALKACTIONS,

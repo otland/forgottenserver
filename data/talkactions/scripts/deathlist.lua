@@ -9,9 +9,8 @@ local function getMonthDayEnding(day)
 		return "nd"
 	elseif day == "03" or day == "23" then
 		return "rd"
-	else
-		return "th"
 	end
+	return "th"
 end
 
 local function getMonthString(m)

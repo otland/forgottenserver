@@ -71,6 +71,7 @@ function setAuxFunctions()
 			elseif not def.cmp and attr and attr ~= 0 then
 				return attr
 			end
+
 			local default = ItemType['get'.. name]
 			return default and default(self:getType()) or nil
 		end
@@ -327,6 +328,7 @@ do
 				ss:append(' (Arm:%d', obj:getArmor())
 				begin = false
 			end
+
 			begin = addGenerics(item, it, abilities, ss, begin)
 			if not begin then
 				ss:append(')')
@@ -388,6 +390,7 @@ do
 							if not text then
 								text = item:getText()
 							end
+
 							if text then
 								local writer = item:getWriter()
 								if writer then
@@ -466,6 +469,7 @@ do
 			if not text and item then
 				text = item:getText()
 			end
+
 			if not text or text == '' then
 				ss:append('.')
 			end
@@ -536,7 +540,6 @@ do
 				ss:append('\n%s', text)
 			end
 		end
-
 		return ss:concat()
 	end
 

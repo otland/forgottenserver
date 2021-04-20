@@ -12,12 +12,14 @@ function juicyRoot.onUse(player, item, fromPosition, target, toPosition, isHotke
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your harvesting attempt destroyed more of the juicy roots than you could salvage.")
 	end
+
 	local roots = rootsTable[item.itemid]
 	if roots then
 		item:transform(roots)
 		item:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
 		item:decay()
 	end
+
 	if table.contains({23477, 23478}, item.itemid) then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "This root has already been harvested, nothing to gain here.")
 	end

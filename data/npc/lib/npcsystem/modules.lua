@@ -43,6 +43,7 @@ if Modules == nil then
 		if npcHandler == nil then
 			error("StdModule.say called without any npcHandler instance.")
 		end
+
 		local onlyFocus = (parameters.onlyFocus == nil or parameters.onlyFocus == true)
 		if not npcHandler:isFocused(cid) and onlyFocus then
 			return false
@@ -55,7 +56,6 @@ if Modules == nil then
 		elseif parameters.moveup then
 			npcHandler.keywordHandler:moveUp(cid, parameters.moveup)
 		end
-
 		return true
 	end
 
@@ -90,6 +90,7 @@ if Modules == nil then
 		else
 			npcHandler:say("You need a premium account in order to get promoted.", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -119,6 +120,7 @@ if Modules == nil then
 		else
 			npcHandler:say("You need a premium account in order to buy " .. parameters.spellName .. ".", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -146,6 +148,7 @@ if Modules == nil then
 		else
 			npcHandler:say("You need a premium account in order to be blessed.", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -182,6 +185,7 @@ if Modules == nil then
 		else
 			npcHandler:say("I'm sorry, but you need a premium account in order to travel onboard our ships.", cid)
 		end
+
 		npcHandler:resetNpc(cid)
 		return true
 	end
@@ -214,7 +218,6 @@ if Modules == nil then
 			obj.callback = FOCUS_FAREWELLWORDS.callback or FocusModule.messageMatcher
 			handler.keywordHandler:addKeyword(obj, FocusModule.onFarewell, {module = self})
 		end
-
 		return true
 	end
 
@@ -470,6 +473,7 @@ if Modules == nil then
 		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
 			return false
 		end
+
 		local parentParameters = node:getParent():getParameters()
 		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
 		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_DECLINE), parseInfo)
@@ -754,7 +758,6 @@ if Modules == nil then
 				handler.keywordHandler:addKeyword(obj, ShopModule.requestTrade, {module = self})
 			end
 		end
-
 		return true
 	end
 
@@ -767,7 +770,6 @@ if Modules == nil then
 				end
 			end
 		end
-
 		return false
 	end
 
@@ -789,7 +791,6 @@ if Modules == nil then
 		elseif ret > self.maxCount then
 			ret = self.maxCount
 		end
-
 		return ret
 	end
 
@@ -819,13 +820,13 @@ if Modules == nil then
 		if names and SHOPMODULE_MODE ~= SHOPMODULE_MODE_TRADE then
 			for i, name in pairs(names) do
 				local parameters = {
-						itemid = itemid,
-						cost = cost,
-						eventType = SHOPMODULE_BUY_ITEM,
-						module = self,
-						realName = realName or ItemType(itemid):getName(),
-						subType = itemSubType or 1
-					}
+					itemid = itemid,
+					cost = cost,
+					eventType = SHOPMODULE_BUY_ITEM,
+					module = self,
+					realName = realName or ItemType(itemid):getName(),
+					subType = itemSubType or 1
+				}
 
 				keywords = {}
 				keywords[#keywords + 1] = "buy"
@@ -873,14 +874,14 @@ if Modules == nil then
 		if names then
 			for i, name in pairs(names) do
 				local parameters = {
-						container = container,
-						itemid = itemid,
-						cost = cost,
-						eventType = SHOPMODULE_BUY_ITEM_CONTAINER,
-						module = self,
-						realName = realName or ItemType(itemid):getName(),
-						subType = subType or 1
-					}
+					container = container,
+					itemid = itemid,
+					cost = cost,
+					eventType = SHOPMODULE_BUY_ITEM_CONTAINER,
+					module = self,
+					realName = realName or ItemType(itemid):getName(),
+					subType = subType or 1
+				}
 
 				keywords = {}
 				keywords[#keywords + 1] = "buy"
@@ -994,7 +995,6 @@ if Modules == nil then
 				end
 				return true
 			end
-
 			return false
 		else
 			local msg = self.npcHandler:getMessage(MESSAGE_BOUGHT)
@@ -1003,6 +1003,7 @@ if Modules == nil then
 			if not player:removeTotalMoney(totalCost) then
 				return false
 			end
+
 			self.npcHandler.talkStart[cid] = os.time()
 			return true
 		end
@@ -1145,6 +1146,7 @@ if Modules == nil then
 				if not player:removeTotalMoney(cost) then
 					return false
 				end
+
 				if shop_itemid[cid] == ITEM_PARCEL then
 					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
 				end

@@ -48,6 +48,7 @@ local function findPushPosition(creature, round)
 			end
 		end
 	end
+
 	if round < 4 then
 		return findPushPosition(creature, round + 1)
 	end
@@ -79,6 +80,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				target:transform(doors[target.itemid])
 				return true
 			end
+
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
 		end
@@ -97,6 +99,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				end
 				table.insert(creaturePositionTable, {creature = doorCreature, position = pushPosition})
 			end
+
 			for _, tableCreature in ipairs(creaturePositionTable) do
 				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end

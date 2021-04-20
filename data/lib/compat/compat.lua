@@ -535,7 +535,9 @@ function getPlayerFood(cid)
 	if player == nil then
 		return false
 	end
-	local c = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT) return c and math.floor(c:getTicks() / 1000) or 0
+
+	local c = player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
+	return c and math.floor(c:getTicks() / 1000) or 0
 end
 function canPlayerLearnInstantSpell(cid, name) local p = Player(cid) return p and p:canLearnSpell(name) or false end
 function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p and p:hasLearnedSpell(name) or false end
@@ -617,6 +619,7 @@ function doPlayerTransferMoneyTo(cid, target, money)
 	if not isValidMoney(money) then
 		return false
 	end
+
 	local p = Player(cid)
 	return p and p:transferMoneyTo(target, money) or false
 end
@@ -643,6 +646,7 @@ function doPlayerRemOutfit(cid, lookType, addons)
 	if player == nil then
 		return false
 	end
+
 	if addons == 255 then
 		return player:removeOutfit(lookType)
 	else
@@ -1020,6 +1024,7 @@ function getTileHouseInfo(pos)
 	if t == nil then
 		return false
 	end
+
 	local h = t:getHouse()
 	return h and h:getId() or false
 end
@@ -1218,6 +1223,7 @@ function getConfigInfo(info)
 	if type(info) ~= "string" then
 		return nil
 	end
+
 	dofile('config.lua')
 	return _G[info]
 end
@@ -1282,6 +1288,7 @@ function doCreateTeleport(itemId, destination, position)
 		item:remove()
 		return false
 	end
+
 	item:setDestination(destination)
 	return item:getUniqueId()
 end
@@ -1322,7 +1329,6 @@ function getPlayerInstantSpellInfo(cid, spellId)
 	if not spell or not player:canCast(spell) then
 		return false
 	end
-
 	return spell
 end
 
@@ -1340,7 +1346,6 @@ function doSetCreatureOutfit(cid, outfit, time)
 	})
 	condition:setTicks(time)
 	creature:addCondition(condition)
-
 	return true
 end
 
@@ -1354,7 +1359,6 @@ function doTileAddItemEx(pos, uid, flags)
 	if item then
 		return tile:addItemEx(item, flags)
 	end
-
 	return false
 end
 
@@ -1393,6 +1397,7 @@ function createFunctions(class)
 				add = false
 			end
 		end
+
 		if add then
 			local str = name:sub(1, 1):upper() .. name:sub(2)
 			local getFunc = function(self) return func(self) end
@@ -1404,6 +1409,7 @@ function createFunctions(class)
 			end
 		end
 	end
+
 	for _, func in ipairs(temp) do
 		rawset(class, func[1], func[2])
 		rawset(class, func[3], func[4])

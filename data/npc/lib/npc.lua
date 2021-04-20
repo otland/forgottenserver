@@ -6,7 +6,6 @@ function msgcontains(message, keyword)
 	if message == keyword then
 		return true
 	end
-
 	return message:find(keyword) and not message:find('(%w+)' .. keyword)
 end
 

@@ -8,6 +8,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Rocket in Pocket", 3)
 		doTargetCombat(0, player, COMBAT_PHYSICALDAMAGE, -10, -10, CONST_ME_EXPLOSIONAREA)
 	end
+
 	player:addAchievementProgress("Fireworks in the Sky", 250)
 	item:remove()
 	return true

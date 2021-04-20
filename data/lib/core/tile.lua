@@ -33,7 +33,6 @@ function Tile.relocateTo(self, toPosition)
 			end
 		end
 	end
-
 	return true
 end
 

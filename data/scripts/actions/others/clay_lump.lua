@@ -32,7 +32,6 @@ function clayLump.onUse(player, item, fromPosition, target, toPosition, isHotkey
 				player:addAchievement("Clay Fighter")
 				player:addAchievementProgress("Clay to Fame", 5)
 			end
-
 			break
 		end
 	end

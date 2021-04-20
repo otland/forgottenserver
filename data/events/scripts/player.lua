@@ -154,7 +154,6 @@ function Player:onGainExperience(source, exp, rawExp)
 			exp = exp * 0.5
 		end
 	end
-
 	return hasEventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE, self, source, exp, rawExp) or exp
 end
 
@@ -171,6 +170,7 @@ function Player:onGainSkillTries(skill, tries)
 		tries = tries * configManager.getNumber(configKeys.RATE_MAGIC)
 		return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 	end
+
 	tries = tries * configManager.getNumber(configKeys.RATE_SKILL)
 	return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
 end

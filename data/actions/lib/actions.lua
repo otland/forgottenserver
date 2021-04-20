@@ -50,7 +50,6 @@ function destroyItem(player, target, toPosition)
 				end
 			end
 		end
-
 		target:remove(1)
 	end
 
@@ -77,7 +76,6 @@ function onUseMachete(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Nothing Can Stop Me", 100)
 		return true
 	end
-
 	return destroyItem(player, target, toPosition)
 end
 
@@ -93,6 +91,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:addItem(2145) -- 49% chance of getting small diamond
 		end
+
 		player:addAchievementProgress("Petrologist", 100)
 		target:getPosition():sendMagicEffect(CONST_ME_BLOCKHIT)
 		target:remove(1)
@@ -126,7 +125,6 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		toPosition:sendMagicEffect(CONST_ME_HITAREA)
 		return true
 	end
-
 	return false
 end
 
@@ -137,7 +135,6 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local ground = tile:getGround()
-
 	if ground and table.contains(ropeSpots, ground:getId()) then
 		tile = Tile(toPosition:moveUpstairs())
 		if not tile then
@@ -169,15 +166,12 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 			if Tile(toPosition:moveUpstairs()):queryAdd(thing) ~= RETURNVALUE_NOERROR then
 				return false
 			end
-
 			return thing:teleportTo(toPosition, false)
 		elseif thing:isItem() and thing:getType():isMovable() then
 			return thing:moveTo(toPosition:moveUpstairs())
 		end
-
 		return true
 	end
-
 	return false
 end
 
@@ -231,7 +225,6 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 	else
 		return false
 	end
-
 	return true
 end
 
@@ -247,6 +240,7 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 		player:addAchievementProgress("Happy Farmer", 200)
 		return true
 	end
+
 	if target.itemid == 5465 then -- burning sugar cane
 		target:transform(5464)
 		target:decay()
@@ -261,7 +255,6 @@ function onUseCrowbar(player, item, fromPosition, target, toPosition, isHotkey)
 	if not table.contains({2416, 10515}, item.itemid) then
 		return false
 	end
-
 	return destroyItem(player, target, toPosition)
 end
 
@@ -276,6 +269,5 @@ function onUseKitchenKnife(player, item, fromPosition, target, toPosition, isHot
 		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 		return true
 	end
-
 	return false
 end
