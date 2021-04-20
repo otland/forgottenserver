@@ -1527,6 +1527,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_GROUP_DOOR)
 	registerEnum(ITEM_GROUP_DEPRECATED)
 
+	registerEnum(ITEM_BROWSEFIELD)
 	registerEnum(ITEM_BAG)
 	registerEnum(ITEM_SHOPPING_BAG)
 	registerEnum(ITEM_GOLD_COIN)
