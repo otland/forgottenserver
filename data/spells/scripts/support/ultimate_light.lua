@@ -5,7 +5,7 @@ combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 local condition = Condition(CONDITION_LIGHT)
 condition:setParameter(CONDITION_PARAM_LIGHT_LEVEL, 9)
 condition:setParameter(CONDITION_PARAM_LIGHT_COLOR, 215)
-condition:setParameter(CONDITION_PARAM_TICKS, 10 + (33 * 60 * 1000))
+condition:setParameter(CONDITION_PARAM_TICKS, (10 + 33 * 60) * 1000)
 combat:addCondition(condition)
 
 function onCastSpell(creature, variant)
