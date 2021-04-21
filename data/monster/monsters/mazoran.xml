@@ -34,7 +34,7 @@
 		<attack name="death" interval="2000" chance="20" length="10" spread="0" min="-500" max="-800">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
-		<attack name="fire" interval="2000" chance="20"  length="8" spread="3" min="-500" max="-800">
+		<attack name="fire" interval="2000" chance="20" length="8" spread="3" min="-500" max="-800">
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>
 	</attacks>

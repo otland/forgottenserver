@@ -52,7 +52,7 @@
 	</immunities>
 	<voices interval="2000" chance="7">
 		<voice sentence="Ah, the sweet music of a beating heart!" />
-		<voice sentence="Death and Darkness"/>
+		<voice sentence="Death and Darkness" />
 		<voice sentence="Embrace the night!" />
 		<voice sentence="May night fall upon you!" />
 	</voices>
@@ -62,7 +62,7 @@
 		<item id="2148" countmax="42" chance="60000" /><!-- gold coin -->
 		<item id="2152" countmax="6" chance="18200" /><!-- fish -->
 		<item id="7368" countmax="2" chance="2000" /><!-- assassin stars -->
-		<item id="2144" chance="2000" /><!--  black pearls -->
+		<item id="2144" chance="2000" /><!-- black pearls -->
 		<item id="6558" chance="2000" /><!-- concentrated demonic blood -->
 		<item id="6500" chance="2210" /><!-- demonic essence -->
 		<item id="2145" countmax="3" chance="800" /><!-- small diamond -->
