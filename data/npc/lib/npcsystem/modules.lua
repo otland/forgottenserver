@@ -402,8 +402,8 @@ if Modules == nil then
 
 		if npcs_loaded_travel[getNpcCid()] == nil then
 			npcs_loaded_travel[getNpcCid()] = getNpcCid()
-			self.npcHandler.keywordHandler:addKeyword({'yes'}, TravelModule.onConfirm, {module = self})
-			self.npcHandler.keywordHandler:addKeyword({'no'}, TravelModule.onDecline, {module = self})
+			self.npcHandler.keywordHandler:addKeyword({"yes"}, TravelModule.onConfirm, {module = self})
+			self.npcHandler.keywordHandler:addKeyword({"no"}, TravelModule.onDecline, {module = self})
 		end
 	end
 
@@ -811,7 +811,7 @@ if Modules == nil then
 				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = cost, sell = -1, subType = itemSubType, name = realName or ItemType(itemid):getName()}
 			else
 				if cost < shopItem.sell then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (".. shopItem.name ..")")
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (" .. shopItem.name .. ")")
 				end
 				shopItem.buy = cost
 			end
@@ -839,8 +839,8 @@ if Modules == nil then
 
 		if npcs_loaded_shop[getNpcCid()] == nil then
 			npcs_loaded_shop[getNpcCid()] = getNpcCid()
-			self.npcHandler.keywordHandler:addKeyword({'yes'}, ShopModule.onConfirm, {module = self})
-			self.npcHandler.keywordHandler:addKeyword({'no'}, ShopModule.onDecline, {module = self})
+			self.npcHandler.keywordHandler:addKeyword({"yes"}, ShopModule.onConfirm, {module = self})
+			self.npcHandler.keywordHandler:addKeyword({"no"}, ShopModule.onDecline, {module = self})
 		end
 	end
 
@@ -909,7 +909,7 @@ if Modules == nil then
 				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = -1, sell = cost, subType = itemSubType, name = realName or ItemType(itemid):getName()}
 			else
 				if cost > shopItem.buy then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (".. shopItem.name ..")")
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (" .. shopItem.name .. ")")
 				end
 				shopItem.sell = cost
 			end

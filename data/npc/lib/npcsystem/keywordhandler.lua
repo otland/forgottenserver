@@ -33,7 +33,7 @@ if not KeywordHandler then
 		end
 
 		for _, v in ipairs(self.keywords) do
-			if type(v) == 'string' then
+			if type(v) == "string" then
 				local a, b = string.find(message, v)
 				if not a or not b then
 					return false
@@ -67,7 +67,7 @@ if not KeywordHandler then
 	-- Adds an alias keyword. Should be used if you have to answer the same thing to several keywords.
 	function KeywordNode:addAliasKeyword(keywords)
 		if #self.children == 0 then
-			print('KeywordNode:addAliasKeyword no previous node found')
+			print("KeywordNode:addAliasKeyword no previous node found")
 			return false
 		end
 
@@ -112,7 +112,7 @@ if not KeywordHandler then
 	function KeywordHandler:processMessage(cid, message)
 		local node = self:getLastNode(cid)
 		if not node then
-			error('No root node found.')
+			error("No root node found.")
 			return false
 		end
 

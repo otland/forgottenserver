@@ -1224,7 +1224,7 @@ function getConfigInfo(info)
 		return nil
 	end
 
-	dofile('config.lua')
+	dofile("config.lua")
 	return _G[info]
 end
 
@@ -1436,18 +1436,18 @@ end
 
 do
 	local combats = {
-		[COMBAT_PHYSICALDAMAGE] = 'physical',
-		[COMBAT_ENERGYDAMAGE] = 'energy',
-		[COMBAT_EARTHDAMAGE] = 'earth',
-		[COMBAT_FIREDAMAGE] = 'fire',
-		[COMBAT_UNDEFINEDDAMAGE] = 'undefined',
-		[COMBAT_LIFEDRAIN] = 'lifedrain',
-		[COMBAT_MANADRAIN] = 'manadrain',
-		[COMBAT_HEALING] = 'healing',
-		[COMBAT_DROWNDAMAGE] = 'drown',
-		[COMBAT_ICEDAMAGE] = 'ice',
-		[COMBAT_HOLYDAMAGE] = 'holy',
-		[COMBAT_DEATHDAMAGE] = 'death'
+		[COMBAT_PHYSICALDAMAGE] = "physical",
+		[COMBAT_ENERGYDAMAGE] = "energy",
+		[COMBAT_EARTHDAMAGE] = "earth",
+		[COMBAT_FIREDAMAGE] = "fire",
+		[COMBAT_UNDEFINEDDAMAGE] = "undefined",
+		[COMBAT_LIFEDRAIN] = "lifedrain",
+		[COMBAT_MANADRAIN] = "manadrain",
+		[COMBAT_HEALING] = "healing",
+		[COMBAT_DROWNDAMAGE] = "drown",
+		[COMBAT_ICEDAMAGE] = "ice",
+		[COMBAT_HOLYDAMAGE] = "holy",
+		[COMBAT_DEATHDAMAGE] = "death"
 	}
 
 	function getCombatName(combat)
@@ -1457,34 +1457,34 @@ end
 
 do
 	local skills = {
-		[SKILL_FIST] = 'fist fighting',
-		[SKILL_CLUB] = 'club fighting',
-		[SKILL_SWORD] = 'sword fighting',
-		[SKILL_AXE] = 'axe fighting',
-		[SKILL_DISTANCE] = 'distance fighting',
-		[SKILL_SHIELD] = 'shielding',
-		[SKILL_FISHING] = 'fishing',
-		[SKILL_MAGLEVEL] = 'magic level',
-		[SKILL_LEVEL] = 'level'
+		[SKILL_FIST] = "fist fighting",
+		[SKILL_CLUB] = "club fighting",
+		[SKILL_SWORD] = "sword fighting",
+		[SKILL_AXE] = "axe fighting",
+		[SKILL_DISTANCE] = "distance fighting",
+		[SKILL_SHIELD] = "shielding",
+		[SKILL_FISHING] = "fishing",
+		[SKILL_MAGLEVEL] = "magic level",
+		[SKILL_LEVEL] = "level"
 	}
 
 	function getSkillName(skill)
-		return skills[skill] or 'unknown'
+		return skills[skill] or "unknown"
 	end
 end
 
 do
 	local specialSkills = {
-		[SPECIALSKILL_CRITICALHITCHANCE] = 'critical hit chance',
-		[SPECIALSKILL_CRITICALHITAMOUNT] = 'critical extra damage',
-		[SPECIALSKILL_LIFELEECHCHANCE] = 'hitpoints leech chance',
-		[SPECIALSKILL_LIFELEECHAMOUNT] = 'hitpoints leech amount',
-		[SPECIALSKILL_MANALEECHCHANCE] = 'manapoints leech chance',
-		[SPECIALSKILL_MANALEECHAMOUNT] = 'manapoints leech amount'
+		[SPECIALSKILL_CRITICALHITCHANCE] = "critical hit chance",
+		[SPECIALSKILL_CRITICALHITAMOUNT] = "critical extra damage",
+		[SPECIALSKILL_LIFELEECHCHANCE] = "hitpoints leech chance",
+		[SPECIALSKILL_LIFELEECHAMOUNT] = "hitpoints leech amount",
+		[SPECIALSKILL_MANALEECHCHANCE] = "manapoints leech chance",
+		[SPECIALSKILL_MANALEECHAMOUNT] = "manapoints leech amount"
 	}
 
 	function getSpecialSkillName(specialSkill)
-		return specialSkills[specialSkill] or 'unknown'
+		return specialSkills[specialSkill] or "unknown"
 	end
 end
 
@@ -1493,7 +1493,7 @@ function indexToCombatType(idx)
 end
 
 function showpos(v)
-	return v > 0 and '+' or '-'
+	return v > 0 and "+" or "-"
 end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack

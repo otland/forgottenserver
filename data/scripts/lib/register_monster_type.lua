@@ -217,7 +217,7 @@ registerMonsterType.loot = function(mtype, mask)
 			mtype:addLoot(parent)
 		end
 		if lootError then
-			print("[Warning - end] Monster: \"".. mtype:name() .. "\" loot could not correctly be load.")
+			print("[Warning - end] Monster: \"" .. mtype:name() .. "\" loot could not correctly be load.")
 		end
 	end
 end

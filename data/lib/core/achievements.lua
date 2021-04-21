@@ -652,7 +652,7 @@ end
 function Player.addAchievementProgress(self, ach, value)
 	local achievement = tonumber(ach) ~= nil and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
 	if not achievement then
-		print('[!] -> Invalid achievement "' .. ach .. '".')
+		print("[!] -> Invalid achievement " .. ach .. ".")
 		return true
 	end
 

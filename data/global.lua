@@ -1,5 +1,5 @@
 math.randomseed(os.time())
-dofile('data/lib/lib.lua')
+dofile("data/lib/lib.lua")
 
 ropeSpots = {384, 418, 8278, 8592, 13189, 14435, 14436, 14857, 15635, 19518, 24621, 24622, 24623, 24624, 26019}
 
@@ -28,9 +28,9 @@ function getFormattedWorldTime()
 
 	local minutes = worldTime % 60
 	if minutes < 10 then
-		minutes = '0' .. minutes
+		minutes = "0" .. minutes
 	end
-	return hours .. ':' .. minutes
+	return hours .. ":" .. minutes
 end
 
 function getLootRandom()
@@ -63,7 +63,7 @@ string.splitTrimmed = function(str, sep)
 end
 
 string.trim = function(str)
-	return str:match'^()%s*$' and '' or str:match'^%s*(.*%S)'
+	return str:match"^()%s*$" and "" or str:match"^%s*(.*%S)"
 end
 
 if not nextUseStaminaTime then
@@ -73,10 +73,10 @@ end
 function getPlayerDatabaseInfo(name_or_guid)
 	local sql_where = ""
 
-	if type(name_or_guid) == 'string' then
-		sql_where = "WHERE `p`.`name`=" .. db.escapeString(name_or_guid) .. ""
-	elseif type(name_or_guid) == 'number' then
-		sql_where = "WHERE `p`.`id`='" .. name_or_guid .. "'"
+	if type(name_or_guid) == "string" then
+		sql_where = "WHERE `p`.`name` = " .. db.escapeString(name_or_guid) .. ""
+	elseif type(name_or_guid) == "number" then
+		sql_where = "WHERE `p`.`id` = '" .. name_or_guid .. "'"
 	else
 		return false
 	end

@@ -1,12 +1,12 @@
 -- Including the Advanced NPC System
-dofile('data/npc/lib/npcsystem/npcsystem.lua')
+dofile("data/npc/lib/npcsystem/npcsystem.lua")
 
 function msgcontains(message, keyword)
 	local message, keyword = message:lower(), keyword:lower()
 	if message == keyword then
 		return true
 	end
-	return message:find(keyword) and not message:find('(%w+)' .. keyword)
+	return message:find(keyword) and not message:find("(%w+)" .. keyword)
 end
 
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
@@ -73,7 +73,7 @@ function doPlayerSellItem(cid, itemid, count, cost)
 	local player = Player(cid)
 	if player:removeItem(itemid, count) then
 		if not player:addMoney(cost) then
-			error('Could not add money to ' .. player:getName() .. '(' .. cost .. 'gp)')
+			error("Could not add money to " .. player:getName() .. "(" .. cost .. "gp)")
 		end
 		return true
 	end
