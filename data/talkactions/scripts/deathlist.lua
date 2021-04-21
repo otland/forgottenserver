@@ -32,8 +32,8 @@ function onSay(player, words, param)
 				if str ~= "" then
 					breakline = "\n"
 				end
-				local date = os.date("*t", result.getNumber(resultId, "time"))
 
+				local date = os.date("*t", result.getNumber(resultId, "time"))
 				local article = ""
 				local killed_by = result.getString(resultId, "killed_by")
 				if result.getNumber(resultId, "is_player") == 0 then
