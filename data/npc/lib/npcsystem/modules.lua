@@ -291,7 +291,7 @@ if not Modules then
 				if reply then
 					self:addKeyword(keywords, reply)
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter '" .. "keyword_reply" .. n .. "' missing. Skipping...")
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter 'keyword_reply" .. n .. "' missing. Skipping...")
 				end
 			else
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem: No keywords found for keyword set #" .. n .. ". Skipping...")

@@ -43,7 +43,7 @@ function onUpdateDatabase()
 							repeat
 								local attr, attrSize = result.getStream(resultId3, "attributes")
 								runningId = runningId + 1
-								stmt = stmt .. "(" .. playerId .. "," .. runningId .. ",0," .. result.getNumber(resultId3, "itemtype") .. "," .. result.getNumber(resultId3, "count") .. "," .. db.escapeBlob(attr, attrSize) .. "),"
+								stmt = stmt .. "(" .. playerId .. "," .. runningId .. ", 0," .. result.getNumber(resultId3, "itemtype") .. "," .. result.getNumber(resultId3, "count") .. "," .. db.escapeBlob(attr, attrSize) .. "),"
 								sids[#sids + 1] = result.getNumber(resultId3, "sid")
 
 								db.query("DELETE FROM `player_depotitems` WHERE `player_id` = " .. result.getNumber(resultId, "player_id") .. " AND `sid` = " .. result.getNumber(resultId3, "sid"))

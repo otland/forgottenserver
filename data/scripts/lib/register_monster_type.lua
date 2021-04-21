@@ -3,7 +3,7 @@ setmetatable(registerMonsterType,
 {
 	__call =
 	function(self, mtype, mask)
-		for _,parse in pairs(self) do
+		for _, parse in pairs(self) do
 			parse(mtype, mask)
 		end
 	end
