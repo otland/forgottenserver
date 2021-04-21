@@ -649,9 +649,8 @@ function doPlayerRemOutfit(cid, lookType, addons)
 
 	if addons == 255 then
 		return player:removeOutfit(lookType)
-	else
-		return player:removeOutfitAddon(lookType, addons)
 	end
+	return player:removeOutfitAddon(lookType, addons)
 end
 doPlayerRemoveOutfit = doPlayerRemOutfit
 function canPlayerWearOutfit(cid, lookType, addons) local p = Player(cid) return p and p:hasOutfit(lookType, addons) or false end
@@ -971,9 +970,8 @@ function hasProperty(uid, prop)
 	local parent = item:getParent()
 	if parent:isTile() and item == parent:getGround() then
 		return parent:hasProperty(prop)
-	else
-		return item:hasProperty(prop)
 	end
+	return item:hasProperty(prop)
 end
 
 function doSetItemText(uid, text)
@@ -1112,9 +1110,8 @@ function doTeleportThing(uid, dest, pushMovement)
 	if type(uid) == "userdata" then
 		if uid:isCreature() then
 			return uid:teleportTo(dest, pushMovement or false)
-		else
-			return uid:moveTo(dest)
 		end
+		return uid:moveTo(dest)
 	else
 		if uid >= 0x10000000 then
 			local creature = Creature(uid)

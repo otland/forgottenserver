@@ -31,9 +31,8 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 			if parent:isContainer() and parent:getSize() == parent:getCapacity() then
 				self:sendTextMessage(MESSAGE_STATUS_SMALL, Game.getReturnMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM))
 				return false
-			else
-				return moveItem:moveTo(parent)
 			end
+			return moveItem:moveTo(parent)
 		end
 	end
 	return true

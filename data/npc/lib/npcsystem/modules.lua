@@ -232,9 +232,8 @@ if not Modules then
 		if parameters.module.npcHandler:isFocused(cid) then
 			parameters.module.npcHandler:onFarewell(cid)
 			return true
-		else
-			return false
 		end
+		return false
 	end
 
 	-- Custom message matching callback function for greeting messages.

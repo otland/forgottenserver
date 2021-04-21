@@ -53,9 +53,8 @@ if not NpcSystem then
 		local ret = getNpcParameter(tostring(key))
 		if type(ret) == "number" and ret == 0 then
 			return nil
-		else
-			return ret
 		end
+		return ret
 	end
 
 	-- Parses all known parameters for the npc. Also parses parseable modules.
