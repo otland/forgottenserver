@@ -14,7 +14,7 @@ local rewards = { -- chanceMin, chanceMax, itemID, count
 local crateUsable = Action()
 
 function crateUsable.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if (player:getStorageValue(PlayerStorageKeys.crateUsable)) <= os.time() then
+	if player:getStorageValue(PlayerStorageKeys.crateUsable) <= os.time() then
 		local totalChance = math.random(100)
 		for i = 1, #rewards do
 			local reward = rewards[i]

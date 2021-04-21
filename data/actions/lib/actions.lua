@@ -195,7 +195,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 		tile:relocateTo(toPosition)
 		player:addAchievementProgress("The Undertaker", 500)
 	elseif target.itemid == 20230 then -- swamp digging
-		if (player:getStorageValue(PlayerStorageKeys.swampDigging)) <= os.time() then
+		if player:getStorageValue(PlayerStorageKeys.swampDigging) <= os.time() then
 			local chance = math.random(100)
 			if chance >= 1 and chance <= 42 then
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You dug up a dead snake.")
