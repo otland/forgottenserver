@@ -207,7 +207,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You dug up a leech.")
 				player:addItem(20138)
 			end
-			player:setStorageValue(PlayerStorageKeys.swampDigging, os.time() + 7 * 24 * 60 * 60)
+			player:setStorageValue(PlayerStorageKeys.swampDigging, os.time() + (7 * 24 * 60 * 60))
 			player:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
 		end
 	elseif table.contains(sandIds, groundId) then

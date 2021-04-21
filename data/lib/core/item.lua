@@ -426,16 +426,16 @@ do
 				local duration = item:getDuration() / 1000
 				if duration > 0 then
 					ss:append(" that will expire in ")
-					if duration >= 86400 then
-						local days = math.floor(duration / 86400)
-						local hours = math.floor((duration % 86400) / 3600)
+					if duration >= (24 * 60 * 60) then
+						local days = math.floor(duration / (24 * 60 * 60))
+						local hours = math.floor((duration % (24 * 60 * 60)) / (1 * 60 * 60))
 						ss:append("%d day%s", days, days ~= 1 and "s" or "")
 						if hours > 0 then
 							ss:append(" and %d hour%s", hours, hours ~= 1 and "s" or "")
 						end
-					elseif duration >= 3600 then
-						local hours = math.floor(duration / 3600)
-						local minutes = math.floor((duration % 3600) / 60)
+					elseif duration >= (1 * 60 * 60) then
+						local hours = math.floor(duration / (1 * 60 * 60))
+						local minutes = math.floor((duration % (1 * 60 * 60)) / 60)
 						ss:append("%d hour%s", hours, hours ~= 1 and "s" or "")
 						if minutes > 0 then
 							ss:append(" and %d minute%s", minutes, minutes ~= 1 and "s" or "")

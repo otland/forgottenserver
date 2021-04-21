@@ -1,5 +1,5 @@
 local drunk = Condition(CONDITION_DRUNK)
-drunk:setParameter(CONDITION_PARAM_TICKS, 60000)
+drunk:setParameter(CONDITION_PARAM_TICKS, 1 * 60 * 1000)
 
 local poison = Condition(CONDITION_POISON)
 poison:setParameter(CONDITION_PARAM_DELAYED, true)

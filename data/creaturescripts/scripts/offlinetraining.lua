@@ -1,6 +1,6 @@
 function onLogin(player)
 	local lastLogout = player:getLastLogout()
-	local offlineTime = lastLogout ~= 0 and math.min(os.time() - lastLogout, 86400 * 21) or 0
+	local offlineTime = lastLogout ~= 0 and math.min(os.time() - lastLogout, 21 * 24 * 60 * 60) or 0
 	local offlineTrainingSkill = player:getOfflineTrainingSkill()
 	if offlineTrainingSkill == -1 then
 		player:addOfflineTrainingTime(offlineTime * 1000)
@@ -14,7 +14,7 @@ function onLogin(player)
 		return true
 	end
 
-	local trainingTime = math.max(0, math.min(offlineTime, math.min(43200, player:getOfflineTrainingTime() / 1000)))
+	local trainingTime = math.max(0, math.min(offlineTime, math.min(12 * 60 * 60, player:getOfflineTrainingTime() / 1000)))
 	player:removeOfflineTrainingTime(trainingTime * 1000)
 
 	local remainder = offlineTime - trainingTime
@@ -27,14 +27,14 @@ function onLogin(player)
 	end
 
 	local text = "During your absence you trained for"
-	local hours = math.floor(trainingTime / 3600)
+	local hours = math.floor(trainingTime / (1 * 60 * 60))
 	if hours > 1 then
 		text = string.format("%s %d hours", text, hours)
 	elseif hours == 1 then
 		text = string.format("%s 1 hour", text)
 	end
 
-	local minutes = math.floor((trainingTime % 3600) / 60)
+	local minutes = math.floor((trainingTime % (1 * 60 * 60)) / 60)
 	if minutes ~= 0 then
 		if hours ~= 0 then
 			text = string.format("%s and", text)

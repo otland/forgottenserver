@@ -80,15 +80,15 @@ function Player.removePremiumTime(self, seconds)
 end
 
 function Player.getPremiumDays(self)
-	return math.floor(self:getPremiumTime() / 86400)
+	return math.floor(self:getPremiumTime() / (24 * 60 * 60))
 end
 
 function Player.addPremiumDays(self, days)
-	return self:addPremiumTime(days * 86400)
+	return self:addPremiumTime(days * 24 * 60 * 60)
 end
 
 function Player.removePremiumDays(self, days)
-	return self:removePremiumTime(days * 86400)
+	return self:removePremiumTime(days * 24 * 60 * 60)
 end
 
 function Player.isPremium(self)

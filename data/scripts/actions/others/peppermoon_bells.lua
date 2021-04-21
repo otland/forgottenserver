@@ -1,5 +1,5 @@
 local drunk = Condition(CONDITION_DRUNK)
-drunk:setParameter(CONDITION_PARAM_TICKS, 5000)
+drunk:setParameter(CONDITION_PARAM_TICKS, 5 * 1000)
 
 local peppermoonBells = Action()
 
