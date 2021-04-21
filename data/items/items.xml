@@ -35769,7 +35769,7 @@
 		<attribute key="duration" value="300" />
 		<attribute key="decayTo" value="0" />
 	</item>
-	<item fromid="26138" toid="26140" name="vortex" >
+	<item fromid="26138" toid="26140" name="vortex">
 		<attribute key="type" value="teleport" />
 	</item>
 	<item id="26141" article="an" name="explosive barrel">
