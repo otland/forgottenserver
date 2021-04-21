@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <groups>
 	<group id="1" name="player" access="0" maxdepotitems="0" maxvipentries="0" />
-	<group id="2" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="2" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200">
 		<flags>
 			<flag cannotusecombat="1" />
 			<flag cannotattackplayer="1" />
@@ -42,7 +42,7 @@
 			<flag isalwayspremium="1" />
 		</flags>
 	</group>
-	<group id="3" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="3" name="god" access="1" maxdepotitems="0" maxvipentries="200">
 		<flags>
 			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
