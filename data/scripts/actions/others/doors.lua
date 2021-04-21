@@ -123,12 +123,12 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 end
 
 local doorsSet = {} -- unique value set for door ids
-for _, d in ipairs(questDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(levelDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(keys) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(horizontalOpenDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(verticalOpenDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for d, _ in pairs(doors) do if doorsSet[d] == nil then doorsSet[d] = true end end
+for _, d in ipairs(questDoors) do if not doorsSet[d] then doorsSet[d] = true end end
+for _, d in ipairs(levelDoors) do if not doorsSet[d] then doorsSet[d] = true end end
+for _, d in ipairs(keys) do if not doorsSet[d] then doorsSet[d] = true end end
+for _, d in ipairs(horizontalOpenDoors) do if not doorsSet[d] then doorsSet[d] = true end end
+for _, d in ipairs(verticalOpenDoors) do if not doorsSet[d] then doorsSet[d] = true end end
+for d, _ in pairs(doors) do if not doorsSet[d] then doorsSet[d] = true end end
 for i, _ in pairs(doorsSet) do
 	door:id(i)
 end

@@ -6,7 +6,7 @@ function onSay(player, words, param)
 	end
 
 	local resultId = db.storeQuery("SELECT `name`, `lastip` FROM `players` WHERE `name` = " .. db.escapeString(param))
-	if resultId == false then
+	if not resultId then
 		return false
 	end
 

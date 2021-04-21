@@ -129,7 +129,7 @@ setmetatable(EventCallback, {
 		local args, events = table.pack(...), #eventTable
 		for k, ev in pairs(eventTable) do
 			ret = {ev[1](unpack(args))}
-			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
+			if k == events or (ret[1] and (not ret[1] or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
 				return unpack(ret)
 			end
 
