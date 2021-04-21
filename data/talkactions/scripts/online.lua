@@ -2,10 +2,8 @@ local maxPlayersPerMessage = 10
 
 function onSay(player, words, param)
 	local hasAccess = player:getGroup():getAccess()
-	local players = Game.getPlayers()
 	local onlineList = {}
-
-	for _, targetPlayer in ipairs(players) do
+	for _, targetPlayer in ipairs(Game.getPlayers()) do
 		if hasAccess or not targetPlayer:isInGhostMode() then
 			table.insert(onlineList, ("%s [%d]"):format(targetPlayer:getName(), targetPlayer:getLevel()))
 		end
