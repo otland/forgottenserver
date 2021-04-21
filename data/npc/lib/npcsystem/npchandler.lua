@@ -214,7 +214,7 @@ if not NpcHandler then
 		end
 
 		if Player(focus) then
-			closeShopWindow(focus) --Even if it can not exist, we need to prevent it.
+			closeShopWindow(focus) -- Even if it can not exist, we need to prevent it.
 			self:updateFocus()
 		end
 	end

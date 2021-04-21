@@ -42,7 +42,7 @@ setmetatable(StringStream, {
 })
 
 function StringStream.append(self, str, ...)
-	self[#self+1] = string.format(str, ...)
+	self[#self + 1] = string.format(str, ...)
 end
 
 function StringStream.concat(self, sep)

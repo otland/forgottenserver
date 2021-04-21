@@ -20,7 +20,7 @@ function Party:onDisband()
 end
 
 function Party:onShareExperience(exp)
-	local sharedExperienceMultiplier = 1.20 --20%
+	local sharedExperienceMultiplier = 1.20 -- 20%
 	local vocationsIds = {}
 	local rawExp = exp
 
