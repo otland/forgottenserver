@@ -2,7 +2,7 @@ local CHANNEL_HELP = 7
 
 local muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
 muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_HELP)
-muted:setParameter(CONDITION_PARAM_TICKS, 60 * 60 * 1000)
+muted:setParameter(CONDITION_PARAM_TICKS, 1 * 60 * 60 * 1000)
 
 function onSpeak(player, type, message)
 	local playerAccountType = player:getAccountType()
