@@ -291,10 +291,10 @@ if not Modules then
 				if reply then
 					self:addKeyword(keywords, reply)
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter '" .. "keyword_reply" .. n .. "' missing. Skipping...")
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter '" .. "keyword_reply" .. n .. "' missing. Skipping...")
 				end
 			else
-				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "No keywords found for keyword set #" .. n .. ". Skipping...")
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem: No keywords found for keyword set #" .. n .. ". Skipping...")
 			end
 
 			n = n + 1
@@ -368,7 +368,7 @@ if not Modules then
 				elseif i == 6 then
 					premium = temp == "true"
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in travel destination parameter.", temp, destination)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Unknown parameter found in travel destination parameter.", temp, destination)
 				end
 				i = i + 1
 			end
@@ -376,7 +376,7 @@ if not Modules then
 			if name and x and y and z and cost then
 				self:addDestination(name, {x=x, y=y, z=z}, cost, premium)
 			else
-				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for travel destination:", name, x, y, z, cost, premium)
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter(s) missing for travel destination:", name, x, y, z, cost, premium)
 			end
 		end
 	end
@@ -592,7 +592,7 @@ if not Modules then
 				elseif i == 5 then
 					realName = temp
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Unknown parameter found in buyable items parameter.", temp, item)
 				end
 				i = i + 1
 			end
@@ -600,10 +600,10 @@ if not Modules then
 			local it = ItemType(itemid)
 			if it:getId() == 0 then
 				-- invalid item
-				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem: Item id missing (or invalid) for parameter item:", item)
 			else
 				if alreadyParsedIds[itemid] and not it:getFluidSource() then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Found duplicated item:", item)
 				else
 					alreadyParsedIds[itemid] = true
 				end
@@ -616,24 +616,24 @@ if not Modules then
 			if SHOPMODULE_MODE == SHOPMODULE_MODE_TRADE then
 				if itemid and cost then
 					if not subType and it:isFluidContainer() then
-						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem: SubType missing for parameter item:", item)
 					else
 						self:addBuyableItem(nil, itemid, cost, subType, realName)
 					end
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", itemid, cost)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter(s) missing for item:", itemid, cost)
 				end
 			else
 				if name and itemid and cost then
 					if not subType and it:isFluidContainer() then
-						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem: SubType missing for parameter item:", item)
 					else
 						local names = {}
 						names[#names + 1] = name
 						self:addBuyableItem(names, itemid, cost, subType, realName)
 					end
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, itemid, cost)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter(s) missing for item:", name, itemid, cost)
 				end
 			end
 		end
@@ -663,7 +663,7 @@ if not Modules then
 				elseif i == 5 then
 					subType = tonumber(temp)
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in sellable items parameter.", temp, item)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Unknown parameter found in sellable items parameter.", temp, item)
 				end
 				i = i + 1
 			end
@@ -671,10 +671,10 @@ if not Modules then
 			local it = ItemType(itemid)
 			if it:getId() == 0 then
 				-- invalid item
-				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem: Item id missing (or invalid) for parameter item:", item)
 			else
 				if alreadyParsedIds[itemid] and not it:getFluidSource() then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Found duplicated item:", item)
 				else
 					alreadyParsedIds[itemid] = true
 				end
@@ -684,7 +684,7 @@ if not Modules then
 				if itemid and cost then
 					self:addSellableItem(nil, itemid, cost, realName, subType)
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", itemid, cost)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter(s) missing for item:", itemid, cost)
 				end
 			else
 				if name and itemid and cost then
@@ -692,7 +692,7 @@ if not Modules then
 					names[#names + 1] = name
 					self:addSellableItem(names, itemid, cost, realName, subType)
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, itemid, cost)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter(s) missing for item:", name, itemid, cost)
 				end
 			end
 		end
@@ -724,21 +724,21 @@ if not Modules then
 				elseif i == 6 then
 					realName = temp
 				else
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Unknown parameter found in buyable items parameter.", temp, item)
 				end
 				i = i + 1
 			end
 
 			if name and container and itemid and cost then
 				if not subType and ItemType(itemid):isFluidContainer() then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: SubType missing for parameter item:", item)
 				else
 					local names = {}
 					names[#names + 1] = name
 					self:addBuyableItemContainer(names, container, itemid, cost, subType, realName)
 				end
 			else
-				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, container, itemid, cost)
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem: Parameter(s) missing for item:", name, container, itemid, cost)
 			end
 		end
 	end
