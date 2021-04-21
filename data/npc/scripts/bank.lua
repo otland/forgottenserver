@@ -433,8 +433,8 @@ keywordHandler:addKeyword({"help"}, StdModule.say, {
 	npcHandler = npcHandler,
 	text = "You can check the {balance} of your bank account, {deposit} money or {withdraw} it. You can {transfer} money to other characters, provided that they have a vocation, or {change} the coins in your inventory."
 })
-keywordHandler:addAliasKeyword({'functions'})
-keywordHandler:addAliasKeyword({'basic'})
+keywordHandler:addAliasKeyword({"functions"})
+keywordHandler:addAliasKeyword({"basic"})
 keywordHandler:addKeyword({"job"}, StdModule.say, {
 	npcHandler = npcHandler,
 	text = "I work in this bank. I can {change} money for you and help you with your {bank account}."
