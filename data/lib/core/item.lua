@@ -137,13 +137,11 @@ do
 			if hitChance ~= 0 then
 				ss:append(", Hit%%%s%d", showpos(hitChance), math.abs(hitChance))
 			end
-
 			begin = false
 		elseif it:getWeaponType() ~= WEAPON_AMMO then
 			local attack = obj:getAttack()
 			local defense = obj:getDefense()
 			local extraDefense = obj:getExtraDefense()
-
 			if attack ~= 0 then
 				begin = false
 				ss:append(" (Atk:%d", attack)
@@ -277,7 +275,6 @@ do
 							vocMap[#vocMap + 1] = vocName
 						end
 					end
-
 					ss:append(". %s can only be used by", it:isStackable() and subType > 1 and "They" or "It")
 
 					-- Only show base vocations in description; promotions should be a given
@@ -309,7 +306,6 @@ do
 						end
 						ss:append("magic level %d", rune:runeMagicLevel())
 					end
-
 					ss:append(" or higher")
 				end
 
@@ -334,7 +330,6 @@ do
 			end
 		elseif it:isContainer() or item and item:isContainer() then
 			local volume = 0
-
 			if not item or not item:hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) then
 				if it:isContainer() then
 					volume = it:getCapacity()
@@ -430,7 +425,6 @@ do
 			if item and item:hasAttribute(ITEM_ATTRIBUTE_DURATION) then
 				local duration = item:getDuration() / 1000
 				if duration > 0 then
-
 					ss:append(" that will expire in ")
 					if duration >= 86400 then
 						local days = math.floor(duration / 86400)
@@ -476,7 +470,6 @@ do
 
 		local wieldInfo = it:getWieldInfo()
 		if wieldInfo ~= 0 then
-
 			ss:append("\nIt can only be wielded properly by ")
 			if bit.band(wieldInfo, WIELDINFO_PREMIUM) ~= 0 then
 				ss:append("premium ")

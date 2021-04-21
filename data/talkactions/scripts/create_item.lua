@@ -12,7 +12,6 @@ function onSay(player, words, param)
 	end
 
 	local split = param:splitTrimmed(",")
-
 	local itemType = ItemType(split[1])
 	if itemType:getId() == 0 then
 		itemType = ItemType(tonumber(split[1]))

@@ -302,6 +302,5 @@ function Creature:addAttributeCondition(parameters)
 			condition:setParameter(parameter.key, parameter.value)
 		end
 	end
-
 	self:addCondition(condition)
 end

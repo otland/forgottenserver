@@ -762,7 +762,6 @@ function getMonsterFriendList(cid)
 	end
 
 	local z = monster:getPosition().z
-
 	local result = {}
 	for _, creature in ipairs(monster:getFriendList()) do
 		if not creature:isRemoved() and creature:getPosition().z == z then

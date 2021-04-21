@@ -25,7 +25,6 @@ end
 function getFormattedWorldTime()
 	local worldTime = getWorldTime()
 	local hours = math.floor(worldTime / 60)
-
 	local minutes = worldTime % 60
 	if minutes < 10 then
 		minutes = "0" .. minutes
@@ -72,7 +71,6 @@ end
 
 function getPlayerDatabaseInfo(name_or_guid)
 	local sql_where = ""
-
 	if type(name_or_guid) == "string" then
 		sql_where = "WHERE `p`.`name` = " .. db.escapeString(name_or_guid) .. ""
 	elseif type(name_or_guid) == "number" then

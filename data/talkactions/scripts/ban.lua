@@ -7,7 +7,6 @@ function onSay(player, words, param)
 
 	local name = param
 	local reason = ""
-
 	local separatorPos = param:find(",")
 	if separatorPos then
 		name = param:sub(0, separatorPos - 1)
