@@ -120,7 +120,7 @@ function creatureSayCallback(cid, type, msg)
 				selfSay('What? I have already gave you one {' .. ItemType(items[vocationId]):getName() .. '}!', cid)
 			end
 		else
-			selfSay('Sorry, you aren\'t a druid either a sorcerer.', cid)
+			selfSay('Sorry, you aren't a druid either a sorcerer.', cid)
 		end
 	elseif msgcontains(msg, 'yes') then
 		if npcHandler.topic[cid] == 1 then
