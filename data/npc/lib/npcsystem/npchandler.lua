@@ -596,7 +596,7 @@ if not NpcHandler then
 		local ret = {}
 		for aux = 1, #msgs do
 			self.eventDelayedSay[pcid][aux] = {}
-			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
+			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux - 1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
 			ret[#ret + 1] = self.eventDelayedSay[pcid][aux]
 		end
 		return(ret)
