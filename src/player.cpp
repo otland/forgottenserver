@@ -1297,16 +1297,11 @@ void Player::checkStairs(const Tile* newTile, const Position& newPos, const Posi
 			const Position tileBelowPos = tileBelow->getPosition();
 
 			std::vector<std::vector<int>> offsetVectors;
-			std::vector<int> north { 0, -1};
-			std::vector<int> west  {-1,  0};
-			std::vector<int> south { 0,  1};
-			std::vector<int> east  { 1,  0};
+			offsetVectors.push_back(std::vector<int>{ 0, -1});
+			offsetVectors.push_back(std::vector<int>{-1,  0});
+			offsetVectors.push_back(std::vector<int>{ 0,  1});
+			offsetVectors.push_back(std::vector<int>{ 1,  0});
 
-			offsetVectors.push_back(north);
-			offsetVectors.push_back(west);
-			offsetVectors.push_back(south);
-			offsetVectors.push_back(east);
-			
 			for (std::vector offsetVector : offsetVectors) {
 				Tile* tempTile = g_game.map.getTile(
 					tileBelowPos.x + offsetVector.at(0),
