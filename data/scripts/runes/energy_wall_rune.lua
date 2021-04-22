@@ -1,0 +1,25 @@
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ENERGYHIT)
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGYBALL)
+combat:setParameter(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP)
+combat:setArea(createCombatArea(AREA_WALLFIELD, AREADIAGONAL_WALLFIELD))
+
+local energyWallRune = Spell("rune")
+
+function energyWallRune.onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
+end
+
+energyWallRune:group("attack")
+energyWallRune:id(33)
+energyWallRune:name("Energy Wall Rune")
+energyWallRune:runeId(2279)
+energyWallRune:allowFarUse(true)
+energyWallRune:charges(4)
+energyWallRune:level(41)
+energyWallRune:magicLevel(9)
+energyWallRune:cooldown(2000)
+energyWallRune:groupCooldown(2000)
+energyWallRune:isBlocking(true)
+energyWallRune:register()

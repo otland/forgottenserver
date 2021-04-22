@@ -1,0 +1,26 @@
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
+combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_POISON)
+combat:setParameter(COMBAT_PARAM_TARGETCASTERORTOPMOST, true)
+combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
+
+local curePoisonRune = Spell("rune")
+
+function curePoisonRune.onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
+end
+
+curePoisonRune:group("healing")
+curePoisonRune:id(31)
+curePoisonRune:name("Cure Poison Rune")
+curePoisonRune:runeId(2266)
+curePoisonRune:allowFarUse(true)
+curePoisonRune:charges(1)
+curePoisonRune:level(15)
+curePoisonRune:magicLevel(0)
+curePoisonRune:cooldown(2000)
+curePoisonRune:groupCooldown(2000)
+curePoisonRune:needTarget(true)
+curePoisonRune:isBlocking(true)
+curePoisonRune:isAggressive(false)
+curePoisonRune:register()
