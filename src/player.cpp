@@ -1291,20 +1291,42 @@ void Player::checkStairs(const Tile* newTile, const Position& newPos, const Posi
 
 	if (newTile->hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
 		Direction dir = getDirection();
-		// Check diagonal movement
-		const bool isNorthWest = (oldPos.x > newPos.x && oldPos.y > newPos.y);
-		const bool isNorthEast = (oldPos.x < newPos.x && oldPos.y > newPos.y);
-		const bool isSouthWest = (oldPos.x > newPos.x && oldPos.y < newPos.y);
-		const bool isSouthEast = (oldPos.x < newPos.x && oldPos.y < newPos.y);
 
-		dir = (isNorthWest || isNorthEast) ? DIRECTION_NORTH : dir;
-		dir = (isSouthWest || isSouthEast) ? DIRECTION_SOUTH : dir;
+/*
+	1. find stairs on sides
+		- if found:
+			- set offSet X & Y based on opposite floorchange
+		- else
+			- check bottom; 0 offset.
+	
+*/
 
-		uint16_t offsetY = (dir == DIRECTION_NORTH) ? -1 : 0;
-		uint16_t offsetX = (dir == DIRECTION_WEST)  ? -1 : 0;
-
-		Tile* tileBelow = g_game.map.getTile(newPos.x + offsetX, newPos.y + offsetY, newPos.z + 1);
+		Tile* tileBelow = g_game.map.getTile(newPos.x, newPos.y, newPos.z + 1);
 		if (!tileBelow || !tileBelow->isWalkable()) {
+			const Position tileBelowPos = tileBelow->getPosition();
+
+			std::vector<std::vector<int>> offsetVectors;
+			std::vector<int> north { 0, -1};
+			std::vector<int> west  {-1,  0};
+			std::vector<int> south { 0,  1};
+			std::vector<int> east  { 1,  0};
+
+			offsetVectors.push_back(north);
+			offsetVectors.push_back(west);
+			offsetVectors.push_back(south);
+			offsetVectors.push_back(east);
+			
+			for (std::vector offsetVector : offsetVectors) {
+				Tile* tempTile = g_game.map.getTile(
+					tileBelowPos.x + offsetVector.at(0),
+					tileBelowPos.y + offsetVector.at(1),
+					tileBelowPos.z
+				);
+				if (tempTile && tempTile->isWalkable()) {
+					return;
+				}
+			}
+
 			if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
 				newTile->patch();
 			}
