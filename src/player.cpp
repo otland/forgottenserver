@@ -67,7 +67,6 @@ Player::~Player()
 
 	for (const auto& it : depotLockerMap) {
 		it.second->removeInbox(inbox);
-		it.second->decrementReferenceCounter();
 	}
 
 	inbox->decrementReferenceCounter();
@@ -782,35 +781,32 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
-		return it->second;
+		return it->second.get();
 	}
 
 	if (!autoCreate) {
 		return nullptr;
 	}
 
-	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
-	depotChest->incrementReferenceCounter();
-	depotChest->setMaxDepotItems(getMaxDepotItems());
-	depotChests[depotId] = depotChest;
-	return depotChest;
+	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
+	it->second->setMaxDepotItems(getMaxDepotItems());
+	return it->second.get();
 }
 
 DepotLocker* Player::getDepotLocker(uint32_t depotId)
 {
 	auto it = depotLockerMap.find(depotId);
 	if (it != depotLockerMap.end()) {
-		inbox->setParent(it->second);
-		return it->second;
+		inbox->setParent(it->second.get());
+		return it->second.get();
 	}
 
-	DepotLocker* depotLocker = new DepotLocker(ITEM_LOCKER1);
-	depotLocker->setDepotId(depotId);
-	depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-	depotLocker->internalAddThing(inbox);
-	depotLocker->internalAddThing(getDepotChest(depotId, true));
-	depotLockerMap[depotId] = depotLocker;
-	return depotLocker;
+	it = depotLockerMap.emplace(depotId, new DepotLocker(ITEM_LOCKER1)).first;
+	it->second->setDepotId(depotId);
+	it->second->internalAddThing(Item::CreateItem(ITEM_MARKET));
+	it->second->internalAddThing(inbox);
+	it->second->internalAddThing(getDepotChest(depotId, true));
+	return it->second.get();
 }
 
 void Player::sendCancelMessage(ReturnValue message) const
@@ -3045,7 +3041,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					bool isOwner = false;
 
 					for (const auto& it : depotChests) {
-						if (it.second == depotChest) {
+						if (it.second.get() == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}

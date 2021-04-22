@@ -842,8 +842,7 @@ bool IOLoginData::savePlayer(Player* player)
 		itemList.clear();
 
 		for (const auto& it : player->depotChests) {
-			DepotChest* depotChest = it.second;
-			for (Item* item : depotChest->getItemList()) {
+			for (Item* item : it.second->getItemList()) {
 				itemList.emplace_back(it.first, item);
 			}
 		}
