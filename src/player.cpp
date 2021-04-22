@@ -1292,15 +1292,6 @@ void Player::checkStairs(const Tile* newTile, const Position& newPos, const Posi
 	if (newTile->hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
 		Direction dir = getDirection();
 
-/*
-	1. find stairs on sides
-		- if found:
-			- set offSet X & Y based on opposite floorchange
-		- else
-			- check bottom; 0 offset.
-	
-*/
-
 		Tile* tileBelow = g_game.map.getTile(newPos.x, newPos.y, newPos.z + 1);
 		if (!tileBelow || !tileBelow->isWalkable()) {
 			const Position tileBelowPos = tileBelow->getPosition();
