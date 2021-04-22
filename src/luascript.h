@@ -1401,6 +1401,7 @@ class LuaScriptInterface
 		static int luaSpellSelfTarget(lua_State* L);
 		static int luaSpellBlocking(lua_State* L);
 		static int luaSpellAggressive(lua_State* L);
+		static int luaSpellPzLock(lua_State* L);
 		static int luaSpellVocation(lua_State* L);
 
 		// only for InstantSpells
