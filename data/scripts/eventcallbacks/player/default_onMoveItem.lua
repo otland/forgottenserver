@@ -1,6 +1,15 @@
 local ec = EventCallback
 
 ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	if item:getId() == 2579 then -- trap
+        item:transform(item.itemid - 1) -- closed trap
+        if toPosition.x ~= CONTAINER_POSITION then
+            toPosition:sendMagicEffect(CONST_ME_POFF)
+        else
+            self:getPosition():sendMagicEffect(CONST_ME_POFF)
+        end
+    end
+
 	if item:getAttribute("wrapid") ~= 0 then
 		local tile = Tile(toPosition)
 		if (fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION) or tile and not tile:getHouse() then

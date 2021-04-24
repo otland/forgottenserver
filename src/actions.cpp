@@ -348,7 +348,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 {
 	if (Door* door = item->getDoor()) {
 		if (!door->canUse(player)) {
-			return RETURNVALUE_CANNOTUSETHISOBJECT;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	}
 
@@ -371,12 +371,19 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 	if (BedItem* bed = item->getBed()) {
 		if (!bed->canUse(player)) {
-			return RETURNVALUE_CANNOTUSETHISOBJECT;
+			if (!player->isPremium()) {
+				return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
+			} else {
+				return RETURNVALUE_CANNOTUSETHISOBJECT;
+			}
 		}
 
 		if (bed->trySleep(player)) {
 			player->setBedItem(bed);
 			g_game.sendOfflineTrainingDialog(player);
+			if (!bed->sleep(player)) {
+				return RETURNVALUE_CANNOTUSETHISOBJECT;
+			}
 		}
 
 		return RETURNVALUE_NOERROR;

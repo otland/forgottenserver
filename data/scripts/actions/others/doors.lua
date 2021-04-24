@@ -112,7 +112,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if item.actionid == 0 then
 			item:transform(doors[itemId])
 		else
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is locked.")
+			player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
 		end
 		return true
 	end
