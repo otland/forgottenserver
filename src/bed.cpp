@@ -124,6 +124,11 @@ bool BedItem::trySleep(Player* player)
 		return false;
 	}
 
+	if (player->hasCondition(CONDITION_INFIGHT)) {
+		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
+		return false;
+	}
+
 	if (sleeperGUID != 0) {
 		if (Item::items[id].transformToFree != 0 && house->getOwner() == player->getGUID()) {
 			wakeUp(nullptr);
