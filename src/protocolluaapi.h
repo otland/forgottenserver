@@ -44,6 +44,7 @@ class ProtocolLuaApi final : public Protocol
 
 	private:
 		bool rawMessages = true;
+		bool apiResponse = false;
 };
 
 #endif

@@ -33,19 +33,21 @@ extern ConfigManager g_config;
 * 
 * Server ----> API (structure of packet)
 * --------------------------------------------------------------------
-* 100 => sending a callback message (string)
-* 101 => sending lua error back to API (string)
-* 102 => request to exchange lua code, if the API has any
+* 100 => ping
+* 101 => sending a callback message (string)
+* 102 => sending lua error back to API (string)
+* 103 => request to exchange lua code, if the API has any
 * --------------------------------------------------------------------
 * 
 * API ----> Server (structure of packet)
 * --------------------------------------------------------------------
-* 100 => sending raw string lua code with immediate execution (string)
-* 101 => force reload scripts
-* 102 => save server
-* 103 => restart server
-* 104 => close server
-* 105 => start raid (string)
+* 100 => pong
+* 101 => sending raw string lua code with immediate execution (string)
+* 102 => force reload scripts
+* 103 => save server
+* 104 => restart server
+* 105 => close server
+* 106 => start raid (string)
 * --------------------------------------------------------------------
 */
 
@@ -62,6 +64,9 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 
 	switch (recvbyte) {
 		case 100: {
+			apiResponse = true;
+		}
+		case 101: {
 			std::string text = msg.getString();
 			std::string returnvalue = g_scripts->executeString(text);
 			if (!returnvalue.empty()) {
@@ -73,13 +78,13 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 				"successfully executed lua code.")));
 			return;
 		}
-		case 101: {
+		case 102: {
 			g_scripts->executeString("EventCallbackData = {}; for i = 1, EVENT_CALLBACK_LAST do EventCallbackData[i] = {} end; Game.reload(RELOAD_TYPE_SCRIPTS)");
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
 				"successfully reloaded scripts.")));
 			return;
 		}
-		case 102: {
+		case 103: {
 			g_scripts->executeString("EventCallbackData = {}; for i = 1, EVENT_CALLBACK_LAST do EventCallbackData[i] = {} end; Game.reload(RELOAD_TYPE_SCRIPTS)");
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
 				"successfully reloaded scripts.")));
