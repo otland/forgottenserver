@@ -42,8 +42,6 @@
 #include "weapons.h"
 #include "script.h"
 
-#include <fmt/format.h>
-
 extern ConfigManager g_config;
 extern Actions* g_actions;
 extern Chat* g_chat;

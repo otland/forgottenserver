@@ -36,7 +36,6 @@
 #include "databasetasks.h"
 #include "script.h"
 #include <fstream>
-#include <fmt/format.h>
 #if __has_include("gitmetadata.h")
 	#include "gitmetadata.h"
 #endif
