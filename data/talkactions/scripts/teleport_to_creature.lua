@@ -5,9 +5,11 @@ function onSay(player, words, param)
 
 	local target = Creature(param)
 	if target then
-		player:teleportTo(target:getPosition())
+		player:teleportTo(target:getPosition(), true)
+		player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 	else
 		player:sendCancelMessage("Creature not found.")
+		player:getPosition():sendMagicEffect(CONST_ME_POFF)
 	end
 	return false
 end

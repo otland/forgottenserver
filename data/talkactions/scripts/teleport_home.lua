@@ -3,6 +3,7 @@ function onSay(player, words, param)
 		return true
 	end
 
-	player:teleportTo(player:getTown():getTemplePosition())
+	player:teleportTo(player:getTown():getTemplePosition(), true)
+	player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
 	return false
 end
