@@ -21,7 +21,6 @@
 	<movevent event="StepOut" itemid="1511" script="trap.lua" />
 	<movevent event="StepIn" itemid="1513" script="trap.lua" />
 	<movevent event="StepIn" itemid="2579" script="trap.lua" />
-	<movevent event="RemoveItem" itemid="2579" script="trap.lua" />
 	<movevent event="StepIn" itemid="4208" script="trap.lua" />
 	<movevent event="StepIn" itemid="25331" script="trap.lua" />
 
