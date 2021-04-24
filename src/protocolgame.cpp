@@ -1917,9 +1917,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		// example:
 		// "attack +x, chance to hit +y%, z fields"
 		if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
-			std::ostringstream ss;
-			ss << it.attack << " physical +" << it.abilities->elementDamage << ' ' << getCombatName(it.abilities->elementType);
-			msg.addString(ss.str());
+			msg.addString(fmt::format("{:d} physical +{:d} {:s}", it.attack, it.abilities->elementDamage, getCombatName(it.abilities->elementType)));
 		} else {
 			msg.addString(std::to_string(it.attack));
 		}
@@ -1935,9 +1933,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 
 	if (it.defense != 0) {
 		if (it.extraDefense != 0) {
-			std::ostringstream ss;
-			ss << it.defense << ' ' << std::showpos << it.extraDefense << std::noshowpos;
-			msg.addString(ss.str());
+			msg.addString(fmt::format("{:d} {:+d}", it.defense, it.extraDefense));
 		} else {
 			msg.addString(std::to_string(it.defense));
 		}
@@ -1957,9 +1953,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	}
 
 	if (it.decayTime != 0) {
-		std::ostringstream ss;
-		ss << it.decayTime << " seconds";
-		msg.addString(ss.str());
+		msg.addString(fmt::format("{:d} seconds", it.decayTime));
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
