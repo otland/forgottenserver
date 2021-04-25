@@ -211,60 +211,30 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 bool Actions::registerLuaEvent(Action* event)
 {
 	Action_ptr action{ event };
-	if (action->getItemIdRange().size() > 0) {
-		if (action->getItemIdRange().size() == 1) {
-			auto id = action->getItemIdRange().front();
-			auto result = useItemMap.emplace(id, std::move(*action));
+	if (!action->getItemIdRange().empty()) {
+		const auto& v = action->getItemIdRange();
+		for (auto id : v) {
+			auto result = useItemMap.emplace(id, *action);
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << std::endl;
-			}
-			return result.second;
-		}
-
-		auto v = action->getItemIdRange();
-		for (auto i = v.begin(); i != v.end(); i++) {
-			auto result = useItemMap.emplace(*i, std::move(*action));
-			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << *i << " in range from id: " << v.front() << ", to id: " << v.at(v.size() - 1) << std::endl;
-				continue;
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << " in range from id: " << v.front() << ", to id: " << v.back() << std::endl;
 			}
 		}
 		return true;
-	} else if (action->getUniqueIdRange().size() > 0) {
-		if (action->getUniqueIdRange().size() == 1) {
-			auto uid = action->getUniqueIdRange().front();
-			auto result = uniqueItemMap.emplace(uid, std::move(*action));
+	} else if (!action->getUniqueIdRange().empty()) {
+		const auto& v = action->getUniqueIdRange();
+		for (auto id : v) {
+			auto result = uniqueItemMap.emplace(id, *action);
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << uid << std::endl;
-			}
-			return result.second;
-		}
-
-		auto v = action->getUniqueIdRange();
-		for (auto i = v.begin(); i != v.end(); i++) {
-			auto result = uniqueItemMap.emplace(*i, std::move(*action));
-			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << *i << " in range from uid: " << v.front() << ", to uid: " << v.at(v.size() - 1) << std::endl;
-				continue;
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << id << " in range from uid: " << v.front() << ", to uid: " << v.back() << std::endl;
 			}
 		}
 		return true;
-	} else if (action->getActionIdRange().size() > 0) {
-		if (action->getActionIdRange().size() == 1) {
-			auto aid = action->getActionIdRange().front();
-			auto result = actionItemMap.emplace(aid, std::move(*action));
+	} else if (!action->getActionIdRange().empty()) {
+		const auto& v = action->getActionIdRange();
+		for (auto id : v) {
+			auto result = actionItemMap.emplace(id, *action);
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << aid << std::endl;
-			}
-			return result.second;
-		}
-
-		auto v = action->getActionIdRange();
-		for (auto i = v.begin(); i != v.end(); i++) {
-			auto result = actionItemMap.emplace(*i, std::move(*action));
-			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << *i << " in range from aid: " << v.front() << ", to aid: " << v.at(v.size() - 1) << std::endl;
-				continue;
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << id << " in range from aid: " << v.front() << ", to aid: " << v.back() << std::endl;
 			}
 		}
 		return true;
