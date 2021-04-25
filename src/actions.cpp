@@ -26,6 +26,7 @@
 #include "game.h"
 #include "pugicast.h"
 #include "spells.h"
+#include <fmt/format.h>
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -218,17 +219,17 @@ bool Actions::registerLuaEvent(Action* event)
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << std::endl;
 			}
 			return result.second;
-		} else {
-			auto v = action->getItemIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				auto result = useItemMap.emplace(*i, std::move(*action));
-				if (!result.second) {
-					std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << *i << " in range from id: " << v.front() << ", to id: " << v.at(v.size() - 1) << std::endl;
-					continue;
-				}
-			}
-			return true;
 		}
+
+		auto v = action->getItemIdRange();
+		for (auto i = v.begin(); i != v.end(); i++) {
+			auto result = useItemMap.emplace(*i, std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << *i << " in range from id: " << v.front() << ", to id: " << v.at(v.size() - 1) << std::endl;
+				continue;
+			}
+		}
+		return true;
 	} else if (action->getUniqueIdRange().size() > 0) {
 		if (action->getUniqueIdRange().size() == 1) {
 			auto uid = action->getUniqueIdRange().front();
@@ -237,17 +238,17 @@ bool Actions::registerLuaEvent(Action* event)
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << uid << std::endl;
 			}
 			return result.second;
-		} else {
-			auto v = action->getUniqueIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				auto result = uniqueItemMap.emplace(*i, std::move(*action));
-				if (!result.second) {
-					std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << *i << " in range from uid: " << v.front() << ", to uid: " << v.at(v.size() - 1) << std::endl;
-					continue;
-				}
-			}
-			return true;
 		}
+
+		auto v = action->getUniqueIdRange();
+		for (auto i = v.begin(); i != v.end(); i++) {
+			auto result = uniqueItemMap.emplace(*i, std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << *i << " in range from uid: " << v.front() << ", to uid: " << v.at(v.size() - 1) << std::endl;
+				continue;
+			}
+		}
+		return true;
 	} else if (action->getActionIdRange().size() > 0) {
 		if (action->getActionIdRange().size() == 1) {
 			auto aid = action->getActionIdRange().front();
@@ -256,21 +257,21 @@ bool Actions::registerLuaEvent(Action* event)
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << aid << std::endl;
 			}
 			return result.second;
-		} else {
-			auto v = action->getActionIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				auto result = actionItemMap.emplace(*i, std::move(*action));
-				if (!result.second) {
-					std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << *i << " in range from aid: " << v.front() << ", to aid: " << v.at(v.size() - 1) << std::endl;
-					continue;
-				}
-			}
-			return true;
 		}
-	} else {
-		std::cout << "[Warning - Actions::registerLuaEvent] There is no id / aid / uid set for this event" << std::endl;
-		return false;
+
+		auto v = action->getActionIdRange();
+		for (auto i = v.begin(); i != v.end(); i++) {
+			auto result = actionItemMap.emplace(*i, std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << *i << " in range from aid: " << v.front() << ", to aid: " << v.at(v.size() - 1) << std::endl;
+				continue;
+			}
+		}
+		return true;
 	}
+
+	std::cout << "[Warning - Actions::registerLuaEvent] There is no id / aid / uid set for this event" << std::endl;
+	return false;
 }
 
 ReturnValue Actions::canUse(const Player* player, const Position& pos)
@@ -362,10 +363,8 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			if (item->isRemoved()) {
 				return RETURNVALUE_CANNOTUSETHISOBJECT;
 			}
-		} else if (action->function) {
-			if (action->function(player, item, pos, nullptr, pos, isHotkey)) {
-				return RETURNVALUE_NOERROR;
-			}
+		} else if (action->function && action->function(player, item, pos, nullptr, pos, isHotkey)) {
+			return RETURNVALUE_NOERROR;
 		}
 	}
 
@@ -402,12 +401,12 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 		//open/close container
 		int32_t oldContainerId = player->getContainerID(openContainer);
-		if (oldContainerId != -1) {
-			player->onCloseContainer(openContainer);
-			player->closeContainer(oldContainerId);
-		} else {
+		if (oldContainerId == -1) {
 			player->addContainer(index, openContainer);
 			player->onSendContainer(openContainer);
+		} else {
+			player->onCloseContainer(openContainer);
+			player->closeContainer(oldContainerId);
 		}
 
 		return RETURNVALUE_NOERROR;
@@ -429,6 +428,19 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
+
+static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count)
+{
+	const ItemType& it = Item::items[item->getID()];
+	if (!it.showCount) {
+		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Using one of {:s}...",  item->getName()));
+	} else if (count == 1) {
+		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Using the last {:s}...",  item->getName()));
+	} else {
+		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Using one of {:d} {:s}...", count, item->getPluralName()));
+	}
+}
+
 bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
 {
 	player->setNextAction(OTSYS_TIME() + g_config.getNumber(ConfigManager::ACTIONS_DELAY_INTERVAL));
@@ -440,11 +452,12 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	ReturnValue ret = internalUseItem(player, pos, index, item, isHotkey);
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		return false;
+	if (ret == RETURNVALUE_NOERROR) {
+		return true;
 	}
-	return true;
+
+	player->sendCancelMessage(ret);
+	return false;
 }
 
 bool Actions::useItemEx(Player* player, const Position& fromPos, const Position& toPos,
@@ -470,28 +483,15 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 		showUseHotkeyMessage(player, item, player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1));
 	}
 
-	if (!action->executeUse(player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos, isHotkey)) {
-		if (!action->hasOwnErrorHandler()) {
-			player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
-		}
-		return false;
+	if (action->executeUse(player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos, isHotkey)) {
+		return true;
 	}
-	return true;
-}
 
-void Actions::showUseHotkeyMessage(Player* player, const Item* item, uint32_t count)
-{
-	std::ostringstream ss;
-
-	const ItemType& it = Item::items[item->getID()];
-	if (!it.showCount) {
-		ss << "Using one of " << item->getName() << "...";
-	} else if (count == 1) {
-		ss << "Using the last " << item->getName() << "...";
-	} else {
-		ss << "Using one of " << count << ' ' << item->getPluralName() << "...";
+	if (!action->hasOwnErrorHandler()) {
+		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 	}
-	player->sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+
+	return false;
 }
 
 Action::Action(LuaScriptInterface* interface) :
@@ -556,11 +556,10 @@ std::string Action::getScriptEventName() const
 
 ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos)
 {
-	if (!allowFarUse) {
-		return g_actions->canUse(player, toPos);
-	} else {
+	if (allowFarUse) {
 		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
 	}
+	return g_actions->canUse(player, toPos);
 }
 
 Thing* Action::getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos) const
