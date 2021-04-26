@@ -23,6 +23,8 @@
 
 #include "bed.h"
 
+#include <fmt/format.h>
+
 /*
 	OTBM_ROOTV1
 	|

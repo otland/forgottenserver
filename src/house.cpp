@@ -27,6 +27,8 @@
 #include "configmanager.h"
 #include "bed.h"
 
+#include <fmt/format.h>
+
 extern ConfigManager g_config;
 extern Game g_game;
 

@@ -23,6 +23,8 @@
 #include "guild.h"
 #include "ioguild.h"
 
+#include <fmt/format.h>
+
 Guild* IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();

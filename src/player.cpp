@@ -34,6 +34,8 @@
 #include "scheduler.h"
 #include "weapons.h"
 
+#include <fmt/format.h>
+
 extern ConfigManager g_config;
 extern Game g_game;
 extern Chat* g_chat;
