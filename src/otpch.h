@@ -42,5 +42,3 @@
 #include <boost/asio.hpp>
 
 #include <pugixml.hpp>
-
-#include <fmt/format.h>

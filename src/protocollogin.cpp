@@ -29,6 +29,8 @@
 #include "ban.h"
 #include "game.h"
 
+#include <fmt/format.h>
+
 extern ConfigManager g_config;
 extern Game g_game;
 
