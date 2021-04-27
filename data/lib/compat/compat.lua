@@ -278,7 +278,7 @@ function pushThing(thing)
 			if ItemType(t:getId()):hasSubType() then
 				t.type = thing:getSubType()
 			end
-			t.actionid = thing:getActionId()
+			t:getActionId() = thing:getActionId()
 		elseif thing:isCreature() then
 			t.uid = thing:getId()
 			t:getId() = 1

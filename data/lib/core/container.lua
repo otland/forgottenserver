@@ -41,8 +41,8 @@ function Container.createLootItem(self, item)
 			tmpItem:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
 		end
 
-		if item.actionId ~= -1 then
-			tmpItem:setActionId(item.actionId)
+		if item:getActionId() ~= -1 then
+			tmpItem:setActionId(item:getActionId())
 		end
 
 		if item.text and item.text ~= "" then

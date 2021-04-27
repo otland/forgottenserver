@@ -108,7 +108,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if table.contains(groundIds, ground:getId()) and ground.actionid == actionIds.pickHole then
+	if table.contains(groundIds, ground:getId()) and ground:getActionId() == actionIds.pickHole then
 		ground:transform(392)
 		ground:decay()
 		toPosition:sendMagicEffect(CONST_ME_POFF)
@@ -212,7 +212,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 	elseif table.contains(sandIds, groundId) then
 		local randomValue = math.random(1, 100)
-		if target.actionid == actionIds.sandHole and randomValue <= 20 then
+		if target:getActionId() == actionIds.sandHole and randomValue <= 20 then
 			ground:transform(489)
 			ground:decay()
 		elseif randomValue == 1 then

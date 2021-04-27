@@ -181,8 +181,8 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.maxCount then
 				parent:setMaxCount(loot.maxCount)
 			end
-			if loot.aid or loot.actionId then
-				parent:setActionId(loot.aid or loot.actionId)
+			if loot.aid or loot:getActionId() then
+				parent:setActionId(loot.aid or loot:getActionId())
 			end
 			if loot.subType or loot.charges then
 				parent:setSubType(loot.subType or loot.charges)
@@ -202,8 +202,8 @@ registerMonsterType.loot = function(mtype, mask)
 					if children.maxCount then
 						child:setMaxCount(children.maxCount)
 					end
-					if children.aid or children.actionId then
-						child:setActionId(children.aid or children.actionId)
+					if children.aid or children:getActionId() then
+						child:setActionId(children.aid or children:getActionId())
 					end
 					if children.subType or children.charges then
 						child:setSubType(children.subType or children.charges)

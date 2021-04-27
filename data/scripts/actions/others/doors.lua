@@ -58,7 +58,7 @@ local door = Action()
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if table.contains(closedQuestDoors, itemId) then
-		if player:getStorageValue(item.actionid) ~= -1 then
+		if player:getStorageValue(item:getActionId()) ~= -1 then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
@@ -66,7 +66,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		return true
 	elseif table.contains(closedLevelDoors, itemId) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor then
+		if item:getActionId() > 0 and player:getLevel() >= item:getActionId() - actionIds.levelDoor then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
@@ -80,7 +80,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 
 		target = tile:getTopVisibleThing()
-		if target.actionid == 0 then
+		if target:getActionId() == 0 then
 			return false
 		end
 
@@ -92,7 +92,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return false
 		end
 
-		if item.actionid ~= target.actionid then
+		if item:getActionId() ~= target:getActionId() then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
 		end
