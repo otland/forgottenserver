@@ -105,7 +105,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true	
 	elseif table.contains(openDoors, itemId) or table.contains(openExtraDoors, itemId) or table.contains(openHouseDoors, itemId) then
 		local creaturePositionTable = {}
-		local doorCreatures = tile:getCreatures()
+		local doorCreatures = Tile(toPosition):getCreatures()
 		if doorCreatures and #doorCreatures > 0 then
 			for _, doorCreature in pairs(doorCreatures) do
 				local pushPosition = findPushPosition(doorCreature, 1)
