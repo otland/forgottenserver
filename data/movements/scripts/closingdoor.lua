@@ -26,6 +26,6 @@ function onStepOut(creature, item, position, fromPosition)
 		end
 	end
 
-	item:transform(item.itemid - 1)
+	item:transform(item:getId() - 1)
 	return true
 end

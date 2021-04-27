@@ -30,7 +30,7 @@ function destroyItem(player, target, toPosition)
 		return true
 	end
 
-	local destroyId = ItemType(target.itemid):getDestroyId()
+	local destroyId = ItemType(target:getId()):getDestroyId()
 	if destroyId == 0 then
 		return false
 	end
@@ -58,7 +58,7 @@ function destroyItem(player, target, toPosition)
 end
 
 function onUseMachete(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetId = target.itemid
+	local targetId = target:getId()
 	if not targetId then
 		return true
 	end
@@ -80,7 +80,7 @@ function onUseMachete(player, item, fromPosition, target, toPosition, isHotkey)
 end
 
 function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
-	if target.itemid == 11227 then -- shiny stone refining
+	if target:getId() == 11227 then -- shiny stone refining
 		local chance = math.random(1, 100)
 		if chance == 1 then
 			player:addItem(ITEM_CRYSTAL_COIN) -- 1% chance of getting crystal coin
@@ -108,7 +108,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if table.contains(groundIds, ground.itemid) and ground.actionid == actionIds.pickHole then
+	if table.contains(groundIds, ground:getId()) and ground.actionid == actionIds.pickHole then
 		ground:transform(392)
 		ground:decay()
 		toPosition:sendMagicEffect(CONST_ME_POFF)
@@ -119,7 +119,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	-- Ice fishing hole
-	if ground.itemid == 7200 then
+	if ground:getId() == 7200 then
 		ground:transform(7236)
 		ground:decay()
 		toPosition:sendMagicEffect(CONST_ME_HITAREA)
@@ -150,7 +150,7 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	if table.contains(holeId, target.itemid) then
+	if table.contains(holeId, target:getId()) then
 		toPosition.z = toPosition.z + 1
 		tile = Tile(toPosition)
 		if not tile then
@@ -194,7 +194,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
 		player:addAchievementProgress("The Undertaker", 500)
-	elseif target.itemid == 20230 then -- swamp digging
+	elseif target:getId() == 20230 then -- swamp digging
 		if player:getStorageValue(PlayerStorageKeys.swampDigging) <= os.time() then
 			local chance = math.random(100)
 			if chance >= 1 and chance <= 42 then
@@ -229,11 +229,11 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 end
 
 function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
-	if not table.contains({2550, 10513}, item.itemid) then
+	if not table.contains({2550, 10513}, item:getId()) then
 		return false
 	end
 
-	if target.itemid == 2739 then -- wheat
+	if target:getId() == 2739 then -- wheat
 		target:transform(2737)
 		target:decay()
 		Game.createItem(2694, 1, toPosition) -- bunch of wheat
@@ -241,7 +241,7 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	if target.itemid == 5465 then -- burning sugar cane
+	if target:getId() == 5465 then -- burning sugar cane
 		target:transform(5464)
 		target:decay()
 		Game.createItem(5467, 1, toPosition) -- bunch of sugar cane
@@ -252,18 +252,18 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 end
 
 function onUseCrowbar(player, item, fromPosition, target, toPosition, isHotkey)
-	if not table.contains({2416, 10515}, item.itemid) then
+	if not table.contains({2416, 10515}, item:getId()) then
 		return false
 	end
 	return destroyItem(player, target, toPosition)
 end
 
 function onUseKitchenKnife(player, item, fromPosition, target, toPosition, isHotkey)
-	if not table.contains({2566, 10511, 10515}, item.itemid) then
+	if not table.contains({2566, 10511, 10515}, item:getId()) then
 		return false
 	end
 
-	if table.contains(fruits, target.itemid) and player:removeItem(6278, 1) then
+	if table.contains(fruits, target:getId()) and player:removeItem(6278, 1) then
 		target:remove(1)
 		player:addItem(6279, 1)
 		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)

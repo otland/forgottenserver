@@ -40,7 +40,7 @@ function christmasBundle.onUse(player, item, fromPosition, target, toPosition, i
 		}
 	}
 
-	local targetItem = presents[item.itemid]
+	local targetItem = presents[item:getId()]
 	if not targetItem then
 		return true
 	end

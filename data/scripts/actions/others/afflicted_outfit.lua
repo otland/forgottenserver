@@ -7,7 +7,7 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 	end
 
 	local hasOutfit = player:getStorageValue(PlayerStorageKeys.afflictedOutfit) == 1
-	if item.itemid == 13925 then -- plague mask
+	if item:getId() == 13925 then -- plague mask
 		if not hasOutfit then
 			return false
 		end
@@ -25,7 +25,7 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 		end
 
 		item:remove(1)
-	elseif item.itemid == 13926 then -- plague bell
+	elseif item:getId() == 13926 then -- plague bell
 		if not hasOutfit then
 			return false
 		end

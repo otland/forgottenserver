@@ -9,7 +9,7 @@ local items = {
 local blessingCharms = Action()
 
 function blessingCharms.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local blessItem = items[item.itemid]
+	local blessItem = items[item:getId()]
 	if blessItem then
 		if player:hasBlessing(blessItem.id) then
 			player:say("You already possess this blessing.", TALKTYPE_MONSTER_SAY)

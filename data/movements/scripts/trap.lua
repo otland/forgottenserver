@@ -22,7 +22,7 @@ local traps = {
 }
 
 function onStepIn(creature, item, position, fromPosition)
-	local trap = traps[item.itemid]
+	local trap = traps[item:getId()]
 	if not trap then
 		return true
 	end
@@ -38,14 +38,14 @@ function onStepIn(creature, item, position, fromPosition)
 end
 
 function onStepOut(creature, item, position, fromPosition)
-	item:transform(item.itemid - 1)
+	item:transform(item:getId() - 1)
 	return true
 end
 
 function onRemoveItem(item, tile, position)
 	local itemPosition = item:getPosition()
 	if itemPosition:getDistance(position) > 0 then
-		item:transform(item.itemid - 1)
+		item:transform(item:getId() - 1)
 		itemPosition:sendMagicEffect(CONST_ME_POFF)
 	end
 	return true

@@ -15,7 +15,7 @@ local transformID = {
 local carpets = Action()
 
 function carpets.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local carpet = transformID[item.itemid]
+	local carpet = transformID[item:getId()]
 	if not carpet then
 		return false
 	end

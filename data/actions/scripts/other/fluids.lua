@@ -26,7 +26,7 @@ local fluidMessage = {
 local distillery = {[5513] = 5469, [5514] = 5470}
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetItemType = ItemType(target.itemid)
+	local targetItemType = ItemType(target:getId())
 	if targetItemType and targetItemType:isFluidContainer() then
 		if target.type == 0 and item.type ~= 0 then
 			target:transform(target:getId(), item.type)
@@ -39,7 +39,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 	end
 
-	if target.itemid == 1 then
+	if target:getId() == 1 then
 		if item.type == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		elseif target.uid == player.uid then
@@ -64,8 +64,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		local fluidSource = targetItemType and targetItemType:getFluidSource() or 0
 		if fluidSource ~= 0 then
 			item:transform(item:getId(), fluidSource)
-		elseif table.contains(distillery, target.itemid) then
-			local tmp = distillery[target.itemid]
+		elseif table.contains(distillery, target:getId()) then
+			local tmp = distillery[target:getId()]
 			if tmp then
 				item:transform(item:getId(), 0)
 			else

@@ -7,7 +7,7 @@ local config = {
 local costumeBag = Action()
 
 function costumeBag.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local creatures = config[item.itemid]
+	local creatures = config[item:getId()]
 	if not creatures then
 		return true
 	end

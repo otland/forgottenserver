@@ -14,7 +14,7 @@ local constructionKits = {
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local kit = constructionKits[item.itemid]
+	local kit = constructionKits[item:getId()]
 	if not kit then
 		return false
 	end

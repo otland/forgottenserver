@@ -2,7 +2,7 @@ local increasing = {[416] = 417, [426] = 425, [446] = 447, [3216] = 3217, [3202]
 local decreasing = {[417] = 416, [425] = 426, [447] = 446, [3217] = 3216, [3215] = 3202, [11063] = 11062}
 
 function onStepIn(creature, item, position, fromPosition)
-	if not increasing[item.itemid] then
+	if not increasing[item:getId()] then
 		return true
 	end
 
@@ -10,7 +10,7 @@ function onStepIn(creature, item, position, fromPosition)
 		return true
 	end
 
-	item:transform(increasing[item.itemid])
+	item:transform(increasing[item:getId()])
 
 	if item.actionid >= actionIds.levelDoor then
 		if creature:getLevel() < item.actionid - actionIds.levelDoor then
@@ -43,7 +43,7 @@ function onStepIn(creature, item, position, fromPosition)
 end
 
 function onStepOut(creature, item, position, fromPosition)
-	if not decreasing[item.itemid] then
+	if not decreasing[item:getId()] then
 		return true
 	end
 
@@ -51,6 +51,6 @@ function onStepOut(creature, item, position, fromPosition)
 		return true
 	end
 
-	item:transform(decreasing[item.itemid])
+	item:transform(decreasing[item:getId()])
 	return true
 end

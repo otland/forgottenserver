@@ -5,7 +5,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 
 	local amulet = player:getSlotItem(CONST_SLOT_NECKLACE)
 	local isRedOrBlack = table.contains({SKULL_RED, SKULL_BLACK}, player:getSkull())
-	if amulet and amulet.itemid == ITEM_AMULETOFLOSS and not isRedOrBlack then
+	if amulet and amulet:getId() == ITEM_AMULETOFLOSS and not isRedOrBlack then
 		local isPlayer = false
 		if killer then
 			if killer:isPlayer() then

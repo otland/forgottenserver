@@ -18,9 +18,9 @@ function juiceSquizer.onUse(player, item, fromPosition, target, toPosition, isHo
 		8841 -- lemon
 	}
 
-	if table.contains(fruits, target.itemid) and player:removeItem(2006, 1, 0) then
+	if table.contains(fruits, target:getId()) and player:removeItem(2006, 1, 0) then
 		target:remove(1)
-		player:addItem(2006, target.itemid == 2678 and 14 or 21) -- if target is a coconut, create coconut milk, otherwise create fruit juice
+		player:addItem(2006, target:getId() == 2678 and 14 or 21) -- if target is a coconut, create coconut milk, otherwise create fruit juice
 		return true
 	end
 end

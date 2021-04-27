@@ -105,7 +105,7 @@ local dollsTable = {
 local dolls = Action()
 
 function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local sounds = dollsTable[item.itemid]
+	local sounds = dollsTable[item:getId()]
 	if not sounds then
 		return false
 	end
@@ -116,7 +116,7 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local chance = math.random(#sounds)
 	local sound = sounds[chance]
-	if item.itemid == 6566 then
+	if item:getId() == 6566 then
 		if chance == 3 then
 			fromPosition:sendMagicEffect(CONST_ME_POFF)
 		elseif chance == 4 then
@@ -124,27 +124,27 @@ function dolls.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif chance == 5 then
 			doTargetCombat(0, player, COMBAT_PHYSICALDAMAGE, -1, -1, CONST_ME_EXPLOSIONHIT)
 		end
-	elseif item.itemid == 5669 then
+	elseif item:getId() == 5669 then
 		player:addAchievementProgress("Superstitious", 100)
 		fromPosition:sendMagicEffect(CONST_ME_MAGIC_RED)
-		item:transform(item.itemid + 1)
+		item:transform(item:getId() + 1)
 		item:decay()
-	elseif item.itemid == 6388 then
+	elseif item:getId() == 6388 then
 		fromPosition:sendMagicEffect(CONST_ME_SOUND_YELLOW)
-	elseif item.itemid == 23806 then
-		item:transform(item.itemid + 1)
+	elseif item:getId() == 23806 then
+		item:transform(item:getId() + 1)
 		item:decay()
-	elseif item.itemid == 16107 then
-		item:transform(item.itemid + 1)
+	elseif item:getId() == 16107 then
+		item:transform(item:getId() + 1)
 		item:decay()
-	elseif item.itemid == 13559 then
+	elseif item:getId() == 13559 then
 		item:transform(13581)
 		item:decay()
-	elseif item.itemid == 10063 then
-		item:transform(item.itemid + 1)
+	elseif item:getId() == 10063 then
+		item:transform(item:getId() + 1)
 		item:decay()
-	elseif item.itemid == 24776 then
-		item:transform(item.itemid + 1)
+	elseif item:getId() == 24776 then
+		item:transform(item:getId() + 1)
 		item:decay()
 	end
 

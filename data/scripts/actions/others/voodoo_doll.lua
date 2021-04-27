@@ -1,7 +1,7 @@
 local voodooDoll = Action()
 
 function voodooDoll.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if target.itemid ~= 1 or not target:isPlayer() then
+	if target:getId() ~= 1 or not target:isPlayer() then
 		return false
 	end
 

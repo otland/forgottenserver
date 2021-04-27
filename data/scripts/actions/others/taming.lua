@@ -365,7 +365,7 @@ local config = {
 local taming = Action()
 
 function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local mount = config[item.itemid]
+	local mount = config[item:getId()]
 	if not mount then
 		return false
 	end
@@ -379,18 +379,18 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if target:getName():lower() == "horse" and item.itemid == 13939 then
+	if target:getName():lower() == "horse" and item:getId() == 13939 then
 		player:say("The horse happily munches the sugar oat and runs on. You shouldn't steal one of the horse station's horses anyway.", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
 		return true
 	end
 
-	if target:getName():lower() == "white deer" and item.itemid == 13539 then
+	if target:getName():lower() == "white deer" and item:getId() == 13539 then
 		player:say("You should try to enrage this deer before your taming attempt. That way you make sure it's strong enough to carry you.", TALKTYPE_MONSTER_SAY)
 		return true
 	end
 
-	if target:getName():lower() == "desperate white deer" and item.itemid == 13539 then
+	if target:getName():lower() == "desperate white deer" and item:getId() == 13539 then
 		player:say("This deer doesn't show enough strength and is too desperate already. Only enraged deer have the necessary power to carry you.", TALKTYPE_MONSTER_SAY)
 		return true
 	end
@@ -424,7 +424,7 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif action.broke then
 			item:remove(1)
 		elseif action.destroyObject then
-			addEvent(Game.createItem, math.random(3) * 60 * 60 * 1000, target.itemid, 1, toPosition)
+			addEvent(Game.createItem, math.random(3) * 60 * 60 * 1000, target:getId(), 1, toPosition)
 			target:remove()
 		elseif action.removeTransformation then
 			target:removeCondition(CONDITION_OUTFIT)

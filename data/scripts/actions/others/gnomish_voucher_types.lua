@@ -10,7 +10,7 @@ local config = {
 local gnomishVoucher = Action()
 
 function gnomishVoucher.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local useItem = config[item.itemid]
+	local useItem = config[item:getId()]
 	local looktype = player:getSex() == PLAYERSEX_FEMALE and useItem.female or useItem.male
 	if useItem.addon then
 		if not player:isPremium()

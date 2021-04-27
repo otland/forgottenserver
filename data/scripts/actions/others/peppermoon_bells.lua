@@ -4,7 +4,7 @@ drunk:setParameter(CONDITION_PARAM_TICKS, 5 * 1000)
 local peppermoonBells = Action()
 
 function peppermoonBells.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if item.itemid == 23461 then
+	if item:getId() == 23461 then
 		player:say("This flower has no pollen left. It will take a little before it has new pollen.", TALKTYPE_MONSTER_SAY, false, player, item:getPosition())
 	else
 		if math.random(5) == 1 then
