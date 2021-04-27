@@ -42,7 +42,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if target:getId() == 1 then
 		if item.type == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
-		elseif target.uid == player.uid then
+		elseif target:getUniqueId() == player:getUniqueId() then
 			if table.contains({3, 15, 43}, item.type) then
 				player:addCondition(drunk)
 			elseif item.type == 4 then

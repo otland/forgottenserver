@@ -433,7 +433,7 @@ if not Modules then
 			return false
 		end
 
-		if shop_npcuid[cid] ~= Npc().uid then
+		if shop_npcuid[cid] ~= Npc():getUniqueId() then
 			return false
 		end
 

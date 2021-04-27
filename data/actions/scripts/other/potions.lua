@@ -142,7 +142,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	elseif potion.transform then
 		local reward = potion.transform[math.random(#potion.transform)]
 		if fromPosition.x == CONTAINER_POSITION then
-			local targetContainer = Container(item:getParent().uid)
+			local targetContainer = Container(item:getParent():getUniqueId())
 			targetContainer:addItem(reward, 1)
 		else
 			Game.createItem(reward, 1, fromPosition)
