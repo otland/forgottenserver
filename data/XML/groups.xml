@@ -24,7 +24,7 @@
 			<flag cannotbebanned="1" />
 			<flag cannotbepushed="1" />
 			<flag hasinfinitecapacity="1" />
-			<flag cannotpushallcreatures="1" />
+			<flag canpushallcreatures="1" />
 			<flag cantalkredprivate="1" />
 			<flag cantalkredchannel="1" />
 			<flag talkorangehelpchannel="1" />
@@ -65,7 +65,7 @@
 			<flag cannotbebanned="1" />
 			<flag cannotbepushed="1" />
 			<flag hasinfinitecapacity="1" />
-			<flag cannotpushallcreatures="1" />
+			<flag canpushallcreatures="1" />
 			<flag cantalkredprivate="1" />
 			<flag cantalkredchannel="1" />
 			<flag talkorangehelpchannel="1" />

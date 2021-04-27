@@ -1527,6 +1527,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_GROUP_DOOR)
 	registerEnum(ITEM_GROUP_DEPRECATED)
 
+	registerEnum(ITEM_BROWSEFIELD)
 	registerEnum(ITEM_BAG)
 	registerEnum(ITEM_SHOPPING_BAG)
 	registerEnum(ITEM_GOLD_COIN)
@@ -2908,6 +2909,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Spell", "isSelfTarget", LuaScriptInterface::luaSpellSelfTarget);
 	registerMethod("Spell", "isBlocking", LuaScriptInterface::luaSpellBlocking);
 	registerMethod("Spell", "isAggressive", LuaScriptInterface::luaSpellAggressive);
+	registerMethod("Spell", "isPzLock", LuaScriptInterface::luaSpellPzLock);
 	registerMethod("Spell", "vocation", LuaScriptInterface::luaSpellVocation);
 
 	// only for InstantSpell
@@ -14801,6 +14803,23 @@ int LuaScriptInterface::luaSpellAggressive(lua_State* L)
 			pushBoolean(L, spell->getAggressive());
 		} else {
 			spell->setAggressive(getBoolean(L, 2));
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaSpellPzLock(lua_State* L)
+{
+	// spell:isPzLock(bool)
+	Spell* spell = getUserdata<Spell>(L, 1);
+	if (spell) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, spell->getPzLock());
+		} else {
+			spell->setPzLock(getBoolean(L, 2));
 			pushBoolean(L, true);
 		}
 	} else {

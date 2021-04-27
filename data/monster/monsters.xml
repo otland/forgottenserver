@@ -285,6 +285,7 @@
 	<monster name="Grave Guard" file="monsters/grave_guard.xml" />
 	<monster name="Grave Robber" file="monsters/grave_robber.xml" />
 	<monster name="Gravedigger" file="monsters/gravedigger.xml" />
+	<monster name="Gravelord Oshuran" file="monsters/gravelord_oshuran.xml" />
 	<monster name="Gray Horse" file="monsters/gray_horse.xml" />
 	<monster name="Green Djinn" file="monsters/green_djinn.xml" />
 	<monster name="Green Frog" file="monsters/green_frog.xml" />
@@ -310,6 +311,7 @@
 	<monster name="Hero" file="monsters/hero.xml" />
 	<monster name="Hide" file="monsters/hide.xml" />
 	<monster name="Hideous Fungus" file="monsters/hideous_fungus.xml" />
+	<monster name="High Templar Cobrass" file="monsters/high_templar_cobrass.xml" />
 	<monster name="Hive Overseer" file="monsters/hive_overseer.xml" />
 	<monster name="Hive Pore" file="monsters/hive_pore.xml" />
 	<monster name="Honour Guard" file="monsters/honour_guard.xml" />
@@ -536,6 +538,7 @@
 	<monster name="Rot Elemental" file="monsters/rot_elemental.xml" />
 	<monster name="Rottie The Rotworm" file="monsters/rottie_the_rotworm.xml" />
 	<monster name="Rotworm Queen" file="monsters/rotworm_queen.xml" />
+	<monster name="Rukor Zad" file="monsters/rukor_zad.xml" />
 	<monster name="Rotworm" file="monsters/rotworm.xml" />
 	<monster name="Rustheap Golem" file="monsters/rustheap_golem.xml" />
 	<monster name="Sacred Spider" file="monsters/sacred_spider.xml" />
@@ -574,6 +577,7 @@
 	<monster name="Slippery Northern Pike" file="monsters/slippery_northern_pike.xml" />
 	<monster name="Slug" file="monsters/slug.xml" />
 	<monster name="Smuggler" file="monsters/smuggler.xml" />
+	<monster name="Smuggler Baron Silvertoe" file="monsters/smuggler_baron_silvertoe.xml" />
 	<monster name="Snake God Essence" file="monsters/snake_god_essence.xml" />
 	<monster name="Snake Thing" file="monsters/snake_thing.xml" />
 	<monster name="Snake" file="monsters/snake.xml" />
@@ -610,6 +614,7 @@
 	<monster name="Tanjis" file="monsters/tanjis.xml" />
 	<monster name="Tarantula" file="monsters/tarantula.xml" />
 	<monster name="Tarnished Spirit" file="monsters/tarnished_spirit.xml" />
+	<monster name="Teleskor" file="monsters/teleskor.xml" />
 	<monster name="Terofar" file="monsters/terofar.xml" />
 	<monster name="Terramite" file="monsters/terramite.xml" />
 	<monster name="Terrified Elephant" file="monsters/terrified_elephant.xml" />
@@ -618,6 +623,7 @@
 	<monster name="Thalas" file="monsters/thalas.xml" />
 	<monster name="The Abomination" file="monsters/the_abomination.xml" />
 	<monster name="The Axeorcist" file="monsters/the_axeorcist.xml" />
+	<monster name="The Big Bad One" file="monsters/the_big_bad_one.xml" />
 	<monster name="The Blightfather" file="monsters/the_blightfather.xml" />
 	<monster name="The Bloodtusk" file="monsters/the_bloodtusk.xml" />
 	<monster name="The Bloodweb" file="monsters/the_bloodweb.xml" />
@@ -638,12 +644,14 @@
 	<monster name="The Masked Marauder" file="monsters/the_masked_marauder.xml" />
 	<monster name="The Noxious Spawn" file="monsters/the_noxious_spawn.xml" />
 	<monster name="The Obliverator" file="monsters/the_obliverator.xml" />
+	<monster name="The Old Whopper" file="monsters/the_old_whopper.xml" />
 	<monster name="The Old Widow" file="monsters/the_old_widow.xml" />
 	<monster name="The Pale Count" file="monsters/the_pale_count.xml" />
 	<monster name="The Pit Lord" file="monsters/the_pit_lord.xml" />
 	<monster name="The Plasmother" file="monsters/the_plasmother.xml" />
 	<monster name="The Ruthless Herald" file="monsters/the_ruthless_herald.xml" />
 	<monster name="The Snapper" file="monsters/the_snapper.xml" />
+	<monster name="The Weakened Count" file="monsters/the_weakened_count.xml" />
 	<monster name="Thief" file="monsters/thief.xml" />
 	<monster name="Thornback Tortoise" file="monsters/thornback_tortoise.xml" />
 	<monster name="Thornfire Wolf" file="monsters/thornfire_wolf.xml" />
@@ -724,6 +732,7 @@
 	<monster name="Yielothax" file="monsters/yielothax.xml" />
 	<monster name="Young Sea Serpent" file="monsters/young_sea_serpent.xml" />
 	<monster name="Young Troll" file="monsters/young_troll.xml" />
+	<monster name="Zarabustor" file="monsters/zarabustor.xml" />
 	<monster name="Zavarash" file="monsters/zavarash.xml" />
 	<monster name="Zevelon Duskbringer" file="monsters/zevelon_duskbringer.xml" />
 	<monster name="Zomba" file="monsters/zomba.xml" />
