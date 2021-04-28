@@ -1,4 +1,4 @@
--- default callbacks
+-- Default Callbacks
 
 function defaultStepIn(creature, item, position, fromPosition)
 	return true

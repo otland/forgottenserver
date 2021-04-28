@@ -251,6 +251,7 @@ if not Modules then
 	KeywordModule = {
 		npcHandler = nil
 	}
+
 	-- Add it to the parseable module list.
 	Modules.parseableModules["module_keywords"] = KeywordModule
 
@@ -278,7 +279,6 @@ if not Modules then
 		local n = 1
 		for keys in string.gmatch(data, "[^;]+") do
 			local i = 1
-
 			local keywords = {}
 			for temp in string.gmatch(keys, "[^,]+") do
 				keywords[#keywords + 1] = temp
@@ -295,7 +295,6 @@ if not Modules then
 			else
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem: No keywords found for keyword set #" .. n .. ". Skipping...")
 			end
-
 			n = n + 1
 		end
 	end
@@ -334,25 +333,21 @@ if not Modules then
 		local ret = NpcSystem.getParameter("travel_destinations")
 		if ret then
 			self:parseDestinations(ret)
-
 			self.npcHandler.keywordHandler:addKeyword({"destination"}, TravelModule.listDestinations, {module = self})
 			self.npcHandler.keywordHandler:addKeyword({"where"}, TravelModule.listDestinations, {module = self})
 			self.npcHandler.keywordHandler:addKeyword({"travel"}, TravelModule.listDestinations, {module = self})
-
 		end
 	end
 
 	function TravelModule:parseDestinations(data)
 		for destination in string.gmatch(data, "[^;]+") do
 			local i = 1
-
 			local name = nil
 			local x = nil
 			local y = nil
 			local z = nil
 			local cost = nil
 			local premium = false
-
 			for temp in string.gmatch(destination, "[^,]+") do
 				if i == 1 then
 					name = temp
@@ -389,6 +384,7 @@ if not Modules then
 			premium = premium,
 			module = self
 		}
+
 		local keywords = {}
 		keywords[#keywords + 1] = name
 
@@ -438,7 +434,6 @@ if not Modules then
 		end
 
 		local npcHandler = module.npcHandler
-
 		local cost = shop_cost[cid]
 		local destination = Position(shop_destination[cid])
 
@@ -572,13 +567,11 @@ if not Modules then
 		local alreadyParsedIds = {}
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
-
 			local name = nil
 			local itemid = nil
 			local cost = nil
 			local subType = nil
 			local realName = nil
-
 			for temp in string.gmatch(item, "[^,]+") do
 				if i == 1 then
 					name = temp
@@ -643,13 +636,11 @@ if not Modules then
 		local alreadyParsedIds = {}
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
-
 			local name = nil
 			local itemid = nil
 			local cost = nil
 			local realName = nil
 			local subType = nil
-
 			for temp in string.gmatch(item, "[^,]+") do
 				if i == 1 then
 					name = temp
@@ -701,14 +692,12 @@ if not Modules then
 	function ShopModule:parseBuyableContainers(data)
 		for item in string.gmatch(data, "[^;]+") do
 			local i = 1
-
 			local name = nil
 			local container = nil
 			local itemid = nil
 			local cost = nil
 			local subType = nil
 			local realName = nil
-
 			for temp in string.gmatch(item, "[^,]+") do
 				if i == 1 then
 					name = temp

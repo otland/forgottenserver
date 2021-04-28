@@ -6,7 +6,6 @@ function onLogin(player)
 	local lastLogout = player:getLastLogout()
 	local offlineTime = lastLogout ~= 0 and math.min(os.time() - lastLogout, 21 * 24 * 60 * 60) or 0
 	offlineTime = offlineTime - 600
-
 	if offlineTime < 180 then
 		return true
 	end

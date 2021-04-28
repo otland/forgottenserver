@@ -38,7 +38,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local instrument, chance = instruments[item:getId()]
 	if instrument.chance then
 		chance = instrument.chance >= math.random(1, 100)
-
 		if instrument.monster and chance then
 			local monster = Game.createMonster(instrument.monster, player:getPosition(), true)
 			if monster then

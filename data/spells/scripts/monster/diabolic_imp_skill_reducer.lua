@@ -9,7 +9,6 @@ local parameters = {
 
 function onCastSpell(creature, variant)
 	parameters[2].value = math.random(70, 80)
-
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		target:addAttributeCondition(parameters)
 	end

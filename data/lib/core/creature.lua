@@ -135,7 +135,6 @@ function Creature:addDamageCondition(target, type, list, damage, period, rounds)
 		while value < damage do
 			value = math.floor(10 * math.pow(1.2, exponent) + 0.5)
 			condition:addDamage(1, period or 4000, -value)
-
 			if value >= damage then
 				local permille = math.random(10, 1200) / 1000
 				condition:addDamage(1, period or 4000, -math.max(1, math.floor(value * permille + 0.5)))

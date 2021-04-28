@@ -99,5 +99,4 @@ end
 for i, v in pairs(transformItems) do
 	transformTo:id(i)
 end
-
 transformTo:register()

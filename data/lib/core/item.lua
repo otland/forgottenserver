@@ -183,7 +183,6 @@ do
 		end
 
 		-- Absorb
-
 		local show = abilities.absorbPercent[1]
 		if show ~= 0 then
 			for _, value in ipairs(abilities.absorbPercent) do
@@ -213,7 +212,6 @@ do
 		end
 
 		-- Field absorb
-
 		local show = abilities.fieldAbsorbPercent[1]
 		if show ~= 0 then
 			for _, value in ipairs(abilities.fieldAbsorbPercent) do

@@ -25,6 +25,7 @@ function onSpeak(player, type, message)
 		player:sendCancelMessage("You may only place one offer in two minutes.")
 		return false
 	end
+
 	player:addCondition(muted)
 
 	if type == TALKTYPE_CHANNEL_O then

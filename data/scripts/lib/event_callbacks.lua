@@ -140,5 +140,5 @@ setmetatable(EventCallback, {
 	end
 	})
 
--- can't be overwritten on reloads
+-- Can't be overwritten on reloads
 EventCallback:clear()

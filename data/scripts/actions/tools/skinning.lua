@@ -130,7 +130,6 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 						player:addAchievement("Marblelous")
 						player:addAchievementProgress("Marble Madness", 5)
 					end
-
 					effect = CONST_ME_HITAREA
 					target:remove()
 					added = true
@@ -155,7 +154,6 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 				player:addAchievement("Ice Sculptor")
 				player:addAchievementProgress("Cold as Ice", 10)
 			end
-
 			target:transform(skin.newItem, 1)
 			effect = CONST_ME_HITAREA
 		else

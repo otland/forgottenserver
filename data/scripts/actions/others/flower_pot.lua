@@ -69,7 +69,6 @@ function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotke
 				else
 					target:transform(flower.after[i])
 				end
-
 				toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 				player:say(flower.msg[i], TALKTYPE_MONSTER_SAY)
 				target:decay()

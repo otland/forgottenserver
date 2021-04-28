@@ -14,7 +14,6 @@ function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			player:addItem(13939, 1)
 			toPosition = player:getPosition()
 		end
-
 		toPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 		item:remove(1)
 		target:remove(1)

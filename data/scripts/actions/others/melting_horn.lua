@@ -5,6 +5,7 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
 		return true
 	end
+
 	if player:hasMount(38) then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You already have the obedience of the ursagrodon.")
 		return true

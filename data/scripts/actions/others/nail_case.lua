@@ -34,6 +34,7 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	end
 
 	player:setStorageValue(PlayerStorageKeys.nailCaseUseCount, player:getStorageValue(PlayerStorageKeys.nailCaseUseCount) + 1)
+
 	local count = player:getStorageValue(PlayerStorageKeys.nailCaseUseCount)
 	local message = messages[count]
 	if message then

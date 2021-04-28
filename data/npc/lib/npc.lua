@@ -107,11 +107,9 @@ end
 function Player.removeTotalMoney(self, amount)
 	local moneyCount = self:getMoney()
 	local bankCount = self:getBankBalance()
-
 	if amount <= moneyCount then
 		self:removeMoney(amount)
 		return true
-
 	elseif amount <= (moneyCount + bankCount) then
 		if moneyCount ~= 0 then
 			self:removeMoney(moneyCount)

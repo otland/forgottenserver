@@ -1,6 +1,6 @@
-local creatureevent = CreatureEvent("ScarabDeath")
+local scarabDeath = CreatureEvent("ScarabDeath")
 
-function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+function scarabDeath.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if math.random(100) < 10 then
 		Game.createMonster("Scorpion", creature:getPosition())
 		creature:say("Horestis' curse spawns a vengeful scorpion from the body!", TALKTYPE_MONSTER_SAY)
@@ -8,4 +8,4 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 	return true
 end
 
-creatureevent:register()
+scarabDeath:register()

@@ -1,6 +1,6 @@
-local creatureevent = CreatureEvent("WhiteDeerScouts")
+local whiteDeerScouts = CreatureEvent("WhiteDeerScouts")
 
-function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+function whiteDeerScouts.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	local targetMonster = creature:getMonster()
 	if not targetMonster or targetMonster:getMaster() then
 		return true
@@ -19,4 +19,4 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 	return true
 end
 
-creatureevent:register()
+whiteDeerScouts:register()
