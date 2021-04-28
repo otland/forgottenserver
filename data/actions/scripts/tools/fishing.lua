@@ -6,7 +6,7 @@ local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetId = target:getId()
+	local targetId = target.itemid
 	if not table.contains(waterIds, targetId) then
 		return false
 	end

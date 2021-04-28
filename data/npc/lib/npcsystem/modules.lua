@@ -429,7 +429,7 @@ if not Modules then
 			return false
 		end
 
-		if shop_npcuid[cid] ~= Npc():getUniqueId() then
+		if shop_npcuid[cid] ~= Npc():getId() then
 			return false
 		end
 
@@ -1196,7 +1196,7 @@ if not Modules then
 		shop_amount[cid] = module.amount
 		shop_cost[cid] = parameters.cost
 		shop_rlname[cid] = parameters.realName
-		shop_itemid[cid] = parameters:getId()
+		shop_itemid[cid] = parameters.itemid
 		shop_container[cid] = parameters.container
 		shop_npcuid[cid] = getNpcCid()
 		shop_eventtype[cid] = parameters.eventType

@@ -26,23 +26,23 @@ local fluidMessage = {
 local distillery = {[5513] = 5469, [5514] = 5470}
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetItemType = ItemType(target:getId())
+	local targetItemType = ItemType(target.itemid)
 	if targetItemType and targetItemType:isFluidContainer() then
 		if target.type == 0 and item:getSubType() ~= 0 then
-			target:transform(target:getId(), item:getSubType())
+			target:transform(target.itemid, item:getSubType())
 			item:transform(item:getId(), 0)
 			return true
 		elseif target.type ~= 0 and item:getSubType() == 0 then
-			target:transform(target:getId(), 0)
+			target:transform(target.itemid, 0)
 			item:transform(item:getId(), target.type)
 			return true
 		end
 	end
 
-	if target:getId() == 1 then
+	if target.itemid == 1 then
 		if item:getSubType() == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
-		elseif target:getUniqueId() == player:getUniqueId() then
+		elseif target.itemid == player:getId() then
 			if table.contains({3, 15, 43}, item:getSubType()) then
 				player:addCondition(drunk)
 			elseif item:getSubType() == 4 then
@@ -64,8 +64,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		local fluidSource = targetItemType and targetItemType:getFluidSource() or 0
 		if fluidSource ~= 0 then
 			item:transform(item:getId(), fluidSource)
-		elseif table.contains(distillery, target:getId()) then
-			local tmp = distillery[target:getId()]
+		elseif table.contains(distillery, target.itemid) then
+			local tmp = distillery[target.itemid]
 			if tmp then
 				item:transform(item:getId(), 0)
 			else

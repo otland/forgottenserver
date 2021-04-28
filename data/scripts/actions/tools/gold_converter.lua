@@ -7,7 +7,7 @@ local config = {
 local goldConverter = Action()
 
 function goldConverter.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local coin = config[target:getId()]
+	local coin = config[target.itemid]
 
 	if not coin then
 		return false
@@ -19,7 +19,7 @@ function goldConverter.onUse(player, item, fromPosition, target, toPosition, isH
 		player:addItem(coin.changeTo, 1)
 		item:transform(item:getId(), charges -1)
 	elseif coin.changeBack then
-		target:transform(target:getId(), target.type - 1)
+		target:transform(target.itemid, target.type - 1)
 		player:addItem(coin.changeBack, 100)
 		item:transform(item:getId(), charges -1)
 	else

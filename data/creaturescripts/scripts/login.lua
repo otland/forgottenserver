@@ -12,7 +12,7 @@ function onLogin(player)
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 
 	-- Stamina
-	nextUseStaminaTime[player:getUniqueId()] = 0
+	nextUseStaminaTime[player:getId()] = 0
 
 	-- Promotion
 	local vocation = player:getVocation()

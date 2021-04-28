@@ -107,7 +107,7 @@ local config = {
 local skinning = Action()
 
 function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local skin = config[item:getId()][target:getId()]
+	local skin = config[item:getId()][target.itemid]
 	if not skin then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
@@ -119,8 +119,8 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	if type(skin[1]) == "table" then
 		local added = false
 		for _, skinChild in ipairs(skin) do
-			if randomChance <= skinChild.chance and not target:getId() == 13583 then
-				if target:getId() == 11343 then
+			if randomChance <= skinChild.chance and not target.itemid == 13583 then
+				if target.itemid == 11343 then
 					local marble = player:addItem(skinChild.newItem, skinChild.amount or 1)
 					if marble then
 						marble:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, skinChild.desc:gsub("|PLAYERNAME|", player:getName()))
@@ -142,14 +142,14 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			end
 		end
 
-		if not added and target:getId() == 11343 then
+		if not added and target.itemid == 11343 then
 			effect = CONST_ME_HITAREA
 			player:say("Your attempt at shaping that marble rock failed miserably.", TALKTYPE_MONSTER_SAY)
 			transform = false
 			target:remove()
 		end
 	elseif randomChance <= skin.chance then
-		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then
+		if table.contains({7441, 7442, 7444, 7445}, target.itemid) then
 			if skin.newItem == 7446 then
 				player:addAchievement("Ice Sculptor")
 				player:addAchievementProgress("Cold as Ice", 10)
@@ -165,7 +165,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			player:addItem(skin.newItem, skin.amount or 1)
 		end
 	else
-		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then
+		if table.contains({7441, 7442, 7444, 7445}, target.itemid) then
 			player:say("The attempt of sculpting failed miserably.", TALKTYPE_MONSTER_SAY)
 			effect = CONST_ME_HITAREA
 			target:remove()
@@ -174,11 +174,11 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		end
 	end
 	if transform then
-		target:transform(skin.after or target:getType():getDecayId() or target:getId() + 1)
+		target:transform(skin.after or target:getType():getDecayId() or target.itemid + 1)
 	else
 		target:remove()
 	end
-	if target:getId() == 13583 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
+	if target.itemid == 13583 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
 		player:setStorageValue(PlayerStorageKeys.mutatedPumpkin, os.time() + 4 * 60 * 60)
 		player:say("Happy Halloween!", TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)

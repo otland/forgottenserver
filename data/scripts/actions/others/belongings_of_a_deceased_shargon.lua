@@ -12,7 +12,7 @@ function belongingsShargon.onUse(player, item, fromPosition, target, toPosition,
 	for i = 1, #config do
 		local randomItem = config[i]
 		if chance >= randomItem.chanceFrom and chance <= randomItem.chanceTo then
-			local gift = randomItem:getId()
+			local gift = randomItem.itemId
 			local count = randomItem.count or 1
 			if type(count) == "table" then
 				count = math.random(count[1], count[2])

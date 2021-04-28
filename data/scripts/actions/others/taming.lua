@@ -424,7 +424,7 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		elseif action.broke then
 			item:remove(1)
 		elseif action.destroyObject then
-			addEvent(Game.createItem, math.random(3) * 60 * 60 * 1000, target:getId(), 1, toPosition)
+			addEvent(Game.createItem, math.random(3) * 60 * 60 * 1000, target.itemid, 1, toPosition)
 			target:remove()
 		elseif action.removeTransformation then
 			target:removeCondition(CONDITION_OUTFIT)

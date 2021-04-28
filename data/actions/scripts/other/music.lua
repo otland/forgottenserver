@@ -43,8 +43,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			if monster then
 				player:addSummon(monster)
 			end
-		elseif instrument:getId() and chance then
-			player:addItem(instrument:getId(), instrument.itemCount)
+		elseif instrument.itemId and chance then
+			player:addItem(instrument.itemId, instrument.itemCount)
 		end
 	end
 

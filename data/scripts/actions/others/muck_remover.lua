@@ -13,7 +13,7 @@ local config = { -- chance1, chance2, itemID, count
 local muckRemover = Action()
 
 function muckRemover.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if target:getId() ~= 18396 then -- mucus plug
+	if target.itemid ~= 18396 then -- mucus plug
 		return false
 	end
 
@@ -22,9 +22,9 @@ function muckRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 		randomItem = config[i]
 		if chance >= randomItem.from and chance <= randomItem.to then
 			if toPosition.x == CONTAINER_POSITION then
-				player:addItem(randomItem:getId(), randomItem.count or 1)
+				player:addItem(randomItem.itemid, randomItem.count or 1)
 			else
-				Game.createItem(randomItem:getId(), randomItem.count or 1, toPosition)
+				Game.createItem(randomItem.itemid, randomItem.count or 1, toPosition)
 			end
 
 			player:addAchievementProgress("Goo Goo Dancer", 100)
