@@ -30,7 +30,7 @@ function destroyItem(player, target, toPosition)
 		return true
 	end
 
-	local destroyId = ItemType(target.id):getDestroyId()
+	local destroyId = ItemType(target.itemid):getDestroyId()
 	if destroyId == 0 then
 		return false
 	end
