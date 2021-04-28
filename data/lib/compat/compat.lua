@@ -273,15 +273,15 @@ function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing then
 		if thing:isItem() then
-			t:getUniqueId() = thing:getUniqueId()
-			t:getId() = thing:getId()
-			if ItemType(t:getId()):hasSubType() then
+			t.uid = thing:getUniqueId()
+			t.itemid = thing:getId()
+			if ItemType(t.itemid):hasSubType() then
 				t.type = thing:getSubType()
 			end
-			t:getActionId() = thing:getActionId()
+			t.actionid = thing:getActionId()
 		elseif thing:isCreature() then
-			t:getUniqueId() = thing:getId()
-			t:getId() = 1
+			t.uid = thing:getId()
+			t.itemid = 1
 			if thing:isPlayer() then
 				t.type = THING_TYPE_PLAYER
 			elseif thing:isMonster() then
