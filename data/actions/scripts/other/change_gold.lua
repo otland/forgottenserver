@@ -6,7 +6,7 @@ local config = {
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local coin = config[item:getId()]
-	if coin.changeTo and item.type == 100 then
+	if coin.changeTo and item:getSubType() == 100 then
 		item:remove()
 		player:addItem(coin.changeTo, 1)
 	elseif coin.changeBack then
