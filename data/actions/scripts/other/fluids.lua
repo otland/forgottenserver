@@ -28,11 +28,11 @@ local distillery = {[5513] = 5469, [5514] = 5470}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target:getId())
 	if targetItemType and targetItemType:isFluidContainer() then
-		if target:getCount() == 0 and item:getSubType() ~= 0 then
-			target:transform(target:getId(), item:getSubType())
+		if target:getCount() == 0 and item:getCount() ~= 0 then
+			target:transform(target:getId(), item:getCount())
 			item:transform(item:getId(), 0)
 			return true
-		elseif target:getCount()  ~= 0 and item:getSubType() == 0 then
+		elseif target:getCount()  ~= 0 and item:getCount() == 0 then
 			target:transform(target:getId(), 0)
 			item:transform(item:getId(), target:getCount())
 			return true
@@ -40,24 +40,24 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if target:getId() == 1 then
-		if item:getSubType() == 0 then
+		if item:getCount() == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		elseif target:getId() == player:getId() then
-			if table.contains({3, 15, 43}, item:getSubType()) then
+			if table.contains({3, 15, 43}, item:getCount()) then
 				player:addCondition(drunk)
-			elseif item:getSubType() == 4 then
+			elseif item:getCount() == 4 then
 				player:addCondition(poison)
-			elseif item:getSubType() == 7 then
+			elseif item:getCount() == 7 then
 				player:addMana(math.random(50, 150))
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
-			elseif item:getSubType() == 10 then
+			elseif item:getCount() == 10 then
 				player:addHealth(60)
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			end
-			player:say(fluidMessage[item:getSubType()] or "Gulp.", TALKTYPE_MONSTER_SAY)
+			player:say(fluidMessage[item:getCount()] or "Gulp.", TALKTYPE_MONSTER_SAY)
 			item:transform(item:getId(), 0)
 		else
-			Game.createItem(2016, item:getSubType(), toPosition):decay()
+			Game.createItem(2016, item:getCount(), toPosition):decay()
 			item:transform(item:getId(), 0)
 		end
 	else
@@ -71,13 +71,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			else
 				player:sendCancelMessage("You have to process the bunch into the distillery to get rum.")
 			end
-		elseif item:getSubType() == 0 then
+		elseif item:getCount() == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		else
 			if toPosition.x == CONTAINER_POSITION then
 				toPosition = player:getPosition()
 			end
-			Game.createItem(2016, item:getSubType(), toPosition):decay()
+			Game.createItem(2016, item:getCount(), toPosition):decay()
 			item:transform(item:getId(), 0)
 		end
 	end
