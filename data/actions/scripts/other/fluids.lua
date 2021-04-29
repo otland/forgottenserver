@@ -28,13 +28,13 @@ local distillery = {[5513] = 5469, [5514] = 5470}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target:getId())
 	if targetItemType and targetItemType:isFluidContainer() then
-		if target:getSubType() == 0 and item:getSubType() ~= 0 then
+		if target:getCount() == 0 and item:getSubType() ~= 0 then
 			target:transform(target:getId(), item:getSubType())
 			item:transform(item:getId(), 0)
 			return true
-		elseif target:getSubType()  ~= 0 and item:getSubType() == 0 then
+		elseif target:getCount()  ~= 0 and item:getSubType() == 0 then
 			target:transform(target:getId(), 0)
-			item:transform(item:getId(), target:getSubType())
+			item:transform(item:getId(), target:getCount())
 			return true
 		end
 	end

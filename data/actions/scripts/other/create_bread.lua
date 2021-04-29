@@ -4,7 +4,7 @@ local millstones = {1381, 1382, 1383, 1384}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if itemId == 2692 then
-		if target:getSubType() == 1 and table.contains(liquidContainers, target:getId()) then
+		if target:getCount() == 1 and table.contains(liquidContainers, target:getId()) then
 			item:remove(1)
 			player:addItem(2693, 1)
 			target:transform(target:getId(), 0)
