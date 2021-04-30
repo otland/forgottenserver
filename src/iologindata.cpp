@@ -573,7 +573,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		size_t attributesSize;
 		const char* attributes = propWriteStream.getStream(attributesSize);
 
-		if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), pid, runningId, item->getID(), item->getSubType(), db.escapeBlob(attributes, attributesSize)))) {
+		if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), pid, runningId, item->getID(), item->getSubType(), db.escapeBlob(attributes, attributesSize)))) {
 			return false;
 		}
 
