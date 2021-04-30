@@ -94,7 +94,7 @@ bool IOMapSerialize::saveHouseItems()
 			size_t attributesSize;
 			const char* attributes = stream.getStream(attributesSize);
 			if (attributesSize > 0) {
-				if (!stmt.addRow(fmt::format("{:d},{:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
+				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
 					return false;
 				}
 				stream.clear();
@@ -387,7 +387,7 @@ bool IOMapSerialize::saveHouse(House* house)
 		size_t attributesSize;
 		const char* attributes = stream.getStream(attributesSize);
 		if (attributesSize > 0) {
-			if (!stmt.addRow(fmt::format("{:d},{:s}", houseId, db.escapeBlob(attributes, attributesSize)))) {
+			if (!stmt.addRow(fmt::format("{:d}, {:s}", houseId, db.escapeBlob(attributes, attributesSize)))) {
 				return false;
 			}
 			stream.clear();
