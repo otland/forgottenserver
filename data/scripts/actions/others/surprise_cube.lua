@@ -30,7 +30,7 @@ function surpriseCube.onUse(player, item, fromPosition, target, toPosition, isHo
 		local randomItem = config[i]
 		if chance >= randomItem.chanceFrom and chance <= randomItem.chanceTo then
 			if randomItem.itemId then
-				local gift = randomItem.itemid
+				local gift = randomItem.itemId
 				local count = randomItem.count or 1
 				if type(count) == "table" then
 					count = math.random(count[1], count[2])
