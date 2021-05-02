@@ -33,7 +33,7 @@ function gnomish.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	for i = 1, #config do
 		local randomItem = config[i]
 		if chance >= randomItem.chanceFrom and chance <= randomItem.chanceTo then
-			if randomItem.itemid then
+			if randomItem.itemId then
 				local gift = randomItem.itemid
 				local count = randomItem.count or 1
 				if type(count) == "table" then
