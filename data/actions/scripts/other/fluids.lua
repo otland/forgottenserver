@@ -32,7 +32,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			target:transform(target:getId(), item:getCount())
 			item:transform(item:getId(), 0)
 			return true
-		elseif target.type  ~= 0 and item:getCount() == 0 then
+		elseif target.type ~= 0 and item:getCount() == 0 then
 			target:transform(target:getId(), 0)
 			item:transform(item:getId(), target.type)
 			return true
