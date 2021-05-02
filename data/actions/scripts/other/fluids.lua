@@ -71,13 +71,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			else
 				player:sendCancelMessage("You have to process the bunch into the distillery to get rum.")
 			end
-		elseif item:getCount() == 0 then
+		elseif item:getSubType() == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		else
 			if toPosition.x == CONTAINER_POSITION then
 				toPosition = player:getPosition()
 			end
-			Game.createItem(2016, item:getCount(), toPosition):decay()
+			Game.createItem(2016, item:getSubType(), toPosition):decay()
 			item:transform(item:getId(), 0)
 		end
 	end
