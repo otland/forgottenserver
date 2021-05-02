@@ -1,7 +1,7 @@
 local saw = Action()
 
 function saw.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if target.itemid ~= 5901 then -- wood
+	if target:getId() ~= 5901 then -- wood
 		return false
 	end
 

@@ -53,7 +53,7 @@ local flowerPot = Action()
 
 function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	for _, flower in pairs(flowers) do
-		if target.itemid == flower.itemid then
+		if target:getId() == flower.itemid then
 			if not flower.watered and not flower.advance then
 				player:say(flower.msg, TALKTYPE_MONSTER_SAY)
 			elseif flower.watered and not flower.advance then

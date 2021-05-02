@@ -13,7 +13,7 @@ local config = { -- chance1, chance2, itemID, count
 local muckRemover = Action()
 
 function muckRemover.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if target.itemid ~= 18396 then -- mucus plug
+	if target:getId() ~= 18396 then -- mucus plug
 		return false
 	end
 

@@ -84,11 +84,11 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return false
 		end
 
-		if table.contains(keys, target.itemid) then
+		if table.contains(keys, target:getId()) then
 			return false
 		end
 
-		if not table.contains(openDoors, target.itemid) and not table.contains(closedDoors, target.itemid) and not table.contains(lockedDoors, target.itemid) then
+		if not table.contains(openDoors, target:getId()) and not table.contains(closedDoors, target:getId()) and not table.contains(lockedDoors, target:getId()) then
 			return false
 		end
 
@@ -97,11 +97,11 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 
-		local transformTo = target.itemid + 2
-		if table.contains(openDoors, target.itemid) then
-			transformTo = target.itemid - 2
-		elseif table.contains(closedDoors, target.itemid) then
-			transformTo = target.itemid - 1
+		local transformTo = target:getId() + 2
+		if table.contains(openDoors, target:getId()) then
+			transformTo = target:getId() - 2
+		elseif table.contains(closedDoors, target:getId()) then
+			transformTo = target:getId()- 1
 		end
 
 		target:transform(transformTo)

@@ -6,8 +6,7 @@ local machines = {
 local sugarOat = Action()
 
 function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetId = target.itemid
-	if targetId == 2694 then
+	if target:getId() == 2694 then
 		if toPosition.x ~= CONTAINER_POSITION then
 			Game.createItem(13939, 1, toPosition)
 		else
@@ -18,7 +17,7 @@ function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		item:remove(1)
 		target:remove(1)
 	else
-		local machine = machines[targetId]
+		local machine = machines[target:getId()]
 		if machine then
 			target:transform(machine)
 			target:decay()
