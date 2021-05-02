@@ -13,9 +13,7 @@ function gnomishVoucher.onUse(player, item, fromPosition, target, toPosition, is
 	local useItem = config[item:getId()]
 	local looktype = player:getSex() == PLAYERSEX_FEMALE and useItem.female or useItem.male
 	if useItem.addon then
-		if not player:isPremium()
-				or not player:hasOutfit(looktype)
-				or player:hasOutfit(looktype, useItem.addon) then
+		if not player:isPremium() or not player:hasOutfit(looktype) or player:hasOutfit(looktype, useItem.addon) then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You own no premium account, lack the base outfit or already own this outfit part.")
 			return true
 		end

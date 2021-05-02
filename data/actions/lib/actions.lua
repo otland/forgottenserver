@@ -210,14 +210,14 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 			player:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
 		end
 	elseif table.contains(sandIds, groundId) then
-		local randomValue = math.random(1, 100)
-		if target.actionid == actionIds.sandHole and randomValue <= 20 then
+		local chance = math.random(1, 100)
+		if target.actionid == actionIds.sandHole and chance <= 20 then
 			ground:transform(489)
 			ground:decay()
-		elseif randomValue == 1 then
+		elseif chance == 1 then
 			Game.createItem(2159, 1, toPosition)
 			player:addAchievementProgress("Gold Digger", 100)
-		elseif randomValue > 95 then
+		elseif chance > 95 then
 			Game.createMonster("Scarab", toPosition)
 		end
 		toPosition:sendMagicEffect(CONST_ME_POFF)

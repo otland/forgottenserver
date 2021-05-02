@@ -113,13 +113,13 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		return true
 	end
 
-	local randomChance = math.random(1, 100000)
+	local chance = math.random(1, 100000)
 	local effect = CONST_ME_MAGIC_GREEN
 	local transform = true
 	if type(skin[1]) == "table" then
 		local added = false
 		for _, skinChild in ipairs(skin) do
-			if randomChance <= skinChild.chance and not target:getId() == 13583 then
+			if chance <= skinChild.chance and not target:getId() == 13583 then
 				if target:getId() == 11343 then
 					local marble = player:addItem(skinChild.newItem, skinChild.amount or 1)
 					if marble then
@@ -148,7 +148,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			transform = false
 			target:remove()
 		end
-	elseif randomChance <= skin.chance then
+	elseif chance <= skin.chance then
 		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then
 			if skin.newItem == 7446 then
 				player:addAchievement("Ice Sculptor")
@@ -173,11 +173,13 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			effect = CONST_ME_BLOCKHIT
 		end
 	end
+
 	if transform then
 		target:transform(skin.after or target:getType():getDecayId() or target:getId() + 1)
 	else
 		target:remove()
 	end
+
 	if target:getId() == 13583 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
 		player:setStorageValue(PlayerStorageKeys.mutatedPumpkin, os.time() + 4 * 60 * 60)
 		player:say("Happy Halloween!", TALKTYPE_MONSTER_SAY)

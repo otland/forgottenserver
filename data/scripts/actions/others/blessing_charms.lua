@@ -10,17 +10,19 @@ local blessingCharms = Action()
 
 function blessingCharms.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local blessItem = items[item:getId()]
-	if blessItem then
-		if player:hasBlessing(blessItem.id) then
-			player:say("You already possess this blessing.", TALKTYPE_MONSTER_SAY)
-			return true
-		end
-
-		player:addBlessing(blessItem.id)
-		player:say(blessItem.text, TALKTYPE_MONSTER_SAY)
-		player:getPosition():sendMagicEffect(blessItem.effect)
-		item:remove()
+	if not blessItem then
+		return false
 	end
+
+	if player:hasBlessing(blessItem.id) then
+		player:say("You already possess this blessing.", TALKTYPE_MONSTER_SAY)
+		return true
+	end
+
+	player:addBlessing(blessItem.id)
+	player:say(blessItem.text, TALKTYPE_MONSTER_SAY)
+	player:getPosition():sendMagicEffect(blessItem.effect)
+	item:remove()
 	return true
 end
 

@@ -201,7 +201,7 @@ if not NpcHandler then
 				pos = k
 			end
 		end
-		
+
 		self.focuses[pos] = nil
 		self.eventSay[focus] = nil
 		self.eventDelayedSay[focus] = nil

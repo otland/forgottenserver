@@ -22,12 +22,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		target:transform(targetId + 1)
 		target:decay()
 
-		local rareChance = math.random(1, 100)
-		if rareChance == 1 then
+		local chance = math.random(1, 100)
+		if chance == 1 then
 			player:addItem(lootVeryRare[math.random(#lootVeryRare)], 1)
-		elseif rareChance <= 3 then
+		elseif chance <= 3 then
 			player:addItem(lootRare[math.random(#lootRare)], 1)
-		elseif rareChance <= 10 then
+		elseif chance <= 10 then
 			player:addItem(lootCommon[math.random(#lootCommon)], 1)
 		else
 			player:addItem(lootTrash[math.random(#lootTrash)], 1)
@@ -63,15 +63,15 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			target:decay()
 			player:addAchievementProgress("Exquisite Taste", 250)
 
-			local rareChance = math.random(1, 100)
-			if rareChance == 1 then
 				player:addItem(7158, 1)
+			local chance = math.random(1, 100)
+			if chance == 1 then
 				return true
-			elseif rareChance <= 4 then
 				player:addItem(2669, 1)
+			elseif chance <= 4 then
 				return true
-			elseif rareChance <= 10 then
 				player:addItem(7159, 1)
+			elseif chance <= 10 then
 				return true
 			end
 		end
