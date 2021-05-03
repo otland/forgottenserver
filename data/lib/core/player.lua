@@ -2,9 +2,7 @@ local foodCondition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 
 function Player.feed(self, food)
 	local condition = self:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
-	if condition then
-		condition:setTicks(condition:getTicks() + (food * 1000))
-	else
+	if not condition then
 		local vocation = self:getVocation()
 		if not vocation then
 			return nil
@@ -17,7 +15,10 @@ function Player.feed(self, food)
 		foodCondition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
 
 		self:addCondition(foodCondition)
+		return true
 	end
+
+	condition:setTicks(condition:getTicks() + (food * 1000))
 	return true
 end
 
@@ -247,17 +248,17 @@ function Player.removeTotalMoney(self, amount)
 		self:removeMoney(amount)
 		return true
 	elseif amount <= (moneyCount + bankCount) then
-		if moneyCount ~= 0 then
-			self:removeMoney(moneyCount)
-			local remains = amount - moneyCount
-			self:setBankBalance(bankCount - remains)
-			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
-			return true
-		else
+		if moneyCount == 0 then
 			self:setBankBalance(bankCount - amount)
 			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
 			return true
 		end
+
+		self:removeMoney(moneyCount)
+		local remains = amount - moneyCount
+		self:setBankBalance(bankCount - remains)
+		self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
+		return true
 	end
 	return false
 end

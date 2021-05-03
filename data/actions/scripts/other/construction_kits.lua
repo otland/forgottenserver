@@ -20,15 +20,17 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local tile = Tile(item:getPosition())
-	if tile and tile:getHouse() then
-		if fromPosition.x ~= CONTAINER_POSITION or item:getParent():getId() == ITEM_BROWSEFIELD then
-			item:transform(kit)
-			fromPosition:sendMagicEffect(CONST_ME_POFF)
-		else
-			player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
-		end
-	else
+	if not tile or tile and not tile:getHouse() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may construct this only inside a house.")
+		return true
 	end
+
+	if fromPosition.x == CONTAINER_POSITION and item:getParent():getId() ~= ITEM_BROWSEFIELD then
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
+		return true
+	end
+
+	item:transform(kit)
+	fromPosition:sendMagicEffect(CONST_ME_POFF)
 	return true
 end

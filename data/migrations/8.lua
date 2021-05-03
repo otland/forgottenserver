@@ -24,9 +24,7 @@ function onUpdateDatabase()
 	if resultId ~= false then
 		repeat
 			local playerId = result.getNumber(resultId, "player_id")
-
 			local runningId = 100
-
 			local stmt = "INSERT INTO `player_inboxitems` (`player_id`, `sid`, `pid`, `itemtype`, `count`, `attributes`) VALUES "
 
 			local resultId2 = db.storeQuery("SELECT `sid` FROM `player_depotitems` WHERE `player_id` = " .. playerId .. " AND `itemtype` = 14404")

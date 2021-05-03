@@ -58,20 +58,22 @@ local door = Action()
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if table.contains(closedQuestDoors, itemId) then
-		if player:getStorageValue(item:getActionId()) ~= -1 then
-			item:transform(itemId + 1)
-			player:teleportTo(toPosition, true)
-		else
+		if player:getStorageValue(item:getActionId()) == -1 then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The door seems to be sealed against unwanted intruders.")
+			return true
 		end
+
+		item:transform(itemId + 1)
+		player:teleportTo(toPosition, true)
 		return true
 	elseif table.contains(closedLevelDoors, itemId) then
-		if item:getActionId() > 0 and player:getLevel() >= item:getActionId() - actionIds.levelDoor then
-			item:transform(itemId + 1)
-			player:teleportTo(toPosition, true)
-		else
+		if item:getActionId() <= 0 or player:getLevel() < item:getActionId() - actionIds.levelDoor then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Only the worthy may pass.")
+			return true
 		end
+
+		item:transform(itemId + 1)
+		player:teleportTo(toPosition, true)
 		return true
 	elseif table.contains(keys, itemId) then
 		local tile = Tile(toPosition)

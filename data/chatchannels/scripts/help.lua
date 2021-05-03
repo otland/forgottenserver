@@ -20,38 +20,44 @@ function onSpeak(player, type, message)
 		if string.sub(message, 1, 6) == "!mute " then
 			local targetName = string.sub(message, 7)
 			local target = Player(targetName)
-			if target then
-				if playerAccountType > target:getAccountType() then
-					if not target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
-						target:addCondition(muted)
-						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been muted by " .. player:getName() .. " for using Help Channel inappropriately.")
-					else
-						player:sendCancelMessage("That player is already muted.")
-					end
-				else
-					player:sendCancelMessage("You are not authorized to mute that player.")
-				end
-			else
+			if not target then
 				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
+				return false
 			end
+
+			if playerAccountType <= target:getAccountType() then
+				player:sendCancelMessage("You are not authorized to mute that player.")
+				return false
+			end
+
+			if target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
+				player:sendCancelMessage("That player is already muted.")
+				return false
+			end
+
+			target:addCondition(muted)
+			sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been muted by " .. player:getName() .. " for using Help Channel inappropriately.")
 			return false
 		elseif string.sub(message, 1, 8) == "!unmute " then
 			local targetName = string.sub(message, 9)
 			local target = Player(targetName)
-			if target then
-				if playerAccountType > target:getAccountType() then
-					if target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
-						target:removeCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
-						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been unmuted by " .. player:getName() .. ".")
-					else
-						player:sendCancelMessage("That player is not muted.")
-					end
-				else
-					player:sendCancelMessage("You are not authorized to unmute that player.")
-				end
-			else
+			if not target then
 				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
+				return false
 			end
+
+			if playerAccountType <= target:getAccountType() then
+				player:sendCancelMessage("You are not authorized to unmute that player.")
+				return false
+			end
+
+			if not target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
+				player:sendCancelMessage("That player is not muted.")
+				return false
+			end
+
+			target:removeCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
+			sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been unmuted by " .. player:getName() .. ".")
 			return false
 		end
 	end

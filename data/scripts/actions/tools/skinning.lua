@@ -180,7 +180,12 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		target:remove()
 	end
 
-	if target:getId() == 13583 and player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) <= os.time() then
+	if target:getId() == 13583 then -- slain mutated pumpkin
+		if player:getStorageValue(PlayerStorageKeys.mutatedPumpkin) > os.time() then
+			player:sendCancelMessage("You already used your knife on the corpse.")
+			return true
+		end
+
 		player:setStorageValue(PlayerStorageKeys.mutatedPumpkin, os.time() + 4 * 60 * 60)
 		player:say("Happy Halloween!", TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
@@ -188,9 +193,6 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		local reward = math.random(1, #skin)
 		player:addItem(skin[reward].newItem, skin[reward].amount or 1)
 		effect = CONST_ME_HITAREA
-	else
-		player:sendCancelMessage("You already used your knife on the corpse.")
-		return true
 	end
 
 	if toPosition.x == CONTAINER_POSITION then
