@@ -1,15 +1,15 @@
 function onLogin(player)
-	local msg = "Welcome to " .. configManager.getString(configKeys.SERVER_NAME) .. "!"
+	local text = "Welcome to " .. configManager.getString(configKeys.SERVER_NAME) .. "!"
 	if player:getLastLoginSaved() <= 0 then
-		msg = msg .. " Please choose your outfit."
+		text = text .. " Please choose your outfit."
 		player:sendOutfitWindow()
 	else
-		if msg ~= "" then
-			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, msg)
+		if text ~= "" then
+			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, text)
 		end
-		msg = string.format("Your last visit was on %s.", os.date("%a %b %d %X %Y", player:getLastLoginSaved()))
+		text = string.format("Your last visit was on %s.", os.date("%a %b %d %X %Y", player:getLastLoginSaved()))
 	end
-	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, msg)
+	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, text)
 
 	-- Stamina
 	nextUseStaminaTime[player:getId()] = 0

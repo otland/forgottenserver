@@ -96,11 +96,11 @@ function Player.isPremium(self)
 	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
-function Player.sendCancelMessage(self, message)
-	if type(message) == "number" then
-		message = Game.getReturnMessage(message)
+function Player.sendCancelMessage(self, text)
+	if type(text) == "number" then
+		text = Game.getReturnMessage(text)
 	end
-	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
+	return self:sendTextMessage(MESSAGE_STATUS_SMALL, text)
 end
 
 function Player.isUsingOtClient(self)

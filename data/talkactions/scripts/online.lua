@@ -14,8 +14,8 @@ function onSay(player, words, param)
 
 	for i = 1, playersOnline, maxPlayersPerMessage do
 		local j = math.min(i + maxPlayersPerMessage - 1, playersOnline)
-		local msg = table.concat(onlineList, ", ", i, j) .. "."
-		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, msg)
+		local text = table.concat(onlineList, ", ", i, j) .. "."
+		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, text)
 	end
 	return false
 end

@@ -1,10 +1,10 @@
-function Game.broadcastMessage(message, messageType)
+function Game.broadcastMessage(text, messageType)
 	if not messageType then
 		messageType = MESSAGE_STATUS_WARNING
 	end
 
 	for _, player in ipairs(Game.getPlayers()) do
-		player:sendTextMessage(messageType, message)
+		player:sendTextMessage(messageType, text)
 	end
 end
 

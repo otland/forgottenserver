@@ -98,6 +98,7 @@ function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 	end
 
 	if not index then
+		local msg = ""
 		if table.contains({9808, 9809, 9810}, target:getId()) then
 			msg = "The armor was already damaged so badly that it broke when you tried to clean it."
 		end

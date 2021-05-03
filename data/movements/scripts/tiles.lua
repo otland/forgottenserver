@@ -37,7 +37,6 @@ function onStepIn(creature, item, position, fromPosition)
 		creature:teleportTo(fromPosition, false)
 		position:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 		creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The tile seems to be protected against unwanted intruders.")
-		return true
 	end
 	return true
 end

@@ -1,12 +1,4 @@
-local foods = {
-	2666, -- meat
-	2671, -- ham
-	2681, -- grape
-	2674, -- apple
-	2689, -- bread
-	2690, -- roll
-	2696  -- cheese
-}
+local foods = {2666, 2671, 2681, 2674, 2689, 2690, 2696}
 
 function onCastSpell(creature, variant)
 	if math.random(0, 1) == 1 then

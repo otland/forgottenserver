@@ -6,12 +6,11 @@ local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetId = target:getId()
-	if not table.contains(waterIds, targetId) then
+	if not table.contains(waterIds, target:getId()) then
 		return false
 	end
 
-	if targetId == 10499 then -- remains of a water elemental
+	if target:getId() == 10499 then -- remains of a water elemental
 		local owner = target:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 		if owner ~= 0 and owner ~= player:getId() then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
@@ -19,7 +18,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 
 		toPosition:sendMagicEffect(CONST_ME_WATERSPLASH)
-		target:transform(targetId + 1)
+		target:transform(target:getId() + 1)
 		target:decay()
 
 		local chance = math.random(1, 100)
@@ -35,11 +34,11 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	if targetId ~= 7236 then -- ice hole
+	if target:getId() ~= 7236 then -- ice hole
 		toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 	end
 
-	if targetId == 493 or targetId == 15402 then -- water / shallow water
+	if table.contains({493, 15402}, target:getId()) then -- water / shallow water
 		return true
 	end
 
@@ -49,8 +48,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 
-		if targetId == 15401 then -- shallow water
-			target:transform(targetId + 1)
+		if target:getId() == 15401 then -- shallow water
+			target:transform(target:getId() + 1)
 			target:decay()
 
 			if math.random(1, 100) >= 97 then
@@ -58,8 +57,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				player:addAchievement("Desert Fisher")
 				return true
 			end
-		elseif targetId == 7236 then -- ice hole
-			target:transform(targetId + 1)
+		elseif target:getId() == 7236 then -- ice hole
+			target:transform(target:getId() + 1)
 			target:decay()
 			player:addAchievementProgress("Exquisite Taste", 250)
 
