@@ -11,7 +11,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if targetId == 10499 then
+	if targetId == 10499 then -- remains of a water elemental
 		local owner = target:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 		if owner ~= 0 and owner ~= player:getId() then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
@@ -35,48 +35,48 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	end
 
-	if targetId ~= 7236 then
+	if targetId ~= 7236 then -- ice hole
 		toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 	end
 
-	if targetId == 493 or targetId == 15402 then
+	if targetId == 493 or targetId == 15402 then -- water / shallow water
 		return true
 	end
 
 	player:addSkillTries(SKILL_FISHING, 1)
 	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
-		if useWorms and not player:removeItem(3976, 1) then
+		if useWorms and not player:removeItem(3976, 1) then -- worm
 			return true
 		end
 
-		if targetId == 15401 then
+		if targetId == 15401 then -- shallow water
 			target:transform(targetId + 1)
 			target:decay()
 
 			if math.random(1, 100) >= 97 then
-				player:addItem(15405, 1)
+				player:addItem(15405, 1) -- sandfish
 				player:addAchievement("Desert Fisher")
 				return true
 			end
-		elseif targetId == 7236 then
+		elseif targetId == 7236 then -- ice hole
 			target:transform(targetId + 1)
 			target:decay()
 			player:addAchievementProgress("Exquisite Taste", 250)
 
-				player:addItem(7158, 1)
 			local chance = math.random(1, 100)
 			if chance == 1 then
+				player:addItem(7158, 1) -- rainbow trout
 				return true
-				player:addItem(2669, 1)
 			elseif chance <= 4 then
+				player:addItem(2669, 1) -- northern pike
 				return true
-				player:addItem(7159, 1)
 			elseif chance <= 10 then
+				player:addItem(7159, 1) -- green perch
 				return true
 			end
 		end
 		player:addAchievementProgress("Here, Fishy Fishy!", 1000)
-		player:addItem(2667, 1)
+		player:addItem(2667, 1) -- fish
 	end
 	return true
 end

@@ -11,5 +11,5 @@ function iceFlower.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return true
 end
 
-iceFlower:id(15269)
+iceFlower:id(15269) -- ice flower
 iceFlower:register()

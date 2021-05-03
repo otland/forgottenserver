@@ -1,9 +1,9 @@
 local items = {
-	[11260] = {text = "The Spiritual Shielding protects you.", id = 1, effect = CONST_ME_LOSEENERGY},
-	[11259] = {text = "The Embrace of Tibia surrounds you.", id = 2, effect = CONST_ME_MAGIC_BLUE},
-	[11261] = {text = "The Fire of the Suns engulfs you.", id = 3, effect = CONST_ME_MAGIC_RED},
-	[11262] = {text = "The Wisdom of Solitude inspires you.", id = 4, effect = CONST_ME_MAGIC_GREEN},
-	[11258] = {text = "The Spark of the Phoenix emblazes you.", id = 5, effect = CONST_ME_FIREATTACK}
+	[11260] = {text = "The Spiritual Shielding protects you.", id = 1, effect = CONST_ME_LOSEENERGY}, -- spiritual charm
+	[11259] = {text = "The Embrace of Tibia surrounds you.", id = 2, effect = CONST_ME_MAGIC_BLUE}, -- unity charm
+	[11261] = {text = "The Fire of the Suns engulfs you.", id = 3, effect = CONST_ME_MAGIC_RED}, -- twin sun charm
+	[11262] = {text = "The Wisdom of Solitude inspires you.", id = 4, effect = CONST_ME_MAGIC_GREEN}, -- solitude charm
+	[11258] = {text = "The Spark of the Phoenix emblazes you.", id = 5, effect = CONST_ME_FIREATTACK} -- phoenix charm
 }
 
 local blessingCharms = Action()

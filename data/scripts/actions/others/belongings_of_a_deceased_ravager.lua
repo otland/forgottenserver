@@ -32,5 +32,5 @@ function belongingsRavager.onUse(player, item, fromPosition, target, toPosition,
 	return false
 end
 
-belongingsRavager:id(23704)
+belongingsRavager:id(23704) -- belongings of a deceased (The Ravager)
 belongingsRavager:register()

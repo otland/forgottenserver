@@ -20,6 +20,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		player:say(player:getName() .. " rolled a " .. value .. ".", TALKTYPE_MONSTER_SAY, isInGhostMode, spectator, position)
 	end
 
-	item:transform(5791 + value)
+	item:transform(5791 + value) -- die
 	return true
 end

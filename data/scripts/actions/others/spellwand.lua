@@ -28,5 +28,5 @@ function spellwand.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return true
 end
 
-spellwand:id(7735)
+spellwand:id(7735) -- spellwand
 spellwand:register()

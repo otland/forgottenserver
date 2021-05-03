@@ -8,5 +8,5 @@ function roastedMeat.onUse(player, item, fromPosition, target, toPosition, isHot
 	return true
 end
 
-roastedMeat:id(24842)
+roastedMeat:id(24842) -- raw meat
 roastedMeat:register()

@@ -37,5 +37,5 @@ function muckRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 	return true
 end
 
-muckRemover:id(18395)
+muckRemover:id(18395) -- muck remover
 muckRemover:register()

@@ -31,5 +31,5 @@ function belongingsShargon.onUse(player, item, fromPosition, target, toPosition,
 	return false
 end
 
-belongingsShargon:id(23705)
+belongingsShargon:id(23705) -- belongings of a deceased (Death Priest Shargon)
 belongingsShargon:register()

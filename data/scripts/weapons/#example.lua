@@ -25,7 +25,7 @@ burstarrow.onUseWeapon = function(player, variant)
 	return combat:execute(player, variant)
 end
 
-burstarrow:id(2546)
+burstarrow:id(2546) -- burst arrow
 burstarrow:attack(27)
 burstarrow:shootType(CONST_ANI_BURSTARROW)
 burstarrow:ammoType("arrow")
@@ -38,7 +38,7 @@ burstarrow:register()
 
 ]]
 local wov = Weapon(WEAPON_WAND)
-wov:id(2190)
+wov:id(2190) -- wand of vortex
 wov:damage(8, 18)
 wov:element("energy")
 wov:level(7)
@@ -53,7 +53,7 @@ wov:register()
 
 ]]
 local arbalest = Weapon(WEAPON_DISTANCE)
-arbalest:id(5803)
+arbalest:id(5803) -- arbalest
 arbalest:slotType("two-handed") -- it's now a 2h weapon
 arbalest:ammoType("bolt")
 arbalest:range(6)
@@ -69,7 +69,7 @@ arbalest:register()
 
 ]]
 local eba = Weapon(WEAPON_AXE)
-eba:id(7859)
+eba:id(7859) -- earth barbarian axe
 eba:attack(23)
 eba:defense(18, 1)
 eba:extraElement(5, COMBAT_EARTHDAMAGE)

@@ -50,5 +50,5 @@ function gnomish.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return false
 end
 
-gnomish:id(18215)
+gnomish:id(18215) -- gnomish supply package
 gnomish:register()

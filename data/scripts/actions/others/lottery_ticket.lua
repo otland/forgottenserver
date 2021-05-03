@@ -3,7 +3,7 @@ local lotteryTicket = Action()
 function lotteryTicket.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if math.random(98) == 1 then
 		player:getPosition():sendMagicEffect(CONST_ME_SOUND_YELLOW)
-		item:transform(5958)
+		item:transform(5958) -- winning lottery ticket
 	else
 		player:addAchievementProgress("Jinx", 500)
 		item:getPosition():sendMagicEffect(CONST_ME_POFF)
@@ -12,5 +12,5 @@ function lotteryTicket.onUse(player, item, fromPosition, target, toPosition, isH
 	return true
 end
 
-lotteryTicket:id(5957)
+lotteryTicket:id(5957) -- lottery ticket
 lotteryTicket:register()

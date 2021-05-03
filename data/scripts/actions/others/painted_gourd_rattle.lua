@@ -11,5 +11,5 @@ function paintedGourdRattle.onUse(player, item, fromPosition, target, toPosition
 	return true
 end
 
-paintedGourdRattle:id(24846)
+paintedGourdRattle:id(24846) -- painted gourd rattle
 paintedGourdRattle:register()

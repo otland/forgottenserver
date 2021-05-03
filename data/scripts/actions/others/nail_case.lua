@@ -51,5 +51,5 @@ function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	return true
 end
 
-nailCase:id(21452)
+nailCase:id(21452) -- nail case
 nailCase:register()

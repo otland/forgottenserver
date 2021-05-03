@@ -41,5 +41,5 @@ function redSurpriseBag.onUse(player, item, fromPosition, target, toPosition, is
 	return false
 end
 
-redSurpriseBag:id(6571)
+redSurpriseBag:id(6571) -- surprise bag
 redSurpriseBag:register()

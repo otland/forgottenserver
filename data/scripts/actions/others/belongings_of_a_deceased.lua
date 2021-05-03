@@ -61,5 +61,5 @@ function belongings.onUse(player, item, fromPosition, target, toPosition, isHotk
 	return false
 end
 
-belongings:id(13670)
+belongings:id(13670) -- belongings of a deceased
 belongings:register()

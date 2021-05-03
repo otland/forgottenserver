@@ -40,5 +40,5 @@ function crateUsable.onUse(player, item, fromPosition, target, toPosition, isHot
 	return true
 end
 
-crateUsable:id(9661)
+crateUsable:id(9661) -- crate
 crateUsable:register()

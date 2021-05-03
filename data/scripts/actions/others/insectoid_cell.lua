@@ -11,5 +11,5 @@ function insectoidCell.onUse(player, item, fromPosition, target, toPosition, isH
 	return true
 end
 
-insectoidCell:id(14437, 14438)
+insectoidCell:id(14437, 14438) -- insectoid cell
 insectoidCell:register()

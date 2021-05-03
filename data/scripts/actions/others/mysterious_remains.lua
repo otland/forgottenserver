@@ -47,5 +47,5 @@ function mysteriousRemains.onUse(player, item, fromPosition, target, toPosition,
 	return false
 end
 
-mysteriousRemains:id(26165)
+mysteriousRemains:id(26165) -- mysterious remains
 mysteriousRemains:register()
