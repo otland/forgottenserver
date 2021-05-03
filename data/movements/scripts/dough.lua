@@ -1,5 +1,5 @@
 function onAddItem(moveitem, tileitem, position)
-	if moveitem:getId() == 2693 then -- timber wall
+	if moveitem:getId() == 2693 then -- lump of dough
 		moveitem:transform(2689) -- bread
 		position:sendMagicEffect(CONST_ME_HITBYFIRE)
 	elseif moveitem:getId() == 6277 then -- lump of cake dough

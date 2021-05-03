@@ -31,5 +31,5 @@ function goldConverter.onUse(player, item, fromPosition, target, toPosition, isH
 	return true
 end
 
-goldConverter:id(26378)
+goldConverter:id(26378) -- gold converter
 goldConverter:register()

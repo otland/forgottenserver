@@ -1,7 +1,7 @@
 local ferumbrasManaKeg = Action()
 
 function ferumbrasManaKeg.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	player:addItem(7590, 10)
+	player:addItem(7590, 10) -- great mana potion
 	item:transform(25426) -- Ferumbras' mana keg
 	item:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
 	item:decay()

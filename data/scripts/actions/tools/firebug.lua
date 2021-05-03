@@ -5,19 +5,19 @@ function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if chance > 4 then -- Success 6% chance
 		if target:getId() == 7538 then -- Destroy spider webs/North - South
 			toPosition:sendMagicEffect(CONST_ME_HITBYFIRE)
-			target:transform(7544)
+			target:transform(7544) -- the remains of a spider web
 			target:decay()
 		elseif target:getId() == 7539 then -- Destroy spider webs/East - West
 			toPosition:sendMagicEffect(CONST_ME_HITBYFIRE)
-			target:transform(7545)
+			target:transform(7545) -- the remains of a spider web
 			target:decay()
 		elseif target:getId() == 5466 then -- Burn Sugar Cane
 			toPosition:sendMagicEffect(CONST_ME_FIREAREA)
-			target:transform(5465)
+			target:transform(5465) -- burning sugar cane
 			target:decay()
 		elseif target:getId() == 1485 then -- Light up empty coal basins
 			toPosition:sendMagicEffect(CONST_ME_HITBYFIRE)
-			target:transform(1484)
+			target:transform(1484) -- coal basin
 		end
 	elseif chance == 2 then -- It removes the firebug 1% chance
 		item:remove(1)
@@ -32,5 +32,5 @@ function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-fireBug:id(5468)
+fireBug:id(5468) -- fire bug
 fireBug:register()

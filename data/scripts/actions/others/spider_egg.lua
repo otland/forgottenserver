@@ -17,5 +17,5 @@ function spiderEgg.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return true
 end
 
-spiderEgg:id(7537) --spider egg
+spiderEgg:id(7537) -- spider egg
 spiderEgg:register()

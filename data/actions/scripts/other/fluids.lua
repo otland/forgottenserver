@@ -23,7 +23,7 @@ local fluidMessage = {
 	[43] = "Aaaah..."
 }
 
-local distillery = {[5513] = 5469, [5514] = 5470}
+local distillery = {[5513] = 5469, [5514] = 5470} -- distilling machine
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target:getId())
@@ -57,7 +57,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:say(fluidMessage[item:getCount()] or "Gulp.", TALKTYPE_MONSTER_SAY)
 			item:transform(item:getId(), 0)
 		else
-			Game.createItem(2016, item:getCount(), toPosition):decay()
+			Game.createItem(2016, item:getCount(), toPosition):decay() -- pool
 			item:transform(item:getId(), 0)
 		end
 	else
@@ -77,7 +77,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			if toPosition.x == CONTAINER_POSITION then
 				toPosition = player:getPosition()
 			end
-			Game.createItem(2016, item:getSubType(), toPosition):decay()
+			Game.createItem(2016, item:getSubType(), toPosition):decay() -- pool
 			item:transform(item:getId(), 0)
 		end
 	end

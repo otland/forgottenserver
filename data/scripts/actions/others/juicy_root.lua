@@ -29,5 +29,5 @@ end
 for k, v in pairs(rootsTable) do
 	juicyRoot:id(k)
 end
-juicyRoot:id(23477, 23478)
+juicyRoot:id(23477, 23478) -- harvested root
 juicyRoot:register()

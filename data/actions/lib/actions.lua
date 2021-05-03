@@ -108,7 +108,7 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if table.contains(groundIds, ground:getId()) and ground:getActionId() == actionIds.pickHole then
-		ground:transform(392)
+		ground:transform(392) -- hole
 		ground:decay()
 		toPosition:sendMagicEffect(CONST_ME_POFF)
 
@@ -118,8 +118,8 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	-- Ice fishing hole
-	if ground:getId() == 7200 then
-		ground:transform(7236)
+	if ground:getId() == 7200 then -- fragile ice
+		ground:transform(7236) -- ice hole
 		ground:decay()
 		toPosition:sendMagicEffect(CONST_ME_HITAREA)
 		return true
@@ -198,13 +198,13 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 			local chance = math.random(100)
 			if chance >= 1 and chance <= 42 then
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You dug up a dead snake.")
-				player:addItem(3077)
+				player:addItem(3077) -- dead snake
 			elseif chance >= 43 and chance <= 79 then
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You dug up a small diamond.")
-				player:addItem(2145)
+				player:addItem(2145) -- small diamond
 			elseif chance >= 80 then
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You dug up a leech.")
-				player:addItem(20138)
+				player:addItem(20138) -- leech
 			end
 			player:setStorageValue(PlayerStorageKeys.swampDigging, os.time() + (7 * 24 * 60 * 60))
 			player:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
@@ -212,10 +212,10 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 	elseif table.contains(sandIds, groundId) then
 		local chance = math.random(1, 100)
 		if target.actionid == actionIds.sandHole and chance <= 20 then
-			ground:transform(489)
+			ground:transform(489) -- hole
 			ground:decay()
 		elseif chance == 1 then
-			Game.createItem(2159, 1, toPosition)
+			Game.createItem(2159, 1, toPosition) -- scarab coin
 			player:addAchievementProgress("Gold Digger", 100)
 		elseif chance > 95 then
 			Game.createMonster("Scarab", toPosition)
@@ -233,7 +233,7 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if target:getId() == 2739 then -- wheat
-		target:transform(2737)
+		target:transform(2737) -- wheat
 		target:decay()
 		Game.createItem(2694, 1, toPosition) -- bunch of wheat
 		player:addAchievementProgress("Happy Farmer", 200)
@@ -241,7 +241,7 @@ function onUseScythe(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if target:getId() == 5465 then -- burning sugar cane
-		target:transform(5464)
+		target:transform(5464) -- sugar cane
 		target:decay()
 		Game.createItem(5467, 1, toPosition) -- bunch of sugar cane
 		player:addAchievementProgress("Natural Sweetener", 50)
@@ -264,7 +264,7 @@ function onUseKitchenKnife(player, item, fromPosition, target, toPosition, isHot
 
 	if table.contains(fruits, target:getId()) and player:removeItem(6278, 1) then
 		target:remove(1)
-		player:addItem(6279, 1)
+		player:addItem(6279, 1) -- cake
 		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 		return true
 	end

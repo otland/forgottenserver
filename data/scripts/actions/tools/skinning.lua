@@ -119,14 +119,14 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	if type(skin[1]) == "table" then
 		local added = false
 		for _, skinChild in ipairs(skin) do
-			if chance <= skinChild.chance and not target:getId() == 13583 then
-				if target:getId() == 11343 then
+			if chance <= skinChild.chance and not target:getId() == 13583 then -- slain mutated pumpkin
+				if target:getId() == 11343 then -- piece of marble rock
 					local marble = player:addItem(skinChild.newItem, skinChild.amount or 1)
 					if marble then
 						marble:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, skinChild.desc:gsub("|PLAYERNAME|", player:getName()))
 					end
 
-					if skinChild.newItem == 11346 then
+					if skinChild.newItem == 11346 then -- beautiful marble statue
 						player:addAchievement("Marblelous")
 						player:addAchievementProgress("Marble Madness", 5)
 					end
@@ -142,7 +142,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			end
 		end
 
-		if not added and target:getId() == 11343 then
+		if not added and target:getId() == 11343 then -- piece of marble rock
 			effect = CONST_ME_HITAREA
 			player:say("Your attempt at shaping that marble rock failed miserably.", TALKTYPE_MONSTER_SAY)
 			transform = false
@@ -150,7 +150,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 		end
 	elseif chance <= skin.chance then
 		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then
-			if skin.newItem == 7446 then
+			if skin.newItem == 7446 then -- ice mammoth
 				player:addAchievement("Ice Sculptor")
 				player:addAchievementProgress("Cold as Ice", 10)
 			end
@@ -201,5 +201,5 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	return true
 end
 
-skinning:id(5908, 5942)
+skinning:id(5908, 5942) -- obsidian knife / blessed wooden stake
 skinning:register()

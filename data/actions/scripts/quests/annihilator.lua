@@ -13,7 +13,7 @@ local newPosition = {
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if item:getId() == 1945 then
+	if item:getId() == 1945 then -- lever
 		local players = {}
 		for _, position in ipairs(playerPosition) do
 			local topPlayer = Tile(position):getTopCreature()
@@ -30,7 +30,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			targetPlayer:getPosition():sendMagicEffect(CONST_ME_ENERGYAREA)
 		end
 		item:transform(1946)
-	elseif item:getId() == 1946 then
+	elseif item:getId() == 1946 then -- lever
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end
 	return true
