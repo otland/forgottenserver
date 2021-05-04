@@ -9,5 +9,5 @@ function saw.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-saw:id(2558)
+saw:id(2558) -- saw
 saw:register()

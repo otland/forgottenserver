@@ -29,7 +29,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			targetPlayer:teleportTo(newPosition[i], false)
 			targetPlayer:getPosition():sendMagicEffect(CONST_ME_ENERGYAREA)
 		end
-		item:transform(1946)
+		item:transform(1946) -- lever
 	elseif item:getId() == 1946 then -- lever
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 	end

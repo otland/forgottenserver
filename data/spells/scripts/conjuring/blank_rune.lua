@@ -1,3 +1,3 @@
 function onCastSpell(creature, variant)
-	return creature:conjureItem(0, 2260, 1)
+	return creature:conjureItem(0, 2260, 1) -- blank rune
 end

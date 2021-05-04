@@ -1,7 +1,7 @@
 local cupOfMoltenGold = Action()
 
 function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if not table.contains({2700, 21428}, target:getId()) then -- fir tree or fir cone
+	if not table.contains({2700, 21428}, target:getId()) then -- fir tree | fir cone
 		return false
 	end
 

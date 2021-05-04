@@ -4,7 +4,7 @@ function onStepOut(creature, item, position, fromPosition)
 	end
 
 	if item:getId() == 670 then -- snow
-		item:transform(6594)
+		item:transform(6594) -- snow
 	else
 		item:transform(item:getId() + 15)
 	end

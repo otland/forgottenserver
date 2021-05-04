@@ -1,6 +1,22 @@
-local liquidContainers = {1775, 2005, 2006, 2007, 2008, 2009, 2011, 2012, 2013, 2014, 2015, 2023, 2031, 2032, 2033}
+local liquidContainers = {
+	1775, -- trough
+	2005, -- bucket
+	2006, -- vial
+	2007, -- bottle
+	2008, -- vase
+	2009, -- green flask
+	2011, -- elven vase
+	2012, -- mug
+	2013, -- cup
+	2014, -- jug
+	2015, -- brown flask
+	2023, -- amphora
+	2031, -- waterskin
+	2032, -- bowl
+	2033 -- golden mug
+}
 
-local millstones = {1381, 1382, 1383, 1384}
+local millstones = {1381, 1382, 1383, 1384} -- millstone
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if item:getId() == 2692 then -- flour

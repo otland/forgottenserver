@@ -1,4 +1,4 @@
-local rootsTable = {
+local rootsTable = { -- juicy root | harvested root
 	[23475] = 23477,
 	[23476] = 23478
 }

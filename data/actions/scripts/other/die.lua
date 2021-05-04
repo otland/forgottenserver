@@ -1,4 +1,4 @@
-local depotTiles = {11062, 11063}
+local depotTiles = {11062, 11063} -- glowing switch
 
 local diceEnabledOnDepot = true
 

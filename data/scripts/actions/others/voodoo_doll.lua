@@ -18,5 +18,5 @@ function voodooDoll.onUse(player, item, fromPosition, target, toPosition, isHotk
 	return true
 end
 
-voodooDoll:id(3955)
+voodooDoll:id(3955) -- voodoo doll
 voodooDoll:register()

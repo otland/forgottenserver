@@ -1,4 +1,19 @@
-local fruits = {2673, 2674, 2675, 2676, 2677, 2678, 2679, 2680, 2681, 2682, 5097, 8839, 8840, 8841}
+local fruits = {
+	2673, -- pear
+	2674, -- red apple
+	2675, -- orange
+	2676, -- banana
+	2677, -- blueberry
+	2678, -- coconut
+	2679, -- cherry
+	2680, -- strawberry
+	2681, -- grapes
+	2682, -- melon
+	5097, -- mango
+	8839, -- plum
+	8840, -- raspberry
+	8841 -- lemon
+}
 
 local juiceSquizer = Action()
 

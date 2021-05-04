@@ -149,7 +149,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			target:remove()
 		end
 	elseif chance <= skin.chance then
-		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then
+		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then -- ice cube
 			if skin.newItem == 7446 then -- ice mammoth
 				player:addAchievement("Ice Sculptor")
 				player:addAchievementProgress("Cold as Ice", 10)
@@ -157,7 +157,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			target:transform(skin.newItem, 1)
 			effect = CONST_ME_HITAREA
 		else
-			if table.contains({5906, 5905}, skin.newItem) then
+			if table.contains({5906, 5905}, skin.newItem) then -- demon dust | vampire dust
 				player:addAchievementProgress("Ashes to Dust", 500)
 			else
 				player:addAchievementProgress("Skin-Deep", 500)
@@ -165,7 +165,7 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 			player:addItem(skin.newItem, skin.amount or 1)
 		end
 	else
-		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then
+		if table.contains({7441, 7442, 7444, 7445}, target:getId()) then -- ice cube
 			player:say("The attempt of sculpting failed miserably.", TALKTYPE_MONSTER_SAY)
 			effect = CONST_ME_HITAREA
 			target:remove()
@@ -203,5 +203,5 @@ function skinning.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	return true
 end
 
-skinning:id(5908, 5942) -- obsidian knife / blessed wooden stake
+skinning:id(5908, 5942) -- obsidian knife | blessed wooden stake
 skinning:register()

@@ -1,8 +1,60 @@
-local waterIds = {493, 4608, 4609, 4610, 4611, 4612, 4613, 4614, 4615, 4616, 4617, 4618, 4619, 4620, 4621, 4622, 4623, 4624, 4625, 7236, 10499, 15401, 15402}
-local lootTrash = {2234, 2238, 2376, 2509, 2667}
-local lootCommon = {2152, 2167, 2168, 2669, 7588, 7589}
-local lootRare = {2143, 2146, 2149, 7158, 7159}
-local lootVeryRare = {7632, 7633, 10220}
+local waterIds = {
+	493, -- water
+	4608, -- shallow water
+	4609, -- shallow water
+	4610, -- shallow water
+	4611, -- shallow water
+	4612, -- shallow water
+	4613, -- shallow water
+	4614, -- shallow water
+	4615, -- shallow water
+	4616, -- shallow water
+	4617, -- shallow water
+	4618, -- shallow water
+	4619, -- shallow water
+	4620, -- shallow water (Swimmable)
+	4621, -- shallow water (Swimmable)
+	4622, -- shallow water (Swimmable)
+	4623, -- shallow water (Swimmable)
+	4624, -- shallow water (Swimmable)
+	4625, -- shallow water (Swimmable)
+	7236, -- ice hole
+	10499, -- remains of a water elemental
+	15401, -- shallow water
+	15402 -- shallow water
+}
+
+local lootTrash = {
+	2234, -- broken sword
+	2238, -- worn leather boots
+	2376, -- sword
+	2509, -- steel shield
+	2667 -- fish
+}
+
+local lootCommon = {
+	2152, -- platinum coic
+	2167, -- energy ring
+	2168, -- life ring
+	2669, -- northern pike
+	7588, -- strong health potion
+	7589 -- strong mana potion
+}
+
+local lootRare = {
+	2143, -- white pearl
+	2146, -- small sapphire
+	2149, -- small emerald
+	7158, -- rainbow trout
+	7159 -- green perch
+}
+
+local lootVeryRare = {
+	7632, -- giant shimmering pearl
+	7633, -- giant shimmering pearl
+	10220 -- leviathan's amulet
+}
+
 local useWorms = true
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -38,7 +90,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 	end
 
-	if table.contains({493, 15402}, target:getId()) then -- water / shallow water
+	if table.contains({493, 15402}, target:getId()) then -- water | shallow water
 		return true
 	end
 

@@ -211,7 +211,23 @@ AREADIAGONAL_WALLFIELD = {
 }
 
 -- This array contains all destroyable field items
-FIELDS = {1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1500, 1501, 1502, 1503, 1504}
+FIELDS = {
+	1487, -- fire field
+	1488, -- fire field
+	1489, -- fire field
+	1490, -- poison field
+	1491, -- energy field
+	1492, -- fire field
+	1493, -- fire field
+	1494, -- fire field
+	1495, -- energy field
+	1496, -- poison field
+	1500, -- fire field
+	1501, -- fire field
+	1502, -- fire field
+	1503, -- poison gas
+	1504 -- energy field
+}
 
 function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local party = self:getParty()

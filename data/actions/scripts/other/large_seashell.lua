@@ -10,7 +10,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		doTargetCombat(0, player, COMBAT_PHYSICALDAMAGE, -200, -200, CONST_ME_NONE)
 		msg = "Ouch! You squeezed your fingers."
 	elseif chance > 16 and chance <= 64 then
-		Game.createItem(math.random(7632, 7633), 1, player:getPosition())
+		Game.createItem(math.random(7632, 7633), 1, player:getPosition()) -- giant shimmering pearl
 		msg = "You found a beautiful pearl."
 		player:addAchievementProgress("Shell Seeker", 100)
 	else

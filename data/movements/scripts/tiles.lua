@@ -1,5 +1,20 @@
-local increasing = {[416] = 417, [426] = 425, [446] = 447, [3216] = 3217, [3202] = 3215, [11062] = 11063}
-local decreasing = {[417] = 416, [425] = 426, [447] = 446, [3217] = 3216, [3215] = 3202, [11063] = 11062}
+local increasing = {
+	[416] = 417, -- stone tile
+	[426] = 425, -- stone tile
+	[446] = 447, -- wooden floor
+	[3216] = 3217, -- wooden floor
+	[3202] = 3215, -- stone floor
+	[11062] = 11063 -- glowing switch
+}
+
+local decreasing = {
+	[417] = 416, -- stone tile
+	[425] = 426, -- stone tile
+	[447] = 446, -- wooden floor
+	[3217] = 3216, -- wooden floor
+	[3215] = 3202, -- stone floor
+	[11063] = 11062 -- glowing switch
+}
 
 function onStepIn(creature, item, position, fromPosition)
 	if not increasing[item:getId()] then

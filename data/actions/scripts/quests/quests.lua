@@ -1,4 +1,9 @@
-local annihilatorReward = {1990, 2400, 2431, 2494}
+local annihilatorReward = {
+	1990, -- present
+	2400, -- magic sword
+	2431, -- stonecutter axe
+	2494 -- demon armor
+}
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if item:getUniqueId() <= 1250 or item:getUniqueId() >= 30000 then

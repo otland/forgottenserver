@@ -46,13 +46,13 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 			return false
 		end
 
-		for id = 13540, 13545 do
+		for id = 13540, 13545 do -- piece of cloth
 			if player:getItemCount(id) < 1 then
 				return false
 			end
 		end
 
-		for id = 13540, 13545 do
+		for id = 13540, 13545 do -- piece of cloth
 			player:removeItem(id, 1)
 		end
 
@@ -65,5 +65,5 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 	return true
 end
 
-afflictedOutfit:id(13540, 13541, 13542, 13543, 13544, 13545, 13925, 13926)
+afflictedOutfit:id(13540, 13541, 13542, 13543, 13544, 13545, 13925, 13926) -- piece of cloth | plague mask | plague bell
 afflictedOutfit:register()

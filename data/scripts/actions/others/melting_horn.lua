@@ -11,7 +11,7 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 		return true
 	end
 
-	if table.contains({22729, 22730, 22731}, target:getId()) then
+	if table.contains({22729, 22730, 22731}, target:getId()) then -- frozen ursagrodon | half-frozen ursagrodon | half-frozen ursagrodon
 		if math.random(100) > 32 then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The ice cracked and the frozen creature with it - be more careful next time!")
 			item:remove(1)

@@ -99,23 +99,23 @@ function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 
 	if not index then
 		local msg = ""
-		if table.contains({9808, 9809, 9810}, target:getId()) then
+		if table.contains({9808, 9809, 9810}, target:getId()) then -- rusty armor
 			msg = "The armor was already damaged so badly that it broke when you tried to clean it."
 		end
 
-		if table.contains({9811, 9812, 9813}, target:getId()) then
+		if table.contains({9811, 9812, 9813}, target:getId()) then -- rusty legs
 			msg = "The legs were already damaged so badly that they broke when you tried to clean them."
 		end
 
-		if table.contains({9814, 9815, 9816}, target:getId()) then
+		if table.contains({9814, 9815, 9816}, target:getId()) then -- rusty shield
 			msg = "The shield was already damaged so badly that it broke when you tried to clean it."
 		end
 
-		if table.contains({9817, 9818, 9819}, target:getId()) then
+		if table.contains({9817, 9818, 9819}, target:getId()) then -- rusty boots
 			msg = "The boots were already damaged so badly that they broke when you tried to clean them."
 		end
 
-		if table.contains({9820, 9821, 9822}, target:getId()) then
+		if table.contains({9820, 9821, 9822}, target:getId()) then -- rusty helmet
 			msg = "The helmet was already damaged so badly that it broke when you tried to clean it."
 		end
 
@@ -130,5 +130,5 @@ function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 	return item:remove(1)
 end
 
-rustRemover:id(9930)
+rustRemover:id(9930) -- flask of rust remover
 rustRemover:register()

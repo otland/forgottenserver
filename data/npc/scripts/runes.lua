@@ -105,10 +105,10 @@ function creatureSayCallback(cid, type, msg)
 	local player = Player(cid)
 	local vocationId = player:getVocation():getId()
 	local items = {
-		[1] = 2190,
-		[2] = 2182,
-		[5] = 2190,
-		[6] = 2182
+		[1] = 2190, -- wand of vortex
+		[2] = 2182, -- snakebite rod
+		[5] = 2190, -- wand of vortex
+		[6] = 2182 -- snakebite rod
 	}
 
 	if msgcontains(msg, "first rod") or msgcontains(msg, "first wand") then

@@ -1,4 +1,4 @@
-local machines = {
+local machines = { -- distilling machine
 	[5469] = 5513,
 	[5470] = 5514
 }

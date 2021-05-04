@@ -1,20 +1,100 @@
-local wildGrowth = {1499, 11099} -- wild growth destroyable by machete
+local wildGrowth = {1499, 11099} -- rush wood | wild growth destroyable by machete
 
-local jungleGrass = { -- grass destroyable by machete
+local jungleGrass = { -- jungle grass | grass destroyable by machete
 	[2782] = 2781,
 	[3985] = 3984,
 	[19433] = 19431
 }
 
-local groundIds = {354, 355} -- pick usable ground
+local groundIds = {354, 355} -- muddy floor | pick usable ground
 
 local sandIds = {231, 9059} -- desert sand
 
-local holeId = {294, 369, 370, 383, 392, 408, 409, 410, 427, 428, 429, 430, 462, 469, 470, 482, 484, 485, 489, 924, 1369, 3135, 3136, 4835, 4837, 7933, 7938, 8170, 8249, 8250, 8251, 8252, 8254, 8255, 8256, 8276, 8277, 8279, 8281, 8284, 8285, 8286, 8323, 8567, 8585, 8595, 8596, 8972, 9606, 9625, 13190, 14461, 19519, 21536, 23713, 26020} -- usable rope holes, for rope spots see global.lua
+local holeId = { -- usable rope holes, for rope spots see global.lua
+	294, -- pitfall
+	369, -- trapdoor
+	370, -- trapdoor
+	383, -- hole
+	392, -- hole
+	408, -- trapdoor
+	409, -- trapdoor
+	410, -- stairs
+	427, -- trapdoor
+	428, -- ladder
+	429, -- trapdoor
+	430, -- sewer grate
+	462, -- open trapdoor
+	469, -- hole
+	470, -- hole
+	482, -- hole
+	484, -- hole
+	485, -- hole
+	489, -- hole
+	924, -- trapdoor
+	1369, -- draw well
+	3135, -- ladder
+	3136, -- ladder
+	4835, -- stairs
+	4837, -- stairs
+	7933, -- hole
+	7938, -- large hole
+	8170, -- stairs
+	8249, -- hole
+	8250, -- hole
+	8251, -- hole
+	8252, -- hole
+	8254, -- hole
+	8255, -- hole
+	8256, -- large hole
+	8276, -- trapdoor
+	8277, -- trapdoor
+	8279, -- trapdoor
+	8281, -- trapdoor
+	8284, -- trapdoor
+	8285, -- trapdoor
+	8286, -- trapdoor
+	8323, -- hole
+	8567, -- hole
+	8585, -- hole
+	8595, -- trapdoor
+	8596, -- trapdoor
+	8972, -- large hole
+	9606, -- stairs
+	9625, -- open trapdoor
+	13190, -- hole
+	14461, -- insectoid hive
+	19519, -- hole
+	21536, -- hole
+	23713, -- hole
+	26020 -- hole
+}
 
-local holes = {468, 481, 483, 7932, 23712} -- holes opened by shovel
+local holes = { -- holes opened by shovel
+	468, -- stone pile
+	481, -- loose stone pile
+	483, -- loose ice pile
+	7932, -- large hole
+	23712 -- loose stone pile
+}
 
-local fruits = {2673, 2674, 2675, 2676, 2677, 2678, 2679, 2680, 2681, 2682, 2684, 2685, 5097, 8839, 8840, 8841} -- fruits to make decorated cake with knife
+local fruits = {-- fruits to make decorated cake with knife
+	2673, -- pear
+	2674, -- red apple
+	2675, -- orange
+	2676, -- banana
+	2677, -- blueberry
+	2678, -- coconut
+	2679, -- cherry
+	2680, -- strawberry
+	2681, -- grapes
+	2682, -- melon
+	2684, -- carrot
+	2685, -- tomato
+	5097, -- mango
+	8839, -- plum
+	8840, -- raspberry
+	8841 -- lemon
+}
 
 function destroyItem(player, target, toPosition)
 	if type(target) ~= "userdata" or not target:isItem() then

@@ -17,7 +17,7 @@ bullseye:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local potions = {
 	[6558] = { -- concentrated demonic blood
-		transform = {7588, 7589}, -- strong health potion / strong mana potion
+		transform = {7588, 7589}, -- strong health potion | strong mana potion
 		effect = CONST_ME_DRAWBLOOD
 	},
 	[7439] = { -- berserk potion

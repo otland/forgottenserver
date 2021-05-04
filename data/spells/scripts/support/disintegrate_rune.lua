@@ -1,4 +1,4 @@
-local corpseIds = {3058, 3059, 3060, 3061, 3064, 3065, 3066}
+local corpseIds = {3058, 3059, 3060, 3061, 3064, 3065, 3066} -- dead human
 local removalLimit = 500
 
 function onCastSpell(creature, variant, isHotkey)

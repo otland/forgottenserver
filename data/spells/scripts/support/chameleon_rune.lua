@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_OUTFIT)
-condition:setTicks(200000)
+condition:setTicks((20 + 3 * 60) * 1000)
 
 function onCastSpell(creature, variant, isHotkey)
 	local position, item = variant:getPosition()
