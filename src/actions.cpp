@@ -348,7 +348,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 {
 	if (Door* door = item->getDoor()) {
 		if (!door->canUse(player)) {
-			return RETURNVALUE_CANNOTUSETHISOBJECT;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	}
 
@@ -371,6 +371,9 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 	if (BedItem* bed = item->getBed()) {
 		if (!bed->canUse(player)) {
+			if (!player->isPremium()) {
+				return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
+			}
 			return RETURNVALUE_CANNOTUSETHISOBJECT;
 		}
 
