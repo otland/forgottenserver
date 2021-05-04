@@ -13,10 +13,10 @@
 	<talkaction words="/town" separator=" " script="teleport_to_town.lua" />
 	<talkaction words="/a" separator=" " script="teleport_ntiles.lua" />
 	<talkaction words="/info" separator=" " script="info.lua" />
-	<talkaction words="/r" separator=" " script="removething.lua" />
+	<talkaction words="/r" separator=" " script="remove_thing.lua" />
 	<talkaction words="/kick" separator=" " script="kick.lua" />
-	<talkaction words="/openserver" script="openserver.lua" />
-	<talkaction words="/closeserver" separator=" " script="closeserver.lua" />
+	<talkaction words="/openserver" script="open_server.lua" />
+	<talkaction words="/closeserver" separator=" " script="close_server.lua" />
 	<talkaction words="/B" separator=" " script="broadcast.lua" />
 	<talkaction words="/m" separator=" " script="place_monster.lua" />
 	<talkaction words="/i" separator=" " script="create_item.lua" />
@@ -27,7 +27,7 @@
 	<talkaction words="/summon" separator=" " script="place_summon.lua" />
 	<talkaction words="/chameleon" separator=" " script="chameleon.lua" />
 	<talkaction words="/addskill" separator=" " script="add_skill.lua" />
-	<talkaction words="/mccheck" script="mccheck.lua" />
+	<talkaction words="/mccheck" script="mc_check.lua" />
 	<talkaction words="/ghost" script="ghost.lua" />
 	<talkaction words="/clean" script="clean.lua" />
 	<talkaction words="/hide" script="hide.lua" />
@@ -35,18 +35,18 @@
 	<talkaction words="/raid" separator=" " script="force_raid.lua" />
 
 	<!-- Player Talkactions -->
-	<talkaction words="!buypremium" script="buyprem.lua" />
-	<talkaction words="!buyhouse" script="buyhouse.lua" />
-	<talkaction words="!sellhouse" separator=" " script="sellhouse.lua" />
-	<talkaction words="!leavehouse" script="leavehouse.lua" />
-	<talkaction words="!changesex" script="changesex.lua" />
+	<talkaction words="!buypremium" script="buy_premium.lua" />
+	<talkaction words="!buyhouse" script="buy_house.lua" />
+	<talkaction words="!sellhouse" separator=" " script="sell_house.lua" />
+	<talkaction words="!leavehouse" script="leave_house.lua" />
+	<talkaction words="!changesex" script="change_sex.lua" />
 	<talkaction words="!uptime" script="uptime.lua" />
-	<talkaction words="!deathlist" script="deathlist.lua" />
+	<talkaction words="!deathlist" script="death_list.lua" />
 	<talkaction words="!kills" script="kills.lua" />
 	<talkaction words="!online;/online" script="online.lua" />
-	<talkaction words="!serverinfo" script="serverinfo.lua" />
+	<talkaction words="!serverinfo" script="server_info.lua" />
 
 	<!-- Test Talkactions -->
-	<talkaction words="!z" separator=" " script="magiceffect.lua" />
-	<talkaction words="!x" separator=" " script="animationeffect.lua" />
+	<talkaction words="!z" separator=" " script="magic_effect.lua" />
+	<talkaction words="!x" separator=" " script="animation_effect.lua" />
 </talkactions>
