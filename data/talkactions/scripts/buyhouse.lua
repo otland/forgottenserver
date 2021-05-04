@@ -1,10 +1,12 @@
+local premiumToBuyHouse = true
+
 function onSay(player, words, param)
 	local housePrice = configManager.getNumber(configKeys.HOUSE_PRICE)
 	if housePrice == -1 then
 		return true
 	end
 
-	if not player:isPremium() then
+	if not player:isPremium() and premiumToBuyHouse then
 		player:sendCancelMessage("You need a premium account.")
 		return false
 	end
