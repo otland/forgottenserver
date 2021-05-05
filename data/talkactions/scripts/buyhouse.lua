@@ -14,7 +14,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	if not player:isPremium() and config.onlyPremium then
+	if config.onlyPremium and not player:isPremium() then
 		player:sendCancelMessage("You need a premium account.")
 		return false
 	end
