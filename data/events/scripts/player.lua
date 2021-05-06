@@ -211,3 +211,7 @@ function Player:onWrapItem(item)
 		end
 	end
 end
+
+function Player:onInventoryUpdate(item, slot, equip)
+    itemAttributes(self, item, slot, equip)
+end

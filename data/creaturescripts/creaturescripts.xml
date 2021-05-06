@@ -8,4 +8,8 @@
 	<event type="death" name="PlayerDeath" script="playerdeath.lua" />
 	<event type="death" name="DropLoot" script="droploot.lua" />
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua" />
+	
+	<!-- Custom Roll Attribute Damage -->
+	<event type="healthchange" name="rollHealth" script="attributes.lua"/>
+	<event type="manachange" name="rollMana" script="attributes.lua"/>
 </creaturescripts>

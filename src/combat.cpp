@@ -799,6 +799,19 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 
 void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params)
 {
+	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
+	if (casterPlayer) {
+		if (damage.primary.value < 0 || damage.secondary.value < 0) {
+			Player* targetPlayer = target ? target->getPlayer() : nullptr;
+			if (targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
+				damage.primary.value /= 2;
+				damage.secondary.value /= 2;
+			}
+			Combat::checkCriticalHit(casterPlayer, damage);
+			Combat::checkLeech(casterPlayer, damage);
+		}
+	}
+
 	if (caster && target && params.distanceEffect != CONST_ANI_NONE) {
 		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 	}
