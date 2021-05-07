@@ -92,7 +92,7 @@ function Player.removePremiumDays(self, days)
 end
 
 function Player.isPremium(self)
-	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
+	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM) or self:hasFlag(PlayerFlag_IsAlwaysPremium)
 end
 
 function Player.sendCancelMessage(self, message)
