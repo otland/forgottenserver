@@ -398,7 +398,7 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 {
 	if (attr == CONDITIONATTR_SKILLS) {
 		return propStream.read<int32_t>(skills[currentSkill++]);
-	} else if (attr == CONDITIONATTR_SKILLS) {
+	} else if (attr == CONDITIONATTR_SPECIALSKILLS) {
 		return propStream.read<int32_t>(specialSkills[currentSpecialSkill++]);
 	} else if (attr == CONDITIONATTR_STATS) {
 		return propStream.read<int32_t>(stats[currentStat++]);
