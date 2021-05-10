@@ -22,8 +22,6 @@
 
 #include "container.h"
 
-using DepotChest_ptr = std::shared_ptr<DepotChest>;
-
 class DepotChest final : public Container
 {
 	public:
