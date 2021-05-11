@@ -18,7 +18,7 @@ keywordHandler:addAliasKeyword({"wares"})
 keywordHandler:addAliasKeyword({"offer"})
 
 shopModule:addBuyableItem({"spellbook"}, 2175, 150, "spellbook")
-shopModule:addBuyableItem({"magic lightwand"}, 2163, 400, "magic lightwand")
+shopModule:addBuyableItem({"magic lightwand"}, 2162, 400, "magic lightwand")
 
 shopModule:addBuyableItem({"small health"}, 8704, 20, 1, "small health potion")
 shopModule:addBuyableItem({"health potion"}, 7618, 45, 1, "health potion")
@@ -31,7 +31,7 @@ shopModule:addBuyableItem({"great spirit"}, 8472, 190, 1, "great spirit potion")
 shopModule:addBuyableItem({"ultimate health"}, 8473, 310, 1, "ultimate health potion")
 shopModule:addBuyableItem({"antidote potion"}, 8474, 50, 1, "antidote potion")
 
-shopModule:addSellableItem({"normal potion flask", "normal flask"}, 7636, 5, "empty small potion flask")
+shopModule:addSellableItem({"empty potion flask", "empty flask"}, 7636, 5, "empty small potion flask")
 shopModule:addSellableItem({"strong potion flask", "strong flask"}, 7634, 10, "empty strong potion flask")
 shopModule:addSellableItem({"great potion flask", "great flask"}, 7635, 15, "empty great potion flask")
 
@@ -50,16 +50,16 @@ shopModule:addBuyableItem({"convince creature"}, 2290, 80, 1, "convince creature
 shopModule:addBuyableItem({"chameleon"}, 2291, 210, 1, "chameleon rune")
 shopModule:addBuyableItem({"disintegrate"}, 2310, 80, 3, "disintegrate rune")
 
-shopModule:addBuyableItemContainer({"bp ap"}, 2002, 8378, 2000, 1, "backpack of antidote potions")
-shopModule:addBuyableItemContainer({"bp slhp"}, 2000, 8610, 400, 1, "backpack of small health potions")
+shopModule:addBuyableItemContainer({"bp ap"}, 2002, 8474, 2000, 1, "backpack of antidote potions")
+shopModule:addBuyableItemContainer({"bp slhp"}, 2000, 8704, 400, 1, "backpack of small health potions")
 shopModule:addBuyableItemContainer({"bp hp"}, 2000, 7618, 900, 1, "backpack of health potions")
 shopModule:addBuyableItemContainer({"bp mp"}, 2001, 7620, 1000, 1, "backpack of mana potions")
 shopModule:addBuyableItemContainer({"bp shp"}, 2000, 7588, 2000, 1, "backpack of strong health potions")
 shopModule:addBuyableItemContainer({"bp smp"}, 2001, 7589, 1600, 1, "backpack of strong mana potions")
 shopModule:addBuyableItemContainer({"bp ghp"}, 2000, 7591, 3800, 1, "backpack of great health potions")
 shopModule:addBuyableItemContainer({"bp gmp"}, 2001, 7590, 2400, 1, "backpack of great mana potions")
-shopModule:addBuyableItemContainer({"bp gsp"}, 1999, 8376, 3800, 1, "backpack of great spirit potions")
-shopModule:addBuyableItemContainer({"bp uhp"}, 2000, 8377, 6200, 1, "backpack of ultimate health potions")
+shopModule:addBuyableItemContainer({"bp gsp"}, 1999, 8472, 3800, 1, "backpack of great spirit potions")
+shopModule:addBuyableItemContainer({"bp uhp"}, 2000, 8473, 6200, 1, "backpack of ultimate health potions")
 
 shopModule:addBuyableItem({"wand of vortex", "vortex"}, 2190, 500, "wand of vortex")
 shopModule:addBuyableItem({"wand of dragonbreath", "dragonbreath"}, 2191, 1000, "wand of dragonbreath")
