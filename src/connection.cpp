@@ -116,7 +116,7 @@ void Connection::accept()
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
 	try {
-		readTimer.expires_from_now(boost::posix_time::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.expires_from_now(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
 		// Read size of the first packet
@@ -161,7 +161,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	}
 
 	try {
-		readTimer.expires_from_now(boost::posix_time::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.expires_from_now(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                    std::placeholders::_1));
 
@@ -223,7 +223,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	}
 
 	try {
-		readTimer.expires_from_now(boost::posix_time::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.expires_from_now(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                    std::placeholders::_1));
 
@@ -255,7 +255,7 @@ void Connection::internalSend(const OutputMessage_ptr& msg)
 {
 	protocol->onSendMessage(msg);
 	try {
-		writeTimer.expires_from_now(boost::posix_time::seconds(CONNECTION_WRITE_TIMEOUT));
+		writeTimer.expires_from_now(std::chrono::seconds(CONNECTION_WRITE_TIMEOUT));
 		writeTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()),
 		                                     std::placeholders::_1));
 
@@ -304,7 +304,7 @@ void Connection::onWriteOperation(const boost::system::error_code& error)
 void Connection::handleTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error)
 {
 	if (error == boost::asio::error::operation_aborted) {
-		//The timer has been manually cancelled
+		//The timer has been manually canceled
 		return;
 	}
 

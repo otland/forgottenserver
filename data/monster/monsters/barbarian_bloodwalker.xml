@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="230" manacost="590">
+	<health now="305" max="305" />
+	<look type="255" head="114" body="113" legs="132" feet="94" corpse="20335" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-240" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="240" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5" />
+		<element holyPercent="20" />
+		<element energyPercent="10" />
+		<element icePercent="50" />
+		<element deathPercent="-5" />
+		<element earthPercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="YAAAHEEE!" />
+		<voice sentence="SLAUGHTER!" />
+		<voice sentence="CARNAGE!" />
+		<voice sentence="You can run but you can't hide" />
+	</voices>
+	<loot>
+		<item id="2044" chance="8280" /><!-- lamp -->
+		<item name="gold coin" countmax="12" chance="50000" />
+		<item name="battle axe" chance="6000" />
+		<item name="halberd" chance="6730" />
+		<item name="chain helmet" chance="10440" />
+		<item name="chain armor" chance="10290" />
+		<item name="ham" chance="4970" />
+		<item name="beastslayer axe" chance="390" />
+		<item name="red piece of cloth" chance="530" />
+		<item name="shard" chance="290" />
+		<item name="fur boots" chance="100" />
+		<item name="health potion" chance="950" />
+	</loot>
+</monster>

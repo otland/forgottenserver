@@ -180,9 +180,8 @@ class Player final : public Creature, public Cylinder
 		void addList() override;
 		void kickPlayer(bool displayEffect);
 
-		static uint64_t getExpForLevel(int32_t lv) {
-			lv--;
-			return ((50ULL * lv * lv * lv) - (150ULL * lv * lv) + (400ULL * lv)) / 3ULL;
+		static uint64_t getExpForLevel(uint64_t lv) {
+			return (((lv - 6ULL) * lv + 17ULL) * lv - 12ULL) / 6ULL * 100ULL;
 		}
 
 		uint16_t getStaminaMinutes() const {
@@ -605,7 +604,7 @@ class Player final : public Creature, public Cylinder
 			return pzLocked;
 		}
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 		void doAttacking(uint32_t interval) override;
 		bool hasExtraSwing() override {
 			return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());
@@ -724,6 +723,11 @@ class Player final : public Creature, public Cylinder
 				client->sendRemoveTileThing(pos, stackpos);
 			}
 		}
+		void sendRemoveTileCreature(const Creature* creature, const Position& pos, int32_t stackpos) {
+			if (client) {
+				client->sendRemoveTileCreature(creature, pos, stackpos);
+			}
+		}
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
 			if (client) {
 				client->sendUpdateTile(tile, pos);
@@ -742,7 +746,7 @@ class Player final : public Creature, public Cylinder
 		}
 		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
 			if (client) {
-				client->sendAddCreature(creature, pos, creature->getTile()->getStackposOfCreature(this, creature), isLogin);
+				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), isLogin);
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport) {
@@ -752,7 +756,7 @@ class Player final : public Creature, public Cylinder
 		}
 		void sendCreatureTurn(const Creature* creature) {
 			if (client && canSeeCreature(creature)) {
-				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
+				int32_t stackpos = creature->getTile()->getClientIndexOfCreature(this, creature);
 				if (stackpos != -1) {
 					client->sendCreatureTurn(creature, stackpos);
 				}
@@ -793,7 +797,7 @@ class Player final : public Creature, public Cylinder
 			} else if (canSeeInvisibility()) {
 				client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
 			} else {
-				int32_t stackpos = creature->getTile()->getStackposOfCreature(this, creature);
+				int32_t stackpos = creature->getTile()->getClientIndexOfCreature(this, creature);
 				if (stackpos == -1) {
 					return;
 				}
@@ -801,7 +805,7 @@ class Player final : public Creature, public Cylinder
 				if (visible) {
 					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
 				} else {
-					client->sendRemoveTileThing(creature->getPosition(), stackpos);
+					client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
 				}
 			}
 		}
@@ -1199,7 +1203,7 @@ class Player final : public Creature, public Cylinder
 		std::unordered_set<uint32_t> VIPList;
 
 		std::map<uint8_t, OpenContainer> openContainers;
-		std::map<uint32_t, DepotLocker*> depotLockerMap;
+		std::map<uint32_t, DepotLocker_ptr> depotLockerMap;
 		std::map<uint32_t, DepotChest*> depotChests;
 		std::map<uint32_t, int32_t> storageMap;
 

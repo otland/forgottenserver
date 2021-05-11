@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cliff Strider" nameDescription="a cliff strider" race="undead" experience="5700" speed="260">
+	<health now="9400" max="9400" />
+	<look type="497" corpse="17420" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-499" />
+		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-800">
+			<attribute key="shootEffect" value="largerock" />
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="cliff strider skill reducer" interval="2000" chance="10" />
+		<attack name="cliff strider electrify" range="1" interval="2000" chance="15" />
+		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1000">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="15" radius="4" target="0" min="-100" max="-300">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55" />
+	<elements>
+		<element firePercent="1" />
+		<element physicalPercent="1" />
+		<element deathPercent="40" />
+		<element icePercent="20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity earth="1" />
+		<immunity energy="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Knorrrr" />
+	</voices>
+	<loot>
+		<item name="white pearl" countmax="3" chance="9630" />
+		<item name="black pearl" chance="9090" />
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="95" chance="100000" />
+		<item name="platinum coin" countmax="10" chance="100000" />
+		<item name="red gem" chance="6110" />
+		<item name="blue gem" chance="830" />
+		<item name="giant sword" chance="620" />
+		<item name="hammer of wrath" chance="70" />
+		<item name="knight legs" chance="830" />
+		<item name="crown armor" chance="310" />
+		<item name="crusader helmet" chance="410" />
+		<item name="steel boots" chance="100" />
+		<item name="iron ore" chance="14490" />
+		<item name="magic sulphur" chance="1450" />
+		<item name="soul orb" chance="17080" />
+		<item name="sapphire hammer" chance="1350" />
+		<item name="spiked squelcher" chance="1040" />
+		<item name="great mana potion" countmax="4" chance="30950" />
+		<item name="ultimate health potion" countmax="2" chance="25260" />
+		<item name="crystal of balance" chance="2690" />
+		<item name="crystal of power" chance="720" />
+		<item name="shiny stone" chance="11280" />
+		<item name="wand of defiance" chance="2000" />
+		<item name="glacial rod" chance="1240" />
+		<item name="blue crystal shard" chance="6520" />
+		<item name="blue crystal splinter" countmax="2" chance="7970" />
+		<item name="cyan crystal fragment" chance="8070" />
+		<item name="pulverized ore" chance="15110" />
+		<item name="cliff strider claw" chance="15630" />
+		<item name="vein of ore" countmax="2" chance="18000" />
+		<item name="prismatic bolt" countmax="8" chance="9090" />
+		<item name="crystalline sword" chance="620" />
+		<item name="crystal crossbow" chance="830" />
+	</loot>
+</monster>

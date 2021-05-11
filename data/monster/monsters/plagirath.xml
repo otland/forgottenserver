@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Plagirath" nameDescription="Plagirath" race="venom" experience="50000" speed="320">
+	<health now="290000" max="290000" />
+	<look type="862" head="83" body="61" legs="98" feet="79" addons="1" corpse="25151" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1350" />
+		<attack name="earth" interval="2000" chance="20" radius="4" target="0" min="-500" max="-900">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" radius="4" range="4" target="1" min="-500" max="-900">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" length="10" spread="3" min="-1000" max="-1200">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="20" length="10" spread="0" min="-1500" max="-1900">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" radius="7" speedchange="-600" duration="20000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55">
+		<defense name="healing" interval="2000" chance="15" min="3000" max="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="30" speedchange="440" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="-25" />
+		<element energyPercent="-10" />
+		<element icePercent="10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="BOOOOOOOMMM!!!!!" />
+		<voice sentence="WITHER AND DIE!" yell="1" />
+		<voice sentence="DEATH AND DECAY!" yell="1" />
+		<voice sentence="I CAN SENSE YOUR BODIES ROOTING!" yell="1" />
+	</voices>
+	<loot>
+		<item id="25172" chance="100000" /><!-- silver token -->
+		<item id="11306" chance="3000" /><!-- sai -->
+		<item id="18411" chance="1820" /><!-- muck rod -->
+		<item id="18419" countmax="6" chance="23000" /><!-- cyan crystal fragment -->
+		<item id="18420" countmax="6" chance="23000" /><!-- red crystal fragment -->
+		<item id="18421" countmax="6" chance="23000" /><!-- green crystal fragment -->
+		<item id="2143" countmax="8" chance="12000" /><!-- white pearl -->
+		<item id="2146" countmax="9" chance="12000" /><!-- small sapphire -->
+		<item id="2148" countmax="100" chance="49000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="49000" /><!-- gold coin -->
+		<item id="2150" countmax="5" chance="10000" /><!-- small amethyst -->
+		<item id="2152" countmax="58" chance="8000" /><!-- platinum coin -->
+		<item id="25383" chance="800" /><!-- rift lance -->
+		<item id="25415" chance="500" /><!-- plague bite -->
+		<item id="25522" chance="800" /><!-- rift bow -->
+		<item id="25523" chance="800" /><!-- rift crossbow -->
+		<item id="6500" chance="11000" /><!-- demonic essence -->
+		<item id="7386" chance="5000" /><!-- mercenary sword -->
+		<item id="7632" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
+		<item id="7633" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
+		<item id="7887" chance="5000" /><!-- terra amulet -->
+		<item id="8473" countmax="15" chance="23000" /><!-- ultimate health potion -->
+		<item id="8901" chance="4000" /><!-- spellbook of warding -->
+		<item id="9970" countmax="8" chance="10000" /><!-- small topaz -->
+	</loot>
+</monster>

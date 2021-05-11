@@ -39,3 +39,5 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 
 	return true
 end
+
+ec:register()

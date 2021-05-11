@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zombie" nameDescription="a zombie" race="undead" experience="280" speed="180">
+	<health now="500" max="500" />
+	<look type="311" corpse="9875" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="manadrain" interval="2000" chance="10" target="1" range="1" min="-14" max="-23" />
+		<attack name="lifedrain" interval="2000" chance="15" target="1" range="7" min="-15" max="-24">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" target="1" range="1" min="-30" max="-49">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element firePercent="50" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity energy="1" />
+		<immunity ice="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity drunk="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Mst.... klll...." />
+		<voice sentence="Whrrrr... ssss.... mmm.... grrrrl" />
+		<voice sentence="Dnnnt... cmmm... clsrrr...." />
+		<voice sentence="Httt.... hmnnsss..." />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="65" chance="82000" />
+		<item name="life ring" chance="1000" />
+		<item name="halberd" chance="3750" />
+		<item name="mace" chance="7250" />
+		<item name="battle hammer" chance="7000" />
+		<item name="steel helmet" chance="4600" />
+		<item name="brass helmet" chance="9400" />
+		<item name="simple dress" chance="560" />
+		<item name="mana potion" chance="740" />
+		<item id="9808" chance="5680" /><!-- rusty armor (common) -->
+		<item name="half-eaten brain" chance="10000" />
+	</loot>
+</monster>

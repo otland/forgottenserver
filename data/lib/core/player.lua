@@ -239,3 +239,56 @@ function Player.depositMoney(self, amount)
 	self:setBankBalance(self:getBankBalance() + amount)
 	return true
 end
+
+function Player.removeTotalMoney(self, amount)
+	local moneyCount = self:getMoney()
+	local bankCount = self:getBankBalance()
+	if amount <= moneyCount then
+		self:removeMoney(amount)
+		return true
+	elseif amount <= (moneyCount + bankCount) then
+		if moneyCount ~= 0 then
+			self:removeMoney(moneyCount)
+			local remains = amount - moneyCount
+			self:setBankBalance(bankCount - remains)
+			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
+			return true
+		else
+			self:setBankBalance(bankCount - amount)
+			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
+			return true
+		end
+	end
+	return false
+end
+
+function Player.addLevel(self, amount, round)
+	local experience, level, amount = 0, self:getLevel(), amount or 1
+	if amount > 0 then
+		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
+	else
+		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+	end
+	return self:addExperience(experience)
+end
+
+function Player.addMagicLevel(self, value)
+	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+end
+
+function Player.addSkill(self, skillId, value, round)
+	if skillId == SKILL_LEVEL then
+		return self:addLevel(value, round)
+	elseif skillId == SKILL_MAGLEVEL then
+		return self:addMagicLevel(value)
+	end
+	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+end
+
+function Player.getWeaponType()
+	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
+	if weapon then
+		return ItemType(weapon:getId()):getWeaponType()
+	end
+	return WEAPON_NONE
+end

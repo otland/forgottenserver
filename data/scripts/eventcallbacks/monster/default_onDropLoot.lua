@@ -35,3 +35,5 @@ ec.onDropLoot = function(self, corpse)
 		end
 	end
 end
+
+ec:register()

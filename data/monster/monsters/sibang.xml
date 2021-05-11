@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="214">
+	<health now="225" max="225" />
+	<look type="118" corpse="6045" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="physical" interval="2000" chance="35" range="7" min="0" max="-55">
+			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="380" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="25" />
+		<element holyPercent="10" />
+		<element icePercent="-15" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Eeeeek! Eeeeek" />
+		<voice sentence="Huh! Huh! Huh!" />
+		<voice sentence="Ahhuuaaa!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="35" chance="88000" />
+		<item name="banana" countmax="12" chance="30000" />
+		<item name="small stone" countmax="3" chance="30000" />
+		<item name="orange" countmax="5" chance="20000" />
+		<item name="banana sash" chance="5000" />
+		<item name="coconut" countmax="3" chance="1960" />
+		<item name="melon" chance="1000" />
+		<item name="ape fur" chance="1000" />
+	</loot>
+</monster>

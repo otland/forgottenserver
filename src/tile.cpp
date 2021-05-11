@@ -378,7 +378,7 @@ void Tile::onAddTileItem(Item* item)
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
 			it->second->addItemBack(item);
-			item->setParent(this);
+			item->setParent(it->second);
 		}
 	}
 
@@ -416,7 +416,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 			int32_t index = it->second->getThingIndex(oldItem);
 			if (index != -1) {
 				it->second->replaceThing(index, newItem);
-				newItem->setParent(this);
+				newItem->setParent(it->second);
 			}
 		}
 	} else if (oldItem->hasProperty(CONST_PROP_MOVEABLE) || oldItem->getContainer()) {
@@ -534,7 +534,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 
 						const Monster* creatureMonster = tileCreature->getMonster();
 						if (!creatureMonster || !tileCreature->isPushable() ||
-						        (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
+								(creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
 							return RETURNVALUE_NOTPOSSIBLE;
 						}
 					}
@@ -1233,37 +1233,6 @@ int32_t Tile::getClientIndexOfCreature(const Player* player, const Creature* cre
 				return n;
 			} else if (player->canSeeCreature(c)) {
 				++n;
-			}
-		}
-	}
-	return -1;
-}
-
-int32_t Tile::getStackposOfCreature(const Player* player, const Creature* creature) const
-{
-	int32_t n;
-	if (ground) {
-		n = 1;
-	} else {
-		n = 0;
-	}
-
-	const TileItemVector* items = getItemList();
-	if (items) {
-		n += items->getTopItemCount();
-		if (n >= 10) {
-			return -1;
-		}
-	}
-
-	if (const CreatureVector* creatures = getCreatures()) {
-		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
-			if (c == creature) {
-				return n;
-			} else if (player->canSeeCreature(c)) {
-				if (++n >= 10) {
-					return -1;
-				}
 			}
 		}
 	}

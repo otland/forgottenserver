@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Mantassin Scout" nameDescription="a quara mantassin scout" race="blood" experience="100" speed="220" manacost="480">
+	<health now="220" max="220" />
+	<look type="72" corpse="6064" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+		<immunity lifedrain="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zuerk Pachak!" />
+		<voice sentence="Shrrrr" />
+	</voices>
+	<loot>
+		<item name="small sapphire" chance="920" />
+		<item name="gold coin" countmax="30" chance="94000" />
+		<item name="stealth ring" chance="520" />
+		<item id="2229" chance="920" /><!-- skull -->
+		<item name="two handed sword" chance="580" />
+		<item name="chain armor" chance="4761" />
+		<item name="fish fin" chance="520" />
+		<item name="mantassin tail" chance="7780" />
+	</loot>
+</monster>

@@ -63,14 +63,8 @@ enum GameState_t {
 	GAME_STATE_MAINTAIN,
 };
 
-enum LightState_t {
-	LIGHT_STATE_DAY,
-	LIGHT_STATE_NIGHT,
-	LIGHT_STATE_SUNSET,
-	LIGHT_STATE_SUNRISE,
-};
-
 static constexpr int32_t EVENT_LIGHTINTERVAL = 10000;
+static constexpr int32_t EVENT_WORLDTIMEINTERVAL = 2500;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
 static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
 
@@ -134,7 +128,7 @@ class Game
 		Monster* getMonsterByID(uint32_t id);
 
 		/**
-		  * Returns a npc based on the unique creature identifier
+		  * Returns an npc based on the unique creature identifier
 		  * \param id is the unique npc id to get a npc pointer to
 		  * \returns A NPC pointer to the npc
 		  */
@@ -189,7 +183,8 @@ class Game
 		  */
 		Player* getPlayerByAccount(uint32_t acc);
 
-		/* Place Creature on the map without sending out events to the surrounding.
+		/**
+		  * Place Creature on the map without sending out events to the surrounding.
 		  * \param creature Creature to place on the map
 		  * \param pos The position to place the creature
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
@@ -208,10 +203,11 @@ class Game
 
 		/**
 		  * Remove Creature from the map.
-		  * Removes the Creature the map
+		  * Removes the Creature from the map
 		  * \param c Creature to remove
 		  */
 		bool removeCreature(Creature* creature, bool isLogout = true);
+		void executeDeath(uint32_t creatureId);
 
 		void addCreatureCheck(Creature* creature);
 		static void removeCreatureCheck(Creature* creature);
@@ -229,7 +225,17 @@ class Game
 			return playersRecord;
 		}
 
-		LightInfo getWorldLightInfo() const;
+		LightInfo getWorldLightInfo() const {
+			return {lightLevel, lightColor};
+		}
+		void setWorldLightInfo(LightInfo lightInfo) {
+			lightLevel = lightInfo.level;
+			lightColor = lightInfo.color;
+			for (const auto& it : players) {
+				it.second->sendWorldLight(lightInfo);
+			}
+		}
+		void updateWorldLightLevel();
 
 		ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 		ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
@@ -261,7 +267,7 @@ class Game
 		  * Remove/Add item(s) with a monetary value
 		  * \param cylinder to remove the money from
 		  * \param money is the amount to remove
-		  * \param flags optional flags to modifiy the default behaviour
+		  * \param flags optional flags to modify the default behavior
 		  * \returns true if the removal was successful
 		  */
 		bool removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags = 0);
@@ -279,7 +285,7 @@ class Game
 		  * \param item is the item to transform
 		  * \param newId is the new itemid
 		  * \param newCount is the new count value, use default value (-1) to not change it
-		  * \returns true if the tranformation was successful
+		  * \returns true if the transformation was successful
 		  */
 		Item* transformItem(Item* item, uint16_t newId, int32_t newCount = -1);
 
@@ -344,7 +350,7 @@ class Game
 		void playerCloseNpcChannel(uint32_t playerId);
 		void playerReceivePing(uint32_t playerId);
 		void playerReceivePingBack(uint32_t playerId);
-		void playerAutoWalk(uint32_t playerId, const std::forward_list<Direction>& listDir);
+		void playerAutoWalk(uint32_t playerId, const std::vector<Direction>& listDir);
 		void playerStopAutoWalk(uint32_t playerId);
 		void playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos,
 		                     uint16_t fromSpriteId, const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId);
@@ -435,7 +441,7 @@ class Game
 		void checkCreatures(size_t index);
 		void checkLight();
 
-		bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field);
+		bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field, bool ignoreResistances = false);
 
 		void combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect);
 
@@ -451,12 +457,9 @@ class Game
 		static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		void startDecay(Item* item);
-		int32_t getLightHour() const {
-			return lightHour;
-		}
 
-		bool loadExperienceStages();
-		uint64_t getExperienceStage(uint32_t level);
+		int16_t getWorldTime() { return worldTime; }
+		void updateWorldTime();
 
 		void loadMotdNum();
 		void saveMotdNum() const;
@@ -557,19 +560,24 @@ class Game
 
 		ModalWindow offlineTrainingWindow { std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:" };
 
-		static constexpr int32_t LIGHT_LEVEL_DAY = 250;
-		static constexpr int32_t LIGHT_LEVEL_NIGHT = 40;
-		static constexpr int32_t SUNSET = 1305;
-		static constexpr int32_t SUNRISE = 430;
+		static constexpr uint8_t LIGHT_DAY = 250;
+		static constexpr uint8_t LIGHT_NIGHT = 40;
+		// 1h realtime   = 1day worldtime
+		// 2.5s realtime = 1min worldtime
+		// worldTime is calculated in minutes
+		static constexpr int16_t GAME_SUNRISE = 360;
+		static constexpr int16_t GAME_DAYTIME = 480;
+		static constexpr int16_t GAME_SUNSET = 1080;
+		static constexpr int16_t GAME_NIGHTTIME = 1200;
+		static constexpr float LIGHT_CHANGE_SUNRISE = static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_DAYTIME - GAME_SUNRISE)) * 100) / 100.0f;
+		static constexpr float LIGHT_CHANGE_SUNSET = static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_NIGHTTIME - GAME_SUNSET)) * 100) / 100.0f;
+
+		uint8_t lightLevel = LIGHT_DAY;
+		uint8_t lightColor = 215;
+		int16_t worldTime = 0;
 
 		GameState_t gameState = GAME_STATE_NORMAL;
 		WorldType_t worldType = WORLD_TYPE_PVP;
-
-		LightState_t lightState = LIGHT_STATE_DAY;
-		uint8_t lightLevel = LIGHT_LEVEL_DAY;
-		int32_t lightHour = SUNRISE + (SUNSET - SUNRISE) / 2;
-		// (1440 minutes/day)/(3600 seconds/day)*10 seconds event interval
-		int32_t lightHourDelta = 1400 * 10 / 3600;
 
 		ServiceManager* serviceManager = nullptr;
 

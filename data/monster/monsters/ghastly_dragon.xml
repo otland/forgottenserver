@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ghastly Dragon" nameDescription="a ghastly dragon" race="undead" experience="4600" speed="320">
+	<health now="7800" max="7800" />
+	<look type="351" corpse="11362" />
+	<targetchange interval="4000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="366" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-603" />
+		<attack name="ghastly dragon curse" interval="2000" chance="5" range="5" />
+		<attack name="poisoncondition" interval="2000" chance="10" target="1" range="5" min="-920" max="-1280">
+			<attribute key="areaEffect" value="bats" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="-80" max="-230">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" length="8" spread="3" min="-120" max="-250">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" radius="4" target="0" min="-110" max="-180">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="7" target="1" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35" />
+	<elements>
+		<element firePercent="10" />
+		<element icePercent="50" />
+		<element physicalPercent="-10" />
+		<element holyPercent="-15" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="EMBRACE MY GIFTS!" yell="1" />
+		<voice sentence="I WILL FEAST ON YOUR SOUL!" yell="1" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="33725" />
+		<item name="gold coin" countmax="100" chance="33725" />
+		<item name="gold coin" countmax="66" chance="33725" />
+		<item name="platinum coin" countmax="2" chance="29840" />
+		<item name="soul orb" chance="12170" />
+		<item name="demonic essence" chance="8920" />
+		<item name="great mana potion" countmax="2" chance="30560" />
+		<item name="terra legs" chance="3130" />
+		<item name="terra boots" chance="9510" />
+		<item name="great spirit potion" countmax="2" chance="29460" />
+		<item name="ultimate health potion" chance="24700" />
+		<item id="9810" chance="180" /><!-- rusty armor (rare) -->
+		<item name="shiny stone" chance="860" />
+		<item name="guardian boots" chance="200" />
+		<item name="Zaoan armor" chance="870" />
+		<item name="Zaoan helmet" chance="150" />
+		<item name="Zaoan shoes" chance="870" />
+		<item name="Zaoan legs" chance="1400" />
+		<item name="drakinata" chance="1470" />
+		<item name="Zaoan sword" chance="100" />
+		<item name="twin hooks" chance="15100" />
+		<item name="Zaoan halberd" chance="15020" />
+		<item name="spellweaver's robe" chance="690" />
+		<item name="ghastly dragon head" chance="6650" />
+		<item name="undead heart" chance="19830" />
+		<item name="jade hat" chance="810" />
+	</loot>
+</monster>

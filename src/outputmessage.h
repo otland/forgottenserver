@@ -90,9 +90,6 @@ class OutputMessagePool
 			return instance;
 		}
 
-		void sendAll();
-		void scheduleSendAll();
-
 		static OutputMessage_ptr getOutputMessage();
 
 		void addProtocolToAutosend(Protocol_ptr protocol);
@@ -103,6 +100,5 @@ class OutputMessagePool
 		//and relatively rarely modified (only when a client connects/disconnects)
 		std::vector<Protocol_ptr> bufferedProtocols;
 };
-
 
 #endif

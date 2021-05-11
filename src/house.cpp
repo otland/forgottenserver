@@ -90,15 +90,15 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
 		if (strRentPeriod == "yearly") {
-		    currentTime += 24 * 60 * 60 * 365;
+			currentTime += 24 * 60 * 60 * 365;
 		} else if (strRentPeriod == "monthly") {
-		    currentTime += 24 * 60 * 60 * 30;
+			currentTime += 24 * 60 * 60 * 30;
 		} else if (strRentPeriod == "weekly") {
-		    currentTime += 24 * 60 * 60 * 7;
+			currentTime += 24 * 60 * 60 * 7;
 		} else if (strRentPeriod == "daily") {
-		    currentTime += 24 * 60 * 60;
+			currentTime += 24 * 60 * 60;
 		} else {
-		    currentTime = 0;
+			currentTime = 0;
 		}
 
 		paidUntil = currentTime;
@@ -203,7 +203,7 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 			door->setAccessList(textlist);
 		}
 
-		// We dont have kick anyone
+		// We do not have to kick anyone
 		return;
 	}
 
@@ -426,7 +426,7 @@ void AccessList::parseList(const std::string& list)
 	std::istringstream listStream(list);
 	std::string line;
 
-	int lineNo = 1;
+	uint16_t lineNo = 1;
 	while (getline(listStream, line)) {
 		if (++lineNo > 100) {
 			break;

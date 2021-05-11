@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Draken Warmaster" nameDescription="a draken warmaster" race="blood" experience="2400" speed="220">
+	<health now="4150" max="4150" />
+	<look type="334" corpse="11107" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-240" max="-520">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="10" min="510" max="600">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5" />
+		<element holyPercent="5" />
+		<element deathPercent="50" />
+		<element energyPercent="5" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Attack aggrezzively! Dezztroy zze intruderzz!" />
+		<voice sentence="Hizzzzz!" />
+	</voices>
+	<loot>
+		<item name="ring of the sky" chance="180" />
+		<item name="small ruby" countmax="5" chance="1525" />
+		<item name="gold coin" countmax="100" chance="47000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="platinum coin" countmax="5" chance="50625" />
+		<item name="tower shield" chance="2035" />
+		<item name="meat" chance="30300" />
+		<item name="great health potion" countmax="3" chance="4850" />
+		<item name="ultimate health potion" chance="4020" />
+		<item name="Zaoan armor" chance="790" />
+		<item name="Zaoan shoes" chance="1900" />
+		<item name="Zaoan legs" chance="960" />
+		<item name="drakinata" chance="860" />
+		<item name="bone shoulderplate" chance="12010" />
+		<item name="warmaster's wristguards" chance="7000" />
+		<item name="Zaoan halberd" chance="7925" />
+	</loot>
+</monster>

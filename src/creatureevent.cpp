@@ -78,7 +78,7 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
-		//(happens when realoading), it is reused
+		//(happens when reloading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
 			oldEvent->copyEvent(creatureEvent.get());
 		}
@@ -102,7 +102,7 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
-		//(happens when realoading), it is reused
+		//(happens when reloading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
 			oldEvent->copyEvent(creatureEvent.get());
 		}

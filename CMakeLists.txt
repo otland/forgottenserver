@@ -10,7 +10,7 @@ add_executable(tfs ${tfs_SRC})
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set_target_properties(tfs PROPERTIES CXX_STANDARD 11)
+set_target_properties(tfs PROPERTIES CXX_STANDARD 17)
 set_target_properties(tfs PROPERTIES CXX_STANDARD_REQUIRED ON)
 
 if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
@@ -39,6 +39,7 @@ if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
 else()
     find_package(Crypto++ REQUIRED)
 endif ()
+find_package(fmt 6.1.2 REQUIRED)
 find_package(MySQL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(PugiXML REQUIRED)
@@ -60,7 +61,7 @@ else ()
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.53.0 REQUIRED COMPONENTS date_time system filesystem iostreams)
+find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system filesystem iostreams)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 target_link_libraries(tfs PRIVATE
@@ -68,6 +69,7 @@ target_link_libraries(tfs PRIVATE
         Boost::system
         Boost::filesystem
         Boost::iostreams
+        fmt::fmt
         ${CMAKE_THREAD_LIBS_INIT}
         ${Crypto++_LIBRARIES}
         ${LUA_LIBRARIES}
@@ -90,11 +92,14 @@ endif ()
 ### Git Version ###
 # Define the two required variables before including
 # the source code for watching a git repository.
-set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
-set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
-include(git_watcher)
-if (Git_FOUND)
-    add_dependencies(tfs check_git)
-    target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+option(SKIP_GIT "Skip checking for git updates" OFF)
+if(NOT SKIP_GIT)
+	set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
+	set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
+	include(git_watcher)
+	if(Git_FOUND)
+		add_dependencies(tfs check_git)
+		target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+	endif()
 endif()
 ### END  Git Version ###

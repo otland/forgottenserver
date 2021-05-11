@@ -23,6 +23,8 @@
 #include "game.h"
 #include "bed.h"
 
+#include <fmt/format.h>
+
 extern Game g_game;
 
 void IOMapSerialize::loadHouseItems(Map* map)
@@ -68,7 +70,6 @@ bool IOMapSerialize::saveHouseItems()
 {
 	int64_t start = OTSYS_TIME();
 	Database& db = Database::getInstance();
-	std::ostringstream query;
 
 	//Start the transaction
 	DBTransaction transaction;
@@ -93,8 +94,7 @@ bool IOMapSerialize::saveHouseItems()
 			size_t attributesSize;
 			const char* attributes = stream.getStream(attributesSize);
 			if (attributesSize > 0) {
-				query << house->getId() << ',' << db.escapeBlob(attributes, attributesSize);
-				if (!stmt.addRow(query)) {
+				if (!stmt.addRow(fmt::format("{:d},{:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
 					return false;
 				}
 				stream.clear();
@@ -368,5 +368,46 @@ bool IOMapSerialize::saveHouseInfo()
 		return false;
 	}
 
+	return transaction.commit();
+}
+
+bool IOMapSerialize::saveHouse(House* house)
+{
+	Database& db = Database::getInstance();
+
+	//Start the transaction
+	DBTransaction transaction;
+	if (!transaction.begin()) {
+		return false;
+	}
+
+	uint32_t houseId = house->getId();
+	
+	//clear old tile data
+	if (!db.executeQuery(fmt::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
+		return false;
+	}
+
+	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
+
+	PropWriteStream stream;
+	for (HouseTile* tile : house->getTiles()) {
+		saveTile(stream, tile);
+
+		size_t attributesSize;
+		const char* attributes = stream.getStream(attributesSize);
+		if (attributesSize > 0) {
+			if (!stmt.addRow(fmt::format("{:d},{:s}", houseId, db.escapeBlob(attributes, attributesSize)))) {
+				return false;
+			}
+			stream.clear();
+		}
+	}
+
+	if (!stmt.execute()) {
+		return false;
+	}
+
+	//End the transaction
 	return transaction.commit();
 }
