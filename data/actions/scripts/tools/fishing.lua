@@ -33,7 +33,7 @@ local lootTrash = {
 }
 
 local lootCommon = {
-	2152, -- platinum coic
+	2152, -- platinum coin
 	2167, -- energy ring
 	2168, -- life ring
 	2669, -- northern pike
