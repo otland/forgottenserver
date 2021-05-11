@@ -781,7 +781,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
-		return it->second.get();
+		return it->second;
 	}
 
 	if (!autoCreate) {
@@ -790,7 +790,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
-	return it->second.get();
+	return it->second;
 }
 
 DepotLocker* Player::getDepotLocker(uint32_t depotId)
@@ -3041,7 +3041,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					bool isOwner = false;
 
 					for (const auto& it : depotChests) {
-						if (it.second.get() == depotChest) {
+						if (it.second == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}
