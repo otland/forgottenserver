@@ -38,6 +38,7 @@ class ProtocolLuaApi final : public Protocol
 
 		void onRecvFirstMessage(NetworkMessage& msg) override;
 
+		void sendPing();
 		void sendErrorMessage(const std::string& error);
 		void sendCallbackMessage(const std::string& message);
 		void sendRequestFileExchange();

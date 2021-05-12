@@ -23,9 +23,11 @@
 #include "script.h"
 #include "configmanager.h"
 #include "game.h"
+#include "events.h"
 
 extern Scripts* g_scripts;
 extern ConfigManager g_config;
+extern Events* g_events;
 
 /*
 * List of Packets used for communication
@@ -61,13 +63,15 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	auto recvbyte = msg.get<uint16_t>();
+	std::string text = msg.getString();
+	g_events->eventMiscOnLuaApiResponse(recvbyte, text);
 
 	switch (recvbyte) {
 		case 100: {
 			apiResponse = true;
+			return;
 		}
 		case 101: {
-			std::string text = msg.getString();
 			std::string returnvalue = g_scripts->executeString(text);
 			if (!returnvalue.empty()) {
 				g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendErrorMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
@@ -78,51 +82,48 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 				"successfully executed lua code.")));
 			return;
 		}
-		case 102: {
-			g_scripts->executeString("EventCallbackData = {}; for i = 1, EVENT_CALLBACK_LAST do EventCallbackData[i] = {} end; Game.reload(RELOAD_TYPE_SCRIPTS)");
-			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
-				"successfully reloaded scripts.")));
-			return;
-		}
-		case 103: {
-			g_scripts->executeString("EventCallbackData = {}; for i = 1, EVENT_CALLBACK_LAST do EventCallbackData[i] = {} end; Game.reload(RELOAD_TYPE_SCRIPTS)");
-			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
-				"successfully reloaded scripts.")));
-			return;
-		}
-
 		default:
-			std::cout << "unhandled packet: " << recvbyte << std::endl;
 			disconnect();
 			return;
 	}
 }
 
+
 // packet 100
-void ProtocolLuaApi::sendCallbackMessage(const std::string& message)
+void ProtocolLuaApi::sendPing()
 {
+	apiResponse = false;
 	auto output = OutputMessagePool::getOutputMessage();
 	output->add<uint16_t>(100);
-	output->addString(message);
 	send(output);
 	disconnect();
 }
 
 // packet 101
-void ProtocolLuaApi::sendErrorMessage(const std::string& error)
+void ProtocolLuaApi::sendCallbackMessage(const std::string& message)
 {
 	auto output = OutputMessagePool::getOutputMessage();
 	output->add<uint16_t>(101);
+	output->addString(message);
+	send(output);
+	disconnect();
+}
+
+// packet 102
+void ProtocolLuaApi::sendErrorMessage(const std::string& error)
+{
+	auto output = OutputMessagePool::getOutputMessage();
+	output->add<uint16_t>(102);
 	output->addString(error);
 	send(output);
 	disconnect();
 }
 
-//packet 102
+//packet 103
 void ProtocolLuaApi::sendRequestFileExchange()
 {
 	auto output = OutputMessagePool::getOutputMessage();
-	output->add<uint16_t>(102);
+	output->add<uint16_t>(103);
 	send(output);
 	disconnect();
 }

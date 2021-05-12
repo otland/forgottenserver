@@ -65,6 +65,9 @@ class Events
 		// Monster
 		int32_t monsterOnDropLoot = -1;
 		int32_t monsterOnSpawn = -1;
+
+		// Misc
+		int32_t MiscOnLuaApiResponse = -1;
 	};
 
 	public:
@@ -107,6 +110,9 @@ class Events
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
 		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
+
+		// Game
+		void eventMiscOnLuaApiResponse(uint16_t recvbyte, std::string data);
 
 	private:
 		LuaScriptInterface scriptInterface;
