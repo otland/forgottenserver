@@ -1,3 +1,20 @@
+local spellbooks = {
+	2175, -- spellbook
+	6120, -- Dragha's spellbook
+	8900, -- spellbook of enlightenment
+	8901, -- spellbook of warding
+	8902, -- spellbook of mind control
+	8903, -- spellbook of lost souls
+	8904, -- spellscroll of prophecies
+	8918, -- spellbook of dark mysteries
+	16112, -- spellbook of ancient arcana
+	18401, -- spellbook of vigilance
+	22422, -- crude umbral spellbook
+	22423, -- umbral spellbook
+	22424, -- umbral master spellbook
+	23771 -- spellbook of the novice
+}
+
 local spellbook = Action()
 
 function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -18,19 +35,19 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 	for i, spell in ipairs(spells) do
 		if prevLevel ~= spell.level then
 			if i == 1 then
-				text[#text == nil and 1 or #text+1] = "Spells for Level "
+				text[not #text and 1 or #text + 1] = "Spells for Level "
 			else
-				text[#text+1] = "\nSpells for Level "
+				text[#text + 1] = "\nSpells for Level "
 			end
-			text[#text+1] = spell.level .. "\n"
+			text[#text + 1] = spell.level .. "\n"
 			prevLevel = spell.level
 		end
-		text[#text+1] = spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
+		text[#text + 1] = spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
 
 	player:showTextDialog(item:getId(), table.concat(text))
 	return true
 end
 
-spellbook:id(2175, 6120, 8900, 8901, 8902, 8903, 8904, 8918, 16112, 18401, 22422, 22423, 22424, 23771)
+spellbook:id(unpack(spellbooks))
 spellbook:register()

@@ -81,39 +81,44 @@ local config = {
 local rustRemover = Action()
 
 function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetItem = config[target.itemid]
+	local targetItem = config[target:getId()]
 	if not targetItem then
 		return true
 	end
 
-	local randomChance = math.random(10000)
 	local index = false
-
-	if targetItem[1].chance >= randomChance then -- implying first item in the table index always has the highest chance.
+	local chance = math.random(10000)
+	if targetItem[1].chance >= chance then -- implying first item in the table index always has the highest chance.
 		while not index do
 			randomIndex = math.random(#targetItem)
-			if targetItem[randomIndex].chance >= randomChance then
+			if targetItem[randomIndex].chance >= chance then
 				index = randomIndex
 			end
 		end
 	end
 
 	if not index then
-		if table.contains({9808, 9809, 9810}, target.itemid) then
+		local msg = ""
+		if table.contains({9808, 9809, 9810}, target:getId()) then -- rusty armor
 			msg = "The armor was already damaged so badly that it broke when you tried to clean it."
 		end
-		if table.contains({9811, 9812, 9813}, target.itemid) then
+
+		if table.contains({9811, 9812, 9813}, target:getId()) then -- rusty legs
 			msg = "The legs were already damaged so badly that they broke when you tried to clean them."
 		end
-		if table.contains({9814, 9815, 9816}, target.itemid) then
+
+		if table.contains({9814, 9815, 9816}, target:getId()) then -- rusty shield
 			msg = "The shield was already damaged so badly that it broke when you tried to clean it."
 		end
-		if table.contains({9817, 9818, 9819}, target.itemid) then
+
+		if table.contains({9817, 9818, 9819}, target:getId()) then -- rusty boots
 			msg = "The boots were already damaged so badly that they broke when you tried to clean them."
 		end
-		if table.contains({9820, 9821, 9822}, target.itemid) then
+
+		if table.contains({9820, 9821, 9822}, target:getId()) then -- rusty helmet
 			msg = "The helmet was already damaged so badly that it broke when you tried to clean it."
 		end
+
 		player:say(msg, TALKTYPE_MONSTER_SAY)
 		target:getPosition():sendMagicEffect(CONST_ME_BLOCKHIT)
 		target:remove()
@@ -125,5 +130,5 @@ function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 	return item:remove(1)
 end
 
-rustRemover:id(9930)
+rustRemover:id(9930) -- flask of rust remover
 rustRemover:register()

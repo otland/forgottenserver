@@ -36,5 +36,5 @@ function suspiciousSurpriseBag.onUse(player, item, fromPosition, target, toPosit
 	return false
 end
 
-suspiciousSurpriseBag:id(9108)
+suspiciousSurpriseBag:id(9108) -- suspicious surprise bag
 suspiciousSurpriseBag:register()

@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_OUTFIT)
-condition:setTicks(200000)
+condition:setTicks((20 + 3 * 60) * 1000)
 
 function onCastSpell(creature, variant, isHotkey)
 	local position, item = variant:getPosition()
@@ -14,13 +14,13 @@ function onCastSpell(creature, variant, isHotkey)
 		item = Tile(position):getTopDownItem()
 	end
 
-	if not item or item.itemid == 0 or not isMoveable(item.uid) then
+	if not item or item:getId() == 0 or not isMoveable(item:getUniqueId()) then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
 
-	condition:setOutfit({lookTypeEx = item.itemid})
+	condition:setOutfit({lookTypeEx = item:getId()})
 	creature:addCondition(condition)
 	creature:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
 	return true

@@ -1,4 +1,4 @@
-local statues = {
+local statues = { -- skill trainer statues
 	[18488] = SKILL_SWORD,
 	[18489] = SKILL_AXE,
 	[18490] = SKILL_CLUB,

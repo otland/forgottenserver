@@ -3,7 +3,7 @@ setmetatable(registerMonsterType,
 {
 	__call =
 	function(self, mtype, mask)
-		for _,parse in pairs(self) do
+		for _, parse in pairs(self) do
 			parse(mtype, mask)
 		end
 	end
@@ -77,31 +77,31 @@ registerMonsterType.corpse = function(mtype, mask)
 end
 registerMonsterType.flags = function(mtype, mask)
 	if mask.flags then
-		if mask.flags.attackable ~= nil then
+		if mask.flags.attackable then
 			mtype:isAttackable(mask.flags.attackable)
 		end
-		if mask.flags.healthHidden ~= nil then
+		if mask.flags.healthHidden then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
-		if mask.flags.boss ~= nil then
+		if mask.flags.boss then
 			mtype:isBoss(mask.flags.boss)
 		end
-		if mask.flags.convinceable ~= nil then
+		if mask.flags.convinceable then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
-		if mask.flags.illusionable ~= nil then
+		if mask.flags.illusionable then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
-		if mask.flags.hostile ~= nil then
+		if mask.flags.hostile then
 			mtype:isHostile(mask.flags.hostile)
 		end
-		if mask.flags.pushable ~= nil then
+		if mask.flags.pushable then
 			mtype:isPushable(mask.flags.pushable)
 		end
-		if mask.flags.canPushItems ~= nil then
+		if mask.flags.canPushItems then
 			mtype:canPushItems(mask.flags.canPushItems)
 		end
-		if mask.flags.canPushCreatures ~= nil then
+		if mask.flags.canPushCreatures then
 			mtype:canPushCreatures(mask.flags.canPushCreatures)
 		end
 		-- if a monster can push creatures,
@@ -217,7 +217,7 @@ registerMonsterType.loot = function(mtype, mask)
 			mtype:addLoot(parent)
 		end
 		if lootError then
-			print("[Warning - end] Monster: \"".. mtype:name() .. "\" loot could not correctly be load.")
+			print("[Warning - end] Monster: \"" .. mtype:name() .. "\" loot could not correctly be load.")
 		end
 	end
 end

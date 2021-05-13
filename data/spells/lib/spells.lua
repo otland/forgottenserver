@@ -1,6 +1,6 @@
---Pre-made areas
+-- Pre-made areas
 
---Waves
+-- Waves
 AREA_WAVE3 = {
 	{1, 1, 1},
 	{1, 1, 1},
@@ -57,7 +57,7 @@ AREA_SQUAREWAVE7 = {
 	{0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0}
 }
 
---Diagonal waves
+-- Diagonal Waves
 AREADIAGONAL_WAVE4 = {
 	{0, 0, 0, 0, 1, 0},
 	{0, 0, 0, 1, 1, 0},
@@ -81,7 +81,7 @@ AREADIAGONAL_WAVE6 = {
 	{1, 0, 0}
 }
 
---Beams
+-- Beams
 AREA_BEAM1 = {
 	{3}
 }
@@ -115,7 +115,7 @@ AREA_BEAM8 = {
 	{3}
 }
 
---Diagonal Beams
+-- Diagonal Beams
 AREADIAGONAL_BEAM5 = {
 	{1, 0, 0, 0, 0},
 	{0, 1, 0, 0, 0},
@@ -134,7 +134,7 @@ AREADIAGONAL_BEAM7 = {
 	{0, 0, 0, 0, 0, 0, 3}
 }
 
---Circles
+-- Circles
 AREA_CIRCLE2X2 = {
 	{0, 1, 1, 1, 0},
 	{1, 1, 1, 1, 1},
@@ -190,7 +190,7 @@ AREA_CIRCLE6X6 = {
 	{0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}
 }
 
---Squares
+-- Squares
 AREA_SQUARE1X1 = {
 	{1, 1, 1},
 	{1, 3, 1},
@@ -211,7 +211,23 @@ AREADIAGONAL_WALLFIELD = {
 }
 
 -- This array contains all destroyable field items
-FIELDS = {1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1500,1501,1502,1503,1504}
+FIELDS = {
+	1487, -- fire field
+	1488, -- fire field
+	1489, -- fire field
+	1490, -- poison field
+	1491, -- energy field
+	1492, -- fire field
+	1493, -- fire field
+	1494, -- fire field
+	1495, -- energy field
+	1496, -- poison field
+	1500, -- fire field
+	1501, -- fire field
+	1502, -- fire field
+	1503, -- poison gas
+	1504 -- energy field
+}
 
 function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local party = self:getParty()
@@ -302,6 +318,5 @@ function Creature:addAttributeCondition(parameters)
 			condition:setParameter(parameter.key, parameter.value)
 		end
 	end
-
 	self:addCondition(condition)
 end

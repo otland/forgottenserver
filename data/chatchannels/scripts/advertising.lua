@@ -6,7 +6,7 @@ local CHANNEL_ADVERTISING = 5
 
 local muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
 muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_ADVERTISING)
-muted:setParameter(CONDITION_PARAM_TICKS, 120000)
+muted:setParameter(CONDITION_PARAM_TICKS, 2 * 60 * 1000)
 
 function onSpeak(player, type, message)
 	if player:getAccountType() >= ACCOUNT_TYPE_GAMEMASTER then
@@ -25,6 +25,7 @@ function onSpeak(player, type, message)
 		player:sendCancelMessage("You may only place one offer in two minutes.")
 		return false
 	end
+
 	player:addCondition(muted)
 
 	if type == TALKTYPE_CHANNEL_O then

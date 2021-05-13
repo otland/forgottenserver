@@ -52,12 +52,12 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 
 	local deathRecords = 0
 	local tmpResultId = resultId
-	while tmpResultId ~= false do
+	while tmpResultId do
 		tmpResultId = result.next(resultId)
 		deathRecords = deathRecords + 1
 	end
 
-	if resultId ~= false then
+	if resultId then
 		result.free(resultId)
 	end
 
@@ -75,12 +75,12 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 			if killerGuild ~= 0 and targetGuild ~= killerGuild and isInWar(playerId, killer:getId()) then
 				local warId = false
 				resultId = db.storeQuery("SELECT `id` FROM `guild_wars` WHERE `status` = 1 AND ((`guild1` = " .. killerGuild .. " AND `guild2` = " .. targetGuild .. ") OR (`guild1` = " .. targetGuild .. " AND `guild2` = " .. killerGuild .. "))")
-				if resultId ~= false then
+				if resultId then
 					warId = result.getNumber(resultId, "id")
 					result.free(resultId)
 				end
 
-				if warId ~= false then
+				if warId then
 					db.asyncQuery("INSERT INTO `guildwar_kills` (`killer`, `target`, `killerguild`, `targetguild`, `time`, `warid`) VALUES (" .. db.escapeString(killerName) .. ", " .. db.escapeString(player:getName()) .. ", " .. killerGuild .. ", " .. targetGuild .. ", " .. os.time() .. ", " .. warId .. ")")
 				end
 			end

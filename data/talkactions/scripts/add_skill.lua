@@ -11,9 +11,8 @@ local function getSkillId(skillName)
 		return SKILL_SHIELD
 	elseif skillName:sub(1, 4) == "fish" then
 		return SKILL_FISHING
-	else
-		return SKILL_FIST
 	end
+	return SKILL_FIST
 end
 
 function onSay(player, words, param)

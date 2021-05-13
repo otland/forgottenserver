@@ -587,13 +587,13 @@
 	</distance>
 
 	<!-- Ammunition -->
-	<distance id="1294" breakchance="3" /> <!-- small stone -->
-	<distance id="2111" action="removecount" /> <!-- snowball -->
-	<distance id="2389" breakchance="3" /> <!-- spear -->
-	<distance id="2399" breakchance="10" /> <!-- throwing star -->
-	<distance id="2410" breakchance="7" /> <!-- throwing knife -->
-	<distance id="2543" action="removecount" /> <!-- bolt -->
-	<distance id="2544" action="removecount" /> <!-- arrow -->
+	<distance id="1294" breakchance="3" /> <!-- Small Stone -->
+	<distance id="2111" action="removecount" /> <!-- Snowball -->
+	<distance id="2389" breakchance="3" /> <!-- Spear -->
+	<distance id="2399" breakchance="10" /> <!-- Throwing Star -->
+	<distance id="2410" breakchance="7" /> <!-- Throwing Knife -->
+	<distance id="2543" action="removecount" /> <!-- Bolt -->
+	<distance id="2544" action="removecount" /> <!-- Arrow -->
 	<distance id="2545" action="removecount" script="poison_arrow.lua" />
 	<distance id="2546" action="removecount" script="burst_arrow.lua" />
 	<distance id="2547" action="removecount" unproperly="1" level="55" /> <!-- Power Bolt -->
@@ -612,12 +612,12 @@
 	<distance id="7850" action="removecount" unproperly="1" level="20" /> <!-- Earth Arrow -->
 	<distance id="15648" action="removecount" unproperly="1" level="30" /> <!-- Tarsal Arrow -->
 	<distance id="15649" action="removecount" unproperly="1" level="40" /> <!-- Vortex Bolt -->
-	<distance id="18303" action="removecount" /> <!-- crystal bolt -->
+	<distance id="18303" action="removecount" /> <!-- Crystal Bolt -->
 	<distance id="18304" action="removecount" unproperly="1" level="90" /> <!-- Crystalline Arrow -->
 	<distance id="18435" action="removecount" unproperly="1" level="90" /> <!-- Prismatic Bolt -->
 	<distance id="18436" action="removecount" unproperly="1" level="70" /> <!-- Drill Bolt -->
 	<distance id="18437" action="removecount" unproperly="1" level="70" /> <!-- Envenomed Arrow -->
 	<distance id="23529" breakchance="31" unproperly="1" level="60" /> <!-- Glooth Spear -->
 	<distance id="23839" action="removecount" unproperly="0" level="1" /> <!-- Simple Arrow -->
-	<distance id="25526" breakchance="10" /> <!-- throwing star of Sula -->
+	<distance id="25526" breakchance="10" /> <!-- Throwing Star of Sula -->
 </weapons>

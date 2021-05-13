@@ -46,5 +46,5 @@ function surpriseCube.onUse(player, item, fromPosition, target, toPosition, isHo
 	return false
 end
 
-surpriseCube:id(26144)
+surpriseCube:id(26144) -- surprise cube
 surpriseCube:register()

@@ -20,7 +20,7 @@ function spell.onCastSpell(creature, variant, isHotkey)
 end
 
 spell:name("test rune")
-spell:runeId(2275)
+spell:runeId(2275) -- spell rune
 spell:id(220)
 spell:level(20)
 spell:magicLevel(5)

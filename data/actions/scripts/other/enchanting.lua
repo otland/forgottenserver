@@ -145,6 +145,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendCancelMessage(RETURNVALUE_NOTENOUGHSOUL)
 			return true
 		end
+
 		player:addSoul(-items.valuables.soul)
 		player:addMana(-items.valuables.mana)
 		player:addManaSpent(items.valuables.mana)

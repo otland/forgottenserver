@@ -520,31 +520,31 @@ end
 
 function isAchievementSecret(ach)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
+
 	if not achievement then
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
 	end
-
 	return achievement.secret
 end
 
 function Player.hasAchievement(self, ach)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
+
 	if not achievement then
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
 	end
-
 	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
 end
 
@@ -560,11 +560,12 @@ end
 
 function Player.addAchievement(self, ach, hideMsg)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
+
 	if not achievement then
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
@@ -581,11 +582,12 @@ end
 
 function Player.removeAchievement(self, ach)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
+
 	if not achievement then
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
@@ -648,9 +650,9 @@ function Player.getAchievementPoints(self)
 end
 
 function Player.addAchievementProgress(self, ach, value)
-	local achievement = tonumber(ach) ~= nil and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
+	local achievement = tonumber(ach) and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
 	if not achievement then
-		print('[!] -> Invalid achievement "' .. ach .. '".')
+		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return true
 	end
 

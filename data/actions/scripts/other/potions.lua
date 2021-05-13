@@ -17,7 +17,7 @@ bullseye:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local potions = {
 	[6558] = { -- concentrated demonic blood
-		transform = {7588, 7589},
+		transform = {7588, 7589}, -- strong health potion | strong mana potion
 		effect = CONST_ME_DRAWBLOOD
 	},
 	[7439] = { -- berserk potion
@@ -142,11 +142,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	elseif potion.transform then
 		local reward = potion.transform[math.random(#potion.transform)]
 		if fromPosition.x == CONTAINER_POSITION then
-			local targetContainer = Container(item:getParent().uid)
+			local targetContainer = Container(item:getParent():getUniqueId())
 			targetContainer:addItem(reward, 1)
 		else
 			Game.createItem(reward, 1, fromPosition)
 		end
+
 		item:getPosition():sendMagicEffect(potion.effect)
 		item:remove(1)
 		return true

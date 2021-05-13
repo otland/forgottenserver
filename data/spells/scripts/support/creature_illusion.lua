@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_OUTFIT)
-condition:setTicks(180000)
+condition:setTicks(2 * 60 * 1000)
 
 function onCastSpell(creature, variant)
 	local returnValue = RETURNVALUE_NOERROR

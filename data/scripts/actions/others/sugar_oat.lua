@@ -1,4 +1,4 @@
-local machines = {
+local machines = { -- distilling machine
 	[5469] = 5513,
 	[5470] = 5514
 }
@@ -6,19 +6,18 @@ local machines = {
 local sugarOat = Action()
 
 function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local targetId = target.itemid
-	if targetId == 2694 then
+	if target:getId() == 2694 then -- bunch of wheat
 		if toPosition.x ~= CONTAINER_POSITION then
-			Game.createItem(13939, 1, toPosition)
+			Game.createItem(13939, 1, toPosition) -- sugar oat
 		else
-			player:addItem(13939, 1)
+			player:addItem(13939, 1) -- sugar oat
 			toPosition = player:getPosition()
 		end
 		toPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 		item:remove(1)
 		target:remove(1)
 	else
-		local machine = machines[targetId]
+		local machine = machines[target:getId()]
 		if machine then
 			target:transform(machine)
 			target:decay()
@@ -30,5 +29,5 @@ function sugarOat.onUse(player, item, fromPosition, target, toPosition, isHotkey
 	return true
 end
 
-sugarOat:id(5467)
+sugarOat:id(5467) -- bunch of sugar cane
 sugarOat:register()

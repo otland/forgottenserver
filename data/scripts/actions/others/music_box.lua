@@ -79,10 +79,9 @@ function musicBox.onUse(player, item, fromPosition, target, toPosition, isHotkey
 
 	target:say(monsterConfig.sound, TALKTYPE_MONSTER_SAY)
 	target:remove()
-
 	item:remove(1)
 	return true
 end
 
-musicBox:id(18511)
+musicBox:id(18511) -- music box
 musicBox:register()

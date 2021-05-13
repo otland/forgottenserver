@@ -3,9 +3,8 @@ local function hasPendingReport(name, targetName, reportType)
 	if f then
 		io.close(f)
 		return true
-	else
-		return false
 	end
+	return false
 end
 
 local ec = EventCallback

@@ -13,9 +13,11 @@ function onStepIn(creature, item, position, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end
+
 	for i = 1, #conditions do
 		creature:removeCondition(conditions[i])
 	end
+
 	creature:addAchievementProgress("Waverider", 100000)
 	creature:addCondition(condition)
 	return true

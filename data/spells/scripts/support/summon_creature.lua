@@ -6,7 +6,6 @@ function onCastSpell(creature, variant)
 
 	local monsterName = variant:getString()
 	local monsterType = MonsterType(monsterName)
-
 	if not monsterType then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)

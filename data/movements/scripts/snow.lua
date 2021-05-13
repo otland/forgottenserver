@@ -3,11 +3,12 @@ function onStepOut(creature, item, position, fromPosition)
 		return true
 	end
 
-	if item:getId() == 670 then
-		item:transform(6594)
+	if item:getId() == 670 then -- snow
+		item:transform(6594) -- snow
 	else
-		item:transform(item.itemid + 15)
+		item:transform(item:getId() + 15)
 	end
+
 	creature:addAchievementProgress("Snowbunny", 10000)
 	item:decay()
 	return true

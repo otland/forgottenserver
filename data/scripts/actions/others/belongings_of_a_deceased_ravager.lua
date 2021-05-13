@@ -18,6 +18,7 @@ function belongingsRavager.onUse(player, item, fromPosition, target, toPosition,
 			if type(count) == "table" then
 				count = math.random(count[1], count[2])
 			end
+
 			player:addItem(gift, count)
 
 			local itemType = ItemType(gift)
@@ -31,5 +32,5 @@ function belongingsRavager.onUse(player, item, fromPosition, target, toPosition,
 	return false
 end
 
-belongingsRavager:id(23704)
+belongingsRavager:id(23704) -- belongings of a deceased (The Ravager)
 belongingsRavager:register()

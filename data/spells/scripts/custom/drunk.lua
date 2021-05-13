@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_DRUNK)
-condition:setParameter(CONDITION_PARAM_TICKS, 20000)
+condition:setParameter(CONDITION_PARAM_TICKS, 20 * 1000)
 
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_RED)

@@ -36,5 +36,5 @@ function surpriseNest.onUse(player, item, fromPosition, target, toPosition, isHo
 	return false
 end
 
-surpriseNest:id(16102)
+surpriseNest:id(16102) -- surprise nest
 surpriseNest:register()

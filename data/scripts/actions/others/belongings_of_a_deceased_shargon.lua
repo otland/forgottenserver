@@ -17,6 +17,7 @@ function belongingsShargon.onUse(player, item, fromPosition, target, toPosition,
 			if type(count) == "table" then
 				count = math.random(count[1], count[2])
 			end
+
 			player:addItem(gift, count)
 
 			local itemType = ItemType(gift)
@@ -30,5 +31,5 @@ function belongingsShargon.onUse(player, item, fromPosition, target, toPosition,
 	return false
 end
 
-belongingsShargon:id(23705)
+belongingsShargon:id(23705) -- belongings of a deceased (Death Priest Shargon)
 belongingsShargon:register()

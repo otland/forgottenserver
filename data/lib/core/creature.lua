@@ -2,7 +2,7 @@ function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReacha
 	maxRadius = maxRadius or 1
 
 	-- backward compatability (extended)
-	if maxRadius == true then
+	if maxRadius then
 		maxRadius = 2
 	end
 
@@ -74,7 +74,6 @@ function Creature:setMonsterOutfit(monster, time)
 	condition:setOutfit(monsterType:getOutfit())
 	condition:setTicks(time)
 	self:addCondition(condition)
-
 	return true
 end
 
@@ -90,7 +89,6 @@ function Creature:setItemOutfit(item, time)
 	})
 	condition:setTicks(time)
 	self:addCondition(condition)
-
 	return true
 end
 
@@ -106,7 +104,6 @@ function Creature:addSummon(monster)
 	summon:setSkillLoss(false)
 	summon:setMaster(self)
 	summon:getPosition():notifySummonAppear(summon)
-
 	return true
 end
 
@@ -121,7 +118,6 @@ function Creature:removeSummon(monster)
 	summon:setDropLoot(true)
 	summon:setSkillLoss(true)
 	summon:setMaster(nil)
-
 	return true
 end
 
@@ -139,7 +135,6 @@ function Creature:addDamageCondition(target, type, list, damage, period, rounds)
 		while value < damage do
 			value = math.floor(10 * math.pow(1.2, exponent) + 0.5)
 			condition:addDamage(1, period or 4000, -value)
-
 			if value >= damage then
 				local permille = math.random(10, 1200) / 1000
 				condition:addDamage(1, period or 4000, -math.max(1, math.floor(value * permille + 0.5)))

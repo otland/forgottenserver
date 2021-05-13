@@ -17,7 +17,6 @@ ec.onLook = function(self, thing, position, distance, description)
 			end
 
 			local itemType = thing:getType()
-
 			local transformEquipId = itemType:getTransformEquipId()
 			local transformDeEquipId = itemType:getTransformDeEquipId()
 			if transformEquipId ~= 0 then

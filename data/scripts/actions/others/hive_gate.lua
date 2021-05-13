@@ -12,7 +12,7 @@ function hiveGateHorizontal.onUse(player, item, fromPosition, target, toPosition
 	return true
 end
 
-hiveGateHorizontal:id(14755, 14756, 14757, 14758, 14759, 14760)
+hiveGateHorizontal:id(14755, 14756, 14757, 14758, 14759, 14760) -- hive gate
 hiveGateHorizontal:register()
 
 local hiveGateVertical = Action()
@@ -29,5 +29,5 @@ function hiveGateVertical.onUse(player, item, fromPosition, target, toPosition, 
 	return true
 end
 
-hiveGateVertical:id(14767, 14768, 14769, 14770, 14771)
+hiveGateVertical:id(14767, 14768, 14769, 14770, 14771) -- hive gate
 hiveGateVertical:register()

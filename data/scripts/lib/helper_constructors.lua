@@ -46,7 +46,6 @@ for _, class in ipairs(classes) do
 				obj:register()
 			end
 		end
-
 		return obj
 	end
 end

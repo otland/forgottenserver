@@ -34,5 +34,5 @@ function gooeyMass.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return false
 end
 
-gooeyMass:id(15572)
+gooeyMass:id(15572) -- gooey masses
 gooeyMass:register()

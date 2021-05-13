@@ -1,5 +1,5 @@
 local condition = Condition(CONDITION_OUTFIT)
-condition:setParameter(CONDITION_PARAM_TICKS, 20000)
+condition:setParameter(CONDITION_PARAM_TICKS, 20 * 1000)
 condition:setOutfit(0, 230, 0, 0, 0, 0)
 condition:setOutfit(0, 231, 0, 0, 0, 0)
 condition:setOutfit(0, 232, 0, 0, 0, 0)

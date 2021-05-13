@@ -7,7 +7,7 @@ function onUpdateDatabase()
 	db.query("ALTER TABLE `player_storage` ADD PRIMARY KEY (`player_id`, `key`)")
 
 	local resultId = db.storeQuery("SELECT `players`.`id` AS `player_id`, `players`.`rank_id` AS `rank_id`, `players`.`guildnick` AS `guild_nick`, `guild_ranks`.`guild_id` AS `guild_id` FROM `guild_ranks` INNER JOIN `players` ON `guild_ranks`.`id` = `players`.`rank_id`")
-	if resultId ~= false then
+	if resultId then
 		local stmt = "INSERT INTO `guild_membership` (`player_id`, `guild_id`, `rank_id`, `nick`) VALUES "
 		repeat
 			stmt = stmt .. "(" .. result.getNumber(resultId, "player_id") .. "," .. result.getNumber(resultId, "guild_id") .. "," .. result.getNumber(resultId, "rank_id") .. "," .. db.escapeString(result.getString(resultId, "guild_nick")) .. "),"

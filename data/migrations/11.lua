@@ -3,7 +3,6 @@ function onUpdateDatabase()
 
 	local motdNum = ""
 	local motd = ""
-
 	local lastMotdFile = io.open("lastMotd.txt", "r")
 	if lastMotdFile then
 		motdNum = lastMotdFile:read()
@@ -12,7 +11,6 @@ function onUpdateDatabase()
 	end
 
 	local record = 0
-
 	local playersRecordFile = io.open("playersRecord.txt", "r")
 	if playersRecordFile then
 		record = playersRecordFile:read("*n")

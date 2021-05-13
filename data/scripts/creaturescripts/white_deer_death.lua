@@ -3,9 +3,9 @@ local config = {
 	{chance = 100, monster = "Desperate White Deer", message = "The white deer desperately tries to escape!"}
 }
 
-local creatureevent = CreatureEvent("WhiteDeerDeath")
+local whiteDeer = CreatureEvent("WhiteDeerDeath")
 
-function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+function whiteDeer.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	local targetMonster = creature:getMonster()
 	if not targetMonster or targetMonster:getMaster() then
 		return true
@@ -25,4 +25,4 @@ function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastH
 	return true
 end
 
-creatureevent:register()
+whiteDeer:register()

@@ -1,29 +1,26 @@
 function Party:onJoin(player)
 	if hasEventCallback(EVENT_CALLBACK_ONJOIN) then
 		return EventCallback(EVENT_CALLBACK_ONJOIN, self, player)
-	else
-		return true
 	end
+	return true
 end
 
 function Party:onLeave(player)
 	if hasEventCallback(EVENT_CALLBACK_ONLEAVE) then
 		return EventCallback(EVENT_CALLBACK_ONLEAVE, self, player)
-	else
-		return true
 	end
+	return true
 end
 
 function Party:onDisband()
 	if hasEventCallback(EVENT_CALLBACK_ONDISBAND) then
 		return EventCallback(EVENT_CALLBACK_ONDISBAND, self)
-	else
-		return true
 	end
+	return true
 end
 
 function Party:onShareExperience(exp)
-	local sharedExperienceMultiplier = 1.20 --20%
+	local sharedExperienceMultiplier = 1.20 -- 20%
 	local vocationsIds = {}
 	local rawExp = exp
 

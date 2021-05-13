@@ -2,9 +2,7 @@ local foodCondition = Condition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 
 function Player.feed(self, food)
 	local condition = self:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
-	if condition then
-		condition:setTicks(condition:getTicks() + (food * 1000))
-	else
+	if not condition then
 		local vocation = self:getVocation()
 		if not vocation then
 			return nil
@@ -17,7 +15,10 @@ function Player.feed(self, food)
 		foodCondition:setParameter(CONDITION_PARAM_MANATICKS, vocation:getManaGainTicks() * 1000)
 
 		self:addCondition(foodCondition)
+		return true
 	end
+
+	condition:setTicks(condition:getTicks() + (food * 1000))
 	return true
 end
 
@@ -80,26 +81,26 @@ function Player.removePremiumTime(self, seconds)
 end
 
 function Player.getPremiumDays(self)
-	return math.floor(self:getPremiumTime() / 86400)
+	return math.floor(self:getPremiumTime() / (24 * 60 * 60))
 end
 
 function Player.addPremiumDays(self, days)
-	return self:addPremiumTime(days * 86400)
+	return self:addPremiumTime(days * 24 * 60 * 60)
 end
 
 function Player.removePremiumDays(self, days)
-	return self:removePremiumTime(days * 86400)
+	return self:removePremiumTime(days * 24 * 60 * 60)
 end
 
 function Player.isPremium(self)
 	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
 end
 
-function Player.sendCancelMessage(self, message)
-	if type(message) == "number" then
-		message = Game.getReturnMessage(message)
+function Player.sendCancelMessage(self, text)
+	if type(text) == "number" then
+		text = Game.getReturnMessage(text)
 	end
-	return self:sendTextMessage(MESSAGE_STATUS_SMALL, message)
+	return self:sendTextMessage(MESSAGE_STATUS_SMALL, text)
 end
 
 function Player.isUsingOtClient(self)
@@ -247,17 +248,17 @@ function Player.removeTotalMoney(self, amount)
 		self:removeMoney(amount)
 		return true
 	elseif amount <= (moneyCount + bankCount) then
-		if moneyCount ~= 0 then
-			self:removeMoney(moneyCount)
-			local remains = amount - moneyCount
-			self:setBankBalance(bankCount - remains)
-			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
-			return true
-		else
+		if moneyCount == 0 then
 			self:setBankBalance(bankCount - amount)
 			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
 			return true
 		end
+
+		self:removeMoney(moneyCount)
+		local remains = amount - moneyCount
+		self:setBankBalance(bankCount - remains)
+		self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
+		return true
 	end
 	return false
 end

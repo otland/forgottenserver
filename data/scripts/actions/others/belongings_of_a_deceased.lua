@@ -44,6 +44,7 @@ function belongings.onUse(player, item, fromPosition, target, toPosition, isHotk
 				if type(count) == "table" then
 					count = math.random(count[1], count[2])
 				end
+
 				player:addItem(gift, count)
 
 				local itemType = ItemType(gift)
@@ -60,5 +61,5 @@ function belongings.onUse(player, item, fromPosition, target, toPosition, isHotk
 	return false
 end
 
-belongings:id(13670)
+belongings:id(13670) -- belongings of a deceased
 belongings:register()

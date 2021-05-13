@@ -43,5 +43,5 @@ function shaggyBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return false
 end
 
-shaggyBag:id(25419)
+shaggyBag:id(25419) -- shaggy ogre bag
 shaggyBag:register()

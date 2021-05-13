@@ -35,5 +35,5 @@ function gloothBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 	return false
 end
 
-gloothBag:id(23574)
+gloothBag:id(23574) -- glooth bag
 gloothBag:register()

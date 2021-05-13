@@ -10,15 +10,14 @@ local config = {
 local gnomishVoucher = Action()
 
 function gnomishVoucher.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local useItem = config[item.itemid]
+	local useItem = config[item:getId()]
 	local looktype = player:getSex() == PLAYERSEX_FEMALE and useItem.female or useItem.male
 	if useItem.addon then
-		if not player:isPremium()
-				or not player:hasOutfit(looktype)
-				or player:hasOutfit(looktype, useItem.addon) then
+		if not player:isPremium() or not player:hasOutfit(looktype) or player:hasOutfit(looktype, useItem.addon) then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You own no premium account, lack the base outfit or already own this outfit part.")
 			return true
 		end
+
 		player:addOutfitAddon(useItem.female, useItem.addon)
 		player:addOutfitAddon(useItem.male, useItem.addon)
 		player:getPosition():sendMagicEffect(useItem.effect)
@@ -31,6 +30,7 @@ function gnomishVoucher.onUse(player, item, fromPosition, target, toPosition, is
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You own no premium account or already own this outfit part.")
 			return true
 		end
+
 		player:addOutfit(useItem.female)
 		player:addOutfit(useItem.male)
 		player:getPosition():sendMagicEffect(useItem.effect)

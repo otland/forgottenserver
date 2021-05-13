@@ -15,6 +15,5 @@ function onSay(player, words, param)
 	else
 		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Raid started.")
 	end
-
 	return false
 end
