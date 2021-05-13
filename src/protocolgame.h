@@ -321,8 +321,8 @@ class ProtocolGame final : public Protocol
 		struct Viewport {
 			int x = Map::maxClientViewportX;
 			int y = Map::maxClientViewportY;
-			int width = Map::getWidth();
-			int height = Map::getHeight();
+			int width = (x * 2) + 2;
+			int height = (y * 2) + 2;
 		} viewport;
 
 		std::unordered_set<uint32_t> knownCreatureSet;
