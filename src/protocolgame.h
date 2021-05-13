@@ -318,13 +318,6 @@ class ProtocolGame final : public Protocol
 			g_dispatcher.addTask(createTask(delay, std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
 		}
 
-		struct Viewport {
-			int x = Map::maxClientViewportX;
-			int y = Map::maxClientViewportY;
-			int width = (x * 2) + 2;
-			int height = (y * 2) + 2;
-		} viewport;
-
 		std::unordered_set<uint32_t> knownCreatureSet;
 		Player* player = nullptr;
 
