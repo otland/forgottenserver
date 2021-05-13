@@ -25,6 +25,7 @@
 #include "creature.h"
 #include "tasks.h"
 
+class Map;
 class NetworkMessage;
 class Player;
 class Game;
@@ -316,6 +317,13 @@ class ProtocolGame final : public Protocol
 		void addGameTaskTimed(uint32_t delay, Callable&& function, Args&&... args) {
 			g_dispatcher.addTask(createTask(delay, std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
 		}
+
+		struct Viewport {
+			int x = Map::maxClientViewportX;
+			int y = Map::maxClientViewportY;
+			int width = Map::getWidth();
+			int height = Map::getHeight();
+		} viewport;
 
 		std::unordered_set<uint32_t> knownCreatureSet;
 		Player* player = nullptr;
