@@ -93,6 +93,7 @@ yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
+showPlayerLogInConsole = true
 
 -- VIP
 vipFreeLimit = 20
