@@ -25,7 +25,6 @@
 #include "creature.h"
 #include "tasks.h"
 
-class Map;
 class NetworkMessage;
 class Player;
 class Game;
