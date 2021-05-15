@@ -976,7 +976,7 @@ void Monster::onThinkDefense(uint32_t interval)
 					summon->setSkillLoss(false);
 					summon->setMaster(this);
 
-					if (isSummon()) {
+					if (summon->isSummon()) {
 						summon->mType->info.canPushCreatures = canPushCreatures();
 						summon->mType->info.canPushItems = canPushItems();
 					}
