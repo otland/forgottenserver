@@ -1027,9 +1027,9 @@ void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 	return scriptInterface.callVoidFunction(2);
 }
 
-void Events::eventMiscOnLuaApiResponse(uint16_t recvbyte, std::string data)
+void Events::eventMiscOnLuaApiResponse(uint16_t recvbyte, const std::string& name, const std::string& data)
 {
-	// onLuaApiResponse(recvbyte, data)
+	// onLuaApiResponse(recvbyte, name, data)
 	if (info.MiscOnLuaApiResponse == -1) {
 		return;
 	}
@@ -1046,8 +1046,9 @@ void Events::eventMiscOnLuaApiResponse(uint16_t recvbyte, std::string data)
 	scriptInterface.pushFunction(info.MiscOnLuaApiResponse);
 
 	lua_pushnumber(L, recvbyte);
+	LuaScriptInterface::pushString(L, name);
 	LuaScriptInterface::pushString(L, data);
 	
-	return scriptInterface.callVoidFunction(2);
+	return scriptInterface.callVoidFunction(3);
 }
 

@@ -30,7 +30,7 @@ class Scripts
 		~Scripts();
 
 		bool loadScripts(std::string folderName, bool isLib, bool reload);
-		std::string executeString(const std::string text);
+		std::string executeString(const std::string& text, const std::string& fileName);
 		LuaScriptInterface& getScriptInterface() {
 			return scriptInterface;
 		}

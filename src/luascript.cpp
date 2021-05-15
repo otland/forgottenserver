@@ -340,7 +340,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 	return 0;
 }
 
-std::string LuaScriptInterface::loadString(const std::string& string)
+std::string LuaScriptInterface::loadString(const std::string& string, const std::string& fileName)
 {
 	//loads string as a chunk at stack top
 	int ret = luaL_loadstring(luaState, string.c_str());
@@ -354,6 +354,8 @@ std::string LuaScriptInterface::loadString(const std::string& string)
 		return "not handled";
 	}
 
+	loadingFile = "lua api: " + fileName;
+
 	if (!reserveScriptEnv()) {
 		return "not handled";
 	}
@@ -365,8 +367,7 @@ std::string LuaScriptInterface::loadString(const std::string& string)
 	ret = protectedCall(luaState, 0, 0);
 	if (ret != 0) {
 		lastLuaError = popString(luaState);
-		std::cout << "[lua protocol API]" << std::endl;
-		std::cout << lastLuaError << std::endl;
+		reportError(nullptr, lastLuaError);
 		resetScriptEnv();
 		return lastLuaError;
 	}

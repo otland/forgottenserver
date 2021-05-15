@@ -112,7 +112,7 @@ class Events
 		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
 
 		// Game
-		void eventMiscOnLuaApiResponse(uint16_t recvbyte, std::string data);
+		void eventMiscOnLuaApiResponse(uint16_t recvbyte, const std::string& name, const std::string& data);
 
 	private:
 		LuaScriptInterface scriptInterface;

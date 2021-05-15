@@ -43,6 +43,13 @@ class ProtocolLuaApi final : public Protocol
 		void sendCallbackMessage(const std::string& message);
 		void sendRequestFileExchange();
 
+		void setResponse(bool response) {
+			apiResponse = response;
+		}
+		bool getResponse() {
+			return apiResponse;
+		}
+
 	private:
 		bool rawMessages = true;
 		bool apiResponse = false;

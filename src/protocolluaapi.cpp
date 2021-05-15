@@ -44,12 +44,12 @@ extern Events* g_events;
 * API ----> Server (structure of packet)
 * --------------------------------------------------------------------
 * 100 => pong
-* 101 => sending raw string lua code with immediate execution (string)
-* 102 => force reload scripts
-* 103 => save server
-* 104 => restart server
-* 105 => close server
-* 106 => start raid (string)
+* 101 => sending raw string lua code with immediate execution (string[name], string[data])
+* 102 => save server
+* 103 => clean server
+* 104 => close server
+* 105 => start raid (string)
+* 200-218 => force reload 200 (reload all) up to 218 (reload weapons)
 * --------------------------------------------------------------------
 */
 
@@ -63,36 +63,37 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	auto recvbyte = msg.get<uint16_t>();
-	std::string text = msg.getString();
-	g_events->eventMiscOnLuaApiResponse(recvbyte, text);
+	auto name = msg.getString();
+	auto data = msg.getString();
+	g_events->eventMiscOnLuaApiResponse(recvbyte, name, data);
 
 	switch (recvbyte) {
 		case 100: {
-			apiResponse = true;
+			setResponse(true);
+			disconnect();
 			return;
 		}
 		case 101: {
-			std::string returnvalue = g_scripts->executeString(text);
+			auto returnvalue = g_scripts->executeString(data, name);
 			if (!returnvalue.empty()) {
 				g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendErrorMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
 					returnvalue)));
 				return;
 			}
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
-				"successfully executed lua code.")));
+				"successfully executed " + name)));
 			return;
 		}
 		default:
-			disconnect();
-			return;
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
+				"transmission disconnected")));
 	}
 }
-
 
 // packet 100
 void ProtocolLuaApi::sendPing()
 {
-	apiResponse = false;
+	setResponse(false);
 	auto output = OutputMessagePool::getOutputMessage();
 	output->add<uint16_t>(100);
 	send(output);
