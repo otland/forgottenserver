@@ -70,7 +70,8 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 	switch (recvbyte) {
 		case 100: {
 			setResponse(true);
-			disconnect();
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
+				"pong was successful")));
 			return;
 		}
 		case 101: {
