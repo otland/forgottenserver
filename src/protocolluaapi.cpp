@@ -65,7 +65,7 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 	auto recvbyte = msg.get<uint16_t>();
 	auto name = msg.getString();
 	auto data = msg.getString();
-	g_events->eventMiscOnLuaApiResponse(recvbyte, name, data);
+	g_events->eventGameOnLuaApiResponse(recvbyte, name, data);
 
 	switch (recvbyte) {
 		case 100: {
