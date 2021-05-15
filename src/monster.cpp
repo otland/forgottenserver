@@ -976,8 +976,10 @@ void Monster::onThinkDefense(uint32_t interval)
 					summon->setSkillLoss(false);
 					summon->setMaster(this);
 
-					summon->mType->info.canPushCreatures = canPushCreatures();
-					summon->mType->info.canPushItems = canPushItems();
+					if (isSummon()) {
+						summon->mType->info.canPushCreatures = canPushCreatures();
+						summon->mType->info.canPushItems = canPushItems();
+					}
 
 					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
 					g_game.addMagicEffect(summon->getPosition(), CONST_ME_TELEPORT);
