@@ -96,6 +96,4 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-std::string getCompilerVersion();
-
 #endif

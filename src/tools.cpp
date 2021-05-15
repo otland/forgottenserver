@@ -1253,16 +1253,3 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
-
-std::string getCompilerVersion()
-{
-	#if defined(__amd64__) || defined(_M_X64)
-		return "x64";
-	#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
-		return "x86";
-	#elif defined(__arm__)
-		return "ARM";
-	#else
-		return "unknown";
-	#endif
-}
