@@ -262,7 +262,7 @@ registerMonsterType.attacks = function(mtype, mask)
 						if attack.condition.type then
 							spell:setConditionType(attack.condition.type)
 						end
-						local startDamnage = 0
+						local startDamage = 0
 						if attack.condition.startDamage then
 							startDamage = attack.condition.startDamage
 						end
@@ -382,7 +382,7 @@ registerMonsterType.defenses = function(mtype, mask)
 							if defense.condition.type then
 								spell:setConditionType(defense.condition.type)
 							end
-							local startDamnage = 0
+							local startDamage = 0
 							if defense.condition.startDamage then
 								startDamage = defense.condition.startDamage
 							end
