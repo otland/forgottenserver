@@ -21,7 +21,8 @@
 #define FS_SCHEDULER_H_2905B3D5EAB34B4BA8830167262D2DC1
 
 #include "tasks.h"
-#include <unordered_map>
+#include <unordered_set>
+#include <queue>
 
 #include "thread_holder_base.h"
 
@@ -37,34 +38,44 @@ class SchedulerTask : public Task
 			return eventId;
 		}
 
-		uint32_t getDelay() const {
-			return delay;
+		std::chrono::system_clock::time_point getCycle() const {
+			return expiration;
 		}
+
 	private:
-		SchedulerTask(uint32_t delay, TaskFunc&& f) : Task(std::move(f)), delay(delay) {}
+		SchedulerTask(uint32_t delay, std::function<void (void)>&& f) : Task(delay, std::move(f)) {}
 
 		uint32_t eventId = 0;
-		uint32_t delay = 0;
 
-		friend SchedulerTask* createSchedulerTask(uint32_t, TaskFunc&&);
+		friend SchedulerTask* createSchedulerTask(uint32_t, std::function<void (void)>);
 };
 
-SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f);
+SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f);
+
+struct TaskComparator {
+	bool operator()(const SchedulerTask* lhs, const SchedulerTask* rhs) const {
+		return lhs->getCycle() > rhs->getCycle();
+	}
+};
 
 class Scheduler : public ThreadHolder<Scheduler>
 {
 	public:
 		uint32_t addEvent(SchedulerTask* task);
-		void stopEvent(uint32_t eventId);
+		bool stopEvent(uint32_t eventId);
 
 		void shutdown();
 
-		void threadMain() { io_context.run(); }
+		void threadMain();
+
 	private:
-		std::atomic<uint32_t> lastEventId{0};
-		std::unordered_map<uint32_t, boost::asio::steady_timer> eventIdTimerMap;
-		boost::asio::io_context io_context;
-		boost::asio::io_context::work work{io_context};
+		std::thread thread;
+		std::mutex eventLock;
+		std::condition_variable eventSignal;
+
+		uint32_t lastEventId {0};
+		std::priority_queue<SchedulerTask*, std::deque<SchedulerTask*>, TaskComparator> eventList;
+		std::unordered_set<uint32_t> eventIds;
 };
 
 extern Scheduler g_scheduler;
