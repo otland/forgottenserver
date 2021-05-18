@@ -19,9 +19,12 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "quests.h"
 
 #include "pugicast.h"
+
+extern ConfigManager g_config;
 
 std::string Mission::getDescription(Player* player) const
 {
@@ -148,10 +151,12 @@ bool Quests::reload()
 
 bool Quests::loadFromXml()
 {
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string questsFile = dataDirectory + "XML/quests.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/quests.xml");
+	pugi::xml_parse_result result = doc.load_file(questsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Quests::loadFromXml", "data/XML/quests.xml", result);
+		printXMLError("Error - Quests::loadFromXml", questsFile, result);
 		return false;
 	}
 

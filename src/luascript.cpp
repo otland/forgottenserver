@@ -3810,7 +3810,7 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 	if (getScriptEnv()->getScriptInterface() == &g_scripts->getScriptInterface()) {
 		pushBoolean(L, true);
 	} else {
-		reportErrorFunc(L, "EventCallback: can only be called inside (data/scripts/)");
+		reportErrorFunc(L, "EventCallback: can only be called inside (scripts/ in data directory)");
 		pushBoolean(L, false);
 	}
 	return 1;
@@ -4572,7 +4572,7 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	// Game.reload(reloadType)
 	ReloadTypes_t reloadType = getNumber<ReloadTypes_t>(L, 1);
 	if (reloadType == RELOAD_TYPE_GLOBAL) {
-		pushBoolean(L, g_luaEnvironment.loadFile("data/global.lua") == 0);
+		pushBoolean(L, g_luaEnvironment.loadFile(g_config.getString(ConfigManager::DATA_DIRECTORY) + "global.lua") == 0);
 		pushBoolean(L, g_scripts->loadScripts("scripts/lib", true, true));
 	} else {
 		pushBoolean(L, g_game.reload(reloadType));

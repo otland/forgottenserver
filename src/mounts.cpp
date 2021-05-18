@@ -19,10 +19,13 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "mounts.h"
 
 #include "pugicast.h"
 #include "tools.h"
+
+extern ConfigManager g_config;
 
 bool Mounts::reload()
 {
@@ -32,10 +35,12 @@ bool Mounts::reload()
 
 bool Mounts::loadFromXml()
 {
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string mountsFile = dataDirectory + "XML/mounts.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/mounts.xml");
+	pugi::xml_parse_result result = doc.load_file(mountsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Mounts::loadFromXml", "data/XML/mounts.xml", result);
+		printXMLError("Error - Mounts::loadFromXml", mountsFile, result);
 		return false;
 	}
 

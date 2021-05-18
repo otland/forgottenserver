@@ -41,7 +41,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 {
 	namespace fs = boost::filesystem;
 
-	const auto dir = fs::current_path() / "data" / folderName;
+	const auto dir = fs::current_path() / g_config.getString(ConfigManager::DATA_DIRECTORY) / folderName;
 	if(!fs::exists(dir) || !fs::is_directory(dir)) {
 		std::cout << "[Warning - Scripts::loadScripts] Can not load folder '" << folderName << "'." << std::endl;
 		return false;

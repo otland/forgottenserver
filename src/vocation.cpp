@@ -19,17 +19,22 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "vocation.h"
 
 #include "pugicast.h"
 #include "tools.h"
 
+extern ConfigManager g_config;
+
 bool Vocations::loadFromXml()
 {
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string vocationsFile = dataDirectory + "XML/vocations.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
+	pugi::xml_parse_result result = doc.load_file(vocationsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Vocations::loadFromXml", "data/XML/vocations.xml", result);
+		printXMLError("Error - Vocations::loadFromXml", vocationsFile, result);
 		return false;
 	}
 

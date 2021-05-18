@@ -59,10 +59,12 @@ void MonsterType::loadLoot(MonsterType* monsterType, LootBlock lootBlock)
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
 	unloadedMonsters = {};
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string monstersFile = dataDirectory + "monster/monsters.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
+	pugi::xml_parse_result result = doc.load_file(monstersFile.c_str());
 	if (!result) {
-		printXMLError("Error - Monsters::loadFromXml", "data/monster/monsters.xml", result);
+		printXMLError("Error - Monsters::loadFromXml", monstersFile, result);
 		return false;
 	}
 
@@ -70,7 +72,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 	for (auto monsterNode : doc.child("monsters").children()) {
 		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
-		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
+		std::string file = dataDirectory + "monster/" + std::string(monsterNode.attribute("file").as_string());
 		unloadedMonsters.emplace(name, file);
 	}
 
@@ -180,7 +182,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		}
 
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, needTarget, needDirection));
-		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
+		if (!combatSpellPtr->loadScript(g_config.getString(ConfigManager::DATA_DIRECTORY) + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
 			return false;
 		}
 
@@ -568,7 +570,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 
 	if (spell->isScripted) {
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, spell->needTarget, spell->needDirection));
-		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + spell->scriptName)) {
+		if (!combatSpellPtr->loadScript(g_config.getString(ConfigManager::DATA_DIRECTORY) + g_spells->getScriptBaseName() + "/scripts/" + spell->scriptName)) {
 			std::cout << "cannot find file" << std::endl;
 			return false;
 		}
@@ -857,7 +859,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		}
 
 		std::string script = attr.as_string();
-		if (scriptInterface->loadFile("data/monster/scripts/" + script) == 0) {
+		if (scriptInterface->loadFile(g_config.getString(ConfigManager::DATA_DIRECTORY) + "monster/scripts/" + script) == 0) {
 			mType->info.scriptInterface = scriptInterface.get();
 			mType->info.creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
 			mType->info.creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");

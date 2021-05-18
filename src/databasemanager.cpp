@@ -109,7 +109,7 @@ void DatabaseManager::updateDatabase()
 	int32_t version = getDatabaseVersion();
 	do {
 		std::ostringstream ss;
-		ss << "data/migrations/" << version << ".lua";
+		ss << g_config.getString(ConfigManager::DATA_DIRECTORY) << "migrations/" << version << ".lua";
 		if (luaL_dofile(L, ss.str().c_str()) != 0) {
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
 			break;

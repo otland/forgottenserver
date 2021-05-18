@@ -134,7 +134,7 @@ void sighupHandler()
 	g_chat->load();
 	std::cout << "Reloaded chatchannels." << std::endl;
 
-	g_luaEnvironment.loadFile("data/global.lua");
+	g_luaEnvironment.loadFile(g_config.getString(ConfigManager::DATA_DIRECTORY) + "global.lua");
 	std::cout << "Reloaded global.lua." << std::endl;
 
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);

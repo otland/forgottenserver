@@ -119,12 +119,13 @@ ExperienceStages loadLuaStages(lua_State* L)
 	return stages;
 }
 
-ExperienceStages loadXMLStages()
+ExperienceStages loadXMLStages(std::string dataDirectory)
 {
+	std::string stagesFile = dataDirectory + "XML/stages.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
+	pugi::xml_parse_result result = doc.load_file(stagesFile.c_str());
 	if (!result) {
-		printXMLError("Error - loadXMLStages", "data/XML/stages.xml", result);
+		printXMLError("Error - loadXMLStages", stagesFile, result);
 		return {};
 	}
 
@@ -195,6 +196,7 @@ bool ConfigManager::load()
 		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
 		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[DATA_DIRECTORY] = getGlobalString(L, "dataDirectory", "data/");
 
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 
@@ -286,7 +288,7 @@ bool ConfigManager::load()
 	integer[VIP_FREE_LIMIT] = getGlobalNumber(L, "vipFreeLimit", 20);
 	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
 
-	expStages = loadXMLStages();
+	expStages = loadXMLStages(string[DATA_DIRECTORY]);
 	if (expStages.empty()) {
 		expStages = loadLuaStages(L);
 	} else {
