@@ -20,6 +20,7 @@
 #include "otpch.h"
 
 #include <bitset>
+#include <fmt/format.h>
 
 #include "bed.h"
 #include "chat.h"
@@ -1270,6 +1271,8 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 		party->updateSharedExperience();
 	}
 
+	checkStairs(newTile, newPos, oldPos);
+
 	if (teleport || oldPos.z != newPos.z) {
 		int32_t ticks = g_config.getNumber(ConfigManager::STAIRHOP_DELAY);
 		if (ticks > 0) {
@@ -1278,6 +1281,91 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 			}
 		}
 	}
+}
+
+void Player::checkStairs(const Tile* newTile, const Position& newPos, const Position& oldPos)
+{
+	if (!newTile->hasFlag(TILESTATE_FLOORCHANGE)) {
+		return;
+	}
+
+	if (newTile->hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
+		Direction dir = getDirection();
+
+		Tile* tileBelow = g_game.map.getTile(newPos.x, newPos.y, newPos.z + 1);
+		if (!tileBelow || !tileBelow->isWalkable()) {
+			const Position tileBelowPos = tileBelow->getPosition();
+
+			std::vector<std::vector<int>> offsetVectors;
+			offsetVectors.push_back(std::vector<int>{ 0, -1});
+			offsetVectors.push_back(std::vector<int>{-1,  0});
+			offsetVectors.push_back(std::vector<int>{ 0,  1});
+			offsetVectors.push_back(std::vector<int>{ 1,  0});
+
+			for (std::vector offsetVector : offsetVectors) {
+				Tile* tempTile = g_game.map.getTile(
+					tileBelowPos.x + offsetVector.at(0),
+					tileBelowPos.y + offsetVector.at(1),
+					tileBelowPos.z
+				);
+				if (tempTile && tempTile->isWalkable()) {
+					return;
+				}
+			}
+
+			if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
+				newTile->patch();
+			}
+
+			g_game.internalTeleport(this, oldPos);
+			fmt::print("[Warning - Player::onCreatureMove] Invalid stairs at position ({0} / {1} / {2})\n", newPos.x, newPos.y, newPos.z);
+
+			std::string msg = "Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.";
+			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, newPos.x, newPos.y, newPos.z));
+		}
+		return;
+	}
+
+	bool walkableTileFound = false;
+
+	Position tileNextPos = newTile->getFloorChangeOffset();
+	--tileNextPos.z;
+
+	Tile* tileNext = g_game.map.getTile(tileNextPos);
+	if (!tileNext) {
+		return;
+	}
+
+	for (uint16_t x = tileNextPos.x - 1; x < tileNextPos.x + 1; ++x) {
+		for (uint16_t y = tileNextPos.y - 1; y < tileNextPos.y + 1; ++y) {
+			if (newPos.x == x && newPos.y == y) {
+				continue;
+			}
+			Tile* tileToCheck = g_game.map.getTile(x, y, tileNextPos.z);
+			if (tileToCheck && tileToCheck->isWalkable()) {
+				walkableTileFound = true;
+				break;
+			}
+		}
+		if (walkableTileFound) {
+			return;
+		}
+	}
+
+	if (g_config.getBoolean(ConfigManager::PATCH_INVALID_STAIRS)) {
+		const TileItemVector* tileItems = newTile->getItemList();
+		for (Item* item : *tileItems) {
+			if (item->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH)) {
+				g_game.internalRemoveItem(item);
+			}
+		}
+	}
+
+	g_game.internalTeleport(this, oldPos);
+	fmt::print("[Warning - Player::onCreatureMove] Invalid stairs at position ({} / {} / {})\n", newPos.x, newPos.y, newPos.z);
+
+	std::string msg = "Invalid stairs found at Position({:d} / {:d} / {:d}). Please notify staff members.";
+	sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, newPos.x, newPos.y, newPos.z));
 }
 
 //container

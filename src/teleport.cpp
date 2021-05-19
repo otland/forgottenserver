@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <fmt/format.h>
+
 #include "teleport.h"
 #include "game.h"
 
@@ -91,6 +93,48 @@ void Teleport::addThing(int32_t, Thing* thing)
 	Tile* destTile = g_game.map.getTile(destPos);
 	if (!destTile) {
 		return;
+	}
+
+	// Destination may be non-walkable on purpose ..
+	if (!destTile->isWalkable()) {
+		// .. but make sure players won't get stuck
+		bool pathExists = false;
+		for (uint16_t x = destPos.x - 1; x <= destPos.x + 1; ++x) {
+			for (uint16_t y = destPos.y - 1; y <= destPos.y + 1; ++y) {
+				if (x == destPos.x && y == destPos.y) {
+					continue;
+				}
+
+				if (g_game.map.getTile(x, y, destPos.z)->isWalkable()) {
+					pathExists = true;
+					break;
+				}
+			}
+
+			if (pathExists) {
+				break;
+			}
+		}
+
+		if (!pathExists) {
+			Creature* creature = thing->getCreature();
+			std::string msg = "";
+
+			if (creature) {
+				const Position& creaturePos = creature->getPosition();
+
+				msg = "[Warning - Teleport::addThing] Invalid teleport at position ({0} / {1} / {2}) with destination ({3} / {4} / {5})\n";
+				fmt::print(stdout, msg, creaturePos.x, creaturePos.y, creaturePos.z, destPos.x, destPos.y, destPos.z);
+
+				Player* player = creature->getPlayer();
+				msg = "Invalid Destination at Position({:d} / {:d} / {:d}). Please notify staff members.";
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format(msg, destPos.x, destPos.y, destPos.z));
+			} else {
+				msg = "[Warning - Teleport::addThing] Invalid teleport with destination ({} / {} / {})\n";
+				fmt::print(stdout, msg, destPos.x, destPos.y, destPos.z);
+			}
+			return;
+		}
 	}
 
 	// Prevent infinity loop

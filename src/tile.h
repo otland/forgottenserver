@@ -174,6 +174,8 @@ class Tile : public Cylinder
 			return false;
 		}
 
+		Position getFloorChangeOffset() const;
+
 		MagicField* getFieldItem() const;
 		Teleport* getTeleportItem() const;
 		TrashHolder* getTrashHolder() const;
@@ -187,6 +189,7 @@ class Tile : public Cylinder
 		Item* getTopTopItem() const;
 		Item* getTopDownItem() const;
 		bool isMoveableBlocking() const;
+		bool isWalkable() const;
 		Thing* getTopVisibleThing(const Creature* creature);
 		Item* getItemByTopOrder(int32_t topOrder);
 
@@ -242,6 +245,8 @@ class Tile : public Cylinder
 				uint32_t& maxQueryCount, uint32_t flags) const override final;
 		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 		Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
+
+		void patch() const;
 
 		void addThing(Thing* thing) override final;
 		void addThing(int32_t index, Thing* thing) override;

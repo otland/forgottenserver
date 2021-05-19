@@ -236,6 +236,16 @@ BedItem* Tile::getBedItem() const
 	return nullptr;
 }
 
+Position Tile::getFloorChangeOffset() const
+{
+	const Position& p = getPosition();
+	if (hasFlag(TILESTATE_FLOORCHANGE_NORTH)) { return Position(p.x,   p.y-1, p.z); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_WEST))  { return Position(p.x-1, p.y,   p.z); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_SOUTH)) { return Position(p.x,   p.y+1, p.z); }
+	if (hasFlag(TILESTATE_FLOORCHANGE_EAST))  { return Position(p.x+1, p.y,   p.z); }
+	return Position(0, 0, 0);
+}
+
 Creature* Tile::getTopCreature() const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
@@ -850,6 +860,32 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		}
 	}
 	return destTile;
+}
+
+void Tile::patch() const
+{
+	uint16_t patchTileId = 100;
+
+	const Position& p = getPosition();
+	for (uint16_t x = p.x - 1; x <= p.x + 1; ++x) {
+		for (uint16_t y = p.y - 1; y <= p.y + 1; ++y) {
+			if (x == p.x && y == p.y) {
+				continue;
+			}
+
+			Tile* t = g_game.map.getTile(x, y, p.z);
+			if (t && t->isWalkable()) {
+				patchTileId = t->getGround()->getID();
+				break;
+			}
+		}
+
+		if (patchTileId > 100) {
+			break;
+		}
+	}
+
+	g_game.transformItem(ground, patchTileId);
 }
 
 void Tile::addThing(Thing* thing)
@@ -1612,6 +1648,27 @@ void Tile::resetTileFlags(const Item* item)
 bool Tile::isMoveableBlocking() const
 {
 	return !ground || hasFlag(TILESTATE_BLOCKSOLID);
+}
+
+bool Tile::isWalkable() const
+{
+	if (isMoveableBlocking()) {
+		return false;
+	}
+
+	const TileItemVector* tileItems = getItemList();
+	if (!tileItems) {
+		return true;
+	}
+
+	for (const Item* item : *tileItems) {
+		const ItemType& it = Item::items[item->getID()];
+		if (!it.isMagicField() && !it.moveable && item->hasProperty(CONST_PROP_BLOCKSOLID)) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 Item* Tile::getUseItem(int32_t index) const
