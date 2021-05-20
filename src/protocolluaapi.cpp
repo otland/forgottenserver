@@ -49,7 +49,7 @@ extern Events* g_events;
 * 103 => clean server
 * 104 => close server
 * 105 => start raid (string)
-* 200-218 => force reload 200 (reload all) up to 218 (reload weapons)
+* 200 => reload scripts
 * --------------------------------------------------------------------
 */
 
@@ -65,7 +65,6 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 	auto recvbyte = msg.get<uint16_t>();
 	auto name = msg.getString();
 	auto data = msg.getString();
-	g_events->eventGameOnLuaApiResponse(recvbyte, name, data);
 
 	switch (recvbyte) {
 		case 100: {
@@ -86,6 +85,7 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 			return;
 		}
 		default:
+			g_events->eventGameOnLuaApiResponse(recvbyte, name, data);
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
 				"transmission disconnected")));
 	}
