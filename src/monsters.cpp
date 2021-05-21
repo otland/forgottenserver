@@ -411,12 +411,17 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->addCondition(condition);
 		} else if (tmpName == "drunk") {
 			int32_t duration = 10000;
+			uint8_t drunkenness = 25;
 
 			if ((attr = node.attribute("duration"))) {
 				duration = pugi::cast<int32_t>(attr.value());
 			}
 
-			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
+			if ((attr = node.attribute("drunkenness"))) {
+				drunkenness = pugi::cast<uint8_t>(attr.value());
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, drunkenness);
 			combat->addCondition(condition);
 		} else if (tmpName == "firefield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
@@ -704,12 +709,17 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			combat->addCondition(condition);
 		} else if (tmpName == "drunk") {
 			int32_t duration = 10000;
+			uint8_t drunkenness = 25;
 
 			if (spell->duration != 0) {
 				duration = spell->duration;
 			}
 
-			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
+			if (spell->drunkenness != 0) {
+				drunkenness = spell->drunkenness;
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, drunkenness);
 			combat->addCondition(condition);
 		} else if (tmpName == "firefield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);

@@ -1349,6 +1349,7 @@ class LuaScriptInterface
 		static int luaMonsterSpellSetConditionDamage(lua_State* L);
 		static int luaMonsterSpellSetConditionSpeedChange(lua_State* L);
 		static int luaMonsterSpellSetConditionDuration(lua_State* L);
+		static int luaMonsterSpellSetConditionDrunkenness(lua_State* L);
 		static int luaMonsterSpellSetConditionTickInterval(lua_State* L);
 		static int luaMonsterSpellSetCombatShootEffect(lua_State* L);
 		static int luaMonsterSpellSetCombatEffect(lua_State* L);
