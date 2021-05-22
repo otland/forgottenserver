@@ -285,10 +285,10 @@ function Player.addSkill(self, skillId, value, round)
 	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
 end
 
-function Player.getWeaponType()
+function Player.getWeaponType(self)
 	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
 	if weapon then
-		return ItemType(weapon:getId()):getWeaponType()
+		return weapon:getType():getWeaponType()
 	end
 	return WEAPON_NONE
 end
