@@ -102,7 +102,7 @@ jobs:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
-          vcpkgGitCommitId: 7db401cb1ef1fc559ec9f9ce814d064c328fd767
+          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
       - name: Build with CMake
         uses: lukka/run-cmake@main
