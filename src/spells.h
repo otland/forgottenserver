@@ -51,8 +51,6 @@ class Spells final : public BaseEvents
 		InstantSpell* getInstantSpell(const std::string& words);
 		InstantSpell* getInstantSpellByName(const std::string& name);
 
-		InstantSpell* getInstantSpellById(uint32_t spellId);
-
 		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 		static Position getCasterPosition(Creature* creature, Direction dir);
