@@ -233,8 +233,8 @@ void Creature::onWalk(Direction& dir)
 		return;
 	}
 
-	uint8_t rand = uniform_random(0, 99);
-	if (rand > getDrunkenness()) {
+	uint16_t rand = uniform_random(0, 399);
+	if (rand / 4 > getDrunkenness()) {
 		return;
 	}
 
