@@ -339,6 +339,8 @@ class LuaScriptInterface
 		static Creature* getCreature(lua_State* L, int32_t arg);
 		static Player* getPlayer(lua_State* L, int32_t arg);
 
+		static bool getFieldBoolean(lua_State* L, int32_t arg, const std::string& key);
+
 		template<typename T>
 		static T getField(lua_State* L, int32_t arg, const std::string& key)
 		{
@@ -485,6 +487,8 @@ class LuaScriptInterface
 		static int luaSendGuildChannelMessage(lua_State* L);
 
 		static int luaIsScriptsInterface(lua_State* L);
+
+		static int luaLoadOutfits(lua_State* L);
 
 #ifndef LUAJIT_VERSION
 		static int luaBitNot(lua_State* L);

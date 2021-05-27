@@ -887,6 +887,12 @@ Player* LuaScriptInterface::getPlayer(lua_State* L, int32_t arg)
 	return g_game.getPlayerByID(getNumber<uint32_t>(L, arg));
 }
 
+bool LuaScriptInterface::getFieldBoolean(lua_State* L, int32_t arg, const std::string& key)
+{
+	lua_getfield(L, arg, key.c_str());
+	return getBoolean(L, -1);
+}
+
 std::string LuaScriptInterface::getFieldString(lua_State* L, int32_t arg, const std::string& key)
 {
 	lua_getfield(L, arg, key.c_str());
@@ -1073,6 +1079,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//isScriptsInterface()
 	lua_register(luaState, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
+
+	//loadOutfits(outfits)
+	lua_register(luaState, "loadOutfits", LuaScriptInterface::luaLoadOutfits);
 
 #ifndef LUAJIT_VERSION
 	//bit operations for Lua, based on bitlib project release 24
@@ -1939,6 +1948,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::SERVER_SAVE_SHUTDOWN)
 	registerEnumIn("configKeys", ConfigManager::ONLINE_OFFLINE_CHARLIST)
 	registerEnumIn("configKeys", ConfigManager::LUA_ITEM_DESC)
+	registerEnumIn("configKeys", ConfigManager::LOAD_OUTFITS_FROM_LUA)
 
 	registerEnumIn("configKeys", ConfigManager::MAP_NAME)
 	registerEnumIn("configKeys", ConfigManager::HOUSE_RENT_PERIOD)
@@ -3813,6 +3823,42 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 		reportErrorFunc(L, "EventCallback: can only be called inside (data/scripts/)");
 		pushBoolean(L, false);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaLoadOutfits(lua_State* L)
+{
+	//loadOutfits(outfits)
+	if (!isTable(L, -1)) {
+		reportErrorFunc("[LuaLoadOutfits::ERROR] Outfits table missing!");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	#ifdef LUAJIT_VERSION
+		size_t len = lua_objlen(L, -1);
+	#else
+		size_t len = lua_rawlen(L, -1);
+	#endif
+
+	if (len == 0) {
+		reportErrorFunc("[LuaLoadOutfits::ERROR] Cannot find outfits");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0) {
+		PlayerSex_t playerSex   = getField<PlayerSex_t>(L, -1, "sex");   lua_pop(L, 1);
+		uint16_t lookType       = getField<uint16_t>(L, -1, "lookType"); lua_pop(L, 1);
+		const std::string& name = getFieldString(L, -1, "name");         lua_pop(L, 1);
+		bool premium            = getFieldBoolean(L, -1, "premium");     lua_pop(L, 1);
+		bool unlocked           = getFieldBoolean(L, -1, "unlocked");    lua_pop(L, 1);
+		bool enabled            = getFieldBoolean(L, -1, "enabled");     lua_pop(L, 2);
+		Outfits::getInstance().loadFromLua(playerSex, lookType, name, premium, unlocked, enabled);
+	}
+	lua_pop(L, 1);
+	pushBoolean(L, true);
 	return 1;
 }
 

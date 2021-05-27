@@ -263,10 +263,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
-	std::cout << ">> Loading outfits" << std::endl;
-	if (!Outfits::getInstance().loadFromXml()) {
-		startupErrorMessage("Unable to load outfits!");
-		return;
+	if (!g_config.getBoolean(ConfigManager::LOAD_OUTFITS_FROM_LUA)) {
+		std::cout << ">> Loading XML outfits" << std::endl;
+		if (!Outfits::getInstance().loadFromXml()) {
+			startupErrorMessage("Unable to load outfits!");
+			return;
+		}
 	}
 
 	std::cout << ">> Checking world type... " << std::flush;
