@@ -606,7 +606,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values

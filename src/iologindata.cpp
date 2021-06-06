@@ -44,13 +44,6 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	return account;
 }
 
-bool IOLoginData::saveAccount(const Account& acc)
-{
-	std::ostringstream query;
-	query << "UPDATE `accounts` SET `premium_ends_at` = " << acc.premiumEndsAt << " WHERE `id` = " << acc.id;
-	return Database::getInstance().executeQuery(query.str());
-}
-
 std::string decodeSecret(const std::string& secret)
 {
 	// simple base32 decoding
@@ -102,15 +95,12 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 
 	query.str(std::string());
-	query << "SELECT `name`, `deletion` FROM `players` WHERE `account_id` = " << account.id;
+	query << "SELECT `name` FROM `players` WHERE `account_id` = " << account.id << " AND `deletion` = 0 ORDER BY `name` ASC";
 	result = db.storeQuery(query.str());
 	if (result) {
 		do {
-			if (result->getNumber<uint64_t>("deletion") == 0) {
-				account.characters.push_back(result->getString("name"));
-			}
+			account.characters.push_back(result->getString("name"));
 		} while (result->next());
-		std::sort(account.characters.begin(), account.characters.end());
 	}
 	return true;
 }
@@ -145,15 +135,12 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	uint32_t accountId = result->getNumber<uint32_t>("id");
 
 	query.str(std::string());
-	query << "SELECT `account_id`, `name`, `deletion` FROM `players` WHERE `name` = " << db.escapeString(characterName);
+	query << "SELECT `name` FROM `players` WHERE `name` = " << db.escapeString(characterName) << " AND `account_id` = " << accountId << " AND `deletion` = 0";
 	result = db.storeQuery(query.str());
 	if (!result) {
 		return 0;
 	}
 
-	if (result->getNumber<uint32_t>("account_id") != accountId || result->getNumber<uint64_t>("deletion") != 0) {
-		return 0;
-	}
 	characterName = result->getString("name");
 	return accountId;
 }
@@ -164,6 +151,19 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 
 	std::ostringstream query;
 	query << "SELECT `account_id` FROM `players` WHERE `name` = " << db.escapeString(playerName);
+	DBResult_ptr result = db.storeQuery(query.str());
+	if (!result) {
+		return 0;
+	}
+	return result->getNumber<uint32_t>("account_id");
+}
+
+uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
+{
+	Database& db = Database::getInstance();
+
+	std::ostringstream query;
+	query << "SELECT `account_id` FROM `players` WHERE `id` = " << playerId;
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
 		return 0;
@@ -209,13 +209,9 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 	Database& db = Database::getInstance();
 
 	std::ostringstream query;
-	query << "SELECT `p`.`id`, `p`.`account_id`, `p`.`group_id`, `p`.`deletion`,`a`.`type`,`a`.`premium_ends_at` FROM `players` as `p` JOIN `accounts` as `a` ON `a`.`id` = `p`.`account_id` WHERE `p`.`name` = " << db.escapeString(name);
+	query << "SELECT `p`.`id`, `p`.`account_id`, `p`.`group_id`, `a`.`type`, `a`.`premium_ends_at` FROM `players` as `p` JOIN `accounts` as `a` ON `a`.`id` = `p`.`account_id` WHERE `p`.`name` = " << db.escapeString(name) << " AND `p`.`deletion` = 0";
 	DBResult_ptr result = db.storeQuery(query.str());
 	if (!result) {
-		return false;
-	}
-
-	if (result->getNumber<uint64_t>("deletion") != 0) {
 		return false;
 	}
 
@@ -839,8 +835,7 @@ bool IOLoginData::savePlayer(Player* player)
 		itemList.clear();
 
 		for (const auto& it : player->depotChests) {
-			DepotChest* depotChest = it.second;
-			for (Item* item : depotChest->getItemList()) {
+			for (Item* item : it.second->getItemList()) {
 				itemList.emplace_back(it.first, item);
 			}
 		}

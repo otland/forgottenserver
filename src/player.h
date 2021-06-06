@@ -1203,7 +1203,7 @@ class Player final : public Creature, public Cylinder
 		std::unordered_set<uint32_t> VIPList;
 
 		std::map<uint8_t, OpenContainer> openContainers;
-		std::map<uint32_t, DepotLocker*> depotLockerMap;
+		std::map<uint32_t, DepotLocker_ptr> depotLockerMap;
 		std::map<uint32_t, DepotChest*> depotChests;
 		std::map<uint32_t, int32_t> storageMap;
 

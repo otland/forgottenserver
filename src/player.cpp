@@ -67,7 +67,6 @@ Player::~Player()
 
 	for (const auto& it : depotLockerMap) {
 		it.second->removeInbox(inbox);
-		it.second->decrementReferenceCounter();
 	}
 
 	inbox->decrementReferenceCounter();
@@ -438,6 +437,10 @@ void Player::updateInventoryWeight()
 			inventoryWeight += item->getWeight();
 		}
 	}
+
+	if (StoreInbox* storeInbox = getStoreInbox()) {
+		inventoryWeight += storeInbox->getWeight();
+	}
 }
 
 void Player::addSkillAdvance(skills_t skill, uint64_t count)
@@ -785,28 +788,25 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	DepotChest* depotChest = new DepotChest(ITEM_DEPOT);
-	depotChest->incrementReferenceCounter();
-	depotChest->setMaxDepotItems(getMaxDepotItems());
-	depotChests[depotId] = depotChest;
-	return depotChest;
+	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
+	it->second->setMaxDepotItems(getMaxDepotItems());
+	return it->second;
 }
 
 DepotLocker* Player::getDepotLocker(uint32_t depotId)
 {
 	auto it = depotLockerMap.find(depotId);
 	if (it != depotLockerMap.end()) {
-		inbox->setParent(it->second);
-		return it->second;
+		inbox->setParent(it->second.get());
+		return it->second.get();
 	}
 
-	DepotLocker* depotLocker = new DepotLocker(ITEM_LOCKER1);
-	depotLocker->setDepotId(depotId);
-	depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-	depotLocker->internalAddThing(inbox);
-	depotLocker->internalAddThing(getDepotChest(depotId, true));
-	depotLockerMap[depotId] = depotLocker;
-	return depotLocker;
+	it = depotLockerMap.emplace(depotId, new DepotLocker(ITEM_LOCKER1)).first;
+	it->second->setDepotId(depotId);
+	it->second->internalAddThing(Item::CreateItem(ITEM_MARKET));
+	it->second->internalAddThing(inbox);
+	it->second->internalAddThing(getDepotChest(depotId, true));
+	return it->second.get();
 }
 
 void Player::sendCancelMessage(ReturnValue message) const
@@ -3544,7 +3544,7 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 
 			if (lastHit && hasCondition(CONDITION_INFIGHT)) {
 				pzLocked = true;
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME), 0);
+				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000, 0);
 				addCondition(condition);
 			}
 		}

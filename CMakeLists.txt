@@ -40,7 +40,16 @@ else()
     find_package(Crypto++ REQUIRED)
 endif ()
 find_package(fmt 6.1.2 REQUIRED)
-find_package(MySQL REQUIRED)
+
+# Look for vcpkg-provided libmariadb first
+# If we link to the file directly, we might miss its dependencies from vcpkg
+find_package(unofficial-libmariadb CONFIG QUIET)
+if (unofficial-libmariadb_FOUND)
+    set(MYSQL_CLIENT_LIBS "libmariadb")
+else ()
+    find_package(MySQL REQUIRED)
+endif ()
+
 find_package(Threads REQUIRED)
 find_package(PugiXML REQUIRED)
 
@@ -92,11 +101,14 @@ endif ()
 ### Git Version ###
 # Define the two required variables before including
 # the source code for watching a git repository.
-set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
-set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
-include(git_watcher)
-if (Git_FOUND)
-    add_dependencies(tfs check_git)
-    target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+option(SKIP_GIT "Skip checking for git updates" OFF)
+if(NOT SKIP_GIT)
+	set(PRE_CONFIGURE_FILE "cmake/gitmetadata.h.in")
+	set(POST_CONFIGURE_FILE "${CMAKE_CURRENT_BINARY_DIR}/gitmetadata.h")
+	include(git_watcher)
+	if(Git_FOUND)
+		add_dependencies(tfs check_git)
+		target_include_directories(tfs PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+	endif()
 endif()
 ### END  Git Version ###

@@ -613,7 +613,6 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 	return blockType;
 }
 
-
 bool Monster::isTarget(const Creature* creature) const
 {
 	if (creature->isRemoved() || !creature->isAttackable() ||
@@ -2001,4 +2000,14 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 	} else {
 		fpp.fullPathSearch = !canUseAttack(getPosition(), creature);
 	}
+}
+
+bool Monster::canPushItems() const
+{
+	Monster* master = this->master ? this->master->getMonster() : nullptr;
+	if (master) {
+		return master->mType->info.canPushItems;
+	}
+
+	return mType->info.canPushItems;
 }

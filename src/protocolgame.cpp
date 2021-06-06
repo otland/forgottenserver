@@ -320,7 +320,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 			}
 		}
 
-		if (displayEffect && player->getHealth() > 0) {
+		if (displayEffect && player->getHealth() > 0 && !player->isInGhostMode()) {
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		}
 	}
@@ -779,7 +779,7 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 	//negative offset means that the action taken place is on a lower floor than ourself
 	int32_t offsetz = myPos.getZ() - z;
 	if ((x >= myPos.getX() - 8 + offsetz) && (x <= myPos.getX() + 9 + offsetz) &&
-	        (y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
+			(y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
 		return true;
 	}
 	return false;
@@ -2439,8 +2439,21 @@ void ProtocolGame::sendRemoveTileThing(const Position& pos, uint32_t stackpos)
 
 void ProtocolGame::sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
 {
+	if (stackpos < 10) {
+		if (!canSee(pos)) {
+			return;
+		}
+
+		NetworkMessage msg;
+		RemoveTileThing(msg, pos, stackpos);
+		writeToOutputBuffer(msg);
+		return;
+	}
+
 	NetworkMessage msg;
-	RemoveTileCreature(msg, creature, pos, stackpos);
+	msg.addByte(0x6C);
+	msg.add<uint16_t>(0xFFFF);
+	msg.add<uint32_t>(creature->getID());
 	writeToOutputBuffer(msg);
 }
 

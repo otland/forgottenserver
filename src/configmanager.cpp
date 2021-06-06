@@ -20,7 +20,11 @@
 #include "otpch.h"
 
 #include <algorithm>
+#if __has_include("luajit/lua.hpp")
+#include <luajit/lua.hpp>
+#else
 #include <lua.hpp>
+#endif
 
 #include "configmanager.h"
 #include "game.h"
@@ -332,7 +336,6 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 	}
 	return boolean[what];
 }
-
 
 float ConfigManager::getExperienceStage(uint32_t level) const
 {

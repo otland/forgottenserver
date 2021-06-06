@@ -71,18 +71,17 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	for (auto monsterNode : doc.child("monsters").children()) {
 		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
 		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
-		auto forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
-		if (forceLoad) {
-			loadMonster(file, name, true);
-			continue;
-		}
+		unloadedMonsters.emplace(name, file);
+	}
 
-		if (reloading && monsters.find(name) != monsters.end()) {
-			loadMonster(file, name, true);
-		} else {
-			unloadedMonsters.emplace(name, file);
+	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+
+	for (auto it : unloadedMonsters) {
+		if (forceLoad || reloading && monsters.find(it.first) != monsters.end()) {
+			loadMonster(it.second, it.first, reloading);
 		}
 	}
+
 	return true;
 }
 
@@ -426,12 +425,12 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		} else if (tmpName == "energyfield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
 		} else if (tmpName == "firecondition" || tmpName == "energycondition" ||
-		           tmpName == "earthcondition" || tmpName == "poisoncondition" ||
-		           tmpName == "icecondition" || tmpName == "freezecondition" ||
-		           tmpName == "deathcondition" || tmpName == "cursecondition" ||
-		           tmpName == "holycondition" || tmpName == "dazzlecondition" ||
-		           tmpName == "drowncondition" || tmpName == "bleedcondition" ||
-		           tmpName == "physicalcondition") {
+				   tmpName == "earthcondition" || tmpName == "poisoncondition" ||
+				   tmpName == "icecondition" || tmpName == "freezecondition" ||
+				   tmpName == "deathcondition" || tmpName == "cursecondition" ||
+				   tmpName == "holycondition" || tmpName == "dazzlecondition" ||
+				   tmpName == "drowncondition" || tmpName == "bleedcondition" ||
+				   tmpName == "physicalcondition") {
 			ConditionType_t conditionType = CONDITION_NONE;
 			uint32_t tickInterval = 2000;
 
@@ -1457,12 +1456,12 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 
 	auto it = monsters.find(lowerCaseName);
 	if (it == monsters.end()) {
-		auto it2 = unloadedMonsters.find(lowerCaseName);
-		if (it2 == unloadedMonsters.end()) {
+		if (!loadFromFile) {
 			return nullptr;
 		}
 
-		if (!loadFromFile) {
+		auto it2 = unloadedMonsters.find(lowerCaseName);
+		if (it2 == unloadedMonsters.end()) {
 			return nullptr;
 		}
 

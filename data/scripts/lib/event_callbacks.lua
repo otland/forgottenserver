@@ -71,6 +71,10 @@ local callbacks = {
 }
 
 local auxargs = {
+	[EVENT_CALLBACK_ONLOOK] = {[5] = 1},
+	[EVENT_CALLBACK_ONLOOKINBATTLELIST] = {[4] = 1},
+	[EVENT_CALLBACK_ONLOOKINTRADE] = {[5] = 1},
+	[EVENT_CALLBACK_ONLOOKINSHOP] = {[4] = 1},
 	[EVENT_CALLBACK_ONGAINEXPERIENCE] = {[3] = 1},
 	[EVENT_CALLBACK_ONLOSEEXPERIENCE] = {[2] = 1},
 	[EVENT_CALLBACK_ONGAINSKILLTRIES] = {[3] = 1}
@@ -86,15 +90,11 @@ EventCallback = {
 		if isScriptsInterface() then
 			local type, call = rawget(self, "type"), rawget(self, "call")
 			if type and call then
-				index = tonumber(index)
-				EventCallbackData[type][#EventCallbackData[type] + 1] = {call, index or -math.huge}
-				if index then
-					table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
-				end
+				EventCallbackData[type][#EventCallbackData[type] + 1] = {call, tonumber(index) or 0}
+				table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
 				return rawset(self, "type", nil) and rawset(self, "call", nil)
-			else
-				debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
 			end
+			debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
 		end
 	end,
 	clear = function (self)
@@ -126,11 +126,9 @@ setmetatable(EventCallback, {
 		for k, ev in pairs(eventTable) do
 			ret = {ev[1](unpack(args))}
 			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
-			return unpack(ret)
+				return unpack(ret)
 			end
-			for k, v in pairs(auxargs[type] or {}) do
-				args[k] = ret[v]
-			end
+			for k, v in pairs(auxargs[type] or {}) do args[k] = ret[v] end
 		end
 	end
 	})

@@ -1,39 +1,47 @@
 function Player:onBrowseField(position)
 	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then
 		return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onLook(thing, position, distance)
-	local ret = EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance)
-	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
+	local description = ""
+	if hasEventCallback(EVENT_CALLBACK_ONLOOK) then
+		description = EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance, description)
+	end
+	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
 function Player:onLookInBattleList(creature, distance)
-	local ret = EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance)
-	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
+	local description = ""
+	if hasEventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST) then
+		description = EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance, description)
+	end
+	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
 function Player:onLookInTrade(partner, item, distance)
 	local description = "You see " .. item:getDescription(distance)
-	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) and EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description) or description
-	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
+	if hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) then
+		description = EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description)
+	end
+	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
 function Player:onLookInShop(itemType, count, description)
 	local description = "You see " .. description
-	local ret = hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) and EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description) or description
-	self:sendTextMessage(MESSAGE_INFO_DESCR, ret)
+	if hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) then
+		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description)
+	end
+	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
 		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
@@ -45,9 +53,8 @@ end
 function Player:onMoveCreature(creature, fromPosition, toPosition)
 	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then
 		return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
@@ -59,33 +66,29 @@ end
 function Player:onReportBug(message, position, category)
 	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then
 		return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onTurn(direction)
 	if hasEventCallback(EVENT_CALLBACK_ONTURN) then
 		return EventCallback(EVENT_CALLBACK_ONTURN, self, direction)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onTradeRequest(target, item)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then
 		return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onTradeAccept(target, item, targetItem)
 	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then
 		return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem)
-	else
-		return true
 	end
+	return true
 end
 
 function Player:onTradeCompleted(target, item, targetItem, isSuccess)

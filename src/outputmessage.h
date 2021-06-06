@@ -101,5 +101,4 @@ class OutputMessagePool
 		std::vector<Protocol_ptr> bufferedProtocols;
 };
 
-
 #endif
