@@ -42,6 +42,7 @@ class ProtocolLuaApi final : public Protocol
 		void sendErrorMessage(const std::string& error);
 		void sendCallbackMessage(const std::string& message);
 		void sendRequestFileExchange();
+		void parseHttpRequest(std::string& name, NetworkMessage& msg);
 
 		void setResponse(bool response) {
 			apiResponse = response;

@@ -23,11 +23,11 @@
 #include "script.h"
 #include "configmanager.h"
 #include "game.h"
-#include "events.h"
+#include "globalevent.h"
 
 extern Scripts* g_scripts;
 extern ConfigManager g_config;
-extern Events* g_events;
+extern GlobalEvents* g_globalEvents;
 
 /*
 * List of Packets used for communication
@@ -56,7 +56,7 @@ extern Events* g_events;
 void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 {
 	// we only allow connection from the ip set in config.lua "luaApiIp = "xx.xxx.x.xx"" or from localhost.
-	if (convertIPToString(getIP()) != g_config.getString(ConfigManager::LUA_API_IP) || convertIPToString(getIP()) != "127.0.0.1") {
+	if (convertIPToString(getIP()) != g_config.getString(ConfigManager::LUA_API_IP) && convertIPToString(getIP()) != "127.0.0.1") {
 		std::cout << "IP: " << convertIPToString(getIP()) << " tried to connect." << std::endl;
 		disconnect();
 		return;
@@ -64,7 +64,6 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 
 	auto recvbyte = msg.get<uint16_t>();
 	auto name = msg.getString();
-	auto data = msg.getString();
 
 	switch (recvbyte) {
 		case 100: {
@@ -74,6 +73,7 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 			return;
 		}
 		case 101: {
+			auto data = msg.getString();
 			auto returnvalue = g_scripts->executeString(data, name);
 			if (!returnvalue.empty()) {
 				g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendErrorMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
@@ -85,9 +85,35 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 			return;
 		}
 		default:
-			g_events->eventGameOnLuaApiResponse(recvbyte, name, data);
+			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::parseHttpRequest, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
+				name, msg)));
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
-				"transmission disconnected")));
+				"http request recieved")));
+	}
+}
+
+void ProtocolLuaApi::parseHttpRequest(std::string& name, NetworkMessage& msg)
+{
+	std::unordered_map<std::string, std::string> dataMap;
+	// now we get a byte which tells us how much http headers we have to parse
+	auto headers = msg.get<uint16_t>();
+	for (uint16_t i = 0; i < headers; i++) {
+		// we get the header string
+		auto headerString = msg.getString();
+		// now we get the data as string
+		auto dataString = msg.getString();
+		// add everything to map
+		dataMap.emplace(headerString, dataString);
+	}
+
+	/* We are searching if we can even find a registered GlobalEvent with the name
+	*  This way we could push app names onward from the API to only execute the GlobalEvent which belongs to this app
+	*/
+	auto& http = g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST);
+	if (http.find(name) != http.end()) {
+		g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST).at(name).executeHttpRequest(name, dataMap);
+	} else {
+		std::cout << "[Error - ProtocolLuaApi::parseHttpRequest] Invalid name for global event: " << name << std::endl;
 	}
 }
 

@@ -133,12 +133,6 @@ bool Events::load()
 			} else {
 				std::cout << "[Warning - Events::load] Unknown monster method: " << methodName << std::endl;
 			}
-		} else if (className == "Game") {
-			if (methodName == "onLuaApiResponse") {
-				info.gameOnLuaApiResponse = scriptInterface.getEvent(methodName);
-			} else {
-				std::cout << "[Warning - Events::load] Unknown game method: " << methodName << std::endl;
-			}
 		} else {
 			std::cout << "[Warning - Events::load] Unknown class: " << className << std::endl;
 		}
@@ -1025,30 +1019,5 @@ void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 	LuaScriptInterface::setMetatable(L, -1, "Container");
 
 	return scriptInterface.callVoidFunction(2);
-}
-
-void Events::eventGameOnLuaApiResponse(uint16_t recvbyte, const std::string& name, const std::string& data)
-{
-	// onLuaApiResponse(recvbyte, name, data)
-	if (info.gameOnLuaApiResponse == -1) {
-		return;
-	}
-
-	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventMiscOnLuaApiResponse] Call stack overflow" << std::endl;
-		return;
-	}
-
-	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.gameOnLuaApiResponse, &scriptInterface);
-
-	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(info.gameOnLuaApiResponse);
-
-	lua_pushnumber(L, recvbyte);
-	LuaScriptInterface::pushString(L, name);
-	LuaScriptInterface::pushString(L, data);
-	
-	return scriptInterface.callVoidFunction(3);
 }
 
