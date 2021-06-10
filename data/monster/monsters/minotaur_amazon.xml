@@ -57,7 +57,7 @@
 	<loot>
 		<item id="7368" countmax="5" chance="3040" /><!-- assassin star -->
 		<item id="23575" chance="19830" /><!-- cowbell -->
-		<item id="2148" countmin="9" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="96" chance="60000" /><!-- gold coin -->
 		<item id="2671" chance="60780" /><!-- ham -->
 		<item id="2666" chance="4920" /><!-- meat -->
