@@ -354,14 +354,14 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 					return false;
 				}
 
-				if (minSpeedChange < -1000) {
-					std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - you cannot reduce a creatures speed below -1000 (100%)" << std::endl;
-					minSpeedChange = -1000;
-				}
-
 				if (maxSpeedChange == 0) {
 					maxSpeedChange = minSpeedChange; // static speedchange value
 				}
+			}
+
+			if (minSpeedChange < -1000) {
+				std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - you cannot reduce a creatures speed below -1000 (100%)" << std::endl;
+				minSpeedChange = -1000;
 			}
 
 			ConditionType_t conditionType;
