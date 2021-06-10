@@ -89,6 +89,9 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
+		if mask.flags.summonable ~= nil then
+			mtype.isSummonable(mask.flags.summonable)
+		end
 		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
