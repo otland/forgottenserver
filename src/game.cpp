@@ -3759,9 +3759,9 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	}
 }
 
-void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
+void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit, bool callOutfitChangeEvent /*= true */)
 {
-	if (!g_events->eventCreatureOnChangeOutfit(creature, outfit)) {
+	if (callOutfitChangeEvent && !g_events->eventCreatureOnChangeOutfit(creature, outfit)) {
 		return;
 	}
 
