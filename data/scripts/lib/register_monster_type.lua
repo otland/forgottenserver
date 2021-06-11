@@ -255,6 +255,9 @@ registerMonsterType.attacks = function(mtype, mask)
 					if attack.attack and attack.skill then
 						spell:setAttackValue(attack.attack, attack.skill)
 					end
+					if attack.minDamage and attack.maxDamage then
+						spell:setCombatValue(attack.minDamage, attack.maxDamage)
+					end
 					if attack.interval then
 						spell:setInterval(attack.interval)
 					end
