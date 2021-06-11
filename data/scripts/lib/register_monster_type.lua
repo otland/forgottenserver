@@ -13,6 +13,11 @@ MonsterType.register = function(self, mask)
 	return registerMonsterType(self, mask)
 end
 
+registerMonsterType.name = function(mtype, mask)
+	if mask.name then
+		mtype:name(mask.name)
+	end
+end
 registerMonsterType.description = function(mtype, mask)
 	if mask.description then
 		mtype:nameDescription(mask.description)
