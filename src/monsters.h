@@ -191,6 +191,7 @@ class MonsterSpell
 
 		uint8_t chance = 100;
 		uint8_t range = 0;
+		uint8_t drunkenness = 0;
 
 		uint16_t interval = 2000;
 

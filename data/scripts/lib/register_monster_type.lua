@@ -335,6 +335,12 @@ registerMonsterType.attacks = function(mtype, mask)
 					if attack.shootEffect then
 						spell:setCombatShootEffect(attack.shootEffect)
 					end
+					if attack.name == "drunk" then
+						spell:setConditionType(CONDITION_DRUNK)
+						if attack.drunkenness then
+							spell:setConditionDrunkenness(attack.drunkenness)
+						end
+					end
 				end
 			elseif attack.script then
 				spell:setScriptName(attack.script)
