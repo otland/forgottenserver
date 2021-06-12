@@ -1265,6 +1265,10 @@ class LuaScriptInterface
 		static int luaMonsterTypeCanPushItems(lua_State* L);
 		static int luaMonsterTypeCanPushCreatures(lua_State* L);
 
+		static int luaMonsterTypeCanWalkOnEnergy(lua_State* L);
+		static int luaMonsterTypeCanWalkOnFire(lua_State* L);
+		static int luaMonsterTypeCanWalkOnPoison(lua_State* L);
+
 		static int luaMonsterTypeName(lua_State* L);
 		static int luaMonsterTypeNameDescription(lua_State* L);
 
