@@ -123,13 +123,13 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.staticAttackChance then
 			mtype:staticAttackChance(mask.flags.staticAttackChance)
 		end
-		if mask.flags.canWalkOnEnergy then
+		if mask.flags.canWalkOnEnergy ~= nil then
 			mtype:canWalkOnEnergy(mask.flags.canWalkOnEnergy)
 		end
-		if mask.flags.canWalkOnFire then
+		if mask.flags.canWalkOnFire ~= nil then
 			mtype:canWalkOnFire(mask.flags.canWalkOnFire)
 		end
-		if mask.flags.canWalkOnPoison then
+		if mask.flags.canWalkOnPoison ~= nil then
 			mtype:canWalkOnPoison(mask.flags.canWalkOnPoison)
 		end
 	end
@@ -400,6 +400,9 @@ registerMonsterType.defenses = function(mtype, mask)
 						spell:setType("melee")
 						if defense.attack and defense.skill then
 							spell:setAttackValue(defense.attack, defense.skill)
+						end
+						if attack.minDamage and attack.maxDamage then
+							spell:setCombatValue(attack.minDamage, attack.maxDamage)
 						end
 						if defense.interval then
 							spell:setInterval(defense.interval)
