@@ -1342,6 +1342,7 @@ class LuaScriptInterface
 		static int luaMonsterSpellSetCombatType(lua_State* L);
 		static int luaMonsterSpellSetAttackValue(lua_State* L);
 		static int luaMonsterSpellSetNeedTarget(lua_State* L);
+		static int luaMonsterSpellSetNeedDirection(lua_State* L);
 		static int luaMonsterSpellSetCombatLength(lua_State* L);
 		static int luaMonsterSpellSetCombatSpread(lua_State* L);
 		static int luaMonsterSpellSetCombatRadius(lua_State* L);

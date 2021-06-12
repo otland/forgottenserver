@@ -367,6 +367,9 @@ registerMonsterType.attacks = function(mtype, mask)
 				if attack.target then
 					spell:setNeedTarget(attack.target)
 				end
+				if attack.direction then
+					spell:setNeedDirection(attack.direction)
+				end
 			end
 			mtype:addAttack(spell)
 		end
@@ -486,6 +489,9 @@ registerMonsterType.defenses = function(mtype, mask)
 					end
 					if defense.target then
 						spell:setNeedTarget(defense.target)
+					end
+					if attack.direction then
+						spell:setNeedDirection(attack.direction)
 					end
 				end
 				mtype:addDefense(spell)
