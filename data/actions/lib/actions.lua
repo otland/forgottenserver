@@ -13,7 +13,7 @@ local holeId = { -- usable rope holes, for rope spots see global.lua
 	8567, 8585, 8595, 8596, 8972, 9606, 9625, 13190, 14461, 19519, 21536, 23713,
 	26020
 }
-local holes = {468, 481, 483, 7932, 23712} -- holes opened by shovel
+local holes = {468, 481, 483, 23712} -- holes opened by shovel
 local fruits = {2673, 2674, 2675, 2676, 2677, 2678, 2679, 2680, 2681, 2682, 2684, 2685, 5097, 8839, 8840, 8841} -- fruits to make decorated cake with knife
 
 function destroyItem(player, target, toPosition)
@@ -199,6 +199,10 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
+		player:addAchievementProgress("The Undertaker", 500)
+	elseif target.itemid == 7932 then -- large hole
+		target:transform(7933)
+		target:decay()
 		player:addAchievementProgress("The Undertaker", 500)
 	elseif target.itemid == 20230 then -- swamp digging
 		if (player:getStorageValue(PlayerStorageKeys.swampDigging)) <= os.time() then

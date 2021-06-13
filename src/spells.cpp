@@ -264,16 +264,6 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	return nullptr;
 }
 
-InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
-{
-	for (auto& it : instants) {
-		if (it.second.getId() == spellId) {
-			return &it.second;
-		}
-	}
-	return nullptr;
-}
-
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (auto& it : instants) {

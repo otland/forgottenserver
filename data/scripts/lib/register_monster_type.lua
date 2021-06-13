@@ -262,7 +262,7 @@ registerMonsterType.attacks = function(mtype, mask)
 						if attack.condition.type then
 							spell:setConditionType(attack.condition.type)
 						end
-						local startDamnage = 0
+						local startDamage = 0
 						if attack.condition.startDamage then
 							startDamage = attack.condition.startDamage
 						end
@@ -335,6 +335,12 @@ registerMonsterType.attacks = function(mtype, mask)
 					if attack.shootEffect then
 						spell:setCombatShootEffect(attack.shootEffect)
 					end
+					if attack.name == "drunk" then
+						spell:setConditionType(CONDITION_DRUNK)
+						if attack.drunkenness then
+							spell:setConditionDrunkenness(attack.drunkenness)
+						end
+					end
 				end
 			elseif attack.script then
 				spell:setScriptName(attack.script)
@@ -382,7 +388,7 @@ registerMonsterType.defenses = function(mtype, mask)
 							if defense.condition.type then
 								spell:setConditionType(defense.condition.type)
 							end
-							local startDamnage = 0
+							local startDamage = 0
 							if defense.condition.startDamage then
 								startDamage = defense.condition.startDamage
 							end

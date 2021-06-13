@@ -202,8 +202,10 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_SPELLGROUPCOOLDOWN:
 			return new ConditionSpellGroupCooldown(id, type, ticks, buff, subId, aggressive);
 
-		case CONDITION_INFIGHT:
 		case CONDITION_DRUNK:
+			return new ConditionDrunk(id, type, ticks, buff, subId, param, aggressive);
+
+		case CONDITION_INFIGHT:
 		case CONDITION_EXHAUST_WEAPON:
 		case CONDITION_EXHAUST_COMBAT:
 		case CONDITION_EXHAUST_HEAL:
@@ -357,10 +359,6 @@ uint32_t ConditionGeneric::getIcons() const
 			icons |= ICON_SWORDS;
 			break;
 
-		case CONDITION_DRUNK:
-			icons |= ICON_DRUNK;
-			break;
-
 		default:
 			break;
 	}
@@ -398,6 +396,8 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 {
 	if (attr == CONDITIONATTR_SKILLS) {
 		return propStream.read<int32_t>(skills[currentSkill++]);
+	} else if (attr == CONDITIONATTR_SPECIALSKILLS) {
+		return propStream.read<int32_t>(specialSkills[currentSpecialSkill++]);
 	} else if (attr == CONDITIONATTR_STATS) {
 		return propStream.read<int32_t>(stats[currentStat++]);
 	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
@@ -422,6 +422,11 @@ void ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.write<uint8_t>(CONDITIONATTR_DISABLEDEFENSE);
 	propWriteStream.write<bool>(disableDefense);
+
+	for (int32_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+		propWriteStream.write<uint8_t>(CONDITIONATTR_SPECIALSKILLS);
+		propWriteStream.write<int32_t>(specialSkills[i]);
+	}
 }
 
 bool ConditionAttributes::startCondition(Creature* creature)
@@ -1726,4 +1731,57 @@ bool ConditionSpellGroupCooldown::startCondition(Creature* creature)
 		}
 	}
 	return true;
+}
+
+bool ConditionDrunk::startCondition(Creature* creature)
+{
+	if (!Condition::startCondition(creature)) {
+		return false;
+	}
+
+	creature->setDrunkenness(drunkenness);
+	return true;
+}
+
+bool ConditionDrunk::updateCondition(const Condition* addCondition)
+{
+	const ConditionDrunk* conditionDrunk = static_cast<const ConditionDrunk*>(addCondition);
+	return conditionDrunk->drunkenness > drunkenness;
+}
+
+void ConditionDrunk::addCondition(Creature* creature, const Condition* condition)
+{
+	if (!updateCondition(condition)) {
+		return;
+	}
+
+	const ConditionDrunk* conditionDrunk = static_cast<const ConditionDrunk*>(condition);
+	setTicks(conditionDrunk->getTicks());
+	creature->setDrunkenness(conditionDrunk->drunkenness);
+}
+
+void ConditionDrunk::endCondition(Creature* creature)
+{
+	creature->setDrunkenness(0);
+}
+
+uint32_t ConditionDrunk::getIcons() const
+{
+	return ICON_DRUNK;
+}
+
+bool ConditionDrunk::setParam(ConditionParam_t param, int32_t value)
+{
+	bool ret = Condition::setParam(param, value);
+
+	switch (param) {
+		case CONDITION_PARAM_DRUNKENNESS: {
+			drunkenness = value;
+			return true;
+		}
+
+		default: {
+			return ret;
+		}
+	}
 }
