@@ -182,6 +182,7 @@ bool ConfigManager::load()
 	if (!loaded) { //info that must be loaded one time (unless we reset the modules involved)
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
+		boolean[LUA_API_ENABLED] = getGlobalBoolean(L, "luaApiEnabled", true);
 
 		if (string[IP] == "") {
 			string[IP] = getGlobalString(L, "ip", "127.0.0.1");
