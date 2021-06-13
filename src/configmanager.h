@@ -67,8 +67,8 @@ class ConfigManager
 			HOUSE_DOOR_SHOW_PRICE,
 			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 			REMOVE_ON_DESPAWN,
-      PLAYER_CONSOLE_LOGS,
-      LUA_API_ENABLED,
+			PLAYER_CONSOLE_LOGS,
+			LUA_API_ENABLED,
 
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
@@ -135,7 +135,7 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
-      LUA_API_PORT,
+			LUA_API_PORT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};

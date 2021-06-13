@@ -161,7 +161,7 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 		}
 		default:
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendErrorMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
-				 appName, recvbyte + " recvbyte does not exist!")));
+				 appName, "recvbyte: " + std::to_string(recvbyte) + " does not exist!")));
 	}
 }
 
