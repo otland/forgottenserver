@@ -182,7 +182,7 @@ void ProtocolLuaApi::parseHttpRequest(std::string& appName, std::string& name, N
 	/* We are searching if we can even find a registered GlobalEvent with the name
 	*  This way we could push app names onward from the API to only execute the GlobalEvent which belongs to this app
 	*/
-	auto& http = g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST);
+	auto http = g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST);
 	if (http.find(name) != http.end()) {
 		http.find(name)->second.executeHttpRequest(name, dataMap);
 	} else {
