@@ -140,10 +140,10 @@ void ProtocolLuaApi::onRecvFirstMessage(NetworkMessage& msg)
 			// We use fileName, to let the lua interface know how this file is named, incase it throws an error so we get a name to it.
 			auto fileName = msg.getString();
 			auto data = msg.getString();
-			auto returnvalue = g_scripts->executeString(data, fileName);
-			if (!returnvalue.empty()) {
+			auto returnValue = g_scripts->executeString(data, fileName);
+			if (!returnValue.empty()) {
 				g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendErrorMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
-					appName, returnvalue)));
+					appName, returnValue)));
 				return;
 			}
 			g_dispatcher.addTask(createTask(std::bind(&ProtocolLuaApi::sendCallbackMessage, std::static_pointer_cast<ProtocolLuaApi>(shared_from_this()),
@@ -182,9 +182,9 @@ void ProtocolLuaApi::parseHttpRequest(std::string& appName, std::string& name, N
 	/* We are searching if we can even find a registered GlobalEvent with the name
 	*  This way we could push app names onward from the API to only execute the GlobalEvent which belongs to this app
 	*/
-	auto http = g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST);
+	auto& http = g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST);
 	if (http.find(name) != http.end()) {
-		g_globalEvents->getEventMap(GLOBALEVENT_HTTPREQUEST).at(name).executeHttpRequest(name, dataMap);
+		http.find(name)->second.executeHttpRequest(name, dataMap);
 	} else {
 		std::cout << "[Error - ProtocolLuaApi::parseHttpRequest] Invalid name for global event: " << name << std::endl;
 	}
