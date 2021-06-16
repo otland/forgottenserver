@@ -503,7 +503,7 @@ registerMonsterType.defenses = function(mtype, mask)
 						spell:setNeedTarget(defense.target)
 					end
 					if defense.direction then
-						spell:setNeedDirection(attack.direction)
+						spell:setNeedDirection(defense.direction)
 					end
 				end
 				mtype:addDefense(spell)
