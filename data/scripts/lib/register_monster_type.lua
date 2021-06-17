@@ -13,6 +13,11 @@ MonsterType.register = function(self, mask)
 	return registerMonsterType(self, mask)
 end
 
+registerMonsterType.name = function(mtype, mask)
+	if mask.name then
+		mtype:name(mask.name)
+	end
+end
 registerMonsterType.description = function(mtype, mask)
 	if mask.description then
 		mtype:nameDescription(mask.description)
@@ -89,6 +94,9 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
+		if mask.flags.summonable ~= nil then
+			mtype.isSummonable(mask.flags.summonable)
+		end
 		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
@@ -114,6 +122,15 @@ registerMonsterType.flags = function(mtype, mask)
 		end
 		if mask.flags.staticAttackChance then
 			mtype:staticAttackChance(mask.flags.staticAttackChance)
+		end
+		if mask.flags.canWalkOnEnergy ~= nil then
+			mtype:canWalkOnEnergy(mask.flags.canWalkOnEnergy)
+		end
+		if mask.flags.canWalkOnFire ~= nil then
+			mtype:canWalkOnFire(mask.flags.canWalkOnFire)
+		end
+		if mask.flags.canWalkOnPoison ~= nil then
+			mtype:canWalkOnPoison(mask.flags.canWalkOnPoison)
 		end
 	end
 end
@@ -252,6 +269,9 @@ registerMonsterType.attacks = function(mtype, mask)
 					if attack.attack and attack.skill then
 						spell:setAttackValue(attack.attack, attack.skill)
 					end
+					if attack.minDamage and attack.maxDamage then
+						spell:setCombatValue(attack.minDamage, attack.maxDamage)
+					end
 					if attack.interval then
 						spell:setInterval(attack.interval)
 					end
@@ -356,6 +376,9 @@ registerMonsterType.attacks = function(mtype, mask)
 				if attack.target then
 					spell:setNeedTarget(attack.target)
 				end
+				if attack.direction then
+					spell:setNeedDirection(attack.direction)
+				end
 			end
 			mtype:addAttack(spell)
 		end
@@ -377,6 +400,9 @@ registerMonsterType.defenses = function(mtype, mask)
 						spell:setType("melee")
 						if defense.attack and defense.skill then
 							spell:setAttackValue(defense.attack, defense.skill)
+						end
+						if defense.minDamage and defense.maxDamage then
+							spell:setCombatValue(defense.minDamage, defense.maxDamage)
 						end
 						if defense.interval then
 							spell:setInterval(defense.interval)
@@ -475,6 +501,9 @@ registerMonsterType.defenses = function(mtype, mask)
 					end
 					if defense.target then
 						spell:setNeedTarget(defense.target)
+					end
+					if defense.direction then
+						spell:setNeedDirection(defense.direction)
 					end
 				end
 				mtype:addDefense(spell)

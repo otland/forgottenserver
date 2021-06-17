@@ -2763,8 +2763,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "canPushItems", LuaScriptInterface::luaMonsterTypeCanPushItems);
 	registerMethod("MonsterType", "canPushCreatures", LuaScriptInterface::luaMonsterTypeCanPushCreatures);
 
-	registerMethod("MonsterType", "name", LuaScriptInterface::luaMonsterTypeName);
+	registerMethod("MonsterType", "canWalkOnEnergy", LuaScriptInterface::luaMonsterTypeCanWalkOnEnergy);
+	registerMethod("MonsterType", "canWalkOnFire", LuaScriptInterface::luaMonsterTypeCanWalkOnFire);
+	registerMethod("MonsterType", "canWalkOnPoison", LuaScriptInterface::luaMonsterTypeCanWalkOnPoison);
 
+	registerMethod("MonsterType", "name", LuaScriptInterface::luaMonsterTypeName);
 	registerMethod("MonsterType", "nameDescription", LuaScriptInterface::luaMonsterTypeNameDescription);
 
 	registerMethod("MonsterType", "health", LuaScriptInterface::luaMonsterTypeHealth);
@@ -2849,6 +2852,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterSpell", "setCombatType", LuaScriptInterface::luaMonsterSpellSetCombatType);
 	registerMethod("MonsterSpell", "setAttackValue", LuaScriptInterface::luaMonsterSpellSetAttackValue);
 	registerMethod("MonsterSpell", "setNeedTarget", LuaScriptInterface::luaMonsterSpellSetNeedTarget);
+	registerMethod("MonsterSpell", "setNeedDirection", LuaScriptInterface::luaMonsterSpellSetNeedDirection);
 	registerMethod("MonsterSpell", "setCombatLength", LuaScriptInterface::luaMonsterSpellSetCombatLength);
 	registerMethod("MonsterSpell", "setCombatSpread", LuaScriptInterface::luaMonsterSpellSetCombatSpread);
 	registerMethod("MonsterSpell", "setCombatRadius", LuaScriptInterface::luaMonsterSpellSetCombatRadius);
@@ -12839,6 +12843,57 @@ int LuaScriptInterface::luaMonsterTypeCanPushCreatures(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterTypeCanWalkOnEnergy(lua_State* L)
+{
+	// get: monsterType:canWalkOnEnergy() set: monsterType:canWalkOnEnergy(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.canWalkOnEnergy);
+		} else {
+			monsterType->info.canWalkOnEnergy = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeCanWalkOnFire(lua_State* L)
+{
+	// get: monsterType:canWalkOnFire() set: monsterType:canWalkOnFire(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.canWalkOnFire);
+		} else {
+			monsterType->info.canWalkOnFire = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeCanWalkOnPoison(lua_State* L)
+{
+	// get: monsterType:canWalkOnPoison() set: monsterType:canWalkOnPoison(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.canWalkOnPoison);
+		} else {
+			monsterType->info.canWalkOnPoison = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int32_t LuaScriptInterface::luaMonsterTypeName(lua_State* L)
 {
 	// get: monsterType:name() set: monsterType:name(name)
@@ -13923,6 +13978,19 @@ int LuaScriptInterface::luaMonsterSpellSetNeedTarget(lua_State* L)
 	MonsterSpell* spell = getUserdata<MonsterSpell>(L, 1);
 	if (spell) {
 		spell->needTarget = getBoolean(L, 2);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterSpellSetNeedDirection(lua_State* L)
+{
+	// monsterSpell:setNeedDirection(bool)
+	MonsterSpell* spell = getUserdata<MonsterSpell>(L, 1);
+	if (spell) {
+		spell->needDirection = getBoolean(L, 2);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
