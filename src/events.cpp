@@ -19,12 +19,15 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "events.h"
 #include "tools.h"
 #include "item.h"
 #include "player.h"
 
 #include <set>
+
+extern ConfigManager g_config;
 
 Events::Events() :
 	scriptInterface("Event Interface")
@@ -34,10 +37,12 @@ Events::Events() :
 
 bool Events::load()
 {
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string eventsFile = dataDirectory + "events/events.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/events/events.xml");
+	pugi::xml_parse_result result = doc.load_file(eventsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Events::load", "data/events/events.xml", result);
+		printXMLError("Error - Events::load", eventsFile, result);
 		return false;
 	}
 
@@ -53,7 +58,7 @@ bool Events::load()
 		auto res = classes.insert(className);
 		if (res.second) {
 			const std::string& lowercase = asLowerCaseString(className);
-			if (scriptInterface.loadFile("data/events/scripts/" + lowercase + ".lua") != 0) {
+			if (scriptInterface.loadFile(dataDirectory + "events/scripts/" + lowercase + ".lua") != 0) {
 				std::cout << "[Warning - Events::load] Can not load script: " << lowercase << ".lua" << std::endl;
 				std::cout << scriptInterface.getLastLuaError() << std::endl;
 			}

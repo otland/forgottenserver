@@ -49,10 +49,12 @@ bool Raids::loadFromXml()
 		return true;
 	}
 
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string raidsFile = dataDirectory + "raids/raids.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/raids/raids.xml");
+	pugi::xml_parse_result result = doc.load_file(raidsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Raids::loadFromXml", "data/raids/raids.xml", result);
+		printXMLError("Error - Raids::loadFromXml", raidsFile, result);
 		return false;
 	}
 
@@ -98,7 +100,7 @@ bool Raids::loadFromXml()
 		}
 
 		Raid* newRaid = new Raid(name, interval, margin, repeat);
-		if (newRaid->loadFromXml("data/raids/" + file)) {
+		if (newRaid->loadFromXml(g_config.getString(ConfigManager::DATA_DIRECTORY) + "raids/" + file)) {
 			raidList.push_back(newRaid);
 		} else {
 			std::cout << "[Error - Raids::loadFromXml] Failed to load raid: " << name << std::endl;
@@ -560,7 +562,7 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		return false;
 	}
 
-	if (!loadScript("data/raids/scripts/" + std::string(scriptAttribute.as_string()))) {
+	if (!loadScript(g_config.getString(ConfigManager::DATA_DIRECTORY) + "raids/scripts/" + std::string(scriptAttribute.as_string()))) {
 		std::cout << "Error: [ScriptEvent::configureRaidEvent] Can not load raid script." << std::endl;
 		return false;
 	}

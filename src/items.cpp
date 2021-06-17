@@ -19,6 +19,7 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "items.h"
 #include "spells.h"
 #include "movement.h"
@@ -26,6 +27,7 @@
 
 #include "pugicast.h"
 
+extern ConfigManager g_config;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 
@@ -231,7 +233,7 @@ void Items::clear()
 bool Items::reload()
 {
 	clear();
-	loadFromOtb("data/items/items.otb");
+	loadFromOtb(g_config.getString(ConfigManager::DATA_DIRECTORY) + "items/items.otb");
 
 	if (!loadFromXml()) {
 		return false;
@@ -480,10 +482,12 @@ bool Items::loadFromOtb(const std::string& file)
 
 bool Items::loadFromXml()
 {
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string itemsFile = dataDirectory + "items/items.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/items/items.xml");
+	pugi::xml_parse_result result = doc.load_file(itemsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Items::loadFromXml", "data/items/items.xml", result);
+		printXMLError("Error - Items::loadFromXml", itemsFile, result);
 		return false;
 	}
 

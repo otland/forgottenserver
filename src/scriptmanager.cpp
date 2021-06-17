@@ -23,6 +23,7 @@
 
 #include "actions.h"
 #include "chat.h"
+#include "configmanager.h"
 #include "talkaction.h"
 #include "spells.h"
 #include "movement.h"
@@ -42,6 +43,7 @@ MoveEvents* g_moveEvents = nullptr;
 Weapons* g_weapons = nullptr;
 Scripts* g_scripts = nullptr;
 
+extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
 ScriptingManager::~ScriptingManager()
@@ -60,8 +62,8 @@ ScriptingManager::~ScriptingManager()
 
 bool ScriptingManager::loadScriptSystems()
 {
-	if (g_luaEnvironment.loadFile("data/global.lua") == -1) {
-		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load data/global.lua" << std::endl;
+	if (g_luaEnvironment.loadFile(g_config.getString(ConfigManager::DATA_DIRECTORY) + "global.lua") == -1) {
+		std::cout << "[Warning - ScriptingManager::loadScriptSystems] Can not load global.lua from data directory" << std::endl;
 	}
 
 	g_scripts = new Scripts();

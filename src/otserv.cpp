@@ -229,7 +229,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	// load item data
 	std::cout << ">> Loading items" << std::endl;
-	if (!Item::items.loadFromOtb("data/items/items.otb")) {
+	if (!Item::items.loadFromOtb(g_config.getString(ConfigManager::DATA_DIRECTORY) + "items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}

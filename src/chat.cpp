@@ -20,11 +20,13 @@
 #include "otpch.h"
 
 #include "chat.h"
+#include "configmanager.h"
 #include "game.h"
 #include "pugicast.h"
 #include "scheduler.h"
 
 extern Chat* g_chat;
+extern ConfigManager g_config;
 extern Game g_game;
 
 bool PrivateChatChannel::isInvited(uint32_t guid) const
@@ -287,10 +289,12 @@ Chat::Chat():
 
 bool Chat::load()
 {
+	std::string dataDirectory = g_config.getString(ConfigManager::DATA_DIRECTORY);
+	std::string chatchannelsFile = dataDirectory + "chatchannels/chatchannels.xml";
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/chatchannels/chatchannels.xml");
+	pugi::xml_parse_result result = doc.load_file(chatchannelsFile.c_str());
 	if (!result) {
-		printXMLError("Error - Chat::load", "data/chatchannels/chatchannels.xml", result);
+		printXMLError("Error - Chat::load", chatchannelsFile, result);
 		return false;
 	}
 
@@ -307,7 +311,7 @@ bool Chat::load()
 			channel.name = channelName;
 
 			if (scriptAttribute) {
-				if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
+				if (scriptInterface.loadFile(dataDirectory + "chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
 					channel.onSpeakEvent = scriptInterface.getEvent("onSpeak");
 					channel.canJoinEvent = scriptInterface.getEvent("canJoin");
 					channel.onJoinEvent = scriptInterface.getEvent("onJoin");
@@ -328,7 +332,7 @@ bool Chat::load()
 		channel.publicChannel = isPublic;
 
 		if (scriptAttribute) {
-			if (scriptInterface.loadFile("data/chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
+			if (scriptInterface.loadFile(dataDirectory + "chatchannels/scripts/" + std::string(scriptAttribute.as_string())) == 0) {
 				channel.onSpeakEvent = scriptInterface.getEvent("onSpeak");
 				channel.canJoinEvent = scriptInterface.getEvent("canJoin");
 				channel.onJoinEvent = scriptInterface.getEvent("onJoin");

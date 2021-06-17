@@ -19,10 +19,12 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "npc.h"
 #include "game.h"
 #include "pugicast.h"
 
+extern ConfigManager g_config;
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
 
@@ -55,7 +57,7 @@ Npc* Npc::createNpc(const std::string& name)
 
 Npc::Npc(const std::string& name) :
 	Creature(),
-	filename("data/npc/" + name + ".xml"),
+	filename(g_config.getString(ConfigManager::DATA_DIRECTORY) + "npc/" + name + ".xml"),
 	npcEventHandler(nullptr),
 	masterRadius(-1),
 	loaded(false)
@@ -88,7 +90,7 @@ bool Npc::load()
 
 	if (!scriptInterface) {
 		scriptInterface = new NpcScriptInterface();
-		scriptInterface->loadNpcLib("data/npc/lib/npc.lua");
+		scriptInterface->loadNpcLib(g_config.getString(ConfigManager::DATA_DIRECTORY) + "npc/lib/npc.lua");
 	}
 
 	loaded = loadFromXml();
@@ -1095,7 +1097,7 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
 	npc(npc), scriptInterface(npc->getScriptInterface())
 {
-	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
+	loaded = scriptInterface->loadFile(g_config.getString(ConfigManager::DATA_DIRECTORY) + "npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << scriptInterface->getLastLuaError() << std::endl;

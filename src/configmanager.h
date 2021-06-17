@@ -91,6 +91,7 @@ class ConfigManager
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
 			CONFIG_FILE,
+			DATA_DIRECTORY,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};

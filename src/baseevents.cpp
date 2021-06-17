@@ -20,10 +20,12 @@
 #include "otpch.h"
 
 #include "baseevents.h"
+#include "configmanager.h"
 
 #include "pugicast.h"
 #include "tools.h"
 
+extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
 bool BaseEvents::loadFromXml()
@@ -34,7 +36,7 @@ bool BaseEvents::loadFromXml()
 	}
 
 	std::string scriptsName = getScriptBaseName();
-	std::string basePath = "data/" + scriptsName + "/";
+	std::string basePath = g_config.getString(ConfigManager::DATA_DIRECTORY) + scriptsName + "/";
 	if (getScriptInterface().loadFile(basePath + "lib/" + scriptsName + ".lua") == -1) {
 		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
 	}
