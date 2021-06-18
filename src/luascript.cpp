@@ -7656,11 +7656,11 @@ int LuaScriptInterface::luaCreatureGetOutfit(lua_State* L)
 
 int LuaScriptInterface::luaCreatureSetOutfit(lua_State* L)
 {
-	// creature:setOutfit(outfit[, callOutfitChangeEvent = true])
+	// creature:setOutfit(outfit)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
 		creature->defaultOutfit = getOutfit(L, 2);
-		g_game.internalCreatureChangeOutfit(creature, creature->defaultOutfit, getBoolean(L, 3, true));
+		g_game.internalCreatureChangeOutfit(creature, creature->defaultOutfit);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
