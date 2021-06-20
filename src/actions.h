@@ -123,7 +123,6 @@ class Actions final : public BaseEvents
 
 	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
