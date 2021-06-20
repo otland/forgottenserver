@@ -59,7 +59,7 @@
 		<item name="black pearl" chance="8980" />
 		<item name="gold coin" countmax="98" chance="100000" />
 		<item name="platinum coin" countmax="5" chance="50000" />
-		<item name="ring of healing (faster regeneration)" chance="11111" />
+		<item name="ring of healing" chance="11111" />
 		<item id="2229" chance="10000" /><!-- skull -->
 		<item name="vampire shield" chance="6300" />
 		<item name="bloody edge" chance="1200" />

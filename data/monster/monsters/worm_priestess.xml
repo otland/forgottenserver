@@ -59,8 +59,8 @@
 		<voice sentence="From the earthy depths he comes and brings freedom!" />
 	</voices>
 	<loot>
-		<item id="2148" countmin="2" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmin="2" countmax="50" chance="60000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="50" chance="60000" /><!-- gold coin -->
 		<item id="2152" countmax="3" chance="41130" /><!-- platinum coin -->
 		<item id="12429" chance="15850" /><!-- purple robe -->
 		<item id="7589" countmax="3" chance="12380" /><!-- strong mana potion -->

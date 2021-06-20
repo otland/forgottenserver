@@ -53,7 +53,7 @@
 		<voice sentence="Raaaargh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmin="10" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="95" chance="60000" /><!-- gold coin -->
 		<item id="2152" countmax="2" chance="58160" /><!-- platinum coin -->
 		<item id="23554" countmax="2" chance="15740" /><!-- moohtant horn -->

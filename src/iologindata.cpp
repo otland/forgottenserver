@@ -44,11 +44,6 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	return account;
 }
 
-bool IOLoginData::saveAccount(const Account& acc)
-{
-	return Database::getInstance().executeQuery(fmt::format("UPDATE `accounts` SET `premium_ends_at` = {:d} WHERE `id` = {:d}", acc.premiumEndsAt, acc.id));
-}
-
 std::string decodeSecret(const std::string& secret)
 {
 	// simple base32 decoding

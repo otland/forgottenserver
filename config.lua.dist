@@ -93,10 +93,14 @@ yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
+showPlayerLogInConsole = true
 
--- VIP
+-- VIP and Depot limits
+-- NOTE: you can set custom limits per group in data/XML/groups.xml
 vipFreeLimit = 20
 vipPremiumLimit = 100
+depotFreeLimit = 2000
+depotPremiumLimit = 10000
 
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will

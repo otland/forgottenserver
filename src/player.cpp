@@ -781,7 +781,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
-		return it->second.get();
+		return it->second;
 	}
 
 	if (!autoCreate) {
@@ -790,7 +790,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
-	return it->second.get();
+	return it->second;
 }
 
 DepotLocker* Player::getDepotLocker(uint32_t depotId)
@@ -1043,7 +1043,9 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 
 		Account account = IOLoginData::loadAccount(accountNumber);
 
-		std::cout << name << " has logged in." << std::endl;
+		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
+			std::cout << name << " has logged in." << std::endl;
+		}
 
 		if (guild) {
 			guild->addMember(this);
@@ -1165,7 +1167,9 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 
 		g_chat->removeUserFromAllChannels(*this);
 
-		std::cout << getName() << " has logged out." << std::endl;
+		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
+			std::cout << getName() << " has logged out." << std::endl;
+		}
 
 		if (guild) {
 			guild->removeMember(this);
@@ -3026,7 +3030,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					bool isOwner = false;
 
 					for (const auto& it : depotChests) {
-						if (it.second.get() == depotChest) {
+						if (it.second == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}
@@ -3529,7 +3533,7 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 
 			if (lastHit && hasCondition(CONDITION_INFIGHT)) {
 				pzLocked = true;
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME), 0);
+				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000, 0);
 				addCondition(condition);
 			}
 		}
@@ -4502,19 +4506,16 @@ size_t Player::getMaxVIPEntries() const
 		return group->maxVipEntries;
 	}
 
-	return g_config.getNumber(isPremium() ?
-		ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT
-	);
+	return g_config.getNumber(isPremium() ? ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT);
 }
 
 size_t Player::getMaxDepotItems() const
 {
 	if (group->maxDepotItems != 0) {
 		return group->maxDepotItems;
-	} else if (isPremium()) {
-		return 2000;
 	}
-	return 1000;
+
+	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const

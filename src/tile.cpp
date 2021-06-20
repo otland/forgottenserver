@@ -378,7 +378,7 @@ void Tile::onAddTileItem(Item* item)
 		auto it = g_game.browseFields.find(this);
 		if (it != g_game.browseFields.end()) {
 			it->second->addItemBack(item);
-			item->setParent(this);
+			item->setParent(it->second);
 		}
 	}
 
@@ -416,7 +416,7 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 			int32_t index = it->second->getThingIndex(oldItem);
 			if (index != -1) {
 				it->second->replaceThing(index, newItem);
-				newItem->setParent(this);
+				newItem->setParent(it->second);
 			}
 		}
 	} else if (oldItem->hasProperty(CONST_PROP_MOVEABLE) || oldItem->getContainer()) {
