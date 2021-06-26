@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Swarmer" nameDescription="a swarmer" race="venom" experience="350" speed="190">
 	<health now="460" max="460" />
 	<look type="460" corpse="15388" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="50" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />

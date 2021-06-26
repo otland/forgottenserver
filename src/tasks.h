@@ -24,6 +24,7 @@
 #include "thread_holder_base.h"
 #include "enums.h"
 
+using TaskFunc = std::function<void(void)>;
 const int DISPATCHER_TASK_EXPIRATION = 2000;
 const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));
 
@@ -31,8 +32,8 @@ class Task
 {
 	public:
 		// DO NOT allocate this class on the stack
-		explicit Task(std::function<void (void)>&& f) : func(std::move(f)) {}
-		Task(uint32_t ms, std::function<void (void)>&& f) :
+		explicit Task(TaskFunc&& f) : func(std::move(f)) {}
+		Task(uint32_t ms, TaskFunc&& f) :
 			expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f)) {}
 
 		virtual ~Task() = default;
@@ -58,15 +59,15 @@ class Task
 		// Expiration has another meaning for scheduler tasks,
 		// then it is the time the task should be added to the
 		// dispatcher
-		std::function<void (void)> func;
+		TaskFunc func;
 };
 
-Task* createTask(std::function<void (void)> f);
-Task* createTask(uint32_t expiration, std::function<void (void)> f);
+Task* createTask(TaskFunc&& f);
+Task* createTask(uint32_t expiration, TaskFunc&& f);
 
 class Dispatcher : public ThreadHolder<Dispatcher> {
 	public:
-		void addTask(Task* task, bool push_front = false);
+		void addTask(Task* task);
 
 		void shutdown();
 
@@ -80,7 +81,7 @@ class Dispatcher : public ThreadHolder<Dispatcher> {
 		std::mutex taskLock;
 		std::condition_variable taskSignal;
 
-		std::list<Task*> taskList;
+		std::vector<Task*> taskList;
 		uint64_t dispatcherCycle = 0;
 };
 

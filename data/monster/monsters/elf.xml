@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Elf" nameDescription="an elf" race="blood" experience="42" speed="190" manacost="320">
 	<health now="100" max="100" />
 	<look type="62" corpse="6003" />

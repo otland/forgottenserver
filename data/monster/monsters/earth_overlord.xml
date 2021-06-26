@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Earth Overlord" nameDescription="an Earth Overlord" race="undead" experience="2800" speed="330">
 	<health now="4000" max="4000" />
 	<look type="285" corpse="8933" />
@@ -12,10 +12,8 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
-		<flag runonhealth="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />

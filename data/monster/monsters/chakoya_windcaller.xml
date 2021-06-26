@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Chakoya Windcaller" nameDescription="a chakoya windcaller" race="blood" experience="48" speed="200" manacost="305">
 	<health now="84" max="84" />
 	<look type="260" corpse="7320" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="90" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="4" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />

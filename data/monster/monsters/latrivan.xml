@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Latrivan" nameDescription="Latrivan" race="fire" experience="10000" speed="340">
 	<health now="25000" max="25000" />
-	<look type="12" head="120" body="128" legs="121" feet="111" corpse="6068" />
+	<look type="12" head="119" body="71" legs="118" feet="34" corpse="8721" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

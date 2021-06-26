@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deepling Worker" nameDescription="a deepling worker" race="blood" experience="130" speed="210">
 	<health now="190" max="190" />
 	<look type="470" corpse="15497" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="20" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />

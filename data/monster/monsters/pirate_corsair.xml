@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Pirate Corsair" nameDescription="a pirate corsair" race="blood" experience="350" speed="250" manacost="775">
 	<health now="675" max="675" />
 	<look type="98" corpse="20475" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tarnished Spirit" nameDescription="a tarnished spirit" race="undead" experience="120" speed="180">
 	<health now="150" max="150" />
 	<look type="566" corpse="21366" />

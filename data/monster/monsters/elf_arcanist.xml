@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Elf Arcanist" nameDescription="an elf arcanist" race="blood" experience="175" speed="220">
 	<health now="220" max="220" />
 	<look type="63" corpse="6011" />
@@ -72,7 +72,7 @@
 		<item name="holy orchid" chance="2000" />
 		<item name="wand of cosmic energy" chance="1160" />
 		<item name="life crystal" chance="970" />
-		<item name="inkwell" chance="1000" />
+		<item id="2600" chance="1000" /><!-- inkwell -->
 		<item name="sandals" chance="950" />
 		<item name="grave flower" chance="880" />
 		<item name="yellow gem" chance="50" />

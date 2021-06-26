@@ -24,7 +24,6 @@
 
 extern Dispatcher g_dispatcher;
 
-
 void DatabaseTasks::start()
 {
 	db.connect();

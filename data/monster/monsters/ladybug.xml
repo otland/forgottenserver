@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ladybug" nameDescription="a ladybug" race="venom" experience="70" speed="200">
 	<health now="255" max="255" />
 	<look type="448" corpse="15272" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 	</flags>
 	<attacks>

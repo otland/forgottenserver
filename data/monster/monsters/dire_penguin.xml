@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dire Penguin" nameDescription="a dire penguin" race="blood" experience="119" speed="200">
 	<health now="173" max="173" />
 	<look type="250" corpse="7334" />

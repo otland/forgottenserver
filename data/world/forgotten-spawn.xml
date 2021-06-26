@@ -1262,7 +1262,7 @@
 		<monster name="Scorpion" x="2" y="5" z="10" spawntime="60" />
 	</spawn>
 	<spawn centerx="243" centery="590" centerz="10" radius="5">
-		<monster name="Beholder" x="0" y="0" z="10" spawntime="60" />
+		<monster name="Bonelord" x="0" y="0" z="10" spawntime="60" />
 	</spawn>
 	<spawn centerx="220" centery="602" centerz="10" radius="5">
 		<monster name="Scorpion" x="-2" y="-1" z="10" spawntime="60" />

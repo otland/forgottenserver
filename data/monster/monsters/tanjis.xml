@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tanjis" nameDescription="Tanjis" race="blood" experience="15000" speed="560">
 	<health now="30000" max="30000" />
 	<look type="446" corpse="15228" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 		<flag isboss="1" />
 	</flags>
@@ -63,7 +63,7 @@
 		<element physicalPercent="-20" />
 		<element deathPercent="-20" />
 	</elements>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="JAUL QJELL, JAKNH JEH KENH!!" />
 	</voices>
 	<loot>

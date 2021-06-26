@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deathbine" nameDescription="Deathbine" race="venom" experience="340" speed="240">
 	<health now="525" max="525" />
 	<look type="120" corpse="6047" />

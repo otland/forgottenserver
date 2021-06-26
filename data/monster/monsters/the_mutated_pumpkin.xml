@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Mutated Pumpkin" nameDescription="The Mutated Pumpkin" race="venom" experience="30000" speed="330">
 	<health now="500000" max="500000" />
 	<look type="292" corpse="8960" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deepling Warrior" nameDescription="a deepling warrior" race="blood" experience="1500" speed="210">
 	<health now="1600" max="1600" />
 	<look type="441" corpse="15175" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="70" />
 		<flag runonhealth="30" />
 		<flag canwalkonenergy="0" />
