@@ -540,11 +540,7 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 		return false;
 	}
 
-	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-		return false;
-	}
-
-	return true;
+	return !(tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
 }
 
 bool Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
