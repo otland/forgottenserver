@@ -652,7 +652,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 			return isTileClear(x0, y0, z0, true) && checkSightLine(x0, y0, x1, y1, z0);
 		} else {
 			//target is below us
-			if (!checkSightLine(x0, y0, x1, y1, z0)){
+			if (!checkSightLine(x0, y0, x1, y1, z0)) {
 				return false;
 			}
 
