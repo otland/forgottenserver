@@ -2094,10 +2094,27 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
+		std::unordered_map<std::string, uint16_t> names;
+		for (const auto& killer : getKillers()) {
+			++names[killer->getName()];
+		}
+
 		if (lastHitCreature) {
-			corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s}.", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription()));
+			if (!mostDamageCreature) {
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(), names.size() > 1 ? " and others." : "."));
+			} else if (lastHitCreature != mostDamageCreature && names[lastHitCreature->getName()] == 1) {
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(), lastHitCreature->getNameDescription(), names.size() > 2 ? " and others." : "."));
+			} else {
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
+			}
+		} else if (mostDamageCreature) {
+			if (names.size() > 1) {
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil, {:s}, and others", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
+			} else {
+				corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil and others", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
+			}
 		} else {
-			corpse->setSpecialDescription(fmt::format("You recognize {:s}.", getNameDescription()));
+			corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil {:s}", getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He", names.size() ? " and others." : "."));
 		}
 	}
 	return corpse;

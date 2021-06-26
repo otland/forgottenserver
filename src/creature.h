@@ -352,6 +352,7 @@ class Creature : virtual public Thing
 			return false;
 		}
 
+		CreatureVector getKillers();
 		void onDeath();
 		virtual uint64_t getGainedExperience(Creature* attacker) const;
 		void addDamagePoints(Creature* attacker, int32_t damagePoints);
