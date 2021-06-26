@@ -502,6 +502,13 @@ void Map::clearPlayersSpectatorCache()
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
+	//z checks
+	//underground 8->15
+	//ground level and above 7->0
+	if ((fromPos.z >= 8 && toPos.z < 8) || (toPos.z >= 8 && fromPos.z < 8)) {
+		return false;
+	}
+
 	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
 	if (deltaz > 2) {
 		return false;
