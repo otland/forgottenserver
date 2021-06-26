@@ -502,13 +502,6 @@ void Map::clearPlayersSpectatorCache()
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	//z checks
-	//underground 8->15
-	//ground level and above 7->0
-	if ((fromPos.z >= 8 && toPos.z < 8) || (toPos.z >= 8 && fromPos.z < 8)) {
-		return false;
-	}
-
 	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
 	if (deltaz > 2) {
 		return false;
@@ -529,62 +522,164 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
 {
-	if (fromPos == toPos) {
+	const Tile* tile = getTile(x, y, z);
+	if (!tile) {
 		return true;
 	}
 
-	Position start(fromPos.z > toPos.z ? toPos : fromPos);
-	Position destination(fromPos.z > toPos.z ? fromPos : toPos);
-
-	const int8_t mx = start.x < destination.x ? 1 : start.x == destination.x ? 0 : -1;
-	const int8_t my = start.y < destination.y ? 1 : start.y == destination.y ? 0 : -1;
-
-	int32_t A = Position::getOffsetY(destination, start);
-	int32_t B = Position::getOffsetX(start, destination);
-	int32_t C = -(A * destination.x + B * destination.y);
-
-	while (start.x != destination.x || start.y != destination.y) {
-		int32_t move_hor = std::abs(A * (start.x + mx) + B * (start.y) + C);
-		int32_t move_ver = std::abs(A * (start.x) + B * (start.y + my) + C);
-		int32_t move_cross = std::abs(A * (start.x + mx) + B * (start.y + my) + C);
-
-		if (start.y != destination.y && (start.x == destination.x || move_hor > move_ver || move_hor > move_cross)) {
-			start.y += my;
-		}
-
-		if (start.x != destination.x && (start.y == destination.y || move_ver > move_hor || move_ver > move_cross)) {
-			start.x += mx;
-		}
-
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-			return false;
-		}
+	if (blockFloor && tile->getGround()){
+		return false;
 	}
 
-	// now we need to perform a jump between floors to see if everything is clear (literally)
-	while (start.z != destination.z) {
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->getThingCount() > 0) {
-			return false;
-		}
-
-		start.z++;
+	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
+		return false;
 	}
 
 	return true;
 }
 
-bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
+bool Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
-	if (floorCheck && fromPos.z != toPos.z) {
-		return false;
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+	float grad = (dx == 0) ? 1 : dy / dx;
+	float xy = y0 + grad;
+
+	for (uint16_t y = x0 + 1; y < x1; ++y) {
+		uint16_t newX = std::floor(xy);
+		bool tileClear = isTileClear(newX, y, z);
+		if (!tileClear) {
+			return false;
+		}
+		xy += grad;
 	}
 
-	// Cast two converging rays and see if either yields a result.
-	return checkSightLine(fromPos, toPos) || checkSightLine(toPos, fromPos);
+	return true;
+}
+
+bool Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+	float grad = (dx == 0) ? 1 : dy / dx;
+	float xy = y0 + grad;
+
+	for (uint16_t x = x0 + 1; x < x1; ++x) {
+		uint16_t newY = std::floor(xy + 0.1);
+		bool tileClear = isTileClear(x, newY, z);
+		if (!tileClear) {
+			return false;
+		}
+		xy += grad;
+	}
+
+	return true;
+}
+
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	if (x0 == x1 && y0 == y1) {
+		return true;
+	}
+
+	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
+		if (y1 > y0) {
+			return getSteepLine(y0, x0, y1, x1, z);
+		}
+		return getSteepLine(y1, x1, y0, x0, z);
+	}
+
+	if (x0 > x1) {
+		return getSlightLine(x1, y1, x0, y0, z);
+	}
+
+	return getSlightLine(x0, y0, x1, y1, z);
+}
+
+bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck /*= false*/) const
+{
+	uint16_t x0 = fromPos.x;
+	uint16_t y0 = fromPos.y;
+	uint8_t z0 = fromPos.z;
+
+	uint16_t x1 = toPos.x;
+	uint16_t y1 = toPos.y;
+	uint8_t z1 = toPos.z;
+
+	if (z0 == z1) {
+		//target is on the same floor
+
+		//skip checks if toPos is next to us
+		if (Position::getDistanceX(fromPos, toPos) < 2 && Position::getDistanceY(fromPos, toPos) < 2) {
+			return true;
+		}
+
+		//sight is clear or floorCheck is enabled
+		bool sightClear = checkSightLine(x0, y0, x1, y1, z0);
+		if (sightClear || floorCheck) {
+			return sightClear;
+		}
+
+		//no obstacles above floor 0 so we can throw above the obstacle
+		if (z0 == 0) {
+			return true;
+		}
+
+		//attempt to find a path above the obstacle
+		--z0;
+		sightClear = checkSightLine(x0, y0, x1, y1, z0);
+
+		//check if there are no ground tiles directly above us and the target
+		bool aboveFromPos = isTileClear(x0, y0, z0, true);
+		bool aboveToPos = isTileClear(x1, y1, z0, true);
+
+		return sightClear && aboveFromPos && aboveToPos;
+	} else {
+		//target is on a different floor
+
+		if (floorCheck) {
+			return false;
+		}
+
+		//skip checks for sight line in case fromPos and toPos cross the ground floor
+		if (z0 < 8 && z1 > 7 || z0 > 7 && z1 < 8) {
+			return false;
+		}
+
+		if (z0 > z1) {
+			//target is above us
+
+			int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
+
+			if (deltaz > 1) {
+				return false;
+			}
+
+			--z0;
+			bool aboveFromPos = isTileClear(x0, y0, z0, true);
+			bool sightClear = checkSightLine(x0, y0, x1, y1, z0);
+
+			return sightClear && aboveFromPos;
+		} else {
+			//target is below us
+
+			bool sightClear = checkSightLine(x0, y0, x1, y1, z0);
+
+			if (!sightClear){
+				return false;
+			}
+
+			for (uint8_t z = z0; z < z1; ++z) {
+				if (!isTileClear(x1, y1, z, true)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+	}
 }
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
