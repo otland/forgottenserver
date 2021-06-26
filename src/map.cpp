@@ -627,18 +627,11 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 			return true;
 		}
 
-		//attempt to find a path above the obstacle
+		//check if tiles above us and target are clear and check for clear sight between them
 		--z0;
-		sightClear = checkSightLine(x0, y0, x1, y1, z0);
-
-		//check if there are no ground tiles directly above us and the target
-		bool aboveFromPos = isTileClear(x0, y0, z0, true);
-		bool aboveToPos = isTileClear(x1, y1, z0, true);
-
-		return sightClear && aboveFromPos && aboveToPos;
+		return checkSightLine(x0, y0, x1, y1, z0) && isTileClear(x0, y0, z0, true) && isTileClear(x1, y1, z0, true);
 	} else {
 		//target is on a different floor
-
 		if (floorCheck) {
 			return false;
 		}
@@ -650,27 +643,20 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 
 		if (z0 > z1) {
 			//target is above us
-
-			int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
-
-			if (deltaz > 1) {
+			if (Position::getDistanceZ(fromPos, toPos) > 1) {
 				return false;
 			}
 
+			//check a tile above us and the path to target
 			--z0;
-			bool aboveFromPos = isTileClear(x0, y0, z0, true);
-			bool sightClear = checkSightLine(x0, y0, x1, y1, z0);
-
-			return sightClear && aboveFromPos;
+			return isTileClear(x0, y0, z0, true) && checkSightLine(x0, y0, x1, y1, z0);
 		} else {
 			//target is below us
-
-			bool sightClear = checkSightLine(x0, y0, x1, y1, z0);
-
-			if (!sightClear){
+			if (!checkSightLine(x0, y0, x1, y1, z0)){
 				return false;
 			}
 
+			//check if tiles above the target are clear
 			for (uint8_t z = z0; z < z1; ++z) {
 				if (!isTileClear(x1, y1, z, true)) {
 					return false;
