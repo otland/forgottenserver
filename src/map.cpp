@@ -529,17 +529,17 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-uint8_t Map::isTileClear(uint16_t x, uint16_t y, uint8_t z) const
+SightTileState Map::getSightTileState(uint16_t x, uint16_t y, uint8_t z) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile || !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-		return 0;
+		return SIGHTTILESTATE_CLEARED;
 	}
 
-	return tile->getFieldItem() ? 2 : 1;
+	return tile->getFieldItem() ? SIGHTTILESTATE_FIELD : SIGHTTILESTATE_BLOCKED;
 }
 
-uint8_t Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+SightTileState Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
 	float dx = x1 - x0;
 	float dy = y1 - y0;
@@ -548,17 +548,17 @@ uint8_t Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, ui
 
 	for (int y = x0 +1; y < x1; ++y) {
 		uint16_t newX = std::floor(xy);
-		uint8_t tileClear = isTileClear(newX, y, z);
-		if (tileClear != 0) {
+		auto tileClear = getSightTileState(newX, y, z);
+		if (tileClear != SIGHTTILESTATE_CLEARED) {
 			return tileClear;
 		}
 		xy += grad;
 	}
 
-	return 0;
+	return SIGHTTILESTATE_CLEARED;
 }
 
-uint8_t Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+SightTileState Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
 	float dx = x1 - x0;
 	float dy = y1 - y0;
@@ -567,20 +567,20 @@ uint8_t Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, u
 
 	for (int x = x0 +1; x < x1; ++x) {
 		uint16_t newY = std::floor(xy + 0.1);
-		uint8_t tileClear = isTileClear(x, newY, z);
-		if (tileClear != 0) {
+		auto tileClear = getSightTileState(x, newY, z);
+		if (tileClear != SIGHTTILESTATE_CLEARED) {
 			return tileClear;
 		}
 		xy += grad;
 	}
 
-	return 0;
+	return SIGHTTILESTATE_CLEARED;
 }
 
-uint8_t Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+SightTileState Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
 	if (x0 == x1 && y0 == y1) {
-		return 0;
+		return SIGHTTILESTATE_CLEARED;
 	}
 
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
@@ -605,22 +605,22 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	}
 
 	uint16_t x0 = fromPos.x, y0 = fromPos.y, x1 = toPos.x, y1 = toPos.y;
-	uint8_t sightClear = checkSightLine(x0, y0, x1, y1, z0);
-	if (sightClear == 2 || sightClear == 1 && z0 == z1) {
+	auto sightClear = checkSightLine(x0, y0, x1, y1, z0);
+	if (sightClear == SIGHTTILESTATE_FIELD || sightClear == SIGHTTILESTATE_BLOCKED && z0 == z1) {
 		return false;
 	}
 
 	if (z0 < z1) {
-		if (sightClear == 1 || isTileClear(x1, y1, z0) != 0) {
+		if (sightClear == SIGHTTILESTATE_BLOCKED || getSightTileState(x1, y1, z0) != SIGHTTILESTATE_CLEARED) {
 			return false;
 		}
 
 		for (uint8_t z = z0 +1; z <= z1; ++z) {
-			if (isTileClear(x1, y1, z) != 0 || checkSightLine(x0, y0, x1, y1, z) == 2) {
+			if (getSightTileState(x1, y1, z) != SIGHTTILESTATE_CLEARED || checkSightLine(x0, y0, x1, y1, z) == SIGHTTILESTATE_FIELD) {
 				return false;
 			}
 		}
-	} else if (isTileClear(x1, y1, z1) != 0 || checkSightLine(x0, y0, x1, y1, z1) != 0) {
+	} else if (getSightTileState(x1, y1, z1) != SIGHTTILESTATE_CLEARED || checkSightLine(x0, y0, x1, y1, z1) != SIGHTTILESTATE_CLEARED) {
 		return false;
 	}
 

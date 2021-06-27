@@ -170,6 +170,12 @@ class QTreeLeafNode final : public QTreeNode
   * Holds all the actual map-data
   */
 
+enum SightTileState : uint8_t {
+	SIGHTTILESTATE_CLEARED,
+	SIGHTTILESTATE_BLOCKED,
+	SIGHTTILESTATE_FIELD,
+};
+
 class Map
 {
 	public:
@@ -256,10 +262,10 @@ class Map
 		  *	\returns The result if there is no obstacles
 		  */
 		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
-		uint8_t isTileClear(uint16_t x, uint16_t y, uint8_t z) const;
-		uint8_t checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
-		uint8_t getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
-		uint8_t getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
+		SightTileState getSightTileState(uint16_t x, uint16_t y, uint8_t z) const;
+		SightTileState checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
+		SightTileState getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
+		SightTileState getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
