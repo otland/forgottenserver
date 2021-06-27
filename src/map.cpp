@@ -510,7 +510,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	}
 
 	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
-	if (deltaz > 2) {
+	if (fromPos.z > toPos.z && deltaz > 2) {
 		return false;
 	}
 
@@ -529,62 +529,102 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
+SightTileState Map::getSightTileState(uint16_t x, uint16_t y, uint8_t z) const
 {
-	if (fromPos == toPos) {
-		return true;
+	const Tile* tile = getTile(x, y, z);
+	if (!tile || !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
+		return SIGHTTILESTATE_CLEARED;
 	}
 
-	Position start(fromPos.z > toPos.z ? toPos : fromPos);
-	Position destination(fromPos.z > toPos.z ? fromPos : toPos);
+	return tile->getFieldItem() ? SIGHTTILESTATE_FIELD : SIGHTTILESTATE_BLOCKED;
+}
 
-	const int8_t mx = start.x < destination.x ? 1 : start.x == destination.x ? 0 : -1;
-	const int8_t my = start.y < destination.y ? 1 : start.y == destination.y ? 0 : -1;
+SightTileState Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+	float grad = (dx == 0) ? 1 : dy / dx;
+	float xy = y0 + grad;
 
-	int32_t A = Position::getOffsetY(destination, start);
-	int32_t B = Position::getOffsetX(start, destination);
-	int32_t C = -(A * destination.x + B * destination.y);
-
-	while (start.x != destination.x || start.y != destination.y) {
-		int32_t move_hor = std::abs(A * (start.x + mx) + B * (start.y) + C);
-		int32_t move_ver = std::abs(A * (start.x) + B * (start.y + my) + C);
-		int32_t move_cross = std::abs(A * (start.x + mx) + B * (start.y + my) + C);
-
-		if (start.y != destination.y && (start.x == destination.x || move_hor > move_ver || move_hor > move_cross)) {
-			start.y += my;
+	for (int y = x0 +1; y < x1; ++y) {
+		uint16_t newX = std::floor(xy);
+		auto tileClear = getSightTileState(newX, y, z);
+		if (tileClear != SIGHTTILESTATE_CLEARED) {
+			return tileClear;
 		}
-
-		if (start.x != destination.x && (start.y == destination.y || move_ver > move_hor || move_ver > move_cross)) {
-			start.x += mx;
-		}
-
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-			return false;
-		}
+		xy += grad;
 	}
 
-	// now we need to perform a jump between floors to see if everything is clear (literally)
-	while (start.z != destination.z) {
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->getThingCount() > 0) {
-			return false;
-		}
+	return SIGHTTILESTATE_CLEARED;
+}
 
-		start.z++;
+SightTileState Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	float dx = x1 - x0;
+	float dy = y1 - y0;
+	float grad = (dx == 0) ? 1 : dy / dx;
+	float xy = y0 + grad;
+
+	for (int x = x0 +1; x < x1; ++x) {
+		uint16_t newY = std::floor(xy + 0.1);
+		auto tileClear = getSightTileState(x, newY, z);
+		if (tileClear != SIGHTTILESTATE_CLEARED) {
+			return tileClear;
+		}
+		xy += grad;
 	}
 
-	return true;
+	return SIGHTTILESTATE_CLEARED;
+}
+
+SightTileState Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	if (x0 == x1 && y0 == y1) {
+		return SIGHTTILESTATE_CLEARED;
+	}
+
+	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
+		if (y1 > y0) {
+			return getSteepLine(y0, x0, y1, x1, z);
+		}
+		return getSteepLine(y1, x1, y0, x0, z);
+	}
+
+	if (x0 > x1) {
+		return getSlightLine(x1, y1, x0, y0, z);
+	}
+
+	return getSlightLine(x0, y0, x1, y1, z);
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
-	if (floorCheck && fromPos.z != toPos.z) {
+	uint8_t z0 = fromPos.z, z1 = toPos.z;
+	if (floorCheck && z0 != z1) {
 		return false;
 	}
 
-	// Cast two converging rays and see if either yields a result.
-	return checkSightLine(fromPos, toPos) || checkSightLine(toPos, fromPos);
+	uint16_t x0 = fromPos.x, y0 = fromPos.y, x1 = toPos.x, y1 = toPos.y;
+	auto sightClear = checkSightLine(x0, y0, x1, y1, z0);
+	if (sightClear == SIGHTTILESTATE_FIELD || sightClear == SIGHTTILESTATE_BLOCKED && z0 == z1) {
+		return false;
+	}
+
+	if (z0 < z1) {
+		if (sightClear == SIGHTTILESTATE_BLOCKED || getSightTileState(x1, y1, z0) != SIGHTTILESTATE_CLEARED) {
+			return false;
+		}
+
+		for (uint8_t z = z0 +1; z <= z1; ++z) {
+			if (getSightTileState(x1, y1, z) != SIGHTTILESTATE_CLEARED || checkSightLine(x0, y0, x1, y1, z) == SIGHTTILESTATE_FIELD) {
+				return false;
+			}
+		}
+	} else if (getSightTileState(x1, y1, z1) != SIGHTTILESTATE_CLEARED || checkSightLine(x0, y0, x1, y1, z1) != SIGHTTILESTATE_CLEARED) {
+		return false;
+	}
+
+	return true;
 }
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
