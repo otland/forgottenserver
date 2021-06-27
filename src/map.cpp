@@ -505,7 +505,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	//z checks
 	//underground 8->15
 	//ground level and above 7->0
-	if ((fromPos.z >= 8 && toPos.z < 8) || (toPos.z >= 8 && fromPos.z < 8)) {
+	if (fromPos.z < 8 && toPos.z > 7 || fromPos.z > 7 && toPos.z < 8) {
 		return false;
 	}
 
@@ -514,12 +514,12 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 		return false;
 	}
 
-	if ((Position::getDistanceX(fromPos, toPos) - deltaz) > rangex) {
+	//distance checks
+	if (Position::getDistanceX(fromPos, toPos) - deltaz > rangex) {
 		return false;
 	}
 
-	//distance checks
-	if ((Position::getDistanceY(fromPos, toPos) - deltaz) > rangey) {
+	if (Position::getDistanceY(fromPos, toPos) - deltaz > rangey) {
 		return false;
 	}
 
@@ -536,11 +536,11 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 		return true;
 	}
 
-	if (blockFloor && tile->getGround()){
+	if (blockFloor && tile->getGround()) {
 		return false;
 	}
 
-	return !(tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
+	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 }
 
 bool Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
@@ -551,9 +551,7 @@ bool Map::getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8
 	float xy = y0 + grad;
 
 	for (uint16_t y = x0 + 1; y < x1; ++y) {
-		uint16_t newX = std::floor(xy);
-		bool tileClear = isTileClear(newX, y, z);
-		if (!tileClear) {
+		if (!isTileClear(std::floor(xy), y, z)) {
 			return false;
 		}
 		xy += grad;
@@ -570,9 +568,7 @@ bool Map::getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint
 	float xy = y0 + grad;
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		uint16_t newY = std::floor(xy + 0.1);
-		bool tileClear = isTileClear(x, newY, z);
-		if (!tileClear) {
+		if (!isTileClear(x, std::floor(xy + 0.1), z)) {
 			return false;
 		}
 		xy += grad;
@@ -605,15 +601,14 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 {
 	uint16_t x0 = fromPos.x;
 	uint16_t y0 = fromPos.y;
-	uint8_t z0 = fromPos.z;
+	uint8_t  z0 = fromPos.z;
 
 	uint16_t x1 = toPos.x;
 	uint16_t y1 = toPos.y;
-	uint8_t z1 = toPos.z;
+	uint8_t  z1 = toPos.z;
 
+	//target is on the same floor
 	if (z0 == z1) {
-		//target is on the same floor
-
 		//skip checks if toPos is next to us
 		if (Position::getDistanceX(fromPos, toPos) < 2 && Position::getDistanceY(fromPos, toPos) < 2) {
 			return true;
@@ -630,45 +625,42 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 			return true;
 		}
 
-		//check if tiles above us and target are clear and check for clear sight between them
+		//check if tiles above us and the target are clear and check for a clear sight between them
 		--z0;
 		return checkSightLine(x0, y0, x1, y1, z0) && isTileClear(x0, y0, z0, true) && isTileClear(x1, y1, z0, true);
-	} else {
-		//target is on a different floor
-		if (floorCheck) {
+	}
+
+	//target is on a different floor
+	if (floorCheck) {
+		return false;
+	}
+
+	//skip checks for sight line in case fromPos and toPos cross the ground floor
+	if (z0 < 8 && z1 > 7 || z0 > 7 && z1 < 8) {
+		return false;
+	}
+
+	//target is above us
+	if (z0 > z1) {
+		if (Position::getDistanceZ(fromPos, toPos) > 1) {
 			return false;
 		}
 
-		//skip checks for sight line in case fromPos and toPos cross the ground floor
-		if (z0 < 8 && z1 > 7 || z0 > 7 && z1 < 8) {
+		//check a tile above us and the path to the target
+		--z0;
+		return isTileClear(x0, y0, z0, true) && checkSightLine(x0, y0, x1, y1, z0);
+	}
+
+	//target is below us
+	//check if tiles above the target are clear
+	for (uint8_t z = z0; z < z1; ++z) {
+		if (!isTileClear(x1, y1, z, true)) {
 			return false;
-		}
-
-		if (z0 > z1) {
-			//target is above us
-			if (Position::getDistanceZ(fromPos, toPos) > 1) {
-				return false;
-			}
-
-			//check a tile above us and the path to target
-			--z0;
-			return isTileClear(x0, y0, z0, true) && checkSightLine(x0, y0, x1, y1, z0);
-		} else {
-			//target is below us
-			if (!checkSightLine(x0, y0, x1, y1, z0)) {
-				return false;
-			}
-
-			//check if tiles above the target are clear
-			for (uint8_t z = z0; z < z1; ++z) {
-				if (!isTileClear(x1, y1, z, true)) {
-					return false;
-				}
-			}
-
-			return true;
 		}
 	}
+
+	//check if we can throw to the tile above the target
+	return checkSightLine(x0, y0, x1, y1, z0);
 }
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
