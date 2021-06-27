@@ -456,6 +456,11 @@ class Game
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 		static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
 
+		void setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value);
+		bool getAccountStorageValue(const uint32_t accountId, const uint32_t key, int32_t& value) const;
+
+		size_t getNumberOfPlayersByAccount(const uint32_t accountId) const;
+
 		void startDecay(Item* item);
 
 		int16_t getWorldTime() { return worldTime; }
@@ -507,6 +512,8 @@ class Game
 		Quests quests;
 
 		std::forward_list<Item*> toDecayItems;
+
+		std::unordered_map<uint32_t, std::unordered_map<uint32_t, int32_t>> accountStorageMap;
 
 		std::unordered_set<Tile*> getTilesToClean() const {
 			return tilesToClean;

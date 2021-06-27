@@ -536,6 +536,15 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		} while (result->next());
 	}
 
+	// load account storage map
+	if (g_game.getNumberOfPlayersByAccount(player->getAccount()) == 0) {
+		if ((result == db.storeQuery(fmt::format("SELECT `key`, `value` FROM `account_storage` WHERE `account_id` = {:d}", player->getAccount())))) {
+			do {
+				g_game.setAccountStorageValue(player->getAccount(), result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"));
+			} while (result->next());
+		}
+	}
+
 	//load vip list
 	if ((result = db.storeQuery(fmt::format("SELECT `player_id` FROM `account_viplist` WHERE `account_id` = {:d}", player->getAccount())))) {
 		do {
@@ -830,6 +839,31 @@ bool IOLoginData::savePlayer(Player* player)
 
 	if (!storageQuery.execute()) {
 		return false;
+	}
+
+	// save account storage values
+	if (g_game.getNumberOfPlayersByAccount(player->getAccount()) == 1) {
+		if (!db.executeQuery(fmt::format("DELETE FROM `account_storage` WHERE `account_id` = {:d}", player->getAccount()))) {
+			return false;
+		}
+
+		const auto& accountStorageMap = g_game.accountStorageMap.find(player->getAccount());
+		if (accountStorageMap == g_game.accountStorageMap.end()) {
+			return false;
+		}
+
+		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
+		for (const auto& it : accountStorageMap->second) {
+			if (!accountStorageQuery.addRow(fmt::format("{:d}, {:d}, {:d}", player->getAccount(), it.first, it.second))) {
+				return false;
+			}
+		}
+
+		if (!accountStorageQuery.execute()) {
+			return false;
+		}
+
+		g_game.accountStorageMap.erase(player->getAccount());
 	}
 
 	//End the transaction

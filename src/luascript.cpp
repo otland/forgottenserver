@@ -2038,6 +2038,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
 
+	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
+	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
+
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
 
@@ -4586,6 +4589,35 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 		pushBoolean(L, g_game.reload(reloadType));
 	}
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetAccountStorageValue(lua_State* L)
+{
+	// Game.getAccountStorageValue(accountId, key)
+	uint32_t accountId = getNumber<uint32_t>(L, 1);
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	int32_t value;
+
+	if (g_game.getAccountStorageValue(accountId, key, value)) {
+		lua_pushnumber(L, value);
+	} else {
+		lua_pushnumber(L, -1);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGameSetAccountStorageValue(lua_State* L)
+{
+	// Game.setAccountStorageValue(accountId, key, value)
+	uint32_t accountId = getNumber<uint32_t>(L, 1);
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	int32_t value = getNumber<int32_t>(L, 3);
+
+	g_game.setAccountStorageValue(accountId, key, value);
+	lua_pushboolean(L, true);
+
 	return 1;
 }
 

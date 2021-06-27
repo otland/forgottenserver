@@ -4407,6 +4407,45 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
 	}
 }
 
+void Game::setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value)
+{
+	if (value == -1) {
+		accountStorageMap[accountId].erase(key);
+		return;
+	}
+
+	accountStorageMap[accountId][key] = value;
+}
+
+bool Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key, int32_t& value) const
+{
+	const auto& accountMapIt = accountStorageMap.find(accountId);
+
+	if (accountMapIt != accountStorageMap.end()) {
+		const auto& storageMapIt = accountMapIt->second.find(key);
+		if (storageMapIt != accountMapIt->second.end()) {
+			value = storageMapIt->second;
+			return true;
+		}
+	}
+
+	value = -1;
+	return false;
+}
+
+size_t Game::getNumberOfPlayersByAccount(const uint32_t accountId) const
+{
+	size_t ret = 0;
+
+	for (const auto& it : players) {
+		if (it.second->getAccount() == accountId) {
+			ret++;
+		}
+	}
+
+	return ret;
+}
+
 void Game::startDecay(Item* item)
 {
 	if (!item || !item->canDecay()) {
