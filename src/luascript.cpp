@@ -2706,6 +2706,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("ItemType", "isStoreItem", LuaScriptInterface::luaItemTypeIsStoreItem);
 
+	registerMethod("ItemType", "getDefaultDurationMin", LuaScriptInterface::luaItemTypeGetDefaultDurationMin);
+	registerMethod("ItemType", "getDefaultDurationMax", LuaScriptInterface::luaItemTypeGetDefaultDurationMax);
+
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
 	registerMetaMethod("Combat", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -12206,6 +12209,30 @@ int LuaScriptInterface::luaItemTypeIsStoreItem(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushBoolean(L, itemType->storeItem);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetDefaultDurationMin(lua_State* L)
+{
+	// itemType:getDefaultDurationMin()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->decayTime);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetDefaultDurationMax(lua_State* L)
+{
+	// itemType:getDefaultDurationMax()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->decayTimeMax);
 	} else {
 		lua_pushnil(L);
 	}
