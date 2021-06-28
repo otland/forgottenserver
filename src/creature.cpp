@@ -640,6 +640,20 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 	}
 }
 
+CreatureVector Creature::getKillers()
+{
+	CreatureVector killers;
+	const int64_t timeNow = OTSYS_TIME();
+	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	for (const auto& it : damageMap) {
+		Creature* attacker = g_game.getCreatureByID(it.first);
+		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
+			killers.push_back(attacker);
+		}
+	}
+	return killers;
+}
+
 void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;
@@ -814,6 +828,8 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 
 	if (attacker) {
 		attacker->onAttackedCreatureDrainHealth(this, damage);
+	} else {
+		lastHitCreatureId = 0;
 	}
 }
 
