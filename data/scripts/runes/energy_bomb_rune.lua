@@ -1,0 +1,25 @@
+local combat = Combat()
+combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ENERGYHIT)
+combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGYBALL)
+combat:setParameter(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP)
+combat:setArea(createCombatArea(AREA_SQUARE1X1))
+
+local energyBombRune = Spell("rune")
+
+function energyBombRune.onCastSpell(creature, variant, isHotkey)
+	return combat:execute(creature, variant)
+end
+
+energyBombRune:group("attack")
+energyBombRune:id(55)
+energyBombRune:name("Energy Bomb Rune")
+energyBombRune:runeId(2262)
+energyBombRune:allowFarUse(true)
+energyBombRune:charges(2)
+energyBombRune:level(37)
+energyBombRune:magicLevel(10)
+energyBombRune:cooldown(2000)
+energyBombRune:groupCooldown(2000)
+energyBombRune:isBlocking(true)
+energyBombRune:register()
