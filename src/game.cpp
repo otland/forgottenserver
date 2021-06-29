@@ -4420,7 +4420,6 @@ void Game::setAccountStorageValue(const uint32_t accountId, const uint32_t key, 
 bool Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key, int32_t& value) const
 {
 	const auto& accountMapIt = accountStorageMap.find(accountId);
-
 	if (accountMapIt != accountStorageMap.end()) {
 		const auto& storageMapIt = accountMapIt->second.find(key);
 		if (storageMapIt != accountMapIt->second.end()) {
@@ -4436,7 +4435,6 @@ bool Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key, 
 size_t Game::getNumberOfPlayersByAccount(const uint32_t accountId) const
 {
 	size_t ret = 0;
-
 	for (const auto& it : players) {
 		if (it.second->getAccount() == accountId) {
 			ret++;
