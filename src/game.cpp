@@ -4417,31 +4417,21 @@ void Game::setAccountStorageValue(const uint32_t accountId, const uint32_t key, 
 	accountStorageMap[accountId][key] = value;
 }
 
-bool Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key, int32_t& value) const
+uint32_t Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key) const
 {
 	const auto& accountMapIt = accountStorageMap.find(accountId);
 	if (accountMapIt != accountStorageMap.end()) {
 		const auto& storageMapIt = accountMapIt->second.find(key);
 		if (storageMapIt != accountMapIt->second.end()) {
-			value = storageMapIt->second;
-			return true;
+			return storageMapIt->second;
 		}
 	}
-
-	value = -1;
-	return false;
+	return -1;
 }
 
 size_t Game::getNumberOfPlayersByAccount(const uint32_t accountId) const
 {
-	size_t ret = 0;
-	for (const auto& it : players) {
-		if (it.second->getAccount() == accountId) {
-			ret++;
-		}
-	}
-
-	return ret;
+	return std::count_if(players.begin(), players.end(), [=](const auto& it) { return it.second->getAccount() == accountId; });
 }
 
 void Game::startDecay(Item* item)

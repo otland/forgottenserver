@@ -4597,13 +4597,8 @@ int LuaScriptInterface::luaGameGetAccountStorageValue(lua_State* L)
 	// Game.getAccountStorageValue(accountId, key)
 	uint32_t accountId = getNumber<uint32_t>(L, 1);
 	uint32_t key = getNumber<uint32_t>(L, 2);
-	int32_t value;
 
-	if (g_game.getAccountStorageValue(accountId, key, value)) {
-		lua_pushnumber(L, value);
-	} else {
-		lua_pushnumber(L, -1);
-	}
+	lua_pushnumber(L, g_game.getAccountStorageValue(accountId, key));
 
 	return 1;
 }

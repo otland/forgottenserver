@@ -457,7 +457,7 @@ class Game
 		static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect);
 
 		void setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value);
-		bool getAccountStorageValue(const uint32_t accountId, const uint32_t key, int32_t& value) const;
+		uint32_t getAccountStorageValue(const uint32_t accountId, const uint32_t key) const;
 
 		size_t getNumberOfPlayersByAccount(const uint32_t accountId) const;
 
