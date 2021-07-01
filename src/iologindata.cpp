@@ -862,10 +862,6 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	if (g_game.getNumberOfPlayersByAccount(player->getAccount()) == 1) {
-		g_game.accountStorageMap.erase(player->getAccount());
-	}
-
 	//End the transaction
 	return transaction.commit();
 }
