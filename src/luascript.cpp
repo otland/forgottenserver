@@ -2040,6 +2040,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
+	registerMethod("Game", "saveAccountStorageValues", LuaScriptInterface::luaGameSaveAccountStorageValues);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -4612,6 +4613,14 @@ int LuaScriptInterface::luaGameSetAccountStorageValue(lua_State* L)
 
 	g_game.setAccountStorageValue(accountId, key, value);
 	lua_pushboolean(L, true);
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGameSaveAccountStorageValues(lua_State* L)
+{
+	// Game.saveAccountStorageValues()
+	lua_pushboolean(L, g_game.saveAccountStorageValues());
 
 	return 1;
 }

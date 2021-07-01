@@ -1185,10 +1185,6 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 			}
 		}
 
-		if (g_game.getNumberOfPlayersByAccount(getAccount()) == 1) {
-			g_game.accountStorageMap.erase(getAccount());
-		}
-
 		if (!saved) {
 			std::cout << "Error while saving player: " << getName() << std::endl;
 		}
