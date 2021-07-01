@@ -709,12 +709,6 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	if (blockingSolid && tile->hasFlag(TILESTATE_BLOCKSOLID)) {
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
 	return true;
 }
 
