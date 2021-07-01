@@ -66,8 +66,27 @@ MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows)
 	return area;
 }
 
-std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos)
+std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
 {
+	Position casterPos(targetPos.x, targetPos.y, targetPos.z);
+
+	switch (dir) {
+		case DIRECTION_NORTH:
+			casterPos.y += 1;
+			break;
+		case DIRECTION_EAST:
+			casterPos.x -= 1;
+			break;
+		case DIRECTION_SOUTH:
+			casterPos.y -= 1;
+			break;
+		case DIRECTION_WEST:
+			casterPos.x += 1;
+			break;
+		default:
+			break;
+	}
+
 	std::vector<Tile*> vec;
 
 	auto center = area.getCenter();
@@ -76,7 +95,7 @@ std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos)
 	for (uint32_t row = 0; row < area.getRows(); ++row, ++tmpPos.y) {
 		for (uint32_t col = 0; col < area.getCols(); ++col, ++tmpPos.x) {
 			if (area(row, col)) {
-				if (g_game.isSightClear(targetPos, tmpPos, true)) {
+				if (g_game.isSightClear(casterPos, tmpPos, true)) {
 					Tile* tile = g_game.map.getTile(tmpPos);
 					if (!tile) {
 						tile = new StaticTile(tmpPos.x, tmpPos.y, tmpPos.z);
@@ -98,7 +117,8 @@ std::vector<Tile*> getCombatArea(const Position& centerPos, const Position& targ
 	}
 
 	if (area) {
-		return getList(area->getArea(centerPos, targetPos), targetPos);
+		
+		return getList(area->getArea(centerPos, targetPos), targetPos, getDirectionTo(centerPos, targetPos));
 	}
 
 	Tile* tile = g_game.map.getTile(targetPos);
