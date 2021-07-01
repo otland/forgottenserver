@@ -117,7 +117,6 @@ std::vector<Tile*> getCombatArea(const Position& centerPos, const Position& targ
 	}
 
 	if (area) {
-		
 		return getList(area->getArea(centerPos, targetPos), targetPos, getDirectionTo(centerPos, targetPos));
 	}
 
