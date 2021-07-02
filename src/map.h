@@ -254,9 +254,6 @@ class Map
 		  */
 		bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) const;
 
-		bool getSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
-		bool getSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
-
 		/**
 		  * Checks if path is clear from fromPos to toPos
 		  * Notice: This only checks a straight line if the path is clear, for path finding use getPathTo.
