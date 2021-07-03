@@ -552,7 +552,8 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	float yi = y0 + slope;
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		if (!g_game.map.isTileClear(std::floor(yi), x, z)) {
+		//0.1 is necessary to avoid loss of precision during calculation
+		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
 			return false;
 		}
 		yi += slope;
@@ -568,7 +569,8 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 	float yi = y0 + slope;
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		if (!g_game.map.isTileClear(x, std::floor(yi), z)) {
+		//0.1 is necessary to avoid loss of precision during calculation
+		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
 			return false;
 		}
 		yi += slope;
