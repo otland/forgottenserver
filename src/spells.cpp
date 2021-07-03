@@ -746,7 +746,13 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	if (range != -1 && !g_game.canThrowObjectTo(playerPos, toPos, true, range, range)) {
+	if (range != -1 && (Position::getDistanceX(playerPos, toPos) > range || Position::getDistanceY(playerPos, toPos) > range)) {
+		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
+		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+		return false;
+	}
+
+	if (!g_game.map.isSightClear(playerPos, toPos, true)) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -1026,12 +1032,20 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 {
 	const Position& fromPos = creature->getPosition();
 	const Position& toPos = target->getPosition();
-	if (fromPos.z != toPos.z ||
-			(range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, 7, 5)) ||
-			(range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
+
+	if (fromPos.z != toPos.z) {
 		return false;
 	}
-	return true;
+
+	if (Position::getDistanceX(fromPos, toPos) > (range != -1 ? range : Map::maxClientViewportX)) {
+		return false;
+	}
+
+	if (Position::getDistanceY(fromPos, toPos) > (range != -1 ? range : Map::maxClientViewportY)) {
+		return false;
+	}
+
+	return g_game.map.isSightClear(fromPos, toPos, true);
 }
 
 bool InstantSpell::castSpell(Creature* creature)
