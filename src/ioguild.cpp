@@ -54,7 +54,7 @@ uint32_t IOGuild::getGuildIdByName(const std::string& name)
 
 void IOGuild::getWarList(uint32_t guildId, GuildWarVector& guildWarVector)
 {
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format("SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = {:d} OR `guild2` = {:d}) AND `ended` = 0 AND `status` = 1", guildId));
+	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format("SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = {:d} OR `guild2` = {:d}) AND `ended` = 0 AND `status` = 1", guildId, guildId));
 	if (!result) {
 		return;
 	}
