@@ -68,6 +68,8 @@ class ConfigManager
 			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 			REMOVE_ON_DESPAWN,
 			PLAYER_CONSOLE_LOGS,
+			LUA_API_ENABLED,
+
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -91,7 +93,7 @@ class ConfigManager
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
 			CONFIG_FILE,
-
+			LUA_API_IP,
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
 
@@ -133,6 +135,7 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			LUA_API_PORT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};

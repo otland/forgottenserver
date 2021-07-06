@@ -228,6 +228,7 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 		case GLOBALEVENT_TIMER: return timerMap;
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
+		case GLOBALEVENT_HTTPREQUEST:
 		case GLOBALEVENT_RECORD: {
 			GlobalEventMap retMap;
 			for (const auto& it : serverMap) {
@@ -305,6 +306,8 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			eventType = GLOBALEVENT_SHUTDOWN;
 		} else if (strcasecmp(value, "record") == 0) {
 			eventType = GLOBALEVENT_RECORD;
+		} else if (strcasecmp(value, "http") == 0) {
+			eventType = GLOBALEVENT_HTTPREQUEST;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << name << std::endl;
 			return false;
@@ -326,6 +329,7 @@ std::string GlobalEvent::getScriptEventName() const
 		case GLOBALEVENT_SHUTDOWN: return "onShutdown";
 		case GLOBALEVENT_RECORD: return "onRecord";
 		case GLOBALEVENT_TIMER: return "onTime";
+		case GLOBALEVENT_HTTPREQUEST: return "onHttpRequest";
 		default: return "onThink";
 	}
 }
@@ -346,6 +350,29 @@ bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 
 	lua_pushnumber(L, current);
 	lua_pushnumber(L, old);
+	return scriptInterface->callFunction(2);
+}
+
+bool GlobalEvent::executeHttpRequest(std::string& name, std::unordered_map<std::string, std::string> data)
+{
+	//onHttpRequest(name, data)
+	if (!scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - GlobalEvent::executeHttpRequest] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
+
+	lua_State* L = scriptInterface->getLuaState();
+	scriptInterface->pushFunction(scriptId);
+
+	LuaScriptInterface::pushString(L, name);
+	lua_createtable(L, data.size(), 0);
+	for (auto& args : data) {
+		LuaScriptInterface::pushString(L, args.second);
+		lua_setfield(L, -2, args.first.c_str());
+	}
 	return scriptInterface->callFunction(2);
 }
 

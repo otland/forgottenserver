@@ -213,6 +213,10 @@ do
 			self:type("record")
 			self:onRecord(value)
 			return
+		elseif key == "onHttpRequest" then
+			self:type("http")
+			self:onHttpRequest(value)
+			return
 		end
 		rawset(self, key, value)
 	end

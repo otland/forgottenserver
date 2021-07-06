@@ -30,6 +30,7 @@ enum GlobalEvent_t {
 	GLOBALEVENT_STARTUP,
 	GLOBALEVENT_SHUTDOWN,
 	GLOBALEVENT_RECORD,
+	GLOBALEVENT_HTTPREQUEST,
 };
 
 class GlobalEvent;
@@ -84,6 +85,7 @@ class GlobalEvent final : public Event
 
 		bool executeRecord(uint32_t current, uint32_t old);
 		bool executeEvent() const;
+		bool executeHttpRequest(std::string& name, std::unordered_map<std::string, std::string> data);
 
 		GlobalEvent_t getEventType() const {
 			return eventType;
