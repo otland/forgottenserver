@@ -73,7 +73,7 @@ class Events
 		bool load();
 
 		// Creature
-		bool eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit);
+		bool eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& outfit);
 		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 		void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);

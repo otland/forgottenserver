@@ -3732,11 +3732,12 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 
 void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
-	if (!g_events->eventCreatureOnChangeOutfit(creature, outfit)) {
+	Outfit_t tempOutfit = outfit;
+	if (!g_events->eventCreatureOnChangeOutfit(creature, tempOutfit)) {
 		return;
 	}
 
-	creature->setCurrentOutfit(outfit);
+	creature->setCurrentOutfit(tempOutfit);
 
 	if (creature->isInvisible()) {
 		return;
@@ -3746,7 +3747,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
+		spectator->getPlayer()->sendCreatureChangeOutfit(creature, tempOutfit);
 	}
 }
 

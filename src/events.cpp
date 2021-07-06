@@ -169,7 +169,7 @@ bool Events::eventMonsterOnSpawn(Monster* monster, const Position& position, boo
 }
 
 // Creature
-bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& outfit)
+bool Events::eventCreatureOnChangeOutfit(Creature* creature, Outfit_t& outfit)
 {
 	// Creature:onChangeOutfit(outfit) or Creature.onChangeOutfit(self, outfit)
 	if (info.creatureOnChangeOutfit == -1) {
@@ -192,7 +192,22 @@ bool Events::eventCreatureOnChangeOutfit(Creature* creature, const Outfit_t& out
 
 	LuaScriptInterface::pushOutfit(L, outfit);
 
-	return scriptInterface.callFunction(2);
+	bool success = true;
+
+	if (scriptInterface.protectedCall(L, 2, 1) != 0) {
+		success = false;
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	} else {
+		if (LuaScriptInterface::isTable(L, -1)) {
+			outfit = LuaScriptInterface::getOutfit(L, -1);
+		} else {
+			success = LuaScriptInterface::getBoolean(L, -1);
+			lua_pop(L, 1);
+		}
+	}
+
+	scriptInterface.resetScriptEnv();
+	return success;
 }
 
 ReturnValue Events::eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive)
