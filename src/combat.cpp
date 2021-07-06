@@ -1306,7 +1306,10 @@ const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position&
 void AreaCombat::setupArea(const std::vector<uint32_t>& vec, uint32_t rows)
 {
 	auto area = createArea(vec, rows);
-	areas.resize(4);
+	if (areas.size() == 0) {
+		areas.resize(4);
+	}
+
 	areas[DIRECTION_EAST] = area.rotate90();
 	areas[DIRECTION_SOUTH] = area.rotate180();
 	areas[DIRECTION_WEST] = area.rotate270();
