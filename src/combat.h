@@ -162,6 +162,8 @@ class Combat
 		CallBack* getCallback(CallBackParam_t key);
 
 		bool setParam(CombatParam_t param, uint32_t value);
+		int32_t getParam(CombatParam_t param);
+
 		void setArea(AreaCombat* area) {
 			this->area.reset(area);
 		}

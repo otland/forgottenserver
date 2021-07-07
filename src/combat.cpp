@@ -485,6 +485,44 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 	return false;
 }
 
+int32_t Combat::getParam(CombatParam_t param)
+{
+	switch (param) {
+		case COMBAT_PARAM_TYPE:
+			return static_cast<int32_t>(params.combatType);
+
+		case COMBAT_PARAM_EFFECT:
+			return static_cast<int32_t>(params.impactEffect);
+
+		case COMBAT_PARAM_DISTANCEEFFECT:
+			return static_cast<int32_t>(params.distanceEffect);
+
+		case COMBAT_PARAM_BLOCKARMOR:
+			return params.blockedByArmor ? 1 : 0;
+
+		case COMBAT_PARAM_BLOCKSHIELD:
+			return params.blockedByShield ? 1 : 0;
+
+		case COMBAT_PARAM_TARGETCASTERORTOPMOST:
+			return params.targetCasterOrTopMost ? 1 : 0;
+
+		case COMBAT_PARAM_CREATEITEM:
+			return params.itemId;
+
+		case COMBAT_PARAM_AGGRESSIVE:
+			return params.aggressive ? 1 : 0;
+
+		case COMBAT_PARAM_DISPEL:
+			return static_cast<int32_t>(params.dispelType);
+
+		case COMBAT_PARAM_USECHARGES:
+			return params.useCharges ? 1 : 0;
+
+		default:
+			return std::numeric_limits<int32_t>().max();
+	}
+}
+
 bool Combat::setCallback(CallBackParam_t key)
 {
 	switch (key) {

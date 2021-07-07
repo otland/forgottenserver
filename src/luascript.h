@@ -1215,6 +1215,8 @@ class LuaScriptInterface
 		static int luaCombatCreate(lua_State* L);
 
 		static int luaCombatSetParameter(lua_State* L);
+		static int luaCombatGetParameter(lua_State* L);
+
 		static int luaCombatSetFormula(lua_State* L);
 
 		static int luaCombatSetArea(lua_State* L);
@@ -1241,6 +1243,8 @@ class LuaScriptInterface
 		static int luaConditionSetTicks(lua_State* L);
 
 		static int luaConditionSetParameter(lua_State* L);
+		static int luaConditionGetParameter(lua_State* L);
+
 		static int luaConditionSetFormula(lua_State* L);
 		static int luaConditionSetOutfit(lua_State* L);
 
