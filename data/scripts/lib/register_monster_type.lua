@@ -299,10 +299,10 @@ registerMonsterType.attacks = function(mtype, mask)
 				else
 					spell:setType(attack.name)
 					if attack.type then
-						if attack.name == "combat" then
-							spell:setCombatType(attack.type)
-						else
+						if attack.name == "condition" then
 							spell:setConditionType(attack.type)
+						else
+							spell:setCombatType(attack.type)
 						end
 					end
 					if attack.interval then
@@ -339,14 +339,14 @@ registerMonsterType.attacks = function(mtype, mask)
 						spell:setCombatRadius(attack.radius)
 					end
 					if attack.minDamage and attack.maxDamage then
-						if attack.name == "combat" then
-							spell:setCombatValue(attack.minDamage, attack.maxDamage)
-						else
+						if attack.name == "condition" then
 							local startDamage = 0
 							if attack.startDamage then
 								startDamage = attack.startDamage
 							end
 							spell:setConditionDamage(attack.minDamage, attack.maxDamage, startDamage)
+						else
+							spell:setCombatValue(attack.minDamage, attack.maxDamage)
 						end
 					end
 					if attack.effect then
@@ -431,10 +431,10 @@ registerMonsterType.defenses = function(mtype, mask)
 					else
 						spell:setType(defense.name)
 						if defense.type then
-							if defense.name == "combat" then
-								spell:setCombatType(defense.type)
-							else
+							if defense.name == "condition" then
 								spell:setConditionType(defense.type)
+							else
+								spell:setCombatType(defense.type)
 							end
 						end
 						if defense.interval then
@@ -471,14 +471,14 @@ registerMonsterType.defenses = function(mtype, mask)
 							spell:setCombatRadius(defense.radius)
 						end
 						if defense.minDamage and defense.maxDamage then
-							if defense.name == "combat" then
-								spell:setCombatValue(defense.minDamage, defense.maxDamage)
-							else
+							if defense.name == "condition" then
 								local startDamage = 0
 								if defense.startDamage then
 									startDamage = defense.startDamage
 								end
 								spell:setConditionDamage(defense.minDamage, defense.maxDamage, startDamage)
+							else
+								spell:setCombatValue(defense.minDamage, defense.maxDamage)
 							end
 						end
 						if defense.effect then
