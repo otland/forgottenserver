@@ -44,6 +44,10 @@ class NetworkMessage
 		enum { MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10 };
 
 		NetworkMessage() = default;
+		NetworkMessage(const NetworkMessage& other) {
+			info = other.info;
+			memcpy(&buffer, &other.buffer, sizeof(other.buffer) / sizeof(other.buffer[0]));
+		}
 
 		void reset() {
 			info = {};
