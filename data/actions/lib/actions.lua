@@ -199,6 +199,7 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
+		player:teleportTo(toPosition, false)
 		player:addAchievementProgress("The Undertaker", 500)
 	elseif target.itemid == 7932 then -- large hole
 		target:transform(7933)
