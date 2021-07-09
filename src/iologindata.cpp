@@ -552,7 +552,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream)
 {
 	using ContainerBlock = std::pair<Container*, int32_t>;
-	std::list<ContainerBlock> queue;
+	std::vector<ContainerBlock> containers;
+	containers.reserve(32);
 
 	int32_t runningId = 100;
 
@@ -573,22 +574,21 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		}
 
 		if (Container* container = item->getContainer()) {
-			queue.emplace_back(container, runningId);
+			containers.emplace_back(container, runningId);
 		}
 	}
 
-	while (!queue.empty()) {
-		const ContainerBlock& cb = queue.front();
+	for (size_t i = 0; i < containers.size(); i++) {
+		const ContainerBlock& cb = containers[i];
 		Container* container = cb.first;
 		int32_t parentId = cb.second;
-		queue.pop_front();
 
 		for (Item* item : container->getItemList()) {
 			++runningId;
 
 			Container* subContainer = item->getContainer();
 			if (subContainer) {
-				queue.emplace_back(subContainer, runningId);
+				containers.emplace_back(subContainer, runningId);
 			}
 
 			propWriteStream.clear();
