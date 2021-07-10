@@ -277,32 +277,10 @@ function AbilityTableToSpell(ability)
 			if ability.effect then
 				spell:setCombatEffect(ability.effect)
 			end
-			if ability.condition then
-				if ability.condition.type then
-					spell:setConditionType(ability.condition.type)
-				end
-				local startDamage = 0
-				if ability.condition.startDamage then
-					startDamage = ability.condition.startDamage
-				end
-				if ability.condition.minDamage and ability.condition.maxDamage then
-					spell:setConditionDamage(ability.condition.minDamage, ability.condition.maxDamage, startDamage)
-				end
-				if ability.condition.duration then
-					spell:setConditionDuration(ability.condition.duration)
-				end
-				if ability.condition.interval then
-					spell:setConditionTickInterval(ability.condition.interval)
-				end
-			end
 		else
 			spell:setType(ability.name)
 			if ability.type then
-				if ability.name == "condition" then
-					spell:setConditionType(ability.type)
-				else
-					spell:setCombatType(ability.type)
-				end
+				spell:setCombatType(ability.type)
 			end
 			if ability.interval then
 				spell:setInterval(ability.interval)
@@ -341,15 +319,7 @@ function AbilityTableToSpell(ability)
 				spell:setCombatRing(ability.ring)
 			end
 			if ability.minDamage and ability.maxDamage then
-				if ability.name == "condition" then
-					local startDamage = 0
-					if ability.startDamage then
-						startDamage = ability.startDamage
-					end
-					spell:setConditionDamage(ability.minDamage, ability.maxDamage, startDamage)
-				else
-					spell:setCombatValue(ability.minDamage, ability.maxDamage)
-				end
+				spell:setCombatValue(ability.minDamage, ability.maxDamage)
 			end
 			if ability.effect then
 				spell:setCombatEffect(ability.effect)
@@ -362,6 +332,25 @@ function AbilityTableToSpell(ability)
 				if ability.drunkenness then
 					spell:setConditionDrunkenness(ability.drunkenness)
 				end
+			end
+		end
+		if ability.condition then
+			if ability.condition.type then
+				print(ability.condition.type)
+				spell:setConditionType(ability.condition.type)
+			end
+			local startDamage = 0
+			if ability.condition.startDamage then
+				startDamage = ability.condition.startDamage
+			end
+			if ability.condition.minDamage and ability.condition.maxDamage then
+				spell:setConditionDamage(ability.condition.minDamage, ability.condition.maxDamage, startDamage)
+			end
+			if ability.condition.duration then
+				spell:setConditionDuration(ability.condition.duration)
+			end
+			if ability.condition.interval then
+				spell:setConditionTickInterval(ability.condition.interval)
 			end
 		end
 	elseif ability.script then
