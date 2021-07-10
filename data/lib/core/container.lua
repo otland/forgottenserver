@@ -18,7 +18,7 @@ function Container.createLootItem(self, item)
 	end
 
 	if itemCount > 0 then
-		local tmpItem = Game.createItem(item.itemId, math.min(itemCount, 100))
+		local tmpItem = Game.createItem(item.itemId, item.subType ~= -1 and item.subType or math.min(itemCount, 100))
 		if not tmpItem then
 			return false
 		end
