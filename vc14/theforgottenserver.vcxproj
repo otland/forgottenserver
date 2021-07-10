@@ -243,6 +243,9 @@
     <ClCompile Include="..\src\xtea.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="theforgottenserver.rc" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\src\account.h" />
     <ClInclude Include="..\src\actions.h" />
     <ClInclude Include="..\src\ban.h" />
