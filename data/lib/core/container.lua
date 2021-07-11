@@ -49,7 +49,10 @@ function Container.createLootItem(self, item)
 			tmpItem:setText(item.text)
 		end
 
-		self:addItemEx(tmpItem)
+		local ret = self:addItemEx(tmpItem)
+		if ret ~= RETURNVALUE_NOERROR then
+			tmpItem:remove()
+		end
 	end
 	return true
 end

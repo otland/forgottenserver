@@ -229,15 +229,17 @@ void Creature::onWalk()
 
 void Creature::onWalk(Direction& dir)
 {
-	if (hasCondition(CONDITION_DRUNK)) {
-		uint32_t r = uniform_random(0, 20);
-		if (r <= DIRECTION_DIAGONAL_MASK) {
-			if (r < DIRECTION_DIAGONAL_MASK) {
-				dir = static_cast<Direction>(r);
-			}
-			g_game.internalCreatureSay(this, TALKTYPE_MONSTER_SAY, "Hicks!", false);
-		}
+	if (!hasCondition(CONDITION_DRUNK)) {
+		return;
 	}
+
+	uint16_t rand = uniform_random(0, 399);
+	if (rand / 4 > getDrunkenness()) {
+		return;
+	}
+
+	dir = static_cast<Direction>(rand % 4);
+	g_game.internalCreatureSay(this, TALKTYPE_MONSTER_SAY, "Hicks!", false);
 }
 
 bool Creature::getNextStep(Direction& dir, uint32_t&)
@@ -638,6 +640,20 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 	}
 }
 
+CreatureVector Creature::getKillers()
+{
+	CreatureVector killers;
+	const int64_t timeNow = OTSYS_TIME();
+	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	for (const auto& it : damageMap) {
+		Creature* attacker = g_game.getCreatureByID(it.first);
+		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
+			killers.push_back(attacker);
+		}
+	}
+	return killers;
+}
+
 void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;
@@ -812,6 +828,8 @@ void Creature::drainHealth(Creature* attacker, int32_t damage)
 
 	if (attacker) {
 		attacker->onAttackedCreatureDrainHealth(this, damage);
+	} else {
+		lastHitCreatureId = 0;
 	}
 }
 

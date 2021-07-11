@@ -48,7 +48,7 @@
 		<voice sentence="Your sentence is death!" />
 	</voices>
 	<loot>
-		<item id="2148" countmin="10" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
 		<item id="2148" countmax="98" chance="100000" /><!-- gold coin -->
 		<item id="2152" countmax="3" chance="67610" /><!-- platinum coin -->
 		<item id="9971" chance="390" />	<!-- gold ingot -->

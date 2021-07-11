@@ -429,4 +429,30 @@ class ConditionSpellGroupCooldown final : public ConditionGeneric
 		}
 };
 
+class ConditionDrunk final : public Condition
+{
+	public:
+		ConditionDrunk(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t drunkenness, bool aggressive = false)
+		    	: Condition(id, type, ticks, buff, subId, aggressive) {
+			if (drunkenness != 0) {
+				this->drunkenness = drunkenness;
+			}
+		}
+
+		uint32_t getIcons() const override;
+		void endCondition(Creature* creature) override;
+		bool startCondition(Creature* creature) override;
+		bool setParam(ConditionParam_t param, int32_t value) override;
+		void addCondition(Creature* creature, const Condition* condition) override;
+
+		ConditionDrunk* clone() const override {
+			return new ConditionDrunk(*this);
+		}
+
+	private:
+		uint8_t drunkenness = 25;
+
+		bool updateCondition(const Condition* addCondition) override;
+};
+
 #endif

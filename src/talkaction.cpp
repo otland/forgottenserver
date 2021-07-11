@@ -136,7 +136,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 
 			if (player->getAccountType() < it->second.getRequiredAccountType()) {
-				return TALKACTION_BREAK;
+				return TALKACTION_CONTINUE;
 			}
 		}
 

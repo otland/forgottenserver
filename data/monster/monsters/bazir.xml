@@ -36,7 +36,7 @@
 		<attack name="manadrain" interval="1000" chance="10" radius="8" target="0" min="-400" max="-700">
 			<attribute key="areaEffect" value="greenshimmer" />
 		</attack>
-		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-1900" duration="60000">
+		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-1000" duration="60000">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="effect" interval="1000" chance="8" radius="5" target="0">

@@ -28,7 +28,7 @@ extern RSA g_RSA;
 
 namespace {
 
-void XTEA_encrypt(OutputMessage& msg, const xtea::key& key)
+void XTEA_encrypt(OutputMessage& msg, const xtea::round_keys& key)
 {
 	// The message must be a multiple of 8
 	size_t paddingBytes = msg.getLength() % 8u;
@@ -40,7 +40,7 @@ void XTEA_encrypt(OutputMessage& msg, const xtea::key& key)
 	xtea::encrypt(buffer, msg.getLength(), key);
 }
 
-bool XTEA_decrypt(NetworkMessage& msg, const xtea::key& key)
+bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 {
 	if (((msg.getLength() - 6) & 7) != 0) {
 		return false;
