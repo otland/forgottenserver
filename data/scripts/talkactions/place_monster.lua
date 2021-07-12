@@ -1,12 +1,6 @@
-function onSay(player, words, param)
-	if not player:getGroup():getAccess() then
-		return true
-	end
+local talk = TalkAction("/m")
 
-	if player:getAccountType() < ACCOUNT_TYPE_GOD then
-		return false
-	end
-
+function talk.onSay(player, words, param)
 	local position = player:getPosition()
 	local monster = Game.createMonster(param, position)
 	if monster then
@@ -18,3 +12,8 @@ function onSay(player, words, param)
 	end
 	return false
 end
+
+talk:access(true)
+talk:accountType(ACCOUNT_TYPE_GOD)
+talk:separator(" ")
+talk:register()

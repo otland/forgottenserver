@@ -18,7 +18,6 @@
 	<talkaction words="/openserver" script="openserver.lua" />
 	<talkaction words="/closeserver" separator=" " script="closeserver.lua" />
 	<talkaction words="/B" separator=" " script="broadcast.lua" />
-	<talkaction words="/m" separator=" " script="place_monster.lua" />
 	<talkaction words="/i" separator=" " script="create_item.lua" />
 	<talkaction words="/s" separator=" " script="place_npc.lua" />
 	<talkaction words="/addtutor" separator=" " script="add_tutor.lua" />
