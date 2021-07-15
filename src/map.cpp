@@ -583,7 +583,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 {
 	uint8_t z0 = fromPos.z, z1 = toPos.z;
 	bool sameFloor = z0 == z1;
-	if (floorCheck && sameFloor) {
+	if (floorCheck && !sameFloor) {
 		return false;
 	}
 
