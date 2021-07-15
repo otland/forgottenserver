@@ -535,14 +535,13 @@ bool Map::isBlockProjectile(uint16_t x, uint16_t y, uint8_t z) const
 	return (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
 }
 
-bool Map::checkLineSteps(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool steep) const
+template<bool STEEP>
+bool Map::checkLineSteps(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
-	float dx = x1 - x0;
-	float dy = y1 - y0;
+	float dx = x1 - x0, dy = y1 - y0;
 	float grad = (dx == 0) ? 1 : dy / dx;
 	float xy = y0 + grad;
-
-	if (steep) {
+	if (STEEP) {
 		for (int y = x0 + 1; y < x1; ++y) {
 			if (isBlockProjectile(std::floor(xy), y, z)) {
 				return false;
@@ -567,16 +566,10 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 	}
 
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
-		if (y1 > y0) {
-			return checkLineSteps(y0, x0, y1, x1, z, true);
-		}
-		return checkLineSteps(y1, x1, y0, x0, z, true);
+		return (y1 > y0) ? checkLineSteps<true>(y0, x0, y1, x1, z) : checkLineSteps<true>(y1, x1, y0, x0, z);
 	}
 
-	if (x0 > x1) {
-		return checkLineSteps(x1, y1, x0, y0, z, false);
-	}
-	return checkLineSteps(x0, y0, x1, y1, z, false);
+	return (x0 > x1) ? checkLineSteps<false>(x1, y1, x0, y0, z) : checkLineSteps<false>(x0, y0, x1, y1, z);
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
