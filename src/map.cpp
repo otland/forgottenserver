@@ -584,7 +584,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	if (sameFloor && (isBlockProjectile(x1, y1, z0) || !checkSightLine(x0, y0, x1, y1, z0))) {
 		return false;
 	}
-	
+
 	if (z0 < z1) {
 		if (!checkSightLine(x0, y0, x1, y1, z0)) {
 			return false;
