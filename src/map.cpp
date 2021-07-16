@@ -586,6 +586,17 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 		return true;
 	}
 
+	const Position start(fromPos.z > toPos.z ? toPos : fromPos);
+	const Position dest(fromPos.z > toPos.z ? fromPos : toPos);
+
+	// now we need to perform a jump between floors to see if everything is clear (literally)
+	for (auto z = start.z; z != dest.z; z++) {
+		const Tile* tile = getTile(dest.x, dest.y, z);
+		if (tile && tile->getThingCount() > 0) {
+			return false;
+		}
+	}
+
 	const auto isTileClear = [this](uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) {
 		const Tile* tile = getTile(x, y, z);
 		if (!tile) {
@@ -599,26 +610,7 @@ bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
 		return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 	};
 
-	const auto isTileThing = [this](uint16_t x, uint16_t y, uint8_t z, uint8_t toZ) {
-		int8_t step = (z > toZ) ? -1 : 1;
-		// now we need to perform a jump between floors to see if everything is clear (literally)
-		while (z != toZ) {
-			const Tile* tile = getTile(x, y, z);
-			if (tile && tile->getThingCount() > 0) {
-				return true;
-			}
-
-			z += step;
-		}
-
-		return false;
-	};
-
-	if (fromPos.z <= toPos.z) {
-		return isTileThing(toPos.x, toPos.y, fromPos.z, toPos.z) || !isPathClear(fromPos.x, fromPos.y, toPos.x, toPos.y, [&](uint16_t x, uint16_t y) { return isTileClear(x, y, fromPos.z); });
-	}
-
-	return isTileThing(fromPos.x, fromPos.y, toPos.z, fromPos.z) || !isPathClear(fromPos.x, fromPos.y, toPos.x, toPos.y, [&](uint16_t x, uint16_t y) { return isTileClear(x, y, toPos.z); });
+	return isPathClear(start.x, start.y, dest.x, dest.y, [&](uint16_t x, uint16_t y) { return isTileClear(x, y, start.z); });
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
