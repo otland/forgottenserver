@@ -511,7 +511,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 
 	//distance checks
 	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
-	if (fromPos.z > toPos.z && deltaz > 2) {
+	if (deltaz > 2) {
 		return false;
 	}
 
@@ -529,75 +529,106 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return isSightClear(fromPos, toPos, false);
 }
 
-bool Map::isBlockProjectile(uint16_t x, uint16_t y, uint8_t z) const
-{
-	const Tile* tile = getTile(x, y, z);
-	return (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE));
-}
+namespace {
 
-template<bool STEEP>
-bool Map::checkLineSteps(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
-{
-	float dx = x1 - x0, dy = y1 - y0;
-	float grad = (dx == 0) ? 1 : dy / dx;
-	float xy = y0 + grad;
-	if (STEEP) {
+	template<class Fn>
+	constexpr auto checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, Fn isTileClear) {
+		float dx = x1 - x0;
+		float grad = (dx == 0) ? 1 : (y1 - y0) / dx;
+		float slopeX = y0 + grad;
 		for (int y = x0 + 1; y < x1; ++y) {
-			if (isBlockProjectile(std::floor(xy), y, z)) {
+			if (!isTileClear(std::floor(slopeX), y)) {
 				return false;
 			}
-			xy += grad;
+			slopeX += grad;
 		}
-	} else {
-		for (int x = x0 + 1; x < x1; ++x) {
-			if (isBlockProjectile(x, std::floor(xy + 0.1), z)) {
-				return false;
-			}
-			xy += grad;
-		}
-	}
-	return true;
-}
 
-bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
-{
-	if (x0 == x1 && y0 == y1) {
 		return true;
 	}
 
-	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
-		return (y1 > y0) ? checkLineSteps<true>(y0, x0, y1, x1, z) : checkLineSteps<true>(y1, x1, y0, x0, z);
+	template<class Fn>
+	constexpr auto checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, Fn isTileClear) {
+		float dx = x1 - x0;
+		float grad = (dx == 0) ? 1 : (y1 - y0) / dx;
+		float slopeY = y0 + grad;
+		for (int x = x0 + 1; x < x1; ++x) {
+			if (!isTileClear(x, std::floor(slopeY + 0.1))) {
+				return false;
+			}
+			slopeY += grad;
+		}
+
+		return true;
 	}
 
-	return (x0 > x1) ? checkLineSteps<false>(x1, y1, x0, y0, z) : checkLineSteps<false>(x0, y0, x1, y1, z);
+	template<class Fn>
+	constexpr bool isPathClear(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, Fn isTileClear)
+	{
+		if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
+			if (y1 > y0) {
+				return checkSteepLine(y0, x0, y1, x1, isTileClear);
+			}
+			return checkSteepLine(y1, x1, y0, x0, isTileClear);
+		}
+
+		if (x0 > x1) {
+			return checkSlightLine(x1, y1, x0, y0, isTileClear);
+		}
+
+		return checkSlightLine(x0, y0, x1, y1, isTileClear);
+	}
+
+}
+
+bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
+{
+	if (fromPos == toPos) {
+		return true;
+	}
+
+	const auto isTileClear = [this](uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) {
+		const Tile* tile = getTile(x, y, z);
+		if (!tile) {
+			return true;
+		}
+
+		if (blockFloor && tile->getGround()) {
+			return false;
+		}
+
+		return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
+	};
+
+	const auto isTileThing = [this](uint16_t x, uint16_t y, uint8_t z, uint8_t toZ) {
+		int8_t step = (z > toZ) ? -1 : 1;
+		// now we need to perform a jump between floors to see if everything is clear (literally)
+		while (z != toZ) {
+			const Tile* tile = getTile(x, y, z);
+			if (tile && tile->getThingCount() > 0) {
+				return true;
+			}
+
+			z += step;
+		}
+
+		return false;
+	};
+
+	if (fromPos.z <= toPos.z) {
+		return isTileThing(toPos.x, toPos.y, fromPos.z, toPos.z) || !isPathClear(fromPos.x, fromPos.y, toPos.x, toPos.y, [&](uint16_t x, uint16_t y) { return isTileClear(x, y, fromPos.z); });
+	}
+
+	return isTileThing(fromPos.x, fromPos.y, toPos.z, fromPos.z) || !isPathClear(fromPos.x, fromPos.y, toPos.x, toPos.y, [&](uint16_t x, uint16_t y) { return isTileClear(x, y, toPos.z); });
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
-	uint8_t z0 = fromPos.z, z1 = toPos.z;
-	bool sameFloor = z0 == z1;
-	if (floorCheck && !sameFloor) {
+	if (floorCheck && fromPos.z != toPos.z) {
 		return false;
 	}
 
-	uint16_t x0 = fromPos.x, y0 = fromPos.y, x1 = toPos.x, y1 = toPos.y;
-	if (sameFloor && (isBlockProjectile(x1, y1, z0) || !checkSightLine(x0, y0, x1, y1, z0))) {
-		return false;
-	}
-
-	if (z0 < z1) {
-		if (!checkSightLine(x0, y0, x1, y1, z0)) {
-			return false;
-		}
-
-		for (uint8_t z = z0 +1; z <= z1; ++z) {
-			if (isBlockProjectile(x1, y1, z)) {
-				return false;
-			}
-		}
-		return true;
-	}
-	return (sameFloor || !(isBlockProjectile(x1, y1, z1) || !checkSightLine(x0, y0, x1, y1, z1)));
+	// Cast two converging rays and see if either yields a result.
+	return checkSightLine(fromPos, toPos);
 }
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const

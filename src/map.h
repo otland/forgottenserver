@@ -256,10 +256,7 @@ class Map
 		  *	\returns The result if there is no obstacles
 		  */
 		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
-		bool isBlockProjectile(uint16_t x, uint16_t y, uint8_t z) const;
-		template<bool STEEP>
-		bool checkLineSteps(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
-		bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
+		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
