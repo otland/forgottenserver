@@ -500,7 +500,7 @@ void Map::clearPlayersSpectatorCache()
 }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
-	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
+                           int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
 	//distance checks
 	int32_t distanceZ = Position::getDistanceZ(fromPos, toPos);
@@ -600,7 +600,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 			return true;
 		}
 
-		//sight is clear or checkFloor is enabled
+		//sight is clear or sameFloor is enabled
 		bool sightClear = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
 		if (sightClear || sameFloor) {
 			return sightClear;
