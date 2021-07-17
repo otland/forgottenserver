@@ -499,34 +499,24 @@ void Map::clearPlayersSpectatorCache()
 	playersSpectatorCache.clear();
 }
 
-bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                           int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
+bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
+	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	//z checks
-	//underground 8->15
-	//ground level and above 7->0
-	if (fromPos.z < 8 && toPos.z > 7 || fromPos.z > 7 && toPos.z < 8) {
-		return false;
-	}
-
-	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
-	if (deltaz > 2) {
-		return false;
-	}
-
 	//distance checks
-	if (Position::getDistanceX(fromPos, toPos) - deltaz > rangex) {
+	int32_t distanceZ = Position::getDistanceZ(fromPos, toPos);
+
+	if (Position::getDistanceX(fromPos, toPos) - distanceZ > rangex) {
 		return false;
 	}
 
-	if (Position::getDistanceY(fromPos, toPos) - deltaz > rangey) {
+	if (Position::getDistanceY(fromPos, toPos) - distanceZ > rangey) {
 		return false;
 	}
 
 	if (!checkLineOfSight) {
 		return true;
 	}
-	return isSightClear(fromPos, toPos, false);
+	return isSightClear(fromPos, toPos, sameFloor);
 }
 
 bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
@@ -601,7 +591,7 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 	return checkSlightLine(x0, y0, x1, y1, z);
 }
 
-bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck /*= false*/) const
+bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
 {
 	//target is on the same floor
 	if (fromPos.z == toPos.z) {
@@ -610,9 +600,9 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 			return true;
 		}
 
-		//sight is clear or floorCheck is enabled
+		//sight is clear or checkFloor is enabled
 		bool sightClear = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
-		if (sightClear || floorCheck) {
+		if (sightClear || sameFloor) {
 			return sightClear;
 		}
 
@@ -627,7 +617,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floo
 	}
 
 	//target is on a different floor
-	if (floorCheck) {
+	if (sameFloor) {
 		return false;
 	}
 
