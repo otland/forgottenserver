@@ -502,21 +502,11 @@ void Map::clearPlayersSpectatorCache()
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	//distance checks
-	int32_t distanceZ = Position::getDistanceZ(fromPos, toPos);
-
-	if (Position::getDistanceX(fromPos, toPos) - distanceZ > rangex) {
+	if (Position::getDistanceX(fromPos, toPos) > rangex || Position::getDistanceY(fromPos, toPos) > rangey) {
 		return false;
 	}
 
-	if (Position::getDistanceY(fromPos, toPos) - distanceZ > rangey) {
-		return false;
-	}
-
-	if (!checkLineOfSight) {
-		return true;
-	}
-	return isSightClear(fromPos, toPos, sameFloor);
+	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
 bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
