@@ -2747,7 +2747,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		return;
 	}
 
-	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition()), true, true) {
+	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition(), true, true)) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
 		return;
 	}
