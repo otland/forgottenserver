@@ -16806,7 +16806,6 @@ void LuaEnvironment::clearCombatObjects(LuaScriptInterface* interface)
 	for (uint32_t id : it->second) {
 		auto itt = combatMap.find(id);
 		if (itt != combatMap.end()) {
-			delete itt->second;
 			combatMap.erase(itt);
 		}
 	}
