@@ -295,8 +295,8 @@ CombatSpell::~CombatSpell()
 
 bool CombatSpell::loadScriptCombat()
 {
-	combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.lastCombatId);
-	return combat != nullptr;
+	Combat_ptr combatPtr = g_luaEnvironment.getCombatObject(g_luaEnvironment.lastCombatId);
+	return combatPtr != nullptr;
 }
 
 bool CombatSpell::castSpell(Creature* creature)
