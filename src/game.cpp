@@ -3400,6 +3400,11 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
+	if (type == TALKTYPE_PRIVATE_PN) {
+		playerSpeakToNpc(player, text);
+		return;
+	}
+
 	uint32_t muteTime = player->isMuted();
 	if (muteTime > 0) {
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You are still muted for {:d} seconds.", muteTime));
@@ -3410,9 +3415,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
-	if (type != TALKTYPE_PRIVATE_PN) {
-		player->removeMessageBuffer();
-	}
+	player->removeMessageBuffer();
 
 	switch (type) {
 		case TALKTYPE_SAY:
@@ -3436,10 +3439,6 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		case TALKTYPE_CHANNEL_Y:
 		case TALKTYPE_CHANNEL_R1:
 			g_chat->talkToChannel(*player, type, text, channelId);
-			break;
-
-		case TALKTYPE_PRIVATE_PN:
-			playerSpeakToNpc(player, text);
 			break;
 
 		case TALKTYPE_BROADCAST:
