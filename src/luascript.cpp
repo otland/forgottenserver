@@ -12248,7 +12248,7 @@ int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 	} else {
 		value = getNumber<uint32_t>(L, 3);
 	}
-	combatPtr->setParam(key, value);
+	combat->setParam(key, value);
 	pushBoolean(L, true);
 	return 1;
 }
