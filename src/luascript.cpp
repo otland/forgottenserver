@@ -16788,10 +16788,10 @@ Combat* LuaEnvironment::getCombatObject(uint32_t id) const
 
 Combat_ptr LuaEnvironment::createCombatObject(LuaScriptInterface* interface)
 {
-	Combat_ptr combatPtr = std::make_shared<Combat>();
-	combatMap[++lastCombatId] = combatPtr;
+	Combat_ptr combat = std::make_shared<Combat>();
+	combatMap[++lastCombatId] = combat;
 	combatIdMap[interface].push_back(lastCombatId);
-	return combatPtr;
+	return combat;
 }
 
 void LuaEnvironment::clearCombatObjects(LuaScriptInterface* interface)
