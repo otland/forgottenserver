@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crocodile" nameDescription="a crocodile" race="blood" experience="40" speed="156" manacost="350">
 	<health now="105" max="105" />
 	<look type="119" corpse="6046" />

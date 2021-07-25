@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Phantasm" nameDescription="a phantasm" race="undead" experience="4400" speed="240">
 	<health now="3950" max="3950" />
 	<look type="241" head="20" corpse="6344" />

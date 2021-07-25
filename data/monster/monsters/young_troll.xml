@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Young Troll" nameDescription="a young troll" race="blood" experience="12" speed="380">
 	<health now="30" max="30" />
 	<look type="15" corpse="5960" />

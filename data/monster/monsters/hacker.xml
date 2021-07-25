@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hacker" nameDescription="a hacker" race="blood" experience="45" speed="250">
 	<health now="430" max="430" />
 	<look type="8" corpse="5980" />
@@ -7,8 +7,8 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
@@ -17,7 +17,7 @@
 		<flag runonhealth="429" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="1000" min="0" max="-83" />
+		<attack name="melee" interval="2000" min="0" max="-83" />
 	</attacks>
 	<defenses armor="15" defense="12">
 		<defense name="speed" interval="1000" chance="15" speedchange="290" duration="6000">

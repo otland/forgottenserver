@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mr. Punish" nameDescription="Mr. Punish" race="undead" experience="9000" speed="470">
 	<health now="22000" max="22000" />
 	<look type="234" corpse="6331" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="50" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
 		<flag runonhealth="2000" />
 		<flag isboss="1" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Infected Weeper" nameDescription="an infected weeper" race="fire" experience="4800" speed="250">
 	<health now="6800" max="6800" />
 	<look type="489" corpse="17251" />
@@ -45,14 +45,15 @@
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<summons maxSummons="6">
+	<summons maxSummons="1">
 		<summon name="Parasite" interval="2000" chance="10" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Moooaaan!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="198" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="98" chance="50000" />
 		<item name="platinum coin" countmax="7" chance="100000" />
 		<item id="8748" chance="1460" /><!-- coal -->
 	</loot>

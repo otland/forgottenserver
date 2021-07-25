@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ice Witch" nameDescription="an ice witch" race="blood" experience="580" speed="200">
 	<health now="650" max="650" />
-	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20423" />
+	<look type="149" head="0" body="9" legs="86" feet="86" addons="0" corpse="20423" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="70" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="4" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />

@@ -135,11 +135,9 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 	return result.second;
 }
 
-bool Weapons::registerLuaEvent(Weapon* event)
+bool Weapons::registerLuaEvent(Weapon* weapon)
 {
-	Weapon_ptr weapon{ event };
-	weapons[weapon->getID()] = weapon.release();
-
+	weapons[weapon->getID()] = weapon;
 	return true;
 }
 

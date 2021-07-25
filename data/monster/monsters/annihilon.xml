@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Annihilon" nameDescription="Annihilon" race="fire" experience="15000" speed="380">
 	<health now="46500" max="46500" />
-	<look type="12" head="19" body="104" legs="96" feet="96" corpse="6068" />
+	<look type="12" head="3" body="28" legs="115" feet="39" corpse="6068" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Stone Devourer" nameDescription="a stone devourer" race="undead" experience="2900" speed="250">
 	<health now="4200" max="4200" />
 	<look type="486" corpse="18375" />
@@ -11,11 +11,9 @@
 		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
+		<flag staticattack="90" />
 		<flag targetdistance="1" />
-		<flag runonhealth="1" />
+		<flag runonhealth="0" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-990" />

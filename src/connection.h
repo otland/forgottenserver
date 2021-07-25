@@ -69,7 +69,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 		enum { FORCE_CLOSE = true };
 
 		Connection(boost::asio::io_service& io_service,
-		           ConstServicePort_ptr service_port) :
+		ConstServicePort_ptr service_port) :
 			readTimer(io_service),
 			writeTimer(io_service),
 			service_port(std::move(service_port)),
@@ -106,8 +106,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		NetworkMessage msg;
 
-		boost::asio::deadline_timer readTimer;
-		boost::asio::deadline_timer writeTimer;
+		boost::asio::steady_timer readTimer;
+		boost::asio::steady_timer writeTimer;
 
 		std::recursive_mutex connectionLock;
 

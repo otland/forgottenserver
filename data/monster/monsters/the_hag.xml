@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Hag" nameDescription="The Hag" race="blood" experience="510" speed="205">
 	<health now="935" max="935" />
-	<look type="264" head="78" body="97" legs="95" feet="95" corpse="7349" />
+	<look type="264" head="19" body="1" legs="40" feet="2" corpse="7349" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
@@ -23,7 +23,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="24" defense="25">
-		<defense name="healing" interval="2000" chance="35" min="95" max="155">
+		<defense name="healing" interval="2000" chance="35" min="15" max="75">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 		<defense name="invisible" interval="3000" chance="50" duration="8000">

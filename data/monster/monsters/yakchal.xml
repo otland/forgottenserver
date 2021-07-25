@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Yakchal" nameDescription="Yakchal" race="blood" experience="4400" speed="200">
 	<health now="5750" max="5750" />
-	<look type="149" head="0" body="47" legs="105" feet="105" addons="0" corpse="20546" />
+	<look type="149" head="9" body="0" legs="85" feet="85" addons="1" corpse="20546" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag summonable="0" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="50" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="4" />
 		<flag runonhealth="0" />
 		<flag isboss="1" />
@@ -52,9 +50,9 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="Ice Golem" interval="1000" chance="13" max="4" />
+		<summon name="Ice Golem" interval="1000" chance="13" />
 	</summons>
-	<voices interval="2000" chance="5">
+	<voices interval="5000" chance="10">
 		<voice sentence="So you think you are cool?" />
 		<voice sentence="I hope it is not too cold for you! HeHeHe." />
 		<voice sentence="Freeze!" />

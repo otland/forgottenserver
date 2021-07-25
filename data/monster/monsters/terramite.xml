@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Terramite" nameDescription="a terramite" race="venom" experience="160" speed="200" manacost="505">
 	<health now="365" max="365" />
 	<look type="346" corpse="11347" />

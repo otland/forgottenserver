@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bones" nameDescription="Bones" race="undead" experience="3750" speed="300">
 	<health now="9500" max="9500" />
 	<look type="231" corpse="6306" />
@@ -14,7 +14,7 @@
 		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
-		<flag runonhealth="1" />
+		<flag runonhealth="100" />
 		<flag isboss="1" />
 	</flags>
 	<attacks>

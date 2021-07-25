@@ -51,8 +51,6 @@ class Spells final : public BaseEvents
 		InstantSpell* getInstantSpell(const std::string& words);
 		InstantSpell* getInstantSpellByName(const std::string& name);
 
-		InstantSpell* getInstantSpellById(uint32_t spellId);
-
 		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 		static Position getCasterPosition(Creature* creature, Direction dir);
@@ -320,7 +318,6 @@ class Spell : public BaseSpell
 		bool needTarget = false;
 
 	private:
-
 		uint32_t mana = 0;
 		uint32_t manaPercent = 0;
 		uint32_t soul = 0;
@@ -334,8 +331,6 @@ class Spell : public BaseSpell
 		bool enabled = true;
 		bool premium = false;
 
-
-	private:
 		std::string name;
 };
 

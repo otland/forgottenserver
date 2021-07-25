@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ironblight" nameDescription="Ironblight" race="undead" experience="4400" speed="220">
 	<health now="6600" max="6600" />
 	<look type="498" corpse="17424" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag staticattack="70" />
 		<flag runonhealth="260" />
 		<flag canwalkonenergy="0" />
@@ -56,7 +56,8 @@
 		<voice sentence="Yowl!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="199" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="99" chance="50000" />
 		<item name="small emerald" countmax="3" chance="10890" />
 		<item name="small amethyst" countmax="3" chance="15020" />
 		<item name="platinum coin" countmax="8" chance="100000" />

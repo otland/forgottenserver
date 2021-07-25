@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Waspoid" nameDescription="Waspoid" race="venom" experience="830" speed="210">
 	<health now="1100" max="1100" />
 	<look type="462" corpse="15396" />
@@ -12,7 +12,7 @@
 		<flag pushable="0" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />

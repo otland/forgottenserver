@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Obujos" nameDescription="Obujos" race="blood" experience="20000" speed="560">
 	<health now="35000" max="35000" />
 	<look type="445" corpse="15224" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 		<flag isboss="1" />
 	</flags>
@@ -55,7 +55,7 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<voices interval="3000" chance="100">
+	<voices interval="5000" chance="10">
 		<voice sentence="JN OBU!!" />
 		<voice sentence="QJELL KEJH!!" />
 	</voices>

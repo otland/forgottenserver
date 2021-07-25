@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Groam" nameDescription="Groam" race="blood" experience="180" speed="560">
 	<health now="400" max="400" />
 	<look type="413" corpse="13839" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 		<flag isboss="1" />
 	</flags>
@@ -35,7 +35,7 @@
 		<immunity drown="1" />
 		<immunity fire="1" />
 	</immunities>
-	<voices interval="3000" chance="200">
+	<voices interval="5000" chance="10">
 		<voice sentence="Njaaarh!!" />
 		<voice sentence="Begjone, intrjuder!!" />
 		<voice sentence="Djon't djare stjare injo the eyes of the djeep!" />

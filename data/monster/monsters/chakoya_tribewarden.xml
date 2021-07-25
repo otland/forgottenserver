@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Chakoya Tribewarden" nameDescription="a chakoya tribewarden" race="blood" experience="40" speed="200" manacost="305">
 	<health now="68" max="68" />
 	<look type="259" corpse="7320" />
@@ -12,8 +12,6 @@
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag staticattack="80" />
-		<flag lightlevel="0" />
-		<flag lightcolor="0" />
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Demon" nameDescription="a demon" race="fire" experience="6000" speed="256">
 	<health now="8200" max="8200" />
 	<look type="35" corpse="5995" />
@@ -63,14 +63,15 @@
 		<summon name="fire elemental" interval="2000" chance="10" />
 	</summons>
 	<voices interval="5000" chance="10">
-		<voice sentence="Your soul will be mine!" />
-		<voice sentence="MUHAHAHAHA!" />
+		<voice sentence="Your soul will be mine!" yell="1" />
+		<voice sentence="MUHAHAHAHA!" yell="1" />
 		<voice sentence="CHAMEK ATH UTHUL ARAK!" yell="1" />
 		<voice sentence="I SMELL FEEEEAAAAAR!" yell="1" />
 		<voice sentence="Your resistance is futile!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="200" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="platinum coin" countmax="8" chance="100000" />
 		<item name="great mana potion" countmax="3" chance="25000" />
 		<item name="great spirit potion" countmax="3" chance="25000" />

@@ -87,13 +87,18 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
-		uint16_t id = pugi::cast<uint16_t>(attr.value());
+		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
+		bool success = true;
 
-		auto result = useItemMap.emplace(id, std::move(*action));
-		if (!result.second) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
+		for (const auto& id : idList) {
+			auto result = useItemMap.emplace(id, std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with id: " << id << std::endl;
+				success = false;
+			}
 		}
-		return result.second;
+
+		return success;
 	} else if ((attr = node.attribute("fromid"))) {
 		pugi::xml_attribute toIdAttribute = node.attribute("toid");
 		if (!toIdAttribute) {
@@ -121,13 +126,18 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 		return success;
 	} else if ((attr = node.attribute("uniqueid"))) {
-		uint16_t uid = pugi::cast<uint16_t>(attr.value());
+		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
+		bool success = true;
 
-		auto result = uniqueItemMap.emplace(uid, std::move(*action));
-		if (!result.second) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
+		for (const auto& uid : uidList) {
+			auto result = uniqueItemMap.emplace(uid, std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with uniqueid: " << uid << std::endl;
+				success = false;
+			}
 		}
-		return result.second;
+
+		return success;
 	} else if ((attr = node.attribute("fromuid"))) {
 		pugi::xml_attribute toUidAttribute = node.attribute("touid");
 		if (!toUidAttribute) {
@@ -155,13 +165,18 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		}
 		return success;
 	} else if ((attr = node.attribute("actionid"))) {
-		uint16_t aid = pugi::cast<uint16_t>(attr.value());
+		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
+		bool success = true;
 
-		auto result = actionItemMap.emplace(aid, std::move(*action));
-		if (!result.second) {
-			std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
+		for (const auto& aid : aidList) {
+			auto result = actionItemMap.emplace(aid, std::move(*action));
+			if (!result.second) {
+				std::cout << "[Warning - Actions::registerEvent] Duplicate registered item with actionid: " << aid << std::endl;
+				success = false;
+			}
 		}
-		return result.second;
+
+		return success;
 	} else if ((attr = node.attribute("fromaid"))) {
 		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
 		if (!toAidAttribute) {
@@ -333,7 +348,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 {
 	if (Door* door = item->getDoor()) {
 		if (!door->canUse(player)) {
-			return RETURNVALUE_CANNOTUSETHISOBJECT;
+			return RETURNVALUE_NOTPOSSIBLE;
 		}
 	}
 
@@ -356,6 +371,13 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 	if (BedItem* bed = item->getBed()) {
 		if (!bed->canUse(player)) {
+			if (!bed->getHouse()) {
+				return RETURNVALUE_YOUCANNOTUSETHISBED;
+			}
+
+			if (!player->isPremium()) {
+				return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
+			}
 			return RETURNVALUE_CANNOTUSETHISOBJECT;
 		}
 
@@ -425,6 +447,11 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	ReturnValue ret = internalUseItem(player, pos, index, item, isHotkey);
+	if (ret == RETURNVALUE_YOUCANNOTUSETHISBED) {
+		g_game.internalCreatureSay(player, TALKTYPE_MONSTER_SAY, getReturnMessage(ret), false);
+		return false;
+	}
+
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		return false;

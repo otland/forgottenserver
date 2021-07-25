@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crawler" nameDescription="a crawler" race="venom" experience="1000" speed="200">
 	<health now="1450" max="1450" />
 	<look type="456" corpse="15292" />
@@ -12,7 +12,7 @@
 		<flag pushable="1" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
-		<flag targetdistance="0" />
+		<flag targetdistance="1" />
 		<flag runonhealth="40" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />

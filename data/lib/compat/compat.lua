@@ -329,7 +329,7 @@ function doCombat(cid, combat, var) return combat:execute(cid, var) end
 function isCreature(cid) return Creature(cid) end
 function isPlayer(cid) return Player(cid) end
 function isMonster(cid) return Monster(cid) end
-function isSummon(cid) return Creature(cid):getMaster() end
+function isSummon(cid) local c = Creature(cid) return c and c:getMaster() end
 function isNpc(cid) return Npc(cid) end
 function isItem(uid) return Item(uid) end
 function isContainer(uid) return Container(uid) end
@@ -347,6 +347,7 @@ function getCreatureBaseSpeed(cid) local c = Creature(cid) return c and c:getBas
 function getCreatureLookDirection(cid) local c = Creature(cid) return c and c:getDirection() or false end
 function getCreatureHideHealth(cid) local c = Creature(cid) return c and c:isHealthHidden() or false end
 function getCreatureSkullType(cid) local c = Creature(cid) return c and c:getSkull() or false end
+function getCreatureNoMove(cid) local c = Creature(cid) return c and c:isMovementBlocked() or false end
 
 function getCreatureTarget(cid)
 	local c = Creature(cid)
@@ -390,6 +391,7 @@ function doCreatureSetSkullType(cid, skull) local c = Creature(cid) return c and
 function setCreatureMaxHealth(cid, health) local c = Creature(cid) return c and c:setMaxHealth(health) or false end
 function setCreatureMaxMana(cid, mana) local c = Creature(cid) return c and c:setMaxMana(mana) or false end
 function doCreatureSetHideHealth(cid, hide) local c = Creature(cid) return c and c:setHiddenHealth(hide) or false end
+function doCreatureSetNoMove(cid, block) local c = Creature(cid) return c and c:setMovementBlocked(block) or false end
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c and c:say(text, type, ...) or false end
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c and c:setOutfit(outfit) or false end
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c and c:setDropLoot(doDrop) or false end
@@ -603,12 +605,14 @@ getIpByName = getIPByPlayerName
 
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p and p:setStorageValue(key, value) or false end
 function doPlayerSetNameDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
+function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel) local p = Player(cid) return p and p:sendChannelMessage(author, message, SpeakClasses, channel) or false end
 function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setCapacity(cap) or false end
 function doPlayerSetSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p and p:setBankBalance(balance) or false end
 function doPlayerSetPromotionLevel(cid, level) local p = Player(cid) return p and p:setVocation(p:getVocation():getPromotion()) or false end
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p and p:addMoney(money) or false end
 function doPlayerRemoveMoney(cid, money) local p = Player(cid) return p and p:removeMoney(money) or false end
+function doPlayerTakeItem(cid, itemid, count) local p = Player(cid) return p and p:removeItem(itemid, count) or false end
 function doPlayerTransferMoneyTo(cid, target, money)
 	if not isValidMoney(money) then
 		return false
@@ -1298,6 +1302,7 @@ function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+doBroadcastMessage = broadcastMessage
 
 function Guild.addMember(self, player)
 	return player:setGuild(guild)
@@ -1405,10 +1410,6 @@ function createFunctions(class)
 	end
 end
 
-function doPlayerTakeItem(cid, itemid, count)
-	return Player(cid):removeItem(itemid, count)
-end
-
 function isNumber(str)
 	return tonumber(str) ~= nil
 end
@@ -1427,8 +1428,66 @@ function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	return true
 end
 
-function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel)
-	return Player(cid):sendChannelMessage(author, message, SpeakClasses, channel)
+do
+	local combats = {
+		[COMBAT_PHYSICALDAMAGE] = 'physical',
+		[COMBAT_ENERGYDAMAGE] = 'energy',
+		[COMBAT_EARTHDAMAGE] = 'earth',
+		[COMBAT_FIREDAMAGE] = 'fire',
+		[COMBAT_UNDEFINEDDAMAGE] = 'undefined',
+		[COMBAT_LIFEDRAIN] = 'lifedrain',
+		[COMBAT_MANADRAIN] = 'manadrain',
+		[COMBAT_HEALING] = 'healing',
+		[COMBAT_DROWNDAMAGE] = 'drown',
+		[COMBAT_ICEDAMAGE] = 'ice',
+		[COMBAT_HOLYDAMAGE] = 'holy',
+		[COMBAT_DEATHDAMAGE] = 'death'
+	}
+
+	function getCombatName(combat)
+		return combats[combat]
+	end
+end
+
+do
+	local skills = {
+		[SKILL_FIST] = 'fist fighting',
+		[SKILL_CLUB] = 'club fighting',
+		[SKILL_SWORD] = 'sword fighting',
+		[SKILL_AXE] = 'axe fighting',
+		[SKILL_DISTANCE] = 'distance fighting',
+		[SKILL_SHIELD] = 'shielding',
+		[SKILL_FISHING] = 'fishing',
+		[SKILL_MAGLEVEL] = 'magic level',
+		[SKILL_LEVEL] = 'level'
+	}
+
+	function getSkillName(skill)
+		return skills[skill] or 'unknown'
+	end
+end
+
+do
+	local specialSkills = {
+		[SPECIALSKILL_CRITICALHITCHANCE] = 'critical hit chance',
+		[SPECIALSKILL_CRITICALHITAMOUNT] = 'critical extra damage',
+		[SPECIALSKILL_LIFELEECHCHANCE] = 'hitpoints leech chance',
+		[SPECIALSKILL_LIFELEECHAMOUNT] = 'hitpoints leech amount',
+		[SPECIALSKILL_MANALEECHCHANCE] = 'manapoints leech chance',
+		[SPECIALSKILL_MANALEECHAMOUNT] = 'manapoints leech amount'
+	}
+
+	function getSpecialSkillName(specialSkill)
+		return specialSkills[specialSkill] or 'unknown'
+	end
+end
+
+function indexToCombatType(idx)
+	return bit.lshift(1, idx)
+end
+
+function showpos(v)
+	return v > 0 and '+' or '-'
 end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
