@@ -12225,9 +12225,9 @@ int LuaScriptInterface::luaCombatCreate(lua_State* L)
 
 int LuaScriptInterface::luaCombatDelete(lua_State* L)
 {
-	Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (combatPtr) {
-		combatPtr->reset();
+	Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (combat) {
+		combat.reset();
 	}
 	return 0;
 }
@@ -12235,8 +12235,8 @@ int LuaScriptInterface::luaCombatDelete(lua_State* L)
 int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 {
 	// combat:setParameter(key, value)
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
@@ -12248,7 +12248,7 @@ int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 	} else {
 		value = getNumber<uint32_t>(L, 3);
 	}
-	combatPtr->get()->setParam(key, value);
+	combatPtr->setParam(key, value);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -12256,8 +12256,8 @@ int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 int LuaScriptInterface::luaCombatSetFormula(lua_State* L)
 {
 	// combat:setFormula(type, mina, minb, maxa, maxb)
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
@@ -12267,7 +12267,7 @@ int LuaScriptInterface::luaCombatSetFormula(lua_State* L)
 	double minb = getNumber<double>(L, 4);
 	double maxa = getNumber<double>(L, 5);
 	double maxb = getNumber<double>(L, 6);
-	combatPtr->get()->setPlayerCombatValues(type, mina, minb, maxa, maxb);
+	combat->setPlayerCombatValues(type, mina, minb, maxa, maxb);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -12288,13 +12288,13 @@ int LuaScriptInterface::luaCombatSetArea(lua_State* L)
 		return 1;
 	}
 
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	combatPtr->get()->setArea(new AreaCombat(*area));
+	combat->setArea(new AreaCombat(*area));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -12302,15 +12302,15 @@ int LuaScriptInterface::luaCombatSetArea(lua_State* L)
 int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 {
 	// combat:addCondition(condition)
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	Condition* condition = getUserdata<Condition>(L, 2);
 	if (condition) {
-		combatPtr->get()->addCondition(condition->clone());
+		combat->addCondition(condition->clone());
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -12321,13 +12321,13 @@ int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
 {
 	// combat:clearConditions()
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	combatPtr->get()->clearConditions();
+	combat->clearConditions();
 	pushBoolean(L, true);
 	return 1;
 }
@@ -12335,13 +12335,12 @@ int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
 int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 {
 	// combat:setCallback(key, function)
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Combat* combat = combatPtr->get();
 	CallBackParam_t key = getNumber<CallBackParam_t>(L, 2);
 	if (!combat->setCallback(key)) {
 		lua_pushnil(L);
@@ -12362,13 +12361,13 @@ int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 int LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
 {
 	// combat:setOrigin(origin)
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	combatPtr->get()->setOrigin(getNumber<CombatOrigin>(L, 2));
+	combat->setOrigin(getNumber<CombatOrigin>(L, 2));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -12376,8 +12375,8 @@ int LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
 int LuaScriptInterface::luaCombatExecute(lua_State* L)
 {
 	// combat:execute(creature, variant)
-	const Combat_ptr* combatPtr = getSharedPtr<Combat_ptr>(L, 1);
-	if (!combatPtr) {
+	const Combat_ptr combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
 		lua_pushnil(L);
 		return 1;
 	}
@@ -12390,7 +12389,6 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 		}
 	}
 
-	Combat* combat = combatPtr->get();
 	Creature* creature = getCreature(L, 2);
 
 	const LuaVariant& variant = getVariant(L, 3);
@@ -16779,13 +16777,13 @@ LuaScriptInterface* LuaEnvironment::getTestInterface()
 	return testInterface;
 }
 
-Combat_ptr LuaEnvironment::getCombatObject(uint32_t id) const
+Combat* LuaEnvironment::getCombatObject(uint32_t id) const
 {
 	auto it = combatMap.find(id);
 	if (it == combatMap.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.get();
 }
 
 Combat_ptr LuaEnvironment::createCombatObject(LuaScriptInterface* interface)

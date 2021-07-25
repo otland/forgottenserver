@@ -275,8 +275,7 @@ class LuaScriptInterface
 		template<class T>
 		static void pushSharedPtr(lua_State* L, T value)
 		{
-			void* Memory = lua_newuserdata(L, sizeof(T));
-			new(Memory) T(value);
+			new (lua_newuserdata(L, sizeof(T))) T(std::move(value));
 		}
 
 		// Metatables
@@ -323,9 +322,9 @@ class LuaScriptInterface
 			return static_cast<T**>(lua_touserdata(L, arg));
 		}
 		template<class T>
-		static T* getSharedPtr(lua_State* L, int32_t arg)
+		static const std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
 		{
-			return static_cast<T*>(lua_touserdata(L, arg));
+			return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
 		}
 
 		static bool getBoolean(lua_State* L, int32_t arg)
@@ -1557,7 +1556,7 @@ class LuaEnvironment : public LuaScriptInterface
 
 		LuaScriptInterface* getTestInterface();
 
-		Combat_ptr getCombatObject(uint32_t id) const;
+		Combat* getCombatObject(uint32_t id) const;
 		Combat_ptr createCombatObject(LuaScriptInterface* interface);
 		void clearCombatObjects(LuaScriptInterface* interface);
 
