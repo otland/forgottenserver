@@ -668,7 +668,7 @@ function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) ret
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
 function getPlayerAccountManager() debugPrint("Deprecated function.") return true end
 function doPlayerSetExperienceRate() debugPrint("Deprecated function, use Player:onGainExperience event instead.") return true end
-function doPlayerSetSkillLevel(cid, skill, value, ...) local p = Player(cid) return p and p:addSkill(skillId, value, round) end
+function doPlayerSetSkillLevel(cid, skillId, value, ...) local p = Player(cid) return p and p:addSkill(skillId, value, ...) end
 function doPlayerSetMagicLevel(cid, value) local p = Player(cid) return p and p:addMagicLevel(value) end
 function doPlayerAddLevel(cid, amount, round) local p = Player(cid) return p and p:addLevel(amount, round) end
 function doPlayerAddExp(cid, exp, useMult, ...)
@@ -1305,7 +1305,7 @@ end
 doBroadcastMessage = broadcastMessage
 
 function Guild.addMember(self, player)
-	return player:setGuild(guild)
+	return player:setGuild(self)
 end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
@@ -1335,9 +1335,7 @@ function doSetCreatureOutfit(cid, outfit, time)
 	end
 
 	local condition = Condition(CONDITION_OUTFIT)
-	condition:setOutfit({
-		lookTypeEx = itemType:getId()
-	})
+	condition:setOutfit(outfit)
 	condition:setTicks(time)
 	creature:addCondition(condition)
 
