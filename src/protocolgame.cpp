@@ -3134,13 +3134,11 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 	//going to surface
 	if (newPos.z == 7) {
 		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 5, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 3, skip); //(floor 7 and 6 already set)
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 4, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 4, skip);
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 3, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 5, skip);
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 2, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 6, skip);
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 1, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 7, skip);
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 0, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 8, skip);
 
+                //(floor 7 and 6 already set)
+                for (int i = 5; i >= 0; i--) {
+                        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, i, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 8 - i, skip);
+                }
 		if (skip >= 0) {
 			msg.addByte(skip);
 			msg.addByte(0xFF);
@@ -3180,10 +3178,9 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 	if (newPos.z == 8) {
 		int32_t skip = -1;
 
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -1, skip);
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 1, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -2, skip);
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 2, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -3, skip);
-
+                for (int i = 1; i <= 3; i++) {
+                        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + i - 1, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 0 - i, skip);
+                }
 		if (skip >= 0) {
 			msg.addByte(skip);
 			msg.addByte(0xFF);
