@@ -3135,10 +3135,10 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 	if (newPos.z == 7) {
 		int32_t skip = -1;
 
-        //(floor 7 and 6 already set)
-        for (int i = 5; i >= 0; i--) {
-            GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, i, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 8 - i, skip);
-        }
+		//(floor 7 and 6 already set)
+		for (int i = 5; i >= 0; i--) {
+			GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, i, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 8 - i, skip);
+		}
 		if (skip >= 0) {
 			msg.addByte(skip);
 			msg.addByte(0xFF);
@@ -3178,9 +3178,9 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 	if (newPos.z == 8) {
 		int32_t skip = -1;
 
-        for (int i = 1; i <= 3; i++) {
-            GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + i - 1, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 0 - i, skip);
-        }
+		for (int i = 1; i <= 3; i++) {
+			GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + i - 1, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 0 - i, skip);
+		}
 		if (skip >= 0) {
 			msg.addByte(skip);
 			msg.addByte(0xFF);
