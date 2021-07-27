@@ -34462,13 +34462,13 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="24667" article="a" name="dead werebear">
-		<attribute key="containerSize" value="3-" />
+		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="24668" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="24668" article="a" name="dead werebear">
-		<attribute key="containerSize" value="3-" />
+		<attribute key="containerSize" value="30" />
 		<attribute key="decayTo" value="24669" />
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="blood" />
