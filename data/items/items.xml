@@ -25017,7 +25017,7 @@
 	<item fromid="15820" toid="15823" name="counter" />
 	<item id="15985" article="a" name="slain pharaoh" />
 	<item id="16003" article="a" name="CM token">
-		<attribute key="description" value="It was awarded during the festivities of Tibia's 15th anniversary." />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 15th anniversary." />
 		<attribute key="weight" value="1250" />
 	</item>
 	<item id="16004" name="Delany's golden bug trophy">
@@ -33637,7 +33637,7 @@
 		<attribute key="description" value="There is a hole in the ceiling." />
 	</item>
 	<item id="23871" article="a" name="pendulum clock" />
-	<item id="23872" article="a" name="globe of the Tibian world">
+	<item id="23872" article="a" name="globe of the world">
 		<attribute key="description" value="You see the mainland, a lot of islands and huge white areas that are not yet explored around them." />
 	</item>
 	<item id="23873" article="a" name="vial of medusa blood">
