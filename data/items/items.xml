@@ -525,7 +525,7 @@
 		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="1405" article="a" name="ramp" />
-	<item id="1406" article="a" name="sanctified grave" />
+	<item id="1406" article="a" name="grave" />
 	<item fromid="1407" toid="1409" article="a" name="grave stone" />
 	<item id="1410" article="a" name="stone coffin">
 		<attribute key="containerSize" value="10" />
@@ -14968,7 +14968,7 @@
 		<attribute key="type" value="teleport" />
 		<attribute key="effect" value="teleport" />
 	</item>
-	<item id="8059" article="a" name="grave" />
+	<item id="8059" article="a" name="sanctified grave" />
 	<item id="8062" article="a" name="poison gas" editorsuffix=" (Slime Corpse)">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="2" />
@@ -27726,7 +27726,7 @@
 	<item fromid="20222" toid="20223" article="an" name="elevator" />
 	<item fromid="20224" toid="20225" article="a" name="winch" />
 	<item fromid="20226" toid="20227" article="an" name="elevator" />
-	<item id="20230" name="swamp">
+	<item id="20230" name="swamp" editorsuffix=" (Swamp digging)">
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="greenbubble" />
 		<attribute key="allowpickupable" value="1" />
