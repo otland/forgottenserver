@@ -212,29 +212,29 @@ bool Actions::registerLuaEvent(Action* event)
 {
 	Action_ptr action{ event };
 	if (!action->getItemIdRange().empty()) {
-		const auto& v = action->getItemIdRange();
-		for (auto id : v) {
+		const auto& range = action->getItemIdRange();
+		for (auto id : range) {
 			auto result = useItemMap.emplace(id, *action);
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << " in range from id: " << v.front() << ", to id: " << v.back() << std::endl;
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << " in range from id: " << range.front() << ", to id: " << range.back() << std::endl;
 			}
 		}
 		return true;
 	} else if (!action->getUniqueIdRange().empty()) {
-		const auto& v = action->getUniqueIdRange();
-		for (auto id : v) {
+		const auto& range = action->getUniqueIdRange();
+		for (auto id : range) {
 			auto result = uniqueItemMap.emplace(id, *action);
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << id << " in range from uid: " << v.front() << ", to uid: " << v.back() << std::endl;
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << id << " in range from uid: " << range.front() << ", to uid: " << range.back() << std::endl;
 			}
 		}
 		return true;
 	} else if (!action->getActionIdRange().empty()) {
-		const auto& v = action->getActionIdRange();
-		for (auto id : v) {
+		const auto& range = action->getActionIdRange();
+		for (auto id : range) {
 			auto result = actionItemMap.emplace(id, *action);
 			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << id << " in range from aid: " << v.front() << ", to aid: " << v.back() << std::endl;
+				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << id << " in range from aid: " << range.front() << ", to aid: " << range.back() << std::endl;
 			}
 		}
 		return true;
