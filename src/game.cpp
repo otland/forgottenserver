@@ -843,6 +843,8 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 		return ret;
 	}
 
+	Tile* fromTile = creature.getTile();
+
 	map.moveCreature(creature, toTile);
 	if (creature.getParent() != &toTile) {
 		return RETURNVALUE_NOERROR;
@@ -856,6 +858,12 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	uint32_t n = 0;
 
 	while ((subCylinder = toCylinder->queryDestination(index, creature, &toItem, flags)) != toCylinder) {
+		//cancel movement if stairs lead to unwalkable tiles
+		if (subCylinder->hasFlag(TILESTATE_BLOCKSOLID)) {
+			map.moveCreature(creature, *fromTile);
+			return RETURNVALUE_NOTPOSSIBLE;
+		}
+
 		map.moveCreature(creature, *subCylinder);
 
 		if (creature.getParent() != subCylinder) {
