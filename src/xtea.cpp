@@ -52,22 +52,34 @@ void apply_rounds(uint8_t* data, size_t length, Round round)
 
 }
 
-void encrypt(uint8_t* data, size_t length, const key& k)
+round_keys expand_key(const key& k)
 {
-	for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < 32; ++i, sum = next_sum, next_sum += delta) {
+	round_keys expanded;
+
+	for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < expanded.size(); i += 2, sum = next_sum, next_sum += delta) {
+		expanded[i] = sum + k[sum & 3];
+		expanded[i + 1] = next_sum + k[(next_sum >> 11) & 3];
+	}
+
+	return expanded;
+}
+
+void encrypt(uint8_t* data, size_t length, const round_keys& k)
+{
+	for (int32_t i = 0; i < k.size(); i += 2) {
 		apply_rounds(data, length, [&](uint32_t& left, uint32_t& right) {
-			left += ((right << 4 ^ right >> 5) + right) ^ (sum + k[sum & 3]);
-			right += ((left << 4 ^ left >> 5) + left) ^ (next_sum + k[(next_sum >> 11) & 3]);
+			left += ((right << 4 ^ right >> 5) + right) ^ k[i];
+			right += ((left << 4 ^ left >> 5) + left) ^ k[i + 1];
 		});
 	};
 }
 
-void decrypt(uint8_t* data, size_t length, const key& k)
+void decrypt(uint8_t* data, size_t length, const round_keys& k)
 {
-	for (uint32_t i = 0, sum = delta << 5, next_sum = sum - delta; i < 32; ++i, sum = next_sum, next_sum -= delta) {
+	for (int32_t i = k.size() - 1; i > 0; i -= 2) {
 		apply_rounds(data, length, [&](uint32_t& left, uint32_t& right) {
-			right -= ((left << 4 ^ left >> 5) + left) ^ (sum + k[(sum >> 11) & 3]);
-			left -= ((right << 4 ^ right >> 5) + right) ^ (next_sum + k[next_sum & 3]);
+			right -= ((left << 4 ^ left >> 5) + left) ^ k[i];
+			left -= ((right << 4 ^ right >> 5) + right) ^ k[i - 1];
 		});
 	};
 }

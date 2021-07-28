@@ -228,6 +228,13 @@ class Creature : virtual public Thing
 			return healthMax;
 		}
 
+		void setDrunkenness(uint8_t newDrunkenness) {
+			drunkenness = newDrunkenness;
+		}
+		uint8_t getDrunkenness() const {
+			return drunkenness;
+		}
+
 		const Outfit_t getCurrentOutfit() const {
 			return currentOutfit;
 		}
@@ -345,6 +352,7 @@ class Creature : virtual public Thing
 			return false;
 		}
 
+		CreatureVector getKillers();
 		void onDeath();
 		virtual uint64_t getGainedExperience(Creature* attacker) const;
 		void addDamagePoints(Creature* attacker, int32_t damagePoints);
@@ -512,6 +520,7 @@ class Creature : virtual public Thing
 		int32_t varSpeed = 0;
 		int32_t health = 1000;
 		int32_t healthMax = 1000;
+		uint8_t drunkenness = 0;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;

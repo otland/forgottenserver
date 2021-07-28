@@ -28,6 +28,8 @@
 #include "scheduler.h"
 #include "monster.h"
 
+#include <fmt/format.h>
+
 extern Game g_game;
 extern ConfigManager g_config;
 
@@ -71,9 +73,7 @@ bool Raids::loadFromXml()
 		if ((attr = raidNode.attribute("file"))) {
 			file = attr.as_string();
 		} else {
-			std::ostringstream ss;
-			ss << "raids/" << name << ".xml";
-			file = ss.str();
+			file = fmt::format("raids/{:s}.xml", name);
 			std::cout << "[Warning - Raids::loadFromXml] File tag missing for raid " << name << ". Using default: " << file << std::endl;
 		}
 

@@ -72,8 +72,8 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		void enableXTEAEncryption() {
 			encryptionEnabled = true;
 		}
-		void setXTEAKey(xtea::key key) {
-			this->key = std::move(key);
+		void setXTEAKey(const xtea::key& key) {
+			this->key = xtea::expand_key(key);
 		}
 		void disableChecksum() {
 			checksumEnabled = false;
@@ -93,7 +93,7 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 		OutputMessage_ptr outputBuffer;
 
 		const ConnectionWeak_ptr connection;
-		xtea::key key;
+		xtea::round_keys key;
 		bool encryptionEnabled = false;
 		bool checksumEnabled = true;
 		bool rawMessages = false;
