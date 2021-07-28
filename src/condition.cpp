@@ -946,11 +946,6 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 
 int32_t ConditionRegeneration::getParam(ConditionParam_t param)
 {
-	int32_t value = ConditionGeneric::getParam(param);
-	if (value != std::numeric_limits<int32_t>().max()) {
-		return value;
-	}
-
 	switch (param) {
 		case CONDITION_PARAM_HEALTHGAIN:
 			return healthGain;
@@ -965,7 +960,7 @@ int32_t ConditionRegeneration::getParam(ConditionParam_t param)
 			return manaTicks;
 
 		default:
-			return value;
+			return ConditionGeneric::getParam(param);
 	}
 }
 
@@ -1037,11 +1032,6 @@ bool ConditionSoul::setParam(ConditionParam_t param, int32_t value)
 
 int32_t ConditionSoul::getParam(ConditionParam_t param)
 {
-	int32_t value = ConditionGeneric::getParam(param);
-	if (value != std::numeric_limits<int32_t>().max()) {
-		return value;
-	}
-
 	switch (param) {
 		case CONDITION_PARAM_SOULGAIN:
 			return soulGain;
@@ -1050,7 +1040,7 @@ int32_t ConditionSoul::getParam(ConditionParam_t param)
 			return soulTicks;
 
 		default:
-			return value;
+			return ConditionGeneric::getParam(param);
 	}
 }
 
@@ -1104,11 +1094,6 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 
 int32_t ConditionDamage::getParam(ConditionParam_t param)
 {
-	int32_t value = Condition::getParam(param);
-	if (value != std::numeric_limits<int32_t>().max()) {
-		return value;
-	}
-
 	switch (param) {
 		case CONDITION_PARAM_OWNER:
 			return owner;
@@ -1138,7 +1123,7 @@ int32_t ConditionDamage::getParam(ConditionParam_t param)
 			return field ? 1 : 0;
 
 		default:
-			return value;
+			return Condition::getParam(param);;
 	}
 }
 
@@ -1526,17 +1511,12 @@ bool ConditionSpeed::setParam(ConditionParam_t param, int32_t value)
 
 int32_t ConditionSpeed::getParam(ConditionParam_t param)
 {
-	int32_t value = Condition::getParam(param);
-	if (value != std::numeric_limits<int32_t>().max()) {
-		return value;
-	}
-
 	switch (param) {
 		case CONDITION_PARAM_SPEED:
 			return speedDelta;
 
 		default:
-			return value;
+			return Condition::getParam(param);;
 	}
 }
 
@@ -1798,11 +1778,6 @@ bool ConditionLight::setParam(ConditionParam_t param, int32_t value)
 
 int32_t ConditionLight::getParam(ConditionParam_t param)
 {
-	int32_t value = Condition::getParam(param);
-	if (value != std::numeric_limits<int32_t>().max()) {
-		return value;
-	}
-
 	switch (param) {
 		case CONDITION_PARAM_LIGHT_LEVEL:
 			return lightInfo.level;
@@ -1811,7 +1786,7 @@ int32_t ConditionLight::getParam(ConditionParam_t param)
 			return lightInfo.color;
 
 		default:
-			return value;
+			return Condition::getParam(param);;
 	}
 }
 
