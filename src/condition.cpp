@@ -1516,7 +1516,7 @@ int32_t ConditionSpeed::getParam(ConditionParam_t param)
 			return speedDelta;
 
 		default:
-			return Condition::getParam(param);;
+			return Condition::getParam(param);
 	}
 }
 
