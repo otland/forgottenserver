@@ -1786,7 +1786,7 @@ int32_t ConditionLight::getParam(ConditionParam_t param)
 			return lightInfo.color;
 
 		default:
-			return Condition::getParam(param);;
+			return Condition::getParam(param);
 	}
 }
 
