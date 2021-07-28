@@ -1123,7 +1123,7 @@ int32_t ConditionDamage::getParam(ConditionParam_t param)
 			return field ? 1 : 0;
 
 		default:
-			return Condition::getParam(param);;
+			return Condition::getParam(param);
 	}
 }
 
