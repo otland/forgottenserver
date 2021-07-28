@@ -710,11 +710,6 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 
 int32_t ConditionAttributes::getParam(ConditionParam_t param)
 {
-	int32_t value = ConditionGeneric::getParam(param);
-	if (value != std::numeric_limits<int32_t>().max()) {
-		return value;
-	}
-
 	switch (param) {
 		case CONDITION_PARAM_SKILL_FIST:
 			return skills[SKILL_FIST];
@@ -798,7 +793,7 @@ int32_t ConditionAttributes::getParam(ConditionParam_t param)
 			return specialSkills[SPECIALSKILL_MANALEECHAMOUNT];
 
 		default:
-			return value;
+			return ConditionGeneric::getParam(param);
 	}
 }
 
