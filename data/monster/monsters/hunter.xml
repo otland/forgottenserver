@@ -37,12 +37,12 @@
 		<voice sentence="You'll make a nice trophy!" />
 	</voices>
 	<loot>
-		<item name="arrow" countmax="22" chance="82000" />
+		<item id="2544" countmax="22" chance="82000" /><!-- arrow -->
 		<item name="orange" countmax="2" chance="20300" />
 		<item name="roll" countmax="2" chance="11370" />
 		<item name="hunter's quiver" chance="10240" />
 		<item name="bow" chance="5770" />
-		<item name="burst arrow" countmax="3" chance="5360" />
+		<item id="2546" countmax="3" chance="5360" /><!-- burst arrow -->
 		<item name="brass armor" chance="5070" />
 		<item name="brass helmet" chance="5050" />
 		<item name="poison arrow" countmax="4" chance="4500" />
