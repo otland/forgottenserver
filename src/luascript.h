@@ -1556,7 +1556,7 @@ class LuaEnvironment : public LuaScriptInterface
 
 		LuaScriptInterface* getTestInterface();
 
-		Combat* getCombatObject(uint32_t id) const;
+		Combat_ptr getCombatObject(uint32_t id) const;
 		Combat_ptr createCombatObject(LuaScriptInterface* interface);
 		void clearCombatObjects(LuaScriptInterface* interface);
 

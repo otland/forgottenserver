@@ -109,7 +109,7 @@ class CombatSpell final : public Event, public BaseSpell
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
 
 		bool loadScriptCombat();
-		Combat* getCombat() {
+		Combat_ptr getCombat() {
 			return combat;
 		}
 
@@ -118,7 +118,7 @@ class CombatSpell final : public Event, public BaseSpell
 			return "onCastSpell";
 		}
 
-		Combat* combat;
+		Combat_ptr combat;
 
 		bool needDirection;
 		bool needTarget;
