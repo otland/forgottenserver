@@ -286,13 +286,6 @@ CombatSpell::CombatSpell(Combat* combat, bool needTarget, bool needDirection) :
 	needTarget(needTarget)
 {}
 
-CombatSpell::~CombatSpell()
-{
-	if (!scripted) {
-		delete combat;
-	}
-}
-
 bool CombatSpell::loadScriptCombat()
 {
 	combat = g_luaEnvironment.getCombatObject(g_luaEnvironment.lastCombatId);
