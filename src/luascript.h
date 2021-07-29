@@ -562,6 +562,7 @@ class LuaScriptInterface
 		static int luaGameGetClientVersion(lua_State* L);
 
 		static int luaGameReload(lua_State* L);
+		static int luaGameGetTalkactions(lua_State* L);
 
 		// Variant
 		static int luaVariantCreate(lua_State* L);
@@ -1449,6 +1450,9 @@ class LuaScriptInterface
 		static int luaTalkactionSeparator(lua_State* L);
 		static int luaTalkactionAccess(lua_State* L);
 		static int luaTalkactionAccountType(lua_State* L);
+		static int luaTalkactionGetAccess(lua_State* L);
+		static int luaTalkactionGetAccountType(lua_State* L);
+		static int luaTalkactionGetWords(lua_State* L);
 
 		// CreatureEvents
 		static int luaCreateCreatureEvent(lua_State* L);

@@ -2037,6 +2037,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
+	registerMethod("Game", "getTalkactions", LuaScriptInterface::luaGameGetTalkactions);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -2958,6 +2959,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("TalkAction", "separator", LuaScriptInterface::luaTalkactionSeparator);
 	registerMethod("TalkAction", "access", LuaScriptInterface::luaTalkactionAccess);
 	registerMethod("TalkAction", "accountType", LuaScriptInterface::luaTalkactionAccountType);
+	registerMethod("TalkAction", "getAccess", LuaScriptInterface::luaTalkactionGetAccess);
+	registerMethod("TalkAction", "getAccountType", LuaScriptInterface::luaTalkactionGetAccountType);
+	registerMethod("TalkAction", "getWords", LuaScriptInterface::luaTalkactionGetWords);
 
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
@@ -4589,6 +4593,39 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 		pushBoolean(L, g_game.reload(reloadType));
 	}
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetTalkactions(lua_State* L)
+{
+	// Game.getTalkactions()
+	std::map<std::string, TalkAction> talkMap = g_talkActions->getTalkactions();
+	std::map<std::string, TalkAction> finalMap;
+
+	for (auto const ta: talkMap) {
+		if (!ta.second.fromLua) {
+			continue;
+		}
+
+		for (auto const word: ta.second.getWordsMap()) {
+			if (finalMap.count(word) > 0) {
+				continue;
+			}
+
+			finalMap.insert(std::make_pair(word, ta.second));
+		}
+	}
+
+	lua_createtable(L, finalMap.size(), 0);
+	for (auto &ta: finalMap) {
+		if (!ta.second.fromLua) {
+			continue;
+		}
+
+		pushUserdata<TalkAction>(L, &(ta.second));
+		setMetatable(L, -1, "TalkAction");
+		lua_setfield(L, -2, ta.first.c_str());
+	}
 	return 1;
 }
 
@@ -15545,6 +15582,19 @@ int LuaScriptInterface::luaTalkactionAccess(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaTalkactionGetAccess(lua_State* L)
+{
+	// talkaction:getAccess()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		pushBoolean(L, talk->getNeedAccess());
+		return 1;
+	}
+
+	lua_pushnil(L);
+	return 1;
+}
+
 int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 {
 	// talkAction:accountType(AccountType_t = ACCOUNT_TYPE_NORMAL)
@@ -15555,6 +15605,32 @@ int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionGetAccountType(lua_State* L)
+{
+	// talkaction:getAccountType()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		lua_pushnumber(L, talk->getRequiredAccountType());
+		return 1;
+	}
+
+	lua_pushnil(L);
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionGetWords(lua_State* L)
+{
+	// talkaction:getWords()
+	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	if (talk) {
+		pushString(L, talk->getWords());
+		return 1;
+	}
+
+	lua_pushnil(L);
 	return 1;
 }
 
