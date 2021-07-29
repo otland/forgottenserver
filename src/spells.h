@@ -93,7 +93,6 @@ class CombatSpell final : public Event, public BaseSpell
 {
 	public:
 		CombatSpell(Combat* combat, bool needTarget, bool needDirection);
-		~CombatSpell();
 
 		// non-copyable
 		CombatSpell(const CombatSpell&) = delete;
