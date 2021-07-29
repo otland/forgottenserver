@@ -109,7 +109,6 @@ jobs:
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs
-        if: "! contains( matrix.os, 'windows')"
 
       - name: Prepare datapack contents
         run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
@@ -122,7 +121,7 @@ jobs:
           path: ${{ github.workspace }}
 
   windows:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=on
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
@@ -130,7 +129,6 @@ jobs:
       matrix:
         name: [windows-msvc]
         buildtype: [Debug, Release]
-        luajit: [on]
         include:
           - name: windows-msvc
             os: windows
@@ -155,7 +153,6 @@ jobs:
 
       - name: Windows - remove C:/mysql*
         run: rm -r -fo C:/mysql-5.7.21-winx64
-        if: contains( matrix.os, 'windows')
 
       - name: Set Environment vars
         run: |
@@ -176,7 +173,7 @@ jobs:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="${{ matrix.luajit }}"'
+          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="on"'
 
       - name: dir
         run: find $RUNNER_WORKSPACE
@@ -185,16 +182,14 @@ jobs:
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v2
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs.exe
-        if: contains( matrix.os, 'windows')
 
       - name: Upload artifact binary (dlls)
         uses: actions/upload-artifact@v2
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
           path: ${{ runner.workspace }}/build/*.dll
-        if: contains( matrix.os, 'windows')
 
       - name: Prepare datapack contents
         run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
@@ -203,5 +198,5 @@ jobs:
       - name: Upload datapack contents
         uses: actions/upload-artifact@v2
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
           path: ${{ github.workspace }}
