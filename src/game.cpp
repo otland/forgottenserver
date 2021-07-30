@@ -2747,14 +2747,6 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		return;
 	}
 
-<<<<<<< HEAD
-	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition())) {
-		player->sendCancelMessage(RETURNVALUE_CREATUREISNOTREACHABLE);
-		return;
-	}
-
-=======
->>>>>>> 598f6958 (fix trade bug & trade system tweaks)
 	player->setTradeState(TRADE_ACCEPT);
 
 	if (tradePartner->getTradeState() == TRADE_ACCEPT) {
