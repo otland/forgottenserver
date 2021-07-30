@@ -7717,7 +7717,7 @@ int LuaScriptInterface::luaCreatureAddCondition(lua_State* L)
 
 int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 {
-	// creature:removeCondition(conditionType[, conditionId = CONDITIONID_COMBAT or force if userdata is passed[, subId = 0[, force = false]]])
+	// creature:removeCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0[, force = false]]])
 	// creature:removeCondition(condition[, force = false])
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
