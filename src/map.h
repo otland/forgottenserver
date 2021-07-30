@@ -210,11 +210,19 @@ class Map
 		}
 
 		/**
+		  * Removes a single tile.
+		  */
+		void removeTile(uint16_t x, uint16_t y, uint8_t z);
+		void removeTile(const Position& pos) {
+			removeTile(pos.x, pos.y, pos.z);
+		}
+
+		/**
 		  * Place a creature on the map
 		  * \param centerPos The position to place the creature
 		  * \param creature Creature to place on the map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
-		  * \param forceLogin If true, placing the creature will not fail becase of obstacles (creatures/chests)
+		  * \param forceLogin If true, placing the creature will not fail because of obstacles (creatures/chests)
 		  */
 		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
 
@@ -231,7 +239,7 @@ class Map
 		  * Checks if you can throw an object to that position
 		  *	\param fromPos from Source point
 		  *	\param toPos Destination point
-		  *	\param rangex maximum allowed range horizontially
+		  *	\param rangex maximum allowed range horizontally
 		  *	\param rangey maximum allowed range vertically
 		  *	\param checkLineOfSight checks if there is any blocking objects in the way
 		  *	\returns The result if you can throw there or not
@@ -252,7 +260,7 @@ class Map
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-		bool getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList,
+		bool getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;

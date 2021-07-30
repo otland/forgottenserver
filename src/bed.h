@@ -48,6 +48,9 @@ class BedItem final : public Item
 			return sleeperGUID;
 		}
 
+		House* getHouse() const {
+			return house;
+		}
 		void setHouse(House* h) {
 			house = h;
 		}

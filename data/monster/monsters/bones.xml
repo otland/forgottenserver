@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Bones" nameDescription="Bones" race="undead" experience="3750" speed="300">
+	<health now="9500" max="9500" />
+	<look type="231" corpse="6306" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="100" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-845" />
+		<attack name="lifedrain" interval="1000" chance="13" radius="1" target="1" min="-400" max="-600" />
+		<attack name="death" interval="3000" chance="34" range="1" radius="1" target="1" min="-180" max="-500">
+			<attribute key="shootEffect" value="death" />
+		</attack>
+		<!--
+		<attack name="blood ball" interval="3000" chance="34" range="7" radius="3" target="1" min="-120" max="-230" />
+		-->
+	</attacks>
+	<defenses armor="50" defense="55">
+		<defense name="healing" interval="5000" chance="25" min="60" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Your new name is breakfast." />
+		<voice sentence="Keep that dog away!" />
+		<voice sentence="Out Fluffy! Out! Bad dog!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="90" chance="50000" />
+		<item name="sword ring" chance="10000" />
+		<item name="broadsword" chance="4000" />
+		<item name="magic plate armor" chance="2000" />
+		<item name="spectral stone" chance="800" />
+		<item name="skull helmet" chance="50000" />
+		<item name="soul orb" chance="10000" />
+		<item id="6300" chance="4000" /><!-- death ring -->
+		<item name="demonic essence" chance="1538" />
+		<item id="6570" countmax="3" chance="5538" /><!-- surprise bag -->
+		<item id="6571" chance="1538" /><!-- surprise bag -->
+		<item name="dragonbone staff" chance="50000" />
+	</loot>
+</monster>

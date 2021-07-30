@@ -39,7 +39,7 @@ achievements =
 	[12] = {name = "Castlemania", grade = 2, points = 5, secret = true, description = "You have an eye for suspicious places and love to read other people's diaries, especially those with vampire stories in it. You're also a dedicated token collector and explorer. Respect!"},
 	[13] = {name = "Champion of Chazorai", grade = 2, points = 4, description = "You won the merciless 2 vs. 2 team tournament on the Isle of Strife and wiped out wave after wave of fearsome opponents. Death or victory - you certainly chose the latter."},
 	[14] = {name = "Chorister", grade = 1, points = 1, description = "Lalalala... you now know the cult's hymn sung in Liberty Bay"},
-	[15] = {name = "Clay Fighter", grade = 1, points = 3, secret = true, description = "You love getting your hands wet and dirty - and covered with clay. Your perfect sculpture of Brog, the raging Titan is your true masterpiece."},	
+	[15] = {name = "Clay Fighter", grade = 1, points = 3, secret = true, description = "You love getting your hands wet and dirty - and covered with clay. Your perfect sculpture of Brog, the raging Titan is your true masterpiece."},
 	[16] = {name = "Clay to Fame", grade = 2, points = 6, secret = true, description = "Sculpting Brog, the raging Titan, is your secret passion. Numerous perfect little clay statues with your name on them can be found everywhere around the World."},
 	[17] = {name = "Cold as Ice", grade = 2, points = 6, secret = true, description = "Take an ice cube and an obsidian knife and you'll very likely shape something really pretty from it. Mostly cute little mammoths, which are a hit with all the girls."},
 	[18] = {name = "Culinary Master", grade = 2, points = 4, description = "Simple hams and bread merely make you laugh. You're the master of the extra-ordinaire, melter of cheese, fryer of bat wings and shaker of shakes. Delicious!"},
@@ -49,7 +49,7 @@ achievements =
 	[22] = {name = "Elite Hunter", grade = 2, points = 5, description = "You jump at every opportunity for a hunting challenge that's offered to you and carry out those tasks with deadly precision. You're a hunter at heart and a valuable member of the Paw &amp; Fur Society."},
 	[23] = {name = "Explorer", grade = 2, points = 4, description = "You've been to places most people don't even know the names of. Collecting botanic, zoologic and ectoplasmic samples is your daily business and you're always prepared to discover new horizons."},
 	[24] = {name = "Exquisite Taste", grade = 1, points = 2, secret = true, description = "You love fish - but preferably those caught in the cold north. Even though they're hard to come by you never get tired of picking holes in ice sheets and hanging your fishing rod in."},
-	[25] = {name = "Firewalker", grade = 2, points = 4, secret = true, description = "Running barefoot across ember is not for you! You do it the elegant way. Yet, you're kind of drawn to fire and warm surroundings in general - you like it hot!"},	
+	[25] = {name = "Firewalker", grade = 2, points = 4, secret = true, description = "Running barefoot across ember is not for you! You do it the elegant way. Yet, you're kind of drawn to fire and warm surroundings in general - you like it hot!"},
 	[26] = {name = "Fireworks in the Sky", grade = 1, points = 2, secret = true, description = "You love the moment right before your rocket takes off and explodes into beautiful colours - not only on new year's eve!"},
 	[27] = {name = "Follower of Azerus", grade = 2, points = 4, description = "When you do something, you do it right. You have an opinion and you stand by it - and no one will be able to convince you otherwise. On a sidenote, you're a bit on the brutal and war-oriented side, but that's not a bad thing, is it?"},
 	[28] = {name = "Follower of Palimuth", grade = 2, points = 4, description = "You're a peacekeeper and listen to what the small people have to say. You've made up your mind and know who to help and for which reasons - and you do it consistently. Your war is fought with reason rather than weapons."},
@@ -68,7 +68,7 @@ achievements =
 	[41] = {name = "Huntsman", grade = 1, points = 2, description = "You're familiar with hunting tasks and have carried out quite a few already. A bright career as hunter for the Paw &amp; Fur society lies ahead!"},
 	[42] = {name = "Ice Sculptor", grade = 1, points = 3, secret = true, description = "You love to hang out in cold surroundings and consider ice the best material to be shaped. What a waste to use ice cubes for drinks when you can create a beautiful mammoth statue from it!"},
 	[43] = {name = "Interior Decorator", grade = 2, points = 4, secret = true, description = "Your home is your castle - and the furniture in it is just as important. Your friends ask for your advice when decorating their Houses and your probably own every statue, rack and bed there is."},
-	[44] = {name = "Jamjam", grade = 2, points = 5, secret = true, description = "When it comes to interracial understanding, you're an expert. You've mastered the language of the Chakoya and made someone really happy with your generosity. Achuq!"},	
+	[44] = {name = "Jamjam", grade = 2, points = 5, secret = true, description = "When it comes to interracial understanding, you're an expert. You've mastered the language of the Chakoya and made someone really happy with your generosity. Achuq!"},
 	[45] = {name = "Jinx", grade = 1, points = 2, secret = true, description = "Sometimes you feel there's a gremlin in there. So many lottery tickets, so many blanks? That's just not fair! Share your misery with the world."},
 	[46] = {name = "Just in Time", grade = 1, points = 1, description = "You're a fast runner and are good at delivering wares which are bound to decay just in the nick of time, even if you can't use any means of transportation or if your hands get cold or smelly in the process."},
 	[47] = {name = "King Fan", grade = 1, points = 3, description = "You're not sure what it is, but you feel drawn to royalty. Your knees are always a bit grazed from crawling around in front of thrones and you love hanging out in castles. Maybe you should consider applying as a guard?"},
@@ -78,7 +78,7 @@ achievements =
 	[51] = {name = "Lucky Devil", grade = 2, points = 4, secret = true, description = "That's almost too much luck for one person. If something's really, really rare - it probably falls into your lap sooner or later. Congratulations!"},
 	[52] = {name = "Marble Madness", grade = 2, points = 6, secret = true, description = "Your little statues of Godsula have become quite famous around the World and there's few people with similar skills when it comes to shaping marble."},
 	[53] = {name = "Marblelous", grade = 1, points = 3, secret = true, description = "You're an aspiring marble sculptor with promising skills - proven by the perfect little Godsula statue you shaped. One day you'll be really famous!"},
-	[54] = {name = "Marid Ally", grade = 1, points = 3, description = "You've proven to be a valuable ally to the Marid, and Gabel welcomed you to trade with Haroun and Nah'Bob whenever you want to. Though the Djinn war has still not ended, the Marid can't fail with you on their side."},	
+	[54] = {name = "Marid Ally", grade = 1, points = 3, description = "You've proven to be a valuable ally to the Marid, and Gabel welcomed you to trade with Haroun and Nah'Bob whenever you want to. Though the Djinn war has still not ended, the Marid can't fail with you on their side."},
 	[55] = {name = "Masquerader", grade = 1, points = 3, secret = true, description = "You probably don't know anymore how you really look like - usually when you look into a mirror, some kind of monster stares back at you. On the other hand - maybe that's an improvement?"},
 	[56] = {name = "Master Thief", grade = 2, points = 4, description = "Robbing, inviting yourself to VIP parties, faking contracts and pretending to be someone else - you're a jack of all trades when it comes to illegal activities. You take no prisoners, except for the occasional goldfish now and then."},
 	[57] = {name = "Master of the Nexus", grade = 2, points = 6, description = "You were able to fight your way through the countless hordes in the Demon Forge. Once more you proved that nothing is impossible."},
@@ -91,10 +91,10 @@ achievements =
 	[64] = {name = "Perfect Fool", grade = 1, points = 3, description = "You love playing jokes on others and tricking them into looking a little silly. Wagging tongues say that the moment of realisation in your victims' eyes is the reward you feed on, but you're probably just kidding and having fun with them... right??"},
 	[65] = {name = "Poet Laureate", grade = 1, points = 2, secret = true, description = "Poems, verses, songs and rhymes you've recited many times. You have passed the cryptic door, raconteur of ancient lore. Even elves you've left impressed, so it seems you're truly blessed."},
 	[66] = {name = "Polisher", grade = 2, points = 4, secret = true, description = "If you see a rusty item, you can't resist polishing it. There's always a little flask of rust remover in your inventory - who knows, there might be a golden armor beneath all that dirt!"},
-	[67] = {name = "Potion Addict", grade = 2, points = 4, secret = true, description = "Your local magic trader considers you one of his best customers - you usually buy large stocks of potions so you won't wake up in the middle of the night craving for more. Yet, you always seem to run out of them too fast. Cheers!"},	
+	[67] = {name = "Potion Addict", grade = 2, points = 4, secret = true, description = "Your local magic trader considers you one of his best customers - you usually buy large stocks of potions so you won't wake up in the middle of the night craving for more. Yet, you always seem to run out of them too fast. Cheers!"},
 	[68] = {name = "Quick as a Turtle", grade = 1, points = 2, secret = true, description = "There... is... simply... no... better... way - than to travel on the back of a turtle. At least you get to enjoy the beautiful surroundings of Laguna."},
 	[69] = {name = "Razing!", grade = 3, points = 7, secret = true, description = "People with sharp canine teeth better beware of you, especially at nighttime, or they might find a stake between their ribs. You're a merciless vampire hunter and have gathered numerous tokens as proof."},
-	[70] = {name = "Recognised Trader", grade = 1, points = 3, description = "You're a talented merchant who's able to handle wares with care, finds good offers and digs up rares every now and then. Never late to complete an order, you're a reliable trader - at least in Rashid's eyes."},	
+	[70] = {name = "Recognised Trader", grade = 1, points = 3, description = "You're a talented merchant who's able to handle wares with care, finds good offers and digs up rares every now and then. Never late to complete an order, you're a reliable trader - at least in Rashid's eyes."},
 	[71] = {name = "Rockstar", grade = 1, points = 3, secret = true, description = "Music just comes to you naturally. You feel comfortable on any stage, at any time, and secretly hope that someday you will be able to defeat your foes by playing music only. Rock on!"},
 	[72] = {name = "Ruthless", grade = 2, points = 5, description = "You've touched all thrones of The Ruthless Seven and absorbed some of their evil spirit. It may have changed you forever."},
 	[73] = {name = "Scrapper", grade = 1, points = 3, description = "You put out the Spirit of Fire's flames in the arena of Svargrond. Arena fights are for you - fair, square, with simple rules and one-on-one battles."},
@@ -117,9 +117,9 @@ achievements =
 	[90] = {name = "Waverider", grade = 1, points = 2, secret = true, description = "One thing's for sure: You definitely love swimming. Hanging out on the beach with your friends, having ice cream and playing beach ball is splashingly good fun!"},
 	[91] = {name = "Wayfarer", grade = 1, points = 3, secret = true, description = "Dragon dreams are golden."},
 	[92] = {name = "Worm Whacker", grade = 1, points = 1, secret = true, description = "Weehee! Whack those worms! You sure know how to handle a big hammer."},
-	
+
 	-- 8.61
-	[93] = {name = "Cocoon of Doom", grade = 1, points = 3, secret = true, description = "You helped bringing Devovorga's dangerous tentacles and her humongous cocoon down - not stopping her transformation, but ultimately completing a crucial step to her death."},	
+	[93] = {name = "Cocoon of Doom", grade = 1, points = 3, secret = true, description = "You helped bringing Devovorga's dangerous tentacles and her humongous cocoon down - not stopping her transformation, but ultimately completing a crucial step to her death."},
 	[94] = {name = "Daring Trespasser", grade = 1, points = 3, secret = true, description = "You've entered the lair of Devovorga and joined the crew trying to take her down - whether crowned with success or not doesn't matter, but they can't blame you for not trying!"},
 	[95] = {name = "Devovorga's Nemesis", grade = 2, points = 5, secret = true, description = "One special hero among many. This year - it was you. Devovorga withdrew in a darker realm because she could not withstand your power - and that of your comrades. Time will tell if the choice you made was good - but for now, it saved your world."},
 	[96] = {name = "I Did My Part", grade = 1, points = 2, secret = true, description = "Your world is lucky to have you! You don't hesitate to jump in and help when brave heroes are called to save the world."},
@@ -130,7 +130,7 @@ achievements =
 	[101] = {name = "Slayer of Phrodomo", grade = 1, points = 2, secret = true, description = "Blind hatred took physical form, violently rebelling against the injustice it was born into. You were not able to bring justice - but at least temporary peace."},
 	[102] = {name = "Slayer of Teneshpar", grade = 1, points = 2, secret = true, description = "The forbidden knowledge of aeons was never meant to invade this world. You silenced its voice before it could be made heard."},
 	[103] = {name = "Teamplayer", grade = 1, points = 2, secret = true, description = "You don't consider yourself too good to do the dirty work while someone else might win the laurels for killing Devovorga. They couldn't do it without you!"},
-	
+
 	-- 8.62
 	[104] = {name = "Alumni", grade = 2, points = 6, description = "You're considered a first-rate graduate of the Magic Academy in Edron due to your pioneering discoveries and successful studies in the field of experimental magic and spell development. Ever considered teaching the Armageddon spell?"},
 	[105] = {name = "Aristocrat", grade = 2, points = 4, description = "You begin your day by bathing in your pot of gold and you don't mind showing off your wealth while strolling the streets in your best clothes - after all it's your hard-earned money! You prefer to be addressed with 'Your Highness'."},
@@ -138,7 +138,7 @@ achievements =
 	[107] = {name = "Berserker", grade = 1, points = 3, description = "RAWR! Strength running through your body, your heart racing faster and adrenaline fueling your every weapon swing. All in a little bottle. No refund for destroyed furniture. For further questions consult your healer or potion dealer."},
 	[108] = {name = "Bluebarian", grade = 1, points = 2, secret = true, description = "You live the life of hunters and gatherers. Well, especially that of a gatherer, and especially of one who gathers lots of blueberries. Have you checked the colour of your tongue lately?"},
 	[109] = {name = "Brutal Politeness", grade = 2, points = 6, description = "What is best in life? To crush your enemies. To see them driven before you. And to maybe have a nice cup of tea afterwards."},
-	[110] = {name = "Commitment Phobic", grade = 1, points = 2, secret = true, description = "Longterm relationships are just not for you. And each time you think you're in love, you're proven wrong shortly afterwards. Or maybe you just end up with the wrong lover each time - exploited and betrayed. Staying single might just be better."},	
+	[110] = {name = "Commitment Phobic", grade = 1, points = 2, secret = true, description = "Longterm relationships are just not for you. And each time you think you're in love, you're proven wrong shortly afterwards. Or maybe you just end up with the wrong lover each time - exploited and betrayed. Staying single might just be better."},
 	[111] = {name = "Cookie Monster", grade = 1, points = 1, secret = true, description = "You can easily be found by anyone if they just follow the cookie crumb trail. And for you, true love means to give away your last cookie."},
 	[112] = {name = "Cursed!", grade = 1, points = 3, secret = true, description = "The wrath of the Noxious Spawn - you accidentally managed to incur it. Your days are counted and your death inevitable. Sometime. Someplace."},
 	[113] = {name = "Demonbane", grade = 2, points = 6, description = "You don't carry that stake just for decoration - you're prepared to use it. Usually you're seen hightailing through the deepest dungeons leaving a trail of slain demons. Whoever dares stand in your way should prepare to die."},
@@ -188,7 +188,7 @@ achievements =
 	[157] = {name = "Sweet Tooth", grade = 1, points = 2, secret = true, description = "The famous 'Ode to a Molten Chocolate Cake' was probably written by you. Spending a rainy afternoon in front of the chimney, wrapped in a blanket while indulging in cocoa delights sounds just like something you'd do. Enjoy!"},
 	[158] = {name = "Swift Death", grade = 2, points = 6, description = "Stealth kills and backstabbing are you specialty. Your numerous victims are usually unaware of their imminent death, which you bring to them silently and swiftly. Everything is permitted."},
 	[159] = {name = "The Cake's the Truth", grade = 1, points = 1, secret = true, description = "And anyone claiming otherwise is a liar."},
-	[160] = {name = "The Day After", grade = 1, points = 2, secret = true, description = "Uhm... who's that person who you just woke up beside? Broken cocktail glasses on the floor, flowers all over the room, and why the heck are you wearing a ring? Yesterday must have been a long, weird day..."},	
+	[160] = {name = "The Day After", grade = 1, points = 2, secret = true, description = "Uhm... who's that person who you just woke up beside? Broken cocktail glasses on the floor, flowers all over the room, and why the heck are you wearing a ring? Yesterday must have been a long, weird day..."},
 	[161] = {name = "The Undertaker", grade = 1, points = 2, secret = true, description = "You and your shovel - a match made in heaven. Or hell, for that matter. Somewhere down below in any case. You're magically attracted by stone piles and love to open them up and see where those holes lead you. Good biceps as well."},
 	[162] = {name = "True Lightbearer", grade = 2, points = 5, secret = true, description = "You're one of the most dedicated Lightbearers - without you, the demons would have torn the veil between the worlds for sure. You've lit each and every basin, travelling high and low, pushing back the otherworldly forces. Let there be light!"},
 	[163] = {name = "Warlock", grade = 2, points = 6, description = "You're proficient in the darker ways of magic and are usually found sitting inside a circle of candles and skulls muttering unspeakable words. Don't carry things too far or the demons might come get you."},
@@ -197,7 +197,7 @@ achievements =
 	[166] = {name = "With a Cherry on Top", grade = 1, points = 1, secret = true, description = "You like your cake soft, with fruity bits and a nice sugar icing. And you prefer to make them by yourself. Have you ever considered opening a bakery? You must be really good by now!"},
 	[167] = {name = "Yalahari of Power", grade = 1, points = 3, description = "You defend Yalahar with brute force and are ready to lead it into a glorious battle, if necessary. Thanks to you, Yalahar will be powerful enough to stand up against any enemy."},
 	[168] = {name = "Yalahari of Wisdom", grade = 1, points = 3, description = "Your deeds for Yalahar are usually characterised by deep insight and thoughtful actions. Thanks to you, Yalahar might have a chance to grow peacefully and with happy people living in it."},
-	
+
 	-- 8.7
 	[169] = {name = "Afraid of no Ghost!", grade = 1, points = 2, description = "You passed their test and helped the Spirithunters testing equipment, researching the supernatural and catching ghosts - it's you they're gonna call."},
 	[170] = {name = "Ashes to Dust", grade = 2, points = 4, secret = true, description = "Staking vampires and demons has almost turned into your profession. You make sure to gather even the tiniest amount of evil dust particles. Beware of silicosis."},
@@ -227,14 +227,14 @@ achievements =
 	[194] = {name = "Scourge of Death", grade = 2, points = 5, secret = true, description = "You are a master of the nether sea and have traveled with the ghost captain so many times that you know his ship and the perils of the nether sea inside out. You laugh in the face of death and may return as a ghost pirate yourself in the afterlife!"},
 	[195] = {name = "Silent Pet", grade = 1, points = 1, secret = true, description = "Awww. Your very own little goldfish friend - he's cute, he's shiny and he can't complain should you forget to feed him. He'll definitely brighten up your day!"},
 	[196] = {name = "Skin-Deep", grade = 2, points = 4, secret = true, description = "You always carry your obsidian knife with you and won't hesitate to use it. You've skinned countless little - and bigger - critters and yeah: they usually don't get any more beautiful on the inside. It's rather blood and gore and all that..."},
-	[197] = {name = "Snowbunny", grade = 1, points = 2, secret = true, description = "Hopping, hopping through the snow - that's the funnest way to go! Making footprints in a flurry - it's more fun the more you hurry! Licking icicles all day - Winter, never go away!"},	
-	[198] = {name = "Something's in There", grade = 1, points = 1, secret = true, description = "By the gods! What was that?"},	
+	[197] = {name = "Snowbunny", grade = 1, points = 2, secret = true, description = "Hopping, hopping through the snow - that's the funnest way to go! Making footprints in a flurry - it's more fun the more you hurry! Licking icicles all day - Winter, never go away!"},
+	[198] = {name = "Something's in There", grade = 1, points = 1, secret = true, description = "By the gods! What was that?"},
 	[199] = {name = "Spectral Traveler", grade = 1, points = 2, secret = true, description = "You have sailed the nether seas with the Ghost Captain several times. The dangers of the nether have become familiar to you and unexperienced travelers turn to you for advice."},
 	[200] = {name = "True Colours", grade = 1, points = 3, secret = true, description = "You and your friends showed the three wizards your loyalty three times - I am sure at least one of them is probably eternally thankful and exceedingly proud of you."},
 	[201] = {name = "Truth Be Told", grade = 1, points = 2, secret = true, description = "You told Jack the truth by explaining you and Spectulus made a mistake when trying to convince him of being a completely different person."},
 	[202] = {name = "Witches Lil' Helper", grade = 1, points = 1, secret = true, description = "You sacrificed ingredients to create the protective brew of the witches."},
 	[203] = {name = "You Don't Know Jack", grade = 1, points = 2, secret = true, description = "You did not tell Jack the truth about the mistake you and Spectulus made when trying to convince him about being a completely different person. He will live in doubt until the end of his existence."},
-	
+
 	-- 9.1
 	[204] = {name = "Askarak Nemesis", grade = 1, points = 1, secret = true, description = "You are now the royal archfiend of the Askarak, prince slayer."},
 	[205] = {name = "Beak Doctor", grade = 2, points = 4, description = "You significantly helped the afflicted citizens of Venore in times of dire need. Somehow you still feel close to the victims of the fever outbreak. Your clothes make you one of them, one poor soul amongst the countless afflicted."},
@@ -248,7 +248,7 @@ achievements =
 	[213] = {name = "Mystic Fabric Magic", grade = 2, points = 4, description = "You vanquished the mad mage, you subdued the raging mage - no spellweaving self-exposer can stand in your way. Yet you are quite absorbed in magical studies yourself. This very fabric reflects this personal approval of the magic arts."},
 	[214] = {name = "Shaburak Nemesis", grade = 1, points = 1, secret = true, description = "You are now the public archenemy of the Shaburak, prince slayer."},
 	[215] = {name = "Slimer", grade = 1, points = 1, secret = true, description = "With the assistance of your friendly little helper, you gobbled more than 500 chunks of slime. Well done, Slimer."},
-	
+
 	-- 9.2
 	[216] = {name = "Arachnoise", grade = 1, points = 1, description = "You've shattered each of Bloodweb's eight frozen legs. As they say: break a leg, and then some more."},
 	[217] = {name = "Back into the Abyss", grade = 1, points = 1, description = "You've cut off a whole lot of tentacles today. Thul was driven back to where he belongs."},
@@ -271,7 +271,7 @@ achievements =
 	[234] = {name = "The Gates of Hell", grade = 1, points = 2, description = "It seems the gates to the underworld have to remain unprotected for a while. Kerberos, the mighty hellhound, lost his head. All three of them."},
 	[235] = {name = "The Serpent's Bride", grade = 1, points = 2, description = "You made a knot with Gorgo's living curls and took her scalp. You couldn't save her countless petrified victims, but at least you didn't become one."},
 	[236] = {name = "Twisted Mutation", grade = 1, points = 1, description = "You've slain Esmeralda, the most hideous and aggressive of the mutated rats. No one will know that you almost lost a finger in the process."},
-	
+
 	-- 9.4
 	[237] = {name = "Bane of the Hive", grade = 1, points = 2, description = "Countless fights and never tiring effort in the war against the hive grant you the experience to finish your outfit with the last remaining part. Your chitin outfit is a testament of your skills and dedication for the cause."},
 	[238] = {name = "Chest Robber", grade = 1, points = 1, description = "You've discovered three nomad camps and stole their supplies. Well, you can probably use them better then they can."},
@@ -286,14 +286,14 @@ achievements =
 	[247] = {name = "Exterminator", grade = 2, points = 4, description = "Efficient and lethal, you have gained significant experience in fighting the elite forces of the hive. Almost single-handed, you have slain the best of the Hive Born and live to tell the tale."},
 	[248] = {name = "Fire from the Earth", grade = 1, points = 2, description = "You've survived the Hellgorge eruption and found a way through the flames and lava. You've even managed to kill a few fireborn on the way."},
 	[249] = {name = "Gatherer", grade = 1, points = 2, description = "By killing creatures of the hive and gaining weapons for further missions, you started a quite effective way of war. You gathered a lot of dissolved chitin to resupply the war effort."},
-	[250] = {name = "Gem Cutter", grade = 1, points = 1, secret = true, description = "You cut your first gem - and it bears your own name! Now that would be a nice gift! This does not make it a \"true\" Heart of the Sea, however..."},	
-	[251] = {name = "Goldhunter", grade = 1, points = 2, secret = true, description = "	If it wasn't for you, several banks in the World would've gotten bankrupt by now. Keep on chasing bank robbers and no one will have to worry about the World economy!"},	
+	[250] = {name = "Gem Cutter", grade = 1, points = 1, secret = true, description = "You cut your first gem - and it bears your own name! Now that would be a nice gift! This does not make it a \"true\" Heart of the Sea, however..."},
+	[251] = {name = "Goldhunter", grade = 1, points = 2, secret = true, description = "	If it wasn't for you, several banks in the World would've gotten bankrupt by now. Keep on chasing bank robbers and no one will have to worry about the World economy!"},
 	[252] = {name = "Guard Killer", grade = 1, points = 2, description = "You have proven that you can beat the best of the hive. You have caused first promising breaches in the defence of the hive"},
 	[253] = {name = "Guardian Downfall", grade = 2, points = 4, description = "You ended the life of over three hundred Deepling Guards. Not quite the guardian of the Deeplings, are you?"},
-	[254] = {name = "Headache", grade = 1, points = 2, description = "Even in the deepest structures of the hive, you began to strike against the mighty foe. Your actions probably already gave the hive a headache."},	
+	[254] = {name = "Headache", grade = 1, points = 2, description = "Even in the deepest structures of the hive, you began to strike against the mighty foe. Your actions probably already gave the hive a headache."},
 	[255] = {name = "Heartburn", grade = 1, points = 3, description = "Never-tiring, you attack the inner organs of the mighty hive. Your attacks on the hive's digestion system begin to cause some trouble."},
 	[256] = {name = "Hickup", grade = 1, points = 2, description = "You have grown accustomed to frequenting the hive's stomach system. Your actions have caused the hive some first digestion problems."},
-	[257] = {name = "Hive Blinder", grade = 2, points = 4, description = "You have put a lot of time and energy into keeping the hive unaware of what is happening on Quirefang. The hive learnt to fear your actions. It would surely crush you with all its might ... if it could only find you!"},	
+	[257] = {name = "Hive Blinder", grade = 2, points = 4, description = "You have put a lot of time and energy into keeping the hive unaware of what is happening on Quirefang. The hive learnt to fear your actions. It would surely crush you with all its might ... if it could only find you!"},
 	[258] = {name = "Hive Fighter", grade = 1, points = 1, description = "You have participated that much in the hive war, that you are able to create some makeshift armor from the remains of dead hive born that can be found in the major hive, to show of your skill."},
 	[259] = {name = "Hive Infiltrator", grade = 1, points = 3, description = "The most powerful warriors of the hive were killed by you by the dozens. The hive is not safe anymore because of your actions."},
 	[260] = {name = "Hive War Veteran", grade = 1, points = 1, description = "Your invaluable experience in fighting the hive allows you to add another piece of armor to your chitin outfit to proove your dedication for the cause."},
@@ -301,9 +301,9 @@ achievements =
 	[262] = {name = "Ice Harvester", grade = 1, points = 1, description = "You witnessed the thawing of Svargrond and harvested rare seeds from some strange icy plants. They must be good for something."},
 	[263] = {name = "Loyal Subject", grade = 1, points = 1, description = "You joined the Kingsday festivities and payed the King your respects. Now, off to party!"},
 	[264] = {name = "Manic", grade = 2, points = 4, description = "You have destroyed a significant amount of the hive's vital nerve centres and caused massive destruction to the hive's awareness. You are probably causing the hive horrible nightmares."},
-	[265] = {name = "Minor Disturbance", grade = 1, points = 2, description = "Your actions start to make a difference. You have blinded the antennae of the hive often enough to become an annoyance to it."},	
+	[265] = {name = "Minor Disturbance", grade = 1, points = 2, description = "Your actions start to make a difference. You have blinded the antennae of the hive often enough to become an annoyance to it."},
 	[266] = {name = "Navigational Error", grade = 2, points = 5, secret = true, description = "You confronted the Navigator."},
-	[267] = {name = "Pimple", grade = 1, points = 3, description = "You are getting more and more experienced in destroying the supply of the enemy's forces. Your actions caused the hive some severe skin problems."},	
+	[267] = {name = "Pimple", grade = 1, points = 3, description = "You are getting more and more experienced in destroying the supply of the enemy's forces. Your actions caused the hive some severe skin problems."},
 	[268] = {name = "Planter", grade = 1, points = 2, description = "The hive has to be fought with might and main, hampering its soldiers is only the first step. You diligently stopped the pores of the hive to spread its warriors."},
 	[269] = {name = "Preservationist", grade = 1, points = 1, secret = true, description = "You are a pretty smart thinker and managed to create everlasting flowers. They might become a big hit with all the people who aren't blessed with a green thumb or just forgetful."},
 	[270] = {name = "Si, Ariki!", grade = 1, points = 1, description = "You've found the oriental traveller Yasir and were able to trade with him - even if you didn't really understand his language."},
@@ -315,7 +315,7 @@ achievements =
 	[276] = {name = "Torn Treasures", grade = 1, points = 1, secret = true, description = "Wyda seems to be really, really bored. You also found out that she doesn't really need all those blood herbs that adventurers brought her. Still, she was nice enough to take one from you and gave you something quite cool in exchange."},
 	[277] = {name = "Trail of the Ape God", grade = 1, points = 1, secret = true, description = "You've discovered a trail of giant footprints and Terrified Elephants running everywhere. Could it be that the mysterious Ape God is rambling in the jungle?"},
 	[278] = {name = "Whistle-Blower", grade = 1, points = 1, secret = true, description = "You can't keep a secret, can you? Then again, you're just fulfilling your duty to the Queen of Carlin as a lawful citizen. That's a good thing, isn't it...?"},
-	
+
 	-- 9.5
 	[279] = {name = "Back from the Dead", grade = 1, points = 2, description = "You overcame the undead Zanakeph and sent him back into the darkness that spawned him."},
 	[280] = {name = "Dream's Over", grade = 1, points = 1, description = "No more fear and bad dreams. You stabbed Tormentor to death with its scythe leg."},
@@ -323,10 +323,10 @@ achievements =
 	[282] = {name = "Howly Silence", grade = 1, points = 1, description = "You muted the everlasting howling of Hemming."},
 	[283] = {name = "Kapow!", grade = 1, points = 1, description = "No joke, you murdered the bat."},
 	[284] = {name = "King of the Ring", grade = 1, points = 2, description = "Bretzecutioner's body just got slammed away. You are a true king of the ring!"},
-	[285] = {name = "Pwned All Fur", grade = 3, points = 8, secret = true, description = "You've faced and defeated each of the mighty bosses the Paw and Fur society sent you out to kill. All by yourself. What a hunt!"},	
+	[285] = {name = "Pwned All Fur", grade = 3, points = 8, secret = true, description = "You've faced and defeated each of the mighty bosses the Paw and Fur society sent you out to kill. All by yourself. What a hunt!"},
 	[286] = {name = "Stepped on a Big Toe", grade = 1, points = 1, description = "This time you knocked out the big one."},
 	[287] = {name = "Zzztill Zzztanding!", grade = 1, points = 1, description = "You wiped Fazzrah away - zzeemzz like now you're the captain."},
-	
+
 	-- 9.6
 	[288] = {name = "Becoming a Bigfoot", grade = 1, points = 1, description = "You did it! You convinced the reclusive gnomes to accept you as one of their Bigfoots. Now you are ready to help them. With big feet big missions seen to come."},
 	[289] = {name = "Bibby's Bloodbath", grade = 1, points = 1, secret = true, description = "You lend a helping hand in defeating invading Orcs by destroying their warcamp along with their leader. Bibby's personal bloodbath..."},
@@ -337,7 +337,7 @@ achievements =
 	[294] = {name = "Death from Below", grade = 1, points = 2, secret = true, description = "The face of the enemy is unmasked. You have encountered one of 'those below' and survived. More than that, you managed to kill the beast and prove once and for all that the enemy can be beaten."},
 	[295] = {name = "Death on Strike", grade = 2, points = 4, secret = true, description = "Again and again Deathstrike has fallen to your prowess. Perhaps it's time for people calling YOU Deathstrike from now on."},
 	[296] = {name = "Diplomatic Immunity", grade = 2, points = 4, secret = true, description = "You killed the ambassador of the abyss that often that they might consider sending another one. Perhaps that will one day stop further intrusions."},
-	[297] = {name = "Dungeon Cleaner", grade = 1, points = 3, secret = true, description = "Seen it all. Done it all. Your unstoppable force swept through the dungeons and you vanquished their masters. Not to forget the precious loot you took! Now stop reading this and continue hunting! Time is money after all!"},	
+	[297] = {name = "Dungeon Cleaner", grade = 1, points = 3, secret = true, description = "Seen it all. Done it all. Your unstoppable force swept through the dungeons and you vanquished their masters. Not to forget the precious loot you took! Now stop reading this and continue hunting! Time is money after all!"},
 	[298] = {name = "Fall of the Fallen", grade = 2, points = 4, secret = true, description = "Have you ever wondered how he reappears again and again? You only care for the loot, do you? Gotcha!"},
 	[299] = {name = "Final Strike", grade = 1, points = 2, secret = true, description = "The mighty Deathstrike is dead! One legend is dead and you're on your way to become one yourself."},
 	[300] = {name = "Funghitastic", grade = 1, points = 3, description = "Finally your dream to become a walking mushroom has come true ... No, wait a minute!"},
@@ -353,7 +353,7 @@ achievements =
 	[310] = {name = "One Foot Vs. Many", grade = 1, points = 1, description = "One Bigfoot won over thousands of tiny feet. Perhaps the gnomes are wrong and size matters?"},
 	[311] = {name = "Spore Hunter", grade = 1, points = 1, description = "After hunting for the correct mushrooms and their spores you're starting to feel like a mushroom yourself. A few times more and you might start thinking like a mushroom, who knows?"},
 	[312] = {name = "Substitute Tinker", grade = 1, points = 1, description = "Ring-a-ding! You have visited the golem workshop and lent a hand in repairing them. To know those golems are safe is worth all the bruises, isn't it?"},
-	[313] = {name = "The Picky Pig", grade = 1, points = 1, description = "The gnomes decided their pigs need some exclusive diet and you had to do all the dirty work - but wasn't the piglet adorable?"},	
+	[313] = {name = "The Picky Pig", grade = 1, points = 1, description = "The gnomes decided their pigs need some exclusive diet and you had to do all the dirty work - but wasn't the piglet adorable?"},
 
 	-- 9.8
 	[314] = {name = "Task Manager", grade = 1, points = 2, secret = true, description = "Helping a poor, stupid goblin to feed his starving children and wifes feels good ... if you'd only get rid of the strange feeling that you're missing something."},
@@ -363,7 +363,7 @@ achievements =
 	[316] = {name = "Gravedigger", grade = 1, points = 3, description = "Assisting Omrabas' sick plan to resurrect made you dig your way through the blood-soaked halls of Drefia. Maybe better he failed!"},
 	[317] = {name = "Repenter", grade = 1, points = 1, secret = true, description = "You cleansed your soul in serving the Repenter enclave and purified thine self in completing all tasks in a single day of labour."},
 
-	-- 10.2	
+	-- 10.2
 	[318] = {name = "Cave Completionist", grade = 1, points = 2, description = "	You have helped the gnomes of the spike in securing the caves and explored enough of the lightles depths to earn you a complete cave explorers outfit. Well done!"},
 
 	-- 10.3
@@ -373,7 +373,7 @@ achievements =
 	[322] = {name = "Luring Silence", grade = 1, points = 2, description = "What a scientific discovery - they really DO communicate! Using their own communication habits against them, you lured a large pack of silencers away from the walls of Roshamuul."},
 	[323] = {name = "Never Surrender", grade = 1, points = 3, description = "You did not show any signs of surrender to any sight of... you get the picture. Even a hundred of them did not pose a threat to you."},
 	[324] = {name = "Nevermending Story", grade = 1, points = 3, secret = true, description = "You collected all of the mysterious bottle messages around the island of Roshamuul and located the remains of the first mate. Time will tell if his tale of mending an evil ring holds true."},
-	[325] = {name = "Noblesse Obliterated", grade = 2, points = 6, description = "After a battle like this you know who your friends are."}, 
+	[325] = {name = "Noblesse Obliterated", grade = 2, points = 6, description = "After a battle like this you know who your friends are."},
 	[326] = {name = "Prison Break", grade = 3, points = 8, description = "Gaz'haragoth... a day to remember! Your world accomplished someting really big - and you have been part of it!"},
 	[327] = {name = "Sleepwalking", grade = 1, points = 1, description = "You know your way, in dream and waking. And how to make tea that transcends the boundaries of conscience."},
 	[328] = {name = "Umbral Archer", grade = 2, points = 6, description = "You managed to transform, improve and sacrify your bow into a master state and have proven yourself worthy in a nightmarish world."},

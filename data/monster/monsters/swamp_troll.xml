@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Swamp Troll" nameDescription="a swamp troll" race="blood" experience="25" speed="128" manacost="320">
+	<health now="55" max="55" />
+	<look type="76" corpse="6018" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-13" poison="1" />
+	</attacks>
+	<defenses armor="6" defense="6" />
+	<elements>
+		<element earthPercent="15" />
+		<element firePercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrr" />
+		<voice sentence="Groar!" />
+		<voice sentence="Me strong! Me ate spinach!" />
+	</voices>
+	<loot>
+		<item id="2667" chance="60000" /><!-- fish -->
+		<item name="gold coin" countmax="5" chance="50300" />
+		<item id="2050" chance="15000" /><!-- torch -->
+		<item name="spear" chance="13000" />
+		<item name="mouldy cheese" chance="10000" />
+		<item name="leather boots" chance="10000" />
+		<item name="swamp grass" chance="3100" />
+		<item name="medicine pouch" chance="2400" />
+		<item id="5901" chance="2000" /><!-- wood -->
+		<item name="troll green" chance="1000" />
+		<item name="fishing rod" chance="80" />
+	</loot>
+</monster>

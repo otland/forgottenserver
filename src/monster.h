@@ -104,9 +104,7 @@ class Monster final : public Creature
 			return mType->info.isAttackable;
 		}
 
-		bool canPushItems() const {
-			return mType->info.canPushItems;
-		}
+		bool canPushItems() const;
 		bool canPushCreatures() const {
 			return mType->info.canPushCreatures;
 		}
@@ -124,7 +122,6 @@ class Monster final : public Creature
 			this->spawn = spawn;
 		}
 		bool canWalkOnFieldType(CombatType_t combatType) const;
-
 
 		void onAttackedCreatureDisappear(bool isLogout) override;
 
@@ -148,7 +145,7 @@ class Monster final : public Creature
 
 		void doAttacking(uint32_t interval) override;
 		bool hasExtraSwing() override {
-			return extraMeleeAttack;
+			return lastMeleeAttack == 0;
 		}
 
 		bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
@@ -175,7 +172,7 @@ class Monster final : public Creature
 		}
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                     bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		                     bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
 		static uint32_t monsterAutoID;
 
@@ -204,7 +201,6 @@ class Monster final : public Creature
 		Position masterPos;
 
 		bool isIdle = true;
-		bool extraMeleeAttack = false;
 		bool isMasterInRange = false;
 		bool randomStepping = false;
 		bool ignoreFieldDamage = false;

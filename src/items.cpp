@@ -143,9 +143,12 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"elementearth", ITEM_PARSE_ELEMENTEARTH},
 	{"elementfire", ITEM_PARSE_ELEMENTFIRE},
 	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
+	{"elementdeath", ITEM_PARSE_ELEMENTDEATH},
+	{"elementholy", ITEM_PARSE_ELEMENTHOLY},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
+	{"storeitem", ITEM_PARSE_STOREITEM},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -211,7 +214,6 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"mead", FLUID_MEAD},
 };
 
-
 Items::Items()
 {
 	items.reserve(30000);
@@ -223,6 +225,7 @@ void Items::clear()
 	items.clear();
 	clientIdToServerIdMap.clear();
 	nameToItems.clear();
+	inventory.clear();
 }
 
 bool Items::reload()
@@ -538,18 +541,18 @@ void Items::buildInventoryList()
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
-	if (id > 30000 && id < 30100) {
-		id -= 30000;
-
-		if (id >= items.size()) {
-			items.resize(id + 1);
-		}
+	if (id > 0 && id < 100) {
 		ItemType& iType = items[id];
 		iType.id = id;
 	}
 
 	ItemType& it = getItemType(id);
 	if (it.id == 0) {
+		return;
+	}
+
+	if (!it.name.empty()) {
+		std::cout << "[Warning - Items::parseItemNode] Duplicate item with id: " << id << std::endl;
 		return;
 	}
 
@@ -1227,7 +1230,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						}
 
 						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
-						// initDamage = 0 (dont override initDamage with damage, dont set any initDamage)
+						// initDamage = 0 (don't override initDamage with damage, don't set any initDamage)
 						// initDamage = -1 (undefined, override initDamage with damage)
 						if (initDamage > 0 || initDamage < -1) {
 							conditionDamage->setInitDamage(-initDamage);
@@ -1322,6 +1325,18 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
+				case ITEM_PARSE_ELEMENTDEATH: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_DEATHDAMAGE;
+					break;
+				}
+
+				case ITEM_PARSE_ELEMENTHOLY: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_HOLYDAMAGE;
+					break;
+				}
+
 				case ITEM_PARSE_WALKSTACK: {
 					it.walkStack = valueAttribute.as_bool();
 					break;
@@ -1334,6 +1349,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ALLOWDISTREAD: {
 					it.allowDistRead = booleanString(valueAttribute.as_string());
+					break;
+				}
+
+				case ITEM_PARSE_STOREITEM: {
+					it.storeItem = booleanString(valueAttribute.as_string());
 					break;
 				}
 

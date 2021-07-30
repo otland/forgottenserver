@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Esmeralda" nameDescription="Esmeralda" race="blood" experience="600" speed="245">
+	<health now="800" max="800" />
+	<look type="305" corpse="9871" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-175" poison="100" />
+		<attack name="earth" interval="2000" chance="30" range="7" min="0" max="-110">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="22" length="8" spread="0" min="-100" max="-100">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" radius="3" min="-80" max="-80">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="25" range="7" radius="3" target="0" min="0" max="-110">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="10">
+		<voice sentence="Fcccccchhhhhh" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="58775" />
+		<item name="gold coin" countmax="19" chance="58775" />
+		<item name="platinum coin" countmax="4" chance="68125" />
+		<item name="ring of healing" chance="100000" />
+		<item name="halberd" chance="30050" />
+		<item name="epee" chance="14150" />
+		<item name="knight armor" chance="45950" />
+		<item name="tower shield" chance="41400" />
+		<item name="stone herb" chance="9600" />
+		<item name="terra mantle" chance="2775" />
+		<item name="mutated rat tail" chance="100000" />
+	</loot>
+</monster>

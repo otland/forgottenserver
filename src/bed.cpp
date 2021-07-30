@@ -95,7 +95,7 @@ BedItem* BedItem::getNextBedItem() const
 
 bool BedItem::canUse(Player* player)
 {
-	if (!player || !house || !player->isPremium()) {
+	if (!player || !house || !player->isPremium() || player->getZone() != ZONE_PROTECTION) {
 		return false;
 	}
 

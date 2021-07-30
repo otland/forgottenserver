@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Centipede" namedescription="a centipede" race="venom" experience="34" speed="166" manacost="335">
+	<health now="70" max="70" />
+	<look type="124" corpse="6050" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" poison="20" />
+	</attacks>
+	<defenses armor="8" defense="8" />
+	<elements>
+		<element icePercent="20" />
+		<element energyPercent="10" />
+		<element firePercent="-15" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="15" chance="80000" />
+		<item name="centipede leg" chance="10300" />
+	</loot>
+</monster>

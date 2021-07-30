@@ -162,9 +162,12 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ELEMENTEARTH,
 	ITEM_PARSE_ELEMENTFIRE,
 	ITEM_PARSE_ELEMENTENERGY,
+	ITEM_PARSE_ELEMENTDEATH,
+	ITEM_PARSE_ELEMENTHOLY,
 	ITEM_PARSE_WALKSTACK,
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
+	ITEM_PARSE_STOREITEM,
 };
 
 struct Abilities {
@@ -177,20 +180,20 @@ struct Abilities {
 	uint32_t conditionSuppressions = 0;
 
 	//stats modifiers
-	int32_t stats[STAT_LAST + 1] = { 0 };
-	int32_t statsPercent[STAT_LAST + 1] = { 0 };
+	std::array<int32_t, STAT_LAST + 1> stats;
+	std::array<int32_t, STAT_LAST + 1> statsPercent;
 
 	//extra skill modifiers
-	int32_t skills[SKILL_LAST + 1] = { 0 };
-	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
+	std::array<int32_t, STAT_LAST + 1> skills;
+	std::array<int32_t, SPECIALSKILL_LAST + 1> specialSkills;
 
 	int32_t speed = 0;
 
 	// field damage abilities modifiers
-	int16_t fieldAbsorbPercent[COMBAT_COUNT] = { 0 };
+	std::array<int16_t, COMBAT_COUNT> fieldAbsorbPercent;
 
 	//damage abilities modifiers
-	int16_t absorbPercent[COMBAT_COUNT] = { 0 };
+	std::array<int16_t, COMBAT_COUNT> absorbPercent;
 
 	//elemental damage
 	uint16_t elementDamage = 0;
@@ -281,6 +284,10 @@ class ItemType
 				return name;
 			}
 
+			if (name.empty() || name.back() == 's') {
+				return name;
+			}
+
 			std::string str;
 			str.reserve(name.length() + 1);
 			str.assign(name);
@@ -351,6 +358,7 @@ class ItemType
 		uint8_t shootRange = 1;
 		int8_t hitChance = 0;
 
+		bool storeItem = false;
 		bool forceUse = false;
 		bool forceSerialize = false;
 		bool hasHeight = false;

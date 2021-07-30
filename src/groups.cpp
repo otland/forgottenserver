@@ -46,7 +46,7 @@ const std::unordered_map<std::string, PlayerFlags> ParsePlayerFlagMap = {
 	{"cannotbebanned", PlayerFlag_CannotBeBanned},
 	{"cannotbepushed", PlayerFlag_CannotBePushed},
 	{"hasinfinitecapacity", PlayerFlag_HasInfiniteCapacity},
-	{"cannotpushallcreatures", PlayerFlag_CanPushAllCreatures},
+	{"canpushallcreatures", PlayerFlag_CanPushAllCreatures},
 	{"cantalkredprivate", PlayerFlag_CanTalkRedPrivate},
 	{"cantalkredchannel", PlayerFlag_CanTalkRedChannel},
 	{"talkorangehelpchannel", PlayerFlag_TalkOrangeHelpChannel},
@@ -84,7 +84,7 @@ bool Groups::load()
 		if (pugi::xml_node node = groupNode.child("flags")) {
 			for (auto flagNode : node.children()) {
 				pugi::xml_attribute attr = flagNode.first_attribute();
-				if (!attr || (attr && !attr.as_bool())) {
+				if (!attr || !attr.as_bool()) {
 					continue;
 				}
 

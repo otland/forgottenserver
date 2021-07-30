@@ -28,7 +28,6 @@
 #include <typeinfo>
 
 #include <boost/variant.hpp>
-#include <boost/lexical_cast.hpp>
 #include <deque>
 
 class Creature;
@@ -104,7 +103,8 @@ enum AttrTypes_t {
 	ATTR_SHOOTRANGE = 33,
 	ATTR_CUSTOM_ATTRIBUTES = 34,
 	ATTR_DECAYTO = 35,
-	ATTR_WRAPID = 36
+	ATTR_WRAPID = 36,
+	ATTR_STOREITEM = 37
 };
 
 enum Attr_ReadValue {
@@ -286,7 +286,7 @@ class ItemAttributes
 			}
 
 			bool unserialize(PropStream& propStream) {
-				// This is hard coded so it's not general, depends on the position of the variants.
+				// This is hard-coded so it's not general, depends on the position of the variants.
 				uint8_t pos;
 				if (!propStream.read<uint8_t>(pos)) {
 					return false;
@@ -436,12 +436,12 @@ class ItemAttributes
 
 		template<typename R>
 		void setCustomAttribute(int64_t key, R value) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			setCustomAttribute(tmp, value);
 		}
 
 		void setCustomAttribute(int64_t key, CustomAttribute& value) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			setCustomAttribute(tmp, value);
 		}
 
@@ -467,7 +467,7 @@ class ItemAttributes
 		}
 
 		const CustomAttribute* getCustomAttribute(int64_t key) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			return getCustomAttribute(tmp);
 		}
 
@@ -482,7 +482,7 @@ class ItemAttributes
 		}
 
 		bool removeCustomAttribute(int64_t key) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			return removeCustomAttribute(tmp);
 		}
 
@@ -501,7 +501,7 @@ class ItemAttributes
 			| ITEM_ATTRIBUTE_WEIGHT | ITEM_ATTRIBUTE_ATTACK | ITEM_ATTRIBUTE_DEFENSE | ITEM_ATTRIBUTE_EXTRADEFENSE
 			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
 			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
-			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID;
+			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID | ITEM_ATTRIBUTE_STOREITEM;
 		const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
 			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
 
@@ -897,9 +897,6 @@ class Item : virtual public Thing
 			return items[id].isMagicField();
 		}
 		bool isMoveable() const {
-			if (id == ITEM_STORE_INBOX) {
-				return false;
-			}
 			return items[id].moveable;
 		}
 		bool isPickupable() const {
@@ -919,6 +916,15 @@ class Item : virtual public Thing
 			return items[id].walkStack;
 		}
 
+		void setStoreItem(bool storeItem) {
+			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, static_cast<int64_t>(storeItem));
+		}
+		bool isStoreItem() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_STOREITEM)) {
+				return getIntAttr(ITEM_ATTRIBUTE_STOREITEM) == 1;
+			}
+			return items[id].storeItem;
+		}
 		const std::string& getName() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
 				return getStrAttr(ITEM_ATTRIBUTE_NAME);

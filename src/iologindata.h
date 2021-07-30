@@ -30,11 +30,11 @@ class IOLoginData
 {
 	public:
 		static Account loadAccount(uint32_t accno);
-		static bool saveAccount(const Account& acc);
 
 		static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
 		static uint32_t gameworldAuthentication(const std::string& accountName, const std::string& password, std::string& characterName, std::string& token, uint32_t tokenTime);
 		static uint32_t getAccountIdByPlayerName(const std::string& playerName);
+		static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 
 		static AccountType_t getAccountType(uint32_t accountId);
 		static void setAccountType(uint32_t accountId, AccountType_t accountType);
@@ -57,8 +57,7 @@ class IOLoginData
 		static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
 		static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
-		static void addPremiumDays(uint32_t accountId, int32_t addDays);
-		static void removePremiumDays(uint32_t accountId, int32_t removeDays);
+		static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
 	private:
 		using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;

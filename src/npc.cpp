@@ -103,7 +103,7 @@ void Npc::reset()
 	pushable = true;
 	floorChange = false;
 	attackable = false;
-	ignoreHeight = true;
+	ignoreHeight = false;
 	focusCreature = 0;
 	speechBubble = SPEECHBUBBLE_NONE;
 
@@ -191,6 +191,11 @@ bool Npc::loadFromXml()
 			healthMax = pugi::cast<int32_t>(attr.value());
 		} else {
 			healthMax = 100;
+		}
+
+		if (health > healthMax) {
+			health = healthMax;
+			std::cout << "[Warning - Npc::loadFromXml] Health now is greater than health max in " << filename << std::endl;
 		}
 	}
 
@@ -487,9 +492,9 @@ bool Npc::getRandomStep(Direction& dir) const
 
 void Npc::doMoveTo(const Position& pos)
 {
-	std::forward_list<Direction> listDir;
-	if (getPathTo(pos, listDir, 1, 1, true, true)) {
-		startAutoWalk(listDir);
+	listWalkDir.clear();
+	if (getPathTo(pos, listWalkDir, 1, 1, true, true)) {
+		startAutoWalk();
 	}
 }
 
@@ -704,7 +709,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 
 	Npc* npc = env->getNpc();
 	if (!npc) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -713,7 +718,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 
 	Thing* thing = env->getThingByUID(uid);
 	if (!thing) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -820,7 +825,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 
 	Player* player = getPlayer(L, -1);
 	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -830,7 +835,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 
 	Npc* npc = getScriptEnv()->getNpc();
 	if (!npc) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -848,14 +853,14 @@ int NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 	//closeShopWindow(cid)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (!npc) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
 	Player* player = getPlayer(L, 1);
 	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -890,7 +895,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 	//doSellItem(cid, itemid, amount, <optional> subtype, <optional> actionid, <optional: default: 1> canDropOnMap)
 	Player* player = getPlayer(L, 1);
 	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -986,21 +991,21 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 {
 	// npc:openShopWindow(cid, items, buyCallback, sellCallback)
 	if (!isTable(L, 3)) {
-		reportErrorFunc("item list is not a table.");
+		reportErrorFunc(L, "item list is not a table.");
 		pushBoolean(L, false);
 		return 1;
 	}
 
 	Player* player = getPlayer(L, 2);
 	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
 	Npc* npc = getUserdata<Npc>(L, 1);
 	if (!npc) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
@@ -1053,14 +1058,14 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	// npc:closeShopWindow(player)
 	Player* player = getPlayer(L, 2);
 	if (!player) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
 	Npc* npc = getUserdata<Npc>(L, 1);
 	if (!npc) {
-		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}

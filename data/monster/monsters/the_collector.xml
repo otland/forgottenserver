@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Collector" nameDescription="The Collector" race="undead" experience="100" speed="195">
+	<health now="340" max="340" />
+	<look type="261" corpse="7282" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="50" />
+		<flag targetdistance="1" />
+		<flag runonhealth="20" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-220" />
+		<attack name="speed" interval="1000" chance="13" length="8" spread="0" speedchange="-800" duration="20000">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-85">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" range="7" radius="3" target="0" min="-10" max="-80">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="26" />
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Leave as long as you can." />
+	</voices>
+</monster>

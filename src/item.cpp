@@ -67,17 +67,17 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 			newItem = new Mailbox(type);
 		} else if (it.isBed()) {
 			newItem = new BedItem(type);
-		} else if (it.id >= 2210 && it.id <= 2212) {
+		} else if (it.id >= 2210 && it.id <= 2212) { // magic rings
 			newItem = new Item(type - 3, count);
-		} else if (it.id == 2215 || it.id == 2216) {
+		} else if (it.id == 2215 || it.id == 2216) { // magic rings
 			newItem = new Item(type - 2, count);
-		} else if (it.id >= 2202 && it.id <= 2206) {
+		} else if (it.id >= 2202 && it.id <= 2206) { // magic rings
 			newItem = new Item(type - 37, count);
-		} else if (it.id == 2640) {
+		} else if (it.id == 2640) { // soft boots
 			newItem = new Item(6132, count);
-		} else if (it.id == 6301) {
+		} else if (it.id == 6301) { // death ring
 			newItem = new Item(6300, count);
-		} else if (it.id == 18528) {
+		} else if (it.id == 18528) { // prismatic ring
 			newItem = new Item(18408, count);
 		} else {
 			newItem = new Item(type, count);
@@ -596,6 +596,16 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		case ATTR_STOREITEM: {
+			uint8_t storeItem;
+			if (!propStream.read<uint8_t>(storeItem)) {
+				return ATTR_READ_ERROR;
+			}
+
+			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, storeItem);
+			break;
+		}
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values
@@ -809,6 +819,11 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 	if (hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 		propWriteStream.write<uint8_t>(ATTR_WRAPID);
 		propWriteStream.write<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_WRAPID));
+	}
+
+	if (hasAttribute(ITEM_ATTRIBUTE_STOREITEM)) {
+		propWriteStream.write<uint8_t>(ATTR_STOREITEM);
+		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_STOREITEM));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
@@ -1307,7 +1322,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 		if (!found) {
 			if (it.isKey()) {
-				s << " (Key:" << std::setfill('0') << std::setw(4) << (item ? item->getActionId() : 0) << ')';
+				int32_t keyNumber = (item ? item->getActionId() : 0);
+				if (keyNumber != 0) {
+					s << " (Key:" << std::setfill('0') << std::setw(4) << keyNumber << ')';
+				}
 			} else if (it.isFluidContainer()) {
 				if (subType > 0) {
 					const std::string& itemName = items[subType].name;
@@ -1664,7 +1682,6 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 				attributes.pop_back();
 				break;
 			}
-			prev_it = it;
 		}
 	}
 	attributeBits &= ~type;
