@@ -184,7 +184,7 @@ struct Abilities {
 	std::array<int32_t, STAT_LAST + 1> statsPercent;
 
 	//extra skill modifiers
-	std::array<int32_t, STAT_LAST + 1> skills;
+	std::array<int32_t, SKILL_LAST + 1> skills;
 	std::array<int32_t, SPECIALSKILL_LAST + 1> specialSkills;
 
 	int32_t speed = 0;
