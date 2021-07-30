@@ -2593,7 +2593,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	Player* tradePartner = getPlayerByID(tradePlayerId);
 	if (!tradePartner || tradePartner == player) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		player->sendCancelMessage("Select a player to trade with.");
 		return;
 	}
 
