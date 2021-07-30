@@ -127,6 +127,7 @@ void Game::setGameState(GameState_t newState)
 
 			loadMotdNum();
 			loadPlayersRecord();
+			loadAccountStorageValues();
 
 			g_globalEvents->startup();
 			break;
@@ -182,6 +183,10 @@ void Game::saveGameState()
 	}
 
 	std::cout << "Saving server..." << std::endl;
+
+	if (!saveAccountStorageValues()) {
+		std::cout << "[Error - Game::saveGameState] Failed to save account-level storage values." << std::endl;
+	}
 
 	for (const auto& it : players) {
 		it.second->loginPosition = it.second->getPosition();
@@ -4404,6 +4409,73 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);
 		}
 	}
+}
+
+void Game::setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value)
+{
+	if (value == -1) {
+		accountStorageMap[accountId].erase(key);
+		return;
+	}
+
+	accountStorageMap[accountId][key] = value;
+}
+
+int32_t Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key) const
+{
+	const auto& accountMapIt = accountStorageMap.find(accountId);
+	if (accountMapIt != accountStorageMap.end()) {
+		const auto& storageMapIt = accountMapIt->second.find(key);
+		if (storageMapIt != accountMapIt->second.end()) {
+			return storageMapIt->second;
+		}
+	}
+	return -1;
+}
+
+void Game::loadAccountStorageValues()
+{
+	Database& db = Database::getInstance();
+
+	DBResult_ptr result;
+	if ((result = db.storeQuery("SELECT `account_id`, `key`, `value` FROM `account_storage`"))) {
+		do {
+			g_game.setAccountStorageValue(result->getNumber<uint32_t>("account_id"), result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"));
+		} while (result->next());
+	}
+}
+
+bool Game::saveAccountStorageValues() const
+{
+	DBTransaction transaction;
+	Database& db = Database::getInstance();
+
+	if (!transaction.begin()) {
+		return false;
+	}
+
+	if (!db.executeQuery("DELETE FROM `account_storage`")) {
+		return false;
+	}
+
+	for (const auto& accountIt : g_game.accountStorageMap) {
+		if (accountIt.second.empty()) {
+			break;
+		}
+
+		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
+		for (const auto& storageIt : accountIt.second) {
+			if (!accountStorageQuery.addRow(fmt::format("{:d}, {:d}, {:d}", accountIt.first, storageIt.first, storageIt.second))) {
+				return false;
+			}
+		}
+
+		if (!accountStorageQuery.execute()) {
+			return false;
+		}
+	}
+
+	return transaction.commit();
 }
 
 void Game::startDecay(Item* item)
