@@ -101,7 +101,7 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 end
 
 function getCount(string)
-	local b, e = string:find('%d+')
+	local b, e = string:find("%d+")
 	return b and e and math.min(2 ^ 32 - 1, tonumber(string:sub(b, e))) or -1
 end
 
