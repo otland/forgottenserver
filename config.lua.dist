@@ -145,10 +145,6 @@ deSpawnRange = 2
 deSpawnRadius = 50
 removeOnDespawn = true
 
--- Party
--- NOTE: 1.20 = 20%
-sharedExperienceMultiplier = 1.20
-
 -- Stamina
 staminaSystem = true
 

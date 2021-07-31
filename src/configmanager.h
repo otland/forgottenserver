@@ -138,8 +138,6 @@ class ConfigManager
 		};
 
 		enum floating_config_t {
-			SHARED_EXPERIENCE_MULTIPLIER,
-
 			LAST_FLOATING_CONFIG
 		};
 

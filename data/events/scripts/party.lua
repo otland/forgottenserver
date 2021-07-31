@@ -23,7 +23,7 @@ function Party:onDisband()
 end
 
 function Party:onShareExperience(exp)
-	local sharedExperienceMultiplier = configManager.getGlobalFloat(configKeys.SHARED_EXPERIENCE_MULTIPLIER)
+	local sharedExperienceMultiplier = 1.20 --20%
 	local vocationsIds = {}
 	local rawExp = exp
 

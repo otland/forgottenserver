@@ -310,8 +310,6 @@ bool ConfigManager::load()
 	}
 	expStages.shrink_to_fit();
 
-	floating[SHARED_EXPERIENCE_MULTIPLIER] = getGlobalFloat(L, "sharedExperienceMultiplier", 1.2f);
-
 	loaded = true;
 	lua_close(L);
 	return true;
