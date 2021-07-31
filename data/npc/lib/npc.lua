@@ -100,13 +100,16 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	return true
 end
 
+-- maximum representable value without precision loss, 53 bits mantissa from IEEE754
+local MAX_SAFE_INTEGER = 2 ^ 53 - 1
+
 function getCount(string)
 	local b, e = string:find("%d+")
 	local tonumber = tonumber(string:sub(b, e))
-	if tonumber > 2 ^ 32 - 1 then
-		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+	if tonumber > MAX_SAFE_INTEGER then
+		print("Warning: clamping value to "..MAX_SAFE_INTEGER.." to prevent crash\n"..debug.traceback())
 	end
-	return b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	return b and e and math.min(MAX_SAFE_INTEGER, tonumber) or -1
 end
 
 function Player.getTotalMoney(self)
@@ -120,10 +123,10 @@ end
 function getMoneyCount(string)
 	local b, e = string:find("%d+")
 	local tonumber = tonumber(string:sub(b, e))
-	if tonumber > 2 ^ 32 - 1 then
-		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+	if tonumber > MAX_SAFE_INTEGER then
+		print("Warning: clamping value to "..MAX_SAFE_INTEGER.." to prevent crash\n"..debug.traceback())
 	end
-	local money = b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	local money = b and e and math.min(MAX_SAFE_INTEGER, tonumber) or -1
 	if isValidMoney(money) then
 		return money
 	end
