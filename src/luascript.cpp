@@ -7754,25 +7754,30 @@ int LuaScriptInterface::luaCreatureAddCondition(lua_State* L)
 
 int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 {
-	// creature:removeCondition(conditionType or condition[, conditionId = CONDITIONID_COMBAT[, subId = 0[, force = false]]])
+	// creature:removeCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0[, force = false]]])
+	// creature:removeCondition(condition[, force = false])
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
-	
+
 	Condition* condition = nullptr;
+
+	bool force = false;
+
 	if (isUserdata(L, 2)) {
 		condition = getUserdata<Condition>(L, 2);
+		force = getBoolean(L, 3, false);
 	} else {
 		ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
 		ConditionId_t conditionId = getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
 		uint32_t subId = getNumber<uint32_t>(L, 4, 0);
 		condition = creature->getCondition(conditionType, conditionId, subId);
+		force = getBoolean(L, 5, false);
 	}
 
 	if (condition) {
-		bool force = getBoolean(L, 5, false);
 		creature->removeCondition(condition, force);
 		pushBoolean(L, true);
 	} else {

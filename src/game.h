@@ -326,7 +326,7 @@ class Game
 		void playerReportRuleViolation(uint32_t playerId, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation);
 
 		bool internalStartTrade(Player* player, Player* tradePartner, Item* tradeItem);
-		void internalCloseTrade(Player* player);
+		void internalCloseTrade(Player* player, bool sendCancel = true);
 		bool playerBroadcastMessage(Player* player, const std::string& text) const;
 		void broadcastMessage(const std::string& text, MessageClasses type) const;
 
