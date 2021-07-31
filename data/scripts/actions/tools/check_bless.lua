@@ -10,13 +10,14 @@ local blessings = {
 local checkBless = Action()
 
 function checkBless.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local result, bless = "Received blessings:"
-	for i = 1, #blessings do
-		bless = blessings[i]
-		result = player:hasBlessing(i) and result .. "\n" .. bless or result
+	local message = {"Received blessings:"}
+	for i, blessing in pairs(blessings) do
+		if player:hasBlessing(i) then
+			message[#message + 1] = blessing
+		end
 	end
 
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 20 > result:len() and "No blessings received." or result)
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, #message == 1 and "No blessings received." or table.concat(message, '\n'))
 	return true
 end
 

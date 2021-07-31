@@ -42,7 +42,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="25" chance="75000" />
-		<item name="arrow" countmax="12" chance="30710" />
+		<item id="2544" countmax="12" chance="30710" /><!-- arrow -->
 		<item name="grapes" chance="17750" />
 		<item name="poison arrow" countmax="4" chance="15400" />
 		<item name="elven scouting glass" chance="9750" />

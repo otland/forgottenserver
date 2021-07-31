@@ -56,7 +56,7 @@
 		<item name="green mushroom" chance="12000" />
 		<item name="royal spear" countmax="3" chance="9000" />
 		<item id="1976" chance="9000" /><!-- book (gemmed) -->
-		<item name="power bolt" countmax="7" chance="6700" />
+		<item id="2547" countmax="7" chance="6700" /><!-- power bolt -->
 		<item name="energy ring" chance="5250" />
 		<item name="small sapphire" chance="5300" />
 		<item name="golden mug" chance="3190" />
@@ -70,6 +70,6 @@
 		<item name="royal helmet" chance="280" />
 		<item name="dragon scale mail" chance="170" />
 		<item name="dragon slayer" chance="110" />
-		<item name="dragon lord trophy" chance="90" />
+		<item id="7399" chance="90" /><!-- dragon lord trophy -->
 	</loot>
 </monster>

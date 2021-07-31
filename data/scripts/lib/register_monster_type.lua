@@ -136,12 +136,7 @@ registerMonsterType.flags = function(mtype, mask)
 end
 registerMonsterType.light = function(mtype, mask)
 	if mask.light then
-		if mask.light.color then
-			local color = mask.light.color
-		end
-		if mask.light.level then
-			mtype:light(color, mask.light.level)
-		end
+		mtype:light(mask.light.color or 0, mask.light.level or 0)
 	end
 end
 registerMonsterType.changeTarget = function(mtype, mask)

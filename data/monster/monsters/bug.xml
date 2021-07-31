@@ -28,6 +28,6 @@
 	</elements>
 	<loot>
 		<item name="gold coin" countmax="6" chance="50000" />
-		<item name="cherry" countmax="3" chance="3000" />
+		<item id="2679" countmax="3" chance="3000" /><!-- cherry -->
 	</loot>
 </monster>
