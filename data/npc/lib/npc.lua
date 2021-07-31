@@ -100,9 +100,9 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	return true
 end
 
-function getCount(str)
-	local b, e = str:find('%d+')
-	return b and e and math.min(4294967295, tonumber(str:sub(b, e))) or -1
+function getCount(string)
+	local b, e = string:find('%d+')
+	return b and e and math.min(2 ^ 32 - 1, tonumber(string:sub(b, e))) or -1
 end
 
 function Player.getTotalMoney(self)
@@ -115,7 +115,7 @@ end
 
 function getMoneyCount(string)
 	local b, e = string:find("%d+")
-	local money = b and e and math.min(4294967295, tonumber(string:sub(b, e))) or -1
+	local money = b and e and math.min(2 ^ 32 - 1, tonumber(string:sub(b, e))) or -1
 	if isValidMoney(money) then
 		return money
 	end
