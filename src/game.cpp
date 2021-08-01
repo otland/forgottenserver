@@ -4471,7 +4471,7 @@ bool Game::saveAccountStorageValues() const
 
 	for (const auto& accountIt : g_game.accountStorageMap) {
 		if (accountIt.second.empty()) {
-			break;
+			continue;
 		}
 
 		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
