@@ -180,20 +180,20 @@ struct Abilities {
 	uint32_t conditionSuppressions = 0;
 
 	//stats modifiers
-	std::array<int32_t, STAT_LAST + 1> stats;
-	std::array<int32_t, STAT_LAST + 1> statsPercent;
+	std::array<int32_t, STAT_LAST + 1> stats = {0};
+	std::array<int32_t, STAT_LAST + 1> statsPercent = {0};
 
 	//extra skill modifiers
-	std::array<int32_t, SKILL_LAST + 1> skills;
-	std::array<int32_t, SPECIALSKILL_LAST + 1> specialSkills;
+	std::array<int32_t, SKILL_LAST + 1> skills = {0};
+	std::array<int32_t, SPECIALSKILL_LAST + 1> specialSkills = {0};
 
 	int32_t speed = 0;
 
 	// field damage abilities modifiers
-	std::array<int16_t, COMBAT_COUNT> fieldAbsorbPercent;
+	std::array<int16_t, COMBAT_COUNT> fieldAbsorbPercent = {0};
 
 	//damage abilities modifiers
-	std::array<int16_t, COMBAT_COUNT> absorbPercent;
+	std::array<int16_t, COMBAT_COUNT> absorbPercent = {0};
 
 	//elemental damage
 	uint16_t elementDamage = 0;
