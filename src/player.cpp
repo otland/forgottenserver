@@ -409,9 +409,7 @@ uint16_t Player::getClientIcons() const
 		icons |= ICON_PIGEON;
 
 		// Don't show ICON_SWORDS if player is in protection zone.
-		if (hasBitSet(ICON_SWORDS, icons)) {
-			icons &= ~ICON_SWORDS;
-		}
+		icons &= ~ICON_SWORDS;
 	}
 
 	// Game client debugs with 10 or more icons
