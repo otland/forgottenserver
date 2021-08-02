@@ -19,8 +19,6 @@
 
 #include "otpch.h"
 
-#include <bitset>
-
 #include "bed.h"
 #include "chat.h"
 #include "combat.h"
@@ -2015,16 +2013,15 @@ void Player::death(Creature* lastHitCreature)
 			}
 		}
 
-		std::bitset<6> bitset(blessings);
-		if (bitset[5]) {
+		if (blessings.test(5)) {
 			if (lastHitPlayer) {
-				bitset.reset(5);
-				blessings = bitset.to_ulong();
+				blessings.reset(5);
 			} else {
-				blessings = 32;
+				blessings.reset();
+				blessings.set(5);
 			}
 		} else {
-			blessings = 0;
+			blessings.reset();
 		}
 
 		sendStats();
@@ -3902,15 +3899,13 @@ bool Player::isPromoted() const
 
 double Player::getLostPercent() const
 {
-	int32_t blessingCount = std::bitset<5>(blessings).count();
-
 	int32_t deathLosePercent = g_config.getNumber(ConfigManager::DEATH_LOSE_PERCENT);
 	if (deathLosePercent != -1) {
 		if (isPromoted()) {
 			deathLosePercent -= 3;
 		}
 
-		deathLosePercent -= blessingCount;
+		deathLosePercent -= blessings.count();
 		return std::max<int32_t>(0, deathLosePercent) / 100.;
 	}
 
@@ -3926,7 +3921,7 @@ double Player::getLostPercent() const
 	if (isPromoted()) {
 		percentReduction += 30;
 	}
-	percentReduction += blessingCount * 8;
+	percentReduction += blessings.count() * 8;
 	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 
