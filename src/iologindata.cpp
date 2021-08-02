@@ -716,7 +716,7 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(nullptr) - player->lastLoginSaved) << ',';
 	}
-	query << "`blessings` = " << static_cast<uint32_t>(player->blessings);
+	query << "`blessings` = " << static_cast<uint32_t>(player->blessings.to_ulong());
 	query << " WHERE `id` = " << player->getGUID();
 
 	DBTransaction transaction;
