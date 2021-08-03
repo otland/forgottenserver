@@ -1899,7 +1899,7 @@ uint32_t Player::getIP() const
 
 void Player::death(Creature* lastHitCreature)
 {
-	//trigger creature remove events without removing the creature
+	//trigger g_game.removeCreature behaviour without removing the creature
 	Tile* tile = this->getTile();
 
 	SpectatorVec spectators;
@@ -1907,8 +1907,44 @@ void Player::death(Creature* lastHitCreature)
 
 	//event method
 	for (Creature* spectator : spectators) {
-		spectator->onRemoveCreature(this, false);
+		if (spectator != this) {
+			spectator->onRemoveCreature(this, false);
+		}
 	}
+
+	//trigger Player::onRemoveCreature
+	//without sending has logged out message
+	//and without destroying guild and joined channels references
+	Creature::onRemoveCreature(this, false);
+
+	if (eventWalk != 0) {
+		setFollowCreature(nullptr);
+	}
+
+	if (tradePartner) {
+		g_game.internalCloseTrade(this);
+	}
+
+	closeShopWindow();
+
+	clearPartyInvitations();
+
+	if (party) {
+		party->leaveParty(this);
+	}
+
+	bool saved = false;
+	for (uint32_t tries = 0; tries < 3; ++tries) {
+		if (IOLoginData::savePlayer(this)) {
+			saved = true;
+			break;
+		}
+	}
+
+	if (!saved) {
+		std::cout << "Error while saving player: " << getName() << std::endl;
+	}
+	//end onRemoveCreature
 
 	for (Creature* summon : this->summons) {
 		summon->setSkillLoss(false);
@@ -2074,6 +2110,13 @@ void Player::death(Creature* lastHitCreature)
 	sendStats();
 	sendSkills();
 	//sendReLoginWindow(unfairFightReduction);
+
+	//scripting event - onLogin
+	if (g_creatureEvents->playerLogin(this)) {
+		g_game.addMagicEffect(loginPosition, CONST_ME_TELEPORT);
+	} else {
+		kickPlayer(true);
+	}
 }
 
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
