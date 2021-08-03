@@ -61,21 +61,30 @@ class Action : public Event
 			checkFloor = v;
 		}
 
-		std::vector<uint16_t> getItemIdRange() {
+		std::vector<uint16_t>& getItemIdRange() {
+			return ids;
+		}
+		const std::vector<uint16_t>& getItemIdRange() const {
 			return ids;
 		}
 		void addItemId(uint16_t id) {
 			ids.emplace_back(id);
 		}
 
-		std::vector<uint16_t> getUniqueIdRange() {
+		std::vector<uint16_t>& getUniqueIdRange() {
+			return uids;
+		}
+		const std::vector<uint16_t>& getUniqueIdRange() const {
 			return uids;
 		}
 		void addUniqueId(uint16_t id) {
 			uids.emplace_back(id);
 		}
 
-		std::vector<uint16_t> getActionIdRange() {
+		std::vector<uint16_t>& getActionIdRange() {
+			return aids;
+		}
+		const std::vector<uint16_t>& getActionIdRange() const {
 			return aids;
 		}
 		void addActionId(uint16_t id) {
