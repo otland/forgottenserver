@@ -1899,6 +1899,23 @@ uint32_t Player::getIP() const
 
 void Player::death(Creature* lastHitCreature)
 {
+	//trigger creature remove events without removing the creature
+	Tile* tile = this->getTile();
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, tile->getPosition(), true);
+
+	//event method
+	for (Creature* spectator : spectators) {
+		spectator->onRemoveCreature(this, false);
+	}
+
+	for (Creature* summon : this->summons) {
+		summon->setSkillLoss(false);
+		g_game.removeCreature(summon);
+	}
+	//end of creature remove events
+
 	loginPosition = town->getTemplePosition();
 
 	if (skillLoss) {
@@ -2024,10 +2041,6 @@ void Player::death(Creature* lastHitCreature)
 			blessings.reset();
 		}
 
-		sendStats();
-		sendSkills();
-		sendReLoginWindow(unfairFightReduction);
-
 		if (getSkull() == SKULL_BLACK) {
 			health = 40;
 			mana = 0;
@@ -2035,44 +2048,32 @@ void Player::death(Creature* lastHitCreature)
 			health = healthMax;
 			mana = manaMax;
 		}
-
-		auto it = conditions.begin(), end = conditions.end();
-		while (it != end) {
-			Condition* condition = *it;
-			if (condition->isPersistent()) {
-				it = conditions.erase(it);
-
-				condition->endCondition(this);
-				onEndCondition(condition->getType());
-				delete condition;
-			} else {
-				++it;
-			}
-		}
 	} else {
 		setSkillLoss(true);
-
-		auto it = conditions.begin(), end = conditions.end();
-		while (it != end) {
-			Condition* condition = *it;
-			if (condition->isPersistent()) {
-				it = conditions.erase(it);
-
-				condition->endCondition(this);
-				onEndCondition(condition->getType());
-				delete condition;
-			} else {
-				++it;
-			}
-		}
-
-		health = healthMax;
-		g_game.internalTeleport(this, getTemplePosition(), true);
-		g_game.addCreatureHealth(this);
-		onThink(EVENT_CREATURE_THINK_INTERVAL);
-		onIdleStatus();
-		sendStats();
 	}
+
+	auto it = conditions.begin(), end = conditions.end();
+	while (it != end) {
+		Condition* condition = *it;
+		if (condition->isPersistent()) {
+			it = conditions.erase(it);
+
+			condition->endCondition(this);
+			onEndCondition(condition->getType());
+			delete condition;
+		} else {
+			++it;
+		}
+	}
+
+	health = healthMax;
+	g_game.internalTeleport(this, loginPosition, true);
+	g_game.addCreatureHealth(this);
+	onThink(EVENT_CREATURE_THINK_INTERVAL);
+	onIdleStatus();
+	sendStats();
+	sendSkills();
+	//sendReLoginWindow(unfairFightReduction);
 }
 
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
