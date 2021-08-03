@@ -68,41 +68,41 @@
 		<voice sentence="The judgement is guilty! The sentence is death!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="25000" />
-		<item name="gold coin" countmax="100" chance="25000" />
-		<item name="platinum coin" countmax="26" chance="20000" />
-		<item name="orb" chance="16666" />
-		<item name="life crystal" chance="16666" />
-		<item name="mind stone" chance="20000" />
-		<item name="spike sword" chance="9090" />
-		<item name="fire sword" chance="14285" />
-		<item name="giant sword" chance="7692" />
-		<item id="2419" chance="11111" /><!-- scimitar -->
-		<item name="warrior helmet" chance="20000" />
-		<item name="strange helmet" chance="8333" />
-		<item name="crown helmet" chance="6250" />
-		<item name="royal helmet" chance="20000" />
-		<item name="brown mushroom" countmax="30" chance="50000" />
-		<item name="mysterious voodoo skull" chance="12500" />
-		<item name="skull helmet" chance="20000" />
-		<item name="iron ore" chance="33333" />
-		<item name="spirit container" chance="4761" />
-		<item name="flask of warrior's sweat" chance="5555" />
-		<item name="enchanted chicken wing" chance="7692" />
-		<item name="huge chunk of crude iron" chance="14285" />
-		<item name="hardened bone" countmax="20" chance="25000" />
-		<item name="demon horn" countmax="2" chance="8333" />
-		<item name="unholy book" chance="2063" />
-		<item name="demonic essence" chance="100000" />
-		<item id="7385" chance="10000" /><!-- crimson sword -->
-		<item name="thaian sword" chance="25000" />
-		<item name="dragon slayer" chance="8333" />
-		<item name="runed sword" chance="6666" />
-		<item name="great mana potion" chance="20000" />
-		<item name="great health potion" chance="20000" />
-		<item name="great spirit potion" chance="20000" />
-		<item name="ultimate health potion" chance="20000" />
-		<item id="9808" chance="20000" /><!-- rusty armor (common) -->
-		<item name="gold ingot" chance="16666" />
+		<item id="2148" countmax="90" chance="25000" />
+		<item id="2148" countmax="100" chance="25000" />
+		<item id="2152" countmax="26" chance="20000" />
+		<item id="2176" chance="16666" />
+		<item id="2177" chance="16666" />
+		<item id="2178" chance="20000" />
+		<item id="2383" chance="9090" />
+		<item id="2392" chance="14285" />
+		<item id="2393" chance="7692" />
+		<item id="2419" chance="11111" />
+		<item id="2475" chance="20000" />
+		<item id="2479" chance="8333" />
+		<item id="2491" chance="6250" />
+		<item id="2498" chance="20000" />
+		<item id="2789" countmax="30" chance="50000" />
+		<item id="5669" chance="12500" />
+		<item id="5741" chance="20000" />
+		<item id="5880" chance="33333" />
+		<item id="5884" chance="4761" />
+		<item id="5885" chance="5555" />
+		<item id="5891" chance="7692" />
+		<item id="5892" chance="14285" />
+		<item id="5925" countmax="20" chance="25000" />
+		<item id="5954" countmax="2" chance="8333" />
+		<item id="6103" chance="2063" />
+		<item id="6500" chance="100000" />
+		<item id="7385" chance="10000" />
+		<item id="7391" chance="25000" />
+		<item id="7402" chance="8333" />
+		<item id="7417" chance="6666" />
+		<item id="7590" chance="20000" />
+		<item id="7591" chance="20000" />
+		<item id="8472" chance="20000" />
+		<item id="8473" chance="20000" />
+		<item id="9808" chance="20000" />
+		<item id="9971" chance="16666" />
 	</loot>
 </monster>

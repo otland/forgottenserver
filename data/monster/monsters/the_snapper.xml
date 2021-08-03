@@ -33,13 +33,13 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50675" />
-		<item name="gold coin" countmax="94" chance="50675" />
-		<item name="life ring" chance="100000" />
-		<item name="plate armor" chance="35800" />
-		<item name="knight armor" chance="4025" />
-		<item name="plate legs" chance="44025" />
-		<item name="crocodile boots" chance="9900" />
-		<item name="health potion" countmax="5" chance="51100" />
+		<item id="2148" countmax="100" chance="50675" />
+		<item id="2148" countmax="94" chance="50675" />
+		<item id="2168" chance="100000" />
+		<item id="2463" chance="35800" />
+		<item id="2476" chance="4025" />
+		<item id="2647" chance="44025" />
+		<item id="3982" chance="9900" />
+		<item id="7618" countmax="5" chance="51100" />
 	</loot>
 </monster>

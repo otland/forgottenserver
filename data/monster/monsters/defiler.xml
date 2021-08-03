@@ -56,22 +56,22 @@
 		<voice sentence="Blubb Blubb" />
 	</voices>
 	<loot>
-		<item name="small diamond" countmax="2" chance="2439" />
-		<item name="small ruby" countmax="2" chance="3000" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="72" chance="100000" />
-		<item name="small emerald" countmax="3" chance="5366" />
-		<item name="talon" chance="5710" />
-		<item name="platinum coin" countmax="6" chance="95000" />
-		<item name="yellow gem" chance="1219" />
-		<item name="green gem" chance="613" />
-		<item name="red gem" chance="1538" />
-		<item name="blue gem" chance="300" />
-		<item name="soul orb" chance="20000" />
-		<item id="6300" chance="3030" /><!-- death ring-->
-		<item name="demonic essence" chance="20320" />
-		<item name="glob of acid slime" chance="14210" />
-		<item name="glob of tar" chance="12000" />
+		<item id="2145" countmax="2" chance="2439" />
+		<item id="2147" countmax="2" chance="3000" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="72" chance="100000" />
+		<item id="2149" countmax="3" chance="5366" />
+		<item id="2151" chance="5710" />
+		<item id="2152" countmax="6" chance="95000" />
+		<item id="2154" chance="1219" />
+		<item id="2155" chance="613" />
+		<item id="2156" chance="1538" />
+		<item id="2158" chance="300" />
+		<item id="5944" chance="20000" />
+		<item id="6300" chance="3030" />
+		<item id="6500" chance="20320" />
+		<item id="9967" chance="14210" />
+		<item id="9968" chance="12000" />
 	</loot>
 </monster>

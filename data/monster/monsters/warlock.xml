@@ -66,29 +66,29 @@
 		<voice sentence="We don't like intruders!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="80" chance="30000" />
-		<item name="cherry" countmax="4" chance="19000" />
-		<item name="bread" chance="9000" />
-		<item name="poison dagger" chance="7600" />
-		<item name="skull staff" chance="6370" />
-		<item name="great health potion" chance="5000" />
-		<item name="great mana potion" chance="5000" />
-		<item name="assassin star" countmax="4" chance="3500" />
-		<item name="dark mushroom" chance="3000" />
-		<item name="mind stone" chance="2000" />
-		<item name="energy ring" chance="2000" />
-		<item name="blue robe" chance="1500" />
-		<item name="candlestick" chance="1500" />
-		<item name="small sapphire" chance="1200" />
-		<item name="talon" chance="1150" />
-		<item name="lightning robe" chance="1000" />
-		<item id="2600" chance="1000" /><!-- inkwell -->
-		<item id="2124" chance="730" /><!-- crystal ring -->
-		<item name="luminous orb" chance="450" />
-		<item name="ring of the sky" chance="380" />
-		<item name="stone skin amulet" chance="330" />
-		<item name="red tome" chance="240" />
-		<item name="golden armor" chance="210" />
-		<item name="piggy bank" chance="60" />
+		<item id="2148" countmax="80" chance="30000" />
+		<item id="2679" countmax="4" chance="19000" />
+		<item id="2689" chance="9000" />
+		<item id="2411" chance="7600" />
+		<item id="2436" chance="6370" />
+		<item id="7591" chance="5000" />
+		<item id="7590" chance="5000" />
+		<item id="7368" countmax="4" chance="3500" />
+		<item id="2792" chance="3000" />
+		<item id="2178" chance="2000" />
+		<item id="2167" chance="2000" />
+		<item id="2656" chance="1500" />
+		<item id="2047" chance="1500" />
+		<item id="2146" chance="1200" />
+		<item id="2151" chance="1150" />
+		<item id="7898" chance="1000" />
+		<item id="2600" chance="1000" />
+		<item id="2124" chance="730" />
+		<item id="12410" chance="450" />
+		<item id="2123" chance="380" />
+		<item id="2197" chance="330" />
+		<item id="1986" chance="240" />
+		<item id="2466" chance="210" />
+		<item id="2114" chance="60" />
 	</loot>
 </monster>

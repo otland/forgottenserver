@@ -50,23 +50,23 @@
 		<voice sentence="UGGA UGGA!!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="54" chance="50000" />
-		<item name="ogre ear stud" chance="19720" />
-		<item name="ogre nose ring" chance="17360" />
-		<item name="strong health potion" chance="15330" />
-		<item name="skull fetish" chance="9300" />
-		<item name="cookie" countmax="5" chance="8350" />
-		<item name="mysterious fetish" chance="6120" />
-		<item name="jalapeno pepper" countmax="2" chance="4130" />
-		<item name="onyx chip" countmax="2" chance="3060" />
-		<item name="small ruby" countmax="2" chance="2840" />
-		<item name="small topaz" countmax="2" chance="2500" />
-		<item name="opal" countmax="2" chance="2240" />
-		<item name="war hammer" chance="1510" />
-		<item name="ogre choppa" chance="1160" />
-		<item name="berserk potion" chance="520" />
-		<item name="shamanic mask" chance="340" />
-		<item name="dreaded cleaver" chance="40" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="54" chance="50000" />
+		<item id="24844" chance="19720" />
+		<item id="24845" chance="17360" />
+		<item id="7588" chance="15330" />
+		<item id="24847" chance="9300" />
+		<item id="2687" countmax="5" chance="8350" />
+		<item id="2194" chance="6120" />
+		<item id="8844" countmax="2" chance="4130" />
+		<item id="24849" countmax="2" chance="3060" />
+		<item id="2147" countmax="2" chance="2840" />
+		<item id="9970" countmax="2" chance="2500" />
+		<item id="24850" countmax="2" chance="2240" />
+		<item id="2391" chance="1510" />
+		<item id="24828" chance="1160" />
+		<item id="7439" chance="520" />
+		<item id="24848" chance="340" />
+		<item id="7419" chance="40" />
 	</loot>
 </monster>

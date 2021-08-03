@@ -48,18 +48,18 @@
 		<voice sentence="Dust to dust." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="45" chance="75000" />
-		<item name="white mushroom" countmax="2" chance="60000" />
-		<item name="blank rune" chance="33000" />
-		<item name="pear" chance="24000" />
-		<item id="2162" chance="14000" /><!-- magic lightwand -->
-		<item name="geomancer's robe" chance="8000" />
-		<item name="geomancer's staff" chance="7000" />
-		<item name="clerical mace" chance="1120" />
-		<item name="dwarven ring" chance="580" />
-		<item name="small sapphire" chance="580" />
-		<item id="2175" chance="500" /><!-- spellbook -->
-		<item name="terra boots" chance="500" />
-		<item name="iron ore" chance="290" />
+		<item id="2148" countmax="45" chance="75000" />
+		<item id="2787" countmax="2" chance="60000" />
+		<item id="2260" chance="33000" />
+		<item id="2673" chance="24000" />
+		<item id="2162" chance="14000" />
+		<item id="12414" chance="8000" />
+		<item id="12419" chance="7000" />
+		<item id="2423" chance="1120" />
+		<item id="2213" chance="580" />
+		<item id="2146" chance="580" />
+		<item id="2175" chance="500" />
+		<item id="7886" chance="500" />
+		<item id="5880" chance="290" />
 	</loot>
 </monster>

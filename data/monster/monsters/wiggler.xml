@@ -49,19 +49,19 @@
 		<voice sentence="Crick! Crick!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="platinum coin" chance="14790" />
-		<item name="terra rod" chance="850" />
-		<item name="serpent sword" chance="1360" />
-		<item name="black shield" chance="1320" />
-		<item name="white mushroom" countmax="5" chance="7142" />
-		<item name="blue piece of cloth" chance="2080" />
-		<item name="yellow piece of cloth" chance="2160" />
-		<item name="strong health potion" chance="4930" />
-		<item name="strong mana potion" chance="5250" />
-		<item name="crystalline arrow" countmax="5" chance="15540" />
-		<item name="green crystal splinter" chance="3600" />
-		<item name="green crystal fragment" chance="2070" />
-		<item name="drill bolt" countmax="5" chance="15260" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2152" chance="14790" />
+		<item id="2181" chance="850" />
+		<item id="2409" chance="1360" />
+		<item id="2529" chance="1320" />
+		<item id="2787" countmax="5" chance="7142" />
+		<item id="5912" chance="2080" />
+		<item id="5914" chance="2160" />
+		<item id="7588" chance="4930" />
+		<item id="7589" chance="5250" />
+		<item id="18304" countmax="5" chance="15540" />
+		<item id="18416" chance="3600" />
+		<item id="18421" chance="2070" />
+		<item id="18436" countmax="5" chance="15260" />
 	</loot>
 </monster>

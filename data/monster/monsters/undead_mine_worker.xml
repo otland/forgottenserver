@@ -33,11 +33,11 @@
 		<immunity death="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="10" chance="73000" />
-		<item id="2230" chance="42000" /><!-- bone -->
-		<item id="2376" chance="3850" /><!-- sword -->
-		<item name="mace" chance="26900" />
-		<item name="white mushroom" countmax="3" chance="15400" />
-		<item name="brown mushroom" chance="3850" />
+		<item id="2148" countmax="10" chance="73000" />
+		<item id="2230" chance="42000" />
+		<item id="2376" chance="3850" />
+		<item id="2398" chance="26900" />
+		<item id="2787" countmax="3" chance="15400" />
+		<item id="2789" chance="3850" />
 	</loot>
 </monster>

@@ -45,9 +45,9 @@
 		<voice sentence="Splipsh Splash" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="70" chance="22500" />
-		<item name="gold coin" countmax="60" chance="22500" />
-		<item name="shiver arrow" chance="2575" countmax="3" />
-		<item name="iced soil" chance="6000" />
+		<item id="2148" countmax="70" chance="22500" />
+		<item id="2148" countmax="60" chance="22500" />
+		<item id="7839" chance="2575" countmax="3" />
+		<item id="8302" chance="6000" />
 	</loot>
 </monster>

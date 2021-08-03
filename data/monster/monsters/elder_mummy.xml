@@ -39,18 +39,18 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2124" chance="1650" /><!-- crystal ring -->
-		<item name="silver brooch" chance="4000" />
-		<item name="black pearl" chance="1340" />
-		<item name="gold coin" countmax="100" chance="43000" />
-		<item name="gold coin" countmax="60" chance="43000" />
-		<item name="scarab coin" countmax="3" chance="10000" />
-		<item name="strange talisman" chance="4500" />
-		<item id="2162" chance="6000" /><!-- magic lightwand -->
-		<item name="poison dagger" chance="380" />
-		<item name="worm" countmax="3" chance="20000" />
-		<item name="gauze bandage" chance="10000" />
-		<item name="flask of embalming fluid" chance="12600" />
-		<item id="13472" chance="2400" /><!-- pharaoh banner -->
+		<item id="2124" chance="1650" />
+		<item id="2134" chance="4000" />
+		<item id="2144" chance="1340" />
+		<item id="2148" countmax="100" chance="43000" />
+		<item id="2148" countmax="60" chance="43000" />
+		<item id="2159" countmax="3" chance="10000" />
+		<item id="2161" chance="4500" />
+		<item id="2162" chance="6000" />
+		<item id="2411" chance="380" />
+		<item id="3976" countmax="3" chance="20000" />
+		<item id="10566" chance="10000" />
+		<item id="12422" chance="12600" />
+		<item id="13472" chance="2400" />
 	</loot>
 </monster>

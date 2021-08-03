@@ -55,30 +55,30 @@
 		<voice sentence="I will not allow your evil to continue!" />
 	</voices>
 	<loot>
-		<item id="7368" countmax="5" chance="3040" /><!-- assassin star -->
-		<item id="23575" chance="19830" /><!-- cowbell -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="96" chance="60000" /><!-- gold coin -->
-		<item id="2671" chance="60780" /><!-- ham -->
-		<item id="2666" chance="4920" /><!-- meat -->
-		<item id="2152" countmax="3" chance="62080" /><!-- platinum coin -->
-		<item id="9971" chance="290" /><!-- gold ingot -->
-		<item id="5878" chance="17950" /><!-- minotaur leather -->
-		<item id="7591" chance="7670" /><!-- great health potion -->
-		<item id="7590" chance="7380" /><!-- great mana potion -->
-		<item id="12428" countmax="2" chance="6800" /><!-- minotaur horn -->
-		<item id="2214" chance="3040" /><!-- ring of healing -->
-		<item id="2147" countmax="2" chance="5500" /><!-- small ruby -->
-		<item id="9970" countmax="2" chance="5500" /><!-- small topaz -->
-		<item id="2150" countmax="2" chance="5070" /><!-- small amethyst -->
-		<item id="2149" countmax="2" chance="4050" /><!-- small emerald -->
-		<item id="23546" chance="3040" /><!-- mino shield -->
-		<item id="23545" chance="1740" /><!-- mino lance -->
-		<item id="5911" chance="1010" /><!-- red piece of cloth -->
-		<item id="2156" chance="430" /><!-- red gem -->
-		<item id="2197" chance="1450" /><!-- stone skin amulet -->
-		<item id="2154" chance="870" /><!-- yellow gem -->
-		<item id="2475" chance="1160" /><!-- warrior helmet -->
-		<item id="7443" chance="720" /><!-- bullseye potion -->
+		<item id="7368" countmax="5" chance="3040" />
+		<item id="23575" chance="19830" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="96" chance="60000" />
+		<item id="2671" chance="60780" />
+		<item id="2666" chance="4920" />
+		<item id="2152" countmax="3" chance="62080" />
+		<item id="9971" chance="290" />
+		<item id="5878" chance="17950" />
+		<item id="7591" chance="7670" />
+		<item id="7590" chance="7380" />
+		<item id="12428" countmax="2" chance="6800" />
+		<item id="2214" chance="3040" />
+		<item id="2147" countmax="2" chance="5500" />
+		<item id="9970" countmax="2" chance="5500" />
+		<item id="2150" countmax="2" chance="5070" />
+		<item id="2149" countmax="2" chance="4050" />
+		<item id="23546" chance="3040" />
+		<item id="23545" chance="1740" />
+		<item id="5911" chance="1010" />
+		<item id="2156" chance="430" />
+		<item id="2197" chance="1450" />
+		<item id="2154" chance="870" />
+		<item id="2475" chance="1160" />
+		<item id="7443" chance="720" />
 	</loot>
 </monster>

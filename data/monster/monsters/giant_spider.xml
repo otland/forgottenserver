@@ -46,19 +46,19 @@
 		<summon name="Poison Spider" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="95" chance="50000" />
-		<item name="poison arrow" countmax="12" chance="12500" />
-		<item name="plate armor" chance="10000" />
-		<item name="plate legs" chance="8000" />
-		<item name="two handed sword" chance="5000" />
-		<item name="steel helmet" chance="5000" />
-		<item name="strong health potion" chance="3571" />
-		<item name="spider silk" chance="2000" />
-		<item name="knight legs" chance="870" />
-		<item id="2169" chance="710" /><!-- time ring -->
-		<item name="knight armor" chance="500" />
-		<item name="platinum amulet" chance="280" />
-		<item name="lightning headband" chance="270" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="95" chance="50000" />
+		<item id="2545" countmax="12" chance="12500" />
+		<item id="2463" chance="10000" />
+		<item id="2647" chance="8000" />
+		<item id="2377" chance="5000" />
+		<item id="2457" chance="5000" />
+		<item id="7588" chance="3571" />
+		<item id="5879" chance="2000" />
+		<item id="2477" chance="870" />
+		<item id="2169" chance="710" />
+		<item id="2476" chance="500" />
+		<item id="2171" chance="280" />
+		<item id="7901" chance="270" />
 	</loot>
 </monster>

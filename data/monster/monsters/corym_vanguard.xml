@@ -44,20 +44,20 @@
 		<voice sentence="Gimme! Gimme!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="20" chance="50000" />
-		<item id="2696" chance="20000" /><!-- cheese -->
-		<item name="bola" chance="10000" />
-		<item name="spike shield" chance="4761" />
-		<item name="ratana" chance="5000" />
-		<item name="life preserver" chance="5000" />
-		<item name="cheese cutter" chance="16666" />
-		<item name="cheesy figurine" chance="3846" />
-		<item name="earflap" chance="11111" />
-		<item name="soft cheese" chance="14285" />
-		<item name="rat cheese" chance="14285" />
-		<item name="rat god doll" chance="14" />
-		<item name="leather harness" chance="1612" />
-		<item name="spiky club" chance="3225" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="20" chance="50000" />
+		<item id="2696" chance="20000" />
+		<item id="20089" chance="10000" />
+		<item id="20090" chance="4761" />
+		<item id="20092" chance="5000" />
+		<item id="20093" chance="5000" />
+		<item id="20097" chance="16666" />
+		<item id="20098" chance="3846" />
+		<item id="20099" chance="11111" />
+		<item id="20100" chance="14285" />
+		<item id="20101" chance="14285" />
+		<item id="20105" chance="14" />
+		<item id="20126" chance="1612" />
+		<item id="20139" chance="3225" />
 	</loot>
 </monster>

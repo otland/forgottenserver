@@ -38,11 +38,11 @@
 		<element earthPercent="20" />
 	</elements>
 	<loot>
-		<item name="gold coin" countmax="15" chance="66710" />
-		<item name="meat" countmax="2" chance="40860" />
-		<item name="ham" countmax="2" chance="39530" />
-		<item name="gloom wolf fur" chance="8260" />
-		<item name="wolf tooth chain" chance="7250" />
-		<item name="wolf paw" chance="3030" />
+		<item id="2148" countmax="15" chance="66710" />
+		<item id="2666" countmax="2" chance="40860" />
+		<item id="2671" countmax="2" chance="39530" />
+		<item id="24663" chance="8260" />
+		<item id="2129" chance="7250" />
+		<item id="5897" chance="3030" />
 	</loot>
 </monster>

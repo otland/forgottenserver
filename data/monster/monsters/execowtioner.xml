@@ -48,24 +48,24 @@
 		<voice sentence="Your sentence is death!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="98" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="3" chance="67610" /><!-- platinum coin -->
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="98" chance="100000" />
+		<item id="2152" countmax="3" chance="67610" />
 		<item id="9971" chance="390" />	<!-- gold ingot -->
-		<item id="5911" chance="3230" /><!-- red piece of cloth -->
-		<item id="5878" chance="14710" /><!-- minotaur leather -->
-		<item id="12428" countmax="2" chance="6580" /><!-- minotaur horn -->
-		<item id="23572" chance="13160" /><!-- execowtioner mask -->
-		<item id="7591" chance="11480" /><!-- great health potion -->
-		<item id="7590" chance="10060" /><!-- great mana potion -->
-		<item id="2666" chance="7230" /><!-- meat -->
-		<item id="9970" countmax="2" chance="5810" /><!-- small topaz -->
-		<item id="2147" countmax="2" chance="4520" /><!-- small ruby -->
-		<item id="7412" chance="900" /><!-- butcher's axe -->
-		<item id="2487" chance="770" /><!-- crown armor -->
-		<item id="23547" chance="1420" /><!-- execowtioner axe -->
-		<item id="2430" chance="770" /><!-- knight axe -->
-		<item id="7413" chance="390" /><!-- titan axe -->
-		<item id="7401" chance="520" /><!-- minotaur trophy -->
+		<item id="5911" chance="3230" />
+		<item id="5878" chance="14710" />
+		<item id="12428" countmax="2" chance="6580" />
+		<item id="23572" chance="13160" />
+		<item id="7591" chance="11480" />
+		<item id="7590" chance="10060" />
+		<item id="2666" chance="7230" />
+		<item id="9970" countmax="2" chance="5810" />
+		<item id="2147" countmax="2" chance="4520" />
+		<item id="7412" chance="900" />
+		<item id="2487" chance="770" />
+		<item id="23547" chance="1420" />
+		<item id="2430" chance="770" />
+		<item id="7413" chance="390" />
+		<item id="7401" chance="520" />
 	</loot>
 </monster>

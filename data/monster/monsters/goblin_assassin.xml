@@ -50,16 +50,16 @@
 		<voice sentence="Gooobliiiins!" />
 	</voices>
 	<loot>
-		<item name="small stone" countmax="3" chance="9900" />
-		<item name="gold coin" countmax="9" chance="50000" />
-		<item id="2230" chance="13000" /><!-- bone -->
-		<item name="mouldy cheese" chance="6610" />
-		<item name="dagger" chance="17000" />
-		<item name="short sword" chance="8820" />
-		<item name="bone club" chance="4770" />
-		<item name="leather helmet" chance="13000" />
-		<item name="leather armor" chance="7240" />
-		<item name="small axe" chance="9800" />
-		<item id="2667" chance="12400" /><!-- fish -->
+		<item id="1294" countmax="3" chance="9900" />
+		<item id="2148" countmax="9" chance="50000" />
+		<item id="2230" chance="13000" />
+		<item id="2235" chance="6610" />
+		<item id="2379" chance="17000" />
+		<item id="2406" chance="8820" />
+		<item id="2449" chance="4770" />
+		<item id="2461" chance="13000" />
+		<item id="2467" chance="7240" />
+		<item id="2559" chance="9800" />
+		<item id="2667" chance="12400" />
 	</loot>
 </monster>

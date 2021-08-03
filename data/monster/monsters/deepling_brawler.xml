@@ -36,11 +36,11 @@
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="44" chance="61000" />
-		<item id="2667" countmax="3" chance="19120" /><!-- fish-->
-		<item name="fish fin" chance="740" />
-		<item name="heavy trident" chance="2940" />
-		<item name="eye of a deepling" chance="6600" />
-		<item name="deepling scales" chance="14500" />
+		<item id="2148" countmax="44" chance="61000" />
+		<item id="2667" countmax="3" chance="19120" />
+		<item id="5895" chance="740" />
+		<item id="13838" chance="2940" />
+		<item id="13870" chance="6600" />
+		<item id="15430" chance="14500" />
 	</loot>
 </monster>

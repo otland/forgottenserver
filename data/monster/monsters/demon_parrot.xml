@@ -44,6 +44,6 @@
 		<voice sentence="Your shhoooul will be mineee!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="99" chance="50000" />
+		<item id="2148" countmax="99" chance="50000" />
 	</loot>
 </monster>

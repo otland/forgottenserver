@@ -70,39 +70,39 @@
 		<voice sentence="Your resistance is futile!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="platinum coin" countmax="8" chance="100000" />
-		<item name="great mana potion" countmax="3" chance="25000" />
-		<item name="great spirit potion" countmax="3" chance="25000" />
-		<item name="demon horn" chance="20000" />
-		<item name="demonic essence" chance="20000" />
-		<item name="ultimate health potion" countmax="3" chance="20000" />
-		<item name="fire mushroom" countmax="6" chance="20000" />
-		<item name="assassin star" countmax="10" chance="15263" />
-		<item name="small topaz" countmax="5" chance="10000" />
-		<item name="small ruby" countmax="5" chance="10000" />
-		<item name="small emerald" countmax="5" chance="10000" />
-		<item name="small amethyst" countmax="5" chance="10000" />
-		<item name="fire axe" chance="4000" />
-		<item name="talon" chance="3571" />
-		<item name="orb" chance="2900" />
-		<item name="red gem" chance="2900" />
-		<item name="ring of healing" chance="2600" />
-		<item name="might ring" chance="2500" />
-		<item name="stealth ring" chance="2300" />
-		<item name="giant sword" chance="2000" />
-		<item name="ice rapier" chance="1800" />
-		<item name="golden sickle" chance="1428" />
-		<item name="purple tome" chance="1190" />
-		<item name="devil helmet" chance="1204" />
-		<item name="gold ring" chance="1010" />
-		<item name="demon shield" chance="750" />
-		<item name="platinum amulet" chance="710" />
-		<item name="mastermind shield" chance="470" />
-		<item name="golden legs" chance="400" />
-		<item id="7393" chance="100" /><!-- demon trophy -->
-		<item name="magic plate armor" chance="80" />
-		<item name="demonrage sword" chance="60" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2152" countmax="8" chance="100000" />
+		<item id="7590" countmax="3" chance="25000" />
+		<item id="8472" countmax="3" chance="25000" />
+		<item id="5954" chance="20000" />
+		<item id="6500" chance="20000" />
+		<item id="8473" countmax="3" chance="20000" />
+		<item id="2795" countmax="6" chance="20000" />
+		<item id="7368" countmax="10" chance="15263" />
+		<item id="9970" countmax="5" chance="10000" />
+		<item id="2147" countmax="5" chance="10000" />
+		<item id="2149" countmax="5" chance="10000" />
+		<item id="2150" countmax="5" chance="10000" />
+		<item id="2432" chance="4000" />
+		<item id="2151" chance="3571" />
+		<item id="2176" chance="2900" />
+		<item id="2156" chance="2900" />
+		<item id="2214" chance="2600" />
+		<item id="2164" chance="2500" />
+		<item id="2165" chance="2300" />
+		<item id="2393" chance="2000" />
+		<item id="2396" chance="1800" />
+		<item id="2418" chance="1428" />
+		<item id="1982" chance="1190" />
+		<item id="2462" chance="1204" />
+		<item id="2179" chance="1010" />
+		<item id="2520" chance="750" />
+		<item id="2171" chance="710" />
+		<item id="2514" chance="470" />
+		<item id="2470" chance="400" />
+		<item id="7393" chance="100" />
+		<item id="2472" chance="80" />
+		<item id="7382" chance="60" />
 	</loot>
 </monster>

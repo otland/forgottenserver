@@ -56,34 +56,34 @@
 		<voice sentence="Cough Cough" />
 	</voices>
 	<loot>
-		<item name="emerald bangle" chance="341" />
-		<item name="silver brooch" chance="2000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="65" chance="50000" />
-		<item name="small amethyst" countmax="3" chance="5000" />
-		<item name="platinum coin" countmax="2" chance="7142" />
-		<item name="axe ring" chance="4347" />
-		<item name="club ring" chance="4761" />
-		<item name="piece of iron" chance="20000" />
-		<item name="mouldy cheese" chance="50000" />
-		<item id="2237" chance="60000" /><!-- dirty cape -->
-		<item name="two handed sword" chance="20000" />
-		<item name="war hammer" chance="2127" />
-		<item name="morning star" chance="29000" />
-		<item name="battle hammer" chance="20000" />
-		<item name="hammer of wrath" chance="952" />
-		<item name="knight legs" chance="6250" />
-		<item name="steel shield" chance="20000" />
-		<item name="steel boots" chance="1123" />
-		<item id="2079" chance="100" /><!-- war horn -->
-		<item name="piece of royal steel" chance="1234" />
-		<item name="piece of hell steel" chance="1010" />
-		<item name="piece of draconian steel" chance="1030" />
-		<item name="soul orb" chance="11111" />
-		<item name="demonic essence" chance="9033" />
-		<item name="onyx arrow" countmax="4" chance="7692" />
-		<item name="great health potion" chance="10000" />
-		<item id="9810" chance="540" /><!-- rusty armor (rare) -->
+		<item id="2127" chance="341" />
+		<item id="2134" chance="2000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="65" chance="50000" />
+		<item id="2150" countmax="3" chance="5000" />
+		<item id="2152" countmax="2" chance="7142" />
+		<item id="2208" chance="4347" />
+		<item id="2209" chance="4761" />
+		<item id="2225" chance="20000" />
+		<item id="2235" chance="50000" />
+		<item id="2237" chance="60000" />
+		<item id="2377" chance="20000" />
+		<item id="2391" chance="2127" />
+		<item id="2394" chance="29000" />
+		<item id="2417" chance="20000" />
+		<item id="2444" chance="952" />
+		<item id="2477" chance="6250" />
+		<item id="2509" chance="20000" />
+		<item id="2645" chance="1123" />
+		<item id="2079" chance="100" />
+		<item id="5887" chance="1234" />
+		<item id="5888" chance="1010" />
+		<item id="5889" chance="1030" />
+		<item id="5944" chance="11111" />
+		<item id="6500" chance="9033" />
+		<item id="7365" countmax="4" chance="7692" />
+		<item id="7591" chance="10000" />
+		<item id="9810" chance="540" />
 	</loot>
 </monster>

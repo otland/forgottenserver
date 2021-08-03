@@ -56,15 +56,15 @@
 		<voice sentence="Slurp!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50750" />
-		<item name="gold coin" countmax="5" chance="50750" />
-		<item name="boggy dreads" chance="9870" />
-		<item name="great health potion" chance="2030" />
-		<item name="plate legs" chance="2020" />
-		<item name="great spirit potion" chance="2000" />
-		<item name="springsprout rod" chance="1030" />
-		<item name="ultimate health potion" chance="770" />
-		<item name="belted cape" chance="590" />
-		<item name="paladin armor" chance="140" />
+		<item id="2148" countmax="100" chance="50750" />
+		<item id="2148" countmax="5" chance="50750" />
+		<item id="10584" chance="9870" />
+		<item id="7591" chance="2030" />
+		<item id="2647" chance="2020" />
+		<item id="8472" chance="2000" />
+		<item id="8912" chance="1030" />
+		<item id="8473" chance="770" />
+		<item id="8872" chance="590" />
+		<item id="8891" chance="140" />
 	</loot>
 </monster>

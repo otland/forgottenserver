@@ -39,12 +39,12 @@
 		<voice sentence="You'll never take me alive!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="65" chance="100000" />
-		<item name="skull of Ratha" countmax="2" chance="100000" />
-		<item name="plate armor" chance="4000" />
-		<item name="knight armor" chance="1200" />
-		<item name="meat" chance="100000" />
-		<item name="pirate backpack" chance="4000" />
-		<item name="Deadeye Devious' eye patch" chance="100000" />
+		<item id="2148" countmax="65" chance="100000" />
+		<item id="2320" countmax="2" chance="100000" />
+		<item id="2463" chance="4000" />
+		<item id="2476" chance="1200" />
+		<item id="2666" chance="100000" />
+		<item id="5926" chance="4000" />
+		<item id="6102" chance="100000" />
 	</loot>
 </monster>

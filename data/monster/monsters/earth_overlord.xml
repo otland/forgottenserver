@@ -37,13 +37,13 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="68" chance="100000" />
-		<item name="platinum coin" countmax="3" chance="33333" />
-		<item name="terra mantle" chance="1923" />
-		<item name="mother soil" chance="100000" />
-		<item name="lump of earth" chance="33333" />
-		<item name="shiny stone" chance="8333" />
-		<item id="13757" chance="552" /><!-- coal -->
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="68" chance="100000" />
+		<item id="2152" countmax="3" chance="33333" />
+		<item id="7884" chance="1923" />
+		<item id="8305" chance="100000" />
+		<item id="11222" chance="33333" />
+		<item id="11227" chance="8333" />
+		<item id="13757" chance="552" />
 	</loot>
 </monster>

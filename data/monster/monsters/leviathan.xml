@@ -50,9 +50,9 @@
 		<voice sentence="HISSSS" />
 	</voices>
 	<loot>
-		<item name="small sapphire" countmax="3" chance="10000" />
-		<item name="gold coin" countmax="80" chance="40000" />
-		<item name="gold coin" countmax="80" chance="40000" />
-		<item name="platinum coin" countmax="6" chance="40000" />
+		<item id="2146" countmax="3" chance="10000" />
+		<item id="2148" countmax="80" chance="40000" />
+		<item id="2148" countmax="80" chance="40000" />
+		<item id="2152" countmax="6" chance="40000" />
 	</loot>
 </monster>

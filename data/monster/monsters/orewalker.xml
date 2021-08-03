@@ -55,34 +55,34 @@
 		<voice sentence="CLONK!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="98" chance="50000" />
-		<item name="platinum coin" countmax="10" chance="100000" />
-		<item name="yellow gem" chance="1030" />
-		<item name="dwarven ring" chance="4660" />
-		<item name="knight legs" chance="1910" />
-		<item name="crown armor" chance="370" />
-		<item name="crown helmet" chance="890" />
-		<item name="iron ore" chance="15000" />
-		<item name="magic sulphur" chance="3000" />
-		<item name="titan axe" chance="2600" />
-		<item name="glorious axe" chance="1870" />
-		<item name="strong health potion" countmax="2" chance="15600" />
-		<item name="strong mana potion" countmax="2" chance="14000" />
-		<item name="great mana potion" countmax="2" chance="14000" />
-		<item name="mana potion" countmax="4" chance="14000" />
-		<item name="ultimate health potion" countmax="2" chance="9500" />
-		<item name="crystalline armor" chance="560" />
-		<item name="small topaz" countmax="3" chance="16500" />
-		<item name="shiny stone" chance="13700" />
-		<item name="sulphurous stone" chance="20700" />
-		<item name="wand of defiance" chance="1300" />
-		<item name="green crystal shard" chance="8000" />
-		<item name="blue crystal splinter" countmax="2" chance="16000" />
-		<item name="cyan crystal fragment" chance="13000" />
-		<item name="pulverized ore" chance="20500" />
-		<item name="vein of ore" chance="15000" />
-		<item name="prismatic bolt" countmax="5" chance="15500" />
-		<item name="crystal crossbow" chance="300" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="98" chance="50000" />
+		<item id="2152" countmax="10" chance="100000" />
+		<item id="2154" chance="1030" />
+		<item id="2213" chance="4660" />
+		<item id="2477" chance="1910" />
+		<item id="2487" chance="370" />
+		<item id="2491" chance="890" />
+		<item id="5880" chance="15000" />
+		<item id="5904" chance="3000" />
+		<item id="7413" chance="2600" />
+		<item id="7454" chance="1870" />
+		<item id="7588" countmax="2" chance="15600" />
+		<item id="7589" countmax="2" chance="14000" />
+		<item id="7590" countmax="2" chance="14000" />
+		<item id="7620" countmax="4" chance="14000" />
+		<item id="8473" countmax="2" chance="9500" />
+		<item id="8878" chance="560" />
+		<item id="9970" countmax="3" chance="16500" />
+		<item id="11227" chance="13700" />
+		<item id="11232" chance="20700" />
+		<item id="18390" chance="1300" />
+		<item id="18415" chance="8000" />
+		<item id="18418" countmax="2" chance="16000" />
+		<item id="18419" chance="13000" />
+		<item id="18427" chance="20500" />
+		<item id="18429" chance="15000" />
+		<item id="18435" countmax="5" chance="15500" />
+		<item id="18453" chance="300" />
 	</loot>
 </monster>

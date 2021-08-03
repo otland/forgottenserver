@@ -42,15 +42,15 @@
 		<voice sentence="I don't like competition" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="39" chance="50900" />
-		<item name="axe" chance="2730" />
-		<item name="mace" chance="1800" />
-		<item name="iron helmet" chance="450" />
-		<item name="brass armor" chance="2240" />
-		<item name="steel shield" chance="450" />
-		<item name="nomad parchment" chance="220" />
-		<item name="potato" countmax="3" chance="4840" />
-		<item name="dirty turban" chance="1570" />
-		<item name="rope belt" chance="4040" />
+		<item id="2148" countmax="39" chance="50900" />
+		<item id="2386" chance="2730" />
+		<item id="2398" chance="1800" />
+		<item id="2459" chance="450" />
+		<item id="2465" chance="2240" />
+		<item id="2509" chance="450" />
+		<item id="8267" chance="220" />
+		<item id="8838" countmax="3" chance="4840" />
+		<item id="12412" chance="1570" />
+		<item id="12448" chance="4040" />
 	</loot>
 </monster>

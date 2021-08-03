@@ -36,13 +36,13 @@
 		<voice sentence="Shrrrr" />
 	</voices>
 	<loot>
-		<item name="small sapphire" chance="920" />
-		<item name="gold coin" countmax="30" chance="94000" />
-		<item name="stealth ring" chance="520" />
-		<item id="2229" chance="920" /><!-- skull -->
-		<item name="two handed sword" chance="580" />
-		<item name="chain armor" chance="4761" />
-		<item name="fish fin" chance="520" />
-		<item name="mantassin tail" chance="7780" />
+		<item id="2146" chance="920" />
+		<item id="2148" countmax="30" chance="94000" />
+		<item id="2165" chance="520" />
+		<item id="2229" chance="920" />
+		<item id="2377" chance="580" />
+		<item id="2464" chance="4761" />
+		<item id="5895" chance="520" />
+		<item id="12445" chance="7780" />
 	</loot>
 </monster>

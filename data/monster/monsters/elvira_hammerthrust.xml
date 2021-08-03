@@ -32,7 +32,7 @@
 		<voice sentence="You won't get this bag, I worked hard for this!" />
 	</voices>
 	<loot>
-		<item name="bag with stolen gold" chance="100000" />
-		<item name="platinum coin" countmax="100" chance="77000" />
+		<item id="14903" chance="100000" />
+		<item id="2152" countmax="100" chance="77000" />
 	</loot>
 </monster>

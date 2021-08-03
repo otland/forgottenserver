@@ -36,20 +36,20 @@
 		<voice sentence="Tssss!" />
 	</voices>
 	<loot>
-		<item name="small diamond" countmax="2" chance="1001" />
-		<item name="gold coin" countmax="100" chance="44000" />
-		<item name="gold coin" countmax="65" chance="54000" />
-		<item name="lizard leather" chance="970" />
-		<item name="lizard scale" countmax="3" chance="980" />
-		<item name="strong health potion" chance="3880" />
-		<item name="red lantern" chance="530" />
-		<item name="bunch of ripe rice" chance="1950" />
-		<item name="Zaoan armor" chance="70" />
-		<item name="Zaoan shoes" chance="460" />
-		<item name="drakinata" chance="710" />
-		<item name="Zaoan halberd" chance="960" />
-		<item name="legionnaire flags" chance="1940" />
-		<item name="broken halberd" chance="14940" />
-		<item name="lizard trophy" chance="20" />
+		<item id="2145" countmax="2" chance="1001" />
+		<item id="2148" countmax="100" chance="44000" />
+		<item id="2148" countmax="65" chance="54000" />
+		<item id="5876" chance="970" />
+		<item id="5881" countmax="3" chance="980" />
+		<item id="7588" chance="3880" />
+		<item id="11206" chance="530" />
+		<item id="11245" chance="1950" />
+		<item id="11301" chance="70" />
+		<item id="11303" chance="460" />
+		<item id="11305" chance="710" />
+		<item id="11323" chance="960" />
+		<item id="11334" chance="1940" />
+		<item id="11335" chance="14940" />
+		<item id="11336" chance="20" />
 	</loot>
 </monster>

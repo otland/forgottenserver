@@ -38,18 +38,18 @@
 		<voice sentence="By the power of Greenskull!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="68" chance="90000" />
-		<item name="bolt" countmax="15" chance="45000" />
-		<item name="hunting spear" countmax="2" chance="45000" />
-		<item name="venison" chance="21000" />
-		<item name="meat" chance="18000" />
-		<item name="piercing bolt" countmax="5" chance="16000" />
-		<item name="elven hoof" chance="12000" />
-		<item name="hunting spear" countmax="2" chance="8000" />
-		<item name="small emerald" chance="3600" />
-		<item name="crossbow" chance="2350" />
-		<item name="raspberry" countmax="3" chance="670" />
-		<item name="bullseye potion" chance="340" />
-		<item name="terra rod" chance="340" />
+		<item id="2148" countmax="68" chance="90000" />
+		<item id="2543" countmax="15" chance="45000" />
+		<item id="3965" countmax="2" chance="45000" />
+		<item id="21312" chance="21000" />
+		<item id="2666" chance="18000" />
+		<item id="7363" countmax="5" chance="16000" />
+		<item id="21311" chance="12000" />
+		<item id="3965" countmax="2" chance="8000" />
+		<item id="2149" chance="3600" />
+		<item id="2455" chance="2350" />
+		<item id="8840" countmax="3" chance="670" />
+		<item id="7443" chance="340" />
+		<item id="2181" chance="340" />
 	</loot>
 </monster>

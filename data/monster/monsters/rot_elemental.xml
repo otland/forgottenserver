@@ -61,18 +61,18 @@
 		<voice sentence="*splib*" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="100000" /><!-- gold coin -->
-		<item id="2152" chance="10390" /><!-- platinum coin -->
-		<item id="7588" chance="10310" /><!-- strong health potion -->
-		<item id="7589" chance="9990" /><!-- strong mana potion -->
-		<item id="23553" chance="14320" /><!-- glob of glooth -->
-		<item id="2168" chance="1630" /><!-- life ring -->
-		<item id="2146" chance="5110" /><!-- small sapphire -->
-		<item id="9970" countmax="2" chance="4140" /><!-- small topaz -->
-		<item id="2149" countmax="2" chance="5340" /><!-- small emeralds -->
-		<item id="2155" chance="80" /><!-- green gem -->
-		<item id="23554" chance="130" /><!-- glooth amulet -->
-		<item id="23551" chance="60" /><!-- glooth axe -->
-		<item id="23529" chance="5660" /><!-- glooth spear -->
+		<item id="2148" countmax="80" chance="100000" />
+		<item id="2152" chance="10390" />
+		<item id="7588" chance="10310" />
+		<item id="7589" chance="9990" />
+		<item id="23553" chance="14320" />
+		<item id="2168" chance="1630" />
+		<item id="2146" chance="5110" />
+		<item id="9970" countmax="2" chance="4140" />
+		<item id="2149" countmax="2" chance="5340" />
+		<item id="2155" chance="80" />
+		<item id="23554" chance="130" />
+		<item id="23551" chance="60" />
+		<item id="23529" chance="5660" />
 	</loot>
 </monster>

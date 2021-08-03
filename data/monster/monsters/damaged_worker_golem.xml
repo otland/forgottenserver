@@ -53,11 +53,11 @@
 		<voice sentence="Aw... chhhrrr orders." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="88" chance="68810" />
-		<item name="sword ring" chance="570" />
-		<item name="iron ore" chance="400" />
-		<item name="nail" chance="1460" />
-		<item id="9808" chance="790" /><!-- rusty armor (common) -->
-		<item name="gear crystal" chance="200" />
+		<item id="2148" countmax="88" chance="68810" />
+		<item id="2207" chance="570" />
+		<item id="5880" chance="400" />
+		<item id="8309" chance="1460" />
+		<item id="9808" chance="790" />
+		<item id="10572" chance="200" />
 	</loot>
 </monster>

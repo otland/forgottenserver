@@ -50,11 +50,11 @@
 		<voice sentence="You will not get my treasure!" />
 	</voices>
 	<loot>
-		<item id="1951" chance="910" /><!-- parchment -->
-		<item name="gold coin" countmax="67" chance="48000" />
-		<item name="stealth ring" chance="650" />
-		<item name="spike sword" chance="130" />
-		<item name="red robe" chance="130" />
-		<item name="tattered piece of robe" chance="4300" />
+		<item id="1951" chance="910" />
+		<item id="2148" countmax="67" chance="48000" />
+		<item id="2165" chance="650" />
+		<item id="2383" chance="130" />
+		<item id="2655" chance="130" />
+		<item id="10601" chance="4300" />
 	</loot>
 </monster>

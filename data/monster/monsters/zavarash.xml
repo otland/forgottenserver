@@ -57,35 +57,35 @@
 		<voice sentence="Harrr, Harrr!" yell="1" />
 	</voices>
 	<loot>
-		<item id="22396" chance="100000" /><!-- cluster of solace -->
-		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
-		<item id="2148" countmax="97" chance="50000" /><!-- gold coin -->
-		<item id="2152" countmax="50" chance="100000" /><!-- platinum coin -->
-		<item id="5954" chance="100000" /><!-- demon horn -->
-		<item id="22598" chance="60000" /><!-- unrealized dream -->
-		<item id="6500" chance="60000" /><!-- demonic essence -->
-		<item id="7632" chance="40000" /><!-- giant shimmering pearl -->
-		<item id="18414" countmax="8" chance="40000" /><!-- violet crystal shard -->
-		<item id="7590" countmax="10" chance="34440" /><!-- great mana potion -->
-		<item id="8473" countmax="10" chance="34440" /><!-- ultimate health potion -->
-		<item id="8472" countmax="5" chance="34440" /><!-- great spirit potion -->
-		<item id="18413" countmax="8" chance="30000" /><!-- blue crystal shard -->
-		<item id="18415" countmax="8" chance="30000" /><!-- green crystal shard -->
-		<item id="2155" chance="20000" /><!-- green gem -->
-		<item id="2515" chance="15030" /><!-- guardian shield -->
-		<item id="2427" chance="15030" /><!-- guardian halberd -->
-		<item id="2158" chance="15030" /><!-- blue gem -->
-		<item id="9971" chance="15030" /><!-- gold ingot -->
-		<item id="7428" chance="15030" /><!-- bonebreaker -->
-		<item id="2452" chance="12940" /><!-- heavy mace -->
-		<item id="2519" chance="11540" /><!-- crown shield -->
-		<item id="22610" chance="10000" /><!-- dream warden mask -->
-		<item id="8891" chance="9620" /><!-- paladin armor -->
-		<item id="7387" chance="8390" /><!-- diamond sceptre -->
-		<item id="2520" chance="6290" /><!-- demon shield -->
-		<item id="2514" chance="1400" /><!-- mastermind shield -->
-		<item id="7431" chance="700" /><!-- demonbone -->
-		<item id="8877" chance="350" /><!-- lavos armor -->
-		<item id="8928" chance="170" /><!-- obsidian truncheon -->
+		<item id="22396" chance="100000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="97" chance="50000" />
+		<item id="2152" countmax="50" chance="100000" />
+		<item id="5954" chance="100000" />
+		<item id="22598" chance="60000" />
+		<item id="6500" chance="60000" />
+		<item id="7632" chance="40000" />
+		<item id="18414" countmax="8" chance="40000" />
+		<item id="7590" countmax="10" chance="34440" />
+		<item id="8473" countmax="10" chance="34440" />
+		<item id="8472" countmax="5" chance="34440" />
+		<item id="18413" countmax="8" chance="30000" />
+		<item id="18415" countmax="8" chance="30000" />
+		<item id="2155" chance="20000" />
+		<item id="2515" chance="15030" />
+		<item id="2427" chance="15030" />
+		<item id="2158" chance="15030" />
+		<item id="9971" chance="15030" />
+		<item id="7428" chance="15030" />
+		<item id="2452" chance="12940" />
+		<item id="2519" chance="11540" />
+		<item id="22610" chance="10000" />
+		<item id="8891" chance="9620" />
+		<item id="7387" chance="8390" />
+		<item id="2520" chance="6290" />
+		<item id="2514" chance="1400" />
+		<item id="7431" chance="700" />
+		<item id="8877" chance="350" />
+		<item id="8928" chance="170" />
 	</loot>
 </monster>

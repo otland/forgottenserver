@@ -33,6 +33,6 @@
 		<voice sentence="Luuurrrp" />
 	</voices>
 	<loot>
-		<item name="shrimp" chance="8333" />
+		<item id="2670" chance="8333" />
 	</loot>
 </monster>

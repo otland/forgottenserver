@@ -50,10 +50,10 @@
 		<voice sentence="Fchu?" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="55" chance="86750" />
-		<item name="dragon ham" chance="79600" />
-		<item name="health potion" chance="560" />
-		<item name="spellbook of enlightenment" chance="400" />
-		<item name="frosty heart" chance="5000" />
+		<item id="2148" countmax="55" chance="86750" />
+		<item id="2672" chance="79600" />
+		<item id="7618" chance="560" />
+		<item id="8900" chance="400" />
+		<item id="10578" chance="5000" />
 	</loot>
 </monster>

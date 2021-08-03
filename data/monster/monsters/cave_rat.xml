@@ -31,9 +31,9 @@
 		<voice sentence="Meep!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="2" chance="85000" />
-		<item id="2696" chance="30000" /><!-- cheese -->
-		<item name="worm" countmax="2" chance="10000" />
-		<item name="cookie" chance="940" />
+		<item id="2148" countmax="2" chance="85000" />
+		<item id="2696" chance="30000" />
+		<item id="3976" countmax="2" chance="10000" />
+		<item id="2687" chance="940" />
 	</loot>
 </monster>

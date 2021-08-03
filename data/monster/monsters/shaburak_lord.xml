@@ -54,18 +54,18 @@
 		<voice sentence="ONLY WE ARE TRUE DEMONS!" />
 	</voices>
 	<loot>
-		<item name="small ruby" countmax="5" chance="6120" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="78" chance="50000" />
-		<item name="platinum coin" countmax="2" chance="33333" />
-		<item name="energy ring" chance="1652" />
-		<item name="wand of inferno" chance="800" />
-		<item name="steel boots" chance="160" />
-		<item name="brown mushroom" chance="5346" />
-		<item name="magic sulphur" chance="620" />
-		<item name="bullseye potion" chance="400" />
-		<item name="strong health potion" chance="7000" />
-		<item name="strong mana potion" chance="7000" />
-		<item name="magma coat" chance="100" />
+		<item id="2147" countmax="5" chance="6120" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="78" chance="50000" />
+		<item id="2152" countmax="2" chance="33333" />
+		<item id="2167" chance="1652" />
+		<item id="2187" chance="800" />
+		<item id="2645" chance="160" />
+		<item id="2789" chance="5346" />
+		<item id="5904" chance="620" />
+		<item id="7443" chance="400" />
+		<item id="7588" chance="7000" />
+		<item id="7589" chance="7000" />
+		<item id="7899" chance="100" />
 	</loot>
 </monster>

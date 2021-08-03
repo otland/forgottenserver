@@ -57,20 +57,20 @@
 		<voice sentence="Muahahaha!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="holy orchid" chance="100000" />
-		<item name="elvish talisman" chance="87880" />
-		<item name="elven astral observer" chance="83330" />
-		<item name="yellow gem" chance="42420" />
-		<item name="blank rune" chance="25760" />
-		<item name="melon" chance="22000" />
-		<item name="bread" chance="16000" />
-		<item name="elven amulet" chance="15150" />
-		<item name="great mana potion" chance="13000" />
-		<item name="life crystal" chance="13000" />
-		<item name="sling herb" chance="10000" />
-		<item id="3957" chance="7500" /><!-- cornucopia -->
-		<item name="green tunic" chance="3000" />
-		<item name="royal spear" countmax="2" chance="1520" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="5922" chance="100000" />
+		<item id="10552" chance="87880" />
+		<item id="12421" chance="83330" />
+		<item id="2154" chance="42420" />
+		<item id="2260" chance="25760" />
+		<item id="2682" chance="22000" />
+		<item id="2689" chance="16000" />
+		<item id="2198" chance="15150" />
+		<item id="7590" chance="13000" />
+		<item id="2177" chance="13000" />
+		<item id="2802" chance="10000" />
+		<item id="3957" chance="7500" />
+		<item id="2652" chance="3000" />
+		<item id="7378" countmax="2" chance="1520" />
 	</loot>
 </monster>

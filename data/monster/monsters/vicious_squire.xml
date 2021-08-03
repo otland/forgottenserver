@@ -46,20 +46,20 @@
 		<voice sentence="You are as good as dead!" />
 	</voices>
 	<loot>
-		<item id="2455" chance="12763" /><!-- crossbow -->
-		<item id="2148" countmax="70" chance="100000" /><!-- gold coin -->
-		<item id="2661" chance="743" /><!-- scarf -->
-		<item id="2543" countmax="10" chance="21685" /><!-- bolt -->
-		<item id="2666" chance="11771" /><!-- meat -->
-		<item id="2145" chance="2602" /><!-- small diamond -->
-		<item id="2149" chance="3097" /><!-- small emerald -->
-		<item id="2150" chance="2973" /><!-- small amethyst -->
-		<item id="2391" chance="991" /><!-- war hammer -->
-		<item id="2381" chance="2230" /><!-- halberd -->
-		<item id="2477" chance="619" /><!-- knight legs -->
-		<item id="2515" chance="247" /><!-- guardian shield -->
-		<item id="2475" chance="123" /><!-- warrior helmet -->
-		<item id="7591" chance="5576" /><!-- great health potion -->
-		<item id="2164" chance="247" /><!-- might ring -->
+		<item id="2455" chance="12763" />
+		<item id="2148" countmax="70" chance="100000" />
+		<item id="2661" chance="743" />
+		<item id="2543" countmax="10" chance="21685" />
+		<item id="2666" chance="11771" />
+		<item id="2145" chance="2602" />
+		<item id="2149" chance="3097" />
+		<item id="2150" chance="2973" />
+		<item id="2391" chance="991" />
+		<item id="2381" chance="2230" />
+		<item id="2477" chance="619" />
+		<item id="2515" chance="247" />
+		<item id="2475" chance="123" />
+		<item id="7591" chance="5576" />
+		<item id="2164" chance="247" />
 	</loot>
 </monster>

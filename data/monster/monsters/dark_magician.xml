@@ -54,14 +54,14 @@
 		<voice sentence="Stand Still!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="55" chance="75100" />
-		<item name="wand of decay" chance="280" />
-		<item name="blank rune" chance="10000" />
-		<item name="strong health potion" chance="3000" />
-		<item name="strong mana potion" chance="2860" />
-		<item name="health potion" chance="12000" />
-		<item name="mana potion" chance="11900" />
-		<item name="small enchanted emerald" chance="510" />
-		<item name="reins" chance="20" />
+		<item id="2148" countmax="55" chance="75100" />
+		<item id="2188" chance="280" />
+		<item id="2260" chance="10000" />
+		<item id="7588" chance="3000" />
+		<item id="7589" chance="2860" />
+		<item id="7618" chance="12000" />
+		<item id="7620" chance="11900" />
+		<item id="7761" chance="510" />
+		<item id="13295" chance="20" />
 	</loot>
 </monster>

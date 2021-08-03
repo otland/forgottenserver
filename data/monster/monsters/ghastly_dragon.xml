@@ -57,31 +57,31 @@
 		<voice sentence="I WILL FEAST ON YOUR SOUL!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="33725" />
-		<item name="gold coin" countmax="100" chance="33725" />
-		<item name="gold coin" countmax="66" chance="33725" />
-		<item name="platinum coin" countmax="2" chance="29840" />
-		<item name="soul orb" chance="12170" />
-		<item name="demonic essence" chance="8920" />
-		<item name="great mana potion" countmax="2" chance="30560" />
-		<item name="terra legs" chance="3130" />
-		<item name="terra boots" chance="9510" />
-		<item name="great spirit potion" countmax="2" chance="29460" />
-		<item name="ultimate health potion" chance="24700" />
-		<item id="9810" chance="180" /><!-- rusty armor (rare) -->
-		<item name="shiny stone" chance="860" />
-		<item name="guardian boots" chance="200" />
-		<item name="Zaoan armor" chance="870" />
-		<item name="Zaoan helmet" chance="150" />
-		<item name="Zaoan shoes" chance="870" />
-		<item name="Zaoan legs" chance="1400" />
-		<item name="drakinata" chance="1470" />
-		<item name="Zaoan sword" chance="100" />
-		<item name="twin hooks" chance="15100" />
-		<item name="Zaoan halberd" chance="15020" />
-		<item name="spellweaver's robe" chance="690" />
-		<item name="ghastly dragon head" chance="6650" />
-		<item name="undead heart" chance="19830" />
-		<item name="jade hat" chance="810" />
+		<item id="2148" countmax="100" chance="33725" />
+		<item id="2148" countmax="100" chance="33725" />
+		<item id="2148" countmax="66" chance="33725" />
+		<item id="2152" countmax="2" chance="29840" />
+		<item id="5944" chance="12170" />
+		<item id="6500" chance="8920" />
+		<item id="7590" countmax="2" chance="30560" />
+		<item id="7885" chance="3130" />
+		<item id="7886" chance="9510" />
+		<item id="8472" countmax="2" chance="29460" />
+		<item id="8473" chance="24700" />
+		<item id="9810" chance="180" />
+		<item id="11227" chance="860" />
+		<item id="11240" chance="200" />
+		<item id="11301" chance="870" />
+		<item id="11302" chance="150" />
+		<item id="11303" chance="870" />
+		<item id="11304" chance="1400" />
+		<item id="11305" chance="1470" />
+		<item id="11307" chance="100" />
+		<item id="11309" chance="15100" />
+		<item id="11323" chance="15020" />
+		<item id="11355" chance="690" />
+		<item id="11366" chance="6650" />
+		<item id="11367" chance="19830" />
+		<item id="11368" chance="810" />
 	</loot>
 </monster>

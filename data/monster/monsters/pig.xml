@@ -25,7 +25,7 @@
 		<voice sentence="Oink" />
 	</voices>
 	<loot>
-		<item name="meat" countmax="4" chance="65000" />
-		<item name="pig foot" chance="1200" />
+		<item id="2666" countmax="4" chance="65000" />
+		<item id="10610" chance="1200" />
 	</loot>
 </monster>

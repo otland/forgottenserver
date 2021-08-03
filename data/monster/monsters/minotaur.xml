@@ -34,17 +34,17 @@
 		<voice sentence="Hurr" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="25" chance="67500" />
-		<item name="plate shield" chance="20020" />
-		<item name="mace" chance="12840" />
-		<item name="chain armor" chance="10000" />
-		<item name="brass helmet" chance="7700" />
-		<item id="2376" chance="5000" /><!-- sword -->
-		<item name="meat" chance="5000" />
-		<item name="axe" chance="4000" />
-		<item name="minotaur horn" countmax="2" chance="2090" />
-		<item name="minotaur leather" chance="990" />
-		<item id="2554" chance="310" /><!-- shovel -->
-		<item name="bronze amulet" chance="110" />
+		<item id="2148" countmax="25" chance="67500" />
+		<item id="2510" chance="20020" />
+		<item id="2398" chance="12840" />
+		<item id="2464" chance="10000" />
+		<item id="2460" chance="7700" />
+		<item id="2376" chance="5000" />
+		<item id="2666" chance="5000" />
+		<item id="2386" chance="4000" />
+		<item id="12428" countmax="2" chance="2090" />
+		<item id="5878" chance="990" />
+		<item id="2554" chance="310" />
+		<item id="2172" chance="110" />
 	</loot>
 </monster>

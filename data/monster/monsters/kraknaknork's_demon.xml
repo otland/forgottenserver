@@ -40,8 +40,8 @@
 		<voice sentence="ROOKIE FOR BREAKFAST" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="48025" />
-		<item name="gold coin" countmax="86" chance="48025" />
-		<item name="gold coin" chance="24400" />
+		<item id="2148" countmax="100" chance="48025" />
+		<item id="2148" countmax="86" chance="48025" />
+		<item id="2148" chance="24400" />
 	</loot>
 </monster>

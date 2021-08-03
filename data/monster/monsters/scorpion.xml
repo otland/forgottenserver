@@ -31,6 +31,6 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item name="scorpion tail" chance="5000" />
+		<item id="10568" chance="5000" />
 	</loot>
 </monster>

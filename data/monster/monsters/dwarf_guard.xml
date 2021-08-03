@@ -36,18 +36,18 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item name="white mushroom" countmax="2" chance="55000" />
-		<item name="leather boots" chance="40000" />
-		<item name="gold coin" countmax="30" chance="40000" />
-		<item name="scale armor" chance="9200" />
-		<item name="battle shield" chance="6000" />
-		<item name="battle hammer" chance="4000" />
-		<item name="steel helmet" chance="1600" />
-		<item name="double axe" chance="600" />
-		<item name="iron ore" chance="510" />
-		<item name="health potion" chance="400" />
-		<item name="axe ring" chance="200" />
-		<item id="13757" chance="190" /><!-- coal -->
-		<item name="small amethyst" chance="100" />
+		<item id="2787" countmax="2" chance="55000" />
+		<item id="2643" chance="40000" />
+		<item id="2148" countmax="30" chance="40000" />
+		<item id="2483" chance="9200" />
+		<item id="2513" chance="6000" />
+		<item id="2417" chance="4000" />
+		<item id="2457" chance="1600" />
+		<item id="2387" chance="600" />
+		<item id="5880" chance="510" />
+		<item id="7618" chance="400" />
+		<item id="2208" chance="200" />
+		<item id="13757" chance="190" />
+		<item id="2150" chance="100" />
 	</loot>
 </monster>

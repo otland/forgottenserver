@@ -50,18 +50,18 @@
 		<voice sentence="Roarr!" />
 	</voices>
 	<loot>
-		<item id="23549" chance="16010" /><!-- poisoned fang -->
-		<item id="10557" chance="5080" /><!-- poisonous slime -->
-		<item id="23517" chance="3720" /><!-- glooth steak -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="50" chance="60000" /><!-- gold coin -->
-		<item id="23565" chance="20040" /><!-- slime heart -->
-		<item id="7588" chance="7710" /><!-- strong health potion -->
-		<item id="7366" countmax="5" chance="8290" /><!-- viper star -->
-		<item id="23554" chance="850" /><!-- glooth amulet -->
-		<item id="23550" chance="810" /><!-- glooth blade -->
-		<item id="23549" chance="810" /><!-- glooth club -->
-		<item id="23551" chance="1050" /><!-- glooth axe -->
-		<item id="23529" chance="780" /><!-- glooth spear -->
+		<item id="23549" chance="16010" />
+		<item id="10557" chance="5080" />
+		<item id="23517" chance="3720" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="50" chance="60000" />
+		<item id="23565" chance="20040" />
+		<item id="7588" chance="7710" />
+		<item id="7366" countmax="5" chance="8290" />
+		<item id="23554" chance="850" />
+		<item id="23550" chance="810" />
+		<item id="23549" chance="810" />
+		<item id="23551" chance="1050" />
+		<item id="23529" chance="780" />
 	</loot>
 </monster>

@@ -35,12 +35,12 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="65" chance="66900" />
-		<item name="platinum coin" countmax="3" chance="83825" />
-		<item name="tusk shield" chance="83825" />
-		<item name="furry club" chance="50500" />
-		<item name="mammoth fur cape" chance="42175" />
-		<item name="orc tusk" countmax="2" chance="58825" />
-		<item name="mammoth tusk" countmax="2" chance="38000" />
+		<item id="2148" countmax="65" chance="66900" />
+		<item id="2152" countmax="3" chance="83825" />
+		<item id="3973" chance="83825" />
+		<item id="7432" chance="50500" />
+		<item id="7463" chance="42175" />
+		<item id="8614" countmax="2" chance="58825" />
+		<item id="11238" countmax="2" chance="38000" />
 	</loot>
 </monster>

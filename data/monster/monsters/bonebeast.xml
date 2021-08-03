@@ -58,16 +58,16 @@
 		<voice sentence="Knooorrrrr!" />
 	</voices>
 	<loot>
-		<item id="2230" chance="49750" /><!-- bone -->
-		<item name="gold coin" countmax="90" chance="30000" />
-		<item id="2229" chance="20000" /><!-- skull -->
-		<item name="bony tail" chance="9980" />
-		<item name="plate armor" chance="8000" />
-		<item name="bone club" chance="4950" />
-		<item name="bone shield" chance="2000" />
-		<item name="green mushroom" chance="1450" />
-		<item name="hardened bone" chance="1000" />
-		<item name="health potion" chance="540" />
-		<item name="bonebeast trophy" chance="120" />
+		<item id="2230" chance="49750" />
+		<item id="2148" countmax="90" chance="30000" />
+		<item id="2229" chance="20000" />
+		<item id="11194" chance="9980" />
+		<item id="2463" chance="8000" />
+		<item id="2449" chance="4950" />
+		<item id="2541" chance="2000" />
+		<item id="2796" chance="1450" />
+		<item id="5925" chance="1000" />
+		<item id="7618" chance="540" />
+		<item id="11161" chance="120" />
 	</loot>
 </monster>

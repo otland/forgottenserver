@@ -52,11 +52,11 @@
 		<voice sentence="FI?" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="37500" />
-		<item name="gold coin" countmax="100" chance="37500" />
-		<item name="gold coin" countmax="27" chance="37500" />
-		<item name="strong health potion" countmax="2" chance="24480" />
-		<item name="strong mana potion" countmax="2" chance="16900" />
-		<item name="blazing bone" chance="12410" />
+		<item id="2148" countmax="100" chance="37500" />
+		<item id="2148" countmax="100" chance="37500" />
+		<item id="2148" countmax="27" chance="37500" />
+		<item id="7588" countmax="2" chance="24480" />
+		<item id="7589" countmax="2" chance="16900" />
+		<item id="18425" chance="12410" />
 	</loot>
 </monster>

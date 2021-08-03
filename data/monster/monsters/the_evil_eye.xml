@@ -69,20 +69,20 @@
 		<voice sentence="653768764!" />
 	</voices>
 	<loot>
-		<item name="bonelord eye" chance="100000" />
-		<item name="gold coin" countmax="29" chance="33000" />
-		<item name="gold coin" countmax="100" chance="33000" />
-		<item name="gold coin" countmax="100" chance="33000" />
-		<item name="small flask of eyedrops" chance="100000" />
-		<item name="morning star" chance="50000" />
-		<item name="steel shield" chance="50000" />
-		<item name="two handed sword" chance="34000" />
-		<item name="longsword" chance="23000" />
-		<item id="2175" chance="23000" /><!-- spellbook -->
-		<item name="great mana potion" chance="15000" />
-		<item name="bonelord shield" chance="11000" />
-		<item name="terra mantle" chance="11000" />
-		<item name="terra rod" chance="500" />
-		<item name="bonelord helmet" chance="100" />
+		<item id="5898" chance="100000" />
+		<item id="2148" countmax="29" chance="33000" />
+		<item id="2148" countmax="100" chance="33000" />
+		<item id="2148" countmax="100" chance="33000" />
+		<item id="12468" chance="100000" />
+		<item id="2394" chance="50000" />
+		<item id="2509" chance="50000" />
+		<item id="2377" chance="34000" />
+		<item id="2397" chance="23000" />
+		<item id="2175" chance="23000" />
+		<item id="7590" chance="15000" />
+		<item id="2518" chance="11000" />
+		<item id="7884" chance="11000" />
+		<item id="2181" chance="500" />
+		<item id="3972" chance="100" />
 	</loot>
 </monster>

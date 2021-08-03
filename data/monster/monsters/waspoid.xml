@@ -42,17 +42,17 @@
 		<voice sentence="Peeex!" />
 	</voices>
 	<loot>
-		<item name="emerald bangle" chance="2040" />
-		<item name="black pearl" chance="4230" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="35" chance="50000" />
-		<item name="platinum coin" chance="40430" />
-		<item name="yellow gem" chance="1040" />
-		<item name="waspoid claw" chance="9096" />
-		<item name="waspoid wing" chance="13890" />
-		<item name="compound eye" chance="6060" />
-		<item name="grasshopper legs" chance="230" />
-		<item name="carapace shield" chance="120" />
-		<item name="hive scythe" chance="330" />
+		<item id="2127" chance="2040" />
+		<item id="2144" chance="4230" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="35" chance="50000" />
+		<item id="2152" chance="40430" />
+		<item id="2154" chance="1040" />
+		<item id="15483" chance="9096" />
+		<item id="15484" chance="13890" />
+		<item id="15486" chance="6060" />
+		<item id="15490" chance="230" />
+		<item id="15491" chance="120" />
+		<item id="15492" chance="330" />
 	</loot>
 </monster>

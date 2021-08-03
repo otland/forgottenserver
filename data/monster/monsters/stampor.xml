@@ -49,18 +49,18 @@
 		<voice sentence="KRRRRRNG" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="10000" />
-		<item name="gold coin" countmax="100" chance="10000" />
-		<item name="gold coin" countmax="42" chance="10000" />
-		<item name="platinum coin" countmax="2" chance="9920" />
-		<item name="war hammer" chance="1010" />
-		<item name="knight armor" chance="870" />
-		<item name="spiked squelcher" chance="160" />
-		<item name="strong health potion" countmax="2" chance="5000" />
-		<item name="strong mana potion" countmax="2" chance="5000" />
-		<item name="small topaz" countmax="2" chance="7940" />
-		<item name="stampor horn" chance="4920" />
-		<item name="stampor talons" countmax="2" chance="9950" />
-		<item name="hollow stampor hoof" chance="3020" />
+		<item id="2148" countmax="100" chance="10000" />
+		<item id="2148" countmax="100" chance="10000" />
+		<item id="2148" countmax="42" chance="10000" />
+		<item id="2152" countmax="2" chance="9920" />
+		<item id="2391" chance="1010" />
+		<item id="2476" chance="870" />
+		<item id="7452" chance="160" />
+		<item id="7588" countmax="2" chance="5000" />
+		<item id="7589" countmax="2" chance="5000" />
+		<item id="9970" countmax="2" chance="7940" />
+		<item id="13299" chance="4920" />
+		<item id="13300" countmax="2" chance="9950" />
+		<item id="13301" chance="3020" />
 	</loot>
 </monster>

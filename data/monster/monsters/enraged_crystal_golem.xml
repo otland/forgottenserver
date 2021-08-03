@@ -33,14 +33,14 @@
 		<voice sentence="Crrrrk! Chhhhr!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="crystal sword" chance="4710" />
-		<item name="glorious axe" chance="360" />
-		<item name="strong health potion" chance="7140" />
-		<item name="strong mana potion" chance="8270" />
-		<item name="blue crystal splinter" chance="4120" />
-		<item name="cyan crystal fragment" chance="1050" />
-		<item name="crystalline spikes" chance="7980" />
-		<item name="crystalline axe" countmax="5" chance="5008" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="7449" chance="4710" />
+		<item id="7454" chance="360" />
+		<item id="7588" chance="7140" />
+		<item id="7589" chance="8270" />
+		<item id="18418" chance="4120" />
+		<item id="18419" chance="1050" />
+		<item id="18432" chance="7980" />
+		<item id="18451" countmax="5" chance="5008" />
 	</loot>
 </monster>

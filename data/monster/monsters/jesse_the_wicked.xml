@@ -24,7 +24,7 @@
 		<voice sentence="That banker never saw it coming!" />
 	</voices>
 	<loot>
-		<item name="bag with stolen gold" chance="100000" />
-		<item name="platinum coin" countmax="85" chance="100000" />
+		<item id="14903" chance="100000" />
+		<item id="2152" countmax="85" chance="100000" />
 	</loot>
 </monster>

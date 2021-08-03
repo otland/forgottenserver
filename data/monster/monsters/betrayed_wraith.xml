@@ -55,25 +55,25 @@
 		<voice sentence="Tcharrr!" />
 	</voices>
 	<loot>
-		<item name="small diamond" countmax="4" chance="11800" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="20" chance="20000" />
-		<item name="platinum coin" countmax="8" chance="100000" />
-		<item name="amulet of loss" chance="130" />
-		<item name="power bolt" countmax="5" chance="50000" />
-		<item name="orichalcum pearl" countmax="2" chance="8000" />
-		<item name="skull helmet" chance="390" />
-		<item name="golden figurine" chance="160" />
-		<item name="soul orb" chance="10000" />
-		<item id="6300" chance="390" /><!-- death ring -->
-		<item name="demonic essence" chance="19430" />
-		<item name="concentrated demonic blood" chance="65250" />
-		<item name="assassin star" countmax="5" chance="10780" />
-		<item name="mercenary sword" chance="1890" />
-		<item name="bloody edge" chance="80" />
-		<item name="great mana potion" countmax="3" chance="15000" />
-		<item name="ultimate health potion" chance="15410" />
-		<item name="unholy bone" chance="18410" />
+		<item id="2145" countmax="4" chance="11800" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="20" chance="20000" />
+		<item id="2152" countmax="8" chance="100000" />
+		<item id="2173" chance="130" />
+		<item id="2547" countmax="5" chance="50000" />
+		<item id="5022" countmax="2" chance="8000" />
+		<item id="5741" chance="390" />
+		<item id="5799" chance="160" />
+		<item id="5944" chance="10000" />
+		<item id="6300" chance="390" />
+		<item id="6500" chance="19430" />
+		<item id="6558" chance="65250" />
+		<item id="7368" countmax="5" chance="10780" />
+		<item id="7386" chance="1890" />
+		<item id="7416" chance="80" />
+		<item id="7590" countmax="3" chance="15000" />
+		<item id="8473" chance="15410" />
+		<item id="11233" chance="18410" />
 	</loot>
 </monster>

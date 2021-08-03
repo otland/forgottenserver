@@ -40,15 +40,15 @@
 		<voice sentence="The X marks the spot!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="38" chance="54260" />
-		<item name="axe" chance="2500" />
-		<item name="mace" chance="1700" />
-		<item name="iron helmet" chance="500" />
-		<item name="brass armor" chance="1700" />
-		<item name="steel shield" chance="500" />
-		<item name="nomad parchment" chance="170" />
-		<item name="potato" countmax="3" chance="5680" />
-		<item name="dirty turban" chance="1700" />
-		<item name="rope belt" chance="7510" />
+		<item id="2148" countmax="38" chance="54260" />
+		<item id="2386" chance="2500" />
+		<item id="2398" chance="1700" />
+		<item id="2459" chance="500" />
+		<item id="2465" chance="1700" />
+		<item id="2509" chance="500" />
+		<item id="8267" chance="170" />
+		<item id="8838" countmax="3" chance="5680" />
+		<item id="12412" chance="1700" />
+		<item id="12448" chance="7510" />
 	</loot>
 </monster>

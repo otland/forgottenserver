@@ -41,18 +41,18 @@
 		<voice sentence="&lt;sniff&gt;&lt;sniff&gt;&lt;sniff&gt;" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="45" chance="50000" />
-		<item id="2696" chance="20000" /><!-- cheese -->
-		<item name="bola" chance="7692" />
-		<item name="spike shield" chance="645" />
-		<item name="ratana" chance="2702" />
-		<item name="life preserver" chance="2941" />
-		<item name="cheese cutter" chance="8333" />
-		<item name="cheesy figurine" chance="854" />
-		<item name="earflap" chance="9090" />
-		<item name="soft cheese" chance="14285" />
-		<item name="rat cheese" chance="16666" />
-		<item name="rat god doll" chance="12" />
-		<item name="leather harness" chance="561" />
+		<item id="2148" countmax="45" chance="50000" />
+		<item id="2696" chance="20000" />
+		<item id="20089" chance="7692" />
+		<item id="20090" chance="645" />
+		<item id="20092" chance="2702" />
+		<item id="20093" chance="2941" />
+		<item id="20097" chance="8333" />
+		<item id="20098" chance="854" />
+		<item id="20099" chance="9090" />
+		<item id="20100" chance="14285" />
+		<item id="20101" chance="16666" />
+		<item id="20105" chance="12" />
+		<item id="20126" chance="561" />
 	</loot>
 </monster>

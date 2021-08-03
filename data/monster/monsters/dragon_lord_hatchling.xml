@@ -51,11 +51,11 @@
 		<voice sentence="Rooawwrr" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="33750" />
-		<item name="gold coin" countmax="75" chance="33750" />
-		<item name="dragon ham" chance="80000" />
-		<item name="green mushroom" chance="560" />
-		<item name="mana potion" chance="300" />
-		<item name="magma boots" chance="100" />
+		<item id="2148" countmax="90" chance="33750" />
+		<item id="2148" countmax="75" chance="33750" />
+		<item id="2672" chance="80000" />
+		<item id="2796" chance="560" />
+		<item id="7620" chance="300" />
+		<item id="7891" chance="100" />
 	</loot>
 </monster>

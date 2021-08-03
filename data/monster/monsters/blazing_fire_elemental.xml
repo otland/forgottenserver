@@ -42,11 +42,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="35000" />
-		<item name="gold coin" countmax="25" chance="35000" />
-		<item name="fiery heart" chance="6300" />
-		<item name="glimmering soil" chance="4000" />
-		<item name="flaming arrow" countmax="3" chance="3600" />
-		<item id="13757" chance="740" /><!-- coal -->
+		<item id="2148" countmax="100" chance="35000" />
+		<item id="2148" countmax="25" chance="35000" />
+		<item id="10553" chance="6300" />
+		<item id="8299" chance="4000" />
+		<item id="7840" countmax="3" chance="3600" />
+		<item id="13757" chance="740" />
 	</loot>
 </monster>

@@ -44,22 +44,22 @@
 		<voice sentence="Plundeeeeer!" />
 	</voices>
 	<loot>
-		<item id="2050" chance="10190" /><!-- torch -->
-		<item name="gold coin" countmax="59" chance="67740" />
-		<item id="2238" chance="9900" /><!-- worn leather boots -->
-		<item name="sabre" chance="10100" />
-		<item name="throwing knife" countmax="5" chance="9000" />
-		<item name="plate armor" chance="1130" />
-		<item name="battle shield" chance="3850" />
-		<item id="5091" chance="1000" /><!-- treasure map -->
-		<item name="rum flask" chance="120" />
-		<item id="5792" chance="40" /><!-- die -->
-		<item name="pirate backpack" chance="430" />
-		<item name="pirate shirt" chance="1200" />
-		<item name="hook" chance="450" />
-		<item name="eye patch" chance="420" />
-		<item name="peg leg" chance="510" />
-		<item name="strong health potion" chance="670" />
-		<item name="compass" chance="9780" />
+		<item id="2050" chance="10190" />
+		<item id="2148" countmax="59" chance="67740" />
+		<item id="2238" chance="9900" />
+		<item id="2385" chance="10100" />
+		<item id="2410" countmax="5" chance="9000" />
+		<item id="2463" chance="1130" />
+		<item id="2513" chance="3850" />
+		<item id="5091" chance="1000" />
+		<item id="5553" chance="120" />
+		<item id="5792" chance="40" />
+		<item id="5926" chance="430" />
+		<item id="6095" chance="1200" />
+		<item id="6097" chance="450" />
+		<item id="6098" chance="420" />
+		<item id="6126" chance="510" />
+		<item id="7588" chance="670" />
+		<item id="11219" chance="9780" />
 	</loot>
 </monster>

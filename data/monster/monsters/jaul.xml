@@ -65,13 +65,13 @@
 		<voice sentence="DIE!! KENH!!" />
 	</voices>
 	<loot>
-		<item name="deepling axe" chance="25000" />
-		<item name="ornate chestplate" chance="25000" />
-		<item name="depth lorica" chance="20000" />
-		<item id="15408" chance="33333" /><!-- depth galea -->
-		<item name="depth calcei" chance="14285" />
-		<item name="ornate legs" chance="7142" />
-		<item name="ornate shield" chance="50000" />
-		<item name="ornate mace" chance="14285" />
+		<item id="15404" chance="25000" />
+		<item id="15406" chance="25000" />
+		<item id="15407" chance="20000" />
+		<item id="15408" chance="33333" />
+		<item id="15410" chance="14285" />
+		<item id="15412" chance="7142" />
+		<item id="15413" chance="50000" />
+		<item id="15414" chance="14285" />
 	</loot>
 </monster>

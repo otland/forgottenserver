@@ -44,18 +44,18 @@
 		<voice sentence="I will punish the sinners!" />
 	</voices>
 	<loot>
-		<item name="bread" chance="20000" />
-		<item name="gold coin" countmax="18" chance="15000" />
-		<item name="book of prayers" chance="4930" />
-		<item name="rope belt" chance="3150" />
-		<item name="ankh" chance="2240" />
-		<item id="1949" chance="1700" /><!-- scroll -->
-		<item name="life crystal" chance="1002" />
-		<item name="safety pin" chance="1001" />
-		<item name="brown flask" chance="890" />
-		<item id="2044" chance="840" /><!-- lamp -->
-		<item name="sandals" chance="660" />
-		<item id="2401" chance="440" /><!-- staff -->
-		<item name="power ring" chance="100" />
+		<item id="2689" chance="20000" />
+		<item id="2148" countmax="18" chance="15000" />
+		<item id="10563" chance="4930" />
+		<item id="12448" chance="3150" />
+		<item id="2193" chance="2240" />
+		<item id="1949" chance="1700" />
+		<item id="2177" chance="1002" />
+		<item id="12449" chance="1001" />
+		<item id="2015" chance="890" />
+		<item id="2044" chance="840" />
+		<item id="2642" chance="660" />
+		<item id="2401" chance="440" />
+		<item id="2166" chance="100" />
 	</loot>
 </monster>

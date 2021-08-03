@@ -43,18 +43,18 @@
 		<voice sentence="Plundeeeeer!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="50" chance="78000" />
-		<item name="scale armor" chance="3000" />
-		<item name="steel shield" chance="2800" />
-		<item id="5091" chance="1000" /><!-- treasure map -->
-		<item name="rum flask" chance="90" />
-		<item name="light shovel" chance="2000" />
-		<item id="5792" chance="110" /><!-- dice -->
-		<item name="pirate knee breeches" chance="980" />
-		<item name="pirate bag" chance="1000" />
-		<item name="hook" chance="550" />
-		<item name="eye patch" chance="450" />
-		<item name="peg leg" chance="500" />
-		<item name="compass" chance="10120" />
+		<item id="2148" countmax="50" chance="78000" />
+		<item id="2483" chance="3000" />
+		<item id="2509" chance="2800" />
+		<item id="5091" chance="1000" />
+		<item id="5553" chance="90" />
+		<item id="5710" chance="2000" />
+		<item id="5792" chance="110" />
+		<item id="5918" chance="980" />
+		<item id="5927" chance="1000" />
+		<item id="6097" chance="550" />
+		<item id="6098" chance="450" />
+		<item id="6126" chance="500" />
+		<item id="11219" chance="10120" />
 	</loot>
 </monster>

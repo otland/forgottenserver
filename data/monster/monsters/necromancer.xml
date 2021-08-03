@@ -57,17 +57,17 @@
 		<voice sentence="Taste the sweetness of death!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="30050" />
-		<item name="poison arrow" countmax="5" chance="15000" />
-		<item name="book of necromantic rituals" chance="10130" />
-		<item name="green mushroom" chance="1470" />
-		<item name="necromantic robe" chance="1001" />
-		<item name="mystic turban" chance="500" />
-		<item name="clerical mace" chance="390" />
-		<item name="strong mana potion" chance="300" />
-		<item name="boots of haste" chance="210" />
-		<item name="spellbook of warding" chance="130" />
-		<item name="skull staff" chance="100" />
-		<item name="noble axe" chance="10" />
+		<item id="2148" countmax="90" chance="30050" />
+		<item id="2545" countmax="5" chance="15000" />
+		<item id="11237" chance="10130" />
+		<item id="2796" chance="1470" />
+		<item id="12431" chance="1001" />
+		<item id="2663" chance="500" />
+		<item id="2423" chance="390" />
+		<item id="7589" chance="300" />
+		<item id="2195" chance="210" />
+		<item id="8901" chance="130" />
+		<item id="2436" chance="100" />
+		<item id="7456" chance="10" />
 	</loot>
 </monster>

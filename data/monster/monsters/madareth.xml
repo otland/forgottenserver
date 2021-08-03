@@ -31,10 +31,10 @@
 		<voice sentence="I am going to play with yourself!" yell="1" />
 	</voices>
 	<loot>
-		<item name="small diamond" chance="5800" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="ring of healing" chance="8000" />
-		<item name="mastermind shield" chance="12650" />
-		<item name="demon shield" chance="7650" />
+		<item id="2145" chance="5800" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2214" chance="8000" />
+		<item id="2514" chance="12650" />
+		<item id="2520" chance="7650" />
 	</loot>
 </monster>

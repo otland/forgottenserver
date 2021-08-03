@@ -33,15 +33,15 @@
 		<immunity lifedrain="1" />
 	</immunities>
 	<loot>
-		<item id="2230" chance="49100" /><!-- bone -->
-		<item name="gold coin" countmax="10" chance="45000" />
-		<item id="2050" chance="10000" /><!-- torch -->
-		<item name="pelvis bone" chance="9500" />
-		<item name="viking helmet" chance="7520" />
-		<item name="hatchet" chance="5100" />
-		<item name="mace" chance="4350" />
+		<item id="2230" chance="49100" />
+		<item id="2148" countmax="10" chance="45000" />
+		<item id="2050" chance="10000" />
+		<item id="12437" chance="9500" />
+		<item id="2473" chance="7520" />
+		<item id="2388" chance="5100" />
+		<item id="2398" chance="4350" />
 		<!-- Heavy Old Tome 2.16% -->
-		<item id="2376" chance="2060" /><!-- sword -->
-		<item name="brass shield" chance="1070" />
+		<item id="2376" chance="2060" />
+		<item id="2511" chance="1070" />
 	</loot>
 </monster>

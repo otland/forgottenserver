@@ -50,9 +50,9 @@
 		<voice sentence="Gaaahhh!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="77" chance="50000" />
-		<item name="shrimp" chance="25000" />
-		<item name="fish fin" chance="100000" />
-		<item name="relic sword" chance="50000" />
+		<item id="2148" countmax="77" chance="50000" />
+		<item id="2670" chance="25000" />
+		<item id="5895" chance="100000" />
+		<item id="7383" chance="50000" />
 	</loot>
 </monster>

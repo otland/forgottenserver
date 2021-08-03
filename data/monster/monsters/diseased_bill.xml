@@ -53,6 +53,6 @@
 		<voice sentence="Desolate! Everything is so desolate!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="25" chance="40000" />
+		<item id="2148" countmax="25" chance="40000" />
 	</loot>
 </monster>

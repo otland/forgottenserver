@@ -42,6 +42,6 @@
 		<voice sentence="Kzzchhh!" />
 	</voices>
 	<loot>
-		<item name="glob of acid slime" chance="14285" />
+		<item id="9967" chance="14285" />
 	</loot>
 </monster>

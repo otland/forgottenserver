@@ -82,64 +82,64 @@
 		<voice sentence="Even in my weakened state I will crush you all!" />
 	</voices>
 	<loot>
-		<item name="Ferumbras' hat" chance="100000" />
-		<item name="gold coin" countmax="100" chance="97000" />
-		<item name="gold coin" countmax="100" chance="97000" />
-		<item name="gold coin" countmax="70" chance="33000" />
-		<item name="gold ingot" countmax="2" chance="75000" />
-		<item name="great shield" chance="26000" />
-		<item name="spellbook of lost souls" chance="26000" />
-		<item name="golden armor" chance="24000" />
-		<item name="golden legs" chance="22000" />
-		<item name="spellbook of mind control" chance="22000" />
-		<item name="velvet mantle" chance="22000" />
-		<item name="demon shield" chance="20000" />
-		<item name="divine plate" chance="20000" />
-		<item name="magma legs" chance="20000" />
-		<item name="tempest shield" chance="20000" />
-		<item name="emerald bangle" chance="18000" />
-		<item name="glacier kilt" chance="18000" />
-		<item name="lightning legs" chance="18000" />
-		<item name="phoenix shield" chance="18000" />
-		<item name="spellbook of dark mysteries" chance="18000" />
-		<item name="terra legs" chance="18000" />
-		<item name="emerald sword" chance="16000" />
-		<item name="havoc blade" chance="16000" />
-		<item name="shadow sceptre" chance="16000" />
-		<item name="small emerald" countmax="100" chance="16000" />
-		<item id="7632" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
-		<item id="7633" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
-		<item name="magic plate armor" chance="14000" />
-		<item name="mastermind shield" chance="14000" />
-		<item name="runed sword" chance="14000" />
-		<item name="spellscroll of prophecies" chance="14000" />
-		<item name="chaos mace" chance="12000" />
-		<item name="demonwing axe" chance="12000" />
-		<item name="greenwood coat" chance="12000" />
-		<item name="small sapphire" countmax="98" chance="12000" />
-		<item name="white pearl" countmax="88" chance="12000" />
-		<item name="haunted blade" chance="10000" />
-		<item name="hellforged axe" chance="10000" />
-		<item name="obsidian truncheon" chance="10000" />
-		<item name="ornamented axe" chance="10000" />
-		<item name="queen's sceptre" chance="10000" />
-		<item name="small amethyst" countmax="54" chance="10000" />
-		<item name="small topaz" countmax="87" chance="10000" />
-		<item name="demonrage sword" chance="8100" />
-		<item name="jade hammer" chance="8100" />
-		<item name="platinum coin" countmax="58" chance="8100" />
-		<item name="skullcrusher" chance="8100" />
-		<item name="soul orb" countmax="9" chance="8100" />
-		<item name="vile axe" chance="8100" />
-		<item name="abyss hammer" chance="6100" />
-		<item name="berserker" chance="6100" />
-		<item name="black pearl" countmax="83" chance="6100" />
-		<item name="bloody edge" chance="6100" />
-		<item name="nightmare blade" chance="6100" />
-		<item name="great axe" chance="4000" />
-		<item name="impaler" chance="4000" />
-		<item name="red tome" chance="4000" />
-		<item name="small diamond" countmax="82" chance="4000" />
-		<item name="small ruby" countmax="92" chance="4000" />
+		<item id="5903" chance="100000" />
+		<item id="2148" countmax="100" chance="97000" />
+		<item id="2148" countmax="100" chance="97000" />
+		<item id="2148" countmax="70" chance="33000" />
+		<item id="9971" countmax="2" chance="75000" />
+		<item id="2522" chance="26000" />
+		<item id="8903" chance="26000" />
+		<item id="2466" chance="24000" />
+		<item id="2470" chance="22000" />
+		<item id="8902" chance="22000" />
+		<item id="8868" chance="22000" />
+		<item id="2520" chance="20000" />
+		<item id="8885" chance="20000" />
+		<item id="7894" chance="20000" />
+		<item id="2542" chance="20000" />
+		<item id="2127" chance="18000" />
+		<item id="7896" chance="18000" />
+		<item id="7895" chance="18000" />
+		<item id="2539" chance="18000" />
+		<item id="8918" chance="18000" />
+		<item id="7885" chance="18000" />
+		<item id="8930" chance="16000" />
+		<item id="7405" chance="16000" />
+		<item id="7451" chance="16000" />
+		<item id="2149" countmax="100" chance="16000" />
+		<item id="7632" countmax="5" chance="14000" />
+		<item id="7633" countmax="5" chance="14000" />
+		<item id="2472" chance="14000" />
+		<item id="2514" chance="14000" />
+		<item id="7417" chance="14000" />
+		<item id="8904" chance="14000" />
+		<item id="7427" chance="12000" />
+		<item id="8926" chance="12000" />
+		<item id="8869" chance="12000" />
+		<item id="2146" countmax="98" chance="12000" />
+		<item id="2143" countmax="88" chance="12000" />
+		<item id="7407" chance="10000" />
+		<item id="8924" chance="10000" />
+		<item id="8928" chance="10000" />
+		<item id="7411" chance="10000" />
+		<item id="7410" chance="10000" />
+		<item id="2150" countmax="54" chance="10000" />
+		<item id="9970" countmax="87" chance="10000" />
+		<item id="7382" chance="8100" />
+		<item id="7422" chance="8100" />
+		<item id="2152" countmax="58" chance="8100" />
+		<item id="7423" chance="8100" />
+		<item id="5944" countmax="9" chance="8100" />
+		<item id="7388" chance="8100" />
+		<item id="7414" chance="6100" />
+		<item id="7403" chance="6100" />
+		<item id="2144" countmax="83" chance="6100" />
+		<item id="7416" chance="6100" />
+		<item id="7418" chance="6100" />
+		<item id="2415" chance="4000" />
+		<item id="7435" chance="4000" />
+		<item id="1986" chance="4000" />
+		<item id="2145" countmax="82" chance="4000" />
+		<item id="2147" countmax="92" chance="4000" />
 	</loot>
 </monster>

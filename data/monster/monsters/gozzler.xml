@@ -48,15 +48,15 @@
 		<voice sentence="I'll bite you! Nyehehehehe!" />
 	</voices>
 	<loot>
-		<item name="brown flask" chance="8750" />
-		<item name="small sapphire" chance="360" />
-		<item name="gold coin" countmax="70" chance="52500" />
-		<item name="dwarven ring" chance="190" />
-		<item name="battle axe" chance="3100" />
-		<item name="sabre" chance="8250" />
-		<item name="morning star" chance="5000" />
-		<item name="serpent sword" chance="250" />
-		<item name="clerical mace" chance="900" />
-		<item name="plate shield" chance="10000" />
+		<item id="2015" chance="8750" />
+		<item id="2146" chance="360" />
+		<item id="2148" countmax="70" chance="52500" />
+		<item id="2213" chance="190" />
+		<item id="2378" chance="3100" />
+		<item id="2385" chance="8250" />
+		<item id="2394" chance="5000" />
+		<item id="2409" chance="250" />
+		<item id="2423" chance="900" />
+		<item id="2510" chance="10000" />
 	</loot>
 </monster>

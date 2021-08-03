@@ -42,14 +42,14 @@
 		<voice sentence="Crrrk! Crrrk!" />
 	</voices>
 	<loot>
-		<item name="small ruby" chance="3440" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="43" chance="49000" />
-		<item name="life crystal" chance="1000" />
-		<item name="halberd" chance="1840" />
-		<item name="plate armor" chance="4170" />
-		<item name="fish fin" chance="1000" />
-		<item name="quara pincers" chance="9940" />
-		<item name="giant shrimp" chance="10" />
+		<item id="2147" chance="3440" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="43" chance="49000" />
+		<item id="2177" chance="1000" />
+		<item id="2381" chance="1840" />
+		<item id="2463" chance="4170" />
+		<item id="5895" chance="1000" />
+		<item id="12446" chance="9940" />
+		<item id="13305" chance="10" />
 	</loot>
 </monster>

@@ -61,24 +61,24 @@
 		<voice sentence="The end is near!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="33000" />
-		<item name="gold coin" countmax="100" chance="33000" />
-		<item name="gold coin" countmax="63" chance="33000" />
-		<item name="platinum coin" countmax="4" chance="5200" />
-		<item id="2162" chance="4850" /><!-- magic lightwand -->
-		<item name="dark shield" chance="3000" />
-		<item name="scythe" chance="9000" />
-		<item name="orichalcum pearl" countmax="4" chance="1400" />
-		<item id="6300" chance="330" /><!-- death ring -->
-		<item name="demonic essence" chance="10600" />
-		<item name="concentrated demonic blood" chance="35000" />
-		<item name="nightmare blade" chance="880" />
-		<item name="great mana potion" chance="10000" />
-		<item name="glacier kilt" chance="330" />
-		<item name="ultimate health potion" chance="9600" />
-		<item name="skullcracker armor" chance="270" />
-		<item name="underworld rod" chance="910" />
-		<item id="9810" chance="2500" /><!-- rusty armor (rare) -->
-		<item name="mystical hourglass" chance="5300" />
+		<item id="2148" countmax="100" chance="33000" />
+		<item id="2148" countmax="100" chance="33000" />
+		<item id="2148" countmax="63" chance="33000" />
+		<item id="2152" countmax="4" chance="5200" />
+		<item id="2162" chance="4850" />
+		<item id="2521" chance="3000" />
+		<item id="2550" chance="9000" />
+		<item id="5022" countmax="4" chance="1400" />
+		<item id="6300" chance="330" />
+		<item id="6500" chance="10600" />
+		<item id="6558" chance="35000" />
+		<item id="7418" chance="880" />
+		<item id="7590" chance="10000" />
+		<item id="7896" chance="330" />
+		<item id="8473" chance="9600" />
+		<item id="8889" chance="270" />
+		<item id="8910" chance="910" />
+		<item id="9810" chance="2500" />
+		<item id="10577" chance="5300" />
 	</loot>
 </monster>

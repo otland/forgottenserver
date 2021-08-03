@@ -62,12 +62,12 @@
 		<voice sentence="I'LL FREEZE YOU THEN I CRUSH YOU!" yell="1" />
 	</voices>
 	<loot>
-		<item name="small sapphire" countmax="4" chance="7142" />
-		<item name="small ruby" countmax="4" chance="11111" />
-		<item name="small emerald" countmax="4" chance="11111" />
-		<item name="small amethyst" countmax="3" chance="11111" />
-		<item name="platinum coin" countmax="9" chance="50000" />
-		<item name="earthborn titan armor" chance="2063" />
-		<item name="gold ingot" chance="25000" />
+		<item id="2146" countmax="4" chance="7142" />
+		<item id="2147" countmax="4" chance="11111" />
+		<item id="2149" countmax="4" chance="11111" />
+		<item id="2150" countmax="3" chance="11111" />
+		<item id="2152" countmax="9" chance="50000" />
+		<item id="8882" chance="2063" />
+		<item id="9971" chance="25000" />
 	</loot>
 </monster>

@@ -69,27 +69,27 @@
 		<voice sentence="Dieee!" />
 	</voices>
 	<loot>
-		<item id="2120" countmax="3" chance="8000" /><!-- small amethyst -->
-		<item id="2124" chance="410" /><!-- crystal ring-->
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="69" chance="38000" />
-		<item name="platinum coin" countmax="4" chance="2800" />
-		<item name="terra rod" chance="20000" />
-		<item name="golden legs" chance="130" />
-		<item name="steel boots" chance="790" />
-		<item name="meat" chance="25000" />
-		<item name="orichalcum pearl" countmax="4" chance="1500" />
-		<item name="red piece of cloth" chance="4000" />
-		<item name="soul orb" chance="21500" />
-		<item name="soul orb" chance="50" />
-		<item id="6301" chance="60" /><!-- death ring-->
-		<item name="demonic essence" chance="22500" />
-		<item name="concentrated demonic blood" countmax="3" chance="35000" />
-		<item name="assassin dagger" chance="660" />
-		<item name="noble axe" chance="2000" />
-		<item name="great health potion" chance="10500" />
-		<item name="jalapeno pepper" countmax="4" chance="29280" />
-		<item id="9813" chance="1920" /><!-- rusty legs (rare) -->
+		<item id="2120" countmax="3" chance="8000" />
+		<item id="2124" chance="410" />
+		<item id="2148" countmax="100" chance="30000" />
+		<item id="2148" countmax="100" chance="30000" />
+		<item id="2148" countmax="69" chance="38000" />
+		<item id="2152" countmax="4" chance="2800" />
+		<item id="2181" chance="20000" />
+		<item id="2470" chance="130" />
+		<item id="2645" chance="790" />
+		<item id="2666" chance="25000" />
+		<item id="5022" countmax="4" chance="1500" />
+		<item id="5911" chance="4000" />
+		<item id="5944" chance="21500" />
+		<item id="5944" chance="50" />
+		<item id="6301" chance="60" />
+		<item id="6500" chance="22500" />
+		<item id="6558" countmax="3" chance="35000" />
+		<item id="7404" chance="660" />
+		<item id="7456" chance="2000" />
+		<item id="7591" chance="10500" />
+		<item id="8844" countmax="4" chance="29280" />
+		<item id="9813" chance="1920" />
 	</loot>
 </monster>

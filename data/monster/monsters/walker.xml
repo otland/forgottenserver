@@ -41,18 +41,18 @@
 		<voice sentence="?" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="99" chance="50000" />
-		<item name="platinum coin" countmax="3" chance="52000" />
-		<item name="metal toe" chance="20000" />
-		<item name="small topaz" countmax="6" chance="10000" />
-		<item name="great spirit potion" chance="8000" />
-		<item name="great health potion" chance="8000" />
-		<item name="small amethyst" countmax="3" chance="4500" />
-		<item name="small emerald" countmax="3" chance="4500" />
-		<item name="metal spats" chance="3500" />
-		<item name="gearwheel chain" chance="2200" />
-		<item name="crystal mace" chance="670" />
-		<item name="steel boots" chance="520" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="99" chance="50000" />
+		<item id="2152" countmax="3" chance="52000" />
+		<item id="23569" chance="20000" />
+		<item id="9970" countmax="6" chance="10000" />
+		<item id="8472" chance="8000" />
+		<item id="7591" chance="8000" />
+		<item id="2150" countmax="3" chance="4500" />
+		<item id="2149" countmax="3" chance="4500" />
+		<item id="23540" chance="3500" />
+		<item id="23541" chance="2200" />
+		<item id="2445" chance="670" />
+		<item id="2645" chance="520" />
 	</loot>
 </monster>

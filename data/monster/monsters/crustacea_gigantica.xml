@@ -36,9 +36,9 @@
 		<voice sentence="Chrrrrr" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="43" chance="100000" />
-		<item name="strong mana potion" chance="14285" />
-		<item name="giant crab pincer" chance="5000" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="43" chance="100000" />
+		<item id="7589" chance="14285" />
+		<item id="13304" chance="5000" />
 	</loot>
 </monster>

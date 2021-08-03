@@ -37,18 +37,18 @@
 		<voice sentence="Let da mashing begin!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="47" chance="82000" />
-		<item name="meat" chance="30070" />
-		<item name="short sword" chance="8000" />
-		<item name="cyclops toe" chance="4930" />
-		<item name="plate shield" chance="2500" />
+		<item id="2148" countmax="47" chance="82000" />
+		<item id="2666" chance="30070" />
+		<item id="2406" chance="8000" />
+		<item id="10574" chance="4930" />
+		<item id="2510" chance="2500" />
 		<!-- Heavy Old Tome 2.02% -->
-		<item name="battle shield" chance="1400" />
-		<item id="2381" chance="730" /><!-- halberd -->
-		<item name="wolf tooth chain" chance="360" />
-		<item name="dark helmet" chance="230" />
-		<item id="7398" chance="180" /><!-- cyclops trophy -->
-		<item name="club ring" chance="140" />
-		<item name="health potion" chance="50" />
+		<item id="2513" chance="1400" />
+		<item id="2381" chance="730" />
+		<item id="2129" chance="360" />
+		<item id="2490" chance="230" />
+		<item id="7398" chance="180" />
+		<item id="2209" chance="140" />
+		<item id="7618" chance="50" />
 	</loot>
 </monster>

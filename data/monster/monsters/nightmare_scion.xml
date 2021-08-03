@@ -52,18 +52,18 @@
 		<voice sentence="Peak a boo, I killed you!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="53" chance="50000" />
-		<item name="platinum coin" countmax="3" chance="961" />
-		<item name="crown helmet" chance="666" />
-		<item name="meat" countmax="4" chance="50000" />
-		<item id="6300" chance="250" /><!-- death ring -->
-		<item name="bar of chocolate" chance="280" />
-		<item name="diamond sceptre" chance="340" />
-		<item name="shadow sceptre" chance="270" />
-		<item name="focus cape" chance="340" />
-		<item name="crystal of focus" chance="100" />
-		<item name="essence of a bad dream" chance="7692" />
-		<item name="scythe leg" chance="4761" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="53" chance="50000" />
+		<item id="2152" countmax="3" chance="961" />
+		<item id="2491" chance="666" />
+		<item id="2666" countmax="4" chance="50000" />
+		<item id="6300" chance="250" />
+		<item id="6574" chance="280" />
+		<item id="7387" chance="340" />
+		<item id="7451" chance="270" />
+		<item id="8871" chance="340" />
+		<item id="9941" chance="100" />
+		<item id="11223" chance="7692" />
+		<item id="11229" chance="4761" />
 	</loot>
 </monster>

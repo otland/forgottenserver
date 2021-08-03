@@ -44,16 +44,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="98" chance="100000" />
-		<item name="platinum coin" countmax="6" chance="100000" />
-		<item name="shiny stone" chance="100000" />
-		<item name="small amethyst" countmax="2" chance="73000" />
-		<item name="steel shield" chance="65000" />
-		<item name="sulphurous stone" chance="65000" />
-		<item name="red gem" chance="57000" />
-		<item name="power ring" chance="42000" />
-		<item name="steel boots" chance="11000" />
-		<item id="2124" chance="3850" /><!-- crystal ring -->
-		<item name="small stone" countmax="3" chance="3850" />
+		<item id="2148" countmax="98" chance="100000" />
+		<item id="2152" countmax="6" chance="100000" />
+		<item id="11227" chance="100000" />
+		<item id="2150" countmax="2" chance="73000" />
+		<item id="2509" chance="65000" />
+		<item id="11232" chance="65000" />
+		<item id="2156" chance="57000" />
+		<item id="2166" chance="42000" />
+		<item id="2645" chance="11000" />
+		<item id="2124" chance="3850" />
+		<item id="1294" countmax="3" chance="3850" />
 	</loot>
 </monster>

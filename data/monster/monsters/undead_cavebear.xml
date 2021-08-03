@@ -32,9 +32,9 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="80" chance="9750" />
-		<item name="maxilla maximus" chance="900" />
-		<item name="maxilla" chance="2350" />
-		<item name="cavebear skull" chance="3150" />
+		<item id="2148" countmax="80" chance="9750" />
+		<item id="13291" chance="900" />
+		<item id="13302" chance="2350" />
+		<item id="13303" chance="3150" />
 	</loot>
 </monster>

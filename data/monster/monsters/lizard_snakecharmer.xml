@@ -54,18 +54,18 @@
 		<voice sentence="Shhhhhhhh" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="55" chance="83740" />
-		<item id="3077" chance="45000" /><!-- dead snake -->
-		<item name="cape" chance="8640" />
-		<item name="life crystal" chance="1430" />
-		<item name="lizard leather" chance="1320" />
-		<item name="lizard scale" chance="1000" />
-		<item name="terra rod" chance="980" />
-		<item name="mana potion" chance="700" />
-		<item name="small amethyst" chance="370" />
-		<item name="life ring" chance="190" />
-		<item name="snakebite rod" chance="120" />
-		<item name="charmer's tiara" chance="100" />
-		<item name="yellow gem" chance="30" />
+		<item id="2148" countmax="55" chance="83740" />
+		<item id="3077" chance="45000" />
+		<item id="2654" chance="8640" />
+		<item id="2177" chance="1430" />
+		<item id="5876" chance="1320" />
+		<item id="5881" chance="1000" />
+		<item id="2181" chance="980" />
+		<item id="7620" chance="700" />
+		<item id="2150" chance="370" />
+		<item id="2168" chance="190" />
+		<item id="2182" chance="120" />
+		<item id="3971" chance="100" />
+		<item id="2154" chance="30" />
 	</loot>
 </monster>

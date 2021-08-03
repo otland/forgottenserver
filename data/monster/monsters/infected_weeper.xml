@@ -52,9 +52,9 @@
 		<voice sentence="Moooaaan!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="98" chance="50000" />
-		<item name="platinum coin" countmax="7" chance="100000" />
-		<item id="8748" chance="1460" /><!-- coal -->
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="98" chance="50000" />
+		<item id="2152" countmax="7" chance="100000" />
+		<item id="8748" chance="1460" />
 	</loot>
 </monster>

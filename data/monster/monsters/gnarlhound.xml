@@ -28,9 +28,9 @@
 		<voice sentence="Grrrrrr!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="30" chance="48000" />
-		<item name="meat" countmax="3" chance="39075" />
-		<item name="worm" countmax="3" chance="33300" />
-		<item name="shaggy tail" chance="25550" />
+		<item id="2148" countmax="30" chance="48000" />
+		<item id="2666" countmax="3" chance="39075" />
+		<item id="3976" countmax="3" chance="33300" />
+		<item id="11324" chance="25550" />
 	</loot>
 </monster>

@@ -47,16 +47,16 @@
 		<voice sentence="This is Venore!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="35" chance="30300" />
-		<item id="2230" chance="4920" /><!-- bone -->
-		<item name="worm" countmax="3" chance="25730" />
-		<item name="ominous piece of cloth" chance="1660" />
-		<item name="dubious piece of cloth" chance="1720" />
-		<item name="voluminous piece of cloth" chance="2290" />
-		<item name="obvious piece of cloth" chance="2006" />
-		<item name="ludicrous piece of cloth" chance="2060" />
-		<item name="luminous piece of cloth" chance="2290" />
-		<item name="plague mask" chance="100" />
-		<item name="plague bell" chance="100" />
+		<item id="2148" countmax="35" chance="30300" />
+		<item id="2230" chance="4920" />
+		<item id="3976" countmax="3" chance="25730" />
+		<item id="13540" chance="1660" />
+		<item id="13541" chance="1720" />
+		<item id="13542" chance="2290" />
+		<item id="13543" chance="2006" />
+		<item id="13544" chance="2060" />
+		<item id="13545" chance="2290" />
+		<item id="13925" chance="100" />
+		<item id="13926" chance="100" />
 	</loot>
 </monster>

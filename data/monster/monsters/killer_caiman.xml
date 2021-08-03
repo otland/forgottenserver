@@ -37,14 +37,14 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="80" chance="50000" />
-		<item name="small emerald" countmax="5" chance="10150" />
-		<item name="obsidian lance" chance="4975" />
-		<item name="ham" chance="40100" />
-		<item name="crocodile boots" chance="510" />
-		<item id="7632" chance="1130" /><!-- giant shimmering pearl -->
-		<item name="piece of crocodile leather" chance="25430" />
-		<item name="bunch of ripe rice" countmax="2" chance="4800" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="80" chance="50000" />
+		<item id="2149" countmax="5" chance="10150" />
+		<item id="2425" chance="4975" />
+		<item id="2671" chance="40100" />
+		<item id="3982" chance="510" />
+		<item id="7632" chance="1130" />
+		<item id="11196" chance="25430" />
+		<item id="11245" countmax="2" chance="4800" />
 	</loot>
 </monster>

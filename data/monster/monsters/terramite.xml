@@ -39,9 +39,9 @@
 		<voice sentence="Zrp zrp!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="45" chance="97520" />
-		<item name="terramite shell" chance="7730" />
-		<item name="terramite eggs" countmax="3" chance="4680" />
-		<item name="terramite legs" chance="14880" />
+		<item id="2148" countmax="45" chance="97520" />
+		<item id="11369" chance="7730" />
+		<item id="11370" countmax="3" chance="4680" />
+		<item id="11371" chance="14880" />
 	</loot>
 </monster>

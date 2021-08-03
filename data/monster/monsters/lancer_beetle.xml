@@ -49,12 +49,12 @@
 		<voice sentence="Crump!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="61" chance="60000" />
-		<item name="gold coin" countmax="79" chance="60000" />
-		<item name="small amethyst" chance="247" />
-		<item name="poisonous slime" chance="8333" />
-		<item name="lump of dirt" chance="4166" />
-		<item name="lancer beetle shell" chance="16666" />
-		<item name="beetle necklace" chance="1123" />
+		<item id="2148" countmax="61" chance="60000" />
+		<item id="2148" countmax="79" chance="60000" />
+		<item id="2150" chance="247" />
+		<item id="10557" chance="8333" />
+		<item id="10609" chance="4166" />
+		<item id="11372" chance="16666" />
+		<item id="11374" chance="1123" />
 	</loot>
 </monster>

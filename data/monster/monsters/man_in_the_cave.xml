@@ -44,16 +44,16 @@
 		<voice sentence="A MIC to rule them all!" />
 	</voices>
 	<loot>
-		<item id="2120" chance="20000" /><!-- rope -->
-		<item id="2120" chance="6666" /><!-- rope -->
-		<item id="2120" chance="3333" /><!-- rope -->
-		<item name="gold coin" countmax="27" chance="100000" />
-		<item name="amulet of loss" chance="500" />
-		<item name="brown bread" chance="4000" />
-		<item name="brown piece of cloth" chance="2000" />
-		<item name="shard" chance="4000" />
-		<item name="mercenary sword" chance="6666" />
-		<item name="fur cap" chance="1000" />
-		<item name="mammoth fur cape" chance="6666" />
+		<item id="2120" chance="20000" />
+		<item id="2120" chance="6666" />
+		<item id="2120" chance="3333" />
+		<item id="2148" countmax="27" chance="100000" />
+		<item id="2173" chance="500" />
+		<item id="2691" chance="4000" />
+		<item id="5913" chance="2000" />
+		<item id="7290" chance="4000" />
+		<item id="7386" chance="6666" />
+		<item id="7458" chance="1000" />
+		<item id="7463" chance="6666" />
 	</loot>
 </monster>

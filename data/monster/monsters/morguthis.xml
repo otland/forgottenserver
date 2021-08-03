@@ -68,18 +68,18 @@
 		<voice sentence="Anotherone to bite the dust!" />
 	</voices>
 	<loot>
-		<item name="sword hilt" chance="100000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="21" chance="30000" />
-		<item name="black pearl" chance="10000" />
-		<item name="assassin star" countmax="3" chance="9700" />
-		<item name="great health potion" chance="9500" />
-		<item name="knight axe" chance="6000" />
-		<item name="stone skin amulet" chance="5000" />
-		<item name="mini mummy" chance="140" />
-		<item name="ravager's axe" chance="150" />
-		<item name="steel boots" chance="150" />
-		<item id="2136" chance="140" /><!-- demonbone amulet -->
+		<item id="2350" chance="100000" />
+		<item id="2148" countmax="100" chance="30000" />
+		<item id="2148" countmax="100" chance="30000" />
+		<item id="2148" countmax="21" chance="30000" />
+		<item id="2144" chance="10000" />
+		<item id="7368" countmax="3" chance="9700" />
+		<item id="7591" chance="9500" />
+		<item id="2430" chance="6000" />
+		<item id="2197" chance="5000" />
+		<item id="11207" chance="140" />
+		<item id="2443" chance="150" />
+		<item id="2645" chance="150" />
+		<item id="2136" chance="140" />
 	</loot>
 </monster>

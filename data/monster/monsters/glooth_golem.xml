@@ -50,25 +50,25 @@
 		<voice sentence="*clank*" />
 	</voices>
 	<loot>
-		<item id="5880" chance="1030" /><!-- iron ore -->
-		<item id="23554" chance="1720" /><!-- glooth amulet -->
-		<item id="23541" chance="1720" /><!-- gearwheel chain -->
-		<item id="23536" chance="1370" /><!-- rubber cap -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
-		<item id="24124" chance="4470" /><!-- bronze gear wheel -->
-		<item id="9690" chance="690" /><!-- gear wheel -->
-		<item id="23514" chance="9970" /><!-- glooth sandwich -->
-		<item id="2152" countmax="4" chance="56010" /><!-- platinum coin -->
-		<item id="23474" chance="16840" /><!-- glooth injection tube -->
-		<item id="8473" chance="4470" /><!-- ultimate health potion -->
-		<item id="7590" chance="9280" /><!-- great mana potion -->
-		<item id="23538" chance="690" /><!-- heat core -->
-		<item id="23550" chance="3440" /><!-- glooth blade -->
-		<item id="23549" chance="1030" /><!-- glooth club -->
-		<item id="23551" chance="690" /><!-- glooth axe -->
-		<item id="2154" chance="1030" /><!-- yellow gem -->
-		<item id="9970" countmax="4" chance="7560" /><!-- small topaz -->
-		<item id="2149" countmax="4" chance="8590" /><!-- small emerald -->
+		<item id="5880" chance="1030" />
+		<item id="23554" chance="1720" />
+		<item id="23541" chance="1720" />
+		<item id="23536" chance="1370" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="100" chance="60000" />
+		<item id="24124" chance="4470" />
+		<item id="9690" chance="690" />
+		<item id="23514" chance="9970" />
+		<item id="2152" countmax="4" chance="56010" />
+		<item id="23474" chance="16840" />
+		<item id="8473" chance="4470" />
+		<item id="7590" chance="9280" />
+		<item id="23538" chance="690" />
+		<item id="23550" chance="3440" />
+		<item id="23549" chance="1030" />
+		<item id="23551" chance="690" />
+		<item id="2154" chance="1030" />
+		<item id="9970" countmax="4" chance="7560" />
+		<item id="2149" countmax="4" chance="8590" />
 	</loot>
 </monster>

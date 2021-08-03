@@ -44,15 +44,15 @@
 		<immunity paralyze="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="88" chance="11690" />
-		<item id="2230" chance="8230" /><!-- bone -->
-		<item name="plate armor" chance="2810" />
-		<item id="2229" chance="2810" /><!-- skull -->
-		<item id="2231" chance="1950" /><!-- big bone -->
-		<item name="bone club" chance="1520" />
-		<item name="bone shield" chance="1520" />
-		<item name="health potion" chance="870" />
-		<item name="green mushroom" chance="650" />
-		<item name="hardened bone" chance="650" />
+		<item id="2148" countmax="88" chance="11690" />
+		<item id="2230" chance="8230" />
+		<item id="2463" chance="2810" />
+		<item id="2229" chance="2810" />
+		<item id="2231" chance="1950" />
+		<item id="2449" chance="1520" />
+		<item id="2541" chance="1520" />
+		<item id="7618" chance="870" />
+		<item id="2796" chance="650" />
+		<item id="5925" chance="650" />
 	</loot>
 </monster>

@@ -43,17 +43,17 @@
 		<voice sentence="Die! Die! Die!" />
 	</voices>
 	<loot>
-		<item id="2050" chance="61500" /><!-- torch -->
-		<item name="gold coin" countmax="30" chance="60000" />
-		<item name="life ring" chance="230" />
-		<item name="skull of Ratha" chance="3270" />
-		<item name="knife" chance="15500" />
-		<item name="brass helmet" chance="20360" />
-		<item name="viking helmet" chance="5080" />
-		<item name="scale armor" chance="4090" />
-		<item name="brown piece of cloth" chance="950" />
-		<item name="fur boots" chance="100" />
-		<item name="krimhorn helmet" chance="110" />
-		<item name="health potion" chance="560" />
+		<item id="2050" chance="61500" />
+		<item id="2148" countmax="30" chance="60000" />
+		<item id="2168" chance="230" />
+		<item id="2320" chance="3270" />
+		<item id="2403" chance="15500" />
+		<item id="2460" chance="20360" />
+		<item id="2473" chance="5080" />
+		<item id="2483" chance="4090" />
+		<item id="5913" chance="950" />
+		<item id="7457" chance="100" />
+		<item id="7461" chance="110" />
+		<item id="7618" chance="560" />
 	</loot>
 </monster>

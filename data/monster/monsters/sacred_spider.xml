@@ -32,11 +32,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="19" chance="50000" />
-		<item name="scarab coin" countmax="4" chance="7142" />
-		<item name="plate armor" chance="4761" />
-		<item name="spider fangs" chance="25000" />
-		<item name="gold ingot" chance="95" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="19" chance="50000" />
+		<item id="2159" countmax="4" chance="7142" />
+		<item id="2463" chance="4761" />
+		<item id="8859" chance="25000" />
+		<item id="9971" chance="95" />
 	</loot>
 </monster>

@@ -47,30 +47,30 @@
 		<voice sentence="Crush the intruders!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="59000" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="platinum coin" countmax="5" chance="60000" />
-		<item name="meat" countmax="6" chance="30000" />
-		<item name="battle stone" chance="14000" />
-		<item name="assassin star" countmax="5" chance="10000" />
-		<item name="double axe" chance="9900" />
-		<item name="small amethyst" countmax="5" chance="6380" />
-		<item name="two handed sword" chance="5980" />
-		<item name="great health potion" chance="5120" />
-		<item name="dark armor" chance="4370" />
-		<item name="plate armor" chance="3930" />
-		<item name="crystal necklace" chance="2530" />
-		<item name="perfect behemoth fang" chance="1090" />
-		<item name="giant sword" chance="1006" />
-		<item name="strange symbol" chance="820" />
-		<item id="2231" chance="720" /><!-- big bone -->
-		<item name="pick" chance="650" />
-		<item name="behemoth claw" chance="460" />
-		<item name="steel boots" chance="440" />
-		<item name="crowbar" chance="130" />
-		<item id="7396" chance="170" /><!-- behemoth trophy -->
-		<item id="2023" chance="90" /><!-- amphora -->
-		<item name="titan axe" chance="70" />
-		<item name="war axe" chance="60" />
+		<item id="2148" countmax="100" chance="59000" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2152" countmax="5" chance="60000" />
+		<item id="2666" countmax="6" chance="30000" />
+		<item id="12403" chance="14000" />
+		<item id="7368" countmax="5" chance="10000" />
+		<item id="2387" chance="9900" />
+		<item id="2150" countmax="5" chance="6380" />
+		<item id="2377" chance="5980" />
+		<item id="7591" chance="5120" />
+		<item id="2489" chance="4370" />
+		<item id="2463" chance="3930" />
+		<item id="2125" chance="2530" />
+		<item id="5893" chance="1090" />
+		<item id="2393" chance="1006" />
+		<item id="2174" chance="820" />
+		<item id="2231" chance="720" />
+		<item id="2553" chance="650" />
+		<item id="5930" chance="460" />
+		<item id="2645" chance="440" />
+		<item id="2416" chance="130" />
+		<item id="7396" chance="170" />
+		<item id="2023" chance="90" />
+		<item id="7413" chance="70" />
+		<item id="2454" chance="60" />
 	</loot>
 </monster>

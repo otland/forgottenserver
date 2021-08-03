@@ -51,28 +51,28 @@
 		<voice sentence="You stop! You lunch!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="25" chance="50000" />
-		<item name="ogre ear stud" chance="18740" />
-		<item name="meat" countmax="2" chance="14920" />
-		<item name="ogre nose ring" chance="14660" />
-		<item name="strong health potion" chance="12580" />
-		<item name="battle stone" chance="4980" />
-		<item name="small stone" countmax="5" chance="4980" />
-		<item name="cookie" countmax="5" chance="3900" />
-		<item name="skull fetish" chance="3350" />
-		<item name="small ruby" countmax="2" chance="2460" />
-		<item name="club ring" chance="2340" />
-		<item name="white pearl" chance="2240" />
-		<item name="onyx chip" countmax="2" chance="2150" />
-		<item name="power ring" chance="1630" />
-		<item name="opal" countmax="2" chance="1560" />
-		<item name="ogre klubba" chance="1040" />
-		<item name="pot" chance="310" />
-		<item id="9821" chance="260" /><!-- rusty helmet -->
-		<item name="ancient stone" chance="1900" />
-		<item name="bonebreaker" chance="140" />
-		<item name="shamanic mask" chance="140" />
-		<item name="butcher's axe" chance="20" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="25" chance="50000" />
+		<item id="24844" chance="18740" />
+		<item id="2666" countmax="2" chance="14920" />
+		<item id="24845" chance="14660" />
+		<item id="7588" chance="12580" />
+		<item id="12403" chance="4980" />
+		<item id="1294" countmax="5" chance="4980" />
+		<item id="2687" countmax="5" chance="3900" />
+		<item id="24847" chance="3350" />
+		<item id="2147" countmax="2" chance="2460" />
+		<item id="2209" chance="2340" />
+		<item id="2143" chance="2240" />
+		<item id="24849" countmax="2" chance="2150" />
+		<item id="2166" chance="1630" />
+		<item id="24850" countmax="2" chance="1560" />
+		<item id="24827" chance="1040" />
+		<item id="2562" chance="310" />
+		<item id="9821" chance="260" />
+		<item id="10549" chance="1900" />
+		<item id="7428" chance="140" />
+		<item id="24848" chance="140" />
+		<item id="7412" chance="20" />
 	</loot>
 </monster>

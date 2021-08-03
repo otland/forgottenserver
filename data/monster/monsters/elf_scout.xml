@@ -41,16 +41,16 @@
 		<voice sentence="Your existence will end here!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="25" chance="75000" />
-		<item id="2544" countmax="12" chance="30710" /><!-- arrow -->
-		<item name="grapes" chance="17750" />
-		<item name="poison arrow" countmax="4" chance="15400" />
-		<item name="elven scouting glass" chance="9750" />
-		<item name="elvish talisman" chance="5200" />
-		<item name="bow" chance="4000" />
-		<item name="waterskin" chance="1350" />
-		<item name="sandals" chance="1180" />
-		<item id="5921" chance="1130" /><!-- heaven blossom -->
-		<item name="elvish bow" chance="140" />
+		<item id="2148" countmax="25" chance="75000" />
+		<item id="2544" countmax="12" chance="30710" />
+		<item id="2681" chance="17750" />
+		<item id="2545" countmax="4" chance="15400" />
+		<item id="12420" chance="9750" />
+		<item id="10552" chance="5200" />
+		<item id="2456" chance="4000" />
+		<item id="2031" chance="1350" />
+		<item id="2642" chance="1180" />
+		<item id="5921" chance="1130" />
+		<item id="7438" chance="140" />
 	</loot>
 </monster>

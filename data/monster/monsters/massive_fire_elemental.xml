@@ -45,16 +45,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="small ruby" countmax="2" chance="6100" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="25000" />
-		<item name="gold coin" countmax="12" chance="25000" />
-		<item name="bronze amulet" chance="15000" />
-		<item name="wand of inferno" chance="2240" />
-		<item name="fire sword" chance="530" />
-		<item name="magma amulet" chance="1300" />
-		<item name="magma boots" chance="560" />
-		<item name="magma legs" chance="210" />
-		<item id="9809" chance="1330" /><!-- rusty armor (semi-rare) -->
+		<item id="2147" countmax="2" chance="6100" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="100" chance="25000" />
+		<item id="2148" countmax="12" chance="25000" />
+		<item id="2172" chance="15000" />
+		<item id="2187" chance="2240" />
+		<item id="2392" chance="530" />
+		<item id="7890" chance="1300" />
+		<item id="7891" chance="560" />
+		<item id="7894" chance="210" />
+		<item id="9809" chance="1330" />
 	</loot>
 </monster>

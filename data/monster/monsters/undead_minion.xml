@@ -30,12 +30,12 @@
 		<immunity drunk="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="40" chance="100000" />
-		<item name="blank rune" chance="10000" />
-		<item name="battle hammer" chance="5000" />
-		<item name="battle shield" chance="1000" />
-		<item name="guardian shield" chance="5000" />
-		<item id="6570" chance="5538" /><!-- blue surprise bag -->
-		<item id="6571" chance="1538" /><!-- red surprise bag -->
+		<item id="2148" countmax="40" chance="100000" />
+		<item id="2260" chance="10000" />
+		<item id="2417" chance="5000" />
+		<item id="2513" chance="1000" />
+		<item id="2515" chance="5000" />
+		<item id="6570" chance="5538" />
+		<item id="6571" chance="1538" />
 	</loot>
 </monster>

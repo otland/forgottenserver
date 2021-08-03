@@ -49,28 +49,28 @@
 		<voice sentence="Frizzle!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="platinum coin" countmax="3" chance="90000" />
-		<item name="sparkion claw" chance="16000" />
-		<item name="energy drink" chance="15000" />
-		<item name="energy bar" chance="15000" />
-		<item name="sparkion stings" chance="13000" />
-		<item name="sparkion legs" chance="11000" />
-		<item name="sparkion tail" chance="9700" />
-		<item name="great mana potion" countmax="2" chance="9500" />
-		<item name="great spirit potion" countmax="2" chance="9500" />
-		<item name="great health potion" countmax="2" chance="9500" />
-		<item name="blue crystal splinter" chance="7700" />
-		<item name="cyan crystal fragment" chance="5300" />
-		<item name="small sapphire" countmax="2" chance="4400" />
-		<item name="blue crystal shard" chance="4000" />
-		<item name="blue gem" chance="900" />
-		<item name="wand of cosmic energy" chance="900" />
-		<item id="26187" chance="400" /><!-- ring of green plasma -->
-		<item id="26189" chance="400" /><!-- ring of red plasma -->
-		<item id="26185" chance="400" /><!-- ring of blue plasma -->
-		<item id="26199" chance="250" /><!-- collar of green plasma -->
-		<item id="26198" chance="250" /><!-- collar of blue plasma -->
-		<item id="26200" chance="250" /><!-- collar of red plasma -->
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2152" countmax="3" chance="90000" />
+		<item id="26158" chance="16000" />
+		<item id="26201" chance="15000" />
+		<item id="26191" chance="15000" />
+		<item id="26161" chance="13000" />
+		<item id="26160" chance="11000" />
+		<item id="26159" chance="9700" />
+		<item id="7590" countmax="2" chance="9500" />
+		<item id="8472" countmax="2" chance="9500" />
+		<item id="7591" countmax="2" chance="9500" />
+		<item id="18418" chance="7700" />
+		<item id="18419" chance="5300" />
+		<item id="2146" countmax="2" chance="4400" />
+		<item id="18413" chance="4000" />
+		<item id="2158" chance="900" />
+		<item id="2189" chance="900" />
+		<item id="26187" chance="400" />
+		<item id="26189" chance="400" />
+		<item id="26185" chance="400" />
+		<item id="26199" chance="250" />
+		<item id="26198" chance="250" />
+		<item id="26200" chance="250" />
 	</loot>
 </monster>

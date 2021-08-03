@@ -57,9 +57,9 @@
 		<voice sentence="You wil die Begging like the others did" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="21000" />
-		<item name="fire mushroom" countmax="6" chance="10000" />
-		<item name="great mana potion" chance="20000" />
-		<item name="great health potion" chance="20000" />
+		<item id="2148" countmax="90" chance="21000" />
+		<item id="2795" countmax="6" chance="10000" />
+		<item id="7590" chance="20000" />
+		<item id="7591" chance="20000" />
 	</loot>
 </monster>

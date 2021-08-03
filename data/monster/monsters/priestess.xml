@@ -54,23 +54,23 @@
 		<voice sentence="Throw the soul on the altar!" />
 	</voices>
 	<loot>
-		<item name="sling herb" chance="13200" />
-		<item name="goat grass" chance="12720" />
-		<item name="dark rosary" chance="9840" />
-		<item name="red apple" countmax="2" chance="7500" />
-		<item name="powder herb" chance="6100" />
-		<item name="black hood" chance="5000" />
-		<item name="wood mushroom" chance="3340" />
-		<item name="cultish robe" chance="1700" />
-		<item name="clerical mace" chance="1500" />
-		<item id="2374" chance="1400" /><!-- wooden flute -->
-		<item id="2192" chance="1250" /><!-- crystal ball -->
-		<item name="hailstorm rod" chance="1100" />
-		<item id="1962" chance="910" /><!-- orange book -->
-		<item name="mana potion" chance="910" />
-		<item name="talon" chance="740" />
-		<item name="crystal necklace" chance="640" />
-		<item name="black shield" chance="210" />
-		<item name="piggy bank" chance="90" />
+		<item id="2802" chance="13200" />
+		<item id="2760" chance="12720" />
+		<item id="11220" chance="9840" />
+		<item id="2674" countmax="2" chance="7500" />
+		<item id="2803" chance="6100" />
+		<item id="10562" chance="5000" />
+		<item id="2791" chance="3340" />
+		<item id="10556" chance="1700" />
+		<item id="2423" chance="1500" />
+		<item id="2374" chance="1400" />
+		<item id="2192" chance="1250" />
+		<item id="2183" chance="1100" />
+		<item id="1962" chance="910" />
+		<item id="7620" chance="910" />
+		<item id="2151" chance="740" />
+		<item id="2125" chance="640" />
+		<item id="2529" chance="210" />
+		<item id="2114" chance="90" />
 	</loot>
 </monster>

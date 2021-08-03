@@ -57,32 +57,32 @@
 		<voice sentence="Death! Death! Death!" />
 	</voices>
 	<loot>
-		<item name="piggy bank" chance="3920" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="platinum coin" countmax="9" chance="100000" />
-		<item name="dwarven ring" chance="2280" />
-		<item name="knight axe" chance="2070" />
-		<item name="fire axe" chance="380" />
-		<item name="royal helmet" chance="150" />
-		<item name="guardian shield" chance="1400" />
-		<item name="tower shield" chance="1002" />
-		<item name="black shield" chance="640" />
-		<item name="brown mushroom" countmax="2" chance="15190" />
-		<item name="iron ore" chance="8490" />
-		<item name="magic sulphur" chance="720" />
-		<item name="chaos mace" chance="550" />
-		<item name="spiked squelcher" chance="810" />
-		<item name="great mana potion" chance="13650" />
-		<item name="great health potion" chance="13650" />
-		<item name="terra boots" chance="640" />
-		<item name="small topaz" countmax="2" chance="7970" />
-		<item name="clay lump" chance="930" />
-		<item id="13757" chance="2050" /><!-- coal -->
-		<item name="violet crystal shard" chance="3500" />
-		<item name="brown crystal splinter" countmax="2" chance="7540" />
-		<item name="blue crystal splinter" chance="4610" />
-		<item name="green crystal fragment" chance="6870" />
-		<item name="drill bolt" countmax="10" chance="8210" />
+		<item id="2114" chance="3920" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2152" countmax="9" chance="100000" />
+		<item id="2213" chance="2280" />
+		<item id="2430" chance="2070" />
+		<item id="2432" chance="380" />
+		<item id="2498" chance="150" />
+		<item id="2515" chance="1400" />
+		<item id="2528" chance="1002" />
+		<item id="2529" chance="640" />
+		<item id="2789" countmax="2" chance="15190" />
+		<item id="5880" chance="8490" />
+		<item id="5904" chance="720" />
+		<item id="7427" chance="550" />
+		<item id="7452" chance="810" />
+		<item id="7590" chance="13650" />
+		<item id="7591" chance="13650" />
+		<item id="7886" chance="640" />
+		<item id="9970" countmax="2" chance="7970" />
+		<item id="11339" chance="930" />
+		<item id="13757" chance="2050" />
+		<item id="18414" chance="3500" />
+		<item id="18417" countmax="2" chance="7540" />
+		<item id="18418" chance="4610" />
+		<item id="18421" chance="6870" />
+		<item id="18436" countmax="10" chance="8210" />
 	</loot>
 </monster>

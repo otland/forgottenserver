@@ -67,21 +67,21 @@
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="47000" />
-		<item name="gold coin" countmax="30" chance="47000" />
-		<item name="royal spear" countmax="3" chance="15570" />
-		<item name="strong mana potion" chance="10500" />
-		<item name="pear" countmax="5" chance="9390" />
-		<item name="jewelled belt" chance="8540" />
-		<item name="small emerald" chance="7200" />
-		<item name="heavy machete" chance="5000" />
-		<item name="green piece of cloth" chance="3000" />
-		<item id="1860" chance="2200" /><!-- green tapestry -->
-		<item name="noble turban" chance="1130" />
-		<item name="magma monocle" chance="420" />
-		<item name="wand of inferno" chance="390" />
-		<item name="mystic turban" chance="180" />
-		<item name="small oil lamp" chance="180" />
-		<item name="green gem" chance="150" />
+		<item id="2148" countmax="100" chance="47000" />
+		<item id="2148" countmax="30" chance="47000" />
+		<item id="7378" countmax="3" chance="15570" />
+		<item id="7589" chance="10500" />
+		<item id="2673" countmax="5" chance="9390" />
+		<item id="12426" chance="8540" />
+		<item id="2149" chance="7200" />
+		<item id="2442" chance="5000" />
+		<item id="5910" chance="3000" />
+		<item id="1860" chance="2200" />
+		<item id="12442" chance="1130" />
+		<item id="7900" chance="420" />
+		<item id="2187" chance="390" />
+		<item id="2663" chance="180" />
+		<item id="2063" chance="180" />
+		<item id="2155" chance="150" />
 	</loot>
 </monster>

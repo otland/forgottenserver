@@ -54,23 +54,23 @@
 		<voice sentence="HISSSS" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="34000" />
-		<item name="gold coin" countmax="100" chance="34000" />
-		<item name="gold coin" countmax="46" chance="20000" />
-		<item name="ham" countmax="4" chance="60000" />
-		<item name="platinum coin" countmax="3" chance="49000" />
-		<item name="hydra head" chance="10120" />
-		<item name="small sapphire" chance="5000" />
-		<item name="cucumber" chance="4780" />
-		<item name="ring of healing" chance="1190" />
-		<item name="knight armor" chance="1000" />
-		<item name="hydra egg" chance="930" />
-		<item name="stone skin amulet" chance="900" />
-		<item name="warrior helmet" chance="890" />
-		<item name="life crystal" chance="520" />
-		<item name="strong mana potion" chance="470" />
-		<item name="royal helmet" chance="220" />
-		<item name="medusa shield" chance="220" />
-		<item name="boots of haste" chance="110" />
+		<item id="2148" countmax="100" chance="34000" />
+		<item id="2148" countmax="100" chance="34000" />
+		<item id="2148" countmax="46" chance="20000" />
+		<item id="2671" countmax="4" chance="60000" />
+		<item id="2152" countmax="3" chance="49000" />
+		<item id="11199" chance="10120" />
+		<item id="2146" chance="5000" />
+		<item id="8842" chance="4780" />
+		<item id="2214" chance="1190" />
+		<item id="2476" chance="1000" />
+		<item id="4850" chance="930" />
+		<item id="2197" chance="900" />
+		<item id="2475" chance="890" />
+		<item id="2177" chance="520" />
+		<item id="7589" chance="470" />
+		<item id="2498" chance="220" />
+		<item id="2536" chance="220" />
+		<item id="2195" chance="110" />
 	</loot>
 </monster>

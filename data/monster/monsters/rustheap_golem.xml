@@ -48,24 +48,24 @@
 		<voice sentence="*frzzp*" />
 	</voices>
 	<loot>
-		<item id="8309" chance="1950" /><!-- nail -->
-		<item id="9930" chance="5860" /><!-- flask of rust remover -->
-		<item id="23567" chance="14980" /><!-- necromantic rust -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->
-		<item id="2148" countmax="90" chance="60000" /><!-- gold coin -->
-		<item id="5880" chance="330" /><!-- iron ore -->
-		<item id="24124" chance="1950" /><!-- bronze gear wheel -->
-		<item id="2152" countmax="3" chance="58310" /><!-- platinum coin -->
-		<item id="2143" chance="1300" /><!-- white pearl -->
-		<item id="2144" chance="1630" /><!-- black pearl -->
-		<item id="7588" countmax="2" chance="10100" /><!-- strong health potion -->
-		<item id="7589" countmax="2" chance="7170" /><!-- strong mana potion -->
-		<item id="2391" chance="3580" /><!-- war hammer -->
-		<item id="7452" chance="330" /><!-- spiked squelcher -->
-		<item id="23542" chance="330" /><!-- metal bat -->
-		<item id="23541" chance="2930" /><!-- gearwheel chain -->
-		<item id="9810" chance="5860" /><!-- rusty armor(rare) -->
-		<item id="9813" chance="4230" /><!-- rusty legs(rare) -->
+		<item id="8309" chance="1950" />
+		<item id="9930" chance="5860" />
+		<item id="23567" chance="14980" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="100" chance="80000" />
+		<item id="2148" countmax="90" chance="60000" />
+		<item id="5880" chance="330" />
+		<item id="24124" chance="1950" />
+		<item id="2152" countmax="3" chance="58310" />
+		<item id="2143" chance="1300" />
+		<item id="2144" chance="1630" />
+		<item id="7588" countmax="2" chance="10100" />
+		<item id="7589" countmax="2" chance="7170" />
+		<item id="2391" chance="3580" />
+		<item id="7452" chance="330" />
+		<item id="23542" chance="330" />
+		<item id="23541" chance="2930" />
+		<item id="9810" chance="5860" />
+		<item id="9813" chance="4230" />
 	</loot>
 </monster>

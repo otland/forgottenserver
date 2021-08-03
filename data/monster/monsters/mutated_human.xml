@@ -58,18 +58,18 @@
 		<voice sentence="Oh by the gods! What is this... aaaaaargh!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="80" chance="44000" />
-		<item name="gold coin" countmax="50" chance="44000" />
-		<item name="strange talisman" chance="4980" />
-		<item name="silver amulet" chance="70" />
-		<item name="fishbone" chance="10050" />
-		<item id="2376" chance="5030" /><!-- sword -->
-		<item name="scale armor" chance="8080" />
-		<item id="2696" chance="8000" /><!-- cheese -->
-		<item name="fern" chance="420" />
-		<item name="worm" countmax="2" chance="7110" />
-		<item name="peanut" chance="580" />
-		<item id="9808" chance="190" /><!-- rusty armor (common) -->
-		<item name="mutated flesh" chance="19940" />
+		<item id="2148" countmax="80" chance="44000" />
+		<item id="2148" countmax="50" chance="44000" />
+		<item id="2161" chance="4980" />
+		<item id="2170" chance="70" />
+		<item id="2226" chance="10050" />
+		<item id="2376" chance="5030" />
+		<item id="2483" chance="8080" />
+		<item id="2696" chance="8000" />
+		<item id="2801" chance="420" />
+		<item id="3976" countmax="2" chance="7110" />
+		<item id="7910" chance="580" />
+		<item id="9808" chance="190" />
+		<item id="11225" chance="19940" />
 	</loot>
 </monster>

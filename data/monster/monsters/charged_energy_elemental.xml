@@ -39,9 +39,9 @@
 		<immunity ice="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="22" chance="50000" />
-		<item name="flash arrow" countmax="3" chance="6250" />
-		<item name="energy soil" chance="2063" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="22" chance="50000" />
+		<item id="7838" countmax="3" chance="6250" />
+		<item id="8303" chance="2063" />
 	</loot>
 </monster>

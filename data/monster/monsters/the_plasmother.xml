@@ -49,14 +49,14 @@
 		<voice sentence="Blubb" />
 	</voices>
 	<loot>
-		<item name="black pearl" countmax="3" chance="5000" />
-		<item name="small sapphire" countmax="3" chance="5000" />
-		<item name="gold coin" countmax="70" chance="20000" />
-		<item name="gold coin" countmax="60" chance="20000" />
-		<item name="gold coin" countmax="45" chance="20000" />
-		<item name="platinum coin" countmax="13" chance="25000" />
-		<item name="soul orb" chance="35000" />
-		<item name="demonic essence" chance="45000" />
-		<item name="the Plasmother's remains" chance="100000" />
+		<item id="2144" countmax="3" chance="5000" />
+		<item id="2146" countmax="3" chance="5000" />
+		<item id="2148" countmax="70" chance="20000" />
+		<item id="2148" countmax="60" chance="20000" />
+		<item id="2148" countmax="45" chance="20000" />
+		<item id="2152" countmax="13" chance="25000" />
+		<item id="5944" chance="35000" />
+		<item id="6500" chance="45000" />
+		<item id="6535" chance="100000" />
 	</loot>
 </monster>

@@ -27,10 +27,10 @@
 		<voice sentence="Meeeeep!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="16" chance="100000" />
-		<item name="bone club" chance="5000" />
-		<item name="jacket" chance="50000" />
-		<item name="cookie" chance="5000" />
-		<item id="2696" chance="50000" /><!-- cheese -->
+		<item id="2148" countmax="16" chance="100000" />
+		<item id="2449" chance="5000" />
+		<item id="2650" chance="50000" />
+		<item id="2687" chance="5000" />
+		<item id="2696" chance="50000" />
 	</loot>
 </monster>

@@ -21,9 +21,9 @@
 	</attacks>
 	<defenses armor="1" defense="2" />
 	<loot>
-		<item id="2120" chance="10000" /><!-- rope -->
-		<item name="gold coin" countmax="12" chance="58000" />
-		<item name="studded club" chance="3000" />
-		<item name="meat" countmax="2" chance="14000" />
+		<item id="2120" chance="10000" />
+		<item id="2148" countmax="12" chance="58000" />
+		<item id="2448" chance="3000" />
+		<item id="2666" countmax="2" chance="14000" />
 	</loot>
 </monster>

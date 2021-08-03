@@ -41,10 +41,10 @@
 		<voice sentence="Ribbit!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="20" chance="80000" />
-		<item name="war hammer" chance="148" />
-		<item name="mace" chance="2854" />
-		<item id="2667" chance="20000" /><!-- fish -->
-		<item name="poisonous slime" chance="4761" />
+		<item id="2148" countmax="20" chance="80000" />
+		<item id="2391" chance="148" />
+		<item id="2398" chance="2854" />
+		<item id="2667" chance="20000" />
+		<item id="10557" chance="4761" />
 	</loot>
 </monster>

@@ -57,32 +57,32 @@
 		<voice sentence="Join me, brothers, for a BLOODY FRENZY!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->
-		<item id="2148" countmax="42" chance="60000" /><!-- gold coin -->
-		<item id="2152" countmax="6" chance="18200" /><!-- fish -->
-		<item id="6558" chance="2000" /><!-- concentrated demonic blood -->
-		<item id="7590" chance="2000" /><!-- great mana potion -->
-		<item id="2150" countmax="3" chance="210" /><!-- small amethyst -->
-		<item id="2145" countmax="3" chance="300" /><!-- small diamond -->
-		<item id="2149" countmax="3" chance="300" /><!-- small emeralds -->
-		<item id="2147" countmax="3" chance="350" /><!-- small rubbie -->
-		<item id="9970" countmax="3" chance="280" /><!-- small topaz -->
-		<item id="2158" chance="300" /><!-- blue gem -->
-		<item id="6300" chance="260" /><!-- death ring -->
-		<item id="6500" chance="330" /><!-- demonic essence -->
-		<item id="8871" chance="220" /><!--  focus cape -->
-		<item id="24630" chance="500" /><!-- golden lotus brooch -->
-		<item id="7899" chance="100" /><!-- magma coat -->
-		<item id="2194" chance="400" /><!-- mysterious fetish -->
-		<item id="2663" chance="300" /><!-- mystic turban -->
-		<item id="24637" chance="300" /><!-- oriental shoes -->
-		<item id="24631" chance="500" /><!-- peacock feather fan -->
-		<item id="5911" chance="300" /><!-- red piece of cloth -->
-		<item id="2133" chance="400" /><!--  ruby necklace -->
-		<item id="2134" chance="900" /><!-- silver brooch -->
-		<item id="5944" chance="300" /><!-- soul orb -->
-		<item id="8902" chance="100" /><!-- spellbook of mind control -->
-		<item id="2187" chance="200" /><!-- wand of inferno -->
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="100" chance="80000" />
+		<item id="2148" countmax="42" chance="60000" />
+		<item id="2152" countmax="6" chance="18200" />
+		<item id="6558" chance="2000" />
+		<item id="7590" chance="2000" />
+		<item id="2150" countmax="3" chance="210" />
+		<item id="2145" countmax="3" chance="300" />
+		<item id="2149" countmax="3" chance="300" />
+		<item id="2147" countmax="3" chance="350" />
+		<item id="9970" countmax="3" chance="280" />
+		<item id="2158" chance="300" />
+		<item id="6300" chance="260" />
+		<item id="6500" chance="330" />
+		<item id="8871" chance="220" />
+		<item id="24630" chance="500" />
+		<item id="7899" chance="100" />
+		<item id="2194" chance="400" />
+		<item id="2663" chance="300" />
+		<item id="24637" chance="300" />
+		<item id="24631" chance="500" />
+		<item id="5911" chance="300" />
+		<item id="2133" chance="400" />
+		<item id="2134" chance="900" />
+		<item id="5944" chance="300" />
+		<item id="8902" chance="100" />
+		<item id="2187" chance="200" />
 	</loot>
 </monster>

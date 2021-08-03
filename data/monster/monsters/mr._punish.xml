@@ -27,6 +27,6 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="Mr. Punish's handcuffs" chance="100000" />
+		<item id="6537" chance="100000" />
 	</loot>
 </monster>

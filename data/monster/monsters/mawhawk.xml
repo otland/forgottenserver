@@ -42,22 +42,22 @@
 		<voice sentence="Knorrrr!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="10000" />
-		<item name="platinum coin" countmax="25" chance="10000" />
-		<item name="fire sword" chance="10000" />
-		<item name="iron ore" chance="10000" />
-		<item name="fish fin" chance="10000" />
-		<item name="red piece of cloth" chance="10000" />
-		<item name="hardened bone" chance="10000" />
-		<item name="assassin dagger" chance="10000" />
-		<item name="haunted blade" chance="10000" />
-		<item name="nightmare blade" chance="10000" />
-		<item name="violet crystal shard" countmax="3" chance="10000" />
-		<item name="green crystal shard" countmax="3" chance="10000" />
-		<item name="green crystal splinter" countmax="5" chance="10000" />
-		<item name="blue crystal splinter" countmax="5" chance="10000" />
-		<item name="cluster of solace" countmax="2" chance="30000" />
-		<item name="frazzle tongue" chance="30000" />
-		<item name="unrealized dream" countmax="2" chance="30000" />
+		<item id="2148" countmax="100" chance="10000" />
+		<item id="2152" countmax="25" chance="10000" />
+		<item id="2392" chance="10000" />
+		<item id="5880" chance="10000" />
+		<item id="5895" chance="10000" />
+		<item id="5911" chance="10000" />
+		<item id="5925" chance="10000" />
+		<item id="7404" chance="10000" />
+		<item id="7407" chance="10000" />
+		<item id="7418" chance="10000" />
+		<item id="18414" countmax="3" chance="10000" />
+		<item id="18415" countmax="3" chance="10000" />
+		<item id="18416" countmax="5" chance="10000" />
+		<item id="18418" countmax="5" chance="10000" />
+		<item id="22396" countmax="2" chance="30000" />
+		<item id="22532" chance="30000" />
+		<item id="22598" countmax="2" chance="30000" />
 	</loot>
 </monster>

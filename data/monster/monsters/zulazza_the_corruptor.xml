@@ -53,28 +53,28 @@
 		<voice sentence="Oh, HE will take revenge on zzizz azzault when you zztep in front of HIZZ fazze!" />
 	</voices>
 	<loot>
-		<item name="emerald bangle" chance="10500" />
-		<item name="gold coin" countmax="100" chance="49650" />
-		<item name="platinum coin" countmax="30" chance="41325" />
-		<item name="violet gem" chance="25500" />
-		<item name="yellow gem" chance="15500" />
-		<item name="green gem" chance="20500" />
-		<item name="red gem" chance="10500" />
-		<item name="blue gem" chance="30500" />
-		<item name="mastermind shield" chance="5500" />
-		<item name="guardian shield" chance="5500" />
-		<item name="tower shield" chance="15500" />
-		<item name="soul orb" countmax="4" chance="19250" />
-		<item name="viper star" countmax="67" chance="8100" />
-		<item name="mastermind potion" chance="10500" />
-		<item name="great mana potion" chance="20500" />
-		<item name="great health potion" chance="30500" />
-		<item id="7632" countmax="2" chance="28000" /><!-- giant shimmering pearl -->
-		<item name="ultimate health potion" chance="10500" />
-		<item name="earthborn titan armor" chance="5500" />
-		<item name="paladin armor" chance="5500" />
-		<item id="9808" chance="50500" /><!-- rusty armor (common) -->
-		<item name="gold ingot" countmax="4" chance="33000" />
-		<item name="dragon scale boots" chance="5500" />
+		<item id="2127" chance="10500" />
+		<item id="2148" countmax="100" chance="49650" />
+		<item id="2152" countmax="30" chance="41325" />
+		<item id="2153" chance="25500" />
+		<item id="2154" chance="15500" />
+		<item id="2155" chance="20500" />
+		<item id="2156" chance="10500" />
+		<item id="2158" chance="30500" />
+		<item id="2514" chance="5500" />
+		<item id="2515" chance="5500" />
+		<item id="2528" chance="15500" />
+		<item id="5944" countmax="4" chance="19250" />
+		<item id="7366" countmax="67" chance="8100" />
+		<item id="7440" chance="10500" />
+		<item id="7590" chance="20500" />
+		<item id="7591" chance="30500" />
+		<item id="7632" countmax="2" chance="28000" />
+		<item id="8473" chance="10500" />
+		<item id="8882" chance="5500" />
+		<item id="8891" chance="5500" />
+		<item id="9808" chance="50500" />
+		<item id="9971" countmax="4" chance="33000" />
+		<item id="11118" chance="5500" />
 	</loot>
 </monster>

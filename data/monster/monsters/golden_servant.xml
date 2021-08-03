@@ -49,18 +49,18 @@
 		<voice sentence="Remain. Obedient." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="40" chance="45000" />
-		<item name="stealth ring" chance="450" />
-		<item name="gold ring" chance="10" />
-		<item name="halberd" chance="3003" />
-		<item name="golden armor" chance="10" />
-		<item name="green mushroom" chance="1450" />
-		<item name="health potion" chance="4930" />
-		<item name="mana potion" chance="4950" />
-		<item name="spellbook of enlightenment" chance="520" />
-		<item name="gear wheel" chance="940" />
-		<item name="slime mould" chance="340" />
-		<item name="golden can of oil" chance="40" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="40" chance="45000" />
+		<item id="2165" chance="450" />
+		<item id="2179" chance="10" />
+		<item id="2381" chance="3003" />
+		<item id="2466" chance="10" />
+		<item id="2796" chance="1450" />
+		<item id="7618" chance="4930" />
+		<item id="7620" chance="4950" />
+		<item id="8900" chance="520" />
+		<item id="9690" chance="940" />
+		<item id="13758" chance="340" />
+		<item id="13938" chance="40" />
 	</loot>
 </monster>

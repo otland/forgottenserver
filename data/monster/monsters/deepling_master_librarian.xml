@@ -48,18 +48,18 @@
 		<voice sentence="Mmmmmoooaaaaaahaaa!!!" />
 	</voices>
 	<loot>
-		<item name="small sapphire" countmax="3" chance="8440" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="platinum coin" countmax="3" chance="90000" />
-		<item name="life ring" chance="3200" />
-		<item id="2667" countmax="2" chance="9090" /><!-- fish -->
-		<item name="fish fin" chance="1950" />
-		<item name="eye of a deepling" chance="9380" />
-		<item name="deepling staff" chance="3130" />
-		<item name="necklace of the deep" chance="1330" />
-		<item name="spellsinger's seal" chance="25000" />
-		<item name="key to the Drowned Library" chance="20000" />
-		<item name="deepling filet" chance="20000" />
-		<item name="ornate crossbow" chance="39" />
+		<item id="2146" countmax="3" chance="8440" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2152" countmax="3" chance="90000" />
+		<item id="2168" chance="3200" />
+		<item id="2667" countmax="2" chance="9090" />
+		<item id="5895" chance="1950" />
+		<item id="13870" chance="9380" />
+		<item id="15400" chance="3130" />
+		<item id="15403" chance="1330" />
+		<item id="15421" chance="25000" />
+		<item id="15422" chance="20000" />
+		<item id="15488" chance="20000" />
+		<item id="15644" chance="39" />
 	</loot>
 </monster>

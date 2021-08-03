@@ -48,21 +48,21 @@
 		<voice sentence="Your gods won't help you!" />
 	</voices>
 	<loot>
-		<item id="12406" chance="724" /><!-- small notebook -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="55" chance="60000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="73188" /><!-- platinum coin -->
-		<item id="2121" chance="7246" /><!-- wedding ring -->
-		<item id="12466" chance="8695" /><!-- scroll of heroic deeds -->
-		<item id="2666" chance="7971" /><!-- meat -->
-		<item id="2147" chance="2173" /><!-- small ruby -->
-		<item id="2146" chance="2173" /><!-- small sapphire -->
-		<item id="2391" chance="1449" /><!-- war hammer -->
-		<item id="5911" chance="2898" /><!-- red piece of cloth -->
-		<item id="2487" chance="1449" /><!-- crown armor -->
-		<item id="2491" chance="1449" /><!-- crown helmet -->
-		<item id="2392" chance="2173" /><!-- fire sword -->
-		<item id="7591" chance="9420" /><!-- great health potion -->
-		<item id="2488" chance="724" /><!-- crown legs -->
+		<item id="12406" chance="724" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="55" chance="60000" />
+		<item id="2152" countmax="2" chance="73188" />
+		<item id="2121" chance="7246" />
+		<item id="12466" chance="8695" />
+		<item id="2666" chance="7971" />
+		<item id="2147" chance="2173" />
+		<item id="2146" chance="2173" />
+		<item id="2391" chance="1449" />
+		<item id="5911" chance="2898" />
+		<item id="2487" chance="1449" />
+		<item id="2491" chance="1449" />
+		<item id="2392" chance="2173" />
+		<item id="7591" chance="9420" />
+		<item id="2488" chance="724" />
 	</loot>
 </monster>

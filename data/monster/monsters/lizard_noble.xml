@@ -43,12 +43,12 @@
 		<voice sentence="Where are zhe guardz when you need zhem!" />
 	</voices>
 	<loot>
-		<item name="small ruby" countmax="5" chance="7100" />
-		<item name="gold coin" countmax="100" chance="91300" />
-		<item name="platinum coin" countmax="20" chance="10000" />
-		<item name="lizard leather" chance="220" />
-		<item name="lizard scale" chance="650" />
-		<item name="strong health potion" chance="2550" />
-		<item name="great health potion" chance="2900" />
+		<item id="2147" countmax="5" chance="7100" />
+		<item id="2148" countmax="100" chance="91300" />
+		<item id="2152" countmax="20" chance="10000" />
+		<item id="5876" chance="220" />
+		<item id="5881" chance="650" />
+		<item id="7588" chance="2550" />
+		<item id="7591" chance="2900" />
 	</loot>
 </monster>

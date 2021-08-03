@@ -35,15 +35,15 @@
 		<voice sentence="Ngl..Nglll...Gll" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="41000" />
-		<item name="gold coin" countmax="8" chance="41000" />
-		<item name="scarab coin" chance="8210" />
-		<item name="rotten meat" chance="2000" />
-		<item id="2230" chance="49000" /><!-- bone -->
-		<item name="longsword" chance="6560" />
-		<item name="bone shield" chance="5300" />
-		<item name="worm" countmax="12" chance="25325" />
-		<item name="half-digested piece of meat" chance="1000" />
-		<item name="fist on a stick" chance="230" />
+		<item id="2148" countmax="100" chance="41000" />
+		<item id="2148" countmax="8" chance="41000" />
+		<item id="2159" chance="8210" />
+		<item id="2227" chance="2000" />
+		<item id="2230" chance="49000" />
+		<item id="2397" chance="6560" />
+		<item id="2541" chance="5300" />
+		<item id="3976" countmax="12" chance="25325" />
+		<item id="11200" chance="1000" />
+		<item id="13535" chance="230" />
 	</loot>
 </monster>

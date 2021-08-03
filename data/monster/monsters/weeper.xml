@@ -51,25 +51,25 @@
 		<voice sentence="Moooaaan!" />
 	</voices>
 	<loot>
-		<item name="small ruby" countmax="3" chance="15690" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="99" chance="50000" />
-		<item name="bronze amulet" countmax="7" chance="100000" />
-		<item name="fire sword" chance="3280" />
-		<item name="fire axe" chance="2150" />
-		<item name="great mana potion" countmax="2" chance="14800" />
-		<item name="magma legs" chance="790" />
-		<item name="magma coat" chance="790" />
-		<item name="ultimate health potion" countmax="2" chance="15440" />
-		<item name="fiery heart" chance="13570" />
-		<item id="13757" chance="1320" /><!-- coal -->
-		<item name="wand of everblazing" chance="1480" />
-		<item name="violet crystal shard" chance="5430" />
-		<item name="brown crystal splinter" countmax="2" chance="12100" />
-		<item name="red crystal fragment" chance="8880" />
-		<item name="magma clump" chance="13240" />
-		<item name="blazing bone" chance="14890" />
-		<item name="eye of a weeper" chance="15870" />
-		<item name="prismatic bolt" countmax="5" chance="10900" />
+		<item id="2147" countmax="3" chance="15690" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="99" chance="50000" />
+		<item id="2172" countmax="7" chance="100000" />
+		<item id="2392" chance="3280" />
+		<item id="2432" chance="2150" />
+		<item id="7590" countmax="2" chance="14800" />
+		<item id="7894" chance="790" />
+		<item id="7899" chance="790" />
+		<item id="8473" countmax="2" chance="15440" />
+		<item id="10553" chance="13570" />
+		<item id="13757" chance="1320" />
+		<item id="18409" chance="1480" />
+		<item id="18414" chance="5430" />
+		<item id="18417" countmax="2" chance="12100" />
+		<item id="18420" chance="8880" />
+		<item id="18424" chance="13240" />
+		<item id="18425" chance="14890" />
+		<item id="18426" chance="15870" />
+		<item id="18435" countmax="5" chance="10900" />
 	</loot>
 </monster>

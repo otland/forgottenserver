@@ -45,11 +45,11 @@
 		<voice sentence="Aaaauuuuuooooooo!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="52" chance="56000" />
-		<item name="hailstorm rod" chance="7400" />
-		<item name="meat" countmax="4" chance="52000" />
-		<item name="wolf paw" chance="3700" />
-		<item name="shiver arrow" countmax="10" chance="11000" />
-		<item name="crystalline armor" chance="3700" />
+		<item id="2148" countmax="52" chance="56000" />
+		<item id="2183" chance="7400" />
+		<item id="2666" countmax="4" chance="52000" />
+		<item id="5897" chance="3700" />
+		<item id="7839" countmax="10" chance="11000" />
+		<item id="8878" chance="3700" />
 	</loot>
 </monster>

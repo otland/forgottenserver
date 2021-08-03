@@ -46,19 +46,19 @@
 		<voice sentence="A challenge at last!" />
 	</voices>
 	<loot>
-		<item id="12406" chance="1655" /><!-- small notebook -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2152" countmax="2" chance="25165" /><!-- platinum coin -->
-		<item id="12466" chance="4635" /><!-- scroll of heroic deeds -->
-		<item id="2666" chance="7615" /><!-- meat -->
-		<item id="2377" chance="5960" /><!-- two handed sword -->
-		<item id="2391" chance="993" /><!-- war hammer -->
-		<item id="5911" chance="2317" /><!-- red piece of cloth -->
-		<item id="2487" chance="662" /><!-- crown armor -->
-		<item id="2491" chance="331" /><!-- crown helmet -->
-		<item id="7591" chance="7284" /><!-- great health potion -->
-		<item id="2147" chance="6622" /><!-- small ruby -->
-		<item id="2114" chance="331" /><!-- piggy bank -->
-		<item id="2488" chance="331" /><!-- crown legs -->
+		<item id="12406" chance="1655" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2152" countmax="2" chance="25165" />
+		<item id="12466" chance="4635" />
+		<item id="2666" chance="7615" />
+		<item id="2377" chance="5960" />
+		<item id="2391" chance="993" />
+		<item id="5911" chance="2317" />
+		<item id="2487" chance="662" />
+		<item id="2491" chance="331" />
+		<item id="7591" chance="7284" />
+		<item id="2147" chance="6622" />
+		<item id="2114" chance="331" />
+		<item id="2488" chance="331" />
 	</loot>
 </monster>

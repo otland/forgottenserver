@@ -38,14 +38,14 @@
 		<voice sentence="By the power of Greenskull!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="53" chance="87250" />
-		<item name="crossbow" chance="2750" />
-		<item name="bolt" countmax="15" chance="48270" />
-		<item name="meat" chance="24930" />
-		<item name="piercing bolt" countmax="5" chance="14900" />
-		<item name="elvish bow" chance="90" />
-		<item name="small topaz" chance="470" />
-		<item name="elven hoof" chance="7030" />
-		<item name="venison" chance="13210" />
+		<item id="2148" countmax="53" chance="87250" />
+		<item id="2455" chance="2750" />
+		<item id="2543" countmax="15" chance="48270" />
+		<item id="2666" chance="24930" />
+		<item id="7363" countmax="5" chance="14900" />
+		<item id="7438" chance="90" />
+		<item id="9970" chance="470" />
+		<item id="21311" chance="7030" />
+		<item id="21312" chance="13210" />
 	</loot>
 </monster>

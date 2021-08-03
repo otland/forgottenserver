@@ -46,19 +46,19 @@
 		<voice sentence="*stomp*" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
-		<item id="24124" chance="1490" /><!-- bronze gear wheel -->
-		<item id="23564" chance="17160" /><!-- metal jaw -->
-		<item id="2152" countmax="2" chance="43280" /><!-- platinum coin -->
-		<item id="7588" countmax="2" chance="9700" /><!-- strong health potion -->
-		<item id="7589" countmax="2" chance="9700" /><!-- strong mana potion -->
-		<item id="23542" chance="1490" /><!-- metal bat -->
-		<item id="2167" chance="2240" /><!-- energy ring -->
-		<item id="2168" chance="750" /><!-- life ring -->
-		<item id="11227" chance="2240" /><!-- shiny stone -->
-		<item id="23540" chance="1490" /><!-- metal spats -->
-		<item id="23539" chance="1490" /><!-- alloy legs -->
-		<item id="9810" chance="2990" /><!-- rusty armor(rare) -->
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2148" countmax="100" chance="60000" />
+		<item id="24124" chance="1490" />
+		<item id="23564" chance="17160" />
+		<item id="2152" countmax="2" chance="43280" />
+		<item id="7588" countmax="2" chance="9700" />
+		<item id="7589" countmax="2" chance="9700" />
+		<item id="23542" chance="1490" />
+		<item id="2167" chance="2240" />
+		<item id="2168" chance="750" />
+		<item id="11227" chance="2240" />
+		<item id="23540" chance="1490" />
+		<item id="23539" chance="1490" />
+		<item id="9810" chance="2990" />
 	</loot>
 </monster>

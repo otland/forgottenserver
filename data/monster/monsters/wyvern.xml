@@ -48,14 +48,14 @@
 		<voice sentence="Shriiiek" yell="1" />
 	</voices>
 	<loot>
-		<item name="emerald bangle" chance="540" />
-		<item name="small sapphire" chance="5000" />
-		<item name="gold coin" countmax="90" chance="100000" />
-		<item name="wand of inferno" chance="810" />
-		<item name="power bolt" countmax="2" chance="3400" />
-		<item name="dragon ham" countmax="3" chance="60500" />
-		<item name="wyvern fang" chance="410" />
-		<item name="strong health potion" chance="2500" />
-		<item name="wyvern talisman" chance="12300" />
+		<item id="2127" chance="540" />
+		<item id="2146" chance="5000" />
+		<item id="2148" countmax="90" chance="100000" />
+		<item id="2187" chance="810" />
+		<item id="2547" countmax="2" chance="3400" />
+		<item id="2672" countmax="3" chance="60500" />
+		<item id="7408" chance="410" />
+		<item id="7588" chance="2500" />
+		<item id="10561" chance="12300" />
 	</loot>
 </monster>

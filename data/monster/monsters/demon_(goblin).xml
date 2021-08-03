@@ -44,17 +44,17 @@
 		<element deathPercent="-10" />
 	</elements>
 	<loot>
-		<item name="gold coin" countmax="9" chance="50320" />
-		<item name="small stone" chance="15290" />
-		<item id="2667" chance="12750" /><!-- fish -->
-		<item name="small axe" chance="9700" />
-		<item name="short sword" chance="8870" />
-		<item name="bone club" chance="4900" />
-		<item name="leather armor" chance="2510" />
-		<item name="leather helmet" chance="1940" />
-		<item name="dagger" chance="1800" />
-		<item id="2230" chance="1130" /><!-- bone -->
-		<item name="mouldy cheese" chance="1000" />
-		<item name="goblin ear" chance="940" />
+		<item id="2148" countmax="9" chance="50320" />
+		<item id="1294" chance="15290" />
+		<item id="2667" chance="12750" />
+		<item id="2559" chance="9700" />
+		<item id="2406" chance="8870" />
+		<item id="2449" chance="4900" />
+		<item id="2467" chance="2510" />
+		<item id="2461" chance="1940" />
+		<item id="2379" chance="1800" />
+		<item id="2230" chance="1130" />
+		<item id="2235" chance="1000" />
+		<item id="12495" chance="940" />
 	</loot>
 </monster>

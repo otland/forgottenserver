@@ -41,13 +41,13 @@
 		<voice sentence="*tak tak tak*" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="45000" />
-		<item name="gold coin" countmax="28" chance="45000" />
-		<item name="small emerald" countmax="2" chance="9900" />
-		<item name="platinum coin" countmax="2" chance="11111" />
-		<item name="daramian mace" chance="6250" />
-		<item name="steel helmet" chance="5000" />
-		<item name="black shield" chance="1724" />
-		<item name="fist on a stick" chance="280" />
+		<item id="2148" countmax="100" chance="45000" />
+		<item id="2148" countmax="28" chance="45000" />
+		<item id="2149" countmax="2" chance="9900" />
+		<item id="2152" countmax="2" chance="11111" />
+		<item id="2439" chance="6250" />
+		<item id="2457" chance="5000" />
+		<item id="2529" chance="1724" />
+		<item id="13535" chance="280" />
 	</loot>
 </monster>

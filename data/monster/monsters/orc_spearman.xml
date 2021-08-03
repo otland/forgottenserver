@@ -36,14 +36,14 @@
 		<voice sentence="Ugaar!" />
 	</voices>
 	<loot>
-		<item name="meat" chance="30200" />
-		<item name="gold coin" countmax="11" chance="25050" />
-		<item name="spear" chance="17440" />
-		<item name="studded helmet" chance="9000" />
-		<item name="studded legs" chance="8300" />
-		<item name="machete" chance="2800" />
+		<item id="2666" chance="30200" />
+		<item id="2148" countmax="11" chance="25050" />
+		<item id="2389" chance="17440" />
+		<item id="2482" chance="9000" />
+		<item id="2468" chance="8300" />
+		<item id="2420" chance="2800" />
 		<!-- Heavy Old Tome 2.06% -->
-		<item name="orc leather" chance="2000" />
-		<item name="orc tooth" chance="150" />
+		<item id="12435" chance="2000" />
+		<item id="11113" chance="150" />
 	</loot>
 </monster>

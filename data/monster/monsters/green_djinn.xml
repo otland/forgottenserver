@@ -58,17 +58,17 @@
 		<voice sentence="Good wishes are for fairytales" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="44000" />
-		<item name="gold coin" countmax="15" chance="44000" />
-		<item id="2696" chance="24500" /><!-- cheese -->
-		<item name="royal spear" countmax="2" chance="4870" />
-		<item name="small emerald" countmax="4" chance="2960" />
-		<item id="1965" chance="2280" /><!-- book (green) -->
-		<item name="dirty turban" chance="2210" />
-		<item name="green piece of cloth" chance="2000" />
-		<item name="grave flower" chance="1000" />
-		<item name="small oil lamp" chance="910" />
-		<item name="mana potion" chance="490" />
-		<item name="mystic turban" chance="140" />
+		<item id="2148" countmax="100" chance="44000" />
+		<item id="2148" countmax="15" chance="44000" />
+		<item id="2696" chance="24500" />
+		<item id="7378" countmax="2" chance="4870" />
+		<item id="2149" countmax="4" chance="2960" />
+		<item id="1965" chance="2280" />
+		<item id="12412" chance="2210" />
+		<item id="5910" chance="2000" />
+		<item id="2747" chance="1000" />
+		<item id="2063" chance="910" />
+		<item id="7620" chance="490" />
+		<item id="2663" chance="140" />
 	</loot>
 </monster>

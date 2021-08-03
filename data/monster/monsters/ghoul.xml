@@ -45,17 +45,17 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="30" chance="70000" />
-		<item name="rotten piece of cloth" chance="14470" />
-		<item name="worm" countmax="2" chance="10000" />
-		<item id="2050" chance="5000" /><!-- torch -->
-		<item name="ghoul snack" chance="5130" />
+		<item id="2148" countmax="30" chance="70000" />
+		<item id="11208" chance="14470" />
+		<item id="3976" countmax="2" chance="10000" />
+		<item id="2050" chance="5000" />
+		<item id="12423" chance="5130" />
 		<!-- Heavy Old Tome 2.06% -->
-		<item name="viking helmet" chance="1000" />
-		<item name="brown piece of cloth" chance="1000" />
-		<item name="pile of grave earth" chance="950" />
-		<item name="scale armor" chance="940" />
-		<item id="2229" chance="280" /><!-- skull -->
-		<item name="life ring" chance="190" />
+		<item id="2473" chance="1000" />
+		<item id="5913" chance="1000" />
+		<item id="12440" chance="950" />
+		<item id="2483" chance="940" />
+		<item id="2229" chance="280" />
+		<item id="2168" chance="190" />
 	</loot>
 </monster>

@@ -45,11 +45,11 @@
 		<voice sentence="BZZZZZZZZZZ" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="56" chance="50000" />
-		<item name="small amethyst" countmax="2" chance="10000" />
-		<item name="berserk potion" chance="2173" />
-		<item name="great health potion" chance="10000" />
-		<item name="energy soil" chance="14285" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="56" chance="50000" />
+		<item id="2150" countmax="2" chance="10000" />
+		<item id="7439" chance="2173" />
+		<item id="7591" chance="10000" />
+		<item id="8303" chance="14285" />
 	</loot>
 </monster>

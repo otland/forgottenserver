@@ -57,17 +57,17 @@
 		<voice sentence="Wishes can come true." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="43000" />
-		<item name="gold coin" countmax="15" chance="43000" />
-		<item id="2684" chance="23480" /><!-- carrot -->
-		<item name="royal spear" countmax="2" chance="4500" />
-		<item name="small sapphire" countmax="4" chance="2560" />
-		<item id="1963" chance="2450" /><!-- book (blue) -->
-		<item name="blue piece of cloth" chance="1920" />
-		<item name="dirty turban" chance="1890" />
-		<item name="mana potion" chance="860" />
-		<item name="small oil lamp" chance="730" />
-		<item name="blue rose" chance="440" />
-		<item name="mystic turban" chance="70" />
+		<item id="2148" countmax="100" chance="43000" />
+		<item id="2148" countmax="15" chance="43000" />
+		<item id="2684" chance="23480" />
+		<item id="7378" countmax="2" chance="4500" />
+		<item id="2146" countmax="4" chance="2560" />
+		<item id="1963" chance="2450" />
+		<item id="5912" chance="1920" />
+		<item id="12412" chance="1890" />
+		<item id="7620" chance="860" />
+		<item id="2063" chance="730" />
+		<item id="2745" chance="440" />
+		<item id="2663" chance="70" />
 	</loot>
 </monster>

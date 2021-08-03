@@ -40,19 +40,19 @@
 		<voice sentence="&lt;crackle&gt;" />
 	</voices>
 	<loot>
-		<item name="small stone" countmax="10" chance="30230" />
-		<item name="gold coin" countmax="100" chance="99930" />
-		<item name="platinum coin" countmax="4" chance="99540" />
-		<item name="guardian halberd" chance="560" />
-		<item name="tower shield" chance="820" />
-		<item name="iron ore" chance="1700" />
-		<item name="ancient stone" chance="20020" />
-		<item name="shiny stone" chance="800" />
-		<item name="Zaoan sword" chance="100" />
-		<item name="Zaoan halberd" chance="1860" />
-		<item name="spiked iron ball" chance="9960" />
-		<item name="clay lump" chance="720" />
-		<item name="piece of marble rock" chance="430" />
-		<item id="13757" chance="400" /><!-- coal -->
+		<item id="1294" countmax="10" chance="30230" />
+		<item id="2148" countmax="100" chance="99930" />
+		<item id="2152" countmax="4" chance="99540" />
+		<item id="2427" chance="560" />
+		<item id="2528" chance="820" />
+		<item id="5880" chance="1700" />
+		<item id="10549" chance="20020" />
+		<item id="11227" chance="800" />
+		<item id="11307" chance="100" />
+		<item id="11323" chance="1860" />
+		<item id="11325" chance="9960" />
+		<item id="11339" chance="720" />
+		<item id="11343" chance="430" />
+		<item id="13757" chance="400" />
 	</loot>
 </monster>

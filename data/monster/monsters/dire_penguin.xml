@@ -40,10 +40,10 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="10" chance="18000" />
-		<item name="dragon hammer" chance="200" />
-		<item id="2667" countmax="4" chance="8000" /><!-- fish -->
-		<item name="rainbow trout" chance="8000" />
-		<item name="green perch" chance="7000" />
+		<item id="2148" countmax="10" chance="18000" />
+		<item id="2434" chance="200" />
+		<item id="2667" countmax="4" chance="8000" />
+		<item id="7158" chance="8000" />
+		<item id="7159" chance="7000" />
 	</loot>
 </monster>

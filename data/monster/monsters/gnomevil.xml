@@ -56,13 +56,13 @@
 		<voice sentence="I'm feeling grrrreat!" />
 	</voices>
 	<loot>
-		<item name="decorative ribbon" chance="1710" />
-		<item name="crystalline sword" chance="14100" />
-		<item name="crystalline axe" chance="9830" />
-		<item name="mycological mace" chance="8120" />
-		<item name="crystal crossbow" chance="8120" />
-		<item name="mycological bow" chance="9400" />
-		<item name="shiny blade" chance="7690" />
-		<item name="Gnomevil's hat" chance="99150" />
+		<item id="18449" chance="1710" />
+		<item id="18450" chance="14100" />
+		<item id="18451" chance="9830" />
+		<item id="18452" chance="8120" />
+		<item id="18453" chance="8120" />
+		<item id="18454" chance="9400" />
+		<item id="18465" chance="7690" />
+		<item id="18495" chance="99150" />
 	</loot>
 </monster>

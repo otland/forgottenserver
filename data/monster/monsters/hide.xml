@@ -38,11 +38,11 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item name="platinum coin" countmax="5" chance="100000" />
-		<item id="2169" chance="33333" /><!-- time ring -->
-		<item name="steel helmet" chance="50000" />
-		<item name="knight legs" chance="50000" />
-		<item name="spider silk" chance="50000" />
-		<item name="terra hood" chance="50000" />
+		<item id="2152" countmax="5" chance="100000" />
+		<item id="2169" chance="33333" />
+		<item id="2457" chance="50000" />
+		<item id="2477" chance="50000" />
+		<item id="5879" chance="50000" />
+		<item id="7903" chance="50000" />
 	</loot>
 </monster>

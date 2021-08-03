@@ -51,15 +51,15 @@
 		<immunity drunk="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="37" chance="50000" />
-		<item name="halberd" chance="4460" />
-		<item name="plate shield" chance="2854" />
-		<item name="green mushroom" chance="3208" />
-		<item name="health potion" chance="4761" />
-		<item name="mana potion" chance="4785" />
-		<item name="Zaoan halberd" chance="2210" />
-		<item name="widow's mandibles" chance="20950" />
-		<item name="wailing widow's necklace" chance="900" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="37" chance="50000" />
+		<item id="2381" chance="4460" />
+		<item id="2510" chance="2854" />
+		<item id="2796" chance="3208" />
+		<item id="7618" chance="4761" />
+		<item id="7620" chance="4785" />
+		<item id="11323" chance="2210" />
+		<item id="11328" chance="20950" />
+		<item id="11329" chance="900" />
 	</loot>
 </monster>

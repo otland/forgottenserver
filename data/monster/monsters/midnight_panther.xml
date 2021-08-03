@@ -44,10 +44,10 @@
 		<immunity energy="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="57" chance="100000" />
-		<item name="life ring" chance="12500" />
-		<item name="meat" countmax="4" chance="25000" />
-		<item name="panther head" chance="12500" />
-		<item name="panther paw" chance="100000" />
+		<item id="2148" countmax="57" chance="100000" />
+		<item id="2168" chance="12500" />
+		<item id="2666" countmax="4" chance="25000" />
+		<item id="13026" chance="12500" />
+		<item id="13027" chance="100000" />
 	</loot>
 </monster>

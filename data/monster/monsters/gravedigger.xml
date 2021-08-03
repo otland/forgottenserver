@@ -59,21 +59,21 @@
 		<voice sentence="Put it there!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="37" chance="50000" />
-		<item name="platinum coin" chance="24470" />
-		<item name="yellow gem" chance="800" />
-		<item name="wand of inferno" chance="5590" />
-		<item name="sudden death rune" countmax="9" chance="7300" />
-		<item name="skull staff" chance="130" />
-		<item name="mysterious voodoo skull" chance="100" />
-		<item name="hardened bone" chance="50" />
-		<item id="6300" chance="800" /><!-- death ring -->
-		<item name="strong health potion" countmax="2" chance="2260" />
-		<item name="strong mana potion" countmax="2" chance="3600" />
-		<item name="lump of dirt" chance="100" />
-		<item name="unholy bone" chance="9570" />
-		<item name="pile of grave earth" chance="6650" />
-		<item name="safety pin" chance="6000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="37" chance="50000" />
+		<item id="2152" chance="24470" />
+		<item id="2154" chance="800" />
+		<item id="2187" chance="5590" />
+		<item id="2268" countmax="9" chance="7300" />
+		<item id="2436" chance="130" />
+		<item id="5669" chance="100" />
+		<item id="5925" chance="50" />
+		<item id="6300" chance="800" />
+		<item id="7588" countmax="2" chance="2260" />
+		<item id="7589" countmax="2" chance="3600" />
+		<item id="10609" chance="100" />
+		<item id="11233" chance="9570" />
+		<item id="12440" chance="6650" />
+		<item id="12449" chance="6000" />
 	</loot>
 </monster>

@@ -40,16 +40,16 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="platinum coin" countmax="3" chance="26800" />
-		<item name="lizard leather" chance="1825" />
-		<item name="lizard scale" chance="800" />
-		<item name="strong health potion" countmax="2" chance="2875" />
-		<item name="great health potion" countmax="2" chance="2775" />
-		<item name="red lantern" chance="100000" />
-		<item name="Zaoan armor" chance="1050" />
-		<item name="Zaoan shoes" chance="3150" />
-		<item name="Zaoan legs" chance="2625" />
-		<item name="zaogun flag" chance="11250" />
-		<item name="zaogun shoulderplates" chance="100000" />
+		<item id="2152" countmax="3" chance="26800" />
+		<item id="5876" chance="1825" />
+		<item id="5881" chance="800" />
+		<item id="7588" countmax="2" chance="2875" />
+		<item id="7591" countmax="2" chance="2775" />
+		<item id="11206" chance="100000" />
+		<item id="11301" chance="1050" />
+		<item id="11303" chance="3150" />
+		<item id="11304" chance="2625" />
+		<item id="11330" chance="11250" />
+		<item id="11331" chance="100000" />
 	</loot>
 </monster>

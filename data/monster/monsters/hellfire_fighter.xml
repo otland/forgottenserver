@@ -44,24 +44,24 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="emerald bangle" chance="2200" />
-		<item id="2136" chance="190" /><!-- demonbone amulet -->
-		<item name="small diamond" chance="1400" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="46" chance="10000" />
-		<item name="bronze amulet" chance="1000" />
-		<item name="wand of inferno" chance="9450" />
-		<item name="burnt scroll" chance="50000" />
-		<item name="blank rune" countmax="2" chance="30000" />
-		<item name="fire sword" chance="4140" />
-		<item name="fire axe" chance="440" />
-		<item name="soul orb" chance="12150" />
-		<item name="demonic essence" chance="14500" />
-		<item name="magma legs" chance="730" />
-		<item name="magma coat" chance="470" />
-		<item name="fiery heart" chance="9570" />
-		<item name="piece of hellfire armor" chance="5060" />
-		<item id="13757" chance="670" /><!-- coal -->
+		<item id="2127" chance="2200" />
+		<item id="2136" chance="190" />
+		<item id="2145" chance="1400" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="46" chance="10000" />
+		<item id="2172" chance="1000" />
+		<item id="2187" chance="9450" />
+		<item id="2239" chance="50000" />
+		<item id="2260" countmax="2" chance="30000" />
+		<item id="2392" chance="4140" />
+		<item id="2432" chance="440" />
+		<item id="5944" chance="12150" />
+		<item id="6500" chance="14500" />
+		<item id="7894" chance="730" />
+		<item id="7899" chance="470" />
+		<item id="10553" chance="9570" />
+		<item id="10581" chance="5060" />
+		<item id="13757" chance="670" />
 	</loot>
 </monster>

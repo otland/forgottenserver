@@ -39,20 +39,20 @@
 		<voice sentence="Make it stop!" />
 	</voices>
 	<loot>
-		<item name="small blue pillow" chance="420" />
-		<item id="2072" chance="360" /><!-- lute -->
-		<item name="gold coin" countmax="9" chance="99000" />
-		<item name="dwarven ring" chance="120" />
-		<item id="2237" chance="55000" /><!-- dirty cape -->
-		<item name="wooden hammer" chance="6500" />
-		<item name="wooden spoon" chance="9750" />
-		<item id="2570" chance="5650" /><!-- rolling pin -->
-		<item name="meat" chance="9500" />
-		<item name="roll" chance="22500" />
-		<item name="red rose" chance="4700" />
-		<item name="sling herb" chance="420" />
-		<item name="rum flask" chance="420" />
-		<item id="6092" chance="300" /><!-- very noble-looking watch -->
-		<item id="9808" chance="80" /><!-- rusty armor (common) -->
+		<item id="1681" chance="420" />
+		<item id="2072" chance="360" />
+		<item id="2148" countmax="9" chance="99000" />
+		<item id="2213" chance="120" />
+		<item id="2237" chance="55000" />
+		<item id="2556" chance="6500" />
+		<item id="2567" chance="9750" />
+		<item id="2570" chance="5650" />
+		<item id="2666" chance="9500" />
+		<item id="2690" chance="22500" />
+		<item id="2744" chance="4700" />
+		<item id="2802" chance="420" />
+		<item id="5553" chance="420" />
+		<item id="6092" chance="300" />
+		<item id="9808" chance="80" />
 	</loot>
 </monster>

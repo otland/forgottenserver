@@ -30,10 +30,10 @@
 		<element icePercent="-5" />
 	</elements>
 	<loot>
-		<item name="gold coin" countmax="45" chance="50000" />
-		<item name="meat" countmax="2" chance="9460" />
-		<item name="worm" countmax="2" chance="2100" />
-		<item name="carrion worm fang" chance="10000" />
-		<item id="13757" chance="210" /><!-- Coal -->
+		<item id="2148" countmax="45" chance="50000" />
+		<item id="2666" countmax="2" chance="9460" />
+		<item id="3976" countmax="2" chance="2100" />
+		<item id="11192" chance="10000" />
+		<item id="13757" chance="210" />
 	</loot>
 </monster>

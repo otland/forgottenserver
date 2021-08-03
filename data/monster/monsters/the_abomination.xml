@@ -49,9 +49,9 @@
 		<voice sentence="I AM THE ESSENCE OF DEATH!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="platinum coin" countmax="3" chance="10000" />
-		<item name="soul orb" chance="2500" />
-		<item name="demonic essence" chance="2857" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="2152" countmax="3" chance="10000" />
+		<item id="5944" chance="2500" />
+		<item id="6500" chance="2857" />
 	</loot>
 </monster>

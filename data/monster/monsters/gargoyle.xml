@@ -43,18 +43,18 @@
 		<voice sentence="There is a stone in your shoe!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="30" chance="88000" />
-		<item name="small stone" countmax="10" chance="15800" />
-		<item name="stone wing" chance="11730" />
-		<item name="potato" countmax="2" chance="9220" />
-		<item name="strawberry" countmax="5" chance="1910" />
-		<item name="morning star" chance="1500" />
-		<item name="battle shield" chance="1300" />
-		<item name="wolf tooth chain" chance="1180" />
-		<item name="steel helmet" chance="850" />
-		<item name="piece of marble rock" chance="450" />
-		<item name="dark armor" chance="300" />
-		<item name="club ring" chance="260" />
-		<item name="shiny stone" chance="190" />
+		<item id="2148" countmax="30" chance="88000" />
+		<item id="1294" countmax="10" chance="15800" />
+		<item id="11195" chance="11730" />
+		<item id="8838" countmax="2" chance="9220" />
+		<item id="2680" countmax="5" chance="1910" />
+		<item id="2394" chance="1500" />
+		<item id="2513" chance="1300" />
+		<item id="2129" chance="1180" />
+		<item id="2457" chance="850" />
+		<item id="11343" chance="450" />
+		<item id="2489" chance="300" />
+		<item id="2209" chance="260" />
+		<item id="11227" chance="190" />
 	</loot>
 </monster>

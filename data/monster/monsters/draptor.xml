@@ -47,11 +47,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="90" chance="33750" />
-		<item name="gold coin" countmax="60" chance="33750" />
-		<item name="strong health potion" chance="3150" />
-		<item name="strong mana potion" chance="4150" />
-		<item name="dragon robe" chance="950" />
-		<item name="draptor scales" chance="6650" />
+		<item id="2148" countmax="90" chance="33750" />
+		<item id="2148" countmax="60" chance="33750" />
+		<item id="7588" chance="3150" />
+		<item id="7589" chance="4150" />
+		<item id="8867" chance="950" />
+		<item id="13296" chance="6650" />
 	</loot>
 </monster>

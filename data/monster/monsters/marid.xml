@@ -69,23 +69,23 @@
 		<voice sentence="Be careful what you wish." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="49000" />
-		<item name="gold coin" countmax="29" chance="49000" />
-		<item name="blueberry" countmax="25" chance="25000" />
-		<item name="royal spear" countmax="3" chance="15500" />
-		<item name="strong mana potion" chance="9800" />
-		<item name="jewelled belt" chance="8000" />
-		<item name="small sapphire" chance="6200" />
-		<item name="heavy machete" chance="4700" />
-		<item name="blue piece of cloth" chance="3750" />
-		<item id="1872" chance="2560" /><!-- blue tapestry -->
-		<item name="seeds" chance="2400" />
-		<item name="hailstorm rod" chance="770" />
-		<item name="noble turban" chance="530" />
-		<item name="mystic turban" chance="290" />
-		<item name="magma monocle" chance="260" />
-		<item id="2374" chance="260" /><!-- wooden flute -->
-		<item name="small oil lamp" chance="130" />
-		<item name="blue gem" chance="80" />
+		<item id="2148" countmax="100" chance="49000" />
+		<item id="2148" countmax="29" chance="49000" />
+		<item id="2677" countmax="25" chance="25000" />
+		<item id="7378" countmax="3" chance="15500" />
+		<item id="7589" chance="9800" />
+		<item id="12426" chance="8000" />
+		<item id="2146" chance="6200" />
+		<item id="2442" chance="4700" />
+		<item id="5912" chance="3750" />
+		<item id="1872" chance="2560" />
+		<item id="7732" chance="2400" />
+		<item id="2183" chance="770" />
+		<item id="12442" chance="530" />
+		<item id="2663" chance="290" />
+		<item id="7900" chance="260" />
+		<item id="2374" chance="260" />
+		<item id="2063" chance="130" />
+		<item id="2158" chance="80" />
 	</loot>
 </monster>

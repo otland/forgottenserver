@@ -52,19 +52,19 @@
 		<voice sentence="RED IS MAD" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="90" chance="50000" />
-		<item name="small emerald" countmax="5" chance="5882" />
-		<item name="platinum coin" countmax="2" chance="35333" />
-		<item name="energy ring" chance="606" />
-		<item name="brown mushroom" countmax="5" chance="5263" />
-		<item name="magic sulphur" chance="620" />
-		<item name="assassin star" countmax="5" chance="70" />
-		<item name="dreaded cleaver" chance="30" />
-		<item name="mastermind potion" chance="750" />
-		<item name="strong health potion" chance="6250" />
-		<item name="strong mana potion" chance="7692" />
-		<item name="terra mantle" chance="70" />
-		<item name="springsprout rod" chance="1010" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="90" chance="50000" />
+		<item id="2149" countmax="5" chance="5882" />
+		<item id="2152" countmax="2" chance="35333" />
+		<item id="2167" chance="606" />
+		<item id="2789" countmax="5" chance="5263" />
+		<item id="5904" chance="620" />
+		<item id="7368" countmax="5" chance="70" />
+		<item id="7419" chance="30" />
+		<item id="7440" chance="750" />
+		<item id="7588" chance="6250" />
+		<item id="7589" chance="7692" />
+		<item id="7884" chance="70" />
+		<item id="8912" chance="1010" />
 	</loot>
 </monster>

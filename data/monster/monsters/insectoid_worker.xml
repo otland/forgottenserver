@@ -33,11 +33,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="90" chance="100000" />
-		<item name="small emerald" chance="2880" />
-		<item name="epee" chance="560" />
-		<item name="health potion" chance="5090" />
-		<item name="compound eye" chance="15380" />
-		<item id="15622" chance="14990" /><!-- dung ball -->
+		<item id="2148" countmax="90" chance="100000" />
+		<item id="2149" chance="2880" />
+		<item id="2438" chance="560" />
+		<item id="7618" chance="5090" />
+		<item id="15486" chance="15380" />
+		<item id="15622" chance="14990" />
 	</loot>
 </monster>

@@ -48,11 +48,11 @@
 		<voice sentence="Crunch!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="85000" />
-		<item name="crystalline arrow" countmax="3" chance="5000" />
-		<item name="green crystal splinter" chance="4920" />
-		<item name="brown crystal splinter" chance="5250" />
-		<item name="blue crystal splinter" chance="5000" />
-		<item name="crystalline spikes" chance="3690" />
+		<item id="2148" countmax="90" chance="85000" />
+		<item id="18304" countmax="3" chance="5000" />
+		<item id="18416" chance="4920" />
+		<item id="18417" chance="5250" />
+		<item id="18418" chance="5000" />
+		<item id="18432" chance="3690" />
 	</loot>
 </monster>

@@ -64,25 +64,25 @@
 		<voice sentence="Come to me my children!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="39" chance="50000" />
-		<item name="platinum coin" chance="19720" />
-		<item id="2175" chance="10000" /><!-- spellbook -->
-		<item name="strong mana potion" chance="7700" />
-		<item name="black pearl" countmax="3" chance="5160" />
-		<item name="white pearl" chance="5000" />
-		<item name="small topaz" countmax="3" chance="2530" />
-		<item name="small emerald" countmax="3" chance="2230" />
-		<item name="ancient shield" chance="2022" />
-		<item name="ring of healing" chance="1640" />
-		<item name="yellow gem" chance="770" />
-		<item name="strange helmet" chance="740" />
-		<item name="mind stone" chance="450" />
-		<item name="platinum amulet" chance="400" />
-		<item name="skull staff" chance="310" />
-		<item name="castle shield" chance="250" />
-		<item name="blue robe" chance="200" />
-		<item name="lightning boots" chance="200" />
-		<item name="maxilla maximus" chance="50" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="39" chance="50000" />
+		<item id="2152" chance="19720" />
+		<item id="2175" chance="10000" />
+		<item id="7589" chance="7700" />
+		<item id="2144" countmax="3" chance="5160" />
+		<item id="2143" chance="5000" />
+		<item id="9970" countmax="3" chance="2530" />
+		<item id="2149" countmax="3" chance="2230" />
+		<item id="2532" chance="2022" />
+		<item id="2214" chance="1640" />
+		<item id="2154" chance="770" />
+		<item id="2479" chance="740" />
+		<item id="2178" chance="450" />
+		<item id="2171" chance="400" />
+		<item id="2436" chance="310" />
+		<item id="2535" chance="250" />
+		<item id="2656" chance="200" />
+		<item id="7893" chance="200" />
+		<item id="13291" chance="50" />
 	</loot>
 </monster>

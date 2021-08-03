@@ -29,7 +29,7 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="4" chance="75000" />
-		<item name="poison spider shell" chance="1140" />
+		<item id="2148" countmax="4" chance="75000" />
+		<item id="12441" chance="1140" />
 	</loot>
 </monster>

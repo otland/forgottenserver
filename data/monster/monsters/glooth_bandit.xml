@@ -40,33 +40,33 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="3962" chance="800" /><!-- beastslayer axe -->
-		<item id="23554" chance="990" /><!-- glooth amulet -->
-		<item id="23551" chance="1030" /><!-- glooth axe -->
-		<item id="23574" chance="5070" /><!-- glooth bag -->
-		<item id="23550" chance="1000" /><!-- glooth blade -->
-		<item id="23535" chance="580" /><!-- glooth cape -->
-		<item id="24183" chance="3010" /><!-- glooth capsule -->
-		<item id="23549" chance="1000" /><!-- glooth club -->
-		<item id="23514" chance="2470" /><!-- glooth sandwich -->
-		<item id="23529" chance="1010" /><!-- glooth spear -->
-		<item id="23517" chance="2600" /><!-- glooth steak -->
-		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
-		<item id="7591" chance="8090" /><!-- great health potion -->
-		<item id="7590" countmax="2" chance="7400" /><!-- great mana potion -->
-		<item id="8472" chance="3480" /><!-- great spirit potion -->
-		<item id="2155" chance="160" /><!-- green gem -->
-		<item id="2152" countmax="3" chance="60050" /><!-- platinum coin -->
-		<item id="23536" chance="730" /><!-- rubber cap -->
-		<item id="2436" chance="420" /><!-- skull staff -->
-		<item id="2149" countmax="2" chance="2040" /><!-- small emerald -->
-		<item id="9970" countmax="2" chance="2530" /><!-- small topaz -->
-		<item id="24185" chance="8010" /><!-- tainted glooth capsule -->
-		<item id="7886" chance="490" /><!-- terra boots -->
-		<item id="7903" chance="600" /><!-- terra hood -->
-		<item id="7885" chance="480" /><!-- terra legs -->
-		<item id="7884" chance="600" /><!-- terra mantle -->
-		<item id="8473" chance="3440" /><!-- ultimate health potion -->
-		<item id="2454" chance="100" /><!-- war axe -->
+		<item id="3962" chance="800" />
+		<item id="23554" chance="990" />
+		<item id="23551" chance="1030" />
+		<item id="23574" chance="5070" />
+		<item id="23550" chance="1000" />
+		<item id="23535" chance="580" />
+		<item id="24183" chance="3010" />
+		<item id="23549" chance="1000" />
+		<item id="23514" chance="2470" />
+		<item id="23529" chance="1010" />
+		<item id="23517" chance="2600" />
+		<item id="2148" countmax="100" chance="100000" />
+		<item id="7591" chance="8090" />
+		<item id="7590" countmax="2" chance="7400" />
+		<item id="8472" chance="3480" />
+		<item id="2155" chance="160" />
+		<item id="2152" countmax="3" chance="60050" />
+		<item id="23536" chance="730" />
+		<item id="2436" chance="420" />
+		<item id="2149" countmax="2" chance="2040" />
+		<item id="9970" countmax="2" chance="2530" />
+		<item id="24185" chance="8010" />
+		<item id="7886" chance="490" />
+		<item id="7903" chance="600" />
+		<item id="7885" chance="480" />
+		<item id="7884" chance="600" />
+		<item id="8473" chance="3440" />
+		<item id="2454" chance="100" />
 	</loot>
 </monster>

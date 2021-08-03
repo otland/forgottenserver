@@ -38,10 +38,10 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item name="small stone" countmax="3" chance="40000" />
-		<item name="gold coin" countmax="80" chance="24500" />
-		<item name="gold coin" countmax="47" chance="24500" />
-		<item id="2244" chance="22000" /><!-- some leaves -->
-		<item name="natural soil" chance="3750" />
+		<item id="1294" countmax="3" chance="40000" />
+		<item id="2148" countmax="80" chance="24500" />
+		<item id="2148" countmax="47" chance="24500" />
+		<item id="2244" chance="22000" />
+		<item id="8298" chance="3750" />
 	</loot>
 </monster>

@@ -59,24 +59,24 @@
 		<voice sentence="Yoooohhuuuu!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="94" chance="100000" />
-		<item name="book of prayers" chance="100000" />
-		<item name="platinum coin" countmax="3" chance="97000" />
-		<item name="star herb" chance="92000" />
-		<item name="rope belt" chance="56000" />
-		<item name="yellow gem" chance="43000" />
-		<item name="safety pin" chance="41000" />
-		<item name="power ring" chance="41000" />
-		<item name="blank rune" chance="17000" />
-		<item name="brown flask" chance="12000" />
-		<item name="bread" chance="12000" />
-		<item id="2044" chance="12000" /><!-- lamp -->
-		<item id="2401" chance="12000" /><!-- staff -->
-		<item name="green tunic" chance="12000" />
-		<item name="strong mana potion" chance="10200" />
-		<item name="wooden whistle" chance="7600" />
-		<item name="sling herb" chance="5100" />
-		<item name="wolf tooth chain" chance="5100" />
-		<item name="life crystal" chance="2500" />
+		<item id="2148" countmax="94" chance="100000" />
+		<item id="10563" chance="100000" />
+		<item id="2152" countmax="3" chance="97000" />
+		<item id="2800" chance="92000" />
+		<item id="12448" chance="56000" />
+		<item id="2154" chance="43000" />
+		<item id="12449" chance="41000" />
+		<item id="2166" chance="41000" />
+		<item id="2260" chance="17000" />
+		<item id="2015" chance="12000" />
+		<item id="2689" chance="12000" />
+		<item id="2044" chance="12000" />
+		<item id="2401" chance="12000" />
+		<item id="2652" chance="12000" />
+		<item id="7589" chance="10200" />
+		<item id="5786" chance="7600" />
+		<item id="2802" chance="5100" />
+		<item id="2129" chance="5100" />
+		<item id="2177" chance="2500" />
 	</loot>
 </monster>

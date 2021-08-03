@@ -53,20 +53,20 @@
 		<immunity lifedrain="1" />
 	</immunities>
 	<loot>
-		<item name="small diamond" chance="1000" />
-		<item name="small sapphire" chance="1000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="small emerald" countmax="2" chance="1000" />
-		<item name="platinum coin" chance="10000" />
-		<item name="energy ring" chance="950" />
-		<item name="life ring" chance="930" />
-		<item id="2667" chance="20000" /><!-- fish -->
-		<item name="rainbow trout" chance="940" />
-		<item name="green perch" chance="1050" />
-		<item name="strong health potion" chance="10000" />
-		<item name="strong mana potion" chance="10000" />
-		<item id="7632" chance="800" /><!-- giant shimmering pearl -->
-		<item id="7633" chance="800" /><!-- giant shimmering pearl -->
-		<item name="leviathan's amulet" chance="260" />
+		<item id="2145" chance="1000" />
+		<item id="2146" chance="1000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2149" countmax="2" chance="1000" />
+		<item id="2152" chance="10000" />
+		<item id="2167" chance="950" />
+		<item id="2168" chance="930" />
+		<item id="2667" chance="20000" />
+		<item id="7158" chance="940" />
+		<item id="7159" chance="1050" />
+		<item id="7588" chance="10000" />
+		<item id="7589" chance="10000" />
+		<item id="7632" chance="800" />
+		<item id="7633" chance="800" />
+		<item id="10220" chance="260" />
 	</loot>
 </monster>

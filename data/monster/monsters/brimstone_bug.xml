@@ -52,18 +52,18 @@
 		<voice sentence="Chrrr!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="small emerald" countmax="4" chance="2702" />
-		<item name="stealth ring" chance="892" />
-		<item name="platinum amulet" chance="110" />
-		<item name="magic sulphur" chance="1639" />
-		<item name="strong health potion" chance="9003" />
-		<item name="strong mana potion" chance="9025" />
-		<item name="poisonous slime" chance="50000" />
-		<item name="lump of earth" chance="20000" />
-		<item name="sulphurous stone" chance="14970" />
-		<item name="brimstone fangs" chance="5710" />
-		<item name="brimstone shell" chance="10000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2148" countmax="100" chance="50000" />
+		<item id="2149" countmax="4" chance="2702" />
+		<item id="2165" chance="892" />
+		<item id="2171" chance="110" />
+		<item id="5904" chance="1639" />
+		<item id="7588" chance="9003" />
+		<item id="7589" chance="9025" />
+		<item id="10557" chance="50000" />
+		<item id="11222" chance="20000" />
+		<item id="11232" chance="14970" />
+		<item id="12658" chance="5710" />
+		<item id="12659" chance="10000" />
 	</loot>
 </monster>

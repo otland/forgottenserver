@@ -53,13 +53,13 @@
 		<voice sentence="We'll be back!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="10" chance="12500" />
-		<item name="sabre" chance="10250" />
-		<item name="axe" chance="12250" />
-		<item name="studded helmet" chance="9500" />
-		<item name="studded armor" chance="7000" />
-		<item name="studded shield" chance="1200" />
-		<item id="6570" chance="500" /><!-- blue surprise bag -->
-		<item id="6571" chance="500" /><!-- red surprise bag -->
+		<item id="2148" countmax="10" chance="12500" />
+		<item id="2385" chance="10250" />
+		<item id="2386" chance="12250" />
+		<item id="2482" chance="9500" />
+		<item id="2484" chance="7000" />
+		<item id="2526" chance="1200" />
+		<item id="6570" chance="500" />
+		<item id="6571" chance="500" />
 	</loot>
 </monster>

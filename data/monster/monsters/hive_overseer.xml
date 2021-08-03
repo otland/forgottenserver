@@ -50,21 +50,21 @@
 		<voice sentence="Kropp!" />
 	</voices>
 	<loot>
-		<item name="small ruby" countmax="2" chance="16000" />
-		<item name="gold coin" countmax="100" chance="40000" />
-		<item name="gold coin" countmax="98" chance="58000" />
-		<item name="platinum coin" countmax="6" chance="84000" />
-		<item name="steel boots" chance="550" />
-		<item name="great mana potion" chance="18000" />
-		<item id="7632" chance="6000" /><!-- giant shimmering pearl -->
-		<item name="ultimate health potion" chance="12000" />
-		<item name="gold ingot" chance="29000" />
-		<item name="kollos shell" chance="28000" />
-		<item name="compound eye" chance="16000" />
-		<item name="calopteryx cape" chance="830" />
-		<item name="carapace shield" chance="920" />
-		<item name="hive scythe" chance="1650" />
-		<item name="gooey mass" countmax="2" chance="13000" />
-		<item name="hive bow" chance="830" />
+		<item id="2147" countmax="2" chance="16000" />
+		<item id="2148" countmax="100" chance="40000" />
+		<item id="2148" countmax="98" chance="58000" />
+		<item id="2152" countmax="6" chance="84000" />
+		<item id="2645" chance="550" />
+		<item id="7590" chance="18000" />
+		<item id="7632" chance="6000" />
+		<item id="8473" chance="12000" />
+		<item id="9971" chance="29000" />
+		<item id="15480" chance="28000" />
+		<item id="15486" chance="16000" />
+		<item id="15489" chance="830" />
+		<item id="15491" chance="920" />
+		<item id="15492" chance="1650" />
+		<item id="15572" countmax="2" chance="13000" />
+		<item id="15643" chance="830" />
 	</loot>
 </monster>

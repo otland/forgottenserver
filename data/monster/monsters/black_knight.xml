@@ -44,27 +44,27 @@
 		<voice sentence="You're no match for me!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="24000" />
-		<item name="gold coin" countmax="36" chance="24000" />
-		<item name="spear" countmax="3" chance="30800" />
-		<item name="brown bread" countmax="2" chance="21600" />
-		<item id="2120" chance="14020" /><!-- rope -->
-		<item name="brass legs" chance="13200" />
-		<item id="2381" chance="12050" /><!-- halberd -->
-		<item name="plate armor" chance="11000" />
-		<item name="steel helmet" chance="10500" />
-		<item name="two handed sword" chance="9600" />
-		<item name="battle hammer" chance="6980" />
-		<item name="warrior helmet" chance="4700" />
-		<item name="knight axe" chance="2600" />
-		<item name="dark helmet" chance="2330" />
-		<item name="dark armor" chance="1900" />
-		<item name="knight legs" chance="1050" />
-		<item name="knight armor" chance="750" />
-		<item name="ruby necklace" chance="730" />
-		<item name="lightning legs" chance="580" />
-		<item name="boots of haste" chance="410" />
-		<item name="dragon lance" chance="290" />
-		<item name="piggy bank" chance="120" />
+		<item id="2148" countmax="100" chance="24000" />
+		<item id="2148" countmax="36" chance="24000" />
+		<item id="2389" countmax="3" chance="30800" />
+		<item id="2691" countmax="2" chance="21600" />
+		<item id="2120" chance="14020" />
+		<item id="2478" chance="13200" />
+		<item id="2381" chance="12050" />
+		<item id="2463" chance="11000" />
+		<item id="2457" chance="10500" />
+		<item id="2377" chance="9600" />
+		<item id="2417" chance="6980" />
+		<item id="2475" chance="4700" />
+		<item id="2430" chance="2600" />
+		<item id="2490" chance="2330" />
+		<item id="2489" chance="1900" />
+		<item id="2477" chance="1050" />
+		<item id="2476" chance="750" />
+		<item id="2133" chance="730" />
+		<item id="7895" chance="580" />
+		<item id="2195" chance="410" />
+		<item id="2414" chance="290" />
+		<item id="2114" chance="120" />
 	</loot>
 </monster>

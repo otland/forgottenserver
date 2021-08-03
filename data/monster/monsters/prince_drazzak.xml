@@ -59,24 +59,24 @@
 		<voice sentence="They used you fools to escape and they left ME behind!!??" />
 	</voices>
 	<loot>
-		<item id="22396" countmax="5" chance="100000" /><!-- cluster of solace -->
-		<item id="22598" countmax="3" chance="1000" /><!-- unrealized dream -->
-		<item id="6500" countmax="2" chance="100000" /><!-- demonic essence -->
-		<item id="5954" chance="50000" /><!-- demon horn -->
-		<item id="2152" countmax="50" chance="100000" /><!-- platinum coin -->
-		<item id="8473" countmax="100" chance="100000" /><!-- ultimate health potion -->
-		<item id="8472" countmax="100" chance="100000" /><!-- great spirit potion -->
-		<item id="7590" countmax="100" chance="100000" /><!-- great mana potion -->
-		<item id="22613" chance="25000" /><!-- eye pod -->
-		<item id="22608" chance="2500" /><!-- nightmare horn -->
-		<item id="22611" chance="25000" /><!-- psychodelic tapestry -->
-		<item id="22612" chance="25000" /><!-- demonic tapestry -->
-		<item id="5741" chance="2500" /><!-- skull helmet -->
-		<item id="7417" chance="2500" /><!-- runed sword -->
-		<item id="22610" chance="7000" /><!-- dream warden mask -->
-		<item id="7418" chance="1000" /><!-- nightmare blade -->
-		<item id="7893" chance="1000" /><!-- lightning boots -->
-		<item id="7632" chance="5000" /><!-- giant shimmering pearl -->
-		<item id="7633" chance="5000" /><!-- giant shimmering pearl -->
+		<item id="22396" countmax="5" chance="100000" />
+		<item id="22598" countmax="3" chance="1000" />
+		<item id="6500" countmax="2" chance="100000" />
+		<item id="5954" chance="50000" />
+		<item id="2152" countmax="50" chance="100000" />
+		<item id="8473" countmax="100" chance="100000" />
+		<item id="8472" countmax="100" chance="100000" />
+		<item id="7590" countmax="100" chance="100000" />
+		<item id="22613" chance="25000" />
+		<item id="22608" chance="2500" />
+		<item id="22611" chance="25000" />
+		<item id="22612" chance="25000" />
+		<item id="5741" chance="2500" />
+		<item id="7417" chance="2500" />
+		<item id="22610" chance="7000" />
+		<item id="7418" chance="1000" />
+		<item id="7893" chance="1000" />
+		<item id="7632" chance="5000" />
+		<item id="7633" chance="5000" />
 	</loot>
 </monster>

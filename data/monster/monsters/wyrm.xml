@@ -56,23 +56,23 @@
 		<voice sentence="GRROARR" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="32000" />
-		<item name="gold coin" countmax="100" chance="32000" />
-		<item name="gold coin" countmax="30" chance="32000" />
-		<item name="dragon ham" countmax="3" chance="34800" />
-		<item name="strong health potion" chance="20000" />
-		<item name="strong mana potion" chance="15310" />
-		<item name="wyrm scale" chance="15360" />
-		<item name="burst arrow" countmax="10" chance="8000" />
-		<item name="crossbow" chance="6000" />
-		<item name="focus cape" chance="1250" />
-		<item name="wand of draconia" chance="1000" />
-		<item name="small diamond" countmax="3" chance="910" />
-		<item name="lightning pendant" chance="760" />
-		<item name="wand of starstorm" chance="460" />
-		<item name="hibiscus dress" chance="320" />
-		<item name="composite hornbow" chance="110" />
-		<item name="dragonbone staff" chance="110" />
-		<item name="shockwave amulet" chance="110" />
+		<item id="2148" countmax="100" chance="32000" />
+		<item id="2148" countmax="100" chance="32000" />
+		<item id="2148" countmax="30" chance="32000" />
+		<item id="2672" countmax="3" chance="34800" />
+		<item id="7588" chance="20000" />
+		<item id="7589" chance="15310" />
+		<item id="10582" chance="15360" />
+		<item id="2546" countmax="10" chance="8000" />
+		<item id="2455" chance="6000" />
+		<item id="8871" chance="1250" />
+		<item id="8921" chance="1000" />
+		<item id="2145" countmax="3" chance="910" />
+		<item id="7889" chance="760" />
+		<item id="8920" chance="460" />
+		<item id="8873" chance="320" />
+		<item id="8855" chance="110" />
+		<item id="7430" chance="110" />
+		<item id="10221" chance="110" />
 	</loot>
 </monster>

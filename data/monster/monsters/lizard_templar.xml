@@ -34,17 +34,17 @@
 		<voice sentence="Hissss!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="60" chance="84000" />
-		<item name="short sword" chance="9500" />
-		<item id="2376" chance="4800" /><!-- sword -->
-		<item name="steel helmet" chance="2000" />
-		<item name="morning star" chance="1990" />
-		<item name="plate armor" chance="1000" />
-		<item name="lizard scale" chance="990" />
-		<item name="lizard leather" chance="880" />
-		<item name="health potion" chance="820" />
-		<item name="templar scytheblade" chance="550" />
-		<item name="small emerald" chance="260" />
-		<item name="salamander shield" chance="110" />
+		<item id="2148" countmax="60" chance="84000" />
+		<item id="2406" chance="9500" />
+		<item id="2376" chance="4800" />
+		<item id="2457" chance="2000" />
+		<item id="2394" chance="1990" />
+		<item id="2463" chance="1000" />
+		<item id="5881" chance="990" />
+		<item id="5876" chance="880" />
+		<item id="7618" chance="820" />
+		<item id="3963" chance="550" />
+		<item id="2149" chance="260" />
+		<item id="3975" chance="110" />
 	</loot>
 </monster>

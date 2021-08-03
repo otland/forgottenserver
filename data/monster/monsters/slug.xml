@@ -31,7 +31,7 @@
 		<element deathPercent="7" />
 	</elements>
 	<loot>
-		<item name="gold coin" countmax="40" chance="62000" />
-		<item name="worm" countmax="3" chance="5000" />
+		<item id="2148" countmax="40" chance="62000" />
+		<item id="3976" countmax="3" chance="5000" />
 	</loot>
 </monster>
