@@ -15406,9 +15406,9 @@ int LuaScriptInterface::luaActionRegister(lua_State* L)
 			return 1;
 		}
 		pushBoolean(L, g_actions->registerLuaEvent(action));
-		action->getActionIdRange().clear();
-		action->getItemIdRange().clear();
-		action->getUniqueIdRange().clear();
+		action->clearActionIdRange();
+		action->clearItemIdRange();
+		action->clearUniqueIdRange();
 	} else {
 		lua_pushnil(L);
 	}

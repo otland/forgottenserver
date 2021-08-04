@@ -61,8 +61,8 @@ class Action : public Event
 			checkFloor = v;
 		}
 
-		std::vector<uint16_t>& getItemIdRange() {
-			return ids;
+		void clearItemIdRange() {
+			return ids.clear();
 		}
 		const std::vector<uint16_t>& getItemIdRange() const {
 			return ids;
@@ -71,8 +71,8 @@ class Action : public Event
 			ids.emplace_back(id);
 		}
 
-		std::vector<uint16_t>& getUniqueIdRange() {
-			return uids;
+		void clearUniqueIdRange() {
+			return uids.clear();
 		}
 		const std::vector<uint16_t>& getUniqueIdRange() const {
 			return uids;
@@ -81,8 +81,8 @@ class Action : public Event
 			uids.emplace_back(id);
 		}
 
-		std::vector<uint16_t>& getActionIdRange() {
-			return aids;
+		void clearActionIdRange() {
+			return aids.clear();
 		}
 		const std::vector<uint16_t>& getActionIdRange() const {
 			return aids;
