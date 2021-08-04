@@ -69,23 +69,7 @@ MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows)
 std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
 {
 	Position casterPos(targetPos.x, targetPos.y, targetPos.z);
-
-	switch (dir) {
-		case DIRECTION_NORTH:
-			casterPos.y += 1;
-			break;
-		case DIRECTION_EAST:
-			casterPos.x -= 1;
-			break;
-		case DIRECTION_SOUTH:
-			casterPos.y -= 1;
-			break;
-		case DIRECTION_WEST:
-			casterPos.x += 1;
-			break;
-		default:
-			break;
-	}
+	casterPos = getNextPosition(dir, casterPos);
 
 	std::vector<Tile*> vec;
 
@@ -117,7 +101,7 @@ std::vector<Tile*> getCombatArea(const Position& centerPos, const Position& targ
 	}
 
 	if (area) {
-		return getList(area->getArea(centerPos, targetPos), targetPos, getDirectionTo(centerPos, targetPos));
+		return getList(area->getArea(centerPos, targetPos), targetPos, getDirectionTo(targetPos, centerPos));
 	}
 
 	Tile* tile = g_game.map.getTile(targetPos);
