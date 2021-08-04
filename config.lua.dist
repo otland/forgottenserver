@@ -143,7 +143,7 @@ rateSpawn = 1
 -- despawnRadius is how many tiles away it can be from its spawn position
 -- removeOnDespawn will remove the monster if true or teleport it back to its spawn position if false
 -- spawnIntervalRate controls the rate of monster spawning interval
--- its in percentage so 100 = 100% (normal spawn), 50 = 50% (half spawn time) and so on
+-- it's in percentage so 100 = 100% (normal spawn), 50 = 50% (half spawn time) and so on
 -- the higher the number, the less frequent spawn will be
 -- NOTE: minimum spawn interval is 10 seconds while maximum is 1 day for the map spawn file
 deSpawnRange = 2
