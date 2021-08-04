@@ -58,7 +58,7 @@
 		<item name="gold coin" countmax="95" chance="60000" />
 		<item name="dwarven ring" chance="621" />
 		<item name="white mushroom" countmax="2" chance="5263" />
-		<item name="red mushroom" chance="7142" />
+		<item id="2788" chance="7142" />
 		<item name="orange mushroom" chance="1851" />
 		<item id="4860" chance="25000" /><!-- wooden trash -->
 		<item name="bullseye potion" chance="80" />

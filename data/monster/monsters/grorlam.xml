@@ -50,7 +50,7 @@
 		<item name="small amethyst" countmax="2" chance="73000" />
 		<item name="steel shield" chance="65000" />
 		<item name="sulphurous stone" chance="65000" />
-		<item name="red gem" chance="57000" />
+		<item id="2156" chance="57000" />
 		<item name="power ring" chance="42000" />
 		<item name="steel boots" chance="11000" />
 		<item id="2124" chance="3850" /><!-- crystal ring -->

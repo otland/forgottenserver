@@ -67,7 +67,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="80" chance="30000" />
-		<item name="cherry" countmax="4" chance="19000" />
+		<item id="2679" countmax="4" chance="19000" />
 		<item name="bread" chance="9000" />
 		<item name="poison dagger" chance="7600" />
 		<item name="skull staff" chance="6370" />
@@ -75,7 +75,7 @@
 		<item name="great mana potion" chance="5000" />
 		<item name="assassin star" countmax="4" chance="3500" />
 		<item name="dark mushroom" chance="3000" />
-		<item name="mind stone" chance="2000" />
+		<item id="2178" chance="2000" />
 		<item name="energy ring" chance="2000" />
 		<item name="blue robe" chance="1500" />
 		<item name="candlestick" chance="1500" />

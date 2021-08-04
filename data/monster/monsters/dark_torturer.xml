@@ -54,7 +54,7 @@
 		<item name="golden legs" chance="30" />
 		<item id="2558" chance="5250" /><!-- saw -->
 		<item name="steel boots" chance="5050" />
-		<item name="ham" countmax="2" chance="60000" />
+		<item id="2671" countmax="2" chance="60000" />
 		<item name="orichalcum pearl" countmax="2" chance="2760" />
 		<item name="cat's paw" chance="2222" />
 		<item name="jewelled backpack" chance="1192" />

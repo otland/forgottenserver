@@ -57,11 +57,11 @@
 		<item name="gold coin" countmax="99" chance="50000" />
 		<item name="platinum coin" countmax="11" chance="100000" />
 		<item name="yellow gem" chance="6480" />
-		<item name="red gem" chance="1180" />
+		<item id="2156" chance="1180" />
 		<item name="wand of inferno" chance="2950" />
 		<item name="fire sword" chance="1710" />
 		<item name="fire axe" chance="1560" />
-		<item name="crown shield" chance="1180" />
+		<item id="2519" chance="1180" />
 		<item name="iron ore" chance="11570" />
 		<item name="white piece of cloth" chance="4810" />
 		<item name="red piece of cloth" chance="3530" />

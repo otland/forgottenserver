@@ -71,7 +71,7 @@
 		<item name="beastslayer axe" chance="29950"/>
 		<item name="great spirit potion" chance="21000"/>
 		<item name="platinum coin" countmax="30" chance="20000"/>
-		<item name="crown armor" chance="18000"/>
+		<item id="2487" chance="18000"/>
 		<item name="great health potion" chance="18000"/>
 		<item name="great mana potion" chance="17000"/>
 		<item name="crystal necklace" chance="14000"/>
@@ -87,7 +87,7 @@
 		<item name="magma legs" chance="11000"/>
 		<item name="spirit cloak" chance="10000"/>
 		<item name="ruby necklace" chance="10000"/>
-		<item name="crown legs" chance="10000"/>
+		<item id="2488" chance="10000"/>
 		<item name="spellbook of mind control" chance="10000"/>
 		<item name="golden amulet" chance="10000"/>
 		<item name="stone skin amulet" chance="10000"/>

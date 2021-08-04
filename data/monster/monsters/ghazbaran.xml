@@ -89,7 +89,7 @@
 		<item name="stealth ring" chance="12500" />
 		<item name="strange symbol" chance="11111" />
 		<item name="life crystal" chance="12500" />
-		<item name="mind stone" chance="20000" />
+		<item id="2178" chance="20000" />
 		<item name="gold ring" chance="20000" />
 		<item name="ring of healing" chance="20000" />
 		<item name="twin axe" chance="11111" />

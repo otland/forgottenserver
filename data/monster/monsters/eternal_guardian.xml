@@ -44,7 +44,7 @@
 		<item name="gold coin" countmax="100" chance="99930" />
 		<item name="platinum coin" countmax="4" chance="99540" />
 		<item name="guardian halberd" chance="560" />
-		<item name="tower shield" chance="820" />
+		<item id="2528" chance="820" />
 		<item name="iron ore" chance="1700" />
 		<item name="ancient stone" chance="20020" />
 		<item name="shiny stone" chance="800" />

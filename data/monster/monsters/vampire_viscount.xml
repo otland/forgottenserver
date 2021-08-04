@@ -53,7 +53,7 @@
 		<item name="black pearl" chance="2500" />
 		<item name="small ruby" countmax="2" chance="3040" />
 		<item name="gold coin" countmax="50" chance="83000" />
-		<item name="red gem" chance="540" />
+		<item id="2156" chance="540" />
 		<item name="ice rapier" chance="810" />
 		<item name="vampire shield" chance="200" />
 		<item name="red piece of cloth" chance="70" />

@@ -44,7 +44,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="50" chance="78000" />
-		<item name="scale armor" chance="3000" />
+		<item id="2483" chance="3000" />
 		<item name="steel shield" chance="2800" />
 		<item id="5091" chance="1000" /><!-- treasure map -->
 		<item name="rum flask" chance="90" />

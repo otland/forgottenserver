@@ -66,7 +66,7 @@
 		<item name="life crystal" chance="680" />
 		<item name="strange helmet" chance="360" />
 		<item name="fire sword" chance="290" />
-		<item name="tower shield" chance="250" />
+		<item id="2528" chance="250" />
 		<item name="royal helmet" chance="280" />
 		<item name="dragon scale mail" chance="170" />
 		<item name="dragon slayer" chance="110" />

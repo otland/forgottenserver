@@ -48,7 +48,7 @@
 		<item name="double axe" chance="880" />
 		<item name="battle hammer" chance="5200" />
 		<item name="heavy machete" chance="2000" />
-		<item name="dark helmet" chance="200" />
+		<item id="2490" chance="200" />
 		<item name="plate shield" chance="2000" />
 		<item name="battle shield" chance="6190" />
 		<item name="meat" chance="49950" />

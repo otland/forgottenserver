@@ -46,7 +46,7 @@
 		<item id="2230" chance="25000" /><!-- bone -->
 		<item name="spike sword" chance="2500" />
 		<item name="knight axe" chance="2857" />
-		<item name="ham" countmax="8" chance="50000" />
+		<item id="2671" countmax="8" chance="50000" />
 		<item name="soul orb" chance="5555" />
 		<item name="demonic essence" chance="7200" />
 		<item name="concentrated demonic blood" chance="8888" />

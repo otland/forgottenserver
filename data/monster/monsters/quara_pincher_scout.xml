@@ -46,7 +46,7 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="43" chance="49000" />
 		<item name="life crystal" chance="1000" />
-		<item name="halberd" chance="1840" />
+		<item id="2381" chance="1840" />
 		<item name="plate armor" chance="4170" />
 		<item name="fish fin" chance="1000" />
 		<item name="quara pincers" chance="9940" />

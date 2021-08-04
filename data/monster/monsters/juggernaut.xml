@@ -59,7 +59,7 @@
 		<item name="platinum coin" countmax="15" chance="100000" />
 		<item name="violet gem" chance="830" />
 		<item name="green gem" chance="869" />
-		<item name="red gem" chance="13850" />
+		<item id="2156" chance="13850" />
 		<item id="2228" chance="600" /><!-- broken pottery -->
 		<item name="dragon hammer" chance="9000" />
 		<item name="heavy mace" chance="400" />
@@ -67,9 +67,9 @@
 		<item name="golden armor" chance="550" />
 		<item name="golden legs" chance="500" />
 		<item name="knight armor" chance="4990" />
-		<item name="mastermind shield" chance="800" />
+		<item id="2514" chance="800" />
 		<item id="2578" chance="280" /><!-- closed trap -->
-		<item name="ham" countmax="8" chance="60000" />
+		<item id="2671" countmax="8" chance="60000" />
 		<item name="soul orb" chance="33333" />
 		<item name="demonic essence" chance="45333" />
 		<item name="concentrated demonic blood" countmax="4" chance="25000" />

@@ -32,7 +32,7 @@
 	</elements>
 	<loot>
 		<item name="gold coin" countmax="10" chance="50000" />
-		<item name="ham" chance="40000" />
+		<item id="2671" chance="40000" />
 		<item name="piece of crocodile leather" chance="20180" />
 		<item name="crocodile boots" chance="100" />
 	</loot>

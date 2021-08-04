@@ -38,7 +38,7 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="15" chance="50000" />
 		<item name="meat" countmax="4" chance="25000" />
-		<item name="ham" countmax="2" chance="25000" />
+		<item id="2671" countmax="2" chance="25000" />
 		<item name="lion's mane" chance="20000" />
 		<item name="platinum coin" chance="10000" />
 		<item name="small ruby" chance="7000" />
@@ -47,6 +47,6 @@
 		<item name="small amethyst" chance="7000" />
 		<item name="ankh" chance="2280" />
 		<item name="might ring" chance="730" />
-		<item name="crown helmet" chance="550" />
+		<item id="2491" chance="550" />
 	</loot>
 </monster>

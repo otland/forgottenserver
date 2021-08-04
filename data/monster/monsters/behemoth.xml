@@ -64,7 +64,7 @@
 		<item name="giant sword" chance="1006" />
 		<item name="strange symbol" chance="820" />
 		<item id="2231" chance="720" /><!-- big bone -->
-		<item name="pick" chance="650" />
+		<item id="2553" chance="650" />
 		<item name="behemoth claw" chance="460" />
 		<item name="steel boots" chance="440" />
 		<item name="crowbar" chance="130" />

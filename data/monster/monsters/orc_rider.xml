@@ -48,6 +48,6 @@
 		<item name="battle shield" chance="1000" />
 		<item id="2050" chance="1000" /><!-- torch-->
 		<item name="obsidian lance" chance="1000" />
-		<item name="scale armor" chance="610" />
+		<item id="2483" chance="610" />
 	</loot>
 </monster>

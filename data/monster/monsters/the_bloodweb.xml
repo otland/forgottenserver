@@ -56,7 +56,7 @@
 		<item name="spider silk" chance="50000" />
 		<item name="party hat" chance="1886" />
 		<item name="shard" chance="3703" />
-		<item name="sniper arrow" countmax="9" chance="100000" />
+		<item id="7364" countmax="9" chance="100000" />
 		<item name="sapphire hammer" chance="20000" />
 		<item name="strong mana potion" chance="100000" />
 		<item name="glacier kilt" chance="33333" />

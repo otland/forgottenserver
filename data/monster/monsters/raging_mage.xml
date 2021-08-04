@@ -57,7 +57,7 @@
 		<item name="gold coin" countmax="69" chance="47000" />
 		<item name="platinum coin" countmax="8" chance="77400" />
 		<item name="stealth ring" chance="4880" />
-		<item name="mind stone" chance="9760" />
+		<item id="2178" chance="9760" />
 		<item name="boots of haste" chance="610" />
 		<item name="dark mushroom" countmax="3" chance="3600" />
 		<item name="skull helmet" chance="610" />

@@ -64,7 +64,7 @@
 		<item name="jewelled backpack" chance="70" />
 		<item name="spider silk" chance="1950" />
 		<item name="shard" chance="750" />
-		<item name="sniper arrow" countmax="6" chance="6250" />
+		<item id="7364" countmax="6" chance="6250" />
 		<item name="sapphire hammer" chance="130" />
 		<item name="crystal sword" chance="2564" />
 		<item name="strong mana potion" chance="14810" />

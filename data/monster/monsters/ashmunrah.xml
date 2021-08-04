@@ -82,7 +82,7 @@
 		<item name="great mana potion" chance="12500" />
 		<item name="might ring" chance="4600" />
 		<item name="silver brooch" chance="4000" />
-		<item name="crown armor" chance="470" />
+		<item id="2487" chance="470" />
 		<item name="mini mummy" chance="180" />
 		<item name="hammer of wrath" chance="120" />
 		<item name="holy scarab" chance="120" />

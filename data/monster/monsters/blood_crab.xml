@@ -37,7 +37,7 @@
 		<item id="2667" chance="9700" /><!-- fish -->
 		<item name="bloody pincers" chance="6300" />
 		<item name="chain armor" chance="4555" />
-		<item name="brass legs" chance="2970" />
+		<item id="2478" chance="2970" />
 		<item name="white pearl" chance="500" />
 	</loot>
 </monster>

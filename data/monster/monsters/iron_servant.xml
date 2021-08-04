@@ -45,9 +45,9 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="55" chance="82000" />
-		<item name="halberd" chance="1000" />
+		<item id="2381" chance="1000" />
 		<item name="small health potion" chance="1980" />
-		<item name="gear wheel" chance="4840" />
+		<item id="9690" chance="4840" />
 		<item id="9808" chance="200" /><!-- rusty armor (common) -->
 		<item name="slime mould" chance="310" />
 	</loot>

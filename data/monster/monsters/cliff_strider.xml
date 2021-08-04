@@ -55,12 +55,12 @@
 		<item name="gold coin" countmax="100" chance="100000" />
 		<item name="gold coin" countmax="95" chance="100000" />
 		<item name="platinum coin" countmax="10" chance="100000" />
-		<item name="red gem" chance="6110" />
+		<item id="2156" chance="6110" />
 		<item name="blue gem" chance="830" />
 		<item name="giant sword" chance="620" />
 		<item name="hammer of wrath" chance="70" />
 		<item name="knight legs" chance="830" />
-		<item name="crown armor" chance="310" />
+		<item id="2487" chance="310" />
 		<item name="crusader helmet" chance="410" />
 		<item name="steel boots" chance="100" />
 		<item name="iron ore" chance="14490" />

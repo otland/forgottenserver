@@ -78,7 +78,7 @@
 		<item name="platinum coin" countmax="4" chance="87730" />
 		<item name="stealth ring" chance="550" />
 		<item name="blank rune" countmax="2" chance="22500" />
-		<item name="crown armor" chance="660" />
+		<item id="2487" chance="660" />
 		<item name="shadow herb" countmax="2" chance="26930" />
 		<item id="6300" chance="330" /><!-- death ring -->
 		<item name="demonic essence" chance="16320" />

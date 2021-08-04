@@ -66,7 +66,7 @@
 		<item name="gold coin" countmax="63" chance="33000" />
 		<item name="platinum coin" countmax="4" chance="5200" />
 		<item id="2162" chance="4850" /><!-- magic lightwand -->
-		<item name="dark shield" chance="3000" />
+		<item id="2521" chance="3000" />
 		<item name="scythe" chance="9000" />
 		<item name="orichalcum pearl" countmax="4" chance="1400" />
 		<item id="6300" chance="330" /><!-- death ring -->

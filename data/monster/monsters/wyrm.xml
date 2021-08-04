@@ -63,7 +63,7 @@
 		<item name="strong health potion" chance="20000" />
 		<item name="strong mana potion" chance="15310" />
 		<item name="wyrm scale" chance="15360" />
-		<item name="burst arrow" countmax="10" chance="8000" />
+		<item id="2546" countmax="10" chance="8000" />
 		<item name="crossbow" chance="6000" />
 		<item name="focus cape" chance="1250" />
 		<item name="wand of draconia" chance="1000" />

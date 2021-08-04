@@ -34,7 +34,7 @@
 	</voices>
 	<loot>
 		<item name="meat" countmax="4" chance="50000" />
-		<item name="ham" countmax="2" chance="50000" />
+		<item id="2671" countmax="2" chance="50000" />
 		<item name="polar bear paw" chance="1000" />
 	</loot>
 </monster>

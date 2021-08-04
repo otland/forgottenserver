@@ -63,7 +63,7 @@
 		<item name="war hammer" chance="5050" />
 		<item name="warrior helmet" chance="580" />
 		<item name="guardian shield" chance="2300" />
-		<item name="tower shield" chance="190" />
+		<item id="2528" chance="190" />
 		<item name="ancient shield" chance="3690" />
 		<item name="brown mushroom" countmax="2" chance="15150" />
 		<item name="iron ore" chance="11070" />

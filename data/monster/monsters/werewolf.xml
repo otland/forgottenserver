@@ -68,7 +68,7 @@
 		<item id="2169" chance="800" /><!-- time ring -->
 		<item name="platinum amulet" chance="870" />
 		<item name="stone skin amulet" chance="1000" />
-		<item name="halberd" chance="3000" />
+		<item id="2381" chance="3000" />
 		<item name="epee" chance="560" />
 		<item name="plate shield" chance="10340" />
 		<item name="plate legs" chance="6500" />

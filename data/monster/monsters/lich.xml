@@ -77,7 +77,7 @@
 		<item name="ring of healing" chance="1640" />
 		<item name="yellow gem" chance="770" />
 		<item name="strange helmet" chance="740" />
-		<item name="mind stone" chance="450" />
+		<item id="2178" chance="450" />
 		<item name="platinum amulet" chance="400" />
 		<item name="skull staff" chance="310" />
 		<item name="castle shield" chance="250" />

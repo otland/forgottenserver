@@ -27,9 +27,9 @@
 		<item name="mace" chance="3335" />
 		<item name="katana" chance="900" />
 		<item name="legion helmet" chance="1250" />
-		<item name="copper shield" chance="2850" />
+		<item id="2530" chance="2850" />
 		<item name="meat" countmax="2" chance="3260" />
-		<item name="ham" countmax="2" chance="3160" />
+		<item id="2671" countmax="2" chance="3160" />
 		<item name="worm" countmax="5" chance="32500" />
 	</loot>
 </monster>

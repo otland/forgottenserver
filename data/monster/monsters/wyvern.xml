@@ -52,7 +52,7 @@
 		<item name="small sapphire" chance="5000" />
 		<item name="gold coin" countmax="90" chance="100000" />
 		<item name="wand of inferno" chance="810" />
-		<item name="power bolt" countmax="2" chance="3400" />
+		<item id="2547" countmax="2" chance="3400" />
 		<item name="dragon ham" countmax="3" chance="60500" />
 		<item name="wyvern fang" chance="410" />
 		<item name="strong health potion" chance="2500" />

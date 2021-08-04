@@ -50,11 +50,11 @@
 	<loot>
 		<item name="gold coin" countmax="100" chance="60000" />
 		<item id="1949" chance="45000" /><!-- scroll -->
-		<item name="arrow" countmax="13" chance="26000" />
+		<item id="2544" countmax="13" chance="26000" />
 		<item name="red rose" chance="20450" />
 		<item name="grapes" chance="19850" />
 		<item name="bow" chance="13300" />
-		<item name="sniper arrow" countmax="4" chance="11400" />
+		<item id="7364" countmax="4" chance="11400" />
 		<item name="meat" countmax="3" chance="8200" />
 		<item name="green tunic" chance="8000" />
 		<item name="wedding ring" chance="5200" />
@@ -67,12 +67,12 @@
 		<item name="small notebook" chance="930" />
 		<item name="war hammer" chance="910" />
 		<item name="great health potion" chance="720" />
-		<item name="crown armor" chance="650" />
-		<item name="crown legs" chance="590" />
+		<item id="2487" chance="650" />
+		<item id="2488" chance="590" />
 		<item name="might ring" chance="500" />
 		<item name="fire sword" chance="490" />
-		<item name="crown helmet" chance="460" />
-		<item name="crown shield" chance="210" />
+		<item id="2491" chance="460" />
+		<item id="2519" chance="210" />
 		<item name="piggy bank" chance="80" />
 	</loot>
 </monster>

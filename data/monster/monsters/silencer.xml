@@ -58,7 +58,7 @@
 		<item name="platinum coin" countmax="8" chance="100000" />
 		<item name="stealth ring" chance="1200" />
 		<item name="boots of haste" chance="360" />
-		<item name="dark shield" chance="2000" />
+		<item id="2521" chance="2000" />
 		<item name="assassin star" countmax="10" chance="7600" />
 		<item name="diamond sceptre" chance="960" />
 		<item name="haunted blade" chance="2000" />

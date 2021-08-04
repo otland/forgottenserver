@@ -49,7 +49,7 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="50" chance="50000" />
 		<item name="guardian shield" chance="2240" />
-		<item name="pick" chance="5280" />
+		<item id="2553" chance="5280" />
 		<item name="worm" countmax="5" chance="4580" />
 		<item name="iron ore" chance="1750" />
 		<item name="spiked squelcher" chance="540" />

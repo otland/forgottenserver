@@ -57,7 +57,7 @@
 	<loot>
 		<item name="gold coin" countmax="47" chance="37000" />
 		<item id="1949" chance="31000" /><!-- scroll -->
-		<item name="melon" chance="22000" />
+		<item id="2682" chance="22000" />
 		<item name="blank rune" chance="18000" />
 		<item name="bread" chance="14000" />
 		<item name="elvish talisman" chance="10000" />

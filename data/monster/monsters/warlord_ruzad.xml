@@ -44,7 +44,7 @@
 		<item name="throwing star" chance="6666" countmax="18" />
 		<item name="orcish axe" chance="13000" />
 		<item name="plate armor" chance="7333" />
-		<item name="brass legs" chance="3333" />
+		<item id="2478" chance="3333" />
 		<item name="crusader helmet" chance="6670" />
 		<item name="meat" chance="20000" countmax="3" />
 		<item id="2667" chance="6667" /><!-- fish -->

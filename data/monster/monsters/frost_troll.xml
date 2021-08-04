@@ -40,8 +40,8 @@
 		<item id="2667" chance="18000" /><!-- fish -->
 		<item id="2512" chance="15850" /><!-- wooden shield -->
 		<item name="rapier" chance="15500" />
-		<item name="twigs" chance="8300" />
+		<item id="2245" chance="8300" />
 		<item name="frosty ear of a troll" chance="2000" />
-		<item name="coat" chance="1200" />
+		<item id="2651" chance="1200" />
 	</loot>
 </monster>

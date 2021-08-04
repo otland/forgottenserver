@@ -80,7 +80,7 @@
 		<item name="golden armor" chance="860" />
 		<item name="knight armor" chance="5500" />
 		<item name="royal helmet" chance="1720" />
-		<item name="power bolt" countmax="15" chance="15190" />
+		<item id="2547" countmax="15" chance="15190" />
 		<item name="hardened bone" chance="14180" />
 		<item id="6300" chance="1150" /><!-- death ring -->
 		<item name="demonic essence" chance="12460" />

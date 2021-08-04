@@ -47,9 +47,9 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="49" chance="50000" />
 		<item name="platinum coin" chance="40000" />
-		<item name="halberd" chance="6861" />
+		<item id="2381" chance="6861" />
 		<item name="warrior helmet" chance="1350" />
-		<item name="crown armor" chance="350" />
+		<item id="2487" chance="350" />
 		<item name="shrimp" countmax="5" chance="5245" />
 		<item name="fish fin" chance="1600" />
 		<item name="great health potion" chance="10630" />

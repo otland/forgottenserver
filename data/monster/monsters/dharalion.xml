@@ -63,7 +63,7 @@
 		<item name="elven astral observer" chance="83330" />
 		<item name="yellow gem" chance="42420" />
 		<item name="blank rune" chance="25760" />
-		<item name="melon" chance="22000" />
+		<item id="2682" chance="22000" />
 		<item name="bread" chance="16000" />
 		<item name="elven amulet" chance="15150" />
 		<item name="great mana potion" chance="13000" />

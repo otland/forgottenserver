@@ -65,7 +65,7 @@
 		<item name="small amethyst" countmax="2" chance="1428" />
 		<item name="fire axe" chance="666" />
 		<item name="golden legs" chance="180" />
-		<item name="crown legs" chance="800" />
+		<item id="2488" chance="800" />
 		<item name="guardian shield" chance="1333" />
 		<item name="demon shield" chance="200" />
 		<item name="tempest shield" chance="500" />

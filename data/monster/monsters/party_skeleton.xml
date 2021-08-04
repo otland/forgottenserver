@@ -36,6 +36,6 @@
 		<item name="hatchet" chance="23750" />
 		<item name="mace" chance="19500" />
 		<item name="viking helmet" chance="8250" />
-		<item name="brass shield" chance="13250" />
+		<item id="2511" chance="13250" />
 	</loot>
 </monster>

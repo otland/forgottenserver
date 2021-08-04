@@ -75,7 +75,7 @@
 		<item name="fire sword" chance="6900" />
 		<item name="giant sword" chance="950" />
 		<item name="knight axe" chance="10810" />
-		<item name="ham" countmax="14" chance="30930" />
+		<item id="2671" countmax="14" chance="30930" />
 		<item name="explorer brooch" chance="130" />
 		<item name="soul orb" chance="53000" />
 		<item name="demonic essence" chance="17000" />

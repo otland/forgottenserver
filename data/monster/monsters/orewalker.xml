@@ -61,8 +61,8 @@
 		<item name="yellow gem" chance="1030" />
 		<item name="dwarven ring" chance="4660" />
 		<item name="knight legs" chance="1910" />
-		<item name="crown armor" chance="370" />
-		<item name="crown helmet" chance="890" />
+		<item id="2487" chance="370" />
+		<item id="2491" chance="890" />
 		<item name="iron ore" chance="15000" />
 		<item name="magic sulphur" chance="3000" />
 		<item name="titan axe" chance="2600" />

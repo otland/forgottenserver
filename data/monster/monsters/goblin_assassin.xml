@@ -57,8 +57,8 @@
 		<item name="dagger" chance="17000" />
 		<item name="short sword" chance="8820" />
 		<item name="bone club" chance="4770" />
-		<item name="leather helmet" chance="13000" />
-		<item name="leather armor" chance="7240" />
+		<item id="2461" chance="13000" />
+		<item id="2467" chance="7240" />
 		<item name="small axe" chance="9800" />
 		<item id="2667" chance="12400" /><!-- fish -->
 	</loot>

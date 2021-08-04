@@ -46,6 +46,6 @@
 		<item id="13757" chance="530" /><!-- coal -->
 		<item name="piece of marble rock" chance="410" />
 		<item id="2124" chance="170" /><!-- crystal ring -->
-		<item name="red gem" chance="40" />
+		<item id="2156" chance="40" />
 	</loot>
 </monster>

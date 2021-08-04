@@ -52,9 +52,9 @@
 		<item name="star herb" chance="9000" />
 		<item name="leather boots" chance="5000" />
 		<item name="cape" chance="4870" />
-		<item name="sickle" chance="3910" />
+		<item id="2405" chance="3910" />
 		<item name="garlic necklace" chance="2500" />
-		<item name="coat" chance="2010" />
+		<item id="2651" chance="2010" />
 		<item name="necrotic rod" chance="1140" />
 		<item name="bag of apple slices" chance="920" />
 		<item name="silver dagger" chance="560" />

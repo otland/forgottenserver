@@ -46,7 +46,7 @@
 		<item name="studded helmet" chance="15000" />
 		<item name="leather boots" chance="11410" />
 		<item name="longsword" chance="10800" />
-		<item name="studded armor" chance="9000" />
+		<item id="2484" chance="9000" />
 		<item name="plate shield" chance="8900" />
 		<item id="2544" countmax="3" chance="7060" /><!-- arrow -->
 		<item name="elvish talisman" chance="2000" />

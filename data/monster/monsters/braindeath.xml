@@ -76,7 +76,7 @@
 		<item name="bonelord shield" chance="750" />
 		<item name="bonelord helmet" chance="180" />
 		<item name="bonelord eye" chance="3380" />
-		<item name="sniper arrow" countmax="4" chance="9000" />
+		<item id="7364" countmax="4" chance="9000" />
 		<item name="haunted blade" chance="1500" />
 		<item name="spiked squelcher" chance="950" />
 		<item name="piece of dead brain" chance="4725" />

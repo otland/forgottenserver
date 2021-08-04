@@ -49,7 +49,7 @@
 		<item name="black pearl" chance="2900" />
 		<item name="small ruby" chance="1500" />
 		<item name="mysterious fetish" chance="530" />
-		<item name="mind stone" chance="470" />
+		<item id="2178" chance="470" />
 		<item name="guardian shield" chance="110" />
 	</loot>
 </monster>

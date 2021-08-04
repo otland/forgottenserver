@@ -59,8 +59,8 @@
 		<item name="gold coin" countmax="100" chance="100000" />
 		<item name="platinum coin" countmax="9" chance="100000" />
 		<item name="fire sword" chance="1240" />
-		<item name="crown shield" chance="1700" />
-		<item name="tower shield" chance="550" />
+		<item id="2519" chance="1700" />
+		<item id="2528" chance="550" />
 		<item name="brown mushroom" countmax="2" chance="14000" />
 		<item name="beastslayer axe" chance="4260" />
 		<item name="mercenary sword" chance="2500" />

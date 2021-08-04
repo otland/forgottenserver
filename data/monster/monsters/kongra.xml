@@ -41,7 +41,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="55" chance="90000" />
-		<item name="banana" countmax="13" chance="30000" />
+		<item id="2676" countmax="13" chance="30000" />
 		<item name="kongra's shoulderpad" chance="9500" />
 		<item name="protection amulet" chance="1000" />
 		<item name="plate armor" chance="1000" />

@@ -41,7 +41,7 @@
 		<item name="spear" chance="25000" />
 		<item name="studded club" chance="5450" />
 		<item id="2512" chance="6000" /><!-- wooden shield -->
-		<item name="arrow" countmax="5" chance="5450" />
+		<item id="2544" countmax="5" chance="5450" />
 		<item name="leather boots" chance="9000" />
 		<item name="meat" chance="9650" />
 		<item name="bunch of troll hair" chance="3000" />

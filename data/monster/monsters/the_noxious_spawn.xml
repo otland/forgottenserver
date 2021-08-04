@@ -62,7 +62,7 @@
 		<item name="platinum coin" countmax="5" chance="51850" />
 		<item name="platinum coin" countmax="95" chance="10750" />
 		<item name="life ring" chance="35000" />
-		<item name="power bolt" countmax="29" chance="36250" />
+		<item id="2547" countmax="29" chance="36250" />
 		<item name="green mushroom" chance="11111" />
 		<item name="onyx arrow" chance="525" />
 		<item name="mercenary sword" chance="27750" />

@@ -58,7 +58,7 @@
 		<item name="minotaur leather" chance="97000" />
 		<item name="minotaur horn" countmax="2" chance="93000" />
 		<item name="piece of warrior armor" chance="81000" />
-		<item name="piercing bolt" countmax="14" chance="46000" />
+		<item id="7363" countmax="14" chance="46000" />
 		<item name="brass armor" chance="28000" />
 		<item name="meat" chance="15000" />
 		<item name="battle shield" chance="12150" />

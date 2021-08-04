@@ -44,7 +44,7 @@
 		<item name="gold coin" countmax="40" chance="79000" />
 		<item name="tarantula egg" chance="10000" />
 		<item name="spider fangs" chance="4820" />
-		<item name="brass legs" chance="3050" />
+		<item id="2478" chance="3050" />
 		<item name="plate shield" chance="2000" />
 		<item name="steel helmet" chance="990" />
 		<item id="2169" chance="120" /><!-- time ring -->

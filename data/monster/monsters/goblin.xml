@@ -46,8 +46,8 @@
 		<item name="small axe" chance="9700" />
 		<item name="short sword" chance="8870" />
 		<item name="bone club" chance="4900" />
-		<item name="leather armor" chance="2510" />
-		<item name="leather helmet" chance="1940" />
+		<item id="2467" chance="2510" />
+		<item id="2461" chance="1940" />
 		<item name="dagger" chance="1800" />
 		<item id="2230" chance="1130" /><!-- bone -->
 		<item name="mouldy cheese" chance="1000" />

@@ -36,10 +36,10 @@
 	<loot>
 		<item id="2120" chance="4300" /><!-- rope -->
 		<item name="gold coin" countmax="18" chance="90000" />
-		<item name="arrow" countmax="5" chance="7570" />
+		<item id="2544" countmax="5" chance="7570" />
 		<item name="health potion" chance="1780" />
 		<item name="mana potion" chance="2520" />
-		<item name="insectoid eggs" chance="10830" />
+		<item id="19737" chance="10830" />
 		<item name="marsh stalker feather" chance="8610" />
 	</loot>
 </monster>

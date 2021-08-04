@@ -59,11 +59,11 @@
 		<item name="violet gem" chance="25500" />
 		<item name="yellow gem" chance="15500" />
 		<item name="green gem" chance="20500" />
-		<item name="red gem" chance="10500" />
+		<item id="2156" chance="10500" />
 		<item name="blue gem" chance="30500" />
-		<item name="mastermind shield" chance="5500" />
+		<item id="2514" chance="5500" />
 		<item name="guardian shield" chance="5500" />
-		<item name="tower shield" chance="15500" />
+		<item id="2528" chance="15500" />
 		<item name="soul orb" countmax="4" chance="19250" />
 		<item name="viper star" countmax="67" chance="8100" />
 		<item name="mastermind potion" chance="10500" />

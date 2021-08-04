@@ -37,7 +37,7 @@
 	</voices>
 	<loot>
 		<item name="meat" countmax="4" chance="40000" />
-		<item name="ham" countmax="9" chance="27000" />
+		<item id="2671" countmax="9" chance="27000" />
 		<item name="tusk" countmax="2" chance="8510" />
 		<item name="tusk shield" chance="80" />
 	</loot>

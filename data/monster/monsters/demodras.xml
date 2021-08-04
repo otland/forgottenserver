@@ -53,7 +53,7 @@
 		<item name="platinum coin" countmax="10" chance="99000" />
 		<item name="dragon ham" countmax="10" chance="75000" />
 		<item name="green mushroom" countmax="7" chance="25666" />
-		<item name="power bolt" countmax="10" chance="19000" />
+		<item id="2547" countmax="10" chance="19000" />
 		<item name="red dragon leather" chance="15000" />
 		<item name="small sapphire" chance="12222" />
 		<item id="1976" chance="10000" /><!-- book (gemmed) -->

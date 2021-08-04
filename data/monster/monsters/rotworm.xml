@@ -25,7 +25,7 @@
 	<defenses armor="8" defense="8" />
 	<loot>
 		<item name="gold coin" countmax="17" chance="71760" />
-		<item name="ham" chance="20120" />
+		<item id="2671" chance="20120" />
 		<item name="meat" chance="20000" />
 		<item name="lump of dirt" chance="10000" />
 		<item name="mace" chance="4500" />

@@ -73,14 +73,14 @@
 		<item name="platinum coin" countmax="26" chance="20000" />
 		<item name="orb" chance="16666" />
 		<item name="life crystal" chance="16666" />
-		<item name="mind stone" chance="20000" />
+		<item id="2178" chance="20000" />
 		<item name="spike sword" chance="9090" />
 		<item name="fire sword" chance="14285" />
 		<item name="giant sword" chance="7692" />
 		<item id="2419" chance="11111" /><!-- scimitar -->
 		<item name="warrior helmet" chance="20000" />
 		<item name="strange helmet" chance="8333" />
-		<item name="crown helmet" chance="6250" />
+		<item id="2491" chance="6250" />
 		<item name="royal helmet" chance="20000" />
 		<item name="brown mushroom" countmax="30" chance="50000" />
 		<item name="mysterious voodoo skull" chance="12500" />

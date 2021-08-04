@@ -60,14 +60,14 @@
 		<item name="yellow gem" chance="5940" />
 		<item name="energy ring" chance="3150" />
 		<item name="platinum amulet" chance="1005" />
-		<item name="mind stone" chance="9090" />
+		<item id="2178" chance="9090" />
 		<item name="wand of inferno" chance="5590" />
 		<item name="boots of haste" chance="540" />
 		<item name="protection amulet" chance="8740" />
 		<item name="sudden death rune" countmax="8" chance="4200" />
 		<item name="skull staff" chance="700" />
 		<item name="knight armor" chance="4550" />
-		<item name="crown armor" chance="1400" />
+		<item id="2487" chance="1400" />
 		<item name="mysterious voodoo skull" chance="247" />
 		<item name="golden figurine" chance="195" />
 		<item name="soul orb" chance="31111" />

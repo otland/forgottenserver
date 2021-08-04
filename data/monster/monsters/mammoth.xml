@@ -37,7 +37,7 @@
 	<loot>
 		<item name="gold coin" countmax="40" chance="90000" />
 		<item name="meat" chance="39000" />
-		<item name="ham" countmax="3" chance="30000" />
+		<item id="2671" countmax="3" chance="30000" />
 		<item name="tusk shield" chance="500" />
 		<item name="mammoth whopper" chance="2800" />
 		<item name="furry club" chance="500" />

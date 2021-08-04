@@ -50,7 +50,7 @@
 	<loot>
 		<item name="gold coin" countmax="65" chance="82000" />
 		<item name="life ring" chance="1000" />
-		<item name="halberd" chance="3750" />
+		<item id="2381" chance="3750" />
 		<item name="mace" chance="7250" />
 		<item name="battle hammer" chance="7000" />
 		<item name="steel helmet" chance="4600" />

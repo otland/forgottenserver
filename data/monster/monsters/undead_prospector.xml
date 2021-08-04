@@ -51,7 +51,7 @@
 		<item name="knife" chance="15380" />
 		<item name="brass helmet" chance="23000" />
 		<item name="viking helmet" chance="1000" />
-		<item name="scale armor" chance="1000" />
+		<item id="2483" chance="1000" />
 		<item name="worm" countmax="6" chance="92310" />
 		<item name="brown piece of cloth" chance="1000" />
 	</loot>

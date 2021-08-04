@@ -46,7 +46,7 @@
 		<item name="gold coin" countmax="10" chance="1500" />
 		<item name="small emerald" countmax="2" chance="3750" />
 		<item id="2244" chance="10000" /><!-- leaves -->
-		<item name="twigs" chance="18000" />
+		<item id="2245" chance="18000" />
 		<item name="iron ore" countmax="2" chance="800" />
 		<item name="seeds" chance="1600" />
 		<item name="natural soil" chance="9000" />
