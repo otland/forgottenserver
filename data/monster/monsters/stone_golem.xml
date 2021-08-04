@@ -35,17 +35,17 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="40" chance="95000" />
-		<item id="1294" countmax="4" chance="12890" />
-		<item id="11232" chance="10370" />
-		<item id="2166" chance="5070" />
-		<item id="2395" chance="2500" />
-		<item id="5880" chance="2000" />
-		<item id="10549" chance="1020" />
-		<item id="11227" chance="790" />
-		<item id="13757" chance="530" />
-		<item id="11343" chance="410" />
-		<item id="2124" chance="170" />
-		<item id="2156" chance="40" />
+		<item id="2148" countmax="40" chance="95000" /><!-- gold coin -->
+		<item id="1294" countmax="4" chance="12890" /><!-- small stone -->
+		<item id="11232" chance="10370" /><!-- sulphurous stone -->
+		<item id="2166" chance="5070" /><!-- power ring -->
+		<item id="2395" chance="2500" /><!-- carlin sword -->
+		<item id="5880" chance="2000" /><!-- iron ore -->
+		<item id="10549" chance="1020" /><!-- ancient stone -->
+		<item id="11227" chance="790" /><!-- shiny stone -->
+		<item id="13757" chance="530" /><!-- coal -->
+		<item id="11343" chance="410" /><!-- piece of marble rock -->
+		<item id="2124" chance="170" /><!-- crystal ring -->
+		<item id="2156" chance="40" /><!-- red gem -->
 	</loot>
 </monster>

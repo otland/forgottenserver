@@ -65,17 +65,17 @@
 		<voice sentence="653768764!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="99000" />
-		<item id="11193" chance="20000" />
-		<item id="12468" chance="9700" />
-		<item id="7364" countmax="4" chance="8700" />
-		<item id="2377" chance="3000" />
-		<item id="2509" chance="2000" />
-		<item id="5898" chance="2000" />
-		<item id="2175" chance="1000" />
-		<item id="7589" chance="830" />
-		<item id="11197" chance="460" />
-		<item id="2518" chance="90" />
-		<item id="3972" chance="90" />
+		<item id="2148" countmax="90" chance="99000" /><!-- gold coin -->
+		<item id="11193" chance="20000" /><!-- elder bonelord tentacle -->
+		<item id="12468" chance="9700" /><!-- small flask of eyedrops -->
+		<item id="7364" countmax="4" chance="8700" /><!-- sniper arrow -->
+		<item id="2377" chance="3000" /><!-- two handed sword -->
+		<item id="2509" chance="2000" /><!-- steel shield -->
+		<item id="5898" chance="2000" /><!-- bonelord eye -->
+		<item id="2175" chance="1000" /><!-- spellbook -->
+		<item id="7589" chance="830" /><!-- strong mana potion -->
+		<item id="11197" chance="460" /><!-- giant eye -->
+		<item id="2518" chance="90" /><!-- bonelord shield -->
+		<item id="3972" chance="90" /><!-- bonelord helmet -->
 	</loot>
 </monster>

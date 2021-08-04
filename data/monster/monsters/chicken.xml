@@ -25,9 +25,9 @@
 		<voice sentence="Cluck Cluck" />
 	</voices>
 	<loot>
-		<item id="5890" chance="20000" />
-		<item id="3976" chance="10000" />
-		<item id="2666" countmax="2" chance="2120" />
-		<item id="2695" chance="1000" />
+		<item id="5890" chance="20000" /><!-- chicken feather -->
+		<item id="3976" chance="10000" /><!-- worm -->
+		<item id="2666" countmax="2" chance="2120" /><!-- meat -->
+		<item id="2695" chance="1000" /><!-- egg -->
 	</loot>
 </monster>

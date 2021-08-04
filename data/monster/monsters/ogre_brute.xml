@@ -51,28 +51,28 @@
 		<voice sentence="You stop! You lunch!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />
-		<item id="2148" countmax="25" chance="50000" />
-		<item id="24844" chance="18740" />
-		<item id="2666" countmax="2" chance="14920" />
-		<item id="24845" chance="14660" />
-		<item id="7588" chance="12580" />
-		<item id="12403" chance="4980" />
-		<item id="1294" countmax="5" chance="4980" />
-		<item id="2687" countmax="5" chance="3900" />
-		<item id="24847" chance="3350" />
-		<item id="2147" countmax="2" chance="2460" />
-		<item id="2209" chance="2340" />
-		<item id="2143" chance="2240" />
-		<item id="24849" countmax="2" chance="2150" />
-		<item id="2166" chance="1630" />
-		<item id="24850" countmax="2" chance="1560" />
-		<item id="24827" chance="1040" />
-		<item id="2562" chance="310" />
-		<item id="9821" chance="260" />
-		<item id="10549" chance="1900" />
-		<item id="7428" chance="140" />
-		<item id="24848" chance="140" />
-		<item id="7412" chance="20" />
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="25" chance="50000" /><!-- gold coin -->
+		<item id="24844" chance="18740" /><!-- ogre ear stud -->
+		<item id="2666" countmax="2" chance="14920" /><!-- meat -->
+		<item id="24845" chance="14660" /><!-- ogre nose ring -->
+		<item id="7588" chance="12580" /><!-- strong health potion -->
+		<item id="12403" chance="4980" /><!-- battle stone -->
+		<item id="1294" countmax="5" chance="4980" /><!-- small stone -->
+		<item id="2687" countmax="5" chance="3900" /><!-- cookie -->
+		<item id="24847" chance="3350" /><!-- skull fetish -->
+		<item id="2147" countmax="2" chance="2460" /><!-- small ruby -->
+		<item id="2209" chance="2340" /><!-- club ring -->
+		<item id="2143" chance="2240" /><!-- white pearl -->
+		<item id="24849" countmax="2" chance="2150" /><!-- onyx chip -->
+		<item id="2166" chance="1630" /><!-- power ring -->
+		<item id="24850" countmax="2" chance="1560" /><!-- opal -->
+		<item id="24827" chance="1040" /><!-- ogre klubba -->
+		<item id="2562" chance="310" /><!-- pot -->
+		<item id="9821" chance="260" /><!-- rusty helmet -->
+		<item id="10549" chance="1900" /><!-- ancient stone -->
+		<item id="7428" chance="140" /><!-- bonebreaker -->
+		<item id="24848" chance="140" /><!-- shamanic mask -->
+		<item id="7412" chance="20" /><!-- butcher's axe -->
 	</loot>
 </monster>

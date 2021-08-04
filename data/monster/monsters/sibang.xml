@@ -47,13 +47,13 @@
 		<voice sentence="Ahhuuaaa!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="88000" />
-		<item id="2676" countmax="12" chance="30000" />
-		<item id="1294" countmax="3" chance="30000" />
-		<item id="2675" countmax="5" chance="20000" />
-		<item id="12467" chance="5000" />
-		<item id="2678" countmax="3" chance="1960" />
-		<item id="2682" chance="1000" />
-		<item id="5883" chance="1000" />
+		<item id="2148" countmax="35" chance="88000" /><!-- gold coin -->
+		<item id="2676" countmax="12" chance="30000" /><!-- banana -->
+		<item id="1294" countmax="3" chance="30000" /><!-- small stone -->
+		<item id="2675" countmax="5" chance="20000" /><!-- orange -->
+		<item id="12467" chance="5000" /><!-- banana sash -->
+		<item id="2678" countmax="3" chance="1960" /><!-- coconut -->
+		<item id="2682" chance="1000" /><!-- melon -->
+		<item id="5883" chance="1000" /><!-- ape fur -->
 	</loot>
 </monster>

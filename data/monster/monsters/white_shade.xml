@@ -49,6 +49,6 @@
 		<voice sentence="No... don't go further stranger... danger lies in every step..." />
 	</voices>
 	<loot>
-		<item id="5909" chance="3370" />
+		<item id="5909" chance="3370" /><!-- white piece of cloth -->
 	</loot>
 </monster>

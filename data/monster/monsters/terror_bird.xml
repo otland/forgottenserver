@@ -36,13 +36,13 @@
 		<voice sentence="Carrah Carrah!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="82500" />
-		<item id="2666" countmax="3" chance="48000" />
-		<item id="11190" chance="10000" />
-		<item id="3976" chance="9500" />
-		<item id="12470" chance="3000" />
-		<item id="7618" chance="690" />
-		<item id="7732" chance="230" />
-		<item id="3970" chance="100" />
+		<item id="2148" countmax="30" chance="82500" /><!-- gold coin -->
+		<item id="2666" countmax="3" chance="48000" /><!-- meat -->
+		<item id="11190" chance="10000" /><!-- terrorbird beak -->
+		<item id="3976" chance="9500" /><!-- worm -->
+		<item id="12470" chance="3000" /><!-- colourful feather -->
+		<item id="7618" chance="690" /><!-- health potion -->
+		<item id="7732" chance="230" /><!-- seeds -->
+		<item id="3970" chance="100" /><!-- feather headdress -->
 	</loot>
 </monster>

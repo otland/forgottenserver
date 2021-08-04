@@ -56,20 +56,20 @@
 		<summon name="giant spider" interval="1000" chance="13" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="100" chance="99500" />
-		<item id="2152" countmax="10" chance="98888" />
-		<item id="5879" countmax="3" chance="87000" />
-		<item id="2457" chance="77000" />
-		<item id="7591" countmax="4" chance="67000" />
-		<item id="2476" chance="42000" />
-		<item id="2167" chance="33333" />
-		<item id="2165" chance="33333" />
-		<item id="2169" chance="33333" />
-		<item id="2477" chance="26000" />
-		<item id="2171" chance="21000" />
-		<item id="13307" chance="21000" />
-		<item id="5886" chance="10000" />
-		<item id="7419" chance="2800" />
-		<item id="7416" chance="1120" />
+		<item id="2148" countmax="100" chance="99500" /><!-- gold coin -->
+		<item id="2152" countmax="10" chance="98888" /><!-- platinum coin -->
+		<item id="5879" countmax="3" chance="87000" /><!-- spider silk -->
+		<item id="2457" chance="77000" /><!-- steel helmet -->
+		<item id="7591" countmax="4" chance="67000" /><!-- great health potion -->
+		<item id="2476" chance="42000" /><!-- knight armor -->
+		<item id="2167" chance="33333" /><!-- energy ring -->
+		<item id="2165" chance="33333" /><!-- stealth ring -->
+		<item id="2169" chance="33333" /><!-- time ring -->
+		<item id="2477" chance="26000" /><!-- knight legs -->
+		<item id="2171" chance="21000" /><!-- platinum amulet -->
+		<item id="13307" chance="21000" /><!-- sweet smelling bait -->
+		<item id="5886" chance="10000" /><!-- spool of yarn -->
+		<item id="7419" chance="2800" /><!-- dreaded cleaver -->
+		<item id="7416" chance="1120" /><!-- bloody edge -->
 	</loot>
 </monster>

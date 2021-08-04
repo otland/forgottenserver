@@ -30,7 +30,7 @@
 		<voice sentence="Chrk chrk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="6" chance="33333" />
-		<item id="11373" chance="2173" />
+		<item id="2148" countmax="6" chance="33333" /><!-- gold coin -->
+		<item id="11373" chance="2173" /><!-- sandcrawler shell -->
 	</loot>
 </monster>

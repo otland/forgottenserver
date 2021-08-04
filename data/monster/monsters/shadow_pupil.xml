@@ -51,16 +51,16 @@
 		<voice sentence="When I'm finished with you, you'll be a shadow of your former self." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="64" chance="100000" />
-		<item id="2195" chance="60" />
-		<item id="2423" chance="290" />
-		<item id="2663" chance="580" />
-		<item id="2789" chance="5170" />
-		<item id="7589" chance="470" />
-		<item id="8900" chance="290" />
-		<item id="11237" chance="6920" />
-		<item id="21243" chance="15000" />
-		<item id="21246" chance="9130" />
-		<item id="21247" chance="4300" />
+		<item id="2148" countmax="64" chance="100000" /><!-- gold coin -->
+		<item id="2195" chance="60" /><!-- boots of haste -->
+		<item id="2423" chance="290" /><!-- clerical mace -->
+		<item id="2663" chance="580" /><!-- mystic turban -->
+		<item id="2789" chance="5170" /><!-- brown mushroom -->
+		<item id="7589" chance="470" /><!-- strong mana potion -->
+		<item id="8900" chance="290" /><!-- spellbook of enlightenment -->
+		<item id="11237" chance="6920" /><!-- book of necromantic rituals -->
+		<item id="21243" chance="15000" /><!-- horoscope -->
+		<item id="21246" chance="9130" /><!-- incantation notes -->
+		<item id="21247" chance="4300" /><!-- pieces of magic chalk -->
 	</loot>
 </monster>

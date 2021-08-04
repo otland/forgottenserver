@@ -27,9 +27,9 @@
 		<element deathPercent="-4" />
 	</elements>
 	<loot>
-		<item id="2148" countmax="57" chance="6000" />
-		<item id="2389" countmax="2" chance="2000" />
-		<item id="2448" chance="5000" />
-		<item id="2666" countmax="3" chance="1500" />
+		<item id="2148" countmax="57" chance="6000" /><!-- gold coin -->
+		<item id="2389" countmax="2" chance="2000" /><!-- spear -->
+		<item id="2448" chance="5000" /><!-- studded club -->
+		<item id="2666" countmax="3" chance="1500" /><!-- meat -->
 	</loot>
 </monster>

@@ -41,19 +41,19 @@
 		<voice sentence="One more head for me!" />
 	</voices>
 	<loot>
-		<item id="2389" countmax="3" chance="55000" />
-		<item id="2148" countmax="12" chance="32000" />
-		<item id="2666" chance="30100" />
-		<item id="2464" chance="10000" />
-		<item id="2674" countmax="2" chance="7500" />
-		<item id="12399" chance="6000" />
-		<item id="3965" chance="5155" />
-		<item id="12400" chance="3200" />
-		<item id="2200" chance="1100" />
-		<item id="2463" chance="820" />
-		<item id="2229" chance="740" />
-		<item id="7618" chance="500" />
-		<item id="2387" chance="420" />
-		<item id="2145" chance="200" />
+		<item id="2389" countmax="3" chance="55000" /><!-- spear -->
+		<item id="2148" countmax="12" chance="32000" /><!-- gold coin -->
+		<item id="2666" chance="30100" /><!-- meat -->
+		<item id="2464" chance="10000" /><!-- chain armor -->
+		<item id="2674" countmax="2" chance="7500" /><!-- red apple -->
+		<item id="12399" chance="6000" /><!-- girlish hair decoration -->
+		<item id="3965" chance="5155" /><!-- hunting spear -->
+		<item id="12400" chance="3200" /><!-- protective charm -->
+		<item id="2200" chance="1100" /><!-- protection amulet -->
+		<item id="2463" chance="820" /><!-- plate armor -->
+		<item id="2229" chance="740" /><!-- skull -->
+		<item id="7618" chance="500" /><!-- health potion -->
+		<item id="2387" chance="420" /><!-- double axe -->
+		<item id="2145" chance="200" /><!-- small diamond -->
 	</loot>
 </monster>

@@ -36,20 +36,20 @@
 		<voice sentence="Tssss!" />
 	</voices>
 	<loot>
-		<item id="2145" countmax="2" chance="1001" />
-		<item id="2148" countmax="100" chance="44000" />
-		<item id="2148" countmax="65" chance="54000" />
-		<item id="5876" chance="970" />
-		<item id="5881" countmax="3" chance="980" />
-		<item id="7588" chance="3880" />
-		<item id="11206" chance="530" />
-		<item id="11245" chance="1950" />
-		<item id="11301" chance="70" />
-		<item id="11303" chance="460" />
-		<item id="11305" chance="710" />
-		<item id="11323" chance="960" />
-		<item id="11334" chance="1940" />
-		<item id="11335" chance="14940" />
-		<item id="11336" chance="20" />
+		<item id="2145" countmax="2" chance="1001" /><!-- small diamond -->
+		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
+		<item id="2148" countmax="65" chance="54000" /><!-- gold coin -->
+		<item id="5876" chance="970" /><!-- lizard leather -->
+		<item id="5881" countmax="3" chance="980" /><!-- lizard scale -->
+		<item id="7588" chance="3880" /><!-- strong health potion -->
+		<item id="11206" chance="530" /><!-- red lantern -->
+		<item id="11245" chance="1950" /><!-- bunch of ripe rice -->
+		<item id="11301" chance="70" /><!-- Zaoan armor -->
+		<item id="11303" chance="460" /><!-- Zaoan shoes -->
+		<item id="11305" chance="710" /><!-- drakinata -->
+		<item id="11323" chance="960" /><!-- Zaoan halberd -->
+		<item id="11334" chance="1940" /><!-- legionnaire flags -->
+		<item id="11335" chance="14940" /><!-- broken halberd -->
+		<item id="11336" chance="20" /><!-- lizard trophy -->
 	</loot>
 </monster>

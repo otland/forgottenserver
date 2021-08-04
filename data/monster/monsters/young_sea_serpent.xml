@@ -51,18 +51,18 @@
 		<voice sentence="HISSSS" />
 	</voices>
 	<loot>
-		<item id="2146" countmax="2" chance="1900" />
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="74" chance="48000" />
-		<item id="2165" chance="1000" />
-		<item id="2177" chance="300" />
-		<item id="2378" chance="8000" />
-		<item id="2394" chance="40000" />
-		<item id="2417" chance="5000" />
-		<item id="7588" chance="5000" />
-		<item id="7589" chance="4000" />
-		<item id="9808" chance="7940" />
-		<item id="9809" chance="7940" />
-		<item id="10583" chance="5000" />
+		<item id="2146" countmax="2" chance="1900" /><!-- small sapphire -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="74" chance="48000" /><!-- gold coin -->
+		<item id="2165" chance="1000" /><!-- stealth ring -->
+		<item id="2177" chance="300" /><!-- life crystal -->
+		<item id="2378" chance="8000" /><!-- battle axe -->
+		<item id="2394" chance="40000" /><!-- morning star -->
+		<item id="2417" chance="5000" /><!-- battle hammer -->
+		<item id="7588" chance="5000" /><!-- strong health potion -->
+		<item id="7589" chance="4000" /><!-- strong mana potion -->
+		<item id="9808" chance="7940" /><!-- rusty armor (common) -->
+		<item id="9809" chance="7940" /><!-- rusty armor (semi-rare) -->
+		<item id="10583" chance="5000" /><!-- sea serpent scale -->
 	</loot>
 </monster>

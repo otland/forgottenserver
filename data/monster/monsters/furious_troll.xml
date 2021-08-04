@@ -31,10 +31,10 @@
 		<voice sentence="DIE!!!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="47000" />
-		<item id="2148" countmax="46" chance="47000" />
-		<item id="2152" chance="6000" />
-		<item id="2391" chance="750" />
-		<item id="10606" chance="4400" />
+		<item id="2148" countmax="100" chance="47000" /><!-- gold coin -->
+		<item id="2148" countmax="46" chance="47000" /><!-- gold coin -->
+		<item id="2152" chance="6000" /><!-- platinum coin -->
+		<item id="2391" chance="750" /><!-- war hammer -->
+		<item id="10606" chance="4400" /><!-- bunch of troll hair -->
 	</loot>
 </monster>

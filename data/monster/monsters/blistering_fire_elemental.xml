@@ -45,12 +45,12 @@
 		<voice sentence="FCHHHRRR" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="44000" />
-		<item id="2148" countmax="70" chance="44000" />
-		<item id="10553" chance="10000" />
-		<item id="8299" chance="9500" />
-		<item id="2147" countmax="3" chance="5000" />
-		<item id="8921" chance="500" />
-		<item id="13757" chance="500" />
+		<item id="2148" countmax="100" chance="44000" /><!-- gold coin -->
+		<item id="2148" countmax="70" chance="44000" /><!-- gold coin -->
+		<item id="10553" chance="10000" /><!-- fiery heart -->
+		<item id="8299" chance="9500" /><!-- glimmering soil -->
+		<item id="2147" countmax="3" chance="5000" /><!-- small ruby -->
+		<item id="8921" chance="500" /><!-- wand of draconia -->
+		<item id="13757" chance="500" /><!-- coal -->
 	</loot>
 </monster>

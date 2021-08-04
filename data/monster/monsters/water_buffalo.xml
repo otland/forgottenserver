@@ -37,8 +37,8 @@
 		<voice sentence="Mrrr!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="20" chance="100000" />
-		<item id="2666" countmax="4" chance="33600" />
-		<item id="2671" countmax="3" chance="39200" />
+		<item id="2148" countmax="20" chance="100000" /><!-- gold coin -->
+		<item id="2666" countmax="4" chance="33600" /><!-- meat -->
+		<item id="2671" countmax="3" chance="39200" /><!-- ham -->
 	</loot>
 </monster>

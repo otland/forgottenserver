@@ -34,11 +34,11 @@
 		<summon name="Kongra" interval="2000" chance="25" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="60" chance="50000" />
-		<item id="2166" chance="7500" />
-		<item id="2200" chance="3000" />
-		<item id="2463" chance="5000" />
-		<item id="2676" countmax="2" chance="7500" />
-		<item id="5883" chance="2500" />
+		<item id="2148" countmax="60" chance="50000" /><!-- gold coin -->
+		<item id="2166" chance="7500" /><!-- power ring -->
+		<item id="2200" chance="3000" /><!-- protection amulet -->
+		<item id="2463" chance="5000" /><!-- plate armor -->
+		<item id="2676" countmax="2" chance="7500" /><!-- banana -->
+		<item id="5883" chance="2500" /><!-- ape fur -->
 	</loot>
 </monster>

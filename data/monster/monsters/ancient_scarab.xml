@@ -52,20 +52,20 @@
 		<summon name="Larva" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="87" chance="50000" />
-		<item id="2162" chance="10300" />
-		<item id="2159" countmax="2" chance="8100" />
-		<item id="10548" chance="7140" />
-		<item id="2149" countmax="3" chance="6000" />
-		<item id="2150" countmax="4" chance="6000" />
-		<item id="2463" chance="5000" />
-		<item id="2135" chance="3510" />
-		<item id="2142" chance="2670" />
-		<item id="7588" chance="1660" />
-		<item id="8912" chance="1000" />
-		<item id="2540" chance="500" />
-		<item id="7903" chance="400" />
-		<item id="2440" chance="300" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="87" chance="50000" /><!-- gold coin -->
+		<item id="2162" chance="10300" /><!-- magic lightwand -->
+		<item id="2159" countmax="2" chance="8100" /><!-- scarab coin -->
+		<item id="10548" chance="7140" /><!-- scarab pincers -->
+		<item id="2149" countmax="3" chance="6000" /><!-- small emerald -->
+		<item id="2150" countmax="4" chance="6000" /><!-- small amethyst -->
+		<item id="2463" chance="5000" /><!-- plate armor -->
+		<item id="2135" chance="3510" /><!-- scarab amulet -->
+		<item id="2142" chance="2670" /><!-- ancient amulet -->
+		<item id="7588" chance="1660" /><!-- strong health potion -->
+		<item id="8912" chance="1000" /><!-- springsprout rod -->
+		<item id="2540" chance="500" /><!-- scarab shield -->
+		<item id="7903" chance="400" /><!-- terra hood -->
+		<item id="2440" chance="300" /><!-- daramian waraxe -->
 	</loot>
 </monster>

@@ -49,6 +49,6 @@
 		<voice sentence="Tsshh" />
 	</voices>
 	<loot>
-		<item id="10521" chance="140" />
+		<item id="10521" chance="140" /><!-- moon backpack -->
 	</loot>
 </monster>

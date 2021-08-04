@@ -41,18 +41,18 @@
 		<voice sentence="?" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="99" chance="50000" />
-		<item id="2152" countmax="3" chance="52000" />
-		<item id="23569" chance="20000" />
-		<item id="9970" countmax="6" chance="10000" />
-		<item id="8472" chance="8000" />
-		<item id="7591" chance="8000" />
-		<item id="2150" countmax="3" chance="4500" />
-		<item id="2149" countmax="3" chance="4500" />
-		<item id="23540" chance="3500" />
-		<item id="23541" chance="2200" />
-		<item id="2445" chance="670" />
-		<item id="2645" chance="520" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="99" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="3" chance="52000" /><!-- platinum coin -->
+		<item id="23569" chance="20000" /><!-- metal toe -->
+		<item id="9970" countmax="6" chance="10000" /><!-- small topaz -->
+		<item id="8472" chance="8000" /><!-- great spirit potion -->
+		<item id="7591" chance="8000" /><!-- great health potion -->
+		<item id="2150" countmax="3" chance="4500" /><!-- small amethyst -->
+		<item id="2149" countmax="3" chance="4500" /><!-- small emerald -->
+		<item id="23540" chance="3500" /><!-- metal spats -->
+		<item id="23541" chance="2200" /><!-- gearwheel chain -->
+		<item id="2445" chance="670" /><!-- crystal mace -->
+		<item id="2645" chance="520" /><!-- steel boots -->
 	</loot>
 </monster>

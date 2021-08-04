@@ -74,15 +74,15 @@
 		<voice sentence="BRING IT, COCKROACHES!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2143" chance="10000" countmax="5" />
-		<item id="2148" chance="100000" countmax="100" />
-		<item id="2148" chance="50000" countmax="90" />
-		<item id="2195" chance="16033" />
-		<item id="2393" chance="60000" />
-		<item id="2407" chance="20000" />
-		<item id="2407" chance="20000" />
-		<item id="2408" chance="6000" />
-		<item id="2641" chance="7000" />
-		<item id="6530" chance="16000" />
+		<item id="2143" chance="10000" countmax="5" /><!-- white pearl -->
+		<item id="2148" chance="100000" countmax="100" /><!-- gold coin -->
+		<item id="2148" chance="50000" countmax="90" /><!-- gold coin -->
+		<item id="2195" chance="16033" /><!-- boots of haste -->
+		<item id="2393" chance="60000" /><!-- giant sword -->
+		<item id="2407" chance="20000" /><!-- bright sword -->
+		<item id="2407" chance="20000" /><!-- bright sword -->
+		<item id="2408" chance="6000" /><!-- warlord sword -->
+		<item id="2641" chance="7000" /><!-- patched boots -->
+		<item id="6530" chance="16000" /><!-- worn soft boots -->
 	</loot>
 </monster>

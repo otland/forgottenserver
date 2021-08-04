@@ -42,12 +42,12 @@
 		<immunity physical="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="50" chance="50000" />
-		<item id="2165" chance="20000" />
-		<item id="2488" chance="5000" />
-		<item id="8871" chance="5000" />
-		<item id="2655" chance="5000" />
-		<item id="2383" chance="5000" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
+		<item id="2165" chance="20000" /><!-- stealth ring -->
+		<item id="2488" chance="5000" /><!-- crown legs -->
+		<item id="8871" chance="5000" /><!-- focus cape -->
+		<item id="2655" chance="5000" /><!-- red robe -->
+		<item id="2383" chance="5000" /><!-- spike sword -->
 	</loot>
 </monster>

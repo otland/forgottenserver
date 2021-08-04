@@ -33,7 +33,7 @@
 		<voice sentence="Grrrrrrr" />
 	</voices>
 	<loot>
-		<item id="2666" countmax="2" chance="70000" />
-		<item id="5897" chance="1000" />
+		<item id="2666" countmax="2" chance="70000" /><!-- meat -->
+		<item id="5897" chance="1000" /><!-- wolf paw -->
 	</loot>
 </monster>

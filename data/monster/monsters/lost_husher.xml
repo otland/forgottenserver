@@ -63,32 +63,32 @@
 		<voice sentence="Arr far zwar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2152" countmax="2" chance="58670" />
-		<item id="2213" chance="2870" />
-		<item id="2432" chance="330" />
-		<item id="2436" chance="280" />
-		<item id="2515" chance="830" />
-		<item id="2528" chance="440" />
-		<item id="2789" countmax="2" chance="14920" />
-		<item id="7452" chance="50" />
-		<item id="7588" countmax="3" chance="11050" />
-		<item id="7590" countmax="2" chance="10770" />
-		<item id="7750" chance="770" />
-		<item id="7885" chance="50" />
-		<item id="7886" chance="880" />
-		<item id="9970" chance="9780" />
-		<item id="11339" chance="500" />
-		<item id="13757" chance="10930" />
-		<item id="20109" chance="8180" />
-		<item id="20109" chance="770" />
-		<item id="20110" chance="8510" />
-		<item id="20126" chance="11330" />
-		<item id="20127" chance="8950" />
-		<item id="20128" chance="9280" />
-		<item id="20129" chance="12320" />
-		<item id="20134" chance="15580" />
-		<item id="20135" chance="8510" />
-		<item id="20137" chance="8560" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="2" chance="58670" /><!-- platinum coin -->
+		<item id="2213" chance="2870" /><!-- dwarven ring -->
+		<item id="2432" chance="330" /><!-- fire axe -->
+		<item id="2436" chance="280" /><!-- skull staff -->
+		<item id="2515" chance="830" /><!-- guardian shield -->
+		<item id="2528" chance="440" /><!-- tower shield -->
+		<item id="2789" countmax="2" chance="14920" /><!-- brown mushroom -->
+		<item id="7452" chance="50" /><!-- spiked squelcher -->
+		<item id="7588" countmax="3" chance="11050" /><!-- strong health potion -->
+		<item id="7590" countmax="2" chance="10770" /><!-- great mana potion -->
+		<item id="7750" chance="770" /><!-- fiery knight axe -->
+		<item id="7885" chance="50" /><!-- terra legs -->
+		<item id="7886" chance="880" /><!-- terra boots -->
+		<item id="9970" chance="9780" /><!-- small topaz -->
+		<item id="11339" chance="500" /><!-- clay lump -->
+		<item id="13757" chance="10930" /><!-- Coal -->
+		<item id="20109" chance="8180" /><!-- buckle -->
+		<item id="20109" chance="770" /><!-- buckle -->
+		<item id="20110" chance="8510" /><!-- bonecarving knife -->
+		<item id="20126" chance="11330" /><!-- leather harness -->
+		<item id="20127" chance="8950" /><!-- wimp tooth chain -->
+		<item id="20128" chance="9280" /><!-- lost husher's staff -->
+		<item id="20129" chance="12320" /><!-- skull shatterer -->
+		<item id="20134" chance="15580" /><!-- mad froth -->
+		<item id="20135" chance="8510" /><!-- red hair dye -->
+		<item id="20137" chance="8560" /><!-- basalt figurine -->
 	</loot>
 </monster>

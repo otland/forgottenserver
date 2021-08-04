@@ -56,24 +56,24 @@
 		<voice sentence="Blood for the dark god!" />
 	</voices>
 	<loot>
-		<item id="2147" countmax="2" chance="3510" />
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="71" chance="50000" />
-		<item id="2195" chance="120" />
-		<item id="2436" chance="180" />
-		<item id="2663" chance="2170" />
-		<item id="5909" chance="3040" />
-		<item id="5911" chance="640" />
-		<item id="7589" chance="6000" />
-		<item id="8901" chance="290" />
-		<item id="8902" chance="180" />
-		<item id="8910" chance="470" />
-		<item id="11237" chance="13550" />
-		<item id="15565" chance="880" />
-		<item id="21242" chance="14410" />
-		<item id="21243" chance="9270" />
-		<item id="21245" chance="14460" />
-		<item id="21246" chance="14660" />
-		<item id="21247" chance="7770" />
+		<item id="2147" countmax="2" chance="3510" /><!-- small ruby -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="71" chance="50000" /><!-- gold coin -->
+		<item id="2195" chance="120" /><!-- boots of haste -->
+		<item id="2436" chance="180" /><!-- skull staff -->
+		<item id="2663" chance="2170" /><!-- mystic turban -->
+		<item id="5909" chance="3040" /><!-- white piece of cloth -->
+		<item id="5911" chance="640" /><!-- red piece of cloth -->
+		<item id="7589" chance="6000" /><!-- strong mana potion -->
+		<item id="8901" chance="290" /><!-- spellbook of warding -->
+		<item id="8902" chance="180" /><!-- spellbook of mind control -->
+		<item id="8910" chance="470" /><!-- underworld rod -->
+		<item id="11237" chance="13550" /><!-- book of necromantic rituals -->
+		<item id="15565" chance="880" /><!-- rough red gem -->
+		<item id="21242" chance="14410" /><!-- lancet -->
+		<item id="21243" chance="9270" /><!-- horoscope -->
+		<item id="21245" chance="14460" /><!-- blood tincture in a vial -->
+		<item id="21246" chance="14660" /><!-- incantation notes -->
+		<item id="21247" chance="7770" /><!-- pieces of magic chalk -->
 	</loot>
 </monster>

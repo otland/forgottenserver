@@ -37,17 +37,17 @@
 		<voice sentence="Hmmm, dogs" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="12" chance="65300" />
-		<item id="2380" chance="20000" />
-		<item id="2666" chance="15000" />
-		<item id="2389" chance="13000" />
-		<item id="2461" chance="12000" />
-		<item id="2643" chance="10000" />
-		<item id="2120" chance="8200" />
-		<item id="2512" chance="6300" />
-		<item id="2448" chance="5000" />
+		<item id="2148" countmax="12" chance="65300" /><!-- gold coin -->
+		<item id="2380" chance="20000" /><!-- hand axe -->
+		<item id="2666" chance="15000" /><!-- meat -->
+		<item id="2389" chance="13000" /><!-- spear -->
+		<item id="2461" chance="12000" /><!-- leather helmet -->
+		<item id="2643" chance="10000" /><!-- leather boots -->
+		<item id="2120" chance="8200" /><!-- rope -->
+		<item id="2512" chance="6300" /><!-- wooden shield -->
+		<item id="2448" chance="5000" /><!-- studded club -->
 		<!-- Heavy Old Tome 1.66% -->
-		<item id="10606" chance="700" />
-		<item id="2170" chance="80" />
+		<item id="10606" chance="700" /><!-- bunch of troll hair -->
+		<item id="2170" chance="80" /><!-- silver amulet -->
 	</loot>
 </monster>

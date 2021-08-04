@@ -41,6 +41,6 @@
 		<voice sentence="Flap flap flap!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="38" chance="50000" />
+		<item id="2148" countmax="38" chance="50000" /><!-- gold coin -->
 	</loot>
 </monster>

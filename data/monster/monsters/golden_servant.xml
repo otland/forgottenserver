@@ -49,18 +49,18 @@
 		<voice sentence="Remain. Obedient." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="40000" />
-		<item id="2148" countmax="40" chance="45000" />
-		<item id="2165" chance="450" />
-		<item id="2179" chance="10" />
-		<item id="2381" chance="3003" />
-		<item id="2466" chance="10" />
-		<item id="2796" chance="1450" />
-		<item id="7618" chance="4930" />
-		<item id="7620" chance="4950" />
-		<item id="8900" chance="520" />
-		<item id="9690" chance="940" />
-		<item id="13758" chance="340" />
-		<item id="13938" chance="40" />
+		<item id="2148" countmax="100" chance="40000" /><!-- gold coin -->
+		<item id="2148" countmax="40" chance="45000" /><!-- gold coin -->
+		<item id="2165" chance="450" /><!-- stealth ring -->
+		<item id="2179" chance="10" /><!-- gold ring -->
+		<item id="2381" chance="3003" /><!-- halberd -->
+		<item id="2466" chance="10" /><!-- golden armor -->
+		<item id="2796" chance="1450" /><!-- green mushroom -->
+		<item id="7618" chance="4930" /><!-- health potion -->
+		<item id="7620" chance="4950" /><!-- mana potion -->
+		<item id="8900" chance="520" /><!-- spellbook of enlightenment -->
+		<item id="9690" chance="940" /><!-- gear wheel -->
+		<item id="13758" chance="340" /><!-- slime mould -->
+		<item id="13938" chance="40" /><!-- golden can of oil -->
 	</loot>
 </monster>

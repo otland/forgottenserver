@@ -37,6 +37,6 @@
 		<voice sentence="Fsssss" />
 	</voices>
 	<loot>
-		<item id="10551" chance="5000" />
+		<item id="10551" chance="5000" /><!-- cobra tongue -->
 	</loot>
 </monster>

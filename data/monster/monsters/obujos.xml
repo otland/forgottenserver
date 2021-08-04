@@ -60,8 +60,8 @@
 		<voice sentence="QJELL KEJH!!" />
 	</voices>
 	<loot>
-		<item id="15404" chance="14285" />
-		<item id="15411" chance="100000" />
-		<item id="15412" chance="14285" />
+		<item id="15404" chance="14285" /><!-- deepling axe -->
+		<item id="15411" chance="100000" /><!-- depth scutum -->
+		<item id="15412" chance="14285" /><!-- ornate legs -->
 	</loot>
 </monster>

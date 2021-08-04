@@ -21,7 +21,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" poison="40" />
-		<attack name="poisoncondition" interval="2000" chance="25" range="7" radius="4" min="-31" max="-31" target="1">
+		<attack name="poisoncondition" interval="2000" chance="25" range="7" radius="4" min="-31" max="-31" target="1" >
 			<attribute key="shootEffect" value="poison" />
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
@@ -56,6 +56,6 @@
 		<voice sentence="Phew, what an awful smell ... oh, that's me." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="25" chance="42000" />
+		<item id="2148" countmax="25" chance="42000" /><!-- gold coin -->
 	</loot>
 </monster>

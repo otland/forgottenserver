@@ -38,15 +38,15 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2143" chance="3000" />
-		<item id="2148" countmax="100" chance="35000" />
-		<item id="2148" countmax="44" chance="35000" />
-		<item id="2159" countmax="3" chance="10000" />
-		<item id="2175" chance="6800" />
-		<item id="2214" chance="1000" />
-		<item id="5022" countmax="4" chance="6000" />
-		<item id="7618" chance="15000" />
-		<item id="7620" chance="15000" />
-		<item id="13739" chance="27000" />
+		<item id="2143" chance="3000" /><!-- white pearl -->
+		<item id="2148" countmax="100" chance="35000" /><!-- gold coin -->
+		<item id="2148" countmax="44" chance="35000" /><!-- gold coin -->
+		<item id="2159" countmax="3" chance="10000" /><!-- scarab coin -->
+		<item id="2175" chance="6800" /><!-- spellbook -->
+		<item id="2214" chance="1000" /><!-- ring of healing -->
+		<item id="5022" countmax="4" chance="6000" /><!-- orichalcum pearl -->
+		<item id="7618" chance="15000" /><!-- health potion -->
+		<item id="7620" chance="15000" /><!-- mana potion -->
+		<item id="13739" chance="27000" /><!-- hieroglyph banner -->
 	</loot>
 </monster>

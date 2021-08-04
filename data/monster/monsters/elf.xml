@@ -41,15 +41,15 @@
 		<voice sentence="Death to the defilers!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="30" chance="44000" />
-		<item id="8839" countmax="2" chance="20000" />
-		<item id="2482" chance="15000" />
-		<item id="2643" chance="11410" />
-		<item id="2397" chance="10800" />
-		<item id="2484" chance="9000" />
-		<item id="2510" chance="8900" />
-		<item id="2544" countmax="3" chance="7060" />
-		<item id="10552" chance="2000" />
-		<item id="5921" chance="1000" />
+		<item id="2148" countmax="30" chance="44000" /><!-- gold coin -->
+		<item id="8839" countmax="2" chance="20000" /><!-- plum -->
+		<item id="2482" chance="15000" /><!-- studded helmet -->
+		<item id="2643" chance="11410" /><!-- leather boots -->
+		<item id="2397" chance="10800" /><!-- longsword -->
+		<item id="2484" chance="9000" /><!-- studded armor -->
+		<item id="2510" chance="8900" /><!-- plate shield -->
+		<item id="2544" countmax="3" chance="7060" /><!-- arrow -->
+		<item id="10552" chance="2000" /><!-- elvish talisman -->
+		<item id="5921" chance="1000" /><!-- heaven blossom -->
 	</loot>
 </monster>

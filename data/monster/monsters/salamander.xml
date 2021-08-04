@@ -32,14 +32,14 @@
 		<voice sentence="Chhh!" />
 	</voices>
 	<loot>
-		<item id="2120" chance="4700" />
-		<item id="2148" countmax="15" chance="60000" />
-		<item id="2398" chance="3780" />
-		<item id="2419" chance="420" />
-		<item id="2456" chance="1090" />
-		<item id="2460" chance="2180" />
-		<item id="2544" countmax="3" chance="7890" />
-		<item id="7618" chance="840" />
-		<item id="14776" countmax="5" chance="32830" />
+		<item id="2120" chance="4700" /><!-- Rope -->
+		<item id="2148" countmax="15" chance="60000" /><!-- gold coin -->
+		<item id="2398" chance="3780" /><!-- mace -->
+		<item id="2419" chance="420" /><!-- Scimitar -->
+		<item id="2456" chance="1090" /><!-- bow -->
+		<item id="2460" chance="2180" /><!-- brass helmet -->
+		<item id="2544" countmax="3" chance="7890" /><!-- arrow -->
+		<item id="7618" chance="840" /><!-- health potion -->
+		<item id="14776" countmax="5" chance="32830" /><!-- insectoid eggs -->
 	</loot>
 </monster>

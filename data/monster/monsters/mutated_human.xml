@@ -58,18 +58,18 @@
 		<voice sentence="Oh by the gods! What is this... aaaaaargh!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="44000" />
-		<item id="2148" countmax="50" chance="44000" />
-		<item id="2161" chance="4980" />
-		<item id="2170" chance="70" />
-		<item id="2226" chance="10050" />
-		<item id="2376" chance="5030" />
-		<item id="2483" chance="8080" />
-		<item id="2696" chance="8000" />
-		<item id="2801" chance="420" />
-		<item id="3976" countmax="2" chance="7110" />
-		<item id="7910" chance="580" />
-		<item id="9808" chance="190" />
-		<item id="11225" chance="19940" />
+		<item id="2148" countmax="80" chance="44000" /><!-- gold coin -->
+		<item id="2148" countmax="50" chance="44000" /><!-- gold coin -->
+		<item id="2161" chance="4980" /><!-- strange talisman -->
+		<item id="2170" chance="70" /><!-- silver amulet -->
+		<item id="2226" chance="10050" /><!-- fishbone -->
+		<item id="2376" chance="5030" /><!-- sword -->
+		<item id="2483" chance="8080" /><!-- scale armor -->
+		<item id="2696" chance="8000" /><!-- cheese -->
+		<item id="2801" chance="420" /><!-- fern -->
+		<item id="3976" countmax="2" chance="7110" /><!-- worm -->
+		<item id="7910" chance="580" /><!-- peanut -->
+		<item id="9808" chance="190" /><!-- rusty armor (common) -->
+		<item id="11225" chance="19940" /><!-- mutated flesh -->
 	</loot>
 </monster>

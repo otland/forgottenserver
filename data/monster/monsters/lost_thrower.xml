@@ -56,22 +56,22 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="37" chance="50000" />
-		<item id="2152" countmax="2" chance="70000" />
-		<item id="2789" countmax="2" chance="14500" />
-		<item id="5880" chance="9470" />
-		<item id="7590" chance="13470" />
-		<item id="7591" chance="14730" />
-		<item id="13757" chance="12180" />
-		<item id="20106" chance="11410" />
-		<item id="20109" chance="850" />
-		<item id="20130" chance="15670" />
-		<item id="20131" chance="1390" />
-		<item id="20132" chance="13560" />
-		<item id="20133" chance="14860" />
-		<item id="20134" chance="11810" />
-		<item id="20136" chance="6150" />
-		<item id="20137" chance="7900" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="37" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="2" chance="70000" /><!-- platinum coin -->
+		<item id="2789" countmax="2" chance="14500" /><!-- brown mushroom -->
+		<item id="5880" chance="9470" /><!-- iron ore -->
+		<item id="7590" chance="13470" /><!-- great mana potion -->
+		<item id="7591" chance="14730" /><!-- great health potion -->
+		<item id="13757" chance="12180" /><!-- coal -->
+		<item id="20106" chance="11410" /><!-- lost basher's spike -->
+		<item id="20109" chance="850" /><!-- buckle -->
+		<item id="20130" chance="15670" /><!-- holy ash -->
+		<item id="20131" chance="1390" /><!-- broken throwing axe -->
+		<item id="20132" chance="13560" /><!-- helmet of the lost -->
+		<item id="20133" chance="14860" /><!-- lost bracers -->
+		<item id="20134" chance="11810" /><!-- mad froth -->
+		<item id="20136" chance="6150" /><!-- basalt fetish -->
+		<item id="20137" chance="7900" /><!-- basalt figurine -->
 	</loot>
 </monster>

@@ -39,11 +39,11 @@
 		<voice sentence="For the pharao!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="15" chance="50000" />
-		<item id="2159" chance="2600" />
-		<item id="2398" chance="3760" />
-		<item id="2419" chance="1640" />
-		<item id="2789" countmax="2" chance="6120" />
-		<item id="12437" chance="8700" />
+		<item id="2148" countmax="15" chance="50000" /><!-- gold coin -->
+		<item id="2159" chance="2600" /><!-- scarab coin -->
+		<item id="2398" chance="3760" /><!-- mace -->
+		<item id="2419" chance="1640" /><!-- scimitar -->
+		<item id="2789" countmax="2" chance="6120" /><!-- brown mushroom -->
+		<item id="12437" chance="8700" /><!-- pelvis bone -->
 	</loot>
 </monster>

@@ -56,21 +56,21 @@
 		<voice sentence="My little beetles, go forth, eat, feast!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />
-		<item id="2152" countmax="9" chance="100000" />
-		<item id="2392" chance="1240" />
-		<item id="2519" chance="1700" />
-		<item id="2528" chance="550" />
-		<item id="2789" countmax="2" chance="14000" />
-		<item id="3962" chance="4260" />
-		<item id="7386" chance="2500" />
-		<item id="7452" chance="410" />
-		<item id="7590" chance="12500" />
-		<item id="7591" chance="15000" />
-		<item id="8910" chance="1800" />
-		<item id="8920" chance="960" />
-		<item id="22363" chance="3700" />
-		<item id="22539" chance="16400" />
-		<item id="22541" chance="14000" />
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2152" countmax="9" chance="100000" /><!-- platinum coin -->
+		<item id="2392" chance="1240" /><!-- fire sword -->
+		<item id="2519" chance="1700" /><!-- crown shield -->
+		<item id="2528" chance="550" /><!-- tower shield -->
+		<item id="2789" countmax="2" chance="14000" /><!-- brown mushroom -->
+		<item id="3962" chance="4260" /><!-- beastslayer axe -->
+		<item id="7386" chance="2500" /><!-- mercenary sword -->
+		<item id="7452" chance="410" /><!-- spiked squelcher -->
+		<item id="7590" chance="12500" /><!-- great mana potion -->
+		<item id="7591" chance="15000" /><!-- great health potion -->
+		<item id="8910" chance="1800" /><!-- underworld rod -->
+		<item id="8920" chance="960" /><!-- wand of starstorm -->
+		<item id="22363" chance="3700" /><!-- broken dream -->
+		<item id="22539" chance="16400" /><!-- goosebump leather -->
+		<item id="22541" chance="14000" /><!-- pool of chitinous glue -->
 	</loot>
 </monster>

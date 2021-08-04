@@ -67,8 +67,8 @@
 		<voice sentence="JAUL QJELL, JAKNH JEH KENH!!" />
 	</voices>
 	<loot>
-		<item id="15409" chance="50000" />
-		<item id="15413" chance="20000" />
-		<item id="15414" chance="25000" />
+		<item id="15409" chance="50000" /><!-- depth ocrea -->
+		<item id="15413" chance="20000" /><!-- ornate shield -->
+		<item id="15414" chance="25000" /><!-- ornate mace -->
 	</loot>
 </monster>

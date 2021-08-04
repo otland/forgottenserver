@@ -61,52 +61,52 @@
 		<voice sentence="Delicious!" />
 	</voices>
 	<loot>
-		<item id="6500" chance="100000" />
-		<item id="2148" countmax="100" chance="60000" />
-		<item id="2148" countmax="98" chance="60000" />
-		<item id="9813" chance="51000" />
-		<item id="8473" countmax="2" chance="42000" />
-		<item id="9810" chance="32000" />
-		<item id="8901" chance="30000" />
-		<item id="3962" chance="29950" />
-		<item id="8472" chance="21000" />
-		<item id="2152" countmax="30" chance="20000" />
-		<item id="2487" chance="18000" />
-		<item id="7591" chance="18000" />
-		<item id="7590" chance="17000" />
-		<item id="2125" chance="14000" />
-		<item id="2144" countmax="25" chance="14000" />
-		<item id="2143" countmax="25" chance="13000" />
-		<item id="2147" countmax="25" chance="13000" />
-		<item id="2145" countmax="25" chance="12000" />
-		<item id="7456" chance="12000" />
-		<item id="2150" countmax="25" chance="11000" />
-		<item id="2149" countmax="25" chance="11000" />
-		<item id="2146" countmax="25" chance="11000" />
-		<item id="9970" countmax="25" chance="11000" />
-		<item id="7894" chance="11000" />
-		<item id="8870" chance="10000" />
-		<item id="2133" chance="10000" />
-		<item id="2488" chance="10000" />
-		<item id="8902" chance="10000" />
-		<item id="2130" chance="10000" />
-		<item id="2197" chance="10000" />
-		<item id="5954" countmax="2" chance="9500" />
-		<item id="2645" chance="9500" />
-		<item id="8871" chance="9500" />
-		<item id="2477" chance="9000" />
-		<item id="8903" chance="9000" />
-		<item id="2656" chance="8170" />
-		<item id="7412" chance="2320" />
-		<item id="2466" chance="2870" />
-		<item id="7388" chance="1970" />
-		<item id="8904" chance="1360" />
-		<item id="7453" chance="610" />
-		<item id="2136" chance="590" />
-		<item id="8926" chance="450" />
-		<item id="2470" chance="450" />
-		<item id="8879" chance="450" />
-		<item id="8918" chance="300" />
-		<item id="2415" chance="100" />
+		<item id="6500" chance="100000"/><!-- demonic essence -->
+		<item id="2148" countmax="100" chance="60000"/><!-- gold coin -->
+		<item id="2148" countmax="98" chance="60000"/><!-- gold coin -->
+		<item id="9813" chance="51000"/><!-- rusty legs (rare) -->
+		<item id="8473" countmax="2" chance="42000"/><!-- ultimate health potion -->
+		<item id="9810" chance="32000"/><!-- rusty armor (rare) -->
+		<item id="8901" chance="30000"/><!-- spellbook of warding -->
+		<item id="3962" chance="29950"/><!-- beastslayer axe -->
+		<item id="8472" chance="21000"/><!-- great spirit potion -->
+		<item id="2152" countmax="30" chance="20000"/><!-- platinum coin -->
+		<item id="2487" chance="18000"/><!-- crown armor -->
+		<item id="7591" chance="18000"/><!-- great health potion -->
+		<item id="7590" chance="17000"/><!-- great mana potion -->
+		<item id="2125" chance="14000"/><!-- crystal necklace -->
+		<item id="2144" countmax="25" chance="14000"/><!-- black pearl -->
+		<item id="2143" countmax="25" chance="13000"/><!-- white pearl -->
+		<item id="2147" countmax="25" chance="13000"/><!-- small ruby -->
+		<item id="2145" countmax="25" chance="12000"/><!-- small diamond -->
+		<item id="7456" chance="12000"/><!-- noble axe -->
+		<item id="2150" countmax="25" chance="11000"/><!-- small amethyst -->
+		<item id="2149" countmax="25" chance="11000"/><!-- small emerald -->
+		<item id="2146" countmax="25" chance="11000"/><!-- small sapphire -->
+		<item id="9970" countmax="25" chance="11000"/><!-- small topaz -->
+		<item id="7894" chance="11000"/><!-- magma legs -->
+		<item id="8870" chance="10000"/><!-- spirit cloak -->
+		<item id="2133" chance="10000"/><!-- ruby necklace -->
+		<item id="2488" chance="10000"/><!-- crown legs -->
+		<item id="8902" chance="10000"/><!-- spellbook of mind control -->
+		<item id="2130" chance="10000"/><!-- golden amulet -->
+		<item id="2197" chance="10000"/><!-- stone skin amulet -->
+		<item id="5954" countmax="2" chance="9500"/><!-- demon horn -->
+		<item id="2645" chance="9500"/><!-- steel boots -->
+		<item id="8871" chance="9500"/><!-- focus cape -->
+		<item id="2477" chance="9000"/><!-- knight legs -->
+		<item id="8903" chance="9000"/><!-- spellbook of lost souls -->
+		<item id="2656" chance="8170"/><!-- blue robe -->
+		<item id="7412" chance="2320"/><!-- butcher's axe -->
+		<item id="2466" chance="2870"/><!-- golden armor -->
+		<item id="7388" chance="1970"/><!-- vile axe -->
+		<item id="8904" chance="1360"/><!-- spellscroll of prophecies -->
+		<item id="7453" chance="610"/><!-- executioner -->
+		<item id="2136" chance="590"/><!-- demonbone amulet -->
+		<item id="8926" chance="450"/><!-- demonwing axe -->
+		<item id="2470" chance="450"/><!-- golden legs -->
+		<item id="8879" chance="450"/><!-- voltage armor -->
+		<item id="8918" chance="300"/><!-- spellbook of dark mysteries -->
+		<item id="2415" chance="100"/><!-- great axe -->
 	</loot>
 </monster>

@@ -71,56 +71,56 @@
 		<voice sentence="SOULS FOR ORSHABAAL!" />
 	</voices>
 	<loot>
-		<item id="2152" countmax="71" chance="100000" />
-		<item id="6500" countmax="5" chance="95000" />
-		<item id="6300" chance="55000" />
-		<item id="5954" countmax="2" chance="50000" />
-		<item id="2146" countmax="9" chance="33333" />
-		<item id="2143" countmax="15" chance="33333" />
-		<item id="7590" chance="33333" />
-		<item id="2144" countmax="8" chance="27000" />
-		<item id="2214" chance="27000" />
-		<item id="8473" chance="27000" />
-		<item id="7591" chance="27000" />
-		<item id="2462" chance="27000" />
-		<item id="2149" countmax="9" chance="22000" />
-		<item id="2145" countmax="5" chance="22000" />
-		<item id="2158" chance="22000" />
-		<item id="2178" chance="22000" />
-		<item id="2393" chance="22000" />
-		<item id="2520" chance="22000" />
-		<item id="2150" countmax="19" chance="20000" />
-		<item id="2151" countmax="5" chance="20000" />
-		<item id="7368" countmax="42" chance="16500" />
-		<item id="2200" chance="16000" />
-		<item id="1982" chance="16000" />
-		<item id="2125" chance="16000" />
-		<item id="2174" chance="16000" />
-		<item id="2377" chance="16000" />
-		<item id="2195" chance="16000" />
-		<item id="2170" chance="16000" />
-		<item id="2033" chance="12500" />
-		<item id="2176" chance="12500" />
-		<item id="8472" chance="12500" />
-		<item id="2177" chance="12500" />
-		<item id="2432" chance="12500" />
-		<item id="2470" chance="12500" />
-		<item id="2197" chance="12500" />
-		<item id="2171" chance="12500" />
-		<item id="2514" chance="12500" />
-		<item id="9971" chance="6666" />
-		<item id="2164" chance="6666" />
-		<item id="2112" chance="6666" />
-		<item id="2155" chance="6666" />
-		<item id="2162" chance="6666" />
-		<item id="5808" chance="6666" />
-		<item id="2402" chance="6666" />
-		<item id="2418" chance="6666" />
-		<item id="2421" chance="6666" />
-		<item id="2434" chance="6666" />
-		<item id="2472" chance="6666" />
-		<item id="3955" chance="6666" />
-		<item id="2142" chance="3500" />
-		<item id="8890" chance="1000" />
+		<item id="2152" countmax="71" chance="100000" /><!-- platinum coin -->
+		<item id="6500" countmax="5" chance="95000" /><!-- demonic essence -->
+		<item id="6300" chance="55000" /><!-- death ring -->
+		<item id="5954" countmax="2" chance="50000" /><!-- demon horn -->
+		<item id="2146" countmax="9" chance="33333" /><!-- small sapphire -->
+		<item id="2143" countmax="15" chance="33333" /><!-- white pearl -->
+		<item id="7590" chance="33333" /><!-- great mana potion -->
+		<item id="2144" countmax="8" chance="27000" /><!-- black pearl -->
+		<item id="2214" chance="27000" /><!-- ring of healing -->
+		<item id="8473" chance="27000" /><!-- ultimate health potion -->
+		<item id="7591" chance="27000" /><!-- great health potion -->
+		<item id="2462" chance="27000" /><!-- devil helmet -->
+		<item id="2149" countmax="9" chance="22000" /><!-- small emerald -->
+		<item id="2145" countmax="5" chance="22000" /><!-- small diamond -->
+		<item id="2158" chance="22000" /><!-- blue gem -->
+		<item id="2178" chance="22000" /><!-- mind stone -->
+		<item id="2393" chance="22000" /><!-- giant sword -->
+		<item id="2520" chance="22000" /><!-- demon shield -->
+		<item id="2150" countmax="19" chance="20000" /><!-- small amethyst -->
+		<item id="2151" countmax="5" chance="20000" /><!-- talon -->
+		<item id="7368" countmax="42" chance="16500" /><!-- assassin star -->
+		<item id="2200" chance="16000" /><!-- protection amulet -->
+		<item id="1982" chance="16000" /><!-- purple tome -->
+		<item id="2125" chance="16000" /><!-- crystal necklace -->
+		<item id="2174" chance="16000" /><!-- strange symbol -->
+		<item id="2377" chance="16000" /><!-- two handed sword -->
+		<item id="2195" chance="16000" /><!-- boots of haste -->
+		<item id="2170" chance="16000" /><!-- silver amulet -->
+		<item id="2033" chance="12500" /><!-- golden mug -->
+		<item id="2176" chance="12500" /><!-- orb -->
+		<item id="8472" chance="12500" /><!-- great spirit potion -->
+		<item id="2177" chance="12500" /><!-- life crystal -->
+		<item id="2432" chance="12500" /><!-- fire axe -->
+		<item id="2470" chance="12500" /><!-- golden legs -->
+		<item id="2197" chance="12500" /><!-- stone skin amulet -->
+		<item id="2171" chance="12500" /><!-- platinum amulet -->
+		<item id="2514" chance="12500" /><!-- mastermind shield -->
+		<item id="9971" chance="6666" /><!-- gold ingot -->
+		<item id="2164" chance="6666" /><!-- might ring -->
+		<item id="2112" chance="6666" /><!-- teddy bear -->
+		<item id="2155" chance="6666" /><!-- green gem -->
+		<item id="2162" chance="6666" /><!-- magic lightwand -->
+		<item id="5808" chance="6666" /><!-- Orshabaal's brain -->
+		<item id="2402" chance="6666" /><!-- silver dagger -->
+		<item id="2418" chance="6666" /><!-- golden sickle -->
+		<item id="2421" chance="6666" /><!-- thunder hammer -->
+		<item id="2434" chance="6666" /><!-- dragon hammer -->
+		<item id="2472" chance="6666" /><!-- magic plate armor -->
+		<item id="3955" chance="6666" /><!-- voodoo doll-->
+		<item id="2142" chance="3500" /><!-- ancient amulet -->
+		<item id="8890" chance="1000" /><!-- robe of the underworld -->
 	</loot>
 </monster>

@@ -35,18 +35,18 @@
 		<voice sentence="Growl!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="15" chance="50000" />
-		<item id="2666" countmax="4" chance="25000" />
-		<item id="2671" countmax="2" chance="25000" />
-		<item id="10608" chance="20000" />
-		<item id="2152" chance="10000" />
-		<item id="2147" chance="7000" />
-		<item id="9970" chance="7000" />
-		<item id="2146" chance="7000" />
-		<item id="2150" chance="7000" />
-		<item id="2193" chance="2280" />
-		<item id="2164" chance="730" />
-		<item id="2491" chance="550" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="15" chance="50000" /><!-- gold coin -->
+		<item id="2666" countmax="4" chance="25000" /><!-- meat -->
+		<item id="2671" countmax="2" chance="25000" /><!-- ham -->
+		<item id="10608" chance="20000" /><!-- lion's mane -->
+		<item id="2152" chance="10000" /><!-- platinum coin -->
+		<item id="2147" chance="7000" /><!-- small ruby -->
+		<item id="9970" chance="7000" /><!-- small topaz -->
+		<item id="2146" chance="7000" /><!-- small sapphire -->
+		<item id="2150" chance="7000" /><!-- small amethyst -->
+		<item id="2193" chance="2280" /><!-- ankh -->
+		<item id="2164" chance="730" /><!-- might ring -->
+		<item id="2491" chance="550" /><!-- crown helmet -->
 	</loot>
 </monster>

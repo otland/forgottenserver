@@ -43,15 +43,15 @@
 		<voice sentence="DOWN with the followers of the bog!!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="79000" />
-		<item id="2397" chance="6000" />
-		<item id="2456" chance="4000" />
-		<item id="2681" chance="20000" />
-		<item id="5921" chance="930" />
-		<item id="7438" chance="100" />
-		<item id="7840" countmax="12" chance="30000" />
-		<item id="10552" chance="5000" />
-		<item id="13757" chance="15280" />
-		<item id="13943" chance="340" />
+		<item id="2148" countmax="35" chance="79000" /><!-- gold coin -->
+		<item id="2397" chance="6000" /><!-- longsword -->
+		<item id="2456" chance="4000" /><!-- bow -->
+		<item id="2681" chance="20000" /><!-- grapes -->
+		<item id="5921" chance="930" /><!-- heaven blossom -->
+		<item id="7438" chance="100" /><!-- elvish bow -->
+		<item id="7840" countmax="12" chance="30000" /><!-- flaming arrow -->
+		<item id="10552" chance="5000" /><!-- elvish talisman -->
+		<item id="13757" chance="15280" /><!-- coal -->
+		<item id="13943" chance="340" /><!-- flintstone -->
 	</loot>
 </monster>

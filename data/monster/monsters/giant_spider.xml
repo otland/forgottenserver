@@ -46,19 +46,19 @@
 		<summon name="Poison Spider" interval="2000" chance="10" />
 	</summons>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="95" chance="50000" />
-		<item id="2545" countmax="12" chance="12500" />
-		<item id="2463" chance="10000" />
-		<item id="2647" chance="8000" />
-		<item id="2377" chance="5000" />
-		<item id="2457" chance="5000" />
-		<item id="7588" chance="3571" />
-		<item id="5879" chance="2000" />
-		<item id="2477" chance="870" />
-		<item id="2169" chance="710" />
-		<item id="2476" chance="500" />
-		<item id="2171" chance="280" />
-		<item id="7901" chance="270" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="95" chance="50000" /><!-- gold coin -->
+		<item id="2545" countmax="12" chance="12500" /><!-- poison arrow -->
+		<item id="2463" chance="10000" /><!-- plate armor -->
+		<item id="2647" chance="8000" /><!-- plate legs -->
+		<item id="2377" chance="5000" /><!-- two handed sword -->
+		<item id="2457" chance="5000" /><!-- steel helmet -->
+		<item id="7588" chance="3571" /><!-- strong health potion -->
+		<item id="5879" chance="2000" /><!-- spider silk -->
+		<item id="2477" chance="870" /><!-- knight legs -->
+		<item id="2169" chance="710" /><!-- time ring -->
+		<item id="2476" chance="500" /><!-- knight armor -->
+		<item id="2171" chance="280" /><!-- platinum amulet -->
+		<item id="7901" chance="270" /><!-- lightning headband -->
 	</loot>
 </monster>

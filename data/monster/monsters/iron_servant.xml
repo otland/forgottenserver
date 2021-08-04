@@ -44,11 +44,11 @@
 		<voice sentence="Remain. Obedient." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="55" chance="82000" />
-		<item id="2381" chance="1000" />
-		<item id="8704" chance="1980" />
-		<item id="9690" chance="4840" />
-		<item id="9808" chance="200" />
-		<item id="13758" chance="310" />
+		<item id="2148" countmax="55" chance="82000" /><!-- gold coin -->
+		<item id="2381" chance="1000" /><!-- halberd -->
+		<item id="8704" chance="1980" /><!-- small health potion -->
+		<item id="9690" chance="4840" /><!-- gear wheel -->
+		<item id="9808" chance="200" /><!-- rusty armor (common) -->
+		<item id="13758" chance="310" /><!-- slime mould -->
 	</loot>
 </monster>

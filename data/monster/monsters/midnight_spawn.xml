@@ -34,6 +34,6 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="10531" chance="8333" />
+		<item id="10531" chance="8333" /><!-- midnight shard -->
 	</loot>
 </monster>

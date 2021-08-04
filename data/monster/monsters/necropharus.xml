@@ -49,20 +49,20 @@
 		<voice sentence="Praise to my master Urgith!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />
-		<item id="11237" chance="100000" />
-		<item id="12431" chance="100000" />
-		<item id="5809" chance="100000" />
-		<item id="2423" chance="55000" />
-		<item id="2436" chance="44000" />
-		<item id="2449" chance="36000" />
-		<item id="2796" chance="25000" />
-		<item id="2229" chance="13000" />
-		<item id="2663" chance="11000" />
-		<item id="2186" chance="8300" />
-		<item id="2231" chance="5500" />
-		<item id="2541" chance="5500" />
-		<item id="2195" chance="2700" />
-		<item id="7589" chance="2700" />
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="11237" chance="100000" /><!-- book of necromantic rituals -->
+		<item id="12431" chance="100000" /><!-- necromantic robe -->
+		<item id="5809" chance="100000" /><!-- soul stone -->
+		<item id="2423" chance="55000" /><!-- clerical mace -->
+		<item id="2436" chance="44000" /><!-- skull staff -->
+		<item id="2449" chance="36000" /><!-- bone club -->
+		<item id="2796" chance="25000" /><!-- green mushroom -->
+		<item id="2229" chance="13000" /><!-- skull -->
+		<item id="2663" chance="11000" /><!-- mystic turban -->
+		<item id="2186" chance="8300" /><!-- moonlight rod -->
+		<item id="2231" chance="5500" /><!-- big bone -->
+		<item id="2541" chance="5500" /><!-- bone shield -->
+		<item id="2195" chance="2700" /><!-- boots of haste -->
+		<item id="7589" chance="2700" /><!-- strong mana potion -->
 	</loot>
 </monster>

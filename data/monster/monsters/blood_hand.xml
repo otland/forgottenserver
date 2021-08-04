@@ -55,23 +55,23 @@
 		<voice sentence="Die, filth!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="30" chance="50000" />
-		<item id="2185" chance="3000" />
-		<item id="2195" chance="210" />
-		<item id="2436" chance="130" />
-		<item id="2663" chance="790" />
-		<item id="5909" chance="840" />
-		<item id="5911" chance="500" />
-		<item id="7456" chance="10" />
-		<item id="7589" chance="5590" />
-		<item id="8900" chance="790" />
-		<item id="11237" chance="9340" />
-		<item id="15565" chance="710" />
-		<item id="21242" chance="10680" />
-		<item id="21243" chance="7950" />
-		<item id="21245" chance="15460" />
-		<item id="21246" chance="8820" />
-		<item id="21247" chance="6120" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="30" chance="50000" /><!-- gold coin -->
+		<item id="2185" chance="3000" /><!-- necrotic rod -->
+		<item id="2195" chance="210" /><!-- boots of haste -->
+		<item id="2436" chance="130" /><!-- skull staff -->
+		<item id="2663" chance="790" /><!-- mystic turban -->
+		<item id="5909" chance="840" /><!-- white piece of cloth -->
+		<item id="5911" chance="500" /><!-- red piece of cloth -->
+		<item id="7456" chance="10" /><!-- noble axe -->
+		<item id="7589" chance="5590" /><!-- strong mana potion -->
+		<item id="8900" chance="790" /><!-- spellbook of enlightenment -->
+		<item id="11237" chance="9340" /><!-- book of necromantic rituals -->
+		<item id="15565" chance="710" /><!-- rough red gem -->
+		<item id="21242" chance="10680" /><!-- lancet -->
+		<item id="21243" chance="7950" /><!-- horoscope -->
+		<item id="21245" chance="15460" /><!-- blood tincture in a vial -->
+		<item id="21246" chance="8820" /><!-- incantation notes -->
+		<item id="21247" chance="6120" /><!-- pieces of magic chalk -->
 	</loot>
 </monster>

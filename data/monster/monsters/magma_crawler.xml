@@ -55,32 +55,32 @@
 		<voice sentence="Crrroak!" />
 	</voices>
 	<loot>
-		<item id="2145" countmax="3" chance="8800" />
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2152" countmax="5" chance="95000" />
-		<item id="2154" chance="1030" />
-		<item id="2167" chance="1650" />
-		<item id="2392" chance="1680" />
-		<item id="2529" chance="1550" />
-		<item id="5880" chance="4280" />
-		<item id="5909" chance="2310" />
-		<item id="5911" chance="930" />
-		<item id="5914" chance="2980" />
-		<item id="7590" chance="6500" />
-		<item id="7591" chance="7270" />
-		<item id="7890" chance="3120" />
-		<item id="7891" chance="1820" />
-		<item id="8921" chance="4280" />
-		<item id="10553" chance="7810" />
-		<item id="13757" chance="1675" />
-		<item id="18304" countmax="10" chance="5950" />
-		<item id="18409" chance="690" />
-		<item id="18413" countmax="2" chance="3930" />
-		<item id="18417" countmax="2" chance="8500" />
-		<item id="18418" countmax="2" chance="8500" />
-		<item id="18421" chance="7000" />
-		<item id="18424" chance="11600" />
-		<item id="18425" chance="11500" />
+		<item id="2145" countmax="3" chance="8800" /><!-- small diamond -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="5" chance="95000" /><!-- platinum coin -->
+		<item id="2154" chance="1030" /><!-- yellow gem -->
+		<item id="2167" chance="1650" /><!-- energy ring -->
+		<item id="2392" chance="1680" /><!-- fire sword -->
+		<item id="2529" chance="1550" /><!-- black shield -->
+		<item id="5880" chance="4280" /><!-- iron ore -->
+		<item id="5909" chance="2310" /><!-- white piece of cloth -->
+		<item id="5911" chance="930" /><!-- red piece of cloth -->
+		<item id="5914" chance="2980" /><!-- yellow piece of cloth -->
+		<item id="7590" chance="6500" /><!-- great mana potion -->
+		<item id="7591" chance="7270" /><!-- great health potion -->
+		<item id="7890" chance="3120" /><!-- magma amulet -->
+		<item id="7891" chance="1820" /><!-- magma boots -->
+		<item id="8921" chance="4280" /><!-- wand of draconia -->
+		<item id="10553" chance="7810" /><!-- fiery heart -->
+		<item id="13757" chance="1675" /><!-- coal -->
+		<item id="18304" countmax="10" chance="5950" /><!-- crystalline arrow -->
+		<item id="18409" chance="690" /><!-- wand of everblazing -->
+		<item id="18413" countmax="2" chance="3930" /><!-- blue crystal shard -->
+		<item id="18417" countmax="2" chance="8500" /><!-- brown crystal splinter -->
+		<item id="18418" countmax="2" chance="8500" /><!-- blue crystal splinter -->
+		<item id="18421" chance="7000" /><!-- green crystal fragment -->
+		<item id="18424" chance="11600" /><!-- magma clump -->
+		<item id="18425" chance="11500" /><!-- blazing bone -->
 	</loot>
 </monster>

@@ -31,6 +31,6 @@
 		<voice sentence="Bobble!" />
 	</voices>
 	<loot>
-		<item id="2670" countmax="2" chance="12270" />
+		<item id="2670" countmax="2" chance="12270" /><!-- shrimp -->
 	</loot>
 </monster>

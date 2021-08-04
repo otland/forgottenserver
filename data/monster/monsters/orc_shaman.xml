@@ -50,16 +50,16 @@
 		<voice sentence="Grak brrretz gulu." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="5" chance="90000" />
-		<item id="2686" countmax="2" chance="10000" />
-		<item id="12408" chance="10000" />
-		<item id="2464" chance="8750" />
-		<item id="12434" chance="7800" />
-		<item id="2389" chance="5500" />
-		<item id="12435" chance="3500" />
+		<item id="2148" countmax="5" chance="90000" /><!-- gold coin -->
+		<item id="2686" countmax="2" chance="10000" /><!-- corncob -->
+		<item id="12408" chance="10000" /><!-- broken shamanic staff -->
+		<item id="2464" chance="8750" /><!-- chain armor -->
+		<item id="12434" chance="7800" /><!-- shamanic hood -->
+		<item id="2389" chance="5500" /><!-- spear -->
+		<item id="12435" chance="3500" /><!-- orc leather -->
 		<!-- Heavy Old Tome 2.47% -->
-		<item id="11113" chance="2100" />
-		<item id="2188" chance="1000" />
-		<item id="1958" chance="520" />
+		<item id="11113" chance="2100" /><!-- orc tooth -->
+		<item id="2188" chance="1000" /><!-- wand of decay -->
+		<item id="1958" chance="520" /><!-- book -->
 	</loot>
 </monster>

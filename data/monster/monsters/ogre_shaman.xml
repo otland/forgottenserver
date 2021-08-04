@@ -61,26 +61,26 @@
 		<voice sentence="A sacrifice for Great Hunger!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="90" chance="100000" />
-		<item id="7589" chance="15650" />
-		<item id="24844" chance="14010" />
-		<item id="24847" chance="10920" />
-		<item id="24840" chance="10350" />
-		<item id="24845" chance="10040" />
-		<item id="2229" chance="9700" />
-		<item id="24841" countmax="2" chance="9240" />
-		<item id="12408" chance="6680" />
-		<item id="20111" chance="5080" />
-		<item id="2147" chance="3130" />
-		<item id="2144" chance="2600" />
-		<item id="2185" chance="2600" />
-		<item id="2188" chance="2330" />
-		<item id="2031" chance="2060" />
-		<item id="24850" countmax="2" chance="1640" />
-		<item id="24849" countmax="2" chance="1340" />
-		<item id="24848" chance="880" />
-		<item id="24839" chance="500" />
-		<item id="3952" chance="460" />
-		<item id="3955" chance="40" />
+		<item id="2148" countmax="90" chance="100000" /><!-- gold coin -->
+		<item id="7589" chance="15650" /><!-- strong mana potion -->
+		<item id="24844" chance="14010" /><!-- ogre ear stud -->
+		<item id="24847" chance="10920" /><!-- skull fetish -->
+		<item id="24840" chance="10350" /><!-- shamanic talisman -->
+		<item id="24845" chance="10040" /><!-- ogre nose ring -->
+		<item id="2229" chance="9700" /><!-- skull -->
+		<item id="24841" countmax="2" chance="9240" /><!-- prickly pear -->
+		<item id="12408" chance="6680" /><!-- broken shamanic staff -->
+		<item id="20111" chance="5080" /><!-- bone fetish -->
+		<item id="2147" chance="3130" /><!-- small ruby -->
+		<item id="2144" chance="2600" /><!-- black pearl -->
+		<item id="2185" chance="2600" /><!-- necrotic rod -->
+		<item id="2188" chance="2330" /><!-- wand of decay -->
+		<item id="2031" chance="2060" /><!-- waterskin -->
+		<item id="24850" countmax="2" chance="1640" /><!-- opal -->
+		<item id="24849" countmax="2" chance="1340" /><!-- onyx chip -->
+		<item id="24848" chance="880" /><!-- shamanic mask -->
+		<item id="24839" chance="500" /><!-- ogre scepta -->
+		<item id="3952" chance="460" /><!-- didgeridoo -->
+		<item id="3955" chance="40" /><!-- voodoo doll -->
 	</loot>
 </monster>

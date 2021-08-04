@@ -62,30 +62,30 @@
 		<voice sentence="I bring your deathhh, mortalssss" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="32300" />
-		<item id="2148" countmax="100" chance="32300" />
-		<item id="2148" countmax="39" chance="32300" />
-		<item id="2796" chance="18200" />
-		<item id="10611" chance="14800" />
-		<item id="2146" chance="12000" />
-		<item id="2547" chance="6200" />
-		<item id="2168" chance="6050" />
-		<item id="2167" chance="5900" />
-		<item id="2033" chance="2870" />
-		<item id="7386" chance="2070" />
-		<item id="7590" chance="2000" />
-		<item id="2182" chance="930" />
-		<item id="11230" chance="960" />
-		<item id="2528" chance="860" />
-		<item id="7456" chance="810" />
-		<item id="2177" chance="780" />
-		<item id="2479" chance="630" />
-		<item id="4842" chance="600" />
-		<item id="2475" chance="560" />
-		<item id="2487" chance="510" />
-		<item id="3971" chance="190" />
-		<item id="2498" chance="130" />
-		<item id="8902" chance="100" />
-		<item id="8880" chance="90" />
+		<item id="2148" countmax="100" chance="32300" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="32300" /><!-- gold coin -->
+		<item id="2148" countmax="39" chance="32300" /><!-- gold coin -->
+		<item id="2796" chance="18200" /><!-- green mushroom -->
+		<item id="10611" chance="14800" /><!-- snake skin -->
+		<item id="2146" chance="12000" /><!-- small sapphire -->
+		<item id="2547" chance="6200" /><!-- power bolt -->
+		<item id="2168" chance="6050" /><!-- life ring -->
+		<item id="2167" chance="5900" /><!-- energy ring -->
+		<item id="2033" chance="2870" /><!-- golden mug -->
+		<item id="7386" chance="2070" /><!-- mercenary sword -->
+		<item id="7590" chance="2000" /><!-- great mana potion -->
+		<item id="2182" chance="930" /><!-- snakebite rod -->
+		<item id="11230" chance="960" /><!-- winged tail -->
+		<item id="2528" chance="860" /><!-- tower shield -->
+		<item id="7456" chance="810" /><!-- noble axe -->
+		<item id="2177" chance="780" /><!-- life crystal -->
+		<item id="2479" chance="630" /><!-- strange helmet -->
+		<item id="4842" chance="600" /><!-- old parchment -->
+		<item id="2475" chance="560" /><!-- warrior helmet -->
+		<item id="2487" chance="510" /><!-- crown armor -->
+		<item id="3971" chance="190" /><!-- charmer's tiara -->
+		<item id="2498" chance="130" /><!-- royal helmet -->
+		<item id="8902" chance="100" /><!-- spellbook of mind control -->
+		<item id="8880" chance="90" /><!-- swamplair armor -->
 	</loot>
 </monster>

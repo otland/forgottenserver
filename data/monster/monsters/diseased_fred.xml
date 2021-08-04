@@ -53,6 +53,6 @@
 		<voice sentence="The plague will get you!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="25" chance="43000" />
+		<item id="2148" countmax="25" chance="43000" /><!-- gold coin -->
 	</loot>
 </monster>

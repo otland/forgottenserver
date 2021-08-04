@@ -19,6 +19,6 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<loot>
-		<item id="8710" chance="100000" />
+		<item id="8710" chance="100000" /><!-- cockroach leg -->
 	</loot>
 </monster>

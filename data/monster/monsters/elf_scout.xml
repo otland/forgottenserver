@@ -41,16 +41,16 @@
 		<voice sentence="Your existence will end here!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="25" chance="75000" />
-		<item id="2544" countmax="12" chance="30710" />
-		<item id="2681" chance="17750" />
-		<item id="2545" countmax="4" chance="15400" />
-		<item id="12420" chance="9750" />
-		<item id="10552" chance="5200" />
-		<item id="2456" chance="4000" />
-		<item id="2031" chance="1350" />
-		<item id="2642" chance="1180" />
-		<item id="5921" chance="1130" />
-		<item id="7438" chance="140" />
+		<item id="2148" countmax="25" chance="75000" /><!-- gold coin -->
+		<item id="2544" countmax="12" chance="30710" /><!-- arrow -->
+		<item id="2681" chance="17750" /><!-- grapes -->
+		<item id="2545" countmax="4" chance="15400" /><!-- poison arrow -->
+		<item id="12420" chance="9750" /><!-- elven scouting glass -->
+		<item id="10552" chance="5200" /><!-- elvish talisman -->
+		<item id="2456" chance="4000" /><!-- bow -->
+		<item id="2031" chance="1350" /><!-- waterskin -->
+		<item id="2642" chance="1180" /><!-- sandals -->
+		<item id="5921" chance="1130" /><!-- heaven blossom -->
+		<item id="7438" chance="140" /><!-- elvish bow -->
 	</loot>
 </monster>

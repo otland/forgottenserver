@@ -46,22 +46,22 @@
 		<voice sentence="Knarrrk!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="50" chance="50000" />
-		<item id="2515" chance="2240" />
-		<item id="2553" chance="5280" />
-		<item id="3976" countmax="5" chance="4580" />
-		<item id="5880" chance="1750" />
-		<item id="7452" chance="540" />
-		<item id="7887" chance="2360" />
-		<item id="11222" chance="15000" />
-		<item id="11339" chance="700" />
-		<item id="13757" chance="12130" />
-		<item id="18416" chance="9780" />
-		<item id="18417" chance="9260" />
-		<item id="18418" chance="9610" />
-		<item id="18427" chance="5400" />
-		<item id="18429" chance="7280" />
-		<item id="18436" countmax="2" chance="4870" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="50" chance="50000" /><!-- gold coin -->
+		<item id="2515" chance="2240" /><!-- guardian shield -->
+		<item id="2553" chance="5280" /><!-- pick -->
+		<item id="3976" countmax="5" chance="4580" /><!-- worm -->
+		<item id="5880" chance="1750" /><!-- iron ore -->
+		<item id="7452" chance="540" /><!-- spiked squelcher -->
+		<item id="7887" chance="2360" /><!-- terra amulet -->
+		<item id="11222" chance="15000" /><!-- lump of earth -->
+		<item id="11339" chance="700" /><!-- clay lump -->
+		<item id="13757" chance="12130" /><!-- Coal -->
+		<item id="18416" chance="9780" /><!-- green crystal splinter -->
+		<item id="18417" chance="9260" /><!-- brown crystal splinter -->
+		<item id="18418" chance="9610" /><!-- blue crystal splinter -->
+		<item id="18427" chance="5400" /><!-- pulverized ore -->
+		<item id="18429" chance="7280" /><!-- vein of ore -->
+		<item id="18436" countmax="2" chance="4870" /><!-- drill bolt -->
 	</loot>
 </monster>

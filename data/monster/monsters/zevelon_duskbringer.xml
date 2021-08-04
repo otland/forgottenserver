@@ -53,12 +53,12 @@
 		<voice sentence="Ashari Mortals. Come and stay forever!" />
 	</voices>
 	<loot>
-		<item id="2144" chance="8000" />
-		<item id="2148" chance="100000" countmax="75" />
-		<item id="2152" chance="50000" countmax="5" />
-		<item id="2214" chance="11111" />
-		<item id="2534" chance="4500" />
-		<item id="7588" chance="4000" />
-		<item id="9020" chance="100000" />
+		<item id="2144" chance="8000" /><!-- black pearl -->
+		<item id="2148" chance="100000" countmax="75" /><!-- gold coin -->
+		<item id="2152" chance="50000" countmax="5" /><!-- platinum coin -->
+		<item id="2214" chance="11111" /><!-- ring of healing -->
+		<item id="2534" chance="4500" /><!-- vampire shield -->
+		<item id="7588" chance="4000" /><!-- strong health potion -->
+		<item id="9020" chance="100000" /><!-- vampire lord token -->
 	</loot>
 </monster>

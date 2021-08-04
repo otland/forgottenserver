@@ -61,16 +61,16 @@
 		<voice sentence="You will become a feast for my maggots!" />
 	</voices>
 	<loot>
-		<item id="2351" chance="100000" />
-		<item id="2148" countmax="100" chance="30000" />
-		<item id="2148" countmax="100" chance="30000" />
-		<item id="2148" countmax="38" chance="30000" />
-		<item id="2411" chance="21000" />
-		<item id="2149" countmax="3" chance="9000" />
-		<item id="7591" chance="8200" />
-		<item id="2169" chance="5200" />
-		<item id="2409" chance="2700" />
-		<item id="2451" chance="1000" />
-		<item id="2155" chance="100" />
+		<item id="2351" chance="100000" /><!-- cobrafang dagger -->
+		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="30000" /><!-- gold coin -->
+		<item id="2148" countmax="38" chance="30000" /><!-- gold coin -->
+		<item id="2411" chance="21000" /><!-- poison dagger -->
+		<item id="2149" countmax="3" chance="9000" /><!-- small emerald -->
+		<item id="7591" chance="8200" /><!-- great health potion -->
+		<item id="2169" chance="5200" /><!-- time ring -->
+		<item id="2409" chance="2700" /><!-- serpent sword -->
+		<item id="2451" chance="1000" /><!-- djinn blade -->
+		<item id="2155" chance="100" /><!-- green gem -->
 	</loot>
 </monster>

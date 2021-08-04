@@ -34,12 +34,12 @@
 		<voice sentence="Bzzzzz!" />
 	</voices>
 	<loot>
-		<item id="2120" chance="4300" />
-		<item id="2148" countmax="18" chance="90000" />
-		<item id="2544" countmax="5" chance="7570" />
-		<item id="7618" chance="1780" />
-		<item id="7620" chance="2520" />
-		<item id="14776" chance="10830" />
-		<item id="19742" chance="8610" />
+		<item id="2120" chance="4300" /><!-- rope -->
+		<item id="2148" countmax="18" chance="90000" /><!-- gold coin -->
+		<item id="2544" countmax="5" chance="7570" /><!-- arrow -->
+		<item id="7618" chance="1780" /><!-- health potion -->
+		<item id="7620" chance="2520" /><!-- mana potion -->
+		<item id="14776" chance="10830" /><!-- insectoid eggs -->
+		<item id="19742" chance="8610" /><!-- marsh stalker feather -->
 	</loot>
 </monster>

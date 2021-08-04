@@ -38,11 +38,11 @@
 		<voice sentence="Crrrck!" />
 	</voices>
 	<loot>
-		<item id="2120" chance="4540" />
-		<item id="2148" countmax="12" chance="60000" />
-		<item id="2787" countmax="5" chance="8980" />
-		<item id="20101" chance="18670" />
-		<item id="20102" chance="12610" />
-		<item id="20103" chance="8270" />
+		<item id="2120" chance="4540" /><!-- rope -->
+		<item id="2148" countmax="12" chance="60000" /><!-- gold coin -->
+		<item id="2787" countmax="5" chance="8980" /><!-- white mushroom -->
+		<item id="20101" chance="18670" /><!-- rat cheese -->
+		<item id="20102" chance="12610" /><!-- swampling moss -->
+		<item id="20103" chance="8270" /><!-- piece of swampling wood -->
 	</loot>
 </monster>

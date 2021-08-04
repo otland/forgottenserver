@@ -75,16 +75,16 @@
 		<voice sentence="You will be history soon." />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="33000" />
-		<item id="2148" countmax="100" chance="33000" />
-		<item id="2148" countmax="100" chance="33000" />
-		<item id="2148" countmax="4" chance="50000" />
-		<item id="7590" chance="12500" />
-		<item id="2164" chance="4600" />
-		<item id="2134" chance="4000" />
-		<item id="2487" chance="470" />
-		<item id="11207" chance="180" />
-		<item id="2444" chance="120" />
-		<item id="2140" chance="120" />
+		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
+		<item id="2148" countmax="4" chance="50000" /><!-- gold coin -->
+		<item id="7590" chance="12500" /><!-- great mana potion -->
+		<item id="2164" chance="4600" /><!-- might ring -->
+		<item id="2134" chance="4000" /><!-- silver brooch -->
+		<item id="2487" chance="470" /><!-- crown armor -->
+		<item id="11207" chance="180" /><!-- mini mummy -->
+		<item id="2444" chance="120" /><!-- hammer of wrath -->
+		<item id="2140" chance="120" /><!-- holy scarab -->
 	</loot>
 </monster>

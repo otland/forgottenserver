@@ -49,28 +49,28 @@
 		<voice sentence="Frizzle!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />
-		<item id="2152" countmax="3" chance="90000" />
-		<item id="26158" chance="16000" />
-		<item id="26201" chance="15000" />
-		<item id="26191" chance="15000" />
-		<item id="26161" chance="13000" />
-		<item id="26160" chance="11000" />
-		<item id="26159" chance="9700" />
-		<item id="7590" countmax="2" chance="9500" />
-		<item id="8472" countmax="2" chance="9500" />
-		<item id="7591" countmax="2" chance="9500" />
-		<item id="18418" chance="7700" />
-		<item id="18419" chance="5300" />
-		<item id="2146" countmax="2" chance="4400" />
-		<item id="18413" chance="4000" />
-		<item id="2158" chance="900" />
-		<item id="2189" chance="900" />
-		<item id="26187" chance="400" />
-		<item id="26189" chance="400" />
-		<item id="26185" chance="400" />
-		<item id="26199" chance="250" />
-		<item id="26198" chance="250" />
-		<item id="26200" chance="250" />
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2152" countmax="3" chance="90000" /><!-- platinum coin -->
+		<item id="26158" chance="16000" /><!-- sparkion claw -->
+		<item id="26201" chance="15000" /><!-- energy drink -->
+		<item id="26191" chance="15000" /><!-- energy bar -->
+		<item id="26161" chance="13000" /><!-- sparkion stings -->
+		<item id="26160" chance="11000" /><!-- sparkion legs -->
+		<item id="26159" chance="9700" /><!-- sparkion tail -->
+		<item id="7590" countmax="2" chance="9500" /><!-- great mana potion -->
+		<item id="8472" countmax="2" chance="9500" /><!-- great spirit potion -->
+		<item id="7591" countmax="2" chance="9500" /><!-- great health potion -->
+		<item id="18418" chance="7700" /><!-- blue crystal splinter -->
+		<item id="18419" chance="5300" /><!-- cyan crystal fragment -->
+		<item id="2146" countmax="2" chance="4400" /><!-- small sapphire -->
+		<item id="18413" chance="4000" /><!-- blue crystal shard -->
+		<item id="2158" chance="900" /><!-- blue gem -->
+		<item id="2189" chance="900" /><!-- wand of cosmic energy -->
+		<item id="26187" chance="400" /><!-- ring of green plasma -->
+		<item id="26189" chance="400" /><!-- ring of red plasma -->
+		<item id="26185" chance="400" /><!-- ring of blue plasma -->
+		<item id="26199" chance="250" /><!-- collar of green plasma -->
+		<item id="26198" chance="250" /><!-- collar of blue plasma -->
+		<item id="26200" chance="250" /><!-- collar of red plasma -->
 	</loot>
 </monster>

@@ -56,14 +56,14 @@
 		<voice sentence="Can you feel the passage of time, mortal?" />
 	</voices>
 	<loot>
-		<item id="2144" chance="8980" />
-		<item id="2148" countmax="98" chance="100000" />
-		<item id="2152" countmax="5" chance="50000" />
-		<item id="2214" chance="11111" />
-		<item id="2229" chance="10000" />
-		<item id="2534" chance="6300" />
-		<item id="7416" chance="1200" />
-		<item id="7588" chance="10000" />
-		<item id="9020" chance="100000" />
+		<item id="2144" chance="8980" /><!-- black pearl -->
+		<item id="2148" countmax="98" chance="100000" /><!-- gold coin -->
+		<item id="2152" countmax="5" chance="50000" /><!-- platinum coin -->
+		<item id="2214" chance="11111" /><!-- ring of healing -->
+		<item id="2229" chance="10000" /><!-- skull -->
+		<item id="2534" chance="6300" /><!-- vampire shield -->
+		<item id="7416" chance="1200" /><!-- bloody edge -->
+		<item id="7588" chance="10000" /><!-- strong health potion -->
+		<item id="9020" chance="100000" /><!-- vampire lord token -->
 	</loot>
 </monster>

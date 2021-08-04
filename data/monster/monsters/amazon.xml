@@ -36,15 +36,15 @@
 		<voice sentence="Your head will be mine!" />
 	</voices>
 	<loot>
-		<item id="2379" chance="80000" />
-		<item id="2229" countmax="2" chance="80000" />
-		<item id="2148" countmax="20" chance="40000" />
-		<item id="2691" chance="30333" />
-		<item id="2385" chance="23000" />
-		<item id="12399" chance="10000" />
-		<item id="12400" chance="5000" />
-		<item id="2050" chance="1005" />
-		<item id="2125" chance="250" />
-		<item id="2147" chance="120" />
+		<item id="2379" chance="80000" /><!-- dagger -->
+		<item id="2229" countmax="2" chance="80000" /><!-- skull -->
+		<item id="2148" countmax="20" chance="40000" /><!-- gold coin -->
+		<item id="2691" chance="30333" /><!-- brown bread -->
+		<item id="2385" chance="23000" /><!-- sabre -->
+		<item id="12399" chance="10000" /><!-- girlish hair decoration -->
+		<item id="12400" chance="5000" /><!-- protective charm -->
+		<item id="2050" chance="1005" /><!-- torch -->
+		<item id="2125" chance="250" /><!-- crystal necklace -->
+		<item id="2147" chance="120" /><!-- small ruby -->
 	</loot>
 </monster>

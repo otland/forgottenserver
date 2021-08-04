@@ -33,14 +33,14 @@
 		<voice sentence="Crrrrk! Chhhhr!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="100000" />
-		<item id="7449" chance="4710" />
-		<item id="7454" chance="360" />
-		<item id="7588" chance="7140" />
-		<item id="7589" chance="8270" />
-		<item id="18418" chance="4120" />
-		<item id="18419" chance="1050" />
-		<item id="18432" chance="7980" />
-		<item id="18451" countmax="5" chance="5008" />
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="7449" chance="4710" /><!-- crystal sword -->
+		<item id="7454" chance="360" /><!-- glorious axe -->
+		<item id="7588" chance="7140" /><!-- strong health potion -->
+		<item id="7589" chance="8270" /><!-- strong mana potion -->
+		<item id="18418" chance="4120" /><!-- blue crystal splinter -->
+		<item id="18419" chance="1050" /><!-- cyan crystal fragment -->
+		<item id="18432" chance="7980" /><!-- crystalline spikes -->
+		<item id="18451" countmax="5" chance="5008" /><!-- crystalline axe -->
 	</loot>
 </monster>

@@ -49,16 +49,16 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="35" chance="85780" />
-		<item id="2684" countmax="8" chance="15003" />
-		<item id="12429" chance="6430" />
-		<item id="2050" chance="5000" />
-		<item id="2649" chance="4950" />
-		<item id="2461" chance="3100" />
-		<item id="12428" countmax="2" chance="3020" />
-		<item id="5878" chance="2290" />
-		<item id="7425" chance="1000" />
-		<item id="2189" chance="600" />
-		<item id="7620" chance="490" />
+		<item id="2148" countmax="35" chance="85780" /><!-- gold coin -->
+		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
+		<item id="12429" chance="6430" /><!-- purple robe -->
+		<item id="2050" chance="5000" /><!-- torch -->
+		<item id="2649" chance="4950" /><!-- leather legs -->
+		<item id="2461" chance="3100" /><!-- leather helmet -->
+		<item id="12428" countmax="2" chance="3020" /><!-- minotaur horn -->
+		<item id="5878" chance="2290" /><!-- minotaur leather -->
+		<item id="7425" chance="1000" /><!-- taurus mace -->
+		<item id="2189" chance="600" /><!-- wand of cosmic energy -->
+		<item id="7620" chance="490" /><!-- mana potion -->
 	</loot>
 </monster>

@@ -38,17 +38,17 @@
 		<voice sentence="Tssss!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="80" chance="86000" />
-		<item id="2389" countmax="3" chance="10000" />
-		<item id="2464" chance="9300" />
-		<item id="2483" chance="7730" />
-		<item id="3965" chance="4300" />
-		<item id="5876" chance="2100" />
-		<item id="5881" chance="1960" />
-		<item id="2381" chance="1300" />
-		<item id="2425" chance="1320" />
-		<item id="7618" chance="1100" />
-		<item id="3974" chance="320" />
-		<item id="2145" chance="190" />
+		<item id="2148" countmax="80" chance="86000" /><!-- gold coin -->
+		<item id="2389" countmax="3" chance="10000" /><!-- spear -->
+		<item id="2464" chance="9300" /><!-- chain armor -->
+		<item id="2483" chance="7730" /><!-- scale armor -->
+		<item id="3965" chance="4300" /><!-- hunting spear -->
+		<item id="5876" chance="2100" /><!-- lizard leather -->
+		<item id="5881" chance="1960" /><!-- lizard scale -->
+		<item id="2381" chance="1300" /><!-- halberd -->
+		<item id="2425" chance="1320" /><!-- obsidian lance -->
+		<item id="7618" chance="1100" /><!-- health potion -->
+		<item id="3974" chance="320" /><!-- sentinel shield -->
+		<item id="2145" chance="190" /><!-- small diamond -->
 	</loot>
 </monster>

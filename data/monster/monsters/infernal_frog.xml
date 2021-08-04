@@ -39,6 +39,6 @@
 		<voice sentence="No Kisses for you!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="65" chance="77000" />
+		<item id="2148" countmax="65" chance="77000" /><!-- gold coin -->
 	</loot>
 </monster>

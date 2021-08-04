@@ -42,11 +42,11 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="35000" />
-		<item id="2148" countmax="25" chance="35000" />
-		<item id="10553" chance="6300" />
-		<item id="8299" chance="4000" />
-		<item id="7840" countmax="3" chance="3600" />
-		<item id="13757" chance="740" />
+		<item id="2148" countmax="100" chance="35000" /><!-- gold coin -->
+		<item id="2148" countmax="25" chance="35000" /><!-- gold coin -->
+		<item id="10553" chance="6300" /><!-- fiery heart -->
+		<item id="8299" chance="4000" /><!-- glimmering soil -->
+		<item id="7840" countmax="3" chance="3600" /><!-- flaming arrow -->
+		<item id="13757" chance="740" /><!-- coal -->
 	</loot>
 </monster>

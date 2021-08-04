@@ -36,20 +36,20 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="85" chance="50000" />
-		<item id="15486" countmax="2" chance="100000" />
-		<item id="2152" countmax="5" chance="100000" />
-		<item id="15485" chance="100000" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="85" chance="50000" /><!-- gold coin -->
+		<item id="15486" countmax="2" chance="100000" /><!-- compound eye -->
+		<item id="2152" countmax="5" chance="100000" /><!-- platinum coin -->
+		<item id="15485" chance="100000" /><!-- spidris sandible -->
 		<!-- Dung Ball (Quest) 78% -->
-		<item id="7590" countmax="2" chance="78000" />
-		<item id="2143" countmax="5" chance="35000" />
-		<item id="2156" chance="28000" />
-		<item id="3964" chance="28000" />
-		<item id="2147" countmax="5" chance="28000" />
-		<item id="8473" chance="21000" />
-		<item id="7413" chance="14000" />
-		<item id="6300" chance="7000" />
-		<item id="7632" chance="7000" />
+		<item id="7590" countmax="2" chance="78000" /><!-- great mana potion -->
+		<item id="2143" countmax="5" chance="35000" /><!-- white pearl -->
+		<item id="2156" chance="28000" /><!-- red gem -->
+		<item id="3964" chance="28000" /><!-- ripper lance -->
+		<item id="2147" countmax="5" chance="28000" /><!-- small ruby -->
+		<item id="8473" chance="21000" /><!-- ultimate health potion -->
+		<item id="7413" chance="14000" /><!-- titan axe -->
+		<item id="6300" chance="7000" /><!-- death ring -->
+		<item id="7632" chance="7000" /><!-- giant shimmering pearl -->
 	</loot>
 </monster>

@@ -71,6 +71,6 @@
 		<voice sentence="The shadows will engulf the world." yell="1" />
 	</voices>
 	<loot>
-		<item id="10531" chance="1886" />
+		<item id="10531" chance="1886" /><!-- midnight shard -->
 	</loot>
 </monster>

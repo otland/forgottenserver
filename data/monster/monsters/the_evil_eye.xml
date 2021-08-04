@@ -69,20 +69,20 @@
 		<voice sentence="653768764!" />
 	</voices>
 	<loot>
-		<item id="5898" chance="100000" />
-		<item id="2148" countmax="29" chance="33000" />
-		<item id="2148" countmax="100" chance="33000" />
-		<item id="2148" countmax="100" chance="33000" />
-		<item id="12468" chance="100000" />
-		<item id="2394" chance="50000" />
-		<item id="2509" chance="50000" />
-		<item id="2377" chance="34000" />
-		<item id="2397" chance="23000" />
-		<item id="2175" chance="23000" />
-		<item id="7590" chance="15000" />
-		<item id="2518" chance="11000" />
-		<item id="7884" chance="11000" />
-		<item id="2181" chance="500" />
-		<item id="3972" chance="100" />
+		<item id="5898" chance="100000" /><!-- bonelord eye -->
+		<item id="2148" countmax="29" chance="33000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="33000" /><!-- gold coin -->
+		<item id="12468" chance="100000" /><!-- small flask of eyedrops -->
+		<item id="2394" chance="50000" /><!-- morning star -->
+		<item id="2509" chance="50000" /><!-- steel shield -->
+		<item id="2377" chance="34000" /><!-- two handed sword -->
+		<item id="2397" chance="23000" /><!-- longsword -->
+		<item id="2175" chance="23000" /><!-- spellbook -->
+		<item id="7590" chance="15000" /><!-- great mana potion -->
+		<item id="2518" chance="11000" /><!-- bonelord shield -->
+		<item id="7884" chance="11000" /><!-- terra mantle -->
+		<item id="2181" chance="500" /><!-- terra rod -->
+		<item id="3972" chance="100" /><!-- bonelord helmet -->
 	</loot>
 </monster>

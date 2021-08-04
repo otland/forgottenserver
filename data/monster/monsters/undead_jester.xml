@@ -61,22 +61,22 @@
 		<voice sentence="Did I do that?" />
 	</voices>
 	<loot>
-		<item id="2667" chance="60000" />
-		<item id="9108" chance="40000" />
-		<item id="9696" chance="1000" />
-		<item id="9697" chance="1000" />
-		<item id="9698" chance="1000" />
-		<item id="9699" chance="1000" />
-		<item id="5909" chance="1400" />
-		<item id="5913" chance="1100" />
-		<item id="5910" chance="1000" />
-		<item id="7158" chance="1000" />
-		<item id="5912" chance="900" />
-		<item id="7159" chance="900" />
-		<item id="9695" chance="800" />
-		<item id="5914" chance="700" />
-		<item id="5911" chance="500" />
-		<item id="9694" chance="400" />
-		<item id="7963" chance="200" />
+		<item id="2667" chance="60000" /><!-- fish -->
+		<item id="9108" chance="40000" /><!-- suspicious surprise bag -->
+		<item id="9696" chance="1000" /><!-- part of a jester doll (left arm) -->
+		<item id="9697" chance="1000" /><!-- part of a jester doll (right arm) -->
+		<item id="9698" chance="1000" /><!-- part of a jester doll (left leg) -->
+		<item id="9699" chance="1000" /><!-- part of a jester doll (right leg) -->
+		<item id="5909" chance="1400" /><!-- white piece of cloth -->
+		<item id="5913" chance="1100" /><!-- brown piece of cloth -->
+		<item id="5910" chance="1000" /><!-- green piece of cloth -->
+		<item id="7158" chance="1000" /><!-- rainbow trout -->
+		<item id="5912" chance="900" /><!-- blue piece of cloth -->
+		<item id="7159" chance="900" /><!-- green perch -->
+		<item id="9695" chance="800" /><!-- torso of a jester doll -->
+		<item id="5914" chance="700" /><!-- yellow piece of cloth -->
+		<item id="5911" chance="500" /><!-- red piece of cloth -->
+		<item id="9694" chance="400" /><!-- head of a jester doll -->
+		<item id="7963" chance="200" /><!-- marlin -->
 	</loot>
 </monster>

@@ -55,6 +55,6 @@
 		<summon name="Phantasm Summon" interval="2000" chance="20" />
 	</summons>
 	<loot>
-		<item id="6536" chance="100000" />
+		<item id="6536" chance="100000" /><!-- Countess Sorrow's frozen tear -->
 	</loot>
 </monster>

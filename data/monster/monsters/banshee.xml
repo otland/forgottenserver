@@ -56,27 +56,27 @@
 		<voice sentence="IIIIEEEeeeeeehhhHHHH!" yell="1" />
 	</voices>
 	<loot>
-		<item id="2047" chance="70000" />
-		<item id="2148" countmax="80" chance="30000" />
-		<item id="2170" chance="9400" />
-		<item id="2657" chance="6300" />
-		<item id="12402" chance="5000" />
-		<item id="11337" chance="4250" />
-		<item id="2144" chance="2130" />
-		<item id="2134" chance="1550" />
-		<item id="2411" chance="1550" />
-		<item id="2143" chance="1110" />
-		<item id="2372" chance="970" />
-		<item id="2197" chance="820" />
-		<item id="7589" chance="770" />
-		<item id="2214" chance="750" />
-		<item id="2656" chance="700" />
-		<item id="2121" chance="560" />
-		<item id="2175" chance="520" />
-		<item id="7884" chance="340" />
-		<item id="2124" chance="180" />
-		<item id="2655" chance="150" />
-		<item id="2177" chance="100" />
-		<item id="13307" chance="40" />
+		<item id="2047" chance="70000" /><!-- candlestick -->
+		<item id="2148" countmax="80" chance="30000" /><!-- gold coin -->
+		<item id="2170" chance="9400" /><!-- silver amulet -->
+		<item id="2657" chance="6300" /><!-- simple dress -->
+		<item id="12402" chance="5000" /><!-- hair of a banshee -->
+		<item id="11337" chance="4250" /><!-- petrified scream -->
+		<item id="2144" chance="2130" /><!-- black pearl -->
+		<item id="2134" chance="1550" /><!-- silver brooch -->
+		<item id="2411" chance="1550" /><!-- poison dagger -->
+		<item id="2143" chance="1110" /><!-- white pearl -->
+		<item id="2372" chance="970" /><!-- lyre -->
+		<item id="2197" chance="820" /><!-- stone skin amulet -->
+		<item id="7589" chance="770" /><!-- strong mana potion -->
+		<item id="2214" chance="750" /><!-- ring of healing -->
+		<item id="2656" chance="700" /><!-- blue robe -->
+		<item id="2121" chance="560" /><!-- wedding ring -->
+		<item id="2175" chance="520" /><!-- spellbook -->
+		<item id="7884" chance="340" /><!-- terra mantle -->
+		<item id="2124" chance="180" /><!-- crystal ring -->
+		<item id="2655" chance="150" /><!-- red robe -->
+		<item id="2177" chance="100" /><!-- life crystal -->
+		<item id="13307" chance="40" /><!-- sweet smelling bait -->
 	</loot>
 </monster>

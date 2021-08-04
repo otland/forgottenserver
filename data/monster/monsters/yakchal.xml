@@ -58,21 +58,21 @@
 		<voice sentence="Freeze!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="88" chance="10000" />
-		<item id="2195" chance="2000" />
-		<item id="2201" chance="3250" />
-		<item id="2436" chance="4500" />
-		<item id="2445" chance="4000" />
-		<item id="5912" chance="5000" />
-		<item id="7290" chance="100000" />
-		<item id="7410" chance="1500" />
-		<item id="7439" chance="1500" />
-		<item id="7440" chance="1500" />
-		<item id="7443" chance="1500" />
-		<item id="7449" chance="4000" />
-		<item id="7459" chance="1000" />
-		<item id="7896" chance="2650" />
-		<item id="7897" chance="3000" />
-		<item id="9971" chance="5000" />
+		<item id="2148" countmax="88" chance="10000" /><!-- gold coin -->
+		<item id="2195" chance="2000" /><!-- boots of haste -->
+		<item id="2201" chance="3250" /><!-- dragon necklace -->
+		<item id="2436" chance="4500" /><!-- skull staff -->
+		<item id="2445" chance="4000" /><!-- crystal mace -->
+		<item id="5912" chance="5000" /><!-- blue piece of cloth -->
+		<item id="7290" chance="100000" /><!-- shard -->
+		<item id="7410" chance="1500" /><!-- queen's sceptre -->
+		<item id="7439" chance="1500" /><!-- berserk potion -->
+		<item id="7440" chance="1500" /><!-- mastermind potion -->
+		<item id="7443" chance="1500" /><!-- bullseye potion -->
+		<item id="7449" chance="4000" /><!-- crystal sword -->
+		<item id="7459" chance="1000" /><!-- pair of earmuffs -->
+		<item id="7896" chance="2650" /><!-- glacier kilt -->
+		<item id="7897" chance="3000" /><!-- glacier robe -->
+		<item id="9971" chance="5000" /><!-- gold ingot -->
 	</loot>
 </monster>

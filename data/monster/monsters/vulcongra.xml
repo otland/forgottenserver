@@ -44,22 +44,22 @@
 		<voice sentence="Yag! Yag! Yag!" />
 	</voices>
 	<loot>
-		<item id="2148" countmax="100" chance="50000" />
-		<item id="2148" countmax="7" chance="50000" />
-		<item id="2152" chance="14780" />
-		<item id="2187" chance="1000" />
-		<item id="2207" chance="2920" />
-		<item id="2392" chance="260" />
-		<item id="2676" countmax="10" chance="10420" />
-		<item id="7588" chance="7100" />
-		<item id="7589" chance="7100" />
-		<item id="7890" chance="970" />
-		<item id="7899" chance="140" />
-		<item id="10553" chance="9380" />
-		<item id="13757" chance="940" />
-		<item id="18417" chance="4850" />
-		<item id="18420" chance="2280" />
-		<item id="18424" chance="12440" />
-		<item id="18425" chance="8030" />
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="7" chance="50000" /><!-- gold coin -->
+		<item id="2152" chance="14780" /><!-- platinum coin -->
+		<item id="2187" chance="1000" /><!-- wand of inferno -->
+		<item id="2207" chance="2920" /><!-- sword ring -->
+		<item id="2392" chance="260" /><!-- fire sword -->
+		<item id="2676" countmax="10" chance="10420" /><!-- banana -->
+		<item id="7588" chance="7100" /><!-- strong health potion -->
+		<item id="7589" chance="7100" /><!-- strong mana potion -->
+		<item id="7890" chance="970" /><!-- magma amulet -->
+		<item id="7899" chance="140" /><!-- magma coat -->
+		<item id="10553" chance="9380" /><!-- fiery heart -->
+		<item id="13757" chance="940" /><!-- coal -->
+		<item id="18417" chance="4850" /><!-- brown crystal splinter -->
+		<item id="18420" chance="2280" /><!-- red crystal fragment -->
+		<item id="18424" chance="12440" /><!-- magma clump -->
+		<item id="18425" chance="8030" /><!-- blazing bone -->
 	</loot>
 </monster>
