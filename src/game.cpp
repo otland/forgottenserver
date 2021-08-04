@@ -127,6 +127,7 @@ void Game::setGameState(GameState_t newState)
 
 			loadMotdNum();
 			loadPlayersRecord();
+			loadAccountStorageValues();
 
 			g_globalEvents->startup();
 			break;
@@ -182,6 +183,10 @@ void Game::saveGameState()
 	}
 
 	std::cout << "Saving server..." << std::endl;
+
+	if (!saveAccountStorageValues()) {
+		std::cout << "[Error - Game::saveGameState] Failed to save account-level storage values." << std::endl;
+	}
 
 	for (const auto& it : players) {
 		it.second->loginPosition = it.second->getPosition();
@@ -1038,14 +1043,19 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 		}
 	}
 
-	if ((Position::getDistanceX(playerPos, mapToPos) > item->getThrowRange()) ||
-	        (Position::getDistanceY(playerPos, mapToPos) > item->getThrowRange()) ||
-	        (Position::getDistanceZ(mapFromPos, mapToPos) * 4 > item->getThrowRange())) {
+	if (!item->isPickupable() && playerPos.z != mapToPos.z) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
 	}
 
-	if (!canThrowObjectTo(mapFromPos, mapToPos)) {
+	int32_t throwRange = item->getThrowRange();
+	if ((Position::getDistanceX(playerPos, mapToPos) > throwRange) ||
+	        (Position::getDistanceY(playerPos, mapToPos) > throwRange)) {
+		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
+		return;
+	}
+
+	if (!canThrowObjectTo(mapFromPos, mapToPos, true, false, throwRange, throwRange)) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
 		return;
 	}
@@ -2588,17 +2598,17 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	Player* tradePartner = getPlayerByID(tradePlayerId);
 	if (!tradePartner || tradePartner == player) {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, "Sorry, not possible.");
+		player->sendCancelMessage("Select a player to trade with.");
 		return;
 	}
 
 	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} tells you to move closer.", tradePartner->getName()));
+		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
 	}
 
-	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition())) {
-		player->sendCancelMessage(RETURNVALUE_CREATUREISNOTREACHABLE);
+	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition(), true, true)) {
+		player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
 		return;
 	}
 
@@ -2651,18 +2661,18 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		for (const auto& it : tradeItems) {
 			Item* item = it.first;
 			if (tradeItem == item) {
-				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
+				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
 
 			if (tradeItemContainer->isHoldingItem(item)) {
-				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
+				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
 
 			Container* container = item->getContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
-				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
+				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
 		}
@@ -2670,13 +2680,13 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		for (const auto& it : tradeItems) {
 			Item* item = it.first;
 			if (tradeItem == item) {
-				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
+				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
 
 			Container* container = item->getContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
-				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
+				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
 		}
@@ -2684,7 +2694,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	Container* tradeContainer = tradeItem->getContainer();
 	if (tradeContainer && tradeContainer->getItemHoldingCount() + 1 > 100) {
-		player->sendTextMessage(MESSAGE_INFO_DESCR, "You can not trade more than 100 items.");
+		player->sendCancelMessage("You can only trade up to 100 objects at once.");
 		return;
 	}
 
@@ -2742,19 +2752,21 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		return;
 	}
 
-	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition())) {
-		player->sendCancelMessage(RETURNVALUE_CREATUREISNOTREACHABLE);
-		return;
-	}
-
 	player->setTradeState(TRADE_ACCEPT);
 
 	if (tradePartner->getTradeState() == TRADE_ACCEPT) {
+		if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition(), true, true)) {
+			internalCloseTrade(player, false);
+			player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
+			tradePartner->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
+			return;
+		}
+
 		Item* playerTradeItem = player->tradeItem;
 		Item* partnerTradeItem = tradePartner->tradeItem;
 
 		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
-			internalCloseTrade(player);
+			internalCloseTrade(player, false);
 			return;
 		}
 
@@ -2913,7 +2925,7 @@ void Game::playerCloseTrade(uint32_t playerId)
 	internalCloseTrade(player);
 }
 
-void Game::internalCloseTrade(Player* player)
+void Game::internalCloseTrade(Player* player, bool sendCancel/* = true*/)
 {
 	Player* tradePartner = player->tradePartner;
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) || player->getTradeState() == TRADE_TRANSFER) {
@@ -2934,7 +2946,9 @@ void Game::internalCloseTrade(Player* player)
 	player->setTradeState(TRADE_NONE);
 	player->tradePartner = nullptr;
 
-	player->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
+	if (sendCancel) {
+		player->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
+	}
 	player->sendTradeClose();
 
 	if (tradePartner) {
@@ -2952,7 +2966,9 @@ void Game::internalCloseTrade(Player* player)
 		tradePartner->setTradeState(TRADE_NONE);
 		tradePartner->tradePartner = nullptr;
 
-		tradePartner->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
+		if (sendCancel) {
+			tradePartner->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
+		}
 		tradePartner->sendTradeClose();
 	}
 }
@@ -3400,6 +3416,11 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
+	if (type == TALKTYPE_PRIVATE_PN) {
+		playerSpeakToNpc(player, text);
+		return;
+	}
+
 	uint32_t muteTime = player->isMuted();
 	if (muteTime > 0) {
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You are still muted for {:d} seconds.", muteTime));
@@ -3410,9 +3431,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		return;
 	}
 
-	if (type != TALKTYPE_PRIVATE_PN) {
-		player->removeMessageBuffer();
-	}
+	player->removeMessageBuffer();
 
 	switch (type) {
 		case TALKTYPE_SAY:
@@ -3436,10 +3455,6 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		case TALKTYPE_CHANNEL_Y:
 		case TALKTYPE_CHANNEL_R1:
 			g_chat->talkToChannel(*player, type, text, channelId);
-			break;
-
-		case TALKTYPE_PRIVATE_PN:
-			playerSpeakToNpc(player, text);
 			break;
 
 		case TALKTYPE_BROADCAST:
@@ -3568,15 +3583,15 @@ void Game::playerSpeakToNpc(Player* player, const std::string& text)
 }
 
 //--
-bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
+bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
                             int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	return map.canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
+	return map.canThrowObjectTo(fromPos, toPos, checkLineOfSight, sameFloor, rangex, rangey);
 }
 
-bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
+bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
 {
-	return map.isSightClear(fromPos, toPos, floorCheck);
+	return map.isSightClear(fromPos, toPos, sameFloor);
 }
 
 bool Game::internalCreatureTurn(Creature* creature, Direction dir)
@@ -4405,6 +4420,73 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);
 		}
 	}
+}
+
+void Game::setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value)
+{
+	if (value == -1) {
+		accountStorageMap[accountId].erase(key);
+		return;
+	}
+
+	accountStorageMap[accountId][key] = value;
+}
+
+int32_t Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key) const
+{
+	const auto& accountMapIt = accountStorageMap.find(accountId);
+	if (accountMapIt != accountStorageMap.end()) {
+		const auto& storageMapIt = accountMapIt->second.find(key);
+		if (storageMapIt != accountMapIt->second.end()) {
+			return storageMapIt->second;
+		}
+	}
+	return -1;
+}
+
+void Game::loadAccountStorageValues()
+{
+	Database& db = Database::getInstance();
+
+	DBResult_ptr result;
+	if ((result = db.storeQuery("SELECT `account_id`, `key`, `value` FROM `account_storage`"))) {
+		do {
+			g_game.setAccountStorageValue(result->getNumber<uint32_t>("account_id"), result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"));
+		} while (result->next());
+	}
+}
+
+bool Game::saveAccountStorageValues() const
+{
+	DBTransaction transaction;
+	Database& db = Database::getInstance();
+
+	if (!transaction.begin()) {
+		return false;
+	}
+
+	if (!db.executeQuery("DELETE FROM `account_storage`")) {
+		return false;
+	}
+
+	for (const auto& accountIt : g_game.accountStorageMap) {
+		if (accountIt.second.empty()) {
+			continue;
+		}
+
+		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
+		for (const auto& storageIt : accountIt.second) {
+			if (!accountStorageQuery.addRow(fmt::format("{:d}, {:d}, {:d}", accountIt.first, storageIt.first, storageIt.second))) {
+				return false;
+			}
+		}
+
+		if (!accountStorageQuery.execute()) {
+			return false;
+		}
+	}
+
+	return transaction.commit();
 }
 
 void Game::startDecay(Item* item)

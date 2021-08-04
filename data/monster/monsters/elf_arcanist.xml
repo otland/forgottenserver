@@ -63,7 +63,7 @@
 		<item name="elvish talisman" chance="10000" />
 		<item name="elven astral observer" chance="7710" />
 		<item name="green tunic" chance="7000" />
-		<item name="arrow" countmax="3" chance="6000" />
+		<item id="2544" countmax="3" chance="6000" /><!-- arrow -->
 		<item name="sling herb" chance="5000" />
 		<item name="health potion" chance="4000" />
 		<item name="strong mana potion" chance="3000" />
@@ -74,7 +74,7 @@
 		<item name="life crystal" chance="970" />
 		<item id="2600" chance="1000" /><!-- inkwell -->
 		<item name="sandals" chance="950" />
-		<item name="grave flower" chance="880" />
+		<item id="2747" chance="880" /><!-- grave flower -->
 		<item name="yellow gem" chance="50" />
 	</loot>
 </monster>

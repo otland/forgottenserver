@@ -48,7 +48,7 @@
 		<item name="longsword" chance="10800" />
 		<item name="studded armor" chance="9000" />
 		<item name="plate shield" chance="8900" />
-		<item name="arrow" countmax="3" chance="7060" />
+		<item id="2544" countmax="3" chance="7060" /><!-- arrow -->
 		<item name="elvish talisman" chance="2000" />
 		<item id="5921" chance="1000" /><!-- heaven blossom -->
 	</loot>

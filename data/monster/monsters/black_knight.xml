@@ -50,7 +50,7 @@
 		<item name="brown bread" countmax="2" chance="21600" />
 		<item id="2120" chance="14020" /><!-- rope -->
 		<item name="brass legs" chance="13200" />
-		<item name="halberd" chance="12050" />
+		<item id="2381" chance="12050" /><!-- halberd -->
 		<item name="plate armor" chance="11000" />
 		<item name="steel helmet" chance="10500" />
 		<item name="two handed sword" chance="9600" />
