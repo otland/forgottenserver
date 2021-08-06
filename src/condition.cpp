@@ -1678,13 +1678,15 @@ bool ConditionInvisible::startCondition(Creature* creature)
 		return false;
 	}
 
-	g_game.internalCreatureChangeVisible(creature, false);
+	if (!creature->isInGhostMode()) {
+		g_game.internalCreatureChangeVisible(creature, false);
+	}
 	return true;
 }
 
 void ConditionInvisible::endCondition(Creature* creature)
 {
-	if (!creature->isInvisible()) {
+	if (!creature->isInGhostMode() && !creature->isInvisible()) {
 		g_game.internalCreatureChangeVisible(creature, true);
 	}
 }
