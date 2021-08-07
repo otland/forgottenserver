@@ -7764,29 +7764,32 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 {
 	// creature:removeCondition(conditionType[, conditionId = CONDITIONID_COMBAT[, subId = 0[, force = false]]])
 	// creature:removeCondition(condition[, force = false])
-	Creature* creature = getUserdata<Creature>(L, 1);
+	Creature* const creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	Condition* condition = nullptr;
-
+	Condition* creatureCondition = nullptr;
 	bool force = false;
 
 	if (isUserdata(L, 2)) {
-		condition = getUserdata<Condition>(L, 2);
+		const Condition* const condition = getUserdata<Condition>(L, 2);
+		const ConditionType_t conditionType = condition->getType();
+		const ConditionId_t conditionId = condition->getId();
+		const uint32_t subId = condition->getSubId();
+		creatureCondition = creature->getCondition(conditionType, conditionId, subId);
 		force = getBoolean(L, 3, false);
 	} else {
-		ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
-		ConditionId_t conditionId = getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
-		uint32_t subId = getNumber<uint32_t>(L, 4, 0);
-		condition = creature->getCondition(conditionType, conditionId, subId);
+		const ConditionType_t conditionType = getNumber<ConditionType_t>(L, 2);
+		const ConditionId_t conditionId = getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
+		const uint32_t subId = getNumber<uint32_t>(L, 4, 0);
+		creatureCondition = creature->getCondition(conditionType, conditionId, subId);
 		force = getBoolean(L, 5, false);
 	}
 
-	if (condition) {
-		creature->removeCondition(condition, force);
+	if (creatureCondition) {
+		creature->removeCondition(creatureCondition, force);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
