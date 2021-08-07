@@ -332,10 +332,6 @@ bool Items::loadFromOtb(const std::string& file)
 					if (!stream.read<uint16_t>(serverId)) {
 						return false;
 					}
-
-					if (serverId > 30000 && serverId < 30100) {
-						serverId -= 30000;
-					}
 					break;
 				}
 
