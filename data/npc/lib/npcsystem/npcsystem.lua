@@ -37,7 +37,7 @@ if not NpcSystem then
 	PATTERN_COUNT = '%d+'
 
 	-- Talkdelay behavior. For more information, look at the top of npchandler.lua.
-	NPCHANDLER_TALKDELAY = TALKDELAY_ONTHINK
+	NPCHANDLER_TALKDELAY = TALKDELAY_NONE
 
 	-- Constant strings defining the keywords to replace in the default messages.
 	--	For more information, look at the top of npchandler.lua...

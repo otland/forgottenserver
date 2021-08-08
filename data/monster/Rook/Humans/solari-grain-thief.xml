@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Solari Grain Thief" nameDescription="a Solari grain thief" race="blood" experience="40" speed="160">
+	<health now="40" max="40" />
+	<look type="152" head="114" body="114" legs="114" feet="76" addons="1" corpse="20327" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-15" />
+		<attack name="physical" interval="1000" chance="15" range="1" min="-1" max="-10">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+		<attack name="bleedcondition" interval="1000" chance="15" radius="3" min="-1" max="-15">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="5" defense="4" />
+	<voices interval="5000" chance="10">
+		<voice sentence="You're in the wrong place." />
+		<voice sentence="The Solari are unending!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="8" chance="25000" /> <!-- Tharian Gem Fragment -->
+		<item id="26338" chance="5000" /> <!-- Sack of Stolen Grain -->
+	</loot>
+</monster>

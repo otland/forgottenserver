@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Lewynn" script="LendingPlatform.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="136" head="97" body="114" legs="57" feet="132" addons="1" />
+	<parameters>
+		<parameter key="module_shop" value="1" />
+		<parameter key="shop_sellable" value="tharian gem cluster,18413,100;tharian token,18423,10000;khazan gem cluster,18414,95;khazan token,18422,9500;" />
+		<parameter key="shop_buyable" value="tharian gem cluster,18413,100;tharian token,18423,10000;khazan gem cluster,18414,95;khazan token,18422,9500;" />
+	</parameters>
+</npc>

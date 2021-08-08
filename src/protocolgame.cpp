@@ -769,8 +769,8 @@ bool ProtocolGame::canSee(int32_t x, int32_t y, int32_t z) const
 
 	//negative offset means that the action taken place is on a lower floor than ourself
 	int32_t offsetz = myPos.getZ() - z;
-	if ((x >= myPos.getX() - Map::maxClientViewportX + offsetz) && (x <= myPos.getX() + (Map::maxClientViewportX + 1) + offsetz) &&
-		(y >= myPos.getY() - Map::maxClientViewportY + offsetz) && (y <= myPos.getY() + (Map::maxClientViewportY + 1) + offsetz)) {
+	if ((x >= myPos.getX() - 8 + offsetz) && (x <= myPos.getX() + 9 + offsetz) &&
+			(y >= myPos.getY() - 6 + offsetz) && (y <= myPos.getY() + 7 + offsetz)) {
 		return true;
 	}
 	return false;
@@ -2379,7 +2379,7 @@ void ProtocolGame::sendMapDescription(const Position& pos)
 	NetworkMessage msg;
 	msg.addByte(0x64);
 	msg.addPosition(player->getPosition());
-	GetMapDescription(pos.x - Map::maxClientViewportX, pos.y - Map::maxClientViewportY, pos.z, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, msg);
+	GetMapDescription(pos.x - 8, pos.y - 6, pos.z, 18, 14, msg);
 	writeToOutputBuffer(msg);
 }
 
@@ -2611,18 +2611,18 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 
 			if (oldPos.y > newPos.y) { // north, for old x
 				msg.addByte(0x65);
-				GetMapDescription(oldPos.x - Map::maxClientViewportX, newPos.y - Map::maxClientViewportY, newPos.z, (Map::maxClientViewportX * 2) + 2, 1, msg);
+				GetMapDescription(oldPos.x - 8, newPos.y - 6, newPos.z, 18, 1, msg);
 			} else if (oldPos.y < newPos.y) { // south, for old x
 				msg.addByte(0x67);
-				GetMapDescription(oldPos.x - Map::maxClientViewportX, newPos.y + (Map::maxClientViewportY + 1), newPos.z, (Map::maxClientViewportX * 2) + 2, 1, msg);
+				GetMapDescription(oldPos.x - 8, newPos.y + 7, newPos.z, 18, 1, msg);
 			}
 
 			if (oldPos.x < newPos.x) { // east, [with new y]
 				msg.addByte(0x66);
-				GetMapDescription(newPos.x + (Map::maxClientViewportX + 1), newPos.y - Map::maxClientViewportY, newPos.z, 1, (Map::maxClientViewportY * 2) + 2, msg);
+				GetMapDescription(newPos.x + 9, newPos.y - 6, newPos.z, 1, 14, msg);
 			} else if (oldPos.x > newPos.x) { // west, [with new y]
 				msg.addByte(0x68);
-				GetMapDescription(newPos.x - Map::maxClientViewportX, newPos.y - Map::maxClientViewportY, newPos.z, 1, (Map::maxClientViewportY * 2) + 2, msg);
+				GetMapDescription(newPos.x - 8, newPos.y - 6, newPos.z, 1, 14, msg);
 			}
 			writeToOutputBuffer(msg);
 		}
@@ -3119,11 +3119,13 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 	//going to surface
 	if (newPos.z == 7) {
 		int32_t skip = -1;
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 5, 18, 14, 3, skip); //(floor 7 and 6 already set)
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 4, 18, 14, 4, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 3, 18, 14, 5, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 2, 18, 14, 6, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 1, 18, 14, 7, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 0, 18, 14, 8, skip);
 
-		// floor 7 and 6 already set
-		for (int i = 5; i >= 0; --i) {
-			GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, i, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 8 - i, skip);
-		}
 		if (skip >= 0) {
 			msg.addByte(skip);
 			msg.addByte(0xFF);
@@ -3132,7 +3134,7 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 	//underground, going one floor up (still underground)
 	else if (newPos.z > 7) {
 		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, oldPos.getZ() - 3, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 3, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, oldPos.getZ() - 3, 18, 14, 3, skip);
 
 		if (skip >= 0) {
 			msg.addByte(skip);
@@ -3143,11 +3145,11 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 	//moving up a floor up makes us out of sync
 	//west
 	msg.addByte(0x68);
-	GetMapDescription(oldPos.x - Map::maxClientViewportX, oldPos.y - (Map::maxClientViewportY - 1), newPos.z, 1, (Map::maxClientViewportY * 2) + 2, msg);
+	GetMapDescription(oldPos.x - 8, oldPos.y - 5, newPos.z, 1, 14, msg);
 
 	//north
 	msg.addByte(0x65);
-	GetMapDescription(oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z, (Map::maxClientViewportX * 2) + 2, 1, msg);
+	GetMapDescription(oldPos.x - 8, oldPos.y - 6, newPos.z, 18, 1, msg);
 }
 
 void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos)
@@ -3163,9 +3165,10 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 	if (newPos.z == 8) {
 		int32_t skip = -1;
 
-		for (int i = 0; i < 3; ++i) {
-			GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + i, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -i - 1, skip);
-		}
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z, 18, 14, -1, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 1, 18, 14, -2, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 2, 18, 14, -3, skip);
+
 		if (skip >= 0) {
 			msg.addByte(skip);
 			msg.addByte(0xFF);
@@ -3174,7 +3177,7 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 	//going further down
 	else if (newPos.z > oldPos.z && newPos.z > 8 && newPos.z < 14) {
 		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 2, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -3, skip);
+		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 2, 18, 14, -3, skip);
 
 		if (skip >= 0) {
 			msg.addByte(skip);
@@ -3185,11 +3188,11 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 	//moving down a floor makes us out of sync
 	//east
 	msg.addByte(0x66);
-	GetMapDescription(oldPos.x + (Map::maxClientViewportX + 1), oldPos.y - (Map::maxClientViewportY + 1), newPos.z, 1, (Map::maxClientViewportY * 2) + 2, msg);
+	GetMapDescription(oldPos.x + 9, oldPos.y - 7, newPos.z, 1, 14, msg);
 
 	//south
 	msg.addByte(0x67);
-	GetMapDescription(oldPos.x - Map::maxClientViewportX, oldPos.y + (Map::maxClientViewportY + 1), newPos.z, (Map::maxClientViewportX * 2) + 2, 1, msg);
+	GetMapDescription(oldPos.x - 8, oldPos.y + 7, newPos.z, 18, 1, msg);
 }
 
 void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)

@@ -69,12 +69,12 @@ local potions = {
 		flask = 7635,
 		description = "Only knights of level 80 or above may drink this fluid."
 	},
-	[7618] = { -- health potion
-		health = {125, 175},
+	[7618] = { -- minor health potion
+		health = {40, 70},
 		flask = 7636
 	},
-	[7620] = { -- mana potion
-		mana = {75, 125},
+	[7620] = { -- minor mana potion
+		mana = {15, 30},
 		flask = 7636
 	},
 	[8472] = { -- great spirit potion

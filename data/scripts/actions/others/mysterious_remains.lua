@@ -16,7 +16,6 @@ local config = {
 	{chanceFrom = 7152, chanceTo = 7360, itemId = 2162}, -- magic light wand
 	{chanceFrom = 7361, chanceTo = 7526, itemId = 6570}, -- surprise bag
 	{chanceFrom = 7527, chanceTo = 7944, itemId = 25387}, -- rift tapestry
-	{chanceFrom = 7945, chanceTo = 8624, itemId = 18215}, -- gnomish supply package
 	{chanceFrom = 8625, chanceTo = 8938, itemId = 2199}, -- garlic necklace
 	{chanceFrom = 8939, chanceTo = 9147, itemId = 2153}, -- violet gem
 	{chanceFrom = 9148, chanceTo = 9513, itemId = 9813}, -- slightly rusted legs

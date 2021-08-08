@@ -26,7 +26,7 @@ if Modules == nil then
 	SHOPMODULE_MODE_BOTH = 3 -- Both working at one time
 
 	-- Used shop mode
-	SHOPMODULE_MODE = SHOPMODULE_MODE_BOTH
+	SHOPMODULE_MODE = SHOP_MODULE_TALK
 
 	Modules = {
 		parseableModules = {}
@@ -525,6 +525,1425 @@ if Modules == nil then
 		module.npcHandler:resetNpc(cid)
 		return true
 	end
+
+	KhazanGemShopModule = {
+		npcHandler = nil,
+		yesNode = nil,
+		noNode = nil,
+		noText = "",
+		maxCount = 100,
+		amount = 0
+	}
+	
+	-- Add it to the parseable module list.
+	Modules.parseableModules["khazan_gem_shop_module"] = KhazanGemShopModule
+	
+	-- Creates a new instance of TokenShopModule
+	function KhazanGemShopModule:new()
+		local obj = {}
+		setmetatable(obj, self)
+		self.__index = self
+		return obj
+	end
+	
+	-- Parses all known parameters.
+	function KhazanGemShopModule:parseParameters()
+		local ret = NpcSystem.getParameter("khazan_gem_shop_buyable")
+		if ret then
+			self:parseBuyable(ret)
+		end
+	
+		local ret = NpcSystem.getParameter("khazan_gem_shop_sellable")
+		if ret then
+			self:parseSellable(ret)
+		end
+	
+		local ret = NpcSystem.getParameter("khazan_gem_shop_buyable_containers")
+		if ret then
+			self:parseBuyableContainers(ret)
+		end
+	end
+	
+	-- Parse a string contaning a set of buyable items.
+	function KhazanGemShopModule:parseBuyable(data)
+		local alreadyParsedIds = {}
+		for item in string.gmatch(data, "[^;]+") do
+			local i = 1
+	
+			local name = nil
+			local itemid = nil
+			local cost = nil
+			local subType = nil
+			local realName = nil
+	
+			for temp in string.gmatch(item, "[^,]+") do
+				if i == 1 then
+					name = temp
+				elseif i == 2 then
+					itemid = tonumber(temp)
+				elseif i == 3 then
+					cost = tonumber(temp)
+				elseif i == 4 then
+					subType = tonumber(temp)
+				elseif i == 5 then
+					realName = temp
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
+				end
+				i = i + 1
+			end
+	
+			local it = ItemType(itemid)
+			if it:getId() == 0 then
+				-- invalid item
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+			else
+				if alreadyParsedIds[itemid] and not it:getFluidSource() then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+				else
+					alreadyParsedIds[itemid] = true
+				end
+			end
+	
+			if subType == nil and it:getCharges() ~= 0 then
+				subType = it:getCharges()
+			end
+	
+			if SHOPMODULE_MODE == SHOPMODULE_MODE_TRADE then
+				if itemid and cost then
+					if subType == nil and it:isFluidContainer() then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+					else
+						self:addBuyableItem(nil, itemid, cost, subType, realName)
+					end
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", itemid, cost)
+				end
+			else
+				if name and itemid and cost then
+					if subType == nil and it:isFluidContainer() then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+					else
+						local names = {}
+						names[#names + 1] = name
+						self:addBuyableItem(names, itemid, cost, subType, realName)
+					end
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, itemid, cost)
+				end
+			end
+		end
+	end
+	
+	-- Parse a string contaning a set of sellable items.
+	function KhazanGemShopModule:parseSellable(data)
+		local alreadyParsedIds = {}
+		for item in string.gmatch(data, "[^;]+") do
+			local i = 1
+	
+			local name = nil
+			local itemid = nil
+			local cost = nil
+			local realName = nil
+			local subType = nil
+	
+			for temp in string.gmatch(item, "[^,]+") do
+				if i == 1 then
+					name = temp
+				elseif i == 2 then
+					itemid = tonumber(temp)
+				elseif i == 3 then
+					cost = tonumber(temp)
+				elseif i == 4 then
+					realName = temp
+				elseif i == 5 then
+					subType = tonumber(temp)
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in sellable items parameter.", temp, item)
+				end
+				i = i + 1
+			end
+	
+			local it = ItemType(itemid)
+			if it:getId() == 0 then
+				-- invalid item
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+			else
+				if alreadyParsedIds[itemid] and not it:getFluidSource() then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+				else
+					alreadyParsedIds[itemid] = true
+				end
+			end
+	
+			if SHOPMODULE_MODE == SHOPMODULE_MODE_TRADE then
+				if itemid and cost then
+					self:addSellableItem(nil, itemid, cost, realName, subType)
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", itemid, cost)
+				end
+			else
+				if name and itemid and cost then
+					local names = {}
+					names[#names + 1] = name
+					self:addSellableItem(names, itemid, cost, realName, subType)
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, itemid, cost)
+				end
+			end
+		end
+	end
+	
+	-- Parse a string contaning a set of buyable items.
+	function KhazanGemShopModule:parseBuyableContainers(data)
+		for item in string.gmatch(data, "[^;]+") do
+			local i = 1
+	
+			local name = nil
+			local container = nil
+			local itemid = nil
+			local cost = nil
+			local subType = nil
+			local realName = nil
+	
+			for temp in string.gmatch(item, "[^,]+") do
+				if i == 1 then
+					name = temp
+				elseif i == 2 then
+					itemid = tonumber(temp)
+				elseif i == 3 then
+					itemid = tonumber(temp)
+				elseif i == 4 then
+					cost = tonumber(temp)
+				elseif i == 5 then
+					subType = tonumber(temp)
+				elseif i == 6 then
+					realName = temp
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
+				end
+				i = i + 1
+			end
+	
+			if name and container and itemid and cost then
+				if subType == nil and ItemType(itemid):isFluidContainer() then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+				else
+					local names = {}
+					names[#names + 1] = name
+					self:addBuyableItemContainer(names, container, itemid, cost, subType, realName)
+				end
+			else
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, container, itemid, cost)
+			end
+		end
+	end
+	
+	-- Initializes the module and associates handler to it.
+	function KhazanGemShopModule:init(handler)
+		self.npcHandler = handler
+		self.yesNode = KeywordNode:new(SHOP_YESWORD, KhazanGemShopModule.onConfirm, {module = self})
+		self.noNode = KeywordNode:new(SHOP_NOWORD, KhazanGemShopModule.onDecline, {module = self})
+		self.noText = handler:getMessage(MESSAGE_DECLINE)
+	
+		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
+			for i, word in pairs(SHOP_TRADEREQUEST) do
+				local obj = {}
+				obj[#obj + 1] = word
+				obj.callback = SHOP_TRADEREQUEST.callback or KhazanGemShopModule.messageMatcher
+				handler.keywordHandler:addKeyword(obj, KhazanGemShopModule.requestTrade, {module = self})
+			end
+		end
+	
+		return true
+	end
+	
+	-- Custom message matching callback function for requesting trade messages.
+	function KhazanGemShopModule.messageMatcher(keywords, message)
+		for i, word in pairs(keywords) do
+			if type(word) == "string" then
+				if string.find(message, word) and not string.find(message, "[%w+]" .. word) and not string.find(message, word .. "[%w+]") then
+					return true
+				end
+			end
+		end
+	
+		return false
+	end
+	
+	-- Resets the module-specific variables.
+	function KhazanGemShopModule:reset()
+		self.amount = 0
+	end
+	
+	-- Function used to match a number value from a string.
+	function KhazanGemShopModule:getCount(message)
+		local ret = 1
+		local b, e = string.find(message, PATTERN_COUNT)
+		if b and e then
+			ret = tonumber(string.sub(message, b, e))
+		end
+	
+		if ret <= 0 then
+			ret = 1
+		elseif ret > self.maxCount then
+			ret = self.maxCount
+		end
+	
+		return ret
+	end
+	
+	-- Adds a new buyable item.
+	--	names = A table containing one or more strings of alternative names to this item. Used only for old buy/sell system.
+	--	itemid = The itemid of the buyable item
+	--	cost = The price of one single item
+	--	subType - The subType of each rune or fluidcontainer item. Can be left out if it is not a rune/fluidcontainer. Default value is 1.
+	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
+	function KhazanGemShopModule:addBuyableItem(names, itemid, cost, itemSubType, realName)
+		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
+			if itemSubType == nil then
+				itemSubType = 1
+			end
+	
+			local shopItem = self:getShopItem(itemid, itemSubType)
+			if shopItem == nil then
+				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = cost, sell = -1, subType = itemSubType, name = realName or ItemType(itemid):getName()}
+			else
+				if cost < shopItem.sell then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (".. shopItem.name ..")")
+				end
+				shopItem.buy = cost
+			end
+		end
+	
+		if names and SHOPMODULE_MODE ~= SHOPMODULE_MODE_TRADE then
+			for i, name in pairs(names) do
+				local parameters = {
+						itemid = itemid,
+						cost = cost,
+						eventType = SHOPMODULE_BUY_ITEM,
+						module = self,
+						realName = realName or ItemType(itemid):getName(),
+						subType = itemSubType or 1
+					}
+	
+				keywords = {}
+				keywords[#keywords + 1] = "buy"
+				keywords[#keywords + 1] = name
+				local node = self.npcHandler.keywordHandler:addKeyword(keywords, KhazanGemShopModule.tradeItem, parameters)
+				node:addChildKeywordNode(self.yesNode)
+				node:addChildKeywordNode(self.noNode)
+			end
+		end
+	
+		if npcs_loaded_shop[getNpcCid()] == nil then
+			npcs_loaded_shop[getNpcCid()] = getNpcCid()
+			self.npcHandler.keywordHandler:addKeyword({'yes'}, KhazanGemShopModule.onConfirm, {module = self})
+			self.npcHandler.keywordHandler:addKeyword({'no'}, KhazanGemShopModule.onDecline, {module = self})
+		end
+	end
+	
+	function KhazanGemShopModule:getShopItem(itemId, itemSubType)
+		if ItemType(itemId):isFluidContainer() then
+			for i = 1, #self.npcHandler.shopItems do
+				local shopItem = self.npcHandler.shopItems[i]
+				if shopItem.id == itemId and shopItem.subType == itemSubType then
+					return shopItem
+				end
+			end
+		else
+			for i = 1, #self.npcHandler.shopItems do
+				local shopItem = self.npcHandler.shopItems[i]
+				if shopItem.id == itemId then
+					return shopItem
+				end
+			end
+		end
+		return nil
+	end
+	
+	-- Adds a new buyable container of items.
+	--	names = A table containing one or more strings of alternative names to this item.
+	--	container = Backpack, bag or any other itemid of container where bought items will be stored
+	--	itemid = The itemid of the buyable item
+	--	cost = The price of one single item
+	--	subType - The subType of each rune or fluidcontainer item. Can be left out if it is not a rune/fluidcontainer. Default value is 1.
+	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
+	function KhazanGemShopModule:addBuyableItemContainer(names, container, itemid, cost, subType, realName)
+		if names then
+			for i, name in pairs(names) do
+				local parameters = {
+						container = container,
+						itemid = itemid,
+						cost = cost,
+						eventType = SHOPMODULE_BUY_ITEM_CONTAINER,
+						module = self,
+						realName = realName or ItemType(itemid):getName(),
+						subType = subType or 1
+					}
+	
+				keywords = {}
+				keywords[#keywords + 1] = "buy"
+				keywords[#keywords + 1] = name
+				local node = self.npcHandler.keywordHandler:addKeyword(keywords, KhazanGemShopModule.tradeItem, parameters)
+				node:addChildKeywordNode(self.yesNode)
+				node:addChildKeywordNode(self.noNode)
+			end
+		end
+	end
+	
+	-- Adds a new sellable item.
+	--	names = A table containing one or more strings of alternative names to this item. Used only by old buy/sell system.
+	--	itemid = The itemid of the sellable item
+	--	cost = The price of one single item
+	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
+	function KhazanGemShopModule:addSellableItem(names, itemid, cost, realName, itemSubType)
+		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
+			if itemSubType == nil then
+				itemSubType = 0
+			end
+	
+			local shopItem = self:getShopItem(itemid, itemSubType)
+			if shopItem == nil then
+				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = -1, sell = cost, subType = itemSubType, name = realName or ItemType(itemid):getName()}
+			else
+				if cost > shopItem.buy then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (".. shopItem.name ..")")
+				end
+				shopItem.sell = cost
+			end
+		end
+	
+		if names and SHOPMODULE_MODE ~= SHOPMODULE_MODE_TRADE then
+			for i, name in pairs(names) do
+				local parameters = {
+					itemid = itemid,
+					cost = cost,
+					eventType = SHOPMODULE_SELL_ITEM,
+					module = self,
+					realName = realName or ItemType(itemid):getName()
+				}
+	
+				keywords = {}
+				keywords[#keywords + 1] = "sell"
+				keywords[#keywords + 1] = name
+	
+				local node = self.npcHandler.keywordHandler:addKeyword(keywords, KhazanGemShopModule.tradeItem, parameters)
+				node:addChildKeywordNode(self.yesNode)
+				node:addChildKeywordNode(self.noNode)
+			end
+		end
+	end
+	
+	-- onModuleReset callback function. Calls KhazanGemShopModule:reset()
+	function KhazanGemShopModule:callbackOnModuleReset()
+		self:reset()
+		return true
+	end
+	
+	-- Callback onBuy() function. If you wish, you can change certain Npc to use your onBuy().
+	function KhazanGemShopModule:callbackOnBuy(cid, itemid, subType, amount, ignoreCap, inBackpacks)
+		local shopItem = self:getShopItem(itemid, subType)
+		if shopItem == nil then
+			error("[KhazanGemShopModule.onBuy] shopItem == nil")
+			return false
+		end
+	
+		if shopItem.buy == -1 then
+			error("[KhazanGemShopModule.onSell] attempt to buy a non-buyable item")
+			return false
+		end
+	
+		local totalCost = amount * shopItem.buy
+		if inBackpacks then
+			totalCost = ItemType(itemid):isStackable() and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(ITEM_SHOPPING_BAG):getCapacity())) * 20)
+		end
+	
+		local player = Player(cid)
+		local parseInfo = {
+			[TAG_PLAYERNAME] = player:getName(),
+			[TAG_ITEMCOUNT] = amount,
+			[TAG_TOTALCOST] = totalCost,
+			[TAG_ITEMNAME] = shopItem.name
+		}
+	
+		if player:getTotalKhazanGems() < totalCost then
+			local msg = self.npcHandler:getMessage(MESSAGE_NEEDMONEY)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendCancelMessage(msg)
+			return false
+		end
+	
+		local subType = shopItem.subType or 1
+		local a, b = doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, ITEM_SHOPPING_BAG)
+		if a < amount then
+			local msgId = MESSAGE_NEEDMORESPACE
+			if a == 0 then
+				msgId = MESSAGE_NEEDSPACE
+			end
+	
+			local msg = self.npcHandler:getMessage(msgId)
+			parseInfo[TAG_ITEMCOUNT] = a
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendCancelMessage(msg)
+			self.npcHandler.talkStart[cid] = os.time()
+	
+			if a > 0 then
+				if not player:removeTotalKhazanGems((a * shopItem.buy) + (b * 20)) then
+					return false
+				end
+				return true
+			end
+	
+			return false
+		else
+			local msg = self.npcHandler:getMessage(MESSAGE_KHAZAN_BOUGHT)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendTextMessage(MESSAGE_INFO_DESCR, msg)
+			if not player:removeTotalKhazanGems(totalCost) then
+				return false
+			end
+			self.npcHandler.talkStart[cid] = os.time()
+			return true
+		end
+	end
+	
+	-- Callback onSell() function. If you wish, you can change certain Npc to use your onSell().
+	function KhazanGemShopModule:callbackOnSell(cid, itemid, subType, amount, ignoreEquipped, _)
+		local shopItem = self:getShopItem(itemid, subType)
+		if shopItem == nil then
+			error("[KhazanGemShopModule.onSell] items[itemid] == nil")
+			return false
+		end
+	
+		if shopItem.sell == -1 then
+			error("[KhazanGemShopModule.onSell] attempt to sell a non-sellable item")
+			return false
+		end
+	
+		local player = Player(cid)
+		local parseInfo = {
+			[TAG_PLAYERNAME] = player:getName(),
+			[TAG_ITEMCOUNT] = amount,
+			[TAG_TOTALCOST] = amount * shopItem.sell,
+			[TAG_ITEMNAME] = shopItem.name
+		}
+	
+		if not ItemType(itemid):isFluidContainer() then
+			subType = -1
+		end
+	
+		if player:removeItem(itemid, amount, subType, ignoreEquipped) then
+			local msg = self.npcHandler:getMessage(MESSAGE_KHAZAN_SOLD)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendTextMessage(MESSAGE_INFO_DESCR, msg)
+			player:addKhazanGems(amount * shopItem.sell)
+			self.npcHandler.talkStart[cid] = os.time()
+			return true
+		else
+			local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendCancelMessage(msg)
+			self.npcHandler.talkStart[cid] = os.time()
+			return false
+		end
+	end
+	
+	-- Callback for requesting a trade window with the NPC.
+	function KhazanGemShopModule.requestTrade(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) then
+			return false
+		end
+	
+		if not module.npcHandler:onTradeRequest(cid) then
+			return false
+		end
+	
+		local itemWindow = {}
+		for i = 1, #module.npcHandler.shopItems do
+			itemWindow[#itemWindow + 1] = module.npcHandler.shopItems[i]
+		end
+	
+		if itemWindow[1] == nil then
+			local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
+			local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_NOSHOP), parseInfo)
+			module.npcHandler:say(msg, cid)
+			return true
+		end
+	
+		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
+		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_SENDTRADE), parseInfo)
+		openShopWindow(cid, itemWindow,
+			function(cid, itemid, subType, amount, ignoreCap, inBackpacks) module.npcHandler:onBuy(cid, itemid, subType, amount, ignoreCap, inBackpacks) end,
+			function(cid, itemid, subType, amount, ignoreCap, inBackpacks) module.npcHandler:onSell(cid, itemid, subType, amount, ignoreCap, inBackpacks) end)
+		module.npcHandler:say(msg, cid)
+		return true
+	end
+	
+	-- onConfirm keyword callback function. Sells/buys the actual item.
+	function KhazanGemShopModule.onConfirm(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
+			return false
+		end
+		shop_npcuid[cid] = 0
+	
+		local parentParameters = node:getParent():getParameters()
+		local player = Player(cid)
+		local parseInfo = {
+			[TAG_PLAYERNAME] = player:getName(),
+			[TAG_ITEMCOUNT] = shop_amount[cid],
+			[TAG_TOTALCOST] = shop_cost[cid] * shop_amount[cid],
+			[TAG_ITEMNAME] = shop_rlname[cid]
+		}
+	
+		if shop_eventtype[cid] == SHOPMODULE_SELL_ITEM then
+			local ret = doPlayerSellKhazanItem(cid, shop_itemid[cid], shop_amount[cid], shop_cost[cid] * shop_amount[cid])
+			if ret == true then
+				local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_ONSELL)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_MISSINGITEM)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			end
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM then
+			local cost = shop_cost[cid] * shop_amount[cid]
+			if player:getTotalKhazanGems() < cost then
+				local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_MISSING)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+				return false
+			end
+	
+			local a, b = doNpcSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_subtype[cid], false, false, ITEM_SHOPPING_BAG)
+			if a < shop_amount[cid] then
+				local msgId = MESSAGE_NEEDMORESPACE
+				if a == 0 then
+					msgId = MESSAGE_NEEDSPACE
+				end
+	
+				local msg = module.npcHandler:getMessage(msgId)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+				if a > 0 then
+					if not player:removeTotalKhazanGems(a * shop_cost[cid]) then
+						return false
+					end
+					if shop_itemid[cid] == ITEM_PARCEL then
+						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
+					end
+					return true
+				end
+				return false
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_ONBUY)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+				if not player:removeTotalKhazanGems(cost) then
+					return false
+				end
+				if shop_itemid[cid] == ITEM_PARCEL then
+					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
+				end
+				return true
+			end
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
+			local ret = doPlayerBuyItemContainer(cid, shop_container[cid], shop_itemid[cid], shop_amount[cid], shop_cost[cid] * shop_amount[cid], shop_subtype[cid])
+			if ret == true then
+				local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_ONBUY)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_MISSING)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			end
+		end
+	
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+	
+	-- onDecline keyword callback function. Generally called when the player sais "no" after wanting to buy an item.
+	function KhazanGemShopModule.onDecline(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
+			return false
+		end
+		shop_npcuid[cid] = 0
+	
+		local parentParameters = node:getParent():getParameters()
+		local parseInfo = {
+			[TAG_PLAYERNAME] = Player(cid):getName(),
+			[TAG_ITEMCOUNT] = shop_amount[cid],
+			[TAG_TOTALCOST] = shop_cost[cid] * shop_amount[cid],
+			[TAG_ITEMNAME] = shop_rlname[cid]
+		}
+	
+		local msg = module.npcHandler:parseMessage(module.noText, parseInfo)
+		module.npcHandler:say(msg, cid)
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+	
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function KhazanGemShopModule.tradeItem(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) then
+			return false
+		end
+	
+		if not module.npcHandler:onTradeRequest(cid) then
+			return true
+		end
+	
+		local count = module:getCount(message)
+		module.amount = count
+	
+		shop_amount[cid] = module.amount
+		shop_cost[cid] = parameters.cost
+		shop_rlname[cid] = parameters.realName
+		shop_itemid[cid] = parameters.itemid
+		shop_container[cid] = parameters.container
+		shop_npcuid[cid] = getNpcCid()
+		shop_eventtype[cid] = parameters.eventType
+		shop_subtype[cid] = parameters.subType
+	
+		local parseInfo = {
+			[TAG_PLAYERNAME] = Player(cid):getName(),
+			[TAG_ITEMCOUNT] = shop_amount[cid],
+			[TAG_TOTALCOST] = shop_cost[cid] * shop_amount[cid],
+			[TAG_ITEMNAME] = shop_rlname[cid]
+		}
+	
+		if shop_eventtype[cid] == SHOPMODULE_SELL_ITEM then
+			local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_SELL)
+			msg = module.npcHandler:parseMessage(msg, parseInfo)
+			module.npcHandler:say(msg, cid)
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM then
+			local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_BUY)
+			msg = module.npcHandler:parseMessage(msg, parseInfo)
+			module.npcHandler:say(msg, cid)
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
+			local msg = module.npcHandler:getMessage(MESSAGE_KHAZAN_BUY)
+			msg = module.npcHandler:parseMessage(msg, parseInfo)
+			module.npcHandler:say(msg, cid)
+		end
+		return true
+	end	
+
+	TharianGemShopModule = {
+		npcHandler = nil,
+		yesNode = nil,
+		noNode = nil,
+		noText = "",
+		maxCount = 100,
+		amount = 0
+	}
+	
+	-- Add it to the parseable module list.
+	Modules.parseableModules["tharian_gem_shop_module"] = TharianGemShopModule
+	
+	-- Creates a new instance of TokenShopModule
+	function TharianGemShopModule:new()
+		local obj = {}
+		setmetatable(obj, self)
+		self.__index = self
+		return obj
+	end
+	
+	-- Parses all known parameters.
+	function TharianGemShopModule:parseParameters()
+		local ret = NpcSystem.getParameter("tharian_gem_shop_buyable")
+		if ret then
+			self:parseBuyable(ret)
+		end
+	
+		local ret = NpcSystem.getParameter("tharian_gem_shop_sellable")
+		if ret then
+			self:parseSellable(ret)
+		end
+	
+		local ret = NpcSystem.getParameter("tharian_gem_shop_buyable_containers")
+		if ret then
+			self:parseBuyableContainers(ret)
+		end
+	end
+	
+	-- Parse a string contaning a set of buyable items.
+	function TharianGemShopModule:parseBuyable(data)
+		local alreadyParsedIds = {}
+		for item in string.gmatch(data, "[^;]+") do
+			local i = 1
+	
+			local name = nil
+			local itemid = nil
+			local cost = nil
+			local subType = nil
+			local realName = nil
+	
+			for temp in string.gmatch(item, "[^,]+") do
+				if i == 1 then
+					name = temp
+				elseif i == 2 then
+					itemid = tonumber(temp)
+				elseif i == 3 then
+					cost = tonumber(temp)
+				elseif i == 4 then
+					subType = tonumber(temp)
+				elseif i == 5 then
+					realName = temp
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
+				end
+				i = i + 1
+			end
+	
+			local it = ItemType(itemid)
+			if it:getId() == 0 then
+				-- invalid item
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+			else
+				if alreadyParsedIds[itemid] and not it:getFluidSource() then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+				else
+					alreadyParsedIds[itemid] = true
+				end
+			end
+	
+			if subType == nil and it:getCharges() ~= 0 then
+				subType = it:getCharges()
+			end
+	
+			if SHOPMODULE_MODE == SHOPMODULE_MODE_TRADE then
+				if itemid and cost then
+					if subType == nil and it:isFluidContainer() then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+					else
+						self:addBuyableItem(nil, itemid, cost, subType, realName)
+					end
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", itemid, cost)
+				end
+			else
+				if name and itemid and cost then
+					if subType == nil and it:isFluidContainer() then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+					else
+						local names = {}
+						names[#names + 1] = name
+						self:addBuyableItem(names, itemid, cost, subType, realName)
+					end
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, itemid, cost)
+				end
+			end
+		end
+	end
+	
+	-- Parse a string contaning a set of sellable items.
+	function TharianGemShopModule:parseSellable(data)
+		local alreadyParsedIds = {}
+		for item in string.gmatch(data, "[^;]+") do
+			local i = 1
+	
+			local name = nil
+			local itemid = nil
+			local cost = nil
+			local realName = nil
+			local subType = nil
+	
+			for temp in string.gmatch(item, "[^,]+") do
+				if i == 1 then
+					name = temp
+				elseif i == 2 then
+					itemid = tonumber(temp)
+				elseif i == 3 then
+					cost = tonumber(temp)
+				elseif i == 4 then
+					realName = temp
+				elseif i == 5 then
+					subType = tonumber(temp)
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in sellable items parameter.", temp, item)
+				end
+				i = i + 1
+			end
+	
+			local it = ItemType(itemid)
+			if it:getId() == 0 then
+				-- invalid item
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
+			else
+				if alreadyParsedIds[itemid] and not it:getFluidSource() then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+				else
+					alreadyParsedIds[itemid] = true
+				end
+			end
+	
+			if SHOPMODULE_MODE == SHOPMODULE_MODE_TRADE then
+				if itemid and cost then
+					self:addSellableItem(nil, itemid, cost, realName, subType)
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", itemid, cost)
+				end
+			else
+				if name and itemid and cost then
+					local names = {}
+					names[#names + 1] = name
+					self:addSellableItem(names, itemid, cost, realName, subType)
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, itemid, cost)
+				end
+			end
+		end
+	end
+	
+	-- Parse a string contaning a set of buyable items.
+	function TharianGemShopModule:parseBuyableContainers(data)
+		for item in string.gmatch(data, "[^;]+") do
+			local i = 1
+	
+			local name = nil
+			local container = nil
+			local itemid = nil
+			local cost = nil
+			local subType = nil
+			local realName = nil
+	
+			for temp in string.gmatch(item, "[^,]+") do
+				if i == 1 then
+					name = temp
+				elseif i == 2 then
+					itemid = tonumber(temp)
+				elseif i == 3 then
+					itemid = tonumber(temp)
+				elseif i == 4 then
+					cost = tonumber(temp)
+				elseif i == 5 then
+					subType = tonumber(temp)
+				elseif i == 6 then
+					realName = temp
+				else
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Unknown parameter found in buyable items parameter.", temp, item)
+				end
+				i = i + 1
+			end
+	
+			if name and container and itemid and cost then
+				if subType == nil and ItemType(itemid):isFluidContainer() then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "SubType missing for parameter item:", item)
+				else
+					local names = {}
+					names[#names + 1] = name
+					self:addBuyableItemContainer(names, container, itemid, cost, subType, realName)
+				end
+			else
+				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for item:", name, container, itemid, cost)
+			end
+		end
+	end
+	
+	-- Initializes the module and associates handler to it.
+	function TharianGemShopModule:init(handler)
+		self.npcHandler = handler
+		self.yesNode = KeywordNode:new(SHOP_YESWORD, TharianGemShopModule.onConfirm, {module = self})
+		self.noNode = KeywordNode:new(SHOP_NOWORD, TharianGemShopModule.onDecline, {module = self})
+		self.noText = handler:getMessage(MESSAGE_DECLINE)
+	
+		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
+			for i, word in pairs(SHOP_TRADEREQUEST) do
+				local obj = {}
+				obj[#obj + 1] = word
+				obj.callback = SHOP_TRADEREQUEST.callback or TharianGemShopModule.messageMatcher
+				handler.keywordHandler:addKeyword(obj, TharianGemShopModule.requestTrade, {module = self})
+			end
+		end
+	
+		return true
+	end
+	
+	-- Custom message matching callback function for requesting trade messages.
+	function TharianGemShopModule.messageMatcher(keywords, message)
+		for i, word in pairs(keywords) do
+			if type(word) == "string" then
+				if string.find(message, word) and not string.find(message, "[%w+]" .. word) and not string.find(message, word .. "[%w+]") then
+					return true
+				end
+			end
+		end
+	
+		return false
+	end
+	
+	-- Resets the module-specific variables.
+	function TharianGemShopModule:reset()
+		self.amount = 0
+	end
+	
+	-- Function used to match a number value from a string.
+	function TharianGemShopModule:getCount(message)
+		local ret = 1
+		local b, e = string.find(message, PATTERN_COUNT)
+		if b and e then
+			ret = tonumber(string.sub(message, b, e))
+		end
+	
+		if ret <= 0 then
+			ret = 1
+		elseif ret > self.maxCount then
+			ret = self.maxCount
+		end
+	
+		return ret
+	end
+	
+	-- Adds a new buyable item.
+	--	names = A table containing one or more strings of alternative names to this item. Used only for old buy/sell system.
+	--	itemid = The itemid of the buyable item
+	--	cost = The price of one single item
+	--	subType - The subType of each rune or fluidcontainer item. Can be left out if it is not a rune/fluidcontainer. Default value is 1.
+	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
+	function TharianGemShopModule:addBuyableItem(names, itemid, cost, itemSubType, realName)
+		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
+			if itemSubType == nil then
+				itemSubType = 1
+			end
+	
+			local shopItem = self:getShopItem(itemid, itemSubType)
+			if shopItem == nil then
+				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = cost, sell = -1, subType = itemSubType, name = realName or ItemType(itemid):getName()}
+			else
+				if cost < shopItem.sell then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (".. shopItem.name ..")")
+				end
+				shopItem.buy = cost
+			end
+		end
+	
+		if names and SHOPMODULE_MODE ~= SHOPMODULE_MODE_TRADE then
+			for i, name in pairs(names) do
+				local parameters = {
+						itemid = itemid,
+						cost = cost,
+						eventType = SHOPMODULE_BUY_ITEM,
+						module = self,
+						realName = realName or ItemType(itemid):getName(),
+						subType = itemSubType or 1
+					}
+	
+				keywords = {}
+				keywords[#keywords + 1] = "buy"
+				keywords[#keywords + 1] = name
+				local node = self.npcHandler.keywordHandler:addKeyword(keywords, TharianGemShopModule.tradeItem, parameters)
+				node:addChildKeywordNode(self.yesNode)
+				node:addChildKeywordNode(self.noNode)
+			end
+		end
+	
+		if npcs_loaded_shop[getNpcCid()] == nil then
+			npcs_loaded_shop[getNpcCid()] = getNpcCid()
+			self.npcHandler.keywordHandler:addKeyword({'yes'}, TharianGemShopModule.onConfirm, {module = self})
+			self.npcHandler.keywordHandler:addKeyword({'no'}, TharianGemShopModule.onDecline, {module = self})
+		end
+	end
+	
+	function TharianGemShopModule:getShopItem(itemId, itemSubType)
+		if ItemType(itemId):isFluidContainer() then
+			for i = 1, #self.npcHandler.shopItems do
+				local shopItem = self.npcHandler.shopItems[i]
+				if shopItem.id == itemId and shopItem.subType == itemSubType then
+					return shopItem
+				end
+			end
+		else
+			for i = 1, #self.npcHandler.shopItems do
+				local shopItem = self.npcHandler.shopItems[i]
+				if shopItem.id == itemId then
+					return shopItem
+				end
+			end
+		end
+		return nil
+	end
+	
+	-- Adds a new buyable container of items.
+	--	names = A table containing one or more strings of alternative names to this item.
+	--	container = Backpack, bag or any other itemid of container where bought items will be stored
+	--	itemid = The itemid of the buyable item
+	--	cost = The price of one single item
+	--	subType - The subType of each rune or fluidcontainer item. Can be left out if it is not a rune/fluidcontainer. Default value is 1.
+	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
+	function TharianGemShopModule:addBuyableItemContainer(names, container, itemid, cost, subType, realName)
+		if names then
+			for i, name in pairs(names) do
+				local parameters = {
+						container = container,
+						itemid = itemid,
+						cost = cost,
+						eventType = SHOPMODULE_BUY_ITEM_CONTAINER,
+						module = self,
+						realName = realName or ItemType(itemid):getName(),
+						subType = subType or 1
+					}
+	
+				keywords = {}
+				keywords[#keywords + 1] = "buy"
+				keywords[#keywords + 1] = name
+				local node = self.npcHandler.keywordHandler:addKeyword(keywords, TharianGemShopModule.tradeItem, parameters)
+				node:addChildKeywordNode(self.yesNode)
+				node:addChildKeywordNode(self.noNode)
+			end
+		end
+	end
+	
+	-- Adds a new sellable item.
+	--	names = A table containing one or more strings of alternative names to this item. Used only by old buy/sell system.
+	--	itemid = The itemid of the sellable item
+	--	cost = The price of one single item
+	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
+	function TharianGemShopModule:addSellableItem(names, itemid, cost, realName, itemSubType)
+		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
+			if itemSubType == nil then
+				itemSubType = 0
+			end
+	
+			local shopItem = self:getShopItem(itemid, itemSubType)
+			if shopItem == nil then
+				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = -1, sell = cost, subType = itemSubType, name = realName or ItemType(itemid):getName()}
+			else
+				if cost > shopItem.buy then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (".. shopItem.name ..")")
+				end
+				shopItem.sell = cost
+			end
+		end
+	
+		if names and SHOPMODULE_MODE ~= SHOPMODULE_MODE_TRADE then
+			for i, name in pairs(names) do
+				local parameters = {
+					itemid = itemid,
+					cost = cost,
+					eventType = SHOPMODULE_SELL_ITEM,
+					module = self,
+					realName = realName or ItemType(itemid):getName()
+				}
+	
+				keywords = {}
+				keywords[#keywords + 1] = "sell"
+				keywords[#keywords + 1] = name
+	
+				local node = self.npcHandler.keywordHandler:addKeyword(keywords, TharianGemShopModule.tradeItem, parameters)
+				node:addChildKeywordNode(self.yesNode)
+				node:addChildKeywordNode(self.noNode)
+			end
+		end
+	end
+	
+	-- onModuleReset callback function. Calls TharianGemShopModule:reset()
+	function TharianGemShopModule:callbackOnModuleReset()
+		self:reset()
+		return true
+	end
+	
+	-- Callback onBuy() function. If you wish, you can change certain Npc to use your onBuy().
+	function TharianGemShopModule:callbackOnBuy(cid, itemid, subType, amount, ignoreCap, inBackpacks)
+		local shopItem = self:getShopItem(itemid, subType)
+		if shopItem == nil then
+			error("[TharianGemShopModule.onBuy] shopItem == nil")
+			return false
+		end
+	
+		if shopItem.buy == -1 then
+			error("[TharianGemShopModule.onSell] attempt to buy a non-buyable item")
+			return false
+		end
+	
+		local totalCost = amount * shopItem.buy
+		if inBackpacks then
+			totalCost = ItemType(itemid):isStackable() and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(ITEM_SHOPPING_BAG):getCapacity())) * 20)
+		end
+	
+		local player = Player(cid)
+		local parseInfo = {
+			[TAG_PLAYERNAME] = player:getName(),
+			[TAG_ITEMCOUNT] = amount,
+			[TAG_TOTALCOST] = totalCost,
+			[TAG_ITEMNAME] = shopItem.name
+		}
+	
+		if player:getTotalTharianGems() < totalCost then
+			local msg = self.npcHandler:getMessage(MESSAGE_NEEDMONEY)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendCancelMessage(msg)
+			return false
+		end
+	
+		local subType = shopItem.subType or 1
+		local a, b = doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, ITEM_SHOPPING_BAG)
+		if a < amount then
+			local msgId = MESSAGE_NEEDMORESPACE
+			if a == 0 then
+				msgId = MESSAGE_NEEDSPACE
+			end
+	
+			local msg = self.npcHandler:getMessage(msgId)
+			parseInfo[TAG_ITEMCOUNT] = a
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendCancelMessage(msg)
+			self.npcHandler.talkStart[cid] = os.time()
+	
+			if a > 0 then
+				if not player:removeTotalTharianGems((a * shopItem.buy) + (b * 20)) then
+					return false
+				end
+				return true
+			end
+	
+			return false
+		else
+			local msg = self.npcHandler:getMessage(MESSAGE_THARIAN_BOUGHT)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendTextMessage(MESSAGE_INFO_DESCR, msg)
+			if not player:removeTotalTharianGems(totalCost) then
+				return false
+			end
+			self.npcHandler.talkStart[cid] = os.time()
+			return true
+		end
+	end
+	
+	-- Callback onSell() function. If you wish, you can change certain Npc to use your onSell().
+	function TharianGemShopModule:callbackOnSell(cid, itemid, subType, amount, ignoreEquipped, _)
+		local shopItem = self:getShopItem(itemid, subType)
+		if shopItem == nil then
+			error("[TharianGemShopModule.onSell] items[itemid] == nil")
+			return false
+		end
+	
+		if shopItem.sell == -1 then
+			error("[TharianGemShopModule.onSell] attempt to sell a non-sellable item")
+			return false
+		end
+	
+		local player = Player(cid)
+		local parseInfo = {
+			[TAG_PLAYERNAME] = player:getName(),
+			[TAG_ITEMCOUNT] = amount,
+			[TAG_TOTALCOST] = amount * shopItem.sell,
+			[TAG_ITEMNAME] = shopItem.name
+		}
+	
+		if not ItemType(itemid):isFluidContainer() then
+			subType = -1
+		end
+	
+		if player:removeItem(itemid, amount, subType, ignoreEquipped) then
+			local msg = self.npcHandler:getMessage(MESSAGE_MISSING_THARIAN)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendTextMessage(MESSAGE_INFO_DESCR, msg)
+			player:addTharianGems(amount * shopItem.sell)
+			self.npcHandler.talkStart[cid] = os.time()
+			return true
+		else
+			local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
+			msg = self.npcHandler:parseMessage(msg, parseInfo)
+			player:sendCancelMessage(msg)
+			self.npcHandler.talkStart[cid] = os.time()
+			return false
+		end
+	end
+	
+	-- Callback for requesting a trade window with the NPC.
+	function TharianGemShopModule.requestTrade(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) then
+			return false
+		end
+	
+		if not module.npcHandler:onTradeRequest(cid) then
+			return false
+		end
+	
+		local itemWindow = {}
+		for i = 1, #module.npcHandler.shopItems do
+			itemWindow[#itemWindow + 1] = module.npcHandler.shopItems[i]
+		end
+	
+		if itemWindow[1] == nil then
+			local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
+			local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_NOSHOP), parseInfo)
+			module.npcHandler:say(msg, cid)
+			return true
+		end
+	
+		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
+		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_SENDTRADE), parseInfo)
+		openShopWindow(cid, itemWindow,
+			function(cid, itemid, subType, amount, ignoreCap, inBackpacks) module.npcHandler:onBuy(cid, itemid, subType, amount, ignoreCap, inBackpacks) end,
+			function(cid, itemid, subType, amount, ignoreCap, inBackpacks) module.npcHandler:onSell(cid, itemid, subType, amount, ignoreCap, inBackpacks) end)
+		module.npcHandler:say(msg, cid)
+		return true
+	end
+	
+	-- onConfirm keyword callback function. Sells/buys the actual item.
+	function TharianGemShopModule.onConfirm(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
+			return false
+		end
+		shop_npcuid[cid] = 0
+	
+		local parentParameters = node:getParent():getParameters()
+		local player = Player(cid)
+		local parseInfo = {
+			[TAG_PLAYERNAME] = player:getName(),
+			[TAG_ITEMCOUNT] = shop_amount[cid],
+			[TAG_TOTALCOST] = shop_cost[cid] * shop_amount[cid],
+			[TAG_ITEMNAME] = shop_rlname[cid]
+		}
+	
+		if shop_eventtype[cid] == SHOPMODULE_SELL_ITEM then
+			local ret = doPlayerSellTharianItem(cid, shop_itemid[cid], shop_amount[cid], shop_cost[cid] * shop_amount[cid])
+			if ret == true then
+				local msg = module.npcHandler:getMessage(MESSAGE_THARIAN_ONSELL)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_MISSINGITEM)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			end
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM then
+			local cost = shop_cost[cid] * shop_amount[cid]
+			if player:getTotalTharianGems() < cost then
+				local msg = module.npcHandler:getMessage(MESSAGE_MISSINGTOKENS)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+				return false
+			end
+	
+			local a, b = doNpcSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_subtype[cid], false, false, ITEM_SHOPPING_BAG)
+			if a < shop_amount[cid] then
+				local msgId = MESSAGE_NEEDMORESPACE
+				if a == 0 then
+					msgId = MESSAGE_NEEDSPACE
+				end
+	
+				local msg = module.npcHandler:getMessage(msgId)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+				if a > 0 then
+					if not player:removeTotalTharianGems(a * shop_cost[cid]) then
+						return false
+					end
+					if shop_itemid[cid] == ITEM_PARCEL then
+						doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
+					end
+					return true
+				end
+				return false
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_THARIAN_ONBUY)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+				if not player:removeTotalTharianGems(cost) then
+					return false
+				end
+				if shop_itemid[cid] == ITEM_PARCEL then
+					doNpcSellItem(cid, ITEM_LABEL, shop_amount[cid], shop_subtype[cid], true, false, ITEM_SHOPPING_BAG)
+				end
+				return true
+			end
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
+			local ret = doPlayerBuyItemContainer(cid, shop_container[cid], shop_itemid[cid], shop_amount[cid], shop_cost[cid] * shop_amount[cid], shop_subtype[cid])
+			if ret == true then
+				local msg = module.npcHandler:getMessage(MESSAGE_THARIAN_ONBUY)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_MISSINGTOKENS)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg, cid)
+			end
+		end
+	
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+	
+	-- onDecline keyword callback function. Generally called when the player sais "no" after wanting to buy an item.
+	function TharianGemShopModule.onDecline(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) or shop_npcuid[cid] ~= getNpcCid() then
+			return false
+		end
+		shop_npcuid[cid] = 0
+	
+		local parentParameters = node:getParent():getParameters()
+		local parseInfo = {
+			[TAG_PLAYERNAME] = Player(cid):getName(),
+			[TAG_ITEMCOUNT] = shop_amount[cid],
+			[TAG_TOTALCOST] = shop_cost[cid] * shop_amount[cid],
+			[TAG_ITEMNAME] = shop_rlname[cid]
+		}
+	
+		local msg = module.npcHandler:parseMessage(module.noText, parseInfo)
+		module.npcHandler:say(msg, cid)
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+	
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function TharianGemShopModule.tradeItem(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:isFocused(cid) then
+			return false
+		end
+	
+		if not module.npcHandler:onTradeRequest(cid) then
+			return true
+		end
+	
+		local count = module:getCount(message)
+		module.amount = count
+	
+		shop_amount[cid] = module.amount
+		shop_cost[cid] = parameters.cost
+		shop_rlname[cid] = parameters.realName
+		shop_itemid[cid] = parameters.itemid
+		shop_container[cid] = parameters.container
+		shop_npcuid[cid] = getNpcCid()
+		shop_eventtype[cid] = parameters.eventType
+		shop_subtype[cid] = parameters.subType
+	
+		local parseInfo = {
+			[TAG_PLAYERNAME] = Player(cid):getName(),
+			[TAG_ITEMCOUNT] = shop_amount[cid],
+			[TAG_TOTALCOST] = shop_cost[cid] * shop_amount[cid],
+			[TAG_ITEMNAME] = shop_rlname[cid]
+		}
+	
+		if shop_eventtype[cid] == SHOPMODULE_SELL_ITEM then
+			local msg = module.npcHandler:getMessage(MESSAGE_THARIAN_SELL)
+			msg = module.npcHandler:parseMessage(msg, parseInfo)
+			module.npcHandler:say(msg, cid)
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM then
+			local msg = module.npcHandler:getMessage(MESSAGE_THARIAN_BUY)
+			msg = module.npcHandler:parseMessage(msg, parseInfo)
+			module.npcHandler:say(msg, cid)
+		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
+			local msg = module.npcHandler:getMessage(MESSAGE_THARIAN_BUY)
+			msg = module.npcHandler:parseMessage(msg, parseInfo)
+			module.npcHandler:say(msg, cid)
+		end
+		return true
+	end
+	
 
 	ShopModule = {
 		npcHandler = nil,

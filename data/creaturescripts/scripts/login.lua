@@ -30,5 +30,7 @@ function onLogin(player)
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
+	player:registerEvent("TaskSystemKill")
+	player:registerEvent("DwarfTaskKill")
 	return true
 end

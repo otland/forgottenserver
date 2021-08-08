@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Risen Champion" nameDescription="a risen champion" race="undead" experience="50" speed="170">
+	<health now="80" max="80" />
+	<look type="306" corpse="9823" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-25" />
+		<attack name="physical" interval="1000" chance="20" range="7" min="0" max="-15">
+			<attribute key="shootEffect" value="whirlwindsword" />
+		</attack>
+	</attacks>
+	<defenses armor="3" defense="3">
+	</defenses>
+	<elements>
+		<element earthPercent="-10" />
+		<element holyPercent="10" />
+		<element firePercent="80" />
+		<element energyPercent="20" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="5925" chance="10000" /><!-- bone -->
+		<item id="18419" countmax="20" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item name="hatchet" chance="4000" />
+		<item name="mace" chance="3000" />
+	</loot>
+</monster>

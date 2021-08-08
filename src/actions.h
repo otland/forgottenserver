@@ -61,30 +61,21 @@ class Action : public Event
 			checkFloor = v;
 		}
 
-		void clearItemIdRange() {
-			return ids.clear();
-		}
-		const std::vector<uint16_t>& getItemIdRange() const {
+		std::vector<uint16_t> getItemIdRange() {
 			return ids;
 		}
 		void addItemId(uint16_t id) {
 			ids.emplace_back(id);
 		}
 
-		void clearUniqueIdRange() {
-			return uids.clear();
-		}
-		const std::vector<uint16_t>& getUniqueIdRange() const {
+		std::vector<uint16_t> getUniqueIdRange() {
 			return uids;
 		}
 		void addUniqueId(uint16_t id) {
 			uids.emplace_back(id);
 		}
 
-		void clearActionIdRange() {
-			return aids.clear();
-		}
-		const std::vector<uint16_t>& getActionIdRange() const {
+		std::vector<uint16_t> getActionIdRange() {
 			return aids;
 		}
 		void addActionId(uint16_t id) {
@@ -132,6 +123,7 @@ class Actions final : public BaseEvents
 
 	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
+		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;

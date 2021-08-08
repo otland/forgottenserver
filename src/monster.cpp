@@ -1032,7 +1032,7 @@ bool Monster::pushItem(Item* item)
 	for (const auto& it : relList) {
 		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
 		Tile* tile = g_game.map.getTile(tryPos);
-		if (tile && g_game.canThrowObjectTo(centerPos, tryPos, true, true)) {
+		if (tile && g_game.canThrowObjectTo(centerPos, tryPos)) {
 			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr) == RETURNVALUE_NOERROR) {
 				return true;
 			}
@@ -1107,6 +1107,7 @@ void Monster::pushCreatures(Tile* tile)
 				}
 
 				monster->changeHealth(-monster->getHealth());
+				monster->setDropLoot(false);
 				removeCount++;
 			}
 

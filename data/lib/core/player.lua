@@ -208,6 +208,43 @@ function Player.canCarryMoney(self, amount)
 		end
 	end
 
+	-- Add tharian tokens to totalWeight and inventorySlots
+	local type_tharian = ItemType(ITEM_THARIAN_TOKEN)
+	local tharianTokens = math.floor(amount / 10000)
+	if tharianTokens > 0 then
+		amount = amount - (tharianTokens * 10000)
+		while platinumCoins > 0 do
+			local count = math.min(100, tharianTokens)
+			totalWeight = totalWeight + type_tharian:getWeight(count)
+			tharianTokens = tharianTokens - count
+			inventorySlots = inventorySlots + 1
+		end
+	end
+
+	-- Add tharian gem clusters to totalWeight and inventorySlots
+	local type_tharian_clusters = ItemType(ITEM_THARIAN_GEM_CLUSTER)
+	local tharianClusters = math.floor(amount / 100)
+	if tharianClusters > 0 then
+		amount = amount - (tharianClusters * 100)
+		while tharianClusters > 0 do
+			local count = math.min(100, tharianClusters)
+			totalWeight = totalWeight + type_tharian_clusters:getWeight(count)
+			tharianClusters = tharianClusters - count
+			inventorySlots = inventorySlots + 1
+		end
+	end
+
+	-- Add tharian gems to totalWeight and inventorySlots
+	local type_tharian_gems = ItemType(ITEM_THARIAN_GEM)
+	if amount > 0 then
+		while amount > 0 do
+			local count = math.min(100, amount)
+			totalWeight = totalWeight + type_tharian_gems:getWeight(count)
+			amount = amount - count
+			inventorySlots = inventorySlots + 1
+		end
+	end
+
 	-- If player don't have enough capacity to carry this money
 	if self:getFreeCapacity() < totalWeight then
 		return false
@@ -223,7 +260,7 @@ end
 
 function Player.withdrawMoney(self, amount)
 	local balance = self:getBankBalance()
-	if amount > balance or not self:addMoney(amount) then
+	if amount > balance or not self:addTharianGems(amount) then
 		return false
 	end
 
@@ -238,6 +275,43 @@ function Player.depositMoney(self, amount)
 
 	self:setBankBalance(self:getBankBalance() + amount)
 	return true
+end
+
+function Player.withdrawTharianGems(self, amount)
+	local tharianBalance = self:getTharianBankBalance()
+	if amount > tharianBalance or not self:addTharianGems(amount) then
+		return false
+	end
+
+	self:setTharianBankBalance(tharianBalance - amount)
+	return true
+end
+
+function Player.depositTharianGems(self, amount)
+	if not self:removeTharianGems(amount) then
+		return false
+	end
+
+	self:setTharianBankBalance(self:getTharianBankBalance() + amount)
+	return true
+end
+
+function Player.removeTotalTharianGems(self, amount)
+	local tokensCount = self:getTharianGems()
+	if amount <= tokensCount then
+		self:removeTharianGems(amount)
+		return true
+	end
+	return false
+end
+
+function Player.removeTotalKhazanGems(self, amount)
+	local tokensCount = self:getKhazanGems()
+	if amount <= tokensCount then
+		self:removeKhazanGems(amount)
+		return true
+	end
+	return false
 end
 
 function Player.removeTotalMoney(self, amount)

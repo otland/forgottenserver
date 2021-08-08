@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dwarven Mine Guard" nameDescription="a dwarven mine guard" race="blood" experience="60" speed="170">
+	<health now="55" max="55" />
+	<look type="71" corpse="6014" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-18" />
+		<attack name="physical" interval="2000" chance="10" range="5" min="0" max="-20">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+	</attacks>
+	<defenses armor="5" defense="6" />
+	<voices interval="5000" chance="10">
+		<voice sentence="We protect these mines!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="12" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item name="white mushroom" chance="30000" />
+		<item name="studded armor" chance="4000" />
+		<item name="leather legs" chance="8500" />
+		<item id="2554" chance="5000" /><!-- shovel -->
+	</loot>
+</monster>

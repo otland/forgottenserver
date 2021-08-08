@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gray Wolf" nameDescription="a gray wolf" race="blood" experience="35" speed="164">
+	<health now="25" max="25" />
+	<look type="27" corpse="5968" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="8" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-17" />
+	</attacks>
+	<defenses armor="4" defense="4" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Woof!" />
+		<voice sentence="Grrrrrrr" />
+	</voices>
+	<loot>
+		<item name="meat" countmax="2" chance="50000" />
+		<item name="wolf paw" chance="2500" />
+	</loot>
+</monster>

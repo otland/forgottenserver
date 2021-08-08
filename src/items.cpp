@@ -332,6 +332,10 @@ bool Items::loadFromOtb(const std::string& file)
 					if (!stream.read<uint16_t>(serverId)) {
 						return false;
 					}
+
+					if (serverId > 30000 && serverId < 30100) {
+						serverId -= 30000;
+					}
 					break;
 				}
 
@@ -906,6 +910,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					abilities.skills[SKILL_CLUB] = pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
+
 
 				case ITEM_PARSE_SKILLDIST: {
 					abilities.skills[SKILL_DISTANCE] = pugi::cast<int32_t>(valueAttribute.value());

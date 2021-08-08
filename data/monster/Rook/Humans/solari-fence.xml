@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Solari Fence" nameDescription="a Solari fence" race="blood" experience="50" speed="160">
+	<health now="45" max="45" />
+	<look type="150" head="96" body="39" legs="22" feet="23" addons="1" corpse="20459" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-18" />
+		<attack name="physical" interval="1000" chance="15" range="1" min="-1" max="-14">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+		<attack name="bleedcondition" interval="1000" chance="15" radius="3" min="-1" max="-20">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="10" range="1" radius="3" target="0" min="-1" max="-14">
+			<attribute key="areaEffect" value="dice" />
+		</attack>
+	</attacks>
+	<defenses armor="5" defense="4" />
+	<voices interval="5000" chance="10">
+		<voice sentence="I own these things, you can't take them away!" />
+		<voice sentence="For the Solari!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="10" chance="25000" /> <!-- Tharian Gem Fragment -->
+		<item id="26338" chance="100000" /> <!-- Sack of Stolen Grain -->
+	</loot>
+</monster>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Matezu" script="default.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="130" head="0" body="126" legs="114" feet="114" addons="3" />
+	<parameters>
+		<parameter key="tharian_gem_shop_module" value="1" />
+		<parameter key="tharian_gem_shop_sellable" value="empty potion flask,7636,5" />
+		<parameter key="tharian_gem_shop_buyable" value="minor health potion,7618,50;minor mana potion,7620,50" />
+	</parameters>
+</npc>

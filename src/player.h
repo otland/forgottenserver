@@ -38,8 +38,6 @@
 #include "mounts.h"
 #include "storeinbox.h"
 
-#include <bitset>
-
 class House;
 class NetworkMessage;
 class Weapon;
@@ -216,6 +214,14 @@ class Player final : public Creature, public Cylinder
 			bankBalance = balance;
 		}
 
+		uint64_t getTharianBankBalance() const {
+			return tharianBankBalance;
+		}
+
+		void setTharianBankBalance(uint64_t tharian_balance) {
+			tharianBankBalance = tharian_balance;
+		}
+
 		Guild* getGuild() const {
 			return guild;
 		}
@@ -316,13 +322,13 @@ class Player final : public Creature, public Cylinder
 		}
 
 		void addBlessing(uint8_t blessing) {
-			blessings.set(blessing);
+			blessings |= blessing;
 		}
 		void removeBlessing(uint8_t blessing) {
-			blessings.reset(blessing);
+			blessings &= ~blessing;
 		}
-		bool hasBlessing(uint8_t blessing) const {
-			return blessings.test(blessing);
+		bool hasBlessing(uint8_t value) const {
+			return (blessings & (static_cast<uint8_t>(1) << value)) != 0;
 		}
 
 		bool isOffline() const {
@@ -526,6 +532,9 @@ class Player final : public Creature, public Cylinder
 		}
 
 		uint64_t getMoney() const;
+		uint64_t getTharianGems() const;
+		uint64_t getKhazanGems() const;
+
 
 		//safe-trade functions
 		void setTradeState(tradestate_t state) {
@@ -580,6 +589,8 @@ class Player final : public Creature, public Cylinder
 		void openShopWindow(Npc* npc, const std::list<ShopInfo>& shop);
 		bool closeShopWindow(bool sendCloseShopWindow = true);
 		bool updateSaleShopList(const Item* item);
+		bool updateTharianGemShopList(const Item* item);
+		bool updateKhazanGemShopList(const Item* item);
 		bool hasShopItemForSale(uint32_t itemId, uint8_t subType) const;
 
 		void setChaseMode(bool mode);
@@ -1154,6 +1165,10 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
+		void addItemToAutoLoot(uint16_t itemId);
+		void removeItemFromAutoLoot(uint16_t itemId);
+		bool getItemFromAutoLoot(uint16_t itemId);
+		
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1203,6 +1218,7 @@ class Player final : public Creature, public Cylinder
 
 		std::unordered_set<uint32_t> attackedSet;
 		std::unordered_set<uint32_t> VIPList;
+		std::set<uint32_t> autoLootList;
 
 		std::map<uint8_t, OpenContainer> openContainers;
 		std::map<uint32_t, DepotLocker_ptr> depotLockerMap;
@@ -1235,6 +1251,7 @@ class Player final : public Creature, public Cylinder
 		uint64_t manaSpent = 0;
 		uint64_t lastAttack = 0;
 		uint64_t bankBalance = 0;
+		uint64_t tharianBankBalance = 0;
 		uint64_t lastQuestlogUpdate = 0;
 		int64_t lastFailedFollow = 0;
 		int64_t skullTicks = 0;
@@ -1298,7 +1315,7 @@ class Player final : public Creature, public Cylinder
 		int16_t lastDepotId = -1;
 
 		uint8_t soul = 0;
-		std::bitset<6> blessings;
+		uint8_t blessings = 0;
 		uint8_t levelPercent = 0;
 		uint8_t magLevelPercent = 0;
 

@@ -463,9 +463,18 @@ enum item_t : uint16_t {
 	ITEM_BAG = 1987,
 	ITEM_SHOPPING_BAG = 23782,
 
-	ITEM_GOLD_COIN = 2148,
-	ITEM_PLATINUM_COIN = 2152,
-	ITEM_CRYSTAL_COIN = 2160,
+	ITEM_GOLD_COIN = 25378,
+	ITEM_PLATINUM_COIN = 25376,
+	ITEM_CRYSTAL_COIN = 25377,
+
+	ITEM_THARIAN_GEM = 18419, // Value = 1
+	ITEM_THARIAN_GEM_CLUSTER = 18413, // Value = 100
+	ITEM_THARIAN_TOKEN = 18423, // Value = 10000
+
+	ITEM_KHAZAN_GEM = 18420, // Value = 1
+	ITEM_KHAZAN_GEM_CLUSTER = 18414, // Value = 100
+	ITEM_KHAZAN_TOKEN = 18422, // Value = 10000
+
 	ITEM_STORE_COIN = 24774, // in-game store currency
 
 	ITEM_DEPOT = 2594,
@@ -573,6 +582,7 @@ enum ReloadTypes_t : uint8_t  {
 static constexpr int32_t CHANNEL_GUILD = 0x00;
 static constexpr int32_t CHANNEL_PARTY = 0x01;
 static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
+
 
 //Reserved player storage key ranges;
 //[10000000 - 20000000];

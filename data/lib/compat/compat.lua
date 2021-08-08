@@ -446,7 +446,10 @@ function getPlayerSoul(cid) local p = Player(cid) return p and p:getSoul() or fa
 function getPlayerSex(cid) local p = Player(cid) return p and p:getSex() or false end
 function getPlayerStorageValue(cid, key) local p = Player(cid) return p and p:getStorageValue(key) or false end
 function getPlayerBalance(cid) local p = Player(cid) return p and p:getBankBalance() or false end
+function getPlayerTharianBalance(cid) local p = Player(cid) return p and p:getTharianBankBalance() or false end
 function getPlayerMoney(cid) local p = Player(cid) return p and p:getMoney() or false end
+function getPlayerTharianGems(cid) local p = Player(cid) return p and p:getTharianGems() or false end
+function getPlayerKhazanGems(cid) local p = Player(cid) return p and p:getKhazanGems() or false end
 function getPlayerGroupId(cid) local p = Player(cid) return p and p:getGroup():getId() or false end
 function getPlayerLookDir(cid) local p = Player(cid) return p and p:getDirection() or false end
 function getPlayerLight(cid) local p = Player(cid) return p and p:getLight() or false end
@@ -609,9 +612,15 @@ function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel)
 function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setCapacity(cap) or false end
 function doPlayerSetSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p and p:setBankBalance(balance) or false end
+function doPlayerSetTharianBalance(cid, balance) local p = Player(cid) return p and p:setTharianBankBalance(tharian_balance) or false end
 function doPlayerSetPromotionLevel(cid, level) local p = Player(cid) return p and p:setVocation(p:getVocation():getPromotion()) or false end
+function doPlayerAddTharianGems(cid, gems) local p = Player(cid) return p and p:addTharianGems(gems) or false end
+function doPlayerAddKhazanGems(cid, gems) local p = Player(cid) return p and p:addKhazanGems(gems) or false end
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p and p:addMoney(money) or false end
 function doPlayerRemoveMoney(cid, money) local p = Player(cid) return p and p:removeMoney(money) or false end
+
+function doPlayerRemoveTharianGems(cid, gems) local p = Player(cid) return p and p:removeTharianGems(gems) or false end
+function doPlayerRemoveKhazanGems(cid, gems) local p = Player(cid) return p and p:removeKhazanGems(gems) or false end
 function doPlayerTakeItem(cid, itemid, count) local p = Player(cid) return p and p:removeItem(itemid, count) or false end
 function doPlayerTransferMoneyTo(cid, target, money)
 	if not isValidMoney(money) then
@@ -668,7 +677,7 @@ function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) ret
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
 function getPlayerAccountManager() debugPrint("Deprecated function.") return true end
 function doPlayerSetExperienceRate() debugPrint("Deprecated function, use Player:onGainExperience event instead.") return true end
-function doPlayerSetSkillLevel(cid, skillId, value, ...) local p = Player(cid) return p and p:addSkill(skillId, value, ...) end
+function doPlayerSetSkillLevel(cid, skill, value, ...) local p = Player(cid) return p and p:addSkill(skillId, value, round) end
 function doPlayerSetMagicLevel(cid, value) local p = Player(cid) return p and p:addMagicLevel(value) end
 function doPlayerAddLevel(cid, amount, round) local p = Player(cid) return p and p:addLevel(amount, round) end
 function doPlayerAddExp(cid, exp, useMult, ...)
@@ -1305,7 +1314,7 @@ end
 doBroadcastMessage = broadcastMessage
 
 function Guild.addMember(self, player)
-	return player:setGuild(self)
+	return player:setGuild(guild)
 end
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
@@ -1335,7 +1344,9 @@ function doSetCreatureOutfit(cid, outfit, time)
 	end
 
 	local condition = Condition(CONDITION_OUTFIT)
-	condition:setOutfit(outfit)
+	condition:setOutfit({
+		lookTypeEx = itemType:getId()
+	})
 	condition:setTicks(time)
 	creature:addCondition(condition)
 
@@ -1490,3 +1501,10 @@ end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
 if unpack == nil then unpack = table.unpack end
+
+-- another fix for lua52 as we don't have bitwise operators
+if bit.lshift == nil then 
+	function bit.lshift(start, by) 
+		return start * 2 ^ by 
+	end 
+end

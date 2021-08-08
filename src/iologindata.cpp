@@ -211,13 +211,13 @@ bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
 bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 {
 	Database& db = Database::getInstance();
-	return loadPlayer(player, db.storeQuery(fmt::format("SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = {:d}", id)));
+	return loadPlayer(player, db.storeQuery(fmt::format("SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction`, `lend_balance`, `lend_start`, `lend_end`, `lend_rewards`, `borrow_balance`, `borrow_start`, `borrow_end`, `borrow_accrued`, `margin`, `tharian_balance` FROM `players` WHERE `id` = {:d}", id)));
 }
 
 bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
 {
 	Database& db = Database::getInstance();
-	return loadPlayer(player, db.storeQuery(fmt::format("SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = {:s}", db.escapeString(name))));
+	return loadPlayer(player, db.storeQuery(fmt::format("SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction`, `lend_balance`, `lend_start`, `lend_end`, `lend_rewards`, `borrow_balance`, `borrow_start`, `borrow_end`, `borrow_accrued`, `margin`, `tharian_balance` FROM `players` WHERE `name` = {:s}", db.escapeString(name))));
 }
 
 bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
@@ -247,6 +247,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->setGroup(group);
 
 	player->bankBalance = result->getNumber<uint64_t>("balance");
+	player->tharianBankBalance = result->getNumber<uint64_t>("tharian_balance");
 
 	player->setSex(static_cast<PlayerSex_t>(result->getNumber<uint16_t>("sex")));
 	player->level = std::max<uint32_t>(1, result->getNumber<uint32_t>("level"));
@@ -536,6 +537,21 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		} while (result->next());
 	}
 
+	//load autoloot data
+    if ((result = db.storeQuery(fmt::format("SELECT `autoloot_list` FROM `player_autoloot` WHERE `player_id` = {:d}", player->getGUID())))) {
+        unsigned long lootlistSize;
+        const char* autolootlist = result->getStream("autoloot_list", lootlistSize);
+        PropStream propStreamList;
+        propStreamList.init(autolootlist, lootlistSize);
+
+        int16_t value;
+        int16_t item = propStreamList.read<int16_t>(value);
+        while (item) {
+               player->addItemToAutoLoot(value);
+            item = propStreamList.read<int16_t>(value);
+        }
+    }
+
 	//load vip list
 	if ((result = db.storeQuery(fmt::format("SELECT `player_id` FROM `account_viplist` WHERE `account_id` = {:d}", player->getAccount())))) {
 		do {
@@ -693,6 +709,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 	query << "`lastlogout` = " << player->getLastLogout() << ',';
 	query << "`balance` = " << player->bankBalance << ',';
+	query << "`tharian_balance` = " << player->tharianBankBalance << ',';
 	query << "`offlinetraining_time` = " << player->getOfflineTrainingTime() / 1000 << ',';
 	query << "`offlinetraining_skill` = " << player->getOfflineTrainingSkill() << ',';
 	query << "`stamina` = " << player->getStaminaMinutes() << ',';
@@ -716,7 +733,7 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!player->isOffline()) {
 		query << "`onlinetime` = `onlinetime` + " << (time(nullptr) - player->lastLoginSaved) << ',';
 	}
-	query << "`blessings` = " << player->blessings.to_ulong();
+	query << "`blessings` = " << static_cast<uint32_t>(player->blessings);
 	query << " WHERE `id` = " << player->getGUID();
 
 	DBTransaction transaction;
@@ -783,6 +800,34 @@ bool IOLoginData::savePlayer(Player* player)
 		}
 	}
 
+    query.str(std::string());
+    query << "DELETE FROM `player_autoloot` WHERE `player_id` = " << player->getGUID();
+    if (!db.executeQuery(query.str())) {
+        return false;
+    }
+
+    PropWriteStream propWriteStreamAutoLoot;
+
+    for (auto i : player->autoLootList) {
+        propWriteStreamAutoLoot.write<uint16_t>(i);
+    }
+
+    size_t lootlistSize;
+    const char* autolootlist = propWriteStreamAutoLoot.getStream(lootlistSize);
+
+    query.str(std::string());
+
+    DBInsert autolootQuery("INSERT INTO `player_autoloot` (`player_id`, `autoloot_list`) VALUES ");
+
+    query << player->getGUID() << ',' << db.escapeBlob(autolootlist, lootlistSize);
+    if (!autolootQuery.addRow(query)) {
+        return false;
+    }
+
+    if (!autolootQuery.execute()) {
+        return false;
+    }
+	
 	//save inbox items
 	if (!db.executeQuery(fmt::format("DELETE FROM `player_inboxitems` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
@@ -922,6 +967,11 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 {
 	Database::getInstance().executeQuery(fmt::format("UPDATE `players` SET `balance` = `balance` + {:d} WHERE `id` = {:d}", bankBalance, guid));
+}
+
+void IOLoginData::increaseTharianBankBalance(uint32_t guid, uint64_t tharianBankBalance)
+{
+	Database::getInstance().executeQuery(fmt::format("UPDATE `players` SET `tharian_balance` = `tharian_balance` + {:d} WHERE `id` = {:d}", tharianBankBalance, guid));
 }
 
 bool IOLoginData::hasBiddedOnHouse(uint32_t guid)

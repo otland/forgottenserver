@@ -1626,6 +1626,40 @@ uint32_t Item::getWorth() const
 	}
 }
 
+uint32_t Item::getTharianGemsWorth() const
+{
+	switch (id) {
+		case ITEM_THARIAN_GEM:
+			return count;
+
+		case ITEM_THARIAN_GEM_CLUSTER:
+			return count * 100;
+
+		case ITEM_THARIAN_TOKEN:
+			return count * 10000;
+
+		default:
+			return 0;
+	}
+}
+
+uint32_t Item::getKhazanGemsWorth() const
+{
+	switch (id) {
+		case ITEM_KHAZAN_GEM:
+			return count;
+
+		case ITEM_KHAZAN_GEM_CLUSTER:
+			return count * 100;
+
+		case ITEM_KHAZAN_TOKEN:
+			return count * 10000;
+
+		default:
+			return 0;
+	}
+}
+
 LightInfo Item::getLightInfo() const
 {
 	const ItemType& it = items[id];

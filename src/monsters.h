@@ -75,11 +75,14 @@ struct spellBlock_t {
 		chance(other.chance),
 		speed(other.speed),
 		range(other.range),
+		attack(other.attack),
+		skill(other.skill),
 		minCombatValue(other.minCombatValue),
 		maxCombatValue(other.maxCombatValue),
 		combatSpell(other.combatSpell),
 		isMelee(other.isMelee) {
 		other.spell = nullptr;
+		name = other.name;
 	}
 
 	BaseSpell* spell = nullptr;
@@ -90,6 +93,9 @@ struct spellBlock_t {
 	int32_t maxCombatValue = 0;
 	bool combatSpell = false;
 	bool isMelee = false;
+	std::string name = "";
+	int32_t attack = 0;
+	int32_t skill = 0;
 };
 
 struct voiceBlock_t {

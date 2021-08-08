@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <movements>
+	<!-- Tharian -->
+
 	<!-- Decaying tiles -->
 	<movevent event="StepIn" itemid="293" script="decay.lua" />
 	<movevent event="StepIn" itemid="461" script="decay.lua" />
@@ -604,13 +606,6 @@
 		<vocation name="Elder Druid" showInDescription="0" />
 	</movevent>
 	<movevent event="DeEquip" itemid="10016" slot="head" function="onDeEquipItem" />
-	<movevent event="Equip" itemid="10570" slot="head" function="onEquipItem">
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" showInDescription="0" />
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" showInDescription="0" />
-	</movevent>
-	<movevent event="DeEquip" itemid="10570" slot="head" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="11302" slot="head" function="onEquipItem">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />

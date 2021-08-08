@@ -290,7 +290,7 @@ enum skills_t : uint8_t {
 	SKILL_AXE = 3,
 	SKILL_DISTANCE = 4,
 	SKILL_SHIELD = 5,
-	SKILL_FISHING = 6,
+	SKILL_FISHING = 6, 
 
 	SKILL_MAGLEVEL = 7,
 	SKILL_LEVEL = 8,

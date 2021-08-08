@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dwarven Doorman" nameDescription="a dwarven doorman" race="blood" experience="50" speed="170">
+	<health now="40" max="40" />
+	<look type="160" head="19" body="116" legs="114" feet="95" addons="1" corpse="6007" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-17" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Hail Durin!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="12" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item id="14344" chance="100000" /> <!-- mine gate key --> <!-- For Quest: Doorman w/ Tessa-->
+		<item name="white mushroom" chance="30000" />
+		<item name="leather legs" chance="8500" />
+	</loot>
+</monster>

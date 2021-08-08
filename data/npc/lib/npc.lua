@@ -100,13 +100,113 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	return true
 end
 
+function doPlayerSellItem(cid, itemid, count, cost)
+	local player = Player(cid)
+	if player:removeItem(itemid, count) then
+		if not player:addMoney(cost) then
+			error('Could not add tokens to ' .. player:getName() .. '(' .. cost .. 'gp)')
+		end
+		return true
+	end
+	return false
+end
+
+function doPlayerSellTharianItem(cid, itemid, count, cost)
+	local player = Player(cid)
+	if player:removeItem(itemid, count) then
+		if not player:addTharianGems(cost) then
+			error('Could not add tokens to ' .. player:getName() .. '(' .. cost .. 'gp)')
+		end
+		return true
+	end
+	return false
+end
+
+function doPlayerSellKhazanItem(cid, itemid, count, cost)
+	local player = Player(cid)
+	if player:removeItem(itemid, count) then
+		if not player:addKhazanGems(cost) then
+			error('Could not add tokens to ' .. player:getName() .. '(' .. cost .. 'gp)')
+		end
+		return true
+	end
+	return false
+end
+
+function doPlayerBuyTokenItemContainer(cid, containerid, itemid, count, cost, charges)
+	local player = Player(cid)
+	if not player:removeTotalKhazanGems(cost) or not player:removeTotalTharianGems(const) then
+		return false
+	end
+
+	for i = 1, count do
+		local container = Game.createItem(containerid, 1)
+		for x = 1, ItemType(containerid):getCapacity() do
+			container:addItem(itemid, charges)
+		end
+
+		if player:addItemEx(container, true) ~= RETURNVALUE_NOERROR then
+			return false
+		end
+	end
+	return true
+end
+
 function getCount(string)
 	local b, e = string:find("%d+")
-	local tonumber = tonumber(string:sub(b, e))
-	if tonumber > 2 ^ 32 - 1 then
-		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+	return b and e and tonumber(string:sub(b, e)) or -1
+end
+
+function Player.getTotalTharianGems(self)
+	return self:getTharianGems()
+end
+
+function Player.getTotalKhazanGems(self)
+	return self:getKhazanGems()
+end
+
+function isValidTharianGems(gems)
+	return isNumber(gems) and gems > 0
+end
+
+function getTharianGemsWeight(gems)
+	local t = gems
+	local tharianTokens = math.floor(t / 10000)
+	t = t - tharianTokens * 10000
+	local tharianClusters = math.floor(t / 100)
+	t = t - tharianClusters * 100
+	return (ItemType(ITEM_THARIAN_TOKEN):getWeight() * tharianTokens) + (ItemType(ITEM_THARIAN_GEM_CLUSTER):getWeight() * tharianClusters)  + (ItemType(ITEM_THARIAN_GEM):getWeight() * t)
+end
+
+function getTharianGemsCount(string)
+	local b, e = string:find("%d+")
+	local gems = b and e and tonumber(string:sub(b, e)) or -1
+	if isValidTharianGems(gems) then
+		return gems
 	end
-	return b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	return -1
+end
+
+function isValidKhazanGems(gems)
+	return isNumber(gems) and gems > 0
+end
+
+function getKhazanGemsWeight(gems)
+	local t = gems
+	local khazanTokens = math.floor(t / 10000)
+	t = t - khazanTokens * 10000
+	local khazanClusters = math.floor(t / 100)
+	t = t - khazanClusters * 100
+	return (ItemType(ITEM_KHAZAN_TOKEN):getWeight() * khazanTokens) + (ItemType(ITEM_KHAZAN_GEM_CLUSTER):getWeight() * khazanClusters)  + (ItemType(ITEM_KHAZAN_GEM):getWeight() * t)
+end
+
+function getKhazanGemsCount(string)
+	local b, e = string:find("%d+")
+	local gems = b and e and tonumber(string:sub(b, e)) or -1
+	if isValidKhazanGems(gems) then
+		return gems
+	end
+	return -1
 end
 
 function Player.getTotalMoney(self)
@@ -119,11 +219,7 @@ end
 
 function getMoneyCount(string)
 	local b, e = string:find("%d+")
-	local tonumber = tonumber(string:sub(b, e))
-	if tonumber > 2 ^ 32 - 1 then
-		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
-	end
-	local money = b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	local money = b and e and tonumber(string:sub(b, e)) or -1
 	if isValidMoney(money) then
 		return money
 	end

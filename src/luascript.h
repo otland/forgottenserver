@@ -486,6 +486,8 @@ class LuaScriptInterface
 
 		static int luaIsScriptsInterface(lua_State* L);
 
+		static int luaHasBitSet(lua_State* L);
+
 #ifndef LUAJIT_VERSION
 		static int luaBitNot(lua_State* L);
 		static int luaBitAnd(lua_State* L);
@@ -562,10 +564,6 @@ class LuaScriptInterface
 		static int luaGameGetClientVersion(lua_State* L);
 
 		static int luaGameReload(lua_State* L);
-
-		static int luaGameGetAccountStorageValue(lua_State* L);
-		static int luaGameSetAccountStorageValue(lua_State* L);
-		static int luaGameSaveAccountStorageValues(lua_State* L);
 
 		// Variant
 		static int luaVariantCreate(lua_State* L);
@@ -936,12 +934,23 @@ class LuaScriptInterface
 		static int luaPlayerGetBankBalance(lua_State* L);
 		static int luaPlayerSetBankBalance(lua_State* L);
 
+		static int luaPlayerGetTharianBankBalance(lua_State* L);
+		static int luaPlayerSetTharianBankBalance(lua_State* L);
+
 		static int luaPlayerGetStorageValue(lua_State* L);
 		static int luaPlayerSetStorageValue(lua_State* L);
 
 		static int luaPlayerAddItem(lua_State* L);
 		static int luaPlayerAddItemEx(lua_State* L);
 		static int luaPlayerRemoveItem(lua_State* L);
+
+		static int luaPlayerGetTharianGems(lua_State* L);
+		static int luaPlayerAddTharianGems(lua_State* L);
+		static int luaPlayerRemoveTharianGems(lua_State* L);
+
+		static int luaPlayerGetKhazanGems(lua_State* L);
+		static int luaPlayerAddKhazanGems(lua_State* L);
+		static int luaPlayerRemoveKhazanGems(lua_State* L);
 
 		static int luaPlayerGetMoney(lua_State* L);
 		static int luaPlayerAddMoney(lua_State* L);
@@ -1010,6 +1019,11 @@ class LuaScriptInterface
 		static int luaPlayerHasChaseMode(lua_State* L);
 		static int luaPlayerHasSecureMode(lua_State* L);
 		static int luaPlayerGetFightMode(lua_State* L);
+		
+		static int luaPlayerAddItemToAutoLoot(lua_State* L);
+		static int luaPlayerRemoveItemFromAutoLoot(lua_State* L);
+		static int luaPlayerGetItemFromAutoLoot(lua_State* L);
+		static int luaPlayerGetAutoLootList(lua_State* L);
 
 		static int luaPlayerGetStoreInbox(lua_State* L);
 
@@ -1219,8 +1233,6 @@ class LuaScriptInterface
 		static int luaCombatCreate(lua_State* L);
 
 		static int luaCombatSetParameter(lua_State* L);
-		static int luaCombatGetParameter(lua_State* L);
-
 		static int luaCombatSetFormula(lua_State* L);
 
 		static int luaCombatSetArea(lua_State* L);
@@ -1247,8 +1259,6 @@ class LuaScriptInterface
 		static int luaConditionSetTicks(lua_State* L);
 
 		static int luaConditionSetParameter(lua_State* L);
-		static int luaConditionGetParameter(lua_State* L);
-
 		static int luaConditionSetFormula(lua_State* L);
 		static int luaConditionSetOutfit(lua_State* L);
 

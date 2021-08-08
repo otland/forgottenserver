@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Allison" script="default.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="139" head="20" body="39" legs="45" feet="7" addons="0" />
+	<parameters>
+		<parameter key="tharian_gem_shop_module" value="1" />
+		<parameter key="tharian_gem_shop_buyable" value="torch,2050,5;rope,2120,25;shovel,2554,50;backpack,1988,20;fishing rod,2580,100" />
+	</parameters>
+</npc>

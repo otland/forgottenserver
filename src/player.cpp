@@ -19,6 +19,8 @@
 
 #include "otpch.h"
 
+#include <bitset>
+
 #include "bed.h"
 #include "chat.h"
 #include "combat.h"
@@ -116,7 +118,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 		} else if (vocation->getId() != VOCATION_NONE) {
 			s << " You are " << vocation->getVocDescription() << '.';
 		} else {
-			s << " You have no vocation.";
+			s << "";
 		}
 	} else {
 		s << name;
@@ -126,17 +128,17 @@ std::string Player::getDescription(int32_t lookDistance) const
 		s << '.';
 
 		if (sex == PLAYERSEX_FEMALE) {
-			s << " She";
+			s << "";
 		} else {
-			s << " He";
+			s << "";
 		}
 
 		if (group->access) {
-			s << " is " << group->name << '.';
+			//s << " is " << group->name << '.';
 		} else if (vocation->getId() != VOCATION_NONE) {
-			s << " is " << vocation->getVocDescription() << '.';
+			//s << " is " << vocation->getVocDescription() << '.';
 		} else {
-			s << " has no vocation.";
+			s << "";
 		}
 	}
 
@@ -171,9 +173,9 @@ std::string Player::getDescription(int32_t lookDistance) const
 	if (lookDistance == -1) {
 		s << " You are ";
 	} else if (sex == PLAYERSEX_FEMALE) {
-		s << " She is ";
+		s << "";
 	} else {
-		s << " He is ";
+		s << "";
 	}
 
 	s << guildRank->name << " of the " << guild->getName();
@@ -407,7 +409,9 @@ uint16_t Player::getClientIcons() const
 		icons |= ICON_PIGEON;
 
 		// Don't show ICON_SWORDS if player is in protection zone.
-		icons &= ~ICON_SWORDS;
+		if (hasBitSet(ICON_SWORDS, icons)) {
+			icons &= ~ICON_SWORDS;
+		}
 	}
 
 	// Game client debugs with 10 or more icons
@@ -751,7 +755,7 @@ bool Player::canWalkthroughEx(const Creature* creature) const
 void Player::onReceiveMail() const
 {
 	if (isNearDepotBox()) {
-		sendTextMessage(MESSAGE_EVENT_ADVANCE, "New mail has arrived.");
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, "You've received new mail.");
 	}
 }
 
@@ -1601,7 +1605,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 	experience += exp;
 
 	if (sendText) {
-		std::string expString = std::to_string(exp) + (exp != 1 ? " experience points." : " experience point.");
+		std::string expString = std::to_string(exp) + (exp != 1 ? " experience." : " experience.");
 
 		TextMessage message(MESSAGE_EXPERIENCE, "You gained " + expString);
 		message.position = position;
@@ -1639,8 +1643,6 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 	}
 
 	if (prevLevel != level) {
-		health = getMaxHealth();
-		mana = getMaxMana();
 
 		updateBaseSpeed();
 		setBaseSpeed(getBaseSpeed());
@@ -1687,7 +1689,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 	if (sendText) {
 		lostExp -= experience;
 
-		std::string expString = std::to_string(lostExp) + (lostExp != 1 ? " experience points." : " experience point.");
+		std::string expString = std::to_string(lostExp) + (lostExp != 1 ? " experience." : " experience.");
 
 		TextMessage message(MESSAGE_EXPERIENCE, "You lost " + expString);
 		message.position = position;
@@ -2013,15 +2015,16 @@ void Player::death(Creature* lastHitCreature)
 			}
 		}
 
-		if (blessings.test(5)) {
+		std::bitset<6> bitset(blessings);
+		if (bitset[5]) {
 			if (lastHitPlayer) {
-				blessings.reset(5);
+				bitset.reset(5);
+				blessings = bitset.to_ulong();
 			} else {
-				blessings.reset();
-				blessings.set(5);
+				blessings = 32;
 			}
 		} else {
-			blessings.reset();
+			blessings = 0;
 		}
 
 		sendStats();
@@ -2190,13 +2193,13 @@ bool Player::removeVIP(uint32_t vipGuid)
 bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status)
 {
 	if (VIPList.size() >= getMaxVIPEntries()) {
-		sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add more buddies.");
+		sendTextMessage(MESSAGE_STATUS_SMALL, "Your friends list is full.");
 		return false;
 	}
 
 	auto result = VIPList.insert(vipGuid);
 	if (!result.second) {
-		sendTextMessage(MESSAGE_STATUS_SMALL, "This player is already in your list.");
+		sendTextMessage(MESSAGE_STATUS_SMALL, "You've already added this player.");
 		return false;
 	}
 
@@ -2802,6 +2805,10 @@ void Player::removeThing(Thing* thing, uint32_t count)
 			sendInventoryItem(static_cast<slots_t>(index), nullptr);
 
 			//event methods
+			if(item->getID() == 18419) {
+				onRemoveInventoryItem(item);
+			}
+			
 			onRemoveInventoryItem(item);
 
 			item->setParent(nullptr);
@@ -2984,6 +2991,8 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 		if (shopOwner && requireListUpdate) {
 			updateSaleShopList(item);
+			updateTharianGemShopList(item);
+			updateKhazanGemShopList(item);
 		}
 	} else if (const Creature* creature = thing->getCreature()) {
 		if (creature == this) {
@@ -3061,6 +3070,8 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 		if (shopOwner && requireListUpdate) {
 			updateSaleShopList(item);
+			updateTharianGemShopList(item);
+			updateKhazanGemShopList(item);
 		}
 	}
 }
@@ -3079,6 +3090,54 @@ bool Player::updateSaleShopList(const Item* item)
 			const auto& items = container->getItemList();
 			return std::any_of(items.begin(), items.end(), [this](const Item* containerItem) {
 				return updateSaleShopList(containerItem);
+			});
+		}
+	}
+
+	if (client) {
+		client->sendSaleItemList(shopItemList);
+	}
+	return true;
+}
+
+bool Player::updateTharianGemShopList(const Item* item)
+{
+	uint16_t itemId = item->getID();
+	if (itemId != ITEM_THARIAN_GEM && itemId != ITEM_THARIAN_GEM_CLUSTER && itemId != ITEM_THARIAN_TOKEN) {
+		auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId](const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.sellPrice != 0; });
+		if (it == shopItemList.end()) {
+			const Container* container = item->getContainer();
+			if (!container) {
+				return false;
+			}
+
+			const auto& items = container->getItemList();
+			return std::any_of(items.begin(), items.end(), [this](const Item* containerItem) {
+				return updateTharianGemShopList(containerItem);
+			});
+		}
+	}
+
+	if (client) {
+		client->sendSaleItemList(shopItemList);
+	}
+	return true;
+}
+
+bool Player::updateKhazanGemShopList(const Item* item)
+{
+	uint16_t itemId = item->getID();
+	if (itemId != ITEM_KHAZAN_GEM && itemId != ITEM_KHAZAN_GEM_CLUSTER && itemId != ITEM_KHAZAN_TOKEN) {
+		auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId](const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.sellPrice != 0; });
+		if (it == shopItemList.end()) {
+			const Container* container = item->getContainer();
+			if (!container) {
+				return false;
+			}
+
+			const auto& items = container->getItemList();
+			return std::any_of(items.begin(), items.end(), [this](const Item* containerItem) {
+				return updateKhazanGemShopList(containerItem);
 			});
 		}
 	}
@@ -3322,35 +3381,35 @@ void Player::onAddCombatCondition(ConditionType_t type)
 {
 	switch (type) {
 		case CONDITION_POISON:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are poisoned.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Poisoned");
 			break;
 
 		case CONDITION_DROWN:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drowning.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Drowning");
 			break;
 
 		case CONDITION_PARALYZE:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are paralyzed.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Paralyzed");
 			break;
 
 		case CONDITION_DRUNK:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drunk.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Drunk");
 			break;
 
 		case CONDITION_CURSED:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are cursed.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Cursed");
 			break;
 
 		case CONDITION_FREEZING:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are freezing.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Freezing");
 			break;
 
 		case CONDITION_DAZZLED:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are dazzled.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Dazzled");
 			break;
 
 		case CONDITION_BLEEDING:
-			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are bleeding.");
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "Bleeding");
 			break;
 
 		default:
@@ -3864,7 +3923,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		return;
 	}
 
-	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
+	sendTextMessage(MESSAGE_EVENT_ADVANCE, "You've murdered " + attacked->getName() + " and it was not justified.");
 
 	skullTicks += g_config.getNumber(ConfigManager::FRAG_TIME);
 
@@ -3899,13 +3958,15 @@ bool Player::isPromoted() const
 
 double Player::getLostPercent() const
 {
+	int32_t blessingCount = std::bitset<5>(blessings).count();
+
 	int32_t deathLosePercent = g_config.getNumber(ConfigManager::DEATH_LOSE_PERCENT);
 	if (deathLosePercent != -1) {
 		if (isPromoted()) {
 			deathLosePercent -= 3;
 		}
 
-		deathLosePercent -= blessings.count();
+		deathLosePercent -= blessingCount;
 		return std::max<int32_t>(0, deathLosePercent) / 100.;
 	}
 
@@ -3921,7 +3982,7 @@ double Player::getLostPercent() const
 	if (isPromoted()) {
 		percentReduction += 30;
 	}
-	percentReduction += blessings.count() * 8;
+	percentReduction += blessingCount * 8;
 	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 
@@ -4476,6 +4537,74 @@ void Player::sendClosePrivate(uint16_t channelId)
 	}
 }
 
+uint64_t Player::getTharianGems() const
+{
+	std::vector<const Container*> containers;
+	uint64_t tokenCount = 0;
+
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+		Item* item = inventory[i];
+		if (!item) {
+			continue;
+		}
+
+		const Container* container = item->getContainer();
+		if (container) {
+			containers.push_back(container);
+		} else {
+			tokenCount += item->getTharianGemsWorth();
+		}
+	}
+
+	size_t i = 0;
+	while (i < containers.size()) {
+		const Container* container = containers[i++];
+		for (const Item* item : container->getItemList()) {
+			const Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				containers.push_back(tmpContainer);
+			} else {
+				tokenCount += item->getTharianGemsWorth();
+			}
+		}
+	}
+	return tokenCount;
+}
+
+uint64_t Player::getKhazanGems() const
+{
+	std::vector<const Container*> containers;
+	uint64_t tokenCount = 0;
+
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+		Item* item = inventory[i];
+		if (!item) {
+			continue;
+		}
+
+		const Container* container = item->getContainer();
+		if (container) {
+			containers.push_back(container);
+		} else {
+			tokenCount += item->getKhazanGemsWorth();
+		}
+	}
+
+	size_t i = 0;
+	while (i < containers.size()) {
+		const Container* container = containers[i++];
+		for (const Item* item : container->getItemList()) {
+			const Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				containers.push_back(tmpContainer);
+			} else {
+				tokenCount += item->getKhazanGemsWorth();
+			}
+		}
+	}
+	return tokenCount;
+}
+
 uint64_t Player::getMoney() const
 {
 	std::vector<const Container*> containers;
@@ -4572,4 +4701,19 @@ void Player::setGuild(Guild* guild)
 	if (oldGuild) {
 		oldGuild->removeMember(this);
 	}
+}
+
+void Player::addItemToAutoLoot(uint16_t itemId)
+{
+    autoLootList.insert(itemId);
+}
+
+void Player::removeItemFromAutoLoot(uint16_t itemId)
+{
+    autoLootList.erase(itemId);
+}
+
+bool Player::getItemFromAutoLoot(const uint16_t itemId)
+{
+    return autoLootList.find(itemId) != autoLootList.end();
 }

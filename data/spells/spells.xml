@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spells>
+	<!-- Healing Spells -->
+	<instant group="healing" spellid="1" name="Lesser Heal" words="sana min" level="1" mana="10" aggressive="0" selftarget="1" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/lesser_heal.lua">
+		<vocation name="None" />
+	</instant>
 	<!-- Attack Spells -->
 	<instant group="attack" spellid="62" name="Annihilation" words="exori gran ico" level="110" mana="300" premium="1" range="1" needtarget="1" needweapon="1" cooldown="30000" groupcooldown="4000" needlearn="0" script="attack/annihilation.lua">
 		<vocation name="Knight" />

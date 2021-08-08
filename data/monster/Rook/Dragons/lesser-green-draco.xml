@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lesser Green Draco" nameDescription="a lesser green draco" race="blood" experience="70" speed="160">
+	<health now="100" max="100" />
+	<look type="34" corpse="5973" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="10" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-20" />
+		<attack name="fire" interval="1000" chance="15" range="7" radius="4" target="1" min="-1" max="-15">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="1000" chance="10" length="8" spread="3" min="-1" max="-15">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="3" defense="3">
+		<defense name="healing" interval="1000" chance="15" min="5" max="25">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="GROOAAARRR" yell="1" />
+		<voice sentence="FCHHHHH" yell="1" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="25" chance="25000" /><!-- Tharian Gem Fragment -->	
+	</loot>
+</monster>

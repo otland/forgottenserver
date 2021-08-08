@@ -118,6 +118,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		isScripted = true;
 	} else if ((attr = node.attribute("name"))) {
 		name = attr.as_string();
+		sb.name = name;
 		isScripted = false;
 	} else {
 		return false;
@@ -232,6 +233,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			if ((attackAttribute = node.attribute("attack")) && (skillAttribute = node.attribute("skill"))) {
 				sb.minCombatValue = 0;
 				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(pugi::cast<int32_t>(skillAttribute.value()), pugi::cast<int32_t>(attackAttribute.value()));
+				sb.skill = pugi::cast<int32_t>(skillAttribute.value());
+				sb.attack = pugi::cast<int32_t>(attackAttribute.value());
 			}
 
 			ConditionType_t conditionType = CONDITION_NONE;

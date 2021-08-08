@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Risen Necromancer" nameDescription="a risen necromancer" race="undead" experience="40" speed="160">
+	<health now="70" max="70" />
+	<look type="300" corpse="5972" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-12" />
+		<attack name="death" interval="1000" chance="10" range="7" target="1" min="0" max="-13">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="10" length="7" spread="0" min="0" max="-13">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="1000" chance="10" radius="4" target="0" min="0" max="-13">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="1000" chance="10" length="7" spread="3" min="0" max="-13">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="4" defense="4">
+		<defense name="healing" interval="1000" chance="10" min="10" max="20">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-10" />
+		<element earthPercent="20" />
+		<element icePercent="10" />
+		<element holyPercent="-20" />
+		<element deathPercent="60" />
+		<element firePercent="-20" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Risen" interval="1000" chance="50" />
+	</summons>
+	<loot>
+		<item id="5925" chance="7500" /><!-- bone -->
+		<item id="18419" countmax="20" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item name="hatchet" chance="3500" />
+		<item name="mace" chance="2500" />
+	</loot>
+</monster>

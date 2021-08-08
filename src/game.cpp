@@ -127,7 +127,6 @@ void Game::setGameState(GameState_t newState)
 
 			loadMotdNum();
 			loadPlayersRecord();
-			loadAccountStorageValues();
 
 			g_globalEvents->startup();
 			break;
@@ -183,10 +182,6 @@ void Game::saveGameState()
 	}
 
 	std::cout << "Saving server..." << std::endl;
-
-	if (!saveAccountStorageValues()) {
-		std::cout << "[Error - Game::saveGameState] Failed to save account-level storage values." << std::endl;
-	}
 
 	for (const auto& it : players) {
 		it.second->loginPosition = it.second->getPosition();
@@ -1043,19 +1038,14 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 		}
 	}
 
-	if (!item->isPickupable() && playerPos.z != mapToPos.z) {
+	if ((Position::getDistanceX(playerPos, mapToPos) > item->getThrowRange()) ||
+	        (Position::getDistanceY(playerPos, mapToPos) > item->getThrowRange()) ||
+	        (Position::getDistanceZ(mapFromPos, mapToPos) * 4 > item->getThrowRange())) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
 	}
 
-	int32_t throwRange = item->getThrowRange();
-	if ((Position::getDistanceX(playerPos, mapToPos) > throwRange) ||
-	        (Position::getDistanceY(playerPos, mapToPos) > throwRange)) {
-		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
-		return;
-	}
-
-	if (!canThrowObjectTo(mapFromPos, mapToPos, true, false, throwRange, throwRange)) {
+	if (!canThrowObjectTo(mapFromPos, mapToPos)) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
 		return;
 	}
@@ -1553,6 +1543,247 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	}
 	return true;
 }
+bool Game::removeTharianGems(Cylinder* cylinder, uint64_t gems, uint32_t flags /*= 0*/)
+{
+	if (cylinder == nullptr) {
+		return false;
+	}
+
+	if (gems == 0) {
+		return true;
+	}	
+	std::vector<Container*> containers;
+
+	std::multimap<uint32_t, Item*> gemMap;
+	uint64_t gemCount = 0;
+
+	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
+		Thing* thing = cylinder->getThing(i);
+		if (!thing) {
+			continue;
+		}
+
+		Item* item = thing->getItem();
+		if (!item) {
+			continue;
+		}
+
+		Container* container = item->getContainer();
+		if (container) {
+			containers.push_back(container);
+		} else {
+			const uint32_t worth = item->getTharianGemsWorth();
+			if (worth != 0) {
+				gemCount += worth;
+				gemMap.emplace(worth, item);
+			}
+		}
+	}
+
+	size_t i = 0;
+	while (i < containers.size()) {
+		Container* container = containers[i++];
+		for (Item* item : container->getItemList()) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				containers.push_back(tmpContainer);
+			} else {
+				const uint32_t worth = item->getTharianGemsWorth();
+				if (worth != 0) {
+					gemCount += worth;
+					gemMap.emplace(worth, item);
+				}
+			}
+		}
+	}
+
+	if (gemCount < gems) {
+		return false;
+	}
+
+	for (const auto& gemEntry : gemMap) {
+		Item* item = gemEntry.second;
+		if (gemEntry.first < gems) {
+			internalRemoveItem(item);
+			gems -= gemEntry.first;
+		} else if (gemEntry.first > gems) {
+			const uint32_t worth = gemEntry.first / item->getItemCount();
+			const uint32_t removeCount = std::ceil(gems / static_cast<double>(worth));
+
+			addTharianGems(cylinder, (worth * removeCount) - gems, flags);
+			internalRemoveItem(item, removeCount);
+			break;
+		} else {
+			internalRemoveItem(item);
+			break;
+		}
+	}
+	return true;
+}
+
+void Game::addTharianGems(Cylinder *cylinder, uint64_t gems, uint32_t flags /*= 0*/)
+{
+	if (gems == 0) {
+		return;
+	}
+
+	uint32_t tharianTokens = gems / 10000;
+	gems -= tharianTokens * 10000;
+	while (tharianTokens > 0) {
+		const uint16_t count = std::min<uint32_t>(100, tharianTokens);
+
+		Item* remaindItem = Item::CreateItem(ITEM_THARIAN_TOKEN, count);
+
+		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
+
+		tharianTokens -= count;
+	}
+
+	uint16_t tharianClusters = gems / 100;
+	if (tharianClusters != 0) {
+		Item* remaindItem = Item::CreateItem(ITEM_THARIAN_GEM_CLUSTER, tharianClusters);
+
+		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
+
+		gems -= tharianClusters * 100;
+	}
+
+	if (gems != 0) {
+		Item* remaindItem = Item::CreateItem(ITEM_THARIAN_GEM, gems);
+
+		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
+	}
+}
+
+bool Game::removeKhazanGems(Cylinder* cylinder, uint64_t gems, uint32_t flags /*= 0*/)
+{
+	if (cylinder == nullptr) {
+		return false;
+	}
+
+	if (gems == 0) {
+		return true;
+	}	
+	std::vector<Container*> containers;
+
+	std::multimap<uint32_t, Item*> gemMap;
+	uint64_t gemCount = 0;
+
+	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
+		Thing* thing = cylinder->getThing(i);
+		if (!thing) {
+			continue;
+		}
+
+		Item* item = thing->getItem();
+		if (!item) {
+			continue;
+		}
+
+		Container* container = item->getContainer();
+		if (container) {
+			containers.push_back(container);
+		} else {
+			const uint32_t worth = item->getKhazanGemsWorth();
+			if (worth != 0) {
+				gemCount += worth;
+				gemMap.emplace(worth, item);
+			}
+		}
+	}
+
+	size_t i = 0;
+	while (i < containers.size()) {
+		Container* container = containers[i++];
+		for (Item* item : container->getItemList()) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				containers.push_back(tmpContainer);
+			} else {
+				const uint32_t worth = item->getKhazanGemsWorth();
+				if (worth != 0) {
+					gemCount += worth;
+					gemMap.emplace(worth, item);
+				}
+			}
+		}
+	}
+
+	if (gemCount < gems) {
+		return false;
+	}
+
+	for (const auto& gemEntry : gemMap) {
+		Item* item = gemEntry.second;
+		if (gemEntry.first < gems) {
+			internalRemoveItem(item);
+			gems -= gemEntry.first;
+		} else if (gemEntry.first > gems) {
+			const uint32_t worth = gemEntry.first / item->getItemCount();
+			const uint32_t removeCount = std::ceil(gems / static_cast<double>(worth));
+
+			addKhazanGems(cylinder, (worth * removeCount) - gems, flags);
+			internalRemoveItem(item, removeCount);
+			break;
+		} else {
+			internalRemoveItem(item);
+			break;
+		}
+	}
+	return true;
+}
+
+void Game::addKhazanGems(Cylinder *cylinder, uint64_t gems, uint32_t flags /*= 0*/)
+{
+	if (gems == 0) {
+		return;
+	}
+
+	uint32_t khazanTokens = gems / 10000;
+	gems -= khazanTokens * 10000;
+	while (khazanTokens > 0) {
+		const uint16_t count = std::min<uint32_t>(100, khazanTokens);
+
+		Item* remaindItem = Item::CreateItem(ITEM_KHAZAN_TOKEN, count);
+
+		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
+
+		khazanTokens -= count;
+	}
+
+	uint16_t khazanClusters = gems / 100;
+	if (khazanClusters != 0) {
+		Item* remaindItem = Item::CreateItem(ITEM_KHAZAN_GEM_CLUSTER, khazanClusters);
+
+		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
+
+		gems -= khazanClusters * 100;
+	}
+
+	if (gems != 0) {
+		Item* remaindItem = Item::CreateItem(ITEM_KHAZAN_GEM, gems);
+
+		ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+		if (ret != RETURNVALUE_NOERROR) {
+			internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
+		}
+	}
+}
 
 void Game::addMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*/)
 {
@@ -1982,12 +2213,12 @@ void Game::playerOpenPrivateChannel(uint32_t playerId, std::string& receiver)
 	}
 
 	if (!IOLoginData::formatPlayerName(receiver)) {
-		player->sendCancelMessage("A player with this name does not exist.");
+		player->sendCancelMessage("That player does not exist.");
 		return;
 	}
 
 	if (player->getName() == receiver) {
-		player->sendCancelMessage("You cannot set up a private message channel with yourself.");
+		player->sendCancelMessage("You can't private message yourself.");
 		return;
 	}
 
@@ -2598,17 +2829,17 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	Player* tradePartner = getPlayerByID(tradePlayerId);
 	if (!tradePartner || tradePartner == player) {
-		player->sendCancelMessage("Select a player to trade with.");
+		player->sendTextMessage(MESSAGE_INFO_DESCR, "Not possible.");
 		return;
 	}
 
 	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
-		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
+		player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} tells you to move closer.", tradePartner->getName()));
 		return;
 	}
 
-	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition(), true, true)) {
-		player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
+	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition())) {
+		player->sendCancelMessage(RETURNVALUE_CREATUREISNOTREACHABLE);
 		return;
 	}
 
@@ -2661,18 +2892,18 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		for (const auto& it : tradeItems) {
 			Item* item = it.first;
 			if (tradeItem == item) {
-				player->sendCancelMessage("This item is already being traded.");
+				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
 				return;
 			}
 
 			if (tradeItemContainer->isHoldingItem(item)) {
-				player->sendCancelMessage("This item is already being traded.");
+				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
 				return;
 			}
 
 			Container* container = item->getContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
-				player->sendCancelMessage("This item is already being traded.");
+				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
 				return;
 			}
 		}
@@ -2680,13 +2911,13 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		for (const auto& it : tradeItems) {
 			Item* item = it.first;
 			if (tradeItem == item) {
-				player->sendCancelMessage("This item is already being traded.");
+				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
 				return;
 			}
 
 			Container* container = item->getContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
-				player->sendCancelMessage("This item is already being traded.");
+				player->sendTextMessage(MESSAGE_INFO_DESCR, "This item is already being traded.");
 				return;
 			}
 		}
@@ -2694,7 +2925,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	Container* tradeContainer = tradeItem->getContainer();
 	if (tradeContainer && tradeContainer->getItemHoldingCount() + 1 > 100) {
-		player->sendCancelMessage("You can only trade up to 100 objects at once.");
+		player->sendTextMessage(MESSAGE_INFO_DESCR, "You can not trade more than 100 items.");
 		return;
 	}
 
@@ -2752,21 +2983,19 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		return;
 	}
 
+	if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition())) {
+		player->sendCancelMessage(RETURNVALUE_CREATUREISNOTREACHABLE);
+		return;
+	}
+
 	player->setTradeState(TRADE_ACCEPT);
 
 	if (tradePartner->getTradeState() == TRADE_ACCEPT) {
-		if (!canThrowObjectTo(tradePartner->getPosition(), player->getPosition(), true, true)) {
-			internalCloseTrade(player, false);
-			player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
-			tradePartner->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
-			return;
-		}
-
 		Item* playerTradeItem = player->tradeItem;
 		Item* partnerTradeItem = tradePartner->tradeItem;
 
 		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
-			internalCloseTrade(player, false);
+			internalCloseTrade(player);
 			return;
 		}
 
@@ -2925,7 +3154,7 @@ void Game::playerCloseTrade(uint32_t playerId)
 	internalCloseTrade(player);
 }
 
-void Game::internalCloseTrade(Player* player, bool sendCancel/* = true*/)
+void Game::internalCloseTrade(Player* player)
 {
 	Player* tradePartner = player->tradePartner;
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) || player->getTradeState() == TRADE_TRANSFER) {
@@ -2946,9 +3175,7 @@ void Game::internalCloseTrade(Player* player, bool sendCancel/* = true*/)
 	player->setTradeState(TRADE_NONE);
 	player->tradePartner = nullptr;
 
-	if (sendCancel) {
-		player->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
-	}
+	player->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
 	player->sendTradeClose();
 
 	if (tradePartner) {
@@ -2966,9 +3193,7 @@ void Game::internalCloseTrade(Player* player, bool sendCancel/* = true*/)
 		tradePartner->setTradeState(TRADE_NONE);
 		tradePartner->tradePartner = nullptr;
 
-		if (sendCancel) {
-			tradePartner->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
-		}
+		tradePartner->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
 		tradePartner->sendTradeClose();
 	}
 }
@@ -3242,7 +3467,7 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 		bool specialVip;
 		std::string formattedName = name;
 		if (!IOLoginData::getGuidByNameEx(guid, specialVip, formattedName)) {
-			player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name does not exist.");
+			player->sendTextMessage(MESSAGE_STATUS_SMALL, "That player does not exist.");
 			return;
 		}
 
@@ -3583,15 +3808,15 @@ void Game::playerSpeakToNpc(Player* player, const std::string& text)
 }
 
 //--
-bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
+bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
                             int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	return map.canThrowObjectTo(fromPos, toPos, checkLineOfSight, sameFloor, rangex, rangey);
+	return map.canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
 }
 
-bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
+bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
 {
-	return map.isSightClear(fromPos, toPos, sameFloor);
+	return map.isSightClear(fromPos, toPos, floorCheck);
 }
 
 bool Game::internalCreatureTurn(Creature* creature, Direction dir)
@@ -4422,73 +4647,6 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
 	}
 }
 
-void Game::setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value)
-{
-	if (value == -1) {
-		accountStorageMap[accountId].erase(key);
-		return;
-	}
-
-	accountStorageMap[accountId][key] = value;
-}
-
-int32_t Game::getAccountStorageValue(const uint32_t accountId, const uint32_t key) const
-{
-	const auto& accountMapIt = accountStorageMap.find(accountId);
-	if (accountMapIt != accountStorageMap.end()) {
-		const auto& storageMapIt = accountMapIt->second.find(key);
-		if (storageMapIt != accountMapIt->second.end()) {
-			return storageMapIt->second;
-		}
-	}
-	return -1;
-}
-
-void Game::loadAccountStorageValues()
-{
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result;
-	if ((result = db.storeQuery("SELECT `account_id`, `key`, `value` FROM `account_storage`"))) {
-		do {
-			g_game.setAccountStorageValue(result->getNumber<uint32_t>("account_id"), result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"));
-		} while (result->next());
-	}
-}
-
-bool Game::saveAccountStorageValues() const
-{
-	DBTransaction transaction;
-	Database& db = Database::getInstance();
-
-	if (!transaction.begin()) {
-		return false;
-	}
-
-	if (!db.executeQuery("DELETE FROM `account_storage`")) {
-		return false;
-	}
-
-	for (const auto& accountIt : g_game.accountStorageMap) {
-		if (accountIt.second.empty()) {
-			continue;
-		}
-
-		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
-		for (const auto& storageIt : accountIt.second) {
-			if (!accountStorageQuery.addRow(fmt::format("{:d}, {:d}, {:d}", accountIt.first, storageIt.first, storageIt.second))) {
-				return false;
-			}
-		}
-
-		if (!accountStorageQuery.execute()) {
-			return false;
-		}
-	}
-
-	return transaction.commit();
-}
-
 void Game::startDecay(Item* item)
 {
 	if (!item || !item->canDecay()) {
@@ -4933,7 +5091,7 @@ void Game::playerEnableSharedPartyExperience(uint32_t playerId, bool sharedExpAc
 void Game::sendGuildMotd(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);
-	if (!player) {
+	if (!player) { 
 		return;
 	}
 

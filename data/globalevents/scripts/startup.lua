@@ -25,6 +25,7 @@ function onStartup()
 			if house then
 				local highestBidder = result.getNumber(resultId, "highest_bidder")
 				local balance = result.getNumber(resultId, "balance")
+				local tharian_balance = result.getNumber(resultId, "tharian_balance")
 				local lastBid = result.getNumber(resultId, "last_bid")
 				if balance >= lastBid then
 					db.query("UPDATE `players` SET `balance` = " .. (balance - lastBid) .. " WHERE `id` = " .. highestBidder)

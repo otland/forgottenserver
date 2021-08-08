@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Sewer Rat" nameDescription="a sewer rat" race="blood" experience="10" speed="134">
+	<health now="20" max="20" />
+	<look type="21" corpse="5964" />
+	<targetchange interval="4000" chance="10" />
+	<flags> 
+		<flag summonable="0" /> 
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="5" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-7" />
+	</attacks>
+	<defenses armor="3" defense="3" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Meep!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="4" chance="25000" /> <!-- Tharian Gem Fragment -->
+		<item id="2696" chance="40000" /> <!-- Cheese -->
+		<item id="10585" chance="10000" /> <!-- Rat Tail -->
+	</loot>
+</monster>

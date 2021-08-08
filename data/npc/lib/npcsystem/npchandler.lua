@@ -33,6 +33,23 @@ if NpcHandler == nil then
 	MESSAGE_ALREADYFOCUSED = 21 -- When the player already has the focus of this npc.
 	MESSAGE_WALKAWAY_MALE = 22 -- When a male player walks out of the talkRadius of the npc.
 	MESSAGE_WALKAWAY_FEMALE = 23 -- When a female player walks out of the talkRadius of the npc.
+	MESSAGE_MISSING_THARIAN = 24 -- When the player does not have enough tokens.
+	MESSAGE_NEED_THARIAN = 25 -- Same as above, used for shop window.
+	MESSAGE_THARIAN_BUY = 26 -- When the npc asks the player if he wants to buy something.
+	MESSAGE_THARIAN_ONBUY = 27 -- When the player successfully buys something via talk.
+	MESSAGE_THARIAN_BOUGHT = 28 -- When the player bought something through the shop window.
+	MESSAGE_THARIAN_SELL = 29 -- When the npc asks the player if he wants to sell something.
+	MESSAGE_THARIAN_ONSELL = 30 -- When the player successfully sells something via talk.
+	MESSAGE_THARIAN_SOLD = 31 -- When the player sold something through the shop window.
+	MESSAGE_MISSING_KHAZAN = 32 -- When the player does not have enough tokens.
+	MESSAGE_NEED_KHAZAN = 33 -- Same as above, used for shop window.
+	MESSAGE_KHAZAN_BUY = 34 -- When the npc asks the player if he wants to buy something.
+	MESSAGE_KHAZAN_ONBUY = 35 -- When the player successfully buys something via talk.
+	MESSAGE_KHAZAN_BOUGHT = 36 -- When the player bought something through the shop window.
+	MESSAGE_KHAZAN_SELL = 37 -- When the npc asks the player if he wants to sell something.
+	MESSAGE_KHAZAN_ONSELL = 38 -- When the player successfully sells something via talk.
+	MESSAGE_KHAZAN_SOLD = 39 -- When the player sold something through the shop window.
+	
 
 	-- Constant indexes for callback functions. These are also used for module callback ids.
 	CALLBACK_CREATURE_APPEAR = 1
@@ -78,12 +95,12 @@ if NpcHandler == nil then
 			-- These are the default replies of all npcs. They can/should be changed individually for each npc.
 			[MESSAGE_GREET] = "Greetings, |PLAYERNAME|.",
 			[MESSAGE_FAREWELL] = "Good bye, |PLAYERNAME|.",
-			[MESSAGE_BUY] = "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
+			[MESSAGE_BUY] = "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| exchange tokens?",
 			[MESSAGE_ONBUY] = "Here you are.",
 			[MESSAGE_BOUGHT] = "Bought |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
-			[MESSAGE_SELL] = "Do you want to sell |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
-			[MESSAGE_ONSELL] = "Here you are, |TOTALCOST| gold.",
-			[MESSAGE_SOLD] = "Sold |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
+			[MESSAGE_SELL] = "Do you want to sell |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| exchange tokens?",
+			[MESSAGE_ONSELL] = "Here you are, |TOTALCOST| exchange tokens.",
+			[MESSAGE_SOLD] = "Sold |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| exchange tokens.",
 			[MESSAGE_MISSINGMONEY] = "You don't have enough money.",
 			[MESSAGE_NEEDMONEY] = "You don't have enough money.",
 			[MESSAGE_MISSINGITEM] = "You don't have so many.",
@@ -98,7 +115,23 @@ if NpcHandler == nil then
 			[MESSAGE_ONCLOSESHOP] = "Thank you, come back whenever you're in need of something else.",
 			[MESSAGE_ALREADYFOCUSED] = "|PLAYERNAME|, I am already talking to you.",
 			[MESSAGE_WALKAWAY_MALE] = "Good bye.",
-			[MESSAGE_WALKAWAY_FEMALE] = "Good bye."
+			[MESSAGE_WALKAWAY_FEMALE] = "Good bye.",
+			[MESSAGE_MISSING_THARIAN] = "You don't have enough Tharian gems.",
+			[MESSAGE_NEED_THARIAN] = "You don't have enough Tharian gems.",
+			[MESSAGE_THARIAN_BUY] = "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| Tharian gems?",
+			[MESSAGE_THARIAN_ONBUY] = "Your |ITEMNAME| is on the counter for you.",
+			[MESSAGE_THARIAN_BOUGHT] = "Bought |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| Tharian gems.",
+			[MESSAGE_THARIAN_SELL] = "Do you want to sell |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| Tharian gems?",
+			[MESSAGE_THARIAN_ONSELL] = "Here you are, |TOTALCOST| Tharian gems for |ITEMCOUNT| |ITEMNAME|.",
+			[MESSAGE_THARIAN_SOLD] = "Sold |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| Tharian gems.",
+			[MESSAGE_MISSING_KHAZAN] = "You don't have enough Khazan gems.",
+			[MESSAGE_NEED_KHAZAN] = "You don't have enough Khazan gems.",
+			[MESSAGE_KHAZAN_BUY] = "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| Khazan gems?",
+			[MESSAGE_KHAZAN_ONBUY] = "Your |ITEMNAME| is on the counter for you.",
+			[MESSAGE_KHAZAN_BOUGHT] = "Bought |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| Khazan gems.",
+			[MESSAGE_KHAZAN_SELL] = "Do you want to sell |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| Khazan gems?",
+			[MESSAGE_KHAZAN_ONSELL] = "Here you are, |TOTALCOST| Khazan gems for |ITEMCOUNT| |ITEMNAME|.",
+			[MESSAGE_KHAZAN_SOLD] = "Sold |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| Khazan gems.",
 		}
 	}
 
@@ -493,7 +526,7 @@ if NpcHandler == nil then
 						selfSay(talkDelay.message, cid, talkDelay.publicize and true or false)
 						self.talkDelay[cid] = nil
 					end
-				end
+				end 
 			end
 
 			if self:processModuleCallback(CALLBACK_ONTHINK) then
@@ -564,13 +597,13 @@ if NpcHandler == nil then
 
 	-- Returns true if cid is within the talkRadius of this npc.
 	function NpcHandler:isInRange(cid)
-		local distance = Player(cid) and getDistanceTo(cid) or -1
-		if distance == -1 then
-			return false
-		end
+        local distance = getDistanceBetween(getCreaturePosition(getNpcCid()), getCreaturePosition(cid))
+        if(distance == -1) then
+            return false
+        end
 
-		return distance <= self.talkRadius
-	end
+        return (distance <= self.talkRadius)
+    end
 
 	-- Resets the npc into its initial state (in regard of the keywordhandler).
 	--	All modules are also receiving a reset call through their callbackOnModuleReset function.

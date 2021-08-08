@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Starving Troll" nameDescription="a starving troll" race="blood" experience="40" speed="150">
+	<health now="30" max="30" />
+	<look type="15" corpse="5960" />
+	<targetchange interval="4000" chance="0" />
+	<flags> 
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-13" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<loot>
+		<item id="18419" countmax="8" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item name="studded club" chance="5000" />
+		<item name="hand axe" chance="4000" />
+		<item name="meat" chance="10000" />
+		<item name="bunch of troll hair" chance="2500" />
+	</loot>
+</monster>

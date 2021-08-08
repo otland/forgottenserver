@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Red Draco Whelp" nameDescription="a red draco whelp" race="blood" experience="45" speed="150">
+	<health now="60" max="60" />
+	<look type="272" corpse="7622" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-15" />
+		<attack name="fire" interval="1000" chance="10" length="5" spread="2" min="-1" max="-10">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="1000" chance="15" range="7" radius="4" target="1" min="-1" max="-10">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="2" defense="2">
+		<defense name="healing" interval="1000" chance="10" min="5" max="15">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="Fchu?" />
+		<voice sentence="Rooawwrr" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="13" chance="25000" /><!-- Tharian Gem Fragment -->	
+	</loot>
+</monster>

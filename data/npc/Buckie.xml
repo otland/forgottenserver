@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Buckie" script="default.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="129" head="116" body="114" legs="106" feet="114" addons="0" />
+	<parameters>
+		<parameter key="tharian_gem_shop_module" value="1" />
+		<parameter key="tharian_gem_shop_sellable" value="rat tail,10585,2;wolf paw,5897,5;witch broom,10569,100;bunch of troll hair,10606,10;bone,5925,15;bug antenna,15479,5;snake fang,10560,5;spider fangs,8859,10;" />
+	</parameters>
+</npc>

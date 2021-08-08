@@ -12,7 +12,16 @@ ec.onDropLoot = function(self, corpse)
 		for i = 1, #monsterLoot do
 			local item = corpse:createLootItem(monsterLoot[i])
 			if not item then
-				print('[Warning] DropLoot:', 'Could not add loot item to corpse.')
+				local playerLootedGems = Container.getGems()
+				local playerBal = player:getTharianBankBalance()
+				local playerNewBal = playerBal + playerLootedGems
+				if playerLootedGems >= 1 then
+					player:setTharianBankBalance(playerNewBal)
+					local msg = ("Gems from %s:  %s gems"):format(mType:getNameDescription(), playerLootedGems)
+					print(playerBal)
+					sendChannelMessage(CHANNEL_LOOT, TALKTYPE_CHANNEL_Y, msg)
+					Container.resetGems()
+				end
 			end
 		end
 
@@ -21,8 +30,10 @@ ec.onDropLoot = function(self, corpse)
 			local party = player:getParty()
 			if party then
 				party:broadcastPartyLoot(text)
+				sendChannelMessage(CHANNEL_LOOT, TALKTYPE_CHANNEL_Y, text)
 			else
 				player:sendTextMessage(MESSAGE_LOOT, text)
+				sendChannelMessage(CHANNEL_LOOT, TALKTYPE_CHANNEL_Y, text)
 			end
 		end
 	else
@@ -30,8 +41,10 @@ ec.onDropLoot = function(self, corpse)
 		local party = player:getParty()
 		if party then
 			party:broadcastPartyLoot(text)
+			sendChannelMessage(CHANNEL_LOOT, TALKTYPE_CHANNEL_Y, text)
 		else
 			player:sendTextMessage(MESSAGE_LOOT, text)
+			sendChannelMessage(CHANNEL_LOOT, TALKTYPE_CHANNEL_Y, text)
 		end
 	end
 end

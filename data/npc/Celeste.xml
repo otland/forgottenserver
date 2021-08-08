@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Celeste" script="Rook/taskman.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="140" head="77" body="122" legs="43" feet="23" addons="1" addons="0" />
+	<parameters>
+		<parameter key="message_greet" value="Tasks, |PLAYERNAME|?" />
+	</parameters>
+</npc>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Lawrence" script="default.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="128" head="114" body="114" legs="124" feet="132" addons="3" />
+	<parameters>
+		<parameter key="tharian_gem_shop_module" value="1" />
+		<parameter key="tharian_gem_shop_buyable" value="meat,2666,5;ham,2671,10;cheese,2696,2;red apple,2674,2" />
+	</parameters>
+</npc>

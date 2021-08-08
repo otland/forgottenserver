@@ -8,4 +8,6 @@
 	<event type="death" name="PlayerDeath" script="playerdeath.lua" />
 	<event type="death" name="DropLoot" script="droploot.lua" />
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua" />
+	<event type="kill" name="TaskSystemKill" script="rook/TaskSystem.lua" />
+	<event type="kill" name="DwarfTaskKill" script="rook/DwarfTask.lua" />
 </creaturescripts>

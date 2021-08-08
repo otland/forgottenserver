@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Risen Knight" nameDescription="a risen knight" race="undead" experience="35" speed="150">
+	<health now="60" max="60" />
+	<look type="298" corpse="5972" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-20" />
+		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-1" max="-10">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="3" defense="3" />
+	<elements>
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+	</immunities>
+	<loot>
+		<item id="5925" chance="5000" /><!-- bone -->
+		<item id="18419" countmax="15" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item name="hatchet" chance="3000" />
+		<item name="mace" chance="2000" />
+	</loot>
+</monster>

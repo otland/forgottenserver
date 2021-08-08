@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tharian Outcast" nameDescription="a Tharian outcast" race="blood" experience="55" speed="160">
+	<health now="45" max="45" />
+	<look type="153" head="116" body="95" legs="58" feet="114" addons="1" corpse="3058" />
+	<targetchange interval="5000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-15" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-14">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="6" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Just leave me alone already!" />
+		<voice sentence="You left us for dead!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="20" chance="25000" /> <!-- Tharian Gem Fragment -->
+	</loot>
+</monster>

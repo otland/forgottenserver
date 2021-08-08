@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vocations>
-	<vocation id="0" clientid="0" name="None" description="none" gaincap="10" gainhp="5" gainmana="5" gainhpticks="6" gainhpamount="1" gainmanaticks="6" gainmanaamount="1" manamultiplier="4.0" attackspeed="2000" basespeed="220" soulmax="100" gainsoulticks="120" fromvoc="0">
+	<vocation id="0" clientid="0" name="None" description="none" gaincap="10" gainhp="5" gainmana="5" gainhpticks="3" gainhpamount="1" gainmanaticks="3" gainmanaamount="1" manamultiplier="4.0" attackspeed="1000" basespeed="220" soulmax="100" gainsoulticks="120" fromvoc="0">
 		<formula meleeDamage="1.0" distDamage="1.0" defense="1.0" armor="1.0" />
-		<skill id="0" multiplier="1.5" />
+		<skill id="0" multiplier="2.0" />
 		<skill id="1" multiplier="2.0" />
 		<skill id="2" multiplier="2.0" />
 		<skill id="3" multiplier="2.0" />
 		<skill id="4" multiplier="2.0" />
-		<skill id="5" multiplier="1.5" />
-		<skill id="6" multiplier="1.1" />
+		<skill id="5" multiplier="2.0" />
+		<skill id="6" multiplier="2.0" />
 	</vocation>
 	<vocation id="1" clientid="3" name="Sorcerer" description="a sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="5" gainmanaticks="3" gainmanaamount="5" manamultiplier="1.1" attackspeed="2000" basespeed="220" soulmax="100" gainsoulticks="120" fromvoc="1">
 		<formula meleeDamage="1.0" distDamage="1.0" defense="1.0" armor="1.0" />

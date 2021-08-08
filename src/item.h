@@ -878,6 +878,9 @@ class Item : virtual public Thing
 		}
 
 		uint32_t getWorth() const;
+		uint32_t getTharianGemsWorth() const;
+		uint32_t getKhazanGemsWorth() const;
+
 		LightInfo getLightInfo() const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;

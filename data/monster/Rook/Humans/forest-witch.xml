@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Forest Witch" nameDescription="a forest witch" race="blood" experience="100" speed="160">
+	<health now="100" max="100" />
+	<look type="54" corpse="20535" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="10" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1000" min="0" max="-15" />
+		<attack name="fire" interval="1000" chance="10" range="7" min="-5" max="-15">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="5" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="outfit" interval="1000" chance="1" target="1" range="5" monster="green frog" duration="2500" />
+	</attacks>
+	<defenses armor="3" defense="3" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Horax pokti!" />
+		<voice sentence="Herba budinia ex!" />
+		<voice sentence="Hihihihi!" />
+	</voices>
+	<loot>
+		<item id="18419" countmax="30" chance="25000" /><!-- Tharian Gem Fragment -->
+		<item name="witch broom" chance="10000" />
+	</loot>
+</monster>

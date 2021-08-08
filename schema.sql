@@ -67,6 +67,16 @@ CREATE TABLE IF NOT EXISTS `players` (
   `skill_shielding_tries` bigint unsigned NOT NULL DEFAULT 0,
   `skill_fishing` int unsigned NOT NULL DEFAULT 10,
   `skill_fishing_tries` bigint unsigned NOT NULL DEFAULT 0,
+  `lend_balance` bigint unsigned NOT NULL DEFAULT 0,
+  `lend_start` bigint unsigned NOT NULL DEFAULT 0,
+  `lend_end` bigint unsigned NOT NULL DEFAULT 0,
+  `lend_rewards` bigint unsigned NOT NULL DEFAULT 0,
+  `borrow_balance` bigint unsigned NOT NULL DEFAULT 0,
+  `borrow_start` bigint unsigned NOT NULL DEFAULT 0,
+  `borrow_end` bigint unsigned NOT NULL DEFAULT 0,
+  `borrow_accrued` bigint unsigned NOT NULL DEFAULT 0,
+  `margin` bigint unsigned NOT NULL DEFAULT 0,
+  `tharian_balance` bigint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
@@ -94,14 +104,6 @@ CREATE TABLE IF NOT EXISTS `account_ban_history` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
-
-CREATE TABLE IF NOT EXISTS `account_storage` (
-  `account_id` int NOT NULL,
-  `key` int unsigned NOT NULL,
-  `value` int NOT NULL,
-  PRIMARY KEY (`account_id`, `key`),
-  FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `ip_bans` (
@@ -355,6 +357,25 @@ CREATE TABLE IF NOT EXISTS `towns` (
   `posz` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `margin_book` (
+  `loan_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `player_id` int NOT NULL,
+  `lending_balance` bigint unsigned NOT NULL DEFAULT 0,
+  `borrowing_balance` bigint unsigned NOT NULL DEFAULT 0,
+  `created` bigint unsigned NOT NULL DEFAULT '0',
+  `ended` bigint unsigned NOT NULL DEFAULT '0',
+  `loan_time` bigint unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`loan_id`),
+  FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_autoloot` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `player_id` int NOT NULL,
+  `autoloot_list` blob NOT NULL,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '29'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
