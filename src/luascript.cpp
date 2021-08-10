@@ -315,12 +315,14 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 
 	//check that it is loaded as a function
 	if (!isFunction(luaState, -1)) {
+		lua_pop(luaState, 1);
 		return -1;
 	}
 
 	loadingFile = file;
 
 	if (!reserveScriptEnv()) {
+		lua_pop(luaState, 1);
 		return -1;
 	}
 
@@ -1078,16 +1080,20 @@ void LuaScriptInterface::registerFunctions()
 	//bit operations for Lua, based on bitlib project release 24
 	//bit.bnot, bit.band, bit.bor, bit.bxor, bit.lshift, bit.rshift
 	luaL_register(luaState, "bit", LuaScriptInterface::luaBitReg);
+	lua_pop(luaState, 1);
 #endif
 
 	//configManager table
 	luaL_register(luaState, "configManager", LuaScriptInterface::luaConfigManagerTable);
+	lua_pop(luaState, 1);
 
 	//db table
 	luaL_register(luaState, "db", LuaScriptInterface::luaDatabaseTable);
+	lua_pop(luaState, 1);
 
 	//result table
 	luaL_register(luaState, "result", LuaScriptInterface::luaResultTable);
+	lua_pop(luaState, 1);
 
 	/* New functions */
 	//registerClass(className, baseClass, newFunction)
