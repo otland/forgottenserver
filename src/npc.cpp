@@ -1110,6 +1110,14 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
 	}
 }
 
+NpcEventsHandler::~NpcEventsHandler()
+{
+	std::array<int32_t, 7> eventArray = {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent, playerCloseChannelEvent, playerEndTradeEvent, thinkEvent};
+	for (int32_t eventId : eventArray) {
+		scriptInterface->deleteEvent(eventId);
+	}
+}
+
 bool NpcEventsHandler::isLoaded() const
 {
 	return loaded;

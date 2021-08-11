@@ -423,6 +423,34 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	return runningEventId++;
 }
 
+bool LuaScriptInterface::deleteEvent(int32_t eventId)
+{
+	if (eventId == -1) {
+		return false;
+	}
+
+	//get our events table
+	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
+	if (!isTable(luaState, -1)) {
+		lua_pop(luaState, 1);
+		return false;
+	}
+
+	lua_rawgeti(luaState, -1, eventId);
+	if (!isFunction(luaState, -1)) {
+		lua_pop(luaState, 2);
+		return false;
+	}
+	lua_pop(luaState, 1);
+
+	lua_pushnil(luaState);
+	lua_rawseti(luaState, -2, eventId);
+
+	lua_pop(luaState, 1);
+
+	return true;
+}
+
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 {
 	if (scriptId == EVENT_ID_LOADING) {

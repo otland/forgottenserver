@@ -75,6 +75,7 @@ class NpcEventsHandler
 {
 	public:
 		NpcEventsHandler(const std::string& file, Npc* npc);
+		~NpcEventsHandler();
 
 		void onCreatureAppear(Creature* creature);
 		void onCreatureDisappear(Creature* creature);
