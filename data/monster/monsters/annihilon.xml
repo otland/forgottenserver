@@ -63,17 +63,17 @@
 		<item name="violet gem" chance="16666" />
 		<item name="yellow gem" chance="20000" />
 		<item name="green gem" chance="12500" />
-		<item id="2156" chance="20000" />
+		<item id="2156" chance="20000" /><!-- red gem -->
 		<item name="blue gem" chance="20000" />
-		<item id="2381" chance="20000" />
+		<item id="2381" chance="20000" /><!-- halberd -->
 		<item name="guardian halberd" chance="20000" />
 		<item name="heavy mace" chance="25000" />
-		<item id="2514" chance="4166" />
+		<item id="2514" chance="4166" /><!-- mastermind shield -->
 		<item name="guardian shield" chance="7692" />
-		<item id="2519" chance="11111" />
+		<item id="2519" chance="11111" /><!-- crown shield -->
 		<item name="demon shield" chance="4166" />
-		<item id="2528" chance="9090" />
-		<item id="2547" countmax="94" chance="16666" />
+		<item id="2528" chance="9090" /><!-- tower shield -->
+		<item id="2547" countmax="94" chance="16666" /><!-- power bolt -->
 		<item name="soul orb" countmax="5" chance="20000" />
 		<item name="demon horn" countmax="2" chance="12500" />
 		<item name="infernal bolt" countmax="46" chance="20000" />

@@ -55,7 +55,7 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="53" chance="50000" />
 		<item name="platinum coin" countmax="3" chance="961" />
-		<item id="2491" chance="666" />
+		<item id="2491" chance="666" /><!-- crown helmet -->
 		<item name="meat" countmax="4" chance="50000" />
 		<item id="6300" chance="250" /><!-- death ring -->
 		<item name="bar of chocolate" chance="280" />

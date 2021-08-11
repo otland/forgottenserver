@@ -53,13 +53,13 @@
 		<item name="gold coin" countmax="40" chance="45000" />
 		<item name="stealth ring" chance="450" />
 		<item name="gold ring" chance="10" />
-		<item id="2381" chance="3003" />
+		<item id="2381" chance="3003" /><!-- halberd -->
 		<item name="golden armor" chance="10" />
 		<item name="green mushroom" chance="1450" />
 		<item name="health potion" chance="4930" />
 		<item name="mana potion" chance="4950" />
 		<item name="spellbook of enlightenment" chance="520" />
-		<item id="9690" chance="940" />
+		<item id="9690" chance="940" /><!-- gear wheel -->
 		<item name="slime mould" chance="340" />
 		<item name="golden can of oil" chance="40" />
 	</loot>

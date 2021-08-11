@@ -39,7 +39,7 @@
 	<loot>
 		<item name="gold coin" countmax="30" chance="64000" />
 		<item name="axe" chance="21000" />
-		<item id="2511" chance="17000" />
+		<item id="2511" chance="17000" /><!-- brass shield -->
 		<item name="mace" chance="13000" />
 		<item id="2695" countmax="2" chance="12000" /><!-- egg -->
 		<item name="chain helmet" chance="5250" />

@@ -45,7 +45,7 @@
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="50" chance="50000" />
 		<item name="stealth ring" chance="20000" />
-		<item id="2488" chance="5000" />
+		<item id="2488" chance="5000" /><!-- crown legs -->
 		<item name="focus cape" chance="5000" />
 		<item name="red robe" chance="5000" />
 		<item name="spike sword" chance="5000" />

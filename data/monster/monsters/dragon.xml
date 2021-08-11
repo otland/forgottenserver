@@ -65,7 +65,7 @@
 		<item name="dragon hammer" chance="560" />
 		<item name="serpent sword" chance="510" />
 		<item name="small diamond" chance="380" />
-		<item id="2516" chance="320" />
+		<item id="2516" chance="320" /><!-- dragon shield -->
 		<item name="life crystal" chance="120" />
 		<item name="dragonbone staff" chance="110" />
 	</loot>

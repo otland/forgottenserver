@@ -32,14 +32,14 @@
 		<voice sentence="Chhh!" />
 	</voices>
 	<loot>
-		<item id="2120" chance="4700" /><!-- Rope -->
+		<item id="2120" chance="4700" /><!-- rope -->
 		<item name="gold coin" countmax="15" chance="60000" />
 		<item name="mace" chance="3780" />
-		<item id="2419" chance="420" /><!-- Scimitar -->
+		<item id="2419" chance="420" /><!-- scimitar -->
 		<item name="bow" chance="1090" />
 		<item name="brass helmet" chance="2180" />
-		<item id="2544" countmax="3" chance="7890" />
+		<item id="2544" countmax="3" chance="7890" /><!-- arrow -->
 		<item name="health potion" chance="840" />
-		<item id="19737" countmax="5" chance="32830" />
+		<item id="19737" countmax="5" chance="32830" /><!-- insectoid eggs -->
 	</loot>
 </monster>

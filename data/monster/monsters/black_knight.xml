@@ -49,7 +49,7 @@
 		<item name="spear" countmax="3" chance="30800" />
 		<item name="brown bread" countmax="2" chance="21600" />
 		<item id="2120" chance="14020" /><!-- rope -->
-		<item id="2478" chance="13200" />
+		<item id="2478" chance="13200" /><!-- brass legs -->
 		<item id="2381" chance="12050" /><!-- halberd -->
 		<item name="plate armor" chance="11000" />
 		<item name="steel helmet" chance="10500" />
@@ -57,7 +57,7 @@
 		<item name="battle hammer" chance="6980" />
 		<item name="warrior helmet" chance="4700" />
 		<item name="knight axe" chance="2600" />
-		<item id="2490" chance="2330" />
+		<item id="2490" chance="2330" /><!-- dark helmet -->
 		<item name="dark armor" chance="1900" />
 		<item name="knight legs" chance="1050" />
 		<item name="knight armor" chance="750" />

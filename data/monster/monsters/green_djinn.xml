@@ -66,7 +66,7 @@
 		<item id="1965" chance="2280" /><!-- book (green) -->
 		<item name="dirty turban" chance="2210" />
 		<item name="green piece of cloth" chance="2000" />
-		<item id="2747" chance="1000" />
+		<item id="2747" chance="1000" /><!-- grave flower -->
 		<item name="small oil lamp" chance="910" />
 		<item name="mana potion" chance="490" />
 		<item name="mystic turban" chance="140" />

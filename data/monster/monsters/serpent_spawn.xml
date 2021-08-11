@@ -68,7 +68,7 @@
 		<item name="green mushroom" chance="18200" />
 		<item name="snake skin" chance="14800" />
 		<item name="small sapphire" chance="12000" />
-		<item id="2547" chance="6200" />
+		<item id="2547" chance="6200" /><!-- power bolt -->
 		<item name="life ring" chance="6050" />
 		<item name="energy ring" chance="5900" />
 		<item name="golden mug" chance="2870" />
@@ -76,13 +76,13 @@
 		<item name="great mana potion" chance="2000" />
 		<item name="snakebite rod" chance="930" />
 		<item name="winged tail" chance="960" />
-		<item id="2528" chance="860" />
+		<item id="2528" chance="860" /><!-- tower shield -->
 		<item name="noble axe" chance="810" />
 		<item name="life crystal" chance="780" />
 		<item name="strange helmet" chance="630" />
 		<item id="4842" chance="600" /><!-- old parchment -->
 		<item name="warrior helmet" chance="560" />
-		<item id="2487" chance="510" />
+		<item id="2487" chance="510" /><!-- crown armor -->
 		<item name="charmer's tiara" chance="190" />
 		<item name="royal helmet" chance="130" />
 		<item name="spellbook of mind control" chance="100" />

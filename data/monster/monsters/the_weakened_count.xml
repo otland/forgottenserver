@@ -54,7 +54,7 @@
 		<item name="the ring of the count" chance="100000" />
 		<item name="vampire teeth" chance="7600" />
 		<item name="blood preservation" chance="5100" />
-		<item id="2747" chance="1910" />
+		<item id="2747" chance="1910" /><!-- grave flower -->
 		<item name="black pearl" chance="1800" />
 		<item name="strong health potion" chance="1500" />
 		<item name="katana" chance="1560" />

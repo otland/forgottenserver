@@ -46,8 +46,8 @@
 		<item name="orcish axe" chance="7000" />
 		<item name="orc tooth" chance="2000" />
 		<item name="battle shield" chance="1000" />
-		<item id="2050" chance="1000" /><!-- torch-->
+		<item id="2050" chance="1000" /><!-- torch -->
 		<item name="obsidian lance" chance="1000" />
-		<item id="2483" chance="610" />
+		<item id="2483" chance="610" /><!-- scale armor -->
 	</loot>
 </monster>

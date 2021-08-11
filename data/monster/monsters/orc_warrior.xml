@@ -42,7 +42,7 @@
 		<item name="orc leather" chance="4000" />
 		<!-- Heavy Old Tome 2.03% -->
 		<item name="skull belt" chance="870" />
-		<item id="2530" chance="670" />
+		<item id="2530" chance="670" /><!-- copper shield -->
 		<item name="orc tooth" chance="620" />
 		<item name="poison dagger" chance="30" />
 	</loot>

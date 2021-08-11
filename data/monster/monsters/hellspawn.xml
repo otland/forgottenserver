@@ -61,7 +61,7 @@
 		<item name="broadsword" chance="10000" />
 		<item name="warrior helmet" chance="1886" />
 		<item name="knight legs" chance="3030" />
-		<item id="2788" countmax="2" chance="7692" />
+		<item id="2788" countmax="2" chance="7692" /><!-- red mushroom -->
 		<item name="demonic essence" chance="9090" />
 		<item name="assassin star" countmax="2" chance="9090" />
 		<item name="onyx flail" chance="103" />

@@ -65,8 +65,8 @@
 		<item name="crossbow" chance="10000" />
 		<item name="steel helmet" chance="3000" />
 		<item name="steel shield" chance="14000" />
-		<item id="2516" chance="500" />
-		<item id="2546" countmax="12" chance="4000" />
+		<item id="2516" chance="500" /><!-- dragon shield -->
+		<item id="2546" countmax="12" chance="4000" /><!-- burst arrow -->
 		<item name="plate legs" chance="2000" />
 		<item name="dragon ham" countmax="3" chance="15500" />
 		<item name="green dragon leather" chance="100000" />

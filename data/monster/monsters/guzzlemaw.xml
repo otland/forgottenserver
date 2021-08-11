@@ -69,7 +69,7 @@
 		<item name="remains of a fish" chance="10110" />
 		<item name="two handed sword" chance="2700" />
 		<item id="2667" countmax="3" chance="7000" /><!-- fish -->
-		<item id="2671" chance="10000" />
+		<item id="2671" chance="10000" /><!-- peanut -->
 		<item name="iron ore" chance="3000" />
 		<item name="fish fin" chance="5000" />
 		<item name="hardened bone" chance="5700" />

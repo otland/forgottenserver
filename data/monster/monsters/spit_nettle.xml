@@ -47,7 +47,7 @@
 		<item name="gold coin" countmax="5" chance="10800" />
 		<item name="nettle spit" chance="9500" />
 		<item name="sling herb" countmax="2" chance="5763" />
-		<item id="2747" chance="1010" />
+		<item id="2747" chance="1010" /><!-- grave flower -->
 		<item name="nettle blossom" chance="980" />
 		<item name="seeds" chance="340" />
 	</loot>

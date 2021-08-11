@@ -43,7 +43,7 @@
 		<item name="gold coin" countmax="69" chance="48000" />
 		<item name="two handed sword" chance="2320" />
 		<item name="double axe" chance="5800" />
-		<item id="2483" chance="8000" />
+		<item id="2483" chance="8000" /><!-- scale armor -->
 		<item name="shrimp" countmax="5" chance="4700" />
 		<item name="fish fin" chance="980" />
 		<item name="northwind rod" chance="800" />

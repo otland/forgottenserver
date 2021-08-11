@@ -36,13 +36,13 @@
 	</voices>
 	<loot>
 		<item name="white mushroom" countmax="2" chance="40000" />
-		<item id="2543" countmax="7" chance="38000" />
+		<item id="2543" countmax="7" chance="38000" /><!-- bolt -->
 		<item name="gold coin" countmax="12" chance="28000" />
 		<item name="soldier helmet" chance="12000" />
 		<item id="2554" chance="10000" /><!-- shovel -->
 		<item name="chain armor" chance="8000" />
-		<item id="7363" countmax="3" chance="4000" />
-		<item id="2525" chance="3000" />
+		<item id="7363" countmax="3" chance="4000" /><!-- piercing bolt -->
+		<item id="2525" chance="3000" /><!-- dwarven shield -->
 		<item name="crossbow" chance="3000" />
 		<item name="battle axe" chance="2500" />
 		<item name="iron ore" chance="300" />

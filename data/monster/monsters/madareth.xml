@@ -34,7 +34,7 @@
 		<item name="small diamond" chance="5800" />
 		<item name="gold coin" countmax="100" chance="100000" />
 		<item name="ring of healing" chance="8000" />
-		<item id="2514" chance="12650" />
+		<item id="2514" chance="12650" /><!-- mastermind shield -->
 		<item name="demon shield" chance="7650" />
 	</loot>
 </monster>

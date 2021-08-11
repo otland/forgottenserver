@@ -46,7 +46,7 @@
 		<item name="knife" chance="15250" />
 		<item name="brass helmet" chance="19000" />
 		<item name="viking helmet" chance="8000" />
-		<item id="2483" chance="3850" />
+		<item id="2483" chance="3850" /><!-- scale armor -->
 		<item name="brown piece of cloth" chance="500" />
 		<item name="crystal sword" chance="90" />
 		<item name="fur boots" chance="120" />

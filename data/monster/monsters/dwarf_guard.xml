@@ -39,7 +39,7 @@
 		<item name="white mushroom" countmax="2" chance="55000" />
 		<item name="leather boots" chance="40000" />
 		<item name="gold coin" countmax="30" chance="40000" />
-		<item id="2483" chance="9200" />
+		<item id="2483" chance="9200" /><!-- scale armor -->
 		<item name="battle shield" chance="6000" />
 		<item name="battle hammer" chance="4000" />
 		<item name="steel helmet" chance="1600" />

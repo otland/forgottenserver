@@ -49,7 +49,7 @@
 		<item name="sword ring" chance="3920" />
 		<item name="longsword" chance="2800" />
 		<item name="royal spear" chance="2600" />
-		<item id="2478" chance="2400" />
+		<item id="2478" chance="2400" /><!-- brass legs -->
 		<item id="2419" chance="2160" /><!-- scimitar -->
 		<item name="skull belt" chance="2100" />
 		<item name="plate armor" chance="1650" />

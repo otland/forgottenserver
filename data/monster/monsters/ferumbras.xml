@@ -110,7 +110,7 @@
 		<item id="7632" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
 		<item id="7633" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
 		<item name="magic plate armor" chance="14000" />
-		<item id="2514" chance="14000" />
+		<item id="2514" chance="14000" /><!-- mastermind shield -->
 		<item name="runed sword" chance="14000" />
 		<item name="spellscroll of prophecies" chance="14000" />
 		<item name="chaos mace" chance="12000" />

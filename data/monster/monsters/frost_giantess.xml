@@ -50,9 +50,9 @@
 		<item name="gold coin" countmax="40" chance="80000" />
 		<item name="club ring" chance="70" />
 		<item name="short sword" chance="7960" />
-		<item id="2490" chance="170" />
+		<item id="2490" chance="170" /><!-- dark helmet -->
 		<item name="battle shield" chance="1490" />
-		<item id="2671" countmax="2" chance="20990" />
+		<item id="2671" countmax="2" chance="20990" /><!-- ham -->
 		<item name="shard" chance="100" />
 		<item id="7441" chance="2008" /><!-- ice cube -->
 		<item name="norse shield" chance="320" />

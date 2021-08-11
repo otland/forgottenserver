@@ -42,7 +42,7 @@
 	<loot>
 		<item name="gold coin" countmax="12" chance="54000" />
 		<item name="orcish gear" chance="10500" />
-		<item id="2671" chance="9720" />
+		<item id="2671" chance="9720" /><!-- ham -->
 		<item id="2381" chance="7000" /><!-- halberd -->
 		<item name="battle axe" chance="5770" />
 		<item name="hunting spear" chance="5000" />

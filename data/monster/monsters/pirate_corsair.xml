@@ -49,7 +49,7 @@
 		<item name="sabre" chance="10000" />
 		<item name="throwing star" countmax="12" chance="8400" />
 		<item name="dark armor" chance="1650" />
-		<item id="2521" chance="1000" />
+		<item id="2521" chance="1000" /><!-- dark shield -->
 		<item name="pirate boots" chance="220" />
 		<item name="rum flask" chance="130" />
 		<item id="5813" chance="130" /><!-- skull candle -->
@@ -60,6 +60,5 @@
 		<item name="peg leg" chance="600" />
 		<item name="strong health potion" chance="820" />
 		<item name="compass" chance="11050" />
-		<item name="compass" chance="11020" />
 	</loot>
 </monster>

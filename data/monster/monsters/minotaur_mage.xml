@@ -53,8 +53,8 @@
 		<item id="2684" countmax="8" chance="15003" /><!-- carrot -->
 		<item name="purple robe" chance="6430" />
 		<item id="2050" chance="5000" /><!-- torch -->
-		<item id="2649" chance="4950" />
-		<item id="2461" chance="3100" />
+		<item id="2649" chance="4950" /><!-- leather legs -->
+		<item id="2461" chance="3100" /><!-- leather helmet -->
 		<item name="minotaur horn" countmax="2" chance="3020" />
 		<item name="minotaur leather" chance="2290" />
 		<item name="taurus mace" chance="1000" />

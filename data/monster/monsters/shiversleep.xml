@@ -50,7 +50,7 @@
 		<item name="platinum coin" countmax="10" chance="33333" />
 		<item name="giant sword" chance="422" />
 		<item name="knight legs" chance="444" />
-		<item id="2487" chance="632" />
+		<item id="2487" chance="632" /><!-- crown armor -->
 		<item name="iron ore" countmax="2" chance="2195" />
 		<item name="magic sulphur" chance="632" />
 		<item name="great mana potion" countmax="4" chance="3100" />

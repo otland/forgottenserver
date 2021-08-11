@@ -48,12 +48,12 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="35" chance="88000" />
-		<item id="2676" countmax="12" chance="30000" />
+		<item id="2676" countmax="12" chance="30000" /><!-- banana -->
 		<item name="small stone" countmax="3" chance="30000" />
 		<item name="orange" countmax="5" chance="20000" />
 		<item name="banana sash" chance="5000" />
 		<item name="coconut" countmax="3" chance="1960" />
-		<item id="2682" chance="1000" />
+		<item id="2682" chance="1000" /><!-- melon -->
 		<item name="ape fur" chance="1000" />
 	</loot>
 </monster>

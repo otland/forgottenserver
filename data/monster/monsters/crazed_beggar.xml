@@ -39,7 +39,7 @@
 		<voice sentence="Make it stop!" />
 	</voices>
 	<loot>
-		<item id="1681" chance="420" />
+		<item id="1681" chance="420" /><!-- small blue pillow -->
 		<item id="2072" chance="360" /><!-- lute -->
 		<item name="gold coin" countmax="9" chance="99000" />
 		<item name="dwarven ring" chance="120" />

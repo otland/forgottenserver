@@ -39,11 +39,11 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="68" chance="90000" />
-		<item id="2543" countmax="15" chance="45000" />
+		<item id="2543" countmax="15" chance="45000" /><!-- bolt -->
 		<item name="hunting spear" countmax="2" chance="45000" />
 		<item name="venison" chance="21000" />
 		<item name="meat" chance="18000" />
-		<item id="7363" countmax="5" chance="16000" />
+		<item id="7363" countmax="5" chance="16000" /><!-- piercing bolt -->
 		<item name="elven hoof" chance="12000" />
 		<item name="hunting spear" countmax="2" chance="8000" />
 		<item name="small emerald" chance="3600" />

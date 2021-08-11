@@ -24,7 +24,7 @@
 	</voices>
 	<loot>
 		<item name="walnut" chance="1140" />
-		<item id="7910" chance="980" />
+		<item id="7910" chance="980" /><!-- peanut -->
 		<item name="acorn" chance="50410" />
 	</loot>
 </monster>

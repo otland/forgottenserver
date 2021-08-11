@@ -55,7 +55,7 @@
 	</voices>
 	<loot>
 		<item name="sling herb" chance="13200" />
-		<item id="2760" chance="12720" />
+		<item id="2760" chance="12720" /><!-- goat grass -->
 		<item name="dark rosary" chance="9840" />
 		<item name="red apple" countmax="2" chance="7500" />
 		<item name="powder herb" chance="6100" />

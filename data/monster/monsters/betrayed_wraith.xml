@@ -61,7 +61,7 @@
 		<item name="gold coin" countmax="20" chance="20000" />
 		<item name="platinum coin" countmax="8" chance="100000" />
 		<item name="amulet of loss" chance="130" />
-		<item id="2547" countmax="5" chance="50000" />
+		<item id="2547" countmax="5" chance="50000" /><!-- power bolt -->
 		<item name="orichalcum pearl" countmax="2" chance="8000" />
 		<item name="skull helmet" chance="390" />
 		<item name="golden figurine" chance="160" />

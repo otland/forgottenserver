@@ -69,7 +69,7 @@
 		<item name="fire axe" chance="330" />
 		<item name="skull staff" chance="280" />
 		<item name="guardian shield" chance="830" />
-		<item id="2528" chance="440" />
+		<item id="2528" chance="440" /><!-- tower shield -->
 		<item name="brown mushroom" countmax="2" chance="14920" />
 		<item name="spiked squelcher" chance="50" />
 		<item name="strong health potion" countmax="3" chance="11050" />
@@ -79,7 +79,7 @@
 		<item name="terra boots" chance="880" />
 		<item name="small topaz" chance="9780" />
 		<item name="clay lump" chance="500" />
-		<item id="13757" chance="10930" /><!-- Coal -->
+		<item id="13757" chance="10930" /><!-- coal -->
 		<item name="buckle" chance="8180" />
 		<item name="buckle" chance="770" />
 		<item name="bonecarving knife" chance="8510" />

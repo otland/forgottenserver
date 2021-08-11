@@ -31,9 +31,9 @@
 		<item name="gold coin" countmax="10" chance="33333" />
 		<item name="dwarven ring" chance="793" />
 		<item name="axe" chance="14285" />
-		<item id="2484" chance="6666" />
-		<item id="2553" chance="11111" />
-		<item id="2649" chance="9090" />
+		<item id="2484" chance="6666" /><!-- studded armor -->
+		<item id="2553" chance="11111" /><!-- pick -->
+		<item id="2649" chance="9090" /><!-- leather legs -->
 		<item name="meat" chance="3846" />
 		<item name="iron ore" chance="793" />
 	</loot>

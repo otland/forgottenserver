@@ -41,7 +41,7 @@
 		<item name="gold coin" countmax="80" chance="50000" />
 		<item name="small emerald" countmax="5" chance="10150" />
 		<item name="obsidian lance" chance="4975" />
-		<item id="2671" chance="40100" />
+		<item id="2671" chance="40100" /><!-- ham -->
 		<item name="crocodile boots" chance="510" />
 		<item id="7632" chance="1130" /><!-- giant shimmering pearl -->
 		<item name="piece of crocodile leather" chance="25430" />

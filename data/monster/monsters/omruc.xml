@@ -72,10 +72,10 @@
 		<item name="gold coin" countmax="60" chance="43000" />
 		<item name="red apple" countmax="2" chance="76000" />
 		<item name="poison arrow" countmax="20" chance="56000" />
-		<item id="2546" countmax="15" chance="47000" />
+		<item id="2546" countmax="15" chance="47000" /><!-- burst arrow -->
 		<item name="onyx arrow" countmax="6" chance="32000" />
-		<item id="2544" countmax="25" chance="23000" />
-		<item id="2547" countmax="5" chance="16000" />
+		<item id="2544" countmax="25" chance="23000" /><!-- arrow -->
+		<item id="2547" countmax="5" chance="16000" /><!-- power bolt -->
 		<item name="great health potion" chance="11000" />
 		<item name="small diamond" countmax="3" chance="10000" />
 		<item name="mini mummy" chance="2250" />

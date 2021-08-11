@@ -50,7 +50,7 @@
 		<item name="wand of inferno" chance="1000" />
 		<item name="sword ring" chance="2920" />
 		<item name="fire sword" chance="260" />
-		<item id="2676" countmax="10" chance="10420" />
+		<item id="2676" countmax="10" chance="10420" /><!-- banana -->
 		<item name="strong health potion" chance="7100" />
 		<item name="strong mana potion" chance="7100" />
 		<item name="magma amulet" chance="970" />

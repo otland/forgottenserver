@@ -57,7 +57,7 @@
 		<item name="gold coin" countmax="100" chance="34000" />
 		<item name="gold coin" countmax="100" chance="34000" />
 		<item name="gold coin" countmax="46" chance="20000" />
-		<item id="2671" countmax="4" chance="60000" />
+		<item id="2671" countmax="4" chance="60000" /><!-- ham -->
 		<item name="platinum coin" countmax="3" chance="49000" />
 		<item name="hydra head" chance="10120" />
 		<item name="small sapphire" chance="5000" />

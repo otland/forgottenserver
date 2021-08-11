@@ -54,7 +54,7 @@
 		<item name="viking helmet" chance="1000" />
 		<item name="brown piece of cloth" chance="1000" />
 		<item name="pile of grave earth" chance="950" />
-		<item id="2483" chance="940" />
+		<item id="2483" chance="940" /><!-- scale armor -->
 		<item id="2229" chance="280" /><!-- skull -->
 		<item name="life ring" chance="190" />
 	</loot>

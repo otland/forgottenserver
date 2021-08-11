@@ -40,7 +40,7 @@
 		<item name="gold coin" countmax="11" chance="25050" />
 		<item name="spear" chance="17440" />
 		<item name="studded helmet" chance="9000" />
-		<item id="2468" chance="8300" />
+		<item id="2468" chance="8300" /><!-- studded legs -->
 		<item name="machete" chance="2800" />
 		<!-- Heavy Old Tome 2.06% -->
 		<item name="orc leather" chance="2000" />

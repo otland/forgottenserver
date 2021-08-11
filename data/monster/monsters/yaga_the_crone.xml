@@ -57,7 +57,7 @@
 		<item name="necrotic rod" chance="2500" />
 		<item name="garlic necklace" chance="8000" />
 		<item id="2324" chance="15000" /><!-- witchesbroom -->
-		<item id="2651" chance="25000" />
+		<item id="2651" chance="25000" /><!-- coat -->
 		<item name="cape" chance="15000" />
 		<item name="cookie" countmax="8" chance="30000" />
 		<item name="star herb" chance="20000" />

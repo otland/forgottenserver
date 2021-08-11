@@ -61,9 +61,9 @@
 		<item name="small emerald" countmax="3" chance="10890" />
 		<item name="small amethyst" countmax="3" chance="15020" />
 		<item name="platinum coin" countmax="8" chance="100000" />
-		<item id="2156" chance="3510" />
+		<item id="2156" chance="3510" /><!-- red gem -->
 		<item name="blue gem" chance="480" />
-		<item id="2245" chance="620" />
+		<item id="2245" chance="620" /><!-- twigs -->
 		<item name="epee" chance="480" />
 		<item name="magic sulphur" chance="830" />
 		<item name="sapphire hammer" chance="480" />

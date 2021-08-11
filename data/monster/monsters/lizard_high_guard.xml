@@ -46,7 +46,7 @@
 		<item name="gold coin" countmax="27" chance="32000" />
 		<item name="small emerald" countmax="4" chance="2520" />
 		<item name="platinum coin" countmax="2" chance="4900" />
-		<item id="2528" chance="1040" />
+		<item id="2528" chance="1040" /><!-- tower shield -->
 		<item name="lizard leather" chance="1000" />
 		<item name="lizard scale" chance="970" />
 		<item name="strong health potion" chance="11925" />

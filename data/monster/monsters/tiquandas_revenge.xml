@@ -45,7 +45,7 @@
 		<item name="gold coin" countmax="10" chance="100000" />
 		<item name="gold coin" countmax="100" chance="100000" />
 		<item name="meat" countmax="50" chance="33333" />
-		<item id="2671" countmax="8" chance="20000" />
+		<item id="2671" countmax="8" chance="20000" /><!-- ham -->
 		<item name="worm" countmax="10" chance="50000" />
 		<item name="mandrake" chance="100000" />
 		<item name="seeds" chance="4000" />

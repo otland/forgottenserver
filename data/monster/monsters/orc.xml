@@ -37,8 +37,8 @@
 	<loot>
 		<item name="gold coin" countmax="14" chance="86000" />
 		<item name="meat" chance="10160" />
-		<item id="2484" chance="9000" />
-		<item id="2526" chance="6800" />
+		<item id="2484" chance="9000" /><!-- studded armor -->
+		<item id="2526" chance="6800" /><!-- studded shield -->
 		<item name="axe" chance="6000" />
 		<item name="sabre" chance="5850" />
 		<item name="studded helmet" chance="3100" />

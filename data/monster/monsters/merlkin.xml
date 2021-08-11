@@ -57,7 +57,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="45" chance="83000" />
-		<item id="2676" countmax="12" chance="30350" />
+		<item id="2676" countmax="12" chance="30350" /><!-- banana -->
 		<item id="2162" chance="3000" /><!-- magic lightwand -->
 		<item name="banana sash" chance="1900" />
 		<item name="ape fur" chance="1000" />

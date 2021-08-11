@@ -39,6 +39,6 @@
 	<loot>
 		<item name="gold coin" countmax="20" chance="100000" />
 		<item name="meat" countmax="4" chance="33600" />
-		<item id="2671" countmax="3" chance="39200" />
+		<item id="2671" countmax="3" chance="39200" /><!-- ham -->
 	</loot>
 </monster>

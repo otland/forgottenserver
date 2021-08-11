@@ -46,7 +46,7 @@
 		<item name="battle shield" chance="1400" />
 		<item id="2381" chance="730" /><!-- halberd -->
 		<item name="wolf tooth chain" chance="360" />
-		<item id="2490" chance="230" />
+		<item id="2490" chance="230" /><!-- dark helmet -->
 		<item id="7398" chance="180" /><!-- cyclops trophy -->
 		<item name="club ring" chance="140" />
 		<item name="health potion" chance="50" />

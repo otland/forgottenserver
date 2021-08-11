@@ -65,9 +65,9 @@
 		<item name="stealth ring" chance="540" />
 		<item name="mouldy cheese" chance="930" />
 		<item name="skull of Ratha" chance="20180" />
-		<item id="2381" chance="3000" />
+		<item id="2381" chance="3000" /><!-- halberd -->
 		<item name="plate shield" chance="3750" />
-		<item id="2528" chance="60" />
+		<item id="2528" chance="60" /><!-- tower shield -->
 		<item name="green mushroom" chance="1390" />
 		<item name="stone herb" chance="4920" />
 		<item name="health potion" chance="560" />

@@ -125,7 +125,7 @@
 		<item name="dream warden mask" chance="6000" />
 		<item name="psychedelic tapestry" chance="6000" />
 		<item name="demonic tapestry" chance="6000" />
-		<item id="22613" chance="6000" />
+		<item id="22613" chance="6000" /><!-- eye pod -->
 		<item id="22614" chance="6000" /><!-- nightmare beacon -->
 	</loot>
 </monster>

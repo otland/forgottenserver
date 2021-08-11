@@ -41,7 +41,7 @@
 		<item name="gold coin" countmax="30" chance="80000" />
 		<item name="meat" countmax="4" chance="70000" />
 		<item name="snowball" countmax="22" chance="50000" />
-		<item id="2671" countmax="5" chance="37000" />
+		<item id="2671" countmax="5" chance="37000" /><!-- ham -->
 		<item name="wolf tooth chain" chance="3000" />
 		<item name="bunnyslippers" chance="1333" />
 	</loot>

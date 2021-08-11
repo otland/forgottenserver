@@ -61,7 +61,7 @@
 		<item name="strong mana potion" chance="5980" />
 		<item name="lightning pendant" chance="710" />
 		<item name="crystalline armor" chance="20" />
-		<item id="9690" chance="5000" />
+		<item id="9690" chance="5000" /><!-- gear wheel -->
 		<item id="9976" chance="5320" /><!-- crystal pedestal -->
 		<item name="shockwave amulet" chance="110" />
 		<item name="gear crystal" chance="5000" />

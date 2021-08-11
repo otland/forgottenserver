@@ -59,9 +59,9 @@
 		<item name="hammer of wrath" chance="1380" />
 		<item name="crystal mace" chance="5500" />
 		<item name="magic plate armor" chance="1380" />
-		<item id="2488" chance="920" />
+		<item id="2488" chance="920" /><!-- crown legs -->
 		<item name="crusader helmet" chance="920" />
-		<item id="2528" chance="1380" />
+		<item id="2528" chance="1380" /><!-- tower shield -->
 		<item name="steel boots" chance="920" />
 		<item name="onyx flail" chance="920" />
 		<item name="jade hammer" chance="920" />

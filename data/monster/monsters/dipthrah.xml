@@ -68,7 +68,7 @@
 		<item name="small sapphire" countmax="3" chance="9800" />
 		<item name="great mana potion" chance="8900" />
 		<item name="energy ring" chance="4800" />
-		<item id="2178" chance="1000" />
+		<item id="2178" chance="1000" /><!-- mind stone -->
 		<item name="blue gem" chance="900" />
 		<item name="ankh" chance="600" />
 		<item name="skull staff" chance="560" />

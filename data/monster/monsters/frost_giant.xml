@@ -43,9 +43,9 @@
 	<loot>
 		<item name="gold coin" countmax="40" chance="82000" />
 		<item name="club ring" chance="130" />
-		<item id="2381" chance="560" />
+		<item id="2381" chance="560" /><!-- halberd -->
 		<item name="short sword" chance="8140" />
-		<item id="2490" chance="180" />
+		<item id="2490" chance="180" /><!-- dark helmet -->
 		<item name="battle shield" chance="1350" />
 		<item name="meat" countmax="2" chance="4970" />
 		<item name="shard" chance="60" />

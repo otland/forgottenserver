@@ -54,7 +54,7 @@
 		<item name="crowbar" chance="14800" />
 		<item name="plate armor" chance="7650" />
 		<item name="dark armor" chance="7650" />
-		<item id="2553" chance="14800" />
+		<item id="2553" chance="14800" /><!-- pick -->
 		<item name="meat" chance="36200" />
 		<item name="perfect behemoth fang" chance="64800" />
 		<item name="behemoth claw" chance="50500" />

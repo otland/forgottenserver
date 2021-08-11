@@ -44,10 +44,10 @@
 		<item id="2044" chance="8280" /><!-- lamp -->
 		<item name="gold coin" countmax="12" chance="50000" />
 		<item name="battle axe" chance="6000" />
-		<item id="2381" chance="6730" />
+		<item id="2381" chance="6730" /><!-- halberd -->
 		<item name="chain helmet" chance="10440" />
 		<item name="chain armor" chance="10290" />
-		<item id="2671" chance="4970" />
+		<item id="2671" chance="4970" /><!-- ham -->
 		<item name="beastslayer axe" chance="390" />
 		<item name="red piece of cloth" chance="530" />
 		<item name="shard" chance="290" />

@@ -37,10 +37,10 @@
 		<item name="hand axe" chance="18000" />
 		<item name="spear" chance="20000" />
 		<item name="studded club" chance="5000" />
-		<item id="2461" chance="10000" />
+		<item id="2461" chance="10000" /><!-- leather helmet -->
 		<item id="2512" chance="16000" /><!-- wooden shield -->
 		<item name="leather boots" chance="10500" />
-		<item id="5097" chance="5000" />
+		<item id="5097" chance="5000" /><!-- mango -->
 		<item id="5901" chance="30000" /><!-- wood -->
 		<item name="marlin" chance="40" />
 	</loot>

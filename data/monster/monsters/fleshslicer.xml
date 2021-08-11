@@ -44,9 +44,9 @@
 		<!-- Dung Ball (Quest) 78% -->
 		<item id="7590" countmax="2" chance="78000" /><!-- great mana potion -->
 		<item name="white pearl" countmax="5" chance="35000" />
-		<item id="2156" chance="28000" />
-		<item name="Ripper Lance" chance="28000" />
-		<item name="Small Ruby" countmax="5" chance="28000" />
+		<item id="2156" chance="28000" /><!-- red gem -->
+		<item name="ripper lance" chance="28000" />
+		<item name="small ruby" countmax="5" chance="28000" />
 		<item id="8473" chance="21000" /><!-- ultimate health potion -->
 		<item id="7413" chance="14000" /><!-- titan axe -->
 		<item id="6300" chance="7000" /><!-- death ring -->

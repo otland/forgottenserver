@@ -91,7 +91,7 @@
 		<item name="strange symbol" chance="11111" />
 		<item name="life crystal" chance="11111" />
 		<item name="life crystal" chance="11111" />
-		<item id="2178" chance="16666" />
+		<item id="2178" chance="16666" /><!-- mind stone -->
 		<item name="gold ring" chance="5882" />
 		<item name="ring of healing" chance="25000" />
 		<item name="double axe" chance="16666" />

@@ -36,17 +36,17 @@
 		<summon name="Orc Berserker" interval="2000" chance="30" />
 	</summons>
 	<loot>
-		<item name="gold coin" chance="50000" countmax="59" />
+		<item name="gold coin" countmax="59" chance="50000" />
 		<item name="gold ring" chance="5506" />
 		<item name="protection amulet" chance="9000" />
 		<item name="two handed sword" chance="18180" />
 		<item name="fire sword" chance="8970" />
-		<item name="throwing star" chance="6666" countmax="18" />
+		<item name="throwing star" countmax="18" chance="6666" />
 		<item name="orcish axe" chance="13000" />
 		<item name="plate armor" chance="7333" />
-		<item id="2478" chance="3333" />
+		<item id="2478" chance="3333" /><!-- brass legs -->
 		<item name="crusader helmet" chance="6670" />
-		<item name="meat" chance="20000" countmax="3" />
+		<item name="meat" countmax="3" chance="20000" />
 		<item id="2667" chance="6667" /><!-- fish -->
 	</loot>
 </monster>

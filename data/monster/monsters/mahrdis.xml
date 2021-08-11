@@ -76,7 +76,7 @@
 		<item name="great health potion" chance="10500" />
 		<item name="life ring" chance="6700" />
 		<item name="fire axe" chance="1050" />
-		<item id="2156" chance="600" />
+		<item id="2156" chance="600" /><!-- red gem -->
 		<item name="holy falcon" chance="150" />
 		<item name="mini mummy" chance="110" />
 		<item name="phoenix shield" chance="110" />

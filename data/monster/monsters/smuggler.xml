@@ -34,10 +34,10 @@
 	<loot>
 		<item name="gold coin" countmax="10" chance="80000" />
 		<item id="2050" countmax="2" chance="30200" /><!-- torch -->
-		<item id="2649" chance="14840" />
-		<item id="2671" chance="10200" />
+		<item id="2649" chance="14840" /><!-- leather legs -->
+		<item id="2671" chance="10200" /><!-- ham -->
 		<item name="short sword" chance="10000" />
-		<item id="2461" chance="10050" />
+		<item id="2461" chance="10050" /><!-- leather helmet -->
 		<item name="knife" chance="9920" />
 		<item id="2376" chance="5000" /><!-- sword -->
 		<item name="raspberry" countmax="5" chance="5000" />

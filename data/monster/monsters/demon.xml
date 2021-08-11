@@ -87,7 +87,7 @@
 		<item name="fire axe" chance="4000" />
 		<item name="talon" chance="3571" />
 		<item name="orb" chance="2900" />
-		<item id="2156" chance="2900" />
+		<item id="2156" chance="2900" /><!-- red gem -->
 		<item name="ring of healing" chance="2600" />
 		<item name="might ring" chance="2500" />
 		<item name="stealth ring" chance="2300" />
@@ -99,7 +99,7 @@
 		<item name="gold ring" chance="1010" />
 		<item name="demon shield" chance="750" />
 		<item name="platinum amulet" chance="710" />
-		<item id="2514" chance="470" />
+		<item id="2514" chance="470" /><!-- mastermind shield -->
 		<item name="golden legs" chance="400" />
 		<item id="7393" chance="100" /><!-- demon trophy -->
 		<item name="magic plate armor" chance="80" />

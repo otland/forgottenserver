@@ -60,7 +60,7 @@
 		<item id="2419" chance="3450" /><!-- scimitar -->
 		<item name="two handed sword" chance="1980" />
 		<item name="protection amulet" chance="1800" />
-		<item id="2490" chance="1260" />
+		<item id="2490" chance="1260" /><!-- dark helmet -->
 		<item name="brass armor" chance="860" />
 		<item name="health potion" chance="380" />
 		<item name="crusader helmet" chance="330" />

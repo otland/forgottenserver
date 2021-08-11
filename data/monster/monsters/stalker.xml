@@ -43,8 +43,8 @@
 		<item name="gold coin" countmax="8" chance="13000" />
 		<item name="throwing knife" countmax="2" chance="11170" />
 		<item name="blank rune" chance="8670" />
-		<item id="2511" chance="5600" />
-		<item id="2478" chance="3510" />
+		<item id="2511" chance="5600" /><!-- brass shield -->
+		<item id="2478" chance="3510" /><!-- brass legs -->
 		<item name="miraculum" chance="1550" />
 		<item name="obsidian lance" chance="1210" />
 		<item name="katana" chance="530" />

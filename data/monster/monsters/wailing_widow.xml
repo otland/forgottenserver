@@ -53,7 +53,7 @@
 	<loot>
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="37" chance="50000" />
-		<item id="2381" chance="4460" />
+		<item id="2381" chance="4460" /><!-- halberd -->
 		<item name="plate shield" chance="2854" />
 		<item name="green mushroom" chance="3208" />
 		<item name="health potion" chance="4761" />

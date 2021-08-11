@@ -29,6 +29,6 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="20" chance="25000" />
-		<item id="13297" countmax="2" chance="20000" />
+		<item id="13297" countmax="2" chance="20000" /><!-- haunch of boar -->
 	</loot>
 </monster>

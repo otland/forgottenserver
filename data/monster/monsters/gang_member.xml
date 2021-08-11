@@ -37,8 +37,8 @@
 		<item name="gold coin" countmax="30" chance="50110" />
 		<item name="club ring" chance="740" />
 		<item name="spear" chance="8700" />
-		<item id="2468" chance="5220" />
-		<item id="2649" chance="15330" />
+		<item id="2468" chance="5220" /><!-- studded legs -->
+		<item id="2649" chance="15330" /><!-- leather legs -->
 		<item name="bread" chance="4760" />
 	</loot>
 </monster>

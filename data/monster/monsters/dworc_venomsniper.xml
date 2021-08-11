@@ -41,7 +41,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="13" chance="75000" />
-		<item id="2467" chance="10000" />
+		<item id="2467" chance="10000" /><!-- leather armor -->
 		<item name="throwing knife" countmax="2" chance="8000" />
 		<item id="2050" chance="5400" /><!-- torch -->
 		<item name="poison arrow" countmax="3" chance="5000" />

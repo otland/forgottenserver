@@ -34,7 +34,7 @@
 	</voices>
 	<loot>
 		<item name="meat" countmax="4" chance="45000" />
-		<item id="2671" countmax="2" chance="18430" />
+		<item id="2671" countmax="2" chance="18430" /><!-- ham -->
 		<item name="lion's mane" chance="1400" />
 	</loot>
 </monster>

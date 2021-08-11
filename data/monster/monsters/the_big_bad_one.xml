@@ -43,7 +43,7 @@
 	</voices>
 	<loot>
 		<item id="7394" chance="50000" /><!-- wolf trophy -->
-		<item id="2671" countmax="2" chance="25000" />
+		<item id="2671" countmax="2" chance="25000" /><!-- ham -->
 		<item name="meat" countmax="4" chance="25000" />
 		<item name="wolf paw" countmax="2" chance="15000" />
 		<item name="warwolf fur" chance="5000" />

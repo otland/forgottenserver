@@ -49,7 +49,7 @@
 		<item name="gold coin" countmax="29" chance="50000" />
 		<item name="stealth ring" chance="960" />
 		<item name="two handed sword" chance="1010" />
-		<item id="2381" chance="5000" />
+		<item id="2381" chance="5000" /><!-- halberd -->
 		<item name="strange helmet" chance="100" />
 		<item name="cape" chance="1050" />
 		<item name="blue robe" chance="50" />

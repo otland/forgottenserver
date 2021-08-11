@@ -52,8 +52,8 @@
 		<item name="heavy magic missile rune" chance="2857" />
 		<item name="carrot of doom" countmax="5" chance="20000" />
 		<item name="combat knife" chance="10000" />
-		<item id="2461" chance="8000" />
-		<item id="2649" chance="8000" />
+		<item id="2461" chance="8000" /><!-- leather helmet -->
+		<item id="2649" chance="8000" /><!-- leather legs -->
 		<item id="2817" chance="10000" /><!-- dead snake -->
 		<item name="worm" countmax="10" chance="50000" />
 		<item name="minotaur leather" chance="100000" />

@@ -44,12 +44,12 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="50" chance="78000" />
-		<item id="2483" chance="3000" />
+		<item id="2483" chance="3000" /><!-- scale armor -->
 		<item name="steel shield" chance="2800" />
 		<item id="5091" chance="1000" /><!-- treasure map -->
 		<item name="rum flask" chance="90" />
 		<item name="light shovel" chance="2000" />
-		<item id="5792" chance="110" /><!-- dice -->
+		<item id="5792" chance="110" /><!-- die -->
 		<item name="pirate knee breeches" chance="980" />
 		<item name="pirate bag" chance="1000" />
 		<item name="hook" chance="550" />

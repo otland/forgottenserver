@@ -51,12 +51,12 @@
 		<item name="platinum coin" countmax="3" chance="92000" />
 		<item name="brass armor" chance="76000" />
 		<item name="double axe" chance="76000" />
-		<item id="7363" countmax="7" chance="40000" />
+		<item id="7363" countmax="7" chance="40000" /><!-- piercing bolt -->
 		<item name="meat" countmax="2" chance="30000" />
 		<item name="battle shield" chance="23000" />
 		<item name="chain legs" chance="23000" />
 		<item id="7401" chance="23000" /><!-- minotaur trophy -->
-		<item id="2547" countmax="7" chance="23000" />
+		<item id="2547" countmax="7" chance="23000" /><!-- power bolt -->
 		<item name="dwarven helmet" chance="100" />
 	</loot>
 </monster>

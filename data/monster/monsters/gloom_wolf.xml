@@ -40,7 +40,7 @@
 	<loot>
 		<item name="gold coin" countmax="15" chance="66710" />
 		<item name="meat" countmax="2" chance="40860" />
-		<item id="2671" countmax="2" chance="39530" />
+		<item id="2671" countmax="2" chance="39530" /><!-- ham -->
 		<item name="gloom wolf fur" chance="8260" />
 		<item name="wolf tooth chain" chance="7250" />
 		<item name="wolf paw" chance="3030" />

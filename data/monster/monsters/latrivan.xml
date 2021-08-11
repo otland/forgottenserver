@@ -44,7 +44,7 @@
 		<item name="platinum amulet" chance="12222" />
 		<item name="fire axe" chance="8200" />
 		<item name="golden legs" chance="6555" />
-		<item id="2514" chance="4500" />
+		<item id="2514" chance="4500" /><!-- mastermind shield -->
 		<item name="mastermind potion" chance="17000" />
 	</loot>
 </monster>

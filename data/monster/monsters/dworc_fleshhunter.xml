@@ -40,7 +40,7 @@
 	</voices>
 	<loot>
 		<item name="gold coin" countmax="13" chance="75000" />
-		<item id="2467" chance="10000" />
+		<item id="2467" chance="10000" /><!-- leather armor -->
 		<item name="cleaver" chance="9000" />
 		<item id="2050" chance="5500" /><!-- torch -->
 		<item id="2229" countmax="3" chance="3300" /><!-- skull -->
