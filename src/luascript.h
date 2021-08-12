@@ -322,7 +322,7 @@ class LuaScriptInterface
 			return static_cast<T**>(lua_touserdata(L, arg));
 		}
 		template<class T>
-		static const std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
+		static std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
 		{
 			return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
 		}
