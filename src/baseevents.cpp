@@ -23,6 +23,7 @@
 
 #include "pugicast.h"
 #include "tools.h"
+#include "fmt/printf.h"
 
 extern LuaEnvironment g_luaEnvironment;
 
@@ -167,11 +168,26 @@ bool Event::loadCallback()
 	return true;
 }
 
+CallBack::~CallBack()
+{
+	try {
+		if (scriptInterface && scriptId) {
+			scriptInterface->deleteEvent(scriptId);
+		}
+	} catch (const std::exception& e) {
+		fmt::printf("CallBack::~CallBack(): its look like we have a dangling scriptInterface in a combat callback.");
+	}
+}
+
 bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& name)
 {
 	if (!interface) {
 		std::cout << "Failure: [CallBack::loadCallBack] scriptInterface == nullptr" << std::endl;
 		return false;
+	}
+
+	if (scriptInterface && scriptId) {
+		scriptInterface->deleteEvent(scriptId);
 	}
 
 	scriptInterface = interface;
