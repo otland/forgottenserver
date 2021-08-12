@@ -36,14 +36,12 @@ void Npcs::reload()
 		it.second->closeAllShopWindows();
 	}
 
-	NpcScriptInterface* oldScriptInterface = Npc::scriptInterface;
+	std::unique_ptr<NpcScriptInterface> oldScriptInterface(Npc::scriptInterface);
 	Npc::scriptInterface = nullptr;
 
 	for (const auto& it : npcs) {
 		it.second->reload();
 	}
-
-	delete oldScriptInterface;
 }
 
 Npc* Npc::createNpc(const std::string& name)
