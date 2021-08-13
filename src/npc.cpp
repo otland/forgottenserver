@@ -262,7 +262,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		}
 		updateIdleStatus();
 
-		if (walkTicks > 0 && spectators.size() > 0) {
+		if (walkTicks > 0 && !spectators.empty()) {
 			addEventWalk();
 		}
 
