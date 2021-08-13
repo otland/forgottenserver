@@ -126,7 +126,7 @@ void Npc::reload()
 	}
 
 	const bool hasSpectators = !spectators.empty();
-	setIdle(hasSpectators);
+	setIdle(!hasSpectators);
 
 	if (hasSpectators && walkTicks > 0) {
 		addEventWalk();
@@ -271,7 +271,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		}
 
 		const bool hasSpectators = !spectators.empty();
-		setIdle(hasSpectators);
+		setIdle(!hasSpectators);
 
 		if (hasSpectators && walkTicks > 0) {
 			addEventWalk();
