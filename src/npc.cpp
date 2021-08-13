@@ -255,7 +255,14 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (creature == this) {
-		if (walkTicks > 0) {
+		SpectatorVec players;
+		g_game.map.getSpectators(players, getPosition(), true, true);
+		for (const auto& spectator : players) {
+			spectators.insert(spectator->getPlayer());
+		}
+		updateIdleStatus();
+
+		if (walkTicks > 0 && spectators.size() > 0) {
 			addEventWalk();
 		}
 
@@ -318,7 +325,7 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 
 void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
-	if (creature->getID() == id) {
+	if (creature == this) {
 		return;
 	}
 
