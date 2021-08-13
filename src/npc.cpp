@@ -119,13 +119,21 @@ void Npc::reload()
 	reset();
 	load();
 
+	SpectatorVec players;
+	g_game.map.getSpectators(players, getPosition(), true, true);
+	for (const auto& player : players) {
+		spectators.insert(player->getPlayer());
+	}
+
+	updateIdleStatus();
+
+	if (walkTicks > 0 && !spectators.empty()) {
+		addEventWalk();
+	}
+
 	// Simulate that the creature is placed on the map again.
 	if (npcEventHandler) {
 		npcEventHandler->onCreatureAppear(this);
-	}
-
-	if (walkTicks > 0) {
-		addEventWalk();
 	}
 }
 
