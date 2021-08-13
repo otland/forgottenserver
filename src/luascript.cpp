@@ -15780,10 +15780,10 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 			return 1;
 		}
 		pushBoolean(L, g_moveEvents->registerLuaEvent(moveevent));
-		moveevent->getItemIdRange().clear();
-		moveevent->getActionIdRange().clear();
-		moveevent->getUniqueIdRange().clear();
-		moveevent->getPosList().clear();
+		moveevent->clearItemIdRange();
+		moveevent->clearActionIdRange();
+		moveevent->clearUniqueIdRange();
+		moveevent->clearPosList();
 	} else {
 		lua_pushnil(L);
 	}
