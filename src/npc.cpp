@@ -125,9 +125,10 @@ void Npc::reload()
 		spectators.insert(player->getPlayer());
 	}
 
-	updateIdleStatus();
+	const bool hasSpectators = !spectators.empty();
+	setIdle(hasSpectators);
 
-	if (walkTicks > 0 && !spectators.empty()) {
+	if (hasSpectators && walkTicks > 0) {
 		addEventWalk();
 	}
 
@@ -268,9 +269,11 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		for (const auto& player : players) {
 			spectators.insert(player->getPlayer());
 		}
-		updateIdleStatus();
 
-		if (walkTicks > 0 && !spectators.empty()) {
+		const bool hasSpectators = !spectators.empty();
+		setIdle(hasSpectators);
+
+		if (hasSpectators && walkTicks > 0) {
 			addEventWalk();
 		}
 
@@ -283,7 +286,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		}
 
 		spectators.insert(player);
-		updateIdleStatus();
+		setIdle(false);
 	}
 }
 
@@ -302,7 +305,7 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		spectators.erase(player);
-		updateIdleStatus();
+		setIdle(spectators.empty());
 	}
 }
 
@@ -326,7 +329,7 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 				spectators.erase(player);
 			}
 
-			updateIdleStatus();
+			setIdle(spectators.empty());
 		}
 	}
 }
@@ -428,8 +431,12 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	return getRandomStep(dir);
 }
 
-void Npc::setIdle(bool idle)
+void Npc::setIdle(const bool idle)
 {
+	if (idle == isIdle) {
+		return;
+	}
+
 	if (isRemoved() || getHealth() <= 0) {
 		return;
 	}
@@ -438,14 +445,6 @@ void Npc::setIdle(bool idle)
 
 	if (isIdle) {
 		onIdleStatus();
-	}
-}
-
-void Npc::updateIdleStatus()
-{
-	bool status = spectators.empty();
-	if (status != isIdle) {
-		setIdle(status);
 	}
 }
 
