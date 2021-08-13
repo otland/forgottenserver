@@ -204,6 +204,23 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 bool MoveEvents::registerLuaFunction(MoveEvent* event)
 {
 	MoveEvent_ptr moveEvent{ event };
+
+	const MoveEvent_t eventType = moveEvent->getEventType();
+	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
+		if (moveEvent->getTileItem()) {
+			switch (eventType) {
+				case MOVE_EVENT_ADD_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
+					break;
+				case MOVE_EVENT_REMOVE_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
@@ -237,6 +254,23 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 bool MoveEvents::registerLuaEvent(MoveEvent* event)
 {
 	MoveEvent_ptr moveEvent{ event };
+
+	const MoveEvent_t eventType = moveEvent->getEventType();
+	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
+		if (moveEvent->getTileItem()) {
+			switch (eventType) {
+				case MOVE_EVENT_ADD_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
+					break;
+				case MOVE_EVENT_REMOVE_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
