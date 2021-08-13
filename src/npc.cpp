@@ -257,8 +257,8 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	if (creature == this) {
 		SpectatorVec players;
 		g_game.map.getSpectators(players, getPosition(), true, true);
-		for (const auto& spectator : players) {
-			spectators.insert(spectator->getPlayer());
+		for (const auto& player : players) {
+			spectators.insert(player->getPlayer());
 		}
 		updateIdleStatus();
 
