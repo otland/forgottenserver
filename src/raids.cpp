@@ -395,7 +395,7 @@ bool SingleSpawnEvent::executeEvent()
 		return false;
 	}
 
-	/*Monster monster =*/ monster_ptr.release();
+	/*Monster* monster =*/ monster_ptr.release();
 	return true;
 }
 
