@@ -258,8 +258,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 		}
 	}
 
-	if (foundTile && (!g_events->eventCreatureOnSpawn(creature, tile->getPosition(), startup, artificial) && !forceLogin)) {
-		return false;
+	if (!creature->getPlayer()) {
+		if (!g_events->eventCreatureOnSpawn(creature, tile->getPosition(), startup, artificial) && !forceLogin) {
+			return false;
+		}
 	}
 
 	int32_t index = 0;
