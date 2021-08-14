@@ -191,7 +191,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		Combat* combat = new Combat;
+		Combat_ptr combat = std::make_shared<Combat>();
 		if ((attr = node.attribute("length"))) {
 			int32_t length = pugi::cast<int32_t>(attr.value());
 			if (length > 0) {
@@ -350,7 +350,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				if (minSpeedChange == 0) {
 					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - missing speedchange/minspeedchange value" << std::endl;
-					delete combat;
 					return false;
 				}
 
@@ -491,7 +490,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			//
 		} else {
 			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << name << std::endl;
-			delete combat;
 			return false;
 		}
 
@@ -585,7 +583,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		std::unique_ptr<Combat> combat{ new Combat };
+		Combat_ptr combat = std::make_shared<Combat>();
 		sb.combatSpell = true;
 
 		if (spell->length > 0) {
@@ -773,7 +771,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		}
 
 		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
-		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
+		combatSpell = new CombatSpell(combat, spell->needTarget, spell->needDirection);
 	}
 
 	sb.spell = combatSpell;

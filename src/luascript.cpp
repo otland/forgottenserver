@@ -2722,6 +2722,8 @@ void LuaScriptInterface::registerFunctions()
 	// Combat
 	registerClass("Combat", "", LuaScriptInterface::luaCombatCreate);
 	registerMetaMethod("Combat", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("Combat", "__gc", LuaScriptInterface::luaCombatDelete);
+	registerMethod("Combat", "delete", LuaScriptInterface::luaCombatDelete);
 
 	registerMethod("Combat", "setParameter", LuaScriptInterface::luaCombatSetParameter);
 	registerMethod("Combat", "getParameter", LuaScriptInterface::luaCombatGetParameter);
@@ -12281,16 +12283,26 @@ int LuaScriptInterface::luaItemTypeIsStoreItem(lua_State* L)
 int LuaScriptInterface::luaCombatCreate(lua_State* L)
 {
 	// Combat()
-	pushUserdata<Combat>(L, g_luaEnvironment.createCombatObject(getScriptEnv()->getScriptInterface()));
+	pushSharedPtr(L, g_luaEnvironment.createCombatObject(getScriptEnv()->getScriptInterface()));
 	setMetatable(L, -1, "Combat");
 	return 1;
+}
+
+int LuaScriptInterface::luaCombatDelete(lua_State* L)
+{
+	Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	if (combat) {
+		combat.reset();
+	}
+	return 0;
 }
 
 int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 {
 	// combat:setParameter(key, value)
-	Combat* combat = getUserdata<Combat>(L, 1);
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
 	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -12329,8 +12341,9 @@ int LuaScriptInterface::luaCombatGetParameter(lua_State* L)
 int LuaScriptInterface::luaCombatSetFormula(lua_State* L)
 {
 	// combat:setFormula(type, mina, minb, maxa, maxb)
-	Combat* combat = getUserdata<Combat>(L, 1);
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
 	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -12361,22 +12374,30 @@ int LuaScriptInterface::luaCombatSetArea(lua_State* L)
 		return 1;
 	}
 
-	Combat* combat = getUserdata<Combat>(L, 1);
-	if (combat) {
-		combat->setArea(new AreaCombat(*area));
-		pushBoolean(L, true);
-	} else {
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
+		return 1;
 	}
+
+	combat->setArea(new AreaCombat(*area));
+	pushBoolean(L, true);
 	return 1;
 }
 
 int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 {
 	// combat:addCondition(condition)
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
+		lua_pushnil(L);
+		return 1;
+	}
+
 	Condition* condition = getUserdata<Condition>(L, 2);
-	Combat* combat = getUserdata<Combat>(L, 1);
-	if (combat && condition) {
+	if (condition) {
 		combat->addCondition(condition->clone());
 		pushBoolean(L, true);
 	} else {
@@ -12388,21 +12409,24 @@ int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
 {
 	// combat:clearConditions()
-	Combat* combat = getUserdata<Combat>(L, 1);
-	if (combat) {
-		combat->clearConditions();
-		pushBoolean(L, true);
-	} else {
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
+		return 1;
 	}
+
+	combat->clearConditions();
+	pushBoolean(L, true);
 	return 1;
 }
 
 int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 {
 	// combat:setCallback(key, function)
-	Combat* combat = getUserdata<Combat>(L, 1);
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
 	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -12427,22 +12451,25 @@ int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 int LuaScriptInterface::luaCombatSetOrigin(lua_State* L)
 {
 	// combat:setOrigin(origin)
-	Combat* combat = getUserdata<Combat>(L, 1);
-	if (combat) {
-		combat->setOrigin(getNumber<CombatOrigin>(L, 2));
-		pushBoolean(L, true);
-	} else {
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
+	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
+		return 1;
 	}
+
+	combat->setOrigin(getNumber<CombatOrigin>(L, 2));
+	pushBoolean(L, true);
 	return 1;
 }
 
 int LuaScriptInterface::luaCombatExecute(lua_State* L)
 {
 	// combat:execute(creature, variant)
-	Combat* combat = getUserdata<Combat>(L, 1);
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
 	if (!combat) {
-		pushBoolean(L, false);
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
+		lua_pushnil(L);
 		return 1;
 	}
 
@@ -16874,7 +16901,7 @@ LuaScriptInterface* LuaEnvironment::getTestInterface()
 	return testInterface;
 }
 
-Combat* LuaEnvironment::getCombatObject(uint32_t id) const
+Combat_ptr LuaEnvironment::getCombatObject(uint32_t id) const
 {
 	auto it = combatMap.find(id);
 	if (it == combatMap.end()) {
@@ -16883,9 +16910,9 @@ Combat* LuaEnvironment::getCombatObject(uint32_t id) const
 	return it->second;
 }
 
-Combat* LuaEnvironment::createCombatObject(LuaScriptInterface* interface)
+Combat_ptr LuaEnvironment::createCombatObject(LuaScriptInterface* interface)
 {
-	Combat* combat = new Combat;
+	Combat_ptr combat = std::make_shared<Combat>();
 	combatMap[++lastCombatId] = combat;
 	combatIdMap[interface].push_back(lastCombatId);
 	return combat;
@@ -16901,7 +16928,6 @@ void LuaEnvironment::clearCombatObjects(LuaScriptInterface* interface)
 	for (uint32_t id : it->second) {
 		auto itt = combatMap.find(id);
 		if (itt != combatMap.end()) {
-			delete itt->second;
 			combatMap.erase(itt);
 		}
 	}

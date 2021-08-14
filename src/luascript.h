@@ -48,6 +48,7 @@ class Item;
 class Container;
 class AreaCombat;
 class Combat;
+using Combat_ptr = std::shared_ptr<Combat>;
 class Condition;
 class Npc;
 class Monster;
@@ -270,6 +271,13 @@ class LuaScriptInterface
 			*userdata = value;
 		}
 
+		// Shared Ptr
+		template<class T>
+		static void pushSharedPtr(lua_State* L, T value)
+		{
+			new (lua_newuserdata(L, sizeof(T))) T(std::move(value));
+		}
+
 		// Metatables
 		static void setMetatable(lua_State* L, int32_t index, const std::string& name);
 		static void setWeakMetatable(lua_State* L, int32_t index, const std::string& name);
@@ -312,6 +320,11 @@ class LuaScriptInterface
 		static T** getRawUserdata(lua_State* L, int32_t arg)
 		{
 			return static_cast<T**>(lua_touserdata(L, arg));
+		}
+		template<class T>
+		static std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
+		{
+			return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
 		}
 
 		static bool getBoolean(lua_State* L, int32_t arg)
@@ -1217,6 +1230,7 @@ class LuaScriptInterface
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);
+		static int luaCombatDelete(lua_State* L);
 
 		static int luaCombatSetParameter(lua_State* L);
 		static int luaCombatGetParameter(lua_State* L);
@@ -1551,8 +1565,8 @@ class LuaEnvironment : public LuaScriptInterface
 
 		LuaScriptInterface* getTestInterface();
 
-		Combat* getCombatObject(uint32_t id) const;
-		Combat* createCombatObject(LuaScriptInterface* interface);
+		Combat_ptr getCombatObject(uint32_t id) const;
+		Combat_ptr createCombatObject(LuaScriptInterface* interface);
 		void clearCombatObjects(LuaScriptInterface* interface);
 
 		AreaCombat* getAreaObject(uint32_t id) const;
@@ -1563,7 +1577,7 @@ class LuaEnvironment : public LuaScriptInterface
 		void executeTimerEvent(uint32_t eventIndex);
 
 		std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
-		std::unordered_map<uint32_t, Combat*> combatMap;
+		std::unordered_map<uint32_t, Combat_ptr> combatMap;
 		std::unordered_map<uint32_t, AreaCombat*> areaMap;
 
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> combatIdMap;
