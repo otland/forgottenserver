@@ -196,7 +196,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	}
 }
 
-bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/)
+bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/, bool artificial/* = false*/, bool startup/* = false*/)
 {
 	bool foundTile;
 	bool placeInPZ;
@@ -254,6 +254,10 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 		if (!foundTile) {
 			return false;
 		}
+	}
+
+	if (foundTile && (!g_events->eventCreatureOnSpawn(creature, tile->getPosition(), startup, artificial) && !forceLogin)) {
+		return false;
 	}
 
 	int32_t index = 0;

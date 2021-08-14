@@ -32,6 +32,14 @@ function Creature.getPlayer(self)
 	return self:isPlayer() and self or nil
 end
 
+function Creature.getMonster(self)
+	return self:isMonster() and self or nil
+end
+
+function Creature.getNpc(self)
+	return self:isNpc() and self or nil
+end
+
 function Creature.isContainer(self)
 	return false
 end

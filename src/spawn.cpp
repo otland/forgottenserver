@@ -216,19 +216,16 @@ bool Spawn::isInSpawnZone(const Position& pos)
 
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
-	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {
-		return false;
-	}
+	auto monster_ptr = Monster_ptr(new Monster(mType));
 
 	if (startup) {
 		//No need to send out events to the surrounding since there is no one out there to listen!
-		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true)) {
+		if (!g_game.internalPlaceCreature(monster_ptr.get(), pos, true, false, false, startup)) {
 			std::cout << "[Warning - Spawns::startup] Couldn't spawn monster \"" << monster_ptr->getName() << "\" on position: " << pos << '.' << std::endl;
 			return false;
 		}
 	} else {
-		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true)) {
+		if (!g_game.placeCreature(monster_ptr.get(), pos, false, true, false, startup)) {
 			return false;
 		}
 	}

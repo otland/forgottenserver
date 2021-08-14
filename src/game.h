@@ -189,8 +189,10 @@ class Game
 		  * \param pos The position to place the creature
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param forced If true, placing the creature will not fail because of obstacles (creatures/items)
+		  * \param artificial If true, it means that this monster is being created from lua manually
+		  * \param startup If true, it means that this monster is being created at the startup of the game
 		  */
-		bool internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false);
+		bool internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false, bool artificial = false, bool startup = false);
 
 		/**
 		  * Place Creature on the map.
@@ -198,8 +200,10 @@ class Game
 		  * \param pos The position to place the creature
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param force If true, placing the creature will not fail because of obstacles (creatures/items)
+		  * \param artificial If true, it means that this monster is being created from lua manually
+		  * \param startup If true, it means that this monster is being created at the startup of the game
 		  */
-		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false);
+		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false, bool artificial = false, bool startup = false);
 
 		/**
 		  * Remove Creature from the map.

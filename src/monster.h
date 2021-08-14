@@ -37,6 +37,9 @@ enum TargetSearchType_t {
 	TARGETSEARCH_NEAREST,
 };
 
+class Monster;
+using Monster_ptr = std::unique_ptr<Monster>;
+
 class Monster final : public Creature
 {
 	public:

@@ -223,8 +223,10 @@ class Map
 		  * \param creature Creature to place on the map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param forceLogin If true, placing the creature will not fail because of obstacles (creatures/chests)
+		  * \param artificial If true, it means that this monster is being created from lua manually
+		  * \param startup If true, it means that this monster is being created at the startup of the game
 		  */
-		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
+		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false, bool artificial = false, bool startup = false);
 
 		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 

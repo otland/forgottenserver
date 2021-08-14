@@ -4447,8 +4447,8 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 {
 	// Game.createMonster(monsterName, position[, extended = false[, force = false]])
-	Monster* monster = Monster::createMonster(getString(L, 1));
-	if (!monster) {
+	auto monster_ptr = Monster::createMonster(getString(L, 1));
+	if (!monster_ptr) {
 		lua_pushnil(L);
 		return 1;
 	}
@@ -4456,18 +4456,13 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	const Position& position = getPosition(L, 2);
 	bool extended = getBoolean(L, 3, false);
 	bool force = getBoolean(L, 4, false);
-	if (g_events->eventMonsterOnSpawn(monster, position, false, true) || force) {
-		if (g_game.placeCreature(monster, position, extended, force)) {
-			pushUserdata<Monster>(L, monster);
-			setMetatable(L, -1, "Monster");
-		} else {
-			delete monster;
-			lua_pushnil(L);
-		}
-	} else {
-		delete monster;
-		lua_pushnil(L);
+	if (g_game.placeCreature(monster_ptr.get(), position, extended, force, true)) {
+		pushUserdata<Monster>(L, monster_ptr.release());
+		setMetatable(L, -1, "Monster");
+		return 1;
 	}
+
+	pushBoolean(L, false);
 	return 1;
 }
 
@@ -4483,7 +4478,7 @@ int LuaScriptInterface::luaGameCreateNpc(lua_State* L)
 	const Position& position = getPosition(L, 2);
 	bool extended = getBoolean(L, 3, false);
 	bool force = getBoolean(L, 4, false);
-	if (g_game.placeCreature(npc, position, extended, force)) {
+	if (g_game.placeCreature(npc, position, extended, force, true)) {
 		pushUserdata<Npc>(L, npc);
 		setMetatable(L, -1, "Npc");
 	} else {

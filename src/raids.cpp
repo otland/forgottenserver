@@ -384,17 +384,18 @@ bool SingleSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 bool SingleSpawnEvent::executeEvent()
 {
-	Monster* monster = Monster::createMonster(monsterName);
-	if (!monster) {
+	auto monster_ptr = Monster::createMonster(monsterName);
+	if (!monster_ptr) {
 		std::cout << "[Error] Raids: Cant create monster " << monsterName << std::endl;
 		return false;
 	}
 
-	if (!g_game.placeCreature(monster, position, false, true)) {
-		delete monster;
+	if (!g_game.placeCreature(monster_ptr.get(), position, false, true)) {
 		std::cout << "[Error] Raids: Cant place monster " << monsterName << std::endl;
 		return false;
 	}
+
+	/*Monster monster =*/ monster_ptr.release();
 	return true;
 }
 
@@ -525,23 +526,18 @@ bool AreaSpawnEvent::executeEvent()
 	for (const MonsterSpawn& spawn : spawnList) {
 		uint32_t amount = uniform_random(spawn.minAmount, spawn.maxAmount);
 		for (uint32_t i = 0; i < amount; ++i) {
-			Monster* monster = Monster::createMonster(spawn.name);
-			if (!monster) {
+			auto monster_ptr = Monster::createMonster(spawn.name);
+			if (!monster_ptr) {
 				std::cout << "[Error - AreaSpawnEvent::executeEvent] Can't create monster " << spawn.name << std::endl;
 				return false;
 			}
 
-			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
-					success = true;
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster_ptr.get(), tile->getPosition(), false, true)) {
+					/*Monster* monster =*/ monster_ptr.release();
 					break;
 				}
-			}
-
-			if (!success) {
-				delete monster;
 			}
 		}
 	}

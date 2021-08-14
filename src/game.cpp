@@ -542,13 +542,13 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 	return nullptr;
 }
 
-bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/)
+bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, bool artificial /*= false*/, bool startup /*= false*/)
 {
 	if (creature->getParent() != nullptr) {
 		return false;
 	}
 
-	if (!map.placeCreature(pos, creature, extendedPos, forced)) {
+	if (!map.placeCreature(pos, creature, extendedPos, forced, artificial, startup)) {
 		return false;
 	}
 
@@ -558,9 +558,9 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 	return true;
 }
 
-bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/)
+bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, bool artificial /*= false*/, bool startup /*= false*/)
 {
-	if (!internalPlaceCreature(creature, pos, extendedPos, forced)) {
+	if (!internalPlaceCreature(creature, pos, extendedPos, forced, artificial, startup)) {
 		return false;
 	}
 

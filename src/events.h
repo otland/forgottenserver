@@ -35,6 +35,7 @@ class Events
 		int32_t creatureOnAreaCombat = -1;
 		int32_t creatureOnTargetCombat = -1;
 		int32_t creatureOnHear = -1;
+		int32_t creatureOnSpawn = -1;
 
 		// Party
 		int32_t partyOnJoin = -1;
@@ -64,7 +65,6 @@ class Events
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
-		int32_t monsterOnSpawn = -1;
 	};
 
 	public:
@@ -77,6 +77,7 @@ class Events
 		ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 		ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 		void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
+		bool eventCreatureOnSpawn(Creature* creature, const Position& position, bool startup, bool artificial);
 
 		// Party
 		bool eventPartyOnJoin(Party* party, Player* player);
@@ -106,7 +107,6 @@ class Events
 
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
-		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
 
 	private:
 		LuaScriptInterface scriptInterface;
