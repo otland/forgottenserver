@@ -43,7 +43,7 @@ using Monster_ptr = std::unique_ptr<Monster>;
 class Monster final : public Creature
 {
 	public:
-		static Monster* createMonster(const std::string& name);
+		static Monster_ptr createMonster(const std::string& name);
 		static int32_t despawnRange;
 		static int32_t despawnRadius;
 
