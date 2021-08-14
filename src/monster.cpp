@@ -70,6 +70,7 @@ Monster::~Monster()
 {
 	clearTargetList();
 	clearFriendList();
+	setIdle(true);
 }
 
 void Monster::addList()
