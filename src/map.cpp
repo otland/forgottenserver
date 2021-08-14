@@ -25,8 +25,10 @@
 #include "creature.h"
 #include "game.h"
 #include "monster.h"
+#include "events.h"
 
 extern Game g_game;
+extern Events* g_events;
 
 bool Map::loadMap(const std::string& identifier, bool loadHouses)
 {
