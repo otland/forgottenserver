@@ -119,13 +119,22 @@ void Npc::reload()
 	reset();
 	load();
 
+	SpectatorVec players;
+	g_game.map.getSpectators(players, getPosition(), true, true);
+	for (const auto& player : players) {
+		spectators.insert(player->getPlayer());
+	}
+
+	const bool hasSpectators = !spectators.empty();
+	setIdle(!hasSpectators);
+
+	if (hasSpectators && walkTicks > 0) {
+		addEventWalk();
+	}
+
 	// Simulate that the creature is placed on the map again.
 	if (npcEventHandler) {
 		npcEventHandler->onCreatureAppear(this);
-	}
-
-	if (walkTicks > 0) {
-		addEventWalk();
 	}
 }
 
@@ -255,7 +264,16 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (creature == this) {
-		if (walkTicks > 0) {
+		SpectatorVec players;
+		g_game.map.getSpectators(players, getPosition(), true, true);
+		for (const auto& player : players) {
+			spectators.insert(player->getPlayer());
+		}
+
+		const bool hasSpectators = !spectators.empty();
+		setIdle(!hasSpectators);
+
+		if (hasSpectators && walkTicks > 0) {
 			addEventWalk();
 		}
 
@@ -268,7 +286,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		}
 
 		spectators.insert(player);
-		updateIdleStatus();
+		setIdle(false);
 	}
 }
 
@@ -287,7 +305,7 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		spectators.erase(player);
-		updateIdleStatus();
+		setIdle(spectators.empty());
 	}
 }
 
@@ -311,14 +329,14 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 				spectators.erase(player);
 			}
 
-			updateIdleStatus();
+			setIdle(spectators.empty());
 		}
 	}
 }
 
 void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
 {
-	if (creature->getID() == id) {
+	if (creature == this) {
 		return;
 	}
 
@@ -413,8 +431,12 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	return getRandomStep(dir);
 }
 
-void Npc::setIdle(bool idle)
+void Npc::setIdle(const bool idle)
 {
+	if (idle == isIdle) {
+		return;
+	}
+
 	if (isRemoved() || getHealth() <= 0) {
 		return;
 	}
@@ -423,14 +445,6 @@ void Npc::setIdle(bool idle)
 
 	if (isIdle) {
 		onIdleStatus();
-	}
-}
-
-void Npc::updateIdleStatus()
-{
-	bool status = spectators.empty();
-	if (status != isIdle) {
-		setIdle(status);
 	}
 }
 

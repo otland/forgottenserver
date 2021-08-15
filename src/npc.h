@@ -208,8 +208,7 @@ class Npc final : public Creature
 		}
 		bool getNextStep(Direction& dir, uint32_t& flags) override;
 
-		void setIdle(bool idle);
-		void updateIdleStatus();
+		void setIdle(const bool idle);
 
 		bool canWalkTo(const Position& fromPos, Direction dir) const;
 		bool getRandomStep(Direction& dir) const;
