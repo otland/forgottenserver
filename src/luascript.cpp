@@ -7341,14 +7341,7 @@ int LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 	// creature:setTarget(target)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		Creature* target = getCreature(L, 2);
-		if (!target) {
-			reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		pushBoolean(L, creature->setAttackedCreature(target));
+		pushBoolean(L, creature->setAttackedCreature(getCreature(L, 2)));
 	} else {
 		lua_pushnil(L);
 	}
@@ -7379,14 +7372,7 @@ int LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 	// creature:setFollowCreature(followedCreature)
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (creature) {
-		Creature* followCreature = getCreature(L, 2);
-		if (!followCreature) {
-			reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-			pushBoolean(L, false);
-			return 1;
-		}
-
-		pushBoolean(L, creature->setFollowCreature(followCreature));
+		pushBoolean(L, creature->setFollowCreature(getCreature(L, 2)));
 	} else {
 		lua_pushnil(L);
 	}
