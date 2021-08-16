@@ -52,8 +52,9 @@ Monster::Monster(MonsterType* mType) :
 	defaultOutfit = mType->info.outfit;
 	currentOutfit = mType->info.outfit;
 	skull = mType->info.skull;
-	health = mType->info.health;
-	healthMax = mType->info.healthMax;
+	float multiplier = g_config.getFloat(ConfigManager::RATE_MONSTER_HEALTH);
+	health = mType->info.health * multiplier;
+	healthMax = mType->info.healthMax * multiplier;
 	baseSpeed = mType->info.baseSpeed;
 	internalLight = mType->info.light;
 	hiddenHealth = mType->info.hiddenHealth;
@@ -798,8 +799,15 @@ void Monster::doAttacking(uint32_t interval)
 					updateLook = false;
 				}
 
-				minCombatValue = spellBlock.minCombatValue;
-				maxCombatValue = spellBlock.maxCombatValue;
+				float multiplier;
+				if (maxCombatValue > 0) { //defense
+					multiplier = g_config.getFloat(ConfigManager::RATE_MONSTER_DEFENSE);
+				} else { //attack
+					multiplier = g_config.getFloat(ConfigManager::RATE_MONSTER_ATTACK);
+				}
+
+				minCombatValue = spellBlock.minCombatValue * multiplier;
+				maxCombatValue = spellBlock.maxCombatValue * multiplier;
 				spellBlock.spell->castSpell(this, attackedCreature);
 
 				if (spellBlock.isMelee) {
@@ -1852,8 +1860,15 @@ bool Monster::getCombatValues(int32_t& min, int32_t& max)
 		return false;
 	}
 
-	min = minCombatValue;
-	max = maxCombatValue;
+	float multiplier;
+	if (maxCombatValue > 0) { //defense
+		multiplier = g_config.getFloat(ConfigManager::RATE_MONSTER_DEFENSE);
+	} else { //attack
+		multiplier = g_config.getFloat(ConfigManager::RATE_MONSTER_ATTACK);
+	}
+
+	min = minCombatValue * multiplier;
+	max = maxCombatValue * multiplier;
 	return true;
 }
 
