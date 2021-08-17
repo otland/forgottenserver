@@ -9729,7 +9729,7 @@ int LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 		return 1;
 	}
 
-	player->addBlessing(1 << blessing);
+	player->addBlessing(blessing);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -9749,7 +9749,7 @@ int LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 		return 1;
 	}
 
-	player->removeBlessing(1 << blessing);
+	player->removeBlessing(blessing);
 	pushBoolean(L, true);
 	return 1;
 }
