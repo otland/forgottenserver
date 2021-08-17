@@ -45,7 +45,7 @@ class Teleport final : public Item, public Cylinder
 			destPos = pos;
 		}
 
-		bool checkInfinityLoop(Tile* destTile);
+		bool isHuge(const Tile* destTile);
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,

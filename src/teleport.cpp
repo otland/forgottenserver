@@ -70,19 +70,24 @@ void Teleport::addThing(Thing* thing)
 	return addThing(0, thing);
 }
 
-bool Teleport::checkInfinityLoop(Tile* destTile)
+bool Teleport::isHuge(const Tile* destTile)
 {
-	if (!destTile) {
-		return false;
-	}
-
-	if (Teleport* teleport = destTile->getTeleportItem()) {
+	Teleport* teleport = destTile->getTeleportItem();
+	uint8_t tries = 0;
+	do {
 		const Position& nextDestPos = teleport->getDestPos();
-		if (getPosition() == nextDestPos) {
+		if (getPosition() == nextDestPos || ++tries >= 32) {
 			return true;
 		}
-		return checkInfinityLoop(g_game.map.getTile(nextDestPos));
-	}
+
+		if (const Tile* tempTile = g_game.map.getTile(nextDestPos)) {
+			teleport = tempTile->getTeleportItem();
+		} else {
+			break;
+		}
+
+	} while (teleport);
+
 	return false;
 }
 
@@ -94,9 +99,9 @@ void Teleport::addThing(int32_t, Thing* thing)
 	}
 
 	// Prevent infinity loop
-	if (checkInfinityLoop(destTile)) {
+	if (isHuge(destTile)) {
 		const Position& pos = getPosition();
-		std::cout << "Warning: infinity loop teleport. " << pos << std::endl;
+		std::cout << "Warning: possible infinity loop teleport. " << pos << std::endl;
 		return;
 	}
 
