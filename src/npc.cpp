@@ -583,6 +583,7 @@ bool NpcScriptInterface::initState()
 	lua_newtable(luaState);
 	eventTableRef = luaL_ref(luaState, LUA_REGISTRYINDEX);
 	runningEventId = EVENT_ID_USER;
+	eventIdPool.clear();
 	return true;
 }
 

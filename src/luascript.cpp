@@ -356,17 +356,25 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 		return -1;
 	}
 
+	int32_t eventId = runningEventId;
+	if (!eventIdPool.empty()) {
+		eventId = eventIdPool.back();
+		eventIdPool.pop_back();
+	} else {
+		runningEventId++;
+	}
+
 	//save in our events table
 	lua_pushvalue(luaState, -1);
-	lua_rawseti(luaState, -3, runningEventId);
+	lua_rawseti(luaState, -3, eventId);
 	lua_pop(luaState, 2);
 
 	//reset global value of this event
 	lua_pushnil(luaState);
 	lua_setglobal(luaState, eventName.c_str());
 
-	cacheFiles[runningEventId] = loadingFile + ":" + eventName;
-	return runningEventId++;
+	cacheFiles[eventId] = loadingFile + ":" + eventName;
+	return eventId;
 }
 
 int32_t LuaScriptInterface::getEvent()
@@ -383,13 +391,21 @@ int32_t LuaScriptInterface::getEvent()
 		return -1;
 	}
 
+	int32_t eventId = runningEventId;
+	if (!eventIdPool.empty()) {
+		eventId = eventIdPool.back();
+		eventIdPool.pop_back();
+	} else {
+		runningEventId++;
+	}
+
 	//save in our events table
 	lua_pushvalue(luaState, -2);
-	lua_rawseti(luaState, -2, runningEventId);
+	lua_rawseti(luaState, -2, eventId);
 	lua_pop(luaState, 2);
 
-	cacheFiles[runningEventId] = loadingFile + ":callback";
-	return runningEventId++;
+	cacheFiles[eventId] = loadingFile + ":callback";
+	return eventId;
 }
 
 int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const std::string& eventName)
@@ -409,9 +425,17 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 		return -1;
 	}
 
+	int32_t eventId = runningEventId;
+	if (!eventIdPool.empty()) {
+		eventId = eventIdPool.back();
+		eventIdPool.pop_back();
+	} else {
+		runningEventId++;
+	}
+
 	//save in our events table
 	lua_pushvalue(luaState, -1);
-	lua_rawseti(luaState, -4, runningEventId);
+	lua_rawseti(luaState, -4, eventId);
 	lua_pop(luaState, 1);
 
 	//reset global value of this event
@@ -419,8 +443,8 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	lua_setfield(luaState, -2, eventName.c_str());
 	lua_pop(luaState, 2);
 
-	cacheFiles[runningEventId] = loadingFile + ":" + globalName + "@" + eventName;
-	return runningEventId++;
+	cacheFiles[eventId] = loadingFile + ":" + globalName + "@" + eventName;
+	return eventId;
 }
 
 bool LuaScriptInterface::deleteEvent(int32_t eventId)
@@ -447,6 +471,9 @@ bool LuaScriptInterface::deleteEvent(int32_t eventId)
 	lua_rawseti(luaState, -2, eventId);
 
 	lua_pop(luaState, 1);
+
+	cacheFiles.erase(eventId);
+	eventIdPool.push_back(eventId);
 
 	return true;
 }
@@ -542,6 +569,7 @@ bool LuaScriptInterface::initState()
 	lua_newtable(luaState);
 	eventTableRef = luaL_ref(luaState, LUA_REGISTRYINDEX);
 	runningEventId = EVENT_ID_USER;
+	eventIdPool.clear();
 	return true;
 }
 
@@ -551,6 +579,7 @@ bool LuaScriptInterface::closeState()
 		return false;
 	}
 
+	eventIdPool.clear();
 	cacheFiles.clear();
 	if (eventTableRef != -1) {
 		luaL_unref(luaState, LUA_REGISTRYINDEX, eventTableRef);
@@ -16837,6 +16866,7 @@ bool LuaEnvironment::initState()
 	registerFunctions();
 
 	runningEventId = EVENT_ID_USER;
+	eventIdPool.clear();
 	return true;
 }
 
@@ -16873,6 +16903,7 @@ bool LuaEnvironment::closeState()
 	areaIdMap.clear();
 	timerEvents.clear();
 	cacheFiles.clear();
+	eventIdPool.clear();
 
 	lua_close(luaState);
 	luaState = nullptr;

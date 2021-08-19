@@ -423,6 +423,7 @@ class LuaScriptInterface
 
 		int32_t eventTableRef = -1;
 		int32_t runningEventId = EVENT_ID_USER;
+		std::vector<int32_t> eventIdPool;
 
 		//script file cache
 		std::map<int32_t, std::string> cacheFiles;
