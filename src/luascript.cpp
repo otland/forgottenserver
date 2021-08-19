@@ -2018,6 +2018,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
 
 	registerMethod("Game", "getExperienceStage", LuaScriptInterface::luaGameGetExperienceStage);
+	registerMethod("Game", "getExperienceForLevel", LuaScriptInterface::luaGameGetExperienceForLevel);
 	registerMethod("Game", "getMonsterCount", LuaScriptInterface::luaGameGetMonsterCount);
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
@@ -4249,6 +4250,18 @@ int LuaScriptInterface::luaGameGetExperienceStage(lua_State* L)
 	// Game.getExperienceStage(level)
 	uint32_t level = getNumber<uint32_t>(L, 1);
 	lua_pushnumber(L, g_config.getExperienceStage(level));
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetExperienceForLevel(lua_State* L)
+{
+	// Game.getExperienceForLevel(level)
+	const uint32_t level = getNumber<uint32_t>(L, 1);
+	if (level == 0) {
+		lua_pushnumber(L, 0);
+	} else {
+		lua_pushnumber(L, Player::getExpForLevel(level));
+	}
 	return 1;
 }
 

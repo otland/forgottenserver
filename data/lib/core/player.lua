@@ -265,9 +265,9 @@ end
 function Player.addLevel(self, amount, round)
 	local experience, level, amount = 0, self:getLevel(), amount or 1
 	if amount > 0 then
-		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
+		experience = Game.getExperienceForLevel(level + amount) - (round and self:getExperience() or Game.getExperienceForLevel(level))
 	else
-		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+		experience = -((round and self:getExperience() or Game.getExperienceForLevel(level)) - Game.getExperienceForLevel(level + amount))
 	end
 	return self:addExperience(experience)
 end
