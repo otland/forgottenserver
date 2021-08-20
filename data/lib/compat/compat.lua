@@ -1426,6 +1426,8 @@ function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	return true
 end
 
+function getExperienceForLevel(level) return Game.getExperienceForLevel(level) end
+
 do
 	local combats = {
 		[COMBAT_PHYSICALDAMAGE] = 'physical',

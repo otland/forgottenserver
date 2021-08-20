@@ -225,7 +225,3 @@ function getPlayerDatabaseInfo(name_or_guid)
 	result.free(query)
 	return info
 end
-
-function getExperienceForLevel(level)
-	return math.floor((((level - 6) * level + 17) * level - 12) / 6) * 100
-end
