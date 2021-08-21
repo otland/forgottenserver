@@ -1129,6 +1129,8 @@ class LuaScriptInterface
 		static int luaVocationGetDemotion(lua_State* L);
 		static int luaVocationGetPromotion(lua_State* L);
 
+		static int luaVocationAllowsPvp(lua_State* L);
+
 		// Town
 		static int luaTownCreate(lua_State* L);
 
