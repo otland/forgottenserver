@@ -2625,6 +2625,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Vocation", "getDemotion", LuaScriptInterface::luaVocationGetDemotion);
 	registerMethod("Vocation", "getPromotion", LuaScriptInterface::luaVocationGetPromotion);
 
+	registerMethod("Vocation", "allowsPvp", LuaScriptInterface::luaVocationAllowsPvp);
+
 	// Town
 	registerClass("Town", "", LuaScriptInterface::luaTownCreate);
 	registerMetaMethod("Town", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -11228,6 +11230,18 @@ int LuaScriptInterface::luaVocationGetPromotion(lua_State* L)
 	if (promotedVocation && promotedVocation != vocation) {
 		pushUserdata<Vocation>(L, promotedVocation);
 		setMetatable(L, -1, "Vocation");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaVocationAllowsPvp(lua_State* L)
+{
+	// vocation:allowsPvp()
+	Vocation* vocation = getUserdata<Vocation>(L, 1);
+	if (vocation) {
+		pushBoolean(L, vocation->allowsPvp());
 	} else {
 		lua_pushnil(L);
 	}

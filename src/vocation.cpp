@@ -50,6 +50,10 @@ bool Vocations::loadFromXml()
 			voc.name = attr.as_string();
 		}
 
+		if ((attr = vocationNode.attribute("allowpvp"))) {
+			voc.allowPvp = attr.as_bool();
+		}
+
 		if ((attr = vocationNode.attribute("clientid"))) {
 			voc.clientId = pugi::cast<uint16_t>(attr.value());
 		}
