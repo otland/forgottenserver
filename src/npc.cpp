@@ -112,6 +112,7 @@ void Npc::reset()
 
 	parameters.clear();
 	shopPlayerSet.clear();
+	spectators.clear();
 }
 
 void Npc::reload()
