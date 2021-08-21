@@ -91,6 +91,9 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.boss ~= nil then
 			mtype:isBoss(mask.flags.boss)
 		end
+		if mask.flags.challengeable ~= nil then
+			mtype:isChallengeable(mask.flags.challengeable)
+		end
 		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end

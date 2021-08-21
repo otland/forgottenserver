@@ -1957,9 +1957,13 @@ void Monster::changeHealth(int32_t healthChange, bool sendHealthChange/* = true*
 	Creature::changeHealth(healthChange, sendHealthChange);
 }
 
-bool Monster::challengeCreature(Creature* creature)
+bool Monster::challengeCreature(Creature* creature, bool force/* = false*/)
 {
 	if (isSummon()) {
+		return false;
+	}
+
+	if (!mType->info.isChallengeable && !force) {
 		return false;
 	}
 

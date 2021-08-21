@@ -1041,7 +1041,7 @@ void LuaScriptInterface::registerFunctions()
 	//doTargetCombat(cid, target, type, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield = false[, ignoreResistances = false]]]])
 	lua_register(luaState, "doTargetCombat", LuaScriptInterface::luaDoTargetCombat);
 
-	//doChallengeCreature(cid, target)
+	//doChallengeCreature(cid, target[, force = false])
 	lua_register(luaState, "doChallengeCreature", LuaScriptInterface::luaDoChallengeCreature);
 
 	//addEvent(callback, delay, ...)
@@ -1115,7 +1115,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(AMMO_THROWINGKNIFE)
 	registerEnum(AMMO_STONE)
 	registerEnum(AMMO_SNOWBALL)
-	
+
 	registerEnum(BUG_CATEGORY_MAP)
 	registerEnum(BUG_CATEGORY_TYPO)
 	registerEnum(BUG_CATEGORY_TECHNICAL)
@@ -2772,6 +2772,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMetaMethod("MonsterType", "__eq", LuaScriptInterface::luaUserdataCompare);
 
 	registerMethod("MonsterType", "isAttackable", LuaScriptInterface::luaMonsterTypeIsAttackable);
+	registerMethod("MonsterType", "isChallengeable", LuaScriptInterface::luaMonsterTypeIsChallengeable);
 	registerMethod("MonsterType", "isConvinceable", LuaScriptInterface::luaMonsterTypeIsConvinceable);
 	registerMethod("MonsterType", "isSummonable", LuaScriptInterface::luaMonsterTypeIsSummonable);
 	registerMethod("MonsterType", "isIllusionable", LuaScriptInterface::luaMonsterTypeIsIllusionable);
@@ -3474,7 +3475,7 @@ int LuaScriptInterface::luaDoTargetCombat(lua_State* L)
 
 int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 {
-	//doChallengeCreature(cid, target)
+	//doChallengeCreature(cid, target[, force = false])
 	Creature* creature = getCreature(L, 1);
 	if (!creature) {
 		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
@@ -3489,7 +3490,7 @@ int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 		return 1;
 	}
 
-	target->challengeCreature(creature);
+	target->challengeCreature(creature, getBoolean(L, 3, false));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -12879,6 +12880,23 @@ int LuaScriptInterface::luaMonsterTypeIsAttackable(lua_State* L)
 			pushBoolean(L, monsterType->info.isAttackable);
 		} else {
 			monsterType->info.isAttackable = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeIsChallengeable(lua_State* L)
+{
+	// get: monsterType:isChallengeable() set: monsterType:isChallengeable(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.isChallengeable);
+		} else {
+			monsterType->info.isChallengeable = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
 	} else {
