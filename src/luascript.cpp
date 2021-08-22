@@ -1115,7 +1115,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(AMMO_THROWINGKNIFE)
 	registerEnum(AMMO_STONE)
 	registerEnum(AMMO_SNOWBALL)
-	
+
 	registerEnum(BUG_CATEGORY_MAP)
 	registerEnum(BUG_CATEGORY_TYPO)
 	registerEnum(BUG_CATEGORY_TECHNICAL)
@@ -2514,6 +2514,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
 
 	registerMethod("Monster", "getType", LuaScriptInterface::luaMonsterGetType);
+
+	registerMethod("Monster", "rename", LuaScriptInterface::luaMonsterRename);
 
 	registerMethod("Monster", "getSpawnPosition", LuaScriptInterface::luaMonsterGetSpawnPosition);
 	registerMethod("Monster", "isInSpawnRange", LuaScriptInterface::luaMonsterIsInSpawnRange);
@@ -10235,6 +10237,24 @@ int LuaScriptInterface::luaMonsterGetType(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterRename(lua_State* L)
+{
+	// monster:rename(name[, nameDescription])
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (!monster) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	monster->setName(getString(L, 2));
+	if (lua_gettop(L) >= 3) {
+		monster->setNameDescription(getString(L, 3));
+	}
+
+	pushBoolean(L, true);
 	return 1;
 }
 
