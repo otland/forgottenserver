@@ -309,7 +309,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 			}
 
 			//scripting event - onLogout
-			if (!g_creatureEvents->playerLogout(player)) {
+			if (!g_creatureEvents->playerLogout(player, false)) {
 				//Let the script handle the error message
 				return;
 			}
