@@ -70,27 +70,6 @@ void Teleport::addThing(Thing* thing)
 	return addThing(0, thing);
 }
 
-bool Teleport::isHuge(const Tile* destTile)
-{
-	Teleport* teleport = destTile->getTeleportItem();
-	uint8_t tries = 0;
-	do {
-		const Position& nextDestPos = teleport->getDestPos();
-		if (getPosition() == nextDestPos || ++tries >= 32) {
-			return true;
-		}
-
-		if (const Tile* tempTile = g_game.map.getTile(nextDestPos)) {
-			teleport = tempTile->getTeleportItem();
-		} else {
-			break;
-		}
-
-	} while (teleport);
-
-	return false;
-}
-
 void Teleport::addThing(int32_t, Thing* thing)
 {
 	Tile* destTile = g_game.map.getTile(destPos);
@@ -99,10 +78,29 @@ void Teleport::addThing(int32_t, Thing* thing)
 	}
 
 	// Prevent infinity loop
-	if (isHuge(destTile)) {
-		const Position& pos = getPosition();
-		std::cout << "Warning: possible infinity loop teleport. " << pos << std::endl;
-		return;
+	Teleport* destTeleport = destTile->getTeleportItem();
+	if (destTeleport) {
+		std::vector<Position> lastPositions = { getPosition() };
+
+		while (true) {
+			const Position& nextPos = destTeleport->getDestPos();
+			if (std::find(lastPositions.begin(), lastPositions.end(), nextPos) != lastPositions.end()) {
+				std::cout << "Warning: possible infinity loop teleport. " << nextPos << std::endl;
+				return;
+			}
+
+			const Tile* tile = g_game.map.getTile(nextPos);
+			if (!tile) {
+				break;
+			}
+
+			destTeleport = tile->getTeleportItem();
+			if (!destTeleport) {
+				break;
+			}
+
+			lastPositions.push_back(nextPos);
+		}
 	}
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;
