@@ -2863,7 +2863,7 @@ void ProtocolGame::sendVIPEntries()
 
 		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
 
-		if (!vipPlayer || vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
+		if (!vipPlayer || !player->canSeeCreature(vipPlayer)) {
 			vipStatus = VIPSTATUS_OFFLINE;
 		}
 

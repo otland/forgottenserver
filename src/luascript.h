@@ -792,6 +792,8 @@ class LuaScriptInterface
 
 		static int luaCreatureCanSee(lua_State* L);
 		static int luaCreatureCanSeeCreature(lua_State* L);
+		static int luaCreatureCanSeeGhostMode(lua_State* L);
+		static int luaCreatureCanSeeInvisibility(lua_State* L);
 
 		static int luaCreatureGetParent(lua_State* L);
 

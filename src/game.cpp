@@ -746,7 +746,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 	}
 
 	if ((!movingCreature->isPushable() && !player->hasFlag(PlayerFlag_CanPushAllCreatures)) ||
-	        (movingCreature->isInGhostMode() && !player->isAccessPlayer())) {
+	        (movingCreature->isInGhostMode() && !player->canSeeGhostMode(movingCreature))) {
 		player->sendCancelMessage(RETURNVALUE_NOTMOVEABLE);
 		return;
 	}
@@ -3258,7 +3258,7 @@ void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 			return;
 		}
 
-		if (!vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
+		if (!vipPlayer->isInGhostMode() || player->canSeeGhostMode(vipPlayer)) {
 			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_ONLINE);
 		} else {
 			player->addVIP(vipPlayer->getGUID(), vipPlayer->getName(), VIPSTATUS_OFFLINE);
@@ -3563,7 +3563,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 	toPlayer->sendPrivateMessage(player, type, text);
 	toPlayer->onCreatureSay(player, type, text);
 
-	if (toPlayer->isInGhostMode() && !player->isAccessPlayer()) {
+	if (toPlayer->isInGhostMode() && !player->canSeeGhostMode(toPlayer)) {
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name is not online.");
 	} else {
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("Message sent to {:s}.", toPlayer->getName()));
