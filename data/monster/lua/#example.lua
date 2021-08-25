@@ -22,6 +22,7 @@ monster.flags = {
 	summonable = false,
 	attackable = true,
 	hostile = true,
+	challengeable = true,
 	convinceable = false,
 	illusionable = false,
 	canPushItems = true,

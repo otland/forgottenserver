@@ -138,7 +138,7 @@ class Monster final : public Creature
 
 		void onThink(uint32_t interval) override;
 
-		bool challengeCreature(Creature* creature) override;
+		bool challengeCreature(Creature* creature, bool force = false) override;
 
 		void setNormalCreatureLight() override;
 		bool getCombatValues(int32_t& min, int32_t& max) override;
