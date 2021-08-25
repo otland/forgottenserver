@@ -147,6 +147,7 @@ class MonsterType
 		bool canPushItems = false;
 		bool canPushCreatures = false;
 		bool pushable = true;
+		bool ignoresSpawnBlock = false;
 		bool isSummonable = false;
 		bool isIllusionable = false;
 		bool isConvinceable = false;

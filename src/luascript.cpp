@@ -2785,6 +2785,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
 	registerMetaMethod("MonsterType", "__eq", LuaScriptInterface::luaUserdataCompare);
 
+	registerMethod("MonsterType", "ignoresSpawnBlock", LuaScriptInterface::luaMonsterTypeIgnoresSpawnBlock);
 	registerMethod("MonsterType", "isAttackable", LuaScriptInterface::luaMonsterTypeIsAttackable);
 	registerMethod("MonsterType", "isChallengeable", LuaScriptInterface::luaMonsterTypeIsChallengeable);
 	registerMethod("MonsterType", "isConvinceable", LuaScriptInterface::luaMonsterTypeIsConvinceable);
@@ -12963,6 +12964,23 @@ int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 	if (monsterType) {
 		pushUserdata<MonsterType>(L, monsterType);
 		setMetatable(L, -1, "MonsterType");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeIgnoresSpawnBlock(lua_State* L)
+{
+	// get: monsterType:ignoresSpawnBlock() set: monsterType:ignoresSpawnBlock(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.ignoresSpawnBlock);
+		} else {
+			monsterType->info.ignoresSpawnBlock = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
 	} else {
 		lua_pushnil(L);
 	}
