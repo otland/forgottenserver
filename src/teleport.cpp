@@ -70,22 +70,6 @@ void Teleport::addThing(Thing* thing)
 	return addThing(0, thing);
 }
 
-bool Teleport::checkInfinityLoop(Tile* destTile)
-{
-	if (!destTile) {
-		return false;
-	}
-
-	if (Teleport* teleport = destTile->getTeleportItem()) {
-		const Position& nextDestPos = teleport->getDestPos();
-		if (getPosition() == nextDestPos) {
-			return true;
-		}
-		return checkInfinityLoop(g_game.map.getTile(nextDestPos));
-	}
-	return false;
-}
-
 void Teleport::addThing(int32_t, Thing* thing)
 {
 	Tile* destTile = g_game.map.getTile(destPos);
@@ -93,11 +77,30 @@ void Teleport::addThing(int32_t, Thing* thing)
 		return;
 	}
 
-	// Prevent infinity loop
-	if (checkInfinityLoop(destTile)) {
-		const Position& pos = getPosition();
-		std::cout << "Warning: infinity loop teleport. " << pos << std::endl;
-		return;
+	// Prevent infinite loop
+	Teleport* destTeleport = destTile->getTeleportItem();
+	if (destTeleport) {
+		std::vector<Position> lastPositions = { getPosition() };
+
+		while (true) {
+			const Position& nextPos = destTeleport->getDestPos();
+			if (std::find(lastPositions.begin(), lastPositions.end(), nextPos) != lastPositions.end()) {
+				std::cout << "Warning: possible infinite loop teleport. " << nextPos << std::endl;
+				return;
+			}
+
+			const Tile* tile = g_game.map.getTile(nextPos);
+			if (!tile) {
+				break;
+			}
+
+			destTeleport = tile->getTeleportItem();
+			if (!destTeleport) {
+				break;
+			}
+
+			lastPositions.push_back(nextPos);
+		}
 	}
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;
