@@ -2039,6 +2039,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
 	registerMethod("Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
 
+	registerMethod("Game", "getItemAttributeByName", LuaScriptInterface::luaGameGetItemAttributeByName);
 	registerMethod("Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
 	registerMethod("Game", "createItem", LuaScriptInterface::luaGameCreateItem);
@@ -4376,6 +4377,13 @@ int LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
 	// Game.getReturnMessage(value)
 	ReturnValue value = getNumber<ReturnValue>(L, 1);
 	pushString(L, getReturnMessage(value));
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetItemAttributeByName(lua_State* L)
+{
+	// Game.getItemAttributeByName(name)
+	lua_pushnumber(L, stringToItemAttribute(getString(L, 1)));
 	return 1;
 }
 

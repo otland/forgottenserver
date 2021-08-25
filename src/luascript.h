@@ -562,6 +562,7 @@ class LuaScriptInterface
 		static int luaGameGetWorldType(lua_State* L);
 		static int luaGameSetWorldType(lua_State* L);
 
+		static int luaGameGetItemAttributeByName(lua_State* L);
 		static int luaGameGetReturnMessage(lua_State* L);
 
 		static int luaGameCreateItem(lua_State* L);
