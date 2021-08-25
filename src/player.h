@@ -377,6 +377,7 @@ class Player final : public Creature, public Cylinder
 		bool isInGhostMode() const override {
 			return ghostMode;
 		}
+		bool canSeeGhostMode(const Creature* creature) const override;
 		void switchGhostMode() {
 			ghostMode = !ghostMode;
 		}

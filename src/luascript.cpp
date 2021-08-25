@@ -2278,6 +2278,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "canSee", LuaScriptInterface::luaCreatureCanSee);
 	registerMethod("Creature", "canSeeCreature", LuaScriptInterface::luaCreatureCanSeeCreature);
+	registerMethod("Creature", "canSeeGhostMode", LuaScriptInterface::luaCreatureCanSeeGhostMode);
+	registerMethod("Creature", "canSeeInvisibility", LuaScriptInterface::luaCreatureCanSeeInvisibility);
 
 	registerMethod("Creature", "getParent", LuaScriptInterface::luaCreatureGetParent);
 
@@ -7288,6 +7290,37 @@ int LuaScriptInterface::luaCreatureCanSeeCreature(lua_State* L)
 		}
 
 		pushBoolean(L, creature->canSeeCreature(otherCreature));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureCanSeeGhostMode(lua_State* L)
+{
+	// creature:canSeeGhostMode(creature)
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		const Creature* otherCreature = getCreature(L, 2);
+		if (!otherCreature) {
+			reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+			pushBoolean(L, false);
+			return 1;
+		}
+
+		pushBoolean(L, creature->canSeeGhostMode(otherCreature));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureCanSeeInvisibility(lua_State* L)
+{
+	// creature:canSeeInvisibility()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->canSeeInvisibility());
 	} else {
 		lua_pushnil(L);
 	}

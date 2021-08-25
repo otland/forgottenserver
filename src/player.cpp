@@ -687,7 +687,7 @@ bool Player::canSeeCreature(const Creature* creature) const
 		return true;
 	}
 
-	if (creature->isInGhostMode() && !group->access) {
+	if (creature->isInGhostMode() && !canSeeGhostMode(creature)) {
 		return false;
 	}
 
@@ -695,6 +695,11 @@ bool Player::canSeeCreature(const Creature* creature) const
 		return false;
 	}
 	return true;
+}
+
+bool Player::canSeeGhostMode(const Creature*) const
+{
+	return group->access;
 }
 
 bool Player::canWalkthrough(const Creature* creature) const

@@ -260,11 +260,6 @@ Creature* Tile::getTopVisibleCreature(const Creature* creature) const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (creature) {
-			const Player* player = creature->getPlayer();
-			if (player && player->isAccessPlayer()) {
-				return getTopCreature();
-			}
-
 			for (Creature* tileCreature : *creatures) {
 				if (creature->canSeeCreature(tileCreature)) {
 					return tileCreature;
@@ -288,11 +283,6 @@ const Creature* Tile::getBottomVisibleCreature(const Creature* creature) const
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (creature) {
-			const Player* player = creature->getPlayer();
-			if (player && player->isAccessPlayer()) {
-				return getBottomCreature();
-			}
-
 			for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
 				if (creature->canSeeCreature(*it)) {
 					return *it;
