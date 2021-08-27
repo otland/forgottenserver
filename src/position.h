@@ -51,6 +51,10 @@ struct Position
 		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay && Position::getDistanceZ(p1, p2) <= deltaz;
 	}
 
+	static bool areInRange(const Position& p1, const Position& p2, int_fast32_t deltax, int_fast32_t deltay) {
+		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay;
+	}
+
 	static int_fast32_t getOffsetX(const Position& p1, const Position& p2) {
 		return p1.getX() - p2.getX();
 	}
