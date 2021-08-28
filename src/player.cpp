@@ -494,6 +494,41 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 	}
 }
 
+void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify/* = false*/)
+{
+	uint16_t oldLevel = skills[skill].level;
+	uint8_t oldPercent = skills[skill].percent;
+
+	while (count > skills[skill].tries) {
+		count -= skills[skill].tries;
+
+		if (skills[skill].level <= 10) {
+			skills[skill].level = 10;
+			skills[skill].tries = 0;
+			count = 0;
+			break;
+		}
+
+		skills[skill].tries = vocation->getReqSkillTries(skill, skills[skill].level);
+		skills[skill].level--;
+	}
+
+	skills[skill].tries = std::max<int32_t>(0, skills[skill].tries - count);
+	skills[skill].percent = Player::getPercentLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
+
+	if (notify) {
+		bool sendUpdateSkills = false;
+		if (oldLevel != skills[skill].level) {
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
+			sendUpdateSkills = true;
+		}
+
+		if (sendUpdateSkills || oldPercent != skills[skill].percent) {
+			sendSkills();
+		}
+	}
+}
+
 void Player::setVarStats(stats_t stat, int32_t modifier)
 {
 	varStats[stat] += modifier;
@@ -1586,6 +1621,43 @@ void Player::addManaSpent(uint64_t amount)
 	}
 }
 
+void Player::removeManaSpent(uint64_t amount, bool notify/* = false*/)
+{
+	if (amount == 0) {
+		return;
+	}
+
+	uint32_t oldLevel = magLevel;
+	uint8_t oldPercent = magLevelPercent;
+
+	while (amount > manaSpent && magLevel > 0) {
+		amount -= manaSpent;
+		manaSpent = vocation->getReqMana(magLevel);
+		magLevel--;
+	}
+
+	manaSpent -= amount;
+
+	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
+	if (nextReqMana > vocation->getReqMana(magLevel)) {
+		magLevelPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+	} else {
+		magLevelPercent = 0;
+	}
+
+	if (notify) {
+		bool sendUpdateStats = false;
+		if (oldLevel != magLevel) {
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded to magic level {:d}.", magLevel));
+			sendUpdateStats = true;
+		}
+
+		if (sendUpdateStats || oldPercent != magLevelPercent) {
+			sendStats();
+		}
+	}
+}
+
 void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
@@ -1931,33 +2003,12 @@ void Player::death(Creature* lastHitCreature)
 
 		//Magic level loss
 		uint64_t sumMana = 0;
-		uint64_t lostMana = 0;
-
-		//sum up all the mana
 		for (uint32_t i = 1; i <= magLevel; ++i) {
 			sumMana += vocation->getReqMana(i);
 		}
 
-		sumMana += manaSpent;
-
 		double deathLossPercent = getLostPercent() * (unfairFightReduction / 100.);
-
-		lostMana = static_cast<uint64_t>(sumMana * deathLossPercent);
-
-		while (lostMana > manaSpent && magLevel > 0) {
-			lostMana -= manaSpent;
-			manaSpent = vocation->getReqMana(magLevel);
-			magLevel--;
-		}
-
-		manaSpent -= lostMana;
-
-		uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
-		if (nextReqMana > vocation->getReqMana(magLevel)) {
-			magLevelPercent = Player::getPercentLevel(manaSpent, nextReqMana);
-		} else {
-			magLevelPercent = 0;
-		}
+		removeManaSpent(static_cast<uint64_t>((sumMana + manaSpent) * deathLossPercent), false);
 
 		//Skill loss
 		for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) { //for each skill
@@ -1968,23 +2019,7 @@ void Player::death(Creature* lastHitCreature)
 
 			sumSkillTries += skills[i].tries;
 
-			uint32_t lostSkillTries = static_cast<uint32_t>(sumSkillTries * deathLossPercent);
-			while (lostSkillTries > skills[i].tries) {
-				lostSkillTries -= skills[i].tries;
-
-				if (skills[i].level <= 10) {
-					skills[i].level = 10;
-					skills[i].tries = 0;
-					lostSkillTries = 0;
-					break;
-				}
-
-				skills[i].tries = vocation->getReqSkillTries(i, skills[i].level);
-				skills[i].level--;
-			}
-
-			skills[i].tries = std::max<int32_t>(0, skills[i].tries - lostSkillTries);
-			skills[i].percent = Player::getPercentLevel(skills[i].tries, vocation->getReqSkillTries(i, skills[i].level));
+			removeSkillTries(static_cast<skills_t>(i), sumSkillTries * deathLossPercent, false);
 		}
 
 		//Level loss

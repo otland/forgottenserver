@@ -2386,6 +2386,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "setMaxMana", LuaScriptInterface::luaPlayerSetMaxMana);
 	registerMethod("Player", "getManaSpent", LuaScriptInterface::luaPlayerGetManaSpent);
 	registerMethod("Player", "addManaSpent", LuaScriptInterface::luaPlayerAddManaSpent);
+	registerMethod("Player", "removeManaSpent", LuaScriptInterface::luaPlayerRemoveManaSpent);
 
 	registerMethod("Player", "getBaseMaxHealth", LuaScriptInterface::luaPlayerGetBaseMaxHealth);
 	registerMethod("Player", "getBaseMaxMana", LuaScriptInterface::luaPlayerGetBaseMaxMana);
@@ -2395,6 +2396,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getSkillPercent", LuaScriptInterface::luaPlayerGetSkillPercent);
 	registerMethod("Player", "getSkillTries", LuaScriptInterface::luaPlayerGetSkillTries);
 	registerMethod("Player", "addSkillTries", LuaScriptInterface::luaPlayerAddSkillTries);
+	registerMethod("Player", "removeSkillTries", LuaScriptInterface::luaPlayerRemoveSkillTries);
 	registerMethod("Player", "getSpecialSkill", LuaScriptInterface::luaPlayerGetSpecialSkill);
 	registerMethod("Player", "addSpecialSkill", LuaScriptInterface::luaPlayerAddSpecialSkill);
 
@@ -8391,7 +8393,7 @@ int LuaScriptInterface::luaPlayerAddExperience(lua_State* L)
 	// player:addExperience(experience[, sendText = false])
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		int64_t experience = getNumber<int64_t>(L, 2);
+		uint64_t experience = getNumber<uint64_t>(L, 2);
 		bool sendText = getBoolean(L, 3, false);
 		player->addExperience(nullptr, experience, sendText);
 		pushBoolean(L, true);
@@ -8406,7 +8408,7 @@ int LuaScriptInterface::luaPlayerRemoveExperience(lua_State* L)
 	// player:removeExperience(experience[, sendText = false])
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		int64_t experience = getNumber<int64_t>(L, 2);
+		uint64_t experience = getNumber<uint64_t>(L, 2);
 		bool sendText = getBoolean(L, 3, false);
 		player->removeExperience(experience, sendText);
 		pushBoolean(L, true);
@@ -8539,6 +8541,19 @@ int LuaScriptInterface::luaPlayerAddManaSpent(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerRemoveManaSpent(lua_State* L)
+{
+	// player:removeManaSpent(amount[, notify = true])
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->removeManaSpent(getNumber<uint64_t>(L, 2), getBoolean(L, 3, true));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerGetBaseMaxHealth(lua_State* L)
 {
 	// player:getBaseMaxHealth()
@@ -8623,6 +8638,21 @@ int LuaScriptInterface::luaPlayerAddSkillTries(lua_State* L)
 		skills_t skillType = getNumber<skills_t>(L, 2);
 		uint64_t tries = getNumber<uint64_t>(L, 3);
 		player->addSkillAdvance(skillType, tries);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerRemoveSkillTries(lua_State* L)
+{
+	// player:removeSkillTries(skillType, tries[, notify = true])
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		skills_t skillType = getNumber<skills_t>(L, 2);
+		uint64_t tries = getNumber<uint64_t>(L, 3);
+		player->removeSkillTries(skillType, tries, getBoolean(L, 4, true));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
