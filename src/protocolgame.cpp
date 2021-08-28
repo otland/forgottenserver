@@ -2778,10 +2778,21 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& tex
 
 void ProtocolGame::sendOutfitWindow()
 {
+	const auto& outfits = Outfits::getInstance().getOutfits(player->getSex());
+	if (outfits.size() == 0) {
+		return;
+	}
+
 	NetworkMessage msg;
 	msg.addByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
+	if (currentOutfit.lookType == 0) {
+		Outfit_t newOutfit;
+		newOutfit.lookType = outfits.front().lookType;
+		currentOutfit = newOutfit;
+	}
+
 	Mount* currentMount = g_game.mounts.getMountByID(player->getCurrentMount());
 	if (currentMount) {
 		currentOutfit.lookMount = currentMount->clientId;
@@ -2795,7 +2806,6 @@ void ProtocolGame::sendOutfitWindow()
 		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
 	}
 
-	const auto& outfits = Outfits::getInstance().getOutfits(player->getSex());
 	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {
 		uint8_t addons;
