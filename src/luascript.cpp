@@ -2548,6 +2548,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Monster", "selectTarget", LuaScriptInterface::luaMonsterSelectTarget);
 	registerMethod("Monster", "searchTarget", LuaScriptInterface::luaMonsterSearchTarget);
 
+	registerMethod("Monster", "isWalkingToSpawn", LuaScriptInterface::luaMonsterIsWalkingToSpawn);
+	registerMethod("Monster", "walkToSpawn", LuaScriptInterface::luaMonsterWalkToSpawn);
+
 	// Npc
 	registerClass("Npc", "Creature", LuaScriptInterface::luaNpcCreate);
 	registerMetaMethod("Npc", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10569,6 +10572,30 @@ int LuaScriptInterface::luaMonsterSearchTarget(lua_State* L)
 	if (monster) {
 		TargetSearchType_t searchType = getNumber<TargetSearchType_t>(L, 2, TARGETSEARCH_DEFAULT);
 		pushBoolean(L, monster->searchTarget(searchType));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterIsWalkingToSpawn(lua_State* L)
+{
+	// monster:isWalkingToSpawn()
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->isWalkingToSpawn());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterWalkToSpawn(lua_State* L)
+{
+	// monster:walkToSpawn()
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		pushBoolean(L, monster->walkToSpawn());
 	} else {
 		lua_pushnil(L);
 	}
