@@ -642,7 +642,9 @@ class Player final : public Creature, public Cylinder
 		void drainHealth(Creature* attacker, int32_t damage) override;
 		void drainMana(Creature* attacker, int32_t manaLoss);
 		void addManaSpent(uint64_t amount);
+		void removeManaSpent(uint64_t amount, bool notify = false);
 		void addSkillAdvance(skills_t skill, uint64_t count);
+		void removeSkillTries(skills_t skill, uint64_t count, bool notify = false);
 
 		int32_t getArmor() const override;
 		int32_t getDefense() const override;
