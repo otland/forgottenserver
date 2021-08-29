@@ -139,8 +139,8 @@ class Player final : public Creature, public Cylinder
 		const std::string& getName() const override {
 			return name;
 		}
-		void setName(std::string name) {
-			this->name = std::move(name);
+		void setName(const std::string& name) {
+			this->name = name;
 		}
 		const std::string& getNameDescription() const override {
 			return name;
@@ -726,6 +726,11 @@ class Player final : public Creature, public Cylinder
 		void sendRemoveTileThing(const Position& pos, int32_t stackpos) {
 			if (stackpos != -1 && client) {
 				client->sendRemoveTileThing(pos, stackpos);
+			}
+		}
+		void sendUpdateTileCreature(const Creature* creature) {
+			if (client) {
+				client->sendUpdateTileCreature(creature->getPosition(), creature->getTile()->getClientIndexOfCreature(this, creature), creature);
 			}
 		}
 		void sendRemoveTileCreature(const Creature* creature, const Position& pos, int32_t stackpos) {
