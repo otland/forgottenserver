@@ -24,6 +24,7 @@ monster.flags = {
 	hostile = true,
 	challengeable = true,
 	convinceable = false,
+	ignoreSpawnBlock = false,
 	illusionable = false,
 	canPushItems = true,
 	canPushCreatures = true,

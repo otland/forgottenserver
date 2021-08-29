@@ -145,8 +145,8 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 				sb.mTypes.shrink_to_fit();
 				if (sb.mTypes.size() > 1) {
-					std::sort(sb.mTypes.begin(), sb.mTypes.end(), [](std::tuple<MonsterType*, uint16_t> a, std::tuple<MonsterType*, uint16_t> b) {
-						return std::get<1>(a) > std::get<1>(b);
+					std::sort(sb.mTypes.begin(), sb.mTypes.end(), [](std::pair<MonsterType*, uint16_t> a, std::pair<MonsterType*, uint16_t> b) {
+						return a.second > b.second;
 					});
 				}
 
@@ -287,18 +287,42 @@ bool Spawn::isInSpawnZone(const Position& pos)
 
 bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = false*/)
 {
-	if (sb.mTypes.size() == 1) {
-		return spawnMonster(spawnId, std::get<0>(sb.mTypes.front()), sb.pos, sb.direction, startup);
-	}
+	bool isBlocked = !startup && findPlayer(sb.pos);
+	size_t monstersCount = sb.mTypes.size(), blockedMonsters = 0;
 
-	for (std::tuple<MonsterType*, uint16_t> tuple : sb.mTypes) {
-		if (std::get<1>(tuple) >= normal_random(1, 100) && spawnMonster(spawnId, std::get<0>(tuple), sb.pos, sb.direction, startup)) {
-			return true;
+	auto spawnFunc = [&](bool roll) {
+		MonsterType *mType;
+		for (std::pair<MonsterType*, uint16_t> pair : sb.mTypes) {
+			mType = pair.first;
+			if (isBlocked && !mType->info.isIgnoringSpawnBlock) {
+				++blockedMonsters;
+				continue;
+			}
+
+			if (!roll) {
+				return spawnMonster(spawnId, mType, sb.pos, sb.direction, startup);
+			}
+
+			if (pair.second >= normal_random(1, 100) && spawnMonster(spawnId, mType, sb.pos, sb.direction, startup)) {
+				return true;
+			}
 		}
+
+		return false;
+	};
+
+	// Try to spawn something with chance check, unless it's single spawn
+	if (spawnFunc(monstersCount > 1)) {
+		return true;
 	}
 
-	// Just spawn the one with highest chance
-	return spawnMonster(spawnId, std::get<0>(sb.mTypes.front()), sb.pos, sb.direction, startup);
+	// Every monster spawn is blocked, bail out
+	if (monstersCount == blockedMonsters) {
+		return false;
+	}
+
+	// Just try to spawn something without chance check
+	return spawnFunc(false);
 }
 
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup/*= false*/)
@@ -356,12 +380,11 @@ void Spawn::checkSpawn()
 
 		spawnBlock_t& sb = it.second;
 		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
-			if (findPlayer(sb.pos)) {
+			if (!spawnMonster(spawnId, sb)) {
 				sb.lastSpawn = OTSYS_TIME();
 				continue;
 			}
 
-			spawnMonster(spawnId, sb);
 			if (++spawnCount >= static_cast<uint32_t>(g_config.getNumber(ConfigManager::RATE_SPAWN))) {
 				break;
 			}
