@@ -17,49 +17,45 @@ function Container.createLootItem(self, item)
 		end
 	end
 
-	if itemCount > 0 then
-		local tmpItem = {}
-		while itemCount > 100 do
-			local itm = self:addItem(item.itemId, 100)
-			if itm then
-				tmpItem[#tmpItem + 1] = itm
-			end
-			itemCount = itemCount - 100
-		end
-
-		if itemCount > 0 then
-			local itm = self:addItem(item.itemId, itemCount)
-			if itm then
-				tmpItem[#tmpItem + 1] = itm
-			end
-		end
-
-		if #tmpItem == 0 then
+	while itemCount > 0 do
+		local count = math.min(100, itemCount)
+		local tmpItem = Game.createItem(item.itemId, count)
+		if not tmpItem then
 			return false
 		end
 
-		for index, tmp in pairs(tmpItem) do
-			if tmp:isContainer() then
-				for i = 1, #item.childLoot do
-					if not tmp:createLootItem(item.childLoot[i]) then
-						tmp:remove()
-						return false
-					end
+		if tmpItem:isContainer() then
+			for i = 1, #item.childLoot do
+				if not tmpItem:createLootItem(item.childLoot[i]) then
+					tmpItem:remove()
+					return false
 				end
 			end
 
-			if item.subType ~= -1 then
-				tmp:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
-			end
-
-			if item.actionId ~= -1 then
-				tmp:setActionId(item.actionId)
-			end
-
-			if item.text and item.text ~= "" then
-				tmp:setText(item.text)
+			if #item.childLoot > 0 and tmpItem:getSize() == 0 then
+				tmpItem:remove()
+				return true
 			end
 		end
+
+		if item.subType ~= -1 then
+			tmpItem:setAttribute(ITEM_ATTRIBUTE_CHARGES, item.subType)
+		end
+
+		if item.actionId ~= -1 then
+			tmpItem:setActionId(item.actionId)
+		end
+
+		if item.text and item.text ~= "" then
+			tmpItem:setText(item.text)
+		end
+
+		local ret = self:addItemEx(tmpItem)
+		if ret ~= RETURNVALUE_NOERROR then
+			tmpItem:remove()
+		end
+
+		itemCount = itemCount - count
 	end
 	return true
 end
