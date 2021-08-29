@@ -145,8 +145,8 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 				sb.mTypes.shrink_to_fit();
 				if (sb.mTypes.size() > 1) {
-					std::sort(sb.mTypes.begin(), sb.mTypes.end(), [](std::tuple<MonsterType*, uint16_t> a, std::tuple<MonsterType*, uint16_t> b) {
-						return std::get<1>(a) > std::get<1>(b);
+					std::sort(sb.mTypes.begin(), sb.mTypes.end(), [](std::pair<MonsterType*, uint16_t> a, std::pair<MonsterType*, uint16_t> b) {
+						return a.second > b.second;
 					});
 				}
 
@@ -292,8 +292,8 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 
 	auto spawnFunc = [&](bool roll) {
 		MonsterType *mType;
-		for (std::tuple<MonsterType*, uint16_t> tuple : sb.mTypes) {
-			mType = std::get<0>(tuple);
+		for (std::pair<MonsterType*, uint16_t> pair : sb.mTypes) {
+			mType = pair.first;
 			if (isBlocked && !mType->info.isIgnoringSpawnBlock) {
 				++blockedMonsters;
 				continue;
@@ -303,7 +303,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 				return spawnMonster(spawnId, mType, sb.pos, sb.direction, startup);
 			}
 
-			if (std::get<1>(tuple) >= normal_random(1, 100) && spawnMonster(spawnId, mType, sb.pos, sb.direction, startup)) {
+			if (pair.second >= normal_random(1, 100) && spawnMonster(spawnId, mType, sb.pos, sb.direction, startup)) {
 				return true;
 			}
 		}

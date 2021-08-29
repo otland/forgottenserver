@@ -23,7 +23,7 @@
 #include "tile.h"
 #include "position.h"
 
-#include <tuple>
+#include <utility>
 #include <vector>
 
 class Monster;
@@ -32,7 +32,7 @@ class Npc;
 
 struct spawnBlock_t {
 	Position pos;
-	std::vector<std::tuple<MonsterType*, uint16_t>> mTypes;
+	std::vector<std::pair<MonsterType*, uint16_t>> mTypes;
 	int64_t lastSpawn;
 	uint32_t interval;
 	Direction direction;
