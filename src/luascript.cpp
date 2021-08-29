@@ -2785,11 +2785,11 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
 	registerMetaMethod("MonsterType", "__eq", LuaScriptInterface::luaUserdataCompare);
 
-	registerMethod("MonsterType", "ignoresSpawnBlock", LuaScriptInterface::luaMonsterTypeIgnoresSpawnBlock);
 	registerMethod("MonsterType", "isAttackable", LuaScriptInterface::luaMonsterTypeIsAttackable);
 	registerMethod("MonsterType", "isChallengeable", LuaScriptInterface::luaMonsterTypeIsChallengeable);
 	registerMethod("MonsterType", "isConvinceable", LuaScriptInterface::luaMonsterTypeIsConvinceable);
 	registerMethod("MonsterType", "isSummonable", LuaScriptInterface::luaMonsterTypeIsSummonable);
+	registerMethod("MonsterType", "isIgnoringSpawnBlock", LuaScriptInterface::luaMonsterTypeIsIgnoringSpawnBlock);
 	registerMethod("MonsterType", "isIllusionable", LuaScriptInterface::luaMonsterTypeIsIllusionable);
 	registerMethod("MonsterType", "isHostile", LuaScriptInterface::luaMonsterTypeIsHostile);
 	registerMethod("MonsterType", "isPushable", LuaScriptInterface::luaMonsterTypeIsPushable);
@@ -12970,23 +12970,6 @@ int LuaScriptInterface::luaMonsterTypeCreate(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaMonsterTypeIgnoresSpawnBlock(lua_State* L)
-{
-	// get: monsterType:ignoresSpawnBlock() set: monsterType:ignoresSpawnBlock(bool)
-	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
-	if (monsterType) {
-		if (lua_gettop(L) == 1) {
-			pushBoolean(L, monsterType->info.ignoresSpawnBlock);
-		} else {
-			monsterType->info.ignoresSpawnBlock = getBoolean(L, 2);
-			pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaMonsterTypeIsAttackable(lua_State* L)
 {
 	// get: monsterType:isAttackable() set: monsterType:isAttackable(bool)
@@ -13047,6 +13030,23 @@ int LuaScriptInterface::luaMonsterTypeIsSummonable(lua_State* L)
 			pushBoolean(L, monsterType->info.isSummonable);
 		} else {
 			monsterType->info.isSummonable = getBoolean(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeIsIgnoringSpawnBlock(lua_State* L)
+{
+	// get: monsterType:isIgnoringSpawnBlock() set: monsterType:isIgnoringSpawnBlock(bool)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			pushBoolean(L, monsterType->info.isIgnoringSpawnBlock);
+		} else {
+			monsterType->info.isIgnoringSpawnBlock = getBoolean(L, 2);
 			pushBoolean(L, true);
 		}
 	} else {

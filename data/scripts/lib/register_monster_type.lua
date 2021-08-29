@@ -101,7 +101,7 @@ registerMonsterType.flags = function(mtype, mask)
 			mtype:isSummonable(mask.flags.summonable)
 		end
 		if mask.flags.ignoreSpawnBlock ~= nil then
-			mtype:ignoresSpawnBlock(mask.flags.ignoreSpawnBlock)
+			mtype:isIgnoringSpawnBlock(mask.flags.ignoreSpawnBlock)
 		end
 		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)

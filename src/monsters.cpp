@@ -909,7 +909,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			} else if (strcasecmp(attrName, "hostile") == 0) {
 				mType->info.isHostile = attr.as_bool();
 			} else if (strcasecmp(attrName, "ignorespawnblock") == 0) {
-				mType->info.ignoresSpawnBlock = attr.as_bool();
+				mType->info.isIgnoringSpawnBlock = attr.as_bool();
 			} else if (strcasecmp(attrName, "illusionable") == 0) {
 				mType->info.isIllusionable = attr.as_bool();
 			} else if (strcasecmp(attrName, "challengeable") == 0) {

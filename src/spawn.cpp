@@ -294,7 +294,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 		MonsterType *mType;
 		for (std::tuple<MonsterType*, uint16_t> tuple : sb.mTypes) {
 			mType = std::get<0>(tuple);
-			if (isBlocked && !mType->info.ignoresSpawnBlock) {
+			if (isBlocked && !mType->info.isIgnoringSpawnBlock) {
 				++blockedMonsters;
 				continue;
 			}
