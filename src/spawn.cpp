@@ -311,8 +311,8 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 		return false;
 	};
 
-	// Try to spawn something with chance check
-	if (spawnFunc(true)) {
+	// Try to spawn something with chance check, unless it's single spawn
+	if (spawnFunc(monstersCount > 1)) {
 		return true;
 	}
 
