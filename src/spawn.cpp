@@ -290,20 +290,18 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 	bool isBlocked = !startup && findPlayer(sb.pos);
 	size_t monstersCount = sb.mTypes.size(), blockedMonsters = 0;
 
-	auto spawnFunc = [&](bool roll) {
-		MonsterType *mType;
-		for (std::pair<MonsterType*, uint16_t> pair : sb.mTypes) {
-			mType = pair.first;
-			if (isBlocked && !mType->info.isIgnoringSpawnBlock) {
+	static const auto spawnFunc = [&](bool roll) {
+		for (const auto& pair : sb.mTypes) {
+			if (isBlocked && !pair.first->info.isIgnoringSpawnBlock) {
 				++blockedMonsters;
 				continue;
 			}
 
 			if (!roll) {
-				return spawnMonster(spawnId, mType, sb.pos, sb.direction, startup);
+				return spawnMonster(spawnId, pair.first, sb.pos, sb.direction, startup);
 			}
 
-			if (pair.second >= normal_random(1, 100) && spawnMonster(spawnId, mType, sb.pos, sb.direction, startup)) {
+			if (pair.second >= normal_random(1, 100) && spawnMonster(spawnId, pair.first, sb.pos, sb.direction, startup)) {
 				return true;
 			}
 		}
