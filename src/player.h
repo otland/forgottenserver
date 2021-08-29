@@ -1162,6 +1162,8 @@ class Player final : public Creature, public Cylinder
 		void forgetInstantSpell(const std::string& spellName);
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
+		void updateRegeneration();
+
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
 

@@ -86,13 +86,7 @@ bool Player::setVocation(uint16_t vocId)
 	}
 	vocation = voc;
 
-	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-	if (condition) {
-		condition->setParam(CONDITION_PARAM_HEALTHGAIN, vocation->getHealthGainAmount());
-		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
-		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
-		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
-	}
+	updateRegeneration();
 	return true;
 }
 
@@ -1081,6 +1075,8 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			addCondition(condition);
 		}
 		storedConditionList.clear();
+
+		updateRegeneration();
 
 		BedItem* bed = g_game.getBedBySleeper(guid);
 		if (bed) {
@@ -4621,5 +4617,20 @@ void Player::setGuild(Guild* guild)
 
 	if (oldGuild) {
 		oldGuild->removeMember(this);
+	}
+}
+
+void Player::updateRegeneration()
+{
+	if (!vocation) {
+		return;
+	}
+
+	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
+	if (condition) {
+		condition->setParam(CONDITION_PARAM_HEALTHGAIN, vocation->getHealthGainAmount());
+		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
+		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
+		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
 }
