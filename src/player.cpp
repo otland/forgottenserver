@@ -881,13 +881,24 @@ void Player::sendPing()
 		setAttackedCreature(nullptr);
 	}
 
-	if (noPongTime >= 60000 && canLogout()) {
-		if (g_creatureEvents->playerLogout(this)) {
-			if (client) {
-				client->logout(true, true);
-			} else {
-				g_game.removeCreature(this, true);
-			}
+	int32_t noPongKickTime = vocation->getNoPongKickTime();
+	if (pzLocked && noPongKickTime < 60000) {
+		noPongKickTime = 60000;
+	}
+
+	if (noPongTime >= noPongKickTime) {
+		if (isConnecting || getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
+			return;
+		}
+
+		if (!g_creatureEvents->playerLogout(this)) {
+			return;
+		}
+
+		if (client) {
+			client->logout(true, true);
+		} else {
+			g_game.removeCreature(this, true);
 		}
 	}
 }
@@ -3745,23 +3756,6 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 		}
 	}
 	return false;
-}
-
-bool Player::canLogout()
-{
-	if (isConnecting) {
-		return false;
-	}
-
-	if (getTile()->hasFlag(TILESTATE_NOLOGOUT)) {
-		return false;
-	}
-
-	if (getTile()->hasFlag(TILESTATE_PROTECTIONZONE)) {
-		return true;
-	}
-
-	return !isPzLocked() && !hasCondition(CONDITION_INFIGHT);
 }
 
 void Player::genReservedStorageRange()

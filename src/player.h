@@ -700,8 +700,6 @@ class Player final : public Creature, public Cylinder
 		bool removeOutfitAddon(uint16_t lookType, uint8_t addons);
 		bool getOutfitAddons(const Outfit& outfit, uint8_t& addons) const;
 
-		bool canLogout();
-
 		size_t getMaxVIPEntries() const;
 		size_t getMaxDepotItems() const;
 

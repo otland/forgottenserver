@@ -86,6 +86,10 @@ class Vocation
 			return fromVocation;
 		}
 
+		uint32_t getNoPongKickTime() const {
+			return noPongKickTime;
+		}
+
 		bool allowsPvp() const {
 			return allowPvp;
 		}
@@ -114,8 +118,9 @@ class Vocation
 		uint32_t fromVocation = VOCATION_NONE;
 		uint32_t attackSpeed = 1500;
 		uint32_t baseSpeed = 220;
-		uint16_t id;
+		uint32_t noPongKickTime = 60000;
 
+		uint16_t id;
 		uint16_t gainSoulTicks = 120;
 
 		uint8_t soulMax = 100;
