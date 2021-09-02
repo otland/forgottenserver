@@ -525,8 +525,12 @@
 		<attribute key="floorchange" value="north" />
 	</item>
 	<item id="1405" article="a" name="ramp" />
-	<item id="1406" article="a" name="grave" />
-	<item fromid="1407" toid="1409" article="a" name="grave stone" />
+	<item id="1406" article="a" name="grave">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item fromid="1407" toid="1409" article="a" name="grave stone">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1410" article="a" name="stone coffin">
 		<attribute key="containerSize" value="10" />
 	</item>
@@ -555,31 +559,49 @@
 	</item>
 	<item fromid="1426" toid="1427" article="an" name="unlit campfire" />
 	<item id="1428" article="a" name="campfire" />
-	<item fromid="1429" toid="1434" article="a" name="sign" />
+	<item fromid="1429" toid="1434" article="a" name="sign">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1435" article="a" name="dragon flag" />
 	<item id="1436" article="a" name="castle flag" />
 	<item id="1437" article="a" name="flag of World" />
 	<item fromid="1438" toid="1439" article="a" name="street sign">
 		<attribute key="allowDistRead" value="true" />
 	</item>
-	<item fromid="1440" toid="1441" article="a" name="sign" />
+	<item fromid="1440" toid="1441" article="a" name="sign">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1442" article="a" name="statue">
 		<attribute key="rotateTo" value="1476" />
 	</item>
 	<item id="1443" article="a" name="statue" />
-	<item id="1444" article="a" name="hero statue" />
-	<item id="1445" article="a" name="monument" />
+	<item id="1444" article="a" name="hero statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="1445" article="a" name="monument">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1446" article="a" name="minotaur statue">
 		<attribute key="rotateTo" value="1462" />
 	</item>
 	<item id="1447" article="a" name="goblin statue">
 		<attribute key="rotateTo" value="1465" />
 	</item>
-	<item id="1448" article="an" name="angel statue" />
-	<item id="1449" article="a" name="dwarven statue" />
-	<item id="1450" article="a" name="watchdog statue" />
-	<item id="1451" article="a" name="sandstone statue" />
-	<item fromid="1452" toid="1455" article="a" name="gargoyle statue" />
+	<item id="1448" article="an" name="angel statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="1449" article="a" name="dwarven statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="1450" article="a" name="watchdog statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="1451" article="a" name="sandstone statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item fromid="1452" toid="1455" article="a" name="gargoyle statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="1456" toid="1459" article="a" name="pedestal" />
 	<item id="1460" article="a" name="minotaur statue">
 		<attribute key="rotateTo" value="1461" />
@@ -1314,20 +1336,26 @@
 	<item fromid="1794" toid="1802" article="a" name="red carpet" />
 	<item fromid="1803" toid="1808" article="an" name="oriental carpet" />
 	<item id="1809" article="a" name="painting" />
-	<item id="1810" article="a" name="blackboard" />
+	<item id="1810" article="a" name="blackboard">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="1811" article="a" name="blackboard">
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="1023" />
+		<attribute key="allowDistRead" value="true" />
 	</item>
 	<item fromid="1812" toid="1813" article="a" name="tapestry" />
 	<item id="1814" article="a" name="painting" />
-	<item id="1815" article="a" name="blackboard" />
+	<item id="1815" article="a" name="blackboard">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="1816" toid="1817" article="a" name="wall mirror">
 		<attribute key="description" value="You look fine today." />
 	</item>
 	<item id="1818" article="a" name="blackboard">
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="1023" />
+		<attribute key="allowDistRead" value="true" />
 	</item>
 	<item fromid="1819" toid="1824" article="an" name="emblem" />
 	<item fromid="1825" toid="1828" article="a" name="painting" />
@@ -6936,7 +6964,9 @@
 		<attribute key="fluidSource" value="slime" />
 	</item>
 	<item fromid="3737" toid="3738" article="a" name="pagoda" />
-	<item fromid="3739" toid="3742" article="a" name="huntress statue" />
+	<item fromid="3739" toid="3742" article="a" name="huntress statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="3743" article="a" name="bamboo lamp" />
 	<item id="3744" article="a" name="skull candle" />
 	<item fromid="3745" toid="3751" article="a" name="bamboo column" />
@@ -9014,7 +9044,9 @@
 		<attribute key="duration" value="72000" />
 		<attribute key="description" value="It is not time yet." />
 	</item>
-	<item fromid="5671" toid="5674" article="a" name="pirate statue" />
+	<item fromid="5671" toid="5674" article="a" name="pirate statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="5675" toid="5676" article="a" name="treasure chest" />
 	<item id="5677" article="a" name="tortoise's nest" />
 	<item id="5678" article="a" name="tortoise egg">
@@ -10548,7 +10580,9 @@
 		<attribute key="description" value="It apparently belonged to someone called Dragha, the apprentice of a voodoomaster." />
 		<attribute key="weight" value="5800" />
 	</item>
-	<item fromid="6121" toid="6122" article="a" name="note pinned on the wall" />
+	<item fromid="6121" toid="6122" article="a" name="note pinned on the wall">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="6123" article="a" name="strange piano" />
 	<item id="6124" article="a" name="damaged logbook">
 		<attribute key="description" value="It must be the one which the explorer society requested." />
@@ -14208,10 +14242,18 @@
 		<attribute key="maleSleeper" value="7798" />
 		<attribute key="femaleSleeper" value="7810" />
 	</item>
-	<item id="7823" article="an" name="obsidian statue" />
-	<item id="7824" article="a" name="dragon statue" />
-	<item id="7825" article="a" name="shadowy statue" />
-	<item id="7826" article="a" name="strange statue" />
+	<item id="7823" article="an" name="obsidian statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="7824" article="a" name="dragon statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="7825" article="a" name="shadowy statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item id="7826" article="a" name="strange statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="7827" article="a" name="huge telescope" />
 	<item id="7828" article="an" name="astro clock" />
 	<item fromid="7829" toid="7832" article="a" name="celestial map" />
@@ -15301,7 +15343,9 @@
 	<item fromid="8406" toid="8415" name="bones" />
 	<item fromid="8416" toid="8417" article="a" name="heap of sand" />
 	<item fromid="8418" toid="8421" article="a" name="hydra statue" />
-	<item id="8422" article="a" name="druid statue" />
+	<item id="8422" article="a" name="druid statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="8423" name="brown pavement" />
 	<item id="8424" name="stony pavement" />
 	<item fromid="8425" toid="8431" name="brown pavement" />
@@ -15487,11 +15531,15 @@
 	<item id="8614" article="an" name="orc tusk">
 		<attribute key="weight" value="1000" />
 	</item>
-	<item fromid="8615" toid="8616" article="a" name="dwarven statue" />
+	<item fromid="8615" toid="8616" article="a" name="dwarven statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="8617" toid="8622" article="an" name="orcish banner" />
 	<item id="8623" article="an" name="orcish totem pole" />
 	<item id="8624" article="an" name="orcish pole" />
-	<item fromid="8625" toid="8626" article="a" name="dwarven statue" />
+	<item fromid="8625" toid="8626" article="a" name="dwarven statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="8627" toid="8630" name="bones" />
 	<item id="8631" name="fire" />
 	<item id="8632" article="a" name="water vortex" />
@@ -15551,7 +15599,9 @@
 	<item id="8699" article="the" name="famous Mina Losa painting">
 		<attribute key="weight" value="1000" />
 	</item>
-	<item id="8700" article="a" name="note pinned on the wall" />
+	<item id="8700" article="a" name="note pinned on the wall">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="8701" article="a" name="note from the thieves guild">
 		<attribute key="description" value="It is a warning." />
 		<attribute key="weight" value="150" />
@@ -15670,7 +15720,9 @@
 		<attribute key="weight" value="10" />
 	</item>
 	<item id="8764" article="a" name="goldfish bowl" />
-	<item id="8765" article="a" name="note pinned on the wall" />
+	<item id="8765" article="a" name="note pinned on the wall">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="8766" article="a" name="fishnapped goldfish">
 		<attribute key="weight" value="3200" />
 		<attribute key="description" value="It belongs to Theodore Loveless." />
@@ -15687,8 +15739,12 @@
 		<attribute key="blockprojectile" value="1" />
 	</item>
 	<item fromid="8770" toid="8776" article="the" name="demon oak" />
-	<item fromid="8777" toid="8778" article="a" name="sorcerer statue" />
-	<item fromid="8779" toid="8780" article="a" name="statue" />
+	<item fromid="8777" toid="8778" article="a" name="sorcerer statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item fromid="8779" toid="8780" article="a" name="statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="8781" toid="8784" article="a" name="cage" />
 	<item id="8785" article="a" name="fallen tree" />
 	<item id="8786" article="a" name="tree stump" />
@@ -15719,8 +15775,12 @@
 	</item>
 	<item fromid="8822" toid="8823" article="a" name="toolbox" />
 	<item fromid="8824" toid="8833" name="sparkling gems" />
-	<item fromid="8834" toid="8835" article="a" name="sorcerer statue" />
-	<item fromid="8836" toid="8837" article="a" name="guardian statue" />
+	<item fromid="8834" toid="8835" article="a" name="sorcerer statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item fromid="8836" toid="8837" article="a" name="guardian statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="8838" article="a" name="potato" plural="potatoes">
 		<attribute key="weight" value="170" />
 	</item>
@@ -16801,7 +16861,9 @@
 	<item fromid="9207" toid="9223" article="an" name="iron wall" />
 	<item fromid="9224" toid="9234" name="wooden floor" />
 	<item fromid="9235" toid="9238" article="a" name="sundial" />
-	<item fromid="9239" toid="9240" article="a" name="statue" />
+	<item fromid="9239" toid="9240" article="a" name="statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="9241" article="a" name="vampire lord statue" />
 	<item id="9242" article="a" name="vampire lord" />
 	<item fromid="9243" toid="9244" article="a" name="statue" />
@@ -16885,7 +16947,9 @@
 	<item fromid="9300" toid="9303" article="a" name="stone railing" />
 	<item id="9304" article="a" name="stone pillar" />
 	<item id="9305" article="a" name="broken stone pillar" />
-	<item id="9306" article="a" name="statue" />
+	<item id="9306" article="a" name="statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="9307" toid="9319" article="a" name="golden ornament" />
 	<item fromid="9320" toid="9326" article="an" name="archway" />
 	<item fromid="9327" toid="9330" name="copper pipes" />
@@ -17019,6 +17083,7 @@
 		<attribute key="weight" value="1000" />
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="128" />
+		<attribute key="allowDistRead" value="true" />
 	</item>
 	<item id="9654" article="a" name="dead vampire bride">
 		<attribute key="containerSize" value="10" />
@@ -17176,7 +17241,9 @@
 	<item id="9748" article="a" name="wall lamp" />
 	<item id="9749" article="a" name="lit wall lamp" />
 	<item id="9750" article="a" name="wall lamp" />
-	<item fromid="9751" toid="9752" article="a" name="statue" />
+	<item fromid="9751" toid="9752" article="a" name="statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="9753" toid="9758" article="a" name="tree" />
 	<item fromid="9759" toid="9766" article="a" name="roof" />
 	<item id="9767" article="a" name="strange apparatus" />
@@ -17358,7 +17425,9 @@
 	<item id="9846" name="corkscrew stairs">
 		<attribute key="floorchange" value="down" />
 	</item>
-	<item fromid="9847" toid="9866" article="a" name="stone carving" />
+	<item fromid="9847" toid="9866" article="a" name="stone carving">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="9867" article="a" name="slain treeling">
 		<attribute key="containerSize" value="24" />
 		<attribute key="decayTo" value="9868" />
@@ -18782,7 +18851,9 @@
 	<item id="10343" article="a" name="pillar" />
 	<item id="10344" article="a" name="stone ledge" />
 	<item fromid="10345" toid="10348" article="a" name="pillar" />
-	<item fromid="10349" toid="10354" article="a" name="statue" />
+	<item fromid="10349" toid="10354" article="a" name="statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="10355" toid="10356" article="a" name="statue of Fafnar" />
 	<item fromid="10357" toid="10358" name="spider webs" />
 	<item id="10359" name="dirt" />
@@ -21752,7 +21823,9 @@
 		<attribute key="slotType" value="ammo" />
 		<attribute key="weight" value="650" />
 	</item>
-	<item fromid="12652" toid="12653" article="a" name="gate guardian" />
+	<item fromid="12652" toid="12653" article="a" name="gate guardian">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="12654" article="a" name="loot bag">
 		<attribute key="containerSize" value="60" />
 		<attribute key="weight" value="000" />
@@ -21942,11 +22015,19 @@
 	<item fromid="12942" toid="12943" article="a" name="small wall" />
 	<item fromid="12944" toid="12945" article="a" name="small tomb wall" />
 	<item fromid="12946" toid="12947" article="a" name="skull" />
-	<item fromid="12948" toid="12949" article="a" name="papyrus scroll" />
-	<item fromid="12950" toid="12951" article="an" name="ornate tombstone" />
+	<item fromid="12948" toid="12949" article="a" name="papyrus scroll">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item fromid="12950" toid="12951" article="an" name="ornate tombstone">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="12952" toid="12953" article="a" name="skull" />
-	<item fromid="12954" toid="12955" article="a" name="papyrus scroll" />
-	<item fromid="12956" toid="12957" article="an" name="ornate tombstone" />
+	<item fromid="12954" toid="12955" article="a" name="papyrus scroll">
+		<attribute key="allowDistRead" value="true" />
+	</item>
+	<item fromid="12956" toid="12957" article="an" name="ornate tombstone">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="12958" toid="12960" name="stone" />
 	<item fromid="12961" toid="12968" name="stone" />
 	<item id="12969" article="a" name="dry piece of wood">
@@ -24874,7 +24955,9 @@
 		<attribute key="description" value="There are little puppies inside." />
 	</item>
 	<item id="15556" article="a" name="basket" />
-	<item fromid="15557" toid="15558" article="a" name="wanted note" />
+	<item fromid="15557" toid="15558" article="a" name="wanted note">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="15559" article="a" name="dog collar">
 		<attribute key="weight" value="110" />
 		<attribute key="description" value="It belongs to Noodles, the King's dog." />
@@ -25168,6 +25251,7 @@
 		<attribute key="description" value="This trophy was awarded to honour the greatest architects in the world." />
 		<attribute key="writeable" value="1" />
 		<attribute key="maxTextLen" value="128" />
+		<attribute key="allowDistRead" value="true" />
 	</item>
 	<item id="16620" article="a" name="claw of 'The Noxious Spawn'" />
 	<item id="16621" article="a" name="claw of 'The Noxious Spawn'" />
@@ -27479,7 +27563,9 @@
 		<attribute key="corpseType" value="blood" />
 	</item>
 	<item id="20002" article="an" name="hourglass" />
-	<item fromid="20003" toid="20004" article="a" name="filigree statue" />
+	<item fromid="20003" toid="20004" article="a" name="filigree statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item fromid="20005" toid="20072" article="a" name="sign">
 		<attribute key="allowDistRead" value="true" />
 	</item>
@@ -29806,7 +29892,9 @@
 		<attribute key="weight" value="1500" />
 	</item>
 	<item id="20667" article="an" name="assassin" />
-	<item id="20668" article="a" name="shadowy statue" />
+	<item id="20668" article="a" name="shadowy statue">
+		<attribute key="allowDistRead" value="true" />
+	</item>
 	<item id="20669" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
