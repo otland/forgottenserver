@@ -290,7 +290,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 	bool isBlocked = !startup && findPlayer(sb.pos);
 	size_t monstersCount = sb.mTypes.size(), blockedMonsters = 0;
 
-	static const auto spawnFunc = [&](bool roll) {
+	const auto spawnFunc = [&](bool roll) {
 		for (const auto& pair : sb.mTypes) {
 			if (isBlocked && !pair.first->info.isIgnoringSpawnBlock) {
 				++blockedMonsters;
