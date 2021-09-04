@@ -91,11 +91,17 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.boss ~= nil then
 			mtype:isBoss(mask.flags.boss)
 		end
+		if mask.flags.challengeable ~= nil then
+			mtype:isChallengeable(mask.flags.challengeable)
+		end
 		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
 		if mask.flags.summonable ~= nil then
-			mtype.isSummonable(mask.flags.summonable)
+			mtype:isSummonable(mask.flags.summonable)
+		end
+		if mask.flags.ignoreSpawnBlock ~= nil then
+			mtype:isIgnoringSpawnBlock(mask.flags.ignoreSpawnBlock)
 		end
 		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)

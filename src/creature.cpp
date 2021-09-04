@@ -84,6 +84,10 @@ bool Creature::canSee(const Position& pos) const
 
 bool Creature::canSeeCreature(const Creature* creature) const
 {
+	if (!canSeeGhostMode(creature) && creature->isInGhostMode()) {
+		return false;
+	}
+
 	if (!canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}

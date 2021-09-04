@@ -77,8 +77,6 @@ class Spells final : public BaseEvents
 		LuaScriptInterface scriptInterface { "Spell Interface" };
 };
 
-using RuneSpellFunction = std::function<bool(const RuneSpell* spell, Player* player, const Position& posTo)>;
-
 class BaseSpell
 {
 	public:
@@ -92,8 +90,7 @@ class BaseSpell
 class CombatSpell final : public Event, public BaseSpell
 {
 	public:
-		CombatSpell(Combat* combat, bool needTarget, bool needDirection);
-		~CombatSpell();
+		CombatSpell(Combat_ptr combat, bool needTarget, bool needDirection);
 
 		// non-copyable
 		CombatSpell(const CombatSpell&) = delete;
@@ -109,7 +106,7 @@ class CombatSpell final : public Event, public BaseSpell
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
 
 		bool loadScriptCombat();
-		Combat* getCombat() {
+		Combat_ptr getCombat() {
 			return combat;
 		}
 
@@ -118,7 +115,7 @@ class CombatSpell final : public Event, public BaseSpell
 			return "onCastSpell";
 		}
 
-		Combat* combat;
+		Combat_ptr combat;
 
 		bool needDirection;
 		bool needTarget;

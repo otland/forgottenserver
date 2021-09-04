@@ -64,17 +64,19 @@ class Monster final : public Creature
 			}
 		}
 
-		void removeList() override;
 		void addList() override;
+		void removeList() override;
 
-		const std::string& getName() const override {
-			return mType->name;
-		}
-		const std::string& getNameDescription() const override {
-			return mType->nameDescription;
-		}
+		const std::string& getName() const override;
+		void setName(const std::string& name);
+
+		const std::string& getNameDescription() const override;
+		void setNameDescription(const std::string& nameDescription) {
+			this->nameDescription = nameDescription;
+		};
+
 		std::string getDescription(int32_t) const override {
-			return strDescription + '.';
+			return nameDescription + '.';
 		}
 
 		CreatureType_t getType() const override {
@@ -138,7 +140,7 @@ class Monster final : public Creature
 
 		void onThink(uint32_t interval) override;
 
-		bool challengeCreature(Creature* creature) override;
+		bool challengeCreature(Creature* creature, bool force = false) override;
 
 		void setNormalCreatureLight() override;
 		bool getCombatValues(int32_t& min, int32_t& max) override;
@@ -180,7 +182,8 @@ class Monster final : public Creature
 		CreatureHashSet friendList;
 		CreatureList targetList;
 
-		std::string strDescription;
+		std::string name;
+		std::string nameDescription;
 
 		MonsterType* mType;
 		Spawn* spawn = nullptr;

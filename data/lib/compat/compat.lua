@@ -302,12 +302,12 @@ setCombatFormula = Combat.setFormula
 setCombatParam = Combat.setParameter
 
 Combat.setCondition = function(...)
-	print("[Warning] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
 	Combat.addCondition(...)
 end
 
 setCombatCondition = function(...)
-	print("[Warning] Function setCombatCondition was renamed to addCombatCondition and will be removed in the future")
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function setCombatCondition was renamed to addCombatCondition and will be removed in the future")
 	Combat.addCondition(...)
 end
 
@@ -1425,6 +1425,8 @@ function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	creature:addCondition(condition)
 	return true
 end
+
+function getExperienceForLevel(level) return Game.getExperienceForLevel(level) end
 
 do
 	local combats = {

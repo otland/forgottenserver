@@ -191,7 +191,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		Combat* combat = new Combat;
+		Combat_ptr combat = std::make_shared<Combat>();
 		if ((attr = node.attribute("length"))) {
 			int32_t length = pugi::cast<int32_t>(attr.value());
 			if (length > 0) {
@@ -350,7 +350,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				if (minSpeedChange == 0) {
 					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - missing speedchange/minspeedchange value" << std::endl;
-					delete combat;
 					return false;
 				}
 
@@ -491,7 +490,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			//
 		} else {
 			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << name << std::endl;
-			delete combat;
 			return false;
 		}
 
@@ -585,7 +583,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		std::unique_ptr<Combat> combat{ new Combat };
+		Combat_ptr combat = std::make_shared<Combat>();
 		sb.combatSpell = true;
 
 		if (spell->length > 0) {
@@ -773,7 +771,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		}
 
 		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
-		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
+		combatSpell = new CombatSpell(combat, spell->needTarget, spell->needDirection);
 	}
 
 	sb.spell = combatSpell;
@@ -910,8 +908,12 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				mType->info.isAttackable = attr.as_bool();
 			} else if (strcasecmp(attrName, "hostile") == 0) {
 				mType->info.isHostile = attr.as_bool();
+			} else if (strcasecmp(attrName, "ignorespawnblock") == 0) {
+				mType->info.isIgnoringSpawnBlock = attr.as_bool();
 			} else if (strcasecmp(attrName, "illusionable") == 0) {
 				mType->info.isIllusionable = attr.as_bool();
+			} else if (strcasecmp(attrName, "challengeable") == 0) {
+				mType->info.isChallengeable = attr.as_bool();
 			} else if (strcasecmp(attrName, "convinceable") == 0) {
 				mType->info.isConvinceable = attr.as_bool();
 			} else if (strcasecmp(attrName, "pushable") == 0) {

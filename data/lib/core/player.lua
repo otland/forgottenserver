@@ -263,26 +263,66 @@ function Player.removeTotalMoney(self, amount)
 end
 
 function Player.addLevel(self, amount, round)
-	local experience, level, amount = 0, self:getLevel(), amount or 1
+	round = round or false
+	local level, amount = self:getLevel(), amount or 1
 	if amount > 0 then
-		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
+		return self:addExperience(Game.getExperienceForLevel(level + amount) - (round and self:getExperience() or Game.getExperienceForLevel(level)))
 	else
-		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+		return self:removeExperience(((round and self:getExperience() or Game.getExperienceForLevel(level)) - Game.getExperienceForLevel(level + amount)))
 	end
-	return self:addExperience(experience)
 end
 
 function Player.addMagicLevel(self, value)
-	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+	local currentMagLevel = self:getBaseMagicLevel()
+	local sum = 0
+
+	if value > 0 then
+		while value > 0 do
+			sum = sum + self:getVocation():getRequiredManaSpent(currentMagLevel + value)
+			value = value - 1
+		end
+
+		return self:addManaSpent(sum - self:getManaSpent())
+	else
+		value = math.min(currentMagLevel, math.abs(value))
+		while value > 0 do
+			sum = sum + self:getVocation():getRequiredManaSpent(currentMagLevel - value + 1)
+			value = value - 1
+		end
+
+		return self:removeManaSpent(sum + self:getManaSpent())
+	end
+end
+
+function Player.addSkillLevel(self, skillId, value)
+	local currentSkillLevel = self:getSkillLevel(skillId)
+	local sum = 0
+
+	if value > 0 then
+		while value > 0 do
+			sum = sum + self:getVocation():getRequiredSkillTries(skillId, currentSkillLevel + value)
+			value = value - 1
+		end
+
+		return self:addSkillTries(skillId, sum - self:getSkillTries(skillId))
+	else
+		value = math.min(currentSkillLevel, math.abs(value))
+		while value > 0 do
+			sum = sum + self:getVocation():getRequiredSkillTries(skillId, currentSkillLevel - value + 1)
+			value = value - 1
+		end
+
+		return self:removeSkillTries(skillId, sum + self:getSkillTries(skillId), true)
+	end
 end
 
 function Player.addSkill(self, skillId, value, round)
 	if skillId == SKILL_LEVEL then
-		return self:addLevel(value, round)
+		return self:addLevel(value, round or false)
 	elseif skillId == SKILL_MAGLEVEL then
 		return self:addMagicLevel(value)
 	end
-	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+	return self:addSkillLevel(skillId, value)
 end
 
 function Player.getWeaponType(self)

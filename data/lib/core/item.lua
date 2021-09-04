@@ -53,6 +53,7 @@ local aux = {
 	['Defense'] = {key = ITEM_ATTRIBUTE_DEFENSE},
 	['ExtraDefense'] = {key = ITEM_ATTRIBUTE_EXTRADEFENSE},
 	['Attack'] = {key = ITEM_ATTRIBUTE_ATTACK},
+	['AttackSpeed'] = {key = ITEM_ATTRIBUTE_ATTACK_SPEED},
 	['HitChance'] = {key = ITEM_ATTRIBUTE_HITCHANCE},
 	['ShootRange'] = {key = ITEM_ATTRIBUTE_SHOOTRANGE},
 	['Armor'] = {key = ITEM_ATTRIBUTE_ARMOR},
