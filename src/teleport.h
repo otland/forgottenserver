@@ -41,11 +41,9 @@ class Teleport final : public Item, public Cylinder
 		const Position& getDestPos() const {
 			return destPos;
 		}
-		void setDestPos(Position pos) {
-			destPos = std::move(pos);
+		void setDestPos(const Position& pos) {
+			destPos = pos;
 		}
-
-		bool checkInfinityLoop(Tile* destTile);
 
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,

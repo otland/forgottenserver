@@ -17,8 +17,9 @@ function Container.createLootItem(self, item)
 		end
 	end
 
-	if itemCount > 0 then
-		local tmpItem = Game.createItem(item.itemId, math.min(itemCount, 100))
+	while itemCount > 0 do
+		local count = math.min(100, itemCount)
+		local tmpItem = Game.createItem(item.itemId, count)
 		if not tmpItem then
 			return false
 		end
@@ -49,7 +50,12 @@ function Container.createLootItem(self, item)
 			tmpItem:setText(item.text)
 		end
 
-		self:addItemEx(tmpItem)
+		local ret = self:addItemEx(tmpItem)
+		if ret ~= RETURNVALUE_NOERROR then
+			tmpItem:remove()
+		end
+
+		itemCount = itemCount - count
 	end
 	return true
 end

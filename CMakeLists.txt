@@ -13,15 +13,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set_target_properties(tfs PROPERTIES CXX_STANDARD 17)
 set_target_properties(tfs PROPERTIES CXX_STANDARD_REQUIRED ON)
 
-if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
-    target_precompile_headers(tfs PUBLIC src/otpch.h)
-else ()
-    include(cotire)
-    set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
-    set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-    cotire(tfs)
-endif ()
-
 if (NOT WIN32)
     add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
 endif ()
@@ -40,7 +31,16 @@ else()
     find_package(Crypto++ REQUIRED)
 endif ()
 find_package(fmt 6.1.2 REQUIRED)
-find_package(MySQL REQUIRED)
+
+# Look for vcpkg-provided libmariadb first
+# If we link to the file directly, we might miss its dependencies from vcpkg
+find_package(unofficial-libmariadb CONFIG QUIET)
+if (unofficial-libmariadb_FOUND)
+    set(MYSQL_CLIENT_LIBS "libmariadb")
+else ()
+    find_package(MySQL REQUIRED)
+endif ()
+
 find_package(Threads REQUIRED)
 find_package(PugiXML REQUIRED)
 
@@ -103,3 +103,14 @@ if(NOT SKIP_GIT)
 	endif()
 endif()
 ### END  Git Version ###
+
+# Precompiled header
+# note: cotire() must be called last on a target
+if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
+    target_precompile_headers(tfs PUBLIC src/otpch.h)
+else ()
+    include(cotire)
+    set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
+    set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    cotire(tfs)
+endif ()

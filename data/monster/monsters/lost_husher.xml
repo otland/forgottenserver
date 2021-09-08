@@ -65,7 +65,7 @@
 	<loot>
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="platinum coin" countmax="2" chance="58670" />
-		<item name="dwarven ring (hard drinking)" chance="2870" />
+		<item name="dwarven ring" chance="2870" />
 		<item name="fire axe" chance="330" />
 		<item name="skull staff" chance="280" />
 		<item name="guardian shield" chance="830" />

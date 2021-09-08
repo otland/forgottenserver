@@ -38,7 +38,6 @@
 #include "scheduler.h"
 #include "databasetasks.h"
 
-
 extern Scheduler g_scheduler;
 extern DatabaseTasks g_databaseTasks;
 extern Dispatcher g_dispatcher;

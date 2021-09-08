@@ -48,6 +48,7 @@ class Item;
 class Container;
 class AreaCombat;
 class Combat;
+using Combat_ptr = std::shared_ptr<Combat>;
 class Condition;
 class Npc;
 class Monster;
@@ -270,6 +271,13 @@ class LuaScriptInterface
 			*userdata = value;
 		}
 
+		// Shared Ptr
+		template<class T>
+		static void pushSharedPtr(lua_State* L, T value)
+		{
+			new (lua_newuserdata(L, sizeof(T))) T(std::move(value));
+		}
+
 		// Metatables
 		static void setMetatable(lua_State* L, int32_t index, const std::string& name);
 		static void setWeakMetatable(lua_State* L, int32_t index, const std::string& name);
@@ -312,6 +320,11 @@ class LuaScriptInterface
 		static T** getRawUserdata(lua_State* L, int32_t arg)
 		{
 			return static_cast<T**>(lua_touserdata(L, arg));
+		}
+		template<class T>
+		static std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
+		{
+			return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
 		}
 
 		static bool getBoolean(lua_State* L, int32_t arg)
@@ -534,6 +547,7 @@ class LuaScriptInterface
 		static int luaGameLoadMap(lua_State* L);
 
 		static int luaGameGetExperienceStage(lua_State* L);
+		static int luaGameGetExperienceForLevel(lua_State* L);
 		static int luaGameGetMonsterCount(lua_State* L);
 		static int luaGameGetPlayerCount(lua_State* L);
 		static int luaGameGetNpcCount(lua_State* L);
@@ -548,6 +562,7 @@ class LuaScriptInterface
 		static int luaGameGetWorldType(lua_State* L);
 		static int luaGameSetWorldType(lua_State* L);
 
+		static int luaGameGetItemAttributeByName(lua_State* L);
 		static int luaGameGetReturnMessage(lua_State* L);
 
 		static int luaGameCreateItem(lua_State* L);
@@ -562,6 +577,10 @@ class LuaScriptInterface
 		static int luaGameGetClientVersion(lua_State* L);
 
 		static int luaGameReload(lua_State* L);
+
+		static int luaGameGetAccountStorageValue(lua_State* L);
+		static int luaGameSetAccountStorageValue(lua_State* L);
+		static int luaGameSaveAccountStorageValues(lua_State* L);
 
 		// Variant
 		static int luaVariantCreate(lua_State* L);
@@ -774,6 +793,8 @@ class LuaScriptInterface
 
 		static int luaCreatureCanSee(lua_State* L);
 		static int luaCreatureCanSeeCreature(lua_State* L);
+		static int luaCreatureCanSeeGhostMode(lua_State* L);
+		static int luaCreatureCanSeeInvisibility(lua_State* L);
 
 		static int luaCreatureGetParent(lua_State* L);
 
@@ -877,6 +898,7 @@ class LuaScriptInterface
 		static int luaPlayerSetMaxMana(lua_State* L);
 		static int luaPlayerGetManaSpent(lua_State* L);
 		static int luaPlayerAddManaSpent(lua_State* L);
+		static int luaPlayerRemoveManaSpent(lua_State* L);
 
 		static int luaPlayerGetBaseMaxHealth(lua_State* L);
 		static int luaPlayerGetBaseMaxMana(lua_State* L);
@@ -886,6 +908,7 @@ class LuaScriptInterface
 		static int luaPlayerGetSkillPercent(lua_State* L);
 		static int luaPlayerGetSkillTries(lua_State* L);
 		static int luaPlayerAddSkillTries(lua_State* L);
+		static int luaPlayerRemoveSkillTries(lua_State* L);
 		static int luaPlayerGetSpecialSkill(lua_State* L);
 		static int luaPlayerAddSpecialSkill(lua_State* L);
 
@@ -1016,6 +1039,8 @@ class LuaScriptInterface
 
 		static int luaMonsterGetType(lua_State* L);
 
+		static int luaMonsterRename(lua_State* L);
+
 		static int luaMonsterGetSpawnPosition(lua_State* L);
 		static int luaMonsterIsInSpawnRange(lua_State* L);
 
@@ -1104,6 +1129,8 @@ class LuaScriptInterface
 		static int luaVocationGetDemotion(lua_State* L);
 		static int luaVocationGetPromotion(lua_State* L);
 
+		static int luaVocationAllowsPvp(lua_State* L);
+
 		// Town
 		static int luaTownCreate(lua_State* L);
 
@@ -1141,6 +1168,8 @@ class LuaScriptInterface
 
 		static int luaHouseKickPlayer(lua_State* L);
 
+		static int luaHouseSave(lua_State* L);
+
 		// ItemType
 		static int luaItemTypeCreate(lua_State* L);
 
@@ -1177,6 +1206,7 @@ class LuaScriptInterface
 		static int luaItemTypeGetHitChance(lua_State* L);
 		static int luaItemTypeGetShootRange(lua_State* L);
 		static int luaItemTypeGetAttack(lua_State* L);
+		static int luaItemTypeGetAttackSpeed(lua_State* L);
 		static int luaItemTypeGetDefense(lua_State* L);
 		static int luaItemTypeGetExtraDefense(lua_State* L);
 		static int luaItemTypeGetArmor(lua_State* L);
@@ -1211,8 +1241,11 @@ class LuaScriptInterface
 
 		// Combat
 		static int luaCombatCreate(lua_State* L);
+		static int luaCombatDelete(lua_State* L);
 
 		static int luaCombatSetParameter(lua_State* L);
+		static int luaCombatGetParameter(lua_State* L);
+
 		static int luaCombatSetFormula(lua_State* L);
 
 		static int luaCombatSetArea(lua_State* L);
@@ -1239,6 +1272,8 @@ class LuaScriptInterface
 		static int luaConditionSetTicks(lua_State* L);
 
 		static int luaConditionSetParameter(lua_State* L);
+		static int luaConditionGetParameter(lua_State* L);
+
 		static int luaConditionSetFormula(lua_State* L);
 		static int luaConditionSetOutfit(lua_State* L);
 
@@ -1252,8 +1287,10 @@ class LuaScriptInterface
 		static int luaMonsterTypeCreate(lua_State* L);
 
 		static int luaMonsterTypeIsAttackable(lua_State* L);
+		static int luaMonsterTypeIsChallengeable(lua_State* L);
 		static int luaMonsterTypeIsConvinceable(lua_State* L);
 		static int luaMonsterTypeIsSummonable(lua_State* L);
+		static int luaMonsterTypeIsIgnoringSpawnBlock(lua_State* L);
 		static int luaMonsterTypeIsIllusionable(lua_State* L);
 		static int luaMonsterTypeIsHostile(lua_State* L);
 		static int luaMonsterTypeIsPushable(lua_State* L);
@@ -1262,6 +1299,10 @@ class LuaScriptInterface
 
 		static int luaMonsterTypeCanPushItems(lua_State* L);
 		static int luaMonsterTypeCanPushCreatures(lua_State* L);
+
+		static int luaMonsterTypeCanWalkOnEnergy(lua_State* L);
+		static int luaMonsterTypeCanWalkOnFire(lua_State* L);
+		static int luaMonsterTypeCanWalkOnPoison(lua_State* L);
 
 		static int luaMonsterTypeName(lua_State* L);
 		static int luaMonsterTypeNameDescription(lua_State* L);
@@ -1340,6 +1381,7 @@ class LuaScriptInterface
 		static int luaMonsterSpellSetCombatType(lua_State* L);
 		static int luaMonsterSpellSetAttackValue(lua_State* L);
 		static int luaMonsterSpellSetNeedTarget(lua_State* L);
+		static int luaMonsterSpellSetNeedDirection(lua_State* L);
 		static int luaMonsterSpellSetCombatLength(lua_State* L);
 		static int luaMonsterSpellSetCombatSpread(lua_State* L);
 		static int luaMonsterSpellSetCombatRadius(lua_State* L);
@@ -1347,6 +1389,7 @@ class LuaScriptInterface
 		static int luaMonsterSpellSetConditionDamage(lua_State* L);
 		static int luaMonsterSpellSetConditionSpeedChange(lua_State* L);
 		static int luaMonsterSpellSetConditionDuration(lua_State* L);
+		static int luaMonsterSpellSetConditionDrunkenness(lua_State* L);
 		static int luaMonsterSpellSetConditionTickInterval(lua_State* L);
 		static int luaMonsterSpellSetCombatShootEffect(lua_State* L);
 		static int luaMonsterSpellSetCombatEffect(lua_State* L);
@@ -1399,6 +1442,7 @@ class LuaScriptInterface
 		static int luaSpellSelfTarget(lua_State* L);
 		static int luaSpellBlocking(lua_State* L);
 		static int luaSpellAggressive(lua_State* L);
+		static int luaSpellPzLock(lua_State* L);
 		static int luaSpellVocation(lua_State* L);
 
 		// only for InstantSpells
@@ -1453,6 +1497,7 @@ class LuaScriptInterface
 		static int luaMoveEventMagLevel(lua_State* L);
 		static int luaMoveEventPremium(lua_State* L);
 		static int luaMoveEventVocation(lua_State* L);
+		static int luaMoveEventTileItem(lua_State* L);
 		static int luaMoveEventItemId(lua_State* L);
 		static int luaMoveEventActionId(lua_State* L);
 		static int luaMoveEventUniqueId(lua_State* L);
@@ -1533,8 +1578,8 @@ class LuaEnvironment : public LuaScriptInterface
 
 		LuaScriptInterface* getTestInterface();
 
-		Combat* getCombatObject(uint32_t id) const;
-		Combat* createCombatObject(LuaScriptInterface* interface);
+		Combat_ptr getCombatObject(uint32_t id) const;
+		Combat_ptr createCombatObject(LuaScriptInterface* interface);
 		void clearCombatObjects(LuaScriptInterface* interface);
 
 		AreaCombat* getAreaObject(uint32_t id) const;
@@ -1545,7 +1590,7 @@ class LuaEnvironment : public LuaScriptInterface
 		void executeTimerEvent(uint32_t eventIndex);
 
 		std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
-		std::unordered_map<uint32_t, Combat*> combatMap;
+		std::unordered_map<uint32_t, Combat_ptr> combatMap;
 		std::unordered_map<uint32_t, AreaCombat*> areaMap;
 
 		std::unordered_map<LuaScriptInterface*, std::vector<uint32_t>> combatIdMap;

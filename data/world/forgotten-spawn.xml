@@ -379,7 +379,10 @@
 		<monster name="Troll" x="-4" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="103" centery="120" centerz="7" radius="5">
-		<monster name="Rabbit" x="-1" y="1" z="7" spawntime="180" />
+		<monsters x="-1" y="1" z="7" spawntime="180">
+			<monster name="Rabbit" chance="70" />
+			<monster name="Skunk" chance="30" />
+		</monsters>
 	</spawn>
 	<spawn centerx="86" centery="122" centerz="7" radius="1">
 		<npc name="Riona" x="0" y="0" z="7" spawntime="60" direction="3" />

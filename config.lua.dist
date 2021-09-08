@@ -86,17 +86,21 @@ maxMessageBuffer = 4
 emoteSpells = false
 classicEquipmentSlots = false
 classicAttackSpeed = false
-showScriptsLogInConsole = true
+showScriptsLogInConsole = false
 showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
+showPlayerLogInConsole = true
 
--- VIP
+-- VIP and Depot limits
+-- NOTE: you can set custom limits per group in data/XML/groups.xml
 vipFreeLimit = 20
 vipPremiumLimit = 100
+depotFreeLimit = 2000
+depotPremiumLimit = 10000
 
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will
@@ -137,9 +141,11 @@ rateSpawn = 1
 -- despawnRange is the amount of floors a monster can be from its spawn position
 -- despawnRadius is how many tiles away it can be from its spawn position
 -- removeOnDespawn will remove the monster if true or teleport it back to its spawn position if false
+-- walkToSpawnRadius is the allowed distance that the monster will stay away from spawn position when left with no targets, 0 to disable
 deSpawnRange = 2
 deSpawnRadius = 50
 removeOnDespawn = true
+walkToSpawnRadius = 15
 
 -- Stamina
 staminaSystem = true

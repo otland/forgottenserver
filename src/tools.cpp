@@ -995,8 +995,14 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_FLUIDTYPE;
 	} else if (str == "doorid") {
 		return ITEM_ATTRIBUTE_DOORID;
+	} else if (str == "decayto") {
+		return ITEM_ATTRIBUTE_DECAYTO;
 	} else if (str == "wrapid") {
 		return ITEM_ATTRIBUTE_WRAPID;
+	} else if (str == "storeitem") {
+		return ITEM_ATTRIBUTE_STOREITEM;
+	} else if (str == "attackspeed") {
+		return ITEM_ATTRIBUTE_ATTACK_SPEED;
 	}
 	return ITEM_ATTRIBUTE_NONE;
 }
@@ -1094,7 +1100,7 @@ const char* getReturnMessage(ReturnValue value)
 			return "You do not have the required magic level to use this rune.";
 
 		case RETURNVALUE_YOUAREALREADYTRADING:
-			return "You are already trading.";
+			return "You are already trading. Finish this trade first.";
 
 		case RETURNVALUE_THISPLAYERISALREADYTRADING:
 			return "This player is already trading.";
@@ -1227,6 +1233,9 @@ const char* getReturnMessage(ReturnValue value)
 
 		case RETURNVALUE_ITEMCANNOTBEMOVEDTHERE:
 			return "This item cannot be moved there.";
+
+		case RETURNVALUE_YOUCANNOTUSETHISBED:
+			return "This bed can't be used, but Premium Account players can rent houses and sleep in beds there to regain health and mana.";
 
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";

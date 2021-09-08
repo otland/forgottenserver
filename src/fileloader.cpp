@@ -22,7 +22,6 @@
 #include <stack>
 #include "fileloader.h"
 
-
 namespace OTB {
 
 constexpr Identifier wildcard = {{'\0', '\0', '\0', '\0'}};
