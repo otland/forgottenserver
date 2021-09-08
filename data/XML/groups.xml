@@ -15,7 +15,7 @@
 			<flag cannotbemuted="1" />
 		</flags>
 	</group>
-	<group id="4" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="4" name="gamemaster" access="1" maxdepotitems="0" maxvipentries="200">
 		<flags>
 			<flag cannotusecombat="1" />
 			<flag cannotattackplayer="1" />
@@ -56,7 +56,7 @@
 			<flag isalwayspremium="1" />
 		</flags>
 	</group>
-	<group id="5" name="community manager" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="5" name="community manager" access="1" maxdepotitems="0" maxvipentries="200">
 		<flags>
 			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
@@ -97,7 +97,7 @@
 			<flag isalwayspremium="1" />
 		</flags>
 	</group>
-	<group id="6" name="god" access="1" maxdepotitems="0" maxvipentries="200" >
+	<group id="6" name="god" access="1" maxdepotitems="0" maxvipentries="200">
 		<flags>
 			<flag cannotusecombat="0" />
 			<flag cannotattackplayer="1" />
