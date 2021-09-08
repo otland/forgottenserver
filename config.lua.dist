@@ -135,7 +135,6 @@ rateExp = 5
 rateSkill = 3
 rateLoot = 2
 rateMagic = 3
-rateSpawn = 1
 
 -- Monster Despawn Config
 -- despawnRange is the amount of floors a monster can be from its spawn position

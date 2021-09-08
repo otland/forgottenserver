@@ -106,7 +106,6 @@ class ConfigManager
 			RATE_SKILL,
 			RATE_LOOT,
 			RATE_MAGIC,
-			RATE_SPAWN,
 			HOUSE_PRICE,
 			KILLS_TO_RED,
 			KILLS_TO_BLACK,

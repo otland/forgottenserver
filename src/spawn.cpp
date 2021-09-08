@@ -368,8 +368,6 @@ void Spawn::checkSpawn()
 
 	cleanup();
 
-	uint32_t spawnCount = 0;
-
 	for (auto& it : spawnMap) {
 		uint32_t spawnId = it.first;
 		if (spawnedMap.find(spawnId) != spawnedMap.end()) {
@@ -381,10 +379,6 @@ void Spawn::checkSpawn()
 			if (!spawnMonster(spawnId, sb)) {
 				sb.lastSpawn = OTSYS_TIME();
 				continue;
-			}
-
-			if (++spawnCount >= static_cast<uint32_t>(g_config.getNumber(ConfigManager::RATE_SPAWN))) {
-				break;
 			}
 		}
 	}
