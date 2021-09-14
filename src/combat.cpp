@@ -66,8 +66,12 @@ MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows)
 	return area;
 }
 
-std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
+std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, Direction dir)
 {
+	if (dir > DIRECTION_WEST) {
+		dir = DIRECTION_NONE;
+	}
+	
 	auto casterPos = getNextPosition(dir, targetPos);
 
 	std::vector<Tile*> vec;
