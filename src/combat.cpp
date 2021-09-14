@@ -1019,12 +1019,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		bool playerCombatReduced = false;
 		if ((damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) && caster) {
 			Player* targetPlayer = creature->getPlayer();
-			if (casterPlayer) {
-				if (targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
-					damageCopy.primary.value /= 2;
-					damageCopy.secondary.value /= 2;
-					playerCombatReduced = true;
-				}
+			if (casterPlayer && targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
+				damageCopy.primary.value /= 2;
+				damageCopy.secondary.value /= 2;
+				playerCombatReduced = true;
 			}
 		}
 
