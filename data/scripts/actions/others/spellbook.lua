@@ -8,7 +8,7 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 			if spell.manapercent > 0 then
 				spell.mana = spell.manapercent .. "%"
 			end
-			if spell.params > 0 then
+			if spell.params then
 				spell.words = spell.words .. " para"
 			end
 			spells[#spells + 1] = spell
