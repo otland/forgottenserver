@@ -556,9 +556,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 	if (!it.name.empty()) {
 		std::string lowerCaseName = asLowerCaseString(it.name);
-		auto result = nameToItems.find(lowerCaseName);
-		if (result == nameToItems.end()) {
-			nameToItems.insert({ std::move(lowerCaseName), id });
+		if (nameToItems.find(lowerCaseName) == nameToItems.end()) {
+			nameToItems.emplace(std::move(lowerCaseName), id);
 		}
 	}
 
