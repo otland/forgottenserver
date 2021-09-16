@@ -925,7 +925,7 @@ void LuaScriptInterface::pushCombatDamage(lua_State* L, const CombatDamage& dama
 
 void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spell)
 {
-	lua_createtable(L, 0, 6);
+	lua_createtable(L, 0, 7);
 
 	setField(L, "name", spell.getName());
 	setField(L, "words", spell.getWords());
@@ -933,6 +933,7 @@ void LuaScriptInterface::pushInstantSpell(lua_State* L, const InstantSpell& spel
 	setField(L, "mlevel", spell.getMagicLevel());
 	setField(L, "mana", spell.getMana());
 	setField(L, "manapercent", spell.getManaPercent());
+	setField(L, "params", spell.getHasParam());
 
 	setMetatable(L, -1, "Spell");
 }
