@@ -152,7 +152,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Windows - remove C:/mysql*
-        run: rm -r -fo C:/mysql-5.7.21-winx64
+        run: rm -r -fo C:/mysql*
 
       - name: Set Environment vars
         run: |
