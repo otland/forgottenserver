@@ -9,8 +9,10 @@ function Container.createLootItem(self, item)
 
 	local itemCount = 0
 	local randvalue = getLootRandom()
+	local itemType = ItemType(item.itemId)
+	
 	if randvalue < item.chance then
-		if ItemType(item.itemId):isStackable() then
+		if itemType:isStackable() then
 			itemCount = randvalue % item.maxCount + 1
 		else
 			itemCount = 1
@@ -19,7 +21,13 @@ function Container.createLootItem(self, item)
 
 	while itemCount > 0 do
 		local count = math.min(100, itemCount)
-		local tmpItem = Game.createItem(item.itemId, count)
+		
+		local subType = count
+		if itemType:isFluidContainer() then
+			subType = math.max(0, item.subType)
+		end
+		
+		local tmpItem = Game.createItem(item.itemId, subType)
 		if not tmpItem then
 			return false
 		end
