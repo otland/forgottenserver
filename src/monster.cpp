@@ -517,17 +517,13 @@ void Monster::onCreatureLeave(Creature* creature)
 	//update targetList
 	if (isOpponent(creature)) {
 		removeTarget(creature);
-		if (targetList.empty()) {
+		updateIdleStatus();
+
+		if (!isSummon() && targetList.empty()) {
 			int32_t walkToSpawnRadius = g_config.getNumber(ConfigManager::DEFAULT_WALKTOSPAWNRADIUS);
 			if (walkToSpawnRadius > 0 && !Position::areInRange(position, masterPos, walkToSpawnRadius, walkToSpawnRadius)) {
-				std::vector<Direction> dirList;
-				if (getPathTo(masterPos, dirList, 0, 0, true, true)) {
-					startAutoWalk(dirList);
-					return;
-				}
+				walkToSpawn();
 			}
-
-			updateIdleStatus();
 		}
 	}
 }
@@ -716,10 +712,6 @@ void Monster::updateIdleStatus()
 		idle = std::find_if(conditions.begin(), conditions.end(), [](Condition* condition) {
 			return condition->isAggressive();
 		}) == conditions.end();
-	}
-
-	if (idle) {
-		idle = listWalkDir.empty();
 	}
 
 	setIdle(idle);
@@ -1059,9 +1051,39 @@ void Monster::onThinkYell(uint32_t interval)
 	}
 }
 
+bool Monster::walkToSpawn()
+{
+	if (walkingToSpawn || !spawn || !targetList.empty()) {
+		return false;
+	}
+
+	int32_t distance = std::max<int32_t>(Position::getDistanceX(position, masterPos), Position::getDistanceY(position, masterPos));
+	if (distance == 0) {
+		return false;
+	}
+
+	listWalkDir.clear();
+	if (!getPathTo(masterPos, listWalkDir, 0, std::max<int32_t>(0, distance - 5), true, true, distance)) {
+		return false;
+	}
+
+	walkingToSpawn = true;
+	startAutoWalk();
+	return true;
+}
+
 void Monster::onWalk()
 {
 	Creature::onWalk();
+}
+
+void Monster::onWalkComplete()
+{
+	// Continue walking to spawn
+	if (walkingToSpawn) {
+		walkingToSpawn = false;
+		walkToSpawn();
+	}
 }
 
 bool Monster::pushItem(Item* item)
@@ -1168,20 +1190,20 @@ void Monster::pushCreatures(Tile* tile)
 
 bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 {
-	if (listWalkDir.empty() && (isIdle || getHealth() <= 0)) {
+	if (!walkingToSpawn && (isIdle || getHealth() <= 0)) {
 		//we don't have anyone watching, might as well stop walking
 		eventWalk = 0;
 		return false;
 	}
 
 	bool result = false;
-	if (listWalkDir.empty() && (!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
+	if (!walkingToSpawn && (!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
 		if (getTimeSinceLastMove() >= 1000) {
 			randomStepping = true;
 			//choose a random direction
 			result = getRandomStep(getPosition(), direction);
 		}
-	} else if ((isSummon() && isMasterInRange) || followCreature || !listWalkDir.empty()) {
+	} else if ((isSummon() && isMasterInRange) || followCreature || walkingToSpawn) {
 		randomStepping = false;
 		result = Creature::getNextStep(direction, flags);
 		if (result) {

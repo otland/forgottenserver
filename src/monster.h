@@ -134,7 +134,13 @@ class Monster final : public Creature
 
 		void drainHealth(Creature* attacker, int32_t damage) override;
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
+
+		bool isWalkingToSpawn() const {
+			return walkingToSpawn;
+		}
+		bool walkToSpawn();
 		void onWalk() override;
+		void onWalkComplete() override;
 		bool getNextStep(Direction& direction, uint32_t& flags) override;
 		void onFollowCreatureComplete(const Creature* creature) override;
 
@@ -203,10 +209,11 @@ class Monster final : public Creature
 
 		Position masterPos;
 
+		bool ignoreFieldDamage = false;
 		bool isIdle = true;
 		bool isMasterInRange = false;
 		bool randomStepping = false;
-		bool ignoreFieldDamage = false;
+		bool walkingToSpawn = false;
 
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);
