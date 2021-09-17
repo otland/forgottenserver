@@ -330,6 +330,9 @@
     <ClInclude Include="..\src\wildcardtree.h" />
     <ClInclude Include="..\src\xtea.h" />
   </ItemGroup>
+    <ItemGroup>
+    <ResourceCompile Include="theforgottenserver.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
