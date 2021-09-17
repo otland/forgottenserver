@@ -20628,7 +20628,10 @@
 	<item fromid="11450" toid="11462" name="muddy water" />
 	<item id="11463" article="a" name="buttress" />
 	<item fromid="11464" toid="11475" name="pavement" />
-	<item fromid="11476" toid="11477" article="a" name="closed door" />
+	<item fromid="11476" toid="11477" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
 	<item fromid="11478" toid="11489" name="corrupted soil" />
 	<item fromid="11490" toid="11491" name="earth" />
 	<item fromid="11492" toid="11501" name="corrupted soil" />
@@ -23857,15 +23860,40 @@
 	<item id="14619" article="a" name="small spiked corner" />
 	<item id="14620" article="a" name="stone pillar" />
 	<item fromid="14621" toid="14632" article="an" name="archway" />
-	<item fromid="14633" toid="14634" article="a" name="closed door" />
-	<item id="14635" article="an" name="open door" />
-	<item fromid="14636" toid="14637" article="a" name="gate of expertise" />
-	<item id="14638" article="a" name="closed door" />
-	<item id="14639" article="an" name="open door" />
-	<item fromid="14640" toid="14641" article="a" name="closed door" />
+	<item fromid="14633" toid="14634" article="a" name="closed door" editorsuffix=" (Locked)">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="14635" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="14636" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="14637" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="14638" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="14639" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item fromid="14640" toid="14641" article="a" name="closed door" editorsuffix=" (Locked)">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
 	<item fromid="14642" toid="14644" article="an" name="archway" />
-	<item id="14645" article="a" name="closed door" />
-	<item id="14646" article="an" name="open door" />
+	<item id="14645" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="14646" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
 	<item fromid="14647" toid="14652" article="a" name="stone pillar" />
 	<item id="14653" article="a" name="fossil volute" />
 	<item id="14654" article="a" name="small fossil volute" />
@@ -27846,20 +27874,74 @@
 	<item id="20265" name="wooden floor" />
 	<item fromid="20267" toid="20271" article="a" name="ghastly eye" />
 	<item id="20272" article="a" name="stone socket" />
-	<item fromid="20273" toid="20274" article="a" name="closed door" />
-	<item id="20275" article="an" name="open door" />
-	<item id="20276" article="a" name="closed door" />
-	<item id="20277" article="an" name="open door" />
-	<item fromid="20278" toid="20279" article="a" name="gate of expertise" />
-	<item id="20280" article="a" name="closed door" />
-	<item id="20281" article="an" name="open door" />
-	<item fromid="20282" toid="20283" article="a" name="closed door" />
-	<item id="20284" article="an" name="open door" />
-	<item id="20285" article="a" name="closed door" />
-	<item id="20286" article="an" name="open door" />
-	<item fromid="20287" toid="20288" article="a" name="gate of expertise" />
-	<item id="20289" article="a" name="closed door" />
-	<item id="20290" article="an" name="open door" />
+	<item id="20273" article="a" name="closed door" editorsuffix=" (Locked)">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
+	</item>
+	<item id="20274" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20275" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20276" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20277" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20278" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20279" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20280" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20281" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20282" article="a" name="closed door" editorsuffix=" (Locked)">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
+	</item>
+	<item id="20283" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20284" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20285" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20286" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20287" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20288" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="20289" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="20290" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
 	<item fromid="20291" toid="20292" article="a" name="gate" />
 	<item id="20293" article="a" name="stone tile" />
 	<item id="20295" article="a" name="venorean cabinet">
@@ -32321,7 +32403,7 @@
 	<item fromid="22809" toid="22810" article="an" name="archway" />
 	<item id="22811" article="a" name="wall" />
 	<item fromid="22812" toid="22813" article="an" name="open window" />
-	<item id="22814" article="a" name="closed door">
+	<item id="22814" article="a" name="closed door" editorsuffix=" (Locked)">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
@@ -32341,6 +32423,7 @@
 	</item>
 	<item id="22819" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
 	<item id="22820" article="a" name="gate of expertise">
@@ -32353,7 +32436,7 @@
 	<item id="22822" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="22823" article="a" name="closed door">
+	<item id="22823" article="a" name="closed door" editorsuffix=" (Locked)">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
@@ -32373,6 +32456,7 @@
 	</item>
 	<item id="22828" article="a" name="gate of expertise">
 		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
 	<item id="22829" article="a" name="gate of expertise">
@@ -35402,16 +35486,60 @@
 	<item fromid="25235" toid="25240" article="a" name="broken stone wall" />
 	<item fromid="25241" toid="25274" name="pure energy" />
 	<item id="25282" article="a" name="large pile of bones" />
-	<item fromid="25283" toid="25284" article="a" name="closed door" />
-	<item id="25285" article="an" name="open door" />
-	<item fromid="25286" toid="25287" article="a" name="gate of expertise" />
-	<item id="25288" article="a" name="closed door" />
-	<item id="25289" article="an" name="open door" />
-	<item fromid="25290" toid="25291" article="a" name="closed door" />
-	<item id="25292" article="an" name="open door" />
-	<item fromid="25293" toid="25294" article="a" name="gate of expertise" />
-	<item id="25295" article="a" name="closed door" />
-	<item id="25296" article="an" name="open door" />
+	<item id="25283" article="a" name="closed door" editorsuffix=" (Locked)">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
+	</item>
+	<item id="25284" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="25285" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="25286" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="25287" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="25288" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="25289" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="25290" article="a" name="closed door" editorsuffix=" (Locked)">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
+	</item>
+	<item id="25291" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="25292" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="25293" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+		<attribute key="leveldoor" value="1000" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="25294" article="a" name="gate of expertise">
+		<attribute key="type" value="door" />
+	</item>
+	<item id="25295" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockprojectile" value="1" />
+	</item>
+	<item id="25296" article="an" name="open door">
+		<attribute key="type" value="door" />
+	</item>
 	<item id="25298" article="a" name="clay pot" />
 	<item id="25299" article="a" name="moon flower" />
 	<item id="25300" article="a" name="parrot's beak plant" />
