@@ -15,6 +15,8 @@ local function ServerSave()
 			Game.setGameState(GAME_STATE_NORMAL)
 		end
 	end
+
+	saveServer()
 end
 
 local function ServerSaveWarning(time)
