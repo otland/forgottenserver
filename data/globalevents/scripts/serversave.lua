@@ -7,6 +7,8 @@ local function ServerSave()
 			Game.setGameState(GAME_STATE_CLOSED)
 		end
 
+		saveServer()
+
 		if configManager.getBoolean(configKeys.SERVER_SAVE_CLEAN_MAP) then
 			cleanMap()
 		end
@@ -15,8 +17,6 @@ local function ServerSave()
 			Game.setGameState(GAME_STATE_NORMAL)
 		end
 	end
-
-	saveServer()
 end
 
 local function ServerSaveWarning(time)
