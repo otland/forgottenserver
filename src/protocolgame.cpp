@@ -335,8 +335,24 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 	version = msg.get<uint16_t>();
 
+	/* something TO DO here
+	
+	if (operatingSystem <= CLIENTOS_NEW_MAC) {
+		enableCompact();
+	}
+
+	*/
+
+
 	msg.skipBytes(7); // U32 client version, U8 client type, U16 dat revision
 
+	// Version 12.40.10030 has 13 bytes we have to skip
+	if (msg.getLength() - msg.getBufferPosition() == 141)
+	{
+		msg.skipBytes(13);
+	}
+
+	//disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnect();
 		return;
@@ -361,16 +377,30 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(1); // gamemaster flag
 
 	std::string sessionKey = msg.getString();
+	auto sessionArgs = explodeString(sessionKey, "\n", 2); //4 if using token
 
-	auto sessionArgs = explodeString(sessionKey, "\n", 4);
+	/* token verification disabled
+
 	if (sessionArgs.size() != 4) {
 		disconnect();
 		return;
 	}
 
+	*/
+
+	if (operatingSystem == CLIENTOS_NEW_LINUX)
+	{
+		// TODO: check strings contents
+		msg.getString();
+		msg.getString();
+	}
+
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
+	/* token verification disabled
+
 	std::string& token = sessionArgs[2];
+
 	uint32_t tokenTime = 0;
 	try {
 		tokenTime = std::stoul(sessionArgs[3]);
@@ -381,6 +411,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		disconnectClient("Token time is too long.");
 		return;
 	}
+
+	*/
 
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
@@ -396,10 +428,12 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
+	/* this message is crashing the client 12 for some reason
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		return;
 	}
+	*/
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
 		disconnectClient("Gameworld is starting up. Please wait.");
@@ -421,7 +455,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
+	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName /*,  token, tokenTime */);
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;

@@ -22,6 +22,7 @@
 
 #include <unordered_set>
 
+#include "enums.h"
 #include "networkmessage.h"
 
 static constexpr int32_t CONNECTION_WRITE_TIMEOUT = 30;
@@ -68,13 +69,20 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		enum { FORCE_CLOSE = true };
 
-		Connection(boost::asio::io_service& io_service,
-		ConstServicePort_ptr service_port) :
-			readTimer(io_service),
-			writeTimer(io_service),
-			service_port(std::move(service_port)),
-			socket(io_service),
-			timeConnected(time(nullptr)) {}
+		Connection(boost::asio::io_service& init_io_service,
+			ConstServicePort_ptr init_service_port) :
+			readTimer(init_io_service),
+			writeTimer(init_io_service),
+			service_port(std::move(init_service_port)),
+			socket(init_io_service) {
+			connectionState = CONNECTION_STATE_PENDING;
+			packetsSent = 0;
+			timeConnected = time(nullptr);
+			receivedFirst = false;
+			serverNameTime = 0;
+			receivedName = false;
+			receivedLastChar = false;
+		}
 		~Connection();
 
 		friend class ConnectionManager;
@@ -119,10 +127,14 @@ class Connection : public std::enable_shared_from_this<Connection>
 		boost::asio::ip::tcp::socket socket;
 
 		time_t timeConnected;
-		uint32_t packetsSent = 0;
+		uint32_t packetsSent;
 
-		bool closed = false;
+		int8_t connectionState;
 		bool receivedFirst = false;
+
+		uint32_t serverNameTime;
+		bool receivedName;
+		bool receivedLastChar;
 };
 
 #endif
