@@ -22,8 +22,21 @@
 
 #include <unordered_set>
 
-#include "enums.h"
 #include "networkmessage.h"
+
+enum ConnectionState_t : int8_t {
+	CONNECTION_STATE_DISCONNECTED,
+	CONNECTION_STATE_CONNECTING_STAGE1,
+	CONNECTION_STATE_CONNECTING_STAGE2,
+	CONNECTION_STATE_GAME,
+	CONNECTION_STATE_PENDING
+};
+
+enum checksumMode_t {
+	CHECKSUM_DISABLED,
+	CHECKSUM_ADLER,
+	CHECKSUM_SEQUENCE
+};
 
 static constexpr int32_t CONNECTION_WRITE_TIMEOUT = 30;
 static constexpr int32_t CONNECTION_READ_TIMEOUT = 30;

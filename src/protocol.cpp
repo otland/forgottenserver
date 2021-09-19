@@ -60,14 +60,14 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 
 }
 
-void Protocol::onSendMessage(const OutputMessage_ptr& msg) const
+void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!rawMessages) {
 		msg->writeMessageLength();
 
 		if (encryptionEnabled) {
 			XTEA_encrypt(*msg, key);
-			msg->addCryptoHeader(checksumEnabled);
+			msg->addCryptoHeader(checksumMode, sequenceNumber);
 		}
 	}
 }
