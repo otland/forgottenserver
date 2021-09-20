@@ -339,10 +339,10 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(4); // U32 client version
 	
-	// Version 12.40.10030 has 13 bytes we have to skip
+	//String client version
 	if (version >= 1240) {
 		if (msg.getLength() - msg.getBufferPosition() > 132) {
-			msg.getString(); // String client version
+			msg.getString();
 		}
 	}
 
@@ -379,8 +379,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// Web login skips the character list request so we need to check the client version again
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-	//	disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
-	//	return;
+		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
+		return;
 	}
 
 	msg.skipBytes(1); // gamemaster flag
