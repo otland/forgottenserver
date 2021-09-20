@@ -568,9 +568,6 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), true);
 		}
-	}
-
-	for (Creature* spectator : spectators) {
 		spectator->onCreatureAppear(creature, true);
 	}
 
@@ -609,10 +606,8 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 		if (Player* player = spectator->getPlayer()) {
 			player->sendRemoveTileCreature(creature, tilePosition, oldStackPosVector[i++]);
 		}
-	}
 
-	//event method
-	for (Creature* spectator : spectators) {
+		//event method
 		spectator->onRemoveCreature(creature, isLogout);
 	}
 
@@ -3508,10 +3503,7 @@ void Game::playerWhisper(Player* player, const std::string& text)
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, text);
 			}
 		}
-	}
-
-	//event method
-	for (Creature* spectator : spectators) {
+		//event method
 		spectator->onCreatureSay(player, TALKTYPE_WHISPER, text);
 	}
 }
@@ -3649,15 +3641,14 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 				tmpPlayer->sendCreatureSay(creature, type, text, pos);
 			}
 		}
-	}
 
-	//event method
-	for (Creature* spectator : spectators) {
+		//event method
 		spectator->onCreatureSay(creature, type, text);
 		if (creature != spectator) {
 			g_events->eventCreatureOnHear(spectator, creature, text, type);
 		}
 	}
+
 	return true;
 }
 
