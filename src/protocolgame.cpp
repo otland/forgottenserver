@@ -325,39 +325,36 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 	g_game.removeCreature(player);
 }
 
+// Login to the game world request
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
+	// Server is shutting down
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		disconnect();
 		return;
 	}
 
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
-	version = msg.get<uint16_t>();
+	version = msg.get<uint16_t>(); // U16 client version
 
-	/* something TO DO here
+	msg.skipBytes(4); // U32 client version
 	
-	if (operatingSystem <= CLIENTOS_NEW_MAC) {
-		enableCompact();
-	}
-
-	*/
-
-
-	msg.skipBytes(7); // U32 client version, U8 client type, U16 dat revision
-
 	// Version 12.40.10030 has 13 bytes we have to skip
-	if (msg.getLength() - msg.getBufferPosition() == 141)
-	{
-		msg.skipBytes(13);
+	if (version >= 1240) {
+		if (msg.getLength() - msg.getBufferPosition() > 132) {
+			msg.getString(); // String client version
+		}
 	}
 
-	//disconnect if RSA decrypt fails
+	msg.skipBytes(3); // U16 dat revision, U8 preview state
+
+	// Disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnect();
 		return;
 	}
 
+	// Get XTEA key
 	xtea::key key;
 	key[0] = msg.get<uint32_t>();
 	key[1] = msg.get<uint32_t>();
@@ -366,6 +363,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	enableXTEAEncryption();
 	setXTEAKey(std::move(key));
 
+	// Enable extended opcode feature for otclient
 	if (operatingSystem >= CLIENTOS_OTCLIENT_LINUX) {
 		NetworkMessage opcodeMessage;
 		opcodeMessage.addByte(0x32);
@@ -374,22 +372,27 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		writeToOutputBuffer(opcodeMessage);
 	}
 
+	// Adjust checksum mode for newer clients
+	if (version >= 1111 && operatingSystem >= CLIENTOS_QT_LINUX && operatingSystem <= CLIENTOS_QT_MAC) {
+		setChecksumMode(CHECKSUM_SEQUENCE);
+	}
+
+	// Web login skips the character list request so we need to check the client version again
+	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
+	//	disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
+	//	return;
+	}
+
 	msg.skipBytes(1); // gamemaster flag
 
 	std::string sessionKey = msg.getString();
-	auto sessionArgs = explodeString(sessionKey, "\n", 2); //4 if using token
-
-	/* token verification disabled
-
+	auto sessionArgs = explodeString(sessionKey, "\n", 4); //4 if using token
 	if (sessionArgs.size() != 4) {
 		disconnect();
 		return;
 	}
 
-	*/
-
-	if (operatingSystem == CLIENTOS_NEW_LINUX)
-	{
+	if (operatingSystem == CLIENTOS_QT_LINUX) {
 		// TODO: check strings contents
 		msg.getString();
 		msg.getString();
@@ -397,10 +400,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
-	/* token verification disabled
 
 	std::string& token = sessionArgs[2];
-
 	uint32_t tokenTime = 0;
 	try {
 		tokenTime = std::stoul(sessionArgs[3]);
@@ -411,8 +412,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		disconnectClient("Token time is too long.");
 		return;
 	}
-
-	*/
 
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
@@ -427,16 +426,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		disconnect();
 		return;
 	}
-
-	if (version >= 1111) {
-		setChecksumMode(CHECKSUM_SEQUENCE);
-	}
-
-	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
-		return;
-	}
-	
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
 		disconnectClient("Gameworld is starting up. Please wait.");
@@ -458,7 +447,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName /*,  token, tokenTime */);
+	uint32_t accountId = IOLoginData::gameworldAuthentication(accountName, password, characterName,  token, tokenTime);
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;

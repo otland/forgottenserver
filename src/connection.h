@@ -24,7 +24,7 @@
 
 #include "networkmessage.h"
 
-enum ConnectionState_t : int8_t {
+enum ConnectionState_t {
 	CONNECTION_STATE_DISCONNECTED,
 	CONNECTION_STATE_CONNECTING_STAGE1,
 	CONNECTION_STATE_CONNECTING_STAGE2,
