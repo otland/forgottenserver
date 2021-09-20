@@ -183,6 +183,7 @@ bool ConfigManager::load()
 	if (!loaded) { //info that must be loaded one time (unless we reset the modules involved)
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
+		boolean[LUA_API_ENABLED] = getGlobalBoolean(L, "luaApiEnabled", true);
 
 		if (string[IP] == "") {
 			string[IP] = getGlobalString(L, "ip", "127.0.0.1");
@@ -196,6 +197,7 @@ bool ConfigManager::load()
 		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
 		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
 		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[LUA_API_IP] = getGlobalString(L, "luaApiIp", "127.0.0.1");
 
 		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
 
@@ -208,6 +210,7 @@ bool ConfigManager::load()
 		}
 
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
+		integer[LUA_API_PORT] = getGlobalNumber(L, "luaApiProtocolPort", 7179);
 
 		integer[MARKET_OFFER_DURATION] = getGlobalNumber(L, "marketOfferDuration", 30 * 24 * 60 * 60);
 	}

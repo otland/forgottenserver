@@ -342,6 +342,42 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 	return 0;
 }
 
+std::string LuaScriptInterface::loadString(const std::string& string, const std::string& fileName)
+{
+	//loads string as a chunk at stack top
+	int ret = luaL_loadstring(luaState, string.c_str());
+	if (ret != 0) {
+		lastLuaError = popString(luaState);
+		return lastLuaError;
+	}
+
+	//check that it is loaded as a function
+	if (!isFunction(luaState, -1)) {
+		return "not handled";
+	}
+
+	loadingFile = "lua api: " + fileName;
+
+	if (!reserveScriptEnv()) {
+		return "not handled";
+	}
+
+	ScriptEnvironment* env = getScriptEnv();
+	env->setScriptId(EVENT_ID_LOADING, this);
+
+	//execute it
+	ret = protectedCall(luaState, 0, 0);
+	if (ret != 0) {
+		lastLuaError = popString(luaState);
+		reportError(nullptr, lastLuaError);
+		resetScriptEnv();
+		return lastLuaError;
+	}
+
+	resetScriptEnv();
+	return "";
+}
+
 int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 {
 	//get our events table
@@ -3053,6 +3089,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("GlobalEvent", "onStartup", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod("GlobalEvent", "onShutdown", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod("GlobalEvent", "onRecord", LuaScriptInterface::luaGlobalEventOnCallback);
+	registerMethod("GlobalEvent", "onHttpRequest", LuaScriptInterface::luaGlobalEventOnCallback);
 
 	// Weapon
 	registerClass("Weapon", "", LuaScriptInterface::luaCreateWeapon);
@@ -16361,8 +16398,10 @@ int LuaScriptInterface::luaGlobalEventType(lua_State* L)
 			global->setEventType(GLOBALEVENT_SHUTDOWN);
 		} else if (tmpStr == "record") {
 			global->setEventType(GLOBALEVENT_RECORD);
+		} else if (tmpStr == "http") {
+			global->setEventType(GLOBALEVENT_HTTPREQUEST);
 		} else {
-			std::cout << "[Error - CreatureEvent::configureLuaEvent] Invalid type for global event: " << typeName << std::endl;
+			std::cout << "[Error - GlobalEvent::configureLuaEvent] Invalid type for global event: " << typeName << std::endl;
 			pushBoolean(L, false);
 		}
 		pushBoolean(L, true);

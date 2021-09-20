@@ -97,3 +97,8 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 
 	return true;
 }
+
+std::string Scripts::executeString(const std::string& text, const std::string& fileName)
+{
+	return scriptInterface.loadString(text, fileName);
+}
