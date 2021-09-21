@@ -165,33 +165,20 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		} else {
 			std::string serverName = g_config.getString(ConfigManager::SERVER_NAME) + "\n";
 			if (!receivedName) {
-				//if (static_cast<char>(msgBuffer[0]) == serverName[0]
-				//	&& static_cast<char>(msgBuffer[1]) == serverName[1]) {
-					receivedName = true;
-					serverNameTime = 1;
-
-					accept();
-					return;
-				//} else {
-				//	std::cout << "[Network error - Connection::parseHeader] Invalid Client Login! Server Name mismatch!" << std::endl;
-				//	close(FORCE_CLOSE);
-				//	return;
-				//}
-			}
-			++serverNameTime;
-
-			//if (static_cast<char>(msgBuffer[0]) == serverName[serverNameTime]) {
-				if (msgBuffer[0] == 0x0A) {
-					receivedLastChar = true;
-				}
+				receivedName = true;
+				serverNameTime = 1;
 
 				accept();
 				return;
-			//} else {
-			//	std::cout << "[Network error - Connection::parseHeader] Invalid Client Login! Server Name mismatch!" << std::endl;
-			//	close(FORCE_CLOSE);
-			//	return;
-			//}
+			}
+			++serverNameTime;
+
+			if (msgBuffer[0] == 0x0A) {
+				receivedLastChar = true;
+			}
+
+			accept();
+			return;
 		}
 	}
 

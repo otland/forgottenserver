@@ -104,8 +104,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password, std::string& characterName, std::string& token, uint32_t tokenTime)
 {
 	Database& db = Database::getInstance();
-	std::string q = fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s} LIMIT 1", db.escapeString(accountName), db.escapeString(accountName));
-	DBResult_ptr result = db.storeQuery(q);
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s} LIMIT 1", db.escapeString(accountName), db.escapeString(accountName)));
 	if (!result) {
 		return 0;
 	}
