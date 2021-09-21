@@ -224,26 +224,34 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		return;
 	}
 
-	//Check packet
-	uint32_t recvPacket = msg.get<uint32_t>();
-
 	if (!receivedFirst) {
 		// First message received
 		receivedFirst = true;
 
 		if (!protocol) {
-			// Skip deprecarted checksum part (11.11+)
-			if (msg.getLength() < 280) {
+			// Read packet contents
+			uint32_t checksum;
+			int32_t len = msg.getLength() - msg.getBufferPosition() - NetworkMessage::CHECKSUM_LENGTH;
+			if (len > 0) {
+				checksum = adlerChecksum(msg.getBuffer() + msg.getBufferPosition() + NetworkMessage::CHECKSUM_LENGTH, len);
+			} else {
+				checksum = 0;
+			}
+
+			uint32_t recvChecksum = msg.get<uint32_t>();
+			if (recvChecksum != checksum) {
+				// Not a checksum. Move to the previous point of the packet.
 				msg.skipBytes(-NetworkMessage::CHECKSUM_LENGTH);
 			}
 
 			// Game protocol has already been created at this point
-			protocol = service_port->make_protocol(true, msg, shared_from_this());
+			protocol = service_port->make_protocol(recvChecksum == checksum, msg, shared_from_this());
 			if (!protocol) {
 				close(FORCE_CLOSE);
 				return;
 			}
 		} else {
+			msg.get<uint32_t>();
 			msg.skipBytes(1); // Skip protocol ID
 		}
 

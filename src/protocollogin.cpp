@@ -140,6 +140,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(2); // client OS
 
 	uint16_t version = msg.get<uint16_t>();
+
 	if (version <= 822) {
 		setChecksumMode(CHECKSUM_DISABLED);
 	}
