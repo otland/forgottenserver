@@ -386,7 +386,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(1); // gamemaster flag
 
 	std::string sessionKey = msg.getString();
-	auto sessionArgs = explodeString(sessionKey, "\n", 4); //4 if using token
+	auto sessionArgs = explodeString(sessionKey, "\n", 4); //acc name/email, password, token, timestamp divided by 30
 	if (sessionArgs.size() != 4) {
 		disconnect();
 		return;

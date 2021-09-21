@@ -161,8 +161,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 * 1 byte: 0
 	 */
 
-
-
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnect();
 		return;
