@@ -7086,10 +7086,10 @@ int LuaScriptInterface::luaContainerGetItemCountById(lua_State* L)
 
 int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
 {
-	// container:getContentDescription()
+	// container:getContentDescription([colored = false])
 	Container* container = getUserdata<Container>(L, 1);
 	if (container) {
-		pushString(L, container->getContentDescription());
+		pushString(L, container->getContentDescription(getBoolean(L, 2, false)));
 	} else {
 		lua_pushnil(L);
 	}
