@@ -5106,7 +5106,13 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		return;
 	}
 
-	uint32_t fee = std::max<uint32_t>(20, std::min<uint32_t>(100000, (price / 100.) * amount));
+	uint64_t fee = (price / 100.) * amount;
+	if (fee < MIN_MARKET_FEE) {
+		fee = MIN_MARKET_FEE;
+	} else if (fee > MAX_MARKET_FEE) {
+		fee = MAX_MARKET_FEE;
+	}
+
 	if (type == MARKETACTION_SELL) {
 		if (fee > (player->getMoney() + player->bankBalance)) {
 			return;
