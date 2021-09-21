@@ -400,7 +400,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
-
 	std::string& token = sessionArgs[2];
 	uint32_t tokenTime = 0;
 	try {
