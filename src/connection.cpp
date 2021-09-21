@@ -220,8 +220,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 	if (error) {
 		close(FORCE_CLOSE);
 		return;
-	}
-	else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
+	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
 		return;
 	}
 
