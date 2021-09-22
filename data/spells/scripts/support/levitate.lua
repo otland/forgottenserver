@@ -13,7 +13,7 @@ local function levitate(creature, parameter)
 				local fromPos = creature:getPosition()
 				local moved = creature:move(tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
 
-				if moved then
+				if moved == RETURNVALUE_NOERROR then
 					fromPos:sendMagicEffect(CONST_ME_TELEPORT)
 				end
 
