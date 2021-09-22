@@ -163,7 +163,6 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		if (!receivedName && msgBuffer[1] == 0x00) {
 			receivedLastChar = true;
 		} else {
-			std::string serverName = g_config.getString(ConfigManager::SERVER_NAME) + "\n";
 			if (!receivedName) {
 				receivedName = true;
 				serverNameTime = 1;
@@ -231,7 +230,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		receivedFirst = true;
 
 		if (!protocol) {
-			// Skip deprecarted checksum bytes (with clients that aren't using it in mind)
+			// Skip deprecated checksum bytes (with clients that aren't using it in mind)
 			uint16_t len = msg.getLength();
 			if (len < 280 && len != 151) {
 				msg.skipBytes(-NetworkMessage::CHECKSUM_LENGTH);
