@@ -9,7 +9,7 @@ local function levitate(creature, parameter)
 		if not tile or not tile:getGround() and not tile:hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) then
 			tile = Tile(toPosition.x, toPosition.y, toPosition.z + (parameter == "up" and -1 or 1))
 
-			if tile and tile:getGround() and not tile:hasFlag(ILESTATE_IMMOVABLEBLOCKSOLID) then
+			if tile and tile:getGround() and not tile:hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) then
 				return creature:move(tile, bit.bor(FLAG_IGNOREBLOCKITEM, FLAG_IGNOREBLOCKCREATURE))
 			end
 		end
