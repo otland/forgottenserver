@@ -259,9 +259,8 @@ ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 	if (attacker->hasFlag(PlayerFlag_CannotUseCombat) || !target->isAttackable()) {
 		if (target->getPlayer()) {
 			return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
-		} else {
-			return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 		}
+		return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 	}
 
 	if (target->getPlayer()) {
