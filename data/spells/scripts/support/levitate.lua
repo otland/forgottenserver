@@ -1,5 +1,6 @@
 local function levitate(creature, parameter)
 	local fromPosition = creature:getPosition()
+	parameter = parameter:trim():lower()
 
 	if parameter == "up" and fromPosition.z ~= 8 or parameter == "down" and fromPosition.z ~= 7 then
 		local toPosition = creature:getPosition()
