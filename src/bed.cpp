@@ -61,8 +61,9 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 			return ATTR_READ_CONTINUE;
 		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 	return Item::readAttr(attr, propStream);
 }

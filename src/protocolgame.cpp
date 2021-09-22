@@ -585,9 +585,10 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xF8: parseMarketAcceptOffer(msg); break;
 		case 0xF9: parseModalWindowAnswer(msg); break;
 
-		default:
+		default: {
 			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
 			break;
+		}
 	}
 
 	if (msg.isOverrun()) {
@@ -822,15 +823,41 @@ void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 	for (uint8_t i = 0; i < numdirs; ++i) {
 		uint8_t rawdir = msg.getPreviousByte();
 		switch (rawdir) {
-			case 1: path.push_back(DIRECTION_EAST); break;
-			case 2: path.push_back(DIRECTION_NORTHEAST); break;
-			case 3: path.push_back(DIRECTION_NORTH); break;
-			case 4: path.push_back(DIRECTION_NORTHWEST); break;
-			case 5: path.push_back(DIRECTION_WEST); break;
-			case 6: path.push_back(DIRECTION_SOUTHWEST); break;
-			case 7: path.push_back(DIRECTION_SOUTH); break;
-			case 8: path.push_back(DIRECTION_SOUTHEAST); break;
-			default: break;
+			case 1: {
+				path.push_back(DIRECTION_EAST); break;
+			}
+
+			case 2: {
+				path.push_back(DIRECTION_NORTHEAST); break;
+			}
+
+			case 3: {
+				path.push_back(DIRECTION_NORTH); break;
+			}
+
+			case 4: {
+				path.push_back(DIRECTION_NORTHWEST); break;
+			}
+
+			case 5: {
+				path.push_back(DIRECTION_WEST); break;
+			}
+
+			case 6: {
+				path.push_back(DIRECTION_SOUTHWEST); break;
+			}
+
+			case 7: {
+				path.push_back(DIRECTION_SOUTH); break;
+			}
+
+			case 8: {
+				path.push_back(DIRECTION_SOUTHEAST); break;
+			}
+
+			default: {
+				break;
+			}
 		}
 	}
 
@@ -942,19 +969,22 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	SpeakClasses type = static_cast<SpeakClasses>(msg.getByte());
 	switch (type) {
 		case TALKTYPE_PRIVATE_TO:
-		case TALKTYPE_PRIVATE_RED_TO:
+		case TALKTYPE_PRIVATE_RED_TO: {
 			receiver = msg.getString();
 			channelId = 0;
 			break;
+		}
 
 		case TALKTYPE_CHANNEL_Y:
-		case TALKTYPE_CHANNEL_R1:
+		case TALKTYPE_CHANNEL_R1: {
 			channelId = msg.get<uint16_t>();
 			break;
+		}
 
-		default:
+		default: {
 			channelId = 0;
 			break;
+		}
 	}
 
 	const std::string text = msg.getString();
@@ -1439,6 +1469,7 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.addByte(message.secondary.color);
 			break;
 		}
+
 		case MESSAGE_HEALED:
 		case MESSAGE_HEALED_OTHERS:
 		case MESSAGE_EXPERIENCE:
@@ -1448,11 +1479,14 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 			msg.addByte(message.primary.color);
 			break;
 		}
+
 		case MESSAGE_GUILD:
 		case MESSAGE_PARTY_MANAGEMENT:
-		case MESSAGE_PARTY:
+		case MESSAGE_PARTY: {
 			msg.add<uint16_t>(message.channelId);
 			break;
+		}
+
 		default: {
 			break;
 		}

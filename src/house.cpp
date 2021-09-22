@@ -328,14 +328,17 @@ Door* House::getDoorByPosition(const Position& pos)
 bool House::canEditAccessList(uint32_t listId, const Player* player)
 {
 	switch (getHouseAccessLevel(player)) {
-		case HOUSE_OWNER:
+		case HOUSE_OWNER: {
 			return true;
+		}
 
-		case HOUSE_SUBOWNER:
+		case HOUSE_SUBOWNER: {
 			return listId == GUEST_LIST;
+		}
 
-		default:
+		default: {
 			return false;
+		}
 	}
 }
 
@@ -680,20 +683,29 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 
 			time_t paidUntil = currentTime;
 			switch (rentPeriod) {
-				case RENTPERIOD_DAILY:
+				case RENTPERIOD_DAILY: {
 					paidUntil += 24 * 60 * 60;
 					break;
-				case RENTPERIOD_WEEKLY:
+				}
+
+				case RENTPERIOD_WEEKLY: {
 					paidUntil += 24 * 60 * 60 * 7;
 					break;
-				case RENTPERIOD_MONTHLY:
+				}
+
+				case RENTPERIOD_MONTHLY: {
 					paidUntil += 24 * 60 * 60 * 30;
 					break;
-				case RENTPERIOD_YEARLY:
+				}
+
+				case RENTPERIOD_YEARLY: {
 					paidUntil += 24 * 60 * 60 * 365;
 					break;
-				default:
+				}
+
+				default: {
 					break;
+				}
 			}
 
 			house->setPaidUntil(paidUntil);
@@ -705,24 +717,29 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				std::string period;
 
 				switch (rentPeriod) {
-					case RENTPERIOD_DAILY:
+					case RENTPERIOD_DAILY: {
 						period = "daily";
 						break;
+					}
 
-					case RENTPERIOD_WEEKLY:
+					case RENTPERIOD_WEEKLY: {
 						period = "weekly";
 						break;
+					}
 
-					case RENTPERIOD_MONTHLY:
+					case RENTPERIOD_MONTHLY: {
 						period = "monthly";
 						break;
+					}
 
-					case RENTPERIOD_YEARLY:
+					case RENTPERIOD_YEARLY: {
 						period = "annual";
 						break;
+					}
 
-					default:
+					default: {
 						break;
+					}
 				}
 
 				letter->setText(fmt::format("Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.", period, house->getRent(), house->getName(), daysLeft));

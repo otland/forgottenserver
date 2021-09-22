@@ -382,8 +382,9 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			break;
 		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 	return nullptr;
 }

@@ -152,66 +152,83 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 {
 	switch (type) {
-		case CONDITION_FIRE:
+		case CONDITION_FIRE: {
 			return COMBAT_FIREDAMAGE;
+		}
 
-		case CONDITION_ENERGY:
+		case CONDITION_ENERGY: {
 			return COMBAT_ENERGYDAMAGE;
+		}
 
-		case CONDITION_BLEEDING:
+		case CONDITION_BLEEDING: {
 			return COMBAT_PHYSICALDAMAGE;
+		}
 
-		case CONDITION_DROWN:
+		case CONDITION_DROWN: {
 			return COMBAT_DROWNDAMAGE;
+		}
 
-		case CONDITION_POISON:
+		case CONDITION_POISON: {
 			return COMBAT_EARTHDAMAGE;
+		}
 
-		case CONDITION_FREEZING:
+		case CONDITION_FREEZING: {
 			return COMBAT_ICEDAMAGE;
+		}
 
-		case CONDITION_DAZZLED:
+		case CONDITION_DAZZLED: {
 			return COMBAT_HOLYDAMAGE;
+		}
 
-		case CONDITION_CURSED:
+		case CONDITION_CURSED: {
 			return COMBAT_DEATHDAMAGE;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
-
 	return COMBAT_NONE;
 }
 
 ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 {
 	switch (type) {
-		case COMBAT_FIREDAMAGE:
+		case COMBAT_FIREDAMAGE: {
 			return CONDITION_FIRE;
+		}
 
-		case COMBAT_ENERGYDAMAGE:
+		case COMBAT_ENERGYDAMAGE: {
 			return CONDITION_ENERGY;
+		}
 
-		case COMBAT_DROWNDAMAGE:
+		case COMBAT_DROWNDAMAGE: {
 			return CONDITION_DROWN;
+		}
 
-		case COMBAT_EARTHDAMAGE:
+		case COMBAT_EARTHDAMAGE: {
 			return CONDITION_POISON;
+   		}
 
-		case COMBAT_ICEDAMAGE:
+		case COMBAT_ICEDAMAGE: {
 			return CONDITION_FREEZING;
+		}
 
-		case COMBAT_HOLYDAMAGE:
+		case COMBAT_HOLYDAMAGE: {
 			return CONDITION_DAZZLED;
+		}
 
-		case COMBAT_DEATHDAMAGE:
+		case COMBAT_DEATHDAMAGE: {
 			return CONDITION_CURSED;
+		}
 
-		case COMBAT_PHYSICALDAMAGE:
+		case COMBAT_PHYSICALDAMAGE: {
 			return CONDITION_BLEEDING;
+		}
 
-		default:
+		default: {
 			return CONDITION_NONE;
+		}
 	}
 }
 
@@ -490,38 +507,49 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 int32_t Combat::getParam(CombatParam_t param)
 {
 	switch (param) {
-		case COMBAT_PARAM_TYPE:
+		case COMBAT_PARAM_TYPE: {
 			return static_cast<int32_t>(params.combatType);
+		}
 
-		case COMBAT_PARAM_EFFECT:
+		case COMBAT_PARAM_EFFECT: {
 			return static_cast<int32_t>(params.impactEffect);
+		}
 
-		case COMBAT_PARAM_DISTANCEEFFECT:
+		case COMBAT_PARAM_DISTANCEEFFECT: {
 			return static_cast<int32_t>(params.distanceEffect);
+		}
 
-		case COMBAT_PARAM_BLOCKARMOR:
+		case COMBAT_PARAM_BLOCKARMOR: {
 			return params.blockedByArmor ? 1 : 0;
+		}
 
-		case COMBAT_PARAM_BLOCKSHIELD:
+		case COMBAT_PARAM_BLOCKSHIELD: {
 			return params.blockedByShield ? 1 : 0;
+		}
 
-		case COMBAT_PARAM_TARGETCASTERORTOPMOST:
+		case COMBAT_PARAM_TARGETCASTERORTOPMOST: {
 			return params.targetCasterOrTopMost ? 1 : 0;
+		}
 
-		case COMBAT_PARAM_CREATEITEM:
+		case COMBAT_PARAM_CREATEITEM: {
 			return params.itemId;
+		}
 
-		case COMBAT_PARAM_AGGRESSIVE:
+		case COMBAT_PARAM_AGGRESSIVE: {
 			return params.aggressive ? 1 : 0;
+		}
 
-		case COMBAT_PARAM_DISPEL:
+		case COMBAT_PARAM_DISPEL: {
 			return static_cast<int32_t>(params.dispelType);
+		}
 
-		case COMBAT_PARAM_USECHARGES:
+		case COMBAT_PARAM_USECHARGES: {
 			return params.useCharges ? 1 : 0;
+		}
 
-		default:
+		default: {
 			return std::numeric_limits<int32_t>().max();
+		}
 	}
 }
 
@@ -575,36 +603,44 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 	if (params.itemId != 0) {
 		uint16_t itemId = params.itemId;
 		switch (itemId) {
-			case ITEM_FIREFIELD_PERSISTENT_FULL:
+			case ITEM_FIREFIELD_PERSISTENT_FULL: {
 				itemId = ITEM_FIREFIELD_PVP_FULL;
 				break;
+			}
 
-			case ITEM_FIREFIELD_PERSISTENT_MEDIUM:
+			case ITEM_FIREFIELD_PERSISTENT_MEDIUM: {
 				itemId = ITEM_FIREFIELD_PVP_MEDIUM;
 				break;
+			}
 
-			case ITEM_FIREFIELD_PERSISTENT_SMALL:
+			case ITEM_FIREFIELD_PERSISTENT_SMALL: {
 				itemId = ITEM_FIREFIELD_PVP_SMALL;
 				break;
+			}
 
-			case ITEM_ENERGYFIELD_PERSISTENT:
+			case ITEM_ENERGYFIELD_PERSISTENT: {
 				itemId = ITEM_ENERGYFIELD_PVP;
 				break;
+			}
 
-			case ITEM_POISONFIELD_PERSISTENT:
+			case ITEM_POISONFIELD_PERSISTENT: {
 				itemId = ITEM_POISONFIELD_PVP;
 				break;
+			}
 
-			case ITEM_MAGICWALL_PERSISTENT:
+			case ITEM_MAGICWALL_PERSISTENT: {
 				itemId = ITEM_MAGICWALL;
 				break;
+			}
 
-			case ITEM_WILDGROWTH_PERSISTENT:
+			case ITEM_WILDGROWTH_PERSISTENT: {
 				itemId = ITEM_WILDGROWTH;
 				break;
+			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 
 		if (caster) {
@@ -676,18 +712,25 @@ void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const 
 		}
 
 		switch (player->getWeaponType()) {
-			case WEAPON_AXE:
+			case WEAPON_AXE: {
 				effect = CONST_ANI_WHIRLWINDAXE;
 				break;
-			case WEAPON_SWORD:
+			}
+
+			case WEAPON_SWORD: {
 				effect = CONST_ANI_WHIRLWINDSWORD;
 				break;
-			case WEAPON_CLUB:
+			}
+
+			case WEAPON_CLUB: {
 				effect = CONST_ANI_WHIRLWINDCLUB;
 				break;
-			default:
+			}
+
+			default: {
 				effect = CONST_ANI_NONE;
 				break;
+			}
 		}
 	}
 

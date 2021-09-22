@@ -416,44 +416,53 @@ Direction getDirection(const std::string& string)
 Position getNextPosition(Direction direction, Position pos)
 {
 	switch (direction) {
-		case DIRECTION_NORTH:
+		case DIRECTION_NORTH: {
 			pos.y--;
 			break;
+		}
 
-		case DIRECTION_SOUTH:
+		case DIRECTION_SOUTH: {
 			pos.y++;
 			break;
+		}
 
-		case DIRECTION_WEST:
+		case DIRECTION_WEST: {
 			pos.x--;
 			break;
+		}
 
-		case DIRECTION_EAST:
+		case DIRECTION_EAST: {
 			pos.x++;
 			break;
+		}
 
-		case DIRECTION_SOUTHWEST:
+		case DIRECTION_SOUTHWEST: {
 			pos.x--;
 			pos.y++;
 			break;
+		}
 
-		case DIRECTION_NORTHWEST:
+		case DIRECTION_NORTHWEST: {
 			pos.x--;
 			pos.y--;
 			break;
+		}
 
-		case DIRECTION_NORTHEAST:
+		case DIRECTION_NORTHEAST: {
 			pos.x++;
 			pos.y--;
 			break;
+		}
 
-		case DIRECTION_SOUTHEAST:
+		case DIRECTION_SOUTHEAST: {
 			pos.x++;
 			pos.y++;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 
 	return pos;
@@ -759,61 +768,78 @@ Skulls_t getSkullType(const std::string& strValue)
 std::string getSpecialSkillName(uint8_t skillid)
 {
 	switch (skillid) {
-		case SPECIALSKILL_CRITICALHITCHANCE:
+		case SPECIALSKILL_CRITICALHITCHANCE: {
 			return "critical hit chance";
+		}
 
-		case SPECIALSKILL_CRITICALHITAMOUNT:
+		case SPECIALSKILL_CRITICALHITAMOUNT: {
 			return "critical extra damage";
+		}
 
-		case SPECIALSKILL_LIFELEECHCHANCE:
+		case SPECIALSKILL_LIFELEECHCHANCE: {
 			return "hitpoints leech chance";
+		}
 
-		case SPECIALSKILL_LIFELEECHAMOUNT:
+		case SPECIALSKILL_LIFELEECHAMOUNT: {
 			return "hitpoints leech amount";
+		}
 
-		case SPECIALSKILL_MANALEECHCHANCE:
+		case SPECIALSKILL_MANALEECHCHANCE: {
 			return "manapoints leech chance";
+		}
 
-		case SPECIALSKILL_MANALEECHAMOUNT:
+		case SPECIALSKILL_MANALEECHAMOUNT: {
 			return "mana points leech amount";
+		}
 
-		default:
+		default: {
 			return "unknown";
+		}
 	}
 }
 
 std::string getSkillName(uint8_t skillid)
 {
 	switch (skillid) {
-		case SKILL_FIST:
+		case SKILL_FIST: {
 			return "fist fighting";
+		}
 
-		case SKILL_CLUB:
+		case SKILL_CLUB: {
 			return "club fighting";
+		}
 
-		case SKILL_SWORD:
+		case SKILL_SWORD: {
 			return "sword fighting";
+		}
 
-		case SKILL_AXE:
+		case SKILL_AXE: {
 			return "axe fighting";
+		}
 
-		case SKILL_DISTANCE:
+		case SKILL_DISTANCE: {
 			return "distance fighting";
+		}
 
-		case SKILL_SHIELD:
+		case SKILL_SHIELD: {
 			return "shielding";
+		}
 
-		case SKILL_FISHING:
+		case SKILL_FISHING: {
 			return "fishing";
+		}
 
-		case SKILL_MAGLEVEL:
+		case SKILL_MAGLEVEL: {
 			return "magic level";
+		}
 
-		case SKILL_LEVEL:
+		case SKILL_LEVEL: {
 			return "level";
+		}
 
-		default:
+		default: {
 			return "unknown";
+		}
 	}
 }
 
@@ -884,45 +910,90 @@ bool booleanString(const std::string& str)
 std::string getWeaponName(WeaponType_t weaponType)
 {
 	switch (weaponType) {
-		case WEAPON_SWORD: return "sword";
-		case WEAPON_CLUB: return "club";
-		case WEAPON_AXE: return "axe";
-		case WEAPON_DISTANCE: return "distance";
-		case WEAPON_WAND: return "wand";
-		case WEAPON_AMMO: return "ammunition";
-		default: return std::string();
+		case WEAPON_SWORD: {
+			return "sword";
+		}
+
+		case WEAPON_CLUB: {
+			return "club";
+		}
+
+		case WEAPON_AXE: {
+			return "axe";
+		}
+
+		case WEAPON_DISTANCE: {
+			return "distance";
+		}
+
+		case WEAPON_WAND: {
+			return "wand";
+		}
+
+		case WEAPON_AMMO: {
+			return "ammunition";
+		}
+
+		default: {
+			return std::string();
+		}
 	}
 }
 
 size_t combatTypeToIndex(CombatType_t combatType)
 {
 	switch (combatType) {
-		case COMBAT_PHYSICALDAMAGE:
+		case COMBAT_PHYSICALDAMAGE: {
 			return 0;
-		case COMBAT_ENERGYDAMAGE:
+		}
+
+		case COMBAT_ENERGYDAMAGE: {
 			return 1;
-		case COMBAT_EARTHDAMAGE:
+		}
+
+		case COMBAT_EARTHDAMAGE: {
 			return 2;
-		case COMBAT_FIREDAMAGE:
+		}
+
+		case COMBAT_FIREDAMAGE: {
 			return 3;
-		case COMBAT_UNDEFINEDDAMAGE:
+		}
+
+		case COMBAT_UNDEFINEDDAMAGE: {
 			return 4;
-		case COMBAT_LIFEDRAIN:
+		}
+
+		case COMBAT_LIFEDRAIN: {
 			return 5;
-		case COMBAT_MANADRAIN:
+		}
+
+		case COMBAT_MANADRAIN: {
 			return 6;
-		case COMBAT_HEALING:
+		}
+
+		case COMBAT_HEALING: {
 			return 7;
-		case COMBAT_DROWNDAMAGE:
+		}
+
+		case COMBAT_DROWNDAMAGE: {
 			return 8;
-		case COMBAT_ICEDAMAGE:
+		}
+
+		case COMBAT_ICEDAMAGE: {
 			return 9;
-		case COMBAT_HOLYDAMAGE:
+		}
+
+		case COMBAT_HOLYDAMAGE: {
 			return 10;
-		case COMBAT_DEATHDAMAGE:
+		}
+
+		case COMBAT_DEATHDAMAGE: {
 			return 11;
-		default:
+		}
+
+		default: {
 			return 0;
+		}
 	}
 }
 
@@ -1027,222 +1098,294 @@ std::string getFirstLine(const std::string& str)
 const char* getReturnMessage(ReturnValue value)
 {
 	switch (value) {
-		case RETURNVALUE_DESTINATIONOUTOFREACH:
+		case RETURNVALUE_DESTINATIONOUTOFREACH: {
 			return "Destination is out of range.";
+		}
 
-		case RETURNVALUE_NOTMOVEABLE:
+		case RETURNVALUE_NOTMOVEABLE: {
 			return "You cannot move this object.";
+		}
 
-		case RETURNVALUE_DROPTWOHANDEDITEM:
+		case RETURNVALUE_DROPTWOHANDEDITEM: {
 			return "Drop the double-handed object first.";
+		}
 
-		case RETURNVALUE_BOTHHANDSNEEDTOBEFREE:
+		case RETURNVALUE_BOTHHANDSNEEDTOBEFREE: {
 			return "Both hands need to be free.";
+		}
 
-		case RETURNVALUE_CANNOTBEDRESSED:
+		case RETURNVALUE_CANNOTBEDRESSED: {
 			return "You cannot dress this object there.";
+		}
 
-		case RETURNVALUE_PUTTHISOBJECTINYOURHAND:
+		case RETURNVALUE_PUTTHISOBJECTINYOURHAND: {
 			return "Put this object in your hand.";
+		}
 
-		case RETURNVALUE_PUTTHISOBJECTINBOTHHANDS:
+		case RETURNVALUE_PUTTHISOBJECTINBOTHHANDS: {
 			return "Put this object in both hands.";
+		}
 
-		case RETURNVALUE_CANONLYUSEONEWEAPON:
+		case RETURNVALUE_CANONLYUSEONEWEAPON: {
 			return "You may only use one weapon.";
+		}
 
-		case RETURNVALUE_TOOFARAWAY:
+		case RETURNVALUE_TOOFARAWAY: {
 			return "You are too far away.";
+		}
 
-		case RETURNVALUE_FIRSTGODOWNSTAIRS:
+		case RETURNVALUE_FIRSTGODOWNSTAIRS: {
 			return "First go downstairs.";
+		}
 
-		case RETURNVALUE_FIRSTGOUPSTAIRS:
+		case RETURNVALUE_FIRSTGOUPSTAIRS: {
 			return "First go upstairs.";
+		}
 
-		case RETURNVALUE_NOTENOUGHCAPACITY:
+		case RETURNVALUE_NOTENOUGHCAPACITY: {
 			return "This object is too heavy for you to carry.";
+		}
 
-		case RETURNVALUE_CONTAINERNOTENOUGHROOM:
+		case RETURNVALUE_CONTAINERNOTENOUGHROOM: {
 			return "You cannot put more objects in this container.";
+		}
 
 		case RETURNVALUE_NEEDEXCHANGE:
-		case RETURNVALUE_NOTENOUGHROOM:
+		case RETURNVALUE_NOTENOUGHROOM: {
 			return "There is not enough room.";
+		}
 
-		case RETURNVALUE_CANNOTPICKUP:
+		case RETURNVALUE_CANNOTPICKUP: {
 			return "You cannot take this object.";
+		}
 
-		case RETURNVALUE_CANNOTTHROW:
+		case RETURNVALUE_CANNOTTHROW: {
 			return "You cannot throw there.";
+		}
 
-		case RETURNVALUE_THEREISNOWAY:
+		case RETURNVALUE_THEREISNOWAY: {
 			return "There is no way.";
+		}
 
-		case RETURNVALUE_THISISIMPOSSIBLE:
+		case RETURNVALUE_THISISIMPOSSIBLE: {
 			return "This is impossible.";
+		}
 
-		case RETURNVALUE_PLAYERISPZLOCKED:
+		case RETURNVALUE_PLAYERISPZLOCKED: {
 			return "You can not enter a protection zone after attacking another player.";
+		}
 
-		case RETURNVALUE_PLAYERISNOTINVITED:
+		case RETURNVALUE_PLAYERISNOTINVITED: {
 			return "You are not invited.";
+		}
 
-		case RETURNVALUE_CREATUREDOESNOTEXIST:
+		case RETURNVALUE_CREATUREDOESNOTEXIST: {
 			return "Creature does not exist.";
+		}
 
-		case RETURNVALUE_DEPOTISFULL:
+		case RETURNVALUE_DEPOTISFULL: {
 			return "You cannot put more items in this depot.";
+		}
 
-		case RETURNVALUE_CANNOTUSETHISOBJECT:
+		case RETURNVALUE_CANNOTUSETHISOBJECT: {
 			return "You cannot use this object.";
+		}
 
-		case RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE:
+		case RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE: {
 			return "A player with this name is not online.";
+		}
 
-		case RETURNVALUE_NOTREQUIREDLEVELTOUSERUNE:
+		case RETURNVALUE_NOTREQUIREDLEVELTOUSERUNE: {
 			return "You do not have the required magic level to use this rune.";
+		}
 
-		case RETURNVALUE_YOUAREALREADYTRADING:
+		case RETURNVALUE_YOUAREALREADYTRADING: {
 			return "You are already trading. Finish this trade first.";
+		}
 
-		case RETURNVALUE_THISPLAYERISALREADYTRADING:
+		case RETURNVALUE_THISPLAYERISALREADYTRADING: {
 			return "This player is already trading.";
+		}
 
-		case RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT:
+		case RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT: {
 			return "You may not logout during or immediately after a fight!";
+		}
 
-		case RETURNVALUE_DIRECTPLAYERSHOOT:
+		case RETURNVALUE_DIRECTPLAYERSHOOT: {
 			return "You are not allowed to shoot directly on players.";
+		}
 
-		case RETURNVALUE_NOTENOUGHLEVEL:
+		case RETURNVALUE_NOTENOUGHLEVEL: {
 			return "Your level is too low.";
+		}
 
-		case RETURNVALUE_NOTENOUGHMAGICLEVEL:
+		case RETURNVALUE_NOTENOUGHMAGICLEVEL: {
 			return "You do not have enough magic level.";
+		}
 
-		case RETURNVALUE_NOTENOUGHMANA:
+		case RETURNVALUE_NOTENOUGHMANA: {
 			return "You do not have enough mana.";
+		}
 
-		case RETURNVALUE_NOTENOUGHSOUL:
+		case RETURNVALUE_NOTENOUGHSOUL: {
 			return "You do not have enough soul.";
+		}
 
-		case RETURNVALUE_YOUAREEXHAUSTED:
+		case RETURNVALUE_YOUAREEXHAUSTED: {
 			return "You are exhausted.";
+		}
 
-		case RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST:
+		case RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST: {
 			return "You cannot use objects that fast.";
+		}
 
-		case RETURNVALUE_CANONLYUSETHISRUNEONCREATURES:
+		case RETURNVALUE_CANONLYUSETHISRUNEONCREATURES: {
 			return "You can only use it on creatures.";
+		}
 
-		case RETURNVALUE_PLAYERISNOTREACHABLE:
+		case RETURNVALUE_PLAYERISNOTREACHABLE: {
 			return "Player is not reachable.";
+		}
 
-		case RETURNVALUE_CREATUREISNOTREACHABLE:
+		case RETURNVALUE_CREATUREISNOTREACHABLE: {
 			return "Creature is not reachable.";
+		}
 
-		case RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE:
+		case RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE: {
 			return "This action is not permitted in a protection zone.";
+		}
 
-		case RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER:
+		case RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER: {
 			return "You may not attack this person.";
+		}
 
-		case RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE:
+		case RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE: {
 			return "You may not attack this creature.";
+		}
 
-		case RETURNVALUE_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE:
+		case RETURNVALUE_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE: {
 			return "You may not attack a person in a protection zone.";
+		}
 
-		case RETURNVALUE_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE:
+		case RETURNVALUE_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE: {
 			return "You may not attack a person while you are in a protection zone.";
+		}
 
-		case RETURNVALUE_YOUCANONLYUSEITONCREATURES:
+		case RETURNVALUE_YOUCANONLYUSEITONCREATURES: {
 			return "You can only use it on creatures.";
+		}
 
-		case RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS:
+		case RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS: {
 			return "Turn secure mode off if you really want to attack unmarked players.";
+		}
 
-		case RETURNVALUE_YOUNEEDPREMIUMACCOUNT:
+		case RETURNVALUE_YOUNEEDPREMIUMACCOUNT: {
 			return "You need a premium account.";
+		}
 
-		case RETURNVALUE_YOUNEEDTOLEARNTHISSPELL:
+		case RETURNVALUE_YOUNEEDTOLEARNTHISSPELL: {
 			return "You must learn this spell first.";
+		}
 
-		case RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL:
+		case RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL: {
 			return "You have the wrong vocation to cast this spell.";
+		}
 
-		case RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL:
+		case RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL: {
 			return "You need to equip a weapon to use this spell.";
+		}
 
-		case RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE:
+		case RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE: {
 			return "You can not leave a pvp zone after attacking another player.";
+		}
 
-		case RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE:
+		case RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE: {
 			return "You can not enter a pvp zone after attacking another player.";
+		}
 
-		case RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE:
+		case RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE: {
 			return "This action is not permitted in a non pvp zone.";
+		}
 
-		case RETURNVALUE_YOUCANNOTLOGOUTHERE:
+		case RETURNVALUE_YOUCANNOTLOGOUTHERE: {
 			return "You can not logout here.";
+		}
 
-		case RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL:
+		case RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL: {
 			return "You need a magic item to cast this spell.";
+		}
 
-		case RETURNVALUE_CANNOTCONJUREITEMHERE:
+		case RETURNVALUE_CANNOTCONJUREITEMHERE: {
 			return "You cannot conjure items here.";
+		}
 
-		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS:
+		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS: {
 			return "You need to split your spears first.";
+		}
 
-		case RETURNVALUE_NAMEISTOOAMBIGUOUS:
+		case RETURNVALUE_NAMEISTOOAMBIGUOUS: {
 			return "Player name is ambiguous.";
+		}
 
-		case RETURNVALUE_CANONLYUSEONESHIELD:
+		case RETURNVALUE_CANONLYUSEONESHIELD: {
 			return "You may use only one shield.";
+		}
 
-		case RETURNVALUE_NOPARTYMEMBERSINRANGE:
+		case RETURNVALUE_NOPARTYMEMBERSINRANGE: {
 			return "No party members in range.";
+		}
 
-		case RETURNVALUE_YOUARENOTTHEOWNER:
+		case RETURNVALUE_YOUARENOTTHEOWNER: {
 			return "You are not the owner.";
+		}
 
-		case RETURNVALUE_NOSUCHRAIDEXISTS:
+		case RETURNVALUE_NOSUCHRAIDEXISTS: {
 			return "No such raid exists.";
+		}
 
-		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING:
+		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING: {
 			return "Another raid is already executing.";
+		}
 
-		case RETURNVALUE_TRADEPLAYERFARAWAY:
+		case RETURNVALUE_TRADEPLAYERFARAWAY: {
 			return "Trade player is too far away.";
+		}
 
-		case RETURNVALUE_YOUDONTOWNTHISHOUSE:
+		case RETURNVALUE_YOUDONTOWNTHISHOUSE: {
 			return "You don't own this house.";
+		}
 
-		case RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE:
+		case RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE: {
 			return "Trade player already owns a house.";
+		}
 
-		case RETURNVALUE_TRADEPLAYERHIGHESTBIDDER:
+		case RETURNVALUE_TRADEPLAYERHIGHESTBIDDER: {
 			return "Trade player is currently the highest bidder of an auctioned house.";
+		}
 
-		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE:
+		case RETURNVALUE_YOUCANNOTTRADETHISHOUSE: {
 			return "You can not trade this house.";
+		}
 
-		case RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION:
+		case RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION: {
 			return "You don't have the required profession.";
+		}
 
-		case RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM:
+		case RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM: {
 			return "You cannot move this item into your Store inbox as it was not bought in the Store.";
+		}
 
-		case RETURNVALUE_ITEMCANNOTBEMOVEDTHERE:
+		case RETURNVALUE_ITEMCANNOTBEMOVEDTHERE: {
 			return "This item cannot be moved there.";
+		}
 
-		case RETURNVALUE_YOUCANNOTUSETHISBED:
+		case RETURNVALUE_YOUCANNOTUSETHISBED: {
 			return "This bed can't be used, but Premium Account players can rent houses and sleep in beds there to regain health and mana.";
+		}
 
-		default: // RETURNVALUE_NOTPOSSIBLE, etc
+		default: { // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";
+		}
 	}
 }
 

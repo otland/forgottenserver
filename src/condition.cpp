@@ -56,17 +56,21 @@ bool Condition::setParam(ConditionParam_t param, int32_t value)
 int32_t Condition::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_TICKS:
+		case CONDITION_PARAM_TICKS: {
 			return ticks;
+		}
 
-		case CONDITION_PARAM_BUFF_SPELL:
+		case CONDITION_PARAM_BUFF_SPELL: {
 			return isBuff ? 1: 0;
+		}
 
-		case CONDITION_PARAM_SUBID:
+		case CONDITION_PARAM_SUBID: {
 			return subId;
+		}
 
-		default:
+		default: {
 			return std::numeric_limits<int32_t>().max();
+		}
 	}
 }
 
@@ -132,11 +136,13 @@ bool Condition::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 			return true;
 		}
 
-		case CONDITIONATTR_END:
+		case CONDITIONATTR_END: {
 			return true;
+		}
 
-		default:
+		default: {
 			return false;
+		}
 	}
 }
 
@@ -188,39 +194,50 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_FREEZING:
 		case CONDITION_DAZZLED:
 		case CONDITION_CURSED:
-		case CONDITION_BLEEDING:
+		case CONDITION_BLEEDING: {
 			return new ConditionDamage(id, type, buff, subId, aggressive);
+		}
 
 		case CONDITION_HASTE:
-		case CONDITION_PARALYZE:
+		case CONDITION_PARALYZE: {
 			return new ConditionSpeed(id, type, ticks, buff, subId, param, aggressive);
+		}
 
-		case CONDITION_INVISIBLE:
+		case CONDITION_INVISIBLE: {
 			return new ConditionInvisible(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_OUTFIT:
+		case CONDITION_OUTFIT: {
 			return new ConditionOutfit(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_LIGHT:
+		case CONDITION_LIGHT: {
 			return new ConditionLight(id, type, ticks, buff, subId, param & 0xFF, (param & 0xFF00) >> 8, aggressive);
+		}
 
-		case CONDITION_REGENERATION:
+		case CONDITION_REGENERATION: {
 			return new ConditionRegeneration(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_SOUL:
+		case CONDITION_SOUL: {
 			return new ConditionSoul(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_ATTRIBUTES:
+		case CONDITION_ATTRIBUTES: {
 			return new ConditionAttributes(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_SPELLCOOLDOWN:
+		case CONDITION_SPELLCOOLDOWN: {
 			return new ConditionSpellCooldown(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_SPELLGROUPCOOLDOWN:
+		case CONDITION_SPELLGROUPCOOLDOWN: {
 			return new ConditionSpellGroupCooldown(id, type, ticks, buff, subId, aggressive);
+		}
 
-		case CONDITION_DRUNK:
+		case CONDITION_DRUNK: {
 			return new ConditionDrunk(id, type, ticks, buff, subId, param, aggressive);
+		}
 
 		case CONDITION_INFIGHT:
 		case CONDITION_EXHAUST_WEAPON:
@@ -230,11 +247,13 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_CHANNELMUTEDTICKS:
 		case CONDITION_YELLTICKS:
 		case CONDITION_PACIFIED:
-		case CONDITION_MANASHIELD:
+		case CONDITION_MANASHIELD: {
 			return new ConditionGeneric(id, type, ticks, buff, subId, aggressive);
+		}
 
-		default:
+		default: {
 			return nullptr;
+		}
 	}
 }
 
@@ -368,16 +387,19 @@ uint32_t ConditionGeneric::getIcons() const
 	uint32_t icons = Condition::getIcons();
 
 	switch (conditionType) {
-		case CONDITION_MANASHIELD:
+		case CONDITION_MANASHIELD: {
 			icons |= ICON_MANASHIELD;
 			break;
+		}
 
-		case CONDITION_INFIGHT:
+		case CONDITION_INFIGHT: {
 			icons |= ICON_SWORDS;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 
 	return icons;
@@ -472,17 +494,20 @@ void ConditionAttributes::updatePercentStats(Player* player)
 		}
 
 		switch (i) {
-			case STAT_MAXHITPOINTS:
+			case STAT_MAXHITPOINTS: {
 				stats[i] = static_cast<int32_t>(player->getMaxHealth() * ((statsPercent[i] - 100) / 100.f));
 				break;
+			}
 
-			case STAT_MAXMANAPOINTS:
+			case STAT_MAXMANAPOINTS: {
 				stats[i] = static_cast<int32_t>(player->getMaxMana() * ((statsPercent[i] - 100) / 100.f));
 				break;
+			}
 
-			case STAT_MAGICPOINTS:
+			case STAT_MAGICPOINTS: {
 				stats[i] = static_cast<int32_t>(player->getBaseMagicLevel() * ((statsPercent[i] - 100) / 100.f));
 				break;
+			}
 		}
 	}
 }
@@ -745,97 +770,126 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 			return true;
 		}
 
-		default:
+		default: {
 			return ret;
+		}
 	}
 }
 
 int32_t ConditionAttributes::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_SKILL_FIST:
+		case CONDITION_PARAM_SKILL_FIST: {
 			return skills[SKILL_FIST];
+		}
 
-		case CONDITION_PARAM_SKILL_FISTPERCENT:
+		case CONDITION_PARAM_SKILL_FISTPERCENT: {
 			return skillsPercent[SKILL_FIST];
+		}
 
-		case CONDITION_PARAM_SKILL_CLUB:
+		case CONDITION_PARAM_SKILL_CLUB: {
 			return skills[SKILL_CLUB];
+		}
 
-		case CONDITION_PARAM_SKILL_CLUBPERCENT:
+		case CONDITION_PARAM_SKILL_CLUBPERCENT: {
 			return skillsPercent[SKILL_CLUB];
+		}
 
-		case CONDITION_PARAM_SKILL_SWORD:
+		case CONDITION_PARAM_SKILL_SWORD: {
 			return skills[SKILL_SWORD];
+		}
 
-		case CONDITION_PARAM_SKILL_SWORDPERCENT:
+		case CONDITION_PARAM_SKILL_SWORDPERCENT: {
 			return skillsPercent[SKILL_SWORD];
+		}
 
-		case CONDITION_PARAM_SKILL_AXE:
+		case CONDITION_PARAM_SKILL_AXE: {
 			return skills[SKILL_AXE];
+		}
 
-		case CONDITION_PARAM_SKILL_AXEPERCENT:
+		case CONDITION_PARAM_SKILL_AXEPERCENT: {
 			return skillsPercent[SKILL_AXE];
+		}
 
-		case CONDITION_PARAM_SKILL_DISTANCE:
+		case CONDITION_PARAM_SKILL_DISTANCE: {
 			return skills[SKILL_DISTANCE];
+		}
 
-		case CONDITION_PARAM_SKILL_DISTANCEPERCENT:
+		case CONDITION_PARAM_SKILL_DISTANCEPERCENT: {
 			return skillsPercent[SKILL_DISTANCE];
+		}
 
-		case CONDITION_PARAM_SKILL_SHIELD:
+		case CONDITION_PARAM_SKILL_SHIELD: {
 			return skills[SKILL_SHIELD];
+		}
 
-		case CONDITION_PARAM_SKILL_SHIELDPERCENT:
+		case CONDITION_PARAM_SKILL_SHIELDPERCENT: {
 			return skillsPercent[SKILL_SHIELD];
+		}
 
-		case CONDITION_PARAM_SKILL_FISHING:
+		case CONDITION_PARAM_SKILL_FISHING: {
 			return skills[SKILL_FISHING];
+		}
 
-		case CONDITION_PARAM_SKILL_FISHINGPERCENT: 
+		case CONDITION_PARAM_SKILL_FISHINGPERCENT: {
 			return skillsPercent[SKILL_FISHING];
+		}
 
-		case CONDITION_PARAM_STAT_MAXHITPOINTS:
+		case CONDITION_PARAM_STAT_MAXHITPOINTS: {
 			return stats[STAT_MAXHITPOINTS];
+		}
 
-		case CONDITION_PARAM_STAT_MAXMANAPOINTS:
+		case CONDITION_PARAM_STAT_MAXMANAPOINTS: {
 			return stats[STAT_MAXMANAPOINTS];
+		}
 
-		case CONDITION_PARAM_STAT_MAGICPOINTS:
+		case CONDITION_PARAM_STAT_MAGICPOINTS: {
 			return stats[STAT_MAGICPOINTS];
+		}
 
-		case CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT:
+		case CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT: {
 			return statsPercent[STAT_MAXHITPOINTS];
+		}
 
-		case CONDITION_PARAM_STAT_MAXMANAPOINTSPERCENT:
+		case CONDITION_PARAM_STAT_MAXMANAPOINTSPERCENT: {
 			return statsPercent[STAT_MAXMANAPOINTS];
+		}
 
-		case CONDITION_PARAM_STAT_MAGICPOINTSPERCENT:
+		case CONDITION_PARAM_STAT_MAGICPOINTSPERCENT: {
 			return statsPercent[STAT_MAGICPOINTS];
+		}
 
-		case CONDITION_PARAM_DISABLE_DEFENSE:
+		case CONDITION_PARAM_DISABLE_DEFENSE: {
 			return disableDefense ? 1 : 0;
+		}
 
-		case CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE:
+		case CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE: {
 			return specialSkills[SPECIALSKILL_CRITICALHITCHANCE];
+		}
 
-		case CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT:
+		case CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT: {
 			return specialSkills[SPECIALSKILL_CRITICALHITAMOUNT];
+		}
 
-		case CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE:
+		case CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE: {
 			return specialSkills[SPECIALSKILL_LIFELEECHCHANCE];
+		}
 
-		case CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT:
+		case CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT: {
 			return specialSkills[SPECIALSKILL_LIFELEECHAMOUNT];
+		}
 
-		case CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE:
+		case CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE: {
 			return specialSkills[SPECIALSKILL_MANALEECHCHANCE];
+		}
 
-		case CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT:
+		case CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT: {
 			return specialSkills[SPECIALSKILL_MANALEECHAMOUNT];
+		}
 
-		default:
+		default: {
 			return ConditionGeneric::getParam(param);
+		}
 	}
 }
 
@@ -965,44 +1019,54 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 	bool ret = ConditionGeneric::setParam(param, value);
 
 	switch (param) {
-		case CONDITION_PARAM_HEALTHGAIN:
+		case CONDITION_PARAM_HEALTHGAIN: {
 			healthGain = value;
 			return true;
+		}
 
-		case CONDITION_PARAM_HEALTHTICKS:
+		case CONDITION_PARAM_HEALTHTICKS: {
 			healthTicks = value;
 			return true;
+		}
 
-		case CONDITION_PARAM_MANAGAIN:
+		case CONDITION_PARAM_MANAGAIN: {
 			manaGain = value;
 			return true;
+		}
 
-		case CONDITION_PARAM_MANATICKS:
+		case CONDITION_PARAM_MANATICKS: {
 			manaTicks = value;
 			return true;
+		}
 
-		default:
+		default: {
 			return ret;
+		}
 	}
 }
 
 int32_t ConditionRegeneration::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_HEALTHGAIN:
+		case CONDITION_PARAM_HEALTHGAIN: {
 			return healthGain;
+		}
 
-		case CONDITION_PARAM_HEALTHTICKS:
+		case CONDITION_PARAM_HEALTHTICKS: {
 			return healthTicks;
+		}
 
-		case CONDITION_PARAM_MANAGAIN:
+		case CONDITION_PARAM_MANAGAIN: {
 			return manaGain;
+		}
 
-		case CONDITION_PARAM_MANATICKS:
+		case CONDITION_PARAM_MANATICKS: {
 			return manaTicks;
+		}
 
-		default:
+		default: {
 			return ConditionGeneric::getParam(param);
+		}
 	}
 }
 
@@ -1059,30 +1123,36 @@ bool ConditionSoul::setParam(ConditionParam_t param, int32_t value)
 {
 	bool ret = ConditionGeneric::setParam(param, value);
 	switch (param) {
-		case CONDITION_PARAM_SOULGAIN:
+		case CONDITION_PARAM_SOULGAIN: {
 			soulGain = value;
 			return true;
+		}
 
-		case CONDITION_PARAM_SOULTICKS:
+		case CONDITION_PARAM_SOULTICKS: {
 			soulTicks = value;
 			return true;
+		}
 
-		default:
+		default: {
 			return ret;
+		}
 	}
 }
 
 int32_t ConditionSoul::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_SOULGAIN:
+		case CONDITION_PARAM_SOULGAIN: {
 			return soulGain;
+		}
 
-		case CONDITION_PARAM_SOULTICKS:
+		case CONDITION_PARAM_SOULTICKS: {
 			return soulTicks;
+		}
 
-		default:
+		default: {
 			return ConditionGeneric::getParam(param);
+		}
 	}
 }
 
@@ -1091,44 +1161,54 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 	bool ret = Condition::setParam(param, value);
 
 	switch (param) {
-		case CONDITION_PARAM_OWNER:
+		case CONDITION_PARAM_OWNER: {
 			owner = value;
 			return true;
+		}
 
-		case CONDITION_PARAM_FORCEUPDATE:
+		case CONDITION_PARAM_FORCEUPDATE: {
 			forceUpdate = (value != 0);
 			return true;
+		}
 
-		case CONDITION_PARAM_DELAYED:
+		case CONDITION_PARAM_DELAYED: {
 			delayed = (value != 0);
 			return true;
+		}
 
-		case CONDITION_PARAM_MAXVALUE:
+		case CONDITION_PARAM_MAXVALUE: {
 			maxDamage = std::abs(value);
 			break;
+		}
 
-		case CONDITION_PARAM_MINVALUE:
+		case CONDITION_PARAM_MINVALUE: {
 			minDamage = std::abs(value);
 			break;
+		}
 
-		case CONDITION_PARAM_STARTVALUE:
+		case CONDITION_PARAM_STARTVALUE: {
 			startDamage = std::abs(value);
 			break;
+		}
 
-		case CONDITION_PARAM_TICKINTERVAL:
+		case CONDITION_PARAM_TICKINTERVAL: {
 			tickInterval = std::abs(value);
 			break;
+		}
 
-		case CONDITION_PARAM_PERIODICDAMAGE:
+		case CONDITION_PARAM_PERIODICDAMAGE: {
 			periodDamage = value;
 			break;
+		}
 
-		case CONDITION_PARAM_FIELD:
+		case CONDITION_PARAM_FIELD: {
 			field = (value != 0);
 			break;
+		}
 
-		default:
+		default: {
 			return false;
+		}
 	}
 
 	return ret;
@@ -1137,35 +1217,45 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 int32_t ConditionDamage::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_OWNER:
+		case CONDITION_PARAM_OWNER: {
 			return owner;
+		}
 
-		case CONDITION_PARAM_FORCEUPDATE:
+		case CONDITION_PARAM_FORCEUPDATE: {
 			return forceUpdate ? 1 : 0;
+		}
 
-		case CONDITION_PARAM_DELAYED:
+		case CONDITION_PARAM_DELAYED: {
 			return delayed ? 1 : 0;
+		}
 
-		case CONDITION_PARAM_MAXVALUE:
+		case CONDITION_PARAM_MAXVALUE: {
 			return maxDamage;
+		}
 
-		case CONDITION_PARAM_MINVALUE:
+		case CONDITION_PARAM_MINVALUE: {
 			return minDamage;
+		}
 
-		case CONDITION_PARAM_STARTVALUE:
+		case CONDITION_PARAM_STARTVALUE: {
 			return startDamage;
+		}
 
-		case CONDITION_PARAM_TICKINTERVAL:
+		case CONDITION_PARAM_TICKINTERVAL: {
 			return tickInterval;
+		}
 
-		case CONDITION_PARAM_PERIODICDAMAGE:
+		case CONDITION_PARAM_PERIODICDAMAGE: {
 			return periodDamage;
+		}
 
-		case CONDITION_PARAM_FIELD:
+		case CONDITION_PARAM_FIELD: {
 			return field ? 1 : 0;
+		}
 
-		default:
+		default: {
 			return Condition::getParam(param);
+		}
 	}
 }
 
@@ -1463,40 +1553,49 @@ uint32_t ConditionDamage::getIcons() const
 {
 	uint32_t icons = Condition::getIcons();
 	switch (conditionType) {
-		case CONDITION_FIRE:
+		case CONDITION_FIRE: {
 			icons |= ICON_BURN;
 			break;
+		}
 
-		case CONDITION_ENERGY:
+		case CONDITION_ENERGY: {
 			icons |= ICON_ENERGY;
 			break;
+		}
 
-		case CONDITION_DROWN:
+		case CONDITION_DROWN: {
 			icons |= ICON_DROWNING;
 			break;
+		}
 
-		case CONDITION_POISON:
+		case CONDITION_POISON: {
 			icons |= ICON_POISON;
 			break;
+		}
 
-		case CONDITION_FREEZING:
+		case CONDITION_FREEZING: {
 			icons |= ICON_FREEZING;
 			break;
+		}
 
-		case CONDITION_DAZZLED:
+		case CONDITION_DAZZLED: {
 			icons |= ICON_DAZZLED;
 			break;
+		}
 
-		case CONDITION_CURSED:
+		case CONDITION_CURSED: {
 			icons |= ICON_CURSED;
 			break;
+		}
 
-		case CONDITION_BLEEDING:
+		case CONDITION_BLEEDING: {
 			icons |= ICON_BLEEDING;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 	return icons;
 }
@@ -1549,11 +1648,13 @@ bool ConditionSpeed::setParam(ConditionParam_t param, int32_t value)
 int32_t ConditionSpeed::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_SPEED:
+		case CONDITION_PARAM_SPEED: {
 			return speedDelta;
+		}
 
-		default:
+		default: {
 			return Condition::getParam(param);
+		}
 	}
 }
 
@@ -1658,16 +1759,19 @@ uint32_t ConditionSpeed::getIcons() const
 {
 	uint32_t icons = Condition::getIcons();
 	switch (conditionType) {
-		case CONDITION_HASTE:
+		case CONDITION_HASTE: {
 			icons |= ICON_HASTE;
 			break;
+		}
 
-		case CONDITION_PARALYZE:
+		case CONDITION_PARALYZE: {
 			icons |= ICON_PARALYZE;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 	return icons;
 }
@@ -1804,30 +1908,36 @@ bool ConditionLight::setParam(ConditionParam_t param, int32_t value)
 	}
 
 	switch (param) {
-		case CONDITION_PARAM_LIGHT_LEVEL:
+		case CONDITION_PARAM_LIGHT_LEVEL: {
 			lightInfo.level = value;
 			return true;
+		}
 
-		case CONDITION_PARAM_LIGHT_COLOR:
+		case CONDITION_PARAM_LIGHT_COLOR: {
 			lightInfo.color = value;
 			return true;
+		}
 
-		default:
+		default: {
 			return false;
+		}
 	}
 }
 
 int32_t ConditionLight::getParam(ConditionParam_t param)
 {
 	switch (param) {
-		case CONDITION_PARAM_LIGHT_LEVEL:
+		case CONDITION_PARAM_LIGHT_LEVEL: {
 			return lightInfo.level;
+		}
 
-		case CONDITION_PARAM_LIGHT_COLOR:
+		case CONDITION_PARAM_LIGHT_COLOR: {
 			return lightInfo.color;
+		}
 
-		default:
+		default: {
 			return Condition::getParam(param);
+		}
 	}
 }
 

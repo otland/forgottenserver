@@ -251,20 +251,61 @@ DBResult_ptr ScriptEnvironment::getResultByID(uint32_t id)
 std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 {
 	switch (code) {
-		case LUA_ERROR_PLAYER_NOT_FOUND: return "Player not found";
-		case LUA_ERROR_CREATURE_NOT_FOUND: return "Creature not found";
-		case LUA_ERROR_ITEM_NOT_FOUND: return "Item not found";
-		case LUA_ERROR_THING_NOT_FOUND: return "Thing not found";
-		case LUA_ERROR_TILE_NOT_FOUND: return "Tile not found";
-		case LUA_ERROR_HOUSE_NOT_FOUND: return "House not found";
-		case LUA_ERROR_COMBAT_NOT_FOUND: return "Combat not found";
-		case LUA_ERROR_CONDITION_NOT_FOUND: return "Condition not found";
-		case LUA_ERROR_AREA_NOT_FOUND: return "Area not found";
-		case LUA_ERROR_CONTAINER_NOT_FOUND: return "Container not found";
-		case LUA_ERROR_VARIANT_NOT_FOUND: return "Variant not found";
-		case LUA_ERROR_VARIANT_UNKNOWN: return "Unknown variant type";
-		case LUA_ERROR_SPELL_NOT_FOUND: return "Spell not found";
-		default: return "Bad error code";
+		case LUA_ERROR_PLAYER_NOT_FOUND: {
+			return "Player not found";
+		}
+
+		case LUA_ERROR_CREATURE_NOT_FOUND: {
+			return "Creature not found";
+		}
+
+		case LUA_ERROR_ITEM_NOT_FOUND: {
+			return "Item not found";
+		}
+
+		case LUA_ERROR_THING_NOT_FOUND: {
+			return "Thing not found";
+		}
+
+		case LUA_ERROR_TILE_NOT_FOUND: {
+			return "Tile not found";
+		}
+
+		case LUA_ERROR_HOUSE_NOT_FOUND: {
+			return "House not found";
+		}
+
+		case LUA_ERROR_COMBAT_NOT_FOUND: {
+			return "Combat not found";
+		}
+
+		case LUA_ERROR_CONDITION_NOT_FOUND: {
+			return "Condition not found";
+		}
+
+		case LUA_ERROR_AREA_NOT_FOUND: {
+			return "Area not found";
+		}
+
+		case LUA_ERROR_CONTAINER_NOT_FOUND: {
+			return "Container not found";
+		}
+
+		case LUA_ERROR_VARIANT_NOT_FOUND: {
+			return "Variant not found";
+		}
+
+		case LUA_ERROR_VARIANT_UNKNOWN: {
+			return "Unknown variant type";
+		}
+
+		case LUA_ERROR_SPELL_NOT_FOUND: {
+			return "Spell not found";
+		}
+
+		default: {
+			return "Bad error code";
+		}
 	}
 }
 
@@ -580,20 +621,26 @@ void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 	lua_createtable(L, 0, 2);
 	setField(L, "type", var.type);
 	switch (var.type) {
-		case VARIANT_NUMBER:
+		case VARIANT_NUMBER: {
 			setField(L, "number", var.number);
 			break;
-		case VARIANT_STRING:
+		}
+
+		case VARIANT_STRING: {
 			setField(L, "string", var.text);
 			break;
+		}
+
 		case VARIANT_TARGETPOSITION:
 		case VARIANT_POSITION: {
 			pushPosition(L, var.pos);
 			lua_setfield(L, -2, "pos");
 			break;
 		}
-		default:
+
+		default: {
 			break;
+		}
 	}
 	setMetatable(L, -1, "Variant");
 }
@@ -844,27 +891,40 @@ Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
 	if (lua_getmetatable(L, arg) != 0) {
 		lua_rawgeti(L, -1, 't');
 		switch(getNumber<uint32_t>(L, -1)) {
-			case LuaData_Item:
+			case LuaData_Item: {
 				thing = getUserdata<Item>(L, arg);
 				break;
-			case LuaData_Container:
+			}
+
+			case LuaData_Container: {
 				thing = getUserdata<Container>(L, arg);
 				break;
-			case LuaData_Teleport:
+			}
+
+			case LuaData_Teleport: {
 				thing = getUserdata<Teleport>(L, arg);
 				break;
-			case LuaData_Player:
+			}
+
+			case LuaData_Player: {
 				thing = getUserdata<Player>(L, arg);
 				break;
-			case LuaData_Monster:
+			}
+
+			case LuaData_Monster: {
 				thing = getUserdata<Monster>(L, arg);
 				break;
-			case LuaData_Npc:
+			}
+
+			case LuaData_Npc: {
 				thing = getUserdata<Npc>(L, arg);
 				break;
-			default:
+			}
+
+			default: {
 				thing = nullptr;
 				break;
+			}
 		}
 		lua_pop(L, 2);
 	} else {
@@ -3712,6 +3772,7 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 							lua_getfield(L, -1, "getUniqueId");
 							break;
 						}
+
 						case LuaData_Player:
 						case LuaData_Monster:
 						case LuaData_Npc: {
@@ -3719,8 +3780,10 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 							lua_getfield(L, -1, "getId");
 							break;
 						}
-						default:
+
+						default: {
 							break;
+						}
 					}
 					lua_replace(L, -2);
 					lua_pushvalue(L, entry.first);
@@ -5121,27 +5184,40 @@ int LuaScriptInterface::luaTileGetItemByType(lua_State* L)
 
 	ItemTypes_t itemType = getNumber<ItemTypes_t>(L, 2);
 	switch (itemType) {
-		case ITEM_TYPE_TELEPORT:
+		case ITEM_TYPE_TELEPORT: {
 			found = tile->hasFlag(TILESTATE_TELEPORT);
 			break;
-		case ITEM_TYPE_MAGICFIELD:
+		}
+
+		case ITEM_TYPE_MAGICFIELD: {
 			found = tile->hasFlag(TILESTATE_MAGICFIELD);
 			break;
-		case ITEM_TYPE_MAILBOX:
+		}
+
+		case ITEM_TYPE_MAILBOX: {
 			found = tile->hasFlag(TILESTATE_MAILBOX);
 			break;
-		case ITEM_TYPE_TRASHHOLDER:
+		}
+
+		case ITEM_TYPE_TRASHHOLDER: {
 			found = tile->hasFlag(TILESTATE_TRASHHOLDER);
 			break;
-		case ITEM_TYPE_BED:
+		}
+
+		case ITEM_TYPE_BED: {
 			found = tile->hasFlag(TILESTATE_BED);
 			break;
-		case ITEM_TYPE_DEPOT:
+		}
+
+		case ITEM_TYPE_DEPOT: {
 			found = tile->hasFlag(TILESTATE_DEPOT);
 			break;
-		default:
+		}
+
+		default: {
 			found = true;
 			break;
+		}
 	}
 
 	if (!found) {
@@ -6675,18 +6751,25 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	if (isUserdata(L, 2)) {
 		const LuaDataType type = getUserdataType(L, 2);
 		switch (type) {
-			case LuaData_Container:
+			case LuaData_Container: {
 				toCylinder = getUserdata<Container>(L, 2);
 				break;
-			case LuaData_Player:
+			}
+
+			case LuaData_Player: {
 				toCylinder = getUserdata<Player>(L, 2);
 				break;
-			case LuaData_Tile:
+			}
+
+			case LuaData_Tile: {
 				toCylinder = getUserdata<Tile>(L, 2);
 				break;
-			default:
+			}
+
+			default: {
 				toCylinder = nullptr;
 				break;
+			}
 		}
 	} else {
 		toCylinder = g_game.map.getTile(getPosition(L, 2));
@@ -16501,6 +16584,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 			}
 			break;
 		}
+
 		case WEAPON_DISTANCE:
 		case WEAPON_AMMO: {
 			WeaponDistance* weapon = new WeaponDistance(getScriptEnv()->getScriptInterface());
@@ -16514,6 +16598,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 			}
 			break;
 		}
+
 		case WEAPON_WAND: {
 			WeaponWand* weapon = new WeaponWand(getScriptEnv()->getScriptInterface());
 			if (weapon) {
@@ -16526,6 +16611,7 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 			}
 			break;
 		}
+
 		default: {
 			lua_pushnil(L);
 			break;

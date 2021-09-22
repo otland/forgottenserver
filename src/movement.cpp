@@ -108,14 +108,19 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 		pugi::xml_attribute tileItemAttribute = node.attribute("tileitem");
 		if (tileItemAttribute && pugi::cast<uint16_t>(tileItemAttribute.value()) == 1) {
 			switch (eventType) {
-				case MOVE_EVENT_ADD_ITEM:
+				case MOVE_EVENT_ADD_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
 					break;
-				case MOVE_EVENT_REMOVE_ITEM:
+				}
+
+				case MOVE_EVENT_REMOVE_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
 					break;
-				default:
+				}
+
+				default: {
 					break;
+				}
 			}
 		}
 	}
@@ -209,14 +214,19 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
 		if (moveEvent->getTileItem()) {
 			switch (eventType) {
-				case MOVE_EVENT_ADD_ITEM:
+				case MOVE_EVENT_ADD_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
 					break;
-				case MOVE_EVENT_REMOVE_ITEM:
+				}
+
+				case MOVE_EVENT_REMOVE_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
 					break;
-				default:
+				}
+
+				default: {
 					break;
+				}
 			}
 		}
 	}
@@ -259,14 +269,19 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
 		if (moveEvent->getTileItem()) {
 			switch (eventType) {
-				case MOVE_EVENT_ADD_ITEM:
+				case MOVE_EVENT_ADD_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
 					break;
-				case MOVE_EVENT_REMOVE_ITEM:
+				}
+
+				case MOVE_EVENT_REMOVE_ITEM: {
 					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
 					break;
-				default:
+				}
+
+				default: {
 					break;
+				}
 			}
 		}
 	}
@@ -354,17 +369,60 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 {
 	uint32_t slotp;
 	switch (slot) {
-		case CONST_SLOT_HEAD: slotp = SLOTP_HEAD; break;
-		case CONST_SLOT_NECKLACE: slotp = SLOTP_NECKLACE; break;
-		case CONST_SLOT_BACKPACK: slotp = SLOTP_BACKPACK; break;
-		case CONST_SLOT_ARMOR: slotp = SLOTP_ARMOR; break;
-		case CONST_SLOT_RIGHT: slotp = SLOTP_RIGHT; break;
-		case CONST_SLOT_LEFT: slotp = SLOTP_LEFT; break;
-		case CONST_SLOT_LEGS: slotp = SLOTP_LEGS; break;
-		case CONST_SLOT_FEET: slotp = SLOTP_FEET; break;
-		case CONST_SLOT_AMMO: slotp = SLOTP_AMMO; break;
-		case CONST_SLOT_RING: slotp = SLOTP_RING; break;
-		default: slotp = 0; break;
+		case CONST_SLOT_HEAD: {
+			slotp = SLOTP_HEAD;
+			break;
+		}
+
+		case CONST_SLOT_NECKLACE: {
+			slotp = SLOTP_NECKLACE;
+			break;
+		}
+
+		case CONST_SLOT_BACKPACK: {
+			slotp = SLOTP_BACKPACK;
+			break;
+		}
+
+		case CONST_SLOT_ARMOR: {
+			slotp = SLOTP_ARMOR;
+			break;
+		}
+
+		case CONST_SLOT_RIGHT: {
+			slotp = SLOTP_RIGHT;
+			break;
+		}
+
+		case CONST_SLOT_LEFT: {
+			slotp = SLOTP_LEFT;
+			break;
+		}
+
+		case CONST_SLOT_LEGS: {
+			slotp = SLOTP_LEGS;
+			break;
+		}
+
+		case CONST_SLOT_FEET: {
+			slotp = SLOTP_FEET;
+			break;
+		}
+
+		case CONST_SLOT_AMMO: {
+			slotp = SLOTP_AMMO;
+			break;
+		}
+
+		case CONST_SLOT_RING: {
+			slotp = SLOTP_RING;
+			break;
+		}
+
+		default: {
+			slotp = 0;
+			break;
+		}
 	}
 
 	auto it = itemIdMap.find(item->getID());
@@ -536,15 +594,34 @@ MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface) {}
 std::string MoveEvent::getScriptEventName() const
 {
 	switch (eventType) {
-		case MOVE_EVENT_STEP_IN: return "onStepIn";
-		case MOVE_EVENT_STEP_OUT: return "onStepOut";
-		case MOVE_EVENT_EQUIP: return "onEquip";
-		case MOVE_EVENT_DEEQUIP: return "onDeEquip";
-		case MOVE_EVENT_ADD_ITEM: return "onAddItem";
-		case MOVE_EVENT_REMOVE_ITEM: return "onRemoveItem";
-		default:
+		case MOVE_EVENT_STEP_IN: {
+			return "onStepIn";
+		}
+
+		case MOVE_EVENT_STEP_OUT: {
+			return "onStepOut";
+		}
+
+		case MOVE_EVENT_EQUIP: {
+			return "onEquip";
+		}
+
+		case MOVE_EVENT_DEEQUIP: {
+			return "onDeEquip";
+		}
+
+		case MOVE_EVENT_ADD_ITEM: {
+			return "onAddItem";
+		}
+
+		case MOVE_EVENT_REMOVE_ITEM: {
+			return "onRemoveItem";
+		}
+
+		default: {
 			std::cout << "[Error - MoveEvent::getScriptEventName] Invalid event type" << std::endl;
 			return std::string();
+		}
 	}
 }
 

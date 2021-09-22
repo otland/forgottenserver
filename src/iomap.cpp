@@ -175,14 +175,15 @@ bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode
 	uint8_t attribute;
 	while (propStream.read<uint8_t>(attribute)) {
 		switch (attribute) {
-			case OTBM_ATTR_DESCRIPTION:
+			case OTBM_ATTR_DESCRIPTION: {
 				if (!propStream.readString(mapDescription)) {
 					setLastErrorString("Invalid description tag.");
 					return false;
 				}
 				break;
+			}
 
-			case OTBM_ATTR_EXT_SPAWN_FILE:
+			case OTBM_ATTR_EXT_SPAWN_FILE: {
 				if (!propStream.readString(tmp)) {
 					setLastErrorString("Invalid spawn tag.");
 					return false;
@@ -191,8 +192,9 @@ bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode
 				map.spawnfile = fileName.substr(0, fileName.rfind('/') + 1);
 				map.spawnfile += tmp;
 				break;
+			}
 
-			case OTBM_ATTR_EXT_HOUSE_FILE:
+			case OTBM_ATTR_EXT_HOUSE_FILE: {
 				if (!propStream.readString(tmp)) {
 					setLastErrorString("Invalid house tag.");
 					return false;
@@ -201,10 +203,12 @@ bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode
 				map.housefile = fileName.substr(0, fileName.rfind('/') + 1);
 				map.housefile += tmp;
 				break;
+			}
 
-			default:
+			default: {
 				setLastErrorString("Unknown header node.");
 				return false;
+			}
 		}
 	}
 	return true;
@@ -329,9 +333,10 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 					break;
 				}
 
-				default:
+				default: {
 					setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
 					return false;
+				}
 			}
 		}
 

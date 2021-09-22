@@ -171,8 +171,9 @@ void Game::setGameState(GameState_t newState)
 			break;
 		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 
@@ -3436,35 +3437,42 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	player->removeMessageBuffer();
 
 	switch (type) {
-		case TALKTYPE_SAY:
+		case TALKTYPE_SAY: {
 			internalCreatureSay(player, TALKTYPE_SAY, text, false);
 			break;
+		}
 
-		case TALKTYPE_WHISPER:
+		case TALKTYPE_WHISPER: {
 			playerWhisper(player, text);
 			break;
+		}
 
-		case TALKTYPE_YELL:
+		case TALKTYPE_YELL: {
 			playerYell(player, text);
 			break;
+		}
 
 		case TALKTYPE_PRIVATE_TO:
-		case TALKTYPE_PRIVATE_RED_TO:
+		case TALKTYPE_PRIVATE_RED_TO: {
 			playerSpeakTo(player, type, receiver, text);
 			break;
+		}
 
 		case TALKTYPE_CHANNEL_O:
 		case TALKTYPE_CHANNEL_Y:
-		case TALKTYPE_CHANNEL_R1:
+		case TALKTYPE_CHANNEL_R1: {
 			g_chat->talkToChannel(*player, type, text, channelId);
 			break;
+		}
 
-		case TALKTYPE_BROADCAST:
+		case TALKTYPE_BROADCAST: {
 			playerBroadcastMessage(player, text);
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 
@@ -3868,12 +3876,14 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 		case COMBAT_PHYSICALDAMAGE: {
 			Item* splash = nullptr;
 			switch (target->getRace()) {
-				case RACE_VENOM:
+				case RACE_VENOM: {
 					color = TEXTCOLOR_LIGHTGREEN;
 					effect = CONST_ME_HITBYPOISON;
 					splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_SLIME);
 					break;
-				case RACE_BLOOD:
+				}
+
+				case RACE_BLOOD: {
 					color = TEXTCOLOR_RED;
 					effect = CONST_ME_DRAWBLOOD;
 					if (const Tile* tile = target->getTile()) {
@@ -3882,22 +3892,31 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 						}
 					}
 					break;
-				case RACE_UNDEAD:
+				}
+
+				case RACE_UNDEAD: {
 					color = TEXTCOLOR_LIGHTGREY;
 					effect = CONST_ME_HITAREA;
 					break;
-				case RACE_FIRE:
+				}
+
+				case RACE_FIRE: {
 					color = TEXTCOLOR_ORANGE;
 					effect = CONST_ME_DRAWBLOOD;
 					break;
-				case RACE_ENERGY:
+				}
+
+				case RACE_ENERGY: {
 					color = TEXTCOLOR_ELECTRICPURPLE;
 					effect = CONST_ME_ENERGYHIT;
 					break;
-				default:
+				}
+
+				default: {
 					color = TEXTCOLOR_NONE;
 					effect = CONST_ME_NONE;
 					break;
+				}
 			}
 
 			if (splash) {
@@ -3925,31 +3944,37 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 			effect = CONST_ME_LOSEENERGY;
 			break;
 		}
+
 		case COMBAT_FIREDAMAGE: {
 			color = TEXTCOLOR_ORANGE;
 			effect = CONST_ME_HITBYFIRE;
 			break;
 		}
+
 		case COMBAT_ICEDAMAGE: {
 			color = TEXTCOLOR_SKYBLUE;
 			effect = CONST_ME_ICEATTACK;
 			break;
 		}
+
 		case COMBAT_HOLYDAMAGE: {
 			color = TEXTCOLOR_YELLOW;
 			effect = CONST_ME_HOLYDAMAGE;
 			break;
 		}
+
 		case COMBAT_DEATHDAMAGE: {
 			color = TEXTCOLOR_DARKRED;
 			effect = CONST_ME_SMALLCLOUDS;
 			break;
 		}
+
 		case COMBAT_LIFEDRAIN: {
 			color = TEXTCOLOR_RED;
 			effect = CONST_ME_MAGIC_RED;
 			break;
 		}
+
 		default: {
 			color = TEXTCOLOR_NONE;
 			effect = CONST_ME_NONE;
@@ -5670,27 +5695,60 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 bool Game::reload(ReloadTypes_t reloadType)
 {
 	switch (reloadType) {
-		case RELOAD_TYPE_ACTIONS: return g_actions->reload();
-		case RELOAD_TYPE_CHAT: return g_chat->load();
-		case RELOAD_TYPE_CONFIG: return g_config.reload();
+		case RELOAD_TYPE_ACTIONS: {
+			return g_actions->reload();
+		}
+
+		case RELOAD_TYPE_CHAT: {
+			return g_chat->load();
+		}
+
+		case RELOAD_TYPE_CONFIG: {
+			return g_config.reload();
+		}
+
 		case RELOAD_TYPE_CREATURESCRIPTS: {
 			g_creatureEvents->reload();
 			g_creatureEvents->removeInvalidEvents();
 			return true;
 		}
-		case RELOAD_TYPE_EVENTS: return g_events->load();
-		case RELOAD_TYPE_GLOBALEVENTS: return g_globalEvents->reload();
-		case RELOAD_TYPE_ITEMS: return Item::items.reload();
-		case RELOAD_TYPE_MONSTERS: return g_monsters.reload();
-		case RELOAD_TYPE_MOUNTS: return mounts.reload();
-		case RELOAD_TYPE_MOVEMENTS: return g_moveEvents->reload();
+
+		case RELOAD_TYPE_EVENTS: {
+			return g_events->load();
+		}
+
+		case RELOAD_TYPE_GLOBALEVENTS: {
+			return g_globalEvents->reload();
+		}
+
+		case RELOAD_TYPE_ITEMS: {
+			return Item::items.reload();
+		}
+
+		case RELOAD_TYPE_MONSTERS: {
+			return g_monsters.reload();
+		}
+
+		case RELOAD_TYPE_MOUNTS: {
+			return mounts.reload();
+		}
+
+		case RELOAD_TYPE_MOVEMENTS: {
+			return g_moveEvents->reload();
+		}
+
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
 			return true;
 		}
 
-		case RELOAD_TYPE_QUESTS: return quests.reload();
-		case RELOAD_TYPE_RAIDS: return raids.reload() && raids.startup();
+		case RELOAD_TYPE_QUESTS:  {
+			return quests.reload();
+		}
+
+		case RELOAD_TYPE_RAIDS:  {
+			return raids.reload() && raids.startup();
+		}
 
 		case RELOAD_TYPE_SPELLS: {
 			if (!g_spells->reload()) {
@@ -5703,7 +5761,9 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 
-		case RELOAD_TYPE_TALKACTIONS: return g_talkActions->reload();
+		case RELOAD_TYPE_TALKACTIONS:  {
+			return g_talkActions->reload();
+		}
 
 		case RELOAD_TYPE_WEAPONS: {
 			bool results = g_weapons->reload();

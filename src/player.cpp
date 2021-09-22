@@ -353,11 +353,13 @@ int32_t Player::getDefense() const
 	if (defenseSkill == 0) {
 		switch (fightMode) {
 			case FIGHTMODE_ATTACK:
-			case FIGHTMODE_BALANCED:
+			case FIGHTMODE_BALANCED: {
 				return 1;
+			}
 
-			case FIGHTMODE_DEFENSE:
+			case FIGHTMODE_DEFENSE: {
 				return 2;
+			}
 		}
 	}
 
@@ -377,20 +379,42 @@ uint32_t Player::getAttackSpeed() const
 float Player::getAttackFactor() const
 {
 	switch (fightMode) {
-		case FIGHTMODE_ATTACK: return 1.0f;
-		case FIGHTMODE_BALANCED: return 1.2f;
-		case FIGHTMODE_DEFENSE: return 2.0f;
-		default: return 1.0f;
+		case FIGHTMODE_ATTACK: {
+			return 1.0f;
+		}
+
+		case FIGHTMODE_BALANCED: {
+			return 1.2f;
+		}
+
+		case FIGHTMODE_DEFENSE: {
+			return 2.0f;
+		}
+
+		default: {
+			return 1.0f;
+		}
 	}
 }
 
 float Player::getDefenseFactor() const
 {
 	switch (fightMode) {
-		case FIGHTMODE_ATTACK: return (OTSYS_TIME() - lastAttack) < getAttackSpeed() ? 0.5f : 1.0f;
-		case FIGHTMODE_BALANCED: return (OTSYS_TIME() - lastAttack) < getAttackSpeed() ? 0.75f : 1.0f;
-		case FIGHTMODE_DEFENSE: return 1.0f;
-		default: return 1.0f;
+		case FIGHTMODE_ATTACK: {
+			return (OTSYS_TIME() - lastAttack) < getAttackSpeed() ? 0.5f : 1.0f;
+		}
+
+		case FIGHTMODE_BALANCED: {
+			return (OTSYS_TIME() - lastAttack) < getAttackSpeed() ? 0.75f : 1.0f;
+		}
+
+		case FIGHTMODE_DEFENSE: {
+			return 1.0f;
+		}
+
+		default: {
+			return 1.0f;
+		}
 	}
 }
 
@@ -563,10 +587,21 @@ void Player::setVarStats(stats_t stat, int32_t modifier)
 int32_t Player::getDefaultStats(stats_t stat) const
 {
 	switch (stat) {
-		case STAT_MAXHITPOINTS: return healthMax;
-		case STAT_MAXMANAPOINTS: return manaMax;
-		case STAT_MAGICPOINTS: return getBaseMagicLevel();
-		default: return 0;
+		case STAT_MAXHITPOINTS: {
+			return healthMax;
+		}
+
+		case STAT_MAXMANAPOINTS: {
+			return manaMax;
+		}
+
+		case STAT_MAGICPOINTS: {
+			return getBaseMagicLevel();
+		}
+
+		default: {
+			return 0;
+		}
 	}
 }
 
@@ -2514,13 +2549,15 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		}
 
 		case CONST_SLOT_WHEREEVER:
-		case -1:
+		case -1: {
 			ret = RETURNVALUE_NOTENOUGHROOM;
 			break;
+		}
 
-		default:
+		default: {
 			ret = RETURNVALUE_NOTPOSSIBLE;
 			break;
+		}
 	}
 
 	if (ret != RETURNVALUE_NOERROR && ret != RETURNVALUE_NOTENOUGHROOM) {
@@ -3378,40 +3415,49 @@ void Player::onAddCondition(ConditionType_t type)
 void Player::onAddCombatCondition(ConditionType_t type)
 {
 	switch (type) {
-		case CONDITION_POISON:
+		case CONDITION_POISON: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are poisoned.");
 			break;
+		}
 
-		case CONDITION_DROWN:
+		case CONDITION_DROWN: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drowning.");
 			break;
+		}
 
-		case CONDITION_PARALYZE:
+		case CONDITION_PARALYZE: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are paralyzed.");
 			break;
+		}
 
-		case CONDITION_DRUNK:
+		case CONDITION_DRUNK: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are drunk.");
 			break;
+		}
 
-		case CONDITION_CURSED:
+		case CONDITION_CURSED: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are cursed.");
 			break;
+		}
 
-		case CONDITION_FREEZING:
+		case CONDITION_FREEZING: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are freezing.");
 			break;
+		}
 
-		case CONDITION_DAZZLED:
+		case CONDITION_DAZZLED: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are dazzled.");
 			break;
+		}
 
-		case CONDITION_BLEEDING:
+		case CONDITION_BLEEDING: {
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are bleeding.");
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 }
 

@@ -125,14 +125,21 @@ bool Monster::canSee(const Position& pos) const
 bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 {
 	switch (combatType) {
-		case COMBAT_ENERGYDAMAGE:
+		case COMBAT_ENERGYDAMAGE: {
 			return mType->info.canWalkOnEnergy;
-		case COMBAT_FIREDAMAGE:
+		}
+
+		case COMBAT_FIREDAMAGE: {
 			return mType->info.canWalkOnFire;
-		case COMBAT_EARTHDAMAGE:
+		}
+
+		case COMBAT_EARTHDAMAGE: {
 			return mType->info.canWalkOnPoison;
-		default:
+		}
+
+		default: {
 			return true;
+		}
 	}
 }
 
@@ -1701,8 +1708,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 				break;
 			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 	} else {
 		Direction playerDir = offsetx < 0 ? DIRECTION_EAST : DIRECTION_WEST;
@@ -1833,8 +1841,9 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 				break;
 			}
 
-			default:
+			default: {
 				break;
+			}
 		}
 	}
 

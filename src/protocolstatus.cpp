@@ -80,8 +80,9 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			return;
 		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 	disconnect();
 }

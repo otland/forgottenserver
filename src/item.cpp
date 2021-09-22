@@ -109,36 +109,44 @@ Item* Item::CreateItem(PropStream& propStream)
 	}
 
 	switch (id) {
-		case ITEM_FIREFIELD_PVP_FULL:
+		case ITEM_FIREFIELD_PVP_FULL: {
 			id = ITEM_FIREFIELD_PERSISTENT_FULL;
 			break;
+		}
 
-		case ITEM_FIREFIELD_PVP_MEDIUM:
+		case ITEM_FIREFIELD_PVP_MEDIUM: {
 			id = ITEM_FIREFIELD_PERSISTENT_MEDIUM;
 			break;
+		}
 
-		case ITEM_FIREFIELD_PVP_SMALL:
+		case ITEM_FIREFIELD_PVP_SMALL: {
 			id = ITEM_FIREFIELD_PERSISTENT_SMALL;
 			break;
+		}
 
-		case ITEM_ENERGYFIELD_PVP:
+		case ITEM_ENERGYFIELD_PVP: {
 			id = ITEM_ENERGYFIELD_PERSISTENT;
 			break;
+		}
 
-		case ITEM_POISONFIELD_PVP:
+		case ITEM_POISONFIELD_PVP: {
 			id = ITEM_POISONFIELD_PERSISTENT;
 			break;
+		}
 
-		case ITEM_MAGICWALL:
+		case ITEM_MAGICWALL: {
 			id = ITEM_MAGICWALL_PERSISTENT;
 			break;
+		}
 
-		case ITEM_WILDGROWTH:
+		case ITEM_WILDGROWTH: {
 			id = ITEM_WILDGROWTH_PERSISTENT;
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 	}
 
 	return Item::CreateItem(id, 0);
@@ -688,8 +696,9 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
-		default:
+		default: {
 			return ATTR_READ_ERROR;
+		}
 	}
 
 	return ATTR_READ_CONTINUE;
@@ -859,19 +868,57 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 {
 	const ItemType& it = items[id];
 	switch (prop) {
-		case CONST_PROP_BLOCKSOLID: return it.blockSolid;
-		case CONST_PROP_MOVEABLE: return it.moveable && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID);
-		case CONST_PROP_HASHEIGHT: return it.hasHeight;
-		case CONST_PROP_BLOCKPROJECTILE: return it.blockProjectile;
-		case CONST_PROP_BLOCKPATH: return it.blockPathFind;
-		case CONST_PROP_ISVERTICAL: return it.isVertical;
-		case CONST_PROP_ISHORIZONTAL: return it.isHorizontal;
-		case CONST_PROP_IMMOVABLEBLOCKSOLID: return it.blockSolid && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
-		case CONST_PROP_IMMOVABLEBLOCKPATH: return it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
-		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
-		case CONST_PROP_NOFIELDBLOCKPATH: return !it.isMagicField() && it.blockPathFind;
-		case CONST_PROP_SUPPORTHANGABLE: return it.isHorizontal || it.isVertical;
-		default: return false;
+		case CONST_PROP_BLOCKSOLID: {
+			return it.blockSolid;
+		}
+
+		case CONST_PROP_MOVEABLE: {
+			return it.moveable && !hasAttribute(ITEM_ATTRIBUTE_UNIQUEID);
+		}
+
+		case CONST_PROP_HASHEIGHT: {
+			return it.hasHeight;
+		}
+
+		case CONST_PROP_BLOCKPROJECTILE: {
+			return it.blockProjectile;
+		}
+
+		case CONST_PROP_BLOCKPATH: {
+			return it.blockPathFind;
+		}
+
+		case CONST_PROP_ISVERTICAL: {
+			return it.isVertical;
+		}
+
+		case CONST_PROP_ISHORIZONTAL: {
+			return it.isHorizontal;
+		}
+
+		case CONST_PROP_IMMOVABLEBLOCKSOLID: {
+			return it.blockSolid && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		}
+
+		case CONST_PROP_IMMOVABLEBLOCKPATH: {
+			 it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		}
+
+		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: {
+			return !it.isMagicField() && it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+		}
+
+		case CONST_PROP_NOFIELDBLOCKPATH: {
+			return
+			 !it.isMagicField() && it.blockPathFind;
+		}
+		case CONST_PROP_SUPPORTHANGABLE: {
+			return it.isHorizontal || it.isVertical;
+		}
+
+		default: {
+			return false;
+		}
 	}
 }
 
@@ -1638,17 +1685,21 @@ bool Item::canDecay() const
 uint32_t Item::getWorth() const
 {
 	switch (id) {
-		case ITEM_GOLD_COIN:
+		case ITEM_GOLD_COIN: {
 			return count;
+		}
 
-		case ITEM_PLATINUM_COIN:
+		case ITEM_PLATINUM_COIN: {
 			return count * 100;
+		}
 
-		case ITEM_CRYSTAL_COIN:
+		case ITEM_CRYSTAL_COIN: {
 			return count * 10000;
+		}
 
-		default:
+		default: {
 			return 0;
+		}
 	}
 }
 
