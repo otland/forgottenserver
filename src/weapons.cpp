@@ -383,7 +383,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 	} else {
 		CombatDamage damage;
 		WeaponType_t weaponType = item->getWeaponType();
-		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE) {
+		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE || weaponType == WEAPON_WAND) {
 			damage.origin = ORIGIN_RANGED;
 		} else {
 			damage.origin = ORIGIN_MELEE;
