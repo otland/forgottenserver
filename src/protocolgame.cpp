@@ -824,35 +824,43 @@ void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 		uint8_t rawdir = msg.getPreviousByte();
 		switch (rawdir) {
 			case 1: {
-				path.push_back(DIRECTION_EAST); break;
+				path.push_back(DIRECTION_EAST);
+				break;
 			}
 
 			case 2: {
-				path.push_back(DIRECTION_NORTHEAST); break;
+				path.push_back(DIRECTION_NORTHEAST);
+				break;
 			}
 
 			case 3: {
-				path.push_back(DIRECTION_NORTH); break;
+				path.push_back(DIRECTION_NORTH);
+				break;
 			}
 
 			case 4: {
-				path.push_back(DIRECTION_NORTHWEST); break;
+				path.push_back(DIRECTION_NORTHWEST);
+				break;
 			}
 
 			case 5: {
-				path.push_back(DIRECTION_WEST); break;
+				path.push_back(DIRECTION_WEST);
+				break;
 			}
 
 			case 6: {
-				path.push_back(DIRECTION_SOUTHWEST); break;
+				path.push_back(DIRECTION_SOUTHWEST);
+				break;
 			}
 
 			case 7: {
-				path.push_back(DIRECTION_SOUTH); break;
+				path.push_back(DIRECTION_SOUTH);
+				break;
 			}
 
 			case 8: {
-				path.push_back(DIRECTION_SOUTHEAST); break;
+				path.push_back(DIRECTION_SOUTHEAST);
+				break;
 			}
 
 			default: {
