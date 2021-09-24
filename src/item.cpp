@@ -909,8 +909,7 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 		}
 
 		case CONST_PROP_NOFIELDBLOCKPATH: {
-			return
-			 !it.isMagicField() && it.blockPathFind;
+			return !it.isMagicField() && it.blockPathFind;
 		}
 		case CONST_PROP_SUPPORTHANGABLE: {
 			return it.isHorizontal || it.isVertical;
