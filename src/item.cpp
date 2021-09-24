@@ -901,7 +901,7 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 		}
 
 		case CONST_PROP_IMMOVABLEBLOCKPATH: {
-			 it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
+			return it.blockPathFind && (!it.moveable || hasAttribute(ITEM_ATTRIBUTE_UNIQUEID));
 		}
 
 		case CONST_PROP_IMMOVABLENOFIELDBLOCKPATH: {
@@ -911,6 +911,7 @@ bool Item::hasProperty(ITEMPROPERTY prop) const
 		case CONST_PROP_NOFIELDBLOCKPATH: {
 			return !it.isMagicField() && it.blockPathFind;
 		}
+
 		case CONST_PROP_SUPPORTHANGABLE: {
 			return it.isHorizontal || it.isVertical;
 		}
