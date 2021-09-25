@@ -3523,9 +3523,10 @@ bool Game::playerYell(Player* player, const std::string& text)
 		return false;
 	}
 
-	uint32_t minimumLevel = g_config.getNumber(ConfigManager::YELL_MINIMUM_LEVEL);
+	bool isAccessPlayer = player->isAccessPlayer();
 	bool belowGamemaster = player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER;
-	if (player->getLevel() < minimumLevel && (!player->getGroup()->access || belowGamemaster)) {
+	uint32_t minimumLevel = g_config.getNumber(ConfigManager::YELL_MINIMUM_LEVEL);
+	if (player->getLevel() < minimumLevel && (!isAccessPlayer || belowGamemaster)) {
 		if (g_config.getBoolean(ConfigManager::YELL_ALLOW_PREMIUM)) {
 			if (!player->isPremium()) {
 				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not yell unless you have reached level {:d} or have a premium account.", minimumLevel));
@@ -3537,7 +3538,7 @@ bool Game::playerYell(Player* player, const std::string& text)
 		}
 	}
 
-	if (belowGamemaster) {
+	if (belowGamemaster && !isAccessPlayer) {
 		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_YELLTICKS, 30000, 0);
 		player->addCondition(condition);
 	}
