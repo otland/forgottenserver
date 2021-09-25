@@ -339,6 +339,9 @@ registerMonsterType.attacks = function(mtype, mask)
 					if attack.radius then
 						spell:setCombatRadius(attack.radius)
 					end
+					if attack.ring then
+						spell:setCombatRing(attack.ring)
+					end
 					if attack.minDamage and attack.maxDamage then
 						if attack.name == "combat" then
 							spell:setCombatValue(attack.minDamage, attack.maxDamage)
@@ -470,6 +473,9 @@ registerMonsterType.defenses = function(mtype, mask)
 						end
 						if defense.radius then
 							spell:setCombatRadius(defense.radius)
+						end
+						if defense.ring then
+							spell:setCombatRing(defense.ring)
 						end
 						if defense.minDamage and defense.maxDamage then
 							if defense.name == "combat" then
