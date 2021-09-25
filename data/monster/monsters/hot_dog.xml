@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hot Dog" nameDescription="a hot dog" race="blood" experience="190" speed="300" manacost="220">
 	<health now="505" max="505" />
 	<look type="32" corpse="5971" />

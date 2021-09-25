@@ -19,10 +19,17 @@
 
 #include "otpch.h"
 
+#include <algorithm>
+#if __has_include("luajit/lua.hpp")
+#include <luajit/lua.hpp>
+#else
 #include <lua.hpp>
+#endif
 
 #include "configmanager.h"
 #include "game.h"
+#include "monster.h"
+#include "pugicast.h"
 
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
@@ -85,6 +92,76 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 ConfigManager::ConfigManager()
 {
 	string[CONFIG_FILE] = "config.lua";
+}
+
+namespace {
+
+ExperienceStages loadLuaStages(lua_State* L)
+{
+	ExperienceStages stages;
+
+	lua_getglobal(L, "experienceStages");
+	if (!lua_istable(L, -1)) {
+		return {};
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0) {
+		const auto tableIndex = lua_gettop(L);
+		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel");
+		auto maxLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel");
+		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier");
+		stages.emplace_back(minLevel, maxLevel, multiplier);
+		lua_pop(L, 4);
+	}
+	lua_pop(L, 1);
+
+	std::sort(stages.begin(), stages.end());
+	return stages;
+}
+
+ExperienceStages loadXMLStages()
+{
+	pugi::xml_document doc;
+	pugi::xml_parse_result result = doc.load_file("data/XML/stages.xml");
+	if (!result) {
+		printXMLError("Error - loadXMLStages", "data/XML/stages.xml", result);
+		return {};
+	}
+
+	ExperienceStages stages;
+	for (auto stageNode : doc.child("stages").children()) {
+		if (strcasecmp(stageNode.name(), "config") == 0) {
+			if (!stageNode.attribute("enabled").as_bool()) {
+				return {};
+			}
+		} else {
+			uint32_t minLevel, maxLevel, multiplier;
+
+			if (auto minLevelAttribute = stageNode.attribute("minlevel")) {
+				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
+			} else {
+				minLevel = 1;
+			}
+
+			if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
+				maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
+			}
+
+			if (auto multiplierAttribute = stageNode.attribute("multiplier")) {
+				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
+			} else {
+				multiplier = 1;
+			}
+
+			stages.emplace_back(minLevel, maxLevel, multiplier);
+		}
+	}
+
+	std::sort(stages.begin(), stages.end());
+	return stages;
+}
+
 }
 
 bool ConfigManager::load()
@@ -162,10 +239,14 @@ bool ConfigManager::load()
 	boolean[ONLINE_OFFLINE_CHARLIST] = getGlobalBoolean(L, "showOnlineStatusInCharlist", false);
 	boolean[YELL_ALLOW_PREMIUM] = getGlobalBoolean(L, "yellAlwaysAllowPremium", false);
 	boolean[FORCE_MONSTERTYPE_LOAD] = getGlobalBoolean(L, "forceMonsterTypesOnLoad", true);
+	boolean[DEFAULT_WORLD_LIGHT] = getGlobalBoolean(L, "defaultWorldLight", true);
 	boolean[HOUSE_OWNED_BY_ACCOUNT] = getGlobalBoolean(L, "houseOwnedByAccount", false);
+	boolean[LUA_ITEM_DESC] = getGlobalBoolean(L, "luaItemDesc", false);
 	boolean[CLEAN_PROTECTION_ZONES] = getGlobalBoolean(L, "cleanProtectionZones", false);
 	boolean[HOUSE_DOOR_SHOW_PRICE] = getGlobalBoolean(L, "houseDoorShowPrice", true);
 	boolean[ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS] = getGlobalBoolean(L, "onlyInvitedCanMoveHouseItems", true);
+	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
+	boolean[PLAYER_CONSOLE_LOGS] = getGlobalBoolean(L, "showPlayerLogInConsole", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -178,8 +259,9 @@ bool ConfigManager::load()
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	integer[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
-	integer[DEFAULT_DESPAWNRANGE] = getGlobalNumber(L, "deSpawnRange", 2);
-	integer[DEFAULT_DESPAWNRADIUS] = getGlobalNumber(L, "deSpawnRadius", 50);
+	integer[DEFAULT_DESPAWNRANGE] = Monster::despawnRange = getGlobalNumber(L, "deSpawnRange", 2);
+	integer[DEFAULT_DESPAWNRADIUS] = Monster::despawnRadius = getGlobalNumber(L, "deSpawnRadius", 50);
+	integer[DEFAULT_WALKTOSPAWNRADIUS] = getGlobalNumber(L, "walkToSpawnRadius", 15);
 	integer[RATE_EXPERIENCE] = getGlobalNumber(L, "rateExp", 5);
 	integer[RATE_SKILL] = getGlobalNumber(L, "rateSkill", 3);
 	integer[RATE_LOOT] = getGlobalNumber(L, "rateLoot", 2);
@@ -204,9 +286,22 @@ bool ConfigManager::load()
 	integer[MAX_PACKETS_PER_SECOND] = getGlobalNumber(L, "maxPacketsPerSecond", 25);
 	integer[SERVER_SAVE_NOTIFY_DURATION] = getGlobalNumber(L, "serverSaveNotifyDuration", 5);
 	integer[YELL_MINIMUM_LEVEL] = getGlobalNumber(L, "yellMinimumLevel", 2);
+	integer[VIP_FREE_LIMIT] = getGlobalNumber(L, "vipFreeLimit", 20);
+	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
+	integer[DEPOT_FREE_LIMIT] = getGlobalNumber(L, "depotFreeLimit", 2000);
+	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 10000);
+
+	expStages = loadXMLStages();
+	if (expStages.empty()) {
+		expStages = loadLuaStages(L);
+	} else {
+		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, consider moving to config.lua." << std::endl;
+	}
+	expStages.shrink_to_fit();
 
 	loaded = true;
 	lua_close(L);
+
 	return true;
 }
 
@@ -246,6 +341,19 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 		return false;
 	}
 	return boolean[what];
+}
+
+float ConfigManager::getExperienceStage(uint32_t level) const
+{
+	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
+		return level >= std::get<0>(stage) && level <= std::get<1>(stage);
+	});
+
+	if (it == expStages.end()) {
+		return getNumber(ConfigManager::RATE_EXPERIENCE);
+	}
+
+	return std::get<2>(*it);
 }
 
 bool ConfigManager::setString(string_config_t what, const std::string& value)

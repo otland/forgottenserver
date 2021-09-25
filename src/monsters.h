@@ -22,7 +22,6 @@
 
 #include "creature.h"
 
-
 const uint32_t MAX_LOOTCHANCE = 100000;
 
 struct LootBlock {
@@ -148,13 +147,15 @@ class MonsterType
 		bool canPushItems = false;
 		bool canPushCreatures = false;
 		bool pushable = true;
-		bool isSummonable = false;
-		bool isIllusionable = false;
-		bool isConvinceable = false;
 		bool isAttackable = true;
-		bool isHostile = true;
-		bool hiddenHealth = false;
 		bool isBoss = false;
+		bool isChallengeable = true;
+		bool isConvinceable = false;
+		bool isHostile = true;
+		bool isIgnoringSpawnBlock = false;
+		bool isIllusionable = false;
+		bool isSummonable = false;
+		bool hiddenHealth = false;
 		bool canWalkOnEnergy = true;
 		bool canWalkOnFire = true;
 		bool canWalkOnPoison = true;
@@ -192,6 +193,7 @@ class MonsterSpell
 
 		uint8_t chance = 100;
 		uint8_t range = 0;
+		uint8_t drunkenness = 0;
 
 		uint16_t interval = 2000;
 

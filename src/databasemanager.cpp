@@ -23,15 +23,15 @@
 #include "databasemanager.h"
 #include "luascript.h"
 
+#include <fmt/format.h>
+
 extern ConfigManager g_config;
 
 bool DatabaseManager::optimizeTables()
 {
 	Database& db = Database::getInstance();
-	std::ostringstream query;
 
-	query << "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `DATA_FREE` > 0";
-	DBResult_ptr result = db.storeQuery(query.str());
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = {:s} AND `DATA_FREE` > 0", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))));
 	if (!result) {
 		return false;
 	}
@@ -40,10 +40,7 @@ bool DatabaseManager::optimizeTables()
 		std::string tableName = result->getString("TABLE_NAME");
 		std::cout << "> Optimizing table " << tableName << "..." << std::flush;
 
-		query.str(std::string());
-		query << "OPTIMIZE TABLE `" << tableName << '`';
-
-		if (db.executeQuery(query.str())) {
+		if (db.executeQuery(fmt::format("OPTIMIZE TABLE `{:s}`", tableName))) {
 			std::cout << " [success]" << std::endl;
 		} else {
 			std::cout << " [failed]" << std::endl;
@@ -55,18 +52,13 @@ bool DatabaseManager::optimizeTables()
 bool DatabaseManager::tableExists(const std::string& tableName)
 {
 	Database& db = Database::getInstance();
-
-	std::ostringstream query;
-	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)) << " AND `TABLE_NAME` = " << db.escapeString(tableName) << " LIMIT 1";
-	return db.storeQuery(query.str()).get() != nullptr;
+	return db.storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s} AND `TABLE_NAME` = {:s} LIMIT 1", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName))).get() != nullptr;
 }
 
 bool DatabaseManager::isDatabaseSetup()
 {
 	Database& db = Database::getInstance();
-	std::ostringstream query;
-	query << "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = " << db.escapeString(g_config.getString(ConfigManager::MYSQL_DB));
-	return db.storeQuery(query.str()).get() != nullptr;
+	return db.storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s}", db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)))).get() != nullptr;
 }
 
 int32_t DatabaseManager::getDatabaseVersion()
@@ -108,9 +100,7 @@ void DatabaseManager::updateDatabase()
 
 	int32_t version = getDatabaseVersion();
 	do {
-		std::ostringstream ss;
-		ss << "data/migrations/" << version << ".lua";
-		if (luaL_dofile(L, ss.str().c_str()) != 0) {
+		if (luaL_dofile(L, fmt::format("data/migrations/{:d}.lua", version).c_str()) != 0) {
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] " << lua_tostring(L, -1) << std::endl;
 			break;
 		}
@@ -143,10 +133,8 @@ void DatabaseManager::updateDatabase()
 bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& value)
 {
 	Database& db = Database::getInstance();
-	std::ostringstream query;
-	query << "SELECT `value` FROM `server_config` WHERE `config` = " << db.escapeString(config);
 
-	DBResult_ptr result = db.storeQuery(query.str());
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `value` FROM `server_config` WHERE `config` = {:s}", db.escapeString(config)));
 	if (!result) {
 		return false;
 	}
@@ -158,15 +146,12 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t value)
 {
 	Database& db = Database::getInstance();
-	std::ostringstream query;
 
 	int32_t tmp;
 
 	if (!getDatabaseConfig(config, tmp)) {
-		query << "INSERT INTO `server_config` VALUES (" << db.escapeString(config) << ", '" << value << "')";
+		db.executeQuery(fmt::format("INSERT INTO `server_config` VALUES ({:s}, '{:d}')", db.escapeString(config), value));
 	} else {
-		query << "UPDATE `server_config` SET `value` = '" << value << "' WHERE `config` = " << db.escapeString(config);
+		db.executeQuery(fmt::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = {:s}", value, db.escapeString(config)));
 	}
-
-	db.executeQuery(query.str());
 }

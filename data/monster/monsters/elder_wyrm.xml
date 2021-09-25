@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Elder Wyrm" nameDescription="an elder wyrm" race="blood" experience="2500" speed="280">
 	<health now="2700" max="2700" />
 	<look type="561" corpse="21283" />
@@ -51,7 +51,8 @@
 	</voices>
 	<loot>
 		<item name="small diamond" countmax="5" chance="4000" />
-		<item name="gold coin" countmax="174" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="74" chance="50000" />
 		<item name="platinum coin" countmax="3" chance="25150" />
 		<item name="crossbow" chance="9690" />
 		<item name="dragon ham" countmax="2" chance="32420" />

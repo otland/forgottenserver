@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Blood Hand" nameDescription="a blood hand" race="blood" experience="750" speed="220">
 	<health now="700" max="700" />
 	<look type="552" corpse="21257" />
@@ -55,7 +55,8 @@
 		<voice sentence="Die, filth!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="130" chance="100000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="30" chance="50000" />
 		<item name="necrotic rod" chance="3000" />
 		<item name="boots of haste" chance="210" />
 		<item name="skull staff" chance="130" />

@@ -20,6 +20,11 @@
 #ifndef FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
 #define FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
 
+#include <utility>
+#include <vector>
+
+using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
+
 class ConfigManager
 {
 	public:
@@ -55,10 +60,14 @@ class ConfigManager
 			ONLINE_OFFLINE_CHARLIST,
 			YELL_ALLOW_PREMIUM,
 			FORCE_MONSTERTYPE_LOAD,
+			DEFAULT_WORLD_LIGHT,
 			HOUSE_OWNED_BY_ACCOUNT,
+			LUA_ITEM_DESC,
 			CLEAN_PROTECTION_ZONES,
 			HOUSE_DOOR_SHOW_PRICE,
 			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
+			REMOVE_ON_DESPAWN,
+			PLAYER_CONSOLE_LOGS,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -92,6 +101,7 @@ class ConfigManager
 			PZ_LOCKED,
 			DEFAULT_DESPAWNRANGE,
 			DEFAULT_DESPAWNRADIUS,
+			DEFAULT_WALKTOSPAWNRADIUS,
 			RATE_EXPERIENCE,
 			RATE_SKILL,
 			RATE_LOOT,
@@ -120,6 +130,10 @@ class ConfigManager
 			MAX_PACKETS_PER_SECOND,
 			SERVER_SAVE_NOTIFY_DURATION,
 			YELL_MINIMUM_LEVEL,
+			VIP_FREE_LIMIT,
+			VIP_PREMIUM_LIMIT,
+			DEPOT_FREE_LIMIT,
+			DEPOT_PREMIUM_LIMIT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
@@ -130,6 +144,7 @@ class ConfigManager
 		const std::string& getString(string_config_t what) const;
 		int32_t getNumber(integer_config_t what) const;
 		bool getBoolean(boolean_config_t what) const;
+		float getExperienceStage(uint32_t level) const;
 
 		bool setString(string_config_t what, const std::string& value);
 		bool setNumber(integer_config_t what, int32_t value);
@@ -139,6 +154,8 @@ class ConfigManager
 		std::string string[LAST_STRING_CONFIG] = {};
 		int32_t integer[LAST_INTEGER_CONFIG] = {};
 		bool boolean[LAST_BOOLEAN_CONFIG] = {};
+
+		ExperienceStages expStages = {};
 
 		bool loaded = false;
 };

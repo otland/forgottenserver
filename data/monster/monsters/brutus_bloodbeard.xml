@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Brutus Bloodbeard" nameDescription="Brutus Bloodbeard" race="blood" experience="795" speed="240">
 	<health now="1555" max="1555" />
 	<look type="98" corpse="20478" />

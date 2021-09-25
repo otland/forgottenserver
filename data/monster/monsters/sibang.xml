@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="214">
 	<health now="225" max="225" />
 	<look type="118" corpse="6045" />

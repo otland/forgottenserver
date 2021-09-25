@@ -249,6 +249,8 @@ class ProtocolGame final : public Protocol
 		void sendAddTileItem(const Position& pos, uint32_t stackpos, const Item* item);
 		void sendUpdateTileItem(const Position& pos, uint32_t stackpos, const Item* item);
 		void sendRemoveTileThing(const Position& pos, uint32_t stackpos);
+		void sendUpdateTileCreature(const Position& pos, uint32_t stackpos, const Creature* creature);
+		void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
 		void sendUpdateTile(const Tile* tile, const Position& pos);
 
 		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, bool isLogin);
@@ -272,14 +274,14 @@ class ProtocolGame final : public Protocol
 
 		//Help functions
 
-		// translate a tile to clientreadable format
+		// translate a tile to client-readable format
 		void GetTileDescription(const Tile* tile, NetworkMessage& msg);
 
-		// translate a floor to clientreadable format
+		// translate a floor to client-readable format
 		void GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z,
 		                         int32_t width, int32_t height, int32_t offset, int32_t& skip);
 
-		// translate a map area to clientreadable format
+		// translate a map area to client-readable format
 		void GetMapDescription(int32_t x, int32_t y, int32_t z,
 		                       int32_t width, int32_t height, NetworkMessage& msg);
 
@@ -292,6 +294,7 @@ class ProtocolGame final : public Protocol
 
 		//tiles
 		static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
+		static void RemoveTileCreature(NetworkMessage& msg, const Creature* creature, const Position& pos, uint32_t stackpos);
 
 		void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 		void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
@@ -306,13 +309,13 @@ class ProtocolGame final : public Protocol
 
 		// Helpers so we don't need to bind every time
 		template <typename Callable, typename... Args>
-		void addGameTask(Callable function, Args&&... args) {
-			g_dispatcher.addTask(createTask(std::bind(function, &g_game, std::forward<Args>(args)...)));
+		void addGameTask(Callable&& function, Args&&... args) {
+			g_dispatcher.addTask(createTask(std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
 		}
 
 		template <typename Callable, typename... Args>
-		void addGameTaskTimed(uint32_t delay, Callable function, Args&&... args) {
-			g_dispatcher.addTask(createTask(delay, std::bind(function, &g_game, std::forward<Args>(args)...)));
+		void addGameTaskTimed(uint32_t delay, Callable&& function, Args&&... args) {
+			g_dispatcher.addTask(createTask(delay, std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
 		}
 
 		std::unordered_set<uint32_t> knownCreatureSet;

@@ -119,7 +119,7 @@ class ServiceManager
 
 		boost::asio::io_service io_service;
 		Signals signals{io_service};
-		boost::asio::deadline_timer death_timer { io_service };
+		boost::asio::steady_timer death_timer { io_service };
 		bool running = false;
 };
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bug" namedescription="a bug" race="venom" experience="18" speed="160" manacost="250">
 	<health now="29" max="29" />
 	<look type="45" corpse="5990" />
@@ -28,6 +28,6 @@
 	</elements>
 	<loot>
 		<item name="gold coin" countmax="6" chance="50000" />
-		<item name="cherry" countmax="3" chance="3000" />
+		<item id="2679" countmax="3" chance="3000" /><!-- cherry -->
 	</loot>
 </monster>

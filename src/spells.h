@@ -51,8 +51,6 @@ class Spells final : public BaseEvents
 		InstantSpell* getInstantSpell(const std::string& words);
 		InstantSpell* getInstantSpellByName(const std::string& name);
 
-		InstantSpell* getInstantSpellById(uint32_t spellId);
-
 		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 		static Position getCasterPosition(Creature* creature, Direction dir);
@@ -79,8 +77,6 @@ class Spells final : public BaseEvents
 		LuaScriptInterface scriptInterface { "Spell Interface" };
 };
 
-using RuneSpellFunction = std::function<bool(const RuneSpell* spell, Player* player, const Position& posTo)>;
-
 class BaseSpell
 {
 	public:
@@ -94,8 +90,7 @@ class BaseSpell
 class CombatSpell final : public Event, public BaseSpell
 {
 	public:
-		CombatSpell(Combat* combat, bool needTarget, bool needDirection);
-		~CombatSpell();
+		CombatSpell(Combat_ptr combat, bool needTarget, bool needDirection);
 
 		// non-copyable
 		CombatSpell(const CombatSpell&) = delete;
@@ -111,7 +106,7 @@ class CombatSpell final : public Event, public BaseSpell
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
 
 		bool loadScriptCombat();
-		Combat* getCombat() {
+		Combat_ptr getCombat() {
 			return combat;
 		}
 
@@ -120,7 +115,7 @@ class CombatSpell final : public Event, public BaseSpell
 			return "onCastSpell";
 		}
 
-		Combat* combat;
+		Combat_ptr combat;
 
 		bool needDirection;
 		bool needTarget;
@@ -320,7 +315,6 @@ class Spell : public BaseSpell
 		bool needTarget = false;
 
 	private:
-
 		uint32_t mana = 0;
 		uint32_t manaPercent = 0;
 		uint32_t soul = 0;
@@ -334,8 +328,6 @@ class Spell : public BaseSpell
 		bool enabled = true;
 		bool premium = false;
 
-
-	private:
 		std::string name;
 };
 

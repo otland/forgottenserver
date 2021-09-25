@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Wyvern" nameDescription="a wyvern" race="blood" experience="515" speed="200">
 	<health now="795" max="795" />
 	<look type="239" corpse="6302" />

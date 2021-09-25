@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Verminor" nameDescription="Verminor" race="fire" experience="35000" speed="380">
 	<health now="80000" max="80000" />
 	<look type="12" head="3" body="61" legs="41" feet="3" corpse="6068" />

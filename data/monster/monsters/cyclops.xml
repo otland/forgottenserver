@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Cyclops" nameDescription="a cyclops" race="blood" experience="150" speed="190" manacost="490">
 	<health now="260" max="260" />
 	<look type="22" corpse="5962" />
@@ -44,7 +44,7 @@
 		<item name="plate shield" chance="2500" />
 		<!-- Heavy Old Tome 2.02% -->
 		<item name="battle shield" chance="1400" />
-		<item name="halberd" chance="730" />
+		<item id="2381" chance="730" /><!-- halberd -->
 		<item name="wolf tooth chain" chance="360" />
 		<item name="dark helmet" chance="230" />
 		<item id="7398" chance="180" /><!-- cyclops trophy -->

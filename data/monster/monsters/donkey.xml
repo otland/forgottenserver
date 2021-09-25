@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Donkey" nameDescription="a donkey" race="blood" experience="0" speed="150">
 	<health now="45" max="45" />
 	<look type="399" corpse="13509" />

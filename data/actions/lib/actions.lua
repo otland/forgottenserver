@@ -13,7 +13,7 @@ local holeId = { -- usable rope holes, for rope spots see global.lua
 	8567, 8585, 8595, 8596, 8972, 9606, 9625, 13190, 14461, 19519, 21536, 23713,
 	26020
 }
-local holes = {468, 481, 483, 7932, 23712} -- holes opened by shovel
+local holes = {468, 481, 483, 23712} -- holes opened by shovel
 local fruits = {2673, 2674, 2675, 2676, 2677, 2678, 2679, 2680, 2681, 2682, 2684, 2685, 5097, 8839, 8840, 8841} -- fruits to make decorated cake with knife
 
 function destroyItem(player, target, toPosition)
@@ -112,12 +112,22 @@ function onUsePick(player, item, fromPosition, target, toPosition, isHotkey)
 	if table.contains(groundIds, ground.itemid) and ground.actionid == actionIds.pickHole then
 		ground:transform(392)
 		ground:decay()
+		toPosition:sendMagicEffect(CONST_ME_POFF)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
+		return true
 	end
 
-	return true
+	-- Ice fishing hole
+	if ground.itemid == 7200 then
+		ground:transform(7236)
+		ground:decay()
+		toPosition:sendMagicEffect(CONST_ME_HITAREA)
+		return true
+	end
+
+	return false
 end
 
 function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
@@ -126,31 +136,48 @@ function onUseRope(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if table.contains(ropeSpots, tile:getGround():getId()) or tile:getItemById(14435) then
-		if Tile(toPosition:moveUpstairs()):hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
+	local ground = tile:getGround()
+
+	if ground and table.contains(ropeSpots, ground:getId()) or tile:getItemById(14435) then
+		tile = Tile(toPosition:moveUpstairs())
+		if not tile then
+			return false
+		end
+
+		if tile:hasFlag(TILESTATE_PROTECTIONZONE) and player:isPzLocked() then
 			player:sendCancelMessage(RETURNVALUE_PLAYERISPZLOCKED)
 			return true
 		end
+
 		player:teleportTo(toPosition, false)
 		return true
-	elseif table.contains(holeId, target.itemid) then
+	end
+
+	if table.contains(holeId, target.itemid) then
 		toPosition.z = toPosition.z + 1
 		tile = Tile(toPosition)
-		if tile then
-			local thing = tile:getTopVisibleThing()
-			if thing:isPlayer() then
-				if Tile(toPosition:moveUpstairs()):hasFlag(TILESTATE_PROTECTIONZONE) and thing:isPzLocked() then
-					return false
-				end
-				return thing:teleportTo(toPosition, false)
-			end
-			if thing:isItem() and thing:getType():isMovable() then
-				return thing:moveTo(toPosition:moveUpstairs())
-			end
+		if not tile then
+			return false
 		end
-		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+
+		local thing = tile:getTopVisibleThing()
+		if not thing then
+			return true
+		end
+
+		if thing:isPlayer() then
+			if Tile(toPosition:moveUpstairs()):queryAdd(thing) ~= RETURNVALUE_NOERROR then
+				return false
+			end
+
+			return thing:teleportTo(toPosition, false)
+		elseif thing:isItem() and thing:getType():isMovable() then
+			return thing:moveTo(toPosition:moveUpstairs())
+		end
+
 		return true
 	end
+
 	return false
 end
 
@@ -172,6 +199,10 @@ function onUseShovel(player, item, fromPosition, target, toPosition, isHotkey)
 
 		toPosition.z = toPosition.z + 1
 		tile:relocateTo(toPosition)
+		player:addAchievementProgress("The Undertaker", 500)
+	elseif target.itemid == 7932 then -- large hole
+		target:transform(7933)
+		target:decay()
 		player:addAchievementProgress("The Undertaker", 500)
 	elseif target.itemid == 20230 then -- swamp digging
 		if (player:getStorageValue(PlayerStorageKeys.swampDigging)) <= os.time() then

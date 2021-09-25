@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mutated Bat" nameDescription="a mutated bat" race="blood" experience="615" speed="210">
 	<health now="900" max="900" />
 	<look type="307" corpse="9829" />

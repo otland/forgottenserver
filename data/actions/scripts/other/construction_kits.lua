@@ -1,6 +1,6 @@
 local constructionKits = {
 	[3901] = 1666, [3902] = 1670, [3903] = 1652, [3904] = 1674, [3905] = 1658,
-	[3906] = 3813, [3907] = 3817, [3908] = 1619, [3909] = 12799, [3910] = 2105,
+	[3906] = 3813, [3907] = 3817, [3908] = 1619, [3909] = 2105, [3910] = 12799,
 	[3911] = 1614, [3912] = 3806, [3913] = 3807, [3914] = 3809, [3915] = 1716,
 	[3916] = 1724, [3917] = 1732, [3918] = 1775, [3919] = 1774, [3920] = 1750,
 	[3921] = 3832, [3922] = 2095, [3923] = 2098, [3924] = 2064, [3925] = 2582,
@@ -19,13 +19,16 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false
 	end
 
-	if fromPosition.x == CONTAINER_POSITION then
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
-	elseif not Tile(fromPosition):getHouse() then
-		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may construct this only inside a house.")
+	local tile = Tile(item:getPosition())
+	if tile and tile:getHouse() then
+		if fromPosition.x ~= CONTAINER_POSITION or item:getParent():getId() == ITEM_BROWSEFIELD then
+			item:transform(kit)
+			fromPosition:sendMagicEffect(CONST_ME_POFF)
+		else
+			player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
+		end
 	else
-		item:transform(kit)
-		fromPosition:sendMagicEffect(CONST_ME_POFF)
+		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may construct this only inside a house.")
 	end
 	return true
 end

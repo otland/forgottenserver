@@ -39,6 +39,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"defense", ITEM_PARSE_DEFENSE},
 	{"extradef", ITEM_PARSE_EXTRADEF},
 	{"attack", ITEM_PARSE_ATTACK},
+	{"attackspeed", ITEM_PARSE_ATTACK_SPEED},
 	{"rotateto", ITEM_PARSE_ROTATETO},
 	{"moveable", ITEM_PARSE_MOVEABLE},
 	{"movable", ITEM_PARSE_MOVEABLE},
@@ -214,7 +215,6 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"mead", FLUID_MEAD},
 };
 
-
 Items::Items()
 {
 	items.reserve(30000);
@@ -226,6 +226,7 @@ void Items::clear()
 	items.clear();
 	clientIdToServerIdMap.clear();
 	nameToItems.clear();
+	inventory.clear();
 }
 
 bool Items::reload()
@@ -331,10 +332,6 @@ bool Items::loadFromOtb(const std::string& file)
 
 					if (!stream.read<uint16_t>(serverId)) {
 						return false;
-					}
-
-					if (serverId > 30000 && serverId < 30100) {
-						serverId -= 30000;
 					}
 					break;
 				}
@@ -541,12 +538,7 @@ void Items::buildInventoryList()
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
-	if (id > 30000 && id < 30100) {
-		id -= 30000;
-
-		if (id >= items.size()) {
-			items.resize(id + 1);
-		}
+	if (id > 0 && id < 100) {
 		ItemType& iType = items[id];
 		iType.id = id;
 	}
@@ -563,7 +555,12 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 	it.name = itemNode.attribute("name").as_string();
 
-	nameToItems.insert({ asLowerCaseString(it.name), id });
+	if (!it.name.empty()) {
+		std::string lowerCaseName = asLowerCaseString(it.name);
+		if (nameToItems.find(lowerCaseName) == nameToItems.end()) {
+			nameToItems.emplace(std::move(lowerCaseName), id);
+		}
+	}
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
@@ -644,6 +641,15 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ATTACK: {
 					it.attack = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_ATTACK_SPEED: {
+					it.attackSpeed = pugi::cast<uint32_t>(valueAttribute.value());
+					if (it.attackSpeed > 0 && it.attackSpeed < 100) {
+						std::cout << "[Warning - Items::parseItemNode] AttackSpeed lower than 100 for item: " << it.id << std::endl;
+						it.attackSpeed = 100;
+					}
 					break;
 				}
 
@@ -1235,12 +1241,12 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						}
 
 						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
-						// initDamage = 0 (dont override initDamage with damage, dont set any initDamage)
+						// initDamage = 0 (don't override initDamage with damage, don't set any initDamage)
 						// initDamage = -1 (undefined, override initDamage with damage)
 						if (initDamage > 0 || initDamage < -1) {
 							conditionDamage->setInitDamage(-initDamage);
-						} else if (initDamage == -1 && damage != 0) {
-							conditionDamage->setInitDamage(damage);
+						} else if (initDamage == -1 && start != 0) {
+							conditionDamage->setInitDamage(start);
 						}
 
 						conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
@@ -1407,8 +1413,11 @@ const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
-	auto result = nameToItems.find(asLowerCaseString(name));
+	if (name.empty()) {
+		return 0;
+	}
 
+	auto result = nameToItems.find(asLowerCaseString(name));
 	if (result == nameToItems.end())
 		return 0;
 

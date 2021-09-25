@@ -444,7 +444,7 @@ if Modules == nil then
 		if player:isPremium() or not shop_premium[cid] then
 			if not player:removeTotalMoney(cost) then
 				npcHandler:say("You do not have enough money!", cid)
-			elseif player:isPzLocked(cid) then
+			elseif player:isPzLocked() then
 				npcHandler:say("Get out of there with this blood.", cid)
 			else
 				npcHandler:say("It was a pleasure doing business with you.", cid)
@@ -471,7 +471,7 @@ if Modules == nil then
 			return false
 		end
 		local parentParameters = node:getParent():getParameters()
-		local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
 		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_DECLINE), parseInfo)
 		module.npcHandler:say(msg, cid)
 		module.npcHandler:resetNpc(cid)
@@ -599,9 +599,13 @@ if Modules == nil then
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
 			else
 				if alreadyParsedIds[itemid] then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+					if table.contains(alreadyParsedIds[itemid], subType or -1) then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+					else
+						table.insert(alreadyParsedIds[itemid], subType or -1)
+					end
 				else
-					alreadyParsedIds[itemid] = true
+					alreadyParsedIds[itemid] = {subType or -1}
 				end
 			end
 
@@ -670,9 +674,13 @@ if Modules == nil then
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Item id missing (or invalid) for parameter item:", item)
 			else
 				if alreadyParsedIds[itemid] then
-					print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+					if table.contains(alreadyParsedIds[itemid], subType or -1) then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Found duplicated item:", item)
+					else
+						table.insert(alreadyParsedIds[itemid], subType or -1)
+					end
 				else
-					alreadyParsedIds[itemid] = true
+					alreadyParsedIds[itemid] = {subType or -1}
 				end
 			end
 
@@ -809,6 +817,9 @@ if Modules == nil then
 			if shopItem == nil then
 				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = cost, sell = -1, subType = itemSubType, name = realName or ItemType(itemid):getName()}
 			else
+				if cost < shopItem.sell then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (".. shopItem.name ..")")
+				end
 				shopItem.buy = cost
 			end
 		end
@@ -904,6 +915,9 @@ if Modules == nil then
 			if shopItem == nil then
 				self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = -1, sell = cost, subType = itemSubType, name = realName or ItemType(itemid):getName()}
 			else
+				if shopItem.buy > -1 and cost > shopItem.buy then
+					print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (".. shopItem.name ..")")
+				end
 				shopItem.sell = cost
 			end
 		end
@@ -1060,13 +1074,13 @@ if Modules == nil then
 		end
 
 		if itemWindow[1] == nil then
-			local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+			local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
 			local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_NOSHOP), parseInfo)
 			module.npcHandler:say(msg, cid)
 			return true
 		end
 
-		local parseInfo = { [TAG_PLAYERNAME] = Player(cid):getName() }
+		local parseInfo = {[TAG_PLAYERNAME] = Player(cid):getName()}
 		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_SENDTRADE), parseInfo)
 		openShopWindow(cid, itemWindow,
 			function(cid, itemid, subType, amount, ignoreCap, inBackpacks) module.npcHandler:onBuy(cid, itemid, subType, amount, ignoreCap, inBackpacks) end,
@@ -1267,7 +1281,7 @@ if Modules == nil then
 	function VoiceModule:callbackOnThink()
 		if self.lastVoice < os.time() then
 			self.lastVoice = os.time() + self.timeout
-			if math.random(100) <= self.chance  then
+			if math.random(100) <= self.chance then
 				local voice = self.voices[math.random(self.voiceCount)]
 				Npc():say(voice.text, voice.talktype)
 			end

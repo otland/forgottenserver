@@ -86,44 +86,6 @@
 	<action itemid="26191" script="other/food.lua" />
 	<action itemid="26201" script="other/food.lua" />
 
-	<!-- Doors -->
-	<action fromid="1209" toid="1214" script="other/doors.lua" />
-	<action fromid="1219" toid="1262" script="other/doors.lua" />
-	<action fromid="1539" toid="1542" script="other/doors.lua" />
-	<action fromid="2086" toid="2092" script="other/doors.lua" />
-	<action fromid="3535" toid="3552" script="other/doors.lua" />
-	<action fromid="4913" toid="4918" script="other/doors.lua" />
-	<action fromid="5082" toid="5085" script="other/doors.lua" />
-	<action fromid="5098" toid="5145" script="other/doors.lua" />
-	<action fromid="5278" toid="5295" script="other/doors.lua" />
-	<action fromid="5515" toid="5518" script="other/doors.lua" />
-	<action fromid="5732" toid="5737" script="other/doors.lua" />
-	<action fromid="5745" toid="5749" script="other/doors.lua" />
-	<action fromid="6192" toid="6209" script="other/doors.lua" />
-	<action fromid="6249" toid="6266" script="other/doors.lua" />
-	<action fromid="6795" toid="6802" script="other/doors.lua" />
-	<action fromid="6891" toid="6908" script="other/doors.lua" />
-	<action fromid="7033" toid="7050" script="other/doors.lua" />
-	<action fromid="7054" toid="7057" script="other/doors.lua" />
-	<action fromid="8541" toid="8558" script="other/doors.lua" />
-	<action fromid="9165" toid="9184" script="other/doors.lua" />
-	<action fromid="9267" toid="9284" script="other/doors.lua" />
-	<action itemid="10032" script="other/doors.lua" />
-	<action fromid="10268" toid="10285" script="other/doors.lua" />
-	<action fromid="10468" toid="10486" script="other/doors.lua" />
-	<action fromid="10775" toid="10777" script="other/doors.lua" />
-	<action fromid="10780" toid="10786" script="other/doors.lua" />
-	<action fromid="10789" toid="10792" script="other/doors.lua" />
-	<action fromid="12092" toid="12105" script="other/doors.lua" />
-	<action fromid="12188" toid="12190" script="other/doors.lua" />
-	<action fromid="12193" toid="12199" script="other/doors.lua" />
-	<action fromid="12202" toid="12205" script="other/doors.lua" />
-	<action fromid="13020" toid="13023" script="other/doors.lua" />
-	<action fromid="17235" toid="17238" script="other/doors.lua" />
-	<action fromid="18208" toid="18209" script="other/doors.lua" />
-	<action fromid="19840" toid="19857" script="other/doors.lua" />
-	<action fromid="19980" toid="19997" script="other/doors.lua" />
-
 	<!-- Music -->
 	<action fromid="2070" toid="2085" script="other/music.lua" />
 	<action itemid="2332" script="other/music.lua" />
@@ -177,21 +139,6 @@
 	<action itemid="8704" script="other/potions.lua" />
 	<action fromid="26029" toid="26031" script="other/potions.lua" />
 
-	<!-- Windows -->
-	<action fromid="5303" toid="5304" script="other/windows.lua" />
-	<action fromid="6436" toid="6447" script="other/windows.lua" />
-	<action fromid="6448" toid="6449" script="other/windows.lua" />
-	<action fromid="6450" toid="6473" script="other/windows.lua" />
-	<action fromid="6788" toid="6791" script="other/windows.lua" />
-	<action fromid="7025" toid="7032" script="other/windows.lua" />
-	<action fromid="10264" toid="10267" script="other/windows.lua" />
-	<action fromid="10488" toid="10491" script="other/windows.lua" />
-	<action fromid="19427" toid="19428" script="other/windows.lua" />
-	<action fromid="19440" toid="19441" script="other/windows.lua" />
-	<action fromid="19443" toid="19450" script="other/windows.lua" />
-	<action fromid="19974" toid="19975" script="other/windows.lua" />
-	<action fromid="20180" toid="20185" script="other/windows.lua" />
-
 	<!-- Other -->
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="486" script="other/snow_heap.lua" />
@@ -224,7 +171,6 @@
 	<action itemid="5543" script="other/teleport.lua" />
 	<action fromid="5792" toid="5797" script="other/die.lua" />
 	<action itemid="6092" script="other/watch.lua" />
-	<action fromid="6570" toid="6571" script="other/surprise_bag.lua" />
 	<action itemid="6576" script="other/fireworks_rocket.lua" />
 	<action itemid="6578" script="other/party_hat.lua" />
 	<action itemid="7552" script="other/large_seashell.lua" />

@@ -29,6 +29,8 @@
 #include "ban.h"
 #include "game.h"
 
+#include <fmt/format.h>
+
 extern ConfigManager g_config;
 extern Game g_game;
 
@@ -70,10 +72,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	if (!motd.empty()) {
 		//Add MOTD
 		output->addByte(0x14);
-
-		std::ostringstream ss;
-		ss << g_game.getMotdNum() << "\n" << motd;
-		output->addString(ss.str());
+		output->addString(fmt::format("{:d}\n{:s}", g_game.getMotdNum(), motd));
 	}
 
 	//Add session key
@@ -153,9 +152,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	if (version <= 760) {
-		std::ostringstream ss;
-		ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
-		disconnectClient(ss.str(), version);
+		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
 		return;
 	}
 
@@ -173,9 +170,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	setXTEAKey(std::move(key));
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		std::ostringstream ss;
-		ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
-		disconnectClient(ss.str(), version);
+		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
 		return;
 	}
 
@@ -200,9 +195,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 			banInfo.reason = "(none)";
 		}
 
-		std::ostringstream ss;
-		ss << "Your IP has been banned until " << formatDateShort(banInfo.expiresAt) << " by " << banInfo.bannedBy << ".\n\nReason specified:\n" << banInfo.reason;
-		disconnectClient(ss.str(), version);
+		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason), version);
 		return;
 	}
 
@@ -221,7 +214,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	// read authenticator token and stay logged in flag from last 128 bytes
 	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
 	if (!Protocol::RSA_decrypt(msg)) {
-		disconnectClient("Invalid authentification token.", version);
+		disconnectClient("Invalid authentication token.", version);
 		return;
 	}
 

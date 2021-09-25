@@ -135,11 +135,9 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 	return result.second;
 }
 
-bool Weapons::registerLuaEvent(Weapon* event)
+bool Weapons::registerLuaEvent(Weapon* weapon)
 {
-	Weapon_ptr weapon{ event };
-	weapons[weapon->getID()] = weapon.release();
-
+	weapons[weapon->getID()] = weapon;
 	return true;
 }
 
@@ -385,7 +383,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 	} else {
 		CombatDamage damage;
 		WeaponType_t weaponType = item->getWeaponType();
-		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE) {
+		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE || weaponType == WEAPON_WAND) {
 			damage.origin = ORIGIN_RANGED;
 		} else {
 			damage.origin = ORIGIN_MELEE;

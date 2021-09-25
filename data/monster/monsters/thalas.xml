@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Thalas" nameDescription="Thalas" race="undead" experience="2950" speed="320">
 	<health now="4100" max="4100" />
 	<look type="90" corpse="6025" />
@@ -62,7 +62,9 @@
 	</voices>
 	<loot>
 		<item name="cobrafang dagger" chance="100000" />
-		<item name="gold coin" countmax="238" chance="91000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="38" chance="30000" />
 		<item name="poison dagger" chance="21000" />
 		<item name="small emerald" countmax="3" chance="9000" />
 		<item name="great health potion" chance="8200" />

@@ -130,7 +130,17 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (it->second.executeSay(player, words, param, type)) {
+		if (it->second.fromLua) {
+			if (it->second.getNeedAccess() && !player->getGroup()->access) {
+				return TALKACTION_CONTINUE;
+			}
+
+			if (player->getAccountType() < it->second.getRequiredAccountType()) {
+				return TALKACTION_CONTINUE;
+			}
+		}
+
+		if (it->second.executeSay(player, talkactionWords, param, type)) {
 			return TALKACTION_CONTINUE;
 		} else {
 			return TALKACTION_BREAK;
