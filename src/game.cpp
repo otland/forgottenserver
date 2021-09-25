@@ -3562,16 +3562,18 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		type = TALKTYPE_PRIVATE_FROM;
 	}
 
-	uint32_t minimumLevel = g_config.getNumber(ConfigManager::MINIMUM_LEVEL_TO_SEND_PRIVATE);
-	if (player->getLevel() < minimumLevel && (!player->isAccessPlayer() || !player->hasFlag(PlayerFlag_IgnoreSendPrivateCheck))) {
-		if (g_config.getBoolean(ConfigManager::PREMIUM_TO_SEND_PRIVATE)) {
-			if (!player->isPremium()) {
-				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d} or have a premium account.", minimumLevel));
+	if (!player->isAccessPlayer() && !player->hasFlag(PlayerFlag_IgnoreSendPrivateCheck)) {
+		uint32_t minimumLevel = g_config.getNumber(ConfigManager::MINIMUM_LEVEL_TO_SEND_PRIVATE);
+		if (player->getLevel() < minimumLevel) {
+			if (g_config.getBoolean(ConfigManager::PREMIUM_TO_SEND_PRIVATE)) {
+				if (!player->isPremium()) {
+					player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d} or have a premium account.", minimumLevel));
+					return false;
+				}
+			} else {
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d}.", minimumLevel));
 				return false;
 			}
-		} else {
-			player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d}.", minimumLevel));
-			return false;
 		}
 	}
 
