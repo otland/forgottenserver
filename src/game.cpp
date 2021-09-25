@@ -3523,8 +3523,8 @@ bool Game::playerYell(Player* player, const std::string& text)
 		return false;
 	}
 
-	uint32_t minimumLevel = g_config.getNumber(ConfigManager::YELL_MINIMUM_LEVEL);
 	if (!player->isAccessPlayer() && !player->hasFlag(PlayerFlag_IgnoreYellCheck)) {
+		uint32_t minimumLevel = g_config.getNumber(ConfigManager::YELL_MINIMUM_LEVEL);
 		if (player->getLevel() < minimumLevel) {
 			if (g_config.getBoolean(ConfigManager::YELL_ALLOW_PREMIUM)) {
 				if (!player->isPremium()) {
