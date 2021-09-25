@@ -223,6 +223,19 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->setArea(area);
 		}
 
+		if ((attr = node.attribute("ring"))) {
+			int32_t ring = pugi::cast<int32_t>(attr.value());
+
+			//target spell
+			if ((attr = node.attribute("target"))) {
+				needTarget = attr.as_bool();
+			}
+
+			AreaCombat* area = new AreaCombat();
+			area->setupAreaRing(ring);
+			combat->setArea(area);
+		}
+
 		std::string tmpName = asLowerCaseString(name);
 
 		if (tmpName == "melee") {
@@ -599,6 +612,12 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		if (spell->radius > 0) {
 			AreaCombat* area = new AreaCombat();
 			area->setupArea(spell->radius);
+			combat->setArea(area);
+		}
+
+		if (spell->ring > 0) {
+			AreaCombat* area = new AreaCombat();
+			area->setupAreaRing(spell->ring);
 			combat->setArea(area);
 		}
 
