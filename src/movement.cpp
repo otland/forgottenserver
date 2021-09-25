@@ -953,9 +953,8 @@ uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position
 {
 	if (scripted) {
 		return executeStep(creature, item, pos);
-	} else {
-		return stepFunction(creature, item, pos);
 	}
+	return stepFunction(creature, item, pos);
 }
 
 bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
@@ -992,9 +991,8 @@ ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool 
 			return RETURNVALUE_CANNOTBEDRESSED;
 		}
 		return equipFunction(this, player, item, slot, isCheck);
-	} else {
-		return equipFunction(this, player, item, slot, isCheck);
 	}
+	return equipFunction(this, player, item, slot, isCheck);
 }
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)
@@ -1025,9 +1023,8 @@ uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& p
 {
 	if (scripted) {
 		return executeAddRemItem(item, tileItem, pos);
-	} else {
-		return moveFunction(item, tileItem, pos);
 	}
+	return moveFunction(item, tileItem, pos);
 }
 
 bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& pos)
