@@ -3557,7 +3557,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 	}
 
 	bool belowGamemaster = player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER;
-	if (type == TALKTYPE_PRIVATE_RED_TO && (player->hasFlag(PlayerFlag_CanTalkRedPrivate) || !belowGamemaster) {
+	if (type == TALKTYPE_PRIVATE_RED_TO && (player->hasFlag(PlayerFlag_CanTalkRedPrivate) || !belowGamemaster)) {
 		type = TALKTYPE_PRIVATE_RED_FROM;
 	} else {
 		type = TALKTYPE_PRIVATE_FROM;
