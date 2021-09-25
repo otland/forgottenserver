@@ -3556,14 +3556,15 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		return false;
 	}
 
-	if (type == TALKTYPE_PRIVATE_RED_TO && (player->hasFlag(PlayerFlag_CanTalkRedPrivate) || player->getAccountType() >= ACCOUNT_TYPE_GAMEMASTER)) {
+	bool belowGamemaster = player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER;
+	if (type == TALKTYPE_PRIVATE_RED_TO && (player->hasFlag(PlayerFlag_CanTalkRedPrivate) || !belowGamemaster) {
 		type = TALKTYPE_PRIVATE_RED_FROM;
 	} else {
 		type = TALKTYPE_PRIVATE_FROM;
 	}
 
 	uint32_t minimumLevel = g_config.getNumber(ConfigManager::MINIMUM_LEVEL_TO_SEND_PRIVATE);
-	if (player->getLevel() < minimumLevel && (!player->getGroup()->access || player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER)) {
+	if (player->getLevel() < minimumLevel && (!player->getGroup()->access || belowGamemaster)) {
 		if (g_config.getBoolean(ConfigManager::PREMIUM_TO_SEND_PRIVATE)) {
 			if (!player->isPremium()) {
 				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d} or have a premium account.", minimumLevel));
