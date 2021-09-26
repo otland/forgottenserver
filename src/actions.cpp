@@ -211,37 +211,45 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 bool Actions::registerLuaEvent(Action* event)
 {
 	Action_ptr action{ event };
-	if (!action->getItemIdRange().empty()) {
-		const auto& range = action->getItemIdRange();
-		for (auto id : range) {
-			auto result = useItemMap.emplace(id, *action);
-			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id << " in range from id: " << range.front() << ", to id: " << range.back() << std::endl;
-			}
+
+	auto itemIdRange = action->borrowItemIdRange();
+	auto uniqueIdRange = action->borrowUniqueIdRange();
+	auto actionIdRange = action->borrowActionIdRange();
+
+	bool success = false;
+
+	for (auto itemId : itemIdRange) {
+		auto result = useItemMap.emplace(itemId, std::move(*action));
+		if (!result.second) {
+			std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << itemId << " in range from id: " << itemIdRange.at(0) << ", to id: " << itemIdRange.at(itemIdRange.size() - 1) << std::endl;
+			continue;
 		}
-		return true;
-	} else if (!action->getUniqueIdRange().empty()) {
-		const auto& range = action->getUniqueIdRange();
-		for (auto id : range) {
-			auto result = uniqueItemMap.emplace(id, *action);
-			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << id << " in range from uid: " << range.front() << ", to uid: " << range.back() << std::endl;
-			}
-		}
-		return true;
-	} else if (!action->getActionIdRange().empty()) {
-		const auto& range = action->getActionIdRange();
-		for (auto id : range) {
-			auto result = actionItemMap.emplace(id, *action);
-			if (!result.second) {
-				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << id << " in range from aid: " << range.front() << ", to aid: " << range.back() << std::endl;
-			}
-		}
-		return true;
+		success = true;
 	}
 
-	std::cout << "[Warning - Actions::registerLuaEvent] There is no id / aid / uid set for this event" << std::endl;
-	return false;
+	for (auto uniqueId : uniqueIdRange) {
+		auto result = uniqueItemMap.emplace(uniqueId, std::move(*action));
+		if (!result.second) {
+			std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << uniqueId << " in range from uid: " << uniqueIdRange.at(0) << ", to uid: " << uniqueIdRange.at(uniqueIdRange.size() - 1) << std::endl;
+			continue;
+		}
+		success = true;
+	}
+
+	for (auto actionId : actionIdRange) {
+		auto result = actionItemMap.emplace(actionId, std::move(*action));
+		if (!result.second) {
+			std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << actionId << " in range from aid: " << actionIdRange.at(0) << ", to aid: " << actionIdRange.at(actionIdRange.size() - 1) << std::endl;
+			continue;
+		}
+		success = true;
+	}
+
+	if (!success) {
+		std::cout << "[Warning - Actions::registerLuaEvent] There is no id / aid / uid set for this event" << std::endl;
+	}
+
+	return success;
 }
 
 ReturnValue Actions::canUse(const Player* player, const Position& pos)
