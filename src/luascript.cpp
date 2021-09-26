@@ -16087,15 +16087,13 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 			ItemType& it = Item::items.getItemType(id);
 			moveevent->setSlot(it.slotPosition);
 		}
+
 		if (!moveevent->isScripted()) {
 			pushBoolean(L, g_moveEvents->registerLuaFunction(moveevent));
 			return 1;
 		}
+
 		pushBoolean(L, g_moveEvents->registerLuaEvent(moveevent));
-		moveevent->clearItemIdRange();
-		moveevent->clearActionIdRange();
-		moveevent->clearUniqueIdRange();
-		moveevent->clearPosList();
 	} else {
 		lua_pushnil(L);
 	}
