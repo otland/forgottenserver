@@ -221,34 +221,28 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 		}
 	}
 
-	if (moveEvent->getItemIdRange().size() > 0) {
-		if (moveEvent->getItemIdRange().size() == 1) {
-			uint32_t id = moveEvent->getItemIdRange().at(0);
-			addEvent(*moveEvent, id, itemIdMap);
-			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-				ItemType& it = Item::items.getItemType(id);
-				it.wieldInfo = moveEvent->getWieldInfo();
-				it.minReqLevel = moveEvent->getReqLevel();
-				it.minReqMagicLevel = moveEvent->getReqMagLv();
-				it.vocationString = moveEvent->getVocationString();
-			}
-		} else {
-			uint32_t iterId = 0;
-			while (++iterId < moveEvent->getItemIdRange().size()) {
-				if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-					ItemType& it = Item::items.getItemType(moveEvent->getItemIdRange().at(iterId));
-					it.wieldInfo = moveEvent->getWieldInfo();
-					it.minReqLevel = moveEvent->getReqLevel();
-					it.minReqMagicLevel = moveEvent->getReqMagLv();
-					it.vocationString = moveEvent->getVocationString();
-				}
-				addEvent(*moveEvent, moveEvent->getItemIdRange().at(iterId), itemIdMap);
-			}
-		}
-	} else {
-		return false;
+	bool success = false;
+	auto itemIdRange = moveEvent->borrowItemIdRange();
+
+	if ((eventType == MOVE_EVENT_EQUIP || eventType == MOVE_EVENT_DEEQUIP) && moveEvent->getSlot() == SLOTP_WHEREEVER) {
+		uint32_t id = itemIdRange.at(0);
+		ItemType& it = Item::items.getItemType(id);
+		moveEvent->setSlot(it.slotPosition);
 	}
-	return true;
+
+	for (auto itemId : itemIdRange) {
+		success = true;
+		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+			ItemType& it = Item::items.getItemType(itemId);
+			it.wieldInfo = moveEvent->getWieldInfo();
+			it.minReqLevel = moveEvent->getReqLevel();
+			it.minReqMagicLevel = moveEvent->getReqMagLv();
+			it.vocationString = moveEvent->getVocationString();
+		}
+		addEvent(std::move(*moveEvent), itemId, itemIdMap);
+	}
+
+	return success;
 }
 
 bool MoveEvents::registerLuaEvent(MoveEvent* event)
@@ -270,66 +264,46 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 			}
 		}
 	}
+	auto itemIdRange = moveEvent->borrowItemIdRange();
+	auto actionIdRange = moveEvent->borrowActionIdRange();
+	auto uniqueIdRange = moveEvent->borrowUniqueIdRange();
+	auto posList = moveEvent->borrowPosList();
+	bool success = false;
 
-	if (moveEvent->getItemIdRange().size() > 0) {
-		if (moveEvent->getItemIdRange().size() == 1) {
-			uint32_t id = moveEvent->getItemIdRange().at(0);
-			addEvent(*moveEvent, id, itemIdMap);
-			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-				ItemType& it = Item::items.getItemType(id);
-				it.wieldInfo = moveEvent->getWieldInfo();
-				it.minReqLevel = moveEvent->getReqLevel();
-				it.minReqMagicLevel = moveEvent->getReqMagLv();
-				it.vocationString = moveEvent->getVocationString();
-			}
-		} else {
-			auto v = moveEvent->getItemIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-					ItemType& it = Item::items.getItemType(*i);
-					it.wieldInfo = moveEvent->getWieldInfo();
-					it.minReqLevel = moveEvent->getReqLevel();
-					it.minReqMagicLevel = moveEvent->getReqMagLv();
-					it.vocationString = moveEvent->getVocationString();
-				}
-				addEvent(*moveEvent, *i, itemIdMap);
-			}
-		}
-	} else if (moveEvent->getActionIdRange().size() > 0) {
-		if (moveEvent->getActionIdRange().size() == 1) {
-			int32_t id = moveEvent->getActionIdRange().at(0);
-			addEvent(*moveEvent, id, actionIdMap);
-		} else {
-			auto v = moveEvent->getActionIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				addEvent(*moveEvent, *i, actionIdMap);
-			}
-		}
-	} else if (moveEvent->getUniqueIdRange().size() > 0) {
-		if (moveEvent->getUniqueIdRange().size() == 1) {
-			int32_t id = moveEvent->getUniqueIdRange().at(0);
-			addEvent(*moveEvent, id, uniqueIdMap);
-		} else {
-			auto v = moveEvent->getUniqueIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				addEvent(*moveEvent, *i, uniqueIdMap);
-			}
-		}
-	} else if (moveEvent->getPosList().size() > 0) {
-		if (moveEvent->getPosList().size() == 1) {
-			Position pos = moveEvent->getPosList().at(0);
-			addEvent(*moveEvent, pos, positionMap);
-		} else {
-			auto v = moveEvent->getPosList();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				addEvent(*moveEvent, *i, positionMap);
-			}
-		}
-	} else {
-		return false;
+	if ((eventType == MOVE_EVENT_EQUIP || eventType == MOVE_EVENT_DEEQUIP) && moveEvent->getSlot() == SLOTP_WHEREEVER) {
+		uint32_t id = itemIdRange.at(0);
+		ItemType& it = Item::items.getItemType(id);
+		moveEvent->setSlot(it.slotPosition);
 	}
 
-	return true;
+	for (auto itemId : itemIdRange) {
+		success = true;
+		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+			ItemType& it = Item::items.getItemType(itemId);
+			it.wieldInfo = moveEvent->getWieldInfo();
+			it.minReqLevel = moveEvent->getReqLevel();
+			it.minReqMagicLevel = moveEvent->getReqMagLv();
+			it.vocationString = moveEvent->getVocationString();
+		}
+		addEvent(std::move(*moveEvent), itemId, itemIdMap);
+	}
+
+	for (auto actionId : actionIdRange) {
+		success = true;
+		addEvent(std::move(*moveEvent), actionId, actionIdMap);
+	}
+
+	for (auto uniqueId : uniqueIdRange) {
+		success = true;
+		addEvent(std::move(*moveEvent), uniqueId, uniqueIdMap);
+	}
+
+	for (auto pos : posList) {
+		success = true;
+		addEvent(std::move(*moveEvent), pos, positionMap);
+	}
+
+	return success;
 }
 
 void MoveEvents::addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map)
