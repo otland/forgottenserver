@@ -22,12 +22,12 @@
 #include "depotlocker.h"
 
 DepotLocker::DepotLocker(uint16_t type) :
-	Container(type, 3), depotId(0) {}
+	Container(type, 3), lockerId(0) {}
 
 Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_DEPOT_ID) {
-		if (!propStream.read<uint16_t>(depotId)) {
+		if (!propStream.read<uint16_t>(lockerId)) {
 			return ATTR_READ_ERROR;
 		}
 		return ATTR_READ_CONTINUE;

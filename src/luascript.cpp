@@ -3596,7 +3596,7 @@ int LuaScriptInterface::luaGetLockerId(lua_State* L)
 		return 1;
 	}
 
-	lua_pushnumber(L, depotLocker->getDepotId());
+	lua_pushnumber(L, depotLocker->getLockerId());
 	return 1;
 }
 
