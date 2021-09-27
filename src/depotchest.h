@@ -21,6 +21,7 @@
 #define FS_DEPOTCHEST_H_6538526014684E3DBC92CC12815B6766
 
 #include "container.h"
+#include "player.h"
 
 class DepotChest final : public Container
 {
