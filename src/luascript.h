@@ -443,6 +443,7 @@ class LuaScriptInterface
 		static int luaDoPlayerAddItem(lua_State* L);
 
 		//get item info
+		static int luaGetLockerId(lua_State* L);
 		static int luaGetDepotId(lua_State* L);
 
 		//get world info
@@ -455,6 +456,7 @@ class LuaScriptInterface
 		static int luaGetSubTypeName(lua_State* L);
 
 		//type validation
+		static int luaIsLocker(lua_State* L);
 		static int luaIsDepot(lua_State* L);
 		static int luaIsMoveable(lua_State* L);
 		static int luaIsValidUID(lua_State* L);

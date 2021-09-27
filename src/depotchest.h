@@ -32,9 +32,24 @@ class DepotChest final : public Container
 			maxDepotItems = maxitems;
 		}
 
+		uint16_t getDepotId() const {
+			return depotId;
+		}
+		void setDepotId(uint16_t depotId) {
+			this->depotId = depotId;
+		}
+
+		Player* getOwner() const {
+			return owner;
+		}
+		void setOwner(Player* owner) {
+			this->owner = owner;
+		}
+
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature* actor = nullptr) const override;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
@@ -50,7 +65,10 @@ class DepotChest final : public Container
 		}
 
 	private:
+		uint16_t depotId;
 		uint32_t maxDepotItems;
+
+		Player* owner;
 };
 
 #endif

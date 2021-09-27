@@ -42,11 +42,11 @@ class DepotLocker final : public Container
 		//serialization
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
-		uint16_t getDepotId() const {
-			return depotId;
+		uint16_t getLockerId() const {
+			return lockerId;
 		}
-		void setDepotId(uint16_t depotId) {
-			this->depotId = depotId;
+		void setLockerId(uint16_t lockerId) {
+			this->lockerId = lockerId;
 		}
 
 		//cylinder implementations
@@ -61,7 +61,7 @@ class DepotLocker final : public Container
 		}
 
 	private:
-		uint16_t depotId;
+		uint16_t lockerId;
 };
 
 #endif

@@ -1278,7 +1278,7 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 	toCylinder = toCylinder->queryDestination(index, *item, &toItem, flags);
 
 	//check if we can add this item
-	ReturnValue ret = toCylinder->queryAdd(index, *item, item->getItemCount(), flags);
+	ReturnValue ret = toCylinder->queryAdd(index, *item, item->getItemCount(), flags, dynamic_cast<Creature*>(toCylinder));
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1369,7 +1369,7 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 	}
 
 	//check if we can remove this item
-	ReturnValue ret = cylinder->queryRemove(*item, count, flags | FLAG_IGNORENOTMOVEABLE);
+	ReturnValue ret = cylinder->queryRemove(*item, count, flags | FLAG_IGNORENOTMOVEABLE, dynamic_cast<Creature*>(cylinder));
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}

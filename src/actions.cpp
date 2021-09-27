@@ -393,11 +393,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		Container* openContainer;
 
 		//depot container
-		if (DepotLocker* depot = container->getDepotLocker()) {
-			DepotLocker* myDepotLocker = player->getDepotLocker(depot->getDepotId());
-			myDepotLocker->setParent(depot->getParent()->getTile());
+		if (DepotLocker* depotLocker = container->getDepotLocker()) {
+			DepotLocker* myDepotLocker = player->getDepotLocker(depotLocker->getLockerId());
+			myDepotLocker->setParent(depotLocker->getParent()->getTile());
 			openContainer = myDepotLocker;
-			player->setLastDepotId(depot->getDepotId());
 		} else {
 			openContainer = container;
 		}

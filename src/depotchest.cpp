@@ -54,7 +54,26 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 		}
 	}
 
-	return Container::queryAdd(index, thing, count, flags, actor);
+	ReturnValue ret = Container::queryAdd(index, thing, count, flags, actor);
+	if (ret == RETURNVALUE_NOERROR) {
+		if (owner) {
+			owner->setLastDepotId(depotId);
+		}
+	}
+
+	return ret;
+}
+
+ReturnValue DepotChest::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */) const
+{
+	ReturnValue ret = Container::queryRemove(thing, count, flags, actor);
+	if (ret == RETURNVALUE_NOERROR) {
+		if (owner) {
+			owner->setLastDepotId(depotId);
+		}
+	}
+
+	return ret;
 }
 
 void DepotChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)

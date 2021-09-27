@@ -1005,6 +1005,9 @@ void LuaScriptInterface::registerFunctions()
 	//isValidUID(uid)
 	lua_register(luaState, "isValidUID", LuaScriptInterface::luaIsValidUID);
 
+	//isLocker(uid)
+	lua_register(luaState, "isLocker", LuaScriptInterface::luaIsLocker);
+
 	//isDepot(uid)
 	lua_register(luaState, "isDepot", LuaScriptInterface::luaIsDepot);
 
@@ -1013,6 +1016,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//doAddContainerItem(uid, itemid, <optional> count/subtype)
 	lua_register(luaState, "doAddContainerItem", LuaScriptInterface::luaDoAddContainerItem);
+
+	//getLockerId(uid)
+	lua_register(luaState, "getLockerId", LuaScriptInterface::luaGetLockerId);
 
 	//getDepotId(uid)
 	lua_register(luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
@@ -3481,11 +3487,19 @@ int LuaScriptInterface::luaIsValidUID(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaIsLocker(lua_State* L)
+{
+	//isLocker(uid)
+	Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
+	pushBoolean(L, container && container->getDepotLocker());
+	return 1;
+}
+
 int LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	//isDepot(uid)
 	Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
-	pushBoolean(L, container && container->getDepotLocker());
+	pushBoolean(L, container && container->getDepotChest());
 	return 1;
 }
 
@@ -3563,6 +3577,29 @@ int LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGetLockerId(lua_State* L)
+{
+	//getLockerId(uid)
+	uint32_t uid = getNumber<uint32_t>(L, -1);
+
+	Container* container = getScriptEnv()->getContainerByUID(uid);
+	if (!container) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	DepotLocker* depotLocker = container->getDepotLocker();
+	if (!depotLocker) {
+		reportErrorFunc(L, "DepotLocker not found");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	lua_pushnumber(L, depotLocker->getDepotId());
+	return 1;
+}
+
 int LuaScriptInterface::luaGetDepotId(lua_State* L)
 {
 	//getDepotId(uid)
@@ -3575,14 +3612,14 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 		return 1;
 	}
 
-	DepotLocker* depotLocker = container->getDepotLocker();
-	if (!depotLocker) {
-		reportErrorFunc(L, "Depot not found");
+	DepotChest* depotChest = container->getDepotChest();
+	if (!depotChest || !depotChest->getOwner()) {
+		reportErrorFunc(L, "DepotChest not found");
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	lua_pushnumber(L, depotLocker->getDepotId());
+	lua_pushnumber(L, depotChest->getDepotId());
 	return 1;
 }
 
@@ -8181,7 +8218,6 @@ int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 	bool autoCreate = getBoolean(L, 3, false);
 	DepotChest* depotChest = player->getDepotChest(depotId, autoCreate);
 	if (depotChest) {
-		player->setLastDepotId(depotId); // FIXME: workaround for #2251
 		pushUserdata<Item>(L, depotChest);
 		setItemMetatable(L, -1, depotChest);
 	} else {

@@ -71,6 +71,10 @@ Player::~Player()
 		it.second->removeInbox(inbox);
 	}
 
+	for (const auto& it : depotChests) {
+		it.second->setOwner(nullptr);
+	}
+
 	inbox->decrementReferenceCounter();
 
 	storeInbox->setParent(nullptr);
@@ -790,22 +794,24 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
+	it->second->setDepotId(depotId);
+	it->second->setOwner(this);
 	return it->second;
 }
 
-DepotLocker* Player::getDepotLocker(uint32_t depotId)
+DepotLocker* Player::getDepotLocker(uint32_t lockerId)
 {
-	auto it = depotLockerMap.find(depotId);
+	auto it = depotLockerMap.find(lockerId);
 	if (it != depotLockerMap.end()) {
 		inbox->setParent(it->second.get());
 		return it->second.get();
 	}
 
-	it = depotLockerMap.emplace(depotId, new DepotLocker(ITEM_LOCKER1)).first;
-	it->second->setDepotId(depotId);
+	it = depotLockerMap.emplace(lockerId, new DepotLocker(ITEM_LOCKER1)).first;
+	it->second->setLockerId(lockerId);
 	it->second->internalAddThing(Item::CreateItem(ITEM_MARKET));
 	it->second->internalAddThing(inbox);
-	it->second->internalAddThing(getDepotChest(depotId, true));
+	it->second->internalAddThing(getDepotChest(lockerId, true));
 	return it->second.get();
 }
 
