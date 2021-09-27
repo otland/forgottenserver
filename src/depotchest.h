@@ -68,6 +68,9 @@ class DepotChest final : public Container
 		Player* getOwner() const {
 			return owner;
 		}
+		void setOwner(Player* owner) {
+			this->owner = owner;
+		}
 
 	private:
 		uint16_t depotId;

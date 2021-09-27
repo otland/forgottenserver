@@ -3628,7 +3628,7 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 	if (DepotLocker* depotLocker = container->getDepotLocker()) {
 		lua_pushnumber(L, depotLocker->getDepotId());
 		return 1;
-	} else if if (DepotChest* depotChest = container->getDepotChest()) {
+	} else if (DepotChest* depotChest = container->getDepotChest()) {
 		lua_pushnumber(L, depotChest->getDepotId());
 		return 1;
 	}
