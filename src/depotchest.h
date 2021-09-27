@@ -21,20 +21,36 @@
 #define FS_DEPOTCHEST_H_6538526014684E3DBC92CC12815B6766
 
 #include "container.h"
+#include "player.h"
 
 class DepotChest final : public Container
 {
 	public:
 		explicit DepotChest(uint16_t type);
 
+		DepotChest* getDepotChest() override {
+			return this;
+		}
+		const DepotChest* getDepotChest() const override {
+			return this;
+		}
+
 		//serialization
 		void setMaxDepotItems(uint32_t maxitems) {
 			maxDepotItems = maxitems;
 		}
 
+		uint16_t getDepotId() const {
+			return depotId;
+		}
+		void setDepotId(uint16_t depotId) {
+			this->depotId = depotId;
+		}
+
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature* actor = nullptr) const override;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
@@ -49,8 +65,15 @@ class DepotChest final : public Container
 			return parent;
 		}
 
+		Player* getOwner() const {
+			return owner;
+		}
+
 	private:
+		uint16_t depotId;
 		uint32_t maxDepotItems;
+
+		Player* owner;
 };
 
 #endif

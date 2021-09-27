@@ -3535,7 +3535,7 @@ int LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	//isDepot(uid)
 	Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
-	pushBoolean(L, container && container->getDepotLocker());
+	pushBoolean(L, container && (container->getDepotLocker() != nullptr || container->getDepotChest() != nullptr));
 	return 1;
 }
 
@@ -3625,14 +3625,16 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 		return 1;
 	}
 
-	DepotLocker* depotLocker = container->getDepotLocker();
-	if (!depotLocker) {
-		reportErrorFunc(L, "Depot not found");
-		pushBoolean(L, false);
+	if (DepotLocker* depotLocker = container->getDepotLocker()) {
+		lua_pushnumber(L, depotLocker->getDepotId());
+		return 1;
+	} else if if (DepotChest* depotChest = container->getDepotChest()) {
+		lua_pushnumber(L, depotChest->getDepotId());
 		return 1;
 	}
 
-	lua_pushnumber(L, depotLocker->getDepotId());
+	reportErrorFunc(L, "Depot not found");
+	pushBoolean(L, false);
 	return 1;
 }
 
@@ -8328,7 +8330,6 @@ int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 	bool autoCreate = getBoolean(L, 3, false);
 	DepotChest* depotChest = player->getDepotChest(depotId, autoCreate);
 	if (depotChest) {
-		player->setLastDepotId(depotId); // FIXME: workaround for #2251
 		pushUserdata<Item>(L, depotChest);
 		setItemMetatable(L, -1, depotChest);
 	} else {
