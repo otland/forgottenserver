@@ -5278,18 +5278,29 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			return;
 		}
 
+		bool tempBuyerToDelete = false;
+
 		Player* buyerPlayer = getPlayerByGUID(offer.playerId);
-		if (player == buyerPlayer) {
-			player->sendFYIBox("You cannot accept your own offer.");
-			return;
-		}
-		if (!buyerPlayer) {
-			buyerPlayer = new Player(nullptr);
-			if (!IOLoginData::loadPlayerById(buyerPlayer, offer.playerId)) {
-				delete buyerPlayer;
-				return;
-			}
-		}
+		if (buyerPlayer) {            
+            if (player->getAccount() == buyerPlayer->getAccount()) {                
+                player->sendFYIBox("You cannot accept your own offer.");                
+                return;
+            }
+        } else {
+            buyerPlayer = new Player(nullptr);
+            if (!IOLoginData::loadPlayerById(buyerPlayer, offer.playerId)) {
+                delete buyerPlayer;
+                return;
+            }
+            
+            if (player->getAccount() == buyerPlayer->getAccount()) {                
+                player->sendFYIBox("You cannot accept your own offer.");                
+                delete buyerPlayer;
+                return;
+            }
+            tempBuyerToDelete = true;
+        }
+
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
@@ -5345,16 +5356,35 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		} else {
 			buyerPlayer->onReceiveMail();
 		}
-	} else {
-		Player* sellerPlayer = getPlayerByGUID(offer.playerId);
-		if (player == sellerPlayer) {
-			player->sendFYIBox("You cannot accept your own offer.");
-			return;
+
+		if (tempBuyerToDelete) {
+			delete buyerPlayer;
 		}
-		
+	} else {
+
 		if (totalPrice > (player->getMoney() + player->bankBalance)) {
 			return;
 		}
+
+		bool tempSellerToDelete = false;      
+        Player* sellerPlayer = getPlayerByGUID(offer.playerId);
+        if (sellerPlayer) {            
+            if (player->getAccount() == sellerPlayer->getAccount()) {
+                player->sendFYIBox("You cannot accept your own offer.");
+                return;
+            }
+        } else {
+            sellerPlayer = new Player(nullptr);
+
+            if (IOLoginData::loadPlayerById(sellerPlayer, offer.playerId)) {
+                if (player->getAccount() == sellerPlayer->getAccount()) {                    
+                    player->sendFYIBox("You cannot accept your own offer.");                    
+                    delete sellerPlayer;
+                    return;
+                }
+            }  
+            tempSellerToDelete = true;          
+        }
 
 		const auto debitCash = std::min(player->getMoney(), totalPrice);
 		const auto debitBank = totalPrice - debitCash;
@@ -5389,12 +5419,16 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				}
 			}
 		}
-		
+
 		if (sellerPlayer) {
 			sellerPlayer->bankBalance += totalPrice;
 		} else {
 			IOLoginData::increaseBankBalance(offer.playerId, totalPrice);
 		}
+
+		if (tempSellerToDelete) {
+            delete sellerPlayer;
+        }
 
 		player->onReceiveMail();
 	}
