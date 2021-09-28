@@ -16,7 +16,7 @@ function changeGold.onUse(player, item, fromPosition, target, toPosition, isHotk
 	return true
 end
 
-local currencyItems = Game.getCurrenyItems()
+local currencyItems = Game.getCurrencyItems()
 for index, currency in pairs(currencyItems) do
 	local back, to = currencyItems[index-1], currencyItems[index+1]
 	local currencyId = currency:getId()

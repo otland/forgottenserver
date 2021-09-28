@@ -28,12 +28,12 @@ function goldConverter.onUse(player, item, fromPosition, target, toPosition, isH
 	return true
 end
 
-local currencyItems = Game.getCurrenyItems()
+local currencyItems = Game.getCurrencyItems()
 for index, currency in pairs(currencyItems) do
 	local back, to = currencyItems[index-1], currencyItems[index+1]
 	local currencyId = currency:getId()
 	config[currencyId] = { changeBack = back and back:getId(), changeTo = to and to:getId() }
-	goldConverter:id(currencyId)
 end
 
+goldConverter:id(26378)
 goldConverter:register()
