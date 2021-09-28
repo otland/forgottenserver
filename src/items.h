@@ -437,7 +437,7 @@ class Items
 		}
 
 		NameMap nameToItems;
-		CurrenyMap currencyItems;
+		CurrencyMap currencyItems;
 
 	private:
 		std::vector<ItemType> items;
