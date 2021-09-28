@@ -131,9 +131,9 @@ function getMoneyCount(string)
 end
 
 function getMoneyWeight(money)
-	local currencyItems = Game.getCurrencyItems()
-	local weight = 0
-	for index, currency in pairs(currencyItems) do
+	local weight, currencyItems = 0, Game.getCurrencyItems()
+	for index = #currencyItems, 1, -1 do
+		local currency = currencyItems[index]
 		local worth = currency:getWorth()
 		local currencyCoins = math.floor(money / worth)
 		if currencyCoins > 0 then

@@ -172,7 +172,8 @@ function Player.canCarryMoney(self, amount)
 	local inventorySlots = 0
 
 	local currencyItems = Game.getCurrencyItems()
-	for index, currency in pairs(currencyItems) do
+	for index = #currencyItems, 1, -1 do
+		local currency = currencyItems[index]
 		-- Add currency coins to totalWeight and inventorySlots
 		local worth = currency:getWorth()
 		local currencyCoins = math.floor(amount / worth)
