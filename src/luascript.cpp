@@ -1053,6 +1053,9 @@ void LuaScriptInterface::registerFunctions()
 	//stopEvent(eventid)
 	lua_register(luaState, "stopEvent", LuaScriptInterface::luaStopEvent);
 
+	// addTask(callback, ...)
+	lua_register(luaState, "addTask", LuaScriptInterface::luaAddTask);
+
 	//saveServer()
 	lua_register(luaState, "saveServer", LuaScriptInterface::luaSaveServer);
 
@@ -3776,6 +3779,110 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 		luaL_unref(L, LUA_REGISTRYINDEX, parameter);
 	}
 
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaAddTask(lua_State* L)
+{
+	// addTask(callback, ...)
+	int parameters = lua_gettop(L);
+	if (parameters < 1) {
+		reportErrorFunc(L, fmt::format("Not enough parameters: {:d}.", parameters));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	if (!isFunction(L, 1)) {
+		reportErrorFunc(L, "callback parameter should be a function.");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	if (g_config.getBoolean(ConfigManager::WARN_UNSAFE_SCRIPTS) || g_config.getBoolean(ConfigManager::CONVERT_UNSAFE_SCRIPTS)) {
+		std::vector<std::pair<int32_t, LuaDataType>> indexes;
+		for (int i = 2; i <= parameters; ++i) {
+			if (lua_getmetatable(L, i) == 0) {
+				continue;
+			}
+			lua_rawgeti(L, -1, 't');
+
+			LuaDataType type = getNumber<LuaDataType>(L, -1);
+			if (type != LuaData_Unknown && type != LuaData_Tile) {
+				indexes.push_back({i, type});
+			}
+			lua_pop(L, 2);
+		}
+
+		if (!indexes.empty()) {
+			if (g_config.getBoolean(ConfigManager::WARN_UNSAFE_SCRIPTS)) {
+				bool plural = indexes.size() > 1;
+
+				std::string warningString = "Argument";
+				if (plural) {
+					warningString += 's';
+				}
+
+				for (const auto& entry : indexes) {
+					if (entry == indexes.front()) {
+						warningString += ' ';
+					} else if (entry == indexes.back()) {
+						warningString += " and ";
+					} else {
+						warningString += ", ";
+					}
+					warningString += '#';
+					warningString += std::to_string(entry.first);
+				}
+
+				if (plural) {
+					warningString += " are unsafe";
+				} else {
+					warningString += " is unsafe";
+				}
+
+				reportErrorFunc(L, warningString);
+			}
+
+			if (g_config.getBoolean(ConfigManager::CONVERT_UNSAFE_SCRIPTS)) {
+				for (const auto& entry : indexes) {
+					switch (entry.second) {
+						case LuaData_Item:
+						case LuaData_Container:
+						case LuaData_Teleport: {
+							lua_getglobal(L, "Item");
+							lua_getfield(L, -1, "getUniqueId");
+							break;
+						}
+						case LuaData_Player:
+						case LuaData_Monster:
+						case LuaData_Npc: {
+							lua_getglobal(L, "Creature");
+							lua_getfield(L, -1, "getId");
+							break;
+						}
+						default:
+							break;
+					}
+					lua_replace(L, -2);
+					lua_pushvalue(L, entry.first);
+					lua_call(L, 1, 1);
+					lua_replace(L, entry.first);
+				}
+			}
+		}
+	}
+
+	LuaTaskEventDesc eventDesc;
+	eventDesc.parameters.reserve(parameters - 1); // safe to use -1 since we garanteed that there is at least one parameter
+	for (int i = 0; i < parameters - 1; ++i) {
+		eventDesc.parameters.push_back(luaL_ref(L, LUA_REGISTRYINDEX));
+	}
+
+	eventDesc.function = luaL_ref(L, LUA_REGISTRYINDEX);
+	eventDesc.scriptId = getScriptEnv()->getScriptId();
+
+	g_dispatcher.addTask(createTask(std::bind(&LuaEnvironment::executeTaskEvent, &g_luaEnvironment, std::move(eventDesc))));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -17285,6 +17392,38 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	//free resources
 	luaL_unref(luaState, LUA_REGISTRYINDEX, timerEventDesc.function);
 	for (auto parameter : timerEventDesc.parameters) {
+		luaL_unref(luaState, LUA_REGISTRYINDEX, parameter);
+	}
+}
+
+void LuaEnvironment::executeTaskEvent(const LuaTaskEventDesc& luaTaskEventDesc)
+{
+	// lua state has been shut down
+	if (!luaState) {
+		return;
+	}
+
+	//push function
+	lua_rawgeti(luaState, LUA_REGISTRYINDEX, luaTaskEventDesc.function);
+
+	//push parameters
+	for (auto parameter : boost::adaptors::reverse(luaTaskEventDesc.parameters)) {
+		lua_rawgeti(luaState, LUA_REGISTRYINDEX, parameter);
+	}
+
+	//call the function
+	if (reserveScriptEnv()) {
+		ScriptEnvironment* env = getScriptEnv();
+		env->setTimerEvent();
+		env->setScriptId(luaTaskEventDesc.scriptId, this);
+		callFunction(luaTaskEventDesc.parameters.size());
+	} else {
+		std::cout << "[Error - LuaScriptInterface::executeTaskEvent] Call stack overflow" << std::endl;
+	}
+
+	//free resources
+	luaL_unref(luaState, LUA_REGISTRYINDEX, luaTaskEventDesc.function);
+	for (auto parameter : luaTaskEventDesc.parameters) {
 		luaL_unref(luaState, LUA_REGISTRYINDEX, parameter);
 	}
 }

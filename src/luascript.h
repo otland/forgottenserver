@@ -97,6 +97,14 @@ struct LuaTimerEventDesc {
 	LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
 };
 
+struct LuaTaskEventDesc {
+	int32_t scriptId = -1;
+	int32_t function = -1;
+	std::vector<int32_t> parameters;
+
+	LuaTaskEventDesc() = default;
+};
+
 class LuaScriptInterface;
 class Cylinder;
 class Game;
@@ -486,6 +494,7 @@ class LuaScriptInterface
 		static int luaDebugPrint(lua_State* L);
 		static int luaAddEvent(lua_State* L);
 		static int luaStopEvent(lua_State* L);
+		static int luaAddTask(lua_State* L);
 
 		static int luaSaveServer(lua_State* L);
 		static int luaCleanMap(lua_State* L);
@@ -1593,6 +1602,7 @@ class LuaEnvironment : public LuaScriptInterface
 
 	private:
 		void executeTimerEvent(uint32_t eventIndex);
+		void executeTaskEvent(const LuaTaskEventDesc& luaTaskEventDesc);
 
 		std::unordered_map<uint32_t, LuaTimerEventDesc> timerEvents;
 		std::unordered_map<uint32_t, Combat_ptr> combatMap;
