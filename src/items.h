@@ -398,7 +398,7 @@ class Items
 		using NameMap = std::unordered_map<std::string, uint16_t>;
 		using InventoryVector = std::vector<uint16_t>;
 
-		using CurrenyMap = std::map<uint64_t, uint16_t, std::greater<uint64_t>>;
+		using CurrencyMap = std::map<uint64_t, uint16_t, std::greater<uint64_t>>;
 
 		Items();
 
