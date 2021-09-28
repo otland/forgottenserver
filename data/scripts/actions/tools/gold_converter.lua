@@ -1,8 +1,4 @@
-local config = {
-	[ITEM_GOLD_COIN] = {changeTo = ITEM_PLATINUM_COIN},
-	[ITEM_PLATINUM_COIN] = {changeBack = ITEM_GOLD_COIN, changeTo = ITEM_CRYSTAL_COIN},
-	[ITEM_CRYSTAL_COIN] = {changeBack = ITEM_PLATINUM_COIN}
-}
+local config = {}
 
 local goldConverter = Action()
 
@@ -32,5 +28,12 @@ function goldConverter.onUse(player, item, fromPosition, target, toPosition, isH
 	return true
 end
 
-goldConverter:id(26378)
+local currencyItems = Game.getCurrenyItems()
+for index, currency in pairs(currencyItems) do
+	local back, to = currencyItems[index-1], currencyItems[index+1]
+	local currencyId = currency:getId()
+	config[currencyId] = { changeBack = back and back:getId(), changeTo = to and to:getId() }
+	goldConverter:id(currencyId)
+end
+
 goldConverter:register()
