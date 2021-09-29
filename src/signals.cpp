@@ -58,17 +58,12 @@ extern LuaEnvironment g_luaEnvironment;
 
 namespace {
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
 void sigbreakHandler()
 {
 	//Dispatcher thread
 	std::cout << "SIGBREAK received, shutting game server down..." << std::endl;
-	g_game.setGameState(GAME_STATE_SHUTDOWN);
-}
-
-void sigtermHandler()
-{
-	//Dispatcher thread
-	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
@@ -140,6 +135,15 @@ void sighupHandler()
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 }
 
+#pragma GCC diagnostic pop
+
+void sigtermHandler()
+{
+	//Dispatcher thread
+	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
+	g_game.setGameState(GAME_STATE_SHUTDOWN);
+}
+
 void sigintHandler()
 {
 	//Dispatcher thread
@@ -173,6 +177,11 @@ void dispatchSignalHandler(int signal)
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
+			g_dispatcher2.join();
+			g_dispatcher3.join();
+			g_multitasks.join();
+			g_stats.join();
+		    g_cams.join();
 			break;
 #endif
 		default:
