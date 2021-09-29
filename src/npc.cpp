@@ -121,7 +121,7 @@ void Npc::reload()
 	load();
 
 	SpectatorVec players;
-	g_game.map.getSpectators(players, getPosition(), true, true);
+	g_game.map.getSpectators(players, getPosition(), UNDERGROUND_FLOOR, true);
 	for (const auto& player : players) {
 		spectators.insert(player->getPlayer());
 	}
@@ -266,7 +266,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 
 	if (creature == this) {
 		SpectatorVec players;
-		g_game.map.getSpectators(players, getPosition(), true, true);
+		g_game.map.getSpectators(players, getPosition(), UNDERGROUND_FLOOR, true);
 		for (const auto& player : players) {
 			spectators.insert(player->getPlayer());
 		}
