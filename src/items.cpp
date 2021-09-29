@@ -1373,7 +1373,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				case ITEM_PARSE_WORTH: {
 					uint64_t worth = pugi::cast<uint64_t>(valueAttribute.value());
 					if (currencyItems.find(worth) != currencyItems.end()) {
-						std::cout << "[Warning - Items::parseItemNode] Duplicated currency item " << id << " with worth: " << worth << std::endl;
+						std::cout << "[Warning - Items::parseItemNode] Duplicated currency worth. Item " << id << " redefines worth " << worth << std::endl;
 					} else {
 						currencyItems.insert(CurrencyMap::value_type(worth, id));
 						it.worth = worth;
