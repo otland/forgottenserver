@@ -177,7 +177,7 @@ function Player.canCarryMoney(self, amount)
 		-- Add currency coins to totalWeight and inventorySlots
 		local worth = currency:getWorth()
 		local currencyCoins = math.floor(amount / worth)
-		if crystalCoins > 0 then
+		if currencyCoins > 0 then
 			amount = amount - (currencyCoins * worth)
 			while currencyCoins > 0 do
 				local count = math.min(100, currencyCoins)
