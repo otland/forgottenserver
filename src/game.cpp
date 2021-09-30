@@ -2209,7 +2209,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
-	if (!Position::areInRange<7, 5, 0>(creature->getPosition(), player->getPosition())) {
+	if (!Position::areInRange<Map::maxClientViewportX - 1, Map::maxClientViewportY - 1, 0>(creature->getPosition(), player->getPosition())) {
 		return;
 	}
 
