@@ -182,7 +182,7 @@ class ScriptEnvironment
 		static DBResultMap tempResults;
 };
 
-#define reportErrorFunc(L, a)  LuaScriptInterface::reportError(__FUNCTION__, a, L, true)
+#define reportErrorFunc(L, a) LuaScriptInterface::reportError(__FUNCTION__, a, L, true)
 
 enum ErrorCode_t {
 	LUA_ERROR_PLAYER_NOT_FOUND,

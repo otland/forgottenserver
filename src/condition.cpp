@@ -792,7 +792,7 @@ int32_t ConditionAttributes::getParam(ConditionParam_t param)
 		case CONDITION_PARAM_SKILL_FISHING:
 			return skills[SKILL_FISHING];
 
-		case CONDITION_PARAM_SKILL_FISHINGPERCENT: 
+		case CONDITION_PARAM_SKILL_FISHINGPERCENT:
 			return skillsPercent[SKILL_FISHING];
 
 		case CONDITION_PARAM_STAT_MAXHITPOINTS:
