@@ -54,7 +54,8 @@
 			<flag ignoreweaponcheck="1" />
 			<flag cannotbemuted="1" />
 			<flag isalwayspremium="1" />
-			<flag ignoresendprivatecheck="1" />
+			<flag ignoreyellcheck="1" />
+      <flag ignoresendprivatecheck="1" />
 		</flags>
 	</group>
 	<group id="5" name="community manager" access="1" maxdepotitems="0" maxvipentries="200">
@@ -96,7 +97,8 @@
 			<flag ignoreweaponcheck="1" />
 			<flag cannotbemuted="1" />
 			<flag isalwayspremium="1" />
-			<flag ignoresendprivatecheck="1" />
+			<flag ignoreyellcheck="1" />
+      <flag ignoresendprivatecheck="1" />
 		</flags>
 	</group>
 	<group id="6" name="god" access="1" maxdepotitems="0" maxvipentries="200">
@@ -138,7 +140,8 @@
 			<flag ignoreweaponcheck="1" />
 			<flag cannotbemuted="1" />
 			<flag isalwayspremium="1" />
-			<flag ignoresendprivatecheck="1" />
+			<flag ignoreyellcheck="1" />
+      <flag ignoresendprivatecheck="1" />
 		</flags>
 	</group>
 </groups>

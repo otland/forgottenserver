@@ -223,9 +223,8 @@ class Tile : public Cylinder
 				return ZONE_NOPVP;
 			} else if (hasFlag(TILESTATE_PVPZONE)) {
 				return ZONE_PVP;
-			} else {
-				return ZONE_NORMAL;
 			}
+			return ZONE_NORMAL;
 		}
 
 		bool hasHeight(uint32_t n) const;

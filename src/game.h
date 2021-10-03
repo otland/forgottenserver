@@ -568,7 +568,7 @@ class Game
 
 		static constexpr uint8_t LIGHT_DAY = 250;
 		static constexpr uint8_t LIGHT_NIGHT = 40;
-		// 1h realtime   = 1day worldtime
+		// 1h realtime = 1day worldtime
 		// 2.5s realtime = 1min worldtime
 		// worldTime is calculated in minutes
 		static constexpr int16_t GAME_SUNRISE = 360;

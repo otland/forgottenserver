@@ -294,7 +294,7 @@ class ItemAttributes
 				}
 
 				switch (pos) {
-					case 1:  { // std::string
+					case 1: { // std::string
 						std::string tmp;
 						if (!propStream.readString(tmp)) {
 							return false;
