@@ -1703,7 +1703,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		sendTextMessage(message);
 
 		SpectatorVec spectators;
-		g_game.map.getSpectators(spectators, position, false, true);
+		g_game.map.getSpectators(spectators, position, GROUND_FLOOR, true);
 		spectators.erase(this);
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
@@ -1789,7 +1789,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		sendTextMessage(message);
 
 		SpectatorVec spectators;
-		g_game.map.getSpectators(spectators, position, false, true);
+		g_game.map.getSpectators(spectators, position, GROUND_FLOOR, true);
 		spectators.erase(this);
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
