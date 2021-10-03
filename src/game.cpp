@@ -3564,7 +3564,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 		if (player->getLevel() < minimumLevel) {
 			if (g_config.getBoolean(ConfigManager::PREMIUM_TO_SEND_PRIVATE)) {
 				if (!player->isPremium()) {
-					player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d} or have a premium account.", minimumLevel));
+					player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private messages unless you have reached level {:d} or have a premium account.", minimumLevel));
 					return false;
 				}
 			} else {
