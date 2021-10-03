@@ -3568,7 +3568,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 					return false;
 				}
 			} else {
-				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private unless you have reached level {:d}.", minimumLevel));
+				player->sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You may not send private messages unless you have reached level {:d}.", minimumLevel));
 				return false;
 			}
 		}
