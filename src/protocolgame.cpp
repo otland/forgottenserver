@@ -25,7 +25,7 @@ extern CreatureEvents* g_creatureEvents;
 
 namespace {
 
-std::deque<std::pair<std::size_t, uint32_t>> waitList; // (timeout, player guid)
+std::deque<std::pair<int64_t, uint32_t>> waitList; // (timeout, player guid)
 auto priorityEnd = waitList.end();
 
 auto findClient(const Player& player) {
