@@ -58,7 +58,7 @@ local door = Action()
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
 	if table.contains(closedQuestDoors, itemId) then
-		if player:getStorageValue(item.actionid) ~= -1 then
+		if player:getStorageValue(item.actionid) ~= -1 or player:getGroup():getAccess() then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
@@ -66,7 +66,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		return true
 	elseif table.contains(closedLevelDoors, itemId) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor then
+		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor or player:getGroup():getAccess() then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
