@@ -2691,7 +2691,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "isMagicField", LuaScriptInterface::luaItemTypeIsMagicField);
 	registerMethod("ItemType", "isUseable", LuaScriptInterface::luaItemTypeIsUseable);
 	registerMethod("ItemType", "isPickupable", LuaScriptInterface::luaItemTypeIsPickupable);
-	registerMethod("ItemType", "isKey", LuaScriptInterface::luaItemTypeIsKey);
 
 	registerMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
 	registerMethod("ItemType", "getGroup", LuaScriptInterface::luaItemTypeGetGroup);
@@ -11894,18 +11893,6 @@ int LuaScriptInterface::luaItemTypeIsPickupable(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushBoolean(L, itemType->isPickupable());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaItemTypeIsKey(lua_State* L)
-{
-	// itemType:isKey()
-	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
-	if (itemType) {
-		pushBoolean(L, itemType->isKey());
 	} else {
 		lua_pushnil(L);
 	}
