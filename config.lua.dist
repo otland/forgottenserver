@@ -54,18 +54,6 @@ onlyInvitedCanMoveHouseItems = true
 timeBetweenActions = 200
 timeBetweenExActions = 1000
 
--- Player Task Interval
-moveCreatureInterval = 1000
-rangeMoveCreatureInterval = 1500
-rangeMoveItemInterval = 400
-rangeUseItemInterval = 400
-rangeUseItemExInterval = 400
-rangeUseWithCreatureInterval = 400
-rangeRotateItemInterval = 400
-rangeBrowseFieldInterval = 400
-rangeWrapItemInterval = 400
-rangeTradeRequestInterval = 400
-
 -- Map
 -- NOTE: set mapName WITHOUT .otbm at the end
 mapName = "forgotten"
