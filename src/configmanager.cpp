@@ -290,16 +290,6 @@ bool ConfigManager::load()
 	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
 	integer[DEPOT_FREE_LIMIT] = getGlobalNumber(L, "depotFreeLimit", 2000);
 	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 10000);
-	integer[MOVE_CREATURE_INTERVAL] = getGlobalNumber(L, "moveCreatureInterval", 1000);
-	integer[RANGE_MOVE_CREATURE_INTERVAL] = getGlobalNumber(L, "rangeMoveCreatureInterval", 1500);
-	integer[RANGE_MOVE_ITEM_INTERVAL] = getGlobalNumber(L, "rangeMoveItemInterval", 400);
-	integer[RANGE_USE_ITEM_INTERVAL] = getGlobalNumber(L, "rangeUseItemInterval", 400);
-	integer[RANGE_USE_ITEM_EX_INTERVAL] = getGlobalNumber(L, "rangeUseItemExInterval", 400);
-	integer[RANGE_USE_WITH_CREATURE_INTERVAL] = getGlobalNumber(L, "rangeUseWithCreatureInterval", 400);
-	integer[RANGE_ROTATE_ITEM_INTERVAL] = getGlobalNumber(L, "rangeRotateItemInterval", 400);
-	integer[RANGE_BROWSE_FIELD_INTERVAL] = getGlobalNumber(L, "rangeBrowseFieldInterval", 400);
-	integer[RANGE_WRAP_ITEM_INTERVAL] = getGlobalNumber(L, "rangeWrapItemInterval", 400);
-	integer[RANGE_REQUEST_TRADE_INTERVAL] = getGlobalNumber(L, "rangeTradeRequestInterval", 400);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

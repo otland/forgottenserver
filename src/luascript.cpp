@@ -2017,16 +2017,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND)
 	registerEnumIn("configKeys", ConfigManager::PLAYER_CONSOLE_LOGS)
-	registerEnumIn("configKeys", ConfigManager::MOVE_CREATURE_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_MOVE_CREATURE_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_MOVE_ITEM_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_USE_ITEM_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_USE_ITEM_EX_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_USE_WITH_CREATURE_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_ROTATE_ITEM_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_BROWSE_FIELD_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_WRAP_ITEM_INTERVAL)
-	registerEnumIn("configKeys", ConfigManager::RANGE_REQUEST_TRADE_INTERVAL)
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
