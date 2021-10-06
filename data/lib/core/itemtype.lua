@@ -16,5 +16,5 @@ function ItemType.usesSlot(self, slot)
 end
 
 function ItemType:isKey()
-	return self:getType() == ITEM_TYPE_KEY 
+	return self:getType() == ITEM_TYPE_KEY
 end
