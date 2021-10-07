@@ -26,10 +26,14 @@ function onSay(player, words, param)
 		return false
 	end
 
+	local keyNumber = 0
 	local count = tonumber(split[2])
 	if count then
 		if itemType:isStackable() then
 			count = math.min(10000, math.max(1, count))
+		elseif itemType:isKey() then
+			keyNumber = count
+			count = 1
 		elseif not itemType:isFluidContainer() then
 			count = math.min(100, math.max(1, count))
 		else
@@ -51,6 +55,9 @@ function onSay(player, words, param)
 					item:decay()
 				end
 			else
+				if itemType:isKey() then
+					result:setAttribute(ITEM_ATTRIBUTE_ACTIONID, keyNumber)
+				end
 				result:decay()
 			end
 		end
