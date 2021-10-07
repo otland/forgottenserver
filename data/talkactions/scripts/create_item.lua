@@ -14,9 +14,14 @@ function onSay(player, words, param)
 	local split = param:splitTrimmed(",")
 
 	local itemType = ItemType(split[1])
+	if not itemType then
+		player:sendCancelMessage("There is no item with that id or name.")
+		return false
+	end
+
 	if itemType:getId() == 0 then
 		itemType = ItemType(tonumber(split[1]))
-		if not tonumber(split[1]) or itemType:getId() == 0 then
+		if not tonumber(split[1]) or not itemType or itemType and itemType:getId() == 0 then
 			player:sendCancelMessage("There is no item with that id or name.")
 			return false
 		end
