@@ -28,6 +28,8 @@ class Party;
 
 using PlayerVector = std::vector<Player*>;
 
+static constexpr int32_t EXPERIENCE_SHARE_RADIUS = 30;
+
 class Party
 {
 	public:
