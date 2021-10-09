@@ -100,9 +100,11 @@ struct OutfitEntry {
 	uint8_t addons;
 };
 
+static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
+
 struct Skill {
 	uint64_t tries = 0;
-	uint16_t level = 10;
+	uint16_t level = MINIMUM_SKILL_LEVEL;
 	uint8_t percent = 0;
 };
 
