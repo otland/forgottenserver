@@ -506,8 +506,8 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify/* = fa
 	while (count > skills[skill].tries) {
 		count -= skills[skill].tries;
 
-		if (skills[skill].level <= 10) {
-			skills[skill].level = 10;
+		if (skills[skill].level <= MINIMUM_SKILL_LEVEL) {
+			skills[skill].level = MINIMUM_SKILL_LEVEL;
 			skills[skill].tries = 0;
 			count = 0;
 			break;
@@ -2030,7 +2030,7 @@ void Player::death(Creature* lastHitCreature)
 		//Skill loss
 		for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) { //for each skill
 			uint64_t sumSkillTries = 0;
-			for (uint16_t c = 11; c <= skills[i].level; ++c) { //sum up all required tries for all skill levels
+			for (uint16_t c = MINIMUM_SKILL_LEVEL + 1; c <= skills[i].level; ++c) { //sum up all required tries for all skill levels
 				sumSkillTries += vocation->getReqSkillTries(i, c);
 			}
 
