@@ -28,7 +28,7 @@ class Party;
 
 using PlayerVector = std::vector<Player*>;
 
-static constexpr int32_t EXPERIENCE_SHARE_FLOORS = 30;
+static constexpr int32_t EXPERIENCE_SHARE_RANGE = 30;
 
 class Party
 {
