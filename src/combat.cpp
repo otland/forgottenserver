@@ -742,7 +742,7 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 			}
 			*/
 
-			if (caster && params.distanceEffect != CONST_ANI_NONE) {
+			if (caster && target && params.distanceEffect != CONST_ANI_NONE) {
 				addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 			}
 		}
