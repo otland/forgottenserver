@@ -40,7 +40,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if target.itemid == 1 then
-		if item.type == 0 then
+		if item.type == FLUID_NONE then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		elseif target.uid == player.uid then
 			if table.contains({FLUID_BEER, FLUID_WINE, FLUID_MEAD}, item.type) then
