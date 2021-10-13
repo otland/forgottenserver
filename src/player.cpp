@@ -3018,7 +3018,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() : true);
+		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
 			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
@@ -3072,7 +3072,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() : true);
+		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
 			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
