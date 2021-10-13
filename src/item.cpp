@@ -1778,7 +1778,7 @@ void Item::startDecaying()
 
 bool Item::hasMarketAttributes() const
 {
-	if (attributes == nullptr) {
+	if (!attributes) {
 		return true;
 	}
 

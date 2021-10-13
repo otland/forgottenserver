@@ -1189,7 +1189,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 	if (needTarget) {
 		var.type = VARIANT_NUMBER;
 
-		if (target == nullptr) {
+		if (!target) {
 			Tile* toTile = g_game.map.getTile(toPosition);
 			if (toTile) {
 				const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);

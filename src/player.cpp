@@ -2327,7 +2327,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature*) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -2553,7 +2553,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		uint32_t flags) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2632,7 +2632,7 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -2654,7 +2654,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		*destItem = nullptr;
 
 		const Item* item = thing.getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return this;
 		}
 

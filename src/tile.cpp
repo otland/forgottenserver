@@ -505,7 +505,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
-		if (ground == nullptr) {
+		if (!ground) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
@@ -585,7 +585,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 
-			if (player->getParent() == nullptr && hasFlag(TILESTATE_NOLOGOUT)) {
+			if (!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) {
 				//player is trying to login to a "no logout" tile
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
@@ -654,7 +654,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 		}
 
 		bool itemIsHangable = item->isHangable();
-		if (ground == nullptr && !itemIsHangable) {
+		if (!ground && !itemIsHangable) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
@@ -730,7 +730,7 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -827,7 +827,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		destTile = g_game.map.getTile(dx, dy, dz);
 	}
 
-	if (destTile == nullptr) {
+	if (!destTile) {
 		destTile = this;
 	} else {
 		flags |= FLAG_NOLIMIT; //Will ignore that there is blocking items/creatures
@@ -861,7 +861,7 @@ void Tile::addThing(int32_t, Thing* thing)
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
@@ -874,7 +874,7 @@ void Tile::addThing(int32_t, Thing* thing)
 
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
+			if (!ground) {
 				ground = item;
 				onAddTileItem(item);
 			} else {
@@ -967,7 +967,7 @@ void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -985,7 +985,7 @@ void Tile::replaceThing(uint32_t index, Thing* thing)
 	int32_t pos = index;
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -1439,13 +1439,13 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return;
 		}
 
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
+			if (!ground) {
 				ground = item;
 				setTileFlags(item);
 			}
