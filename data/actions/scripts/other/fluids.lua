@@ -10,17 +10,17 @@ poison:setParameter(CONDITION_PARAM_TICKINTERVAL, 4000)
 poison:setParameter(CONDITION_PARAM_FORCEUPDATE, true)
 
 local fluidMessage = {
-	[3] = "Aah...",
-	[4] = "Urgh!",
-	[5] = "Mmmh.",
-	[7] = "Aaaah...",
-	[10] = "Aaaah...",
-	[11] = "Urgh!",
-	[13] = "Urgh!",
-	[15] = "Aah...",
-	[19] = "Urgh!",
-	[27] = "Aah...",
-	[43] = "Aaaah..."
+	[FLUID_BEER] = "Aah...",
+	[FLUID_SLIME] = "Urgh!",
+	[FLUID_LEMONADE] = "Mmmh.",
+	[FLUID_MANA] = "Aaaah...",
+	[FLUID_LIFE] = "Aaaah...",
+	[FLUID_OIL] = "Urgh!",
+	[FLUID_URINE] = "Urgh!",
+	[FLUID_WINE] = "Aah...",
+	[FLUID_MUD] = "Urgh!",
+	[FLUID_RUM] = "Aah...",
+	[FLUID_MEAD] = "Aaaah..."
 }
 
 local distillery = {[5513] = 5469, [5514] = 5470}
@@ -43,14 +43,14 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if item.type == 0 then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		elseif target.uid == player.uid then
-			if table.contains({3, 15, 43}, item.type) then
+			if table.contains({FLUID_BEER, FLUID_WINE, FLUID_MEAD}, item.type) then
 				player:addCondition(drunk)
-			elseif item.type == 4 then
+			elseif item.type == FLUID_SLIME then
 				player:addCondition(poison)
-			elseif item.type == 7 then
+			elseif item.type == FLUID_MANA then
 				player:addMana(math.random(50, 150))
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
-			elseif item.type == 10 then
+			elseif item.type == FLUID_LIFE then
 				player:addHealth(60)
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			end
