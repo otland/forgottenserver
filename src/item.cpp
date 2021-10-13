@@ -280,7 +280,7 @@ Cylinder* Item::getTopParent()
 		return prevaux;
 	}
 
-	while (aux->getParent() != nullptr) {
+	while (aux->getParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -299,7 +299,7 @@ const Cylinder* Item::getTopParent() const
 		return prevaux;
 	}
 
-	while (aux->getParent() != nullptr) {
+	while (aux->getParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}

@@ -28,7 +28,7 @@ extern ConfigManager g_config;
 
 Database::~Database()
 {
-	if (handle != nullptr) {
+	if (handle) {
 		mysql_close(handle);
 	}
 }
@@ -236,13 +236,13 @@ const char* DBResult::getStream(const std::string& s, unsigned long& size) const
 
 bool DBResult::hasNext() const
 {
-	return row != nullptr;
+	return row;
 }
 
 bool DBResult::next()
 {
 	row = mysql_fetch_row(handle);
-	return row != nullptr;
+	return row;
 }
 
 DBInsert::DBInsert(std::string query) : query(std::move(query))

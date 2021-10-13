@@ -293,7 +293,7 @@ class Creature : virtual public Thing
 		}
 
 		bool isSummon() const {
-			return master != nullptr;
+			return master;
 		}
 		Creature* getMaster() const {
 			return master;

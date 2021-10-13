@@ -346,7 +346,7 @@ int32_t Player::getDefense() const
 	}
 
 	if (shield) {
-		defenseValue = weapon != nullptr ? shield->getDefense() + weapon->getExtraDefense() : shield->getDefense();
+		defenseValue = weapon ? shield->getDefense() + weapon->getExtraDefense() : shield->getDefense();
 		defenseSkill = getSkillLevel(SKILL_SHIELD);
 	}
 
@@ -2317,7 +2317,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 		return true;
 	}
 
-	uint32_t itemWeight = item->getContainer() != nullptr ? item->getWeight() : item->getBaseWeight();
+	uint32_t itemWeight = item->getContainer() ? item->getWeight() : item->getBaseWeight();
 	if (item->isStackable()) {
 		itemWeight *= count;
 	}
@@ -3018,7 +3018,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != nullptr : true);
+		assert(i ? i->getContainer() : true);
 
 		if (i) {
 			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
@@ -3072,7 +3072,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != nullptr : true);
+		assert(i ? i->getContainer() : true);
 
 		if (i) {
 			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;

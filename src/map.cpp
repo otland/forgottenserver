@@ -933,7 +933,7 @@ int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbo
 int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
 	int_fast32_t cost = 0;
-	if (tile->getTopVisibleCreature(&creature) != nullptr) {
+	if (tile->getTopVisibleCreature(&creature)) {
 		//destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
 	}

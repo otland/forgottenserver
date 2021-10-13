@@ -3530,7 +3530,7 @@ int LuaScriptInterface::luaDoChallengeCreature(lua_State* L)
 int LuaScriptInterface::luaIsValidUID(lua_State* L)
 {
 	//isValidUID(uid)
-	pushBoolean(L, getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, -1)) != nullptr);
+	pushBoolean(L, getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, -1)));
 	return 1;
 }
 
@@ -6155,7 +6155,7 @@ int LuaScriptInterface::luaItemCreate(lua_State* L)
 int LuaScriptInterface::luaItemIsItem(lua_State* L)
 {
 	// item:isItem()
-	pushBoolean(L, getUserdata<const Item>(L, 1) != nullptr);
+	pushBoolean(L, getUserdata<const Item>(L, 1));
 	return 1;
 }
 
@@ -7255,7 +7255,7 @@ int LuaScriptInterface::luaCreatureIsRemoved(lua_State* L)
 int LuaScriptInterface::luaCreatureIsCreature(lua_State* L)
 {
 	// creature:isCreature()
-	pushBoolean(L, getUserdata<const Creature>(L, 1) != nullptr);
+	pushBoolean(L, getUserdata<const Creature>(L, 1));
 	return 1;
 }
 
@@ -8190,7 +8190,7 @@ int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 int LuaScriptInterface::luaPlayerIsPlayer(lua_State* L)
 {
 	// player:isPlayer()
-	pushBoolean(L, getUserdata<const Player>(L, 1) != nullptr);
+	pushBoolean(L, getUserdata<const Player>(L, 1));
 	return 1;
 }
 
@@ -10320,7 +10320,7 @@ int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 int LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 {
 	// monster:isMonster()
-	pushBoolean(L, getUserdata<const Monster>(L, 1) != nullptr);
+	pushBoolean(L, getUserdata<const Monster>(L, 1));
 	return 1;
 }
 
@@ -10702,7 +10702,7 @@ int LuaScriptInterface::luaNpcCreate(lua_State* L)
 int LuaScriptInterface::luaNpcIsNpc(lua_State* L)
 {
 	// npc:isNpc()
-	pushBoolean(L, getUserdata<const Npc>(L, 1) != nullptr);
+	pushBoolean(L, getUserdata<const Npc>(L, 1));
 	return 1;
 }
 

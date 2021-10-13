@@ -1265,7 +1265,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
 
-	assert(attackedCreature != nullptr);
+	assert(attackedCreature);
 	const Position& centerPos = attackedCreature->getPosition();
 
 	int_fast32_t offset_x = Position::getOffsetX(creaturePos, centerPos);

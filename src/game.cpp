@@ -542,7 +542,7 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 
 bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/)
 {
-	if (creature->getParent() != nullptr) {
+	if (creature->getParent()) {
 		return false;
 	}
 
