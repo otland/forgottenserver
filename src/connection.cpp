@@ -105,15 +105,14 @@ void Connection::accept(Protocol_ptr protocol)
 {
 	this->protocol = protocol;
 	g_dispatcher.addTask(createTask(std::bind(&Protocol::onConnect, protocol)));
-	connectionState = CONNECTION_STATE_CONNECTING_STAGE2;
-
+	connectionState = CONNECTION_STATE_GAMEWORLD_AUTH;
 	accept();
 }
 
 void Connection::accept()
 {
 	if (connectionState == CONNECTION_STATE_PENDING) {
-		connectionState = CONNECTION_STATE_CONNECTING_STAGE1;
+		connectionState = CONNECTION_STATE_REQUEST_CHARLIST;
 	}
 
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
@@ -121,17 +120,12 @@ void Connection::accept()
 		readTimer.expires_from_now(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(std::bind(&Connection::handleTimeout, std::weak_ptr<Connection>(shared_from_this()), std::placeholders::_1));
 
-		if (!receivedLastChar && receivedName && connectionState == CONNECTION_STATE_CONNECTING_STAGE2) {
-			// Read size of the first packet
-			boost::asio::async_read(socket,
-				boost::asio::buffer(msg.getBuffer(), 1),
-				std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
-		} else {
-			// Read size of the first packet
-			boost::asio::async_read(socket,
-				boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
-				std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
-		}
+		// Read size of the first packet
+		auto bufferLength = !receivedLastChar && receivedName && connectionState == CONNECTION_STATE_GAMEWORLD_AUTH ? 1 : NetworkMessage::HEADER_LENGTH;
+		boost::asio::async_read(socket,
+			boost::asio::buffer(msg.getBuffer(), bufferLength),
+			std::bind(&Connection::parseHeader, shared_from_this(), std::placeholders::_1));
+
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
@@ -157,7 +151,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		return;
 	}
 
-	if (!receivedLastChar && connectionState == CONNECTION_STATE_CONNECTING_STAGE2) {
+	if (!receivedLastChar && connectionState == CONNECTION_STATE_GAMEWORLD_AUTH) {
 		uint8_t* msgBuffer = msg.getBuffer();
 
 		if (!receivedName && msgBuffer[1] == 0x00) {
@@ -181,7 +175,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		}
 	}
 
-	if (receivedLastChar && connectionState == CONNECTION_STATE_CONNECTING_STAGE2) {
+	if (receivedLastChar && connectionState == CONNECTION_STATE_GAMEWORLD_AUTH) {
 		connectionState = CONNECTION_STATE_GAME;
 	}
 

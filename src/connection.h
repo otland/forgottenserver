@@ -26,8 +26,8 @@
 
 enum ConnectionState_t {
 	CONNECTION_STATE_DISCONNECTED,
-	CONNECTION_STATE_CONNECTING_STAGE1,
-	CONNECTION_STATE_CONNECTING_STAGE2,
+	CONNECTION_STATE_REQUEST_CHARLIST,
+	CONNECTION_STATE_GAMEWORLD_AUTH,
 	CONNECTION_STATE_GAME,
 	CONNECTION_STATE_PENDING
 };
@@ -135,7 +135,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 		time_t timeConnected;
 		uint32_t packetsSent = 0;
 
-		int8_t connectionState = CONNECTION_STATE_PENDING;
+		ConnectionState_t connectionState = CONNECTION_STATE_PENDING;
 		bool receivedFirst = false;
 
 		uint32_t serverNameTime = 0;
