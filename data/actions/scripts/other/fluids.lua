@@ -28,13 +28,13 @@ local distillery = {[5513] = 5469, [5514] = 5470}
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target.itemid)
 	if targetItemType and targetItemType:isFluidContainer() then
-		if target.type == 0 and item.type ~= 0 then
+		if target.type == FLUID_NONE and item.type ~= FLUID_NONE then
 			target:transform(target:getId(), item.type)
-			item:transform(item:getId(), 0)
+			item:transform(item:getId(), FLUID_NONE)
 			return true
-		elseif target.type ~= 0 and item.type == 0 then
+		elseif target.type ~= FLUID_NONE and item.type == FLUID_NONE then
 			item:transform(item:getId(), target.type)
-			target:transform(target:getId(), 0)
+			target:transform(target:getId(), FLUID_NONE)
 			return true
 		end
 	end
@@ -55,30 +55,30 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				fromPosition:sendMagicEffect(CONST_ME_MAGIC_BLUE)
 			end
 			player:say(fluidMessage[item.type] or "Gulp.", TALKTYPE_MONSTER_SAY)
-			item:transform(item:getId(), 0)
+			item:transform(item:getId(), FLUID_NONE)
 		else
 			Game.createItem(2016, item.type, toPosition):decay()
-			item:transform(item:getId(), 0)
+			item:transform(item:getId(), FLUID_NONE)
 		end
 	else
-		local fluidSource = targetItemType and targetItemType:getFluidSource() or 0
-		if fluidSource ~= 0 then
+		local fluidSource = targetItemType and targetItemType:getFluidSource() or FLUID_NONE
+		if fluidSource ~= FLUID_NONE then
 			item:transform(item:getId(), fluidSource)
 		elseif table.contains(distillery, target.itemid) then
 			local tmp = distillery[target.itemid]
 			if tmp then
-				item:transform(item:getId(), 0)
+				item:transform(item:getId(), FLUID_NONE)
 			else
 				player:sendCancelMessage("You have to process the bunch into the distillery to get rum.")
 			end
-		elseif item.type == 0 then
+		elseif item.type == FLUID_NONE then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		else
 			if toPosition.x == CONTAINER_POSITION then
 				toPosition = player:getPosition()
 			end
 			Game.createItem(2016, item.type, toPosition):decay()
-			item:transform(item:getId(), 0)
+			item:transform(item:getId(), FLUID_NONE)
 		end
 	end
 	return true
