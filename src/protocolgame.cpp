@@ -1419,7 +1419,7 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(player->getVocation()->getClientId());
 
 	if (version >= 1100) {
-		msg.addByte(player->getVocation()->getId() != VOCATION_NONE ? 0x01 : 0x00);
+		msg.addByte(player->getVocation()->getId() != VOCATION_NONE ? 0x01 : 0x00); // prey data
 	}
 
 	msg.add<uint16_t>(0xFF); // number of known spells
