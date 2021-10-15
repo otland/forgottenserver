@@ -1415,7 +1415,13 @@ void ProtocolGame::sendBasicData()
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
 	}
+
 	msg.addByte(player->getVocation()->getClientId());
+
+	if (version >= 1100) {
+		msg.addByte(player->getVocation()->getId() != VOCATION_NONE ? 0x01 : 0x00);
+	}
+
 	msg.add<uint16_t>(0xFF); // number of known spells
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
@@ -2073,6 +2079,10 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		msg.addString(ss.str());
 	} else {
 		msg.add<uint16_t>(0x00);
+	}
+
+	if (version >= 1100) {
+		msg.add<uint16_t>(0x00); // imbuement slots
 	}
 
 	MarketStatistics* statistics = IOMarket::getInstance().getPurchaseStatistics(itemId);
