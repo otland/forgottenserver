@@ -371,7 +371,7 @@ MoveEvent* MoveEvents::getEvent(Item* item, MoveEvent_t eventType, slots_t slot)
 	if (it != itemIdMap.end()) {
 		std::list<MoveEvent>& moveEventList = it->second.moveEvent[eventType];
 		for (MoveEvent& moveEvent : moveEventList) {
-			if (moveEvent && (moveEvent.getSlot() & slotp) != 0) {
+			if (moveEvent != nullptr && (moveEvent.getSlot() & slotp) != 0) {
 				return &moveEvent;
 			}
 		}
