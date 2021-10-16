@@ -5107,10 +5107,10 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	uint64_t fee = (price / 100.) * amount;
-	if (fee < MIN_MARKET_FEE) {
-		fee = MIN_MARKET_FEE;
-	} else if (fee > MAX_MARKET_FEE) {
-		fee = MAX_MARKET_FEE;
+	if (fee < g_config.getNumber(ConfigManager::MIN_MARKET_FEE)) {
+		fee = g_config.getNumber(ConfigManager::MIN_MARKET_FEE);
+	} else if (fee > g_config.getNumber(ConfigManager::MAX_MARKET_FEE)) {
+		fee = g_config.getNumber(ConfigManager::MAX_MARKET_FEE);
 	}
 
 	if (type == MARKETACTION_SELL) {
