@@ -59,10 +59,13 @@ void NetworkMessage::addString(const std::string& value)
 	memcpy(buffer + info.position, value.c_str(), stringLen);
 	info.position += stringLen;
 	info.length += stringLen;
+
+	std::cout << "string: " << value << std::endl;
 }
 
 void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
 {
+	std::cout << "double: " << value << " " << precision << std::endl;
 	addByte(precision);
 	add<uint32_t>(static_cast<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + std::numeric_limits<int32_t>::max()));
 }
@@ -114,12 +117,15 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 	}
 }
 
-void NetworkMessage::addItem(const Item* item)
+void NetworkMessage::addItem(const Item* item, bool legacyProtocol)
 {
 	const ItemType& it = Item::items[item->getID()];
 
 	add<uint16_t>(it.clientId);
-	addByte(0xFF); // MARK_UNMARKED
+
+	if (legacyProtocol) {
+		addByte(0xFF); // MARK_UNMARKED
+	}
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
@@ -127,9 +133,20 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(fluidMap[item->getFluidType() & 7]);
 	}
 
-	if (it.isAnimation) {
+	if (it.isAnimation && legacyProtocol) {
 		addByte(0xFE); // random phase (0xFF for async)
 	}
+
+	if (!legacyProtocol && it.isContainer()) {
+		const Container* container = item->getContainer();
+		// Loot icon over loot assigned backpacks
+		addByte(0x00);
+
+		// Quiver ammo count
+		addByte(0x00);
+	}
+
+	//podium not supported yet
 }
 
 void NetworkMessage::addItemId(uint16_t itemId)

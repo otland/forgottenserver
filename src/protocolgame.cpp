@@ -334,9 +334,15 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
+	// Client type and OS used
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
-	version = msg.get<uint16_t>(); // U16 client version
 
+	// Backwards compability with upped 10.98 clients
+	if (operatingSystem < CLIENTOS_QT_LINUX || operatingSystem > CLIENTOS_QT_MAC) {
+		legacyProtocol = true;
+	}
+
+	version = msg.get<uint16_t>(); // U16 client version
 	msg.skipBytes(4); // U32 client version
 	
 	//String client version
@@ -376,13 +382,13 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	if (version >= 1111 && operatingSystem >= CLIENTOS_QT_LINUX && operatingSystem <= CLIENTOS_QT_MAC) {
 		setChecksumMode(CHECKSUM_SEQUENCE);
 	}
-
+	/*
 	// Web login skips the character list request so we need to check the client version again
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
 		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		return;
 	}
-
+	*/
 	msg.skipBytes(1); // gamemaster flag
 
 	std::string sessionKey = msg.getString();
@@ -496,6 +502,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
 	auto out = getOutputBuffer(msg.getLength());
 	out->append(msg);
+	std::cout << std::endl;
 }
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
@@ -622,12 +629,14 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 
 void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 {
-	msg.add<uint16_t>(0x00); //environmental effects
+	if (legacyProtocol) {
+		msg.add<uint16_t>(0x00); //environmental effects
+	}
 
 	int32_t count;
 	Item* ground = tile->getGround();
 	if (ground) {
-		msg.addItem(ground);
+		msg.addItem(ground, legacyProtocol);
 		count = 1;
 	} else {
 		count = 0;
@@ -636,7 +645,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	const TileItemVector* items = tile->getItemList();
 	if (items) {
 		for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
-			msg.addItem(*it);
+			msg.addItem(*it, legacyProtocol);
 
 			if (++count == 10) {
 				break;
@@ -661,7 +670,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 
 	if (items && count < 10) {
 		for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
-			msg.addItem(*it);
+			msg.addItem(*it, legacyProtocol);
 
 			if (++count == 10) {
 				return;
@@ -1441,10 +1450,25 @@ void ProtocolGame::sendBasicData()
 		msg.add<uint32_t>(0);
 	}
 	msg.addByte(player->getVocation()->getClientId());
+
+	if (!legacyProtocol) {
+		msg.addByte(0x00); // is prey system enabled (bool)
+	}
+
+	//known spells placeholder (see commented block below)
+	msg.add<uint16_t>(0x00);
+
+	/*
 	msg.add<uint16_t>(0xFF); // number of known spells
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
 	}
+	*/
+
+	if (!legacyProtocol) {
+		msg.addByte(0x00); // is magic shield active (bool)
+	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -1483,7 +1507,7 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 		}
 	}
 	msg.addString(message.text);
-	writeToOutputBuffer(msg);
+	//writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendClosePrivate(uint16_t channelId)
@@ -2372,7 +2396,17 @@ void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
 	NetworkMessage msg;
 	msg.addByte(0x83);
 	msg.addPosition(pos);
+
+	if (!legacyProtocol) {
+		msg.addByte(MAGIC_EFFECTS_CREATE_EFFECT);
+	}
+
 	msg.addByte(type);
+
+	if (!legacyProtocol) {
+		msg.addByte(MAGIC_EFFECTS_END_LOOP);
+	}
+
 	writeToOutputBuffer(msg);
 }
 
@@ -2571,6 +2605,22 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		return;
 	}
 
+	if (!legacyProtocol) {
+		/* that code works and I have no idea why */
+		sendStats();
+		//unjustified kills (placeholder)
+		NetworkMessage msgc;
+		msgc.addByte(0xB7);
+		msgc.addByte(0);
+		msgc.addByte(3);
+		msgc.addByte(0);
+		msgc.addByte(5);
+		msgc.addByte(0);
+		msgc.addByte(10);
+		msgc.addByte(0);
+		writeToOutputBuffer(msgc);
+	}
+
 	NetworkMessage msg;
 	msg.addByte(0x17);
 
@@ -2591,10 +2641,27 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
 
-	msg.add<uint16_t>(0x00); // URL (string) to ingame store images
+	msg.addString("http://127.0.0.1/images/store/");    // to do: store images url
 	msg.add<uint16_t>(25); // premium coin package size
 
+	if (!legacyProtocol) {
+		msg.addByte(0x00); // exiva button enabled (bool)
+		msg.addByte(0x00); // Tournament button (bool)
+	}
+
 	writeToOutputBuffer(msg);
+
+	if (!legacyProtocol) {
+		//send world time
+		//to do: separate function
+		int16_t time = g_game.getWorldTime();
+		NetworkMessage msg2;
+		msg2.addByte(0xEF);
+		//hour/min
+		msg2.addByte(0x02); //msg2.addByte(time / 60);
+		msg2.addByte(0x00); //msg2.addByte(time % 60);
+		writeToOutputBuffer(msg2);
+	}
 
 	sendPendingStateEntered();
 	sendEnterWorld();
@@ -2608,10 +2675,69 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
 	}
 
-	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+	if (legacyProtocol) {
+		sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+	} else {
+		// different store inbox client id
+		NetworkMessage msgd;
+		msgd.addByte(0x78);
+		msgd.addByte(CONST_SLOT_STORE_INBOX);
+		msgd.add<uint16_t>(21025);
+		writeToOutputBuffer(msgd);
+	}
 
 	sendStats();
 	sendSkills();
+
+	if (!legacyProtocol) {
+
+		//sendBlessStatus
+
+		// to do: blessings in use
+		// placeholder packet
+		NetworkMessage msg3;
+		msg3.addByte(0x9C);
+		msg3.add<uint16_t>(0);
+		msg3.addByte(0x01);
+		writeToOutputBuffer(msg3);
+
+		//sendPremiumTrigger
+
+		// limitations for free accounts (?)
+		NetworkMessage msg;
+		msg.addByte(0x9E);
+		msg.addByte(16);
+		for (uint16_t i = 0; i <= 15; i++)
+		{
+			//canary note
+			//PREMIUM_TRIGGER_TRAIN_OFFLINE = false
+			//PREMIUM_TRIGGER_XP_BOOST = false
+			//PREMIUM_TRIGGER_MARKET = false
+			//PREMIUM_TRIGGER_VIP_LIST = false
+			//PREMIUM_TRIGGER_DEPOT_SPACE = false
+			//PREMIUM_TRIGGER_INVITE_PRIVCHAT = false
+			msg.addByte(0x01);
+		}
+		writeToOutputBuffer(msg);
+
+		//sendStoreHighlight
+
+		// store button highlights
+		NetworkMessage msg4;
+		msg4.addByte(0x19);
+		msg4.addByte(0x00); // has sale (bool)
+		msg4.addByte(0x00); // has new items available (bool)
+		writeToOutputBuffer(msg4);
+
+		// sendItemPrice
+
+		// item rarity frames
+		// placeholder packet
+		NetworkMessage msg5;
+		msg5.addByte(0xCD);
+		msg5.add<uint16_t>(0);
+		writeToOutputBuffer(msg5);
+	}
 
 	//gameworld light-settings
 	sendWorldLight(g_game.getWorldLightInfo());
@@ -2619,10 +2745,137 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	//player light level
 	sendCreatureLight(creature);
 
-	sendVIPEntries();
+	if (legacyProtocol) {
+		sendVIPEntries();
+	} else {
+		//to do
+	}
+
+	//send all items carried by player
+	sendItems();
+
+	if (!legacyProtocol) {
+		// sendLootContainers
+		
+		// loot containers
+		// placeholder packet
+		NetworkMessage msg6;
+		msg6.addByte(0xC0);
+		msg6.addByte(0x00);
+		msg6.addByte(0x00);
+		writeToOutputBuffer(msg6);
+	}
+
+
 
 	sendBasicData();
+
+	if (!legacyProtocol) {
+		//initPreyData
+
+		//prey system
+		for (uint8_t i = 0; i < 3; i++)
+		{
+			NetworkMessage msg6;
+			msg6.addByte(0xE8);
+			msg6.addByte(i);
+
+			msg6.addByte(0x00); // prey locked
+			msg6.addByte(0x00); // empty byte
+			msg6.add<uint32_t>(0); // next free roll
+			msg6.addByte(0x00); // wildCards
+
+			writeToOutputBuffer(msg6);
+		}
+
+		//prey system resources
+		NetworkMessage msg7;
+		msg7.addByte(0xEE);
+		msg7.addByte(0x00);
+		msg7.add<uint64_t>(0);
+		writeToOutputBuffer(msg7);
+
+		NetworkMessage msg8;
+		msg8.addByte(0xEE);
+		msg8.addByte(0x01);
+		msg8.add<uint64_t>(0);
+		writeToOutputBuffer(msg8);
+
+		NetworkMessage msg9;
+		msg9.addByte(0xEE);
+		msg9.addByte(0x0A);
+		msg9.add<uint64_t>(0);
+		writeToOutputBuffer(msg9);
+
+		//prey info (placeholder)
+		NetworkMessage msgd;
+		msgd.addByte(0xE9);
+		msgd.add<uint32_t>(0); // price
+		msgd.addByte(0x00); //wildcards
+		msgd.addByte(0x00); //select creature directly price
+		msgd.add<uint32_t>(0); //prey task data
+		msgd.add<uint32_t>(0);
+		msgd.addByte(0x00);
+		msgd.addByte(0x00);
+		writeToOutputBuffer(msgd);
+
+		//client check (?)
+		NetworkMessage msga;
+		msga.addByte(0x63);
+		msga.add<uint32_t>(1);
+		msga.addByte(1);
+		writeToOutputBuffer(msga);
+
+		//game news
+		NetworkMessage msgb;
+		msgb.addByte(0x98);
+		msgb.add<uint32_t>(1); // unknown
+		msgb.addByte(1);         //(0 = open | 1 = highlight)
+		writeToOutputBuffer(msgb);
+
+		//resting area info (placeholder)
+		NetworkMessage msge;
+		msge.addByte(0xA9);
+		msge.addByte(0); // protection (bool)
+		msge.addByte(0); // streak
+		msge.addString("Resting Area (no active bonus)");
+		writeToOutputBuffer(msge);
+	}
+
 	player->sendIcons();
+
+	if (!legacyProtocol) {
+		/*
+		//unjustified kills (placeholder)
+		NetworkMessage msgc;
+		msgc.addByte(0xB7);
+		msgc.addByte(0);
+		msgc.addByte(3);
+		msgc.addByte(0);
+		msgc.addByte(5);
+		msgc.addByte(0);
+		msgc.addByte(10);
+		msgc.addByte(0);
+		writeToOutputBuffer(msgc);
+		*/
+
+		//bestiary tracker (placeholder)
+		NetworkMessage msgf;
+		msgf.addByte(0xB9);
+		msgf.addByte(0);
+		writeToOutputBuffer(msgf);
+
+		//send update tracked quest (?)
+		NetworkMessage msg10;
+		msg10.addByte(0xD0);
+		msg10.addByte(1);
+		msg10.addByte(10);
+		msg10.addByte(0);
+		writeToOutputBuffer(msg10);
+
+		//testing, remove if doesnt crash
+		sendPingBack();
+	}
 }
 
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport)
@@ -2700,7 +2953,7 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 	if (item) {
 		msg.addByte(0x78);
 		msg.addByte(slot);
-		msg.addItem(item);
+		msg.addItem(item, legacyProtocol);
 	} else {
 		msg.addByte(0x79);
 		msg.addByte(slot);
@@ -2713,19 +2966,68 @@ void ProtocolGame::sendItems()
 	NetworkMessage msg;
 	msg.addByte(0xF5);
 
-	const std::vector<uint16_t>& inventory = Item::items.getInventory();
-	msg.add<uint16_t>(inventory.size() + 11);
+	//find all items carried by character (clientId, amount)
+	std::map<uint16_t, uint16_t> inventory;
+
+	if (legacyProtocol) {
+		// backwards compability
+		// there's probably a better way to write it
+		for (auto clientID : Item::items.getInventory()) {
+			inventory.emplace(clientID, 1);
+		}
+	} else {
+		// possible bug: doesnt count items from store inbox (yet)
+		for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+			Item* slotItem = player->getInventoryItem(static_cast<slots_t>(i));
+			if (!slotItem) {
+				continue;
+			}
+
+			uint16_t clientID = slotItem->getClientID();
+
+			auto rootSearch = inventory.find(clientID);
+			if (rootSearch != inventory.end()) {
+				inventory[clientID] = inventory[clientID] + Item::countByType(slotItem, -1);
+			} else {
+				inventory.emplace(clientID, Item::countByType(slotItem, -1));
+			}
+
+			//quiver or backpack
+			if (Container* container = slotItem->getContainer()) {
+				for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
+					uint16_t childClientID = (*it)->getClientID();
+					uint32_t childAmount = Item::countByType(*it, -1);
+
+					auto containerSearch = inventory.find(childClientID);
+					if (containerSearch != inventory.end()) {
+						inventory[childClientID] = inventory[childClientID] + childAmount;
+					} else {
+						inventory.emplace(childClientID, childAmount);
+					}
+					//bug?
+					inventory.emplace(childClientID, childAmount);
+				}
+			}
+		}
+	}
+
+	msg.add<uint16_t>(inventory.size() + 11 +1); //+1 = store inbox
+
 	for (uint16_t i = 1; i <= 11; i++) {
 		msg.add<uint16_t>(i);
 		msg.addByte(0); //always 0
 		msg.add<uint16_t>(1); // always 1
 	}
 
-	for (auto clientId : inventory) {
-		msg.add<uint16_t>(clientId);
+	for (const auto& clientId : inventory) {
+		msg.add<uint16_t>(clientId.first);
 		msg.addByte(0); //always 0
-		msg.add<uint16_t>(1);
+		msg.add<uint16_t>(clientId.second);
 	}
+
+	msg.add<uint16_t>(21025);
+	msg.addByte(0); //always 0
+	msg.add<uint16_t>(1);
 
 	writeToOutputBuffer(msg);
 }
@@ -2985,7 +3287,24 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		msg.add<uint16_t>(0x61);
 		msg.add<uint32_t>(remove);
 		msg.add<uint32_t>(creature->getID());
-		msg.addByte(creatureType);
+
+		if (legacyProtocol) {
+			msg.addByte(creatureType);
+		} else {
+			msg.addByte(creature->isHealthHidden() ? CREATURETYPE_HIDDEN : creatureType);
+		}
+
+		if (!legacyProtocol) {
+			if (creatureType == CREATURETYPE_MONSTER) {
+				const Creature* master = creature->getMaster();
+				if (master) {
+					msg.add<uint32_t>(master->getID());
+				} else {
+					msg.add<uint32_t>(0x00);
+				}
+			}
+		}
+
 		msg.addString(creature->getName());
 	}
 
@@ -3010,6 +3329,17 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.add<uint16_t>(creature->getStepSpeed() / 2);
 
+	if (!legacyProtocol) {
+		msg.addByte(0x00); //creature debuffs, to do
+		/*
+		if (icon != CREATUREICON_NONE) {
+			msg.addByte(icon);
+			msg.addByte(1);
+			msg.add<uint16_t>(0);
+		}
+		*/
+	}
+
 	msg.addByte(player->getSkullClient(creature));
 	msg.addByte(player->getPartyShield(otherPlayer));
 
@@ -3031,14 +3361,44 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		}
 	}
 
-	msg.addByte(creatureType); // Type (for summons)
+	if (legacyProtocol) {
+		// Type (for summons)
+		msg.addByte(creatureType);
+	} else {
+		// Type (for summons)
+		msg.addByte(creature->isHealthHidden() ? CREATURETYPE_HIDDEN : creatureType);
+
+		if (creature->isSummon()) {
+			const Creature* master = creature->getMaster();
+			if (master) {
+				msg.add<uint32_t>(master->getID());
+			} else {
+				msg.add<uint32_t>(0x00);
+			}
+		}
+
+		// Player vocation info
+		if (creatureType == CREATURETYPE_PLAYER) {
+			const Player* otherCreature = creature->getPlayer();
+			if (otherCreature) {
+				msg.addByte(otherCreature->getVocation()->getClientId());
+			} else {
+				msg.addByte(0x00);
+			}
+		}
+	}
+
 	msg.addByte(creature->getSpeechBubble());
 	msg.addByte(0xFF); // MARK_UNMARKED
 
-	if (otherPlayer) {
-		msg.add<uint16_t>(otherPlayer->getHelpers());
+	if (legacyProtocol) {
+		if (otherPlayer) {
+			msg.add<uint16_t>(otherPlayer->getHelpers());
+		} else {
+			msg.add<uint16_t>(0x00);
+		}
 	} else {
-		msg.add<uint16_t>(0x00);
+		msg.addByte(0x00); // inspection type
 	}
 
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
@@ -3052,7 +3412,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<uint16_t>::max()));
 
 	msg.add<uint32_t>(player->getFreeCapacity());
-	msg.add<uint32_t>(player->getCapacity());
+
+	if (legacyProtocol) {
+		msg.add<uint32_t>(player->getCapacity());
+	}
 
 	msg.add<uint64_t>(player->getExperience());
 
@@ -3060,7 +3423,11 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.addByte(player->getLevelPercent());
 
 	msg.add<uint16_t>(100); // base xp gain rate
-	msg.add<uint16_t>(0); // xp voucher
+
+	if (legacyProtocol) {
+		msg.add<uint16_t>(0); // xp voucher
+	}
+
 	msg.add<uint16_t>(0); // low level bonus
 	msg.add<uint16_t>(0); // xp boost
 	msg.add<uint16_t>(100); // stamina multiplier (100 = x1.0)
@@ -3068,14 +3435,14 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));
 
-	msg.addByte(std::min<uint32_t>(player->getMagicLevel(), std::numeric_limits<uint8_t>::max()));
-	msg.addByte(std::min<uint32_t>(player->getBaseMagicLevel(), std::numeric_limits<uint8_t>::max()));
-	msg.addByte(player->getMagicLevelPercent());
+	if (legacyProtocol) {
+		msg.addByte(std::min<uint32_t>(player->getMagicLevel(), std::numeric_limits<uint8_t>::max()));
+		msg.addByte(std::min<uint32_t>(player->getBaseMagicLevel(), std::numeric_limits<uint8_t>::max()));
+		msg.addByte(player->getMagicLevelPercent());
+	}
 
 	msg.addByte(player->getSoul());
-
 	msg.add<uint16_t>(player->getStaminaMinutes());
-
 	msg.add<uint16_t>(player->getBaseSpeed() / 2);
 
 	Condition* condition = player->getCondition(CONDITION_REGENERATION);
@@ -3084,22 +3451,50 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getOfflineTrainingTime() / 60 / 1000);
 
 	msg.add<uint16_t>(0); // xp boost time (seconds)
-	msg.addByte(0); // enables exp boost in the store
+	msg.addByte(0x00); // enables exp boost in the store
+
+	if (!legacyProtocol) {
+		msg.add<uint16_t>(0);  // remaining mana shield
+		msg.add<uint16_t>(0);  // total mana shield
+	}
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 {
 	msg.addByte(0xA1);
 
-	for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
-		msg.add<uint16_t>(std::min<int32_t>(player->getSkillLevel(i), std::numeric_limits<uint16_t>::max()));
-		msg.add<uint16_t>(player->getBaseSkill(i));
-		msg.addByte(player->getSkillPercent(i));
-	}
+	if (legacyProtocol) {
+		for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+			msg.add<uint16_t>(std::min<int32_t>(player->getSkillLevel(i), std::numeric_limits<uint16_t>::max()));
+			msg.add<uint16_t>(player->getBaseSkill(i));
+			msg.addByte(player->getSkillPercent(i));
+		}
 
-	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
-		msg.add<uint16_t>(std::min<int32_t>(100, player->varSpecialSkills[i]));
-		msg.add<uint16_t>(0);
+		for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+			msg.add<uint16_t>(std::min<int32_t>(100, player->varSpecialSkills[i]));
+			msg.add<uint16_t>(0);
+		}
+	} else {
+		msg.add<uint16_t>(player->getMagicLevel());
+		msg.add<uint16_t>(player->getBaseMagicLevel());
+		msg.add<uint16_t>(player->getBaseMagicLevel()); // base + loyalty bonus(?)
+		msg.add<uint16_t>(player->getMagicLevelPercent() * 100);
+
+		for (uint8_t i = SKILL_FIRST; i <= SKILL_FISHING; ++i) {
+			msg.add<uint16_t>(std::min<int32_t>(player->getSkillLevel(i), std::numeric_limits<uint16_t>::max()));
+			msg.add<uint16_t>(player->getBaseSkill(i));
+			msg.add<uint16_t>(player->getBaseSkill(i)); // base + loyalty bonus(?)
+			msg.add<uint16_t>(player->getSkillPercent(i) * 100);
+		}
+
+		for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+			msg.add<uint16_t>(std::min<int32_t>(100, player->varSpecialSkills[i])); // base + bonus special skill
+			msg.add<uint16_t>(0); // base special skill
+		}
+
+		// to do: bonus cap
+		msg.add<uint32_t>(player->getCapacity()); // base + bonus capacity
+		msg.add<uint32_t>(player->getCapacity()); // base capacity
 	}
 }
 

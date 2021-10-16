@@ -61,6 +61,8 @@ class Protocol : public std::enable_shared_from_this<Protocol>
 			if (auto connection = getConnection()) {
 				connection->send(msg);
 			}
+
+			std::cout << std::endl;
 		}
 
 	protected:
