@@ -1590,7 +1590,11 @@ void ProtocolGame::sendIcons(uint16_t icons)
 {
 	NetworkMessage msg;
 	msg.addByte(0xA2);
-	msg.add<uint16_t>(icons);
+	if (legacyProtocol) {
+		msg.add<uint16_t>(icons);
+	} else {
+		msg.add<uint32_t>(icons);
+	}
 	writeToOutputBuffer(msg);
 }
 
