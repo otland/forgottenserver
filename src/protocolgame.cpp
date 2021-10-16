@@ -3298,6 +3298,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 			msg.addByte(creature->isHealthHidden() ? CREATURETYPE_HIDDEN : creatureType);
 		}
 
+		/* summon emblem (bugged)
 		if (!legacyProtocol) {
 			if (creatureType == CREATURETYPE_MONSTER) {
 				const Creature* master = creature->getMaster();
@@ -3308,6 +3309,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 				}
 			}
 		}
+		*/
 
 		msg.addString(creature->getName());
 	}
