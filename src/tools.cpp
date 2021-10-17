@@ -692,6 +692,8 @@ AmmoTypeNames ammoTypeNames = {
 	{"envenomedarrow",	AMMO_ARROW},
 	{"gloothspear",		AMMO_SPEAR},
 	{"simplearrow",		AMMO_ARROW},
+	{"redstar",		AMMO_THROWINGSTAR},
+	{"greenstar",	AMMO_THROWINGSTAR},
 };
 
 WeaponActionNames weaponActionNames = {
