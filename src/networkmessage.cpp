@@ -59,13 +59,10 @@ void NetworkMessage::addString(const std::string& value)
 	memcpy(buffer + info.position, value.c_str(), stringLen);
 	info.position += stringLen;
 	info.length += stringLen;
-
-	std::cout << "string: " << value << std::endl;
 }
 
 void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
 {
-	std::cout << "double: " << value << " " << precision << std::endl;
 	addByte(precision);
 	add<uint32_t>(static_cast<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + std::numeric_limits<int32_t>::max()));
 }

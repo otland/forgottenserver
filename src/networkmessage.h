@@ -90,8 +90,6 @@ class NetworkMessage
 
 			buffer[info.position++] = value;
 			info.length++;
-
-			std::cout << "byte: " << static_cast<int>(value) << std::endl;
 		}
 
 		template<typename T>
@@ -103,8 +101,6 @@ class NetworkMessage
 			memcpy(buffer + info.position, &value, sizeof(T));
 			info.position += sizeof(T);
 			info.length += sizeof(T);
-
-			std::cout << "value: " << static_cast<double>(value) << std::endl;
 		}
 
 		void addBytes(const char* bytes, size_t size);

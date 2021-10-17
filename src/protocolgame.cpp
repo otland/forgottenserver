@@ -502,7 +502,6 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
 	auto out = getOutputBuffer(msg.getLength());
 	out->append(msg);
-	std::cout << std::endl;
 }
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
@@ -1472,18 +1471,21 @@ void ProtocolGame::sendCreatureType(uint32_t creatureId, uint8_t creatureType)
 	msg.add<uint32_t>(creatureId);
 	msg.addByte(creatureType);
 
-	//+u32 master uid if summon
+	if (!legacyProtocol && creatureType == CREATURETYPE_SUMMON_OWN || creatureType == CREATURETYPE_SUMMON_OTHERS) {
+		//to do: master uid if summon
+		msg.add<uint32_t>(0);
+	}
 
 	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendCreatureHelpers(uint32_t creatureId, uint16_t helpers)
 {
-	NetworkMessage msg;
-	msg.addByte(0x94);
-	msg.add<uint32_t>(creatureId);
-	msg.add<uint16_t>(helpers);
-	writeToOutputBuffer(msg);
+		NetworkMessage msg;
+		msg.addByte(0x94);
+		msg.add<uint32_t>(creatureId);
+		msg.add<uint16_t>(helpers);
+		writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t color)
@@ -3485,7 +3487,6 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
-
 	const Player* otherPlayer = creature->getPlayer();
 
 	if (known) {
@@ -3503,15 +3504,16 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		}
 
 		if (!legacyProtocol) {
+			/*
 			if (creatureType == CREATURETYPE_MONSTER) {
 				const Creature* master = creature->getMaster();
 				if (master) {
 					msg.add<uint32_t>(master->getID());
-				}
-				else {
+				} else {
 					msg.add<uint32_t>(0x00);
 				}
 			}
+			*/
 		}
 
 		msg.addString(creature->getName());
@@ -3568,13 +3570,13 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		if (master) {
 			const Player* masterPlayer = master->getPlayer();
 			if (masterPlayer) {
-				
-				//if (masterPlayer == player) {
-					creatureType = CREATURETYPE_SUMMON_OWN;
-				//} else {
-				// crashing(?)
-				//	creatureType = CREATURETYPE_SUMMON_OTHERS;
-				//}
+				if (legacyProtocol) {
+					if (masterPlayer == player) {
+						creatureType = CREATURETYPE_SUMMON_OWN;
+					} else {
+						creatureType = CREATURETYPE_SUMMON_OTHERS;
+					}
+				}
 			}
 		}
 	}
@@ -3586,6 +3588,8 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		// Type (for summons)
 		msg.addByte(creature->isHealthHidden() ? CREATURETYPE_HIDDEN : creatureType);
 
+		// crashing the client 12 for some reason
+		/*
 		if (creatureType == CREATURETYPE_SUMMON_OWN || creatureType == CREATURETYPE_SUMMON_OTHERS) {
 			const Creature* master = creature->getMaster();
 			if (master) {
@@ -3594,6 +3598,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 				msg.add<uint32_t>(0x00);
 			}
 		}
+		*/
 
 		// Player vocation info
 		if (creatureType == CREATURETYPE_PLAYER) {
