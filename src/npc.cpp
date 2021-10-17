@@ -498,7 +498,7 @@ bool Npc::getRandomStep(Direction& dir) const
 		dirList[++directions] = DIRECTION_WEST;
 	}
 
-	if (directions <= 4) {
+	if (directions != -1) {
 		dir = dirList[uniform_random(0, directions)];
 		return true;
 	}
