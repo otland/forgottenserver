@@ -1324,6 +1324,7 @@ void ProtocolGame::parseMarketCreateOffer(NetworkMessage& msg)
 	uint32_t price = msg.get<uint32_t>();
 	bool anonymous = (msg.getByte() != 0);
 	addGameTask(&Game::playerCreateMarketOffer, player->getID(), type, spriteId, amount, price, anonymous);
+	sendMarketBalance();
 }
 
 void ProtocolGame::parseMarketCancelOffer(NetworkMessage& msg)
@@ -1331,6 +1332,7 @@ void ProtocolGame::parseMarketCancelOffer(NetworkMessage& msg)
 	uint32_t timestamp = msg.get<uint32_t>();
 	uint16_t counter = msg.get<uint16_t>();
 	addGameTask(&Game::playerCancelMarketOffer, player->getID(), timestamp, counter);
+	sendMarketBalance();
 }
 
 void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
@@ -1868,12 +1870,42 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendMarketBalance() {
+	//to do: get coins from game.cpp, launch it all from addGameTask (?)
+	if (legacyProtocol) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0xF2);
+	msg.addByte(0x01);
+	writeToOutputBuffer(msg);
+
+	msg.reset();
+
+	// send update
+	msg.addByte(0xDF);
+	msg.addByte(0x01);
+
+	//placeholder packet / to do
+	msg.add<uint32_t>(0); // Normal Coins
+	msg.add<uint32_t>(0); // Transferable Coins
+	msg.add<uint32_t>(0); // Reserved Auction Coins
+	msg.add<uint32_t>(0); // Tournament Coins
+
+	writeToOutputBuffer(msg);
+
+}
+
 void ProtocolGame::sendMarketEnter(uint32_t depotId)
 {
 	NetworkMessage msg;
 	msg.addByte(0xF6);
 
-	msg.add<uint64_t>(player->getBankBalance());
+	if (legacyProtocol) {
+		msg.add<uint64_t>(player->getBankBalance());
+	}
+
 	msg.addByte(std::min<uint32_t>(IOMarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max()));
 
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
@@ -1926,6 +1958,29 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	}
 
 	writeToOutputBuffer(msg);
+
+	sendMarketBalance(); //store coins balance
+	/* bank gp, eq gp, prey cards */
+	//to do: separate function
+	if (!legacyProtocol) {
+		NetworkMessage msg7;
+		msg7.addByte(0xEE);
+		msg7.addByte(0x00);
+		msg7.add<uint64_t>(0);
+		writeToOutputBuffer(msg7);
+
+		NetworkMessage msg8;
+		msg8.addByte(0xEE);
+		msg8.addByte(0x01);
+		msg8.add<uint64_t>(0);
+		writeToOutputBuffer(msg8);
+
+		NetworkMessage msg9;
+		msg9.addByte(0xEE);
+		msg9.addByte(0x0A);
+		msg9.add<uint64_t>(0);
+		writeToOutputBuffer(msg9);
+	}
 }
 
 void ProtocolGame::sendMarketLeave()
@@ -1960,6 +2015,7 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 		msg.addString(offer.playerName);
 	}
 
+	sendMarketBalance();
 	writeToOutputBuffer(msg);
 }
 
@@ -2256,9 +2312,12 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	}
 
 	if (!legacyProtocol) {
-		//imbuing slots
 		//string or u16 0x00
-		msg.add<uint16_t>(0x00);
+		msg.add<uint16_t>(0x00); // magic shield capacity
+		msg.add<uint16_t>(0x00); // cleave
+		msg.add<uint16_t>(0x00); // damage reflection
+		msg.add<uint16_t>(0x00); // perfect shot
+		msg.add<uint16_t>(0x00); // imbuing slots
 	}
 
 	MarketStatistics* statistics = IOMarket::getInstance().getPurchaseStatistics(itemId);
@@ -3533,9 +3592,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.addByte(creature->getDirection());
 
 	if (!creature->isInGhostMode() && !creature->isInvisible()) {
-		AddOutfit(msg, creature->getCurrentOutfit());
-	} else {
-		static Outfit_t outfit;
+		const Outfit_t& outfit = creature->getCurrentOutfit();
 		AddOutfit(msg, outfit);
 		if (!legacyProtocol && outfit.lookMount != 0) {
 			// to do: mount colors
@@ -3544,6 +3601,9 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 			msg.addByte(0);
 			msg.addByte(0);
 		}
+	} else {
+		static Outfit_t outfit;
+		AddOutfit(msg, outfit);
 	}
 
 	LightInfo lightInfo = creature->getCreatureLight();
