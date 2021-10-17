@@ -102,4 +102,92 @@
 	<mount id="100" clientid="901" name="Ivory Fang" speed="20" premium="no" />
 	<mount id="101" clientid="902" name="Shadow Claw" speed="20" premium="no" />
 	<mount id="102" clientid="903" name="Snow Pelt" speed="20" premium="no" />
+	<mount id="103" clientid="905" name="Jackalope" speed="20" premium="no" />
+	<mount id="104" clientid="906" name="Dreadhare" speed="20" premium="no" />
+	<mount id="105" clientid="907" name="Wolpertinger" speed="20" premium="no" />
+	<mount id="106" clientid="937" name="Stone Rhino" speed="20" premium="no" />
+	<mount id="107" clientid="950" name="Gold Sphinx" speed="20" premium="no" />
+	<mount id="108" clientid="951" name="Emerald Sphinx" speed="20" premium="no" />
+	<mount id="109" clientid="952" name="Shadow Sphinx" speed="20" premium="no" />
+	<mount id="110" clientid="959" name="Jungle Saurian" speed="20" premium="no" />
+	<mount id="111" clientid="960" name="Ember Saurian" speed="20" premium="no" />
+	<mount id="112" clientid="961" name="Lagoon Saurian" speed="20" premium="no" />
+	<mount id="113" clientid="1017" name="Blazing Unicorn" speed="20" premium="no" />
+	<mount id="114" clientid="1018" name="Arctic Unicorn" speed="20" premium="no" />
+	<mount id="115" clientid="1019" name="Prismatic unicorn" speed="20" premium="no" />
+	<mount id="116" clientid="1025" name="Cranium Spider" speed="20" premium="no" />
+	<mount id="117" clientid="1026" name="Cave Tarantula" speed="20" premium="no" />
+	<mount id="118" clientid="1027" name="Gloom Widow" speed="20" premium="no" />
+	<mount id="119" clientid="1049" name="Mole" speed="20" premium="no" />
+	<mount id="120" clientid="1052" name="Marsh Toad" speed="20" premium="no" />
+	<mount id="121" clientid="1053" name="Sanguine Frog" speed="20" premium="no" />
+	<mount id="122" clientid="1054" name="Toxic Toad" speed="20" premium="no" />
+	<mount id="123" clientid="1091" name="Ebony Tiger" speed="20" premium="no" />
+	<mount id="124" clientid="1092" name="Feral Tiger" speed="20" premium="no" />
+	<mount id="125" clientid="1093" name="Jungle Tiger" speed="20" premium="no" />
+	<mount id="126" clientid="1101" name="Fleeting Knowledge" speed="20" premium="no" />
+	<mount id="127" clientid="1104" name="Tawny Owl" speed="20" premium="no" />
+	<mount id="128" clientid="1105" name="Snowy Owl" speed="20" premium="no" />
+	<mount id="129" clientid="1106" name="Boreal Owl" speed="20" premium="no" />
+	<mount id="130" clientid="1150" name="Lacewing Moth" speed="20" premium="yes" />
+	<mount id="131" clientid="1151" name="Hibernal Moth" speed="20" premium="yes" />
+	<mount id="132" clientid="1163" name="Cold Percht Sleigh" speed="20" premium="yes" />
+	<mount id="133" clientid="1164" name="Bright Percht Sleigh" speed="20" premium="yes" />
+	<mount id="134" clientid="1165" name="Dark Percht Sleigh" speed="20" premium="yes" />
+	<mount id="135" clientid="1167" name="Festive Snowman" speed="20" premium="no" />
+	<mount id="136" clientid="1168" name="Muffled Snowman" speed="20" premium="no" />
+	<mount id="137" clientid="1169" name="Caped Snowman" speed="20" premium="no" />
+	<mount id="138" clientid="1179" name="Rabbit Rickshaw" speed="20" premium="yes" />
+	<mount id="139" clientid="1180" name="Bunny Dray" speed="20" premium="yes" />
+	<mount id="140" clientid="1181" name="Cony Cart" speed="20" premium="yes" />
+	<mount id="141" clientid="1183" name="River Crocovile" speed="20" premium="no" />
+	<mount id="142" clientid="1184" name="Swamp Crocovile" speed="20" premium="no" />
+	<mount id="143" clientid="1185" name="Nightmarish Crocovile" speed="20" premium="no" />
+	<mount id="144" clientid="1191" name="Gryphon" speed="20" premium="yes" />
+ 	<mount id="145" clientid="1208" name="Jousting Eagle" speed="20" premium="yes" />
+	<mount id="146" clientid="1209" name="Cerberus Champion" speed="20" premium="yes" />
+	<mount id="147" clientid="1229" name="Cold Percht Sleigh Variant" speed="20" premium="yes" />
+	<mount id="148" clientid="1230" name="Bright Percht Sleigh Variant" speed="20" premium="yes" />
+	<mount id="149" clientid="1231" name="Dark Percht Sleigh Variant" speed="20" premium="yes" />
+	<mount id="150" clientid="1232" name="Cold Percht Sleigh Final" speed="20" premium="yes" />
+	<mount id="151" clientid="1233" name="Bright Percht Sleigh Final" speed="20" premium="yes" />
+	<mount id="152" clientid="1234" name="Dark Percht Sleigh Final" speed="20" premium="yes" />
+	<mount id="153" clientid="1247" name="Battle Badger" speed="20" premium="no" />
+	<mount id="154" clientid="1248" name="Ether Badger" speed="20" premium="no" />
+	<mount id="155" clientid="1249" name="Zaoan Badger" speed="20" premium="no" />
+	<mount id="156" clientid="1257" name="Blue Rolling Barrel" speed="20" premium="no" />
+	<mount id="157" clientid="1258" name="Red Rolling Barrel" speed="20" premium="no" />
+	<mount id="158" clientid="1259" name="Green Rolling Barrel" speed="20" premium="no" />
+	<mount id="159" clientid="1264" name="Floating Sage" speed="20" premium="no" />
+	<mount id="160" clientid="1265" name="Floating Scholar" speed="20" premium="no" />
+	<mount id="161" clientid="1266" name="Floating Augur" speed="20" premium="no" />
+	<mount id="162" clientid="1269" name="Haze" speed="20" premium="yes" />
+	<mount id="163" clientid="1281" name="Antelope" speed="20" premium="yes" />
+	<mount id="164" clientid="1284" name="Snow Strider" speed="20" premium="yes" />
+	<mount id="165" clientid="1285" name="Dusk Pryer" speed="20" premium="yes" />
+	<mount id="166" clientid="1286" name="Dawn Strayer" speed="20" premium="yes" />
+	<mount id="167" clientid="1321" name="Spectral Horse" speed="20" premium="yes" />
+	<mount id="168" clientid="1324" name="Savanna Ostrich" speed="20" premium="yes" />
+	<mount id="169" clientid="1325" name="Coral Rhea" speed="20" premium="yes" />
+	<mount id="170" clientid="1326" name="Eventide Nandu" speed="20" premium="yes" />
+	<mount id="171" clientid="1333" name="Voracious Hyaena" speed="20" premium="no" />
+	<mount id="172" clientid="1334" name="Cunning Hyaena" speed="20" premium="no" />
+	<mount id="173" clientid="1335" name="Scruffy Hyaena" speed="20" premium="no" />
+	<mount id="174" clientid="1336" name="White Lion" speed="20" premium="yes" />
+	<mount id="175" clientid="1363" name="Krakoloss" speed="20" premium="yes" />
+	<mount id="176" clientid="1379" name="Merry Mammoth" speed="20" premium="no" />
+	<mount id="177" clientid="1380" name="Holiday Mammoth" speed="20" premium="no" />
+	<mount id="178" clientid="1381" name="Festive Mammoth" speed="20" premium="no" />
+	<mount id="179" clientid="1389" name="Void Watcher" speed="20" premium="no" />
+	<mount id="180" clientid="1390" name="Rune Watcher" speed="20" premium="no" />
+	<mount id="181" clientid="1391" name="Rift Watcher" speed="20" premium="no" />
+	<mount id="182" clientid="1417" name="Phant" speed="20" premium="yes" />
+	<mount id="183" clientid="1430" name="Shellodon" speed="20" premium="yes" />
+	<mount id="184" clientid="1431" name="Singeing Steed" speed="20" premium="yes" />
+	<mount id="185" clientid="1439" name="Hyacinth" speed="20" premium="no" />
+	<mount id="186" clientid="1440" name="Peony" speed="20" premium="no" />
+	<mount id="187" clientid="1441" name="Dandelion" speed="20" premium="no" />
+	<mount id="188" clientid="1446" name="Rustwurm" speed="20" premium="no" />
+	<mount id="189" clientid="1447" name="Bogwurm" speed="20" premium="no" />
+	<mount id="190" clientid="1448" name="Gloomwurm" speed="20" premium="no" />
 </mounts>

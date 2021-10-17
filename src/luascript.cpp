@@ -1355,6 +1355,50 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_RAGIAZ_BONECAPSULE)
 	registerEnum(CONST_ME_CRITICAL_DAMAGE)
 	registerEnum(CONST_ME_PLUNGING_FISH)
+	registerEnum(CONST_ME_BLUECHAIN)
+	registerEnum(CONST_ME_ORANGECHAIN)
+	registerEnum(CONST_ME_GREENCHAIN)
+	registerEnum(CONST_ME_PURPLECHAIN)
+	registerEnum(CONST_ME_GREYCHAIN)
+	registerEnum(CONST_ME_YELLOWCHAIN)
+	registerEnum(CONST_ME_YELLOWSPARKLES)
+	registerEnum(CONST_ME_FAEEXPLOSION)
+	registerEnum(CONST_ME_FAECOMING)
+	registerEnum(CONST_ME_FAEGOING)
+	registerEnum(CONST_ME_BIGCLOUDSSINGLESPACE)
+	registerEnum(CONST_ME_STONESSINGLESPACE)
+	registerEnum(CONST_ME_BLUEGHOST)
+	registerEnum(CONST_ME_POINTOFINTEREST)
+	registerEnum(CONST_ME_MAPEFFECT)
+	registerEnum(CONST_ME_PINKSPARK)
+	registerEnum(CONST_ME_FIREWORK_GREEN)
+	registerEnum(CONST_ME_FIREWORK_ORANGE)
+	registerEnum(CONST_ME_FIREWORK_PURPLE)
+	registerEnum(CONST_ME_FIREWORK_TURQUOISE)
+	registerEnum(CONST_ME_THECUBE)
+	registerEnum(CONST_ME_DRAWINK)
+	registerEnum(CONST_ME_PRISMATICSPARKLES)
+	registerEnum(CONST_ME_THAIAN)
+	registerEnum(CONST_ME_THAIANGHOST)
+	registerEnum(CONST_ME_GHOSTSMOKE)
+	registerEnum(CONST_ME_FLOATINGBLOCK)
+	registerEnum(CONST_ME_BLOCK)
+	registerEnum(CONST_ME_ROOTING)
+	registerEnum(CONST_ME_SUNPRIEST)
+	registerEnum(CONST_ME_WERELION)
+	registerEnum(CONST_ME_GHOSTLYSCRATCH)
+	registerEnum(CONST_ME_GHOSTLYBITE)
+	registerEnum(CONST_ME_BIGSCRATCHING)
+	registerEnum(CONST_ME_SLASH)
+	registerEnum(CONST_ME_BITE)
+	registerEnum(CONST_ME_CHIVALRIOUSCHALLENGE)
+	registerEnum(CONST_ME_DIVINEDAZZLE)
+	registerEnum(CONST_ME_ELECTRICALSPARK)
+	registerEnum(CONST_ME_PURPLETELEPORT)
+	registerEnum(CONST_ME_REDTELEPORT)
+	registerEnum(CONST_ME_ORANGETELEPORT)
+	registerEnum(CONST_ME_GREYTELEPORT)
+	registerEnum(CONST_ME_LIGHTBLUETELEPORT)
 
 	registerEnum(CONST_ANI_NONE)
 	registerEnum(CONST_ANI_SPEAR)
@@ -1407,6 +1451,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ANI_ENVENOMEDARROW)
 	registerEnum(CONST_ANI_GLOOTHSPEAR)
 	registerEnum(CONST_ANI_SIMPLEARROW)
+	registerEnum(CONST_ANI_LEAFSTAR)
+	registerEnum(CONST_ANI_DIAMONDARROW)
+	registerEnum(CONST_ANI_SPECTRALBOLT)
+	registerEnum(CONST_ANI_ROYALSTAR)
 	registerEnum(CONST_ANI_WEAPONTYPE)
 
 	registerEnum(CONST_PROP_BLOCKSOLID)
@@ -16398,13 +16446,13 @@ int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		if (globalevent->getEventType() == GLOBALEVENT_NONE && globalevent->getInterval() == 0) {
 			std::cout << "[Error - LuaScriptInterface::luaGlobalEventRegister] No interval for globalevent with name " << globalevent->getName() << std::endl;
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		pushBoolean(L, g_globalEvents->registerLuaEvent(globalevent));
 	} else {
 		lua_pushnil(L);
