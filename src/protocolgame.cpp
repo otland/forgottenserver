@@ -1609,7 +1609,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 		msg.addItem(ITEM_BAG, 1);
 		msg.addString("Browse Field");
 	} else {
-		msg.addItem(container);
+		msg.addItem(container, legacyProtocol);
 		msg.addString(container->getName());
 	}
 
@@ -1628,7 +1628,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 
 		msg.addByte(itemsToSend);
 		for (auto it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
-			msg.addItem(*it);
+			msg.addItem(*it, legacyProtocol);
 		}
 	} else {
 		msg.addByte(0x00);
@@ -2217,11 +2217,11 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 
 		msg.addByte(itemList.size());
 		for (const Item* listItem : itemList) {
-			msg.addItem(listItem);
+			msg.addItem(listItem, legacyProtocol);
 		}
 	} else {
 		msg.addByte(0x01);
-		msg.addItem(item);
+		msg.addItem(item, legacyProtocol);
 	}
 	writeToOutputBuffer(msg);
 }
@@ -2472,7 +2472,7 @@ void ProtocolGame::sendAddTileItem(const Position& pos, uint32_t stackpos, const
 	msg.addByte(0x6A);
 	msg.addPosition(pos);
 	msg.addByte(stackpos);
-	msg.addItem(item);
+	msg.addItem(item, legacyProtocol);
 	writeToOutputBuffer(msg);
 }
 
@@ -2486,7 +2486,7 @@ void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, co
 	msg.addByte(0x6B);
 	msg.addPosition(pos);
 	msg.addByte(stackpos);
-	msg.addItem(item);
+	msg.addItem(item, legacyProtocol);
 	writeToOutputBuffer(msg);
 }
 
@@ -3058,7 +3058,7 @@ void ProtocolGame::sendAddContainerItem(uint8_t cid, uint16_t slot, const Item* 
 	msg.addByte(0x70);
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
-	msg.addItem(item);
+	msg.addItem(item, legacyProtocol);
 	writeToOutputBuffer(msg);
 }
 
@@ -3068,7 +3068,7 @@ void ProtocolGame::sendUpdateContainerItem(uint8_t cid, uint16_t slot, const Ite
 	msg.addByte(0x71);
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
-	msg.addItem(item);
+	msg.addItem(item, legacyProtocol);
 	writeToOutputBuffer(msg);
 }
 
@@ -3079,7 +3079,7 @@ void ProtocolGame::sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Ite
 	msg.addByte(cid);
 	msg.add<uint16_t>(slot);
 	if (lastItem) {
-		msg.addItem(lastItem);
+		msg.addItem(lastItem, legacyProtocol);
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
@@ -3091,7 +3091,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	NetworkMessage msg;
 	msg.addByte(0x96);
 	msg.add<uint32_t>(windowTextId);
-	msg.addItem(item);
+	msg.addItem(item, legacyProtocol);
 
 	if (canWrite) {
 		msg.add<uint16_t>(maxlen);
