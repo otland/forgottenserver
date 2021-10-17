@@ -85,7 +85,7 @@ jobs:
           echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@3f40d51892f553ccc1279e943640527bde14635b
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
@@ -93,7 +93,7 @@ jobs:
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
       - name: Build with CMake
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@37910ad41ea9667b241360328d9414b62c7feee1
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
@@ -160,7 +160,7 @@ jobs:
           echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@main
+        uses: lukka/run-vcpkg@3f40d51892f553ccc1279e943640527bde14635b
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
@@ -168,7 +168,7 @@ jobs:
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
       - name: Build with CMake
-        uses: lukka/run-cmake@main
+        uses: lukka/run-cmake@37910ad41ea9667b241360328d9414b62c7feee1
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
