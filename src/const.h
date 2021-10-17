@@ -191,9 +191,12 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_YELL = 3,
 	TALKTYPE_PRIVATE_FROM = 4,
 	TALKTYPE_PRIVATE_TO = 5,
+	TALKTYPE_CHANNEL_UNTESTED = 6, /* version 12 */
 	TALKTYPE_CHANNEL_Y = 7,
 	TALKTYPE_CHANNEL_O = 8,
+	TALKTYPE_SPELL = 9, /* version 12 */
 	TALKTYPE_PRIVATE_NP = 10,
+	TALKTYPE_NPC_UNTESTED = 11, /* version 12 */
 	TALKTYPE_PRIVATE_PN = 12,
 	TALKTYPE_BROADCAST = 13,
 	TALKTYPE_CHANNEL_R1 = 14, //red - #c text
@@ -204,6 +207,8 @@ enum SpeakClasses : uint8_t {
 };
 
 enum MessageClasses : uint8_t {
+
+	/* possibly not working anymore */
 	MESSAGE_STATUS_CONSOLE_BLUE = 4, /*FIXME Blue message in the console*/
 
 	MESSAGE_STATUS_CONSOLE_RED = 13, /*Red message in the console*/
@@ -211,6 +216,8 @@ enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_DEFAULT = 17, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_STATUS_WARNING = 18, /*Red message in game window and in the console*/
 	MESSAGE_EVENT_ADVANCE = 19, /*White message in game window and in the console*/
+
+	MESSAGE_RED_UNTESTED = 20, /* version 12 / Red message in game window and in the console */
 
 	MESSAGE_STATUS_SMALL = 21, /*White message at the bottom of the game window"*/
 	MESSAGE_INFO_DESCR = 22, /*Green message in game window and in the console*/
@@ -224,11 +231,29 @@ enum MessageClasses : uint8_t {
 	MESSAGE_EVENT_DEFAULT = 30, /*White message at the bottom of the game window and in the console*/
 	MESSAGE_LOOT = 31,
 
+	MESSAGE_TRADE = 32, /* version 12 / Green message in game window and in the console*/
+
 	MESSAGE_GUILD = 33, /*White message in channel (+ channelId)*/
 	MESSAGE_PARTY_MANAGEMENT = 34, /*White message in channel (+ channelId)*/
 	MESSAGE_PARTY = 35, /*White message in channel (+ channelId)*/
+
+	/* possibly not working anymore */
 	MESSAGE_EVENT_ORANGE = 36, /*Orange message in the console*/
 	MESSAGE_STATUS_CONSOLE_ORANGE = 37,  /*Orange message in the console*/
+
+	/* needs testing */
+	MESSAGE_REPORT = 38, /* White message on the game window and in the console*/
+	MESSAGE_HOTKEY_PRESSED = 39, /* Green message in game window and in the console*/
+	MESSAGE_TUTORIAL_HINT = 40, /* no effect (?)*/
+	MESSAGE_THANK_YOU = 41, /* no effect (?)*/
+	MESSAGE_MARKET = 42, /* Popout a modal window with the message and a 'ok' button*/
+	MESSAGE_MANA = 43, /* no effect (?)*/
+	MESSAGE_BEYOND_LAST = 44, /* White message on the game window and in the console*/
+	MESSAGE_ATTENTION = 48, /* White message on the console*/
+	MESSAGE_BOOSTED_CREATURE = 49, /* White message on the game window and in the console*/
+	MESSAGE_OFFLINE_TRAINING = 50, /* White message on the game window and in the console*/
+	MESSAGE_TRANSACTION = 51, /* White message on the game window and in the console*/
+	MESSAGE_POTION = 52, /* Orange creature say*/
 };
 
 enum FluidColors_t : uint8_t {

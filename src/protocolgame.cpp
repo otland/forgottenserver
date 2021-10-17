@@ -1507,7 +1507,7 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 		}
 	}
 	msg.addString(message.text);
-	//writeToOutputBuffer(msg);
+	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendClosePrivate(uint16_t channelId)
@@ -2273,6 +2273,9 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	msg.add<uint32_t>(++statementId);
 
 	msg.addString(creature->getName());
+	if (!legacyProtocol) {
+		msg.addByte(0x00); // "(Traded)" suffix to player name in chatbox (bool)
+	}
 
 	//Add level only for players
 	if (const Player* speaker = creature->getPlayer()) {
@@ -2301,8 +2304,15 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 	msg.add<uint32_t>(++statementId);
 	if (!creature) {
 		msg.add<uint32_t>(0x00);
+		if (!legacyProtocol) {
+			msg.addByte(0x00); // "(Traded)" suffix after player name
+		}
 	} else {
 		msg.addString(creature->getName());
+		if (!legacyProtocol) {
+			msg.addByte(0x00); // "(Traded)" suffix after player name
+		}
+
 		//Add level only for players
 		if (const Player* speaker = creature->getPlayer()) {
 			msg.add<uint16_t>(speaker->getLevel());
@@ -2325,9 +2335,15 @@ void ProtocolGame::sendPrivateMessage(const Player* speaker, SpeakClasses type, 
 	msg.add<uint32_t>(++statementId);
 	if (speaker) {
 		msg.addString(speaker->getName());
+		if (!legacyProtocol) {
+			msg.addByte(0x00); // "(Traded)" suffix after player name
+		}
 		msg.add<uint16_t>(speaker->getLevel());
 	} else {
 		msg.add<uint32_t>(0x00);
+		if (!legacyProtocol) {
+			msg.addByte(0x00); // "(Traded)" suffix after player name
+		}
 	}
 	msg.addByte(type);
 	msg.addString(text);
