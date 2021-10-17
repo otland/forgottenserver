@@ -1339,7 +1339,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 		}
 	}
 
-	if (directions <= 4) {
+	if (directions != -1) {
 		direction = dirList[uniform_random(0, directions)];
 		return true;
 	}
