@@ -537,6 +537,10 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, getThis(), true, false))); break;
 		case 0x1D: addGameTask(&Game::playerReceivePingBack, player->getID()); break;
 		case 0x1E: addGameTask(&Game::playerReceivePing, player->getID()); break;
+		//case 0x2A: break; // bestiary tracker
+		//case 0x2C: break; // team finder (leader)
+		//case 0x2D: break; // team finder (member)
+		//case 0x28: break; // stash withdraw
 		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode
 		case 0x64: parseAutoWalk(msg); break;
 		case 0x65: addGameTask(&Game::playerMove, player->getID(), DIRECTION_NORTH); break;
@@ -552,6 +556,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x70: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_EAST); break;
 		case 0x71: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_SOUTH); break;
 		case 0x72: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerTurn, player->getID(), DIRECTION_WEST); break;
+		//case 0x73: break; // map click(?)
 		case 0x77: parseEquipObject(msg); break;
 		case 0x78: parseThrow(msg); break;
 		case 0x79: parseLookInShop(msg); break;
@@ -566,6 +571,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x83: parseUseItemEx(msg); break;
 		case 0x84: parseUseWithCreature(msg); break;
 		case 0x85: parseRotateItem(msg); break;
+		//case 0x86: break; // podium interaction
 		case 0x87: parseCloseContainer(msg); break;
 		case 0x88: parseUpArrowContainer(msg); break;
 		case 0x89: parseTextWindow(msg); break;
@@ -574,6 +580,10 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x8C: parseLookAt(msg); break;
 		case 0x8D: parseLookInBattleList(msg); break;
 		case 0x8E: /* join aggression */ break;
+		//case 0x8F: break; // quick loot
+		//case 0x90: break; // loot container
+		//case 0x91: break; // update loot whitelist
+		//case 0x92: break; // request locker items
 		case 0x96: parseSay(msg); break;
 		case 0x97: addGameTask(&Game::playerRequestChannels, player->getID()); break;
 		case 0x98: parseOpenChannel(msg); break;
@@ -592,20 +602,35 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xAA: addGameTask(&Game::playerCreatePrivateChannel, player->getID()); break;
 		case 0xAB: parseChannelInvite(msg); break;
 		case 0xAC: parseChannelExclude(msg); break;
+		//case 0xB1: break; // request highscores
 		case 0xBE: addGameTask(&Game::playerCancelAttackAndFollow, player->getID()); break;
+		//case 0xC7: break; // request tournament leaderboard
 		case 0xC9: /* update tile */ break;
 		case 0xCA: parseUpdateContainer(msg); break;
 		case 0xCB: parseBrowseField(msg); break;
 		case 0xCC: parseSeekInContainer(msg); break;
+		//case 0xCD: break; // request inspect window
 		case 0xD2: addGameTask(&Game::playerRequestOutfit, player->getID()); break;
 		case 0xD3: parseSetOutfit(msg); break;
 		case 0xD4: parseToggleMount(msg); break;
+		//case 0xD5: break; // apply imbuement
+		//case 0xD6: break; // clear imbuement
+		//case 0xD7: break; // close imbuing window
 		case 0xDC: parseAddVip(msg); break;
 		case 0xDD: parseRemoveVip(msg); break;
 		case 0xDE: parseEditVip(msg); break;
+		//case 0xDF: break; // premium shop (?)
+		//case 0xE0: break; // premium shop (?)
+		//case 0xE1: break; // bestiary 1
+		//case 0xE2: break; // bestiary 2
+		//case 0xE3: break; // bestiary 3
+		//case 0xE4: break; // buy charm rune
+		//case 0xE5: break; // request character info (cyclopedia)
 		case 0xE6: parseBugReport(msg); break;
 		case 0xE7: /* thank you */ break;
 		case 0xE8: parseDebugAssert(msg); break;
+		//case 0xEE: break; // greet NPC
+		//case 0xEF: break; // request store coins transfer
 		case 0xF0: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerShowQuestLog, player->getID()); break;
 		case 0xF1: parseQuestLine(msg); break;
 		case 0xF2: parseRuleViolationReport(msg); break;
@@ -616,6 +641,11 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xF7: parseMarketCancelOffer(msg); break;
 		case 0xF8: parseMarketAcceptOffer(msg); break;
 		case 0xF9: parseModalWindowAnswer(msg); break;
+		//case 0xFA: break; // store window open
+		//case 0xFB: break; // store window click
+		//case 0xFC: break; // store window buy
+		//case 0xFD: break; // store window history 1
+		//case 0xFE: break; // store window history 2
 
 		default:
 			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
