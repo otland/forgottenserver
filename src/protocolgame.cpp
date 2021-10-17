@@ -3305,6 +3305,8 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
+	bool mounted = currentOutfit.lookMount != 0;
+
 	if (currentOutfit.lookType == 0) {
 		Outfit_t newOutfit;
 		newOutfit.lookType = outfits.front().lookType;
@@ -3369,7 +3371,11 @@ void ProtocolGame::sendOutfitWindow()
 		}
 	}
 
-	msg.addByte(mounts.size());
+	if (legacyProtocol) {
+		msg.addByte(mounts.size());
+	} else {
+		msg.add<uint16_t>(mounts.size());
+	}
 	for (const Mount* mount : mounts) {
 		msg.add<uint16_t>(mount->clientId);
 		msg.addString(mount->name);
@@ -3386,7 +3392,6 @@ void ProtocolGame::sendOutfitWindow()
 		//0x00 //purchasable (?) (bool?)
 
 		msg.addByte(0x00); //Try outfit mode (?)
-		bool mounted = (currentOutfit.lookMount == currentMount->clientId);
 		msg.addByte(mounted ? 0x01 : 0x00);
 	}
 
