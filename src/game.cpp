@@ -4712,7 +4712,6 @@ void Game::updatePlayerHelpers(const Player& player)
 void Game::updateCreatureType(Creature* creature)
 {
 	const Player* masterPlayer = nullptr;
-	uint32_t masterId = 0;
 
 	uint32_t creatureId = creature->getID();
 	CreatureType_t creatureType = creature->getType();
@@ -4721,7 +4720,6 @@ void Game::updateCreatureType(Creature* creature)
 		if (master) {
 			masterPlayer = master->getPlayer();
 			if (masterPlayer) {
-				masterId = master->getID();
 				creatureType = CREATURETYPE_SUMMON_OTHERS;
 			}
 		}

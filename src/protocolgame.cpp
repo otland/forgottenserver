@@ -3682,8 +3682,6 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		}
 	}
 
-	std::cout << "bottom/creature type: " << static_cast<int>(creatureType) << ", master: " << masterId << std::endl;
-
 	msg.addByte(creature->getSpeechBubble());
 	msg.addByte(0xFF); // MARK_UNMARKED
 
