@@ -7,6 +7,7 @@
 	<item id="5" name="lemonade" />
 	<item id="6" name="milk" />
 	<item id="7" name="manafluid" />
+	<item id="8" name="ink" />
 	<item id="10" name="lifefluid" />
 	<item id="11" name="oil" />
 	<item id="13" name="urine" />
@@ -11515,7 +11516,7 @@
 		<attribute key="description" value="It seems to be rather fragile." />
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="6558" name="concentrated demonic blood">
+	<item id="6558" name="flask of demonic blood">
 		<attribute key="description" value="Shake it to create a potion." />
 		<attribute key="weight" value="200" />
 	</item>
@@ -17346,15 +17347,43 @@
 		<attribute key="description" value="If you can remove the rust layer and dirt from the weapon you will be able to see what it is." />
 		<attribute key="weight" value="4500" />
 	</item>
-	<item fromid="9808" toid="9810" article="a" name="rusty armor">
+	<item id="9808" article="a" name="heavily rusted armor">
 		<attribute key="description" value="If you can remove the rust layer and dirt from the armor you will be able to see what it is." />
 		<attribute key="weight" value="12000" />
 	</item>
-	<item fromid="9811" toid="9813" article="a" name="rusty legs">
+	<item id="9809" article="a" name="rusted armor">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the armor you will be able to see what it is." />
+		<attribute key="weight" value="12000" />
+	</item>
+	<item id="9810" article="a" name="slightly rusted armor">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the armor you will be able to see what it is." />
+		<attribute key="weight" value="12000" />
+	</item>
+	<item id="9811" article="a" name="heavily rusted legs">
 		<attribute key="description" value="If you can remove the rust layer and dirt from the legs you will be able to see what it is." />
 		<attribute key="weight" value="7000" />
 	</item>
-	<item fromid="9814" toid="9816" article="a" name="rusty shield">
+	<item id="9812" article="a" name="rusted legs">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the legs you will be able to see what it is." />
+		<attribute key="weight" value="7000" />
+	</item>
+	<item id="9813" article="a" name="slightly rusted legs">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the legs you will be able to see what it is." />
+		<attribute key="weight" value="7000" />
+	</item>
+	<item id="9814" article="a" name="heavily rusted shield">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the shield you will be able to see what it is." />
+		<attribute key="weight" value="2800" />
+		<attribute key="defense" value="1" />
+		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="9815" article="a" name="rusted shield">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the shield you will be able to see what it is." />
+		<attribute key="weight" value="2800" />
+		<attribute key="defense" value="1" />
+		<attribute key="weaponType" value="shield" />
+	</item>
+	<item id="9816" article="a" name="slightly rusted shield">
 		<attribute key="description" value="If you can remove the rust layer and dirt from the shield you will be able to see what it is." />
 		<attribute key="weight" value="2800" />
 		<attribute key="defense" value="1" />
@@ -17366,7 +17395,19 @@
 		<attribute key="armor" value="1" />
 		<attribute key="slotType" value="feet" />
 	</item>
-	<item fromid="9820" toid="9822" article="a" name="rusty helmet">
+	<item id="9820" article="a" name="heavily rusted helmet">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the helmet you will be able to see what it is." />
+		<attribute key="weight" value="2800" />
+		<attribute key="armor" value="1" />
+		<attribute key="slotType" value="head" />
+	</item>
+	<item id="9821" article="a" name="rusted helmet">
+		<attribute key="description" value="If you can remove the rust layer and dirt from the helmet you will be able to see what it is." />
+		<attribute key="weight" value="2800" />
+		<attribute key="armor" value="1" />
+		<attribute key="slotType" value="head" />
+	</item>
+	<item id="9822" article="a" name="slightly rusted helmet">
 		<attribute key="description" value="If you can remove the rust layer and dirt from the helmet you will be able to see what it is." />
 		<attribute key="weight" value="2800" />
 		<attribute key="armor" value="1" />
