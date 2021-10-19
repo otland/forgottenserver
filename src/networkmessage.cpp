@@ -114,15 +114,11 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 	}
 }
 
-void NetworkMessage::addItem(const Item* item, bool legacyProtocol)
+void NetworkMessage::addItem(const Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
 
 	add<uint16_t>(it.clientId);
-
-	if (legacyProtocol) {
-		addByte(0xFF); // MARK_UNMARKED
-	}
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
@@ -130,11 +126,7 @@ void NetworkMessage::addItem(const Item* item, bool legacyProtocol)
 		addByte(fluidMap[item->getFluidType() & 7]);
 	}
 
-	if (it.isAnimation && legacyProtocol) {
-		addByte(0xFE); // random phase (0xFF for async)
-	}
-
-	if (!legacyProtocol && it.isContainer()) {
+	if (it.isContainer()) {
 		const Container* container = item->getContainer();
 		// Loot icon over loot assigned backpacks
 		addByte(0x00);

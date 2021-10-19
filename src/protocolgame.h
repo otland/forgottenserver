@@ -330,7 +330,6 @@ class ProtocolGame final : public Protocol
 
 		bool debugAssertSent = false;
 		bool acceptPackets = false;
-		bool legacyProtocol = false;
 };
 
 #endif
