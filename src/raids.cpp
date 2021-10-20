@@ -325,10 +325,8 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 			messageType = MESSAGE_INFO_DESCR;
 		} else if (tmpStrValue == "smallstatus") {
 			messageType = MESSAGE_STATUS_SMALL;
-		} else if (tmpStrValue == "blueconsole") {
-			messageType = MESSAGE_STATUS_CONSOLE_BLUE;
-		} else if (tmpStrValue == "redconsole") {
-			messageType = MESSAGE_STATUS_CONSOLE_RED;
+		} else if (tmpStrValue == "blueconsole" || tmpStrValue == "redconsole") {
+			std::cout << "[Notice] Raid: Deprecated type tag for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		} else {
 			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		}

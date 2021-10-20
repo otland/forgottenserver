@@ -209,15 +209,6 @@ enum SpeakClasses : uint8_t {
 };
 
 enum MessageClasses : uint8_t {
-	//removed talktypes:
-	// private messages only (workaround: player:sendPrivateMessage):
-	// to do: remove from sources, do some kind of compat(?)
-	MESSAGE_STATUS_CONSOLE_BLUE = 4,
-	MESSAGE_STATUS_CONSOLE_RED = 13, // workaround: MESSAGE_STATUS_WARNING
-	MESSAGE_EVENT_ORANGE = 36,
-	MESSAGE_STATUS_CONSOLE_ORANGE = 37,
-
-
 	MESSAGE_STATUS_DEFAULT = 17, // White, bottom + console
 	MESSAGE_STATUS_WARNING = 18, // Red, over player + console
 	MESSAGE_EVENT_ADVANCE = 19, // White, over player + console
