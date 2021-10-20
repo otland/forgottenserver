@@ -4713,35 +4713,12 @@ void Game::updateCreatureType(Creature* creature)
 {
 	const Player* masterPlayer = nullptr;
 
-	uint32_t creatureId = creature->getID();
-	CreatureType_t creatureType = creature->getType();
-	if (creatureType == CREATURETYPE_MONSTER) {
-		const Creature* master = creature->getMaster();
-		if (master) {
-			masterPlayer = master->getPlayer();
-			if (masterPlayer) {
-				creatureType = CREATURETYPE_SUMMON_OTHERS;
-			}
-		}
-	}
-
 	//send to clients
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 
-	if (creatureType == CREATURETYPE_SUMMON_OTHERS) {
-		for (Creature* spectator : spectators) {
-			Player* player = spectator->getPlayer();
-			if (masterPlayer == player) {
-				player->sendCreatureType(creatureId, CREATURETYPE_SUMMON_OWN);
-			} else {
-				player->sendCreatureType(creatureId, creatureType);
-			}
-		}
-	} else {
-		for (Creature* spectator : spectators) {
-			spectator->getPlayer()->sendCreatureType(creatureId, creatureType);
-		}
+	for (Creature* spectator : spectators) {
+		spectator->getPlayer()->sendCreatureTypeUpdate(creature->getID());
 	}
 }
 
@@ -4990,7 +4967,6 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 		fclose(file);
 	}
 }
-
 
 void Game::playerLeaveMarket(uint32_t playerId)
 {

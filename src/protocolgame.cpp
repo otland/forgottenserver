@@ -1451,16 +1451,13 @@ void ProtocolGame::sendCreatureSkull(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureType(uint32_t creatureId, uint8_t creatureType)
+void ProtocolGame::sendCreatureTypeUpdate(uint32_t creatureId)
 {
 	Creature* creature = g_game.getCreatureByID(creatureId);
 	if (creature) {
 		const Tile* tile = creature->getTile();
 		if (tile) {
-			const Position& position = creature->getPosition();
-			int32_t stackpos = tile->getClientIndexOfCreature(player, creature);
-
-			sendUpdateTileCreature(position, stackpos, creature);
+			sendUpdateTileCreature(creature->getPosition(), tile->getClientIndexOfCreature(player, creature), creature);
 		}
 	}
 }

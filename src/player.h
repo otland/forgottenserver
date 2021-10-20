@@ -832,9 +832,9 @@ class Player final : public Creature, public Cylinder
 				client->sendCreatureShield(creature);
 			}
 		}
-		void sendCreatureType(uint32_t creatureId, uint8_t creatureType) {
+		void sendCreatureTypeUpdate(uint32_t creatureId) {
 			if (client) {
-				client->sendCreatureType(creatureId, creatureType);
+				client->sendCreatureTypeUpdate(creatureId);
 			}
 		}
 		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers) {

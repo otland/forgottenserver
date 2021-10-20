@@ -35,8 +35,8 @@ std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 	}
 
 	char* v = reinterpret_cast<char*>(buffer) + info.position; //does not break strict aliasing
-	info.position += stringLen;
-	return std::string(v, stringLen);
+info.position += stringLen;
+return std::string(v, stringLen);
 }
 
 Position NetworkMessage::getPosition()
@@ -105,7 +105,8 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 
 	if (it.stackable) {
 		addByte(count);
-	} else if (it.isSplash() || it.isFluidContainer()) {
+	}
+	else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[count & 7]);
 	}
 
@@ -122,12 +123,12 @@ void NetworkMessage::addItem(const Item* item)
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
-	} else if (it.isSplash() || it.isFluidContainer()) {
+	}
+	else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[item->getFluidType() & 7]);
 	}
 
 	if (it.isContainer()) {
-		const Container* container = item->getContainer();
 		// Loot icon over loot assigned backpacks
 		addByte(0x00);
 
@@ -135,7 +136,17 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(0x00);
 	}
 
-	//podium not supported yet
+	// podium (placeholder)
+	// to do: read podium flag from otb
+	if (it.clientId == 35973 || it.clientId == 35974) {
+		add<uint16_t>(0); //looktype
+		//4x byte colors if not 0
+		add<uint16_t>(0); //lookmount
+		//4x byte colors if not 0
+
+		addByte(2); //direction
+		addByte(0x01); //is visible (bool)
+	}
 }
 
 void NetworkMessage::addItemId(uint16_t itemId)
