@@ -1407,6 +1407,16 @@ void ProtocolGame::sendWorldLight(LightInfo lightInfo)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendWorldTime()
+{
+	int16_t time = g_game.getWorldTime();
+	NetworkMessage msg;
+	msg.addByte(0xEF);
+	msg.addByte(time / 60); //hour
+	msg.addByte(time % 60); //min
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendCreatureWalkthrough(const Creature* creature, bool walkthrough)
 {
 	if (!canSee(creature)) {
@@ -1520,6 +1530,37 @@ void ProtocolGame::sendStats()
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendClientFeatures()
+{
+	NetworkMessage msg;
+	msg.addByte(0x17);
+
+	msg.add<uint32_t>(player->getID());
+	msg.add<uint16_t>(50); // beat duration
+
+	msg.addDouble(Creature::speedA, 3);
+	msg.addDouble(Creature::speedB, 3);
+	msg.addDouble(Creature::speedC, 3);
+
+	// can report bugs?
+	if (player->getAccountType() >= ACCOUNT_TYPE_TUTOR) {
+		msg.addByte(0x01);
+	} else {
+		msg.addByte(0x00);
+	}
+
+	msg.addByte(0x00); // can change pvp framing option
+	msg.addByte(0x00); // expert mode button enabled
+
+	msg.addString("http://127.0.0.1/images/store/");    // to do: store images url
+	msg.add<uint16_t>(25); // premium coin package size
+
+	msg.addByte(0x00); // exiva button enabled (bool)
+	msg.addByte(0x00); // Tournament button (bool)
+
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendBasicData()
 {
 	NetworkMessage msg;
@@ -1535,14 +1576,12 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(0x00); // is prey system enabled (bool)
 
 	//known spells placeholder (see commented block below)
-	msg.add<uint16_t>(0x00);
+	//msg.add<uint16_t>(0x00);
 
-	/*
 	msg.add<uint16_t>(0xFF); // number of known spells
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
 	}
-	*/
 
 	msg.addByte(0x00); // is magic shield active (bool)
 	writeToOutputBuffer(msg);
@@ -1715,7 +1754,7 @@ void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 
 	// currency displayed in trade window (currently only gold cupported)
 	msg.add<uint16_t>(Item::items[ITEM_GOLD_COIN].clientId);
-	msg.addString(" "); // unknown, needs testing
+	msg.addString(""); // unknown, works as string but doesn't show anywhere
 
 	uint16_t itemsToSend = std::min<size_t>(itemList.size(), std::numeric_limits<uint16_t>::max());
 	msg.add<uint16_t>(itemsToSend);
@@ -2744,89 +2783,48 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		return;
 	}
 
+	// send player stats
+	sendStats(); // hp, cap, level, xp rate, etc.
+	sendSkills(); // skills and special skills
+	player->sendIcons(); // active conditions
 
-	/* that code works and I have no idea why */
-	// to do: see what can be removed from here
-	sendStats();
-	//unjustified kills (placeholder)
-	NetworkMessage msgc;
-	msgc.addByte(0xB7);
-	msgc.addByte(0);
-	msgc.addByte(3);
-	msgc.addByte(0);
-	msgc.addByte(5);
-	msgc.addByte(0);
-	msgc.addByte(10);
-	msgc.addByte(0);
-	writeToOutputBuffer(msgc);
+	// send client info
+	sendClientFeatures(); // player speed, bug reports, store url, pvp mode, etc
+	sendBasicData(); // premium account, vocation, known spells, prey system status, magic shield status
+	sendItems(); // send carried items for action bars
 
-
-	NetworkMessage msg;
-	msg.addByte(0x17);
-
-	msg.add<uint32_t>(player->getID());
-	msg.add<uint16_t>(0x32); // beat duration (50)
-
-	msg.addDouble(Creature::speedA, 3);
-	msg.addDouble(Creature::speedB, 3);
-	msg.addDouble(Creature::speedC, 3);
-
-	// can report bugs?
-	if (player->getAccountType() >= ACCOUNT_TYPE_TUTOR) {
-		msg.addByte(0x01);
-	} else {
-		msg.addByte(0x00);
-	}
-
-	msg.addByte(0x00); // can change pvp framing option
-	msg.addByte(0x00); // expert mode button enabled
-
-	msg.addString("http://127.0.0.1/images/store/");    // to do: store images url
-	msg.add<uint16_t>(25); // premium coin package size
-
-	msg.addByte(0x00); // exiva button enabled (bool)
-	msg.addByte(0x00); // Tournament button (bool)
-
-	writeToOutputBuffer(msg);
-
-	//send world time
-	//to do: separate function
-	int16_t time = g_game.getWorldTime();
-	NetworkMessage msg2;
-	msg2.addByte(0xEF);
-	//hour/min
-	msg2.addByte(time / 60);
-	msg2.addByte(time % 60);
-	writeToOutputBuffer(msg2);
-
+	// enter world and send game screen
 	sendPendingStateEntered();
 	sendEnterWorld();
 	sendMapDescription(pos);
 
+	// send login effect
 	if (isLogin) {
 		sendMagicEffect(pos, CONST_ME_TELEPORT);
 	}
 
+	// send equipment
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
 	}
 
+	// send store inbox
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
 
-	//will replace packet below when we get proper items otb
-	//sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+	// gameworld light-settings
+	sendWorldLight(g_game.getWorldLightInfo());
+	sendWorldTime();
 
-	// different store inbox client id
-	NetworkMessage msg11;
-	msg11.addByte(0x78);
-	msg11.addByte(CONST_SLOT_STORE_INBOX);
-	msg11.add<uint16_t>(21025); //store inbox client id
-	writeToOutputBuffer(msg11);
+	// player light level
+	sendCreatureLight(creature);
 
-	sendStats();
-	sendSkills();
+	// player vip list
+	sendVIPEntries();
 
+	// optional packets
+	
 	//sendBlessStatus
-
+	/*
 	// to do: blessings in use
 	// placeholder packet
 	NetworkMessage msg3;
@@ -2853,9 +2851,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		msg12.addByte(0x01);
 	}
 	writeToOutputBuffer(msg12);
-
+	*/
 	//sendStoreHighlight
-
+	/*
 	// store button highlights
 	NetworkMessage msg4;
 	msg4.addByte(0x19);
@@ -2871,35 +2869,23 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg5.addByte(0xCD);
 	msg5.add<uint16_t>(0);
 	writeToOutputBuffer(msg5);
-
-
-	// gameworld light-settings
-	sendWorldLight(g_game.getWorldLightInfo());
-
-	// player light level
-	sendCreatureLight(creature);
-
-	// player vip list
-	sendVIPEntries();
-
-
-	// send all items carried by player
-	sendItems();
+	*/
 
 	// sendLootContainers
 		
 	// loot containers
 	// placeholder packet
+	/*
 	NetworkMessage msg6;
 	msg6.addByte(0xC0);
 	msg6.addByte(0x00);
 	msg6.addByte(0x00);
 	writeToOutputBuffer(msg6);
-
-	sendBasicData();
+	*/
+	
 
 	// initPreyData
-
+	/*
 	// prey system
 	for (uint8_t i = 0; i < 3; i++)
 	{
@@ -2952,7 +2938,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msga.add<uint32_t>(1);
 	msga.addByte(1);
 	writeToOutputBuffer(msga);
-
+	*/
+	/*
 	//game news
 	NetworkMessage msgb;
 	msgb.addByte(0x98);
@@ -2967,8 +2954,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msge.addByte(0); // streak
 	msge.addString("Resting Area (no active bonus)");
 	writeToOutputBuffer(msge);
-
-	player->sendIcons();
+	*/
 
 	/*
 	//unjustified kills (placeholder)
@@ -2983,7 +2969,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msgc.addByte(0);
 	writeToOutputBuffer(msgc);
 	*/
-
+	/*
 	//bestiary tracker (placeholder)
 	NetworkMessage msgf;
 	msgf.addByte(0xB9);
@@ -2997,9 +2983,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg10.addByte(10);
 	msg10.addByte(0);
 	writeToOutputBuffer(msg10);
-
+	*/
 	//testing, remove if doesnt crash
-	sendPingBack();
+	//sendPingBack();
 }
 
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport)
@@ -3749,8 +3735,8 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 
 	msg.addString(item.realName);
 	msg.add<uint32_t>(it.weight);
-	msg.add<uint32_t>(item.buyPrice);
-	msg.add<uint32_t>(item.sellPrice);
+	msg.add<uint32_t>(item.buyPrice == 4294967295 ? 0 : item.buyPrice);
+	msg.add<uint32_t>(item.sellPrice == 4294967295 ? 0 : item.sellPrice);
 }
 
 void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)

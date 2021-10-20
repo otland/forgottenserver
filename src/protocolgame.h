@@ -194,6 +194,7 @@ class ProtocolGame final : public Protocol
 		void sendCancelTarget();
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
+		void sendClientFeatures();
 		void sendBasicData();
 		void sendTextMessage(const TextMessage& message);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
@@ -238,6 +239,7 @@ class ProtocolGame final : public Protocol
 
 		void sendCreatureLight(const Creature* creature);
 		void sendWorldLight(LightInfo lightInfo);
+		void sendWorldTime();
 
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 

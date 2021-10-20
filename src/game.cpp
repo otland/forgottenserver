@@ -5000,7 +5000,6 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 
 	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
 	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
-	player->sendMarketEnter(player->getLastDepotId());
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
 	player->sendMarketDetail(it.id);
 }
