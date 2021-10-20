@@ -35,8 +35,8 @@ std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 	}
 
 	char* v = reinterpret_cast<char*>(buffer) + info.position; //does not break strict aliasing
-info.position += stringLen;
-return std::string(v, stringLen);
+	info.position += stringLen;
+	return std::string(v, stringLen);
 }
 
 Position NetworkMessage::getPosition()
@@ -105,8 +105,7 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 
 	if (it.stackable) {
 		addByte(count);
-	}
-	else if (it.isSplash() || it.isFluidContainer()) {
+	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[count & 7]);
 	}
 
@@ -123,8 +122,7 @@ void NetworkMessage::addItem(const Item* item)
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
-	}
-	else if (it.isSplash() || it.isFluidContainer()) {
+	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[item->getFluidType() & 7]);
 	}
 
