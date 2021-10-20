@@ -900,7 +900,6 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	uint8_t outfitType = 0;
 	outfitType = msg.getByte();
 
-
 	Outfit_t newOutfit;
 	newOutfit.lookType = msg.get<uint16_t>();
 	newOutfit.lookHead = msg.getByte();
@@ -3454,7 +3453,6 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		msg.add<uint16_t>(0x61);
 		msg.add<uint32_t>(remove);
 		msg.add<uint32_t>(creature->getID());
-
 		msg.addByte(creature->isHealthHidden() ? CREATURETYPE_HIDDEN : creatureType);
 
 		if (creatureType == CREATURETYPE_SUMMON_OWN) {
