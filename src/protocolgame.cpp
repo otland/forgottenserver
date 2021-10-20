@@ -1543,11 +1543,7 @@ void ProtocolGame::sendClientFeatures()
 	msg.addDouble(Creature::speedC, 3);
 
 	// can report bugs?
-	if (player->getAccountType() >= ACCOUNT_TYPE_TUTOR) {
-		msg.addByte(0x01);
-	} else {
-		msg.addByte(0x00);
-	}
+	msg.addByte(player->getAccountType() >= ACCOUNT_TYPE_TUTOR ? 0x01 : 0x00);
 
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
@@ -1575,10 +1571,8 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(player->getVocation()->getClientId());
 	msg.addByte(0x00); // is prey system enabled (bool)
 
-	//known spells placeholder (see commented block below)
-	//msg.add<uint16_t>(0x00);
-
-	msg.add<uint16_t>(0xFF); // number of known spells
+	// unlock spells on action bar
+	msg.add<uint16_t>(0xFF);
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
 	}
@@ -2811,7 +2805,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	// send store inbox
 	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
 
-	// gameworld light-settings
+	// gameworld time of the day
 	sendWorldLight(g_game.getWorldLightInfo());
 	sendWorldTime();
 
