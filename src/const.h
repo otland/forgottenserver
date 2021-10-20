@@ -204,8 +204,7 @@ enum SpeakClasses : uint8_t {
 	TALKTYPE_PRIVATE_RED_TO = 16, // @name@text
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
-
-	TALKTYPE_POTION = 52, // Potion drinking text
+	TALKTYPE_POTION = 52, // Like MONSTER_SAY but can be disabled in client settings
 };
 
 enum MessageClasses : uint8_t {

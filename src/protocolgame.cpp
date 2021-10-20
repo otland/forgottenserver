@@ -937,14 +937,9 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		msg.getByte();
 		msg.getByte();
 
-		// familiar looktype
-		msg.get<uint16_t>();
-
-		// outfit direction
-		msg.getByte();
-
-		// show outfit (bool)
-		msg.getByte();
+		msg.get<uint16_t>(); // familiar looktype
+		msg.getByte(); // outfit direction	
+		msg.getByte(); // show outfit (bool)
 
 		//apply to podium
 		//player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction
@@ -1746,7 +1741,7 @@ void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 	msg.addByte(0x7A);
 	msg.addString(npc->getName());
 
-	// currency displayed in trade window (currently only gold cupported)
+	// currency displayed in trade window (currently only gold supported)
 	msg.add<uint16_t>(Item::items[ITEM_GOLD_COIN].clientId);
 	msg.addString(""); // unknown, works as string but doesn't show anywhere
 
