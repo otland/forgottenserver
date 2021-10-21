@@ -11458,10 +11458,10 @@ int LuaScriptInterface::luaHouseGetPaidUntil(lua_State* L)
 int LuaScriptInterface::luaHouseSetPaidUntil(lua_State* L)
 {
 	// house:setPaidUntil(timestamp)
-	time_t time = getNumber<time_t>(L, 2);
+	time_t timestamp = getNumber<time_t>(L, 2);
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
-		house->setPaidUntil(time);
+		house->setPaidUntil(timestamp);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
