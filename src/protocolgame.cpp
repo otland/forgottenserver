@@ -3103,7 +3103,7 @@ void ProtocolGame::sendOutfitWindow()
 		msg.add<uint16_t>(outfit.lookType);
 		msg.addString(outfit.name);
 		msg.addByte(outfit.addons);
-		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit tooltip / hardcoded (?)
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit tooltip (hardcoded)
 	}
 
 	std::vector<const Mount*> mounts;
@@ -3256,7 +3256,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 			msg.add<uint32_t>(masterId);
 		}
 
-		msg.addString(creature->getName());
+		msg.addString(creature->isHealthHidden() ? "" : creature->getName());
 	}
 
 	if (creature->isHealthHidden()) {
