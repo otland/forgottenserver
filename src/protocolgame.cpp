@@ -623,7 +623,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xE6: parseBugReport(msg); break;
 		case 0xE7: /* thank you */ break;
 		case 0xE8: parseDebugAssert(msg); break;
-		//case 0xEE: break; // greet NPC
+		case 0xEE: addGameTask(&Game::playerSay, player->getID(), 0, TALKTYPE_SAY, std::string(), "hi"); break;
 		//case 0xEF: break; // request store coins transfer
 		case 0xF0: addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerShowQuestLog, player->getID()); break;
 		case 0xF1: parseQuestLine(msg); break;
