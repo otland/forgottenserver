@@ -3006,8 +3006,9 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	const std::string& writer = item->getWriter();
 	if (!writer.empty()) {
 		msg.addString(writer);
-	} else {
-		msg.add<uint16_t>(0x00);
+	}
+ else {
+ msg.add<uint16_t>(0x00);
 	}
 
 	msg.addByte(0x00); // "(traded)" suffix after writer name (bool)
@@ -3015,7 +3016,8 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	time_t writtenDate = item->getDate();
 	if (writtenDate != 0) {
 		msg.addString(formatDateShort(writtenDate));
-	} else {
+	}
+	else {
 		msg.add<uint16_t>(0x00);
 	}
 
@@ -3095,9 +3097,6 @@ void ProtocolGame::sendOutfitWindow()
 		}
 
 		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
-		if (protocolOutfits.size() == std::numeric_limits<uint8_t>::max()) { // Game client currently doesn't allow more than 255 outfits
-			break;
-		}
 	}
 
 	msg.add<uint16_t>(protocolOutfits.size());
@@ -3106,7 +3105,7 @@ void ProtocolGame::sendOutfitWindow()
 		msg.add<uint16_t>(outfit.lookType);
 		msg.addString(outfit.name);
 		msg.addByte(outfit.addons);
-		msg.addByte(0x00); //purchasable (?) (bool?)
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit tooltip / hardcoded (?)
 	}
 
 	std::vector<const Mount*> mounts;
@@ -3121,13 +3120,15 @@ void ProtocolGame::sendOutfitWindow()
 	for (const Mount* mount : mounts) {
 		msg.add<uint16_t>(mount->clientId);
 		msg.addString(mount->name);
-		msg.addByte(0x00); //purchasable (?) (bool?)
+
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
 	}
 
-	msg.add<uint16_t>(0); //familiars.size()
+	msg.add<uint16_t>(0x00); //familiars.size()
+
 	//U16 looktype
 	//String name
-	//0x00 //purchasable (?) (bool?)
+	//0x00 // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
 
 	msg.addByte(0x00); //Try outfit mode (?)
 
