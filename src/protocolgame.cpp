@@ -3006,9 +3006,8 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	const std::string& writer = item->getWriter();
 	if (!writer.empty()) {
 		msg.addString(writer);
-	}
- else {
- msg.add<uint16_t>(0x00);
+	} else {
+		msg.add<uint16_t>(0x00);
 	}
 
 	msg.addByte(0x00); // "(traded)" suffix after writer name (bool)
@@ -3016,8 +3015,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 	time_t writtenDate = item->getDate();
 	if (writtenDate != 0) {
 		msg.addString(formatDateShort(writtenDate));
-	}
-	else {
+	} else {
 		msg.add<uint16_t>(0x00);
 	}
 
