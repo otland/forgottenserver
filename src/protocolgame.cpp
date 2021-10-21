@@ -897,8 +897,7 @@ void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 
 void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 {
-	uint8_t outfitType = 0;
-	outfitType = msg.getByte();
+	uint8_t outfitType = msg.getByte();
 
 	Outfit_t newOutfit;
 	newOutfit.lookType = msg.get<uint16_t>();
@@ -922,7 +921,11 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		//This value probably has something to do with try outfit variable inside outfit window dialog
 		//if try outfit is set to 2 it expects uint32_t value after mounted and disable mounts from outfit window dialog
 		newOutfit.lookMount = 0;
-		msg.get<uint32_t>(); //unknown 4 bytes
+		// mount colors
+		msg.getByte();
+		msg.getByte();
+		msg.getByte();
+		msg.getByte();
 		//dont change outfit?
 		return;
 	} else if (outfitType == 2) {
@@ -1097,7 +1100,7 @@ void ProtocolGame::parseEquipObject(NetworkMessage& msg)
 {
 	// hotkey equip (?)
 	uint16_t spriteId = msg.get<uint16_t>();
-	// msg.get<uint8_t>(); // bool smartMode (?) (I dont know how smart mode works)
+	// msg.get<uint8_t>(); // bool smartMode (?)
 
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerEquipItem, player->getID(), spriteId);
 }
@@ -1303,7 +1306,7 @@ void ProtocolGame::parseMarketCreateOffer(NetworkMessage& msg)
 	uint32_t price = msg.get<uint32_t>();
 	bool anonymous = (msg.getByte() != 0);
 	addGameTask(&Game::playerCreateMarketOffer, player->getID(), type, spriteId, amount, price, anonymous);
-	sendMarketBalance();
+	sendStoreBalance();
 }
 
 void ProtocolGame::parseMarketCancelOffer(NetworkMessage& msg)
@@ -1311,7 +1314,7 @@ void ProtocolGame::parseMarketCancelOffer(NetworkMessage& msg)
 	uint32_t timestamp = msg.get<uint32_t>();
 	uint16_t counter = msg.get<uint16_t>();
 	addGameTask(&Game::playerCancelMarketOffer, player->getID(), timestamp, counter);
-	sendMarketBalance();
+	sendStoreBalance();
 }
 
 void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
@@ -1543,7 +1546,7 @@ void ProtocolGame::sendClientFeatures()
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
 
-	msg.addString("http://127.0.0.1/images/store/");    // to do: store images url
+	msg.add<uint16_t>(0x00); // store images url (string or u16 0x00)
 	msg.add<uint16_t>(25); // premium coin package size
 
 	msg.addByte(0x00); // exiva button enabled (bool)
@@ -1853,7 +1856,23 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendMarketBalance() {
+void ProtocolGame::sendBankBalance() {
+	NetworkMessage msg;
+
+	msg.addByte(0xEE);
+	msg.addByte(0x00);
+	msg.add<uint64_t>(player->getBankBalance());
+	writeToOutputBuffer(msg);
+
+	msg.reset();
+
+	msg.addByte(0xEE);
+	msg.addByte(0x01);
+	msg.add<uint64_t>(player->getMoney());
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendStoreBalance() {
 	NetworkMessage msg;
 	msg.addByte(0xF2);
 	msg.addByte(0x01);
@@ -1866,10 +1885,10 @@ void ProtocolGame::sendMarketBalance() {
 	msg.addByte(0x01);
 
 	//placeholder packet / to do
-	msg.add<uint32_t>(0); // Normal Coins
-	msg.add<uint32_t>(0); // Transferable Coins
-	msg.add<uint32_t>(0); // Reserved Auction Coins
-	msg.add<uint32_t>(0); // Tournament Coins
+	msg.add<uint32_t>(0); // total store coins (transferable + non-t)
+	msg.add<uint32_t>(0); // transferable store coins
+	msg.add<uint32_t>(0); // reserved auction coins
+	msg.add<uint32_t>(0); // tournament coins
 
 	writeToOutputBuffer(msg);
 
@@ -1932,27 +1951,8 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 
 	writeToOutputBuffer(msg);
 
-	sendMarketBalance(); //store coins balance
-	/* bank gp, eq gp, prey cards */
-	//to do: separate function
-	NetworkMessage msg7;
-	msg7.addByte(0xEE);
-	msg7.addByte(0x00);
-	msg7.add<uint64_t>(0);
-	writeToOutputBuffer(msg7);
-
-	NetworkMessage msg8;
-	msg8.addByte(0xEE);
-	msg8.addByte(0x01);
-	msg8.add<uint64_t>(0);
-	writeToOutputBuffer(msg8);
-
-	NetworkMessage msg9;
-	msg9.addByte(0xEE);
-	msg9.addByte(0x0A);
-	msg9.add<uint64_t>(0);
-	writeToOutputBuffer(msg9);
-
+	sendBankBalance();
+	sendStoreBalance();
 }
 
 void ProtocolGame::sendMarketLeave()
@@ -1987,7 +1987,7 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 		msg.addString(offer.playerName);
 	}
 
-	sendMarketBalance();
+	sendStoreBalance();
 	writeToOutputBuffer(msg);
 }
 
@@ -2894,7 +2894,7 @@ void ProtocolGame::sendInventoryItem(slots_t slot, const Item* item)
 	writeToOutputBuffer(msg);
 }
 
-//this will need to update every time with player inventory but I'm not really sure to make it lightweight
+// to do: make it lightweight, update each time player gets/loses an item
 void ProtocolGame::sendItems()
 {
 	NetworkMessage msg;
@@ -2903,15 +2903,7 @@ void ProtocolGame::sendItems()
 	//find all items carried by character (clientId, amount)
 	std::map<uint16_t, uint16_t> inventory;
 
-	// inventory getInventory can probably be removed from Item class at this point, this is how it was in legacy protocol:
-	/*
-	for (auto clientID : Item::items.getInventory()) {
-		inventory.emplace(clientID, 1);
-	}
-	*/
-
-	// possible bug: doesnt count items from store inbox (yet)
-	for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+	for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_STORE_INBOX; i++) {
 		Item* slotItem = player->getInventoryItem(static_cast<slots_t>(i));
 		if (!slotItem) {
 			continue;
@@ -2944,7 +2936,7 @@ void ProtocolGame::sendItems()
 		}
 	}
 
-	msg.add<uint16_t>(inventory.size() + 11 +1); //+1 = store inbox
+	msg.add<uint16_t>(inventory.size() + 11);
 
 	for (uint16_t i = 1; i <= 11; i++) {
 		msg.add<uint16_t>(i);
@@ -2957,10 +2949,6 @@ void ProtocolGame::sendItems()
 		msg.addByte(0); //always 0
 		msg.add<uint16_t>(clientId.second);
 	}
-
-	msg.add<uint16_t>(21025); //store inbox clientid
-	msg.addByte(0); //always 0
-	msg.add<uint16_t>(1);
 
 	writeToOutputBuffer(msg);
 }
@@ -3142,6 +3130,7 @@ void ProtocolGame::sendOutfitWindow()
 	//0x00 //purchasable (?) (bool?)
 
 	msg.addByte(0x00); //Try outfit mode (?)
+
 	msg.addByte(mounted ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
