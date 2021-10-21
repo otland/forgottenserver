@@ -2651,7 +2651,15 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("House", "getName", LuaScriptInterface::luaHouseGetName);
 	registerMethod("House", "getTown", LuaScriptInterface::luaHouseGetTown);
 	registerMethod("House", "getExitPosition", LuaScriptInterface::luaHouseGetExitPosition);
+
 	registerMethod("House", "getRent", LuaScriptInterface::luaHouseGetRent);
+	registerMethod("House", "setRent", LuaScriptInterface::luaHouseSetRent);
+
+	registerMethod("House", "getPaidUntil", LuaScriptInterface::luaHouseGetPaidUntil);
+	registerMethod("House", "setPaidUntil", LuaScriptInterface::luaHouseSetPaidUntil);
+
+	registerMethod("House", "getPayRentWarnings", LuaScriptInterface::luaHouseGetPayRentWarnings);
+	registerMethod("House", "setPayRentWarnings", LuaScriptInterface::luaHouseSetPayRentWarnings);
 
 	registerMethod("House", "getOwnerGuid", LuaScriptInterface::luaHouseGetOwnerGuid);
 	registerMethod("House", "setOwnerGuid", LuaScriptInterface::luaHouseSetOwnerGuid);
@@ -11415,6 +11423,72 @@ int LuaScriptInterface::luaHouseGetRent(lua_State* L)
 	House* house = getUserdata<House>(L, 1);
 	if (house) {
 		lua_pushnumber(L, house->getRent());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseSetRent(lua_State* L)
+{
+	// house:setRent(rent)
+	uint32_t rent = getNumber<uint32_t>(L, 2);
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		house->setRent(rent);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetPaidUntil(lua_State* L)
+{
+	// house:getPaidUntil()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		lua_pushnumber(L, house->getPaidUntil());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseSetPaidUntil(lua_State* L)
+{
+	// house:setPaidUntil(timestamp)
+	time_t time = getNumber<time_t>(L, 2);
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		house->setPaidUntil(time);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseGetPayRentWarnings(lua_State* L)
+{
+	// house:getPayRentWarnings()
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		lua_pushnumber(L, house->getPayRentWarnings());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaHouseSetPayRentWarnings(lua_State* L)
+{
+	// house:setPayRentWarnings(warnings)
+	uint32_t warnings = getNumber<uint32_t>(L, 2);
+	House* house = getUserdata<House>(L, 1);
+	if (house) {
+		house->setPayRentWarnings(warnings);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}

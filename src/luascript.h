@@ -1148,7 +1148,15 @@ class LuaScriptInterface
 		static int luaHouseGetName(lua_State* L);
 		static int luaHouseGetTown(lua_State* L);
 		static int luaHouseGetExitPosition(lua_State* L);
+
 		static int luaHouseGetRent(lua_State* L);
+		static int luaHouseSetRent(lua_State* L);
+
+		static int luaHouseGetPaidUntil(lua_State* L);
+		static int luaHouseSetPaidUntil(lua_State* L);
+
+		static int luaHouseGetPayRentWarnings(lua_State* L);
+		static int luaHouseSetPayRentWarnings(lua_State* L);
 
 		static int luaHouseGetOwnerGuid(lua_State* L);
 		static int luaHouseSetOwnerGuid(lua_State* L);
