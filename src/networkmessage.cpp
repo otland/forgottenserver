@@ -101,16 +101,25 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 
 	add<uint16_t>(it.clientId);
 
-	addByte(0xFF); // MARK_UNMARKED
-
 	if (it.stackable) {
 		addByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[count & 7]);
+	} else if (it.isContainer()) {
+		addByte(0x00); // assigned loot container icon
+		addByte(0x00); // quiver ammo count
 	}
 
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
+	// podium (placeholder)
+	// to do: read podium flag from otb
+	if (it.clientId == 35973 || it.clientId == 35974) {
+		add<uint16_t>(0); //looktype
+		//4x byte colors if not 0
+		add<uint16_t>(0); //lookmount
+		//4x byte colors if not 0
+
+		addByte(2); //direction
+		addByte(0x01); //is visible (bool)
 	}
 }
 
@@ -127,11 +136,8 @@ void NetworkMessage::addItem(const Item* item)
 	}
 
 	if (it.isContainer()) {
-		// Loot icon over loot assigned backpacks
-		addByte(0x00);
-
-		// Quiver ammo count
-		addByte(0x00);
+		addByte(0x00); // assigned loot container icon
+		addByte(0x00); // quiver ammo count
 	}
 
 	// podium (placeholder)
