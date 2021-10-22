@@ -910,11 +910,10 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 
 	if (outfitType == 0) {
 		newOutfit.lookMount = msg.get<uint16_t>();
-		// mount colors
-		msg.getByte();
-		msg.getByte();
-		msg.getByte();
-		msg.getByte();
+		newOutfit.lookMountHead = msg.getByte();
+		newOutfit.lookMountBody = msg.getByte();
+		newOutfit.lookMountLegs = msg.getByte();
+		newOutfit.lookMountFeet = msg.getByte();
 
 		// familiar looktype
 		msg.get<uint16_t>();
@@ -922,11 +921,10 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		//This value probably has something to do with try outfit variable inside outfit window dialog
 		//if try outfit is set to 2 it expects uint32_t value after mounted and disable mounts from outfit window dialog
 		newOutfit.lookMount = 0;
-		// mount colors
-		msg.getByte();
-		msg.getByte();
-		msg.getByte();
-		msg.getByte();
+		newOutfit.lookMountHead = msg.getByte();
+		newOutfit.lookMountBody = msg.getByte();
+		newOutfit.lookMountLegs = msg.getByte();
+		newOutfit.lookMountFeet = msg.getByte();
 		//dont change outfit?
 		return;
 	} else if (outfitType == 2) {
@@ -935,11 +933,10 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		uint16_t spriteId = msg.get<uint16_t>();
 		uint8_t stackpos = msg.getByte();
 		newOutfit.lookMount = msg.get<uint16_t>();
-		// mount colors
-		msg.getByte();
-		msg.getByte();
-		msg.getByte();
-		msg.getByte();
+		newOutfit.lookMountHead = msg.getByte();
+		newOutfit.lookMountBody = msg.getByte();
+		newOutfit.lookMountLegs = msg.getByte();
+		newOutfit.lookMountFeet = msg.getByte();
 
 		msg.get<uint16_t>(); // familiar looktype
 		msg.getByte(); // outfit direction	
@@ -3379,6 +3376,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 {
+	// outfit
 	msg.add<uint16_t>(outfit.lookType);
 
 	if (outfit.lookType != 0) {
@@ -3391,14 +3389,14 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 		msg.addItemId(outfit.lookTypeEx);
 	}
 
+	// mount
 	msg.add<uint16_t>(outfit.lookMount);
 
-	// to do: mount colors
 	if (outfit.lookMount != 0) {
-		msg.addByte(0);
-		msg.addByte(0);
-		msg.addByte(0);
-		msg.addByte(0);
+		msg.addByte(outfit.lookMountHead);
+		msg.addByte(outfit.lookMountBody);
+		msg.addByte(outfit.lookMountLegs);
+		msg.addByte(outfit.lookMountFeet);
 	}
 }
 
