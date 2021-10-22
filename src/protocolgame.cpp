@@ -910,10 +910,21 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 
 	if (outfitType == 0) {
 		newOutfit.lookMount = msg.get<uint16_t>();
-		newOutfit.lookMountHead = msg.getByte();
-		newOutfit.lookMountBody = msg.getByte();
-		newOutfit.lookMountLegs = msg.getByte();
-		newOutfit.lookMountFeet = msg.getByte();
+		if (newOutfit.lookMount != 0) {
+			newOutfit.lookMountHead = msg.getByte();
+			newOutfit.lookMountBody = msg.getByte();
+			newOutfit.lookMountLegs = msg.getByte();
+			newOutfit.lookMountFeet = msg.getByte();
+		} else {
+			msg.skipBytes(4);
+
+			// prevent mount color settings from resetting
+			const Outfit_t& currentOutfit = player->getCurrentOutfit();
+			newOutfit.lookMountHead = currentOutfit.lookMountHead;
+			newOutfit.lookMountBody = currentOutfit.lookMountBody;
+			newOutfit.lookMountLegs = currentOutfit.lookMountLegs;
+			newOutfit.lookMountFeet = currentOutfit.lookMountFeet;
+		}
 
 		// familiar looktype
 		msg.get<uint16_t>();
