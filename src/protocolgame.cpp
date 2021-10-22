@@ -1376,15 +1376,6 @@ void ProtocolGame::sendCreatureOutfit(const Creature* creature, const Outfit_t& 
 	msg.addByte(0x8E);
 	msg.add<uint32_t>(creature->getID());
 	AddOutfit(msg, outfit);
-
-	//to do: mount colors
-	if (outfit.lookMount != 0) {
-		msg.addByte(0);
-		msg.addByte(0);
-		msg.addByte(0);
-		msg.addByte(0);
-	}
-
 	writeToOutputBuffer(msg);
 }
 
@@ -3074,13 +3065,7 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	AddOutfit(msg, currentOutfit);
-
-	//to do: mount colors and familiar
-	msg.addByte(0);
-	msg.addByte(0);
-	msg.addByte(0);
-	msg.addByte(0);
-	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
@@ -3279,13 +3264,6 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	if (!creature->isInGhostMode() && !creature->isInvisible()) {
 		const Outfit_t& outfit = creature->getCurrentOutfit();
 		AddOutfit(msg, outfit);
-		if (outfit.lookMount != 0) {
-			// to do: mount colors
-			msg.addByte(0);
-			msg.addByte(0);
-			msg.addByte(0);
-			msg.addByte(0);
-		}
 	} else {
 		static Outfit_t outfit;
 		AddOutfit(msg, outfit);
@@ -3414,6 +3392,14 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 	}
 
 	msg.add<uint16_t>(outfit.lookMount);
+
+	// to do: mount colors
+	if (outfit.lookMount != 0) {
+		msg.addByte(0);
+		msg.addByte(0);
+		msg.addByte(0);
+		msg.addByte(0);
+	}
 }
 
 void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
