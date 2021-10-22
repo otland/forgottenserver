@@ -25,6 +25,13 @@
 #include "creature.h"
 #include "tasks.h"
 
+enum SessionEndTypes_t : uint8_t {
+	SESSION_END_LOGOUT = 0,
+	SESSION_END_UNKNOWN = 1, //unknown, no difference from logout
+	SESSION_END_FORCECLOSE = 2,
+	SESSION_END_UNKNOWN_2 = 3, //unknown, no difference from logout
+};
+
 class NetworkMessage;
 class Player;
 class Game;
@@ -275,6 +282,9 @@ class ProtocolGame final : public Protocol
 
 		//messages
 		void sendModalWindow(const ModalWindow& modalWindow);
+
+		//session end
+		void sendSessionEnd(SessionEndTypes_t reason);
 
 		//Help functions
 
