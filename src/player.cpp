@@ -1103,7 +1103,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			}
 		}
 
-		// remove mount check (for when mounted player is moved to pz on login)
+		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
 		Account account = IOLoginData::loadAccount(accountNumber);
