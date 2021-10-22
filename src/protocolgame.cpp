@@ -3062,6 +3062,15 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	AddOutfit(msg, currentOutfit);
+
+	// mount color bytes are required here regardless of having one
+	if (currentOutfit.lookMount == 0){
+		msg.addByte(currentOutfit.lookMountHead);
+		msg.addByte(currentOutfit.lookMountBody);
+		msg.addByte(currentOutfit.lookMountLegs);
+		msg.addByte(currentOutfit.lookMountFeet);
+	}
+
 	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
