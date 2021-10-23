@@ -23,7 +23,7 @@
 static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
 
 enum MagicEffectsType_t : uint8_t {
-	MAGIC_EFFECTS_END_LOOP = 0, //ends the magic effect loop
+	MAGIC_EFFECTS_END_LOOP = 0, // ends the magic effect loop
 	MAGIC_EFFECTS_DELTA = 1, // needs uint8_t delta after type to adjust position
 	MAGIC_EFFECTS_DELAY = 2, // needs uint16_t delay after type to delay in miliseconds effect display
 	MAGIC_EFFECTS_CREATE_EFFECT = 3, // needs uint8_t effectid after type
@@ -241,8 +241,8 @@ enum MessageClasses : uint8_t {
 	//MESSAGE_MANA = 43, // not working (?)
 	MESSAGE_BEYOND_LAST = 44, // White, console only
 	MESSAGE_TOURNAMENT_INFO = 45, // Window "Tournament" + "Ok" button
-	//unused 46?
-	//unused 47?
+	// unused 46?
+	// unused 47?
 	MESSAGE_ATTENTION = 48, // White, console only
 	MESSAGE_BOOSTED_CREATURE = 49, // White, console only
 	MESSAGE_OFFLINE_TRAINING = 50, // White, over player + console
@@ -385,6 +385,17 @@ enum Icons_t {
 	ICON_REDSWORDS = 1 << 13,
 	ICON_PIGEON = 1 << 14,
 	ICON_BLEEDING = 1 << 15,
+	ICON_LESSERHEX = 1 << 16,
+	ICON_INTENSEHEX = 1 << 17,
+	ICON_GREATERHEX = 1 << 18,
+	ICON_ROOT = 1 << 19,
+	ICON_FEAR = 1 << 20,
+	ICON_GOSHNAR1 = 1 << 21,
+	ICON_GOSHNAR2 = 1 << 22,
+	ICON_GOSHNAR3 = 1 << 23,
+	ICON_GOSHNAR4 = 1 << 24,
+	ICON_GOSHNAR5 = 1 << 25,
+	ICON_MANASHIELD_BREAKABLE = 1 << 26,
 };
 
 enum WeaponType_t : uint8_t {
@@ -532,6 +543,14 @@ enum item_t : uint16_t {
 	ITEM_AMULETOFLOSS = 2173,
 
 	ITEM_DOCUMENT_RO = 1968, //read-only
+};
+
+enum ResourceTypes_t: uint8_t {
+	RESOURCE_BANK_BALANCE = 0x00,
+	RESOURCE_GOLD_EQUIPPED = 0x01,
+	RESOURCE_PREY_WILDCARDS = 0x0A,
+	RESOURCE_DAILYREWARD_STREAK = 0x14,
+	RESOURCE_DAILYREWARD_JOKERS = 0x15,
 };
 
 enum PlayerFlags : uint64_t {

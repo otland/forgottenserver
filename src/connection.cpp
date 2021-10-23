@@ -157,12 +157,10 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		} else {
 			if (!receivedName) {
 				receivedName = true;
-				serverNameTime = 1;
 
 				accept();
 				return;
 			}
-			++serverNameTime;
 
 			if (msgBuffer[0] == 0x0A) {
 				receivedLastChar = true;
@@ -229,7 +227,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			}
 
 			// Game protocol has already been created at this point
-			protocol = service_port->make_protocol(true, msg, shared_from_this());
+			protocol = service_port->make_protocol(msg, shared_from_this());
 			if (!protocol) {
 				close(FORCE_CLOSE);
 				return;
@@ -325,7 +323,7 @@ void Connection::onWriteOperation(const boost::system::error_code& error)
 void Connection::handleTimeout(ConnectionWeak_ptr connectionWeak, const boost::system::error_code& error)
 {
 	if (error == boost::asio::error::operation_aborted) {
-		//The timer has been cancelled manually
+		// The timer has been cancelled manually
 		return;
 	}
 

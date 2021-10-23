@@ -27,9 +27,9 @@
 
 enum SessionEndTypes_t : uint8_t {
 	SESSION_END_LOGOUT = 0,
-	SESSION_END_UNKNOWN = 1, //unknown, no difference from logout
+	SESSION_END_UNKNOWN = 1, // unknown, no difference from logout
 	SESSION_END_FORCECLOSE = 2,
-	SESSION_END_UNKNOWN_2 = 3, //unknown, no difference from logout
+	SESSION_END_UNKNOWN_2 = 3, // unknown, no difference from logout
 };
 
 class NetworkMessage;
@@ -181,7 +181,7 @@ class ProtocolGame final : public Protocol
 		void sendOpenPrivateChannel(const std::string& receiver);
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
 		void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text);
-		void sendIcons(uint16_t icons);
+		void sendIcons(uint32_t icons);
 		void sendFYIBox(const std::string& message);
 
 		void sendDistanceShoot(const Position& from, const Position& to, uint8_t type);
@@ -218,7 +218,7 @@ class ProtocolGame final : public Protocol
 		void sendShop(Npc* npc, const ShopInfoList& itemList);
 		void sendCloseShop();
 		void sendSaleItemList(const std::list<ShopInfo>& shop);
-		void sendBankBalance();
+		void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount);
 		void sendStoreBalance();
 		void sendMarketEnter(uint32_t depotId);
 		void sendMarketLeave();

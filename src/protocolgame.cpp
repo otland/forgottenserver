@@ -341,7 +341,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	version = msg.get<uint16_t>(); // U16 client version
 	msg.skipBytes(4); // U32 client version
 	
-	//String client version
+	// String client version
 	if (version >= 1240) {
 		if (msg.getLength() - msg.getBufferPosition() > 132) {
 			msg.getString();
@@ -374,7 +374,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		writeToOutputBuffer(opcodeMessage);
 	}
 
-	// Adjust checksum mode for newer clients
+	// Change packet verifying mode for QT clients
 	if (version >= 1111 && operatingSystem >= CLIENTOS_QT_LINUX && operatingSystem <= CLIENTOS_QT_MAC) {
 		setChecksumMode(CHECKSUM_SEQUENCE);
 	}
@@ -385,19 +385,18 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 	
-	msg.skipBytes(1); // gamemaster flag
+	msg.skipBytes(1); // Gamemaster flag
 
 	std::string sessionKey = msg.getString();
-	auto sessionArgs = explodeString(sessionKey, "\n", 4); //acc name/email, password, token, timestamp divided by 30
+	auto sessionArgs = explodeString(sessionKey, "\n", 4); // acc name or email, password, token, timestamp divided by 30
 	if (sessionArgs.size() != 4) {
 		disconnect();
 		return;
 	}
 
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
-		// TODO: check strings contents
-		msg.getString();
-		msg.getString();
+		msg.getString(); // OS name (?)
+		msg.getString(); // OS version (?)
 	}
 
 	std::string& accountName = sessionArgs[0];
@@ -908,6 +907,7 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	newOutfit.lookFeet = msg.getByte();
 	newOutfit.lookAddons = msg.getByte();
 
+	// Set outfit window
 	if (outfitType == 0) {
 		newOutfit.lookMount = msg.get<uint16_t>();
 		if (newOutfit.lookMount != 0) {
@@ -926,20 +926,21 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 			newOutfit.lookMountFeet = currentOutfit.lookMountFeet;
 		}
 
-		// familiar looktype
-		msg.get<uint16_t>();
+		msg.get<uint16_t>(); // familiar looktype
+		addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
+
+	// Store "try outfit" window
 	} else if (outfitType == 1) {
-		//This value probably has something to do with try outfit variable inside outfit window dialog
-		//if try outfit is set to 2 it expects uint32_t value after mounted and disable mounts from outfit window dialog
 		newOutfit.lookMount = 0;
+		// mount colors or store offerId (needs testing)
 		newOutfit.lookMountHead = msg.getByte();
 		newOutfit.lookMountBody = msg.getByte();
 		newOutfit.lookMountLegs = msg.getByte();
 		newOutfit.lookMountFeet = msg.getByte();
-		//dont change outfit?
-		return;
+		//player->? (open store?)
+
+	// Podium interaction
 	} else if (outfitType == 2) {
-		//Podium
 		Position pos = msg.getPosition();
 		uint16_t spriteId = msg.get<uint16_t>();
 		uint8_t stackpos = msg.getByte();
@@ -955,10 +956,7 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 
 		//apply to podium
 		//player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction
-		return;
 	}
-
-	addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
 }
 
 void ProtocolGame::parseToggleMount(NetworkMessage& msg)
@@ -1410,8 +1408,8 @@ void ProtocolGame::sendWorldTime()
 	int16_t time = g_game.getWorldTime();
 	NetworkMessage msg;
 	msg.addByte(0xEF);
-	msg.addByte(time / 60); //hour
-	msg.addByte(time % 60); //min
+	msg.addByte(time / 60); // hour
+	msg.addByte(time % 60); // min
 	writeToOutputBuffer(msg);
 }
 
@@ -1693,7 +1691,7 @@ void ProtocolGame::sendChannelMessage(const std::string& author, const std::stri
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendIcons(uint16_t icons)
+void ProtocolGame::sendIcons(uint32_t icons)
 {
 	NetworkMessage msg;
 	msg.addByte(0xA2);
@@ -1745,8 +1743,10 @@ void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 	msg.addString(npc->getName());
 
 	// currency displayed in trade window (currently only gold supported)
+	// if item other than gold coin is sent, the shop window takes information
+	// about currency amount from player items packet (the one that updates action bars)
 	msg.add<uint16_t>(Item::items[ITEM_GOLD_COIN].clientId);
-	msg.addString(""); // unknown, works as string but doesn't show anywhere
+	msg.addString(""); // doesn't show anywhere, could be used in otclient for currency name
 
 	uint16_t itemsToSend = std::min<size_t>(itemList.size(), std::numeric_limits<uint16_t>::max());
 	msg.add<uint16_t>(itemsToSend);
@@ -1768,18 +1768,14 @@ void ProtocolGame::sendCloseShop()
 
 void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 {
+	uint64_t playerBank = player->getBankBalance();
+	uint64_t playerMoney = player->getMoney();
+	sendResourceBalance(RESOURCE_BANK_BALANCE, playerBank);
+	sendResourceBalance(RESOURCE_GOLD_EQUIPPED, playerMoney);
+
 	NetworkMessage msg;
-	msg.addByte(0xEE);
-	msg.addByte(0x00); //unknown
-	msg.add<uint64_t>(player->getBankBalance());
-	msg.addByte(0xEE);
-
-	//0x01 + u64 gold amount or 0x02 + u64 currency amount
-	msg.addByte(0x01);
-	msg.add<uint64_t>(player->getMoney() + player->getBankBalance()); //this line appears twice, it's very likely that one is gold equipped, the other is total money
-
 	msg.addByte(0x7B);
-	msg.add<uint64_t>(player->getMoney() + player->getBankBalance());
+	msg.add<uint64_t>(playerBank + playerMoney); // deprecated and ignored by QT client. OTClient still uses it.
 
 	std::map<uint16_t, uint32_t> saleMap;
 
@@ -1856,29 +1852,22 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendBankBalance() {
+void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount) {
 	NetworkMessage msg;
-
 	msg.addByte(0xEE);
-	msg.addByte(0x00);
-	msg.add<uint64_t>(player->getBankBalance());
-	writeToOutputBuffer(msg);
-
-	msg.reset();
-
-	msg.addByte(0xEE);
-	msg.addByte(0x01);
-	msg.add<uint64_t>(player->getMoney());
+	msg.addByte(resourceType);
+	msg.add<uint64_t>(amount);
 	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendStoreBalance() {
 	NetworkMessage msg;
-	msg.addByte(0xF2);
-	msg.addByte(0x01);
-	writeToOutputBuffer(msg);
 
-	msg.reset();
+	//"updating..."
+	//msg.addByte(0xF2);
+	//msg.addByte(0x01);
+	//writeToOutputBuffer(msg);
+	//msg.reset();
 
 	// send update
 	msg.addByte(0xDF);
@@ -1951,7 +1940,8 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 
 	writeToOutputBuffer(msg);
 
-	sendBankBalance();
+	sendResourceBalance(RESOURCE_BANK_BALANCE, player->getBankBalance());
+	sendResourceBalance(RESOURCE_GOLD_EQUIPPED, player->getMoney());
 	sendStoreBalance();
 }
 
@@ -2900,54 +2890,21 @@ void ProtocolGame::sendItems()
 	NetworkMessage msg;
 	msg.addByte(0xF5);
 
-	//find all items carried by character (clientId, amount)
-	std::map<uint16_t, uint16_t> inventory;
-
-	for (uint8_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_STORE_INBOX; i++) {
-		Item* slotItem = player->getInventoryItem(static_cast<slots_t>(i));
-		if (!slotItem) {
-			continue;
-		}
-
-		uint16_t clientID = slotItem->getClientID();
-
-		auto rootSearch = inventory.find(clientID);
-		if (rootSearch != inventory.end()) {
-			inventory[clientID] = inventory[clientID] + Item::countByType(slotItem, -1);
-		} else {
-			inventory.emplace(clientID, Item::countByType(slotItem, -1));
-		}
-
-		//quiver or backpack
-		if (Container* container = slotItem->getContainer()) {
-			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-				uint16_t childClientID = (*it)->getClientID();
-				uint32_t childAmount = Item::countByType(*it, -1);
-
-				auto containerSearch = inventory.find(childClientID);
-				if (containerSearch != inventory.end()) {
-					inventory[childClientID] = inventory[childClientID] + childAmount;
-				} else {
-					inventory.emplace(childClientID, childAmount);
-				}
-				//bug?
-				inventory.emplace(childClientID, childAmount);
-			}
-		}
-	}
+	// find all items carried by character (itemId, amount)
+	std::map<uint32_t, uint32_t> inventory;
+	player->getAllItemTypeCount(inventory);
 
 	msg.add<uint16_t>(inventory.size() + 11);
-
 	for (uint16_t i = 1; i <= 11; i++) {
-		msg.add<uint16_t>(i);
-		msg.addByte(0); //always 0
+		msg.add<uint16_t>(i); // slotId
+		msg.addByte(0); // always 0
 		msg.add<uint16_t>(1); // always 1
 	}
 
-	for (const auto& clientId : inventory) {
-		msg.add<uint16_t>(clientId.first);
-		msg.addByte(0); //always 0
-		msg.add<uint16_t>(clientId.second);
+	for (const auto& item : inventory) {
+		msg.add<uint16_t>(Item::items[item.first].clientId); // item clientId
+		msg.addByte(0); // always 0
+		msg.add<uint16_t>(item.second); // count
 	}
 
 	writeToOutputBuffer(msg);
@@ -3010,7 +2967,7 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 		msg.add<uint16_t>(0x00);
 	}
 
-	msg.addByte(0x00); // "(traded)" suffix after writer name (bool)
+	msg.addByte(0x00); // "(traded)" suffix after player name (bool)
 
 	time_t writtenDate = item->getDate();
 	if (writtenDate != 0) {
@@ -3030,11 +2987,9 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, uint32_t itemId, const 
 	msg.addItem(itemId, 1);
 	msg.add<uint16_t>(text.size());
 	msg.addString(text);
-
-	msg.add<uint16_t>(0x00); // escape writer name
-	msg.addByte(0x00); // escape "(traded)" byte
-
-	msg.add<uint16_t>(0x00);
+	msg.add<uint16_t>(0x00); // writer name
+	msg.addByte(0x00); // "(traded)" byte
+	msg.add<uint16_t>(0x00); // date
 	writeToOutputBuffer(msg);
 }
 
@@ -3101,7 +3056,6 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	msg.add<uint16_t>(protocolOutfits.size());
-
 	for (const ProtocolOutfit& outfit : protocolOutfits) {
 		msg.add<uint16_t>(outfit.lookType);
 		msg.addString(outfit.name);
@@ -3117,24 +3071,20 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	msg.add<uint16_t>(mounts.size());
-
 	for (const Mount* mount : mounts) {
 		msg.add<uint16_t>(mount->clientId);
 		msg.addString(mount->name);
-
 		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
 	}
 
-	msg.add<uint16_t>(0x00); //familiars.size()
-
-	//U16 looktype
-	//String name
-	//0x00 // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
+	msg.add<uint16_t>(0x00); // familiars.size()
+	// size > 0
+	// U16 looktype
+	// String name
+	// 0x00 // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
 
 	msg.addByte(0x00); //Try outfit mode (?)
-
 	msg.addByte(mounted ? 0x01 : 0x00);
-
 	writeToOutputBuffer(msg);
 }
 
@@ -3157,9 +3107,7 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 	msg.add<uint32_t>(std::min<uint32_t>(10, icon));
 	msg.addByte(notify ? 0x01 : 0x00);
 	msg.addByte(status);
-
 	msg.addByte(0x00); // vipGroups (placeholder)
-
 	writeToOutputBuffer(msg);
 }
 
@@ -3239,9 +3187,8 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 {
 	CreatureType_t creatureType = creature->getType();
 	const Player* otherPlayer = creature->getPlayer();
-	uint32_t masterId = 0;
-
 	const Player* masterPlayer = nullptr;
+	uint32_t masterId = 0;
 
 	if (creatureType == CREATURETYPE_MONSTER) {
 		const Creature* master = creature->getMaster();
@@ -3308,9 +3255,8 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		msg.addByte(player->getGuildEmblem(otherPlayer));
 	}
 
-	// Type (for summons)
+	// Creature type and summon emblem
 	msg.addByte(creature->isHealthHidden() ? CREATURETYPE_HIDDEN : creatureType);
-
 	if (creatureType == CREATURETYPE_SUMMON_OWN) {
 		msg.add<uint32_t>(masterId);
 	}
@@ -3339,7 +3285,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(player->getHealth(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<uint16_t>::max()));
 
-	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1 : player->getFreeCapacity());
+	msg.add<uint32_t>(player->getFreeCapacity());
 	msg.add<uint64_t>(player->getExperience());
 
 	msg.add<uint16_t>(player->getLevel());
@@ -3390,15 +3336,14 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	}
 
 	// to do: bonus cap
-	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1 : player->getCapacity()); // base + bonus capacity
-	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1 : player->getCapacity()); // base capacity
+	msg.add<uint32_t>(player->getCapacity()); // base + bonus capacity
+	msg.add<uint32_t>(player->getCapacity()); // base capacity
 }
 
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 {
 	// outfit
 	msg.add<uint16_t>(outfit.lookType);
-
 	if (outfit.lookType != 0) {
 		msg.addByte(outfit.lookHead);
 		msg.addByte(outfit.lookBody);
@@ -3411,7 +3356,6 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 
 	// mount
 	msg.add<uint16_t>(outfit.lookMount);
-
 	if (outfit.lookMount != 0) {
 		msg.addByte(outfit.lookMountHead);
 		msg.addByte(outfit.lookMountBody);

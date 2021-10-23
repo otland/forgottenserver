@@ -137,8 +137,6 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		ConnectionState_t connectionState = CONNECTION_STATE_PENDING;
 		bool receivedFirst = false;
-
-		uint32_t serverNameTime = 0;
 		bool receivedName = false;
 		bool receivedLastChar = false;
 };
