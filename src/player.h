@@ -128,9 +128,11 @@ class Player final : public Creature, public Cylinder
 			return this;
 		}
 
-		void setID() override {
+		void setID() final {
 			if (id == 0) {
-				id = playerAutoID++;
+				if (guid != 0) {
+					id = 0x10000000 + guid;
+				}
 			}
 		}
 
@@ -875,6 +877,7 @@ class Player final : public Creature, public Cylinder
 				client->sendItems();
 			}
 		}
+		void openSavedContainers();
 
 		//event methods
 		void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
@@ -1161,6 +1164,10 @@ class Player final : public Creature, public Cylinder
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
 		void updateRegeneration();
+
+		const std::map<uint8_t, OpenContainer>& getOpenContainers() const {
+			return openContainers;
+		}
 
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
