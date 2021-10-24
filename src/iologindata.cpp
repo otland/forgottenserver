@@ -464,7 +464,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	for (auto& it : openContainersList) {
 		player->addContainer(it.first - 1, it.second);
 		player->onSendContainer(it.second);
-		//player->sendContainer(it.first - 1, it.second, it.second->hasParent(), player->getContainerIndex(it.first - 1));
 	}
 
 	//load depot items
