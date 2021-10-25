@@ -143,6 +143,8 @@ setmetatable(EventCallback, {
 					if output == RETURNVALUE_NOERROR then
 						break
 					end
+					
+					return output
 				end
 				-- We left the loop why have we reached the end
 				if index == eventDataCount then
