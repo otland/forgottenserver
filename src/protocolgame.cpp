@@ -34,6 +34,7 @@
 #include "iomarket.h"
 #include "ban.h"
 #include "scheduler.h"
+#include "podium.h"
 
 #include <fmt/format.h>
 
@@ -279,10 +280,10 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->clearModalWindows();
 	player->setOperatingSystem(operatingSystem);
 	player->isConnecting = false;
-
 	player->client = getThis();
 	player->openSavedContainers();
 	sendAddCreature(player, player->getPosition(), 0, false);
+
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	acceptPackets = true;
@@ -566,7 +567,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x83: parseUseItemEx(msg); break;
 		case 0x84: parseUseWithCreature(msg); break;
 		case 0x85: parseRotateItem(msg); break;
-		//case 0x86: break; // podium interaction
+		case 0x86: parseCustomizePodiumRequest(msg); break;
 		case 0x87: parseCloseContainer(msg); break;
 		case 0x88: parseUpArrowContainer(msg); break;
 		case 0x89: parseTextWindow(msg); break;
@@ -950,14 +951,20 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		newOutfit.lookMountBody = msg.getByte();
 		newOutfit.lookMountLegs = msg.getByte();
 		newOutfit.lookMountFeet = msg.getByte();
-
-		msg.get<uint16_t>(); // familiar looktype
-		msg.getByte(); // outfit direction	
-		msg.getByte(); // show outfit (bool)
+		Direction direction = static_cast<Direction>(msg.getByte());
+		bool podiumVisible = msg.getByte() == 1;
 
 		//apply to podium
-		//player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction
+		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerEditPodium, player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction);
 	}
+}
+
+void ProtocolGame::parseCustomizePodiumRequest(NetworkMessage& msg)
+{
+	Position pos = msg.getPosition();
+	uint16_t spriteId = msg.get<uint16_t>();
+	uint8_t stackpos = msg.getByte();
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRequestCustomizePodium, player->getID(), pos, stackpos, spriteId);
 }
 
 void ProtocolGame::parseToggleMount(NetworkMessage& msg)
@@ -1704,7 +1711,6 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 {
 	NetworkMessage msg;
 	msg.addByte(0x6E);
-
 	msg.addByte(cid);
 
 	if (container->getID() == ITEM_BROWSEFIELD) {
@@ -1726,7 +1732,6 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	msg.add<uint16_t>(firstIndex);
 	if (firstIndex < containerSize) {
 		uint8_t itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
-
 		msg.addByte(itemsToSend);
 		for (auto it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
 			msg.addItem(*it);
@@ -3031,7 +3036,7 @@ void ProtocolGame::sendOutfitWindow()
 	AddOutfit(msg, currentOutfit);
 
 	// mount color bytes are required here regardless of having one
-	if (currentOutfit.lookMount == 0){
+	if (currentOutfit.lookMount == 0) {
 		msg.addByte(currentOutfit.lookMountHead);
 		msg.addByte(currentOutfit.lookMountBody);
 		msg.addByte(currentOutfit.lookMountLegs);
@@ -3086,6 +3091,130 @@ void ProtocolGame::sendOutfitWindow()
 
 	msg.addByte(0x00); //Try outfit mode (?)
 	msg.addByte(mounted ? 0x01 : 0x00);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendPodiumWindow(const Item* item)
+{
+	if (!item) {
+		return;
+	}
+
+	const Podium* podium = item->getPodium();
+	if (!podium) {
+		return;
+	}
+
+	const Tile* tile = item->getTile();
+	if (!tile) {
+		return;
+	}
+
+	int32_t stackpos = tile->getThingIndex(item);
+
+	// read podium outfit
+	Outfit_t podiumOutfit = podium->getOutfit();
+	if (podiumOutfit.lookType == 0) {
+		Outfit_t newOutfit = player->getDefaultOutfit();
+		// copy player outfit without breaking mount colors
+		podiumOutfit.lookType = newOutfit.lookType;
+		podiumOutfit.lookHead = newOutfit.lookHead;
+		podiumOutfit.lookBody = newOutfit.lookBody;
+		podiumOutfit.lookLegs = newOutfit.lookLegs;
+		podiumOutfit.lookFeet = newOutfit.lookFeet;
+		podiumOutfit.lookAddons = newOutfit.lookAddons;
+	}
+
+	// fetch player outfits
+	const auto& outfits = Outfits::getInstance().getOutfits(player->getSex());
+	if (outfits.size() == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	// add GM outfit for staff members
+	std::vector<ProtocolOutfit> protocolOutfits;
+	if (player->isAccessPlayer()) {
+		static const std::string gamemasterOutfitName = "Gamemaster";
+		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
+	}
+
+	// fetch player addons info
+	protocolOutfits.reserve(outfits.size());
+	for (const Outfit& outfit : outfits) {
+		uint8_t addons;
+		if (!player->getOutfitAddons(outfit, addons)) {
+			continue;
+		}
+
+		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
+	}
+
+	// select first outfit available when the one from podium is not unlocked
+	if (!player->canWear(podiumOutfit.lookType, 0)) {
+		podiumOutfit.lookType = outfits.front().lookType;
+	}
+
+	// fetch player mounts
+	std::vector<const Mount*> mounts;
+	for (const Mount& mount : g_game.mounts.getMounts()) {
+		if (player->hasMount(&mount)) {
+			mounts.push_back(&mount);
+		}
+	}
+
+	// packet header
+	NetworkMessage msg;
+	msg.addByte(0xC8);
+
+	// current outfit
+	msg.add<uint16_t>(podiumOutfit.lookType);
+	msg.addByte(podiumOutfit.lookHead);
+	msg.addByte(podiumOutfit.lookBody);
+	msg.addByte(podiumOutfit.lookLegs);
+	msg.addByte(podiumOutfit.lookFeet);
+	msg.addByte(podiumOutfit.lookAddons);
+
+	// current mount
+	msg.add<uint16_t>(podiumOutfit.lookMount);
+	msg.addByte(podiumOutfit.lookMountHead);
+	msg.addByte(podiumOutfit.lookMountBody);
+	msg.addByte(podiumOutfit.lookMountLegs);
+	msg.addByte(podiumOutfit.lookMountFeet);
+
+	// current familiar (not used in podium mode)
+	msg.add<uint16_t>(0);
+
+	// available outfits
+	msg.add<uint16_t>(protocolOutfits.size());
+	for (const ProtocolOutfit& outfit : protocolOutfits) {
+		msg.add<uint16_t>(outfit.lookType);
+		msg.addString(outfit.name);
+		msg.addByte(outfit.addons);
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit tooltip (hardcoded)
+	}
+
+	// available mounts
+	msg.add<uint16_t>(mounts.size());
+	for (const Mount* mount : mounts) {
+		msg.add<uint16_t>(mount->clientId);
+		msg.addString(mount->name);
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
+	}
+
+	// available familiars (not used in podium mode)
+	msg.add<uint16_t>(0);
+
+	msg.addByte(0x05); // "set outfit" window mode (5 = podium)
+	msg.addByte(podium->hasFlag(PODIUM_SHOW_MOUNT) ? 0x01 : 0x00); // "mount" checkbox
+	msg.add<uint16_t>(0); // unknown
+	msg.addPosition(item->getPosition());
+	msg.add<uint16_t>(item->getClientID());
+	msg.addByte(stackpos);
+
+	msg.addByte(podium->hasFlag(PODIUM_NOSPRITE) ? 0x00 : 0x01); // hide the platform
+	msg.addByte(0x01);//podium->hasFlag(PODIUM_SHOW_OUTFIT) ? 0x01 : 0x00); // "outfit" checkbox
+	msg.addByte(podium->getDirection()); // outfit direction
 	writeToOutputBuffer(msg);
 }
 
@@ -3274,8 +3403,14 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.addByte(creature->getSpeechBubble());
 	msg.addByte(0xFF); // MARK_UNMARKED
-	msg.addByte(0x00); // inspection type (bool?)
 
+	// inspection type (flags)
+	// 0x00 - "ask to inspect x"
+	// 0x01 - "revoke x invitation to inspect me"
+	// 0x02 - "invite x to inspect me"
+	// 0x04 - "inspect player x"
+	// 0x08 - "allow x to inspect me"
+	msg.addByte(0x00);
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 }
 

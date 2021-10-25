@@ -31,7 +31,7 @@ MESSAGE_EVENT_ORANGE = MESSAGE_STATUS_WARNING
 MESSAGE_STATUS_CONSOLE_ORANGE = MESSAGE_STATUS_WARNING
 TALKTYPE_ORANGE_1 = TALKTYPE_MONSTER_SAY
 TALKTYPE_ORANGE_2 = TALKTYPE_MONSTER_YELL
-
+	
 NORTH = DIRECTION_NORTH
 EAST = DIRECTION_EAST
 SOUTH = DIRECTION_SOUTH
@@ -85,7 +85,6 @@ do
 	rawgetmetatable("Item").__index = ItemIndex
 	rawgetmetatable("Container").__index = ItemIndex
 	rawgetmetatable("Teleport").__index = ItemIndex
-	rawgetmetatable("Podium").__index = ItemIndex
 end
 
 do

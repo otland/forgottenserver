@@ -27,6 +27,7 @@
 #include "house.h"
 #include "game.h"
 #include "bed.h"
+#include "podium.h"
 
 #include "actions.h"
 #include "spells.h"
@@ -67,6 +68,8 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 			newItem = new Mailbox(type);
 		} else if (it.isBed()) {
 			newItem = new BedItem(type);
+		} else if (it.isPodium()) {
+			newItem = new Podium(type);
 		} else if (it.id >= 2210 && it.id <= 2212) { // magic rings
 			newItem = new Item(type - 3, count);
 		} else if (it.id == 2215 || it.id == 2216) { // magic rings
@@ -656,6 +659,14 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		case ATTR_SLEEPSTART: {
 			if (!propStream.skip(4)) {
+				return ATTR_READ_ERROR;
+			}
+			break;
+		}
+
+		//Podium class
+		case ATTR_PODIUMOUTFIT: {
+			if (!propStream.skip(17)) {
 				return ATTR_READ_ERROR;
 			}
 			break;

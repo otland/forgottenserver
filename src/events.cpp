@@ -102,6 +102,10 @@ bool Events::load()
 				info.playerOnTradeAccept = event;
 			} else if (methodName == "onTradeCompleted") {
 				info.playerOnTradeCompleted = event;
+			} else if (methodName == "onPodiumRequest") {
+				info.playerOnPodiumRequest = event;
+			} else if (methodName == "onPodiumEdit") {
+				info.playerOnPodiumEdit = event;
 			} else if (methodName == "onMoveItem") {
 				info.playerOnMoveItem = event;
 			} else if (methodName == "onItemMoved") {
@@ -856,6 +860,65 @@ void Events::eventPlayerOnTradeCompleted(Player* player, Player* target, Item* i
 	LuaScriptInterface::pushBoolean(L, isSuccess);
 
 	return scriptInterface.callVoidFunction(5);
+}
+
+void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
+{
+	// Player:onPodiumRequest(player, item) or Player.onPodiumRequest(self, player, item)
+	if (info.playerOnPodiumRequest == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnPodiumRequest] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnPodiumRequest, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnPodiumRequest);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	scriptInterface.callFunction(2);
+}
+
+void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction)
+{
+	// Player:onPodiumEdit(player, item, outfit, direction, isVisible) or Player.onPodiumEdit(self, player, item, outfit, direction, isVisible)
+	if (info.playerOnPodiumEdit == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnPodiumEdit] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnPodiumEdit, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnPodiumEdit);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	LuaScriptInterface::pushOutfit(L, outfit);
+
+	lua_pushnumber(L, direction);
+	lua_pushboolean(L, podiumVisible);
+
+	scriptInterface.callFunction(5);
 }
 
 void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)

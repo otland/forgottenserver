@@ -106,7 +106,7 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 	if podium then		
 		-- to do: check if player can wear outfit/mount or is using crafted packet
 		-- add a method to check if player has mount
-		if not self:canWearOutfit(outfit.lookType, 0) then
+		if not self:canWearOutfit(outfit.lookType) then
 			self:sendCancelMessage("Sorry, not possible.")
 			return
 		end

@@ -594,6 +594,12 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
 };
 
+enum PodiumFlags : uint8_t {
+	PODIUM_NOSPRITE = 1 << 0, // hide outfit holder
+	PODIUM_SHOW_OUTFIT = 1 << 1, // show outfit
+	PODIUM_SHOW_MOUNT = 1 << 2 // show mount
+};
+
 enum ReloadTypes_t : uint8_t  {
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_ACTIONS,

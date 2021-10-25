@@ -40,6 +40,7 @@ class Mailbox;
 class Door;
 class MagicField;
 class BedItem;
+class Podium;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -107,6 +108,7 @@ enum AttrTypes_t {
 	ATTR_STOREITEM = 37,
 	ATTR_ATTACK_SPEED = 38,
 	ATTR_OPENCONTAINER = 39,
+	ATTR_PODIUMOUTFIT = 40,
 };
 
 enum Attr_ReadValue {
@@ -587,6 +589,12 @@ class Item : virtual public Thing
 			return nullptr;
 		}
 		virtual const BedItem* getBed() const {
+			return nullptr;
+		}
+		virtual Podium* getPodium() {
+			return nullptr;
+		}
+		virtual const Podium* getPodium() const {
 			return nullptr;
 		}
 

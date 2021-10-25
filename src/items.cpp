@@ -163,6 +163,7 @@ const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
 	{"door", ITEM_TYPE_DOOR},
 	{"bed", ITEM_TYPE_BED},
 	{"rune", ITEM_TYPE_RUNE},
+	{"podium", ITEM_TYPE_PODIUM}
 };
 
 const std::unordered_map<std::string, tileflags_t> TileStatesMap = {
@@ -439,6 +440,11 @@ bool Items::loadFromOtb(const std::string& file)
 				break;
 			default:
 				return false;
+		}
+
+		// TO DO: read flag from OTB
+		if (clientId == 35973 || clientId == 35974) {
+			iType.type = ITEM_TYPE_PODIUM;
 		}
 
 		iType.blockSolid = hasBitSet(FLAG_BLOCK_SOLID, flags);
