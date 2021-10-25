@@ -131,7 +131,7 @@ class Player final : public Creature, public Cylinder
 		void setID() final {
 			if (id == 0) {
 				if (guid != 0) {
-					id = 0x10000000 + guid;
+					id = guid;
 				}
 			}
 		}
@@ -832,11 +832,6 @@ class Player final : public Creature, public Cylinder
 		void sendCreatureShield(const Creature* creature) {
 			if (client) {
 				client->sendCreatureShield(creature);
-			}
-		}
-		void sendCreatureTypeUpdate(uint32_t creatureId) {
-			if (client) {
-				client->sendCreatureTypeUpdate(creatureId);
 			}
 		}
 		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers) {

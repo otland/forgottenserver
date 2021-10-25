@@ -1811,7 +1811,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(SPEECHBUBBLE_NORMAL)
 	registerEnum(SPEECHBUBBLE_TRADE)
 	registerEnum(SPEECHBUBBLE_QUEST)
-	registerEnum(SPEECHBUBBLE_QUESTTRADER)
+	registerEnum(SPEECHBUBBLE_COMPASS)
+	registerEnum(SPEECHBUBBLE_NORMAL2)
+	registerEnum(SPEECHBUBBLE_NORMAL3)
+	registerEnum(SPEECHBUBBLE_HIRELING)
 
 	// Use with player:addMapMark
 	registerEnum(MAPMARK_TICK)
@@ -7508,7 +7511,14 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 	}
 
 	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
-	g_game.updateCreatureType(creature);
+
+	// update summon icon
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
+
+	for (Creature* spectator : spectators) {
+		spectator->getPlayer()->sendUpdateTileCreature(creature);
+	}
 	return 1;
 }
 

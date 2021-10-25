@@ -26,7 +26,7 @@
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
 
-uint32_t Npc::npcAutoID = 0x80000000;
+uint32_t Npc::npcAutoID = 0x20000000;
 NpcScriptInterface* Npc::scriptInterface = nullptr;
 
 void Npcs::reload()

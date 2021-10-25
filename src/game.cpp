@@ -4708,19 +4708,6 @@ void Game::updatePlayerHelpers(const Player& player)
 	}
 }
 
-void Game::updateCreatureType(Creature* creature)
-{
-	const Player* masterPlayer = nullptr;
-
-	//send to clients
-	SpectatorVec spectators;
-	map.getSpectators(spectators, creature->getPosition(), true, true);
-
-	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureTypeUpdate(creature->getID());
-	}
-}
-
 void Game::loadMotdNum()
 {
 	Database& db = Database::getInstance();

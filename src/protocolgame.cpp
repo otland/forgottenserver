@@ -1457,17 +1457,6 @@ void ProtocolGame::sendCreatureSkull(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureTypeUpdate(uint32_t creatureId)
-{
-	Creature* creature = g_game.getCreatureByID(creatureId);
-	if (creature) {
-		const Tile* tile = creature->getTile();
-		if (tile) {
-			sendUpdateTileCreature(creature->getPosition(), tile->getClientIndexOfCreature(player, creature), creature);
-		}
-	}
-}
-
 void ProtocolGame::sendCreatureHelpers(uint32_t creatureId, uint16_t helpers)
 {
 	NetworkMessage msg;
@@ -3324,7 +3313,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getBaseMagicLevel()); // base + loyalty bonus(?)
 	msg.add<uint16_t>(player->getMagicLevelPercent() * 100);
 
-	for (uint8_t i = SKILL_FIRST; i <= SKILL_FISHING; ++i) {
+	for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		msg.add<uint16_t>(std::min<int32_t>(player->getSkillLevel(i), std::numeric_limits<uint16_t>::max()));
 		msg.add<uint16_t>(player->getBaseSkill(i));
 		msg.add<uint16_t>(player->getBaseSkill(i)); // base + loyalty bonus(?)
@@ -3504,8 +3493,8 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 
 	msg.addString(item.realName);
 	msg.add<uint32_t>(it.weight);
-	msg.add<uint32_t>(item.buyPrice == 4294967295 ? 0 : item.buyPrice);
-	msg.add<uint32_t>(item.sellPrice == 4294967295 ? 0 : item.sellPrice);
+	msg.add<uint32_t>(item.buyPrice == std::numeric_limits<uint32_t>::max() ? 0 : item.buyPrice);
+	msg.add<uint32_t>(item.sellPrice == std::numeric_limits<uint32_t>::max() ? 0 : item.sellPrice);
 }
 
 void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)

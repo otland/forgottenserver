@@ -33,7 +33,7 @@ extern ConfigManager g_config;
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
 
-uint32_t Monster::monsterAutoID = 0x40000000;
+uint32_t Monster::monsterAutoID = 0x10000000;
 
 Monster* Monster::createMonster(const std::string& name)
 {
