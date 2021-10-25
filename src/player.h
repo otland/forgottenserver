@@ -1106,6 +1106,11 @@ class Player final : public Creature, public Cylinder
 				client->sendAddMarker(pos, markType, desc);
 			}
 		}
+		void sendKillTracking(const std::string& name, const Outfit_t& outfit, const Container* container) {
+			if (client) {
+				client->sendKillTracking(name, outfit, container);
+			}
+		}
 		void sendQuestLog() {
 			if (client) {
 				client->sendQuestLog();
