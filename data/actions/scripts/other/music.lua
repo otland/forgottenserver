@@ -36,6 +36,7 @@ local instruments = {
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local instrument = instruments[item:getId()]
+	local chance
 	if instrument.chance then
 		chance = instrument.chance >= math.random(1, 100)
 
