@@ -1077,6 +1077,13 @@ void Player::openSavedContainers()
 		}
 	}
 
+	// fix broken containers when logged in from another location
+	for (uint8_t i = 0; i < 16; i++) {
+		client->sendEmptyContainer(i);
+		client->sendCloseContainer(i);
+	}
+
+	// send actual containers
 	for (auto& it : openContainersList) {
 		addContainer(it.first - 1, it.second);
 		onSendContainer(it.second);
