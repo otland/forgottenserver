@@ -14,3 +14,7 @@ local slotBits = {
 function ItemType.usesSlot(self, slot)
 	return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
 end
+
+function ItemType:isKey()
+	return self:getType() == ITEM_TYPE_KEY
+end

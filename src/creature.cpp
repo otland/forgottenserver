@@ -381,9 +381,8 @@ int32_t Creature::getWalkCache(const Position& pos) const
 		if (std::abs(dy) <= maxWalkCacheHeight) {
 			if (localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx]) {
 				return 1;
-			} else {
-				return 0;
 			}
+			return 0;
 		}
 	}
 

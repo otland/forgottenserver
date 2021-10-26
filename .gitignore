@@ -177,6 +177,9 @@ pip-log.txt
 .*.swp
 .*.swo
 
+# Notepad++ backups
+*.bak
+
 #############
 ## TFS / OT
 #############
