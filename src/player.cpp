@@ -3091,6 +3091,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		updateInventoryWeight();
 		updateItemsLight();
 		sendStats();
+		sendItems();
 	}
 
 	if (const Item* item = thing->getItem()) {
@@ -3145,6 +3146,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		updateInventoryWeight();
 		updateItemsLight();
 		sendStats();
+		sendItems();
 	}
 
 	if (const Item* item = thing->getItem()) {
