@@ -376,10 +376,10 @@ Creature* Game::getCreatureByID(uint32_t id)
 {
 	if (id <= Player::playerAutoID) {
 		return getPlayerByID(id);
-	} else if (id <= Monster::monsterAutoID) {
-		return getMonsterByID(id);
 	} else if (id <= Npc::npcAutoID) {
 		return getNpcByID(id);
+	} else if (id <= Monster::monsterAutoID) {
+		return getMonsterByID(id);
 	}
 	return nullptr;
 }
