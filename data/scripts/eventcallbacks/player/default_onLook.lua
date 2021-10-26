@@ -48,6 +48,7 @@ ec.onLook = function(self, thing, position, distance, description)
 			description = string.format("%s\ncid: %s", description, thing:getId())
 		
 			if thing:isPlayer() then
+				description = string.format("%s\nGUID: %s", description, thing:getGuid())
 				description = string.format("%s\nIP: %s.", description, Game.convertIpToString(thing:getIp()))
 			end
 		end
