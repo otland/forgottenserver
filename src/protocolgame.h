@@ -29,7 +29,7 @@ enum SessionEndTypes_t : uint8_t {
 	SESSION_END_LOGOUT = 0,
 	SESSION_END_UNKNOWN = 1, // unknown, no difference from logout
 	SESSION_END_FORCECLOSE = 2,
-	SESSION_END_UNKNOWN_2 = 3, // unknown, no difference from logout
+	SESSION_END_UNKNOWN2 = 3, // unknown, no difference from logout
 };
 
 class NetworkMessage;
