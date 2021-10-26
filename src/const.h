@@ -213,7 +213,7 @@ enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_DEFAULT = 17, // White, bottom + console
 	MESSAGE_STATUS_WARNING = 18, // Red, over player + console
 	MESSAGE_EVENT_ADVANCE = 19, // White, over player + console
-	MESSAGE_STATUS_WARNING_2 = 20, // Red, over player + console
+	MESSAGE_STATUS_WARNING2 = 20, // Red, over player + console
 	MESSAGE_STATUS_SMALL = 21, // White, bottom of the screen
 	MESSAGE_INFO_DESCR = 22, // Green, over player + console
 
