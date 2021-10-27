@@ -929,6 +929,10 @@ class Item : virtual public Thing
 			const ItemType& it = items[id];
 			return it.rotatable && it.rotateTo;
 		}
+		bool isPodium() const {
+			const ItemType& it = items[id];
+			return it.isPodium();
+		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
 		}

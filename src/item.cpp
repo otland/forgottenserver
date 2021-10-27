@@ -666,7 +666,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		//Podium class
 		case ATTR_PODIUMOUTFIT: {
-			if (!propStream.skip(17)) {
+			if (!propStream.skip(15)) {
 				return ATTR_READ_ERROR;
 			}
 			break;

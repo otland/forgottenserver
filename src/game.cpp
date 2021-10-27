@@ -23,6 +23,7 @@
 
 #include "actions.h"
 #include "bed.h"
+#include "podium.h"
 #include "configmanager.h"
 #include "creature.h"
 #include "creatureevent.h"
@@ -2370,7 +2371,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	}
 
 	Item* item = thing->getItem();
-	if (!item || item->getClientID() != spriteId || !item->isRotatable() || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+	if (!item || item->getClientID() != spriteId || (!item->isRotatable() && !item->isPodium()) || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
@@ -2390,9 +2391,15 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	uint16_t newId = Item::items[item->getID()].rotateTo;
-	if (newId != 0) {
-		transformItem(item, newId);
+	if (item->isPodium()) {
+		Podium* podium = item->getPodium();
+		podium->setDirection(Direction((podium->getDirection() + 1) % 4));
+		updatePodium(podium);
+	} else {
+		uint16_t newId = Item::items[item->getID()].rotateTo;
+		if (newId != 0) {
+			transformItem(item, newId);
+		}
 	}
 }
 
@@ -3317,7 +3324,7 @@ void Game::playerRequestOutfit(uint32_t playerId)
 	player->sendOutfitWindow();
 }
 
-void Game::playerRequestCustomizePodium(uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId)
+void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -3340,19 +3347,23 @@ void Game::playerRequestCustomizePodium(uint32_t playerId, const Position& posit
 		return;
 	}
 
-	if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
-		std::vector<Direction> listDir;
-		if (player->getPathTo(position, listDir, 0, 1, true, true)) {
-			g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
-				this, player->getID(), std::move(listDir))));
+	// player has to walk to podium
+	// gm/god can edit instantly
+	if (!player->isAccessPlayer()) {
+		if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
+			std::vector<Direction> listDir;
+			if (player->getPathTo(position, listDir, 0, 1, true, true)) {
+				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
+					this, player->getID(), std::move(listDir))));
 
-			SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerRequestCustomizePodium, this,
-				playerId, position, stackPos, spriteId));
-			player->setNextWalkActionTask(task);
-		} else {
-			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+				SchedulerTask* task = createSchedulerTask(400, std::bind(&Game::playerRequestEditPodium, this,
+					playerId, position, stackPos, spriteId));
+				player->setNextWalkActionTask(task);
+			} else {
+				player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+			}
+			return;
 		}
-		return;
 	}
 
 	g_events->eventPlayerOnPodiumRequest(player, item);

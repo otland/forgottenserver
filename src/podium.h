@@ -69,7 +69,7 @@ class Podium final : public Item
 	protected:
 		Outfit_t outfit;
 	private:
-		uint8_t flags = 0;
+		uint8_t flags = PODIUM_SHOW_PLATFORM; // show platform only
 		Direction direction = DIRECTION_SOUTH;
 };
 

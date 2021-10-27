@@ -567,7 +567,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x83: parseUseItemEx(msg); break;
 		case 0x84: parseUseWithCreature(msg); break;
 		case 0x85: parseRotateItem(msg); break;
-		case 0x86: parseCustomizePodiumRequest(msg); break;
+		case 0x86: parseEditPodiumRequest(msg); break;
 		case 0x87: parseCloseContainer(msg); break;
 		case 0x88: parseUpArrowContainer(msg); break;
 		case 0x89: parseTextWindow(msg); break;
@@ -959,12 +959,12 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	}
 }
 
-void ProtocolGame::parseCustomizePodiumRequest(NetworkMessage& msg)
+void ProtocolGame::parseEditPodiumRequest(NetworkMessage& msg)
 {
 	Position pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRequestCustomizePodium, player->getID(), pos, stackpos, spriteId);
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRequestEditPodium, player->getID(), pos, stackpos, spriteId);
 }
 
 void ProtocolGame::parseToggleMount(NetworkMessage& msg)
@@ -3114,15 +3114,26 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 
 	// read podium outfit
 	Outfit_t podiumOutfit = podium->getOutfit();
+	Outfit_t playerOutfit = player->getDefaultOutfit();
+	bool isEmpty = podiumOutfit.lookType == 0 && podiumOutfit.lookMount == 0;
+
 	if (podiumOutfit.lookType == 0) {
-		Outfit_t newOutfit = player->getDefaultOutfit();
-		// copy player outfit without breaking mount colors
-		podiumOutfit.lookType = newOutfit.lookType;
-		podiumOutfit.lookHead = newOutfit.lookHead;
-		podiumOutfit.lookBody = newOutfit.lookBody;
-		podiumOutfit.lookLegs = newOutfit.lookLegs;
-		podiumOutfit.lookFeet = newOutfit.lookFeet;
-		podiumOutfit.lookAddons = newOutfit.lookAddons;
+		// copy player outfit
+		podiumOutfit.lookType = playerOutfit.lookType;
+		podiumOutfit.lookHead = playerOutfit.lookHead;
+		podiumOutfit.lookBody = playerOutfit.lookBody;
+		podiumOutfit.lookLegs = playerOutfit.lookLegs;
+		podiumOutfit.lookFeet = playerOutfit.lookFeet;
+		podiumOutfit.lookAddons = playerOutfit.lookAddons;
+	}
+
+	if (podiumOutfit.lookMount == 0) {
+		// copy player mount
+		podiumOutfit.lookMount = playerOutfit.lookMount;
+		podiumOutfit.lookMountHead = playerOutfit.lookMountHead;
+		podiumOutfit.lookMountBody = playerOutfit.lookMountBody;
+		podiumOutfit.lookMountLegs = playerOutfit.lookMountLegs;
+		podiumOutfit.lookMountFeet = playerOutfit.lookMountFeet;
 	}
 
 	// fetch player outfits
@@ -3206,14 +3217,14 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 	msg.add<uint16_t>(0);
 
 	msg.addByte(0x05); // "set outfit" window mode (5 = podium)
-	msg.addByte(podium->hasFlag(PODIUM_SHOW_MOUNT) ? 0x01 : 0x00); // "mount" checkbox
+	msg.addByte((isEmpty && playerOutfit.lookMount != 0) || podium->hasFlag(PODIUM_SHOW_MOUNT) ? 0x01 : 0x00); // "mount" checkbox
 	msg.add<uint16_t>(0); // unknown
 	msg.addPosition(item->getPosition());
 	msg.add<uint16_t>(item->getClientID());
 	msg.addByte(stackpos);
 
-	msg.addByte(podium->hasFlag(PODIUM_NOSPRITE) ? 0x00 : 0x01); // hide the platform
-	msg.addByte(0x01);//podium->hasFlag(PODIUM_SHOW_OUTFIT) ? 0x01 : 0x00); // "outfit" checkbox
+	msg.addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00); // is platform visible
+	msg.addByte(0x01); // "outfit" checkbox, ignored by the client
 	msg.addByte(podium->getDirection()); // outfit direction
 	writeToOutputBuffer(msg);
 }

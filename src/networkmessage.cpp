@@ -169,7 +169,7 @@ void NetworkMessage::addItem(const Item* item)
 		}
 
 		addByte(podium->getDirection());
-		addByte(podium->hasFlag(PODIUM_NOSPRITE) ? 0x00 : 0x01);
+		addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00);
 		return;
 	}
 }

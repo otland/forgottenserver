@@ -864,7 +864,7 @@ void Events::eventPlayerOnTradeCompleted(Player* player, Player* target, Item* i
 
 void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
 {
-	// Player:onPodiumRequest(player, item) or Player.onPodiumRequest(self, player, item)
+	// Player:onPodiumRequest(item) or Player.onPodiumRequest(self, item)
 	if (info.playerOnPodiumRequest == -1) {
 		return;
 	}
@@ -891,7 +891,7 @@ void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
 
 void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction)
 {
-	// Player:onPodiumEdit(player, item, outfit, direction, isVisible) or Player.onPodiumEdit(self, player, item, outfit, direction, isVisible)
+	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction, isVisible)
 	if (info.playerOnPodiumEdit == -1) {
 		return;
 	}

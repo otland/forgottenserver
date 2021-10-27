@@ -104,7 +104,7 @@ class ProtocolGame final : public Protocol
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
 		void parseSetOutfit(NetworkMessage& msg);
-		void parseCustomizePodiumRequest(NetworkMessage& msg);
+		void parseEditPodiumRequest(NetworkMessage& msg);
 		void parseSay(NetworkMessage& msg);
 		void parseLookAt(NetworkMessage& msg);
 		void parseLookInBattleList(NetworkMessage& msg);

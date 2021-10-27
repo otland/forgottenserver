@@ -1646,7 +1646,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(PlayerFlag_CannotBeMuted)
 	registerEnum(PlayerFlag_IsAlwaysPremium)
 
-	registerEnum(PODIUM_NOSPRITE)
+	registerEnum(PODIUM_SHOW_PLATFORM)
 	registerEnum(PODIUM_SHOW_OUTFIT)
 	registerEnum(PODIUM_SHOW_MOUNT)
 
