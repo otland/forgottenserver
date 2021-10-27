@@ -890,6 +890,10 @@ void Player::sendPing()
 			return;
 		}
 
+		if (pzLocked) {
+			return;
+		}
+
 		if (!g_creatureEvents->playerLogout(this)) {
 			return;
 		}
