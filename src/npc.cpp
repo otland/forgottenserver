@@ -478,31 +478,32 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 
 bool Npc::getRandomStep(Direction& dir) const
 {
-	std::array<Direction, 4> dirList;
-	size_t directions = static_cast<size_t>(-1);
+	std::vector<Direction> dirList;
+	const Position& creaturePos = getPosition();
 
 	const Position& creaturePos = getPosition();
 	if (canWalkTo(creaturePos, DIRECTION_NORTH)) {
-		dirList[++directions] = DIRECTION_NORTH;
+		dirList.push_back(DIRECTION_NORTH);
 	}
 
 	if (canWalkTo(creaturePos, DIRECTION_SOUTH)) {
-		dirList[++directions] = DIRECTION_SOUTH;
+		dirList.push_back(DIRECTION_SOUTH);
 	}
 
 	if (canWalkTo(creaturePos, DIRECTION_EAST)) {
-		dirList[++directions] = DIRECTION_EAST;
+		dirList.push_back(DIRECTION_EAST);
 	}
 
 	if (canWalkTo(creaturePos, DIRECTION_WEST)) {
-		dirList[++directions] = DIRECTION_WEST;
+		dirList.push_back(DIRECTION_WEST);
 	}
 
-	if (directions != -1) {
-		dir = dirList[uniform_random(0, directions)];
-		return true;
+	if (dirList.empty()) {
+		return false;
 	}
-	return false;
+
+	dir = dirList[uniform_random(0, dirList.size() - 1)];
+	return true;
 }
 
 bool Npc::doMoveTo(const Position& pos, int32_t minTargetDist/* = 1*/, int32_t maxTargetDist/* = 1*/,
