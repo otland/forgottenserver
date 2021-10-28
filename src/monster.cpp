@@ -1276,8 +1276,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 
 	uint32_t centerToDist = std::max<uint32_t>(distance_x, distance_y);
 
-	std::array<Direction, 4> dirList;
-	size_t directions = static_cast<size_t>(-1);
+	std::vector<Direction> dirList;
 
 	if (!keepDistance || offset_y >= 0) {
 		uint32_t tmpDist = std::max<uint32_t>(distance_x, std::abs((creaturePos.getY() - 1) - centerPos.getY()));
@@ -1289,7 +1288,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 			}
 
 			if (result) {
-				dirList[++directions] = DIRECTION_NORTH;
+				dirList.push_back(DIRECTION_NORTH);
 			}
 		}
 	}
@@ -1304,7 +1303,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 			}
 
 			if (result) {
-				dirList[++directions] = DIRECTION_SOUTH;
+				dirList.push_back(DIRECTION_SOUTH);
 			}
 		}
 	}
@@ -1319,7 +1318,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 			}
 
 			if (result) {
-				dirList[++directions] = DIRECTION_EAST;
+				dirList.push_back(DIRECTION_EAST);
 			}
 		}
 	}
@@ -1334,13 +1333,14 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 			}
 
 			if (result) {
-				dirList[++directions] = DIRECTION_WEST;
+				dirList.push_back(DIRECTION_WEST);
 			}
 		}
 	}
 
-	if (directions != -1) {
-		direction = dirList[uniform_random(0, directions)];
+	if (!dirList.empty()) {
+		std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
+		direction = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
 	return false;
