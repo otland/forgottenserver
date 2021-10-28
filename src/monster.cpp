@@ -1277,6 +1277,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 	uint32_t centerToDist = std::max<uint32_t>(distance_x, distance_y);
 
 	std::vector<Direction> dirList;
+	dirList.reserve(4);
 
 	if (!keepDistance || offset_y >= 0) {
 		uint32_t tmpDist = std::max<uint32_t>(distance_x, std::abs((creaturePos.getY() - 1) - centerPos.getY()));
