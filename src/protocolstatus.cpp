@@ -210,7 +210,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 
 	if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 		output->addByte(0x22); // players info - online status info of a player
-		if (g_game.getPlayerByName(characterName) != nullptr) {
+		if (g_game.getPlayerByName(characterName)) {
 			output->addByte(0x01);
 		} else {
 			output->addByte(0x00);

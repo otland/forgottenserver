@@ -341,7 +341,7 @@ bool House::canEditAccessList(uint32_t listId, const Player* player)
 
 HouseTransferItem* House::getTransferItem()
 {
-	if (transferItem != nullptr) {
+	if (transferItem) {
 		return nullptr;
 	}
 
@@ -537,7 +537,7 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 void Door::setHouse(House* house)
 {
-	if (this->house != nullptr) {
+	if (this->house) {
 		return;
 	}
 
