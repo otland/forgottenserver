@@ -806,7 +806,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 			Tile* tmpTile = map.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
 			if (!tmpTile || (!tmpTile->getGround() && !tmpTile->hasFlag(TILESTATE_BLOCKSOLID))) {
 				tmpTile = map.getTile(destPos.x, destPos.y, destPos.getZ() - 1);
-				if (tmpTile && tmpTile->getGround() && !tmpTile->hasFlag(TILESTATE_BLOCKSOLID)) {
+				if (tmpTile && tmpTile->getGround() && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID)) {
 					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 
 					if (!tmpTile->hasFlag(TILESTATE_FLOORCHANGE)) {
@@ -822,7 +822,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 			Tile* tmpTile = map.getTile(destPos.x, destPos.y, destPos.z);
 			if (!tmpTile || (!tmpTile->getGround() && !tmpTile->hasFlag(TILESTATE_BLOCKSOLID))) {
 				tmpTile = map.getTile(destPos.x, destPos.y, destPos.z + 1);
-				if (tmpTile && tmpTile->hasHeight(3)) {
+				if (tmpTile && tmpTile->hasHeight(3) && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID)) {
 					flags |= FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE;
 					player->setDirection(direction);
 					destPos.z++;
