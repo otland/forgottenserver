@@ -139,7 +139,7 @@ class DBResult
 				return static_cast<T>(0);
 			}
 
-			if (row[it->second] == nullptr) {
+			if (!row[it->second]) {
 				return static_cast<T>(0);
 			}
 

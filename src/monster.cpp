@@ -810,7 +810,7 @@ void Monster::doAttacking(uint32_t interval)
 	for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
 		bool inRange = false;
 
-		if (attackedCreature == nullptr) {
+		if (!attackedCreature) {
 			break;
 		}
 
@@ -1248,7 +1248,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
 
-	assert(attackedCreature != nullptr);
+	assert(attackedCreature);
 	const Position& centerPos = attackedCreature->getPosition();
 
 	int_fast32_t offset_x = Position::getOffsetX(creaturePos, centerPos);
@@ -1834,7 +1834,7 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 		}
 
 		Tile* tile = g_game.map.getTile(pos);
-		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
+		if (tile && !tile->getTopVisibleCreature(this) && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}
 	}
