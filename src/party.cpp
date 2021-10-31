@@ -386,7 +386,7 @@ bool Party::canUseSharedExperience(const Player* player) const
 		return false;
 	}
 
-	if (!Position::areInRange<30, 30, 1>(leader->getPosition(), player->getPosition())) {
+	if (!Position::areInRange<EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_FLOORS>(leader->getPosition(), player->getPosition())) {
 		return false;
 	}
 
