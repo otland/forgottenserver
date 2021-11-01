@@ -21,6 +21,7 @@
 
 #include "vocation.h"
 
+#include "player.h"
 #include "pugicast.h"
 #include "tools.h"
 
@@ -158,7 +159,7 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-	return skillBase[skill] * std::pow(skillMultipliers[skill], static_cast<int32_t>(level - 11));
+	return skillBase[skill] * std::pow(skillMultipliers[skill], static_cast<int32_t>(level - (MINIMUM_SKILL_LEVEL + 1)));
 }
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)
