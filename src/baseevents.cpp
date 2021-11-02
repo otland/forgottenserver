@@ -25,7 +25,6 @@
 #include "tools.h"
 
 extern LuaEnvironment g_luaEnvironment;
- 
 bool BaseEvents::loadFromXml()
 {
 	if (loaded) {
