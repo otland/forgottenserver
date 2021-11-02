@@ -58,7 +58,7 @@ class Events
 		int32_t playerOnTradeAccept = -1;
 		int32_t playerOnTradeCompleted = -1;
 		int32_t playerOnPodiumRequest = -1;
-		int32_t	playerOnPodiumEdit = -1;
+		int32_t playerOnPodiumEdit = -1;
 		int32_t playerOnGainExperience = -1;
 		int32_t playerOnLoseExperience = -1;
 		int32_t playerOnGainSkillTries = -1;

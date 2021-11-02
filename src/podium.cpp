@@ -19,10 +19,8 @@
 
 #include "otpch.h"
 
-//#include "enums.h"
 #include "podium.h"
 #include "game.h"
-//#include "iologindata.h"
 
 extern Game g_game;
 

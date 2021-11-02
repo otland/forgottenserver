@@ -115,21 +115,24 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 	end
 	
 	if not self:getGroup():getAccess() then
+		-- check if the player is in melee range
 		if getDistanceBetween(self:getPosition(), item:getPosition()) > 1 then
 			self:sendCancelMessage("Sorry, not possible.")
 			return
 		end
 		
-		-- to do: check if player can wear outfit/mount or is using crafted packet
-		-- add a method to check if player has mount
+		-- reset outfit if unable to wear
 		if not self:canWearOutfit(outfit.lookType, 0) then
-			self:sendCancelMessage("Sorry, not possible.")
-			return
+			outfit.lookType = 0
+		end
+		
+		-- reset mount if unable to ride
+		local mount = Game.getMountIdByLookType(outfit.lookMount)
+		if not (mount and self:hasMount(mount)) then
+			outfit.lookMount = 0
 		end
 	end
-	
-	local showOutfit = true
-	local showMount = true
+
 	local podiumOutfit = podium:getOutfit()
 	local playerOutfit = self:getOutfit()
 	
@@ -171,7 +174,12 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 		podiumOutfit.lookMountFeet = outfit.lookMountFeet
 	end
 
-	-- save player choices
+	-- prevent invisible podium state
+	if outfit.lookType == 0 and outfit.lookMount == 0 then
+		isVisible = true
+	end
+	
+	-- save player choices		
 	podium:setFlag(PODIUM_SHOW_PLATFORM, isVisible)
 	podium:setFlag(PODIUM_SHOW_OUTFIT, outfit.lookType ~= 0)
 	podium:setFlag(PODIUM_SHOW_MOUNT, outfit.lookMount ~= 0)

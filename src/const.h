@@ -595,7 +595,7 @@ enum PlayerFlags : uint64_t {
 };
 
 enum PodiumFlags : uint8_t {
-	PODIUM_SHOW_PLATFORM = 1 << 0, // show outfit holder
+	PODIUM_SHOW_PLATFORM = 1 << 0, // show the platform below the outfit
 	PODIUM_SHOW_OUTFIT = 1 << 1, // show outfit
 	PODIUM_SHOW_MOUNT = 1 << 2 // show mount
 };

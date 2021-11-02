@@ -3414,14 +3414,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.addByte(creature->getSpeechBubble());
 	msg.addByte(0xFF); // MARK_UNMARKED
-
-	// inspection type (flags)
-	// 0x00 - "ask to inspect x"
-	// 0x01 - "revoke x invitation to inspect me"
-	// 0x02 - "invite x to inspect me"
-	// 0x04 - "inspect player x"
-	// 0x08 - "allow x to inspect me"
-	msg.addByte(0x00);
+	msg.addByte(0x00); // inspection type (flags)
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 }
 

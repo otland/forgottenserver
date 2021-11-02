@@ -438,13 +438,11 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
 				break;
+			case ITEM_GROUP_PODIUM:
+				iType.type = ITEM_TYPE_PODIUM;
+				break;
 			default:
 				return false;
-		}
-
-		// TO DO: read flag from OTB
-		if (clientId == 35973 || clientId == 35974) {
-			iType.type = ITEM_TYPE_PODIUM;
 		}
 
 		iType.blockSolid = hasBitSet(FLAG_BLOCK_SOLID, flags);

@@ -136,7 +136,7 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(0x00); // quiver ammo count
 	}
 
-	// display outfit on podium item
+	// display outfit on the podium
 	if (it.isPodium()) {
 		const Podium* podium = item->getPodium();
 		const Outfit_t &outfit = podium->getOutfit();
