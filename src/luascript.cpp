@@ -1572,6 +1572,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_GROUP_FLUID)
 	registerEnum(ITEM_GROUP_DOOR)
 	registerEnum(ITEM_GROUP_DEPRECATED)
+	registerEnum(ITEM_GROUP_PODIUM)
 
 	registerEnum(ITEM_BROWSEFIELD)
 	registerEnum(ITEM_BAG)
