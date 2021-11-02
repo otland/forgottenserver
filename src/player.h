@@ -365,13 +365,6 @@ class Player final : public Creature, public Cylinder
 			return inMarket;
 		}
 
-		void setLastDepotId(int16_t newId) {
-			lastDepotId = newId;
-		}
-		int16_t getLastDepotId() const {
-			return lastDepotId;
-		}
-
 		void resetIdleTime() {
 			idleTime = 0;
 		}
@@ -513,7 +506,7 @@ class Player final : public Creature, public Cylinder
 		void removeConditionSuppressions(uint32_t conditions);
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
-		DepotLocker* getDepotLocker(uint32_t depotId);
+		DepotLocker* getDepotLocker();
 		void onReceiveMail() const;
 		bool isNearDepotBox() const;
 
@@ -1014,9 +1007,9 @@ class Player final : public Creature, public Cylinder
 				client->sendCloseShop();
 			}
 		}
-		void sendMarketEnter(uint32_t depotId) const {
+		void sendMarketEnter() const {
 			if (client) {
-				client->sendMarketEnter(depotId);
+				client->sendMarketEnter();
 			}
 		}
 		void sendMarketLeave() {
@@ -1214,7 +1207,6 @@ class Player final : public Creature, public Cylinder
 		std::unordered_set<uint32_t> VIPList;
 
 		std::map<uint8_t, OpenContainer> openContainers;
-		std::map<uint32_t, DepotLocker_ptr> depotLockerMap;
 		std::map<uint32_t, DepotChest*> depotChests;
 		std::map<uint32_t, int32_t> storageMap;
 
@@ -1270,6 +1262,7 @@ class Player final : public Creature, public Cylinder
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;
 		StoreInbox* storeInbox = nullptr;
+		DepotLocker_ptr depotLocker = nullptr;
 
 		uint32_t inventoryWeight = 0;
 		uint32_t capacity = 40000;
@@ -1304,7 +1297,6 @@ class Player final : public Creature, public Cylinder
 		uint16_t lastStatsTrainingTime = 0;
 		uint16_t staminaMinutes = 2520;
 		uint16_t maxWriteLen = 0;
-		int16_t lastDepotId = -1;
 
 		uint8_t soul = 0;
 		std::bitset<6> blessings;

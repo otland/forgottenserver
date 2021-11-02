@@ -25,7 +25,7 @@
 class DepotChest final : public Container
 {
 	public:
-		explicit DepotChest(uint16_t type);
+		explicit DepotChest(uint16_t type, bool paginated = true);
 
 		//serialization
 		void setMaxDepotItems(uint32_t maxitems) {

@@ -65,8 +65,8 @@ Player::~Player()
 		}
 	}
 
-	for (const auto& it : depotLockerMap) {
-		it.second->removeInbox(inbox);
+	if (depotLocker) {
+		depotLocker->removeInbox(inbox);
 	}
 
 	inbox->decrementReferenceCounter();
@@ -827,25 +827,28 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
+	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT_BOX_I + depotId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
 	return it->second;
 }
 
-DepotLocker* Player::getDepotLocker(uint32_t depotId)
+DepotLocker* Player::getDepotLocker()
 {
-	auto it = depotLockerMap.find(depotId);
-	if (it != depotLockerMap.end()) {
-		inbox->setParent(it->second.get());
-		return it->second.get();
-	}
+	if (!depotLocker) {
+		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
+		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
+		depotLocker->internalAddThing(inbox);
 
-	it = depotLockerMap.emplace(depotId, new DepotLocker(ITEM_LOCKER1)).first;
-	it->second->setDepotId(depotId);
-	it->second->internalAddThing(Item::CreateItem(ITEM_MARKET));
-	it->second->internalAddThing(inbox);
-	it->second->internalAddThing(getDepotChest(depotId, true));
-	return it->second.get();
+		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
+		if (depotChest) {
+			for (int16_t depotId = ITEM_DEPOT_BOX_LAST - ITEM_DEPOT_BOX_FIRST; depotId >= 0; --depotId) {
+				depotChest->internalAddThing(getDepotChest(depotId, true));
+			}
+
+			depotLocker->internalAddThing(depotChest);
+		}
+	}
+	return depotLocker.get();
 }
 
 void Player::sendCancelMessage(ReturnValue message) const
