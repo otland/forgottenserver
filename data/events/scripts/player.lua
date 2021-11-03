@@ -122,7 +122,7 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 		end
 		
 		-- reset outfit if unable to wear
-		if not self:canWearOutfit(outfit.lookType, 0) then
+		if not self:canWearOutfit(outfit.lookType, outfit.lookAddons) then
 			outfit.lookType = 0
 		end
 		
