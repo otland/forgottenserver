@@ -1861,7 +1861,8 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount) {
+void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount)
+{
 	NetworkMessage msg;
 	msg.addByte(0xEE);
 	msg.addByte(resourceType);
@@ -1869,7 +1870,8 @@ void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint6
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendStoreBalance() {
+void ProtocolGame::sendStoreBalance()
+{
 	NetworkMessage msg;
 
 	//"updating..."
