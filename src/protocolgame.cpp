@@ -1873,25 +1873,15 @@ void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint6
 void ProtocolGame::sendStoreBalance()
 {
 	NetworkMessage msg;
-
-	//"updating..."
-	//msg.addByte(0xF2);
-	//msg.addByte(0x01);
-	//writeToOutputBuffer(msg);
-	//msg.reset();
-
-	// send update
 	msg.addByte(0xDF);
 	msg.addByte(0x01);
 
-	//placeholder packet / to do
+	// placeholder packet / to do
 	msg.add<uint32_t>(0); // total store coins (transferable + non-t)
 	msg.add<uint32_t>(0); // transferable store coins
 	msg.add<uint32_t>(0); // reserved auction coins
 	msg.add<uint32_t>(0); // tournament coins
-
 	writeToOutputBuffer(msg);
-
 }
 
 void ProtocolGame::sendMarketEnter(uint32_t depotId)
