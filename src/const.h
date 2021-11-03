@@ -21,8 +21,6 @@
 #define FS_CONST_H_0A49B5996F074465BF44B90F4F780E8B
 
 static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
-static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
-static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
 
 enum MagicEffectsType_t : uint8_t {
 	MAGIC_EFFECTS_END_LOOP = 0, // ends the magic effect loop

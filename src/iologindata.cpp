@@ -636,7 +636,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 						auto opcontainer = openContainer.container;
 
 						if (opcontainer == subContainer) {
-							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(it.first) + 1);
+							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, it.first + 1);
 							break;
 						}
 					}
