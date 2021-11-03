@@ -139,10 +139,7 @@ Protocol_ptr ServicePort::make_protocol(NetworkMessage& msg, const Connection_pt
 		if (protocolID != service->get_protocol_identifier()) {
 			continue;
 		}
-
-		if ((service->is_checksummed()) || !service->is_checksummed()) {
-			return service->make_protocol(connection);
-		}
+		return service->make_protocol(connection);
 	}
 	return nullptr;
 }
