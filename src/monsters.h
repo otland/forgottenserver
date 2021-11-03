@@ -204,6 +204,7 @@ class MonsterSpell
 		int32_t length = 0;
 		int32_t spread = 0;
 		int32_t radius = 0;
+		int32_t ring = 0;
 		int32_t conditionMinDamage = 0;
 		int32_t conditionMaxDamage = 0;
 		int32_t conditionStartDamage = 0;

@@ -100,9 +100,11 @@ struct OutfitEntry {
 	uint8_t addons;
 };
 
+static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
+
 struct Skill {
 	uint64_t tries = 0;
-	uint16_t level = 10;
+	uint16_t level = MINIMUM_SKILL_LEVEL;
 	uint8_t percent = 0;
 };
 
@@ -128,13 +130,7 @@ class Player final : public Creature, public Cylinder
 			return this;
 		}
 
-		void setID() final {
-			if (id == 0) {
-				if (guid != 0) {
-					id = 0x10000000 + guid;
-				}
-			}
-		}
+		void setID() final;
 
 		static MuteCountMap muteCountMap;
 
@@ -475,9 +471,8 @@ class Player final : public Creature, public Cylinder
 				return 0;
 			} else if (hasFlag(PlayerFlag_HasInfiniteCapacity)) {
 				return std::numeric_limits<uint32_t>::max();
-			} else {
-				return std::max<int32_t>(0, capacity - inventoryWeight);
 			}
+			return std::max<int32_t>(0, capacity - inventoryWeight);
 		}
 
 		int32_t getMaxHealth() const override {
@@ -832,11 +827,6 @@ class Player final : public Creature, public Cylinder
 		void sendCreatureShield(const Creature* creature) {
 			if (client) {
 				client->sendCreatureShield(creature);
-			}
-		}
-		void sendCreatureTypeUpdate(uint32_t creatureId) {
-			if (client) {
-				client->sendCreatureTypeUpdate(creatureId);
 			}
 		}
 		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers) {
@@ -1340,6 +1330,7 @@ class Player final : public Creature, public Cylinder
 		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 
 		static uint32_t playerAutoID;
+		static uint32_t playerIDLimit;
 
 		void updateItemsLight(bool internal = false);
 		int32_t getStepSpeed() const override {

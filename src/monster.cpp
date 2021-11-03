@@ -33,7 +33,7 @@ extern ConfigManager g_config;
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
 
-uint32_t Monster::monsterAutoID = 0x40000000;
+uint32_t Monster::monsterAutoID = 0x21000000;
 
 Monster* Monster::createMonster(const std::string& name)
 {
@@ -119,7 +119,8 @@ const std::string& Monster::getNameDescription() const
 
 bool Monster::canSee(const Position& pos) const
 {
-	return Creature::canSee(getPosition(), pos, 9, 9);
+	return Creature::canSee(getPosition(), pos,
+		Map::maxClientViewportX + 1, Map::maxClientViewportX + 1);
 }
 
 bool Monster::canWalkOnFieldType(CombatType_t combatType) const

@@ -69,7 +69,7 @@ function onSay(player, words, param)
 
 	local reloadType = reloadTypes[param:lower()]
 	if not reloadType then
-		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.")
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "Reload type not found.")
 		return false
 	end
 
@@ -79,6 +79,6 @@ function onSay(player, words, param)
 	end
 
 	Game.reload(reloadType)
-	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", param:lower()))
+	player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Reloaded %s.", param:lower()))
 	return false
 end

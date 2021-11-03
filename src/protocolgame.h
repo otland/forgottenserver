@@ -29,7 +29,7 @@ enum SessionEndTypes_t : uint8_t {
 	SESSION_END_LOGOUT = 0,
 	SESSION_END_UNKNOWN = 1, // unknown, no difference from logout
 	SESSION_END_FORCECLOSE = 2,
-	SESSION_END_UNKNOWN_2 = 3, // unknown, no difference from logout
+	SESSION_END_UNKNOWN2 = 3, // unknown, no difference from logout
 };
 
 class NetworkMessage;
@@ -213,7 +213,6 @@ class ProtocolGame final : public Protocol
 		void sendCreatureWalkthrough(const Creature* creature, bool walkthrough);
 		void sendCreatureShield(const Creature* creature);
 		void sendCreatureSkull(const Creature* creature);
-		void sendCreatureTypeUpdate(uint32_t creatureId);
 		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers);
 
 		void sendShop(Npc* npc, const ShopInfoList& itemList);
@@ -277,6 +276,7 @@ class ProtocolGame final : public Protocol
 		void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Item* lastItem);
 
 		void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex);
+		void sendEmptyContainer(uint8_t cid);
 		void sendCloseContainer(uint8_t cid);
 
 		//inventory

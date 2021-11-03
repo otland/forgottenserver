@@ -620,8 +620,8 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_OPENCONTAINER: {
-			int32_t openContainer;
-			if (!propStream.read<int32_t>(openContainer)) {
+			uint8_t openContainer;
+			if (!propStream.read<uint8_t>(openContainer)) {
 				return ATTR_READ_ERROR;
 			}
 
@@ -864,7 +864,7 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 
 	if (hasAttribute(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 		propWriteStream.write<uint8_t>(ATTR_OPENCONTAINER);
-		propWriteStream.write<int32_t>(getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER));
+		propWriteStream.write<uint8_t>(getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER));
 	}
 
 	if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
@@ -977,25 +977,31 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		}
 	} else if (it.weaponType != WEAPON_NONE) {
 		bool begin = true;
-		if (it.weaponType == WEAPON_DISTANCE && it.ammoType != AMMO_NONE) {
-			s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
-
-			int32_t attack;
+		if (it.weaponType == WEAPON_DISTANCE) {
+			int32_t attack, defense;
 			int8_t hitChance;
 			if (item) {
 				attack = item->getAttack();
+				defense = item->getDefense();
 				hitChance = item->getHitChance();
 			} else {
 				attack = it.attack;
+				defense = it.defense;
 				hitChance = it.hitChance;
 			}
 
-			if (attack != 0) {
-				s << ", Atk" << std::showpos << attack << std::noshowpos;
-			}
+			if (it.ammoType != AMMO_NONE) {
+				s << " (Range:" << static_cast<uint16_t>(item ? item->getShootRange() : it.shootRange);
 
-			if (hitChance != 0) {
-				s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
+				if (attack != 0) {
+					s << ", Atk" << std::showpos << attack << std::noshowpos;
+				}
+
+				if (hitChance != 0) {
+					s << ", Hit%" << std::showpos << static_cast<int16_t>(hitChance) << std::noshowpos;
+				}
+			} else {
+				s << " (Atk:" << attack << ", Def:" << defense;
 			}
 
 			begin = false;

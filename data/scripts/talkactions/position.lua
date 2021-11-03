@@ -6,7 +6,7 @@ function talk.onSay(player, words, param)
 		player:teleportTo(Position(split[1], split[2], split[3]))
 	else
 		local position = player:getPosition()
-		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Your current position is: " .. position.x .. ", " .. position.y .. ", " .. position.z .. ".")
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "Your current position is: " .. position.x .. ", " .. position.y .. ", " .. position.z .. ".")
 	end
 	return false
 end

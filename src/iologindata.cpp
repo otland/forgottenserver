@@ -423,7 +423,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	//load inventory items
 	ItemMap itemMap;
-	std::vector<std::pair<uint8_t, Container*>> openContainersList;
+	std::map<uint8_t, Container*> openContainersList;
 
 	if ((result = db.storeQuery(fmt::format("SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = {:d} ORDER BY `sid` DESC", player->getGUID())))) {
 		loadItems(itemMap, result);
@@ -437,7 +437,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			if (itemContainer) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
-					openContainersList.emplace_back(std::make_pair(cid, itemContainer));
+					openContainersList.emplace(cid, itemContainer);
 				}
 			}
 
@@ -456,10 +456,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			}
 		}
 	}
-
-	std::sort(openContainersList.begin(), openContainersList.end(), [](const std::pair<uint8_t, Container*>& left, const std::pair<uint8_t, Container*>& right) {
-		return left.first < right.first;
-		});
 
 	for (auto& it : openContainersList) {
 		player->addContainer(it.first - 1, it.second);
@@ -588,7 +584,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		++runningId;
 
 		if (Container* container = item->getContainer()) {
-			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER) > 0) {
+			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 				container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 			}
 
@@ -598,7 +594,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 					auto opcontainer = openContainer.container;
 
 					if (opcontainer == container) {
-						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, ((int)its.first) + 1);
+						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(its.first) + 1);
 						break;
 					}
 				}
@@ -630,7 +626,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			if (subContainer) {
 				containers.emplace_back(subContainer, runningId);
 
-				if (subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER) > 0) {
+				if (subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 					subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 				}
 
@@ -640,7 +636,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 						auto opcontainer = openContainer.container;
 
 						if (opcontainer == subContainer) {
-							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, ((int)it.first) + 1);
+							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, it.first + 1);
 							break;
 						}
 					}
@@ -703,9 +699,9 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`lookfeet` = " << static_cast<uint32_t>(player->defaultOutfit.lookFeet) << ',';
 	query << "`lookhead` = " << static_cast<uint32_t>(player->defaultOutfit.lookHead) << ',';
 	query << "`looklegs` = " << static_cast<uint32_t>(player->defaultOutfit.lookLegs) << ',';
-	query << "`looktype` = " << static_cast<uint32_t>(player->defaultOutfit.lookType) << ',';
+	query << "`looktype` = " << player->defaultOutfit.lookType << ',';
 	query << "`lookaddons` = " << static_cast<uint32_t>(player->defaultOutfit.lookAddons) << ',';
-	query << "`lookmount` = " << static_cast<uint32_t>(player->defaultOutfit.lookMount) << ',';
+	query << "`lookmount` = " << player->defaultOutfit.lookMount << ',';
 	query << "`lookmounthead` = " << static_cast<uint32_t>(player->defaultOutfit.lookMountHead) << ',';
 	query << "`lookmountbody` = " << static_cast<uint32_t>(player->defaultOutfit.lookMountBody) << ',';
 	query << "`lookmountlegs` = " << static_cast<uint32_t>(player->defaultOutfit.lookMountLegs) << ',';

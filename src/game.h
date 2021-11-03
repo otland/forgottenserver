@@ -68,6 +68,17 @@ static constexpr int32_t EVENT_WORLDTIMEINTERVAL = 2500;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
 static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
 
+static constexpr int32_t MOVE_CREATURE_INTERVAL = 1000;
+static constexpr int32_t RANGE_MOVE_CREATURE_INTERVAL = 1500;
+static constexpr int32_t RANGE_MOVE_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_USE_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_USE_ITEM_EX_INTERVAL = 400;
+static constexpr int32_t RANGE_USE_WITH_CREATURE_INTERVAL = 400;
+static constexpr int32_t RANGE_ROTATE_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_BROWSE_FIELD_INTERVAL = 400;
+static constexpr int32_t RANGE_WRAP_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_REQUEST_TRADE_INTERVAL = 400;
+
 /**
   * Main Game class.
   * This class is responsible to control everything that happens
@@ -429,7 +440,6 @@ class Game
 		void updateCreatureSkull(const Creature* creature);
 		void updatePlayerShield(Player* player);
 		void updatePlayerHelpers(const Player& player);
-		void updateCreatureType(Creature* creature);
 		void updateCreatureWalkthrough(const Creature* creature);
 
 		GameState_t getGameState() const;
@@ -572,7 +582,7 @@ class Game
 
 		static constexpr uint8_t LIGHT_DAY = 250;
 		static constexpr uint8_t LIGHT_NIGHT = 40;
-		// 1h realtime   = 1day worldtime
+		// 1h realtime = 1day worldtime
 		// 2.5s realtime = 1min worldtime
 		// worldTime is calculated in minutes
 		static constexpr int16_t GAME_SUNRISE = 360;

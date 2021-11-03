@@ -28,7 +28,7 @@ class PropStream;
 
 namespace OTB {
 using MappedFile = boost::iostreams::mapped_file_source;
-using ContentIt  = MappedFile::iterator;
+using ContentIt = MappedFile::iterator;
 using Identifier = std::array<char, 4>;
 
 struct Node
@@ -36,14 +36,14 @@ struct Node
 	using ChildrenVector = std::vector<Node>;
 
 	ChildrenVector children;
-	ContentIt      propsBegin;
-	ContentIt      propsEnd;
-	uint8_t           type;
+	ContentIt propsBegin;
+	ContentIt propsEnd;
+	uint8_t type;
 	enum NodeChar: uint8_t
 	{
 		ESCAPE = 0xFD,
-		START  = 0xFE,
-		END    = 0xFF,
+		START = 0xFE,
+		END = 0xFF,
 	};
 };
 
@@ -58,8 +58,8 @@ struct InvalidOTBFormat final : LoadError {
 };
 
 class Loader {
-	MappedFile     fileContents;
-	Node              root;
+	MappedFile fileContents;
+	Node root;
 	std::vector<char> propBuffer;
 public:
 	Loader(const std::string& fileName, const Identifier& acceptedIdentifier);

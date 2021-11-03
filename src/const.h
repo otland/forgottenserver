@@ -211,7 +211,7 @@ enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_DEFAULT = 17, // White, bottom + console
 	MESSAGE_STATUS_WARNING = 18, // Red, over player + console
 	MESSAGE_EVENT_ADVANCE = 19, // White, over player + console
-	MESSAGE_STATUS_WARNING_2 = 20, // Red, over player + console
+	MESSAGE_STATUS_WARNING2 = 20, // Red, over player + console
 	MESSAGE_STATUS_SMALL = 21, // White, bottom of the screen
 	MESSAGE_INFO_DESCR = 22, // Green, over player + console
 
@@ -371,7 +371,7 @@ enum TextColor_t : uint8_t {
 enum Icons_t {
 	ICON_POISON = 1 << 0,
 	ICON_BURN = 1 << 1,
-	ICON_ENERGY =  1 << 2,
+	ICON_ENERGY = 1 << 2,
 	ICON_DRUNK = 1 << 3,
 	ICON_MANASHIELD = 1 << 4,
 	ICON_PARALYZE = 1 << 5,
@@ -592,6 +592,8 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IgnoreWeaponCheck = static_cast<uint64_t>(1) << 35,
 	PlayerFlag_CannotBeMuted = static_cast<uint64_t>(1) << 36,
 	PlayerFlag_IsAlwaysPremium = static_cast<uint64_t>(1) << 37,
+	PlayerFlag_IgnoreYellCheck = static_cast<uint64_t>(1) << 38,
+	PlayerFlag_IgnoreSendPrivateCheck = static_cast<uint64_t>(1) << 39,
 };
 
 enum PodiumFlags : uint8_t {
@@ -600,7 +602,7 @@ enum PodiumFlags : uint8_t {
 	PODIUM_SHOW_MOUNT = 1 << 2 // show mount
 };
 
-enum ReloadTypes_t : uint8_t  {
+enum ReloadTypes_t : uint8_t {
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_ACTIONS,
 	RELOAD_TYPE_CHAT,
