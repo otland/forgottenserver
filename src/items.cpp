@@ -436,6 +436,7 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_FLUID:
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
+			case ITEM_GROUP_PODIUM:
 				break;
 			default:
 				return false;
