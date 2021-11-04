@@ -136,6 +136,8 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			MIN_MARKET_FEE,
+			MAX_MARKET_FEE,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
