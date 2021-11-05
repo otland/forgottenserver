@@ -19,7 +19,7 @@ only_commits:
     - appveyor.yml
 
 install:
-  - cmd : vcpkg install boost-iostreams:x64-windows
+  - cmd : vcpkg install --recurse boost-iostreams:x64-windows
   - cmd : vcpkg install boost-asio:x64-windows
   - cmd : vcpkg install boost-system:x64-windows
   - cmd : vcpkg install boost-filesystem:x64-windows
