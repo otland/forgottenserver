@@ -4710,18 +4710,6 @@ void Game::updatePlayerShield(Player* player)
 	}
 }
 
-void Game::updatePlayerHelpers(const Player& player)
-{
-	uint32_t creatureId = player.getID();
-	uint16_t helpers = player.getHelpers();
-
-	SpectatorVec spectators;
-	map.getSpectators(spectators, player.getPosition(), true, true);
-	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureHelpers(creatureId, helpers);
-	}
-}
-
 void Game::loadMotdNum()
 {
 	Database& db = Database::getInstance();
