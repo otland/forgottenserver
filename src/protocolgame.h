@@ -181,7 +181,7 @@ class ProtocolGame final : public Protocol
 		void sendOpenPrivateChannel(const std::string& receiver);
 		void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
 		void sendPrivateMessage(const Player* speaker, SpeakClasses type, const std::string& text);
-		void sendIcons(uint16_t icons);
+		void sendIcons(uint32_t icons);
 		void sendFYIBox(const std::string& message);
 
 		void sendDistanceShoot(const Position& from, const Position& to, uint8_t type);
@@ -201,6 +201,7 @@ class ProtocolGame final : public Protocol
 		void sendCancelTarget();
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
+		void sendClientFeatures();
 		void sendBasicData();
 		void sendTextMessage(const TextMessage& message);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
@@ -211,12 +212,12 @@ class ProtocolGame final : public Protocol
 		void sendCreatureWalkthrough(const Creature* creature, bool walkthrough);
 		void sendCreatureShield(const Creature* creature);
 		void sendCreatureSkull(const Creature* creature);
-		void sendCreatureType(uint32_t creatureId, uint8_t creatureType);
-		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers);
 
 		void sendShop(Npc* npc, const ShopInfoList& itemList);
 		void sendCloseShop();
 		void sendSaleItemList(const std::list<ShopInfo>& shop);
+		void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount);
+		void sendStoreBalance();
 		void sendMarketEnter(uint32_t depotId);
 		void sendMarketLeave();
 		void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
@@ -244,6 +245,7 @@ class ProtocolGame final : public Protocol
 
 		void sendCreatureLight(const Creature* creature);
 		void sendWorldLight(LightInfo lightInfo);
+		void sendWorldTime();
 
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 
@@ -270,6 +272,7 @@ class ProtocolGame final : public Protocol
 		void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Item* lastItem);
 
 		void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex);
+		void sendEmptyContainer(uint8_t cid);
 		void sendCloseContainer(uint8_t cid);
 
 		//inventory
