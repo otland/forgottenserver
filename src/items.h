@@ -423,11 +423,6 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
-		void buildInventoryList();
-		const InventoryVector& getInventory() const {
-			return inventory;
-		}
-
 		size_t size() const {
 			return items.size();
 		}
@@ -441,7 +436,7 @@ class Items
 		{
 			public:
 				ClientIdToServerIdMap() {
-					vec.reserve(30000);
+					vec.reserve(45000);
 				}
 
 				void emplace(uint16_t clientId, uint16_t serverId) {
