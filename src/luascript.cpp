@@ -154,7 +154,7 @@ void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
 
 Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 {
-	if (uid >= 0x10000000) {
+	if (uid >= CREATURE_ID_MIN) {
 		return g_game.getCreatureByID(uid);
 	}
 
@@ -773,18 +773,23 @@ Position LuaScriptInterface::getPosition(lua_State* L, int32_t arg)
 Outfit_t LuaScriptInterface::getOutfit(lua_State* L, int32_t arg)
 {
 	Outfit_t outfit;
-	outfit.lookMount = getField<uint16_t>(L, arg, "lookMount");
+
+	outfit.lookType = getField<uint16_t>(L, arg, "lookType");
+	outfit.lookTypeEx = getField<uint16_t>(L, arg, "lookTypeEx");
+
+	outfit.lookHead = getField<uint8_t>(L, arg, "lookHead");
+	outfit.lookBody = getField<uint8_t>(L, arg, "lookBody");
+	outfit.lookLegs = getField<uint8_t>(L, arg, "lookLegs");
+	outfit.lookFeet = getField<uint8_t>(L, arg, "lookFeet");
 	outfit.lookAddons = getField<uint8_t>(L, arg, "lookAddons");
 
-	outfit.lookFeet = getField<uint8_t>(L, arg, "lookFeet");
-	outfit.lookLegs = getField<uint8_t>(L, arg, "lookLegs");
-	outfit.lookBody = getField<uint8_t>(L, arg, "lookBody");
-	outfit.lookHead = getField<uint8_t>(L, arg, "lookHead");
+	outfit.lookMount = getField<uint16_t>(L, arg, "lookMount");
+	outfit.lookMountHead = getField<uint8_t>(L, arg, "lookMountHead");
+	outfit.lookMountBody = getField<uint8_t>(L, arg, "lookMountBody");
+	outfit.lookMountLegs = getField<uint8_t>(L, arg, "lookMountLegs");
+	outfit.lookMountFeet = getField<uint8_t>(L, arg, "lookMountFeet");
 
-	outfit.lookTypeEx = getField<uint16_t>(L, arg, "lookTypeEx");
-	outfit.lookType = getField<uint16_t>(L, arg, "lookType");
-
-	lua_pop(L, 8);
+	lua_pop(L, 12);
 	return outfit;
 }
 
@@ -952,7 +957,7 @@ void LuaScriptInterface::pushPosition(lua_State* L, const Position& position, in
 
 void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 {
-	lua_createtable(L, 0, 8);
+	lua_createtable(L, 0, 12);
 	setField(L, "lookType", outfit.lookType);
 	setField(L, "lookTypeEx", outfit.lookTypeEx);
 	setField(L, "lookHead", outfit.lookHead);
@@ -961,6 +966,10 @@ void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit_t& outfit)
 	setField(L, "lookFeet", outfit.lookFeet);
 	setField(L, "lookAddons", outfit.lookAddons);
 	setField(L, "lookMount", outfit.lookMount);
+	setField(L, "lookMountHead", outfit.lookMountHead);
+	setField(L, "lookMountBody", outfit.lookMountBody);
+	setField(L, "lookMountLegs", outfit.lookMountLegs);
+	setField(L, "lookMountFeet", outfit.lookMountFeet);
 }
 
 void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit* outfit)
@@ -1355,6 +1364,50 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_RAGIAZ_BONECAPSULE)
 	registerEnum(CONST_ME_CRITICAL_DAMAGE)
 	registerEnum(CONST_ME_PLUNGING_FISH)
+	registerEnum(CONST_ME_BLUECHAIN)
+	registerEnum(CONST_ME_ORANGECHAIN)
+	registerEnum(CONST_ME_GREENCHAIN)
+	registerEnum(CONST_ME_PURPLECHAIN)
+	registerEnum(CONST_ME_GREYCHAIN)
+	registerEnum(CONST_ME_YELLOWCHAIN)
+	registerEnum(CONST_ME_YELLOWSPARKLES)
+	registerEnum(CONST_ME_FAEEXPLOSION)
+	registerEnum(CONST_ME_FAECOMING)
+	registerEnum(CONST_ME_FAEGOING)
+	registerEnum(CONST_ME_BIGCLOUDSSINGLESPACE)
+	registerEnum(CONST_ME_STONESSINGLESPACE)
+	registerEnum(CONST_ME_BLUEGHOST)
+	registerEnum(CONST_ME_POINTOFINTEREST)
+	registerEnum(CONST_ME_MAPEFFECT)
+	registerEnum(CONST_ME_PINKSPARK)
+	registerEnum(CONST_ME_FIREWORK_GREEN)
+	registerEnum(CONST_ME_FIREWORK_ORANGE)
+	registerEnum(CONST_ME_FIREWORK_PURPLE)
+	registerEnum(CONST_ME_FIREWORK_TURQUOISE)
+	registerEnum(CONST_ME_THECUBE)
+	registerEnum(CONST_ME_DRAWINK)
+	registerEnum(CONST_ME_PRISMATICSPARKLES)
+	registerEnum(CONST_ME_THAIAN)
+	registerEnum(CONST_ME_THAIANGHOST)
+	registerEnum(CONST_ME_GHOSTSMOKE)
+	registerEnum(CONST_ME_FLOATINGBLOCK)
+	registerEnum(CONST_ME_BLOCK)
+	registerEnum(CONST_ME_ROOTING)
+	registerEnum(CONST_ME_SUNPRIEST)
+	registerEnum(CONST_ME_WERELION)
+	registerEnum(CONST_ME_GHOSTLYSCRATCH)
+	registerEnum(CONST_ME_GHOSTLYBITE)
+	registerEnum(CONST_ME_BIGSCRATCHING)
+	registerEnum(CONST_ME_SLASH)
+	registerEnum(CONST_ME_BITE)
+	registerEnum(CONST_ME_CHIVALRIOUSCHALLENGE)
+	registerEnum(CONST_ME_DIVINEDAZZLE)
+	registerEnum(CONST_ME_ELECTRICALSPARK)
+	registerEnum(CONST_ME_PURPLETELEPORT)
+	registerEnum(CONST_ME_REDTELEPORT)
+	registerEnum(CONST_ME_ORANGETELEPORT)
+	registerEnum(CONST_ME_GREYTELEPORT)
+	registerEnum(CONST_ME_LIGHTBLUETELEPORT)
 
 	registerEnum(CONST_ANI_NONE)
 	registerEnum(CONST_ANI_SPEAR)
@@ -1407,6 +1460,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ANI_ENVENOMEDARROW)
 	registerEnum(CONST_ANI_GLOOTHSPEAR)
 	registerEnum(CONST_ANI_SIMPLEARROW)
+	registerEnum(CONST_ANI_LEAFSTAR)
+	registerEnum(CONST_ANI_DIAMONDARROW)
+	registerEnum(CONST_ANI_SPECTRALBOLT)
+	registerEnum(CONST_ANI_ROYALSTAR)
 	registerEnum(CONST_ANI_WEAPONTYPE)
 
 	registerEnum(CONST_PROP_BLOCKSOLID)
@@ -1447,6 +1504,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CREATURE_EVENT_MANACHANGE)
 	registerEnum(CREATURE_EVENT_EXTENDED_OPCODE)
 
+	registerEnum(CREATURE_ID_MIN)
+	registerEnum(CREATURE_ID_MAX)
+
 	registerEnum(GAME_STATE_STARTUP)
 	registerEnum(GAME_STATE_INIT)
 	registerEnum(GAME_STATE_NORMAL)
@@ -1455,11 +1515,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(GAME_STATE_CLOSING)
 	registerEnum(GAME_STATE_MAINTAIN)
 
-	registerEnum(MESSAGE_STATUS_CONSOLE_BLUE)
-	registerEnum(MESSAGE_STATUS_CONSOLE_RED)
 	registerEnum(MESSAGE_STATUS_DEFAULT)
 	registerEnum(MESSAGE_STATUS_WARNING)
 	registerEnum(MESSAGE_EVENT_ADVANCE)
+	registerEnum(MESSAGE_STATUS_WARNING2)
 	registerEnum(MESSAGE_STATUS_SMALL)
 	registerEnum(MESSAGE_INFO_DESCR)
 	registerEnum(MESSAGE_DAMAGE_DEALT)
@@ -1470,12 +1529,20 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MESSAGE_HEALED_OTHERS)
 	registerEnum(MESSAGE_EXPERIENCE_OTHERS)
 	registerEnum(MESSAGE_EVENT_DEFAULT)
+	registerEnum(MESSAGE_LOOT)
+	registerEnum(MESSAGE_TRADE)
 	registerEnum(MESSAGE_GUILD)
 	registerEnum(MESSAGE_PARTY_MANAGEMENT)
 	registerEnum(MESSAGE_PARTY)
-	registerEnum(MESSAGE_EVENT_ORANGE)
-	registerEnum(MESSAGE_STATUS_CONSOLE_ORANGE)
-	registerEnum(MESSAGE_LOOT)
+	registerEnum(MESSAGE_REPORT)
+	registerEnum(MESSAGE_HOTKEY_PRESSED)
+	registerEnum(MESSAGE_MARKET)
+	registerEnum(MESSAGE_BEYOND_LAST)
+	registerEnum(MESSAGE_TOURNAMENT_INFO)
+	registerEnum(MESSAGE_ATTENTION)
+	registerEnum(MESSAGE_BOOSTED_CREATURE)
+	registerEnum(MESSAGE_OFFLINE_TRAINING)
+	registerEnum(MESSAGE_TRANSACTION)
 
 	registerEnum(CREATURETYPE_PLAYER)
 	registerEnum(CREATURETYPE_MONSTER)
@@ -1522,6 +1589,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_WRAPID)
 	registerEnum(ITEM_ATTRIBUTE_STOREITEM)
 	registerEnum(ITEM_ATTRIBUTE_ATTACK_SPEED)
+	registerEnum(ITEM_ATTRIBUTE_OPENCONTAINER)
 
 	registerEnum(ITEM_TYPE_DEPOT)
 	registerEnum(ITEM_TYPE_MAILBOX)
@@ -1708,7 +1776,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(TALKTYPE_PRIVATE_TO)
 	registerEnum(TALKTYPE_CHANNEL_Y)
 	registerEnum(TALKTYPE_CHANNEL_O)
+	registerEnum(TALKTYPE_SPELL)
 	registerEnum(TALKTYPE_PRIVATE_NP)
+	registerEnum(TALKTYPE_PRIVATE_NP_CONSOLE)
 	registerEnum(TALKTYPE_PRIVATE_PN)
 	registerEnum(TALKTYPE_BROADCAST)
 	registerEnum(TALKTYPE_CHANNEL_R1)
@@ -1716,6 +1786,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(TALKTYPE_PRIVATE_RED_TO)
 	registerEnum(TALKTYPE_MONSTER_SAY)
 	registerEnum(TALKTYPE_MONSTER_YELL)
+	registerEnum(TALKTYPE_POTION)
 
 	registerEnum(TEXTCOLOR_BLUE)
 	registerEnum(TEXTCOLOR_LIGHTGREEN)
@@ -1815,7 +1886,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(SPEECHBUBBLE_NORMAL)
 	registerEnum(SPEECHBUBBLE_TRADE)
 	registerEnum(SPEECHBUBBLE_QUEST)
-	registerEnum(SPEECHBUBBLE_QUESTTRADER)
+	registerEnum(SPEECHBUBBLE_COMPASS)
+	registerEnum(SPEECHBUBBLE_NORMAL2)
+	registerEnum(SPEECHBUBBLE_NORMAL3)
+	registerEnum(SPEECHBUBBLE_HIRELING)
 
 	// Use with player:addMapMark
 	registerEnum(MAPMARK_TICK)
@@ -7514,7 +7588,14 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 	}
 
 	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
-	g_game.updateCreatureType(creature);
+
+	// update summon icon
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
+
+	for (Creature* spectator : spectators) {
+		spectator->getPlayer()->sendUpdateTileCreature(creature);
+	}
 	return 1;
 }
 
@@ -8177,7 +8258,7 @@ int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 	Player* player;
 	if (isNumber(L, 2)) {
 		uint32_t id = getNumber<uint32_t>(L, 2);
-		if (id >= 0x10000000 && id <= Player::playerAutoID) {
+		if (id >= CREATURE_ID_MIN && id <= Player::playerIDLimit) {
 			player = g_game.getPlayerByID(id);
 		} else {
 			player = g_game.getPlayerByGUID(id);
@@ -16421,13 +16502,13 @@ int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		if (globalevent->getEventType() == GLOBALEVENT_NONE && globalevent->getInterval() == 0) {
 			std::cout << "[Error - LuaScriptInterface::luaGlobalEventRegister] No interval for globalevent with name " << globalevent->getName() << std::endl;
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		pushBoolean(L, g_globalEvents->registerLuaEvent(globalevent));
 	} else {
 		lua_pushnil(L);

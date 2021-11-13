@@ -374,12 +374,12 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 
 Creature* Game::getCreatureByID(uint32_t id)
 {
-	if (id <= Player::playerAutoID) {
+	if (id <= Player::playerIDLimit) {
 		return getPlayerByID(id);
-	} else if (id <= Monster::monsterAutoID) {
-		return getMonsterByID(id);
 	} else if (id <= Npc::npcAutoID) {
 		return getNpcByID(id);
+	} else if (id <= Monster::monsterAutoID) {
+		return getMonsterByID(id);
 	}
 	return nullptr;
 }
@@ -2804,7 +2804,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		if (player->getInventoryItem(CONST_SLOT_BACKPACK) == playerTradeItem && tradePartner->getInventoryItem(CONST_SLOT_BACKPACK) == partnerTradeItem) {
 			playerRet = RETURNVALUE_NOTENOUGHROOM;
 		}
-		
+
 		if (tradePartnerRet == RETURNVALUE_NOERROR && playerRet == RETURNVALUE_NOERROR) {
 			tradePartnerRet = internalAddItem(tradePartner, playerTradeItem, INDEX_WHEREEVER, 0, true);
 			playerRet = internalAddItem(player, partnerTradeItem, INDEX_WHEREEVER, 0, true);
@@ -3357,17 +3357,16 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 			return;
 		}
 
+		int32_t speedChange = mount->speed;
 		if (player->isMounted()) {
 			Mount* prevMount = mounts.getMountByID(player->getCurrentMount());
 			if (prevMount) {
-				changeSpeed(player, mount->speed - prevMount->speed);
+				speedChange -= prevMount->speed;
 			}
-
-			player->setCurrentMount(mount->id);
-		} else {
-			player->setCurrentMount(mount->id);
-			outfit.lookMount = 0;
 		}
+
+		changeSpeed(player, speedChange);
+		player->setCurrentMount(mount->id);
 	} else if (player->isMounted()) {
 		player->dismount();
 	}
@@ -3484,7 +3483,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	result = g_spells->playerSaySpell(player, words);
 	if (result == TALKACTION_BREAK) {
 		if (!g_config.getBoolean(ConfigManager::EMOTE_SPELLS)) {
-			return internalCreatureSay(player, TALKTYPE_SAY, words, false);
+			return internalCreatureSay(player, TALKTYPE_SPELL, words, false);
 		} else {
 			return internalCreatureSay(player, TALKTYPE_MONSTER_SAY, words, false);
 		}
@@ -4713,54 +4712,6 @@ void Game::updatePlayerShield(Player* player)
 	map.getSpectators(spectators, player->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureShield(player);
-	}
-}
-
-void Game::updatePlayerHelpers(const Player& player)
-{
-	uint32_t creatureId = player.getID();
-	uint16_t helpers = player.getHelpers();
-
-	SpectatorVec spectators;
-	map.getSpectators(spectators, player.getPosition(), true, true);
-	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureHelpers(creatureId, helpers);
-	}
-}
-
-void Game::updateCreatureType(Creature* creature)
-{
-	const Player* masterPlayer = nullptr;
-
-	uint32_t creatureId = creature->getID();
-	CreatureType_t creatureType = creature->getType();
-	if (creatureType == CREATURETYPE_MONSTER) {
-		const Creature* master = creature->getMaster();
-		if (master) {
-			masterPlayer = master->getPlayer();
-			if (masterPlayer) {
-				creatureType = CREATURETYPE_SUMMON_OTHERS;
-			}
-		}
-	}
-
-	//send to clients
-	SpectatorVec spectators;
-	map.getSpectators(spectators, creature->getPosition(), true, true);
-
-	if (creatureType == CREATURETYPE_SUMMON_OTHERS) {
-		for (Creature* spectator : spectators) {
-			Player* player = spectator->getPlayer();
-			if (masterPlayer == player) {
-				player->sendCreatureType(creatureId, CREATURETYPE_SUMMON_OWN);
-			} else {
-				player->sendCreatureType(creatureId, creatureType);
-			}
-		}
-	} else {
-		for (Creature* spectator : spectators) {
-			spectator->getPlayer()->sendCreatureType(creatureId, creatureType);
-		}
 	}
 }
 
