@@ -430,7 +430,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	if (HouseTile* houseTile = dynamic_cast<HouseTile*>(item->getTile())) {
 		House* house = houseTile->getHouse();
 		if (house && !house->isInvited(player)) {
-			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+			player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 			return false;
 		}
 	}
