@@ -427,6 +427,16 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 		showUseHotkeyMessage(player, item, player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1));
 	}
 
+	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(item->getTile())) {
+			House* house = houseTile->getHouse();
+			if (house && !house->isInvited(player)) {
+				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
+				return false;
+			}
+		}
+	}
+
 	ReturnValue ret = internalUseItem(player, pos, index, item, isHotkey);
 	if (ret == RETURNVALUE_YOUCANNOTUSETHISBED) {
 		g_game.internalCreatureSay(player, TALKTYPE_MONSTER_SAY, getReturnMessage(ret), false);
