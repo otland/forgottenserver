@@ -140,9 +140,7 @@ Protocol_ptr ServicePort::make_protocol(NetworkMessage& msg, const Connection_pt
 			continue;
 		}
 
-		if ((service->is_checksummed()) || !service->is_checksummed()) {
-			return service->make_protocol(connection);
-		}
+		return service->make_protocol(connection);
 	}
 	return nullptr;
 }

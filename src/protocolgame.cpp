@@ -1463,15 +1463,6 @@ void ProtocolGame::sendCreatureSkull(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureHelpers(uint32_t creatureId, uint16_t helpers)
-{
-	NetworkMessage msg;
-	msg.addByte(0x94);
-	msg.add<uint32_t>(creatureId);
-	msg.add<uint16_t>(helpers);
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t color)
 {
 	if (!canSee(creature)) {
@@ -1867,7 +1858,8 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount) {
+void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount)
+{
 	NetworkMessage msg;
 	msg.addByte(0xEE);
 	msg.addByte(resourceType);
@@ -1875,27 +1867,20 @@ void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint6
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendStoreBalance() {
+void ProtocolGame::sendStoreBalance()
+{
 	NetworkMessage msg;
-
-	//"updating..."
-	//msg.addByte(0xF2);
-	//msg.addByte(0x01);
-	//writeToOutputBuffer(msg);
-	//msg.reset();
 
 	// send update
 	msg.addByte(0xDF);
 	msg.addByte(0x01);
 
-	//placeholder packet / to do
+	// placeholder packet / to do
 	msg.add<uint32_t>(0); // total store coins (transferable + non-t)
 	msg.add<uint32_t>(0); // transferable store coins
 	msg.add<uint32_t>(0); // reserved auction coins
 	msg.add<uint32_t>(0); // tournament coins
-
 	writeToOutputBuffer(msg);
-
 }
 
 void ProtocolGame::sendMarketEnter(uint32_t depotId)
