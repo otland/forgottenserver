@@ -130,11 +130,7 @@ class Player final : public Creature, public Cylinder
 			return this;
 		}
 
-		void setID() override {
-			if (id == 0) {
-				id = playerAutoID++;
-			}
-		}
+		void setID() final;
 
 		static MuteCountMap muteCountMap;
 
@@ -257,7 +253,7 @@ class Player final : public Creature, public Cylinder
 			return storeInbox;
 		}
 
-		uint16_t getClientIcons() const;
+		uint32_t getClientIcons() const;
 
 		const GuildWarVector& getGuildWarVector() const {
 			return guildWarVector;
@@ -833,16 +829,6 @@ class Player final : public Creature, public Cylinder
 				client->sendCreatureShield(creature);
 			}
 		}
-		void sendCreatureType(uint32_t creatureId, uint8_t creatureType) {
-			if (client) {
-				client->sendCreatureType(creatureId, creatureType);
-			}
-		}
-		void sendCreatureHelpers(uint32_t creatureId, uint16_t helpers) {
-			if (client) {
-				client->sendCreatureHelpers(creatureId, helpers);
-			}
-		}
 		void sendSpellCooldown(uint8_t spellId, uint32_t time) {
 			if (client) {
 				client->sendSpellCooldown(spellId, time);
@@ -876,6 +862,7 @@ class Player final : public Creature, public Cylinder
 				client->sendItems();
 			}
 		}
+		void openSavedContainers();
 
 		//event methods
 		void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
@@ -1085,6 +1072,11 @@ class Player final : public Creature, public Cylinder
 				client->sendOutfitWindow();
 			}
 		}
+		void sendPodiumWindow(const Item* item) {
+			if (client) {
+				client->sendPodiumWindow(item);
+			}
+		}
 		void sendCloseContainer(uint8_t cid) {
 			if (client) {
 				client->sendCloseContainer(cid);
@@ -1162,6 +1154,10 @@ class Player final : public Creature, public Cylinder
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
 		void updateRegeneration();
+
+		const std::map<uint8_t, OpenContainer>& getOpenContainers() const {
+			return openContainers;
+		}
 
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
@@ -1329,6 +1325,7 @@ class Player final : public Creature, public Cylinder
 		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 
 		static uint32_t playerAutoID;
+		static uint32_t playerIDLimit;
 
 		void updateItemsLight(bool internal = false);
 		int32_t getStepSpeed() const override {

@@ -40,6 +40,7 @@ class Mailbox;
 class Door;
 class MagicField;
 class BedItem;
+class Podium;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -106,6 +107,8 @@ enum AttrTypes_t {
 	ATTR_WRAPID = 36,
 	ATTR_STOREITEM = 37,
 	ATTR_ATTACK_SPEED = 38,
+	ATTR_OPENCONTAINER = 39,
+	ATTR_PODIUMOUTFIT = 40,
 };
 
 enum Attr_ReadValue {
@@ -503,7 +506,7 @@ class ItemAttributes
 			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
 			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
 			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID | ITEM_ATTRIBUTE_STOREITEM
-			| ITEM_ATTRIBUTE_ATTACK_SPEED;
+			| ITEM_ATTRIBUTE_ATTACK_SPEED | ITEM_ATTRIBUTE_OPENCONTAINER;
 		const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
 			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
 
@@ -586,6 +589,12 @@ class Item : virtual public Thing
 			return nullptr;
 		}
 		virtual const BedItem* getBed() const {
+			return nullptr;
+		}
+		virtual Podium* getPodium() {
+			return nullptr;
+		}
+		virtual const Podium* getPodium() const {
 			return nullptr;
 		}
 
@@ -919,6 +928,10 @@ class Item : virtual public Thing
 		bool isRotatable() const {
 			const ItemType& it = items[id];
 			return it.rotatable && it.rotateTo;
+		}
+		bool isPodium() const {
+			const ItemType& it = items[id];
+			return it.isPodium();
 		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;

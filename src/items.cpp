@@ -163,6 +163,7 @@ const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
 	{"door", ITEM_TYPE_DOOR},
 	{"bed", ITEM_TYPE_BED},
 	{"rune", ITEM_TYPE_RUNE},
+	{"podium", ITEM_TYPE_PODIUM}
 };
 
 const std::unordered_map<std::string, tileflags_t> TileStatesMap = {
@@ -217,8 +218,8 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 
 Items::Items()
 {
-	items.reserve(30000);
-	nameToItems.reserve(30000);
+	items.reserve(45000);
+	nameToItems.reserve(45000);
 }
 
 void Items::clear()
@@ -293,7 +294,7 @@ bool Items::loadFromOtb(const std::string& file)
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return false;
-	} else if (minorVersion < CLIENT_VERSION_1098) {
+	} else if (minorVersion < CLIENT_VERSION_LAST) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return false;
 	}
@@ -437,6 +438,9 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
 				break;
+			case ITEM_GROUP_PODIUM:
+				iType.type = ITEM_TYPE_PODIUM;
+				break;
 			default:
 				return false;
 		}
@@ -510,30 +514,7 @@ bool Items::loadFromXml()
 		}
 	}
 
-	buildInventoryList();
 	return true;
-}
-
-void Items::buildInventoryList()
-{
-	inventory.reserve(items.size());
-	for (const auto& type: items) {
-		if (type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
-			type.attack != 0 || type.defense != 0 ||
-			type.extraDefense != 0 || type.armor != 0 ||
-			type.slotPosition & SLOTP_NECKLACE ||
-			type.slotPosition & SLOTP_RING ||
-			type.slotPosition & SLOTP_AMMO ||
-			type.slotPosition & SLOTP_FEET ||
-			type.slotPosition & SLOTP_HEAD ||
-			type.slotPosition & SLOTP_ARMOR ||
-			type.slotPosition & SLOTP_LEGS)
-		{
-			inventory.push_back(type.clientId);
-		}
-	}
-	inventory.shrink_to_fit();
-	std::sort(inventory.begin(), inventory.end());
 }
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)

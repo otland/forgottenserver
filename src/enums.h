@@ -93,6 +93,7 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_WRAPID = 1 << 24,
 	ITEM_ATTRIBUTE_STOREITEM = 1 << 25,
 	ITEM_ATTRIBUTE_ATTACK_SPEED = 1 << 26,
+	ITEM_ATTRIBUTE_OPENCONTAINER = 1 << 27,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -135,6 +136,7 @@ enum CreatureType_t : uint8_t {
 	CREATURETYPE_NPC = 2,
 	CREATURETYPE_SUMMON_OWN = 3,
 	CREATURETYPE_SUMMON_OTHERS = 4,
+	CREATURETYPE_HIDDEN = 5,
 };
 
 enum OperatingSystem_t : uint8_t {
@@ -143,6 +145,9 @@ enum OperatingSystem_t : uint8_t {
 	CLIENTOS_LINUX = 1,
 	CLIENTOS_WINDOWS = 2,
 	CLIENTOS_FLASH = 3,
+	CLIENTOS_QT_LINUX = 4,
+	CLIENTOS_QT_WINDOWS = 5,
+	CLIENTOS_QT_MAC = 6,
 
 	CLIENTOS_OTCLIENT_LINUX = 10,
 	CLIENTOS_OTCLIENT_WINDOWS = 11,
@@ -473,7 +478,10 @@ enum SpeechBubble_t
 	SPEECHBUBBLE_NORMAL = 1,
 	SPEECHBUBBLE_TRADE = 2,
 	SPEECHBUBBLE_QUEST = 3,
-	SPEECHBUBBLE_QUESTTRADER = 4,
+	SPEECHBUBBLE_COMPASS = 4,
+	SPEECHBUBBLE_NORMAL2 = 5,
+	SPEECHBUBBLE_NORMAL3 = 6,
+	SPEECHBUBBLE_HIRELING = 7,
 };
 
 enum MapMark_t
@@ -503,12 +511,16 @@ enum MapMark_t
 struct Outfit_t {
 	uint16_t lookType = 0;
 	uint16_t lookTypeEx = 0;
-	uint16_t lookMount = 0;
 	uint8_t lookHead = 0;
 	uint8_t lookBody = 0;
 	uint8_t lookLegs = 0;
 	uint8_t lookFeet = 0;
 	uint8_t lookAddons = 0;
+	uint16_t lookMount = 0;
+	uint8_t lookMountHead = 0;
+	uint8_t lookMountBody = 0;
+	uint8_t lookMountLegs = 0;
+	uint8_t lookMountFeet = 0;
 };
 
 struct LightInfo {

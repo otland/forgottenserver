@@ -23,6 +23,7 @@
 
 #include "container.h"
 #include "creature.h"
+#include "podium.h"
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {
@@ -101,16 +102,20 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 
 	add<uint16_t>(it.clientId);
 
-	addByte(0xFF); // MARK_UNMARKED
-
 	if (it.stackable) {
 		addByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[count & 7]);
+	} else if (it.isContainer()) {
+		addByte(0x00); // assigned loot container icon
+		addByte(0x00); // quiver ammo count
 	}
 
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
+	if (it.isPodium()) {
+		add<uint16_t>(0); //looktype
+		add<uint16_t>(0); //lookmount
+		addByte(2); //direction
+		addByte(0x01); //is visible (bool)
 	}
 }
 
@@ -119,7 +124,6 @@ void NetworkMessage::addItem(const Item* item)
 	const ItemType& it = Item::items[item->getID()];
 
 	add<uint16_t>(it.clientId);
-	addByte(0xFF); // MARK_UNMARKED
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
@@ -127,8 +131,46 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(fluidMap[item->getFluidType() & 7]);
 	}
 
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
+	if (it.isContainer()) {
+		addByte(0x00); // assigned loot container icon
+		addByte(0x00); // quiver ammo count
+	}
+
+	// display outfit on the podium
+	if (it.isPodium()) {
+		const Podium* podium = item->getPodium();
+		const Outfit_t &outfit = podium->getOutfit();
+
+		//add outfit
+		if (podium->hasFlag(PODIUM_SHOW_OUTFIT)) {
+			add<uint16_t>(outfit.lookType);
+			if (outfit.lookType != 0) {
+				addByte(outfit.lookHead);
+				addByte(outfit.lookBody);
+				addByte(outfit.lookLegs);
+				addByte(outfit.lookFeet);
+				addByte(outfit.lookAddons);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		//add mount
+		if (podium->hasFlag(PODIUM_SHOW_MOUNT)) {
+			add<uint16_t>(outfit.lookMount);
+			if (outfit.lookMount != 0) {
+				addByte(outfit.lookMountHead);
+				addByte(outfit.lookMountBody);
+				addByte(outfit.lookMountLegs);
+				addByte(outfit.lookMountFeet);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		addByte(podium->getDirection());
+		addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00);
+		return;
 	}
 }
 
