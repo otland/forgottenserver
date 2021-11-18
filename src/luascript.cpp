@@ -843,7 +843,7 @@ Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
 	Thing* thing;
 	if (lua_getmetatable(L, arg) != 0) {
 		lua_rawgeti(L, -1, 't');
-		switch(getNumber<uint32_t>(L, -1)) {
+		switch (getNumber<uint32_t>(L, -1)) {
 			case LuaData_Item:
 				thing = getUserdata<Item>(L, arg);
 				break;
@@ -1035,7 +1035,7 @@ void LuaScriptInterface::registerFunctions()
 	// getSubTypeName(subType)
 	lua_register(luaState, "getSubTypeName", LuaScriptInterface::luaGetSubTypeName);
 
-	//createCombatArea( {area}, <optional> {extArea} )
+	//createCombatArea({area}, <optional> {extArea})
 	lua_register(luaState, "createCombatArea", LuaScriptInterface::luaCreateCombatArea);
 
 	//doAreaCombat(cid, type, pos, area, min, max, effect[, origin = ORIGIN_SPELL[, blockArmor = false[, blockShield = false[, ignoreResistances = false]]]])
@@ -3418,7 +3418,7 @@ bool LuaScriptInterface::getArea(lua_State* L, std::vector<uint32_t>& vec, uint3
 
 int LuaScriptInterface::luaCreateCombatArea(lua_State* L)
 {
-	//createCombatArea( {area}, <optional> {extArea} )
+	//createCombatArea({area}, <optional> {extArea})
 	ScriptEnvironment* env = getScriptEnv();
 	if (env->getScriptId() != EVENT_ID_LOADING) {
 		reportErrorFunc(L, "This function can only be used while loading the script.");
@@ -11638,8 +11638,8 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 	int index = 0;
 	for (Tile* tile : tiles) {
 		TileItemVector* itemVector = tile->getItemList();
-		if(itemVector) {
-			for(Item* item : *itemVector) {
+		if (itemVector) {
+			for (Item* item : *itemVector) {
 				pushUserdata<Item>(L, item);
 				setItemMetatable(L, -1, item);
 				lua_rawseti(L, -2, ++index);
@@ -16421,13 +16421,13 @@ int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		if (globalevent->getEventType() == GLOBALEVENT_NONE && globalevent->getInterval() == 0) {
 			std::cout << "[Error - LuaScriptInterface::luaGlobalEventRegister] No interval for globalevent with name " << globalevent->getName() << std::endl;
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		pushBoolean(L, g_globalEvents->registerLuaEvent(globalevent));
 	} else {
 		lua_pushnil(L);
