@@ -113,6 +113,7 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_CRITICAL_DAMAGE = 173,
 	// 174 is empty
 	CONST_ME_PLUNGING_FISH = 175,
+	CONST_ME_DRAWINK = 202,
 };
 
 enum ShootType_t : uint8_t {
@@ -231,6 +232,7 @@ enum FluidColors_t : uint8_t {
 	FLUID_YELLOW,
 	FLUID_WHITE,
 	FLUID_PURPLE,
+	FLUID_BLACK,
 };
 
 enum FluidTypes_t : uint8_t {
@@ -242,6 +244,7 @@ enum FluidTypes_t : uint8_t {
 	FLUID_LEMONADE = FLUID_YELLOW,
 	FLUID_MILK = FLUID_WHITE,
 	FLUID_MANA = FLUID_PURPLE,
+	FLUID_INK = FLUID_BLACK,
 
 	FLUID_LIFE = FLUID_RED + 8,
 	FLUID_OIL = FLUID_BROWN + 8,
@@ -272,6 +275,7 @@ const uint8_t reverseFluidMap[] = {
 	FLUID_EMPTY,
 	FLUID_LEMONADE,
 	FLUID_MILK,
+	FLUID_INK,
 };
 
 const uint8_t clientToServerFluidMap[] = {
@@ -293,6 +297,7 @@ const uint8_t clientToServerFluidMap[] = {
 	FLUID_COCONUTMILK,
 	FLUID_TEA,
 	FLUID_MEAD,
+	FLUID_INK,
 };
 
 enum ClientFluidTypes_t : uint8_t {
@@ -306,6 +311,7 @@ enum ClientFluidTypes_t : uint8_t {
 	CLIENTFLUID_BROWN = 7,
 	CLIENTFLUID_YELLOW = 8,
 	CLIENTFLUID_WHITE = 9,
+	CLIENTFLUID_BLACK = 10,
 };
 
 const uint8_t fluidMap[] = {
@@ -317,6 +323,7 @@ const uint8_t fluidMap[] = {
 	CLIENTFLUID_YELLOW,
 	CLIENTFLUID_WHITE,
 	CLIENTFLUID_PURPLE,
+	CLIENTFLUID_BLACK,
 };
 
 enum SquareColor_t : uint8_t {
@@ -324,6 +331,7 @@ enum SquareColor_t : uint8_t {
 };
 
 enum TextColor_t : uint8_t {
+	TEXTCOLOR_BLACK = 0,
 	TEXTCOLOR_BLUE = 5,
 	TEXTCOLOR_LIGHTGREEN = 30,
 	TEXTCOLOR_LIGHTBLUE = 35,
