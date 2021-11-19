@@ -1826,7 +1826,9 @@ bool Item::hasMarketAttributes() const
 				return false;
 			}
 		} else {
-			return false;
+			if (!(attr.type == ITEM_ATTRIBUTE_CUSTOM && attr.value.custom && attr.value.custom->size() > 0)) {
+				return false;
+			}
 		}
 	}
 	return true;

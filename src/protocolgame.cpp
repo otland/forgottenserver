@@ -619,7 +619,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		//case 0xE2: break; // bestiary 2
 		//case 0xE3: break; // bestiary 3
 		//case 0xE4: break; // buy charm rune
-		//case 0xE5: break; // request character info (cyclopedia)
+		//case 0xE5: break; // request character info (in-game knowledge base)
 		case 0xE6: parseBugReport(msg); break;
 		case 0xE7: /* thank you */ break;
 		case 0xE8: parseDebugAssert(msg); break;

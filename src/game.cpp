@@ -5689,7 +5689,6 @@ void Game::removeBedSleeper(uint32_t guid)
 }
 
 void Game::updatePodium(Item* item) {
-	Podium* podium = item->getPodium();
 	if (!item->getPodium()) {
 		return;
 	}
