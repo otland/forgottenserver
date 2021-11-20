@@ -1291,6 +1291,7 @@ void ProtocolGame::parseMarketCancelOffer(NetworkMessage& msg)
 	uint32_t timestamp = msg.get<uint32_t>();
 	uint16_t counter = msg.get<uint16_t>();
 	addGameTask(&Game::playerCancelMarketOffer, player->getID(), timestamp, counter);
+	sendStoreBalance();
 }
 
 void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
@@ -1299,6 +1300,7 @@ void ProtocolGame::parseMarketAcceptOffer(NetworkMessage& msg)
 	uint16_t counter = msg.get<uint16_t>();
 	uint16_t amount = msg.get<uint16_t>();
 	addGameTask(&Game::playerAcceptMarketOffer, player->getID(), timestamp, counter, amount);
+	sendStoreBalance();
 }
 
 void ProtocolGame::parseModalWindowAnswer(NetworkMessage& msg)
@@ -1463,6 +1465,33 @@ void ProtocolGame::sendStats()
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendClientFeatures()
+{
+	NetworkMessage msg;
+	msg.addByte(0x17);
+
+	msg.add<uint32_t>(player->getID());
+	msg.add<uint16_t>(50); // beat duration
+
+	msg.addDouble(Creature::speedA, 3);
+	msg.addDouble(Creature::speedB, 3);
+	msg.addDouble(Creature::speedC, 3);
+
+	// can report bugs?
+	msg.addByte(player->getAccountType() >= ACCOUNT_TYPE_TUTOR ? 0x01 : 0x00);
+
+	msg.addByte(0x00); // can change pvp framing option
+	msg.addByte(0x00); // expert mode button enabled
+
+	msg.add<uint16_t>(0x00); // store images url (string or u16 0x00)
+	msg.add<uint16_t>(25); // premium coin package size
+
+	msg.addByte(0x00); // exiva button enabled (bool)
+	msg.addByte(0x00); // Tournament button (bool)
+
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendBasicData()
 {
 	NetworkMessage msg;
@@ -1596,11 +1625,11 @@ void ProtocolGame::sendChannelMessage(const std::string& author, const std::stri
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendIcons(uint16_t icons)
+void ProtocolGame::sendIcons(uint32_t icons)
 {
 	NetworkMessage msg;
 	msg.addByte(0xA2);
-	msg.add<uint16_t>(icons);
+	msg.add<uint32_t>(icons);
 	writeToOutputBuffer(msg);
 }
 
@@ -1689,9 +1718,14 @@ void ProtocolGame::sendCloseShop()
 
 void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 {
+	uint64_t playerBank = player->getBankBalance();
+	uint64_t playerMoney = player->getMoney();
+	sendResourceBalance(RESOURCE_BANK_BALANCE, playerBank);
+	sendResourceBalance(RESOURCE_GOLD_EQUIPPED, playerMoney);
+
 	NetworkMessage msg;
 	msg.addByte(0x7B);
-	msg.add<uint64_t>(player->getMoney() + player->getBankBalance());
+	msg.add<uint64_t>(playerBank + playerMoney); // deprecated and ignored by QT client. OTClient still uses it.
 
 	std::map<uint16_t, uint32_t> saleMap;
 
@@ -1768,12 +1802,34 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount)
+{
+	NetworkMessage msg;
+	msg.addByte(0xEE);
+	msg.addByte(resourceType);
+	msg.add<uint64_t>(amount);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendStoreBalance()
+{
+	NetworkMessage msg;
+	msg.addByte(0xDF);
+	msg.addByte(0x01);
+
+	// placeholder packet / to do
+	msg.add<uint32_t>(0); // total store coins (transferable + non-t)
+	msg.add<uint32_t>(0); // transferable store coins
+	msg.add<uint32_t>(0); // reserved auction coins
+	msg.add<uint32_t>(0); // tournament coins
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendMarketEnter(uint32_t depotId)
 {
 	NetworkMessage msg;
 	msg.addByte(0xF6);
 
-	msg.add<uint64_t>(player->getBankBalance());
 	msg.addByte(std::min<uint32_t>(IOMarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max()));
 
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
@@ -1826,6 +1882,10 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	}
 
 	writeToOutputBuffer(msg);
+
+	sendResourceBalance(RESOURCE_BANK_BALANCE, player->getBankBalance());
+	sendResourceBalance(RESOURCE_GOLD_EQUIPPED, player->getMoney());
+	sendStoreBalance();
 }
 
 void ProtocolGame::sendMarketLeave()
@@ -1860,6 +1920,7 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 		msg.addString(offer.playerName);
 	}
 
+	sendStoreBalance();
 	writeToOutputBuffer(msg);
 }
 
@@ -2626,61 +2687,46 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		return;
 	}
 
-	NetworkMessage msg;
-	msg.addByte(0x17);
+	// send player stats
+	sendStats(); // hp, cap, level, xp rate, etc.
+	sendSkills(); // skills and special skills
+	player->sendIcons(); // active conditions
 
-	msg.add<uint32_t>(player->getID());
-	msg.add<uint16_t>(0x32); // beat duration (50)
+	// send client info
+	sendClientFeatures(); // player speed, bug reports, store url, pvp mode, etc
+	sendBasicData(); // premium account, vocation, known spells, prey system status, magic shield status
+	sendItems(); // send carried items for action bars
 
-	msg.addDouble(Creature::speedA, 3);
-	msg.addDouble(Creature::speedB, 3);
-	msg.addDouble(Creature::speedC, 3);
-
-	// can report bugs?
-	if (player->getAccountType() >= ACCOUNT_TYPE_TUTOR) {
-		msg.addByte(0x01);
-	} else {
-		msg.addByte(0x00);
-	}
-
-	msg.addByte(0x00); // can change pvp framing option
-	msg.addByte(0x00); // expert mode button enabled
-
-	msg.add<uint16_t>(0x00); // URL (string) to ingame store images
-	msg.add<uint16_t>(25); // premium coin package size
-
-	writeToOutputBuffer(msg);
-
+	// enter world and send game screen
 	sendPendingStateEntered();
 	sendEnterWorld();
 	sendMapDescription(pos);
 
+	// send login effect
 	if (isLogin) {
 		sendMagicEffect(pos, CONST_ME_TELEPORT);
 	}
 
+	// send equipment
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		sendInventoryItem(static_cast<slots_t>(i), player->getInventoryItem(static_cast<slots_t>(i)));
 	}
 
+	// send store inbox
 	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
 
-	sendStats();
-	sendSkills();
-
-	//gameworld light-settings
+	// gameworld time of the day
 	sendWorldLight(g_game.getWorldLightInfo());
+	sendWorldTime();
 
-	//player light level
+	// player light level
 	sendCreatureLight(creature);
 
+	// player vip list
 	sendVIPEntries();
 
 	// opened containers
 	player->openSavedContainers();
-
-	sendBasicData();
-	player->sendIcons();
 }
 
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport)
@@ -3095,6 +3141,15 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.add<uint16_t>(creature->getStepSpeed() / 2);
 
+	msg.addByte(0x00); //creature debuffs, to do
+	/*
+	if (icon != CREATUREICON_NONE) {
+		msg.addByte(icon);
+		msg.addByte(1);
+		msg.add<uint16_t>(0);
+	}
+	*/
+
 	msg.addByte(player->getSkullClient(creature));
 	msg.addByte(player->getPartyShield(otherPlayer));
 
@@ -3132,15 +3187,12 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<uint16_t>::max()));
 
 	msg.add<uint32_t>(player->getFreeCapacity());
-	msg.add<uint32_t>(player->getCapacity());
-
 	msg.add<uint64_t>(player->getExperience());
 
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getLevelPercent());
 
 	msg.add<uint16_t>(100); // base xp gain rate
-	msg.add<uint16_t>(0); // xp voucher
 	msg.add<uint16_t>(0); // low level bonus
 	msg.add<uint16_t>(0); // xp boost
 	msg.add<uint16_t>(100); // stamina multiplier (100 = x1.0)
@@ -3148,14 +3200,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));
 
-	msg.addByte(std::min<uint32_t>(player->getMagicLevel(), std::numeric_limits<uint8_t>::max()));
-	msg.addByte(std::min<uint32_t>(player->getBaseMagicLevel(), std::numeric_limits<uint8_t>::max()));
-	msg.addByte(player->getMagicLevelPercent());
-
 	msg.addByte(player->getSoul());
-
 	msg.add<uint16_t>(player->getStaminaMinutes());
-
 	msg.add<uint16_t>(player->getBaseSpeed() / 2);
 
 	Condition* condition = player->getCondition(CONDITION_REGENERATION);
@@ -3164,7 +3210,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getOfflineTrainingTime() / 60 / 1000);
 
 	msg.add<uint16_t>(0); // xp boost time (seconds)
-	msg.addByte(0); // enables exp boost in the store
+	msg.addByte(0x00); // enables exp boost in the store
+
+	msg.add<uint16_t>(0);  // remaining mana shield
+	msg.add<uint16_t>(0);  // total mana shield
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
