@@ -790,7 +790,7 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	DBInsert spellsQuery("INSERT INTO `player_spells` (`player_id`, `name` ) VALUES ");
+	DBInsert spellsQuery("INSERT INTO `player_spells` (`player_id`, `name`) VALUES ");
 	for (const std::string& spellName : player->learnedInstantSpellList) {
 		if (!spellsQuery.addRow(fmt::format("{:d}, {:s}", player->getGUID(), db.escapeString(spellName)))) {
 			return false;
