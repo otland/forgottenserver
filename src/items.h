@@ -436,7 +436,7 @@ class Items
 		{
 			public:
 				ClientIdToServerIdMap() {
-					vec.reserve(30000);
+					vec.reserve(45000);
 				}
 
 				void emplace(uint16_t clientId, uint16_t serverId) {

@@ -217,8 +217,8 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 
 Items::Items()
 {
-	items.reserve(30000);
-	nameToItems.reserve(30000);
+	items.reserve(45000);
+	nameToItems.reserve(45000);
 }
 
 void Items::clear()
@@ -293,7 +293,7 @@ bool Items::loadFromOtb(const std::string& file)
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return false;
-	} else if (minorVersion < CLIENT_VERSION_1098) {
+	} else if (minorVersion < CLIENT_VERSION_LAST) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return false;
 	}
@@ -436,6 +436,7 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_FLUID:
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
+			case ITEM_GROUP_PODIUM:
 				break;
 			default:
 				return false;
