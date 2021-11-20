@@ -1801,6 +1801,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(TALKTYPE_MONSTER_YELL)
 	registerEnum(TALKTYPE_POTION)
 
+	registerEnum(TEXTCOLOR_BLACK)
 	registerEnum(TEXTCOLOR_BLUE)
 	registerEnum(TEXTCOLOR_LIGHTGREEN)
 	registerEnum(TEXTCOLOR_LIGHTBLUE)

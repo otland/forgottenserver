@@ -616,7 +616,7 @@ MagicEffectNames magicEffectNames = {
 	{"turquoisefirework",	CONST_ME_FIREWORK_TURQUOISE},
 	{"thecube",			CONST_ME_CUBECOMPLETE},
 	{"inksplash",			CONST_ME_INKSPLASH},
-	{"pinkspark",	CONST_ME_PINKSPARK},
+	{"rainbowshimmer",	CONST_ME_MAGIC_RAINBOW},
 	{"thaian",			CONST_ME_THAIAN},
 	{"thaianghost",		CONST_ME_THAIANGHOST},
 	{"ghostsmoke",		CONST_ME_GHOSTSMOKE},

@@ -3989,6 +3989,15 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 					color = TEXTCOLOR_ELECTRICPURPLE;
 					effect = CONST_ME_ENERGYHIT;
 					break;
+				case RACE_INK:
+					color = TEXTCOLOR_LIGHTGREY;
+					effect = CONST_ME_INKSPLASH;
+					if (const Tile* tile = target->getTile()) {
+						if (tile && !tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+							splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_INK);
+						}
+					}
+					break;
 				default:
 					color = TEXTCOLOR_NONE;
 					effect = CONST_ME_NONE;

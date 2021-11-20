@@ -415,6 +415,7 @@ enum SquareColor_t : uint8_t {
 };
 
 enum TextColor_t : uint8_t {
+	TEXTCOLOR_BLACK = 0,
 	TEXTCOLOR_BLUE = 5,
 	TEXTCOLOR_LIGHTGREEN = 30,
 	TEXTCOLOR_LIGHTBLUE = 35,
