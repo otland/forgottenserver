@@ -590,6 +590,54 @@ MagicEffectNames magicEffectNames = {
 	{"yellowsmoke",		CONST_ME_YELLOWSMOKE},
 	{"greensmoke",		CONST_ME_GREENSMOKE},
 	{"purplesmoke",		CONST_ME_PURPLESMOKE},
+	{"earlythunder",	CONST_ME_EARLY_THUNDER},
+	{"bonecapsule",		CONST_ME_RAGIAZ_BONECAPSULE},
+	{"criticaldamage",	CONST_ME_CRITICAL_DAMAGE},
+	{"plungingfish",	CONST_ME_PLUNGING_FISH},
+	{"bluechain",		CONST_ME_BLUECHAIN},
+	{"orangechain",		CONST_ME_ORANGECHAIN},
+	{"greenchain",		CONST_ME_GREENCHAIN},
+	{"purplechain",		CONST_ME_PURPLECHAIN},
+	{"greychain",		CONST_ME_GREYCHAIN},
+	{"yellowchain",		CONST_ME_YELLOWCHAIN},
+	{"yellowshimmer",	CONST_ME_MAGIC_YELLOW},
+	{"faeexplosion",	CONST_ME_FAEEXPLOSION},
+	{"faecoming",		CONST_ME_FAECOMING},
+	{"faegoing",		CONST_ME_FAEGOING},
+	{"bigcloudsthick",	CONST_ME_BIGCLOUDS_THICK},
+	{"stonesthick",	CONST_ME_STONES_THICK},
+	{"blueghost",		CONST_ME_GHOST_BLUE},
+	{"pointofinterest",	CONST_ME_POINTOFINTEREST},
+	{"scroll",		CONST_ME_SCROLL},
+	{"pinkspark",		CONST_ME_PINKSPARK},
+	{"greenfirework",	CONST_ME_FIREWORK_GREEN},
+	{"orangefirework",	CONST_ME_FIREWORK_ORANGE},
+	{"purplefirework",	CONST_ME_FIREWORK_PURPLE},
+	{"turquoisefirework",	CONST_ME_FIREWORK_TURQUOISE},
+	{"thecube",			CONST_ME_CUBECOMPLETE},
+	{"inksplash",			CONST_ME_INKSPLASH},
+	{"pinkspark",	CONST_ME_PINKSPARK},
+	{"thaian",			CONST_ME_THAIAN},
+	{"thaianghost",		CONST_ME_THAIANGHOST},
+	{"ghostsmoke",		CONST_ME_GHOSTSMOKE},
+	{"createblock",	CONST_ME_CREATEBLOCK},
+	{"stoneblock",			CONST_ME_STONEBLOCK},
+	{"roots",			CONST_ME_ROOTS},
+	{"sunpriest",		CONST_ME_SUNPRIEST},
+	{"werelion",		CONST_ME_WERELION},
+	{"ghostlyscratch",	CONST_ME_GHOSTLYSCRATCH},
+	{"ghostlybite",		CONST_ME_GHOSTLYBITE},
+	{"bigscratching",	CONST_ME_BIGSCRATCHING},
+	{"slash",			CONST_ME_SLASH},
+	{"bite",			CONST_ME_BITE},
+	{"chivalriouschallenge",	CONST_ME_CHIVALRIOUSCHALLENGE},
+	{"divinedazzle",	CONST_ME_DIVINEDAZZLE},
+	{"electricalspark",	CONST_ME_ELECTRICALSPARK},
+	{"purpleteleport",	CONST_ME_TELEPORT_PURPLE},
+	{"redteleport",		CONST_ME_TELEPORT_RED},
+	{"orangeteleport",	CONST_ME_TELEPORT_ORANGE},
+	{"greyteleport",	CONST_ME_TELEPORT_GREY},
+	{"lightblueteleport",	CONST_ME_TELEPORT_LIGHTBLUE},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -643,6 +691,10 @@ ShootTypeNames shootTypeNames = {
 	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW},
 	{"gloothspear",		CONST_ANI_GLOOTHSPEAR},
 	{"simplearrow",		CONST_ANI_SIMPLEARROW},
+	{"leafstar",		CONST_ANI_LEAFSTAR},
+	{"diamondarrow",	CONST_ANI_DIAMONDARROW},
+	{"spectralbolt",	CONST_ANI_SPECTRALBOLT},
+	{"royalstar",		CONST_ANI_ROYALSTAR},
 };
 
 CombatTypeNames combatTypeNames = {
@@ -684,6 +736,20 @@ AmmoTypeNames ammoTypeNames = {
 	{"flammingarrow",	AMMO_ARROW},
 	{"shiverarrow",		AMMO_ARROW},
 	{"eartharrow",		AMMO_ARROW},
+	{"tarsalarrow",		AMMO_ARROW},
+	{"vortexbolt",		AMMO_BOLT},
+	{"prismaticbolt",	AMMO_BOLT},
+	{"crystallinearrow",AMMO_ARROW},
+	{"drillbolt",		AMMO_BOLT},
+	{"envenomedarrow",	AMMO_ARROW},
+	{"gloothspear",		AMMO_SPEAR},
+	{"simplearrow",		AMMO_ARROW},
+	{"redstar",		AMMO_THROWINGSTAR},
+	{"greenstar",	AMMO_THROWINGSTAR},
+	{"leafstar",		AMMO_THROWINGSTAR},
+	{"diamondarrow",	AMMO_ARROW},
+	{"spectralbolt",	AMMO_BOLT},
+	{"royalstar",		AMMO_THROWINGSTAR},
 };
 
 WeaponActionNames weaponActionNames = {
@@ -1262,6 +1328,14 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 		return SPELLGROUP_SUPPORT;
 	} else if (tmpStr == "special" || tmpStr == "4") {
 		return SPELLGROUP_SPECIAL;
+	} else if (tmpStr == "conjure" || tmpStr == "5") {
+		return SPELLGROUP_CONJURE;
+	} else if (tmpStr == "crippling" || tmpStr == "6") {
+		return SPELLGROUP_CRIPPLING;
+	} else if (tmpStr == "focus" || tmpStr == "7") {
+		return SPELLGROUP_FOCUS;
+	} else if (tmpStr == "ultimate" || tmpStr == "8") {
+		return SPELLGROUP_ULTIMATE;
 	}
 
 	return SPELLGROUP_NONE;

@@ -214,6 +214,7 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"swamp", FLUID_SWAMP},
 	{"tea", FLUID_TEA},
 	{"mead", FLUID_MEAD},
+	{"ink", FLUID_INK},
 };
 
 Items::Items()

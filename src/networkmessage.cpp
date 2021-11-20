@@ -105,7 +105,7 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 	if (it.stackable) {
 		addByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
-		addByte(fluidMap[count & 7]);
+		addByte(count == 0 ? count : fluidMap[count & 7]);
 	} else if (it.isContainer()) {
 		addByte(0x00); // assigned loot container icon
 		addByte(0x00); // quiver ammo count
@@ -128,7 +128,8 @@ void NetworkMessage::addItem(const Item* item)
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
 	} else if (it.isSplash() || it.isFluidContainer()) {
-		addByte(fluidMap[item->getFluidType() & 7]);
+		uint16_t fluidType = item->getFluidType();
+		addByte(fluidType == 0 ? fluidType : fluidMap[fluidType & 7]);
 	}
 
 	if (it.isContainer()) {

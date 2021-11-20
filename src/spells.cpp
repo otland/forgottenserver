@@ -437,6 +437,14 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 			group = SPELLGROUP_SUPPORT;
 		} else if (tmpStr == "special" || tmpStr == "4") {
 			group = SPELLGROUP_SPECIAL;
+		} else if (tmpStr == "conjure" || tmpStr == "5") {
+			group = SPELLGROUP_CONJURE;
+		} else if (tmpStr == "crippling" || tmpStr == "6") {
+			group = SPELLGROUP_CRIPPLING;
+		} else if (tmpStr == "focus" || tmpStr == "7") {
+			group = SPELLGROUP_FOCUS;
+		} else if (tmpStr == "ultimate" || tmpStr == "8") {
+			group = SPELLGROUP_ULTIMATE;
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Unknown group: " << attr.as_string() << std::endl;
 		}
@@ -458,6 +466,14 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 			secondaryGroup = SPELLGROUP_SUPPORT;
 		} else if (tmpStr == "special" || tmpStr == "4") {
 			secondaryGroup = SPELLGROUP_SPECIAL;
+		} else if (tmpStr == "conjure" || tmpStr == "5") {
+			secondaryGroup = SPELLGROUP_CONJURE;
+		} else if (tmpStr == "crippling" || tmpStr == "6") {
+			secondaryGroup = SPELLGROUP_CRIPPLING;
+		} else if (tmpStr == "focus" || tmpStr == "7") {
+			secondaryGroup = SPELLGROUP_FOCUS;
+		} else if (tmpStr == "ultimate" || tmpStr == "8") {
+			secondaryGroup = SPELLGROUP_ULTIMATE;
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Unknown secondarygroup: " << attr.as_string() << std::endl;
 		}
