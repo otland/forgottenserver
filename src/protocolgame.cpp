@@ -842,6 +842,8 @@ void ProtocolGame::parseAutoWalk(NetworkMessage& msg)
 
 void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 {
+	uint8_t outfitType = msg.getByte();
+
 	Outfit_t newOutfit;
 	newOutfit.lookType = msg.get<uint16_t>();
 	newOutfit.lookHead = msg.getByte();
@@ -849,8 +851,57 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	newOutfit.lookLegs = msg.getByte();
 	newOutfit.lookFeet = msg.getByte();
 	newOutfit.lookAddons = msg.getByte();
-	newOutfit.lookMount = msg.get<uint16_t>();
-	addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
+
+	// Set outfit window
+	if (outfitType == 0) {
+		newOutfit.lookMount = msg.get<uint16_t>();
+		if (newOutfit.lookMount != 0) {
+			newOutfit.lookMountHead = msg.getByte();
+			newOutfit.lookMountBody = msg.getByte();
+			newOutfit.lookMountLegs = msg.getByte();
+			newOutfit.lookMountFeet = msg.getByte();
+		} else {
+			msg.skipBytes(4);
+
+			// prevent mount color settings from resetting
+			const Outfit_t& currentOutfit = player->getCurrentOutfit();
+			newOutfit.lookMountHead = currentOutfit.lookMountHead;
+			newOutfit.lookMountBody = currentOutfit.lookMountBody;
+			newOutfit.lookMountLegs = currentOutfit.lookMountLegs;
+			newOutfit.lookMountFeet = currentOutfit.lookMountFeet;
+		}
+
+		msg.get<uint16_t>(); // familiar looktype
+		addGameTask(&Game::playerChangeOutfit, player->getID(), newOutfit);
+
+	// Store "try outfit" window
+	} else if (outfitType == 1) {
+		newOutfit.lookMount = 0;
+		// mount colors or store offerId (needs testing)
+		newOutfit.lookMountHead = msg.getByte();
+		newOutfit.lookMountBody = msg.getByte();
+		newOutfit.lookMountLegs = msg.getByte();
+		newOutfit.lookMountFeet = msg.getByte();
+		//player->? (open store?)
+
+	// Podium interaction
+	} else if (outfitType == 2) {
+		Position pos = msg.getPosition();
+		uint16_t spriteId = msg.get<uint16_t>();
+		uint8_t stackpos = msg.getByte();
+		newOutfit.lookMount = msg.get<uint16_t>();
+		newOutfit.lookMountHead = msg.getByte();
+		newOutfit.lookMountBody = msg.getByte();
+		newOutfit.lookMountLegs = msg.getByte();
+		newOutfit.lookMountFeet = msg.getByte();
+
+		msg.get<uint16_t>(); // familiar looktype
+		msg.getByte(); // outfit direction
+		msg.getByte(); // show outfit (bool)
+
+		//apply to podium
+		//player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction
+	}
 }
 
 void ProtocolGame::parseToggleMount(NetworkMessage& msg)
@@ -2805,6 +2856,8 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
+	bool mounted = currentOutfit.lookMount != 0;
+
 	if (currentOutfit.lookType == 0) {
 		Outfit_t newOutfit;
 		newOutfit.lookType = outfits.front().lookType;
@@ -2817,6 +2870,16 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	AddOutfit(msg, currentOutfit);
+
+	// mount color bytes are required here regardless of having one
+	if (currentOutfit.lookMount == 0){
+		msg.addByte(currentOutfit.lookMountHead);
+		msg.addByte(currentOutfit.lookMountBody);
+		msg.addByte(currentOutfit.lookMountLegs);
+		msg.addByte(currentOutfit.lookMountFeet);
+	}
+
+	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
@@ -2832,16 +2895,14 @@ void ProtocolGame::sendOutfitWindow()
 		}
 
 		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
-		if (protocolOutfits.size() == std::numeric_limits<uint8_t>::max()) { // Game client currently doesn't allow more than 255 outfits
-			break;
-		}
 	}
 
-	msg.addByte(protocolOutfits.size());
+	msg.add<uint16_t>(protocolOutfits.size());
 	for (const ProtocolOutfit& outfit : protocolOutfits) {
 		msg.add<uint16_t>(outfit.lookType);
 		msg.addString(outfit.name);
 		msg.addByte(outfit.addons);
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit tooltip (hardcoded)
 	}
 
 	std::vector<const Mount*> mounts;
@@ -2851,12 +2912,21 @@ void ProtocolGame::sendOutfitWindow()
 		}
 	}
 
-	msg.addByte(mounts.size());
+	msg.add<uint16_t>(mounts.size());
 	for (const Mount* mount : mounts) {
 		msg.add<uint16_t>(mount->clientId);
 		msg.addString(mount->name);
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
 	}
 
+	msg.add<uint16_t>(0x00); // familiars.size()
+	// size > 0
+	// U16 looktype
+	// String name
+	// 0x00 // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
+
+	msg.addByte(0x00); //Try outfit mode (?)
+	msg.addByte(mounted ? 0x01 : 0x00);
 	writeToOutputBuffer(msg);
 }
 
@@ -3091,7 +3161,14 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 		msg.addItemId(outfit.lookTypeEx);
 	}
 
+	// mount
 	msg.add<uint16_t>(outfit.lookMount);
+	if (outfit.lookMount != 0) {
+		msg.addByte(outfit.lookMountHead);
+		msg.addByte(outfit.lookMountBody);
+		msg.addByte(outfit.lookMountLegs);
+		msg.addByte(outfit.lookMountFeet);
+	}
 }
 
 void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
