@@ -1114,20 +1114,17 @@ function doTeleportThing(uid, dest, pushMovement)
 	if type(uid) == "userdata" then
 		if uid:isCreature() then
 			return uid:teleportTo(dest, pushMovement or false)
-		else
-			return uid:moveTo(dest)
 		end
+
+		return uid:moveTo(dest)
 	else
-		if uid >= 0x10000000 then
-			local creature = Creature(uid)
-			if creature then
-				return creature:teleportTo(dest, pushMovement or false)
+		local thing = getThing(uid)
+		if thing then
+			if thing:isCreature() then
+				return thing:teleportTo(dest, pushMovement or false)
 			end
-		else
-			local item = Item(uid)
-			if item then
-				return item:moveTo(dest)
-			end
+
+			return thing:moveTo(dest)
 		end
 	end
 	return false
@@ -1136,11 +1133,7 @@ end
 function getThingPos(uid)
 	local thing
 	if type(uid) ~= "userdata" then
-		if uid >= 0x10000000 then
-			thing = Creature(uid)
-		else
-			thing = Item(uid)
-		end
+		thing = getThing(uid)
 	else
 		thing = uid
 	end
@@ -1217,7 +1210,7 @@ function doRelocate(fromPos, toPos)
 end
 
 function getThing(uid)
-	return uid >= 0x10000000 and pushThing(Creature(uid)) or pushThing(Item(uid))
+	return uid >= CREATURE_ID_MIN and pushThing(Creature(uid)) or pushThing(Item(uid))
 end
 
 function getConfigInfo(info)

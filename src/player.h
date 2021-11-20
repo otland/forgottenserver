@@ -130,11 +130,7 @@ class Player final : public Creature, public Cylinder
 			return this;
 		}
 
-		void setID() override {
-			if (id == 0) {
-				id = playerAutoID++;
-			}
-		}
+		void setID() final;
 
 		static MuteCountMap muteCountMap;
 
@@ -1319,6 +1315,7 @@ class Player final : public Creature, public Cylinder
 		bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 
 		static uint32_t playerAutoID;
+		static uint32_t playerIDLimit;
 
 		void updateItemsLight(bool internal = false);
 		int32_t getStepSpeed() const override {
