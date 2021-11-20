@@ -319,28 +319,43 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 		}
 	}
 
+	sendSessionEnd(forced ? SESSION_END_FORCECLOSE : SESSION_END_LOGOUT);
 	disconnect();
 
 	g_game.removeCreature(player);
 }
 
+// Login to the game world request
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
+	// Server is shutting down
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		disconnect();
 		return;
 	}
 
+	// Client type and OS used
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
-	version = msg.get<uint16_t>();
 
-	msg.skipBytes(7); // U32 client version, U8 client type, U16 dat revision
+	version = msg.get<uint16_t>(); // U16 client version
+	msg.skipBytes(4); // U32 client version
 
+	// String client version
+	if (version >= 1240) {
+		if (msg.getLength() - msg.getBufferPosition() > 132) {
+			msg.getString();
+		}
+	}
+
+	msg.skipBytes(3); // U16 dat revision, U8 preview state
+
+	// Disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnect();
 		return;
 	}
 
+	// Get XTEA key
 	xtea::key key;
 	key[0] = msg.get<uint32_t>();
 	key[1] = msg.get<uint32_t>();
@@ -349,6 +364,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	enableXTEAEncryption();
 	setXTEAKey(std::move(key));
 
+	// Enable extended opcode feature for otclient
 	if (operatingSystem >= CLIENTOS_OTCLIENT_LINUX) {
 		NetworkMessage opcodeMessage;
 		opcodeMessage.addByte(0x32);
@@ -357,14 +373,29 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		writeToOutputBuffer(opcodeMessage);
 	}
 
-	msg.skipBytes(1); // gamemaster flag
+	// Change packet verifying mode for QT clients
+	if (version >= 1111 && operatingSystem >= CLIENTOS_QT_LINUX && operatingSystem <= CLIENTOS_QT_MAC) {
+		setChecksumMode(CHECKSUM_SEQUENCE);
+	}
+
+	// Web login skips the character list request so we need to check the client version again
+	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
+		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
+		return;
+	}
+
+	msg.skipBytes(1); // Gamemaster flag
 
 	std::string sessionKey = msg.getString();
-
-	auto sessionArgs = explodeString(sessionKey, "\n", 4);
+	auto sessionArgs = explodeString(sessionKey, "\n", 4); // acc name or email, password, token, timestamp divided by 30
 	if (sessionArgs.size() != 4) {
 		disconnect();
 		return;
+	}
+
+	if (operatingSystem == CLIENTOS_QT_LINUX) {
+		msg.getString(); // OS name (?)
+		msg.getString(); // OS version (?)
 	}
 
 	std::string& accountName = sessionArgs[0];
@@ -392,11 +423,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
 		disconnect();
-		return;
-	}
-
-	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		return;
 	}
 
@@ -2996,6 +3022,14 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 	msg.addByte(modalWindow.priority ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendSessionEnd(SessionEndTypes_t reason)
+{
+	auto output = OutputMessagePool::getOutputMessage();
+	output->addByte(0x18);
+	output->addByte(reason);
+	send(output);
 }
 
 ////////////// Add common messages
