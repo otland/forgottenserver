@@ -862,6 +862,7 @@ class Player final : public Creature, public Cylinder
 				client->sendItems();
 			}
 		}
+		void openSavedContainers();
 
 		//event methods
 		void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
@@ -1148,6 +1149,10 @@ class Player final : public Creature, public Cylinder
 		bool hasLearnedInstantSpell(const std::string& spellName) const;
 
 		void updateRegeneration();
+
+		const std::map<uint8_t, OpenContainer>& getOpenContainers() const {
+			return openContainers;
+		}
 
 	private:
 		std::forward_list<Condition*> getMuteConditions() const;
