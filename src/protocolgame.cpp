@@ -1388,24 +1388,6 @@ void ProtocolGame::sendCreatureSkull(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureType(uint32_t creatureId, uint8_t creatureType)
-{
-	NetworkMessage msg;
-	msg.addByte(0x95);
-	msg.add<uint32_t>(creatureId);
-	msg.addByte(creatureType);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendCreatureHelpers(uint32_t creatureId, uint16_t helpers)
-{
-	NetworkMessage msg;
-	msg.addByte(0x94);
-	msg.add<uint32_t>(creatureId);
-	msg.add<uint16_t>(helpers);
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendCreatureSquare(const Creature* creature, SquareColor_t color)
 {
 	if (!canSee(creature)) {
@@ -3075,15 +3057,10 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		}
 	}
 
-	msg.addByte(creatureType); // Type (for summons)
 	msg.addByte(creature->getSpeechBubble());
 	msg.addByte(0xFF); // MARK_UNMARKED
 
-	if (otherPlayer) {
-		msg.add<uint16_t>(otherPlayer->getHelpers());
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
+	msg.addByte(0x00); // inspection type (bool?)
 
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 }
