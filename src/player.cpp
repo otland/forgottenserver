@@ -1150,6 +1150,21 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			bed->wakeUp(this);
 		}
 
+		// load mount speed bonus
+		uint16_t currentMountId = currentOutfit.lookMount;
+		if (currentMountId != 0) {
+			Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId);
+			if (currentMount && hasMount(currentMount)) {
+				g_game.changeSpeed(this, currentMount->speed);
+			} else {
+				defaultOutfit.lookMount = 0;
+				g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+			}
+		}
+
+		// mounted player moved to pz on login, update mount status
+		onChangeZone(getZone());
+
 		Account account = IOLoginData::loadAccount(accountNumber);
 
 		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
