@@ -46,6 +46,7 @@ extern Events* g_events;
 MuteCountMap Player::muteCountMap;
 
 uint32_t Player::playerAutoID = 0x10000000;
+uint32_t Player::playerIDLimit = 0x20000000;
 
 Player::Player(ProtocolGame_ptr p) :
 	Creature(), lastPing(OTSYS_TIME()), lastPong(lastPing), inbox(new Inbox(ITEM_INBOX)), storeInbox(new StoreInbox(ITEM_STORE_INBOX)), client(std::move(p))
@@ -76,6 +77,21 @@ Player::~Player()
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
+}
+
+void Player::setID() {
+	if (id == 0) {
+		// allowClones id assignment
+		if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+			id = playerAutoID++;
+			return;
+		}
+
+		// normal id assignment
+		if (guid != 0) {
+			id = playerAutoID + guid;
+		}
+	}
 }
 
 bool Player::setVocation(uint16_t vocId)

@@ -154,7 +154,7 @@ void ScriptEnvironment::insertItem(uint32_t uid, Item* item)
 
 Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 {
-	if (uid >= 0x10000000) {
+	if (uid >= CREATURE_ID_MIN) {
 		return g_game.getCreatureByID(uid);
 	}
 
@@ -1503,6 +1503,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CREATURE_EVENT_HEALTHCHANGE)
 	registerEnum(CREATURE_EVENT_MANACHANGE)
 	registerEnum(CREATURE_EVENT_EXTENDED_OPCODE)
+
+	registerEnum(CREATURE_ID_MIN)
+	registerEnum(CREATURE_ID_MAX)
 
 	registerEnum(GAME_STATE_STARTUP)
 	registerEnum(GAME_STATE_INIT)
@@ -8247,7 +8250,7 @@ int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 	Player* player;
 	if (isNumber(L, 2)) {
 		uint32_t id = getNumber<uint32_t>(L, 2);
-		if (id >= 0x10000000 && id <= Player::playerAutoID) {
+		if (id >= CREATURE_ID_MIN && id <= Player::playerIDLimit) {
 			player = g_game.getPlayerByID(id);
 		} else {
 			player = g_game.getPlayerByGUID(id);
