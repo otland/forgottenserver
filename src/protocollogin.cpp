@@ -129,6 +129,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	disconnect();
 }
 
+// Character list request
 void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
@@ -139,6 +140,15 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(2); // client OS
 
 	uint16_t version = msg.get<uint16_t>();
+	if (version <= 822) {
+		setChecksumMode(CHECKSUM_DISABLED);
+	}
+
+	if (version <= 760) {
+		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
+		return;
+	}
+
 	if (version >= 971) {
 		msg.skipBytes(17);
 	} else {
@@ -150,11 +160,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 * 12 bytes: dat, spr, pic signatures (4 bytes each)
 	 * 1 byte: 0
 	 */
-
-	if (version <= 760) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
-		return;
-	}
 
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnect();
