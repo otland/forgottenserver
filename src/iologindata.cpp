@@ -77,7 +77,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id`, `name`, `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s}", db.escapeString(name)));
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id`, `name`, `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}", db.escapeString(name), db.escapeString(name)));
 	if (!result) {
 		return false;
 	}
@@ -104,8 +104,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password, std::string& characterName, std::string& token, uint32_t tokenTime)
 {
 	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s}", db.escapeString(accountName)));
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}", db.escapeString(accountName), db.escapeString(accountName)));
 	if (!result) {
 		return 0;
 	}
