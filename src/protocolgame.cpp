@@ -1641,6 +1641,27 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendEmptyContainer(uint8_t cid)
+{
+	NetworkMessage msg;
+	msg.addByte(0x6E);
+
+	msg.addByte(cid);
+
+	msg.addItem(ITEM_BAG, 1);
+	msg.addString("Placeholder");
+
+	msg.addByte(8);
+	msg.addByte(0x00);
+	msg.addByte(0x00);
+	msg.addByte(0x01);
+	msg.addByte(0x00);
+	msg.add<uint16_t>(0);
+	msg.add<uint16_t>(0);
+	msg.addByte(0x00);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 {
 	NetworkMessage msg;
@@ -2653,6 +2674,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendCreatureLight(creature);
 
 	sendVIPEntries();
+
+	// opened containers
+	player->openSavedContainers();
 
 	sendBasicData();
 	player->sendIcons();

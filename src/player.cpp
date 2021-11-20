@@ -1049,6 +1049,47 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 	}
 }
 
+void Player::openSavedContainers()
+{
+	std::map<uint8_t, Container*> openContainersList;
+
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+		Item* item = inventory[i];
+		if (!item) {
+			continue;
+		}
+
+		Container* itemContainer = item->getContainer();
+		if (itemContainer) {
+			uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
+			if (cid > 0) {
+				openContainersList.emplace(cid, itemContainer);
+			}
+			for (ContainerIterator it = itemContainer->iterator(); it.hasNext(); it.advance()) {
+				Container* subContainer = (*it)->getContainer();
+				if (subContainer) {
+					uint8_t subcid = (*it)->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
+					if (subcid > 0) {
+						openContainersList.emplace(subcid, subContainer);
+					}
+				}
+			}
+		}
+	}
+
+	// fix broken containers when logged in from another location
+	for (uint8_t i = 0; i < 16; i++) {
+		client->sendEmptyContainer(i);
+		client->sendCloseContainer(i);
+	}
+
+	// send actual containers
+	for (auto& it : openContainersList) {
+		addContainer(it.first - 1, it.second);
+		onSendContainer(it.second);
+	}
+}
+
 void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
                               const ItemType& oldType, const Item* newItem, const ItemType& newType)
 {
