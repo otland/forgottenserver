@@ -21,12 +21,12 @@
 #define FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
 
 static constexpr auto STATUS_SERVER_NAME = "The Forgotten Server";
-static constexpr auto STATUS_SERVER_VERSION = "1.4";
+static constexpr auto STATUS_SERVER_VERSION = "1.5_dev";
 static constexpr auto STATUS_SERVER_DEVELOPERS = "Mark Samman";
 
-static constexpr auto CLIENT_VERSION_MIN = 1270;
-static constexpr auto CLIENT_VERSION_MAX = 1271;
-static constexpr auto CLIENT_VERSION_STR = "12.71";
+static constexpr auto CLIENT_VERSION_MIN = 1271; //12.72.11405
+static constexpr auto CLIENT_VERSION_MAX = 1272;
+static constexpr auto CLIENT_VERSION_STR = "12.72";
 
 static constexpr auto AUTHENTICATOR_DIGITS = 6U;
 static constexpr auto AUTHENTICATOR_PERIOD = 30U;
