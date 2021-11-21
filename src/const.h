@@ -311,7 +311,7 @@ enum ClientFluidTypes_t : uint8_t {
 	CLIENTFLUID_BROWN = 7,
 	CLIENTFLUID_YELLOW = 8,
 	CLIENTFLUID_WHITE = 9,
-	CLIENTFLUID_BLACK = 10,
+	CLIENTFLUID_BLACK = 18,
 };
 
 const uint8_t fluidMap[] = {
