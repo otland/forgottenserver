@@ -301,3 +301,31 @@ function Player:onWrapItem(item)
 		end
 	end
 end
+
+-- begin extended protocol
+local packetEvents = {}
+function getPacketEvent(recvbyte)
+	return packetEvents[recvbyte]
+end
+
+function setPacketEvent(recvbyte, callback)
+	if tonumber(recvbyte) then
+		packetEvents[tonumber(recvbyte)] = callback
+		return true
+	end
+	
+	return false
+end
+
+function callPacketEvent(player, recvbyte, networkMessage)
+	if packetEvents[recvbyte] then
+		return packetEvents[recvbyte](player, recvbyte, networkMessage)
+	end
+	
+	return false
+end
+
+function Player:onExtendedProtocol(recvbyte, networkMessage)
+	callPacketEvent(self, recvbyte, networkMessage)
+end
+-- end extended protocol

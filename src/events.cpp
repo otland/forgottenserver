@@ -23,6 +23,7 @@
 #include "tools.h"
 #include "item.h"
 #include "player.h"
+#include "pugicast.h"
 
 #include <set>
 
@@ -126,6 +127,8 @@ bool Events::load()
 				info.playerOnGainSkillTries = event;
 			} else if (methodName == "onWrapItem") {
 				info.playerOnWrapItem = event;
+			} else if (methodName == "onExtendedProtocol") {
+				info.playerOnExtendedProtocol = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -1055,6 +1058,35 @@ void Events::eventPlayerOnWrapItem(Player* player, Item* item)
 	LuaScriptInterface::setItemMetatable(L, -1, item);
 
 	scriptInterface.callVoidFunction(2);
+}
+
+void Events::eventPlayerOnExtendedProtocol(Player* player, uint8_t recvbyte, std::unique_ptr<NetworkMessage> message)
+{
+	// Player:onExtendedProtocol(recvbyte, msg) or Player.onExtendedProtocol(self, recvbyte, msg)
+	if (info.playerOnExtendedProtocol == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnExtendedProtocol] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnExtendedProtocol, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnExtendedProtocol);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, recvbyte);
+
+	LuaScriptInterface::pushUserdata<NetworkMessage>(L, message.release());
+	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
+
+	scriptInterface.callVoidFunction(3);
 }
 
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
