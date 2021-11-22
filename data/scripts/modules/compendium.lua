@@ -14,6 +14,18 @@ SCREENSHOT_TYPE_SKILLUP = 12
 SCREENSHOT_TYPE_FIRST = SCREENSHOT_TYPE_ACHIEVEMENT
 SCREENSHOT_TYPE_LAST = SCREENSHOT_TYPE_SKILLUP
 
+function Player:takeScreenshot(eventType)
+	if eventType and eventType >= SCREENSHOT_TYPE_FIRST and eventType < SCREENSHOT_TYPE_LAST then
+		local m = NetworkMessage()
+		m:addByte(0x75)
+		m:addByte(eventType)
+		m:sendToPlayer(self)
+		return true
+	end
+	
+	return false
+end
+
 function getCountdownString(duration)
 	local days = math.floor(duration/86400)
 	local hours = math.floor((duration % 86400)/3600)
@@ -30,18 +42,6 @@ function getCountdownString(duration)
 	response[#response+1] = seconds .. "s"
 	
 	return table.concat(response, " ")
-end
-
-function Player:takeScreenshot(eventType)
-	if eventType and eventType >= SCREENSHOT_TYPE_FIRST and eventType < SCREENSHOT_TYPE_LAST then
-		local m = NetworkMessage()
-		m:addByte(0x75)
-		m:addByte(eventType)
-		m:sendToPlayer(self)
-		return true
-	end
-	
-	return false
 end
 
 function NetworkMessage:addOutfit(outfit, addMount)
@@ -144,6 +144,65 @@ local function getFragStatus(player)
 	return response
 end
 
+local function parseItem(item, response)
+	local clientId = item:getType():getClientId()
+	if not response[clientId] then
+		response[clientId] = 0
+	end
+	response[clientId] = response[clientId] + item:getCount()
+	
+	if item:isContainer() then
+		for containerIndex, containerItem in pairs(item:getItems()) do
+			parseItem(containerItem, response)
+		end
+	end
+end
+
+function Player:getClientInventory(category)
+	local response = {}
+	local responseCount = 0
+	
+	if category == COMPENDIUM_PLAYERITEMS_EQUIPPED then
+		for slot = CONST_SLOT_HEAD, CONST_SLOT_AMMO do
+			local slotItem = self:getSlotItem(slot)
+			if slotItem then
+				parseItem(slotItem, response)
+			end
+		end
+	elseif category == COMPENDIUM_PLAYERITEMS_PURSE then
+		local slotItem = self:getSlotItem(CONST_SLOT_STORE_INBOX)
+		if slotItem then
+			parseItem(slotItem, response)
+		end
+	elseif category == COMPENDIUM_PLAYERITEMS_STASH then
+		-- not implemented yet
+	elseif category == COMPENDIUM_PLAYERITEMS_DEPOT then
+		local towns = Game.getTowns()
+		for _, town in pairs(towns) do
+			local depotBox = self:getDepotChest(town:getId())
+			if depotBox then
+				for containerIndex, containerItem in pairs(depotBox:getItems()) do
+					parseItem(containerItem, response)
+				end
+			end
+		end
+	elseif category == COMPENDIUM_PLAYERITEMS_MAILBOX then
+		local inbox = self:getInbox()
+		if inbox then
+			for containerIndex, containerItem in pairs(inbox:getItems()) do
+				parseItem(containerItem, response)
+			end
+		end
+	end
+	
+	for _ in pairs(response) do
+		responseCount = responseCount + 1
+	end
+	
+	return response, responseCount
+end
+
+
 -- 800000-809999 - compendium tabs cooldown
 COMPENDIUM_COOLDOWNS_BASE = 800000
 COMPENDIUM_COOLDOWN_DURATION = 5 -- in seconds
@@ -170,6 +229,16 @@ COMPENDIUM_PLAYER_STORE = 8
 COMPENDIUM_PLAYER_INSPECTION = 9
 COMPENDIUM_PLAYER_BADGES = 10
 COMPENDIUM_PLAYER_TITLES = 11
+
+-- player items tab
+COMPENDIUM_PLAYERITEMS_EQUIPPED = 0
+COMPENDIUM_PLAYERITEMS_PURSE = 1
+COMPENDIUM_PLAYERITEMS_STASH = 2
+COMPENDIUM_PLAYERITEMS_DEPOT = 3
+COMPENDIUM_PLAYERITEMS_MAILBOX = 4
+
+COMPENDIUM_PLAYERITEMS_FIRST = COMPENDIUM_PLAYERITEMS_EQUIPPED
+COMPENDIUM_PLAYERITEMS_LAST = COMPENDIUM_PLAYERITEMS_MAILBOX
 
 -- kill types
 COMPENDIUM_KILLTYPE_JUSTIFIED = 0
@@ -244,6 +313,7 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 	-- to do: implement per-category cooldowns
 	-- to do: allow updating static pages only on relog/data update/60 seconds
 	-- to do: reduce sql queries by using cache? change frags/deathlist limit?
+	-- to do: addEvent for responses
 	if player:getId() ~= creatureId then
 		sendCompendiumError(player, infoType, COMPENDIUM_RESPONSETYPE_ACCESSDENIED)
 		return
@@ -511,8 +581,9 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 		response:addU32(ost)
 		response:addString("----------------")
 		response:addByte(COMPENDIUM_KILLTYPE_ARENA)
-		-- end extra info
+		-- end extra info (again)
 
+		-- display kills on page
 		for i = (page-1) * entriesPerPage + 1, math.min(page * entriesPerPage, #fragList) do
 			response:addU32(fragList[i].at)
 			response:addString(fragList[i].victim)
@@ -547,6 +618,24 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 		response:sendToPlayer(player)
 		return
 	elseif infoType == COMPENDIUM_PLAYER_INVENTORY then
+		-- to do: show loot if inspecting monster?
+		-- shoplist if npc?
+		if not isPlayer then
+			sendCompendiumError(player, infoType, COMPENDIUM_RESPONSETYPE_NODATA)
+			return
+		end
+		
+		-- send each category
+		for categoryType = COMPENDIUM_PLAYERITEMS_FIRST, COMPENDIUM_PLAYERITEMS_LAST do
+			local categoryItems, categoryCount = creature:getClientInventory(categoryType)
+			response:addU16(categoryCount) -- items to send
+			for clientId, count in pairs(categoryItems) do
+				response:addU16(clientId) -- item clientId
+				response:addU32(count) -- item amount
+			end
+		end
+		
+		response:sendToPlayer(player)
 		return
 	elseif infoType == COMPENDIUM_PLAYER_COSMETICS then
 		return
