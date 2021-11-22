@@ -3990,7 +3990,7 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 					effect = CONST_ME_ENERGYHIT;
 					break;
 				case RACE_INK:
-					color = TEXTCOLOR_LIGHTGREY;
+					color = TEXTCOLOR_DARKGREY;
 					effect = CONST_ME_INKSPLASH;
 					if (const Tile* tile = target->getTile()) {
 						if (tile && !tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
