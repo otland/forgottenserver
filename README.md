@@ -1,18 +1,29 @@
-forgottenserver [![Build Status](https://travis-ci.org/otland/forgottenserver.svg?branch=master)](https://travis-ci.org/otland/forgottenserver "Travis CI status") [![Build status](https://ci.appveyor.com/api/projects/status/599x38f3a0luessl?svg=true)](https://ci.appveyor.com/project/otland/forgottenserver "Download builds for Windows")
+forgottenserver - Version 12 update project
 ===============
+This repository is a fork of [The Forgotten Server](https://github.com/otland/forgottenserver). It aims to bring protocol 12 features and expand engine possibilities while maintaining code style as consistent with the original as possible.
 
-The Forgotten Server is a free and open-source MMORPG server emulator written in C++. It is a fork of the [OpenTibia Server](https://github.com/opentibia/server) project. To connect to the server, you can use [OTClient](https://github.com/edubart/otclient).
+The Forgotten Server is a free and open-source MMORPG server emulator written in C++. It is a fork of the [OpenTibia Server](https://github.com/opentibia/server) project.
+
+### Resources
+
+* [Map Editor](https://github.com/Zbizu/rme) updated with new features and version 12 support
+* [OTClient](https://github.com/Zbizu/otclient-version12) updated to version 12 (playable but no new features)
 
 ### Getting Started
 
-* [Compiling](https://github.com/otland/forgottenserver/wiki/Compiling), alternatively download [AppVeyor builds for Windows](https://ci.appveyor.com/project/otland/forgottenserver)
+* [Compiling](https://github.com/otland/forgottenserver/wiki/Compiling)
 * [Scripting Reference](https://github.com/otland/forgottenserver/wiki/Script-Interface)
-* [Contributing](https://github.com/otland/forgottenserver/wiki/Contributing)
 
-### Support
+### Discussion
 
-If you need help, please visit the [support forum on OTLand](https://otland.net/forums/support.16/). Our issue tracker is not a support forum, and using it as one will result in your issue being closed. If you were unable to get assistance in the support forum, you should consider [becoming a premium user on OTLand](https://otland.net/account/upgrades) which grants you access to the premium support forum and supports OTLand financially.
+* [Discord](https://discord.gg/TYHqCuddcW)(:uk: :brazil: :poland: :es:) - If you ran into issues, want to suggest a new feature or just discuss the development of the server, you're welcome to post on "Dev Chat" of this multi-language community.
 
-### Issues
+Don't want to use discord? You can also post in one of these sections:
 
-We use the [issue tracker on GitHub](https://github.com/otland/forgottenserver/issues). Keep in mind that everyone who is watching the repository gets notified by e-mail when there is activity, so be thoughtful and avoid writing comments that aren't meaningful for an issue (e.g. "+1"). If you'd like for an issue to be fixed faster, you should either fix it yourself and submit a pull request, or place a bounty on the issue.
+* [Issues](https://github.com/Zbizu/forgottenserver/issues)
+
+* [Discussions](https://github.com/Zbizu/forgottenserver/discussions)
+
+### Notes
+
+The engine is still in development. Expect missing features to be added periodically.
