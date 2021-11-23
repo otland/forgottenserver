@@ -1407,6 +1407,12 @@ int64_t Creature::getStepDuration() const
 		return 0;
 	}
 
+	// ignore tile friction for god chars
+	const Player* player = getPlayer();
+	if (player && player->hasFlag(PlayerFlag_SetMaxSpeed)) {
+		return 1;
+	}
+
 	uint32_t calculatedStepSpeed;
 	uint32_t groundSpeed;
 

@@ -1524,6 +1524,8 @@ void ProtocolGame::sendClientFeatures()
 	msg.add<uint32_t>(player->getID());
 	msg.add<uint16_t>(50); // beat duration
 
+	// variables for client-sided step duration
+	// see Creature::getStepDuration() for server-sided equivalent
 	msg.addDouble(Creature::speedA, 3);
 	msg.addDouble(Creature::speedB, 3);
 	msg.addDouble(Creature::speedC, 3);
