@@ -40,6 +40,7 @@
 #include "enums.h"
 #include "position.h"
 #include "outfit.h"
+#include "mounts.h"
 
 class Thing;
 class Creature;
@@ -397,6 +398,7 @@ class LuaScriptInterface
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 		static void pushOutfit(lua_State* L, const Outfit* outfit);
+		static void pushMount(lua_State* L, const Mount* mount);
 		static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList);
 
 		//
