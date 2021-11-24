@@ -316,7 +316,8 @@ COMPENDIUM_CACHE = {
 		[PLAYERSEX_FEMALE] = {},
 		[PLAYERSEX_MALE] = {}
 	},
-	mountLookTypes = {}
+	mountLookTypes = {},
+	mountLookTypeToId = {},
 }
 
 -- init compendium cache
@@ -328,6 +329,7 @@ end
 
 for _, mount in pairs(Game.getMounts()) do
 	COMPENDIUM_CACHE.mountLookTypes[#COMPENDIUM_CACHE.mountLookTypes + 1] = mount.clientId
+	COMPENDIUM_CACHE.mountLookTypeToId[mount.clientId] = mount.id
 end
 -- end compendium cache
 
@@ -738,7 +740,7 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 		if #COMPENDIUM_CACHE.mountLookTypes > 0 then
 			local displayMounts = {}
 			for i = 1, #COMPENDIUM_CACHE.mountLookTypes do
-				if creature:hasMount(COMPENDIUM_CACHE.mountLookTypes[i]) then
+				if creature:hasMount(COMPENDIUM_CACHE.mountLookTypeToId[COMPENDIUM_CACHE.mountLookTypes[i]]) then
 					displayMounts[#displayMounts + 1] = COMPENDIUM_CACHE.mountLookTypes[i]
 				end
 			end
