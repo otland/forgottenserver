@@ -4531,7 +4531,13 @@ int LuaScriptInterface::luaGameGetOutfits(lua_State* L)
 		return 1;
 	}
 
-	const auto& outfits = Outfits::getInstance().getOutfits(getNumber<PlayerSex_t>(L, 1));
+	PlayerSex_t playerSex = getNumber<PlayerSex_t>(L, 1);
+	if (playerSex > PLAYERSEX_LAST) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const auto& outfits = Outfits::getInstance().getOutfits(playerSex);
 	lua_createtable(L, outfits.size(), 0);
 
 	int index = 0;
