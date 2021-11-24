@@ -10,7 +10,7 @@ function Container.createLootItem(self, item)
 	local itemCount = 0
 	local randvalue = getLootRandom()
 	local itemType = ItemType(item.itemId)
-	
+
 	if randvalue < item.chance then
 		if itemType:isStackable() then
 			itemCount = randvalue % item.maxCount + 1
@@ -21,12 +21,12 @@ function Container.createLootItem(self, item)
 
 	while itemCount > 0 do
 		local count = math.min(100, itemCount)
-		
+
 		local subType = count
 		if itemType:isFluidContainer() then
 			subType = math.max(0, item.subType)
 		end
-		
+
 		local tmpItem = Game.createItem(item.itemId, subType)
 		if not tmpItem then
 			return false
@@ -66,4 +66,18 @@ function Container.createLootItem(self, item)
 		itemCount = itemCount - count
 	end
 	return true
+end
+
+function Container:getContentDescription()
+	local items = self:getItems()
+	if items and #items > 0 then
+		local loot = {}
+		for i = 1, #items do
+			loot[#loot+1] = string.format("{%d|%s}", items[i]:getType():getClientId(), items[i]:getNameDescription(items[i]:getSubType(), true))
+		end
+
+		return table.concat(loot, ", ")
+	end
+
+	return "nothing"
 end
