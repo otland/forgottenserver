@@ -124,7 +124,6 @@ void Game::setGameState(GameState_t newState)
 			raids.startup();
 
 			quests.loadFromXml();
-			mounts.loadFromXml();
 
 			loadMotdNum();
 			loadPlayersRecord();

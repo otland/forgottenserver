@@ -220,10 +220,23 @@ void mainLoader(int, char*[], ServiceManager* services)
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
-	//load vocations
+	// load vocations
 	std::cout << ">> Loading vocations" << std::endl;
 	if (!g_vocations.loadFromXml()) {
 		startupErrorMessage("Unable to load vocations!");
+		return;
+	}
+
+	// load cosmetics
+	std::cout << ">> Loading outfits" << std::endl;
+	if (!Outfits::getInstance().loadFromXml()) {
+		startupErrorMessage("Unable to load outfits!");
+		return;
+	}
+
+	std::cout << ">> Loading mounts" << std::endl;
+	if (!g_game.mounts.loadFromXml()) {
+		startupErrorMessage("Unable to load mounts!");
 		return;
 	}
 
@@ -233,7 +246,6 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
-
 	std::cout << fmt::format("OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber) << std::endl;
 
 	if (!Item::items.loadFromXml()) {
@@ -241,6 +253,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	// load lua scripts
 	std::cout << ">> Loading script systems" << std::endl;
 	if (!ScriptingManager::getInstance().loadScriptSystems()) {
 		startupErrorMessage("Failed to load script systems");
@@ -253,6 +266,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	// load monsters
 	std::cout << ">> Loading monsters" << std::endl;
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
@@ -265,12 +279,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
-	std::cout << ">> Loading outfits" << std::endl;
-	if (!Outfits::getInstance().loadFromXml()) {
-		startupErrorMessage("Unable to load outfits!");
-		return;
-	}
-
+	// load world type
 	std::cout << ">> Checking world type... " << std::flush;
 	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
@@ -286,6 +295,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 	std::cout << asUpperCaseString(worldType) << std::endl;
 
+	// load map
 	std::cout << ">> Loading map" << std::endl;
 	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");

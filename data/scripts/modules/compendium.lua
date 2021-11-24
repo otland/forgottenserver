@@ -209,12 +209,18 @@ COMPENDIUM_COOLDOWN_DURATION = 5 -- in seconds
 
 -- compendium tabs
 -- to do: verify
-COMPENDIUM_TAB_ITEMS = 0
-COMPENDIUM_TAB_BESTIARY = 1
-COMPENDIUM_TAB_CHARMS = 2
-COMPENDIUM_TAB_MAP = 3
-COMPENDIUM_TAB_HOUSES = 4
-COMPENDIUM_TAB_PLAYER = 0xDA
+COMPENDIUM_REQUEST_ITEMS = 0xED
+COMPENDIUM_REQUEST_BESTIARY = 0xE1
+COMPENDIUM_REQUEST_CHARMS = 0xE1
+COMPENDIUM_REQUEST_MAP = 0xDB
+COMPENDIUM_REQUEST_HOUSES = 0xAD
+COMPENDIUM_REQUEST_PLAYERDATA = 0xE5
+COMPENDIUM_REQUEST_FRIEND = 0x81
+
+COMPENDIUM_RESPONSE_PLAYERDATA = 0xDA
+
+-- 0xCE - inspect creature
+-- 0xED?
 
 -- player info tabs
 COMPENDIUM_PLAYER_BASEINFORMATION = 0
@@ -262,7 +268,7 @@ COMPENDIUM_SKILL_AXE = 10
 COMPENDIUM_SKILL_DISTANCE = 7
 COMPENDIUM_SKILL_SHIELDING = 6
 COMPENDIUM_SKILL_FISHING = 13
-	
+
 compendiumSkillMap = {
 	[SKILL_FIST] = COMPENDIUM_SKILL_FIST,
 	[SKILL_CLUB] = COMPENDIUM_SKILL_CLUB,
@@ -300,9 +306,34 @@ clientCombatMap = {
 	CLIENT_COMBAT_MANADRAIN = COMBAT_MANADRAIN
 }
 
+OUTFIT_TYPE_NORMAL = 0
+OUTFIT_TYPE_QUEST = 1
+OUTFIT_TYPE_STORE = 2
+	
+-- begin compendium cache
+COMPENDIUM_CACHE = {
+	outfitLookTypes = {
+		[PLAYERSEX_FEMALE] = {},
+		[PLAYERSEX_MALE] = {}
+	},
+	mountLookTypes = {}
+}
+
+-- init compendium cache
+for playerSex = PLAYERSEX_FEMALE, PLAYERSEX_MALE do
+	for _, outfit in pairs(Game.getOutfits(playerSex)) do
+		COMPENDIUM_CACHE.outfitLookTypes[playerSex][#COMPENDIUM_CACHE.outfitLookTypes[playerSex] + 1] = outfit.lookType
+	end
+end
+
+for _, mount in pairs(Game.getMounts()) do
+	COMPENDIUM_CACHE.mountLookTypes[#COMPENDIUM_CACHE.mountLookTypes + 1] = mount.clientId
+end
+-- end compendium cache
+
 function sendCompendiumError(player, infoType, errorCode)
 	local response = NetworkMessage();
-	response:addByte(COMPENDIUM_TAB_PLAYER)
+	response:addByte(COMPENDIUM_RESPONSE_PLAYERDATA)
 	response:addByte(infoType)
 	response:addByte(errorCode)
 	response:sendToPlayer(player)
@@ -340,7 +371,7 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 	end
 	
 	local response = NetworkMessage()
-	response:addByte(COMPENDIUM_TAB_PLAYER)
+	response:addByte(COMPENDIUM_RESPONSE_PLAYERDATA)
 	response:addByte(infoType)
 	response:addByte(COMPENDIUM_RESPONSETYPE_OK)
 		
@@ -638,6 +669,103 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 		response:sendToPlayer(player)
 		return
 	elseif infoType == COMPENDIUM_PLAYER_COSMETICS then
+		-- This tab shows player unlocked outfits.
+		-- Displaying premium only cosmetics for free accounts
+		-- is intentional and 100% accurate.
+		
+		if not isPlayer then
+			sendCompendiumError(player, infoType, COMPENDIUM_RESPONSETYPE_NODATA)
+			return
+		end
+		
+		-- get current outfit
+		local currentOutfit = creature:getOutfit()
+		
+		-- add outfits
+		local playerSex = creature:getSex()
+		local displayOutfits = {}
+		if #COMPENDIUM_CACHE.outfitLookTypes[playerSex] > 0 then
+			if creature:getGroup():getAccess() then
+				-- GM outfit not included because it causes issues when clicking on mounts
+				for cacheIndex = 1, #COMPENDIUM_CACHE.outfitLookTypes[playerSex] do
+					displayOutfits[#displayOutfits + 1] = {COMPENDIUM_CACHE.outfitLookTypes[playerSex][cacheIndex], 3}
+				end
+			else
+				for cacheIndex = 1, #COMPENDIUM_CACHE.outfitLookTypes[playerSex] do
+					local lookType = COMPENDIUM_CACHE.outfitLookTypes[playerSex][cacheIndex]
+					if creature:hasOutfit(lookType, 0) then
+						local outfitData = {lookType, 0}
+						for i = 1, 2 do
+							if creature:hasOutfit(lookType, 1) then
+								outfitData[2] = outfitData[2] + i
+							end
+						end
+						
+						displayOutfits[#displayOutfits + 1] = outfitData
+					end
+				end
+			end
+			
+			response:addU16(#displayOutfits)
+			if #displayOutfits > 0 then
+				for i = 1, #displayOutfits do
+					local outfit = Outfit(displayOutfits[i][1])
+					-- lookType, name, addons, isStore/isQuest
+					response:addU16(displayOutfits[i][1])
+					if outfit then
+						response:addString(outfit.name)
+						response:addByte(displayOutfits[i][2])
+						response:addByte(outfit.unlocked == 1 and OUTFIT_TYPE_NORMAL or OUTFIT_TYPE_QUEST)
+					else
+						response:addString("")
+						response:addByte(displayOutfits[i][2])
+						response:addByte(OUTFIT_TYPE_NORMAL)
+					end
+
+					response:addU32(0) -- store offer id?
+				end
+				
+				response:addByte(currentOutfit.lookHead)
+				response:addByte(currentOutfit.lookBody)
+				response:addByte(currentOutfit.lookLegs)
+				response:addByte(currentOutfit.lookFeet)
+			end
+		else
+			response:addU16(0)
+		end
+
+		-- add mounts
+		if #COMPENDIUM_CACHE.mountLookTypes > 0 then
+			local displayMounts = {}
+			for i = 1, #COMPENDIUM_CACHE.mountLookTypes do
+				if creature:hasMount(COMPENDIUM_CACHE.mountLookTypes[i]) then
+					displayMounts[#displayMounts + 1] = COMPENDIUM_CACHE.mountLookTypes[i]
+				end
+			end
+
+			response:addU16(#displayMounts)
+			if #displayMounts > 0 then
+				for i = 1, #displayMounts do
+					response:addU16(displayMounts[i])
+					response:addString("")
+					response:addByte(OUTFIT_TYPE_NORMAL)
+					response:addU32(0) -- store offer id?
+				end
+				
+				response:addByte(currentOutfit.lookMountHead)
+				response:addByte(currentOutfit.lookMountBody)
+				response:addByte(currentOutfit.lookMountLegs)
+				response:addByte(currentOutfit.lookMountFeet)
+			end
+		else
+			response:addU16(0)
+		end
+
+		-- add familiars (placeholder)
+		response:addU16(0)
+		-- same structure as mounts
+		
+		response:sendToPlayer(player)
 		return
 	elseif infoType == COMPENDIUM_PLAYER_STORE then
 		return
@@ -671,4 +799,4 @@ local callback = function(player, recvbyte, networkMessage)
 	return true
 end
 
-setPacketEvent(0xE5, callback)
+setPacketEvent(COMPENDIUM_REQUEST_PLAYERDATA, callback)
