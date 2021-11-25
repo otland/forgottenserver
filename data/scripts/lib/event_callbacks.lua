@@ -91,7 +91,7 @@ EventCallback = {
 			local eventType = rawget(self, 'eventType')
 			local callback = rawget(self, 'callback')
 			if not eventType or not callback then
-				debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
+				debugPrint("[Warning - EventCallback::register] need to setup a callback before you can register.")
 				return
 			end
 
