@@ -777,6 +777,11 @@ class Player final : public Creature, public Cylinder
 				client->sendPrivateMessage(speaker, type, text);
 			}
 		}
+		void sendResourceBalance(ResourceTypes_t resourceType, uint64_t amount) {
+			if (client) {
+				client->sendResourceBalance(resourceType, amount);
+			}
+		}
 		void sendCreatureSquare(const Creature* creature, SquareColor_t color) {
 			if (client) {
 				client->sendCreatureSquare(creature, color);

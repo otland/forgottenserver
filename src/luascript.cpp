@@ -2032,6 +2032,14 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RELOAD_TYPE_TALKACTIONS)
 	registerEnum(RELOAD_TYPE_WEAPONS)
 
+	registerEnum(RESOURCE_BANK_BALANCE)
+	registerEnum(RESOURCE_GOLD_EQUIPPED)
+	registerEnum(RESOURCE_PREY_WILDCARDS)
+	registerEnum(RESOURCE_DAILYREWARD_STREAK)
+	registerEnum(RESOURCE_DAILYREWARD_JOKERS)
+	registerEnum(RESOURCE_CHARM_POINTS)
+	registerEnum(RESOURCE_TOURNAMENT_COINS)
+
 	registerEnum(ZONE_PROTECTION)
 	registerEnum(ZONE_NOPVP)
 	registerEnum(ZONE_PVP)
@@ -2590,6 +2598,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getBankBalance", LuaScriptInterface::luaPlayerGetBankBalance);
 	registerMethod("Player", "setBankBalance", LuaScriptInterface::luaPlayerSetBankBalance);
+	registerMethod("Player", "sendResourceBalance", LuaScriptInterface::luaPlayerSendResourceBalance);
 
 	registerMethod("Player", "getStorageValue", LuaScriptInterface::luaPlayerGetStorageValue);
 	registerMethod("Player", "setStorageValue", LuaScriptInterface::luaPlayerSetStorageValue);
@@ -9469,6 +9478,28 @@ int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 	}
 
 	player->setBankBalance(balance);
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSendResourceBalance(lua_State* L)
+{
+	// player:sendResourceBalance(resourceId, amount)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	if (!isNumber(L, 2) || !isNumber(L, 3)) {
+		pushBoolean(L, false);
+		return 1;
+	}
+	
+	ResourceTypes_t resourceType = getNumber<ResourceTypes_t>(L, 2);
+	uint64_t amount = getNumber<uint64_t>(L, 3);
+
+	player->sendResourceBalance(resourceType, amount);
 	pushBoolean(L, true);
 	return 1;
 }

@@ -1557,7 +1557,7 @@ void ProtocolGame::sendBasicData()
 		msg.add<uint32_t>(0);
 	}
 	msg.addByte(player->getVocation()->getClientId());
-	msg.addByte(0x00); // is prey system enabled (bool)
+	msg.addByte(0x01); // has reached mainland (bool)
 
 	// unlock spells on action bar
 	msg.add<uint16_t>(0xFF);
@@ -1868,7 +1868,12 @@ void ProtocolGame::sendResourceBalance(const ResourceTypes_t resourceType, uint6
 	NetworkMessage msg;
 	msg.addByte(0xEE);
 	msg.addByte(resourceType);
-	msg.add<uint64_t>(amount);
+	if (resourceType == RESOURCE_CHARM_POINTS) {
+		msg.add<uint32_t>(amount);
+	} else {
+		msg.add<uint64_t>(amount);
+	}
+
 	writeToOutputBuffer(msg);
 }
 
