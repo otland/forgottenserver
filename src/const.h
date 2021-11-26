@@ -245,12 +245,12 @@ enum ShootType_t : uint8_t {
 };
 
 enum SpeakClasses : uint8_t {
+	// creature:say(...)
 	TALKTYPE_SAY = 1,
 	TALKTYPE_WHISPER = 2,
 	TALKTYPE_YELL = 3,
 	TALKTYPE_PRIVATE_FROM = 4, // Received private message
 	TALKTYPE_PRIVATE_TO = 5, // Sent private message
-	//TALKTYPE_CHANNEL_M = 6 // not working (?)
 	TALKTYPE_CHANNEL_Y = 7,
 	TALKTYPE_CHANNEL_O = 8,
 	TALKTYPE_SPELL = 9, // Like SAY but with "casts" instead of "says"
@@ -267,6 +267,10 @@ enum SpeakClasses : uint8_t {
 };
 
 enum MessageClasses : uint8_t {
+	// sendChannelMessage(...)
+	MESSAGE_CHANNEL_MANAGEMENT = 6, // Green, in channel
+
+	// player:sendTextMessage(...)
 	MESSAGE_STATUS_DEFAULT = 17, // White, bottom + console
 	MESSAGE_STATUS_WARNING = 18, // Red, over player + console
 	MESSAGE_EVENT_ADVANCE = 19, // White, over player + console
@@ -274,6 +278,7 @@ enum MessageClasses : uint8_t {
 	MESSAGE_STATUS_SMALL = 21, // White, bottom of the screen
 	MESSAGE_INFO_DESCR = 22, // Green, over player + console
 
+	// messages used together with damage numbers
 	// White, console
 	MESSAGE_DAMAGE_DEALT = 23,
 	MESSAGE_DAMAGE_RECEIVED = 24,
@@ -287,25 +292,38 @@ enum MessageClasses : uint8_t {
 	MESSAGE_LOOT = 31, // White, over player + console, supports colors as {text|itemClientId}
 	MESSAGE_TRADE = 32, // Green, over player + console
 
-	// White, in channel (needs channel Id)
-	MESSAGE_GUILD = 33, 
-	MESSAGE_PARTY_MANAGEMENT = 34,
-	MESSAGE_PARTY = 35,
+	// sendChannelMessage(...)
+	MESSAGE_GUILD = 33, // White, in channel
+	MESSAGE_PARTY_MANAGEMENT = 34, // Green, in channel
+	MESSAGE_PARTY = 35, // White, in channel
 
+	// player:sendTextMessage(...)
 	MESSAGE_REPORT = 38, // White, over player + conosle
 	MESSAGE_HOTKEY_PRESSED = 39, // Green, over player + console
-	//MESSAGE_TUTORIAL_HINT = 40, // not working (?)
-	//MESSAGE_THANK_YOU = 41, // not working (?)
+	//MESSAGE_TUTORIAL_HINT = 40, // not working
+	//MESSAGE_THANK_YOU = 41, // not working
 	MESSAGE_MARKET = 42, // Window "Market Message" + "Ok" button
-	//MESSAGE_MANA = 43, // not working (?)
+
+	// message used together with damage numbers
+	MESSAGE_MANA = 43, // White, console
+
+	// player:sendTextMessage(...)
 	MESSAGE_BEYOND_LAST = 44, // White, console only
 	MESSAGE_TOURNAMENT_INFO = 45, // Window "Tournament" + "Ok" button
-	// unused 46?
-	// unused 47?
+
+	// 46: undiscovered
+
+	// message used together with damage numbers
+	MESSAGE_MANA2 = 47, // White, console
+
+	// player:sendTextMessage(...)
 	MESSAGE_ATTENTION = 48, // White, console only
 	MESSAGE_BOOSTED_CREATURE = 49, // White, console only
 	MESSAGE_OFFLINE_TRAINING = 50, // White, over player + console
 	MESSAGE_TRANSACTION = 51, // White, console only
+
+	// 52: TALKTYPE_POTION
+	// 53: client error: does not exist
 };
 
 enum FluidColors_t : uint8_t {

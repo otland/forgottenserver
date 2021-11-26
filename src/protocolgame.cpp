@@ -1588,12 +1588,16 @@ void ProtocolGame::sendTextMessage(const TextMessage& message)
 		case MESSAGE_HEALED:
 		case MESSAGE_HEALED_OTHERS:
 		case MESSAGE_EXPERIENCE:
-		case MESSAGE_EXPERIENCE_OTHERS: {
+		case MESSAGE_EXPERIENCE_OTHERS:
+		case MESSAGE_MANA:
+		case MESSAGE_MANA2:
+		{
 			msg.addPosition(message.position);
 			msg.add<uint32_t>(message.primary.value);
 			msg.addByte(message.primary.color);
 			break;
 		}
+		case MESSAGE_CHANNEL_MANAGEMENT:
 		case MESSAGE_GUILD:
 		case MESSAGE_PARTY_MANAGEMENT:
 		case MESSAGE_PARTY:
