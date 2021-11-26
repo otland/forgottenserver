@@ -495,6 +495,10 @@ class ItemAttributes
 				auto it = customAttrMap->find(asLowerCaseString(key));
 				if (it != customAttrMap->end()) {
 					customAttrMap->erase(it);
+					if (customAttrMap->size() == 0) {
+						removeAttribute(ITEM_ATTRIBUTE_CUSTOM);
+					}
+
 					return true;
 				}
 			}
