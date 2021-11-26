@@ -332,3 +332,18 @@ function Player.getWeaponType(self)
 	end
 	return WEAPON_NONE
 end
+
+-- player's client take screenshot
+-- can be disabled in client settings
+-- screenshot types are defined in constants.lua
+function Player:takeScreenshot(screenshotType)
+	if screenshotType and screenshotType >= SCREENSHOT_TYPE_FIRST and screenshotType < SCREENSHOT_TYPE_LAST then
+		local m = NetworkMessage()
+		m:addByte(0x75)
+		m:addByte(screenshotType)
+		m:sendToPlayer(self)
+		return true
+	end
+	
+	return false
+end

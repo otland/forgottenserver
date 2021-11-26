@@ -303,7 +303,7 @@ function Player:onWrapItem(item)
 end
 
 -- begin extended protocol
-local packetEvents = {}
+packetEvents = {}
 function getPacketEvent(recvbyte)
 	return packetEvents[recvbyte]
 end
