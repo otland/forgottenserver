@@ -70,7 +70,7 @@ local callbacks = {
 	["onSpawn"] = EVENT_CALLBACK_ONSPAWN
 }
 
-local auxargs = {
+local updateableParameters = {
 	[EVENT_CALLBACK_ONLOOK] = {[5] = 1},
 	[EVENT_CALLBACK_ONLOOKINBATTLELIST] = {[4] = 1},
 	[EVENT_CALLBACK_ONLOOKINTRADE] = {[5] = 1},
@@ -86,7 +86,7 @@ hasEventCallback = function (type)
 end
 
 EventCallback = {
-	register = function (self, priority)
+	register = function (self, triggerIndex)
 		if isScriptsInterface() then
 			local eventType = rawget(self, 'eventType')
 			local callback = rawget(self, 'callback')
@@ -98,9 +98,9 @@ EventCallback = {
 			local eventData = EventCallbackData[eventType]
 			table.insert(eventData, {
 				callback = callback,
-				priority = tonumber(priority) or 0
+				triggerIndex = tonumber(triggerIndex) or 0
 			})
-			table.sort(eventData, function (ecl, ecr) return ecl.priority < ecr.priority end)
+			table.sort(eventData, function (ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
 			rawset(self, 'eventType', nil)
 			rawset(self, 'callback', nil)
 			return true
@@ -153,9 +153,9 @@ setmetatable(EventCallback, {
 			until true
 
 			-- Update the results for the next call
-			local auxiliaries = auxargs[eventCallback]
-			if auxiliaries then
-				for index, value in pairs(auxiliaries) do
+			local parameters = updateableParameters[eventCallback]
+			if parameters then
+				for index, value in pairs(parameters) do
 					args[index] = results[value]
 				end
 			end
