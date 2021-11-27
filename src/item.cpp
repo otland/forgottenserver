@@ -227,18 +227,8 @@ bool Item::equals(const Item* otherItem) const
 			}
 		} else if (ItemAttributes::isCustomAttrType(attribute.type)) {
 			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type) {
-					if (attribute.value.custom->size() != otherAttribute.value.custom->size()) {
-						return false;
-					}
-
-					for (auto it = attribute.value.custom->begin(); it != attribute.value.custom->end(); it++) {
-						if (otherAttribute.value.custom->find(it->first) == otherAttribute.value.custom->end()) {
-							return false;
-						} else if (otherAttribute.value.custom->at(it->first).value != it->second.value) {
-							return false;
-						}
-					}
+				if (attribute.type == otherAttribute.type && *attribute.value.custom != *otherAttribute.value.custom) {
+					return false;
 				}
 			}
 		} else {

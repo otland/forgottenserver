@@ -225,6 +225,14 @@ class ItemAttributes
 
 			CustomAttribute() : value(boost::blank()) {}
 
+			bool operator==(const CustomAttribute& otherAttr) const {
+				return value == otherAttr.value;
+			}
+
+			bool operator!=(const CustomAttribute& otherAttr) const {
+				return value != otherAttr.value;
+			}
+
 			template<typename T>
 			explicit CustomAttribute(const T& v) : value(v) {}
 
@@ -453,7 +461,7 @@ class ItemAttributes
 		void setCustomAttribute(std::string& key, R value) {
 			toLowerCaseString(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
-				removeCustomAttribute(key);
+				removeCustomAttribute(key, true);
 			} else {
 				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 			}
@@ -463,7 +471,7 @@ class ItemAttributes
 		void setCustomAttribute(std::string& key, CustomAttribute& value) {
 			toLowerCaseString(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
-				removeCustomAttribute(key);
+				removeCustomAttribute(key, true);
 			} else {
 				getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 			}
@@ -487,15 +495,17 @@ class ItemAttributes
 
 		bool removeCustomAttribute(int64_t key) {
 			auto tmp = std::to_string(key);
-			return removeCustomAttribute(tmp);
+			return removeCustomAttribute(tmp, false);
 		}
 
-		bool removeCustomAttribute(const std::string& key) {
+		bool removeCustomAttribute(const std::string& key, bool isAttributeUpdate) {
 			if (CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
 				auto it = customAttrMap->find(asLowerCaseString(key));
 				if (it != customAttrMap->end()) {
 					customAttrMap->erase(it);
-					if (customAttrMap->size() == 0) {
+
+					// free the custom attr map if nothing will be added
+					if (!isAttributeUpdate && customAttrMap->size() == 0) {
 						removeAttribute(ITEM_ATTRIBUTE_CUSTOM);
 					}
 
@@ -671,7 +681,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
-			return getAttributes()->removeCustomAttribute(key);
+			return getAttributes()->removeCustomAttribute(key, false);
 		}
 
 		void setSpecialDescription(const std::string& desc) {
