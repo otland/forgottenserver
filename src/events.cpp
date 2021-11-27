@@ -127,6 +127,14 @@ bool Events::load()
 				info.playerOnGainSkillTries = event;
 			} else if (methodName == "onWrapItem") {
 				info.playerOnWrapItem = event;
+			} else if (methodName == "onInspectItem") {
+				info.playerOnInspectItem = event;
+			} else if (methodName == "onInspectTradeItem") {
+				info.playerOnInspectTradeItem = event;
+			} else if (methodName == "onInspectNpcTradeItem") {
+				info.playerOnInspectNpcTradeItem = event;
+			} else if (methodName == "onInspectCompendiumItem") {
+				info.playerOnInspectCompendiumItem = event;
 			} else if (methodName == "onExtendedProtocol") {
 				info.playerOnExtendedProtocol = event;
 			} else {
@@ -553,9 +561,9 @@ void Events::eventPlayerOnLookInTrade(Player* player, Player* partner, Item* ite
 	scriptInterface.callVoidFunction(4);
 }
 
-bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count, const std::string& description)
+bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count, const std::string& description, Npc* npc)
 {
-	// Player:onLookInShop(itemType, count, description) or Player.onLookInShop(self, itemType, count, description)
+	// Player:onLookInShop(itemType, count, description) or Player.onLookInShop(self, itemType, count, description, npc)
 	if (info.playerOnLookInShop == -1) {
 		return true;
 	}
@@ -580,7 +588,10 @@ bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, u
 	lua_pushnumber(L, count);
 	lua_pushstring(L, description.c_str());
 
-	return scriptInterface.callFunction(4);
+	LuaScriptInterface::pushUserdata<Npc>(L, npc);
+	LuaScriptInterface::setMetatable(L, -1, "Npc");
+
+	return scriptInterface.callFunction(5);
 }
 
 bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
@@ -1056,6 +1067,118 @@ void Events::eventPlayerOnWrapItem(Player* player, Item* item)
 
 	LuaScriptInterface::pushUserdata<Item>(L, item);
 	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	scriptInterface.callVoidFunction(2);
+}
+
+void Events::eventPlayerOnInspectItem(Player* player, Item* item)
+{
+	// Player:onInspectItem(item)
+	if (info.playerOnInspectItem == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnWrapItem] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnInspectItem, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnInspectItem);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	scriptInterface.callVoidFunction(2);
+}
+
+void Events::eventPlayerOnInspectTradeItem(Player* player, Player* tradePartner, Item* item)
+{
+	// Player:onInspectTradeItem(tradePartner, item)
+	if (info.playerOnInspectTradeItem == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnWrapItem] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnInspectTradeItem, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnInspectTradeItem);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Player>(L, tradePartner);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	scriptInterface.callVoidFunction(3);
+}
+
+void Events::eventPlayerOnInspectNpcTradeItem(Player* player, Npc* npc, uint16_t itemId)
+{
+	// Player:onInspectNpcTradeItem(npc, itemId)
+	if (info.playerOnInspectNpcTradeItem == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnWrapItem] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnInspectNpcTradeItem, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnInspectNpcTradeItem);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Npc>(L, npc);
+	LuaScriptInterface::setMetatable(L, -1, "Npc");
+
+	lua_pushnumber(L, itemId);
+
+	scriptInterface.callVoidFunction(3);
+}
+
+void Events::eventPlayerOnInspectCompendiumItem(Player* player, uint16_t itemId)
+{
+	// Player:onInspectCompendiumItem(itemId)
+	if (info.playerOnInspectCompendiumItem == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnWrapItem] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnInspectCompendiumItem, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnInspectCompendiumItem);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, itemId);
 
 	scriptInterface.callVoidFunction(2);
 }

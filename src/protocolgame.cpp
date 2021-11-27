@@ -537,7 +537,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		//case 0x2C: break; // team finder (leader)
 		//case 0x2D: break; // team finder (member)
 		//case 0x28: break; // stash withdraw
-		case 0x32: parseExtendedOpcode(msg); break; //otclient extended opcode
+		case 0x32: parseExtendedOpcode(msg); break; // otclient extended opcode
 		case 0x64: parseAutoWalk(msg); break;
 		case 0x65: addGameTask(&Game::playerMove, player->getID(), DIRECTION_NORTH); break;
 		case 0x66: addGameTask(&Game::playerMove, player->getID(), DIRECTION_EAST); break;
@@ -605,7 +605,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xCA: parseUpdateContainer(msg); break;
 		case 0xCB: parseBrowseField(msg); break;
 		case 0xCC: parseSeekInContainer(msg); break;
-		//case 0xCD: break; // request inspect window
+		case 0xCD: parseInspectItem(msg); break;
 		case 0xD2: addGameTask(&Game::playerRequestOutfit, player->getID()); break;
 		case 0xD3: parseSetOutfit(msg); break;
 		case 0xD4: parseToggleMount(msg); break;
@@ -1363,6 +1363,35 @@ void ProtocolGame::parseSeekInContainer(NetworkMessage& msg)
 	uint8_t containerId = msg.getByte();
 	uint16_t index = msg.get<uint16_t>();
 	addGameTask(&Game::playerSeekInContainer, player->getID(), containerId, index);
+}
+
+void ProtocolGame::parseInspectItem(NetworkMessage& msg)
+{
+	InspectionTypes_t inspectionType = static_cast<InspectionTypes_t>(msg.getByte());
+
+	Position position;
+	bool isInspectingPartnerOffer;
+	uint8_t index;
+	uint16_t spriteId;
+
+	switch (inspectionType) {
+		case INSPECTION_ITEM_NORMAL:
+			position = msg.getPosition();
+			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerInspectItem, player->getID(), position);
+			break;
+		case INSPECTION_ITEM_PLAYERTRADE:
+			isInspectingPartnerOffer = msg.getByte() == 1;
+			index = msg.getByte();
+			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerInspectTradeItem, player->getID(), isInspectingPartnerOffer, index);
+			break;
+		case INSPECTION_ITEM_NPCTRADE:
+		case INSPECTION_ITEM_COMPENDIUM:
+			spriteId = msg.get<uint16_t>();
+			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerInspectClientItem, player->getID(), spriteId, inspectionType == INSPECTION_ITEM_NPCTRADE);
+			break;
+		default:
+			break;
+	}
 }
 
 // Send methods

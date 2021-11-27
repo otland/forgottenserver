@@ -65,6 +65,10 @@ class Events
 		int32_t playerOnGainSkillTries = -1;
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnExtendedProtocol = -1;
+		int32_t playerOnInspectItem = -1;
+		int32_t playerOnInspectTradeItem = -1;
+		int32_t playerOnInspectNpcTradeItem = -1;
+		int32_t playerOnInspectCompendiumItem = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -93,7 +97,7 @@ class Events
 		void eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance);
 		void eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
 		void eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
-		bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count, const std::string& description);
+		bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count, const std::string& description, Npc* npc);
 		bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
 		void eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
 		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
@@ -109,6 +113,10 @@ class Events
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 		void eventPlayerOnWrapItem(Player* player, Item* item);
+		void eventPlayerOnInspectItem(Player* player, Item* item);
+		void eventPlayerOnInspectTradeItem(Player* player, Player* tradePartner, Item* item);
+		void eventPlayerOnInspectNpcTradeItem(Player* player, Npc* npc, uint16_t itemId);
+		void eventPlayerOnInspectCompendiumItem(Player* player, uint16_t itemId);
 		void eventPlayerOnExtendedProtocol(Player* player, uint8_t recvbyte, std::unique_ptr<NetworkMessage> message);
 
 		// Monster

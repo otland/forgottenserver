@@ -2541,6 +2541,147 @@ void Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 	player->sendContainer(containerId, container, container->hasParent(), index);
 }
 
+void Game::playerInspectItem(uint32_t playerId, const Position& pos)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	Thing* thing = internalGetThing(player, pos, 0, 0, STACKPOS_TOPDOWN_ITEM);
+	if (!thing) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	Item* item = thing->getItem();
+	if (!item || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	Position thingPos = thing->getPosition();
+	if (!player->canSee(thingPos)) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	// container items skip range check
+	if (pos.x != 0xFFFF) {
+		const Position& playerPos = player->getPosition();
+		if (playerPos.z != pos.z) {
+			player->sendCancelMessage(playerPos.z > pos.z ? RETURNVALUE_FIRSTGOUPSTAIRS : RETURNVALUE_FIRSTGODOWNSTAIRS);
+			return;
+		}
+
+		if (!Position::areInRange<1, 1>(playerPos, pos)) {
+			std::vector<Direction> listDir;
+			if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
+				g_dispatcher.addTask(createTask(std::bind(&Game::playerAutoWalk,
+					this, player->getID(), std::move(listDir))));
+				SchedulerTask* task = createSchedulerTask(RANGE_INSPECT_ITEM_INTERVAL, std::bind(
+					&Game::playerInspectItem, this, playerId, pos
+				));
+				player->setNextWalkActionTask(task);
+			} else {
+				player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+			}
+			return;
+		}
+	}
+
+	g_events->eventPlayerOnInspectItem(player, item);
+}
+
+void Game::playerInspectClientItem(uint32_t playerId, uint16_t spriteId, bool isNpcTrade)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
+	if (it.id == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	// compendium inspect
+	if (!isNpcTrade) {
+		g_events->eventPlayerOnInspectCompendiumItem(player, it.id);
+		return;
+	}
+
+	// npc trade inspect
+	int32_t onBuy, onSell;
+	Npc* merchant = player->getShopOwner(onBuy, onSell);
+	if (!merchant) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	if (!player->hasShopItemForSale(it.id, 1)) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	g_events->eventPlayerOnInspectNpcTradeItem(player, merchant, it.id);
+}
+
+void Game::playerInspectTradeItem(uint32_t playerId, bool isInspectingPartnerOffer, uint8_t index)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	Player* tradePartner = player->tradePartner;
+	if (!tradePartner) {
+		return;
+	}
+
+	Item* tradeItem;
+	if (isInspectingPartnerOffer) {
+		tradeItem = tradePartner->getTradeItem();
+	} else {
+		tradeItem = player->getTradeItem();
+	}
+
+	if (!tradeItem) {
+		return;
+	}
+
+	const Position& playerPosition = player->getPosition();
+	const Position& tradeItemPosition = tradeItem->getPosition();
+
+	if (index == 0) {
+		g_events->eventPlayerOnInspectTradeItem(player, tradePartner, tradeItem);
+		return;
+	}
+
+	Container* tradeContainer = tradeItem->getContainer();
+	if (!tradeContainer) {
+		return;
+	}
+
+	std::vector<const Container*> containers{ tradeContainer };
+	size_t i = 0;
+	while (i < containers.size()) {
+		const Container* container = containers[i++];
+		for (Item* item : container->getItemList()) {
+			Container* tmpContainer = item->getContainer();
+			if (tmpContainer) {
+				containers.push_back(tmpContainer);
+			}
+
+			if (--index == 0) {
+				g_events->eventPlayerOnInspectTradeItem(player, tradePartner, item);
+				return;
+			}
+		}
+	}
+}
+
 void Game::playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text)
 {
 	Player* player = getPlayerByID(playerId);
@@ -3097,7 +3238,7 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 	}
 
 	const std::string& description = Item::getDescription(it, 1, nullptr, subType);
-	g_events->eventPlayerOnLookInShop(player, &it, subType, description);
+	g_events->eventPlayerOnLookInShop(player, &it, subType, description, merchant);
 }
 
 void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos)

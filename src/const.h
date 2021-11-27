@@ -641,6 +641,13 @@ enum ResourceTypes_t: uint8_t {
 	RESOURCE_TOURNAMENT_COINS = 0x28 // u64
 };
 
+enum InspectionTypes_t : uint8_t {
+	INSPECTION_ITEM_NORMAL = 0,
+	INSPECTION_ITEM_NPCTRADE = 1,
+	INSPECTION_ITEM_PLAYERTRADE = 2,
+	INSPECTION_ITEM_COMPENDIUM = 3
+};
+
 enum PlayerFlags : uint64_t {
 	PlayerFlag_CannotUseCombat = 1 << 0,
 	PlayerFlag_CannotAttackPlayer = 1 << 1,

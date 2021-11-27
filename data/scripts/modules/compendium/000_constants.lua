@@ -82,6 +82,7 @@ monsterGroupNames = {
 	[MONSTERGROUP_UNDEAD] = "Undead",
 	[MONSTERGROUP_VERMIN] = "Vermin"
 }
+
 -- player info tabs
 COMPENDIUM_PLAYER_BASEINFORMATION = 0
 COMPENDIUM_PLAYER_GENERAL = 1

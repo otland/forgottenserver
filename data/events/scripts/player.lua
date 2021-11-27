@@ -29,11 +29,12 @@ function Player:onLookInTrade(partner, item, distance)
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
-function Player:onLookInShop(itemType, count, description)
+function Player:onLookInShop(itemType, count, description, npc)
 	local description = "You see " .. description
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) then
-		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description)
+		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description, npc)
 	end
+	
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
@@ -302,6 +303,24 @@ function Player:onWrapItem(item)
 	end
 end
 
+-- begin inspection feature
+function Player:onInspectItem(item)
+	self:popupFYI(string.format("Feature preview:\nType: %s\nitem: %s", "real item inspection", item:getName()))
+end
+
+function Player:onInspectTradeItem(tradePartner, item)
+	self:popupFYI(string.format("Feature preview:\nYou: %s\nPartner: %s\nItem: %s", self:getName(), tradePartner:getName(), item:getName()))
+end
+
+function Player:onInspectNpcTradeItem(npc, itemId)
+	self:popupFYI(string.format("Feature preview:\nYou: %s\nNpc: %s\nItem ID: %d", self:getName(), npc:getName(), itemId))
+end
+
+function Player:onInspectCompendiumItem(itemId)
+	self:popupFYI(string.format("Feature preview:\nCompendium item ID: %d", itemId))
+end
+-- end inspection feature
+
 -- begin extended protocol
 packetEvents = {}
 function getPacketEvent(recvbyte)
@@ -326,6 +345,10 @@ function callPacketEvent(player, recvbyte, networkMessage)
 end
 
 function Player:onExtendedProtocol(recvbyte, networkMessage)
+	-- unhnadled login packets:
+	-- 0xCE
+	-- 0x91
+	-- 0xD0
 	callPacketEvent(self, recvbyte, networkMessage)
 end
 -- end extended protocol

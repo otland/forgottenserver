@@ -78,6 +78,7 @@ static constexpr int32_t RANGE_ROTATE_ITEM_INTERVAL = 400;
 static constexpr int32_t RANGE_BROWSE_FIELD_INTERVAL = 400;
 static constexpr int32_t RANGE_WRAP_ITEM_INTERVAL = 400;
 static constexpr int32_t RANGE_REQUEST_TRADE_INTERVAL = 400;
+static constexpr int32_t RANGE_INSPECT_ITEM_INTERVAL = 400;
 
 /**
   * Main Game class.
@@ -374,6 +375,9 @@ class Game
 		void playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text);
 		void playerBrowseField(uint32_t playerId, const Position& pos);
 		void playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index);
+		void playerInspectItem(uint32_t playerId, const Position& pos);
+		void playerInspectClientItem(uint32_t playerId, uint16_t spriteId, bool isNpcTrade);
+		void playerInspectTradeItem(uint32_t playerId, bool isInspectingPartnerOffer, uint8_t index);
 		void playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text);
 		void playerWrapItem(uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId);
 		void playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t stackPos,
