@@ -38046,7 +38046,14 @@
 	<item id="28388" article="a" name="gleaming starlight vial" />
 	<item id="28389" article="a" name="dark sun catcher" />
 	<item id="28390" article="a" name="shining sun catcher" />
-	<item id="28391" article="a" name="leaf star" />
+	<item id="28391" article="a" name="leaf star">
+		<attribute key="weight" value="200" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="attack" value="48" />
+		<attribute key="range" value="4" />
+		<attribute key="elementEarth" value="2" />
+		<attribute key="shootType" value="leafstar" />
+	</item>
 	<item id="28392" name="swan feathers" />
 	<item id="28393" article="a" name="rainbow quartz" />
 	<item id="28394" name="tar" />
@@ -38065,9 +38072,28 @@
 	<item fromid="28408" toid="28410" name="rubble" />
 	<item id="28411" name="earth" />
 	<item id="28412" name="strange colours" />
-	<item id="28413" article="a" name="diamond arrow" />
-	<item id="28414" article="a" name="spectral bolt" />
-	<item id="28415" article="a" name="royal star" />
+	<item id="28413" article="a" name="diamond arrow">
+		<attribute key="weight" value="80" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="attack" value="37" />
+		<attribute key="shootType" value="diamondarrow" />
+	</item>
+	<item id="28414" article="a" name="spectral bolt">
+		<attribute key="weight" value="90" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="attack" value="78" />
+		<attribute key="shootType" value="spectralbolt" />
+	</item>
+	<item id="28415" article="a" name="royal star">
+		<attribute key="weight" value="220" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="attack" value="64" />
+		<attribute key="range" value="4" />
+		<attribute key="elementFire" value="2" />
+		<attribute key="shootType" value="royalstar" />
+	</item>
 	<item id="28416" article="a" name="wand of darkness" />
 	<item id="28417" name="strange colours" />
 	<item id="28418" article="a" name="stump" />
@@ -40853,8 +40879,20 @@
 	<item fromid="38551" toid="38552" article="a" name="midnight panther rug" />
 	<item fromid="38553" toid="38554" article="a" name="moon carpet" />
 	<item fromid="38555" toid="38556" article="a" name="romantic carpet" />
-	<item id="38557" article="a" name="diamond arrow" />
-	<item id="38558" article="a" name="spectral bolt" />
+	<item id="38557" article="a" name="diamond arrow">
+		<attribute key="weight" value="80" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="attack" value="37" />
+		<attribute key="shootType" value="diamondarrow" />
+	</item>
+	<item id="38558" article="a" name="spectral bolt">
+		<attribute key="weight" value="90" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="attack" value="78" />
+		<attribute key="shootType" value="spectralbolt" />
+	</item>
 	<item id="38564" article="a" name="rope-ladder" />
 	<item fromid="38565" toid="38566" name="chaos critical dice" />
 	<item fromid="38567" toid="38568" article="a" name="grandiose cupboard" />
