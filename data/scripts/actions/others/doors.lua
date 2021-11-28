@@ -102,7 +102,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	elseif table.contains(lockedDoors, itemId) then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
-		return true
+		return true	
 	elseif table.contains(openDoors, itemId) or table.contains(openExtraDoors, itemId) or table.contains(openHouseDoors, itemId) then
 		local creaturePositionTable = {}
 		local doorCreatures = Tile(toPosition):getCreatures()
@@ -119,9 +119,9 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end
 		end
-
+	
 		item:transform(itemId - 1)
-		return true
+		return true	
 	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
 		item:transform(itemId + 1)
 		return true
