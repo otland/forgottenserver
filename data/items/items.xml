@@ -21451,7 +21451,7 @@
 		<attribute key="weight" value="950" />
 	</item>
 	<item id="12544" article="a" name="sweet mangonaise elixir">
-		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing a volatile magical ring with time limit." />
+		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing certain magical rings. So it will not work on every kind of them." />
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="12545" article="the" name="dead glitterscale">
