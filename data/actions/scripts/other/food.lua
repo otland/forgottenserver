@@ -115,7 +115,6 @@ local foods = {
 	[32858] = {15, "Slurp."}, -- winterberry liquor
 	[34216] = {40, "Slurp."}, -- goanna meat
 	[34725] = {15, "Slurp."}, -- candy floss
-
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
