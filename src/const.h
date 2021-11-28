@@ -21,6 +21,8 @@
 #define FS_CONST_H_0A49B5996F074465BF44B90F4F780E8B
 
 static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
+static constexpr int32_t MIN_MARKET_FEE = 20;
+static constexpr int32_t MAX_MARKET_FEE = 100000;
 
 enum MagicEffectsType_t : uint8_t {
 	MAGIC_EFFECTS_END_LOOP = 0, // ends the magic effect loop

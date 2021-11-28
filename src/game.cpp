@@ -5082,10 +5082,10 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	uint64_t fee = (price / 100.) * amount;
-	if (fee < 20) {
-		fee = 20;
-	} else if (fee > 1000) {
-		fee = 1000;
+	if (fee < MIN_MARKET_FEE) {
+		fee = MIN_MARKET_FEE;
+	} else if (fee > MAX_MARKET_FEE) {
+		fee = MAX_MARKET_FEE;
 	}
 
 	if (type == MARKETACTION_SELL) {
