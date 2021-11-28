@@ -13355,15 +13355,15 @@
 	</item>
 	<item id="7634" article="an" name="empty potion flask">
 		<attribute key="weight" value="160" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7635" article="an" name="empty potion flask">
 		<attribute key="weight" value="180" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7636" article="an" name="empty potion flask">
 		<attribute key="weight" value="150" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7637" article="a" name="dead cat">
 		<attribute key="containerSize" value="5" />
@@ -23437,8 +23437,8 @@
 		<attribute key="description" value="It's very toxic. Do not ever drink green liquids." />
 		<attribute key="weight" value="180" />
 	</item>
-	<item id="13924" article="an" name="empty potion flask">
-		<attribute key="description" value="Return it to a magic store for deposit." />
+	<item id="13924" article="an" name="special flask">
+		<attribute key="description" value="Vascalir gave it to you to collect wasp poison." />
 		<attribute key="weight" value="180" />
 	</item>
 	<item id="13925" article="a" name="plague mask">
