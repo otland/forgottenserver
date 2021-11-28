@@ -104,7 +104,18 @@ local foods = {
 	[24841] = {12, "Yum."}, -- prickly pear
 	[24843] = {60, "Chomp."}, -- roasted meat
 	[26191] = {25, "Mmmm."}, -- energy bar
-	[26201] = {15, "Mmmm."} -- energy drink
+	[26201] = {15, "Mmmm."}, -- energy drink
+	[27038] = {20, "Urgh."}, -- bug meat
+	[27039] = {10, "Gulp."}, -- cave turnip
+	[27052] = {60, "Mmmm."}, -- birthday cake
+	[27095] = {4, "Slurp."}, -- shell
+	[27604] = {10, "Slurp."}, -- bottle of Wine
+	[28348] = {15, "Mmmmm!"}, -- fresh fruit
+	[32854] = {40, "Mmmm."}, -- meringue cake
+	[32858] = {15, "Slurp."}, -- winterberry liquor
+	[34216] = {40, "Slurp."}, -- goanna meat
+	[34725] = {15, "Slurp."}, -- candy floss
+
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
