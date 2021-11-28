@@ -26553,9 +26553,9 @@
 	<item id="18465" article="a" name="shiny blade">
 		<attribute key="weight" value="4500" />
 		<attribute key="defense" value="35" />
-		<attribute key="attack" value="50" />
+		<attribute key="attack" value="49" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="extradef" value="3" />
+		<attribute key="extradef" value="2" />
 		<attribute key="skillSword" value="1" />
 	</item>
 	<item id="18466" article="a" name="dead crystal golem">
