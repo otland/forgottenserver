@@ -291,7 +291,7 @@ bool ConfigManager::load()
 	integer[VIP_FREE_LIMIT] = getGlobalNumber(L, "vipFreeLimit", 20);
 	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
 	integer[DEPOT_FREE_LIMIT] = getGlobalNumber(L, "depotFreeLimit", 2000);
-	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 10000);
+	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 15000);
 	integer[MIN_MARKET_FEE] = getGlobalNumber(L, "minMarketFee", 20);
 	integer[MAX_MARKET_FEE] = getGlobalNumber(L, "maxMarketFee", 100000);
 

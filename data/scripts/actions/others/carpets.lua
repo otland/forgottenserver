@@ -36,7 +36,7 @@ function carpets.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	for _, carpetId in pairs(transformID) do
 		carpetStack = carpetStack + tile:getItemCountById(carpetId)
 	end
-	if carpetStack > 1 then
+	if carpetStack > 3 then
 		player:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return true
 	end
