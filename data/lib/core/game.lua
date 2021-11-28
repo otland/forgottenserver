@@ -66,3 +66,33 @@ end
 function Game.setStorageValue(key, value)
 	globalStorageTable[key] = value
 end
+
+function Game.getCountdownString(duration)
+	if duration < 0 then
+		return "expired"
+	end
+	
+	local days = math.floor(duration/86400)
+	local hours = math.floor((duration % 86400)/3600)
+	local minutes = math.floor((duration % 3600)/60)
+	local seconds = math.floor(duration % 60)
+	
+	local response = {}
+	if days > 0 then
+		response[#response+1] = days .. "d"
+		response[#response+1] = hours .. "h"
+		response[#response+1] = minutes .. "m"
+		response[#response+1] = seconds .. "s"
+	elseif hours > 0 then
+		response[#response+1] = hours .. "h"
+		response[#response+1] = minutes .. "m"
+		response[#response+1] = seconds .. "s"
+	elseif minutes > 0 then
+		response[#response+1] = minutes .. "m"
+		response[#response+1] = seconds .. "s"
+	elseif seconds >= 0 then
+		response[#response+1] = seconds .. "s"
+	end
+
+	return table.concat(response, " ")
+end

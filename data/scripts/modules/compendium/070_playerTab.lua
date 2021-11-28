@@ -251,20 +251,20 @@ function sendCompendiumPlayerInfo(player, creatureId, infoType, entriesPerPage, 
 		-- single frag duration
 		if fragStatus.duration > 0 then
 			response:addU32(ost)
-			response:addString(string.format("Next kill expires in: %s", getCountdownString(fragStatus.duration)))
+			response:addString(string.format("Next kill expires in: %s", Game.getCountdownString(fragStatus.duration)))
 			response:addByte(COMPENDIUM_KILLTYPE_ARENA)
 		end
 	
 		-- total frag duration
 		if fragStatus.totalDuration > 0 then
 			response:addU32(ost)
-			response:addString(string.format("All kills expire in: %s", getCountdownString(fragStatus.totalDuration)))
+			response:addString(string.format("All kills expire in: %s", Game.getCountdownString(fragStatus.totalDuration)))
 			response:addByte(COMPENDIUM_KILLTYPE_ARENA)
 		end
 		
 		if pzLockDuration > 0 then
 			response:addU32(ost)
-			response:addString(string.format("PZ lock expires in: %s", getCountdownString(pzLockDuration)))
+			response:addString(string.format("PZ lock expires in: %s", Game.getCountdownString(pzLockDuration)))
 			response:addByte(COMPENDIUM_KILLTYPE_ARENA)
 		end
 		

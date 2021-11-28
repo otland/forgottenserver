@@ -305,19 +305,27 @@ end
 
 -- begin inspection feature
 function Player:onInspectItem(item)
-	self:popupFYI(string.format("Feature preview:\nType: %s\nitem: %s", "real item inspection", item:getName()))
+	if hasEventCallback(EVENT_CALLBACK_ONINSPECTITEM) then
+		EventCallback(EVENT_CALLBACK_ONINSPECTITEM, self, item)
+	end
 end
 
 function Player:onInspectTradeItem(tradePartner, item)
-	self:popupFYI(string.format("Feature preview:\nYou: %s\nPartner: %s\nItem: %s", self:getName(), tradePartner:getName(), item:getName()))
+	if hasEventCallback(EVENT_CALLBACK_ONINSPECTTRADEITEM) then
+		EventCallback(EVENT_CALLBACK_ONINSPECTTRADEITEM, self, tradePartner, item)
+	end
 end
 
 function Player:onInspectNpcTradeItem(npc, itemId)
-	self:popupFYI(string.format("Feature preview:\nYou: %s\nNpc: %s\nItem ID: %d", self:getName(), npc:getName(), itemId))
+	if hasEventCallback(EVENT_CALLBACK_ONINSPECTNPCTRADEITEM) then
+		EventCallback(EVENT_CALLBACK_ONINSPECTNPCTRADEITEM, self, npc, itemId)
+	end
 end
 
 function Player:onInspectCompendiumItem(itemId)
-	self:popupFYI(string.format("Feature preview:\nCompendium item ID: %d", itemId))
+	if hasEventCallback(EVENT_CALLBACK_ONINSPECTCOMPENDIUMITEM) then
+		EventCallback(EVENT_CALLBACK_ONINSPECTCOMPENDIUMITEM, self, itemId)
+	end
 end
 -- end inspection feature
 

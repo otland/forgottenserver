@@ -1,3 +1,60 @@
+-- const to string maps
+elementToStringMap = {
+	[COMBAT_PHYSICALDAMAGE] = "physical",
+	[COMBAT_ENERGYDAMAGE] = "energy",
+	[COMBAT_EARTHDAMAGE] = "earth",
+	[COMBAT_FIREDAMAGE] = "fire",
+	[COMBAT_UNDEFINEDDAMAGE] = "undefined",
+	[COMBAT_LIFEDRAIN] = "lifedrain",
+	[COMBAT_MANADRAIN] = "manadrain",
+	[COMBAT_HEALING] = "healing",
+	[COMBAT_DROWNDAMAGE] = "drowning",
+	[COMBAT_ICEDAMAGE] = "ice",
+	[COMBAT_HOLYDAMAGE] = "holy",
+	[COMBAT_DEATHDAMAGE] = "death"
+}
+
+clientSlotTypesMap = {
+	[CONST_SLOT_HEAD] = "head",
+	[CONST_SLOT_NECKLACE] = "neck",
+	[CONST_SLOT_BACKPACK] = "container",
+	[CONST_SLOT_ARMOR] = "body",
+	[CONST_SLOT_RIGHT] = "weapon hand",
+	[CONST_SLOT_LEFT] = "shield hand",
+	[CONST_SLOT_LEGS] = "legs",
+	[CONST_SLOT_FEET] = "feet",
+	[CONST_SLOT_RING] = "finger",
+	[CONST_SLOT_AMMO] = "extra slot"
+}
+
+skillToStringMap = {
+	[SKILL_LEVEL] = "level",
+	[SKILL_MAGLEVEL] = "magic level",
+	[SKILL_FIST] = "fist fighting",
+	[SKILL_CLUB] = "club fighting",
+	[SKILL_SWORD] = "sword fighting",
+	[SKILL_AXE] = "axe fighting",
+	[SKILL_DISTANCE] = "distance fighting",
+	[SKILL_SHIELD] = "shielding",
+	[SKILL_FISHING] = "fishing"
+}
+
+specialSkillToStringMap = {
+	SPECIALSKILL_CRITICALHITCHANCE = "critical hit chance",
+	SPECIALSKILL_CRITICALHITAMOUNT = "critical hit amount",
+	SPECIALSKILL_LIFELEECHCHANCE = "life leech chance",
+	SPECIALSKILL_LIFELEECHAMOUNT = "life leech amount",
+	SPECIALSKILL_MANALEECHCHANCE = "mana leech chance",
+	SPECIALSKILL_MANALEECHAMOUNT = "mana leech amount"
+}
+
+statToStringMap = {
+	[STAT_MAXHITPOINTS] = "max health",
+	[STAT_MAXMANAPOINTS] = "max mana",
+	[STAT_SOULPOINTS] = "soul points",
+	[STAT_MAGICPOINTS] = "magic level"
+}
+
 -- container
 CONTAINER_POSITION = 0xFFFF
 
