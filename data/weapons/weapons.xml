@@ -620,6 +620,10 @@
 	<distance id="23529" breakchance="31" unproperly="1" level="60" /> <!-- Glooth Spear -->
 	<distance id="23839" action="removecount" unproperly="0" level="1" /> <!-- Simple Arrow -->
 	<distance id="25526" breakchance="10" /> <!-- Throwing Star of Sula -->
+	<distance id="28391" breakchance="42" unproperly="1" level="60" /> <!-- Leaf Star -->
 	<distance id="28413" action="removecount" unproperly="1" level="150" script="diamond_arrow.lua" /> <!-- Diamond Arrow -->
+	<distance id="28414" action="removecount" unproperly="1" level="150" /> <!-- Spectral Bolt -->
+	<distance id="28415" breakchance="30" unproperly="1" level="120" /> <!-- Royal Star -->
 	<distance id="38557" action="removecount" unproperly="1" level="150" script="diamond_arrow.lua" /> <!-- Diamond Arrow -->
+	<distance id="38558" action="removecount" unproperly="1" level="150" /> <!-- Spectral Bolt -->
 </weapons>
