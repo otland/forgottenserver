@@ -102,7 +102,7 @@ showPlayerLogInConsole = true
 vipFreeLimit = 20
 vipPremiumLimit = 100
 depotFreeLimit = 2000
-depotPremiumLimit = 10000
+depotPremiumLimit = 15000
 
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will
