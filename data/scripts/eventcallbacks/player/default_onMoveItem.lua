@@ -15,6 +15,12 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 		return true
 	end
 
+	local itemId = item:getId()
+	if toCylinder:isItem() and toCylinder:getId() == ITEM_GOLD_POUCH and not (itemId == ITEM_CRYSTAL_COIN or itemId == ITEM_PLATINUM_COIN or itemId == ITEM_GOLD_COIN) then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
+		return false
+	end
+
 	if item:getTopParent() == self and bit.band(toPosition.y, 0x40) == 0 then
 		local itemType, moveItem = ItemType(item:getId())
 		if bit.band(itemType:getSlotPosition(), SLOTP_TWO_HAND) ~= 0 and toPosition.y == CONST_SLOT_LEFT then
