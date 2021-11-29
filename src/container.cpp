@@ -26,7 +26,11 @@
 extern Game g_game;
 
 Container::Container(uint16_t type) :
-	Container(type, items[type].maxItems) {}
+	Container(type, items[type].maxItems) {
+	if (getID() == ITEM_GOLD_POUCH) {
+		pagination = true;
+	}
+}
 
 Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
 	Item(type),
