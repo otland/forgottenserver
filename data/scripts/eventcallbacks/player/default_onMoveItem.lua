@@ -37,7 +37,7 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 		end
 	end
 	
-	if containerTo:getId() == ITEM_GOLD_POUCH then
+	if item:getId() == ITEM_GOLD_POUCH then
 			if not item:getId() == ITEM_CRYSTAL_COIN or item:getId() == ITEM_PLATINUM_COIN or item:getId() == ITEM_GOLD_COIN then
 				self:sendCancelMessage("You can move only money to this container.")
 				return false
