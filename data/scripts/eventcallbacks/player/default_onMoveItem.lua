@@ -1,3 +1,8 @@
+local function isGold(item)
+	local itemId = item:getId()
+	return itemId == ITEM_GOLD_COIN or itemId == ITEM_PLATINUM_COIN or itemId == ITEM_CRYSTAL_COIN
+end
+
 local ec = EventCallback
 
 ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
@@ -15,10 +20,36 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 		return true
 	end
 
+	-- moving into container that is in store inbox
 	local itemId = item:getId()
-	if toCylinder:isItem() and toCylinder:getId() == ITEM_GOLD_POUCH and not (itemId == ITEM_CRYSTAL_COIN or itemId == ITEM_PLATINUM_COIN or itemId == ITEM_GOLD_COIN) then
-		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
-		return false
+	if toCylinder:isItem() then
+		local parent = toCylinder:getParent()
+		if parent:isItem() and parent:getId() == ITEM_STORE_INBOX then
+			if toCylinder:getId() == ITEM_GOLD_POUCH then
+				-- move item into gold pouch
+				if not isGold(item) then
+					self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
+					return false
+				end				
+			else
+				-- attempt to move into other container in store inbox
+				return false
+			end
+		elseif toCylinder:getId() == ITEM_STORE_INBOX then
+			local targetItem = toCylinder:getItem(toPosition.z)
+			if targetItem and targetItem:isContainer() then
+				if targetItem:getId() == ITEM_GOLD_POUCH then
+					-- move item into gold pouch
+					if not isGold(item) then
+						self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
+						return false
+					end
+				else
+					-- attempt to move into other container in store inbox
+					return false
+				end
+			end
+		end
 	end
 
 	if item:getTopParent() == self and bit.band(toPosition.y, 0x40) == 0 then
