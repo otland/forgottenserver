@@ -99,10 +99,19 @@ function getItemDetails(item)
 	local showAtk = table.contains(showAtkWeaponTypes, weaponType)
 	if showAtk then
 		local atk = item:getAttack()
-		if weaponType == WEAPON_DISTANCE and (ammoType == AMMO_ARROW or ammoType == AMMO_BOLT) then
+		if itemType:isBow() then
+			local atkAttrs = {}
 			if atk ~= 0 then
-				descriptions[#descriptions + 1] = {"Attack", atk}
+				atkAttrs[#atkAttrs + 1] = string.format("attack %s%d", (atk >= 0 and "+" or ""), atk)
 			end
+			
+			local hitChance = item:getHitChance()
+			if hitChance ~= 0 then
+				atkAttrs[#atkAttrs + 1] = string.format("chance to hit %s%d%%", (hitChance >= 0 and "+" or ""), hitChance)
+			end
+			
+			atkAttrs[#atkAttrs + 1] = string.format("%d fields", item:getShootRange())
+			descriptions[#descriptions + 1] = {"Attack", table.concat(atkAttrs, ", ")}
 		else
 			descriptions[#descriptions + 1] = {"Attack", atk}
 		end
@@ -295,17 +304,27 @@ function getItemDetails(item)
 	end
 	
 	-- tradeable
-	local tradeable = item:isStoreItem() and "no" or "yes"
+	local tradeable = not item:isStoreItem()
+	if not isVirtual then
+		descriptions[#descriptions + 1] = {"Tradeable", tradeable and "yes" or "no"}	
+	end
+
+	tradeable = tradeable and itemType:getWareId() ~= 0
 	if isVirtual then
-		descriptions[#descriptions + 1] = {"Tradeable In Market", tradeable}
+		-- store item or wareId == 0
+		descriptions[#descriptions + 1] = {"Tradeable In Market", tradeable and "yes" or "no"}
 	else
-		descriptions[#descriptions + 1] = {"Tradeable", tradeable}
+		-- item with edited attributes
+		tradeable = tradeable and item:isMarketable()
+		if not tradeable and not isContainer then
+			descriptions[#descriptions + 1] = {"Tradeable In Market", "no"}
+		end
 	end
 	
 	-- slot
 	local bodyPosition
 	if isTwoHanded then
-		bodyPosition = "two-handed"
+		bodyPosition = "both hands"
 	elseif isContainer then
 		bodyPosition = "container"
 	elseif weaponType == WEAPON_SHIELD then -- or quiver
@@ -332,7 +351,6 @@ function getItemDetails(item)
 		descriptions[#descriptions + 1] = {"Body Position", bodyPosition}		
 	end
 
--- hit chance / range?
 	return descriptions
 end
 
