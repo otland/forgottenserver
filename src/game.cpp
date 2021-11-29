@@ -3228,7 +3228,7 @@ void Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, bool ch
 
 void Game::playerRequestAddVip(uint32_t playerId, const std::string& name)
 {
-	if (name.length() > PLAYER_NAME_LENGHT) {
+	if (name.length() > PLAYER_NAME_LENGTH) {
 		return;
 	}
 
