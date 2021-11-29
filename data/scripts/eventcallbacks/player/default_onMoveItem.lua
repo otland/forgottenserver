@@ -33,6 +33,7 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 				end				
 			else
 				-- attempt to move into other container in store inbox
+				self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 				return false
 			end
 		elseif toCylinder:getId() == ITEM_STORE_INBOX then
@@ -46,6 +47,7 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 					end
 				else
 					-- attempt to move into other container in store inbox
+					self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 					return false
 				end
 			end
