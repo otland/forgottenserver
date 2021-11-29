@@ -28,7 +28,7 @@ function ItemType:isLegs()
 end
 
 function ItemType:isBoots()
-	return self:usesSlot(CONST_SLOT_BOOTS)
+	return self:usesSlot(CONST_SLOT_FEET)
 end
 
 local notWeapons = {WEAPON_NONE, WEAPON_SHIELD, WEAPON_AMMO}
