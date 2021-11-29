@@ -866,7 +866,9 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 
 void Player::sendCancelMessage(ReturnValue message) const
 {
-	sendCancelMessage(getReturnMessage(message));
+	if (message != RETURNVALUE_SCRIPT) {
+		sendCancelMessage(getReturnMessage(message));
+	}
 }
 
 void Player::sendStats()
