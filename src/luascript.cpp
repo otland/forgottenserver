@@ -2389,6 +2389,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Item", "hasProperty", LuaScriptInterface::luaItemHasProperty);
 	registerMethod("Item", "isLoadedFromMap", LuaScriptInterface::luaItemIsLoadedFromMap);
 
+	registerMethod("Item", "isMarketable", LuaScriptInterface::luaItemIsMarketable);
+
 	registerMethod("Item", "setStoreItem", LuaScriptInterface::luaItemSetStoreItem);
 	registerMethod("Item", "isStoreItem", LuaScriptInterface::luaItemIsStoreItem);
 
@@ -2857,6 +2859,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getGroup", LuaScriptInterface::luaItemTypeGetGroup);
 	registerMethod("ItemType", "getId", LuaScriptInterface::luaItemTypeGetId);
 	registerMethod("ItemType", "getClientId", LuaScriptInterface::luaItemTypeGetClientId);
+	registerMethod("ItemType", "getWareId", LuaScriptInterface::luaItemTypeGetWareId);
 	registerMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
 	registerMethod("ItemType", "getPluralName", LuaScriptInterface::luaItemTypeGetPluralName);
 	registerMethod("ItemType", "getArticle", LuaScriptInterface::luaItemTypeGetArticle);
@@ -7059,6 +7062,19 @@ int LuaScriptInterface::luaItemIsLoadedFromMap(lua_State* L)
 		lua_pushnil(L);
 	}
 	return 1;
+}
+
+int LuaScriptInterface::luaItemIsMarketable(lua_State* L)
+{
+	// item:isMarketable()
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushBoolean(L, Item::items.getItemType(item->getID()).wareId != 0 && item->hasMarketAttributes());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+
 }
 
 int LuaScriptInterface::luaItemSetStoreItem(lua_State* L)
@@ -12296,6 +12312,18 @@ int LuaScriptInterface::luaItemTypeGetClientId(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->clientId);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetWareId(lua_State* L)
+{
+	// itemType:getWareId()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->wareId);
 	} else {
 		lua_pushnil(L);
 	}

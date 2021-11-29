@@ -14,19 +14,6 @@ elementToStringMap = {
 	[COMBAT_DEATHDAMAGE] = "death"
 }
 
-clientSlotTypesMap = {
-	[CONST_SLOT_HEAD] = "head",
-	[CONST_SLOT_NECKLACE] = "neck",
-	[CONST_SLOT_BACKPACK] = "container",
-	[CONST_SLOT_ARMOR] = "body",
-	[CONST_SLOT_RIGHT] = "weapon hand",
-	[CONST_SLOT_LEFT] = "shield hand",
-	[CONST_SLOT_LEGS] = "legs",
-	[CONST_SLOT_FEET] = "feet",
-	[CONST_SLOT_RING] = "finger",
-	[CONST_SLOT_AMMO] = "extra slot"
-}
-
 skillToStringMap = {
 	[SKILL_LEVEL] = "level",
 	[SKILL_MAGLEVEL] = "magic level",

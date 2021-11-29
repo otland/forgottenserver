@@ -26,7 +26,7 @@ function Player:sendItemInspection(item, descriptions, openCompendium)
 	-- imbuements count (5 max, 6th gets cut in view window)
 	-- structure: u16 imbuement icon id
 	response:addByte(0)
-	
+
 	-- fields count
 	-- structure:
 	-- string key
@@ -71,8 +71,9 @@ function getItemDetails(item)
 	local descriptions = {}
 	
 	-- container capacity
-	if itemType:isContainer() then
-		descriptions[#descriptions + 1] = {"Volume", itemType:getCapacity()}
+	local isContainer = itemType:isContainer()
+	if isContainer then
+		descriptions[#descriptions + 1] = {"Capacity", itemType:getCapacity()}
 	end
 	
 	-- key
@@ -114,16 +115,17 @@ function getItemDetails(item)
 	end
 	
 	-- def
+	-- note: "defence" is actual spelling, it is a correct form in British English
 	local showDef = table.contains(showDefWeaponTypes, weaponType)
 	if showDef then
 		local def = item:getDefense()
 		if weaponType == WEAPON_DISTANCE then
 			-- throwables
 			if ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT then
-				descriptions[#descriptions + 1] = {"Defense", def}
+				descriptions[#descriptions + 1] = {"Defence", def}
 			end
 		else
-			descriptions[#descriptions + 1] = {"Defense", def}
+			descriptions[#descriptions + 1] = {"Defence", def}
 		end
 	end
 	
@@ -140,9 +142,25 @@ function getItemDetails(item)
 	end
 	
 	-- attack speed
-	-- ?
+	local attackSpeed = item:getAttackSpeed()
+	if attackSpeed ~= 0 then
+		descriptions[#descriptions + 1] = {"Attack Speed", attackSpeed}
+	end
 
 	local abilities = itemType:getAbilities()
+	
+	-- protection
+	local protections = {}
+	for element, value in pairs(abilities.absorbPercent) do
+		if value ~= 0 then
+			protections[#protections + 1] = string.format("%s %s%d%%", elementToStringMap[2^(element-1)], (value >= 0 and "+" or ""), value)
+		end
+	end
+	
+	if #protections > 0 then
+		descriptions[#descriptions + 1] = {"Protection", table.concat(protections, ", ")}
+	end
+	protections = nil
 	
 	-- skill boost
 	local skillBoosts = {}
@@ -189,24 +207,12 @@ function getItemDetails(item)
 	end
 	
 	if #skillBoosts > 0 then
-		descriptions[#descriptions + 1] = {"Skill boosts", table.concat(skillBoosts, ", ")}
+		descriptions[#descriptions + 1] = {"Skill Boost", table.concat(skillBoosts, ", ")}
 	end
 	skillBoosts = nil
 	
-	-- protection
-	local protections = {}
-	for element, value in pairs(abilities.absorbPercent) do
-		if value ~= 0 then
-			protections[#protections + 1] = string.format("%s %s%d%%", elementToStringMap[element * 2], (value >= 0 and "+" or ""), value)
-		end
-	end
-	
-	if #protections > 0 then
-		descriptions[#descriptions + 1] = {"Protection", table.concat(protections, ", ")}
-	end
-	protections = nil
-	
 	-- imbuement slot n: empty (new line for each n)
+	-- to do: implement together with imbuements system
 	
 	-- spell
 	local spellName = itemType:getRuneSpellName()
@@ -217,7 +223,7 @@ function getItemDetails(item)
 	-- charges
 	if itemType:hasShowCharges() then
 		if isVirtual then
-			descriptions[#descriptions + 1] = {"Total charges", itemType:getCharges()}
+			descriptions[#descriptions + 1] = {"Total Charges", itemType:getCharges()}
 		else
 			descriptions[#descriptions + 1] = {"Charges", string.format("%d/%d", item:getCharges(), itemType:getCharges())}
 		end
@@ -226,7 +232,7 @@ function getItemDetails(item)
 	-- expires
 	if itemType:hasShowDuration() then
 		if isVirtual then
-			descriptions[#descriptions + 1] = {"Total expire time", (math.floor(itemType:getDuration()/1000) or "unknown")}
+			descriptions[#descriptions + 1] = {"Total Expire Time", (math.floor(itemType:getDuration()/1000) or "unknown")}
 		else
 			descriptions[#descriptions + 1] = {"Expires", Game.getCountdownString(math.floor(item:getDuration()/1000))}
 		end
@@ -239,34 +245,94 @@ function getItemDetails(item)
 		
 		descriptions[#descriptions + 1] = {
 			-- key
-			(itemWeight == typeWeight and "Weight" or "Total weight"),
+			(itemWeight == typeWeight and "Weight" or "Total Weight"),
 			-- value
-			string.format("%0.2f", itemWeight/100)
+			string.format("%0.2f oz", itemWeight/100)
 		}
 	end
 	
-	-- required level
+	-- level
+	local minLevel = itemType:getMinReqLevel()
+	if minLevel and minLevel > 0 then
+		descriptions[#descriptions + 1] = {"Required Level", minLevel}
+	end
 	
-	-- required magic level
+	-- magic level
+	local minMagicLevel = itemType:getMinReqMagicLevel()
+	if minMagicLevel and minMagicLevel > 0 then
+		descriptions[#descriptions + 1] = {"Required Magic Level", minMagicLevel}
+	end
 	
-	-- professions
+	-- vocation
+	local vocations = itemType:getVocationString()
+	if vocations and vocations:len() > 0 then
+		descriptions[#descriptions + 1] = {"Professions", vocations}
+	end
 	
 	-- weapon type
-	
-	-- body position
-	-- clientSlotTypesMap[slottype]
+	local isTwoHanded = itemType:isTwoHanded()
+	local weaponType = itemType:getWeaponType()
+	local isWeapon = itemType:isWeapon()
+	if isWeapon then
+		local weaponString = "unknown"
+		if weaponType == WEAPON_CLUB then
+			weaponString = "blunt instrument"
+		elseif weaponType == WEAPON_SWORD then
+			weaponString = "stabbing weapon"
+		elseif weaponType == WEAPON_AXE then
+			weaponString = "cutting weapon"
+		elseif weaponType == WEAPON_DISTANCE then
+			weaponString = itemType:isBow() and "firearm" or "missile"
+		elseif weaponType == WEAPON_WAND then
+			weaponString = "wand/rod"
+		end
+		
+		if isTwoHanded then
+			weaponString = string.format("%s, two-handed", weaponString)
+		end
+		
+		descriptions[#descriptions + 1] = {"Weapon Type", weaponString}
+	end
 	
 	-- tradeable
+	local tradeable = item:isStoreItem() and "no" or "yes"
+	if isVirtual then
+		descriptions[#descriptions + 1] = {"Tradeable In Market", tradeable}
+	else
+		descriptions[#descriptions + 1] = {"Tradeable", tradeable}
+	end
 	
---[[
-	if (it.slotPosition & SLOTP_TWO_HAND) {
-		if (!weaponName.empty()) {
-			weaponName += ", two-handed";
-		} else {
-			weaponName = "two-handed";
-		}
-	}
-]]
+	-- slot
+	local bodyPosition
+	if isTwoHanded then
+		bodyPosition = "two-handed"
+	elseif isContainer then
+		bodyPosition = "container"
+	elseif weaponType == WEAPON_SHIELD then -- or quiver
+		bodyPosition = "shield hand"
+	elseif isWeapon then
+		bodyPosition = "weapon hand"
+	elseif itemType:isHelmet() then
+		bodyPosition = "head"
+	elseif itemType:isNecklace() then
+		bodyPosition = "neck"
+	elseif itemType:isArmor() then
+		bodyPosition = "body"
+	elseif itemType:isLegs() then
+		bodyPosition = "legs"
+	elseif itemType:isBoots() then
+		bodyPosition = "feet"
+	elseif itemType:isRing() then
+		bodyPosition = "finger"
+	elseif itemType:isTrinket() then
+		bodyPosition = "extra slot"
+	end
+	
+	if bodyPosition then
+		descriptions[#descriptions + 1] = {"Body Position", bodyPosition}		
+	end
+
+-- hit chance / range?
 	return descriptions
 end
 
