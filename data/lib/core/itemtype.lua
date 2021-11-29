@@ -36,9 +36,18 @@ function ItemType:isWeapon()
 	return not table.contains(notWeapons, self:getWeaponType())
 end
 
+function ItemType:isTwoHanded()
+	return bit.band(self:getSlotPosition(), SLOTP_TWO_HAND) ~= 0
+end
+
 function ItemType:isBow()
 	local ammoType = self:getAmmoType()
 	return self:getWeaponType() == WEAPON_DISTANCE and (ammoType == AMMO_ARROW or ammoType == AMMO_BOLT)
+end
+
+function ItemType:isMissile()
+	local ammoType = self:getAmmoType()
+	return self:getWeaponType() == WEAPON_DISTANCE and ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT
 end
 
 function ItemType:isWand()
