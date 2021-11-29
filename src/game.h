@@ -63,6 +63,8 @@ enum GameState_t {
 	GAME_STATE_MAINTAIN,
 };
 
+static constexpr int32_t PLAYER_NAME_LENGTH = 25;
+
 static constexpr int32_t EVENT_LIGHTINTERVAL = 10000;
 static constexpr int32_t EVENT_WORLDTIMEINTERVAL = 2500;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
