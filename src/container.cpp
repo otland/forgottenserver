@@ -269,12 +269,15 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	const Cylinder* cylinder = getParent();
 
 	// don't allow moving items into container that is store item and is in store inbox
+	// unless it's a gold pouch
 	if (isStoreItem() && dynamic_cast<const StoreInbox*>(cylinder)) {
-		ReturnValue ret = RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
-		if (!item->isStoreItem()) {
-			ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
+		if (id != ITEM_GOLD_POUCH) {
+			ReturnValue ret = RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+			if (!item->isStoreItem()) {
+				ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
+			}
+			return ret;
 		}
-		return ret;
 	}
 
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {

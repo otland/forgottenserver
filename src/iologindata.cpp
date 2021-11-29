@@ -548,6 +548,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		}
 	}
 
+	//add store inbox reference to player inventory
+	player->internalAddThing(CONST_SLOT_STORE_INBOX, player->getStoreInbox());
+
 	//load storage map
 	if ((result = db.storeQuery(fmt::format("SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = {:d}", player->getGUID())))) {
 		do {

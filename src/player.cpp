@@ -202,7 +202,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 
 Item* Player::getInventoryItem(slots_t slot) const
 {
-	if (slot < CONST_SLOT_FIRST || slot > CONST_SLOT_LAST) {
+	if (slot < CONST_SLOT_FIRST || slot > CONST_SLOT_LAST + 1) {
 		return nullptr;
 	}
 	return inventory[slot];
@@ -1053,7 +1053,7 @@ void Player::openSavedContainers()
 {
 	std::map<uint8_t, Container*> openContainersList;
 
-	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST + 1; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -2885,7 +2885,7 @@ void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Player::replaceThing(uint32_t index, Thing* thing)
 {
-	if (index > CONST_SLOT_LAST) {
+	if (index > CONST_SLOT_LAST + 1) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -2956,7 +2956,7 @@ void Player::removeThing(Thing* thing, uint32_t count)
 
 int32_t Player::getThingIndex(const Thing* thing) const
 {
-	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST + 1; ++i) {
 		if (inventory[i] == thing) {
 			return i;
 		}
@@ -2977,7 +2977,7 @@ size_t Player::getLastIndex() const
 uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
-	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST + 1; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -3007,7 +3007,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 	std::vector<Item*> itemList;
 
 	uint32_t count = 0;
-	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST + 1; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -3051,7 +3051,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 
 std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {
-	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST + 1; i++) {
 		Item* item = inventory[i];
 		if (!item) {
 			continue;
@@ -3070,7 +3070,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 
 Thing* Player::getThing(size_t index) const
 {
-	if (index >= CONST_SLOT_FIRST && index <= CONST_SLOT_LAST) {
+	if (index >= CONST_SLOT_FIRST && index <= CONST_SLOT_LAST + 1) {
 		return inventory[index];
 	}
 	return nullptr;
@@ -3238,7 +3238,7 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 	}
 
 	//index == 0 means we should equip this item at the most appropriate slot (no action required here)
-	if (index > CONST_SLOT_WHEREEVER && index <= CONST_SLOT_LAST) {
+	if (index > CONST_SLOT_WHEREEVER && index <= CONST_SLOT_LAST + 1) {
 		if (inventory[index]) {
 			return;
 		}
@@ -4592,8 +4592,9 @@ uint64_t Player::getMoney() const
 	std::vector<const Container*> containers;
 	uint64_t moneyCount = 0;
 
-	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST + 1; ++i) {
 		Item* item = inventory[i];
+		
 		if (!item) {
 			continue;
 		}
