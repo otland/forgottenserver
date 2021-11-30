@@ -20,19 +20,16 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 		return true
 	end
 
-	-- moving into container that is in store inbox
 	local itemId = item:getId()
 	if toCylinder:isItem() then
 		local parent = toCylinder:getParent()
 		if parent:isItem() and parent:getId() == ITEM_STORE_INBOX then
 			if toCylinder:getId() == ITEM_GOLD_POUCH then
-				-- move item into gold pouch
 				if not isGold(item) then
 					self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
 					return false
-				end				
+				end
 			else
-				-- attempt to move into other container in store inbox
 				self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 				return false
 			end
@@ -40,13 +37,11 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 			local targetItem = toCylinder:getItem(toPosition.z)
 			if targetItem and targetItem:isContainer() then
 				if targetItem:getId() == ITEM_GOLD_POUCH then
-					-- move item into gold pouch
 					if not isGold(item) then
 						self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
 						return false
 					end
 				else
-					-- attempt to move into other container in store inbox
 					self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 					return false
 				end
