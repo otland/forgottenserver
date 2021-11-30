@@ -158,6 +158,17 @@ bool Npc::loadFromXml()
 	attackable = npcNode.attribute("attackable").as_bool();
 	floorChange = npcNode.attribute("floorchange").as_bool();
 
+	pugi::xml_attribute coin;
+	if ((coin = npcNode.attribute("currency"))) {
+		const ItemType& it = Item::items[pugi::cast<uint16_t>(coin.value())];
+		currencyServerId = it.id;
+		currencyClientId = it.clientId;
+	} else {
+		const ItemType& it = Item::items[ITEM_GOLD_COIN];
+		currencyServerId = it.id;
+		currencyClientId = it.clientId;
+	}
+
 	pugi::xml_attribute attr;
 	if ((attr = npcNode.attribute("speed"))) {
 		baseSpeed = pugi::cast<uint32_t>(attr.value());
