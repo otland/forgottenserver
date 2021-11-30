@@ -154,6 +154,13 @@ class Npc final : public Creature
 		void setSpeechBubble(const uint8_t bubble) {
 			speechBubble = bubble;
 		}
+		
+		uint16_t getCurrencyTrading() const {
+			return currencyClientId;
+		}
+		uint16_t getCurrency() const {
+			return currencyServerId;
+		}
 
 		void doSay(const std::string& text);
 		void doSayToPlayer(Player* player, const std::string& text);
