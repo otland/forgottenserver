@@ -246,6 +246,9 @@ class Npc final : public Creature
 
 		uint8_t speechBubble;
 
+		uint16_t currencyServerId;
+		uint16_t currencyClientId;
+
 		bool floorChange;
 		bool attackable;
 		bool ignoreHeight;
