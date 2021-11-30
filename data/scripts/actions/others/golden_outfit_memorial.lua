@@ -1,7 +1,7 @@
 local goldenOutfitMemorial = Action()
 
 function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local resultId = db.storeQuery("SELECT `player_id` FROM `player_storage` WHERE `key` = " .. Storage.GoldenOutfit .. " AND `value` >= 3;")
+	local resultId = db.storeQuery("SELECT `player_id` FROM `player_storage` WHERE `key` = " .. PlayerStorageKeys.goldenOutfit .. " AND `value` >= 3;")
 	if resultId ~= false then
 		local message = "The following characters have spent a fortune on a Golden Outfit:\n\nFull Outfit for 1,000,000,000 gold:\n\n"
 		repeat
@@ -21,5 +21,5 @@ function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPositi
 	return true
 end
 
-goldenOutfitMemorial:id(34174-34179)
+goldenOutfitMemorial:id(34174, 34175, 34176, 34177, 34178, 34179)
 goldenOutfitMemorial:register()

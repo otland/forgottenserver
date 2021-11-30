@@ -7,9 +7,9 @@ function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid) 
 function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
 function onThink()                          npcHandler:onThink()                        end
 
-local promotion = keywordHandler:addKeyword({'promot'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'I can promote you for 20000 gold coins. Do you want me to promote you?'})
-promotion:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, cost = 20000, level = 20, text = 'Congratulations! You are now promoted.'})
-promotion:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Alright then, come back when you are ready.', reset = true})
+local node1 = keywordHandler:addKeyword({'promot'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'I can promote you for 20000 gold coins. Do you want me to promote you?'})
+node1:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, cost = 20000, level = 20, text = 'Congratulations! You are now promoted.'})
+node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Alright then, come back when you are ready.', reset = true})
 
 local function creatureSayCallback(cid, type, msg)
 	if not npcHandler:isFocused(cid) then
@@ -30,7 +30,7 @@ local function creatureSayCallback(cid, type, msg)
 			selfSay("In that case, return to me once you made up your mind.", cid)
 			npcHandler.topic[cid] = 0
 		elseif npcHandler.topic[cid] == 3 then
-			if player:getStorageValue(Storage.GoldenOutfit) < 1 then
+			if player:getStorageValue(PlayerStorageKeys.goldenOutfit) < 1 then
 				if player:getTotalMoney() >= 500000000 then
 					local storeInbox = player:getStoreInbox()
 					if storeInbox then
@@ -49,7 +49,7 @@ local function creatureSayCallback(cid, type, msg)
 						player:addOutfit(1211)
 						player:addOutfit(1210)
 						player:getPosition():sendMagicEffect(CONST_ME_EARLY_THUNDER)
-						player:setStorageValue(Storage.GoldenOutfit, 1)
+						player:setStorageValue(PlayerStorageKeys.goldenOutfit, 1)
 					else
 						selfSay("Please make sure you have free slots in your store inbox.", cid)
 					end
@@ -61,8 +61,8 @@ local function creatureSayCallback(cid, type, msg)
 			end
 			npcHandler.topic[cid] = 2
 		elseif npcHandler.topic[cid] == 4 then
-			if player:getStorageValue(Storage.GoldenOutfit) == 1 then
-				if player:getStorageValue(Storage.GoldenOutfit) < 2 then
+			if player:getStorageValue(PlayerStorageKeys.goldenOutfit) == 1 then
+				if player:getStorageValue(PlayerStorageKeys.goldenOutfit) < 2 then
 					if player:getTotalMoney() >= 250000000 then
 						selfSay("Take this helmet as a token of great gratitude. Let us forever remember this day, my friend.", cid)
 
@@ -70,7 +70,7 @@ local function creatureSayCallback(cid, type, msg)
 						player:addOutfitAddon(1210, 2)
 						player:addOutfitAddon(1211, 2)
 						player:getPosition():sendMagicEffect(CONST_ME_EARLY_THUNDER)
-						player:setStorageValue(Storage.GoldenOutfit, 2)
+						player:setStorageValue(PlayerStorageKeys.goldenOutfit, 2)
 						npcHandler.topic[cid] = 2
 					else
 						selfSay("You do not have enough money to donate that amount.", cid)
@@ -86,8 +86,8 @@ local function creatureSayCallback(cid, type, msg)
 			end
 			npcHandler.topic[cid] = 2
 		elseif npcHandler.topic[cid] == 5 then
-			if player:getStorageValue(Storage.GoldenOutfit) == 2 then
-				if player:getStorageValue(Storage.GoldenOutfit) < 3 then
+			if player:getStorageValue(PlayerStorageKeys.goldenOutfit) == 2 then
+				if player:getStorageValue(PlayerStorageKeys.goldenOutfit) < 3 then
 					if player:getTotalMoney() >= 250000000 then
 						selfSay("Take this boots as a token of great gratitude. Let us forever remember this day, my friend.", cid)
 
@@ -95,7 +95,7 @@ local function creatureSayCallback(cid, type, msg)
 						player:addOutfitAddon(1210, 1)
 						player:addOutfitAddon(1211, 1)
 						player:getPosition():sendMagicEffect(CONST_ME_EARLY_THUNDER)
-						player:setStorageValue(Storage.GoldenOutfit, 3)
+						player:setStorageValue(PlayerStorageKeys.goldenOutfit, 3)
 						npcHandler.topic[cid] = 2
 					else
 						selfSay("You do not have enough money to donate that amount.", cid)
