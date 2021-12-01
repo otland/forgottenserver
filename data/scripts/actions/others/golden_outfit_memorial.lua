@@ -1,24 +1,21 @@
 local goldenOutfitMemorial = Action()
 
 function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local resultId = db.storeQuery("SELECT `player_id` FROM `player_storage` WHERE `key` = " .. PlayerStorageKeys.goldenOutfit .. " AND `value` >= 3;")
-	if resultId == false then
-		player:showTextDialog(item.itemid, "The Golden Outfit has not been acquired by anyone yet.")
-	else
-		local message = "The following characters have spent a fortune on a Golden Outfit:\n\nFull Outfit for 1,000,000,000 gold:\n\n"
-		repeat
-			local resultId2 = db.storeQuery("SELECT `name` FROM `players` WHERE `id` = " .. result.getDataInt(resultId, "player_id") .. ";")
-			if resultId2 ~= false then
-				local playerName = result.getString(resultId2, "name")
-				message = ""..message.."- ".. playerName .."\n"
-				result.free(resultId2)
-			end
-		until not result.next(resultId)
+    local resultId = db.storeQuery("SELECT `name` FROM `player_storage` INNER JOIN `players` ON `name` = `name` WHERE `key` = " .. PlayerStorageKeys.goldenOutfit .. " AND `value` >= 3;")
+    if not resultId then
+        player:showTextDialog(item.itemid, "The Golden Outfit has not been acquired by anyone yet.")
+        result.free(resultId)
+        return true
+    end
 
-		result.free(resultId)
-		player:showTextDialog(item.itemid, message)
-	end
-	return true
+    local message = "The following characters have spent a fortune on a Golden Outfit:\n\nFull Outfit for 1,000,000,000 gold:\n\n"
+    repeat
+        message = message .. string.format("- %s\n", result.getString(resultId, "name"))
+    until not result.next(resultId)
+
+    result.free(resultId)
+    player:showTextDialog(item.itemid, message)
+    return true
 end
 
 goldenOutfitMemorial:id(34174, 34175, 34176, 34177, 34178, 34179)
