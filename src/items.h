@@ -170,6 +170,7 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
 	ITEM_PARSE_STOREITEM,
+	ITEM_PARSE_WORTH,
 };
 
 struct Abilities {
@@ -334,6 +335,7 @@ class ItemType
 		uint16_t rotateTo = 0;
 		int32_t runeMagLevel = 0;
 		int32_t runeLevel = 0;
+		uint64_t worth = 0;
 
 		CombatType_t combatType = COMBAT_NONE;
 
@@ -400,6 +402,8 @@ class Items
 		using NameMap = std::unordered_map<std::string, uint16_t>;
 		using InventoryVector = std::vector<uint16_t>;
 
+		using CurrencyMap = std::map<uint64_t, uint16_t, std::greater<uint64_t>>;
+
 		Items();
 
 		// non-copyable
@@ -432,6 +436,7 @@ class Items
 		}
 
 		NameMap nameToItems;
+		CurrencyMap currencyItems;
 
 	private:
 		std::vector<ItemType> items;
