@@ -17,10 +17,10 @@ local function creatureSayCallback(cid, type, msg)
 	end
 
 	local player = Player(cid)
-	if(msgcontains(msg, "outfit")) or (msgcontains(msg, "addon")) then
+	if msgcontains(msg, "outfit") or msgcontains(msg, "addon") then
 		selfSay("In exchange for a truly generous donation, I will offer a special outfit. Do you want to make a donation?", cid)
 		npcHandler.topic[cid] = 1
-	elseif(msgcontains(msg, "yes")) then
+	elseif msgcontains(msg, "yes") then
 		if npcHandler.topic[cid] == 1 then
 			selfSay("Excellent! Now, let me explain. If you donate 1.000.000.000 gold pieces, you will be entitled to wear a unique outfit. ...", cid)
 			selfSay("You will be entitled to wear the {armor} for 500.000.000 gold pieces, {helmet} for an additional 250.000.000 and the {boots} for another 250.000.000 gold pieces. ...", cid)
@@ -111,13 +111,13 @@ local function creatureSayCallback(cid, type, msg)
 			end
 			npcHandler.topic[cid] = 2
 		end
-	elseif(msgcontains(msg, "armor")) and npcHandler.topic[cid] == 2 then
+	elseif msgcontains(msg, "armor") and npcHandler.topic[cid] == 2 then
 		selfSay("So you wold like to donate 500.000.000 gold pieces which in return will entitle you to wear a unique armor?", cid)
 		npcHandler.topic[cid] = 3
-	elseif(msgcontains(msg, "helmet")) and npcHandler.topic[cid] == 2 then
+	elseif msgcontains(msg, "helmet") and npcHandler.topic[cid] == 2 then
 		selfSay("So you would like to donate 250.000.000 gold pieces which in return will entitle you to wear unique helmet?", cid)
 		npcHandler.topic[cid] = 4
-	elseif(msgcontains(msg, "boots")) and npcHandler.topic[cid] == 2 then
+	elseif msgcontains(msg, "boots") and npcHandler.topic[cid] == 2 then
 		selfSay("So you would like to donate 250.000.000 gold pieces which in return will entitle you to wear a unique boots?", cid)
 		npcHandler.topic[cid] = 5
 	end
