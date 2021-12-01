@@ -2,7 +2,9 @@ local goldenOutfitMemorial = Action()
 
 function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local resultId = db.storeQuery("SELECT `player_id` FROM `player_storage` WHERE `key` = " .. PlayerStorageKeys.goldenOutfit .. " AND `value` >= 3;")
-	if resultId ~= false then
+	if resultId == false then
+		player:showTextDialog(item.itemid, "The Golden Outfit has not been acquired by anyone yet.")
+	else
 		local message = "The following characters have spent a fortune on a Golden Outfit:\n\nFull Outfit for 1,000,000,000 gold:\n\n"
 		repeat
 			local resultId2 = db.storeQuery("SELECT `name` FROM `players` WHERE `id` = " .. result.getDataInt(resultId, "player_id") .. ";")
@@ -15,8 +17,6 @@ function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPositi
 
 		result.free(resultId)
 		player:showTextDialog(item.itemid, message)
-	else
-		player:showTextDialog(item.itemid, "The Golden Outfit has not been acquired by anyone yet.")
 	end
 	return true
 end
