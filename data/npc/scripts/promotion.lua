@@ -22,9 +22,11 @@ local function creatureSayCallback(cid, type, msg)
 		npcHandler.topic[cid] = 1
 	elseif msgcontains(msg, "yes") then
 		if npcHandler.topic[cid] == 1 then
-			npcHandler:say("Excellent! Now, let me explain. If you donate 1.000.000.000 gold pieces, you will be entitled to wear a unique outfit. ...", cid)
-			npcHandler:say("You will be entitled to wear the {armor} for 500.000.000 gold pieces, {helmet} for an additional 250.000.000 and the {boots} for another 250.000.000 gold pieces. ...", cid)
-			npcHandler:say("What will it be?", cid)
+			npcHandler:say({
+				"Excellent! Now, let me explain. If you donate 1.000.000.000 gold pieces, you will be entitled to wear a unique outfit. ...",
+				"You will be entitled to wear the {armor} for 500.000.000 gold pieces, {helmet} for an additional 250.000.000 and the {boots} for another 250.000.000 gold pieces. ...",
+				"What will it be?"
+			}, cid)
 			npcHandler.topic[cid] = 2
 		elseif npcHandler.topic[cid] == 2 then
 			npcHandler:say("In that case, return to me once you made up your mind.", cid)
@@ -35,11 +37,10 @@ local function creatureSayCallback(cid, type, msg)
 					local storeInbox = player:getStoreInbox()
 					if storeInbox then
 						local item = Game.createItem(ITEM_DECORATION_KIT, 1)
-						local decoKitName = ItemType(34156):getName()
 						if item then
 							item:setStoreItem(true)
 							item:setAttribute("wrapid", 34156)
-							item:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "Unwrap it in your own house to create a " .. decoKitName .. ".")
+							item:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "Unwrap it in your own house to create a " .. ItemType(34156):getName() .. ".")
 							storeInbox:addItemEx(item)
 						end
 
@@ -49,14 +50,15 @@ local function creatureSayCallback(cid, type, msg)
 						player:addOutfit(1210)
 						player:getPosition():sendMagicEffect(CONST_ME_EARLY_THUNDER)
 						player:setStorageValue(PlayerStorageKeys.goldenOutfit, 1)
-					else
-						npcHandler:say("Please make sure you have free slots in your store inbox.", cid)
+						npcHandler.topic[cid] = 2
 					end
 				else
 					npcHandler:say("You do not have enough money to donate that amount.", cid)
+					npcHandler.topic[cid] = 2
 				end
 			else
-				npcHandler:say("You alread have that addon.", cid)
+				npcHandler:say("You already own this outfit.", cid)
+				npcHandler.topic[cid] = 0
 			end
 			npcHandler.topic[cid] = 2
 		elseif npcHandler.topic[cid] == 4 then
@@ -75,11 +77,11 @@ local function creatureSayCallback(cid, type, msg)
 						npcHandler.topic[cid] = 2
 					end
 				else
-					npcHandler:say("You alread have that outfit.", cid)
+					npcHandler:say("You already own this addon.", cid)
 					npcHandler.topic[cid] = 2
 				end
 			else
-				npcHandler:say("You need to donate {armor} outfit first.", cid)
+				npcHandler:say("You need to donate for the {armor} outfit first.", cid)
 				npcHandler.topic[cid] = 2
 			end
 			npcHandler.topic[cid] = 2
@@ -99,11 +101,11 @@ local function creatureSayCallback(cid, type, msg)
 						npcHandler.topic[cid] = 2
 					end
 				else
-					npcHandler:say("You alread have that outfit.", cid)
+					npcHandler:say("You already own this addon.", cid)
 					npcHandler.topic[cid] = 2
 				end
 			else
-				npcHandler:say("You need to donate {helmet} addon first.", cid)
+				npcHandler:say("You need to donate for the {helmet} addon first.", cid)
 				npcHandler.topic[cid] = 2
 			end
 			npcHandler.topic[cid] = 2
@@ -112,7 +114,7 @@ local function creatureSayCallback(cid, type, msg)
 		npcHandler:say("So you wold like to donate 500.000.000 gold pieces which in return will entitle you to wear a unique armor?", cid)
 		npcHandler.topic[cid] = 3
 	elseif msgcontains(msg, "helmet") and npcHandler.topic[cid] == 2 then
-		npcHandler:say("So you would like to donate 250.000.000 gold pieces which in return will entitle you to wear unique helmet?", cid)
+		npcHandler:say("So you would like to donate 250.000.000 gold pieces which in return will entitle you to wear a unique helmet?", cid)
 		npcHandler.topic[cid] = 4
 	elseif msgcontains(msg, "boots") and npcHandler.topic[cid] == 2 then
 		npcHandler:say("So you would like to donate 250.000.000 gold pieces which in return will entitle you to wear a unique boots?", cid)
