@@ -3010,7 +3010,6 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
-	bool mounted = currentOutfit.lookMount != 0;
 
 	if (currentOutfit.lookType == 0) {
 		Outfit_t newOutfit;
@@ -3023,6 +3022,7 @@ void ProtocolGame::sendOutfitWindow()
 		currentOutfit.lookMount = currentMount->clientId;
 	}
 
+	bool mounted = currentOutfit.lookMount != 0;
 	AddOutfit(msg, currentOutfit);
 
 	// mount color bytes are required here regardless of having one
