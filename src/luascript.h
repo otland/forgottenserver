@@ -665,8 +665,11 @@ class LuaScriptInterface
 
 		static int luaNetworkMessageAddByte(lua_State* L);
 		static int luaNetworkMessageAddU16(lua_State* L);
+		static int luaNetworkMessageAddI16(lua_State* L);
 		static int luaNetworkMessageAddU32(lua_State* L);
+		static int luaNetworkMessageAddI32(lua_State* L);
 		static int luaNetworkMessageAddU64(lua_State* L);
+		static int luaNetworkMessageAddI64(lua_State* L);
 		static int luaNetworkMessageAddString(lua_State* L);
 		static int luaNetworkMessageAddPosition(lua_State* L);
 		static int luaNetworkMessageAddDouble(lua_State* L);
