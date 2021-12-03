@@ -2299,8 +2299,11 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("NetworkMessage", "addByte", LuaScriptInterface::luaNetworkMessageAddByte);
 	registerMethod("NetworkMessage", "addU16", LuaScriptInterface::luaNetworkMessageAddU16);
+	registerMethod("NetworkMessage", "addI16", LuaScriptInterface::luaNetworkMessageAddI16);
 	registerMethod("NetworkMessage", "addU32", LuaScriptInterface::luaNetworkMessageAddU32);
+	registerMethod("NetworkMessage", "addI32", LuaScriptInterface::luaNetworkMessageAddI32);
 	registerMethod("NetworkMessage", "addU64", LuaScriptInterface::luaNetworkMessageAddU64);
+	registerMethod("NetworkMessage", "addI64", LuaScriptInterface::luaNetworkMessageAddI64);
 	registerMethod("NetworkMessage", "addString", LuaScriptInterface::luaNetworkMessageAddString);
 	registerMethod("NetworkMessage", "addPosition", LuaScriptInterface::luaNetworkMessageAddPosition);
 	registerMethod("NetworkMessage", "addDouble", LuaScriptInterface::luaNetworkMessageAddDouble);
@@ -5947,6 +5950,20 @@ int LuaScriptInterface::luaNetworkMessageAddU16(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaNetworkMessageAddI16(lua_State* L)
+{
+	// networkMessage:addI16(number)
+	int16_t number = getNumber<int16_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (message) {
+		message->add<int16_t>(number);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 {
 	// networkMessage:addU32(number)
@@ -5961,6 +5978,20 @@ int LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaNetworkMessageAddI32(lua_State* L)
+{
+	// networkMessage:addI32(number)
+	int32_t number = getNumber<int32_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (message) {
+		message->add<int32_t>(number);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 {
 	// networkMessage:addU64(number)
@@ -5968,6 +5999,20 @@ int LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
 	if (message) {
 		message->add<uint64_t>(number);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNetworkMessageAddI64(lua_State* L)
+{
+	// networkMessage:addI64(number)
+	int64_t number = getNumber<int64_t>(L, 2);
+	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	if (message) {
+		message->add<int64_t>(number);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
