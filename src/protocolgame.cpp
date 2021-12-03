@@ -3299,7 +3299,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getStaminaMinutes());
 	msg.add<uint16_t>(player->getBaseSpeed() / 2);
 
-	Condition* condition = player->getCondition(CONDITION_REGENERATION);
+	Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
 	msg.add<uint16_t>(condition ? condition->getTicks() / 1000 : 0x00);
 
 	msg.add<uint16_t>(player->getOfflineTrainingTime() / 60 / 1000);
