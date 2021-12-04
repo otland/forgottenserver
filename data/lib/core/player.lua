@@ -171,40 +171,20 @@ function Player.canCarryMoney(self, amount)
 	local totalWeight = 0
 	local inventorySlots = 0
 
-	-- Add crystal coins to totalWeight and inventorySlots
-	local type_crystal = ItemType(ITEM_CRYSTAL_COIN)
-	local crystalCoins = math.floor(amount / 10000)
-	if crystalCoins > 0 then
-		amount = amount - (crystalCoins * 10000)
-		while crystalCoins > 0 do
-			local count = math.min(100, crystalCoins)
-			totalWeight = totalWeight + type_crystal:getWeight(count)
-			crystalCoins = crystalCoins - count
-			inventorySlots = inventorySlots + 1
-		end
-	end
-
-	-- Add platinum coins to totalWeight and inventorySlots
-	local type_platinum = ItemType(ITEM_PLATINUM_COIN)
-	local platinumCoins = math.floor(amount / 100)
-	if platinumCoins > 0 then
-		amount = amount - (platinumCoins * 100)
-		while platinumCoins > 0 do
-			local count = math.min(100, platinumCoins)
-			totalWeight = totalWeight + type_platinum:getWeight(count)
-			platinumCoins = platinumCoins - count
-			inventorySlots = inventorySlots + 1
-		end
-	end
-
-	-- Add gold coins to totalWeight and inventorySlots
-	local type_gold = ItemType(ITEM_GOLD_COIN)
-	if amount > 0 then
-		while amount > 0 do
-			local count = math.min(100, amount)
-			totalWeight = totalWeight + type_gold:getWeight(count)
-			amount = amount - count
-			inventorySlots = inventorySlots + 1
+	local currencyItems = Game.getCurrencyItems()
+	for index = #currencyItems, 1, -1 do
+		local currency = currencyItems[index]
+		-- Add currency coins to totalWeight and inventorySlots
+		local worth = currency:getWorth()
+		local currencyCoins = math.floor(amount / worth)
+		if currencyCoins > 0 then
+			amount = amount - (currencyCoins * worth)
+			while currencyCoins > 0 do
+				local count = math.min(100, currencyCoins)
+				totalWeight = totalWeight + currency:getWeight(count)
+				currencyCoins = currencyCoins - count
+				inventorySlots = inventorySlots + 1
+			end
 		end
 	end
 
