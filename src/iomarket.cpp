@@ -46,7 +46,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 	do {
 		MarketOffer offer;
 		offer.amount = result->getNumber<uint16_t>("amount");
-		offer.price = result->getNumber<uint32_t>("price");
+		offer.price = result->getNumber<uint64_t>("price");
 		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
 		offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
 		if (result->getNumber<uint16_t>("anonymous") == 0) {
@@ -73,7 +73,7 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 	do {
 		MarketOffer offer;
 		offer.amount = result->getNumber<uint16_t>("amount");
-		offer.price = result->getNumber<uint32_t>("price");
+		offer.price = result->getNumber<uint64_t>("price");
 		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
 		offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
 		offer.itemId = result->getNumber<uint16_t>("itemtype");
@@ -95,7 +95,7 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 		HistoryMarketOffer offer;
 		offer.itemId = result->getNumber<uint16_t>("itemtype");
 		offer.amount = result->getNumber<uint16_t>("amount");
-		offer.price = result->getNumber<uint32_t>("price");
+		offer.price = result->getNumber<uint64_t>("price");
 		offer.timestamp = result->getNumber<uint32_t>("expires_at");
 
 		MarketOfferState_t offerState = static_cast<MarketOfferState_t>(result->getNumber<uint16_t>("state"));
@@ -225,7 +225,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	offer.amount = result->getNumber<uint16_t>("amount");
 	offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
 	offer.timestamp = result->getNumber<uint32_t>("created");
-	offer.price = result->getNumber<uint32_t>("price");
+	offer.price = result->getNumber<uint64_t>("price");
 	offer.itemId = result->getNumber<uint16_t>("itemtype");
 	offer.playerId = result->getNumber<uint32_t>("player_id");
 	if (result->getNumber<uint16_t>("anonymous") == 0) {
@@ -236,7 +236,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	return offer;
 }
 
-void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint32_t price, bool anonymous)
+void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint64_t price, bool anonymous)
 {
 	Database::getInstance().executeQuery(fmt::format("INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})", playerId, action, itemId, amount, price, time(nullptr), anonymous));
 }
@@ -251,7 +251,7 @@ void IOMarket::deleteOffer(uint32_t offerId)
 	Database::getInstance().executeQuery(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId));
 }
 
-void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint32_t price, time_t timestamp, MarketOfferState_t state)
+void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint64_t price, time_t timestamp, MarketOfferState_t state)
 {
 	g_databaseTasks.addTask(fmt::format("INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})", playerId, type, itemId, amount, price, timestamp, time(nullptr), state));
 }
@@ -271,7 +271,7 @@ bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 		return false;
 	}
 
-	appendHistory(result->getNumber<uint32_t>("player_id"), static_cast<MarketAction_t>(result->getNumber<uint16_t>("sale")), result->getNumber<uint16_t>("itemtype"), result->getNumber<uint16_t>("amount"), result->getNumber<uint32_t>("price"), result->getNumber<uint32_t>("created") + marketOfferDuration, state);
+	appendHistory(result->getNumber<uint32_t>("player_id"), static_cast<MarketAction_t>(result->getNumber<uint16_t>("sale")), result->getNumber<uint16_t>("itemtype"), result->getNumber<uint16_t>("amount"), result->getNumber<uint64_t>("price"), result->getNumber<uint32_t>("created") + marketOfferDuration, state);
 	return true;
 }
 
@@ -291,9 +291,9 @@ void IOMarket::updateStatistics()
 		}
 
 		statistics->numTransactions = result->getNumber<uint32_t>("num");
-		statistics->lowestPrice = result->getNumber<uint32_t>("min");
+		statistics->lowestPrice = result->getNumber<uint64_t>("min");
 		statistics->totalPrice = result->getNumber<uint64_t>("sum");
-		statistics->highestPrice = result->getNumber<uint32_t>("max");
+		statistics->highestPrice = result->getNumber<uint64_t>("max");
 	} while (result->next());
 }
 
