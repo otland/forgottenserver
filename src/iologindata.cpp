@@ -109,15 +109,18 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		return 0;
 	}
 
-	std::string secret = decodeSecret(result->getString("secret"));
-	if (!secret.empty()) {
-		if (token.empty()) {
-			return 0;
-		}
+	// two-factor auth
+	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+		std::string secret = decodeSecret(result->getString("secret"));
+		if (!secret.empty()) {
+			if (token.empty()) {
+				return 0;
+			}
 
-		bool tokenValid = token == generateToken(secret, tokenTime) || token == generateToken(secret, tokenTime - 1) || token == generateToken(secret, tokenTime + 1);
-		if (!tokenValid) {
-			return 0;
+			bool tokenValid = token == generateToken(secret, tokenTime) || token == generateToken(secret, tokenTime - 1) || token == generateToken(secret, tokenTime + 1);
+			if (!tokenValid) {
+				return 0;
+			}
 		}
 	}
 

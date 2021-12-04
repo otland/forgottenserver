@@ -388,8 +388,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string sessionKey = msg.getString();
 	auto sessionArgs = explodeString(sessionKey, "\n", 4); // acc name or email, password, token, timestamp divided by 30
-	if (sessionArgs.size() != 4) {
-		disconnect();
+	if (sessionArgs.size() < 2) {
+		disconnectClient("Malformed session key.");
 		return;
 	}
 
@@ -400,25 +400,37 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
-	std::string& token = sessionArgs[2];
-	uint32_t tokenTime = 0;
-	try {
-		tokenTime = std::stoul(sessionArgs[3]);
-	} catch (const std::invalid_argument&) {
-		disconnectClient("Malformed token packet.");
-		return;
-	} catch (const std::out_of_range&) {
-		disconnectClient("Token time is too long.");
-		return;
-	}
-
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
 		return;
 	}
 
-	std::string characterName = msg.getString();
+	std::string token;
+	uint32_t tokenTime = 0;
 
+	// two-factor auth
+	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+		if (sessionArgs.size() < 4) {
+			disconnectClient("Authentication failed. Incomplete session key.");
+			return;
+		}
+
+		token = sessionArgs[2];
+
+		try {
+			tokenTime = std::stoul(sessionArgs[3]);
+		} catch (const std::invalid_argument&) {
+			disconnectClient("Malformed token packet.");
+			return;
+		} catch (const std::out_of_range&) {
+			disconnectClient("Token time is too long.");
+			return;
+		}
+	} else {
+		tokenTime = std::floor(challengeTimestamp / 30);
+	}
+
+	std::string characterName = msg.getString();
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
