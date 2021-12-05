@@ -8,4 +8,6 @@
 	<event type="death" name="PlayerDeath" script="playerdeath.lua" />
 	<event type="death" name="DropLoot" script="droploot.lua" />
 	<event type="extendedopcode" name="ExtendedOpcode" script="extendedopcode.lua" />
+
+	<!-- <event type="parsepacket" recvbyte="130" name="ParsePacket" script="parsepacket.lua" /> -->
 </creaturescripts>

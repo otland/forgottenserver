@@ -21,12 +21,16 @@
 #define FS_NETWORKMESSAGE_H_B853CFED58D1413A87ACED07B2926E03
 
 #include "const.h"
+#include "memory"
 
 class Item;
 class Creature;
 class Player;
 struct Position;
 class RSA;
+
+class NetworkMessage;
+using NetworkMessage_ptr = std::shared_ptr<NetworkMessage>;
 
 class NetworkMessage
 {
@@ -44,6 +48,10 @@ class NetworkMessage
 		enum { MAX_PROTOCOL_BODY_LENGTH = MAX_BODY_LENGTH - 10 };
 
 		NetworkMessage() = default;
+		NetworkMessage(const NetworkMessage& other) {
+			info = other.info;
+			memcpy(&buffer, &other.buffer, sizeof(other.buffer) / sizeof(other.buffer[0]));
+		}
 
 		void reset() {
 			info = {};

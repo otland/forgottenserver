@@ -1521,7 +1521,7 @@ bool Creature::unregisterCreatureEvent(const std::string& name)
 	return true;
 }
 
-CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
+CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type, uint8_t recvbyte /*= 0*/)
 {
 	CreatureEventList tmpEventList;
 
@@ -1535,6 +1535,10 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 		}
 
 		if (creatureEvent->getEventType() == type) {
+			if (type == CREATURE_EVENT_PARSE_PACKET && creatureEvent->getRecvbyte() != recvbyte) {
+				continue;
+			}
+
 			tmpEventList.push_back(creatureEvent);
 		}
 	}

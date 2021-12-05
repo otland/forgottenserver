@@ -555,7 +555,7 @@ class Creature : virtual public Thing
 		bool hasEventRegistered(CreatureEventType_t event) const {
 			return (0 != (scriptEventsBitField & (static_cast<uint32_t>(1) << event)));
 		}
-		CreatureEventList getCreatureEvents(CreatureEventType_t type);
+		CreatureEventList getCreatureEvents(CreatureEventType_t type, uint8_t recvbyte = 0);
 
 		void updateMapCache();
 		void updateTileCache(const Tile* tile, int32_t dx, int32_t dy);

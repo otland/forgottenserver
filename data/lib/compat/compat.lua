@@ -161,6 +161,10 @@ do
 			self:type("extendedopcode")
 			self:onExtendedOpcode(value)
 			return
+		elseif key == "onParsePacket" then
+			self:type("parsepacket")
+			self:onParsePacket(value)
+			return
 		end
 		rawset(self, key, value)
 	end

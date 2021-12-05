@@ -1503,6 +1503,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CREATURE_EVENT_HEALTHCHANGE)
 	registerEnum(CREATURE_EVENT_MANACHANGE)
 	registerEnum(CREATURE_EVENT_EXTENDED_OPCODE)
+	registerEnum(CREATURE_EVENT_PARSE_PACKET)
 
 	registerEnum(CREATURE_ID_MIN)
 	registerEnum(CREATURE_ID_MAX)
@@ -3109,6 +3110,7 @@ void LuaScriptInterface::registerFunctions()
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
 	registerMethod("CreatureEvent", "type", LuaScriptInterface::luaCreatureEventType);
 	registerMethod("CreatureEvent", "register", LuaScriptInterface::luaCreatureEventRegister);
+	registerMethod("CreatureEvent", "recvbyte", LuaScriptInterface::luaCreatureEventRecvbyte);
 	registerMethod("CreatureEvent", "onLogin", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onLogout", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onThink", LuaScriptInterface::luaCreatureEventOnCallback);
@@ -3121,6 +3123,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("CreatureEvent", "onHealthChange", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onManaChange", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onExtendedOpcode", LuaScriptInterface::luaCreatureEventOnCallback);
+	registerMethod("CreatureEvent", "onParsePacket", LuaScriptInterface::luaCreatureEventOnCallback);
 
 	// MoveEvent
 	registerClass("MoveEvent", "", LuaScriptInterface::luaCreateMoveEvent);
@@ -5699,17 +5702,16 @@ int LuaScriptInterface::luaTileGetHouse(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageCreate(lua_State* L)
 {
 	// NetworkMessage()
-	pushUserdata<NetworkMessage>(L, new NetworkMessage);
+	pushSharedPtr(L, std::make_shared<NetworkMessage>());
 	setMetatable(L, -1, "NetworkMessage");
 	return 1;
 }
 
 int LuaScriptInterface::luaNetworkMessageDelete(lua_State* L)
 {
-	NetworkMessage** messagePtr = getRawUserdata<NetworkMessage>(L, 1);
-	if (messagePtr && *messagePtr) {
-		delete *messagePtr;
-		*messagePtr = nullptr;
+	NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
+	if (message) {
+		message.reset();
 	}
 	return 0;
 }
@@ -5717,7 +5719,7 @@ int LuaScriptInterface::luaNetworkMessageDelete(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageGetByte(lua_State* L)
 {
 	// networkMessage:getByte()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->getByte());
 	} else {
@@ -5729,7 +5731,7 @@ int LuaScriptInterface::luaNetworkMessageGetByte(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageGetU16(lua_State* L)
 {
 	// networkMessage:getU16()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->get<uint16_t>());
 	} else {
@@ -5741,7 +5743,7 @@ int LuaScriptInterface::luaNetworkMessageGetU16(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageGetU32(lua_State* L)
 {
 	// networkMessage:getU32()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->get<uint32_t>());
 	} else {
@@ -5753,7 +5755,7 @@ int LuaScriptInterface::luaNetworkMessageGetU32(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageGetU64(lua_State* L)
 {
 	// networkMessage:getU64()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->get<uint64_t>());
 	} else {
@@ -5765,7 +5767,7 @@ int LuaScriptInterface::luaNetworkMessageGetU64(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageGetString(lua_State* L)
 {
 	// networkMessage:getString()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		pushString(L, message->getString());
 	} else {
@@ -5777,7 +5779,7 @@ int LuaScriptInterface::luaNetworkMessageGetString(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageGetPosition(lua_State* L)
 {
 	// networkMessage:getPosition()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		pushPosition(L, message->getPosition());
 	} else {
@@ -5790,7 +5792,7 @@ int LuaScriptInterface::luaNetworkMessageAddByte(lua_State* L)
 {
 	// networkMessage:addByte(number)
 	uint8_t number = getNumber<uint8_t>(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->addByte(number);
 		pushBoolean(L, true);
@@ -5804,7 +5806,7 @@ int LuaScriptInterface::luaNetworkMessageAddU16(lua_State* L)
 {
 	// networkMessage:addU16(number)
 	uint16_t number = getNumber<uint16_t>(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->add<uint16_t>(number);
 		pushBoolean(L, true);
@@ -5818,7 +5820,7 @@ int LuaScriptInterface::luaNetworkMessageAddU32(lua_State* L)
 {
 	// networkMessage:addU32(number)
 	uint32_t number = getNumber<uint32_t>(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->add<uint32_t>(number);
 		pushBoolean(L, true);
@@ -5832,7 +5834,7 @@ int LuaScriptInterface::luaNetworkMessageAddU64(lua_State* L)
 {
 	// networkMessage:addU64(number)
 	uint64_t number = getNumber<uint64_t>(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->add<uint64_t>(number);
 		pushBoolean(L, true);
@@ -5846,7 +5848,7 @@ int LuaScriptInterface::luaNetworkMessageAddString(lua_State* L)
 {
 	// networkMessage:addString(string)
 	const std::string& string = getString(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->addString(string);
 		pushBoolean(L, true);
@@ -5860,7 +5862,7 @@ int LuaScriptInterface::luaNetworkMessageAddPosition(lua_State* L)
 {
 	// networkMessage:addPosition(position)
 	const Position& position = getPosition(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->addPosition(position);
 		pushBoolean(L, true);
@@ -5874,7 +5876,7 @@ int LuaScriptInterface::luaNetworkMessageAddDouble(lua_State* L)
 {
 	// networkMessage:addDouble(number)
 	double number = getNumber<double>(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->addDouble(number);
 		pushBoolean(L, true);
@@ -5894,7 +5896,7 @@ int LuaScriptInterface::luaNetworkMessageAddItem(lua_State* L)
 		return 1;
 	}
 
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->addItem(item);
 		pushBoolean(L, true);
@@ -5907,7 +5909,7 @@ int LuaScriptInterface::luaNetworkMessageAddItem(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageAddItemId(lua_State* L)
 {
 	// networkMessage:addItemId(itemId)
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (!message) {
 		lua_pushnil(L);
 		return 1;
@@ -5932,7 +5934,7 @@ int LuaScriptInterface::luaNetworkMessageAddItemId(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageReset(lua_State* L)
 {
 	// networkMessage:reset()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->reset();
 		pushBoolean(L, true);
@@ -5945,7 +5947,7 @@ int LuaScriptInterface::luaNetworkMessageReset(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageSeek(lua_State* L)
 {
 	// networkMessage:seek(position)
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message && isNumber(L, 2)) {
 		pushBoolean(L, message->setBufferPosition(getNumber<uint16_t>(L, 2)));
 	} else {
@@ -5957,7 +5959,7 @@ int LuaScriptInterface::luaNetworkMessageSeek(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageTell(lua_State* L)
 {
 	// networkMessage:tell()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->getBufferPosition() - message->INITIAL_BUFFER_POSITION);
 	} else {
@@ -5969,7 +5971,7 @@ int LuaScriptInterface::luaNetworkMessageTell(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageLength(lua_State* L)
 {
 	// networkMessage:len()
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		lua_pushnumber(L, message->getLength());
 	} else {
@@ -5982,7 +5984,7 @@ int LuaScriptInterface::luaNetworkMessageSkipBytes(lua_State* L)
 {
 	// networkMessage:skipBytes(number)
 	int16_t number = getNumber<int16_t>(L, 2);
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (message) {
 		message->skipBytes(number);
 		pushBoolean(L, true);
@@ -5995,7 +5997,7 @@ int LuaScriptInterface::luaNetworkMessageSkipBytes(lua_State* L)
 int LuaScriptInterface::luaNetworkMessageSendToPlayer(lua_State* L)
 {
 	// networkMessage:sendToPlayer(player)
-	NetworkMessage* message = getUserdata<NetworkMessage>(L, 1);
+	const NetworkMessage_ptr& message = getSharedPtr<NetworkMessage>(L, 1);
 	if (!message) {
 		lua_pushnil(L);
 		return 1;
@@ -7308,7 +7310,7 @@ int LuaScriptInterface::luaCreatureCreate(lua_State* L)
 
 int LuaScriptInterface::luaCreatureGetEvents(lua_State* L)
 {
-	// creature:getEvents(type)
+	// creature:getEvents(type[, recvbyte = 0])
 	Creature* creature = getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
@@ -7316,7 +7318,7 @@ int LuaScriptInterface::luaCreatureGetEvents(lua_State* L)
 	}
 
 	CreatureEventType_t eventType = getNumber<CreatureEventType_t>(L, 2);
-	const auto& eventList = creature->getCreatureEvents(eventType);
+	const auto& eventList = creature->getCreatureEvents(eventType, getNumber<uint8_t>(L, 3, 0));
 	lua_createtable(L, eventList.size(), 0);
 
 	int index = 0;
@@ -16118,6 +16120,8 @@ int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 			creature->setEventType(CREATURE_EVENT_MANACHANGE);
 		} else if (tmpStr == "extendedopcode") {
 			creature->setEventType(CREATURE_EVENT_EXTENDED_OPCODE);
+		} else if (tmpStr == "parsepacket") {
+			creature->setEventType(CREATURE_EVENT_PARSE_PACKET);
 		} else {
 			std::cout << "[Error - CreatureEvent::configureLuaEvent] Invalid type for creature event: " << typeName << std::endl;
 			pushBoolean(L, false);
@@ -16140,6 +16144,19 @@ int LuaScriptInterface::luaCreatureEventRegister(lua_State* L)
 			return 1;
 		}
 		pushBoolean(L, g_creatureEvents->registerLuaEvent(creature));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureEventRecvbyte(lua_State* L)
+{
+	// creatureevent:recvbyte(byte)
+	CreatureEvent* creature = getUserdata<CreatureEvent>(L, 1);
+	if (creature && creature->getEventType() == CREATURE_EVENT_PARSE_PACKET) {
+		creature->setRecvbyte(getNumber<uint8_t>(L, 2));
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
