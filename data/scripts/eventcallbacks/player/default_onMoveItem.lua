@@ -1,8 +1,3 @@
-local function isCurrency(item)
-	local itemId = item:getId()
-	return itemId == ITEM_GOLD_COIN or itemId == ITEM_PLATINUM_COIN or itemId == ITEM_CRYSTAL_COIN
-end
-
 local ec = EventCallback
 
 ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
@@ -25,7 +20,7 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 		local parent = toCylinder:getParent()
 		if parent:isItem() and parent:getId() == ITEM_STORE_INBOX then
 			if toCylinder:getId() == ITEM_GOLD_POUCH then
-				if not isCurrency(item) then
+				if item:getWorth() == 0 then
 					self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
 					return false
 				end
@@ -37,7 +32,7 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 			local targetItem = toCylinder:getItem(toPosition.z)
 			if targetItem and targetItem:isContainer() then
 				if targetItem:getId() == ITEM_GOLD_POUCH then
-					if not isCurrency(item) then
+					if item:getWorth() == 0 then
 						self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can move only money to this container.")
 						return false
 					end
