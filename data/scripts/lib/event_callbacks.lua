@@ -1,53 +1,61 @@
--- registerEnum mechanism
-local callbacks, updateableParameters, isReturnValue, autoID = {}, {}, {}, 0
-local registerEnum = setmetatable({}, {
-	__newindex = function (self, globalVariableName, enum)
+local callbacks = {}
+local getInfo = {}
+local updateableParameters = {}
+local autoID = 0
+local ec = setmetatable({}, {
+	__newindex = function (self, n, v)
 		autoID = autoID +1
-		_G[globalVariableName] = autoID
-		callbacks[enum[1]] = autoID
-		isReturnValue[autoID] = enum.returnValue
-		if enum.update then
-			updateableParameters[autoID] = enum.update
+		local name = string.format('EVENT_CALLBACK_%s', n:upper())
+		_G[name] = autoID
+		callbacks[n] = autoID
+		local infos = {}
+		local updates = {}
+		for key, value in pairs(v) do
+			if type(key) == "number" then
+				updates[key] = value
+			else
+				infos[key] = value
+			end
 		end
+		getInfo[autoID] = infos
+		updateableParameters[autoID] = updates
+		rawset(self, name, autoID)
 	end
 })
 
--- update: this makes the system update the parameter [n] with the result in the given index, example: [3]=1
--- returnValue: this determines that the value returned by the function is a RETURNVALUE_...
-
 -- Creature
-registerEnum.EVENT_CALLBACK_ONCHANGEOUTFIT = { "onChangeOutfit" }
-registerEnum.EVENT_CALLBACK_ONCHANGEMOUNT = { "onChangeMount" }
-registerEnum.EVENT_CALLBACK_ONAREACOMBAT = { "onAreaCombat", returnValue=true }
-registerEnum.EVENT_CALLBACK_ONTARGETCOMBAT = { "onTargetCombat", returnValue=true }
-registerEnum.EVENT_CALLBACK_ONHEAR = { "onHear" }
+ec.onChangeOutfit = {} -- EVENT_CALLBACK_ONCHANGEOUTFIT
+ec.onChangeMount = {} -- EVENT_CALLBACK_ONCHANGEMOUNT
+ec.onAreaCombat = {returnValue=true} -- EVENT_CALLBACK_ONAREACOMBAT
+ec.onTargetCombat = {returnValue=true} -- EVENT_CALLBACK_ONTARGETCOMBAT
+ec.onHear = {} -- EVENT_CALLBACK_ONHEAR
 -- Party
-registerEnum.EVENT_CALLBACK_ONJOIN = { "onJoin" }
-registerEnum.EVENT_CALLBACK_ONLEAVE = { "onLeave" }
-registerEnum.EVENT_CALLBACK_ONDISBAND = { "onDisband" }
-registerEnum.EVENT_CALLBACK_ONSHAREEXPERIENCE = { "onShareExperience" }
+ec.onJoin = {} -- EVENT_CALLBACK_ONJOIN
+ec.onLeave = {} -- EVENT_CALLBACK_ONLEAVE
+ec.onDisband = {} -- EVENT_CALLBACK_ONDISBAND
+ec.onShareExperience = {} -- EVENT_CALLBACK_ONSHAREEXPERIENCE
 -- Player
-registerEnum.EVENT_CALLBACK_ONBROWSEFIELD = { "onBrowseField" }
-registerEnum.EVENT_CALLBACK_ONLOOK = { "onLook", update={[5]=1} }
-registerEnum.EVENT_CALLBACK_ONLOOKINBATTLELIST = { "onLookInBattleList", update={[4]=1} }
-registerEnum.EVENT_CALLBACK_ONLOOKINTRADE = { "onLookInTrade", update={[5]=1} }
-registerEnum.EVENT_CALLBACK_ONLOOKINSHOP = { "onLookInShop", update={[4]=1} }
-registerEnum.EVENT_CALLBACK_ONTRADEREQUEST = { "onTradeRequest" }
-registerEnum.EVENT_CALLBACK_ONTRADEACCEPT = { "onTradeAccept" }
-registerEnum.EVENT_CALLBACK_ONTRADECOMPLETED = { "onTradeCompleted" }
-registerEnum.EVENT_CALLBACK_ONMOVEITEM = { "onMoveItem" }
-registerEnum.EVENT_CALLBACK_ONITEMMOVED = { "onItemMoved" }
-registerEnum.EVENT_CALLBACK_ONMOVECREATURE = { "onMoveCreature" }
-registerEnum.EVENT_CALLBACK_ONREPORTRULEVIOLATION = { "onReportRuleViolation" }
-registerEnum.EVENT_CALLBACK_ONREPORTBUG = { "onReportBug" }
-registerEnum.EVENT_CALLBACK_ONTURN = { "onTurn" }
-registerEnum.EVENT_CALLBACK_ONGAINEXPERIENCE = { "onGainExperience", update={[3]=1} }
-registerEnum.EVENT_CALLBACK_ONLOSEEXPERIENCE = { "onLoseExperience", update={[2]=1} }
-registerEnum.EVENT_CALLBACK_ONGAINSKILLTRIES = { "onGainSkillTries", update={[3]=1} }
-registerEnum.EVENT_CALLBACK_ONWRAPITEM = { "onWrapItem" }
+ec.onBrowseField = {} -- EVENT_CALLBACK_ONBROWSEFIELD
+ec.onLook = {[5]=1} -- EVENT_CALLBACK_ONLOOK
+ec.onLookInBattleList = {[4]=1} -- EVENT_CALLBACK_ONLOOKINBATTLELIST
+ec.onLookInTrade = {[5]=1} -- EVENT_CALLBACK_ONLOOKINTRADE
+ec.onLookInShop = {[4]=1} -- EVENT_CALLBACK_ONLOOKINSHOP
+ec.onTradeRequest = {} -- EVENT_CALLBACK_ONTRADEREQUEST
+ec.onTradeAccept = {} -- EVENT_CALLBACK_ONTRADEACCEPT
+ec.onTradeCompleted = {} -- EVENT_CALLBACK_ONTRADECOMPLETED
+ec.onMoveItem = {} -- EVENT_CALLBACK_ONMOVEITEM
+ec.onItemMoved = {} -- EVENT_CALLBACK_ONITEMMOVED
+ec.onMoveCreature = {} -- EVENT_CALLBACK_ONMOVECREATURE
+ec.onReportRuleViolation = {} -- EVENT_CALLBACK_ONREPORTRULEVIOLATION
+ec.onReportBug = {} -- EVENT_CALLBACK_ONREPORTBUG
+ec.onTurn = {} -- EVENT_CALLBACK_ONTURN
+ec.onGainExperience = {[3]=1} -- EVENT_CALLBACK_ONGAINEXPERIENCE
+ec.onLoseExperience = {[2]=1} -- EVENT_CALLBACK_ONLOSEEXPERIENCE
+ec.onGainSkillTries = {[3]=1} -- EVENT_CALLBACK_ONGAINSKILLTRIES
+ec.onWrapItem = {} -- EVENT_CALLBACK_ONWRAPITEM
 -- Monster
-registerEnum.EVENT_CALLBACK_ONDROPLOOT = { "onDropLoot" }
-registerEnum.EVENT_CALLBACK_ONSPAWN = { "onSpawn" }
+ec.onDropLoot = {} -- EVENT_CALLBACK_ONDROPLOOT
+ec.onSpawn = {} -- EVENT_CALLBACK_ONSPAWN
 -- last (for correct table counting)
 EVENT_CALLBACK_LAST = EVENT_CALLBACK_ONSPAWN
 
@@ -110,7 +118,7 @@ setmetatable(EventCallback, {
 					return false
 				end
 				-- If the call of type returnvalue returns noerror then we continue the loop
-				if isReturnValue[eventCallback] then
+				if getInfo[eventCallback].returnValue then
 					if output == RETURNVALUE_NOERROR then
 						break
 					end
@@ -124,11 +132,8 @@ setmetatable(EventCallback, {
 			until true
 
 			-- Update the results for the next call
-			local parameters = updateableParameters[eventCallback]
-			if parameters then
-				for index, value in pairs(parameters) do
-					args[index] = results[value]
-				end
+			for index, value in pairs(updateableParameters[eventCallback]) do
+				args[index] = results[value]
 			end
 		end
 	end,
