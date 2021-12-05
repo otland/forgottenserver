@@ -39,6 +39,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"defense", ITEM_PARSE_DEFENSE},
 	{"extradef", ITEM_PARSE_EXTRADEF},
 	{"attack", ITEM_PARSE_ATTACK},
+	{"attackspeed", ITEM_PARSE_ATTACK_SPEED},
 	{"rotateto", ITEM_PARSE_ROTATETO},
 	{"moveable", ITEM_PARSE_MOVEABLE},
 	{"movable", ITEM_PARSE_MOVEABLE},
@@ -143,9 +144,13 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"elementearth", ITEM_PARSE_ELEMENTEARTH},
 	{"elementfire", ITEM_PARSE_ELEMENTFIRE},
 	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
+	{"elementdeath", ITEM_PARSE_ELEMENTDEATH},
+	{"elementholy", ITEM_PARSE_ELEMENTHOLY},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
+	{"storeitem", ITEM_PARSE_STOREITEM},
+	{"worth", ITEM_PARSE_WORTH},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -211,18 +216,19 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"mead", FLUID_MEAD},
 };
 
-
 Items::Items()
 {
-	items.reserve(30000);
-	nameToItems.reserve(30000);
+	items.reserve(45000);
+	nameToItems.reserve(45000);
 }
 
 void Items::clear()
 {
 	items.clear();
-	reverseItemMap.clear();
+	clientIdToServerIdMap.clear();
 	nameToItems.clear();
+	currencyItems.clear();
+	inventory.clear();
 }
 
 bool Items::reload()
@@ -289,7 +295,7 @@ bool Items::loadFromOtb(const std::string& file)
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return false;
-	} else if (minorVersion < CLIENT_VERSION_1098) {
+	} else if (minorVersion < CLIENT_VERSION_LAST) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return false;
 	}
@@ -328,10 +334,6 @@ bool Items::loadFromOtb(const std::string& file)
 
 					if (!stream.read<uint16_t>(serverId)) {
 						return false;
-					}
-
-					if (serverId > 30000 && serverId < 30100) {
-						serverId -= 30000;
 					}
 					break;
 				}
@@ -405,7 +407,7 @@ bool Items::loadFromOtb(const std::string& file)
 			}
 		}
 
-		reverseItemMap.emplace(clientId, serverId);
+		clientIdToServerIdMap.emplace(clientId, serverId);
 
 		// store the found item
 		if (serverId >= items.size()) {
@@ -436,6 +438,7 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_FLUID:
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
+			case ITEM_GROUP_PODIUM:
 				break;
 			default:
 				return false;
@@ -510,40 +513,12 @@ bool Items::loadFromXml()
 		}
 	}
 
-	buildInventoryList();
 	return true;
-}
-
-void Items::buildInventoryList()
-{
-	inventory.reserve(items.size());
-	for (const auto& type: items) {
-		if (type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
-			type.attack != 0 || type.defense != 0 ||
-			type.extraDefense != 0 || type.armor != 0 ||
-			type.slotPosition & SLOTP_NECKLACE ||
-			type.slotPosition & SLOTP_RING ||
-			type.slotPosition & SLOTP_AMMO ||
-			type.slotPosition & SLOTP_FEET ||
-			type.slotPosition & SLOTP_HEAD ||
-			type.slotPosition & SLOTP_ARMOR ||
-			type.slotPosition & SLOTP_LEGS)
-		{
-			inventory.push_back(type.clientId);
-		}
-	}
-	inventory.shrink_to_fit();
-	std::sort(inventory.begin(), inventory.end());
 }
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 {
-	if (id > 30000 && id < 30100) {
-		id -= 30000;
-
-		if (id >= items.size()) {
-			items.resize(id + 1);
-		}
+	if (id > 0 && id < 100) {
 		ItemType& iType = items[id];
 		iType.id = id;
 	}
@@ -553,9 +528,19 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		return;
 	}
 
+	if (!it.name.empty()) {
+		std::cout << "[Warning - Items::parseItemNode] Duplicate item with id: " << id << std::endl;
+		return;
+	}
+
 	it.name = itemNode.attribute("name").as_string();
 
-	nameToItems.insert({ asLowerCaseString(it.name), id });
+	if (!it.name.empty()) {
+		std::string lowerCaseName = asLowerCaseString(it.name);
+		if (nameToItems.find(lowerCaseName) == nameToItems.end()) {
+			nameToItems.emplace(std::move(lowerCaseName), id);
+		}
+	}
 
 	pugi::xml_attribute articleAttribute = itemNode.attribute("article");
 	if (articleAttribute) {
@@ -636,6 +621,15 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ATTACK: {
 					it.attack = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_ATTACK_SPEED: {
+					it.attackSpeed = pugi::cast<uint32_t>(valueAttribute.value());
+					if (it.attackSpeed > 0 && it.attackSpeed < 100) {
+						std::cout << "[Warning - Items::parseItemNode] AttackSpeed lower than 100 for item: " << it.id << std::endl;
+						it.attackSpeed = 100;
+					}
 					break;
 				}
 
@@ -1188,6 +1182,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						uint32_t ticks = 0;
 						int32_t start = 0;
 						int32_t count = 1;
+						int32_t initDamage = -1;
+						int32_t damage = 0;
 						for (auto subAttributeNode : attributeNode.children()) {
 							pugi::xml_attribute subKeyAttribute = subAttributeNode.attribute("key");
 							if (!subKeyAttribute) {
@@ -1200,14 +1196,16 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 							}
 
 							tmpStrValue = asLowerCaseString(subKeyAttribute.as_string());
-							if (tmpStrValue == "ticks") {
+							if (tmpStrValue == "initdamage") {
+								initDamage = pugi::cast<int32_t>(subValueAttribute.value());
+							} else if (tmpStrValue == "ticks") {
 								ticks = pugi::cast<uint32_t>(subValueAttribute.value());
 							} else if (tmpStrValue == "count") {
 								count = std::max<int32_t>(1, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "start") {
 								start = std::max<int32_t>(0, pugi::cast<int32_t>(subValueAttribute.value()));
 							} else if (tmpStrValue == "damage") {
-								int32_t damage = -pugi::cast<int32_t>(subValueAttribute.value());
+								damage = -pugi::cast<int32_t>(subValueAttribute.value());
 								if (start > 0) {
 									std::list<int32_t> damageList;
 									ConditionDamage::generateDamageList(damage, start, damageList);
@@ -1220,6 +1218,15 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 									conditionDamage->addDamage(count, ticks, damage);
 								}
 							}
+						}
+
+						// datapack compatibility, presume damage to be initialdamage if initialdamage is not declared.
+						// initDamage = 0 (don't override initDamage with damage, don't set any initDamage)
+						// initDamage = -1 (undefined, override initDamage with damage)
+						if (initDamage > 0 || initDamage < -1) {
+							conditionDamage->setInitDamage(-initDamage);
+						} else if (initDamage == -1 && start != 0) {
+							conditionDamage->setInitDamage(start);
 						}
 
 						conditionDamage->setParam(CONDITION_PARAM_FIELD, 1);
@@ -1309,6 +1316,18 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
+				case ITEM_PARSE_ELEMENTDEATH: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_DEATHDAMAGE;
+					break;
+				}
+
+				case ITEM_PARSE_ELEMENTHOLY: {
+					abilities.elementDamage = pugi::cast<uint16_t>(valueAttribute.value());
+					abilities.elementType = COMBAT_HOLYDAMAGE;
+					break;
+				}
+
 				case ITEM_PARSE_WALKSTACK: {
 					it.walkStack = valueAttribute.as_bool();
 					break;
@@ -1321,6 +1340,22 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ALLOWDISTREAD: {
 					it.allowDistRead = booleanString(valueAttribute.as_string());
+					break;
+				}
+
+				case ITEM_PARSE_STOREITEM: {
+					it.storeItem = booleanString(valueAttribute.as_string());
+					break;
+				}
+
+				case ITEM_PARSE_WORTH: {
+					uint64_t worth = pugi::cast<uint64_t>(valueAttribute.value());
+					if (currencyItems.find(worth) != currencyItems.end()) {
+						std::cout << "[Warning - Items::parseItemNode] Duplicated currency worth. Item " << id << " redefines worth " << worth << std::endl;
+					} else {
+						currencyItems.insert(CurrencyMap::value_type(worth, id));
+						it.worth = worth;
+					}
 					break;
 				}
 
@@ -1359,17 +1394,21 @@ const ItemType& Items::getItemType(size_t id) const
 
 const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 {
-	auto it = reverseItemMap.find(spriteId);
-	if (it != reverseItemMap.end()) {
-		return getItemType(it->second);
+	if (spriteId >= 100) {
+		if (uint16_t serverId = clientIdToServerIdMap.getServerId(spriteId)) {
+			return getItemType(serverId);
+		}
 	}
 	return items.front();
 }
 
 uint16_t Items::getItemIdByName(const std::string& name)
 {
-	auto result = nameToItems.find(asLowerCaseString(name));
+	if (name.empty()) {
+		return 0;
+	}
 
+	auto result = nameToItems.find(asLowerCaseString(name));
 	if (result == nameToItems.end())
 		return 0;
 

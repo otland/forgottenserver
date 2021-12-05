@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Menace" nameDescription="Menace" race="blood" experience="3250" speed="220">
+	<health now="6000" max="6000" />
+	<look type="113" corpse="4251" />
+	<targetchange interval="2000" chance="9" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-215" />
+	</attacks>
+	<defenses armor="16" defense="19" />
+	<elements>
+		<element firePercent="-10" />
+		<element icePercent="10" />
+		<element energyPercent="20" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185">
+	<health now="125" max="125" />
+	<look type="425" addons="2" corpse="20395" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-18" />
+		<attack name="drunk" interval="2000" chance="15" target="0" length="3" spread="2" duration="3000">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="outfit" interval="2000" chance="1" target="0" radius="3" monster="bog raider" duration="5000">
+			<attribute key="areaeffect" value="greenbubble" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="80" />
+		<element firePercent="20" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Aaaaargh!" />
+		<voice sentence="I am the king of the world!" />
+		<voice sentence="Die Ferumbras!" />
+		<voice sentence="Tigerblood is running through my veins!" />
+		<voice sentence="You! It's you again!" />
+		<voice sentence="Stand still you tasty morsel!" />
+		<voice sentence="&lt;giggle&gt;" />
+		<voice sentence="Burn heretic! Burn!" />
+		<voice sentence="Harrr!" />
+		<voice sentence="This is Venore!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="35" chance="30300" />
+		<item id="2230" chance="4920" /><!-- bone -->
+		<item name="worm" countmax="3" chance="25730" />
+		<item name="ominous piece of cloth" chance="1660" />
+		<item name="dubious piece of cloth" chance="1720" />
+		<item name="voluminous piece of cloth" chance="2290" />
+		<item name="obvious piece of cloth" chance="2006" />
+		<item name="ludicrous piece of cloth" chance="2060" />
+		<item name="luminous piece of cloth" chance="2290" />
+		<item name="plague mask" chance="100" />
+		<item name="plague bell" chance="100" />
+	</loot>
+</monster>

@@ -22,7 +22,6 @@
 
 #include "creature.h"
 
-
 const uint32_t MAX_LOOTCHANCE = 100000;
 
 struct LootBlock {
@@ -148,11 +147,14 @@ class MonsterType
 		bool canPushItems = false;
 		bool canPushCreatures = false;
 		bool pushable = true;
-		bool isSummonable = false;
-		bool isIllusionable = false;
-		bool isConvinceable = false;
 		bool isAttackable = true;
+		bool isBoss = false;
+		bool isChallengeable = true;
+		bool isConvinceable = false;
 		bool isHostile = true;
+		bool isIgnoringSpawnBlock = false;
+		bool isIllusionable = false;
+		bool isSummonable = false;
 		bool hiddenHealth = false;
 		bool canWalkOnEnergy = true;
 		bool canWalkOnFire = true;
@@ -175,7 +177,7 @@ class MonsterType
 
 		MonsterInfo info;
 
-		void loadLoot(MonsterType* monsterType, LootBlock lootblock);
+		void loadLoot(MonsterType* monsterType, LootBlock lootBlock);
 };
 
 class MonsterSpell
@@ -191,6 +193,7 @@ class MonsterSpell
 
 		uint8_t chance = 100;
 		uint8_t range = 0;
+		uint8_t drunkenness = 0;
 
 		uint16_t interval = 2000;
 
@@ -201,11 +204,13 @@ class MonsterSpell
 		int32_t length = 0;
 		int32_t spread = 0;
 		int32_t radius = 0;
+		int32_t ring = 0;
 		int32_t conditionMinDamage = 0;
 		int32_t conditionMaxDamage = 0;
 		int32_t conditionStartDamage = 0;
 		int32_t tickInterval = 0;
-		int32_t speedChange = 0;
+		int32_t minSpeedChange = 0;
+		int32_t maxSpeedChange = 0;
 		int32_t duration = 0;
 
 		bool isScripted = false;
@@ -235,8 +240,7 @@ class Monsters
 		}
 		bool reload();
 
-		MonsterType* getMonsterType(const std::string& name);
-		void addMonsterType(const std::string& name, MonsterType* mType);
+		MonsterType* getMonsterType(const std::string& name, bool loadFromFile = true);
 		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
 		std::unique_ptr<LuaScriptInterface> scriptInterface;

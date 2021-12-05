@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<npc name="Captain" script="ship.lua" walkinterval="2000" floorchange="0">
+	<health now="100" max="100" />
+	<look type="151" head="78" body="115" legs="85" feet="114" addons="2" />
+	<parameters>
+		<parameter key="message_greet" value="Welcome on board, |PLAYERNAME|." />
+	</parameters>
+</npc>

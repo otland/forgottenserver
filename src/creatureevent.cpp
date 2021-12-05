@@ -41,6 +41,15 @@ void CreatureEvents::clear(bool fromLua)
 	reInitState(fromLua);
 }
 
+void CreatureEvents::removeInvalidEvents()
+{
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ++it) {
+		if (it->second.getScriptId() == 0) {
+			creatureEvents.erase(it->second.getName());
+		}
+	}
+}
+
 LuaScriptInterface& CreatureEvents::getScriptInterface()
 {
 	return scriptInterface;
@@ -70,17 +79,16 @@ bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
-		//(happens when realoading), it is reused
+		//(happens when reloading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
 			oldEvent->copyEvent(creatureEvent.get());
 		}
-
 		return false;
-	} else {
-		//if not, register it normally
-		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-		return true;
 	}
+
+	// if not, register it normally
+	creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+	return true;
 }
 
 bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
@@ -94,17 +102,16 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
 	if (oldEvent) {
 		//if there was an event with the same that is not loaded
-		//(happens when realoading), it is reused
+		//(happens when reloading), it is reused
 		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
 			oldEvent->copyEvent(creatureEvent.get());
 		}
-
 		return false;
-	} else {
-		//if not, register it normally
-		creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-		return true;
 	}
+
+	// if not, register it normally
+	creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+	return true;
 }
 
 CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
@@ -385,7 +392,7 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 
 bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
-	//onDeath(creature, corpse, lasthitkiller, mostdamagekiller, lasthitunjustified, mostdamageunjustified)
+	//onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeOnDeath] Call stack overflow" << std::endl;
 		return false;

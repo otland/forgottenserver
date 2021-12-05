@@ -26,16 +26,19 @@
 
 extern Scheduler g_scheduler;
 
+namespace {
+
 const uint16_t OUTPUTMESSAGE_FREE_LIST_CAPACITY = 2048;
 const std::chrono::milliseconds OUTPUTMESSAGE_AUTOSEND_DELAY {10};
 
-void OutputMessagePool::scheduleSendAll()
+void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols);
+
+void scheduleSendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 {
-	auto functor = std::bind(&OutputMessagePool::sendAll, this);
-	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), functor));
+	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(bufferedProtocols); }));
 }
 
-void OutputMessagePool::sendAll()
+void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 {
 	//dispatcher thread
 	for (auto& protocol : bufferedProtocols) {
@@ -46,15 +49,17 @@ void OutputMessagePool::sendAll()
 	}
 
 	if (!bufferedProtocols.empty()) {
-		scheduleSendAll();
+		scheduleSendAll(bufferedProtocols);
 	}
+}
+
 }
 
 void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 {
 	//dispatcher thread
 	if (bufferedProtocols.empty()) {
-		scheduleSendAll();
+		scheduleSendAll(bufferedProtocols);
 	}
 	bufferedProtocols.emplace_back(protocol);
 }
@@ -72,6 +77,6 @@ void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
 OutputMessage_ptr OutputMessagePool::getOutputMessage()
 {
 	// LockfreePoolingAllocator<void,...> will leave (void* allocate) ill-formed because
-	// of sizeof(T), so this guaranatees that only one list will be initialized
+	// of sizeof(T), so this guarantees that only one list will be initialized
 	return std::allocate_shared<OutputMessage>(LockfreePoolingAllocator<void, OUTPUTMESSAGE_FREE_LIST_CAPACITY>());
 }

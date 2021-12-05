@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc Rider" nameDescription="an orc rider" race="blood" experience="110" speed="260" manacost="490">
+	<health now="180" max="180" />
+	<look type="4" corpse="6010" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+	</attacks>
+	<defenses armor="9" defense="9">
+		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrrrrr" />
+		<voice sentence="Orc arga Huummmak!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="81" chance="48000" />
+		<item name="meat" countmax="3" chance="24000" />
+		<item name="wolf tooth chain" chance="10210" />
+		<item name="orc leather" chance="10000" />
+		<item name="warwolf fur" chance="9610" />
+		<item name="orcish axe" chance="7000" />
+		<item name="orc tooth" chance="2000" />
+		<item name="battle shield" chance="1000" />
+		<item id="2050" chance="1000" /><!-- torch-->
+		<item name="obsidian lance" chance="1000" />
+		<item name="scale armor" chance="610" />
+	</loot>
+</monster>

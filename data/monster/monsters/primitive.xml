@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Primitive" nameDescription="Primitive" race="blood" experience="45" speed="300">
+	<health now="200" max="200" />
+	<look type="143" head="1" body="1" legs="1" feet="1" corpse="6080" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="5" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-32" />
+		<attack name="drunk" interval="1000" chance="20" range="7">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="fire" interval="1000" chance="34" range="7" radius="3" target="1" min="-20" max="-20">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="outfit" interval="1000" chance="2" radius="4" target="0" monster="primitive" duration="10000">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="25" />
+	<immunities>
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="We don't need a future!" />
+		<voice sentence="I'll rook you all!" />
+		<voice sentence="They thought they'd beaten us!" />
+		<voice sentence="You are history!" />
+		<voice sentence="There can only be one world!" />
+		<voice sentence="Valor who?" />
+		<voice sentence="Die noob!" />
+		<voice sentence="There are no dragons!" />
+		<voice sentence="I'll quit forever! Again ..." />
+		<voice sentence="You all are noobs!" />
+		<voice sentence="Beware of the cyclops!" />
+		<voice sentence="Just had a disconnect." />
+		<voice sentence="Magic is only good for girls!" />
+		<voice sentence="We'll be back!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="10" chance="12500" />
+		<item name="sabre" chance="10250" />
+		<item name="axe" chance="12250" />
+		<item name="studded helmet" chance="9500" />
+		<item name="studded armor" chance="7000" />
+		<item name="studded shield" chance="1200" />
+		<item id="6570" chance="500" /><!-- blue surprise bag -->
+		<item id="6571" chance="500" /><!-- red surprise bag -->
+	</loot>
+</monster>

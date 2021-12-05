@@ -24,6 +24,20 @@
 
 #include "networkmessage.h"
 
+enum ConnectionState_t {
+	CONNECTION_STATE_DISCONNECTED,
+	CONNECTION_STATE_REQUEST_CHARLIST,
+	CONNECTION_STATE_GAMEWORLD_AUTH,
+	CONNECTION_STATE_GAME,
+	CONNECTION_STATE_PENDING
+};
+
+enum checksumMode_t {
+	CHECKSUM_DISABLED,
+	CHECKSUM_ADLER,
+	CHECKSUM_SEQUENCE
+};
+
 static constexpr int32_t CONNECTION_WRITE_TIMEOUT = 30;
 static constexpr int32_t CONNECTION_READ_TIMEOUT = 30;
 
@@ -66,15 +80,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 		Connection(const Connection&) = delete;
 		Connection& operator=(const Connection&) = delete;
 
-		enum ConnectionState_t {
-			CONNECTION_STATE_OPEN,
-			CONNECTION_STATE_CLOSED,
-		};
-
 		enum { FORCE_CLOSE = true };
 
 		Connection(boost::asio::io_service& io_service,
-		           ConstServicePort_ptr service_port) :
+		ConstServicePort_ptr service_port) :
 			readTimer(io_service),
 			writeTimer(io_service),
 			service_port(std::move(service_port)),
@@ -111,8 +120,8 @@ class Connection : public std::enable_shared_from_this<Connection>
 
 		NetworkMessage msg;
 
-		boost::asio::deadline_timer readTimer;
-		boost::asio::deadline_timer writeTimer;
+		boost::asio::steady_timer readTimer;
+		boost::asio::steady_timer writeTimer;
 
 		std::recursive_mutex connectionLock;
 
@@ -126,8 +135,10 @@ class Connection : public std::enable_shared_from_this<Connection>
 		time_t timeConnected;
 		uint32_t packetsSent = 0;
 
-		bool connectionState = CONNECTION_STATE_OPEN;
+		ConnectionState_t connectionState = CONNECTION_STATE_PENDING;
 		bool receivedFirst = false;
+		bool receivedName = false;
+		bool receivedLastChar = false;
 };
 
 #endif

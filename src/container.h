@@ -24,10 +24,12 @@
 
 #include "cylinder.h"
 #include "item.h"
+#include "tile.h"
 
 class Container;
 class DepotChest;
 class DepotLocker;
+class StoreInbox;
 
 class ContainerIterator
 {
@@ -74,9 +76,15 @@ class Container : public Item, public Cylinder
 			return nullptr;
 		}
 
+		virtual StoreInbox* getStoreInbox() {
+			return nullptr;
+		}
+		virtual const StoreInbox* getStoreInbox() const {
+			return nullptr;
+		}
+
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 		bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
-		std::string getContentDescription() const;
 
 		size_t size() const {
 			return itemlist.size();
@@ -101,6 +109,8 @@ class Container : public Item, public Cylinder
 			return itemlist.rend();
 		}
 
+		std::string getName(bool addArticle = false) const;
+
 		bool hasParent() const;
 		void addItem(Item* item);
 		Item* getItemByIndex(size_t index) const;
@@ -121,7 +131,7 @@ class Container : public Item, public Cylinder
 				uint32_t flags, Creature* actor = nullptr) const override;
 		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 				uint32_t flags) const override final;
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const override final;
+		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override final;
 		Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
 				uint32_t& flags) override final;
 
@@ -141,6 +151,8 @@ class Container : public Item, public Cylinder
 		std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override final;
 		Thing* getThing(size_t index) const override final;
 
+		ItemVector getItems(bool recursive = false);
+
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
@@ -152,8 +164,6 @@ class Container : public Item, public Cylinder
 		ItemDeque itemlist;
 
 	private:
-		std::ostringstream& getContentDescription(std::ostringstream& os) const;
-
 		uint32_t maxSize;
 		uint32_t totalWeight = 0;
 		uint32_t serializationCount = 0;

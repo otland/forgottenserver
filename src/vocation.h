@@ -86,6 +86,14 @@ class Vocation
 			return fromVocation;
 		}
 
+		uint32_t getNoPongKickTime() const {
+			return noPongKickTime;
+		}
+
+		bool allowsPvp() const {
+			return allowPvp;
+		}
+
 		float meleeDamageMultiplier = 1.0f;
 		float distDamageMultiplier = 1.0f;
 		float defenseMultiplier = 1.0f;
@@ -94,13 +102,10 @@ class Vocation
 	private:
 		friend class Vocations;
 
-		std::map<uint32_t, uint64_t> cacheMana;
-		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
-
 		std::string name = "none";
 		std::string description;
 
-		float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};
+		double skillMultipliers[SKILL_LAST + 1] = {1.5, 2.0, 2.0, 2.0, 2.0, 1.5, 1.1};
 		float manaMultiplier = 4.0f;
 
 		uint32_t gainHealthTicks = 6;
@@ -113,14 +118,15 @@ class Vocation
 		uint32_t fromVocation = VOCATION_NONE;
 		uint32_t attackSpeed = 1500;
 		uint32_t baseSpeed = 220;
-		uint16_t id;
+		uint32_t noPongKickTime = 60000;
 
+		uint16_t id;
 		uint16_t gainSoulTicks = 120;
 
 		uint8_t soulMax = 100;
 		uint8_t clientId = 0;
 
-		static uint32_t skillBase[SKILL_LAST + 1];
+		bool allowPvp = true;
 };
 
 class Vocations

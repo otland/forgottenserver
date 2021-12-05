@@ -7,7 +7,7 @@ local useWorms = true
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetId = target.itemid
-	if not table.contains(waterIds, target.itemid) then
+	if not table.contains(waterIds, targetId) then
 		return false
 	end
 
@@ -55,11 +55,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 			if math.random(1, 100) >= 97 then
 				player:addItem(15405, 1)
+				player:addAchievement("Desert Fisher")
 				return true
 			end
 		elseif targetId == 7236 then
 			target:transform(targetId + 1)
 			target:decay()
+			player:addAchievementProgress("Exquisite Taste", 250)
 
 			local rareChance = math.random(1, 100)
 			if rareChance == 1 then
@@ -73,6 +75,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				return true
 			end
 		end
+		player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 		player:addItem(2667, 1)
 	end
 	return true

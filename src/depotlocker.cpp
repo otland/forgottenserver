@@ -42,14 +42,14 @@ ReturnValue DepotLocker::queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Cre
 
 void DepotLocker::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	if (parent != nullptr) {
+	if (parent) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
 void DepotLocker::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	if (parent != nullptr) {
+	if (parent) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }

@@ -26,115 +26,51 @@
 
 namespace xtea {
 
-namespace {
-
-constexpr uint32_t delta = 0x9E3779B9;
-
-template<size_t BLOCK_SIZE>
-void XTEA_encrypt(uint8_t data[BLOCK_SIZE * 8], const key& k)
+round_keys expand_key(const key& k)
 {
-    alignas(16) uint32_t left[BLOCK_SIZE], right[BLOCK_SIZE];
-    for (auto i = 0u, j = 0u; i < BLOCK_SIZE; i += 1u, j += 8u) {
-        left[i] = data[j] | data[j+1] << 8u | data[j+2] << 16u | data[j+3] << 24u;
-        right[i] = data[j+4] | data[j+5] << 8u | data[j+6] << 16u | data[j+7] << 24u;
-    }
+	constexpr uint32_t delta = 0x9E3779B9;
+	round_keys expanded;
 
-    uint32_t sum = 0u;
-    for (auto i = 0u; i < 32; ++i) {
-        for (auto j = 0u; j < BLOCK_SIZE; ++j) {
-            left[j] += (((right[j] << 4) ^ (right[j] >> 5)) + right[j]) ^ (sum + k[sum & 3]);
-        }
-        sum += delta;
-        for (auto j = 0u; j < BLOCK_SIZE; ++j) {
-            right[j] += (((left[j] << 4) ^ (left[j] >> 5)) + left[j]) ^ (sum + k[(sum >> 11) & 3]);
-        }
-    }
+	for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < expanded.size(); i += 2, sum = next_sum, next_sum += delta) {
+		expanded[i] = sum + k[sum & 3];
+		expanded[i + 1] = next_sum + k[(next_sum >> 11) & 3];
+	}
 
-    for (auto i = 0u, j = 0u; i < BLOCK_SIZE; i += 1u, j += 8u) {
-        data[j] = static_cast<uint8_t>(left[i]);
-        data[j+1] = static_cast<uint8_t>(left[i] >> 8u);
-        data[j+2] = static_cast<uint8_t>(left[i] >> 16u);
-        data[j+3] = static_cast<uint8_t>(left[i] >> 24u);
-        data[j+4] = static_cast<uint8_t>(right[i]);
-        data[j+5] = static_cast<uint8_t>(right[i] >> 8u);
-        data[j+6] = static_cast<uint8_t>(right[i] >> 16u);
-        data[j+7] = static_cast<uint8_t>(right[i] >> 24u);
-    }
+	return expanded;
 }
 
-template<size_t BLOCK_SIZE>
-void XTEA_decrypt(uint8_t data[BLOCK_SIZE * 8], const key& k)
+void encrypt(uint8_t* data, size_t length, const round_keys& k)
 {
-    alignas(16) uint32_t left[BLOCK_SIZE], right[BLOCK_SIZE];
-    for (auto i = 0u, j = 0u; i < BLOCK_SIZE; i += 1u, j += 8u) {
-        left[i] = data[j] | data[j+1] << 8u | data[j+2] << 16u | data[j+3] << 24u;
-        right[i] = data[j+4] | data[j+5] << 8u | data[j+6] << 16u | data[j+7] << 24u;
-    }
+	for (int32_t i = 0; i < k.size(); i += 2) {
+		for (auto it = data, last = data + length; it < last; it += 8) {
+			uint32_t left, right;
+			std::memcpy(&left, it, 4);
+			std::memcpy(&right, it + 4, 4);
 
-    uint32_t sum = delta << 5;
-    for (auto i = 0u; i < 32; ++i) {
-        for (auto j = 0u; j < BLOCK_SIZE; ++j) {
-            right[j] -= (((left[j] << 4) ^ (left[j] >> 5)) + left[j]) ^ (sum + k[(sum >> 11) & 3]);
-        }
-        sum -= delta;
-        for (auto j = 0u; j < BLOCK_SIZE; ++j) {
-            left[j] -= (((right[j] << 4) ^ (right[j] >> 5)) + right[j]) ^ (sum + k[(sum) & 3]);
-        }
-    }
+			left += ((right << 4 ^ right >> 5) + right) ^ k[i];
+			right += ((left << 4 ^ left >> 5) + left) ^ k[i + 1];
 
-    for (auto i = 0u, j = 0u; i < BLOCK_SIZE; i += 1u, j += 8u) {
-        data[j] = static_cast<uint8_t>(left[i]);
-        data[j+1] = static_cast<uint8_t>(left[i] >> 8u);
-        data[j+2] = static_cast<uint8_t>(left[i] >> 16u);
-        data[j+3] = static_cast<uint8_t>(left[i] >> 24u);
-        data[j+4] = static_cast<uint8_t>(right[i]);
-        data[j+5] = static_cast<uint8_t>(right[i] >> 8u);
-        data[j+6] = static_cast<uint8_t>(right[i] >> 16u);
-        data[j+7] = static_cast<uint8_t>(right[i] >> 24u);
-    }
+			std::memcpy(it, &left, 4);
+			std::memcpy(it + 4, &right, 4);
+		}
+	}
 }
 
-constexpr auto InitialBlockSize =
-#if defined(__AVX512F__)
-      128u;
-#elif defined(__AVX__)
-      32u;
-#elif defined(__SSE__) || defined(__ARM_FEATURE_SIMD32)
-      8u;
-#elif defined(__x86_64__)
-      2u;
-#else
-      1u;
-#endif
+void decrypt(uint8_t* data, size_t length, const round_keys& k)
+{
+	for (int32_t i = k.size() - 1; i > 0; i -= 2) {
+		for (auto it = data, last = data + length; it < last; it += 8) {
+			uint32_t left, right;
+			std::memcpy(&left, it, 4);
+			std::memcpy(&right, it + 4, 4);
 
-template<bool Encrypt, size_t BlockSize>
-struct XTEA {
-    static constexpr auto step = BlockSize * 8u;
+			right -= ((left << 4 ^ left >> 5) + left) ^ k[i];
+			left -= ((right << 4 ^ right >> 5) + right) ^ k[i - 1];
 
-    void operator()(uint8_t* input, size_t length, const key& k) const {
-        const auto blocks = (length & ~(step - 1));
-        for (auto i = 0u; i < blocks; i += step) {
-            if (Encrypt) {
-                XTEA_encrypt<BlockSize>(input + i, k);
-            } else {
-                XTEA_decrypt<BlockSize>(input + i, k);
-            }
-        }
-        input += blocks;
-        length -= blocks;
-
-        if (BlockSize != 1) {
-            XTEA<Encrypt, (BlockSize + 1u) / 2u>()(input, length, k);
-        }
-    }
-};
-
-constexpr auto encrypt_v = XTEA<true, InitialBlockSize>();
-constexpr auto decrypt_v = XTEA<false, InitialBlockSize>();
-
-} // anonymous namespace
-
-void encrypt(uint8_t* data, size_t length, const key& k) { encrypt_v(data, length, k); }
-void decrypt(uint8_t* data, size_t length, const key& k) { decrypt_v(data, length, k); }
+			std::memcpy(it, &left, 4);
+			std::memcpy(it + 4, &right, 4);
+		}
+	}
+}
 
 } // namespace xtea

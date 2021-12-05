@@ -154,6 +154,48 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 	}
 }
 
+void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
+{
+	if (z >= MAP_MAX_LAYERS) {
+		return;
+	}
+
+	const QTreeLeafNode* leaf = QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, x, y);
+	if (!leaf) {
+		return;
+	}
+
+	const Floor* floor = leaf->getFloor(z);
+	if (!floor) {
+		return;
+	}
+
+	Tile* tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
+	if (tile) {
+		if (const CreatureVector* creatures = tile->getCreatures()) {
+			for (int32_t i = creatures->size(); --i >= 0;) {
+				if (Player* player = (*creatures)[i]->getPlayer()) {
+					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
+				} else {
+					g_game.removeCreature((*creatures)[i]);
+				}
+			}
+		}
+
+		if (TileItemVector* items = tile->getItemList()) {
+			for (auto it = items->begin(), end = items->end(); it != end; ++it) {
+				g_game.internalRemoveItem(*it);
+			}
+		}
+
+		Item* ground = tile->getGround();
+		if (ground) {
+			g_game.internalRemoveItem(ground);
+			tile->setGround(nullptr);
+		}
+	}
+}
+
 bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos/* = false*/, bool forceLogin/* = false*/)
 {
 	bool foundTile;
@@ -287,7 +329,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getStackposOfCreature(tmpPlayer, &creature), oldPos, stackpos, teleport);
+				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getClientIndexOfCreature(tmpPlayer, &creature), oldPos, stackpos, teleport);
 			}
 		}
 	}
@@ -376,8 +418,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!spectators.empty()) {
-					const SpectatorVec& cachedSpectators = it->second;
-					spectators.insert(spectators.end(), cachedSpectators.begin(), cachedSpectators.end());
+					spectators.addSpectators(it->second);
 				} else {
 					spectators = it->second;
 				}
@@ -392,7 +433,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				if (!onlyPlayers) {
 					if (!spectators.empty()) {
 						const SpectatorVec& cachedSpectators = it->second;
-						spectators.insert(spectators.end(), cachedSpectators.begin(), cachedSpectators.end());
+						spectators.addSpectators(cachedSpectators);
 					} else {
 						spectators = it->second;
 					}
@@ -418,9 +459,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 
 		if (multifloor) {
 			if (centerPos.z > 7) {
-				//underground
-
-				//8->15
+				//underground (8->15)
 				minRangeZ = std::max<int32_t>(centerPos.getZ() - 2, 0);
 				maxRangeZ = std::min<int32_t>(centerPos.getZ() + 2, MAP_MAX_LAYERS - 1);
 			} else if (centerPos.z == 6) {
@@ -460,92 +499,144 @@ void Map::clearPlayersSpectatorCache()
 	playersSpectatorCache.clear();
 }
 
-bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
+bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
                            int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	//z checks
-	//underground 8->15
-	//ground level and above 7->0
-	if ((fromPos.z >= 8 && toPos.z < 8) || (toPos.z >= 8 && fromPos.z < 8)) {
+	if (Position::getDistanceX(fromPos, toPos) > rangex || Position::getDistanceY(fromPos, toPos) > rangey) {
 		return false;
 	}
 
-	int32_t deltaz = Position::getDistanceZ(fromPos, toPos);
-	if (deltaz > 2) {
-		return false;
-	}
-
-	if ((Position::getDistanceX(fromPos, toPos) - deltaz) > rangex) {
-		return false;
-	}
-
-	//distance checks
-	if ((Position::getDistanceY(fromPos, toPos) - deltaz) > rangey) {
-		return false;
-	}
-
-	if (!checkLineOfSight) {
-		return true;
-	}
-	return isSightClear(fromPos, toPos, false);
+	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Map::checkSightLine(const Position& fromPos, const Position& toPos) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
 {
-	if (fromPos == toPos) {
+	const Tile* tile = getTile(x, y, z);
+	if (!tile) {
 		return true;
 	}
 
-	Position start(fromPos.z > toPos.z ? toPos : fromPos);
-	Position destination(fromPos.z > toPos.z ? fromPos : toPos);
-
-	const int8_t mx = start.x < destination.x ? 1 : start.x == destination.x ? 0 : -1;
-	const int8_t my = start.y < destination.y ? 1 : start.y == destination.y ? 0 : -1;
-
-	int32_t A = Position::getOffsetY(destination, start);
-	int32_t B = Position::getOffsetX(start, destination);
-	int32_t C = -(A * destination.x + B * destination.y);
-
-	while (start.x != destination.x || start.y != destination.y) {
-		int32_t move_hor = std::abs(A * (start.x + mx) + B * (start.y) + C);
-		int32_t move_ver = std::abs(A * (start.x) + B * (start.y + my) + C);
-		int32_t move_cross = std::abs(A * (start.x + mx) + B * (start.y + my) + C);
-
-		if (start.y != destination.y && (start.x == destination.x || move_hor > move_ver || move_hor > move_cross)) {
-			start.y += my;
-		}
-
-		if (start.x != destination.x && (start.y == destination.y || move_ver > move_hor || move_ver > move_cross)) {
-			start.x += mx;
-		}
-
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
-			return false;
-		}
+	if (blockFloor && tile->getGround()) {
+		return false;
 	}
 
-	// now we need to perform a jump between floors to see if everything is clear (literally)
-	while (start.z != destination.z) {
-		const Tile* tile = getTile(start.x, start.y, start.z);
-		if (tile && tile->getThingCount() > 0) {
+	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
+}
+
+namespace {
+
+bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+{
+	float dx = x1 - x0;
+	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
+	float yi = y0 + slope;
+
+	for (uint16_t x = x0 + 1; x < x1; ++x) {
+		//0.1 is necessary to avoid loss of precision during calculation
+		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
 			return false;
 		}
-
-		start.z++;
+		yi += slope;
 	}
 
 	return true;
 }
 
-bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
 {
-	if (floorCheck && fromPos.z != toPos.z) {
+	float dx = x1 - x0;
+	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
+	float yi = y0 + slope;
+
+	for (uint16_t x = x0 + 1; x < x1; ++x) {
+		//0.1 is necessary to avoid loss of precision during calculation
+		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
+			return false;
+		}
+		yi += slope;
+	}
+
+	return true;
+}
+
+}
+
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+{
+	if (x0 == x1 && y0 == y1) {
+		return true;
+	}
+
+	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
+		if (y1 > y0) {
+			return checkSteepLine(y0, x0, y1, x1, z);
+		}
+		return checkSteepLine(y1, x1, y0, x0, z);
+	}
+
+	if (x0 > x1) {
+		return checkSlightLine(x1, y1, x0, y0, z);
+	}
+
+	return checkSlightLine(x0, y0, x1, y1, z);
+}
+
+bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
+{
+	//target is on the same floor
+	if (fromPos.z == toPos.z) {
+		//skip checks if toPos is next to us
+		if (Position::getDistanceX(fromPos, toPos) < 2 && Position::getDistanceY(fromPos, toPos) < 2) {
+			return true;
+		}
+
+		//sight is clear or sameFloor is enabled
+		bool sightClear = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
+		if (sightClear || sameFloor) {
+			return sightClear;
+		}
+
+		//no obstacles above floor 0 so we can throw above the obstacle
+		if (fromPos.z == 0) {
+			return true;
+		}
+
+		//check if tiles above us and the target are clear and check for a clear sight between them
+		uint8_t newZ = fromPos.z - 1;
+		return isTileClear(fromPos.x, fromPos.y, newZ, true) && isTileClear(toPos.x, toPos.y, newZ, true) && checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, newZ);
+	}
+
+	//target is on a different floor
+	if (sameFloor) {
 		return false;
 	}
 
-	// Cast two converging rays and see if either yields a result.
-	return checkSightLine(fromPos, toPos) || checkSightLine(toPos, fromPos);
+	//skip checks for sight line in case fromPos and toPos cross the ground floor
+	if (fromPos.z < 8 && toPos.z > 7 || fromPos.z > 7 && toPos.z < 8) {
+		return false;
+	}
+
+	//target is above us
+	if (fromPos.z > toPos.z) {
+		if (Position::getDistanceZ(fromPos, toPos) > 1) {
+			return false;
+		}
+
+		//check a tile above us and the path to the target
+		uint8_t newZ = fromPos.z - 1;
+		return isTileClear(fromPos.x, fromPos.y, newZ, true) && checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, newZ);
+	}
+
+	//target is below us
+	//check if tiles above the target are clear
+	for (uint8_t z = fromPos.z; z < toPos.z; ++z) {
+		if (!isTileClear(toPos.x, toPos.y, z, true)) {
+			return false;
+		}
+	}
+
+	//check if we can throw to the tile above the target
+	return checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
 }
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
@@ -567,7 +658,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -720,21 +811,21 @@ bool Map::getPathMatching(const Creature& creature, std::forward_list<Direction>
 		prevy = pos.y;
 
 		if (dx == 1 && dy == 1) {
-			dirList.push_front(DIRECTION_NORTHWEST);
+			dirList.push_back(DIRECTION_NORTHWEST);
 		} else if (dx == -1 && dy == 1) {
-			dirList.push_front(DIRECTION_NORTHEAST);
+			dirList.push_back(DIRECTION_NORTHEAST);
 		} else if (dx == 1 && dy == -1) {
-			dirList.push_front(DIRECTION_SOUTHWEST);
+			dirList.push_back(DIRECTION_SOUTHWEST);
 		} else if (dx == -1 && dy == -1) {
-			dirList.push_front(DIRECTION_SOUTHEAST);
+			dirList.push_back(DIRECTION_SOUTHEAST);
 		} else if (dx == 1) {
-			dirList.push_front(DIRECTION_WEST);
+			dirList.push_back(DIRECTION_WEST);
 		} else if (dx == -1) {
-			dirList.push_front(DIRECTION_EAST);
+			dirList.push_back(DIRECTION_EAST);
 		} else if (dy == 1) {
-			dirList.push_front(DIRECTION_NORTH);
+			dirList.push_back(DIRECTION_NORTH);
 		} else if (dy == -1) {
-			dirList.push_front(DIRECTION_SOUTH);
+			dirList.push_back(DIRECTION_SOUTH);
 		}
 
 		found = found->parent;
@@ -842,7 +933,7 @@ int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbo
 int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
 	int_fast32_t cost = 0;
-	if (tile->getTopVisibleCreature(&creature) != nullptr) {
+	if (tile->getTopVisibleCreature(&creature)) {
 		//destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
 	}
@@ -950,68 +1041,42 @@ void QTreeLeafNode::removeCreature(Creature* c)
 uint32_t Map::clean() const
 {
 	uint64_t start = OTSYS_TIME();
-	size_t count = 0, tiles = 0;
+	size_t tiles = 0;
 
 	if (g_game.getGameState() == GAME_STATE_NORMAL) {
 		g_game.setGameState(GAME_STATE_MAINTAIN);
 	}
 
-	std::vector<const QTreeNode*> nodes {
-		&root
-	};
 	std::vector<Item*> toRemove;
-	do {
-		const QTreeNode* node = nodes.back();
-		nodes.pop_back();
-		if (node->isLeaf()) {
-			const QTreeLeafNode* leafNode = static_cast<const QTreeLeafNode*>(node);
-			for (uint8_t z = 0; z < MAP_MAX_LAYERS; ++z) {
-				Floor* floor = leafNode->getFloor(z);
-				if (!floor) {
-					continue;
-				}
 
-				for (auto& row : floor->tiles) {
-					for (auto tile : row) {
-						if (!tile || tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
-							continue;
-						}
+	for (auto tile : g_game.getTilesToClean()) {
+		if (!tile) {
+			continue;
+		}
 
-						TileItemVector* itemList = tile->getItemList();
-						if (!itemList) {
-							continue;
-						}
-
-						++tiles;
-						for (Item* item : *itemList) {
-							if (item->isCleanable()) {
-								toRemove.push_back(item);
-							}
-						}
-
-						for (Item* item : toRemove) {
-							g_game.internalRemoveItem(item, -1);
-						}
-						count += toRemove.size();
-						toRemove.clear();
-					}
-				}
-			}
-		} else {
-			for (auto childNode : node->child) {
-				if (childNode) {
-					nodes.push_back(childNode);
+		if (auto items = tile->getItemList()) {
+			++tiles;
+			for (auto item : *items) {
+				if (item->isCleanable()) {
+					toRemove.emplace_back(item);
 				}
 			}
 		}
-	} while (!nodes.empty());
+	}
+
+	for (auto item : toRemove) {
+		g_game.internalRemoveItem(item, -1);
+	}
+
+	size_t count = toRemove.size();
+	g_game.clearTilesToClean();
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		g_game.setGameState(GAME_STATE_NORMAL);
 	}
 
 	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "")
-	          << " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
-	          << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+		<< " from " << tiles << " tile" << (tiles != 1 ? "s" : "") << " in "
+		<< (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 	return count;
 }

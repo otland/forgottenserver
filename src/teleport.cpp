@@ -55,7 +55,7 @@ ReturnValue Teleport::queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, 
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-ReturnValue Teleport::queryRemove(const Thing&, uint32_t, uint32_t) const
+ReturnValue Teleport::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*= nullptr */) const
 {
 	return RETURNVALUE_NOERROR;
 }
@@ -75,6 +75,32 @@ void Teleport::addThing(int32_t, Thing* thing)
 	Tile* destTile = g_game.map.getTile(destPos);
 	if (!destTile) {
 		return;
+	}
+
+	// Prevent infinite loop
+	Teleport* destTeleport = destTile->getTeleportItem();
+	if (destTeleport) {
+		std::vector<Position> lastPositions = { getPosition() };
+
+		while (true) {
+			const Position& nextPos = destTeleport->getDestPos();
+			if (std::find(lastPositions.begin(), lastPositions.end(), nextPos) != lastPositions.end()) {
+				std::cout << "Warning: possible infinite loop teleport. " << nextPos << std::endl;
+				return;
+			}
+
+			const Tile* tile = g_game.map.getTile(nextPos);
+			if (!tile) {
+				break;
+			}
+
+			destTeleport = tile->getTeleportItem();
+			if (!destTeleport) {
+				break;
+			}
+
+			lastPositions.push_back(nextPos);
+		}
 	}
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;

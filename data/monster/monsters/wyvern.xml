@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Wyvern" nameDescription="a wyvern" race="blood" experience="515" speed="200">
+	<health now="795" max="795" />
+	<look type="239" corpse="6302" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="300" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-120" poison="480" />
+		<attack name="poisoncondition" interval="2000" chance="15" length="8" spread="3" min="-240" max="-240">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" length="3" spread="2" duration="5000">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="45" max="65">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element icePercent="10" />
+	</elements>
+	<immunities>
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Shriiiek" yell="1" />
+	</voices>
+	<loot>
+		<item name="emerald bangle" chance="540" />
+		<item name="small sapphire" chance="5000" />
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="wand of inferno" chance="810" />
+		<item name="power bolt" countmax="2" chance="3400" />
+		<item name="dragon ham" countmax="3" chance="60500" />
+		<item name="wyvern fang" chance="410" />
+		<item name="strong health potion" chance="2500" />
+		<item name="wyvern talisman" chance="12300" />
+	</loot>
+</monster>

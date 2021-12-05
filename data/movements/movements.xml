@@ -23,7 +23,7 @@
 	<movevent event="StepIn" itemid="2579" script="trap.lua" />
 	<movevent event="RemoveItem" itemid="2579" script="trap.lua" />
 	<movevent event="StepIn" itemid="4208" script="trap.lua" />
-	<movevent event="StepOut" itemid="4209" script="trap.lua" />
+	<movevent event="StepIn" itemid="25331" script="trap.lua" />
 
 	<!-- Citizen teleport -->
 	<movevent event="StepIn" itemid="1387" script="citizen.lua" />
@@ -279,6 +279,10 @@
 	<movevent event="StepIn" itemid="7359" function="onStepInField" />
 	<movevent event="AddItem" itemid="7360" function="onAddField" />
 
+	<!-- Magic Wall NoPvp / Wild Growth NoPvp -->
+	<movevent event="StepIn" itemid="20669" function="onStepInField" />
+	<movevent event="StepIn" itemid="20670" function="onStepInField" />
+
 	<!-- Swimming -->
 	<movevent event="StepIn" fromid="4620" toid="4625" script="swimming.lua" />
 	<movevent event="StepOut" fromid="4620" toid="4625" script="swimming.lua" />
@@ -518,6 +522,15 @@
 		<vocation name="Elite Knight" showInDescription="0" />
 	</movevent>
 	<movevent event="DeEquip" itemid="26189" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10309" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10309" slot="ring" function="onDeEquipItem" />
+	<movevent event="DeEquip" itemid="10310" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10311" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10311" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10312" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10312" slot="ring" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="10314" slot="ring" level="100" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="10314" slot="ring" function="onDeEquipItem" />
 
 	<!-- Helmets -->
 	<movevent event="Equip" itemid="2323" slot="head" function="onEquipItem">

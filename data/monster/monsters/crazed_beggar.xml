@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Crazed Beggar" nameDescription="a crazed beggar" race="blood" experience="35" speed="200" manacost="300">
+	<health now="100" max="100" />
+	<look type="153" body="40" feet="19" head="21" legs="97" addons="3" corpse="20351" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="10" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-25" />
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="20" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hehehe!" />
+		<voice sentence="Raahhh!" />
+		<voice sentence="You are one of THEM! Die!" />
+		<voice sentence="Wanna buy roses??" />
+		<voice sentence="They're coming!" />
+		<voice sentence="Make it stop!" />
+	</voices>
+	<loot>
+		<item name="small blue pillow" chance="420" />
+		<item id="2072" chance="360" /><!-- lute -->
+		<item name="gold coin" countmax="9" chance="99000" />
+		<item name="dwarven ring" chance="120" />
+		<item id="2237" chance="55000" /><!-- dirty cape -->
+		<item name="wooden hammer" chance="6500" />
+		<item name="wooden spoon" chance="9750" />
+		<item id="2570" chance="5650" /><!-- rolling pin -->
+		<item name="meat" chance="9500" />
+		<item name="roll" chance="22500" />
+		<item name="red rose" chance="4700" />
+		<item name="sling herb" chance="420" />
+		<item name="rum flask" chance="420" />
+		<item id="6092" chance="300" /><!-- very noble-looking watch -->
+		<item id="9808" chance="80" /><!-- rusty armor (common) -->
+	</loot>
+</monster>
