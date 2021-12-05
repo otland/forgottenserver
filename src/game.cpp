@@ -5506,7 +5506,7 @@ void Game::playerExecuteParsePacketEvent(uint32_t playerId, uint8_t recvbyte, co
 
 	NetworkMessage_ptr message = std::make_shared<NetworkMessage>(msg);
 	for (CreatureEvent* creatureEvent : creatureEventList) {
-		creatureEvent->executeParsePacket(player, message);
+		creatureEvent->executeParsePacket(player, recvbyte, message);
 		message->setBufferPosition(1);
 	}
 }

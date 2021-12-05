@@ -1,4 +1,4 @@
-function onParsePacket(player, msg)
+function onParsePacket(player, recvbyte, msg)
 	-- structure for parseUseItem packet, recbyte: 130 (0x82)
 	local pos = msg:getPosition()
 	local clientId = msg:getU16()

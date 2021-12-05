@@ -626,7 +626,7 @@ void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	scriptInterface->callVoidFunction(3);
 }
 
-void CreatureEvent::executeParsePacket(Player* player, NetworkMessage_ptr message)
+void CreatureEvent::executeParsePacket(Player* player, uint8_t recvbyte, NetworkMessage_ptr message)
 {
 	//onParsePacket(player, msg)
 	if (!scriptInterface->reserveScriptEnv()) {
@@ -644,8 +644,10 @@ void CreatureEvent::executeParsePacket(Player* player, NetworkMessage_ptr messag
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
+	lua_pushnumber(L, recvbyte);
+
 	LuaScriptInterface::pushSharedPtr(L, message);
 	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
 
-	return scriptInterface->callVoidFunction(2);
+	return scriptInterface->callVoidFunction(3);
 }
