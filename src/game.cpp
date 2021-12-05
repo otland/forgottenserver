@@ -5492,15 +5492,10 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 	}
 }
 
-void Game::playerExecuteParsePacketEvent(uint32_t playerId, uint8_t recvbyte, NetworkMessage* message)
+void Game::playerExecuteParsePacketEvent(uint32_t playerId, uint8_t recvbyte, NetworkMessage& message)
 {
-	std::unique_ptr<NetworkMessage> msgPtr(message);
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
-		return;
-	}
-
-	if (!player->hasEventRegistered(CREATURE_EVENT_PARSE_PACKET)) {
 		return;
 	}
 
@@ -5510,7 +5505,7 @@ void Game::playerExecuteParsePacketEvent(uint32_t playerId, uint8_t recvbyte, Ne
 		}
 
 		if (creatureEvent->getEventType() == CREATURE_EVENT_PARSE_PACKET && creatureEvent->getRecvbyte() == recvbyte) {
-			creatureEvent->executeParsePacket(player, recvbyte, std::move(msgPtr));
+			creatureEvent->executeParsePacket(player, recvbyte, message);
 			return;
 		}
 	}
