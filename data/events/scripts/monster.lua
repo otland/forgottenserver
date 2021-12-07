@@ -1,12 +1,12 @@
 function Monster:onDropLoot(corpse)
-	if hasEventCallback(EVENT_CALLBACK_ONDROPLOOT) then
-		EventCallback(EVENT_CALLBACK_ONDROPLOOT, self, corpse)
+	if EventCallback.onDropLoot then
+		EventCallback.onDropLoot(self, corpse)
 	end
 end
 
 function Monster:onSpawn(position, startup, artificial)
-	if hasEventCallback(EVENT_CALLBACK_ONSPAWN) then
-		return EventCallback(EVENT_CALLBACK_ONSPAWN, self, position, startup, artificial)
+	if EventCallback.onSpawn then
+		return EventCallback.onSpawn(self, position, startup, artificial)
 	else
 		return true
 	end

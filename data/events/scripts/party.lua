@@ -1,22 +1,22 @@
 function Party:onJoin(player)
-	if hasEventCallback(EVENT_CALLBACK_ONJOIN) then
-		return EventCallback(EVENT_CALLBACK_ONJOIN, self, player)
+	if EventCallback.onJoin then
+		return EventCallback.onJoin(self, player)
 	else
 		return true
 	end
 end
 
 function Party:onLeave(player)
-	if hasEventCallback(EVENT_CALLBACK_ONLEAVE) then
-		return EventCallback(EVENT_CALLBACK_ONLEAVE, self, player)
+	if EventCallback.onLeave then
+		return EventCallback.onLeave(self, player)
 	else
 		return true
 	end
 end
 
 function Party:onDisband()
-	if hasEventCallback(EVENT_CALLBACK_ONDISBAND) then
-		return EventCallback(EVENT_CALLBACK_ONDISBAND, self)
+	if EventCallback.onDisband then
+		return EventCallback.onDisband(self)
 	else
 		return true
 	end
@@ -45,5 +45,5 @@ function Party:onShareExperience(exp)
 	end
 
 	exp = math.ceil((exp * sharedExperienceMultiplier) / (#self:getMembers() + 1))
-	return hasEventCallback(EVENT_CALLBACK_ONSHAREEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONSHAREEXPERIENCE, self, exp, rawExp) or exp
+	return EventCallback.onShareExperience and EventCallback.onShareExperience(self, exp, rawExp) or exp
 end
