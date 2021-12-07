@@ -22,6 +22,7 @@
 
 #include "luascript.h"
 #include "const.h"
+#include "networkmessage.h"
 
 class Party;
 class ItemType;
