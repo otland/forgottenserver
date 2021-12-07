@@ -211,3 +211,6 @@ function Player:onWrapItem(item)
 		end
 	end
 end
+
+function Player:onParsePacket(recvbyte, msg)
+end

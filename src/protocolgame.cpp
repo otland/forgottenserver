@@ -32,6 +32,7 @@
 #include "iomarket.h"
 #include "ban.h"
 #include "scheduler.h"
+#include "events.h"
 
 #include <fmt/format.h>
 
@@ -39,6 +40,7 @@ extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern Events* g_events;
 
 namespace {
 
@@ -525,6 +527,14 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			return;
 		}
 	}
+
+	// event: onParsePacket
+	g_dispatcher.addTask(createTask(std::bind([](uint32_t playerId, uint8_t recvbyte, const NetworkMessage& msg) {
+		Player* player = g_game.getPlayerByID(playerId);
+		if (player) {
+			g_events->eventPlayerOnParsePacket(player, recvbyte, msg);
+		}
+	}, player->getID(), recvbyte, msg)));
 
 	switch (recvbyte) {
 		case 0x14: g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, getThis(), true, false))); break;

@@ -122,6 +122,8 @@ bool Events::load()
 				info.playerOnGainSkillTries = event;
 			} else if (methodName == "onWrapItem") {
 				info.playerOnWrapItem = event;
+			} else if (methodName == "onParsePacket") {
+				info.playerOnParsePacket = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -994,6 +996,36 @@ void Events::eventPlayerOnWrapItem(Player* player, Item* item)
 	scriptInterface.callVoidFunction(2);
 }
 
+void Events::eventPlayerOnParsePacket(Player* player, uint8_t recvbyte, const NetworkMessage& msg)
+{
+	// Player:onParsePacket(recvbyte, msg)
+	if (info.playerOnParsePacket == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnParsePacket] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnParsePacket, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnParsePacket);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, recvbyte);
+
+	LuaScriptInterface::pushUserdata<NetworkMessage>(L, new NetworkMessage(msg));
+	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
+
+	scriptInterface.callVoidFunction(3);
+}
+
+// Monster
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 {
 	// Monster:onDropLoot(corpse)
