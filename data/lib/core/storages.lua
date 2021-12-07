@@ -4,6 +4,13 @@ Reserved storage ranges:
 - 20000 to 21000+ reserved for achievement progress
 - 10000000 to 20000000 reserved for outfits and mounts on source
 ]]--
+
+AccountStorageKeys = {
+}
+
+GlobalStorageKeys = {
+}
+
 PlayerStorageKeys = {
 	annihilatorReward = 30015,
 	promotion = 30018,
@@ -24,5 +31,26 @@ PlayerStorageKeys = {
 	achievementsCounter = 20000,
 }
 
-GlobalStorageKeys = {
-}
+-- Checking for duplicate storages:
+local function extractValues(tab, ret)
+	if type(tab) == "number" then
+		table.insert(ret, tab)
+	else
+		for _, v in pairs(tab) do
+			extractValues(v, ret)
+		end
+	end
+end
+
+local keys = (AccountStorageKeys, GlobalStorageKeys, PlayerStorageKeys)
+local extraction = {}
+extractValues(keys, extraction)
+table.sort(extraction)
+
+if #extraction > 1 then
+	for i = 1, #extraction - 1 do
+		if extraction[i] == extraction[i+1] then
+			print("Duplicate storage value found: ".. extraction[i])
+		end
+	end
+end
