@@ -9239,7 +9239,7 @@ int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 
 	int32_t itemCount = 1;
 	int parameters = lua_gettop(L);
-	if (parameters >= 4) {
+	if (parameters >= 5) {
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
