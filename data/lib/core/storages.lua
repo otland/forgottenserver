@@ -42,7 +42,7 @@ local function extractValues(tab, ret)
 	end
 end
 
-local keys = (AccountStorageKeys, GlobalStorageKeys, PlayerStorageKeys)
+local keys = {AccountStorageKeys, GlobalStorageKeys, PlayerStorageKeys}
 local extraction = {}
 extractValues(keys, extraction)
 table.sort(extraction)
