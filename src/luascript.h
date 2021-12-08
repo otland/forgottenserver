@@ -182,7 +182,7 @@ class ScriptEnvironment
 		static DBResultMap tempResults;
 };
 
-#define reportErrorFunc(L, a)  LuaScriptInterface::reportError(__FUNCTION__, a, L, true)
+#define reportErrorFunc(L, a) LuaScriptInterface::reportError(__FUNCTION__, a, L, true)
 
 enum ErrorCode_t {
 	LUA_ERROR_PLAYER_NOT_FOUND,
@@ -1389,6 +1389,7 @@ class LuaScriptInterface
 		static int luaMonsterSpellSetCombatLength(lua_State* L);
 		static int luaMonsterSpellSetCombatSpread(lua_State* L);
 		static int luaMonsterSpellSetCombatRadius(lua_State* L);
+		static int luaMonsterSpellSetCombatRing(lua_State* L);
 		static int luaMonsterSpellSetConditionType(lua_State* L);
 		static int luaMonsterSpellSetConditionDamage(lua_State* L);
 		static int luaMonsterSpellSetConditionSpeedChange(lua_State* L);

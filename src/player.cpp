@@ -506,8 +506,8 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify/* = fa
 	while (count > skills[skill].tries) {
 		count -= skills[skill].tries;
 
-		if (skills[skill].level <= 10) {
-			skills[skill].level = 10;
+		if (skills[skill].level <= MINIMUM_SKILL_LEVEL) {
+			skills[skill].level = MINIMUM_SKILL_LEVEL;
 			skills[skill].tries = 0;
 			count = 0;
 			break;
@@ -660,9 +660,8 @@ uint16_t Player::getLookCorpse() const
 {
 	if (sex == PLAYERSEX_FEMALE) {
 		return ITEM_FEMALE_CORPSE;
-	} else {
-		return ITEM_MALE_CORPSE;
 	}
+	return ITEM_MALE_CORPSE;
 }
 
 void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin/* = false*/)
@@ -2030,7 +2029,7 @@ void Player::death(Creature* lastHitCreature)
 		//Skill loss
 		for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) { //for each skill
 			uint64_t sumSkillTries = 0;
-			for (uint16_t c = 11; c <= skills[i].level; ++c) { //sum up all required tries for all skill levels
+			for (uint16_t c = MINIMUM_SKILL_LEVEL + 1; c <= skills[i].level; ++c) { //sum up all required tries for all skill levels
 				sumSkillTries += vocation->getReqSkillTries(i, c);
 			}
 
@@ -2621,9 +2620,8 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 
 	if (maxQueryCount < count) {
 		return RETURNVALUE_NOTENOUGHROOM;
-	} else {
-		return RETURNVALUE_NOERROR;
 	}
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr*/) const
@@ -2769,9 +2767,8 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		index = INDEX_WHEREEVER;
 		*destItem = nullptr;
 		return subCylinder;
-	} else {
-		return this;
 	}
+	return this;
 }
 
 void Player::addThing(int32_t index, Thing* thing)

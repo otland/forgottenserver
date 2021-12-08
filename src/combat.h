@@ -123,6 +123,7 @@ class AreaCombat
 		void setupArea(const std::vector<uint32_t>& vec, uint32_t rows);
 		void setupArea(int32_t length, int32_t spread);
 		void setupArea(int32_t radius);
+		void setupAreaRing(int32_t ring);
 		void setupExtArea(const std::vector<uint32_t>& vec, uint32_t rows);
 		const MatrixArea& getArea(const Position& centerPos, const Position& targetPos) const;
 

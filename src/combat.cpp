@@ -259,9 +259,8 @@ ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 	if (attacker->hasFlag(PlayerFlag_CannotUseCombat) || !target->isAttackable()) {
 		if (target->getPlayer()) {
 			return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
-		} else {
-			return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 		}
+		return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 	}
 
 	if (target->getPlayer()) {
@@ -1414,6 +1413,41 @@ void AreaCombat::setupArea(int32_t radius)
 			if (cell == 1) {
 				vec.push_back(3);
 			} else if (cell > 0 && cell <= radius) {
+				vec.push_back(1);
+			} else {
+				vec.push_back(0);
+			}
+		}
+	}
+
+	setupArea(vec, 13);
+}
+
+void AreaCombat::setupAreaRing(int32_t ring)
+{
+	int32_t area[13][13] = {
+		{0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 7, 6, 6, 6, 7, 0, 0, 0, 0},
+		{0, 0, 0, 7, 6, 5, 5, 5, 6, 7, 0, 0, 0},
+		{0, 0, 7, 6, 5, 4, 4, 4, 5, 6, 7, 0, 0},
+		{0, 7, 6, 5, 4, 3, 3, 3, 4, 5, 6, 7, 0},
+		{7, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6, 7},
+		{7, 6, 5, 4, 3, 0, 1, 0, 3, 4, 5, 6, 7},
+		{7, 6, 5, 4, 3, 2, 0, 2, 3, 4, 5, 6, 7},
+		{0, 7, 6, 5, 4, 3, 3, 3, 4, 5, 6, 7, 0},
+		{0, 0, 7, 6, 5, 4, 4, 4, 5, 6, 7, 0, 0},
+		{0, 0, 0, 7, 6, 5, 5, 5, 6, 7, 0, 0, 0},
+		{0, 0, 0, 0, 7, 6, 6, 6, 7, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 7, 7, 7, 0, 0, 0, 0, 0}
+	};
+
+	std::vector<uint32_t> vec;
+	vec.reserve(13 * 13);
+	for (auto& row : area) {
+		for (int cell : row) {
+			if (cell == 1) {
+				vec.push_back(3);
+			} else if (cell > 0 && cell == ring) {
 				vec.push_back(1);
 			} else {
 				vec.push_back(0);

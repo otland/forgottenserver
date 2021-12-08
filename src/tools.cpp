@@ -684,6 +684,16 @@ AmmoTypeNames ammoTypeNames = {
 	{"flammingarrow",	AMMO_ARROW},
 	{"shiverarrow",		AMMO_ARROW},
 	{"eartharrow",		AMMO_ARROW},
+	{"tarsalarrow",		AMMO_ARROW},
+	{"vortexbolt",		AMMO_BOLT},
+	{"prismaticbolt",	AMMO_BOLT},
+	{"crystallinearrow",AMMO_ARROW},
+	{"drillbolt",		AMMO_BOLT},
+	{"envenomedarrow",	AMMO_ARROW},
+	{"gloothspear",		AMMO_SPEAR},
+	{"simplearrow",		AMMO_ARROW},
+	{"redstar",		AMMO_THROWINGSTAR},
+	{"greenstar",	AMMO_THROWINGSTAR},
 };
 
 WeaponActionNames weaponActionNames = {
