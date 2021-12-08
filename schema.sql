@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `market_history` (
   `sale` tinyint NOT NULL DEFAULT '0',
   `itemtype` smallint unsigned NOT NULL,
   `amount` smallint unsigned NOT NULL,
-  `price` int unsigned NOT NULL DEFAULT '0',
+  `price` bigint unsigned NOT NULL DEFAULT '0',
   `expires_at` bigint unsigned NOT NULL,
   `inserted` bigint unsigned NOT NULL,
   `state` tinyint unsigned NOT NULL,
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `market_offers` (
   `amount` smallint unsigned NOT NULL,
   `created` bigint unsigned NOT NULL,
   `anonymous` tinyint NOT NULL DEFAULT '0',
-  `price` int unsigned NOT NULL DEFAULT '0',
+  `price` bigint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `sale` (`sale`,`itemtype`),
   KEY `created` (`created`),
@@ -362,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '30'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '31'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;
