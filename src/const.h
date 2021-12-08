@@ -175,6 +175,10 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_ORANGETELEPORT = 224,
 	CONST_ME_GREYTELEPORT = 225,
 	CONST_ME_LIGHTBLUETELEPORT = 226,
+	// 227-229 are empty
+	CONST_ME_FATAL = 230,
+	CONST_ME_DODGE = 231,
+	CONST_ME_HOURGLASS = 232,
 };
 
 enum ShootType_t : uint8_t {
