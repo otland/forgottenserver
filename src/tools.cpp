@@ -640,7 +640,7 @@ MagicEffectNames magicEffectNames = {
 	{"lightblueteleport",	CONST_ME_LIGHTBLUETELEPORT},
 	{"fatal", 			CONST_ME_FATAL},
 	{"dodge", 			CONST_ME_DODGE},
-	{"hourglass",		CONST_ME_HOURGLASS}
+	{"hourglass",		CONST_ME_HOURGLASS},
 };
 
 ShootTypeNames shootTypeNames = {
