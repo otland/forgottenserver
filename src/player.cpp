@@ -1165,8 +1165,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
-		Account account = IOLoginData::loadAccount(accountNumber);
-
 		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
 			std::cout << name << " has logged in." << std::endl;
 		}
