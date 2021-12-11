@@ -638,9 +638,9 @@ MagicEffectNames magicEffectNames = {
 	{"orangeteleport",	CONST_ME_ORANGETELEPORT},
 	{"greyteleport",	CONST_ME_GREYTELEPORT},
 	{"lightblueteleport",	CONST_ME_LIGHTBLUETELEPORT},
-	{"fatal", 			CONST_ME_FATAL},
-	{"dodge", 			CONST_ME_DODGE},
-	{"hourglass",		CONST_ME_HOURGLASS},
+	{"fatal", 				CONST_ME_FATAL},
+	{"dodge", 				CONST_ME_DODGE},
+	{"hourglass",			CONST_ME_HOURGLASS},
 };
 
 ShootTypeNames shootTypeNames = {
