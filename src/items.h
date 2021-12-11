@@ -360,7 +360,7 @@ class ItemType
 		uint8_t lightLevel = 0;
 		uint8_t lightColor = 0;
 		uint8_t shootRange = 1;
-		uint8_t classLevel = 0;
+		uint8_t classification = 0;
 		int8_t hitChance = 0;
 
 		bool storeItem = false;

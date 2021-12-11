@@ -1313,7 +1313,7 @@ void ProtocolGame::parseMarketCreateOffer(NetworkMessage& msg)
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
 	if (it.id == 0 || it.wareId == 0) {
 		return;
-	} else if (it.classLevel > 0) {
+	} else if (it.classification > 0) {
 		msg.getByte(); // item tier
 	}
 
@@ -1937,7 +1937,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 	for (std::map<uint16_t, uint32_t>::const_iterator it = depotItems.begin(); i < itemsToSend; ++it, ++i) {
 		const ItemType& itemType = Item::items[it->first];
 		msg.add<uint16_t>(itemType.wareId);
-		if (itemType.classLevel > 0) {
+		if (itemType.classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(std::min<uint32_t>(0xFFFF, it->second));
@@ -1965,7 +1965,7 @@ void ProtocolGame::sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& 
 	msg.addByte(MARKETREQUEST_ITEM);
 	msg.addItemId(itemId);
 
-	if (Item::items[itemId].classLevel > 0) {
+	if (Item::items[itemId].classification > 0) {
 		msg.addByte(0); // item tier
 	}
 
@@ -1996,7 +1996,7 @@ void ProtocolGame::sendMarketAcceptOffer(const MarketOfferEx& offer)
 	msg.addByte(0xF9);
 	msg.addByte(MARKETREQUEST_ITEM);
 	msg.addItemId(offer.itemId);
-	if (Item::items[offer.itemId].classLevel > 0) {
+	if (Item::items[offer.itemId].classification > 0) {
 		msg.addByte(0);
 	}
 
@@ -2032,7 +2032,7 @@ void ProtocolGame::sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, c
 		msg.add<uint32_t>(offer.timestamp);
 		msg.add<uint16_t>(offer.counter);
 		msg.addItemId(offer.itemId);
-		if (Item::items[offer.itemId].classLevel > 0) {
+		if (Item::items[offer.itemId].classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(offer.amount);
@@ -2044,7 +2044,7 @@ void ProtocolGame::sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, c
 		msg.add<uint32_t>(offer.timestamp);
 		msg.add<uint16_t>(offer.counter);
 		msg.addItemId(offer.itemId);
-		if (Item::items[offer.itemId].classLevel > 0) {
+		if (Item::items[offer.itemId].classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(offer.amount);
@@ -2065,7 +2065,7 @@ void ProtocolGame::sendMarketCancelOffer(const MarketOfferEx& offer)
 		msg.add<uint32_t>(offer.timestamp);
 		msg.add<uint16_t>(offer.counter);
 		msg.addItemId(offer.itemId);
-		if (Item::items[offer.itemId].classLevel > 0) {
+		if (Item::items[offer.itemId].classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(offer.amount);
@@ -2077,7 +2077,7 @@ void ProtocolGame::sendMarketCancelOffer(const MarketOfferEx& offer)
 		msg.add<uint32_t>(offer.timestamp);
 		msg.add<uint16_t>(offer.counter);
 		msg.addItemId(offer.itemId);
-		if (Item::items[offer.itemId].classLevel > 0) {
+		if (Item::items[offer.itemId].classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(offer.amount);
@@ -2103,7 +2103,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 		msg.add<uint32_t>(it->timestamp);
 		msg.add<uint16_t>(counterMap[it->timestamp]++);
 		msg.addItemId(it->itemId);
-		if (Item::items[it->itemId].classLevel > 0) {
+		if (Item::items[it->itemId].classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(it->amount);
@@ -2119,7 +2119,7 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 		msg.add<uint32_t>(it->timestamp);
 		msg.add<uint16_t>(counterMap[it->timestamp]++);
 		msg.addItemId(it->itemId);
-		if (Item::items[it->itemId].classLevel > 0) {
+		if (Item::items[it->itemId].classification > 0) {
 			msg.addByte(0);
 		}
 		msg.add<uint16_t>(it->amount);
@@ -2136,7 +2136,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 	msg.addByte(0xF8);
 	msg.addItemId(itemId);
 
-	if (Item::items[itemId].classLevel > 0) {
+	if (Item::items[itemId].classification > 0) {
 		msg.addByte(0); // item tier
 	}
 
