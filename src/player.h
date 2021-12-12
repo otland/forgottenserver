@@ -1294,7 +1294,7 @@ class Player final : public Creature, public Cylinder
 		int32_t varSkills[SKILL_LAST + 1] = {};
 		int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t varStats[STAT_LAST + 1] = {};
-		std::array<int16_t, COMBAT_COUNT> specialMagicLevelSkill = { 0 };
+		std::array<int16_t, COMBAT_COUNT> specialMagicLevelSkill = {0};
 		int32_t purchaseCallback = -1;
 		int32_t saleCallback = -1;
 		int32_t MessageBufferCount = 0;

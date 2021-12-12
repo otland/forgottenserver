@@ -121,19 +121,19 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"absorbpercentphysical", ITEM_PARSE_ABSORBPERCENTPHYSICAL},
 	{"absorbpercenthealing", ITEM_PARSE_ABSORBPERCENTHEALING},
 	{"absorbpercentundefined", ITEM_PARSE_ABSORBPERCENTUNDEFINED},
-	{"specialmagiclevelenergy", ITEM_PARSE_SPECIALMAGICLEVELENERGY},
-	{"specialmagiclevelfire", ITEM_PARSE_SPECIALMAGICLEVELFIRE},
-	{"specialmagiclevelpoison", ITEM_PARSE_SPECIALMAGICLEVELPOISON},
-	{"specialmagiclevelearth", ITEM_PARSE_SPECIALMAGICLEVELPOISON},
-	{"specialmagiclevelice", ITEM_PARSE_SPECIALMAGICLEVELICE},
-	{"specialmagiclevelholy", ITEM_PARSE_SPECIALMAGICLEVELHOLY},
-	{"specialmagicleveldeath", ITEM_PARSE_SPECIALMAGICLEVELDEATH},
-	{"specialmagiclevellifedrain", ITEM_PARSE_SPECIALMAGICLEVELLIFEDRAIN},
-	{"specialmagiclevelmanadrain", ITEM_PARSE_SPECIALMAGICLEVELMANADRAIN},
-	{"specialmagicleveldrown", ITEM_PARSE_SPECIALMAGICLEVELDROWN},
-	{"specialmagiclevelphysical", ITEM_PARSE_SPECIALMAGICLEVELPHYSICAL},
-	{"specialmagiclevelhealing", ITEM_PARSE_SPECIALMAGICLEVELHEALING},
-	{"specialmagiclevelundefined", ITEM_PARSE_SPECIALMAGICLEVELUNDEFINED},
+	{"magiclevelenergy", ITEM_PARSE_MAGICLEVELENERGY},
+	{"magiclevelfire", ITEM_PARSE_MAGICLEVELFIRE},
+	{"magiclevelpoison", ITEM_PARSE_MAGICLEVELPOISON},
+	{"magiclevelearth", ITEM_PARSE_MAGICLEVELPOISON},
+	{"magiclevelice", ITEM_PARSE_MAGICLEVELICE},
+	{"magiclevelholy", ITEM_PARSE_MAGICLEVELHOLY},
+	{"magicleveldeath", ITEM_PARSE_MAGICLEVELDEATH},
+	{"magiclevellifedrain", ITEM_PARSE_MAGICLEVELLIFEDRAIN},
+	{"magiclevelmanadrain", ITEM_PARSE_MAGICLEVELMANADRAIN},
+	{"magicleveldrown", ITEM_PARSE_MAGICLEVELDROWN},
+	{"magiclevelphysical", ITEM_PARSE_MAGICLEVELPHYSICAL},
+	{"magiclevelhealing", ITEM_PARSE_MAGICLEVELHEALING},
+	{"magiclevelundefined", ITEM_PARSE_MAGICLEVELUNDEFINED},
 	{"suppressdrunk", ITEM_PARSE_SUPPRESSDRUNK},
 	{"suppressenergy", ITEM_PARSE_SUPPRESSENERGY},
 	{"suppressfire", ITEM_PARSE_SUPPRESSFIRE},
@@ -1111,62 +1111,62 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELENERGY: {
+				case ITEM_PARSE_MAGICLEVELENERGY: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELFIRE: {
+				case ITEM_PARSE_MAGICLEVELFIRE: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELPOISON: {
+				case ITEM_PARSE_MAGICLEVELPOISON: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELICE: {
+				case ITEM_PARSE_MAGICLEVELICE: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELHOLY: {
+				case ITEM_PARSE_MAGICLEVELHOLY: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELDEATH: {
+				case ITEM_PARSE_MAGICLEVELDEATH: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELLIFEDRAIN: {
+				case ITEM_PARSE_MAGICLEVELLIFEDRAIN: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_LIFEDRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELMANADRAIN: {
+				case ITEM_PARSE_MAGICLEVELMANADRAIN: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_MANADRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELDROWN: {
+				case ITEM_PARSE_MAGICLEVELDROWN: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_DROWNDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELPHYSICAL: {
+				case ITEM_PARSE_MAGICLEVELPHYSICAL: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELHEALING: {
+				case ITEM_PARSE_MAGICLEVELHEALING: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_HEALING)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
-				case ITEM_PARSE_SPECIALMAGICLEVELUNDEFINED: {
+				case ITEM_PARSE_MAGICLEVELUNDEFINED: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_UNDEFINEDDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
