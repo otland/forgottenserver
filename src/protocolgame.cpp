@@ -2366,8 +2366,10 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 	msg.add<uint16_t>(quest->getID());
 	msg.addByte(quest->getMissionsCount(player));
 
+	uint16_t missionId = 0;
 	for (const Mission& mission : quest->getMissions()) {
 		if (mission.isStarted(player)) {
+			msg.add<uint16_t>(++missionId);
 			msg.addString(mission.getName(player));
 			msg.addString(mission.getDescription(player));
 		}
