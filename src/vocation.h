@@ -20,8 +20,11 @@
 #ifndef FS_VOCATION_H_ADCAA356C0DB44CEBA994A0D678EC92D
 #define FS_VOCATION_H_ADCAA356C0DB44CEBA994A0D678EC92D
 
+#include "configmanager.h"
 #include "enums.h"
 #include "item.h"
+
+extern ConfigManager g_config;
 
 class Vocation
 {
@@ -94,6 +97,17 @@ class Vocation
 			return allowPvp;
 		}
 
+		bool getMagicShield() const {
+			if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE_FOR_ALL)) {
+				return true;
+			}
+
+			if (!g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
+				return false;
+			}
+			return magicShield;
+		}
+
 		float meleeDamageMultiplier = 1.0f;
 		float distDamageMultiplier = 1.0f;
 		float defenseMultiplier = 1.0f;
@@ -127,6 +141,8 @@ class Vocation
 		uint8_t clientId = 0;
 
 		bool allowPvp = true;
+
+		bool magicShield = false;
 };
 
 class Vocations

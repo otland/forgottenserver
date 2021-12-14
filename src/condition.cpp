@@ -233,6 +233,12 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_MANASHIELD:
 			return new ConditionGeneric(id, type, ticks, buff, subId, aggressive);
 
+		case CONDITION_MANASHIELD_BREAKABLE:
+			return new ConditionManaShield(id, type, ticks, buff, subId);
+
+		case CONDITION_ROOT:
+			return new ConditionGeneric(id, type, ticks, buff, subId, aggressive);
+
 		default:
 			return nullptr;
 	}
@@ -374,6 +380,10 @@ uint32_t ConditionGeneric::getIcons() const
 
 		case CONDITION_INFIGHT:
 			icons |= ICON_SWORDS;
+			break;
+
+		case CONDITION_ROOT:
+			icons |= ICON_ROOT;
 			break;
 
 		default:
@@ -1988,4 +1998,88 @@ bool ConditionDrunk::setParam(ConditionParam_t param, int32_t value)
 			return ret;
 		}
 	}
+}
+
+bool ConditionManaShield::startCondition(Creature* creature)
+{
+	if (!Condition::startCondition(creature)) {
+		return false;
+	}
+	if (auto player = creature->getPlayer()) {
+		player->setManaShield(manaShield);
+		player->setMaxManaShield(manaShield);
+		player->sendStats();
+		return true;
+	}
+	return false;
+}
+
+void ConditionManaShield::endCondition(Creature* creature)
+{
+	if (auto player = creature->getPlayer()) {
+		player->setManaShield(0);
+		player->setMaxManaShield(0);
+		player->sendStats();
+	}
+}
+
+void ConditionManaShield::addCondition(Creature* creature, const Condition* addCondition)
+{
+	if (auto player = creature->getPlayer()) {
+		endCondition(player);
+		setTicks(addCondition->getTicks());
+
+		const ConditionManaShield& conditionManaShield = static_cast<const ConditionManaShield&>(*addCondition);
+
+		manaShield = conditionManaShield.manaShield;
+		player->setManaShield(manaShield);
+		player->setMaxManaShield(manaShield);
+		player->sendStats();
+	}
+}
+
+bool ConditionManaShield::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
+{
+	if (attr == CONDITIONATTR_MANASHIELD_BREAKABLE) {
+		return propStream.read<uint16_t>(manaShield);
+	}
+	return Condition::unserializeProp(attr, propStream);
+}
+
+void ConditionManaShield::serialize(PropWriteStream& propWriteStream)
+{
+	Condition::serialize(propWriteStream);
+
+	propWriteStream.write<uint8_t>(CONDITIONATTR_MANASHIELD_BREAKABLE);
+	propWriteStream.write<uint16_t>(manaShield);
+}
+
+bool ConditionManaShield::setParam(ConditionParam_t param, int32_t value)
+{
+	bool ret = Condition::setParam(param, value);
+
+	switch (param) {
+	case CONDITION_PARAM_MANASHIELD_BREAKABLE:
+		manaShield = value;
+		return true;
+
+	default:
+		return ret;
+	}
+}
+
+uint32_t ConditionManaShield::getIcons() const
+{
+	uint32_t icons = Condition::getIcons();
+
+	switch (conditionType) {
+	case CONDITION_MANASHIELD_BREAKABLE:
+		icons |= ICON_MANASHIELD_BREAKABLE;
+		break;
+
+	default:
+		break;
+	}
+
+	return icons;
 }

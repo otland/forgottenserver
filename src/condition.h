@@ -58,6 +58,7 @@ enum ConditionAttr_t {
 	CONDITIONATTR_ISAGGRESSIVE,
 	CONDITIONATTR_DISABLEDEFENSE,
 	CONDITIONATTR_SPECIALSKILLS,
+	CONDITIONATTR_MANASHIELD_BREAKABLE,
 
 	//reserved for serialization
 	CONDITIONATTR_END = 254,
@@ -460,6 +461,31 @@ class ConditionDrunk final : public Condition
 		uint8_t drunkenness = 25;
 
 		bool updateCondition(const Condition* addCondition) override;
+};
+
+class ConditionManaShield final : public Condition
+{
+public:
+	ConditionManaShield(ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false, uint32_t initSubId = 0) :
+		Condition(initId, initType, iniTicks, initBuff, initSubId) {}
+
+	bool startCondition(Creature* creature) override;
+	void endCondition(Creature* creature) override;
+	void addCondition(Creature* creature, const Condition* addCondition) override;
+	uint32_t getIcons() const override;
+
+	bool setParam(ConditionParam_t param, int32_t value) override;
+
+	ConditionManaShield* clone() const override {
+		return new ConditionManaShield(*this);
+	}
+
+	//serialization
+	void serialize(PropWriteStream& propWriteStream) override;
+	bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
+
+private:
+	uint16_t manaShield = 0;
 };
 
 #endif

@@ -1193,6 +1193,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_INVISIBLE)
 	registerEnum(CONDITION_LIGHT)
 	registerEnum(CONDITION_MANASHIELD)
+	registerEnum(CONDITION_MANASHIELD_BREAKABLE)
 	registerEnum(CONDITION_INFIGHT)
 	registerEnum(CONDITION_DRUNK)
 	registerEnum(CONDITION_EXHAUST_WEAPON)
@@ -1211,6 +1212,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PACIFIED)
 	registerEnum(CONDITION_SPELLCOOLDOWN)
 	registerEnum(CONDITION_SPELLGROUPCOOLDOWN)
+	registerEnum(CONDITION_ROOT)
 
 	registerEnum(CONDITIONID_DEFAULT)
 	registerEnum(CONDITIONID_COMBAT)
@@ -1270,6 +1272,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SUBID)
 	registerEnum(CONDITION_PARAM_FIELD)
 	registerEnum(CONDITION_PARAM_DISABLE_DEFENSE)
+	registerEnum(CONDITION_PARAM_MANASHIELD_BREAKABLE)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE)
@@ -2490,6 +2493,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "addMana", LuaScriptInterface::luaPlayerAddMana);
 	registerMethod("Player", "getMaxMana", LuaScriptInterface::luaPlayerGetMaxMana);
 	registerMethod("Player", "setMaxMana", LuaScriptInterface::luaPlayerSetMaxMana);
+	registerMethod("Player", "setManaShieldBar", LuaScriptInterface::luaPlayerSetManaShieldBar);
 	registerMethod("Player", "getManaSpent", LuaScriptInterface::luaPlayerGetManaSpent);
 	registerMethod("Player", "addManaSpent", LuaScriptInterface::luaPlayerAddManaSpent);
 	registerMethod("Player", "removeManaSpent", LuaScriptInterface::luaPlayerRemoveManaSpent);
@@ -8651,6 +8655,22 @@ int LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
 		player->mana = std::min<int32_t>(player->mana, player->manaMax);
 		player->sendStats();
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
+{
+	// player:setManaShieldBar(capacity, value)
+	Player* player = getPlayer(L, 1);
+	if (player) {
+		player->setMaxManaShield(getNumber<int32_t>(L, 2));
+		player->setManaShield(getNumber<int32_t>(L, 3));
+		player->sendStats();
+		pushBoolean(L, true);
+		return 1;
 	} else {
 		lua_pushnil(L);
 	}

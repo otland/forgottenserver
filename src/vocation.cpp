@@ -57,6 +57,8 @@ bool Vocations::loadFromXml()
 				voc.clientId = pugi::cast<uint16_t>(attrNode.value());
 			} else if (strcasecmp(attrName, "description") == 0) {
 				voc.description = attrNode.as_string();
+			} else if (strcasecmp(attrName, "magicshield") == 0) {
+				voc.magicShield = attrNode.as_bool();
 			} else if (strcasecmp(attrName, "gaincap") == 0) {
 				voc.gainCap = pugi::cast<uint32_t>(attrNode.value()) * 100;
 			} else if (strcasecmp(attrName, "gainhp") == 0) {
