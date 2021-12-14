@@ -56,6 +56,54 @@
 	<outfit type="0" looktype="874" name="Philosopher" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="885" name="Arena Champion" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="900" name="Lupine Warden" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="909" name="Grove Keeper" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="929" name="Festive Outfit" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="956" name="Pharaoh" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="958" name="Trophy Hunter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="963" name="Retro Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="965" name="Retro Summoner" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="967" name="Retro Noblewoman" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="969" name="Retro Wizard" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="971" name="Retro Knight" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="973" name="Retro Hunter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="975" name="Retro Citizen" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1020" name="Herbalist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1024" name="Sun Priest" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1043" name="Makeshift Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1050" name="Siege Master" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1057" name="Mercenary" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1070" name="Battle Mage" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1095" name="Discoverer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1103" name="Sinister Archer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1128" name="Pumpkin Mummy" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1147" name="Dream Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1162" name="Percht Raider" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1174" name="Owl Keeper" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1187" name="Guidon Bearer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1203" name="Void Master" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1205" name="Veteran Paladin" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1207" name="Lion of War" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1211" name="Golden Outfit" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1246" name="Breezy Garb" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1244" name="Hand of the Inquisition" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1252" name="Traditionalist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1271" name="Poltergeist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1280" name="Herder" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1283" name="Falconer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1289" name="Dragon Slayer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1293" name="Trailblazer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1323" name="Revenant" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1332" name="Jouster" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1339" name="Moth Cape" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1372" name="Rascoohan" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1383" name="Merry Garb" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1385" name="Rune Master" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1387" name="Citizen of Issavi" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1416" name="Forest Warden" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1437" name="Royal Bounacean Advisor" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1445" name="Dragon Knight" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1450" name="Arbalester" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1456" name="Royal Costume" premium="no" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -113,4 +161,53 @@
 	<outfit type="1" looktype="873" name="Philosopher" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="884" name="Arena Champion" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="899" name="Lupine Warden" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="908" name="Grove Keeper" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="931" name="Festive Outfit" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="955" name="Pharaoh" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="957" name="Trophy Hunter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="962" name="Retro Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="964" name="Retro Summoner" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="966" name="Retro Nobleman" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="968" name="Retro Wizard" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="970" name="Retro Knight" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="972" name="Retro Hunter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="974" name="Retro Citizen" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1021" name="Herbalist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1023" name="Sun Priest" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1042" name="Makeshift Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1051" name="Siege Master" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1056" name="Mercenary" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1069" name="Battle Mage" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1094" name="Discoverer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1102" name="Sinister Archer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1127" name="Pumpkin Mummy" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1146" name="Dream Warrior" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1161" name="Percht Raider" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1173" name="Owl Keeper" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1186" name="Guidon Bearer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1202" name="Void Master" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1204" name="Veteran Paladin" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1206" name="Lion of War" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1210" name="Golden Outfit" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1245" name="Breezy Garb" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1243" name="Hand of the Inquisition" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1251" name="Traditionalist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1270" name="Poltergeist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1279" name="Herder" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1282" name="Falconer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1288" name="Dragon Slayer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1292" name="Trailblazer" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1322" name="Revenant" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1331" name="Jouster" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1338" name="Moth Cape" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1371" name="Rascoohan" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1382" name="Merry Garb" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1384" name="Rune Master" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1415" name="Forest Warden" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1386" name="Citizen of Issavi" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1415" name="Forest Warden" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1436" name="Royal Bounacean Advisor" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1444" name="Dragon Knight" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1449" name="Arbalester" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1457" name="Royal Costume" premium="no" unlocked="no" enabled="yes" />
 </outfits>

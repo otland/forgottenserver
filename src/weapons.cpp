@@ -55,7 +55,7 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 
 void Weapons::clear(bool fromLua)
 {
-	for (auto it = weapons.begin(); it != weapons.end(); ) {
+	for (auto it = weapons.begin(); it != weapons.end();) {
 		if (fromLua == it->second->fromLua) {
 			it = weapons.erase(it);
 		} else {
@@ -790,7 +790,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			for (const auto& dir : destList) {
 				// Blocking tiles or tiles without ground ain't valid targets for spears
 				Tile* tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
-				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround() != nullptr) {
+				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround()) {
 					destTile = tmpTile;
 					break;
 				}

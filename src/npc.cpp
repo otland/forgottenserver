@@ -26,7 +26,7 @@
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
 
-uint32_t Npc::npcAutoID = 0x80000000;
+uint32_t Npc::npcAutoID = 0x20000000;
 NpcScriptInterface* Npc::scriptInterface = nullptr;
 
 void Npcs::reload()
@@ -479,8 +479,9 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 bool Npc::getRandomStep(Direction& dir) const
 {
 	std::vector<Direction> dirList;
-	const Position& creaturePos = getPosition();
+	dirList.reserve(4);
 
+	const Position& creaturePos = getPosition();
 	if (canWalkTo(creaturePos, DIRECTION_NORTH)) {
 		dirList.push_back(DIRECTION_NORTH);
 	}

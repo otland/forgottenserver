@@ -92,7 +92,7 @@ std::string Container::getName(bool addArticle /* = false*/) const {
 
 bool Container::hasParent() const
 {
-	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
+	return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent());
 }
 
 void Container::addItem(Item* item)
@@ -157,38 +157,6 @@ void Container::updateItemWeight(int32_t diff)
 uint32_t Container::getWeight() const
 {
 	return Item::getWeight() + totalWeight;
-}
-
-std::string Container::getContentDescription() const
-{
-	std::ostringstream os;
-	return getContentDescription(os).str();
-}
-
-std::ostringstream& Container::getContentDescription(std::ostringstream& os) const
-{
-	bool firstitem = true;
-	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
-		Item* item = *it;
-
-		Container* container = item->getContainer();
-		if (container && !container->empty()) {
-			continue;
-		}
-
-		if (firstitem) {
-			firstitem = false;
-		} else {
-			os << ", ";
-		}
-
-		os << item->getNameDescription();
-	}
-
-	if (firstitem) {
-		os << "nothing";
-	}
-	return os;
 }
 
 Item* Container::getItemByIndex(size_t index) const
@@ -281,7 +249,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -346,7 +314,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 		uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -401,7 +369,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -506,7 +474,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -539,7 +507,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -581,7 +549,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 void Container::removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -712,7 +680,7 @@ void Container::internalAddThing(Thing* thing)
 void Container::internalAddThing(uint32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return;
 	}
 
