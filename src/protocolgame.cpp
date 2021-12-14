@@ -2260,6 +2260,19 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 			ss << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
 		}
 
+		for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+			if (it.abilities->specialMagicLevelSkill[i] == 0) {
+				continue;
+			}
+
+			if (separator) {
+				ss << ", ";
+			} else {
+				separator = true;
+			}
+			ss << getCombatName(indexToCombatType(i)) << " magic level " << std::showpos << it.abilities->specialMagicLevelSkill[i] << std::noshowpos;
+		}
+
 		if (it.abilities->speed != 0) {
 			if (separator) {
 				ss << ", ";
