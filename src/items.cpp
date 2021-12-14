@@ -195,6 +195,7 @@ const std::unordered_map<std::string, RaceType_t> RaceTypesMap = {
 	{"undead", RACE_UNDEAD},
 	{"fire", RACE_FIRE},
 	{"energy", RACE_ENERGY},
+	{"ink", RACE_INK},
 };
 
 const std::unordered_map<std::string, WeaponType_t> WeaponTypesMap = {
@@ -227,6 +228,7 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"swamp", FLUID_SWAMP},
 	{"tea", FLUID_TEA},
 	{"mead", FLUID_MEAD},
+	{"ink", FLUID_INK},
 };
 
 Items::Items()
