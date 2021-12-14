@@ -2267,8 +2267,7 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 
 			if (separator) {
 				ss << ", ";
-			}
-			else {
+			} else {
 				separator = true;
 			}
 			ss << getCombatName(indexToCombatType(i)) << " magic level " << std::showpos << it.abilities->specialMagicLevelSkill[i] << std::noshowpos;

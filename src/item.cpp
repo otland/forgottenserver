@@ -1108,12 +1108,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						if (begin) {
 							begin = false;
 							s << " (";
-						}
-						else {
+						} else {
 							s << ", ";
 						}
-					}
-					else {
+					} else {
 						s << ", ";
 					}
 
@@ -1288,12 +1286,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						if (begin) {
 							begin = false;
 							s << " (";
-						}
-						else {
+						} else {
 							s << ", ";
 						}
-					}
-					else {
+					} else {
 						s << ", ";
 					}
 
