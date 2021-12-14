@@ -40091,8 +40091,14 @@
 	<item id="35283" article="a" name="slab with a skull" />
 	<item id="35284" article="a" name="ghost chestplate" />
 	<item id="35285" article="a" name="spectral scrap of cloth" />
-	<item id="35286" article="a" name="spooky hood" />
-	<item id="35287" article="a" name="ghost claw" />
+	<item id="35286" article="a" name="spooky hood">
+		<attribute key="description" value="Every time you look away you have a strange feeling, as if something watches you from its depths." />
+		<attribute key="weight" value="1250" />
+	</item>
+	<item id="35287" article="a" name="ghost claw">
+		<attribute key="description" value="It is glowing in an unhealthy light." />
+		<attribute key="weight" value="730" />
+	</item>
 	<item id="35288" name="raw eye of the chasm" />
 	<item id="35289" name="eye of the chasm" />
 	<item id="35290" article="a" name="raw crystal deposit" />
