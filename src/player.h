@@ -850,6 +850,11 @@ class Player final : public Creature, public Cylinder
 				client->sendSpellGroupCooldown(groupId, time);
 			}
 		}
+		void sendUseItemCooldown(uint32_t time) {
+			if (client) {
+				client->sendUseItemCooldown(time);
+			}
+		}
 		void sendModalWindow(const ModalWindow& modalWindow);
 
 		//container
