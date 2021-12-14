@@ -39,6 +39,7 @@ enum itemgroup_t {
 	ITEM_GROUP_FLUID,
 	ITEM_GROUP_DOOR, //deprecated
 	ITEM_GROUP_DEPRECATED,
+	ITEM_GROUP_PODIUM,
 
 	ITEM_GROUP_LAST
 };
@@ -103,6 +104,11 @@ enum clientVersion_t {
 	CLIENT_VERSION_1035 = 55,
 	CLIENT_VERSION_1076 = 56,
 	CLIENT_VERSION_1098 = 57,
+	CLIENT_VERSION_1100 = 58,
+	CLIENT_VERSION_1272 = 59,
+	CLIENT_VERSION_1281 = 60,
+
+	CLIENT_VERSION_LAST = CLIENT_VERSION_1281
 };
 
 enum rootattrib_ {
@@ -144,6 +150,7 @@ enum itemattrib_t {
 	ITEM_ATTR_WRITEABLE3, //deprecated
 
 	ITEM_ATTR_WAREID,
+	ITEM_ATTR_CLASS,
 
 	ITEM_ATTR_LAST
 };
@@ -176,6 +183,8 @@ enum itemflags_t {
 	FLAG_ANIMATION = 1 << 24,
 	FLAG_FULLTILE = 1 << 25, // unused
 	FLAG_FORCEUSE = 1 << 26,
+	FLAG_AMMO = 1 << 27, // unused
+	FLAG_REPORTABLE = 1 << 28, // unused
 };
 
 //1-byte aligned structs

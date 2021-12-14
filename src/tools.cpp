@@ -464,7 +464,7 @@ Direction getDirectionTo(const Position& from, const Position& to)
 	if (from == to) {
 		return DIRECTION_NONE;
 	}
-	
+
 	Direction dir;
 
 	int32_t x_offset = Position::getOffsetX(from, to);
@@ -590,6 +590,55 @@ MagicEffectNames magicEffectNames = {
 	{"yellowsmoke",		CONST_ME_YELLOWSMOKE},
 	{"greensmoke",		CONST_ME_GREENSMOKE},
 	{"purplesmoke",		CONST_ME_PURPLESMOKE},
+	{"earlythunder",	CONST_ME_EARLY_THUNDER},
+	{"bonecapsule",		CONST_ME_RAGIAZ_BONECAPSULE},
+	{"criticaldamage",	CONST_ME_CRITICAL_DAMAGE},
+	{"plungingfish",	CONST_ME_PLUNGING_FISH},
+	{"bluechain",		CONST_ME_BLUECHAIN},
+	{"orangechain",		CONST_ME_ORANGECHAIN},
+	{"greenchain",		CONST_ME_GREENCHAIN},
+	{"purplechain",		CONST_ME_PURPLECHAIN},
+	{"greychain",		CONST_ME_GREYCHAIN},
+	{"yellowchain",		CONST_ME_YELLOWCHAIN},
+	{"yellowsparkles",	CONST_ME_YELLOWSPARKLES},
+	{"faeexplosion",	CONST_ME_FAEEXPLOSION},
+	{"faecoming",		CONST_ME_FAECOMING},
+	{"faegoing",		CONST_ME_FAEGOING},
+	{"bigcloudssinglespace",	CONST_ME_BIGCLOUDSSINGLESPACE},
+	{"stonessinglespace",	CONST_ME_STONESSINGLESPACE},
+	{"blueghost",		CONST_ME_BLUEGHOST},
+	{"pointofinterest",	CONST_ME_POINTOFINTEREST},
+	{"mapeffect",		CONST_ME_MAPEFFECT},
+	{"pinkspark",		CONST_ME_PINKSPARK},
+	{"greenfirework",	CONST_ME_FIREWORK_GREEN},
+	{"orangefirework",	CONST_ME_FIREWORK_ORANGE},
+	{"purplefirework",	CONST_ME_FIREWORK_PURPLE},
+	{"turquoisefirework",	CONST_ME_FIREWORK_TURQUOISE},
+	{"thecube",			CONST_ME_THECUBE},
+	{"drawink",			CONST_ME_DRAWINK},
+	{"prismaticsparkles",	CONST_ME_PRISMATICSPARKLES},
+	{"thaian",			CONST_ME_THAIAN},
+	{"thaianghost",		CONST_ME_THAIANGHOST},
+	{"ghostsmoke",		CONST_ME_GHOSTSMOKE},
+	{"floatingblock",	CONST_ME_FLOATINGBLOCK},
+	{"block",			CONST_ME_BLOCK},
+	{"rooting",			CONST_ME_ROOTING},
+	{"ghostlyscratch",	CONST_ME_GHOSTLYSCRATCH},
+	{"ghostlybite",		CONST_ME_GHOSTLYBITE},
+	{"bigscratching",	CONST_ME_BIGSCRATCHING},
+	{"slash",			CONST_ME_SLASH},
+	{"bite",			CONST_ME_BITE},
+	{"chivalriouschallenge",	CONST_ME_CHIVALRIOUSCHALLENGE},
+	{"divinedazzle",	CONST_ME_DIVINEDAZZLE},
+	{"electricalspark",	CONST_ME_ELECTRICALSPARK},
+	{"purpleteleport",	CONST_ME_PURPLETELEPORT},
+	{"redteleport",		CONST_ME_REDTELEPORT},
+	{"orangeteleport",	CONST_ME_ORANGETELEPORT},
+	{"greyteleport",	CONST_ME_GREYTELEPORT},
+	{"lightblueteleport",	CONST_ME_LIGHTBLUETELEPORT},
+	{"fatal", 		CONST_ME_FATAL},
+	{"dodge", 		CONST_ME_DODGE},
+	{"hourglass",		CONST_ME_HOURGLASS},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -643,6 +692,10 @@ ShootTypeNames shootTypeNames = {
 	{"envenomedarrow",	CONST_ANI_ENVENOMEDARROW},
 	{"gloothspear",		CONST_ANI_GLOOTHSPEAR},
 	{"simplearrow",		CONST_ANI_SIMPLEARROW},
+	{"leafstar",		CONST_ANI_LEAFSTAR},
+	{"diamondarrow",	CONST_ANI_DIAMONDARROW},
+	{"spectralbolt",	CONST_ANI_SPECTRALBOLT},
+	{"royalstar",		CONST_ANI_ROYALSTAR},
 };
 
 CombatTypeNames combatTypeNames = {
@@ -684,6 +737,10 @@ AmmoTypeNames ammoTypeNames = {
 	{"flammingarrow",	AMMO_ARROW},
 	{"shiverarrow",		AMMO_ARROW},
 	{"eartharrow",		AMMO_ARROW},
+	{"leafstar",		AMMO_THROWINGSTAR},
+	{"diamondarrow",	AMMO_ARROW},
+	{"spectralbolt",	AMMO_BOLT},
+	{"royalstar",		AMMO_THROWINGSTAR},
 };
 
 WeaponActionNames weaponActionNames = {

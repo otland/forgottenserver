@@ -108,6 +108,10 @@ local function useStamina(player)
 	end
 
 	local playerId = player:getId()
+	if not nextUseStaminaTime[playerId] then
+		nextUseStaminaTime[playerId] = 0
+	end
+
 	local currentTime = os.time()
 	local timePassed = currentTime - nextUseStaminaTime[playerId]
 	if timePassed <= 0 then
@@ -148,7 +152,7 @@ function Player:onGainExperience(source, exp, rawExp)
 		useStamina(self)
 
 		local staminaMinutes = self:getStamina()
-		if staminaMinutes > 2400 and self:isPremium() then
+		if staminaMinutes > 2340 and self:isPremium() then
 			exp = exp * 1.5
 		elseif staminaMinutes <= 840 then
 			exp = exp * 0.5
