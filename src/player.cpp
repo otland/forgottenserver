@@ -709,6 +709,14 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 				lastQuestlogUpdate = currentFrameTime;
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
 			}
+
+			for (const TrackedQuest& trackedQuest : trackedQuestList) {
+				if (const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId())) {
+					if (quest->isTracking(key, value)) {
+						sendUpdateQuestTracker(trackedQuest);
+					}
+				}
+			}
 		}
 	} else {
 		storageMap.erase(key);
@@ -4643,6 +4651,39 @@ size_t Player::getMaxDepotItems() const
 	}
 
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
+}
+
+size_t Player::getTrackedQuestCount() const
+{
+	return g_config.getNumber(isPremium() ? ConfigManager::TRACKERQUEST_PREMIUM_LIMIT : ConfigManager::TRACKERQUEST_FREE_LIMIT);
+}
+
+void Player::resetTrackerQuests(std::vector<uint16_t> missionIds)
+{
+	size_t trackedQuestCount = getTrackedQuestCount();
+	trackedQuestList.clear();
+	const auto& quests = g_game.quests.getQuests();
+	for (size_t index = 0; index < missionIds.size(); index++) {
+		for (auto& quest : quests) {
+			uint16_t missionId = missionIds[index];
+			for (const Mission& mission : quest.getMissions()) {
+				if (mission.getID() == missionId) {
+					if (mission.isStarted(this)) {
+						trackedQuestList.emplace_back(
+							quest.getID(),
+							missionId
+						);
+					}
+				}
+			}
+		}
+
+		if (trackedQuestList.size() == trackedQuestCount) {
+			break;
+		}
+	}
+
+	sendQuestTracker();
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const

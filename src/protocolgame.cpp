@@ -603,6 +603,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xCB: parseBrowseField(msg); break;
 		case 0xCC: parseSeekInContainer(msg); break;
 		//case 0xCD: break; // request inspect window
+		case 0xD0: parseTrackerQuest(msg); break;
 		case 0xD2: addGameTask(&Game::playerRequestOutfit, player->getID()); break;
 		case 0xD3: parseSetOutfit(msg); break;
 		case 0xD4: parseToggleMount(msg); break;
@@ -1285,6 +1286,18 @@ void ProtocolGame::parseQuestLine(NetworkMessage& msg)
 {
 	uint16_t questId = msg.get<uint16_t>();
 	addGameTask(&Game::playerShowQuestLine, player->getID(), questId);
+}
+
+void ProtocolGame::parseTrackerQuest(NetworkMessage& msg)
+{
+	uint8_t missions = msg.getByte();
+	std::vector<uint16_t> missionIds;
+	missionIds.reserve(missions);
+	for (uint8_t missionId = 0; missionId < missions; missionId++) {
+		missionIds.push_back(msg.get<uint16_t>());
+	}
+
+	addGameTask(&Game::playerResetTrackerQuests, player->getID(), missionIds);
 }
 
 void ProtocolGame::parseMarketLeave()
@@ -2374,6 +2387,42 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 			msg.addString(mission.getDescription(player));
 		}
 	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendQuestTracker()
+{
+	NetworkMessage msg;
+	msg.addByte(0xD0); // byte quest tracker
+	msg.addByte(1);
+	size_t trackeds = player->trackedQuestList.size();
+	msg.addByte(player->getTrackedQuestCount() - trackeds);
+	msg.addByte(trackeds);
+
+	for (const TrackedQuest& trackedQuest : player->trackedQuestList) {
+		const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
+		const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
+		msg.add<uint16_t>(trackedQuest.getMissionId());
+		msg.addString(quest->getName());
+		msg.addString(mission->getName(player));
+		msg.addString(mission->getDescription(player));
+	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendUpdateQuestTracker(const TrackedQuest& trackedQuest)
+{
+	NetworkMessage msg;
+	msg.addByte(0xD0); // byte quest tracker
+	msg.addByte(0);
+
+	const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
+	const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
+	msg.add<uint16_t>(trackedQuest.getMissionId());
+	msg.addString(mission->getName(player));
+	msg.addString(mission->getDescription(player));
 
 	writeToOutputBuffer(msg);
 }
