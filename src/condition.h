@@ -309,6 +309,7 @@ class ConditionDamage final : public Condition
 		bool delayed = false;
 		bool field = false;
 		uint32_t owner = 0;
+		time_t casterLogoutTime = 0;
 
 		bool init();
 

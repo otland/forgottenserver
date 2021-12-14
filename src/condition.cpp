@@ -1389,7 +1389,11 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 		return false;
 	}
 
-	if (g_game.combatBlockHit(damage, attacker, creature, false, false, field)) {
+	if (attacker && attacker->getPlayer() && attacker->getPlayer()->getLastLogout() != casterLogoutTime) {
+		if (g_game.combatBlockHit(damage, nullptr, creature, false, false, field)) {
+			return false;
+		}
+	} else if (g_game.combatBlockHit(damage, attacker, creature, false, false, field)) {
 		return false;
 	}
 
