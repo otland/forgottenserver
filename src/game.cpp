@@ -5253,11 +5253,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	uint32_t offerAccountId = IOLoginData::getAccountIdByPlayerId(offer.playerId);
 	if (offerAccountId == player->getAccount()) {
-		if (player->getProtocolVersion() >= 1200) {
-            player->sendTextMessage(MESSAGE_MARKET, "You cannot accept your own offer.");
-        } else {
-            player->sendFYIBox("You cannot accept your own offer.");
-        } 
+		player->sendTextMessage(MESSAGE_MARKET, "You cannot accept your own offer.");
 		return;
 	}
 
