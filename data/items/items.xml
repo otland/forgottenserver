@@ -13267,11 +13267,11 @@
 	</item>
 	<item id="7589" article="a" name="strong mana potion">
 		<attribute key="weight" value="290" />
-		<attribute key="description" value="This potion can only be consumed by sorcerers, druids and paladins of level 50 or higher." />
+		<attribute key="description" value="This potion can only be consumed by players of level 50 or higher." />
 	</item>
 	<item id="7590" article="a" name="great mana potion">
 		<attribute key="weight" value="310" />
-		<attribute key="description" value="This potion can only be consumed by sorcerers and druids of level 80 or higher." />
+		<attribute key="description" value="This potion can only be consumed by sorcerers, druids and paladins of level 80 or higher." />
 	</item>
 	<item id="7591" article="a" name="great health potion">
 		<attribute key="weight" value="310" />
@@ -13358,15 +13358,15 @@
 	</item>
 	<item id="7634" article="an" name="empty potion flask">
 		<attribute key="weight" value="160" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7635" article="an" name="empty potion flask">
 		<attribute key="weight" value="180" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7636" article="an" name="empty potion flask">
 		<attribute key="weight" value="150" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7637" article="a" name="dead cat">
 		<attribute key="containerSize" value="5" />
@@ -21454,7 +21454,7 @@
 		<attribute key="weight" value="950" />
 	</item>
 	<item id="12544" article="a" name="sweet mangonaise elixir">
-		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing a volatile magical ring with time limit." />
+		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing certain magical rings. So it will not work on every kind of them." />
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="12545" article="the" name="dead glitterscale">
@@ -23440,8 +23440,8 @@
 		<attribute key="description" value="It's very toxic. Do not ever drink green liquids." />
 		<attribute key="weight" value="180" />
 	</item>
-	<item id="13924" article="an" name="empty potion flask">
-		<attribute key="description" value="Return it to a magic store for deposit." />
+	<item id="13924" article="an" name="special flask">
+		<attribute key="description" value="Vascalir gave it to you to collect wasp poison." />
 		<attribute key="weight" value="180" />
 	</item>
 	<item id="13925" article="a" name="plague mask">
@@ -26556,9 +26556,9 @@
 	<item id="18465" article="a" name="shiny blade">
 		<attribute key="weight" value="4500" />
 		<attribute key="defense" value="35" />
-		<attribute key="attack" value="50" />
+		<attribute key="attack" value="49" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="extradef" value="3" />
+		<attribute key="extradef" value="2" />
 		<attribute key="skillSword" value="1" />
 	</item>
 	<item id="18466" article="a" name="dead crystal golem">
@@ -38049,7 +38049,14 @@
 	<item id="28388" article="a" name="gleaming starlight vial" />
 	<item id="28389" article="a" name="dark sun catcher" />
 	<item id="28390" article="a" name="shining sun catcher" />
-	<item id="28391" article="a" name="leaf star" />
+	<item id="28391" article="a" name="leaf star">
+		<attribute key="weight" value="200" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="attack" value="48" />
+		<attribute key="range" value="4" />
+		<attribute key="elementEarth" value="2" />
+		<attribute key="shootType" value="leafstar" />
+	</item>
 	<item id="28392" name="swan feathers" />
 	<item id="28393" article="a" name="rainbow quartz" />
 	<item id="28394" name="tar" />
@@ -38068,9 +38075,28 @@
 	<item fromid="28408" toid="28410" name="rubble" />
 	<item id="28411" name="earth" />
 	<item id="28412" name="strange colours" />
-	<item id="28413" article="a" name="diamond arrow" />
-	<item id="28414" article="a" name="spectral bolt" />
-	<item id="28415" article="a" name="royal star" />
+	<item id="28413" article="a" name="diamond arrow">
+		<attribute key="weight" value="80" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="attack" value="37" />
+		<attribute key="shootType" value="diamondarrow" />
+	</item>
+	<item id="28414" article="a" name="spectral bolt">
+		<attribute key="weight" value="90" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="attack" value="78" />
+		<attribute key="shootType" value="spectralbolt" />
+	</item>
+	<item id="28415" article="a" name="royal star">
+		<attribute key="weight" value="220" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="attack" value="64" />
+		<attribute key="range" value="4" />
+		<attribute key="elementFire" value="2" />
+		<attribute key="shootType" value="royalstar" />
+	</item>
 	<item id="28416" article="a" name="wand of darkness" />
 	<item id="28417" name="strange colours" />
 	<item id="28418" article="a" name="stump" />
@@ -40856,8 +40882,20 @@
 	<item fromid="38551" toid="38552" article="a" name="midnight panther rug" />
 	<item fromid="38553" toid="38554" article="a" name="moon carpet" />
 	<item fromid="38555" toid="38556" article="a" name="romantic carpet" />
-	<item id="38557" article="a" name="diamond arrow" />
-	<item id="38558" article="a" name="spectral bolt" />
+	<item id="38557" article="a" name="diamond arrow">
+		<attribute key="weight" value="80" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="attack" value="37" />
+		<attribute key="shootType" value="diamondarrow" />
+	</item>
+	<item id="38558" article="a" name="spectral bolt">
+		<attribute key="weight" value="90" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="attack" value="78" />
+		<attribute key="shootType" value="spectralbolt" />
+	</item>
 	<item id="38564" article="a" name="rope-ladder" />
 	<item fromid="38565" toid="38566" name="chaos critical dice" />
 	<item fromid="38567" toid="38568" article="a" name="grandiose cupboard" />
