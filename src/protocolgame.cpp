@@ -1297,7 +1297,7 @@ void ProtocolGame::parseTrackerQuest(NetworkMessage& msg)
 		missionIds.push_back(msg.get<uint16_t>());
 	}
 
-	addGameTask(&Game::playerResetTrackerQuests, player->getID(), missionIds);
+	addGameTask(&Game::playerResetTrackerQuests, player->getID(), std::move(missionIds));
 }
 
 void ProtocolGame::parseMarketLeave()
