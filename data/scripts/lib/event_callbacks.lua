@@ -64,17 +64,14 @@ EventCallback = {
 			eventData.maxn = #eventData +1
 			eventData[eventData.maxn] = {
 				callback = callback,
-				triggerIndex = tonumber(triggerIndex) or 0,
-				byte = rawget(self, "byte")
+				triggerIndex = tonumber(triggerIndex) or 0
 			}
 			table.sort(eventData, function (ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
 			self.eventType = nil
 			self.callback = nil
-			rawset(self, "byte", nil)
 		end
 	end,
 
-	recvbyte = function (self, recvbyte) rawset(self, "byte", recvbyte) end,
 	clear = function (self)
 		EventCallbackData = {}
 		for i = 1, EVENT_CALLBACK_LAST do
@@ -124,8 +121,6 @@ setmetatable(EventCallback, {
 			for index = 1, eventData.maxn do
 				local event = eventData[index]
 				repeat
-					-- The networks allow you to define a specific recvbyte
-					if info.network and event.byte and event.byte ~= args[2] then break end
 					results = {event.callback(unpack(args))}
 					local output = results[1]
 					-- If the call returns nil then we continue with the next call
@@ -137,8 +132,6 @@ setmetatable(EventCallback, {
 					-- We left the loop why have we reached the end
 					if index == eventData.maxn then return unpack(results) end
 				until true
-				-- We reset the position of the message so that the next call will treat it correctly
-				if info.network then args[3]:seek(1) end
 				-- Update the results for the next call
 				for index, value in pairs(updateableParameters[callback]) do
 					args[index] = results[value]
