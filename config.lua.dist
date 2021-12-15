@@ -105,8 +105,8 @@ depotFreeLimit = 2000
 depotPremiumLimit = 15000
 
 -- QUEST TRACKER limits
-trackerQuestFreeLimit = 10
-trackerQuestPremiumLimit = 15
+questTrackerFreeLimit = 10
+questTrackerPremiumLimit = 15
 
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will
