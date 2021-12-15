@@ -40116,7 +40116,10 @@
 	<item id="35282" article="an" name="amber" />
 	<item id="35283" article="a" name="slab with a skull" />
 	<item id="35284" article="a" name="ghost chestplate" />
-	<item id="35285" article="a" name="spectral scrap of cloth" />
+	<item id="35285" article="a" name="spectral scrap of cloth">
+		<attribute key="description" value="Its tattered fringes seem to move by themselves." />
+		<attribute key="weight" value="350" />
+	</item>
 	<item id="35286" article="a" name="spooky hood">
 		<attribute key="description" value="Every time you look away you have a strange feeling, as if something watches you from its depths." />
 		<attribute key="weight" value="1250" />
