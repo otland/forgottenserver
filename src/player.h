@@ -701,8 +701,8 @@ class Player final : public Creature, public Cylinder
 		size_t getMaxDepotItems() const;
 
 		//quest tracker
-		size_t getTrackedQuestCount() const;
-		void resetTrackerQuests(std::vector<uint16_t> missionIds);
+		size_t getMaxTrackedQuests() const;
+		void resetTrackerQuests(const std::vector<uint16_t>& missionIds);
 
 		//tile
 		//send methods
@@ -1234,7 +1234,7 @@ class Player final : public Creature, public Cylinder
 		std::forward_list<Condition*> storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
 
 		//quest tracker
-		std::list<TrackedQuest> trackedQuestList;
+		std::vector<TrackedQuest> trackedQuests;
 
 		std::string name;
 		std::string guildNick;

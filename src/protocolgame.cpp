@@ -1293,7 +1293,7 @@ void ProtocolGame::parseTrackerQuest(NetworkMessage& msg)
 	uint8_t missions = msg.getByte();
 	std::vector<uint16_t> missionIds;
 	missionIds.reserve(missions);
-	for (uint8_t missionId = 0; missionId < missions; missionId++) {
+	for (uint8_t i = 0; i < missions; i++) {
 		missionIds.push_back(msg.get<uint16_t>());
 	}
 
@@ -2379,10 +2379,9 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 	msg.add<uint16_t>(quest->getID());
 	msg.addByte(quest->getMissionsCount(player));
 
-	uint16_t missionId = 0;
 	for (const Mission& mission : quest->getMissions()) {
 		if (mission.isStarted(player)) {
-			msg.add<uint16_t>(++missionId);
+			msg.add<uint16_t>(mission.getID());
 			msg.addString(mission.getName(player));
 			msg.addString(mission.getDescription(player));
 		}
@@ -2396,11 +2395,11 @@ void ProtocolGame::sendQuestTracker()
 	NetworkMessage msg;
 	msg.addByte(0xD0); // byte quest tracker
 	msg.addByte(1);
-	size_t trackeds = player->trackedQuestList.size();
-	msg.addByte(player->getTrackedQuestCount() - trackeds);
+	size_t trackeds = player->trackedQuests.size();
+	msg.addByte(player->getMaxTrackedQuests() - trackeds);
 	msg.addByte(trackeds);
 
-	for (const TrackedQuest& trackedQuest : player->trackedQuestList) {
+	for (const TrackedQuest& trackedQuest : player->trackedQuests) {
 		const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
 		const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
 		msg.add<uint16_t>(trackedQuest.getMissionId());

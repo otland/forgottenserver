@@ -710,7 +710,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
 			}
 
-			for (const TrackedQuest& trackedQuest : trackedQuestList) {
+			for (const TrackedQuest& trackedQuest : trackedQuests) {
 				if (const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId())) {
 					if (quest->isTracking(key, value)) {
 						sendUpdateQuestTracker(trackedQuest);
@@ -4653,33 +4653,28 @@ size_t Player::getMaxDepotItems() const
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
 }
 
-size_t Player::getTrackedQuestCount() const
+size_t Player::getMaxTrackedQuests() const
 {
 	return g_config.getNumber(isPremium() ? ConfigManager::TRACKERQUEST_PREMIUM_LIMIT : ConfigManager::TRACKERQUEST_FREE_LIMIT);
 }
 
-void Player::resetTrackerQuests(std::vector<uint16_t> missionIds)
+void Player::resetTrackerQuests(const std::vector<uint16_t>& missionIds)
 {
-	size_t trackedQuestCount = getTrackedQuestCount();
-	trackedQuestList.clear();
-	const auto& quests = g_game.quests.getQuests();
-	for (size_t index = 0; index < missionIds.size(); index++) {
-		for (auto& quest : quests) {
-			uint16_t missionId = missionIds[index];
+	const size_t maxTrackedQuests = getMaxTrackedQuests();
+	trackedQuests.clear();
+	size_t index = 0;
+
+	const QuestsList& quests = g_game.quests.getQuests();
+	for (const uint8_t missionId : missionIds) {
+		for (const Quest& quest : quests) {
 			for (const Mission& mission : quest.getMissions()) {
-				if (mission.getID() == missionId) {
-					if (mission.isStarted(this)) {
-						trackedQuestList.emplace_back(
-							quest.getID(),
-							missionId
-						);
+				if (mission.getID() == missionId && mission.isStarted(this)) {
+					trackedQuests.emplace_back(quest.getID(), missionId);
+					if (++index == maxTrackedQuests) {
+						break;
 					}
 				}
 			}
-		}
-
-		if (trackedQuestList.size() == trackedQuestCount) {
-			break;
 		}
 	}
 
