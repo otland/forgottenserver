@@ -4718,11 +4718,57 @@ void Game::startDecay(Item* item)
 	}
 }
 
+static bool isEquipped(Player* player, Item* item)
+{
+	for (int slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+		if (player->getInventoryItem(static_cast<slots_t>(slot)) == item) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Game::internalDecayItem(Item* item)
 {
 	const int32_t decayTo = item->getDecayTo();
 	if (decayTo > 0) {
-		startDecay(transformItem(item, decayTo));
+		if (Player* player = item->getHoldingPlayer(); player && isEquipped(player, item)) {
+			const ItemType& it = Item::items[item->getID()];
+
+			bool needUpdateSkills = false;
+			for (int i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+				if (it.abilities && it.abilities->skills[i] != 0) {
+					needUpdateSkills = true;
+					player->setVarSkill(static_cast<skills_t>(i), -it.abilities->skills[i]);
+				}
+			}
+
+			bool needUpdateStats = false;
+			for (int s = STAT_FIRST; s <= STAT_LAST; ++s) {
+				if (it.abilities && it.abilities->stats[s] != 0) {
+					needUpdateStats = true;
+					needUpdateSkills = true;
+					player->setVarStats(static_cast<stats_t>(s), -it.abilities->stats[s]);
+				}
+				if (it.abilities && it.abilities->statsPercent[s] != 0) {
+					needUpdateStats = true;
+					player->setVarStats(static_cast<stats_t>(s),
+					                    -static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) *
+					                                          ((it.abilities->statsPercent[s] - 100) / 100.f)));
+				}
+			}
+
+			if (needUpdateStats) {
+				player->sendStats();
+			}
+
+			if (needUpdateSkills) {
+				player->sendSkills();
+			}
+		}
+
+		Item* newItem = transformItem(item, item->getDecayTo());
+		startDecay(newItem);
 	} else {
 		if (const Player* player = item->getHoldingPlayer()) {
 			const ItemType& it = Item::items[item->getID()];

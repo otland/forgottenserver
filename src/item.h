@@ -734,6 +734,7 @@ public:
 	void setID(uint16_t newid);
 
 	// Returns the player that is holding this item in his inventory
+	Player* getHoldingPlayer();
 	const Player* getHoldingPlayer() const;
 
 	WeaponType_t getWeaponType() const { return items[id].weaponType; }
