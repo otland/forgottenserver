@@ -38,10 +38,8 @@ magicShield:group("support")
 magicShield:isAggressive(false)
 magicShield:isSelfTarget(true)
 if configManager.getBoolean(configKeys.MANASHIELD_BREAKABLE) == true then
-	print("set14")
 	magicShield:cooldown(14000)
 else
-	print("set2")
 	magicShield:cooldown(2000)
 end
 magicShield:groupCooldown(2000)
