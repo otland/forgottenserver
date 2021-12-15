@@ -2717,7 +2717,7 @@ bool Game::internalStartTrade(Player* player, Player* tradePartner, Item* tradeI
 	player->sendTradeItemRequest(player->getName(), tradeItem, true);
 
 	if (tradePartner->tradeState == TRADE_NONE) {
-		tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("{:s} wants to trade with you.", player->getName()));
+		tradePartner->sendTextMessage(MESSAGE_TRADE, fmt::format("{:s} wants to trade with you.", player->getName()));
 		tradePartner->tradeState = TRADE_ACKNOWLEDGE;
 		tradePartner->tradePartner = player;
 	} else {
@@ -3903,6 +3903,15 @@ void Game::combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColo
 				case RACE_ENERGY:
 					color = TEXTCOLOR_ELECTRICPURPLE;
 					effect = CONST_ME_ENERGYHIT;
+					break;
+				case RACE_INK:
+					color = TEXTCOLOR_DARKGREY;
+					effect = CONST_ME_DRAWINK;
+					if (const Tile* tile = target->getTile()) {
+						if (tile && !tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+							splash = Item::CreateItem(ITEM_SMALLSPLASH, FLUID_INK);
+						}
+					}
 					break;
 				default:
 					color = TEXTCOLOR_NONE;
@@ -5220,6 +5229,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	uint32_t offerAccountId = IOLoginData::getAccountIdByPlayerId(offer.playerId);
 	if (offerAccountId == player->getAccount()) {
+		player->sendTextMessage(MESSAGE_MARKET, "You cannot accept your own offer.");
 		return;
 	}
 
