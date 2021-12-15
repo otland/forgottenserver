@@ -1288,7 +1288,7 @@ void ProtocolGame::parseQuestLine(NetworkMessage& msg)
 	addGameTask(&Game::playerShowQuestLine, player->getID(), questId);
 }
 
-void ProtocolGame::parseTrackerQuest(NetworkMessage& msg)
+void ProtocolGame::parseQuestTracker(NetworkMessage& msg)
 {
 	uint8_t missions = msg.getByte();
 	std::vector<uint16_t> missionIds;
@@ -1297,7 +1297,7 @@ void ProtocolGame::parseTrackerQuest(NetworkMessage& msg)
 		missionIds.push_back(msg.get<uint16_t>());
 	}
 
-	addGameTask(&Game::playerResetTrackerQuests, player->getID(), std::move(missionIds));
+	addGameTask(&Game::playerResetQuestTracker, player->getID(), std::move(missionIds));
 }
 
 void ProtocolGame::parseMarketLeave()
@@ -2393,7 +2393,7 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 void ProtocolGame::sendQuestTracker()
 {
 	NetworkMessage msg;
-	msg.addByte(0xD0); // byte quest tracker
+	msg.addByte(0xD0);
 	msg.addByte(1);
 	size_t trackeds = player->trackedQuests.size();
 	msg.addByte(player->getMaxTrackedQuests() - trackeds);
@@ -2414,7 +2414,7 @@ void ProtocolGame::sendQuestTracker()
 void ProtocolGame::sendUpdateQuestTracker(const TrackedQuest& trackedQuest)
 {
 	NetworkMessage msg;
-	msg.addByte(0xD0); // byte quest tracker
+	msg.addByte(0xD0);
 	msg.addByte(0);
 
 	const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());

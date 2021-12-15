@@ -4655,10 +4655,10 @@ size_t Player::getMaxDepotItems() const
 
 size_t Player::getMaxTrackedQuests() const
 {
-	return g_config.getNumber(isPremium() ? ConfigManager::TRACKERQUEST_PREMIUM_LIMIT : ConfigManager::TRACKERQUEST_FREE_LIMIT);
+	return g_config.getNumber(isPremium() ? ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT : ConfigManager::QUEST_TRACKER_FREE_LIMIT);
 }
 
-void Player::resetTrackerQuests(const std::vector<uint16_t>& missionIds)
+void Player::resetQuestTracker(const std::vector<uint16_t>& missionIds)
 {
 	const size_t maxTrackedQuests = getMaxTrackedQuests();
 	trackedQuests.clear();

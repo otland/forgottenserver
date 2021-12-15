@@ -402,7 +402,7 @@ class Game
 		void playerRequestOutfit(uint32_t playerId);
 		void playerShowQuestLog(uint32_t playerId);
 		void playerShowQuestLine(uint32_t playerId, uint16_t questId);
-		void playerResetTrackerQuests(uint32_t playerId, const std::vector<uint16_t>& missionIds);
+		void playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds);
 		void playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		               const std::string& receiver, const std::string& text);
 		void playerChangeOutfit(uint32_t playerId, Outfit_t outfit);

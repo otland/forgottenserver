@@ -3399,14 +3399,14 @@ void Game::playerShowQuestLine(uint32_t playerId, uint16_t questId)
 	player->sendQuestLine(quest);
 }
 
-void Game::playerResetTrackerQuests(uint32_t playerId, const std::vector<uint16_t>& missionIds)
+void Game::playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
 
-	player->resetTrackerQuests(missionIds);
+	player->resetQuestTracker(missionIds);
 }
 
 void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,

@@ -133,7 +133,7 @@ class ProtocolGame final : public Protocol
 		void parsePlayerSale(NetworkMessage& msg);
 
 		void parseQuestLine(NetworkMessage& msg);
-		void parseTrackerQuest(NetworkMessage& msg);
+		void parseQuestTracker(NetworkMessage& msg);
 
 		void parseInviteToParty(NetworkMessage& msg);
 		void parseJoinParty(NetworkMessage& msg);
