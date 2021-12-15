@@ -702,7 +702,7 @@ class Player final : public Creature, public Cylinder
 
 		//quest tracker
 		size_t getMaxTrackedQuests() const;
-		void resetTrackerQuests(const std::vector<uint16_t>& missionIds);
+		void resetQuestTracker(const std::vector<uint16_t>& missionIds);
 
 		//tile
 		//send methods
