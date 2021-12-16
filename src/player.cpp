@@ -430,9 +430,7 @@ uint32_t Player::getClientIcons() const
 		icons &= ~ICON_SWORDS;
 	}
 
-	std::bitset<31> icon_bitset(static_cast<uint64_t>(icons));
-
-	return icon_bitset.to_ulong();
+	return icons;
 }
 
 void Player::updateInventoryWeight()

@@ -15,6 +15,13 @@ bullseye:setParameter(CONDITION_PARAM_SKILL_DISTANCE, 5)
 bullseye:setParameter(CONDITION_PARAM_SKILL_SHIELD, -10)
 bullseye:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
+local manaShield = Condition(CONDITION_MANASHIELD_BREAKABLE)
+manaShield:setParameter(CONDITION_PARAM_TICKS, 200000)
+
+local function magicShieldCapacity(player)
+	manaShield:setParameter(CONDITION_PARAM_MANASHIELD_BREAKABLE, math.min(player:getMaxMana(), 300 + 7.6 * player:getLevel() + 7 * player:getMagicLevel()))
+end
+
 local potions = {
 	[6558] = { -- concentrated demonic blood
 		transform = {7588, 7589},
@@ -40,6 +47,14 @@ local potions = {
 		effect = CONST_ME_MAGIC_GREEN,
 		description = "Only paladins may drink this potion.",
 		text = "You feel more accurate."
+	},
+	[38219] = { -- magic shield potion
+		condition = manaShield,
+		vocations = {1, 2, 5, 6},
+		level = 14,
+		effect = CONST_ME_ENERGYAREA,
+		description = "Only sorcerers and druids of level 14 or above may drink this potion.",
+		capacity = magicShieldCapacity
 	},
 	[7588] = { -- strong health potion
 		health = {250, 350},
@@ -136,6 +151,9 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if potion.condition then
+		if potion.capacity then
+			potion.capacity(player)
+		end
 		player:addCondition(potion.condition)
 		player:say(potion.text, TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(potion.effect)
