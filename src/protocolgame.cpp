@@ -942,8 +942,6 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	// Podium interaction
 	} else if (outfitType == 2) {
 		Position pos = msg.getPosition();
-		uint16_t spriteId = msg.get<uint16_t>();
-		uint8_t stackpos = msg.getByte();
 		newOutfit.lookMount = msg.get<uint16_t>();
 		newOutfit.lookMountHead = msg.getByte();
 		newOutfit.lookMountBody = msg.getByte();
