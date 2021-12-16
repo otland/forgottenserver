@@ -58,6 +58,7 @@ void MonsterType::loadLoot(MonsterType* monsterType, LootBlock lootBlock)
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
+	raceidMonsters = {};
 	unloadedMonsters = {};
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
@@ -71,6 +72,12 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	for (auto monsterNode : doc.child("monsters").children()) {
 		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
 		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
+
+		uint16_t race = 0;
+		if (race != 0) {
+			raceidMonsters[race] = name;
+		}
+
 		unloadedMonsters.emplace(name, file);
 	}
 
@@ -778,7 +785,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 	return true;
 }
 
-MonsterType* Monsters::loadMonster(const std::string& file, const std::string& monsterName, bool reloading /*= false*/)
+MonsterType* Monsters::loadMonster(const std::string& file, const std::string& monsterName, bool reloading /*= false*/, uint16_t raceid)
 {
 	MonsterType* mType = nullptr;
 
@@ -851,6 +858,11 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 	if ((attr = monsterNode.attribute("manacost"))) {
 		mType->info.manaCost = pugi::cast<uint32_t>(attr.value());
+	}
+
+	if ((attr = monsterNode.attribute("raceId"))) {
+		mType->info.raceid = pugi::cast<uint16_t>(attr.value());
+		raceidMonsters[pugi::cast<uint16_t>(attr.value())] = mType->name;
 	}
 
 	if ((attr = monsterNode.attribute("skull"))) {
@@ -1475,4 +1487,14 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;
+}
+
+MonsterType* Monsters::getMonsterTypeByRace(uint16_t raceid)
+{
+	auto it = raceidMonsters.find(raceid);
+	if (it != raceidMonsters.end()) {
+		return getMonsterType(it->second);
+	}
+
+	return nullptr;
 }

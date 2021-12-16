@@ -3,10 +3,15 @@ local ec = EventCallback
 ec.onLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
 	if self:getGroup():getAccess() then
+		if thing:isMonster() then
+			description = string.format("%s\nRace ID: %d", description, thing:getRaceId())
+		end
+
 		local str = "%s\nHealth: %d / %d"
 		if creature:isPlayer() and creature:getMaxMana() > 0 then
 			str = string.format("%s, Mana: %d / %d", str, creature:getMana(), creature:getMaxMana())
 		end
+
 		description = string.format(str, description, creature:getHealth(), creature:getMaxHealth()) .. "."
 
 		local position = creature:getPosition()

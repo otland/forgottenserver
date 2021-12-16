@@ -552,6 +552,7 @@ class LuaScriptInterface
 		static int luaGameGetPlayerCount(lua_State* L);
 		static int luaGameGetNpcCount(lua_State* L);
 		static int luaGameGetMonsterTypes(lua_State* L);
+		static int luaGameGetMonstersRace(lua_State* L);
 		static int luaGameGetCurrencyItems(lua_State* L);
 
 		static int luaGameGetTowns(lua_State* L);
@@ -1039,6 +1040,7 @@ class LuaScriptInterface
 		static int luaMonsterIsMonster(lua_State* L);
 
 		static int luaMonsterGetType(lua_State* L);
+		static int luaMonsterGetRaceId(lua_State* L);
 
 		static int luaMonsterRename(lua_State* L);
 
@@ -1360,6 +1362,7 @@ class LuaScriptInterface
 		static int luaMonsterTypeDefense(lua_State* L);
 		static int luaMonsterTypeOutfit(lua_State* L);
 		static int luaMonsterTypeRace(lua_State* L);
+		static int luaMonsterTypeRaceId(lua_State* L);
 		static int luaMonsterTypeCorpseId(lua_State* L);
 		static int luaMonsterTypeManaCost(lua_State* L);
 		static int luaMonsterTypeBaseSpeed(lua_State* L);

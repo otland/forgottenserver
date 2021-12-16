@@ -121,6 +121,8 @@ class MonsterType
 
 		uint64_t experience = 0;
 
+		uint16_t raceid = 0;
+
 		uint32_t manaCost = 0;
 		uint32_t yellChance = 0;
 		uint32_t yellSpeedTicks = 0;
@@ -243,7 +245,10 @@ class Monsters
 		MonsterType* getMonsterType(const std::string& name, bool loadFromFile = true);
 		bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
+		MonsterType* getMonsterTypeByRace(uint16_t raceid);
+
 		std::unique_ptr<LuaScriptInterface> scriptInterface;
+		std::unordered_map<uint16_t, std::string> raceidMonsters;
 		std::map<std::string, MonsterType> monsters;
 
 	private:
@@ -251,7 +256,7 @@ class Monsters
 		                                    int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval);
 		bool deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description = "");
 
-		MonsterType* loadMonster(const std::string& file, const std::string& monsterName, bool reloading = false);
+		MonsterType* loadMonster(const std::string& file, const std::string& monsterName, bool reloading = false, uint16_t raceid = 0);
 
 		void loadLootContainer(const pugi::xml_node& node, LootBlock&);
 		bool loadLootItem(const pugi::xml_node& node, LootBlock&);
