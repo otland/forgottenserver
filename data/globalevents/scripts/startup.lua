@@ -42,4 +42,8 @@ function onStartup()
 		local position = town:getTemplePosition()
 		db.query("INSERT INTO `towns` (`id`, `name`, `posx`, `posy`, `posz`) VALUES (" .. town:getId() .. ", " .. db.escapeString(town:getName()) .. ", " .. position.x .. ", " .. position.y .. ", " .. position.z .. ")")
 	end
+
+	-- Boosted Creature
+	Game.updateBoostMonster()
+	print("> Boosted monster: ".. Game.getBoostMonster())
 end

@@ -5,6 +5,11 @@ ec.onDropLoot = function(self, corpse)
 		return
 	end
 
+	local percent = 1.0
+	if self:isBoosted() then
+		percent = 1.5
+	end
+
 	local player = Player(corpse:getCorpseOwner())
 	local mType = self:getType()
 	if not player or player:getStamina() > 840 then

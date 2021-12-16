@@ -257,6 +257,8 @@ bool ConfigManager::load()
 	string[LOCATION] = getGlobalString(L, "location", "");
 	string[MOTD] = getGlobalString(L, "motd", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
+	string[BOOSTED_MONSTERS_IMAGES_URL] = getGlobalString(L, "boostedMonstersImagesUrl", "");
+	string[BOOSTED_ITEMS_IMAGES_URL] = getGlobalString(L, "boostedItemsImagesUrl", "");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	integer[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);

@@ -92,6 +92,8 @@ class ConfigManager
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
 			CONFIG_FILE,
+			BOOSTED_MONSTERS_IMAGES_URL,
+			BOOSTED_ITEMS_IMAGES_URL,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};

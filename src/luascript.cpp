@@ -2167,6 +2167,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
 	registerMethod("Game", "saveAccountStorageValues", LuaScriptInterface::luaGameSaveAccountStorageValues);
 
+	registerMethod("Game", "getBoostMonster", LuaScriptInterface::luaGameGetBoostMonster);
+	registerMethod("Game", "setBoostMonster", LuaScriptInterface::luaGameSetBoostMonster);
+
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
 
@@ -4834,6 +4837,24 @@ int LuaScriptInterface::luaGameSaveAccountStorageValues(lua_State* L)
 	// Game.saveAccountStorageValues()
 	lua_pushboolean(L, g_game.saveAccountStorageValues());
 
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetBoostMonster(lua_State* L)
+{
+	// Game.getBoostMonster()
+	pushString(L, g_game.getBoostMonster());
+	return 1;
+}
+
+int LuaScriptInterface::luaGameSetBoostMonster(lua_State* L)
+{
+	// Game.setBoostMonster(monster, id)
+	std::string monster = getString(L, 1);
+	uint16_t raceid = getNumber<uint16_t>(L, 2);
+
+	g_game.setBoostMonster(monster, raceid);
+	pushBoolean(L, true);
 	return 1;
 }
 

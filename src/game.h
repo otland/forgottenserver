@@ -516,6 +516,13 @@ class Game
 
 		bool reload(ReloadTypes_t reloadType);
 
+		bool loadBoostMonster();
+		std::string getBoostMonster() {
+			return boostMonster;
+		}
+
+		void setBoostMonster(std::string monstername, uint16_t monsterid);
+
 		Groups groups;
 		Map map;
 		Mounts mounts;
@@ -546,6 +553,9 @@ class Game
 
 		void checkDecay();
 		void internalDecayItem(Item* item);
+
+		std::string boostMonster = "";
+		uint16_t boostRace = 1;
 
 		std::unordered_map<uint32_t, Player*> players;
 		std::unordered_map<std::string, Player*> mappedPlayerNames;

@@ -135,6 +135,8 @@ end
 function Player:onGainExperience(source, exp, rawExp)
 	if not source or source:isPlayer() then
 		return exp
+	elseif source and source:isMonster() and source:isBoosted() then
+		exp = exp * 2
 	end
 
 	-- Soul regeneration
