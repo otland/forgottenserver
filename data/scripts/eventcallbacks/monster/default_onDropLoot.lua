@@ -15,7 +15,7 @@ ec.onDropLoot = function(self, corpse)
 	if not player or player:getStamina() > 840 then
 		local monsterLoot = mType:getLoot()
 		for i = 1, #monsterLoot do
-			local item = corpse:createLootItem(monsterLoot[i])
+			local item = corpse:createLootItem(monsterLoot[i], percent)
 			if not item then
 				print('[Warning] DropLoot:', 'Could not add loot item to corpse.')
 			end
