@@ -5814,10 +5814,10 @@ void Game::setBoostMonster(std::string monstername, uint16_t monsterid)
 				outfitstr << "&mount=" << std::to_string(outfit.lookMount);
 
 		} else {
-			outfitstr << g_config.getString(ConfigManager::BOOSTED_ITEMS_IMAGES_URL) << std::to_string(outfit.lookTypeEx) << ".png";
+			outfitstr << g_config.getString(ConfigManager::BOOSTED_ITEMS_IMAGES_URL) << "images/items/" << std::to_string(outfit.lookTypeEx) << ".png";
 		}
 	} else {
-		outfitstr << g_config.getString(ConfigManager::BOOSTED_MONSTERS_IMAGES_URL) << "id=128&addons=3&head=115&body=107&legs=19&feet=38";
+		outfitstr << g_config.getString(ConfigManager::BOOSTED_MONSTERS_IMAGES_URL) << "images/outfits/outfit.php?id=128&addons=3&head=115&body=107&legs=19&feet=38";
 	}
 
 	query.str(std::string());

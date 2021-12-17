@@ -97,6 +97,11 @@ cleanProtectionZones = false
 luaItemDesc = false
 showPlayerLogInConsole = true
 
+-- Boosted Creature
+-- NOTE: These links are only used on websites to get the lookType and lookTypeEx.
+boostedMonstersImagesUrl = "http://otserv.info/"
+boostedItemsImagesUrl = "http://otserv.info/"
+
 -- VIP and Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
 vipFreeLimit = 20
