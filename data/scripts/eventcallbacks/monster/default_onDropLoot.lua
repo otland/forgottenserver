@@ -23,7 +23,7 @@ ec.onDropLoot = function(self, corpse)
 
 		if player then
 			local text = {}
-			if self:getName():lower() == (Game.getBoostMonster()):lower() then
+			if self:getName():lower() == (Game.getBoostedMonster()):lower() then
 				text = ("Loot of %s: %s (boosted loot)"):format(mType:getNameDescription(), corpse:getContentDescription())
 			else
 				text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())

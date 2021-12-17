@@ -128,7 +128,7 @@ void Game::setGameState(GameState_t newState)
 			loadMotdNum();
 			loadPlayersRecord();
 			loadAccountStorageValues();
-			loadBoostMonster();
+			loadBoostedMonster();
 
 			g_globalEvents->startup();
 			break;
@@ -5753,7 +5753,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 	return true;
 }
 
-bool Game::loadBoostMonster()
+bool Game::loadBoostedMonster()
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr resultQuery1 = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'boost_monster'");
@@ -5767,9 +5767,9 @@ bool Game::loadBoostMonster()
 	DBResult_ptr resultQuery2 = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'boost_monster_name'");
 	if (!resultQuery2) {
 		db.executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('boost_monster_name', 'none')");
-		boostMonster = "none";
+		BoostedMonster = "none";
 	} else {
-		boostMonster = resultQuery2->getString("value");
+		BoostedMonster = resultQuery2->getString("value");
 	}
 
 	DBResult_ptr resultQuery3 = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'boost_monster_url'");
@@ -5780,7 +5780,7 @@ bool Game::loadBoostMonster()
 	return true;
 }
 
-void Game::setBoostMonster(std::string monstername, uint16_t monsterid)
+void Game::setBoostedMonster(std::string monstername, uint16_t monsterid)
 {
 	Database& db = Database::getInstance();
 	std::ostringstream query;
@@ -5825,5 +5825,5 @@ void Game::setBoostMonster(std::string monstername, uint16_t monsterid)
 	db.executeQuery(query.str());
 
 	boostRace = monsterid;
-	boostMonster = monstername;
+	BoostedMonster = monstername;
 }

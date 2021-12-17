@@ -44,6 +44,6 @@ function onStartup()
 	end
 
 	-- Boosted Creature
-	Game.updateBoostMonster()
-	print("> Boosted monster: ".. Game.getBoostMonster())
+	Game.updateBoostedMonster()
+	print("> Boosted monster: ".. Game.getBoostedMonster())
 end

@@ -1,5 +1,5 @@
-function Game.updateBoostMonster()
-	local oldname = Game.getBoostMonster()
+function Game.updateBoostedMonster()
+	local oldname = Game.getBoostedMonster()
 	local boost = oldname
 	local raceid = 2
 	local monsters = Game.getMonstersByRace()
@@ -10,10 +10,10 @@ function Game.updateBoostMonster()
 		raceid = monsters[possible].raceid
 	until boost ~= oldname and mType
 
-	Game.setBoostMonster(boost, raceid)
+	Game.setBoostedMonster(boost, raceid)
 	return true
 end
 
 function Monster.isBoosted(self)
-	return self:getName():lower() == Game.getBoostMonster():lower()
+	return self:getName():lower() == Game.getBoostedMonster():lower()
 end

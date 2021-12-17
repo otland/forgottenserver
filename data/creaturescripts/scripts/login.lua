@@ -14,8 +14,8 @@ function onLogin(player)
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 
 	-- Bosted Creature
-	if Game.getBoostMonster():lower() ~= 'none' and MonsterType(Game.getBoostMonster()) then
-		player:sendTextMessage(MESSAGE_BOOSTED_CREATURE, string.format("Today's boosted creature: %s\nBoosted creatures yield more experience points, carry more loot than usual and respawn at a faster rate.", MonsterType(Game.getBoostMonster()):getName()))
+	if Game.getBoostedMonster():lower() ~= 'none' and MonsterType(Game.getBoostedMonster()) then
+		player:sendTextMessage(MESSAGE_BOOSTED_CREATURE, string.format("Today's boosted creature: %s\nBoosted creatures yield more experience points, carry more loot than usual and respawn at a faster rate.", MonsterType(Game.getBoostedMonster()):getName()))
 	end
 
 	-- Promotion
