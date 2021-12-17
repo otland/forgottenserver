@@ -4464,7 +4464,7 @@ int LuaScriptInterface::luaGameGetCurrencyItems(lua_State* L)
 int LuaScriptInterface::luaGameGetMonstersByRace(lua_State* L)
 {
 	// Game.getMonstersByRace()
-	auto& type = g_monsters.raceidMonsters;
+	auto& type = g_monsters.raceIdMonsters;
 	lua_createtable(L, type.size(), 0);
 
 	int index = 0;
@@ -4645,7 +4645,7 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 
 int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 {
-	// Game.createMonster(monsterName or raceid, position[, extended = false[, force = false]])
+	// Game.createMonster(monsterName or raceId, position[, extended = false[, force = false]])
 	Monster* monster = nullptr;
 	if (isNumber(L, 1)) {
 		monster = Monster::createMonsterByRace(getNumber<uint16_t>(L, 1));
@@ -4851,9 +4851,9 @@ int LuaScriptInterface::luaGameSetBoostedMonster(lua_State* L)
 {
 	// Game.setBoostedMonster(monster, id)
 	std::string monster = getString(L, 1);
-	uint16_t raceid = getNumber<uint16_t>(L, 2);
+	uint16_t raceId = getNumber<uint16_t>(L, 2);
 
-	g_game.setBoostedMonster(monster, raceid);
+	g_game.setBoostedMonster(monster, raceId);
 	pushBoolean(L, true);
 	return 1;
 }
@@ -14222,9 +14222,9 @@ int LuaScriptInterface::luaMonsterTypeRaceId(lua_State* L)
 	uint16_t race = getNumber<uint16_t>(L, 2);
 	if (monsterType) {
 		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, monsterType->info.raceid);
+			lua_pushnumber(L, monsterType->info.raceId);
 		} else {
-			monsterType->info.raceid = race;
+			monsterType->info.raceId = race;
 			pushBoolean(L, true);
 		}
 	} else {

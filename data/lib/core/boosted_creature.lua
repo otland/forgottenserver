@@ -1,16 +1,16 @@
 function Game.updateBoostedMonster()
 	local oldname = Game.getBoostedMonster()
 	local boost = oldname
-	local raceid = 2
+	local raceId = 2
 	local monsters = Game.getMonstersByRace()
 	repeat
 		local possible = math.random(#monsters)
 		local mType = MonsterType(monsters[possible].name)
 		boost = monsters[possible].name
-		raceid = monsters[possible].raceid
+		raceId = monsters[possible].raceId
 	until boost ~= oldname and mType
 
-	Game.setBoostedMonster(boost, raceid)
+	Game.setBoostedMonster(boost, raceId)
 	return true
 end
 

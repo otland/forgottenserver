@@ -40,7 +40,7 @@ enum TargetSearchType_t {
 class Monster final : public Creature
 {
 	public:
-		static Monster* createMonsterByRace(uint16_t raceid);
+		static Monster* createMonsterByRace(uint16_t raceId);
 		static Monster* createMonster(const std::string& name);
 		static int32_t despawnRange;
 		static int32_t despawnRadius;
@@ -101,7 +101,7 @@ class Monster final : public Creature
 			return mType->info.defense;
 		}
 		uint16_t getRaceId() const {
-			return mType->info.raceid;
+			return mType->info.raceId;
 		}
 		bool isPushable() const override {
 			return mType->info.pushable && baseSpeed != 0;

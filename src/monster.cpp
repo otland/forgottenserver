@@ -35,9 +35,9 @@ int32_t Monster::despawnRadius;
 
 uint32_t Monster::monsterAutoID = 0x21000000;
 
-Monster* Monster::createMonsterByRace(uint16_t raceid)
+Monster* Monster::createMonsterByRace(uint16_t raceId)
 {
-	MonsterType* mType = g_monsters.getMonsterTypeByRace(raceid);
+	MonsterType* mType = g_monsters.getMonsterTypeByRace(raceId);
 	if (!mType) {
 		return nullptr;
 	}

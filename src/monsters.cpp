@@ -58,7 +58,7 @@ void MonsterType::loadLoot(MonsterType* monsterType, LootBlock lootBlock)
 
 bool Monsters::loadFromXml(bool reloading /*= false*/)
 {
-	raceidMonsters = {};
+	raceIdMonsters = {};
 	unloadedMonsters = {};
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/monster/monsters.xml");
@@ -75,7 +75,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 
 		uint16_t race = 0;
 		if (race != 0) {
-			raceidMonsters[race] = name;
+			raceIdMonsters[race] = name;
 		}
 
 		unloadedMonsters.emplace(name, file);
@@ -785,7 +785,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 	return true;
 }
 
-MonsterType* Monsters::loadMonster(const std::string& file, const std::string& monsterName, bool reloading /*= false*/, uint16_t raceid)
+MonsterType* Monsters::loadMonster(const std::string& file, const std::string& monsterName, bool reloading /*= false*/, uint16_t raceId)
 {
 	MonsterType* mType = nullptr;
 
@@ -861,8 +861,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if ((attr = monsterNode.attribute("raceId"))) {
-		mType->info.raceid = pugi::cast<uint16_t>(attr.value());
-		raceidMonsters[pugi::cast<uint16_t>(attr.value())] = mType->name;
+		mType->info.raceId = pugi::cast<uint16_t>(attr.value());
+		raceIdMonsters[pugi::cast<uint16_t>(attr.value())] = mType->name;
 	}
 
 	if ((attr = monsterNode.attribute("skull"))) {
@@ -1489,10 +1489,10 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 	return &it->second;
 }
 
-MonsterType* Monsters::getMonsterTypeByRace(uint16_t raceid)
+MonsterType* Monsters::getMonsterTypeByRace(uint16_t raceId)
 {
-	auto it = raceidMonsters.find(raceid);
-	if (it != raceidMonsters.end()) {
+	auto it = raceIdMonsters.find(raceId);
+	if (it != raceIdMonsters.end()) {
 		return getMonsterType(it->second);
 	}
 
