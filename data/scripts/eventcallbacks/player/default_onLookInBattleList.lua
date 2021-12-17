@@ -3,7 +3,7 @@ local ec = EventCallback
 ec.onLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
 	if self:getGroup():getAccess() then
-		if thing:isMonster() then
+		if creature:isMonster() then
 			description = string.format("%s\nRace ID: %d", description, thing:getRaceId())
 		end
 

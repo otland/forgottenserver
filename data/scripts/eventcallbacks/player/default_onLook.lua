@@ -31,7 +31,7 @@ ec.onLook = function(self, thing, position, distance, description)
 				description = string.format("%s\nDecays to: %d", description, decayId)
 			end
 		elseif thing:isCreature() then
-			if thing:isMonster() then
+			if creature:isMonster() then
 				description = string.format("%s\nRace ID: %d", description, thing:getRaceId())
 			end
 
