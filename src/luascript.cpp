@@ -2135,7 +2135,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
 	registerMethod("Game", "getMonsterTypes", LuaScriptInterface::luaGameGetMonsterTypes);
-	registerMethod("Game", "getMonstersRace", LuaScriptInterface::luaGameGetMonstersRace);
+	registerMethod("Game", "getMonstersByRace", LuaScriptInterface::luaGameGetMonstersByRace);
 	registerMethod("Game", "getCurrencyItems", LuaScriptInterface::luaGameGetCurrencyItems);
 
 	registerMethod("Game", "getTowns", LuaScriptInterface::luaGameGetTowns);
@@ -4461,9 +4461,9 @@ int LuaScriptInterface::luaGameGetCurrencyItems(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameGetMonstersRace(lua_State* L)
+int LuaScriptInterface::luaGameGetMonstersByRace(lua_State* L)
 {
-	// Game.getMonstersRace()
+	// Game.getMonstersByRace()
 	auto& type = g_monsters.raceidMonsters;
 	lua_createtable(L, type.size(), 0);
 

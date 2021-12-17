@@ -2,7 +2,7 @@ function Game.updateBoostMonster()
 	local oldname = Game.getBoostMonster()
 	local boost = oldname
 	local raceid = 2
-	local monsters = Game.getMonstersRace()
+	local monsters = Game.getMonstersByRace()
 	repeat
 		local possible = math.random(#monsters)
 		local mType = MonsterType(monsters[possible].name)
