@@ -87,6 +87,7 @@ do
 	rawgetmetatable("Item").__index = ItemIndex
 	rawgetmetatable("Container").__index = ItemIndex
 	rawgetmetatable("Teleport").__index = ItemIndex
+	rawgetmetatable("Podium").__index = ItemIndex
 end
 
 do
