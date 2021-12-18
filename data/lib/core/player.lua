@@ -313,43 +313,44 @@ function Player.getWeaponType(self)
 	return WEAPON_NONE
 end
 
-local function prepareUpdateKillTrackerMsg(monster, corpse)
-	monsterType = monster:getType()
-	if monsterType then
-		return nil
-	end
-	local networkMessage = NetworkMessage()
-	networkMessage:addByte(0xD1)
-	networkMessage:addString(monster:getName())
-	networkMessage:addU16(monsterType:getOutfit().lookType or 19)
-	networkMessage:addByte(monsterType:getOutfit().lookHead)
-	networkMessage:addByte(monsterType:getOutfit().lookBody)
-	networkMessage:addByte(monsterType:getOutfit().lookLegs)
-	networkMessage:addByte(monsterType:getOutfit().lookFeet)
-	networkMessage:addByte(monsterType:getOutfit().lookAddons)
-	networkMessage:addByte(corpse:getSize())
-	for a = corpse:getSize() - 1, 0, -1 do
-        local item = corpse:getItem(a)
-		networkMessage:addItem(item)
-	end
-	return networkMessage
-end
-
 function Player.updateKillTracker(self, monster, corpse)
-	monsterType = monster.getType()
-	msg = prepareUpdateKillTrackerMsg(monster, corpse)
-	if self:getParty() and msg then
-		msg:sendToPlayer(self:getParty():getLeader())
-		local membersList = self:getParty():getMembers()
-		for i = 1, #membersList do
-			local player = membersList[i]
-			if player then
-				msg:sendToPlayer(player)
-			end
-		end
-		msg:delete()
-	elseif msg then
-		msg:sendToPlayer(self)
-		msg:delete()
-	end
+    local monsterType = monster:getType()
+    if not monsterType then
+        return false
+    end
+    
+    local monsterOutfit = monsterType:getOutfit()
+
+    local networkMessage = NetworkMessage()
+    networkMessage:addByte(0xD1)
+    networkMessage:addString(monster:getName())
+    networkMessage:addU16(monsterOutfit.lookType or 19)
+    networkMessage:addByte(monsterOutfit.lookHead)
+    networkMessage:addByte(monsterOutfit.lookBody)
+    networkMessage:addByte(monsterOutfit.lookLegs)
+    networkMessage:addByte(monsterOutfit.lookFeet)
+    networkMessage:addByte(monsterOutfit.lookAddons)
+    networkMessage:addByte(corpse:getSize())
+
+    for i = corpse:getSize() - 1, 0, -1 do
+        local item = corpse:getItem(i)
+        networkMessage:addItem(item)
+    end
+
+    if self:getParty() then
+        networkMessage:sendToPlayer(self:getParty():getLeader())
+        local membersList = self:getParty():getMembers()
+        for i = 1, #membersList do
+            local player = membersList[i]
+            if player then
+                networkMessage:sendToPlayer(player)
+            end
+        end
+        networkMessage:delete()
+        return true 
+    end
+
+    networkMessage:sendToPlayer(self)
+    networkMessage:delete()
+    return true
 end
