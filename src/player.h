@@ -488,20 +488,20 @@ class Player final : public Creature, public Cylinder
 			return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]);
 		}
 
-		uint16_t getManaShield() const {
-			return manaShield;
+		uint16_t getManaShieldBar() const {
+			return manaShieldBar;
 		}
 
-		void setManaShield(uint16_t value) {
-			manaShield = value;
+		void setManaShieldBar(uint16_t value) {
+			manaShieldBar = value;
 		}
 
-		uint16_t getMaxManaShield() const {
-			return maxManaShield;
+		uint16_t getMaxManaShieldBar() const {
+			return maxManaShieldBar;
 		}
 
-		void setMaxManaShield(uint16_t value) {
-			maxManaShield = value;
+		void setMaxManaShieldBar(uint16_t value) {
+			maxManaShieldBar = value;
 		}
 
 		Item* getInventoryItem(slots_t slot) const;
@@ -1307,8 +1307,8 @@ class Player final : public Creature, public Cylinder
 		uint32_t editListId = 0;
 		uint32_t mana = 0;
 		uint32_t manaMax = 0;
-		uint16_t manaShield = 0;
-		uint16_t maxManaShield = 0;
+		uint16_t manaShieldBar = 0;
+		uint16_t maxManaShieldBar = 0;
 		int32_t varSkills[SKILL_LAST + 1] = {};
 		int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t varStats[STAT_LAST + 1] = {};

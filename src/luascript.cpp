@@ -8667,8 +8667,8 @@ int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
 	// player:setManaShieldBar(capacity, value)
 	Player* player = getPlayer(L, 1);
 	if (player) {
-		player->setMaxManaShield(getNumber<int32_t>(L, 2));
-		player->setManaShield(getNumber<int32_t>(L, 3));
+		player->setMaxManaShieldBar(getNumber<int32_t>(L, 2));
+		player->setManaShieldBar(getNumber<int32_t>(L, 3));
 		player->sendStats();
 		pushBoolean(L, true);
 		return 1;

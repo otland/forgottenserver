@@ -36,8 +36,6 @@ CREATE TABLE IF NOT EXISTS `players` (
   `maglevel` int NOT NULL DEFAULT '0',
   `mana` int NOT NULL DEFAULT '0',
   `manamax` int NOT NULL DEFAULT '0',
-  `manashield` SMALLINT UNSIGNED NOT NULL DEFAULT '0'
-  `maxmanashield` SMALLINT UNSIGNED NOT NULL DEFAULT '0'
   `manaspent` bigint unsigned NOT NULL DEFAULT '0',
   `soul` int unsigned NOT NULL DEFAULT '0',
   `town_id` int NOT NULL DEFAULT '1',
@@ -364,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '32'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '31'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

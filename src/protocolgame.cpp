@@ -1560,7 +1560,6 @@ void ProtocolGame::sendBasicData()
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
 	}
-
 	msg.addByte(player->getVocation()->getMagicShield()); // is magic shield active (bool)
 	writeToOutputBuffer(msg);
 }
@@ -3398,8 +3397,16 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 
 	msg.add<uint16_t>(0); // xp boost time (seconds)
 	msg.addByte(0x00); // enables exp boost in the store
-	msg.add<uint16_t>(player->getManaShield());  // remaining mana shield
-	msg.add<uint16_t>(player->getMaxManaShield());  // total mana shield
+	if (ConditionManaShield* conditionManaShield = dynamic_cast<ConditionManaShield*>(player->getCondition(CONDITION_MANASHIELD_BREAKABLE))) {
+		msg.add<uint16_t>(conditionManaShield->getManaShield());  // remaining mana shield
+		msg.add<uint16_t>(conditionManaShield->getMaxManaShield());  // total mana shield
+	} else if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE_FOR_ALL)) {
+		msg.add<uint16_t>(player->getManaShieldBar());  // remaining mana shield
+		msg.add<uint16_t>(player->getMaxManaShieldBar());  // total mana shield
+	} else {
+		msg.add<uint16_t>(0);  // remaining mana shield
+		msg.add<uint16_t>(0);  // total mana shield
+	}
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)

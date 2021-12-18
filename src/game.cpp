@@ -4080,41 +4080,33 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		SpectatorVec spectators;
 		if (targetPlayer && (target->hasCondition(CONDITION_MANASHIELD) || target->hasCondition(CONDITION_MANASHIELD_BREAKABLE)) && damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
-			if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE) && targetPlayer) {
-				// Mana Shield Breakable
-				uint16_t manaShield = targetPlayer->getManaShield();
-				if (manaShield > 0) {
-					if (manaShield > manaDamage) {
-						targetPlayer->setManaShield(manaShield - manaDamage);
-						manaShield = manaShield - manaDamage;
-					} else {
-						manaDamage = manaShield;
-						targetPlayer->removeCondition(CONDITION_MANASHIELD_BREAKABLE);
-						manaShield = 0;
+			if (damage.origin != ORIGIN_NONE) {
+				const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
+				if (!events.empty()) {
+					for (CreatureEvent* creatureEvent : events) {
+						creatureEvent->executeManaChange(target, attacker, damage);
 					}
+					healthChange = damage.primary.value + damage.secondary.value;
+					if (healthChange == 0) {
+						return true;
+					}
+					manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
 				}
-				if (targetPlayer->getMana() == 0 && manaShield > 0) {
-					targetPlayer->removeCondition(CONDITION_MANASHIELD_BREAKABLE);
-				}
-			} else {
-			// Old Mana Shield
-				manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
-				if (damage.origin != ORIGIN_NONE) {
-					const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
-					if (!events.empty()) {
-						for (CreatureEvent* creatureEvent : events) {
-							creatureEvent->executeManaChange(target, attacker, damage);
-						}
-						healthChange = damage.primary.value + damage.secondary.value;
-						if (healthChange == 0) {
-							return true;
-						}
-						manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
+			}
+
+			if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE) && targetPlayer) {
+				if (ConditionManaShield* conditionManaShield = dynamic_cast<ConditionManaShield*>(targetPlayer->getCondition(CONDITION_MANASHIELD_BREAKABLE))) {
+					if (int32_t remainingManaDamage = conditionManaShield->onDamageTaken(targetPlayer, manaDamage) != 0) {
+						manaDamage -= remainingManaDamage;
+						targetPlayer->removeCondition(CONDITION_MANASHIELD_BREAKABLE);
 					}
 				}
 			}
 			if (manaDamage != 0) {
 				targetPlayer->drainMana(attacker, manaDamage);
+				if (targetPlayer->getMana() == 0) {
+					targetPlayer->removeCondition(CONDITION_MANASHIELD_BREAKABLE);
+				}
 				map.getSpectators(spectators, targetPos, true, true);
 				addMagicEffect(spectators, targetPos, CONST_ME_LOSEENERGY);
 

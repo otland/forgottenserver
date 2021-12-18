@@ -1998,9 +1998,13 @@ bool ConditionManaShield::startCondition(Creature* creature)
 	if (!Condition::startCondition(creature)) {
 		return false;
 	}
-	if (auto player = creature->getPlayer()) {
-		player->setManaShield(manaShield);
-		player->setMaxManaShield(manaShield);
+
+	if (Player* player = creature->getPlayer()) {
+
+		const ConditionManaShield& conditionManaShield = static_cast<const ConditionManaShield&>(*this);
+
+		manaShield = conditionManaShield.manaShield;
+		maxManaShield = conditionManaShield.manaShield;
 		player->sendStats();
 		return true;
 	}
@@ -2009,42 +2013,61 @@ bool ConditionManaShield::startCondition(Creature* creature)
 
 void ConditionManaShield::endCondition(Creature* creature)
 {
-	if (auto player = creature->getPlayer()) {
-		player->setManaShield(0);
-		player->setMaxManaShield(0);
+	if (Player* player = creature->getPlayer()) {
 		player->sendStats();
 	}
 }
 
 void ConditionManaShield::addCondition(Creature* creature, const Condition* addCondition)
 {
-	if (auto player = creature->getPlayer()) {
+	if (Player* player = creature->getPlayer()) {
 		endCondition(player);
 		setTicks(addCondition->getTicks());
 
 		const ConditionManaShield& conditionManaShield = static_cast<const ConditionManaShield&>(*addCondition);
 
 		manaShield = conditionManaShield.manaShield;
-		player->setManaShield(manaShield);
-		player->setMaxManaShield(manaShield);
+		maxManaShield = conditionManaShield.manaShield;
 		player->sendStats();
+
 	}
 }
 
 bool ConditionManaShield::unserializeProp(ConditionAttr_t attr, PropStream& propStream)
 {
-	if (attr == CONDITIONATTR_MANASHIELD_BREAKABLE) {
+	if (attr == CONDITIONATTR_MANASHIELD_BREAKABLE_MANA) {
 		return propStream.read<uint16_t>(manaShield);
 	}
+
+	if (attr == CONDITIONATTR_MANASHIELD_BREAKABLE_MAXMANA) {
+		return propStream.read<uint16_t>(maxManaShield);
+	}
 	return Condition::unserializeProp(attr, propStream);
+}
+
+int32_t ConditionManaShield::onDamageTaken(Player* player, int32_t manaChange) {
+	if (!player) {
+		return 0;
+	}
+
+	if (manaChange > manaShield) {
+		return manaChange - manaShield;
+	}
+
+	manaShield -= manaChange;
+
+	player->sendStats();
+	return 0;
 }
 
 void ConditionManaShield::serialize(PropWriteStream& propWriteStream)
 {
 	Condition::serialize(propWriteStream);
 
-	propWriteStream.write<uint8_t>(CONDITIONATTR_MANASHIELD_BREAKABLE);
+	propWriteStream.write<uint8_t>(CONDITIONATTR_MANASHIELD_BREAKABLE_MANA);
 	propWriteStream.write<uint16_t>(manaShield);
+	propWriteStream.write<uint8_t>(CONDITIONATTR_MANASHIELD_BREAKABLE_MAXMANA);
+	propWriteStream.write<uint16_t>(maxManaShield);
 }
 
 bool ConditionManaShield::setParam(ConditionParam_t param, int32_t value)
@@ -2052,12 +2075,12 @@ bool ConditionManaShield::setParam(ConditionParam_t param, int32_t value)
 	bool ret = Condition::setParam(param, value);
 
 	switch (param) {
-	case CONDITION_PARAM_MANASHIELD_BREAKABLE:
-		manaShield = value;
-		return true;
+		case CONDITION_PARAM_MANASHIELD_BREAKABLE:
+			manaShield = value;
+			return true;
 
-	default:
-		return ret;
+		default:
+			return ret;
 	}
 }
 
@@ -2066,12 +2089,12 @@ uint32_t ConditionManaShield::getIcons() const
 	uint32_t icons = Condition::getIcons();
 
 	switch (conditionType) {
-	case CONDITION_MANASHIELD_BREAKABLE:
-		icons |= ICON_MANASHIELD_BREAKABLE;
-		break;
+		case CONDITION_MANASHIELD_BREAKABLE:
+			icons |= ICON_MANASHIELD_BREAKABLE;
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	return icons;

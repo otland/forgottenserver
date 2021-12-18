@@ -13,7 +13,7 @@ combatBreakableManaShield:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combatBreakableManaShield:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 local conditionBreakableManaShield = Condition(CONDITION_MANASHIELD_BREAKABLE)
-conditionBreakableManaShield:setParameter(CONDITION_PARAM_TICKS, 200000)
+conditionBreakableManaShield:setParameter(CONDITION_PARAM_TICKS, 60 * 1000)
 
 local magicShield = Spell(SPELL_INSTANT)
 
