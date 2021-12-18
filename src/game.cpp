@@ -4102,11 +4102,13 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					}
 				}
 			}
+
 			if (manaDamage != 0) {
 				targetPlayer->drainMana(attacker, manaDamage);
 				if (targetPlayer->getMana() == 0) {
 					targetPlayer->removeCondition(CONDITION_MANASHIELD_BREAKABLE);
 				}
+
 				map.getSpectators(spectators, targetPos, true, true);
 				addMagicEffect(spectators, targetPos, CONST_ME_LOSEENERGY);
 
