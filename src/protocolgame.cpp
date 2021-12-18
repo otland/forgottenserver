@@ -388,8 +388,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string sessionKey = msg.getString();
 	auto sessionArgs = explodeString(sessionKey, "\n", 4); // acc name or email, password, token, timestamp divided by 30
-	if (sessionArgs.size() != 4) {
-		disconnect();
+	if (sessionArgs.size() < 2) {
+		disconnectClient("Malformed session key.");
 		return;
 	}
 
@@ -400,25 +400,37 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
-	std::string& token = sessionArgs[2];
-	uint32_t tokenTime = 0;
-	try {
-		tokenTime = std::stoul(sessionArgs[3]);
-	} catch (const std::invalid_argument&) {
-		disconnectClient("Malformed token packet.");
-		return;
-	} catch (const std::out_of_range&) {
-		disconnectClient("Token time is too long.");
-		return;
-	}
-
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
 		return;
 	}
 
-	std::string characterName = msg.getString();
+	std::string token;
+	uint32_t tokenTime = 0;
 
+	// two-factor auth
+	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+		if (sessionArgs.size() < 4) {
+			disconnectClient("Authentication failed. Incomplete session key.");
+			return;
+		}
+
+		token = sessionArgs[2];
+
+		try {
+			tokenTime = std::stoul(sessionArgs[3]);
+		} catch (const std::invalid_argument&) {
+			disconnectClient("Malformed token packet.");
+			return;
+		} catch (const std::out_of_range&) {
+			disconnectClient("Token time is too long.");
+			return;
+		}
+	} else {
+		tokenTime = std::floor(challengeTimestamp / 30);
+	}
+
+	std::string characterName = msg.getString();
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
@@ -2259,6 +2271,19 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 			ss << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
 		}
 
+		for (size_t i = 0; i < COMBAT_COUNT; ++i) {
+			if (it.abilities->specialMagicLevelSkill[i] == 0) {
+				continue;
+			}
+
+			if (separator) {
+				ss << ", ";
+			} else {
+				separator = true;
+			}
+			ss << getCombatName(indexToCombatType(i)) << " magic level " << std::showpos << it.abilities->specialMagicLevelSkill[i] << std::noshowpos;
+		}
+
 		if (it.abilities->speed != 0) {
 			if (separator) {
 				ss << ", ";
@@ -2365,8 +2390,10 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 	msg.add<uint16_t>(quest->getID());
 	msg.addByte(quest->getMissionsCount(player));
 
+	uint16_t missionId = 0;
 	for (const Mission& mission : quest->getMissions()) {
 		if (mission.isStarted(player)) {
+			msg.add<uint16_t>(++missionId);
 			msg.addString(mission.getName(player));
 			msg.addString(mission.getDescription(player));
 		}
@@ -3218,6 +3245,14 @@ void ProtocolGame::sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendUseItemCooldown(uint32_t time)
+{
+	NetworkMessage msg;
+	msg.addByte(0xA6);
+	msg.add<uint32_t>(time);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 {
 	NetworkMessage msg;
@@ -3357,7 +3392,7 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(std::min<int32_t>(player->getHealth(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<uint16_t>::max()));
 
-	msg.add<uint32_t>(player->getFreeCapacity());
+	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000 : player->getFreeCapacity());
 	msg.add<uint64_t>(player->getExperience());
 
 	msg.add<uint16_t>(player->getLevel());
@@ -3425,8 +3460,8 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	msg.add<uint16_t>(0);
 
 	// to do: bonus cap
-	msg.add<uint32_t>(player->getCapacity()); // base + bonus capacity
-	msg.add<uint32_t>(player->getCapacity()); // base capacity
+	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000 : player->getCapacity()); // base + bonus capacity
+	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000 : player->getCapacity()); // base capacity
 }
 
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)

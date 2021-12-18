@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Druid Familiar" nameDescription="a druid familiar" race="blood" speed="309" manacost="3000">
+	<health now="20000" max="20000" />
+	<look type="993" corpse="0" />
+	<targetchange interval="4000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="earth" interval="2000" chance="20" target="1" range="5" min="-230" max="-260">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="earth" interval="2000" chance="25" length="2" spread="0" min="-90" max="-150">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="summon challenge" interval="2000" chance="40" />
+	</attacks>
+	<defenses armor="55" defense="55">
+		<defense name="healing" interval="2000" chance="75" min="500" max="600">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

@@ -71,6 +71,7 @@ class ConfigManager
 			PLAYER_CONSOLE_LOGS,
 			MANASHIELD_BREAKABLE,
 			MANASHIELD_BREAKABLE_FOR_ALL,
+			TWO_FACTOR_AUTH,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

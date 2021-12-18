@@ -65,17 +65,16 @@ local potions = {
 	},
 	[7589] = { -- strong mana potion
 		mana = {115, 185},
-		vocations = {1, 2, 3, 5, 6, 7},
 		level = 50,
 		flask = 7634,
-		description = "Only sorcerers, druids and paladins of level 50 or above may drink this fluid."
+		description = "Only players of level 50 or above may drink this fluid."
 	},
 	[7590] = { -- great mana potion
 		mana = {150, 250},
-		vocations = {1, 2, 5, 6},
+		vocations = {1, 2, 3, 5, 6, 7},
 		level = 80,
 		flask = 7635,
-		description = "Only druids and sorcerers of level 80 or above may drink this fluid."
+		description = "Only sorcerers, druids and paladins of level 80 or above may drink this fluid."
 	},
 	[7591] = { -- great health potion
 		health = {425, 575},
@@ -146,7 +145,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local potion = potions[item:getId()]
 	if potion.level and player:getLevel() < potion.level or potion.vocations and not table.contains(potion.vocations, player:getVocation():getId()) then
-		player:say(potion.description, TALKTYPE_MONSTER_SAY)
+		player:say(potion.description, TALKTYPE_POTION)
 		return true
 	end
 
@@ -155,7 +154,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			potion.capacity(player)
 		end
 		player:addCondition(potion.condition)
-		player:say(potion.text, TALKTYPE_MONSTER_SAY)
+		player:say(potion.text, TALKTYPE_POTION)
 		player:getPosition():sendMagicEffect(potion.effect)
 	elseif potion.transform then
 		local reward = potion.transform[math.random(#potion.transform)]
@@ -183,7 +182,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 		player:addAchievementProgress("Potion Addict", 100000)
 		player:addItem(potion.flask)
-		target:say("Aaaah...", TALKTYPE_MONSTER_SAY)
+		target:say("Aaaah...", TALKTYPE_POTION)
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_BLUE)
 	end
 
