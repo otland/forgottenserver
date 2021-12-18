@@ -16,7 +16,7 @@ bullseye:setParameter(CONDITION_PARAM_SKILL_SHIELD, -10)
 bullseye:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local manaShield = Condition(CONDITION_MANASHIELD_BREAKABLE)
-manaShield:setParameter(CONDITION_PARAM_TICKS, 60 * 1000)
+manaShield:setParameter(CONDITION_PARAM_TICKS, 3 * 60 * 1000)
 
 local function magicShieldCapacity(player)
 	manaShield:setParameter(CONDITION_PARAM_MANASHIELD_BREAKABLE, math.min(player:getMaxMana(), 300 + 7.6 * player:getLevel() + 7 * player:getMagicLevel()))
