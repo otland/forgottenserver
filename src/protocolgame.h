@@ -225,7 +225,6 @@ class ProtocolGame final : public Protocol
 		void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
 		void sendMarketCancelOffer(const MarketOfferEx& offer);
 		void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers);
-		void sendMarketDetail(uint16_t itemId);
 		void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack);
 		void sendCloseTrade();
 

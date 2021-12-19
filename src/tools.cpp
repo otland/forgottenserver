@@ -948,19 +948,6 @@ bool booleanString(const std::string& str)
 	return ch != 'f' && ch != 'n' && ch != '0';
 }
 
-std::string getWeaponName(WeaponType_t weaponType)
-{
-	switch (weaponType) {
-		case WEAPON_SWORD: return "sword";
-		case WEAPON_CLUB: return "club";
-		case WEAPON_AXE: return "axe";
-		case WEAPON_DISTANCE: return "distance";
-		case WEAPON_WAND: return "wand";
-		case WEAPON_AMMO: return "ammunition";
-		default: return std::string();
-	}
-}
-
 size_t combatTypeToIndex(CombatType_t combatType)
 {
 	switch (combatType) {

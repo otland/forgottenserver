@@ -37,6 +37,12 @@ function Player:onLookInShop(itemType, count, description)
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
+function Player:onLookInMarket(itemType)
+	if hasEventCallback(EVENT_CALLBACK_ONLOOKINMARKET) then
+		EventCallback(EVENT_CALLBACK_ONLOOKINMARKET, self, itemType)
+	end
+end
+
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
 		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
