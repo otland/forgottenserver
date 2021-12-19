@@ -633,7 +633,7 @@ class Player final : public Creature, public Cylinder
 			return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 		}
 
-		int16_t Player::getCooldownReduction() const {
+		int16_t getCooldownReduction() const {
 			if (cooldownReduction >= 100) {
 				return 100;
 			}
@@ -641,31 +641,31 @@ class Player final : public Creature, public Cylinder
 			return cooldownReduction;
 		}
 
-		void Player::addCooldownReduction(int16_t value) {
+		void addCooldownReduction(int16_t value) {
 			cooldownReduction += value;
 		}
 
-		int16_t Player::getIncreasedDamage() const {
+		int16_t getIncreasedDamage() const {
 			return increaseDamage;
 		}
 
-		void Player::addIncreasedDamage(int16_t value) {
+		void addIncreasedDamage(int16_t value) {
 			increaseDamage += value;
 		}
 
-		int16_t Player::getIncreasedHealing() const {
+		int16_t getIncreasedHealing() const {
 			return increaseHealing;
 		}
 
-		void Player::addIncreasedHealing(int16_t value) {
+		void addIncreasedHealing(int16_t value) {
 			increaseHealing += value;
 		}
 
-		int16_t Player::getIncreasedManaGain() const {
+		int16_t getIncreasedManaGain() const {
 			return increaseManaGain;
 		}
 
-		void Player::addiIncreasedManaGain(int16_t value) {
+		void addiIncreasedManaGain(int16_t value) {
 			increaseManaGain += value;
 		}
 
