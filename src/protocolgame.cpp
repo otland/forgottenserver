@@ -2288,9 +2288,49 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 		if (it.abilities->speed != 0) {
 			if (separator) {
 				ss << ", ";
+			} else {
+				separator = true;
 			}
 
 			ss << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
+		}
+
+		if (it.abilities->cooldownReduction != 0) {
+			if (separator) {
+				ss << ", ";
+			} else {
+				separator = true;
+			}
+
+			ss << "cooldown reduction " << std::showpos << (it.abilities->cooldownReduction) << "%" << std::noshowpos;
+		}
+
+		if (it.abilities->increaseDamage != 0) {
+			if (separator) {
+				ss << ", ";
+			} else {
+				separator = true;
+			}
+
+			ss << "increase damage " << std::showpos << (it.abilities->increaseDamage) << "%" << std::noshowpos;
+		}
+
+		if (it.abilities->increaseDamage != 0) {
+			if (separator) {
+				ss << ", ";
+			} else {
+				separator = true;
+			}
+
+			ss << "increase healing " << std::showpos << (it.abilities->increaseHealing) << "%" << std::noshowpos;
+		}
+
+		if (it.abilities->increaseManaGain != 0) {
+			if (separator) {
+				ss << ", ";
+			}
+
+			ss << "increase mana gain " << std::showpos << (it.abilities->increaseManaGain) << "%" << std::noshowpos;
 		}
 
 		msg.addString(ss.str());

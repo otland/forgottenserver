@@ -12473,6 +12473,18 @@ int LuaScriptInterface::luaItemTypeGetAbilities(lua_State* L)
 			lua_rawseti(L, -2, i + 1);
 		}
 		lua_setfield(L, -2, "specialMagicLevel");
+
+		lua_pushboolean(L, abilities.cooldownReduction);
+		lua_setfield(L, -2, "cooldownReduction");
+
+		lua_pushboolean(L, abilities.increaseDamage);
+		lua_setfield(L, -2, "increasedDamage");
+
+		lua_pushboolean(L, abilities.increaseHealing);
+		lua_setfield(L, -2, "increasedHealing");
+
+		lua_pushboolean(L, abilities.increaseManaGain);
+		lua_setfield(L, -2, "increasedManaGain");
 	}
 	return 1;
 }

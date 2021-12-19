@@ -177,6 +177,10 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ELEMENTENERGY,
 	ITEM_PARSE_ELEMENTDEATH,
 	ITEM_PARSE_ELEMENTHOLY,
+	ITEM_PARSE_COOLDOWNREDUCTION,
+	ITEM_PARSE_INCREASEDAMAGE,
+	ITEM_PARSE_INCREASEHEALING,
+	ITEM_PARSE_INCREASEMANAGAIN,
 	ITEM_PARSE_WALKSTACK,
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
@@ -216,6 +220,11 @@ struct Abilities {
 	bool manaShield = false;
 	bool invisible = false;
 	bool regeneration = false;
+
+	int16_t cooldownReduction = 0;
+	int16_t increaseDamage = 0;
+	int16_t increaseHealing = 0;
+	int16_t increaseManaGain = 0;
 };
 
 class ConditionDamage;

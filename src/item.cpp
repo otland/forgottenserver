@@ -1094,6 +1094,51 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 			}
 
+			if (it.abilities->cooldownReduction) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "cooldown reduction " << std::showpos << it.abilities->cooldownReduction << '%' << std::noshowpos;
+			}
+
+			if (it.abilities->increaseDamage) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "increase damage " << std::showpos << it.abilities->increaseDamage << '%' << std::noshowpos;
+			}
+
+			if (it.abilities->increaseHealing) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "increase healing " << std::showpos << it.abilities->increaseHealing << '%' << std::noshowpos;
+			}
+
+			if (it.abilities->increaseManaGain) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "increase mana gain " << std::showpos << it.abilities->increaseManaGain << '%' << std::noshowpos;
+			}
+
+
 			if (show == 0) {
 				bool tmp = true;
 
@@ -1270,6 +1315,50 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						break;
 					}
 				}
+			}
+
+			if (it.abilities->cooldownReduction) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "cooldown reduction " << std::showpos << it.abilities->cooldownReduction << '%' << std::noshowpos;
+			}
+
+			if (it.abilities->increaseDamage) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "increase damage " << std::showpos << it.abilities->increaseDamage << '%' << std::noshowpos;
+			}
+
+			if (it.abilities->increaseHealing) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "increase healing " << std::showpos << it.abilities->increaseHealing << '%' << std::noshowpos;
+			}
+
+			if (it.abilities->increaseManaGain) {
+				if (begin) {
+					begin = false;
+					s << " (";
+				} else {
+					s << ", ";
+				}
+
+				s << "increase mana gain " << std::showpos << it.abilities->increaseManaGain << '%' << std::noshowpos;
 			}
 
 			if (show == 0) {

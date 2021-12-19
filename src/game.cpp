@@ -3847,6 +3847,12 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		}
 	};
 
+	if (attacker) {
+		if (Player* attackerPlayer = attacker->getPlayer() ) {
+			damage.primary.value = damage.primary.value * ((100.0 + attackerPlayer->getIncreasedDamage()) / 100.0);
+		}
+	}
+
 	BlockType_t primaryBlockType, secondaryBlockType;
 	if (damage.primary.type != COMBAT_NONE) {
 		damage.primary.value = -damage.primary.value;
@@ -4006,6 +4012,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				damage.origin = ORIGIN_NONE;
 				return combatChangeHealth(attacker, target, damage);
 			}
+		}
+
+		if (attackerPlayer && damage.primary.type == COMBAT_HEALING && target) {
+			damage.primary.value *= (100.0 + attackerPlayer->getIncreasedHealing()) / 100.0;
 		}
 
 		int32_t realHealthChange = target->getHealth();
@@ -4290,6 +4300,10 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 				damage.origin = ORIGIN_NONE;
 				return combatChangeMana(attacker, target, damage);
 			}
+		}
+
+		if (targetPlayer) {
+			manaChange *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
 		}
 
 		int32_t realManaChange = targetPlayer->getMana();

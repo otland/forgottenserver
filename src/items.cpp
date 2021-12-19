@@ -159,6 +159,10 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"elementenergy", ITEM_PARSE_ELEMENTENERGY},
 	{"elementdeath", ITEM_PARSE_ELEMENTDEATH},
 	{"elementholy", ITEM_PARSE_ELEMENTHOLY},
+	{"cooldownreduction", ITEM_PARSE_COOLDOWNREDUCTION},
+	{"increasedamage", ITEM_PARSE_INCREASEDAMAGE},
+	{"increasehealing", ITEM_PARSE_INCREASEHEALING},
+	{"increasemanaget", ITEM_PARSE_INCREASEMANAGAIN},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
@@ -1170,6 +1174,26 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_MAGICLEVELUNDEFINED: {
 					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_UNDEFINEDDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_COOLDOWNREDUCTION: {
+					abilities.cooldownReduction += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_INCREASEDAMAGE: {
+					abilities.increaseDamage += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_INCREASEHEALING: {
+					abilities.increaseHealing += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_INCREASEMANAGAIN: {
+					abilities.increaseManaGain += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 

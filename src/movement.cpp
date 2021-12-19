@@ -828,6 +828,22 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 		}
 	}
 
+	if (it.abilities->cooldownReduction) {
+		player->addCooldownReduction(it.abilities->cooldownReduction);
+	}
+
+	if (it.abilities->increaseDamage) {
+		player->addIncreasedDamage(it.abilities->increaseDamage);
+	}
+
+	if (it.abilities->increaseHealing) {
+		player->addIncreasedHealing(it.abilities->increaseHealing);
+	}
+
+	if (it.abilities->increaseManaGain) {
+		player->addiIncreasedManaGain(it.abilities->increaseManaGain);
+	}
+
 	if (needUpdateStats) {
 		player->sendStats();
 	}
@@ -914,6 +930,22 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 			needUpdateStats = true;
 			player->setVarStats(static_cast<stats_t>(s), -static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)));
 		}
+	}
+
+	if (it.abilities->cooldownReduction) {
+		player->addCooldownReduction(-it.abilities->cooldownReduction);
+	}
+
+	if (it.abilities->increaseDamage) {
+		player->addIncreasedDamage(-it.abilities->increaseDamage);
+	}
+
+	if (it.abilities->increaseHealing) {
+		player->addIncreasedHealing(-it.abilities->increaseHealing);
+	}
+
+	if (it.abilities->increaseManaGain) {
+		player->addiIncreasedManaGain(-it.abilities->increaseManaGain);
 	}
 
 	if (needUpdateStats) {

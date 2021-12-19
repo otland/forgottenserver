@@ -509,6 +509,11 @@ class Player final : public Creature, public Cylinder
 			specialMagicLevelSkill[combatTypeToIndex(type)] += modifier;
 		}
 
+		int16_t cooldownReduction = 0;
+		int16_t increaseDamage = 0;
+		int16_t increaseHealing = 0;
+		int16_t increaseManaGain = 0;
+
 		void setVarStats(stats_t stat, int32_t modifier);
 
 		int32_t getDefaultStats(stats_t stat) const;
@@ -627,6 +632,43 @@ class Player final : public Creature, public Cylinder
 		uint16_t getSpecialMagicLevelSkill(CombatType_t type) const {
 			return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 		}
+
+		int16_t Player::getCooldownReduction() const {
+			if (cooldownReduction >= 100) {
+				return 100;
+			}
+
+			return cooldownReduction;
+		}
+
+		void Player::addCooldownReduction(int16_t value) {
+			cooldownReduction += value;
+		}
+
+		int16_t Player::getIncreasedDamage() const {
+			return increaseDamage;
+		}
+
+		void Player::addIncreasedDamage(int16_t value) {
+			increaseDamage += value;
+		}
+
+		int16_t Player::getIncreasedHealing() const {
+			return increaseHealing;
+		}
+
+		void Player::addIncreasedHealing(int16_t value) {
+			increaseHealing += value;
+		}
+
+		int16_t Player::getIncreasedManaGain() const {
+			return increaseManaGain;
+		}
+
+		void Player::addiIncreasedManaGain(int16_t value) {
+			increaseManaGain += value;
+		}
+
 		uint16_t getBaseSkill(uint8_t skill) const {
 			return skills[skill].level;
 		}
