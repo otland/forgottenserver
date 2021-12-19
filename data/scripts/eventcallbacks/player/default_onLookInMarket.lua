@@ -130,7 +130,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 		local protections = {}
 		for element, value in pairs(abilities.absorbPercent) do
 			if value ~= 0 then
-				protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2^(element-1)), value)
+				protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2 ^ (element - 1)), value)
 			end
 		end
 
@@ -208,14 +208,14 @@ ec.onLookInMarket = function(self, itemType, tier)
 		-- stats (hp/mp/soul/ml)
 		for stat, value in pairs(abilities.stats) do
 			if value ~= 0 then
-				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getStatName(stat-1), value)
+				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getStatName(stat - 1), value)
 			end
 		end
 
 		-- stats but in %
 		for stat, value in pairs(abilities.statsPercent) do
 			if value ~= 0 then
-				skillBoosts[#skillBoosts + 1] = string.format("%s %+d%%", getStatName(stat-1), value)
+				skillBoosts[#skillBoosts + 1] = string.format("%s %+d%%", getStatName(stat - 1), value)
 			end
 		end
 
@@ -227,7 +227,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 		-- skills
 		for skill, value in pairs(abilities.skills) do
 			if value ~= 0 then
-				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getSkillName(skill-1), value)
+				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getSkillName(skill - 1), value)
 			end
 		end
 
@@ -274,7 +274,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 	end
 
 	-- weight
-	response:addString(string.format("%0.2f", itemType:getWeight()/100))
+	response:addString(string.format("%0.2f", itemType:getWeight() / 100))
 
 	-- to do
 	response:addU16(0) -- Imbuement Slots
@@ -282,33 +282,8 @@ ec.onLookInMarket = function(self, itemType, tier)
 	response:addU16(0) -- Cleave
 	response:addU16(0) -- Damage Reflection
 	response:addU16(0) -- Perfect Shot
-
-	-- classification
-	do
-		local classification = itemType:getClassification()
-		if classification > 0 then
-			response:addString(classification)
-		else
-			response:addU16(0) -- Classification
-		end
-	end
-
-	-- tier info: "tier (0.01% bonusName)"
-	if tier > 0 then
-		local tierString = tier
-		local bonusType, bonusValue = itemType:getTierBonus(tier)
-		if bonusType ~= -1 then
-			if bonusType > 5 then
-				tierString = string.format("%d (%0.2f%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
-			else
-				tierString = string.format("%d (%d%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
-			end
-		end
-
-		response:addString(tierString)
-	else
-		response:addU16(0)
-	end
+	response:addU16(0) -- Classification
+	response:addU16(0) -- Tier
 
 	-- buy stats
 	do

@@ -1235,6 +1235,7 @@ class LuaScriptInterface
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
 		static int luaItemTypeGetAmmoType(lua_State* L);
 		static int luaItemTypeGetCorpseType(lua_State* L);
+		static int luaItemTypeGetClassification(lua_State* L);
 		static int luaItemTypeHasShowCount(lua_State* L);
 		static int luaItemTypeGetAbilities(lua_State* L);
 		static int luaItemTypeHasShowAttributes(lua_State* L);
