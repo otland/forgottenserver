@@ -616,6 +616,22 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			break;
 		}
 
+		//12+ compatibility
+		case ATTR_OPENCONTAINER:
+		case ATTR_TIER: {
+			if (!propStream.skip(1)) {
+				return ATTR_READ_ERROR;
+			}
+			break;
+		}
+
+		case ATTR_PODIUMOUTFIT: {
+			if (!propStream.skip(15)) {
+				return ATTR_READ_ERROR;
+			}
+			break;
+		}
+
 		//these should be handled through derived classes
 		//If these are called then something has changed in the items.xml since the map was saved
 		//just read the values

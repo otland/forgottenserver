@@ -395,6 +395,13 @@ bool Items::loadFromOtb(const std::string& file)
 					break;
 				}
 
+				case ITEM_ATTR_CLASSIFICATION: {
+					if (!stream.skip(1)) {
+						return false;
+					}
+					break;
+				}
+
 				default: {
 					//skip unknown attributes
 					if (!stream.skip(datalen)) {
@@ -436,6 +443,7 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_FLUID:
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
+			case ITEM_GROUP_PODIUM:
 				break;
 			default:
 				return false;

@@ -106,6 +106,11 @@ enum AttrTypes_t {
 	ATTR_WRAPID = 36,
 	ATTR_STOREITEM = 37,
 	ATTR_ATTACK_SPEED = 38,
+
+	// version 12.x
+	ATTR_OPENCONTAINER = 39,
+	ATTR_PODIUMOUTFIT = 40,
+	ATTR_TIER = 41,
 };
 
 enum Attr_ReadValue {
