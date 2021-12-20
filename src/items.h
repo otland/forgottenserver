@@ -142,6 +142,18 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ABSORBPERCENTPHYSICAL,
 	ITEM_PARSE_ABSORBPERCENTHEALING,
 	ITEM_PARSE_ABSORBPERCENTUNDEFINED,
+	ITEM_PARSE_MAGICLEVELENERGY,
+	ITEM_PARSE_MAGICLEVELFIRE,
+	ITEM_PARSE_MAGICLEVELPOISON,
+	ITEM_PARSE_MAGICLEVELICE,
+	ITEM_PARSE_MAGICLEVELHOLY,
+	ITEM_PARSE_MAGICLEVELDEATH,
+	ITEM_PARSE_MAGICLEVELLIFEDRAIN,
+	ITEM_PARSE_MAGICLEVELMANADRAIN,
+	ITEM_PARSE_MAGICLEVELDROWN,
+	ITEM_PARSE_MAGICLEVELPHYSICAL,
+	ITEM_PARSE_MAGICLEVELHEALING,
+	ITEM_PARSE_MAGICLEVELUNDEFINED,
 	ITEM_PARSE_SUPPRESSDRUNK,
 	ITEM_PARSE_SUPPRESSENERGY,
 	ITEM_PARSE_SUPPRESSFIRE,
@@ -188,7 +200,7 @@ struct Abilities {
 	//extra skill modifiers
 	std::array<int32_t, SKILL_LAST + 1> skills = {0};
 	std::array<int32_t, SPECIALSKILL_LAST + 1> specialSkills = {0};
-
+	std::array<int16_t, COMBAT_COUNT> specialMagicLevelSkill = {0};
 	int32_t speed = 0;
 
 	// field damage abilities modifiers
@@ -360,6 +372,7 @@ class ItemType
 		uint8_t lightLevel = 0;
 		uint8_t lightColor = 0;
 		uint8_t shootRange = 1;
+		uint8_t classification = 0;
 		int8_t hitChance = 0;
 
 		bool storeItem = false;

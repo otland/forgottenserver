@@ -111,8 +111,9 @@ enum MarketAction_t {
 };
 
 enum MarketRequest_t {
-	MARKETREQUEST_OWN_OFFERS = 0xFFFE,
-	MARKETREQUEST_OWN_HISTORY = 0xFFFF,
+	MARKETREQUEST_OWN_HISTORY = 1,
+	MARKETREQUEST_OWN_OFFERS = 2,
+	MARKETREQUEST_ITEM = 3,
 };
 
 enum MarketOfferState_t {
@@ -189,6 +190,7 @@ enum RaceType_t : uint8_t {
 	RACE_UNDEAD,
 	RACE_FIRE,
 	RACE_ENERGY,
+	RACE_INK,
 };
 
 enum CombatType_t : uint16_t {
@@ -548,7 +550,7 @@ struct ShopInfo {
 };
 
 struct MarketOffer {
-	uint32_t price;
+	uint64_t price;
 	uint32_t timestamp;
 	uint16_t amount;
 	uint16_t counter;
@@ -566,7 +568,7 @@ struct MarketOfferEx {
 	uint32_t id;
 	uint32_t playerId;
 	uint32_t timestamp;
-	uint32_t price;
+	uint64_t price;
 	uint16_t amount;
 	uint16_t counter;
 	uint16_t itemId;
@@ -576,7 +578,7 @@ struct MarketOfferEx {
 
 struct HistoryMarketOffer {
 	uint32_t timestamp;
-	uint32_t price;
+	uint64_t price;
 	uint16_t itemId;
 	uint16_t amount;
 	MarketOfferState_t state;

@@ -238,6 +238,8 @@ class ProtocolGame final : public Protocol
 		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
 		void sendVIPEntries();
 
+		void sendItemClasses();
+
 		void sendPendingStateEntered();
 		void sendEnterWorld();
 
@@ -251,6 +253,7 @@ class ProtocolGame final : public Protocol
 
 		void sendSpellCooldown(uint8_t spellId, uint32_t time);
 		void sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time);
+		void sendUseItemCooldown(uint32_t time);
 
 		//tiles
 		void sendMapDescription(const Position& pos);
