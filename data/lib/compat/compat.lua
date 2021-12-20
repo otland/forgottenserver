@@ -1468,16 +1468,29 @@ end
 
 do
 	local specialSkills = {
-		[SPECIALSKILL_CRITICALHITCHANCE] = 'critical hit chance',
-		[SPECIALSKILL_CRITICALHITAMOUNT] = 'critical extra damage',
-		[SPECIALSKILL_LIFELEECHCHANCE] = 'hitpoints leech chance',
-		[SPECIALSKILL_LIFELEECHAMOUNT] = 'hitpoints leech amount',
-		[SPECIALSKILL_MANALEECHCHANCE] = 'manapoints leech chance',
-		[SPECIALSKILL_MANALEECHAMOUNT] = 'manapoints leech amount'
+		[SPECIALSKILL_CRITICALHITCHANCE] = 'critical hit chance', -- format: x%
+		[SPECIALSKILL_CRITICALHITAMOUNT] = 'critical extra damage', -- format: +y%
+		[SPECIALSKILL_LIFELEECHCHANCE] = 'life leech chance',
+		[SPECIALSKILL_LIFELEECHAMOUNT] = 'life leech amount',
+		[SPECIALSKILL_MANALEECHCHANCE] = 'mana leech chance',
+		[SPECIALSKILL_MANALEECHAMOUNT] = 'mana leech amount',
 	}
 
 	function getSpecialSkillName(specialSkill)
 		return specialSkills[specialSkill] or 'unknown'
+	end
+end
+
+do
+	local stats = {
+		[STAT_MAXHITPOINTS] = 'hitpoints',
+		[STAT_MAXMANAPOINTS] = 'mana',
+		[STAT_SOULPOINTS] = 'soul points',
+		[STAT_MAGICPOINTS] = 'magic level'
+	}
+
+	function getStatName(stat)
+		return stats[stat] or 'unknown'
 	end
 end
 
