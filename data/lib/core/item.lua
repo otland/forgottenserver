@@ -30,530 +30,743 @@ function Item.isTile(self)
 	return false
 end
 
--- Helper class to make string formatting prettier
-
-StringStream = {}
-
-setmetatable(StringStream, {
-	__call = function(self)
-		local obj = {}
-		return setmetatable(obj, {__index = StringStream})
-	end
-})
-
-function StringStream.append(self, str, ...)
-	self[#self+1] = string.format(str, ...)
+function Item:isItemType()
+	return false
 end
-
-function StringStream.concat(self, sep)
-	return table.concat(self, sep)
-end
-
-local aux = {
-	['Defense'] = {key = ITEM_ATTRIBUTE_DEFENSE},
-	['ExtraDefense'] = {key = ITEM_ATTRIBUTE_EXTRADEFENSE},
-	['Attack'] = {key = ITEM_ATTRIBUTE_ATTACK},
-	['AttackSpeed'] = {key = ITEM_ATTRIBUTE_ATTACK_SPEED},
-	['HitChance'] = {key = ITEM_ATTRIBUTE_HITCHANCE},
-	['ShootRange'] = {key = ITEM_ATTRIBUTE_SHOOTRANGE},
-	['Armor'] = {key = ITEM_ATTRIBUTE_ARMOR},
-	['Duration'] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
-	['Text'] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= '' end},
-	['Date'] = {key = ITEM_ATTRIBUTE_DATE},
-	['Writer'] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= '' end}
-}
-
-function setAuxFunctions()
-	for name, def in pairs(aux) do
-		Item['get'.. name] = function(self)
-			local attr = self:getAttribute(def.key)
-			if def.cmp and def.cmp(attr) then
-				return attr
-			elseif not def.cmp and attr and attr ~= 0 then
-				return attr
-			end
-			local default = ItemType['get'.. name]
-			return default and default(self:getType()) or nil
-		end
-	end
-end
-
-setAuxFunctions()
 
 do
+	local aux = {
+		["Defense"] = {key = ITEM_ATTRIBUTE_DEFENSE},
+		["ExtraDefense"] = {key = ITEM_ATTRIBUTE_EXTRADEFENSE},
+		["Attack"] = {key = ITEM_ATTRIBUTE_ATTACK},
+		["AttackSpeed"] = {key = ITEM_ATTRIBUTE_ATTACK_SPEED},
+		["HitChance"] = {key = ITEM_ATTRIBUTE_HITCHANCE},
+		["ShootRange"] = {key = ITEM_ATTRIBUTE_SHOOTRANGE},
+		["Armor"] = {key = ITEM_ATTRIBUTE_ARMOR},
+		["Duration"] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
+		["Text"] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= "" end},
+		["Date"] = {key = ITEM_ATTRIBUTE_DATE},
+		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end},
+		["Tier"] = {key = ITEM_ATTRIBUTE_TIER}
+	}
+
+	function setAuxFunctions()
+		for name, def in pairs(aux) do
+			Item["get".. name] = function(self)
+				local attr = self:getAttribute(def.key)
+				if def.cmp and def.cmp(attr) then
+					return attr
+				elseif not def.cmp and attr and attr ~= 0 then
+					return attr
+				end
+				local default = ItemType["get".. name]
+				return default and default(self:getType()) or nil
+			end
+		end
+	end
+	setAuxFunctions()
+end
+
+do
+	StringStream = {}
+
+	setmetatable(StringStream, {
+		__call = function(self)
+			local obj = {}
+			return setmetatable(obj, {__index = StringStream})
+		end
+	})
+
+	function StringStream.append(self, str, ...)
+		self[#self+1] = string.format(str, ...)
+	end
+
+	function StringStream.concat(self, sep)
+		return table.concat(self, sep)
+	end
+
 	local function internalItemGetNameDescription(it, item, subType, addArticle)
-		local subType = subType or (item and item:getSubType() or -1)
+		subType = subType or (item and item:getSubType() or -1)
 		local ss = StringStream()
 		local obj = item or it
 		local name = obj:getName()
-		if name ~= '' then
+		if name ~= "" then
 			if it:isStackable() and subType >  1 then
 				if it:hasShowCount() then
-					ss:append('%d ', subType)
+					ss:append("%d ", subType)
 				end
-				ss:append('%s', obj:getPluralName())
+				ss:append("%s", obj:getPluralName())
 			else
-				if addArticle and obj:getArticle() ~= '' then
-					ss:append('%s ', obj:getArticle())
+				if addArticle and obj:getArticle() ~= "" then
+					ss:append("%s ", obj:getArticle())
 				end
-				ss:append('%s', obj:getName())
+				ss:append("%s", obj:getName())
 			end
 		else
-			ss:append('an item of type %d', obj:getId())
+			ss:append("an item of type %d", obj:getId())
 		end
 		return ss:concat()
 	end
 
-	function Item.getNameDescription(self, subType, addArticle)
+	function Item:getNameDescription(subType, addArticle)
 		return internalItemGetNameDescription(self:getType(), self, subType, addArticle)
 	end
 
-	function ItemType.getNameDescription(self, subType, addArticle)
+	function ItemType:getNameDescription(subType, addArticle)
 		return internalItemGetNameDescription(self, nil, subType, addArticle)
 	end
 end
 
 do
-	local function addSeparator(ss, begin)
-		if begin then
-			begin = false
-			ss:append(' (')
+	local housePriceVisible = configManager.getBoolean(configKeys.HOUSE_DOOR_SHOW_PRICE)
+	local pricePerSQM = configManager.getNumber(configKeys.HOUSE_PRICE)
+
+	local showAtkWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE}
+	local showDefWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE, WEAPON_SHIELD}
+	local suppressedConditionNames = {
+		-- NOTE: these names are made up just to match dwarven ring attribute style
+		[CONDITION_POISON] = "antidote",
+		[CONDITION_FIRE] = "non-inflammable",
+		[CONDITION_ENERGY] = "antistatic",
+		[CONDITION_BLEEDING] = "antiseptic",
+		[CONDITION_HASTE] = "heavy",
+		[CONDITION_PARALYZE] = "slow immunity",
+		[CONDITION_DRUNK] = "hard drinking",
+		[CONDITION_DROWN] = "water breathing",
+		[CONDITION_FREEZING] = "warm",
+		[CONDITION_DAZZLED] = "dazzle immunity",
+		[CONDITION_CURSED] = "curse immunity"
+	}
+
+	-- first argument: Item, itemType or item id
+	local function internalItemGetDescription(item, lookDistance, subType, addArticle)
+		-- optional, but true by default
+		if addArticle == nil then
+			addArticle = true
+		end
+
+		local isVirtual = false -- check if we're inspecting a real item or itemType only
+		local itemType
+
+		-- determine the kind of item data to process
+		if tonumber(item) then
+			-- number in function argument
+			-- pull data from itemType instead
+			isVirtual = true
+			itemType = ItemType(item)
+			if not itemType then
+				return
+			end
+
+			-- polymorphism for item attributes (atk, def, etc)
+			item = itemType
+		elseif item:isItemType() then
+			isVirtual = true
+			itemType = item
 		else
-			ss:append(', ')
+			itemType = item:getType()
 		end
-		return begin
-	end
 
-	local function addGenerics(item, it, abilities, ss, begin)
-		local obj = item or it
-		if it:getWeaponType() == WEAPON_DISTANCE and it:getAmmoType() ~= 0 then
-			ss:append(' (Range:%d', obj:getShootRange())
-			local attack = obj:getAttack()
-			local hitChance = obj:getHitChance()
-			if attack ~= 0 then
-				ss:append(', Atk%s%d', showpos(attack), math.abs(attack))
-			end
+		-- use default values if not provided
+		lookDistance = lookDistance or -1
+		subType = subType or (not isVirtual and item:getSubType() or -1)
 
-			if hitChance ~= 0 then
-				ss:append(', Hit%%%s%d', showpos(hitChance), math.abs(hitChance))
-			end
+		-- possibility of picking the item up (will be reused later)
+		local isPickupable = itemType:isMovable() and itemType:isPickupable()
 
-			begin = false
-		elseif it:getWeaponType() ~= WEAPON_AMMO then
-			local attack = obj:getAttack()
-			local defense = obj:getDefense()
-			local extraDefense = obj:getExtraDefense()
-
-			if attack ~= 0 then
-				begin = false
-				ss:append(' (Atk:%d', attack)
-
-				if abilities.elementType ~= COMBAT_NONE and abilities.elementDamage ~= 0 then
-					ss:append(' physical + %d %s', abilities.elementDamage, getCombatName(abilities.elementType))
-				end
-			end
-
-			if defense ~= 0 or extraDefense ~= 0 then
-				begin = addSeparator(ss, begin)
-				ss:append('Def:%d', defense)
-				if extraDefense ~= 0 then
-					ss:append(' %s%d', showpos(extraDefense), math.abs(extraDefense))
-				end
+		-- has uniqueId tag
+		local isUnique = false
+		if not isVirtual then
+			local uid = item:getUniqueId()
+			if uid > 100 and uid < 0xFFFF then
+				isUnique = true
 			end
 		end
 
-		-- Skills
-		for skill, value in ipairs(abilities.skills) do
-			if value ~= 0 then
-				begin = addSeparator(ss, begin)
-				ss:append('%s %s%d', getSkillName(skill - 1), showpos(value), math.abs(value))
+		-- read item name with article
+		local itemName = item:getNameDescription(subType, addArticle)
+
+		-- things that will go in parenthesis "(...)"
+		local descriptions = {}
+
+		-- spell words
+		do
+			local spellName = itemType:getRuneSpellName()
+			if spellName then
+				descriptions[#descriptions + 1] = string.format('"%s"', spellName)
 			end
 		end
 
-		-- Special Skills
-		for specialSkill, value in ipairs(abilities.specialSkills) do
-			if value ~= 0 then
-				begin = addSeparator(ss, begin)
-				ss:append('%s %s%d%%', getSpecialSkillName(specialSkill - 1), showpos(value), math.abs(value))
-			end
-		end
-
-		local magicPoints = abilities.stats[4]
-		if magicPoints ~= 0 then
-			begin = addSeparator(ss, begin)
-			ss:append('magic level %s%d', showpos(magicPoints), math.abs(magicPoints))
-		end
-
-		-- Absorb
-
-		local show = abilities.absorbPercent[1]
-		if show ~= 0 then
-			for _, value in ipairs(abilities.absorbPercent) do
-				if value ~= show then
-					show = 0
+		-- container capacity
+		do
+			-- show container capacity only on non-quest containers
+			if not isUnique then
+				local isContainer = itemType:isContainer()
+				if isContainer then
+					descriptions[#descriptions + 1] = string.format("Vol:%d", itemType:getCapacity())
 				end
 			end
 		end
 
-		if show == 0 then
-			local tmp = true
-			for i, value in ipairs(abilities.absorbPercent) do
-				if value ~= 0 then
-					if tmp then
-						tmp = false
-						begin = addSeparator(ss, begin)
-						ss:append('protection ')
-					else
-						ss:append(', ')
+		-- actionId (will be reused)
+		local actionId = 0
+		if not isVirtual then
+			actionId = item:getActionId()
+		end
+
+		-- key
+		do
+			if not isVirtual and itemType:isKey() then
+				descriptions[#descriptions + 1] = string.format("Key:%0.4d", actionId)
+			end
+		end
+
+		-- weapon type (will be reused)
+		local weaponType = itemType:getWeaponType()
+
+		-- attack attributes
+		do
+			local attack = item:getAttack()
+
+			-- bows and crossbows
+			-- range, attack, hit%
+			if itemType:isBow() then
+				descriptions[#descriptions + 1] = string.format("Range:%d", item:getShootRange())
+
+				if attack ~= 0 then
+					descriptions[#descriptions + 1] = string.format("Atk:%+d", attack)
+				end
+
+				local hitPercent = item:getHitChance()
+				if hitPercent ~= 0 then
+					descriptions[#descriptions + 1] = string.format("Hit%%:%+d", item:hitPercent())
+				end
+
+			-- melee weapons and missiles
+			-- atk x physical +y% element
+			elseif table.contains(showAtkWeaponTypes, weaponType) then
+				local atkString = string.format("Atk:%d", attack)
+				local elementDmg = itemType:getElementDamage()
+				if elementDmg ~= 0 then
+					atkString = string.format("%s physical %+d %s", atkString, elementDmg, getCombatName(itemType:getElementType()))
+				end
+
+				descriptions[#descriptions + 1] = atkString
+			end
+		end
+
+		-- attack speed
+		do
+			local atkSpeed = item:getAttackSpeed()
+			if atkSpeed ~= 0 then
+				descriptions[#descriptions + 1] = string.format("AS:%0.2f/turn", 2000 / atkSpeed)
+			end
+		end
+
+		-- defense attributes
+		do
+			local showDef = table.contains(showDefWeaponTypes, weaponType)
+			local ammoType = itemType:getAmmoType()
+			if showDef then
+				local defense = item:getDefense()
+				local defAttrs = {}
+				if weaponType == WEAPON_DISTANCE then
+					-- throwables
+					if ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT then
+						defAttrs[#defAttrs + 1] = defense
 					end
-					ss:append('%s %s%d%%', getCombatName(indexToCombatType(i - 1)), showpos(value), math.abs(value))
+				else
+					defAttrs[#defAttrs + 1] = defense
 				end
-			end
-		else
-			begin = addSeparator(ss, begin)
-			ss:append('protection all %s%d%%', showpos(show), math.abs(show))
-		end
 
-		-- Field absorb
+				-- extra def
+				local xD = item:getExtraDefense()
+				if xD ~= 0 then
+					defAttrs[#defAttrs + 1] = string.format("%+d", xD)
+				end
 
-		local show = abilities.fieldAbsorbPercent[1]
-		if show ~= 0 then
-			for _, value in ipairs(abilities.fieldAbsorbPercent) do
-				if value ~= show then
-					show = 0
+				if #defAttrs > 0 then
+					descriptions[#descriptions + 1] = string.format("Def:%s", table.concat(defAttrs, " "))
 				end
 			end
 		end
 
-		if show == 0 then
-			local tmp = true
-			for i, value in ipairs(abilities.fieldAbsorbPercent) do
+		-- armor
+		do
+			local arm = item:getArmor()
+			if arm > 0 then
+				descriptions[#descriptions + 1] = string.format("Arm:%d", arm)
+			end
+		end
+
+		-- abilities (will be reused)
+		local abilities = itemType:getAbilities()
+
+		-- stats: hp/mp/soul/magic level
+		do
+			local stats = {}
+			-- flat buffs
+			for stat, value in pairs(abilities.stats) do
+				stats[stat] = {name = getStatName(stat-1)}
 				if value ~= 0 then
-					if tmp then
-						tmp = false
-						begin = addSeparator(ss, begin)
-						ss:append('protection ')
-					else
-						ss:append(', ')
-					end
-					ss:append('%s field %s%d%%', getCombatName(indexToCombatType(i - 1)), showpos(value), math.abs(value))
+					stats[stat].flat = value
 				end
 			end
-		else
-			begin = addSeparator(ss, begin)
-			ss:append('protection all fields %s%d%%', showpos(show), math.abs(show))
+
+			-- percent buffs
+			for stat, value in pairs(abilities.statsPercent) do
+				if value ~= 0 then
+					stats[stat].percent = value
+				end
+			end
+
+			-- display the buffs
+			for _, statData in pairs(stats) do
+				local displayValues = {}
+				if statData.flat then
+					displayValues[#displayValues + 1] = statData.flat
+				end
+
+				if statData.percent then
+					displayValues[#displayValues + 1] = statData.percent
+				end
+
+				-- desired format examples:
+				-- +5%
+				-- +20 and 5%
+				if #displayValues > 0 then
+					displayValues[1] = string.format("%+d", displayValues[1])
+					descriptions[#descriptions + 1] = string.format("%s %s", statData.name, table.concat(displayValues, " and "))
+				end
+			end
 		end
 
+		-- skill boosts
+		do
+			for skill, value in pairs(abilities.skills) do
+				if value ~= 0 then
+					descriptions[#descriptions + 1] = string.format("%s %+d", getSkillName(skill-1), value)
+				end
+			end
+		end
+
+		-- element magic level
+		do
+			for element, value in pairs(abilities.specialMagicLevel) do
+				if value ~= 0 then
+					descriptions[#descriptions + 1] = string.format("%s magic level %+d", getCombatName(2^(element-1)), value)
+				end
+			end
+		end
+
+		-- special skills
+		do
+			for skill, value in pairs(abilities.specialSkills) do
+				if value ~= 0 then
+					-- add + symbol to special skill "amount" fields
+					if skill-1 < 6 and skill % 2 == 1 then
+						value = string.format("%+d", value)
+					elseif skill-1 >= 6 then
+						-- fatal, dodge, momentum coming from the item natively
+						-- (stats coming from tier are near tier info)
+						value = string.format("%0.2f", value/100)
+					end
+
+					descriptions[#descriptions + 1] = string.format("%s %s%%", getSpecialSkillName(skill-1), value)
+				end
+			end
+		end
+
+		-- cleave
+		-- perfect shot
+		-- to do
+
+		-- protections
+		do
+			local protections = {}
+			for element, value in pairs(abilities.absorbPercent) do
+				if value ~= 0 then
+					protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2^(element-1)), value)
+				end
+			end
+
+			if #protections > 0 then
+				descriptions[#descriptions + 1] = string.format("protection %s", table.concat(protections, ", "))
+			end
+		end
+
+		-- damage reflection
+		-- to do
+
+		-- magic shield (classic)
+		if abilities.manaShield then
+			descriptions[#descriptions + 1] = "magic shield"
+		end
+
+		-- magic shield capacity +flat and x%
+		-- to do
+
+		-- regeneration
+		if abilities.manaGain > 0 or abilities.healthGain > 0 or abilities.regeneration then
+			descriptions[#descriptions + 1] = "faster regeneration"
+		end
+
+		-- invisibility
+		if abilities.invisible then
+			descriptions[#descriptions + 1] = "invisibility"
+		end
+
+		-- condition immunities
+		do
+			local suppressions = abilities.conditionSuppressions
+			for conditionId, conditionName in pairs(suppressedConditionNames) do
+				if bit.band(abilities.conditionSuppressions, conditionId) ~= 0 then
+					descriptions[#descriptions + 1] = conditionName
+				end
+			end
+		end
+
+		-- speed
 		if abilities.speed ~= 0 then
-			begin = addSeparator(ss, begin)
-			ss:append('speed %s%d', showpos(abilities.speed), math.abs(abilities.speed / 2))
-		end
-		return begin
-	end
-
-	local function internalItemGetDescription(it, lookDistance, item, subType, addArticle)
-		local abilities = it:getAbilities()
-		local ss = StringStream()
-		local subType = subType or (item and item:getSubType() or -1)
-		local text = nil
-		local begin = true
-		local obj = item or it
-
-		if item then
-			ss:append(item:getNameDescription(subType, addArticle or true))
-		else
-			ss:append(it:getNameDescription(subType, addArticle or true))
+			descriptions[#descriptions + 1] = string.format("speed %+d", math.floor(abilities.speed / 2))
 		end
 
-		if it:isRune() then
-			local rune = Spell(it:getId())
-			if rune then
-				if rune:runeLevel() and rune:runeLevel() > 0 or rune:runeMagicLevel() and rune:runeMagicLevel() > 0 then
-					local tmpVocMap = rune:vocation()
-					local vocMap = {}
-					for k, vocName in ipairs(tmpVocMap) do
-						local vocation = Vocation(vocName)
-						if vocation and vocation:getPromotion() then
-							vocMap[#vocMap + 1] = vocName
-						end
+		-- collecting attributes finished
+		-- build the output text
+		local response = {itemName}
+
+		-- item group (will be reused)
+		local itemGroup = itemType:getGroup()
+
+		-- fluid type
+		do
+			if (itemGroup == ITEM_GROUP_FLUID or itemGroup == ITEM_GROUP_SPLASH) and subType > 0 then
+				local subTypeName = getSubTypeName(subType)
+				response[#response + 1] = string.format(" of %s", (subTypeName ~= '' and subTypeName or "unknown"))
+			end
+		end
+
+		-- door check (will be reused)
+		local isDoor = itemType:isDoor()
+
+		-- door info
+		if isDoor then
+			if not isVirtual then
+				local minLevelDoor = itemType:getLevelDoor()
+				if minLevelDoor ~= 0 then
+					if actionId >= minLevelDoor then
+						response[#response + 1] = string.format(" for level %d", actionId - minLevelDoor)
 					end
-
-					ss:append('. %s can only be used by', it:isStackable() and subType > 1 and 'They' or 'It')
-
-					-- Only show base vocations in description; promotions should be a given
-					if #vocMap == 0 then
-						ss:append(' players')
-					else
-						for i = 1, #vocMap - 1 do
-							local vocName = vocMap[i]
-							local vocation = Vocation(vocName)
-							ss:append(' %ss', vocName:lower())
-							if i + 1 == #vocMap then
-								ss:append(' and')
-							else
-								ss:append(',')
-							end
-						end
-						local vocName = vocMap[#vocMap]
-						ss:append(' %ss', vocName:lower())
-					end
-
-					ss:append(' with')
-
-					if rune:runeLevel() > 0 then
-						ss:append(' level %d', rune:runeLevel())
-					end
-
-					if rune:runeMagicLevel() > 0 then
-						if rune:runeLevel() > 0 then
-							ss:append(' and ')
-						end
-						ss:append('magic level %d', rune:runeMagicLevel())
-					end
-
-					ss:append(' or higher')
-				end
-
-				if not begin then
-					ss:append(')')
 				end
 			end
-		elseif it:getWeaponType() ~= WEAPON_NONE then
-			begin = addGenerics(item, it, abilities, ss, begin)
-			if not begin then
-				ss:append(')')
-			end
-		elseif obj:getArmor() ~= 0 or it:hasShowAttributes() then
-			if obj:getArmor() ~= 0 then
-				ss:append(' (Arm:%d', obj:getArmor())
-				begin = false
-			end
-			begin = addGenerics(item, it, abilities, ss, begin)
-			if not begin then
-				ss:append(')')
-			end
-		elseif it:isContainer() or item and item:isContainer() then
-			local volume = 0
+		end
 
-			if not item or not item:hasAttribute(ITEM_ATTRIBUTE_UNIQUEID) then
-				if it:isContainer() then
-					volume = it:getCapacity()
+		-- primary attributes parenthesis
+		if #descriptions > 0 then
+			response[#response + 1] = string.format(" (%s)", table.concat(descriptions, ", "))
+		end
+
+		-- podium description
+		if not isVirtual and itemType:isPodium() then
+			local outfit = item:getOutfit()
+			local hasOutfit = item:hasFlag(PODIUM_SHOW_OUTFIT)
+			local hasMount = item:hasFlag(PODIUM_SHOW_MOUNT)
+			if outfit then
+				local podiumParts = {}
+				local outfitType = Outfit(outfit.lookType)
+				if outfitType then
+					if hasOutfit then
+						podiumParts[#podiumParts + 1] = string.format("%s outfit", outfitType.name)
+					end
+
+					-- search mount
+					local mountName = getMountNameByLookType(outfit.lookMount)
+					if mountName and hasMount then
+						podiumParts[#podiumParts + 1] = string.format("%s mount", mountName)
+					end
 				else
-					volume = item:getCapacity()
+					-- search mount
+					local mountName = getMountNameByLookType(outfit.lookMount)
+					local isEnabled = mountName and hasMount
+					if not mountName then
+						mountName = getMountNameByLookType(outfit.lookType)
+						isEnabled = mountName and hasOutfit
+					end
+
+					if mountName and isEnabled then
+						podiumParts[#podiumParts + 1] = string.format("%s mount", mountName)
+					end
+				end
+
+				if #podiumParts > 0 then
+					response[#response + 1] = string.format(" displaying the %s", table.concat(podiumParts, " on the "))
+				end
+			end
+		end
+
+		-- charges and duration
+		do
+			local expireInfo = {}
+
+			-- charges
+			if itemType:hasShowCharges() then
+				local charges = item:getCharges()
+				expireInfo[#expireInfo + 1] = string.format("has %d charge%s left", charges, (charges ~= 1 and "s" or ""))
+			end
+
+			-- duration
+			if itemType:hasShowDuration() then
+				local currentDuration = item:getDuration()
+				if isVirtual then
+					currentDuration = currentDuration * 1000
+				end
+
+				local maxDuration = itemType:getDuration() * 1000
+				if maxDuration == 0 then
+					local transferType = itemType:getTransformEquipId()
+					if transferType ~= 0 then
+						transferType = ItemType(transferType)
+						maxDuration = transferType and transferType:getDuration() * 1000 or maxDuration
+					end
+				end
+
+				if currentDuration == maxDuration then
+					expireInfo[#expireInfo + 1] = "is brand-new"
+				elseif currentDuration ~= 0 then
+					expireInfo[#expireInfo + 1] = string.format("will expire in %s", Game.getCountdownString(math.floor(currentDuration/1000), true, true))
 				end
 			end
 
-			if volume ~= 0 then
-				ss:append(' (Vol:%d)', volume)
+			if #expireInfo > 0 then
+				response[#response + 1] = string.format(" that %s", table.concat(expireInfo, " and "))
 			end
-		else
-			local found = true
+		end
 
-			if abilities.speed > 0 then
-				ss:append(' (speed %s%d)', showpos(abilities.speed), math.abs(abilities.speed / 2))
-			elseif bit.band(abilities.conditionSuppressions, CONDITION_DRUNK) == 1 then
-				ss:append(' (hard drinking)')
-			elseif abilities.invisible then
-				ss:append(' (invisibility)')
-			elseif abilities.regeneration then
-				ss:append(' (faster regeneration)')
-			elseif abilities.manashield then
-				ss:append(' (mana shield)')
-			else
-				found = false
+		-- dot after primary attributes info
+		response[#response + 1] = "."
+
+		-- empty fluid container suffix
+		if itemGroup == ITEM_GROUP_FLUID and subType < 1 then
+			response[#response + 1] = " It is empty."
+		end
+
+		-- house door
+		if isDoor and not isVirtual then
+			local tile = item:getTile()
+			if tile then
+				local house = tile:getHouse()
+				if house then
+					local houseName = house:getName()
+					local houseOwnerName = house:getOwnerName()
+					local isForSale = false
+
+					if not houseOwnerName or houseOwnerName:len() == 0 then
+						houseOwnerName = "Nobody"
+						isForSale = true
+					end
+
+					response[#response + 1] = string.format(" It belongs to house '%s'. %s owns this house.", houseName, houseOwnerName)
+					if housePriceVisible and isForSale and pricePerSQM > 0 then
+						response[#response + 1] = string.format(" It costs %d gold coins.", pricePerSQM * house:getTileCount())
+					end
+				end
 			end
+		end
 
-			if not found then
-				if it:getType() == ITEM_TYPE_KEY then
-					local aid = item and item:getActionId() or 0
-					ss:append(' (Key:%s)', ('0'):rep(4 - #tostring(aid)) .. aid)
-				elseif it:getGroup() == ITEM_GROUP_FLUID then
-					if subType > 0 then
-						local name = getSubTypeName(subType)
-						ss:append(' of %s', name ~= '' and name or 'unknown')
-					else
-						ss:append('. It is empty')
-					end
-				elseif it:getGroup() == ITEM_GROUP_SPLASH then
-					local name = getSubTypeName(subType)
-					ss:append(' of ')
-					if subType > 0 and name ~= '' then
-						ss:append(name)
-					else
-						ss:append('unknown')
-					end
-				elseif it:hasAllowDistRead() and (it:getId() < 7369 or it:getId() > 7371) then
-					ss:append('.\n')
-					if lookDistance <= 4 then
-						if item then
-							if not text then
-								text = item:getText()
-							end
-							if text then
-								local writer = item:getWriter()
-								if writer then
-									local date = item:getDate()
-									ss:append('%s wrote', writer)
-									if date then
-										ss:append(' on %s', os.date('%d %b %Y'))
-									end
-									ss:append(': ')
-								else
-									ss:append('You read: ')
-								end
-								ss:append(text)
-							else
-								ss:append('Nothing is written on it')
-							end
+		-- imbuements (to do)
+		-- \nImbuements: (Basic Strike 2:30h, Basic Void 2:30h, Empty Slot).
+
+		-- item class
+		-- Classification: x Tier: y (0.50% Onslaught).
+		do
+			local classification = itemType:getClassification()
+			local tier = isVirtual and 0 or item:getTier() or 0
+
+			if classification > 0 or tier > 0 then
+				if classification == 0 then
+					classification = "other"
+				end
+
+				local tierString = tier
+				if tier > 0 then
+					local bonusType, bonusValue = itemType:getTierBonus(tier)
+					if bonusType ~= -1 then
+						if bonusType > 5 then
+							tierString = string.format("%d (%0.2f%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
 						else
-							ss:append('Nothing is written on it')
+							tierString = string.format("%d (%d%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
 						end
-					else
-						ss:append('You are too far away to read it.')
-					end
-				elseif it:getLevelDoor() ~= 0 and item then
-					local aid = item:getActionId()
-					if aid >= it:getLevelDoor() then
-						ss:append(' for level %d', aid - it:getLevelDoor())
 					end
 				end
+
+				response[#response + 1] = string.format("\nClassification: %s Tier: %s.", classification, tierString)
 			end
 		end
 
-		if it:hasShowCharges() then
-			ss:append(' that has %d charge%s left', subType, subType ~= -1 and 's' or '')
-		end
+		-- item count (will be reused later)
+		local count = isVirtual and 1 or item:getCount()
 
-		-- show duration
-		if it:hasShowDuration() then
-			if item and item:hasAttribute(ITEM_ATTRIBUTE_DURATION) then
-				local duration = item:getDuration() / 1000
-				if duration > 0 then
-					ss:append(' that will expire in ')
+		-- wield info
+		do
+			if itemType:isRune() then
+				local rune = Spell(it:getId())
+				if rune then
+					local runeLevel = rune:runeLevel()
+					local runeMagLevel = rune:runeMagicLevel()
+					local runeVocMap = rune:vocation()
 
-					if duration >= 86400 then
-						local days = math.floor(duration / 86400)
-						local hours = math.floor((duration % 86400) / 3600)
-						ss:append('%d day%s', days, days ~= 1 and 's' or '')
-						if hours > 0 then
-							ss:append(' and %d hour%s', hours, hours ~= 1 and 's' or '')
+					local hasLevel = runeLevel > 0
+					local hasMLvl = runeMagLevel > 0
+					local hasVoc = #runeVocMap > 0
+					if hasLevel or hasMLvl or hasVoc then
+						local vocAttrs = {}
+						if not hasVoc then
+							vocAttrs[#vocAttrs + 1] = "players"
+						else
+							for _, vocName in ipairs(runeVocMap) do
+								local vocation = Vocation(vocName)
+								if vocation and vocation:getPromotion() then
+									vocAttrs[#vocAttrs + 1] = vocName
+								end
+							end
 						end
-					elseif duration >= 3600 then
-						local hours = math.floor(duration / 3600)
-						local minutes = math.floor((duration % 3600) / 60)
-						ss:append('%d hour%s', hours, hours ~= 1 and 's' or '')
-						if minutes > 0 then
-							ss:append(' and %d minute%s', minutes, minutes ~= 1 and 's' or '')
+
+						if #vocAttrs > 1 then
+							vocAttrs[#vocAttrs - 1] = string.format("and %s", vocAttrs[#vocAttrs - 1])
 						end
-					elseif duration >= 60 then
-						local minutes = math.floor(duration / 60)
-						local seconds = duration % 60
-						ss:append('%d minute%s', minutes, minutes ~= 1 and 's' or '')
-						if seconds > 0 then
-							ss:append(' and %d second%s', seconds, seconds ~= 1 and 's' or '')
+
+						local levelInfo = {}
+						if hasLevel then
+							levelInfo[#levelInfo + 1] = string.format("level %d", runeLevel)
 						end
-					else
-						ss:append('%d second%s', duration, duration ~= 1 and 's' or '')
+
+						if hasMLvl then
+							levelInfo[#levelInfo + 1] = string.format("magic level %d", runeMagLevel)
+						end
+
+						local levelStr = ""
+						if #levelInfo > 0 then
+							levelStr = string.format(" of %s or higher", table.concat(levelInfo, " and "))
+						end
+
+						response[#response + 1] = string.format(
+							"\n%s can only be used properly by %s%s.",
+							(count > 1 and "They" or "It"),
+							table.concat(vocAttrs, ", "),
+							levelStr
+						)
 					end
 				end
 			else
-				ss:append(' that is brand-new')
-			end
-		end
+				local wieldInfo = itemType:getWieldInfo()
+				if wieldInfo ~= 0 then
+					local wieldAttrs = {}
+					if bit.band(wieldInfo, WIELDINFO_PREMIUM) ~= 0 then
+						wieldAttrs[#wieldAttrs + 1] = "premium"
+					end
 
-		if not it:hasAllowDistRead() or (it:getId() >= 7369 and it:getId() <= 7371) then
-			ss:append('.')
-		else
-			if not text and item then
-				text = item:getText()
-			end
-			if not text or text == '' then
-				ss:append('.')
-			end
-		end
+					local vocStr = itemType:getVocationString()
+					if vocStr ~= '' then
+						wieldAttrs[#wieldAttrs + 1] = vocStr
+					else
+						wieldAttrs[#wieldAttrs + 1] = "players"
+					end
 
-		local wieldInfo = it:getWieldInfo()
-		if wieldInfo ~= 0 then
-			ss:append('\nIt can only be wielded properly by ')
+					local levelInfo = {}
+					if bit.band(wieldInfo, WIELDINFO_LEVEL) ~= 0 then
+						levelInfo[#levelInfo + 1] = string.format("level %d", itemType:getMinReqLevel())
+					end
 
-			if bit.band(wieldInfo, WIELDINFO_PREMIUM) ~= 0 then
-				ss:append('premium ')
-			end
+					if bit.band(wieldInfo, WIELDINFO_MAGLV) ~= 0 then
+						levelInfo[#levelInfo + 1] = string.format("magic level %d", itemType:getMinReqMagicLevel())
+					end
 
-			local vocStr = it:getVocationString()
-			if vocStr ~= '' then
-				ss:append(vocStr)
-			else
-				ss:append('players')
-			end
+					if #levelInfo > 0 then
+						wieldAttrs[#wieldAttrs + 1] = string.format("of %s or higher", table.concat(levelInfo, " and "))
+					end
 
-			if bit.band(wieldInfo, WIELDINFO_LEVEL) ~= 0 then
-				ss:append(' of level %d or higher', it:getMinReqLevel())
-			end
-
-			if bit.band(wieldInfo, WIELDINFO_MAGLV) ~= 0 then
-				if bit.band(wieldInfo, WIELDINFO_LEVEL) ~= 0 then
-					ss:append(' and')
-				else
-					ss:append(' of')
+					response[#response + 1] = string.format(
+						"\n%s can only be wielded properly by %s.",
+						(count > 1 and "They" or "It"),
+						table.concat(wieldAttrs, " ")
+					)
 				end
-				ss:append(' magic level %d or higher', it:getMinReqMagicLevel())
 			end
-			ss:append('.')
 		end
 
 		if lookDistance <= 1 then
-			local weight = obj:getWeight()
-			local count = item and item:getCount() or 1
-			if weight ~= 0 and it:isPickupable() then
-				ss:append('\n')
-				if it:isStackable() and count > 1 and it:hasShowCount() then
-					ss:append('They weigh ')
+			local weight = item:getWeight()
+			if isPickupable and not isUnique then
+				response[#response + 1] = string.format("\n%s %0.2f oz.", (count == 1 or not itemType:hasShowCount()) and "It weighs" or "They weigh", weight / 100)
+			end
+		end
+
+		-- item text
+		if not isVirtual and itemType:hasAllowDistRead() then
+			local text = item:getText()
+			if text and text:len() > 0 then
+				if lookDistance <= 4 then
+					local writer = item:getAttribute(ITEM_ATTRIBUTE_WRITER)
+					local writeDate = item:getAttribute(ITEM_ATTRIBUTE_DATE)
+					local writeInfo = {}
+					if writer and writer:len() > 0 then
+						writeInfo[#writeInfo + 1] = string.format("\n%s wrote", writer)
+
+						if writeDate and writeDate > 0 then
+							writeInfo[#writeInfo + 1] = string.format(" on %s", os.date("%d %b %Y", writeDate))
+						end
+					end
+
+					if #writeInfo > 0 then
+						response[#response + 1] = string.format("%s:\n%s", table.concat(writeInfo, ""), text)
+					else
+						response[#response + 1] = string.format("\nYou read: %s", text)
+					end
 				else
-					ss:append('It weighs ')
+					response[#response + 1] = "\nYou are too far away to read it."
 				end
-				ss:append('%.2f oz.', weight / 100)
+			else
+				response[#response + 1] = "\nNothing is written on it."
 			end
 		end
 
-		local desc = it:getDescription()
-		if item then
-			local specialDesc = item:getSpecialDescription()
-			if specialDesc ~= '' then
-				ss:append('\n%s', specialDesc)
-			elseif lookDistance <= 1 and desc ~= '' then
-				ss:append('\n%s', desc)
+		-- item description
+		local isBed = itemType:isBed()
+		if lookDistance <= 1 or (not isVirtual and (isDoor or isBed)) then
+			-- custom item description
+			local desc = not isVirtual and item:getSpecialDescription()
+
+			-- native item description
+			if not desc or desc == "" then
+				desc = itemType:getDescription()
 			end
-		elseif lookDistance <= 1 and desc ~= '' then
-			ss:append('\n%s', it:getDescription())
+
+			-- level door description
+			if isDoor and lookDistance <= 1 and (not desc or desc == "") and itemType:getLevelDoor() ~= 0 then
+				desc = "Only the worthy may pass."
+			end
+
+			if desc and desc:len() > 0 then
+				if not (isBed and desc == "Nobody is sleeping there.") then
+					response[#response + 1] = string.format("\n%s", desc)
+				end
+			end
 		end
 
-		if it:hasAllowDistRead() or (it:getId() >= 7369 and it:getId() <= 7371) then
-			if not text and item then
-				text = item:getText()
-			end
-
-			if text and text ~= '' then
-				ss:append('\n%s', text)
-			end
+		-- pickupable items with store flag
+		if not isVirtual and isPickupable and item:isStoreItem() then
+			response[#response + 1] = "\nThis item cannot be traded."
 		end
 
-		return ss:concat()
+		-- turn response into a single string
+		return table.concat(response, "")
 	end
 
-	if not oldItemDesc then
-		oldItemDesc = Item.getDescription
+	function Item:getDescription(lookDistance, subType, addArticle)
+		return internalItemGetDescription(self, lookDistance, subType, addArticle)
 	end
 
-	if configManager.getBoolean(configKeys.LUA_ITEM_DESC) then
-		function Item.getDescription(self, lookDistance, subType)
-			return internalItemGetDescription(self:getType(), lookDistance, self, subType)
-		end
-
-		function ItemType.getItemDescription(self, lookDistance, subType)
-			return internalItemGetDescription(self, lookDistance, nil, subType)
-		end
-	else
-		Item.getDescription = oldItemDesc
+	function ItemType:getItemDescription(lookDistance, subType, addArticle)
+		return internalItemGetDescription(self, lookDistance, subType, addArticle)
 	end
 end

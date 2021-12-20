@@ -2468,7 +2468,7 @@
 		<attribute key="absorbPercentFire" value="8" />
 		<attribute key="showattributes" value="1" />
 	</item>
-	<item id="2202" article="a" name="stealth ring (invisibility)">
+	<item id="2202" article="a" name="stealth ring">
 		<attribute key="weight" value="100" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2478,7 +2478,7 @@
 		<attribute key="invisible" value="1" />
 		<attribute key="showattributes" value="1" />
 	</item>
-	<item id="2203" article="a" name="power ring (fist fighting +6)">
+	<item id="2203" article="a" name="power ring">
 		<attribute key="weight" value="80" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2487,7 +2487,7 @@
 		<attribute key="duration" value="1800" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="2204" article="an" name="energy ring (magic shield)">
+	<item id="2204" article="an" name="energy ring">
 		<attribute key="weight" value="80" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2497,7 +2497,7 @@
 		<attribute key="manashield" value="1" />
 		<attribute key="showattributes" value="1" />
 	</item>
-	<item id="2205" article="a" name="life ring (faster regeneration)">
+	<item id="2205" article="a" name="life ring">
 		<attribute key="weight" value="80" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2541,7 +2541,7 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="2210" article="a" name="sword ring (sword fighting +4)">
+	<item id="2210" article="a" name="sword ring">
 		<attribute key="weight" value="90" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2550,7 +2550,7 @@
 		<attribute key="duration" value="1800" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="2211" article="an" name="axe ring (axe fighting +4)">
+	<item id="2211" article="an" name="axe ring">
 		<attribute key="weight" value="90" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2559,7 +2559,7 @@
 		<attribute key="duration" value="1800" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="2212" article="a" name="club ring (club fighting +4)">
+	<item id="2212" article="a" name="club ring">
 		<attribute key="weight" value="90" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2582,7 +2582,7 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="2215" article="a" name="dwarven ring (hard drinking)">
+	<item id="2215" article="a" name="dwarven ring">
 		<attribute key="weight" value="110" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -2592,7 +2592,7 @@
 		<attribute key="showduration" value="1" />
 		<attribute key="showattributes" value="1" />
 	</item>
-	<item id="2216" article="a" name="ring of healing (faster regeneration)">
+	<item id="2216" article="a" name="ring of healing">
 		<attribute key="weight" value="80" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />
@@ -4470,7 +4470,7 @@
 	<item fromid="2638" toid="2639" article="a" name="tic-tac-toe token">
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="2640" article="a" name="pair of soft boots (faster regeneration)">
+	<item id="2640" article="a" name="pair of soft boots">
 		<attribute key="weight" value="800" />
 		<attribute key="slotType" value="feet" />
 		<attribute key="decayTo" value="10021" />
@@ -4696,6 +4696,7 @@
 	</item>
 	<item id="2692" name="flour">
 		<attribute key="weight" value="100" />
+		<attribute key="showcount" value="0" />
 	</item>
 	<item id="2693" article="a" name="lump of dough" plural="lumps of dough">
 		<attribute key="weight" value="100" />
@@ -36988,7 +36989,7 @@
 		<attribute key="showduration" value="1" />
 		<attribute key="transformDeEquipTo" value="26198" />
 	</item>
-	<item id="26183" article="a" name="collar of green plasma (faster regeneration)">
+	<item id="26183" article="a" name="collar of green plasma">
 		<attribute key="weight" value="500" />
 		<attribute key="slotType" value="necklace" />
 		<attribute key="decayTo" value="0" />
@@ -37037,7 +37038,7 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 	</item>
-	<item id="26188" name="ring of green plasma (faster regeneration)">
+	<item id="26188" name="ring of green plasma">
 		<attribute key="weight" value="90" />
 		<attribute key="slotType" value="ring" />
 		<attribute key="decayTo" value="0" />

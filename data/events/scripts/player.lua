@@ -29,8 +29,8 @@ function Player:onLookInTrade(partner, item, distance)
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
-function Player:onLookInShop(itemType, count, description)
-	local description = "You see " .. description
+function Player:onLookInShop(itemType, count)
+	local description = "You see "
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description)
 	end

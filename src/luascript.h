@@ -747,7 +747,6 @@ class LuaScriptInterface
 		static int luaItemTransform(lua_State* L);
 		static int luaItemDecay(lua_State* L);
 
-		static int luaItemGetDescription(lua_State* L);
 		static int luaItemGetSpecialDescription(lua_State* L);
 
 		static int luaItemHasProperty(lua_State* L);
@@ -1159,6 +1158,7 @@ class LuaScriptInterface
 		static int luaHouseGetPayRentWarnings(lua_State* L);
 		static int luaHouseSetPayRentWarnings(lua_State* L);
 
+		static int luaHouseGetOwnerName(lua_State* L);
 		static int luaHouseGetOwnerGuid(lua_State* L);
 		static int luaHouseSetOwnerGuid(lua_State* L);
 		static int luaHouseStartTrade(lua_State* L);

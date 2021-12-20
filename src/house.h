@@ -133,7 +133,6 @@ class House
 		explicit House(uint32_t houseId);
 
 		void addTile(HouseTile* tile);
-		void updateDoorDescription() const;
 
 		bool canEditAccessList(uint32_t listId, const Player* player);
 		// listId special values:
@@ -159,6 +158,10 @@ class House
 		}
 		const std::string& getName() const {
 			return houseName;
+		}
+
+		const std::string& getOwnerName() const {
+			return ownerName;
 		}
 
 		void setOwner(uint32_t guid, bool updateDatabase = true, Player* player = nullptr);
