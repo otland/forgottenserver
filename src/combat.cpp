@@ -843,15 +843,23 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 	}
 
 	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
+	Player* targetPlayer = target ? target->getPlayer() : nullptr;
 
 	bool success = false;
 	if (damage.primary.type != COMBAT_MANADRAIN) {
+		if (casterPlayer && damage.primary.type != COMBAT_HEALING) {
+			damage.primary.value *= (100.0 + casterPlayer->getIncreasedDamage()) / 100.0;
+			damage.secondary.value *= (100.0 + casterPlayer->getIncreasedDamage()) / 100.0;
+		} else if (targetPlayer && damage.primary.type == COMBAT_HEALING) {
+			damage.primary.value *= (100.0 + targetPlayer->getIncreasedHealing()) / 100.0;
+			damage.secondary.value *= (100.0 + targetPlayer->getIncreasedHealing()) / 100.0;
+		}
+
 		if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0, params.ignoreResistances)) {
 			return;
 		}
 
 		if (casterPlayer) {
-			Player* targetPlayer = target ? target->getPlayer() : nullptr;
 			if (targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK && damage.primary.type != COMBAT_HEALING) {
 				damage.primary.value /= 2;
 				damage.secondary.value /= 2;
@@ -870,6 +878,11 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 
 		success = g_game.combatChangeHealth(caster, target, damage);
 	} else {
+		if (targetPlayer && damage.primary.value > 0) {
+			damage.primary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
+			damage.secondary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
+		}
+
 		success = g_game.combatChangeMana(caster, target, damage);
 	}
 
@@ -937,6 +950,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	auto tiles = caster ? getCombatArea(caster->getPosition(), position, area) : getCombatArea(position, position, area);
 
 	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
+
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
 	if (!damage.critical && damage.primary.type != COMBAT_HEALING && casterPlayer && damage.origin != ORIGIN_CONDITION) {
@@ -1016,8 +1030,8 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	for (Creature* creature : toDamageCreatures) {
 		CombatDamage damageCopy = damage; // we cannot avoid copying here, because we don't know if it's player combat or not, so we can't modify the initial damage.
 		bool playerCombatReduced = false;
+		Player* targetPlayer = creature->getPlayer();
 		if ((damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) && caster) {
-			Player* targetPlayer = creature->getPlayer();
 			if (casterPlayer && targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
 				damageCopy.primary.value /= 2;
 				damageCopy.secondary.value /= 2;
@@ -1033,11 +1047,24 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 
 		bool success = false;
 		if (damageCopy.primary.type != COMBAT_MANADRAIN) {
+			if (casterPlayer && damageCopy.primary.type != COMBAT_HEALING) {
+				damageCopy.primary.value *= (100.0 + casterPlayer->getIncreasedDamage()) / 100.0;
+				damageCopy.secondary.value *= (100.0 + casterPlayer->getIncreasedDamage()) / 100.0;
+			} else if (targetPlayer && damage.primary.type == COMBAT_HEALING) {
+				damageCopy.primary.value *= (100.0 + targetPlayer->getIncreasedHealing()) / 100.0;
+				damageCopy.secondary.value *= (100.0 + targetPlayer->getIncreasedHealing()) / 100.0;
+			}
+
 			if (g_game.combatBlockHit(damageCopy, caster, creature, params.blockedByShield, params.blockedByArmor, params.itemId != 0, params.ignoreResistances)) {
 				continue;
 			}
 			success = g_game.combatChangeHealth(caster, creature, damageCopy);
 		} else {
+			if (targetPlayer && damageCopy.primary.value > 0) {
+				damageCopy.primary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
+				damageCopy.secondary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
+			}
+
 			success = g_game.combatChangeMana(caster, creature, damageCopy);
 		}
 
