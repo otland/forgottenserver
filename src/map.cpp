@@ -345,10 +345,10 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const
 {
-	int_fast16_t min_y = centerPos.y + minRangeY;
-	int_fast16_t min_x = centerPos.x + minRangeX;
-	int_fast16_t max_y = centerPos.y + maxRangeY;
-	int_fast16_t max_x = centerPos.x + maxRangeX;
+	auto min_y = centerPos.y + minRangeY;
+	auto min_x = centerPos.x + minRangeX;
+	auto max_y = centerPos.y + maxRangeY;
+	auto max_x = centerPos.x + maxRangeX;
 
 	int32_t minoffset = centerPos.getZ() - maxRangeZ;
 	uint16_t x1 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (min_x + minoffset)));
