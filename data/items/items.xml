@@ -39678,9 +39678,55 @@
 	<item fromid="34150" toid="34151" article="a" name="closed door" />
 	<item fromid="34152" toid="34153" article="an" name="open door" />
 	<item fromid="34154" toid="34155" article="an" name="ancient wall" />
-	<item id="34156" article="the" name="golden outfit display" />
+	<item id="34156" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34158" />
+	</item>
 	<item id="34157" article="a" name="glowing switch" />
-	<item fromid="34158" toid="34172" article="the" name="golden outfit display" />
+	<item id="34158" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34159" />
+	</item>
+	<item id="34159" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34160" />
+	</item>
+	<item id="34160" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34156" />
+	</item>
+	<item id="34161" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34162" />
+	</item>
+	<item id="34162" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34163" />
+	</item>
+	<item id="34163" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34164" />
+	</item>
+	<item id="34164" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34161" />
+	</item>
+	<item id="34165" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34166" />
+	</item>
+	<item id="34166" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34167" />
+	</item>
+	<item id="34167" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34168" />
+	</item>
+	<item id="34168" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34165" />
+	</item>
+	<item id="34169" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34170" />
+	</item>
+	<item id="34170" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34171" />
+	</item>
+	<item id="34171" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34172" />
+	</item>
+	<item id="34172" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34169" />
+	</item>
 	<item fromid="34174" toid="34179" article="a" name="memorial" />
 	<item fromid="34180" toid="34183" article="a" name="dead ogre ruffian" />
 	<item fromid="34184" toid="34187" article="a" name="dead ogre rowdy" />
