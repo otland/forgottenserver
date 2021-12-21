@@ -118,6 +118,7 @@ do
 end
 
 do
+	-- Lua item descriptions created by Zbizu
 	local housePriceVisible = configManager.getBoolean(configKeys.HOUSE_DOOR_SHOW_PRICE)
 	local pricePerSQM = configManager.getNumber(configKeys.HOUSE_PRICE)
 
