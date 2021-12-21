@@ -3275,8 +3275,8 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 		msg.addByte(it.second);
 	}
 
-	msg.addByte(modalWindow.defaultEscapeButton);
 	msg.addByte(modalWindow.defaultEnterButton);
+	msg.addByte(modalWindow.defaultEscapeButton);
 	msg.addByte(modalWindow.priority ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
