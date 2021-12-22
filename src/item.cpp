@@ -1693,7 +1693,6 @@ void Item::cancelTradeIfNeeded()
 	if (player && this == player->getTradeItem()) {
 		g_game.playerCloseTrade(player->getID());
 	}
-
 }
 
 std::string Item::getWeightDescription(uint32_t weight) const
