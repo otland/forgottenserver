@@ -828,20 +828,20 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 		}
 	}
 
-	if (it.abilities->cooldownReduction) {
-		player->addCooldownReduction(it.abilities->cooldownReduction);
+	if (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) {
+		player->addCooldownReduction(it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]);
 	}
 
-	if (it.abilities->increaseDamage) {
-		player->addIncreasedDamage(it.abilities->increaseDamage);
+	if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) {
+		player->addIncreasedDamage(it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]);
 	}
 
-	if (it.abilities->increaseHealing) {
-		player->addIncreasedHealing(it.abilities->increaseHealing);
+	if (it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]) {
+		player->addIncreasedHealing(it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]);
 	}
 
-	if (it.abilities->increaseManaGain) {
-		player->addiIncreasedManaGain(it.abilities->increaseManaGain);
+	if (it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]) {
+		player->addiIncreasedManaGain(it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]);
 	}
 
 	if (needUpdateStats) {
@@ -932,20 +932,20 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 		}
 	}
 
-	if (it.abilities->cooldownReduction) {
-		player->addCooldownReduction(-it.abilities->cooldownReduction);
+	if (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) {
+		player->addCooldownReduction(-it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]);
 	}
 
-	if (it.abilities->increaseDamage) {
-		player->addIncreasedDamage(-it.abilities->increaseDamage);
+	if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) {
+		player->addIncreasedDamage(-it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]);
 	}
 
-	if (it.abilities->increaseHealing) {
-		player->addIncreasedHealing(-it.abilities->increaseHealing);
+	if (it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]) {
+		player->addIncreasedHealing(-it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]);
 	}
 
-	if (it.abilities->increaseManaGain) {
-		player->addiIncreasedManaGain(-it.abilities->increaseManaGain);
+	if (it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]) {
+		player->addiIncreasedManaGain(-it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]);
 	}
 
 	if (needUpdateStats) {

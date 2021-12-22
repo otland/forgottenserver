@@ -2295,42 +2295,42 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 			ss << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
 		}
 
-		if (it.abilities->cooldownReduction != 0) {
+		if (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] != 0) {
 			if (separator) {
 				ss << ", ";
 			} else {
 				separator = true;
 			}
 
-			ss << "cooldown reduction " << std::showpos << (it.abilities->cooldownReduction) << "%" << std::noshowpos;
+			ss << "cooldown reduction " << std::showpos << (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) << "%" << std::noshowpos;
 		}
 
-		if (it.abilities->increaseDamage != 0) {
+		if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE] != 0) {
 			if (separator) {
 				ss << ", ";
 			} else {
 				separator = true;
 			}
 
-			ss << "increase damage " << std::showpos << (it.abilities->increaseDamage) << "%" << std::noshowpos;
+			ss << "increase damage " << std::showpos << (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) << "%" << std::noshowpos;
 		}
 
-		if (it.abilities->increaseDamage != 0) {
+		if (it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING] != 0) {
 			if (separator) {
 				ss << ", ";
 			} else {
 				separator = true;
 			}
 
-			ss << "increase healing " << std::showpos << (it.abilities->increaseHealing) << "%" << std::noshowpos;
+			ss << "increase healing " << std::showpos << (it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]) << "%" << std::noshowpos;
 		}
 
-		if (it.abilities->increaseManaGain != 0) {
+		if (it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING] != 0) {
 			if (separator) {
 				ss << ", ";
 			}
 
-			ss << "increase mana gain " << std::showpos << (it.abilities->increaseManaGain) << "%" << std::noshowpos;
+			ss << "mana restoration " << std::showpos << (it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]) << "%" << std::noshowpos;
 		}
 
 		msg.addString(ss.str());

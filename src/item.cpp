@@ -1094,7 +1094,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 			}
 
-			if (it.abilities->cooldownReduction) {
+			if (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1102,10 +1102,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "cooldown reduction " << std::showpos << it.abilities->cooldownReduction << '%' << std::noshowpos;
+				s << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->increaseDamage) {
+			if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1113,10 +1113,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "increase damage " << std::showpos << it.abilities->increaseDamage << '%' << std::noshowpos;
+				s << "increase damage " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE] << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->increaseHealing) {
+			if (it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1124,10 +1124,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "increase healing " << std::showpos << it.abilities->increaseHealing << '%' << std::noshowpos;
+				s << "increase healing " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING] << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->increaseManaGain) {
+			if (it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1135,7 +1135,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "increase mana gain " << std::showpos << it.abilities->increaseManaGain << '%' << std::noshowpos;
+				s << "mana restoration " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING] << '%' << std::noshowpos;
 			}
 
 
@@ -1317,7 +1317,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				}
 			}
 
-			if (it.abilities->cooldownReduction) {
+			if (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1325,10 +1325,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "cooldown reduction " << std::showpos << it.abilities->cooldownReduction << '%' << std::noshowpos;
+				s << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->increaseDamage) {
+			if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1336,10 +1336,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "increase damage " << std::showpos << it.abilities->increaseDamage << '%' << std::noshowpos;
+				s << "increase damage " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE] << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->increaseHealing) {
+			if (it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1347,10 +1347,10 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "increase healing " << std::showpos << it.abilities->increaseHealing << '%' << std::noshowpos;
+				s << "increase healing " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_INCREASEHEALING] << '%' << std::noshowpos;
 			}
 
-			if (it.abilities->increaseManaGain) {
+			if (it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING]) {
 				if (begin) {
 					begin = false;
 					s << " (";
@@ -1358,7 +1358,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "increase mana gain " << std::showpos << it.abilities->increaseManaGain << '%' << std::noshowpos;
+				s << "mana restoration " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_INCREADEMANARESTORING] << '%' << std::noshowpos;
 			}
 
 			if (show == 0) {

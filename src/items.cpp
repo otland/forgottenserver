@@ -1178,22 +1178,22 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_COOLDOWNREDUCTION: {
-					abilities.cooldownReduction += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] += pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_INCREASEDAMAGE: {
-					abilities.increaseDamage += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.customSkill[CUSTOMSKILL_INCREASEDAMAGE] += pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_INCREASEHEALING: {
-					abilities.increaseHealing += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.customSkill[CUSTOMSKILL_INCREASEHEALING] += pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_INCREASEMANAGAIN: {
-					abilities.increaseManaGain += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.customSkill[CUSTOMSKILL_INCREADEMANARESTORING] += pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
 

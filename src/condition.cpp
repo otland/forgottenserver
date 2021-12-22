@@ -398,6 +398,7 @@ void ConditionAttributes::addCondition(Creature* creature, const Condition* cond
 		memcpy(skillsPercent, conditionAttrs.skillsPercent, sizeof(skillsPercent));
 		memcpy(stats, conditionAttrs.stats, sizeof(stats));
 		memcpy(statsPercent, conditionAttrs.statsPercent, sizeof(statsPercent));
+		memcpy(customSkill, conditionAttrs.customSkill, sizeof(customSkill));
 		disableDefense = conditionAttrs.disableDefense;
 
 		if (Player* player = creature->getPlayer()) {
@@ -405,6 +406,7 @@ void ConditionAttributes::addCondition(Creature* creature, const Condition* cond
 			updateSkills(player);
 			updatePercentStats(player);
 			updateStats(player);
+			updateCustomSkills(player);
 		}
 	}
 }
@@ -417,6 +419,8 @@ bool ConditionAttributes::unserializeProp(ConditionAttr_t attr, PropStream& prop
 		return propStream.read<int32_t>(specialSkills[currentSpecialSkill++]);
 	} else if (attr == CONDITIONATTR_STATS) {
 		return propStream.read<int32_t>(stats[currentStat++]);
+	} else if (attr == CONDITIONATTR_CUSTOMSKILLS) {
+		return propStream.read<int32_t>(customSkill[currentCustomSkill++]);
 	} else if (attr == CONDITIONATTR_DISABLEDEFENSE) {
 		return propStream.read<bool>(disableDefense);
 	}
@@ -444,6 +448,11 @@ void ConditionAttributes::serialize(PropWriteStream& propWriteStream)
 		propWriteStream.write<uint8_t>(CONDITIONATTR_SPECIALSKILLS);
 		propWriteStream.write<int32_t>(specialSkills[i]);
 	}
+
+	for (int32_t i = CUSTOMSKILL_FIRST; i <= CUSTOMSKILL_LAST; ++i) {
+		propWriteStream.write<uint8_t>(CONDITIONATTR_CUSTOMSKILLS);
+		propWriteStream.write<int32_t>(customSkill[i]);
+	}
 }
 
 bool ConditionAttributes::startCondition(Creature* creature)
@@ -459,6 +468,7 @@ bool ConditionAttributes::startCondition(Creature* creature)
 		updateSkills(player);
 		updatePercentStats(player);
 		updateStats(player);
+		updateCustomSkills(player);
 	}
 
 	return true;
@@ -539,6 +549,15 @@ void ConditionAttributes::updateSkills(Player* player)
 	}
 }
 
+void ConditionAttributes::updateCustomSkills(Player* player)
+{
+	for (int32_t i = CUSTOMSKILL_FIRST; i <= CUSTOMSKILL_LAST; ++i) {
+		if (customSkill[i]) {
+			player->setVarCustomSkill(static_cast<CustomSkills_t>(i), customSkill[i]);
+		}
+	}
+}
+
 bool ConditionAttributes::executeCondition(Creature* creature, int32_t interval)
 {
 	return ConditionGeneric::executeCondition(creature, interval);
@@ -574,6 +593,12 @@ void ConditionAttributes::endCondition(Creature* creature)
 			if (stats[i]) {
 				needUpdateStats = true;
 				player->setVarStats(static_cast<stats_t>(i), -stats[i]);
+			}
+		}
+
+		for (int32_t i = CUSTOMSKILL_FIRST; i <= CUSTOMSKILL_LAST; ++i) {
+			if (customSkill[i]) {
+				player->setVarCustomSkill(static_cast<CustomSkills_t>(i), -customSkill[i]);
 			}
 		}
 
@@ -747,6 +772,26 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 			return true;
 		}
 
+		case CONDITION_PARAM_CUSTOMSKILL_COOLDOWNREDUCTION: {
+			customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] = value;
+			return true;
+		}
+
+		case CONDITION_PARAM_CUSTOMSKILL_INCREASEDAMAGE: {
+			customSkill[CUSTOMSKILL_INCREASEDAMAGE] = value;
+			return true;
+		}
+
+		case CONDITION_PARAM_CUSTOMSKILL_INCREASEHEALING: {
+			customSkill[CUSTOMSKILL_INCREASEHEALING] = value;
+			return true;
+		}
+
+		case CONDITION_PARAM_CUSTOMSKILL_INCREADEMANARESTORING: {
+			customSkill[CUSTOMSKILL_INCREADEMANARESTORING] = value;
+			return true;
+		}
+
 		default:
 			return ret;
 	}
@@ -835,6 +880,18 @@ int32_t ConditionAttributes::getParam(ConditionParam_t param)
 
 		case CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT:
 			return specialSkills[SPECIALSKILL_MANALEECHAMOUNT];
+
+		case CONDITION_PARAM_CUSTOMSKILL_COOLDOWNREDUCTION:
+			return customSkill[CUSTOMSKILL_COOLDOWNREDUCTION];
+
+		case CONDITION_PARAM_CUSTOMSKILL_INCREASEDAMAGE:
+			return customSkill[CUSTOMSKILL_INCREASEDAMAGE];
+
+		case CONDITION_PARAM_CUSTOMSKILL_INCREASEHEALING:
+			return customSkill[CUSTOMSKILL_INCREASEHEALING];
+
+		case CONDITION_PARAM_CUSTOMSKILL_INCREADEMANARESTORING:
+			return customSkill[CUSTOMSKILL_INCREADEMANARESTORING];
 
 		default:
 			return ConditionGeneric::getParam(param);

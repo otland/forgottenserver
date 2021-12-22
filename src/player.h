@@ -509,11 +509,10 @@ class Player final : public Creature, public Cylinder
 			specialMagicLevelSkill[combatTypeToIndex(type)] += modifier;
 		}
 
-		int16_t cooldownReduction = 0;
-		int16_t increaseDamage = 0;
-		int16_t increaseHealing = 0;
-		int16_t increaseManaGain = 0;
-
+		void setVarCustomSkill(CustomSkills_t skill, int32_t modifier) {
+			varCustomSkill[skill] += modifier;
+		}
+		
 		void setVarStats(stats_t stat, int32_t modifier);
 
 		int32_t getDefaultStats(stats_t stat) const;
@@ -633,40 +632,44 @@ class Player final : public Creature, public Cylinder
 			return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 		}
 
-		int16_t getCooldownReduction() const {
-			if (cooldownReduction >= 100) {
+		int32_t getBaseCustomSkill(CustomSkills_t skill) {
+			return customSkill[skill];
+		}
+
+		int32_t getCooldownReduction() const {
+			if (customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION] >= 100) {
 				return 100;
 			}
 
-			return cooldownReduction;
+			return customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION];
 		}
 
-		void addCooldownReduction(int16_t value) {
-			cooldownReduction += value;
+		void addCooldownReduction(int32_t value) {
+			customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] += value;
 		}
 
-		int16_t getIncreasedDamage() const {
-			return increaseDamage;
+		int32_t getIncreasedDamage() const {
+			return customSkill[CUSTOMSKILL_INCREASEDAMAGE] + varCustomSkill[CUSTOMSKILL_INCREASEDAMAGE];
 		}
 
-		void addIncreasedDamage(int16_t value) {
-			increaseDamage += value;
+		void addIncreasedDamage(int32_t value) {
+			customSkill[CUSTOMSKILL_INCREASEDAMAGE] += value;
 		}
 
-		int16_t getIncreasedHealing() const {
-			return increaseHealing;
+		int32_t getIncreasedHealing() const {
+			return customSkill[CUSTOMSKILL_INCREASEHEALING] + varCustomSkill[CUSTOMSKILL_INCREASEHEALING];
 		}
 
-		void addIncreasedHealing(int16_t value) {
-			increaseHealing += value;
+		void addIncreasedHealing(int32_t value) {
+			customSkill[CUSTOMSKILL_INCREASEHEALING] += value;
 		}
 
-		int16_t getIncreasedManaGain() const {
-			return increaseManaGain;
+		int32_t getIncreasedManaRestoring() const {
+			return customSkill[CUSTOMSKILL_INCREADEMANARESTORING] + varCustomSkill[CUSTOMSKILL_INCREADEMANARESTORING];
 		}
 
-		void addiIncreasedManaGain(int16_t value) {
-			increaseManaGain += value;
+		void addiIncreasedManaGain(int32_t value) {
+			customSkill[CUSTOMSKILL_INCREADEMANARESTORING] += value;
 		}
 
 		uint16_t getBaseSkill(uint8_t skill) const {
@@ -1341,7 +1344,9 @@ class Player final : public Creature, public Cylinder
 		int32_t varSkills[SKILL_LAST + 1] = {};
 		int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t varStats[STAT_LAST + 1] = {};
-		std::array<int16_t, COMBAT_COUNT> specialMagicLevelSkill = {0};
+		std::array<int32_t, COMBAT_COUNT> specialMagicLevelSkill = {0};
+		std::array<int32_t, CUSTOMSKILL_SIZE> customSkill = {0};
+		std::array<int32_t, CUSTOMSKILL_SIZE> varCustomSkill = {0};
 		int32_t purchaseCallback = -1;
 		int32_t saleCallback = -1;
 		int32_t MessageBufferCount = 0;

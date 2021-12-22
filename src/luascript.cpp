@@ -1277,6 +1277,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE)
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT)
 	registerEnum(CONDITION_PARAM_AGGRESSIVE)
+	registerEnum(CONDITION_PARAM_CUSTOMSKILL_COOLDOWNREDUCTION)
+	registerEnum(CONDITION_PARAM_CUSTOMSKILL_INCREASEDAMAGE)
+	registerEnum(CONDITION_PARAM_CUSTOMSKILL_INCREASEHEALING)
+	registerEnum(CONDITION_PARAM_CUSTOMSKILL_INCREADEMANARESTORING)
 
 	registerEnum(CONST_ME_NONE)
 	registerEnum(CONST_ME_DRAWBLOOD)
@@ -12474,17 +12478,17 @@ int LuaScriptInterface::luaItemTypeGetAbilities(lua_State* L)
 		}
 		lua_setfield(L, -2, "specialMagicLevel");
 
-		lua_pushboolean(L, abilities.cooldownReduction);
+		lua_pushboolean(L, abilities.customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]);
 		lua_setfield(L, -2, "cooldownReduction");
 
-		lua_pushboolean(L, abilities.increaseDamage);
+		lua_pushboolean(L, abilities.customSkill[CUSTOMSKILL_INCREASEDAMAGE]);
 		lua_setfield(L, -2, "increasedDamage");
 
-		lua_pushboolean(L, abilities.increaseHealing);
+		lua_pushboolean(L, abilities.customSkill[CUSTOMSKILL_INCREASEHEALING]);
 		lua_setfield(L, -2, "increasedHealing");
 
-		lua_pushboolean(L, abilities.increaseManaGain);
-		lua_setfield(L, -2, "increasedManaGain");
+		lua_pushboolean(L, abilities.customSkill[CUSTOMSKILL_INCREADEMANARESTORING]);
+		lua_setfield(L, -2, "increasedManaRestoring");
 	}
 	return 1;
 }

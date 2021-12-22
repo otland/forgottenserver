@@ -879,8 +879,8 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 		success = g_game.combatChangeHealth(caster, target, damage);
 	} else {
 		if (targetPlayer && damage.primary.value > 0) {
-			damage.primary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
-			damage.secondary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
+			damage.primary.value *= (100.0 + targetPlayer->getIncreasedManaRestoring()) / 100.0;
+			damage.secondary.value *= (100.0 + targetPlayer->getIncreasedManaRestoring()) / 100.0;
 		}
 
 		success = g_game.combatChangeMana(caster, target, damage);
@@ -1061,8 +1061,8 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 			success = g_game.combatChangeHealth(caster, creature, damageCopy);
 		} else {
 			if (targetPlayer && damageCopy.primary.value > 0) {
-				damageCopy.primary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
-				damageCopy.secondary.value *= (100.0 + targetPlayer->getIncreasedManaGain()) / 100.0;
+				damageCopy.primary.value *= (100.0 + targetPlayer->getIncreasedManaRestoring()) / 100.0;
+				damageCopy.secondary.value *= (100.0 + targetPlayer->getIncreasedManaRestoring()) / 100.0;
 			}
 
 			success = g_game.combatChangeMana(caster, creature, damageCopy);

@@ -58,6 +58,7 @@ enum ConditionAttr_t {
 	CONDITIONATTR_ISAGGRESSIVE,
 	CONDITIONATTR_DISABLEDEFENSE,
 	CONDITIONATTR_SPECIALSKILLS,
+	CONDITIONATTR_CUSTOMSKILLS,
 
 	//reserved for serialization
 	CONDITIONATTR_END = 254,
@@ -178,9 +179,11 @@ class ConditionAttributes final : public ConditionGeneric
 		int32_t specialSkills[SPECIALSKILL_LAST + 1] = {};
 		int32_t stats[STAT_LAST + 1] = {};
 		int32_t statsPercent[STAT_LAST + 1] = {};
+		int32_t customSkill[CUSTOMSKILL_SIZE] = {};
 		int32_t currentSkill = 0;
 		int32_t currentSpecialSkill = 0;
 		int32_t currentStat = 0;
+		int32_t currentCustomSkill = 0;
 
 		bool disableDefense = false;
 
@@ -188,6 +191,7 @@ class ConditionAttributes final : public ConditionGeneric
 		void updateStats(Player* player);
 		void updatePercentSkills(Player* player);
 		void updateSkills(Player* player);
+		void updateCustomSkills(Player* player);
 };
 
 class ConditionRegeneration final : public ConditionGeneric

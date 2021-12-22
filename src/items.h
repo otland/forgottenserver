@@ -221,10 +221,7 @@ struct Abilities {
 	bool invisible = false;
 	bool regeneration = false;
 
-	int16_t cooldownReduction = 0;
-	int16_t increaseDamage = 0;
-	int16_t increaseHealing = 0;
-	int16_t increaseManaGain = 0;
+	std::array<int32_t, CUSTOMSKILL_SIZE> customSkill = {0};
 };
 
 class ConditionDamage;
