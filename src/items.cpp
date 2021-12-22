@@ -162,7 +162,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"cooldownreduction", ITEM_PARSE_COOLDOWNREDUCTION},
 	{"increasedamage", ITEM_PARSE_INCREASEDAMAGE},
 	{"increasehealing", ITEM_PARSE_INCREASEHEALING},
-	{"increasemanaget", ITEM_PARSE_INCREASEMANAGAIN},
+	{"increasemanarestoring", ITEM_PARSE_INCREASEMANARESTORING},
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
@@ -1192,7 +1192,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
-				case ITEM_PARSE_INCREASEMANAGAIN: {
+				case ITEM_PARSE_INCREASEMANARESTORING: {
 					abilities.customSkill[CUSTOMSKILL_INCREADEMANARESTORING] += pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
