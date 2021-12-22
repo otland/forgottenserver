@@ -478,10 +478,6 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	if (action->executeUse(player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos, isHotkey)) {
-		Thing* tradeItem = action->getTarget(player, creature, toPos, toStackPos);
-		if (tradeItem  && tradeItem->getItem() && tradeItem->getItem() == player->getTradeItem()) {
-			g_game.playerCloseTrade(player->getID());
-		}
 		return true;
 	}
 

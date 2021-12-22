@@ -1687,6 +1687,15 @@ std::string Item::getWeightDescription(const ItemType& it, uint32_t weight, uint
 	return ss.str();
 }
 
+void Item::cancelTradeIfNeeded()
+{
+	Player* player = getHoldingPlayer();
+	if (player && this == player->getTradeItem()) {
+		g_game.playerCloseTrade(player->getID());
+	}
+
+}
+
 std::string Item::getWeightDescription(uint32_t weight) const
 {
 	const ItemType& it = Item::items[id];

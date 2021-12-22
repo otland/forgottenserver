@@ -631,6 +631,7 @@ class Item : virtual public Thing
 		}
 
 		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
+			cancelTradeIfNeeded();
 			getAttributes()->setCustomAttribute(key, value);
 		}
 
@@ -652,6 +653,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+			cancelTradeIfNeeded();
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -659,6 +661,7 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+			cancelTradeIfNeeded();
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -1046,6 +1049,8 @@ class Item : virtual public Thing
 
 	private:
 		std::string getWeightDescription(uint32_t weight) const;
+
+		void cancelTradeIfNeeded();
 
 		std::unique_ptr<ItemAttributes> attributes;
 
