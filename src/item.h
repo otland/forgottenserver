@@ -632,6 +632,7 @@ class Item : virtual public Thing
 
 		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
 			cancelTradeIfNeeded();
+
 			getAttributes()->setCustomAttribute(key, value);
 		}
 
@@ -653,7 +654,9 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+
 			cancelTradeIfNeeded();
+
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -661,7 +664,9 @@ class Item : virtual public Thing
 			if (!attributes) {
 				return false;
 			}
+
 			cancelTradeIfNeeded();
+
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
