@@ -139,6 +139,8 @@ class ConfigManager
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
 			ABILITY_HASTE_BASE,
+			QUEST_TRACKER_FREE_LIMIT,
+			QUEST_TRACKER_PREMIUM_LIMIT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
