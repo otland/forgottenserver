@@ -3354,6 +3354,21 @@ void Player::doAttacking(uint32_t)
 	}
 }
 
+int32_t Player::getCooldownReduction() const
+{
+	if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
+		// 0.0 is required to perform calculations on floats instead of ints, without this result will be 0
+		return (0.0 + customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) /
+			(g_config.getNumber(ConfigManager::ABILITY_HASTE_BASE) + customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) * 100.0;
+	}
+
+	if (customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION] >= 100) {
+		return 100;
+	}
+
+	return customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION];
+}
+
 uint64_t Player::getGainedExperience(Creature* attacker) const
 {
 	if (g_config.getBoolean(ConfigManager::EXPERIENCE_FROM_PLAYERS)) {

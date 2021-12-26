@@ -27,11 +27,13 @@
 #include "house.h"
 #include "game.h"
 #include "bed.h"
+#include "configmanager.h"
 
 #include "actions.h"
 #include "spells.h"
 
 extern Game g_game;
+extern ConfigManager g_config;
 extern Spells* g_spells;
 extern Vocations g_vocations;
 
@@ -1101,8 +1103,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				} else {
 					s << ", ";
 				}
-
-				s << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
+				if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
+					s << "ability haste  " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << std::noshowpos;
+				} else {
+					s << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
+				}
 			}
 
 			if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) {
@@ -1325,7 +1330,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << ", ";
 				}
 
-				s << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
+				if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
+					s << "ability haste  " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << std::noshowpos;
+				} else {
+					s << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
+				}
 			}
 
 			if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE]) {

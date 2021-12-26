@@ -636,13 +636,7 @@ class Player final : public Creature, public Cylinder
 			return customSkill[skill];
 		}
 
-		int32_t getCooldownReduction() const {
-			if (customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION] >= 100) {
-				return 100;
-			}
-
-			return customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] + varCustomSkill[CUSTOMSKILL_COOLDOWNREDUCTION];
-		}
+		int32_t getCooldownReduction() const;
 
 		void addCooldownReduction(int32_t value) {
 			customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] += value;

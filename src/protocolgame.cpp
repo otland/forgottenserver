@@ -2302,7 +2302,11 @@ void ProtocolGame::sendMarketDetail(uint16_t itemId)
 				separator = true;
 			}
 
-			ss << "cooldown reduction " << std::showpos << (it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION]) << "%" << std::noshowpos;
+			if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
+				ss << "ability haste  " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << std::noshowpos;
+			} else {
+				ss << "cooldown reduction " << std::showpos << it.abilities->customSkill[CUSTOMSKILL_COOLDOWNREDUCTION] << '%' << std::noshowpos;
+			}
 		}
 
 		if (it.abilities->customSkill[CUSTOMSKILL_INCREASEDAMAGE] != 0) {

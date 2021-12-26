@@ -70,6 +70,7 @@ class ConfigManager
 			REMOVE_ON_DESPAWN,
 			PLAYER_CONSOLE_LOGS,
 			TWO_FACTOR_AUTH,
+			ABILITY_HASTE_AS_COOLDOWNREDUCTION,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -137,6 +138,7 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			ABILITY_HASTE_BASE,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
