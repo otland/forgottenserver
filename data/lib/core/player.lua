@@ -318,7 +318,7 @@ function Player.updateKillTracker(self, monster, corpse)
     if not monsterType then
         return false
     end
-    
+
     local monsterOutfit = monsterType:getOutfit()
 
     local networkMessage = NetworkMessage()
@@ -347,10 +347,14 @@ function Player.updateKillTracker(self, monster, corpse)
             end
         end
         networkMessage:delete()
-        return true 
+        return true
     end
 
     networkMessage:sendToPlayer(self)
     networkMessage:delete()
     return true
+end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
 end
