@@ -19,6 +19,7 @@ expFromPlayersLevelRange = 75
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
 -- NOTE: allowWalkthrough is only applicable to players
+-- NOTE: two-factor auth requires token and timestamp in session key
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
@@ -33,6 +34,7 @@ serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
 maxPacketsPerSecond = 25
+enableTwoFactorAuth = true
 
 -- Deaths
 -- NOTE: Leave deathLosePercent as -1 if you want to use the default
@@ -103,6 +105,10 @@ vipFreeLimit = 20
 vipPremiumLimit = 100
 depotFreeLimit = 2000
 depotPremiumLimit = 15000
+
+-- Quest Tracker limits
+questTrackerFreeLimit = 10
+questTrackerPremiumLimit = 15
 
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will

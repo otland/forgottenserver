@@ -312,3 +312,49 @@ function Player.getWeaponType(self)
 	end
 	return WEAPON_NONE
 end
+
+function Player.updateKillTracker(self, monster, corpse)
+    local monsterType = monster:getType()
+    if not monsterType then
+        return false
+    end
+
+    local monsterOutfit = monsterType:getOutfit()
+
+    local networkMessage = NetworkMessage()
+    networkMessage:addByte(0xD1)
+    networkMessage:addString(monster:getName())
+    networkMessage:addU16(monsterOutfit.lookType or 19)
+    networkMessage:addByte(monsterOutfit.lookHead)
+    networkMessage:addByte(monsterOutfit.lookBody)
+    networkMessage:addByte(monsterOutfit.lookLegs)
+    networkMessage:addByte(monsterOutfit.lookFeet)
+    networkMessage:addByte(monsterOutfit.lookAddons)
+    networkMessage:addByte(corpse:getSize())
+
+    for i = corpse:getSize() - 1, 0, -1 do
+        local item = corpse:getItem(i)
+        networkMessage:addItem(item)
+    end
+
+    if self:getParty() then
+        networkMessage:sendToPlayer(self:getParty():getLeader())
+        local membersList = self:getParty():getMembers()
+        for i = 1, #membersList do
+            local player = membersList[i]
+            if player then
+                networkMessage:sendToPlayer(player)
+            end
+        end
+        networkMessage:delete()
+        return true
+    end
+
+    networkMessage:sendToPlayer(self)
+    networkMessage:delete()
+    return true
+end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
+end

@@ -13,44 +13,39 @@ GlobalStorageKeys = {
 
 PlayerStorageKeys = {
 	annihilatorReward = 30015,
+	goldenOutfit = 30016,
+	-- empty: 30017
 	promotion = 30018,
 	delayLargeSeaShell = 30019,
 	firstRod = 30020,
 	delayWallMirror = 30021,
+	-- empty: 30022
 	madSheepSummon = 30023,
 	crateUsable = 30024,
+	-- empty: 30025
 	afflictedOutfit = 30026,
 	afflictedPlagueMask = 30027,
 	afflictedPlagueBell = 30028,
+	-- empty: 30029
+	-- empty: 30030
 	nailCaseUseCount = 30031,
 	swampDigging = 30032,
 	insectoidCell = 30033,
 	vortexTamer = 30034,
 	mutatedPumpkin = 30035,
+
 	achievementsBase = 300000,
 	achievementsCounter = 20000,
 }
 
 -- Checking for duplicate storages:
-local function extractValues(tab, ret)
-	if type(tab) == "number" then
-		table.insert(ret, tab)
-	else
-		for _, v in pairs(tab) do
-			extractValues(v, ret)
-		end
-	end
-end
-
 local keys = {AccountStorageKeys, GlobalStorageKeys, PlayerStorageKeys}
-local extraction = {}
-extractValues(keys, extraction)
-table.sort(extraction)
-
-if #extraction > 1 then
-	for i = 1, #extraction - 1 do
-		if extraction[i] == extraction[i+1] then
-			print("Duplicate storage value found: ".. extraction[i])
-		end
+local storage_map = {}
+for _, key in pairs(keys) do
+	if storage_map[key] == nil then
+		storage_map[key] = 1
+	else
+		print(key .. " is duplicated")
 	end
 end
+

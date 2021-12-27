@@ -121,6 +121,19 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"absorbpercentphysical", ITEM_PARSE_ABSORBPERCENTPHYSICAL},
 	{"absorbpercenthealing", ITEM_PARSE_ABSORBPERCENTHEALING},
 	{"absorbpercentundefined", ITEM_PARSE_ABSORBPERCENTUNDEFINED},
+	{"magiclevelenergy", ITEM_PARSE_MAGICLEVELENERGY},
+	{"magiclevelfire", ITEM_PARSE_MAGICLEVELFIRE},
+	{"magiclevelpoison", ITEM_PARSE_MAGICLEVELPOISON},
+	{"magiclevelearth", ITEM_PARSE_MAGICLEVELPOISON},
+	{"magiclevelice", ITEM_PARSE_MAGICLEVELICE},
+	{"magiclevelholy", ITEM_PARSE_MAGICLEVELHOLY},
+	{"magicleveldeath", ITEM_PARSE_MAGICLEVELDEATH},
+	{"magiclevellifedrain", ITEM_PARSE_MAGICLEVELLIFEDRAIN},
+	{"magiclevelmanadrain", ITEM_PARSE_MAGICLEVELMANADRAIN},
+	{"magicleveldrown", ITEM_PARSE_MAGICLEVELDROWN},
+	{"magiclevelphysical", ITEM_PARSE_MAGICLEVELPHYSICAL},
+	{"magiclevelhealing", ITEM_PARSE_MAGICLEVELHEALING},
+	{"magiclevelundefined", ITEM_PARSE_MAGICLEVELUNDEFINED},
 	{"suppressdrunk", ITEM_PARSE_SUPPRESSDRUNK},
 	{"suppressenergy", ITEM_PARSE_SUPPRESSENERGY},
 	{"suppressfire", ITEM_PARSE_SUPPRESSFIRE},
@@ -182,6 +195,7 @@ const std::unordered_map<std::string, RaceType_t> RaceTypesMap = {
 	{"undead", RACE_UNDEAD},
 	{"fire", RACE_FIRE},
 	{"energy", RACE_ENERGY},
+	{"ink", RACE_INK},
 };
 
 const std::unordered_map<std::string, WeaponType_t> WeaponTypesMap = {
@@ -214,6 +228,7 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"swamp", FLUID_SWAMP},
 	{"tea", FLUID_TEA},
 	{"mead", FLUID_MEAD},
+	{"ink", FLUID_INK},
 };
 
 Items::Items()
@@ -318,6 +333,7 @@ bool Items::loadFromOtb(const std::string& file)
 		uint8_t lightLevel = 0;
 		uint8_t lightColor = 0;
 		uint8_t alwaysOnTopOrder = 0;
+		uint8_t classification = 0;
 
 		uint8_t attrib;
 		while (stream.read<uint8_t>(attrib)) {
@@ -397,6 +413,17 @@ bool Items::loadFromOtb(const std::string& file)
 					break;
 				}
 
+				case ITEM_ATTR_CLASS: {
+					if (datalen != sizeof(uint8_t)) {
+						return false;
+					}
+
+					if (!stream.read<uint8_t>(classification)) {
+						return false;
+					}
+					break;
+				}
+
 				default: {
 					//skip unknown attributes
 					if (!stream.skip(datalen)) {
@@ -471,6 +498,7 @@ bool Items::loadFromOtb(const std::string& file)
 		iType.lightLevel = lightLevel;
 		iType.lightColor = lightColor;
 		iType.wareId = wareId;
+		iType.classification = classification;
 		iType.alwaysOnTopOrder = alwaysOnTopOrder;
 	}
 
@@ -1082,6 +1110,66 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_ABSORBPERCENTUNDEFINED: {
 					abilities.absorbPercent[combatTypeToIndex(COMBAT_UNDEFINEDDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELENERGY: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELFIRE: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELPOISON: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELICE: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELHOLY: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELDEATH: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELLIFEDRAIN: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_LIFEDRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELMANADRAIN: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_MANADRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELDROWN: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_DROWNDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELPHYSICAL: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELHEALING: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_HEALING)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELUNDEFINED: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_UNDEFINEDDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 

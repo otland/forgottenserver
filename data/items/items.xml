@@ -13267,11 +13267,11 @@
 	</item>
 	<item id="7589" article="a" name="strong mana potion">
 		<attribute key="weight" value="290" />
-		<attribute key="description" value="This potion can only be consumed by sorcerers, druids and paladins of level 50 or higher." />
+		<attribute key="description" value="This potion can only be consumed by players of level 50 or higher." />
 	</item>
 	<item id="7590" article="a" name="great mana potion">
 		<attribute key="weight" value="310" />
-		<attribute key="description" value="This potion can only be consumed by sorcerers and druids of level 80 or higher." />
+		<attribute key="description" value="This potion can only be consumed by sorcerers, druids and paladins of level 80 or higher." />
 	</item>
 	<item id="7591" article="a" name="great health potion">
 		<attribute key="weight" value="310" />
@@ -13358,15 +13358,15 @@
 	</item>
 	<item id="7634" article="an" name="empty potion flask">
 		<attribute key="weight" value="160" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7635" article="an" name="empty potion flask">
 		<attribute key="weight" value="180" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7636" article="an" name="empty potion flask">
 		<attribute key="weight" value="150" />
-		<attribute key="description" value="Return it to a potion store for your deposit." />
+		<attribute key="description" value="Return it to a potion store for your deposit or refill it with a potion keg or cask." />
 	</item>
 	<item id="7637" article="a" name="dead cat">
 		<attribute key="containerSize" value="5" />
@@ -21454,7 +21454,7 @@
 		<attribute key="weight" value="950" />
 	</item>
 	<item id="12544" article="a" name="sweet mangonaise elixir">
-		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing a volatile magical ring with time limit." />
+		<attribute key="description" value="It's said to have incredible effects if you drink it while wearing certain magical rings. So it will not work on every kind of them." />
 		<attribute key="weight" value="300" />
 	</item>
 	<item id="12545" article="the" name="dead glitterscale">
@@ -23440,8 +23440,8 @@
 		<attribute key="description" value="It's very toxic. Do not ever drink green liquids." />
 		<attribute key="weight" value="180" />
 	</item>
-	<item id="13924" article="an" name="empty potion flask">
-		<attribute key="description" value="Return it to a magic store for deposit." />
+	<item id="13924" article="an" name="special flask">
+		<attribute key="description" value="Vascalir gave it to you to collect wasp poison." />
 		<attribute key="weight" value="180" />
 	</item>
 	<item id="13925" article="a" name="plague mask">
@@ -26556,9 +26556,9 @@
 	<item id="18465" article="a" name="shiny blade">
 		<attribute key="weight" value="4500" />
 		<attribute key="defense" value="35" />
-		<attribute key="attack" value="50" />
+		<attribute key="attack" value="49" />
 		<attribute key="weaponType" value="sword" />
-		<attribute key="extradef" value="3" />
+		<attribute key="extradef" value="2" />
 		<attribute key="skillSword" value="1" />
 	</item>
 	<item id="18466" article="a" name="dead crystal golem">
@@ -38049,7 +38049,14 @@
 	<item id="28388" article="a" name="gleaming starlight vial" />
 	<item id="28389" article="a" name="dark sun catcher" />
 	<item id="28390" article="a" name="shining sun catcher" />
-	<item id="28391" article="a" name="leaf star" />
+	<item id="28391" article="a" name="leaf star">
+		<attribute key="weight" value="200" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="attack" value="48" />
+		<attribute key="range" value="4" />
+		<attribute key="elementEarth" value="2" />
+		<attribute key="shootType" value="leafstar" />
+	</item>
 	<item id="28392" name="swan feathers" />
 	<item id="28393" article="a" name="rainbow quartz" />
 	<item id="28394" name="tar" />
@@ -38068,9 +38075,28 @@
 	<item fromid="28408" toid="28410" name="rubble" />
 	<item id="28411" name="earth" />
 	<item id="28412" name="strange colours" />
-	<item id="28413" article="a" name="diamond arrow" />
-	<item id="28414" article="a" name="spectral bolt" />
-	<item id="28415" article="a" name="royal star" />
+	<item id="28413" article="a" name="diamond arrow">
+		<attribute key="weight" value="80" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="attack" value="37" />
+		<attribute key="shootType" value="diamondarrow" />
+	</item>
+	<item id="28414" article="a" name="spectral bolt">
+		<attribute key="weight" value="90" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="attack" value="78" />
+		<attribute key="shootType" value="spectralbolt" />
+	</item>
+	<item id="28415" article="a" name="royal star">
+		<attribute key="weight" value="220" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="attack" value="64" />
+		<attribute key="range" value="4" />
+		<attribute key="elementFire" value="2" />
+		<attribute key="shootType" value="royalstar" />
+	</item>
 	<item id="28416" article="a" name="wand of darkness" />
 	<item id="28417" name="strange colours" />
 	<item id="28418" article="a" name="stump" />
@@ -38419,16 +38445,77 @@
 	<item id="30102" name="gold dust" />
 	<item id="30103" name="silver dust" />
 	<item id="30104" article="a" name="bookcase" />
-	<item id="30105" article="a" name="blade of destruction" />
-	<item id="30106" article="a" name="slayer of destruction" />
-	<item id="30107" article="an" name="axe of destruction" />
-	<item id="30108" article="a" name="chopper of destruction" />
-	<item id="30109" article="a" name="mace of destruction" />
-	<item id="30110" article="a" name="hammer of destruction" />
-	<item id="30111" article="a" name="bow of destruction" />
-	<item id="30112" article="a" name="crossbow of destruction" />
-	<item id="30113" article="a" name="wand of destruction" />
-	<item id="30114" article="a" name="rod of destruction" />
+	<item id="30105" article="a" name="blade of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="33" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="sword" />
+	</item>
+	<item id="30106" article="a" name="slayer of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="sword" />
+	</item>
+	<item id="30107" article="an" name="axe of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="31" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="axe" />
+	</item>
+	<item id="30108" article="a" name="chopper of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="axe" />
+	</item>
+	<item id="30109" article="a" name="mace of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="32" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="club" />
+	</item>
+	<item id="30110" article="a" name="hammer of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="29" />
+		<attribute key="attack" value="53" />
+		<attribute key="weaponType" value="club" />
+	</item>
+	<item id="30111" article="a" name="bow of destruction">
+		<attribute key="weight" value="5500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="6" />
+		<attribute key="hitChance" value="5" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="30112" article="a" name="crossbow of destruction">
+		<attribute key="weight" value="6500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="hitChance" value="5" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="30113" article="a" name="wand of destruction">
+		<attribute key="weight" value="3500" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="energy" />
+		<attribute key="range" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+	</item>
+	<item id="30114" article="a" name="rod of destruction">
+		<attribute key="weight" value="3500" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="ice" />
+		<attribute key="range" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+	</item>
 	<item id="30115" article="a" name="shadow bite plant" />
 	<item id="30116" name="shadow bite berries" />
 	<item id="30117" name="nightshade distillate" />
@@ -39652,9 +39739,55 @@
 	<item fromid="34150" toid="34151" article="a" name="closed door" />
 	<item fromid="34152" toid="34153" article="an" name="open door" />
 	<item fromid="34154" toid="34155" article="an" name="ancient wall" />
-	<item id="34156" article="the" name="golden outfit display" />
+	<item id="34156" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34158" />
+	</item>
 	<item id="34157" article="a" name="glowing switch" />
-	<item fromid="34158" toid="34172" article="the" name="golden outfit display" />
+	<item id="34158" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34159" />
+	</item>
+	<item id="34159" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34160" />
+	</item>
+	<item id="34160" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34156" />
+	</item>
+	<item id="34161" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34162" />
+	</item>
+	<item id="34162" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34163" />
+	</item>
+	<item id="34163" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34164" />
+	</item>
+	<item id="34164" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34161" />
+	</item>
+	<item id="34165" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34166" />
+	</item>
+	<item id="34166" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34167" />
+	</item>
+	<item id="34167" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34168" />
+	</item>
+	<item id="34168" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34165" />
+	</item>
+	<item id="34169" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34170" />
+	</item>
+	<item id="34170" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34171" />
+	</item>
+	<item id="34171" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34172" />
+	</item>
+	<item id="34172" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34169" />
+	</item>
 	<item fromid="34174" toid="34179" article="a" name="memorial" />
 	<item fromid="34180" toid="34183" article="a" name="dead ogre ruffian" />
 	<item fromid="34184" toid="34187" article="a" name="dead ogre rowdy" />
@@ -40090,9 +40223,18 @@
 	<item id="35282" article="an" name="amber" />
 	<item id="35283" article="a" name="slab with a skull" />
 	<item id="35284" article="a" name="ghost chestplate" />
-	<item id="35285" article="a" name="spectral scrap of cloth" />
-	<item id="35286" article="a" name="spooky hood" />
-	<item id="35287" article="a" name="ghost claw" />
+	<item id="35285" article="a" name="spectral scrap of cloth">
+		<attribute key="description" value="Its tattered fringes seem to move by themselves." />
+		<attribute key="weight" value="350" />
+	</item>
+	<item id="35286" article="a" name="spooky hood">
+		<attribute key="description" value="Every time you look away you have a strange feeling, as if something watches you from its depths." />
+		<attribute key="weight" value="1250" />
+	</item>
+	<item id="35287" article="a" name="ghost claw">
+		<attribute key="description" value="It is glowing in an unhealthy light." />
+		<attribute key="weight" value="730" />
+	</item>
 	<item id="35288" name="raw eye of the chasm" />
 	<item id="35289" name="eye of the chasm" />
 	<item id="35290" article="a" name="raw crystal deposit" />
@@ -40856,8 +40998,20 @@
 	<item fromid="38551" toid="38552" article="a" name="midnight panther rug" />
 	<item fromid="38553" toid="38554" article="a" name="moon carpet" />
 	<item fromid="38555" toid="38556" article="a" name="romantic carpet" />
-	<item id="38557" article="a" name="diamond arrow" />
-	<item id="38558" article="a" name="spectral bolt" />
+	<item id="38557" article="a" name="diamond arrow">
+		<attribute key="weight" value="80" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="attack" value="37" />
+		<attribute key="shootType" value="diamondarrow" />
+	</item>
+	<item id="38558" article="a" name="spectral bolt">
+		<attribute key="weight" value="90" />
+		<attribute key="weaponType" value="ammunition" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="attack" value="78" />
+		<attribute key="shootType" value="spectralbolt" />
+	</item>
 	<item id="38564" article="a" name="rope-ladder" />
 	<item fromid="38565" toid="38566" name="chaos critical dice" />
 	<item fromid="38567" toid="38568" article="a" name="grandiose cupboard" />

@@ -10,7 +10,7 @@ function onLogin(player)
 	player:setOfflineTrainingSkill(-1)
 
 	if offlineTime < 600 then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You must be logged out for more than 10 minutes to start offline training.")
+		player:sendTextMessage(MESSAGE_OFFLINE_TRAINING, "You must be logged out for more than 10 minutes to start offline training.")
 		return true
 	end
 
@@ -48,7 +48,7 @@ function onLogin(player)
 	end
 
 	text = string.format("%s.", text)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, text)
+	player:sendTextMessage(MESSAGE_OFFLINE_TRAINING, text)
 
 	local vocation = player:getVocation()
 	local promotion = vocation:getPromotion()
