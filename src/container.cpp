@@ -724,7 +724,7 @@ void Container::internalAddThing(uint32_t, Thing* thing)
 
 void Container::startDecaying()
 {
-	g_game.startDecay(this);
+	Item::startDecaying();
 	for (Item* item : itemlist) {
 		item->startDecaying();
 	}
