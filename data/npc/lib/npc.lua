@@ -109,10 +109,6 @@ function getCount(string)
 	return b and e and math.min(2 ^ 32 - 1, tonumber) or -1
 end
 
-function Player.getTotalMoney(self)
-	return self:getMoney() + self:getBankBalance()
-end
-
 function isValidMoney(money)
 	return isNumber(money) and money > 0
 end
