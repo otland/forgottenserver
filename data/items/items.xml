@@ -38445,16 +38445,77 @@
 	<item id="30102" name="gold dust" />
 	<item id="30103" name="silver dust" />
 	<item id="30104" article="a" name="bookcase" />
-	<item id="30105" article="a" name="blade of destruction" />
-	<item id="30106" article="a" name="slayer of destruction" />
-	<item id="30107" article="an" name="axe of destruction" />
-	<item id="30108" article="a" name="chopper of destruction" />
-	<item id="30109" article="a" name="mace of destruction" />
-	<item id="30110" article="a" name="hammer of destruction" />
-	<item id="30111" article="a" name="bow of destruction" />
-	<item id="30112" article="a" name="crossbow of destruction" />
-	<item id="30113" article="a" name="wand of destruction" />
-	<item id="30114" article="a" name="rod of destruction" />
+	<item id="30105" article="a" name="blade of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="33" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="sword" />
+	</item>
+	<item id="30106" article="a" name="slayer of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="sword" />
+	</item>
+	<item id="30107" article="an" name="axe of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="31" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="axe" />
+	</item>
+	<item id="30108" article="a" name="chopper of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="axe" />
+	</item>
+	<item id="30109" article="a" name="mace of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="32" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="club" />
+	</item>
+	<item id="30110" article="a" name="hammer of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="29" />
+		<attribute key="attack" value="53" />
+		<attribute key="weaponType" value="club" />
+	</item>
+	<item id="30111" article="a" name="bow of destruction">
+		<attribute key="weight" value="5500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="6" />
+		<attribute key="hitChance" value="5" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="30112" article="a" name="crossbow of destruction">
+		<attribute key="weight" value="6500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="hitChance" value="5" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="30113" article="a" name="wand of destruction">
+		<attribute key="weight" value="3500" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="energy" />
+		<attribute key="range" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+	</item>
+	<item id="30114" article="a" name="rod of destruction">
+		<attribute key="weight" value="3500" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="ice" />
+		<attribute key="range" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+	</item>
 	<item id="30115" article="a" name="shadow bite plant" />
 	<item id="30116" name="shadow bite berries" />
 	<item id="30117" name="nightshade distillate" />
@@ -39678,9 +39739,55 @@
 	<item fromid="34150" toid="34151" article="a" name="closed door" />
 	<item fromid="34152" toid="34153" article="an" name="open door" />
 	<item fromid="34154" toid="34155" article="an" name="ancient wall" />
-	<item id="34156" article="the" name="golden outfit display" />
+	<item id="34156" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34158" />
+	</item>
 	<item id="34157" article="a" name="glowing switch" />
-	<item fromid="34158" toid="34172" article="the" name="golden outfit display" />
+	<item id="34158" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34159" />
+	</item>
+	<item id="34159" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34160" />
+	</item>
+	<item id="34160" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34156" />
+	</item>
+	<item id="34161" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34162" />
+	</item>
+	<item id="34162" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34163" />
+	</item>
+	<item id="34163" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34164" />
+	</item>
+	<item id="34164" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34161" />
+	</item>
+	<item id="34165" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34166" />
+	</item>
+	<item id="34166" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34167" />
+	</item>
+	<item id="34167" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34168" />
+	</item>
+	<item id="34168" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34165" />
+	</item>
+	<item id="34169" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34170" />
+	</item>
+	<item id="34170" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34171" />
+	</item>
+	<item id="34171" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34172" />
+	</item>
+	<item id="34172" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34169" />
+	</item>
 	<item fromid="34174" toid="34179" article="a" name="memorial" />
 	<item fromid="34180" toid="34183" article="a" name="dead ogre ruffian" />
 	<item fromid="34184" toid="34187" article="a" name="dead ogre rowdy" />

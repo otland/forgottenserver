@@ -85,6 +85,16 @@
 	<action itemid="24843" script="other/food.lua" />
 	<action itemid="26191" script="other/food.lua" />
 	<action itemid="26201" script="other/food.lua" />
+	<action itemid="27038" script="other/food.lua" />
+	<action itemid="27039" script="other/food.lua" />
+	<action itemid="27052" script="other/food.lua" />
+	<action itemid="27095" script="other/food.lua" />
+	<action itemid="27604" script="other/food.lua" />
+	<action itemid="28348" script="other/food.lua" />
+	<action itemid="32854" script="other/food.lua" />
+	<action itemid="32858" script="other/food.lua" />
+	<action itemid="34216" script="other/food.lua" />
+	<action itemid="34725" script="other/food.lua" />
 
 	<!-- Music -->
 	<action fromid="2070" toid="2085" script="other/music.lua" />
