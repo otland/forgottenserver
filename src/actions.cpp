@@ -98,7 +98,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				success = false;
 			}
 		}
-
 		return success;
 	} else if ((attr = node.attribute("fromid"))) {
 		pugi::xml_attribute toIdAttribute = node.attribute("toid");
@@ -137,7 +136,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				success = false;
 			}
 		}
-
 		return success;
 	} else if ((attr = node.attribute("fromuid"))) {
 		pugi::xml_attribute toUidAttribute = node.attribute("touid");
@@ -176,7 +174,6 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 				success = false;
 			}
 		}
-
 		return success;
 	} else if ((attr = node.attribute("fromaid"))) {
 		pugi::xml_attribute toAidAttribute = node.attribute("toaid");
@@ -286,7 +283,6 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 	if (checkLineOfSight && !g_game.canThrowObjectTo(creaturePos, toPos, checkLineOfSight, checkFloor)) {
 		return RETURNVALUE_CANNOTTHROW;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -354,7 +350,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->setBedItem(bed);
 			g_game.sendOfflineTrainingDialog(player);
 		}
-
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -385,7 +380,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->onCloseContainer(openContainer);
 			player->closeContainer(oldContainerId);
 		}
-
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -398,10 +392,8 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 			player->setWriteItem(nullptr);
 			player->sendTextWindow(item, 0, false);
 		}
-
 		return RETURNVALUE_NOERROR;
 	}
-
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
@@ -449,7 +441,6 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 		player->sendCancelMessage(ret);
 		return false;
 	}
-
 	return true;
 }
 
@@ -484,7 +475,6 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	if (!action->hasOwnErrorHandler()) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 	}
-
 	return false;
 }
 
@@ -507,7 +497,6 @@ bool Action::configureEvent(const pugi::xml_node& node)
 	if (checkFloorAttr) {
 		checkFloor = checkFloorAttr.as_bool();
 	}
-
 	return true;
 }
 

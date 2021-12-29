@@ -120,7 +120,6 @@ class IOMap
 				map->spawnfile = g_config.getString(ConfigManager::MAP_NAME);
 				map->spawnfile += "-spawn.xml";
 			}
-
 			return map->spawns.loadFromXml(map->spawnfile);
 		}
 
@@ -135,7 +134,6 @@ class IOMap
 				map->housefile = g_config.getString(ConfigManager::MAP_NAME);
 				map->housefile += "-house.xml";
 			}
-
 			return map->houses.loadHousesXML(map->housefile);
 		}
 

@@ -4521,7 +4521,6 @@ int LuaScriptInterface::luaGameGetOutfits(lua_State* L)
 		pushOutfit(L, &outfit);
 		lua_rawseti(L, -2, ++index);
 	}
-
 	return 1;
 }
 
@@ -4536,7 +4535,6 @@ int LuaScriptInterface::luaGameGetMounts(lua_State* L)
 		pushMount(L, &mount);
 		lua_rawseti(L, -2, ++index);
 	}
-
 	return 1;
 }
 
@@ -9201,7 +9199,6 @@ int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 		player->setGuildRank(rank);
 		pushBoolean(L, true);
 	}
-
 	return 1;
 }
 

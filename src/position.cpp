@@ -68,6 +68,5 @@ std::ostream& operator<<(std::ostream& os, const Direction& dir)
 		default:
 			break;
 	}
-
 	return os;
 }

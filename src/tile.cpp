@@ -69,7 +69,6 @@ bool Tile::hasProperty(const Item* exclude, ITEMPROPERTY prop) const
 			}
 		}
 	}
-
 	return false;
 }
 
@@ -356,7 +355,6 @@ Thing* Tile::getTopVisibleThing(const Creature* creature)
 			}
 		}
 	}
-
 	return ground;
 }
 
@@ -569,7 +567,6 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
-
 			return RETURNVALUE_NOERROR;
 		}
 
@@ -739,7 +736,6 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1613,6 +1609,5 @@ Item* Tile::getUseItem(int32_t index) const
 	if (Thing* thing = getThing(index)) {
 		return thing->getItem();
 	}
-
 	return nullptr;
 }

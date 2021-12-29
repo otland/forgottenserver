@@ -108,6 +108,5 @@ uint32_t Protocol::getIP() const
 	if (auto connection = getConnection()) {
 		return connection->getIP();
 	}
-
 	return 0;
 }

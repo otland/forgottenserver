@@ -784,7 +784,6 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 			dropLoot(corpse->getContainer(), lastHitCreature);
 		}
 	}
-
 	return true;
 }
 
@@ -1019,7 +1018,6 @@ double Creature::getDamageRatio(Creature* attacker) const
 	if (totalDamage == 0) {
 		return 0;
 	}
-
 	return (static_cast<double>(attackerDamage) / totalDamage);
 }
 
@@ -1437,7 +1435,6 @@ int64_t Creature::getStepDuration() const
 	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
 		stepDuration *= 2;
 	}
-
 	return stepDuration;
 }
 
@@ -1542,7 +1539,6 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 			tmpEventList.push_back(creatureEvent);
 		}
 	}
-
 	return tmpEventList;
 }
 
@@ -1609,7 +1605,6 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 		if (testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist) {
 			return false;
 		}
-
 		return true;
 	} else if (testDist <= fpp.maxTargetDist) {
 		if (testDist < fpp.minTargetDist) {

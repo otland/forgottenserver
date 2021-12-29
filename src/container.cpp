@@ -385,7 +385,6 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (houseTile) {
 		return houseTile->queryRemove(thing, count, flags, actor);
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 

@@ -357,7 +357,6 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 	if (it == expStages.end()) {
 		return getNumber(ConfigManager::RATE_EXPERIENCE);
 	}
-
 	return std::get<2>(*it);
 }
 

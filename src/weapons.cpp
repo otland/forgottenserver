@@ -328,7 +328,6 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		}
 		return damageModifier;
 	}
-
 	return 100;
 }
 
@@ -369,7 +368,6 @@ bool Weapon::useFist(Player* player, Creature* target)
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
 		player->addSkillAdvance(SKILL_FIST, 1);
 	}
-
 	return true;
 }
 
@@ -478,7 +476,6 @@ uint32_t Weapon::getManaCost(const Player* player) const
 	if (manaPercent == 0) {
 		return 0;
 	}
-
 	return (player->getMaxMana() * manaPercent) / 100;
 }
 
@@ -491,7 +488,6 @@ int32_t Weapon::getHealthCost(const Player* player) const
 	if (healthPercent == 0) {
 		return 0;
 	}
-
 	return (player->getMaxHealth() * healthPercent) / 100;
 }
 
@@ -615,7 +611,6 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, cons
 	if (maxDamage) {
 		return -maxValue;
 	}
-
 	return -normal_random(0, maxValue);
 }
 
@@ -828,7 +823,6 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 			minValue = static_cast<int32_t>(std::ceil(player->getLevel() * 0.2));
 		}
 	}
-
 	return -normal_random(minValue, static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier));
 }
 

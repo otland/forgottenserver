@@ -116,7 +116,6 @@ bool Database::executeQuery(const std::string& query)
 	if (m_res) {
 		mysql_free_result(m_res);
 	}
-
 	return success;
 }
 
@@ -212,7 +211,6 @@ std::string DBResult::getString(const std::string& s) const
 	if (!row[it->second]) {
 		return std::string();
 	}
-
 	return std::string(row[it->second]);
 }
 

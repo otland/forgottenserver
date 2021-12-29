@@ -90,10 +90,8 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 		if (instantSpell->getHasParam() && !param.empty()) {
 			words += " \"" + param + "\"";
 		}
-
 		return TALKACTION_BREAK;
 	}
-
 	return TALKACTION_FAILED;
 }
 
@@ -162,7 +160,6 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		}
 		return result.second;
 	}
-
 	return false;
 }
 
@@ -177,7 +174,6 @@ bool Spells::registerInstantLuaEvent(InstantSpell* event)
 		}
 		return result.second;
 	}
-
 	return false;
 }
 
@@ -192,7 +188,6 @@ bool Spells::registerRuneLuaEvent(RuneSpell* event)
 		}
 		return result.second;
 	}
-
 	return false;
 }
 
@@ -303,7 +298,6 @@ bool CombatSpell::castSpell(Creature* creature)
 		} else {
 			var.pos = creature->getPosition();
 		}
-
 		return executeCastSpell(creature, var);
 	}
 
@@ -602,7 +596,6 @@ bool Spell::playerSpellCheck(Player* player) const
 		if (isInstant()) {
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		}
-
 		return false;
 	}
 
@@ -662,7 +655,6 @@ bool Spell::playerSpellCheck(Player* player) const
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
-
 	return true;
 }
 
@@ -700,7 +692,6 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
-
 	return true;
 }
 
@@ -828,7 +819,6 @@ uint32_t Spell::getManaCost(const Player* player) const
 		uint32_t manaCost = (maxMana * manaPercent) / 100;
 		return manaCost;
 	}
-
 	return 0;
 }
 
@@ -1004,7 +994,6 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 	if (result) {
 		postCastSpell(player);
 	}
-
 	return result;
 }
 
@@ -1035,7 +1024,6 @@ bool InstantSpell::castSpell(Creature* creature)
 			var.number = target->getID();
 			return internalCastSpell(creature, var);
 		}
-
 		return false;
 	} else if (needDirection) {
 		var.type = VARIANT_POSITION;
@@ -1044,7 +1032,6 @@ bool InstantSpell::castSpell(Creature* creature)
 		var.type = VARIANT_POSITION;
 		var.pos = creature->getPosition();
 	}
-
 	return internalCastSpell(creature, var);
 }
 
@@ -1106,7 +1093,6 @@ bool InstantSpell::canCast(const Player* player) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -1148,7 +1134,6 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 		iType.runeLevel = level;
 		iType.charges = charges;
 	}
-
 	return true;
 }
 
@@ -1170,7 +1155,6 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 

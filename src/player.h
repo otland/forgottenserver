@@ -274,7 +274,6 @@ class Player final : public Creature, public Cylinder
 			if (!client) {
 				return 0;
 			}
-
 			return client->getVersion();
 		}
 

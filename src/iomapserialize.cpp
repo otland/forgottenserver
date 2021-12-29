@@ -357,7 +357,6 @@ bool IOMapSerialize::saveHouseInfo()
 	if (!stmt.execute()) {
 		return false;
 	}
-
 	return transaction.commit();
 }
 

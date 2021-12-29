@@ -35,7 +35,6 @@ round_keys expand_key(const key& k)
 		expanded[i] = sum + k[sum & 3];
 		expanded[i + 1] = next_sum + k[(next_sum >> 11) & 3];
 	}
-
 	return expanded;
 }
 

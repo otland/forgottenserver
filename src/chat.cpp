@@ -507,7 +507,6 @@ bool Chat::talkToChannel(const Player& player, SpeakClasses type, const std::str
 	if (!channel->executeOnSpeakEvent(player, type, text)) {
 		return false;
 	}
-
 	return channel->talk(player, type, text);
 }
 

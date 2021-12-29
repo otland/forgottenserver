@@ -328,7 +328,6 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 	} else {
 		return false;
 	}
-
 	return true;
 }
 
@@ -676,7 +675,6 @@ uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 		field->onStepInField(creature);
 		return 1;
 	}
-
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
@@ -831,7 +829,6 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 	if (needUpdateStats) {
 		player->sendStats();
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -919,7 +916,6 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 	if (needUpdateStats) {
 		player->sendStats();
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 

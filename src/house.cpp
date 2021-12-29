@@ -152,7 +152,6 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
 	if (guestList.isInList(player)) {
 		return HOUSE_GUEST;
 	}
-
 	return HOUSE_NOT_INVITED;
 }
 
@@ -273,7 +272,6 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 	if (!door) {
 		return false;
 	}
-
 	return door->getAccessList(list);
 }
 
@@ -472,7 +470,6 @@ const Guild* getGuildByName(const std::string& name)
 	if (guild) {
 		return guild;
 	}
-
 	return IOGuild::loadGuild(guildId);
 }
 
@@ -557,7 +554,6 @@ bool Door::canUse(const Player* player)
 	if (house->getHouseAccessLevel(player) >= HOUSE_SUBOWNER) {
 		return true;
 	}
-
 	return accessList->isInList(player);
 }
 

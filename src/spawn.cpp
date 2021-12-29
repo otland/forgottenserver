@@ -247,7 +247,6 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 	if (radius == -1) {
 		return true;
 	}
-
 	return ((pos.getX() >= centerPos.getX() - radius) && (pos.getX() <= centerPos.getX() + radius) &&
 			(pos.getY() >= centerPos.getY() - radius) && (pos.getY() <= centerPos.getY() + radius));
 }
@@ -305,7 +304,6 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup/* = fal
 				return true;
 			}
 		}
-
 		return false;
 	};
 

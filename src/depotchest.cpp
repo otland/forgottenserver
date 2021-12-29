@@ -53,7 +53,6 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 			return RETURNVALUE_DEPOTISFULL;
 		}
 	}
-
 	return Container::queryAdd(index, thing, count, flags, actor);
 }
 

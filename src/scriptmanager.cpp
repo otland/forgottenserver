@@ -122,6 +122,5 @@ bool ScriptingManager::loadScriptSystems()
 		std::cout << "> ERROR: Unable to load events!" << std::endl;
 		return false;
 	}
-
 	return true;
 }

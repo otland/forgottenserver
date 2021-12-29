@@ -133,7 +133,6 @@ bool Party::leaveParty(Player* player)
 	if (missingLeader || empty()) {
 		disband();
 	}
-
 	return true;
 }
 
@@ -232,7 +231,6 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer/* = true*/)
 	if (empty()) {
 		disband();
 	}
-
 	return true;
 }
 

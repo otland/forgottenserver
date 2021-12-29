@@ -505,7 +505,6 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	if (Position::getDistanceX(fromPos, toPos) > rangex || Position::getDistanceY(fromPos, toPos) > rangey) {
 		return false;
 	}
-
 	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
@@ -519,7 +518,6 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 	if (blockFloor && tile->getGround()) {
 		return false;
 	}
-
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 }
 
@@ -538,7 +536,6 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 		}
 		yi += slope;
 	}
-
 	return true;
 }
 
@@ -555,7 +552,6 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 		}
 		yi += slope;
 	}
-
 	return true;
 }
 
@@ -577,7 +573,6 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 	if (x0 > x1) {
 		return checkSlightLine(x1, y1, x0, y0, z);
 	}
-
 	return checkSlightLine(x0, y0, x1, y1, z);
 }
 

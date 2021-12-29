@@ -432,7 +432,6 @@ class ItemAttributes
 			if (!hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				return nullptr;
 			}
-
 			return getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom;
 		}
 
@@ -965,7 +964,6 @@ class Item : virtual public Thing
 			if (subType == -1 || subType == i->getSubType()) {
 				return i->getItemCount();
 			}
-
 			return 0;
 		}
 

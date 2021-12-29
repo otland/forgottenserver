@@ -172,7 +172,6 @@ bool BedItem::sleep(Player* player)
 	if (nextBedItem) {
 		nextBedItem->updateAppearance(player);
 	}
-
 	return true;
 }
 

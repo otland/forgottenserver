@@ -365,6 +365,5 @@ bool argumentsHandler(const StringVector& args)
 		else if (tmp[0] == "--game-port")
 			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
 	}
-
 	return true;
 }

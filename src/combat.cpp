@@ -179,7 +179,6 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 		default:
 			break;
 	}
-
 	return COMBAT_NONE;
 }
 
@@ -224,7 +223,6 @@ bool Combat::isPlayerCombat(const Creature* target)
 	if (target->isSummon() && target->getMaster()->getPlayer()) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -272,7 +270,6 @@ ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 			return RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
 	}
-
 	return Combat::canDoCombat(attacker, target);
 }
 
@@ -310,7 +307,6 @@ ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool aggressive)
 	if (aggressive && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE;
 	}
-
 	return g_events->eventCreatureOnAreaCombat(caster, tile, aggressive);
 }
 
@@ -333,7 +329,6 @@ bool Combat::isProtected(const Player* attacker, const Player* target)
 	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
 		return true;
 	}
-
 	return false;
 }
 

@@ -69,7 +69,6 @@ std::string decodeSecret(const std::string& secret)
 			key.push_back(static_cast<char>(buffer >> left));
 		}
 	}
-
 	return key;
 }
 

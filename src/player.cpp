@@ -376,7 +376,6 @@ int32_t Player::getDefense() const
 				return 2;
 		}
 	}
-
 	return (defenseSkill / 4. + 2.23) * defenseValue * 0.15 * getDefenseFactor() * vocation->defenseMultiplier;
 }
 
@@ -386,7 +385,6 @@ uint32_t Player::getAttackSpeed() const
 	if (!weapon || weapon->getAttackSpeed() == 0) {
 		return vocation->getAttackSpeed();
 	}
-
 	return weapon->getAttackSpeed();
 }
 
@@ -2064,7 +2062,6 @@ uint32_t Player::getIP() const
 	if (client) {
 		return client->getIP();
 	}
-
 	return 0;
 }
 
@@ -2346,7 +2343,6 @@ bool Player::addVIPInternal(uint32_t vipGuid)
 	if (VIPList.size() >= getMaxVIPEntries()) {
 		return false;
 	}
-
 	return VIPList.insert(vipGuid).second;
 }
 
@@ -2621,7 +2617,6 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		if (cylinder && (dynamic_cast<const DepotChest*>(cylinder) || dynamic_cast<const Player*>(cylinder))) {
 			return RETURNVALUE_NEEDEXCHANGE;
 		}
-
 		return RETURNVALUE_NOTENOUGHROOM;
 	}
 	return ret;
@@ -2691,7 +2686,6 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 			} else {
 				maxQueryCount = 1;
 			}
-
 			return RETURNVALUE_NOERROR;
 		}
 	}
@@ -2721,7 +2715,6 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -2831,7 +2824,6 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				return tmpContainer;
 			}
 		}
-
 		return this;
 	}
 
@@ -3692,7 +3684,6 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 			}
 		}
 	}
-
 	return unjustified;
 }
 
@@ -3953,7 +3944,6 @@ bool Player::hasAttacked(const Player* attacked) const
 	if (hasFlag(PlayerFlag_NotGainInFight) || !attacked) {
 		return false;
 	}
-
 	return attackedSet.find(attacked->guid) != attackedSet.end();
 }
 
@@ -4090,7 +4080,6 @@ bool Player::isInWar(const Player* player) const
 	if (!playerGuild) {
 		return false;
 	}
-
 	return isInWarList(playerGuild->getId()) && player->isInWarList(guild->getId());
 }
 
@@ -4104,7 +4093,6 @@ bool Player::isPremium() const
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM) || hasFlag(PlayerFlag_IsAlwaysPremium)) {
 		return true;
 	}
-
 	return premiumEndsAt > time(nullptr);
 }
 
@@ -4130,10 +4118,8 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 				if (party->canUseSharedExperience(player)) {
 					return SHIELD_YELLOW_NOSHAREDEXP;
 				}
-
 				return SHIELD_YELLOW_NOSHAREDEXP_BLINK;
 			}
-
 			return SHIELD_YELLOW;
 		}
 
@@ -4146,10 +4132,8 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 				if (party->canUseSharedExperience(player)) {
 					return SHIELD_BLUE_NOSHAREDEXP;
 				}
-
 				return SHIELD_BLUE_NOSHAREDEXP_BLINK;
 			}
-
 			return SHIELD_BLUE;
 		}
 
@@ -4165,7 +4149,6 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 	if (player->party) {
 		return SHIELD_GRAY;
 	}
-
 	return SHIELD_NONE;
 }
 
@@ -4245,7 +4228,6 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	} else if (isInWar(player)) {
 		return GUILDEMBLEM_ENEMY;
 	}
-
 	return GUILDEMBLEM_NEUTRAL;
 }
 
@@ -4375,7 +4357,6 @@ bool Player::untameMount(uint8_t mountId)
 
 		setCurrentMount(0);
 	}
-
 	return true;
 }
 
@@ -4395,7 +4376,6 @@ bool Player::hasMount(const Mount* mount) const
 	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31), value)) {
 		return false;
 	}
-
 	return ((1 << (tmpMountId % 31)) & value) != 0;
 }
 
@@ -4586,7 +4566,6 @@ uint16_t Player::getHelpers() const
 	} else {
 		helpers = 0;
 	}
-
 	return helpers;
 }
 
@@ -4640,7 +4619,6 @@ size_t Player::getMaxVIPEntries() const
 	if (group->maxVipEntries != 0) {
 		return group->maxVipEntries;
 	}
-
 	return g_config.getNumber(isPremium() ? ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT);
 }
 
@@ -4649,7 +4627,6 @@ size_t Player::getMaxDepotItems() const
 	if (group->maxDepotItems != 0) {
 		return group->maxDepotItems;
 	}
-
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
 }
 

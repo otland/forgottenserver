@@ -54,7 +54,6 @@ class NetworkMessage
 			if (!canRead(1)) {
 				return 0;
 			}
-
 			return buffer[info.position++];
 		}
 

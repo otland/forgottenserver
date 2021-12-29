@@ -125,7 +125,6 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 			}
 		}
 	}
-
 	return Tile::queryDestination(index, thing, destItem, flags);
 }
 

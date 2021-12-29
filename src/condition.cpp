@@ -294,7 +294,6 @@ Condition* Condition::createCondition(PropStream& propStream)
 	if (!propStream.read<uint8_t>(aggressive)) {
 		return nullptr;
 	}
-
 	return createCondition(static_cast<ConditionId_t>(id), static_cast<ConditionType_t>(type), ticks, 0, buff != 0, subId, aggressive);
 }
 
@@ -315,7 +314,6 @@ bool Condition::isPersistent() const
 	if (!(id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT || conditionType == CONDITION_MUTED)) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -337,7 +335,6 @@ bool Condition::updateCondition(const Condition* addCondition)
 	if (addCondition->getTicks() >= 0 && getEndTime() > (OTSYS_TIME() + addCondition->getTicks())) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -379,7 +376,6 @@ uint32_t ConditionGeneric::getIcons() const
 		default:
 			break;
 	}
-
 	return icons;
 }
 
@@ -460,7 +456,6 @@ bool ConditionAttributes::startCondition(Creature* creature)
 		updatePercentStats(player);
 		updateStats(player);
 	}
-
 	return true;
 }
 
@@ -958,7 +953,6 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 			}
 		}
 	}
-
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
@@ -1053,7 +1047,6 @@ bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
 			}
 		}
 	}
-
 	return ConditionGeneric::executeCondition(creature, interval);
 }
 
@@ -1132,7 +1125,6 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 		default:
 			return false;
 	}
-
 	return ret;
 }
 
@@ -1226,7 +1218,6 @@ bool ConditionDamage::updateCondition(const Condition* addCondition)
 	if (ticks == -1 && conditionDamage.ticks > 0) {
 		return false;
 	}
-
 	return conditionDamage.getTotalDamage() > getTotalDamage();
 }
 
@@ -1258,7 +1249,6 @@ bool ConditionDamage::addDamage(int32_t rounds, int32_t time, int32_t value)
 			setTicks(ticks + damageInfo.interval);
 		}
 	}
-
 	return true;
 }
 
@@ -1346,7 +1336,6 @@ bool ConditionDamage::executeCondition(Creature* creature, int32_t interval)
 			interval = 0;
 		}
 	}
-
 	return Condition::executeCondition(creature, interval);
 }
 
@@ -1392,7 +1381,6 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 	if (g_game.combatBlockHit(damage, attacker, creature, false, false, field)) {
 		return false;
 	}
-
 	return g_game.combatChangeHealth(attacker, creature, damage);
 }
 
@@ -1773,7 +1761,6 @@ bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 			g_game.changeLight(creature);
 		}
 	}
-
 	return Condition::executeCondition(creature, interval);
 }
 

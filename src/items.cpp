@@ -540,7 +540,6 @@ bool Items::loadFromXml()
 			parseItemNode(itemNode, id++);
 		}
 	}
-
 	return true;
 }
 
@@ -1497,8 +1496,8 @@ uint16_t Items::getItemIdByName(const std::string& name)
 	}
 
 	auto result = nameToItems.find(asLowerCaseString(name));
-	if (result == nameToItems.end())
+	if (result == nameToItems.end()) {
 		return 0;
-
+	}
 	return result->second;
 }

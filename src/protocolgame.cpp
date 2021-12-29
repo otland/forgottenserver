@@ -58,7 +58,6 @@ std::tuple<WaitList&, WaitList::iterator, WaitList::size_type> findClient(const 
 	if (it != waitList.end()) {
 		return std::make_tuple(std::ref(waitList), it, priorityWaitList.size() + std::distance(it, waitList.end()) + 1);
 	}
-
 	return std::make_tuple(std::ref(waitList), waitList.end(), priorityWaitList.size() + waitList.size());
 }
 
@@ -804,7 +803,6 @@ bool ProtocolGame::canSee(const Creature* c) const
 	if (!player->canSeeCreature(c)) {
 		return false;
 	}
-
 	return canSee(c->getPosition());
 }
 

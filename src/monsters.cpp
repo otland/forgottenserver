@@ -81,7 +81,6 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 			loadMonster(it.second, it.first, reloading);
 		}
 	}
-
 	return true;
 }
 
@@ -1471,7 +1470,6 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 		if (it2 == unloadedMonsters.end()) {
 			return nullptr;
 		}
-
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;

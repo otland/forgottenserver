@@ -85,7 +85,6 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 
 		newItem->incrementReferenceCounter();
 	}
-
 	return newItem;
 }
 
@@ -140,7 +139,6 @@ Item* Item::CreateItem(PropStream& propStream)
 		default:
 			break;
 	}
-
 	return Item::CreateItem(id, 0);
 }
 
@@ -701,7 +699,6 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		default:
 			return ATTR_READ_ERROR;
 	}
-
 	return ATTR_READ_CONTINUE;
 }
 
@@ -1727,7 +1724,6 @@ bool Item::canDecay() const
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -1889,7 +1885,6 @@ const std::string& ItemAttributes::CustomAttribute::get<std::string>() {
 	if (value.type() == typeid(std::string)) {
 		return boost::get<std::string>(value);
 	}
-
 	return emptyString;
 }
 
@@ -1898,7 +1893,6 @@ const int64_t& ItemAttributes::CustomAttribute::get<int64_t>() {
 	if (value.type() == typeid(int64_t)) {
 		return boost::get<int64_t>(value);
 	}
-
 	return emptyInt;
 }
 
@@ -1907,7 +1901,6 @@ const double& ItemAttributes::CustomAttribute::get<double>() {
 	if (value.type() == typeid(double)) {
 		return boost::get<double>(value);
 	}
-
 	return emptyDouble;
 }
 
@@ -1916,6 +1909,5 @@ const bool& ItemAttributes::CustomAttribute::get<bool>() {
 	if (value.type() == typeid(bool)) {
 		return boost::get<bool>(value);
 	}
-
 	return emptyBool;
 }

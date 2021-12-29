@@ -481,7 +481,6 @@ bool Monster::isFriend(const Creature* creature) const
 	} else if (creature->getMonster() && !creature->isSummon()) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -497,7 +496,6 @@ bool Monster::isOpponent(const Creature* creature) const
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -650,7 +648,6 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 			}
 		}
 	}
-
 	return blockType;
 }
 
@@ -1238,7 +1235,6 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			}
 		}
 	}
-
 	return result;
 }
 
@@ -1424,7 +1420,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (n && canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
 				direction = DIRECTION_NORTH;
 			}
-
 			return true;
 		} else if (offsetx <= -1 && offsety <= -1) {
 			//player is SE
@@ -1472,7 +1467,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (e && canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
 				direction = DIRECTION_EAST;
 			}
-
 			return true;
 		} else if (offsetx >= 1 && offsety <= -1) {
 			//player is SW
@@ -1519,7 +1513,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (s && canWalkTo(creaturePos, DIRECTION_SOUTHEAST)) {
 				direction = DIRECTION_SOUTH;
 			}
-
 			return true;
 		} else if (offsetx <= -1 && offsety >= 1) {
 			// player is NE
@@ -1564,7 +1557,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 			} else if (n && canWalkTo(creaturePos, DIRECTION_NORTHWEST)) {
 				direction = DIRECTION_NORTH;
 			}
-
 			return true;
 		}
 	}
@@ -1839,7 +1831,6 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 				break;
 		}
 	}
-
 	return true;
 }
 
@@ -1913,7 +1904,6 @@ bool Monster::isInSpawnRange(const Position& pos) const
 	if (Position::getDistanceZ(pos, masterPos) > Monster::despawnRange) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -2082,6 +2072,5 @@ bool Monster::canPushItems() const
 	if (master) {
 		return master->mType->info.canPushItems;
 	}
-
 	return mType->info.canPushItems;
 }

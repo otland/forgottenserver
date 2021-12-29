@@ -428,7 +428,6 @@ bool Npc::getNextStep(Direction& dir, uint32_t& flags)
 	if (getTimeSinceLastMove() < walkTicks) {
 		return false;
 	}
-
 	return getRandomStep(dir);
 }
 
@@ -472,7 +471,6 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	if (!ignoreHeight && tile->hasHeight(1)) {
 		return false;
 	}
-
 	return true;
 }
 

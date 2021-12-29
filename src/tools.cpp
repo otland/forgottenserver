@@ -354,7 +354,6 @@ std::string convertIPToString(uint32_t ip)
 	if (res < 0) {
 		return {};
 	}
-
 	return buffer;
 }
 
@@ -409,7 +408,6 @@ Direction getDirection(const std::string& string)
 	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" || string == "7") {
 		direction = DIRECTION_NORTHEAST;
 	}
-
 	return direction;
 }
 
@@ -455,7 +453,6 @@ Position getNextPosition(Direction direction, Position pos)
 		default:
 			break;
 	}
-
 	return pos;
 }
 
@@ -906,7 +903,6 @@ uint32_t adlerChecksum(const uint8_t* data, size_t length)
 		a %= adler;
 		b %= adler;
 	}
-
 	return (b << 16) | a;
 }
 
@@ -934,7 +930,6 @@ std::string ucwords(std::string str)
 			str[i] = toupper(str[i]);
 		}
 	}
-
 	return str;
 }
 
@@ -1330,6 +1325,5 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 	} else if (tmpStr == "special" || tmpStr == "4") {
 		return SPELLGROUP_SPECIAL;
 	}
-
 	return SPELLGROUP_NONE;
 }

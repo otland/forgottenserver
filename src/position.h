@@ -103,7 +103,6 @@ struct Position
 		if (x > p.x) {
 			return false;
 		}
-
 		return false;
 	}
 

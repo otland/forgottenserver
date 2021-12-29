@@ -331,7 +331,6 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 		} else {
 			subType = -1;
 		}
-
 		return findItemOfType(player, it.id, true, subType);
 	}
 
@@ -340,7 +339,6 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 	if (slot == CONST_SLOT_STORE_INBOX) {
 		return player->getStoreInbox();
 	}
-
 	return player->getInventoryItem(slot);
 }
 
@@ -458,7 +456,6 @@ Creature* Game::getCreatureByName(const std::string& s)
 			return it->second;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -526,7 +523,6 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 	if (!player) {
 		return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -887,7 +883,6 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 			}
 		}
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1272,7 +1267,6 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	if (actorPlayer && fromPos && toPos) {
 		g_events->eventPlayerOnItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
 	}
-
 	return ret;
 }
 
@@ -1362,7 +1356,6 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 		item->setDecaying(DECAYING_TRUE);
 		toDecayItems.push_front(item);
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1411,7 +1404,6 @@ ReturnValue Game::internalRemoveItem(Item* item, int32_t count /*= -1*/, bool te
 
 		cylinder->postRemoveNotification(item, nullptr, index);
 	}
-
 	return RETURNVALUE_NOERROR;
 }
 
@@ -1430,7 +1422,6 @@ ReturnValue Game::internalPlayerAddItem(Player* player, Item* item, bool dropOnM
 	if (ret != RETURNVALUE_NOERROR && dropOnMap) {
 		ret = internalAddItem(player->getTile(), item, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	}
-
 	return ret;
 }
 
@@ -1728,7 +1719,6 @@ Item* Game::transformItem(Item* item, uint16_t newId, int32_t newCount /*= -1*/)
 			toDecayItems.push_front(newItem);
 		}
 	}
-
 	return newItem;
 }
 
@@ -1766,7 +1756,6 @@ Item* searchForItem(Container* container, uint16_t itemId)
 			return *it;
 		}
 	}
-
 	return nullptr;
 }
 
@@ -1794,7 +1783,6 @@ slots_t getSlotType(const ItemType& it)
 			slot = CONST_SLOT_LEFT;
 		}
 	}
-
 	return slot;
 }
 
@@ -1857,7 +1845,6 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text) const
 	for (const auto& it : players) {
 		it.second->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
-
 	return true;
 }
 
@@ -2725,7 +2712,6 @@ bool Game::internalStartTrade(Player* player, Player* tradePartner, Item* tradeI
 		player->sendTradeItemRequest(tradePartner->getName(), counterOfferItem, false);
 		tradePartner->sendTradeItemRequest(player->getName(), tradeItem, false);
 	}
-
 	return true;
 }
 
@@ -3493,7 +3479,6 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	} else if (result == TALKACTION_FAILED) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -3878,7 +3863,6 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 	}
 
 	damage.blockType = primaryBlockType;
-
 	return (primaryBlockType != BLOCK_NONE) && (secondaryBlockType != BLOCK_NONE);
 }
 
@@ -4271,7 +4255,6 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		target->drainHealth(attacker, realDamage);
 		addCreatureHealth(spectators, target);
 	}
-
 	return true;
 }
 
@@ -4398,7 +4381,6 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 			tmpPlayer->sendTextMessage(message);
 		}
 	}
-
 	return true;
 }
 
@@ -4516,7 +4498,6 @@ bool Game::saveAccountStorageValues() const
 			return false;
 		}
 	}
-
 	return transaction.commit();
 }
 

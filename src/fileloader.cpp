@@ -99,7 +99,6 @@ const Node& Loader::parseTree()
 	if (!parseStack.empty()) {
 		throw InvalidOTBFormat{};
 	}
-
 	return root;
 }
 

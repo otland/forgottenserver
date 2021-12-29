@@ -75,7 +75,6 @@ bool Mission::isStarted(Player* player) const
 	if (!ignoreEndValue && value > endValue) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -93,7 +92,6 @@ bool Mission::isCompleted(Player* player) const
 	if (ignoreEndValue) {
 		return value >= endValue;
 	}
-
 	return value == endValue;
 }
 
@@ -136,7 +134,6 @@ bool Quest::isStarted(Player* player) const
 	if (!player->getStorageValue(startStorageID, value) || value < startStorageValue) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -145,7 +142,6 @@ const Mission* Quest::getMissionById(uint16_t missionId) const
 	auto it = std::find_if(missions.cbegin(), missions.cend(), [missionId](const Mission& mission) {
 		return mission.id == missionId;
 	});
-
 	return it != missions.cend() ? &*it : nullptr;
 }
 

@@ -77,7 +77,6 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 			talkActions.emplace(words[i], *talkAction);
 		}
 	}
-
 	return true;
 }
 
@@ -93,7 +92,6 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 			talkActions.emplace(words[i], *talkAction);
 		}
 	}
-
 	return true;
 }
 

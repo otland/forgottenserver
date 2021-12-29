@@ -366,6 +366,5 @@ bool GlobalEvent::executeEvent() const
 		lua_pushnumber(L, interval);
 		params = 1;
 	}
-
 	return scriptInterface->callFunction(params);
 }
