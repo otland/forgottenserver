@@ -778,33 +778,18 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 	if (finishedCast) {
 		if (!player->hasFlag(PlayerFlag_HasNoExhaustion)) {
 			if (cooldown > 0) {
-				if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, spellId);
-					player->addCondition(condition);
-				} else {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, spellId);
-					player->addCondition(condition);
-				}
+				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, spellId);
+				player->addCondition(condition);
 			}
 
 			if (groupCooldown > 0) {
-				if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, group);
-					player->addCondition(condition);
-				} else {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, group);
-					player->addCondition(condition);
-				}
+				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, group);
+				player->addCondition(condition);
 			}
 
 			if (secondaryGroupCooldown > 0) {
-				if (g_config.getBoolean(ConfigManager::ABILITY_HASTE_AS_COOLDOWNREDUCTION)) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, secondaryGroup);
-					player->addCondition(condition);
-				} else {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, secondaryGroup);
-					player->addCondition(condition);
-				}
+				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown * ((100.0 - player->getCooldownReduction()) / 100.0), 0, false, secondaryGroup);
+				player->addCondition(condition);
 			}
 		}
 
