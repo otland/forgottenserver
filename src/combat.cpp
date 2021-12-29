@@ -1477,7 +1477,6 @@ void MagicField::onStepInField(Creature* creature)
 		if (!creature->isInGhostMode()) {
 			g_game.internalRemoveItem(this, 1);
 		}
-
 		return;
 	}
 

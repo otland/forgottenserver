@@ -521,7 +521,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		if (recvbyte == 0x0F) {
 			disconnect();
 		}
-
 		return;
 	}
 
