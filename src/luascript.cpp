@@ -11172,8 +11172,7 @@ int LuaScriptInterface::luaGroupGetMaxVipGroups(lua_State* L)
 	Group* group = getUserdata<Group>(L, 1);
 	if (group) {
 		lua_pushnumber(L, group->maxVipGroups);
-	}
-	else {
+	} else {
 		lua_pushnil(L);
 	}
 	return 1;

@@ -106,9 +106,9 @@ vipPremiumLimit = 100
 depotFreeLimit = 2000
 depotPremiumLimit = 15000
 
--- VIP Group limits
-vipGroupFreeLimit = 0
-vipGroupPremiumLimit = 5
+-- VIP Group limits (including 3 default groups)
+vipGroupFreeLimit = 3
+vipGroupPremiumLimit = 8
 
 -- Quest Tracker limits
 questTrackerFreeLimit = 10

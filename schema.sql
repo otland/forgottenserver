@@ -129,15 +129,26 @@ CREATE TABLE IF NOT EXISTS `player_namelocks` (
   FOREIGN KEY (`namelocked_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-CREATE TABLE IF NOT EXISTS `account_viplist` (
+CREATE TABLE IF NOT EXISTS `account_vipentries` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `account_id` int NOT NULL COMMENT 'id of account whose viplist entry it is',
   `player_id` int NOT NULL COMMENT 'id of target player of viplist entry',
   `description` varchar(128) NOT NULL DEFAULT '',
   `icon` tinyint unsigned NOT NULL DEFAULT '0',
   `notify` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
   UNIQUE KEY `account_player_index` (`account_id`,`player_id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `account_vipgroups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `account_id` int NOT NULL,
+  `name` varchar(128) NOT NULL DEFAULT '',
+  `editable` tinyint NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `guilds` (
@@ -362,10 +373,19 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '31'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+CREATE TABLE IF NOT EXISTS `vipgroup_vipentry` (
+  `group_id` int NOT NULL,
+  `entry_id` int NOT NULL,
+  UNIQUE KEY `group_entry_index` (`group_id`, `entry_id`),
+  FOREIGN KEY (`group_id`) REFERENCES `account_vipgroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`entry_id`) REFERENCES `account_vipentries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '32'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;
+DROP TRIGGER IF EXISTS `oncreate_accounts`;
 
 DELIMITER //
 CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`
@@ -380,4 +400,10 @@ CREATE TRIGGER `oncreate_guilds` AFTER INSERT ON `guilds`
     INSERT INTO `guild_ranks` (`name`, `level`, `guild_id`) VALUES ('a Member', 1, NEW.`id`);
 END
 //
+CREATE TRIGGER `oncreate_accounts` AFTER INSERT ON `accounts`
+ FOR EACH ROW BEGIN
+    INSERT INTO `account_vipgroups` (`account_id`, `name`, `editable`) VALUES (NEW.id, 'Enemies', 0);
+    INSERT INTO `account_vipgroups` (`account_id`, `name`, `editable`) VALUES (NEW.id, 'Friends', 0);
+    INSERT INTO `account_vipgroups` (`account_id`, `name`, `editable`) VALUES (NEW.id, 'Trading Partners', 0);
+END
 DELIMITER ;
