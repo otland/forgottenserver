@@ -105,6 +105,12 @@ enum VipStatus_t : uint8_t {
 	VIPSTATUS_TRAINING = 3
 };
 
+enum VipGroupAction_t : uint8_t {
+	VIPGROUPACTION_CREATE = 1,
+	VIPGROUPACTION_EDIT = 2,
+	VIPGROUPACTION_REMOVE = 3
+};
+
 enum MarketAction_t {
 	MARKETACTION_BUY = 0,
 	MARKETACTION_SELL = 1,

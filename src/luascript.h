@@ -1105,6 +1105,7 @@ class LuaScriptInterface
 		static int luaGroupGetAccess(lua_State* L);
 		static int luaGroupGetMaxDepotItems(lua_State* L);
 		static int luaGroupGetMaxVipEntries(lua_State* L);
+		static int luaGroupGetMaxVipGroups(lua_State* L);
 		static int luaGroupHasFlag(lua_State* L);
 
 		// Vocation

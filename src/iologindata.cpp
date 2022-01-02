@@ -73,6 +73,20 @@ std::string decodeSecret(const std::string& secret)
 	return key;
 }
 
+std::vector<uint16_t> stringToIntArray(const std::string value)
+{
+	std::vector<uint16_t> groups;
+	std::stringstream ss(value);
+	uint16_t groupId;
+	while (ss >> groupId) {
+		groups.push_back(groupId);
+		if (ss.peek() == ',') {
+			ss.ignore();
+		}
+	}
+	return groups;
+}
+
 bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
 {
 	Database& db = Database::getInstance();
@@ -559,9 +573,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	//load vip list
-	if ((result = db.storeQuery(fmt::format("SELECT `player_id` FROM `account_viplist` WHERE `account_id` = {:d}", player->getAccount())))) {
+	if ((result = db.storeQuery(fmt::format("SELECT `player_id` FROM `account_vipentries` WHERE `account_id` = {:d}", player->getAccount())))) {
 		do {
 			player->addVIPInternal(result->getNumber<uint32_t>("player_id"));
+		} while (result->next());
+	}
+
+	//load vip groups
+	if ((result = db.storeQuery(fmt::format("SELECT `id` FROM `account_vipgroups` WHERE `account_id` = {:d}", player->getAccount())))) {
+		do {
+			player->addVIPGroupInternal(result->getNumber<uint32_t>("id"));
 		} while (result->next());
 	}
 
@@ -990,19 +1011,38 @@ bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 	return db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `highest_bidder` = {:d} LIMIT 1", guid)).get();
 }
 
+std::forward_list<VIPGroup> IOLoginData::getVIPGroups(uint32_t accountId)
+{
+	std::forward_list<VIPGroup> groups;
+
+	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format("SELECT `id`, `name`, `editable` FROM `account_vipgroups` WHERE `account_id` = {:d}", accountId));
+	if (result) {
+		do {
+			groups.emplace_front(
+				result->getNumber<uint32_t>("id"),
+				result->getString("name"),
+				result->getNumber<uint16_t>("editable") != 0
+			);
+		} while (result->next());
+	}
+	return groups;
+}
+
 std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 {
 	std::forward_list<VIPEntry> entries;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format("SELECT `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify` FROM `account_viplist` WHERE `account_id` = {:d}", accountId));
+	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format("SELECT `id`, `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify`, (SELECT GROUP_CONCAT(DISTINCT `group_id` SEPARATOR ',') FROM `vipgroup_vipentry` WHERE `entry_id` = `id`) AS `groupIds` FROM `account_vipentries` WHERE `account_id` = {:d}", accountId));
 	if (result) {
 		do {
 			entries.emplace_front(
+				result->getNumber<uint32_t>("id"),
 				result->getNumber<uint32_t>("player_id"),
 				result->getString("name"),
 				result->getString("description"),
 				result->getNumber<uint32_t>("icon"),
-				result->getNumber<uint16_t>("notify") != 0
+				result->getNumber<uint16_t>("notify") != 0,
+				stringToIntArray(result->getString("groupIds"))
 			);
 		} while (result->next());
 	}
@@ -1012,18 +1052,66 @@ std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 void IOLoginData::addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify)
 {
 	Database& db = Database::getInstance();
-	db.executeQuery(fmt::format("INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES ({:d}, {:d}, {:s}, {:d}, {:d})", accountId, guid, db.escapeString(description), icon, notify));
+	db.executeQuery(fmt::format("INSERT INTO `account_vipentries` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES ({:d}, {:d}, {:s}, {:d}, {:d})", accountId, guid, db.escapeString(description), icon, notify));
 }
 
-void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify)
+void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify, const std::vector<uint16_t> groupIds)
 {
 	Database& db = Database::getInstance();
-	db.executeQuery(fmt::format("UPDATE `account_viplist` SET `description` = {:s}, `icon` = {:d}, `notify` = {:d} WHERE `account_id` = {:d} AND `player_id` = {:d}", db.escapeString(description), icon, notify, accountId, guid));
+	db.executeQuery(fmt::format("UPDATE `account_vipentries` SET `description` = {:s}, `icon` = {:d}, `notify` = {:d} WHERE `account_id` = {:d} AND `player_id` = {:d}", db.escapeString(description), icon, notify, accountId, guid));
+
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `account_vipentries` WHERE `account_id` = {:d} AND `player_id` = {:d}", accountId, guid));
+	if (!result) {
+		return;
+	}
+
+	uint16_t entryId = result->getNumber<uint16_t>("id");
+
+	db.executeQuery(fmt::format("DELETE FROM `vipgroup_vipentry` WHERE `entry_id` = {:d}", entryId));
+	if (groupIds.empty()) {
+		return;
+	}
+
+	DBInsert insertQuery("INSERT INTO `vipgroup_vipentry` (`group_id`, `entry_id`) VALUES ");
+	for (const uint16_t& groupId : groupIds) {
+		if (!insertQuery.addRow(fmt::format("{:d}, {:d}", groupId, entryId))) {
+			return;
+		}
+	}
+
+	if (!insertQuery.execute()) {
+		return;
+	}
 }
 
 void IOLoginData::removeVIPEntry(uint32_t accountId, uint32_t guid)
 {
-	Database::getInstance().executeQuery(fmt::format("DELETE FROM `account_viplist` WHERE `account_id` = {:d} AND `player_id` = {:d}", accountId, guid));
+	Database::getInstance().executeQuery(fmt::format("DELETE FROM `account_vipentries` WHERE `account_id` = {:d} AND `player_id` = {:d}", accountId, guid));
+}
+
+bool IOLoginData::checkVIPGroupName(uint32_t accountId, const std::string& name)
+{
+	Database& db = Database::getInstance();
+	return db.storeQuery(fmt::format("SELECT `id` FROM `account_vipgroups` WHERE `account_id` = {:d} AND `name` = {:s} LIMIT 1", accountId, db.escapeString(name))).get();
+}
+
+uint32_t IOLoginData::addVIPGroup(uint32_t accountId, const std::string& name, bool isEditable)
+{
+	Database& db = Database::getInstance();
+	db.executeQuery(fmt::format("INSERT INTO `account_vipgroups` (`account_id`, `name`, `editable`) VALUES ({:d}, {:s}, {:d})", accountId, db.escapeString(name), isEditable ? 1 : 0));
+
+	return db.getLastInsertId();
+}
+
+void IOLoginData::editVIPGroup(uint16_t vipGroupId, const std::string& name)
+{
+	Database& db = Database::getInstance();
+	db.executeQuery(fmt::format("UPDATE `account_vipgroups` SET `name` = {:s} WHERE `id` = {:d}", db.escapeString(name), vipGroupId));
+}
+
+void IOLoginData::removeVIPGroup(uint16_t vipGroupId)
+{
+	Database::getInstance().executeQuery(fmt::format("DELETE FROM `account_vipgroups` WHERE `id` = {:d}", vipGroupId));
 }
 
 void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)

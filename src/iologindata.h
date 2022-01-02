@@ -52,10 +52,15 @@ class IOLoginData
 		static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 		static bool hasBiddedOnHouse(uint32_t guid);
 
+		static std::forward_list<VIPGroup> getVIPGroups(uint32_t accountId);
 		static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
 		static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
-		static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify);
+		static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify, const std::vector<uint16_t> groupIds);
 		static void removeVIPEntry(uint32_t accountId, uint32_t guid);
+		static bool checkVIPGroupName(uint32_t accountId, const std::string& name);
+		static uint32_t addVIPGroup(uint32_t accountId, const std::string& name, bool isEditable);
+		static void editVIPGroup(uint16_t vipGroupId, const std::string& name);
+		static void removeVIPGroup(uint16_t vipGroupId);
 
 		static void updatePremiumTime(uint32_t accountId, time_t endTime);
 

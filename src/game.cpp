@@ -3274,14 +3274,44 @@ void Game::playerRequestRemoveVip(uint32_t playerId, uint32_t guid)
 	player->removeVIP(guid);
 }
 
-void Game::playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify)
+void Game::playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify, const std::vector<uint16_t>& groupIds)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
 
-	player->editVIP(guid, description, icon, notify);
+	player->editVIP(guid, description, icon, notify, groupIds);
+}
+
+void Game::playerRequestAddVipGroup(uint32_t playerId, const std::string& name)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	player->addVIPGroup(name);
+}
+
+void Game::playerRequestEditVipGroup(uint32_t playerId, uint16_t vipGroupId, const std::string& name)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	player->editVIPGroup(vipGroupId, name);
+}
+
+void Game::playerRequestRemoveVipGroup(uint32_t playerId, uint16_t vipGroupId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	player->removeVIPGroup(vipGroupId);
 }
 
 void Game::playerTurn(uint32_t playerId, Direction dir)

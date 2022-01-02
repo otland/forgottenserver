@@ -163,6 +163,7 @@ class ProtocolGame final : public Protocol
 		void parseAddVip(NetworkMessage& msg);
 		void parseRemoveVip(NetworkMessage& msg);
 		void parseEditVip(NetworkMessage& msg);
+		void parseVipGroupAction(NetworkMessage& msg);
 
 		void parseRotateItem(NetworkMessage& msg);
 
@@ -239,8 +240,9 @@ class ProtocolGame final : public Protocol
 		void sendOutfitWindow();
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
-		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
+		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status, std::vector<uint16_t> groupIds);
 		void sendVIPEntries();
+		void sendVIPGroups();
 
 		void sendItemClasses();
 

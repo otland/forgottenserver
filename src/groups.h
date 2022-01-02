@@ -25,6 +25,7 @@ struct Group {
 	uint64_t flags;
 	uint32_t maxDepotItems;
 	uint32_t maxVipEntries;
+	uint32_t maxVipGroups;
 	uint16_t id;
 	bool access;
 };

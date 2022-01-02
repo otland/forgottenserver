@@ -78,14 +78,27 @@ enum tradestate_t : uint8_t {
 };
 
 struct VIPEntry {
-	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
-		guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify) {}
+	VIPEntry(uint32_t id, uint32_t playerId, std::string name, std::string description,
+		uint32_t icon, bool notify, std::vector<uint16_t> groupIds) :
+		id(id), playerId(playerId), name(std::move(name)), description(std::move(description)),
+		icon(icon), notify(notify), groupIds(groupIds) {}
 
-	uint32_t guid;
+	uint32_t id;
+	uint32_t playerId;
 	std::string name;
 	std::string description;
 	uint32_t icon;
 	bool notify;
+	std::vector<uint16_t> groupIds;
+};
+
+struct VIPGroup {
+	VIPGroup(uint16_t id, std::string name, bool isEditable) :
+		id(id), name(std::move(name)), isEditable(isEditable) {}
+
+	uint16_t id;
+	std::string name;
+	bool isEditable = true;
 };
 
 struct OpenContainer {
@@ -568,7 +581,11 @@ class Player final : public Creature, public Cylinder
 		bool removeVIP(uint32_t vipGuid);
 		bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
 		bool addVIPInternal(uint32_t vipGuid);
-		bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
+		bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify, const std::vector<uint16_t> groupIds);
+		bool addVIPGroup(const std::string& name);
+		bool addVIPGroupInternal(uint32_t vipGroupId);
+		bool editVIPGroup(uint16_t vipGroupId, const std::string& name);
+		bool removeVIPGroup(uint16_t vipGroupId);
 
 		//follow functions
 		bool setFollowCreature(Creature* creature) override;
@@ -709,6 +726,7 @@ class Player final : public Creature, public Cylinder
 		bool getOutfitAddons(const Outfit& outfit, uint8_t& addons) const;
 
 		size_t getMaxVIPEntries() const;
+		size_t getMaxVIPGroups() const;
 		size_t getMaxDepotItems() const;
 
 		//quest tracker
@@ -1233,6 +1251,7 @@ class Player final : public Creature, public Cylinder
 
 		std::unordered_set<uint32_t> attackedSet;
 		std::unordered_set<uint32_t> VIPList;
+		std::unordered_set<uint32_t> VIPGroups;
 
 		std::map<uint8_t, OpenContainer> openContainers;
 		std::map<uint32_t, DepotLocker_ptr> depotLockerMap;

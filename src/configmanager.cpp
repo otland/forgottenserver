@@ -295,6 +295,8 @@ bool ConfigManager::load()
 	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 15000);
 	integer[QUEST_TRACKER_FREE_LIMIT] = getGlobalNumber(L, "questTrackerFreeLimit", 10);
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
+	integer[VIPGROUP_FREE_LIMIT] = getGlobalNumber(L, "vipGroupFreeLimit", 3);
+	integer[VIPGROUP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipGroupPremiumLimit", 8);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

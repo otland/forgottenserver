@@ -2336,7 +2336,7 @@ bool Player::addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t st
 
 	IOLoginData::addVIPEntry(accountNumber, vipGuid, "", 0, false);
 	if (client) {
-		client->sendVIP(vipGuid, vipName, "", 0, false, status);
+		client->sendVIP(vipGuid, vipName, "", 0, false, status, {});
 	}
 	return true;
 }
@@ -2350,14 +2350,93 @@ bool Player::addVIPInternal(uint32_t vipGuid)
 	return VIPList.insert(vipGuid).second;
 }
 
-bool Player::editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify)
+bool Player::addVIPGroupInternal(uint32_t vipGroupId)
+{
+	if (VIPGroups.size() >= getMaxVIPGroups()) {
+		return false;
+	}
+
+	return VIPGroups.insert(vipGroupId).second;
+}
+
+bool Player::editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify, const std::vector<uint16_t> groupIds)
 {
 	auto it = VIPList.find(vipGuid);
 	if (it == VIPList.end()) {
 		return false; // player is not in VIP
 	}
 
-	IOLoginData::editVIPEntry(accountNumber, vipGuid, description, icon, notify);
+	IOLoginData::editVIPEntry(accountNumber, vipGuid, description, icon, notify, groupIds);
+	return true;
+}
+
+bool Player::addVIPGroup(const std::string& name)
+{
+	if (VIPGroups.size() >= getMaxVIPGroups()) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "You have already reached the maximum of groups you can create yourself.");
+		return false;
+	}
+
+	const std::vector<std::string> reservedNames = { "Friends", "Enemies", "Trading Partners" };
+	if (std::find(reservedNames.begin(), reservedNames.end(), name) != reservedNames.end()) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "You have selected an invalid group name. Please choose another one.");
+		return false;
+	}
+
+	if (IOLoginData::checkVIPGroupName(accountNumber, name)) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "A group with this name already exists. Please choose another name.");
+		return false;
+	}
+
+	uint32_t newId = IOLoginData::addVIPGroup(accountNumber, name, true);
+	auto result = VIPGroups.insert(newId);
+	if (!result.second) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "This group is already in your group list.");
+		return false;
+	}
+
+	if (client) {
+		client->sendVIPGroups();
+	}
+
+	return true;
+}
+
+bool Player::editVIPGroup(uint16_t vipGroupId, const std::string& name)
+{
+	const std::vector<std::string> reservedNames = { "Friends", "Enemies", "Trading Partners" };
+	if (std::find(reservedNames.begin(), reservedNames.end(), name) != reservedNames.end()) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "You have selected an invalid group name. Please choose another one.");
+		return false;
+	}
+
+	if (IOLoginData::checkVIPGroupName(accountNumber, name)) {
+		sendTextMessage(MESSAGE_STATUS_SMALL, "A group with this name already exists. Please choose another name.");
+		return false;
+	}
+
+	IOLoginData::editVIPGroup(vipGroupId, name);
+
+	if (client) {
+		client->sendVIPGroups();
+	}
+
+	return true;
+}
+
+bool Player::removeVIPGroup(uint16_t vipGroupId)
+{
+	if (VIPGroups.erase(vipGroupId) == 0) {
+		return false;
+	}
+
+	IOLoginData::removeVIPGroup(vipGroupId);
+
+	if (client) {
+		client->sendVIPEntries();
+		client->sendVIPGroups();
+	}
+
 	return true;
 }
 
@@ -4642,6 +4721,15 @@ size_t Player::getMaxVIPEntries() const
 	}
 
 	return g_config.getNumber(isPremium() ? ConfigManager::VIP_PREMIUM_LIMIT : ConfigManager::VIP_FREE_LIMIT);
+}
+
+size_t Player::getMaxVIPGroups() const
+{
+	if (group->maxVipGroups != 0) {
+		return group->maxVipGroups;
+	}
+
+	return g_config.getNumber(isPremium() ? ConfigManager::VIPGROUP_PREMIUM_LIMIT : ConfigManager::VIPGROUP_FREE_LIMIT);
 }
 
 size_t Player::getMaxDepotItems() const
