@@ -53,8 +53,8 @@ ec.onSpawn = {}
 EventCallback = {
 	register = function (self, triggerIndex)
 		if isScriptsInterface() then
-			local eventType = rawget(self, "eventType")
-			local callback = rawget(self, "callback")
+			local eventType = rawget(self, 'eventType')
+			local callback = rawget(self, 'callback')
 			if not eventType or not callback then
 				debugPrint("[Warning - EventCallback::register] need to setup a callback before you can register.")
 				return
@@ -128,7 +128,7 @@ setmetatable(EventCallback, {
 					-- If the call returns false then we exit the loop
 					if output == false then return false end
 					-- If the call of type returnvalue returns noerror then we continue the loop
-					if info.returnValue and output == RETURNVALUE_NOERROR then break end
+					if info.returnValue then if output == RETURNVALUE_NOERROR then break end return output end
 					-- We left the loop why have we reached the end
 					if index == eventData.maxn then return unpack(results) end
 				until true
