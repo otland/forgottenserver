@@ -14100,13 +14100,14 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 {
-	// monsterType:addSummon(name, interval, chance)
+	// monsterType:addSummon(name, interval, chance[, max = -1])
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		summonBlock_t summon;
 		summon.name = getString(L, 2);
 		summon.speed = getNumber<int32_t>(L, 3);
 		summon.chance = getNumber<int32_t>(L, 4);
+		summon.max = getNumber<int32_t>(L, 5, -1);
 		monsterType->info.summons.push_back(summon);
 		pushBoolean(L, true);
 	} else {
