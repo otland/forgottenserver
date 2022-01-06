@@ -401,10 +401,6 @@ void Spawn::cleanup()
 		uint32_t spawnId = it->first;
 		Monster* monster = it->second;
 		if (monster->isRemoved()) {
-			if (spawnId != 0) {
-				spawnMap[spawnId].lastSpawn = OTSYS_TIME();
-			}
-
 			monster->decrementReferenceCounter();
 			it = spawnedMap.erase(it);
 		} else if (!isInSpawnZone(monster->getPosition()) && spawnId != 0) {
