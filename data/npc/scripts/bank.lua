@@ -71,7 +71,6 @@ local function creatureSayCallback(cid, type, msg)
 			return false
 		end
 		if msgcontains(msg, "all") then
-			count[cid] = player:getMoney()
 			npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 			npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 			return true
