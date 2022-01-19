@@ -37557,7 +37557,7 @@
 		<attribute key="weight" value="1500" />
 		<attribute key="containerSize" value="20" />
 		<attribute key="slotType" value="backpack" />
-		<attribute key="description" value="It was awarded during the festivities of worlds 20th anniversary." />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 20th anniversary." />
 	</item>
 	<item id="27052" article="a" name="birthday cake" />
 	<item id="27053" name="Ferumbras' Candy Hat" />
