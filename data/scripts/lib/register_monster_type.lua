@@ -280,7 +280,11 @@ local function AbilityTableToSpell(ability)
 		else
 			spell:setType(ability.name)
 			if ability.type then
-				spell:setCombatType(ability.type)
+				if ability.name == "combat" then
+					spell:setCombatType(ability.type)
+				elseif ability.name == "condition" then
+					spell:setConditionType(ability.type)
+				end
 			end
 			if ability.interval then
 				spell:setInterval(ability.interval)
@@ -327,11 +331,8 @@ local function AbilityTableToSpell(ability)
 			if ability.shootEffect then
 				spell:setCombatShootEffect(ability.shootEffect)
 			end
-			if ability.name == "drunk" then
-				spell:setConditionType(CONDITION_DRUNK)
-				if ability.drunkenness then
-					spell:setConditionDrunkenness(ability.drunkenness)
-				end
+			if ability.drunkenness then
+				spell:setConditionDrunkenness(ability.drunkenness)
 			end
 		end
 		if ability.condition then
