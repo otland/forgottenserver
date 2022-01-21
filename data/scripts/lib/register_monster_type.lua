@@ -280,11 +280,7 @@ local function AbilityTableToSpell(ability)
 		else
 			spell:setType(ability.name)
 			if ability.type then
-				if ability.name == "combat" then
-					spell:setCombatType(ability.type)
-				elseif ability.name == "condition" then
-					spell:setConditionType(ability.type)
-				end
+				spell:setCombatType(ability.type)
 			end
 			if ability.interval then
 				spell:setInterval(ability.interval)
