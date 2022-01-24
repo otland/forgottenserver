@@ -6,9 +6,6 @@ on:
       - master
       - v*
 
-    tags:
-      - v*
-
     paths:
       - cmake/**
       - src/**
