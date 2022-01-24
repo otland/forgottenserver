@@ -62,8 +62,7 @@ monster.attacks = {
 	{name = "speed", chance = 15, interval = 2*1000, speed = -700, radius = 1, target = true, duration = 30*1000, effect = CONST_ME_MAGIC_RED},
 	{name = "firefield", chance = 10, interval = 2*1000, range = 7, radius = 1, target = true, shootEffect = CONST_ANI_FIRE},
 	{name = "condition", chance = 1000, range = 1, condition = { type = CONDITION_ENERGY, minDamage = 10, maxDamage = 20, duration = 5000, interval = 1000}},
-	{name = "drunk", chance = 10, interval = 2000, drunkenness = 25, duration = 5000, range = 7, shootEffect = CONST_ANI_ENERGY},
-	{name =	"outfit", chance = 10, interval = 2000, item = 7172, duration = 8000, range = 7, effect = CONST_ME_MAGIC_BLUE}
+	{name = "drunk", chance = 10, interval = 2000, drunkenness = 25, duration = 5000, range = 7, shootEffect = CONST_ANI_ENERGY}
 }
 
 monster.defenses = {
