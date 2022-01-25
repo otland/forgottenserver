@@ -465,12 +465,6 @@ class ItemAttributes
 
 		template<typename R>
 		void setCustomAttribute(std::string& key, R value) {
-			int64_t numericKey;
-			if (stringToLong(key, numericKey) && numericKey <= ITEM_CUSTOMATTRIBUTE_LAST) {
-				std::cout << "Attempt to set protected custom attribute key " << numericKey << std::endl;
-				return;
-			}
-
 			toLowerCaseString(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
@@ -481,12 +475,6 @@ class ItemAttributes
 		}
 
 		void setCustomAttribute(std::string& key, CustomAttribute& value) {
-			int64_t numericKey;
-			if (stringToLong(key, numericKey) && numericKey <= ITEM_CUSTOMATTRIBUTE_LAST) {
-				std::cout << "Attempt to set protected custom attribute key " << numericKey << std::endl;
-				return;
-			}
-
 			toLowerCaseString(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
@@ -512,7 +500,7 @@ class ItemAttributes
 		}
 
 		bool removeCustomAttribute(int64_t key) {
-			const std::string& tmp = std::to_string(key);
+			auto tmp = std::to_string(key);
 			return removeCustomAttribute(tmp);
 		}
 

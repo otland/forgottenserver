@@ -100,6 +100,4 @@ ItemCustomAttributes_t combatTypeToCustomBoostAttribute(CombatType_t combatType)
 ItemCustomAttributes_t combatTypeToCustomReflectPercentAttribute(CombatType_t combatType);
 ItemCustomAttributes_t combatTypeToCustomReflectChanceAttribute(CombatType_t combatType);
 
-bool stringToLong(const std::string& input, int64_t& output);
-
 #endif

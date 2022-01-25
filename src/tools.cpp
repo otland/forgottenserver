@@ -1429,14 +1429,3 @@ ItemCustomAttributes_t combatTypeToCustomReflectChanceAttribute(CombatType_t com
 			return ITEM_CUSTOMATTRIBUTE_NONE;
 	}
 }
-
-bool stringToLong(const std::string& input, int64_t& output)
-{
-	try {
-		output = std::stol(input);
-	} catch (std::exception&) {
-		// silently ignore exception
-		return false;
-	}
-	return true;
-}
