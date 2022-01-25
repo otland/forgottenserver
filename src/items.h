@@ -253,7 +253,7 @@ struct Abilities {
 
 	std::array<Reflect, COMBAT_COUNT> reflect;
 
-	int16_t boostPercent[COMBAT_COUNT] = { 0 };
+	int16_t boostPercent[COMBAT_COUNT] = {0};
 
 	//elemental damage
 	uint16_t elementDamage = 0;
