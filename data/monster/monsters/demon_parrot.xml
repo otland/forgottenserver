@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demon Parrot" nameDescription="a demon parrot" race="blood" experience="225" speed="300" manacost="250">
+	<health now="360" max="360" />
+	<look type="217" corpse="6056" />
+	<targetchange interval="5000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1200" min="0" max="-100" />
+		<attack name="drunk" interval="1000" chance="30" length="5" spread="0">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="30" range="5" min="-25" max="-45">
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="30" range="1" min="-15" max="-45" />
+	</attacks>
+	<defenses armor="30" defense="35" />
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="ISHH THAT THE BESHHT YOU HAVE TO OFFERRR?" />
+		<voice sentence="YOU ARRRRRE DOOMED!" />
+		<voice sentence="I SHHMELL FEEAARRR!" />
+		<voice sentence="MY SHHEED IS FEARRR AND MY HARRRVEST ISHH YOURRR SHHOUL!" />
+		<voice sentence="Your shhoooul will be mineee!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="99" chance="50000" />
+	</loot>
+</monster>

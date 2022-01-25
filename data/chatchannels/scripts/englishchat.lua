@@ -1,10 +1,10 @@
 function onSpeak(player, type, message)
-	local playerAccountType = player:getAccountType()
-	if player:getLevel() == 1 and playerAccountType < ACCOUNT_TYPE_GAMEMASTER then
-		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
+	if player:getLevel() < 20 and not player:isPremium() then
+		player:sendCancelMessage("You may not speak in this channel unless you have reached level 20 or your account has premium status.")
 		return false
 	end
 
+	local playerAccountType = player:getAccountType()
 	if type == TALKTYPE_CHANNEL_Y then
 		if playerAccountType >= ACCOUNT_TYPE_GAMEMASTER then
 			type = TALKTYPE_CHANNEL_O

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Bloodweb" nameDescription="The Bloodweb" race="undead" experience="1450" speed="340">
+	<health now="1750" max="1750" />
+	<look type="263" corpse="7344" />
+	<targetchange speed="20000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="60" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" poison="8" />
+		<attack name="speed" interval="2000" chance="20" range="7" radius="7" target="0" speedchange="-850" duration="8000">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="25" range="7" target="1" min="-60" max="-150">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="20">
+		<defense name="speed" interval="3000" chance="40" speedchange="380" duration="80000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="20" />
+		<element energyPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Screeech!" />
+	</voices>
+	<loot>
+		<item id="2169" chance="3703" /><!-- time ring -->
+		<item name="plate armor" chance="100000" />
+		<item name="knight armor" chance="7692" />
+		<item name="knight legs" chance="5555" />
+		<item name="jewelled backpack" chance="7692" />
+		<item name="spider silk" chance="50000" />
+		<item name="party hat" chance="1886" />
+		<item name="shard" chance="3703" />
+		<item name="sniper arrow" countmax="9" chance="100000" />
+		<item name="sapphire hammer" chance="20000" />
+		<item name="strong mana potion" chance="100000" />
+		<item name="glacier kilt" chance="33333" />
+		<item name="glacier mask" chance="33333" />
+		<item name="sai" chance="20000" />
+	</loot>
+</monster>

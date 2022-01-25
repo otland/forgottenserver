@@ -22,7 +22,6 @@
 #include <stack>
 #include "fileloader.h"
 
-
 namespace OTB {
 
 constexpr Identifier wildcard = {{'\0', '\0', '\0', '\0'}};
@@ -62,7 +61,7 @@ const Node& Loader::parseTree()
 	parseStack.push(&root);
 
 	for (; it != fileContents.end(); ++it) {
-		switch(static_cast<uint8_t>(*it)) {
+		switch (static_cast<uint8_t>(*it)) {
 			case Node::START: {
 				auto& currentNode = getCurrentNode(parseStack);
 				if (currentNode.children.empty()) {

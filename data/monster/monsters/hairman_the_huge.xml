@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hairman The Huge" nameDescription="Hairman The Huge" race="blood" experience="335" speed="230">
+	<health now="600" max="600" />
+	<look type="116" corpse="6043" />
+	<targetchange interval="5000" chance="14" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="speed" interval="1000" chance="7" speedchange="260" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="1000" chance="2">
+		<voice sentence="Hugah!" />
+		<voice sentence="Ungh! Ungh!" />
+		<voice sentence="Huaauaauaauaa!" />
+	</voices>
+	<summons maxSummons="1">
+		<summon name="Kongra" interval="2000" chance="25" />
+	</summons>
+	<loot>
+		<item name="gold coin" countmax="60" chance="50000" />
+		<item name="power ring" chance="7500" />
+		<item name="protection amulet" chance="3000" />
+		<item name="plate armor" chance="5000" />
+		<item name="banana" countmax="2" chance="7500" />
+		<item name="ape fur" chance="2500" />
+	</loot>
+</monster>

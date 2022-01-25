@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orewalker" nameDescription="an orewalker" race="undead" experience="4800" speed="250">
+	<health now="7200" max="7200" />
+	<look type="490" corpse="17256" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="manadrain" interval="2000" chance="15" length="4" spread="3" min="-296" max="-700">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1500">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="10" target="1" radius="3" min="-800" max="-1080">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="15" target="0" radius="4" duration="6000">
+			<attribute key="areaEffect" value="purplenote" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="2" target="0" spread="0" speedchange="-800" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45" />
+	<elements>
+		<element energyPercent="-5" />
+		<element firePercent="65" />
+		<element deathPercent="15" />
+		<element physicalPercent="5" />
+		<element icePercent="5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Sizzle!" />
+		<voice sentence="CLONK!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="98" chance="50000" />
+		<item name="platinum coin" countmax="10" chance="100000" />
+		<item name="yellow gem" chance="1030" />
+		<item name="dwarven ring" chance="4660" />
+		<item name="knight legs" chance="1910" />
+		<item name="crown armor" chance="370" />
+		<item name="crown helmet" chance="890" />
+		<item name="iron ore" chance="15000" />
+		<item name="magic sulphur" chance="3000" />
+		<item name="titan axe" chance="2600" />
+		<item name="glorious axe" chance="1870" />
+		<item name="strong health potion" countmax="2" chance="15600" />
+		<item name="strong mana potion" countmax="2" chance="14000" />
+		<item name="great mana potion" countmax="2" chance="14000" />
+		<item name="mana potion" countmax="4" chance="14000" />
+		<item name="ultimate health potion" countmax="2" chance="9500" />
+		<item name="crystalline armor" chance="560" />
+		<item name="small topaz" countmax="3" chance="16500" />
+		<item name="shiny stone" chance="13700" />
+		<item name="sulphurous stone" chance="20700" />
+		<item name="wand of defiance" chance="1300" />
+		<item name="green crystal shard" chance="8000" />
+		<item name="blue crystal splinter" countmax="2" chance="16000" />
+		<item name="cyan crystal fragment" chance="13000" />
+		<item name="pulverized ore" chance="20500" />
+		<item name="vein of ore" chance="15000" />
+		<item name="prismatic bolt" countmax="5" chance="15500" />
+		<item name="crystal crossbow" chance="300" />
+	</loot>
+</monster>

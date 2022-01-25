@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tormented Ghost" nameDescription="a tormented ghost" race="undead" experience="5" speed="160">
+	<health now="210" max="210" />
+	<look type="48" corpse="9741" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="lifedrain" interval="3000" chance="15" range="1" min="-40" max="-70" />
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<immunities>
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity physical="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Haaahhh!" />
+		<voice sentence="Grrglll" />
+	</voices>
+</monster>

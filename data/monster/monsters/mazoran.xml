@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mazoran" nameDescription="Mazoran" race="fire" experience="50000" speed="400">
+	<health now="290000" max="290000" />
+	<look type="842" head="97" body="80" legs="79" feet="0" addons="3" corpse="25151" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-1500" max="-2500" />
+		<attack name="fire" interval="3000" chance="20" length="10" spread="0" min="-500" max="-1000">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="speed" interval="2000" chance="25" radius="7" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" radius="5" min="-300" max="-700">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" length="10" spread="0" min="-500" max="-800">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20"  length="8" spread="3" min="-500" max="-800">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="10" min="2090" max="4500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="35" speedchange="700" duration="6000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity fire="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="ASHES TO ASHES, TASTE MY FIRE!" />
+		<voice sentence="BUUURN!" />
+		<voice sentence="UNLEASH THE FIRE!" />
+	</voices>
+	<loot>
+		<item id="25172" chance="100000" /><!-- silver token -->
+		<item id="18419" countmax="5" chance="23000" /><!-- cyan crystal fragment -->
+		<item id="18420" countmax="5" chance="23000" /><!-- red crystal fragment -->
+		<item id="18421" countmax="5" chance="23000" /><!-- green crystal fragment -->
+		<item id="2143" countmax="8" chance="12000" /><!-- white pearl -->
+		<item id="2146" countmax="9" chance="12000" /><!-- small sapphire -->
+		<item id="2148" countmax="100" chance="49000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="49000" /><!-- gold coin -->
+		<item id="2150" countmax="5" chance="10000" /><!-- small amethyst -->
+		<item id="2152" countmax="58" chance="8000" /><!-- platinum coin -->
+		<item id="2155" chance="1000" /><!-- green gem -->
+		<item id="2158" chance="1000" /><!-- blue gem -->
+		<item id="2167" chance="4000" /><!-- energy ring -->
+		<item id="2432" chance="3000" /><!-- fire axe -->
+		<item id="25416" chance="500" /><!-- impaler of igniter -->
+		<item id="2542" chance="500" /><!-- tempest shield -->
+		<item id="25522" chance="500" /><!-- rift bow -->
+		<item id="25523" chance="500" /><!-- rift crossbow -->
+		<item id="6500" chance="11000" /><!-- demonic essence -->
+		<item id="7382" chance="1000" /><!-- demonrange sword -->
+		<item id="7590" countmax="5" chance="23000" /><!-- great mana potion -->
+		<item id="7632" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
+		<item id="7633" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
+		<item id="7890" chance="1000" /><!-- magma amulet -->
+		<item id="7894" chance="1000" /><!-- magma legs-->
+		<item id="7899" chance="1000" /><!-- magma coat-->
+		<item id="8472" countmax="5" chance="46100" /><!-- great spirit potion -->
+		<item id="8473" countmax="5" chance="23000" /><!-- ultimate health potion -->
+		<item id="9970" countmax="8" chance="10000" /><!-- small topaz -->
+		<item id="9971" chance="3000" /><!-- gold ingot-->
+	</loot>
+</monster>

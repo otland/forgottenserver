@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tarnished Spirit" nameDescription="a tarnished spirit" race="undead" experience="120" speed="180">
+	<health now="150" max="150" />
+	<look type="566" corpse="21366" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-80" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-45">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity physical="1" />
+		<immunity drown="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Huh!" />
+	</voices>
+	<loot>
+		<item id="1962" chance="1310" /><!-- orange book -->
+		<item name="stealth ring" chance="180" />
+		<item name="morning star" chance="10610" />
+		<item name="combat knife" chance="7002" />
+		<item name="ancient shield" chance="860" />
+		<item name="cape" chance="8800" />
+		<item name="shadow herb" chance="14400" />
+		<item name="white piece of cloth" chance="1940" />
+		<item name="ghostly tissue" chance="1870" />
+	</loot>
+</monster>

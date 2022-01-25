@@ -24,6 +24,8 @@
 
 #include "game.h"
 
+#include <fmt/format.h>
+
 extern Game g_game;
 
 void ProtocolOld::disconnectClient(const std::string& message)
@@ -48,9 +50,7 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(12);
 
 	if (version <= 760) {
-		std::ostringstream ss;
-		ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
-		disconnectClient(ss.str());
+		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		return;
 	}
 
@@ -68,10 +68,8 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 	setXTEAKey(std::move(key));
 
 	if (version <= 822) {
-		disableChecksum();
+		setChecksumMode(CHECKSUM_DISABLED);
 	}
 
-	std::ostringstream ss;
-	ss << "Only clients with protocol " << CLIENT_VERSION_STR << " allowed!";
-	disconnectClient(ss.str());
+	disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 }

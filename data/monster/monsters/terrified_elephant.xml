@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Terrified Elephant" nameDescription="a terrified elephant" race="blood" experience="160" speed="220" manacost="500">
+	<health now="320" max="320" />
+	<look type="211" corpse="6052" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+	</attacks>
+	<defenses>
+		<defense name="speed" interval="2000" chance="15" speedchange="800" duration="5000" />
+	</defenses>
+	<elements>
+		<element physicalPercent="25" />
+		<element icePercent="20" />
+		<element energyPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hooooot-Toooooot!" />
+		<voice sentence="Tooooot!" />
+		<voice sentence="Trooooot!" />
+	</voices>
+	<loot>
+		<item name="meat" countmax="4" chance="40000" />
+		<item name="ham" countmax="9" chance="27000" />
+		<item name="tusk" countmax="2" chance="8510" />
+		<item name="tusk shield" chance="80" />
+	</loot>
+</monster>

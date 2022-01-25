@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spidris" nameDescription="Spidris" race="venom" experience="2600" speed="260">
+	<health now="3700" max="3700" />
+	<look type="457" corpse="15296" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-298" />
+		<attack name="earth" interval="2000" chance="20" target="1" range="7" radius="3" min="-150" max="-310">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="450" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="5" />
+		<element firePercent="5" />
+		<element holyPercent="-10" />
+		<element energyPercent="-5" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Eeeeeeyyyyh!" />
+		<voice sentence="Iiiiieeeeeh!" />
+	</voices>
+	<loot>
+		<item name="small ruby" countmax="5" chance="11900" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="platinum coin" countmax="4" chance="45000" />
+		<item name="violet gem" chance="770" />
+		<item id="6300" chance="2700" /><!-- death ring -->
+		<item name="titan axe" chance="920" />
+		<item name="great mana potion" countmax="2" chance="11500" />
+		<item id="7632" chance="1700" /><!-- giant shimmering pearl -->
+		<item name="ultimate health potion" countmax="2" chance="6250" />
+		<item name="spidris mandible" chance="14960" />
+		<item name="compound eye" chance="12500" />
+		<item name="calopteryx cape" chance="370" />
+		<item name="carapace shield" chance="720" />
+		<item name="hive scythe" chance="690" />
+	</loot>
+</monster>

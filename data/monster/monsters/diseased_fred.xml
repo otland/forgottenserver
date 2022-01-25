@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Diseased Fred" nameDescription="a diseased Fred" race="venom" experience="300" speed="250">
+	<health now="1100" max="1100" />
+	<look type="299" corpse="8951" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="150" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" poison="60" />
+		<attack name="lifedrain" interval="2000" chance="15" target="1" range="7" min="-65" max="-80">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" radius="3" target="0" min="-100" max="-170">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="3000" chance="40" target="1" speedchange="-900" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="5000" chance="60" min="50" max="80">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="15" />
+		<element energyPercent="15" />
+		<element icePercent="15" />
+		<element holyPercent="15" />
+		<element deathPercent="55" />
+		<element firePercent="15" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="You will suffer the same fate as I do!" />
+		<voice sentence="The pain! The pain!" />
+		<voice sentence="Stay away! I am contagious!" />
+		<voice sentence="The plague will get you!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="25" chance="43000" />
+	</loot>
+</monster>

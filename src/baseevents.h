@@ -47,6 +47,10 @@ class Event
 		bool scripted = false;
 		bool fromLua = false;
 
+		int32_t getScriptId() {
+			return scriptId;
+		}
+
 	protected:
 		virtual std::string getScriptEventName() const = 0;
 

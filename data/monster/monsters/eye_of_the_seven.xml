@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Eye of the Seven" nameDescription="an eye of the seven" race="venom" experience="0" speed="0">
+	<health now="1" max="1" />
+	<look type="109" corpse="6036" />
+	<targetchange interval="5000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="0" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="lifedrain" interval="1000" chance="9" range="6" min="0" max="-500" />
+	</attacks>
+	<defenses armor="1" defense="1" />
+	<immunities>
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity manadrain="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+		<immunity outfit="1" />
+	</immunities>
+</monster>

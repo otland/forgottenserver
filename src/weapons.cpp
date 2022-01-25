@@ -55,7 +55,7 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 
 void Weapons::clear(bool fromLua)
 {
-	for (auto it = weapons.begin(); it != weapons.end(); ) {
+	for (auto it = weapons.begin(); it != weapons.end();) {
 		if (fromLua == it->second->fromLua) {
 			it = weapons.erase(it);
 		} else {
@@ -135,11 +135,9 @@ bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 	return result.second;
 }
 
-bool Weapons::registerLuaEvent(Weapon* event)
+bool Weapons::registerLuaEvent(Weapon* weapon)
 {
-	Weapon_ptr weapon{ event };
-	weapons[weapon->getID()] = weapon.release();
-
+	weapons[weapon->getID()] = weapon;
 	return true;
 }
 
@@ -367,7 +365,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 	damage.primary.type = params.combatType;
 	damage.primary.value = -normal_random(0, maxDamage);
 
-	Combat::doCombatHealth(player, target, damage, params);
+	Combat::doTargetCombat(player, target, damage, params);
 	if (!player->hasFlag(PlayerFlag_NotGainSkill) && player->getAddAttackSkill()) {
 		player->addSkillAdvance(SKILL_FIST, 1);
 	}
@@ -387,6 +385,8 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		WeaponType_t weaponType = item->getWeaponType();
 		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE) {
 			damage.origin = ORIGIN_RANGED;
+		} else if (weaponType == WEAPON_WAND) {
+			damage.origin = ORIGIN_WAND;
 		} else {
 			damage.origin = ORIGIN_MELEE;
 		}
@@ -394,7 +394,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		damage.primary.value = (getWeaponDamage(player, target, item) * damageModifier) / 100;
 		damage.secondary.type = getElementType();
 		damage.secondary.value = getElementDamage(player, target, item);
-		Combat::doCombatHealth(player, target, damage, params);
+		Combat::doTargetCombat(player, target, damage, params);
 	}
 
 	onUsedWeapon(player, item, target->getTile());
@@ -447,12 +447,14 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
-			Weapon::decrementItemCount(item);
+			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
+				Weapon::decrementItemCount(item);
+			}
 			break;
 
 		case WEAPONACTION_REMOVECHARGE: {
 			uint16_t charges = item->getCharges();
-			if (charges != 0) {
+			if (charges != 0 && g_config.getBoolean(ConfigManager::REMOVE_WEAPON_CHARGES)) {
 				g_game.transformItem(item, item->getID(), charges - 1);
 			}
 			break;
@@ -643,14 +645,14 @@ void WeaponDistance::configureWeapon(const ItemType& it)
 
 bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) const
 {
-	int32_t damageModifier;
+	int32_t damageModifier = 0;
 	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_AMMO) {
 		Item* mainWeaponItem = player->getWeapon(true);
 		const Weapon* mainWeapon = g_weapons->getWeapon(mainWeaponItem);
 		if (mainWeapon) {
 			damageModifier = mainWeapon->playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
-		} else {
+		} else if (mainWeaponItem) {
 			damageModifier = playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
 		}
 	} else {
@@ -788,7 +790,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			for (const auto& dir : destList) {
 				// Blocking tiles or tiles without ground ain't valid targets for spears
 				Tile* tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
-				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround() != nullptr) {
+				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround()) {
 					destTile = tmpTile;
 					break;
 				}

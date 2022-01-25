@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goblin Assassin" nameDescription="a goblin assassin" race="blood" experience="52" speed="200" manacost="360">
+	<health now="75" max="75" />
+	<look type="296" corpse="6002" />
+	<targetchange interval="10000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-15" />
+		<attack name="drunk" interval="2000" chance="10" duration="10000">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" range="6" min="0" max="-35">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="invisible" interval="2000" chance="10" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="100" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element earthPercent="-10" />
+		<element holyPercent="1" />
+		<element deathPercent="-1" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Goblin Powahhh!" />
+		<voice sentence="Me kill you!" />
+		<voice sentence="Me green menace!" />
+		<voice sentence="Gobabunga!" />
+		<voice sentence="Gooobliiiins!" />
+	</voices>
+	<loot>
+		<item name="small stone" countmax="3" chance="9900" />
+		<item name="gold coin" countmax="9" chance="50000" />
+		<item id="2230" chance="13000" /><!-- bone -->
+		<item name="mouldy cheese" chance="6610" />
+		<item name="dagger" chance="17000" />
+		<item name="short sword" chance="8820" />
+		<item name="bone club" chance="4770" />
+		<item name="leather helmet" chance="13000" />
+		<item name="leather armor" chance="7240" />
+		<item name="small axe" chance="9800" />
+		<item id="2667" chance="12400" /><!-- fish -->
+	</loot>
+</monster>

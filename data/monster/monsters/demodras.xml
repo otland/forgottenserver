@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demodras" nameDescription="Demodras" race="blood" experience="6000" speed="230">
+	<health now="4500" max="4500" />
+	<look type="204" corpse="5984" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="300" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-235" />
+		<attack name="fire" interval="3000" chance="20" range="7" radius="4" target="1" min="-350" max="-400">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="10" range="7" radius="6" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="4000" chance="20" length="8" spread="3" min="-300" max="-550">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="25" min="400" max="600">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Dragon" interval="1000" chance="17" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I WILL SET THE WORLD ON FIRE!" yell="1" />
+		<voice sentence="I WILL PROTECT MY BROOD!" yell="1" />
+	</voices>
+	<loot>
+		<item id="5919" chance="100000" /><!-- dragon claw -->
+		<item name="platinum coin" countmax="10" chance="99000" />
+		<item name="dragon ham" countmax="10" chance="75000" />
+		<item name="green mushroom" countmax="7" chance="25666" />
+		<item name="power bolt" countmax="10" chance="19000" />
+		<item name="red dragon leather" chance="15000" />
+		<item name="small sapphire" chance="12222" />
+		<item id="1976" chance="10000" /><!-- book (gemmed) -->
+		<item name="energy ring" chance="10000" />
+		<item name="great mana potion" chance="8800" />
+		<item name="great health potion" chance="8800" />
+		<item name="golden mug" chance="6100" />
+		<item name="onyx arrow" countmax="5" chance="4500" />
+		<item name="dragon scale mail" chance="2000" />
+		<item name="fire sword" chance="2000" />
+		<item name="life crystal" chance="1000" />
+	</loot>
+</monster>

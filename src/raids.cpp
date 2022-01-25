@@ -28,6 +28,8 @@
 #include "scheduler.h"
 #include "monster.h"
 
+#include <fmt/format.h>
+
 extern Game g_game;
 extern ConfigManager g_config;
 
@@ -71,9 +73,7 @@ bool Raids::loadFromXml()
 		if ((attr = raidNode.attribute("file"))) {
 			file = attr.as_string();
 		} else {
-			std::ostringstream ss;
-			ss << "raids/" << name << ".xml";
-			file = ss.str();
+			file = fmt::format("raids/{:s}.xml", name);
 			std::cout << "[Warning - Raids::loadFromXml] File tag missing for raid " << name << ". Using default: " << file << std::endl;
 		}
 
@@ -282,9 +282,8 @@ RaidEvent* Raid::getNextRaidEvent()
 {
 	if (nextEvent < raidEvents.size()) {
 		return raidEvents[nextEvent];
-	} else {
-		return nullptr;
 	}
+	return nullptr;
 }
 
 bool RaidEvent::configureRaidEvent(const pugi::xml_node& eventNode)
@@ -325,10 +324,8 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 			messageType = MESSAGE_INFO_DESCR;
 		} else if (tmpStrValue == "smallstatus") {
 			messageType = MESSAGE_STATUS_SMALL;
-		} else if (tmpStrValue == "blueconsole") {
-			messageType = MESSAGE_STATUS_CONSOLE_BLUE;
-		} else if (tmpStrValue == "redconsole") {
-			messageType = MESSAGE_STATUS_CONSOLE_RED;
+		} else if (tmpStrValue == "blueconsole" || tmpStrValue == "redconsole") {
+			std::cout << "[Notice] Raid: Deprecated type tag for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		} else {
 			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		}
@@ -534,7 +531,7 @@ bool AreaSpawnEvent::executeEvent()
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;
 				}

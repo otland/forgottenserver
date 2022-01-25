@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="White Shade" nameDescription="a white shade" race="undead" experience="120" speed="190">
+	<health now="260" max="260" />
+	<look type="560" corpse="21376" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-8" />
+		<attack name="lifedrain" interval="2000" chance="20" range="7" min="-4" max="-6">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="yalaharighost" />
+		</attack>
+		<attack name="speed" interval="2000" chance="5" radius="4" target="0" speedchange="-400" duration="3000">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="invisible" interval="2000" chance="5" duration="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-10" />
+		<element physicalPercent="90" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Leave this place... save yourself..." />
+		<voice sentence="The dark ones.. must be stopped... unholy, twisted, EVIL!" />
+		<voice sentence="No... don't go further stranger... danger lies in every step..." />
+	</voices>
+	<loot>
+		<item name="white piece of cloth" chance="3370" />
+	</loot>
+</monster>

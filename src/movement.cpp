@@ -44,7 +44,7 @@ void MoveEvents::clearMap(MoveListMap& map, bool fromLua)
 	for (auto it = map.begin(); it != map.end(); ++it) {
 		for (int eventType = MOVE_EVENT_STEP_IN; eventType < MOVE_EVENT_LAST; ++eventType) {
 			auto& moveEvents = it->second.moveEvent[eventType];
-			for (auto find = moveEvents.begin(); find != moveEvents.end(); ) {
+			for (auto find = moveEvents.begin(); find != moveEvents.end();) {
 				if (fromLua == find->fromLua) {
 					find = moveEvents.erase(find);
 				} else {
@@ -60,7 +60,7 @@ void MoveEvents::clearPosMap(MovePosListMap& map, bool fromLua)
 	for (auto it = map.begin(); it != map.end(); ++it) {
 		for (int eventType = MOVE_EVENT_STEP_IN; eventType < MOVE_EVENT_LAST; ++eventType) {
 			auto& moveEvents = it->second.moveEvent[eventType];
-			for (auto find = moveEvents.begin(); find != moveEvents.end(); ) {
+			for (auto find = moveEvents.begin(); find != moveEvents.end();) {
 				if (fromLua == find->fromLua) {
 					find = moveEvents.erase(find);
 				} else {
@@ -122,15 +122,18 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("itemid"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
-		if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-			ItemType& it = Item::items.getItemType(id);
-			it.wieldInfo = moveEvent->getWieldInfo();
-			it.minReqLevel = moveEvent->getReqLevel();
-			it.minReqMagicLevel = moveEvent->getReqMagLv();
-			it.vocationString = moveEvent->getVocationString();
+		std::vector<int32_t> idList = vectorAtoi(explodeString(attr.as_string(), ";"));
+
+		for (const auto& id : idList) {
+			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
+				ItemType& it = Item::items.getItemType(id);
+				it.wieldInfo = moveEvent->getWieldInfo();
+				it.minReqLevel = moveEvent->getReqLevel();
+				it.minReqMagicLevel = moveEvent->getReqMagLv();
+				it.vocationString = moveEvent->getVocationString();
+			}
+			addEvent(std::move(*moveEvent), id, itemIdMap);
 		}
-		addEvent(std::move(*moveEvent), id, itemIdMap);
 	} else if ((attr = node.attribute("fromid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toid").value());
@@ -159,7 +162,11 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			}
 		}
 	} else if ((attr = node.attribute("uniqueid"))) {
-		addEvent(std::move(*moveEvent), pugi::cast<int32_t>(attr.value()), uniqueIdMap);
+		std::vector<int32_t> uidList = vectorAtoi(explodeString(attr.as_string(), ";"));
+
+		for (const auto& uid : uidList) {
+			addEvent(std::move(*moveEvent), uid, uniqueIdMap);
+		}
 	} else if ((attr = node.attribute("fromuid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("touid").value());
@@ -168,7 +175,11 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			addEvent(*moveEvent, id, uniqueIdMap);
 		}
 	} else if ((attr = node.attribute("actionid"))) {
-		addEvent(std::move(*moveEvent), pugi::cast<int32_t>(attr.value()), actionIdMap);
+		std::vector<int32_t> aidList = vectorAtoi(explodeString(attr.as_string(), ";"));
+
+		for (const auto& aid : aidList) {
+			addEvent(std::move(*moveEvent), aid, actionIdMap);
+		}
 	} else if ((attr = node.attribute("fromaid"))) {
 		uint32_t id = pugi::cast<uint32_t>(attr.value());
 		uint32_t endId = pugi::cast<uint32_t>(node.attribute("toaid").value());
@@ -193,6 +204,23 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 bool MoveEvents::registerLuaFunction(MoveEvent* event)
 {
 	MoveEvent_ptr moveEvent{ event };
+
+	const MoveEvent_t eventType = moveEvent->getEventType();
+	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
+		if (moveEvent->getTileItem()) {
+			switch (eventType) {
+				case MOVE_EVENT_ADD_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
+					break;
+				case MOVE_EVENT_REMOVE_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
@@ -226,6 +254,23 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 bool MoveEvents::registerLuaEvent(MoveEvent* event)
 {
 	MoveEvent_ptr moveEvent{ event };
+
+	const MoveEvent_t eventType = moveEvent->getEventType();
+	if (eventType == MOVE_EVENT_ADD_ITEM || eventType == MOVE_EVENT_REMOVE_ITEM) {
+		if (moveEvent->getTileItem()) {
+			switch (eventType) {
+				case MOVE_EVENT_ADD_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_ADD_ITEM_ITEMTILE);
+					break;
+				case MOVE_EVENT_REMOVE_ITEM:
+					moveEvent->setEventType(MOVE_EVENT_REMOVE_ITEM_ITEMTILE);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
 	if (moveEvent->getItemIdRange().size() > 0) {
 		if (moveEvent->getItemIdRange().size() == 1) {
 			uint32_t id = moveEvent->getItemIdRange().at(0);
@@ -427,20 +472,20 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 	return ret;
 }
 
-uint32_t MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck)
+ReturnValue MoveEvents::onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_EQUIP, slot);
 	if (!moveEvent) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, isCheck);
 }
 
-uint32_t MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot)
+ReturnValue MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
 	if (!moveEvent) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, false);
 }
@@ -659,29 +704,33 @@ uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&)
 	return 1;
 }
 
-uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
+ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	if (player->isItemAbilityEnabled(slot)) {
-		return 1;
-	}
-
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
-		if (player->getLevel() < moveEvent->getReqLevel() || player->getMagicLevel() < moveEvent->getReqMagLv()) {
-			return 0;
+		const VocEquipMap& vocEquipMap = moveEvent->getVocEquipMap();
+		if (!vocEquipMap.empty() && vocEquipMap.find(player->getVocationId()) == vocEquipMap.end()) {
+			return RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION;
+		}
+
+		if (player->getLevel() < moveEvent->getReqLevel()) {
+			return RETURNVALUE_NOTENOUGHLEVEL;
+		}
+
+		if (player->getMagicLevel() < moveEvent->getReqMagLv()) {
+			return RETURNVALUE_NOTENOUGHMAGICLEVEL;
 		}
 
 		if (moveEvent->isPremium() && !player->isPremium()) {
-			return 0;
-		}
-
-		const VocEquipMap& vocEquipMap = moveEvent->getVocEquipMap();
-		if (!vocEquipMap.empty() && vocEquipMap.find(player->getVocationId()) == vocEquipMap.end()) {
-			return 0;
+			return RETURNVALUE_YOUNEEDPREMIUMACCOUNT;
 		}
 	}
 
 	if (isCheck) {
-		return 1;
+		return RETURNVALUE_NOERROR;
+	}
+
+	if (player->isItemAbilityEnabled(slot)) {
+		return RETURNVALUE_NOERROR;
 	}
 
 	const ItemType& it = Item::items[item->getID()];
@@ -693,7 +742,7 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 	}
 
 	if (!it.abilities) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (it.abilities->invisible) {
@@ -747,6 +796,12 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 		}
 	}
 
+	for (int32_t i = 0; i < COMBAT_COUNT; ++i) {
+		if (it.abilities->specialMagicLevelSkill[i]) {
+			player->setSpecialMagicLevelSkill(indexToCombatType(i), it.abilities->specialMagicLevelSkill[i]);
+		}
+	}
+
 	for (int32_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
 		if (it.abilities->specialSkills[i]) {
 			needUpdateSkills = true;
@@ -777,13 +832,13 @@ uint32_t MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, 
 		player->sendStats();
 	}
 
-	return 1;
+	return RETURNVALUE_NOERROR;
 }
 
-uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
+ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t slot, bool)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	player->setItemAbility(slot, false);
@@ -795,7 +850,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 	}
 
 	if (!it.abilities) {
-		return 1;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (it.abilities->invisible) {
@@ -829,6 +884,12 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 		}
 	}
 
+	for (int32_t i = 0; i < COMBAT_COUNT; ++i) {
+		if (it.abilities->specialMagicLevelSkill[i] != 0) {
+			player->setSpecialMagicLevelSkill(indexToCombatType(i), -it.abilities->specialMagicLevelSkill[i]);
+		}
+	}
+
 	for (int32_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
 		if (it.abilities->specialSkills[i] != 0) {
 			needUpdateSkills = true;
@@ -859,7 +920,7 @@ uint32_t MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots_t 
 		player->sendStats();
 	}
 
-	return 1;
+	return RETURNVALUE_NOERROR;
 }
 
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
@@ -904,9 +965,8 @@ uint32_t MoveEvent::fireStepEvent(Creature* creature, Item* item, const Position
 {
 	if (scripted) {
 		return executeStep(creature, item, pos);
-	} else {
-		return stepFunction(creature, item, pos);
 	}
+	return stepFunction(creature, item, pos);
 }
 
 bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
@@ -933,18 +993,18 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 	return scriptInterface->callFunction(4);
 }
 
-uint32_t MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
+ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (scripted) {
-		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == 1) {
+		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == RETURNVALUE_NOERROR) {
 			if (executeEquip(player, item, slot, isCheck)) {
-				return 1;
+				return RETURNVALUE_NOERROR;
 			}
+			return RETURNVALUE_CANNOTBEDRESSED;
 		}
-		return 0;
-	} else {
 		return equipFunction(this, player, item, slot, isCheck);
 	}
+	return equipFunction(this, player, item, slot, isCheck);
 }
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)
@@ -975,9 +1035,8 @@ uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& p
 {
 	if (scripted) {
 		return executeAddRemItem(item, tileItem, pos);
-	} else {
-		return moveFunction(item, tileItem, pos);
 	}
+	return moveFunction(item, tileItem, pos);
 }
 
 bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& pos)

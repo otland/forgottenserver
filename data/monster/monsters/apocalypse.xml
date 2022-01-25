@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Apocalypse" nameDescription="Apocalypse" race="fire" experience="30000" speed="380">
+	<health now="125000" max="125000" />
+	<look type="12" head="58" body="13" legs="58" feet="85" corpse="6068" />
+	<targetchange interval="5000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-2520" />
+		<attack name="death" interval="1000" chance="8" radius="9" target="0" min="-800" max="-1900">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-850" duration="60000">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="1000" chance="10" radius="5" target="0" min="-600" max="-1450">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="fire" interval="3000" chance="13" range="7" radius="7" target="1" min="-300" max="-800">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="manadrain" interval="3000" chance="8" radius="10" target="0" min="-600" max="-700">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="9" length="8" spread="0" min="-400" max="-800">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="poisoncondition" interval="5000" chance="18" length="0" spread="0" min="-800" max="-1000">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="6" radius="14" target="0" min="-600" max="-1200">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="188" defense="145">
+		<defense name="healing" interval="1000" chance="15" min="1000" max="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="8" speedchange="480" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="BOW TO THE POWER OF THE RUTHLESS SEVEN!" yell="1" />
+		<voice sentence="DESTRUCTION!" yell="1" />
+		<voice sentence="CHAOS!" yell="1" />
+		<voice sentence="DEATH TO ALL!" yell="1" />
+	</voices>
+	<loot>
+		<item name="purple tome" chance="2600" />
+		<item name="golden mug" chance="7500" />
+		<item name="teddy bear" chance="14500" />
+		<item name="ring of the sky" chance="3500" />
+		<item id="2124" chance="5500" /><!-- crystal ring -->
+		<item name="crystal necklace" chance="1500" />
+		<item id="2142" chance="3500" /><!-- ancient amulet -->
+		<item name="white pearl" countmax="15" chance="12500" />
+		<item name="black pearl" countmax="15" chance="15000" />
+		<item name="small diamond" countmax="5" chance="9500" />
+		<item name="small sapphire" countmax="10" chance="13500" />
+		<item name="gold coin" countmax="100" chance="99900" />
+		<item name="gold coin" countmax="100" chance="88800" />
+		<item name="gold coin" countmax="100" chance="77700" />
+		<item name="gold coin" countmax="100" chance="66600" />
+		<item name="small emerald" countmax="10" chance="15500" />
+		<item name="small amethyst" countmax="20" chance="13500" />
+		<item name="talon" countmax="7" chance="14000" />
+		<item name="green gem" chance="1500" />
+		<item name="blue gem" chance="1500" />
+		<item id="2162" chance="11500" /><!-- magic lightwand -->
+		<item name="might ring" chance="5000" />
+		<item name="stealth ring" chance="9500" />
+		<item name="energy ring" chance="13500" />
+		<item name="silver amulet" chance="13000" />
+		<item name="platinum amulet" chance="4500" />
+		<item name="strange symbol" chance="2500" />
+		<item name="orb" chance="12000" />
+		<item name="life crystal" chance="1000" />
+		<item name="mind stone" chance="4000" />
+		<item name="gold ring" chance="8000" />
+		<item name="snakebite rod" chance="3500" />
+		<item name="necrotic rod" chance="3500" />
+		<item name="moonlight rod" chance="3500" />
+		<item name="wand of decay" chance="2500" />
+		<item id="2192" chance="2500" /><!-- crystal ball -->
+		<item name="boots of haste" chance="4000" />
+		<item name="stone skin amulet" chance="4000" />
+		<item name="protection amulet" chance="4500" />
+		<item name="ring of healing" chance="13000" />
+		<item id="2231" chance="9000" /><!-- big bone -->
+		<item name="two handed sword" chance="20000" />
+		<item name="double axe" chance="20000" />
+		<item name="giant sword" chance="12500" />
+		<item name="ice rapier" chance="7500" />
+		<item name="silver dagger" chance="15500" />
+		<item name="golden sickle" chance="4500" />
+		<item name="thunder hammer" chance="13500" />
+		<item name="fire axe" chance="17000" />
+		<item name="dragon hammer" chance="4500" />
+		<item name="skull staff" chance="5000" />
+		<item name="devil helmet" chance="11000" />
+		<item name="golden legs" chance="5000" />
+		<item name="magic plate armor" chance="3000" />
+		<item name="mastermind shield" chance="7500" />
+		<item name="demon shield" chance="15500" />
+		<item id="3955" chance="100" /><!-- voodoo doll-->
+	</loot>
+</monster>

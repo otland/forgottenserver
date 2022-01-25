@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Undead Dragon" nameDescription="an undead dragon" race="undead" experience="7200" speed="250">
+	<health now="8350" max="8350" />
+	<look type="231" corpse="6306" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-480" />
+		<attack name="physical" interval="2000" chance="5" range="7" radius="4" target="1" min="-300" max="-400">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="-125" max="-600">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="earth" interval="2000" chance="5" range="7" radius="4" target="1" min="-100" max="-390">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" target="1" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-150" max="-690">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="3" min="-300" max="-700">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" min="-100" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="undead dragon curse" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5" />
+		<element icePercent="50" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="FEEEED MY ETERNAL HUNGER!" yell="1" />
+		<voice sentence="I SENSE LIFE" yell="1" />
+	</voices>
+	<loot>
+		<item name="golden mug" chance="6002" />
+		<item name="black pearl" countmax="2" chance="22780" />
+		<item name="small sapphire" countmax="2" chance="28370" />
+		<item name="gold coin" countmax="100" chance="35500" />
+		<item name="gold coin" countmax="98" chance="55500" />
+		<item name="platinum coin" countmax="5" chance="52000" />
+		<item name="life crystal" chance="2500" />
+		<item name="war axe" chance="1290" />
+		<item name="golden armor" chance="860" />
+		<item name="knight armor" chance="5500" />
+		<item name="royal helmet" chance="1720" />
+		<item name="power bolt" countmax="15" chance="15190" />
+		<item name="hardened bone" chance="14180" />
+		<item id="6300" chance="1150" /><!-- death ring -->
+		<item name="demonic essence" chance="12460" />
+		<item name="assassin star" countmax="5" chance="26650" />
+		<item name="dragon slayer" chance="860" />
+		<item name="dragonbone staff" chance="4000" />
+		<item name="great mana potion" chance="21490" />
+		<item name="great health potion" chance="21200" />
+		<item name="divine plate" chance="430" />
+		<item name="skullcracker armor" chance="290" />
+		<item name="gold ingot" chance="570" />
+		<item name="unholy bone" chance="33380" />
+		<item name="spellweaver's robe" chance="860" />
+	</loot>
+</monster>
