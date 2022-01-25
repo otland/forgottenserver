@@ -359,7 +359,7 @@ function Player.getTotalMoney(self)
 	return self:getMoney() + self:getBankBalance()
 end
 
-function Player.addAllAddons(self, addon)
+function Player.addAddonToAllOutfits(self, addon)
 	for sex = 0, 1 do
 		local outfits = Game.getOutfits(sex)
 		for outfit = 1, #outfits do
