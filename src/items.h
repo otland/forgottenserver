@@ -251,8 +251,7 @@ struct Abilities {
 	//damage abilities modifiers
 	std::array<int16_t, COMBAT_COUNT> absorbPercent = {0};
 
-	int16_t reflectPercent[COMBAT_COUNT] = { 0 };
-	int16_t reflectChance[COMBAT_COUNT] = { 0 };
+	std::array<Reflect, COMBAT_COUNT> reflect;
 
 	int16_t boostPercent[COMBAT_COUNT] = { 0 };
 

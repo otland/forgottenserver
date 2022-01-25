@@ -1163,167 +1163,167 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_REFLECTPERCENTALL: {
 					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
-					for (auto& i : abilities.reflectPercent) {
-						i += value;
+					for (auto& i : abilities.reflect) {
+						i.percent += value;
 					}
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTELEMENTS: {
 					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].percent += value;
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTMAGIC: {
 					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += value;
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].percent += value;
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTENERGY: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTFIRE: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTEARTH: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTICE: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTHOLY: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTDEATH: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTLIFEDRAIN: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_LIFEDRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_LIFEDRAIN)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTMANADRAIN: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_MANADRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_MANADRAIN)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTDROWN: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_DROWNDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_DROWNDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTPHYSICAL: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTPERCENTHEALING: {
-					abilities.reflectPercent[combatTypeToIndex(COMBAT_HEALING)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_HEALING)].percent += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEALL: {
 					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
-					for (auto& i : abilities.reflectChance) {
-						i += value;
+					for (auto& i : abilities.reflect) {
+						i.chance += value;
 					}
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEELEMENTS: {
 					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
-					abilities.reflectChance[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_FIREDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_ICEDAMAGE)] += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].chance += value;
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEMAGIC: {
 					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
-					abilities.reflectChance[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_FIREDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_ICEDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += value;
-					abilities.reflectChance[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].chance += value;
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEENERGY: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEFIRE: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEEARTH: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEICE: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEHOLY: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEDEATH: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCELIFEDRAIN: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_LIFEDRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_LIFEDRAIN)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEMANADRAIN: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_MANADRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_MANADRAIN)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEDROWN: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_DROWNDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_DROWNDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEPHYSICAL: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 
 				case ITEM_PARSE_REFLECTCHANCEHEALING: {
-					abilities.reflectChance[combatTypeToIndex(COMBAT_HEALING)] += pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_HEALING)].chance += pugi::cast<int16_t>(valueAttribute.value());
 					break;
 				}
 

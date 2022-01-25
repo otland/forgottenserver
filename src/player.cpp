@@ -2008,8 +2008,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	}
 
 	if (!ignoreResistances) {
-		int16_t reflectPercent = 0;
-		int16_t reflectChance = 0;
+		Reflect reflect;
 
 		size_t combatIndex = combatTypeToIndex(combatType);
 		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
@@ -2042,8 +2041,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				}
 			}
 
-			reflectPercent += item->getReflectPercent(combatType);
-			reflectChance = std::min<int16_t>(100, reflectChance + item->getReflectChance(combatType));
+			reflect += item->getTotalReflect(combatType);
 
 			if (field) {
 				const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatIndex];
@@ -2058,10 +2056,10 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 			}
 		}
 
-		if (attacker && reflectChance > 0 && reflectPercent != 0 && uniform_random(1, 100) <= reflectChance) {
+		if (attacker && reflect.chance > 0 && reflect.percent != 0 && uniform_random(1, 100) <= reflect.chance) {
 			CombatDamage reflectDamage;
 			reflectDamage.primary.type = combatType;
-			reflectDamage.primary.value = -std::round(damage * (reflectPercent / 100.));
+			reflectDamage.primary.value = -std::round(damage * (reflect.percent / 100.));
 			reflectDamage.origin = ORIGIN_REFLECT;
 			g_game.combatChangeHealth(this, attacker, reflectDamage);
 		}
