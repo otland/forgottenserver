@@ -2095,8 +2095,9 @@ LightInfo Item::getLightInfo() const
 
 Reflect Item::getTotalReflect(CombatType_t combatType)
 {
-	Reflect reflect;
 	const ItemType& it = Item::items[id];
+
+	Reflect reflect;
 	if (it.abilities) {
 		reflect += it.abilities->reflect[combatTypeToIndex(combatType)];
 	}
@@ -2110,8 +2111,9 @@ Reflect Item::getTotalReflect(CombatType_t combatType)
 
 int16_t Item::getTotalBoostPercent(CombatType_t combatType)
 {
-	int16_t boostPercent = 0;
 	const ItemType& it = Item::items[id];
+
+	int16_t boostPercent = 0;
 	if (it.abilities) {
 		boostPercent += it.abilities->boostPercent[combatTypeToIndex(combatType)];
 	}
