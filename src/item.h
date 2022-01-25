@@ -352,6 +352,7 @@ class ItemAttributes
 		static int64_t emptyInt;
 		static double emptyDouble;
 		static bool emptyBool;
+		static Reflect emptyReflect;
 
 		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
@@ -424,8 +425,6 @@ class ItemAttributes
 		std::map<CombatType_t, uint16_t> boostPercent;
 
 		const Reflect& getReflect(CombatType_t combatType) {
-			static Reflect emptyReflect;
-
 			auto it = reflect.find(combatType);
 			return it != reflect.end() ? it->second : emptyReflect;
 		}
@@ -905,8 +904,15 @@ class Item : virtual public Thing
 		uint32_t getWorth() const;
 		LightInfo getLightInfo() const;
 
-		Reflect getTotalReflect(CombatType_t combatType);
-		int16_t getTotalBoostPercent(CombatType_t combatType);
+		void setReflect(CombatType_t combatType, const Reflect& reflect) {
+			getAttributes()->reflect[combatType] = reflect;
+		}
+		Reflect getReflect(CombatType_t combatType, bool total = true) const;
+
+		void setBoostPercent(CombatType_t combatType, uint16_t value) {
+			getAttributes()->boostPercent[combatType] = value;
+		}
+		uint16_t getBoostPercent(CombatType_t combatType, bool total = true) const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool isBlocking() const {

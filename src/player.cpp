@@ -2041,7 +2041,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				}
 			}
 
-			reflect += item->getTotalReflect(combatType);
+			reflect += item->getReflect(combatType);
 
 			if (field) {
 				const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatIndex];

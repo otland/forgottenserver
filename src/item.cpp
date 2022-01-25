@@ -1270,7 +1270,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			int16_t modifier = item ? const_cast<Item*>(item)->getTotalReflect(COMBAT_NONE).percent : it.abilities->reflect[0].percent;
+			int16_t modifier = item ? item->getReflect(COMBAT_NONE).percent : it.abilities->reflect[0].percent;
 			show = modifier;
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
@@ -1285,7 +1285,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					modifier = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
+					modifier = item ? item->getReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
 					if (modifier == 0) {
 						continue;
 					}
@@ -1318,11 +1318,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "reflect all " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			modifier = item ? const_cast<Item*>(item)->getTotalReflect(COMBAT_NONE).chance : it.abilities->reflect[0].chance;
+			modifier = item ? item->getReflect(COMBAT_NONE).chance : it.abilities->reflect[0].chance;
 			show = modifier;
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					int16_t temp = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
+					int16_t temp = item ? item->getReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
 					if (temp != show) {
 						show = 0;
 						break;
@@ -1334,7 +1334,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					modifier = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
+					modifier = item ? item->getReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
 					if (modifier == 0) {
 						continue;
 					}
@@ -1367,11 +1367,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "reflect chance all " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			modifier = item ? const_cast<Item*>(item)->getTotalBoostPercent(COMBAT_NONE) : it.abilities->boostPercent[0];
+			modifier = item ? item->getBoostPercent(COMBAT_NONE) : it.abilities->boostPercent[0];
 			show = modifier;
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					int16_t temp = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).chance : it.abilities->reflect[i].chance;
+					int16_t temp = item ? item->getReflect(indexToCombatType(i)).chance : it.abilities->reflect[i].chance;
 					if (temp != show) {
 						show = 0;
 						break;
@@ -1383,7 +1383,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					modifier = item ? const_cast<Item*>(item)->getTotalBoostPercent(indexToCombatType(i)) : it.abilities->boostPercent[i];
+					modifier = item ? item->getBoostPercent(indexToCombatType(i)) : it.abilities->boostPercent[i];
 					if (modifier == 0) {
 						continue;
 					}
@@ -1593,7 +1593,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "protection all fields " << std::showpos << show << std::noshowpos << '%';
 			}
 
-			int16_t modifier = item ? const_cast<Item*>(item)->getTotalReflect(COMBAT_NONE).percent : it.abilities->reflect[0].percent;
+			int16_t modifier = item ? item->getReflect(COMBAT_NONE).percent : it.abilities->reflect[0].percent;
 			show = modifier;
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
@@ -1608,7 +1608,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					modifier = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
+					modifier = item ? item->getReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
 					if (modifier == 0) {
 						continue;
 					}
@@ -1641,11 +1641,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "reflect all " << show << std::noshowpos << '%';
 			}
 
-			modifier = item ? const_cast<Item*>(item)->getTotalReflect(COMBAT_NONE).chance : it.abilities->reflect[0].chance;
+			modifier = item ? item->getReflect(COMBAT_NONE).chance : it.abilities->reflect[0].chance;
 			show = modifier;
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					int16_t temp = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
+					int16_t temp = item ? item->getReflect(indexToCombatType(i)).percent : it.abilities->reflect[i].percent;
 					if (temp != show) {
 						show = 0;
 						break;
@@ -1657,7 +1657,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					modifier = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).chance : it.abilities->reflect[i].chance;
+					modifier = item ? item->getReflect(indexToCombatType(i)).chance : it.abilities->reflect[i].chance;
 					if (modifier == 0) {
 						continue;
 					}
@@ -1690,11 +1690,11 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << "reflect chance all " << show << std::noshowpos << '%';
 			}
 
-			modifier = item ? const_cast<Item*>(item)->getTotalBoostPercent(COMBAT_NONE) : it.abilities->boostPercent[0];
+			modifier = item ? item->getBoostPercent(COMBAT_NONE) : it.abilities->boostPercent[0];
 			show = modifier;
 			if (show != 0) {
 				for (size_t i = 1; i < COMBAT_COUNT; ++i) {
-					int16_t temp = item ? const_cast<Item*>(item)->getTotalReflect(indexToCombatType(i)).chance : it.abilities->reflect[i].chance;
+					int16_t temp = item ? item->getReflect(indexToCombatType(i)).chance : it.abilities->reflect[i].chance;
 					if (temp != show) {
 						show = 0;
 						break;
@@ -1706,7 +1706,7 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				bool tmp = true;
 
 				for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-					modifier = item ? const_cast<Item*>(item)->getTotalBoostPercent(indexToCombatType(i)) : it.abilities->boostPercent[i];
+					modifier = item ? item->getBoostPercent(indexToCombatType(i)) : it.abilities->boostPercent[i];
 					if (modifier == 0) {
 						continue;
 					}
@@ -2093,33 +2093,33 @@ LightInfo Item::getLightInfo() const
 	return {it.lightLevel, it.lightColor};
 }
 
-Reflect Item::getTotalReflect(CombatType_t combatType)
+Reflect Item::getReflect(CombatType_t combatType, bool total /* = true */) const
 {
 	const ItemType& it = Item::items[id];
 
 	Reflect reflect;
-	if (it.abilities) {
-		reflect += it.abilities->reflect[combatTypeToIndex(combatType)];
-	}
-
 	if (attributes) {
 		reflect += attributes->getReflect(combatType);
+	}
+
+	if (total && it.abilities) {
+		reflect += it.abilities->reflect[combatTypeToIndex(combatType)];
 	}
 
 	return reflect;
 }
 
-int16_t Item::getTotalBoostPercent(CombatType_t combatType)
+uint16_t Item::getBoostPercent(CombatType_t combatType, bool total /* = true */) const
 {
 	const ItemType& it = Item::items[id];
 
-	int16_t boostPercent = 0;
-	if (it.abilities) {
-		boostPercent += it.abilities->boostPercent[combatTypeToIndex(combatType)];
-	}
-
+	uint16_t boostPercent = 0;
 	if (attributes) {
 		boostPercent += attributes->getBoostPercent(combatType);
+	}
+
+	if (total && it.abilities) {
+		boostPercent += it.abilities->boostPercent[combatTypeToIndex(combatType)];
 	}
 
 	return boostPercent;
@@ -2129,6 +2129,7 @@ std::string ItemAttributes::emptyString;
 int64_t ItemAttributes::emptyInt;
 double ItemAttributes::emptyDouble;
 bool ItemAttributes::emptyBool;
+Reflect ItemAttributes::emptyReflect;
 
 const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
 {
