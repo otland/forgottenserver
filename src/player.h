@@ -113,6 +113,8 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
 
+static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
+
 class Player final : public Creature, public Cylinder
 {
 	public:
@@ -711,6 +713,10 @@ class Player final : public Creature, public Cylinder
 		size_t getMaxVIPEntries() const;
 		size_t getMaxDepotItems() const;
 
+		//quest tracker
+		size_t getMaxTrackedQuests() const;
+		void resetQuestTracker(const std::vector<uint16_t>& missionIds);
+
 		//tile
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
@@ -1114,6 +1120,16 @@ class Player final : public Creature, public Cylinder
 				client->sendQuestLine(quest);
 			}
 		}
+		void sendQuestTracker() {
+			if (client) {
+				client->sendQuestTracker();
+			}
+		}
+		void sendUpdateQuestTracker(const TrackedQuest& trackedQuest) {
+			if (client) {
+				client->sendUpdateQuestTracker(trackedQuest);
+			}
+		}
 		void sendEnterWorld() {
 			if (client) {
 				client->sendEnterWorld();
@@ -1229,6 +1245,9 @@ class Player final : public Creature, public Cylinder
 		std::forward_list<uint32_t> modalWindows;
 		std::forward_list<std::string> learnedInstantSpellList;
 		std::forward_list<Condition*> storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
+
+		//quest tracker
+		std::vector<TrackedQuest> trackedQuests;
 
 		std::string name;
 		std::string guildNick;

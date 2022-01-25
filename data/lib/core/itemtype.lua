@@ -82,6 +82,10 @@ function ItemType:isKey()
 	return self:getType() == ITEM_TYPE_KEY
 end
 
+function ItemType:isBed()
+	return self:getType() == ITEM_TYPE_BED
+end
+
 function ItemType:getWeaponString()
 	local weaponType = self:getWeaponType()
 	local weaponString = "unknown"

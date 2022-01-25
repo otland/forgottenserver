@@ -983,6 +983,16 @@ void LuaScriptInterface::pushOutfit(lua_State* L, const Outfit* outfit)
 	setMetatable(L, -1, "Outfit");
 }
 
+void LuaScriptInterface::pushMount(lua_State* L, const Mount* mount)
+{
+	lua_createtable(L, 0, 5);
+	setField(L, "name", mount->name);
+	setField(L, "speed", mount->speed);
+	setField(L, "clientId", mount->clientId);
+	setField(L, "id", mount->id);
+	setField(L, "premium", mount->premium);
+}
+
 void LuaScriptInterface::pushLoot(lua_State* L, const std::vector<LootBlock>& lootList)
 {
 	lua_createtable(L, lootList.size(), 0);
@@ -1410,6 +1420,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_FATAL)
 	registerEnum(CONST_ME_DODGE)
 	registerEnum(CONST_ME_HOURGLASS)
+	registerEnum(CONST_ME_FERUMBRAS_1)
+	registerEnum(CONST_ME_GAZHARAGOTH)
+	registerEnum(CONST_ME_MAD_MAGE)
+	registerEnum(CONST_ME_HORESTIS)
+	registerEnum(CONST_ME_DEVOVORGA)
+	registerEnum(CONST_ME_FERUMBRAS_2)
 
 	registerEnum(CONST_ANI_NONE)
 	registerEnum(CONST_ANI_SPEAR)
@@ -1647,6 +1663,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_WILDGROWTH)
 	registerEnum(ITEM_WILDGROWTH_PERSISTENT)
 	registerEnum(ITEM_WILDGROWTH_SAFE)
+	registerEnum(ITEM_DECORATION_KIT)
 
 	registerEnum(WIELDINFO_NONE)
 	registerEnum(WIELDINFO_LEVEL)
@@ -2146,6 +2163,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getTowns", LuaScriptInterface::luaGameGetTowns);
 	registerMethod("Game", "getHouses", LuaScriptInterface::luaGameGetHouses);
+	registerMethod("Game", "getOutfits", LuaScriptInterface::luaGameGetOutfits);
+	registerMethod("Game", "getMounts", LuaScriptInterface::luaGameGetMounts);
 
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
@@ -4492,6 +4511,47 @@ int LuaScriptInterface::luaGameGetHouses(lua_State* L)
 		setMetatable(L, -1, "House");
 		lua_rawseti(L, -2, ++index);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetOutfits(lua_State* L)
+{
+	// Game.getOutfits(playerSex)
+	if (!isNumber(L, 1)) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	PlayerSex_t playerSex = getNumber<PlayerSex_t>(L, 1);
+	if (playerSex > PLAYERSEX_LAST) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const auto& outfits = Outfits::getInstance().getOutfits(playerSex);
+	lua_createtable(L, outfits.size(), 0);
+
+	int index = 0;
+	for (const auto& outfit : outfits) {
+		pushOutfit(L, &outfit);
+		lua_rawseti(L, -2, ++index);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetMounts(lua_State* L)
+{
+	// Game.getMounts()
+	const auto& mounts = g_game.mounts.getMounts();
+	lua_createtable(L, mounts.size(), 0);
+
+	int index = 0;
+	for (const auto& mount : mounts) {
+		pushMount(L, &mount);
+		lua_rawseti(L, -2, ++index);
+	}
+
 	return 1;
 }
 
@@ -14109,13 +14169,14 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 {
-	// monsterType:addSummon(name, interval, chance)
+	// monsterType:addSummon(name, interval, chance[, max = -1])
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		summonBlock_t summon;
 		summon.name = getString(L, 2);
 		summon.speed = getNumber<int32_t>(L, 3);
 		summon.chance = getNumber<int32_t>(L, 4);
+		summon.max = getNumber<int32_t>(L, 5, -1);
 		monsterType->info.summons.push_back(summon);
 		pushBoolean(L, true);
 	} else {

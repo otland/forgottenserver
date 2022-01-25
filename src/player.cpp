@@ -709,6 +709,14 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 				lastQuestlogUpdate = currentFrameTime;
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
 			}
+
+			for (const TrackedQuest& trackedQuest : trackedQuests) {
+				if (const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId())) {
+					if (quest->isTracking(key, value)) {
+						sendUpdateQuestTracker(trackedQuest);
+					}
+				}
+			}
 		}
 	} else {
 		storageMap.erase(key);
@@ -817,8 +825,8 @@ void Player::onReceiveMail() const
 bool Player::isNearDepotBox() const
 {
 	const Position& pos = getPosition();
-	for (int32_t cx = -1; cx <= 1; ++cx) {
-		for (int32_t cy = -1; cy <= 1; ++cy) {
+	for (int32_t cx = -NOTIFY_DEPOT_BOX_RANGE; cx <= NOTIFY_DEPOT_BOX_RANGE; ++cx) {
+		for (int32_t cy = -NOTIFY_DEPOT_BOX_RANGE; cy <= NOTIFY_DEPOT_BOX_RANGE; ++cy) {
 			Tile* tile = g_game.map.getTile(pos.x + cx, pos.y + cy, pos.z);
 			if (!tile) {
 				continue;
@@ -4643,6 +4651,34 @@ size_t Player::getMaxDepotItems() const
 	}
 
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
+}
+
+size_t Player::getMaxTrackedQuests() const
+{
+	return g_config.getNumber(isPremium() ? ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT : ConfigManager::QUEST_TRACKER_FREE_LIMIT);
+}
+
+void Player::resetQuestTracker(const std::vector<uint16_t>& missionIds)
+{
+	const size_t maxTrackedQuests = getMaxTrackedQuests();
+	trackedQuests.clear();
+	size_t index = 0;
+
+	const QuestsList& quests = g_game.quests.getQuests();
+	for (const uint8_t missionId : missionIds) {
+		for (const Quest& quest : quests) {
+			for (const Mission& mission : quest.getMissions()) {
+				if (mission.getID() == missionId && mission.isStarted(this)) {
+					trackedQuests.emplace_back(quest.getID(), missionId);
+					if (++index == maxTrackedQuests) {
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	sendQuestTracker();
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const
