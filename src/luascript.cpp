@@ -6805,7 +6805,8 @@ int LuaScriptInterface::luaItemRemoveAttribute(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
+int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L)
+{
 	// item:getCustomAttribute(key)
 	Item* item = getUserdata<Item>(L, 1);
 	if (!item) {
@@ -6831,7 +6832,8 @@ int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L) {
 	return 1;
 }
 
-int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
+int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L)
+{
 	// item:setCustomAttribute(key, value)
 	Item* item = getUserdata<Item>(L, 1);
 	if (!item) {
@@ -6871,7 +6873,8 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L) {
 	return 1;
 }
 
-int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L) {
+int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L)
+{
 	// item:removeCustomAttribute(key)
 	Item* item = getUserdata<Item>(L, 1);
 	if (!item) {
