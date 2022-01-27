@@ -640,7 +640,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 					return ATTR_READ_ERROR;
 				}
 
-				attributes->reflect[combatType] = reflect;
+				getAttributes()->reflect[combatType] = reflect;
 			}
 		}
 
@@ -658,7 +658,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 					return ATTR_READ_ERROR;
 				}
 
-				attributes->boostPercent[combatType] = percent;
+				getAttributes()->boostPercent[combatType] = percent;
 			}
 		}
 
@@ -905,26 +905,28 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 		}
 	}
 
-	const auto& reflects = attributes->reflect;
-	if (!reflects.empty()) {
-		propWriteStream.write<uint8_t>(ATTR_REFLECT);
-		propWriteStream.write<uint16_t>(reflects.size());
+	if (attributes) {
+		const auto& reflects = attributes->reflect;
+		if (!reflects.empty()) {
+			propWriteStream.write<uint8_t>(ATTR_REFLECT);
+			propWriteStream.write<uint16_t>(reflects.size());
 
-		for (const auto& reflect : reflects) {
-			propWriteStream.write<CombatType_t>(reflect.first);
-			propWriteStream.write<uint16_t>(reflect.second.percent);
-			propWriteStream.write<uint16_t>(reflect.second.chance);
+			for (const auto& reflect : reflects) {
+				propWriteStream.write<CombatType_t>(reflect.first);
+				propWriteStream.write<uint16_t>(reflect.second.percent);
+				propWriteStream.write<uint16_t>(reflect.second.chance);
+			}
 		}
-	}
 
-	const auto& boosts = attributes->boostPercent;
-	if (!boosts.empty()) {
-		propWriteStream.write<uint8_t>(ATTR_BOOST);
-		propWriteStream.write<uint16_t>(boosts.size());
+		const auto& boosts = attributes->boostPercent;
+		if (!boosts.empty()) {
+			propWriteStream.write<uint8_t>(ATTR_BOOST);
+			propWriteStream.write<uint16_t>(boosts.size());
 
-		for (const auto& boost : boosts) {
-			propWriteStream.write<CombatType_t>(boost.first);
-			propWriteStream.write<uint16_t>(boost.second);
+			for (const auto& boost : boosts) {
+				propWriteStream.write<CombatType_t>(boost.first);
+				propWriteStream.write<uint16_t>(boost.second);
+			}
 		}
 	}
 }
