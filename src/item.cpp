@@ -210,7 +210,13 @@ bool Item::equals(const Item* otherItem) const
 	const auto& attributeList = attributes->attributes;
 	const auto& otherAttributeList = otherAttributes->attributes;
 	for (const auto& attribute : attributeList) {
-		if (ItemAttributes::isStrAttrType(attribute.type)) {
+		if (ItemAttributes::isIntAttrType(attribute.type)) {
+			for (const auto& otherAttribute : otherAttributeList) {
+				if (attribute.type == otherAttribute.type && attribute.value.integer != otherAttribute.value.integer) {
+					return false;
+				}
+			}
+		} else if (ItemAttributes::isStrAttrType(attribute.type)) {
 			for (const auto& otherAttribute : otherAttributeList) {
 				if (attribute.type == otherAttribute.type && *attribute.value.string != *otherAttribute.value.string) {
 					return false;
@@ -218,7 +224,7 @@ bool Item::equals(const Item* otherItem) const
 			}
 		} else {
 			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type && attribute.value.integer != otherAttribute.value.integer) {
+				if (attribute.type == otherAttribute.type && *attribute.value.custom != *otherAttribute.value.custom) {
 					return false;
 				}
 			}
