@@ -227,6 +227,14 @@ class ItemAttributes
 
 			CustomAttribute() : value(boost::blank()) {}
 
+			bool operator==(const CustomAttribute& otherAttr) const {
+				return value == otherAttr.value;
+			}
+
+			bool operator!=(const CustomAttribute& otherAttr) const {
+				return value != otherAttr.value;
+			}
+
 			template<typename T>
 			explicit CustomAttribute(const T& v) : value(v) {}
 
