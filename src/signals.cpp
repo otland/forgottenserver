@@ -58,20 +58,7 @@ extern LuaEnvironment g_luaEnvironment;
 
 namespace {
 
-void sigbreakHandler()
-{
-	//Dispatcher thread
-	std::cout << "SIGBREAK received, shutting game server down..." << std::endl;
-	g_game.setGameState(GAME_STATE_SHUTDOWN);
-}
-
-void sigtermHandler()
-{
-	//Dispatcher thread
-	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
-	g_game.setGameState(GAME_STATE_SHUTDOWN);
-}
-
+#ifndef _WIN32
 void sigusr1Handler()
 {
 	//Dispatcher thread
@@ -138,6 +125,21 @@ void sighupHandler()
 	std::cout << "Reloaded global.lua." << std::endl;
 
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
+}
+#else
+void sigbreakHandler()
+{
+	//Dispatcher thread
+	std::cout << "SIGBREAK received, shutting game server down..." << std::endl;
+	g_game.setGameState(GAME_STATE_SHUTDOWN);
+}
+#endif
+
+void sigtermHandler()
+{
+	//Dispatcher thread
+	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
+	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
 void sigintHandler()
