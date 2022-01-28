@@ -3,25 +3,28 @@
 
 #include "otpch.h"
 
-#include "actions.h"
-#include "ban.h"
+#include "protocolgame.h"
+
+#include "outputmessage.h"
+
+#include "player.h"
+
 #include "configmanager.h"
+#include "actions.h"
 #include "game.h"
 #include "iologindata.h"
 #include "iomarket.h"
-#include "outputmessage.h"
-#include "player.h"
-#include "protocolgame.h"
+#include "ban.h"
 #include "scheduler.h"
 #include "podium.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <fmt/format.h>
 
-extern Actions actions;
-extern Chat* g_chat;
 extern ConfigManager g_config;
+extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
+extern Chat* g_chat;
 
 namespace {
 
