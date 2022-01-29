@@ -4716,7 +4716,7 @@ bool Player::isEquippedItem(const Item* item) const
 	static const slots_t allSlots[] = {CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_HEAD, CONST_SLOT_NECKLACE, CONST_SLOT_ARMOR, CONST_SLOT_LEGS, CONST_SLOT_FEET, CONST_SLOT_RING};
 	for (slots_t slot : allSlots) {
 		Item* checkitem = inventory[slot];
-		if (checkitem and (checkitem == item)) {
+		if (checkitem && (checkitem == item)) {
 			isEquiped = true;
 			break;
 		}
