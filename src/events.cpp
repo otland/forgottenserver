@@ -611,8 +611,7 @@ ReturnValue Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t c
 	if (scriptInterface.protectedCall(L, 7, 1) != 0) {
 		returnValue = RETURNVALUE_NOTPOSSIBLE;
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
-	}
-	else {
+	} else {
 		returnValue = LuaScriptInterface::getNumber<ReturnValue>(L, -1);
 		lua_pop(L, 1);
 	}
