@@ -880,32 +880,32 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 			}
 		}
 
-		if (Player* attackerPlayer = attacker->getPlayer()) {
-			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-				if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
-					continue;
-				}
-
-				Item* item = attackerPlayer->getInventoryItem(static_cast<slots_t>(slot));
-				if (!item) {
-					continue;
-				}
-
-				const uint16_t boostPercent = item->getBoostPercent(combatType);
-				if (boostPercent != 0) {
-					damage += std::round(damage * (boostPercent / 100.));
-				}
-			}
-		}
-
-		if (damage <= 0) {
-			damage = 0;
-			blockType = BLOCK_ARMOR;
-		}
-
 		if (hasDefense && blockType != BLOCK_NONE) {
 			onBlockHit();
 		}
+	}
+	
+	if (Player* attackerPlayer = attacker->getPlayer()) {
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+			if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+				continue;
+			}
+
+			Item* item = attackerPlayer->getInventoryItem(static_cast<slots_t>(slot));
+			if (!item) {
+				continue;
+			}
+
+			const uint16_t boostPercent = item->getBoostPercent(combatType);
+			if (boostPercent != 0) {
+				damage += std::round(damage * (boostPercent / 100.));
+			}
+		}
+	}
+
+	if (damage <= 0) {
+		damage = 0;
+		blockType = BLOCK_ARMOR;
 	}
 
 	if (attacker) {
