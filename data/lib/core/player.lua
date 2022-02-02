@@ -319,20 +319,20 @@ function Player.updateKillTracker(self, monster, corpse)
 		return false
 	end
 
-	local networkMessage = NetworkMessage()
-	networkMessage:addByte(0xD1)
-	networkMessage:addString(monster:getName())
-	networkMessage:addU16(monsterOutfit.lookType or 19)
-	networkMessage:addByte(monsterOutfit.lookHead)
-	networkMessage:addByte(monsterOutfit.lookBody)
-	networkMessage:addByte(monsterOutfit.lookLegs)
-	networkMessage:addByte(monsterOutfit.lookFeet)
-	networkMessage:addByte(monsterOutfit.lookAddons)
+	local msg = NetworkMessage()
+	msg:addByte(0xD1)
+	msg:addString(monster:getName())
+	msg:addU16(monsterOutfit.lookType or 19)
+	msg:addByte(monsterOutfit.lookHead)
+	msg:addByte(monsterOutfit.lookBody)
+	msg:addByte(monsterOutfit.lookLegs)
+	msg:addByte(monsterOutfit.lookFeet)
+	msg:addByte(monsterOutfit.lookAddons)
 
 	local corpseSize = corpse:getSize()
-	networkMessage:addByte(corpseSize)
+	msg:addByte(corpseSize)
 	for index = corpseSize - 1, 0, -1 do
-		networkMessage:addItem(corpse:getItem(index))
+		msg:addItem(corpse:getItem(index))
 	end
 
 	local party = self:getParty()
@@ -341,13 +341,13 @@ function Player.updateKillTracker(self, monster, corpse)
 		members[#members + 1] = party:getLeader()
 
 		for _, member in ipairs(members) do
-			networkMessage:sendToPlayer(member)
+			msg:sendToPlayer(member)
 		end
 	else
-		 networkMessage:sendToPlayer(self)
+		 msg:sendToPlayer(self)
 	end
 
-	networkMessage:delete()
+	msg:delete()
 	return true
 end
 
