@@ -322,6 +322,8 @@ function Player.updateKillTracker(self, monster, corpse)
 	local msg = NetworkMessage()
 	msg:addByte(0xD1)
 	msg:addString(monster:getName())
+	
+	local monsterOutfit = monsterType:getOutfit()
 	msg:addU16(monsterOutfit.lookType or 19)
 	msg:addByte(monsterOutfit.lookHead)
 	msg:addByte(monsterOutfit.lookBody)
