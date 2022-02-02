@@ -314,45 +314,41 @@ function Player.getWeaponType(self)
 end
 
 function Player.updateKillTracker(self, monster, corpse)
-    local monsterType = monster:getType()
-    if not monsterType then
-        return false
-    end
+	local monsterType = monster:getType()
+	if not monsterType then
+		return false
+	end
 
-    local monsterOutfit = monsterType:getOutfit()
+	local networkMessage = NetworkMessage()
+	networkMessage:addByte(0xD1)
+	networkMessage:addString(monster:getName())
+	networkMessage:addU16(monsterOutfit.lookType or 19)
+	networkMessage:addByte(monsterOutfit.lookHead)
+	networkMessage:addByte(monsterOutfit.lookBody)
+	networkMessage:addByte(monsterOutfit.lookLegs)
+	networkMessage:addByte(monsterOutfit.lookFeet)
+	networkMessage:addByte(monsterOutfit.lookAddons)
 
-    local networkMessage = NetworkMessage()
-    networkMessage:addByte(0xD1)
-    networkMessage:addString(monster:getName())
-    networkMessage:addU16(monsterOutfit.lookType or 19)
-    networkMessage:addByte(monsterOutfit.lookHead)
-    networkMessage:addByte(monsterOutfit.lookBody)
-    networkMessage:addByte(monsterOutfit.lookLegs)
-    networkMessage:addByte(monsterOutfit.lookFeet)
-    networkMessage:addByte(monsterOutfit.lookAddons)
-    networkMessage:addByte(corpse:getSize())
+	local corpseSize = corpse:getSize()
+	networkMessage:addByte(corpseSize)
+	for index = corpseSize - 1, 0, -1 do
+		networkMessage:addItem(corpse:getItem(index))
+	end
 
-    for i = corpse:getSize() - 1, 0, -1 do
-        local item = corpse:getItem(i)
-        networkMessage:addItem(item)
-    end
+	local party = self:getParty()
+	if party then
+		local members = party:getMembers()
+		members[#members + 1] = party:getLeader()
 
-    if self:getParty() then
-        networkMessage:sendToPlayer(self:getParty():getLeader())
-        local membersList = self:getParty():getMembers()
-        for i = 1, #membersList do
-            local player = membersList[i]
-            if player then
-                networkMessage:sendToPlayer(player)
-            end
-        end
-        networkMessage:delete()
-        return true
-    end
+		for _, member in ipairs(members) do
+			networkMessage:sendToPlayer(member)
+		end
+	else
+		 networkMessage:sendToPlayer(self)
+	end
 
-    networkMessage:sendToPlayer(self)
-    networkMessage:delete()
-    return true
+	networkMessage:delete()
+	return true
 end
 
 function Player.getTotalMoney(self)
