@@ -47,7 +47,7 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
 		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
-	return true
+	return RETURNVALUE_NOERROR
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)

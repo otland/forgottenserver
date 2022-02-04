@@ -605,16 +605,16 @@ bool Events::eventPlayerOnLookInMarket(Player* player, const ItemType* itemType)
 	return scriptInterface.callFunction(2);
 }
 
-bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+ReturnValue Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if (info.playerOnMoveItem == -1) {
-		return true;
+		return RETURNVALUE_NOERROR;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
 		std::cout << "[Error - Events::eventPlayerOnMoveItem] Call stack overflow" << std::endl;
-		return false;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -636,7 +636,17 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 	LuaScriptInterface::pushCylinder(L, fromCylinder);
 	LuaScriptInterface::pushCylinder(L, toCylinder);
 
-	return scriptInterface.callFunction(7);
+	ReturnValue returnValue;
+	if (scriptInterface.protectedCall(L, 7, 1) != 0) {
+		returnValue = RETURNVALUE_NOTPOSSIBLE;
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	} else {
+		returnValue = LuaScriptInterface::getNumber<ReturnValue>(L, -1);
+		lua_pop(L, 1);
+	}
+
+	scriptInterface.resetScriptEnv();
+	return returnValue;
 }
 
 void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)

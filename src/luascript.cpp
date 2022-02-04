@@ -844,6 +844,14 @@ InstantSpell* LuaScriptInterface::getInstantSpell(lua_State* L, int32_t arg)
 	return spell;
 }
 
+Reflect LuaScriptInterface::getReflect(lua_State* L, int32_t arg)
+{
+	uint16_t percent = getField<uint16_t>(L, arg, "percent");
+	uint16_t value = getField<uint16_t>(L, arg, "value");
+	lua_pop(L, 2);
+	return Reflect(percent, value);
+}
+
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
 {
 	Thing* thing;
@@ -1013,6 +1021,13 @@ void LuaScriptInterface::pushLoot(lua_State* L, const std::vector<LootBlock>& lo
 
 		lua_rawseti(L, -2, ++index);
 	}
+}
+
+void LuaScriptInterface::pushReflect(lua_State* L, const Reflect& reflect)
+{
+	lua_createtable(L, 0, 2);
+	setField(L, "percent", reflect.percent);
+	setField(L, "chance", reflect.chance);
 }
 
 #define registerEnum(value) { std::string enumName = #value; registerGlobalVariable(enumName.substr(enumName.find_last_of(':') + 1), value); }
@@ -2370,6 +2385,12 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Item", "setStoreItem", LuaScriptInterface::luaItemSetStoreItem);
 	registerMethod("Item", "isStoreItem", LuaScriptInterface::luaItemIsStoreItem);
+
+	registerMethod("Item", "setReflect", LuaScriptInterface::luaItemSetReflect);
+	registerMethod("Item", "getReflect", LuaScriptInterface::luaItemGetReflect);
+
+	registerMethod("Item", "setBoostPercent", LuaScriptInterface::luaItemSetBoostPercent);
+	registerMethod("Item", "getBoostPercent", LuaScriptInterface::luaItemGetBoostPercent);
 
 	// Container
 	registerClass("Container", "Item", LuaScriptInterface::luaContainerCreate);
@@ -7065,6 +7086,58 @@ int LuaScriptInterface::luaItemIsStoreItem(lua_State* L)
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
 		pushBoolean(L, item->isStoreItem());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemSetReflect(lua_State* L)
+{
+	// item:setReflect(combatType, reflect)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	item->setReflect(getNumber<CombatType_t>(L, 2), getReflect(L, 3));
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaItemGetReflect(lua_State* L)
+{
+	// item:getReflect(combatType[, total = true])
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		pushReflect(L, item->getReflect(getNumber<CombatType_t>(L, 2), getBoolean(L, 3, true)));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemSetBoostPercent(lua_State* L)
+{
+	// item:setBoostPercent(combatType, percent)
+	Item* item = getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	item->setBoostPercent(getNumber<CombatType_t>(L, 2), getNumber<uint16_t>(L, 3));
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaItemGetBoostPercent(lua_State* L)
+{
+	// item:getBoostPercent(combatType[, total = true])
+	Item* item = getUserdata<Item>(L, 1);
+	if (item) {
+		lua_pushnumber(L, item->getBoostPercent(getNumber<CombatType_t>(L, 2), getBoolean(L, 3, true)));
 	} else {
 		lua_pushnil(L);
 	}
