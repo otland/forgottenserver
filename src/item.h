@@ -107,8 +107,10 @@ enum AttrTypes_t {
 	ATTR_STOREITEM = 37,
 	ATTR_ATTACK_SPEED = 38,
 	ATTR_OPENCONTAINER = 39,
-	ATTR_REFLECT = 40,
-	ATTR_BOOST = 41,
+	// ATTR_PODIUMOUTFIT = 40, // mapeditor
+	// ATTR_TIER = 41, // mapeditor
+	ATTR_REFLECT = 42,
+	ATTR_BOOST = 43,
 };
 
 enum Attr_ReadValue {
