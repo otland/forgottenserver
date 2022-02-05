@@ -90,10 +90,9 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
 
-		if (actor) {
-			Player* actorPlayer = actor->getPlayer();
-			if (!house->isInvited(actorPlayer)) {
-				return RETURNVALUE_CANNOTTHROW;
+		if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+			if (!house->isInvited(actor->getPlayer())) {
+				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		}
 	}
@@ -137,9 +136,8 @@ ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		Player* actorPlayer = actor->getPlayer();
-		if (!house->isInvited(actorPlayer)) {
-			return RETURNVALUE_NOTPOSSIBLE;
+		if (!house->isInvited(actor->getPlayer())) {
+			return RETURNVALUE_PLAYERISNOTINVITED;
 		}
 	}
 	return Tile::queryRemove(thing, count, flags);
