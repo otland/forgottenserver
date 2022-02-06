@@ -1149,7 +1149,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 				ret = toCylinder->queryAdd(index, *item, count, flags);
 
-				if (actorPlayer && fromPos && toPos) {
+				if (actorPlayer && fromPos && toPos && !toItem->isRemoved()) {
 					g_events->eventPlayerOnItemMoved(actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos, toCylinder, fromCylinder);
 				}
 
@@ -1274,11 +1274,11 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	if (actorPlayer && fromPos && toPos) {
-		if (updateItem) {
+		if (updateItem && !updateItem->isRemoved()) {
 			g_events->eventPlayerOnItemMoved(actorPlayer, updateItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
-		} else if (moveItem) {
+		} else if (moveItem && !moveItem->isRemoved()) {
 			g_events->eventPlayerOnItemMoved(actorPlayer, moveItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
-		} else {
+		} else if (item && !item->isRemoved()) {
 			g_events->eventPlayerOnItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
 		}
 	}
