@@ -2666,6 +2666,10 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getStoreInbox", LuaScriptInterface::luaPlayerGetStoreInbox);
 
+	registerMethod("Player", "isNearDepotBox", LuaScriptInterface::luaPlayerIsNearDepotBox);
+
+	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10553,6 +10557,32 @@ int LuaScriptInterface::luaPlayerGetStoreInbox(lua_State* L)
 
 	pushUserdata<Container>(L, storeInbox);
 	setMetatable(L, -1, "Container");
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerIsNearDepotBox(lua_State* L)
+{
+	// player:isNearDepotBox()
+	const Player* const player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	pushBoolean(L, player->isNearDepotBox());
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
+{
+	// player:getIdleTime()
+	const Player* const player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_pushnumber(L, player->getIdleTime());
 	return 1;
 }
 
