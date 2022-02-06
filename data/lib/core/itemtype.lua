@@ -85,3 +85,17 @@ end
 function ItemType:isBed()
 	return self:getType() == ITEM_TYPE_BED
 end
+
+local weaponTypeToSkillType = {
+	[WEAPON_SWORD] = SKILL_SWORD,
+	[WEAPON_CLUB] = SKILL_CLUB,
+	[WEAPON_AXE] = SKILL_AXE,
+	[WEAPON_SHIELD] = SKILL_SHIELD,
+	[WEAPON_DISTANCE] = SKILL_DISTANCE,
+	[WEAPON_WAND] = SKILL_MAGIC,
+	[WEAPON_AMMO] = SKILL_DISTANCE
+}
+
+function ItemType:getSkillType()
+	return weaponTypeToSkillType[self:getWeaponType()]
+end
