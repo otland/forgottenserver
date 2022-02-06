@@ -40,6 +40,8 @@
 #include "enums.h"
 #include "position.h"
 #include "outfit.h"
+#include "mounts.h"
+#include <fmt/format.h>
 
 class Thing;
 class Creature;
@@ -299,9 +301,7 @@ class LuaScriptInterface
 		{
 			LUA_NUMBER luaNum = lua_tonumber(L, arg);
 			if (luaNum < 0 || luaNum > std::numeric_limits<T>::max()) {
-				std::ostringstream ss;
-				ss << "Passed argument " << arg << " has invalid value" << std::endl;
-				reportErrorFunc(ss.str());
+				reportErrorFunc(L, fmt::format("Passed argument '{:s}' has invalid value: {:d}", arg, luaNum));
 			}
 
 			return static_cast<T>(luaNum);
@@ -313,13 +313,11 @@ class LuaScriptInterface
 		{
 			LUA_NUMBER luaNum = lua_tonumber(L, arg);
 			if (luaNum > std::numeric_limits<T>::max()) {
-				std::ostringstream ss;
-				ss << "Passed argument " << arg << " has invalid value" << std::endl;
-				reportErrorFunc(ss.str());
+				reportErrorFunc(L, fmt::format("Passed argument '{:s}' has invalid value: {:d}", arg, luaNum));
 			}
 
 			return static_cast<T>(luaNum);
-		}		
+		}
 
 		template<typename T>
 		static T getNumber(lua_State *L, int32_t arg, T defaultValue)
