@@ -1079,8 +1079,9 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 {
 	Player* actorPlayer = actor ? actor->getPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
-		if (!g_events->eventPlayerOnMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder)) {
-			return RETURNVALUE_NOTPOSSIBLE;
+		const ReturnValue ret = g_events->eventPlayerOnMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		if (ret != RETURNVALUE_NOERROR) {
+			return ret;
 		}
 	}
 
@@ -1118,8 +1119,11 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		//check if we can add it to source cylinder
 		ret = fromCylinder->queryAdd(fromCylinder->getThingIndex(item), *toItem, toItem->getItemCount(), 0);
 		if (ret == RETURNVALUE_NOERROR) {
-			if (actorPlayer && fromPos && toPos && !g_events->eventPlayerOnMoveItem(actorPlayer, toItem, count, *toPos, *fromPos, toCylinder, fromCylinder)) {
-				return RETURNVALUE_NOTPOSSIBLE;
+			if (actorPlayer && fromPos && toPos) {
+				const ReturnValue eventRet = g_events->eventPlayerOnMoveItem(actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos, toCylinder, fromCylinder);
+				if (eventRet != RETURNVALUE_NOERROR) {
+					return eventRet;
+				}
 			}
 
 			//check how much we can move
@@ -1147,7 +1151,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 				ret = toCylinder->queryAdd(index, *item, count, flags);
 
 				if (actorPlayer && fromPos && toPos) {
-					g_events->eventPlayerOnItemMoved(actorPlayer, toItem, count, *toPos, *fromPos, toCylinder, fromCylinder);
+					g_events->eventPlayerOnItemMoved(actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos, toCylinder, fromCylinder);
 				}
 
 				toItem = nullptr;
@@ -1271,7 +1275,13 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	if (actorPlayer && fromPos && toPos) {
-		g_events->eventPlayerOnItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		if (updateItem) {
+			g_events->eventPlayerOnItemMoved(actorPlayer, updateItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		} else if (moveItem) {
+			g_events->eventPlayerOnItemMoved(actorPlayer, moveItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		} else {
+			g_events->eventPlayerOnItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		}
 	}
 
 	return ret;
@@ -2625,10 +2635,9 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(tradeItem->getTile())) {
-			House* house = houseTile->getHouse();
-			if (house && !house->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(tradeItem->getTile())) {
+			if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return;
 			}
 		}
@@ -3474,6 +3483,16 @@ void Game::playerShowQuestLine(uint32_t playerId, uint16_t questId)
 	}
 
 	player->sendQuestLine(quest);
+}
+
+void Game::playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	player->resetQuestTracker(missionIds);
 }
 
 void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
@@ -5135,7 +5154,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	if (g_config.getBoolean(ConfigManager::MARKET_PREMIUM) && !player->isPremium()) {
-		player->sendMarketLeave();
+		player->sendTextMessage(MESSAGE_MARKET, "Only premium accounts may create offers for that object.");
 		return;
 	}
 

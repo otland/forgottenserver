@@ -639,6 +639,12 @@ MagicEffectNames magicEffectNames = {
 	{"fatal", 		CONST_ME_FATAL},
 	{"dodge", 		CONST_ME_DODGE},
 	{"hourglass",		CONST_ME_HOURGLASS},
+	{"ferumbras1",		CONST_ME_FERUMBRAS_1},
+	{"gazharagoth",		CONST_ME_GAZHARAGOTH},
+	{"madmage",			CONST_ME_MAD_MAGE},
+	{"horestis",		CONST_ME_HORESTIS},
+	{"devovorga",		CONST_ME_DEVOVORGA},
+	{"ferumbras2",		CONST_ME_FERUMBRAS_2},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -1333,3 +1339,4 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
+

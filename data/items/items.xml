@@ -37547,9 +37547,18 @@
 	<item id="27046" article="an" name="ancient coin" />
 	<item id="27047" article="a" name="coral brooch" />
 	<item id="27048" article="a" name="gemmed figurine" />
-	<item id="27049" article="a" name="pillow backpack" />
+	<item id="27049" article="a" name="pillow backpack">
+		<attribute key="weight" value="1450" />
+		<attribute key="containerSize" value="24" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="27050" article="an" name="orclops santa" />
-	<item id="27051" article="a" name="birthday backpack" />
+	<item id="27051" article="a" name="birthday backpack">
+		<attribute key="weight" value="1500" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+		<attribute key="description" value="It was awarded during the festivities of the worlds 20th anniversary." />
+	</item>
 	<item id="27052" article="a" name="birthday cake" />
 	<item id="27053" name="Ferumbras' Candy Hat" />
 	<item fromid="27054" toid="27057" article="a" name="plate layered archway" />
@@ -38109,7 +38118,11 @@
 	<item id="28433" name="remains of a withering soul" />
 	<item id="28434" name="remains of a decaying soul" />
 	<item id="28435" article="a" name="swan feather cloak" />
-	<item id="28436" article="a" name="blossom bag" />
+	<item id="28436" article="a" name="blossom bag">
+		<attribute key="weight" value="800" />
+		<attribute key="containerSize" value="24" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="28438" name="magical music notes" />
 	<item id="28439" name="raven herb bush" />
 	<item id="28450" article="a" name="cult object" />
@@ -38445,16 +38458,77 @@
 	<item id="30102" name="gold dust" />
 	<item id="30103" name="silver dust" />
 	<item id="30104" article="a" name="bookcase" />
-	<item id="30105" article="a" name="blade of destruction" />
-	<item id="30106" article="a" name="slayer of destruction" />
-	<item id="30107" article="an" name="axe of destruction" />
-	<item id="30108" article="a" name="chopper of destruction" />
-	<item id="30109" article="a" name="mace of destruction" />
-	<item id="30110" article="a" name="hammer of destruction" />
-	<item id="30111" article="a" name="bow of destruction" />
-	<item id="30112" article="a" name="crossbow of destruction" />
-	<item id="30113" article="a" name="wand of destruction" />
-	<item id="30114" article="a" name="rod of destruction" />
+	<item id="30105" article="a" name="blade of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="33" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="sword" />
+	</item>
+	<item id="30106" article="a" name="slayer of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="sword" />
+	</item>
+	<item id="30107" article="an" name="axe of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="31" />
+		<attribute key="attack" value="51" />
+		<attribute key="weaponType" value="axe" />
+	</item>
+	<item id="30108" article="a" name="chopper of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="30" />
+		<attribute key="attack" value="52" />
+		<attribute key="weaponType" value="axe" />
+	</item>
+	<item id="30109" article="a" name="mace of destruction">
+		<attribute key="weight" value="5000" />
+		<attribute key="defense" value="32" />
+		<attribute key="attack" value="50" />
+		<attribute key="weaponType" value="club" />
+	</item>
+	<item id="30110" article="a" name="hammer of destruction">
+		<attribute key="weight" value="7000" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="defense" value="29" />
+		<attribute key="attack" value="53" />
+		<attribute key="weaponType" value="club" />
+	</item>
+	<item id="30111" article="a" name="bow of destruction">
+		<attribute key="weight" value="5500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="arrow" />
+		<attribute key="range" value="6" />
+		<attribute key="hitChance" value="5" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="30112" article="a" name="crossbow of destruction">
+		<attribute key="weight" value="6500" />
+		<attribute key="slotType" value="two-handed" />
+		<attribute key="weaponType" value="distance" />
+		<attribute key="ammoType" value="bolt" />
+		<attribute key="range" value="5" />
+		<attribute key="hitChance" value="5" />
+		<attribute key="attack" value="5" />
+	</item>
+	<item id="30113" article="a" name="wand of destruction">
+		<attribute key="weight" value="3500" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="energy" />
+		<attribute key="range" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+	</item>
+	<item id="30114" article="a" name="rod of destruction">
+		<attribute key="weight" value="3500" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="ice" />
+		<attribute key="range" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+	</item>
 	<item id="30115" article="a" name="shadow bite plant" />
 	<item id="30116" name="shadow bite berries" />
 	<item id="30117" name="nightshade distillate" />
@@ -38808,7 +38882,11 @@
 	<item id="31224" article="an" name="inkwell" />
 	<item id="31225" article="a" name="book page" />
 	<item id="31226" article="a" name="glowing rune" />
-	<item id="31227" article="a" name="book backpack" />
+	<item id="31227" article="a" name="book backpack">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="22" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="31228" article="an" name="ornate tome" />
 	<item id="31229" article="a" name="sign of Zathroth" />
 	<item id="31230" article="a" name="glowing sign of Zathroth" />
@@ -39199,7 +39277,11 @@
 	<item id="32850" article="a" name="soft hammer" />
 	<item id="32851" article="a" name="golden bell" />
 	<item id="32852" name="yetislippers" />
-	<item id="32853" article="a" name="festive backpack" />
+	<item id="32853" article="a" name="festive backpack">
+		<attribute key="weight" value="1500" />
+		<attribute key="containerSize" value="22" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="32854" article="a" name="meringue cake" />
 	<item id="32856" article="a" name="birthday card" />
 	<item id="32857" article="a" name="birthday cup" />
@@ -39678,9 +39760,55 @@
 	<item fromid="34150" toid="34151" article="a" name="closed door" />
 	<item fromid="34152" toid="34153" article="an" name="open door" />
 	<item fromid="34154" toid="34155" article="an" name="ancient wall" />
-	<item id="34156" article="the" name="golden outfit display" />
+	<item id="34156" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34158" />
+	</item>
 	<item id="34157" article="a" name="glowing switch" />
-	<item fromid="34158" toid="34172" article="the" name="golden outfit display" />
+	<item id="34158" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34159" />
+	</item>
+	<item id="34159" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34160" />
+	</item>
+	<item id="34160" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34156" />
+	</item>
+	<item id="34161" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34162" />
+	</item>
+	<item id="34162" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34163" />
+	</item>
+	<item id="34163" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34164" />
+	</item>
+	<item id="34164" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34161" />
+	</item>
+	<item id="34165" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34166" />
+	</item>
+	<item id="34166" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34167" />
+	</item>
+	<item id="34167" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34168" />
+	</item>
+	<item id="34168" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34165" />
+	</item>
+	<item id="34169" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34170" />
+	</item>
+	<item id="34170" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34171" />
+	</item>
+	<item id="34171" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34172" />
+	</item>
+	<item id="34172" article="the" name="golden outfit display">
+		<attribute key="rotateTo" value="34169" />
+	</item>
 	<item fromid="34174" toid="34179" article="a" name="memorial" />
 	<item fromid="34180" toid="34183" article="a" name="dead ogre ruffian" />
 	<item fromid="34184" toid="34187" article="a" name="dead ogre rowdy" />
@@ -39742,7 +39870,11 @@
 	<item id="34278" name="Urmahlullu's tail" />
 	<item id="34279" name="Urmahlullu's mane" />
 	<item id="34280" name="Urmahlullu's paw" />
-	<item id="34281" article="a" name="winged backpack" />
+	<item id="34281" article="a" name="winged backpack">
+		<attribute key="weight" value="1500" />
+		<attribute key="containerSize" value="24" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item fromid="34282" toid="34286" article="a" name="gryphon nest" />
 	<item id="34287" article="the" name="cobra amulet" />
 	<item id="34288" article="the" name="missing piece of the cube" />
@@ -40074,14 +40206,29 @@
 	<item id="35235" name="Brain Head's left hemisphere" />
 	<item id="35236" name="Brain Head's right hemisphere" />
 	<item id="35237" name="Brain Head's brain" />
-	<item id="35238" article="a" name="death knell" />
-	<item id="35239" article="a" name="skull coin" />
-	<item id="35240" article="a" name="vial with a skull cork" />
+	<item id="35238" article="a" name="death knell">
+		<attribute key="weight" value="250" />
+	</item>
+	<item id="35239" article="a" name="skull coin">
+		<attribute key="weight" value="25" />
+	</item>
+	<item id="35240" article="a" name="vial with a skull cork">
+		<attribute key="weight" value="170" />
+		<attribute key="description" value="It is filled with a potion that might grant you access to the Netherworld." />
+	</item>
 	<item id="35241" article="a" name="burial shroud" />
-	<item id="35242" name="yarn" />
-	<item id="35243" name="glittering yarn" />
-	<item id="35244" article="a" name="loom" />
-	<item id="35245" article="an" name="angel figurine" />
+	<item id="35242" name="yarn">
+		<attribute key="weight" value="130" />
+	</item>
+	<item id="35243" name="glittering yarn">
+		<attribute key="weight" value="130" />
+	</item>
+	<item id="35244" article="a" name="loom">
+		<attribute key="description" value="The strands glow in an unearthly light. But one coil is empty, the yarn there is missing." />
+	</item>
+	<item id="35245" article="an" name="angel figurine">
+		<attribute key="description" value="It is made of ivory." />
+	</item>
 	<item id="35246" article="a" name="hole left by a hunger worm" />
 	<item id="35247" article="a" name="soulforged lantern" />
 	<item id="35249" article="a" name="grimace" />
@@ -40093,7 +40240,9 @@
 	<item id="35255" article="a" name="writhing heart" />
 	<item id="35256" article="a" name="writhing brain" />
 	<item id="35257" article="a" name="treasure chest" />
-	<item id="35258" name="bone meal" />
+	<item id="35258" name="bone meal">
+		<attribute key="weight" value="80" />
+	</item>
 	<item id="35259" name="grave flower extract" />
 	<item id="35260" article="a" name="ghost web" />
 	<item id="35261" name="ghostly barrier" />
@@ -40107,12 +40256,24 @@
 	<item id="35273" name="fabulous legs" />
 	<item id="35274" name="soulful legs" />
 	<item id="35275" article="a" name="pair of nightmare boots" />
-	<item id="35276" article="a" name="ghost backpack" />
+	<item id="35276" article="a" name="ghost backpack">
+		<attribute key="weight" value="500" />
+		<attribute key="containerSize" value="26" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="35277" article="a" name="ring of souls" />
-	<item id="35278" article="a" name="giant amethyst" />
-	<item id="35279" article="a" name="giant topaz" />
-	<item id="35280" article="an" name="amber with a bug" />
-	<item id="35281" article="an" name="amber with a dragonfly" />
+	<item id="35278" article="a" name="giant amethyst">
+		<attribute key="weight" value="170" />
+	</item>
+	<item id="35279" article="a" name="giant topaz">
+		<attribute key="weight" value="170" />
+	</item>
+	<item id="35280" article="an" name="amber with a bug">
+		<attribute key="weight" value="100" />
+	</item>
+	<item id="35281" article="an" name="amber with a dragonfly">
+		<attribute key="weight" value="100" />
+	</item>
 	<item id="35282" article="an" name="amber" />
 	<item id="35283" article="a" name="slab with a skull" />
 	<item id="35284" article="a" name="ghost chestplate" />
@@ -40172,12 +40333,26 @@
 	<item id="35421" name="plushie of a hydra" />
 	<item id="35422" name="nothing special" />
 	<item fromid="35423" toid="35424" article="a" name="sandtimer" />
-	<item id="35425" article="a" name="white gem" />
-	<item id="35426" article="a" name="diamond" />
-	<item id="35427" article="a" name="moonstone" />
-	<item id="35428" article="a" name="silver hand mirror" />
-	<item id="35429" article="an" name="ivory comb" />
-	<item id="35430" article="a" name="cursed bone" />
+	<item id="35425" article="a" name="white gem">
+		<attribute key="weight" value="30" />
+	</item>
+	<item id="35426" article="a" name="diamond">
+		<attribute key="weight" value="30" />
+	</item>
+	<item id="35427" article="a" name="moonstone">
+		<attribute key="weight" value="35" />
+	</item>
+	<item id="35428" article="a" name="silver hand mirror">
+		<attribute key="weight" value="650" />
+		<attribute key="description" value="It has an ornate frame." />
+	</item>
+	<item id="35429" article="an" name="ivory comb">
+		<attribute key="weight" value="650" />
+		<attribute key="description" value="It looks magnificent." />
+	</item>
+	<item id="35430" article="a" name="cursed bone">
+		<attribute key="weight" value="650" />
+	</item>
 	<item fromid="35431" toid="35432" article="an" name="ice cabinet" />
 	<item id="35433" article="an" name="ice table" />
 	<item fromid="35434" toid="35435" article="an" name="ice stool" />
@@ -40517,7 +40692,10 @@
 	<item id="36762" article="a" name="slab with a lizard" />
 	<item id="36763" article="a" name="slab with a scorpion" />
 	<item id="36764" article="a" name="sun and moon mosaic" />
-	<item id="36765" article="a" name="bag you desire" />
+	<item id="36765" article="a" name="bag you desire">
+		<attribute key="weight" value="150" />
+		<attribute key="description" value="It contains the most powerful artifacts from the depths of Zarganash's darkest realms" />
+	</item>
 	<item id="36766" article="a" name="slightly feline statue" />
 	<item id="36767" article="a" name="magic forcefield" />
 	<item fromid="36774" toid="36777" article="a" name="dead capricious phantom" />
@@ -40796,7 +40974,9 @@
 	<item fromid="38046" toid="38085" name="shallow water" />
 	<item fromid="38090" toid="38101" name="shallow water" />
 	<item id="38134" article="a" name="floating cask" />
-	<item id="38135" article="a" name="bag of smuggled goods" />
+	<item id="38135" article="a" name="bag of smuggled goods">
+		<attribute key="weight" value="800" />
+	</item>
 	<item fromid="38136" toid="38139" article="a" name="catapult" />
 	<item fromid="38140" toid="38143" name="fire ball" />
 	<item fromid="38144" toid="38145" article="a" name="coohan cannon" />
@@ -40830,7 +41010,11 @@
 	<item id="38230" name="shark fins" />
 	<item id="38231" name="quicksand" />
 	<item id="38232" article="a" name="plushie of Tentugly" />
-	<item id="38233" article="a" name="raccoon backpack" />
+	<item id="38233" article="a" name="raccoon backpack">
+		<attribute key="weight" value="1800" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item id="38234" article="a" name="tiara" />
 	<item id="38235" article="a" name="golden dustbin" />
 	<item id="38236" article="a" name="golden skull" />
@@ -41230,8 +41414,12 @@
 	<item id="39650" article="a" name="golden blessed shield" />
 	<item id="39651" article="a" name="gilded magic longsword" />
 	<item fromid="39656" toid="39657" article="a" name="magic forcefield" />
-	<item id="39658" article="a" name="tagralt-inlaid scabbard" />
-	<item id="39659" article="an" name="eye-embroidered veil" />
+	<item id="39658" article="a" name="tagralt-inlaid scabbard">
+		<attribute key="weight" value="100" />
+	</item>
+	<item id="39659" article="an" name="eye-embroidered veil">
+		<attribute key="weight" value="2500" />
+	</item>
 	<item fromid="39691" toid="39692" article="a" name="small boat" />
 	<item fromid="39693" toid="39701" name="sand" />
 	<item fromid="39702" toid="39704" name="dirt floor" />

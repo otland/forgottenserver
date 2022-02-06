@@ -389,8 +389,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string sessionKey = msg.getString();
 	auto sessionArgs = explodeString(sessionKey, "\n", 4); // acc name or email, password, token, timestamp divided by 30
-	if (sessionArgs.size() != 4) {
-		disconnect();
+	if (sessionArgs.size() < 2) {
+		disconnectClient("Malformed session key.");
 		return;
 	}
 
@@ -401,25 +401,37 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string& accountName = sessionArgs[0];
 	std::string& password = sessionArgs[1];
-	std::string& token = sessionArgs[2];
-	uint32_t tokenTime = 0;
-	try {
-		tokenTime = std::stoul(sessionArgs[3]);
-	} catch (const std::invalid_argument&) {
-		disconnectClient("Malformed token packet.");
-		return;
-	} catch (const std::out_of_range&) {
-		disconnectClient("Token time is too long.");
-		return;
-	}
-
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
 		return;
 	}
 
-	std::string characterName = msg.getString();
+	std::string token;
+	uint32_t tokenTime = 0;
 
+	// two-factor auth
+	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+		if (sessionArgs.size() < 4) {
+			disconnectClient("Authentication failed. Incomplete session key.");
+			return;
+		}
+
+		token = sessionArgs[2];
+
+		try {
+			tokenTime = std::stoul(sessionArgs[3]);
+		} catch (const std::invalid_argument&) {
+			disconnectClient("Malformed token packet.");
+			return;
+		} catch (const std::out_of_range&) {
+			disconnectClient("Token time is too long.");
+			return;
+		}
+	} else {
+		tokenTime = std::floor(challengeTimestamp / 30);
+	}
+
+	std::string characterName = msg.getString();
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
@@ -604,6 +616,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xCB: parseBrowseField(msg); break;
 		case 0xCC: parseSeekInContainer(msg); break;
 		//case 0xCD: break; // request inspect window
+		case 0xD0: parseQuestTracker(msg); break;
 		case 0xD2: addGameTask(&Game::playerRequestOutfit, player->getID()); break;
 		case 0xD3: parseSetOutfit(msg); break;
 		case 0xD4: parseToggleMount(msg); break;
@@ -1292,6 +1305,18 @@ void ProtocolGame::parseQuestLine(NetworkMessage& msg)
 {
 	uint16_t questId = msg.get<uint16_t>();
 	addGameTask(&Game::playerShowQuestLine, player->getID(), questId);
+}
+
+void ProtocolGame::parseQuestTracker(NetworkMessage& msg)
+{
+	uint8_t missions = msg.getByte();
+	std::vector<uint16_t> missionIds;
+	missionIds.reserve(missions);
+	for (uint8_t i = 0; i < missions; i++) {
+		missionIds.push_back(msg.get<uint16_t>());
+	}
+
+	addGameTask(&Game::playerResetQuestTracker, player->getID(), std::move(missionIds));
 }
 
 void ProtocolGame::parseMarketLeave()
@@ -2386,14 +2411,49 @@ void ProtocolGame::sendQuestLine(const Quest* quest)
 	msg.add<uint16_t>(quest->getID());
 	msg.addByte(quest->getMissionsCount(player));
 
-	uint16_t missionId = 0;
 	for (const Mission& mission : quest->getMissions()) {
 		if (mission.isStarted(player)) {
-			msg.add<uint16_t>(++missionId);
+			msg.add<uint16_t>(mission.getID());
 			msg.addString(mission.getName(player));
 			msg.addString(mission.getDescription(player));
 		}
 	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendQuestTracker()
+{
+	NetworkMessage msg;
+	msg.addByte(0xD0);
+	msg.addByte(1);
+	size_t trackeds = player->trackedQuests.size();
+	msg.addByte(player->getMaxTrackedQuests() - trackeds);
+	msg.addByte(trackeds);
+
+	for (const TrackedQuest& trackedQuest : player->trackedQuests) {
+		const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
+		const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
+		msg.add<uint16_t>(trackedQuest.getMissionId());
+		msg.addString(quest->getName());
+		msg.addString(mission->getName(player));
+		msg.addString(mission->getDescription(player));
+	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendUpdateQuestTracker(const TrackedQuest& trackedQuest)
+{
+	NetworkMessage msg;
+	msg.addByte(0xD0);
+	msg.addByte(0);
+
+	const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
+	const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
+	msg.add<uint16_t>(trackedQuest.getMissionId());
+	msg.addString(mission->getName(player));
+	msg.addString(mission->getDescription(player));
 
 	writeToOutputBuffer(msg);
 }
@@ -3405,8 +3465,8 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 		msg.addByte(it.second);
 	}
 
-	msg.addByte(modalWindow.defaultEscapeButton);
 	msg.addByte(modalWindow.defaultEnterButton);
+	msg.addByte(modalWindow.defaultEscapeButton);
 	msg.addByte(modalWindow.priority ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);
