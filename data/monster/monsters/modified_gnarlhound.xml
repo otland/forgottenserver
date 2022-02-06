@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Modified Gnarlhound" nameDescription="a modified gnarlhound" race="blood" experience="0" speed="450">
+	<health now="1500" max="1500" />
+	<look type="515" corpse="13528" />
+	<targetchange interval="2000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="1500" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<defenses armor="200" defense="200" />
+	<elements>
+		<element physicalPercent="90" />
+		<element firePercent="90" />
+		<element energyPercent="90" />
+		<element icePercent="90" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity holy="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+</monster>

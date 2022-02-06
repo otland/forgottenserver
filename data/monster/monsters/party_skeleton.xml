@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Party Skeleton" nameDescription="a party skeleton" race="undead" experience="0" speed="154" manacost="300">
+	<health now="40" max="40" />
+	<look type="33" corpse="5972" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="0" />
+		<flag hostile="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-20" />
+		<attack name="lifedrain" interval="1000" chance="9" range="1" min="-7" max="-13" />
+	</attacks>
+	<defenses armor="2" defense="9" />
+	<elements>
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+	</immunities>
+	<loot>
+		<item id="2050" chance="25000" /><!-- torch -->
+		<item id="2050" chance="25000" /><!-- torch -->
+		<item name="gold coin" countmax="10" chance="24500" />
+		<item id="2230" chance="49750" /><!-- bone -->
+		<item id="2376" chance="1500" /><!-- sword -->
+		<item name="hatchet" chance="23750" />
+		<item name="mace" chance="19500" />
+		<item name="viking helmet" chance="8250" />
+		<item name="brass shield" chance="13250" />
+	</loot>
+</monster>

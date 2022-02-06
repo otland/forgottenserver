@@ -319,7 +319,7 @@ if NpcHandler == nil then
 		end
 
 		local callback = self:getCallback(CALLBACK_FAREWELL)
-		if callback == nil or callback() then
+		if callback == nil or callback(cid) then
 			if self:processModuleCallback(CALLBACK_FAREWELL) then
 				local msg = self:getMessage(MESSAGE_FAREWELL)
 				local player = Player(cid)
@@ -361,10 +361,10 @@ if NpcHandler == nil then
 		if cid == getNpcCid() and next(self.shopItems) then
 			local npc = Npc()
 			local speechBubble = npc:getSpeechBubble()
-			if speechBubble == 3 then
-				npc:setSpeechBubble(4)
+			if speechBubble == SPEECHBUBBLE_QUEST then
+				npc:setSpeechBubble(SPEECHBUBBLE_QUESTTRADER)
 			else
-				npc:setSpeechBubble(2)
+				npc:setSpeechBubble(SPEECHBUBBLE_TRADE)
 			end
 		end
 
@@ -531,7 +531,7 @@ if NpcHandler == nil then
 	function NpcHandler:onWalkAway(cid)
 		if self:isFocused(cid) then
 			local callback = self:getCallback(CALLBACK_CREATURE_DISAPPEAR)
-			if callback == nil or callback() then
+			if callback == nil or callback(cid) then
 				if self:processModuleCallback(CALLBACK_CREATURE_DISAPPEAR, cid) then
 					local msg = self:getMessage(MESSAGE_WALKAWAY)
 

@@ -63,7 +63,7 @@ void ServiceManager::stop()
 
 	acceptors.clear();
 
-	death_timer.expires_from_now(boost::posix_time::seconds(3));
+	death_timer.expires_from_now(std::chrono::seconds(3));
 	death_timer.async_wait(std::bind(&ServiceManager::die, this));
 }
 
@@ -132,17 +132,14 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 	}
 }
 
-Protocol_ptr ServicePort::make_protocol(bool checksummed, NetworkMessage& msg, const Connection_ptr& connection) const
+Protocol_ptr ServicePort::make_protocol(NetworkMessage& msg, const Connection_ptr& connection) const
 {
 	uint8_t protocolID = msg.getByte();
 	for (auto& service : services) {
 		if (protocolID != service->get_protocol_identifier()) {
 			continue;
 		}
-
-		if ((checksummed && service->is_checksummed()) || !service->is_checksummed()) {
-			return service->make_protocol(connection);
-		}
+		return service->make_protocol(connection);
 	}
 	return nullptr;
 }

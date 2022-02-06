@@ -99,7 +99,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 
 void Spells::clearMaps(bool fromLua)
 {
-	for (auto instant = instants.begin(); instant != instants.end(); ) {
+	for (auto instant = instants.begin(); instant != instants.end();) {
 		if (fromLua == instant->second.fromLua) {
 			instant = instants.erase(instant);
 		} else {
@@ -107,7 +107,7 @@ void Spells::clearMaps(bool fromLua)
 		}
 	}
 
-	for (auto rune = runes.begin(); rune != runes.end(); ) {
+	for (auto rune = runes.begin(); rune != runes.end();) {
 		if (fromLua == rune->second.fromLua) {
 			rune = runes.erase(rune);
 		} else {
@@ -264,16 +264,6 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	return nullptr;
 }
 
-InstantSpell* Spells::getInstantSpellById(uint32_t spellId)
-{
-	for (auto& it : instants) {
-		if (it.second.getId() == spellId) {
-			return &it.second;
-		}
-	}
-	return nullptr;
-}
-
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (auto& it : instants) {
@@ -289,19 +279,12 @@ Position Spells::getCasterPosition(Creature* creature, Direction dir)
 	return getNextPosition(dir, creature->getPosition());
 }
 
-CombatSpell::CombatSpell(Combat* combat, bool needTarget, bool needDirection) :
+CombatSpell::CombatSpell(Combat_ptr combat, bool needTarget, bool needDirection) :
 	Event(&g_spells->getScriptInterface()),
 	combat(combat),
 	needDirection(needDirection),
 	needTarget(needTarget)
 {}
-
-CombatSpell::~CombatSpell()
-{
-	if (!scripted) {
-		delete combat;
-	}
-}
 
 bool CombatSpell::loadScriptCombat()
 {
@@ -555,6 +538,10 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		}
 	}
 
+	if ((attr = node.attribute("pzlock"))) {
+		pzLock = booleanString(attr.as_string());
+	}
+
 	if ((attr = node.attribute("aggressive"))) {
 		aggressive = booleanString(attr.as_string());
 	}
@@ -593,18 +580,18 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (aggressive && (range < 1 || (range > 0 && !player->getAttackedCreature())) && player->getSkull() == SKULL_BLACK) {
+	if ((aggressive || pzLock) && (range < 1 || (range > 0 && !player->getAttackedCreature())) && player->getSkull() == SKULL_BLACK) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return false;
 	}
 
-	if (aggressive && player->hasCondition(CONDITION_PACIFIED)) {
+	if ((aggressive || pzLock) && player->hasCondition(CONDITION_PACIFIED)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
 	}
 
-  if (aggressive && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
+	if ((aggressive || pzLock) && !player->hasFlag(PlayerFlag_IgnoreProtectionZone) && player->getZone() == ZONE_PROTECTION) {
 		player->sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 		return false;
 	}
@@ -702,14 +689,7 @@ bool Spell::playerInstantSpellCheck(Player* player, const Position& toPos)
 		g_game.map.setTile(toPos, tile);
 	}
 
-	ReturnValue ret = Combat::canDoCombat(player, tile, aggressive);
-	if (ret != RETURNVALUE_NOERROR) {
-		player->sendCancelMessage(ret);
-		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-		return false;
-	}
-
-	if (blockingCreature && tile->getBottomVisibleCreature(player) != nullptr) {
+	if (blockingCreature && tile->getBottomVisibleCreature(player)) {
 		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -752,7 +732,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 		return false;
 	}
 
-	if (range != -1 && !g_game.canThrowObjectTo(playerPos, toPos, true, range, range)) {
+	if (range != -1 && !g_game.canThrowObjectTo(playerPos, toPos, true, true, range, range)) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -1033,8 +1013,8 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 	const Position& fromPos = creature->getPosition();
 	const Position& toPos = target->getPosition();
 	if (fromPos.z != toPos.z ||
-	        (range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight)) ||
-	        (range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, range, range))) {
+			(range == -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, true, Map::maxClientViewportX - 1, Map::maxClientViewportY - 1)) ||
+			(range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, true, range, range))) {
 		return false;
 	}
 	return true;
@@ -1075,9 +1055,8 @@ bool InstantSpell::castSpell(Creature* creature, Creature* target)
 		var.type = VARIANT_NUMBER;
 		var.number = target->getID();
 		return internalCastSpell(creature, var);
-	} else {
-		return castSpell(creature);
 	}
+	return castSpell(creature);
 }
 
 bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
@@ -1210,7 +1189,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 	if (needTarget) {
 		var.type = VARIANT_NUMBER;
 
-		if (target == nullptr) {
+		if (!target) {
 			Tile* toTile = g_game.map.getTile(toPosition);
 			if (toTile) {
 				const Creature* visibleCreature = toTile->getBottomVisibleCreature(player);
@@ -1231,6 +1210,12 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 	}
 
 	postCastSpell(player);
+
+	target = g_game.getCreatureByID(var.number);
+	if (getPzLock() && target) {
+		player->onAttackedCreature(target->getCreature());
+	}
+
 	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
 		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 		g_game.transformItem(item, item->getID(), newCount);

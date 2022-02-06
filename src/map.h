@@ -73,7 +73,7 @@ class AStarNodes
 		int_fast32_t closedNodes;
 };
 
-using SpectatorCache = std::map<Position, SpectatorHashSet>;
+using SpectatorCache = std::map<Position, SpectatorVec>;
 
 static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
@@ -210,48 +210,65 @@ class Map
 		}
 
 		/**
+		  * Removes a single tile.
+		  */
+		void removeTile(uint16_t x, uint16_t y, uint8_t z);
+		void removeTile(const Position& pos) {
+			removeTile(pos.x, pos.y, pos.z);
+		}
+
+		/**
 		  * Place a creature on the map
 		  * \param centerPos The position to place the creature
 		  * \param creature Creature to place on the map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
-		  * \param forceLogin If true, placing the creature will not fail becase of obstacles (creatures/chests)
+		  * \param forceLogin If true, placing the creature will not fail because of obstacles (creatures/chests)
 		  */
 		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
 
 		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
-		void getSpectators(SpectatorHashSet& spectators, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
+		void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
 		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
 
 		void clearSpectatorCache();
+		void clearPlayersSpectatorCache();
 
 		/**
 		  * Checks if you can throw an object to that position
 		  *	\param fromPos from Source point
 		  *	\param toPos Destination point
-		  *	\param rangex maximum allowed range horizontially
+		  *	\param rangex maximum allowed range horizontally
 		  *	\param rangey maximum allowed range vertically
 		  *	\param checkLineOfSight checks if there is any blocking objects in the way
+		  *	\param sameFloor checks if the destination is on same floor
 		  *	\returns The result if you can throw there or not
 		  */
-		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
+		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true, bool sameFloor = false,
 		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY) const;
+
+		/**
+		  * Checks if there are no obstacles on that position
+		  *	\param blockFloor counts the ground tile as an obstacle
+		  *	\returns The result if there is an obstacle or not
+		  */
+		bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) const;
 
 		/**
 		  * Checks if path is clear from fromPos to toPos
 		  * Notice: This only checks a straight line if the path is clear, for path finding use getPathTo.
 		  *	\param fromPos from Source point
 		  *	\param toPos Destination point
-		  *	\param floorCheck if true then view is not clear if fromPos.z is not the same as toPos.z
+		  *	\param sameFloor checks if the destination is on same floor
 		  *	\returns The result if there is no obstacles
 		  */
-		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
-		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
+		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
+		bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-		bool getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList,
+		bool getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;
@@ -277,7 +294,7 @@ class Map
 		uint32_t height = 0;
 
 		// Actually scans the map for spectators
-		void getSpectatorsInternal(SpectatorHashSet& spectators, const Position& centerPos,
+		void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos,
 		                           int32_t minRangeX, int32_t maxRangeX,
 		                           int32_t minRangeY, int32_t maxRangeY,
 		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const;

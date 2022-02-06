@@ -20,8 +20,8 @@
 #ifndef FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
 #define FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
 
-#include <regex>
 #include <set>
+#include <unordered_set>
 
 #include "container.h"
 #include "housetile.h"
@@ -38,9 +38,8 @@ class AccessList
 		void addPlayer(const std::string& name);
 		void addGuild(const std::string& name);
 		void addGuildRank(const std::string& name, const std::string& rankName);
-		void addExpression(const std::string& expression);
 
-		bool isInList(const Player* player);
+		bool isInList(const Player* player) const;
 
 		void getList(std::string& list) const;
 
@@ -48,8 +47,7 @@ class AccessList
 		std::string list;
 		std::unordered_set<uint32_t> playerList;
 		std::unordered_set<uint32_t> guildRankList;
-		std::list<std::string> expressionList;
-		std::list<std::pair<std::regex, bool>> regExList;
+		bool allowEveryone = false;
 };
 
 class Door final : public Item
@@ -144,9 +142,9 @@ class House
 		void setAccessList(uint32_t listId, const std::string& textlist);
 		bool getAccessList(uint32_t listId, std::string& list) const;
 
-		bool isInvited(const Player* player);
+		bool isInvited(const Player* player) const;
 
-		AccessHouseLevel_t getHouseAccessLevel(const Player* player);
+		AccessHouseLevel_t getHouseAccessLevel(const Player* player) const;
 		bool kickPlayer(Player* player, Player* target);
 
 		void setEntryPos(Position pos) {
@@ -247,6 +245,7 @@ class House
 
 		uint32_t id;
 		uint32_t owner = 0;
+		uint32_t ownerAccountId = 0;
 		uint32_t rentWarnings = 0;
 		uint32_t rent = 0;
 		uint32_t townId = 0;

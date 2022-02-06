@@ -83,7 +83,7 @@ class Cylinder : virtual public Thing
 		  * \param flags optional flags to modify the default behaviour
 		  * \returns ReturnValue holds the return value
 		  */
-		virtual ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const = 0;
+		virtual ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* = nullptr) const = 0;
 
 		/**
 		  * Query the destination cylinder
@@ -216,7 +216,7 @@ class VirtualCylinder final : public Cylinder
 		virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const override {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-		virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t) const override {
+		virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 		virtual Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override {

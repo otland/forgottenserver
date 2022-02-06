@@ -64,17 +64,19 @@ class Monster final : public Creature
 			}
 		}
 
-		void removeList() override;
 		void addList() override;
+		void removeList() override;
 
-		const std::string& getName() const override {
-			return mType->name;
-		}
-		const std::string& getNameDescription() const override {
-			return mType->nameDescription;
-		}
+		const std::string& getName() const override;
+		void setName(const std::string& name);
+
+		const std::string& getNameDescription() const override;
+		void setNameDescription(const std::string& nameDescription) {
+			this->nameDescription = nameDescription;
+		};
+
 		std::string getDescription(int32_t) const override {
-			return strDescription + '.';
+			return nameDescription + '.';
 		}
 
 		CreatureType_t getType() const override {
@@ -104,9 +106,7 @@ class Monster final : public Creature
 			return mType->info.isAttackable;
 		}
 
-		bool canPushItems() const {
-			return mType->info.canPushItems;
-		}
+		bool canPushItems() const;
 		bool canPushCreatures() const {
 			return mType->info.canPushCreatures;
 		}
@@ -125,7 +125,6 @@ class Monster final : public Creature
 		}
 		bool canWalkOnFieldType(CombatType_t combatType) const;
 
-
 		void onAttackedCreatureDisappear(bool isLogout) override;
 
 		void onCreatureAppear(Creature* creature, bool isLogin) override;
@@ -135,20 +134,26 @@ class Monster final : public Creature
 
 		void drainHealth(Creature* attacker, int32_t damage) override;
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
+
+		bool isWalkingToSpawn() const {
+			return walkingToSpawn;
+		}
+		bool walkToSpawn();
 		void onWalk() override;
+		void onWalkComplete() override;
 		bool getNextStep(Direction& direction, uint32_t& flags) override;
 		void onFollowCreatureComplete(const Creature* creature) override;
 
 		void onThink(uint32_t interval) override;
 
-		bool challengeCreature(Creature* creature) override;
+		bool challengeCreature(Creature* creature, bool force = false) override;
 
 		void setNormalCreatureLight() override;
 		bool getCombatValues(int32_t& min, int32_t& max) override;
 
 		void doAttacking(uint32_t interval) override;
 		bool hasExtraSwing() override {
-			return extraMeleeAttack;
+			return lastMeleeAttack == 0;
 		}
 
 		bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
@@ -163,7 +168,7 @@ class Monster final : public Creature
 
 		bool isTarget(const Creature* creature) const;
 		bool isFleeing() const {
-			return !isSummon() && getHealth() <= mType->info.runAwayHealth;
+			return !isSummon() && getHealth() <= mType->info.runAwayHealth && challengeFocusDuration <= 0;
 		}
 
 		bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
@@ -175,7 +180,7 @@ class Monster final : public Creature
 		}
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                     bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		                     bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
 		static uint32_t monsterAutoID;
 
@@ -183,7 +188,8 @@ class Monster final : public Creature
 		CreatureHashSet friendList;
 		CreatureList targetList;
 
-		std::string strDescription;
+		std::string name;
+		std::string nameDescription;
 
 		MonsterType* mType;
 		Spawn* spawn = nullptr;
@@ -198,15 +204,16 @@ class Monster final : public Creature
 		int32_t minCombatValue = 0;
 		int32_t maxCombatValue = 0;
 		int32_t targetChangeCooldown = 0;
+		int32_t challengeFocusDuration = 0;
 		int32_t stepDuration = 0;
 
 		Position masterPos;
 
+		bool ignoreFieldDamage = false;
 		bool isIdle = true;
-		bool extraMeleeAttack = false;
 		bool isMasterInRange = false;
 		bool randomStepping = false;
-		bool ignoreFieldDamage = false;
+		bool walkingToSpawn = false;
 
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Fluffy" nameDescription="Fluffy" race="blood" experience="3550" speed="310">
+	<health now="4500" max="4500" />
+	<look type="240" corpse="6332" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-648" />
+		<attack name="energy" interval="1500" chance="30" length="8" spread="3" min="-100" max="-200">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="earth" interval="1000" chance="15" length="8" spread="3" min="-120" max="-300">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="1000" chance="25" range="7" min="-105" max="-235">
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="earth" interval="1000" chance="20" range="7" radius="6" target="0" min="-135" max="-255">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35" />
+	<immunities>
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Wooof!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="20" chance="100000" />
+		<item id="2230" chance="25000" /><!-- bone -->
+		<item name="spike sword" chance="2500" />
+		<item name="knight axe" chance="2857" />
+		<item name="ham" countmax="8" chance="50000" />
+		<item name="soul orb" chance="5555" />
+		<item name="demonic essence" chance="7200" />
+		<item name="concentrated demonic blood" chance="8888" />
+		<item id="6570" chance="5538" countmax="4" /><!-- blue surprise bag -->
+		<item id="6571" chance="1538" /><!-- red surprise bag -->
+	</loot>
+</monster>

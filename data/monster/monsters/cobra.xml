@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cobra" namedescription="a cobra" race="blood" experience="30" speed="120" manacost="275">
+	<health now="65" max="65" />
+	<look type="81" corpse="3007" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="0" poison="100" />
+		<attack name="poisoncondition" interval="2000" chance="15" range="7" min="-20" max="-40">
+			<attribute key="shooteffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="1" defense="1" />
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity drunk="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zzzzzz" />
+		<voice sentence="Fsssss" />
+	</voices>
+	<loot>
+		<item name="cobra tongue" chance="5000" />
+	</loot>
+</monster>

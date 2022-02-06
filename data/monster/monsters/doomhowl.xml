@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Doomhowl" nameDescription="Doomhowl" experience="3750" speed="320" race="blood">
+	<health now="8500" max="8500" />
+	<targetchange speed="0" chance="8" />
+	<look type="308" corpse="6080" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="100" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-400" />
+		<attack name="physical" interval="2000" chance="50" radius="3" target="0" min="0" max="-645">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="4000" chance="20" radius="0">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="55">
+		<defense name="speed" interval="2000" chance="10" speedchange="390" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="15" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

@@ -14,30 +14,30 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	local amount = amount or 1
 	local subType = subType or 0
 	local item = 0
-	if isItemStackable(itemid) then
+	if ItemType(itemid):isStackable() then
 		if inBackpacks then
-			stuff = doCreateItemEx(backpack, 1)
-			item = doAddContainerItem(stuff, itemid, math.min(100, amount))
+			stuff = Game.createItem(backpack, 1)
+			item = stuff:addItem(itemid, math.min(100, amount))
 		else
-			stuff = doCreateItemEx(itemid, math.min(100, amount))
+			stuff = Game.createItem(itemid, math.min(100, amount))
 		end
-		return doPlayerAddItemEx(cid, stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
+		return Player(cid):addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
 	end
 
 	local a = 0
 	if inBackpacks then
-		local container, b = doCreateItemEx(backpack, 1), 1
+		local container, b = Game.createItem(backpack, 1), 1
 		for i = 1, amount do
-			local item = doAddContainerItem(container, itemid, subType)
-			if table.contains({(getContainerCapById(backpack) * b), amount}, i) then
-				if doPlayerAddItemEx(cid, container, ignoreCap) ~= RETURNVALUE_NOERROR then
+			local item = container:addItem(itemid, subType)
+			if table.contains({(ItemType(backpack):getCapacity() * b), amount}, i) then
+				if Player(cid):addItemEx(container, ignoreCap) ~= RETURNVALUE_NOERROR then
 					b = b - 1
 					break
 				end
 
 				a = i
 				if amount > i then
-					container = doCreateItemEx(backpack, 1)
+					container = Game.createItem(backpack, 1)
 					b = b + 1
 				end
 			end
@@ -46,8 +46,8 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	end
 
 	for i = 1, amount do -- normal method for non-stackable items
-		local item = doCreateItemEx(itemid, subType)
-		if doPlayerAddItemEx(cid, item, ignoreCap) ~= RETURNVALUE_NOERROR then
+		local item = Game.createItem(itemid, subType)
+		if Player(cid):addItemEx(item, ignoreCap) ~= RETURNVALUE_NOERROR then
 			break
 		end
 		a = i
@@ -56,50 +56,25 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 end
 
 local func = function(cid, text, type, e, pcid)
-	if isPlayer(pcid) then
-		doCreatureSay(cid, text, type, false, pcid, getCreaturePosition(cid))
-		e.done = TRUE
+	if Player(pcid):isPlayer() then
+		local creature = Creature(cid)
+		creature:say(text, type, false, pcid, creature:getPosition())
+		e.done = true
 	end
 end
 
 function doCreatureSayWithDelay(cid, text, type, delay, e, pcid)
-	if isPlayer(pcid) then
-		e.done = FALSE
+	if Player(pcid):isPlayer() then
+		e.done = false
 		e.event = addEvent(func, delay < 1 and 1000 or delay, cid, text, type, e, pcid)
 	end
 end
 
-function doPlayerTakeItem(cid, itemid, count)
-	if getPlayerItemCount(cid,itemid) < count then
-		return false
-	end
-
-	while count > 0 do
-		local tempcount = 0
-		if isItemStackable(itemid) then
-			tempcount = math.min (100, count)
-		else
-			tempcount = 1
-		end
-
-		local ret = doPlayerRemoveItem(cid, itemid, tempcount)
-		if ret ~= false then
-			count = count - tempcount
-		else
-			return false
-		end
-	end
-
-	if count ~= 0 then
-		return false
-	end
-	return true
-end
-
 function doPlayerSellItem(cid, itemid, count, cost)
-	if doPlayerTakeItem(cid, itemid, count) == true then
-		if not doPlayerAddMoney(cid, cost) then
-			error('Could not add money to ' .. getPlayerName(cid) .. '(' .. cost .. 'gp)')
+	local player = Player(cid)
+	if player:removeItem(itemid, count) then
+		if not player:addMoney(cost) then
+			error('Could not add money to ' .. player:getName() .. '(' .. cost .. 'gp)')
 		end
 		return true
 	end
@@ -107,17 +82,18 @@ function doPlayerSellItem(cid, itemid, count, cost)
 end
 
 function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges)
-	if not doPlayerRemoveMoney(cid, cost) then
+	local player = Player(cid)
+	if not player:removeTotalMoney(cost) then
 		return false
 	end
 
 	for i = 1, count do
-		local container = doCreateItemEx(containerid, 1)
-		for x = 1, getContainerCapById(containerid) do
-			doAddContainerItem(container, itemid, charges)
+		local container = Game.createItem(containerid, 1)
+		for x = 1, ItemType(containerid):getCapacity() do
+			container:addItem(itemid, charges)
 		end
 
-		if doPlayerAddItemEx(cid, container, true) ~= RETURNVALUE_NOERROR then
+		if player:addItemEx(container, true) ~= RETURNVALUE_NOERROR then
 			return false
 		end
 	end
@@ -126,5 +102,40 @@ end
 
 function getCount(string)
 	local b, e = string:find("%d+")
-	return b and e and tonumber(string:sub(b, e)) or -1
+	local tonumber = tonumber(string:sub(b, e))
+	if tonumber > 2 ^ 32 - 1 then
+		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+	end
+	return b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+end
+
+function isValidMoney(money)
+	return isNumber(money) and money > 0
+end
+
+function getMoneyCount(string)
+	local b, e = string:find("%d+")
+	local tonumber = tonumber(string:sub(b, e))
+	if tonumber > 2 ^ 32 - 1 then
+		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+	end
+	local money = b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	if isValidMoney(money) then
+		return money
+	end
+	return -1
+end
+
+function getMoneyWeight(money)
+	local weight, currencyItems = 0, Game.getCurrencyItems()
+	for index = #currencyItems, 1, -1 do
+		local currency = currencyItems[index]
+		local worth = currency:getWorth()
+		local currencyCoins = math.floor(money / worth)
+		if currencyCoins > 0 then
+			money = money - (currencyCoins * worth)
+			weight = weight + currency:getWeight(currencyCoins)
+		end
+	end
+	return weight
 end

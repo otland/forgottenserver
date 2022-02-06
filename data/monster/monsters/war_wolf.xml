@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="264" manacost="420">
+	<health now="140" max="140" />
+	<look type="3" corpse="6009" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" />
+	</attacks>
+	<defenses armor="8" defense="8" />
+	<elements>
+		<element earthPercent="20" />
+		<element holyPercent="10" />
+		<element icePercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrrrrr" />
+		<voice sentence="Yoooohhuuuu!" yell="1" />
+	</voices>
+	<loot>
+		<item name="ham" countmax="2" chance="39000" />
+		<item name="warwolf fur" chance="5000" />
+		<item name="wolf paw" chance="1000" />
+		<item id="7394" chance="50" /><!-- wolf trophy -->
+	</loot>
+</monster>

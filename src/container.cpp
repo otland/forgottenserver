@@ -85,9 +85,14 @@ Container* Container::getParentContainer()
 	return thing->getContainer();
 }
 
+std::string Container::getName(bool addArticle /* = false*/) const {
+	const ItemType& it = items[id];
+	return getNameDescription(it, this, -1, addArticle);
+}
+
 bool Container::hasParent() const
 {
-	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
+	return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent());
 }
 
 void Container::addItem(Item* item)
@@ -154,38 +159,6 @@ uint32_t Container::getWeight() const
 	return Item::getWeight() + totalWeight;
 }
 
-std::string Container::getContentDescription() const
-{
-	std::ostringstream os;
-	return getContentDescription(os).str();
-}
-
-std::ostringstream& Container::getContentDescription(std::ostringstream& os) const
-{
-	bool firstitem = true;
-	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
-		Item* item = *it;
-
-		Container* container = item->getContainer();
-		if (container && !container->empty()) {
-			continue;
-		}
-
-		if (firstitem) {
-			firstitem = false;
-		} else {
-			os << ", ";
-		}
-
-		os << item->getNameDescription();
-	}
-
-	if (firstitem) {
-		os << "nothing";
-	}
-	return os;
-}
-
 Item* Container::getItemByIndex(size_t index) const
 {
 	if (index >= size()) {
@@ -215,8 +188,8 @@ bool Container::isHoldingItem(const Item* item) const
 
 void Container::onAddContainerItem(Item* item)
 {
-	SpectatorHashSet spectators;
-	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 1, 1, 1, 1);
 
 	//send to client
 	for (Creature* spectator : spectators) {
@@ -231,8 +204,8 @@ void Container::onAddContainerItem(Item* item)
 
 void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newItem)
 {
-	SpectatorHashSet spectators;
-	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 1, 1, 1, 1);
 
 	//send to client
 	for (Creature* spectator : spectators) {
@@ -247,8 +220,8 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 void Container::onRemoveContainerItem(uint32_t index, Item* item)
 {
-	SpectatorHashSet spectators;
-	g_game.map.getSpectators(spectators, getPosition(), false, true, 2, 2, 2, 2);
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, getPosition(), false, true, 1, 1, 1, 1);
 
 	//send change to client
 	for (Creature* spectator : spectators) {
@@ -276,7 +249,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -288,7 +261,22 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
+	// store items can be only moved into depot chest or store inbox
+	if (item->isStoreItem() && !dynamic_cast<const DepotChest*>(this)) {
+		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+	}
+
 	const Cylinder* cylinder = getParent();
+
+	// don't allow moving items into container that is store item and is in store inbox
+	if (isStoreItem() && dynamic_cast<const StoreInbox*>(cylinder)) {
+		ReturnValue ret = RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		if (!item->isStoreItem()) {
+			ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
+		}
+		return ret;
+	}
+
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		while (cylinder) {
 			if (cylinder == &thing) {
@@ -315,19 +303,26 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		}
 	}
 
-	const Cylinder* topParent = getTopParent();
+	const Cylinder* const topParent = getTopParent();
+	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
+			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+				return RETURNVALUE_PLAYERISNOTINVITED;
+			}
+		}
+	}
+
 	if (topParent != this) {
 		return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
-	} else {
-		return RETURNVALUE_NOERROR;
 	}
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -347,18 +342,16 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
-					uint32_t remainder = (100 - containerItem->getItemCount());
-					if (queryAdd(slotIndex++, *item, remainder, flags) == RETURNVALUE_NOERROR) {
-						n += remainder;
+					if (queryAdd(slotIndex++, *item, count, flags) == RETURNVALUE_NOERROR) {
+						n += 100 - containerItem->getItemCount();
 					}
 				}
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
 			if (item->equals(destItem) && destItem->getItemCount() < 100) {
-				uint32_t remainder = 100 - destItem->getItemCount();
-				if (queryAdd(index, *item, remainder, flags) == RETURNVALUE_NOERROR) {
-					n = remainder;
+				if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) {
+					n = 100 - destItem->getItemCount();
 				}
 			}
 		}
@@ -376,7 +369,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags) const
+ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */) const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {
@@ -384,7 +377,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -395,6 +388,16 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
 		return RETURNVALUE_NOTMOVEABLE;
 	}
+
+	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		const Cylinder* const topParent = getTopParent();
+		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
+			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+				return RETURNVALUE_PLAYERISNOTINVITED;
+			}
+		}
+	}
+
 	return RETURNVALUE_NOERROR;
 }
 
@@ -453,6 +456,10 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
+		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < 100) {
+			return this;
+		}
+
 		//try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
@@ -479,7 +486,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -512,7 +519,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -554,7 +561,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 void Container::removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -627,6 +634,21 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 	return countMap;
 }
 
+ItemVector Container::getItems(bool recursive /*= false*/)
+{
+	ItemVector containerItems;
+	if (recursive) {
+		for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
+			containerItems.push_back(*it);
+		}
+	} else {
+		for (Item* item : itemlist) {
+			containerItems.push_back(item);
+		}
+	}
+	return containerItems;
+}
+
 Thing* Container::getThing(size_t index) const
 {
 	return getItemByIndex(index);
@@ -670,7 +692,7 @@ void Container::internalAddThing(Thing* thing)
 void Container::internalAddThing(uint32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return;
 	}
 
@@ -681,6 +703,8 @@ void Container::internalAddThing(uint32_t, Thing* thing)
 
 void Container::startDecaying()
 {
+	Item::startDecaying();
+
 	for (Item* item : itemlist) {
 		item->startDecaying();
 	}

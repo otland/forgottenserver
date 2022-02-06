@@ -40,8 +40,19 @@ bool Mounts::loadFromXml()
 	}
 
 	for (auto mountNode : doc.child("mounts").children()) {
+		uint16_t nodeId = pugi::cast<uint16_t>(mountNode.attribute("id").value());
+		if (nodeId == 0 || nodeId > std::numeric_limits<uint8_t>::max()) {
+			std::cout << "[Notice - Mounts::loadFromXml] Mount id \"" << nodeId << "\" is not within 1 and 255 range" << std::endl;
+			continue;
+		}
+
+		if (getMountByID(nodeId)) {
+			std::cout << "[Notice - Mounts::loadFromXml] Duplicate mount with id: " << nodeId << std::endl;
+			continue;
+		}
+
 		mounts.emplace_back(
-			static_cast<uint8_t>(pugi::cast<uint16_t>(mountNode.attribute("id").value())),
+			static_cast<uint8_t>(nodeId),
 			pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
 			mountNode.attribute("name").as_string(),
 			pugi::cast<int32_t>(mountNode.attribute("speed").value()),

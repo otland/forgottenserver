@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Iron Servant" nameDescription="an iron servant" race="energy" experience="210" speed="190">
+	<health now="350" max="350" />
+	<look type="395" corpse="13486" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="50" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-45" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-60">
+			<attribute key="shootEffect" value="smallstone" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="2000">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element firePercent="10" />
+		<element icePercent="-5" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Error. LOAD 'PROGRAM" />
+		<voice sentence="8,1" />
+		<voice sentence="Remain. Obedient." />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="55" chance="82000" />
+		<item name="halberd" chance="1000" />
+		<item name="small health potion" chance="1980" />
+		<item name="gear wheel" chance="4840" />
+		<item id="9808" chance="200" /><!-- rusty armor (common) -->
+		<item name="slime mould" chance="310" />
+	</loot>
+</monster>

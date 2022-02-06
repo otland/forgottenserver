@@ -28,7 +28,6 @@
 #include <typeinfo>
 
 #include <boost/variant.hpp>
-#include <boost/lexical_cast.hpp>
 #include <deque>
 
 class Creature;
@@ -102,7 +101,16 @@ enum AttrTypes_t {
 	ATTR_ARMOR = 31,
 	ATTR_HITCHANCE = 32,
 	ATTR_SHOOTRANGE = 33,
-	ATTR_CUSTOM_ATTRIBUTES = 34
+	ATTR_CUSTOM_ATTRIBUTES = 34,
+	ATTR_DECAYTO = 35,
+	ATTR_WRAPID = 36,
+	ATTR_STOREITEM = 37,
+	ATTR_ATTACK_SPEED = 38,
+	ATTR_OPENCONTAINER = 39,
+	// ATTR_PODIUMOUTFIT = 40, // mapeditor
+	// ATTR_TIER = 41, // mapeditor
+	ATTR_REFLECT = 42,
+	ATTR_BOOST = 43,
 };
 
 enum Attr_ReadValue {
@@ -219,6 +227,14 @@ class ItemAttributes
 
 			CustomAttribute() : value(boost::blank()) {}
 
+			bool operator==(const CustomAttribute& otherAttr) const {
+				return value == otherAttr.value;
+			}
+
+			bool operator!=(const CustomAttribute& otherAttr) const {
+				return value != otherAttr.value;
+			}
+
 			template<typename T>
 			explicit CustomAttribute(const T& v) : value(v) {}
 
@@ -284,14 +300,14 @@ class ItemAttributes
 			}
 
 			bool unserialize(PropStream& propStream) {
-				// This is hard coded so it's not general, depends on the position of the variants.
+				// This is hard-coded so it's not general, depends on the position of the variants.
 				uint8_t pos;
 				if (!propStream.read<uint8_t>(pos)) {
 					return false;
 				}
 
 				switch (pos) {
-					case 1:  { // std::string
+					case 1: { // std::string
 						std::string tmp;
 						if (!propStream.readString(tmp)) {
 							return false;
@@ -346,6 +362,7 @@ class ItemAttributes
 		static int64_t emptyInt;
 		static double emptyDouble;
 		static bool emptyBool;
+		static Reflect emptyReflect;
 
 		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
@@ -411,8 +428,20 @@ class ItemAttributes
 			}
 		};
 
-		std::forward_list<Attribute> attributes;
+		std::vector<Attribute> attributes;
 		uint32_t attributeBits = 0;
+
+		std::map<CombatType_t, Reflect> reflect;
+		std::map<CombatType_t, uint16_t> boostPercent;
+
+		const Reflect& getReflect(CombatType_t combatType) {
+			auto it = reflect.find(combatType);
+			return it != reflect.end() ? it->second : emptyReflect;
+		}
+		int16_t getBoostPercent(CombatType_t combatType) {
+			auto it = boostPercent.find(combatType);
+			return it != boostPercent.end() ? it->second : 0;
+		}
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
@@ -434,12 +463,12 @@ class ItemAttributes
 
 		template<typename R>
 		void setCustomAttribute(int64_t key, R value) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			setCustomAttribute(tmp, value);
 		}
 
 		void setCustomAttribute(int64_t key, CustomAttribute& value) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			setCustomAttribute(tmp, value);
 		}
 
@@ -465,7 +494,7 @@ class ItemAttributes
 		}
 
 		const CustomAttribute* getCustomAttribute(int64_t key) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			return getCustomAttribute(tmp);
 		}
 
@@ -480,7 +509,7 @@ class ItemAttributes
 		}
 
 		bool removeCustomAttribute(int64_t key) {
-			std::string tmp = boost::lexical_cast<std::string>(key);
+			auto tmp = std::to_string(key);
 			return removeCustomAttribute(tmp);
 		}
 
@@ -495,18 +524,27 @@ class ItemAttributes
 			return false;
 		}
 
+		const static uint32_t intAttributeTypes = ITEM_ATTRIBUTE_ACTIONID | ITEM_ATTRIBUTE_UNIQUEID | ITEM_ATTRIBUTE_DATE
+			| ITEM_ATTRIBUTE_WEIGHT | ITEM_ATTRIBUTE_ATTACK | ITEM_ATTRIBUTE_DEFENSE | ITEM_ATTRIBUTE_EXTRADEFENSE
+			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
+			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
+			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID | ITEM_ATTRIBUTE_STOREITEM
+			| ITEM_ATTRIBUTE_ATTACK_SPEED | ITEM_ATTRIBUTE_OPENCONTAINER;
+		const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
+			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
+
 	public:
 		static bool isIntAttrType(itemAttrTypes type) {
-			return (type & 0x7FFE13) != 0;
+			return (type & intAttributeTypes) == type;
 		}
 		static bool isStrAttrType(itemAttrTypes type) {
-			return (type & 0x1EC) != 0;
+			return (type & stringAttributeTypes) == type;
 		}
 		inline static bool isCustomAttrType(itemAttrTypes type) {
-			return (type & 0x80000000) != 0;
+			return (type & ITEM_ATTRIBUTE_CUSTOM) == type;
 		}
 
-		const std::forward_list<Attribute>& getList() const {
+		const std::vector<Attribute>& getList() const {
 			return attributes;
 		}
 
@@ -587,16 +625,16 @@ class Item : virtual public Thing
 			getAttributes()->setStrAttr(type, value);
 		}
 
-		int32_t getIntAttr(itemAttrTypes type) const {
+		int64_t getIntAttr(itemAttrTypes type) const {
 			if (!attributes) {
 				return 0;
 			}
 			return attributes->getIntAttr(type);
 		}
-		void setIntAttr(itemAttrTypes type, int32_t value) {
+		void setIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->setIntAttr(type, value);
 		}
-		void increaseIntAttr(itemAttrTypes type, int32_t value) {
+		void increaseIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->increaseIntAttr(type, value);
 		}
 
@@ -620,20 +658,32 @@ class Item : virtual public Thing
 		void setCustomAttribute(std::string& key, ItemAttributes::CustomAttribute& value) {
 			getAttributes()->setCustomAttribute(key, value);
 		}
-		
+
 		const ItemAttributes::CustomAttribute* getCustomAttribute(int64_t key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->getCustomAttribute(key);
 		}
 
 		const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key) {
+			if (!attributes) {
+				return nullptr;
+			}
 			return getAttributes()->getCustomAttribute(key);
 		}
 
 		bool removeCustomAttribute(int64_t key) {
+			if (!attributes) {
+				return false;
+			}
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
 		bool removeCustomAttribute(const std::string& key) {
+			if (!attributes) {
+				return false;
+			}
 			return getAttributes()->removeCustomAttribute(key);
 		}
 
@@ -758,6 +808,16 @@ class Item : virtual public Thing
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
+		void setDecayTo(int32_t decayTo) {
+			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
+		}
+		int32_t getDecayTo() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DECAYTO)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DECAYTO);
+			}
+			return items[id].decayTo;
+		}
+
 		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
@@ -817,6 +877,12 @@ class Item : virtual public Thing
 			}
 			return items[id].attack;
 		}
+		uint32_t getAttackSpeed() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_ATTACK_SPEED)) {
+				return getIntAttr(ITEM_ATTRIBUTE_ATTACK_SPEED);
+			}
+			return items[id].attackSpeed;
+		}
 		int32_t getArmor() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
 				return getIntAttr(ITEM_ATTRIBUTE_ARMOR);
@@ -847,6 +913,16 @@ class Item : virtual public Thing
 
 		uint32_t getWorth() const;
 		LightInfo getLightInfo() const;
+
+		void setReflect(CombatType_t combatType, const Reflect& reflect) {
+			getAttributes()->reflect[combatType] = reflect;
+		}
+		Reflect getReflect(CombatType_t combatType, bool total = true) const;
+
+		void setBoostPercent(CombatType_t combatType, uint16_t value) {
+			getAttributes()->boostPercent[combatType] = value;
+		}
+		uint16_t getBoostPercent(CombatType_t combatType, bool total = true) const;
 
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool isBlocking() const {
@@ -884,6 +960,15 @@ class Item : virtual public Thing
 			return items[id].walkStack;
 		}
 
+		void setStoreItem(bool storeItem) {
+			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, static_cast<int64_t>(storeItem));
+		}
+		bool isStoreItem() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_STOREITEM)) {
+				return getIntAttr(ITEM_ATTRIBUTE_STOREITEM) == 1;
+			}
+			return items[id].storeItem;
+		}
 		const std::string& getName() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
 				return getStrAttr(ITEM_ATTRIBUTE_NAME);
@@ -992,7 +1077,7 @@ class Item : virtual public Thing
 	protected:
 		Cylinder* parent = nullptr;
 
-		uint16_t id;  // the same id as in ItemType
+		uint16_t id; // the same id as in ItemType
 
 	private:
 		std::string getWeightDescription(uint32_t weight) const;

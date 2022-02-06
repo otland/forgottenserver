@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="210" manacost="490">
+	<health now="275" max="275" />
+	<look type="265" corpse="7330" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="60" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-60" />
+		<attack name="physical" interval="2000" chance="30" range="7" min="0" max="-90">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="20" />
+		<element holyPercent="10" />
+		<element energyPercent="-10" />
+		<element deathPercent="-3" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ymirs Mjalle!" />
+		<voice sentence="No run so much, must stay fat!" />
+		<voice sentence="Horre, Sjan Flan!" />
+		<voice sentence="Damned fast food." />
+		<voice sentence="Come kiss the cook!" />
+	</voices>
+	<loot>
+		<item name="small stone" countmax="3" chance="10360" />
+		<item name="gold coin" countmax="40" chance="80000" />
+		<item name="club ring" chance="70" />
+		<item name="short sword" chance="7960" />
+		<item name="dark helmet" chance="170" />
+		<item name="battle shield" chance="1490" />
+		<item name="ham" countmax="2" chance="20990" />
+		<item name="shard" chance="100" />
+		<item id="7441" chance="2008" /><!-- ice cube -->
+		<item name="norse shield" chance="320" />
+		<item name="mana potion" chance="950" />
+		<item name="frost giant pelt" chance="4800" />
+	</loot>
+</monster>

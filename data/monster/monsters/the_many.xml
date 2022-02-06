@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Many" nameDescription="The Many" race="blood" experience="4000" speed="260">
+	<health now="5000" max="5000" />
+	<look type="121" corpse="6048" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="300" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-270" />
+		<attack name="earth" interval="2000" chance="7" length="8" spread="3" min="-65" max="-320">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="speed" interval="2000" chance="8" range="7" radius="4" target="1" speedchange="-360" duration="15000">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="ice" interval="2000" chance="9" length="8" spread="3" min="-100" max="-250">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="ice" interval="2000" chance="10" range="7" target="1" min="-70" max="-155">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="35">
+		<defense name="healing" interval="2000" chance="30" min="420" max="500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="50" />
+		<element holyPercent="30" />
+		<element physicalPercent="-5" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="FCHHHHH" />
+		<voice sentence="HISSSS" />
+	</voices>
+	<loot>
+		<item name="small sapphire" countmax="5" chance="56325" />
+		<item name="stone skin amulet" chance="100000" />
+		<item name="warrior helmet" chance="75500" />
+		<item name="royal helmet" chance="25500" />
+		<item name="medusa shield" chance="75500" />
+		<item name="strong mana potion" countmax="2" chance="100000" />
+		<item name="gold ingot" countmax="3" chance="47725" />
+		<item name="sacred tree amulet" chance="75500" />
+		<item name="egg of The Many" chance="100000" />
+	</loot>
+</monster>

@@ -11,14 +11,15 @@ local function getSkillId(skillName)
 		return SKILL_SHIELD
 	elseif skillName:sub(1, 4) == "fish" then
 		return SKILL_FISHING
-	else
+	elseif skillName:sub(1, 4) == "fist" then
 		return SKILL_FIST
+	elseif skillName:sub(1, 1) == "m" then
+		return SKILL_MAGLEVEL
+	elseif skillName == "level" or skillName:sub(1, 1) == "l" or skillName:sub(1, 1) == "e" then
+		return SKILL_LEVEL
 	end
-end
 
-local function getExpForLevel(level)
-	level = level - 1
-	return ((50 * level * level * level) - (150 * level * level) + (400 * level)) / 3
+	return nil
 end
 
 function onSay(player, words, param)
@@ -30,7 +31,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	local split = param:split(",")
+	local split = param:splitTrimmed(",")
 	if not split[2] then
 		player:sendCancelMessage("Insufficient parameters.")
 		return false
@@ -42,24 +43,17 @@ function onSay(player, words, param)
 		return false
 	end
 
-	-- Trim left
-	split[2] = split[2]:gsub("^%s*(.-)$", "%1")
-
 	local count = 1
 	if split[3] then
 		count = tonumber(split[3])
 	end
 
-	local ch = split[2]:sub(1, 1)
-	for i = 1, count do
-		if ch == "l" or ch == "e" then
-			target:addExperience(getExpForLevel(target:getLevel() + 1) - target:getExperience(), false)
-		elseif ch == "m" then
-			target:addManaSpent(target:getVocation():getRequiredManaSpent(target:getBaseMagicLevel() + 1) - target:getManaSpent())
-		else
-			local skillId = getSkillId(split[2])
-			target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
-		end
+	local skillId = getSkillId(split[2])
+	if not skillId then
+		player:sendCancelMessage("Unknown skill.")
+		return false
 	end
+
+	target:addSkill(skillId, count)
 	return false
 end

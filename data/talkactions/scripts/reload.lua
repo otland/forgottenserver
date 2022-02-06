@@ -69,11 +69,16 @@ function onSay(player, words, param)
 
 	local reloadType = reloadTypes[param:lower()]
 	if not reloadType then
-		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Reload type not found.")
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "Reload type not found.")
 		return false
 	end
 
+	-- need to clear EventCallback.data or we end up having duplicated events on /reload scripts
+	if table.contains({RELOAD_TYPE_SCRIPTS, RELOAD_TYPE_ALL}, reloadType) then
+		EventCallback:clear()
+	end
+
 	Game.reload(reloadType)
-	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", param:lower()))
+	player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Reloaded %s.", param:lower()))
 	return false
 end

@@ -89,6 +89,11 @@ enum itemAttrTypes : uint32_t {
 	ITEM_ATTRIBUTE_CHARGES = 1 << 20,
 	ITEM_ATTRIBUTE_FLUIDTYPE = 1 << 21,
 	ITEM_ATTRIBUTE_DOORID = 1 << 22,
+	ITEM_ATTRIBUTE_DECAYTO = 1 << 23,
+	ITEM_ATTRIBUTE_WRAPID = 1 << 24,
+	ITEM_ATTRIBUTE_STOREITEM = 1 << 25,
+	ITEM_ATTRIBUTE_ATTACK_SPEED = 1 << 26,
+	ITEM_ATTRIBUTE_OPENCONTAINER = 1 << 27,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -96,7 +101,8 @@ enum itemAttrTypes : uint32_t {
 enum VipStatus_t : uint8_t {
 	VIPSTATUS_OFFLINE = 0,
 	VIPSTATUS_ONLINE = 1,
-	VIPSTATUS_PENDING = 2
+	VIPSTATUS_PENDING = 2,
+	VIPSTATUS_TRAINING = 3
 };
 
 enum MarketAction_t {
@@ -105,8 +111,9 @@ enum MarketAction_t {
 };
 
 enum MarketRequest_t {
-	MARKETREQUEST_OWN_OFFERS = 0xFFFE,
-	MARKETREQUEST_OWN_HISTORY = 0xFFFF,
+	MARKETREQUEST_OWN_HISTORY = 1,
+	MARKETREQUEST_OWN_OFFERS = 2,
+	MARKETREQUEST_ITEM = 3,
 };
 
 enum MarketOfferState_t {
@@ -131,6 +138,7 @@ enum CreatureType_t : uint8_t {
 	CREATURETYPE_NPC = 2,
 	CREATURETYPE_SUMMON_OWN = 3,
 	CREATURETYPE_SUMMON_OTHERS = 4,
+	CREATURETYPE_HIDDEN = 5,
 };
 
 enum OperatingSystem_t : uint8_t {
@@ -139,6 +147,9 @@ enum OperatingSystem_t : uint8_t {
 	CLIENTOS_LINUX = 1,
 	CLIENTOS_WINDOWS = 2,
 	CLIENTOS_FLASH = 3,
+	CLIENTOS_QT_LINUX = 4,
+	CLIENTOS_QT_WINDOWS = 5,
+	CLIENTOS_QT_MAC = 6,
 
 	CLIENTOS_OTCLIENT_LINUX = 10,
 	CLIENTOS_OTCLIENT_WINDOWS = 11,
@@ -151,6 +162,10 @@ enum SpellGroup_t : uint8_t {
 	SPELLGROUP_HEALING = 2,
 	SPELLGROUP_SUPPORT = 3,
 	SPELLGROUP_SPECIAL = 4,
+	//SPELLGROUP_CONJURE = 5,
+	SPELLGROUP_CRIPPLING = 6,
+	SPELLGROUP_FOCUS = 7,
+	SPELLGROUP_ULTIMATESTRIKES = 8,
 };
 
 enum SpellType_t : uint8_t {
@@ -164,7 +179,8 @@ enum AccountType_t : uint8_t {
 	ACCOUNT_TYPE_TUTOR = 2,
 	ACCOUNT_TYPE_SENIORTUTOR = 3,
 	ACCOUNT_TYPE_GAMEMASTER = 4,
-	ACCOUNT_TYPE_GOD = 5
+	ACCOUNT_TYPE_COMMUNITYMANAGER = 5,
+	ACCOUNT_TYPE_GOD = 6
 };
 
 enum RaceType_t : uint8_t {
@@ -174,6 +190,7 @@ enum RaceType_t : uint8_t {
 	RACE_UNDEAD,
 	RACE_FIRE,
 	RACE_ENERGY,
+	RACE_INK,
 };
 
 enum CombatType_t : uint16_t {
@@ -269,6 +286,8 @@ enum ConditionParam_t {
 	CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT = 51,
 	CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE = 52,
 	CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT = 53,
+	CONDITION_PARAM_AGGRESSIVE = 54,
+	CONDITION_PARAM_DRUNKENNESS = 55,
 };
 
 enum BlockType_t : uint8_t {
@@ -421,6 +440,7 @@ enum ReturnValue {
 	RETURNVALUE_NOTENOUGHMANA,
 	RETURNVALUE_NOTENOUGHSOUL,
 	RETURNVALUE_YOUAREEXHAUSTED,
+	RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST,
 	RETURNVALUE_PLAYERISNOTREACHABLE,
 	RETURNVALUE_CANONLYUSETHISRUNEONCREATURES,
 	RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE,
@@ -453,6 +473,10 @@ enum ReturnValue {
 	RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE,
 	RETURNVALUE_TRADEPLAYERHIGHESTBIDDER,
 	RETURNVALUE_YOUCANNOTTRADETHISHOUSE,
+	RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION,
+	RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM,
+	RETURNVALUE_ITEMCANNOTBEMOVEDTHERE,
+	RETURNVALUE_YOUCANNOTUSETHISBED,
 };
 
 enum SpeechBubble_t
@@ -461,7 +485,10 @@ enum SpeechBubble_t
 	SPEECHBUBBLE_NORMAL = 1,
 	SPEECHBUBBLE_TRADE = 2,
 	SPEECHBUBBLE_QUEST = 3,
-	SPEECHBUBBLE_QUESTTRADER = 4,
+	SPEECHBUBBLE_COMPASS = 4,
+	SPEECHBUBBLE_NORMAL2 = 5,
+	SPEECHBUBBLE_NORMAL3 = 6,
+	SPEECHBUBBLE_HIRELING = 7,
 };
 
 enum MapMark_t
@@ -491,12 +518,16 @@ enum MapMark_t
 struct Outfit_t {
 	uint16_t lookType = 0;
 	uint16_t lookTypeEx = 0;
-	uint16_t lookMount = 0;
 	uint8_t lookHead = 0;
 	uint8_t lookBody = 0;
 	uint8_t lookLegs = 0;
 	uint8_t lookFeet = 0;
 	uint8_t lookAddons = 0;
+	uint16_t lookMount = 0;
+	uint8_t lookMountHead = 0;
+	uint8_t lookMountBody = 0;
+	uint8_t lookMountLegs = 0;
+	uint8_t lookMountFeet = 0;
 };
 
 struct LightInfo {
@@ -507,25 +538,19 @@ struct LightInfo {
 };
 
 struct ShopInfo {
-	uint16_t itemId;
-	int32_t subType;
-	uint32_t buyPrice;
-	uint32_t sellPrice;
-	std::string realName;
+	uint16_t itemId = 0;
+	int32_t subType = 1;
+	uint32_t buyPrice = 0;
+	uint32_t sellPrice = 0;
+	std::string realName = "";
 
-	ShopInfo() {
-		itemId = 0;
-		subType = 1;
-		buyPrice = 0;
-		sellPrice = 0;
-	}
-
+	ShopInfo() = default;
 	ShopInfo(uint16_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
 		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName)) {}
 };
 
 struct MarketOffer {
-	uint32_t price;
+	uint64_t price;
 	uint32_t timestamp;
 	uint16_t amount;
 	uint16_t counter;
@@ -543,7 +568,7 @@ struct MarketOfferEx {
 	uint32_t id;
 	uint32_t playerId;
 	uint32_t timestamp;
-	uint32_t price;
+	uint64_t price;
 	uint16_t amount;
 	uint16_t counter;
 	uint16_t itemId;
@@ -553,24 +578,17 @@ struct MarketOfferEx {
 
 struct HistoryMarketOffer {
 	uint32_t timestamp;
-	uint32_t price;
+	uint64_t price;
 	uint16_t itemId;
 	uint16_t amount;
 	MarketOfferState_t state;
 };
 
 struct MarketStatistics {
-	MarketStatistics() {
-		numTransactions = 0;
-		highestPrice = 0;
-		totalPrice = 0;
-		lowestPrice = 0;
-	}
-
-	uint32_t numTransactions;
-	uint32_t highestPrice;
-	uint64_t totalPrice;
-	uint32_t lowestPrice;
+	uint32_t numTransactions = 0;
+	uint32_t highestPrice = 0;
+	uint64_t totalPrice = 0;
+	uint32_t lowestPrice = 0;
 };
 
 struct ModalWindow
@@ -578,11 +596,10 @@ struct ModalWindow
 	std::list<std::pair<std::string, uint8_t>> buttons, choices;
 	std::string title, message;
 	uint32_t id;
-	uint8_t defaultEnterButton, defaultEscapeButton;
-	bool priority;
+	uint8_t defaultEnterButton = 0xFF, defaultEscapeButton = 0xFF;
+	bool priority = false;
 
-	ModalWindow(uint32_t id, std::string title, std::string message)
-		: title(std::move(title)), message(std::move(message)), id(id), defaultEnterButton(0xFF), defaultEscapeButton(0xFF), priority(false) {}
+	ModalWindow(uint32_t id, std::string title, std::string message): title(std::move(title)), message(std::move(message)), id(id) {}
 };
 
 enum CombatOrigin
@@ -592,22 +609,21 @@ enum CombatOrigin
 	ORIGIN_SPELL,
 	ORIGIN_MELEE,
 	ORIGIN_RANGED,
+	ORIGIN_WAND,
+	ORIGIN_REFLECT,
 };
 
 struct CombatDamage
 {
 	struct {
-		CombatType_t type;
-		int32_t value;
-	} primary, secondary;
+		CombatType_t type = COMBAT_NONE;
+		int32_t value = 0;
+	} primary = {}, secondary = {};
 
-	CombatOrigin origin;
-	CombatDamage()
-	{
-		origin = ORIGIN_NONE;
-		primary.type = secondary.type = COMBAT_NONE;
-		primary.value = secondary.value = 0;
-	}
+	CombatOrigin origin = ORIGIN_NONE;
+	BlockType_t blockType = BLOCK_NONE;
+	bool critical = false;
+	bool leeched = false;
 };
 
 using MarketOfferList = std::list<MarketOffer>;
@@ -621,6 +637,20 @@ enum MonstersEvent_t : uint8_t {
 	MONSTERS_EVENT_DISAPPEAR = 3,
 	MONSTERS_EVENT_MOVE = 4,
 	MONSTERS_EVENT_SAY = 5,
+};
+
+struct Reflect {
+	Reflect() = default;
+	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
+
+	Reflect& operator+=(const Reflect& other) {
+		percent += other.percent;
+		chance = std::min(100, chance + other.chance);
+		return *this;
+	}
+
+	uint16_t percent = 0;
+	uint16_t chance = 0;
 };
 
 #endif

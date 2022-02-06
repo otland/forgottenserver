@@ -22,7 +22,9 @@ monster.flags = {
 	summonable = false,
 	attackable = true,
 	hostile = true,
+	challengeable = true,
 	convinceable = false,
+	ignoreSpawnBlock = false,
 	illusionable = false,
 	canPushItems = true,
 	canPushCreatures = true,
@@ -38,14 +40,14 @@ monster.voices = {
 	interval = 5000,
 	chance = 10,
 	{text = "I'm an example", yell = false},
-	{text = "You shall bow", yell = false},
+	{text = "You shall bow", yell = false}
 }
 
 monster.loot = {
 	{id = "gold coin", chance = 60000, maxCount = 100},
-	{id = "bag", chance = 60000,
+	{id = 1987, chance = 60000, -- bag
 		child = {
-			{id = "platin coin", chance = 60000, maxCount = 100},
+			{id = "platinum coin", chance = 60000, maxCount = 100},
 			{id = "crystal coin", chance = 60000, maxCount = 100}
 		}
 	}

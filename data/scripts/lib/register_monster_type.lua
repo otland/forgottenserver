@@ -13,6 +13,11 @@ MonsterType.register = function(self, mask)
 	return registerMonsterType(self, mask)
 end
 
+registerMonsterType.name = function(mtype, mask)
+	if mask.name then
+		mtype:name(mask.name)
+	end
+end
 registerMonsterType.description = function(mtype, mask)
 	if mask.description then
 		mtype:nameDescription(mask.description)
@@ -23,6 +28,11 @@ registerMonsterType.experience = function(mtype, mask)
 		mtype:experience(mask.experience)
 	end
 end
+registerMonsterType.skull = function(mtype, mask)
+	if mask.skull then
+		mtype:skull(mask.skull)
+	end
+end
 registerMonsterType.outfit = function(mtype, mask)
 	if mask.outfit then
 		mtype:outfit(mask.outfit)
@@ -31,11 +41,13 @@ end
 registerMonsterType.maxHealth = function(mtype, mask)
 	if mask.maxHealth then
 		mtype:maxHealth(mask.maxHealth)
+		mtype:health(math.min(mtype:health(), mask.maxHealth))
 	end
 end
 registerMonsterType.health = function(mtype, mask)
 	if mask.health then
 		mtype:health(mask.health)
+		mtype:maxHealth(math.max(mask.health, mtype:maxHealth()))
 	end
 end
 registerMonsterType.runHealth = function(mtype, mask)
@@ -70,29 +82,46 @@ registerMonsterType.corpse = function(mtype, mask)
 end
 registerMonsterType.flags = function(mtype, mask)
 	if mask.flags then
-		if mask.flags.attackable then
+		if mask.flags.attackable ~= nil then
 			mtype:isAttackable(mask.flags.attackable)
 		end
-		if mask.flags.healthHidden then
+		if mask.flags.healthHidden ~= nil then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
-		if mask.flags.convinceable then
+		if mask.flags.boss ~= nil then
+			mtype:isBoss(mask.flags.boss)
+		end
+		if mask.flags.challengeable ~= nil then
+			mtype:isChallengeable(mask.flags.challengeable)
+		end
+		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
-		if mask.flags.illusionable then
+		if mask.flags.summonable ~= nil then
+			mtype:isSummonable(mask.flags.summonable)
+		end
+		if mask.flags.ignoreSpawnBlock ~= nil then
+			mtype:isIgnoringSpawnBlock(mask.flags.ignoreSpawnBlock)
+		end
+		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
-		if mask.flags.hostile then
+		if mask.flags.hostile ~= nil then
 			mtype:isHostile(mask.flags.hostile)
 		end
-		if mask.flags.pushable then
+		if mask.flags.pushable ~= nil then
 			mtype:isPushable(mask.flags.pushable)
 		end
-		if mask.flags.canPushItems then
+		if mask.flags.canPushItems ~= nil then
 			mtype:canPushItems(mask.flags.canPushItems)
 		end
-		if mask.flags.canPushCreatures then
+		if mask.flags.canPushCreatures ~= nil then
 			mtype:canPushCreatures(mask.flags.canPushCreatures)
+		end
+		-- if a monster can push creatures,
+		-- it should not be pushable
+		if mask.flags.canPushCreatures then
+			mtype:isPushable(false)
 		end
 		if mask.flags.targetDistance then
 			mtype:targetDistance(mask.flags.targetDistance)
@@ -100,16 +129,20 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.staticAttackChance then
 			mtype:staticAttackChance(mask.flags.staticAttackChance)
 		end
+		if mask.flags.canWalkOnEnergy ~= nil then
+			mtype:canWalkOnEnergy(mask.flags.canWalkOnEnergy)
+		end
+		if mask.flags.canWalkOnFire ~= nil then
+			mtype:canWalkOnFire(mask.flags.canWalkOnFire)
+		end
+		if mask.flags.canWalkOnPoison ~= nil then
+			mtype:canWalkOnPoison(mask.flags.canWalkOnPoison)
+		end
 	end
 end
 registerMonsterType.light = function(mtype, mask)
 	if mask.light then
-		if mask.light.color then
-			local color = mask.light.color
-		end
-		if mask.light.level then
-			mtype:light(color, mask.light.level)
-		end
+		mtype:light(mask.light.color or 0, mask.light.level or 0)
 	end
 end
 registerMonsterType.changeTarget = function(mtype, mask)
@@ -124,7 +157,7 @@ registerMonsterType.changeTarget = function(mtype, mask)
 end
 registerMonsterType.voices = function(mtype, mask)
 	if type(mask.voices) == "table" then
-		local interval; local chance;
+		local interval, chance
 		if mask.voices.interval then
 			interval = mask.voices.interval
 		end
@@ -141,7 +174,7 @@ end
 registerMonsterType.summons = function(mtype, mask)
 	if type(mask.summons) == "table" then
 		for k, v in pairs(mask.summons) do
-			mtype:addSummon(v.name, v.interval, v.chance)
+			mtype:addSummon(v.name, v.interval, v.chance, v.max or -1)
 		end
 	end
 end
@@ -154,9 +187,12 @@ registerMonsterType.events = function(mtype, mask)
 end
 registerMonsterType.loot = function(mtype, mask)
 	if type(mask.loot) == "table" then
+		local lootError = false
 		for _, loot in pairs(mask.loot) do
 			local parent = Loot()
-			parent:setId(loot.id)
+			if not parent:setId(loot.id) then
+				lootError = true
+			end
 			if loot.chance then
 				parent:setChance(loot.chance)
 			end
@@ -175,7 +211,9 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.child then
 				for _, children in pairs(loot.child) do
 					local child = Loot()
-					child:setId(children.id)
+					if not child:setId(children.id) then
+						lootError = true
+					end
 					if children.chance then
 						child:setChance(children.chance)
 					end
@@ -195,6 +233,9 @@ registerMonsterType.loot = function(mtype, mask)
 				end
 			end
 			mtype:addLoot(parent)
+		end
+		if lootError then
+			print("[Warning - end] Monster: \"".. mtype:name() .. "\" loot could not correctly be load.")
 		end
 	end
 end
@@ -219,109 +260,122 @@ registerMonsterType.immunities = function(mtype, mask)
 		end
 	end
 end
+local function AbilityTableToSpell(ability)
+	local spell = MonsterSpell()
+	if ability.name then
+		if ability.name == "melee" then
+			spell:setType("melee")
+			if ability.attack and ability.skill then
+				spell:setAttackValue(ability.attack, ability.skill)
+			end
+			if ability.minDamage and ability.maxDamage then
+				spell:setCombatValue(ability.minDamage, ability.maxDamage)
+			end
+			if ability.interval then
+				spell:setInterval(ability.interval)
+			end
+			if ability.effect then
+				spell:setCombatEffect(ability.effect)
+			end
+		else
+			spell:setType(ability.name)
+			if ability.type then
+				spell:setCombatType(ability.type)
+			end
+			if ability.interval then
+				spell:setInterval(ability.interval)
+			end
+			if ability.chance then
+				spell:setChance(ability.chance)
+			end
+			if ability.range then
+				spell:setRange(ability.range)
+			end
+			if ability.duration then
+				spell:setConditionDuration(ability.duration)
+			end
+			if ability.speed then
+				if type(ability.speed) ~= "table" then
+					spell:setConditionSpeedChange(ability.speed)
+				elseif type(ability.speed) == "table" then
+					if ability.speed.min and ability.speed.max then
+						spell:setConditionSpeedChange(ability.speed.min, ability.speed.max)
+					end
+				end
+			end
+			if ability.target then
+				spell:setNeedTarget(ability.target)
+			end
+			if ability.length then
+				spell:setCombatLength(ability.length)
+			end
+			if ability.spread then
+				spell:setCombatSpread(ability.spread)
+			end
+			if ability.radius then
+				spell:setCombatRadius(ability.radius)
+			end
+			if ability.ring then
+				spell:setCombatRing(ability.ring)
+			end
+			if ability.minDamage and ability.maxDamage then
+				spell:setCombatValue(ability.minDamage, ability.maxDamage)
+			end
+			if ability.effect then
+				spell:setCombatEffect(ability.effect)
+			end
+			if ability.shootEffect then
+				spell:setCombatShootEffect(ability.shootEffect)
+			end
+			if ability.name == "drunk" then
+				spell:setConditionType(CONDITION_DRUNK)
+				if ability.drunkenness then
+					spell:setConditionDrunkenness(ability.drunkenness)
+				end
+			end
+		end
+		if ability.condition then
+			if ability.condition.type then
+				spell:setConditionType(ability.condition.type)
+			end
+			local startDamage = 0
+			if ability.condition.startDamage then
+				startDamage = ability.condition.startDamage
+			end
+			if ability.condition.minDamage and ability.condition.maxDamage then
+				spell:setConditionDamage(ability.condition.minDamage, ability.condition.maxDamage, startDamage)
+			end
+			if ability.condition.duration then
+				spell:setConditionDuration(ability.condition.duration)
+			end
+			if ability.condition.interval then
+				spell:setConditionTickInterval(ability.condition.interval)
+			end
+		end
+	elseif ability.script then
+		spell:setScriptName(ability.script)
+		if ability.interval then
+			spell:setInterval(ability.interval)
+		end
+		if ability.chance then
+			spell:setChance(ability.chance)
+		end
+		if ability.minDamage and ability.maxDamage then
+			spell:setCombatValue(ability.minDamage, ability.maxDamage)
+		end
+		if ability.target then
+			spell:setNeedTarget(ability.target)
+		end
+		if ability.direction then
+			spell:setNeedDirection(ability.direction)
+		end
+	end
+	return spell
+end
 registerMonsterType.attacks = function(mtype, mask)
 	if type(mask.attacks) == "table" then
 		for _, attack in pairs(mask.attacks) do
-			local spell = MonsterSpell()
-			if attack.name then
-				if attack.name == "melee" then
-					spell:setType("melee")
-					if attack.attack and attack.skill then
-						spell:setAttackValue(attack.attack, attack.skill)
-					end
-					if attack.interval then
-						spell:setInterval(attack.interval)
-					end
-					if attack.effect then
-						spell:setCombatEffect(attack.effect)
-					end
-					if attack.condition then
-						if attack.condition.type then
-							spell:setConditionType(attack.condition.type)
-						end
-						local startDamnage = 0
-						if attack.condition.startDamage then
-							startDamage = attack.condition.startDamage
-						end
-						if attack.condition.minDamage and attack.condition.maxDamage then
-							spell:setConditionDamage(attack.condition.minDamage, attack.condition.maxDamage, startDamage)
-						end
-						if attack.condition.duration then
-							spell:setConditionDuration(attack.condition.duration)
-						end
-						if attack.condition.interval then
-							spell:setConditionTickInterval(attack.condition.interval)
-						end
-					end
-				else
-					spell:setType(attack.name)
-					if attack.type then
-						if attack.name == "combat" then
-							spell:setCombatType(attack.type)
-						else
-							spell:setConditionType(attack.type)
-						end
-					end
-					if attack.interval then
-						spell:setInterval(attack.interval)
-					end
-					if attack.chance then
-						spell:setChance(attack.chance)
-					end
-					if attack.range then
-						spell:setRange(attack.range)
-					end
-					if attack.duration then
-						spell:setConditionDuration(attack.duration)
-					end
-					if attack.speed then
-						spell:setConditionSpeedChange(attack.speed)
-					end
-					if attack.target then
-						spell:setNeedTarget(attack.target)
-					end
-					if attack.length then
-						spell:setCombatLength(attack.length)
-					end
-					if attack.spread then
-						spell:setCombatSpread(attack.spread)
-					end
-					if attack.radius then
-						spell:setCombatRadius(attack.radius)
-					end
-					if attack.minDamage and attack.maxDamage then
-						if attack.name == "combat" then
-							spell:setCombatValue(attack.minDamage, attack.maxDamage)
-						else
-							local startDamage = 0
-							if attack.startDamage then
-								startDamage = attack.startDamage
-							end
-							spell:setConditionDamage(attack.minDamage, attack.maxDamage, startDamage)
-						end
-					end
-					if attack.effect then
-						spell:setCombatEffect(attack.effect)
-					end
-					if attack.shootEffect then
-						spell:setCombatShootEffect(attack.shootEffect)
-					end
-				end
-			elseif attack.script then
-				spell:setScriptName(attack.script)
-				if attack.interval then
-					spell:setInterval(attack.interval)
-				end
-				if attack.chance then
-					spell:setChance(attack.chance)
-				end
-				if attack.minDamage and attack.maxDamage then
-					spell:setCombatValue(attack.minDamage, attack.maxDamage)
-				end
-				if attack.target then
-					spell:setNeedTarget(attack.target)
-				end
-			end
+			local spell = AbilityTableToSpell(attack)
 			mtype:addAttack(spell)
 		end
 	end
@@ -336,106 +390,7 @@ registerMonsterType.defenses = function(mtype, mask)
 		end
 		for _, defense in pairs(mask.defenses) do
 			if type(defense) == "table" then
-				local spell = MonsterSpell()
-				if defense.name then
-					if defense.name == "melee" then
-						spell:setType("melee")
-						if defense.attack and defense.skill then
-							spell:setAttackValue(defense.attack, defense.skill)
-						end
-						if defense.interval then
-							spell:setInterval(defense.interval)
-						end
-						if defense.effect then
-							spell:setCombatEffect(defense.effect)
-						end
-						if defense.condition then
-							if defense.condition.type then
-								spell:setConditionType(defense.condition.type)
-							end
-							local startDamnage = 0
-							if defense.condition.startDamage then
-								startDamage = defense.condition.startDamage
-							end
-							if defense.condition.minDamage and defense.condition.maxDamage then
-								spell:setConditionDamage(defense.condition.minDamage, defense.condition.maxDamage, startDamage)
-							end
-							if defense.condition.duration then
-								spell:setConditionDuration(defense.condition.duration)
-							end
-							if defense.condition.interval then
-								spell:setConditionTickInterval(defense.condition.interval)
-							end
-						end
-					else
-						spell:setType(defense.name)
-						if defense.type then
-							if defense.name == "combat" then
-								spell:setCombatType(defense.type)
-							else
-								spell:setConditionType(defense.type)
-							end
-						end
-						if defense.interval then
-							spell:setInterval(defense.interval)
-						end
-						if defense.chance then
-							spell:setChance(defense.chance)
-						end
-						if defense.range then
-							spell:setRange(defense.range)
-						end
-						if defense.duration then
-							spell:setConditionDuration(defense.duration)
-						end
-						if defense.speed then
-							spell:setConditionSpeedChange(defense.speed)
-						end
-						if defense.target then
-							spell:setNeedTarget(defense.target)
-						end
-						if defense.length then
-							spell:setCombatLength(defense.length)
-						end
-						if defense.spread then
-							spell:setCombatSpread(defense.spread)
-						end
-						if defense.radius then
-							spell:setCombatRadius(defense.radius)
-						end
-						if defense.minDamage and defense.maxDamage then
-							if defense.name == "combat" then
-								spell:setCombatValue(defense.minDamage, defense.maxDamage)
-							else
-								local startDamage = 0
-								if defense.startDamage then
-									startDamage = defense.startDamage
-								end
-								spell:setConditionDamage(defense.minDamage, defense.maxDamage, startDamage)
-							end
-						end
-						if defense.effect then
-							spell:setCombatEffect(defense.effect)
-						end
-						if defense.shootEffect then
-							spell:setCombatShootEffect(defense.shootEffect)
-						end
-					end
-				elseif defense.script then
-					spell:setScriptName(defense.script)
-					if defense.interval then
-						spell:setInterval(defense.interval)
-					end
-					if defense.chance then
-						spell:setChance(defense.chance)
-					end
-					if defense.minDamage and defense.maxDamage then
-						spell:setCombatValue(defense.minDamage, defense.maxDamage)
-					end
-					if defense.target then
-						spell:setNeedTarget(defense.target)
-					end
-				end
+				local spell = AbilityTableToSpell(defense)
 				mtype:addDefense(spell)
 			end
 		end

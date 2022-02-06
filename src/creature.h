@@ -43,6 +43,7 @@ enum slots_t : uint8_t {
 	CONST_SLOT_FEET = 8,
 	CONST_SLOT_RING = 9,
 	CONST_SLOT_AMMO = 10,
+	CONST_SLOT_STORE_INBOX = 11,
 
 	CONST_SLOT_FIRST = CONST_SLOT_HEAD,
 	CONST_SLOT_LAST = CONST_SLOT_AMMO,
@@ -70,6 +71,8 @@ class Tile;
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;
 static constexpr int32_t EVENT_CHECK_CREATURE_INTERVAL = (EVENT_CREATURE_THINK_INTERVAL / EVENT_CREATURECOUNT);
+static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
+static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
 
 class FrozenPathingConditionCall
 {
@@ -187,6 +190,9 @@ class Creature : virtual public Thing
 		virtual bool isInGhostMode() const {
 			return false;
 		}
+		virtual bool canSeeGhostMode(const Creature*) const {
+			return false;
+		}
 
 		int32_t getWalkDelay(Direction dir) const;
 		int32_t getWalkDelay() const;
@@ -227,6 +233,13 @@ class Creature : virtual public Thing
 			return healthMax;
 		}
 
+		void setDrunkenness(uint8_t newDrunkenness) {
+			drunkenness = newDrunkenness;
+		}
+		uint8_t getDrunkenness() const {
+			return drunkenness;
+		}
+
 		const Outfit_t getCurrentOutfit() const {
 			return currentOutfit;
 		}
@@ -242,7 +255,9 @@ class Creature : virtual public Thing
 		}
 
 		//walk functions
-		void startAutoWalk(const std::forward_list<Direction>& listDir);
+		void startAutoWalk();
+		void startAutoWalk(Direction direction);
+		void startAutoWalk(const std::vector<Direction>& listDir);
 		void addEventWalk(bool firstStep = false);
 		void stopEventWalk();
 		virtual void goToFollowCreature();
@@ -268,7 +283,7 @@ class Creature : virtual public Thing
 		}
 		virtual bool setAttackedCreature(Creature* creature);
 		virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                             bool checkDefense = false, bool checkArmor = false, bool field = false);
+		                             bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false);
 
 		bool setMaster(Creature* newMaster);
 
@@ -338,10 +353,11 @@ class Creature : virtual public Thing
 		void gainHealth(Creature* healer, int32_t healthGain);
 		virtual void drainHealth(Creature* attacker, int32_t damage);
 
-		virtual bool challengeCreature(Creature*) {
+		virtual bool challengeCreature(Creature*, bool) {
 			return false;
 		}
 
+		CreatureVector getKillers();
 		void onDeath();
 		virtual uint64_t getGainedExperience(Creature* attacker) const;
 		void addDamagePoints(Creature* attacker, int32_t damagePoints);
@@ -353,7 +369,7 @@ class Creature : virtual public Thing
 		virtual void onEndCondition(ConditionType_t type);
 		void onTickCondition(ConditionType_t type, bool& bRemove);
 		virtual void onCombatRemoveCondition(Condition* condition);
-		virtual void onAttackedCreature(Creature*) {}
+		virtual void onAttackedCreature(Creature*, bool = true) {}
 		virtual void onAttacked();
 		virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 		virtual void onTargetCreatureGainHealth(Creature*, int32_t) {}
@@ -408,6 +424,13 @@ class Creature : virtual public Thing
 		void setUseDefense(bool useDefense) {
 			canUseDefense = useDefense;
 		}
+		void setMovementBlocked(bool state) {
+			movementBlocked = state;
+			cancelNextWalk = true;
+		}
+		bool isMovementBlocked() const {
+			return movementBlocked;
+		}
 
 		//creature script events
 		bool registerCreatureEvent(const std::string& name);
@@ -445,8 +468,8 @@ class Creature : virtual public Thing
 
 		double getDamageRatio(Creature* attacker) const;
 
-		bool getPathTo(const Position& targetPos, std::forward_list<Direction>& dirList, const FindPathParams& fpp) const;
-		bool getPathTo(const Position& targetPos, std::forward_list<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
+		bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const;
+		bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0) const;
 
 		void incrementReferenceCounter() {
 			++referenceCounter;
@@ -481,7 +504,7 @@ class Creature : virtual public Thing
 		CreatureEventList eventsList;
 		ConditionList conditions;
 
-		std::forward_list<Direction> listWalkDir;
+		std::vector<Direction> listWalkDir;
 
 		Tile* tile = nullptr;
 		Creature* attackedCreature = nullptr;
@@ -502,6 +525,7 @@ class Creature : virtual public Thing
 		int32_t varSpeed = 0;
 		int32_t health = 1000;
 		int32_t healthMax = 1000;
+		uint8_t drunkenness = 0;
 
 		Outfit_t currentOutfit;
 		Outfit_t defaultOutfit;
@@ -525,6 +549,7 @@ class Creature : virtual public Thing
 		bool forceUpdateFollowPath = false;
 		bool hiddenHealth = false;
 		bool canUseDefense = true;
+		bool movementBlocked = false;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

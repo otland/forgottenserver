@@ -24,51 +24,45 @@
 
 extern Game g_game;
 
-Task* createTask(std::function<void (void)> f)
+Task* createTask(TaskFunc&& f)
 {
 	return new Task(std::move(f));
 }
 
-Task* createTask(uint32_t expiration, std::function<void (void)> f)
+Task* createTask(uint32_t expiration, TaskFunc&& f)
 {
 	return new Task(expiration, std::move(f));
 }
 
 void Dispatcher::threadMain()
 {
+	std::vector<Task*> tmpTaskList;
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
 
 	while (getState() != THREAD_STATE_TERMINATED) {
 		// check if there are tasks waiting
 		taskLockUnique.lock();
-
 		if (taskList.empty()) {
 			//if the list is empty wait for signal
 			taskSignal.wait(taskLockUnique);
 		}
+		tmpTaskList.swap(taskList);
+		taskLockUnique.unlock();
 
-		if (!taskList.empty()) {
-			// take the first task
-			Task* task = taskList.front();
-			taskList.pop_front();
-			taskLockUnique.unlock();
-
+		for (Task* task : tmpTaskList) {
 			if (!task->hasExpired()) {
 				++dispatcherCycle;
 				// execute it
 				(*task)();
-
-				g_game.map.clearSpectatorCache();
 			}
 			delete task;
-		} else {
-			taskLockUnique.unlock();
 		}
+		tmpTaskList.clear();
 	}
 }
 
-void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
+void Dispatcher::addTask(Task* task)
 {
 	bool do_signal = false;
 
@@ -76,12 +70,7 @@ void Dispatcher::addTask(Task* task, bool push_front /*= false*/)
 
 	if (getState() == THREAD_STATE_RUNNING) {
 		do_signal = taskList.empty();
-
-		if (push_front) {
-			taskList.push_front(task);
-		} else {
-			taskList.push_back(task);
-		}
+		taskList.push_back(task);
 	} else {
 		delete task;
 	}
