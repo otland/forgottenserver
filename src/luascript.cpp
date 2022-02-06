@@ -7561,7 +7561,6 @@ int LuaScriptInterface::luaPodiumSetDirection(lua_State* L)
 		podium->setDirection(getNumber<Direction>(L, 2));
 		g_game.updatePodium(podium);
 		pushBoolean(L, true);
-	}
 	else {
 		lua_pushnil(L);
 	}
