@@ -300,7 +300,7 @@ class LuaScriptInterface
 			getNumber(lua_State* L, int32_t arg)
 		{
 			double num = lua_tonumber(L, arg);
-			if (num < 0 || num > std::numeric_limits<T>::max()) {
+			if (num < 0.0 || num > static_cast<double>(std::numeric_limits<T>::max())) {
 				reportErrorFunc(L, fmt::format("Passed argument '{}' has invalid value: {}", arg, num));
 			}
 
@@ -312,7 +312,7 @@ class LuaScriptInterface
 			getNumber(lua_State* L, int32_t arg)
 		{
 			double num = lua_tonumber(L, arg);
-			if (num > std::numeric_limits<T>::max()) {
+			if (num > static_cast<double>(std::numeric_limits<T>::max())) {
 				reportErrorFunc(L, fmt::format("Passed argument '{}' has invalid value: {}", arg, num));
 			}
 
