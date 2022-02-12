@@ -1,3 +1,5 @@
+--- global entrypoint for Lua environment
+-- @module global
 math.randomseed(os.time())
 dofile('data/lib/lib.lua')
 
@@ -74,6 +76,9 @@ closedLevelDoors = {
 	10789, 12095, 12102, 12195, 12204, 19845, 19854, 19985, 19994, 20278, 20287, 22819, 22828, 25286, 25293
 }
 
+--- gets distance between two positions
+-- @return Number specifying the larger difference in X, Y or Z coordinates.
+-- If the Z coordinate of both positions is different, 15 is added to the result.
 function getDistanceBetween(firstPosition, secondPosition)
 	local xDif = math.abs(firstPosition.x - secondPosition.x)
 	local yDif = math.abs(firstPosition.y - secondPosition.y)
@@ -84,6 +89,8 @@ function getDistanceBetween(firstPosition, secondPosition)
 	return posDif
 end
 
+--- gets human readable world time
+-- @return string
 function getFormattedWorldTime()
 	local worldTime = getWorldTime()
 	local hours = math.floor(worldTime / 60)
@@ -108,6 +115,7 @@ table.contains = function(array, value)
 	return false
 end
 
+--- split a string by separator
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do

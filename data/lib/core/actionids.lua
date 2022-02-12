@@ -1,3 +1,6 @@
+--- Global list of Action IDs
+--- These AIDs are set on items on the map using a map editor.
+--- @table actionIds
 actionIds = {
 	sandHole = 100, -- hidden sand hole
 	pickHole = 105, -- hidden mud hole

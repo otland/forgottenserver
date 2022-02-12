@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * @module global
  */
 
 #include "otpch.h"
@@ -4340,7 +4342,10 @@ int LuaScriptInterface::luaRawGetMetatable(lua_State* L)
 	return 1;
 }
 
-// os
+// @class os
+
+/// get server time
+// @function mtime
 int LuaScriptInterface::luaSystemTime(lua_State* L)
 {
 	// os.mtime()
@@ -11640,6 +11645,8 @@ int LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
 	return 1;
 }
 
+// @table house
+
 // House
 int LuaScriptInterface::luaHouseCreate(lua_State* L)
 {
@@ -11814,6 +11821,8 @@ int LuaScriptInterface::luaHouseSetOwnerGuid(lua_State* L)
 	return 1;
 }
 
+/// Start a trade
+// @function startTrade
 int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 {
 	// house:startTrade(player, tradePartner)
@@ -11861,6 +11870,8 @@ int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 	return 1;
 }
 
+/// Return beds belonging to the house
+// @function getBeds
 int LuaScriptInterface::luaHouseGetBeds(lua_State* L)
 {
 	// house:getBeds()
@@ -11914,7 +11925,11 @@ int LuaScriptInterface::luaHouseGetDoors(lua_State* L)
 	}
 	return 1;
 }
-
+/***
+ * Get number of doors in the house.
+ * @function getDoorCount
+ * @return number or doors
+*/
 int LuaScriptInterface::luaHouseGetDoorCount(lua_State* L)
 {
 	// house:getDoorCount()
