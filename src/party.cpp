@@ -313,23 +313,25 @@ void Party::updateSharedExperience()
 }
 
 namespace {
+
 const char* getSharedExpReturnMessage(SharedExpStatus_t value)
 {
 	switch (value) {
-	case SHAREDEXP_OK:
-		return "Shared Experience is now active."; break;
-	case SHAREDEXP_TOOFARAWAY:
-		return "Shared Experience has been activated, but some members of your party are too far away."; break;
-	case SHAREDEXP_LEVELDIFFTOOLARGE:
-		return "Shared Experience has been activated, but the level spread of your party is too wide."; break;
-	case SHAREDEXP_MEMBERINACTIVE:
-		return "Shared Experience has been activated, but some members of your party are inactive."; break;
-	case SHAREDEXP_EMPTYPARTY:
-		return "Shared Experience has been activated, but you are alone in your party."; break;
-	default:
-		return "An error occured. Unable to activate shared experience."; break;
+		case SHAREDEXP_OK:
+			return "Shared Experience is now active.";
+		case SHAREDEXP_TOOFARAWAY:
+			return "Shared Experience has been activated, but some members of your party are too far away.";
+		case SHAREDEXP_LEVELDIFFTOOLARGE:
+			return "Shared Experience has been activated, but the level spread of your party is too wide.";
+		case SHAREDEXP_MEMBERINACTIVE:
+			return "Shared Experience has been activated, but some members of your party are inactive.";
+		case SHAREDEXP_EMPTYPARTY:
+			return "Shared Experience has been activated, but you are alone in your party.";
+		default:
+			return "An error occured. Unable to activate shared experience.";
 	}
 }
+
 }
 
 bool Party::setSharedExperience(Player* player, bool sharedExpActive)

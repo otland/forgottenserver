@@ -39,7 +39,6 @@ enum SharedExpStatus_t : uint8_t {
 	SHAREDEXP_EMPTYPARTY
 };
 
-
 class Party
 {
 	public:
