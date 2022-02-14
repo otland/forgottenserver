@@ -461,7 +461,7 @@ bool Items::loadFromOtb(const std::string& file)
 					break;
 				}
 
-				case ITEM_ATTR_CLASS: {
+				case ITEM_ATTR_CLASSIFICATION: {
 					if (datalen != sizeof(uint8_t)) {
 						return false;
 					}
