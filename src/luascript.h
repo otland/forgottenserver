@@ -300,8 +300,8 @@ class LuaScriptInterface
 			getNumber(lua_State* L, int32_t arg)
 		{
 			double num = lua_tonumber(L, arg);
-			if (num < 0.0 || num > static_cast<double>(std::numeric_limits<T>::max())) {
-				reportErrorFunc(L, fmt::format("Passed argument '{}' has invalid value: {}", arg, num));
+			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
+				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 			}
 
 			return static_cast<T>(num);
@@ -312,8 +312,8 @@ class LuaScriptInterface
 			getNumber(lua_State* L, int32_t arg)
 		{
 			double num = lua_tonumber(L, arg);
-			if (num > static_cast<double>(std::numeric_limits<T>::max())) {
-				reportErrorFunc(L, fmt::format("Passed argument '{}' has invalid value: {}", arg, num));
+			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
+				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 			}
 
 			return static_cast<T>(num);
