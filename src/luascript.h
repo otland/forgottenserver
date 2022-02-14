@@ -299,24 +299,24 @@ class LuaScriptInterface
 		static typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value, T>::type
 			getNumber(lua_State* L, int32_t arg)
 		{
-			LUA_NUMBER luaNum = lua_tonumber(L, arg);
-			if (luaNum < 0 || luaNum > std::numeric_limits<T>::max()) {
-				reportErrorFunc(L, fmt::format("Passed argument '{:s}' has invalid value: {:d}", arg, luaNum));
+			double num = lua_tonumber(L, arg);
+			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
+				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 			}
 
-			return static_cast<T>(luaNum);
+			return static_cast<T>(num);
 		}
 
 		template<typename T>
-		static typename std::enable_if<(std::is_integral<T>::value && std::is_signed<T>::value) || std::is_floating_point<T>::value, T>::type
+		static typename std::enable_if<(std::is_integral<T>::value && (std::is_signed<T>::value) || std::is_floating_point<T>::value), T>::type
 			getNumber(lua_State* L, int32_t arg)
 		{
-			LUA_NUMBER luaNum = lua_tonumber(L, arg);
-			if (luaNum > std::numeric_limits<T>::max()) {
-				reportErrorFunc(L, fmt::format("Passed argument '{:s}' has invalid value: {:d}", arg, luaNum));
+			double num = lua_tonumber(L, arg);
+			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
+				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
 			}
 
-			return static_cast<T>(luaNum);
+			return static_cast<T>(num);
 		}
 
 		template<typename T>
@@ -1271,6 +1271,7 @@ class LuaScriptInterface
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
 		static int luaItemTypeGetAmmoType(lua_State* L);
 		static int luaItemTypeGetCorpseType(lua_State* L);
+		static int luaItemTypeGetClassification(lua_State* L);
 		static int luaItemTypeHasShowCount(lua_State* L);
 		static int luaItemTypeGetAbilities(lua_State* L);
 		static int luaItemTypeHasShowAttributes(lua_State* L);
@@ -1284,6 +1285,9 @@ class LuaScriptInterface
 		static int luaItemTypeGetVocationString(lua_State* L);
 		static int luaItemTypeGetMinReqLevel(lua_State* L);
 		static int luaItemTypeGetMinReqMagicLevel(lua_State* L);
+
+		static int luaItemTypeGetMarketBuyStatistics(lua_State* L);
+		static int luaItemTypeGetMarketSellStatistics(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
 

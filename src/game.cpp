@@ -1099,7 +1099,6 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	while ((subCylinder = toCylinder->queryDestination(index, *item, &toItem, flags)) != toCylinder) {
 		toCylinder = subCylinder;
-		flags = 0;
 
 		//to prevent infinite loop
 		if (++floorN >= MAP_MAX_LAYERS) {
@@ -5020,7 +5019,7 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
 	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
-	player->sendMarketDetail(it.id);
+	g_events->eventPlayerOnLookInMarket(player, &it);
 }
 
 void Game::playerBrowseMarketOwnOffers(uint32_t playerId)
