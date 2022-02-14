@@ -1271,6 +1271,7 @@ class LuaScriptInterface
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
 		static int luaItemTypeGetAmmoType(lua_State* L);
 		static int luaItemTypeGetCorpseType(lua_State* L);
+		static int luaItemTypeGetClassification(lua_State* L);
 		static int luaItemTypeHasShowCount(lua_State* L);
 		static int luaItemTypeGetAbilities(lua_State* L);
 		static int luaItemTypeHasShowAttributes(lua_State* L);
@@ -1284,6 +1285,9 @@ class LuaScriptInterface
 		static int luaItemTypeGetVocationString(lua_State* L);
 		static int luaItemTypeGetMinReqLevel(lua_State* L);
 		static int luaItemTypeGetMinReqMagicLevel(lua_State* L);
+
+		static int luaItemTypeGetMarketBuyStatistics(lua_State* L);
+		static int luaItemTypeGetMarketSellStatistics(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
 

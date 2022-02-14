@@ -42,6 +42,7 @@
 #include "globalevent.h"
 #include "script.h"
 #include "weapons.h"
+#include "iomarket.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -1773,6 +1774,11 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(SPECIALSKILL_MANALEECHCHANCE)
 	registerEnum(SPECIALSKILL_MANALEECHAMOUNT)
 
+	registerEnum(STAT_MAXHITPOINTS)
+	registerEnum(STAT_MAXMANAPOINTS)
+	registerEnum(STAT_SOULPOINTS)
+	registerEnum(STAT_MAGICPOINTS)
+
 	registerEnum(SKULL_NONE)
 	registerEnum(SKULL_YELLOW)
 	registerEnum(SKULL_GREEN)
@@ -2881,6 +2887,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getRequiredLevel", LuaScriptInterface::luaItemTypeGetRequiredLevel);
 	registerMethod("ItemType", "getAmmoType", LuaScriptInterface::luaItemTypeGetAmmoType);
 	registerMethod("ItemType", "getCorpseType", LuaScriptInterface::luaItemTypeGetCorpseType);
+	registerMethod("ItemType", "getClassification", LuaScriptInterface::luaItemTypeGetClassification);
 
 	registerMethod("ItemType", "getAbilities", LuaScriptInterface::luaItemTypeGetAbilities);
 
@@ -2896,6 +2903,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getVocationString", LuaScriptInterface::luaItemTypeGetVocationString);
 	registerMethod("ItemType", "getMinReqLevel", LuaScriptInterface::luaItemTypeGetMinReqLevel);
 	registerMethod("ItemType", "getMinReqMagicLevel", LuaScriptInterface::luaItemTypeGetMinReqMagicLevel);
+	registerMethod("ItemType", "getMarketBuyStatistics", LuaScriptInterface::luaItemTypeGetMarketBuyStatistics);
+	registerMethod("ItemType", "getMarketSellStatistics", LuaScriptInterface::luaItemTypeGetMarketSellStatistics);
 
 	registerMethod("ItemType", "hasSubType", LuaScriptInterface::luaItemTypeHasSubType);
 
@@ -12562,6 +12571,18 @@ int LuaScriptInterface::luaItemTypeGetCorpseType(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemTypeGetClassification(lua_State* L)
+{
+	// itemType:getClassification()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->classification);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaItemTypeGetAbilities(lua_State* L)
 {
 	// itemType:getAbilities()
@@ -12783,6 +12804,48 @@ int LuaScriptInterface::luaItemTypeGetMinReqMagicLevel(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushinteger(L, itemType->minReqMagicLevel);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetMarketBuyStatistics(lua_State* L)
+{
+	// itemType:getMarketBuyStatistics()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		MarketStatistics* statistics = IOMarket::getInstance().getPurchaseStatistics(itemType->id);
+		if (statistics) {
+			lua_createtable(L, 4, 0);
+			setField(L, "numTransactions", statistics->numTransactions);
+			setField(L, "totalPrice", statistics->totalPrice);
+			setField(L, "highestPrice", statistics->highestPrice);
+			setField(L, "lowestPrice", statistics->lowestPrice);
+		} else {
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetMarketSellStatistics(lua_State* L)
+{
+	// itemType:getMarketSellStatistics()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		MarketStatistics* statistics = IOMarket::getInstance().getSaleStatistics(itemType->id);
+		if (statistics) {
+			lua_createtable(L, 4, 0);
+			setField(L, "numTransactions", statistics->numTransactions);
+			setField(L, "totalPrice", statistics->totalPrice);
+			setField(L, "highestPrice", statistics->highestPrice);
+			setField(L, "lowestPrice", statistics->lowestPrice);
+		} else {
+			lua_pushnil(L);
+		}
 	} else {
 		lua_pushnil(L);
 	}
