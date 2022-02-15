@@ -3,7 +3,7 @@ local showDefWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTAN
 
 local ec = EventCallback
 
-ec.onLookInMarket = function(self, itemType, tier)
+ec.onLookInMarket = function(self, itemType)
 	local response = NetworkMessage()
 	response:addByte(0xF8)
 	response:addU16(itemType:getClientId())
@@ -11,7 +11,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 	-- tier label (byte)
 	do
 		if itemType:getClassification() > 0 then
-			response:addByte(tier)
+			response:addByte(0)
 		end
 	end
 
@@ -234,16 +234,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 		-- special skills
 		for skill, value in pairs(abilities.specialSkills) do
 			if value ~= 0 then
-				-- add + symbol to special skill "amount" fields
-				if skill-1 < 6 and skill % 2 == 1 then
-					value = string.format("%+d", value)
-				elseif skill-1 >= 6 then
-					-- fatal, dodge, momentum coming from the item natively
-					-- (stats coming from tier are near tier info)
-					value = string.format("%0.2f", value/100)
-				end
-
-				skillBoosts[#skillBoosts + 1] = string.format("%s %s%%", getSpecialSkillName(skill-1), value)
+				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getSpecialSkillName[skill-1], value)
 			end
 		end
 
@@ -287,7 +278,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 
 	-- buy stats
 	do
-		local stats = itemType:getMarketBuyStatistics(tier)
+		local stats = itemType:getMarketBuyStatistics()
 		if stats then
 			response:addByte(0x01)
 			response:addU32(stats.numTransactions)
@@ -301,7 +292,7 @@ ec.onLookInMarket = function(self, itemType, tier)
 
 	-- sell stats
 	do
-		local stats = itemType:getMarketSellStatistics(tier)
+		local stats = itemType:getMarketSellStatistics()
 		if stats then
 			response:addByte(0x01)
 			response:addU32(stats.numTransactions)
