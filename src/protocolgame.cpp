@@ -65,18 +65,18 @@ int64_t getTimeout(std::size_t slot)
 std::size_t clientLogin(const Player& player)
 {
 	if (player.hasFlag(PlayerFlag_CanAlwaysLogin) || player.getAccountType() >= ACCOUNT_TYPE_GAMEMASTER) {
-		return true;
+		return 0;
 	}
 
 	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
 	if (maxPlayers == 0 || (waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
-		return true;
+		return 0;
 	}
 
 	int64_t time = OTSYS_TIME();
 
-	auto it = waitList.begin(), end = waitList.end();
-	while (it != end) {
+	auto it = waitList.begin();
+	while (it != waitList.end()) {
 		if ((it->first - time) <= 0) {
 			it = waitList.erase(it);
 		} else {
@@ -87,24 +87,24 @@ std::size_t clientLogin(const Player& player)
 	std::size_t slot;
 	std::tie(it, slot) = findClient(player);
 	if (it != waitList.end()) {
+		// If server has capacity for this client, let him in even though his current slot might be higher than 0.
 		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
-			//should be able to login now
 			waitList.erase(it);
-			return true;
+			return 0;
 		}
 
 		//let them wait a bit longer
 		it->first = time + (getTimeout(slot) * 1000);
-		return false;
+		return slot;
 	}
 
 	if (player.isPremium()) {
-		slot = std::distance(waitList.begin(), priorityEnd);
 		priorityEnd = waitList.emplace(priorityEnd, time + (getTimeout(slot + 1) * 1000), player.getGUID());
-	} else {
-		waitList.emplace_back(time + (getTimeout(waitList.size() + 1) * 1000), player.getGUID());
+		return std::distance(waitList.begin(), priorityEnd);
 	}
-	return false;
+
+	waitList.emplace_back(time + (getTimeout(waitList.size() + 1) * 1000), player.getGUID());
+	return waitList.size();
 }
 
 }
