@@ -160,26 +160,38 @@ class MoveEvent final : public Event
 		void setTileItem(bool b) {
 			tileItem = b;
 		}
-		std::vector<uint32_t> borrowItemIdRange() {
-			return std::move(itemIdRange);
+		void clearItemIdRange() {
+			return itemIdRange.clear();
+		}
+		const std::vector<uint32_t>& getItemIdRange() const {
+			return itemIdRange;
 		}
 		void addItemId(uint32_t id) {
 			itemIdRange.emplace_back(id);
 		}
-		std::vector<uint32_t> borrowActionIdRange() {
-			return std::move(actionIdRange);
+		void clearActionIdRange() {
+			return actionIdRange.clear();
+		}
+		const std::vector<uint32_t>& getActionIdRange() const {
+			return actionIdRange;
 		}
 		void addActionId(uint32_t id) {
 			actionIdRange.emplace_back(id);
 		}
-		std::vector<uint32_t> borrowUniqueIdRange() {
-			return std::move(uniqueIdRange);
+		void clearUniqueIdRange() {
+			return uniqueIdRange.clear();
+		}
+		const std::vector<uint32_t>& getUniqueIdRange() const {
+			return uniqueIdRange;
 		}
 		void addUniqueId(uint32_t id) {
 			uniqueIdRange.emplace_back(id);
 		}
-		std::vector<Position> borrowPosList() {
-			return std::move(posList);
+		void clearPosList() {
+			return posList.clear();
+		}
+		const std::vector<Position>& getPosList() const {
+			return posList;
 		}
 		void addPosList(Position pos) {
 			posList.emplace_back(pos);
