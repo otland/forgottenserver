@@ -87,7 +87,6 @@ namespace IOGuild
 {
 	Guild* loadGuild(uint32_t guildId);
 	uint32_t getGuildIdByName(const std::string& name);
-	void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
 };
 
 #endif
