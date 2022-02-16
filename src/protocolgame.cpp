@@ -31,17 +31,17 @@ namespace {
 std::deque<std::pair<int64_t, uint32_t>> waitList; // (timeout, player guid)
 auto priorityEnd = waitList.end();
 
-auto findClient(const Player& player) {
+auto findClient(uint32_t guid) {
 	std::size_t slot = 1;
 	for (auto it = waitList.begin(), end = waitList.end(); it != end; ++it, ++slot) {
-		if (it->second == player.getGUID()) {
+		if (it->second == guid) {
 			return std::make_pair(it, slot);
 		}
 	}
 	return std::make_pair(waitList.end(), slot);
 }
 
-int64_t getWaitTime(std::size_t slot)
+constexpr int64_t getWaitTime(std::size_t slot)
 {
 	if (slot < 5) {
 		return 5;
@@ -56,7 +56,7 @@ int64_t getWaitTime(std::size_t slot)
 	}
 }
 
-int64_t getTimeout(std::size_t slot)
+constexpr int64_t getTimeout(std::size_t slot)
 {
 	// timeout is set to 15 seconds longer than expected retry attempt
 	return getWaitTime(slot) + 15;
@@ -85,7 +85,7 @@ std::size_t clientLogin(const Player& player)
 	}
 
 	std::size_t slot;
-	std::tie(it, slot) = findClient(player);
+	std::tie(it, slot) = findClient(player.getGUID());
 	if (it != waitList.end()) {
 		// If server has capacity for this client, let him in even though his current slot might be higher than 0.
 		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
