@@ -56,17 +56,17 @@ void RSA::loadPEM(const std::string& filename)
 	for (std::string line; std::getline(file, line); oss << line);
 	std::string key = oss.str();
 
-	auto pos1 = key.find(header);
-	if (pos1 == std::string::npos) {
+	auto headerIndex = key.find(header);
+	if (headerIndex == std::string::npos) {
 		throw std::runtime_error("Missing RSA private key PEM header.");
 	}
 
-	auto pos2 = key.find(footer, pos1 + 1);
-	if (pos2 == std::string::npos) {
+	auto footerIndex = key.find(footer, headerIndex + 1);
+	if (footerIndex == std::string::npos) {
 		throw std::runtime_error("Missing RSA private key PEM footer.");
 	}
 
-	key = key.substr(pos1 + header.size(), pos2 - pos1 - header.size());
+	key = key.substr(headerIndex + header.size(), footerIndex - headerIndex - header.size());
 
 	CryptoPP::ByteQueue queue;
 	CryptoPP::Base64Decoder decoder;
