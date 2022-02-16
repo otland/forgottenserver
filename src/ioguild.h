@@ -23,12 +23,11 @@
 class Guild;
 using GuildWarVector = std::vector<uint32_t>;
 
-class IOGuild
+namespace IOGuild
 {
-	public:
-		static Guild* loadGuild(uint32_t guildId);
-		static uint32_t getGuildIdByName(const std::string& name);
-		static void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
+	Guild* loadGuild(uint32_t guildId);
+	uint32_t getGuildIdByName(const std::string& name);
+	void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
 };
 
 #endif
