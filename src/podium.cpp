@@ -68,7 +68,7 @@ void Podium::serializeAttr(PropWriteStream& propWriteStream) const
 {
 	if (ATTR_PODIUMOUTFIT != 0) {
 		propWriteStream.write<uint8_t>(ATTR_PODIUMOUTFIT);
-		propWriteStream.write<uint8_t>(flags);
+		propWriteStream.write<uint8_t>(flags.to_ulong());
 		propWriteStream.write<uint8_t>(direction);
 		propWriteStream.write<uint16_t>(outfit.lookType);
 		propWriteStream.write<uint8_t>(outfit.lookHead);

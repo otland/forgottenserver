@@ -22,6 +22,8 @@
 
 #include "item.h"
 
+#include <bitset>
+
 class Player;
 
 class Podium final : public Item
@@ -39,37 +41,39 @@ class Podium final : public Item
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 		void serializeAttr(PropWriteStream& propWriteStream) const override;
 
-		void setOutfit(const Outfit_t& outfit) {
-			this->outfit = outfit;
+		void setOutfit(const Outfit_t& newOutfit) {
+			outfit = newOutfit;
 		}
 		const Outfit_t getOutfit() const {
 			return outfit;
 		}
 
 		bool hasFlag(PodiumFlags flag) const {
-			return (this->flags & flag) != 0;
+			return flags.test(flag);
 		}
 		void setFlagValue(PodiumFlags flag, bool value) {
 			if (value) {
-				this->flags |= flag;
-				return;
+				flags.set(flag);
+			} else {
+				flags.reset(flag);
 			}
-			this->flags &= ~flag;
 		}
-		void setFlags(uint8_t flags) {
-			this->flags = flags;
+		void setFlags(uint8_t newFlags) {
+			flags = newFlags;
 		}
 
 		const Direction getDirection() const {
 			return direction;
 		}
-		void setDirection(Direction direction) {
-			this->direction = direction;
+		void setDirection(Direction newDirection) {
+			direction = newDirection;
 		}
+
 	protected:
 		Outfit_t outfit;
+
 	private:
-		uint8_t flags = PODIUM_SHOW_PLATFORM; // show platform only
+		std::bitset<3> flags = { true }; // show platform only
 		Direction direction = DIRECTION_SOUTH;
 };
 
