@@ -45,13 +45,19 @@ struct LockfreeFreeList
 };
 
 template <typename T, size_t CAPACITY>
-class LockfreePoolingAllocator : public std::allocator<T>
+class LockfreePoolingAllocator
 {
 	public:
+		template <class U>
+		class rebind
+		{
+			using other = LockfreePoolingAllocator<U, CAPACITY>;
+		};
+
 		LockfreePoolingAllocator() = default;
 
-		template <typename U, class = typename std::enable_if<!std::is_same<U, T>::value>::type>
-		explicit constexpr LockfreePoolingAllocator(const U&) {}
+		template <typename U>
+		explicit constexpr LockfreePoolingAllocator(const LockfreePoolingAllocator<U, CAPACITY>&) {}
 		using value_type = T;
 
 		T* allocate(size_t) const {
