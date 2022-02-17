@@ -49,7 +49,7 @@ class LockfreePoolingAllocator
 {
 	public:
 		template <class U>
-		class rebind
+		struct rebind
 		{
 			using other = LockfreePoolingAllocator<U, CAPACITY>;
 		};
