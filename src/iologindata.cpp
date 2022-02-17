@@ -241,7 +241,6 @@ static GuildWarVector getWarList(uint32_t guildId)
 	return std::move(guildWarVector);
 }
 
-
 bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 {
 	if (!result) {
