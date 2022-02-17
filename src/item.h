@@ -964,8 +964,7 @@ class Item : virtual public Thing
 			return it.rotatable && it.rotateTo;
 		}
 		bool isPodium() const {
-			const ItemType& it = items[id];
-			return it.isPodium();
+			return items[id].isPodium();
 		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
