@@ -2393,7 +2393,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	}
 
 	if (Podium* podium = item->getPodium()) {
-		podium->setDirection(static_cast<Direction_t>((podium->getDirection() + 1) % 4));
+		podium->setDirection(static_cast<Direction>((podium->getDirection() + 1) % 4));
 		updatePodium(podium);
 	} else {
 		uint16_t newId = Item::items[item->getID()].rotateTo;
