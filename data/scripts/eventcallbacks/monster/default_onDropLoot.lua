@@ -7,26 +7,29 @@ ec.onDropLoot = function(self, corpse)
 
 	local player = Player(corpse:getCorpseOwner())
 	local mType = self:getType()
+	local doCreateLoot = false
+
 	if not player or player:getStamina() > 840 then
+		doCreateLoot = true
+	end
+
+	if doCreateLoot then
 		local monsterLoot = mType:getLoot()
 		for i = 1, #monsterLoot do
 			local item = corpse:createLootItem(monsterLoot[i])
 			if not item then
-				print('[Warning] DropLoot:', 'Could not add loot item to corpse.')
+				print("[Warning] DropLoot: Could not add loot item to corpse.")
 			end
 		end
+	end
 
-		if player then
-			local text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
-			local party = player:getParty()
-			if party then
-				party:broadcastPartyLoot(text)
-			else
-				player:sendTextMessage(MESSAGE_LOOT, text)
-			end
+	if player then
+		local text
+		if doCreateLoot then
+			text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
+		else
+			text = ("Loot of %s: nothing (due to low stamina)"):format(mType:getNameDescription())
 		end
-	else
-		local text = ("Loot of %s: nothing (due to low stamina)"):format(mType:getNameDescription())
 		local party = player:getParty()
 		if party then
 			party:broadcastPartyLoot(text)

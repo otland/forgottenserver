@@ -212,7 +212,7 @@ class Game
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
 		  * \param force If true, placing the creature will not fail because of obstacles (creatures/items)
 		  */
-		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false);
+		bool placeCreature(Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false, MagicEffectClasses magicEffect = CONST_ME_TELEPORT);
 
 		/**
 		  * Remove Creature from the map.
@@ -326,7 +326,7 @@ class Game
 		  * \param text The text to say
 		  */
 		bool internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text,
-		                         bool ghostMode, SpectatorVec* spectatorsPtr = nullptr, const Position* pos = nullptr);
+		                         bool ghostMode, SpectatorVec* spectatorsPtr = nullptr, const Position* pos = nullptr, bool echo = false);
 
 		void loadPlayersRecord();
 		void checkPlayersRecord();
@@ -402,6 +402,7 @@ class Game
 		void playerRequestOutfit(uint32_t playerId);
 		void playerShowQuestLog(uint32_t playerId);
 		void playerShowQuestLine(uint32_t playerId, uint16_t questId);
+		void playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds);
 		void playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		               const std::string& receiver, const std::string& text);
 		void playerChangeOutfit(uint32_t playerId, Outfit_t outfit);

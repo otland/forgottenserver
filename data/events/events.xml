@@ -18,6 +18,7 @@
 	<event class="Player" method="onLookInBattleList" enabled="1" />
 	<event class="Player" method="onLookInTrade" enabled="1" />
 	<event class="Player" method="onLookInShop" enabled="1" />
+	<event class="Player" method="onLookInMarket" enabled="1" />
 	<event class="Player" method="onMoveItem" enabled="1" />
 	<event class="Player" method="onItemMoved" enabled="0" />
 	<event class="Player" method="onMoveCreature" enabled="0" />
@@ -31,6 +32,7 @@
 	<event class="Player" method="onLoseExperience" enabled="0" />
 	<event class="Player" method="onGainSkillTries" enabled="1" />
 	<event class="Player" method="onWrapItem" enabled="1" />
+	<event class="Player" method="onInventoryUpdate" enabled="1" />
 
 	<!-- Monster methods -->
 	<event class="Monster" method="onDropLoot" enabled="1" />

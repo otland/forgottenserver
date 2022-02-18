@@ -85,3 +85,26 @@ end
 function ItemType:isBed()
 	return self:getType() == ITEM_TYPE_BED
 end
+
+function ItemType:getWeaponString()
+	local weaponType = self:getWeaponType()
+	local weaponString = "unknown"
+
+	if weaponType == WEAPON_CLUB then
+		weaponString = "blunt instrument"
+	elseif weaponType == WEAPON_SWORD then
+		weaponString = "stabbing weapon"
+	elseif weaponType == WEAPON_AXE then
+		weaponString = "cutting weapon"
+	elseif weaponType == WEAPON_DISTANCE then
+		weaponString = self:isBow() and "firearm" or "missile"
+	elseif weaponType == WEAPON_WAND then
+		weaponString = "wand/rod"
+	end
+
+	if self:isTwoHanded() then
+		weaponString = string.format("%s, two-handed", weaponString)
+	end
+
+	return weaponString
+end
