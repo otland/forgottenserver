@@ -22,7 +22,7 @@ function modalWindowHelper.onModalWindow(player, modalWindowId, buttonId, choice
     local returnValue = true
     if buttonCallback then returnValue = buttonCallback(player, button, choice) end
     if returnValue and choiceCallback then returnValue = choiceCallback(player, button, choice) end
-    if returnValue and defaultCallback then returnValue = defaultCallback(player, button, choice) end
+    if returnValue and defaultCallback then defaultCallback(player, button, choice) end
 end
 
 modalWindowHelper:register()
