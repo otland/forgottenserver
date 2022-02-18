@@ -63,11 +63,22 @@ do
 		elseif key == "actionid" then
 			return 0
 		end
-		return methods[key]
+
+		local value = methods[key]
+		if not value and creatureType == THING_TYPE_PLAYER then
+			return methods.getStorageValue(self, key)
+		end
+
+		return value
 	end
 	rawgetmetatable("Player").__index = CreatureIndex
 	rawgetmetatable("Monster").__index = CreatureIndex
 	rawgetmetatable("Npc").__index = CreatureIndex
+
+	local function PlayerNewIndex(self, key, value)
+		getmetatable(self).setStorageValue(self, key, value)
+	end
+	rawgetmetatable("Player").__newindex = PlayerNewIndex
 end
 
 do
